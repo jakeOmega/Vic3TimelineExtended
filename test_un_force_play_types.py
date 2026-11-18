@@ -158,6 +158,12 @@ class StrikeLoopTests(unittest.TestCase):
         self.assertIn("while = { count = 30 if = { limit = { un_force_goal_held = { TYPE = $TYPE$ } } "
                       "remove_war_goal = { who = scope:actor type = $TYPE$ }", self.goal)
 
+    def test_the_protected_country_is_saved_before_any_strike(self):
+        # un_strike_goals_self_check reads the play test against it after the loop.
+        strikes = self.effects[self.effects.index("un_force_strike_war_goals = {"):]
+        self.assertLess(strikes.index("target ?= { save_scope_as = un_force_protected }"),
+                        strikes.index("un_force_strike_goal_type = {"))
+
     def test_no_call_outside_the_loop(self):
         self.assertEqual(self.effects.count("remove_war_goal"), 1)
 
@@ -167,7 +173,7 @@ class StrikeLoopTests(unittest.TestCase):
             "while = {",
             "remove_war_goal",
             "scope:actor = { change_variable = { name = un_strike_chk_calls add = 1 } }",
-            "un_strike_goals_self_check = { STRIKE = force TYPE = $TYPE$ }")]
+            "un_strike_goals_self_check = { STRIKE = force TYPE = $TYPE$ TARGET = scope:un_force_protected }")]
         self.assertEqual(order, sorted(order))
 
 

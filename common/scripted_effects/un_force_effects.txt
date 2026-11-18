@@ -188,7 +188,7 @@ un_force_strike_goal = {
 				scope:actor = { change_variable = { name = un_strike_chk_calls add = 1 } }
 			}
 		}
-		un_strike_goals_self_check = { STRIKE = force TYPE = $TYPE$ }
+		un_strike_goals_self_check = { STRIKE = force TYPE = $TYPE$ TARGET = scope:un_force_protected }
 	}
 }
 

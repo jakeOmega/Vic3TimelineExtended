@@ -132,7 +132,7 @@ class StrikeTest(unittest.TestCase):
             "while = {",
             "remove_war_goal",
             "scope:actor = { change_variable = { name = un_strike_chk_calls add = 1 } }",
-            "un_strike_goals_self_check = { STRIKE = mandate TYPE = $TYPE$ }")]
+            "un_strike_goals_self_check = { STRIKE = mandate TYPE = $TYPE$ TARGET = scope:un_mandate_strike_target }")]
         self.assertEqual(order, sorted(order))
 
     def test_the_mandates_play_opens_with_a_goal_that_is_never_struck(self):
@@ -154,19 +154,22 @@ class StrikeTest(unittest.TestCase):
 
 class StrikeSelfCheckTest(unittest.TestCase):
     """``un_strike_goals_self_check``, after the mandate's and the Standing UN
-    Force's strike loops: once a game, whether the loop stopped before its
-    cap, which shows the holder's play test saw each removal at once."""
+    Force's strike loops: once a game for each, whether the holder's play test
+    saw each removal at once. The verdict reads the play test again after the
+    loop: the Force's loop also stops when ``has_play_goal`` goes false, so the
+    count alone could read OK either way (review of #1897)."""
 
     @classmethod
     def setUpClass(cls):
         cls.check = _squash(_block(_read(EFFECTS), "un_strike_goals_self_check"))
 
-    def test_once_a_game(self):
-        self.assertIn("if = { limit = { NOT = { has_global_variable = un_strike_goals_self_check_done } } "
-                      "set_global_variable = un_strike_goals_self_check_done", self.check)
+    def test_once_a_game_for_each_kind(self):
+        self.assertIn("if = { limit = { NOT = { has_global_variable = un_strike_goals_self_check_done_$STRIKE$ } } "
+                      "set_global_variable = un_strike_goals_self_check_done_$STRIKE$", self.check)
 
     def test_ok_below_the_cap_broken_at_it(self):
-        self.assertIn("if = { limit = { var:un_strike_chk_calls < 30 } "
+        self.assertIn("if = { limit = { var:un_strike_chk_calls < 30 "
+                      "NOT = { play_participant_has_war_goal_of_type_against = { type = $TYPE$ target = $TARGET$ } } } "
                       "debug_log = \"TE_SELF_CHECK OK un_strike_goals:", self.check)
         self.assertIn("else = { debug_log = \"TE_SELF_CHECK BROKEN un_strike_goals:", self.check)
         for verdict in ("OK", "BROKEN"):
