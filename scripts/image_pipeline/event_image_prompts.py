@@ -2492,6 +2492,10 @@ IMAGES = {
         "style": "oil painting, social realism, harsh white midday light",
         "events": ["environmentalism_events.24"],
     },
+    # humanitarian_crisis is retouched (2026-11-18): FLUX drew a second woman
+    # cut off at the waist, hanging in the air behind the standpipe. She was
+    # painted out (roof, wall and sky rebuilt behind her, a stem put back on the
+    # pump), so the picture shows one woman. A render from this prompt undoes it.
     "humanitarian_crisis": {
         "prompt": "At the left of the frame, women in headscarves fill metal pails at a single standpipe on a muddy lane between self-built shacks of brick, timber and corrugated iron, a small child waiting beside them. The right of the frame is the shanty district spreading over low hills toward the distant towers and chimneys of a great city under haze.",
         "style": "oil painting, social realism, hazy afternoon light",
