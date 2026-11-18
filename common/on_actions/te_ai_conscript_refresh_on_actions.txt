@@ -1,5 +1,6 @@
-﻿# The AI conscript refresh, yearly for each AI country (common/scripted_effects/te_ai_conscript_refresh_effects.txt).
-on_yearly_pulse_country = {
+﻿# The AI conscript refresh: each AI country looks monthly and runs it at most once a year
+# (common/scripted_effects/te_ai_conscript_refresh_effects.txt).
+on_monthly_pulse_country = {
 	on_actions = {
 		te_ai_conscript_refresh_on_action
 	}

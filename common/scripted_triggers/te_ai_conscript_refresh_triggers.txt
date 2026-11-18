@@ -2,14 +2,20 @@
 # The pass itself: common/scripted_effects/te_ai_conscript_refresh_effects.txt.
 
 # Country scope: an AI country at peace, whose conscripts nobody needs this month. Not at war, in no diplomatic play
-# (committed or undecided: a play's escalation raises conscripts), and no formation mobilized, so that no raised
-# battalion is deleted and no country is left short as a war starts.
+# (committed or undecided: a play's escalation raises conscripts), and no army mobilized, so that no raised
+# battalion is deleted and no country is left short as a war starts. Armies only: a fleet's mobilization says
+# nothing about conscripts, and a fleet on a sea-node order at peace must not hold the pass back.
 te_ai_conscript_refresh_may = {
 	is_ai = yes
 	is_at_war = no
 	is_diplomatic_play_committed_participant = no
 	is_diplomatic_play_undecided_participant = no
-	NOT = { any_military_formation = { is_mobilized = yes } }
+	NOT = {
+		any_military_formation = {
+			is_army = yes
+			is_mobilized = yes
+		}
+	}
 }
 
 # State scope: the state's conscription center holds at least one stale battalion.
@@ -358,10 +364,27 @@ te_ai_conscript_unit_stale = {
 	}
 }
 
-# No scope: TE_SELF_CHECK ai_conscript_refresh's sample can still be read. Its state and country exist, and the
-# country still owns the state.
+# No scope: TE_SELF_CHECK ai_conscript_refresh's sample can still be read. Its state and country exist, the
+# country still owns the state, and it is not at war (a state at war may hold no conscripts for reasons of its own,
+# and a false BROKEN would take the pass out).
 te_ai_conscript_refresh_sample_intact = {
 	exists = global_var:te_ai_conscript_sc_state
 	exists = global_var:te_ai_conscript_sc_country
 	global_var:te_ai_conscript_sc_state = { owner = global_var:te_ai_conscript_sc_country }
+	global_var:te_ai_conscript_sc_country = { is_at_war = no }
+}
+
+# State scope: TE_SELF_CHECK ai_conscript_refresh_rule's case, a center the stale rule must catch once Trench Works
+# is researched. Read by direct type, not through te_ai_conscript_unit_stale, so that the rule's own links (the
+# owner, its technology) are what the check tests.
+te_ai_conscript_refresh_rule_case = {
+	has_building = building_conscription_center
+	b:building_conscription_center = {
+		any_combat_unit = {
+			OR = {
+				has_unit_type = unit_type:combat_unit_type_irregular_infantry
+				has_unit_type = unit_type:combat_unit_type_line_infantry
+			}
+		}
+	}
 }

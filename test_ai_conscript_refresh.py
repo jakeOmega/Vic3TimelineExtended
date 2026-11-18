@@ -171,7 +171,7 @@ class WhoAndWhen(unittest.TestCase):
         may = _norm(_block(_code(TRIGGERS), "te_ai_conscript_refresh_may"))
         for part in ("is_ai = yes", "is_at_war = no", "is_diplomatic_play_committed_participant = no",
                      "is_diplomatic_play_undecided_participant = no",
-                     "NOT = { any_military_formation = { is_mobilized = yes } }"):
+                     "NOT = { any_military_formation = { is_army = yes is_mobilized = yes } }"):
             with self.subTest(part=part):
                 self.assertIn(part, may)
 
@@ -188,16 +188,26 @@ class Files(unittest.TestCase):
 
 
 class ThePass(unittest.TestCase):
-    def test_an_ai_country_runs_it_yearly(self):
+    def test_an_ai_country_looks_monthly_and_runs_it_at_most_once_a_year(self):
+        # A country in a play or a war on one yearly day would miss the whole year; it looks again each month
+        # until the gate holds, then not for a year.
         code = _code(ON_ACTIONS)
         self.assertIn("on_actions = { te_ai_conscript_refresh_on_action }",
-                      _norm(_block(code, "on_yearly_pulse_country")))
+                      _norm(_block(code, "on_monthly_pulse_country")))
+        self.assertNotIn("on_yearly_pulse_country", code)
+        effect = _norm(_block(_code(EFFECTS), "te_ai_conscript_refresh_effect"))
+        self.assertTrue(effect.startswith("if = { limit = { NOT = { has_variable = te_ai_conscript_refresh_year } "
+                                          "te_ai_conscript_refresh_may = yes } "
+                                          "set_variable = { name = te_ai_conscript_refresh_year years = 1 }"))
         self.assertEqual(_norm(_block(code, "te_ai_conscript_refresh_on_action")),
                          "trigger = { is_ai = yes } effect = { te_ai_conscript_refresh_effect = yes }")
 
     def test_the_whole_pass_sits_behind_the_peace_test(self):
         effect = _norm(_block(_code(EFFECTS), "te_ai_conscript_refresh_effect"))
-        self.assertTrue(effect.startswith("if = { limit = { te_ai_conscript_refresh_may = yes } every_scope_state = {"))
+        self.assertTrue(effect.startswith("if = { limit = { NOT = { has_variable = te_ai_conscript_refresh_year } "
+                                          "te_ai_conscript_refresh_may = yes }"))
+        # The outer if's block runs to the effect's end: nothing sits outside the gate.
+        self.assertEqual(len(_body(effect, len("if = {"))) + len("if = {") + 1, len(effect))
         self.assertTrue(effect.endswith("} }"))
         self.assertEqual(effect.count("every_scope_state"), 1)
 
@@ -274,9 +284,44 @@ class TheSelfCheck(unittest.TestCase):
         self.assertNotIn("te_ai_conscript_sc_done", rest)
         intact = _norm(_block(_code(TRIGGERS), "te_ai_conscript_refresh_sample_intact"))
         for part in ("exists = global_var:te_ai_conscript_sc_state", "exists = global_var:te_ai_conscript_sc_country",
+                     "global_var:te_ai_conscript_sc_country = { is_at_war = no }",
                      "global_var:te_ai_conscript_sc_state = { owner = global_var:te_ai_conscript_sc_country }"):
             with self.subTest(part=part):
                 self.assertIn(part, intact)
+
+    def test_the_rule_check_reads_a_center_the_pass_must_clear_before_it_clears_anything(self):
+        """TE_SELF_CHECK ai_conscript_refresh_rule: the gate held, and a center the stale rule must catch
+        (Irregular or Line Infantry, Trench Works researched) reads stale. Without it a pass that never fires
+        logs nothing at all."""
+        effect = _norm(_block(_code(EFFECTS), "te_ai_conscript_refresh_effect"))
+        rule = effect.index("NOT = { has_global_variable = te_ai_conscript_rule_done }")
+        self.assertLess(rule, effect.index("every_scope_state"))
+        block = effect[rule:effect.index("every_scope_state")]
+        for part in ("has_technology_researched = trench_works",
+                     "any_scope_state = { te_ai_conscript_refresh_rule_case = yes }",
+                     "set_global_variable = te_ai_conscript_rule_done",
+                     "TE_SELF_CHECK START ai_conscript_refresh_rule",
+                     "if = { limit = { any_scope_state = { te_ai_conscript_refresh_rule_case = yes "
+                     "te_ai_conscript_center_stale = yes } } debug_log = \"TE_SELF_CHECK OK ai_conscript_refresh_rule",
+                     "else = { debug_log = \"TE_SELF_CHECK BROKEN ai_conscript_refresh_rule"):
+            with self.subTest(part=part):
+                self.assertIn(part, block)
+        self.assertLess(block.index("set_global_variable = te_ai_conscript_rule_done"),
+                        block.index("TE_SELF_CHECK START"))
+        case = _norm(_block(_code(TRIGGERS), "te_ai_conscript_refresh_rule_case"))
+        self.assertEqual(case, "has_building = building_conscription_center b:building_conscription_center = { "
+                               "any_combat_unit = { OR = { "
+                               "has_unit_type = unit_type:combat_unit_type_irregular_infantry "
+                               "has_unit_type = unit_type:combat_unit_type_line_infantry } } }")
+        # The case is one the stale rule must catch.
+        for old in ("combat_unit_type_irregular_infantry", "combat_unit_type_line_infantry"):
+            self.assertIn("trench_works", expected_rule()[old])
+
+    def test_both_checks_have_a_play_test_row(self):
+        text = (ROOT / "docs/testing/ai-economy-playtest.md").read_text(encoding="utf-8")
+        for name in ("ai_conscript_refresh`", "ai_conscript_refresh_rule`"):
+            with self.subTest(name=name):
+                self.assertIn(f"`TE_SELF_CHECK … {name}", text)
 
     def test_every_value_the_lines_print_is_defined(self):
         printed = set(re.findall(r"ScriptValue\('([a-z_]+)'\)", EFFECTS.read_text(encoding="utf-8-sig")))

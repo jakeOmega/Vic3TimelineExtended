@@ -9,10 +9,45 @@
 # (te_ai_conscript_refresh_triggers.txt), except one cleared in the last five years, which stops a center the AI
 # rebuilds stale from being cleared every year. TE_SELF_CHECK ai_conscript_refresh follows the first cleared state.
 #
-# Country scope, from the yearly country pulse (te_ai_conscript_refresh_on_actions.txt).
+# The country looks each month and runs the pass the first month its gate holds, then not for a year
+# (te_ai_conscript_refresh_year), so a country in a play or a war on one day does not miss the whole year.
+#
+# TEMPORARY self-check TE_SELF_CHECK ai_conscript_refresh_rule (2026-11-18, the PR's review): once a game, the first
+# time the gate holds for a country with Trench Works that has a center holding Irregular or Line Infantry, it reads
+# whether that center reads stale, before anything is cleared. OK: the gate holds and the rule's links work. BROKEN:
+# the rule reads such a center as current, so the pass clears nothing (read te_ai_conscript_unit_stale's owner and
+# technology links). No line at all by the time AI countries at peace hold Trench Works (an observer run's 1900s):
+# the gate never holds; read its parts. Delete with the rest of the self-check once both have read.
+#
+# Country scope, from the monthly country pulse (te_ai_conscript_refresh_on_actions.txt).
 te_ai_conscript_refresh_effect = {
 	if = {
-		limit = { te_ai_conscript_refresh_may = yes }
+		limit = {
+			NOT = { has_variable = te_ai_conscript_refresh_year }
+			te_ai_conscript_refresh_may = yes
+		}
+		set_variable = { name = te_ai_conscript_refresh_year years = 1 }
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_ai_conscript_rule_done }
+				has_technology_researched = trench_works
+				any_scope_state = { te_ai_conscript_refresh_rule_case = yes }
+			}
+			set_global_variable = te_ai_conscript_rule_done
+			debug_log = "TE_SELF_CHECK START ai_conscript_refresh_rule (the verdict line follows; none after this one means the engine dropped the templated line)"
+			if = {
+				limit = {
+					any_scope_state = {
+						te_ai_conscript_refresh_rule_case = yes
+						te_ai_conscript_center_stale = yes
+					}
+				}
+				debug_log = "TE_SELF_CHECK OK ai_conscript_refresh_rule country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] (a country at peace with Trench Works holds Irregular or Line Infantry conscripts, and the stale rule reads their center as stale)"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN ai_conscript_refresh_rule country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] (a country at peace with Trench Works holds Irregular or Line Infantry conscripts, and the stale rule reads their center as current: the pass clears nothing; read te_ai_conscript_unit_stale's owner and technology links)"
+			}
+		}
 		every_scope_state = {
 			limit = {
 				NOT = { has_variable = te_ai_conscript_cleared }
@@ -36,7 +71,8 @@ te_ai_conscript_refresh_effect = {
 #   BROKEN stale      the rebuilt battalions are stale again: the country's formation defaults are themselves out of
 #               date. Fallback: skip a country whose conscripts the AI rebuilds stale (the five-year mark already
 #               stops the churn).
-#   NO_VERDICT  the state changed owner, or it or its country is gone, before the verdict: re-armed for the next clear.
+#   NO_VERDICT  the state changed owner, it or its country is gone, or the country is at war, before the verdict:
+#               re-armed for the next clear.
 # Play-test row: docs/testing/ai-economy-playtest.md § The AI conscript refresh. Delete the sample's call, the
 # verdict, the selfcheck on_action and te_ai_conscript_refresh_values.txt once it reads.
 #
@@ -105,7 +141,7 @@ te_ai_conscript_refresh_verdict = {
 	}
 	else = {
 		random_country = {
-			debug_log = "TE_SELF_CHECK NO_VERDICT ai_conscript_refresh date=[TimeKeeper.GetCurrentDate.GetString] (the sampled state changed owner, or it or its country is gone, before the verdict: re-armed for the next clear)"
+			debug_log = "TE_SELF_CHECK NO_VERDICT ai_conscript_refresh date=[TimeKeeper.GetCurrentDate.GetString] (the sampled state changed owner, it or its country is gone, or the country is at war, before the verdict: re-armed for the next clear)"
 		}
 		remove_global_variable = te_ai_conscript_sc_state
 		remove_global_variable = te_ai_conscript_sc_country
