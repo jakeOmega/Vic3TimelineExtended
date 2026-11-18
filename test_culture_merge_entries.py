@@ -1275,6 +1275,42 @@ class ValuesAndBarsTest(unittest.TestCase):
                 self.assertNotIn("te_cm_joined_%s_%s " % (key, part.cultures[0]), squash(block(self.values, "te_cmg_%s_lowest_dom" % key)))
                 self.assertIn("te_cm_joined_%s_%s " % (key, part.cultures[0]), squash(block(self.values, "te_cmg_%s_lowest_dom_all" % key)))
 
+    def test_a_years_count_reads_the_census_counter_guarded_and_capped_at_its_tiers_years(self):
+        # 0 while the census hasn't set the counter (a loc Var read of an unset one logs on every redraw), and no more
+        # than the years the culture's tier asks for, so a met slot reads "30 of 30".
+        for merge in cfg.MERGES:
+            key = merge.key
+            for part in merge.core:
+                for culture in part.cultures:
+                    name = "te_cmg_%s_%s_years_so_far" % (key, culture)
+                    tier = tier_of(merge, culture)
+                    if tier == 1:
+                        self.assertIsNone(block(self.values, name), name)
+                        continue
+                    counter = "te_cm_years_%s_%s" % (key, culture)
+                    self.assertEqual(
+                        squash(block(self.values, name)),
+                        "value = 0 if = { limit = { has_variable = %s } value = var:%s max = te_cm_years_tier%d }"
+                        % (counter, counter, tier),
+                    )
+            for part in merge.optional:
+                for culture in part.cultures:
+                    self.assertIsNone(block(self.values, "te_cmg_%s_%s_years_so_far" % (key, culture)), culture)
+
+    def test_a_wait_count_reads_the_census_counter_guarded(self):
+        # Only the merges with a core wait: Anglophone's counter is never set, and a read of it would log at every load.
+        for merge in cfg.MERGES:
+            key = merge.key
+            name = "te_cmg_%s_wait_years_so_far" % key
+            if not gen.core_waits(merge):
+                self.assertIsNone(block(self.values, name), key)
+                continue
+            counter = "te_cm_wait_years_%s" % key
+            self.assertEqual(
+                squash(block(self.values, name)),
+                "value = 0 if = { limit = { has_variable = %s } value = var:%s }" % (counter, counter),
+            )
+
     def test_one_bar_per_merge_from_zero_to_a_hundred(self):
         for merge in cfg.MERGES:
             body = squash(block(self.bars, "te_cmg_%s_bar" % merge.key))
@@ -1800,6 +1836,65 @@ class MixedTiersTest(unittest.TestCase):
         self.assertIn("$pan-nationalism$", loc["te_cmg_pan_turkic_core_3_tt"])
         self.assertIn("$mass_media$", loc["te_cmg_pan_turkic_core_4_tt"])
         self.assertNotIn("also need", loc["te_cmg_pan_turkic_core_1_tt"])
+
+
+class YearsSoFarTest(unittest.TestCase):
+    """A start condition that counts years says how many have passed (owner, 2026-11-18: "it is not clear if I have
+    1 or 29 more years"). The inactive entry's page shows the conditions and no status row, so the count is in them."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.loc = loc_of(GEN_LOC)
+
+    @staticmethod
+    def figure(key, culture, tier):
+        return "[ROOT.GetCountry.MakeScope.ScriptValue('te_cmg_%s_%s_years_so_far')|0] of " \
+               "[GetPlayer.MakeScope.ScriptValue('te_cm_years_tier%d')|0]" % (key, culture, tier)
+
+    def test_a_slot_that_counts_years_gives_each_alternatives_count(self):
+        for merge in cfg.MERGES:
+            key = merge.key
+            for index, part in enumerate(merge.core, start=1):
+                text = self.loc["te_cmg_%s_core_%d_tt" % (key, index)]
+                counted = [c for c in part.cultures if tier_of(merge, c) > 1]
+                if not counted:
+                    self.assertNotIn("so far", text, "%s %d" % (key, index))
+                    continue
+                if len(counted) == 1:
+                    shown = self.figure(key, counted[0], tier_of(merge, counted[0]))
+                else:
+                    shown = ", ".join("$%s$ %s" % (c, self.figure(key, c, tier_of(merge, c))) for c in counted)
+                self.assertTrue(
+                    text.endswith(" Years so far: %s. Each yearly census that finds them held and accepted adds one." % shown),
+                    "%s %d: %s" % (key, index, text),
+                )
+
+    def test_anglophone_names_whose_count_is_whose(self):
+        # Yankee and American each count on their own counter; the slot is met by either.
+        text = self.loc["te_cmg_anglophone_core_2_tt"]
+        self.assertIn(
+            "Years so far: $yankee$ %s, $cm_american$ %s." % (self.figure("anglophone", "yankee", 2),
+                                                             self.figure("anglophone", "cm_american", 2)),
+            text,
+        )
+        self.assertIn("Years so far: %s." % self.figure("anglophone", "british", 2), self.loc["te_cmg_anglophone_core_1_tt"])
+
+    def test_a_wait_gives_the_years_waited_in_its_condition_and_its_row(self):
+        for merge in cfg.MERGES:
+            key = merge.key
+            for part in gen.core_waits(merge):
+                culture = part.cultures[0]
+                count = "[ROOT.GetCountry.MakeScope.ScriptValue('te_cmg_%s_wait_years_so_far')|0]" % key
+                self.assertIn(
+                    "Years waited so far: %s of [GetPlayer.MakeScope.ScriptValue('te_cm_wait_cap_years')|0]. Each yearly "
+                    "census that finds the merge otherwise ready to begin adds one." % count,
+                    self.loc["te_cmg_%s_wait_%s_tt" % (key, culture)],
+                )
+                self.assertTrue(
+                    self.loc["je_te_cm_%s_status_wait_%s" % (key, culture)].endswith(
+                        " Years waited so far: %s of [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_wait_cap_years')|0]." % count),
+                    key,
+                )
 
 
 class WordingTest(unittest.TestCase):
