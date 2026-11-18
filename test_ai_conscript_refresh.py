@@ -176,5 +176,42 @@ class WhoAndWhen(unittest.TestCase):
                 self.assertIn(part, may)
 
 
+class Files(unittest.TestCase):
+    def test_one_bom_and_tabs(self):
+        for path in (TRIGGERS, EFFECTS, ON_ACTIONS):
+            raw = path.read_bytes()
+            with self.subTest(path=path.name):
+                self.assertTrue(raw.startswith(b"\xef\xbb\xbf"))
+                self.assertFalse(raw[3:].startswith(b"\xef\xbb\xbf"))
+                self.assertEqual([n for n, line in enumerate(raw.decode("utf-8-sig").splitlines(), 1)
+                                  if re.match(r"^ +\S", line)], [])
+
+
+class ThePass(unittest.TestCase):
+    def test_an_ai_country_runs_it_yearly(self):
+        code = _code(ON_ACTIONS)
+        self.assertIn("on_actions = { te_ai_conscript_refresh_on_action }",
+                      _norm(_block(code, "on_yearly_pulse_country")))
+        self.assertEqual(_norm(_block(code, "te_ai_conscript_refresh_on_action")),
+                         "trigger = { is_ai = yes } effect = { te_ai_conscript_refresh_effect = yes }")
+
+    def test_the_whole_pass_sits_behind_the_peace_test(self):
+        effect = _norm(_block(_code(EFFECTS), "te_ai_conscript_refresh_effect"))
+        self.assertTrue(effect.startswith("if = { limit = { te_ai_conscript_refresh_may = yes } every_scope_state = {"))
+        self.assertTrue(effect.endswith("} }"))
+        self.assertEqual(effect.count("every_scope_state"), 1)
+
+    def test_it_clears_each_stale_centre_not_cleared_in_five_years(self):
+        effect = _norm(_block(_code(EFFECTS), "te_ai_conscript_refresh_effect"))
+        limit = effect[effect.index("every_scope_state = { limit = {"):effect.index("te_ai_conscript_refresh_sample")]
+        self.assertIn("NOT = { has_variable = te_ai_conscript_cleared }", limit)
+        self.assertIn("te_ai_conscript_centre_stale = yes", limit)
+        steps = ["te_ai_conscript_refresh_sample = yes", "remove_building = building_conscription_center",
+                 "set_variable = { name = te_ai_conscript_cleared years = 5 }"]
+        at = [effect.index(step) for step in steps]
+        self.assertEqual(at, sorted(at), "sample the self-check, then remove, then mark the five years")
+        self.assertEqual(effect.count("remove_building"), 1)
+
+
 if __name__ == "__main__":
     unittest.main()

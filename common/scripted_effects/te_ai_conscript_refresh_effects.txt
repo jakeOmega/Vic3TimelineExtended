@@ -1,0 +1,26 @@
+﻿# The AI conscript refresh (#1877 trap 5; owner, 2026-11-18; design docs/superpowers/specs/2026-11-18-ai-conscript-refresh-design.md).
+#
+# The AI keeps each formation's default unit types at its best unlocked type, so new conscripts come in modern, but it
+# never upgrades a conscript battalion it already has: Japan's 100 conscripts, half of them Irregular Infantry, were
+# the same in 1946 and 1964 in the owner's game. No effect changes a battalion's type or disbands one, but removing a
+# state's conscription centre deletes its conscripts, and an AI at peace rebuilds the centre within a month in its
+# formations' defaults (measured 2026-11-18, docs/guides/scripting_best_practices.md). So once a year an AI country at
+# peace has removed every conscription centre holding a battalion three or more eras behind its own unlocked types
+# (te_ai_conscript_refresh_triggers.txt), except one cleared in the last five years, which stops a centre the AI
+# rebuilds stale from being cleared every year. TE_SELF_CHECK ai_conscript_refresh follows the first cleared state.
+#
+# Country scope, from the yearly country pulse (te_ai_conscript_refresh_on_actions.txt).
+te_ai_conscript_refresh_effect = {
+	if = {
+		limit = { te_ai_conscript_refresh_may = yes }
+		every_scope_state = {
+			limit = {
+				NOT = { has_variable = te_ai_conscript_cleared }
+				te_ai_conscript_centre_stale = yes
+			}
+			te_ai_conscript_refresh_sample = yes
+			remove_building = building_conscription_center
+			set_variable = { name = te_ai_conscript_cleared years = 5 }
+		}
+	}
+}

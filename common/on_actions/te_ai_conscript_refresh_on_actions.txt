@@ -1,0 +1,15 @@
+﻿# The AI conscript refresh, yearly for each AI country (common/scripted_effects/te_ai_conscript_refresh_effects.txt).
+on_yearly_pulse_country = {
+	on_actions = {
+		te_ai_conscript_refresh_on_action
+	}
+}
+
+te_ai_conscript_refresh_on_action = {
+	trigger = {
+		is_ai = yes
+	}
+	effect = {
+		te_ai_conscript_refresh_effect = yes
+	}
+}
