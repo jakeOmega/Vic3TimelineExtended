@@ -297,6 +297,7 @@
  building_huawei_ox_horn_campus:0 "Huawei Ox Horn Campus"
  building_hughes_yuzovka_steelworks:0 "Hughes Yuzovka Steelworks"
  building_hydro_plant:0 "Hydro Plant"
+ building_hydro_plant_possible_tt:0 "This state is on a river or has a finished great dam: the $building_wonder_hoover_dam$, $building_wonder_aswan_high_dam$, $building_wonder_itaipu_dam$ or $building_wonder_three_gorges_dam$"
  building_hydro_plant_throughput_add:0 "Hydro Plant [concept_throughput]"
  building_hydro_plant_throughput_add_desc:0 "Hydro Plant [concept_throughput]"
  building_hyundai_ulsan_factory:0 "Hyundai Ulsan Factory"

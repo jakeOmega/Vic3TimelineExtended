@@ -631,7 +631,9 @@ Each wonder employs 10,000 workers, and its effects scale with how fully it is
 staffed. The effects are modest and themed: the dams add 10 to 20 Hydro Plant
 levels to their state and 25% Hydro Plant throughput, towers and trade landmarks
 raise trade advantage or Urban Center, Trade Center or service throughput,
-religious landmarks please the Devout, and several give flat prestige.
+religious landmarks please the Devout, and several give flat prestige. Once a
+dam is built, its state can build Hydro Plants even with no river, which is how
+Nevada gets them.
 
 Eight science and diplomacy wonders can be built in any state, so the first
 country to meet their conditions and finish one claims it:

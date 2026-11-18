@@ -289,3 +289,15 @@ they held a Grid Interconnection Agreement (`power_grids.md` § Bloc partners). 
 | **A redundant agreement.** Propose a Grid Interconnection Agreement to an AI bloc partner, once where your stations meet and once where they don't. | Offered as before; the acceptance breakdown shows the same in both: the bloc's +10 and a −10 for the bloc already interconnecting the grids, with no stations line, the whole as between two countries whose grids don't meet. | A stations line in the breakdown: `NAND` in `AI_GRID_STATIONS_MEET`'s limit didn't read as "not both"; write it `NOT = { AND = { ... } }`. |
 | **AI stations.** An observer run past the principle: an AI member with no power plant beside a bloc partner's station. | It builds a station on that border, as beside an agreement partner's. | — |
 | **How many stations AI bloc members build.** An observer run to 1980 or later with a bloc that holds one of the four principles, against the same seed on `main`. | A few stations more in the bloc's members, along their shared borders, and no member with stations in every state. Every member now has a partner list, so `te_grid_ai_partner_near`'s early-out on `has_variable_list = te_grid_partners` no longer skips them and each runs the site search monthly; a station still needs power in the market area or a partner's station (or, with `ANY = yes`, a partner with Electrical Capacitors) beside it. | Members queueing a station a month along every border, or stations with no power on either side: weigh the site's partner term only for a partner whose state has a station (`ANY = no`), or count a bloc partner near only when it has power in the market area. |
+
+## Hydro Plants beside a great dam (2026-11-18)
+
+A Hydro Plant may be built on a river, as before, or in a state whose Hoover, Aswan High, Itaipu or Three Gorges Dam
+is built (`common/buildings/06_zz_te_clean_power.txt`; `test_hydro_plant_sites.py` holds the dam list). Nevada is not
+on a river in the map data, so before this the Hoover Dam's +10 Hydro Plant levels did nothing.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Nevada, no dam.** The United States with Public Works Programs; open Nevada's build list. | No Hydro Plant can be built; the hover reads "This state is on a river or has a finished great dam: …" with the four dams named. | A raw `building_hydro_plant_possible_tt`: missing loc. Buildable already: Nevada is on a river after all, and the report was something else. |
+| **Nevada, dam built.** Finish the Hoover Dam (console `create_building` or build it), then open the build list again. | A Hydro Plant can be queued, up to 5 levels from the technology plus 10 from the dam at full staffing. | Still blocked: `has_building` doesn't see a wonder in a building's `possible`; switch to `any_scope_building = { is_building_type = building_wonder_hoover_dam level > 0 }`. |
+| **A river state.** Any state that could build a Hydro Plant before. | Unchanged. | — |
