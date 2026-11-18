@@ -1165,6 +1165,19 @@ class TestFinalReviewFixesPhase2(unittest.TestCase):
         self.assertIn("[THIS.GetCountry.GetNameNoFormatting]", broken)
         self.assertIn("[SCOPE.sCountry('nd_suez_check_other').GetNameNoFormatting]", broken)
         self.assertIn("remove_variable = nd_suez_check_other", ev)
+        # What tells a BROKEN's cases apart (2026-11-17): the wars the two
+        # fight on opposite sides, the ones the yielder leads, and the other
+        # country named from its own scope, since the saved scope's name
+        # printed blank in the verdict line.
+        self.assertIn("wars=[THIS.Var('nd_suez_chk_wars').GetValue|0] led=[THIS.Var('nd_suez_chk_led').GetValue|0]", broken)
+        self.assertIn("is_warleader = ROOT", ev)
+        other = squash(block(ev, "scope:nd_suez_check_other"))
+        self.assertIn("type=suez_check_other", other)
+        self.assertIn("[THIS.GetCountry.GetNameNoFormatting]", other)
+        # Re-armed under a new marker: the old one is set in saves that read it.
+        self.assertIn("set_global_variable = nd_suez_self_check_v2_done", concede)
+        self.assertIn("remove_global_variable = nd_suez_self_check_v2_done", ev)
+        self.assertNotIn("nd_suez_self_check_done", self.crisis + self.crisis_events)
 
     # A crisis their strike ended (outcome 7) leaves a cooldown that must not
     # outlast the grievance it ended over.

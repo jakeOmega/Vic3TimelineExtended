@@ -2081,8 +2081,9 @@ nd_crisis_concede_war = {
 					nd_crisis_drop_goals = { WHO = initiator }
 				}
 				if = {
-					limit = { NOT = { has_global_variable = nd_suez_self_check_done } }
-					set_global_variable = nd_suez_self_check_done
+					# _v2 since 2026-11-17: re-armed for the line that counts the wars
+					limit = { NOT = { has_global_variable = nd_suez_self_check_v2_done } }
+					set_global_variable = nd_suez_self_check_v2_done
 					scope:nd_target = {
 						set_variable = { name = nd_suez_check_other value = scope:nd_crisis_other_side days = 10 }
 						trigger_event = { id = nuclear_crisis.25 days = 1 }
