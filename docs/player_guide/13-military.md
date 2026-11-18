@@ -64,6 +64,11 @@ industrial robotics, and launch capacity for the orbital units. Tanks, aircraft,
 and the new artillery, cavalry and marines after Combined Arms Marines can't be
 built under the Peasant Levies law.
 
+AI countries don't upgrade conscripts already raised. Once a year an AI country
+at peace removes each conscription center whose conscripts are three or more
+eras behind its own technology, and builds it again with its current units.
+Your own conscripts are never touched.
+
 ## Barracks training methods
 
 The Barracks' training methods go on past Mobile Warfare Tactics. Two raise the
