@@ -408,6 +408,7 @@ gm_clear_state = {
 	gm_state_clear_namesake = yes
 	gm_remove_state_var = { VAR = gm_name }
 	gm_remove_state_var = { VAR = gm_unveiled_for_com }
+	gm_remove_state_var = { VAR = gm_unearthed_for_com }
 	gm_remove_state_var = { VAR = gm_unveil_pending }
 	gm_remove_state_var = { VAR = gm_name_choice_open }
 	gm_remove_state_var = { VAR = gm_being_named }
@@ -1312,9 +1313,11 @@ gm_state_changed_hands = {
 		limit = { gm_state_merge_pending = yes }
 		gm_state_adopt_orphans = yes
 	}
-	# A commission's mark and a naming in progress belong to the old owner
-	# (v2 §3.3, §3.5); its naming is closed by its own sweep.
+	# A commission's marks and a naming in progress belong to the old owner
+	# (v2 §3.3, §3.5); its naming is closed by its own sweep. A find's mark
+	# (gm_unearthed_for_com) was for the old owner's opportunity.
 	gm_remove_state_var = { VAR = gm_unveiled_for_com }
+	gm_remove_state_var = { VAR = gm_unearthed_for_com }
 	gm_remove_state_var = { VAR = gm_being_named }
 	# The country it came from, for a trophy taken from it (gm_trophy_effects.txt).
 	gm_state_tr_changed_hands = yes

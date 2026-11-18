@@ -46,6 +46,10 @@ After the independent review of PR #1810 (2026-11-14):
 2026-11-15 (owner: the principle's lines read as paragraphs): every figure the
 principle prints is a numeric display field, each held here to the script
 value or static modifier that pays it (``TooltipTest``).
+
+#1864: the leader pays for the tier III backstop only where its adopter gets it,
+not where a treaty guarantee or a receivership already pays the relief
+(``BackstopCostTest``).
 """
 
 import math
@@ -1800,6 +1804,85 @@ class OtherMintingFiguresTest(MintingBonusTest):
 
     def test_the_guide_says_so_for_printing(self):
         self.assertIn("Each level mints about 1% of a year's GDP before minting bonuses", self.guide)
+
+
+class BackstopCostTest(unittest.TestCase):
+    """#1864: the leader pays for the tier III backstop only where the adopter receives it.
+
+    te_mon_union_recipient_value pays the relief only when no treaty guarantee or
+    receivership already does (te_mon_has_treaty_debt_relief); the leader's
+    te_mon_union_cost_to_root charged it either way. Run both, with the member's GDP
+    equal to the leader's (a ratio of 1), so what the leader pays is what the member gets.
+    """
+
+    RELIEF = 0.6
+
+    def cost_and_benefit(self, tier, *, backstop, treaty):
+        s = Script()
+        s.stub_values.update(te_mon_lolr_relief=self.RELIEF, te_mon_arr_gdp_ratio_to_root=1)
+        s.stub_triggers.update(
+            te_mon_union_backstop_is_effective=lambda scope: backstop,
+            te_mon_has_treaty_debt_relief=lambda scope: treaty,
+            te_mon_union_gets_cooperation=lambda scope: False,
+        )
+        leader = union(tier)
+        member = leader.bloc.members[1]
+        cost = s.value(s.values["te_mon_union_cost_to_root"], member, leader)
+        benefit = s.value(s.values["te_mon_union_recipient_value"], member, member)
+        return cost, benefit
+
+    def test_the_leader_pays_for_the_backstop_only_where_it_is_paid(self):
+        for backstop in (True, False):
+            for treaty in (True, False):
+                with self.subTest(backstop=backstop, treaty=treaty):
+                    cost, benefit = self.cost_and_benefit(3, backstop=backstop, treaty=treaty)
+                    self.assertAlmostEqual(cost, benefit)
+                    self.assertAlmostEqual(cost, self.RELIEF if backstop and not treaty else 0)
+
+    def test_a_treaty_covered_adopter_still_costs_its_supervision_at_tier_four(self):
+        # The tier IV supervision is the leader's own work on the adopter's banks, which a
+        # treaty guarantee does not do for it: only the relief comes off.
+        cost, benefit = self.cost_and_benefit(4, backstop=True, treaty=True)
+        self.assertEqual(benefit, 0)
+        self.assertAlmostEqual(cost, Script().number("te_mon_union_supervision_cost", None, None))
+
+
+class HelpTextTest(unittest.TestCase):
+    """#1858: the Banking Help's Monetary Union note covers every tier the group has.
+
+    It said three tiers after the group grew to five, so the note is held to
+    the principle file: one `#b <tier>:#!` line per tier, in order, and the count in words.
+    """
+
+    WORDS = {3: "three", 4: "four", 5: "five", 6: "six", 7: "seven"}
+
+    @classmethod
+    def setUpClass(cls):
+        cls.text = english()["banking_dash_how_union"]
+        cls.tiers = sorted(int(m) for m in re.findall(r"^principle_monetary_union_(\d+) = \{",
+                                                       (ROOT / PRINCIPLES).read_text(encoding="utf-8-sig"), re.M))
+
+    def test_one_line_per_tier_in_order(self):
+        lines = re.findall(r"#b \$principle_monetary_union_(\d+)\$:#!", self.text)
+        self.assertEqual([int(n) for n in lines], self.tiers)
+
+    def test_the_count_in_words(self):
+        self.assertIn(f"has {self.WORDS[len(self.tiers)]} tiers", self.text)
+
+    def test_the_backstop_says_a_treaty_pays_first(self):
+        # te_mon_union_recipient_value and (#1864) te_mon_union_cost_to_root
+        self.assertIn("unless a treaty guarantee or a receivership already does", self.text)
+
+    def test_the_tier_four_and_five_figures(self):
+        bloc4 = dict((k, v) for k, _, v in principle_blocks()[4]["power_bloc_modifier"])
+        self.assertEqual(float(bloc4["power_bloc_te_mon_currency_crash_chance_mult"]), -0.25)
+        self.assertEqual(float(bloc4["power_bloc_te_mon_currency_volatility_mult"]), -0.25)
+        self.assertIn("crashes are 25% less likely and its cycle 25% less volatile", self.text)
+        bloc5 = dict((k, v) for k, _, v in principle_blocks()[5]["power_bloc_modifier"])
+        self.assertIn(f"{round(float(bloc5['power_bloc_te_mon_currency_investment_pool_add']) * 100)}% pool contribution in all",
+                      self.text)
+        cut = Script().number("te_mon_union_reserve_standing_cut", None, None)
+        self.assertIn(f"−{cut:g} points of credit standing", self.text)
 
 
 if __name__ == "__main__":

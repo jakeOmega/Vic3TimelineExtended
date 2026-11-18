@@ -369,9 +369,11 @@ gm_mon_has_dedication_flag = {
 # Container scope. This secondary counts toward its owner's open opportunity
 # (spec 2026-10-16 §5), as gm_state_com_counts does for a state's own: it fits,
 # it is of the opportunity's dedication, and it stands in the opportunity's
-# state if that names one.
+# state if that names one. Not a buried site dug up while the opportunity was
+# offered or open (gm_tr_unearthed_for_com, gm_arch_place).
 gm_mon_com_counts = {
 	var:gm_tr_origin ?= { owner = { has_variable = gm_com_dedication } }
+	NOT = { has_variable = gm_tr_unearthed_for_com }
 	gm_mon_status_fits = yes
 	gm_mon_has_dedication_flag = { VAR = gm_com_dedication }
 	var:gm_tr_origin ?= {
