@@ -1,0 +1,6 @@
+﻿# TEMPORARY: what TE_SELF_CHECK ai_conscript_refresh's lines print (te_ai_conscript_refresh_effects.txt). Read only
+# after te_ai_conscript_refresh_verdict has set every one of them.
+te_ai_conscript_sc_before_g = { value = global_var:te_ai_conscript_sc_before }
+te_ai_conscript_sc_before_stale_g = { value = global_var:te_ai_conscript_sc_before_stale }
+te_ai_conscript_sc_after_g = { value = global_var:te_ai_conscript_sc_after }
+te_ai_conscript_sc_after_stale_g = { value = global_var:te_ai_conscript_sc_after_stale }

@@ -104,6 +104,10 @@ A check-in every half hour fires only when no turn is running, and a triage turn
 
 Two findings of one morning launch were not `main`'s: a `filter` error at line numbers that fit neither `main`'s file nor its predecessor's, and an engine-built key for a building `main` handled differently. The launch was a QA run of an unmerged branch. The tells: line numbers that do not match `main`'s file at that commit; a load-time error absent from every later launch whose `error.log` is whole; and a deploy dry run that copies nothing, which says the game folder is `main` now and nothing about then. Close such a finding on the later launches, not on a fix you can point to.
 
+### A merged PR ran in a launch only if its files reached the mod folder before the launch: read their ctime there, not the reflog (2026-11-18)
+
+The reflog showed #1880 pulled into the main checkout at 13:51 on 2026-11-17, before a 14:46 launch, but its files reached the Windows mod folder at 19:49, during that launch, and the engine reads mod files only at launch. So the launch played 1929 to 1962 without #1880. Its save of 1946 had none of the pass's variables, and the next launch was the first to run it. `rsync` keeps the source's mtime, so the mod folder's mtime is the pull time. The copy time is the ctime: `stat -c '%n %z' "<mod_deploy_target>/<file>"`, or `find "<mod_deploy_target>" -type f -printf '%CY-%Cm-%Cd_%CH:%CM\n' | sort | uniq -c` for the deploys by time. A save holding none of a PR's variables while the reflog says the PR was in is the tell.
+
 ## Mod, vanilla or third party
 
 ### A path in neither the mod nor vanilla is a third-party Workshop mod (2026-05-02)

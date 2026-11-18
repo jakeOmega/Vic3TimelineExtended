@@ -1,0 +1,149 @@
+﻿# The AI conscript refresh (#1877 trap 5; owner, 2026-11-18; design docs/superpowers/specs/2026-11-18-ai-conscript-refresh-design.md).
+#
+# The AI keeps each formation's default unit types at its best unlocked type, so new conscripts come in modern, but it
+# never upgrades a conscript battalion it already has: Japan's 100 conscripts, half of them Irregular Infantry, were
+# the same in 1946 and 1964 in the owner's game. No effect changes a battalion's type or disbands one, but removing a
+# state's conscription center deletes its conscripts, and an AI at peace rebuilds the center within a month in its
+# formations' defaults (measured 2026-11-18, docs/guides/scripting_best_practices.md). So once a year an AI country at
+# peace has removed every conscription center holding a battalion three or more eras behind its own unlocked types
+# (te_ai_conscript_refresh_triggers.txt), except one cleared in the last five years, which stops a center the AI
+# rebuilds stale from being cleared every year. TE_SELF_CHECK ai_conscript_refresh follows the first cleared state.
+#
+# The country looks each month and runs the pass the first month its gate holds, then not for a year
+# (te_ai_conscript_refresh_year), so a country in a play or a war on one day does not miss the whole year.
+#
+# TEMPORARY self-check TE_SELF_CHECK ai_conscript_refresh_rule (2026-11-18, the PR's review): once a game, the first
+# time the gate holds for a country with Trench Works that has a center holding Irregular or Line Infantry, it reads
+# whether that center reads stale, before anything is cleared. OK: the gate holds and the rule's links work. BROKEN:
+# the rule reads such a center as current, so the pass clears nothing (read te_ai_conscript_unit_stale's owner and
+# technology links). No line at all by the time AI countries at peace hold Trench Works (an observer run's 1900s):
+# the gate never holds; read its parts. Delete with the rest of the self-check once both have read.
+#
+# Country scope, from the monthly country pulse (te_ai_conscript_refresh_on_actions.txt).
+te_ai_conscript_refresh_effect = {
+	if = {
+		limit = {
+			NOT = { has_variable = te_ai_conscript_refresh_year }
+			te_ai_conscript_refresh_may = yes
+		}
+		set_variable = { name = te_ai_conscript_refresh_year years = 1 }
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_ai_conscript_rule_done }
+				has_technology_researched = trench_works
+				any_scope_state = { te_ai_conscript_refresh_rule_case = yes }
+			}
+			set_global_variable = te_ai_conscript_rule_done
+			debug_log = "TE_SELF_CHECK START ai_conscript_refresh_rule (the verdict line follows; none after this one means the engine dropped the templated line)"
+			if = {
+				limit = {
+					any_scope_state = {
+						te_ai_conscript_refresh_rule_case = yes
+						te_ai_conscript_center_stale = yes
+					}
+				}
+				debug_log = "TE_SELF_CHECK OK ai_conscript_refresh_rule country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] (a country at peace with Trench Works holds Irregular or Line Infantry conscripts, and the stale rule reads their center as stale)"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN ai_conscript_refresh_rule country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] (a country at peace with Trench Works holds Irregular or Line Infantry conscripts, and the stale rule reads their center as current: the pass clears nothing; read te_ai_conscript_unit_stale's owner and technology links)"
+			}
+		}
+		every_scope_state = {
+			limit = {
+				NOT = { has_variable = te_ai_conscript_cleared }
+				te_ai_conscript_center_stale = yes
+			}
+			te_ai_conscript_refresh_sample = yes
+			remove_building = building_conscription_center
+			set_variable = { name = te_ai_conscript_cleared years = 5 }
+		}
+	}
+}
+
+# TEMPORARY self-check (2026-11-18, #1877): does an AI rebuild a removed conscription center, and in current types?
+# Measured once (two countries in one save, at peace); this reads it in every game. The first center the pass clears
+# is counted before its removal (te_ai_conscript_refresh_sample) and again three months on, from the world's monthly
+# pulse (te_ai_conscript_refresh_selfcheck, te_ai_conscript_refresh_verdict). Once read:
+#   START       a plain marker, logged first: with no verdict line after it, the templated line was dropped.
+#   OK          the state has a conscription center again, with at least one battalion and none of them stale.
+#   BROKEN no_center  no center or no battalion there: the AI does not rebuild a removed center. Fallback: take the
+#               pass's on_action line out and take this to the owner.
+#   BROKEN stale      the rebuilt battalions are stale again: the country's formation defaults are themselves out of
+#               date. Fallback: skip a country whose conscripts the AI rebuilds stale (the five-year mark already
+#               stops the churn).
+#   NO_VERDICT  the state changed owner, it or its country is gone, or the country is at war, before the verdict:
+#               re-armed for the next clear.
+# Play-test row: docs/testing/ai-economy-playtest.md § The AI conscript refresh. Delete the sample's call, the
+# verdict, the selfcheck on_action and te_ai_conscript_refresh_values.txt once it reads.
+#
+# State scope, the state about to be cleared.
+te_ai_conscript_refresh_sample = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_ai_conscript_sc_state }
+			NOT = { has_global_variable = te_ai_conscript_sc_done }
+		}
+		set_global_variable = { name = te_ai_conscript_sc_state value = this }
+		set_global_variable = { name = te_ai_conscript_sc_country value = owner }
+		set_global_variable = { name = te_ai_conscript_sc_months value = 0 }
+		set_global_variable = { name = te_ai_conscript_sc_before value = 0 }
+		set_global_variable = { name = te_ai_conscript_sc_before_stale value = 0 }
+		b:building_conscription_center = {
+			every_combat_unit = {
+				change_global_variable = { name = te_ai_conscript_sc_before add = 1 }
+				if = {
+					limit = { te_ai_conscript_unit_stale = yes }
+					change_global_variable = { name = te_ai_conscript_sc_before_stale add = 1 }
+				}
+			}
+		}
+	}
+}
+
+# No scope (the world's monthly pulse), three months after the sample.
+te_ai_conscript_refresh_verdict = {
+	if = {
+		limit = { te_ai_conscript_refresh_sample_intact = yes }
+		set_global_variable = { name = te_ai_conscript_sc_after value = 0 }
+		set_global_variable = { name = te_ai_conscript_sc_after_stale value = 0 }
+		global_var:te_ai_conscript_sc_state = {
+			if = {
+				limit = { has_building = building_conscription_center }
+				b:building_conscription_center = {
+					every_combat_unit = {
+						change_global_variable = { name = te_ai_conscript_sc_after add = 1 }
+						if = {
+							limit = { te_ai_conscript_unit_stale = yes }
+							change_global_variable = { name = te_ai_conscript_sc_after_stale add = 1 }
+						}
+					}
+				}
+			}
+		}
+		set_global_variable = te_ai_conscript_sc_done
+		global_var:te_ai_conscript_sc_country = {
+			debug_log = "TE_SELF_CHECK START ai_conscript_refresh (the verdict line follows; none after this one means the engine dropped the templated line)"
+			if = {
+				limit = {
+					global_var:te_ai_conscript_sc_after >= 1
+					global_var:te_ai_conscript_sc_after_stale = 0
+				}
+				debug_log = "TE_SELF_CHECK OK ai_conscript_refresh country=[THIS.GetCountry.GetTagName] before=[THIS.ScriptValue('te_ai_conscript_sc_before_g')|0] before_stale=[THIS.ScriptValue('te_ai_conscript_sc_before_stale_g')|0] after=[THIS.ScriptValue('te_ai_conscript_sc_after_g')|0] after_stale=0 date=[TimeKeeper.GetCurrentDate.GetString] (three months after its conscription center was removed, the state has one again and none of its battalions is stale: the AI rebuilds in current types)"
+			}
+			else_if = {
+				limit = { global_var:te_ai_conscript_sc_after = 0 }
+				debug_log = "TE_SELF_CHECK BROKEN ai_conscript_refresh no_center country=[THIS.GetCountry.GetTagName] before=[THIS.ScriptValue('te_ai_conscript_sc_before_g')|0] before_stale=[THIS.ScriptValue('te_ai_conscript_sc_before_stale_g')|0] after=0 date=[TimeKeeper.GetCurrentDate.GetString] (three months after its conscription center was removed, the state holds no conscripts: the AI did not rebuild; fallback in te_ai_conscript_refresh_effects.txt)"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN ai_conscript_refresh stale country=[THIS.GetCountry.GetTagName] before=[THIS.ScriptValue('te_ai_conscript_sc_before_g')|0] before_stale=[THIS.ScriptValue('te_ai_conscript_sc_before_stale_g')|0] after=[THIS.ScriptValue('te_ai_conscript_sc_after_g')|0] after_stale=[THIS.ScriptValue('te_ai_conscript_sc_after_stale_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (the rebuilt conscripts are stale again: the country's formation defaults are out of date; fallback in te_ai_conscript_refresh_effects.txt)"
+			}
+		}
+	}
+	else = {
+		random_country = {
+			debug_log = "TE_SELF_CHECK NO_VERDICT ai_conscript_refresh date=[TimeKeeper.GetCurrentDate.GetString] (the sampled state changed owner, it or its country is gone, or the country is at war, before the verdict: re-armed for the next clear)"
+		}
+		remove_global_variable = te_ai_conscript_sc_state
+		remove_global_variable = te_ai_conscript_sc_country
+	}
+}
