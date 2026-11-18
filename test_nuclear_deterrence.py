@@ -998,6 +998,49 @@ class TestYieldForfeit(unittest.TestCase):
                       preview)
 
 
+class TestStakesSubjectGoals(unittest.TestCase):
+    """A goal to free or take a subject targets the subject, not its overlord
+    (targets_enemy_subject; a war's in game, 2026-11-18), so the stakes read
+    those two types on the target's direct subjects (#1895)."""
+
+    def setUp(self):
+        self.values = strip_comments(read(VALUES))
+        self.triggers = strip_comments(read(TRIGGERS))
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+
+    def test_read_on_the_targets_subjects_not_on_the_target(self):
+        territory = block(self.values, "nd_yp_stakes_territory_value")
+        for t in ("liberate_subject", "transfer_subject"):
+            self.assertNotIn(f"nd_side_holds_goal_against = {{ TYPE = {t} TARGET = scope:nd_target }}", territory)
+            self.assertIn(f"scope:nd_stakes_demander = {{ nd_side_holds_goal_on_subject_of ="
+                          f" {{ TYPE = {t} TARGET = scope:nd_target }} }}", territory)
+
+    # Side-wide, in a play or a war, as every other stakes read.
+    def test_helper_walks_direct_subjects_side_wide(self):
+        helper = squash(block(self.triggers, "nd_side_holds_goal_on_subject_of"))
+        self.assertEqual(helper, "save_temporary_scope_as = nd_sgs_side_t $TARGET$ = { any_direct_subject = {"
+                                 " save_temporary_scope_as = nd_sgs_subject_t scope:nd_sgs_side_t ="
+                                 " { nd_side_holds_goal_against = { TYPE = $TYPE$ TARGET = scope:nd_sgs_subject_t } } } }")
+
+    # The play's reading is unverified: a once-a-game line says which.
+    def test_play_self_check(self):
+        refresh = squash(block(self.crisis, "nd_crisis_refresh_figures"))
+        start = refresh.index("var:nd_crisis_dispute ?= 1 NOT = { has_global_variable = nd_play_subject_goal_check_done }")
+        check = refresh[start:refresh.index("save_scope_as = nd_forfeit_to")]
+        self.assertIn("scope:nd_target = { is_subject = no }", check)
+        marker = check.index("set_global_variable = nd_play_subject_goal_check_done")
+        self.assertLess(marker, check.index("TE_SELF_CHECK BROKEN nd_play_subject_goal"))
+        self.assertLess(marker, check.index("TE_SELF_CHECK OK nd_play_subject_goal"))
+        # BROKEN on any reading against the target; OK only otherwise.
+        self.assertLess(check.index("limit = { nd_play_subject_goal_on_overlord = yes }"),
+                        check.index("TE_SELF_CHECK BROKEN"))
+        for name in ("nd_play_subject_goal_on_overlord", "nd_play_subject_goal_on_subject"):
+            body = block(self.triggers, name)
+            self.assertNotIn("war_side_has_war_goal_of_type_against", body)
+            self.assertNotIn("nd_side_holds_goal_against", body)
+            self.assertEqual(body.count("play_side_has_war_goal_of_type_against"), 2, name)
+
+
 class TestPeacetimeStrikeDispute(unittest.TestCase):
     """Dispute code 6: the target struck us, or a country we cover, outside a
     war in the last 24 months (2026-10-28 rework spec §8.5)."""

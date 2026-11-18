@@ -2438,6 +2438,49 @@ nd_side_holds_goal_against = {
 	}
 }
 
+# Demander scope: does our side hold a goal of $TYPE$ against one of
+# $TARGET$'s direct subjects, in a play or a war? A goal to free or take a
+# subject targets the subject, not its overlord (targets_enemy_subject: a
+# war's, in game 2026-11-18; a play's, TE_SELF_CHECK nd_play_subject_goal).
+# The stakes' read of those two types (nd_yp_stakes_territory_value, #1895).
+# Parameters: $TYPE$ = war goal type; $TARGET$ = the overlord
+nd_side_holds_goal_on_subject_of = {
+	save_temporary_scope_as = nd_sgs_side_t
+	$TARGET$ = {
+		any_direct_subject = {
+			save_temporary_scope_as = nd_sgs_subject_t
+			scope:nd_sgs_side_t = { nd_side_holds_goal_against = { TYPE = $TYPE$ TARGET = scope:nd_sgs_subject_t } }
+		}
+	}
+}
+
+# Issuer scope, scope:nd_target saved: TE_SELF_CHECK nd_play_subject_goal's
+# two readings (nd_crisis_refresh_figures). Does our side's play hold a goal
+# to free or take a subject that reads as against the target itself, or as
+# against one of its direct subjects? Play reads only, so a war between us
+# and one of its subjects can't answer for the play.
+nd_play_subject_goal_on_overlord = {
+	OR = {
+		play_side_has_war_goal_of_type_against = { type = liberate_subject target = scope:nd_target }
+		play_side_has_war_goal_of_type_against = { type = transfer_subject target = scope:nd_target }
+	}
+}
+
+nd_play_subject_goal_on_subject = {
+	save_temporary_scope_as = nd_psg_side_t
+	scope:nd_target = {
+		any_direct_subject = {
+			save_temporary_scope_as = nd_psg_subject_t
+			scope:nd_psg_side_t = {
+				OR = {
+					play_side_has_war_goal_of_type_against = { type = liberate_subject target = scope:nd_psg_subject_t }
+					play_side_has_war_goal_of_type_against = { type = transfer_subject target = scope:nd_psg_subject_t }
+				}
+			}
+		}
+	}
+}
+
 # Country scope: do we ourselves, in any war, hold a goal against $TARGET$, or
 # one to liberate or take one of its direct subjects? Our own goals only, not
 # our allies': a country that yields gives up what it holds and nothing its

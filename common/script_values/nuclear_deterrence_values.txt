@@ -1800,12 +1800,15 @@ nd_yp_stakes_territory_value = {
 		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = te_un_mandate_restore_state TARGET = scope:nd_target } } }
 		add = -10
 	}
+	# A goal to free or take a subject targets the subject, not its overlord
+	# (#1895): these two count on one of our direct subjects. On us, as another
+	# country's subject, they take nothing from us.
 	if = {
-		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = transfer_subject TARGET = scope:nd_target } } }
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_on_subject_of = { TYPE = transfer_subject TARGET = scope:nd_target } } }
 		add = -10
 	}
 	if = {
-		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_against = { TYPE = liberate_subject TARGET = scope:nd_target } } }
+		limit = { scope:nd_stakes_demander = { nd_side_holds_goal_on_subject_of = { TYPE = liberate_subject TARGET = scope:nd_target } } }
 		add = -10
 	}
 	if = {
