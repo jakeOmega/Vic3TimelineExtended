@@ -62,6 +62,21 @@ gm_com_clear = {
 		limit = { has_variable = gm_unveiled_for_com }
 		remove_variable = gm_unveiled_for_com
 	}
+	# A find dug up while this one was offered or open (gm_arch_place) is
+	# marked for this one only: the next counts it in its baseline, so it adds
+	# nothing there either.
+	every_scope_state = {
+		limit = { has_variable = gm_unearthed_for_com }
+		remove_variable = gm_unearthed_for_com
+	}
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		every_in_list = {
+			variable = gm_monuments_held
+			limit = { has_variable = gm_tr_unearthed_for_com }
+			remove_variable = gm_tr_unearthed_for_com
+		}
+	}
 }
 
 # Country scope. An opportunity closes (let pass, seized, run out or lapsed).

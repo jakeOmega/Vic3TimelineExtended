@@ -111,9 +111,12 @@ gm_state_has_dedication_flag = {
 # (dedicated, not contested, not heritage, its message stands), it is of the
 # opportunity's dedication, and it stands in the opportunity's state if it
 # names one. A monument contested after acceptance drops out; the progress count
-# floors at zero (gm_com_progress).
+# floors at zero (gm_com_progress). A buried site dug up while the opportunity
+# was offered or open never counts toward it (gm_unearthed_for_com,
+# gm_arch_place).
 gm_state_com_counts = {
 	owner = { has_variable = gm_com_dedication }
+	NOT = { has_variable = gm_unearthed_for_com }
 	gm_state_status_fits = yes
 	gm_state_has_dedication_flag = { VAR = gm_com_dedication }
 	OR = {

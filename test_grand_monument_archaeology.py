@@ -484,6 +484,74 @@ class PlacingTests(unittest.TestCase):
             self.assertIn(lm.key, names, f"{lm.key}: gm_tr_landmark_name names the site's row")
 
 
+class OpportunityTests(unittest.TestCase):
+    """A find is dug, not built (owner, 2026-11-18): a dig that finishes while
+    its ground's owner has an opportunity offered or open never counts toward
+    it. Pompeii,
+    To the Nation in Two Sicilies' capital, could otherwise complete a
+    centenary's column with no level built."""
+
+    MARK, TR_MARK = "gm_unearthed_for_com", "gm_tr_unearthed_for_com"
+    COM_E = "common/scripted_effects/gm_commission_effects.txt"
+    COM_T = "common/scripted_triggers/gm_commission_triggers.txt"
+    MON_E = "common/scripted_effects/gm_monument_effects.txt"
+    MON_T = "common/scripted_triggers/gm_monument_triggers.txt"
+
+    def body(self, path, name):
+        return squash(strip_comments(block(read(path), name)))
+
+    def test_a_find_is_marked_before_it_stands(self):
+        place = self.body(EFFECTS, "gm_arch_place")
+        # On offer too: seized while the find's dedication is put back, the
+        # baseline would miss it.
+        mark = ("if = { limit = { exists = scope:gm_arch_host scope:gm_arch_host = { OR = { "
+                "has_variable = gm_com_open has_variable = gm_com_offered } } } "
+                f"set_variable = {self.TR_MARK} }}")
+        self.assertIn(mark, place)
+        self.assertLess(place.index("owner = { save_scope_as = gm_arch_host }"), place.index(mark))
+        # Before either way it stands: beside another, or as the state's own
+        # through the records a return copies.
+        self.assertLess(place.index(mark), place.index("gm_arch_stand_beside = yes"))
+        self.assertLess(place.index(mark), place.index("gm_state_tr_receive = yes"))
+
+    def test_a_marked_monument_does_not_count(self):
+        self.assertIn(f"NOT = {{ has_variable = {self.MARK} }}", self.body(self.COM_T, "gm_state_com_counts"))
+        self.assertIn(f"NOT = {{ has_variable = {self.TR_MARK} }}", self.body(self.MON_T, "gm_mon_com_counts"))
+
+    def test_the_mark_goes_with_the_records(self):
+        from test_grand_monument_registry import CONTAINER_RECORDS
+        self.assertIn((self.MARK, self.TR_MARK), CONTAINER_RECORDS)
+        self.assertIn(f"gm_tr_copy_to_state = {{ FROM = {self.TR_MARK} TO = {self.MARK} }}",
+                      self.body("common/scripted_effects/gm_trophy_effects.txt",
+                                "gm_state_tr_take_records_from_moving"))
+        self.assertIn(f"gm_remove_state_var = {{ VAR = {self.MARK} }}", self.body(GM_EFFECTS, "gm_clear_state"))
+
+    def test_the_mark_ends_with_the_opportunity(self):
+        clear = self.body(self.COM_E, "gm_com_clear")
+        self.assertIn(f"every_scope_state = {{ limit = {{ has_variable = {self.MARK} }} "
+                      f"remove_variable = {self.MARK} }}", clear)
+        self.assertIn("if = { limit = { has_variable_list = gm_monuments_held } every_in_list = { "
+                      f"variable = gm_monuments_held limit = {{ has_variable = {self.TR_MARK} }} "
+                      f"remove_variable = {self.TR_MARK} }} }}", clear)
+        self.assertIn("gm_com_clear = yes", self.body(self.COM_E, "gm_com_close"))
+
+    def test_the_mark_stays_with_its_owner(self):
+        self.assertIn(f"gm_remove_state_var = {{ VAR = {self.MARK} }}",
+                      self.body(GM_EFFECTS, "gm_state_changed_hands"))
+        for name in ("gm_mon_changed_hands", "gm_mon_forget_home"):
+            self.assertIn(f"gm_remove_state_var = {{ VAR = {self.TR_MARK} }}", self.body(self.MON_E, name), name)
+
+    def test_only_a_find_is_marked(self):
+        setters = set()
+        for path in sorted(ROOT.glob("common/**/*.txt")) + sorted(ROOT.glob("events/*.txt")):
+            text = strip_comments(read(path.relative_to(ROOT).as_posix()))
+            if re.search(rf"set_variable = (\{{ name = )?{self.TR_MARK}\b", text):
+                setters.add(path.relative_to(ROOT).as_posix())
+            self.assertNotRegex(text, rf"set_variable = (\{{ name = )?{self.MARK}\b",
+                                "the state's mark comes only from the records")
+        self.assertEqual(setters, {EFFECTS})
+
+
 class NamesTests(unittest.TestCase):
     """The events name their site, its place and state, the find and its history,
     through a saved scope of the site's own (rework spec § 2)."""

@@ -701,6 +701,27 @@ gm_arch_place = {
 	scope:gm_arch_dig_state = {
 		owner = { save_scope_as = gm_arch_host }
 	}
+	# A find is dug, not built (owner, 2026-11-18): it counts toward no
+	# opportunity its ground's owner already has open or on offer
+	# (gm_state_com_counts, gm_mon_com_counts), or a dig of To the Nation
+	# finishing in the capital would complete a centenary's column. On offer
+	# too: seized while the find's dedication is still being put back
+	# (gm_restore_pm), the baseline would miss it. The mark goes with its
+	# records (CONTAINER_RECORDS) and is cleared when that opportunity closes
+	# (gm_com_clear) or the ground changes hands; an opportunity offered later
+	# counts the find in its baseline, so it adds nothing there either.
+	if = {
+		limit = {
+			exists = scope:gm_arch_host
+			scope:gm_arch_host = {
+				OR = {
+					has_variable = gm_com_open
+					has_variable = gm_com_offered
+				}
+			}
+		}
+		set_variable = gm_tr_unearthed_for_com
+	}
 	debug_log = "TE_MONUMENTS: site unearthed and placed"
 	# The players are told before the container may go.
 	gm_arch_tell_finished = yes
