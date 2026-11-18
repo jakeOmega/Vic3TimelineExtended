@@ -494,8 +494,15 @@ te_mon_union_cost_to_root = {
 		limit = { te_mon_union_gets_cooperation = yes }
 		add = te_mon_union_cooperation_cut
 	}
+	# [tier 3] The backstop costs what it pays, so the limit is the recipient
+	# side's (te_mon_union_recipient_value): an adopter whose debt a treaty
+	# guarantee or a receivership already relieves gets nothing from the union,
+	# and its leader pays nothing for it (#1864).
 	if = {
-		limit = { te_mon_union_backstop_is_effective = yes }
+		limit = {
+			te_mon_union_backstop_is_effective = yes
+			te_mon_has_treaty_debt_relief = no
+		}
 		add = te_mon_lolr_relief
 	}
 	# [tier 4] Supervising this adopter's banks. Keyed on the adopter, not on
