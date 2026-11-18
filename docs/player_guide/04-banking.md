@@ -609,7 +609,8 @@ controls open when the cycle starts.
 The Monetary Policy section's rows are grouped under The Rate, Gold and the Peg (on a gold standard with a dial),
 Exchange Rate, International Arrangements (while you are anchored, party to a
 monetary treaty or in a bloc with a Monetary Union principle), What Borrowing
-Costs and Prices. Hover a row's label for what the term means and the row for
+Costs and Prices. International Arrangements can be closed on its own, since in
+a monetary union it lists every partner and member. Hover a row's label for what the term means and the row for
 its reading and what moves it; the Help page has the rules behind each
 group. Each mandate button says what its rule does. Your Policy Stance and price band are in the
 overview, with the policy rate and the past year's inflation under them.

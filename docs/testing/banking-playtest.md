@@ -687,3 +687,20 @@ capital, and a country that holds no state or no market neither rolls the monthl
    `banking_cycle_spread_contagion` turns away an origin with no state or no market. It is still counted: the same
    `after` runs `banking_crisis_wave_increment`, which adds it to the wave's country count toward the Great
    Depression's ten and its GDP to the wave's, and then checks for a Great Depression.
+
+## International Arrangements folds on its own (2026-11-18)
+
+The Monetary Policy section's International Arrangements group, which in a monetary union lists every swap, guarantee
+and member row, now has a header of its own that closes it (`banking_dash_subsection_header`, flag
+`banking_dash_arrangements_closed`, open by default). It is the `section_header_button` shape the UN, Global Warming
+and Nuclear panels already use for a section inside a section, at the block's 460 and in the subheadings' 20.
+
+1. **The header reads as one of the block's groups.** As a bloc leader or member under a Monetary Union principle, the
+   header sits where the ruled "International Arrangements" subheading was, inside the block's dark background, its
+   left edge in line with the Exchange Rate and What Borrowing Costs subheadings around it; it does not look like the
+   next section. Its arrow points open, and the text is not elided.
+2. **It closes and opens.** A click hides every row under it (Monetary Anchor, Peg Confidence, Backstops, the partner
+   rows, Monetary Union, the member rows and the union buttons), and What Borrowing Costs moves up under the header.
+   A second click brings them back. Closing Monetary Policy itself still hides the header with the rest.
+3. **Nothing moves for a country with no arrangement.** A country with no anchor, treaty or union shows neither the
+   header nor an empty gap between Exchange Rate and What Borrowing Costs.
