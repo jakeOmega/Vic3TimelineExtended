@@ -1,0 +1,359 @@
+﻿# The AI conscript refresh's triggers (#1877 trap 5; design docs/superpowers/specs/2026-11-18-ai-conscript-refresh-design.md).
+# The pass itself: common/scripted_effects/te_ai_conscript_refresh_effects.txt.
+
+# Country scope: an AI country at peace, whose conscripts nobody needs this month. Not at war, in no diplomatic play
+# (committed or undecided: a play's escalation raises conscripts), and no formation mobilized, so that no raised
+# battalion is deleted and no country is left short as a war starts.
+te_ai_conscript_refresh_may = {
+	is_ai = yes
+	is_at_war = no
+	is_diplomatic_play_committed_participant = no
+	is_diplomatic_play_undecided_participant = no
+	NOT = { any_military_formation = { is_mobilized = yes } }
+}
+
+# State scope: the state's conscription centre holds at least one stale battalion.
+te_ai_conscript_centre_stale = {
+	has_building = building_conscription_center
+	b:building_conscription_center = {
+		any_combat_unit = { te_ai_conscript_unit_stale = yes }
+	}
+}
+
+# Combat unit scope: a battalion three or more eras behind a type of its own unit group that its country has
+# unlocked (owner, 2026-11-18). A type's era is its earliest unlocking technology's; Irregular Infantry, which no
+# technology unlocks, is era 0. One line per old type, each OR'ing the technologies that unlock a same-group type at
+# least three eras newer. The lines are derived from the unit-type and technology data, and
+# test_ai_conscript_refresh.py fails until a new type's line is here (it prints the line it expects).
+te_ai_conscript_unit_stale = {
+	OR = {
+		# infantry
+		AND = {  # era 0
+			has_unit_type = unit_type:combat_unit_type_irregular_infantry
+			owner = {
+				OR = {
+					has_technology_researched = trench_works  # era 4
+					has_technology_researched = mobile_armor  # era 5
+					has_technology_researched = nco_training  # era 5
+					has_technology_researched = combined_arms  # era 6
+					has_technology_researched = autonomous_weapons  # era 11
+					has_technology_researched = swarm_technology  # era 11
+					has_technology_researched = molecular_assemblers  # era 13
+				}
+			}
+		}
+		AND = {  # era 1
+			has_unit_type = unit_type:combat_unit_type_line_infantry
+			owner = {
+				OR = {
+					has_technology_researched = trench_works  # era 4
+					has_technology_researched = mobile_armor  # era 5
+					has_technology_researched = nco_training  # era 5
+					has_technology_researched = combined_arms  # era 6
+					has_technology_researched = autonomous_weapons  # era 11
+					has_technology_researched = swarm_technology  # era 11
+					has_technology_researched = molecular_assemblers  # era 13
+				}
+			}
+		}
+		AND = {  # era 2
+			has_unit_type = unit_type:combat_unit_type_skirmish_infantry
+			owner = {
+				OR = {
+					has_technology_researched = mobile_armor  # era 5
+					has_technology_researched = nco_training  # era 5
+					has_technology_researched = combined_arms  # era 6
+					has_technology_researched = autonomous_weapons  # era 11
+					has_technology_researched = swarm_technology  # era 11
+					has_technology_researched = molecular_assemblers  # era 13
+				}
+			}
+		}
+		AND = {  # era 4
+			has_unit_type = unit_type:combat_unit_type_trench_infantry
+			owner = {
+				OR = {
+					has_technology_researched = autonomous_weapons  # era 11
+					has_technology_researched = swarm_technology  # era 11
+					has_technology_researched = molecular_assemblers  # era 13
+				}
+			}
+		}
+		AND = {  # era 5
+			has_unit_type = unit_type:combat_unit_type_mechanized_infantry
+			owner = {
+				OR = {
+					has_technology_researched = autonomous_weapons  # era 11
+					has_technology_researched = swarm_technology  # era 11
+					has_technology_researched = molecular_assemblers  # era 13
+				}
+			}
+		}
+		AND = {  # era 5
+			has_unit_type = unit_type:combat_unit_type_squad_infantry
+			owner = {
+				OR = {
+					has_technology_researched = autonomous_weapons  # era 11
+					has_technology_researched = swarm_technology  # era 11
+					has_technology_researched = molecular_assemblers  # era 13
+				}
+			}
+		}
+		AND = {  # era 6
+			has_unit_type = unit_type:combat_unit_type_armored_infantry
+			owner = {
+				OR = {
+					has_technology_researched = autonomous_weapons  # era 11
+					has_technology_researched = swarm_technology  # era 11
+					has_technology_researched = molecular_assemblers  # era 13
+				}
+			}
+		}
+		# cavalry
+		AND = {  # era 1
+			has_unit_type = unit_type:combat_unit_type_cuirassiers
+			owner = {
+				OR = {
+					has_technology_researched = mobile_armor  # era 5
+					has_technology_researched = inertial_navigation_systems  # era 7
+					has_technology_researched = rapid_deployment_forces  # era 9
+					has_technology_researched = augmented_reality_warfare  # era 11
+				}
+			}
+		}
+		AND = {  # era 1
+			has_unit_type = unit_type:combat_unit_type_dragoons
+			owner = {
+				OR = {
+					has_technology_researched = mobile_armor  # era 5
+					has_technology_researched = inertial_navigation_systems  # era 7
+					has_technology_researched = rapid_deployment_forces  # era 9
+					has_technology_researched = augmented_reality_warfare  # era 11
+				}
+			}
+		}
+		AND = {  # era 1
+			has_unit_type = unit_type:combat_unit_type_hussars
+			owner = {
+				OR = {
+					has_technology_researched = mobile_armor  # era 5
+					has_technology_researched = inertial_navigation_systems  # era 7
+					has_technology_researched = rapid_deployment_forces  # era 9
+					has_technology_researched = augmented_reality_warfare  # era 11
+				}
+			}
+		}
+		AND = {  # era 1
+			has_unit_type = unit_type:combat_unit_type_lancers
+			owner = {
+				OR = {
+					has_technology_researched = mobile_armor  # era 5
+					has_technology_researched = inertial_navigation_systems  # era 7
+					has_technology_researched = rapid_deployment_forces  # era 9
+					has_technology_researched = augmented_reality_warfare  # era 11
+				}
+			}
+		}
+		AND = {  # era 5
+			has_unit_type = unit_type:combat_unit_type_light_tanks
+			owner = {
+				OR = {
+					has_technology_researched = rapid_deployment_forces  # era 9
+					has_technology_researched = augmented_reality_warfare  # era 11
+				}
+			}
+		}
+		AND = {  # era 7
+			has_unit_type = unit_type:combat_unit_type_light_scout_tanks
+			owner = {
+				OR = {
+					has_technology_researched = augmented_reality_warfare  # era 11
+				}
+			}
+		}
+		# artillery
+		AND = {  # era 1
+			has_unit_type = unit_type:combat_unit_type_cannon_artillery
+			owner = {
+				OR = {
+					has_technology_researched = defense_in_depth  # era 4
+					has_technology_researched = motorized_artillery  # era 6
+					has_technology_researched = guided_missiles  # era 7
+					has_technology_researched = network_centric_warfare  # era 9
+					has_technology_researched = space_militarization  # era 11
+					has_technology_researched = antimatter_production  # era 13
+				}
+			}
+		}
+		AND = {  # era 1
+			has_unit_type = unit_type:combat_unit_type_mobile_artillery
+			owner = {
+				OR = {
+					has_technology_researched = defense_in_depth  # era 4
+					has_technology_researched = motorized_artillery  # era 6
+					has_technology_researched = guided_missiles  # era 7
+					has_technology_researched = network_centric_warfare  # era 9
+					has_technology_researched = space_militarization  # era 11
+					has_technology_researched = antimatter_production  # era 13
+				}
+			}
+		}
+		AND = {  # era 3
+			has_unit_type = unit_type:combat_unit_type_shrapnel_artillery
+			owner = {
+				OR = {
+					has_technology_researched = motorized_artillery  # era 6
+					has_technology_researched = guided_missiles  # era 7
+					has_technology_researched = network_centric_warfare  # era 9
+					has_technology_researched = space_militarization  # era 11
+					has_technology_researched = antimatter_production  # era 13
+				}
+			}
+		}
+		AND = {  # era 4
+			has_unit_type = unit_type:combat_unit_type_siege_artillery
+			owner = {
+				OR = {
+					has_technology_researched = guided_missiles  # era 7
+					has_technology_researched = network_centric_warfare  # era 9
+					has_technology_researched = space_militarization  # era 11
+					has_technology_researched = antimatter_production  # era 13
+				}
+			}
+		}
+		AND = {  # era 6
+			has_unit_type = unit_type:combat_unit_type_motorized_artillery
+			owner = {
+				OR = {
+					has_technology_researched = network_centric_warfare  # era 9
+					has_technology_researched = space_militarization  # era 11
+					has_technology_researched = antimatter_production  # era 13
+				}
+			}
+		}
+		AND = {  # era 7
+			has_unit_type = unit_type:combat_unit_type_guided_artillery_projectiles
+			owner = {
+				OR = {
+					has_technology_researched = space_militarization  # era 11
+					has_technology_researched = antimatter_production  # era 13
+				}
+			}
+		}
+		AND = {  # era 9
+			has_unit_type = unit_type:combat_unit_type_networked_guided_artillery_projectiles
+			owner = {
+				OR = {
+					has_technology_researched = antimatter_production  # era 13
+				}
+			}
+		}
+		# tanks
+		AND = {  # era 5
+			has_unit_type = unit_type:combat_unit_type_heavy_tank
+			owner = {
+				OR = {
+					has_technology_researched = advanced_materials_armor  # era 8
+					has_technology_researched = hypersonic_weapons  # era 10
+					has_technology_researched = compact_fusion_reactors  # era 12
+				}
+			}
+		}
+		AND = {  # era 7
+			has_unit_type = unit_type:combat_unit_type_main_battle_tank
+			owner = {
+				OR = {
+					has_technology_researched = hypersonic_weapons  # era 10
+					has_technology_researched = compact_fusion_reactors  # era 12
+				}
+			}
+		}
+		AND = {  # era 8
+			has_unit_type = unit_type:combat_unit_type_reactive_armor_tank
+			owner = {
+				OR = {
+					has_technology_researched = compact_fusion_reactors  # era 12
+				}
+			}
+		}
+		# marines
+		AND = {  # era 1
+			has_unit_type = unit_type:combat_unit_type_low_tier_marines
+			owner = {
+				OR = {
+					has_technology_researched = landing_craft  # era 4
+					has_technology_researched = combined_arms  # era 6
+					has_technology_researched = stealth_technology  # era 8
+					has_technology_researched = jadc2  # era 10
+					has_technology_researched = bioenhanced_soldiers  # era 12
+				}
+			}
+		}
+		AND = {  # era 2
+			has_unit_type = unit_type:combat_unit_type_mid_tier_marines
+			owner = {
+				OR = {
+					has_technology_researched = combined_arms  # era 6
+					has_technology_researched = stealth_technology  # era 8
+					has_technology_researched = jadc2  # era 10
+					has_technology_researched = bioenhanced_soldiers  # era 12
+				}
+			}
+		}
+		AND = {  # era 4
+			has_unit_type = unit_type:combat_unit_type_high_tier_marines
+			owner = {
+				OR = {
+					has_technology_researched = stealth_technology  # era 8
+					has_technology_researched = jadc2  # era 10
+					has_technology_researched = bioenhanced_soldiers  # era 12
+				}
+			}
+		}
+		AND = {  # era 6
+			has_unit_type = unit_type:combat_unit_type_combined_arms_marines
+			owner = {
+				OR = {
+					has_technology_researched = jadc2  # era 10
+					has_technology_researched = bioenhanced_soldiers  # era 12
+				}
+			}
+		}
+		AND = {  # era 8
+			has_unit_type = unit_type:combat_unit_type_stealth_marines
+			owner = {
+				OR = {
+					has_technology_researched = bioenhanced_soldiers  # era 12
+				}
+			}
+		}
+		# aircraft
+		AND = {  # era 6
+			has_unit_type = unit_type:combat_unit_type_bomber_aircraft
+			owner = {
+				OR = {
+					has_technology_researched = space_militarization  # era 11
+					has_technology_researched = orbital_weapon_platforms  # era 12
+				}
+			}
+		}
+		AND = {  # era 7
+			has_unit_type = unit_type:combat_unit_type_jet_powered_fighters
+			owner = {
+				OR = {
+					has_technology_researched = space_militarization  # era 11
+					has_technology_researched = orbital_weapon_platforms  # era 12
+				}
+			}
+		}
+		AND = {  # era 8
+			has_unit_type = unit_type:combat_unit_type_stealth_aircraft
+			owner = {
+				OR = {
+					has_technology_researched = space_militarization  # era 11
+					has_technology_researched = orbital_weapon_platforms  # era 12
+				}
+			}
+		}
+	}
+}
