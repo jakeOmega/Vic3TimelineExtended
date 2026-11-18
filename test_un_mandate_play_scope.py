@@ -6,13 +6,15 @@ any play, and each must act only in the mandate's own play:
 
 * the AI holder's strike, ``un_mandate_ai_strike_prohibited``
   (common/scripted_effects/un_mandate_effects.txt). It strikes with
-  ``remove_war_goal = { who = initiator type = ... }``, which cannot tell one
-  goal of a type from another. Ungated, it struck the opening goal of a bound
-  AI holder's unrelated play (a ``dp_conquer_state`` against a third country),
-  and whether a play survives that is unproven. It runs only in a
+  ``remove_war_goal = { who = scope:actor type = ... }``, which takes the
+  holder's first goal of the type, whatever it targets. Ungated, it struck the
+  opening goal of a bound AI holder's unrelated play (a ``dp_conquer_state``
+  against a third country). It runs only in a
   ``dp_te_un_mandate_restore_state`` play against the mandate's target, which
-  opens with ``te_un_mandate_restore_state``, never struck; and it strikes a
-  type only when the holder holds one against that target.
+  opens with ``te_un_mandate_restore_state``, never struck; it strikes a type
+  only when the holder holds one against that target; and it repeats the call
+  while one is left (#1892: one call took an older, allowed goal of the type
+  and left the prohibited one).
 * the violation check, ``un_mandate_has_prohibited_goal``
   (common/scripted_triggers/un_mandate_triggers.txt). It counted a
   prohibited goal against the target from any play or war; the player is
@@ -54,6 +56,10 @@ MANDATE_GOAL = "te_un_mandate_restore_state"
 
 _STRIKE_CALL = re.compile(r"\bun_mandate_strike_goal_type\s*=\s*\{\s*TYPE\s*=\s*(\w+)\s*\}")
 _HELD_CALL = re.compile(r"\bun_mandate_prohibited_goal_held\s*=\s*\{\s*TYPE\s*=\s*(\w+)\s+TARGET\s*=\s*\$TARGET\$\s*\}")
+
+
+def _squash(text):
+    return re.sub(r"\s+", " ", text)
 
 
 def _top_level_keys(body):
@@ -108,6 +114,27 @@ class StrikeTest(unittest.TestCase):
         self.assertRegex(limit, r"play_participant_has_war_goal_of_type_against\s*=\s*\{\s*type\s*=\s*\$TYPE\$"
                                 r"\s+target\s*=\s*scope:un_mandate_strike_target\s*\}")
 
+    def test_the_strike_repeats_while_a_goal_against_the_target_is_left(self):
+        # remove_war_goal takes the holder's first goal of the type, whatever it
+        # targets: one call took an allowed goal against the target's ally and
+        # left the prohibited one (#1892).
+        helper = _squash(self.helper)
+        held = ("scope:actor = { play_participant_has_war_goal_of_type_against = "
+                "{ type = $TYPE$ target = scope:un_mandate_strike_target } }")
+        self.assertIn("while = { count = 30 if = { limit = { " + held + " } "
+                      "remove_war_goal = { who = scope:actor type = $TYPE$ }", helper)
+        self.assertEqual(helper.count("remove_war_goal"), 1, "a call outside the loop")
+
+    def test_the_loop_is_counted_for_the_self_check(self):
+        helper = _squash(self.helper)
+        order = [helper.index(x) for x in (
+            "scope:actor = { set_variable = { name = un_strike_chk_calls value = 0 } }",
+            "while = {",
+            "remove_war_goal",
+            "scope:actor = { change_variable = { name = un_strike_chk_calls add = 1 } }",
+            "un_strike_goals_self_check = { STRIKE = mandate TYPE = $TYPE$ TARGET = scope:un_mandate_strike_target }")]
+        self.assertEqual(order, sorted(order))
+
     def test_the_mandates_play_opens_with_a_goal_that_is_never_struck(self):
         play = _block(_read(PLAY), MANDATE_PLAY)
         self.assertRegex(play, r"\bwar_goal\s*=\s*" + MANDATE_GOAL + r"\b")
@@ -123,6 +150,47 @@ class StrikeTest(unittest.TestCase):
         order = [hook.index(name) for name in (
             "un_mandate_try_bind", "un_mandate_ai_strike_prohibited", "un_mandate_check_prohibited")]
         self.assertEqual(order, sorted(order))
+
+
+class StrikeSelfCheckTest(unittest.TestCase):
+    """``un_strike_goals_self_check``, after the mandate's and the Standing UN
+    Force's strike loops: once a game for each, whether the holder's play test
+    saw each removal at once. The verdict reads the play test again after the
+    loop: the Force's loop also stops when ``has_play_goal`` goes false, so the
+    count alone could read OK either way (review of #1897)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.check = _squash(_block(_read(EFFECTS), "un_strike_goals_self_check"))
+
+    def test_once_a_game_for_each_kind(self):
+        self.assertIn("if = { limit = { NOT = { has_global_variable = un_strike_goals_self_check_done_$STRIKE$ } } "
+                      "set_global_variable = un_strike_goals_self_check_done_$STRIKE$", self.check)
+
+    def test_ok_below_the_cap_broken_at_it(self):
+        self.assertIn("if = { limit = { un_strike_goals_loop_clean = { TYPE = $TYPE$ TARGET = $TARGET$ } } "
+                      "debug_log = \"TE_SELF_CHECK OK un_strike_goals:", self.check)
+        self.assertIn("else = { debug_log = \"TE_SELF_CHECK BROKEN un_strike_goals:", self.check)
+        for verdict in ("OK", "BROKEN"):
+            with self.subTest(verdict=verdict):
+                line = self.check[self.check.index("TE_SELF_CHECK " + verdict):]
+                line = line[:line.index('"')]
+                for field in ("strike=$STRIKE$", "type=$TYPE$",
+                              "calls=[THIS.Var('un_strike_chk_calls').GetValue|0]"):
+                    self.assertIn(field, line)
+
+    def test_clean_means_no_goal_left_by_the_play_test_and_below_the_cap(self):
+        clean = _squash(_block(_read(TRIGGERS), "un_strike_goals_loop_clean"))
+        self.assertEqual(clean.strip(), "var:un_strike_chk_calls < 30 NOT = { "
+                         "play_participant_has_war_goal_of_type_against = { type = $TYPE$ target = $TARGET$ } }")
+
+    def test_the_count_goes_whether_or_not_the_check_reads(self):
+        self.assertTrue(self.check.rstrip().endswith("remove_variable = un_strike_chk_calls }"),
+                        "the count must be dropped after the once-a-game branch, not inside it")
+
+    def test_the_play_test_list_names_it(self):
+        with open(os.path.join(REPO, "docs", "testing", "un-tooltips-playtest.md"), encoding="utf-8") as f:
+            self.assertIn("TE_SELF_CHECK OK\\|BROKEN un_strike_goals", f.read())
 
 
 class ViolationTest(unittest.TestCase):

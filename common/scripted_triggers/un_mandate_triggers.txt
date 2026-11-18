@@ -243,6 +243,20 @@ un_mandate_has_prohibited_goal = {
 	}
 }
 
+# After a strike loop (un_mandate_strike_goal_type, un_force_strike_goal):
+# the holder's play test, read again in the same block, finds no goal of
+# $TYPE$ against $TARGET$, and the loop stopped before its cap of 30 calls.
+# Then the play test saw each removal at once, and the loop's count is the
+# goals it removed. un_strike_goals_self_check logs it once a game for each
+# kind. un_force_strike_goal gives the collateral's infamy back only when it
+# holds, since otherwise the count may be mostly calls that found nothing.
+# Parameters: $TYPE$ = war goal type; $TARGET$ = the protected country
+# Scope: the holder, holding un_strike_chk_calls
+un_strike_goals_loop_clean = {
+	var:un_strike_chk_calls < 30
+	NOT = { play_participant_has_war_goal_of_type_against = { type = $TYPE$ target = $TARGET$ } }
+}
+
 # Whether the scoped country holds a goal of $TYPE$ against $TARGET$, and the
 # play its bound mandate is exercised in carries a goal of $TYPE$. No trigger
 # reads one play's goals by holder and target: the country's test reads every
