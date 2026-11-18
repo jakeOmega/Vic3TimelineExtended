@@ -213,5 +213,77 @@ class ThePass(unittest.TestCase):
         self.assertEqual(effect.count("remove_building"), 1)
 
 
+class TheSelfCheck(unittest.TestCase):
+    """TE_SELF_CHECK ai_conscript_refresh: the first cleared state, counted before its removal and three months on."""
+
+    def test_the_values_file_has_one_bom_and_tabs(self):
+        raw = VALUES.read_bytes()
+        self.assertTrue(raw.startswith(b"\xef\xbb\xbf"))
+        self.assertFalse(raw[3:].startswith(b"\xef\xbb\xbf"))
+        self.assertFalse(re.search(r"(?m)^ +\S", raw.decode("utf-8-sig")))
+
+    def test_the_sample_is_taken_once_and_counts_what_it_clears(self):
+        sample = _norm(_block(_code(EFFECTS), "te_ai_conscript_refresh_sample"))
+        self.assertTrue(sample.startswith("if = { limit = { NOT = { has_global_variable = te_ai_conscript_sc_state } "
+                                          "NOT = { has_global_variable = te_ai_conscript_sc_done } }"))
+        for part in ("set_global_variable = { name = te_ai_conscript_sc_state value = this }",
+                     "set_global_variable = { name = te_ai_conscript_sc_country value = owner }",
+                     "set_global_variable = { name = te_ai_conscript_sc_months value = 0 }",
+                     "b:building_conscription_center = { every_combat_unit = { "
+                     "change_global_variable = { name = te_ai_conscript_sc_before add = 1 } "
+                     "if = { limit = { te_ai_conscript_unit_stale = yes } "
+                     "change_global_variable = { name = te_ai_conscript_sc_before_stale add = 1 } } } }"):
+            with self.subTest(part=part):
+                self.assertIn(part, sample)
+        # Each counter is set before it is changed (change_variable creates nothing).
+        for counter in ("te_ai_conscript_sc_before", "te_ai_conscript_sc_before_stale"):
+            self.assertLess(sample.index(f"set_global_variable = {{ name = {counter} value = 0 }}"),
+                            sample.index(f"change_global_variable = {{ name = {counter} add = 1 }}"))
+
+    def test_the_world_reads_it_monthly_and_judges_at_three_months(self):
+        code = _code(ON_ACTIONS)
+        self.assertIn("on_actions = { te_ai_conscript_refresh_selfcheck }", _norm(_block(code, "on_monthly_pulse")))
+        check = _norm(_block(code, "te_ai_conscript_refresh_selfcheck"))
+        self.assertEqual(check, "trigger = { has_global_variable = te_ai_conscript_sc_state "
+                                "NOT = { has_global_variable = te_ai_conscript_sc_done } } "
+                                "effect = { change_global_variable = { name = te_ai_conscript_sc_months add = 1 } "
+                                "if = { limit = { global_var:te_ai_conscript_sc_months >= 3 } "
+                                "te_ai_conscript_refresh_verdict = yes } }")
+
+    def test_ok_needs_a_rebuilt_centre_with_nothing_stale(self):
+        verdict = _norm(_block(_code(EFFECTS), "te_ai_conscript_refresh_verdict"))
+        self.assertTrue(verdict.startswith("if = { limit = { te_ai_conscript_refresh_sample_intact = yes }"))
+        start = verdict.index("TE_SELF_CHECK START ai_conscript_refresh")
+        ok = verdict.index("TE_SELF_CHECK OK ai_conscript_refresh")
+        self.assertLess(start, ok)
+        self.assertIn("if = { limit = { global_var:te_ai_conscript_sc_after >= 1 "
+                      "global_var:te_ai_conscript_sc_after_stale = 0 } debug_log = \"TE_SELF_CHECK OK", verdict)
+        self.assertIn("else_if = { limit = { global_var:te_ai_conscript_sc_after = 0 } "
+                      "debug_log = \"TE_SELF_CHECK BROKEN ai_conscript_refresh no_centre", verdict)
+        self.assertIn("else = { debug_log = \"TE_SELF_CHECK BROKEN ai_conscript_refresh stale", verdict)
+        # Counted after, from the same state's centre, and marked read before any line.
+        self.assertLess(verdict.index("change_global_variable = { name = te_ai_conscript_sc_after add = 1 }"), start)
+        self.assertLess(verdict.index("set_global_variable = te_ai_conscript_sc_done"), start)
+
+    def test_a_sample_that_lost_its_state_or_country_reads_no_verdict_and_rearms(self):
+        verdict = _norm(_block(_code(EFFECTS), "te_ai_conscript_refresh_verdict"))
+        rest = verdict[verdict.rindex("else = { random_country = {"):]
+        self.assertIn("TE_SELF_CHECK NO_VERDICT ai_conscript_refresh", rest)
+        for name in ("te_ai_conscript_sc_state", "te_ai_conscript_sc_country"):
+            self.assertIn(f"remove_global_variable = {name}", rest)
+        self.assertNotIn("te_ai_conscript_sc_done", rest)
+        intact = _norm(_block(_code(TRIGGERS), "te_ai_conscript_refresh_sample_intact"))
+        for part in ("exists = global_var:te_ai_conscript_sc_state", "exists = global_var:te_ai_conscript_sc_country",
+                     "global_var:te_ai_conscript_sc_state = { owner = global_var:te_ai_conscript_sc_country }"):
+            with self.subTest(part=part):
+                self.assertIn(part, intact)
+
+    def test_every_value_the_lines_print_is_defined(self):
+        printed = set(re.findall(r"ScriptValue\('([a-z_]+)'\)", EFFECTS.read_text(encoding="utf-8-sig")))
+        defined = set(re.findall(r"(?m)^([a-z_]+) = ", _code(VALUES)))
+        self.assertTrue(printed)
+        self.assertEqual(printed - defined, set())
+
+
 if __name__ == "__main__":
     unittest.main()

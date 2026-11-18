@@ -357,3 +357,11 @@ te_ai_conscript_unit_stale = {
 		}
 	}
 }
+
+# No scope: TE_SELF_CHECK ai_conscript_refresh's sample can still be read. Its state and country exist, and the
+# country still owns the state.
+te_ai_conscript_refresh_sample_intact = {
+	exists = global_var:te_ai_conscript_sc_state
+	exists = global_var:te_ai_conscript_sc_country
+	global_var:te_ai_conscript_sc_state = { owner = global_var:te_ai_conscript_sc_country }
+}

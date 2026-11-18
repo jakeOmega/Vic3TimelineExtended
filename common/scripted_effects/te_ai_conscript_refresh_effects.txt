@@ -24,3 +24,90 @@ te_ai_conscript_refresh_effect = {
 		}
 	}
 }
+
+# TEMPORARY self-check (2026-11-18, #1877): does an AI rebuild a removed conscription centre, and in current types?
+# Measured once (two countries in one save, at peace); this reads it in every game. The first centre the pass clears
+# is counted before its removal (te_ai_conscript_refresh_sample) and again three months on, from the world's monthly
+# pulse (te_ai_conscript_refresh_selfcheck, te_ai_conscript_refresh_verdict). Once read:
+#   START       a plain marker, logged first: with no verdict line after it, the templated line was dropped.
+#   OK          the state has a conscription centre again, with at least one battalion and none of them stale.
+#   BROKEN no_centre  no centre or no battalion there: the AI does not rebuild a removed centre. Fallback: take the
+#               pass's on_action line out and take this to the owner.
+#   BROKEN stale      the rebuilt battalions are stale again: the country's formation defaults are themselves out of
+#               date. Fallback: skip a country whose conscripts the AI rebuilds stale (the five-year mark already
+#               stops the churn).
+#   NO_VERDICT  the state changed owner, or it or its country is gone, before the verdict: re-armed for the next clear.
+# Play-test row: docs/testing/ai-economy-playtest.md § The AI conscript refresh. Delete the sample's call, the
+# verdict, the selfcheck on_action and te_ai_conscript_refresh_values.txt once it reads.
+#
+# State scope, the state about to be cleared.
+te_ai_conscript_refresh_sample = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_ai_conscript_sc_state }
+			NOT = { has_global_variable = te_ai_conscript_sc_done }
+		}
+		set_global_variable = { name = te_ai_conscript_sc_state value = this }
+		set_global_variable = { name = te_ai_conscript_sc_country value = owner }
+		set_global_variable = { name = te_ai_conscript_sc_months value = 0 }
+		set_global_variable = { name = te_ai_conscript_sc_before value = 0 }
+		set_global_variable = { name = te_ai_conscript_sc_before_stale value = 0 }
+		b:building_conscription_center = {
+			every_combat_unit = {
+				change_global_variable = { name = te_ai_conscript_sc_before add = 1 }
+				if = {
+					limit = { te_ai_conscript_unit_stale = yes }
+					change_global_variable = { name = te_ai_conscript_sc_before_stale add = 1 }
+				}
+			}
+		}
+	}
+}
+
+# No scope (the world's monthly pulse), three months after the sample.
+te_ai_conscript_refresh_verdict = {
+	if = {
+		limit = { te_ai_conscript_refresh_sample_intact = yes }
+		set_global_variable = { name = te_ai_conscript_sc_after value = 0 }
+		set_global_variable = { name = te_ai_conscript_sc_after_stale value = 0 }
+		global_var:te_ai_conscript_sc_state = {
+			if = {
+				limit = { has_building = building_conscription_center }
+				b:building_conscription_center = {
+					every_combat_unit = {
+						change_global_variable = { name = te_ai_conscript_sc_after add = 1 }
+						if = {
+							limit = { te_ai_conscript_unit_stale = yes }
+							change_global_variable = { name = te_ai_conscript_sc_after_stale add = 1 }
+						}
+					}
+				}
+			}
+		}
+		set_global_variable = te_ai_conscript_sc_done
+		global_var:te_ai_conscript_sc_country = {
+			debug_log = "TE_SELF_CHECK START ai_conscript_refresh (the verdict line follows; none after this one means the engine dropped the templated line)"
+			if = {
+				limit = {
+					global_var:te_ai_conscript_sc_after >= 1
+					global_var:te_ai_conscript_sc_after_stale = 0
+				}
+				debug_log = "TE_SELF_CHECK OK ai_conscript_refresh country=[THIS.GetCountry.GetTagName] before=[THIS.ScriptValue('te_ai_conscript_sc_before_g')|0] before_stale=[THIS.ScriptValue('te_ai_conscript_sc_before_stale_g')|0] after=[THIS.ScriptValue('te_ai_conscript_sc_after_g')|0] after_stale=0 date=[TimeKeeper.GetCurrentDate.GetString] (three months after its conscription centre was removed, the state has one again and none of its battalions is stale: the AI rebuilds in current types)"
+			}
+			else_if = {
+				limit = { global_var:te_ai_conscript_sc_after = 0 }
+				debug_log = "TE_SELF_CHECK BROKEN ai_conscript_refresh no_centre country=[THIS.GetCountry.GetTagName] before=[THIS.ScriptValue('te_ai_conscript_sc_before_g')|0] before_stale=[THIS.ScriptValue('te_ai_conscript_sc_before_stale_g')|0] after=0 date=[TimeKeeper.GetCurrentDate.GetString] (three months after its conscription centre was removed, the state holds no conscripts: the AI did not rebuild; fallback in te_ai_conscript_refresh_effects.txt)"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN ai_conscript_refresh stale country=[THIS.GetCountry.GetTagName] before=[THIS.ScriptValue('te_ai_conscript_sc_before_g')|0] before_stale=[THIS.ScriptValue('te_ai_conscript_sc_before_stale_g')|0] after=[THIS.ScriptValue('te_ai_conscript_sc_after_g')|0] after_stale=[THIS.ScriptValue('te_ai_conscript_sc_after_stale_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (the rebuilt conscripts are stale again: the country's formation defaults are out of date; fallback in te_ai_conscript_refresh_effects.txt)"
+			}
+		}
+	}
+	else = {
+		random_country = {
+			debug_log = "TE_SELF_CHECK NO_VERDICT ai_conscript_refresh date=[TimeKeeper.GetCurrentDate.GetString] (the sampled state changed owner, or it or its country is gone, before the verdict: re-armed for the next clear)"
+		}
+		remove_global_variable = te_ai_conscript_sc_state
+		remove_global_variable = te_ai_conscript_sc_country
+	}
+}
