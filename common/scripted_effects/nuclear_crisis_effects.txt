@@ -2269,7 +2269,24 @@ nd_crisis_concede_orbital = {
 # So each holder is named, and nd_crisis_strike_goals repeats the call while a
 # goal against the other side is left; a goal of the same type against a third
 # country that the engine reaches first goes too (the tooltip says so).
+# The yield's tooltip walks this, hidden_effect and all, every frame its
+# option or button shows, and a saved scope is no fence (scripting_best_practices
+# § "An Option's Tooltip Walks Its Effects"), so the walk would run every loop
+# below each frame: the body sits behind a click-only marker, as
+# nd_crisis_close's does. The walk writes no variable, so has_variable is false
+# there and true in the real run. Its lines are all hidden, so no tooltip line
+# goes.
 nd_crisis_drop_goals = {
+	scope:nd_target = { set_variable = nd_crisis_drop_click }
+	if = {
+		limit = { scope:nd_target = { has_variable = nd_crisis_drop_click } }
+		scope:nd_target = { remove_variable = nd_crisis_drop_click }
+		nd_crisis_drop_side_goals = yes
+	}
+}
+
+# War scope, from nd_crisis_drop_goals: the walk of the yielder's side.
+nd_crisis_drop_side_goals = {
 	save_scope_as = nd_crisis_war
 	diplomatic_play = { save_scope_as = nd_crisis_war_play }
 	every_war_participant = {
@@ -2355,23 +2372,50 @@ nd_crisis_drop_holder_goals = {
 	}
 }
 
-# Play scope, scope:nd_crisis_holder saved: remove the holder's goals of
-# $TYPE$ until none against $TARGET$ is left. Each call takes the holder's
-# first goal of the type, whatever it targets, so goals of $TYPE$ against
-# other countries that come first go too. The trigger reads the removal at
-# once, inside this block (in game, 2026-11-18), so the loop stops when the
-# last goal against $TARGET$ goes; it makes at most 30 calls, which also
-# bounds it when the goal against $TARGET$ is in another war between the two
-# (war_participant_has_war_goal_of_type_against reads every war).
+# Play scope; scope:nd_crisis_holder and scope:nd_crisis_other_side saved:
+# remove the holder's goals of $TYPE$ until none against $TARGET$ is left.
+# Each call takes the holder's first goal of the type, whatever it targets, so
+# goals of $TYPE$ against other countries that come first go too. The trigger
+# reads the removal at once, inside this block (in game, 2026-11-18), so the
+# loop stops when the last goal against $TARGET$ goes, after at most 30 calls.
+# But war_participant_has_war_goal_of_type_against reads every war, and the
+# call acts in this one: a holder that fights the other side in another war
+# too could hold its goal against $TARGET$ there, and the loop would strip
+# every goal of $TYPE$ here without reaching it. Such a holder gets one call
+# per type in each war, as before 2026-11-18; a goal it keeps shows on the
+# self-check's line as wars= above 1.
 # Parameters: $TYPE$ = war goal type; $TARGET$ = the country the goals target
 nd_crisis_strike_goals = {
 	if = {
 		limit = { scope:nd_crisis_holder = { war_participant_has_war_goal_of_type_against = { type = $TYPE$ target = $TARGET$ } } }
-		while = {
-			count = 30
-			if = {
-				limit = { scope:nd_crisis_holder = { war_participant_has_war_goal_of_type_against = { type = $TYPE$ target = $TARGET$ } } }
-				remove_war_goal = { who = scope:nd_crisis_holder type = $TYPE$ }
+		if = {
+			limit = {
+				scope:nd_crisis_holder = {
+					any_scope_war = {
+						count > 1
+						is_war_participant = scope:nd_crisis_other_side
+						OR = {
+							AND = {
+								is_on_defending_side = scope:nd_crisis_holder
+								NOT = { is_on_defending_side = scope:nd_crisis_other_side }
+							}
+							AND = {
+								is_on_defending_side = scope:nd_crisis_other_side
+								NOT = { is_on_defending_side = scope:nd_crisis_holder }
+							}
+						}
+					}
+				}
+			}
+			remove_war_goal = { who = scope:nd_crisis_holder type = $TYPE$ }
+		}
+		else = {
+			while = {
+				count = 30
+				if = {
+					limit = { scope:nd_crisis_holder = { war_participant_has_war_goal_of_type_against = { type = $TYPE$ target = $TARGET$ } } }
+					remove_war_goal = { who = scope:nd_crisis_holder type = $TYPE$ }
+				}
 			}
 		}
 	}

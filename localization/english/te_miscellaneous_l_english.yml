@@ -5786,7 +5786,7 @@
  nd_tt_yield_covert_ops:0 "We end every covert operation against them that they have caught, and launch no hostile operation against them for #v 10#! years. Operations they haven't caught go on"
  nd_tt_yield_deployment:0 "We leave every treaty holding our #v Nuclear Basing#! article in, or our nuclear guarantee over, a country next to them, switch off our missile defense in states bordering theirs, and make none of these again for #v 10#! years. A treaty is left whole, so its other articles end too; leaving it carries no penalty for breaking it"
  nd_tt_yield_freeze:0 "Our weapons program is frozen for #v 10#! years"
- nd_tt_yield_guarantee:0 "We leave the country they protect alone: we back down in the play, or in a war our war support falls by #R 15#! and, if we lead our side, every country on it drops its goals against it, and a goal of the same kind against another country in that war may go with them"
+ nd_tt_yield_guarantee:0 "We leave the country they protect alone: we back down in the play, or in a war our war support falls by #R 15#! and, if we lead our side, every country on it drops its goals against it, and any to free or take one of its subjects. A goal of the same kind against another country in that war may go with them"
  nd_tt_yield_orbital:0 "We tear down our Orbital Battlestation construction site, losing its progress, and start no new site for #v 10#! years. Levels already finished stay"
  nd_tt_yield_play:0 "We back down in the diplomatic play: their side wins it"
  nd_tt_yield_reparations:0 "We pay reparations for our nuclear strike, about a tenth of a year's income, and open our arsenal to inspection for #v 20#! years, taking Custody Inspections (#R −5#! legitimacy, fading over ten years)"

@@ -807,8 +807,16 @@ class TestSuezConcession(unittest.TestCase):
     # targets (in game, 2026-11-18): one call per type, naming only the
     # leader, took France's opening goal against Brazil and left its goal
     # against the United States.
+    # The yield's tooltip walks hidden_effect every frame and a saved scope is
+    # no fence, so the loops sit behind a click-only marker.
+    def test_goal_drop_is_click_only(self):
+        gate = squash(block(self.crisis, "nd_crisis_drop_goals"))
+        self.assertEqual(gate, "scope:nd_target = { set_variable = nd_crisis_drop_click } if = { limit = {"
+                               " scope:nd_target = { has_variable = nd_crisis_drop_click } } scope:nd_target ="
+                               " { remove_variable = nd_crisis_drop_click } nd_crisis_drop_side_goals = yes }")
+
     def test_every_holder_on_the_side_is_named(self):
-        drop = squash(block(self.crisis, "nd_crisis_drop_goals"))
+        drop = squash(block(self.crisis, "nd_crisis_drop_side_goals"))
         self.assertIn("save_scope_as = nd_crisis_war", drop)
         self.assertIn("diplomatic_play = { save_scope_as = nd_crisis_war_play }", drop)
         self.assertIn("every_war_participant = {", drop)
@@ -827,6 +835,16 @@ class TestSuezConcession(unittest.TestCase):
         self.assertIn(f"while = {{ count = 30 if = {{ limit = {{ {held} }}"
                       " remove_war_goal = { who = scope:nd_crisis_holder type = $TYPE$ } } }", strike)
         self.assertTrue(strike.startswith(f"if = {{ limit = {{ {held} }}"), strike[:120])
+
+    # The trigger reads every war and the call acts in one: a holder that
+    # fights the other side in another war too gets one call per type.
+    def test_one_call_per_type_when_the_holder_fights_them_in_another_war(self):
+        strike = squash(block(self.crisis, "nd_crisis_strike_goals"))
+        self.assertIn("if = { limit = { scope:nd_crisis_holder = { any_scope_war = { count > 1"
+                      " is_war_participant = scope:nd_crisis_other_side", strike)
+        multi = strike.index("count > 1")
+        single_call = strike.index("remove_war_goal = { who = scope:nd_crisis_holder type = $TYPE$ }", multi)
+        self.assertLess(single_call, strike.index("else = { while = { count = 30", multi))
 
     def test_holder_ladder_covers_every_type_the_trigger_tests(self):
         trig = block(self.triggers, "nd_side_holds_any_goal_against")
