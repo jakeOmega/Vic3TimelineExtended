@@ -12,8 +12,8 @@ te_ai_conscript_refresh_may = {
 	NOT = { any_military_formation = { is_mobilized = yes } }
 }
 
-# State scope: the state's conscription centre holds at least one stale battalion.
-te_ai_conscript_centre_stale = {
+# State scope: the state's conscription center holds at least one stale battalion.
+te_ai_conscript_center_stale = {
 	has_building = building_conscription_center
 	b:building_conscription_center = {
 		any_combat_unit = { te_ai_conscript_unit_stale = yes }

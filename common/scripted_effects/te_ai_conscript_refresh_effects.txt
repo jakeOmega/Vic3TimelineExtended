@@ -3,10 +3,10 @@
 # The AI keeps each formation's default unit types at its best unlocked type, so new conscripts come in modern, but it
 # never upgrades a conscript battalion it already has: Japan's 100 conscripts, half of them Irregular Infantry, were
 # the same in 1946 and 1964 in the owner's game. No effect changes a battalion's type or disbands one, but removing a
-# state's conscription centre deletes its conscripts, and an AI at peace rebuilds the centre within a month in its
+# state's conscription center deletes its conscripts, and an AI at peace rebuilds the center within a month in its
 # formations' defaults (measured 2026-11-18, docs/guides/scripting_best_practices.md). So once a year an AI country at
-# peace has removed every conscription centre holding a battalion three or more eras behind its own unlocked types
-# (te_ai_conscript_refresh_triggers.txt), except one cleared in the last five years, which stops a centre the AI
+# peace has removed every conscription center holding a battalion three or more eras behind its own unlocked types
+# (te_ai_conscript_refresh_triggers.txt), except one cleared in the last five years, which stops a center the AI
 # rebuilds stale from being cleared every year. TE_SELF_CHECK ai_conscript_refresh follows the first cleared state.
 #
 # Country scope, from the yearly country pulse (te_ai_conscript_refresh_on_actions.txt).
@@ -16,7 +16,7 @@ te_ai_conscript_refresh_effect = {
 		every_scope_state = {
 			limit = {
 				NOT = { has_variable = te_ai_conscript_cleared }
-				te_ai_conscript_centre_stale = yes
+				te_ai_conscript_center_stale = yes
 			}
 			te_ai_conscript_refresh_sample = yes
 			remove_building = building_conscription_center
@@ -25,13 +25,13 @@ te_ai_conscript_refresh_effect = {
 	}
 }
 
-# TEMPORARY self-check (2026-11-18, #1877): does an AI rebuild a removed conscription centre, and in current types?
-# Measured once (two countries in one save, at peace); this reads it in every game. The first centre the pass clears
+# TEMPORARY self-check (2026-11-18, #1877): does an AI rebuild a removed conscription center, and in current types?
+# Measured once (two countries in one save, at peace); this reads it in every game. The first center the pass clears
 # is counted before its removal (te_ai_conscript_refresh_sample) and again three months on, from the world's monthly
 # pulse (te_ai_conscript_refresh_selfcheck, te_ai_conscript_refresh_verdict). Once read:
 #   START       a plain marker, logged first: with no verdict line after it, the templated line was dropped.
-#   OK          the state has a conscription centre again, with at least one battalion and none of them stale.
-#   BROKEN no_centre  no centre or no battalion there: the AI does not rebuild a removed centre. Fallback: take the
+#   OK          the state has a conscription center again, with at least one battalion and none of them stale.
+#   BROKEN no_center  no center or no battalion there: the AI does not rebuild a removed center. Fallback: take the
 #               pass's on_action line out and take this to the owner.
 #   BROKEN stale      the rebuilt battalions are stale again: the country's formation defaults are themselves out of
 #               date. Fallback: skip a country whose conscripts the AI rebuilds stale (the five-year mark already
@@ -92,11 +92,11 @@ te_ai_conscript_refresh_verdict = {
 					global_var:te_ai_conscript_sc_after >= 1
 					global_var:te_ai_conscript_sc_after_stale = 0
 				}
-				debug_log = "TE_SELF_CHECK OK ai_conscript_refresh country=[THIS.GetCountry.GetTagName] before=[THIS.ScriptValue('te_ai_conscript_sc_before_g')|0] before_stale=[THIS.ScriptValue('te_ai_conscript_sc_before_stale_g')|0] after=[THIS.ScriptValue('te_ai_conscript_sc_after_g')|0] after_stale=0 date=[TimeKeeper.GetCurrentDate.GetString] (three months after its conscription centre was removed, the state has one again and none of its battalions is stale: the AI rebuilds in current types)"
+				debug_log = "TE_SELF_CHECK OK ai_conscript_refresh country=[THIS.GetCountry.GetTagName] before=[THIS.ScriptValue('te_ai_conscript_sc_before_g')|0] before_stale=[THIS.ScriptValue('te_ai_conscript_sc_before_stale_g')|0] after=[THIS.ScriptValue('te_ai_conscript_sc_after_g')|0] after_stale=0 date=[TimeKeeper.GetCurrentDate.GetString] (three months after its conscription center was removed, the state has one again and none of its battalions is stale: the AI rebuilds in current types)"
 			}
 			else_if = {
 				limit = { global_var:te_ai_conscript_sc_after = 0 }
-				debug_log = "TE_SELF_CHECK BROKEN ai_conscript_refresh no_centre country=[THIS.GetCountry.GetTagName] before=[THIS.ScriptValue('te_ai_conscript_sc_before_g')|0] before_stale=[THIS.ScriptValue('te_ai_conscript_sc_before_stale_g')|0] after=0 date=[TimeKeeper.GetCurrentDate.GetString] (three months after its conscription centre was removed, the state holds no conscripts: the AI did not rebuild; fallback in te_ai_conscript_refresh_effects.txt)"
+				debug_log = "TE_SELF_CHECK BROKEN ai_conscript_refresh no_center country=[THIS.GetCountry.GetTagName] before=[THIS.ScriptValue('te_ai_conscript_sc_before_g')|0] before_stale=[THIS.ScriptValue('te_ai_conscript_sc_before_stale_g')|0] after=0 date=[TimeKeeper.GetCurrentDate.GetString] (three months after its conscription center was removed, the state holds no conscripts: the AI did not rebuild; fallback in te_ai_conscript_refresh_effects.txt)"
 			}
 			else = {
 				debug_log = "TE_SELF_CHECK BROKEN ai_conscript_refresh stale country=[THIS.GetCountry.GetTagName] before=[THIS.ScriptValue('te_ai_conscript_sc_before_g')|0] before_stale=[THIS.ScriptValue('te_ai_conscript_sc_before_stale_g')|0] after=[THIS.ScriptValue('te_ai_conscript_sc_after_g')|0] after_stale=[THIS.ScriptValue('te_ai_conscript_sc_after_stale_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (the rebuilt conscripts are stale again: the country's formation defaults are out of date; fallback in te_ai_conscript_refresh_effects.txt)"

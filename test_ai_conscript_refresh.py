@@ -2,7 +2,7 @@
 
 The AI never upgrades a conscript battalion once it exists, though it keeps each formation's default unit types at its
 best unlocked type. So once a year an AI country at peace (no war, no formation mobilized, no diplomatic play) has its
-conscription centres removed wherever one holds a battalion three or more eras behind a type of the same unit group
+conscription centers removed wherever one holds a battalion three or more eras behind a type of the same unit group
 it has unlocked, and the AI rebuilds them in its current defaults (measured 2026-11-18: within a month, in modern
 types). A cleared state waits five years before it can be cleared again. TE_SELF_CHECK ai_conscript_refresh follows
 the first cleared state for three months. Design: docs/superpowers/specs/2026-11-18-ai-conscript-refresh-design.md.
@@ -160,8 +160,8 @@ class TheStaleRule(unittest.TestCase):
         self.assertNotIn("trench_works", rule["combat_unit_type_skirmish_infantry"])
         self.assertNotIn("breech_loading_artillery", rule["combat_unit_type_cannon_artillery"])
 
-    def test_a_centre_is_stale_when_any_of_its_battalions_is(self):
-        body = _norm(_block(_code(TRIGGERS), "te_ai_conscript_centre_stale"))
+    def test_a_center_is_stale_when_any_of_its_battalions_is(self):
+        body = _norm(_block(_code(TRIGGERS), "te_ai_conscript_center_stale"))
         self.assertEqual(body, "has_building = building_conscription_center b:building_conscription_center = { "
                                "any_combat_unit = { te_ai_conscript_unit_stale = yes } }")
 
@@ -201,11 +201,11 @@ class ThePass(unittest.TestCase):
         self.assertTrue(effect.endswith("} }"))
         self.assertEqual(effect.count("every_scope_state"), 1)
 
-    def test_it_clears_each_stale_centre_not_cleared_in_five_years(self):
+    def test_it_clears_each_stale_center_not_cleared_in_five_years(self):
         effect = _norm(_block(_code(EFFECTS), "te_ai_conscript_refresh_effect"))
         limit = effect[effect.index("every_scope_state = { limit = {"):effect.index("te_ai_conscript_refresh_sample")]
         self.assertIn("NOT = { has_variable = te_ai_conscript_cleared }", limit)
-        self.assertIn("te_ai_conscript_centre_stale = yes", limit)
+        self.assertIn("te_ai_conscript_center_stale = yes", limit)
         steps = ["te_ai_conscript_refresh_sample = yes", "remove_building = building_conscription_center",
                  "set_variable = { name = te_ai_conscript_cleared years = 5 }"]
         at = [effect.index(step) for step in steps]
@@ -250,7 +250,7 @@ class TheSelfCheck(unittest.TestCase):
                                 "if = { limit = { global_var:te_ai_conscript_sc_months >= 3 } "
                                 "te_ai_conscript_refresh_verdict = yes } }")
 
-    def test_ok_needs_a_rebuilt_centre_with_nothing_stale(self):
+    def test_ok_needs_a_rebuilt_center_with_nothing_stale(self):
         verdict = _norm(_block(_code(EFFECTS), "te_ai_conscript_refresh_verdict"))
         self.assertTrue(verdict.startswith("if = { limit = { te_ai_conscript_refresh_sample_intact = yes }"))
         start = verdict.index("TE_SELF_CHECK START ai_conscript_refresh")
@@ -259,9 +259,9 @@ class TheSelfCheck(unittest.TestCase):
         self.assertIn("if = { limit = { global_var:te_ai_conscript_sc_after >= 1 "
                       "global_var:te_ai_conscript_sc_after_stale = 0 } debug_log = \"TE_SELF_CHECK OK", verdict)
         self.assertIn("else_if = { limit = { global_var:te_ai_conscript_sc_after = 0 } "
-                      "debug_log = \"TE_SELF_CHECK BROKEN ai_conscript_refresh no_centre", verdict)
+                      "debug_log = \"TE_SELF_CHECK BROKEN ai_conscript_refresh no_center", verdict)
         self.assertIn("else = { debug_log = \"TE_SELF_CHECK BROKEN ai_conscript_refresh stale", verdict)
-        # Counted after, from the same state's centre, and marked read before any line.
+        # Counted after, from the same state's center, and marked read before any line.
         self.assertLess(verdict.index("change_global_variable = { name = te_ai_conscript_sc_after add = 1 }"), start)
         self.assertLess(verdict.index("set_global_variable = te_ai_conscript_sc_done"), start)
 
