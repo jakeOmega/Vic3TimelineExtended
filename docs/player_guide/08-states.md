@@ -374,7 +374,8 @@ Each constituent culture has a tier, set by how close it is to the others:
 A merge starts on its core cultures' tiers, and each optional culture joins on
 its own. The years count from when you have the technology for the merge's tier
 and one of its core cultures as a primary culture, and only while the culture is
-held and accepted; they keep what they have when it isn't. The mod sets some tiers by
+held and accepted; they keep what they have when it isn't. The culture's condition
+in the journal entry gives its years so far against the years it needs. The mod sets some tiers by
 hand where history differs from the game's traits: Occitan and Wallonian join
 French at tier 1, Catalan at tier 2.
 
@@ -404,7 +405,7 @@ A few cultures wait while any country has a base-game journal entry open that
 works on them. A merge doesn't start while a core culture waits: East Slavic for
 the Ukrainian and Byelorussian Renaissances, American for Readmit the
 Secessionist States, and Brazilian for the Ragamuffin War. It waits at most 20
-years, then goes ahead. A waiting
+years, then goes ahead, and its condition gives the years waited so far. A waiting
 optional culture stays out until the entry closes, or in American until the start
 has waited its 20 years: Afro-American (Equality for All) in American and
 Anglophone, and Dixie (Readmit the Secessionist States) in Anglophone.

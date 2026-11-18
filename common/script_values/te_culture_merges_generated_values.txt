@@ -540,6 +540,16 @@ te_cmg_east_slavic_bar_pct = {
 	multiply = 100
 }
 
+# Country scope. The years the east_slavic merge has waited on a vanilla entry (the census stops at
+# te_cm_wait_cap_years), for its wait condition and status row. 0 before the census sets the counter.
+te_cmg_east_slavic_wait_years_so_far = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cm_wait_years_east_slavic }
+		value = var:te_cm_wait_years_east_slavic
+	}
+}
+
 # ---- yugoslav ----
 
 # Country scope (the starter). The smallest result share among the core parts of the yugoslav merge that joined and
@@ -1368,6 +1378,16 @@ te_cmg_american_bar_pct = {
 	multiply = 100
 }
 
+# Country scope. The years the american merge has waited on a vanilla entry (the census stops at
+# te_cm_wait_cap_years), for its wait condition and status row. 0 before the census sets the counter.
+te_cmg_american_wait_years_so_far = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cm_wait_years_american }
+		value = var:te_cm_wait_years_american
+	}
+}
+
 # ---- anglophone ----
 
 # Country scope (the starter). The smallest result share among the core parts of the anglophone merge that joined and
@@ -1573,6 +1593,39 @@ te_cmg_anglophone_bar_pct = {
 	multiply = 100
 }
 
+# Country scope. The years british pops have been held and accepted together for the anglophone merge, up to the
+# te_cm_years_tier2 its tier asks for: the figure its start condition shows. 0 before the census sets the counter.
+te_cmg_anglophone_british_years_so_far = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cm_years_anglophone_british }
+		value = var:te_cm_years_anglophone_british
+		max = te_cm_years_tier2
+	}
+}
+
+# Country scope. The years yankee pops have been held and accepted together for the anglophone merge, up to the
+# te_cm_years_tier2 its tier asks for: the figure its start condition shows. 0 before the census sets the counter.
+te_cmg_anglophone_yankee_years_so_far = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cm_years_anglophone_yankee }
+		value = var:te_cm_years_anglophone_yankee
+		max = te_cm_years_tier2
+	}
+}
+
+# Country scope. The years cm_american pops have been held and accepted together for the anglophone merge, up to the
+# te_cm_years_tier2 its tier asks for: the figure its start condition shows. 0 before the census sets the counter.
+te_cmg_anglophone_cm_american_years_so_far = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cm_years_anglophone_cm_american }
+		value = var:te_cm_years_anglophone_cm_american
+		max = te_cm_years_tier2
+	}
+}
+
 # ---- brazilian ----
 
 # Country scope (the starter). The smallest result share among the core parts of the brazilian merge that joined and
@@ -1748,6 +1801,16 @@ te_cmg_brazilian_progress = {
 te_cmg_brazilian_bar_pct = {
 	value = te_cmg_brazilian_progress
 	multiply = 100
+}
+
+# Country scope. The years the brazilian merge has waited on a vanilla entry (the census stops at
+# te_cm_wait_cap_years), for its wait condition and status row. 0 before the census sets the counter.
+te_cmg_brazilian_wait_years_so_far = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cm_wait_years_brazilian }
+		value = var:te_cm_wait_years_brazilian
+	}
 }
 
 # ---- platine ----
@@ -3920,6 +3983,50 @@ te_cmg_latin_bar_pct = {
 	multiply = 100
 }
 
+# Country scope. The years french pops have been held and accepted together for the latin merge, up to the
+# te_cm_years_tier3 its tier asks for: the figure its start condition shows. 0 before the census sets the counter.
+te_cmg_latin_french_years_so_far = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cm_years_latin_french }
+		value = var:te_cm_years_latin_french
+		max = te_cm_years_tier3
+	}
+}
+
+# Country scope. The years cm_italian pops have been held and accepted together for the latin merge, up to the
+# te_cm_years_tier3 its tier asks for: the figure its start condition shows. 0 before the census sets the counter.
+te_cmg_latin_cm_italian_years_so_far = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cm_years_latin_cm_italian }
+		value = var:te_cm_years_latin_cm_italian
+		max = te_cm_years_tier3
+	}
+}
+
+# Country scope. The years spanish pops have been held and accepted together for the latin merge, up to the
+# te_cm_years_tier3 its tier asks for: the figure its start condition shows. 0 before the census sets the counter.
+te_cmg_latin_spanish_years_so_far = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cm_years_latin_spanish }
+		value = var:te_cm_years_latin_spanish
+		max = te_cm_years_tier3
+	}
+}
+
+# Country scope. The years portuguese pops have been held and accepted together for the latin merge, up to the
+# te_cm_years_tier3 its tier asks for: the figure its start condition shows. 0 before the census sets the counter.
+te_cmg_latin_portuguese_years_so_far = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cm_years_latin_portuguese }
+		value = var:te_cm_years_latin_portuguese
+		max = te_cm_years_tier3
+	}
+}
+
 # ---- pan_slavic ----
 
 # Country scope (the starter). The smallest result share among the core parts of the pan_slavic merge that joined and
@@ -4095,6 +4202,39 @@ te_cmg_pan_slavic_progress = {
 te_cmg_pan_slavic_bar_pct = {
 	value = te_cmg_pan_slavic_progress
 	multiply = 100
+}
+
+# Country scope. The years cm_east_slavic pops have been held and accepted together for the pan_slavic merge, up to the
+# te_cm_years_tier3 its tier asks for: the figure its start condition shows. 0 before the census sets the counter.
+te_cmg_pan_slavic_cm_east_slavic_years_so_far = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cm_years_pan_slavic_cm_east_slavic }
+		value = var:te_cm_years_pan_slavic_cm_east_slavic
+		max = te_cm_years_tier3
+	}
+}
+
+# Country scope. The years cm_czechoslovak pops have been held and accepted together for the pan_slavic merge, up to the
+# te_cm_years_tier3 its tier asks for: the figure its start condition shows. 0 before the census sets the counter.
+te_cmg_pan_slavic_cm_czechoslovak_years_so_far = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cm_years_pan_slavic_cm_czechoslovak }
+		value = var:te_cm_years_pan_slavic_cm_czechoslovak
+		max = te_cm_years_tier3
+	}
+}
+
+# Country scope. The years cm_yugoslav pops have been held and accepted together for the pan_slavic merge, up to the
+# te_cm_years_tier3 its tier asks for: the figure its start condition shows. 0 before the census sets the counter.
+te_cmg_pan_slavic_cm_yugoslav_years_so_far = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cm_years_pan_slavic_cm_yugoslav }
+		value = var:te_cm_years_pan_slavic_cm_yugoslav
+		max = te_cm_years_tier3
+	}
 }
 
 # ---- pan_turkic ----
@@ -4344,6 +4484,39 @@ te_cmg_pan_turkic_bar_pct = {
 	multiply = 100
 }
 
+# Country scope. The years cm_oghuz_turkic pops have been held and accepted together for the pan_turkic merge, up to the
+# te_cm_years_tier3 its tier asks for: the figure its start condition shows. 0 before the census sets the counter.
+te_cmg_pan_turkic_cm_oghuz_turkic_years_so_far = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cm_years_pan_turkic_cm_oghuz_turkic }
+		value = var:te_cm_years_pan_turkic_cm_oghuz_turkic
+		max = te_cm_years_tier3
+	}
+}
+
+# Country scope. The years uzbek pops have been held and accepted together for the pan_turkic merge, up to the
+# te_cm_years_tier3 its tier asks for: the figure its start condition shows. 0 before the census sets the counter.
+te_cmg_pan_turkic_uzbek_years_so_far = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cm_years_pan_turkic_uzbek }
+		value = var:te_cm_years_pan_turkic_uzbek
+		max = te_cm_years_tier3
+	}
+}
+
+# Country scope. The years tatar pops have been held and accepted together for the pan_turkic merge, up to the
+# te_cm_years_tier2 its tier asks for: the figure its start condition shows. 0 before the census sets the counter.
+te_cmg_pan_turkic_tatar_years_so_far = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cm_years_pan_turkic_tatar }
+		value = var:te_cm_years_pan_turkic_tatar
+		max = te_cm_years_tier2
+	}
+}
+
 # ---- pan_malay ----
 
 # Country scope (the starter). The smallest result share among the core parts of the pan_malay merge that joined and
@@ -4449,6 +4622,28 @@ te_cmg_pan_malay_progress = {
 te_cmg_pan_malay_bar_pct = {
 	value = te_cmg_pan_malay_progress
 	multiply = 100
+}
+
+# Country scope. The years cm_indonesian pops have been held and accepted together for the pan_malay merge, up to the
+# te_cm_years_tier3 its tier asks for: the figure its start condition shows. 0 before the census sets the counter.
+te_cmg_pan_malay_cm_indonesian_years_so_far = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cm_years_pan_malay_cm_indonesian }
+		value = var:te_cm_years_pan_malay_cm_indonesian
+		max = te_cm_years_tier3
+	}
+}
+
+# Country scope. The years filipino pops have been held and accepted together for the pan_malay merge, up to the
+# te_cm_years_tier3 its tier asks for: the figure its start condition shows. 0 before the census sets the counter.
+te_cmg_pan_malay_filipino_years_so_far = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cm_years_pan_malay_filipino }
+		value = var:te_cm_years_pan_malay_filipino
+		max = te_cm_years_tier3
+	}
 }
 
 # ---- east_african ----
@@ -4640,4 +4835,37 @@ te_cmg_east_african_progress = {
 te_cmg_east_african_bar_pct = {
 	value = te_cmg_east_african_progress
 	multiply = 100
+}
+
+# Country scope. The years swahili pops have been held and accepted together for the east_african merge, up to the
+# te_cm_years_tier3 its tier asks for: the figure its start condition shows. 0 before the census sets the counter.
+te_cmg_east_african_swahili_years_so_far = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cm_years_east_african_swahili }
+		value = var:te_cm_years_east_african_swahili
+		max = te_cm_years_tier3
+	}
+}
+
+# Country scope. The years nyamwezi pops have been held and accepted together for the east_african merge, up to the
+# te_cm_years_tier3 its tier asks for: the figure its start condition shows. 0 before the census sets the counter.
+te_cmg_east_african_nyamwezi_years_so_far = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cm_years_east_african_nyamwezi }
+		value = var:te_cm_years_east_african_nyamwezi
+		max = te_cm_years_tier3
+	}
+}
+
+# Country scope. The years sukuma pops have been held and accepted together for the east_african merge, up to the
+# te_cm_years_tier3 its tier asks for: the figure its start condition shows. 0 before the census sets the counter.
+te_cmg_east_african_sukuma_years_so_far = {
+	value = 0
+	if = {
+		limit = { has_variable = te_cm_years_east_african_sukuma }
+		value = var:te_cm_years_east_african_sukuma
+		max = te_cm_years_tier3
+	}
 }

@@ -935,6 +935,47 @@ def _years_clause(tier: int) -> str:
     return "te_cm_years_tier2" if tier == 2 else "te_cm_years_tier3"
 
 
+def years_so_far_value(key: str, culture: str) -> str:
+    """The script value a core slot's start condition shows as the culture's years together so far."""
+    return "te_cmg_%s_%s_years_so_far" % (key, culture)
+
+
+def wait_years_so_far_value(key: str) -> str:
+    """The script value a wait's start condition and status row show as the years the merge has waited."""
+    return "te_cmg_%s_wait_years_so_far" % key
+
+
+def counted_cultures(merge: cfg.Merge, tiers: dict[str, int]) -> list[str]:
+    """The core cultures whose route counts years together (tiers 1b and 2), in slot order: the ones
+    ``_slot_routes`` gives a ``years_met`` clause, so a value over their counters names nothing new."""
+    return [c for part in merge.core for c in part.cultures if tiers[c] > 1]
+
+
+# A figure read off this country, in a start condition or a status row (both render with the entry as ROOT).
+COUNTRY_SV = "[ROOT.GetCountry.MakeScope.ScriptValue('{}')|{}]"
+
+
+def _years_so_far_text(key: str, cultures: list[str], tiers: dict[str, int], sv: str) -> str:
+    """A core slot's count so far, after its condition: ``Years so far: 12 of 30.``, or one figure for
+    each alternative (``$yankee$ 12 of 30, $cm_american$ 0 of 30``), each with its own counter. ``sv``
+    reads the constants, as the text around it does."""
+
+    def figure(culture: str) -> str:
+        return "%s of %s" % (COUNTRY_SV.format(years_so_far_value(key, culture), "0"), sv.format(_years_clause(tiers[culture]), "0"))
+
+    if len(cultures) == 1:
+        shown = figure(cultures[0])
+    else:
+        shown = ", ".join("$%s$ %s" % (c, figure(c)) for c in cultures)
+    return "Years so far: %s. Each yearly census that finds them held and accepted adds one." % shown
+
+
+def _wait_so_far_text(key: str, sv: str) -> str:
+    """The years a merge has waited on a vanilla entry, out of the most it waits; ``sv`` reads the cap."""
+    return "Years waited so far: %s of %s." % (
+        COUNTRY_SV.format(wait_years_so_far_value(key), "0"), sv.format("te_cm_wait_cap_years", "0"))
+
+
 def _slot_routes(merge: cfg.Merge, part: cfg.Part, tiers: dict[str, int]) -> list[list[str]]:
     """The ways one core slot is met, each a list of clauses all of which must hold.
 
@@ -2530,15 +2571,18 @@ def _write_lowest(out: "_Script", key: str, name: str, cultures: list[str]) -> N
                         out.line("max = 0")
 
 
-def render_values(merges: tuple[cfg.Merge, ...] | None = None) -> str:
-    """Per merge, the progress the entry's bar shows (country scope, the starter).
+def render_values(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> str:
+    """Per merge, the progress the entry's bar shows (country scope, the starter), and the counts the
+    start conditions show.
 
     ``lowest_dom``: the smallest result share (te_cm_dom_<m>_<c>, Task 6's) among the core parts
     that joined and haven't switched, which is what completes the merge; ``lowest_dom_all`` the same
     over every part that joined, optional and late ones too, which is what is left once the merge
     is complete and a late part is still converting. ``progress`` is the first while the merge runs
     and the second once it is complete, over te_cm_switch_share, capped at 1; ``bar_pct`` is the
-    bar's 0 to 100.
+    bar's 0 to 100. ``<c>_years_so_far`` is a core culture's years together (tiers 1b and 2) up to
+    what its tier asks for, and ``wait_years_so_far`` the years a merge with a core wait has waited:
+    each 0 while the census hasn't set its counter, which a loc ``Var`` read can't guard.
     """
     merges = cfg.MERGES if merges is None else merges
     out = _Script()
@@ -2574,6 +2618,28 @@ def render_values(merges: tuple[cfg.Merge, ...] | None = None) -> str:
         with out.block("te_cmg_%s_bar_pct" % key):
             out.line("value = te_cmg_%s_progress" % key)
             out.line("multiply = 100")
+        tiers = {c: cfg.derive_tier(merge, c, vanilla, merges) for c in slot_cultures(merge)}
+        for culture in counted_cultures(merge, tiers):
+            counter = "te_cm_years_%s_%s" % (key, culture)
+            out.line()
+            out.line("# Country scope. The years %s pops have been held and accepted together for the %s merge, up to the" % (culture, key))
+            out.line("# %s its tier asks for: the figure its start condition shows. 0 before the census sets the counter." % _years_clause(tiers[culture]))
+            with out.block(years_so_far_value(key, culture)):
+                out.line("value = 0")
+                with out.block("if"):
+                    out.line("limit = { has_variable = %s }" % counter)
+                    out.line("value = var:%s" % counter)
+                    out.line("max = %s" % _years_clause(tiers[culture]))
+        if core_waits(merge):
+            counter = "te_cm_wait_years_%s" % key
+            out.line()
+            out.line("# Country scope. The years the %s merge has waited on a vanilla entry (the census stops at" % key)
+            out.line("# te_cm_wait_cap_years), for its wait condition and status row. 0 before the census sets the counter.")
+            with out.block(wait_years_so_far_value(key)):
+                out.line("value = 0")
+                with out.block("if"):
+                    out.line("limit = { has_variable = %s }" % counter)
+                    out.line("value = var:%s" % counter)
     return out.text()
 
 
@@ -2808,8 +2874,8 @@ def status_rows(merge: cfg.Merge, vanilla: dict, merges: tuple[cfg.Merge, ...]) 
             Row(
                 base + "wait_%s" % culture,
                 ["te_cmg_%s_start_basics = yes" % key, "te_cmg_%s_%s_waiting = yes" % (key, culture)],
-                "The merge waits while a country still has %s open. It goes ahead after %s years at most."
-                % (_either(part.wait_for), sv.format("te_cm_wait_cap_years", "0")),
+                "The merge waits while a country still has %s open. It goes ahead after %s years at most. %s"
+                % (_either(part.wait_for), sv.format("te_cm_wait_cap_years", "0"), _wait_so_far_text(key, sv)),
             )
         )
     rows.append(Row("te_cm_status_ready", ["te_cmg_%s_can_start = yes" % key]))
@@ -3037,6 +3103,9 @@ def entry_loc(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> dic
                         "where many of them live give them $full_acceptance$." % sv.format("te_cm_years_tier3", "0"))
             if tier != start:
                 tail += " They also need $%s$." % TIER_TECH[tier]
+            counted = [c for c in part.cultures if c in counted_cultures(merge, tiers)]
+            if counted:
+                tail += " " + _years_so_far_text(key, counted, tiers, sv)
             out["te_cmg_%s_core_%d_tt" % (key, index)] = "%s %s" % (head, tail)
         var = "[ROOT.GetCountry.MakeScope.Var('te_cm_sol_%s_" + key + "')%s]"
         out["te_cmg_%s_sol_tt" % key] = (
@@ -3051,8 +3120,9 @@ def entry_loc(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> dic
             out["te_cmg_%s_comp_%s_tt" % (key, component)] = "The %s merge is complete." % _names([merge_by_key(component).result])
         for part in core_waits(merge):
             out["te_cmg_%s_wait_%s_tt" % (key, part.cultures[0])] = (
-                "No country has %s open, or the merge has already waited %s years for it to end."
-                % (_either(part.wait_for), sv.format("te_cm_wait_cap_years", "0"))
+                "No country has %s open, or the merge has already waited %s years for it to end. %s Each yearly census "
+                "that finds the merge otherwise ready to begin adds one."
+                % (_either(part.wait_for), sv.format("te_cm_wait_cap_years", "0"), _wait_so_far_text(key, sv))
             )
     out[CORE_NAMES_FALLBACK] = "its constituent cultures"
     out[CORE_SWITCHED_FALLBACK] = "its constituent cultures have all switched"
@@ -3131,7 +3201,7 @@ def plan_outputs(root: Path = ROOT) -> dict[Path, str]:
         JE_OUT: render_journal_entries(vanilla),
         BUTTONS_OUT: render_buttons(),
         BARS_OUT: render_bars(),
-        VALUES_OUT: render_values(),
+        VALUES_OUT: render_values(vanilla),
         DEFINITIONS_OUT: render_definitions(),
         VANILLA_TRIGGERS_OUT: render_vanilla_triggers(),
         GOVERNMENT_TYPES_OUT: render_government_types(),
