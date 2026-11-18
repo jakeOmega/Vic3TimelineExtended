@@ -1099,6 +1099,19 @@ class TestBannerHover(unittest.TestCase):
         self.assertRegex(values["te_state_picture_k_smog"], rf"value = {registry.SMOG_POLLUTION}\b")
         self.assertRegex(values["te_state_picture_k_ruins"], rf"value = {registry.RUINS_DEVASTATION}\b")
 
+    def test_the_smog_hover_gives_its_floor_as_the_percentage_the_player_sees(self):
+        # the game shows Pollution Impact as a percentage of POLLUTION_MAX (255), never the 0-255 figure the trigger
+        # reads, so the hover prints the floor's share, and the floor is a whole percent of it (owner, 2026-11-18)
+        values = _raw_blocks([VALUES])
+        share = values["te_state_picture_k_smog_share"]
+        self.assertRegex(share, r"value = te_state_picture_k_smog\b")
+        self.assertRegex(share, r"divide = 255\b")
+        percent = registry.SMOG_POLLUTION * 100 / 255
+        self.assertEqual(percent, round(percent), f"{registry.SMOG_POLLUTION} of 255 is {percent:.2f}%")
+        line = self.loc["te_sp_tt_why_smog"]
+        self.assertIn("ScriptValue('te_state_picture_k_smog_share')|%0", line)
+        self.assertNotIn("255", line)
+
     def test_the_means_lines_give_the_world_average_the_state_was_judged_against(self):
         # the hover agrees with the picture: each line gives the world's average as the state stored it at its count,
         # and the floor derived from it, never the world's live figure or the owner's rung

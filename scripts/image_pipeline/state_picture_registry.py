@@ -239,7 +239,9 @@ W_CITY_OVER = 11000000
 
 # Characters and conditions a weight can read live, off the state or its owner.
 # (state trigger lines, the digit in the weight)
-SMOG_POLLUTION = 150  # of 255; vanilla's pollution map mode is at full color from 153
+# of POLLUTION_MAX (255): the game shows the player Pollution Impact, this over 255, as a percentage, so the
+# floor is a round 60% (owner, 2026-11-18), also where vanilla's pollution map mode reaches full color
+SMOG_POLLUTION = 153
 RUINS_DEVASTATION = 0.5  # the trigger reads 0 to 1
 CHARACTERS = {
     "housing_blocks": ([

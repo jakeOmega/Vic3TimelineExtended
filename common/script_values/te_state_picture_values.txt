@@ -400,7 +400,12 @@ te_state_picture_hover_port_level = {
 	}
 }
 te_state_picture_k_major_port = { value = 20 }
-te_state_picture_k_smog = { value = 150 }
+te_state_picture_k_smog = { value = 153 }
+# the same floor as the player sees it, a share of POLLUTION_MAX (the hover prints it as a percentage)
+te_state_picture_k_smog_share = {
+	value = te_state_picture_k_smog
+	divide = 255
+}
 te_state_picture_k_ruins = { value = 0.5 }
 
 te_state_picture_hover_kept_metropolis = {

@@ -36092,8 +36092,8 @@
   "ru": "[concept_sol] в ней составлял #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#! при ежегодном подсчёте, на #v [State.MakeScope.ScriptValue('te_state_picture_hover_shortfall')|1]#! ниже ожидаемых её людьми #v [State.MakeScope.ScriptValue('te_state_picture_hover_esol')|1]#!: запущенная улица остаётся таковой, пока отставание не сократится до #v [State.MakeScope.ScriptValue('te_state_picture_k_rundown_keep')|1]#!."
  },
  "te_sp_tt_why_smog": {
-  "en": "Pollution in its region is at #v [State.MakeScope.ScriptValue('te_state_picture_k_smog')|0]#! of 255 or more.",
-  "ru": "Загрязнение в её регионе составляет #v [State.MakeScope.ScriptValue('te_state_picture_k_smog')|0]#! при пороге в 255 или выше."
+  "en": "Its region's [concept_pollution_impact] is #v [State.MakeScope.ScriptValue('te_state_picture_k_smog_share')|%0]#! or more.",
+  "ru": "[concept_pollution_impact] в её регионе: #v [State.MakeScope.ScriptValue('te_state_picture_k_smog_share')|%0]#! или выше."
  },
  "te_sp_tt_why_town": {
   "en": "Its largest city has about #v [State.MakeScope.ScriptValue('te_state_picture_hover_people')|K]#! people, under the #v [State.MakeScope.ScriptValue('te_state_picture_k_city')|K]#! of a city.",

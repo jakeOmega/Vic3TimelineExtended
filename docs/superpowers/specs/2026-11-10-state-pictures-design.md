@@ -49,8 +49,9 @@ System doc (as built): `docs/systems/mod_systems/state_pictures.md`. Play-test l
     overlap, India's farmland generic, an oil field taking over farmland and pasture. The harbor replacing
     the pilot's liner quay in lesser ports is "fine - a new game is going to be way less developed than the
     world by the time we get to the new eras". The flooded coast stays unwired until the warming system has
-    local effects ("we can wire it up later"). Natural terrain on Modern Urban Planning, smog from 150 of
-    255 and ruins from one half devastation stand until a test game says otherwise.
+    local effects ("we can wire it up later"). Natural terrain on Modern Urban Planning, smog from 153 of
+    255 (60% Pollution Impact; 150 until 2026-11-18) and ruins from one half devastation stand until a
+    test game says otherwise.
 11. **The plantation and cleared-land pictures stay though they may never show** ("let's leave them for
     now"). Nothing in vanilla 1.15's files makes a province either terrain: plantation buildings set no
     terrain manipulator and none creates cleared land (`docs/guides/scripting_best_practices.md`, § "State
@@ -302,7 +303,7 @@ order below shows (each has its own digit in the character place of the weight).
 | Boomtown, cranes everywhere | a city (100,000 or more) whose people have grown 3% a year, smoothed (5% since 2026-11-14, the owner's "~5%/year"; the system doc gives the years it takes) | the pass's `te_sp_boom`: `te_dg_walk_pop` against the year before, held within a tenth either way and smoothed (a fifth of each year's rate), so 5% a year makes a boomtown in its fifth year. A year in which the state's province count changed is left out | the yearly pass |
 | Declining city, empty works | a city whose people have fallen 1% a year, smoothed | `te_sp_decline`, the same figure: 2% a year makes one in its fourth year | the yearly pass |
 | Divided city, shacks under towers | a metropolis with a Gini of 0.85 or more | `te_sp_divided`: `te_dg_gini` (in a 1940 save the metropolises' median is 0.78 and a quarter are at 0.85) | the yearly pass |
-| Smog city | heavy pollution | the state region's `pollution_amount` at 150 or more of 255 (vanilla's pollution map mode is at full color from 153) | live |
+| Smog city | heavy pollution | the state region's `pollution_amount` at 153 or more of 255, a round 60% of the Pollution Impact the player sees (vanilla's pollution map mode is at full color from 153) | live |
 | Heavy-industry city | heavy industry (`bg_heavy_industry`) holds a quarter of the state's building levels, and at least 30 | `te_sp_industry`, a share as oil is (32 of 335 city states in the 1940 save) | the yearly pass |
 | Resort | the Tourism Industry holds 2% of the state's building levels, and at least 10 | `te_sp_resort` (13 states in the save; tourism is never above 8% of a state) | the yearly pass |
 
