@@ -1575,15 +1575,19 @@ nuclear_crisis.24 = {
 
 # ---- .25 Hidden: the Suez self-check ---------------------------------------------
 # A day after the first war concession that dropped goals (nd_crisis_concede_war,
-# rework spec §8.1): does the yielding side still hold a goal against the other
-# side? Read a day later, as the probe read its removals (2026-10-28), not in
-# the block that removed them. If the war is already over, nothing is judged
-# and the next concession checks again, so an ended war cannot read as OK. A
-# goal script added stays (the probe), and a goal from another war between the
-# two counts too, so read a BROKEN line against the war it names
-# (docs/testing/nuclear-playtest.md). The line counts the wars the two fight
-# on opposite sides (wars=) and how many of them this country leads (led=):
-# wars=1 led=1 leaves only a goal remove_war_goal kept, or one script added.
+# rework spec §8.1): does the yielder still hold a goal of its own against the
+# other side? Its allies' goals are not its to give up and stay (owner,
+# 2026-11-18). Read a day later, as the probe read its removals (2026-10-28),
+# not in the block that removed them. If the war is already over, nothing is
+# judged and the next concession checks again, so an ended war cannot read as
+# OK. A goal from another war between the two counts too, so read a BROKEN
+# line against the war it names (docs/testing/nuclear-playtest.md). The line
+# counts the wars the two fight on opposite sides (wars=): wars=1 leaves a
+# goal the removal missed. Before 2026-11-18 the removal named only the leader
+# and removed one goal per type, and read BROKEN twice (Great Britain,
+# 2026-11-17; France, in a war on Brazil the United States had joined,
+# 2026-11-18); _v4 re-arms it for the removal that takes the yielder's own
+# goals, leader or not, and repeats.
 # The other country is named from its own scope on the TE_NUCLEAR
 # suez_check_other line just before: the saved scope's name printed blank in
 # the verdict line (2026-11-17), though it is kept there in case it prints.
@@ -1600,7 +1604,6 @@ nuclear_crisis.25 = {
 		if = {
 			limit = { has_war_with = scope:nd_suez_check_other }
 			set_variable = { name = nd_suez_chk_wars value = 0 }
-			set_variable = { name = nd_suez_chk_led value = 0 }
 			every_scope_war = {
 				limit = {
 					is_war_participant = scope:nd_suez_check_other
@@ -1616,26 +1619,21 @@ nuclear_crisis.25 = {
 					}
 				}
 				ROOT = { change_variable = { name = nd_suez_chk_wars add = 1 } }
-				if = {
-					limit = { is_warleader = ROOT }
-					ROOT = { change_variable = { name = nd_suez_chk_led add = 1 } }
-				}
 			}
 			scope:nd_suez_check_other = {
 				debug_log = "TE_NUCLEAR: type=suez_check_other; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]"
 			}
 			if = {
-				limit = { nd_side_holds_any_goal_against = { TARGET = scope:nd_suez_check_other } }
-				debug_log = "TE_SELF_CHECK BROKEN nd_suez_goals: the side of [THIS.GetCountry.GetNameNoFormatting] still holds a goal against [SCOPE.sCountry('nd_suez_check_other').GetNameNoFormatting] a day after remove_war_goal; wars=[THIS.Var('nd_suez_chk_wars').GetValue|0] led=[THIS.Var('nd_suez_chk_led').GetValue|0]"
+				limit = { nd_holds_any_goal_against = { TARGET = scope:nd_suez_check_other } }
+				debug_log = "TE_SELF_CHECK BROKEN nd_suez_goals: [THIS.GetCountry.GetNameNoFormatting] still holds a goal against [SCOPE.sCountry('nd_suez_check_other').GetNameNoFormatting] a day after remove_war_goal; wars=[THIS.Var('nd_suez_chk_wars').GetValue|0]"
 			}
 			else = {
-				debug_log = "TE_SELF_CHECK OK nd_suez_goals: the side of [THIS.GetCountry.GetNameNoFormatting] holds no goal against [SCOPE.sCountry('nd_suez_check_other').GetNameNoFormatting] a day after remove_war_goal; wars=[THIS.Var('nd_suez_chk_wars').GetValue|0] led=[THIS.Var('nd_suez_chk_led').GetValue|0]"
+				debug_log = "TE_SELF_CHECK OK nd_suez_goals: [THIS.GetCountry.GetNameNoFormatting] holds no goal against [SCOPE.sCountry('nd_suez_check_other').GetNameNoFormatting] a day after remove_war_goal; wars=[THIS.Var('nd_suez_chk_wars').GetValue|0]"
 			}
 			remove_variable = nd_suez_chk_wars
-			remove_variable = nd_suez_chk_led
 		}
 		else = {
-			remove_global_variable = nd_suez_self_check_v2_done
+			remove_global_variable = nd_suez_self_check_v4_done
 		}
 		remove_variable = nd_suez_check_other
 	}

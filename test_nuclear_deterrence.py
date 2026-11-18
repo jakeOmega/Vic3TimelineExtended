@@ -789,8 +789,9 @@ class TestFinalReviewFixesPhase1(unittest.TestCase):
 
 
 class TestSuezConcession(unittest.TestCase):
-    """Yielding in a war drops the target's side's goals against the other
-    side and costs 15 war support (2026-10-28 rework spec §8.1)."""
+    """Yielding in a war drops the target's own goals against the other side,
+    leader or not, and costs 15 war support (2026-10-28 rework spec §8.1;
+    owner, 2026-11-18: its allies keep theirs)."""
 
     def setUp(self):
         self.crisis = strip_comments(read(CRISIS_EFFECTS))
@@ -800,12 +801,82 @@ class TestSuezConcession(unittest.TestCase):
         body = block(self.crisis, "nd_crisis_concede_war")
         self.assertIn("value = -15", body)
         self.assertNotIn("value = -35", body)
-        self.assertIn("nd_crisis_drop_goals = { WHO = target }", body)
-        self.assertIn("nd_crisis_drop_goals = { WHO = initiator }", body)
+        self.assertIn("nd_crisis_drop_goals = yes", body)
+        self.assertNotIn("WHO =", body)
+
+    # remove_war_goal takes one holder's first goal of a type, whatever it
+    # targets (in game, 2026-11-18): one call per type, naming only the
+    # leader, took France's opening goal against Brazil and left its goal
+    # against the United States.
+    # The yield's tooltip walks hidden_effect every frame and a saved scope is
+    # no fence, so the loops sit behind a click-only marker.
+    def test_goal_drop_is_click_only(self):
+        gate = squash(block(self.crisis, "nd_crisis_drop_goals"))
+        self.assertEqual(gate, "scope:nd_target = { set_variable = nd_crisis_drop_click } if = { limit = {"
+                               " scope:nd_target = { has_variable = nd_crisis_drop_click } } scope:nd_target ="
+                               " { remove_variable = nd_crisis_drop_click save_scope_as = nd_crisis_holder }"
+                               " diplomatic_play = { save_scope_as = nd_crisis_war_play"
+                               " nd_crisis_drop_holder_goals = yes } }")
+
+    # A country that yields gives up only what it holds: naming its allies
+    # would let one country's yield strip goals another chose (owner,
+    # 2026-11-18).
+    def test_only_the_yielder_is_named(self):
         drop = block(self.crisis, "nd_crisis_drop_goals")
-        for typ in ("conquer_state", "annex_country", "humiliation", "make_protectorate", "te_reunify_country"):
-            self.assertIn(f"remove_war_goal = {{ who = $WHO$ type = {typ} }}", drop, typ)
-        self.assertIn("diplomatic_play = {", drop)
+        self.assertNotIn("every_war_participant", drop)
+        self.assertNotIn("nd_crisis_drop_side_goals", self.crisis)
+        self.assertNotIn("remove_war_goal = { who = $WHO$", self.crisis)
+
+    def test_each_type_repeats_until_none_against_the_target_is_left(self):
+        strike = squash(block(self.crisis, "nd_crisis_strike_goals"))
+        held = ("scope:nd_crisis_holder = { war_participant_has_war_goal_of_type_against ="
+                " { type = $TYPE$ target = $TARGET$ } }")
+        self.assertIn(f"while = {{ count = 30 if = {{ limit = {{ {held} }}"
+                      " remove_war_goal = { who = scope:nd_crisis_holder type = $TYPE$ } } }", strike)
+        self.assertTrue(strike.startswith(f"if = {{ limit = {{ {held} }}"), strike[:120])
+
+    # The trigger reads every war and the call acts in one: a holder that
+    # fights the other side in another war too gets one call per type.
+    def test_one_call_per_type_when_the_holder_fights_them_in_another_war(self):
+        strike = squash(block(self.crisis, "nd_crisis_strike_goals"))
+        self.assertIn("if = { limit = { scope:nd_crisis_holder = { any_scope_war = { count > 1"
+                      " is_war_participant = scope:nd_crisis_other_side", strike)
+        multi = strike.index("count > 1")
+        single_call = strike.index("remove_war_goal = { who = scope:nd_crisis_holder type = $TYPE$ }", multi)
+        self.assertLess(single_call, strike.index("else = { while = { count = 30", multi))
+
+    def test_holder_ladder_covers_every_type_the_trigger_tests(self):
+        trig = block(self.triggers, "nd_holds_any_goal_against")
+        tested = re.findall(r"type = ([a-z_]+) target = \$TARGET\$", trig)
+        self.assertEqual(len(tested), 44)
+        holder = block(self.crisis, "nd_crisis_drop_holder_goals")
+        struck = re.findall(r"nd_crisis_strike_goals = \{ TYPE = ([a-z_]+) TARGET = scope:nd_crisis_other_side \}", holder)
+        self.assertEqual(struck, tested)
+
+    # A goal to liberate or take a subject targets the subject, not its
+    # overlord (targets_enemy_subject; in game, 2026-11-18).
+    def test_goals_against_the_other_sides_subjects(self):
+        holder = squash(block(self.crisis, "nd_crisis_drop_holder_goals"))
+        self.assertIn("scope:nd_crisis_other_side = { every_direct_subject = {"
+                      " save_scope_as = nd_crisis_goal_subject scope:nd_crisis_war_play = {"
+                      " nd_crisis_strike_goals = { TYPE = liberate_subject TARGET = scope:nd_crisis_goal_subject }"
+                      " nd_crisis_strike_goals = { TYPE = transfer_subject TARGET = scope:nd_crisis_goal_subject } } } }",
+                      holder)
+        trig = squash(block(self.triggers, "nd_holds_any_goal_against"))
+        self.assertIn("$TARGET$ = { any_direct_subject = { save_temporary_scope_as = nd_goal_subject_t"
+                      " scope:nd_goal_holder_t = { OR = {"
+                      " war_participant_has_war_goal_of_type_against = { type = liberate_subject target = scope:nd_goal_subject_t }"
+                      " war_participant_has_war_goal_of_type_against = { type = transfer_subject target = scope:nd_goal_subject_t }"
+                      " } } } }", trig)
+
+    # The test reads the yielder's own goals, as the removal takes them: a
+    # side-wide read would hold the concession (and the self-check) to goals
+    # its allies keep.
+    def test_trigger_reads_the_countrys_own_goals(self):
+        trig = block(self.triggers, "nd_holds_any_goal_against")
+        self.assertNotIn("war_side_has_war_goal_of_type_against", trig)
+        self.assertEqual(trig.count("war_participant_has_war_goal_of_type_against"), 46)
+        self.assertNotIn("nd_side_holds_any_goal_against", self.triggers + self.crisis)
 
     def wars_loop(self):
         return block(block(self.crisis, "nd_crisis_concede_war"), "every_scope_war")
@@ -817,17 +888,12 @@ class TestSuezConcession(unittest.TestCase):
         support = loop.index("add_war_war_support")
         self.assertEqual(loop[:support].count("{") - loop[:support].count("}"), 0)
 
-    def test_concession_side_from_defending_side(self):
-        goals = " ".join(block(self.wars_loop(), "if").split())
-        self.assertIn("if = { limit = { is_on_defending_side = scope:nd_target } nd_crisis_drop_goals = { WHO = target } }"
-                      " else = { nd_crisis_drop_goals = { WHO = initiator } }", goals)
-
     def test_suez_self_check_line(self):
         ev = block(strip_comments(read(CRISIS_EVENTS)), "nuclear_crisis.25")
         self.assertIn("TE_SELF_CHECK OK nd_suez_goals", ev)
         self.assertIn("TE_SELF_CHECK BROKEN nd_suez_goals", ev)
-        self.assertIn("war_side_has_war_goal_of_type_against = { type = conquer_state target = $TARGET$ }",
-                      block(self.triggers, "nd_side_holds_any_goal_against"))
+        self.assertIn("war_participant_has_war_goal_of_type_against = { type = conquer_state target = $TARGET$ }",
+                      block(self.triggers, "nd_holds_any_goal_against"))
         self.assertNotIn("35", loc_value("nd_tt_yield_war"))
         self.assertIn("15", loc_value("nd_tt_yield_war"))
 
@@ -1138,8 +1204,8 @@ class TestFinalReviewFixesPhase2(unittest.TestCase):
         trig = squash(block(block(self.events, "nuclear_weapon_events.27"), "trigger"))
         self.assertIn("scope:nd_claim_victim = { is_country_alive = yes }", trig)
 
-    # The war concession: only wars the two fight against each other, and
-    # only a war leader's concession drops its side's goals.
+    # The war concession: only wars the two fight against each other, and the
+    # yielder drops its own goals there, whether or not it leads its side.
     def test_only_wars_fought_against_each_other(self):
         lim = squash(block(block(block(self.crisis, "nd_crisis_concede_war"), "every_scope_war"), "limit"))
         self.assertIn("AND = { is_on_defending_side = scope:nd_target"
@@ -1147,11 +1213,16 @@ class TestFinalReviewFixesPhase2(unittest.TestCase):
         self.assertIn("AND = { is_on_defending_side = scope:nd_crisis_other_side"
                       " NOT = { is_on_defending_side = scope:nd_target } }", lim)
 
-    def test_only_the_war_leader_drops_its_sides_goals(self):
-        loop = block(block(self.crisis, "nd_crisis_concede_war"), "every_scope_war")
+    # Before 2026-11-18 only a war leader's yield dropped goals, meant for its
+    # whole side; the owner ruled that a country gives up only its own, leader
+    # or not, so an ally's yield can't strip its leader's goals, nor a
+    # leader's its allies'.
+    def test_the_yielder_drops_its_own_goals_leader_or_not(self):
+        concede = block(self.crisis, "nd_crisis_concede_war")
+        loop = block(concede, "every_scope_war")
         lim = squash(block(block(loop, "if"), "limit"))
-        self.assertIn("is_warleader = scope:nd_target", lim)
-        self.assertIn("nd_side_holds_any_goal_against = { TARGET = scope:nd_crisis_other_side }", lim)
+        self.assertEqual(lim, "scope:nd_target = { nd_holds_any_goal_against = { TARGET = scope:nd_crisis_other_side } }")
+        self.assertNotIn("is_warleader", concede)
         self.assertNotIn("nd_suez_had_goals", self.crisis)
 
     def test_suez_self_check_a_day_later_naming_the_parties(self):
@@ -1166,18 +1237,21 @@ class TestFinalReviewFixesPhase2(unittest.TestCase):
         self.assertIn("[SCOPE.sCountry('nd_suez_check_other').GetNameNoFormatting]", broken)
         self.assertIn("remove_variable = nd_suez_check_other", ev)
         # What tells a BROKEN's cases apart (2026-11-17): the wars the two
-        # fight on opposite sides, the ones the yielder leads, and the other
-        # country named from its own scope, since the saved scope's name
-        # printed blank in the verdict line.
-        self.assertIn("wars=[THIS.Var('nd_suez_chk_wars').GetValue|0] led=[THIS.Var('nd_suez_chk_led').GetValue|0]", broken)
-        self.assertIn("is_warleader = ROOT", ev)
+        # fight on opposite sides, and the other country named from its own
+        # scope, since the saved scope's name printed blank in the verdict
+        # line. Who leads no longer matters (2026-11-18), so no led= count.
+        self.assertIn("a day after remove_war_goal; wars=[THIS.Var('nd_suez_chk_wars').GetValue|0]\"", broken)
+        self.assertNotIn("nd_suez_chk_led", ev)
+        self.assertNotIn("is_warleader", ev)
+        self.assertIn("limit = { nd_holds_any_goal_against = { TARGET = scope:nd_suez_check_other } }", ev)
         other = squash(block(ev, "scope:nd_suez_check_other"))
         self.assertIn("type=suez_check_other", other)
         self.assertIn("[THIS.GetCountry.GetNameNoFormatting]", other)
         # Re-armed under a new marker: the old one is set in saves that read it.
-        self.assertIn("set_global_variable = nd_suez_self_check_v2_done", concede)
-        self.assertIn("remove_global_variable = nd_suez_self_check_v2_done", ev)
-        self.assertNotIn("nd_suez_self_check_done", self.crisis + self.crisis_events)
+        self.assertIn("set_global_variable = nd_suez_self_check_v4_done", concede)
+        self.assertIn("remove_global_variable = nd_suez_self_check_v4_done", ev)
+        for old in ("nd_suez_self_check_done", "nd_suez_self_check_v2_done", "nd_suez_self_check_v3_done"):
+            self.assertNotIn(old, self.crisis + self.crisis_events)
 
     # A crisis their strike ended (outcome 7) leaves a cooldown that must not
     # outlast the grievance it ended over.
@@ -1204,11 +1278,21 @@ class TestFinalReviewFixesPhase2(unittest.TestCase):
         for key in ("nd_tt_yield_reparations", "nd_concession_long_6", "nd_tt_open_over_peacetime_strike"):
             self.assertIn("Custody Inspections", loc_value(key), key)
 
-    def test_war_concession_texts_say_only_a_leader_drops_goals(self):
+    # The yielder drops its own goals, leader or not, and its allies keep
+    # theirs (owner, 2026-11-18): no text may still say only a leader drops
+    # them, or that a leader drops its side's.
+    def test_war_concession_texts_say_the_yielder_drops_its_own_goals(self):
         for key in ("nd_tt_yield_war", "nd_tt_yield_guarantee", "nd_concession_long_2", "nd_concession_long_3",
                     "nd_tt_open_over_war", "nd_tt_open_over_guarantee", "nd_concession_past_they_2",
                     "nd_concession_past_they_3", "nd_concession_past_we_2", "nd_concession_past_we_3"):
-            self.assertRegex(loc_value(key), r"\b(leads?|led)\b", key)
+            text = loc_value(key)
+            self.assertRegex(text, r"\bown\b", key)
+            self.assertNotRegex(text, r"\bif (it|we|they) (leads?|led)\b", key)
+            self.assertNotIn("every country on", text, key)
+        for key in ("nd_tt_yield_war", "nd_tt_yield_guarantee", "nd_concession_long_2", "nd_concession_long_3",
+                    "nd_tt_open_over_war", "nd_tt_open_over_guarantee"):
+            self.assertIn("keep theirs", loc_value(key), key)
+        self.assertNotIn("if it leads its side", loc_value("nd_w_crisis_actions_legend"))
 
     def test_claim_texts_match_the_rules(self):
         self.assertNotIn("a year or two", loc_value("nuclear_weapon_events.1.k.tt"))

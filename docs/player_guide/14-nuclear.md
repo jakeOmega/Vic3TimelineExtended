@@ -428,7 +428,7 @@ concede.
 
 | Dispute | What the target gives up if it concedes |
 |---|---|
-| A war between you | It loses 15 war support in the war. If it leads its side, the side drops its war goals against you, and any others of the same kind it holds in that war |
+| A war between you | It loses 15 war support in the war and drops its own war goals against you, including those to free or take your subjects, whether or not it leads its side. Its allies keep theirs. A goal of its own of the same kind against another country in that war may go with them |
 | A diplomatic play between you | It backs down, and the play should end in your favor |
 | A play or war between the target and a country you cover, when you are not a party to it | The same, on your protégé's behalf |
 | The target struck you, or a country you cover, with a nuclear weapon outside a war in the last 24 months, other than in answer to a strike of yours | It pays the struck country reparations, about a tenth of a year's income, and opens its arsenal to inspection for 20 years, taking Custody Inspections (−5 legitimacy, fading over ten years) |
