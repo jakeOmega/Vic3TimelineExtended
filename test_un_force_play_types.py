@@ -58,6 +58,10 @@ def _block(text, name):
     raise AssertionError(f"{name} unbalanced")
 
 
+def _squash(text):
+    return re.sub(r"\s+", " ", text)
+
+
 def _opening_goals():
     """{play type: the war goal it opens with}, the mod's over vanilla's."""
     with open(os.path.join(REPO, "vanilla_parsed", "common", "diplomatic_plays.json"), encoding="utf-8") as f:
@@ -128,6 +132,43 @@ class PlayTypeTests(unittest.TestCase):
         self.assertEqual(one, set(self.one))
         held = set(re.findall(r"un_force_strike_goal = \{ TYPE = (\w+) \}", effects))
         self.assertEqual(held, self.held)
+
+
+
+class StrikeLoopTests(unittest.TestCase):
+    """remove_war_goal takes the initiator's first goal of a type, whatever it
+    targets, so one call per type left a second goal of the type against the
+    host, and every goal against it when one against the host's ally came first
+    (#1892). The strike repeats the call while one against the host is left."""
+
+    @classmethod
+    def setUpClass(cls):
+        effects = _read(EFFECTS)
+        cls.effects = _squash(effects)
+        cls.typed = _squash(_block(effects, "un_force_strike_goal_type"))
+        cls.goal = _squash(_block(effects, "un_force_strike_goal"))
+
+    def test_a_typed_strike_skips_the_play_it_opens_and_loops_like_the_rest(self):
+        self.assertIn("if = { limit = { NOT = { is_diplomatic_play_type = $PLAY$ } } "
+                      "un_force_strike_goal = { TYPE = $TYPE$ } }", self.typed)
+        self.assertNotIn("remove_war_goal", self.typed)
+
+    def test_the_strike_repeats_while_a_goal_against_the_host_is_left(self):
+        self.assertIn("if = { limit = { un_force_goal_held = { TYPE = $TYPE$ } }", self.goal)
+        self.assertIn("while = { count = 30 if = { limit = { un_force_goal_held = { TYPE = $TYPE$ } } "
+                      "remove_war_goal = { who = scope:actor type = $TYPE$ }", self.goal)
+
+    def test_no_call_outside_the_loop(self):
+        self.assertEqual(self.effects.count("remove_war_goal"), 1)
+
+    def test_the_loop_is_counted_for_the_self_check(self):
+        order = [self.goal.index(x) for x in (
+            "scope:actor = { set_variable = { name = un_strike_chk_calls value = 0 } }",
+            "while = {",
+            "remove_war_goal",
+            "scope:actor = { change_variable = { name = un_strike_chk_calls add = 1 } }",
+            "un_strike_goals_self_check = { STRIKE = force TYPE = $TYPE$ }")]
+        self.assertEqual(order, sorted(order))
 
 
 if __name__ == "__main__":

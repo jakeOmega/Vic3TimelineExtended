@@ -82,9 +82,15 @@ un_standing_force_chamber_preview = {
 # Never a goal of the type the play opened with (un_force_has_strikeable_goal
 # says why and lists the types): when that is the goal just added,
 # un_force_war_goal_barred fails and un_teeth_war_goal_surcharge charges it the
-# surcharge, doubled against the host. Like un_mandate_strike_goal_type,
-# remove_war_goal addresses a goal by side and type, so a goal of the same type
-# against another country in the same play would go too.
+# surcharge, doubled against the host. remove_war_goal takes the initiator's
+# first goal of a type, whatever it targets (scripting_best_practices.md
+# § "`remove_war_goal` Takes One Holder's First Goal of a Type, Whatever It
+# Targets"), so un_force_strike_goal repeats it while a goal of the type
+# against the host is left, as un_mandate_strike_goal_type does. A goal of the
+# same type against another country in the play that comes first goes too, and
+# the notice says so. Before #1892 there was one call per type: an initiator
+# holding two goals of a type against the host kept the second, and one holding
+# a goal against the host's ally first kept every goal against the host.
 # Scope: diplomatic play; expects scope:actor, the initiator (on_wargoal_added)
 un_force_strike_war_goals = {
 	target ?= { save_scope_as = un_force_protected }
@@ -150,26 +156,39 @@ un_force_strike_war_goals = {
 	}
 }
 
-# Strike the initiator's goal of $TYPE$ unless the play is of type $PLAY$, the
-# one that opens with it.
+# Strike the initiator's goals of $TYPE$ against the host unless the play is of
+# type $PLAY$, the one that opens with it (un_force_goal_strikeable's test).
 # Parameters: $TYPE$ = war goal type; $PLAY$ = the diplomatic play type whose
 # opening goal it is
 # Scope: diplomatic play; expects scope:actor
 un_force_strike_goal_type = {
 	if = {
-		limit = { un_force_goal_strikeable = { TYPE = $TYPE$ PLAY = $PLAY$ } }
-		remove_war_goal = { who = initiator type = $TYPE$ }
+		limit = { NOT = { is_diplomatic_play_type = $PLAY$ } }
+		un_force_strike_goal = { TYPE = $TYPE$ }
 	}
 }
 
-# Strike the initiator's goal of $TYPE$, which no play opens with (or, for the
-# callers above, not this one).
+# Strike the initiator's goals of $TYPE$, which no play opens with (or, for the
+# callers above, not this one), until none against the host is left. Each call
+# takes the initiator's first goal of $TYPE$, whatever it targets, so it repeats
+# while un_force_goal_held still finds one, at most 30 times. That its play
+# test sees each removal at once is unmeasured (un_mandate_strike_goal_type
+# says why, and un_strike_goals_self_check reports it).
 # Parameters: $TYPE$ = war goal type
 # Scope: diplomatic play; expects scope:actor
 un_force_strike_goal = {
 	if = {
 		limit = { un_force_goal_held = { TYPE = $TYPE$ } }
-		remove_war_goal = { who = initiator type = $TYPE$ }
+		scope:actor = { set_variable = { name = un_strike_chk_calls value = 0 } }
+		while = {
+			count = 30
+			if = {
+				limit = { un_force_goal_held = { TYPE = $TYPE$ } }
+				remove_war_goal = { who = scope:actor type = $TYPE$ }
+				scope:actor = { change_variable = { name = un_strike_chk_calls add = 1 } }
+			}
+		}
+		un_strike_goals_self_check = { STRIKE = force TYPE = $TYPE$ }
 	}
 }
 

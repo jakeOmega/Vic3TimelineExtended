@@ -900,8 +900,12 @@ the classification and the loc.
    stabilisation hosts. At Supranational `un_teeth_war_goal_surcharge` strikes, instead of
    charging, each goal of a listed type that a represented member initiating the play holds
    against a host of an active peacekeeping or stabilisation mission (`remove_war_goal`; a
-   notice to a human), except a goal of the type the play opened with. A play opens with its
-   type's `war_goal`, so `is_diplomatic_play_type` tells which (`un_force_has_strikeable_goal`;
+   notice to a human), except a goal of the type the play opened with. Each call takes the
+   holder's first goal of the type, whatever it targets, so `un_force_strike_goal` repeats it,
+   at most 30 times, while one against the host is left, and a goal of that type against another
+   country that comes first goes too (#1892; until then one call per type left the rest). A
+   play opens with its type's `war_goal`, so `is_diplomatic_play_type` tells which
+   (`un_force_has_strikeable_goal`;
    `test_un_force_play_types.py` pins the lists to vanilla's and the mod's plays). That goal, a
    later goal of the same type, and unification goals (never struck: every formable adds such a
    play) pay the surcharge, doubled, as before the Force; so does a suspended member. Subjects
