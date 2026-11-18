@@ -617,6 +617,7 @@ gm_state_tr_take_records_from_moving = {
 	gm_tr_copy_to_state = { FROM = gm_tr_supporter_ig TO = gm_supporter_ig }
 	gm_tr_copy_to_state = { FROM = gm_tr_signature TO = gm_signature }
 	gm_tr_copy_to_state = { FROM = gm_tr_sig_parent TO = gm_sig_parent }
+	gm_tr_copy_to_state = { FROM = gm_tr_unearthed_for_com TO = gm_unearthed_for_com }
 	# Finished as it was: frozen at its own levels (spec 2026-10-16 §3.1), and
 	# never an older save's monument to migrate (sites spec 2026-10-18 §3.5).
 	set_variable = { name = gm_levels value = scope:gm_tr_moving.var:gm_tr_levels }

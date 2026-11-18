@@ -3392,7 +3392,7 @@
  gm_je_com_named_plain:0 "To be named for [Country.GetCustom('gm_com_namesake_phrase')]"
  gm_je_com_occasion:0 "#b [Country.GetCustom('gm_com_occasion_name')]#!"
  gm_je_com_occasion_tt:0 "#b The moment#!\nWhat brought this opportunity. Each kind of moment brings its own boon when the opportunity is completed."
- gm_je_com_progress_tt:0 "#b Grandeur raised#! #v [Country.MakeScope.ScriptValue('gm_disp_com_progress')|1]#! of #v [Country.MakeScope.ScriptValue('gm_disp_com_target')|1]#!\nCounted in the starting grandeur of fitting monuments of its dedication dedicated since we seized it, a new one or one beside another; their years do not count. A counted monument that becomes contested stops counting."
+ gm_je_com_progress_tt:0 "#b Grandeur raised#! #v [Country.MakeScope.ScriptValue('gm_disp_com_progress')|1]#! of #v [Country.MakeScope.ScriptValue('gm_disp_com_target')|1]#!\nCounted in the starting grandeur of fitting monuments of its dedication dedicated since we seized it, a new one or one beside another; their years do not count. A counted monument that becomes contested stops counting, and a buried site dug up meanwhile never counts."
  gm_je_com_reward:0 "Completed: #G +[Country.MakeScope.ScriptValue('gm_com_gift')|0]#! [concept_grandeur], approval and #b [Country.GetCustom('gm_com_boon_name')]#!"
  gm_je_com_reward_boon:0 "#b [Country.GetCustom('gm_com_boon_name')]#! for #v [Country.MakeScope.ScriptValue('gm_disp_boon_years')|0]#! years: [Country.GetCustom('gm_com_boon_effect')]."
  gm_je_com_reward_hist:0 "It becomes #b [Country.GetCustom('gm_com_occasion_name')]#!, a historical monument with its own name and look.[Country.GetCustom('gm_com_hist_sig_line')]"

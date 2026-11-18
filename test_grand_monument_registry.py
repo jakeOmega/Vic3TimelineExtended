@@ -5236,6 +5236,9 @@ CONTAINER_RECORDS = (
     ("gm_ceremony_level", "gm_tr_ceremony_level"),
     # A unique dedication (signatures spec 2026-10-16 §1, §7).
     ("gm_signature", "gm_tr_signature"), ("gm_sig_parent", "gm_tr_sig_parent"),
+    # A buried site dug up while its owner's opportunity was open counts toward
+    # none of it, wherever it stands (gm_arch_place; owner, 2026-11-18).
+    ("gm_unearthed_for_com", "gm_tr_unearthed_for_com"),
 )
 
 

@@ -1080,7 +1080,9 @@ one or one raised beside a finished one; years of age do not. Late in the game
 that takes many more levels than 5, and Raise It queues what it takes at
 today's rate, at most 100 levels a press. An opportunity for the capital counts only the capital's monuments. One for the
 capital can be met anywhere when the capital already holds a monument of
-another dedication. A monument that becomes contested stops counting. Its
+another dedication. A monument that becomes contested stops counting. A
+[buried site](#buried-sites) dug up while the opportunity is on offer or open
+never counts toward it, even one of its dedication. Its
 levels count once it is dedicated, so press its Dedicate button before the
 deadline. When a new monument's dedication ceremony could answer the open
 opportunity, its first choice is "As the opportunity asks", with its
