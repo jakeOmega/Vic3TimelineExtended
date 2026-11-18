@@ -20,7 +20,7 @@ the things only the game can show. Strike a fixed item through with the commit t
 |---|---|---|
 | `TE_SELF_CHECK OK covert_catch_decision` | A caught operation's saved scope reached the defender's decision event (`covert_warfare.3`), attacker to defender. | At the roll, write the attacker and type code on the target as variables and look the operation up in `.3`'s `immediate` (one decision open per target at a time). |
 | `TE_SELF_CHECK BROKEN covert_catch_decision` | `.3` never ran for a pending catch; the operation was released for the next roll. | As above. |
-| `TE_SELF_CHECK OK covert_watch_expose` | An exposure of a watched operation reached the attacker's `covert_warfare.1`, defender to attacker. | — |
+| `TE_SELF_CHECK OK covert_watch_expose` | An exposure of a watched operation reached the attacker's `covert_warfare.1`, defender to attacker. **First verdict: OK, 2026-11-17**, in the owner's 1.15.1 game (a 1929 save, launch of 14:46), 1 June 1952: `attacker=SWE` | — |
 | `TE_SELF_CHECK BROKEN covert_watch_expose` | An ordered exposure was sent but `.1` never ran. | `covert_watch_expose_record` flags the operation (`iw_expose_requested`), and the attacker's own monthly pass finds it and calls `covert_exposure_fire`. |
 | `TE_SELF_CHECK OK covert_can_research_current` | `can_research` held for every country's current production or military research whose prerequisites it holds (`held=` countries, `can_research=` of them). Logged on the first monthly pulse with a sample. | — |
 | `TE_SELF_CHECK BROKEN covert_can_research_current` | `can_research` failed for some current research with its prerequisites held. | Keep the prerequisite lines in covert tech theft (as built); delete the check. |
