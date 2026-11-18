@@ -2041,17 +2041,19 @@ nd_crisis_concede_play = {
 # side: the war then ends through the engine's own capitulation and peace.
 # Only wars the two fight on opposite sides: a country can be an ally of the
 # other side in one war and its enemy in another.
-# The Suez model (rework spec §8.1, owner call 9): when the target leads its
-# side, every country on that side drops the war goals it holds against the
-# other side (the issuer, or the protégé it shields), and those to liberate or
-# take its subjects (nd_crisis_drop_goals). A co-belligerent that yields loses
-# only war support, so threatening a coalition's weakest member does not strip
-# its leader's goals (phase 2 final review). remove_war_goal takes one
-# holder's first goal of a type, whatever it targets, so a goal of the same
-# type against another country in the war can go too (the tooltip says so).
-# A once-a-game self-check, a day later (nuclear_crisis.25), says whether
-# anything was left. A target that holds no goal against us is the defender
-# of our attack: only its war support falls.
+# The Suez model (rework spec §8.1, owner call 9): the target drops the war
+# goals it holds itself against the other side (the issuer, or the protégé it
+# shields), and those to liberate or take its subjects (nd_crisis_drop_goals),
+# whether it leads its side or not. Its allies keep theirs: a country that
+# yields gives up only what it holds, so the leader's yield costs its allies
+# nothing and an ally's yield costs its leader nothing (owner, 2026-11-18;
+# before, only a leader's yield dropped goals, and it tried to drop its whole
+# side's). remove_war_goal takes one holder's first goal of a type, whatever
+# it targets, so a goal of ours of the same type against another country in
+# the war can go too (the tooltip says so). A once-a-game self-check, a day
+# later (nuclear_crisis.25), says whether anything was left. A target that
+# holds no goal against us (the defender of our attack, or an ally that
+# brought none) loses only its war support.
 nd_crisis_concede_war = {
 	scope:nd_target = {
 		every_scope_war = {
@@ -2070,15 +2072,14 @@ nd_crisis_concede_war = {
 			}
 			if = {
 				limit = {
-					is_warleader = scope:nd_target
-					scope:nd_target = { nd_side_holds_any_goal_against = { TARGET = scope:nd_crisis_other_side } }
+					scope:nd_target = { nd_holds_any_goal_against = { TARGET = scope:nd_crisis_other_side } }
 				}
 				nd_crisis_drop_goals = yes
 				if = {
-					# _v3 since 2026-11-18: re-armed for the removal that names
-					# each holder and repeats per type
-					limit = { NOT = { has_global_variable = nd_suez_self_check_v3_done } }
-					set_global_variable = nd_suez_self_check_v3_done
+					# _v4 since 2026-11-18: re-armed for the removal that takes
+					# the yielder's own goals, leader or not, and repeats per type
+					limit = { NOT = { has_global_variable = nd_suez_self_check_v4_done } }
+					set_global_variable = nd_suez_self_check_v4_done
 					scope:nd_target = {
 						set_variable = { name = nd_suez_check_other value = scope:nd_crisis_other_side days = 10 }
 						trigger_event = { id = nuclear_crisis.25 days = 1 }
@@ -2258,16 +2259,16 @@ nd_crisis_concede_orbital = {
 	}
 }
 
-# War scope, in nd_crisis_concede_war, when scope:nd_target leads its side:
-# every country on that side drops every goal it holds against
-# scope:nd_crisis_other_side, and every goal to liberate or take one of the
-# other side's direct subjects. remove_war_goal names one holder (who = a
+# War scope, in nd_crisis_concede_war, when scope:nd_target holds a goal
+# against scope:nd_crisis_other_side: the target drops every goal it holds
+# itself against the other side, and every goal to liberate or take one of the
+# other side's direct subjects. Its allies' goals stay, whether it leads the
+# side or not (owner, 2026-11-18). remove_war_goal names one holder (who = a
 # country) and a type, and takes that holder's first goal of the type,
 # whatever it targets (in game on a 1962 save, 2026-11-18): one call per type
 # took France's opening goal against Brazil and left its goal against the
-# United States, and an ally's goal stayed because only the leader was named.
-# So each holder is named, and nd_crisis_strike_goals repeats the call while a
-# goal against the other side is left; a goal of the same type against a third
+# United States. So nd_crisis_strike_goals repeats the call while a goal
+# against the other side is left; a goal of the same type against a third
 # country that the engine reaches first goes too (the tooltip says so).
 # The yield's tooltip walks this, hidden_effect and all, every frame its
 # option or button shows, and a saved scope is no fence (scripting_best_practices
@@ -2280,39 +2281,20 @@ nd_crisis_drop_goals = {
 	scope:nd_target = { set_variable = nd_crisis_drop_click }
 	if = {
 		limit = { scope:nd_target = { has_variable = nd_crisis_drop_click } }
-		scope:nd_target = { remove_variable = nd_crisis_drop_click }
-		nd_crisis_drop_side_goals = yes
-	}
-}
-
-# War scope, from nd_crisis_drop_goals: the walk of the yielder's side.
-nd_crisis_drop_side_goals = {
-	save_scope_as = nd_crisis_war
-	diplomatic_play = { save_scope_as = nd_crisis_war_play }
-	every_war_participant = {
-		limit = {
-			save_temporary_scope_as = nd_crisis_holder_t
-			scope:nd_crisis_war = {
-				OR = {
-					AND = {
-						is_on_defending_side = scope:nd_target
-						is_on_defending_side = scope:nd_crisis_holder_t
-					}
-					AND = {
-						NOT = { is_on_defending_side = scope:nd_target }
-						NOT = { is_on_defending_side = scope:nd_crisis_holder_t }
-					}
-				}
-			}
+		scope:nd_target = {
+			remove_variable = nd_crisis_drop_click
+			save_scope_as = nd_crisis_holder
 		}
-		save_scope_as = nd_crisis_holder
-		scope:nd_crisis_war_play = { nd_crisis_drop_holder_goals = yes }
+		diplomatic_play = {
+			save_scope_as = nd_crisis_war_play
+			nd_crisis_drop_holder_goals = yes
+		}
 	}
 }
 
 # Play scope; scope:nd_crisis_holder, scope:nd_crisis_other_side and
 # scope:nd_crisis_war_play saved: the holder's goals of every type against the
-# other side (the types nd_side_holds_any_goal_against tests), then its goals
+# other side (the types nd_holds_any_goal_against tests), then its goals
 # to liberate or take one of the other side's direct subjects, which target
 # the subject, not its overlord (targets_enemy_subject: France's goal to
 # liberate Cuba reads as against Cuba, not the United States).
