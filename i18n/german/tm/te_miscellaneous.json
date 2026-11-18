@@ -36432,8 +36432,8 @@
   "de": "Sein [concept_sol] lag bei der Jahreszählung bei #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#!, #v [State.MakeScope.ScriptValue('te_state_picture_hover_shortfall')|1]#! unter den #v [State.MakeScope.ScriptValue('te_state_picture_hover_esol')|1]#!, die seine Bevölkerung erwartet: eine Heruntergekommene Straße bleibt es, bis der Abstand höchstens #v [State.MakeScope.ScriptValue('te_state_picture_k_rundown_keep')|1]#! beträgt."
  },
  "te_sp_tt_why_smog": {
-  "en": "Pollution in its region is at #v [State.MakeScope.ScriptValue('te_state_picture_k_smog')|0]#! of 255 or more.",
-  "de": "Die Verschmutzung in seiner Region liegt bei #v [State.MakeScope.ScriptValue('te_state_picture_k_smog')|0]#! von 255 oder mehr."
+  "en": "Its region's [concept_pollution_impact] is #v [State.MakeScope.ScriptValue('te_state_picture_k_smog_share')|%0]#! or more.",
+  "de": "[concept_pollution_impact] in seiner Region: #v [State.MakeScope.ScriptValue('te_state_picture_k_smog_share')|%0]#! oder mehr."
  },
  "te_sp_tt_why_town": {
   "en": "Its largest city has about #v [State.MakeScope.ScriptValue('te_state_picture_hover_people')|K]#! people, under the #v [State.MakeScope.ScriptValue('te_state_picture_k_city')|K]#! of a city.",

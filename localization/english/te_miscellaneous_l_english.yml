@@ -10189,7 +10189,7 @@
  te_sp_tt_why_rundown:0 "[SelectLocalization(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_state_picture_hover_kept_rundown'), '(CFixedPoint)0'), 'te_sp_tt_why_rundown_kept', 'te_sp_tt_why_rundown_at')]"
  te_sp_tt_why_rundown_at:0 "Its [concept_sol] was #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#! at the yearly count, #v [State.MakeScope.ScriptValue('te_state_picture_hover_shortfall')|1]#! under the #v [State.MakeScope.ScriptValue('te_state_picture_hover_esol')|1]#! its people expect: run-down from #v [State.MakeScope.ScriptValue('te_state_picture_k_rundown')|0]#! under."
  te_sp_tt_why_rundown_kept:0 "Its [concept_sol] was #v [State.MakeScope.ScriptValue('te_state_picture_hover_sol')|1]#! at the yearly count, #v [State.MakeScope.ScriptValue('te_state_picture_hover_shortfall')|1]#! under the #v [State.MakeScope.ScriptValue('te_state_picture_hover_esol')|1]#! its people expect: a run-down street stays so until within #v [State.MakeScope.ScriptValue('te_state_picture_k_rundown_keep')|1]#!."
- te_sp_tt_why_smog:0 "Pollution in its region is at #v [State.MakeScope.ScriptValue('te_state_picture_k_smog')|0]#! of 255 or more."
+ te_sp_tt_why_smog:0 "Its region's [concept_pollution_impact] is #v [State.MakeScope.ScriptValue('te_state_picture_k_smog_share')|%0]#! or more."
  te_sp_tt_why_town:0 "Its largest city has about #v [State.MakeScope.ScriptValue('te_state_picture_hover_people')|K]#! people, under the #v [State.MakeScope.ScriptValue('te_state_picture_k_city')|K]#! of a city."
  te_state_climate_comfort_bonus_value:0 "#G +[State.MakeScope.ScriptValue('te_climate_bonus_now')|0]%#!"
  te_state_climate_comfort_none:0 "#v None#!"
