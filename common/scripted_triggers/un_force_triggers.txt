@@ -59,12 +59,13 @@ un_force_war_goal_barred = {
 # This play holds a goal the Force may strike: one of the barred types, held
 # by the actor against the play's target, and not of the type the play opened
 # with. on_wargoal_added fires for the goal a play opens with too and does not
-# say which goal was added, and remove_war_goal takes a side and a type, so a
-# second goal of the opening type cannot be struck without the first; whether
-# striking a play's own goal leaves a working play is unproven. A play opens
-# with the goal its type names (war_goal in common/diplomatic_plays/, vanilla's
-# and the mod's), so the play's type tells the opening goal, and each type is
-# struck only from a play of another type.
+# say which goal was added, and remove_war_goal takes the holder's first goal
+# of a type, whatever it targets, so a second goal of the opening type cannot
+# be struck without the opening goal, and the play is left without the goal it
+# was started over (review 2026-10-02: the opening goal is charged, never
+# struck). A play opens with the goal its type names (war_goal in
+# common/diplomatic_plays/, vanilla's and the mod's), so the play's type tells
+# the opening goal, and each type is struck only from a play of another type.
 #
 # The types are every type a play opens with in vanilla, the subjugation types
 # of 1.14, the mod's reunification, its colonial reconquest (whose play,

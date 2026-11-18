@@ -704,3 +704,23 @@ and Nuclear panels already use for a section inside a section, at the block's 46
    A second click brings them back. Closing Monetary Policy itself still hides the header with the rest.
 3. **Nothing moves for a country with no arrangement.** A country with no anchor, treaty or union shows neither the
    header nor an empty gap between Exchange Rate and What Borrowing Costs.
+
+## The Help's Monetary Union note; the backstop costs what it pays (2026-11-18, #1858, #1864)
+
+The Help popup's Monetary Union note now gives all five tiers, one line each, and what the leader earns. And a tier III
+leader no longer pays for the relief on an adopter whose debt a treaty guarantee or a receivership already relieves:
+`te_mon_union_cost_to_root` asks `te_mon_has_treaty_debt_relief = no`, as the adopter's side always did. The cost is
+run offline by `test_monetary_union_leader.py` (`BackstopCostTest`); these are what only the game shows.
+
+1. **The note's lines.** Open the Banking tab's Help, International Arrangements. The Monetary Union note opens "A power
+   bloc's Monetary Union principle has five tiers", then five lines, each starting with a tier's name in bold
+   (Monetary Cooperation, Common Currency, Fiscal Backstop, Banking Union, Reserve Currency) and none running into the
+   next, then the paragraph on the leader. No raw `$principle_monetary_union_N$`, `$too_much_private_construction$` or
+   `$law_unregulated_banking$`; Common Currency and Currency Reach are concept links. If the `\n` breaks do not render
+   in a note, join the tiers back into one paragraph as the note had them.
+2. **A covered adopter costs only its cooperation (and supervision).** As a tier III or higher leader with an adopter
+   that also holds a Lender of Last Resort treaty from a third country (or is under a Debt Receivership), that
+   adopter's member row under Monetary Union shows a backing cost without the relief: about the swap-line share, plus
+   the supervision at tier IV and up, times its GDP over yours. Its Backstops row shows the relief from the treaty, and
+   the union's received figure no relief. End the treaty and, at the next monthly update, the member's cost rises by
+   the relief times the GDP ratio.

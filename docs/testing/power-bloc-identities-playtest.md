@@ -81,3 +81,15 @@ Research Commons, with two or three members invited, at least one of them well b
 | `TE_SELF_CHECK … rc_grant_lands` | once a game, at the pass after one that granted a member ten or more technologies (a newcomer's first pulse, usually) | the next pass gave that member fewer than half as many (`next` against `first`): `add_technology_researched` grants land, in the ladder's prerequisite order (§ 11 fact 6) | as many again: the grants don't land, or the engine refuses some for missing prerequisites; `error.log` names the effect if it refuses | if prerequisites are the cause, check `gen_research_commons_sync.py`'s order against the technology files (a missing prerequisite edge); if grants don't land at all, the sharing can't work as built: give members `country_tech_spread_mult` scaled by the bloc's technology gap instead (owner's call) |
 | `TE_SELF_CHECK … rc_grant_hook` | once a game, once 20 grants have been made in any Commons | `fired=inside`: `on_acquired_technology` fires inside the grant, while `te_rc_granting` is set, so the headline, Cultural Hegemony's world first and agricultural diffusion skip it. `fired=never`: it doesn't fire for a scripted grant, and there is nothing to guard (§ 11 fact 7) | `fired=after`: it fires after the effect, when the guard is gone, so a grant can post a headline, count as a world first, and run the ladder once more per grant (a newcomer's 200 grants: 200 extra passes) | make the guard a timed variable (`set_variable = { name = te_rc_granting days = 1 }` in `te_rc_grant`, no `remove_variable`), which also skips a country's genuine discoveries for that day |
 | `TE_SELF_CHECK … rc_entry_add` | once a game, at the leader's pulse a month after it added the entry to a member that lacked it | the entry is running | `add_journal_entry` didn't take, or the entry ended at once (its invalid outcome read true): the member pays nothing | read the outcome's trigger (`te_rc_in_commons`) for that member; if the entry can't be added, the dynamic-modifier pattern above carries the transfer without it |
+
+## Diplomatic Framework: invitations weigh relations (2026-11-18, #1863)
+
+The identity's term in the AI's invitation score read `scope:source_country`, which the invite action never sets, so it
+never paid. It now reads the inviter (`scope:actor`) in `ai_power_bloc_identity_score`, and the bloc's side
+(`scope:target_country`) in the join treaty's `ai_power_bloc_identity_score_treaties`, which had no term at all.
+`test_pb_identity_ai_scores.py` holds every identity branch to its value's scope.
+
+| # | Check | Expect | If not |
+|---|---|---|---|
+| 1 | Invite an AI country into a Diplomatic Framework bloc you lead | The acceptance breakdown has a "Diplomatic Relations" line of 10 plus its relations with you: about 60 at relations 50, −40 at −50 | No line: the identity test fails (the bloc is read in the wrong scope). A line of 10 alone: `"relations(scope:actor)"` reads nothing as a value there; use `scope:actor.relations:root` |
+| 2 | Propose the join treaty to the same country | The treaty's acceptance breakdown has the same "Diplomatic Relations" line | As above, with `scope:target_country` |

@@ -90,6 +90,33 @@ un_standing_force_ai_chance = {
 	min = 0
 }
 
+# ---- War goals struck as collateral -------------------------------------------------
+
+# The infamy given back when un_force_strike_goal takes goals of a type that
+# were not against the host (#1896). remove_war_goal takes the initiator's
+# first goal of the type, so a goal against the host's ally added before the
+# one against the host goes with it. That goal was charged the surcharge when
+# it was added, doubled because the play's target is under UN protection: so
+# each such goal gets twice un_war_surcharge_value back, 20 at Supranational.
+# Without this, an AI that re-adds the lost goal pays again every time.
+# They are counted as the loop's calls less one. A goal against the host is
+# struck as it is added, so the loop usually finds one, the newest, and every
+# earlier call took a goal against another country. The count is wrong only
+# where goals against the host stood before the strike could act (the mission,
+# the tier or the Force arrived mid-play). Then each extra one is refunded,
+# though it was not collateral. And a goal against another country added while
+# such a goal stood was never charged, since the strike ran in place of the
+# surcharge, but is refunded if it goes. Either way the error is one surcharge
+# a goal, and only in that case.
+# Scope: country (the initiator, holding un_strike_chk_calls)
+un_force_collateral_refund_value = {
+	value = var:un_strike_chk_calls
+	subtract = 1
+	multiply = un_war_surcharge_value
+	multiply = 2
+	min = 0
+}
+
 # ---- Display ------------------------------------------------------------------------
 
 # What the Force would take from the budget a week at present, for the

@@ -330,6 +330,7 @@ gm_state_demote_primary = {
 			gm_tr_copy_from_state = { FROM = gm_ceremony_level TO = gm_tr_ceremony_level }
 			gm_tr_copy_from_state = { FROM = gm_signature TO = gm_tr_signature }
 			gm_tr_copy_from_state = { FROM = gm_sig_parent TO = gm_tr_sig_parent }
+			gm_tr_copy_from_state = { FROM = gm_unearthed_for_com TO = gm_tr_unearthed_for_com }
 			set_variable = gm_tr_seen
 			gm_tr_update_picture = yes
 		}
@@ -454,6 +455,8 @@ gm_mon_check_contest = {
 # owner did not raise honours a foreign order (contested), a shrine becomes
 # heritage. Not for a civil war's transfers.
 gm_mon_changed_hands = {
+	# A find's mark was for the old owner's opportunity (gm_arch_place).
+	gm_remove_state_var = { VAR = gm_tr_unearthed_for_com }
 	if = {
 		limit = {
 			has_variable = gm_tr_seen
@@ -672,6 +675,7 @@ gm_mon_forget_home = {
 	gm_remove_state_var = { VAR = gm_tr_new_contest }
 	gm_remove_state_var = { VAR = gm_mon_order }
 	gm_remove_state_var = { VAR = gm_mon_order_by }
+	gm_remove_state_var = { VAR = gm_tr_unearthed_for_com }
 }
 
 # ---- The swap (spec 2026-10-16 §3.3) -----------------------------------------------
@@ -1336,6 +1340,7 @@ gm_state_write_shadow = {
 				gm_sh_mirror = { FROM = gm_ceremony_level TO = gm_tr_ceremony_level }
 				gm_sh_mirror = { FROM = gm_signature TO = gm_tr_signature }
 				gm_sh_mirror = { FROM = gm_sig_parent TO = gm_tr_sig_parent }
+				gm_sh_mirror = { FROM = gm_unearthed_for_com TO = gm_tr_unearthed_for_com }
 				gm_sh_mirror = { FROM = gm_picture_code TO = gm_tr_picture_code }
 				set_variable = gm_tr_seen
 			}

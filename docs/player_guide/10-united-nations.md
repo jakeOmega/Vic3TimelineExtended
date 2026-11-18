@@ -739,11 +739,13 @@ serves in every peacekeeping and Stabilization mission as one more contributor,
 and those missions no longer lapse unstaffed or fail when the last contingent
 goes home. It costs a tenth of the UN's budget. At Supranational, a war goal a
 member adds against a country hosting such a mission, in a play it started, is
-struck as soon as it is added. Three kinds of goal are not struck but pay the
-doubled infamy surcharge instead: the goal the play opens with, another goal of
-that same kind, and a unification goal. Countries outside the UN, and members
-whose credentials are suspended, pay that surcharge on every such goal. Nothing
-is struck or charged in the play a mandate is used in.
+struck as soon as it is added. A goal of the same kind that the member holds
+against another country in that play may be struck with it, and the infamy
+surcharge paid for that goal is given back. Three kinds of goal are not struck
+but pay the doubled surcharge instead: the goal the play opens with, another
+goal of that same kind, and a unification goal. Countries outside the UN, and
+members whose credentials are suspended, pay that surcharge on every such goal.
+Nothing is struck or charged in the play a mandate is used in.
 
 ### Electoral observers
 

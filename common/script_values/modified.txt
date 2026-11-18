@@ -573,16 +573,22 @@ power_bloc_mandate_progress_by_rank = {
 }
 
 INJECT:ai_power_bloc_identity_score = {
-	### Diplomatic
+	### Diplomatic Framework: 10, plus the invitee's relations with the inviting
+	### leader. scope:actor is the inviter and ROOT the invitee, as in vanilla's
+	### own branches (#1863: this read scope:source_country, which the invite
+	### action never sets, so it never paid). An `add` block, not `value =`, so it
+	### adds to what came before it and its line shows in the breakdown.
 	if = {
 		limit = {
-			scope:source_country.power_bloc ?= {
+			scope:actor.power_bloc ?= {
 				has_identity = identity:identity_diplomatic
 			}
 		}
-		value = 10 # Base value
-		add = scope:target_country.relations:root
-		desc = "DIPLOMATIC_ACCEPTANCE_DIPLOMATIC_RELATIONS"
+		add = {
+			desc = "DIPLOMATIC_ACCEPTANCE_DIPLOMATIC_RELATIONS"
+			value = 10
+			add = "relations(scope:actor)"
+		}
 	}
 
 	### Creditors' Consortium (2026-11-16): vanilla's convention, scope:actor the
@@ -662,6 +668,22 @@ INJECT:ai_power_bloc_identity_score = {
 # The join treaty's AI score (09_join_power_bloc.txt): root is the joining
 # country and scope:target_country the bloc's side.
 INJECT:ai_power_bloc_identity_score_treaties = {
+	### Diplomatic Framework: the invitation's term, so a country asked to join
+	### by treaty weighs its relations with the bloc's side as an invited one does
+	### (#1863).
+	if = {
+		limit = {
+			scope:target_country.power_bloc ?= {
+				has_identity = identity:identity_diplomatic
+			}
+		}
+		add = {
+			desc = "DIPLOMATIC_ACCEPTANCE_DIPLOMATIC_RELATIONS"
+			value = 10
+			add = "relations(scope:target_country)"
+		}
+	}
+
 	### Creditors' Consortium: the invitation's three terms, so a country asked
 	### to join by treaty weighs the guarantee and the lending as it weighs an
 	### invitation.
