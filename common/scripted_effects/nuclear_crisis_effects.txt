@@ -244,6 +244,20 @@ nd_crisis_preview = {
 		}
 		custom_tooltip = nd_tt_open_f_existence
 	}
+	# What conceding would cost them in a war with us (nd_yp_forfeit): their own
+	# goals against us. In a guarantee dispute the goals are against the
+	# protégé, which the preview doesn't name; the panel shows them once the
+	# crisis opens.
+	if = {
+		limit = {
+			save_temporary_scope_as = nd_pv_self
+			$TARGET$ = {
+				has_war_with = scope:nd_pv_self
+				nd_holds_any_goal_against = { TARGET = scope:nd_pv_self }
+			}
+		}
+		custom_tooltip = nd_tt_open_f_forfeit
+	}
 	# ---- the stakes, and what happens next ------------------------------------
 	if = {
 		limit = { always = $PUBLIC$ }
@@ -646,6 +660,20 @@ nd_crisis_refresh_figures = {
 	else = {
 		save_scope_as = nd_stakes_demander
 	}
+	# Whom the target would give its own war goals up to (nd_yp_forfeit_value):
+	# the country the yield names (nd_crisis_act_yield's nd_crisis_other_side),
+	# the protégé while one is recorded, else us. Saved under its own name, so
+	# the yield's own save is never pre-empted by a stale one.
+	if = {
+		limit = {
+			has_variable = nd_crisis_beneficiary
+			exists = var:nd_crisis_beneficiary
+		}
+		var:nd_crisis_beneficiary = { save_scope_as = nd_forfeit_to }
+	}
+	else = {
+		save_scope_as = nd_forfeit_to
+	}
 	nd_crisis_classify_follow_through = { TARGET = scope:nd_target }
 	scope:nd_target = {
 		set_variable = { name = nd_ft_reason value = scope:nd_issuer.var:nd_ft_reason }
@@ -685,6 +713,7 @@ nd_crisis_refresh_figures = {
 		nd_crisis_store_yp = { C = nd_yp_temperament V = nd_yp_temperament_value }
 		nd_crisis_store_yp = { C = nd_yp_war V = nd_yp_war_value }
 		nd_crisis_store_yp = { C = nd_yp_stakes V = nd_yp_stakes_value }
+		nd_crisis_store_yp = { C = nd_yp_forfeit V = nd_yp_forfeit_value }
 		nd_crisis_store_yp = { C = nd_yp_follow_through V = nd_yp_follow_through_value }
 		nd_crisis_store_yp = { C = nd_yp_taboo V = nd_yp_taboo_value }
 		set_variable = { name = nd_yield_pressure value = nd_yield_pressure_value }
@@ -812,6 +841,10 @@ nd_crisis_clear_figures = {
 	if = {
 		limit = { has_variable = nd_yp_stakes }
 		remove_variable = nd_yp_stakes
+	}
+	if = {
+		limit = { has_variable = nd_yp_forfeit }
+		remove_variable = nd_yp_forfeit
 	}
 	if = {
 		limit = { has_variable = nd_yp_follow_through }

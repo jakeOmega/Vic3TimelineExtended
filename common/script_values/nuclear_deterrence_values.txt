@@ -1898,6 +1898,213 @@ nd_yp_stakes_minor_value = {
 	}
 }
 
+# What yielding costs the target itself (#1893). In a war, conceding drops the
+# war goals it holds against the other side, and those to free or take one of
+# that side's direct subjects, whether it leads its side or not
+# (nd_crisis_concede_war; the set nd_holds_any_goal_against reads). Weighed by
+# type on the stakes' scale at half, since giving up what it hopes to win
+# weighs less than facing a loss: an annexation or reunification −15 and
+# nothing else counted; a subjugation type or regime change −10; −5 for each
+# type that takes a state or a subject; −2 for each lesser type; at most −20,
+# then half while it is losing the war to the other side, whose goals it is
+# unlikely to enforce. Only where the yield is the war concession: dispute 2,
+# or 3 while the target fights the protégé (in a play it backs down and keeps
+# its goals, and these reads find no war goal there). The AI's stake gate
+# (nd_ai_stakes_block) asks before any crisis, with no dispute stored, where
+# a war between the two is dispute 2. Target scope; scope:nd_issuer and
+# scope:nd_forfeit_to (the country the yield names) saved.
+nd_yp_forfeit_value = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:nd_forfeit_to
+			scope:nd_issuer = {
+				OR = {
+					NOT = { has_variable = nd_crisis_dispute }
+					var:nd_crisis_dispute ?= 2
+					var:nd_crisis_dispute ?= 3
+				}
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					war_participant_has_war_goal_of_type_against = { type = annex_country target = scope:nd_forfeit_to }
+					war_participant_has_war_goal_of_type_against = { type = te_reunify_country target = scope:nd_forfeit_to }
+					war_participant_has_war_goal_of_type_against = { type = unification target = scope:nd_forfeit_to }
+					war_participant_has_war_goal_of_type_against = { type = restore_union target = scope:nd_forfeit_to }
+					war_participant_has_war_goal_of_type_against = { type = te_colonial_reconquest target = scope:nd_forfeit_to }
+				}
+			}
+			add = -15
+		}
+		else = {
+			if = {
+				limit = {
+					OR = {
+						war_participant_has_war_goal_of_type_against = { type = make_protectorate target = scope:nd_forfeit_to }
+						war_participant_has_war_goal_of_type_against = { type = make_dominion target = scope:nd_forfeit_to }
+						war_participant_has_war_goal_of_type_against = { type = make_tributary target = scope:nd_forfeit_to }
+						war_participant_has_war_goal_of_type_against = { type = make_personal_union target = scope:nd_forfeit_to }
+						war_participant_has_war_goal_of_type_against = { type = make_crown_land target = scope:nd_forfeit_to }
+						war_participant_has_war_goal_of_type_against = { type = make_chartered_company target = scope:nd_forfeit_to }
+						war_participant_has_war_goal_of_type_against = { type = regime_change target = scope:nd_forfeit_to }
+					}
+				}
+				add = -10
+			}
+			add = nd_yp_forfeit_territory_value
+			add = nd_yp_forfeit_minor_value
+		}
+		min = -20
+		if = {
+			limit = { nd_is_losing_war_to = { ENEMY = scope:nd_forfeit_to } }
+			multiply = 0.5
+		}
+	}
+	round = yes
+}
+
+# −5 for each type that takes a state or a subject from the other side (target
+# scope). A goal to free or take a subject targets the subject, not its
+# overlord, so those two also count against the other side's direct subjects.
+nd_yp_forfeit_territory_value = {
+	value = 0
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = conquer_state target = scope:nd_forfeit_to } }
+		add = -5
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = return_state target = scope:nd_forfeit_to } }
+		add = -5
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = take_treaty_port target = scope:nd_forfeit_to } }
+		add = -5
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = te_seize_strait target = scope:nd_forfeit_to } }
+		add = -5
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = liberate_country target = scope:nd_forfeit_to } }
+		add = -5
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = secession target = scope:nd_forfeit_to } }
+		add = -5
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = release_as_subject target = scope:nd_forfeit_to } }
+		add = -5
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = te_colonial_independence target = scope:nd_forfeit_to } }
+		add = -5
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = te_un_mandate_restore_state target = scope:nd_forfeit_to } }
+		add = -5
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = independence target = scope:nd_forfeit_to } }
+		add = -5
+	}
+	if = {
+		limit = { nd_holds_goal_against_or_subject = { TYPE = transfer_subject TARGET = scope:nd_forfeit_to } }
+		add = -5
+	}
+	if = {
+		limit = { nd_holds_goal_against_or_subject = { TYPE = liberate_subject TARGET = scope:nd_forfeit_to } }
+		add = -5
+	}
+}
+
+# −2 for each lesser type held against the other side (target scope).
+nd_yp_forfeit_minor_value = {
+	value = 0
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = break_enforced_treaties target = scope:nd_forfeit_to } }
+		add = -2
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = unification_leadership target = scope:nd_forfeit_to } }
+		add = -2
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = enforce_treaty_article target = scope:nd_forfeit_to } }
+		add = -2
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = open_market target = scope:nd_forfeit_to } }
+		add = -2
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = humiliation target = scope:nd_forfeit_to } }
+		add = -2
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = contain_threat target = scope:nd_forfeit_to } }
+		add = -2
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = foreign_investment_rights target = scope:nd_forfeit_to } }
+		add = -2
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = force_nationalization target = scope:nd_forfeit_to } }
+		add = -2
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = ban_slavery target = scope:nd_forfeit_to } }
+		add = -2
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = colonization_rights target = scope:nd_forfeit_to } }
+		add = -2
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = revoke_claim target = scope:nd_forfeit_to } }
+		add = -2
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = revoke_all_claims target = scope:nd_forfeit_to } }
+		add = -2
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = demand_strait_access target = scope:nd_forfeit_to } }
+		add = -2
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = demand_toll_exemption target = scope:nd_forfeit_to } }
+		add = -2
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = demand_no_tolls target = scope:nd_forfeit_to } }
+		add = -2
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = demand_no_strait_closure target = scope:nd_forfeit_to } }
+		add = -2
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = join_power_bloc target = scope:nd_forfeit_to } }
+		add = -2
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = leave_power_bloc target = scope:nd_forfeit_to } }
+		add = -2
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = increase_autonomy target = scope:nd_forfeit_to } }
+		add = -2
+	}
+	if = {
+		limit = { war_participant_has_war_goal_of_type_against = { type = reduce_autonomy target = scope:nd_forfeit_to } }
+		add = -2
+	}
+}
+
 # The AI's chance (percent) of claiming a deliberate first strike was
 # unauthorized when it was not (rework spec §5.4; owner, 2026-10-28): 15, twice
 # under an aggressive ruler, half from a taboo of 50, and by the ruler's
@@ -1998,6 +2205,7 @@ nd_yield_pressure_value = {
 	add = nd_yp_temperament_value
 	add = nd_yp_war_value
 	add = nd_yp_stakes_value
+	add = nd_yp_forfeit_value
 	add = nd_yp_follow_through_value
 	add = nd_yp_taboo_value
 	min = 0
@@ -2006,7 +2214,10 @@ nd_yield_pressure_value = {
 }
 
 # The same without the stakes: the AI's stake gate (nd_ai_stakes_block) asks
-# whether the demands alone hold the pressure under its concession line.
+# whether the demands alone hold the pressure under its concession line. The
+# forfeit stays in (#1893): the gate holds back an issuer's demands, and the
+# target's own goals are no reason to hold back a threat, least of all from a
+# country whose survival those goals put at stake.
 nd_yield_pressure_unstaked_value = {
 	value = nd_yp_base_value
 	add = nd_yp_answer_value
@@ -2019,6 +2230,7 @@ nd_yield_pressure_unstaked_value = {
 	add = nd_yp_exercise_value
 	add = nd_yp_temperament_value
 	add = nd_yp_war_value
+	add = nd_yp_forfeit_value
 	add = nd_yp_follow_through_value
 	add = nd_yp_taboo_value
 	min = 0

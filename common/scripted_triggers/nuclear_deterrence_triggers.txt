@@ -2414,10 +2414,13 @@ nd_ai_would_warn = {
 # pressure values read scope:nd_issuer and scope:nd_target, so they are saved
 # here as temporary scopes; nd_ai_would_warn's callers (the opening actions'
 # AI, a proliferation event's weight) run outside any crisis, where neither
-# exists. The demands are ours (nd_stakes_demander).
+# exists. The demands are ours (nd_stakes_demander), and so are the goals the
+# target would give up by yielding (nd_forfeit_to): a guarantee dispute, whose
+# demands and goals are the protégé's, skips the gate.
 nd_ai_stakes_block = {
 	save_temporary_scope_as = nd_issuer
 	save_temporary_scope_as = nd_stakes_demander
+	save_temporary_scope_as = nd_forfeit_to
 	$TARGET$ = {
 		save_temporary_scope_as = nd_target
 		nd_yield_pressure_unstaked_value >= nd_ai_concession_line
@@ -2499,6 +2502,28 @@ nd_holds_any_goal_against = {
 							war_participant_has_war_goal_of_type_against = { type = liberate_subject target = scope:nd_goal_subject_t }
 							war_participant_has_war_goal_of_type_against = { type = transfer_subject target = scope:nd_goal_subject_t }
 						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Country scope: do we ourselves, in any war, hold a goal of $TYPE$ against
+# $TARGET$ or against one of its direct subjects? A goal to free or take a
+# subject targets the subject (nd_holds_any_goal_against). The forfeit's read
+# of those two types (nd_yp_forfeit_territory_value).
+# Parameters: $TYPE$ = war goal type; $TARGET$ = the country
+nd_holds_goal_against_or_subject = {
+	OR = {
+		war_participant_has_war_goal_of_type_against = { type = $TYPE$ target = $TARGET$ }
+		AND = {
+			save_temporary_scope_as = nd_goal_holder_t
+			$TARGET$ = {
+				any_direct_subject = {
+					save_temporary_scope_as = nd_goal_subject_t
+					scope:nd_goal_holder_t = {
+						war_participant_has_war_goal_of_type_against = { type = $TYPE$ target = scope:nd_goal_subject_t }
 					}
 				}
 			}
