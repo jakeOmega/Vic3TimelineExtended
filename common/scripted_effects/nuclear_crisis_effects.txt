@@ -244,6 +244,20 @@ nd_crisis_preview = {
 		}
 		custom_tooltip = nd_tt_open_f_existence
 	}
+	# What conceding would cost them in a war with us (nd_yp_forfeit): their own
+	# goals against us. In a guarantee dispute the goals are against the
+	# protégé, which the preview doesn't name; the panel shows them once the
+	# crisis opens.
+	if = {
+		limit = {
+			save_temporary_scope_as = nd_pv_self
+			$TARGET$ = {
+				has_war_with = scope:nd_pv_self
+				nd_holds_any_goal_against = { TARGET = scope:nd_pv_self }
+			}
+		}
+		custom_tooltip = nd_tt_open_f_forfeit
+	}
 	# ---- the stakes, and what happens next ------------------------------------
 	if = {
 		limit = { always = $PUBLIC$ }
@@ -646,6 +660,46 @@ nd_crisis_refresh_figures = {
 	else = {
 		save_scope_as = nd_stakes_demander
 	}
+	# Once a game (TE_SELF_CHECK nd_play_subject_goal, #1895): in a play, does
+	# a goal to free or take a subject read as on the subject, as a war's does
+	# (in game, 2026-11-18)? The stakes read those two on the target's
+	# subjects. Only on a target that is no one's subject, where a goal found
+	# on the target itself can only be one on its subject, read as on its
+	# overlord; so OK needs the goal found on a subject and on nothing else.
+	# A tooltip walk of the opening writes no dispute, so it never gets here.
+	if = {
+		limit = {
+			var:nd_crisis_dispute ?= 1
+			NOT = { has_global_variable = nd_play_subject_goal_check_done }
+			scope:nd_target = { is_subject = no }
+			OR = {
+				nd_play_subject_goal_on_overlord = yes
+				nd_play_subject_goal_on_subject = yes
+			}
+		}
+		set_global_variable = nd_play_subject_goal_check_done
+		if = {
+			limit = { nd_play_subject_goal_on_overlord = yes }
+			debug_log = "TE_SELF_CHECK BROKEN nd_play_subject_goal: in the play between [THIS.GetCountry.GetNameNoFormatting] and [SCOPE.sCountry('nd_target').GetNameNoFormatting], who is no one's subject, a goal of [THIS.GetCountry.GetNameNoFormatting]'s side to free or take a subject reads as against [SCOPE.sCountry('nd_target').GetNameNoFormatting] itself, so in a play the goal reads on the overlord and the stakes miss it"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK OK nd_play_subject_goal: in the play between [THIS.GetCountry.GetNameNoFormatting] and [SCOPE.sCountry('nd_target').GetNameNoFormatting], a goal of [THIS.GetCountry.GetNameNoFormatting]'s side to free or take a subject reads as on one of [SCOPE.sCountry('nd_target').GetNameNoFormatting]'s subjects, not on [SCOPE.sCountry('nd_target').GetNameNoFormatting]"
+		}
+	}
+	# Whom the target would give its own war goals up to (nd_yp_forfeit_value):
+	# the country the yield names (nd_crisis_act_yield's nd_crisis_other_side),
+	# the protégé while one is recorded, else us. Saved under its own name, so
+	# the yield's own save is never pre-empted by a stale one.
+	if = {
+		limit = {
+			has_variable = nd_crisis_beneficiary
+			exists = var:nd_crisis_beneficiary
+		}
+		var:nd_crisis_beneficiary = { save_scope_as = nd_forfeit_to }
+	}
+	else = {
+		save_scope_as = nd_forfeit_to
+	}
 	nd_crisis_classify_follow_through = { TARGET = scope:nd_target }
 	scope:nd_target = {
 		set_variable = { name = nd_ft_reason value = scope:nd_issuer.var:nd_ft_reason }
@@ -685,6 +739,7 @@ nd_crisis_refresh_figures = {
 		nd_crisis_store_yp = { C = nd_yp_temperament V = nd_yp_temperament_value }
 		nd_crisis_store_yp = { C = nd_yp_war V = nd_yp_war_value }
 		nd_crisis_store_yp = { C = nd_yp_stakes V = nd_yp_stakes_value }
+		nd_crisis_store_yp = { C = nd_yp_forfeit V = nd_yp_forfeit_value }
 		nd_crisis_store_yp = { C = nd_yp_follow_through V = nd_yp_follow_through_value }
 		nd_crisis_store_yp = { C = nd_yp_taboo V = nd_yp_taboo_value }
 		set_variable = { name = nd_yield_pressure value = nd_yield_pressure_value }
@@ -812,6 +867,10 @@ nd_crisis_clear_figures = {
 	if = {
 		limit = { has_variable = nd_yp_stakes }
 		remove_variable = nd_yp_stakes
+	}
+	if = {
+		limit = { has_variable = nd_yp_forfeit }
+		remove_variable = nd_yp_forfeit
 	}
 	if = {
 		limit = { has_variable = nd_yp_follow_through }

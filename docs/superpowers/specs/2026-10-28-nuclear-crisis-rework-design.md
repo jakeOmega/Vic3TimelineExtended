@@ -247,7 +247,7 @@ Even with global reach, weapons based in a country next to us cut our warning ti
 
 ### 8.2 Play: what is at stake
 
-A new pressure part, `nd_yp_stakes`: the issuer's side's primary demands on the target, weighted by type. Annexation or reunification −30; a subjugation type (protectorate, dominion, tributary, personal union, crown land, chartered company) −20; a state transfer −10 each; a treaty, market, strait or minor goal −4 each. Capped at −40 and counting every primary demand (owner call 10). Unreasonable demands are refused, and a refusal moves the crisis toward Acute. The AI doesn't threaten where the stakes would hold pressure below its own concession line.
+A new pressure part, `nd_yp_stakes`: the issuer's side's primary demands on the target, weighted by type. Annexation or reunification −30; a subjugation type (protectorate, dominion, tributary, personal union, crown land, chartered company) −20; a state transfer −10 each; a treaty, market, strait or minor goal −4 each. Capped at −40 and counting every primary demand (owner call 10). Unreasonable demands are refused, and a refusal moves the crisis toward Acute. The AI doesn't threaten where the stakes would hold pressure below its own concession line. (Added 2026-11-18, #1893: a mirror part, `nd_yp_forfeit`, for what a war concession takes from the target itself, its own goals against the other side, at half this scale and at most −20; it stays out of the stake gate's question. See `nuclear_crisis_design.md` §0.3, "Figures".)
 
 ### 8.3 Co-belligerent cover (owner call 11)
 

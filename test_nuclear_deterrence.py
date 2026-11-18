@@ -459,7 +459,7 @@ DANGER_PARTS = ["nd_cd_stage", "nd_cd_issuer_readiness", "nd_cd_target_readiness
                 "nd_cd_exercise", "nd_cd_vulnerability"]
 PRESSURE_PARTS = ["nd_yp_base", "nd_yp_answer", "nd_yp_issuer_exposure", "nd_yp_protector", "nd_yp_credibility", "nd_yp_alert",
                   "nd_yp_recessed", "nd_yp_danger", "nd_yp_exercise", "nd_yp_temperament", "nd_yp_war",
-                  "nd_yp_stakes", "nd_yp_follow_through", "nd_yp_taboo"]
+                  "nd_yp_stakes", "nd_yp_forfeit", "nd_yp_follow_through", "nd_yp_taboo"]
 
 
 class TestCrisisFigures(unittest.TestCase):
@@ -621,10 +621,14 @@ class TestCrisisSubjects(unittest.TestCase):
                       block(strip_comments(read(SGUIS)), "nd_crisis_pressure_breakdown_sgui"))
         self.assertIsNotNone(loc_value("nd_yp_stakes_line"))
 
+    # The forfeit stays in the unstaked total (#1893): the gate holds back an
+    # issuer's demands, and a target's own goals are no reason to hold back a
+    # threat against it.
     def test_unstaked_total_is_every_other_part(self):
         body = block(self.values, "nd_yield_pressure_unstaked_value")
         parts = re.findall(r"(?:value|add) = (nd_yp_\w+)_value\b", body)
         self.assertEqual(parts, [p for p in PRESSURE_PARTS if p != "nd_yp_stakes"])
+        self.assertIn("nd_yp_forfeit", parts)
 
     def test_ai_stake_gate(self):
         self.assertIn("nd_ai_stakes_block = { TARGET = $TARGET$ }", block(self.triggers, "nd_ai_would_warn"))
@@ -896,6 +900,145 @@ class TestSuezConcession(unittest.TestCase):
                       block(self.triggers, "nd_holds_any_goal_against"))
         self.assertNotIn("35", loc_value("nd_tt_yield_war"))
         self.assertIn("15", loc_value("nd_tt_yield_war"))
+
+
+FORFEIT_VALUES = ("nd_yp_forfeit_value", "nd_yp_forfeit_territory_value", "nd_yp_forfeit_minor_value")
+
+
+class TestYieldForfeit(unittest.TestCase):
+    """What yielding in a war costs the target itself weighs on the pressure:
+    the goals the war concession drops, by type, at half the stakes' scale
+    (#1893)."""
+
+    def setUp(self):
+        self.values = strip_comments(read(VALUES))
+        self.triggers = strip_comments(read(TRIGGERS))
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+
+    def forfeit(self):
+        return "\n".join(block(self.values, name) for name in FORFEIT_VALUES)
+
+    def test_part_is_stored_shown_and_cleared(self):
+        self.assertIn("C = nd_yp_forfeit V = nd_yp_forfeit_value", block(self.crisis, "nd_crisis_refresh_figures"))
+        self.assertIn("remove_variable = nd_yp_forfeit", block(self.crisis, "nd_crisis_clear_figures"))
+        self.assertIn("C = nd_yp_forfeit KEY = nd_yp_forfeit_line",
+                      block(strip_comments(read(SGUIS)), "nd_crisis_pressure_breakdown_sgui"))
+        self.assertIn("Var('nd_yp_forfeit')", loc_value("nd_yp_forfeit_line"))
+
+    # Every goal the concession can drop is weighed, and nothing else: a type
+    # added to the removal (nd_holds_any_goal_against and the holder ladder,
+    # which TestSuezConcession holds equal) needs its weight here too.
+    def test_weighs_exactly_the_types_the_concession_drops(self):
+        dropped = set(re.findall(r"type = ([a-z_]+) target = \$TARGET\$",
+                                 block(self.triggers, "nd_holds_any_goal_against")))
+        body = self.forfeit()
+        direct = re.findall(r"type = ([a-z_]+) target = scope:nd_forfeit_to", body)
+        via_subject = re.findall(r"nd_holds_goal_against_or_subject = \{ TYPE = ([a-z_]+) TARGET = scope:nd_forfeit_to \}", body)
+        weighed = direct + via_subject
+        self.assertEqual(len(weighed), len(set(weighed)), "a type weighed twice")
+        self.assertEqual(set(weighed), dropped)
+        # A goal to free or take a subject targets the subject: those two are
+        # read on the other side's subjects too.
+        self.assertEqual(sorted(via_subject), ["liberate_subject", "transfer_subject"])
+
+    def test_subject_read_walks_the_other_sides_direct_subjects(self):
+        trig = squash(block(self.triggers, "nd_holds_goal_against_or_subject"))
+        self.assertIn("war_participant_has_war_goal_of_type_against = { type = $TYPE$ target = $TARGET$ }", trig)
+        self.assertIn("$TARGET$ = { any_direct_subject = { save_temporary_scope_as = nd_goal_subject_t"
+                      " scope:nd_goal_holder_t = { war_participant_has_war_goal_of_type_against ="
+                      " { type = $TYPE$ target = scope:nd_goal_subject_t } } } }", trig)
+
+    # The concession drops the yielder's own goals, not its allies': a
+    # side-wide read would weigh goals it keeps.
+    def test_reads_the_targets_own_war_goals(self):
+        body = self.forfeit() + block(self.triggers, "nd_holds_goal_against_or_subject")
+        self.assertNotIn("war_side_has_war_goal_of_type_against", body)
+        self.assertNotIn("play_side_has_war_goal_of_type_against", body)
+        self.assertNotIn("nd_side_holds_goal_against", body)
+
+    def test_scale_is_half_the_stakes(self):
+        main = block(self.values, "nd_yp_forfeit_value")
+        self.assertIn("add = -15", main)
+        self.assertIn("add = -10", main)
+        self.assertEqual(set(re.findall(r"add = (-\d+)", block(self.values, "nd_yp_forfeit_territory_value"))), {"-5"})
+        self.assertEqual(set(re.findall(r"add = (-\d+)", block(self.values, "nd_yp_forfeit_minor_value"))), {"-2"})
+        # Capped at −20, then halved while losing the war: the cap first.
+        cap = main.index("min = -20")
+        self.assertLess(cap, main.index("nd_is_losing_war_to = { ENEMY = scope:nd_forfeit_to }"))
+        self.assertLess(cap, main.index("multiply = 0.5"))
+
+    # Only the war concession drops goals: dispute 2, or 3 against a protégé
+    # it fights. The gate asks before any dispute is stored.
+    def test_only_where_the_yield_is_the_war_concession(self):
+        main = squash(block(self.values, "nd_yp_forfeit_value"))
+        self.assertIn("scope:nd_issuer = { OR = { NOT = { has_variable = nd_crisis_dispute }"
+                      " var:nd_crisis_dispute ?= 2 var:nd_crisis_dispute ?= 3 } }", main)
+
+    # The same country the yield names (nd_crisis_act_yield's
+    # nd_crisis_other_side): the protégé while one is recorded, else the
+    # issuer. A dispute 3 that turned into a war keeps its protégé.
+    def test_figures_save_the_country_the_yield_names(self):
+        refresh = squash(block(self.crisis, "nd_crisis_refresh_figures"))
+        self.assertIn("if = { limit = { has_variable = nd_crisis_beneficiary exists = var:nd_crisis_beneficiary }"
+                      " var:nd_crisis_beneficiary = { save_scope_as = nd_forfeit_to } }"
+                      " else = { save_scope_as = nd_forfeit_to }", refresh)
+        self.assertLess(refresh.index("save_scope_as = nd_forfeit_to"), refresh.index("C = nd_yp_forfeit"))
+        yield_ = squash(block(self.crisis, "nd_crisis_act_yield"))
+        self.assertIn("if = { limit = { has_variable = nd_crisis_beneficiary }"
+                      " var:nd_crisis_beneficiary ?= { save_scope_as = nd_crisis_other_side } }"
+                      " else = { save_scope_as = nd_crisis_other_side }", yield_)
+
+    def test_gate_saves_the_issuer_as_the_other_side(self):
+        self.assertIn("save_temporary_scope_as = nd_forfeit_to", block(self.triggers, "nd_ai_stakes_block"))
+
+    def test_opening_preview_names_it_in_a_war(self):
+        preview = squash(block(self.crisis, "nd_crisis_preview"))
+        self.assertIn("$TARGET$ = { has_war_with = scope:nd_pv_self"
+                      " nd_holds_any_goal_against = { TARGET = scope:nd_pv_self } } } custom_tooltip = nd_tt_open_f_forfeit",
+                      preview)
+
+
+class TestStakesSubjectGoals(unittest.TestCase):
+    """A goal to free or take a subject targets the subject, not its overlord
+    (targets_enemy_subject; a war's in game, 2026-11-18), so the stakes read
+    those two types on the target's direct subjects (#1895)."""
+
+    def setUp(self):
+        self.values = strip_comments(read(VALUES))
+        self.triggers = strip_comments(read(TRIGGERS))
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+
+    def test_read_on_the_targets_subjects_not_on_the_target(self):
+        territory = block(self.values, "nd_yp_stakes_territory_value")
+        for t in ("liberate_subject", "transfer_subject"):
+            self.assertNotIn(f"nd_side_holds_goal_against = {{ TYPE = {t} TARGET = scope:nd_target }}", territory)
+            self.assertIn(f"scope:nd_stakes_demander = {{ nd_side_holds_goal_on_subject_of ="
+                          f" {{ TYPE = {t} TARGET = scope:nd_target }} }}", territory)
+
+    # Side-wide, in a play or a war, as every other stakes read.
+    def test_helper_walks_direct_subjects_side_wide(self):
+        helper = squash(block(self.triggers, "nd_side_holds_goal_on_subject_of"))
+        self.assertEqual(helper, "save_temporary_scope_as = nd_sgs_side_t $TARGET$ = { any_direct_subject = {"
+                                 " save_temporary_scope_as = nd_sgs_subject_t scope:nd_sgs_side_t ="
+                                 " { nd_side_holds_goal_against = { TYPE = $TYPE$ TARGET = scope:nd_sgs_subject_t } } } }")
+
+    # The play's reading is unverified: a once-a-game line says which.
+    def test_play_self_check(self):
+        refresh = squash(block(self.crisis, "nd_crisis_refresh_figures"))
+        start = refresh.index("var:nd_crisis_dispute ?= 1 NOT = { has_global_variable = nd_play_subject_goal_check_done }")
+        check = refresh[start:refresh.index("save_scope_as = nd_forfeit_to")]
+        self.assertIn("scope:nd_target = { is_subject = no }", check)
+        marker = check.index("set_global_variable = nd_play_subject_goal_check_done")
+        self.assertLess(marker, check.index("TE_SELF_CHECK BROKEN nd_play_subject_goal"))
+        self.assertLess(marker, check.index("TE_SELF_CHECK OK nd_play_subject_goal"))
+        # BROKEN on any reading against the target; OK only otherwise.
+        self.assertLess(check.index("limit = { nd_play_subject_goal_on_overlord = yes }"),
+                        check.index("TE_SELF_CHECK BROKEN"))
+        for name in ("nd_play_subject_goal_on_overlord", "nd_play_subject_goal_on_subject"):
+            body = block(self.triggers, name)
+            self.assertNotIn("war_side_has_war_goal_of_type_against", body)
+            self.assertNotIn("nd_side_holds_goal_against", body)
+            self.assertEqual(body.count("play_side_has_war_goal_of_type_against"), 2, name)
 
 
 class TestPeacetimeStrikeDispute(unittest.TestCase):
@@ -1915,6 +2058,7 @@ PREVIEW_PINS = {
     "nd_tt_open_f_cautious": ("nd_yp_temperament_value", "add", 10),
     "nd_tt_open_f_losing": ("nd_yp_war_value", "add", 15),
     "nd_tt_open_f_existence": ("nd_yp_war_value", "subtract", 15),
+    "nd_tt_open_f_forfeit": ("nd_yp_forfeit_value", "min", -20),
     "nd_tt_open_f_alert": ("nd_yp_alert_value", "add", 10),
     "nd_tt_open_backed": ("nd_yp_follow_through_value", "add", 10),
     "nd_tt_open_bluff_existential": ("nd_yp_follow_through_value", "subtract", 25),
