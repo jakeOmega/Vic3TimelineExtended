@@ -757,7 +757,7 @@ colonies:
 | Off-World Resort | +3% tourism output |
 | Black Site | +1 intelligence capacity, +3% covert operation efficiency |
 | Training Ground | +4% army experience gain |
-| Nuclear Command Center | +4 nuclear command reliability, at most +12 |
+| Nuclear Command Center | +4 nuclear command reliability, at most +12; +2 Command Redundancy against a salvo on the capital, at most +6 |
 | Materials Foundry | +3% advanced materials output |
 | Administration | −0.15 a month to the colony's autonomy |
 

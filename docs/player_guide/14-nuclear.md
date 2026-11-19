@@ -174,8 +174,8 @@ weekly total, and each readiness choice and investment row its own weekly cost.
 The Forces section tracks three numbers on a 0–100 scale, updated monthly, and
 two investment steppers from 0 to 3, Safeguards and Hardening.
 
-- Survivability is how much of your force would survive a first strike. It climbs toward a ceiling set by technology (25, plus 15 for Radar, 20 for Intercontinental Ballistic Missiles, 25 for Advanced Submarine Technology and 10 for Missile Defense Systems, at most 80) only while you pay for hardening, and erodes when you stop. Its bar shows where it is heading: a green stretch while it climbs, a red one while it erodes, and a cream line at the ceiling.
-- Command reliability is how well the chain of command holds. Each safeguards level raises it by about 12; strain, buried incidents and enemy sabotage lower it.
+- Survivability is how much of your force would survive a first strike. It climbs toward a ceiling set by technology (25, plus 15 for Radar, 20 for Intercontinental Ballistic Missiles, 25 for Advanced Submarine Technology and 10 for Missile Defense Systems, at most 80) only while you pay for hardening, and erodes when you stop. Its bar shows where it is heading: a green stretch while it climbs, a red one while it erodes, and a cream line at the ceiling. Each 20 of it adds 1 to your Command Redundancy.
+- Command reliability is how well the chain of command holds. Each safeguards level raises it by about 12; strain, buried incidents and enemy sabotage lower it. Under Central Authorization it also moves your Command Redundancy against a salvo on your capital (see [Salvos and the Strike section](#salvos-and-the-strike-section)).
 - Crew strain rises 5 a month at High Alert, settles around 40 at Heightened, and falls 6 a month at Routine or Recessed.
 
 Safeguards also make an unapproved launch likelier to be halted and cut the
@@ -651,12 +651,26 @@ choice. A single warhead can't disarm a large arsenal, and a hardened one keeps
 most of its warheads whatever lands.
 
 Warheads that land on the capital of a nuclear power under Central
-Authorization can cut its chain of command. The more warheads it holds, and
-with Satellite Communications and Mainframe Computers, the more redundant its
-command: a power with 30 warheads and Satellite Communications needs 7 on its
-capital before there is any chance, and a state with 3 warheads faces 21% from
-two. A country cut off can't order a launch, or change its launch authority,
-for two to four weeks. The salvo's event, "A Nuclear Salvo from …", offers "Our
+Authorization can cut its chain of command. There is no chance until more land
+than its Command Redundancy, and then the chance rises fast: three in four when
+twice as many land. Command Redundancy starts at 1 and adds:
+
+| Source | Command Redundancy |
+|---|---|
+| Each ten warheads the country holds | +1 |
+| Satellite Communications | +2 |
+| Mainframe Computers | +1 |
+| Each 20 survivability, at any readiness | +1 (+4 at the ceiling of 80) |
+| Each staffed level of a Nuclear Command Center on a colony | +2, at most +6 |
+| Command reliability | +1 for each 10 above 50, −1 for each 10 below |
+
+A power with 20 warheads, both technologies, survivability 50 and command
+reliability 72 has about 11: a full salvo of 25 cuts it off about 82% of the
+time, 15 warheads about half the time, and 10 never. One with 50 warheads at
+the survivability ceiling, reliability 98 and three Command Center levels has
+about 24, and 25 warheads cut it off less than one time in ten. Sabotaging its
+communications first wears its reliability down. A country cut off can't order
+a launch, or change its launch authority, for two to four weeks. The salvo's event, "A Nuclear Salvo from …", offers "Our
 command is cut off" in place of absorbing the blow or answering it, and so does
 any strike that lands before command returns. Once the command is restored, a
 "Command Restored" event asks how to answer, if the war or exchange is still on

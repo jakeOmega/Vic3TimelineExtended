@@ -13,11 +13,16 @@ only, X's effective survivability is 10 lower, never below zero.
 In the exchange itself (§6.2, §6.3), a Forces salvo that lands L warheads on
 the victim's arsenal destroys min(exposed, K x L) x (1 - credit) of it, and the
 credit's share gets away first; L warheads on a Central Authorization victim's
-capital decapitate it with a chance of max(0, (L - R)/(L + R)).
+capital decapitate it with a chance of max(0, 1 - (R/L)^2) (owner, 2026-11-19;
+until then (L - R)/(L + R)). R, the victim's redundancy, is 1 + warheads / 10,
++2 with Satellite Communications, +1 with Mainframe Computers, + survivability
+/ 20, +2 a staffed Nuclear Command Center level (at most +6) and + (command
+reliability - 50) / 10, never below 1.
 
 test_nuclear_survivors.py checks it against the script values, as
 nuclear_taboo_sim.py mirrors the taboo. Run it to print the survivors table
-and the counterforce calibration (owner, 2026-10-28: keep K, check it here).
+the counterforce calibration (owner, 2026-10-28: keep K, check it here) and
+a full Leadership salvo's chance against a range of commands.
 """
 
 
@@ -49,9 +54,35 @@ def counterforce_saved(landed, k, exposed, credit):
     return max(0.0, min(exposed, k * landed) * credit)
 
 
+def redundancy(stockpile, satellite_communications=True, mainframe=True, survivability=0.0,
+               command_center=0, reliability=None):
+    """A command's redundancy against a strike on its capital (nd_redundancy).
+    `command_center` is staffed Nuclear Command Center levels; `reliability`
+    None leaves the reliability term out, as nd_redundancy_believed does."""
+    r = 1 + stockpile / 10 + 2 * satellite_communications + mainframe + survivability / 20
+    r += min(6, 2 * command_center)
+    if reliability is not None:
+        r += (reliability - 50) / 10
+    return max(1.0, r)
+
+
 def decapitation_chance(landed, redundancy):
     """Percent chance that `landed` warheads on the capital decapitate (nd_decapitation_chance_value)."""
-    return max(0.0, (landed - redundancy) / (landed + redundancy)) * 100
+    if landed <= 0:
+        return 0.0
+    return max(0.0, 1 - (redundancy / landed) ** 2) * 100
+
+
+# Commands a full salvo of 25 might face: (label, nd_redundancy's arguments).
+DECAPITATION_ROWS = (
+    ("5 warheads, survivability 40, reliability 72", dict(stockpile=5, survivability=40, reliability=72)),
+    ("20 warheads, survivability 50, reliability 72", dict(stockpile=20, survivability=50, reliability=72)),
+    ("20 warheads, as above, comms sabotaged (reliability 62)", dict(stockpile=20, survivability=50, reliability=62)),
+    ("50 warheads, survivability 70, reliability 84", dict(stockpile=50, survivability=70, reliability=84)),
+    ("100 warheads, survivability 80, reliability 98", dict(stockpile=100, survivability=80, reliability=98)),
+    ("50 warheads, survivability 80, reliability 98, Command Center x3",
+     dict(stockpile=50, survivability=80, reliability=98, command_center=3)),
+)
 
 
 def calibration():
@@ -80,6 +111,13 @@ def main():
     print("|---|---|---|---|---|")
     for stockpile, survivability, left in calibration():
         print(f"| {stockpile} | {survivability} | " + " | ".join(f"{x:.1f}" for x in left) + " |")
+    print()
+    print("A Leadership salvo on the capital (Central Authorization, both technologies)")
+    print("| Command | R | 10 landed | 25 landed |")
+    print("|---|---|---|---|")
+    for label, kwargs in DECAPITATION_ROWS:
+        r = redundancy(**kwargs)
+        print(f"| {label} | {r:.1f} | {decapitation_chance(10, r):.0f}% | {decapitation_chance(25, r):.0f}% |")
 
 
 if __name__ == "__main__":

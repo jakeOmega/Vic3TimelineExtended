@@ -79,6 +79,7 @@ class Posture:
     in_reach: bool = True          # our delivery reaches the enemy (nd_reaches_country, rework spec §7)
     capital_in_reach: bool = True  # and its capital (nd_leadership_in_reach)
     based_near: bool = False       # the enemy's weapons are based next door (nd_based_near, §7.4)
+    command_center: float = 0      # staffed Nuclear Command Center levels (sr_mod_units_bunker)
 
 
 # The rework spec's §2.3 rows: both sides take the same posture.
@@ -94,6 +95,10 @@ ACUTE_ROWS = (
 class RiskModel:
     def __init__(self, root=ROOT):
         self.values = {k: v for k, _, v in parse_script(root / "common/script_values/nuclear_deterrence_values.txt")}
+        # A colony's Nuclear Command Center (sr_mod_bunker_reliability and
+        # sr_mod_bunker_redundancy read sr_mod_units_bunker, the posture's).
+        self.values.update({k: v for k, _, v in parse_script(root / "common/script_values/sr_colony_module_values.txt")
+                            if k.startswith("sr_mod_bunker_")})
         self.triggers = {k: v for k, _, v in parse_script(root / "common/scripted_triggers/nuclear_deterrence_triggers.txt")}
         effects = {k: v for k, _, v in parse_script(root / "common/scripted_effects/nuclear_deterrence_effects.txt")}
         self.families = next(v for k, _, v in effects["nd_fire_incident_family"] if k == "random_list")
@@ -121,8 +126,8 @@ class RiskModel:
             return posture.believed_stockpile
         if value == "nd_ai_capital_hit_share":
             return posture.capital_hit_share   # reads modifiers at the enemy's capital
-        if value == "sr_mod_bunker_reliability":
-            return 0.0  # a colony's Nuclear Command Center: the benchmarks hold no colonies
+        if value == "sr_mod_units_bunker":
+            return posture.command_center  # the benchmarks hold no colonies: 0
         if value in self.values:
             return self.number(self.values[value], posture)
         return float(value)

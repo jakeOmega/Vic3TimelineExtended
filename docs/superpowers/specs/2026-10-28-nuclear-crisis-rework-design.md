@@ -199,6 +199,8 @@ Only a target under Central Authorization, and only through warheads that land o
 
 Delegation, Launch on Warning and Automatic Retaliation are immune: that is part of their payoff.
 
+**Amended (owner, 2026-11-19).** A full salvo of 25 topped out at 72% against any power with both technologies, so the chance is now max(0, 1 − (R ÷ L)²): still nothing until L exceeds R (owner call 7), three in four at L = 2R. R gains survivability ÷ 20, +2 a staffed Nuclear Command Center level (at most +6) and (command reliability − 50) ÷ 10, never below 1; the believed R the AI reads leaves reliability out. The 30-warhead example above still needs 7; the 3-warhead state's 21% from two is now 58%. Built in `nd_redundancy`, `nd_redundancy_command` and `nd_decapitation_chance_value`; `nuclear_crisis_design.md` §0.14 has the detail.
+
 ### 6.4 The answer
 
 `nuclear_weapon_events.1` sizes its answer from what survived. Automatic Retaliation's three are counted after counterforce losses, since it answers detonations; Launch on Warning's fly before them.

@@ -1701,7 +1701,7 @@
  je_space_race_widget_locations_header:0 "Locations"
  je_space_race_widget_mod_admin_tt:0 "#header Administration#!\nA governor's office and the clerks who answer to Earth: #v -0.15#! a month to the colony's [concept_sr_colony_autonomy] a staffed level."
  je_space_race_widget_mod_black_tt:0 "#header Black Site#!\nA facility no treaty inspector will reach: #v +1#! intelligence capacity and #v +3%#! covert operation efficiency a staffed level."
- je_space_race_widget_mod_bunker_tt:0 "#header Nuclear Command Center#!\nA command post far beyond a first strike's reach: #v +4#! nuclear command reliability a staffed level, at most #v +12#!."
+ je_space_race_widget_mod_bunker_tt:0 "#header Nuclear Command Center#!\nA command post far beyond a first strike's reach. A staffed level gives #v +4#! nuclear command reliability, at most #v +12#!, and #v +2#! [concept_command_redundancy], at most #v +6#!."
  je_space_race_widget_mod_coming_down:0 "Coming down, months left:"
  je_space_race_widget_mod_culture_tt:0 "#header Cultural Center#!\nTheaters, broadcasts and the colony's own festivals: #v +3%#! cultural pull and #v +1%#! prestige a staffed level."
  je_space_race_widget_mod_def_tt:0 "#header Defenses#!\nFire on enemy [concept_sr_space_fleet]s closing in on the colony, and make it harder to wear down. Under Simple Colonies they do nothing. A [concept_sr_module]: it takes a slot and needs a crew."

@@ -760,11 +760,35 @@ nd_launch_credit = {
 }
 
 # How many warheads on the capital it takes to have any chance of
-# decapitating a country under Central Authorization (rework spec §6.3).
+# decapitating a country under Central Authorization (rework spec §6.3):
+# 1 + warheads ÷ 10, the command's own redundancy (nd_redundancy_command), and
+# (command reliability − 50) ÷ 10, so a well-run chain of command takes more
+# and one an enemy's sabotage has worn down takes fewer (owner, 2026-11-19).
+# Never below 1.
 nd_redundancy = {
 	value = nd_stockpile
 	divide = 10
 	add = 1
+	add = nd_redundancy_command
+	if = {
+		limit = { has_variable = nd_reliability }
+		add = {
+			value = var:nd_reliability
+			subtract = 50
+			divide = 10
+		}
+	}
+	min = 1
+}
+
+# What the command adds to its redundancy whatever the arsenal (owner,
+# 2026-11-19): +2 with Satellite Communications, +1 with Mainframe Computers,
+# survivability ÷ 20 (a hardened force has hardened command posts too, at
+# most +4 at the ceiling of 80), and a colony's Nuclear Command Center
+# (sr_mod_bunker_redundancy, +2 a staffed level, at most +6). The world can
+# see all of these, so nd_redundancy_believed counts them too.
+nd_redundancy_command = {
+	value = 0
 	if = {
 		limit = { has_technology_researched = satellite_communications }
 		add = 2
@@ -773,6 +797,12 @@ nd_redundancy = {
 		limit = { has_technology_researched = mainframe_computers }
 		add = 1
 	}
+	add = {
+		value = nd_survivability_or_zero
+		divide = 20
+	}
+	# 0 without the space race.
+	add = sr_mod_bunker_redundancy
 }
 
 # What the enemy's whole arsenal could destroy: its exchange ratio times the
@@ -1029,15 +1059,25 @@ nd_counterforce_saved_raw = {
 }
 
 # Percent chance that the warheads landed on a Central Authorization
-# country's capital cut its command: max(0, (L - R)/(L + R)).
+# country's capital cut its command: max(0, 1 − (R/L)²) (owner, 2026-11-19).
+# Nothing below L = R, as before (owner call 7); above it the chance climbs
+# fast, so a full salvo of 25 on an arsenal the AI builds nearly always cuts
+# it. Until 2026-11-19 it was (L − R)/(L + R), at most 72% from 25 warheads
+# on any power with both technologies.
 nd_decapitation_chance_value = {
 	value = 0
 	scope:nd_sv_enemy = {
-		add = var:nd_salvo_capital_landed
-		subtract = var:nd_salvo_victim_r
-		divide = {
-			value = var:nd_salvo_capital_landed
-			add = var:nd_salvo_victim_r
+		if = {
+			limit = { var:nd_salvo_capital_landed > 0 }
+			add = 1
+			subtract = {
+				value = var:nd_salvo_victim_r
+				divide = var:nd_salvo_capital_landed
+				multiply = {
+					value = var:nd_salvo_victim_r
+					divide = var:nd_salvo_capital_landed
+				}
+			}
 		}
 	}
 	multiply = 100
@@ -1045,19 +1085,14 @@ nd_decapitation_chance_value = {
 }
 
 # The redundancy the world sees: nd_redundancy on the public estimate, for the
-# AI's choice of a Leadership strike (launch authority is public, §14.2).
+# AI's choice of a Leadership strike (launch authority is public, §14.2). It
+# leaves out command reliability, which nobody outside sees.
 nd_redundancy_believed = {
 	value = nd_believed_stockpile
 	divide = 10
 	add = 1
-	if = {
-		limit = { has_technology_researched = satellite_communications }
-		add = 2
-	}
-	if = {
-		limit = { has_technology_researched = mainframe_computers }
-		add = 1
-	}
+	add = nd_redundancy_command
+	min = 1
 }
 
 # Attacker scope: the warheads a salvo fires, from var:nd_salvo_size, a whole
@@ -1201,7 +1236,8 @@ nd_ai_forces_need = {
 }
 
 # Leadership: enough to land twice the enemy's redundancy on its capital, a
-# chance of a third, at the share of warheads the capital lets through.
+# chance of three in four (a third before 2026-11-19's curve), at the share of
+# warheads the capital lets through.
 nd_ai_leadership_need = {
 	value = 0
 	scope:nd_sv_enemy = {

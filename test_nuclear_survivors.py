@@ -9,8 +9,8 @@ from pathlib import Path
 
 from scripts.analysis.nuclear_incident_rates import Posture, RiskModel
 from scripts.analysis.nuclear_survivors import (WARNING_TIME_PENALTY, counterforce_destroyed, counterforce_saved,
-                                                decapitation_chance, exposed, survivors)
-from test_nuclear_deterrence import block, read, squash, strip_comments
+                                                decapitation_chance, exposed, redundancy, survivors)
+from test_nuclear_deterrence import block, loc_value, read, squash, strip_comments
 
 ROOT = Path(__file__).resolve().parent
 
@@ -50,7 +50,9 @@ class TestSurvivorsScript(unittest.TestCase):
         self.assertEqual(k("nd_k_ratio", Posture(icbms=True, pgm=True)), 2)
 
     def test_redundancy(self):
-        r = self.model.number("nd_redundancy", Posture(stockpile=30, satellite_communications=True, mainframe=False))
+        # Survivability 0 and reliability 50 add nothing: the spec's 6.
+        r = self.model.number("nd_redundancy", Posture(stockpile=30, satellite_communications=True, mainframe=False,
+                                                       survivability=0, reliability=50))
         self.assertTrue(math.isclose(r, 6))
 
     def test_mirror_matches_script(self):
@@ -213,8 +215,12 @@ class TestCounterforceScript(unittest.TestCase):
 
 
 class TestDecapitationScript(unittest.TestCase):
-    """Chance = max(0, (L - R)/(L + R)) for L warheads on the capital against
-    redundancy R (rework spec §6.3)."""
+    """Chance = max(0, 1 - (R/L)^2) for L warheads on the capital against
+    redundancy R (rework spec §6.3; the curve and R's command terms, owner,
+    2026-11-19)."""
+
+    # Survivability 0 and reliability 50: R is the spec's warheads-and-technology figure.
+    BASE = Posture(survivability=0, reliability=50)
 
     @classmethod
     def setUpClass(cls):
@@ -224,25 +230,93 @@ class TestDecapitationScript(unittest.TestCase):
         attacker = Posture(salvo_capital_landed=landed, salvo_victim_r=redundancy)
         return self.model.number("nd_decapitation_chance_value", Posture(enemy=attacker))
 
+    def r(self, value="nd_redundancy", **fields):
+        return self.model.number(value, replace(self.BASE, **fields))
+
     def test_chance_matches_mirror(self):
-        for landed in (0, 1, 2, 5, 9):
-            for redundancy in (1, 1.3, 3.5, 6):
-                self.assertTrue(math.isclose(self.chance(landed, redundancy), decapitation_chance(landed, redundancy),
-                                             abs_tol=1e-9), (landed, redundancy))
+        for landed in (0, 1, 2, 5, 9, 25):
+            for r in (1, 1.3, 3.5, 6, 21.8):
+                self.assertTrue(math.isclose(self.chance(landed, r), decapitation_chance(landed, r),
+                                             abs_tol=1e-9), (landed, r))
+
+    def test_nothing_until_landed_exceeds_redundancy(self):
+        # Owner call 7, kept: one warhead can't decapitate a large arsenal.
+        self.assertEqual(self.chance(0, 1), 0)
+        self.assertEqual(self.chance(6, 6), 0)
+        self.assertEqual(self.chance(5, 6), 0)
+        self.assertGreater(self.chance(7, 6), 0)
+
+    def test_full_salvo_on_an_ai_sized_arsenal(self):
+        # Twenty warheads and both technologies, nothing else: 94% from 25.
+        r = self.r(stockpile=20, satellite_communications=True, mainframe=True)
+        self.assertTrue(math.isclose(r, 6))
+        self.assertTrue(math.isclose(self.chance(25, r), (1 - (6 / 25) ** 2) * 100))
 
     def test_thirty_warhead_power_needs_seven(self):
-        r = self.model.number("nd_redundancy", Posture(stockpile=30, satellite_communications=True, mainframe=False))
+        r = self.r(stockpile=30, satellite_communications=True, mainframe=False)
         self.assertEqual(self.chance(6, r), 0)
         self.assertGreater(self.chance(7, r), 0)
 
-    def test_three_warhead_state_faces_21_from_two(self):
-        r = self.model.number("nd_redundancy", Posture(stockpile=3, satellite_communications=False, mainframe=False))
+    def test_three_warhead_state_faces_58_from_two(self):
+        r = self.r(stockpile=3, satellite_communications=False, mainframe=False)
         self.assertTrue(math.isclose(r, 1.3))
-        self.assertTrue(math.isclose(self.chance(2, r), 0.7 / 3.3 * 100))
+        self.assertTrue(math.isclose(self.chance(2, r), (1 - 0.65 ** 2) * 100))
+
+    def test_command_terms(self):
+        bare = dict(stockpile=0, satellite_communications=False, mainframe=False)
+        self.assertTrue(math.isclose(self.r(**bare), 1))
+        # Survivability / 20: +4 at the ceiling of 80.
+        self.assertTrue(math.isclose(self.r(**bare, survivability=80), 5))
+        # A Nuclear Command Center: +2 a staffed level, at most +6.
+        self.assertTrue(math.isclose(self.r(**bare, command_center=1), 3))
+        self.assertTrue(math.isclose(self.r(**bare, command_center=3), 7))
+        self.assertTrue(math.isclose(self.r(**bare, command_center=5), 7))
+        # (Reliability - 50) / 10, either way, and never below 1.
+        self.assertTrue(math.isclose(self.r(**bare, reliability=98), 5.8))
+        self.assertTrue(math.isclose(self.r(**dict(bare, stockpile=40), reliability=30), 3))
+        self.assertTrue(math.isclose(self.r(**bare, reliability=5), 1))
+
+    def test_redundancy_matches_mirror(self):
+        for fields in (dict(stockpile=20, survivability=50, reliability=72),
+                       dict(stockpile=5, survivability=40, reliability=62, mainframe=False),
+                       dict(stockpile=50, survivability=80, reliability=98, command_center=3),
+                       dict(stockpile=0, satellite_communications=False, mainframe=False, reliability=5)):
+            self.assertTrue(math.isclose(self.r(**fields), redundancy(**fields)), fields)
 
     def test_believed_redundancy_reads_the_estimate(self):
-        p = Posture(stockpile=30, believed_stockpile=10, satellite_communications=False, mainframe=False)
-        self.assertTrue(math.isclose(self.model.number("nd_redundancy_believed", p), 2))
+        p = dict(stockpile=30, believed_stockpile=10, satellite_communications=False, mainframe=False)
+        self.assertTrue(math.isclose(self.r("nd_redundancy_believed", **p), 2))
+        # The world sees survivability and a Command Center, not reliability.
+        seen = dict(p, survivability=40, command_center=1, reliability=90)
+        self.assertTrue(math.isclose(self.r("nd_redundancy_believed", **seen), 6))
+        self.assertTrue(math.isclose(self.r("nd_redundancy_believed", **seen),
+                                     redundancy(10, False, False, 40, 1, reliability=None)))
+
+    def test_text_gives_the_scripts_figures(self):
+        # Command Redundancy's concept and the tooltips that name its terms
+        # (owner, 2026-11-19) state the figures the script values use.
+        values = squash(strip_comments(read(ROOT / "common/script_values/nuclear_deterrence_values.txt")))
+        colony = squash(strip_comments(read(ROOT / "common/script_values/sr_colony_module_values.txt")))
+        self.assertIn("value = nd_stockpile divide = 10 add = 1 add = nd_redundancy_command", values)
+        self.assertIn("value = var:nd_reliability subtract = 50 divide = 10", values)
+        self.assertIn("value = nd_survivability_or_zero divide = 20", values)
+        self.assertIn("sr_mod_bunker_redundancy_per_level = { value = 2 }", colony)
+        self.assertIn("sr_mod_bunker_redundancy_max = { value = 6 }", colony)
+        concept = loc_value("concept_command_redundancy_desc")
+        for words in ("It is 1, and:", "Each ten warheads the country holds: #v +1#!",
+                      "[GetTechnology('satellite_communications').GetName]: #v +2#!",
+                      "[GetTechnology('mainframe_computers').GetName]: #v +1#!", "Each 20 survivability: #v +1#!",
+                      "#v +2#!, at most #v +6#!", "#v +1#! for each 10 above 50, #v −1#! for each 10 below",
+                      "never below 1", "twice the redundancy gives three in four",
+                      "25 warheads against a redundancy of 6 give 94%"):
+            self.assertIn(words, concept)
+        self.assertEqual(round(decapitation_chance(50, 25)), 75)
+        self.assertEqual(round(decapitation_chance(25, 6)), 94)
+        self.assertIn("Each 20 adds #G +1#! [concept_command_redundancy]", loc_value("nd_w_survivability_tt"))
+        self.assertIn("#G +1#! for each 10 above 50, #R −1#! for each 10 below", loc_value("nd_w_reliability_tt"))
+        for key in ("sr_mod_queue_bunker_tt", "je_space_race_widget_mod_bunker_tt"):
+            self.assertIn("#v +2#! [concept_command_redundancy], at most #v +6#!", loc_value(key), key)
+        self.assertIn("three in four when twice as many land", loc_value("nd_w_strike_mission_3_tt"))
 
 
 class TestSalvoScale(unittest.TestCase):
@@ -312,10 +386,13 @@ class TestAiSalvo(unittest.TestCase):
         return self.model.number("nd_ai_salvo_mission_value", Posture(**attacker))
 
     def test_mission_rule(self):
-        # A large, well-connected enemy under Central Authorization: R = 6.
-        hard = Posture(authority=1, believed_stockpile=30, satellite_communications=True, mainframe=False)
+        # A large, well-connected enemy under Central Authorization: R = 6
+        # (survivability 0, so the command adds only its technology).
+        hard = Posture(authority=1, believed_stockpile=30, satellite_communications=True, mainframe=False,
+                       survivability=0)
         # A small one: R = 1.3.
-        small = Posture(authority=1, believed_stockpile=3, satellite_communications=False, mainframe=False)
+        small = Posture(authority=1, believed_stockpile=3, satellite_communications=False, mainframe=False,
+                        survivability=0)
         delegated = replace(hard, authority=2)
         # Existential deterrence, an enemy it cannot decapitate: the single strike.
         self.assertEqual(self.mission(doctrine=2, stockpile=9, enemy=hard), 1)
@@ -359,7 +436,8 @@ class TestAiSalvo(unittest.TestCase):
         self.assertEqual(size("nd_ai_salvo_size_value", Posture(doctrine=5, stockpile=6, icbms=True, pgm=True,
                                                                  enemy=enemy)), 4)
         # Leadership: ceil(2R), here 2 x 1.3.
-        small = Posture(authority=1, believed_stockpile=3, satellite_communications=False, mainframe=False)
+        small = Posture(authority=1, believed_stockpile=3, satellite_communications=False, mainframe=False,
+                        survivability=0)
         self.assertEqual(size("nd_ai_salvo_size_value", Posture(stockpile=9, capital_hit_share=0.9, enemy=small)), 3)
         # Enough to land 2R on the capital (final review): 2.6 / 0.4 is 6.5,
         # so 7, where ceil(2R) alone would land 1.2, under R.
