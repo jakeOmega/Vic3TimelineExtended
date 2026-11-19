@@ -826,6 +826,54 @@ matched by pop id (`runs/explore4/dump_A.csv`, `dump_B.csv`).
   faster. Halving the pops would buy a few percent at most, at the price of
   changing who a building may hire.
 
+## The USA of 1977, 2026-11-19: 1.15.1
+
+The owner's game as the United States, which had spread through the New
+World with heavy immigration, ran far slower than the 1931 bench. Their own
+`dedicated_server.log` files (no harness attached) give the day at about 2 s
+through 1974, 3.5–4 s from April 1975, and 8–10 s from 7 April 1976, a step
+that shows in every frame type at once: the sub-ticks (hours 6, 12, 18) went
+from about 0.15 s to about 1 s each and an ordinary day's hour 0 from 1 s to
+4–5 s. Their save of 18 May 1977 holds 183 countries, 819 states and 153,538
+pops (37,746 of them under 100 people); the United States owns 169 states and
+66,208 pops holding 610 million people. That is 1.7 times the 1931 bench's
+pops, with fewer countries. The harness on the save read the owner's figure:
+8.1 s a day over its first 27 days. Data, scripts and the variant:
+`/mnt/d/vic3te-data/perf-2026-11-19/` (`owner_logs/`, `scripts/owner_wall.py`,
+`owner_frames.py`, `framecmp.py`, `sumw.py`, `variants/rsfix/`); sessions
+`20261119T090040Z` (S1, the save as it is) and `20261119T092916Z` (S2, with
+the fix below).
+
+### Resettlement: one tick of 32 s a month
+
+The owner runs 41 Settlement Authorities, each moving about 39,000 people a
+month from the largest US states to South America. All of them walk in the
+United States' monthly country pulse, inside one tick: 28 s of wall time in
+the owner's own log on 12 March 1976 and 32 s in S1 on 5 June 1977 (the flat
+script profiler on). The GUI profiler put the merged monthly country pulse at
+58.8 s profiled over 20 days, 56.8 s of it `resettlement_on_actions.txt:14`.
+
+Each Authority ran `ordered_scope_state` over its owner's states twice (drive
+states, then the rest). The engine evaluates `limit` and `order_by` for every
+candidate first, and both read `resettlement_state_eligible_pop`, a sum over
+every pop of the state; the take's budget read it again, and the take walked
+every pop of every source even after the destination's capacity was used,
+which was the first source in nearly every case. So every Authority walked
+all 66,000 pops four or five times: 41 × 5 × 66,000, about 13 million pop
+tests a month in one tick.
+
+The fix counts each source's eligible population once a month per program
+(`rs_elig`) and counts again only after a take from it, the one step of the
+pulse that changes a source's pops, and it stops visiting sources once the
+capacity is used. In S2, with the fix loaded as an add-on mod over the same
+save, the pulse of 5 June gave exactly what S1's did (83 `TE_RESETTLEMENT`
+lines of 83 the same: the same sources, the same destinations, 1,569,901
+people moved), the tick took 15 s against 32 s, and the next month's capture
+put the whole monthly country pulse at 2.7 s profiled over 30 days against
+58.8 over 20. That is about 17 s a month, roughly 0.55 s of a 7–8 s day, and
+it also keeps the harness's `advance` working: a window frozen for more than
+10 s reads as `game_gone`, and the old pulse froze it for 30.
+
 ## Measurements, 2026-10-03: 2072
 
 The same save, 7 Nov 2072 → Jan 2073, measured with the flat dump.

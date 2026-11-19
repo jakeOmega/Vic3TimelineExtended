@@ -596,7 +596,9 @@ class TransferTests(unittest.TestCase):
         # Spec §2: at most $CAP$ of a source's eligible population a month,
         # however many Authorities walk it.
         body = squash(block(read(EFFECTS), "resettlement_take_from_source"))
-        self.assertIn("set_local_variable = { name = rs_budget value = { value = resettlement_state_eligible_pop "
+        # var:rs_elig is the state's eligible population, counted by the walk
+        # (test_each_source_is_counted_once_until_a_take_changes_it).
+        self.assertIn("set_local_variable = { name = rs_budget value = { value = var:rs_elig "
                       "multiply = $CAP$ } }", body)
         self.assertIn("if = { limit = { has_variable = rs_recruits } "
                       "change_local_variable = { name = rs_budget subtract = var:rs_recruits } }", body)
@@ -607,6 +609,32 @@ class TransferTests(unittest.TestCase):
                       "set_local_variable = { name = rs_take value = local_var:rs_budget_left } }", body)
         # The budget limit comes before the minimum-take test and the move.
         self.assertLess(body.index("local_var:rs_budget_left }"), body.index("local_var:rs_take >= resettlement_min_take"))
+
+    def test_each_source_is_counted_once_until_a_take_changes_it(self):
+        # Performance (late_game_performance.md, the USA of 1977): a source's
+        # eligible population is counted into var:rs_elig once a month for a
+        # program, the count is dropped after a take from it (the only step
+        # that changes a source's pops), and a destination of another program
+        # drops every count. Exact only while all three hold.
+        walk = squash(block(read(EFFECTS), "resettlement_run_destination"))
+        self.assertIn("limit = { NOT = { var:rs_elig_code = scope:rs_destination.var:rs_programme } } "
+                      "every_scope_state = { limit = { has_variable = rs_elig } remove_variable = rs_elig } "
+                      "set_variable = { name = rs_elig_code value = scope:rs_destination.var:rs_programme }", walk)
+        self.assertIn("NOT = { has_variable = rs_elig } } "
+                      "set_variable = { name = rs_elig value = resettlement_state_eligible_pop }", walk)
+        self.assertEqual(walk.count("order_by = var:rs_elig"), 2)
+        self.assertEqual(walk.count("resettlement_valid_source_counted = yes"), 2)
+        # past the destination's capacity no source is walked
+        self.assertEqual(walk.count("if = { limit = { scope:rs_destination.var:rs_remaining >= resettlement_min_take } "
+                                    "resettlement_take_from_source = {"), 2)
+        take = squash(block(read(EFFECTS), "resettlement_take_from_source"))
+        consequences = take.index("resettlement_source_consequences = yes")
+        self.assertGreater(take.index("remove_variable = rs_elig"), consequences)
+        monthly = squash(block(read(EFFECTS), "resettlement_country_monthly"))
+        self.assertLess(monthly.index("resettlement_run_destination = yes"),
+                        monthly.index("every_scope_state = { limit = { has_variable = rs_elig } remove_variable = rs_elig }"))
+        trig = squash(block(read(TRIGGERS), "resettlement_valid_source_counted"))
+        self.assertLess(trig.index("has_variable = rs_elig"), trig.index("var:rs_elig >= resettlement_min_take"))
 
     def test_deaths_in_steps_of_one_hundred_for_each_coercive_programme(self):
         body = squash(block(read(EFFECTS), "resettlement_source_consequences"))
