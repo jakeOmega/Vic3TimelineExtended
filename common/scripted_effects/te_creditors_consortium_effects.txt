@@ -281,11 +281,13 @@ te_cred_apply_rescue = {
 		# The answer is the DEBTOR's (te_cc.3 reads it through scope:te_cc_debtor),
 		# so two members answering the same leader at once can't overwrite each other.
 		set_variable = { name = te_cc_answer value = 1 days = 120 }
+		# Before te_cc.3, which runs inside this effect: after it, ROOT printed
+		# null here (2026-11-19). THIS is the debtor.
+		debug_log = "TE_CC rescued debtor=[THIS.GetCountry.GetNameNoFormatting] creditor=[SCOPE.sCountry('te_cc_creditor').GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
 		scope:te_cc_creditor = {
 			trigger_event = { id = te_monetary_internal.2 days = 1 }
 			trigger_event = { id = te_cc.3 }
 		}
-		debug_log = "TE_CC rescued debtor=[ROOT.GetCountry.GetNameNoFormatting] creditor=[SCOPE.sCountry('te_cc_creditor').GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
 	}
 }
 
@@ -310,11 +312,13 @@ te_cred_refuse_terms = {
 	}
 	hidden_effect = {
 		set_variable = { name = te_cc_answer value = 2 days = 120 }
+		# Before te_cc.3, which runs inside this effect: after it, ROOT printed
+		# null here (2026-11-19). THIS is the debtor.
+		debug_log = "TE_CC terms_refused debtor=[THIS.GetCountry.GetNameNoFormatting] creditor=[SCOPE.sCountry('te_cc_creditor').GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
 		scope:te_cc_creditor = {
 			trigger_event = { id = te_monetary_internal.2 days = 1 }
 			trigger_event = { id = te_cc.3 }
 		}
-		debug_log = "TE_CC terms_refused debtor=[ROOT.GetCountry.GetNameNoFormatting] creditor=[SCOPE.sCountry('te_cc_creditor').GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
 	}
 }
 
