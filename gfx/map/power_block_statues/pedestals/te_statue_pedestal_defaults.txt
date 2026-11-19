@@ -1,0 +1,50 @@
+﻿# ============================================================================
+# POWER BLOC STATUES: the mod's identities as defaults for vanilla's pedestals
+# ============================================================================
+# Each vanilla statue pedestal lists the identities it is a default for
+# (default_choice_for_identities, which the AI's random statue draws from:
+# vanilla's pedestals.md). Vanilla's lists name only its six identities, so the
+# engine logged "Identity '<id>' is not default for any pedestal!" at load for
+# each of the mod's three (issue #1916). Each mod identity takes the pedestals of
+# its nearest vanilla identity (owner, 2026-11-19):
+#   identity_creditors_consortium  -> identity_trade_league
+#   identity_research_commons      -> identity_cultural
+#   identity_diplomatic            -> identity_military_treaty_organization
+#
+# The INJECTs list only the mod's identities, on the assumption that an
+# injected list adds to vanilla's, as an INJECT into a terrain's textures list
+# does (scripting_best_practices.md, State pictures). Unread for this
+# database: the 1.12 digest's INJECT list names five gfx/map databases but not
+# this one. docs/testing/power-bloc-identities-playtest.md, the statue row,
+# says what the next launch's log shows for each outcome.
+# test_power_bloc_statue_defaults.py keeps every mod identity on both lists.
+
+INJECT:pedestal_01 = {
+	default_choice_for_identities = {
+		identity_creditors_consortium
+	}
+}
+
+INJECT:pedestal_02 = {
+	default_choice_for_identities = {
+		identity_creditors_consortium
+	}
+}
+
+INJECT:pedestal_06 = {
+	default_choice_for_identities = {
+		identity_research_commons
+	}
+}
+
+INJECT:pedestal_03 = {
+	default_choice_for_identities = {
+		identity_diplomatic
+	}
+}
+
+INJECT:pedestal_04 = {
+	default_choice_for_identities = {
+		identity_diplomatic
+	}
+}

@@ -94,3 +94,19 @@ never paid. It now reads the inviter (`scope:actor`) in `ai_power_bloc_identity_
 |---|---|---|---|
 | 1 | Invite an AI country into a Diplomatic Framework bloc you lead | The acceptance breakdown has a "Diplomatic Relations" line of 10 plus its relations with you: about 60 at relations 50, −40 at −50 | No line: the identity test fails (the bloc is read in the wrong scope). A line of 10 alone: `"relations(scope:actor)"` reads nothing as a value there; use `scope:actor.relations:root` |
 | 2 | Propose the join treaty to the same country | The treaty's acceptance breakdown has the same "Diplomatic Relations" line | As above, with `scope:target_country` |
+
+## Statue defaults for the mod's three identities (2026-11-19, #1916)
+
+Vanilla's statue pieces list the identities each is a default for, which the AI's random statue draws from, and name
+only vanilla's six. Each mod identity now takes the pieces of its nearest vanilla identity (owner): the Creditors'
+Consortium the Trade League's (globe and octopus heroes, pedestals 1 and 2), the Research Commons the Cultural
+identity's (armillary, dancing lady and globe, pedestal 6), Diplomatic Framework the Military Treaty Organization's
+(pointing man and prancing horse, pedestals 3 and 4). The two files under `gfx/map/power_block_statues/` INJECT the
+mod identities into those pieces' lists. Whether this database takes `INJECT`, and whether an injected list adds to
+vanilla's, is unread: the 1.12 digest's list names five `gfx/map` databases, not this one. The engine's own load lines
+answer it at the next launch, and the log triage reports them (their registry entries were removed).
+
+| # | Check | Expect | If not |
+|---|---|---|---|
+| 1 | The first launch's log (`log_triage.py`, Untagged) | None of the six `Identity 'identity_creditors_consortium' / 'identity_research_commons' / 'identity_diplomatic' is not default for any hero!` (and pedestal) lines, and no line naming `te_statue_hero_defaults.txt` or `te_statue_pedestal_defaults.txt` | The six lines and a line naming a file: the database takes no `INJECT`; add mod pieces in files of their own that reuse vanilla's entities (issue #1916, option 2). The six lines gone but `Identity 'identity_trade_league'` (or another vanilla identity) now logged: the INJECT replaced vanilla's list; restate vanilla's identities in each INJECT |
+| 2 | An AI bloc of each mod identity founded in play: open its statue (power bloc panel) | A statue drawn from its pieces above, e.g. a globe or an octopus on pedestal 1 or 2 for a Consortium | Another piece: the AI draws from more than the default list |

@@ -51,11 +51,14 @@ jobs:
           # gfx/ is ~1.7 GB of textures that nothing in this job reads; the
           # dds-dimensions job below fetches the ones it scans. gfx/models/
           # holds only generated text (the state pictures' overlay copies,
-          # whose staleness test_state_pictures.py checks).
+          # whose staleness test_state_pictures.py checks), and gfx/map/ only
+          # script (the fleet entities and the statue defaults that
+          # test_power_bloc_statue_defaults.py reads).
           sparse-checkout: |
             /*
             !/gfx/
             /gfx/models/
+            /gfx/map/
           sparse-checkout-cone-mode: false
           filter: blob:none
 

@@ -260,15 +260,3 @@ Duplicated key free_construction will not be created from file: common/game_rule
 ```
 
 One line per launch, and it is the copy working: `00_a_te_free_construction.txt` sorts before vanilla's file and `game_rules` keeps the first bare definition (read 2026-11-13, #1768). The signature names vanilla's file on purpose: a line naming the mod's file means the mod's copy lost, and that one must not be filtered.
-
-### `power_bloc_statue_hero_type.cpp:141` — power bloc statues: the mod's two identities are no piece's default
-- source: `power_bloc_statue_hero_type.cpp:141`
-- source: `power_bloc_statue_pedestal_type.cpp:62`
-- tracked: `docs/audits/open_issues.md#l33-power-bloc-statues-the-mods-two-identities-are-no-pieces-default`
-
-```
-Identity 'identity_creditors_consortium' is not default for any
-Identity 'identity_research_commons' is not default for any
-```
-
-Four lines per launch, at load: each of the two identities #1865 added, once for heroes and once for pedestals, because vanilla's statue pieces name only vanilla's six identities as their defaults (read 2026-11-19, the first 1.15.2 session). The signatures name the two identities, so a vanilla identity that loses its last piece still shows. Issue #1916 holds the fix options.
