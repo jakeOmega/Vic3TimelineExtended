@@ -5,8 +5,10 @@
 # regime_change_min_progressiveness_difference = a regime change imposes the holder's law in this group only if its progressiveness differs from the target's law by at least this much. If not specified or 0, regime change does not impose laws in this group
 #
 # 1.15.2 replaced affected_by_regime_change = yes with this field, and its define
-# WAR_GOAL_REGIME_CHANGE_MIN_LAW_PROGRESSIVENESS_DIFFERENCE (50) with the value, so
-# the groups that had the flag carry 50.
+# WAR_GOAL_REGIME_CHANGE_MIN_LAW_PROGRESSIVENESS_DIFFERENCE (50) with the value.
+# The mod follows vanilla's values by category: its power structure and human rights
+# groups carry 50, as vanilla's power structure groups do, and its economy groups 25,
+# as the economic system and trade policy do (test_regime_change_thresholds.py).
 
 lawgroup_privacy_rights = {
 	law_group_category = human_rights
@@ -30,19 +32,19 @@ lawgroup_rules_of_war = {
 lawgroup_intellectual_property = {
 	law_group_category = economy
 	ideological_opinion_impact = 0.25
-	regime_change_min_progressiveness_difference = 50
+	regime_change_min_progressiveness_difference = 25
 }
 
 lawgroup_monetary_policy = {
 	law_group_category = economy
 	ideological_opinion_impact = 0
-	regime_change_min_progressiveness_difference = 50
+	regime_change_min_progressiveness_difference = 25
 }
 
 lawgroup_right_to_information = {
 	law_group_category = economy
 	ideological_opinion_impact = 0.25
-	regime_change_min_progressiveness_difference = 50
+	regime_change_min_progressiveness_difference = 25
 }
 
 lawgroup_minority_rights = {
@@ -101,13 +103,13 @@ lawgroup_electoral_finance = {
 lawgroup_financial_regulation = {
 	law_group_category = economy
 	ideological_opinion_impact = 0.25
-	regime_change_min_progressiveness_difference = 50
+	regime_change_min_progressiveness_difference = 25
 }
 
 lawgroup_genetic_rights = {
 	law_group_category = economy
 	ideological_opinion_impact = 0.25
-	regime_change_min_progressiveness_difference = 50
+	regime_change_min_progressiveness_difference = 25
 }
 
 lawgroup_internet_governance = {
@@ -139,7 +141,7 @@ lawgroup_language_policy = {
 lawgroup_antitrust = {
 	law_group_category = economy
 	ideological_opinion_impact = 0.25
-	regime_change_min_progressiveness_difference = 50
+	regime_change_min_progressiveness_difference = 25
 }
 
 

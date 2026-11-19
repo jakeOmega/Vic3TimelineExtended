@@ -17,9 +17,9 @@ frigate's modules.
 
 | Finding | Evidence | Done |
 |---|---|---|
-| Vanilla dropped the law group field `affected_by_regime_change` and the define `NDiplomacy\|WAR_GOAL_REGIME_CHANGE_MIN_LAW_PROGRESSIVENESS_DIFFERENCE` (50). Each group now carries `regime_change_min_progressiveness_difference`: a regime change imposes the holder's law in that group only when the two laws' progressiveness differs by at least that much, and never in a group without it. The mod set the old field on 19 groups (Judiciary, Monetary Policy, Privacy Rights, Bodily Autonomy, Frontier AI Control and 14 more) | `vanilla_patch_diff.py parsed --mod-uses`: the one removed field the mod still set; `targets`: the removed define | All 19 carry `regime_change_min_progressiveness_difference = 50`, the old define's value, so each group is imposed as before. `test_judiciary.py` checks the new field |
+| Vanilla dropped the law group field `affected_by_regime_change` and the define `NDiplomacy\|WAR_GOAL_REGIME_CHANGE_MIN_LAW_PROGRESSIVENESS_DIFFERENCE` (50). Each group now carries `regime_change_min_progressiveness_difference`: a regime change imposes the holder's law in that group only when the two laws' progressiveness differs by at least that much, and never in a group without it. The mod set the old field on 19 groups (Judiciary, Monetary Policy, Privacy Rights, Bodily Autonomy, Frontier AI Control and 14 more) | `vanilla_patch_diff.py parsed --mod-uses`: the one removed field the mod still set; `targets`: the removed define | The 13 power structure and human rights groups carry `regime_change_min_progressiveness_difference = 50`, the old define's value; the six economy groups 25, vanilla's economy value (owner call 3). `test_regime_change_thresholds.py` checks both |
 | `REPLACE:law_official_nationality` restated 1.15.1's primary-culture acceptance of 50; 1.15.2 gives 100, as every other citizenship law has | Target sweep | Ported |
-| `REPLACE:mobilization_option_first_aid` and `_field_hospitals` held vanilla's recovery, 0.20 and 0.40; vanilla halved both | Target sweep | Ported: 0.10 and 0.20. Medevac Helicopters, the mod's third tier, stays at 0.80 (owner call 1) |
+| `REPLACE:mobilization_option_first_aid` and `_field_hospitals` held vanilla's recovery, 0.20 and 0.40; vanilla halved both | Target sweep | Ported: 0.10 and 0.20. Medevac Helicopters, the mod's third tier, halved to 0.40 with the mod's other sources (owner call 1) |
 | `REPLACE:company_basic_electrics` and `REPLACE:company_construction_power_bloc` restated their `possible` in `ai_will_do`. 1.15.2's AI picks a company with no `ai_construction_targets` only once it can form it (`companies.md`), and vanilla's 26 such companies say `always = yes` | Target sweep | Ported. With `possible` needing five levels, the mod's three-level `ai_will_do` never added anything |
 | `REPLACE:ideology_vanguardist` (Bolsheviks journal entry opens it) and `REPLACE:ideology_egalitarian_modern` (caste, Edo and education stances added, labor rights dropped) | Target sweep: both generator-owned | `apply_ideologies.py` regenerated them. `heir_ed_country_allows_ideology_vanguardist`, a copy of Vanguardist's `country_trigger` that keeps an heir's education roll off an ideology the country can't have, takes the Bolsheviks branch (`test_heir_education_ideologies.py`) |
 | Vanilla's eleven parties gained a +1000 join weight for the dominant party's groups under the new Single-Party State amendments | Target sweep: the eleven party `INJECT`s | `gen_party_join_weights.py` restated them from 1.15.2 |
@@ -100,23 +100,55 @@ bloc name or principle file changed; the subject types lost only `breaks_if_subj
 ship of the line, monitor, frigate and early troop ship, none of them a mod analogue. The maps, regions and every
 other § 4 generator came out unchanged.
 
-## Owner calls this leaves open (none applied)
+## Owner calls
 
-1. **The mod's recovery rates.** Recovery now also demoralizes, and vanilla cut its own sources (see Engine
-   surface). The mod's were sized on the old meaning: Medevac Helicopters 0.80 (its ladder was First Aid 0.20,
-   Field Hospitals 0.40, Medevac 0.80; halving it to 0.40 keeps the ladder), Bioenhanced Soldiers 0.5, Humanitarian
-   Regulations 0.1, Fortified Bastion 0.05 and Impregnable Fortress 0.1, and the Healthcare principles' 0.05 and
-   Food Standardization V's 0.1. None was changed.
-2. **The mod's parties under Single-Party State.** 1.15.2's dominant-party event offers vanilla's eleven parties
-   only, the amendments and join weights exist for them only, and the event can't be `INJECT`ed. With only the
-   Technocratic, Green or Populist Party in government it may show no option at all. #1908 laid out three ways
-   to close it; the first was built after this bump: a twin event, `te_single_party_state.1`
-   (`events/te_single_party_state_events.txt`), offers the mod's parties when the enactment starts, so a choice
-   made there keeps vanilla's event closed, and leaves the choice to vanilla's event in a government that also
-   holds a vanilla party. Each mod party has vanilla's amendment, join weight term and availability gate.
-3. **Regime change thresholds for the mod's economy groups.** Vanilla imposes its economic system and trade policy
-   at a 25 difference and labour associations at 75; the mod's six economy groups (Intellectual Property,
-   Monetary Policy, Right to Information, Financial Regulation, Genetic Rights, Antitrust) keep the old 50.
+1. **The mod's recovery rates: halved, as vanilla's were** (owner, 2026-11-19, in the follow-up to #1909).
+   Recovery now also demoralizes, and vanilla cut its medical and battle condition sources (see Engine surface),
+   halving each and rounding up to its 5% step (0.15 to 0.10, 0.25 to 0.15). Its 0.05 sources stayed, as did the
+   0.1 of a personality trait and a commander order. The mod's sources are all of the first kind:
+
+   | Source | 1.15.1 | Now |
+   |---|---|---|
+   | Medevac Helicopters (mobilization option) | 0.80 | 0.40, keeping the 1 : 2 : 4 ladder with First Aid and Field Hospitals (`test_recovery_rates.py`) |
+   | Bioenhanced Soldiers (era 12 technology) | 0.5 | 0.25 |
+   | Humanitarian Regulations (Rules of War law) | 0.1 | 0.05 |
+   | Impregnable Fortress (battle condition) | 0.1 | 0.05 |
+   | Food Standardization V (power bloc principle) | 0.1 | 0.05 |
+   | Fortified Bastion (battle condition), Healthcare I to V (principle) | 0.05 | 0.05: half falls between the tooltip's whole percents, and vanilla kept its own 0.05s |
+
+   Fortified Bastion and Impregnable Fortress now share a recovery figure; the second still has the larger
+   defense, morale loss, kill rate and width figures. The mod's kill rates are unchanged: vanilla cut only Chemical
+   Weapons', which the mod has no copy of.
+2. **The mod's parties under Single-Party State: a twin event** (#1908, its first option). 1.15.2's dominant-party
+   event offers vanilla's eleven parties only, the amendments and join weights exist for them only, and the event
+   can't be `INJECT`ed. With only the Technocratic, Green or Populist Party in government it may show no option at
+   all. `te_single_party_state.1` (`events/te_single_party_state_events.txt`) offers the mod's parties, as a popup
+   when the enactment starts and monthly while it runs, so a choice made in it keeps vanilla's event closed. In a
+   government that also holds a vanilla party it can leave the choice to vanilla's event, and a checkpoint that
+   gives vanilla's event a vanilla party to offer closes it, so the two are never both answered. Each mod party has
+   vanilla's amendment, join weight term and availability gate.
+3. **Regime change thresholds for the mod's economy groups: 25, vanilla's economy value** (owner, 2026-11-19).
+   1.15.2 made vanilla's economic system and trade policy carried at a 25 difference (neither was carried before)
+   and labour associations at 75. The mod's six economy groups (Intellectual Property, Monetary Policy, Right to
+   Information, Financial Regulation, Genetic Rights, Antitrust) had the old 50, which their laws' narrow spread of
+   progressiveness almost never reached: 3 of their 77 pairs of laws were 50 apart, so regime change in effect never
+   imposed them. At 25, 30 pairs are:
+
+   | Group | Progressiveness of its laws | Pairs at 50 | Pairs at 25 |
+   |---|---|---|---|
+   | Intellectual Property | 40 to 80 | 0 of 15 | 6 |
+   | Monetary Policy | 0 to 35 | 0 of 10 | 3 |
+   | Right to Information | 0 to 50 | 1 of 6 | 4 |
+   | Financial Regulation | 0 to 50 | 1 of 21 | 10 |
+   | Genetic Rights | 0 to 25 | 0 of 10 | 2 |
+   | Antitrust | 0 to 50 | 1 of 15 | 5 |
+
+   Monetary Policy's three: Commodity Money against Decentralized Cryptocurrency or Digital Currency, and the Gold
+   Standard against Digital Currency. None of the six groups' laws has an `on_activate`, and the monetary system
+   already handles a regime change off gold (`monetary_policy_design.md`, F6). `can_regime_change` is true when any of the target's
+   laws would change, so the Regime Change war goal and the power bloc action are open against more targets than
+   before. The mod's human rights groups keep 50: vanilla's one human rights group with a threshold, labour
+   associations, gets 75 for its own spread (Factory Councils at 125).
 
 ## In-game checks
 

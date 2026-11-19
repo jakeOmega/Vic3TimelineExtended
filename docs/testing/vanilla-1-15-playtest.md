@@ -537,8 +537,10 @@ unless a line names a save.
   `regime_change_min_progressiveness_difference` in `extra_law_groups.txt`, and none for `affected_by_regime_change`
   anywhere.
 - **Regime change carries the mod's law groups.** Win a Regime Change war (or a power bloc's forced regime change)
-  against a country whose Judiciary, Monetary Policy or Privacy Rights law sits 50 or more progressiveness from
-  yours: the target takes your law in that group, as on 1.15.1.
+  against a country whose Judiciary or Privacy Rights law sits 50 or more progressiveness from yours, and whose
+  Financial Regulation or Monetary Policy law sits 25 or more from yours (Unregulated Banking against Prudential
+  Narrow Banking; Commodity Money against Digital Currency): the target takes your law in each of those groups.
+  On Monetary Policy, a target taken off the Gold Standard loses its peg as by the law panel (record, owner call 3).
 - **Single-Party State with a mod party in government (#1908).** The mod's twin of `single_party_state.8`,
   `te_single_party_state.1` ("The Sole Legal Party"), opens as a window when the enactment starts, and is sent
   monthly while it runs if the government changes.
@@ -564,7 +566,8 @@ unless a line names a save.
 - **Companies.** An AI country with five levels of electrics industry forms Basic Electrics; a power bloc member
   with five levels of construction sector forms the bloc's construction company. Vanilla's flavored companies now
   need their home state incorporated: a country holding that state unincorporated can't found the company.
-- **First Aid, Field Hospitals, Medevac Helicopters** show 10%, 20% and 80% recovery (owner call 1 of the record).
+- **First Aid, Field Hospitals, Medevac Helicopters** show 10%, 20% and 40% recovery; Bioenhanced Soldiers 25%,
+  Humanitarian Regulations and Impregnable Fortress 5% (owner call 1 of the record).
 - **Official Nationality** (Russia): the primary culture's acceptance reads 100, as under the other citizenship
   laws.
 - **Merged panels.** A broken GUI merge logs nothing, so open each:

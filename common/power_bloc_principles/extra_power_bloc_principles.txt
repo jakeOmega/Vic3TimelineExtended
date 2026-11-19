@@ -726,7 +726,7 @@ principle_food_standardization_5 = {
 		state_food_security_add = 0.2
 		country_institution_cost_institution_health_system_mult = -0.1
 		country_institution_cost_institution_ministry_of_consumer_protection_mult = -0.5
-		unit_recovery_rate_add = 0.1
+		unit_recovery_rate_add = 0.05 # 0.1 until 1.15.2 halved vanilla's recovery sources
 	}
 
 	institution = institution_ministry_of_consumer_protection
