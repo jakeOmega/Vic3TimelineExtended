@@ -84,15 +84,36 @@ def plan(installed: str, version: str | None, out: str | os.PathLike | None, for
                           "from the last dotted number in the pinned path (`versions.engine_docs_source`)"
                           % (target, installed), out=str(target))
     if digests:
-        clone = Path(os.path.abspath(Path(digests).expanduser()))
-        if target == clone or clone in target.parents:
+        clone = Path(os.path.realpath(Path(digests).expanduser()))
+        real = Path(os.path.realpath(target))       # a link on the way may lead into the clone
+        if real == clone or clone in real.parents:
             raise DocsRefused("inside_digests", "%s is inside the Modding-Digests clone %s, which upstream rewrites "
                               "and the server auto-pulls: keep the dump outside it" % (target, clone),
                               out=str(target))
-    if os.path.lexists(target) and not force:
-        raise DocsRefused("out_exists", "%s is there already: pass --force to replace it with a new dump of %s"
-                          % (target, installed), out=str(target))
+    if os.path.lexists(target):
+        if not force:
+            raise DocsRefused("out_exists", "%s is there already: pass --force to replace it with a new dump of %s"
+                              % (target, installed), out=str(target))
+        _replaceable(target)
     return target
+
+
+def _replaceable(target: Path) -> None:
+    """Raise DocsRefused (`out_not_a_dump`) unless `target` is a plain folder holding nothing but the six logs:
+    `--force` replaces a dump, never a folder of something else (a version folder named without its `docs/`, say)."""
+    others = None
+    if target.is_symlink() or not target.is_dir():
+        others = ["(%s is not a plain folder)" % target.name]
+    else:
+        try:
+            others = sorted(entry.name for entry in os.scandir(target)
+                            if entry.name not in LOGS or not entry.is_file(follow_symlinks=False))
+        except OSError as e:
+            others = ["(it could not be listed: %s)" % e]
+    if others:
+        raise DocsRefused("out_not_a_dump", "--force replaces only a folder of the six logs, and %s holds %s: name "
+                          "the dump's own folder (…/<version>/docs)" % (target, ", ".join(others[:5])),
+                          out=str(target))
 
 
 def stats(folder: str | os.PathLike) -> dict[str, Stat | None]:
@@ -171,9 +192,11 @@ def install(staged: str | os.PathLike, out: str | os.PathLike, files: dict[str, 
     staged, out = Path(staged), Path(out)
     temp = out.with_name(".%s.part-%s" % (out.name, os.urandom(4).hex()))
     old = out.with_name(".%s.old-%s" % (out.name, os.urandom(4).hex()))
-    if os.path.lexists(out) and not force:
-        raise DocsRefused("out_exists", "%s appeared while the dump was taken: the copy is in %s; pass --force to "
-                          "replace it" % (out, staged), out=str(out), staged=str(staged))
+    if os.path.lexists(out):
+        if not force:
+            raise DocsRefused("out_exists", "%s appeared while the dump was taken: the copy is in %s; pass --force "
+                              "to replace it" % (out, staged), out=str(out), staged=str(staged))
+        _replaceable(out)
     try:
         out.parent.mkdir(parents=True, exist_ok=True)
         temp.mkdir()
@@ -189,9 +212,13 @@ def install(staged: str | os.PathLike, out: str | os.PathLike, files: dict[str, 
         raise
     except OSError as e:
         shutil.rmtree(temp, ignore_errors=True)
+        where = ""
         if os.path.lexists(old) and not os.path.lexists(out):
-            os.replace(old, out)
-        raise DocsRefused("copy_failed", "copying the dump to %s failed (%s): it is in %s" % (out, e, staged),
+            try:
+                os.replace(old, out)
+            except OSError as again:
+                where = "; the dump it was to replace could not be put back and is at %s (%s)" % (old, again)
+        raise DocsRefused("copy_failed", "copying the dump to %s failed (%s): it is in %s%s" % (out, e, staged, where),
                           out=str(out), staged=str(staged)) from e
     shutil.rmtree(old, ignore_errors=True)
 
@@ -211,7 +238,11 @@ def previous(root: str | os.PathLike, version: str, out: str | os.PathLike | Non
         docs = child / DOCS_FOLDER
         if out is not None and Path(os.path.abspath(docs)) == Path(os.path.abspath(out)):
             continue
-        if all((docs / name).is_file() for name in LOGS) and (best is None or _key(child.name) > best[0]):
+        try:
+            complete = all((docs / name).is_file() for name in LOGS)
+        except OSError:                             # unreadable: not a dump to diff against
+            continue
+        if complete and (best is None or _key(child.name) > best[0]):
             best = (_key(child.name), docs)
     return best[1] if best else None
 

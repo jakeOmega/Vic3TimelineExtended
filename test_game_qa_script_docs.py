@@ -5,14 +5,16 @@ The module's checks run on temp folders. The session runs against `test_game_qa_
 2026-11-19 (`fakes.FakeHelper._script_docs`). The refusals the issue names: a stale log, the mod's marker in
 `modifiers.log`, a version mismatch, an existing folder.
 """
+import argparse
 import json
 import os
 import tempfile
 import time
 import unittest
 from pathlib import Path
+from unittest import mock
 
-from game_qa import console, fakes, script_docs, server, session
+from game_qa import client, console, fakes, script_docs, server, session
 from game_qa.logtail import LogFollower
 from test_game_qa_session import PERMISSION, RESTORED, SNAP, SessionTestCase
 
@@ -47,12 +49,36 @@ class PlanTest(unittest.TestCase):
         self.assertIn("1.15.2", caught.exception.detail)
 
     def test_an_existing_folder_is_refused_unless_forced(self):
-        (self.root / "1.15.2" / "docs").mkdir(parents=True)
+        write_dump(self.root / "1.15.2" / "docs")
         with self.assertRaises(script_docs.DocsRefused) as caught:
             script_docs.plan("1.15.2", None, None, root=self.root)
         self.assertEqual(caught.exception.code, "out_exists")
         self.assertEqual(script_docs.plan("1.15.2", None, None, force=True, root=self.root),
                          self.root / "1.15.2" / "docs")
+
+    def test_force_replaces_only_a_folder_of_the_six_logs(self):
+        # The review's case (2026-11-19): `--out <root>/1.15.2 --force`, the `docs/` left off, named the folder that
+        # holds the owner's dump; it would have been deleted and six flat logs put in its place.
+        version = self.root / "1.15.2"
+        write_dump(version / "docs")
+        for out in (version, self.root / "other-1.15.2"):
+            if out.name.startswith("other"):
+                write_dump(out)
+                (out / "notes.txt").write_text("the owner's")
+            with self.assertRaises(script_docs.DocsRefused) as caught:
+                script_docs.plan("1.15.2", None, out, force=True)
+            self.assertEqual(caught.exception.code, "out_not_a_dump", out)
+        file_out = self.root / "file-1.15.2"
+        file_out.write_text("not a folder")
+        with self.assertRaises(script_docs.DocsRefused) as caught:
+            script_docs.plan("1.15.2", None, file_out, force=True)
+        self.assertEqual(caught.exception.code, "out_not_a_dump")
+        linked = self.root / "link-1.15.2"
+        linked.symlink_to(version / "docs", target_is_directory=True)
+        with self.assertRaises(script_docs.DocsRefused) as caught:
+            script_docs.plan("1.15.2", None, linked, force=True)
+        self.assertEqual(caught.exception.code, "out_not_a_dump")
+        self.assertTrue((version / "docs" / "effects.log").is_file())
 
     def test_an_out_folder_must_end_in_the_version(self):
         with self.assertRaises(script_docs.DocsRefused) as caught:
@@ -64,6 +90,15 @@ class PlanTest(unittest.TestCase):
         digests = self.root.parent / "Modding-Digests"
         with self.assertRaises(script_docs.DocsRefused) as caught:
             script_docs.plan("1.15.2", None, digests / "1.15.2" / "docs", digests=digests)
+        self.assertEqual(caught.exception.code, "inside_digests")
+
+    def test_an_out_folder_reached_through_a_link_into_the_clone_is_refused(self):
+        digests = self.root.parent / "Modding-Digests"
+        (digests / "1.15.2").mkdir(parents=True)
+        self.root.mkdir(parents=True, exist_ok=True)
+        (self.root / "via-link").symlink_to(digests, target_is_directory=True)
+        with self.assertRaises(script_docs.DocsRefused) as caught:
+            script_docs.plan("1.15.2", None, self.root / "via-link" / "1.15.2" / "docs", digests=digests)
         self.assertEqual(caught.exception.code, "inside_digests")
 
     def test_an_unreadable_installed_version_is_refused(self):
@@ -127,10 +162,36 @@ class ChecksTest(unittest.TestCase):
         with self.assertRaises(script_docs.DocsRefused) as caught:
             script_docs.install(self.dir / "staged", out, files)
         self.assertEqual(caught.exception.code, "out_exists")
-        (out / "stray.txt").write_text("from an earlier dump")
         script_docs.install(self.dir / "staged", out, files, force=True)
         self.assertEqual(sorted(p.name for p in out.iterdir()), sorted(script_docs.LOGS))
         self.assertEqual(sorted(p.name for p in out.parent.iterdir()), ["docs"])
+        (out / "stray.txt").write_text("not a log")                   # appeared since the plan: not replaced
+        with self.assertRaises(script_docs.DocsRefused) as caught:
+            script_docs.install(self.dir / "staged", out, files, force=True)
+        self.assertEqual(caught.exception.code, "out_not_a_dump")
+        self.assertTrue((out / "stray.txt").is_file())
+
+    def test_a_failed_replace_whose_old_dump_cannot_go_back_says_where_it_is(self):
+        write_dump(self.dir / "staged")
+        files = {name: {"sha256": script_docs.sha256(self.dir / "staged" / name)} for name in script_docs.LOGS}
+        out = self.dir / "1.15.2" / "docs"
+        write_dump(out)
+        real_replace = os.replace
+        calls = []
+
+        def replace(src, dst):
+            calls.append((Path(src).name, Path(dst).name))
+            if len(calls) == 1:
+                return real_replace(src, dst)          # the old dump moved aside
+            raise OSError("the drive went away")       # the new one in, and the old one back, both fail
+        with mock.patch.object(script_docs.os, "replace", replace):
+            with self.assertRaises(script_docs.DocsRefused) as caught:
+                script_docs.install(self.dir / "staged", out, files, force=True)
+        self.assertEqual(caught.exception.code, "copy_failed")
+        old = [p for p in out.parent.iterdir() if p.name.startswith(".docs.old-")]
+        self.assertEqual(len(old), 1)
+        self.assertIn(str(old[0]), caught.exception.detail)
+        self.assertTrue((old[0] / "effects.log").is_file())
 
     def test_the_previous_dump_is_the_newest_older_complete_one(self):
         root = self.dir / "root"
@@ -206,6 +267,7 @@ class SessionScriptDocsTest(SessionTestCase):
         self.assertEqual(reply["stop"]["outcome"], "restored")
         self.assertEqual(reply["previous"], str(self.root / "1.14.5" / "docs"))
         self.assertIn(str(self.out), reply["next"]["pin"])
+        self.assertEqual(reply["next"], reply["dump_next"])
         self.assertIn("vanilla_patch_diff.py docs", reply["next"]["diff"])
         run = Path(reply["run_dir"])
         self.assertEqual(sorted(p.name for p in (run / session.DOCS_STAGED).iterdir()), sorted(script_docs.LOGS))
@@ -257,10 +319,43 @@ class SessionScriptDocsTest(SessionTestCase):
 
     def test_force_replaces_an_existing_folder(self):
         write_dump(self.out)
-        (self.out / "stray.txt").write_text("from an earlier dump")
         reply = self.take(force=True)
         self.assertEqual(reply["stop"]["outcome"], "restored")
         self.assertEqual(sorted(p.name for p in self.out.iterdir()), sorted(script_docs.LOGS))
+        self.assertEqual(self.game.docs_runs, 1)
+
+    def test_force_over_a_folder_that_is_not_a_dump_starts_nothing(self):
+        write_dump(self.out)
+        error = self.session_error(lambda: self.take(out=str(self.out.parent), force=True))
+        self.assertEqual(error.code, "out_not_a_dump")
+        self.assertEqual(self.cli.verbs, [])
+        self.assertTrue((self.out / "effects.log").is_file())
+
+    def test_a_crash_folder_that_appears_after_the_logs_keeps_nothing(self):
+        # The review's case: the game crashed with the six logs written but one cut short, and `watch` had not looked
+        # yet. The crash folder refuses the dump.
+        def crash(seconds):
+            self.hands_off(seconds)
+            if self.game.docs_runs and not (self.user / "crashes" / "victoria3_late").exists():
+                (self.user / "crashes" / "victoria3_late").mkdir(parents=True)
+        self.game.on_sleep = crash
+        error = self.session_error(self.take)
+        self.assertEqual(error.code, "crashed")
+        self.assertEqual(error.info["crashes"], [str(self.user / "crashes" / "victoria3_late")])
+        self.assertEqual(error.info["stop"]["outcome"], "restored")
+        self.assertFalse(self.out.exists())
+
+    def test_a_game_not_proved_alive_after_the_copy_keeps_nothing(self):
+        real_adopt = self.game.adopt
+
+        def adopt(proc):
+            if self.game.docs_runs:
+                raise RuntimeError("no process with that pid and start time")
+            return real_adopt(proc)
+        self.game.adopt = adopt
+        error = self.session_error(self.take)
+        self.assertEqual(error.code, "watch_ended")
+        self.assertFalse(self.out.exists())
 
     def test_a_stale_log_is_refused_after_the_stop_and_nothing_is_kept(self):
         self.game.docs_skipped = {"on_actions.log"}
@@ -318,10 +413,31 @@ class SessionScriptDocsTest(SessionTestCase):
         self.assertEqual(reply["stop"]["outcome"], "held")
         self.assertTrue(self.out.is_dir())
         self.assertFalse(server.clean_stop(reply["stop"]))
+        # What to do first is the stop's: the pin waits in `dump_next` (review, 2026-11-19).
+        self.assertIn("did not end clean", reply["next"])
+        self.assertIn("owner", reply["next"])
+        self.assertIn(str(self.out), reply["dump_next"]["pin"])
+
+    def test_a_game_left_up_puts_the_stops_next_first(self):
+        stopped = {"outcome": "game_left_up", "next": "run `python3 -m game_qa stop` again", "stop_again": True}
+        with mock.patch.object(session.Session, "stop", return_value=stopped):
+            reply = self.take()
+        self.assertEqual(reply["next"], stopped["next"])
+        self.assertIn(str(self.out), reply["dump_next"]["pin"])
 
     def test_a_second_run_in_one_session_is_refused(self):
         self.take()
         self.assertEqual(self.session_error(self.take).code, "already_started")
+
+
+class ClientOutTest(unittest.TestCase):
+    def test_out_is_sent_absolute_since_the_server_runs_from_the_repository(self):
+        args = argparse.Namespace(permission="the owner's", version=None, out="dumps/1.15.2/docs", force=False,
+                                  owner_confirmed_busy=False)
+        with mock.patch.object(client, "start_session", return_value=({}, 0)) as started:
+            client.script_docs_verb(args, Path("/backups"), spawn=None)
+        body = started.call_args.args[1]
+        self.assertEqual(body["out"], os.path.join(os.getcwd(), "dumps", "1.15.2", "docs"))
 
 
 class MenuProbeTest(unittest.TestCase):

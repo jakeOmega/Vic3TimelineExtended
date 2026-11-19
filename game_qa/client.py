@@ -16,9 +16,9 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
                                              # hours of the owner's desktop past spring 1836 (--dry-run first)
     python3 -m game_qa script-docs --permission "<where the go-ahead came from>" [--version X.Y.Z] [--out DIR]
                        [--force] [--owner-confirmed-busy]
-                                             # the mods-off `script_docs` dump of a vanilla bump: one game with no
-                                             # mod, to the main menu, the command, the six logs checked, then the
-                                             # stop, then a copy to ~/src/vic3-engine-docs/<version>/docs (#1907)
+                                             # the mods-off `script_docs` dump of a vanilla bump: one hands-off new
+                                             # game with no mod, the command, the six logs checked, then the stop,
+                                             # then a copy to ~/src/vic3-engine-docs/<version>/docs (#1907)
     python3 -m game_qa console "<text>"      # one console command, with its reply
     python3 -m game_qa run-setup NAME        # a setup, through its event: its log lines
     python3 -m game_qa add-setup NAME=FILE   # a new setup for the running game: it reloads the overlay's effects
@@ -122,8 +122,9 @@ START_TIMEOUT_S = 2800.0
 # rename (about 160 s), its restore's retries (30 + 60 s), and the stop after it (STOP_TIMEOUT_S), with room.
 FIXTURE_MARGIN_S = 1200.0
 # `script-docs`: snapshot and launch (about 120 s), the window (WINDOW_WAIT_S 300), the console's first answer
-# (LOAD_WAIT_S 600 and a probe round), the command and its answer (a foreground wait of 120 and DOCS_REPLY_S 60), the
-# logs (DOCS_WAIT_S 120), the copies and checks, and the stop (STOP_TIMEOUT_S): about 2000 s.
+# (LOAD_WAIT_S 600 and a probe round), the game state (DOCS_STATE_WAIT_S 300), the command (a foreground wait of 120
+# and its arrival), the logs (DOCS_WAIT_S 120), the copies and checks, and the stop (STOP_TIMEOUT_S 600): about
+# 2200 s.
 SCRIPT_DOCS_TIMEOUT_S = 2400.0
 STOP_TIMEOUT_S = 600.0
 EXIT_WAIT_S = 120.0                     # after a failed start or a stop: for the server to exit
@@ -857,7 +858,7 @@ def script_docs_verb(args, backup_root: Path, spawn) -> tuple[dict, int]:
     if args.version is not None:
         body["version"] = args.version
     if args.out is not None:
-        body["out"] = args.out
+        body["out"] = os.path.abspath(os.path.expanduser(args.out))     # the server's own cwd is the repository
     return start_session(backup_root, body, spawn, verb="script-docs", timeout=SCRIPT_DOCS_TIMEOUT_S)
 
 
@@ -1040,8 +1041,8 @@ def add_verbs(sub) -> None:
                    help="the owner was asked about the busy GPU and said to go ahead")
     p.set_defaults(run=cmd_fixture)
 
-    p = sub.add_parser("script-docs", help="take the mods-off script_docs dump of a vanilla bump: one game with no "
-                                           "mod, to the main menu, then the stop; the six logs are checked, then "
+    p = sub.add_parser("script-docs", help="take the mods-off script_docs dump of a vanilla bump: one hands-off new "
+                                           "game with no mod, then the stop; the six logs are checked, then "
                                            "copied to ~/src/vic3-engine-docs/<version>/docs")
     p.add_argument("--permission", required=True,
                    help="where the go-ahead to launch came from (the owner's grant for a runbook run: "
@@ -1052,7 +1053,8 @@ def add_verbs(sub) -> None:
     p.add_argument("--out", metavar="DIR",
                    help="where the dump goes (default ~/src/vic3-engine-docs/<version>/docs): its path must end in "
                         "the version, outside the Modding-Digests clone")
-    p.add_argument("--force", action="store_true", help="replace a dump already at --out")
+    p.add_argument("--force", action="store_true",
+                   help="replace a dump already at --out (a folder holding nothing but the six logs)")
     p.add_argument("--owner-confirmed-busy", action="store_true",
                    help="the owner was asked about the busy GPU and said to go ahead")
     p.set_defaults(run=cmd_script_docs)

@@ -99,9 +99,11 @@ DOCS_PLAYSET = "none"
 GAME_STATE_MARK = "][jomini_effect_impl.cpp:"
 DOCS_STATE_WAIT_S = 300.0               # from the console's first answer to that line
 DOCS_STATE_SETTLE_S = 2.0               # after it, before the command: the setup is still running
-DOCS_REPLY_S = 60.0                     # for the command's answer in the log (live: the same second)
 DOCS_WAIT_S = 120.0                     # from the command to all six logs written and settled
 DOCS_SETTLE_S = 3.0                     # a log's size and time unchanged this long: the game is done with it
+# After the copy and the checks: this long more, then no new crash folder and the game proved alive by its pid and
+# start time, so that a dump cut short by a crash `watch` has not seen yet is never kept (review, 2026-11-19).
+DOCS_ALIVE_S = 3.0
 DOCS_POLL_S = 1.0
 DOCS_STAGED = "script_docs"             # the run folder's copy of the dump, checked before it goes anywhere
 DOCS_RECORD = "script_docs.json"        # the run folder's record of the reply, as `fixture.json` is a fixture's
@@ -1105,8 +1107,12 @@ class Session:
         `copy_failed`, with the staged copy left in the run's folder (`staged`).
 
         The reply: `version`, `out`, `files` (each log's size and SHA-256), `checks`, `run_dir`, `snapshot`,
-        `game_docs_left` (the game's own `docs/`, which keeps the dump), `next` (the pin and, when an older dump is
-        under the root, the diff the runbook runs next), `previous`, and `stop`."""
+        `game_docs_left` (the game's own `docs/`, which keeps the dump), `dump_next` (the pin and, when an older dump
+        is under the root, the diff the runbook runs next), `next` (`dump_next` after a clean stop; otherwise the
+        stop's own `next`, or a hold to tell the owner of), `previous`, and `stop`. `--force` replaces only a folder
+        holding nothing but the six logs (`out_not_a_dump`). After the checks, a crash folder that appeared
+        (`crashed`) or a game no longer alive by its pid and start time (`watch_ended`) refuses the dump: it may have
+        been cut short."""
         if self._began or self._stopped is not None:
             raise SessionError("already_started", "a session runs one game: stop it and start a new session")
         if os.path.lexists(self._paths.overlay_dir):
@@ -1163,7 +1169,20 @@ class Session:
                                        DOCS_RECORD)
             raise error from e
         old = script_docs.previous(Path(self._paths.engine_docs_root), self._paths.game_version, target)
-        result.update(out=str(target), next=script_docs.next_steps(target, old))
+        steps = script_docs.next_steps(target, old)
+        # `next` is what to do first: the stop's own when it left something to do (a game left up, a restore to run
+        # again), a hold to tell the owner of when it held, else the pin and the diff, which `dump_next` always holds.
+        # The test is server.clean_stop's, which this module cannot import.
+        clean = (stopped.get("held") is not True and not stopped.get("refused")
+                 and stopped.get("outcome") in ("restored", None) and not stopped.get("overlay_kept")
+                 and not stopped.get("snapshot_unknown"))
+        first = steps
+        if not clean:
+            first = stopped.get("next") or (
+                "the dump is at %s, but the stop did not end clean (outcome %s%s): tell the owner, who resolves a "
+                "hold, and start nothing more; `dump_next` has the pin and the diff for afterwards"
+                % (target, stopped.get("outcome"), ", %s" % stopped["reason"] if stopped.get("reason") else ""))
+        result.update(out=str(target), dump_next=steps, next=first)
         if old is not None:
             result["previous"] = str(old)
         self._write_fixture_record(self._snapshot, result, DOCS_RECORD)
@@ -1192,6 +1211,12 @@ class Session:
             files = script_docs.stage(docs, staged, written)
             out["files"] = files
             checks = script_docs.check(staged)
+            self._sleep(DOCS_ALIVE_S)
+            crashed = self._new_crashes()
+            if crashed:
+                raise SessionError("crashed", "the game left a crash folder after the logs were written: the dump "
+                                   "may be cut short, so it was not kept", crashes=crashed)
+            self._prove_game()          # alive after the copy: the game finished the command it was writing
         self._record("script_docs_checked", outcome="ok", checks=checks)
         return {"snapshot": snap, "version": self._paths.game_version, "files": files, "checks": checks,
                 "run_dir": str(self._report.dir), "staged": str(staged), "game_docs_left": str(docs)}
