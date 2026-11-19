@@ -122,25 +122,33 @@ populist_party = {
 	}
 
 	available_for_interest_group = {
-		owner = {
-			country_has_voting_franchise = yes
-			OR = {
-				py:populist_party ?= {
-					any_member = {}
-				}
-				ig:ig_rural_folk ?= {
-					ig_counts_as_marginal = no
-				}
-				ig:ig_petty_bourgeoisie ?= {
-					ig_counts_as_marginal = no
+		trigger_if = { # Single-Party State: open to the dominant party's groups, as vanilla's parties are
+			limit = {
+				ig_is_member_of_dominant_party = { PARTY = populist }
+			}
+			always = yes
+		}
+		trigger_else = {
+			owner = {
+				country_has_voting_franchise = yes
+				OR = {
+					py:populist_party ?= {
+						any_member = {}
+					}
+					ig:ig_rural_folk ?= {
+						ig_counts_as_marginal = no
+					}
+					ig:ig_petty_bourgeoisie ?= {
+						ig_counts_as_marginal = no
+					}
 				}
 			}
-		}
-		leader ?= {
-			NOR = {
-				has_ideology = ideology:ideology_communist_leader
-				has_ideology = ideology:ideology_vanguardist
-				has_ideology = ideology:ideology_anarchist
+			leader ?= {
+				NOR = {
+					has_ideology = ideology:ideology_communist_leader
+					has_ideology = ideology:ideology_vanguardist
+					has_ideology = ideology:ideology_anarchist
+				}
 			}
 		}
 	}
@@ -336,6 +344,15 @@ populist_party = {
 			add = {
 				value = -5
 				desc = "from_fascist_distinction"
+			}
+		}
+		if = { # Single-Party State: the dominant party keeps its groups (vanilla 1.15.2's term)
+			limit = {
+				ig_is_member_of_dominant_party = { PARTY = populist }
+			}
+			add = {
+				value = 1000
+				desc = "amendment_populist_party_dominance"
 			}
 		}
 		# First Past the Post (amendment_first_past_the_post): one of the two

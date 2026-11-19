@@ -1,0 +1,89 @@
+﻿# Single-Party State's dominant party, for the mod's three parties (#1908).
+#
+# Vanilla 1.15.2's single_party_state.8 asks which party a Single-Party State
+# keeps. It fires at each checkpoint that advances, is debated or succeeds,
+# until var:sps_dominant_party_ig_var is set, and only offers vanilla's eleven
+# parties. te_single_party_state.1 offers the mod's three. It is sent in two
+# places, and each sending marks the country with te_sps_dominance_pending
+# (one copy at a time; the event's `after` clears it, and 100 days outlasts
+# the event's three months):
+#
+# * When the enactment starts, if a mod party governs. The first checkpoint
+#   comes after it, so a choice made here sets the variable before vanilla's
+#   event can fire. In a government that also holds a vanilla party, the
+#   event's last option leaves the choice to vanilla's event at that checkpoint.
+# * At a checkpoint, if only mod parties govern and nothing has been chosen
+#   (a government that changed since the start, or a choice left to vanilla's
+#   event whose parties have since left). Vanilla's event fires then too, with
+#   no option it can offer; this one gives the choice.
+
+# Root = owner country of the law.
+on_law_enactment_started = {
+	on_actions = {
+		te_sps_dominance_on_enactment_started
+	}
+}
+
+on_law_checkpoint_advance = {
+	on_actions = {
+		te_sps_dominance_on_checkpoint
+	}
+}
+
+on_law_checkpoint_debate = {
+	on_actions = {
+		te_sps_dominance_on_checkpoint
+	}
+}
+
+on_law_checkpoint_success = {
+	on_actions = {
+		te_sps_dominance_on_checkpoint
+	}
+}
+
+te_sps_dominance_on_enactment_started = {
+	trigger = {
+		is_enacting_law = law_type:law_single_party_state
+	}
+	effect = {
+		# A new enactment starts with no choice. Vanilla's own
+		# on_law_enactment_started removes this variable too, in an order
+		# against this sub-action nobody has read, and the event's trigger
+		# reads it at once.
+		if = {
+			limit = { has_variable = sps_dominant_party_ig_var }
+			remove_variable = sps_dominant_party_ig_var
+		}
+		# A copy from an earlier enactment that ended unanswered.
+		if = {
+			limit = { has_variable = te_sps_dominance_pending }
+			remove_variable = te_sps_dominance_pending
+		}
+		if = {
+			limit = { te_sps_mod_party_in_government = yes }
+			set_variable = {
+				name = te_sps_dominance_pending
+				days = 100
+			}
+			trigger_event = { id = te_single_party_state.1 }
+		}
+	}
+}
+
+te_sps_dominance_on_checkpoint = {
+	trigger = {
+		is_enacting_law = law_type:law_single_party_state
+		NOT = { has_variable = sps_dominant_party_ig_var }
+		NOT = { has_variable = te_sps_dominance_pending }
+		te_sps_mod_party_in_government = yes
+		te_sps_vanilla_party_in_government = no
+	}
+	effect = {
+		set_variable = {
+			name = te_sps_dominance_pending
+			days = 100
+		}
+		trigger_event = { id = te_single_party_state.1 }
+	}
+}

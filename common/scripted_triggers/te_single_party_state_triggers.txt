@@ -1,0 +1,41 @@
+﻿# Single-Party State's dominant party, for the mod's three parties (#1908).
+# Read by te_single_party_state.1 (events/te_single_party_state_events.txt) and
+# its two senders (common/on_actions/te_single_party_state_on_actions.txt).
+
+# Party scope. One of the parties the mod adds (common/parties/), which
+# vanilla's single_party_state.8 has no option for.
+te_sps_is_mod_party = {
+	OR = {
+		is_party_type = green_party
+		is_party_type = populist_party
+		is_party_type = technocratic_party
+	}
+}
+
+# Country scope. A group in government belongs to one of the mod's parties,
+# and that party has no insurrectionary member: te_single_party_state.1 then
+# has an option to pick.
+te_sps_mod_party_in_government = {
+	any_interest_group = {
+		is_in_government = yes
+		party ?= {
+			te_sps_is_mod_party = yes
+			party_has_insurrectionary_member = no
+		}
+	}
+}
+
+# Country scope. A group in government belongs to a vanilla party other than
+# the revolutionary one, and that party has no insurrectionary member: vanilla's
+# single_party_state.8 then has an option to pick. Its trigger excludes the
+# revolutionary party, and each of its options needs this for its own party.
+te_sps_vanilla_party_in_government = {
+	any_interest_group = {
+		is_in_government = yes
+		party ?= {
+			NOT = { is_party_type = revolutionary_party }
+			te_sps_is_mod_party = no
+			party_has_insurrectionary_member = no
+		}
+	}
+}
