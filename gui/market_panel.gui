@@ -228,11 +228,12 @@ types market_panel
 					direction = vertical
 					parentanchor = hcenter
 					spacing = 5
-					margin = { 10 5 }
+					margin = { 0 5 }
 
 					container = {
 						visible = "[Not(MarketPanel.HasSelectedWorldMarketHub)]"
 						minimumsize = { 540 -1 }
+						parentanchor = hcenter
 						tooltip = "[MarketPanel.GetMarket.GetTradeCapacityDesc]"
 
 						background = {
@@ -240,12 +241,12 @@ types market_panel
 						}
 
 						flowcontainer = {
+							direction = vertical
 							parentanchor = center
-							spacing = 7
 							margin = { 10 10 }
 
 							textbox = {
-								parentanchor = vcenter
+								parentanchor = hcenter
 								max_width = 250
 								autoresize = yes
 								align = nobaseline
@@ -254,7 +255,7 @@ types market_panel
 							}
 
 							textbox = {
-								parentanchor = vcenter
+								parentanchor = hcenter
 								max_width = 250
 								autoresize = yes
 								align = nobaseline
@@ -267,6 +268,7 @@ types market_panel
 
 					flowcontainer = {
 						visible = "[MarketPanel.HasSelectedWorldMarketHub]"
+						parentanchor = hcenter
 						datacontext = "[MarketPanel.GetSelectedWorldMarketHub]"
 						spacing = 5
 
@@ -523,6 +525,7 @@ types market_panel
 								align = nobaseline
 								alpha = 0.5
 								using = elide_fontsize_min
+								tooltip = "[concept_world_market_hub]"
 								text = "concept_world_market_hub"
 							}
 
@@ -596,6 +599,17 @@ types market_panel
 								text = "EXPORTS"
 							}
 
+							blockoverride "chart_empty_state" {
+								textbox = {
+									visible = "[Not(MarketPanel.HasExports)]"
+									parentanchor = center
+									autoresize = yes
+									align = nobaseline
+									using = empty_state_text_properties
+									text = "NONE"
+								}
+							}
+
 							blockoverride "tooltip" {
 								tooltip = "WORLD_MARKET_GOODS_EXPORT_TOOLTIP"
 
@@ -660,6 +674,17 @@ types market_panel
 
 							blockoverride "heading" {
 								text = "IMPORTS"
+							}
+
+							blockoverride "chart_empty_state" {
+								textbox = {
+									visible = "[Not(MarketPanel.HasImports)]"
+									parentanchor = center
+									autoresize = yes
+									align = nobaseline
+									using = empty_state_text_properties
+									text = "NONE"
+								}
 							}
 
 							blockoverride "tooltip" {
@@ -1093,12 +1118,12 @@ types market_panel
 				}
 
 				sort_button = {
-					text = "[concept_market_price]"
 					onclick = "[Market.Sort('price')]"
 					onclick = "[Market.RestoreSort]"
-					
 					size = { 210 20 }
 					align = hcenter|nobaseline
+					tooltip = "SORT_BY_RELATIVE_MARKET_PRICE"
+					text = "MARKET_PRICE_SORT"
 				}
 
 				sort_button = {
@@ -1160,96 +1185,86 @@ types market_panel
 
 			flowcontainer = {
 				visible = "[InformationPanel.IsTabSelected('world_market_trade')]"
+				direction = vertical
 
-				sort_button = {
-					onclick = "[Market.Sort('name')]"
-					onclick = "[Market.RestoreSort]"
-					tooltip = "SORT_BY_MARKET_GOODS"
-					size = { 60 20 }
+				### TOP ROW
+				flowcontainer = {
+					sort_button = {
+						size = { 135 20 }
+						onclick = "[Market.Sort('name')]"
+						onclick = "[Market.RestoreSort]"
+						tooltip = "SORT_BY_MARKET_GOODS"
 
-					button = {
-						texture = "gfx/interface/buttons/sort_button_icons/sort_icon_good.dds"
-						size = { 25 25 }
-						parentanchor = center
-						alwaystransparent = yes
+						button = {
+							size = { 25 25 }
+							parentanchor = center
+							alwaystransparent = yes
+							texture = "gfx/interface/buttons/sort_button_icons/sort_icon_good.dds"
+						}
+					}
+
+					sort_button = {
+						size = { 135 20 }
+						elide = right
+						align = hcenter|nobaseline
+						onclick = "[Market.Sort('price')]"
+						onclick = "[Market.RestoreSort]"
+						tooltip = "SORT_BY_RELATIVE_MARKET_PRICE"
+						text = "concept_market_price"
+					}
+
+					sort_button = {
+						size = { @panel_width_half 20 }
+						elide = right
+						align = hcenter|nobaseline
+						onclick = "[Market.Sort('world_market_price')]"
+						onclick = "[Market.RestoreSort]"
+						tooltip = "SORT_BY_RELATIVE_WORLD_MARKET_PRICE"
+						text = "WORLD_MARKET_PRICE"
 					}
 				}
 
-				sort_button = {
-					name = "tutorial_highlight_market_details_panel_buy_orders"
-					onclick = "[Market.Sort('imports')]"
-					onclick = "[Market.RestoreSort]"
-					tooltip = "SORT_BY_IMPORTS"
+				### BOTTOM ROW
+				flowcontainer = {
+					sort_button = {
+						size = { 135 20 }
+						align = hcenter|nobaseline
+						onclick = "[Market.Sort('imports')]"
+						onclick = "[Market.RestoreSort]"
+						tooltip = "SORT_BY_IMPORTS"
 
-					button = {
-						texture = "gfx/interface/buttons/sort_button_icons/sort_imports.dds"
-						size = { 25 25 }
-						parentanchor = center
-						alwaystransparent = yes
+						button = {
+							size = { 25 25 }
+							parentanchor = center
+							alwaystransparent = yes
+							texture = "gfx/interface/buttons/sort_button_icons/sort_imports.dds"
+						}
 					}
-					
-					align = hcenter|nobaseline
-					size = { 80 20 }
-					margin_right = 7
-					elide = right
 
-					button = {
-						texture = "gfx/interface/buttons/sort_button_icons/sort_imports.dds"
-						size = { 25 25 }
-						parentanchor = center
-						alwaystransparent = yes
+					sort_button = {
+						size = { 135 20 }
+						align = hcenter|nobaseline
+						onclick = "[Market.Sort('exports')]"
+						onclick = "[Market.RestoreSort]"
+						tooltip = "SORT_BY_EXPORTS"
+
+						button = {
+							size = { 25 25 }
+							parentanchor = center
+							alwaystransparent = yes
+							texture = "gfx/interface/buttons/sort_button_icons/sort_exports.dds"
+						}
 					}
-				}
 
-				sort_button = {
-					onclick = "[Market.Sort('exports')]"
-					onclick = "[Market.RestoreSort]"
-					tooltip = "SORT_BY_EXPORTS"
-					
-					size = { 80 20 }
-					align = hcenter|nobaseline
-					elide = right
-
-					button = {
-						texture = "gfx/interface/buttons/sort_button_icons/sort_exports.dds"
-						size = { 25 25 }
-						parentanchor = center
-						alwaystransparent = yes
+					sort_button = {
+						size = { @panel_width_half 20 }
+						elide = right
+						align = hcenter|nobaseline
+						onclick = "[Market.Sort('tariffs_balance')]"
+						onclick = "[Market.RestoreSort]"
+						tooltip = "SORT_BY_TARIFFS"
+						text = "TARIFFS"
 					}
-				}
-
-				sort_button = {
-					text = "concept_market_price"
-					onclick = "[Market.Sort('price')]"
-					onclick = "[Market.RestoreSort]"
-					
-					align = hcenter|nobaseline
-					size = { 120 20 }
-					margin_right = 7
-					elide = right
-				}
-
-				sort_button = {
-					text = "WORLD_MARKET_PRICE"
-					onclick = "[Market.Sort('world_market_price')]"
-					onclick = "[Market.RestoreSort]"
-					
-					align = hcenter|nobaseline
-					size = { 80 20 }
-					margin_right = 7
-					elide = right
-				}
-
-				sort_button = {
-					text = "TARIFFS"
-					onclick = "[Market.Sort('tariffs_balance')]"
-					onclick = "[Market.RestoreSort]"
-					tooltip = "SORT_BY_BALANCE_TOOLTIP"
-					
-					align = hcenter|nobaseline
-					size = { 120 20 }
-					margin_right = 7
-					elide = right
 				}
 			}
 		}
@@ -1315,9 +1330,19 @@ types market_panel
 						spacing = 8
 						margin_top = 2
 						margin_bottom = 4
-						
+
 						item = {
 							market_world_market_goods_list_item = {}
+						}
+					}
+
+					empty_state = {
+						blockoverride "visible" {
+							visible = "[Not(Or(MarketPanel.HasImports, MarketPanel.HasExports))]"
+						}
+
+						blockoverride "text" {
+							text = "MARKET_NO_WORLD_MARKET_TRADE"
 						}
 					}
 

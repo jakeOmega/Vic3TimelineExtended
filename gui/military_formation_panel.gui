@@ -1,4 +1,4 @@
-﻿# TE override of vanilla military_formation_panel.gui (1.15.1). Everything else is vanilla; re-diff against
+﻿# TE override of vanilla military_formation_panel.gui (1.15.2). Everything else is vanilla; re-diff against
 # the installed file on every vanilla patch. Deviations kept from the mod's older copy (each a few lines):
 #   1. mobilization option groups listed in one column for selected armies (datamodel_wrap = 1 on
 #      GetMobilizationOptionGroups): with the mod's options a group holds up to ten (special_weapons),
@@ -1375,6 +1375,7 @@ types military_formation_panel_types
 								blockoverride "mission_button_with_round_icon" {
 									size = { 300 60 }
 								}
+
 								blockoverride "long_mission_button_size" {
 									size = { 280 50 }
 								}
@@ -1570,6 +1571,8 @@ types military_formation_panel_types
 								blockoverride "formation_onclick" {
 									onclick = "[FormationPanel.SelectFormation(MilitaryFormation.Self)]"
 								}
+
+								blockoverride "formation_checkbox" {}
 
 								blockoverride "extra_action" {
 									military_formation_cancel_invasion_button = {
@@ -6939,6 +6942,17 @@ types military_formation_panel_types
 			text = "SELECTED_STRATEGIC_OBJECTIVE"
 		}
 
+		textbox = {
+			visible = "[MapInteractions.HasSelectionEditNavalMissionInteraction]"
+			max_update_rate = 8
+			maximumsize = { @panel_width -1 }
+			parentanchor = hcenter
+			autoresize = yes
+			align = nobaseline
+			multiline = yes
+			text = "MILITARY_FORMATION_NAVAL_MISSION_EDIT_SUMMARY"
+		}
+
 		widget = {
 			size = { 5 5 }
 		}
@@ -7168,25 +7182,6 @@ types military_formation_panel_types
 					onclick = "[RightClickMenuManager.ToggleSelectNavalMissionTypeForFleet(MilitaryFormation.AccessSelf, PdxGuiWidget.AccessSelf)]"
 				}
 			}
-
-			# edit mission sea regions
-			button_icon_round_map_interaction = {
-				size = { 60 60 }
-				parentanchor = vcenter
-                datacontext = "[MilitaryFormation]" # needed for the tooltip
-				tooltip = "EDIT_NAVAL_MISSION_SEA_REGIONS_TOOLTIP"
-				onclick = "[MilitaryFormation.OnEditMissionSeaRegionsClicked]"
-				enabled = "[MilitaryFormation.CanEditMissionSeaRegions]"
-				using = tooltip_ne
-				
-				blockoverride "icon_size" {
-					size = { 75% 75% }
-				}
-
-				blockoverride "icon" {
-					texture = "gfx/interface/icons/generic_icons/edit_sea_nodes.dds"
-				}
-			}
 			
 			### Additional Fleet Actions Menu
 			button_icon_round = {
@@ -7320,6 +7315,27 @@ types military_formation_panel_types
 				texture = "[NavalMissionType.GetIcon]"
 			}
 		}
+
+		action_selection_number = {
+			visible = "[And(MilitaryFormation.HasNavalMission, GreaterThan_int32(MilitaryFormation.GetNavalMission.GetNumSeaRegions, '(int32)0'))]"
+			parentanchor = right
+			position = { -5 0 }
+
+			blockoverride "default_format" {
+				default_format = "#u"
+			}
+
+			blockoverride "text" {
+				raw_text = "#b [MilitaryFormation.GetNavalMission.GetNumSeaRegions]#!"
+			}
+		}
+
+		icon = {
+			visible = "[And(MilitaryFormation.HasNavalMission, Not(GreaterThan_int32(MilitaryFormation.GetNavalMission.GetNumSeaRegions, '(int32)0')))]"
+			size = { 20 20 }
+			parentanchor = right
+			texture = "gfx/interface/icons/generic_icons/warning.dds"
+		}
 	}
 
 	type naval_mission_button = button {
@@ -7380,8 +7396,18 @@ types military_formation_panel_types
 					using = tooltip_ne
 					raw_text = "[NavalMissionType.GetNameNoFormatting]"
 
-					tooltipwidget = {
-						FancyTooltip_NavalMissionType = {}
+					block "naval_mission_tooltip" {
+						tooltipwidget = {
+							FancyTooltip_NavalMissionType = {
+								blockoverride "naval_mission_tooltip_region_count" {
+									custom_tooltip_newline = {}
+
+									custom_tooltip_textbox = {
+										text = "SELECTED_FLEETS_NAVAL_MISSION_TOOLTIP_CONTENT"
+									}
+								}
+							}
+						}
 					}
 				}
 
@@ -7439,6 +7465,29 @@ types military_formation_panel_types
 				}
 			}
 		}
+
+		action_selection_number = {
+			visible = "[And(Not(NoSelectedFleetsHaveNavalMissions), GreaterThan_int32(GetNumSelectedFleetsMissionSeaRegions, '(int32)0'))]"
+			parentanchor = right
+			position = { -5 0 }
+
+			blockoverride "default_format" {
+				default_format = "#u"
+			}
+
+			blockoverride "text" {
+				raw_text = "#b [GetNumSelectedFleetsMissionSeaRegions]#!"
+			}
+		}
+
+		icon = {
+			visible = "[And(Not(NoSelectedFleetsHaveNavalMissions), Not(GreaterThan_int32(GetNumSelectedFleetsMissionSeaRegions, '(int32)0')))]"
+			size = { 20 20 }
+			parentanchor = right
+			position = { -5 0 }
+			texture = "gfx/interface/icons/generic_icons/warning.dds"
+		}
+
 	}
 
 	type action_selection_number = textbox {
