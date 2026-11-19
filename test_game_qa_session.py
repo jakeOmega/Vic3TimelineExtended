@@ -25,7 +25,7 @@ from game_qa import __main__ as cli
 from game_qa import dap, fakes, fixture, gate, logtail, overlay, pixels, profiling, server, session, snapshot
 from game_qa.report import read_steps
 from game_qa.client import enabled_mods
-from game_qa.console import UNRESPONSIVE_S, ConsoleError
+from game_qa.console import MAX_UNRESPONSIVE_S, UNRESPONSIVE_S, ConsoleError
 from game_qa.gate import ProcId
 from game_qa.helper import HelperError
 from test_game_qa_overlay import PROFILER_GUI
@@ -5302,6 +5302,54 @@ class GameArgsTest(SessionTestCase):
                      "-no_notifications", [7]):
             with self.subTest(args=args):
                 error = self.session_error(self.start, game_args=args)
+                self.assertEqual(error.code, "bad_argument")
+                self.assertEqual(self.cli.calls, [])
+                self.assertFalse(self.paths.overlay_dir.exists())
+
+
+class UnresponsiveTest(SessionTestCase):
+    """#1905: `start --unresponsive-s N` lets a late save's long tick freeze the window past the default 10 s (the USA
+    of 1977: a monthly pulse of 28-32 s), for every verb of the session."""
+
+    def freeze_for(self, seconds):
+        """The game's window stops responding now, inside a tick, for `seconds` of the fake clock."""
+        until = self.game.now + seconds
+        self.game.responding = False
+
+        def freeze(_):
+            self.game.responding = self.game.now >= until
+        self.game.on_sleep = freeze
+        self.addCleanup(setattr, self.game, "on_sleep", None)
+
+    def test_by_default_a_tick_of_30_s_is_a_game_gone(self):
+        reply = self.started()
+        self.assertNotIn("unresponsive_s", reply)
+        self.freeze_for(30)
+        with self.assertRaises(ConsoleError) as caught:
+            self.session.console("tag FRA")
+        self.assertEqual(caught.exception.code, "game_gone")
+        self.assertIn("10 s", caught.exception.detail)
+
+    def test_with_a_longer_limit_the_same_tick_is_waited_out(self):
+        reply = self.started(unresponsive_s=120)
+        self.assertEqual(reply["unresponsive_s"], 120.0)
+        self.freeze_for(30)
+        self.assertTrue(self.session.console("tag FRA").lines is not None)
+
+    def test_the_longer_limit_still_ends_in_game_gone(self):
+        self.started(unresponsive_s=60)
+        self.freeze_for(10_000)
+        before = self.game.now
+        with self.assertRaises(ConsoleError) as caught:
+            self.session.console("tag FRA")
+        self.assertEqual(caught.exception.code, "game_gone")
+        self.assertIn("60 s", caught.exception.detail)
+        self.assertGreaterEqual(self.game.now - before, 60)
+
+    def test_a_limit_out_of_range_or_not_a_number_is_refused_before_anything(self):
+        for value in (5, 9.9, MAX_UNRESPONSIVE_S + 1, 600, float("nan"), float("inf"), 10 ** 400, "120", True):
+            with self.subTest(value=value):
+                error = self.session_error(self.start, unresponsive_s=value)
                 self.assertEqual(error.code, "bad_argument")
                 self.assertEqual(self.cli.calls, [])
                 self.assertFalse(self.paths.overlay_dir.exists())

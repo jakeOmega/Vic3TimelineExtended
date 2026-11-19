@@ -56,7 +56,7 @@ def counterforce_saved(landed, k, exposed, credit):
 
 def redundancy(stockpile, satellite_communications=True, mainframe=True, survivability=0.0,
                command_center=0, reliability=None):
-    """A command's redundancy against a strike on its capital (nd_redundancy).
+    """A command's redundancy against a Leadership salvo (nd_redundancy).
     `command_center` is staffed Nuclear Command Center levels; `reliability`
     None leaves the reliability term out, as nd_redundancy_believed does."""
     r = 1 + stockpile / 10 + 2 * satellite_communications + mainframe + survivability / 20
@@ -67,7 +67,7 @@ def redundancy(stockpile, satellite_communications=True, mainframe=True, surviva
 
 
 def decapitation_chance(landed, redundancy):
-    """Percent chance that `landed` warheads on the capital decapitate (nd_decapitation_chance_value)."""
+    """Percent chance that `landed` warheads on the command decapitate (nd_decapitation_chance_value)."""
     if landed <= 0:
         return 0.0
     return max(0.0, 1 - (redundancy / landed) ** 2) * 100
@@ -112,7 +112,7 @@ def main():
     for stockpile, survivability, left in calibration():
         print(f"| {stockpile} | {survivability} | " + " | ".join(f"{x:.1f}" for x in left) + " |")
     print()
-    print("A Leadership salvo on the capital (Central Authorization, both technologies)")
+    print("A Leadership salvo, warheads landed on the command (Central Authorization, both technologies)")
     print("| Command | R | 10 landed | 25 landed |")
     print("|---|---|---|---|")
     for label, kwargs in DECAPITATION_ROWS:

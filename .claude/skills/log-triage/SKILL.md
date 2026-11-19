@@ -28,7 +28,7 @@ From a worktree the script reads that worktree's registries and the main checkou
 
 | Section | What it tells you | What to do |
 |---|---|---|
-| **Launches** | Each launch in the logs: start, exe version, new game or loaded save, game dates, the playset, and how much of each family survives | A family "from HH:MM:SS" has lost that launch's load-time errors; only a fresh launch shows them (and only a new game runs `common/history/`). A mod-off launch is where vanilla's own errors show. If it says commits reached `origin/main` since, see § 3 step 3 |
+| **Launches** | Each launch in the logs: start, exe version, new game or loaded save, game dates, the playset, and how much of each family survives | A family "from HH:MM:SS" has lost that launch's load-time errors; only a fresh launch shows them (and only a new game runs `common/history/`). A mod-off launch is where vanilla's own errors show, unless it says `LOADED A SAVE WITH MODS MISSING`: then most of its lines are the save's mod content failing to read, not findings. If it says commits reached `origin/main` since, see § 3 step 3 |
 | **Registry** | The registries' loader warnings; `DRIFT`: a registered signature logged from a cpp line no entry names | Fix the warnings. For DRIFT add the new `- source:` line to the entry and keep the old one |
 | **Untagged** | Every line no entry explains, grouped by exact message, mod-framed ones first | Each is a finding until explained: § 3 |
 | **Watch list** | Lines an entry tags and leaves visible, with its `check:` | Do the check every time and say what it showed |

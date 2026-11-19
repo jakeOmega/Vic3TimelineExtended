@@ -2568,7 +2568,7 @@ nd_order_salvo = {
 			set_variable = { name = nd_salvo_fired value = 0 }
 			set_variable = { name = nd_salvo_landed value = 0 }
 			set_variable = { name = nd_salvo_forces_landed value = 0 }
-			set_variable = { name = nd_salvo_capital_landed value = 0 }
+			set_variable = { name = nd_salvo_command_landed value = 0 }
 			set_variable = { name = nd_salvo_destroyed value = 0 }
 			set_variable = { name = nd_salvo_victim_r value = scope:nd_salvo_victim.nd_redundancy }
 			while = {
@@ -2611,8 +2611,11 @@ nd_salvo_warhead = {
 
 # Victim scope: the next warhead's state, saved as scope:target_state (§6.1),
 # always one the attacker reaches (§7, nd_state_in_reach_of). Leadership: the
-# capital, every warhead. Forces: a state with a military target, then the
-# capital's region, then the capital. Cities, and Forces when none of those is
+# capital, then one of the command's other sites (nd_salvo_pick_command_site),
+# by turns, so the capital takes the first warhead and half of the rest
+# (owner, 2026-11-19: not all of a country's leadership sits in its capital).
+# Forces: a state with a military target, then the capital's region, then the
+# capital. Cities, and Forces when none of those is
 # in reach: the states the strike action would choose. An ordered_* position
 # is a literal, so the warheads spread by marks: each pick is the best state
 # not yet aimed at, and once every state is, the best of all.
@@ -2623,7 +2626,16 @@ nd_salvo_pick_target = {
 			exists = capital
 			capital = { nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker } }
 		}
-		capital = { nd_salvo_aim_here = yes }
+		# nd_salvo_lead_alt: the warhead before went to the capital.
+		if = {
+			limit = { scope:nd_salvo_attacker = { has_variable = nd_salvo_lead_alt } }
+			scope:nd_salvo_attacker = { remove_variable = nd_salvo_lead_alt }
+			nd_salvo_pick_command_site = yes
+		}
+		else = {
+			scope:nd_salvo_attacker = { set_variable = nd_salvo_lead_alt }
+			capital = { nd_salvo_aim_here = yes }
+		}
 	}
 	else_if = {
 		limit = {
@@ -2704,6 +2716,78 @@ nd_salvo_pick_target = {
 	}
 }
 
+# Victim scope: a Leadership warhead that doesn't go to the capital goes to
+# the command's other sites, one each, the best first: a state with a military
+# target, where the hardened command posts are, then a state in the capital's
+# region, then any state in reach; once every one is marked, the capital.
+nd_salvo_pick_command_site = {
+	if = {
+		limit = {
+			any_scope_state = {
+				is_capital = no
+				nd_state_has_military_target = yes
+				NOT = { has_variable = nd_salvo_target }
+				nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker }
+			}
+		}
+		ordered_scope_state = {
+			limit = {
+				is_capital = no
+				nd_state_has_military_target = yes
+				NOT = { has_variable = nd_salvo_target }
+				nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker }
+			}
+			order_by = nuclear_strike_target_score
+			position = 0
+			nd_salvo_aim_here = yes
+		}
+	}
+	else_if = {
+		limit = {
+			exists = scope:nd_salvo_cap_region
+			any_scope_state = {
+				is_capital = no
+				region ?= scope:nd_salvo_cap_region
+				NOT = { has_variable = nd_salvo_target }
+				nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker }
+			}
+		}
+		ordered_scope_state = {
+			limit = {
+				is_capital = no
+				region ?= scope:nd_salvo_cap_region
+				NOT = { has_variable = nd_salvo_target }
+				nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker }
+			}
+			order_by = nuclear_strike_target_score
+			position = 0
+			nd_salvo_aim_here = yes
+		}
+	}
+	else_if = {
+		limit = {
+			any_scope_state = {
+				is_capital = no
+				NOT = { has_variable = nd_salvo_target }
+				nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker }
+			}
+		}
+		ordered_scope_state = {
+			limit = {
+				is_capital = no
+				NOT = { has_variable = nd_salvo_target }
+				nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker }
+			}
+			order_by = nuclear_strike_target_score
+			position = 0
+			nd_salvo_aim_here = yes
+		}
+	}
+	else = {
+		capital = { nd_salvo_aim_here = yes }
+	}
+}
+
 # State scope: this is the next warhead's state. Marked for the spread, and
 # the attacker told a warhead was aimed (nd_salvo_warhead).
 nd_salvo_aim_here = {
@@ -2723,8 +2807,19 @@ nd_salvo_hit = {
 	scope:target_state = { save_scope_as = nd_salvo_hit_state }
 	if = {
 		limit = { scope:target_state = { is_capital = yes } }
-		change_variable = { name = nd_salvo_capital_landed add = 1 }
 		scope:target_state = { save_scope_as = nd_salvo_hit_capital }
+	}
+	# On the command, for the decapitation (§6.3): the capital, whatever the
+	# mission, and every state a Leadership warhead hits, the command's other
+	# sites (owner, 2026-11-19).
+	if = {
+		limit = {
+			OR = {
+				scope:target_state = { is_capital = yes }
+				var:nd_salvo_mission = 3
+			}
+		}
+		change_variable = { name = nd_salvo_command_landed add = 1 }
 	}
 	if = {
 		limit = { var:nd_salvo_mission = 2 }
@@ -2772,7 +2867,7 @@ nd_salvo_aftermath = {
 		}
 		if = {
 			limit = {
-				var:nd_salvo_capital_landed > 0
+				var:nd_salvo_command_landed > 0
 				scope:nd_salvo_victim = {
 					nd_authority_central = yes
 					nd_is_armed = yes
@@ -2980,9 +3075,9 @@ nd_salvo_decapitation = {
 	save_scope_as = nd_sv_enemy
 	scope:nd_salvo_victim = {
 		set_variable = { name = nd_dc_result value = 0 }
-		# For the log line: the warheads on the capital, the redundancy and
+		# For the log line: the warheads on the command, the redundancy and
 		# the chance they were rolled against.
-		set_variable = { name = nd_dc_landed value = scope:nd_salvo_attacker.var:nd_salvo_capital_landed }
+		set_variable = { name = nd_dc_landed value = scope:nd_salvo_attacker.var:nd_salvo_command_landed }
 		set_variable = { name = nd_dc_r value = scope:nd_salvo_attacker.var:nd_salvo_victim_r }
 		set_variable = { name = nd_dc_chance value = nd_decapitation_chance_value }
 		random = {
@@ -3089,7 +3184,11 @@ nd_salvo_clear = {
 	remove_variable = nd_salvo_fired
 	remove_variable = nd_salvo_landed
 	remove_variable = nd_salvo_forces_landed
-	remove_variable = nd_salvo_capital_landed
+	remove_variable = nd_salvo_command_landed
+	if = {
+		limit = { has_variable = nd_salvo_lead_alt }
+		remove_variable = nd_salvo_lead_alt
+	}
 	remove_variable = nd_salvo_destroyed
 	remove_variable = nd_salvo_victim_r
 	if = {

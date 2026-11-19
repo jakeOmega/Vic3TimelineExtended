@@ -225,6 +225,25 @@ class ReportTests(unittest.TestCase):
         self.assertIn("debug.log whole, error.log from 12:05:10, game.log whole; playset: Vic3TimelineExtended",
                       launches)
 
+    def test_a_launch_that_loaded_a_save_with_mods_missing_says_so(self):
+        self.assertNotIn("MODS MISSING", section(self.report, "Launches"))
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        fx = Fixture(tmp.name)
+        fx.standard()
+        fx.log("game.log", "".join([
+            "[12:00:40][gamestate.cpp:1388]: Warning: we're loading a save file while missing mod(s). "
+            "Might cause unexpected issues.\n",
+            "\x16warning! \x15X Missing Mods:\x15!\n",
+            "   \x15indent_newline: • Headlines!\n",
+            "   \x15indent_newline: • Vic3TimelineExtended!\n",
+        ]), "12:06:00")
+        launches = section(fx.report(), "Launches")
+        self.assertIn("LOADED A SAVE WITH MODS MISSING (Headlines, Vic3TimelineExtended)", launches)
+        # Only launch 2 loaded it.
+        self.assertEqual(launches.count("MODS MISSING"), 1)
+        self.assertLess(launches.index("#2 "), launches.index("MODS MISSING"))
+
     def test_untagged_groups_by_exact_message_and_keeps_every_site(self):
         untagged = section(self.report, "Untagged")
         # st_1 and st_2 stay two findings (no digit folding), and st_1's two lines of the file are both named.

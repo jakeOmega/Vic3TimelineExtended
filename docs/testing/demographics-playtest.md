@@ -1726,6 +1726,21 @@ of millions to around 10¹⁵ came before 1917.
    (and `te_dg_chk_runaway = 5` marks in its saves) should be rare, and each should read its `mig=` under three
    quarters of `people` − `prev`. A sane state still tripping on sign 5 means the skip isn't enough: reopen #1500 (its other options were two
    censuses running, or the floor in the model). Six of its sane states had no surviving line, so this can happen.
+6. **First `why=7`: Ingria, 1977** (the owner's 1.15.2 USA game, 2026-11-19). `state=Sankt-Peterburg owner=RUS
+   people=196594 prev=3995797 provinces=30 mig=6985682 mb=10.000 cbr=839.64 cdr=6369.36 e0=42.46`. Russia's capital
+   took a 25-warhead Leadership salvo in 1977 (the owner). Each warhead booked a tenth of `state_population` as known
+   dead, but that figure doesn't fall until the next tick and the salvo lands in one effect, so all 25 booked a tenth
+   of 4 million, about 10 million in all, while the kills compounded to about 3.8 million. The census took the other
+   6 to 7 million for arrivals, and the year's rates pinned its births term at the ceiling. Fixed: the strikes book
+   from the day's running figure (`nd_strike_people_before`/`_after`, `extra_effects.txt`). **To check** (Full, a
+   salvo of several warheads on one state): the state's next census reads a net migration near 0, not millions, and
+   no `demog_runaway` line; `nuclear_weapon_events`' death figures fall warhead by warhead. Ingria itself keeps the bad
+   year in its books, and the 1978 census made it worse: 197,774 to 19,852 people (`te_dg_mb` 5.3, `te_dg_md` 9.1,
+   net migration −134,293; the 1979.4.1 autosave). The 1977 rates it carried (840 births and 6,369 deaths per 1,000)
+   are the year's events over the survivors, so any strike that kills most of a state blows them up, booked rightly
+   or not; the over-booking fix does not cover it. Proposed to the owner: a guard for a census year whose known
+   kills are a large share of the people, handing that state to the engine's rates as the #1476 guards do.
+   Autosaves of 1977.7 to 1978.7: `/mnt/d/vic3_triage_2026-11-19/saves/`.
 
 ## W's lead: the census sets the pops past its aim (2026-11-07)
 

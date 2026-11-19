@@ -72,7 +72,7 @@ class Posture:
     mainframe: bool = True         # mainframe_computers
     enemy: "Posture | None" = None # scope:nd_sv_enemy, for the survivors values
     salvo_forces_landed: float = 0 # a salvo's warheads landed on forces (the attacker's var:nd_salvo_forces_landed)
-    salvo_capital_landed: float = 0  # landed on the victim's capital (var:nd_salvo_capital_landed)
+    salvo_command_landed: float = 0  # landed on the victim's command: its capital, and a Leadership salvo's other sites (var:nd_salvo_command_landed)
     salvo_victim_r: float = 1      # the victim's redundancy when the salvo began (var:nd_salvo_victim_r)
     believed_armed: bool = True    # the world believes it holds warheads (nd_believed_armed)
     capital_hit_share: float = 0.9 # a warhead's chance on the enemy's capital (nd_ai_capital_hit_share)

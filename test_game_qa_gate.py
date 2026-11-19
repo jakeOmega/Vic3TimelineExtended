@@ -17,7 +17,7 @@ from unittest import mock
 
 from game_qa import __main__ as cli
 from game_qa import fixture as fixture_mod
-from game_qa import gate, restore, snapshot
+from game_qa import crash_reporter, gate, restore, snapshot
 
 IDLE = [gate.GpuSample(14, 1607, 10240)] * 5
 MINE = gate.ProcId(100, "2026-11-10T12:00:00.0000000Z")
@@ -484,6 +484,242 @@ class CommandLineTest(unittest.TestCase):
         self.assertEqual((code, out["held"]), (0, False), self.why(out))
         self.assertEqual(self.tree(), before)
 
+    # -- the crash reporter (#1905) ------------------------------------------
+
+    @contextlib.contextmanager
+    def fake_reporters(self, listings, holding=(False,)):
+        """The install's crash reporter, faked: `listings` is what each look at the reporters finds, a queue whose
+        last entry repeats, less those `crash_reporter.close` has ended. While `holding[0]`, a rename over a log is
+        refused (PermissionError), as the reporter's open log refuses it; closing a reporter ends that. Yields the
+        reporters closed; `self.looks` counts the looks."""
+        exe = self.base_game / crash_reporter.REPORTER_EXE
+        exe.parent.mkdir(parents=True, exist_ok=True)
+        exe.write_bytes(b"MZ")
+        closed, holding = [], list(holding)
+        self.looks = 0
+        real_replace = os.replace
+
+        def listing(*a, **k):
+            self.looks += 1
+            found = listings.pop(0) if len(listings) > 1 else listings[0]
+            return [r for r in found if r not in closed]
+
+        def close(who, *a, **k):
+            closed.append(who)
+            holding[0] = False
+            return crash_reporter.CLOSED
+
+        def replace(source, target):
+            if holding[0] and Path(target).parent.name == "logs":
+                raise PermissionError(13, "Permission denied", str(source), None, str(target))
+            real_replace(source, target)
+
+        with mock.patch.object(crash_reporter, "list_reporters", side_effect=listing), \
+                mock.patch.object(crash_reporter, "close", side_effect=close), \
+                mock.patch("os.replace", replace):
+            yield closed
+
+    @contextlib.contextmanager
+    def crashed_run(self, listings, reporter_holds=True):
+        """A run whose game crashed: `launched_run` with the run writing `logs/debug.log`, then, inside,
+        `fake_reporters`, a reporter holding `logs/` open from the start. Yields the snapshot id and the list of
+        reporters closed."""
+        with self.naps_clock() as now:
+            snap_id = self.launched_run(lambda: self.game_writes("logs/debug.log", b"the run's log\n", now()))
+            with self.fake_reporters(listings, (reporter_holds,)) as closed:
+                yield snap_id, closed
+
+    def reporter_of(self, snap_id, after_s=1.0, pid=7000):
+        """The install's reporter, started `after_s` after the run's game (negative: before it)."""
+        started = [e for e in snapshot.journal(snapshot.all_snapshots(self.backups)[-1]) if e["event"] == "started"]
+        game = cli._when(started[-1]["created"])
+        return crash_reporter.Reporter(pid, iso(game + dt.timedelta(seconds=after_s)), 4242,
+                                       "W:" + str(self.base_game / crash_reporter.REPORTER_EXE))
+
+    def test_restore_closes_the_reporter_the_runs_crash_left_before_it_puts_the_logs_back(self):
+        before = self.tree()
+        listings = []
+        with self.crashed_run(listings) as (snap_id, closed):
+            listings.append([self.reporter_of(snap_id)])
+            out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["held"]), (0, False), self.why(out))
+        self.assertEqual([r.pid for r in closed], [7000])
+        self.assertEqual([(r["pid"], r["outcome"]) for r in out["reporters_closed"]], [(7000, "closed")])
+        self.assertIn("logs/debug.log", out["restored"])
+        self.assertEqual(self.events()[-2:], ["reporter_closed", "restored"])
+        self.assertEqual(self.tree(), before)
+
+    def test_a_reporter_that_came_up_after_the_first_look_is_closed_and_the_restore_run_again(self):
+        listings = [[]]
+        with self.crashed_run(listings) as (snap_id, closed):
+            listings.append([self.reporter_of(snap_id)])     # the second look finds it
+            out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["held"]), (0, False), self.why(out))
+        self.assertEqual([r.pid for r in closed], [7000])
+        self.assertEqual(self.events()[-2:], ["reporter_closed", "restored"])
+
+    def test_a_reporter_not_the_runs_is_left_and_the_refusal_names_it(self):
+        # One that started before the run's game: an earlier crash, perhaps of the owner's own game. It is left, and
+        # the restore that its open log refuses says whom to ask; the owner's other files are back by then.
+        listings = []
+        with self.crashed_run(listings) as (snap_id, closed):
+            listings.append([self.reporter_of(snap_id, after_s=-600, pid=6000)])
+            out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["held"], out["refused"]), (2, False, "error"))
+        self.assertEqual(closed, [])
+        self.assertEqual([r["pid"] for r in out["reporters_left"]], [6000])
+        for needle in ("Permission denied", "pid 6000", "Ask the owner", "recover"):
+            self.assertIn(needle, out["detail"])
+        self.assertNotIn("restored", self.events())
+
+    def test_recover_closes_the_reporter_of_a_run_a_dead_session_left(self):
+        before = self.tree()
+        listings = []
+        with self.crashed_run(listings) as (snap_id, closed):
+            listings.append([self.reporter_of(snap_id)])
+            out, code = self.run_cli("recover")
+        self.assertEqual(code, 0, out)
+        self.assertEqual([(r["id"], r["held"]) for r in out["runs"]], [(snap_id, False)])
+        self.assertEqual([r["pid"] for r in out["runs"][0]["reporters_closed"]], [7000])
+        self.assertEqual([r.pid for r in closed], [7000])
+        self.assertEqual(self.tree(), before)
+
+    def test_recover_names_a_reporter_it_left_when_a_log_is_held_open(self):
+        listings = []
+        with self.crashed_run(listings) as (snap_id, closed):
+            listings.append([self.reporter_of(snap_id, after_s=-600, pid=6000)])
+            out, code = self.run_cli("recover")
+        self.assertEqual(code, 2)
+        self.assertEqual(closed, [])
+        self.assertIn("Permission denied", out["runs"][0]["reason"])
+        self.assertIn("pid 6000", out["runs"][0]["reason"])
+
+    def test_no_reporter_up_changes_nothing_in_a_restore(self):
+        before = self.tree()
+        with self.crashed_run([[]], reporter_holds=False) as (snap_id, closed):
+            out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["held"]), (0, False), self.why(out))
+        self.assertEqual(closed, [])
+        self.assertNotIn("reporters_closed", out)
+        self.assertNotIn("reporter_closed", self.events())
+        self.assertEqual(self.tree(), before)
+
+    # The break-it review of #1913 ended a reporter in each of the next four; each now leaves it alone.
+
+    def unrecorded_exit_run(self):
+        """snapshot, launch, and a `watch` whose first look finds the game gone: no `game_exited` is recorded.
+        Returns the snapshot id and the game's start."""
+        taken, code = self.run_cli("snapshot", "--save", "new york_1940_07_29")
+        self.assertEqual(code, 0, taken)
+        game = self.game(seconds_from_now=1)
+        self.start_result = game
+        out, code = self.launch(taken["id"], "-debug_mode", "-loadsave=new york_1940_07_29")
+        self.assertEqual(code, 0, out)
+        self.start_result = None
+        self.games = []
+        out, code = self.run_cli("watch", taken["id"])
+        self.assertEqual(out.get("refused"), "game_gone_unrecorded", out)
+        return taken["id"], cli._when(game.created)
+
+    def install_reporter(self, when, pid=7000):
+        return crash_reporter.Reporter(pid, iso(when), 1234, "W:" + str(self.base_game / crash_reporter.REPORTER_EXE))
+
+    def test_the_owners_crash_a_day_after_a_run_with_no_recorded_exit_is_left(self):
+        # A day later the owner played (continue_game.json) and their game crashed: the run holds, and their
+        # reporter is not the harness's to end. The listing is not even looked at: nothing gets past the holds.
+        with self.naps_clock() as now:
+            snap_id, game_start = self.unrecorded_exit_run()
+            self._nap(86400)
+            self.game_writes("continue_game.json", b'{"title": "the owner played"}', now())
+            with self.fake_reporters([[self.install_reporter(game_start + dt.timedelta(seconds=86400))]]) as closed:
+                out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((out["held"], out["reason"]), (True, "modified_after_exit"))
+        self.assertEqual((closed, self.looks), ([], 0))
+        self.assertNotIn("reporter_closed", self.events())
+
+    def test_a_reporter_a_day_after_a_run_with_no_recorded_exit_is_left_even_when_nothing_holds(self):
+        # Nothing the hold rule judges changed, so the restore goes ahead; the run's end is its last sign of life,
+        # and a reporter a day after that is not its.
+        with self.naps_clock():
+            snap_id, game_start = self.unrecorded_exit_run()
+            self._nap(86400)
+            owners = self.install_reporter(game_start + dt.timedelta(seconds=86400))
+            with self.fake_reporters([[owners]]) as closed:
+                out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["held"]), (0, False), self.why(out))
+        self.assertEqual(closed, [])
+        self.assertEqual([(r["pid"], "last known alive" in r["why"]) for r in out["reporters_left"]], [(7000, True)])
+
+    def test_restore_of_an_already_restored_snapshot_leaves_a_later_reporter(self):
+        with self.naps_clock():
+            snap_id, game_start = self.unrecorded_exit_run()
+            self._nap(60)
+            with self.fake_reporters([[]]):
+                out, code = self.run_cli("restore", snap_id)
+            self.assertEqual((code, out["held"]), (0, False), out)
+            self._nap(86400)
+            with self.fake_reporters([[self.install_reporter(game_start + dt.timedelta(seconds=86400))]]) as closed:
+                self.run_cli("restore", snap_id)
+        self.assertEqual(closed, [])
+        self.assertNotIn("reporter_closed", self.events())
+
+    def test_a_reporter_in_an_unwatched_stretch_is_left_and_the_run_held(self):
+        # `watch` resumed after two hours (nobody saw whether another game ran): the run holds before any change.
+        with self.naps_clock():
+            taken, code = self.run_cli("snapshot", "--save", "new york_1940_07_29")
+            game = self.game(seconds_from_now=1)
+            self.start_result = game
+            out, code = self.launch(taken["id"], "-debug_mode", "-loadsave=new york_1940_07_29")
+            self.assertEqual(code, 0, out)
+            snap = self.the_snapshot()
+            snapshot.record(snap, "watching", gap_s=1.0)
+            snapshot.record(snap, "heartbeat")
+            self._nap(7200)
+            snapshot.record(snap, "watch_resumed", gap_s=7200.0)
+            snapshot.record(snap, "heartbeat")
+            snapshot.record(snap, "game_exited")
+            self._nap(60)
+            in_gap = self.install_reporter(cli._when(game.created) + dt.timedelta(seconds=3600))
+            with self.fake_reporters([[in_gap]]) as closed:
+                out, code = self.run_cli("restore", taken["id"])
+        self.assertEqual((out["held"], out["reason"]), (True, "unwatched_stretch"))
+        self.assertEqual((closed, self.looks), ([], 0))
+
+    def test_a_refused_rename_outside_the_logs_gets_no_second_look(self):
+        # Only a log's refusal is a reporter's: anything else is raised as it came, with no reporter looked for again.
+        listings = [[]]
+        real_replace = os.replace
+
+        def replace(source, target):
+            if Path(target).name == "continue_game.json":
+                raise PermissionError(13, "Permission denied", str(source), None, str(target))
+            real_replace(source, target)
+
+        with self.naps_clock() as now:
+            snap_id = self.launched_run(lambda: self.game_writes("continue_game.json", b"{}", now()))
+            with self.fake_reporters(listings) as closed, mock.patch("os.replace", replace):
+                listings.append([self.reporter_of(snap_id)])     # a second look would find one
+                out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["refused"]), (2, "error"))
+        self.assertIn("continue_game.json", out["detail"])
+        self.assertEqual((closed, self.looks), ([], 1))
+
+    def launched_with(self, *given):
+        """The arguments one launch passed, as its reply, the start and the journal's `started` give them."""
+        taken, _ = self.run_cli("snapshot")
+        self.start_result = self.game(seconds_from_now=1)
+        out, code = self.launch(taken["id"], *given)
+        self.assertEqual(code, 0, out)
+        self.assertEqual(self.starts[-1][1], out["args"])
+        self.assertEqual(snapshot.journal(self.the_snapshot())[-1]["args"], out["args"])
+        return out["args"]
+
+    def test_launch_adds_the_no_crash_reporter_flag(self):
+        self.assertEqual(self.launched_with("-debug_mode"), ["-debug_mode", "-no_crash_reporter"])
+
+    def test_launch_does_not_add_the_flag_a_caller_gave(self):
+        self.assertEqual(self.launched_with("-no_crash_reporter", "-debug_mode"), ["-no_crash_reporter", "-debug_mode"])
+
     def test_a_file_the_game_wrote_again_with_the_same_bytes_gets_its_time_back(self):
         # #1588: the game writes pdx_settings.json again at launch, byte for byte (here, a file this folder has).
         # Nothing is put back, and the folder still ends exactly as the snapshot found it, times included; the
@@ -609,15 +845,16 @@ class CommandLineTest(unittest.TestCase):
         game = self.game(seconds_from_now=1)
         self.start_result = game
         args = ["-gdpr-compliant", "-debug_mode", "-loadsave=te_qa_fixture_x"]
+        passed = [*args, "-no_crash_reporter"]      # the one argument launch adds (#1905)
         with self.naps_clock() as now:      # the run's write is judged against its exit (#1648)
             out, code = self.launch(taken["id"], *args)
             self.assertEqual((code, out),
-                             (0, {"id": taken["id"], "pid": game.pid, "created": game.created, "args": args}))
+                             (0, {"id": taken["id"], "pid": game.pid, "created": game.created, "args": passed}))
             exe = self.base_game / "binaries" / "victoria3.exe"
-            self.assertEqual(self.starts, [("W:" + str(exe), args, "W:" + str(exe.parent))])   # nothing added
+            self.assertEqual(self.starts, [("W:" + str(exe), passed, "W:" + str(exe.parent))])
             started = snapshot.journal(self.the_snapshot())[-1]
             self.assertEqual((started["event"], started["pid"], started["created"], started["args"]),
-                             ("started", game.pid, game.created, args))
+                             ("started", game.pid, game.created, passed))
             run_write = self.user / "continue_game.json"
             run_write.write_text('{"title": "te_qa_fixture_x"}')
             os.utime(run_write, (now().timestamp(), now().timestamp()))   # while the run's game is up
