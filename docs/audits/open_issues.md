@@ -308,6 +308,17 @@ Filtered from log triage via `docs/audits/mod_known_noise.md`.
 
 ---
 
+### L33. Power bloc statues: the mod's two identities are no piece's default
+**Files:** `common/power_bloc_identities/extra_power_bloc_identities.txt` (`identity_creditors_consortium`, `identity_research_commons`); vanilla's `gfx/map/power_block_statues/heroes/00_heroes.txt` and `pedestals/00_pedestals.txt`
+
+**Problem (2026-11-19):** vanilla's statue heroes and pedestals each list the identities they are a default for (`default_choice_for_identities`, which the AI's random statue uses), and none lists the two identities #1865 added. The engine logs `Identity 'identity_creditors_consortium' is not default for any hero!` (`power_bloc_statue_hero_type.cpp:141`) and the same for `pedestal` (`power_bloc_statue_pedestal_type.cpp:62`), for each identity, once a launch. What an AI Consortium's or Commons' statue looks like as a result is unknown.
+
+Filtered from log triage via `docs/audits/mod_known_noise.md`.
+
+**Fix:** issue #1916 (owner's call: override vanilla's two files, add mod pieces in files of their own, or leave it if the engine falls back to a sensible piece).
+
+---
+
 ## Vanilla 1.13.7 patch impact (2026-05-27)
 
 Verify+flag pass after vanilla released **1.13.7**. The patch is overwhelmingly vanilla-internal (AI fleet logic, naval balance, Japan/USA content, bugfixes); the mod does not override Japan, USA decisions, tolls, treaty articles, or vanilla canals, so most of it needs no action. The real overlap is the **naval domain**.

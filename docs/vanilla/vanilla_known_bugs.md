@@ -772,6 +772,8 @@ The same block appears in `common/war_goal_types/03_conquer_state.txt` (`:69`, `
 
 20 lines in one session (2026-09-20). In 1.15.1 the same reads sit one line lower (70 and 84, the `scope:target_country = {` lines) and log `Event target link 'scope' returned an invalid object`: four lines on 2026-11-17, all while the game was paused (the war-goal preview), with no mod frame. Not mod-caused: this mod defines only `te_reunify_country` and `te_un_mandate_restore_state` under `common/war_goal_types/`, and references `wg_return_state` / `wg_conquer_state` / `wg_annex_country` nowhere in `common/` or `events/`. Cosmetic — the `multiply` simply fails its limit, so the subject-related infamy discounts don't apply during the preview.
 
+1.15.2 (2026-11-19): the same unguarded `scope:target_country = {` logs at `common/war_goal_types/14_liberate_subject.txt` (`:53`, the liberty-desire limit) and `common/war_goal_types/20_regime_change.txt` (`:61`, `:76`, the loyal and rebellious subject multipliers), nine lines over three launches, each beside the `00_infamy_values.txt` `root` lines. Two of the launches loaded the save with every mod missing, so these are vanilla's own; the mod overrides neither file.
+
 ### `common/scripted_triggers/00_ai_triggers.txt:614, 624, 644` — AI regional-objective iterators meet a null objective (1.14.4)
 - reviewed: helper anchor, signature cannot match a mod call (the mod calls only `ai_has_enact_weight_modifier_journal_entries` from this file, a law-commitment and journal-entry check with no regional-objective iterator; #730)
 

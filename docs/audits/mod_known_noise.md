@@ -185,13 +185,14 @@ Vanilla's reciprocal-article check skips its own two mutual articles but not the
 - source: `country.cpp:9594`
 - source: `country.cpp:9794`
 - source: `country.cpp:9780`
+- source: `country.cpp:9781`
 - tracked: `docs/audits/open_issues.md#l28-zero-construction-speed-with-a-queued-project-unattributed`
 
 ```
 The total construction speed is zero
 ```
 
-The engine's estimate of a country's queue length divides by its construction speed, and logs this when that speed is zero. It names no country and no script, so the cause isn't known. 2026-10-24: 3,208 lines over three and a half hours of play, steady at 20 to 40 a minute from about half an hour after the launch, a third of every `error.log`; the 2026-10-11 observer runs logged it at `:9594` ("queues"), so it predates that day's builds. Vanilla 1.15 moved both lines, to `:9794` ("queue") and `:9780` ("queues"): 720 lines in the 2026-11-05/06 sessions, untagged until the two anchors were added. 2026-11-12 (1.15.1, a 1932–1939 game): about 1,000 an hour, all at `:9780`, so not grown. 2026-11-13 (a 1945–1946 game): about 650 an hour, and a first candidate for the cause: in an autosave of that game two countries (Canada and `E64`) had buildings queued and Construction Sites with no laborer at all, so no construction to spend, and a site hires only one laborer a week (`docs/testing/ai-economy-playtest.md`, "First verdict"). Not shown to be the line's only source. Tracked at `docs/audits/open_issues.md#l28-zero-construction-speed-with-a-queued-project-unattributed`.
+The engine's estimate of a country's queue length divides by its construction speed, and logs this when that speed is zero. It names no country and no script, so the cause isn't known. 2026-10-24: 3,208 lines over three and a half hours of play, steady at 20 to 40 a minute from about half an hour after the launch, a third of every `error.log`; the 2026-10-11 observer runs logged it at `:9594` ("queues"), so it predates that day's builds. Vanilla 1.15 moved both lines, to `:9794` ("queue") and `:9780` ("queues"): 720 lines in the 2026-11-05/06 sessions, untagged until the two anchors were added. 2026-11-12 (1.15.1, a 1932–1939 game): about 1,000 an hour, all at `:9780`, so not grown. 2026-11-13 (a 1945–1946 game): about 650 an hour, and a first candidate for the cause: in an autosave of that game two countries (Canada and `E64`) had buildings queued and Construction Sites with no laborer at all, so no construction to spend, and a site hires only one laborer a week (`docs/testing/ai-economy-playtest.md`, "First verdict"). Not shown to be the line's only source. Vanilla 1.15.2 moved the "queues" line again, to `:9781` (2026-11-19, the first 1.15.2 session). Tracked at `docs/audits/open_issues.md#l28-zero-construction-speed-with-a-queued-project-unattributed`.
 
 ### `common/decrees/extra_decrees.txt` — the engine checks a decree's country_trigger with no country
 - tracked: `docs/audits/open_issues.md#l29-a-decrees-country_trigger-checked-with-no-country`
@@ -259,3 +260,15 @@ Duplicated key free_construction will not be created from file: common/game_rule
 ```
 
 One line per launch, and it is the copy working: `00_a_te_free_construction.txt` sorts before vanilla's file and `game_rules` keeps the first bare definition (read 2026-11-13, #1768). The signature names vanilla's file on purpose: a line naming the mod's file means the mod's copy lost, and that one must not be filtered.
+
+### `power_bloc_statue_hero_type.cpp:141` — power bloc statues: the mod's two identities are no piece's default
+- source: `power_bloc_statue_hero_type.cpp:141`
+- source: `power_bloc_statue_pedestal_type.cpp:62`
+- tracked: `docs/audits/open_issues.md#l33-power-bloc-statues-the-mods-two-identities-are-no-pieces-default`
+
+```
+Identity 'identity_creditors_consortium' is not default for any
+Identity 'identity_research_commons' is not default for any
+```
+
+Four lines per launch, at load: each of the two identities #1865 added, once for heroes and once for pedestals, because vanilla's statue pieces name only vanilla's six identities as their defaults (read 2026-11-19, the first 1.15.2 session). The signatures name the two identities, so a vanilla identity that loses its last piece still shows. Issue #1916 holds the fix options.
