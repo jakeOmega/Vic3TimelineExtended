@@ -21,7 +21,7 @@ frigate's modules.
 | `REPLACE:law_official_nationality` restated 1.15.1's primary-culture acceptance of 50; 1.15.2 gives 100, as every other citizenship law has | Target sweep | Ported |
 | `REPLACE:mobilization_option_first_aid` and `_field_hospitals` held vanilla's recovery, 0.20 and 0.40; vanilla halved both | Target sweep | Ported: 0.10 and 0.20. Medevac Helicopters, the mod's third tier, stays at 0.80 (owner call 1) |
 | `REPLACE:company_basic_electrics` and `REPLACE:company_construction_power_bloc` restated their `possible` in `ai_will_do`. 1.15.2's AI picks a company with no `ai_construction_targets` only once it can form it (`companies.md`), and vanilla's 26 such companies say `always = yes` | Target sweep | Ported. With `possible` needing five levels, the mod's three-level `ai_will_do` never added anything |
-| `REPLACE:ideology_vanguardist` (Bolsheviks journal entry opens it) and `REPLACE:ideology_egalitarian_modern` (caste, Edo and education stances added, labor rights dropped) | Target sweep: both generator-owned | `apply_ideologies.py` regenerated them |
+| `REPLACE:ideology_vanguardist` (Bolsheviks journal entry opens it) and `REPLACE:ideology_egalitarian_modern` (caste, Edo and education stances added, labor rights dropped) | Target sweep: both generator-owned | `apply_ideologies.py` regenerated them. `heir_ed_country_allows_ideology_vanguardist`, a copy of Vanguardist's `country_trigger` that keeps an heir's education roll off an ideology the country can't have, takes the Bolsheviks branch (`test_heir_education_ideologies.py`) |
 | Vanilla's eleven parties gained a +1000 join weight for the dominant party's groups under the new Single-Party State amendments | Target sweep: the eleven party `INJECT`s | `gen_party_join_weights.py` restated them from 1.15.2 |
 | Vanilla changed seven GUI files the mod overrides by path, and three that its type redefinitions copy | § 5 at-risk loop | See GUI |
 | Engine reference docs and catalogs were 1.15.1's | `test_texture_reference_audit` wants the asset catalog's version to match the snapshot's | `vanilla_parsed/` rebuilt; `docs/engine/` rendered from the 1.15.2 dump; the effect/trigger catalog (+13, −4), its context list (+11, −2) and the asset catalog (+13 road textures, nothing removed) rebuilt; 3 loc accessors folded, 2 pruned; the culture-merge reads rescanned (only the version moved) |
@@ -82,7 +82,7 @@ those of `diff(1.15.2, result)`.
   `gen_law_effects_gui.py` reran to the same output.
 
 **Verified clean.** No mod entry collides with anything the hotfix added (39 entries, 4 events, 144 English loc
-keys). Of the 10 entries vanilla removed, the mod used none (`installed_regime`, `calculate_communism_progress`,
+keys). Of the 8 entries vanilla removed, the mod used none (`installed_regime`, `calculate_communism_progress`,
 `calculate_populism_progress`, two subject-release on-actions and their messages, a map mode). The mod sets and
 reads no define vanilla removed or changed (`NAI|COMPANY_TYPE_FORMABLE_MULTIPLE_FREE_SLOTS_FACTOR` and the regime
 change one above). The changed `INJECT:` targets take vanilla's additions beside the mod's: the political

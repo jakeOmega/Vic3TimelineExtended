@@ -55,7 +55,10 @@ heir_ed_country_allows_ideology_communist_leader = {
 }
 
 heir_ed_country_allows_ideology_vanguardist = {
-	has_technology_researched = political_agitation
+	OR = {
+		has_technology_researched = political_agitation
+		has_journal_entry = je_bolsheviks
+	}
 }
 
 heir_ed_country_allows_ideology_humanitarian = {
