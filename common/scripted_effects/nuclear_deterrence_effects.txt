@@ -2975,6 +2975,11 @@ nd_salvo_decapitation = {
 	save_scope_as = nd_sv_enemy
 	scope:nd_salvo_victim = {
 		set_variable = { name = nd_dc_result value = 0 }
+		# For the log line: the warheads on the capital, the redundancy and
+		# the chance they were rolled against.
+		set_variable = { name = nd_dc_landed value = scope:nd_salvo_attacker.var:nd_salvo_capital_landed }
+		set_variable = { name = nd_dc_r value = scope:nd_salvo_attacker.var:nd_salvo_victim_r }
+		set_variable = { name = nd_dc_chance value = nd_decapitation_chance_value }
 		random = {
 			chance = nd_decapitation_chance_value
 			set_variable = { name = nd_dc_result value = 1 }
@@ -2989,12 +2994,15 @@ nd_salvo_decapitation = {
 			}
 			set_variable = { name = nd_pending_retaliation value = scope:nd_salvo_attacker }
 			set_variable = { name = nd_restored_from_decapitation days = 60 }
-			debug_log = "TE_NUCLEAR: type=decapitation; result=yes; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+			debug_log = "TE_NUCLEAR: type=decapitation; result=yes; landed=[THIS.Var('nd_dc_landed').GetValue|0]; r=[THIS.Var('nd_dc_r').GetValue|1]; chance=[THIS.Var('nd_dc_chance').GetValue|0]; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 		}
 		else = {
-			debug_log = "TE_NUCLEAR: type=decapitation; result=no; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+			debug_log = "TE_NUCLEAR: type=decapitation; result=no; landed=[THIS.Var('nd_dc_landed').GetValue|0]; r=[THIS.Var('nd_dc_r').GetValue|1]; chance=[THIS.Var('nd_dc_chance').GetValue|0]; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 		}
 		remove_variable = nd_dc_result
+		remove_variable = nd_dc_landed
+		remove_variable = nd_dc_r
+		remove_variable = nd_dc_chance
 	}
 }
 

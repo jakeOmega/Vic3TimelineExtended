@@ -81,6 +81,15 @@ sr_mod_bunker_reliability = {
 	multiply = sr_mod_bunker_reliability_per_level
 	max = sr_mod_bunker_reliability_max
 }
+# And the command's redundancy against a strike on the capital
+# (nd_redundancy_command), at most sr_mod_bunker_redundancy_max.
+sr_mod_bunker_redundancy_per_level = { value = 2 }
+sr_mod_bunker_redundancy_max = { value = 6 }
+sr_mod_bunker_redundancy = {
+	value = sr_mod_units_bunker
+	multiply = sr_mod_bunker_redundancy_per_level
+	max = sr_mod_bunker_redundancy_max
+}
 # The AI's plan (sr_mod_ai_plan_<key>): an Administration from this autonomy
 # while the colony is still heading for sr_mod_ai_admin_settles_at or more (the
 # owner, 2026-10-31: from 25, a warning ahead of the demand at sr_aut_ask_level
