@@ -81,7 +81,7 @@ sr_mod_bunker_reliability = {
 	multiply = sr_mod_bunker_reliability_per_level
 	max = sr_mod_bunker_reliability_max
 }
-# And the command's redundancy against a strike on the capital
+# And the command's redundancy against a Leadership salvo
 # (nd_redundancy_command), at most sr_mod_bunker_redundancy_max.
 sr_mod_bunker_redundancy_per_level = { value = 2 }
 sr_mod_bunker_redundancy_max = { value = 6 }

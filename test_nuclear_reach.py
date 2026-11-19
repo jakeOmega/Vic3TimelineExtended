@@ -227,7 +227,18 @@ class TestReachReaders(unittest.TestCase):
         # when it is in reach.
         self.assertEqual(pick.count("exists = capital capital = { nd_state_in_reach_of ="
                                     " { COUNTRY = scope:nd_salvo_attacker } }"), 2)
-        self.assertNotIn(" else = {", pick)
+        # The one else is Leadership's turn at the capital, inside the branch
+        # that found the capital in reach; its other turn,
+        # nd_salvo_pick_command_site, is called from there alone and ends on
+        # that capital too.
+        lead = pick[:pick.index("var:nd_salvo_mission = 2")]
+        self.assertEqual(pick.count(" else = {"), 1)
+        self.assertIn(" else = { scope:nd_salvo_attacker = { set_variable = nd_salvo_lead_alt }"
+                      " capital = { nd_salvo_aim_here = yes } }", lead)
+        self.assertEqual(self.effects.count("nd_salvo_pick_command_site = yes"), 1)
+        self.assertIn("nd_salvo_pick_command_site = yes", lead)
+        site = squash(block(self.effects, "nd_salvo_pick_command_site"))
+        self.assertTrue(site.rstrip().endswith("else = { capital = { nd_salvo_aim_here = yes } }"))
         self.assertTrue(pick.rstrip().endswith("position = 0 nd_salvo_aim_here = yes } }"))
         # The warhead rolls only once aimed: the stockpile, the count and the
         # dice sit behind the flag.

@@ -215,7 +215,7 @@ class TestCounterforceScript(unittest.TestCase):
 
 
 class TestDecapitationScript(unittest.TestCase):
-    """Chance = max(0, 1 - (R/L)^2) for L warheads on the capital against
+    """Chance = max(0, 1 - (R/L)^2) for L warheads on the command against
     redundancy R (rework spec §6.3; the curve and R's command terms, owner,
     2026-11-19)."""
 
@@ -227,7 +227,7 @@ class TestDecapitationScript(unittest.TestCase):
         cls.model = RiskModel()
 
     def chance(self, landed, redundancy):
-        attacker = Posture(salvo_capital_landed=landed, salvo_victim_r=redundancy)
+        attacker = Posture(salvo_command_landed=landed, salvo_victim_r=redundancy)
         return self.model.number("nd_decapitation_chance_value", Posture(enemy=attacker))
 
     def r(self, value="nd_redundancy", **fields):
