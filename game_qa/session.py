@@ -141,14 +141,15 @@ SETUP_WAIT_S = 10.0                     # from a setup's command to its done mar
 # window did not respond; the probes of 2026-11-10 saw 40 s, console commands dropped and every debug.log
 # generation rotated (spec § 3.3).
 RELOAD_FIRST_S = 20.0                   # after the rewrite, before the first look: the window is frozen by then
-RELOAD_RETRY_S = 5.0                    # between looks (a look at a frozen window takes the console's 10 s itself)
+RELOAD_RETRY_S = 5.0                    # between looks (a look at a frozen window takes the console's limit itself)
 RELOAD_WAIT_S = 300.0                   # for the game to log the new revision, in all
 LOADED_WAIT_S = 5.0                     # from the revision event's command to its line in the log
 LOADED_COMMAND = "event " + overlay.LOADED_EVENT
 # What a look may fail with while the game reloads, and so is tried again: the command was dropped (no_ack),
 # or the reload's burst swallowed its lines (no_reply, log_gap). The event only logs, so a second run costs nothing.
 RELOAD_RETRIED = ("no_ack", "no_reply", "log_gap")
-# The console calls a window that has not responded for 10 s `game_gone`. During a reload that is the game being
+# The console calls a window that has not responded for its limit (10 s, or `start --unresponsive-s`) `game_gone`.
+# During a reload that is the game being
 # busy, so it is tried again too, but only while the window is still there (`_reloading`); `watch` is looked at
 # between tries, and ends them when the game really has gone.
 RELOAD_FROZEN = "game_gone"
@@ -3623,12 +3624,16 @@ def _check_unresponsive(value) -> float:
     taken for a gone one."""
     if value is None:
         return UNRESPONSIVE_S
-    if isinstance(value, bool) or not isinstance(value, (int, float)) or value != value:
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
         raise SessionError("bad_argument", "unresponsive_s is a number of seconds, not %r" % (value,))
-    if not UNRESPONSIVE_S <= value <= MAX_UNRESPONSIVE_S:
-        raise SessionError("bad_argument", "--unresponsive-s takes %g to %g seconds, not %g"
-                           % (UNRESPONSIVE_S, MAX_UNRESPONSIVE_S, value))
-    return float(value)
+    try:
+        seconds = float(value)
+    except OverflowError:
+        seconds = math.inf
+    if not UNRESPONSIVE_S <= seconds <= MAX_UNRESPONSIVE_S:      # NaN fails both comparisons
+        raise SessionError("bad_argument", "--unresponsive-s takes %g to %g seconds, not %r"
+                           % (UNRESPONSIVE_S, MAX_UNRESPONSIVE_S, value if isinstance(value, float) else seconds))
+    return seconds
 
 
 def _selected(lines: list[str], index: int, event: str) -> bool:

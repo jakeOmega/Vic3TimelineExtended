@@ -992,6 +992,38 @@ class FailureTests(RestoreTestCase):
         self.assertEqual(order, [("put back", "continue_game.json"), ("removed", "tests.txt"),
                                  ("put back", "logs/debug.log"), ("removed", "logs/game.log")])
 
+    def test_before_changes_runs_once_every_hold_is_decided_and_before_the_first_change(self):
+        # #1905: the command line closes the run's crash reporter there, so that a run that holds never has one ended.
+        snap = self.run_that_changed_files_and_logs()
+        seen = []
+        restore.restore(snap, self.user, other_game_running=False, before_changes=lambda: seen.append(
+            ((self.user / "continue_game.json").read_text(), (self.user / "tests.txt").exists())))
+        self.assertEqual(seen, [("{}", True)])                 # nothing put back or removed yet
+
+    def test_before_changes_is_not_run_for_a_hold_or_a_store_that_is_missing_a_file(self):
+        cases = {
+            "another game running": (lambda snap: None, True, "other_game_running"),
+            "modified after the exit": (lambda snap: set_mtime(self.user / "continue_game.json", NOW, 3600), False,
+                                        "modified_after_exit"),
+            "a store file missing": (lambda snap: blob(self.backups, snap.files["continue_game.json"]).unlink(), False,
+                                     "FileNotFoundError"),
+        }
+        for name, (arrange, other_game, expected) in cases.items():
+            with self.subTest(name):
+                snap = self.run_started(at=NOW)
+                (self.user / "continue_game.json").write_text("{}")
+                set_mtime(self.user / "continue_game.json", NOW)
+                finish(snap, at=NOW)
+                arrange(snap)
+                seen = []
+                try:
+                    got = restore.restore(snap, self.user, other_game_running=other_game,
+                                          before_changes=lambda: seen.append(1)).reason
+                except OSError as error:
+                    got = type(error).__name__
+                self.assertEqual((got, seen), (expected, []))
+                (self.user / "continue_game.json").write_bytes(b'{"save": "autosave.v3"}')
+
     def test_a_damaged_stored_log_still_raises_before_anything_is_changed(self):
         # Every stored copy is staged and checked before the first change, the logs' too.
         snap = self.run_that_changed_files_and_logs()

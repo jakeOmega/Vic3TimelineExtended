@@ -650,6 +650,7 @@ def restore(
     now: datetime | None = None,
     logs: bool = True,
     saves: bool = True,
+    before_changes: Callable[[], None] | None = None,
 ) -> Outcome:
     """Put `user_data` back as `snap` found it, or hold.
 
@@ -689,7 +690,10 @@ def restore(
     the wrong size or damaged. The store is checked before the first change. `now` stamps the journal entry.
     With `logs` False, `logs/` is left alone entirely: nothing is copied out, put back or removed there. With
     `saves` False the owner's own saves are not looked at (the self-test restores into an empty folder, and a run
-    that never recorded a start launched nothing a session could have driven).
+    that never recorded a start launched nothing a session could have driven). `before_changes` is called once
+    every hold before the changes has been decided and the store checked, right before the first change (the
+    command line closes the run's crash reporter there, #1905): never for a run that holds before it changes
+    anything, or one whose store is missing a file.
     """
     user_data = Path(user_data)
     if other_game_running:
@@ -712,6 +716,8 @@ def restore(
     to_remove = sorted([*diff.added_in_set, *diff.created])
     backup_root = _backup_root(snap)
     _check_store(backup_root, snap, to_restore)
+    if before_changes is not None:
+        before_changes()
     if logs:
         _copy_logs_out(snap, user_data, Path(run_logs_dir) if run_logs_dir is not None else snap.dir / RUN_LOGS_NAME)
     restored, removed, changed_file = _put_back(backup_root, snap, to_restore, user_data, seen, to_remove)

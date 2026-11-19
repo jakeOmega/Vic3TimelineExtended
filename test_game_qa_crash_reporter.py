@@ -5,6 +5,7 @@ command-line half (`restore` and `recover` closing the run's reporter) is in tes
 """
 import base64
 import subprocess
+import sys
 import tempfile
 import unittest
 from datetime import datetime, timedelta, timezone
@@ -94,7 +95,27 @@ class ListReportersTest(unittest.TestCase):
         script = crash_reporter.LIST_REPORTERS[-1]
         self.assertIn("Get-Process -Name CrashReporter", script)
         self.assertTrue(script.startswith("$ErrorActionPreference = 'Stop'"))
+        self.assertIn("[Console]::OutputEncoding = [Text.Encoding]::UTF8", script)
         self.assertTrue(script.endswith("'te_qa_end'"))
+
+    def test_a_path_that_is_not_utf8_reads_as_a_path_and_raises_nothing(self):
+        # Review of #1913: PowerShell wrote the console's code page (437), in which a path's `ö` is byte 0x94, and
+        # text=True raised UnicodeDecodeError, which no caller caught: every restore was refused while any process
+        # named CrashReporter ran from such a folder. Undecodable bytes are replaced now.
+        emit = ("import sys; sys.stdout.buffer.write(b'7000 2026-11-19T09:30:16.1234567Z 4242 "
+                "C:\\\\Users\\\\J\\x94rg\\\\CrashReporter.exe\\r\\nte_qa_end\\r\\n')")
+
+        def via_python(argv, **kwargs):
+            self.assertEqual((kwargs["encoding"], kwargs["errors"]), ("utf-8", "replace"))
+            return subprocess.run([sys.executable, "-c", emit], **kwargs)
+        (found,) = crash_reporter.list_reporters(run=via_python)
+        self.assertEqual((found.pid, found.path), (7000, "C:\\Users\\J\ufffdrg\\CrashReporter.exe"))
+
+    def test_an_output_that_cannot_be_read_at_all_is_a_gate_error(self):
+        def run(*a, **k):
+            raise UnicodeDecodeError("utf-8", b"\x94", 0, 1, "invalid start byte")
+        with self.assertRaises(gate.GateError):
+            crash_reporter.list_reporters(run=run)
 
 
 class CloseTest(unittest.TestCase):
@@ -112,7 +133,7 @@ class CloseTest(unittest.TestCase):
     def test_it_ends_the_process_only_with_its_pid_name_and_start_time(self):
         outcome, script = self.close("closed\r\n" + END)
         self.assertEqual(outcome, crash_reporter.CLOSED)
-        self.assertIn("Stop-Process -Id 7000 -Force", script)
+        self.assertIn("Stop-Process -InputObject $q -Force", script)       # the process object that was checked
         self.assertIn("Get-Process -Id 7000", script)
         self.assertIn("-eq 'CrashReporter'", script)
         self.assertIn("-eq '%s'" % win(GAME_START + timedelta(seconds=60)), script)
@@ -156,6 +177,8 @@ class RunsOwnTest(unittest.TestCase):
             "unknown start": (crash_reporter.Reporter(7000, "unknown", 4242, EXE), None, "start time could not"),
             "another game ran": (reporter(), run_journal(others=True), "another game"),
             "long after the exit": (reporter(after_s=62 + crash_reporter.AFTER_EXIT_S + 30), None, "after this run"),
+            "a date no calendar has": (crash_reporter.Reporter(7000, "2026-02-30T09:30:16Z", 4242, EXE), None,
+                                       "start time could not"),
             "no game start": (reporter(), run_journal(created="unknown"), "no start time for its game"),
             "no started": (reporter(), run_journal()[:1], "no start time for its game"),
         }
@@ -167,10 +190,26 @@ class RunsOwnTest(unittest.TestCase):
                 self.assertEqual(left[0]["pid"], who.pid)
                 self.assertIn(why, left[0]["why"])
 
-    def test_with_no_exit_recorded_any_reporter_since_the_start_is_the_runs(self):
-        # `watch` died before it saw the exit: nothing bounds the run's end, and no other game was seen.
-        late = reporter(after_s=3600)
-        self.assertEqual(self.judge([late], run_journal(exited_after_s=None)), ([late], []))
+    def test_with_no_exit_recorded_the_last_sign_of_life_bounds_the_run(self):
+        # Review of #1913: with no `game_exited`, any reporter since the start was taken for the run's, the owner's
+        # own crash a day later among them. The run's end is now its last sign of life (`started` here).
+        journal = run_journal(exited_after_s=None)
+        soon = reporter(after_s=crash_reporter.AFTER_EXIT_S - 1)
+        self.assertEqual(self.judge([soon], journal), ([soon], []))
+        ours, left = self.judge([reporter(after_s=86400)], journal)
+        self.assertEqual(ours, [])
+        self.assertIn("last known alive", left[0]["why"])
+        journal.append({"event": "heartbeat", "at": journal_time(GAME_START + timedelta(seconds=3600))})
+        later = reporter(after_s=3600 + 30)
+        self.assertEqual(self.judge([later], journal), ([later], []))
+
+    def test_a_failed_look_leaves_every_reporter(self):
+        # Review of #1913: nobody saw then whether another game ran (restore holds such a run, unwatched_stretch).
+        journal = run_journal()
+        journal.insert(2, {"event": "look_failed", "at": journal_time(GAME_START)})
+        ours, left = self.judge([reporter()], journal)
+        self.assertEqual(ours, [])
+        self.assertIn("failed a look", left[0]["why"])
 
     def test_a_reporter_a_little_after_the_exit_is_still_the_runs(self):
         # `watch` saw the exit at a look, and two clocks are compared: the margin covers both.
@@ -253,6 +292,29 @@ class SettleTest(unittest.TestCase):
                 self.assertNotIn("reporters_closed", notes)
                 self.assertIn(why, notes["reporters_left"][0]["why"])
         self.assertNotIn("reporter_closed", [e["event"] for e in snapshot.journal(self.snap)])
+
+    def test_a_snapshot_with_a_verdict_is_never_looked_at_again(self):
+        # Review of #1913: `restore <id>` of a restored or held snapshot, days later, ended a later reporter.
+        for verdict in ("restored", "held"):
+            with self.subTest(verdict=verdict):
+                snapshot.record(self.snap, verdict)
+                self.assertEqual(self.settle(), {})
+                self.assertEqual(self.closes, [])
+
+    def test_it_never_raises_into_the_restore(self):
+        def broken_path(path):
+            raise ValueError("no Windows path")
+        notes = crash_reporter.settle(self.snap, [], self.exe, windows_path=broken_path)
+        self.assertEqual(notes, {"reporters_unlisted": "ValueError: no Windows path"})
+        with mock.patch.object(Path, "is_file", side_effect=PermissionError(13, "Permission denied")):
+            self.assertIn("PermissionError", self.settle()["reporters_unlisted"])
+        self.assertEqual(self.closes, [])
+
+    def test_a_close_the_journal_could_not_record_is_still_reported(self):
+        with mock.patch.object(snapshot, "record", side_effect=OSError("disk fell off")):
+            notes = self.settle()
+        self.assertEqual(notes["reporters_closed"][0]["outcome"], "closed")
+        self.assertEqual(notes["reporters_closed"][0]["not_journaled"], "disk fell off")
 
     def test_a_listing_that_fails_is_noted_and_closes_nothing(self):
         self.up = gate.GateError("could not list crash reporter processes")

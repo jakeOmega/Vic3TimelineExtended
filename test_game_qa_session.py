@@ -5347,7 +5347,7 @@ class UnresponsiveTest(SessionTestCase):
         self.assertGreaterEqual(self.game.now - before, 60)
 
     def test_a_limit_out_of_range_or_not_a_number_is_refused_before_anything(self):
-        for value in (5, 9.9, MAX_UNRESPONSIVE_S + 1, float("nan"), "120", True):
+        for value in (5, 9.9, MAX_UNRESPONSIVE_S + 1, 600, float("nan"), float("inf"), 10 ** 400, "120", True):
             with self.subTest(value=value):
                 error = self.session_error(self.start, unresponsive_s=value)
                 self.assertEqual(error.code, "bad_argument")

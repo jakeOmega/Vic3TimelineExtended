@@ -100,8 +100,10 @@ QUIET_GAPS = 2                  # quiet gaps in a row before the foreground is t
 
 UNRESPONSIVE_S = 10.0           # a window that does not respond this long is a game that is gone (the default)
 # `start --unresponsive-s` (#1905): a late save's tick freezes the window for longer than the default (the USA of
-# 1977, 2026-11-19: a monthly pulse of 28-32 s in one tick), and its first `advance` answered game_gone. Up to this.
-MAX_UNRESPONSIVE_S = 600.0
+# 1977, 2026-11-19: a monthly pulse of 28-32 s in one tick, and 120 s was what its session needed), and its first
+# `advance` answered game_gone. Up to this: one verb may wait out a freeze in each of its waits (the front, the
+# arrival, the reply), and the client gives a verb 300 s (client.VERB_TIMEOUT_S) before it answers `no_answer`.
+MAX_UNRESPONSIVE_S = 120.0
 ARRIVAL_S = 5.0                 # how long a command gets to show up in the history
 PROBE_ARRIVAL_S = 6.0           # the same for the probe that asks whether the console is open. Longer than the
                                 # ~5 s after which Windows reports a window as not responding (the waits then hold
@@ -334,7 +336,7 @@ class Console:
                                             still nothing: no_ack
             did not, text was already in it cannot tell: type the flush; the text's line followed directly
                                             by the flush's line in the log is the proof; none: as above
-            the window is not responding    the wait's clock is held (for 10 s, then game_gone)
+            the window is not responding    the wait's clock is held (for `unresponsive_s`, then game_gone)
             gained the text later           (checked before the console key and before any retype) arrived
             Enter refused with text typed   stranded_text until `clear_line()`
             log lines lost while waiting    log_gap (`entered` None unless the arrival was seen)
