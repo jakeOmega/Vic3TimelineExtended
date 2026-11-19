@@ -261,6 +261,49 @@ class PlaysetTest(unittest.TestCase):
         self.assertEqual(self.tree(), before)
         self.assertEqual(self.launch(snap_id, "--add-mod", OVERLAY)[1], 0)   # refused before the claim
 
+    def test_none_enables_no_mod_and_empties_the_ugc_list(self):
+        # #1907: the mods-off script_docs dump. Every other key, the DLC list among them, is kept.
+        self.write_the_owners_files(dict(self.owners_playset, disabledDLC=["dlc019"],
+                                         enabledUGC=[{"id": "some workshop item"}]))
+        snap_id = self.take_snapshot()
+        self.start_result = self.game()
+        out, code = self.launch(snap_id, "--playset", "none")
+        self.assertEqual(code, 0, out)
+        self.assertEqual(self.written(), {"enabledMods": [], "disabledDLC": ["dlc019"], "enabledUGC": []})
+        self.assertEqual(self.playset_at_start, self.playset.read_bytes())       # written before the start
+        self.assertEqual(out["playset"], {"mode": "none", "enabled": [], "written": True})
+        entry = next(e for e in self.journal() if e["event"] == "playset")
+        self.assertEqual((entry["mode"], entry["enabled"], entry["sha256"]),
+                         ("none", [], sha256(self.playset.read_bytes())))
+
+    def test_none_on_a_playset_that_enables_nothing_leaves_the_file_untouched(self):
+        self.write_the_owners_files(dict(self.owners_playset, enabledMods=[]))
+        before = self.tree()
+        snap_id = self.take_snapshot()
+        self.start_result = self.game()
+        out, code = self.launch(snap_id, "--playset", "none")
+        self.assertEqual(code, 0, out)
+        self.assertEqual(self.tree(), before)
+        self.assertEqual(out["playset"], {"mode": "none", "enabled": [], "written": False})
+
+    def test_restore_after_none_puts_the_owners_playset_back(self):
+        before = self.tree()
+        snap_id = self.take_snapshot()
+        game = self.game()
+        self.start_result = game
+        with self.pinned_clock():
+            self.assertEqual(self.launch(snap_id, "--playset", "none")[1], 0)
+            self.assertEqual(self.enabled(), [])
+            self.start_result = None
+            self.games = [[game], [game], []]
+            self.assertEqual(self.run_cli("watch", snap_id)[1], 0)
+            self.games = []
+            out, code = self.run_cli("restore", snap_id)
+        self.assertEqual((code, out["held"]), (0, False), out)
+        self.assertEqual(out["restored"], [PLAYSET])
+        self.assertEqual(self.playset.read_bytes(), self.playset_bytes)
+        self.assertEqual(self.tree(), before)
+
     def test_no_option_leaves_the_file_untouched(self):
         before = self.tree()
         for options in ((), ("--playset", "current")):
