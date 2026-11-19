@@ -1735,7 +1735,11 @@ of millions to around 10¹⁵ came before 1917.
    from the day's running figure (`nd_strike_people_before`/`_after`, `extra_effects.txt`). **To check** (Full, a
    salvo of several warheads on one state): the state's next census reads a net migration near 0, not millions, and
    no `demog_runaway` line; `nuclear_weapon_events`' death figures fall warhead by warhead. Ingria itself keeps the bad
-   year in its books: watch whether its births term runs its people back up from 200,000 in the 1978 census.
+   year in its books, and the 1978 census made it worse: 197,774 to 19,852 people (`te_dg_mb` 5.3, `te_dg_md` 9.1,
+   net migration −134,293; the 1979.4.1 autosave). The 1977 rates it carried (840 births and 6,369 deaths per 1,000)
+   are the year's events over the survivors, so any strike that kills most of a state blows them up, booked rightly
+   or not; the over-booking fix does not cover it. Proposed to the owner: a guard for a census year whose known
+   kills are a large share of the people, handing that state to the engine's rates as the #1476 guards do.
    Autosaves of 1977.7 to 1978.7: `/mnt/d/vic3_triage_2026-11-19/saves/`.
 
 ## W's lead: the census sets the pops past its aim (2026-11-07)
