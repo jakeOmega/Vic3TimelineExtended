@@ -41,12 +41,7 @@
 		building_advanced_material_fabricator
 	}
 	ai_will_do = {
-		any_scope_state = {
-			any_scope_building = {
-				is_building_type = building_construction_sector
-				level >= 3
-			}
-		}
+		always = yes
 	}
 }
 
@@ -237,16 +232,7 @@ REPLACE:company_basic_electrics = {
 	}
 
 	ai_will_do = {
-		any_scope_state = {
-			any_scope_building = {
-				OR = {
-					is_building_type = building_electrics_industry
-					is_building_type = building_electrics_industry_radio
-					is_building_type = building_electrics_industry_appliances
-				}
-				level >= 3
-			}
-		}
+		always = yes
 	}
 }
 

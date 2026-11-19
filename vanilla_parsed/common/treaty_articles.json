@@ -31635,108 +31635,100 @@
             ]
            }
           ],
-          "if": [
+          "subtract": [
            "=",
            {
-            "limit": [
+            "desc": [
              "=",
-             {
-              "scope:article.input_country.ai_subject_value:root": [
-               ">",
-               "150"
-              ]
-             }
+             "\"DIPLOMATIC_ACCEPTANCE_TRADE_SUBJECT_SOURCE\""
             ],
-            "subtract": [
+            "value": [
              "=",
-             {
-              "desc": [
-               "=",
-               "\"DIPLOMATIC_ACCEPTANCE_TRADE_SUBJECT_SOURCE\""
-              ],
-              "value": [
-               "=",
-               "1000"
-              ]
-             }
-            ]
-           }
-          ],
-          "else": [
-           "=",
-           {
-            "subtract": [
+             "scope:article.input_country.ai_subject_value:root"
+            ],
+            "multiply": [
              "=",
-             {
-              "desc": [
-               "=",
-               "\"DIPLOMATIC_ACCEPTANCE_TRADE_SUBJECT_SOURCE\""
-              ],
-              "value": [
-               "=",
-               "scope:article.input_country.ai_subject_value:root"
-              ],
-              "add": [
-               [
+             "5"
+            ],
+            "add": [
+             [
+              "=",
+              "100"
+             ],
+             [
+              "=",
+              {
+               "value": [
                 "=",
-                "100"
+                "scope:article.input_country.gdp"
                ],
-               [
+               "divide": [
+                "=",
+                "200000"
+               ],
+               "max": [
+                "=",
+                "200"
+               ]
+              }
+             ]
+            ],
+            "if": [
+             [
+              "=",
+              {
+               "limit": [
                 "=",
                 {
-                 "value": [
+                 "scope:source_country.country_rank": [
+                  ">",
+                  "scope:target_country.country_rank"
+                 ]
+                }
+               ],
+               "multiply": [
+                "=",
+                {
+                 "add": [
+                  [
+                   "=",
+                   "scope:source_country.country_rank"
+                  ],
+                  [
+                   "=",
+                   "1"
+                  ]
+                 ],
+                 "subtract": [
                   "=",
-                  "scope:article.input_country.gdp"
+                  "scope:target_country.country_rank"
                  ],
                  "divide": [
                   "=",
-                  "200000"
-                 ],
-                 "max": [
-                  "=",
-                  "200"
+                  "10"
                  ]
                 }
                ]
-              ],
-              "if": [
-               "=",
-               {
-                "limit": [
-                 "=",
-                 {
-                  "scope:source_country.country_rank": [
-                   ">",
-                   "scope:target_country.country_rank"
-                  ]
-                 }
-                ],
-                "multiply": [
-                 "=",
-                 {
-                  "add": [
-                   [
-                    "=",
-                    "scope:source_country.country_rank"
-                   ],
-                   [
-                    "=",
-                    "1"
-                   ]
-                  ],
-                  "subtract": [
-                   "=",
-                   "scope:target_country.country_rank"
-                  ],
-                  "divide": [
-                   "=",
-                   "10"
-                  ]
-                 }
-                ]
-               }
-              ]
-             }
+              }
+             ],
+             [
+              "=",
+              {
+               "limit": [
+                "=",
+                {
+                 "scope:article.input_country.ai_subject_value:root": [
+                  ">",
+                  "150"
+                 ]
+                }
+               ],
+               "min": [
+                "=",
+                "1000"
+               ]
+              }
+             ]
             ]
            }
           ]

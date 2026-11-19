@@ -3792,8 +3792,8 @@ rises to as much as 1000, §0.13) — so monetary laws may change more often tha
 readily as a result. Two mechanisms checked and *not* affected: political movements (vanilla
 movements are explicit entities with their own `creation_trigger`; none forms around a law
 group), and regime change (`lawgroup_monetary_policy` already carried
-`affected_by_regime_change = yes`, and a regime change imposes the winner's law regardless of
-anyone's stance). Note also vanilla's global `MAX_IG_APPROVAL_FROM_LAWS` ±5 cap across all
+`affected_by_regime_change = yes`, since 1.15.2 `regime_change_min_progressiveness_difference = 50`,
+and a regime change imposes the winner's law regardless of anyone's stance). Note also vanilla's global `MAX_IG_APPROVAL_FROM_LAWS` ±5 cap across all
 law groups: for an IG already pinned by the rest of the statute book, these standing ±1 rows
 are absorbed and only the one-off enactment swing lands.
 

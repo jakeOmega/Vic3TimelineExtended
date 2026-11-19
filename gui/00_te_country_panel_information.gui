@@ -235,7 +235,7 @@ types te_country_panel_information
 						autoresize = yes
 						datacontext = "[CountryPanel.GetCountry]"
 						visible = "[CountryPanel.GetCountry.IsColonizable]"
-						raw_text = "#variable @battalions![Country.CalcConscriptableBattalions|0]#! "
+						raw_text = "#variable @battalions![Country.GetMaxConscriptBattalions|0]#! "
 						tooltip = "PANEL_MILITARY_NATIVE_POTENTIAL_BATTALIONS_TOOLTIP"
 						using = fontsize_mega
 						minimumsize = { 60 -1 }
@@ -520,7 +520,7 @@ types te_country_panel_information
 				#BATTALIONS (COLONIZABLE)
 				country_stats_entry = {
 					visible = "[CountryPanel.GetCountry.IsColonizable]"
-					alpha = "[TransparentIfZero_int32(Country.CalcConscriptableBattalions)]"
+					alpha = "[TransparentIfZero_int32(Country.GetMaxConscriptBattalions)]"
 
 					blockoverride "stats_tooltip" {
 						tooltip = "PANEL_MILITARY_NATIVE_POTENTIAL_BATTALIONS_TOOLTIP"
@@ -532,7 +532,7 @@ types te_country_panel_information
 						text = "BATTALIONS"
 					}
 					blockoverride "stats_value" {
-						raw_text = "#variable [Country.CalcConscriptableBattalions]#!"
+						raw_text = "#variable [Country.GetMaxConscriptBattalions]#!"
 					}
 
 					blockoverride "stats_rank" {

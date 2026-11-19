@@ -4281,6 +4281,65 @@
     "=",
     "100"
    ],
+   "lawgroup_caste_hegemony": [
+    "=",
+    {
+     "law_hindu_caste_enforced": [
+      "=",
+      "strongly_disapprove"
+     ],
+     "law_hindu_caste_codified": [
+      "=",
+      "strongly_disapprove"
+     ],
+     "law_hindu_caste_not_enforced": [
+      "=",
+      "neutral"
+     ],
+     "law_affirmative_action": [
+      "=",
+      "approve"
+     ]
+    }
+   ],
+   "lawgroup_edo_social_system": [
+    "=",
+    {
+     "law_strict_edo_system": [
+      "=",
+      "strongly_disapprove"
+     ],
+     "law_intermediate_edo_system": [
+      "=",
+      "disapprove"
+     ],
+     "law_lax_edo_system": [
+      "=",
+      "strongly_approve"
+     ]
+    }
+   ],
+   "lawgroup_education_system": [
+    "=",
+    {
+     "law_public_schools": [
+      "=",
+      "approve"
+     ],
+     "law_private_schools": [
+      "=",
+      "disapprove"
+     ],
+     "law_religious_schools": [
+      "=",
+      "neutral"
+     ],
+     "law_no_schools": [
+      "=",
+      "disapprove"
+     ]
+    }
+   ],
    "lawgroup_free_speech": [
     "=",
     {
@@ -4299,23 +4358,6 @@
      "law_outlawed_dissent": [
       "=",
       "disapprove"
-     ]
-    }
-   ],
-   "lawgroup_labor_rights": [
-    "=",
-    {
-     "law_worker_protections": [
-      "=",
-      "strongly_approve"
-     ],
-     "law_regulatory_bodies": [
-      "=",
-      "approve"
-     ],
-     "law_no_workers_rights": [
-      "=",
-      "neutral"
      ]
     }
    ],
@@ -23558,9 +23600,18 @@
    "country_trigger": [
     "=",
     {
-     "has_technology_researched": [
+     "OR": [
       "=",
-      "political_agitation"
+      {
+       "has_technology_researched": [
+        "=",
+        "political_agitation"
+       ],
+       "has_journal_entry": [
+        "=",
+        "je_bolsheviks"
+       ]
+      }
      ]
     }
    ],

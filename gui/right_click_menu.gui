@@ -1,4 +1,4 @@
-﻿# TE override of vanilla right_click_menu.gui (1.15.1): vanilla's file plus the treaty-article inputs
+﻿# TE override of vanilla right_click_menu.gui (1.15.2): vanilla's file plus the treaty-article inputs
 # vanilla draws only for its own articles (a quantity for any article, #542; a company; a building type
 # and Cede Colony's colonies, #1140, #1255), each marked TE, and the taxation toggles greyed while the
 # legislated tax code sets the taxed goods (### MOD: Tax Code).
@@ -812,7 +812,7 @@ types right_click_menu_types {
 					fontsize_min = 12
 
 					block "starvation_severe_text" {
-						raw_text = "#r [FoodSecurity.GetPercentageStarvingPopsSevere|0%]#!"
+						raw_text = "#v [FoodSecurity.GetPercentageStarvingPopsSevere|0%]#!"
 					}
 				}
 			}
@@ -913,7 +913,7 @@ types right_click_menu_types {
 					fontsize_min = 12
 
 					block "starvation_mild_text" {
-						raw_text = "#r [FoodSecurity.GetPercentageStarvingPopsMild|0%]#!"
+						raw_text = "#v [FoodSecurity.GetPercentageStarvingPopsMild|0%]#!"
 					}
 				}
 			}
@@ -937,7 +937,7 @@ types right_click_menu_types {
 					fontsize_min = 12
 
 					block "starvation_severe_text" {
-						raw_text = "#r [FoodSecurity.GetPercentageStarvingPopsSevere|0%]#!"
+						raw_text = "#v [FoodSecurity.GetPercentageStarvingPopsSevere|0%]#!"
 					}
 				}
 			}
@@ -957,7 +957,19 @@ types right_click_menu_types {
 		}
 
 		block "tooltip" {
-			tooltip = "MARKET_WORLD_MARKET_HUB_BUTTON_TOOLTIP"
+			tooltipwidget = {
+				RegularTooltip_WorldMarketHub = {
+					datacontext = "[State.GetCountry]"
+
+					blockoverride "world_market_hub_tooltip_after" {
+						custom_tooltip_newline = {}
+
+						custom_tooltip_textbox_fixed_width = {
+							text = "MARKET_WORLD_MARKET_HUB_BUTTON_INSTRUCTION"
+						}
+					}
+				}
+			}
 		}
 
 		block "default_button_template" {
@@ -987,7 +999,7 @@ types right_click_menu_types {
 				flowcontainer = {
 					parentanchor = vcenter
 					spacing = 5
-					tooltip = "[MarketPanel.GetMarket.GetWorldMarketHubTradeCapacityDesc(State.Self)]"
+					tooltip = "WORLD_MARKET_HUB_TRADE_CAPACITY_TOOLTIP"
 
 					icon = {
 						size = { 30 30 }
@@ -1000,7 +1012,7 @@ types right_click_menu_types {
 						elide = right
 						fontsize_min = 12
 						align = nobaseline
-						text = "[MarketPanel.GetMarket.GetWorldMarketHubTradeCapacityBalance(State.Self)|+=]"
+						text = "[State.GetWorldMarketHubTradeCapacityBalance|+]"
 					}
 				}
 
@@ -1045,7 +1057,11 @@ types right_click_menu_types {
 		}
 
 		block "tooltip" {
-			tooltip = "MARKET_WORLD_MARKET_HUB_SELECTED_TOOLTIP"
+			tooltipwidget = {
+				RegularTooltip_WorldMarketHub = {
+					datacontext = "[State.GetCountry]"
+				}
+			}
 		}
 
 		background = {
@@ -1075,7 +1091,7 @@ types right_click_menu_types {
 				flowcontainer = {
 					parentanchor = vcenter
 					spacing = 5
-					tooltip = "[MarketPanel.GetMarket.GetWorldMarketHubTradeCapacityDesc(State.Self)]"
+					tooltip = "WORLD_MARKET_HUB_TRADE_CAPACITY_TOOLTIP"
 
 					icon = {
 						size = { 30 30 }
@@ -1088,7 +1104,7 @@ types right_click_menu_types {
 						elide = right
 						fontsize_min = 12
 						align = nobaseline
-						text = "[MarketPanel.GetMarket.GetWorldMarketHubTradeCapacityBalance(State.Self)|+=]"
+						text = "[State.GetWorldMarketHubTradeCapacityBalance|+]"
 					}
 				}
 
@@ -2305,28 +2321,6 @@ right_click_menu = {
 				}
 			}
 
-			right_click_menu_item = {		# EDIT MISSION SEA REGIONS
-				visible = "[MilitaryFormation.IsFleet]"
-
-				blockoverride "properties" {
-					tooltip = "EDIT_NAVAL_MISSION_SEA_REGIONS_TOOLTIP"
-					onclick = "[MilitaryFormation.OnEditMissionSeaRegionsClicked]"
-					enabled = "[MilitaryFormation.CanEditMissionSeaRegions]"
-				}
-
-				blockoverride "texture" {
-					texture = "gfx/interface/icons/generic_icons/edit_sea_nodes.dds"
-				}
-
-				blockoverride = "text" {
-					text = "EDIT_NAVAL_MISSION_SEA_REGIONS_LABEL"
-				}
-
-				blockoverride "size" {
-					size = { 260 44 }
-				}
-			}
-
 			right_click_menu_item = {		# STATION
 
 				blockoverride "properties" {
@@ -2625,6 +2619,7 @@ right_click_menu = {
 
 									blockoverride "add_mission_button_properties" {
 								        enabled = "[IsValid(MilitaryFormation.CreateNavalMissionWithPreviousArea(NavalMissionType.AccessSelf))]"
+								        onclick = "[MilitaryFormation.Check]"
 								        onclick = "[PopupManager.ExecuteOrAskConfirmationIfNeeded(MilitaryFormation.CreateNavalMissionWithPreviousArea(NavalMissionType.AccessSelf))]"
 								    }
 
@@ -2696,8 +2691,8 @@ right_click_menu = {
 
 									blockoverride "add_mission_button_properties" {
 								        enabled = "[IsValid(MilitaryFormation.CreateNavalMission(NavalMissionType.AccessSelf))]"
+								        onclick = "[MilitaryFormation.Check]"
 								        onclick = "[PopupManager.ExecuteOrAskConfirmationIfNeeded(MilitaryFormation.CreateNavalMission(NavalMissionType.AccessSelf))]"
-										onclick = "[MilitaryFormation.OnEditMissionSeaRegionsClicked]"
 								    }
 
 								    blockoverride "remove_mission_button_properties" {
@@ -5344,35 +5339,6 @@ right_click_menu = {
 					max_width = 320
 					text = "NO_FLEET_HAS_NAVAL_MISSION"
 				}
-
-				button = {
-					parentanchor = hcenter
-					size = { 320 50 }
-					using = default_button_map_interaction
-					enabled = "[CanEditSeaRegionsForSelectedFleets]"
-					onclick = "[OnEditSelectedFleetsSeaRegionsClicked]"
-					tooltip = "EDIT_NAVAL_MISSION_SEA_REGIONS_TOOLTIP_MULTIPLE"
-
-					hbox = {
-						layoutpolicy_horizontal = expanding
-						margin = { 15 5 }
-						spacing = 5
-
-						expand = {}
-
-						textbox = {
-							layoutpolicy_horizontal = expanding
-							size = { 0 20 }
-							align = hcenter|nobaseline
-							elide = right
-							fontsize_min = 12
-							min_width = 52
-							text = "CHANGE_REGION"
-						}
-
-						expand = {}
-					}
-				}
 			}
 		}
 	}
@@ -5427,6 +5393,7 @@ right_click_menu = {
 
 							blockoverride "add_mission_button_properties" {
 								enabled = "[IsValid(MilitaryFormation.CreateNavalMissionWithPreviousArea(NavalMissionType.AccessSelf))]"
+								onclick = "[MilitaryFormation.Check]"
 								onclick = "[PopupManager.ExecuteOrAskConfirmationIfNeeded(MilitaryFormation.CreateNavalMissionWithPreviousArea(NavalMissionType.AccessSelf))]"
 							}
 
@@ -5490,8 +5457,8 @@ right_click_menu = {
 
 							blockoverride "add_mission_button_properties" {
 								enabled = "[IsValid(MilitaryFormation.CreateNavalMission(NavalMissionType.AccessSelf))]"
+								onclick = "[MilitaryFormation.Check]"
 								onclick = "[PopupManager.ExecuteOrAskConfirmationIfNeeded(MilitaryFormation.CreateNavalMission(NavalMissionType.AccessSelf))]"
-								onclick = "[MilitaryFormation.OnEditMissionSeaRegionsClicked]"
 							}
 
 							blockoverride "remove_mission_button_properties" {
@@ -5609,32 +5576,64 @@ right_click_menu = {
 					max_width = 320
 					text = "FLEET_HAS_NO_NAVAL_MISSION"
 				}
+			}
+		}
+	}
+}
 
-				button = {
-					parentanchor = hcenter
-					size = { 320 50 }
-					using = default_button_map_interaction
-					enabled = "[MilitaryFormation.CanEditMissionSeaRegions]"
-					onclick = "[MilitaryFormation.OnEditMissionSeaRegionsClicked]"
-					tooltip = "EDIT_NAVAL_MISSION_SEA_REGIONS_TOOLTIP"
+right_click_menu = {
+	name = "sea_node_select_naval_mission_type_right_click_menu"
 
-					hbox = {
-						layoutpolicy_horizontal = expanding
-						margin = { 10 5 }
-						spacing = 5
+	blockoverride "title_text" {
+		text = "SELECT_NAVAL_MISSION_TYPE_RIGHT_CLICK_MENU_TITLE"
+	}
 
-						expand = {}
+	blockoverride "items" {
+		dynamicgridbox = {
+			datamodel = "[GetSelectedFleetsPotentialAndPossibleMissions]"
 
-						textbox = {
-							layoutpolicy_horizontal = expanding
-							size = { 0 20 }
-							align = hcenter|nobaseline
-							elide = right
-							fontsize_min = 12
-							min_width = 52
-							text = "CHANGE_REGION"
+			item = {
+				right_click_menu_item = {
+					clicksound = "[NavalMissionType.GetClickSound]"
+
+					tooltipwidget = {
+						FancyTooltip_NavalMissionType = {
+							blockoverride "naval_mission_tooltip_desc" {
+								custom_tooltip_textbox = {
+									visible = "[Not(StringIsEmpty(GetDesc(Province.AssignSelectedFleetsToNewMissionInRegion(NavalMissionType.Self))))]"
+									text = "[GetDesc(Province.AssignSelectedFleetsToNewMissionInRegion(NavalMissionType.Self))]"
+								}
+
+								custom_tooltip_newline = {
+									visible = "[Not(StringIsEmpty(GetDesc(Province.AssignSelectedFleetsToNewMissionInRegion(NavalMissionType.Self))))]"
+								}
+							}
 						}
+					}
 
+					blockoverride "properties" {
+						enabled = "[IsValid(Province.AssignSelectedFleetsToNewMissionInRegion(NavalMissionType.Self))]"
+						onclick = "[PopupManager.ExecuteOrAskConfirmationIfNeeded(Province.AssignSelectedFleetsToNewMissionInRegion(NavalMissionType.Self))]"
+						onclick = "[RightClickMenuManager.Close]"
+					}
+
+					blockoverride "texture" {
+						texture = "[NavalMissionType.GetIcon]"
+					}
+
+					blockoverride "text" {
+						text = "[NavalMissionType.GetNameNoFormatting]"
+					}
+
+					blockoverride "size" {
+						size = { 360 44 }
+					}
+
+					blockoverride "text_layoutpolicies" {
+						autoresize = yes
+					}
+
+					blockoverride "right_text" {
 						expand = {}
 					}
 				}
@@ -13508,11 +13507,11 @@ right_click_menu = {
 			}
 
 			blockoverride "starvation_mild_text" {
-				raw_text = "#r [FoodSecurity.GetPercentageStarvingPopsMild|0%]#!"
+				raw_text = "#v [FoodSecurity.GetPercentageStarvingPopsMild|0%]#!"
 			}
 
 			blockoverride "starvation_severe_text" {
-				raw_text = "#r [FoodSecurity.GetPercentageStarvingPopsSevere|0%]#!"
+				raw_text = "#v [FoodSecurity.GetPercentageStarvingPopsSevere|0%]#!"
 			}
 
 			blockoverride "starvation_famine_text" {
@@ -13535,11 +13534,11 @@ right_click_menu = {
 			}
 
 			blockoverride "starvation_mild_text" {
-				raw_text = "#r [FoodSecurity.GetPercentageStarvingPopsMild|0%]#!"
+				raw_text = "#v [FoodSecurity.GetPercentageStarvingPopsMild|0%]#!"
 			}
 
 			blockoverride "starvation_severe_text" {
-				raw_text = "#r [FoodSecurity.GetPercentageStarvingPopsSevere|0%]#!"
+				raw_text = "#v [FoodSecurity.GetPercentageStarvingPopsSevere|0%]#!"
 			}
 
 			blockoverride "starvation_famine_text" {
@@ -15899,7 +15898,6 @@ types right_click_menu {
 				block "add_mission_button_properties" {
 			        enabled = "[IsValid(CreateNavalMissionsForSelectedFleets(NavalMissionType.AccessSelf))]"
 			        onclick = "[PopupManager.ExecuteOrAskConfirmationIfNeeded(CreateNavalMissionsForSelectedFleets(NavalMissionType.AccessSelf))]"
-					onclick = "[OnEditSelectedFleetsSeaRegionsClicked]"
 			    }
 
 		        onclick = "[RightClickMenuManager.Close]"

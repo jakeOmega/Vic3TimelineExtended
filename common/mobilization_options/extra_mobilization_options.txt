@@ -1176,7 +1176,7 @@ REPLACE:mobilization_option_first_aid = {
 		# Total cost: 80.0
 	}
 	unit_modifier = {
-		unit_recovery_rate_add = 0.20
+		unit_recovery_rate_add = 0.10
 	}
 	ai_weight = {
 		value = 1
@@ -1243,7 +1243,7 @@ REPLACE:mobilization_option_field_hospitals = {
 		# Total cost: 160.0
 	}
 	unit_modifier = {
-		unit_recovery_rate_add = 0.40
+		unit_recovery_rate_add = 0.20
 	}
 	ai_weight = {
 		value = 1

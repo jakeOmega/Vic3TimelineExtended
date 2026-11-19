@@ -1,4 +1,4 @@
-﻿# TE override of vanilla power_bloc_panel.gui (1.15.0): vanilla's file plus principle slots 5-8, their
+﻿# TE override of vanilla power_bloc_panel.gui (1.15.2): vanilla's file plus principle slots 5-8, their
 # locked-slot tooltips and the remove button (#787, #836), principle_group widened to 550 for the
 # mod's five-level groups (tiers IV and V), and the Convene a Summit button beside the leader's
 # mandate count (#1442).
@@ -467,23 +467,8 @@ types power_bloc_panel_types
 								tooltip = "POWER_BLOC_INVITABLE_COUNTRIES_TOOLTIP"
 								using = tooltip_above
 
-								blockoverride "fontsize" {
-									using = fontsize_large
-								}
-
 								blockoverride "text" {
-									raw_text = "[PowerBlocPanel.GetNumInvitableCountries|+]"
-								}
-
-								blockoverride "position" {
-									position = { -7 3 }
-								}
-
-								blockoverride "background" {
-									background = {
-										using = blurry_dark_background
-										margin = { 5 5 }
-									}
+									text = "[PowerBlocPanel.GetNumInvitableCountries|+]"
 								}
 							}
 						}

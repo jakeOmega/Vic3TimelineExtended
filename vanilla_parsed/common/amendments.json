@@ -5057,6 +5057,666 @@
    ]
   }
  ],
+ "amendment_agrarian_party_dominance": [
+  "=",
+  {
+   "parent": [
+    "=",
+    "law_single_party_state"
+   ],
+   "allowed_laws": [
+    "=",
+    [
+     "law_single_party_state"
+    ]
+   ],
+   "sponsor_modifier": [
+    "=",
+    {
+     "interest_group_pol_str_mult": [
+      "=",
+      "0.15"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "ai_will_revoke": [
+    "=",
+    {
+     "always": [
+      "=",
+      "no"
+     ]
+    }
+   ],
+   "can_repeal": [
+    "=",
+    {
+     "NOT": [
+      "=",
+      {
+       "has_law_or_variant": [
+        "=",
+        "law_type:law_single_party_state"
+       ]
+      }
+     ]
+    }
+   ],
+   "amendment_activism_multiplier": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "amendment_anarchist_party_dominance": [
+  "=",
+  {
+   "parent": [
+    "=",
+    "law_single_party_state"
+   ],
+   "allowed_laws": [
+    "=",
+    [
+     "law_single_party_state"
+    ]
+   ],
+   "sponsor_modifier": [
+    "=",
+    {
+     "interest_group_pol_str_mult": [
+      "=",
+      "0.15"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "ai_will_revoke": [
+    "=",
+    {
+     "always": [
+      "=",
+      "no"
+     ]
+    }
+   ],
+   "can_repeal": [
+    "=",
+    {
+     "NOT": [
+      "=",
+      {
+       "has_law_or_variant": [
+        "=",
+        "law_type:law_single_party_state"
+       ]
+      }
+     ]
+    }
+   ],
+   "amendment_activism_multiplier": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "amendment_communist_party_dominance": [
+  "=",
+  {
+   "parent": [
+    "=",
+    "law_single_party_state"
+   ],
+   "allowed_laws": [
+    "=",
+    [
+     "law_single_party_state"
+    ]
+   ],
+   "sponsor_modifier": [
+    "=",
+    {
+     "interest_group_pol_str_mult": [
+      "=",
+      "0.15"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "ai_will_revoke": [
+    "=",
+    {
+     "always": [
+      "=",
+      "no"
+     ]
+    }
+   ],
+   "can_repeal": [
+    "=",
+    {
+     "NOT": [
+      "=",
+      {
+       "has_law_or_variant": [
+        "=",
+        "law_type:law_single_party_state"
+       ]
+      }
+     ]
+    }
+   ],
+   "amendment_activism_multiplier": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "amendment_conservative_party_dominance": [
+  "=",
+  {
+   "parent": [
+    "=",
+    "law_single_party_state"
+   ],
+   "allowed_laws": [
+    "=",
+    [
+     "law_single_party_state"
+    ]
+   ],
+   "sponsor_modifier": [
+    "=",
+    {
+     "interest_group_pol_str_mult": [
+      "=",
+      "0.15"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "ai_will_revoke": [
+    "=",
+    {
+     "always": [
+      "=",
+      "no"
+     ]
+    }
+   ],
+   "can_repeal": [
+    "=",
+    {
+     "NOT": [
+      "=",
+      {
+       "has_law_or_variant": [
+        "=",
+        "law_type:law_single_party_state"
+       ]
+      }
+     ]
+    }
+   ],
+   "amendment_activism_multiplier": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "amendment_fascist_party_dominance": [
+  "=",
+  {
+   "parent": [
+    "=",
+    "law_single_party_state"
+   ],
+   "allowed_laws": [
+    "=",
+    [
+     "law_single_party_state"
+    ]
+   ],
+   "sponsor_modifier": [
+    "=",
+    {
+     "interest_group_pol_str_mult": [
+      "=",
+      "0.15"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "ai_will_revoke": [
+    "=",
+    {
+     "always": [
+      "=",
+      "no"
+     ]
+    }
+   ],
+   "can_repeal": [
+    "=",
+    {
+     "NOT": [
+      "=",
+      {
+       "has_law_or_variant": [
+        "=",
+        "law_type:law_single_party_state"
+       ]
+      }
+     ]
+    }
+   ],
+   "amendment_activism_multiplier": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "amendment_free_trade_party_dominance": [
+  "=",
+  {
+   "parent": [
+    "=",
+    "law_single_party_state"
+   ],
+   "allowed_laws": [
+    "=",
+    [
+     "law_single_party_state"
+    ]
+   ],
+   "sponsor_modifier": [
+    "=",
+    {
+     "interest_group_pol_str_mult": [
+      "=",
+      "0.15"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "ai_will_revoke": [
+    "=",
+    {
+     "always": [
+      "=",
+      "no"
+     ]
+    }
+   ],
+   "can_repeal": [
+    "=",
+    {
+     "NOT": [
+      "=",
+      {
+       "has_law_or_variant": [
+        "=",
+        "law_type:law_single_party_state"
+       ]
+      }
+     ]
+    }
+   ],
+   "amendment_activism_multiplier": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "amendment_liberal_party_dominance": [
+  "=",
+  {
+   "parent": [
+    "=",
+    "law_single_party_state"
+   ],
+   "allowed_laws": [
+    "=",
+    [
+     "law_single_party_state"
+    ]
+   ],
+   "sponsor_modifier": [
+    "=",
+    {
+     "interest_group_pol_str_mult": [
+      "=",
+      "0.15"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "ai_will_revoke": [
+    "=",
+    {
+     "always": [
+      "=",
+      "no"
+     ]
+    }
+   ],
+   "can_repeal": [
+    "=",
+    {
+     "NOT": [
+      "=",
+      {
+       "has_law_or_variant": [
+        "=",
+        "law_type:law_single_party_state"
+       ]
+      }
+     ]
+    }
+   ],
+   "amendment_activism_multiplier": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "amendment_military_party_dominance": [
+  "=",
+  {
+   "parent": [
+    "=",
+    "law_single_party_state"
+   ],
+   "allowed_laws": [
+    "=",
+    [
+     "law_single_party_state"
+    ]
+   ],
+   "sponsor_modifier": [
+    "=",
+    {
+     "interest_group_pol_str_mult": [
+      "=",
+      "0.15"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "ai_will_revoke": [
+    "=",
+    {
+     "always": [
+      "=",
+      "no"
+     ]
+    }
+   ],
+   "can_repeal": [
+    "=",
+    {
+     "NOT": [
+      "=",
+      {
+       "has_law_or_variant": [
+        "=",
+        "law_type:law_single_party_state"
+       ]
+      }
+     ]
+    }
+   ],
+   "amendment_activism_multiplier": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "amendment_radical_party_dominance": [
+  "=",
+  {
+   "parent": [
+    "=",
+    "law_single_party_state"
+   ],
+   "allowed_laws": [
+    "=",
+    [
+     "law_single_party_state"
+    ]
+   ],
+   "sponsor_modifier": [
+    "=",
+    {
+     "interest_group_pol_str_mult": [
+      "=",
+      "0.15"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "ai_will_revoke": [
+    "=",
+    {
+     "always": [
+      "=",
+      "no"
+     ]
+    }
+   ],
+   "can_repeal": [
+    "=",
+    {
+     "NOT": [
+      "=",
+      {
+       "has_law_or_variant": [
+        "=",
+        "law_type:law_single_party_state"
+       ]
+      }
+     ]
+    }
+   ],
+   "amendment_activism_multiplier": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "amendment_religious_party_dominance": [
+  "=",
+  {
+   "parent": [
+    "=",
+    "law_single_party_state"
+   ],
+   "allowed_laws": [
+    "=",
+    [
+     "law_single_party_state"
+    ]
+   ],
+   "sponsor_modifier": [
+    "=",
+    {
+     "interest_group_pol_str_mult": [
+      "=",
+      "0.15"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "ai_will_revoke": [
+    "=",
+    {
+     "always": [
+      "=",
+      "no"
+     ]
+    }
+   ],
+   "can_repeal": [
+    "=",
+    {
+     "NOT": [
+      "=",
+      {
+       "has_law_or_variant": [
+        "=",
+        "law_type:law_single_party_state"
+       ]
+      }
+     ]
+    }
+   ],
+   "amendment_activism_multiplier": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "amendment_socialist_party_dominance": [
+  "=",
+  {
+   "parent": [
+    "=",
+    "law_single_party_state"
+   ],
+   "allowed_laws": [
+    "=",
+    [
+     "law_single_party_state"
+    ]
+   ],
+   "sponsor_modifier": [
+    "=",
+    {
+     "interest_group_pol_str_mult": [
+      "=",
+      "0.15"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "ai_will_revoke": [
+    "=",
+    {
+     "always": [
+      "=",
+      "no"
+     ]
+    }
+   ],
+   "can_repeal": [
+    "=",
+    {
+     "NOT": [
+      "=",
+      {
+       "has_law_or_variant": [
+        "=",
+        "law_type:law_single_party_state"
+       ]
+      }
+     ]
+    }
+   ],
+   "amendment_activism_multiplier": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
  "amendment_taikunate": [
   "=",
   {

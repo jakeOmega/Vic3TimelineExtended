@@ -2177,6 +2177,10 @@
        "limit": [
         "=",
         {
+         "c:POL": [
+          "?=",
+          "this"
+         ],
          "has_journal_entry": [
           "=",
           "je_congress_poland"

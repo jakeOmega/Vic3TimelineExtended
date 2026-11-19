@@ -229,6 +229,10 @@
    "default_modifications": [
     "=",
     {
+     "ship_mod_slot_armor": [
+      "=",
+      "ship_mod_ship_of_the_line_armor_light"
+     ],
      "ship_mod_slot_propulsion": [
       "=",
       "ship_mod_ship_of_the_line_propulsion_light"
@@ -255,9 +259,20 @@
    "is_obsolete": [
     "=",
     {
-     "has_technology_researched": [
+     "OR": [
       "=",
-      "monitor_tech"
+      {
+       "has_technology_researched": [
+        [
+         "=",
+         "monitor_tech"
+        ],
+        [
+         "=",
+         "pre_dreadnought_tech"
+        ]
+       ]
+      }
      ]
     }
    ],
@@ -2199,6 +2214,10 @@
    "default_modifications": [
     "=",
     {
+     "ship_mod_slot_armor": [
+      "=",
+      "ship_mod_frigate_armor_light"
+     ],
      "ship_mod_slot_propulsion": [
       "=",
       "ship_mod_frigate_propulsion_light"
@@ -2527,7 +2546,7 @@
     {
      "goods_input_hardwood_add": [
       "=",
-      "230"
+      "210"
      ],
      "goods_input_fabric_add": [
       "=",

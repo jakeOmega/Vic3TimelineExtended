@@ -267,6 +267,7 @@ ai_state_has_core_ambition
 ai_state_is_invalid_target
 ai_strait_fallout_weight
 ai_strait_toll_income_weight
+ai_subject_value_state_value_fraction
 ai_systemic_befriend_score
 ai_systemic_conquest_score
 ai_systemic_protect_score
@@ -1585,11 +1586,9 @@ bureaucrats_clothes_pop_trigger
 byzantium_state_region_owned_to_complete
 calc_true_if
 calculate_caudillo_progress
-calculate_communism_progress
 calculate_global_democracy_index_effect
 calculate_great_game_passive_progress
 calculate_national_identity_progress
-calculate_populism_progress
 calculate_russia_revolution_alignments_conservative
 calculate_russia_revolution_alignments_liberal
 calculate_russia_revolution_alignments_socialist
@@ -1637,6 +1636,7 @@ can_reach_target_country_to_protect
 can_reach_target_country_to_subjugate
 can_reach_target_state_to_coerce
 can_reach_target_state_to_conquer
+can_regime_change
 can_research
 can_revolution_inherit
 can_secede_during_revolution
@@ -1945,6 +1945,7 @@ company_valid_trigger
 complete_great_game_effect
 complete_objective_subgoal
 concentration_of_defensive_mobilized_battalions
+conclude_journal_entry
 conclusion_date
 conclusion_desc
 conditions
@@ -3931,6 +3932,7 @@ has_mp2_soundtrack_dlc_trigger
 has_name
 has_naval_mission_in_region
 has_naval_mission_with_invalid_area
+has_naval_mission_without_area
 has_negotiated
 has_objective
 has_ongoing_assimilation
@@ -4154,6 +4156,7 @@ ig_ideology_towards_republican
 ig_is_anti_dreyfusard
 ig_is_dreyfusard
 ig_is_liberal
+ig_is_member_of_dominant_party
 ig_is_reactionary
 ig_is_socialist
 ig_leader
@@ -4328,6 +4331,7 @@ is_busy
 is_byzantium_state_region
 is_capital
 is_character_alive
+is_character_interaction_available
 is_character_role
 is_character_role_type
 is_china_unification_pair
@@ -5642,8 +5646,6 @@ on_diplo_play_overlord_protects_subject
 on_diplo_play_start
 on_diplo_play_start_third_party
 on_diplo_play_subject_backstab_overlord
-on_diplo_play_subject_released
-on_diplo_play_subject_released_overlord
 on_diplo_play_switch_sides
 on_diplo_play_war_start
 on_diplomatic_action
@@ -7061,6 +7063,7 @@ partial
 partition_ottoman_balkans
 party
 party_counts_as_socialist_party
+party_has_insurrectionary_member
 party_has_members
 party_total_clout
 patronize_authority_cost
@@ -8549,6 +8552,7 @@ reform_or_revolution_war_threshold
 regency_clothes_trigger
 regency_monthly_events
 regime_change
+regime_change_target_allowed_trigger
 region
 region_score
 relations_hit_with_power_bloc_leaders
@@ -8935,6 +8939,7 @@ set_secret_goal
 set_ship_owner
 set_ship_owner_multiple
 set_social_hierarchy
+set_sps_dominant_party_effect
 set_state_name
 set_state_owner
 set_state_religion
@@ -9075,6 +9080,7 @@ springtime_of_peoples_yearly_events
 springtime_save_conservative_laws
 springtime_total_europe_prestige
 springtime_total_europe_revolutionary_prestige
+sps_law_checkpoint_cancellation
 stall_chance
 stall_chance_for_law
 stall_chance_for_law_without_enactment_modifier
@@ -9358,7 +9364,10 @@ tsarpoints_privatised_buildings_percent_value
 tsarpoints_privatizable_buildings_count_value
 tsarpoints_privatized_buildings_current_value
 tsarpoints_railway_levels_value
+tsarpoints_replace_decree
 tsarpoints_revenue_multiplier_value
+tsarpoints_update_subject_decree
+tsarpoints_update_subject_decrees
 tsarpoints_urban_center_level_target_value
 tsarpoints_value_high
 tsarpoints_value_low

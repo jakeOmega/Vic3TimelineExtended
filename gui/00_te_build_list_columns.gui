@@ -42,11 +42,10 @@ types te_build_list_columns {
 		# Trade Capacity (Trade Center)
 		textbox = {
 			visible = "[ObjectsEqual(Building.GetBuildingType, GetBuildingType('building_trade_center').Self)]"
-			raw_text = "[State.GetTradeCapacityBalance|0+=]"
 			tooltip = "STATE_TRADE_CAPACITY_USAGE_TOOLTIP"
-
 			elide = right
 			fontsize_min = 12
+			raw_text = "[State.GetTradeCapacityBalance|0+]"
 
 			block "productivity_info_text_style" {}
 		}

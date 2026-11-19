@@ -2,11 +2,16 @@
 # enactment_approval_mult = multiplier to the approval effects changing this law has on IGs, default 1.0
 
 # enable = {} trigger for whether laws in this group should be possible at all
+# regime_change_min_progressiveness_difference = a regime change imposes the holder's law in this group only if its progressiveness differs from the target's law by at least this much. If not specified or 0, regime change does not impose laws in this group
+#
+# 1.15.2 replaced affected_by_regime_change = yes with this field, and its define
+# WAR_GOAL_REGIME_CHANGE_MIN_LAW_PROGRESSIVENESS_DIFFERENCE (50) with the value, so
+# the groups that had the flag carry 50.
 
 lawgroup_privacy_rights = {
 	law_group_category = human_rights
 	ideological_opinion_impact = 0.25
-	affected_by_regime_change = yes
+	regime_change_min_progressiveness_difference = 50
 }
 
 # Groups react to the inheritance law in force, not only while one is being
@@ -19,49 +24,49 @@ lawgroup_inheritance = {
 lawgroup_rules_of_war = {
 	law_group_category = power_structure
 	ideological_opinion_impact = 0.5
-	affected_by_regime_change = yes
+	regime_change_min_progressiveness_difference = 50
 }
 
 lawgroup_intellectual_property = {
 	law_group_category = economy
 	ideological_opinion_impact = 0.25
-	affected_by_regime_change = yes
+	regime_change_min_progressiveness_difference = 50
 }
 
 lawgroup_monetary_policy = {
 	law_group_category = economy
 	ideological_opinion_impact = 0
-	affected_by_regime_change = yes
+	regime_change_min_progressiveness_difference = 50
 }
 
 lawgroup_right_to_information = {
 	law_group_category = economy
 	ideological_opinion_impact = 0.25
-	affected_by_regime_change = yes
+	regime_change_min_progressiveness_difference = 50
 }
 
 lawgroup_minority_rights = {
 	law_group_category = human_rights
 	ideological_opinion_impact = 1.0
-	affected_by_regime_change = yes
+	regime_change_min_progressiveness_difference = 50
 }
 
 lawgroup_criminal_justice = {
 	law_group_category = human_rights
 	ideological_opinion_impact = 0.5
-	affected_by_regime_change = yes
+	regime_change_min_progressiveness_difference = 50
 }
 
 lawgroup_LGBTQ_rights = {
 	law_group_category = human_rights
 	ideological_opinion_impact = 1.0
-	affected_by_regime_change = yes
+	regime_change_min_progressiveness_difference = 50
 }
 
 lawgroup_human_augmentation = {
 	law_group_category = human_rights
 	ideological_opinion_impact = 0.5
-	affected_by_regime_change = yes
+	regime_change_min_progressiveness_difference = 50
 }
 
 # Bodily Autonomy (era 13 spec § 7.1): what people may do to how their bodies
@@ -69,13 +74,13 @@ lawgroup_human_augmentation = {
 lawgroup_bodily_autonomy = {
 	law_group_category = human_rights
 	ideological_opinion_impact = 0.5
-	affected_by_regime_change = yes
+	regime_change_min_progressiveness_difference = 50
 }
 
 lawgroup_state_power = {
 	law_group_category = power_structure
 	ideological_opinion_impact = 0
-	affected_by_regime_change = yes
+	regime_change_min_progressiveness_difference = 50
 }
 
 # Judiciary (docs/superpowers/archive/specs/2026-10-17-judiciary-design.md): who checks
@@ -84,31 +89,31 @@ lawgroup_state_power = {
 lawgroup_judiciary = {
 	law_group_category = power_structure
 	ideological_opinion_impact = 0.5
-	affected_by_regime_change = yes
+	regime_change_min_progressiveness_difference = 50
 }
 
 lawgroup_electoral_finance = {
 	law_group_category = power_structure
 	ideological_opinion_impact = 0.25
-	affected_by_regime_change = yes
+	regime_change_min_progressiveness_difference = 50
 }
 
 lawgroup_financial_regulation = {
 	law_group_category = economy
 	ideological_opinion_impact = 0.25
-	affected_by_regime_change = yes
+	regime_change_min_progressiveness_difference = 50
 }
 
 lawgroup_genetic_rights = {
 	law_group_category = economy
 	ideological_opinion_impact = 0.25
-	affected_by_regime_change = yes
+	regime_change_min_progressiveness_difference = 50
 }
 
 lawgroup_internet_governance = {
 	law_group_category = power_structure
 	ideological_opinion_impact = 0.25
-	affected_by_regime_change = yes
+	regime_change_min_progressiveness_difference = 50
 }
 
 # Frontier AI Control (era 13 spec § 7.1): who builds the most capable AI
@@ -117,7 +122,7 @@ lawgroup_internet_governance = {
 lawgroup_frontier_ai_control = {
 	law_group_category = power_structure
 	ideological_opinion_impact = 0.25
-	affected_by_regime_change = yes
+	regime_change_min_progressiveness_difference = 50
 }
 
 lawgroup_family_reproductive_policy = {
@@ -128,13 +133,13 @@ lawgroup_family_reproductive_policy = {
 lawgroup_language_policy = {
 	law_group_category = human_rights
 	ideological_opinion_impact = 0.25
-	affected_by_regime_change = yes
+	regime_change_min_progressiveness_difference = 50
 }
 
 lawgroup_antitrust = {
 	law_group_category = economy
 	ideological_opinion_impact = 0.25
-	affected_by_regime_change = yes
+	regime_change_min_progressiveness_difference = 50
 }
 
 

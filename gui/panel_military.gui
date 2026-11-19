@@ -1,4 +1,4 @@
-﻿# TE override of vanilla panel_military.gui (1.15.1): vanilla's file plus the Nuclear and Covert tabs
+﻿# TE override of vanilla panel_military.gui (1.15.2): vanilla's file plus the Nuclear and Covert tabs
 # (### MOD blocks) and the mobilization option groups one a row (datamodel_wrap = 1, commented there).
 # Re-diff against the installed file on every vanilla patch (docs/guides/vanilla_patch_runbook.md § 5).
 # COPY-PASTED FOR NOW
@@ -1584,7 +1584,7 @@ types mobilization_options {
 			}
 
 			military_formation_mobilize_button = {
-				parentanchor = center
+				parentanchor = hcenter
 				visible = "[MilitaryFormation.IsArmy]"
 
 				blockoverride "size" {

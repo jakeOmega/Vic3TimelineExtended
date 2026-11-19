@@ -1372,6 +1372,86 @@
    ]
   }
  ],
+ "rus_settle_ecumenical_question": [
+  "=",
+  {
+   "is_shown": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "ip5_content"
+     ],
+     "c:RUS": [
+      "?=",
+      "this"
+     ],
+     "has_variable": [
+      "=",
+      "ecumenical_question_var"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "owns_entire_state_region": [
+      "=",
+      "STATE_EASTERN_THRACE"
+     ],
+     "any_scope_state": [
+      "=",
+      {
+       "state_region": [
+        "=",
+        {
+         "is_homeland": [
+          "=",
+          "cu:greek"
+         ]
+        }
+       ],
+       "count": [
+        ">=",
+        "5"
+       ]
+      }
+     ]
+    }
+   ],
+   "when_taken": [
+    "=",
+    {
+     "remove_variable": [
+      "=",
+      "ecumenical_question_var"
+     ],
+     "trigger_event": [
+      "=",
+      {
+       "id": [
+        "=",
+        "tsarpoints_events.16"
+       ],
+       "popup": [
+        "=",
+        "yes"
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_chance": [
+    "=",
+    {
+     "value": [
+      "=",
+      "100"
+     ]
+    }
+   ]
+  }
+ ],
  "antarctica_expedition": [
   "=",
   {

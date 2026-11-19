@@ -18,9 +18,9 @@
     "=",
     "2.0"
    ],
-   "affected_by_regime_change": [
+   "regime_change_min_progressiveness_difference": [
     "=",
-    "yes"
+    "50"
    ],
    "change_allowed_trigger": [
     "=",
@@ -72,9 +72,9 @@
     "=",
     "2.0"
    ],
-   "affected_by_regime_change": [
+   "regime_change_min_progressiveness_difference": [
     "=",
-    "yes"
+    "50"
    ]
   }
  ],
@@ -89,9 +89,9 @@
     "=",
     "1.0"
    ],
-   "affected_by_regime_change": [
+   "regime_change_min_progressiveness_difference": [
     "=",
-    "yes"
+    "50"
    ]
   }
  ],
@@ -106,9 +106,9 @@
     "=",
     "0.5"
    ],
-   "affected_by_regime_change": [
+   "regime_change_min_progressiveness_difference": [
     "=",
-    "yes"
+    "50"
    ],
    "linked_social_hierarchy": [
     "=",
@@ -127,9 +127,9 @@
     "=",
     "0.5"
    ],
-   "affected_by_regime_change": [
+   "regime_change_min_progressiveness_difference": [
     "=",
-    "yes"
+    "50"
    ],
    "linked_social_hierarchy": [
     "=",
@@ -148,9 +148,9 @@
     "=",
     "1.0"
    ],
-   "affected_by_regime_change": [
+   "regime_change_min_progressiveness_difference": [
     "=",
-    "yes"
+    "50"
    ]
   }
  ],
@@ -165,9 +165,9 @@
     "=",
     "0.25"
    ],
-   "affected_by_regime_change": [
+   "regime_change_min_progressiveness_difference": [
     "=",
-    "yes"
+    "50"
    ]
   }
  ],
@@ -222,9 +222,9 @@
     "=",
     "0.5"
    ],
-   "affected_by_regime_change": [
+   "regime_change_min_progressiveness_difference": [
     "=",
-    "yes"
+    "50"
    ]
   }
  ],
@@ -242,6 +242,10 @@
    "base_enactment_days": [
     "=",
     "150"
+   ],
+   "regime_change_min_progressiveness_difference": [
+    "=",
+    "25"
    ]
   }
  ],
@@ -255,6 +259,10 @@
    "ideological_opinion_impact": [
     "=",
     "1.0"
+   ],
+   "regime_change_min_progressiveness_difference": [
+    "=",
+    "25"
    ],
    "change_allowed_trigger": [
     "=",
@@ -477,6 +485,10 @@
    "ideological_opinion_impact": [
     "=",
     "0.5"
+   ],
+   "regime_change_min_progressiveness_difference": [
+    "=",
+    "75"
    ]
   }
  ]

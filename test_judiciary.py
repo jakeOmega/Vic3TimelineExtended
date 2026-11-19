@@ -204,7 +204,7 @@ class LawsTest(unittest.TestCase):
         group = _body(_parse(GROUPS)["lawgroup_judiciary"])
         self.assertEqual(_body(group["law_group_category"]), "power_structure")
         self.assertEqual(_body(group["ideological_opinion_impact"]), "0.5")
-        self.assertEqual(_body(group["affected_by_regime_change"]), "yes")
+        self.assertEqual(_body(group["regime_change_min_progressiveness_difference"]), "50")
 
     def test_six_laws_executive_first(self):
         self.assertEqual(tuple(self.laws), COURT_LAWS)

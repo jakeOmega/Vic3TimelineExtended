@@ -1842,6 +1842,14 @@
   "=",
   {}
  ],
+ "concept_enforced_war_goal": [
+  "=",
+  {}
+ ],
+ "concept_advancing_war_goal": [
+  "=",
+  {}
+ ],
  "concept_primary_demand": [
   "=",
   {}

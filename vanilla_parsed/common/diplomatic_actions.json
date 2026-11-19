@@ -10459,65 +10459,13 @@
    "possible": [
     "=",
     {
-     "custom_tooltip": [
+     "can_regime_change": [
       "=",
-      {
-       "text": [
-        "=",
-        "\"FORCE_REGIME_CHANGE_GOV_PRINCIPLES_DIST_POWER_PROGRESSIVENESS_DIFFERENCE\""
-       ],
-       "OR": [
-        "=",
-        {
-         "50": [
-          [
-           "<=",
-           {
-            "add": [
-             "=",
-             {
-              "add": [
-               "=",
-               "active_law:lawgroup_governance_principles.type.progressiveness"
-              ],
-              "subtract": [
-               "=",
-               "scope:target_country.active_law:lawgroup_governance_principles.type.progressiveness"
-              ],
-              "abs": [
-               "=",
-               "yes"
-              ]
-             }
-            ]
-           }
-          ],
-          [
-           "<=",
-           {
-            "add": [
-             "=",
-             {
-              "add": [
-               "=",
-               "active_law:lawgroup_distribution_of_power.type.progressiveness"
-              ],
-              "subtract": [
-               "=",
-               "scope:target_country.active_law:lawgroup_distribution_of_power.type.progressiveness"
-              ],
-              "abs": [
-               "=",
-               "yes"
-              ]
-             }
-            ]
-           }
-          ]
-         ]
-        }
-       ]
-      }
+      "scope:target_country"
+     ],
+     "regime_change_target_allowed_trigger": [
+      "=",
+      "yes"
      ],
      "power_bloc": [
       "=",
@@ -10819,36 +10767,6 @@
        "scope:target_country": [
         "=",
         {
-         "add_modifier": [
-          "=",
-          {
-           "name": [
-            "=",
-            "installed_regime"
-           ],
-           "days": [
-            "=",
-            "normal_modifier_time"
-           ],
-           "multiplier": [
-            "=",
-            "0.2"
-           ]
-          }
-         ],
-         "change_relations": [
-          "=",
-          {
-           "country": [
-            "=",
-            "root"
-           ],
-           "value": [
-            "=",
-            "-25"
-           ]
-          }
-         ],
          "if": [
           "=",
           {
@@ -14210,31 +14128,71 @@
         }
        ],
        "NOT": [
-        "=",
-        {
-         "AND": [
-          "=",
-          {
-           "c:BOL": [
-            "?=",
-            "this"
-           ],
-           "is_involved_in_journal_entry": [
-            "=",
-            "je_peru_bolivia"
-           ]
-          }
-         ],
-         "scope:target_country": [
-          "=",
-          {
-           "is_involved_in_journal_entry": [
-            "=",
-            "je_peru_bolivia"
-           ]
-          }
-         ]
-        }
+        [
+         "=",
+         {
+          "AND": [
+           "=",
+           {
+            "c:BOL": [
+             "?=",
+             "this"
+            ],
+            "is_involved_in_journal_entry": [
+             "=",
+             "je_peru_bolivia"
+            ]
+           }
+          ],
+          "scope:target_country": [
+           "=",
+           {
+            "is_involved_in_journal_entry": [
+             "=",
+             "je_peru_bolivia"
+            ]
+           }
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "AND": [
+           "=",
+           {
+            "c:AUS": [
+             "?=",
+             "this"
+            ],
+            "scope:target_country": [
+             "=",
+             {
+              "c:HUN": [
+               "?=",
+               "this"
+              ]
+             }
+            ],
+            "NOR": [
+             "=",
+             {
+              "has_technology_researched": [
+               [
+                "=",
+                "pan-nationalism"
+               ],
+               [
+                "=",
+                "philosophical_pragmatism"
+               ]
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ]
        ],
        "ai_russia_is_holding_poland": [
         "=",
@@ -14937,6 +14895,57 @@
               "ai_russia_refuses_polish_autonomy": [
                "=",
                "yes"
+              ]
+             }
+            ],
+            "add": [
+             "=",
+             "-300"
+            ]
+           }
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "desc": [
+           "=",
+           "\"je_matter_of_hungary\""
+          ],
+          "if": [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "c:AUS": [
+               "?=",
+               "this"
+              ],
+              "scope:actor": [
+               "=",
+               {
+                "c:HUN": [
+                 "?=",
+                 "this"
+                ]
+               }
+              ],
+              "NOR": [
+               "=",
+               {
+                "has_technology_researched": [
+                 [
+                  "=",
+                  "pan-nationalism"
+                 ],
+                 [
+                  "=",
+                  "philosophical_pragmatism"
+                 ]
+                ]
+               }
               ]
              }
             ],
@@ -28399,13 +28408,24 @@
         "root"
        ],
        "NOT": [
-        "=",
-        {
-         "is_diplomatic_play_enemy_of": [
-          "=",
-          "root"
-         ]
-        }
+        [
+         "=",
+         {
+          "is_subject_type": [
+           "=",
+           "subject_type_personal_union"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "is_diplomatic_play_enemy_of": [
+           "=",
+           "root"
+          ]
+         }
+        ]
        ],
        "NAND": [
         "=",

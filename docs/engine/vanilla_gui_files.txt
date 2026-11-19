@@ -1,5 +1,5 @@
 # AUTO-GENERATED list of vanilla GUI files for gui_placeholder_textures.py.
-# Game version 1.15.1. Regenerate on a vanilla bump:
+# Game version 1.15.2. Regenerate on a vanilla bump:
 #   python3 texture_reference_audit.py --bootstrap
 # Every file under game/gui, jomini/gui and clausewitz/gui, as the engine
 # mounts it (gui/...). A mod GUI file at one of these paths replaces a vanilla

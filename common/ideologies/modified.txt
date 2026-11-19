@@ -3548,7 +3548,10 @@ REPLACE:ideology_vanguardist = {
 		law_factory_councils = approve
 	}
 	country_trigger = {
-		has_technology_researched = political_agitation
+		OR = {
+			has_technology_researched = political_agitation
+			has_journal_entry = je_bolsheviks
+		}
 	}
 	interest_group_leader_trigger = {
 		ideology_vanguardist_valid_trigger = yes
@@ -6037,16 +6040,28 @@ REPLACE:ideology_egalitarian_modern = {
 		law_comprehensive_rights = approve
 		law_full_equality_and_protection = strongly_approve
 	}
+	lawgroup_caste_hegemony = {
+		law_hindu_caste_enforced = strongly_disapprove
+		law_hindu_caste_codified = strongly_disapprove
+		law_hindu_caste_not_enforced = neutral
+		law_affirmative_action = approve
+	}
+	lawgroup_edo_social_system = {
+		law_strict_edo_system = strongly_disapprove
+		law_intermediate_edo_system = disapprove
+		law_lax_edo_system = strongly_approve
+	}
+	lawgroup_education_system = {
+		law_public_schools = approve
+		law_private_schools = disapprove
+		law_religious_schools = neutral
+		law_no_schools = disapprove
+	}
 	lawgroup_free_speech = {
 		law_protected_speech = strongly_approve
 		law_right_of_assembly = approve
 		law_censorship = neutral
 		law_outlawed_dissent = disapprove
-	}
-	lawgroup_labor_rights = {
-		law_worker_protections = strongly_approve
-		law_regulatory_bodies = approve
-		law_no_workers_rights = neutral
 	}
 	lawgroup_childrens_rights = {
 		law_compulsory_primary_school = strongly_approve

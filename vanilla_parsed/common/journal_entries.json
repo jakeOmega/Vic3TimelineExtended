@@ -6004,6 +6004,28 @@
               "law_type:law_single_party_state"
              ]
             ],
+            "has_law_or_variant": [
+             [
+              "=",
+              "law_type:law_landed_voting"
+             ],
+             [
+              "=",
+              "law_type:law_wealth_voting"
+             ],
+             [
+              "=",
+              "law_type:law_census_voting"
+             ],
+             [
+              "=",
+              "law_type:law_universal_suffrage"
+             ],
+             [
+              "=",
+              "law_type:law_single_party_state"
+             ]
+            ],
             "country_has_voting_franchise": [
              "=",
              "yes"
@@ -10777,28 +10799,64 @@
       "=",
       "yes"
      ],
-     "show_as_tooltip": [
+     "if": [
       "=",
       {
+       "limit": [
+        "=",
+        {
+         "has_technology_researched": [
+          "=",
+          "socialism"
+         ],
+         "country_has_laws_in_need_of_critical_modernization": [
+          "=",
+          "no"
+         ],
+         "NOT": [
+          "=",
+          {
+           "any_political_movement": [
+            "=",
+            {
+             "is_political_movement_type": [
+              "=",
+              "movement_socialist"
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "create_political_movement": [
+        "=",
+        {
+         "type": [
+          "=",
+          "movement_socialist"
+         ]
+        }
+       ],
        "if": [
         "=",
         {
          "limit": [
           "=",
           {
-           "country_has_laws_in_need_of_critical_modernization": [
-            "=",
-            "no"
-           ],
            "NOT": [
             "=",
             {
-             "any_political_movement": [
+             "any_scope_character": [
               "=",
               {
-               "is_political_movement_type": [
+               "has_role_of_type": [
                 "=",
-                "movement_socialist"
+                "agitator"
+               ],
+               "has_ideology": [
+                "=",
+                "ideology:ideology_communist"
                ]
               }
              ]
@@ -10806,14 +10864,211 @@
            ]
           }
          ],
-         "create_political_movement": [
+         "custom_tooltip": [
           "=",
           {
-           "type": [
+           "text": [
+            "=",
+            "communist_agitator_tt"
+           ],
+           "create_character": [
+            "=",
+            {
+             "culture": [
+              "=",
+              "ig_before_random_accepted"
+             ],
+             "is_agitator": [
+              "=",
+              "yes"
+             ],
+             "interest_group": [
+              "=",
+              "ig:ig_trade_unions"
+             ],
+             "ideology": [
+              "=",
+              "ideology:ideology_communist_leader"
+             ],
+             "traits": [
+              "=",
+              [
+               "firebrand"
+              ]
+             ],
+             "on_created": [
+              "=",
+              {
+               "add_random_trait": [
+                "=",
+                "personality"
+               ]
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "random_political_movement": [
+        "=",
+        {
+         "limit": [
+          "=",
+          {
+           "is_political_movement_type": [
             "=",
             "movement_socialist"
            ]
           }
+         ],
+         "save_scope_as": [
+          "=",
+          "socialist_movement_scope"
+         ]
+        }
+       ]
+      }
+     ],
+     "else_if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "has_technology_researched": [
+          "=",
+          "anarchism"
+         ],
+         "country_has_laws_in_need_of_critical_modernization": [
+          "=",
+          "no"
+         ],
+         "NOT": [
+          "=",
+          {
+           "any_political_movement": [
+            "=",
+            {
+             "OR": [
+              "=",
+              {
+               "is_political_movement_type": [
+                [
+                 "=",
+                 "movement_socialist"
+                ],
+                [
+                 "=",
+                 "movement_anarchist"
+                ]
+               ]
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "create_political_movement": [
+        "=",
+        {
+         "type": [
+          "=",
+          "movement_anarchist"
+         ]
+        }
+       ],
+       "if": [
+        "=",
+        {
+         "limit": [
+          "=",
+          {
+           "NOT": [
+            "=",
+            {
+             "any_scope_character": [
+              "=",
+              {
+               "has_role_of_type": [
+                "=",
+                "agitator"
+               ],
+               "has_ideology": [
+                "=",
+                "ideology:ideology_anarchist"
+               ]
+              }
+             ]
+            }
+           ]
+          }
+         ],
+         "custom_tooltip": [
+          "=",
+          {
+           "text": [
+            "=",
+            "anarchist_agitator_tt"
+           ],
+           "create_character": [
+            "=",
+            {
+             "culture": [
+              "=",
+              "ig_before_random_accepted"
+             ],
+             "is_agitator": [
+              "=",
+              "yes"
+             ],
+             "interest_group": [
+              "=",
+              "ig:ig_trade_unions"
+             ],
+             "ideology": [
+              "=",
+              "ideology:ideology_anarchist"
+             ],
+             "traits": [
+              "=",
+              [
+               "firebrand"
+              ]
+             ],
+             "on_created": [
+              "=",
+              {
+               "add_random_trait": [
+                "=",
+                "personality"
+               ]
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "random_political_movement": [
+        "=",
+        {
+         "limit": [
+          "=",
+          {
+           "is_political_movement_type": [
+            "=",
+            "movement_anarchist"
+           ]
+          }
+         ],
+         "save_scope_as": [
+          "=",
+          "socialist_movement_scope"
          ]
         }
        ]
@@ -10826,25 +11081,7 @@
         "=",
         "communism.10"
        ],
-       "days": [
-        "=",
-        "1"
-       ],
        "popup": [
-        "=",
-        "yes"
-       ]
-      }
-     ]
-    }
-   ],
-   "on_weekly_pulse": [
-    "=",
-    {
-     "effect": [
-      "=",
-      {
-       "calculate_communism_progress": [
         "=",
         "yes"
        ]
@@ -10865,15 +11102,6 @@
        "1": [
         "=",
         "communism.7"
-       ]
-      }
-     ],
-     "effect": [
-      "=",
-      {
-       "calculate_communism_progress": [
-        "=",
-        "yes"
        ]
       }
      ]
@@ -12211,13 +12439,33 @@
                 ]
                }
               ],
-              "set_variable": [
-               "=",
-               "sozialistische_weltrepublik_var"
-              ],
               "custom_tooltip": [
-               "=",
-               "socialist_world_republic_tt"
+               [
+                "=",
+                {
+                 "text": [
+                  "=",
+                  "socialist_world_republic_tt"
+                 ],
+                 "trigger_event": [
+                  "=",
+                  {
+                   "id": [
+                    "=",
+                    "communism.14"
+                   ],
+                   "popup": [
+                    "=",
+                    "yes"
+                   ]
+                  }
+                 ]
+                }
+               ],
+               [
+                "=",
+                "socialist_world_republic_primary_cultures_tt"
+               ]
               ]
              }
             ],
@@ -12231,13 +12479,15 @@
                  "=",
                  "if_quarter_of_world_gdp_swr_tt"
                 ],
-                "set_variable": [
-                 "=",
-                 "sozialistische_weltrepublik_var"
-                ],
                 "custom_tooltip": [
-                 "=",
-                 "socialist_world_republic_tt"
+                 [
+                  "=",
+                  "socialist_world_republic_tt"
+                 ],
+                 [
+                  "=",
+                  "socialist_world_republic_primary_cultures_tt"
+                 ]
                 ]
                }
               ]
@@ -37238,6 +37488,38 @@
          "\"springtime_conservative_blue\""
         ]
        }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "=",
+           {
+            "is_in_geographic_region": [
+             "=",
+             "geographic_region_europe"
+            ],
+            "NOT": [
+             "=",
+             {
+              "is_involved_in_journal_entry": [
+               "=",
+               "je_springtime_of_the_peoples"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "value": [
+         "=",
+         "\"white\""
+        ]
+       }
       ]
      ]
     }
@@ -42468,6 +42750,35 @@
          }
         ]
        }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "is_in_geographic_region": [
+             [
+              "=",
+              "geographic_region_central_asia"
+             ],
+             [
+              "=",
+              "geographic_region_greater_persia"
+             ]
+            ]
+           }
+          ]
+         }
+        ],
+        "value": [
+         "=",
+         "\"white\""
+        ]
+       }
       ]
      ]
     }
@@ -43260,6 +43571,15 @@
                   "yes"
                  ]
                 }
+               ],
+               "hidden_effect": [
+                "=",
+                {
+                 "set_variable": [
+                  "=",
+                  "achievement_great_game_no_re"
+                 ]
+                }
                ]
               }
              ]
@@ -43552,6 +43872,15 @@
                    "yes"
                   ]
                  }
+                ],
+                "hidden_effect": [
+                 "=",
+                 {
+                  "set_variable": [
+                   "=",
+                   "achievement_great_game_no_re"
+                  ]
+                 }
                 ]
                }
               ]
@@ -43560,29 +43889,6 @@
            ]
           }
          ]
-        ],
-        "hidden_effect": [
-         "=",
-         {
-          "c:GBR": [
-           "?=",
-           {
-            "set_variable": [
-             "=",
-             "achievement_great_game_no_re"
-            ]
-           }
-          ],
-          "c:RUS": [
-           "?=",
-           {
-            "set_variable": [
-             "=",
-             "achievement_great_game_no_re"
-            ]
-           }
-          ]
-         }
         ],
         "je_great_game_control_cleanup": [
          "=",
@@ -57893,15 +58199,24 @@
       "trigger": [
        "=",
        {
-        "NOT": [
+        "custom_tooltip": [
          "=",
          {
-          "any_political_movement": [
+          "text": [
+           "=",
+           "slave_owner_paranoid_completion_tt"
+          ],
+          "NOT": [
            "=",
            {
-            "is_political_movement_type": [
+            "any_political_movement": [
              "=",
-             "movement_slave_revolt"
+             {
+              "is_political_movement_type": [
+               "=",
+               "movement_slave_revolt"
+              ]
+             }
             ]
            }
           ]
@@ -81889,6 +82204,230 @@
      ]
     }
    ],
+   "map_color": [
+    "=",
+    {
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "owner": [
+          "?=",
+          {
+           "has_journal_entry": [
+            "=",
+            "je_silkworm_diseases"
+           ]
+          }
+         ],
+         "has_building": [
+          "=",
+          "building_silk_plantation"
+         ]
+        }
+       ],
+       "value": [
+        "=",
+        "\"silk\""
+       ]
+      }
+     ],
+     "else_if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "owner": [
+          "?=",
+          {
+           "has_journal_entry": [
+            "=",
+            "je_silkworm_diseases"
+           ]
+          }
+         ]
+        }
+       ],
+       "value": [
+        "=",
+        "\"white\""
+       ]
+      }
+     ]
+    }
+   ],
+   "map_color_second": [
+    "=",
+    {
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "state_has_decree_variant": [
+           "=",
+           {
+            "DECREE": [
+             "=",
+             "decree_encourage_agricultural_industry"
+            ]
+           }
+          ]
+         }
+        ],
+        "value": [
+         "=",
+         "\"pebrine_decree_light_green\""
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_modifier": [
+           "=",
+           "modifier_pebrine_state_modifier"
+          ],
+          "state_has_decree_variant": [
+           "=",
+           {
+            "DECREE": [
+             "=",
+             "decree_encourage_agricultural_industry"
+            ]
+           }
+          ]
+         }
+        ],
+        "value": [
+         "=",
+         "\"pebrine_decree_medium_green\""
+        ]
+       }
+      ]
+     ],
+     "else_if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "has_modifier": [
+          "=",
+          "modifier_pebrine_state_modifier"
+         ]
+        }
+       ],
+       "value": [
+        "=",
+        "\"disease_outbreak_brown\""
+       ]
+      }
+     ]
+    }
+   ],
+   "map_tooltip": [
+    "=",
+    {
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_silkworm_diseases"
+            ]
+           }
+          ]
+         }
+        ],
+        "owner": [
+         "?=",
+         {
+          "custom_tooltip_no_bullet": [
+           "=",
+           "\"pebrine_map_country_tt\""
+          ]
+         }
+        ],
+        "if": [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "has_building": [
+             "=",
+             "building_silk_plantation"
+            ]
+           }
+          ],
+          "custom_tooltip_no_bullet": [
+           "=",
+           "\"pebrine_map_silk_tt\""
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_modifier": [
+           "=",
+           "modifier_pebrine_state_modifier"
+          ]
+         }
+        ],
+        "custom_tooltip_no_bullet": [
+         "=",
+         "\"pebrine_map_epidemic_tt\""
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "state_has_decree_variant": [
+           "=",
+           {
+            "DECREE": [
+             "=",
+             "decree_encourage_agricultural_industry"
+            ]
+           }
+          ]
+         }
+        ],
+        "custom_tooltip_no_bullet": [
+         "=",
+         "\"pebrine_map_decree_tt\""
+        ]
+       }
+      ]
+     ]
+    }
+   ],
    "outcome": [
     [
      "=",
@@ -95402,20 +95941,6 @@
         "1"
        ],
        "popup": [
-        "=",
-        "yes"
-       ]
-      }
-     ]
-    }
-   ],
-   "on_weekly_pulse": [
-    "=",
-    {
-     "effect": [
-      "=",
-      {
-       "calculate_populism_progress": [
         "=",
         "yes"
        ]
@@ -132476,6 +133001,24 @@
         "value": [
          "=",
          "\"rice_color\""
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "is_in_geographic_region": [
+           "=",
+           "geographic_region_europe"
+          ]
+         }
+        ],
+        "value": [
+         "=",
+         "\"white\""
         ]
        }
       ]
@@ -176885,6 +177428,29 @@
         }
        ]
       }
+     ],
+     "else_if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "state_region": [
+          "=",
+          {
+           "is_homeland": [
+            "=",
+            "cu:ukrainian"
+           ]
+          }
+         ]
+        }
+       ],
+       "value": [
+        "=",
+        "\"white\""
+       ]
+      }
      ]
     }
    ],
@@ -178155,6 +178721,29 @@
         }
        ]
       }
+     ],
+     "else_if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "state_region": [
+          "=",
+          {
+           "is_homeland": [
+            "=",
+            "cu:byelorussian"
+           ]
+          }
+         ]
+        }
+       ],
+       "value": [
+        "=",
+        "\"white\""
+       ]
+      }
      ]
     }
    ],
@@ -178577,31 +179166,65 @@
       }
      ],
      "else_if": [
-      "=",
-      {
-       "limit": [
-        "=",
-        {
-         "owner": [
-          "=",
-          {
-           "is_involved_in_journal_entry": [
-            "=",
-            "je_reform_or_revolution"
-           ],
-           "has_technology_researched": [
-            "=",
-            "socialism"
-           ]
-          }
-         ]
-        }
-       ],
-       "value": [
-        "=",
-        "\"reform_or_revolution_socialist_pink\""
-       ]
-      }
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "=",
+           {
+            "is_involved_in_journal_entry": [
+             "=",
+             "je_reform_or_revolution"
+            ],
+            "has_technology_researched": [
+             "=",
+             "socialism"
+            ]
+           }
+          ]
+         }
+        ],
+        "value": [
+         "=",
+         "\"reform_or_revolution_socialist_pink\""
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "=",
+           {
+            "NOT": [
+             "=",
+             {
+              "is_involved_in_journal_entry": [
+               "=",
+               "je_reform_or_revolution"
+              ]
+             }
+            ],
+            "has_technology_researched": [
+             "=",
+             "socialism"
+            ]
+           }
+          ]
+         }
+        ],
+        "value": [
+         "=",
+         "\"white\""
+        ]
+       }
+      ]
      ]
     }
    ],
@@ -186668,14 +187291,14 @@
             [
              "=",
              {
-              "replace_decree": [
+              "tsarpoints_replace_decree": [
                "=",
                {
-                "from": [
+                "FROM": [
                  "=",
                  "decree_promote_social_mobility_tsarpoints"
                 ],
-                "to": [
+                "TO": [
                  "=",
                  "decree_promote_social_mobility"
                 ]
@@ -186686,14 +187309,14 @@
             [
              "=",
              {
-              "replace_decree": [
+              "tsarpoints_replace_decree": [
                "=",
                {
-                "from": [
+                "FROM": [
                  "=",
                  "decree_promote_national_values_tsarpoints"
                 ],
-                "to": [
+                "TO": [
                  "=",
                  "decree_promote_national_values"
                 ]
@@ -186704,14 +187327,14 @@
             [
              "=",
              {
-              "replace_decree": [
+              "tsarpoints_replace_decree": [
                "=",
                {
-                "from": [
+                "FROM": [
                  "=",
                  "decree_encourage_manufacturing_industry_tsarpoints"
                 ],
-                "to": [
+                "TO": [
                  "=",
                  "decree_encourage_manufacturing_industry"
                 ]
@@ -186722,14 +187345,14 @@
             [
              "=",
              {
-              "replace_decree": [
+              "tsarpoints_replace_decree": [
                "=",
                {
-                "from": [
+                "FROM": [
                  "=",
                  "decree_encourage_agricultural_industry_tsarpoints"
                 ],
-                "to": [
+                "TO": [
                  "=",
                  "decree_encourage_agricultural_industry"
                 ]
@@ -186740,14 +187363,14 @@
             [
              "=",
              {
-              "replace_decree": [
+              "tsarpoints_replace_decree": [
                "=",
                {
-                "from": [
+                "FROM": [
                  "=",
                  "decree_encourage_resource_industry_tsarpoints"
                 ],
-                "to": [
+                "TO": [
                  "=",
                  "decree_encourage_resource_industry"
                 ]
@@ -186758,14 +187381,14 @@
             [
              "=",
              {
-              "replace_decree": [
+              "tsarpoints_replace_decree": [
                "=",
                {
-                "from": [
+                "FROM": [
                  "=",
                  "decree_greener_grass_campaign_tsarpoints"
                 ],
-                "to": [
+                "TO": [
                  "=",
                  "decree_greener_grass_campaign"
                 ]
@@ -186776,14 +187399,14 @@
             [
              "=",
              {
-              "replace_decree": [
+              "tsarpoints_replace_decree": [
                "=",
                {
-                "from": [
+                "FROM": [
                  "=",
                  "decree_enlistment_efforts_tsarpoints"
                 ],
-                "to": [
+                "TO": [
                  "=",
                  "decree_enlistment_efforts"
                 ]
@@ -187441,6 +188064,19 @@
         "limit": [
          "=",
          {
+          "OR": [
+           "=",
+           {
+            "c:RUS": [
+             "?=",
+             "owner"
+            ],
+            "owner.top_overlord": [
+             "?=",
+             "c:RUS"
+            ]
+           }
+          ],
           "is_in_geographic_region": [
            "=",
            "geographic_region_diocese_of_kamchatka"
@@ -187454,6 +188090,42 @@
         "value": [
          "=",
          "\"emperor_and_autocrat_orthodox_purple\""
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "OR": [
+             "=",
+             {
+              "is_in_geographic_region": [
+               "=",
+               "geographic_region_europe"
+              ],
+              "c:RUS": [
+               "?=",
+               "this"
+              ],
+              "is_subject_of": [
+               "=",
+               "c:RUS"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "value": [
+         "=",
+         "\"white\""
         ]
        }
       ]
@@ -187570,6 +188242,19 @@
         "limit": [
          "=",
          {
+          "OR": [
+           "=",
+           {
+            "c:RUS": [
+             "?=",
+             "owner"
+            ],
+            "owner.top_overlord": [
+             "?=",
+             "c:RUS"
+            ]
+           }
+          ],
           "is_in_geographic_region": [
            "=",
            "geographic_region_diocese_of_kamchatka"
@@ -187687,6 +188372,19 @@
         "limit": [
          "=",
          {
+          "OR": [
+           "=",
+           {
+            "c:RUS": [
+             "?=",
+             "owner"
+            ],
+            "owner.top_overlord": [
+             "?=",
+             "c:RUS"
+            ]
+           }
+          ],
           "is_in_geographic_region": [
            "=",
            "geographic_region_diocese_of_kamchatka"
@@ -188619,30 +189317,50 @@
       }
      ],
      "else_if": [
-      "=",
-      {
-       "limit": [
-        "=",
-        {
-         "owner": [
-          "?=",
-          "c:RUS"
-         ],
-         "je_tp_crown_of_perfection_state_has_developed_urban_center": [
-          "=",
-          "yes"
-         ],
-         "is_incorporated": [
-          "=",
-          "yes"
-         ]
-        }
-       ],
-       "value": [
-        "=",
-        "\"emperor_and_autocrat_golden_yellow\""
-       ]
-      }
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           "c:RUS"
+          ],
+          "je_tp_crown_of_perfection_state_has_developed_urban_center": [
+           "=",
+           "yes"
+          ],
+          "is_incorporated": [
+           "=",
+           "yes"
+          ]
+         }
+        ],
+        "value": [
+         "=",
+         "\"emperor_and_autocrat_golden_yellow\""
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           "c:RUS"
+          ]
+         }
+        ],
+        "value": [
+         "=",
+         "\"white\""
+        ]
+       }
+      ]
      ]
     }
    ],
@@ -189756,6 +190474,28 @@
         "limit": [
          "=",
          {
+          "is_in_geographic_region": [
+           "=",
+           "geographic_region_eastern_europe"
+          ],
+          "je_tp_heir_of_alexander_state_owned_by_russia_or_subject": [
+           "=",
+           "yes"
+          ]
+         }
+        ],
+        "value": [
+         "=",
+         "\"white\""
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
           "je_tp_heir_of_alexander_state_is_far_east_annexation_target": [
            "=",
            "yes"
@@ -189831,6 +190571,24 @@
         "value": [
          "=",
          "\"emperor_and_autocrat_golden_yellow\""
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "is_in_geographic_region": [
+           "=",
+           "geographic_region_manchuria_old"
+          ]
+         }
+        ],
+        "value": [
+         "=",
+         "\"white\""
         ]
        }
       ]
@@ -192009,6 +192767,23 @@
             }
            ]
           }
+         ],
+         "clamp_variable": [
+          "=",
+          {
+           "name": [
+            "=",
+            "tp_suppress_revolts_var"
+           ],
+           "max": [
+            "=",
+            "tsarpoints_goal_duration_months_value"
+           ],
+           "min": [
+            "=",
+            "0"
+           ]
+          }
          ]
         }
        ]
@@ -192580,6 +193355,23 @@
               "1"
              ]
             }
+           ]
+          }
+         ],
+         "clamp_variable": [
+          "=",
+          {
+           "name": [
+            "=",
+            "tp_cultural_dominance_var"
+           ],
+           "max": [
+            "=",
+            "tsarpoints_goal_duration_months_value"
+           ],
+           "min": [
+            "=",
+            "0"
            ]
           }
          ]
@@ -197166,6 +197958,29 @@
           }
          ]
         }
+       ]
+      }
+     ],
+     "else_if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "owner": [
+          "=",
+          {
+           "is_in_geographic_region": [
+            "=",
+            "geographic_region_europe"
+           ]
+          }
+         ]
+        }
+       ],
+       "value": [
+        "=",
+        "\"white\""
        ]
       }
      ]

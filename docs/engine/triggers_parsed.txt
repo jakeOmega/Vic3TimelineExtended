@@ -1,4 +1,4 @@
-# Auto-generated from triggers.log (engine docs 1.15.1). Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from triggers.log (engine docs 1.15.2). Do not hand-edit. Run POST /reload after the engine regenerates the source.
 # Regional iterators (<any|every|random|ordered>_<type>_in_<geographic_region>) carry a fixed description: the engine dump prints unrelated script there, reshuffled on every dump.
 
 ## active_lens
@@ -6922,6 +6922,12 @@ Scopes: building
 
 Checks if the building's owner could queue the provided number of additional levels without hitting a level or resource potential cap
 
+## can_regime_change
+Scopes: country
+Targets: country
+
+Checks if the scoped country can enforce a regime change on the target country: the target has no recent regime change, an interest group in the scoped country's government is not marginalized in the target, and at least one of the target's laws would change
+
 ## can_research
 Scopes: country
 
@@ -8269,6 +8275,11 @@ Scopes: military_formation
 
 Checks if a Fleet has a naval mission with an invalid area
 
+## has_naval_mission_without_area
+Scopes: military_formation
+
+Checks if a Fleet has a naval mission with no sea regions in its area
+
 ## has_negotiated
 Scopes: interest_group
 
@@ -9015,6 +9026,12 @@ Check if state is the capital of the owner = bool
 Scopes: character
 
 Checks if the scoped character is alive
+
+## is_character_interaction_available
+Scopes: country, character
+
+Checks if a character interaction is available to the scoped country, meaning it is not on cooldown and its actor_capacity trigger passes. In character scope, also checks that the root country, or the character's own country when root is not a country, can target the character with the interaction
+**Value Type**: common/character_interactions
 
 ## is_character_role
 Scopes: character_role

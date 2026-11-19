@@ -1,4 +1,4 @@
-<!-- Auto-generated from modifiers.log (engine docs 1.15.1) + common/_meta/modifier_patterns.yml. Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
+<!-- Auto-generated from modifiers.log (engine docs 1.15.2) + common/_meta/modifier_patterns.yml. Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
 
 # Modifier Patterns
 

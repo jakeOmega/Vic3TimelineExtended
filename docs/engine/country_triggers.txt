@@ -1,4 +1,4 @@
-# Auto-generated from triggers.log (engine docs 1.15.1). Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from triggers.log (engine docs 1.15.2). Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 additional_war_support_change: Compares the additional war support change the scoped country has accumulated from scripted events in the target diplomatic play
 aggressive_diplomatic_plays_permitted: True if country is independent or permitted to start their own Diplomatic Plays
@@ -84,6 +84,7 @@ can_increase_autonomy: Check if a subject country is able to become a more auton
 can_leave_power_bloc: Checks if the country in scope can leave its current Power Bloc (returns false if country is not in a Power Bloc)
 can_lobbies_target: Checks if target country is a valid target for lobbies in the scoped country
 can_own_autonomy_be_decreased: Check if scoped country can have it's autonomy decreased
+can_regime_change: Checks if the scoped country can enforce a regime change on the target country: the target has no recent regime change, an interest group in the scoped country's government is not marginalized in t...
 can_research: True if a country can research an technology **Value Type**: common/technology/technologies
 can_send_diplomatic_action: Checks if a diplomatic action is valid to send by scope country to target country
 can_start_play_against_overlord: Checks if a subject can start a diplomatic play against its direct overlord, even while the overlord is at war: no war the overlord is in has a war goal targeting the subject, and none of the subje...
@@ -243,6 +244,7 @@ is_adjacent_to_state: Checks if country in scope is adjacent to a target state
 is_ai: True if country scope is controlled by an AI
 is_at_war: Check if the country is at war
 is_banning_goods: Check if a country is banning a good
+is_character_interaction_available: Checks if a character interaction is available to the scoped country, meaning it is not on cooldown and its actor_capacity trigger passes.
 is_coastal: Check if a state borders a (non-impassable) sea region or if a country contains any such state.
 is_considered_adjacent_due_to_wargoals: Checks if the scoped country is considered adjacent to the target country by virtue of the scoped country having war goals that are adjacent to the target country in a committed diplomatic play
 is_construction_paused: Check if construction in a state is paused.

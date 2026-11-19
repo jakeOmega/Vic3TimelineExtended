@@ -204,7 +204,7 @@
     {
      "goods_input_artillery_add": [
       "=",
-      "22"
+      "20"
      ],
      "goods_input_iron_add": [
       "=",
@@ -272,7 +272,7 @@
      ],
      "goods_input_iron_add": [
       "=",
-      "22"
+      "25"
      ]
     }
    ],
@@ -10736,11 +10736,7 @@
     {
      "goods_input_hardwood_add": [
       "=",
-      "25"
-     ],
-     "goods_input_copper_add": [
-      "=",
-      "19"
+      "45"
      ]
     }
    ],
@@ -10802,7 +10798,7 @@
      ],
      "goods_input_iron_add": [
       "=",
-      "18"
+      "15"
      ],
      "goods_input_copper_add": [
       "=",
@@ -10917,7 +10913,7 @@
     {
      "ship_hull_damage_add": [
       "=",
-      "5"
+      "7"
      ],
      "ship_crew_damage_add": [
       "=",
@@ -10930,7 +10926,11 @@
     {
      "goods_input_artillery_add": [
       "=",
-      "18"
+      "10"
+     ],
+     "goods_input_iron_add": [
+      "=",
+      "10"
      ]
     }
    ],
@@ -10975,7 +10975,7 @@
     {
      "ship_hull_damage_add": [
       "=",
-      "15"
+      "14"
      ],
      "ship_crew_damage_add": [
       "=",
@@ -10992,7 +10992,11 @@
     {
      "goods_input_artillery_add": [
       "=",
-      "35"
+      "20"
+     ],
+     "goods_input_iron_add": [
+      "=",
+      "15"
      ]
     }
    ],
@@ -11037,7 +11041,7 @@
     {
      "ship_hull_damage_add": [
       "=",
-      "25"
+      "24"
      ],
      "ship_crew_damage_add": [
       "=",
@@ -11058,7 +11062,11 @@
     {
      "goods_input_artillery_add": [
       "=",
-      "50"
+      "40"
+     ],
+     "goods_input_iron_add": [
+      "=",
+      "20"
      ]
     }
    ],
@@ -11103,7 +11111,7 @@
     {
      "ship_movement_speed_add": [
       "=",
-      "5.0"
+      "5"
      ]
     }
    ],
@@ -11112,15 +11120,11 @@
     {
      "goods_input_fabric_add": [
       "=",
-      "45"
+      "50"
      ],
      "goods_input_hardwood_add": [
       "=",
-      "25"
-     ],
-     "goods_input_coal_add": [
-      "=",
-      "45"
+      "40"
      ]
     }
    ],
@@ -11165,7 +11169,7 @@
     {
      "ship_movement_speed_add": [
       "=",
-      "8.0"
+      "7"
      ]
     }
    ],
@@ -11174,15 +11178,19 @@
     {
      "goods_input_fabric_add": [
       "=",
-      "25"
+      "30"
+     ],
+     "goods_input_hardwood_add": [
+      "=",
+      "30"
      ],
      "goods_input_engines_add": [
       "=",
-      "45"
+      "15"
      ],
      "goods_input_coal_add": [
       "=",
-      "35"
+      "40"
      ]
     }
    ],
@@ -11233,7 +11241,7 @@
     {
      "ship_movement_speed_add": [
       "=",
-      "10.0"
+      "10"
      ]
     }
    ],
@@ -11242,15 +11250,19 @@
     {
      "goods_input_fabric_add": [
       "=",
-      "16"
+      "30"
+     ],
+     "goods_input_hardwood_add": [
+      "=",
+      "30"
      ],
      "goods_input_engines_add": [
       "=",
-      "90"
+      "35"
      ],
      "goods_input_coal_add": [
       "=",
-      "50"
+      "60"
      ]
     }
    ],
@@ -11312,13 +11324,9 @@
    "construction_goods": [
     "=",
     {
-     "goods_input_groceries_add": [
-      "=",
-      "30"
-     ],
      "goods_input_grain_add": [
       "=",
-      "65"
+      "100"
      ]
     }
    ],
@@ -11386,13 +11394,9 @@
    "construction_goods": [
     "=",
     {
-     "goods_input_groceries_add": [
-      "=",
-      "65"
-     ],
      "goods_input_grain_add": [
       "=",
-      "65"
+      "150"
      ]
     }
    ],
@@ -11460,13 +11464,9 @@
    "construction_goods": [
     "=",
     {
-     "goods_input_groceries_add": [
-      "=",
-      "120"
-     ],
      "goods_input_grain_add": [
       "=",
-      "90"
+      "200"
      ]
     }
    ],

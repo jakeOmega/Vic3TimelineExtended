@@ -21,6 +21,10 @@
       "=",
       "yes"
      ],
+     "country_can_conscript_protected_subsistence_employment_bool": [
+      "=",
+      "yes"
+     ],
      "unit_morale_loss_mult": [
       "=",
       "0.1"
@@ -224,6 +228,10 @@
       "yes"
      ],
      "country_can_only_conscript_peasants_bool": [
+      "=",
+      "yes"
+     ],
+     "country_can_conscript_protected_subsistence_employment_bool": [
       "=",
       "yes"
      ],
@@ -5567,7 +5575,7 @@
      ],
      "country_acceptance_primary_culture_add": [
       "=",
-      "50"
+      "100"
      ],
      "country_acceptance_homeland_add": [
       "=",
@@ -11129,55 +11137,43 @@
    "can_enact": [
     "=",
     {
-     "OR": [
+     "custom_tooltip": [
       "=",
       {
-       "custom_tooltip": [
-        [
-         "=",
-         {
-          "text": [
-           "=",
-           "ruler_in_party_tt"
-          ],
-          "exists": [
-           "=",
-           "ruler"
-          ],
-          "OR": [
-           "=",
-           {
-            "ruler": [
-             "=",
-             {
-              "this.interest_group": [
-               "?=",
-               {
-                "has_party": [
-                 "=",
-                 "yes"
-                ]
-               }
-              ]
-             }
-            ]
-           }
-          ]
-         }
-        ],
-        [
-         "=",
-         {
-          "text": [
-           "=",
-           "sps_no_party_tt"
-          ],
-          "country_has_voting_franchise": [
-           "=",
-           "no"
-          ]
-         }
-        ]
+       "text": [
+        "=",
+        "sps_government_party_tt"
+       ],
+       "any_interest_group": [
+        "=",
+        {
+         "is_in_government": [
+          "=",
+          "yes"
+         ],
+         "has_party": [
+          "=",
+          "yes"
+         ]
+        }
+       ]
+      }
+     ],
+     "any_interest_group": [
+      "=",
+      {
+       "is_in_government": [
+        "=",
+        "yes"
+       ],
+       "party": [
+        "?=",
+        {
+         "party_has_insurrectionary_member": [
+          "=",
+          "no"
+         ]
+        }
        ]
       }
      ],
@@ -11261,30 +11257,22 @@
    "on_activate": [
     "=",
     {
-     "set_only_legal_party_from_ig": [
-      "=",
-      "ruler.interest_group"
-     ],
      "custom_tooltip": [
-      "=",
-      {
-       "text": [
-        "=",
-        "sps_government_reshuffle_tt"
-       ],
-       "every_interest_group": [
-        [
+      [
+       "=",
+       {
+        "text": [
+         "=",
+         "set_government_party_as_only_legal_party_tt"
+        ],
+        "if": [
          "=",
          {
           "limit": [
            "=",
            {
-            "is_in_government": [
-             "=",
-             "yes"
-            ],
-            "NOT": [
-             "=",
+            "var:sps_dominant_party_ig_var": [
+             "?=",
              {
               "has_party": [
                "=",
@@ -11294,38 +11282,103 @@
             ]
            }
           ],
-          "remove_ruling_interest_group": [
+          "set_only_legal_party_from_ig": [
            "=",
-           "yes"
+           "var:sps_dominant_party_ig_var"
           ]
          }
         ],
-        [
+        "else": [
          "=",
          {
-          "limit": [
+          "set_only_legal_party_from_ig": [
            "=",
-           {
-            "is_in_government": [
-             "=",
-             "no"
-            ],
-            "has_party": [
-             "=",
-             "yes"
-            ]
-           }
-          ],
-          "add_ruling_interest_group": [
-           "=",
-           "yes"
+           "ruler.interest_group"
           ]
          }
         ]
-       ]
-      }
+       }
+      ],
+      [
+       "=",
+       {
+        "text": [
+         "=",
+         "sps_government_reshuffle_tt"
+        ],
+        "every_interest_group": [
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "is_in_government": [
+              "=",
+              "yes"
+             ],
+             "NOT": [
+              "=",
+              {
+               "has_party": [
+                "=",
+                "yes"
+               ]
+              }
+             ]
+            }
+           ],
+           "remove_ruling_interest_group": [
+            "=",
+            "yes"
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "is_in_government": [
+              "=",
+              "no"
+             ],
+             "has_party": [
+              "=",
+              "yes"
+             ]
+            }
+           ],
+           "add_ruling_interest_group": [
+            "=",
+            "yes"
+           ]
+          }
+         ]
+        ]
+       }
+      ]
      ],
      "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_variable": [
+           "=",
+           "sps_dominant_party_ig_var"
+          ]
+         }
+        ],
+        "remove_variable": [
+         "=",
+         "sps_dominant_party_ig_var"
+        ]
+       }
+      ],
       [
        "=",
        {
@@ -11393,6 +11446,19 @@
         ]
        }
       ]
+     ],
+     "add_modifier": [
+      "=",
+      {
+       "name": [
+        "=",
+        "modifier_single_party_consolidation"
+       ],
+       "days": [
+        "=",
+        "90"
+       ]
+      }
      ],
      "call_election": [
       "=",
@@ -17941,6 +18007,15 @@
      ]
     }
    ],
+   "modifier": [
+    "=",
+    {
+     "state_migration_pull_unincorporated_mult": [
+      "=",
+      "0.2"
+     ]
+    }
+   ],
    "institution": [
     "=",
     "institution_colonial_affairs"
@@ -17955,10 +18030,6 @@
      "state_assimilation_mult": [
       "=",
       "0.05"
-     ],
-     "state_migration_pull_unincorporated_mult": [
-      "=",
-      "0.2"
      ]
     }
    ],
@@ -28086,7 +28157,7 @@
    ],
    "progressiveness": [
     "=",
-    "-50"
+    "-24"
    ],
    "on_enact": [
     "=",
@@ -29045,7 +29116,7 @@
    ],
    "progressiveness": [
     "=",
-    "25"
+    "30"
    ],
    "unlocking_technologies": [
     "=",
@@ -29297,7 +29368,7 @@
    ],
    "progressiveness": [
     "=",
-    "75"
+    "125"
    ],
    "unlocking_technologies": [
     "=",

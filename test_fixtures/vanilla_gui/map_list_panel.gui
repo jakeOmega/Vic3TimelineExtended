@@ -623,15 +623,20 @@ types map_list_panel_types {
 								onmousehierarchyleave = "[SetCanOpenRightClickContextMenu( '(bool)yes' )]"
 								parentanchor = hcenter
 								direction = vertical
-								datamodel = "[MapListPanel.AccessValidOptions]"
-								datamodel_reuse_widgets = yes
 
-								block "scrollarea_spacing" {}
+								block "valid_options_list" {
+									flowcontainer = {
+										direction = vertical
+										parentanchor = hcenter
+										datamodel_reuse_widgets = yes
+										datamodel = "[MapListPanel.AccessValidOptions]"
 
-								block "item" {
-									block "item" {
-										item = {
-											map_list_panel_item = {}
+										block "scrollarea_spacing" {}
+
+										block "item" {
+											item = {
+												map_list_panel_item = {}
+											}
 										}
 									}
 								}
@@ -3048,6 +3053,15 @@ types map_list_panel_types {
 							text = "TREATY_ARTICLE_LIST_PANEL_PLAYER_CONTROLLED"
 						}
 
+						textbox = {
+							visible = "[Not(Or(MapListOption.GetTreatyArticleData.HasAcceptance, MapListOption.GetTreatyArticleData.IsPlayerControlled))]"
+							size = { 120 25 }
+							parentanchor = vcenter
+							align = hcenter|nobaseline
+							alpha = 0.5
+							text = "NOT_AVAILABLE"
+						}
+
 						widget = { size = { 5 5 }}
 					}
 				}
@@ -3281,100 +3295,101 @@ types map_list_panel_types {
 	}
 
 	### NAVAL MISSION
-	type naval_mission_map_list_panel = map_list_panel {
-		name = "naval_mission_map_list_panel"
 
-		blockoverride "headers" {
-			sort_button = {
+	### FORMATIONS
+	type military_formation_map_list_panel_item = map_list_panel_item_interaction {
+		blockoverride "values" {
+
+			button = {
+				visible = "[MapListOption.GetDestinationData.HasHQ]"
+				datacontext = "[MapListOption.GetDestinationData.GetHQ]"
+				datacontext = "[MapListOption.GetDestinationData.GetHQ.GetStrategicRegion]"
+				parentanchor = vcenter
+				size = { 130 30 }
+				using = default_button
+				onclick = "[InformationPanelBar.OpenStrategicRegionPanel(StrategicRegion.Self)]"
+
+				textbox = {
+					parentanchor = vcenter
+					size = { 98% 100% }
+					align = nobaseline
+					margin = { 10 0 }
+					elide = right
+					fontsize_min = 12
+					text = "[MapListOption.GetTitle]"
+				}
+
+				tooltipwidget = {
+					FancyTooltip_StrategicRegion = {}
+				}
+			}
+
+			flowcontainer = {
+				visible = "[MapListOption.GetDestinationData.HasHQ]"
+				datacontext = "[GetPlayer]"
+				datacontext = "[MapListOption.GetDestinationData.GetHQ]"
+				datacontext = "[MapListOption.GetDestinationData.GetHQ.GetStrategicRegion]"
+				datacontext = "[GetPlayer.GetCurrentInterestTierTypeIn(StrategicRegion.Self)]"
+				parentanchor = vcenter
+				minimumsize = { 100 30 }
+				maximumsize = { 100 30 }
+				spacing = 5
+				margin_left = 10
+
+				tooltipwidget = {
+					FancyTooltip_InterestTierTypeWithCountryAndStrategicRegionContext = {}
+				}
+
+				icon = {
+					size = { 24 24 }
+					parentanchor = vcenter
+					texture = "[InterestTierType.GetSmallIcon]"
+				}
+
+				textbox = {
+					parentanchor = vcenter
+					size = { 70 30 }
+					align = nobaseline
+					elide = right
+					fontsize_min = 12
+					text = "[InterestTierType.GetNameNoFormatting]"
+				}
+			}
+
+			textbox = {
+				visible = "[Not(MapListOption.GetDestinationData.HasHQ)]"
+				parentanchor = vcenter
 				size = { 230 30 }
-				align = hcenter|nobaseline
-				text = "NAVAL_MISSION_LIST_PANEL_SEA_REGION_HEADER"
-				tooltip = "NAVAL_MISSION_LIST_PANEL_SEA_REGION_HEADER_TOOLTIP"
-				onclick = "[MapListPanel.Sort('sea_region')]"
+				align = nobaseline
+				margin_left = 10
+				elide = right
+				fontsize_min = 12
+				text = "[MapListOption.GetTitle]"
 			}
 
-			sort_button = {
+			textbox = {
+				parentanchor = vcenter
 				size = { 120 30 }
-				align = hcenter|nobaseline
-				text = "NAVAL_MISSION_LIST_PANEL_TRAVEL_TIME_HEADER"
-				tooltip = "NAVAL_MISSION_LIST_PANEL_TRAVEL_TIME_HEADER_TOOLTIP"
-				onclick = "[MapListPanel.Sort('travel_time')]"
+				align = nobaseline
+				margin_left = 10
+				elide = right
+				fontsize_min = 12
+				text = "MAP_LIST_MILITARY_FORMATION_TRAVEL_TIME"
+				tooltip = "MAP_LIST_MILITARY_FORMATION_TRAVEL_TIME_TOOLTIP"
 			}
 
-			sort_button = {
+			textbox = {
+				parentanchor = vcenter
 				size = { 135 30 }
 				align = hcenter|nobaseline
-				text = "NAVAL_MISSION_LIST_PANEL_SUPPLY_SHIPS_HEADER"
-				tooltip = "NAVAL_MISSION_LIST_PANEL_SUPPLY_SHIPS_HEADER_TOOLTIP"
-				onclick = "[MapListPanel.Sort('supply_ships')]"
-			}
-
-			sort_button = {
-				size = { 55 20 }
-				tooltip = "NAVAL_MISSION_MAP_LIST_PANEL_STATUS_HEADER_TOOLTIP"
-				onclick = "[MapListPanel.Sort('status')]"
-				icon = {
-					texture = "gfx/interface/buttons/sort_button_icons/sort_icon_status.dds"
-					size = { 25 25 }
-					parentanchor = center
-					alwaystransparent = yes
-				}
-			}
-		}
-
-		blockoverride "item" {
-			item = {
-				map_list_panel_item_interaction = {
-					blockoverride "values" {
-						textbox = {
-							parentanchor = vcenter
-							size = { 230 30 }
-							align = nobaseline
-							margin_left = 10
-							elide = right
-							fontsize_min = 12
-							text = "[MapListOption.GetTitle]"
-						}
-
-						textbox = {
-							parentanchor = vcenter
-							size = { 120 30 }
-							align = nobaseline
-							margin_left = 10
-							elide = right
-							fontsize_min = 12
-							text = "MAP_LIST_NAVAL_MISSION_TRAVEL_TIME"
-							tooltip = "MAP_LIST_NAVAL_MISSION_TRAVEL_TIME_TOOLTIP"
-						}
-
-						textbox = {
-							visible = "[Not(MapListOption.GetNavalMissionData.HasMultipleMissions)]"
-							parentanchor = vcenter
-							size = { 135 30 }
-							align = hcenter|nobaseline
-							elide = right
-							fontsize_min = 12
-							text = "MAP_LIST_NAVAL_MISSION_SUPPLY_SHIPS"
-							tooltip = "MAP_LIST_NAVAL_MISSION_SUPPLY_SHIPS_TOOLTIP"
-						}
-
-						textbox = {
-							visible = "[MapListOption.GetNavalMissionData.HasMultipleMissions]"
-							parentanchor = vcenter
-							size = { 135 30 }
-							align = hcenter|nobaseline
-							elide = right
-							fontsize_min = 12
-							text = "MAP_LIST_NAVAL_MISSION_SUPPLY_SHIPS"
-							tooltip = "MAP_LIST_NAVAL_MISSION_SUPPLY_SHIPS_TOOLTIP_MULTIPLE"
-						}
-					}
-				}
+				elide = right
+				fontsize_min = 12
+				text = "MAP_LIST_MILITARY_FORMATION_SUPPLY_SHIPS"
+				tooltip = "MAP_LIST_MILITARY_FORMATION_SUPPLY_SHIPS_TOOLTIP"
 			}
 		}
 	}
 
-	### FORMATIONS
 	type military_formation_map_list_panel = map_list_panel {
 		name = "military_formation_map_list_panel"
 
@@ -3442,100 +3457,23 @@ types map_list_panel_types {
 			}
 		}
 
+		blockoverride "valid_options_list" {
+			fixedgridbox = {
+				parentanchor = hcenter
+				addcolumn = @panel_width
+				addrow = 40
+				datamodel_reuse_widgets = yes
+				datamodel = "[MapListPanel.AccessValidOptions]"
+
+				item = {
+					military_formation_map_list_panel_item = {}
+				}
+			}
+		}
+
 		blockoverride "item" {
 			item = {
-				map_list_panel_item_interaction = {
-					blockoverride "values" {
-
-						button = {
-							visible = "[MapListOption.GetDestinationData.HasHQ]"
-							datacontext = "[MapListOption.GetDestinationData.GetHQ]"
-							datacontext = "[MapListOption.GetDestinationData.GetHQ.GetStrategicRegion]"
-							parentanchor = vcenter
-							size = { 130 30 }
-							using = default_button
-							onclick = "[InformationPanelBar.OpenStrategicRegionPanel(StrategicRegion.Self)]"
-
-							textbox = {
-								parentanchor = vcenter
-								size = { 98% 100% }
-								align = nobaseline
-								margin = { 10 0 }
-								elide = right
-								fontsize_min = 12
-								text = "[MapListOption.GetTitle]"
-							}
-
-							tooltipwidget = {
-								FancyTooltip_StrategicRegion = {}
-							}
-						}
-
-						flowcontainer = {
-							visible = "[MapListOption.GetDestinationData.HasHQ]"
-							datacontext = "[GetPlayer]"
-							datacontext = "[MapListOption.GetDestinationData.GetHQ]"
-							datacontext = "[MapListOption.GetDestinationData.GetHQ.GetStrategicRegion]"
-							datacontext = "[GetPlayer.GetCurrentInterestTierTypeIn(StrategicRegion.Self)]"
-							parentanchor = vcenter
-							minimumsize = { 100 30 }
-							maximumsize = { 100 30 }
-							spacing = 5
-							margin_left = 10
-
-							tooltipwidget = {
-								FancyTooltip_InterestTierTypeWithCountryAndStrategicRegionContext = {}
-							}
-
-							icon = {
-								size = { 24 24 }
-								parentanchor = vcenter
-								texture = "[InterestTierType.GetSmallIcon]"
-							}
-
-							textbox = {
-								parentanchor = vcenter
-								size = { 70 30 }
-								align = nobaseline
-								elide = right
-								fontsize_min = 12
-								text = "[InterestTierType.GetNameNoFormatting]"
-							}
-						}
-
-						textbox = {
-							visible = "[Not(MapListOption.GetDestinationData.HasHQ)]"
-							parentanchor = vcenter
-							size = { 230 30 }
-							align = nobaseline
-							margin_left = 10
-							elide = right
-							fontsize_min = 12
-							text = "[MapListOption.GetTitle]"
-						}
-
-						textbox = {
-							parentanchor = vcenter
-							size = { 120 30 }
-							align = nobaseline
-							margin_left = 10
-							elide = right
-							fontsize_min = 12
-							text = "MAP_LIST_MILITARY_FORMATION_TRAVEL_TIME"
-							tooltip = "MAP_LIST_MILITARY_FORMATION_TRAVEL_TIME_TOOLTIP"
-						}
-
-						textbox = {
-							parentanchor = vcenter
-							size = { 135 30 }
-							align = hcenter|nobaseline
-							elide = right
-							fontsize_min = 12
-							text = "MAP_LIST_MILITARY_FORMATION_SUPPLY_SHIPS"
-							tooltip = "MAP_LIST_MILITARY_FORMATION_SUPPLY_SHIPS_TOOLTIP"
-						}
-					}
-				}
+				military_formation_map_list_panel_item = {}
 			}
 		}
 	}
@@ -5397,11 +5335,10 @@ types building_info {
 		# Trade Capacity (Trade Center)
 		textbox = {
 			visible = "[ObjectsEqual(Building.GetBuildingType, GetBuildingType('building_trade_center').Self)]"
-			raw_text = "[State.GetTradeCapacityBalance|0+=]"
 			tooltip = "STATE_TRADE_CAPACITY_USAGE_TOOLTIP"
-
 			elide = right
 			fontsize_min = 12
+			raw_text = "[State.GetTradeCapacityBalance|0+]"
 
 			block "productivity_info_text_style" {}
 		}

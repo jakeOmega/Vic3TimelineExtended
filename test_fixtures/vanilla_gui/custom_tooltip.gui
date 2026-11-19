@@ -3295,9 +3295,10 @@ types TooltipTypes
 		blockoverride "tooltip_content" {
 			flowcontainer = {
 				direction = vertical
+				minimumsize = { @tooltip_fixed_width -1 }
 				spacing = 2
 
-				custom_tooltip_textbox = {
+				custom_tooltip_textbox_fixed_width = {
 					text = "WORLD_MARKET_HUB_TOOLTIP_HEADER"
 				}
 
@@ -3330,64 +3331,218 @@ types TooltipTypes
 					custom_tooltip_textbox = {
 						visible = "[ObjectsEqual(Country.Self, GetMapPerspectiveCountry.Self)]"
 						parentanchor = vcenter
+						max_width = 470
 						text = "WORLD_MARKET_HUB_OWNER_YOURS"
 					}
 
 					custom_tooltip_textbox = {
 						visible = "[And(Country.IsFriendlyTo(GetMapPerspectiveCountry.Self), Not(ObjectsEqual(Country.Self, GetMapPerspectiveCountry.Self)))]"
 						parentanchor = vcenter
+						max_width = 470
 						text = "WORLD_MARKET_HUB_OWNER_FRIENDLY"
 					}
 
 					custom_tooltip_textbox = {
 						visible = "[Country.IsHostileTo(GetMapPerspectiveCountry.Self)]"
 						parentanchor = vcenter
+						max_width = 470
 						text = "WORLD_MARKET_HUB_OWNER_HOSTILE"
 					}
 
 					custom_tooltip_textbox = {
 						visible = "[Not(Or(Country.IsFriendlyTo(GetMapPerspectiveCountry.Self), Country.IsHostileTo(GetMapPerspectiveCountry.Self)))]"
 						parentanchor = vcenter
+						max_width = 470
 						text = "WORLD_MARKET_HUB_OWNER_NEUTRAL"
 					}
 				}
 
-				custom_tooltip_textbox = {
+				custom_tooltip_textbox_fixed_width = {
 					text = "WORLD_MARKET_HUB_FOR_MARKET"
 				}
 
 				tooltip_divider = {}
 
-				custom_tooltip_textbox = {
-					text = "WORLD_MARKET_HUB_TRADING_STATES"
-				}
-
-				custom_tooltip_textbox = {
+				custom_tooltip_textbox_fixed_width = {
 					text = "WORLD_MARKET_HUB_TRADE_CAPACITY"
 				}
 
-				custom_tooltip_textbox = {
+				custom_tooltip_textbox_fixed_width = {
 					text = "WORLD_MARKET_HUB_ACCESS"
 				}
 
-				custom_tooltip_textbox = {
-					visible = "[IsZero(State.GetTradeCapacity)]"
-					text = "NO_WORLD_MARKET_ACCESS_DUE_TO_NO_TRADE_CAPACITY"
-				}
-
-				custom_tooltip_textbox = {
-					text = "[State.GetWorldMarketHubAccessDesc]"
-				}
-
-				custom_tooltip_textbox = {
+				custom_tooltip_textbox_fixed_width = {
 					visible = "[State.HasBlockadeSeaRegion]"
 					text = "WORLD_MARKET_HUB_EXIT_SEA"
 				}
 
 				custom_tooltip_newline = {}
 
-				custom_tooltip_textbox = {
+				custom_tooltip_textbox_fixed_width = {
+					visible = "[Not(IsDataModelEmpty(State.GetWorldMarketHubTradingStates))]"
+					text = "WORLD_MARKET_HUB_TRADING_STATES_TITLE"
+				}
+
+				flowcontainer = {
+					visible = "[Not(IsDataModelEmpty(State.GetWorldMarketHubTradingStates))]"
+					direction = vertical
+					spacing = 2
+					margin = { 0 4 }
+
+					background = {
+						using = dark_area
+					}
+
+					world_market_hub_trading_state_row = {
+						blockoverride "divider" {}
+
+						blockoverride "state_text" {
+							text = "[concept_state]"
+						}
+
+						blockoverride "trade_capacity_text" {
+							text = "[concept_trade_capacity]"
+						}
+
+						blockoverride "world_market_access_text" {
+							text = "[concept_world_market_access]"
+						}
+					}
+
+					flowcontainer = {
+						direction = vertical
+						spacing = 2
+						datamodel = "[DataModelFirst(State.GetWorldMarketHubTradingStates, '(int32)5')]"
+
+						item = {
+							world_market_hub_trading_state_row = {}
+						}
+					}
+
+					custom_tooltip_textbox = {
+						visible = "[GreaterThan_int32(GetDataModelSize(State.GetWorldMarketHubTradingStates), '(int32)5')]"
+						max_width = 484
+						margin_left = 8
+						default_format = "#tooltippable"
+						text = "WORLD_MARKET_HUB_TRADING_STATES_ADDITIONAL"
+
+						tooltipwidget = {
+							RegularTooltip = {
+								blockoverride "tooltip_content" {
+									flowcontainer = {
+										direction = vertical
+										spacing = 2
+										margin = { 0 4 }
+
+										background = {
+											using = dark_area
+										}
+
+										world_market_hub_trading_state_row = {
+											blockoverride "divider" {}
+
+											blockoverride "state_text" {
+												text = "[concept_state]"
+											}
+
+											blockoverride "trade_capacity_text" {
+												text = "[concept_trade_capacity]"
+											}
+
+											blockoverride "world_market_access_text" {
+												text = "[concept_world_market_access]"
+											}
+										}
+
+										flowcontainer = {
+											direction = vertical
+											spacing = 2
+											datamodel = "[DataModelSubSpan(State.GetWorldMarketHubTradingStates, '(int32)5', '(int32)15')]"
+
+											item = {
+												world_market_hub_trading_state_row = {}
+											}
+										}
+
+										custom_tooltip_textbox = {
+											visible = "[GreaterThan_int32(GetDataModelSize(State.GetWorldMarketHubTradingStates), '(int32)20')]"
+											margin_left = 8
+											text = "WORLD_MARKET_HUB_TRADING_STATES_ADDITIONAL_END"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+
+				custom_tooltip_newline = {}
+
+				custom_tooltip_textbox_fixed_width = {
 					text = "[SelectLocalization(State.HasBlockadeSeaRegion, 'WORLD_MARKET_HUB_BLOCKADE_IN_SEA_REGION', 'WORLD_MARKET_HUB_BLOCKADE_HERE')]"
+				}
+
+				block "world_market_hub_tooltip_after" {}
+			}
+		}
+	}
+
+	type world_market_hub_trading_state_row = flowcontainer {
+		direction = vertical
+
+		block "divider" {
+			divider_clean = {
+				blockoverride "size" {
+					size = { @tooltip_fixed_width 2 }
+				}
+			}
+		}
+
+		flowcontainer = {
+			spacing = 10
+			margin = { 8 4 }
+
+			custom_tooltip_textbox = {
+				minimumsize = { 200 -1 }
+				maximumsize = { 200 -1 }
+				parentanchor = vcenter
+				autoresize = yes
+				align = nobaseline
+				multiline = no
+				using = elide_fontsize_min
+
+				block "state_text" {
+					text = "[State.GetOwner.GetFlagTextIcon] [State.GetName]"
+				}
+			}
+
+			custom_tooltip_textbox = {
+				minimumsize = { 110 -1 }
+				maximumsize = { 110 -1 }
+				parentanchor = vcenter
+				autoresize = yes
+				align = nobaseline
+				multiline = no
+				using = elide_fontsize_min
+
+				block "trade_capacity_text" {
+					tooltip = "STATE_TRADE_CAPACITY_DESC"
+					text = "[State.GetTradeCapacityUsage|v]/[State.GetTradeCapacity|v]"
+				}
+			}
+
+			custom_tooltip_textbox = {
+				minimumsize = { 154 -1 }
+				maximumsize = { 154 -1 }
+				parentanchor = vcenter
+				autoresize = yes
+				align = nobaseline
+				multiline = no
+				using = elide_fontsize_min
+
+				block "world_market_access_text" {
+					tooltip = "STATE_WORLD_MARKET_ACCESS_DESC"
+					text = "[State.GetWorldMarketAccessFormatted]"
 				}
 			}
 		}
@@ -5083,18 +5238,27 @@ types TooltipTypes
 						#TARIFFS AND SUBVENTION
 						vbox = {
 							visible = "[Goods.IsTradeable]"
-							spacing = 5
-							widget = {
+
+							hbox = {
+								layoutpolicy_horizontal = expanding
+
 								textbox = {
 									autoresize = yes
 									align = nobaseline
 									text = "BUDGET_TARIFFS"
-									parentanchor = left|vcenter
+								}
+
+								expand = {}
+
+								textbox = {
+									autoresize = yes
+									align = right|nobaseline
+									tooltip = "TOTAL_TARIFFS_SUBVENTIONS_MONEY_MARKET_BALANCE_FOR_GOODS_TOOLTIP"
+									text = "TOTAL_TARIFFS_SUBVENTIONS_MONEY_MARKET_BALANCE_FOR_GOODS"
 								}
 							}
 
 							hbox = {
-								margin_top = 6
 								spacing = 5
 
 								icon = {
@@ -5105,9 +5269,12 @@ types TooltipTypes
 								set_level_bar_import_tariffs = {}
 							}
 
+							widget = {
+								size = { 5 5 }
+							}
+
 							hbox = {
 								spacing = 5
-								#margin_top = 5
 
 								icon = {
 									texture = "gfx/interface/icons/trade_icons/exports.dds"
@@ -10308,8 +10475,13 @@ types TooltipTypes
 		blockoverride "table_value_2" {
 			minimumsize = { 125 -1 }
 			maximumsize = { 125 -1 }
+			datacontext = "[Country.GetCurrentInterestTierTypeIn(StrategicRegion.Self)]"
 			align = nobaseline
-			raw_text = "[Country.GetCurrentInterestTierTypeIn(StrategicRegion.Self).GetName]"
+			raw_text = "[InterestTierType.GetTextIcon] [InterestTierType.GetNameNoFormatting]"
+
+			tooltipwidget = {
+				FancyTooltip_InterestTierTypeWithCountryAndStrategicRegionContext = {}
+			}
 		}
 
 		blockoverride "table_value_3" {
@@ -11890,18 +12062,6 @@ types TooltipTypes
 					margin_left = 10
 					text = "[InterestTierType.GetOnDeactivateEffectDesc(Country.Self, StrategicRegion.Self)]"
 				}
-			}
-
-			custom_tooltip_newline = {}
-
-			### INVOLVEMENT BREAKDOWN
-			custom_tooltip_textbox = {
-				text = "INTERST_TIER_INVOLVEMENT_BREAKDOWN_TITLE"
-			}
-
-			custom_tooltip_textbox_with_empty_line = {
-				margin_left = 10
-				text = "INTERST_TIER_INVOLVEMENT_BREAKDOWN"
 			}
 
 			tooltip_divider = {}
@@ -14018,6 +14178,8 @@ types TooltipTypes
 				margin_left = 10
 				text = "[NavalMissionType.GetCommandModifier.GetDesc]"
 			}
+
+			block "naval_mission_tooltip_region_count" {}
 		}
 	}
 
