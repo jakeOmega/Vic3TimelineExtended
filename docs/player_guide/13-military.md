@@ -197,7 +197,7 @@ apply, set by that level. Each tier replaces the one below it.
 | Fortified Position | Any base | +20% defense, −10% morale loss, −20% combat width |
 | Fortified Stronghold | 5 or more | +35% defense, −20% morale loss, +10% kill rate, −40% combat width |
 | Fortified Bastion | 10 or more | +50% defense, −30% morale loss, +15% kill rate, +5% recovery, −60% combat width |
-| Impregnable Fortress | 15 or more | +70% defense, −40% morale loss, +20% kill rate, +10% recovery, −80% combat width |
+| Impregnable Fortress | 15 or more | +70% defense, −40% morale loss, +20% kill rate, +5% recovery, −80% combat width |
 
 The base game's Naval Fortification also gains two late production methods,
 Coastal Missile Battery (Guided Missiles) and Integrated Coastal Defense

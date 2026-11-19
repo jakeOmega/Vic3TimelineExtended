@@ -335,7 +335,7 @@ laws](06-politics.md#rights-and-society-laws).
 | Cyberwarfare Team | Cyber Warfare | +20% morale damage, −20% morale loss, +5% offense and defense |
 | Electronic Warfare Team | Electronic Warfare | +20% morale damage, +10% offense, +5% defense |
 | Exoskeleton Suits | Advanced Body Armor | +15% offense and defense |
-| Medevac Helicopters | Advanced Military Aircraft | +80% recovery rate |
+| Medevac Helicopters | Advanced Military Aircraft | +40% recovery rate |
 | Voluntary Bioenhancement | Regulated Augmentation Market or Unrestricted Augmentation law | +25% offense and defense |
 | Mandatory Bioenhancement | Mandatory Augmentation law | +50% offense and defense |
 | Jungle Combat Training | Military Training principle, tier III+ | +25% offense and defense in forest and hazardous terrain |

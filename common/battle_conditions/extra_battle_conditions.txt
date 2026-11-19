@@ -265,7 +265,9 @@ battle_condition_impregnable_fortress = {
 		unit_army_defense_mult = 0.7
 		unit_morale_loss_mult = -0.4
 		unit_kill_rate_add = 0.2
-		unit_recovery_rate_add = 0.1
+		# 0.1 until 1.15.2 halved vanilla's recovery sources; Fortified Bastion's
+		# 0.05 stays, as vanilla's own 0.05 sources did.
+		unit_recovery_rate_add = 0.05
 		battle_combat_width_mult = -0.8
 	}
 
