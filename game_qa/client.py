@@ -3,13 +3,14 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
 
     python3 -m game_qa start --permission "asked 12:40" [--as TAG] [--save NAME] [--setup NAME=FILE]...
                        [--playset mod_only|current] [--switch-rule RULE=SETTING]... [--owner-confirmed-busy]
-                       [--game-arg FLAG]... [--add-mod WINDOWS_PATH]... [--fixture DATE]
+                       [--game-arg FLAG]... [--add-mod WINDOWS_PATH]... [--fixture DATE] [--unresponsive-s S]
                                              # a game on the deployed build, on the fixture or on NAME; a
                                              # switched rule is switched in a copy of the fixture, as of its
                                              # date (the reply's `rules` says what the save holds); a game
                                              # arg from session.GAME_ARGS; a variant mod folder, loaded after
                                              # the playset and before the overlay; --fixture loads the dated
-                                             # fixture of this build, never makes one
+                                             # fixture of this build, never makes one; S seconds of a window
+                                             # not responding before game_gone (10 by default, #1905)
     python3 -m game_qa fixture --until DATE [--dry-run] --permission "<the owner's words>" --max-hours H
                        [--playset mod_only|current] [--owner-confirmed-busy]
                                              # one unattended run that makes the fixture dated DATE, then stops:
@@ -816,6 +817,8 @@ def cmd_start(args) -> tuple[dict, int]:
         body["add_mods"] = list(args.add_mod)
     if args.fixture is not None:
         body["fixture_date"] = args.fixture
+    if args.unresponsive_s is not None:
+        body["unresponsive_s"] = args.unresponsive_s
     return start_session(_backup_root(), body, spawn_server)
 
 
@@ -1040,6 +1043,10 @@ def add_verbs(sub) -> None:
     p.add_argument("--game-arg", action="append", default=[], metavar="FLAG",
                    help="add one of %s to the game's arguments (repeatable). Write it without its dash, or as "
                         "--game-arg=-FLAG. The fixture's own run never gets it" % ", ".join(session.GAME_ARGS))
+    p.add_argument("--unresponsive-s", type=float, metavar="S",
+                   help="how long the game's window may not respond before a verb calls the game gone (game_gone), "
+                        "for every verb of the session: %g s by default, up to %g. For a late save whose ticks freeze "
+                        "the window longer (#1905)" % (session.UNRESPONSIVE_S, session.MAX_UNRESPONSIVE_S))
     p.add_argument("--add-mod", action="append", default=[], metavar="WINDOWS_PATH",
                    help="a variant mod folder (a Windows drive path outside the user-data folder, holding "
                         ".metadata/metadata.json), loaded after the run's playset and before the overlay, for an A/B "

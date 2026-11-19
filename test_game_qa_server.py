@@ -62,11 +62,12 @@ class FakeSession:
             raise self.raises[verb]
 
     def start(self, permission, as_tag=None, setups=None, save=None, playset="mod_only", owner_confirmed_busy=False,
-              switch_rules=None, game_args=None, add_mods=None, fixture_date=None):
+              switch_rules=None, game_args=None, add_mods=None, fixture_date=None, unresponsive_s=None):
         self._call("start", permission, as_tag, setups, save, playset, owner_confirmed_busy)
         self.switch_rules = switch_rules
         self.game_args, self.add_mods = game_args, add_mods
         self.fixture_date = fixture_date
+        self.unresponsive_s = unresponsive_s
         return {"snapshot": SNAP, "pid": 7, "country": as_tag, "run_dir": "/backups/runs/" + SNAP}
 
     def make_fixture(self, permission, until, playset="mod_only", owner_confirmed_busy=False, max_hours=None):
@@ -1061,6 +1062,18 @@ class FixtureVerbTest(ServerTestCase):
         self.threads.extend(h.thread for h in spawn.handles)
         self.assertEqual(code, 0, reply)
         self.assertEqual(fake.fixture_date, "1900")
+
+    def test_start_passes_the_unresponsive_limit_on_and_leaves_it_out_by_default(self):
+        for argv, expected in (((), None), (("--unresponsive-s", "120"), 120.0)):
+            with self.subTest(argv=argv):
+                fake = FakeSession()
+                spawn = ThreadSpawner(lambda: fake)
+                with mock.patch.object(client, "spawn_server", spawn):
+                    reply, code = self.run_cli("start", "--permission", PERMISSION, *argv)
+                self.threads.extend(h.thread for h in spawn.handles)
+                self.assertEqual(code, 0, reply)
+                self.assertEqual(fake.unresponsive_s, expected)
+                self.assertEqual(self.run_cli("stop")[1], 0)
 
 
 # A server in a child process, so that it can be killed or signalled. Its double's `start` builds the overlay and

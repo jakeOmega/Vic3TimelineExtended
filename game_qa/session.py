@@ -52,8 +52,8 @@ from pathlib import Path
 from typing import Any
 
 from game_qa import addmod, fixture, overlay, pixels, profiling, rules, script_docs, snapshot
-from game_qa.console import (CLEAR_BACKSPACES, KEYBOARD_AWAY, MENU_PROBE_COMMAND, PROBE_COMMAND, Console,
-                             ConsoleError, Reply)
+from game_qa.console import (CLEAR_BACKSPACES, KEYBOARD_AWAY, MAX_UNRESPONSIVE_S, MENU_PROBE_COMMAND, PROBE_COMMAND,
+                             UNRESPONSIVE_S, Console, ConsoleError, Reply)
 from game_qa.dap import Debugger, DebuggerError
 from game_qa.fixture import RunCli
 from game_qa.gate import UNKNOWN_START, ProcId
@@ -411,6 +411,7 @@ class Session:
         self._fixture_lines: dict | None = None  # the record of the lines kept with it
         self._dated: dict | None = None     # a dated fixture loaded: its save's own game_date, and whether it matches
         self._game_args: list[str] = []     # `start --game-arg`s, checked against GAME_ARGS
+        self._unresponsive_s = UNRESPONSIVE_S   # `start --unresponsive-s` (#1905): the console's game_gone limit
         self._add_mods: list[addmod.AddMod] = []         # `start --add-mod`s, checked (addmod.check)
         self._add_mods_playset = "mod_only"                # the playset they were checked for
         self._add_mods_digest: str | None = None           # fixture.add_mod_digest of them, at that check
@@ -425,8 +426,16 @@ class Session:
     def start(self, permission: str, as_tag: str | None = None, setups: Mapping[str, str] | None = None,
               save: str | None = None, playset: str = "mod_only", owner_confirmed_busy: bool = False,
               switch_rules: Mapping[str, str] | None = None, game_args: Sequence[str] | None = None,
-              add_mods: Sequence[str] | None = None, fixture_date: str | None = None) -> dict:
+              add_mods: Sequence[str] | None = None, fixture_date: str | None = None,
+              unresponsive_s: float | None = None) -> dict:
         """Get a game up on the fixture (made first if missing) or on `save`, played as `as_tag`.
+
+        `unresponsive_s` (#1905) is how long the game's window may not respond before a verb calls the game gone
+        (`game_gone`; console.UNRESPONSIVE_S, 10 s, by default, at most MAX_UNRESPONSIVE_S): a late save's tick can
+        freeze the window longer than that (the USA of 1977: a monthly pulse of 28-32 s), and its first `advance`
+        then answered `left_running`. A longer wait only delays the verdict: `watch` still proves the game alive or
+        gone, and every verb looks at it first. It holds for every verb of the session; `start`'s reply gives it
+        when it is not the default.
 
         `fixture_date` ("1900.1.1", or a year) loads the dated fixture of this build instead (#1602): it is never
         made here, since its run takes hours that need the owner's own grant (`make_fixture`). Missing, it is
@@ -486,6 +495,7 @@ class Session:
             save = self._check_save(save)
         switch_rules = self._check_switches(switch_rules, save)
         self._game_args = _check_game_args(game_args)
+        self._unresponsive_s = _check_unresponsive(unresponsive_s)
         self._add_mods = self._check_add_mods(add_mods, playset)
         date = self._check_fixture_date(fixture_date, save, playset)
         self._add_mods_playset = playset
@@ -578,6 +588,8 @@ class Session:
         result["profiler_window"] = self._profiler_window
         if self._game_args:
             result["game_args"] = list(self._game_args)
+        if self._unresponsive_s != UNRESPONSIVE_S:
+            result["unresponsive_s"] = self._unresponsive_s
         if self._add_mods:
             result["add_mods"] = [asdict(mod) for mod in self._add_mods]
         self._record("start", outcome="ok", **result)
@@ -646,7 +658,7 @@ class Session:
         self._error_log = LogFollower(self._paths.logs / "error.log")
         self._console = Console(self._sends, self._proc, self._paths.history,
                                 LogFollower(self._paths.logs / "debug.log"), sleep=self._sleep, clock=self._clock,
-                                probe=probe)
+                                probe=probe, unresponsive_s=self._unresponsive_s)
         self._console_when_loaded()
 
     def _check_abort(self) -> None:
@@ -3603,6 +3615,20 @@ def _check_game_args(game_args: Sequence[str] | None) -> list[str]:
             raise SessionError("bad_argument", "%s is given twice" % flag)
         found.append(flag)
     return found
+
+
+def _check_unresponsive(value) -> float:
+    """`start`'s unresponsive_s: None for the default, else a number of seconds from UNRESPONSIVE_S to
+    MAX_UNRESPONSIVE_S. Shorter than the default is refused: nothing has needed it, and a busy game would sooner be
+    taken for a gone one."""
+    if value is None:
+        return UNRESPONSIVE_S
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or value != value:
+        raise SessionError("bad_argument", "unresponsive_s is a number of seconds, not %r" % (value,))
+    if not UNRESPONSIVE_S <= value <= MAX_UNRESPONSIVE_S:
+        raise SessionError("bad_argument", "--unresponsive-s takes %g to %g seconds, not %g"
+                           % (UNRESPONSIVE_S, MAX_UNRESPONSIVE_S, value))
+    return float(value)
 
 
 def _selected(lines: list[str], index: int, event: str) -> bool:
