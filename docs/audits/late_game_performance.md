@@ -870,22 +870,81 @@ save, the pulse of 5 June gave exactly what S1's did (83 `TE_RESETTLEMENT`
 lines of 83 the same: the same sources, the same destinations, 1,569,901
 people moved), the tick took 15 s against 32 s, and the next month's capture
 put the whole monthly country pulse at 2.7 s profiled over 30 days against
-58.8 over 20. That is about 17 s a month, roughly 0.55 s of a 7–8 s day.
+58.8 over 20. Both of those ran with supply ship construction at Very High
+(the next section), which slows every tick. With it at Very Low the tick of
+5 June took about 23 s without the fix (session `20261119T164817Z`; the
+resettlement lines run from its first second to its 23rd) and about 1 s with
+it (`20261119T162248Z`): some 22 s a month, which is a lot once a day takes
+1.5–2 s.
 
-### Where the rest of the day goes (provisional)
+### The step of April 1976: supply ship construction at Very High
 
-The engine's tick tasks are about 1 s of the 6–8 s day (985 ms a day over
-S2's 129 days): `HandleAutonomousInvestment` 254 ms (the United States' pool,
-in weekly bursts of 3.5–9 s), `UpdateEmployment` 125, `RecalculateModifierNodes`
-112, `ProcessEconomicMigration` 76, `UpdatePopGrowth` 60, `UpdateStateTrades`
-47, `UpdateAI` 40; the tasks that walk pops (migration, growth, employment,
-`MergeSmallPops`, `DissolveMicroPops`, the state pop caches) about 300 ms. The
-flat script dump adds 0.6–0.9 s a day of CPU summed over threads. Paused, a
-frame takes 11.6 ms. The rest is time a tick spends outside its tasks: about
-0.9 s of every sub-tick (hours 6, 12, 18; tasks 50–120 ms) and 1.5–4 s of an
-ordinary day's hour 0.
+**Most of the day was the United States' supply ship construction, set to
+Very High.** Setting it to Very Low took the same save from 6.3 s a day to
+1.6–2.0 s.
 
-| Window (S1 the save as it is, S2 with the fix) | Settings | s/day | Sub-tick s | Ordinary hour 0 s |
+- **The idle reload stayed fast.** The owner's autosave of 1 April 1976,
+  loaded in the harness and left idle (session `20261119T160326Z`), ran at
+  1–1.5 s a day to 28 April. The owner's own game had reached 7–8 s by
+  15 April. So the step came from something the player did, not from the
+  state the save held.
+- **The saves show what.** Token 25536 in the binary gamestate is
+  `supply_ship_construction_level`; its counts in the save of May 1977 match
+  the plain-text save of September (79 `high`, 76 `very_low`, 18 `low`,
+  one `very_high`, `medium` unwritten). No country had `very_high` on
+  1 April 1976. The United States alone had it on 1 July 1976 and after. The
+  save's `ship_construction_manager` grew from 0.17 MB to 1.31 MB in that
+  quarter.
+- **The backlog it built.** In 1977, 62,367 of the United States' 62,693
+  ship construction points went to supply ships: 3,177 on maintenance and
+  59,189 on 17,236 supply ships under construction, 11,753 of them part
+  built. The pool held 373,732 supply ships. The save's
+  `dead_supply_entries` lists 11,004 construction entries ended in one week.
+  The next largest queue in the world was 182.
+- **The test.** A variant `gui/timemanip.gui`, whose ship construction
+  readout under the date runs `SetSupplyShipConstructionLevelVeryLow`, was
+  clicked in session `20261119T162248Z`. The tooltip at once showed 0 points
+  for the 17,236 under construction. The day fell from 6.3 s (session
+  `20261119T161343Z`, the same save at Very High) to 1.6–2.0 s over the next
+  26 days. The weekly tick went from 10–15 s to 5 s, an ordinary hour 0
+  from 3.4–5 s to 0.6–0.9 s, and a sub-tick from about 1 s to 0.2 s.
+- **The cost is outside the tick tasks.** The tick tasks summed to about 1 s
+  a day in both settings (`ProgressSupplyShipConstructions` 11 ms a month).
+  The time is spent elsewhere in the tick: the monthly resettlement tick
+  with the fix took 15 s at Very High and 1 s at Very Low.
+- **The tooltip makes it worse.** With the cursor left on that readout (its
+  tooltip lists the supply ships under construction) the day was 17 s at
+  Very High (one window of 12 days, the start of `20261119T162248Z`).
+- **Script can't help.** No effect sets the level; it is the construction
+  panel's buttons, `set_supply_ship_construction_level_command`, and no
+  trigger reads the queue. The AI steps its own level down
+  (`SUPPLY_SHIP_ALLOCATION_*`, `SUPPLY_SHIP_CONSTRUCTION_MAX_INCOME_FRACTION`
+  in `00_ai.txt`); a player's stays where it was set.
+
+| 1977 save, with the resettlement fix | Sub-tick rendering on | Off (`-disable_renderframeifneeded`) |
+|---|---|---|
+| Supply ships at Very High | 6.3 s a day (6.1–7.8 in S1 and S2) | 3.8 |
+| Supply ships at Very Low | 1.6–2.0 | 1.3 |
+
+Rendering off by launch argument (session `20261119T163959Z`) settles the
+S1/S2 disagreement below: it halves a day that the backlog makes slow, and
+saves about a third of what is left once the backlog is gone. Its cost is a
+window that stops answering during a long tick. `GameStateTick.MinLockTime`
+(console; default 1) at 50 and 200 made no difference beyond noise.
+
+The tick tasks themselves, about 1 s a day (985 ms over S2's 129 days):
+`HandleAutonomousInvestment` 254 ms (the United States' pool, in weekly
+bursts of 3.5–9 s), `UpdateEmployment` 125, `RecalculateModifierNodes` 112,
+`ProcessEconomicMigration` 76, `UpdatePopGrowth` 60, `UpdateStateTrades` 47,
+`UpdateAI` 40. The tasks that walk pops (migration, growth, employment,
+`MergeSmallPops`, `DissolveMicroPops`, the state pop caches) are about
+300 ms, so a smaller pop count would buy little here. Paused, a frame takes
+11.6 ms.
+
+The night's knockouts, before the cause was known (S1 the save as it is, S2
+with the resettlement fix; both at Very High):
+
+| Window | Settings | s/day | Sub-tick s | Ordinary hour 0 s |
 |---|---|---|---|---|
 | S1 18 May – 13 Jun | as loaded | 7.76 | 1.05 | 5.1 |
 | S1 28 Jun – 14 Jul | sub-tick rendering off | 7.94 | 1.17 | 2.0 |
@@ -897,15 +956,10 @@ ordinary day's hour 0.
 | S2 24 Aug – 9 Sep | map objects back on | 4.07 | 0.72 | 1.2 |
 | S2 9 Sep – 24 Sep | GUI back on: everything drawn, rendering off | 3.51 | 0.59 | 1.1 |
 
-So in S2 switching sub-tick rendering off (`gamestatetick.renderframeifneeded`)
-took the day from 6–7.7 s to 3.3–4.1 s, while in S1 the same switch left the
-sub-ticks where they were. The two sessions differ in more than the switch
-(S1 had the debug-mode map tooltip up under the cursor; S2 had toggled the
-drawing switches off and on), so this needs a clean A/B by launch argument
-before it is advice. With everything drawn off and rendering on the tick was
-slowest of all: the tick gives way to every frame, and frames with nothing to
-draw come fastest, which suggests the cost is in each hand-over rather than
-in what is drawn.
+S1's rendering-off windows did not show the gain, probably because the
+debug-mode map tooltip was up under the cursor there. With everything drawn
+off and rendering on the tick was slowest of all: the tick gives way to every
+frame, and frames with nothing to draw come fastest.
 
 **Typing `gamestatetick.renderframeifneeded` to switch rendering back on in
 a running session crashed the game** a minute later
@@ -914,16 +968,6 @@ after `GUI.Draw`, `Draw.Map` and `Draw.MapObjects` had been toggled off and on.
 Switching it off once (S1) did not. Use `--game-arg disable_renderframeifneeded`
 for an A/B, not the console twice. The crash left `CrashReporter.exe` up,
 which kept the restore from finishing (#1905).
-
-What changed on 7 April 1976 is open. Between the owner's autosave of
-1 April 1976 and the save of May 1977 the save's sections barely moved (pops
-169,142 database entries against 168,657, buildings 21,972 against 22,141,
-185–189 countries); what grew is war: land battles 20 → 81, naval battles
-0 → 25, ships 1,297 → 1,842, and the ship construction section 8.7 times its
-size. The next test is to load that autosave (the owner's `autosave_4.v3`
-once the restore is back; a copy is
-`/mnt/d/vic3te-data/perf-2026-11-19/save/autosave_4_19760401ish.v3`) and
-watch the days across 7 April.
 
 ## Measurements, 2026-10-03: 2072
 
