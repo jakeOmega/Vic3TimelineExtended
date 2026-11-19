@@ -5,7 +5,7 @@
 # less every LHS keyword vanilla's common/ and events/ use in trigger context.
 # [trigger_only]: the mirror image, for effect context.
 # Regenerate on a vanilla bump: python3 effect_trigger_validity_audit.py bootstrap-context
-# Sizes: 4823 effect-only, 3043 trigger-only.
+# Sizes: 4825 effect-only, 3046 trigger-only.
 # Left out of [effect_only], used by vanilla in the other context: none
 # Left out of [trigger_only], used by vanilla in the other context: age, escalation, literacy_rate, lobby_formation_reason, strata
 [effect_only]
@@ -193,11 +193,9 @@ baltic_riga_vicariate_conversion_effect
 bic_become_bengal_effect
 britain_generate_scripted_heirs
 calculate_caudillo_progress
-calculate_communism_progress
 calculate_global_democracy_index_effect
 calculate_great_game_passive_progress
 calculate_national_identity_progress
-calculate_populism_progress
 calculate_russia_revolution_alignments_conservative
 calculate_russia_revolution_alignments_liberal
 calculate_russia_revolution_alignments_socialist
@@ -4740,6 +4738,7 @@ set_secret_goal
 set_ship_owner
 set_ship_owner_multiple
 set_social_hierarchy
+set_sps_dominant_party_effect
 set_state_name
 set_state_owner
 set_state_religion
@@ -4817,6 +4816,9 @@ transition_off_of_monarchy_effects
 transition_off_of_monarchy_law_effects
 trigger_event
 try_form_government_with
+tsarpoints_replace_decree
+tsarpoints_update_subject_decree
+tsarpoints_update_subject_decrees
 tsunami_effect
 unassign_from_formation
 unification_claims_effect
@@ -6863,6 +6865,7 @@ ig_has_carlist_ideology
 ig_is_anti_dreyfusard
 ig_is_dreyfusard
 ig_is_liberal
+ig_is_member_of_dominant_party
 ig_is_reactionary
 ig_is_socialist
 ig_state_pol_strength_share
@@ -7494,6 +7497,7 @@ owns_treaty_port_in
 paraguayan_clothes_pop_trigger
 paraguayan_clothes_trigger
 party_counts_as_socialist_party
+party_has_insurrectionary_member
 party_has_members
 peasants_clothes_pop_trigger
 peru_bolivian_clothes_pop_trigger
@@ -7645,6 +7649,7 @@ red_summer_liberal_victory_trigger
 red_summer_radical_victory_trigger
 reform_or_revolution_variables_initialised
 regency_clothes_trigger
+regime_change_target_allowed_trigger
 region_score
 relative_authority
 relative_bureaucracy

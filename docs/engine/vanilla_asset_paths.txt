@@ -1,5 +1,5 @@
 # AUTO-GENERATED vanilla asset path catalog for texture_reference_audit.py.
-# Game version 1.15.1. Regenerate on a vanilla bump:
+# Game version 1.15.2. Regenerate on a vanilla bump:
 #   python3 texture_reference_audit.py --bootstrap
 # Every file under game/gfx, jomini/gfx, clausewitz/gfx and game/dlc/*/gfx
 # with one of the extensions .dds .png .tga .jpg .jpeg .bk2 .shader .fxh .txt .settings, as the engine
@@ -6725,6 +6725,19 @@ gfx/map/spline_network/naval_route_diffuse_flatmap_highlight.dds
 gfx/map/spline_network/naval_route_diffuse_highlight.dds
 gfx/map/spline_network/naval_route_properties.dds
 gfx/map/spline_network/road_dirt_diffuse.dds
+gfx/map/spline_network/road_dirt_look_1_diffuse.dds
+gfx/map/spline_network/road_dirt_look_1_normal.dds
+gfx/map/spline_network/road_dirt_look_1_properties.dds
+gfx/map/spline_network/road_dirt_look_2_diffuse.dds
+gfx/map/spline_network/road_dirt_look_2_normal.dds
+gfx/map/spline_network/road_dirt_look_2_properties.dds
+gfx/map/spline_network/road_dirt_look_3_diffuse.dds
+gfx/map/spline_network/road_dirt_look_3_normal.dds
+gfx/map/spline_network/road_dirt_look_3_properties.dds
+gfx/map/spline_network/road_dirt_look_4_diffuse.dds
+gfx/map/spline_network/road_dirt_look_4_normal.dds
+gfx/map/spline_network/road_dirt_look_4_properties.dds
+gfx/map/spline_network/road_dirt_looks.settings
 gfx/map/spline_network/road_dirt_normal.dds
 gfx/map/spline_network/road_dirt_properties.dds
 gfx/map/spline_network/road_paved_diffuse.dds
