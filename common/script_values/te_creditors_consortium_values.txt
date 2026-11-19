@@ -401,12 +401,16 @@ te_cred_dl_payment = {
 }
 
 # The bloc's GDP per head, for the leader's pulse: all members' GDP over all
-# members' people. Leader scope.
+# members' people. Leader scope. Each member's GDP is read through
+# te_cred_dl_member_gdp: written as `add = gdp` inside this iterator the
+# engine refused the link at load ("Invalid scope types for event target
+# link, link: gdp", 2026-11-19), so the bloc's GDP read 0 and nobody
+# received. The self-check cc_dl_bloc_gdppc says whether the read lands.
 te_cred_dl_bloc_gdppc_now = {
 	value = 0
 	power_bloc ?= {
 		every_power_bloc_member = {
-			add = gdp
+			add = te_cred_dl_member_gdp
 		}
 	}
 	divide = {
@@ -418,6 +422,11 @@ te_cred_dl_bloc_gdppc_now = {
 		}
 		min = 1
 	}
+}
+
+# One member's GDP, for the sum above. Member scope.
+te_cred_dl_member_gdp = {
+	value = gdp
 }
 
 # A receiver's population in millions, its weight in the split. Receiver scope.

@@ -567,14 +567,51 @@ remove_banking_market_modifiers_effect = {
 	banking_strip_tool = { MODIFIER = banking_bail_in_regime                   MARK = off_cb_bail_in_regime }
 }
 
+# State scope, around a strike's kill: the state's people as the day's
+# strikes have left them (var:nd_strike_people_left, read by the strikes'
+# killed-population values). state_population doesn't fall until the next
+# tick, and a salvo's warheads all land in one effect, a Leadership salvo's all
+# on the capital. So each warhead read the same figure and booked a tenth of
+# it as dead while it killed a tenth of what the last had left: 25 on
+# Sankt-Peterburg booked about 10 million dead of 4 million people, and the
+# census took the 6 million it could not find for arrivals (2026-11-19). Kept
+# for a day, so the next tick reads the engine's figure again. A tooltip pass
+# writes nothing, so the after step reads the figure only once it is set.
+nd_strike_people_before = {
+	if = {
+		limit = { NOT = { has_variable = nd_strike_people_left } }
+		set_variable = { name = nd_strike_people_left value = state_population days = 1 }
+	}
+}
+
+nd_strike_people_after = {
+	if = {
+		limit = {
+			has_variable = nd_strike_people_left
+			has_variable = nuclear_strike_killed_population
+		}
+		set_variable = {
+			name = nd_strike_people_left
+			value = {
+				value = var:nd_strike_people_left
+				subtract = var:nuclear_strike_killed_population
+				min = 0
+			}
+			days = 1
+		}
+	}
+}
+
 nuclear_industrial_strike = {
 	state_region = {
 		add_devastation = 100
 	}
+	nd_strike_people_before = yes
 	set_variable = {
 		name = nuclear_strike_killed_population
 		value = nuclear_industrial_strike_killed_population
 	}
+	nd_strike_people_after = yes
 	te_demog_note_kills = { VALUE = var:nuclear_strike_killed_population }
 	kill_population_percent_in_state = {
 		percent = 0.1
@@ -634,10 +671,12 @@ nd_counterforce_strike_damage = {
 	state_region = {
 		add_devastation = 25
 	}
+	nd_strike_people_before = yes
 	set_variable = {
 		name = nuclear_strike_killed_population
 		value = nd_counterforce_strike_killed_population
 	}
+	nd_strike_people_after = yes
 	te_demog_note_kills = { VALUE = var:nuclear_strike_killed_population }
 	kill_population_percent_in_state = {
 		percent = 0.025

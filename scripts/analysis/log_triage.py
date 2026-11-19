@@ -85,6 +85,11 @@ INGAME_RE = re.compile(r"\[time-to-reach-ingame-idler\]:\[([0-9.]+)\]")
 # debug.log's startup names each mod of the playset once it has matched its
 # version against the game's (`dlc.cpp`): the launch's mod list.
 PLAYSET_MOD_RE = re.compile(r"^Mod (.+?) \([^)]*\) version ")
+# game.log's warning when a save is loaded without mods it was made with
+# (`gamestate.cpp`), naming each as `• <name>!`. Such a launch's lines are the
+# save's content failing to read, not findings (2026-11-19: 830 lines).
+MISSING_MODS_RE = re.compile(r"loading a save file while missing mod")
+MISSING_MOD_NAME_RE = re.compile(r"• ([^!\n]+)!")
 # How soon after the exe starts a family's first line comes when nothing has
 # rotated away (game.log's first lines wait for the events to load).
 FIRST_LINE_WITHIN = {"debug": 5, "error": 5, "game": 60}
@@ -371,6 +376,12 @@ def launch_rows(families: dict, clock: Clock, git_ref: str | None) -> list[str]:
                     + (f"  ({behind} commits on {git_ref} since)" if behind else ""))
         rows.append("     kept: " + ", ".join(covers) + "; playset: "
                     + (", ".join(mods) if mods else "rotated out (debug.log's first second names it)"))
+        warned = [line.entry.message for family in ("game", "error") for line in families.get(family, [])
+                  if clock.launch_of(line.when) == i and MISSING_MODS_RE.search(line.entry.message)]
+        if warned:
+            missing = list(dict.fromkeys(n.strip() for m in warned for n in MISSING_MOD_NAME_RE.findall(m)))
+            rows.append("     LOADED A SAVE WITH MODS MISSING" + (f" ({', '.join(missing)})" if missing else "")
+                        + ": its lines are the save's content failing to read without them, not findings")
     rows.append("  A family not kept whole has lost that launch's load-time errors: only a fresh "
                 "launch shows them.")
     if any(commits_since(l["start"], git_ref) for l in clock.launches[-1:]):
