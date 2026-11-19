@@ -1370,19 +1370,31 @@ def rate_term(target, bare, absorbed=0.0, other=0.0, on_top=0.0, added=0.0, ceil
     return m, False
 
 
-def census_out_of_range(people, e0=None, cbr_model=None, cdr_model=None):
+def census_out_of_range(people, e0=None, cbr_model=None, cdr_model=None, kill_share=None):
     """Why the census's own figures are out of range (#1476), the script's te_demog_census_out_of_range in the order
     te_demog_rates_refresh stores it as te_dg_rate_guard: 1 its people's sum below 0 (wrapped at the script's fixed-point
     limit) or above P.RATE_GUARD_PEOPLE_MAX, 2 life expectancy under P.RATE_GUARD_E0_MIN, 3 the model's birth or death
-    rate below 0; 0 in range. A figure the state doesn't hold (None) says nothing. Out of range, the census clears its
-    terms and the engine's own rates run, as under Display only."""
+    rate below 0, 4 known kills of P.RATE_GUARD_KILLS_SHARE or more of its people in the step's window (kill_share, the
+    script's local te_dg_kill_share; above 1 counts too); 0 in range. A figure the state doesn't hold (None) says nothing.
+    Out of range, the census clears its terms and the engine's own rates run, as under Display only."""
     if people is not None and (people < 0 or people > P.RATE_GUARD_PEOPLE_MAX):
         return 1
     if e0 is not None and e0 < P.RATE_GUARD_E0_MIN:
         return 2
     if (cbr_model is not None and cbr_model < 0) or (cdr_model is not None and cdr_model < 0):
         return 3
+    if kill_share is not None and kill_share >= P.RATE_GUARD_KILLS_SHARE:
+        return 4
     return 0
+
+
+def kill_share(kills, people_last):
+    """The census's fourth guard's figure (owner, 2026-11-19), the script's te_demog_kill_share_store: the known kills a
+    step's window holds (te_dg_kills_in) over the people at the last count (te_dg_pop_last, at least 1), uncapped; None
+    with no kills noted (the script then sets no local)."""
+    if kills is None:
+        return None
+    return kills / max(people_last, 1.0)
 
 
 def on_top_scale(engine, target):
