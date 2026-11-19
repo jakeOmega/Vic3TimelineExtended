@@ -3,13 +3,13 @@
 A hold at a crisis's deadline puts the forces on High Alert and a
 counter-threat on Heightened. Before 2026-11-19 nothing took them off once
 the crisis was over, and only the Nuclear tab showed the level: a player
-left on High Alert for two years, at strain 100, met a false warning nearly
-every week of a war with an armed power. Two fixes, each pinned here:
+left on High Alert for two years, at strain 100, met four false warnings in
+six weeks of a war with an armed power. Two fixes, each pinned here:
 
 - Each side's ordered readiness is recorded when the crisis opens, and the
   outcome notice (nuclear_crisis.6) offers to stand back down to it.
 - Six months at High Alert with no crisis under way posts one notice to a
-  human player, re-armed once readiness is ordered lower.
+  human player, re-armed when a crisis or a readiness step restarts the count.
 
 Run: python3 -m unittest test_nuclear_alert_standdown -v
 """
@@ -71,7 +71,16 @@ class TestOutcomeNoticeStandDown(unittest.TestCase):
     def test_offer_compares_the_ordered_level_with_the_record(self):
         body = block(self.triggers, "nd_crisis_notice_offers_standdown")
         self.assertIn("nd_is_armed = yes", body)
+        # A notice left open into a second crisis loses the option.
+        self.assertIn("nd_in_crisis = no", body)
         self.assertIn("var:nd_readiness_target > nd_pre_crisis_readiness_value", body)
+
+    def test_crisis_records_are_cleared_before_the_notices_fire(self):
+        # The offer's nd_in_crisis = no holds at the close only because each
+        # side's crisis record is cleared before nuclear_crisis.6 is sent.
+        body = block(self.effects, "nd_crisis_close")
+        clear = body.rindex("nd_crisis_clear_vars = yes")
+        self.assertLess(clear, body.index("trigger_event = { id = nuclear_crisis.6 popup = yes }"))
 
     def test_stand_down_option_is_gated_and_settles_first(self):
         self.assertIn("name = nuclear_crisis.6.b", self.stand_down)
@@ -118,22 +127,36 @@ class TestHighAlertReminder(unittest.TestCase):
 
     def test_one_notice_per_stint_for_players(self):
         body = block(self.effects, "nd_remind_high_alert")
+        self.assertRegex(body, r"^\s*if = \{\s*limit = \{ is_ai = no \}")
         self.assertEqual(body.count("post_notification = nd_high_alert_reminder"), 1)
-        self.assertIn("is_ai = no", body)
         self.assertIn("NOT = { has_variable = nd_high_alert_reminded }", body)
         self.assertIn("set_variable = nd_high_alert_reminded", body)
         rearm = body.index("remove_variable = nd_high_alert_reminded")
         self.assertLess(rearm, body.index("post_notification"))
-        self.assertRegex(body, r"var:nd_readiness_target < 3\s*\}\s*remove_variable = nd_high_alert_reminded")
+        self.assertRegex(body, r"var:nd_high_alert_quiet_months < (\d+)\s*\}\s*remove_variable = nd_high_alert_reminded")
+
+    def test_quiet_months_count_only_outside_a_crisis(self):
+        body = block(self.effects, "nd_remind_high_alert")
+        quiet = block(self.triggers, "nd_high_alert_quiet")
+        for line in ("nd_readiness_high_alert = yes", "var:nd_readiness_target = 3", "nd_in_crisis = no",
+                     "has_variable = nd_readiness_months"):
+            self.assertIn(line, quiet)
+        # Seeded before the first change (change_variable creates nothing).
+        seed = body.index("NOT = { has_variable = nd_high_alert_quiet_months }")
+        self.assertLess(seed, body.index("change_variable = { name = nd_high_alert_quiet_months add = 1 }"))
+        # A readiness step during the month restarts the count.
+        self.assertRegex(body, r"var:nd_high_alert_quiet_months > var:nd_readiness_months \}\s*"
+                               r"set_variable = \{ name = nd_high_alert_quiet_months value = var:nd_readiness_months \}")
+        # Anything but a quiet High Alert zeroes it.
+        self.assertRegex(body, r"else = \{\s*set_variable = \{ name = nd_high_alert_quiet_months value = 0 \}\s*\}")
 
     def test_months_match_the_permanent_alert_threshold(self):
-        ours = block(self.triggers, "nd_high_alert_outlasts_crisis")
-        theirs = block(self.triggers, "nd_incident_eligible_permanent_alert")
-        months = re.findall(r"var:nd_readiness_months >= (\d+)", ours)
-        self.assertEqual(months, re.findall(r"var:nd_readiness_months >= (\d+)", theirs))
-        self.assertIn("nd_in_crisis = no", ours)
-        self.assertIn("nd_readiness_high_alert = yes", ours)
-        self.assertIn("var:nd_readiness_target = 3", ours)
+        body = block(self.effects, "nd_remind_high_alert")
+        theirs = re.findall(r"var:nd_readiness_months >= (\d+)",
+                            block(self.triggers, "nd_incident_eligible_permanent_alert"))
+        self.assertEqual(len(theirs), 1)
+        self.assertEqual(re.findall(r"var:nd_high_alert_quiet_months >= (\d+)", body), theirs)
+        self.assertEqual(re.findall(r"var:nd_high_alert_quiet_months < (\d+)", body), theirs)
 
     def test_message_is_a_toast(self):
         body = block(strip_comments(read(MESSAGES)), "nd_high_alert_reminder")
@@ -142,7 +165,7 @@ class TestHighAlertReminder(unittest.TestCase):
 
     def test_notice_text_reads_the_live_figures(self):
         desc = loc_value("notification_nd_high_alert_reminder_desc")
-        self.assertIn("Var('nd_readiness_months')", desc)
+        self.assertIn("Var('nd_high_alert_quiet_months')", desc)
         self.assertIn("ScriptValue('nd_display_strain')", desc)
         self.assertIn("$nd_w_posture_header$", desc)
         self.assertIn("$te_military_tab_nuclear$", desc)
@@ -151,9 +174,12 @@ class TestHighAlertReminder(unittest.TestCase):
             self.assertTrue(loc_value(key), key)
 
     def test_ten_times_routine(self):
-        # The notice says incidents at High Alert are at least ten times as
-        # likely as at Routine: the base monthly rates, 10 against 1.
-        self.assertIn("ten times as likely as at Routine", loc_value("notification_nd_high_alert_reminder_desc"))
+        # The notice says that in peacetime incidents at High Alert are ten
+        # times as likely as at Routine: the base monthly rates, 10 against 1
+        # (with no crisis or war the surcharge is 0). In a war the commander
+        # misreading can be eligible at Routine, so the ratio is lower there.
+        self.assertIn("In peacetime, incidents at High Alert are ten times as likely as at Routine",
+                      loc_value("notification_nd_high_alert_reminder_desc"))
         body = block(strip_comments(read(VALUES)), "nd_incident_base_monthly_permille")
         self.assertRegex(body, r"^\s*value = 1\b")
         self.assertRegex(body, r"nd_readiness_high_alert = yes \} value = 10\b")

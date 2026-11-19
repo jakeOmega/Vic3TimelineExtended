@@ -3503,7 +3503,7 @@
  nuclear_crisis.5.f:0 "\"My father has dug a trench at the end of the garden and lined it with planks. He will not say what it is for, and he goes out to look at it every evening.\"\n\n\"The shop I keep sold out of canned food on the first day and candles on the second. I have put a sign in the window so that people stop asking me when the next delivery comes. I do not know.\"\n\n\"We have been told to keep the children at school until their parents come for them. The parents come earlier every day, and some have not brought the children back.\"\n\n\"The clerks in my office have started taking their files home each night in case the building is closed. We have had no instruction either way, so each of us decides alone.\""
  nuclear_crisis.5.t:0 "Pressed Again"
  nuclear_crisis.6.a:0 "So this is how it ended."
- nuclear_crisis.6.a_keep:0 "Keep our forces at their present readiness."
+ nuclear_crisis.6.a_keep:0 "Keep our forces at the readiness we have ordered."
  nuclear_crisis.6.b:0 "Stand our forces down to where they were before the crisis."
  nuclear_crisis.6.d_backed_down_issuer:0 "We have withdrawn our nuclear threat against [SCOPE.sCountry('nd_target').GetName] without getting what we demanded, and the crisis is closed. The retreat has cost us credibility."
  nuclear_crisis.6.d_backed_down_target:0 "[SCOPE.sCountry('nd_issuer').GetName] has withdrawn its nuclear threat against us, and we conceded nothing. The crisis is closed, and we held."

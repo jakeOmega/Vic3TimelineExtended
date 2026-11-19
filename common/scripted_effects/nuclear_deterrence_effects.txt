@@ -375,30 +375,58 @@ nd_weekly_update = {
 	nd_log_strike_eligibility = yes
 }
 
-# Country scope, armed (nd_monthly_update). A hold at a crisis's deadline puts
-# the forces on High Alert, the panel is the only place that shows it, and
-# nothing takes them off once the crisis is over (2026-11-19: a player left on
-# High Alert for two years, at strain 100, saw a false warning a week in a war
-# with an armed power). Six months at High Alert with no crisis under way
-# (nd_high_alert_outlasts_crisis) posts one notice; ordering anything lower
-# re-arms it. Human players only: the AI reviews its posture every sixth month.
+# Country scope, armed (nd_monthly_update, after nd_readiness_months has
+# counted this month). A hold at a crisis's deadline puts the forces on High
+# Alert, the panel is the only place that shows it, and nothing takes them off
+# once the crisis is over (2026-11-19: a player left on High Alert for two
+# years, at strain 100, met four false warnings in six weeks of a war with an
+# armed power). nd_high_alert_quiet_months counts the months at High Alert
+# with no crisis under way (nd_high_alert_quiet): a crisis restarts it, and so
+# does a readiness step during the month, which nd_readiness_months shows.
+# Six such months (the months at which nd_incident_eligible_permanent_alert
+# raises the weapons-accident weight; test_nuclear_alert_standdown.py holds
+# the two together) post one notice. A restart below six re-arms it. Human
+# players only: the AI reviews its posture every sixth month.
 nd_remind_high_alert = {
 	if = {
-		limit = {
-			has_variable = nd_high_alert_reminded
-			has_variable = nd_readiness_target
-			var:nd_readiness_target < 3
+		limit = { is_ai = no }
+		# First month under a player (a save from before 2026-11-19, a switch
+		# of country): the months at this readiness stand in, crisis or not.
+		# change_variable does not create a variable, so it is set either way.
+		if = {
+			limit = { NOT = { has_variable = nd_high_alert_quiet_months } }
+			set_variable = { name = nd_high_alert_quiet_months value = 0 }
+			if = {
+				limit = { nd_high_alert_quiet = yes }
+				set_variable = { name = nd_high_alert_quiet_months value = var:nd_readiness_months }
+			}
 		}
-		remove_variable = nd_high_alert_reminded
-	}
-	if = {
-		limit = {
-			is_ai = no
-			NOT = { has_variable = nd_high_alert_reminded }
-			nd_high_alert_outlasts_crisis = yes
+		if = {
+			limit = { nd_high_alert_quiet = yes }
+			change_variable = { name = nd_high_alert_quiet_months add = 1 }
+			if = {
+				limit = { var:nd_high_alert_quiet_months > var:nd_readiness_months }
+				set_variable = { name = nd_high_alert_quiet_months value = var:nd_readiness_months }
+			}
 		}
-		set_variable = nd_high_alert_reminded
-		post_notification = nd_high_alert_reminder
+		else = {
+			set_variable = { name = nd_high_alert_quiet_months value = 0 }
+		}
+		if = {
+			limit = {
+				has_variable = nd_high_alert_reminded
+				var:nd_high_alert_quiet_months < 6
+			}
+			remove_variable = nd_high_alert_reminded
+		}
+		if = {
+			limit = {
+				NOT = { has_variable = nd_high_alert_reminded }
+				var:nd_high_alert_quiet_months >= 6
+			}
+			set_variable = nd_high_alert_reminded
+			post_notification = nd_high_alert_reminder
+		}
 	}
 }
 

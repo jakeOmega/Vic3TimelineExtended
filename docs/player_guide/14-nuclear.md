@@ -308,11 +308,12 @@ agreed or conceded in a crisis holds you at Routine or below for two years, and
 dismantling your arsenal takes you down to Recessed and holds you there until
 it ends or you halt it.
 
-Nothing lowers readiness for you when a crisis ends. Holding firm at the
+Any other crisis leaves your readiness where it ended. Holding firm at the
 deadline puts your forces on High Alert and a counter-threat puts them on
-Heightened, so the outcome notice offers to stand them back down to the level
-you had ordered when the crisis opened. If you keep them on High Alert, a
-reminder comes after six months with no crisis under way.
+Heightened, so when a crisis ends with your forces above the level you had
+ordered when it opened, the outcome notice offers to stand them back down to
+it. If you keep them on High Alert, a reminder comes after six months at High
+Alert with no crisis under way.
 
 ### Launch authority
 
