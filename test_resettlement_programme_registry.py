@@ -623,6 +623,9 @@ class TransferTests(unittest.TestCase):
         self.assertIn("NOT = { has_variable = rs_elig } } "
                       "set_variable = { name = rs_elig value = resettlement_state_eligible_pop }", walk)
         self.assertEqual(walk.count("order_by = var:rs_elig"), 2)
+        # the count comes before both walks read it
+        self.assertLess(walk.index("set_variable = { name = rs_elig value = resettlement_state_eligible_pop }"),
+                        walk.index("ordered_scope_state"))
         self.assertEqual(walk.count("resettlement_valid_source_counted = yes"), 2)
         # past the destination's capacity no source is walked
         self.assertEqual(walk.count("if = { limit = { scope:rs_destination.var:rs_remaining >= resettlement_min_take } "
@@ -635,6 +638,23 @@ class TransferTests(unittest.TestCase):
                         monthly.index("every_scope_state = { limit = { has_variable = rs_elig } remove_variable = rs_elig }"))
         trig = squash(block(read(TRIGGERS), "resettlement_valid_source_counted"))
         self.assertLess(trig.index("has_variable = rs_elig"), trig.index("var:rs_elig >= resettlement_min_take"))
+
+    def test_only_a_take_changes_a_source_inside_the_walk(self):
+        # The premise of the count above: inside the monthly walk, pops change
+        # only in a take and its consequences (at the source, which drops its
+        # count) and in the land pressure (at the destination, never a source).
+        # A pop-changing effect anywhere else in the walk's file would leave a
+        # count stale.
+        text = read(EFFECTS)
+        allowed = {"resettlement_take_from_source", "resettlement_source_consequences",
+                   "resettlement_land_pressure", "resettlement_touch_pressed_cultures"}
+        for effect in ("move_partial_pop", "move_pop", "kill_population_in_state", "kill_population_percent_in_state",
+                       "add_radicals_in_state", "add_loyalists_in_state", "create_pop", "change_pop_culture"):
+            for name in re.findall(r"^(\w+) = \{", text, re.M):
+                if name in allowed:
+                    continue
+                with self.subTest(effect=effect, block=name):
+                    self.assertNotIn(effect + " ", squash(block(text, name)) + " ")
 
     def test_deaths_in_steps_of_one_hundred_for_each_coercive_programme(self):
         body = squash(block(read(EFFECTS), "resettlement_source_consequences"))
