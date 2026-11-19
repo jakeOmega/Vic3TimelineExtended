@@ -6599,6 +6599,17 @@
  te_seabed.3.t:0 "The Seabed Rush Begins"
 
 #
+# TE_SINGLE_PARTY_STATE
+#
+ te_single_party_state.1.a:0 "The [SCOPE.sParty('sps_green_party').GetName]."
+ te_single_party_state.1.b:0 "The [SCOPE.sParty('sps_populist_party').GetName]."
+ te_single_party_state.1.c:0 "The [SCOPE.sParty('sps_technocratic_party').GetName]."
+ te_single_party_state.1.d:0 "[GetLawType('law_single_party_state').GetName] is being enacted. Once it passes, one party will be legal in [ROOT.GetCountry.GetName] and every other will be struck from the register of parties. The clerks drafting the law's final text have left a space for that party's name. It must be a party that is part of our [concept_government]."
+ te_single_party_state.1.e:0 "One of the other parties in [concept_government]."
+ te_single_party_state.1.f:0 "A party's general secretary, to its branch secretaries:\n\n\"The law will name one party, and every other will be outlawed. If the government names ours, members of the other parties who hold public posts will come to you asking to join. Take each one's name and old membership card and send them to me. Promise nobody that they will keep a post, because that is not ours to decide. If the government names another party, keep our own lists safe and wait for my instructions.\""
+ te_single_party_state.1.t:0 "The Sole Legal Party"
+
+#
 # TE_UNION
 #
  te_union.1.a:0 "Our future is in the union."

@@ -827,7 +827,9 @@ Protected Class, the higher LGBTQ+ Rights laws and related technologies.
 | Technocratic Party | Machine Learning | Industrialists and Intelligentsia, Corpocrat, transhumanist and market-liberal leaders |
 
 All three need a voting franchise and take national names in some countries,
-such as Die Grünen or Movimento 5 Stelle.
+such as Die Grünen or Movimento 5 Stelle. Enacting a Single-Party State while
+one of them is in the government lets you name it the one legal party, as you
+can one of the base game's parties.
 
 ### Two-party politics
 

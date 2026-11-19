@@ -1,0 +1,127 @@
+﻿# Single-Party State's dominant party, for the mod's three parties (#1908).
+#
+# Vanilla 1.15.2's single_party_state.8 asks which party a Single-Party State
+# keeps. It fires at each checkpoint that advances, is debated or succeeds,
+# until var:sps_dominant_party_ig_var is set, and only offers vanilla's eleven
+# parties. te_single_party_state.1 offers the mod's three, and both are
+# answered by setting that variable, so one must not be answered after the
+# other: nothing can close .8 from outside, and a second answer overwrites the
+# first and leaves its amendment on the law.
+#
+# * Sent, as a popup, when the enactment starts if a mod party governs. The
+#   first checkpoint comes after it, so a choice made in it keeps .8 shut.
+# * Sent monthly while the enactment runs and nothing is chosen, when a mod
+#   party governs (a government that changed since the start): always if only
+#   mod parties govern, since .8 has nothing to offer them, and in a mixed
+#   government only if the choice has not been left to .8 yet.
+# * At a checkpoint that fires .8 with a vanilla party to offer, the choice is
+#   left to .8: te_sps_left_to_vanilla cancels an open copy of the twin and
+#   stops the monthly offers in a mixed government. The twin's "one of the
+#   other parties" option sets the same variable.
+#
+# te_sps_dominance_pending marks an open copy, one at a time: set by the
+# sender, cleared in the event's `after`, 100 days outlasting its three months.
+
+# Root = owner country of the law.
+on_law_enactment_started = {
+	on_actions = {
+		te_sps_dominance_on_enactment_started
+	}
+}
+
+on_monthly_pulse_country = {
+	on_actions = {
+		te_sps_dominance_monthly
+	}
+}
+
+on_law_checkpoint_advance = {
+	on_actions = {
+		te_sps_dominance_on_checkpoint
+	}
+}
+
+on_law_checkpoint_debate = {
+	on_actions = {
+		te_sps_dominance_on_checkpoint
+	}
+}
+
+on_law_checkpoint_success = {
+	on_actions = {
+		te_sps_dominance_on_checkpoint
+	}
+}
+
+te_sps_dominance_on_enactment_started = {
+	trigger = {
+		is_enacting_law = law_type:law_single_party_state
+	}
+	effect = {
+		# A new enactment starts with no choice. Vanilla's own
+		# on_law_enactment_started removes this variable too, in an order
+		# against this sub-action nobody has read, and the event's trigger
+		# reads it at once.
+		if = {
+			limit = { has_variable = sps_dominant_party_ig_var }
+			remove_variable = sps_dominant_party_ig_var
+		}
+		# Left over from an earlier enactment.
+		if = {
+			limit = { has_variable = te_sps_dominance_pending }
+			remove_variable = te_sps_dominance_pending
+		}
+		if = {
+			limit = { has_variable = te_sps_left_to_vanilla }
+			remove_variable = te_sps_left_to_vanilla
+		}
+		if = {
+			limit = { te_sps_mod_party_in_government = yes }
+			set_variable = {
+				name = te_sps_dominance_pending
+				days = 100
+			}
+			trigger_event = {
+				id = te_single_party_state.1
+				popup = yes
+			}
+		}
+	}
+}
+
+te_sps_dominance_monthly = {
+	trigger = {
+		is_enacting_law = law_type:law_single_party_state
+		NOT = { has_variable = sps_dominant_party_ig_var }
+		NOT = { has_variable = te_sps_dominance_pending }
+		te_sps_mod_party_in_government = yes
+		OR = {
+			te_sps_vanilla_party_in_government = no
+			NOT = { has_variable = te_sps_left_to_vanilla }
+		}
+	}
+	effect = {
+		set_variable = {
+			name = te_sps_dominance_pending
+			days = 100
+		}
+		trigger_event = {
+			id = te_single_party_state.1
+			popup = yes
+		}
+	}
+}
+
+# .8 fires at this checkpoint exactly when its trigger holds: the law is being
+# enacted, nothing is chosen and some party governs. With a vanilla party in
+# government it has an option, so it takes the choice from here on.
+te_sps_dominance_on_checkpoint = {
+	trigger = {
+		is_enacting_law = law_type:law_single_party_state
+		NOT = { has_variable = sps_dominant_party_ig_var }
+		te_sps_vanilla_party_in_government = yes
+	}
+	effect = {
+		set_variable = te_sps_left_to_vanilla
+	}
+}

@@ -119,10 +119,14 @@ other § 4 generator came out unchanged.
    Fortified Bastion and Impregnable Fortress now share a recovery figure; the second still has the larger
    defense, morale loss, kill rate and width figures. The mod's kill rates are unchanged: vanilla cut only Chemical
    Weapons', which the mod has no copy of.
-2. **The mod's parties under Single-Party State** (open). 1.15.2's dominant-party event offers vanilla's eleven parties
-   only, the amendments and join weights exist for them only, and the event can't be `INJECT`ed. With only the
-   Technocratic, Green or Populist Party in government it may show no option at all. #1908 lays out three ways
-   to close it.
+2. **The mod's parties under Single-Party State: a twin event** (#1908, its first option). 1.15.2's dominant-party
+   event offers vanilla's eleven parties only, the amendments and join weights exist for them only, and the event
+   can't be `INJECT`ed. With only the Technocratic, Green or Populist Party in government it may show no option at
+   all. `te_single_party_state.1` (`events/te_single_party_state_events.txt`) offers the mod's parties, as a popup
+   when the enactment starts and monthly while it runs, so a choice made in it keeps vanilla's event closed. In a
+   government that also holds a vanilla party it can leave the choice to vanilla's event, and a checkpoint that
+   gives vanilla's event a vanilla party to offer closes it, so the two are never both answered. Each mod party has
+   vanilla's amendment, join weight term and availability gate.
 3. **Regime change thresholds for the mod's economy groups: 25, vanilla's economy value** (owner, 2026-11-19).
    1.15.2 made vanilla's economic system and trade policy carried at a 25 difference (neither was carried before)
    and labour associations at 75. The mod's six economy groups (Intellectual Property, Monetary Policy, Right to

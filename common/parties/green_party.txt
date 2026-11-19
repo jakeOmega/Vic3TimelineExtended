@@ -87,26 +87,34 @@ green_party = {
 	}
 
 	available_for_interest_group = {
-		owner = {
-			country_has_voting_franchise = yes
-			OR = {
-				py:green_party ?= {
-					any_member = {}
-				}
-				ig:ig_intelligentsia ?= {
-					ig_counts_as_marginal = no
-				}
-				ig:ig_rural_folk ?= {
-					ig_counts_as_marginal = no
+		trigger_if = { # Single-Party State: open to the dominant party's groups, as vanilla's parties are
+			limit = {
+				ig_is_member_of_dominant_party = { PARTY = green }
+			}
+			always = yes
+		}
+		trigger_else = {
+			owner = {
+				country_has_voting_franchise = yes
+				OR = {
+					py:green_party ?= {
+						any_member = {}
+					}
+					ig:ig_intelligentsia ?= {
+						ig_counts_as_marginal = no
+					}
+					ig:ig_rural_folk ?= {
+						ig_counts_as_marginal = no
+					}
 				}
 			}
-		}
-		leader ?= {
-			NOR = {
-				has_ideology = ideology:ideology_fascist
-				has_ideology = ideology:ideology_integralist
-				has_ideology = ideology:ideology_ethno_nationalist
-				has_ideology = ideology:ideology_vanguardist
+			leader ?= {
+				NOR = {
+					has_ideology = ideology:ideology_fascist
+					has_ideology = ideology:ideology_integralist
+					has_ideology = ideology:ideology_ethno_nationalist
+					has_ideology = ideology:ideology_vanguardist
+				}
 			}
 		}
 	}
@@ -286,6 +294,15 @@ green_party = {
 			add = {
 				value = -3
 				desc = "from_market_liberal"
+			}
+		}
+		if = { # Single-Party State: the dominant party keeps its groups (vanilla 1.15.2's term)
+			limit = {
+				ig_is_member_of_dominant_party = { PARTY = green }
+			}
+			add = {
+				value = 1000
+				desc = "amendment_green_party_dominance"
 			}
 		}
 		# First Past the Post (amendment_first_past_the_post): one of the two
