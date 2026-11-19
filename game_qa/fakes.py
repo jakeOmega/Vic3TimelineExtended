@@ -27,6 +27,14 @@ _HELP_LINES = 500                           # what it prints, about
 _HELD_BACK = 120                            # the last of it that the game is still holding when the file is written
 INT32_MIN, INT32_MAX = -2 ** 31, 2 ** 31 - 1
 NO_MATCH = "No matching pending event"      # the game's answer to an id it has no pending event for (live, 2026-11-12)
+DOCS_LOGS = ("effects.log", "triggers.log", "modifiers.log", "event_targets.log", "on_actions.log",
+             "custom_localization.log")         # what `script_docs` writes into the user-data folder's docs/
+DOCS_DONE = "Logs created in directory: docs/"  # and its answer (the owner's dump of 1.15.2, 2026-11-19)
+# What a game at its bare main menu runs without crashing: the log system's own command, `log list` (live,
+# 2026-11-19). `select_event_option list` and `script_docs` both crashed it there that day; the fake takes any other
+# command for one that needs a game state, and crashes too.
+MENU_SAFE = ("log",)
+MENU_ASSERT = "Assertion failed: NGameState::GameStateAccess._Value != EGameStateAccess::Uninitialized"
 
 
 class FakeSocket:
@@ -283,6 +291,12 @@ class FakeHelper:
     answers `Selected option <index> of <event>`, takes the event off the list and calls `on_selected` with
     (event id, index). With `high_ids_refused`, as live (2026-11-13), a typed id above 2^31 - 1 matches nothing,
     and neither does its signed form (id - 2^32): both answer NO_MATCH. Off, a typed id matches as written.
+
+    `script_docs`, while `docs` names a folder, writes the six logs there (`docs_logs` gives a log's bytes, else a
+    line naming it) and answers DOCS_DONE, as the game does; a log in `docs_skipped` is left as it was.
+
+    `at_menu` is a game at its main menu: a command whose first word is not in MENU_SAFE crashes it (its window is
+    gone, `crashed` names the command), as `select_event_option list` did live.
     """
 
     def __init__(self, history: Path | None = None, log: Path | None = None) -> None:
@@ -326,6 +340,12 @@ class FakeHelper:
         self.pending_events: list[list] | None = None   # [numeric id, event id, options], oldest first (see above)
         self.high_ids_refused = False           # a typed id above 2^31 - 1, or its signed form, matches nothing
         self.on_selected = None                 # called with (event id, option index) when an option is picked
+        self.docs: Path | None = None           # the folder `script_docs` writes its logs to, when set
+        self.docs_logs: dict[str, bytes] = {}   # what it writes, by log name
+        self.docs_skipped: set[str] = set()     # logs it leaves as they were
+        self.docs_runs = 0                      # the times it has written them
+        self.at_menu = False                    # the main menu: a command needing a game state crashes the game
+        self.crashed: str | None = None         # the command that crashed it
         self.unwritten: list[str] = []          # log lines the game has made but not yet written to the file
         self.launched: list[tuple[str, list, str]] = []
         self.adopted: list[ProcId] = []
@@ -470,8 +490,15 @@ class FakeHelper:
 
     def _run(self, text: str) -> None:
         """The game runs a command: its lines go to the buffer, and a flush writes the buffer out."""
+        if self.at_menu and text.split()[0] not in MENU_SAFE:
+            self._logged("console.cpp:1175", "Running console command: " + text)
+            self._logged("pdx_assert.cpp:641", MENU_ASSERT)
+            self.crashed, self.exists = text, False
+            return
         success, failure, script = self.replies.get(text, ([], [], []))
         answer = None if text in self.replies else self._select_event_option(text)
+        if answer is None and text not in self.replies:
+            answer = self._script_docs(text)
         if answer is not None:
             success, failure = answer
         self._logged("console.cpp:1175", "Running console command: " + text)
@@ -518,6 +545,18 @@ class FakeHelper:
         if self.on_selected is not None:
             self.on_selected(event, index)
         return ["Selected option %d of %s" % (index, event)], []
+
+    def _script_docs(self, text: str) -> tuple[list[str], list[str]] | None:
+        """(success lines, failure lines) of a `script_docs` the fake answers itself, having written the logs."""
+        if text.strip() != "script_docs" or self.docs is None:
+            return None
+        self.docs.mkdir(parents=True, exist_ok=True)
+        self.docs_runs += 1
+        for name in DOCS_LOGS:
+            if name not in self.docs_skipped:
+                default = ("%s, dump %d of the fake game\n" % (name, self.docs_runs)).encode()
+                (self.docs / name).write_bytes(self.docs_logs.get(name, default))
+        return [DOCS_DONE], []
 
     def screenshot(self, pid: int, path: Path, max_width: int = 1600) -> Path:
         path = Path(path)

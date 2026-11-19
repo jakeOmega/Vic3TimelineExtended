@@ -89,6 +89,11 @@ SCAN_CONSOLE, SCAN_ENTER = 0x29, 0x1C
 SCAN_BACKSPACE = 0x0E
 FLUSH_COMMAND = "help ndefines.ngui"
 PROBE_COMMAND = "select_event_option list"
+# The probe for a game at its main menu, which has no game state: there `select_event_option list` crashes the game
+# (live 2026-11-19, 1.15.2: "Assertion failed: NGameState::GameStateAccess._Value != EGameStateAccess::Uninitialized"
+# in the second it ran, then EXCEPTION_ACCESS_VIOLATION). `log list` is the engine's own logging command
+# (pdx_core/log/log.cpp, "Print a list of all log categories and sinks"), which needs none.
+MENU_PROBE_COMMAND = "log list"
 FOREGROUND_WAIT_S = 120.0
 PRESENCE_GAP_S = 3.0            # between the two readings that say whether someone is at the machine
 QUIET_GAPS = 2                  # quiet gaps in a row before the foreground is taken back
@@ -159,9 +164,12 @@ def _someone_between(before: Presence, after: Presence) -> bool:
 
 class Console:
     def __init__(self, helper: Helper, proc: ProcId, history: Path, log: LogFollower,
-                 sleep=time.sleep, clock=time.monotonic) -> None:
+                 sleep=time.sleep, clock=time.monotonic, probe: str = PROBE_COMMAND) -> None:
+        """`probe` is the harmless command typed to learn whether the console is open: PROBE_COMMAND in a loaded
+        game, MENU_PROBE_COMMAND at the main menu, where the first one crashes the game."""
         self._helper, self._proc, self._history_path, self._log = helper, proc, Path(history), log
         self._sleep, self._clock = sleep, clock
+        self._probe = probe
         self._seen: list[Parsed] = []       # console lines of the log since the current call began
         self._gap = False                   # the log lost lines since the current call began
         self._stranded = False              # text went out without its Enter: the input line holds half a command
@@ -631,7 +639,7 @@ class Console:
 
     def _console_answers(self, probes: list[_Typed]) -> bool:
         """Type the probe and see whether the console took it."""
-        typed = self._type(PROBE_COMMAND)
+        typed = self._type(self._probe)
         probes.append(typed)
         arrival = self._watch(typed, PROBE_ARRIVAL_S)
         if arrival is not None:
@@ -639,7 +647,7 @@ class Console:
         # A probe the history already held shows nothing there, and guessing "closed" would press the key
         # and close an open console. A flush makes the game log the probe and itself instead.
         self._type(FLUSH_COMMAND)
-        return self._await_reply(PROBE_COMMAND, PROBE_ARRIVAL_S, adjacent=True) is not None
+        return self._await_reply(self._probe, PROBE_ARRIVAL_S, adjacent=True) is not None
 
     def _open_console(self, timeout: float = 30.0, already: Callable[[], bool] | None = None) -> None:
         """Make the console take commands. `already` says whether what the caller typed has since landed: the

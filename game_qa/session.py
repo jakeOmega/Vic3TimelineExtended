@@ -51,8 +51,9 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-from game_qa import addmod, fixture, overlay, pixels, profiling, rules, snapshot
-from game_qa.console import CLEAR_BACKSPACES, KEYBOARD_AWAY, Console, ConsoleError, Reply
+from game_qa import addmod, fixture, overlay, pixels, profiling, rules, script_docs, snapshot
+from game_qa.console import (CLEAR_BACKSPACES, KEYBOARD_AWAY, MENU_PROBE_COMMAND, PROBE_COMMAND, Console,
+                             ConsoleError, Reply)
 from game_qa.dap import Debugger, DebuggerError
 from game_qa.fixture import RunCli
 from game_qa.gate import UNKNOWN_START, ProcId
@@ -78,6 +79,33 @@ SESSION_ARGS = ("-gdpr-compliant", "-debug_mode", "-script_debugger")
 # not what a new game is, so the fixture (made with fixture.FIXTURE_ARGS alone) and its key never see them.
 GAME_ARGS = ("-disable_renderframeifneeded", "-no_notifications", "-script_profiling")
 PLAYSETS = ("current", "mod_only")
+# `script_docs`' game (#1907): launched on `launch --playset none`, with no save, no debugger and no overlay. Live on
+# 2026-11-19 (1.15.2) both `select_event_option list` and `script_docs` itself crashed a game at its bare main menu
+# ("Assertion failed: NGameState::GameStateAccess._Value != EGameStateAccess::Uninitialized"): they need a game state.
+# The owner's hand-taken dump that morning had one, on a new game's country-select screen (vanilla's setup lines,
+# "Tory Party Created - Great Britain", came 24 s before it). So the game starts a new game by itself (`-handsoff`,
+# which `launch` lets run only to an end date: the last of a short run, before the first quarterly autosave), and
+# `script_docs` is typed once a line of script has run (GAME_STATE_MARK). The console is probed with
+# MENU_PROBE_COMMAND, which needs no game state, so that the probe can go before it.
+# `-no_crash_reporter` ("Never launch the crash reporter app on a crash, so an unattended run leaves no modal window
+# behind", the 1.15.2 binary): after the first crash the reporter's window held `logs/` open, and the restore could
+# not put the owner's logs back until the owner closed it.
+DOCS_END = "-run_until=%d.%d.%d" % fixture.SHORT_RUN_LAST
+DOCS_ARGS = ("-gdpr-compliant", "-debug_mode", "-no_crash_reporter", "-handsoff", DOCS_END)
+DOCS_PLAYSET = "none"
+# A debug.log line of script having run, which needs a game state: in a new game, vanilla's own setup logs one per
+# party it creates (`common/on_actions/00_code_on_actions.txt`, 12 s after the database load in a hands-off run of
+# 2026-11-13).
+GAME_STATE_MARK = "][jomini_effect_impl.cpp:"
+DOCS_STATE_WAIT_S = 300.0               # from the console's first answer to that line
+DOCS_STATE_SETTLE_S = 2.0               # after it, before the command: the setup is still running
+DOCS_REPLY_S = 60.0                     # for the command's answer in the log (live: the same second)
+DOCS_WAIT_S = 120.0                     # from the command to all six logs written and settled
+DOCS_SETTLE_S = 3.0                     # a log's size and time unchanged this long: the game is done with it
+DOCS_POLL_S = 1.0
+DOCS_STAGED = "script_docs"             # the run folder's copy of the dump, checked before it goes anywhere
+DOCS_RECORD = "script_docs.json"        # the run folder's record of the reply, as `fixture.json` is a fixture's
+CRASHES_FOLDER = "crashes"              # under the user data: one folder per crash, its dump and logs inside
 READ_COMMAND = "event " + overlay.READ_EVENT
 FIRE_COMMAND = "event %s"               # console `event` fires whatever the trigger and cooldown say (spec § 12.1 A6)
 READ_PREFIX = "TE_QA read "
@@ -260,6 +288,8 @@ class Paths:
     deployed_mod_windows_path: str                  # the deployed mod's folder as Windows names it: what mod_only keeps
     disabled_dlc: Sequence = ()                     # the owner's playset's disabledDLC, which launch keeps as it is
     wsl_path_of: Callable[[str], Path] | None = None    # a Windows path from WSL (`start --add-mod`); None: wslpath -u
+    digests: Path | None = None                     # the Modding-Digests clone: `script_docs` never writes inside it
+    engine_docs_root: Path | str = script_docs.DEFAULT_ROOT     # where `script_docs` keeps dumps, by version
 
     @property
     def overlay_dir(self) -> Path:
@@ -385,6 +415,7 @@ class Session:
         self._server_log: LogFollower | None = None      # dedicated_server.log, followed from the first profile start
         self._server_lines = 0              # the lines of it the run folder's copy holds
         self._profiler_window: dict = {"enlarged": False, "why": "the overlay has not been built"}
+        self._crashes_before: set[str] | None = None     # script_docs: the crash folders there before the launch
 
     # ---- start
 
@@ -501,19 +532,7 @@ class Session:
         self._save = save
         self._drop_fixture_lines()
         self._check_abort()
-        try:
-            reply, code = self._cli(["snapshot", "--save", save])
-        except BaseException:
-            self._snapshot_unknown = True       # it may have been taken, and armed, before the reply was lost
-            raise
-        snap = reply.get("id")
-        if code != 0 or not isinstance(snap, str) or not snap:
-            self._snapshot_unknown = _reply_lost(reply, code)
-            self._record("snapshot", outcome="refused", reply=reply)
-            raise SessionError("snapshot_refused", _why(reply), reply=reply)
-        self._snapshot = snap
-        self._open_report(snap)
-        self._record("snapshot", outcome="ok", reply=reply)
+        snap = self._take_snapshot(["snapshot", "--save", save])
         self._check_abort()
 
         argv = ["launch", snap, "--permission", permission, "--playset", playset]
@@ -527,6 +546,63 @@ class Session:
         if changed is not None:
             self._record("launch", outcome="refused", reply={"refused": fixture.ADD_MOD_CHANGED, "detail": changed})
             raise SessionError(fixture.ADD_MOD_CHANGED, changed)
+        self._launch(snap, argv)
+        self._console_up(snap)
+        if as_tag is not None:
+            with self._step("tag", tag=as_tag):
+                self._tag(as_tag)
+        self._attach()
+        self._check_abort()
+        self._ready = True
+        ov = self._overlay
+        result = {
+            "snapshot": snap, "pid": self._proc.pid, "created": self._proc.created, "save": save,
+            "fixture_made": made, "country": self._country,
+            "overlay": {"dir": str(ov.dir), "events_file": str(ov.events_file), "read_line": ov.read_line,
+                        "setup_events": dict(ov.setup_events)},
+            "run_dir": str(self._report.dir),
+        }
+        if pruned:
+            result["fixtures_pruned"] = pruned
+        if date is not None:
+            result["fixture_date"] = fixture.dotted(date)
+            result.update(self._dated or {})
+        if self._rules is not None:
+            result["rules"] = self._rules
+            differs = self._lobby_differs(self._rules.get("settings") or [])
+            if differs:
+                result["rules"] = dict(self._rules, lobby_differs=differs)
+        result["profiler_window"] = self._profiler_window
+        if self._game_args:
+            result["game_args"] = list(self._game_args)
+        if self._add_mods:
+            result["add_mods"] = [asdict(mod) for mod in self._add_mods]
+        self._record("start", outcome="ok", **result)
+        return result
+
+    def _take_snapshot(self, argv: list[str]) -> str:
+        """`snapshot` (`argv`, its arguments included), the run's folder opened under its id; the id. A refusal
+        raises `snapshot_refused`; a reply lost on the way marks the snapshot unknown, since it may have been taken
+        and armed."""
+        try:
+            reply, code = self._cli(argv)
+        except BaseException:
+            self._snapshot_unknown = True       # it may have been taken, and armed, before the reply was lost
+            raise
+        snap = reply.get("id")
+        if code != 0 or not isinstance(snap, str) or not snap:
+            self._snapshot_unknown = _reply_lost(reply, code)
+            self._record("snapshot", outcome="refused", reply=reply)
+            raise SessionError("snapshot_refused", _why(reply), reply=reply)
+        self._snapshot = snap
+        self._open_report(snap)
+        self._record("snapshot", outcome="ok", reply=reply)
+        return snap
+
+    def _launch(self, snap: str, argv: list[str]) -> None:
+        """`launch` (`argv`), then at once `watch`, then adopt the game and wait for its window to answer. A refusal
+        that started no game raises `launch_refused`; from any other reply on, a game of this run may be up, and it
+        is watched and ended by `stop`."""
         try:
             reply, code = self._cli(argv)
         except Exception as e:
@@ -560,42 +636,15 @@ class Session:
         self._adopted = True
         self._await_window()
 
+    def _console_up(self, snap: str, probe: str = PROBE_COMMAND) -> None:
+        """Follow the game's logs (the one it found at the launch skipped) and wait for its console to take
+        commands (`_console_when_loaded`), probing it with `probe`."""
         self._debug_log = LogFollower(self._paths.logs / "debug.log", found=self._found_log(snap))
         self._error_log = LogFollower(self._paths.logs / "error.log")
         self._console = Console(self._sends, self._proc, self._paths.history,
-                                LogFollower(self._paths.logs / "debug.log"), sleep=self._sleep, clock=self._clock)
+                                LogFollower(self._paths.logs / "debug.log"), sleep=self._sleep, clock=self._clock,
+                                probe=probe)
         self._console_when_loaded()
-        if as_tag is not None:
-            with self._step("tag", tag=as_tag):
-                self._tag(as_tag)
-        self._attach()
-        self._check_abort()
-        self._ready = True
-        ov = self._overlay
-        result = {
-            "snapshot": snap, "pid": self._proc.pid, "created": self._proc.created, "save": save,
-            "fixture_made": made, "country": self._country,
-            "overlay": {"dir": str(ov.dir), "events_file": str(ov.events_file), "read_line": ov.read_line,
-                        "setup_events": dict(ov.setup_events)},
-            "run_dir": str(self._report.dir),
-        }
-        if pruned:
-            result["fixtures_pruned"] = pruned
-        if date is not None:
-            result["fixture_date"] = fixture.dotted(date)
-            result.update(self._dated or {})
-        if self._rules is not None:
-            result["rules"] = self._rules
-            differs = self._lobby_differs(self._rules.get("settings") or [])
-            if differs:
-                result["rules"] = dict(self._rules, lobby_differs=differs)
-        result["profiler_window"] = self._profiler_window
-        if self._game_args:
-            result["game_args"] = list(self._game_args)
-        if self._add_mods:
-            result["add_mods"] = [asdict(mod) for mod in self._add_mods]
-        self._record("start", outcome="ok", **result)
-        return result
 
     def _check_abort(self) -> None:
         if self._abort:
@@ -1016,17 +1065,193 @@ class Session:
             out["wall_s_per_day"] = round(out["wall_s"] / out["days"], 3)
         return out
 
-    def _write_fixture_record(self, snap: str | None, result: dict) -> None:
-        """`fixture.json` in the run's folder: the reply, made or refused, with the session's stop, for whoever reads
-        it after the client that asked has gone (a run of hours outlives most). Never raises."""
+    def _write_fixture_record(self, snap: str | None, result: dict, name: str = "fixture.json") -> None:
+        """`fixture.json` (or `name`) in the run's folder: the reply, made or refused, with the session's stop, for
+        whoever reads it after the client that asked has gone (a run of hours outlives most). Never raises."""
         if not isinstance(snap, str) or not snap:
             return
         try:
             folder = self._paths.run_root / snap
             folder.mkdir(parents=True, exist_ok=True)
-            (folder / "fixture.json").write_text(_json.dumps(result, indent=1, default=str) + "\n", "utf-8")
+            (folder / name).write_text(_json.dumps(result, indent=1, default=str) + "\n", "utf-8")
         except (OSError, TypeError, ValueError):
             pass
+
+    # ---- the mods-off script_docs dump (#1907)
+
+    def script_docs(self, permission: str, version: str | None = None, out: str | None = None, force: bool = False,
+                    owner_confirmed_busy: bool = False) -> dict:
+        """Take the engine-doc dump of a vanilla bump with no mod loaded, then stop the session and keep the dump.
+
+        One game, launched by part 1 on `--playset none` (no mod in `content_load.json`, `enabledUGC` emptied) with
+        DOCS_ARGS and no save: a new game that starts by itself and ends at the last day of a short run. The console
+        is opened with MENU_PROBE_COMMAND (the usual probe crashes a game with no game state); once script has run
+        (GAME_STATE_MARK), `script_docs`, its arrival proved by the history; then the six logs of the game's
+        `docs/` waited for until each is rewritten (its size and time no longer those read just before the command,
+        and later) and has held still for DOCS_SETTLE_S; then copied into the run's folder (`script_docs/`) and
+        checked there (`script_docs.check`: every log present and not empty, the mod's marker absent from
+        `modifiers.log`); then the session's stop, which ends the game and restores the owner's files; then the
+        copy to `out` (`script_docs.plan`'s default `<engine_docs_root>/<version>/docs`). The owner's `docs/`
+        keeps the new dump: it is the game's output, not in the snapshot set, as when the owner takes one by hand.
+
+        Refused with nothing done: a second call, an overlay left (an earlier run is unfinished), no permission,
+        `version` not the installed game's (`version_mismatch`), `out` already there without `force`
+        (`out_exists`), not ending in the version (`out_version`) or inside the Modding-Digests clone
+        (`inside_digests`), and any held snapshot. Once begun, any failure stops the session before raising, the
+        stop's reply in `info["stop"]`, as `start` does: `no_game_state`, `stale_docs` (a log not rewritten within DOCS_WAIT_S),
+        `docs_unsettled` (still changing at the end of it), `changed_while_copied`, `missing`, `empty`,
+        `mod_loaded`, and the console's and the watch's errors (a game that crashed: `info["crashes"]` names the
+        crash folders that appeared after the launch); and after the stop, `out_exists` (it appeared meanwhile) or
+        `copy_failed`, with the staged copy left in the run's folder (`staged`).
+
+        The reply: `version`, `out`, `files` (each log's size and SHA-256), `checks`, `run_dir`, `snapshot`,
+        `game_docs_left` (the game's own `docs/`, which keeps the dump), `next` (the pin and, when an older dump is
+        under the root, the diff the runbook runs next), `previous`, and `stop`."""
+        if self._began or self._stopped is not None:
+            raise SessionError("already_started", "a session runs one game: stop it and start a new session")
+        if os.path.lexists(self._paths.overlay_dir):
+            raise SessionError("overlay_left", "%s is there already, left by an earlier run whose playset may still "
+                               "name it: finish that run, then `python3 -m game_qa remove-overlay`. Nothing was done"
+                               % self._paths.overlay_dir)
+        if not isinstance(permission, str) or not permission.strip():
+            raise SessionError("no_permission", "say where the go-ahead to launch came from")
+        if not isinstance(force, bool) or not isinstance(owner_confirmed_busy, bool):
+            raise SessionError("bad_argument", "force and owner_confirmed_busy are true or false")
+        try:
+            target = script_docs.plan(self._paths.game_version, version, out, force, self._paths.digests,
+                                      self._paths.engine_docs_root)
+        except script_docs.DocsRefused as e:
+            raise SessionError(e.code, e.detail, **e.info) from e
+        self._starting = True
+        try:
+            self._refuse_if_held()
+        except BaseException:
+            self._starting = self._abort = False
+            raise
+        self._began = True
+        self._permission = permission
+        try:
+            result = self._script_docs(permission, owner_confirmed_busy)
+            self._check_abort()
+        except BaseException as e:
+            self._starting = False
+            stopped = self.stop()
+            if not isinstance(e, Exception):
+                raise
+            if isinstance(e, script_docs.DocsRefused):
+                error = SessionError(e.code, e.detail, **e.info)
+            else:
+                error = e if isinstance(e, SessionError) else SessionError(_code_of(e), str(e))
+            error.info["stop"] = stopped
+            crashed = self._new_crashes()
+            if crashed:
+                error.info["crashes"] = crashed
+            self._write_fixture_record(self._snapshot, {"refused": error.code, "detail": str(error), **error.info},
+                                       DOCS_RECORD)
+            if error is e:
+                raise
+            raise error from e
+        finally:
+            self._starting = False
+        staged = Path(result.pop("staged"))
+        result["stop"] = stopped = self.stop()
+        try:
+            script_docs.install(staged, target, result["files"], force)
+        except script_docs.DocsRefused as e:
+            error = SessionError(e.code, e.detail, stop=stopped, **dict({"staged": str(staged)}, **e.info))
+            self._write_fixture_record(self._snapshot, {"refused": error.code, "detail": str(error), **error.info},
+                                       DOCS_RECORD)
+            raise error from e
+        old = script_docs.previous(Path(self._paths.engine_docs_root), self._paths.game_version, target)
+        result.update(out=str(target), next=script_docs.next_steps(target, old))
+        if old is not None:
+            result["previous"] = str(old)
+        self._write_fixture_record(self._snapshot, result, DOCS_RECORD)
+        return result
+
+    def _script_docs(self, permission: str, busy: bool) -> dict:
+        self._check_abort()
+        snap = self._take_snapshot(["snapshot"])
+        self._check_abort()
+        argv = ["launch", snap, "--permission", permission, "--playset", DOCS_PLAYSET]
+        if busy:
+            argv.append("--owner-confirmed-busy")
+        crashes = Path(self._paths.user_data) / CRASHES_FOLDER
+        self._crashes_before = _listing(crashes)
+        self._launch(snap, argv + ["--", *DOCS_ARGS])
+        self._console_up(snap, probe=MENU_PROBE_COMMAND)
+        self._await_game_state()
+        docs = Path(self._paths.user_data) / script_docs.DOCS_FOLDER
+        before = script_docs.stats(docs)
+        with self._step("script_docs", before={k: list(v) if v else None for k, v in before.items()}) as out:
+            # No answer is asked for: the six logs are the proof wanted. The command is typed after the probe, so
+            # the history shows it arrive even where the owner's history ends in it.
+            self._console.run(script_docs.COMMAND, reply=False)
+            written = self._await_docs(docs, before, out)
+            staged = self._report.dir / DOCS_STAGED
+            files = script_docs.stage(docs, staged, written)
+            out["files"] = files
+            checks = script_docs.check(staged)
+        self._record("script_docs_checked", outcome="ok", checks=checks)
+        return {"snapshot": snap, "version": self._paths.game_version, "files": files, "checks": checks,
+                "run_dir": str(self._report.dir), "staged": str(staged), "game_docs_left": str(docs)}
+
+    def _new_crashes(self) -> list[str]:
+        """The crash folders under the user data's `crashes/` that were not there just before the launch: the
+        run's game crashed (its `exception.txt` and copied logs are inside; scripts/analysis/crash_stack_strings.py
+        reads the dump). Empty when nothing was listed before the launch."""
+        if self._crashes_before is None:
+            return []
+        now = _listing(Path(self._paths.user_data) / CRASHES_FOLDER) or set()
+        return sorted(str(Path(self._paths.user_data) / CRASHES_FOLDER / name) for name in now - self._crashes_before)
+
+    def _await_game_state(self) -> None:
+        """Wait until the run's game has a game state, which `script_docs` needs: a debug.log line of script having
+        run (GAME_STATE_MARK), then DOCS_STATE_SETTLE_S more; refused `no_game_state` after DOCS_STATE_WAIT_S.
+        `watch` (and a stop asked meanwhile) is looked at between looks."""
+        deadline = self._clock() + DOCS_STATE_WAIT_S
+        with self._step("game_state") as out:
+            while True:
+                seen = next((line for line in self._new_lines() if GAME_STATE_MARK in line), None)
+                if seen is not None:
+                    out["line"] = seen[:300]
+                    self._sleep(DOCS_STATE_SETTLE_S)
+                    return
+                if self._clock() >= deadline:
+                    raise SessionError("no_game_state", "no line of script in debug.log within %g s of the console's "
+                                       "first answer: the hands-off game did not start, and `%s` needs one"
+                                       % (DOCS_STATE_WAIT_S, script_docs.COMMAND))
+                self._sleep(DOCS_POLL_S)
+                self._check_watch()
+                self._check_abort()
+
+    def _await_docs(self, docs: Path, before: dict, out: dict) -> dict:
+        """The six logs' (size, mtime_ns) once each is rewritten since `before` and all have held still for
+        DOCS_SETTLE_S, looked at every DOCS_POLL_S up to DOCS_WAIT_S; `watch` (and a stop asked meanwhile) is
+        looked at between looks, so a game that ended stops the wait."""
+        deadline = self._clock() + DOCS_WAIT_S
+        held: dict | None = None
+        since = 0.0
+        while True:
+            now = script_docs.stats(docs)
+            left = script_docs.unwritten(before, now)
+            if left:
+                held = None
+            elif now != held:
+                held, since = now, self._clock()
+            elif self._clock() - since >= DOCS_SETTLE_S:
+                out["written"] = {k: list(v) for k, v in now.items()}
+                return now
+            if self._clock() >= deadline:
+                if left:
+                    raise SessionError("stale_docs", "%s not rewritten within %g s of `%s`: the game wrote no "
+                                       "complete dump" % (", ".join(left), DOCS_WAIT_S, script_docs.COMMAND),
+                                       files=left)
+                raise SessionError("docs_unsettled", "the logs were still changing %g s after `%s`"
+                                   % (DOCS_WAIT_S, script_docs.COMMAND))
+            self._sleep(DOCS_POLL_S)
+            self._check_watch()
+            self._check_abort()
 
     def _prune(self, user: Path, in_use: Sequence[str] = ()) -> list[str]:
         """Trim the old fixtures, never one of `in_use` (file names): the save about to be loaded, and the
@@ -3515,10 +3740,20 @@ def _game_day(when: tuple[int, int, int]) -> int:
     return year * 365 + _DAYS_BEFORE[month - 1] + day
 
 
+def _listing(folder: Path) -> set[str] | None:
+    """The names in `folder` (empty if there is none), or None when it cannot be read."""
+    try:
+        return {entry.name for entry in os.scandir(folder)}
+    except FileNotFoundError:
+        return set()
+    except OSError:
+        return None
+
+
 def _code_of(e: BaseException) -> str:
     if isinstance(e, SessionError):
         return e.code
-    if isinstance(e, ConsoleError):
+    if isinstance(e, (ConsoleError, script_docs.DocsRefused)):
         return e.code
     if isinstance(e, DebuggerError):
         return "debugger"
