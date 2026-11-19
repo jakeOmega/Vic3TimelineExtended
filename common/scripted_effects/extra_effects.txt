@@ -616,6 +616,10 @@ nuclear_industrial_strike = {
 	kill_population_percent_in_state = {
 		percent = 0.1
 	}
+	# The city's buildings: a share destroyed, the rest taken into government
+	# ownership (nuclear_raze_effects.txt). After the deaths, as the tactical
+	# strike's damage is: a rebuilt building lays its staff off.
+	nuclear_strike_raze_city = yes
 	add_modifier = {
 		name = nuclear_strike_aftermath
 		days = short_modifier_time

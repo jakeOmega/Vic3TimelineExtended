@@ -63,6 +63,16 @@ industrial_nuke_succeeds_defender = {
 	color = bad
 }
 
+# A city strike destroyed or nationalized buildings our investors held shares in
+# (nd_raze_tell_investors, nuclear_raze_effects.txt). The texture is vanilla's
+# nationalization notice's.
+nd_raze_foreign_assets_lost = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/capitulate.dds"
+	notification_type = feed
+	color = bad
+}
+
 tactical_nuke_succeeds_attacker = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/military.dds"

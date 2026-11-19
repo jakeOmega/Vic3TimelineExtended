@@ -1,0 +1,65 @@
+﻿# ============================================================================
+# NUCLEAR STRIKES — the city's buildings (nuclear_raze_effects.txt)
+# ============================================================================
+
+# State scope: the share of a struck state's urban building levels a city
+# strike destroys, before a loose warhead's factor. The state's metropolitan
+# share (te_dg_mt, 0-100: the share of its urban people living in its largest
+# city, where the warhead falls), held between 10% and 80% (owner, 2026-11-19):
+# a state of market towns still loses a tenth, and one warhead never takes a
+# whole metropolis. Half where the share does not act: Demographics not on Full
+# (its effects act under Full only: te_demog_effects_run), or a state with too
+# few urban people to keep a share.
+nd_raze_share_base = {
+	value = 0.5
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			has_variable = te_dg_mt
+		}
+		value = var:te_dg_mt
+		divide = 100
+		min = 0.1
+		max = 0.8
+	}
+}
+
+# State scope: the share this strike destroys. A loose warhead's factor
+# (nd_raze_roll_terror_factor) scales it down.
+nd_raze_share_destroyed = {
+	value = nd_raze_share_base
+	if = {
+		limit = { has_variable = nd_raze_factor }
+		multiply = var:nd_raze_factor
+	}
+}
+
+# State scope: nd_raze_share_base as a whole percent, for the striker's tooltip
+# (industrial_nuke_succeeds_desc).
+nd_raze_share_shown = {
+	value = nd_raze_share_base
+	multiply = 100
+	round = yes
+}
+
+# State scope, in nd_raze_building: the building's levels times one less the
+# share destroyed, before rounding.
+nd_raze_left_raw_value = {
+	value = 1
+	subtract = var:nd_raze_share
+	multiply = var:nd_raze_level
+}
+
+# State scope, in nd_raze_building once var:nd_raze_left holds the levels left
+# rounded down: the chance in percent of keeping one more, the fraction dropped.
+nd_raze_round_up_chance = {
+	value = var:nd_raze_left_raw
+	subtract = var:nd_raze_left
+	multiply = 100
+}
+
+# Building scope, in nd_raze_tell_investors: the share of the building's levels
+# held by scope:nd_raze_investor and its investors.
+nd_raze_investor_share = {
+	value = "fraction_of_levels_owned_by_country(scope:nd_raze_investor)"
+}

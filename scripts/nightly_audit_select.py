@@ -102,6 +102,7 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/scripted_effects/te_region_area_generated.txt",
     "common/scripted_effects/te_demog_generated_effects.txt",
     "common/scripted_effects/te_demog_capital_generated.txt",
+    "common/scripted_effects/nuclear_raze_generated.txt",
     "common/script_values/te_demog_generated_values.txt",
     "common/static_modifiers/te_demog_line_modifiers_generated.txt",
     "common/script_values/te_demog_line_values_generated.txt",
