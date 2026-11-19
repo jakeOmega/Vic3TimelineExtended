@@ -527,6 +527,42 @@ Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders i
 
 1.15.1 hotfix, "Ports and railways": no country starts with a subsidized port or railway. `decentralized_law_baseline` OK again.
 
+## 1.15.2 hotfix (2026-11-19)
+
+What the 1.15.2 bump (`docs/audits/vanilla_1_15_2_migration.md`) leaves for the game. Any new 1.15.2 game will do
+unless a line names a save.
+
+- **Load.** As for 1.15.1: no `Unexpected token`, `Unknown modifier type` or `inject/replace to a non-existing
+  entry` line from a mod file, and no version warning for the mod. In particular no `Unexpected token` for
+  `regime_change_min_progressiveness_difference` in `extra_law_groups.txt`, and none for `affected_by_regime_change`
+  anywhere.
+- **Regime change carries the mod's law groups.** Win a Regime Change war (or a power bloc's forced regime change)
+  against a country whose Judiciary, Monetary Policy or Privacy Rights law sits 50 or more progressiveness from
+  yours: the target takes your law in that group, as on 1.15.1.
+- **Single-Party State with a mod party in government (the issue the record names).** Enact Single-Party State
+  with the Technocratic, Green or Populist Party in government. Note what `single_party_state.8` ("which party
+  dominates") offers: none of its options names a mod party, so with only mod parties in government it may show
+  no option at all.
+- **Companies.** An AI country with five levels of electrics industry forms Basic Electrics; a power bloc member
+  with five levels of construction sector forms the bloc's construction company. Vanilla's flavored companies now
+  need their home state incorporated: a country holding that state unincorporated can't found the company.
+- **First Aid, Field Hospitals, Medevac Helicopters** show 10%, 20% and 80% recovery (owner call 1 of the record).
+- **Official Nationality** (Russia): the primary culture's acceptance reads 100, as under the other citizenship
+  laws.
+- **Merged panels.** A broken GUI merge logs nothing, so open each:
+  - *States panel, a state's buildings*: the earnings figure still hides on a subsidized building (the mod's gate)
+    and sits where vanilla now puts it; the expansion-level text; the trade center's go-to button; a cultural
+    community's local acceptance difference.
+  - *Market panel*: the goods list's sort buttons (vanilla rebuilt them, with tooltips) and the empty imports and
+    exports boxes, beside the mod's Trade-tab charts, Climate and Reserve tabs and All Goods rows.
+  - *Formation panel and right-click on a sea region*: a fleet's naval mission summary, and the new menu that picks
+    a naval mission type; the mod's settings section as on 1.15.1.
+  - *Construction panel*: the supply ship decommission and retrofit buttons and their tooltips.
+  - *Power bloc panel*: the count of countries you can invite; principle slots 5 to 8 as before.
+  - *Military overview*: the mobilization widget's alignment; the Nuclear and Covert tabs.
+  - *Nation tab of a decentralized country*: the potential battalions figure (vanilla reads it from a new
+    function). *Build list*: the trade center's capacity column.
+
 ## Infamy ported to `country_infamy_value`, and the naturalization amendment (#387, #1384)
 
 | Check | Expect | If it fails |
