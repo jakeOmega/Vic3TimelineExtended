@@ -539,10 +539,17 @@ unless a line names a save.
 - **Regime change carries the mod's law groups.** Win a Regime Change war (or a power bloc's forced regime change)
   against a country whose Judiciary, Monetary Policy or Privacy Rights law sits 50 or more progressiveness from
   yours: the target takes your law in that group, as on 1.15.1.
-- **Single-Party State with a mod party in government (the issue the record names).** Enact Single-Party State
-  with the Technocratic, Green or Populist Party in government. Note what `single_party_state.8` ("which party
-  dominates") offers: none of its options names a mod party, so with only mod parties in government it may show
-  no option at all.
+- **Single-Party State with a mod party in government (#1908).** The mod's twin of `single_party_state.8`,
+  `te_single_party_state.1` ("The Sole Legal Party"), is sent when the enactment starts.
+  - *Only mod parties in government* (for instance the Technocratic Party alone): the event arrives the day the
+    enactment starts and offers that party; "One of the other parties" is not offered. Pick it. At the first
+    checkpoint that advances, is debated or succeeds, vanilla's "The Party-State" does not open. The law shows the
+    Technocratic Party-State amendment, a group's party join weight shows +1000 from it, and when the law passes the
+    Technocratic Party is the only legal party.
+  - *A mod party and a vanilla party in government*: the event offers the mod party and "One of the other parties".
+    Take the latter: vanilla's "The Party-State" opens at the first such checkpoint and offers the vanilla party.
+  - *With the console*: `event te_single_party_state.1` while enacting the law in either government gives the
+    same options.
 - **Companies.** An AI country with five levels of electrics industry forms Basic Electrics; a power bloc member
   with five levels of construction sector forms the bloc's construction company. Vanilla's flavored companies now
   need their home state incorporated: a country holding that state unincorporated can't found the company.

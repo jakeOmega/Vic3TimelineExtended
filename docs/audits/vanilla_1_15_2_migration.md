@@ -109,8 +109,11 @@ other § 4 generator came out unchanged.
    Food Standardization V's 0.1. None was changed.
 2. **The mod's parties under Single-Party State.** 1.15.2's dominant-party event offers vanilla's eleven parties
    only, the amendments and join weights exist for them only, and the event can't be `INJECT`ed. With only the
-   Technocratic, Green or Populist Party in government it may show no option at all. #1908 lays out three ways
-   to close it.
+   Technocratic, Green or Populist Party in government it may show no option at all. #1908 laid out three ways
+   to close it; the first was built after this bump: a twin event, `te_single_party_state.1`
+   (`events/te_single_party_state_events.txt`), offers the mod's parties when the enactment starts, so a choice
+   made there keeps vanilla's event closed, and leaves the choice to vanilla's event in a government that also
+   holds a vanilla party. Each mod party has vanilla's amendment, join weight term and availability gate.
 3. **Regime change thresholds for the mod's economy groups.** Vanilla imposes its economic system and trade policy
    at a 25 difference and labour associations at 75; the mod's six economy groups (Intellectual Property,
    Monetary Policy, Right to Information, Financial Regulation, Genetic Rights, Antitrust) keep the old 50.
