@@ -817,6 +817,12 @@ nuclear_program_display_state = {
 
 nuclear_industrial_strike_killed_population = {
 	value = state_population
+	# What the day's earlier strikes left (nd_strike_people_before).
+	if = {
+		limit = { has_variable = nd_strike_people_left }
+		value = var:nd_strike_people_left
+		max = state_population
+	}
 	multiply = 0.1
 	round = yes
 }
@@ -824,6 +830,12 @@ nuclear_industrial_strike_killed_population = {
 # A counterforce warhead (nd_counterforce_strike_damage): a quarter of a city's.
 nd_counterforce_strike_killed_population = {
 	value = state_population
+	# What the day's earlier strikes left (nd_strike_people_before).
+	if = {
+		limit = { has_variable = nd_strike_people_left }
+		value = var:nd_strike_people_left
+		max = state_population
+	}
 	multiply = 0.025
 	round = yes
 }

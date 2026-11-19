@@ -1727,16 +1727,16 @@ of millions to around 10¹⁵ came before 1917.
    quarters of `people` − `prev`. A sane state still tripping on sign 5 means the skip isn't enough: reopen #1500 (its other options were two
    censuses running, or the floor in the model). Six of its sane states had no surviving line, so this can happen.
 6. **First `why=7`: Ingria, 1977** (the owner's 1.15.2 USA game, 2026-11-19). `state=Sankt-Peterburg owner=RUS
-   people=196594 prev=3995797 provinces=30 mig=6985682 mb=10.000 cbr=839.64 cdr=6369.36 e0=42.46`. The census counted
-   3,995,846 people in its 1976 step and 197,774 in its 1977 one, with no province change and no new state in the save.
-   Read as the residual, the year booked some 10.8 million deaths and kills against a 4 million state, so the books
-   are wrong for that year whatever emptied it. Not found from the logs or the binary saves (which carry no pops):
-   Russia's East Slavic merge was complete by 1964, and no nuclear line names Russia's states. A candidate is the
-   mod's Violent Hostility yearly pulse (`violent_hostility_on_action`, Russia under `law_minority_rights_violent_hostility`
-   since 1945), whose worst outcome moves 80% of a low-acceptance culture out of the state and kills a tenth.
-   **To check in game**: Sankt-Peterburg's population, its pops by culture, and whether the births term runs it back up
-   from 200,000 in the 1978 census (its Census: Births line in the birth rate tooltip). Autosaves of 1977.7 to 1978.7:
-   `/mnt/d/vic3_triage_2026-11-19/saves/`.
+   people=196594 prev=3995797 provinces=30 mig=6985682 mb=10.000 cbr=839.64 cdr=6369.36 e0=42.46`. Russia's capital
+   took a 25-warhead Leadership salvo in 1977 (the owner). Each warhead booked a tenth of `state_population` as known
+   dead, but that figure doesn't fall until the next tick and the salvo lands in one effect, so all 25 booked a tenth
+   of 4 million, about 10 million in all, while the kills compounded to about 3.8 million. The census took the other
+   6 to 7 million for arrivals, and the year's rates pinned its births term at the ceiling. Fixed: the strikes book
+   from the day's running figure (`nd_strike_people_before`/`_after`, `extra_effects.txt`). **To check** (Full, a
+   salvo of several warheads on one state): the state's next census reads a net migration near 0, not millions, and
+   no `demog_runaway` line; `nuclear_weapon_events`' death figures fall warhead by warhead. Ingria itself keeps the bad
+   year in its books: watch whether its births term runs its people back up from 200,000 in the 1978 census.
+   Autosaves of 1977.7 to 1978.7: `/mnt/d/vic3_triage_2026-11-19/saves/`.
 
 ## W's lead: the census sets the pops past its aim (2026-11-07)
 
