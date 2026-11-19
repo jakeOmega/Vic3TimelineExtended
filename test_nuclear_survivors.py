@@ -265,8 +265,8 @@ class TestDecapitationScript(unittest.TestCase):
     def test_command_terms(self):
         bare = dict(stockpile=0, satellite_communications=False, mainframe=False)
         self.assertTrue(math.isclose(self.r(**bare), 1))
-        # Survivability / 40: +2 at the ceiling of 80.
-        self.assertTrue(math.isclose(self.r(**bare, survivability=80), 3))
+        # Survivability / 20: +4 at the ceiling of 80.
+        self.assertTrue(math.isclose(self.r(**bare, survivability=80), 5))
         # A Nuclear Command Center: +2 a staffed level, at most +6.
         self.assertTrue(math.isclose(self.r(**bare, command_center=1), 3))
         self.assertTrue(math.isclose(self.r(**bare, command_center=3), 7))
@@ -288,7 +288,7 @@ class TestDecapitationScript(unittest.TestCase):
         self.assertTrue(math.isclose(self.r("nd_redundancy_believed", **p), 2))
         # The world sees survivability and a Command Center, not reliability.
         seen = dict(p, survivability=40, command_center=1, reliability=90)
-        self.assertTrue(math.isclose(self.r("nd_redundancy_believed", **seen), 5))
+        self.assertTrue(math.isclose(self.r("nd_redundancy_believed", **seen), 6))
         self.assertTrue(math.isclose(self.r("nd_redundancy_believed", **seen),
                                      redundancy(10, False, False, 40, 1, reliability=None)))
 
@@ -299,20 +299,20 @@ class TestDecapitationScript(unittest.TestCase):
         colony = squash(strip_comments(read(ROOT / "common/script_values/sr_colony_module_values.txt")))
         self.assertIn("value = nd_stockpile divide = 10 add = 1 add = nd_redundancy_command", values)
         self.assertIn("value = var:nd_reliability subtract = 50 divide = 10", values)
-        self.assertIn("value = nd_survivability_or_zero divide = 40", values)
+        self.assertIn("value = nd_survivability_or_zero divide = 20", values)
         self.assertIn("sr_mod_bunker_redundancy_per_level = { value = 2 }", colony)
         self.assertIn("sr_mod_bunker_redundancy_max = { value = 6 }", colony)
         concept = loc_value("concept_command_redundancy_desc")
         for words in ("It is 1, and:", "Each ten warheads the country holds: #v +1#!",
                       "[GetTechnology('satellite_communications').GetName]: #v +2#!",
-                      "[GetTechnology('mainframe_computers').GetName]: #v +1#!", "Each 40 survivability: #v +1#!",
+                      "[GetTechnology('mainframe_computers').GetName]: #v +1#!", "Each 20 survivability: #v +1#!",
                       "#v +2#!, at most #v +6#!", "#v +1#! for each 10 above 50, #v −1#! for each 10 below",
                       "never below 1", "twice the redundancy gives three in four",
                       "25 warheads against a redundancy of 6 give 94%"):
             self.assertIn(words, concept)
         self.assertEqual(round(decapitation_chance(50, 25)), 75)
         self.assertEqual(round(decapitation_chance(25, 6)), 94)
-        self.assertIn("Each 40 adds #G +1#! [concept_command_redundancy]", loc_value("nd_w_survivability_tt"))
+        self.assertIn("Each 20 adds #G +1#! [concept_command_redundancy]", loc_value("nd_w_survivability_tt"))
         self.assertIn("#G +1#! for each 10 above 50, #R −1#! for each 10 below", loc_value("nd_w_reliability_tt"))
         for key in ("sr_mod_queue_bunker_tt", "je_space_race_widget_mod_bunker_tt"):
             self.assertIn("#v +2#! [concept_command_redundancy], at most #v +6#!", loc_value(key), key)

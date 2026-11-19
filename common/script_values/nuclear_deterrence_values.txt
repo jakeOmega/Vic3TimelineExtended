@@ -783,8 +783,8 @@ nd_redundancy = {
 
 # What the command adds to its redundancy whatever the arsenal (owner,
 # 2026-11-19): +2 with Satellite Communications, +1 with Mainframe Computers,
-# survivability ÷ 40 (a hardened force has hardened command posts too, at
-# most +2 at the ceiling of 80), and a colony's Nuclear Command Center
+# survivability ÷ 20 (a hardened force has hardened command posts too, at
+# most +4 at the ceiling of 80), and a colony's Nuclear Command Center
 # (sr_mod_bunker_redundancy, +2 a staffed level, at most +6). The world can
 # see all of these, so nd_redundancy_believed counts them too.
 nd_redundancy_command = {
@@ -799,7 +799,7 @@ nd_redundancy_command = {
 	}
 	add = {
 		value = nd_survivability_or_zero
-		divide = 40
+		divide = 20
 	}
 	# 0 without the space race.
 	add = sr_mod_bunker_redundancy

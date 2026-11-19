@@ -16,7 +16,7 @@ credit's share gets away first; L warheads on a Central Authorization victim's
 capital decapitate it with a chance of max(0, 1 - (R/L)^2) (owner, 2026-11-19;
 until then (L - R)/(L + R)). R, the victim's redundancy, is 1 + warheads / 10,
 +2 with Satellite Communications, +1 with Mainframe Computers, + survivability
-/ 40, +2 a staffed Nuclear Command Center level (at most +6) and + (command
+/ 20, +2 a staffed Nuclear Command Center level (at most +6) and + (command
 reliability - 50) / 10, never below 1.
 
 test_nuclear_survivors.py checks it against the script values, as
@@ -59,7 +59,7 @@ def redundancy(stockpile, satellite_communications=True, mainframe=True, surviva
     """A command's redundancy against a strike on its capital (nd_redundancy).
     `command_center` is staffed Nuclear Command Center levels; `reliability`
     None leaves the reliability term out, as nd_redundancy_believed does."""
-    r = 1 + stockpile / 10 + 2 * satellite_communications + mainframe + survivability / 40
+    r = 1 + stockpile / 10 + 2 * satellite_communications + mainframe + survivability / 20
     r += min(6, 2 * command_center)
     if reliability is not None:
         r += (reliability - 50) / 10
