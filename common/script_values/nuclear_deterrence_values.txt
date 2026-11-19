@@ -759,7 +759,7 @@ nd_launch_credit = {
 	min = 0
 }
 
-# How many warheads on the capital it takes to have any chance of
+# How many warheads on the command it takes to have any chance of
 # decapitating a country under Central Authorization (rework spec §6.3):
 # 1 + warheads ÷ 10, the command's own redundancy (nd_redundancy_command), and
 # (command reliability − 50) ÷ 10, so a well-run chain of command takes more
@@ -1024,7 +1024,7 @@ nd_survivors_ceiling_bare_r2_vs_saved = {
 # THE EXCHANGE (rework spec §6) — a salvo's counterforce and decapitation, in
 # the shape of the survivors values above. Victim scope, the attacker saved as
 # scope:nd_sv_enemy and holding the salvo's counts (nd_salvo_forces_landed,
-# nd_salvo_capital_landed, nd_salvo_victim_r: the victim's redundancy when the
+# nd_salvo_command_landed, nd_salvo_victim_r: the victim's redundancy when the
 # salvo began). scripts/analysis/nuclear_survivors.py mirrors them.
 # ----------------------------------------------------------------------------
 
@@ -1059,7 +1059,10 @@ nd_counterforce_saved_raw = {
 }
 
 # Percent chance that the warheads landed on a Central Authorization
-# country's capital cut its command: max(0, 1 − (R/L)²) (owner, 2026-11-19).
+# country's command cut it: max(0, 1 − (R/L)²) (owner, 2026-11-19). L counts
+# the capital's and, for a Leadership salvo, the command's other sites
+# (nd_salvo_hit; owner, 2026-11-19: half the warheads go elsewhere, and all
+# count).
 # Nothing below L = R, as before (owner call 7); above it the chance climbs
 # fast, so a full salvo of 25 on an arsenal the AI builds nearly always cuts
 # it. Until 2026-11-19 it was (L − R)/(L + R), at most 72% from 25 warheads
@@ -1068,14 +1071,14 @@ nd_decapitation_chance_value = {
 	value = 0
 	scope:nd_sv_enemy = {
 		if = {
-			limit = { var:nd_salvo_capital_landed > 0 }
+			limit = { var:nd_salvo_command_landed > 0 }
 			add = 1
 			subtract = {
 				value = var:nd_salvo_victim_r
-				divide = var:nd_salvo_capital_landed
+				divide = var:nd_salvo_command_landed
 				multiply = {
 					value = var:nd_salvo_victim_r
-					divide = var:nd_salvo_capital_landed
+					divide = var:nd_salvo_command_landed
 				}
 			}
 		}
@@ -1175,7 +1178,9 @@ nd_ai_salvo_spare_value = {
 }
 
 # The chance a warhead lands on the enemy's capital, 0.05 to 1:
-# nuclear_strike_success_chance's, read at the capital.
+# nuclear_strike_success_chance's, read at the capital. It stands for every
+# Leadership warhead, though half go to the command's other sites: the
+# capital is the best defended, so the AI errs toward a larger salvo.
 nd_ai_capital_hit_share = {
 	value = nuclear_strike_attack_rating
 	scope:nd_sv_enemy = {
@@ -1217,7 +1222,8 @@ nd_ai_salvo_mission_value = {
 				nd_believed_armed = yes
 			}
 			nd_ai_leadership_margin > 0
-			# Every Leadership warhead aims at the capital (plan 4a R6).
+			# The capital takes the first Leadership warhead and half the
+			# rest (nd_salvo_pick_target), so it must be in reach.
 			nd_leadership_in_reach = { ENEMY = scope:nd_sv_enemy }
 		}
 		value = 3
@@ -1235,7 +1241,7 @@ nd_ai_forces_need = {
 	ceiling = yes
 }
 
-# Leadership: enough to land twice the enemy's redundancy on its capital, a
+# Leadership: enough to land twice the enemy's redundancy on its command, a
 # chance of three in four (a third before 2026-11-19's curve), at the share of
 # warheads the capital lets through.
 nd_ai_leadership_need = {

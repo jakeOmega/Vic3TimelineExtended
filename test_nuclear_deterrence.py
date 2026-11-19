@@ -1497,6 +1497,37 @@ class TestSalvo(unittest.TestCase):
         aim = squash(block(self.effects, "nd_salvo_aim_here"))
         self.assertIn("save_scope_as = target_state set_variable = nd_salvo_target", aim)
 
+    def test_leadership_takes_the_capital_and_the_command_sites_by_turns(self):
+        # Owner, 2026-11-19: the capital takes the first warhead and every
+        # second one after it; the others go one each to the command's other
+        # sites, military targets first, and to the capital once none is left.
+        pick = squash(block(self.effects, "nd_salvo_pick_target"))
+        lead = pick[pick.index("var:nd_salvo_mission = 3"):pick.index("var:nd_salvo_mission = 2")]
+        self.assertIn("limit = { scope:nd_salvo_attacker = { has_variable = nd_salvo_lead_alt } }"
+                      " scope:nd_salvo_attacker = { remove_variable = nd_salvo_lead_alt }"
+                      " nd_salvo_pick_command_site = yes }"
+                      " else = { scope:nd_salvo_attacker = { set_variable = nd_salvo_lead_alt }"
+                      " capital = { nd_salvo_aim_here = yes } }", lead)
+        site = block(self.effects, "nd_salvo_pick_command_site")
+        branches = [squash(b) for b in re.split(r"\n\t(?:else_if|else) = \{", site)]
+        self.assertEqual(len(branches), 4)
+        for branch in branches[:3]:
+            self.assertEqual(branch.count("is_capital = no"), 2, branch)
+            self.assertEqual(branch.count("NOT = { has_variable = nd_salvo_target }"), 2, branch)
+            self.assertEqual(branch.count("nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker }"), 2, branch)
+            self.assertIn("order_by = nuclear_strike_target_score position = 0 nd_salvo_aim_here = yes", branch)
+        self.assertIn("nd_state_has_military_target = yes", branches[0])
+        self.assertIn("region ?= scope:nd_salvo_cap_region", branches[1])
+        self.assertIn("capital = { nd_salvo_aim_here = yes }", branches[3])
+
+    def test_every_leadership_hit_counts_toward_the_decapitation(self):
+        hit = squash(block(self.effects, "nd_salvo_hit"))
+        self.assertIn("OR = { scope:target_state = { is_capital = yes } var:nd_salvo_mission = 3 } }"
+                      " change_variable = { name = nd_salvo_command_landed add = 1 }", hit)
+        chance = squash(block(read(VALUES), "nd_decapitation_chance_value"))
+        self.assertIn("var:nd_salvo_command_landed > 0", chance)
+        self.assertNotIn("capital_landed", read(EFFECTS) + read(VALUES))
+
     def test_targets_fall_back_once_all_are_marked(self):
         # Last, once every state in reach is marked: the best state in reach
         # (rework spec §7; test_nuclear_reach.py).
@@ -1593,9 +1624,9 @@ class TestSalvo(unittest.TestCase):
 
     def test_salvo_working_variables_cleared(self):
         clear = block(self.effects, "nd_salvo_clear")
-        for name in ("nd_salvo_landed", "nd_salvo_forces_landed", "nd_salvo_capital_landed", "nd_salvo_fired",
+        for name in ("nd_salvo_landed", "nd_salvo_forces_landed", "nd_salvo_command_landed", "nd_salvo_fired",
                      "nd_salvo_victim_r", "nd_salvo_sqrt", "nd_salvo_world_rel", "nd_salvo_destroyed",
-                     "nd_salvo_count"):
+                     "nd_salvo_count", "nd_salvo_lead_alt"):
             self.assertIn(f"remove_variable = {name}", clear, name)
         # The panel's settings stay for the next salvo.
         for name in ("nd_salvo_mission", "nd_salvo_size"):
@@ -1672,14 +1703,14 @@ class TestSalvo(unittest.TestCase):
         # at; it is put back on one a warhead hit, the capital first.
         hit = squash(block(self.effects, "nd_salvo_hit"))
         self.assertIn("scope:target_state = { save_scope_as = nd_salvo_hit_state }", hit)
-        self.assertIn("is_capital = yes } } change_variable = { name = nd_salvo_capital_landed add = 1 }"
-                      " scope:target_state = { save_scope_as = nd_salvo_hit_capital }", hit)
+        self.assertIn("is_capital = yes } } scope:target_state = { save_scope_as = nd_salvo_hit_capital }", hit)
         restore = self.after.index("save_scope_as = target_state")
         self.assertLess(self.after.index("scope:nd_salvo_hit_capital"), restore)
         self.assertLess(restore, self.after.index("nd_salvo_record_use = yes"))
 
     def test_each_salvo_effect_defined_once(self):
-        for name in ("nd_order_salvo", "nd_salvo_warhead", "nd_salvo_pick_target", "nd_salvo_hit", "nd_salvo_aftermath",
+        for name in ("nd_order_salvo", "nd_salvo_warhead", "nd_salvo_pick_target", "nd_salvo_pick_command_site",
+                     "nd_salvo_hit", "nd_salvo_aftermath",
                      "nd_salvo_record_use", "nd_salvo_counterforce", "nd_salvo_fire_first", "nd_salvo_decapitation",
                      "nd_salvo_clear", "nd_salvo_targets_self_check"):
             self.assertEqual(len(re.findall(rf"(?m)^{name} = \{{", read(EFFECTS))), 1, name)
