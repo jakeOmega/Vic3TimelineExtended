@@ -2552,6 +2552,9 @@ nd_order_salvo = {
 			scope:nd_salvo_victim = {
 				save_scope_as = target_country
 				save_scope_as = nd_strike_victim
+				# The buildings the warheads raze, summed (nd_raze_city_run).
+				set_variable = { name = nd_raze_tally_lost value = 0 }
+				set_variable = { name = nd_raze_tally_nat value = 0 }
 			}
 			if = {
 				limit = { exists = scope:nd_salvo_victim.capital.region }
@@ -2784,6 +2787,8 @@ nd_salvo_aftermath = {
 			set_variable = { name = nd_salvo_seen_landed value = scope:nd_salvo_attacker.var:nd_salvo_landed days = 30 }
 			set_variable = { name = nd_salvo_seen_destroyed value = scope:nd_salvo_attacker.var:nd_salvo_destroyed days = 30 }
 			set_variable = { name = nd_salvo_seen_mission value = scope:nd_salvo_attacker.var:nd_salvo_mission days = 30 }
+			set_variable = { name = nd_salvo_seen_razed value = var:nd_raze_tally_lost days = 30 }
+			set_variable = { name = nd_salvo_seen_razed_nat value = var:nd_raze_tally_nat days = 30 }
 			trigger_event = { id = nuclear_weapon_events.1 popup = yes }
 			change_relations = {
 				country = scope:nd_salvo_attacker
@@ -3070,6 +3075,14 @@ nd_salvo_clear = {
 		every_scope_state = {
 			limit = { has_variable = nd_salvo_target }
 			remove_variable = nd_salvo_target
+		}
+		if = {
+			limit = { has_variable = nd_raze_tally_lost }
+			remove_variable = nd_raze_tally_lost
+		}
+		if = {
+			limit = { has_variable = nd_raze_tally_nat }
+			remove_variable = nd_raze_tally_nat
 		}
 	}
 	remove_variable = nd_salvo_count

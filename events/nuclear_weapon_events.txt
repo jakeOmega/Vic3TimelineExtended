@@ -3253,3 +3253,24 @@ nuclear_weapon_events.32 = {
 		nd_reach_refresh = yes
 	}
 }
+
+# The nuclear_raze_rebuild self-check's read (nd_raze_selfcheck_arm, nuclear_raze_effects.txt),
+# three days after a city strike rebuilt a building: on the country the check was armed for, which
+# holds the state in nd_raze_sc_state. No trigger: a delayed event whose trigger is false when it
+# is queued is dropped (scripting_best_practices.md), so its conditions are in immediate.
+nuclear_weapon_events.34 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = { has_variable = nd_raze_sc_state }
+			save_scope_as = nd_raze_sc_country
+			var:nd_raze_sc_state = {
+				save_scope_as = nd_raze_sc_site
+				nd_raze_selfcheck_read = yes
+			}
+			remove_variable = nd_raze_sc_state
+		}
+	}
+}

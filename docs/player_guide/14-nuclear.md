@@ -605,6 +605,21 @@ you cover costs neither. The action's confirmation, and a salvo's Launch Order,
 name the figures. A strike
 that fails costs 5 infamy.
 
+A strategic strike that lands also destroys part of the state's urban buildings:
+its industry, power plants, arts academies, tourism, ports, railways, highways,
+airports, networks, government administration and universities. Each loses the
+same share of its levels: the state's metropolitan share
+([the urban pattern](08-states.md#the-urban-pattern-and-a-planned-capital)),
+from 10% in a state of market towns to 80% in a metropolis, or half outside the
+Full Demographics setting. The strike action's confirmation gives the share. The struck
+country's government takes every level still standing in those buildings into
+state ownership, whoever held the shares before; foreign investors who held
+some are told, and a country under Laissez-Faire sells the buildings off again
+over time. Farms, mines, plantations, ranches, the urban center, financial
+districts, company headquarters and military buildings are spared. The strike's
+popup gives the levels destroyed and the levels taken over. A Forces salvo's
+warheads and a tactical strike destroy none of these buildings.
+
 A tactical strike that lands kills half the soldiers and officers in the state
 and a few civilians, and stops unit training there for a while. As a first use
 it costs infamy equal to four tenths of the taboo, and relations with every other
@@ -908,7 +923,9 @@ radicals, a war, or a movement at 50% activism or more. It is real with a
 lost warheads. Your security services seize it first with a 10% chance, plus 5%
 per Ministry of Intelligence and Security level and 15% with the Nuclear Weapons
 technology (at most 75%). Otherwise it destroys a city in one of your populous
-states. Once a device surfaces anywhere, no other can for a year.
+states, as a strategic strike does, though it destroys between a tenth and all
+of the share of buildings a missile's warhead would. Once a device surfaces
+anywhere, no other can for a year.
 
 ### Tracing a stolen warhead
 

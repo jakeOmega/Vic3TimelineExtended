@@ -160,6 +160,9 @@ nd_loose_surface = {
 			limit = { exists = scope:nd_loose_state }
 			set_variable = { name = nd_loose_state value = scope:nd_loose_state }
 			scope:nd_loose_state = {
+				# A device carried in by hand razes less than a missile's
+				# warhead (nuclear_raze_effects.txt).
+				nd_raze_roll_terror_factor = yes
 				nuclear_industrial_strike = yes
 			}
 			# The nuclear taboo: no government chose this, so it is not a use;

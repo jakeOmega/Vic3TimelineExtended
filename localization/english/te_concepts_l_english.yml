@@ -1675,7 +1675,7 @@
  independence_nationalization_modifier_desc:0 "The newly independent nation has seized all foreign-owned assets, boosting national [concept_prestige] but disrupting economic output and angering former investors."
  indian_union:0 "Indian Union"
  industrial_nuke_fails_desc:0 "Our [concept_nuclear_strike] fails."
- industrial_nuke_succeeds_desc:0 "Our [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] is successful."
+ industrial_nuke_succeeds_desc:0 "Our [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] is successful. It destroys about #v [SCOPE.sState('target_state').MakeScope.ScriptValue('nd_raze_share_shown')|0]%#! of the levels of the state's industry, power plants, transport and offices, and the government there takes every level still standing into state ownership."
  industry_accountability_modifier:0 "Industry Accountability"
  industry_accountability_modifier_desc:0 "New regulations hold polluting industries accountable, reducing output but improving environmental standards."
  industry_protected_modifier:0 "Industry Protected"

@@ -465,3 +465,120 @@ nd_taboo_last_use = {
 		localization_key = nd_taboo_last_use_never
 	}
 }
+
+# The buildings a city strike destroyed and took into state ownership
+# (nuclear_raze_effects.txt), appended to the strike events' descriptions; nothing
+# when it destroyed none. Inside a target ROOT is the object the entry was called
+# on and a saved scope is empty, so the keys read ROOT (scripting_best_practices.md,
+# "Keep customizable-localization target keys as plain text").
+#
+# State scope: the struck state's last razing. _victim speaks as its owner
+# (nuclear_weapon_events.1, .11, nuclear_loose.2), _attacker as the striker
+# (nuclear_weapon_events.2, .12).
+nd_raze_line_victim = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = nd_raze_lost
+			var:nd_raze_lost > 0
+			has_variable = nd_raze_nat
+			var:nd_raze_nat > 0
+		}
+		localization_key = nd_raze_line_victim_nat
+	}
+	text = {
+		trigger = {
+			has_variable = nd_raze_lost
+			var:nd_raze_lost > 0
+		}
+		localization_key = nd_raze_line_victim_lost
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+nd_raze_line_attacker = {
+	type = state
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = nd_raze_lost
+			var:nd_raze_lost > 0
+			has_variable = nd_raze_nat
+			var:nd_raze_nat > 0
+		}
+		localization_key = nd_raze_line_attacker_nat
+	}
+	text = {
+		trigger = {
+			has_variable = nd_raze_lost
+			var:nd_raze_lost > 0
+		}
+		localization_key = nd_raze_line_attacker_lost
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+# Country scope, the victim of a salvo: its sums for 30 days (nd_salvo_seen_razed,
+# nd_salvo_seen_razed_nat, set by nd_salvo_aftermath). _victim on the victim's own
+# event (nuclear_weapon_events.1), _attacker called on the victim from the
+# striker's (nuclear_weapon_events.2).
+nd_raze_salvo_line_victim = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = nd_salvo_seen_razed
+			var:nd_salvo_seen_razed > 0
+			has_variable = nd_salvo_seen_razed_nat
+			var:nd_salvo_seen_razed_nat > 0
+		}
+		localization_key = nd_raze_salvo_line_victim_nat
+	}
+	text = {
+		trigger = {
+			has_variable = nd_salvo_seen_razed
+			var:nd_salvo_seen_razed > 0
+		}
+		localization_key = nd_raze_salvo_line_victim_lost
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+nd_raze_salvo_line_attacker = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = nd_salvo_seen_razed
+			var:nd_salvo_seen_razed > 0
+			has_variable = nd_salvo_seen_razed_nat
+			var:nd_salvo_seen_razed_nat > 0
+		}
+		localization_key = nd_raze_salvo_line_attacker_nat
+	}
+	text = {
+		trigger = {
+			has_variable = nd_salvo_seen_razed
+			var:nd_salvo_seen_razed > 0
+		}
+		localization_key = nd_raze_salvo_line_attacker_lost
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
