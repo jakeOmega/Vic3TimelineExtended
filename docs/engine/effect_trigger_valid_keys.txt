@@ -1945,6 +1945,7 @@ company_valid_trigger
 complete_great_game_effect
 complete_objective_subgoal
 concentration_of_defensive_mobilized_battalions
+conclude_journal_entry
 conclusion_date
 conclusion_desc
 conditions
@@ -3931,6 +3932,7 @@ has_mp2_soundtrack_dlc_trigger
 has_name
 has_naval_mission_in_region
 has_naval_mission_with_invalid_area
+has_naval_mission_without_area
 has_negotiated
 has_objective
 has_ongoing_assimilation
@@ -4329,6 +4331,7 @@ is_busy
 is_byzantium_state_region
 is_capital
 is_character_alive
+is_character_interaction_available
 is_character_role
 is_character_role_type
 is_china_unification_pair

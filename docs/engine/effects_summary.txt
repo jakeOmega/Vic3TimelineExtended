@@ -1,4 +1,4 @@
-# Auto-generated from effects.log (engine docs 1.15.1). Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from effects.log (engine docs 1.15.2). Do not hand-edit. Run POST /reload after the engine regenerates the source.
 # Regional iterators (<any|every|random|ordered>_<type>_in_<geographic_region>) carry a fixed description: the engine dump prints unrelated script there, reshuffled on every dump.
 
 interest_group|abandon_revolution|Removes interest group from revolution
@@ -139,6 +139,7 @@ container|clear_tags|Removes all tags from the script container in scope.
 none|clear_variable_list|Empties the list
 none|clear_variable_map|Empties the map
 country|complete_objective_subgoal|Completes an objective subgoal **Value Type**: common/objective_subgoals
+country|conclude_journal_entry|Concludes the scoped country's journal entry of the given type with the regular outcome whose effect_header matches,
 state|convert_population|Changes X% of the different religion population to the specified religion.
 country|copy_laws|Copies the constitution of the target country scope Warning: This stops any current enactment.
 country|create_bidirectional_truce|Create a bidirectional truce between two countries
@@ -3542,7 +3543,7 @@ culture|remove_tradition_trait|Removes an existing tradition trait from the cult
 character|remove_trait|Remove a trait from a Character **Value Type**: common/character_traits
 none|remove_variable|Removes a variable
 diplomatic_play|remove_war_goal|Removes a war goal from a DP.
-country|renege_treaty_ports_with|Void all treaty-port treaties scoped country hosts for the target foreign power, returning the ports to the host
+country|renege_treaty_ports_with|Void all treaty-port treaties scoped country hosts for the target foreign power; the foreign power keeps the port provinces as ordinary territory
 character|replace_character_roles|Replaces existing role(s) from a character with another, works with either archetype or database role replace_character_role
 country,state|replace_decree|Replaces the from decree with the to decree in the scoped state, or in every state of the scoped country, keeping the original enactor
 state|reset_hub_names|Resets the names of all hubs in a scoped state

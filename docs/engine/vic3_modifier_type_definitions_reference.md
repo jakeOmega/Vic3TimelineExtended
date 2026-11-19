@@ -1,8 +1,8 @@
-<!-- Auto-generated from modifiers.log (engine docs 1.15.1). Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
+<!-- Auto-generated from modifiers.log (engine docs 1.15.2). Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
 
 # Victoria 3 — Modifier Type Definitions Reference
 
-*Auto-generated from 7295 modifier entries.*
+*Auto-generated from 7296 modifier entries.*
 
 ## Dynamic Patterns
 
@@ -1913,7 +1913,7 @@ _Cannon Artillery Offense_
 - `character_prominence_add` — **Prominence** — An increase or decrease to a Character’s Prominence.
 - `character_raid_supply_add` — **Admiral Raid Supply Chance** — The chance the Admiral’s Fleet has at raiding Fleets supply ships every quarter of a day
 
-### country (437)
+### country (438)
 
 - `country_acceptance_homeland_add` — **Acceptance from Homeland** — The amount of Acceptance a Pop is subject to from living in Homeland
 - `country_acceptance_no_shared_heritage_trait_add` — **Acceptance from no shared Heritage Traits** — The amount of Acceptance a Pop is subject to if their Culture does not share a Heritage Trait with (one of) their Country’s Primary Cultures
@@ -1978,6 +1978,7 @@ _Cannon Artillery Offense_
 - `country_bureaucracy_cost_add` — **bur! Bureaucracy Cost** — Adds a flat cost to the country's bur! Bureaucracy usage
 - `country_bureaucracy_investment_cost_factor_mult` — **bur! Bureaucracy Institution Cost Multiplier** — An increase or reduction to the Bureaucracy cost of bringing a Institution Investment to the citizens
 - `country_bureaucracy_mult` — **bur! Bureaucracy** — The amount of bur! Bureaucracy is modified up or down
+- `country_can_conscript_protected_subsistence_employment_bool` — **Conscription Centers ignore Protected Subsistence Employment** — Whether Conscription Centers can recruit from Subsistence Buildings even when their employment is protected
 - `country_can_form_construction_company_bool` — **Can form Construction type Companies** — Can form Construction type Companies
 - `country_can_found_cossack_host_bool` — **Can Establish Cossack Hosts** — Allows the establishment of a Cossack Host in States
 - `country_can_only_conscript_peasants_bool` — **Allows only Infantry Conscript Battalions** — Conscript Battalions can only consist of Infantry Military Unit Types, except Mechanized Infantry
@@ -2207,7 +2208,7 @@ _Cannon Artillery Offense_
 - `country_ship_type_destroyer_construction_efficiency_add`
 - `country_ship_type_dreadnought_construction_efficiency_add`
 - `country_ship_type_early_ironclad_construction_efficiency_add`
-- `country_ship_type_early_troop_ship_construction_efficiency_add` — **Early Troopship Construction Efficiency** — The efficiency of Early Troopship ship_construction! Ship Construction
+- `country_ship_type_early_troop_ship_construction_efficiency_add` — **Troopship Construction Efficiency** — The efficiency of Troopship ship_construction! Ship Construction
 - `country_ship_type_frigate_construction_efficiency_add`
 - `country_ship_type_iron_frigate_construction_efficiency_add`
 - `country_ship_type_light_cruiser_construction_efficiency_add` — **Light Cruiser Construction Efficiency** — The efficiency of Light Cruiser ship_construction! Ship Construction
@@ -2222,7 +2223,7 @@ _Cannon Artillery Offense_
 - `country_ship_type_supply_ship_construction_efficiency_add`
 - `country_ship_type_torpedo_boat_construction_efficiency_add`
 - `country_ship_type_torpedo_boat_destroyer_construction_efficiency_add`
-- `country_ship_type_troop_ship_construction_efficiency_add` — **Troopship Construction Efficiency** — The efficiency of Troopship ship_construction! Ship Construction
+- `country_ship_type_troop_ship_construction_efficiency_add` — **Iron Troopship Construction Efficiency** — The efficiency of Iron Troopship ship_construction! Ship Construction
 - `country_shudras_acceptance_max_add` — **Maximum Acceptance for the Shudras Social Class** — A threshold describing the Acceptance value that Pops in the Shudras Social Class won't be able to exceed
 - `country_shudras_cultural_acceptance_add` — **Cultural Acceptance for the Shudras Social Class** — A flat increase or decrease to cultural Acceptance for the Shudras Social Class
 - `country_shudras_cultural_acceptance_mult` — **Cultural Acceptance for the Shudras Social Class** — A percentage increase or decrease to cultural Acceptance for the Shudras Social Class
@@ -2768,7 +2769,7 @@ _Cannon Artillery Offense_
 - `unit_devastation_mult` — **Devastation** — How much Devastation Military Units inflict on the State Region a battle takes place in
 - `unit_experience_gain_add` — **Weekly Experience Gain for Armies** — How much Experience is gained by Armies each week so that they can increase their Veterancy Rank
 - `unit_experience_gain_mult` — **Weekly Experience Gain for Armies** — How much Experience is gained by Armies each week so that they can increase their Veterancy Rank
-- `unit_kill_rate_add` — **Kill Rate** — How effective a Military Unit is at ensuring their opponent's Casualties end up unable to come back to fight another day.
+- `unit_kill_rate_add` — **Kill Rate** — How effective a Military Unit is at killing its opponents.
 - `unit_morale_damage_mult` — **Morale Damage** — The amount of damage a Military Unit inflicts on its enemy's Morale
 - `unit_morale_loss_add` — **Morale Loss** — The amount of Morale a Military Unit loses during battle
 - `unit_morale_loss_mult` — **Morale Loss** — The amount of Morale a Military Unit loses during battle
@@ -2793,6 +2794,6 @@ _Cannon Artillery Offense_
 - `unit_offense_water_mult` — **Offense in Flat Terrain** — A Military Unit’s Offense in Flat Terrain
 - `unit_provinces_captured_mult` — **Provinces Captured** — Alters the number of Provinces captured when winning an advance
 - `unit_provinces_lost_mult` — **Provinces Lost** — Alters the number of Provinces lost when losing a defensive battle
-- `unit_recovery_rate_add` — **Recovery Rate** — The percentage of Casualties a Military Unit takes that survive, in some cases by becoming Dependents.
+- `unit_recovery_rate_add` — **Recovery Rate** — How effective a Military Unit is at protecting its soldiers.
 - `unit_supply_consumption_mult` — **Supply Consumption** — How many Goods it takes to maintain a Military Unit
 

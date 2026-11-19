@@ -1,9 +1,9 @@
-<!-- Auto-generated from triggers.log + effects.log (engine docs 1.15.1). Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
+<!-- Auto-generated from triggers.log + effects.log (engine docs 1.15.2). Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
 
 # Victoria 3 — Triggers & Effects Compressed Reference
 
-*Auto-generated from 2045 trigger entries and 3666 effect entries.*
-*99 iterator families, 964 standalone triggers, 403 standalone effects.*
+*Auto-generated from 2048 trigger entries and 3667 effect entries.*
+*99 iterator families, 967 standalone triggers, 404 standalone effects.*
 
 ## Reading Guide
 
@@ -82,7 +82,7 @@
 - `any/every/ordered/random_subject_or_below` → country — Any country below current in hierarchy
 - `any/every/ordered/random_valid_mass_migration_culture` → culture — Lists for cultures in the scoped country that are valid for mass migration
 
-### Triggers (350)
+### Triggers (352)
 
 - `additional_war_support_change` — Compares the additional war support change the scoped country has accumulated from scripted events in the target diplomatic play
 - `aggressive_diplomatic_plays_permitted` — True if country is independent or permitted to start their own Diplomatic Plays
@@ -115,6 +115,7 @@
 - `can_leave_power_bloc` — Checks if the country in scope can leave its current Power Bloc (returns false if country is not in a Power Bloc)
 - `can_lobbies_target` — Checks if target country is a valid target for lobbies in the scoped country → country
 - `can_own_autonomy_be_decreased` — Check if scoped country can have it's autonomy decreased
+- `can_regime_change` — Checks if the scoped country can enforce a regime change on the target country: the target has no recent regime change, an interest group in the scoped country's government is not marginalized in t... → country
 - `can_research` — True if a country can research an technology **Value Type**: common/technology/technologies
 - `can_send_diplomatic_action` — Checks if a diplomatic action is valid to send by scope country to target country
 - `can_start_play_against_overlord` — Checks if a subject can start a diplomatic play against its direct overlord, even while the overlord is at war: no war the overlord is in has a war goal targeting the subject, and none of the subje...
@@ -274,6 +275,7 @@
 - `is_ai` — True if country scope is controlled by an AI
 - `is_at_war` — Check if the country is at war
 - `is_banning_goods` — Check if a country is banning a good
+- `is_character_interaction_available` — Checks if a character interaction is available to the scoped country, meaning it is not on cooldown and its actor_capacity trigger passes. (scopes: country, character)
 - `is_coastal` — Check if a state borders a (non-impassable) sea region or if a country contains any such state. (scopes: country, state)
 - `is_considered_adjacent_due_to_wargoals` — Checks if the scoped country is considered adjacent to the target country by virtue of the scoped country having war goals that are adjacent to the target country in a committed diplomatic play → country
 - `is_construction_paused` — Check if construction in a state is paused.
@@ -435,7 +437,7 @@
 - `weeks_until_bankruptcy` — Compares how many weeks the country can sustain its current deficit before its debt reaches its credit limit
 - `would_accept_diplomatic_action` — Checks if a country would accept a diplomatic action proposed by another country if set, modify_acceptance will be added to their acceptance score, to allow for checking if they would accept with a...
 
-### Effects (125)
+### Effects (126)
 
 - `activate_law` — Activates a law for a country **Value Type**: common/laws → law_type
 - `activate_production_method` — Activates the named production method for buildings of a certain type in country/state (scopes: country, state)
@@ -480,6 +482,7 @@
 - `clear_ownership_transfer_fleet` — Clears the ownership transfer fleet in the scoped country, should be done after a series of set_ship_owner_multiple
 - `clear_scaled_debt` — Clears an amount of debt equal to the defined multiplier on target's max credit
 - `complete_objective_subgoal` — Completes an objective subgoal **Value Type**: common/objective_subgoals
+- `conclude_journal_entry` — Concludes the scoped country's journal entry of the given type with the regular outcome whose effect_header matches,
 - `copy_laws` — Copies the constitution of the target country scope Warning: This stops any current enactment. → country
 - `create_bidirectional_truce` — Create a bidirectional truce between two countries
 - `create_character` — Creates a character, any option can be omitted.
@@ -525,7 +528,7 @@
 - `remove_monopoly` — removes a monopoly in a country scope for a specific building: → building_type
 - `remove_primary_culture` — Removes a culture from the primary cultures of a country Where X is a culture scope → culture
 - `remove_taxed_goods` — Removes consumption taxes on a good from a country **Value Type**: common/goods → goods
-- `renege_treaty_ports_with` — Void all treaty-port treaties scoped country hosts for the target foreign power, returning the ports to the host → country
+- `renege_treaty_ports_with` — Void all treaty-port treaties scoped country hosts for the target foreign power; the foreign power keeps the port provinces as ordinary territory → country
 - `replace_decree` — Replaces the from decree with the to decree in the scoped state, or in every state of the scoped country, keeping the original enactor (scopes: country, state)
 - `seize_investment_pool` — Seize investment pool for the treasury and transfer all private construction queue elements to the government
 - `set_capital` — Set capital state in a country scope Where X is a state region **Value Type**: map_data/state_regions
@@ -1275,7 +1278,7 @@
 ---
 ## Military Formation
 
-### Triggers (15)
+### Triggers (16)
 
 - `formation_army_unit_type_fraction` — Checks that a formation has a certain percentage of a specific army unit type scope:example_formation
 - `formation_ship_type_fraction` — Checks that a formation has a certain fraction of a specific ship type
@@ -1283,6 +1286,7 @@
 - `has_mobilization_option` — Checks that a formation has a specific mobilization option → mobilization_option
 - `has_naval_mission_in_region` — Checks if a Fleet is running a specific naval mission covering the specified strategic region
 - `has_naval_mission_with_invalid_area` — Checks if a Fleet has a naval mission with an invalid area
+- `has_naval_mission_without_area` — Checks if a Fleet has a naval mission with no sea regions in its area
 - `has_ship_outside_max_port_distance` — Checks if a Fleet has any ship that is beyond its maximum distance to port
 - `is_army` — Checks if a military formation is Army
 - `is_doing_piracy_in_region` — Checks if a Fleet is doing piracy in the specified strategic region **Value Type**: common/strategic_regions → strategic_region

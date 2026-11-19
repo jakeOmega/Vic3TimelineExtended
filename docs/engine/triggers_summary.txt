@@ -1,4 +1,4 @@
-# Auto-generated from triggers.log (engine docs 1.15.1). Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from triggers.log (engine docs 1.15.2). Do not hand-edit. Run POST /reload after the engine regenerates the source.
 # Regional iterators (<any|every|random|ordered>_<type>_in_<geographic_region>) carry a fixed description: the engine dump prints unrelated script there, reshuffled on every dump.
 
 none|active_lens|Checks if the specified lens is open
@@ -1150,6 +1150,7 @@ country|can_lobbies_target|Checks if target country is a valid target for lobbie
 country|can_own_autonomy_be_decreased|Check if scoped country can have it's autonomy decreased
 company|can_potentially_produce_prestige_goods|Checks if scope company can potentially produce target prestige good type
 building|can_queue_building_levels|Checks if the building's owner could queue the provided number of additional levels without hitting a level or resource potential cap
+country|can_regime_change|Checks if the scoped country can enforce a regime change on the target country: the target has no recent regime change, an interest group in the sc...
 country|can_research|True if a country can research an technology **Value Type**: common/technology/technologies
 country|can_send_diplomatic_action|Checks if a diplomatic action is valid to send by scope country to target country
 country|can_start_play_against_overlord|Checks if a subject can start a diplomatic play against its direct overlord, even while the overlord is at war: no war the overlord is in has a war...
@@ -1382,6 +1383,7 @@ country,building,character,institution,interest_group,journal_entry,political_mo
 container|has_name|True if the script container in scope has a name
 military_formation|has_naval_mission_in_region|Checks if a Fleet is running a specific naval mission covering the specified strategic region
 military_formation|has_naval_mission_with_invalid_area|Checks if a Fleet has a naval mission with an invalid area
+military_formation|has_naval_mission_without_area|Checks if a Fleet has a naval mission with no sea regions in its area
 interest_group|has_negotiated|Checks whether the interest group has finished negotiation:
 country|has_objective|Checks if the scoped country has a certain objective type **Value Type**: common/objectives
 pop|has_ongoing_assimilation|Checks if the scoped pop has ongoing cultural assimilation
@@ -1516,6 +1518,7 @@ none|is_building_type_expanded|Checks if the CProductionMethodsPanelEntry for a 
 character|is_busy|Check if character is busy
 state|is_capital|Check if state is the capital of the
 character|is_character_alive|Checks if the scoped character is alive
+country,character|is_character_interaction_available|Checks if a character interaction is available to the scoped country, meaning it is not on cooldown and its actor_capacity trigger passes.
 character_role|is_character_role|Checks if the scoped character role is a specific role **Value Type**: common/character_roles
 character_role|is_character_role_type|Checks if the scoped character role is of a specific archetype
 civil_war|is_civil_war_type|Check if the scoped civil war is of a specific type

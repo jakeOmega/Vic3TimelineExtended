@@ -1,4 +1,4 @@
-# Auto-generated from modifiers.log (engine docs 1.15.1). Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from modifiers.log (engine docs 1.15.2). Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 battle|battle_casualties_mult|A bonus or penalty to the number of Casualties this side takes in Battle
 battle|battle_combat_width_mult|A bonus or penalty to the Terrain Combat Width for this side of the Battle
@@ -4472,6 +4472,7 @@ country|country_buryat_cultural_acceptance_add|A bonus or penalty to a specific 
 country|country_byelorussian_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_caddoan_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_cajun_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
+country|country_can_conscript_protected_subsistence_employment_bool|Whether Conscription Centers can recruit from Subsistence Buildings even when their employment is protected
 country|country_can_form_construction_company_bool|Can form Construction type Companies
 country|country_can_found_cossack_host_bool|Allows the establishment of a Cossack Host in States
 country|country_can_impose_same_lawgroup_army_model_in_power_bloc_bool|Allowed to Impose the same Law as their own in the Army Model group on other Bloc Members
@@ -5638,7 +5639,7 @@ country|country_ship_type_coastal_defense_ship_construction_efficiency_add|
 country|country_ship_type_destroyer_construction_efficiency_add|
 country|country_ship_type_dreadnought_construction_efficiency_add|
 country|country_ship_type_early_ironclad_construction_efficiency_add|
-country|country_ship_type_early_troop_ship_construction_efficiency_add|The efficiency of Early Troopship ship_construction! Ship Construction
+country|country_ship_type_early_troop_ship_construction_efficiency_add|The efficiency of Troopship ship_construction! Ship Construction
 country|country_ship_type_frigate_construction_efficiency_add|
 country|country_ship_type_iron_frigate_construction_efficiency_add|
 country|country_ship_type_light_cruiser_construction_efficiency_add|The efficiency of Light Cruiser ship_construction! Ship Construction
@@ -5653,7 +5654,7 @@ country|country_ship_type_super_dreadnought_construction_efficiency_add|
 country|country_ship_type_supply_ship_construction_efficiency_add|
 country|country_ship_type_torpedo_boat_construction_efficiency_add|
 country|country_ship_type_torpedo_boat_destroyer_construction_efficiency_add|
-country|country_ship_type_troop_ship_construction_efficiency_add|The efficiency of Troopship ship_construction! Ship Construction
+country|country_ship_type_troop_ship_construction_efficiency_add|The efficiency of Iron Troopship ship_construction! Ship Construction
 country|country_shona_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
 country|country_shopkeepers_pol_str_mult|An increase or decrease in the Political Strength of shopkeepers! Shopkeepers
 country|country_shopkeepers_voting_power_add|An increase or decrease to amount of Political Strength gained from the Votes of shopkeepers! Shopkeepers in Elections
@@ -7268,7 +7269,7 @@ unit|unit_defense_water_mult|A Military Unit’s Defense in Flat Terrain
 unit|unit_devastation_mult|How much Devastation Military Units inflict on the State Region a battle takes place in
 unit|unit_experience_gain_add|How much Experience is gained by Armies each week so that they can increase their Veterancy Rank
 unit|unit_experience_gain_mult|How much Experience is gained by Armies each week so that they can increase their Veterancy Rank
-unit|unit_kill_rate_add|How effective a Military Unit is at ensuring their opponent's Casualties end up unable to come back to fight another day.
+unit|unit_kill_rate_add|How effective a Military Unit is at killing its opponents.
 unit|unit_morale_damage_mult|The amount of damage a Military Unit inflicts on its enemy's Morale
 unit|unit_morale_loss_add|The amount of Morale a Military Unit loses during battle
 unit|unit_morale_loss_mult|The amount of Morale a Military Unit loses during battle
@@ -7293,5 +7294,5 @@ unit|unit_offense_water_add|A Military Unit’s Offense in Flat Terrain
 unit|unit_offense_water_mult|A Military Unit’s Offense in Flat Terrain
 unit|unit_provinces_captured_mult|Alters the number of Provinces captured when winning an advance
 unit|unit_provinces_lost_mult|Alters the number of Provinces lost when losing a defensive battle
-unit|unit_recovery_rate_add|The percentage of Casualties a Military Unit takes that survive, in some cases by becoming Dependents.
+unit|unit_recovery_rate_add|How effective a Military Unit is at protecting its soldiers.
 unit|unit_supply_consumption_mult|How many Goods it takes to maintain a Military Unit

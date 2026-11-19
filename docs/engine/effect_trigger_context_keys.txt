@@ -5,7 +5,7 @@
 # less every LHS keyword vanilla's common/ and events/ use in trigger context.
 # [trigger_only]: the mirror image, for effect context.
 # Regenerate on a vanilla bump: python3 effect_trigger_validity_audit.py bootstrap-context
-# Sizes: 4825 effect-only, 3046 trigger-only.
+# Sizes: 4826 effect-only, 3049 trigger-only.
 # Left out of [effect_only], used by vanilla in the other context: none
 # Left out of [trigger_only], used by vanilla in the other context: age, escalation, literacy_rate, lobby_formation_reason, strata
 [effect_only]
@@ -299,6 +299,7 @@ collapse_india_effect
 communist_agitator_election_scope_effect
 complete_great_game_effect
 complete_objective_subgoal
+conclude_journal_entry
 congo_river_expedition_location
 congress_poland_ai_approach_roll
 congress_poland_ai_refresh_russia_stance_effect
@@ -6117,6 +6118,7 @@ can_reach_target_country_to_protect
 can_reach_target_country_to_subjugate
 can_reach_target_state_to_coerce
 can_reach_target_state_to_conquer
+can_regime_change
 can_research
 can_send_diplomatic_action
 can_start_play_against_overlord
@@ -6703,6 +6705,7 @@ has_mp2_soundtrack_dlc_trigger
 has_name
 has_naval_mission_in_region
 has_naval_mission_with_invalid_area
+has_naval_mission_without_area
 has_negotiated
 has_objective
 has_ongoing_assimilation
@@ -6947,6 +6950,7 @@ is_busy
 is_byzantium_state_region
 is_capital
 is_character_alive
+is_character_interaction_available
 is_character_role
 is_character_role_type
 is_china_unification_pair
