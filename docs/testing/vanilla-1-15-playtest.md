@@ -540,14 +540,25 @@ unless a line names a save.
   against a country whose Judiciary, Monetary Policy or Privacy Rights law sits 50 or more progressiveness from
   yours: the target takes your law in that group, as on 1.15.1.
 - **Single-Party State with a mod party in government (#1908).** The mod's twin of `single_party_state.8`,
-  `te_single_party_state.1` ("The Sole Legal Party"), is sent when the enactment starts.
-  - *Only mod parties in government* (for instance the Technocratic Party alone): the event arrives the day the
+  `te_single_party_state.1` ("The Sole Legal Party"), opens as a window when the enactment starts, and is sent
+  monthly while it runs if the government changes.
+  - *Only mod parties in government* (for instance the Technocratic Party alone): the window opens the day the
     enactment starts and offers that party; "One of the other parties" is not offered. Pick it. At the first
     checkpoint that advances, is debated or succeeds, vanilla's "The Party-State" does not open. The law shows the
     Technocratic Party-State amendment, a group's party join weight shows +1000 from it, and when the law passes the
     Technocratic Party is the only legal party.
-  - *A mod party and a vanilla party in government*: the event offers the mod party and "One of the other parties".
-    Take the latter: vanilla's "The Party-State" opens at the first such checkpoint and offers the vanilla party.
+  - *A mod party and a vanilla party in government*: the window offers the mod party and "One of the other
+    parties". Take the latter: vanilla's "The Party-State" opens at the first such checkpoint and offers the
+    vanilla party, and the twin does not come back.
+  - *Mixed government, twin left unanswered* (needs a checkpoint inside the twin's three months, so a
+    law-enactment speed bonus such as Legislative Efficiency's): when "The Party-State" opens at the checkpoint, the twin
+    leaves the notification list within a day or so, so only one of the two can be answered.
+  - *Only mod parties in government, twin left unanswered past a checkpoint*: "The Party-State" opens too, with no
+    option it can offer. Note what the game shows (no button, a blank button, or nothing), and what happens when
+    it runs out. Answer the twin; the law should then name its party. This is the one case the twin cannot keep
+    vanilla's event from.
+  - *A mod party joining the government during the enactment* (with no choice made yet and no checkpoint that
+    fired vanilla's event): the twin arrives within a month.
   - *With the console*: `event te_single_party_state.1` while enacting the law in either government gives the
     same options.
 - **Companies.** An AI country with five levels of electrics industry forms Basic Electrics; a power bloc member

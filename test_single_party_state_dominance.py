@@ -109,6 +109,10 @@ class ModPartyPiecesTest(unittest.TestCase):
                 self.assertRegex(self.event, rf"save_scope_as = sps_{stem}_ig\b")
                 self.assertRegex(self.event, rf"save_scope_as = sps_{stem}_party\b")
                 self.assertRegex(self.event, rf"is_party_type = {party}\b")
+                # once in the option's trigger, once in the cancellation_trigger
+                self.assertEqual(
+                    len(re.findall(rf"te_sps_twin_option_valid = \{{ PARTY = {stem} \}}", self.event)), 2,
+                )
                 names = [
                     loc.get(key, "")
                     for key in re.findall(r"name = (te_single_party_state\.1\.\w+)", self.event)
@@ -174,13 +178,19 @@ class AmendmentTest(unittest.TestCase):
 
 
 class SendersTest(unittest.TestCase):
-    """Both senders mark the country before sending, the checkpoint sender
-    stays away once vanilla's variable is set or a vanilla party can be
-    picked, and the start sender clears a stale variable first."""
+    """The twin and vanilla's single_party_state.8 are both answered by setting
+    sps_dominant_party_ig_var, so one must never be answered after the other:
+    each sender marks the country before it sends; the start sender clears what
+    an earlier enactment left; a checkpoint that fires .8 with a vanilla party
+    to offer hands the choice to .8, which closes an open twin and stops the
+    monthly offers in a mixed government."""
+
+    SENDERS = ("te_sps_dominance_on_enactment_started", "te_sps_dominance_monthly")
 
     @classmethod
     def setUpClass(cls):
         cls.text = _strip_comments(_read(ON_ACTIONS))
+        cls.event = _strip_comments(_event_block(_read(EVENT_FILE), "te_single_party_state.1"))
 
     def _block(self, name):
         return "\n".join(field_lines(self.text, name))
@@ -188,6 +198,7 @@ class SendersTest(unittest.TestCase):
     def test_hooked_to_vanilla_on_actions(self):
         for on_action, handler in (
             ("on_law_enactment_started", "te_sps_dominance_on_enactment_started"),
+            ("on_monthly_pulse_country", "te_sps_dominance_monthly"),
             ("on_law_checkpoint_advance", "te_sps_dominance_on_checkpoint"),
             ("on_law_checkpoint_debate", "te_sps_dominance_on_checkpoint"),
             ("on_law_checkpoint_success", "te_sps_dominance_on_checkpoint"),
@@ -198,30 +209,58 @@ class SendersTest(unittest.TestCase):
                 self.assertNotRegex(block, r"\beffect = \{", "an effect block replaces vanilla's")
 
     def test_each_sender_marks_before_it_sends(self):
-        for handler in ("te_sps_dominance_on_enactment_started", "te_sps_dominance_on_checkpoint"):
+        for handler in self.SENDERS:
             block = self._block(handler)
             with self.subTest(handler=handler):
                 mark = block.find("name = te_sps_dominance_pending")
-                send = block.find("trigger_event = { id = te_single_party_state.1 }")
+                send = block.find("id = te_single_party_state.1")
                 self.assertGreaterEqual(mark, 0)
                 self.assertGreater(send, mark)
+                self.assertRegex(block, r"id = te_single_party_state\.1\s*popup = yes")
 
-    def test_start_sender_clears_the_stale_choice_first(self):
+    def test_only_the_senders_send(self):
+        self.assertEqual(self.text.count("id = te_single_party_state.1"), len(self.SENDERS))
+
+    def test_start_sender_clears_what_an_earlier_enactment_left(self):
         block = self._block("te_sps_dominance_on_enactment_started")
-        clear = block.find("remove_variable = sps_dominant_party_ig_var")
-        self.assertGreaterEqual(clear, 0)
-        self.assertGreater(block.find("trigger_event"), clear)
+        send = block.find("trigger_event")
+        for name in ("sps_dominant_party_ig_var", "te_sps_dominance_pending", "te_sps_left_to_vanilla"):
+            with self.subTest(variable=name):
+                clear = block.find(f"remove_variable = {name}")
+                self.assertGreaterEqual(clear, 0)
+                self.assertGreater(send, clear)
 
-    def test_checkpoint_sender_leaves_vanilla_choices_to_vanilla(self):
-        block = self._block("te_sps_dominance_on_checkpoint")
+    def test_monthly_sender_stays_away_from_a_choice_left_to_vanilla(self):
+        block = self._block("te_sps_dominance_monthly")
         for line in (
             "NOT = { has_variable = sps_dominant_party_ig_var }",
             "NOT = { has_variable = te_sps_dominance_pending }",
             "te_sps_mod_party_in_government = yes",
-            "te_sps_vanilla_party_in_government = no",
         ):
             with self.subTest(line=line):
                 self.assertIn(line, block)
+        self.assertRegex(
+            block,
+            r"OR = \{\s*te_sps_vanilla_party_in_government = no\s*"
+            r"NOT = \{ has_variable = te_sps_left_to_vanilla \}\s*\}",
+        )
+
+    def test_checkpoint_hands_the_choice_to_vanilla(self):
+        block = self._block("te_sps_dominance_on_checkpoint")
+        self.assertIn("NOT = { has_variable = sps_dominant_party_ig_var }", block)
+        self.assertIn("te_sps_vanilla_party_in_government = yes", block)
+        self.assertIn("set_variable = te_sps_left_to_vanilla", block)
+
+    def test_event_closes_once_the_choice_is_vanillas(self):
+        cancel = "\n".join(field_lines(self.event, "cancellation_trigger"))
+        self.assertIn("has_variable = sps_dominant_party_ig_var", cancel)
+        self.assertRegex(
+            cancel,
+            r"AND = \{\s*has_variable = te_sps_left_to_vanilla\s*"
+            r"te_sps_vanilla_party_in_government = yes\s*\}",
+        )
+        # the option that leaves the choice to vanilla's event says so the same way
+        self.assertRegex(self.event, r"set_variable = te_sps_left_to_vanilla")
 
 
 if __name__ == "__main__":

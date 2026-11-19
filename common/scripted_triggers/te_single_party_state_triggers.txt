@@ -1,6 +1,6 @@
 ﻿# Single-Party State's dominant party, for the mod's three parties (#1908).
 # Read by te_single_party_state.1 (events/te_single_party_state_events.txt) and
-# its two senders (common/on_actions/te_single_party_state_on_actions.txt).
+# its senders (common/on_actions/te_single_party_state_on_actions.txt).
 
 # Party scope. One of the parties the mod adds (common/parties/), which
 # vanilla's single_party_state.8 has no option for.
@@ -35,6 +35,23 @@ te_sps_vanilla_party_in_government = {
 		party ?= {
 			NOT = { is_party_type = revolutionary_party }
 			te_sps_is_mod_party = no
+			party_has_insurrectionary_member = no
+		}
+	}
+}
+
+# Country scope, inside te_single_party_state.1 only: its option for the mod's
+# party $PARTY$_party can be picked. The same test as single_party_state.8's
+# options: the party's largest group, saved in the event's immediate, and a
+# group of the party in government with no insurrectionary member. The event's
+# options and its cancellation_trigger both read it, so the event closes when
+# no option is left.
+te_sps_twin_option_valid = {
+	exists = scope:sps_$PARTY$_ig
+	any_interest_group = {
+		is_in_government = yes
+		party ?= {
+			is_party_type = $PARTY$_party
 			party_has_insurrectionary_member = no
 		}
 	}

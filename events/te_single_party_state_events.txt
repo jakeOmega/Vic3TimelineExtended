@@ -1,16 +1,19 @@
 ﻿namespace = te_single_party_state
 
 # Single-Party State's dominant party, for the mod's three parties (#1908).
-#   .1  sent when a Single-Party State enactment starts with a Green, Populist
-#       or Technocratic group in government, or at a checkpoint when only such
-#       groups govern (common/on_actions/te_single_party_state_on_actions.txt)
+#   .1  sent, as a popup, when a Single-Party State enactment starts with a
+#       Green, Populist or Technocratic group in government, and monthly while
+#       it runs (common/on_actions/te_single_party_state_on_actions.txt, which
+#       says when, and how the event and vanilla's never both take an answer)
 #
 # Vanilla 1.15.2's single_party_state.8 asks the same question for its eleven
 # parties; this event is its copy for the mod's three, and calls the same
 # set_sps_dominant_party_effect, so the law's on_activate, the dominance
 # amendments (common/amendments/te_sps_party_dominance.txt) and the parties'
 # join_weight terms work as they do for vanilla's parties. Its last option
-# leaves the choice to vanilla's event when a vanilla party governs as well.
+# leaves the choice to vanilla's event when a vanilla party governs as well,
+# and a checkpoint that fires vanilla's event with a vanilla party to offer
+# closes this one (te_sps_left_to_vanilla).
 
 # ======================================================================
 #  1 – The Party-State  (Single-Party State is being enacted)
@@ -34,21 +37,31 @@ te_single_party_state.1 = {
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
 	duration = 3
+	is_popup = yes
 
-	# Undelayed from both senders, which test te_sps_dominance_pending.
+	# Undelayed from the senders, which test te_sps_dominance_pending.
 	trigger = {
 		is_enacting_law = law_type:law_single_party_state
 		NOT = { has_variable = sps_dominant_party_ig_var }
 		te_sps_mod_party_in_government = yes
 	}
 
-	# The enactment ended, vanilla's event made the choice, or no mod party
-	# is left to choose (vanilla's event then has the choice at a checkpoint).
+	# The enactment ended; vanilla's event made the choice, or has it now
+	# (it fired at a checkpoint with a vanilla party to offer); or none of
+	# this event's options is left.
 	cancellation_trigger = {
 		OR = {
 			NOT = { is_enacting_law = law_type:law_single_party_state }
 			has_variable = sps_dominant_party_ig_var
-			te_sps_mod_party_in_government = no
+			AND = {
+				has_variable = te_sps_left_to_vanilla
+				te_sps_vanilla_party_in_government = yes
+			}
+			NOR = {
+				te_sps_twin_option_valid = { PARTY = green }
+				te_sps_twin_option_valid = { PARTY = populist }
+				te_sps_twin_option_valid = { PARTY = technocratic }
+			}
 		}
 	}
 
@@ -118,14 +131,7 @@ te_single_party_state.1 = {
 		name = te_single_party_state.1.a
 		default_option = yes
 		trigger = {
-			exists = scope:sps_green_ig
-			any_interest_group = {
-				is_in_government = yes
-				party ?= {
-					is_party_type = green_party
-					party_has_insurrectionary_member = no
-				}
-			}
+			te_sps_twin_option_valid = { PARTY = green }
 		}
 		show_as_unavailable = {
 			exists = scope:sps_green_ig
@@ -159,14 +165,7 @@ te_single_party_state.1 = {
 		name = te_single_party_state.1.b
 		default_option = yes
 		trigger = {
-			exists = scope:sps_populist_ig
-			any_interest_group = {
-				is_in_government = yes
-				party ?= {
-					is_party_type = populist_party
-					party_has_insurrectionary_member = no
-				}
-			}
+			te_sps_twin_option_valid = { PARTY = populist }
 		}
 		show_as_unavailable = {
 			exists = scope:sps_populist_ig
@@ -200,14 +199,7 @@ te_single_party_state.1 = {
 		name = te_single_party_state.1.c
 		default_option = yes
 		trigger = {
-			exists = scope:sps_technocratic_ig
-			any_interest_group = {
-				is_in_government = yes
-				party ?= {
-					is_party_type = technocratic_party
-					party_has_insurrectionary_member = no
-				}
-			}
+			te_sps_twin_option_valid = { PARTY = technocratic }
 		}
 		show_as_unavailable = {
 			exists = scope:sps_technocratic_ig
@@ -238,7 +230,6 @@ te_single_party_state.1 = {
 	}
 
 	option = { # a vanilla party: single_party_state.8 asks at a checkpoint
-		# REVIEWED 2026-11-19 (no_effect_option): leaving the choice to vanilla's event is the choice; the tooltip says when it comes
 		name = te_single_party_state.1.e
 		trigger = {
 			te_sps_vanilla_party_in_government = yes
@@ -259,5 +250,8 @@ te_single_party_state.1 = {
 			}
 		}
 		custom_tooltip = te_single_party_state_another_party_tt
+		hidden_effect = {
+			set_variable = te_sps_left_to_vanilla
+		}
 	}
 }
