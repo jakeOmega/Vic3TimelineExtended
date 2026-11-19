@@ -7,6 +7,7 @@ The mod's two files INJECT its identities into the default lists of the pieces o
 A new mod identity must be added there too.
 """
 
+import os
 import re
 import unittest
 from pathlib import Path
@@ -65,6 +66,9 @@ def by_identity(pieces):
     return out
 
 
+# A worktree made with the older sparse recipe has no gfx/map/ (docs/guides/git_workflow.md); CI's checkout has it,
+# so there a missing file still fails.
+@unittest.skipUnless(STATUES.is_dir() or "CI" in os.environ, "gfx/map/ not checked out (sparse worktree)")
 class TestStatueDefaults(unittest.TestCase):
     def test_every_mod_identity_has_a_hero_and_a_pedestal(self):
         heroes, pedestals = by_identity(defaults(HEROES)), by_identity(defaults(PEDESTALS))
