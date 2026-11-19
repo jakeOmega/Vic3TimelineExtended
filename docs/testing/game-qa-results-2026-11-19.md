@@ -81,6 +81,8 @@ reshuffles each time. The mod's marker `country_add_anticolonial_ideology_to_igs
 
 ## Not run live
 
-The refusals other than the two crashes' (`stale_docs`, `mod_loaded`, `out_exists`, `version_mismatch`,
-`no_game_state`, a copy that fails) are tested against the fakes only. So is the copy to the default folder
-`~/src/vic3-engine-docs/<version>/docs`: the live run wrote to a scratch folder with `--out`.
+The refusals other than the two crashes' (`stale_docs`, `mod_loaded`, `out_exists`, `out_not_a_dump`,
+`version_mismatch`, `no_game_state`, `crashed`, a copy that fails) are tested against the fakes only; `crashed` and
+`out_not_a_dump` came from the independent review of the PR, after these runs. So is the copy to the default folder
+`~/src/vic3-engine-docs/<version>/docs`: the live run wrote to a scratch folder with `--out`. And so is `--playset
+none`'s write: the owner's playset already enabled nothing, so the runs left `content_load.json` alone.
