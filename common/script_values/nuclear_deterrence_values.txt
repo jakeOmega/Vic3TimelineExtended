@@ -2334,6 +2334,17 @@ nd_display_strain = {
 	}
 }
 
+# The readiness we had ordered when our last crisis opened
+# (nd_record_pre_crisis_readiness), Routine where there is no record: the
+# level nuclear_crisis.6's stand-down returns to.
+nd_pre_crisis_readiness_value = {
+	value = 1
+	if = {
+		limit = { has_variable = nd_pre_crisis_readiness }
+		value = var:nd_pre_crisis_readiness
+	}
+}
+
 nd_display_credibility = {
 	value = nd_credibility_or_default
 }

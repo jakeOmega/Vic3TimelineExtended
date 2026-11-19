@@ -1949,7 +1949,10 @@ class TestOutcomeNotice(unittest.TestCase):
         self.assertRegex(body, r"NOT = \{ var:nd_crisis_outcome_now = 9 \}(\s*\})+\s*nd_crisis_record_pending = yes")
 
     def test_outcome_option_guards_pending(self):
-        body = option_body(self.events, "nuclear_crisis.6.a")
+        # Both options settle through one effect (the stand-down, 2026-11-19).
+        notice = block(self.events, "nuclear_crisis.6")
+        self.assertEqual(notice.count("nd_crisis_notice_settle = yes"), 2)
+        body = block(self.effects, "nd_crisis_notice_settle")
         self.assertIn("has_variable = nd_crisis_pending_outcome", body)
         self.assertIn("var:nd_crisis_pending_opponent ?= scope:nd_outcome_other", body)
         self.assertIn("nd_crisis_apply_outcome_side = yes", body)
@@ -2611,7 +2614,7 @@ class TestReviewFixes(unittest.TestCase):
         self.values = strip_comments(read(VALUES))
 
     def test_outcome_option_applies_when_the_opponent_is_gone(self):
-        body = option_body(self.events, "nuclear_crisis.6.a")
+        body = block(self.effects, "nd_crisis_notice_settle")
         self.assertIn("NOT = { exists = scope:nd_outcome_other }", body)
         self.assertIn("NOT = { exists = var:nd_crisis_pending_opponent }", body)
 

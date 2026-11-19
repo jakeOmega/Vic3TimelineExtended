@@ -1794,6 +1794,32 @@ nd_outcome_other_is_live = {
 	var:nd_crisis_pending_opponent ?= scope:nd_outcome_other
 }
 
+# Country scope (nuclear_crisis.6): no crisis under way and our forces
+# ordered above the readiness we had ordered when the last one opened
+# (nd_pre_crisis_readiness_value), so the outcome notice offers to stand them
+# back down. Where the outcome itself lowered readiness (both sides of an
+# agreed stand-down, the yielder of an alert dispute) it has done so by the
+# time the notice opens, so the offer covers only what is left: a side
+# Recessed before the crisis is offered Recessed again. The issuer who held
+# firm is not lowered by any outcome. A notice left open into a second crisis
+# loses the option.
+nd_crisis_notice_offers_standdown = {
+	nd_is_armed = yes
+	nd_in_crisis = no
+	has_variable = nd_readiness_target
+	var:nd_readiness_target > nd_pre_crisis_readiness_value
+}
+
+# Country scope (nd_remind_high_alert): High Alert ordered and reached, with
+# no crisis under way.
+nd_high_alert_quiet = {
+	nd_readiness_high_alert = yes
+	has_variable = nd_readiness_target
+	var:nd_readiness_target = 3
+	has_variable = nd_readiness_months
+	nd_in_crisis = no
+}
+
 # Owner scope: the issuer is defending rather than demanding — the target
 # initiated the play we dispute, or we are protecting a beneficiary. A
 # stand-down then achieves our objective and carries no audience cost (§6).
