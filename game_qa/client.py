@@ -3,13 +3,14 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
 
     python3 -m game_qa start --permission "asked 12:40" [--as TAG] [--save NAME] [--setup NAME=FILE]...
                        [--playset mod_only|current] [--switch-rule RULE=SETTING]... [--owner-confirmed-busy]
-                       [--game-arg FLAG]... [--add-mod WINDOWS_PATH]... [--fixture DATE]
+                       [--game-arg FLAG]... [--add-mod WINDOWS_PATH]... [--fixture DATE] [--unresponsive-s S]
                                              # a game on the deployed build, on the fixture or on NAME; a
                                              # switched rule is switched in a copy of the fixture, as of its
                                              # date (the reply's `rules` says what the save holds); a game
                                              # arg from session.GAME_ARGS; a variant mod folder, loaded after
                                              # the playset and before the overlay; --fixture loads the dated
-                                             # fixture of this build, never makes one
+                                             # fixture of this build, never makes one; S seconds of a window
+                                             # not responding before game_gone (10 by default, #1905)
     python3 -m game_qa fixture --until DATE [--dry-run] --permission "<the owner's words>" --max-hours H
                        [--playset mod_only|current] [--owner-confirmed-busy]
                                              # one unattended run that makes the fixture dated DATE, then stops:
@@ -80,7 +81,7 @@ from collections.abc import Callable, Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
-from game_qa import fixture, gate, overlay, restore, server, session, snapshot
+from game_qa import crash_reporter, fixture, gate, overlay, restore, server, session, snapshot
 from game_qa.helper import ProcessHelper, to_windows_path
 from game_qa.report import read_steps, utc_now
 from game_qa import profiling, selfchecks
@@ -430,11 +431,13 @@ def _profile_roots() -> list[tuple[str, Path]]:
 
 # ---- doctor
 
-def doctor(resolve: Callable[[str], Any], ping: Callable[[], str], sample_gpu: Callable[[], Sequence]) -> tuple[dict, int]:
+def doctor(resolve: Callable[[str], Any], ping: Callable[[], str], sample_gpu: Callable[[], Sequence],
+           reporters: Callable[[], Sequence] | None = None) -> tuple[dict, int]:
     """Is this machine ready for a session? One line per check, `<check>: ok…` or what is wrong. It starts no game,
     and changes nothing: `resolve` gives a path constant (raising when it is not set), `ping` asks the Windows
-    python.exe for its version through the helper, `sample_gpu` gives one nvidia-smi reading. Exit 0 only when
-    every check is ok."""
+    python.exe for its version through the helper, `sample_gpu` gives one nvidia-smi reading, `reporters` (when
+    given) lists the install's crash reporters that are up (#1905: one holds a crashed game's logs open). Exit 0
+    only when every check is ok."""
     lines: list[str] = []
     problems: list[str] = []
 
@@ -476,6 +479,18 @@ def doctor(resolve: Callable[[str], Any], ping: Callable[[], str], sample_gpu: C
     else:
         note("nvidia-smi", "no reading: nvidia-smi is missing or failed, so `launch` takes the GPU for busy until "
                            "the owner confirms (--owner-confirmed-busy)")
+
+    if reporters is not None:
+        try:
+            up = list(reporters())
+        except Exception as e:
+            note("crash reporter", "could not be listed: %s" % e)
+        else:
+            note("crash reporter", "up: %s. A crashed game's reporter holds its logs open, so a restore of `logs/` "
+                                   "fails until it is closed: `restore` and `recover` close the one a run's own "
+                                   "crash left, and any other is the owner's to close" % ", ".join(
+                                       "pid %d (started %s)" % (r.pid, r.created) for r in up) if up else None,
+                 "ok (none)")
 
     backups = paths.get("game_qa_backup_path")
     note("backup root", _backup_root_problem(backups) if backups is not None else "game_qa_backup_path is not set")
@@ -802,6 +817,8 @@ def cmd_start(args) -> tuple[dict, int]:
         body["add_mods"] = list(args.add_mod)
     if args.fixture is not None:
         body["fixture_date"] = args.fixture
+    if args.unresponsive_s is not None:
+        body["unresponsive_s"] = args.unresponsive_s
     return start_session(_backup_root(), body, spawn_server)
 
 
@@ -980,7 +997,16 @@ def cmd_profile_summary(args) -> tuple[dict, int]:
 
 
 def cmd_doctor(args) -> tuple[dict, int]:
-    return doctor(_resolve, _ping_windows_python, lambda: gate.sample_gpu(n=1))
+    return doctor(_resolve, _ping_windows_python, lambda: gate.sample_gpu(n=1), _install_reporters)
+
+
+def _install_reporters() -> list:
+    """The crash reporters of this install that are up (`crash_reporter.this_installs`); none when it has no
+    reporter to start."""
+    exe = _resolve("base_game_path") / crash_reporter.REPORTER_EXE
+    if not exe.is_file():
+        return []
+    return crash_reporter.this_installs(crash_reporter.list_reporters(), gate.windows_path(exe))
 
 
 def cmd_remove_overlay(args) -> tuple[dict, int]:
@@ -1017,6 +1043,10 @@ def add_verbs(sub) -> None:
     p.add_argument("--game-arg", action="append", default=[], metavar="FLAG",
                    help="add one of %s to the game's arguments (repeatable). Write it without its dash, or as "
                         "--game-arg=-FLAG. The fixture's own run never gets it" % ", ".join(session.GAME_ARGS))
+    p.add_argument("--unresponsive-s", type=float, metavar="S",
+                   help="how long the game's window may not respond before a verb calls the game gone (game_gone), "
+                        "for every verb of the session: %g s by default, up to %g. For a late save whose ticks freeze "
+                        "the window longer (#1905)" % (session.UNRESPONSIVE_S, session.MAX_UNRESPONSIVE_S))
     p.add_argument("--add-mod", action="append", default=[], metavar="WINDOWS_PATH",
                    help="a variant mod folder (a Windows drive path outside the user-data folder, holding "
                         ".metadata/metadata.json), loaded after the run's playset and before the overlay, for an A/B "

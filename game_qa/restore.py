@@ -495,31 +495,48 @@ def _stage(source: Path, entry: Entry, target: Path) -> Path:
 
 
 def _put_back(
-    backup_root: Path, snap: Snapshot, names: Sequence[str], user_data: Path, seen: dict[str, _Signature]
-) -> tuple[list[str], str | None]:
-    """Put `names` back; return the ones done and, if it stopped early, the file that had changed.
+    backup_root: Path, snap: Snapshot, names: Sequence[str], user_data: Path, seen: dict[str, _Signature],
+    removes: Sequence[str] = (),
+) -> tuple[list[str], list[str], str | None]:
+    """Put `names` back and remove `removes`; return the ones put back, the ones removed and, if it stopped early,
+    the file that had changed.
 
     Stages every file first, so that a bad store file stops the restore before the folder is touched; then
-    renames each over its target, so that an interrupted restore never leaves a half-written file. Just
-    before each rename the target is looked at again: if it is not as `compare` saw it, the restore stops.
+    renames each over its target, so that an interrupted restore never leaves a half-written file, and then
+    removes. The files outside `logs/` go first, put back and then removed, and the logs last (#1905): a log
+    another program holds open (a crashed game's crash reporter) refuses its rename with PermissionError, and by
+    then the owner's saves and settings are back. Just before each change the target is looked at again: if it is
+    not as `compare` saw it, the restore stops.
     """
     staged: list[tuple[str, Path, Path]] = []
     done: list[str] = []
+    removed: list[str] = []
     try:
         for rel in names:
             target = user_data / rel
             entry = snap.files[rel]
             staged.append((rel, _stage(_store_blob(backup_root, entry.sha256), entry, target), target))
-        for rel, temp, target in staged:
-            if _signature(target) != seen[rel]:
-                return done, rel
-            os.replace(temp, target)
-            done.append(rel)
+        for logs in (False, True):
+            for rel, temp, target in staged:
+                if _in_logs(rel) is not logs:
+                    continue
+                if _signature(target) != seen[rel]:
+                    return done, removed, rel
+                os.replace(temp, target)
+                done.append(rel)
+            gone, changed = _remove([rel for rel in removes if _in_logs(rel) is logs], user_data, seen)
+            removed += gone
+            if changed is not None:
+                return done, removed, changed
     finally:
         for _, temp, _ in staged:
             with contextlib.suppress(FileNotFoundError):
                 os.unlink(temp)
-    return done, None
+    return done, removed, None
+
+
+def _in_logs(rel: str) -> bool:
+    return rel.startswith("logs/")
 
 
 def _remove(names: Sequence[str], user_data: Path, seen: dict[str, _Signature]) -> tuple[list[str], str | None]:
@@ -633,6 +650,7 @@ def restore(
     now: datetime | None = None,
     logs: bool = True,
     saves: bool = True,
+    before_changes: Callable[[], None] | None = None,
 ) -> Outcome:
     """Put `user_data` back as `snap` found it, or hold.
 
@@ -647,7 +665,8 @@ def restore(
 
     Otherwise: clears the leftover temp files of a killed restore; copies the live `logs/*` to `run_logs_dir`
     (by default `<snapshot folder>/run_logs`); copies the changed and missing files back from the store with
-    their recorded times; removes the files the run added or created; puts the recorded time back on the files
+    their recorded times; removes the files the run added or created (`logs/` last in both, so that a log another
+    program holds open stops the restore with everything else back: `_put_back`); puts the recorded time back on the files
     the run wrote again with the same bytes (`_retouched`; listed as `retimed`, in the Outcome and, when there
     are some, in the journal entry); records `restored` with the names.
 
@@ -671,7 +690,10 @@ def restore(
     the wrong size or damaged. The store is checked before the first change. `now` stamps the journal entry.
     With `logs` False, `logs/` is left alone entirely: nothing is copied out, put back or removed there. With
     `saves` False the owner's own saves are not looked at (the self-test restores into an empty folder, and a run
-    that never recorded a start launched nothing a session could have driven).
+    that never recorded a start launched nothing a session could have driven). `before_changes` is called once
+    every hold before the changes has been decided and the store checked, right before the first change (the
+    command line closes the run's crash reporter there, #1905): never for a run that holds before it changes
+    anything, or one whose store is missing a file.
     """
     user_data = Path(user_data)
     if other_game_running:
@@ -694,12 +716,11 @@ def restore(
     to_remove = sorted([*diff.added_in_set, *diff.created])
     backup_root = _backup_root(snap)
     _check_store(backup_root, snap, to_restore)
+    if before_changes is not None:
+        before_changes()
     if logs:
         _copy_logs_out(snap, user_data, Path(run_logs_dir) if run_logs_dir is not None else snap.dir / RUN_LOGS_NAME)
-    restored, changed_file = _put_back(backup_root, snap, to_restore, user_data, seen)
-    removed: list[str] = []
-    if changed_file is None:
-        removed, changed_file = _remove(to_remove, user_data, seen)
+    restored, removed, changed_file = _put_back(backup_root, snap, to_restore, user_data, seen, to_remove)
     if changed_file is not None:
         return _hold(snap, "modified_during_restore", now, found, files=[changed_file], restored=restored,
                      removed=removed)

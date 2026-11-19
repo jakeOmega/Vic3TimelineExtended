@@ -25,7 +25,7 @@ from pathlib import Path
 from unittest import mock
 
 from game_qa import __main__ as cli
-from game_qa import client, fakes, gate, overlay, profiling, server, session, snapshot
+from game_qa import client, crash_reporter, fakes, gate, overlay, profiling, server, session, snapshot
 from game_qa import fixture as fixture_mod
 from game_qa.console import ConsoleError, Reply
 from game_qa.dap import DebuggerError
@@ -62,11 +62,12 @@ class FakeSession:
             raise self.raises[verb]
 
     def start(self, permission, as_tag=None, setups=None, save=None, playset="mod_only", owner_confirmed_busy=False,
-              switch_rules=None, game_args=None, add_mods=None, fixture_date=None):
+              switch_rules=None, game_args=None, add_mods=None, fixture_date=None, unresponsive_s=None):
         self._call("start", permission, as_tag, setups, save, playset, owner_confirmed_busy)
         self.switch_rules = switch_rules
         self.game_args, self.add_mods = game_args, add_mods
         self.fixture_date = fixture_date
+        self.unresponsive_s = unresponsive_s
         return {"snapshot": SNAP, "pid": 7, "country": as_tag, "run_dir": "/backups/runs/" + SNAP}
 
     def make_fixture(self, permission, until, playset="mod_only", owner_confirmed_busy=False, max_hours=None):
@@ -1062,6 +1063,18 @@ class FixtureVerbTest(ServerTestCase):
         self.assertEqual(code, 0, reply)
         self.assertEqual(fake.fixture_date, "1900")
 
+    def test_start_passes_the_unresponsive_limit_on_and_leaves_it_out_by_default(self):
+        for argv, expected in (((), None), (("--unresponsive-s", "120"), 120.0)):
+            with self.subTest(argv=argv):
+                fake = FakeSession()
+                spawn = ThreadSpawner(lambda: fake)
+                with mock.patch.object(client, "spawn_server", spawn):
+                    reply, code = self.run_cli("start", "--permission", PERMISSION, *argv)
+                self.threads.extend(h.thread for h in spawn.handles)
+                self.assertEqual(code, 0, reply)
+                self.assertEqual(fake.unresponsive_s, expected)
+                self.assertEqual(self.run_cli("stop")[1], 0)
+
 
 # A server in a child process, so that it can be killed or signalled. Its double's `start` builds the overlay and
 # runs `snapshot` and `launch` for real (in-process, `gate` patched: the "game" is a record, nothing starts).
@@ -1485,6 +1498,31 @@ class DoctorTest(ServerTestCase):
         self.assertNotIn("replaces it", problems)              # `start` refuses a left overlay; it never replaces it
         self.assertEqual(len(reply["checks"]), 9)
         self.assertEqual((tree(self.user), tree(self.backups)), before)          # it changed nothing
+
+    def test_doctor_names_a_crash_reporter_that_is_up(self):
+        # #1905: a crashed game's reporter holds its logs open, so a restore of `logs/` would fail.
+        up = [crash_reporter.Reporter(7000, "2026-11-19T09:30:16.1234567Z", 4242, "C:\\x\\CrashReporter.exe")]
+        reply, code = client.doctor(self.resolve, ping=lambda: "3.11.9", sample_gpu=lambda: IDLE[:1],
+                                    reporters=lambda: up)
+        self.assertEqual(code, 2)
+        self.assertEqual(len(reply["problems"]), 1)
+        self.assertIn("crash reporter: up: pid 7000 (started 2026-11-19T09:30:16.1234567Z)", reply["problems"][0])
+        reply, code = client.doctor(self.resolve, ping=lambda: "3.11.9", sample_gpu=lambda: IDLE[:1],
+                                    reporters=lambda: [])
+        self.assertEqual(code, 0, reply)
+        self.assertIn("crash reporter: ok (none)", reply["checks"])
+
+        def unlisted():
+            raise gate.GateError("could not list crash reporter processes")
+        reply, code = client.doctor(self.resolve, ping=lambda: "3.11.9", sample_gpu=lambda: IDLE[:1],
+                                    reporters=unlisted)
+        self.assertEqual(code, 2)
+        self.assertIn("could not be listed", reply["problems"][0])
+
+    def test_doctors_reporter_look_is_skipped_on_an_install_without_one(self):
+        with mock.patch.object(client, "_resolve", self.resolve), \
+                mock.patch.object(crash_reporter, "list_reporters", side_effect=AssertionError("listed")):
+            self.assertEqual(client._install_reporters(), [])
 
     def test_doctor_says_when_a_path_is_not_set(self):
         self.paths["base_game_path"] = RuntimeError("base_game_path is not configured")
