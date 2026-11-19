@@ -200,8 +200,12 @@ te_ni_nuclear_tab_sgui = {
 
 # ---------------------------------------------------------------------------
 # Covert Warfare: Military panel (gui/panel_military.gui, the fifth slot),
-# je_covert_warfare. The entry is active once a country holds one operation
-# slot more than its rank grants, and stays active (can_deactivate = no).
+# je_covert_warfare. The entry is active once the setting's gate is met
+# (covert_warfare_entry_unlocked, covert_warfare_triggers.txt): a named source
+# of an operation slot beyond the rank's, Mainframe Computers, Computer
+# Networks, Cyber Warfare, Quantum Computing or the Ministry of Intelligence
+# and Security's law (covert_warfare_slot_source), or under the early unlock
+# Central Archives too. It stays active (can_deactivate = no).
 # ---------------------------------------------------------------------------
 te_military_covert_tab_sgui = {
 	scope = country

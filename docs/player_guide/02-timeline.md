@@ -91,18 +91,20 @@ Manufacturing, Electric Vehicles, Internet of Things, Reusable Rocketry,
 Hypersonic Weapons, Cyber Warfare, Universal Basic Income and Mental Health
 Awareness. Cislunar Infrastructure opens the Space Program's Solar Colonization
 method, and with it colonies on the Moon after a Moon Landing, and In-Situ
-Resource Utilization the Extraplanetary Base.
+Resource Utilization the Extraplanetary Base. Carbon Capture and Storage
+unlocks the Carbon Conversion Works, whose Direct Air Capture takes CO₂ out of
+the atmosphere.
 
 Era 11 is the near future. Modern Material Science unlocks the Advanced Material
 Fabricator, Abyssal Plain Mining the Deep-Sea Mine, Asteroid Mining the
 Extraplanetary Base's Asteroid Mine method, Fusion Power the Fusion Plant, and
 Advanced Fission a second, more productive base method for the Nuclear Plant.
-Genetic Engineering unlocks the Carbon Conversion Works and Integrated Biorefinery, Lab-Grown Food
-the Cultured Meat Plant and Cultured Produce Facility (which can culture tobacco
-leaf too), and Synthetic Biology
-adds bioengineered production methods such as Designed Crops. Brain-Computer
-Interfaces and Human Augmentation bring augmentation laws. Era 11 also brings
-the AI that works on its own: AI Agents (the Automated Bureaucracy law and
+Genetic Engineering unlocks the Integrated Biorefinery and the Carbon
+Conversion Works' Synthetic Coal method, Lab-Grown Food the Cultured Meat Plant
+and Cultured Produce Facility (which can culture tobacco leaf too), and
+Synthetic Biology adds bioengineered production methods such as Designed Crops.
+Brain-Computer Interfaces and Human Augmentation bring augmentation laws.
+Era 11 also brings the AI that works on its own: AI Agents (the Automated Bureaucracy law and
 Fully Automated Content Creation), Self-Driving Laboratories (the University's
 AI Assisted Research), Humanoid Robotics (Robotic Service Providers and
 Neuromorphic Computing) and Autonomous Weapons (Robotic Soldiers). Artificial
