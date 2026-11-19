@@ -25,6 +25,9 @@ removes the folder (spec § 5.2, Review Focus 1).
     fixture    instead of `start`: one unattended run that makes a dated fixture (`Session.make_fixture`, #1602),
                then the session's stop, whatever happened; the server then ends as after `stop`. It may run for
                hours, and nothing else is answered meanwhile (`status` included: a client sees `no_answer`)
+    script-docs
+               instead of `start`: the mods-off `script_docs` dump of a vanilla bump (`Session.script_docs`,
+               #1907), then the session's stop, whatever happened; the server then ends as after `stop`
     stop       the session's stop. The server answers with its reply, then exits, unless the stop can be run again
                to effect (`final_stop`: a restore refused for a reason waiting can clear, a game left up that is
                known by pid and start time): then it serves on, and `stop` again runs the stop again
@@ -81,6 +84,7 @@ MAX_BODY = 1 << 20                      # a request's JSON: setup scripts are th
 START_ARGS = ("permission", "as_tag", "setups", "save", "playset", "owner_confirmed_busy", "switch_rules",
               "game_args", "add_mods", "fixture_date")
 FIXTURE_ARGS = ("permission", "until", "playset", "owner_confirmed_busy", "max_hours")
+SCRIPT_DOCS_ARGS = ("permission", "version", "out", "force", "owner_confirmed_busy")
 
 
 class ServerError(Exception):
@@ -268,6 +272,8 @@ class SessionServer:
             return self._start(body)
         if verb == "fixture":
             return self._fixture(body)
+        if verb == "script-docs":
+            return self._script_docs(body)
         if verb == "stop":
             reply = self._stop_reply = self._stop_session()
             self._done = final_stop(reply)
@@ -277,7 +283,7 @@ class SessionServer:
         run = self._verbs.get(verb)
         if run is None:
             return {"refused": "unknown_verb", "detail": "%r is not a verb of the session server; it has %s" % (
-                verb, ", ".join(sorted(["start", "fixture", "stop", "status", *self._verbs])))}, 2
+                verb, ", ".join(sorted(["start", "fixture", "script-docs", "stop", "status", *self._verbs])))}, 2
         try:
             return run(body)
         except _BadBody as e:
@@ -309,17 +315,25 @@ class SessionServer:
     def _fixture(self, body: dict) -> tuple[dict, int]:
         """`make_fixture`, once per server and only instead of `start`; the session is stopped after it either
         way, and the server ends as after a final stop."""
+        return self._one_run(body, "fixture", FIXTURE_ARGS, ("permission", "until"), self._session.make_fixture)
+
+    def _script_docs(self, body: dict) -> tuple[dict, int]:
+        """`Session.script_docs`, as `fixture` is run: once per server, instead of `start`, stopped after."""
+        return self._one_run(body, "script-docs", SCRIPT_DOCS_ARGS, ("permission",), self._session.script_docs)
+
+    def _one_run(self, body: dict, verb: str, names: tuple[str, ...], required: tuple[str, ...],
+                 run: Callable[..., dict]) -> tuple[dict, int]:
         if self._start_posted:
             return {"refused": "session_running", "detail": "this server's session has had its start: one server "
                                                             "holds one session, for one game"}, 2
         self._start_posted = True
         code = 0
         try:
-            unknown = sorted(set(body) - set(FIXTURE_ARGS))
-            if unknown or "permission" not in body or "until" not in body:
-                raise _BadBody("fixture takes %s (permission and until required), not %s"
-                               % (", ".join(FIXTURE_ARGS), unknown))
-            out = self._session.make_fixture(**{k: body[k] for k in FIXTURE_ARGS if k in body})
+            unknown = sorted(set(body) - set(names))
+            if unknown or any(name not in body for name in required):
+                raise _BadBody("%s takes %s (%s required), not %s"
+                               % (verb, ", ".join(names), " and ".join(required), unknown))
+            out = run(**{k: body[k] for k in names if k in body})
         except Exception as e:
             out = {"refused": "bad_argument", "detail": str(e)} if isinstance(e, _BadBody) else refusal(e)
             code = 2

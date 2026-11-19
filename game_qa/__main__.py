@@ -1,7 +1,7 @@
 """Command line of the in-game QA harness, part 1: protecting the owner's files.
 
     python3 -m game_qa snapshot [--save NAME]...           # with no game running
-    python3 -m game_qa launch <id> --permission "asked 12:40" [--playset current|mod_only]
+    python3 -m game_qa launch <id> --permission "asked 12:40" [--playset current|mod_only|none]
                        [--add-mod WINDOWS_PATH]... -- -debug_mode -loadsave=NAME
                                                            # the gate's checks, the run's playset, then start
                                                            # the game and record its start: the only way to
@@ -78,11 +78,15 @@ LOCK_BREAK_NAME = ".lock.break"
 LOCK_STALE_S = 15 * 60.0
 # The one spelling of the end date probed against the game, matched whole: -run_until=1836.2.10.
 _END_DATE_ARG = re.compile(r"-run_until=[0-9]{1,4}\.[0-9]{1,2}\.[0-9]{1,2}")
-# The playset a direct start of the game loads; the launcher writes it. `launch --playset mod_only` and `--add-mod`
-# rewrite it for the run (UTF-8 without a BOM, indent 2: the form a live session proved the game reads,
-# 2026-11-10). It is in the snapshot set, so `restore` puts the owner's back.
+# The playset a direct start of the game loads; the launcher writes it. `launch --playset mod_only`, `--playset none`
+# and `--add-mod` rewrite it for the run (UTF-8 without a BOM, indent 2: the form a live session proved the game
+# reads, 2026-11-10). It is in the snapshot set, so `restore` puts the owner's back.
 PLAYSET_FILE = "content_load.json"
-PLAYSET_MODES = ("current", "mod_only")
+# current: the owner's mods; mod_only: only this mod's deployed folder; none: no mod at all, for the mods-off
+# `script_docs` dump of a vanilla bump (#1907, `game_qa script-docs`).
+PLAYSET_MODES = ("current", "mod_only", "none")
+# The playset's other list of mods: `none` empties it too (the launcher's name; what it holds is not verified).
+UGC_KEY = "enabledUGC"
 # An --add-mod path: a drive path (`C:\…`) or a UNC path (`\\server\…`), as the launcher writes them.
 _WINDOWS_PATH = addmod.WINDOWS_PATH
 _SHA256_HEX = re.compile(r"[0-9a-f]{64}")
@@ -374,7 +378,8 @@ def cmd_launch(args) -> tuple[dict, int]:
     PowerShell could not read is recorded as "unknown" and never looked up later: a process found by its pid
     alone could be another game that took the pid.
 
-    The run's playset: with `--playset mod_only` or an `--add-mod`, `content_load.json` is rewritten for the run
+    The run's playset: with `--playset mod_only`, `--playset none` or an `--add-mod`, `content_load.json` is
+    rewritten for the run
     after the claim and before the start (`_plan_playset`, `_write_playset`); with neither it is not touched.
     Everything that can refuse is decided before the claim, from the file the stale check has just matched
     against the snapshot. After the claim the `playset` entry (mode, enabled paths, and the SHA-256 of the bytes
@@ -386,7 +391,7 @@ def cmd_launch(args) -> tuple[dict, int]:
     user, backups = _paths()
     snap = _find(backups, args.id)
     game_args = list(args.game_args)
-    playset_wanted = args.playset == "mod_only" or bool(args.add_mod)
+    playset_wanted = args.playset in ("mod_only", "none") or bool(args.add_mod)
     playset = None
     try:
         _launchable(snap)
@@ -689,7 +694,8 @@ def _check_playset_present(snap: snapshot.Snapshot, user: Path) -> None:
                                         ("the folder", (user / PLAYSET_FILE).is_file())) if not present]
     if where:
         raise _Refused("playset_unwritable", f"{PLAYSET_FILE}, the playset a direct start loads, is missing from "
-                                             f"{' and '.join(where)}: --playset mod_only and --add-mod rewrite "
+                                             f"{' and '.join(where)}: --playset mod_only, --playset none and "
+                                             "--add-mod rewrite "
                                              "the owner's playset and never make one. Nothing was written. The "
                                              "launcher writes the file when it starts the game")
 
@@ -697,8 +703,9 @@ def _check_playset_present(snap: snapshot.Snapshot, user: Path) -> None:
 def _plan_playset(snap: snapshot.Snapshot, user: Path, mode: str, add_mods: list[str],
                   this_mod: str | None) -> _Playset:
     """The run's playset, from the owner's `content_load.json`: their enabled mods (with `mod_only`, only the
-    entries for this mod's deployed folder, `this_mod`), then each of `add_mods` not among them yet, in order;
-    every other key, and every entry kept, as it was. Folders are matched by `_folder_key`. Raises _Refused,
+    entries for this mod's deployed folder, `this_mod`; with `none`, none of them, and `enabledUGC` emptied too when
+    it is a list), then each of `add_mods` not among them yet, in order; every other key, and every entry kept, as
+    it was. Folders are matched by `_folder_key`. Raises _Refused,
     having written nothing: `stale_snapshot` when the file's bytes are not the snapshot's (the stale check has
     just matched them, but the owner's launcher writes this file); `playset_unwritable` when it cannot be read
     as a playset; `mod_not_in_playset` for `mod_only` when no entry is this mod's."""
@@ -727,15 +734,20 @@ def _plan_playset(snap: snapshot.Snapshot, user: Path, mode: str, add_mods: list
                                                  f"at its deployed folder, {this_mod} (mod_deploy_target): enable it "
                                                  "in the launcher, or check mod_deploy_target. Nothing was written",
                            enabled=[m["path"] for m in mods])
+    elif mode == "none":
+        kept = []
     else:
         kept = list(mods)
     for added in add_mods:
         if all(_folder_key(m["path"]) != _folder_key(added) for m in kept):
             kept.append({"path": added})
     enabled = [m["path"] for m in kept]
-    if kept == mods:
+    empty_ugc = mode == "none" and isinstance(data.get(UGC_KEY), list) and data[UGC_KEY] != []
+    if kept == mods and not empty_ugc:
         return _Playset(mode, enabled, None)
     data["enabledMods"] = kept
+    if empty_ugc:
+        data[UGC_KEY] = []
     try:
         return _Playset(mode, enabled, json.dumps(data, indent=2, ensure_ascii=False).encode("utf-8"))
     except Exception as exc:    # a lone surrogate the owner's file spelled as an escape; nesting too deep to write
@@ -1366,7 +1378,8 @@ def main(argv=None) -> int:
 
     p = sub.add_parser("launch", help="the gate's checks, then start the game for a snapshot's run and record it",
                        description="Everything after `--` is passed to victoria3.exe as it is; nothing is added. "
-                                   f"--playset mod_only and --add-mod rewrite {PLAYSET_FILE} for the run; "
+                                   f"--playset mod_only, --playset none and --add-mod rewrite {PLAYSET_FILE} "
+                                   "for the run; "
                                    "`restore` puts the owner's back.")
     p.add_argument("id")
     p.add_argument("--permission", required=True,
@@ -1375,7 +1388,8 @@ def main(argv=None) -> int:
                    help="the owner was asked about the busy GPU and said to go ahead")
     p.add_argument("--playset", choices=PLAYSET_MODES, default="current",
                    help="current (the default): the mods the owner has enabled; mod_only: only this mod's "
-                        "deployed folder (mod_deploy_target)")
+                        "deployed folder (mod_deploy_target); none: no mod (and an empty enabledUGC), for a "
+                        "vanilla run such as `script-docs`")
     p.add_argument("--add-mod", action="append", default=[], metavar="WINDOWS_PATH",
                    help="a mod folder to enable for the run as well, as Windows names it (repeatable)")
     p.add_argument("--long-run", metavar="TEXT",
