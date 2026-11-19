@@ -1903,6 +1903,7 @@ te_demog_k_rate_total_floor = { value = -1 }
 te_demog_k_rate_bare_min = { value = 80 }
 te_demog_k_rate_guard_people = { value = 500000000 }
 te_demog_k_rate_guard_e0 = { value = 5 }
+te_demog_k_rate_guard_kills_share = { value = 0.33333 }
 te_demog_k_rate_births_ceiling = { value = 10 }
 te_demog_k_crowding_pull_max = { value = 5 }
 te_demog_k_natural_fertility_floor = { value = 0.2 }

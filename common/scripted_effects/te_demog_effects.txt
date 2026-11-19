@@ -446,6 +446,8 @@ te_demog_state_census = {
 		limit = { te_demog_cohorts_run = yes }
 		# the state's provinces now (te_demog_territory_values.txt), stored as te_dg_provinces after the census
 		set_local_variable = { name = te_dg_prov value = te_demog_state_provinces }
+		# the fourth guard's share is this census's alone: none until a census a year on reads its kills (below)
+		set_local_variable = { name = te_dg_kill_share value = 0 }
 		# No census yet: seed. te_demog_set_scale writes te_dg_year and te_dg_raw
 		# together, so the branches below never read a missing variable.
 		if = {
@@ -466,6 +468,14 @@ te_demog_state_census = {
 		# merge or a split; in the owner's 2057 game it fired only on migration. The
 		# limits compare a local and literals, never state_population with an inline
 		# block (#830, #833; scripting_best_practices.md).
+		# Known kills are not a move: a census a year on whose window holds known kills
+		# of a third or more of its people (the census's fourth guard,
+		# te_demog_census_kills_out_of_range; 2026-11-19) seeds again in place of its
+		# step, at the people left. The step would count the year's births and deaths
+		# from the people before the kills and divide them over the survivors, and leave
+		# M's next target, the scales and the ring's newest cohort poisoned for the years
+		# after (Sankt-Peterburg, 1977). The refresh then clears the terms for this year
+		# (te_dg_rate_guard 4), and the next step starts from the seed.
 		else = {
 			set_local_variable = {
 				name = te_dg_gap
@@ -474,6 +484,11 @@ te_demog_state_census = {
 			# a change in the state's provinces since the last census writes a TE_INFO line, and changes no number
 			# (te_debug_demog_effects.txt): does the engine merge or split states in a game?
 			te_debug_demog_province_change = yes
+			# the step's window's known kills over its people, for the fourth guard (local te_dg_kill_share)
+			if = {
+				limit = { local_var:te_dg_gap = 1 }
+				te_demog_kill_share_store = yes
+			}
 			if = {
 				limit = {
 					OR = {
@@ -483,6 +498,7 @@ te_demog_state_census = {
 							state_population > 0
 						}
 						has_variable = te_dg_reseed
+						te_demog_census_kills_out_of_range = yes
 					}
 				}
 				te_demog_seed = yes
@@ -1603,6 +1619,27 @@ te_demog_note_kills = {
 			set_variable = { name = te_dg_kills_in value = 0 }
 		}
 		change_variable = { name = te_dg_kills_in add = $VALUE$ }
+	}
+}
+
+# THIS = a state at a census a year on (te_demog_state_census, before it seeds or steps): the known kills the step's
+# window holds (te_dg_kills_in, every kill te_demog_note_kills noted since the last count, Internal Resettlement's
+# transit dead among them) over the people at that count (te_dg_pop_last), into the local te_dg_kill_share for the
+# census's fourth guard (te_demog_census_kills_out_of_range, owner 2026-11-19), which te_demog_rates_refresh reads
+# straight after the census in the same effect. A local, not a variable: it holds for this census only, and the census
+# sets it 0 first, so a seed or a second pulse in a year reads none; it stays 0 without kills. Not capped: a salvo's
+# kills booked against a stale state_population can pass the people (#1917), and that is past the bound too. Twin:
+# demographics_model.kill_share.
+te_demog_kill_share_store = {
+	if = {
+		limit = {
+			has_variable = te_dg_kills_in
+			has_variable = te_dg_pop_last
+		}
+		set_local_variable = {
+			name = te_dg_kill_share
+			value = { value = var:te_dg_kills_in divide = { value = var:te_dg_pop_last min = 1 } }
+		}
 	}
 }
 

@@ -1913,6 +1913,7 @@ def constants(o):
         "rate_bare_min": P.RATE_BARE_MIN,
         # the census's guards (#1476)
         "rate_guard_people": P.RATE_GUARD_PEOPLE_MAX, "rate_guard_e0": P.RATE_GUARD_E0_MIN,
+        "rate_guard_kills_share": P.RATE_GUARD_KILLS_SHARE,
         "rate_births_ceiling": P.RATE_BIRTHS_CEILING, "crowding_pull_max": P.CROWDING_INFECTION_PULL_MAX,
         "natural_fertility_floor": P.NATURAL_FERTILITY_FLOOR,
         "wealth_line_floor": P.WEALTH_LINE_FLOOR,

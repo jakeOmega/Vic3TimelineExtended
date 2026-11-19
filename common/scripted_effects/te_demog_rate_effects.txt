@@ -14,7 +14,8 @@
 #   te_dg_mb, te_dg_md  M for births and deaths (signed), behind the te_demog_census_* pair
 #   te_dg_rate_clamped  1 when the last refresh clamped either term (the floor, or births' ceiling)
 #   te_dg_rate_guard    while the census's own figures are out of range and its terms cleared (#1476): which bound
-#                       held, 1 its people, 2 life expectancy, 3 a model rate below 0 (te_demog_census_out_of_range)
+#                       held, 1 its people, 2 life expectancy, 3 a model rate below 0, 4 known kills of a third or more
+#                       of its people in the step's window (te_demog_census_out_of_range)
 #   te_dg_bz, te_dg_dz  the scales the last step used (te_dg_eb or te_dg_ed over the target,
 #                       less 1)
 #   te_dg_eb_target, te_dg_ed_target  that target: the births and deaths the model's rates gave
@@ -587,12 +588,15 @@ te_demog_on_top_cause_scale = {
 # 100,000) has nothing to fit M to, and leaves the terms as they are, as a seed does.
 # The census's guards (#1476): under Full, a state whose census's own figures are out of range
 # (te_demog_census_out_of_range: its people's sum wrapped or past half a billion, life expectancy under 5, a model rate
-# below 0) has its terms cleared (te_demog_rates_clear), so the engine's own rates run there, as under Display only,
-# rather than terms set from nonsense: Sindh's model death rate of -474 per 1,000 put its deaths term at the floor, and
-# the engine killed nobody (the 1.15 observer game). The moved lines' pairs come back at the state's next monthly
-# refresh (te_demog_lines_apply holds once te_dg_mb is gone), and the census sets its terms again at the first step
-# whose figures are back in range. te_dg_rate_guard keeps which bound held (1 people, 2 life expectancy, 3 a model rate)
-# while it holds, for the runaway tripwire (te_debug_demog_runaway_selfcheck) and for a save.
+# below 0, or known kills of a third or more of its people in the step's window, the local te_dg_kill_share that
+# te_demog_state_census sets) has its terms cleared (te_demog_rates_clear), so the engine's own rates run there, as under
+# Display only, rather than terms set from nonsense: Sindh's model death rate of -474 per 1,000 put its deaths term at
+# the floor, and the engine killed nobody (the 1.15 observer game); 25 warheads on Sankt-Peterburg in 1977 put its births
+# term at the ceiling. The moved lines' pairs come back at the state's next monthly refresh (te_demog_lines_apply holds
+# once te_dg_mb is gone), and the census sets its terms again at the first step whose figures are back in range (after
+# the fourth guard, the step after the census's seed). te_dg_rate_guard keeps which bound held (1 people, 2 life
+# expectancy, 3 a model rate, 4 known kills) while it holds, for the runaway tripwire (te_debug_demog_runaway_selfcheck)
+# and for a save.
 # Always leaves two pairs of locals for fast mode, which runs next in the same effect:
 #   te_dg_rate_prev_b/_d  the terms the walk's window ran with (read through has_modifier
 #                         before anything here touches the modifiers)
@@ -639,8 +643,12 @@ te_demog_rates_refresh = {
 			limit = { te_demog_census_e0_out_of_range = yes }
 			set_variable = { name = te_dg_rate_guard value = 2 }
 		}
-		else = {
+		else_if = {
+			limit = { te_demog_census_rates_out_of_range = yes }
 			set_variable = { name = te_dg_rate_guard value = 3 }
+		}
+		else = {
+			set_variable = { name = te_dg_rate_guard value = 4 }
 		}
 	}
 	else_if = {

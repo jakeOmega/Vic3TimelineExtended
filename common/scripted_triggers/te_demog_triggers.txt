@@ -112,12 +112,13 @@ te_demog_lines_apply = {
 # THIS = a state at its census, in te_demog_rates_refresh (#1476): the census's own figures are out of range, so its
 # births and deaths terms would be set from nonsense. The bounds sit past every sane state of the 2020, 1940 and 1926
 # saves (demographics_params.py, RATE_GUARD_*), and a figure the state doesn't hold says nothing. The refresh keeps
-# which held first as te_dg_rate_guard (1, 2, 3, in this order). Twin: demographics_model.census_out_of_range.
+# which held first as te_dg_rate_guard (1, 2, 3, 4, in this order). Twin: demographics_model.census_out_of_range.
 te_demog_census_out_of_range = {
 	OR = {
 		te_demog_census_people_out_of_range = yes
 		te_demog_census_e0_out_of_range = yes
 		te_demog_census_rates_out_of_range = yes
+		te_demog_census_kills_out_of_range = yes
 	}
 }
 
@@ -148,6 +149,16 @@ te_demog_census_rates_out_of_range = {
 			var:te_dg_cdr_model < 0
 		}
 	}
+}
+
+# 4 (owner, 2026-11-19): known kills of te_demog_k_rate_guard_kills_share (a third) or more of its people in the step's
+# window: the local te_dg_kill_share, which te_demog_state_census sets at every census, 0 unless a census a year on took
+# kills (te_demog_kill_share_store: te_dg_kills_in over te_dg_pop_last, uncapped, so a share above 1 holds too). The step
+# counts a year's births and deaths from the people before the kills and divides them over the survivors, so its rates,
+# M's next target and the scales come out of range. Also te_demog_state_census's reason to seed the census again.
+te_demog_census_kills_out_of_range = {
+	has_local_variable = te_dg_kill_share
+	local_var:te_dg_kill_share >= te_demog_k_rate_guard_kills_share
 }
 
 # THIS = a state: the working-adult lines' pair applies (phase 2 step 1) unless the census sets this state's

@@ -713,12 +713,21 @@ RATE_BARE_MIN = 80.0
 # Out of range, the census clears its terms (te_demog_rates_clear) and the engine's own rates run, as under Display only,
 # instead of setting M from nonsense (Sindh's model death rate of -474 per 1,000 put deaths at the floor, so the engine
 # killed nobody there): its people's sum below 0 (wrapped) or above RATE_GUARD_PEOPLE_MAX, life expectancy under
-# RATE_GUARD_E0_MIN, or the model's birth or death rate below 0 (demographics_model.census_out_of_range).
+# RATE_GUARD_E0_MIN, the model's birth or death rate below 0, or known kills of RATE_GUARD_KILLS_SHARE or more of its
+# people in the step's window (demographics_model.census_out_of_range).
 # RATE_GUARD_PEOPLE_MAX: four times the largest sane state (128 million, 2020), and below the first of the census's sums
 # to wrap at the script's fixed-point limit (about 9.2e13): a seed's normalization, people x 100,000, at 9.2e8.
 RATE_GUARD_PEOPLE_MAX = 500_000_000
 # RATE_GUARD_E0_MIN: sane states read 26 or more; a life table this short has all but its adults dying.
 RATE_GUARD_E0_MIN = 5.0
+# RATE_GUARD_KILLS_SHARE (owner, 2026-11-19), the fourth guard: a census a year on whose window holds the mod's own known
+# kills (te_demog_note_kills: nuclear strikes, the Violent Hostility pulse, Internal Resettlement's transit dead) of this
+# share or more of the people at its last count. The step counts a year's births and deaths from the people before the
+# kills and divides them over the survivors, so the model's rates, M's next target and the scales come out of range:
+# 25 warheads on Sankt-Peterburg in 1977 left 197,774 of 3,995,846 people, at 840 births and 6,369 deaths per 1,000,
+# and the births term at its ceiling (demog_runaway why=7). A share above 1 (a salvo's kills booked against a stale
+# state_population, #1917) is past the bound too (demographics_model.census_out_of_range, kill_share).
+RATE_GUARD_KILLS_SHARE = 1 / 3
 # A ceiling on M for births, the guard behind the guard (the 2026-10-20 "no ceiling" stands for any figure in range):
 # target / bare reaches about 6 at most (the highest model birth rate over the lowest curve), and the largest sane term
 # was +4.05 (Turkmenia, 2020). Past the sums' fixed-point limit M would be computed from wrapped numbers with no ceiling;
