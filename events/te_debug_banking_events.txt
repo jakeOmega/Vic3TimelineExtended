@@ -5,6 +5,9 @@
 #    (common/on_actions/te_banking_entry_on_actions.txt): did the engine give
 #    every country the banking entry? Logs once a game, 30 days after the first
 #    yearly pulse, so a record that activates in its two weeks has done so.
+# .2 the check on banking_law_cascade_on_uprising (extra_effects.txt): does
+#    State-Owned Banking enacted at on_revolution_start survive the uprising's
+#    build? Fired on the uprising a week after the enactment; logs once a game.
 # ============================================================================
 namespace = te_debug_banking
 
@@ -37,6 +40,33 @@ te_debug_banking.1 = {
 				else = {
 					debug_log = "TE_SELF_CHECK INFO banking_entry_everywhere missing: [THIS.GetCountry.GetNameNoFormatting] record=none"
 				}
+			}
+		}
+	}
+}
+
+# ROOT = an uprising banking_law_cascade_on_uprising gave State-Owned Banking a
+# week ago. OK: it still holds it. BROKEN: it holds Command Economy and some
+# other banking law, so the engine copied the origin's law in after
+# on_revolution_start too and the write there is lost. No verdict when the
+# uprising has left Command Economy since, which says nothing either way.
+te_debug_banking.2 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_sc_cw_sob_logged }
+				has_law = law_type:law_command_economy
+			}
+			set_global_variable = te_sc_cw_sob_logged
+			if = {
+				limit = { has_law = law_type:law_state_owned_banking }
+				debug_log = "TE_SELF_CHECK OK cw_sob_survives_build country=[THIS.GetCountry.GetNameNoFormatting] (the State-Owned Banking enacted at on_revolution_start held a week on) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN cw_sob_survives_build country=[THIS.GetCountry.GetNameNoFormatting] (Command Economy without State-Owned Banking a week after on_revolution_start enacted it: the build overwrote it again; see docs/testing/banking-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 			}
 		}
 	}

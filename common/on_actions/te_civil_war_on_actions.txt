@@ -49,6 +49,10 @@ te_civil_war_on_start = {
 			# (te_tax_civil_war_effects.txt). After te_civil_war_record_start,
 			# so the rebels already carry te_cw_origin.
 			te_tax_on_uprising = yes
+			# A Command Economy new to the rebels gets State-Owned Banking, which
+			# the engine's copy of the origin's laws can overwrite in the build
+			# (extra_effects.txt).
+			banking_law_cascade_on_uprising = yes
 		}
 	}
 }
