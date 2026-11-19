@@ -941,6 +941,21 @@ te_cred_dl_pulse = {
 	if = {
 		limit = { te_cred_dl_tier_1_plus = yes }
 		set_variable = { name = te_cred_dl_bloc_gdppc value = te_cred_dl_bloc_gdppc_now }
+		# Self-check, once a game: the bloc's GDP per head is above 0. The
+		# leader is a member with GDP and people of its own, so 0 means the
+		# members' GDP read gave nothing (the load-time refusal of 2026-11-19,
+		# te_creditors_consortium_values.txt) and nobody ever receives.
+		if = {
+			limit = { NOT = { has_global_variable = te_cc_sc_dl_gdppc_logged } }
+			set_global_variable = te_cc_sc_dl_gdppc_logged
+			if = {
+				limit = { var:te_cred_dl_bloc_gdppc > 0 }
+				debug_log = "TE_SELF_CHECK OK cc_dl_bloc_gdppc (bloc GDP per head [ROOT.GetCountry.MakeScope.Var('te_cred_dl_bloc_gdppc').GetValue|2]: the members' GDP is read) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN cc_dl_bloc_gdppc (bloc GDP per head [ROOT.GetCountry.MakeScope.Var('te_cred_dl_bloc_gdppc').GetValue|2]: the members' GDP read gave nothing; see docs/testing/power-bloc-identities-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+		}
 		set_variable = { name = te_cred_dl_pool value = 0 }
 		set_variable = { name = te_cred_dl_pop_m value = 0 }
 		# 1. The receivers' population.
@@ -1114,7 +1129,9 @@ te_cred_sc_imposition_rung = {
 			limit = {
 				has_law_imposition_rights = {
 					target_country = scope:te_cc_sc_target
-					type = law_type:$LAW$
+					# law_type, as vanilla's 00_impose_law.txt writes it; the
+					# engine docs' `type =` is refused at load (2026-11-19).
+					law_type = law_type:$LAW$
 				}
 			}
 			change_variable = { name = te_cred_sc_rights add = 1 }

@@ -1094,6 +1094,10 @@ Workflow when verifying a candidate trigger name:
 
 Common undocumented-but-real triggers worth knowing: `has_treaty_defensive_pact_with`, `has_treaty_alliance_with`, `has_treaty_guarantee_independence_with`, `has_treaty_support_independence_with`, `has_treaty_trade_privilege_with`, `has_treaty_foreign_investment_rights_with`, `has_truce_with`, `has_subject_relation_with`, `is_in_customs_union_with`.
 
+## A Block Trigger's Field Names Come From Vanilla's Call Sites, Not the Docs' Example: `has_law_imposition_rights` Takes `law_type =`
+
+`triggers.log` documents `has_law_imposition_rights = { target_country = scope:target_country type = law_type:law_serfdom }`, but the engine reads the law from `law_type =`, as vanilla's two call sites write it (`00_impose_law.txt`, `04_india_british_dictates.txt`). Written with `type =`, the trigger is refused at load: `Unexpected token: type` from `pdx_persistent_reader.cpp`, then `has_law_imposition_rights trigger [ law_type: field not set ]` and `PostValidate of trigger 'has_law_imposition_rights' returned false` from `jomini_trigger.cpp`, one of each per call. The Creditors' Consortium's imposition self-check shipped that way in #1865 and logged 16 of each at every load (2026-11-19). Before writing a block-form trigger or effect, read its fields off `/engine-docs/usage/<name>` (vanilla's call sites) rather than the docs' example line.
+
 ## `GetName` / `GetAdjective` Require `.GetCountry` Accessor
 
 `GetName`, `GetAdjective`, `GetAdjectiveNoFormatting`, etc. are methods on the **Country data type**, NOT on ROOT directly. Even in country_events where you might expect ROOT = country, you must use `.GetCountry` to access country-type methods. Vanilla uses `[ROOT.GetCountry.GetName]` (80+ event uses) and never `[ROOT.GetName]` (0 event uses) — treat the `.GetCountry` hop as mandatory.
