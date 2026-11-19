@@ -28571,22 +28571,40 @@
        ]
       }
      ],
-     "any_country_in_qing_empire": [
+     "custom_tooltip": [
       "=",
       {
-       "any_scope_state": [
+       "text": [
+        "=",
+        "qing_country_holds_outer_manchuria_tt"
+       ],
+       "any_country_in_qing_empire": [
         "=",
         {
-         "state_region": [
+         "any_scope_state": [
           "=",
-          "s:STATE_OUTER_MANCHURIA"
+          {
+           "state_region": [
+            "=",
+            "s:STATE_OUTER_MANCHURIA"
+           ],
+           "is_capital": [
+            "=",
+            "no"
+           ]
+          }
          ],
-         "is_capital": [
+         "save_temporary_scope_as": [
           "=",
-          "no"
+          "qing_treaty_partner"
          ]
         }
-       ],
+       ]
+      }
+     ],
+     "scope:qing_treaty_partner": [
+      "?=",
+      {
        "country_is_valid_qing_treaty_partner": [
         "=",
         "yes"
@@ -28636,7 +28654,7 @@
         "=",
         {
          "scope:donor_scope": [
-          "=",
+          "?=",
           {
            "owes_obligation_to": [
             "=",
@@ -28659,7 +28677,7 @@
         "=",
         {
          "scope:donor_scope": [
-          "=",
+          "?=",
           {
            "is_subject_of": [
             "=",
@@ -28702,7 +28720,7 @@
              ],
              "value": [
               "=",
-              "10"
+              "5"
              ]
             }
            ]
@@ -28914,107 +28932,127 @@
    "possible": [
     "=",
     {
-     "any_country_in_qing_empire": [
-      "=",
-      {
-       "OR": [
-        "=",
-        {
-         "any_scope_state": [
-          [
+     "custom_tooltip": [
+      [
+       "=",
+       {
+        "text": [
+         "=",
+         "qing_country_holds_central_asia_tt"
+        ],
+        "any_country_in_qing_empire": [
+         "=",
+         {
+          "OR": [
            "=",
            {
-            "state_region": [
-             "=",
-             "s:STATE_ALTAI"
-            ],
-            "is_capital": [
-             "=",
-             "no"
+            "any_scope_state": [
+             [
+              "=",
+              {
+               "state_region": [
+                "=",
+                "s:STATE_ALTAI"
+               ],
+               "is_capital": [
+                "=",
+                "no"
+               ]
+              }
+             ],
+             [
+              "=",
+              {
+               "state_region": [
+                "=",
+                "s:STATE_JETISY"
+               ],
+               "is_capital": [
+                "=",
+                "no"
+               ]
+              }
+             ],
+             [
+              "=",
+              {
+               "state_region": [
+                "=",
+                "s:STATE_KIRGHIZIA"
+               ],
+               "is_capital": [
+                "=",
+                "no"
+               ]
+              }
+             ]
             ]
            }
           ],
-          [
+          "save_temporary_scope_as": [
+           "=",
+           "qing_treaty_partner"
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "text": [
+         "=",
+         "russia_chuguchak_protocol_req_tt"
+        ],
+        "c:RUS": [
+         "?=",
+         {
+          "OR": [
            "=",
            {
-            "state_region": [
+            "AND": [
              "=",
-             "s:STATE_JETISY"
+             {
+              "owns_entire_state_region": [
+               [
+                "=",
+                "STATE_SEMIRECHE"
+               ],
+               [
+                "=",
+                "STATE_AKMOLINSK"
+               ]
+              ]
+             }
             ],
-            "is_capital": [
+            "any_subject_or_below": [
              "=",
-             "no"
-            ]
-           }
-          ],
-          [
-           "=",
-           {
-            "state_region": [
-             "=",
-             "s:STATE_KIRGHIZIA"
-            ],
-            "is_capital": [
-             "=",
-             "no"
+             {
+              "owns_entire_state_region": [
+               [
+                "=",
+                "STATE_SEMIRECHE"
+               ],
+               [
+                "=",
+                "STATE_AKMOLINSK"
+               ]
+              ]
+             }
             ]
            }
           ]
-         ]
-        }
-       ],
+         }
+        ]
+       }
+      ]
+     ],
+     "scope:qing_treaty_partner": [
+      "?=",
+      {
        "country_is_valid_qing_treaty_partner": [
         "=",
         "yes"
-       ]
-      }
-     ],
-     "custom_tooltip": [
-      "=",
-      {
-       "text": [
-        "=",
-        "russia_chuguchak_protocol_req_tt"
-       ],
-       "c:RUS": [
-        "?=",
-        {
-         "OR": [
-          "=",
-          {
-           "AND": [
-            "=",
-            {
-             "owns_entire_state_region": [
-              [
-               "=",
-               "STATE_SEMIRECHE"
-              ],
-              [
-               "=",
-               "STATE_AKMOLINSK"
-              ]
-             ]
-            }
-           ],
-           "any_subject_or_below": [
-            "=",
-            {
-             "owns_entire_state_region": [
-              [
-               "=",
-               "STATE_SEMIRECHE"
-              ],
-              [
-               "=",
-               "STATE_AKMOLINSK"
-              ]
-             ]
-            }
-           ]
-          }
-         ]
-        }
        ]
       }
      ]
@@ -29094,7 +29132,7 @@
         "=",
         {
          "scope:donor_scope": [
-          "=",
+          "?=",
           {
            "owes_obligation_to": [
             "=",
@@ -29117,7 +29155,7 @@
         "=",
         {
          "scope:donor_scope": [
-          "=",
+          "?=",
           {
            "is_subject_of": [
             "=",
@@ -29160,7 +29198,7 @@
              ],
              "value": [
               "=",
-              "15"
+              "5"
              ]
             }
            ]
@@ -29326,22 +29364,82 @@
        ]
       }
      ],
-     "any_country_in_qing_empire": [
-      "=",
+     "custom_tooltip": [
+      [
+       "=",
+       {
+        "text": [
+         "=",
+         "qing_country_holds_amur_tt"
+        ],
+        "any_country_in_qing_empire": [
+         "=",
+         {
+          "any_scope_state": [
+           "=",
+           {
+            "state_region": [
+             "=",
+             "s:STATE_AMUR"
+            ],
+            "is_capital": [
+             "=",
+             "no"
+            ]
+           }
+          ],
+          "save_temporary_scope_as": [
+           "=",
+           "qing_treaty_partner"
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "text": [
+         "=",
+         "east_siberia_formation_tt"
+        ],
+        "OR": [
+         "=",
+         {
+          "is_ai": [
+           "=",
+           "yes"
+          ],
+          "any_military_formation": [
+           "=",
+           {
+            "is_army": [
+             "=",
+             "yes"
+            ],
+            "current_hq.region": [
+             "?=",
+             "sr:region_siberia"
+            ],
+            "any_combat_unit": [
+             "=",
+             {
+              "count": [
+               ">=",
+               "20"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     ],
+     "scope:qing_treaty_partner": [
+      "?=",
       {
-       "any_scope_state": [
-        "=",
-        {
-         "state_region": [
-          "=",
-          "s:STATE_AMUR"
-         ],
-         "is_capital": [
-          "=",
-          "no"
-         ]
-        }
-       ],
        "country_is_valid_qing_treaty_partner": [
         "=",
         "yes"
@@ -29354,46 +29452,6 @@
        "country_rank": [
         ">=",
         "rank_value:great_power"
-       ]
-      }
-     ],
-     "custom_tooltip": [
-      "=",
-      {
-       "text": [
-        "=",
-        "east_siberia_formation_tt"
-       ],
-       "OR": [
-        "=",
-        {
-         "is_ai": [
-          "=",
-          "yes"
-         ],
-         "any_military_formation": [
-          "=",
-          {
-           "is_army": [
-            "=",
-            "yes"
-           ],
-           "current_hq.region": [
-            "?=",
-            "sr:region_siberia"
-           ],
-           "any_combat_unit": [
-            "=",
-            {
-             "count": [
-              ">=",
-              "20"
-             ]
-            }
-           ]
-          }
-         ]
-        }
        ]
       }
      ]
@@ -29440,7 +29498,7 @@
         "=",
         {
          "scope:donor_scope": [
-          "=",
+          "?=",
           {
            "owes_obligation_to": [
             "=",
@@ -29463,7 +29521,7 @@
         "=",
         {
          "scope:donor_scope": [
-          "=",
+          "?=",
           {
            "is_subject_of": [
             "=",
@@ -29506,7 +29564,7 @@
              ],
              "value": [
               "=",
-              "10"
+              "5"
              ]
             }
            ]

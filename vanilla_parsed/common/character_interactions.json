@@ -11921,17 +11921,12 @@
     "=",
     "yes"
    ],
-   "possible": [
+   "actor_capacity": [
     "=",
     {
-     "owner": [
-      "?=",
-      {
-       "can_have_favorites": [
-        "=",
-        "yes"
-       ]
-      }
+     "can_have_favorites": [
+      "=",
+      "yes"
      ],
      "trigger_if": [
       [
@@ -11940,14 +11935,9 @@
         "limit": [
          "=",
          {
-          "owner": [
-           "?=",
-           {
-            "has_variable": [
-             "=",
-             "rasputin1_active_var"
-            ]
-           }
+          "has_variable": [
+           "=",
+           "rasputin1_active_var"
           ]
          }
         ],
@@ -11961,14 +11951,9 @@
           "NOT": [
            "=",
            {
-            "owner": [
-             "?=",
-             {
-              "has_variable": [
-               "=",
-               "rasputin1_active_var"
-              ]
-             }
+            "has_variable": [
+             "=",
+             "rasputin1_active_var"
             ]
            }
           ]
@@ -11982,14 +11967,9 @@
         "limit": [
          "=",
          {
-          "owner": [
-           "?=",
-           {
-            "has_variable": [
-             "=",
-             "favorite_event_active_var"
-            ]
-           }
+          "has_variable": [
+           "=",
+           "favorite_event_active_var"
           ]
          }
         ],
@@ -12003,14 +11983,9 @@
           "NOT": [
            "=",
            {
-            "owner": [
-             "?=",
-             {
-              "has_variable": [
-               "=",
-               "favorite_event_active_var"
-              ]
-             }
+            "has_variable": [
+             "=",
+             "favorite_event_active_var"
             ]
            }
           ]

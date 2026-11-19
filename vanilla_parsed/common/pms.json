@@ -441,19 +441,15 @@
        ],
        "goods_input_glass_add": [
         "=",
-        "4"
-       ],
-       "goods_input_copper_add": [
-        "=",
-        "1"
+        "5"
        ],
        "goods_output_liquor_add": [
         "=",
-        "60"
+        "50"
        ],
        "goods_output_groceries_add": [
         "=",
-        "-25"
+        "-15"
        ]
       }
      ],
@@ -499,19 +495,19 @@
        ],
        "goods_input_glass_add": [
         "=",
-        "7"
+        "5"
        ],
        "goods_input_copper_add": [
         "=",
-        "3"
+        "5"
        ],
        "goods_output_liquor_add": [
         "=",
-        "100"
+        "75"
        ],
        "goods_output_groceries_add": [
         "=",
-        "-40"
+        "-20"
        ]
       }
      ],

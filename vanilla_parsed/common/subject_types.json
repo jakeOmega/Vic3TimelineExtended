@@ -22,10 +22,6 @@
     "=",
     "yes"
    ],
-   "breaks_if_subject_not_protected": [
-    "=",
-    "yes"
-   ],
    "join_overlord_wars": [
     "=",
     "no"
@@ -149,10 +145,6 @@
    "can_start_own_diplomatic_plays": [
     "=",
     "no"
-   ],
-   "breaks_if_subject_not_protected": [
-    "=",
-    "yes"
    ],
    "join_overlord_wars": [
     "=",
@@ -278,10 +270,6 @@
     "=",
     "yes"
    ],
-   "breaks_if_subject_not_protected": [
-    "=",
-    "yes"
-   ],
    "join_overlord_wars": [
     "=",
     "no"
@@ -402,10 +390,6 @@
    "can_start_own_diplomatic_plays": [
     "=",
     "no"
-   ],
-   "breaks_if_subject_not_protected": [
-    "=",
-    "yes"
    ],
    "join_overlord_wars": [
     "=",
@@ -529,10 +513,6 @@
     "=",
     "yes"
    ],
-   "breaks_if_subject_not_protected": [
-    "=",
-    "yes"
-   ],
    "join_overlord_wars": [
     "=",
     "yes"
@@ -650,10 +630,6 @@
    "can_start_own_diplomatic_plays": [
     "=",
     "no"
-   ],
-   "breaks_if_subject_not_protected": [
-    "=",
-    "yes"
    ],
    "join_overlord_wars": [
     "=",
@@ -778,10 +754,6 @@
    "can_start_own_diplomatic_plays": [
     "=",
     "no"
-   ],
-   "breaks_if_subject_not_protected": [
-    "=",
-    "yes"
    ],
    "join_overlord_wars": [
     "=",
@@ -922,10 +894,6 @@
     "=",
     "no"
    ],
-   "breaks_if_subject_not_protected": [
-    "=",
-    "yes"
-   ],
    "join_overlord_wars": [
     "=",
     "yes"
@@ -1044,10 +1012,6 @@
     "no"
    ],
    "can_start_own_diplomatic_plays": [
-    "=",
-    "yes"
-   ],
-   "breaks_if_subject_not_protected": [
     "=",
     "yes"
    ],

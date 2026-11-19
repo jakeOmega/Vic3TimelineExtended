@@ -10371,6 +10371,15 @@
      ]
     }
    ],
+   "should_auto_expand": [
+    "=",
+    {
+     "default_auto_expand_rule": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
    "ownership_type": [
     "=",
     "self"
@@ -11305,6 +11314,15 @@
     "=",
     {
      "trade_center_construction_allowed": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "should_auto_expand": [
+    "=",
+    {
+     "default_auto_expand_rule": [
       "=",
       "yes"
      ]

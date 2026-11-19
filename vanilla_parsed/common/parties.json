@@ -729,31 +729,59 @@
    "available_for_interest_group": [
     "=",
     {
-     "owner": [
+     "trigger_if": [
       "=",
       {
-       "country_has_voting_franchise": [
-        "=",
-        "yes"
-       ],
-       "OR": [
+       "limit": [
         "=",
         {
-         "py:agrarian_party": [
-          "?=",
+         "ig_is_member_of_dominant_party": [
+          "=",
           {
-           "party_has_members": [
+           "PARTY": [
             "=",
-            "yes"
+            "agrarian"
            ]
           }
+         ]
+        }
+       ],
+       "always": [
+        "=",
+        "yes"
+       ]
+      }
+     ],
+     "trigger_else": [
+      "=",
+      {
+       "owner": [
+        "=",
+        {
+         "country_has_voting_franchise": [
+          "=",
+          "yes"
          ],
-         "ig:ig_rural_folk": [
-          "?=",
+         "OR": [
+          "=",
           {
-           "ig_counts_as_marginal": [
-            "=",
-            "no"
+           "py:agrarian_party": [
+            "?=",
+            {
+             "party_has_members": [
+              "=",
+              "yes"
+             ]
+            }
+           ],
+           "ig:ig_rural_folk": [
+            "?=",
+            {
+             "ig_counts_as_marginal": [
+              "=",
+              "no"
+             ]
+            }
            ]
           }
          ]
@@ -1730,6 +1758,38 @@
         "limit": [
          "=",
          {
+          "ig_is_member_of_dominant_party": [
+           "=",
+           {
+            "PARTY": [
+             "=",
+             "agrarian"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         {
+          "value": [
+           "=",
+           "1000"
+          ],
+          "desc": [
+           "=",
+           "\"amendment_agrarian_party_dominance\""
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
           "is_interest_group_type": [
            "=",
            "ig_rural_folk"
@@ -2153,47 +2213,75 @@
    "available_for_interest_group": [
     "=",
     {
-     "owner": [
+     "trigger_if": [
       "=",
       {
-       "country_has_voting_franchise": [
-        "=",
-        "yes"
-       ],
-       "OR": [
+       "limit": [
         "=",
         {
-         "py:anarchist_party": [
-          "?=",
-          {
-           "party_has_members": [
-            "=",
-            "yes"
-           ]
-          }
-         ],
-         "any_interest_group": [
+         "ig_is_member_of_dominant_party": [
           "=",
           {
-           "ig_counts_as_marginal": [
+           "PARTY": [
             "=",
-            "no"
-           ],
-           "leader": [
+            "anarchist"
+           ]
+          }
+         ]
+        }
+       ],
+       "always": [
+        "=",
+        "yes"
+       ]
+      }
+     ],
+     "trigger_else": [
+      "=",
+      {
+       "owner": [
+        "=",
+        {
+         "country_has_voting_franchise": [
+          "=",
+          "yes"
+         ],
+         "OR": [
+          "=",
+          {
+           "py:anarchist_party": [
             "?=",
             {
-             "OR": [
+             "party_has_members": [
               "=",
+              "yes"
+             ]
+            }
+           ],
+           "any_interest_group": [
+            "=",
+            {
+             "ig_counts_as_marginal": [
+              "=",
+              "no"
+             ],
+             "leader": [
+              "?=",
               {
-               "has_ideology": [
-                [
-                 "=",
-                 "ideology:ideology_anarchist"
-                ],
-                [
-                 "=",
-                 "ideology:ideology_nihilist"
-                ]
+               "OR": [
+                "=",
+                {
+                 "has_ideology": [
+                  [
+                   "=",
+                   "ideology:ideology_anarchist"
+                  ],
+                  [
+                   "=",
+                   "ideology:ideology_nihilist"
+                  ]
+                 ]
+                }
                ]
               }
              ]
@@ -2202,24 +2290,24 @@
           }
          ]
         }
-       ]
-      }
-     ],
-     "leader": [
-      "?=",
-      {
-       "OR": [
-        "=",
+       ],
+       "leader": [
+        "?=",
         {
-         "has_ideology": [
-          [
-           "=",
-           "ideology:ideology_anarchist"
-          ],
-          [
-           "=",
-           "ideology:ideology_nihilist"
-          ]
+         "OR": [
+          "=",
+          {
+           "has_ideology": [
+            [
+             "=",
+             "ideology:ideology_anarchist"
+            ],
+            [
+             "=",
+             "ideology:ideology_nihilist"
+            ]
+           ]
+          }
          ]
         }
        ]
@@ -2785,6 +2873,38 @@
           "desc": [
            "=",
            "\"from_slavery\""
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "ig_is_member_of_dominant_party": [
+           "=",
+           {
+            "PARTY": [
+             "=",
+             "anarchist"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         {
+          "value": [
+           "=",
+           "1000"
+          ],
+          "desc": [
+           "=",
+           "\"amendment_anarchist_party_dominance\""
           ]
          }
         ]
@@ -3811,51 +3931,79 @@
    "available_for_interest_group": [
     "=",
     {
-     "owner": [
+     "trigger_if": [
       "=",
       {
-       "country_has_voting_franchise": [
-        "=",
-        "yes"
-       ],
-       "had_reformist_socialism_victory": [
-        "=",
-        "yes"
-       ],
-       "OR": [
+       "limit": [
         "=",
         {
-         "py:communist_party": [
-          "?=",
-          {
-           "party_has_members": [
-            "=",
-            "yes"
-           ]
-          }
-         ],
-         "any_interest_group": [
+         "ig_is_member_of_dominant_party": [
           "=",
           {
-           "leader": [
+           "PARTY": [
+            "=",
+            "communist"
+           ]
+          }
+         ]
+        }
+       ],
+       "always": [
+        "=",
+        "yes"
+       ]
+      }
+     ],
+     "trigger_else": [
+      "=",
+      {
+       "owner": [
+        "=",
+        {
+         "country_has_voting_franchise": [
+          "=",
+          "yes"
+         ],
+         "had_reformist_socialism_victory": [
+          "=",
+          "yes"
+         ],
+         "OR": [
+          "=",
+          {
+           "py:communist_party": [
             "?=",
             {
-             "OR": [
+             "party_has_members": [
               "=",
+              "yes"
+             ]
+            }
+           ],
+           "any_interest_group": [
+            "=",
+            {
+             "leader": [
+              "?=",
               {
-               "has_ideology": [
-                [
-                 "=",
-                 "ideology:ideology_communist_leader"
-                ],
-                [
-                 "=",
-                 "ideology:ideology_vanguardist"
-                ],
-                [
-                 "=",
-                 "ideology:ideology_anarchist"
-                ]
+               "OR": [
+                "=",
+                {
+                 "has_ideology": [
+                  [
+                   "=",
+                   "ideology:ideology_communist_leader"
+                  ],
+                  [
+                   "=",
+                   "ideology:ideology_vanguardist"
+                  ],
+                  [
+                   "=",
+                   "ideology:ideology_anarchist"
+                  ]
+                 ]
+                }
                ]
               }
              ]
@@ -3864,79 +4012,79 @@
           }
          ]
         }
-       ]
-      }
-     ],
-     "NOR": [
-      "=",
-      {
-       "is_interest_group_type": [
-        [
-         "=",
-         "ig_industrialists"
-        ],
-        [
-         "=",
-         "ig_landowners"
-        ]
-       ]
-      }
-     ],
-     "leader": [
-      "?=",
-      {
+       ],
        "NOR": [
         "=",
         {
-         "has_ideology": [
+         "is_interest_group_type": [
           [
            "=",
-           "ideology:ideology_fascist"
+           "ig_industrialists"
           ],
           [
            "=",
-           "ideology:ideology_integralist"
-          ],
-          [
-           "=",
-           "ideology:ideology_ethno_nationalist"
-          ],
-          [
-           "=",
-           "ideology:ideology_market_liberal"
-          ],
-          [
-           "=",
-           "ideology:ideology_traditionalist"
-          ],
-          [
-           "=",
-           "ideology:ideology_royalist"
-          ],
-          [
-           "=",
-           "ideology:ideology_orleanist"
-          ],
-          [
-           "=",
-           "ideology:ideology_bonapartist"
-          ],
-          [
-           "=",
-           "ideology:ideology_legitimist"
-          ],
-          [
-           "=",
-           "ideology:ideology_theocrat"
-          ],
-          [
-           "=",
-           "ideology:ideology_corporatist_leader"
+           "ig_landowners"
           ]
-         ],
-         "character_has_carlist_ideology": [
+         ]
+        }
+       ],
+       "leader": [
+        "?=",
+        {
+         "NOR": [
           "=",
-          "yes"
+          {
+           "has_ideology": [
+            [
+             "=",
+             "ideology:ideology_fascist"
+            ],
+            [
+             "=",
+             "ideology:ideology_integralist"
+            ],
+            [
+             "=",
+             "ideology:ideology_ethno_nationalist"
+            ],
+            [
+             "=",
+             "ideology:ideology_market_liberal"
+            ],
+            [
+             "=",
+             "ideology:ideology_traditionalist"
+            ],
+            [
+             "=",
+             "ideology:ideology_royalist"
+            ],
+            [
+             "=",
+             "ideology:ideology_orleanist"
+            ],
+            [
+             "=",
+             "ideology:ideology_bonapartist"
+            ],
+            [
+             "=",
+             "ideology:ideology_legitimist"
+            ],
+            [
+             "=",
+             "ideology:ideology_theocrat"
+            ],
+            [
+             "=",
+             "ideology:ideology_corporatist_leader"
+            ]
+           ],
+           "character_has_carlist_ideology": [
+            "=",
+            "yes"
+           ]
+          }
          ]
         }
        ]
@@ -4749,6 +4897,38 @@
           "desc": [
            "=",
            "\"from_slavery\""
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "ig_is_member_of_dominant_party": [
+           "=",
+           {
+            "PARTY": [
+             "=",
+             "communist"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         {
+          "value": [
+           "=",
+           "1000"
+          ],
+          "desc": [
+           "=",
+           "\"amendment_communist_party_dominance\""
           ]
          }
         ]
@@ -6399,62 +6579,90 @@
    "available_for_interest_group": [
     "=",
     {
-     "owner": [
+     "trigger_if": [
       "=",
       {
-       "country_has_voting_franchise": [
-        "=",
-        "yes"
-       ],
-       "OR": [
+       "limit": [
         "=",
         {
-         "py:conservative_party": [
-          "?=",
+         "ig_is_member_of_dominant_party": [
+          "=",
           {
-           "party_has_members": [
+           "PARTY": [
             "=",
-            "yes"
-           ]
-          }
-         ],
-         "ig:ig_landowners": [
-          "?=",
-          {
-           "ig_counts_as_marginal": [
-            "=",
-            "no"
-           ]
-          }
-         ],
-         "ig:ig_devout": [
-          "?=",
-          {
-           "ig_counts_as_marginal": [
-            "=",
-            "no"
-           ]
-          }
-         ],
-         "ig:ig_petty_bourgeoisie": [
-          "?=",
-          {
-           "ig_counts_as_marginal": [
-            "=",
-            "no"
+            "conservative"
            ]
           }
          ]
         }
+       ],
+       "always": [
+        "=",
+        "yes"
        ]
       }
      ],
-     "NOT": [
+     "trigger_else": [
       "=",
       {
-       "is_interest_group_type": [
+       "owner": [
         "=",
-        "ig_trade_unions"
+        {
+         "country_has_voting_franchise": [
+          "=",
+          "yes"
+         ],
+         "OR": [
+          "=",
+          {
+           "py:conservative_party": [
+            "?=",
+            {
+             "party_has_members": [
+              "=",
+              "yes"
+             ]
+            }
+           ],
+           "ig:ig_landowners": [
+            "?=",
+            {
+             "ig_counts_as_marginal": [
+              "=",
+              "no"
+             ]
+            }
+           ],
+           "ig:ig_devout": [
+            "?=",
+            {
+             "ig_counts_as_marginal": [
+              "=",
+              "no"
+             ]
+            }
+           ],
+           "ig:ig_petty_bourgeoisie": [
+            "?=",
+            {
+             "ig_counts_as_marginal": [
+              "=",
+              "no"
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "NOT": [
+        "=",
+        {
+         "is_interest_group_type": [
+          "=",
+          "ig_trade_unions"
+         ]
+        }
        ]
       }
      ]
@@ -8567,6 +8775,38 @@
         "limit": [
          "=",
          {
+          "ig_is_member_of_dominant_party": [
+           "=",
+           {
+            "PARTY": [
+             "=",
+             "conservative"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         {
+          "value": [
+           "=",
+           "1000"
+          ],
+          "desc": [
+           "=",
+           "\"amendment_conservative_party_dominance\""
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
           "is_interest_group_type": [
            "=",
            "ig_landowners"
@@ -9799,51 +10039,79 @@
    "available_for_interest_group": [
     "=",
     {
-     "owner": [
+     "trigger_if": [
       "=",
       {
-       "country_has_voting_franchise": [
-        "=",
-        "yes"
-       ],
-       "OR": [
+       "limit": [
         "=",
         {
-         "py:fascist_party": [
-          "?=",
-          {
-           "party_has_members": [
-            "=",
-            "yes"
-           ]
-          }
-         ],
-         "any_interest_group": [
+         "ig_is_member_of_dominant_party": [
           "=",
           {
-           "leader": [
+           "PARTY": [
+            "=",
+            "fascist"
+           ]
+          }
+         ]
+        }
+       ],
+       "always": [
+        "=",
+        "yes"
+       ]
+      }
+     ],
+     "trigger_else": [
+      "=",
+      {
+       "owner": [
+        "=",
+        {
+         "country_has_voting_franchise": [
+          "=",
+          "yes"
+         ],
+         "OR": [
+          "=",
+          {
+           "py:fascist_party": [
             "?=",
             {
-             "OR": [
+             "party_has_members": [
               "=",
+              "yes"
+             ]
+            }
+           ],
+           "any_interest_group": [
+            "=",
+            {
+             "leader": [
+              "?=",
               {
-               "has_ideology": [
-                [
-                 "=",
-                 "ideology:ideology_fascist"
-                ],
-                [
-                 "=",
-                 "ideology:ideology_integralist"
-                ],
-                [
-                 "=",
-                 "ideology:ideology_corporatist_leader"
-                ],
-                [
-                 "=",
-                 "ideology:ideology_ethno_nationalist"
-                ]
+               "OR": [
+                "=",
+                {
+                 "has_ideology": [
+                  [
+                   "=",
+                   "ideology:ideology_fascist"
+                  ],
+                  [
+                   "=",
+                   "ideology:ideology_integralist"
+                  ],
+                  [
+                   "=",
+                   "ideology:ideology_corporatist_leader"
+                  ],
+                  [
+                   "=",
+                   "ideology:ideology_ethno_nationalist"
+                  ]
+                 ]
+                }
                ]
               }
              ]
@@ -10908,6 +11176,38 @@
         "limit": [
          "=",
          {
+          "ig_is_member_of_dominant_party": [
+           "=",
+           {
+            "PARTY": [
+             "=",
+             "fascist"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         {
+          "value": [
+           "=",
+           "1000"
+          ],
+          "desc": [
+           "=",
+           "\"amendment_fascist_party_dominance\""
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
           "scope:number": [
            "=",
            "1"
@@ -11586,45 +11886,73 @@
    "available_for_interest_group": [
     "=",
     {
-     "owner": [
+     "trigger_if": [
       "=",
       {
-       "country_has_voting_franchise": [
-        "=",
-        "yes"
-       ],
-       "OR": [
+       "limit": [
         "=",
         {
-         "py:free_trade_party": [
-          "?=",
-          {
-           "party_has_members": [
-            "=",
-            "yes"
-           ]
-          }
-         ],
-         "any_interest_group": [
+         "ig_is_member_of_dominant_party": [
           "=",
           {
-           "ig_counts_as_marginal": [
+           "PARTY": [
             "=",
-            "no"
+            "free_trade"
+           ]
+          }
+         ]
+        }
+       ],
+       "always": [
+        "=",
+        "yes"
+       ]
+      }
+     ],
+     "trigger_else": [
+      "=",
+      {
+       "owner": [
+        "=",
+        {
+         "country_has_voting_franchise": [
+          "=",
+          "yes"
+         ],
+         "OR": [
+          "=",
+          {
+           "py:free_trade_party": [
+            "?=",
+            {
+             "party_has_members": [
+              "=",
+              "yes"
+             ]
+            }
            ],
-           "OR": [
+           "any_interest_group": [
             "=",
             {
-             "is_interest_group_type": [
+             "ig_counts_as_marginal": [
               "=",
-              "ig_industrialists"
+              "no"
              ],
-             "leader": [
-              "?=",
+             "OR": [
+              "=",
               {
-               "has_ideology": [
+               "is_interest_group_type": [
                 "=",
-                "ideology:ideology_market_liberal"
+                "ig_industrialists"
+               ],
+               "leader": [
+                "?=",
+                {
+                 "has_ideology": [
+                  "=",
+                  "ideology:ideology_market_liberal"
+                 ]
+                }
                ]
               }
              ]
@@ -12810,6 +13138,38 @@
              ]
             }
            ]
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "ig_is_member_of_dominant_party": [
+           "=",
+           {
+            "PARTY": [
+             "=",
+             "free_trade"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         {
+          "value": [
+           "=",
+           "1000"
+          ],
+          "desc": [
+           "=",
+           "\"amendment_free_trade_party_dominance\""
           ]
          }
         ]
@@ -14477,87 +14837,115 @@
    "available_for_interest_group": [
     "=",
     {
-     "owner": [
+     "trigger_if": [
       "=",
       {
-       "country_has_voting_franchise": [
-        "=",
-        "yes"
-       ],
-       "OR": [
+       "limit": [
         "=",
         {
-         "py:liberal_party": [
-          "?=",
+         "ig_is_member_of_dominant_party": [
+          "=",
           {
-           "party_has_members": [
+           "PARTY": [
             "=",
-            "yes"
-           ]
-          }
-         ],
-         "ig:ig_intelligentsia": [
-          "?=",
-          {
-           "ig_counts_as_marginal": [
-            "=",
-            "no"
-           ]
-          }
-         ],
-         "ig:ig_petty_bourgeoisie": [
-          "?=",
-          {
-           "ig_counts_as_marginal": [
-            "=",
-            "no"
-           ]
-          }
-         ],
-         "ig:ig_industrialists": [
-          "?=",
-          {
-           "ig_counts_as_marginal": [
-            "=",
-            "no"
+            "liberal"
            ]
           }
          ]
         }
+       ],
+       "always": [
+        "=",
+        "yes"
        ]
       }
      ],
-     "leader": [
-      "?=",
+     "trigger_else": [
+      "=",
       {
-       "NOR": [
+       "owner": [
         "=",
         {
-         "has_ideology": [
-          [
-           "=",
-           "ideology:ideology_fascist"
-          ],
-          [
-           "=",
-           "ideology:ideology_integralist"
-          ],
-          [
-           "=",
-           "ideology:ideology_ethno_nationalist"
-          ],
-          [
-           "=",
-           "ideology:ideology_communist_leader"
-          ],
-          [
-           "=",
-           "ideology:ideology_vanguardist"
-          ],
-          [
-           "=",
-           "ideology:ideology_anarchist"
-          ]
+         "country_has_voting_franchise": [
+          "=",
+          "yes"
+         ],
+         "OR": [
+          "=",
+          {
+           "py:liberal_party": [
+            "?=",
+            {
+             "party_has_members": [
+              "=",
+              "yes"
+             ]
+            }
+           ],
+           "ig:ig_intelligentsia": [
+            "?=",
+            {
+             "ig_counts_as_marginal": [
+              "=",
+              "no"
+             ]
+            }
+           ],
+           "ig:ig_petty_bourgeoisie": [
+            "?=",
+            {
+             "ig_counts_as_marginal": [
+              "=",
+              "no"
+             ]
+            }
+           ],
+           "ig:ig_industrialists": [
+            "?=",
+            {
+             "ig_counts_as_marginal": [
+              "=",
+              "no"
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "leader": [
+        "?=",
+        {
+         "NOR": [
+          "=",
+          {
+           "has_ideology": [
+            [
+             "=",
+             "ideology:ideology_fascist"
+            ],
+            [
+             "=",
+             "ideology:ideology_integralist"
+            ],
+            [
+             "=",
+             "ideology:ideology_ethno_nationalist"
+            ],
+            [
+             "=",
+             "ideology:ideology_communist_leader"
+            ],
+            [
+             "=",
+             "ideology:ideology_vanguardist"
+            ],
+            [
+             "=",
+             "ideology:ideology_anarchist"
+            ]
+           ]
+          }
          ]
         }
        ]
@@ -16795,6 +17183,38 @@
         "limit": [
          "=",
          {
+          "ig_is_member_of_dominant_party": [
+           "=",
+           {
+            "PARTY": [
+             "=",
+             "liberal"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         {
+          "value": [
+           "=",
+           "1000"
+          ],
+          "desc": [
+           "=",
+           "\"amendment_liberal_party_dominance\""
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
           "is_interest_group_type": [
            "=",
            "ig_intelligentsia"
@@ -17357,31 +17777,59 @@
    "available_for_interest_group": [
     "=",
     {
-     "owner": [
+     "trigger_if": [
       "=",
       {
-       "country_has_voting_franchise": [
-        "=",
-        "yes"
-       ],
-       "OR": [
+       "limit": [
         "=",
         {
-         "py:military_party": [
-          "?=",
+         "ig_is_member_of_dominant_party": [
+          "=",
           {
-           "party_has_members": [
+           "PARTY": [
             "=",
-            "yes"
+            "military"
            ]
           }
+         ]
+        }
+       ],
+       "always": [
+        "=",
+        "yes"
+       ]
+      }
+     ],
+     "trigger_else": [
+      "=",
+      {
+       "owner": [
+        "=",
+        {
+         "country_has_voting_franchise": [
+          "=",
+          "yes"
          ],
-         "ig:ig_armed_forces": [
-          "?=",
+         "OR": [
+          "=",
           {
-           "ig_counts_as_marginal": [
-            "=",
-            "no"
+           "py:military_party": [
+            "?=",
+            {
+             "party_has_members": [
+              "=",
+              "yes"
+             ]
+            }
+           ],
+           "ig:ig_armed_forces": [
+            "?=",
+            {
+             "ig_counts_as_marginal": [
+              "=",
+              "no"
+             ]
+            }
            ]
           }
          ]
@@ -18291,6 +18739,38 @@
           "desc": [
            "=",
            "\"from_monarchist_leanings\""
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "ig_is_member_of_dominant_party": [
+           "=",
+           {
+            "PARTY": [
+             "=",
+             "military"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         {
+          "value": [
+           "=",
+           "1000"
+          ],
+          "desc": [
+           "=",
+           "\"amendment_military_party_dominance\""
           ]
          }
         ]
@@ -19411,126 +19891,154 @@
    "available_for_interest_group": [
     "=",
     {
-     "owner": [
+     "trigger_if": [
       "=",
       {
-       "country_has_voting_franchise": [
-        "=",
-        "yes"
-       ],
-       "OR": [
+       "limit": [
         "=",
         {
-         "py:radical_party": [
-          "?=",
-          {
-           "party_has_members": [
-            "=",
-            "yes"
-           ]
-          }
-         ],
-         "any_interest_group": [
+         "ig_is_member_of_dominant_party": [
           "=",
           {
-           "ig_counts_as_marginal": [
+           "PARTY": [
             "=",
-            "no"
+            "radical"
+           ]
+          }
+         ]
+        }
+       ],
+       "always": [
+        "=",
+        "yes"
+       ]
+      }
+     ],
+     "trigger_else": [
+      "=",
+      {
+       "owner": [
+        "=",
+        {
+         "country_has_voting_franchise": [
+          "=",
+          "yes"
+         ],
+         "OR": [
+          "=",
+          {
+           "py:radical_party": [
+            "?=",
+            {
+             "party_has_members": [
+              "=",
+              "yes"
+             ]
+            }
            ],
-           "OR": [
+           "any_interest_group": [
             "=",
             {
-             "leader": [
-              "?=",
+             "ig_counts_as_marginal": [
+              "=",
+              "no"
+             ],
+             "OR": [
+              "=",
               {
-               "has_ideology": [
+               "leader": [
+                "?=",
+                {
+                 "has_ideology": [
+                  "=",
+                  "ideology:ideology_radical"
+                 ]
+                }
+               ],
+               "is_interest_group_type": [
                 "=",
-                "ideology:ideology_radical"
+                "ig_trade_unions"
                ]
               }
-             ],
-             "is_interest_group_type": [
-              "=",
-              "ig_trade_unions"
              ]
             }
            ]
           }
          ]
         }
-       ]
-      }
-     ],
-     "NOR": [
-      "=",
-      {
-       "is_interest_group_type": [
-        [
-         "=",
-         "ig_landowners"
-        ],
-        [
-         "=",
-         "ig_devout"
-        ]
-       ]
-      }
-     ],
-     "leader": [
-      "?=",
-      {
+       ],
        "NOR": [
         "=",
         {
-         "has_ideology": [
+         "is_interest_group_type": [
           [
            "=",
-           "ideology:ideology_fascist"
+           "ig_landowners"
           ],
           [
            "=",
-           "ideology:ideology_integralist"
-          ],
-          [
-           "=",
-           "ideology:ideology_ethno_nationalist"
-          ],
-          [
-           "=",
-           "ideology:ideology_traditionalist"
-          ],
-          [
-           "=",
-           "ideology:ideology_royalist"
-          ],
-          [
-           "=",
-           "ideology:ideology_orleanist"
-          ],
-          [
-           "=",
-           "ideology:ideology_bonapartist"
-          ],
-          [
-           "=",
-           "ideology:ideology_legitimist"
-          ],
-          [
-           "=",
-           "ideology:ideology_theocrat"
-          ],
-          [
-           "=",
-           "ideology:ideology_slaver"
+           "ig_devout"
           ]
-         ],
-         "character_has_carlist_ideology": [
+         ]
+        }
+       ],
+       "leader": [
+        "?=",
+        {
+         "NOR": [
           "=",
-          "yes"
-         ],
-         "character_has_miguelist_ideology": [
-          "=",
-          "yes"
+          {
+           "has_ideology": [
+            [
+             "=",
+             "ideology:ideology_fascist"
+            ],
+            [
+             "=",
+             "ideology:ideology_integralist"
+            ],
+            [
+             "=",
+             "ideology:ideology_ethno_nationalist"
+            ],
+            [
+             "=",
+             "ideology:ideology_traditionalist"
+            ],
+            [
+             "=",
+             "ideology:ideology_royalist"
+            ],
+            [
+             "=",
+             "ideology:ideology_orleanist"
+            ],
+            [
+             "=",
+             "ideology:ideology_bonapartist"
+            ],
+            [
+             "=",
+             "ideology:ideology_legitimist"
+            ],
+            [
+             "=",
+             "ideology:ideology_theocrat"
+            ],
+            [
+             "=",
+             "ideology:ideology_slaver"
+            ]
+           ],
+           "character_has_carlist_ideology": [
+            "=",
+            "yes"
+           ],
+           "character_has_miguelist_ideology": [
+            "=",
+            "yes"
+           ]
+          }
          ]
         }
        ]
@@ -20616,6 +21124,38 @@
         "limit": [
          "=",
          {
+          "ig_is_member_of_dominant_party": [
+           "=",
+           {
+            "PARTY": [
+             "=",
+             "radical"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         {
+          "value": [
+           "=",
+           "1000"
+          ],
+          "desc": [
+           "=",
+           "\"amendment_radical_party_dominance\""
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
           "scope:number": [
            "=",
            "1"
@@ -21498,12 +22038,40 @@
    "available_for_interest_group": [
     "=",
     {
-     "owner": [
+     "trigger_if": [
       "=",
       {
-       "country_has_voting_franchise": [
+       "limit": [
+        "=",
+        {
+         "ig_is_member_of_dominant_party": [
+          "=",
+          {
+           "PARTY": [
+            "=",
+            "religious"
+           ]
+          }
+         ]
+        }
+       ],
+       "always": [
         "=",
         "yes"
+       ]
+      }
+     ],
+     "trigger_else": [
+      "=",
+      {
+       "owner": [
+        "=",
+        {
+         "country_has_voting_franchise": [
+          "=",
+          "yes"
+         ]
+        }
        ]
       }
      ]
@@ -22187,6 +22755,38 @@
           "desc": [
            "=",
            "\"from_traditionalist_monarchism\""
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "ig_is_member_of_dominant_party": [
+           "=",
+           {
+            "PARTY": [
+             "=",
+             "religious"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         {
+          "value": [
+           "=",
+           "1000"
+          ],
+          "desc": [
+           "=",
+           "\"amendment_religious_party_dominance\""
           ]
          }
         ]
@@ -23436,118 +24036,146 @@
    "available_for_interest_group": [
     "=",
     {
-     "owner": [
-      "?=",
+     "trigger_if": [
+      "=",
       {
-       "country_has_voting_franchise": [
-        "=",
-        "yes"
-       ],
-       "OR": [
+       "limit": [
         "=",
         {
-         "py:socialist_party": [
-          "?=",
-          {
-           "party_has_members": [
-            "=",
-            "yes"
-           ]
-          }
-         ],
-         "any_interest_group": [
+         "ig_is_member_of_dominant_party": [
           "=",
           {
-           "ig_counts_as_marginal": [
+           "PARTY": [
             "=",
-            "no"
-           ],
-           "leader": [
-            "?=",
-            {
-             "has_ideology": [
-              "=",
-              "ideology:ideology_state_socialist"
-             ]
-            }
-           ]
-          }
-         ],
-         "ig:ig_trade_unions": [
-          "?=",
-          {
-           "ig_counts_as_marginal": [
-            "=",
-            "no"
+            "socialist"
            ]
           }
          ]
         }
+       ],
+       "always": [
+        "=",
+        "yes"
        ]
       }
      ],
-     "NOR": [
+     "trigger_else": [
       "=",
       {
-       "is_interest_group_type": [
-        [
-         "=",
-         "ig_landowners"
-        ],
-        [
-         "=",
-         "ig_industrialists"
-        ]
-       ]
-      }
-     ],
-     "leader": [
-      "?=",
-      {
+       "owner": [
+        "?=",
+        {
+         "country_has_voting_franchise": [
+          "=",
+          "yes"
+         ],
+         "OR": [
+          "=",
+          {
+           "py:socialist_party": [
+            "?=",
+            {
+             "party_has_members": [
+              "=",
+              "yes"
+             ]
+            }
+           ],
+           "any_interest_group": [
+            "=",
+            {
+             "ig_counts_as_marginal": [
+              "=",
+              "no"
+             ],
+             "leader": [
+              "?=",
+              {
+               "has_ideology": [
+                "=",
+                "ideology:ideology_state_socialist"
+               ]
+              }
+             ]
+            }
+           ],
+           "ig:ig_trade_unions": [
+            "?=",
+            {
+             "ig_counts_as_marginal": [
+              "=",
+              "no"
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ],
        "NOR": [
         "=",
         {
-         "has_ideology": [
+         "is_interest_group_type": [
           [
            "=",
-           "ideology:ideology_fascist"
+           "ig_landowners"
           ],
           [
            "=",
-           "ideology:ideology_integralist"
-          ],
-          [
-           "=",
-           "ideology:ideology_ethno_nationalist"
-          ],
-          [
-           "=",
-           "ideology:ideology_traditionalist"
-          ],
-          [
-           "=",
-           "ideology:ideology_royalist"
-          ],
-          [
-           "=",
-           "ideology:ideology_orleanist"
-          ],
-          [
-           "=",
-           "ideology:ideology_bonapartist"
-          ],
-          [
-           "=",
-           "ideology:ideology_legitimist"
-          ],
-          [
-           "=",
-           "ideology:ideology_theocrat"
+           "ig_industrialists"
           ]
-         ],
-         "character_has_carlist_ideology": [
+         ]
+        }
+       ],
+       "leader": [
+        "?=",
+        {
+         "NOR": [
           "=",
-          "yes"
+          {
+           "has_ideology": [
+            [
+             "=",
+             "ideology:ideology_fascist"
+            ],
+            [
+             "=",
+             "ideology:ideology_integralist"
+            ],
+            [
+             "=",
+             "ideology:ideology_ethno_nationalist"
+            ],
+            [
+             "=",
+             "ideology:ideology_traditionalist"
+            ],
+            [
+             "=",
+             "ideology:ideology_royalist"
+            ],
+            [
+             "=",
+             "ideology:ideology_orleanist"
+            ],
+            [
+             "=",
+             "ideology:ideology_bonapartist"
+            ],
+            [
+             "=",
+             "ideology:ideology_legitimist"
+            ],
+            [
+             "=",
+             "ideology:ideology_theocrat"
+            ]
+           ],
+           "character_has_carlist_ideology": [
+            "=",
+            "yes"
+           ]
+          }
          ]
         }
        ]
@@ -24688,6 +25316,38 @@
           "desc": [
            "=",
            "\"from_slavery\""
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "ig_is_member_of_dominant_party": [
+           "=",
+           {
+            "PARTY": [
+             "=",
+             "socialist"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         {
+          "value": [
+           "=",
+           "1000"
+          ],
+          "desc": [
+           "=",
+           "\"amendment_socialist_party_dominance\""
           ]
          }
         ]

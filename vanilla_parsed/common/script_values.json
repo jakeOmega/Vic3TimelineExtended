@@ -9246,6 +9246,10 @@
   "=",
   "50"
  ],
+ "ai_subject_value_state_value_fraction": [
+  "=",
+  "0.25"
+ ],
  "ai_unjustified_war_restraint": [
   "=",
   "0.15"
@@ -28529,20 +28533,26 @@
            {
             "value": [
              "=",
-             "this.political_movement_radicalism"
+             "this.political_movement_support"
             ],
             "multiply": [
-             "=",
-             {
-              "value": [
-               "=",
-               "this.political_movement_support"
-              ],
-              "multiply": [
-               "=",
-               "5"
-              ]
-             }
+             [
+              "=",
+              {
+               "value": [
+                "=",
+                "this.political_movement_radicalism"
+               ],
+               "min": [
+                "=",
+                "0.05"
+               ]
+              }
+             ],
+             [
+              "=",
+              "5"
+             ]
             ]
            }
           ]
@@ -41462,6 +41472,57 @@
       ],
       [
        "=",
+       {
+        "add": [
+         "=",
+         "active_law:lawgroup_economic_system.type.progressiveness"
+        ],
+        "if": [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "OR": [
+             "=",
+             {
+              "has_law": [
+               [
+                "=",
+                "law_type:law_cooperative_ownership"
+               ],
+               [
+                "=",
+                "law_type:law_command_economy"
+               ]
+              ]
+             }
+            ]
+           }
+          ],
+          "divide": [
+           "=",
+           "2"
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "add": [
+         "=",
+         "active_law:lawgroup_land_reform.type.progressiveness"
+        ],
+        "divide": [
+         "=",
+         "2"
+        ]
+       }
+      ],
+      [
+       "=",
        "active_law:lawgroup_church_and_state.type.progressiveness"
       ],
       [
@@ -41474,19 +41535,6 @@
         "add": [
          "=",
          "active_law:lawgroup_rights_of_women.type.progressiveness"
-        ],
-        "divide": [
-         "=",
-         "2"
-        ]
-       }
-      ],
-      [
-       "=",
-       {
-        "add": [
-         "=",
-         "active_law:lawgroup_land_reform.type.progressiveness"
         ],
         "divide": [
          "=",
@@ -41532,13 +41580,18 @@
           "limit": [
            "=",
            {
-            "has_law": [
+            "NOT": [
              "=",
-             "law_type:law_council_republic"
+             {
+              "has_law": [
+               "=",
+               "law_type:law_council_republic"
+              ]
+             }
             ]
            }
           ],
-          "multiply": [
+          "divide": [
            "=",
            "2"
           ]
@@ -41561,7 +41614,45 @@
       ],
       [
        "=",
-       "active_law:lawgroup_economic_system.type.progressiveness"
+       {
+        "add": [
+         "=",
+         "active_law:lawgroup_economic_system.type.progressiveness"
+        ],
+        "divide": [
+         "=",
+         "2"
+        ],
+        "if": [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "OR": [
+             "=",
+             {
+              "has_law": [
+               [
+                "=",
+                "law_type:law_cooperative_ownership"
+               ],
+               [
+                "=",
+                "law_type:law_command_economy"
+               ]
+              ]
+             }
+            ]
+           }
+          ],
+          "multiply": [
+           "=",
+           "4"
+          ]
+         }
+        ]
+       }
       ],
       [
        "=",
@@ -41582,7 +41673,41 @@
       ],
       [
        "=",
-       "active_law:lawgroup_labour_associations.type.progressiveness"
+       {
+        "add": [
+         "=",
+         "active_law:lawgroup_labour_associations.type.progressiveness"
+        ],
+        "if": [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "OR": [
+             "=",
+             {
+              "has_law": [
+               [
+                "=",
+                "law_type:law_anti_strike_laws"
+               ],
+               [
+                "=",
+                "law_type:law_right_to_associate"
+               ]
+              ]
+             }
+            ]
+           }
+          ],
+          "divide": [
+           "=",
+           "2"
+          ]
+         }
+        ]
+       }
       ],
       [
        "=",
@@ -41597,6 +41722,29 @@
         ]
        }
       ]
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "NOT": [
+          "=",
+          {
+           "has_technology_researched": [
+            "=",
+            "socialism"
+           ]
+          }
+         ]
+        }
+       ],
+       "divide": [
+        "=",
+        "2"
+       ]
+      }
      ]
     }
    ]
@@ -41996,7 +42144,16 @@
       ],
       "divide": [
        "=",
-       "2"
+       {
+        "desc": [
+         "=",
+         "\"russian_alignment_reduced_pre_socialism_ideological_strength\""
+        ],
+        "value": [
+         "=",
+         "2"
+        ]
+       }
       ]
      }
     ],
@@ -42019,7 +42176,16 @@
       ],
       "divide": [
        "=",
-       "2"
+       {
+        "desc": [
+         "=",
+         "\"russian_alignment_reduced_pre_liberalism_ideological_strength\""
+        ],
+        "value": [
+         "=",
+         "2"
+        ]
+       }
       ]
      }
     ]
@@ -42219,27 +42385,15 @@
       "limit": [
        "=",
        {
-        "NOT": [
-         "=",
-         {
-          "AND": [
-           "=",
-           {
-            "russian_liberal_laws_value": [
-             "<=",
-             "0"
-            ],
-            "russian_socialist_laws_value": [
-             "<=",
-             "0"
-            ]
-           }
-          ]
-         }
-        ],
         "russian_liberal_laws_value": [
-         ">",
-         "russian_socialist_laws_value"
+         [
+          ">",
+          "0"
+         ],
+         [
+          ">",
+          "russian_socialist_laws_value"
+         ]
         ]
        }
       ],
@@ -42277,7 +42431,16 @@
       ],
       "divide": [
        "=",
-       "2"
+       {
+        "desc": [
+         "=",
+         "\"russian_alignment_reduced_pre_socialism_ideological_strength\""
+        ],
+        "value": [
+         "=",
+         "2"
+        ]
+       }
       ]
      }
     ]
@@ -42456,27 +42619,15 @@
       "limit": [
        "=",
        {
-        "NOT": [
-         "=",
-         {
-          "AND": [
-           "=",
-           {
-            "russian_liberal_laws_value": [
-             "<=",
-             "0"
-            ],
-            "russian_socialist_laws_value": [
-             "<=",
-             "0"
-            ]
-           }
-          ]
-         }
-        ],
-        "russian_liberal_laws_value": [
-         "<",
-         "russian_socialist_laws_value"
+        "russian_socialist_laws_value": [
+         [
+          ">",
+          "0"
+         ],
+         [
+          ">",
+          "russian_liberal_laws_value"
+         ]
         ]
        }
       ],
