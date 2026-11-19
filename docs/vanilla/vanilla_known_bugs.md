@@ -2400,16 +2400,6 @@ Adding effect after PostInitAndValidate
 
 Engine-internal validation-timing notice fired once during load (vanilla emits it for its own deferred trigger registration; also fires on filewatcher reloads). No script path, no player-visible effect. 1.15 logs an effect twin, `jomini_effect.cpp:160`, twice a launch (2026-11-05). It is not once a launch: a save load logs a burst within one second, 996 lines at 16:13:25 and 2,415 at 17:48:52 on 2026-11-06 (805 trigger lines and 1,610 effect lines, exactly two per trigger), and 2,604 a file in the 2026-10-11 observer run, with a few single lines at other times (filewatcher reloads while the deploy watcher syncs). 2026-11-09: the burst is the save's concluded journal entries. A load of a save with 897 concluded-entry records (see the stale key references entry above for the count) logged exactly 897 trigger lines and 1,794 effect lines in its second, and the 2026-11-06 load's 805 and 1,610 fit the same three lines a record. Those records are nearly all vanilla journal entries (875 of the 897), so the burst is vanilla's and grows by three lines for each entry any country concludes.
 
-### `power_bloc_statue_hero_type.cpp:141` / `power_bloc_statue_pedestal_type.cpp:62` — no default statue hero/pedestal for `identity_diplomatic`
-- source: `power_bloc_statue_hero_type.cpp:141`
-- source: `power_bloc_statue_pedestal_type.cpp:62`
-
-```
-Identity 'identity_diplomatic' is not default for any
-```
-
-Vanilla's power-bloc statue content declares default heroes/pedestals per identity but has no default for the vanilla `identity_diplomatic`. The mod defines no statue heroes or pedestals, so this is a vanilla content gap. Cosmetic — the statue falls back to a generic piece.
-
 ### `savegamehelper.cpp:183` — save browser scanning uncompressed saves
 - source: `savegamehelper.cpp:183`
 
