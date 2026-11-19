@@ -937,6 +937,72 @@ class FailureTests(RestoreTestCase):
         self.assertEqual(restore.compare(snap, self.user), restore.Diff([], [], [], []))
         self.assertEqual(events(snap)[-1], "restored")
 
+    def run_that_changed_files_and_logs(self):
+        snap = self.run_started()
+        (self.user / "continue_game.json").write_text("{}")
+        (self.user / "tests.txt").write_text("Tests:\n")
+        (self.user / "logs/debug.log").write_text("the run's log\n")
+        (self.user / "logs/game.log").write_text("a log the run created\n")
+        finish(snap)
+        return snap
+
+    def test_a_log_held_open_stops_the_restore_with_everything_else_back(self):
+        # #1905: a crashed game's crash reporter holds `logs/` open, and Windows refuses a rename over one of them
+        # (PermissionError). The logs go last, so the owner's other files are back, and the run's own removed, by
+        # then; nothing in `logs/` has changed, and a later restore finishes the logs.
+        snap = self.run_that_changed_files_and_logs()
+        real_replace = os.replace
+
+        def held_open(source, target):
+            if Path(target).parent.name == "logs":
+                raise PermissionError(13, "Permission denied", str(target))
+            real_replace(source, target)
+
+        with mock.patch("os.replace", held_open):
+            with self.assertRaises(PermissionError):
+                restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((self.user / "continue_game.json").read_bytes(), b'{"save": "autosave.v3"}')
+        self.assertFalse((self.user / "tests.txt").exists())
+        self.assertEqual((self.user / "logs/debug.log").read_text(), "the run's log\n")
+        self.assertTrue((self.user / "logs/game.log").exists())
+        self.assertEqual(events(snap), ["started", "game_exited"])
+        self.assertFalse([p for p in self.user.rglob("*") if "te_qa_restore" in p.name])
+        out = restore.restore(snap, self.user, other_game_running=False)       # once nothing holds the log
+        self.assertEqual((out.held, out.restored, out.removed), (False, ["logs/debug.log"], ["logs/game.log"]))
+        self.assertEqual(restore.compare(snap, self.user), restore.Diff([], [], [], []))
+        self.assertEqual(events(snap)[-1], "restored")
+
+    def test_the_logs_go_back_after_everything_else(self):
+        snap = self.run_that_changed_files_and_logs()
+        real_replace, real_unlink, order = os.replace, os.unlink, []
+
+        def replace(source, target):
+            order.append(("put back", Path(target).relative_to(self.user).as_posix()))
+            real_replace(source, target)
+
+        def unlink(path, *a, **k):
+            rel = Path(path)
+            if self.user in rel.parents and "te_qa_restore" not in rel.name:
+                order.append(("removed", rel.relative_to(self.user).as_posix()))
+            real_unlink(path, *a, **k)
+
+        with mock.patch("os.replace", replace), mock.patch("os.unlink", unlink):
+            out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertFalse(out.held)
+        self.assertEqual(order, [("put back", "continue_game.json"), ("removed", "tests.txt"),
+                                 ("put back", "logs/debug.log"), ("removed", "logs/game.log")])
+
+    def test_a_damaged_stored_log_still_raises_before_anything_is_changed(self):
+        # Every stored copy is staged and checked before the first change, the logs' too.
+        snap = self.run_that_changed_files_and_logs()
+        entry = snap.files["logs/debug.log"]
+        blob(self.backups, entry).write_bytes(b"x" * entry.size)
+        before = tree(self.user)
+        with self.assertRaises(OSError):
+            restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual(tree(self.user), before)
+        self.assertEqual(events(snap), ["started", "game_exited"])
+
 
 class HoldTests(RestoreTestCase):
     def test_other_game_running_holds(self):

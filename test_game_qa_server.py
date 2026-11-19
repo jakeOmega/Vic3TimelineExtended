@@ -25,7 +25,7 @@ from pathlib import Path
 from unittest import mock
 
 from game_qa import __main__ as cli
-from game_qa import client, fakes, gate, overlay, profiling, server, session, snapshot
+from game_qa import client, crash_reporter, fakes, gate, overlay, profiling, server, session, snapshot
 from game_qa import fixture as fixture_mod
 from game_qa.console import ConsoleError, Reply
 from game_qa.dap import DebuggerError
@@ -1485,6 +1485,31 @@ class DoctorTest(ServerTestCase):
         self.assertNotIn("replaces it", problems)              # `start` refuses a left overlay; it never replaces it
         self.assertEqual(len(reply["checks"]), 9)
         self.assertEqual((tree(self.user), tree(self.backups)), before)          # it changed nothing
+
+    def test_doctor_names_a_crash_reporter_that_is_up(self):
+        # #1905: a crashed game's reporter holds its logs open, so a restore of `logs/` would fail.
+        up = [crash_reporter.Reporter(7000, "2026-11-19T09:30:16.1234567Z", 4242, "C:\\x\\CrashReporter.exe")]
+        reply, code = client.doctor(self.resolve, ping=lambda: "3.11.9", sample_gpu=lambda: IDLE[:1],
+                                    reporters=lambda: up)
+        self.assertEqual(code, 2)
+        self.assertEqual(len(reply["problems"]), 1)
+        self.assertIn("crash reporter: up: pid 7000 (started 2026-11-19T09:30:16.1234567Z)", reply["problems"][0])
+        reply, code = client.doctor(self.resolve, ping=lambda: "3.11.9", sample_gpu=lambda: IDLE[:1],
+                                    reporters=lambda: [])
+        self.assertEqual(code, 0, reply)
+        self.assertIn("crash reporter: ok (none)", reply["checks"])
+
+        def unlisted():
+            raise gate.GateError("could not list crash reporter processes")
+        reply, code = client.doctor(self.resolve, ping=lambda: "3.11.9", sample_gpu=lambda: IDLE[:1],
+                                    reporters=unlisted)
+        self.assertEqual(code, 2)
+        self.assertIn("could not be listed", reply["problems"][0])
+
+    def test_doctors_reporter_look_is_skipped_on_an_install_without_one(self):
+        with mock.patch.object(client, "_resolve", self.resolve), \
+                mock.patch.object(crash_reporter, "list_reporters", side_effect=AssertionError("listed")):
+            self.assertEqual(client._install_reporters(), [])
 
     def test_doctor_says_when_a_path_is_not_set(self):
         self.paths["base_game_path"] = RuntimeError("base_game_path is not configured")

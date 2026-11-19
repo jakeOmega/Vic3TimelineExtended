@@ -8,11 +8,16 @@
                                                            # start it
     python3 -m game_qa watch <id> [--interval S]           # right after: records that the launched game is
                                                            # alive, and its exit (S at most 10)
-    python3 -m game_qa restore <id>                        # after `watch` has returned
+    python3 -m game_qa restore <id>                        # after `watch` has returned; closes the crash
+                                                           # reporter the run's crash left up first
     python3 -m game_qa gate --permission "asked 12:40"     # dry check: would a launch be allowed now?
     python3 -m game_qa recover                             # finish runs a dead session left
     python3 -m game_qa held                                # snapshots kept because the owner played since
     python3 -m game_qa selftest-restore                    # prove a snapshot restores, touching nothing
+
+Every launch passes `-no_crash_reporter`, and `restore` and `recover` close a crash reporter the run's own crash
+left up anyway (game_qa/crash_reporter.py, #1905): it holds the crashed game's logs open, and the restore could not
+put the owner's back until someone closed it.
 
 A run `watch` lost sight of (a failed look, a first look more than 120 s after the start, or a resume after
 more than 15 s) is held for the owner to resolve, as is one during which it saw another game. `snapshot`, `launch`, `restore`, `recover` and
@@ -37,10 +42,11 @@ import stat
 import sys
 import tempfile
 import time
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
-from game_qa import addmod, fixture, gate, restore, snapshot
+from game_qa import addmod, crash_reporter, fixture, gate, restore, snapshot
 from game_qa import client
 
 MIN_FREE_BYTES = 2 * 1024**3
@@ -374,6 +380,10 @@ def cmd_launch(args) -> tuple[dict, int]:
     `recover` arriving during it is refused `busy`. The claim and `launch_in_flight` remain for a launch
     whose process died between the start and the record.
 
+    Every start gets `-no_crash_reporter` (`crash_reporter.with_flag`, unless the arguments carry it already, in
+    any spelling): a crash then leaves no reporter up holding `logs/` open (#1905). `started` and the reply list the
+    arguments as passed, the flag among them.
+
     `started` (pid, start time, arguments) is recorded the moment the process exists. A start time
     PowerShell could not read is recorded as "unknown" and never looked up later: a process found by its pid
     alone could be another game that took the pid.
@@ -391,6 +401,7 @@ def cmd_launch(args) -> tuple[dict, int]:
     user, backups = _paths()
     snap = _find(backups, args.id)
     game_args = list(args.game_args)
+    passed = crash_reporter.with_flag(game_args)      # checked as given, started with the flag (#1905)
     playset_wanted = args.playset in ("mod_only", "none") or bool(args.add_mod)
     playset = None
     try:
@@ -436,7 +447,7 @@ def cmd_launch(args) -> tuple[dict, int]:
         return dict(refused.result, id=snap.id), 2
     written = playset is not None and playset.data is not None
     try:
-        proc = gate.start_game(exe_windows, game_args, cwd_windows)
+        proc = gate.start_game(exe_windows, passed, cwd_windows)
     except gate.GateError as exc:
         return {"refused": "start_unconfirmed", "id": snap.id,
                 "detail": f"{exc}. Nothing was recorded: a game this started would count as another game "
@@ -448,7 +459,7 @@ def cmd_launch(args) -> tuple[dict, int]:
                              "it holds a changed file outside `logs/` and leaves `logs/` as it is")}, 2
     try:
         long_run = {"long_run": args.long_run} if args.long_run else {}
-        snapshot.record(snap, "started", pid=proc.pid, created=proc.created, args=game_args, **long_run)
+        snapshot.record(snap, "started", pid=proc.pid, created=proc.created, args=passed, **long_run)
     except OSError as exc:
         return {"refused": "not_recorded", "id": snap.id, "pid": proc.pid, "created": proc.created,
                 "detail": f"the game started (pid {proc.pid}) but its start could not be recorded: {exc}. It "
@@ -456,7 +467,7 @@ def cmd_launch(args) -> tuple[dict, int]:
                           f"started it, so it may end pid {proc.pid}, but only while the game listing shows pid "
                           f"{proc.pid} with start time {proc.created}: a pid alone may be another game's by then"
                           + (f". Meanwhile {_PLAYSET_STAYS}" if written else "")}, 2
-    result = {"id": snap.id, "pid": proc.pid, "created": proc.created, "args": game_args}
+    result = {"id": snap.id, "pid": proc.pid, "created": proc.created, "args": passed}
     if playset is not None:
         result["playset"] = {"mode": playset.mode, "enabled": playset.enabled, "written": written}
     if proc.created == gate.UNKNOWN_START:
@@ -1001,7 +1012,9 @@ def cmd_restore(args) -> tuple[dict, int]:
     a start for gets no verdict (`launch_in_flight`). Before judging, the
     playset `launch` wrote for the run is put back when it is provably still
     the harness's own and no game runs, whatever the verdict
-    (`_settle_playset`); beside a game the reply says `playset_left`."""
+    (`_settle_playset`); beside a game the reply says `playset_left`. Before both, a crash reporter the run's own
+    crash left up is closed (`_judged`; the reply's `reporters_closed`, and `reporters_left` for one that is not
+    the run's), and a restore refused `Permission denied` says who may hold the file."""
     user, backups = _paths()
     snap = _find(backups, args.id)
     age = _in_flight_age(snap)
@@ -1022,15 +1035,50 @@ def cmd_restore(args) -> tuple[dict, int]:
                           "returned without recording an exit (game_gone_unrecorded, cannot_look) or died, run "
                           f"`restore` again {WATCH_RECORDING_S:g} s after that time"}, 2
     notes: dict = {}
-    try:
+
+    def judge() -> restore.Outcome:
         _settle_playset(snap, user, bool(games), notes)
         started = "started" in _events(snap)    # nothing launched: logs/ and the saves are whoever played since
-        out = _unvouched_hold(snap, notes, user) or restore.restore(
+        return _unvouched_hold(snap, notes, user) or restore.restore(
             snap, user, other_game_running=bool(games), logs=started, saves=started,
             run_logs_dir=Path(args.run_logs) if args.run_logs else None)
+
+    try:
+        out = _judged(snap, games, notes, judge)
     except OSError as exc:
-        return {"held": False, "refused": "error", "detail": str(exc), **notes}, 2
+        return {"held": False, "refused": "error", "detail": str(exc) + crash_reporter.held_open_hint(exc, notes),
+                **notes}, 2
     return _reply(out, notes), 2 if out.held else 0
+
+
+def _judged(snap: snapshot.Snapshot, games: list[gate.ProcId], notes: dict,
+            judge: Callable[[], restore.Outcome]) -> restore.Outcome:
+    """`judge()` (the playset settled, then the hold or the restore), with a crash reporter the run's own crash
+    left up closed first (#1905: `crash_reporter.settle`, whose notes go into `notes`). A rename refused anyway
+    (PermissionError) is run once more when a second look closes a reporter of the run's that came up after the
+    first: a restore cut short so is safe to run again, as `recover` does (what it put back is the owner's, and
+    is not looked at again). Raises what `judge` raises."""
+    exe = _reporter_exe()
+    crash_reporter.merge(notes, crash_reporter.settle(snap, games, exe))
+    try:
+        return judge()
+    except PermissionError:
+        late = crash_reporter.settle(snap, games, exe)
+        crash_reporter.merge(notes, late)
+        if not late.get("reporters_closed"):
+            raise
+    return judge()
+
+
+def _reporter_exe() -> Path | None:
+    """This install's crash reporter (`crash_reporter.REPORTER_EXE` under base_game_path); None when the install's
+    path is not set."""
+    import path_constants
+
+    try:
+        return Path(path_constants.refresh("base_game_path")) / crash_reporter.REPORTER_EXE
+    except Exception:
+        return None
 
 
 def _reply(out: restore.Outcome, notes: dict) -> dict:
@@ -1226,8 +1274,9 @@ def cmd_recover(args) -> tuple[dict, int]:
     writes; and a run during which `watch` saw another game holds (`other_game_ran`), as does one it lost
     sight of (`unwatched_stretch`). A run whose last sign of life is under WATCH_RECORDING_S old is reported
     `watch_still_recording`, as `restore` refuses it, and the unwinding stops there, nothing recorded. Each
-    run judged gets its playset settled first, as in `restore` (`_settle_playset`). A held snapshot is never
-    looked at again here: `restore <id>` does that."""
+    run judged gets its playset settled first, as in `restore` (`_settle_playset`), and before that a crash
+    reporter its own crash left up closed (`_judged`). A held snapshot is never looked at again here: `restore
+    <id>` does that."""
     user, backups = _paths()
     games = gate.list_games()
     stack = list(reversed(restore.unfinished(backups)))
@@ -1249,10 +1298,16 @@ def cmd_recover(args) -> tuple[dict, int]:
             if age is not None and age < WATCH_RECORDING_S:   # as `restore` refuses: leave it, record nothing
                 runs.append(dict(_outcome(restore.Outcome([], [], False, "watch_still_recording")), id=snap.id))
                 break
-            _settle_playset(snap, user, bool(games), notes)
-            out = _unvouched_hold(snap, notes, user) or restore.restore(snap, user, other_game_running=bool(games))
+
+            def judge(snap=snap, notes=notes) -> restore.Outcome:
+                _settle_playset(snap, user, bool(games), notes)
+                return _unvouched_hold(snap, notes, user) or restore.restore(snap, user,
+                                                                             other_game_running=bool(games))
+
+            out = _judged(snap, games, notes, judge)
         except Exception as exc:
-            runs.append(dict(_outcome(restore.Outcome([], [], False, f"error: {exc}")), id=snap.id, **notes))
+            hint = crash_reporter.held_open_hint(exc, notes) if isinstance(exc, OSError) else ""
+            runs.append(dict(_outcome(restore.Outcome([], [], False, f"error: {exc}{hint}")), id=snap.id, **notes))
             break
         runs.append(dict(_reply(out, notes), id=snap.id))
         if out.held:

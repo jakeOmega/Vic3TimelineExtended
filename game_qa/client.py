@@ -80,7 +80,7 @@ from collections.abc import Callable, Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
-from game_qa import fixture, gate, overlay, restore, server, session, snapshot
+from game_qa import crash_reporter, fixture, gate, overlay, restore, server, session, snapshot
 from game_qa.helper import ProcessHelper, to_windows_path
 from game_qa.report import read_steps, utc_now
 from game_qa import profiling, selfchecks
@@ -430,11 +430,13 @@ def _profile_roots() -> list[tuple[str, Path]]:
 
 # ---- doctor
 
-def doctor(resolve: Callable[[str], Any], ping: Callable[[], str], sample_gpu: Callable[[], Sequence]) -> tuple[dict, int]:
+def doctor(resolve: Callable[[str], Any], ping: Callable[[], str], sample_gpu: Callable[[], Sequence],
+           reporters: Callable[[], Sequence] | None = None) -> tuple[dict, int]:
     """Is this machine ready for a session? One line per check, `<check>: ok…` or what is wrong. It starts no game,
     and changes nothing: `resolve` gives a path constant (raising when it is not set), `ping` asks the Windows
-    python.exe for its version through the helper, `sample_gpu` gives one nvidia-smi reading. Exit 0 only when
-    every check is ok."""
+    python.exe for its version through the helper, `sample_gpu` gives one nvidia-smi reading, `reporters` (when
+    given) lists the install's crash reporters that are up (#1905: one holds a crashed game's logs open). Exit 0
+    only when every check is ok."""
     lines: list[str] = []
     problems: list[str] = []
 
@@ -476,6 +478,18 @@ def doctor(resolve: Callable[[str], Any], ping: Callable[[], str], sample_gpu: C
     else:
         note("nvidia-smi", "no reading: nvidia-smi is missing or failed, so `launch` takes the GPU for busy until "
                            "the owner confirms (--owner-confirmed-busy)")
+
+    if reporters is not None:
+        try:
+            up = list(reporters())
+        except Exception as e:
+            note("crash reporter", "could not be listed: %s" % e)
+        else:
+            note("crash reporter", "up: %s. A crashed game's reporter holds its logs open, so a restore of `logs/` "
+                                   "fails until it is closed: `restore` and `recover` close the one a run's own "
+                                   "crash left, and any other is the owner's to close" % ", ".join(
+                                       "pid %d (started %s)" % (r.pid, r.created) for r in up) if up else None,
+                 "ok (none)")
 
     backups = paths.get("game_qa_backup_path")
     note("backup root", _backup_root_problem(backups) if backups is not None else "game_qa_backup_path is not set")
@@ -980,7 +994,16 @@ def cmd_profile_summary(args) -> tuple[dict, int]:
 
 
 def cmd_doctor(args) -> tuple[dict, int]:
-    return doctor(_resolve, _ping_windows_python, lambda: gate.sample_gpu(n=1))
+    return doctor(_resolve, _ping_windows_python, lambda: gate.sample_gpu(n=1), _install_reporters)
+
+
+def _install_reporters() -> list:
+    """The crash reporters of this install that are up (`crash_reporter.this_installs`); none when it has no
+    reporter to start."""
+    exe = _resolve("base_game_path") / crash_reporter.REPORTER_EXE
+    if not exe.is_file():
+        return []
+    return crash_reporter.this_installs(crash_reporter.list_reporters(), gate.windows_path(exe))
 
 
 def cmd_remove_overlay(args) -> tuple[dict, int]:

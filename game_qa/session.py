@@ -89,7 +89,8 @@ PLAYSETS = ("current", "mod_only")
 # MENU_PROBE_COMMAND, which needs no game state, so that the probe can go before it.
 # `-no_crash_reporter` ("Never launch the crash reporter app on a crash, so an unattended run leaves no modal window
 # behind", the 1.15.2 binary): after the first crash the reporter's window held `logs/` open, and the restore could
-# not put the owner's logs back until the owner closed it.
+# not put the owner's logs back until the owner closed it. Since #1905 `launch` adds it to every start
+# (game_qa/crash_reporter.py); it stays here, where it was first needed.
 DOCS_END = "-run_until=%d.%d.%d" % fixture.SHORT_RUN_LAST
 DOCS_ARGS = ("-gdpr-compliant", "-debug_mode", "-no_crash_reporter", "-handsoff", DOCS_END)
 DOCS_PLAYSET = "none"
