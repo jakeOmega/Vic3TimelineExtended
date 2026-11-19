@@ -870,9 +870,60 @@ save, the pulse of 5 June gave exactly what S1's did (83 `TE_RESETTLEMENT`
 lines of 83 the same: the same sources, the same destinations, 1,569,901
 people moved), the tick took 15 s against 32 s, and the next month's capture
 put the whole monthly country pulse at 2.7 s profiled over 30 days against
-58.8 over 20. That is about 17 s a month, roughly 0.55 s of a 7–8 s day, and
-it also keeps the harness's `advance` working: a window frozen for more than
-10 s reads as `game_gone`, and the old pulse froze it for 30.
+58.8 over 20. That is about 17 s a month, roughly 0.55 s of a 7–8 s day.
+
+### Where the rest of the day goes (provisional)
+
+The engine's tick tasks are about 1 s of the 6–8 s day (985 ms a day over
+S2's 129 days): `HandleAutonomousInvestment` 254 ms (the United States' pool,
+in weekly bursts of 3.5–9 s), `UpdateEmployment` 125, `RecalculateModifierNodes`
+112, `ProcessEconomicMigration` 76, `UpdatePopGrowth` 60, `UpdateStateTrades`
+47, `UpdateAI` 40; the tasks that walk pops (migration, growth, employment,
+`MergeSmallPops`, `DissolveMicroPops`, the state pop caches) about 300 ms. The
+flat script dump adds 0.6–0.9 s a day of CPU summed over threads. Paused, a
+frame takes 11.6 ms. The rest is time a tick spends outside its tasks: about
+0.9 s of every sub-tick (hours 6, 12, 18; tasks 50–120 ms) and 1.5–4 s of an
+ordinary day's hour 0.
+
+| Window (S1 the save as it is, S2 with the fix) | Settings | s/day | Sub-tick s | Ordinary hour 0 s |
+|---|---|---|---|---|
+| S1 18 May – 13 Jun | as loaded | 7.76 | 1.05 | 5.1 |
+| S1 28 Jun – 14 Jul | sub-tick rendering off | 7.94 | 1.17 | 2.0 |
+| S1 22 Aug – 14 Oct | rendering off, `GUI.Draw` off | 5.33 | 0.65 | 2.7 |
+| S2 18 May – 8 Jun | as loaded | 6.13 | 0.98 | 3.5 |
+| S2 8 Jul – 23 Jul | `GUI.Draw`, `Draw.Map`, `Draw.MapObjects` off, rendering on | 11.68 | 2.23 | 5.8 |
+| S2 23 Jul – 8 Aug | the same, rendering off | 2.82 | 0.51 | 1.2 |
+| S2 8 Aug – 24 Aug | map back on | 3.28 | 0.57 | 1.3 |
+| S2 24 Aug – 9 Sep | map objects back on | 4.07 | 0.72 | 1.2 |
+| S2 9 Sep – 24 Sep | GUI back on: everything drawn, rendering off | 3.51 | 0.59 | 1.1 |
+
+So in S2 switching sub-tick rendering off (`gamestatetick.renderframeifneeded`)
+took the day from 6–7.7 s to 3.3–4.1 s, while in S1 the same switch left the
+sub-ticks where they were. The two sessions differ in more than the switch
+(S1 had the debug-mode map tooltip up under the cursor; S2 had toggled the
+drawing switches off and on), so this needs a clean A/B by launch argument
+before it is advice. With everything drawn off and rendering on the tick was
+slowest of all: the tick gives way to every frame, and frames with nothing to
+draw come fastest, which suggests the cost is in each hand-over rather than
+in what is drawn.
+
+**Typing `gamestatetick.renderframeifneeded` to switch rendering back on in
+a running session crashed the game** a minute later
+(`EXCEPTION_ACCESS_VIOLATION` at RVA `0x3787360`, `crashes/victoria3_01261019_030122`),
+after `GUI.Draw`, `Draw.Map` and `Draw.MapObjects` had been toggled off and on.
+Switching it off once (S1) did not. Use `--game-arg disable_renderframeifneeded`
+for an A/B, not the console twice. The crash left `CrashReporter.exe` up,
+which kept the restore from finishing (#1905).
+
+What changed on 7 April 1976 is open. Between the owner's autosave of
+1 April 1976 and the save of May 1977 the save's sections barely moved (pops
+169,142 database entries against 168,657, buildings 21,972 against 22,141,
+185–189 countries); what grew is war: land battles 20 → 81, naval battles
+0 → 25, ships 1,297 → 1,842, and the ship construction section 8.7 times its
+size. The next test is to load that autosave (the owner's `autosave_4.v3`
+once the restore is back; a copy is
+`/mnt/d/vic3te-data/perf-2026-11-19/save/autosave_4_19760401ish.v3`) and
+watch the days across 7 April.
 
 ## Measurements, 2026-10-03: 2072
 
