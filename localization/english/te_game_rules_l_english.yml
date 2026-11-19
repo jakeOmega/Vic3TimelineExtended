@@ -33,7 +33,7 @@
  setting_covert_warfare_disabled:0 "Covert Warfare Disabled"
  setting_covert_warfare_disabled_desc:0 "The covert warfare [concept_journal_entry] is disabled. [concept_intelligence_capacity] modifiers from technologies still appear but [concept_covert_operations] are unavailable."
  setting_covert_warfare_early_unlock:0 "Covert Warfare: Early Unlock"
- setting_covert_warfare_early_unlock_desc:0 "The [concept_covert_warfare_system] [concept_journal_entry] opens with $central_archives$. Funding above Professional needs $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ or $law_ministry_of_intelligence_and_security$, and only operations whose technology you have can be launched: espionage and wartime sabotage at first."
+ setting_covert_warfare_early_unlock_desc:0 "The [concept_covert_warfare_system] [concept_journal_entry] opens with $central_archives$. Funding above Professional needs what opens it under Late Unlock, and only operations whose technology you have can be launched: espionage and wartime sabotage at first."
  setting_covert_warfare_enabled:0 "Covert Warfare: Late Unlock"
  setting_covert_warfare_enabled_desc:0 "The [concept_covert_warfare_system] [concept_journal_entry] opens with $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ or $law_ministry_of_intelligence_and_security$. Nations build [concept_intelligence_capacity] through technology and [concept_literacy], and launch [concept_covert_operations] against rivals."
  setting_cultural_hegemony_disabled:0 "Cultural Hegemony Disabled"
