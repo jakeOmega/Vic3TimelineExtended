@@ -107,6 +107,16 @@ nd_deploy_bar_enforced = {
 	color = neutral
 }
 
+# Our forces have stood at High Alert for six months with no crisis under way
+# (nd_remind_high_alert). Human players only. A toast, since the panel is the
+# only other place that shows readiness.
+nd_high_alert_reminder = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/military.dds"
+	notification_type = toast
+	color = bad
+}
+
 nd_crisis_warning_reported = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"

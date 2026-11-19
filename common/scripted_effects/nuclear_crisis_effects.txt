@@ -344,6 +344,11 @@ nd_crisis_open = {
 					set_variable = { name = nd_crisis_opponent value = scope:nd_issuer }
 					set_variable = { name = nd_crisis_role value = 2 }
 				}
+				# ---- each side's readiness before anything in the crisis moves it
+				# (the AIs' review below, a hold, a counter-threat), for the
+				# outcome notice's stand-down (nuclear_crisis.6) ------------------
+				nd_record_pre_crisis_readiness = yes
+				scope:nd_target = { nd_record_pre_crisis_readiness = yes }
 				# ---- a threat wears the nuclear taboo down, by our rank ---------
 				if = {
 					limit = { always = $PUBLIC$ }
@@ -1395,6 +1400,61 @@ nd_crisis_write_pending = {
 	}
 	else = {
 		set_variable = { name = nd_crisis_pending_bluff value = 0 }
+	}
+}
+
+# Country scope, scope:nd_outcome_other saved (nuclear_crisis.6's immediate).
+# The outcome notice's options: apply this notice's record when the pending
+# record is this pair's, or the other party no longer exists (annexed after
+# conceding a war), in which case no newer record about it can have replaced
+# this one.
+nd_crisis_notice_settle = {
+	if = {
+		limit = {
+			has_variable = nd_crisis_pending_outcome
+			OR = {
+				NOT = { exists = scope:nd_outcome_other }
+				NOT = { exists = var:nd_crisis_pending_opponent }
+				var:nd_crisis_pending_opponent ?= scope:nd_outcome_other
+			}
+		}
+		nd_crisis_apply_outcome_side = yes
+	}
+	else = {
+		custom_tooltip = nd_tt_outcome_already_settled
+	}
+}
+
+# Country scope (nd_crisis_open, each side). The readiness we had ordered when
+# the crisis opened: the level the outcome notice offers to stand back down to
+# (nd_pre_crisis_readiness_value). A side with no posture has no record, and
+# an older record is dropped so that it cannot stand in for this crisis.
+nd_record_pre_crisis_readiness = {
+	if = {
+		limit = { has_variable = nd_readiness_target }
+		set_variable = { name = nd_pre_crisis_readiness value = var:nd_readiness_target }
+	}
+	else_if = {
+		limit = { has_variable = nd_pre_crisis_readiness }
+		remove_variable = nd_pre_crisis_readiness
+	}
+}
+
+# Country scope (nuclear_crisis.6.b, behind nd_crisis_notice_offers_standdown,
+# so the level is below the present target and at most Heightened). Lowering
+# is never blocked (nd_can_set_readiness), and the panel's buttons call the
+# same setters.
+nd_stand_down_to_pre_crisis = {
+	if = {
+		limit = { nd_pre_crisis_readiness_value < 1 }
+		nd_set_readiness_target_0 = yes
+	}
+	else_if = {
+		limit = { nd_pre_crisis_readiness_value < 2 }
+		nd_set_readiness_target_1 = yes
+	}
+	else = {
+		nd_set_readiness_target_2 = yes
 	}
 }
 

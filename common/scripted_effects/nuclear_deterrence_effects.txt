@@ -375,6 +375,33 @@ nd_weekly_update = {
 	nd_log_strike_eligibility = yes
 }
 
+# Country scope, armed (nd_monthly_update). A hold at a crisis's deadline puts
+# the forces on High Alert, the panel is the only place that shows it, and
+# nothing takes them off once the crisis is over (2026-11-19: a player left on
+# High Alert for two years, at strain 100, saw a false warning a week in a war
+# with an armed power). Six months at High Alert with no crisis under way
+# (nd_high_alert_outlasts_crisis) posts one notice; ordering anything lower
+# re-arms it. Human players only: the AI reviews its posture every sixth month.
+nd_remind_high_alert = {
+	if = {
+		limit = {
+			has_variable = nd_high_alert_reminded
+			has_variable = nd_readiness_target
+			var:nd_readiness_target < 3
+		}
+		remove_variable = nd_high_alert_reminded
+	}
+	if = {
+		limit = {
+			is_ai = no
+			NOT = { has_variable = nd_high_alert_reminded }
+			nd_high_alert_outlasts_crisis = yes
+		}
+		set_variable = nd_high_alert_reminded
+		post_notification = nd_high_alert_reminder
+	}
+}
+
 nd_monthly_update = {
 	if = {
 		limit = { nd_is_armed = yes }
@@ -384,6 +411,8 @@ nd_monthly_update = {
 		change_variable = { name = nd_authority_months add = 1 }
 		change_variable = { name = nd_readiness_months add = 1 }
 		change_variable = { name = nd_months_since_incident add = 1 }
+		# ---- a High Alert that outlasts its crisis: one reminder --------------
+		nd_remind_high_alert = yes
 		# ---- capabilities -----------------------------------------------------
 		change_variable = { name = nd_strain add = nd_strain_step }
 		clamp_variable = { name = nd_strain min = 0 max = 100 }
