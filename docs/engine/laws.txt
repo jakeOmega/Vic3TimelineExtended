@@ -294,7 +294,7 @@ Labor Rights:
 	Workers' Protections [progressiveness=100] - Unlocking Technology: Human Rights
 		Workers enjoy extensive protections that are enshrined in law.
 Labor Associations:
-	Guild System [progressiveness=-50]
+	Guild System [progressiveness=-24]
 		A system in which eligibility for employment within certain fields is dependent upon membership of a formalized craft or merchant guild.
 	Combination Acts
 		The formation of labor associations of any kind is prohibited by law.
@@ -302,9 +302,9 @@ Labor Associations:
 		Whilst the formation of labor associations is permitted, strikes and certain forms of collective bargaining are prohibited.
 	Right to Associate [progressiveness=50]
 		No special restrictions are placed upon the formation and activity of labor associations.
-	Corporatized Unions [progressiveness=25] - Unlocking Technology: Corporatism
+	Corporatized Unions [progressiveness=30] - Unlocking Technology: Corporatism
 		Labor associations have been brought under the direct or indirect control of the state, serving foremostly as a means to facilitate collaboration between classes.
-	Factory Councils [progressiveness=75] - Unlocking Technology: Socialism
+	Factory Councils [progressiveness=125] - Unlocking Technology: Socialism
 		Workers have been radicalized by revolutionary conditions, seizing control of their workplaces and supplanting previous management structures.
 Migration:
 	No Migration Controls [progressiveness=50]
