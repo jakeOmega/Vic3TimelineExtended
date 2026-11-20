@@ -526,7 +526,7 @@ class SolGateTest(unittest.TestCase):
                 )
 
     def test_each_optional_part_has_a_gate_of_its_own(self):
-        # R23: the gap over the core cultures plus this part, open below te_cm_sol_gap_open, closed above
+        # R23: the part's shortfall below the best-off core culture, open below te_cm_sol_gap_open, closed above
         # te_cm_sol_gap_close. Skipped once the part has switched.
         for merge in cfg.MERGES:
             body = squash(block(self.effects, "te_cmg_census_%s_country" % merge.key))
@@ -543,9 +543,13 @@ class SolGateTest(unittest.TestCase):
                 self.assertGreater(body.index("te_cm_sol_gate_part"), body.index("te_cm_sol_gap_open"))
         gate = squash(block(self.helpers, "te_cm_sol_gate_part"))
         self.assertIn("limit = { local_var:te_cm_sg_all = 1 var:te_cm_ok_$MERGE$_$CULTURE$ = 1 }", gate)
-        self.assertIn("set_local_variable = { name = te_cm_sg_lo value = local_var:te_cm_sg_min }", gate)
-        self.assertIn("limit = { var:te_cm_sol_$MERGE$_$CULTURE$ < local_var:te_cm_sg_lo }", gate)
-        self.assertIn("limit = { var:te_cm_sol_$MERGE$_$CULTURE$ > local_var:te_cm_sg_hi }", gate)
+        # While a core part has a figure, the reference is the best-off core part.
+        self.assertIn(
+            "if = { limit = { local_var:te_cm_sg_n > 0 } "
+            "set_local_variable = { name = te_cm_sg_top value = local_var:te_cm_sg_max } "
+            "set_local_variable = { name = te_cm_sg_known value = 1 } }",
+            gate,
+        )
         # One hysteresis for both references: closed above te_cm_sol_gap_close, reopened below te_cm_sol_gap_open.
         self.assertIn(
             "if = { limit = { local_var:te_cm_sg_known = 1 } "
@@ -559,21 +563,33 @@ class SolGateTest(unittest.TestCase):
 
     def test_with_no_core_figure_left_a_part_is_held_against_the_result(self):
         # R26: once every core part has switched, the optional part is compared with the result culture's
-        # pop-weighted SoL, |part - result|; a merge with core figures keeps using their range.
+        # pop-weighted SoL; a merge with core figures keeps using the best-off core part.
         gate = squash(block(self.helpers, "te_cm_sol_gate_part"))
         core = gate.index("if = { limit = { local_var:te_cm_sg_n > 0 }")
         result = gate.index("else_if = { limit = { local_var:te_cm_sg_ref > 0 }")
         self.assertLess(core, result)
-        branch = gate[result:gate.index("if = { limit = { local_var:te_cm_sg_known = 1 }")]
-        # The absolute difference, from whichever side is larger.
         self.assertIn(
-            "if = { limit = { var:te_cm_sol_$MERGE$_$CULTURE$ >= local_var:te_cm_sg_ref } "
-            "set_local_variable = { name = te_cm_sg_gap value = var:te_cm_sol_$MERGE$_$CULTURE$ } "
-            "change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_ref } } "
-            "else = { set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_ref } "
-            "change_local_variable = { name = te_cm_sg_gap subtract = var:te_cm_sol_$MERGE$_$CULTURE$ } }",
-            branch,
+            "else_if = { limit = { local_var:te_cm_sg_ref > 0 } "
+            "set_local_variable = { name = te_cm_sg_top value = local_var:te_cm_sg_ref } "
+            "set_local_variable = { name = te_cm_sg_known value = 1 } }",
+            gate,
         )
+
+    def test_an_optional_part_is_kept_out_only_for_living_below_the_reference(self):
+        # Owner, 2026-11-20: an optional culture is blocked only by a low standard of living. The gap is its shortfall
+        # below the reference (the best-off core part, or the result), 0 at or above it, never |part - reference|.
+        gate = squash(block(self.helpers, "te_cm_sol_gate_part"))
+        self.assertIn(
+            "if = { limit = { local_var:te_cm_sg_known = 1 } "
+            "set_local_variable = { name = te_cm_sg_gap value = 0 } "
+            "if = { limit = { var:te_cm_sol_$MERGE$_$CULTURE$ < local_var:te_cm_sg_top } "
+            "set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_top } "
+            "change_local_variable = { name = te_cm_sg_gap subtract = var:te_cm_sol_$MERGE$_$CULTURE$ } } }",
+            gate,
+        )
+        # Nothing widens the range upward: no comparison reads the part as above the reference.
+        self.assertNotIn("var:te_cm_sol_$MERGE$_$CULTURE$ >", gate)
+        self.assertNotIn("te_cm_sg_min", gate)
         # No reference figure either: the gate is left as it was (known stays 0).
         self.assertEqual(gate.count("set_local_variable = { name = te_cm_sg_known value = 1 }"), 2)
         self.assertIn("set_local_variable = { name = te_cm_sg_known value = 0 }", gate)
