@@ -230,7 +230,8 @@ kept rare (owner, 2026-10-26: a few two-option events seen too often break
 immersion): about one every fifteen years per nation, four or so in a late game.
 
 - **`.95` The First Child of <World>**, once per nation, when its first colony
-  holds 2,000 people: *a citizen of our nation* (+5% prestige for five years,
+  holds 5,000 people and three years have passed since it first held a colony
+  of 1,000 (2,000 people and no wait until 2026-11-20; see § 14): *a citizen of our nation* (+5% prestige for five years,
   −5 autonomy) or *a child of <World>* (+10% prestige for five years, +5
   autonomy).
 - **`.96` A Strike at <World>**, 1% a month for a holder of a colony of
@@ -356,6 +357,12 @@ open:
   are 1% and 0.5%, and either starts ten quiet years. The breach's half percent
   is rolled as 1% then 50%, since no fractional `random` chance is used in the
   mod or vanilla.
+- **The first child waits three years** (owner, 2026-11-20): at 2,000 people
+  alone it came one to four months after the settlers, since settlers land the
+  month they are sent and a people bar counts months of emigration (Low 500 a
+  month, High 2,000). Now the nation's clock starts at its first colony of
+  1,000 people (`sr_life_first_child_from`, once), and the first colony at
+  5,000 gets the child 36 months on at the soonest.
 - **The covert operations** were built on the registry's pattern
   (`test_covert_op_registry.py`), each with no target modifier and its own block
   in `covert_ops_apply_all_phase_effects`; mod_systems/covert_warfare.md § Covert Warfare

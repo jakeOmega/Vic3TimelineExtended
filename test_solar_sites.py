@@ -2128,6 +2128,28 @@ class FreeColoniesTest(unittest.TestCase):
         self.assertIn("chance = 50", month[month.index("chance = sr_life_breach_chance"):])
         self.assertNotRegex(month, r"chance = \d+\.\d")
 
+    def test_the_first_child_waits_for_years_not_only_people(self):
+        # Owner, 2026-11-20: at 2,000 people alone the first child came one to
+        # four months after the settlers, since a people bar counts months of
+        # emigration. The nation's clock starts at its first colony of
+        # sr_free_colony_minimum people, once, and the pick waits three years.
+        month = _block(self.shared, "sr_life_month")
+        first = month[:month.index("space_race_events.95")]
+        start = first.index("set_variable = { name = sr_life_first_child_from value = te_history_month_index }")
+        clock = first[first.rindex("if = {", 0, start):start]
+        self.assertIn("NOT = { has_variable = sr_life_first_child_from }", clock)
+        self.assertIn("sr_life_has_colony = { MIN = sr_free_colony_minimum }", clock)
+        pick = first.index("sr_life_first_child_pick = yes")
+        self.assertLess(start, pick)
+        self.assertIn("sr_life_first_child_months_settled >= sr_life_first_child_wait_months",
+                      first[start:pick])
+        self.assertIn("remove_variable = sr_life_first_child_from", first[pick:])
+        self.assertEqual(self._number("sr_life_first_child_people"), 5000)
+        self.assertEqual(self._number("sr_life_first_child_wait_months"), 36)
+        settled = _block(self.numbers, "sr_life_first_child_months_settled")
+        self.assertIn("has_variable = sr_life_first_child_from", settled)
+        self.assertIn("subtract = var:sr_life_first_child_from", settled)
+
     def test_the_autonomy_and_free_rows_follow_the_table(self):
         for row_type in ("te_sr_colony_rows", "te_sr_free_rows"):
             rows = self.rows[self.rows.index(f"type {row_type} = flowcontainer {{"):]

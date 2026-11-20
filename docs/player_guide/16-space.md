@@ -1054,7 +1054,8 @@ shows your fleets the target's colony defenses and sharpens their fire on them
 (see [The covert operations](11-influence.md#the-covert-operations)).
 
 **Colony life.** Three rare events come with growing colonies. The First Child
-fires once, when your first colony reaches 2,000 people: prestige, and a choice
+fires once, when your first colony reaches 5,000 people, but never sooner than
+three years after one of your colonies first held 1,000: prestige, and a choice
 between pulling the colony closer or letting it be proud of itself. A Strike can
 come at a colony of 10,000 or more and a Dome Breach, which kills a tenth of a
 colony's people, at one of 5,000 or more; after either, neither comes again for
