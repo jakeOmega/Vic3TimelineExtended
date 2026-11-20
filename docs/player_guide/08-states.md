@@ -347,7 +347,10 @@ culture of yours and you have the technology for its tier. Until the merge can
 start, the entry lists its conditions and checks off each one that holds; then a
 button, Begin the German Merge, starts it, and its tooltip lists anything still
 missing. The AI starts a merge as soon as it qualifies. Only one country runs
-each merge, and once another country has started it, your entry ends.
+each merge, and once another country has started it, your entry ends. The
+entry's description ends with a line for each optional culture: whether it has
+joined or switched, or else the first of its conditions it still fails, with
+the figures from the last yearly census.
 
 The conditions are measured across your sphere: your country, your subjects and,
 if you lead a power bloc, its members. For every core culture:

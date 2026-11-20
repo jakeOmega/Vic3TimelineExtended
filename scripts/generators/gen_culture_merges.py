@@ -188,6 +188,7 @@ DEFINITIONS_OUT = Path("common/country_definitions/zz_te_culture_merge_definitio
 VANILLA_TRIGGERS_OUT = Path("common/scripted_triggers/00_a_te_culture_merge_vanilla_triggers.txt")
 GOVERNMENT_TYPES_OUT = Path("common/government_types/zz_te_culture_merge_government_types.txt")
 CUSTOM_LOC_OUT = Path("common/customizable_localization/te_culture_merges_generated_custom_loc.txt")
+OPTIONAL_CUSTOM_LOC_OUT = Path("common/customizable_localization/te_culture_merges_generated_optional_custom_loc.txt")
 LOC_CATEGORY = "CULTURE_MERGES_GENERATED"
 
 SNAPSHOT_DIR = "vanilla_parsed"
@@ -2640,6 +2641,25 @@ def render_values(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) ->
                 with out.block("if"):
                     out.line("limit = { has_variable = %s }" % counter)
                     out.line("value = var:%s" % counter)
+        for culture in optional_cultures(merge):
+            hi, lo, own = "te_cm_sol_hi_%s" % key, "te_cm_sol_lo_%s" % key, "te_cm_sol_%s_%s" % (key, culture)
+            out.line()
+            out.line("# Country scope. The standard-of-living gap %s's own gate reads (te_cm_sol_gate_part): the core range at" % culture)
+            out.line("# the last census widened to take in %s, highest minus lowest, for the entry's description. 0 without the figures." % culture)
+            with out.block(optional_sol_gap_value(merge, culture)):
+                out.line("value = 0")
+                with out.block("if"):
+                    with out.block("limit"):
+                        out.line("has_variable = %s" % hi)
+                        out.line("has_variable = %s" % lo)
+                        out.line("has_variable = %s" % own)
+                    out.line("value = var:%s" % hi)
+                    out.line("min = var:%s" % own)
+                    with out.block("if"):
+                        out.line("limit = { var:%s < var:%s }" % (own, lo))
+                        out.line("subtract = var:%s" % own)
+                    with out.block("else"):
+                        out.line("subtract = var:%s" % lo)
     return out.text()
 
 
@@ -2882,6 +2902,195 @@ def status_rows(merge: cfg.Merge, vanilla: dict, merges: tuple[cfg.Merge, ...]) 
     return rows
 
 
+# ---------------------------------------------------------------------------
+# Where each optional culture stands (the entry's description)
+# ---------------------------------------------------------------------------
+
+
+def optional_cultures(merge: cfg.Merge) -> list[str]:
+    """Every culture of the merge's optional slots, each alternative its own, in roster order."""
+    return [c for part in merge.optional for c in part.cultures]
+
+
+def optional_status_name(merge: cfg.Merge, culture: str) -> str:
+    """The country custom loc that gives one optional culture's line in the entry's description."""
+    return "te_cmg_%s_opt_%s" % (merge.key, culture)
+
+
+def optional_sol_gap_value(merge: cfg.Merge, culture: str) -> str:
+    """The script value of the standard-of-living gap an optional culture's gate reads against the core range."""
+    return "te_cmg_%s_opt_%s_sol_gap" % (merge.key, culture)
+
+
+def _core_slots_counted(merge: cfg.Merge) -> list[str]:
+    """Every core slot is met the way the census's standard-of-living pass counts it (te_cm_sg_all): an alternative
+    measured now, or joined and switched. No years: the census counts a slot whose culture is held and accepted, and an
+    optional culture's gap is compared from then on."""
+    key = merge.key
+    lines = []
+    for part in merge.core:
+        met = ["te_cmg_%s_%s_measured = yes" % (key, c) for c in part.cultures]
+        met += ["te_cmg_%s_%s_switched_in = yes" % (key, c) for c in part.cultures if not _is_absorb_result(merge, c)]
+        if len(met) == 1:
+            lines.append(met[0])
+        else:
+            lines += ["OR = {"] + ["\t" + m for m in met] + ["}"]
+    return lines
+
+
+def optional_rows(merge: cfg.Merge, culture: str, vanilla: dict, merges: tuple[cfg.Merge, ...]) -> list[Row]:
+    """One optional culture's line in the entry's description, as rows: the first whose trigger holds is shown
+    (``te_cmg_<m>_opt_<c>``, a country custom loc read on the entry's country), the last, with no trigger, when every
+    gate is passed.
+
+    The rows follow the culture through the merge: switched (here, or into another merge's culture), joined (and, while
+    it converts nothing, why: its own gate, the hold, the standard-of-living gap), then, not yet joined, the first of
+    ``can_join``'s conditions it fails in the order a player can act on (no more joins once the result has gone into a
+    wider merge, taken by another merge, its own precondition, its technology, not yet counted, the hold, acceptance,
+    the years together, the gap, which the census counts only once every core slot is met), the vanilla wait
+    ``join_ready`` adds, and last whether it joins at the next census or when the merge begins. Every figure is the
+    census's own (the country's ``te_cm_held_``, ``te_cm_years_`` and ``te_cm_sol_`` variables, the global
+    ``te_cm_dom_``), each read behind the ``has_variable`` of its row's trigger.
+    """
+    key = merge.key
+    base = "%s_" % optional_status_name(merge, culture)
+    name = "$%s$" % culture
+    result = "$%s$" % merge.result
+    part = _part_of(merge, culture)
+    tier = cfg.derive_tier(merge, culture, vanilla, merges)
+    sv = "[ROOT.GetCountry.MakeScope.ScriptValue('{}')|{}]"
+    var = "[ROOT.GetCountry.MakeScope.Var('{}').GetValue|{}]"
+    held = "te_cm_held_%s_%s" % (key, culture)
+    ok = "te_cm_ok_%s_%s" % (key, culture)
+    sol = "te_cm_sol_%s_%s" % (key, culture)
+    sol_ok = "te_cm_sol_ok_%s_%s" % (key, culture)
+    joined = "global_var:te_cm_joined_%s_%s ?= 1" % (key, culture)
+    dom = "te_cm_dom_%s_%s" % (key, culture)
+    rows = [
+        Row(base + "switched", ["te_cmg_%s_%s_switched_in = yes" % (key, culture)],
+            "%s pops have all switched to %s." % (name, result)),
+        Row(base + "switched_away", ["has_global_variable = te_cm_switched_%s" % culture],
+            "%s pops have switched to another merge's culture and can't join this one." % name),
+    ]
+    # Joined: the starter converts it each year while its own gate, its hold and its gap allow (te_cmg_yearly_country).
+    if part.gate:
+        rows.append(Row(base + "joined_gate", [joined] + _negated(["%s = yes" % part.gate.trigger]),
+                        "%s pops have joined, but none convert until %s." % (name, part.gate.clause)))
+    rows += [
+        Row(base + "joined_hold", [joined, "has_variable = %s" % held] + _negated(["var:%s ?= 1" % ok]),
+            "%s pops have joined, but none convert while our sphere holds only %s of their homeland: conversion "
+            "resumes at %s." % (name, var.format(held, "%0"), sv.format("te_cm_hold_open", "%0"))),
+        Row(base + "joined_sol", [joined] + _negated(["var:%s ?= 1" % sol_ok]),
+            "%s pops have joined, but none convert while their standard of living is too far from that of the merge's "
+            "other cultures: conversion resumes once the gap is under %s." % (name, sv.format("te_cm_sol_gap_open", "0"))),
+        Row(base + "joined", [joined, "has_global_variable = %s" % dom],
+            "%s pops have joined: in their homeland %s holds [GetGlobalVariable('%s').GetValue|%%0] of the pops, and at "
+            "%s every remaining %s pop switches." % (name, result, dom, sv.format("te_cm_switch_share", "%0"), name)),
+        Row(base + "joined_new", [joined],
+            "%s pops have joined and convert to %s each year. The next yearly census measures %s's share of their "
+            "homeland." % (name, result, result)),
+    ]
+    # Not joined: can_join's conditions, then join_ready's.
+    if result_can_switch(merge, merges):
+        rows.append(Row(base + "result_gone", ["OR = {", "\t" + _result_switched(merge), "\t" + _result_joined_higher(merge), "}"],
+                        "%s pops can no longer join: %s is merging into a wider culture." % (name, result)))
+    if any(other is not merge and other.result == culture for other in merges):
+        busy = "%s is still forming in its own merge, which has to finish first." % name
+    else:
+        busy = "%s pops are already part of another merge, which has to finish with them first." % name
+    rows.append(Row(base + "busy", _negated(["te_cmg_%s_%s_available = yes" % (key, culture)]), busy))
+    if part.gate:
+        rows.append(Row(base + "gate", _negated(["%s = yes" % part.gate.trigger]),
+                        "%s pops can join only once %s." % (name, part.gate.clause)))
+    rows.append(Row(base + "tech", _negated(["te_cm_tier_tech = { TIER = %d }" % tier]),
+                    "%s pops can join only once $%s$ is researched." % (name, TIER_TECH[tier])))
+    rows.append(Row(base + "unmeasured", _negated(["has_variable = %s" % ok]),
+                    "%s pops have not been counted yet: the next yearly census counts them." % name))
+    rows.append(Row(base + "hold", _negated(["var:%s ?= 1" % ok]) + ["has_variable = %s" % held, "var:%s < te_cm_hold_open" % held],
+                    "%s pops are out of reach: our sphere holds only %s of them in their homeland, and %s is needed."
+                    % (name, var.format(held, "%0"), sv.format("te_cm_hold_open", "%0"))))
+    if tier == 2:
+        accept = ("%s pops are not accepted highly enough where many of them live: their acceptance in our sphere is below "
+                  "%s, beyond the $full_acceptance$ a more closely related culture needs." % (name, sv.format("te_cm_accept_high_open", "0")))
+    else:
+        accept = ("%s pops are not fully accepted where many of them live: their acceptance in our sphere is below "
+                  "$full_acceptance$ (%s), and $second_rate_citizen$ is not enough." % (name, sv.format("te_cm_accept_open", "0")))
+    rows.append(Row(base + "accept", _negated(["var:%s ?= 1" % ok]), accept))
+    if tier > 1:
+        years = "te_cm_years_%s_%s" % (key, culture)
+        rows.append(Row(base + "years", ["has_variable = %s" % years] + _negated(["te_cmg_%s_%s_years_met = yes" % (key, culture)]),
+                        "%s pops have not been held and accepted together long enough: %s of %s years."
+                        % (name, var.format(years, "0"), sv.format(_years_clause(tier), "0"))))
+    # The gap: compared only once every core slot is counted, against the core range while a core culture has a figure
+    # (te_cm_sol_hi_<m> and _lo_<m>, kept by the census), else against the result's pops in the core homelands.
+    sol_shut = _negated(["var:%s ?= 1" % sol_ok])
+    gap = sv.format(optional_sol_gap_value(merge, culture), "1")
+    core_range = "[ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_%s').GetValue|1] to [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_%s').GetValue|1]" % (key, key)
+    figures = ["has_variable = te_cm_sol_hi_%s" % key, "has_variable = te_cm_sol_lo_%s" % key, "has_variable = %s" % sol]
+    rows += [
+        Row(base + "sol_core", sol_shut + _negated(["AND = {"] + ["\t" + line for line in _core_slots_counted(merge)] + ["}"]),
+            "%s pops are held and accepted. Their standard of living is compared with the core cultures' once every core "
+            "culture is held and accepted too." % name),
+        Row(base + "sol_wide", sol_shut + figures + ["%s >= te_cm_sol_gap_open" % optional_sol_gap_value(merge, culture)],
+            "%s pops live too far from the core cultures' standard of living: theirs is %s and the core cultures' runs "
+            "from %s, a gap of %s where under %s is needed."
+            % (name, var.format(sol, "1"), core_range, gap, sv.format("te_cm_sol_gap_open", "0"))),
+        Row(base + "sol_close", sol_shut + figures,
+            "%s pops' standard of living, %s, is close enough to the core cultures' (%s) now: the next yearly census "
+            "counts it." % (name, var.format(sol, "1"), core_range)),
+        Row(base + "sol_result", sol_shut + ["has_variable = %s" % sol],
+            "%s pops' standard of living, %s, is too far from that of %s pops in the core cultures' homelands: the gap "
+            "must be under %s." % (name, var.format(sol, "1"), result, sv.format("te_cm_sol_gap_open", "0"))),
+        Row(base + "sol", sol_shut,
+            "%s pops' standard of living is too far from the core cultures': the gap must be under %s."
+            % (name, sv.format("te_cm_sol_gap_open", "0"))),
+    ]
+    if part.wait_for:
+        rows.append(Row(base + "waiting", ["te_cmg_%s_%s_waiting = yes" % (key, culture)],
+                        "%s pops wait while a country still has %s open." % (name, _either(part.wait_for))))
+    if standing_gate(merge):
+        rows.append(Row(base + "paused", ["te_cmg_%s_is_starter = yes" % key] + _negated([_gate_ok(merge)]),
+                        "%s pops qualify, but no culture joins while the merge is paused." % name))
+    rows.append(Row(base + "ready_running", ["te_cmg_%s_is_starter = yes" % key],
+                    "%s pops qualify and join at the next yearly census." % name))
+    rows.append(Row(base + "ready", [], "%s pops qualify and join when the merge begins." % name))
+    return rows
+
+
+def optional_list_text(merge: cfg.Merge) -> str:
+    """The description's closing list: a heading, then one line per optional culture, each its custom loc."""
+    lines = ["[ROOT.GetCountry.GetCustom('%s')]" % optional_status_name(merge, c) for c in optional_cultures(merge)]
+    return "\\n\\nWhere each optional culture stands:\\n\\n" + "\\n".join(lines)
+
+
+def render_optional_custom_loc(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> str:
+    """Per optional culture of each merge, the country custom loc ``te_cmg_<m>_opt_<c>``: the first row of
+    ``optional_rows`` whose trigger holds on the entry's country. The entry's description reads it as
+    ``[ROOT.GetCountry.GetCustom(...)]``, the form the global warming entry's description and the nuclear entry's
+    status take, so ROOT is the journal entry and its country the one the census measured (the starter, or a candidate
+    of an idle merge)."""
+    merges = cfg.MERGES if merges is None else merges
+    out = _Script()
+    out.line(HEADER)
+    out.line("# Country scope = the merge entry's country: where one optional culture of the merge stands, for the entry's")
+    out.line("# description. The first text whose trigger holds; the last, with none, when the culture passes every gate.")
+    out.line("# Each figure its text reads is guarded by its trigger's has_variable (a loc Var read of an unset name logs).")
+    for merge in merges:
+        for culture in optional_cultures(merge):
+            out.line()
+            with out.block(optional_status_name(merge, culture)):
+                out.line("type = country")
+                out.line("random_valid = no")
+                for row in optional_rows(merge, culture, vanilla, merges):
+                    with out.block("text"):
+                        if row.lines:
+                            with out.block("trigger"):
+                                for line in row.lines:
+                                    out.line(line)
+                        out.line("localization_key = %s" % row.key)
+    return out.text()
+
+
 def merge_by_key(key: str) -> cfg.Merge:
     return cfg.merge_by_key(key)
 
@@ -3053,6 +3262,13 @@ def entry_loc(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> dic
             if not merge.gate.milestone:
                 reason += " It pauses whenever that stops being true."
             out["te_cmg_%s_gate_tt" % key] = _sentence(merge.gate.clause)
+        # Where each optional culture stands, one line each (2026-11-20: nothing showed whether an optional culture
+        # qualified, or what it still needed).
+        if optional:
+            reason += optional_list_text(merge)
+            for culture in optional_cultures(merge):
+                for row in optional_rows(merge, culture, vanilla, merges):
+                    out[row.key] = row.text
         out[entry + "_reason"] = reason
         # The complete outcome's middle condition: the merge's state is 2 once every core slot has switched. An absorb
         # merge's result is one of its core cultures, and it doesn't switch into itself.
@@ -3206,6 +3422,7 @@ def plan_outputs(root: Path = ROOT) -> dict[Path, str]:
         VANILLA_TRIGGERS_OUT: render_vanilla_triggers(),
         GOVERNMENT_TYPES_OUT: render_government_types(),
         CUSTOM_LOC_OUT: render_custom_loc(),
+        OPTIONAL_CUSTOM_LOC_OUT: render_optional_custom_loc(vanilla),
     }
 
 
