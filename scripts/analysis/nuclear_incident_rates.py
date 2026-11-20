@@ -57,6 +57,8 @@ class Posture:
     punished_skeptic: bool = False
     concealed_incident: bool = False
     satellite_communications: bool = True
+    radar: bool = True             # radar (the survivability target's warning factor)
+    missile_defense: bool = True   # missile_defense_systems (its last factor)
     icbms: bool = True             # nd_fields_icbms (phase 1: the technology)
     missile_submarines: bool = True  # nd_fields_missile_submarines (the technology and a coast)
     war_band: int = 0              # the war's exposure band (nd_war_danger_band) while at war
@@ -202,6 +204,7 @@ class RiskModel:
                 answer = next(v for k, _, v in value if k == "name") == "nd_based_near" and p.based_near
             elif key == "has_technology_researched":
                 answer = {"satellite_communications": p.satellite_communications, "ICBMs": p.icbms,
+                          "radar": p.radar, "missile_defense_systems": p.missile_defense,
                           "recon_satellites": p.second_warning_source, "precision_guided_munitions": p.pgm,
                           "mainframe_computers": p.mainframe}.get(value, True)
             elif key == "any_scope_diplomatic_pact":

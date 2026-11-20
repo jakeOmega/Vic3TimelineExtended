@@ -10,6 +10,10 @@ country X facing an enemy Y,
 Weapons Y bases in a country next to X cut X's warning time (§7.4): against Y
 only, X's effective survivability is 10 lower, never below zero.
 
+Survivability climbs toward a target (2026-11-20 delivery spec §3.1): each part
+of a force removes a share of what is still exposed, so the target is 100 x (1
+- the product of the parts' factors), a factor of 1 for a part not held.
+
 In the exchange itself (§6.2, §6.3), a Forces salvo that lands L warheads on
 the victim's arsenal destroys min(exposed, K x L) x (1 - credit) of it, and the
 credit's share gets away first; L warheads on a Central Authorization victim's
@@ -27,6 +31,42 @@ a full Leadership salvo's chance against a range of commands.
 
 
 WARNING_TIME_PENALTY = 10
+
+# nd_exposure_factor_*: the share of what is still exposed that each part
+# leaves exposed. Bombers are always held.
+EXPOSURE_FACTORS = {"bombers": 0.75, "radar": 0.80, "icbms": 0.70, "submarines": 0.50, "missile_defense": 0.85}
+
+
+def exposure_factor(part, held=True):
+    """One part's factor (nd_exposure_factor_<part>): 1 while it isn't held."""
+    return EXPOSURE_FACTORS[part] if held or part == "bombers" else 1.0
+
+
+def survivability_target(radar=True, icbms=True, submarines=True, missile_defense=True):
+    """Where hardening takes survivability (nd_survivability_target)."""
+    share = exposure_factor("bombers")
+    for part, held in (("radar", radar), ("icbms", icbms), ("submarines", submarines),
+                       ("missile_defense", missile_defense)):
+        share *= exposure_factor(part, held)
+    return 100 * (1 - share)
+
+
+def full_strike_lost_share(target, credit):
+    """The share of a force a full first strike destroys, at its target and
+    High Alert, from a rival large enough to reach every exposed warhead (spec
+    §3.3): the exposed share, less what launch credit gets away first."""
+    return (1 - target / 100) * (1 - credit)
+
+
+# The spec's §3.1 rows: (label, survivability_target's arguments).
+TARGET_ROWS = (
+    ("Bombers", dict(radar=False, icbms=False, submarines=False, missile_defense=False)),
+    ("+ Radar", dict(icbms=False, submarines=False, missile_defense=False)),
+    ("+ ICBMs", dict(submarines=False, missile_defense=False)),
+    ("+ missile submarines", dict(missile_defense=False)),
+    ("+ Missile Defense Systems", dict()),
+    ("Bombers, Radar, ICBMs, missile defense (no submarines)", dict(submarines=False)),
+)
 
 
 def exposed(stockpile, survivability, readiness_factor, based_near=False):
@@ -88,11 +128,12 @@ DECAPITATION_ROWS = (
 def calibration():
     """Warheads left after a Forces salvo landing half as many warheads as the
     victim holds, against arsenals the AI builds (about 5 to 20), under Central
-    Authorization. A salvo as large as the arsenal reaches all of its exposure
-    at any K, so K matters only against a larger victim."""
+    Authorization: unhardened, part hardened, and at the highest target at
+    Heightened. A salvo as large as the arsenal reaches all of its exposure at
+    any K, so K matters only against a larger victim."""
     rows = []
     for stockpile in (5, 10, 20):
-        for survivability in (0, 40, 72):
+        for survivability in (0, 40, round(survivability_target() * 0.9, 1)):
             exposed = stockpile * (1 - survivability / 100)
             left = [stockpile - counterforce_destroyed(stockpile / 2, k, exposed, 0) for k in (1.0, 1.5, 2.0)]
             rows.append((stockpile, survivability, left))
@@ -100,6 +141,14 @@ def calibration():
 
 
 def main():
+    print("Survivability target and a full first strike's losses at it (High Alert, no safeguards)")
+    print("| Forces | Target | Central | Delegation | Launch on Warning |")
+    print("|---|---|---|---|---|")
+    for label, kwargs in TARGET_ROWS:
+        target = survivability_target(**kwargs)
+        lost = [full_strike_lost_share(target, credit) * 100 for credit in (0, 0.25, 0.6)]
+        print(f"| {label} | {target:.1f} | " + " | ".join(f"{x:.1f}%" for x in lost) + " |")
+    print()
     print("| Our warheads | Survivability | Enemy reach | Central | Delegation | Launch on Warning |")
     print("|---|---|---|---|---|---|")
     for stockpile, survivability, reach in ((5, 40, 10), (10, 60, 10), (20, 80, 40), (3, 25, 3)):

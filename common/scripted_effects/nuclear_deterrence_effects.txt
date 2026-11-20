@@ -91,7 +91,7 @@ nd_init_posture = {
 		set_variable = {
 			name = nd_survivability
 			value = {
-				value = nd_survivability_cap
+				value = nd_survivability_target
 				multiply = 0.4
 			}
 		}
@@ -1124,7 +1124,9 @@ nd_refresh_main_rival = {
 		set_variable = { name = nd_survivors_main value = nd_survivors_vs_saved }
 		set_variable = { name = nd_survivors_main_r2 value = nd_survivors_r2_vs_saved }
 		set_variable = { name = nd_survivors_main_bare_r2 value = nd_survivors_bare_r2_vs_saved }
-		set_variable = { name = nd_survivors_main_ceiling_bare_r2 value = nd_survivors_ceiling_bare_r2_vs_saved }
+		# "ceiling" here is the survivability target since 2026-11-20: the
+		# variable keeps its name so a save's copy is overwritten, not stranded.
+		set_variable = { name = nd_survivors_main_ceiling_bare_r2 value = nd_survivors_target_bare_r2_vs_saved }
 		# The panel's hover: what the rival could destroy, and how much of
 		# ours is within reach.
 		set_variable = { name = nd_main_rival_reach value = nd_counterforce_reach_saved }

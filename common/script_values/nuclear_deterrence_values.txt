@@ -173,37 +173,71 @@ nd_upkeep_weekly = {
 # CAPABILITY TARGETS (§4)
 # ----------------------------------------------------------------------------
 
-# The highest survivability investment can reach with this technology.
-nd_survivability_cap = {
-	value = 25                                  # dispersed bombers
+# Where hardening takes survivability (2026-11-20 delivery spec §3.1): each
+# part of our forces removes a share of what is still exposed to a first
+# strike, so every part counts, by less the more is already protected, and
+# nothing reaches 100. One factor a part, 1 while the part isn't held, so the
+# panel can print the chain and scripts/analysis/nuclear_survivors.py can
+# mirror it. Since phase 1 this replaces the flat ceiling (25 + 15 + 20 + 25 +
+# 10, at most 80), so "ceiling" in a stored variable's name means this target.
+nd_exposure_factor_bombers = {
+	value = 0.75                                # dispersed bombers, always
+}
+
+nd_exposure_factor_radar = {
+	value = 1
 	if = {
 		limit = { has_technology_researched = radar }
-		add = 15                                # warning time to get bombers up
+		value = 0.80                            # warning time to get bombers up
 	}
+}
+
+nd_exposure_factor_icbms = {
+	value = 1
 	if = {
 		limit = { nd_fields_icbms = yes }
-		add = 20                                # hardened silos
+		value = 0.70                            # hardened silos
 	}
+}
+
+nd_exposure_factor_submarines = {
+	value = 1
 	if = {
 		limit = { nd_fields_missile_submarines = yes }
-		add = 25                                # missile submarines at sea
+		value = 0.50                            # missile submarines at sea
 	}
+}
+
+nd_exposure_factor_missile_defense = {
+	value = 1
 	if = {
 		limit = { has_technology_researched = missile_defense_systems }
-		add = 10
+		value = 0.85
 	}
-	# The last stretch toward full security has to come from a fast launch
-	# authority (nd_launch_credit), not from technology (rework spec §3.1).
-	max = 80
+}
+
+# The share of the force a first strike could still reach at the target.
+nd_survivability_exposed_share = {
+	value = nd_exposure_factor_bombers
+	multiply = nd_exposure_factor_radar
+	multiply = nd_exposure_factor_icbms
+	multiply = nd_exposure_factor_submarines
+	multiply = nd_exposure_factor_missile_defense
+}
+
+nd_survivability_target = {
+	value = 1
+	subtract = nd_survivability_exposed_share
+	multiply = 100
 }
 
 # Without investment, survivability decays toward this floor.
 nd_survivability_floor = {
-	value = nd_survivability_cap
+	value = nd_survivability_target
 	multiply = 0.3
 }
 
-# This month's survivability step: toward the cap at 2 % of the gap per
+# This month's survivability step: toward the target at 2 % of the gap per
 # hardening level, or 1 % of the excess back toward the floor without it.
 nd_survivability_step = {
 	value = 0
@@ -213,9 +247,9 @@ nd_survivability_step = {
 			has_variable = nd_hardening
 			var:nd_hardening >= 1
 		}
-		# No floor: above the ceiling (a save from before it fell from 95 to
-		# 80, rework spec §3.1) the step is negative and settles to it.
-		add = nd_survivability_cap
+		# No floor: above the target (a save from before it fell, or a part
+		# lost) the step is negative and settles to it.
+		add = nd_survivability_target
 		subtract = var:nd_survivability
 		multiply = {
 			value = var:nd_hardening
@@ -714,7 +748,7 @@ nd_effective_survivability_at_readiness_3 = {
 # our launch credit (crises, the panel); at Heightened with it (the AI's High
 # Alert); at Heightened with no credit (the AI's launch authority, so a fast
 # authority or standing down does not feed back into its own choice); and at
-# the technology ceiling, Heightened, no credit ("hardening won't close it").
+# the survivability target, Heightened, no credit ("hardening won't close it").
 # ----------------------------------------------------------------------------
 
 # How many of the enemy's exposed warheads one landed counterforce warhead
@@ -784,7 +818,7 @@ nd_redundancy = {
 # What the command adds to its redundancy whatever the arsenal (owner,
 # 2026-11-19): +2 with Satellite Communications, +1 with Mainframe Computers,
 # survivability ÷ 20 (a hardened force has hardened command posts too, at
-# most +4 at the ceiling of 80), and a colony's Nuclear Command Center
+# most +4.1 at the highest target, 82), and a colony's Nuclear Command Center
 # (sr_mod_bunker_redundancy, +2 a staffed level, at most +6). The world can
 # see all of these, so nd_redundancy_believed counts them too.
 nd_redundancy_command = {
@@ -816,7 +850,7 @@ nd_counterforce_reach_saved = {
 }
 
 # Our warheads a first strike could reach, at our readiness, at Heightened,
-# and at the technology ceiling at Heightened.
+# and at the survivability target at Heightened.
 nd_exposed_warheads = {
 	value = 100
 	subtract = nd_effective_survivability
@@ -831,8 +865,8 @@ nd_exposed_warheads_r2 = {
 	multiply = nd_stockpile
 }
 
-nd_exposed_warheads_ceiling_r2 = {
-	value = nd_survivability_cap
+nd_exposed_warheads_target_r2 = {
+	value = nd_survivability_target
 	multiply = nd_survivability_factor_heightened
 	multiply = -1
 	add = 100
@@ -903,10 +937,10 @@ nd_exposed_warheads_r2_vs_saved = {
 	multiply = nd_stockpile
 }
 
-nd_exposed_warheads_ceiling_r2_vs_saved = {
+nd_exposed_warheads_target_r2_vs_saved = {
 	value = 100
 	subtract = {
-		value = nd_survivability_cap
+		value = nd_survivability_target
 		multiply = nd_survivability_factor_heightened
 		subtract = nd_warning_penalty_saved
 		min = 0
@@ -1012,9 +1046,9 @@ nd_survivors_bare_r2_vs_saved = {
 	min = 0
 }
 
-nd_survivors_ceiling_bare_r2_vs_saved = {
+nd_survivors_target_bare_r2_vs_saved = {
 	value = nd_counterforce_reach_saved
-	max = nd_exposed_warheads_ceiling_r2_vs_saved
+	max = nd_exposed_warheads_target_r2_vs_saved
 	multiply = -1
 	add = nd_stockpile
 	min = 0
@@ -2312,11 +2346,11 @@ nd_display_survivability = {
 	value = nd_survivability_or_zero
 }
 
-nd_display_survivability_cap = {
-	value = nd_survivability_cap
+nd_display_survivability_target = {
+	value = nd_survivability_target
 }
 
-# Where survivability is heading, for the Forces bar (round 3): the ceiling
+# Where survivability is heading, for the Forces bar (round 3): the target
 # while we pay for hardening, back toward the floor without it, as
 # nd_survivability_step moves it; where it is when neither applies.
 nd_display_survivability_heading = {
@@ -2326,9 +2360,9 @@ nd_display_survivability_heading = {
 			has_variable = nd_survivability
 			has_variable = nd_hardening
 			var:nd_hardening >= 1
-			nd_survivability_cap > nd_survivability_or_zero
+			nd_survivability_target > nd_survivability_or_zero
 		}
-		value = nd_survivability_cap
+		value = nd_survivability_target
 	}
 	else_if = {
 		limit = {

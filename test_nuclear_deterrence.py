@@ -2208,13 +2208,8 @@ class TestEffectiveSurvivability(unittest.TestCase):
 
 
 class TestSurvivorsAgainstRival(unittest.TestCase):
-    """Survivability tops out at 80; survivors are measured against the main
-    rival (2026-10-28 rework spec §3.1, §3.2)."""
-
-    def test_survivability_cap_is_80(self):
-        body = block(strip_comments(read(VALUES)), "nd_survivability_cap")
-        self.assertIn("max = 80", body)
-        self.assertNotIn("max = 95", body)
+    """Survivors are measured against the main rival (2026-10-28 rework spec
+    §3.2). Survivability's target: test_nuclear_survivors.TestSurvivabilityTarget."""
 
     def test_main_rival_cleared_without_attacker(self):
         body = block(strip_comments(read(EFFECTS)), "nd_refresh_main_rival")
