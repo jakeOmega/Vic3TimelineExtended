@@ -71,6 +71,7 @@ class Posture:
     second_warning_source: bool = True   # recon_satellites
     stockpile: float = 10          # our true warheads (nd_stockpile)
     believed_stockpile: float = 10 # the world's estimate of them (nd_believed_stockpile)
+    public_estimate: float = 10    # the seeded estimate (var:nd_public_estimate, nd_shown_public_estimate)
     pgm: bool = False              # precision_guided_munitions
     mainframe: bool = True         # mainframe_computers
     enemy: "Posture | None" = None # scope:nd_sv_enemy, for the survivors values
@@ -175,6 +176,9 @@ class RiskModel:
             "nd_launch_under_attack_doctrine": lambda: p.doctrine != 1,
             "nd_crisis_talks_open_either": lambda: p.talks,
             "nd_believed_armed": lambda: p.believed_armed,
+            # The world's view: the benchmarks' crisis, when there is one, is
+            # with the posture's enemy.
+            "nd_seen_in_crisis_with": lambda: p.stage >= 1,
             # The delivery legs (2026-11-20 delivery spec §4): answered from the
             # posture, since the submarine leg's coast is a state walk.
             "nd_fields_icbms": lambda: p.icbms,

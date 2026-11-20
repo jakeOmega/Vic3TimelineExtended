@@ -543,7 +543,9 @@ class TestSurvivorsInCrisis(unittest.TestCase):
     def test_issuer_exposure_falls_to_minus_15(self):
         body = block(self.values, "nd_yp_issuer_exposure_value")
         self.assertIn("nd_believed_armed = yes", body)
-        self.assertIn("nd_survivors_vs_target", body)
+        # The issuer's survivors as the target can count them (2026-11-20
+        # delivery spec owner call 13): test_nuclear_survivors.TestWorldsView.
+        self.assertIn("nd_seen_survivors_vs_target", body)
         self.assertIn("max = 3", body)
         self.assertIn("multiply = 5", body)
 

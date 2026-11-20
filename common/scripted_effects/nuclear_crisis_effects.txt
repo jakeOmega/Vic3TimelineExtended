@@ -187,9 +187,10 @@ nd_crisis_preview = {
 		custom_tooltip = nd_tt_open_f_unarmed
 	}
 	else_if = {
+		# The target's survivors as we can count them (owner call 13).
 		limit = {
 			save_temporary_scope_as = nd_sv_enemy
-			$TARGET$ = { nd_survivors_vs_saved >= 3 }
+			$TARGET$ = { nd_seen_survivors_vs_saved >= 3 }
 		}
 		custom_tooltip = nd_tt_open_f_survivable
 	}

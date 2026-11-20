@@ -1684,6 +1684,13 @@ nd_in_crisis = {
 	has_variable = nd_crisis_role
 }
 
+# Is this country in a crisis with $OBSERVER$? Then the observer sees its
+# readiness (the world's view, nd_seen_readiness_factor_*).
+nd_seen_in_crisis_with = {
+	nd_in_crisis = yes
+	var:nd_crisis_opponent ?= $OBSERVER$
+}
+
 nd_is_crisis_owner = {
 	nd_in_crisis = yes
 	var:nd_crisis_role = 1
