@@ -811,11 +811,17 @@ module once the level is gone.
 Modules are built at Earth by your Space Program's third production method
 group, Module Fabrication, which starts on No Module Fabrication:
 
-| Method | Technology | Launch Capacity and Advanced Materials a week | Points a month |
-|---|---|---|---|
-| Orbital Assembly | Cislunar Infrastructure | 1,500 and 10 | 5 |
-| Orbital Foundries | Space Colonization | 2,000 and 15 | 12 |
-| Fusion Shipyards | Compact Fusion Reactors | 2,000 and 10 | 25 |
+| Method | Technology | Cost a week | Points a month | Cost a module |
+|---|---|---|---|---|
+| Orbital Assembly | Cislunar Infrastructure | 340,000 | 5 | 29.5 million |
+| Orbital Foundries | Space Colonization | 732,000 | 12 | 26.5 million |
+| Fusion Shipyards | Compact Fusion Reactors | 1.37 million | 25 | 23.8 million |
+
+The costs are at full staff and base prices. Every method takes Launch
+Capacity, Electronic Components, Industrial Robotics and Wireless
+Telecommunication Gear, and the two later ones Advanced Materials as well. A
+later method costs much more a week but builds each module only about a tenth
+cheaper, so take it to get modules sooner, not to save money.
 
 Each module within a colony's slots costs 100 points, so a fully staffed Space Program builds one every
 20, 8 or 4 months, more often with higher funding. Mare Imbrium's Mass Driver
@@ -828,11 +834,16 @@ Points wait in a stock while nothing is queued or every shipment slot is taken.
 It holds 500, plus a year of your current fabrication, plus what the Space
 Program's fourth production method group, Module Storage, adds:
 
-| Method | Technology | Goods a week | Storage |
+| Method | Technology | Cost a week | Storage |
 |---|---|---|---|
 | No Module Storage | | | |
-| Component Depot | Cislunar Infrastructure | 1,000 Electricity and 5 Advanced Materials | +1,000 |
-| Orbital Depot | Space Colonization | 500 Launch Capacity, 1,000 Electricity and 10 Advanced Materials | +3,000 |
+| Component Depot | Cislunar Infrastructure | 60,000 | +1,000 |
+| Orbital Depot | Space Colonization | 162,000 | +3,000 |
+
+Again at full staff and base prices. The Component Depot takes Electricity,
+Electronic Components and Industrial Robotics. The Orbital Depot takes Launch
+Capacity, Electricity, Electronic Components, Wireless Telecommunication Gear
+and a little Advanced Materials, and holds a point for about a tenth less.
 
 Points made while the stock is full are lost, unless the next module in the
 queue costs more, when the stock fills to its price. The Fabrication hover in
@@ -866,9 +877,11 @@ a Habitat once its people fill three quarters of its room, otherwise the next
 specialization level its crews can run, its founding specialization first, then
 a facility: an Administration where autonomy has reached 25 and is heading for 45
 or more, a Mining Complex when its bases outgrow their room, Terraforming once its
-people fill half its room, a Nuclear Command Center with nuclear weapons, an Orbital Yard with a Space Command, otherwise a Research Station. It
-runs the best fabrication method it has while anything is queued, never builds
-Spaceports or Defenses, and never pays for a module past a colony's slots.
+people fill half its room, a Nuclear Command Center with nuclear weapons, an Orbital Yard with a Space Command, otherwise a Research Station. While
+anything is queued it runs the best fabrication method it has whose cost fits
+in a twentieth of its government's weekly income, or its cheapest one if none
+does. It never builds Spaceports or Defenses, and never pays for a module past
+a colony's slots.
 
 ### Extraplanetary Base room
 
