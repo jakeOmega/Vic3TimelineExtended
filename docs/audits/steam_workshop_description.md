@@ -46,7 +46,7 @@ Nineteen systems run alongside the base game. In the economy: banking and moneta
 [b]Tourism[/b] — Historic sites, pollution, turmoil, infrastructure, and air travel shape demand.
 [b]Dynastic Wealth[/b] — Inheritance laws decide who inherits; great fortunes strengthen elites and feed bubbles.
 [b]Migration and Homelands[/b] — Crowded states attract fewer migrants, and homelands form or dissolve with acceptance and population.
-[b]Culture Merges[/b] — Related cultures can grow into one national culture over decades (off by default).
+[b]Culture Merges[/b] — Related cultures can grow into one national culture over decades.
 [b]Living-Standard Expectations[/b] — A long boom makes a later downturn harder to accept.
 [b]Power Blocs[/b] — New principles and identities, summits, and names that reflect your bloc's members.
 [b]State Pictures[/b] — The state banner follows technology, city size, and wealth: 356 new pictures of cities, ports, mines, farms, smog, and ruins.

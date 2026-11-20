@@ -5382,7 +5382,7 @@
  nd_public_guarantee_word_gives:0 "Guarantor"
  nd_public_guarantee_word_holds:0 "Guaranteed"
  nd_public_guarantee_word_none:0 "None"
- nd_raze_city_tt:0 "Destroys a share of the levels of the state's industry, power plants, transport and offices: the share of its urban people living in its largest city, from 10% to 80%, or half outside the Full Demographics rule. The state's owner takes every level still standing in those buildings into state ownership."
+ nd_raze_city_tt:0 "Destroys a share of the levels of the state's industry, power plants, transport and offices: half the share of its urban people living in its largest city, from 5% to 40%, or a quarter outside the Full Demographics rule. The state's owner takes every level still standing in those buildings into state ownership."
  nd_raze_line_attacker_lost:0 "\n\n#v [ROOT.GetState.MakeScope.Var('nd_raze_lost').GetValue|0]#! levels of buildings in [ROOT.GetState.GetName] have been destroyed."
  nd_raze_line_attacker_nat:0 "\n\n#v [ROOT.GetState.MakeScope.Var('nd_raze_lost').GetValue|0]#! levels of buildings in [ROOT.GetState.GetName] have been destroyed. #v [ROOT.GetState.MakeScope.Var('nd_raze_nat').GetValue|0]#! levels still stand in the buildings the blast reached, and the government of [ROOT.GetState.GetOwner.GetName] has taken all of them into state ownership."
  nd_raze_line_victim_lost:0 "\n\n#R [ROOT.GetState.MakeScope.Var('nd_raze_lost').GetValue|0]#! levels of buildings in [ROOT.GetState.GetName] have been destroyed."

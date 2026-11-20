@@ -276,9 +276,9 @@ class TestRule(unittest.TestCase):
     def test_rule_polarity(self):
         rules = parse(RULES)
         rule = rules["culture_merges_rule"]
-        # Off by default, and on only by its own setting: a save begun before the rule existed stores neither, and
-        # has none of the new result cultures (#1518).
-        self.assertEqual(unwrap(rule["default"]), "culture_merges_disabled")
+        # On by default from 1.3.5 (owner, 2026-11-20), and on only by its own setting: a save begun before the rule
+        # existed stores neither, and has none of the new result cultures (#1518).
+        self.assertEqual(unwrap(rule["default"]), "culture_merges_enabled")
         self.assertIn("culture_merges_enabled", rule)
         self.assertIn("culture_merges_disabled", rule)
         self.assertEqual(unwrap(unwrap(rule["culture_merges_enabled"])["flag"]), "culture_merges_enabled")

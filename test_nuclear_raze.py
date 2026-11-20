@@ -187,10 +187,11 @@ class WiringTest(unittest.TestCase):
 		self.assertTrue(run.rstrip().endswith("remove_variable = nd_raze_factor\n\t}"), "the factor goes with every strike, a same-day one too")
 
 	def test_the_share_destroyed(self):
-		# The metropolitan share, held between 10% and 80%, only under Full; half otherwise.
+		# Half the metropolitan share, the share held between 10% and 80% first, so 5% to 40%,
+		# only under Full; a quarter otherwise (owner, 2026-11-20).
 		base = block(read(VALUES), "nd_raze_share_base")
 		self.assertRegex(base, r"^\s+value = 0\.5\n")
-		self.assertRegex(base, r"te_demog_effects_run = yes\s+has_variable = te_dg_mt\s+\}\s+value = var:te_dg_mt\s+divide = 100\s+min = 0\.1\s+max = 0\.8")
+		self.assertRegex(base, r"te_demog_effects_run = yes\s+has_variable = te_dg_mt\s+\}\s+value = var:te_dg_mt\s+divide = 100\s+min = 0\.1\s+max = 0\.8\s+\}\s+multiply = 0\.5\s*$")
 
 	def test_a_salvo_sums_what_it_razed(self):
 		deterrence = read(DETERRENCE)
