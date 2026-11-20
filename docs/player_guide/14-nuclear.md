@@ -174,7 +174,7 @@ weekly total, and each readiness choice and investment row its own weekly cost.
 The Forces section tracks three numbers on a 0–100 scale, updated monthly, and
 two investment steppers from 0 to 3, Safeguards and Hardening.
 
-- Survivability is how much of your force would survive a first strike. It climbs toward a ceiling set by technology (25, plus 15 for Radar, 20 for Intercontinental Ballistic Missiles, 25 for Advanced Submarine Technology and 10 for Missile Defense Systems, at most 80) only while you pay for hardening, and erodes when you stop. Its bar shows where it is heading: a green stretch while it climbs, a red one while it erodes, and a cream line at the ceiling. Each 20 of it adds 1 to your Command Redundancy.
+- Survivability is how much of your force would survive a first strike. It climbs toward a ceiling set by technology (25, plus 15 for Radar, 20 for Intercontinental Ballistic Missiles, 25 for Advanced Submarine Technology if you hold a coastal state, and 10 for Missile Defense Systems, at most 80) only while you pay for hardening, and erodes when you stop. Its bar shows where it is heading: a green stretch while it climbs, a red one while it erodes, and a cream line at the ceiling. Each 20 of it adds 1 to your Command Redundancy.
 - Command reliability is how well the chain of command holds. Each safeguards level raises it by about 12; strain, buried incidents and enemy sabotage lower it. Under Central Authorization it also moves your Command Redundancy against a salvo on your capital (see [Salvos and the Strike section](#salvos-and-the-strike-section)).
 - Crew strain rises 5 a month at High Alert, settles around 40 at Heightened, and falls 6 a month at Routine or Recessed.
 
@@ -222,7 +222,8 @@ Until you research Intercontinental Ballistic Missiles, your weapons go only as
 far as your bombers fly. That is every country next to you by land or sea, next
 to one of your direct subjects or next to a country that hosts your weapons, and
 every country with a state in a strategic region where you, a subject or a host
-holds one. Advanced Submarine Technology adds every coastal state. A war goal
+holds one. With a coast of your own, Advanced Submarine Technology adds every
+coastal state. A war goal
 between you and a country puts it in reach, so range matters most in peacetime
 crises and against your enemies' distant allies. No strike, salvo or answer can
 hit a state out of reach, a Leadership salvo needs the capital in reach, and a

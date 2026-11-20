@@ -63,7 +63,7 @@ class TestReachList(unittest.TestCase):
     def test_rebuilt_from_scratch_and_cleared_with_icbms(self):
         self.assertIn("if = { limit = { has_variable_list = nd_reach } clear_variable_list = nd_reach }", self.refresh)
         self.assertIn("set_variable = { name = nd_reach_count value = 0 }", self.refresh)
-        self.assertIn("nd_is_armed = yes NOT = { has_technology_researched = ICBMs }", self.refresh)
+        self.assertIn("nd_is_armed = yes NOT = { nd_fields_icbms = yes }", self.refresh)
         self.assertLess(self.refresh.index("clear_variable_list = nd_reach"), self.refresh.index("nd_reach_add_from = yes"))
 
     def test_from_us_our_subjects_and_our_hosts(self):
@@ -115,21 +115,21 @@ class TestReachTriggers(unittest.TestCase):
 
     def test_state_in_reach(self):
         body = squash(block(self.triggers, "nd_state_in_reach_of"))
-        icbm = body.index("$COUNTRY$ = { has_technology_researched = ICBMs }")
+        icbm = body.index("$COUNTRY$ = { nd_fields_icbms = yes }")
         listed = body.index("is_target_in_variable_list = { name = nd_reach target = scope:nd_reach_owner }")
         coast = body.index("is_coastal = yes")
         self.assertLess(icbm, listed)
         self.assertLess(listed, coast)
-        self.assertIn("has_technology_researched = advanced_submarine_technology", body)
+        self.assertIn("is_coastal = yes $COUNTRY$ = { nd_fields_missile_submarines = yes }", body)
         self.assertIn("has_variable_list = nd_reach", body)
 
     def test_reaches_country(self):
         # Equivalent to "any of its states is in reach", without walking them
         # all: the list holds countries, and only the coast is per state.
         body = squash(block(self.triggers, "nd_reaches_country"))
-        for needle in ("has_technology_researched = ICBMs",
+        for needle in ("nd_fields_icbms = yes",
                        "is_target_in_variable_list = { name = nd_reach target = $TARGET$ }",
-                       "has_technology_researched = advanced_submarine_technology",
+                       "nd_fields_missile_submarines = yes",
                        "$TARGET$ = { any_scope_state = { is_coastal = yes } }"):
             self.assertIn(needle, body)
 
@@ -144,7 +144,7 @@ class TestReachTriggers(unittest.TestCase):
     def test_reach_limited(self):
         body = squash(block(self.triggers, "nd_reach_limited"))
         self.assertIn("nd_is_armed = yes", body)
-        self.assertIn("NOT = { has_technology_researched = ICBMs }", body)
+        self.assertIn("NOT = { nd_fields_icbms = yes }", body)
 
 
 class TestReachReaders(unittest.TestCase):

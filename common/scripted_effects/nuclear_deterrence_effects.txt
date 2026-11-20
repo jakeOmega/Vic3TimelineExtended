@@ -2326,7 +2326,7 @@ nd_reach_refresh = {
 	if = {
 		limit = {
 			nd_is_armed = yes
-			NOT = { has_technology_researched = ICBMs }
+			NOT = { nd_fields_icbms = yes }
 		}
 		nd_reach_add_from = yes
 		every_direct_subject = { nd_reach_add_from = yes }

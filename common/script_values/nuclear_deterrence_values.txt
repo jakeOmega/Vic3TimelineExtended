@@ -181,11 +181,11 @@ nd_survivability_cap = {
 		add = 15                                # warning time to get bombers up
 	}
 	if = {
-		limit = { has_technology_researched = ICBMs }
+		limit = { nd_fields_icbms = yes }
 		add = 20                                # hardened silos
 	}
 	if = {
-		limit = { has_technology_researched = advanced_submarine_technology }
+		limit = { nd_fields_missile_submarines = yes }
 		add = 25                                # missile submarines at sea
 	}
 	if = {
@@ -722,7 +722,7 @@ nd_effective_survivability_at_readiness_3 = {
 nd_k_ratio = {
 	value = 1
 	if = {
-		limit = { has_technology_researched = ICBMs }
+		limit = { nd_fields_icbms = yes }
 		add = 0.5
 	}
 	if = {

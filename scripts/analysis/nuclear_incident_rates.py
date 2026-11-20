@@ -57,7 +57,8 @@ class Posture:
     punished_skeptic: bool = False
     concealed_incident: bool = False
     satellite_communications: bool = True
-    icbms: bool = True
+    icbms: bool = True             # nd_fields_icbms (phase 1: the technology)
+    missile_submarines: bool = True  # nd_fields_missile_submarines (the technology and a coast)
     war_band: int = 0              # the war's exposure band (nd_war_danger_band) while at war
     talks: bool = False            # the crisis's talks are open
     suspect_readiness: int = 3     # the suspected attacker's readiness
@@ -152,6 +153,10 @@ class RiskModel:
             "nd_launch_under_attack_doctrine": lambda: p.doctrine != 1,
             "nd_crisis_talks_open_either": lambda: p.talks,
             "nd_believed_armed": lambda: p.believed_armed,
+            # The delivery legs (2026-11-20 delivery spec §4): answered from the
+            # posture, since the submarine leg's coast is a state walk.
+            "nd_fields_icbms": lambda: p.icbms,
+            "nd_fields_missile_submarines": lambda: p.missile_submarines,
             # Reach (rework spec §7): the benchmarks are within it.
             "nd_reaches_country": lambda: p.in_reach,
             "nd_leadership_in_reach": lambda: p.capital_in_reach,
