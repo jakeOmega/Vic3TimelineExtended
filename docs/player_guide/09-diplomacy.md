@@ -638,10 +638,11 @@ Dar-Al-Islam the Union of Dar-Al-Islam; the other unions keep their names.
 Forming India claims the Pakistani, Bangladeshi, Himalayan and Ceylonese
 periphery; forming Indonesia claims Malaya, northern Borneo and eastern New
 Guinea. A Muslim-ruled state inside India's core isn't swept up in unification.
-While an independent, Muslim-ruled insignificant power borders India, "An Island
-of Resistance" can fire and lets India annex it by police action (20 infamy),
-pressure it into accession as a major power or greater (8 infamy), or leave it
-be.
+While such a holdout stays independent and an insignificant power, with its
+capital in one of India's core states, "The Holdout" can fire and lets India
+annex it by police action (20 infamy), pressure it into accession as a major
+power or greater (8 infamy), or leave it be. Muslim neighbors outside the core,
+such as Persia or Afghanistan, never get it.
 
 <!-- screenshot: the formation panel showing the European Union with its requirements tooltip -->
 

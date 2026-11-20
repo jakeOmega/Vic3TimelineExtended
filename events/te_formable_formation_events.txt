@@ -107,8 +107,9 @@ formation_te.2 = {
 # formation_te.10 — Operation Polo
 #
 # Dispatched from operation_polo_on_action (on_monthly_pulse_country) for a
-# formed India when an independent, sub-minor-power, Muslim-ruled state survives
-# bordered by Indian territory — the Hyderabad/Nizam holdout the formation
+# formed India when an independent, insignificant, Muslim-ruled state governed
+# from one of India's core states survives on its border
+# (te_operation_polo_target) — the Hyderabad/Nizam holdout the formation
 # religion guard (can_be_unification_target) deliberately leaves behind. India
 # may annex it by force ("police action", high infamy), pressure it into
 # accession (major power or higher only, lower infamy), or leave it be.

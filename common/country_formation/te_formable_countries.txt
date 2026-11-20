@@ -313,6 +313,8 @@ DAR = {
 # periphery is granted as claims by formation_te.bharat instead (events/
 # te_formable_formation_events.txt), and Muslim-ruled in-core holdouts (chiefly
 # Hyderabad) are handled by the religion guard + Operation Polo chain below.
+# te_is_india_core_state (common/scripted_triggers/te_operation_polo_triggers.txt)
+# repeats the states list; test_operation_polo_target.py fails if they differ.
 BHA = {
 	states = {
 		STATE_ASSAM

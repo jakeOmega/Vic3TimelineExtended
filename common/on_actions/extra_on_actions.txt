@@ -3608,10 +3608,12 @@ consciousness_network_on_action = {
 # See events/irredentism_events.txt and the design plan at
 # /home/jakef/.claude/plans/can-we-make-a-sparkling-pine.md.
 # ============================================================================
-# Operation Polo dispatcher: when a formed India (BHA) finds an independent,
-# sub-minor-power, Muslim-ruled state surviving bordered by Indian territory —
-# the holdout the formation religion guard (can_be_unification_target) leaves
-# behind — offer the annex/accede/decline event (formation_te.10). Gated to
+# Operation Polo dispatcher: when a formed India (BHA) borders an independent,
+# insignificant, Muslim-ruled state governed from inside its core — the holdout
+# the formation religion guard (can_be_unification_target) leaves behind —
+# offer the annex/accede/decline event (formation_te.10). Who qualifies is
+# te_operation_polo_target (common/scripted_triggers/
+# te_operation_polo_triggers.txt), read by both the test and the pick. Gated to
 # c:BHA only, so the any_country sweep is cheap. A 2-year cooldown variable is
 # set when the event resolves.
 operation_polo_on_action = {
@@ -3621,34 +3623,12 @@ operation_polo_on_action = {
 				c:BHA ?= this
 				NOT = { has_variable = operation_polo_cooldown }
 				any_country = {
-					NOT = { this = c:BHA }
-					NOT = { is_country_type = decentralized }
-					is_subject = no
-					NOT = { country_rank >= rank_value:minor_power }
-					OR = {
-						country_has_state_religion = rel:sunni
-						country_has_state_religion = rel:shiite
-						country_has_state_religion = rel:ibadi
-					}
-					any_scope_state = {
-						any_neighbouring_state = { owner = c:BHA }
-					}
+					te_operation_polo_target = yes
 				}
 			}
 			random_country = {
 				limit = {
-					NOT = { this = c:BHA }
-					NOT = { is_country_type = decentralized }
-					is_subject = no
-					NOT = { country_rank >= rank_value:minor_power }
-					OR = {
-						country_has_state_religion = rel:sunni
-						country_has_state_religion = rel:shiite
-						country_has_state_religion = rel:ibadi
-					}
-					any_scope_state = {
-						any_neighbouring_state = { owner = c:BHA }
-					}
+					te_operation_polo_target = yes
 				}
 				save_scope_as = polo_target_country
 			}
