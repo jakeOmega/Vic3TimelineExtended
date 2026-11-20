@@ -320,62 +320,62 @@ sr_ms_count_slot = {
 }
 
 # ---- Fabrication methods ---------------------------------------------------------------
-# Country scope. The best Module Fabrication method the country has, for the
-# AI's review (design § 10): Fusion Shipyards with Compact Fusion
-# Reactors, else Orbital Foundries (pm_sr_fabrication_lunar_foundries) with
-# Space Colonization, else Orbital Assembly with Cislunar Infrastructure; with
-# none of them, nothing (a holder that was given its colony may have none).
-sr_mod_activate_best_fabrication = {
+# Country scope. Puts the Space Program on the method PM, unless it runs it.
+sr_mod_run_method = {
 	if = {
-		limit = { has_technology_researched = compact_fusion_reactors }
-		if = {
-			limit = { NOT = { sr_mod_fabrication_runs = { PM = pm_sr_fabrication_fusion_shipyards } } }
-			activate_production_method = {
-				building_type = building_space_program
-				production_method = pm_sr_fabrication_fusion_shipyards
-			}
+		limit = { NOT = { sr_mod_fabrication_runs = { PM = $PM$ } } }
+		activate_production_method = {
+			building_type = building_space_program
+			production_method = $PM$
 		}
 	}
-	else_if = {
-		limit = { has_technology_researched = space_colonization }
-		if = {
-			limit = { NOT = { sr_mod_fabrication_runs = { PM = pm_sr_fabrication_lunar_foundries } } }
-			activate_production_method = {
-				building_type = building_space_program
-				production_method = pm_sr_fabrication_lunar_foundries
-			}
+}
+
+# Country scope. The AI's Module Fabrication method, for its review (design
+# § 10): the dearest one its technology allows whose bill is within its
+# fabrication budget (the owner, 2026-11-20; sr_mod_ai_fab_room_<method>,
+# sr_colony_module_values.txt): Fusion Shipyards with Compact Fusion Reactors,
+# Orbital Foundries (pm_sr_fabrication_lunar_foundries) with Space
+# Colonization. Otherwise the cheapest method it has, whatever the budget, as
+# before the budget: Orbital Assembly with Cislunar Infrastructure, else
+# Orbital Foundries, else Fusion Shipyards (neither later technology needs
+# Cislunar Infrastructure, and a holder given its colony may have any of the
+# three). With none of them, nothing.
+sr_mod_activate_best_fabrication = {
+	if = {
+		limit = {
+			has_technology_researched = compact_fusion_reactors
+			sr_mod_ai_fab_room_fusion_shipyards >= 0
 		}
+		sr_mod_run_method = { PM = pm_sr_fabrication_fusion_shipyards }
 	}
 	else_if = {
 		limit = {
-			has_technology_researched = cislunar_infrastructure
-			NOT = { sr_mod_fabrication_runs = { PM = pm_sr_fabrication_orbital_assembly } }
+			has_technology_researched = space_colonization
+			sr_mod_ai_fab_room_lunar_foundries >= 0
 		}
-		activate_production_method = {
-			building_type = building_space_program
-			production_method = pm_sr_fabrication_orbital_assembly
-		}
+		sr_mod_run_method = { PM = pm_sr_fabrication_lunar_foundries }
+	}
+	else_if = {
+		limit = { has_technology_researched = cislunar_infrastructure }
+		sr_mod_run_method = { PM = pm_sr_fabrication_orbital_assembly }
+	}
+	else_if = {
+		limit = { has_technology_researched = space_colonization }
+		sr_mod_run_method = { PM = pm_sr_fabrication_lunar_foundries }
+	}
+	else_if = {
+		limit = { has_technology_researched = compact_fusion_reactors }
+		sr_mod_run_method = { PM = pm_sr_fabrication_fusion_shipyards }
 	}
 }
 
 sr_mod_stop_fabrication = {
-	if = {
-		limit = { NOT = { sr_mod_fabrication_runs = { PM = pm_sr_fabrication_none } } }
-		activate_production_method = {
-			building_type = building_space_program
-			production_method = pm_sr_fabrication_none
-		}
-	}
+	sr_mod_run_method = { PM = pm_sr_fabrication_none }
 }
 
 sr_mod_stop_storage = {
-	if = {
-		limit = { NOT = { sr_mod_fabrication_runs = { PM = pm_sr_storage_none } } }
-		activate_production_method = {
-			building_type = building_space_program
-			production_method = pm_sr_storage_none
-		}
-	}
+	sr_mod_run_method = { PM = pm_sr_storage_none }
 }
 
 # ---- AI (design § 10) -----------------------------------------------------------------------
@@ -384,8 +384,9 @@ sr_mod_stop_storage = {
 # each colony with nothing on the way
 # (sr_mod_ai_plan_<key>: a Habitat when its people fill three quarters of its
 # room, else its next specialization level its crews can run; never the
-# placeholder Defences or Spaceport), and runs the best fabrication method
-# while anything is queued; otherwise fabrication goes off. Storage stays off.
+# placeholder Defences or Spaceport), and runs the dearest fabrication method
+# within its budget while anything is queued (sr_mod_activate_best_fabrication);
+# otherwise fabrication goes off. Storage stays off.
 sr_mod_ai_review = {
 	if = {
 		limit = {

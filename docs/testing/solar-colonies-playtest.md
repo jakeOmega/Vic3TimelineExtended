@@ -996,3 +996,21 @@ queue behind them. The console is `event te_debug_space_race.4` as above.
    blockaded" instead). In a window's last month a module still waiting reads about a cycle less 2 months. While
    fabricating, the hover gives the price, stock, rate and months; when stopped, the reason: launch site lost, or no
    fabrication. "1 month" reads singular.
+
+## Module goods and the AI's fabrication budget (2026-11-20)
+
+The owner's resizing of Module Fabrication and Module Storage: no Advanced Materials on the era 10 methods, new
+inputs on all of them, and each later method dearer a week but about 10% cheaper a point. No self-check: the AI's
+budget reads `fixed_income` and the programme's throughput as the mission budget does.
+
+1. **The goods.** With Cislunar Infrastructure and no Advanced Material Fabricator in the market, Orbital Assembly
+   lists 1,300 Launch Capacity, 400 Electronic Components, 300 Industrial Robotics and 300 Wireless Telecommunication
+   Gear, and Component Depot 1,000 Electricity, 250 Electronic Components and 125 Industrial Robotics; neither shows
+   an Advanced Materials shortage. Orbital Foundries, Fusion Shipyards and Orbital Depot list Advanced Materials
+   (15, 20 and 3) with the rest. The building's expenses rise by about 340,000, 732,000 and 1,368,000 a week at
+   full staff on the three fabrication methods.
+2. **The AI's method.** In a save with AI colony holders that have queued modules, read their Space Programs
+   (`scripts/analysis/save_world_report.py buildings --type building_space_program`) a year after the review: one
+   with Compact Fusion Reactors and weekly fixed income well over 27M runs Fusion Shipyards; one with it and
+   income under about 15M runs Orbital Assembly (or its cheapest method), not Fusion Shipyards. Funding raises the
+   line with the throughput.

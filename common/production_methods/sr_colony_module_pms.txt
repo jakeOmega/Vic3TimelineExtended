@@ -11,11 +11,28 @@
 # the Space Race rule; a method can't be gated by a game rule
 # (scripting_best_practices.md § Locking Production Methods), so its loc says so.
 #
-#   method               gate                      Launch Capacity/wk  Adv. Materials/wk  points/mo
-#   None (default)       -                         0                   0                  0
-#   Orbital Assembly     cislunar_infrastructure   1,500               10                 5
-#   Orbital Foundries    space_colonization        2,000               15                 12
-#   Fusion Shipyards     compact_fusion_reactors   2,000               10                 25
+#   method               gate                      goods a week                                   points/mo  bill/wk  a point
+#   None (default)       -                         -                                              0
+#   Orbital Assembly     cislunar_infrastructure   1,300 Launch Capacity, 400 Electronic         5          340,000  68,000
+#                                                  Components, 300 Robotics, 300 Radios
+#   Orbital Foundries    space_colonization        2,600 Launch Capacity, 15 Advanced            12         732,000  61,000
+#                                                  Materials, 800 Electronic Components,
+#                                                  600 Robotics, 500 Radios
+#   Fusion Shipyards     compact_fusion_reactors   4,800 Launch Capacity, 20 Advanced            25       1,368,000  54,720
+#                                                  Materials, 1,600 Electronic Components,
+#                                                  1,500 Robotics, 1,000 Radios
+#
+# The sizing (the owner, 2026-11-20). Orbital Assembly takes no Advanced
+# Materials: its technology is era 10 and the Advanced Material Fabricator's,
+# modern_material_science, era 11. Each later method costs about 10% less a
+# point a month than the one before at base prices, so it costs more a week and
+# builds a module only a little cheaper: 29.5M, 26.5M and 23.8M a module at full
+# staff. Until then the later methods cost 44% and 54% less a point, and a
+# Fusion Shipyards module a quarter of an Orbital Assembly one.
+# test_solar_sites.py holds both rules, and holds the two dearer bills to the
+# AI's copies of them (sr_mod_fab_bill_base_*, sr_colony_module_values.txt),
+# which keep an AI on the dearest method within its budget
+# (sr_mod_ai_fab_room_*, sr_mod_activate_best_fabrication).
 #
 # Orbital Foundries keeps its first name's key, pm_sr_fabrication_lunar_foundries
 # (renamed for Mare Imbrium's Mass Driver, lunar colonization design § 15.4).
@@ -39,8 +56,10 @@ pm_sr_fabrication_orbital_assembly = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_launch_capacity_add = 1500               # Price:  200, Total cost: 300000.0 (88.24%)
-			goods_input_advanced_materials_add = 10              # Price: 4000, Total cost:  40000.0 (11.76%)
+			goods_input_launch_capacity_add = 1300               # Price:  200, Total cost: 260000.0 (76.47%)
+			goods_input_electronic_components_add = 400          # Price:   80, Total cost:  32000.0 (9.41%)
+			goods_input_robotics_add = 300                       # Price:   80, Total cost:  24000.0 (7.06%)
+			goods_input_radios_add = 300                         # Price:   80, Total cost:  24000.0 (7.06%)
 			# Output goods
 			# Total input cost: 340000.0
 			# Total output cost: 0
@@ -65,12 +84,15 @@ pm_sr_fabrication_lunar_foundries = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_launch_capacity_add = 2000               # Price:  200, Total cost: 400000.0 (86.96%)
-			goods_input_advanced_materials_add = 15              # Price: 4000, Total cost:  60000.0 (13.04%)
+			goods_input_launch_capacity_add = 2600               # Price:  200, Total cost: 520000.0 (71.04%)
+			goods_input_advanced_materials_add = 15              # Price: 4000, Total cost:  60000.0 (8.20%)
+			goods_input_electronic_components_add = 800          # Price:   80, Total cost:  64000.0 (8.74%)
+			goods_input_robotics_add = 600                       # Price:   80, Total cost:  48000.0 (6.56%)
+			goods_input_radios_add = 500                         # Price:   80, Total cost:  40000.0 (5.46%)
 			# Output goods
-			# Total input cost: 460000.0
+			# Total input cost: 732000.0
 			# Total output cost: 0
-			# Profit: -460000.0
+			# Profit: -732000.0
 			# Profit margin: -100.00%
 		}
 	}
@@ -91,12 +113,15 @@ pm_sr_fabrication_fusion_shipyards = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_launch_capacity_add = 2000               # Price:  200, Total cost: 400000.0 (90.91%)
-			goods_input_advanced_materials_add = 10              # Price: 4000, Total cost:  40000.0 (9.09%)
+			goods_input_launch_capacity_add = 4800               # Price:  200, Total cost: 960000.0 (70.18%)
+			goods_input_advanced_materials_add = 20              # Price: 4000, Total cost:  80000.0 (5.85%)
+			goods_input_electronic_components_add = 1600         # Price:   80, Total cost: 128000.0 (9.36%)
+			goods_input_robotics_add = 1500                      # Price:   80, Total cost: 120000.0 (8.77%)
+			goods_input_radios_add = 1000                        # Price:   80, Total cost:  80000.0 (5.85%)
 			# Output goods
-			# Total input cost: 440000.0
+			# Total input cost: 1368000.0
 			# Total output cost: 0
-			# Profit: -440000.0
+			# Profit: -1368000.0
 			# Profit margin: -100.00%
 		}
 	}
@@ -117,11 +142,21 @@ pm_sr_fabrication_fusion_shipyards = {
 # for goods a week; the base 500 and a year of fabrication need no method
 # (sr_mod_fab_stock_cap). Like fabrication, no method employs anyone.
 #
-#   method               gate                      goods a week                                  storage
+#   method               gate                      goods a week                                  storage  bill/wk  a point
 #   None (default)       -                         -                                             0
-#   Component Depot      cislunar_infrastructure   1,000 Electricity, 5 Advanced Materials       +1,000
-#   Orbital Depot        space_colonization        500 Launch Capacity, 1,000 Electricity,      +3,000
-#                                                  10 Advanced Materials
+#   Component Depot      cislunar_infrastructure   1,000 Electricity, 250 Electronic             +1,000   60,000   60
+#                                                  Components, 125 Robotics
+#   Orbital Depot        space_colonization        450 Launch Capacity, 1,000 Electricity,      +3,000  162,000   54
+#                                                  250 Electronic Components, 125 Radios,
+#                                                  3 Advanced Materials
+#
+# Sized as fabrication is (the owner, 2026-11-20): Component Depot takes no
+# Advanced Materials (era 10, the fabricator era 11), and Orbital Depot costs
+# about 10% less a point of storage. Until then the Orbital Depot cost more a
+# point (57 to the Component Depot's 50). test_solar_sites.py holds both rules.
+#
+# Radios is Wireless Telecommunication Gear in game, Robotics Industrial
+# Robotics, here and in fabrication's table above.
 # ============================================================================
 
 pm_sr_storage_none = {
@@ -138,12 +173,13 @@ pm_sr_storage_component_depot = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_electricity_add = 1000                   # Price:   30, Total cost:  30000.0 (60.00%)
-			goods_input_advanced_materials_add = 5               # Price: 4000, Total cost:  20000.0 (40.00%)
+			goods_input_electricity_add = 1000                   # Price:   30, Total cost:  30000.0 (50.00%)
+			goods_input_electronic_components_add = 250          # Price:   80, Total cost:  20000.0 (33.33%)
+			goods_input_robotics_add = 125                       # Price:   80, Total cost:  10000.0 (16.67%)
 			# Output goods
-			# Total input cost: 50000.0
+			# Total input cost: 60000.0
 			# Total output cost: 0
-			# Profit: -50000.0
+			# Profit: -60000.0
 			# Profit margin: -100.00%
 		}
 	}
@@ -164,13 +200,15 @@ pm_sr_storage_orbital_depot = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_launch_capacity_add = 500                # Price:  200, Total cost: 100000.0 (58.82%)
-			goods_input_electricity_add = 1000                   # Price:   30, Total cost:  30000.0 (17.65%)
-			goods_input_advanced_materials_add = 10              # Price: 4000, Total cost:  40000.0 (23.53%)
+			goods_input_launch_capacity_add = 450                # Price:  200, Total cost:  90000.0 (55.56%)
+			goods_input_electricity_add = 1000                   # Price:   30, Total cost:  30000.0 (18.52%)
+			goods_input_electronic_components_add = 250          # Price:   80, Total cost:  20000.0 (12.35%)
+			goods_input_radios_add = 125                         # Price:   80, Total cost:  10000.0 (6.17%)
+			goods_input_advanced_materials_add = 3               # Price: 4000, Total cost:  12000.0 (7.41%)
 			# Output goods
-			# Total input cost: 170000.0
+			# Total input cost: 162000.0
 			# Total output cost: 0
-			# Profit: -170000.0
+			# Profit: -162000.0
 			# Profit margin: -100.00%
 		}
 	}
