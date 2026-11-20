@@ -432,26 +432,25 @@ nd_crisis_action_sgui = {
 # Forces: survivors against the main rival, while we have one
 # (nd_refresh_main_rival).
 # The Forces section's Reach row (rework spec §7, §10): shown while armed
-# without ICBMs (nd_reach_limited); display only. Its hover lists the
-# countries in nd_reach through ExecuteTooltip (vanilla's
-# je_hispanoamerica_not_recognized_countries_sgui shape), each host of our
-# weapons marked on its own line: a heading over a script-built list prints
-# above all of it (gui_modding_guide.md gotcha #18).
-nd_reach_limited_sgui = {
-	scope = country
-	is_shown = { nd_reach_limited = yes }
-	is_valid = { always = no }
-	ai_is_valid = { always = no }
-	effect = { }
-}
-
+# (nd_armed_sgui; 2026-11-20 delivery plan D18), display only. Its hover says
+# every country is in reach with ICBMs; without, it lists the countries in
+# nd_reach through ExecuteTooltip (vanilla's
+# je_hispanoamerica_not_recognized_countries_sgui shape) under one heading,
+# each host of our weapons marked on its own line: a scope's own lines print
+# before its nested blocks', so one heading over one list is all it can hold
+# (gui_modding_guide.md gotcha #18).
 nd_reach_list_sgui = {
 	scope = country
 	is_valid = { always = no }
 	ai_is_valid = { always = no }
 	effect = {
 		if = {
+			limit = { nd_fields_icbms = yes }
+			custom_tooltip = nd_w_reach_every
+		}
+		else_if = {
 			limit = { has_variable_list = nd_reach }
+			custom_tooltip = nd_w_reach_list_head
 			every_in_list = {
 				variable = nd_reach
 				if = {

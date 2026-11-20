@@ -1721,11 +1721,122 @@ nd_crisis_ft_label = {
 	}
 }
 
-# The Reach row's value (nd_w_reach_value): the countries our bombers reach,
-# and every coast once we have missile submarines.
+# The survivability target's chain (Forces, nd_w_survivability_target_tt;
+# 2026-11-20 delivery spec §5.4): each part with its factor while held, or
+# that it isn't. A part is held while its factor is below 1.
+nd_surv_part_radar = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_display_exposure_factor_radar < 1 }
+		localization_key = nd_w_surv_part_radar_held
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_surv_part_radar_missing
+	}
+}
+
+nd_surv_part_icbms = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_display_exposure_factor_icbms < 1 }
+		localization_key = nd_w_surv_part_icbms_held
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_surv_part_icbms_missing
+	}
+}
+
+nd_surv_part_submarines = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_display_exposure_factor_submarines < 1 }
+		localization_key = nd_w_surv_part_submarines_held
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_surv_part_submarines_missing
+	}
+}
+
+nd_surv_part_missile_defense = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_display_exposure_factor_missile_defense < 1 }
+		localization_key = nd_w_surv_part_missile_defense_held
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_surv_part_missile_defense_missing
+	}
+}
+
+# The Survivors hover's breakdown of the main rival's reach (spec §5.4), from
+# what nd_refresh_main_rival stores: the silo line while its precision weapons
+# find our silos, and each part of its counterforce ratio it holds.
+nd_survivors_silo_line = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_main_rival_accuracy_mult
+			var:nd_main_rival_accuracy_mult > 1
+		}
+		localization_key = nd_w_survivors_silo_line
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_empty
+	}
+}
+
+nd_main_rival_k_pgm_part = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_main_rival_pgm
+			var:nd_main_rival_pgm > 0
+		}
+		localization_key = nd_w_survivors_k_pgm
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_empty
+	}
+}
+
+nd_main_rival_k_force_part = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_main_rival_k_force
+			var:nd_main_rival_k_force > 0
+		}
+		localization_key = nd_w_survivors_k_force
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_empty
+	}
+}
+
+# The Reach row's value (nd_w_reach_value): every country with ICBMs
+# (2026-11-20 delivery plan D18), else the countries our bombers reach, and
+# every coast once we have missile submarines.
 nd_reach_value = {
 	type = country
 	random_valid = no
+	text = {
+		trigger = { nd_fields_icbms = yes }
+		localization_key = nd_w_reach_value_every
+	}
 	text = {
 		trigger = { nd_fields_missile_submarines = yes }
 		localization_key = nd_w_reach_value_subs

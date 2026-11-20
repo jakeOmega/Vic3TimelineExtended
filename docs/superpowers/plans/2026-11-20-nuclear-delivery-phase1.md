@@ -129,7 +129,7 @@
 
 **Files:** `gui/journal_entry_widgets/nuclear_deterrence_widget.gui` (the survivability bar's target line and floor, a Launch credit row after Survivors, the Reach row's gate), `common/scripted_guis/nuclear_deterrence_sguis.txt` (the Reach row's gate), `common/script_values/nuclear_deterrence_values.txt` (`nd_display_exposure_factor_*`, `nd_display_launch_credit`), `common/scripted_effects/nuclear_deterrence_effects.txt` (`nd_refresh_main_rival` stores `nd_main_rival_k`, `nd_main_rival_pgm` and `nd_main_rival_accuracy_mult`), `nuclear_deterrence_custom_loc.txt` (`nd_reach_value`), loc (`nd_w_survivability_*`, `nd_w_launch_credit_*`, `nd_w_survivors_tt`, `nd_w_reach_*`), `test_nuclear_layout.py`.
 
-- [ ] Write `TestForcesDisplay`:
+- [x] Write `TestForcesDisplay`:
   - the survivability hover prints one line per factor through `nd_display_exposure_factor_*`, then the exposed share and the target;
   - the bar's line reads the target and the floor is printed;
   - the Launch credit row reads `nd_display_launch_credit`, its hover naming the authority's credit and the safeguards cut;
@@ -138,8 +138,21 @@
   - the rival's figures in the Survivors hover carry the qualifier and `nd_tt_worlds_view` (D8).
 
   The rows fit (`_fits`), and `PrivateTest` and `ObserverTest` pass. Run: FAIL.
-- [ ] Implement, then the GUI lint, the nuclear tests and `preflight.py --changed`. PASS.
-- [ ] Commit `Nuclear panel: survivability's parts, launch credit, the rival's counterforce ratio (spec §5.4)`.
+- [x] Implement, then the GUI lint, the nuclear tests and `preflight.py --changed`. PASS.
+- [x] Commit `Nuclear panel: survivability's parts, launch credit, the rival's counterforce ratio (spec §5.4)`.
+
+**As built (2026-11-20).** Four changes from the plan:
+- **Where the chain sits.** It is in the target's hover, not the survivability row's: that hover is at 473 of the 500 characters `long_tooltip_audit` allows. The bar's target line has the hover, and so does a new row under the bar, "Target and floor", which prints both figures. A part not held prints "not researched", or what it needs.
+- **Reach.** `nd_reach_limited_sgui` is gone. The row shows on `nd_armed_sgui`, and `nd_reach_list_sgui` prints one line with ICBMs. Without ICBMs it prints the list's heading, which moved out of `nd_w_reach_tt`, then the list.
+- **The rival's figures.** The refresh stores five values, through `_saved` script values:
+  - `nd_main_rival_warheads`: the shown estimate, `nd_seen_stockpile`;
+  - `nd_main_rival_k`: the counterforce ratio;
+  - `nd_main_rival_pgm`: the ratio's Precision-Guided Munitions part, `nd_k_ratio_tech_part`, the rest of `country_nd_k_ratio_add`;
+  - `nd_main_rival_k_force`: the ICBM force's part, `nd_k_ratio_force_part`;
+  - `nd_main_rival_accuracy_mult`.
+
+  The reach figure still multiplies `nd_believed_stockpile` (D9). So in the days before a new arsenal's estimate is seeded, the warheads line can read 0 under a reach above it.
+- **The qualifier.** "Up to" on the rival's reach is the qualifier, and its hover is `nd_tt_worlds_view`, a nested hover (`#tooltippable;tooltip:`) in plain text. The safeguards cut a level is now one script value, `nd_launch_credit_safeguards_cut`.
 
 ### Task 6: Posture, hardening, safeguards and the ceiling (D10–D13)
 

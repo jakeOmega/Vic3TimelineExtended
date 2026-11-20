@@ -25,7 +25,9 @@
 ###                             choices beneath it (readiness as a table), then
 ###                             the umbrella, loose warheads, upkeep and
 ###                             incident exposure (open, only while armed).
-### te_nuclear_sec_forces       Survivability, reliability, strain, the chance
+### te_nuclear_sec_forces       Survivability with its target and floor,
+###                             survivors against the main rival, launch
+###                             credit, reach, reliability, strain, the chance
 ###                             a sequence is halted, the investment steppers
 ###                             and the arsenal's size, its count with it
 ###                             (open, only while armed).
@@ -1984,7 +1986,7 @@ types nuclear_deterrence_widget_types
 			nd_panel = {
 				visible = "[Not(GetVariableSystem.Exists('nd_capabilities_closed'))]"
 
-				### Survivability, heading for the ceiling our technology sets while we
+				### Survivability, heading for the target our forces set while we
 				### pay for hardening and back toward the floor without it
 				### (nd_display_survivability_heading). Play-test round 3: the
 				### projection bar shared with Global Warming, in one fixed 200 x 14
@@ -1992,7 +1994,7 @@ types nuclear_deterrence_widget_types
 				### to the higher of today's value and where it is heading, green while
 				### rising and red while falling (a wrapper, alpha 0.5; more
 				### survivability is always good for us, owner 2026-09-30: red bad,
-				### green good); the solid fill to the lower of the two; and the ceiling
+				### green good); the solid fill to the lower of the two; and the target
 				### as a 3 px cream line with its own hover. The row is an nd_row's width
 				### (170 + 200 + 94 and two 8 px gaps, in 6 px margins). Rising and
 				### falling compare the two values rather than a code: a (CFixedPoint)
@@ -2108,6 +2110,20 @@ types nuclear_deterrence_widget_types
 						text = "nd_w_survivability_value"
 					}
 				}
+				### The target and the floor under the bar (2026-11-20 delivery spec
+				### §5.4): the hover is the target line's, the chain of parts that
+				### sets the target, and the floor without hardening.
+				nd_row = {
+					blockoverride "row_label" {
+						text = "nd_w_survivability_target_label"
+					}
+					blockoverride "row_value" {
+						text = "nd_w_survivability_target_value"
+					}
+					blockoverride "row_tooltip" {
+						tooltip = "nd_w_survivability_target_tt"
+					}
+				}
 				### Survivors against the main rival (rework spec §3.2, §10): how many
 				### warheads would be left after its whole arsenal, as we know it, is
 				### spent on ours. Shown while we have one.
@@ -2123,11 +2139,26 @@ types nuclear_deterrence_widget_types
 						tooltip = "nd_w_survivors_tt"
 					}
 				}
-				### Reach (rework spec §7, §10): without ICBMs, the countries our
-				### delivery reaches. Display only; the hover lists them, the hosts
-				### of our weapons marked.
+				### Launch credit (2026-11-20 delivery spec §5.4): the share of the
+				### warheads a first strike would destroy that our launch authority
+				### gets away first, every survivors figure's (nd_launch_credit).
 				nd_row = {
-					visible = "[GetScriptedGui('nd_reach_limited_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+					blockoverride "row_label" {
+						text = "nd_w_launch_credit_label"
+					}
+					blockoverride "row_value" {
+						text = "nd_w_launch_credit_value"
+					}
+					blockoverride "row_tooltip" {
+						tooltip = "nd_w_launch_credit_tt"
+					}
+				}
+				### Reach (rework spec §7, §10; delivery plan D18): while armed, every
+				### country with ICBMs, else the countries our delivery reaches.
+				### Display only; the hover lists them, the hosts of our weapons
+				### marked.
+				nd_row = {
+					visible = "[GetScriptedGui('nd_armed_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					blockoverride "row_label" {
 						text = "nd_w_reach_label"
 					}

@@ -1131,6 +1131,15 @@ nd_refresh_main_rival = {
 		# ours is within reach.
 		set_variable = { name = nd_main_rival_reach value = nd_counterforce_reach_saved }
 		set_variable = { name = nd_exposed_main value = nd_exposed_warheads_vs_saved }
+		# And what that rests on, as the world sees the rival (2026-11-20
+		# delivery spec §5.4): the warheads it is estimated to hold, its
+		# counterforce ratio with the ratio's two parts, and what its precision
+		# weapons do to our silos (1 when nothing).
+		set_variable = { name = nd_main_rival_warheads value = nd_seen_stockpile_saved }
+		set_variable = { name = nd_main_rival_k value = nd_k_ratio_saved }
+		set_variable = { name = nd_main_rival_pgm value = nd_k_ratio_tech_part_saved }
+		set_variable = { name = nd_main_rival_k_force value = nd_k_ratio_force_part_saved }
+		set_variable = { name = nd_main_rival_accuracy_mult value = nd_accuracy_mult_saved }
 	}
 	else = {
 		if = {
@@ -1160,6 +1169,26 @@ nd_refresh_main_rival = {
 		if = {
 			limit = { has_variable = nd_exposed_main }
 			remove_variable = nd_exposed_main
+		}
+		if = {
+			limit = { has_variable = nd_main_rival_warheads }
+			remove_variable = nd_main_rival_warheads
+		}
+		if = {
+			limit = { has_variable = nd_main_rival_k }
+			remove_variable = nd_main_rival_k
+		}
+		if = {
+			limit = { has_variable = nd_main_rival_pgm }
+			remove_variable = nd_main_rival_pgm
+		}
+		if = {
+			limit = { has_variable = nd_main_rival_k_force }
+			remove_variable = nd_main_rival_k_force
+		}
+		if = {
+			limit = { has_variable = nd_main_rival_accuracy_mult }
+			remove_variable = nd_main_rival_accuracy_mult
 		}
 	}
 }

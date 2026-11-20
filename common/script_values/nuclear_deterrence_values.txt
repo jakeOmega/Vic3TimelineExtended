@@ -783,6 +783,25 @@ nd_icbm_force_k_ratio = 0.5
 
 nd_icbm_force_attack_success = 0.5
 
+# The counterforce ratio's parts, for the panel (2026-11-20 delivery spec
+# §5.4): the ICBM force's share while fielded, and the rest of
+# country_nd_k_ratio_add, which is Precision-Guided Munitions'. The rest is
+# held at 0 or more for the days the declared force takes to read.
+nd_k_ratio_force_part = {
+	value = 0
+	if = {
+		limit = { nd_fields_icbms = yes }
+		value = nd_icbm_force_k_ratio
+	}
+}
+
+nd_k_ratio_tech_part = {
+	value = nd_k_ratio
+	subtract = 1
+	subtract = nd_k_ratio_force_part
+	min = 0
+}
+
 # Self-check nd_icbm_force_sum (nd_icbm_force_selfcheck, TEMPORARY): what the
 # parts should give. The technologies' figures are their own (era_8.txt's
 # Precision-Guided Munitions, era_6.txt's Nuclear Weapons); the test holds them.
@@ -821,8 +840,9 @@ nd_sc_icbm_attack_gap = {
 }
 
 # The share of the warheads a counterforce strike would destroy that get away
-# first (rework spec §4.1): Delegation 0.25, Launch on Warning 0.6, each 0.05
-# less per safeguards level, since a launch that can be halted is slower.
+# first (rework spec §4.1): Delegation 0.25, Launch on Warning 0.6, each
+# nd_launch_credit_safeguards_cut (0.05) less per safeguards level, since a
+# launch that can be halted is slower.
 # Central Authorization and Automatic Retaliation get none: the system answers
 # with whatever survives.
 nd_launch_credit = {
@@ -834,11 +854,13 @@ nd_launch_credit = {
 		}
 		subtract = {
 			value = var:nd_safeguards
-			multiply = 0.05
+			multiply = nd_launch_credit_safeguards_cut
 		}
 	}
 	min = 0
 }
+
+nd_launch_credit_safeguards_cut = 0.05
 
 # The authority's own credit, before safeguards: what the world counts
 # (nd_seen_launch_credit), since it sees the authority and not the safeguards.
@@ -915,6 +937,30 @@ nd_redundancy_command_seen = {
 		value = nd_seen_survivability
 		divide = 20
 	}
+}
+
+# The saved enemy's counterforce ratio, its parts and the warheads the world
+# estimates it holds (the shown estimate, never the live count), for the
+# Forces panel's Survivors hover (nd_refresh_main_rival stores them). All
+# public: its technology, its fielded legs and the estimate.
+nd_k_ratio_saved = {
+	value = 0
+	scope:nd_sv_enemy = { add = nd_k_ratio }
+}
+
+nd_k_ratio_tech_part_saved = {
+	value = 0
+	scope:nd_sv_enemy = { add = nd_k_ratio_tech_part }
+}
+
+nd_k_ratio_force_part_saved = {
+	value = 0
+	scope:nd_sv_enemy = { add = nd_k_ratio_force_part }
+}
+
+nd_seen_stockpile_saved = {
+	value = 0
+	scope:nd_sv_enemy = { add = nd_seen_stockpile }
 }
 
 # What the enemy's whole arsenal could destroy: its exchange ratio times the
@@ -2606,6 +2652,51 @@ nd_display_survivability = {
 
 nd_display_survivability_target = {
 	value = nd_survivability_target
+}
+
+nd_display_survivability_floor = {
+	value = nd_survivability_floor
+}
+
+# The target's chain, for its hover (2026-11-20 delivery spec §5.4): each
+# part's factor as it stands (1 while the part isn't held), and their product.
+nd_display_exposure_factor_bombers = {
+	value = nd_exposure_factor_bombers
+}
+
+nd_display_exposure_factor_radar = {
+	value = nd_exposure_factor_radar
+}
+
+nd_display_exposure_factor_icbms = {
+	value = nd_exposure_factor_icbms
+}
+
+nd_display_exposure_factor_submarines = {
+	value = nd_exposure_factor_submarines
+}
+
+nd_display_exposure_factor_missile_defense = {
+	value = nd_exposure_factor_missile_defense
+}
+
+nd_display_survivability_exposed_share = {
+	value = nd_survivability_exposed_share
+}
+
+# The Launch credit row: the share now, the launch authority's own, and what
+# our safeguards take from it.
+nd_display_launch_credit = {
+	value = nd_launch_credit
+}
+
+nd_display_launch_credit_unguarded = {
+	value = nd_launch_credit_unguarded
+}
+
+nd_display_launch_credit_cut = {
+	value = nd_launch_credit_unguarded
+	subtract = nd_launch_credit
 }
 
 # Where survivability is heading, for the Forces bar (round 3): the target
