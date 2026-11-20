@@ -1,6 +1,6 @@
 # Nuclear Delivery Projects and Survivability — Design
 
-> **Status: design only (2026-11-20).** Baseline `main` at the branch point of this spec. The owner's calls from the 2026-11-20 discussion are §1; everything else is a proposal, and every number is a first tuning value. Phases are §9.
+> **Status: design only (2026-11-20); no open questions.** Baseline `main` at the branch point of this spec. The owner's calls from the 2026-11-20 discussion are §1 (calls 9 to 13 answer the draft's open questions); everything else is a proposal, and every number is a first tuning value. Phases are §9.
 > Read first: [`docs/systems/mod_systems/nuclear.md`](../../systems/mod_systems/nuclear.md) and [`docs/systems/nuclear_crisis_design.md`](../../systems/nuclear_crisis_design.md) §0, what shipped; the [crisis rework spec](2026-10-28-nuclear-crisis-rework-design.md) §§3, 4 and 7, which this changes. When a phase ships, update §0 of `nuclear_crisis_design.md`, `mod_systems/nuclear.md`, chapter 14 of the player guide and `docs/testing/nuclear-playtest.md`.
 
 The aim, in the owner's words: model the incentives behind nuclear decisions and strategy in the Cold War, and present the information to the player clearly.
@@ -25,6 +25,11 @@ The aim, in the owner's words: model the incentives behind nuclear decisions and
 | 6 | Survivability has diminishing returns and no flat ceiling |
 | 7 | Against an enemy with Precision-Guided Munitions, silos protect less: the 1970s window of vulnerability |
 | 8 | Every value a decision rests on is shown to the player, except those hidden on purpose. An audit agent reviews the visibility section (§5.5) |
+| 9 | The Nuclear Disarmament article and a completed dismantling remove the fielded legs (§4.4) |
+| 10 | With Precision-Guided Munitions, both effects stay: the counterforce ratio's +0.5 and the silo penalty. Each must be communicated clearly (§3.4) |
+| 11 | The submarine leg's upkeep starts at the proposed figure and is tuned in play-testing (§4.3) |
+| 12 | The AI builds warheads first until it holds half the arsenal it wants. Better still, it scores how useful short range is against long range: if nobody who matters is in short range, it gets the range first (§4.5) |
+| 13 | The two reads that go past the world's view move to it in phase 1: a side's crisis pressure and the opening preview counting the other side's true survivors, and the believed command redundancy (§5.2) |
 
 ## 2. The incentives this models
 
@@ -81,8 +86,17 @@ Against an enemy with `precision_guided_munitions`, a country that fields ICBMs 
 
 - **Order.** Effective survivability (readiness applied), less Nuclear Basing's warning penalty (`nd_warning_penalty_*`, −10 near a guest's host, unchanged), then the exposed share, then the accuracy multiplier.
 - **Effect.** A full triad with missile defense goes from 17.9% to 21.7% exposed. A silo force without submarines goes from 35.7% to 43.4%. The rival's precision weapons therefore push a silo power to sea, or to Launch on Warning, which is the incentive in §2.
-- **The counterforce ratio keeps its +0.5 for Precision-Guided Munitions** (`nd_k_ratio`). That figure says each landed warhead destroys more; this one says more of a silo force is within reach. They count the same advance twice only for a silo force, the historically right target. Open question 2.
-- **Script.** `nd_exposure_accuracy_mult_vs = { ENEMY }` cannot be a parameterized script value, so it is written once per enemy scope the readers already save (`scope:nd_sv_enemy`, `scope:nd_issuer`, `scope:nd_target`, the main rival), beside the warning penalties, which follow the same shape.
+- **Both effects stay, and each is shown on its own line** (owner call 10). The counterforce ratio keeps its +0.5 for Precision-Guided Munitions (`nd_k_ratio`): each landed warhead destroys more. The silo factor says more of a silo force is within reach. They count the same advance twice only against a silo force, the historically right target.
+- **Both become modifiers**, so the technology's own tooltip and every breakdown can name them. They are numeric types that script reads (registered in `common/modifier_type_definitions/`; `modifier_field_audit`):
+  - `country_nd_k_ratio_add`. `nd_k_ratio` becomes 1 + its sum: +0.5 from the Precision-Guided Munitions technology, and +0.5 from fielded ICBMs through the entry's declared modifier (§4.2). `nd_k_ratio`'s technology reads go.
+  - `country_nd_silo_penetration_add`, +0.15 on the technology. The readers take it from the enemy: our silo factor against it is 0.70 + its penetration.
+- **Where each is shown:**
+  - The Precision-Guided Munitions technology's tooltip, both lines.
+  - Survivors' hover, our side. "What its arsenal could destroy" breaks into the rival's believed warheads × its counterforce ratio, with the ratio's parts. When it has the technology and we field silos, a line says its precision weapons leave our silos more exposed (×1.21).
+  - The Strike section's Forces preview, their side. Our counterforce ratio with its parts, and the same silo line when they field silos and we have the technology.
+  - Delivery and Defence: our counterforce ratio with its parts, beside the attack and defense ratings.
+  - The crisis's survivors lines (§5.3), whenever the silo line applies.
+- **Script.** The multiplier, (0.70 + the enemy's penetration) ÷ 0.70, can't be a parameterized script value. It is written once per enemy scope the readers already save (`scope:nd_sv_enemy`, `scope:nd_issuer`, `scope:nd_target`, the main rival), beside the warning penalties, which follow the same shape.
 
 ## 4. Delivery projects
 
@@ -104,10 +118,9 @@ Once a programme's first device is done, The Programme section gets a **Focus**:
 **Fielded ICBMs** (`nd_fields_icbms`, one trigger, read by everything below):
 - reach to every state (`nd_state_in_reach_of`, `nd_reaches_country`, `nd_reach_limited`; `nd_reach_refresh` skips the list);
 - the silo factor, 0.70 (§3.1), and the accuracy multiplier against them (§3.4);
-- +0.5 to the counterforce ratio (`nd_k_ratio`);
 - Launch on Warning (with Radar) and Automatic Retaliation (with Radar and Mainframe Computers);
 - silo accidents: the incident unit (`nuclear_incident_events.txt:1134`) and the silo explosion's weight (`:1399`);
-- +0.5 nuclear attack success (owner call 1), moved off the technology to a modifier declared on the entry (`scaling_modifiers_while_active`, value 0.5 while fielded), so a revolution's winner keeps it (variables carry over, modifiers don't) and nothing adds or removes it. `nuclear_strike_attack_rating` reads the modifier, so the strike odds follow, and the Delivery and Defence line (`nuke_attack_line_icbms`, `zzz_extra_custom_loc.txt:118`) reads the trigger.
+- a modifier declared on the entry, `nd_icbm_force` (`scaling_modifiers_while_active`, value 1 while fielded, 0 otherwise). It carries +0.5 nuclear attack success, moved off the technology (owner call 1), and +0.5 to the counterforce ratio (`country_nd_k_ratio_add`, §3.4). Being declared, it follows the variable: a revolution's winner keeps it (variables carry over, modifiers don't), and nothing adds or removes it. `nuclear_strike_attack_rating` reads the modifier, so the strike odds follow; the Delivery and Defence line (`nuke_attack_line_icbms`, `zzz_extra_custom_loc.txt:118`) reads the trigger.
 
 **Stays on the technology** (knowledge, not hardware): a Major Power's standing to run a programme (`nd_taboo_has_programme_standing`, which a project can't stand in for, since only a country with a programme can run one), the Limited War law, `country_icbm_pb_principles_bool`, +10 diplomatic play maneuvers, the aggressor escalation, the headline, the world's technology spread (`global_tech_spread_script_value`), covert theft and the research commons.
 
@@ -119,7 +132,7 @@ Once a programme's first device is done, The Programme section gets a **Focus**:
 - reach to every coastal state;
 - the submarine factor, 0.50 (§3.1);
 - the submarine as the unit of the cut-off commander incident (`nuclear_incident.20`, `nuclear_incident_events.txt:1130`): harder to destroy, harder to recall;
-- upkeep, the most expensive leg: `nd_upkeep_units_submarines`, first value `nd_upkeep_size_factor × 6` (open question 3), added in `nd_upkeep_units`, shown in the upkeep breakdown and the focus preview.
+- upkeep, the most expensive leg: `nd_upkeep_units_submarines`, first value `nd_upkeep_size_factor × 6`, a figure to tune in play-testing (owner call 11), added in `nd_upkeep_units`, shown in the upkeep breakdown and the focus preview.
 
 **Losing the coast.** With no coastal state the leg's effects lapse and `nd_subs_fielded` stays, so they return with a coast (no rebuild for a port lost in a war).
 
@@ -132,18 +145,24 @@ Once a programme's first device is done, The Programme section gets a **Focus**:
 - **Custody and annexation.** Warheads handed to whoever holds the old capital's region arrive without delivery (owner call 3). The new holder's own legs carry them.
 - **Formation.** A formed country is the same country under a new tag; its variables stay.
 - **Demotion.** A power that loses its standing keeps its legs; its projects stop with its programme and keep their progress.
-- **Disarmament and renunciation.** The Nuclear Disarmament article's `on_entry_into_force` and the end of a dismantling remove both legs (open question 1). Every path that removes a leg re-checks the launch authority's gate and falls back to Central Authorization (`nd_set_authority_1`), putting `nd_authority_months` back as it was, since the government didn't choose the change (the No-First-Strike amendment's binding does the same for doctrine).
+- **Disarmament and renunciation.** The Nuclear Disarmament article's `on_entry_into_force` and the end of a dismantling remove both legs (owner call 9: disarmament treaties took launchers too, so a renounced country that resumes rebuilds its delivery). Every path that removes a leg re-checks the launch authority's gate and falls back to Central Authorization (`nd_set_authority_1`), putting `nd_authority_months` back as it was, since the government didn't choose the change (the No-First-Strike amendment's binding does the same for doctrine).
 
 ### 4.5 The AI
 
 The AI sets its focus in its posture review (`nd_ai_review_posture`, every sixth month and when a crisis opens), not through buttons: the review already sets the rest of its posture by script.
 
-1. **Warheads first** while it holds fewer than half its desired stockpile (`nuclear_ai_desired_stockpile`), unless it is at war or in a crisis with a country out of reach.
-2. **ICBMs** when available and a country it must be able to strike is out of reach (`nd_reaches_country` false): a rival, an antagonistic country believed armed, a crisis opponent or a war enemy. This is the India–Pakistan rule: with every such country in bomber reach, it doesn't build range.
-3. **Missile submarines** when available and it is vulnerable to its main rival (`nd_ai_vulnerable_to_main_rival`: fewer than three survivors at Heightened with no launch credit), or the rival has Precision-Guided Munitions and it fields silos.
-4. Otherwise **Warheads**.
+**The range score** (owner call 12). Range is worth more than warheads to the degree that the bombers reach nobody who matters. `nd_ai_range_score`, from 0 to 1, weighs the countries the AI must be able to strike: a rival, a war enemy or a crisis opponent 3, an antagonistic country believed armed 2 (first values). It is the weighted share of them out of bomber reach (`nd_reaches_country` false), and 0 when there are none.
 
-When both 2 and 3 hold, a war or crisis with an out-of-reach country puts ICBMs first; otherwise submarines.
+**Range** means the ICBM project, unless missile submarines are available and every out-of-reach country that matters has a coast. In that case it means the submarine project, which also buys survival.
+
+1. **Range first** when the score is 1. No country that matters is in bomber reach, so a warhead deters nobody until it can fly.
+2. **Warheads** while it holds fewer than half its desired stockpile (`nuclear_ai_desired_stockpile`). At war or in a crisis with a country out of reach, it builds range instead.
+3. **Range** when the score is 0.5 or more.
+4. **Missile submarines** when available and either it is vulnerable to its main rival (`nd_ai_vulnerable_to_main_rival`: fewer than three survivors at Heightened with no launch credit), or the rival has Precision-Guided Munitions and it fields silos.
+5. **Range** when the score is above 0.
+6. Otherwise **Warheads**.
+
+When 3 and 4 both hold, a war or crisis with an out-of-reach country puts range first; otherwise submarines. A score of 0 never builds range: that is the India–Pakistan rule. Each review logs the score and the focus it chose in a new `TE_NUCLEAR: type=ai_focus` line, for observer balancing.
 
 **Funding.** The increase button's `ai_chance` (`common/scripted_buttons/nuclear_program_buttons.txt`) gets +35 while a project is in focus, as a shortfall under the desired stockpile does, and the decrease button's two stockpile terms (+35 at the desired stockpile, +15 above it) don't count while a project is in focus. Without this an AI at its desired stockpile defunds the programme and never fields anything, and AI great powers stay bomber-bound for the whole game.
 
@@ -171,7 +190,7 @@ Every value a decision rests on is shown where the decision is made, in the unit
 
 The target is an upper bound: a force that stops hardening decays toward 30% of it. Unknown safeguards can cut a fast authority's credit by up to 0.15 (`:747–757`). So a preview prints a range: against a force at its target with full credit, and against one at its floor with the credit cut by 0.15.
 
-**Where the code reads more than the world's view today** (open question 5):
+**Where the code reads more than the world's view today.** Both move to the world's view in phase 1 (owner call 13):
 - When one side's crisis pressure counts the other side's survivors, it reads the other side's true state (`nd_yp_issuer_exposure_line`; `nuclear_deterrence_values.txt:1479–1533`). The opening preview's "survivable" line reads the target's true survivors (`nuclear_crisis_effects.txt:189–206`). A side's own survivors are its own to know, and stay true.
 - `nd_redundancy_believed`, which the AI's Leadership planning reads, adds the target's true survivability ÷ 20 (`nuclear_deterrence_values.txt:801`). It also reads `nd_believed_stockpile` and its live-count fallback.
 
@@ -203,7 +222,7 @@ The target is an upper bound: a force that stops hardening decays toward 30% of 
 
 - **The Programme** (`nuclear_program_widget.gui`).
   - A Focus subsection, open, shown from the first device on: three choice rows (`nd_choice_row`, the option in focus tinted), each greyed with its missing requirement and showing its progress and months to finish.
-  - Each row's hover lists what fielding it grants as display modifier lines. These use `script_only` numeric types: `country_nd_exposure_mult` for the factor, `country_nd_k_ratio_add`, `country_nuclear_weapon_attack_success_add` and `country_nd_upkeep_units_add`. Booleans are only for rules without a quantity, such as reach to every state and the authorities it unlocks. The hover then gives the survivability target before and after, the countries in reach before and after, and the warheads the months in focus will not build.
+  - Each row's hover lists what fielding it grants as modifier lines. The ICBM row prints `nd_icbm_force`'s own lines, attack success and the counterforce ratio (§4.2). The rest use display-only numeric types: `country_nd_exposure_mult` for the factor and `country_nd_upkeep_units_add`. Booleans are only for rules without a quantity, such as reach to every state and the authorities it unlocks. The hover then gives the survivability target before and after, the countries in reach before and after, and the warheads the months in focus will not build.
   - The handler is `nuclear_program_focus_sgui` (ops 1 Warheads, 2 ICBMs, 3 Missile Submarines), with `ai_is_valid = { always = no }`. Its op table goes in the sgui header, the `.gui` header and `journal_entry_systems.md`.
 - **Forces** (`nuclear_deterrence_widget.gui`).
   - **Survivability.** The ceiling line becomes the target line and the floor is printed. Its hover already gives the readiness factors and the effective figure (`te_miscellaneous_l_english.yml:6025`). The hover then adds the chain: one line per part with its factor and whether it is held, then the exposed share and the target.
@@ -242,14 +261,14 @@ A separate agent read the code against the first draft of §5, without its concl
 - **§5.2 changes:**
   - readiness is private only outside a crisis;
   - launch authority is public but the leak test lists it as private;
-  - two existing reads go past the world's view (open question 5);
+  - two existing reads go past the world's view (since answered: owner call 13);
   - previews show a range, because the target is an upper bound and safeguards are unknown.
 - **Feasibility changes:**
   - the per-option strike figures are stored by `nd_refresh_main_rival`, not computed in the GUI;
   - "incident exposure per authority" is replaced by the halt chance, since exposure has no authority term;
   - hardening's "months to within 5" is replaced by half-gap constants, since script values have no logarithm;
   - the Strike previews' expected landed count is decided;
-  - open question 5 is restated, since the AI's salvo planning already reads the world's view apart from the redundancy leak.
+  - the draft's question on the AI's planning is restated, since that planning already reads the world's view apart from the redundancy leak (since answered: owner call 13).
 - **Unverified:** whether a GUI `ScriptValue` with `AddScope` can take a scope read out of a variable in this panel. The design doesn't rely on it (the stored figures above).
 
 ## 6. Tooling and tests
@@ -279,10 +298,12 @@ No new engine fact is load-bearing: script values, declared modifiers on the ent
 - A landlocked armed country after migration: no coastal reach.
 - A posture click: the Survivors row and the per-option strike figures follow it the same day.
 - The Strike previews against the salvo that follows: the expected landed count and the destroyed range hold the outcome.
+- The submarine leg's upkeep against the other legs' and the arsenal's other costs (owner call 11).
+- An observer game's `type=ai_focus` lines: powers whose rivals are all in bomber reach build warheads, distant rivals bring ICBMs, small exposed arsenals go to sea (§2, §4.5).
 
 ## 9. Phases
 
-1. **Survivability and display** (no projects yet). §3 in full; `nd_fields_icbms` and `nd_fields_missile_submarines` introduced, reading the technologies (the submarine trigger also asks for a coastal state, fixing the landlocked bug), with every delivery read routed through them and the guard test; every §5 change that needs no project (Forces, Posture, Strike, Crisis, the events, the articles, launch authority public) and open question 5's world's-view fixes. Player guide and docs.
+1. **Survivability and display** (no projects yet). §3 in full; `nd_fields_icbms` and `nd_fields_missile_submarines` introduced, reading the technologies (the submarine trigger also asks for a coastal state, fixing the landlocked bug), with every delivery read routed through them and the guard test; every §5 change that needs no project (Forces, Posture, Strike, Crisis, the events, the articles, launch authority public) and owner call 13's world's-view fixes. Player guide and docs.
 2. **Delivery projects.** §4: the focus, the two projects, the triggers reading the fielded variables, the attack-success move, the holds, the migration, upkeep, the notices, the AI; §5.4's Programme, Nuclear Powers and National Info changes; the play-test list.
 3. **Later, separate specs** (§10).
 
@@ -294,8 +315,4 @@ No new engine fact is load-bearing: script values, declared modifiers on the ent
 
 ## 11. Open questions
 
-1. Do the Nuclear Disarmament article and a completed dismantling remove the fielded legs? Proposed: yes, since disarmament treaties took launchers too, so a renounced country that resumes rebuilds its delivery.
-2. With Precision-Guided Munitions, keep the counterforce ratio's +0.5 as well as the silo multiplier (§3.4)? Proposed: keep both.
-3. The submarine leg's upkeep: `nd_upkeep_size_factor × 6` units (as much as Heightened's surcharge and a half).
-4. The AI's warheads-first threshold: half its desired stockpile.
-5. Two reads go past the world's view (§5.2). A side's crisis pressure and the opening preview count the other side's true survivors. `nd_redundancy_believed` adds the target's true survivability and can fall back to its live count. Proposed: both read the world's view in phase 1, so the panel's figures and the outcomes agree and the AI knows no more than the player. The AI's Forces sizing (`nd_ai_forces_need`, `nuclear_deterrence_values.txt:1235`) ignores the enemy's exposed share; sizing by it would change the AI's salvos, so it waits for an AI tuning pass.
+None. The draft's five were answered by the owner on 2026-11-20 and are §1's calls 9 to 13. Two more figures are left to play-testing on purpose: the submarine leg's upkeep (call 11) and the range score's weights (§4.5).
