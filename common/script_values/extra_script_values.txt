@@ -747,6 +747,14 @@ nuclear_program_display_aid_bonus = {
 # unverified; these thin wrappers are the documented way to show the number.
 nuclear_program_display_attack_rating = {
 	value = modifier:country_nuclear_weapon_attack_success_add
+	# The ICBM force's fallback (nd_icbm_force_declared_reads), as below.
+	if = {
+		limit = {
+			NOT = { nd_icbm_force_declared_reads = yes }
+			nd_fields_icbms = yes
+		}
+		add = nd_icbm_force_attack_success
+	}
 	# The +1 nuclear_strike_attack_rating adds for an arsenal held without
 	# the technology, shown only to a country that holds one (the panel is
 	# also a non-nuclear country's). te_nuke_attack_held_arsenal is its line
@@ -770,6 +778,16 @@ nuclear_strike_attack_rating = {
 	if = {
 		limit = { nd_lacks_weapon_technology = yes }
 		add = 1
+	}
+	# Fielded ICBMs' +0.5 comes through the modifier, from nd_icbm_force
+	# declared on je_nuclear_program; while that doesn't read
+	# (nd_icbm_force_declared_reads, self-check nd_icbm_force_sum), from here.
+	if = {
+		limit = {
+			NOT = { nd_icbm_force_declared_reads = yes }
+			nd_fields_icbms = yes
+		}
+		add = nd_icbm_force_attack_success
 	}
 }
 

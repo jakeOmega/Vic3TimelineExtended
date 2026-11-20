@@ -1727,7 +1727,7 @@ nd_reach_value = {
 	type = country
 	random_valid = no
 	text = {
-		trigger = { has_technology_researched = advanced_submarine_technology }
+		trigger = { nd_fields_missile_submarines = yes }
 		localization_key = nd_w_reach_value_subs
 	}
 	text = {

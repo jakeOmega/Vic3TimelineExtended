@@ -1127,11 +1127,11 @@ nuclear_incident.20 = {
 	immediate = {
 		# The unit.
 		if = {
-			limit = { has_technology_researched = advanced_submarine_technology }
+			limit = { nd_fields_missile_submarines = yes }
 			set_variable = { name = nd_ic_unit value = 1 }
 		}
 		else_if = {
-			limit = { has_technology_researched = ICBMs }
+			limit = { nd_fields_icbms = yes }
 			set_variable = { name = nd_ic_unit value = 3 }
 		}
 		else = {
@@ -1396,7 +1396,7 @@ nuclear_incident.30 = {
 			0 = {
 				modifier = {
 					if = {
-						limit = { has_technology_researched = ICBMs }
+						limit = { nd_fields_icbms = yes }
 						add = 20
 					}
 				}

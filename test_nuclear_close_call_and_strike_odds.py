@@ -98,9 +98,13 @@ class TestStrikeOddsWithoutTheTechnology(unittest.TestCase):
 
     def test_the_shared_value_adds_the_technologys_plus_one(self):
         rating = squash(block(self.values, SHARED))
+        # And the ICBM force's figure while its declaration doesn't read (the
+        # fallback switch, 2026-11-20 delivery plan D6; test_nuclear_delivery.py).
         self.assertEqual(
             rating,
-            f"value = {RAW_MODIFIER} if = {{ limit = {{ nd_lacks_weapon_technology = yes }} add = 1 }}")
+            f"value = {RAW_MODIFIER} if = {{ limit = {{ nd_lacks_weapon_technology = yes }} add = 1 }} "
+            "if = { limit = { NOT = { nd_icbm_force_declared_reads = yes } nd_fields_icbms = yes } "
+            "add = nd_icbm_force_attack_success }")
         self.assertEqual(squash(block(self.triggers, "nd_lacks_weapon_technology")),
                          "NOT = { has_technology_researched = nuclear_weapons }",
                          "with the technology the value is the modifier unchanged")
@@ -129,8 +133,9 @@ class TestStrikeOddsWithoutTheTechnology(unittest.TestCase):
     def test_nothing_else_reads_the_raw_modifier(self):
         """A new formula that reads the modifier directly would again clamp a
         custody arsenal to 5%. Only the shared value and the panel's display
-        (which adds the +1 for a holder itself) may."""
-        allowed = {SHARED, "nuclear_program_display_attack_rating"}
+        (which adds the +1 for a holder itself) may, and the ICBM force's
+        self-check, which reads the sum to test the declaration."""
+        allowed = {SHARED, "nuclear_program_display_attack_rating", "nd_sc_icbm_attack_gap", "nd_icbm_force_selfcheck"}
         readers = set()
         for path in sorted((ROOT / "common").rglob("*.txt")) + sorted((ROOT / "events").rglob("*.txt")):
             text = strip_comments(read(path))

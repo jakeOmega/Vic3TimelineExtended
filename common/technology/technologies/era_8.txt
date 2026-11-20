@@ -434,6 +434,10 @@ precision_guided_munitions = {
 		ship_hull_damage_mult = 0.10
 		ship_accuracy_mult = 0.05
 		country_st_res_artillery_decay_add = -0.001
+		# Counterforce (2026-11-20 delivery spec §3.4): each landed warhead
+		# destroys more, and an enemy's silos are less protection against us.
+		country_nd_k_ratio_add = 0.5
+		country_nd_silo_penetration_add = 0.15
 	}
 
 	ai_weight = {

@@ -8,8 +8,10 @@ from dataclasses import replace
 from pathlib import Path
 
 from scripts.analysis.nuclear_incident_rates import Posture, RiskModel
-from scripts.analysis.nuclear_survivors import (WARNING_TIME_PENALTY, counterforce_destroyed, counterforce_saved,
-                                                decapitation_chance, exposed, redundancy, survivors)
+from scripts.analysis.nuclear_survivors import (EXPOSURE_FACTORS, TARGET_ROWS, WARNING_TIME_PENALTY,
+                                                accuracy_mult, counterforce_destroyed, counterforce_saved, decapitation_chance,
+                                                exposed, full_strike_lost_share, redundancy, survivability_target,
+                                                survivors)
 from test_nuclear_deterrence import block, loc_value, read, squash, strip_comments
 
 ROOT = Path(__file__).resolve().parent
@@ -75,9 +77,99 @@ class TestSurvivorsScript(unittest.TestCase):
         bare = replace(heightened, authority=1)
         self.assertTrue(math.isclose(self.model.number("nd_survivors_bare_r2_vs_saved", p),
                                      self.model.number("nd_survivors_vs_saved", bare)))
-        ceiling = replace(bare, survivability=self.model.number("nd_survivability_cap", p))
-        self.assertTrue(math.isclose(self.model.number("nd_survivors_ceiling_bare_r2_vs_saved", p),
-                                     self.model.number("nd_survivors_vs_saved", ceiling)))
+        target = replace(bare, survivability=self.model.number("nd_survivability_target", p))
+        self.assertTrue(math.isclose(self.model.number("nd_survivors_target_bare_r2_vs_saved", p),
+                                     self.model.number("nd_survivors_vs_saved", target)))
+
+
+class TestSurvivabilityTarget(unittest.TestCase):
+    """Survivability climbs toward a target, 100 x (1 - the product of five
+    exposure factors), with no flat ceiling (2026-11-20 delivery spec §3.1,
+    owner call 6; phase 1 plan D4)."""
+
+    VALUES = ROOT / "common/script_values/nuclear_deterrence_values.txt"
+    # Each factor, its value while held, and the test that it is held.
+    FACTORS = {
+        "radar": "has_technology_researched = radar",
+        "icbms": "nd_fields_icbms = yes",
+        "submarines": "nd_fields_missile_submarines = yes",
+        "missile_defense": "has_technology_researched = missile_defense_systems",
+    }
+    # Spec §3.1's table, rounded as it prints them.
+    SPEC_TARGETS = (25, 40, 58, 79, 82, 64)
+    # Spec §3.3: the share a full first strike destroys at each target, for
+    # Central, Delegation and Launch on Warning (rows from Radar on).
+    SPEC_LOST = (("+ Radar", (60, 45, 24)), ("+ ICBMs", (42, 31.5, 16.8)), ("+ missile submarines", (21, 15.8, 8.4)),
+                 ("+ Missile Defense Systems", (17.9, 13.4, 7.1)))
+
+    @classmethod
+    def setUpClass(cls):
+        cls.model = RiskModel()
+        cls.values = strip_comments(read(cls.VALUES))
+
+    def test_each_factor_and_its_test(self):
+        self.assertEqual(squash(block(self.values, "nd_exposure_factor_bombers")), "value = 0.75")
+        for part, held in self.FACTORS.items():
+            body = squash(block(self.values, f"nd_exposure_factor_{part}"))
+            figure = f"{EXPOSURE_FACTORS[part]:.2f}"
+            self.assertEqual(body, f"value = 1 if = {{ limit = {{ {held} }} value = {figure} }}", part)
+
+    def test_target_is_one_less_the_product(self):
+        share = squash(block(self.values, "nd_survivability_exposed_share"))
+        self.assertEqual(share, "value = nd_exposure_factor_bombers multiply = nd_exposure_factor_radar "
+                                "multiply = nd_exposure_factor_icbms multiply = nd_exposure_factor_submarines "
+                                "multiply = nd_exposure_factor_missile_defense")
+        target = squash(block(self.values, "nd_survivability_target"))
+        self.assertEqual(target, "value = 1 subtract = nd_survivability_exposed_share multiply = 100")
+        self.assertNotIn("max =", target)
+
+    def test_floor_is_three_tenths_of_the_target(self):
+        self.assertEqual(squash(block(self.values, "nd_survivability_floor")),
+                         "value = nd_survivability_target multiply = 0.3")
+
+    def test_no_reader_names_the_old_ceiling(self):
+        for top in ("common", "events", "gui", "localization"):
+            for path in (ROOT / top).rglob("*"):
+                if path.suffix in (".txt", ".gui", ".yml"):
+                    text = path.read_text(encoding="utf-8-sig")
+                    for old in ("nd_survivability_cap", "nd_exposed_warheads_ceiling", "nd_survivors_ceiling_bare",
+                                "nd_display_survivability_cap", "nd_w_survivability_cap_tt"):
+                        self.assertNotIn(old, text, f"{path.relative_to(ROOT)}: {old}")
+
+    def test_spec_table(self):
+        self.assertEqual(tuple(round(survivability_target(**kwargs)) for _, kwargs in TARGET_ROWS), self.SPEC_TARGETS)
+
+    def test_mirror_matches_script(self):
+        for _, kwargs in TARGET_ROWS:
+            p = Posture(radar=kwargs.get("radar", True), icbms=kwargs.get("icbms", True),
+                        missile_submarines=kwargs.get("submarines", True),
+                        missile_defense=kwargs.get("missile_defense", True))
+            self.assertTrue(math.isclose(self.model.number("nd_survivability_target", p),
+                                         survivability_target(**kwargs)), kwargs)
+            self.assertTrue(math.isclose(self.model.number("nd_survivability_floor", p),
+                                         0.3 * survivability_target(**kwargs)), kwargs)
+
+    def test_every_part_counts_by_less(self):
+        # Missile defense adds something at any force, unlike the old cap of
+        # 80 that Radar, ICBMs and submarines alone already passed.
+        full = survivability_target()
+        without = survivability_target(missile_defense=False)
+        self.assertGreater(full, without)
+        self.assertGreater(survivability_target(icbms=False, submarines=False) -
+                           survivability_target(icbms=False, submarines=False, missile_defense=False),
+                           full - without)
+        self.assertLess(full, 100)
+
+    def test_lost_share_table(self):
+        rows = dict(TARGET_ROWS)
+        for label, lost in self.SPEC_LOST:
+            target = survivability_target(**rows[label])
+            for credit, share in zip((0, 0.25, 0.6), lost):
+                self.assertAlmostEqual(full_strike_lost_share(target, credit) * 100, share, delta=0.06,
+                                       msg=(label, credit))
+        # And the script's own launch credit gives those three columns.
+        credit = [self.model.number("nd_launch_credit", Posture(authority=a, safeguards=0)) for a in (1, 2, 3)]
+        self.assertEqual([round(c, 2) for c in credit], [0, 0.25, 0.6])
 
 
 class TestWarningTime(unittest.TestCase):
@@ -92,7 +184,7 @@ class TestWarningTime(unittest.TestCase):
         "nd_survivors_vs_saved": "nd_exposed_warheads_vs_saved",
         "nd_survivors_r2_vs_saved": "nd_exposed_warheads_r2_vs_saved",
         "nd_survivors_bare_r2_vs_saved": "nd_exposed_warheads_r2_vs_saved",
-        "nd_survivors_ceiling_bare_r2_vs_saved": "nd_exposed_warheads_ceiling_r2_vs_saved",
+        "nd_survivors_target_bare_r2_vs_saved": "nd_exposed_warheads_target_r2_vs_saved",
         "nd_survivors_vs_issuer": "nd_exposed_warheads_vs_issuer",
         "nd_survivors_vs_target": "nd_exposed_warheads_vs_target",
         "nd_counterforce_destroyed_raw": "nd_exposed_warheads_vs_saved",
@@ -140,13 +232,18 @@ class TestWarningTime(unittest.TestCase):
                 bare = exposed(p.stockpile, p.survivability, factor, based_near=based_near)
                 self.assertTrue(math.isclose(self.model.number("nd_exposed_warheads_vs_saved", p), bare), p)
                 self.assertLessEqual(bare, p.stockpile)
+                # An attacker with precision weapons also reaches more of our
+                # silos (delivery spec §3.4), after the warning penalty.
                 attacker = Posture(salvo_forces_landed=3, icbms=True, pgm=True)
                 victim = replace(p, enemy=attacker)
+                aimed = exposed(p.stockpile, p.survivability, factor, based_near=based_near,
+                                accuracy=accuracy_mult(0.15))
                 self.assertTrue(math.isclose(self.model.number("nd_counterforce_destroyed_raw", victim),
-                                             counterforce_destroyed(3, 2, bare, credit), abs_tol=1e-9), p)
+                                             counterforce_destroyed(3, 2, aimed, credit), abs_tol=1e-9), p)
 
     def test_next_door_costs_survivors(self):
-        enemy = Posture(believed_stockpile=40, icbms=True, pgm=True)
+        # No precision weapons, so the warning time alone moves the figure.
+        enemy = Posture(believed_stockpile=40, icbms=True, pgm=False)
         far = Posture(readiness=3, authority=1, survivability=50, stockpile=10, enemy=enemy)
         near = replace(far, based_near=True)
         self.assertTrue(math.isclose(self.model.number("nd_survivors_vs_saved", far), 5))
@@ -187,7 +284,9 @@ class TestCounterforceScript(unittest.TestCase):
                         attacker = Posture(salvo_forces_landed=landed, icbms=icbms, pgm=pgm)
                         victim = Posture(readiness=2, authority=authority, safeguards=safeguards,
                                          survivability=survivability, stockpile=10, enemy=attacker)
-                        exposed = self.model.number("nd_exposed_warheads", victim)
+                        # Our silos against its precision weapons (delivery spec §3.4).
+                        exposed = min(victim.stockpile, self.model.number("nd_exposed_warheads", victim)
+                                      * accuracy_mult(0.15 if pgm else 0, victim.icbms))
                         k = self.model.number("nd_k_ratio", attacker)
                         credit = self.model.number("nd_launch_credit", victim)
                         self.assertTrue(math.isclose(self.destroyed(victim),
@@ -202,7 +301,8 @@ class TestCounterforceScript(unittest.TestCase):
         for stockpile, survivability in ((3, 0), (0, 0), (6, 50)):
             victim = Posture(readiness=3, authority=1, survivability=survivability, stockpile=stockpile, enemy=attacker)
             self.assertLessEqual(self.destroyed(victim), stockpile)
-            self.assertLessEqual(self.destroyed(victim), self.model.number("nd_exposed_warheads", victim) + 1e-9)
+            self.assertLessEqual(self.destroyed(victim),
+                                 self.model.number("nd_exposed_warheads_vs_saved", victim) + 1e-9)
         hidden = Posture(readiness=3, authority=1, survivability=100, stockpile=10, enemy=attacker)
         self.assertEqual(self.destroyed(hidden), 0)
 
@@ -283,14 +383,23 @@ class TestDecapitationScript(unittest.TestCase):
                        dict(stockpile=0, satellite_communications=False, mainframe=False, reliability=5)):
             self.assertTrue(math.isclose(self.r(**fields), redundancy(**fields)), fields)
 
-    def test_believed_redundancy_reads_the_estimate(self):
-        p = dict(stockpile=30, believed_stockpile=10, satellite_communications=False, mainframe=False)
-        self.assertTrue(math.isclose(self.r("nd_redundancy_believed", **p), 2))
-        # The world sees survivability and a Command Center, not reliability.
-        seen = dict(p, survivability=40, command_center=1, reliability=90)
-        self.assertTrue(math.isclose(self.r("nd_redundancy_believed", **seen), 6))
+    def test_believed_redundancy_reads_the_worlds_view(self):
+        # The shown estimate and the survivability target (delivery spec owner
+        # call 13), never the true count, the stored survivability or command
+        # reliability. Bombers alone: a target of 25, so +1.25.
+        bombers = dict(radar=False, icbms=False, missile_submarines=False, missile_defense=False)
+        p = dict(stockpile=30, believed_stockpile=10, public_estimate=10, satellite_communications=False,
+                 mainframe=False, **bombers)
+        self.assertTrue(math.isclose(self.r("nd_redundancy_believed", **p), 3.25))
+        # The world sees a Command Center and the technologies, not reliability
+        # or how far hardening has got.
+        seen = dict(p, survivability=70, command_center=1, reliability=90)
+        self.assertTrue(math.isclose(self.r("nd_redundancy_believed", **seen), 5.25))
         self.assertTrue(math.isclose(self.r("nd_redundancy_believed", **seen),
-                                     redundancy(10, False, False, 40, 1, reliability=None)))
+                                     redundancy(10, False, False, survivability_target(False, False, False, False), 1,
+                                                reliability=None)))
+        # Before the estimate is seeded the world counts none, not the live 30.
+        self.assertTrue(math.isclose(self.r("nd_redundancy_believed", **dict(p, public_estimate=0)), 2.25))
 
     def test_text_gives_the_scripts_figures(self):
         # Command Redundancy's concept and the tooltips that name its terms
@@ -317,6 +426,137 @@ class TestDecapitationScript(unittest.TestCase):
         for key in ("sr_mod_queue_bunker_tt", "je_space_race_widget_mod_bunker_tt"):
             self.assertIn("#v +2#! [concept_command_redundancy], at most #v +6#!", loc_value(key), key)
         self.assertIn("three in four when twice as many land", loc_value("nd_w_strike_mission_3_tt"))
+
+
+class TestWorldsView(unittest.TestCase):
+    """What one country counts of another is the world's view (2026-11-20
+    delivery spec §5.2, owner calls 13 and 14; plan D8, D9): the shown
+    estimate, the survivability target, the authority's credit before
+    safeguards, and readiness only in a crisis between the two."""
+
+    VALUES = ROOT / "common/script_values/nuclear_deterrence_values.txt"
+    CRISIS = ROOT / "common/scripted_effects/nuclear_crisis_effects.txt"
+    TRIGGERS = ROOT / "common/scripted_triggers/nuclear_deterrence_triggers.txt"
+    SEEN = ("nd_seen_stockpile", "nd_seen_survivability", "nd_seen_launch_credit", "nd_seen_readiness_factor_saved",
+            "nd_seen_readiness_factor_target", "nd_seen_exposed_warheads_vs_saved", "nd_seen_exposed_warheads_vs_target",
+            "nd_seen_survivors_vs_saved", "nd_seen_survivors_vs_target", "nd_redundancy_command_seen",
+            "nd_redundancy_believed")
+    # The true state the world never sees (test_nuclear_layout.TRUE_VARS less
+    # launch authority, public since rework spec §14.2, and readiness, which a
+    # crisis shows each side of the other: test_readiness_only_in_a_crisis).
+    HIDDEN = re.compile(
+        r"\b(nuclear_weapon_stockpile|nuclear_weapon_program_progress|nuclear_weapons_program_funding"
+        r"|nd_readiness\w*|nd_survivability|nd_reliability|nd_strain|nd_upkeep_weekly_cached|nd_warhead_ceiling"
+        r"|nd_dismantle_\w+|nd_safeguards|nd_hardening|nd_loose_\w+|nd_custody_\w+|nd_ar_\w+)\b")
+    CRISIS_BRANCH = ("if = {{ limit = {{ nd_seen_in_crisis_with = {{ OBSERVER = {} }} }} "
+                     "value = nd_readiness_survivability_factor }}")
+    OBSERVERS = {"saved": "scope:nd_sv_enemy", "target": "scope:nd_target"}
+
+    @classmethod
+    def setUpClass(cls):
+        cls.model = RiskModel()
+        cls.values = strip_comments(read(cls.VALUES))
+
+    @staticmethod
+    def observed(body):
+        """The body as read at the observed country: blocks in another scope
+        (the observer's reach, a crisis opponent's figure) left out."""
+        out, i = [], 0
+        for m in re.finditer(r"(?:scope:\w+|var:\w+|\$\w+\$) = \{", body):
+            if m.start() < i:
+                continue
+            out.append(body[i:m.start()])
+            depth, j = 1, m.end()
+            while depth:
+                depth += {"{": 1, "}": -1}.get(body[j], 0)
+                j += 1
+            i = j
+        return "".join(out) + body[i:]
+
+    def test_seen_values_read_only_public_inputs(self):
+        from test_nuclear_layout import _NAME_REF, _scripts
+        graph = {**_scripts("script_values"), **_scripts("scripted_triggers")}
+        for name in self.SEEN:
+            self.assertIn(name, graph, name)
+        found, stack, seen = [], [(n, n) for n in self.SEEN], set()
+        while stack:
+            name, path = stack.pop()
+            if name in seen:
+                continue
+            seen.add(name)
+            body = squash(graph[name])
+            for scope, observer in self.OBSERVERS.items():
+                if name == f"nd_seen_readiness_factor_{scope}":
+                    body = body.replace(self.CRISIS_BRANCH.format(observer), "")
+            body = self.observed(body)
+            found += [f"{path}: {m.group(0)}" for m in self.HIDDEN.finditer(body)]
+            stack += [(ref, f"{path} > {ref}") for ref in set(_NAME_REF.findall(body)) & graph.keys() if ref != name]
+        self.assertEqual(found, [], "the world's view reads the true state")
+
+    def test_readiness_only_in_a_crisis_with_the_observer(self):
+        for scope, observer in self.OBSERVERS.items():
+            body = squash(block(self.values, f"nd_seen_readiness_factor_{scope}"))
+            self.assertEqual(body, "value = nd_survivability_factor_heightened " + self.CRISIS_BRANCH.format(observer))
+        trigger = squash(block(strip_comments(read(self.TRIGGERS)), "nd_seen_in_crisis_with"))
+        self.assertEqual(trigger, "nd_in_crisis = yes var:nd_crisis_opponent ?= $OBSERVER$")
+
+    def test_the_three_readers_read_the_world_view(self):
+        exposure = squash(block(self.values, "nd_yp_issuer_exposure_value"))
+        self.assertIn("scope:nd_issuer = { add = nd_seen_survivors_vs_target }", exposure)
+        preview = squash(block(strip_comments(read(self.CRISIS)), "nd_crisis_preview"))
+        self.assertIn("$TARGET$ = { nd_seen_survivors_vs_saved >= 3 }", preview)
+        self.assertNotIn("$TARGET$ = { nd_survivors_vs_saved", preview)
+        believed = squash(block(self.values, "nd_redundancy_believed"))
+        self.assertEqual(believed, "value = nd_seen_stockpile divide = 10 add = 1 add = nd_redundancy_command_seen min = 1")
+
+    def test_a_sides_own_survivors_stay_true(self):
+        self.assertTrue(squash(block(self.values, "nd_yp_answer_survivors_value"))
+                        .startswith("value = nd_survivors_vs_issuer "))
+
+    def test_the_seen_figures(self):
+        self.assertEqual(squash(block(self.values, "nd_seen_stockpile")), "value = nd_shown_public_estimate")
+        self.assertEqual(squash(block(self.values, "nd_seen_survivability")), "value = nd_survivability_target")
+        for authority, credit in ((1, 0), (2, 0.25), (3, 0.6), (4, 0)):
+            for safeguards in (0, 3):
+                p = Posture(authority=authority, safeguards=safeguards)
+                self.assertTrue(math.isclose(self.model.number("nd_seen_launch_credit", p), credit), p)
+
+    def test_mirror_and_script_agree(self):
+        target = survivability_target()
+        heightened = self.model.number("nd_survivability_factor_heightened", Posture())
+        for enemy_pgm in (False, True):
+            enemy = Posture(believed_stockpile=40, icbms=True, pgm=enemy_pgm)
+            for authority in (1, 2, 3):
+                for stage, readiness in ((0, 0), (0, 3), (2, 0), (3, 3)):
+                    p = Posture(readiness=readiness, authority=authority, stage=stage, public_estimate=12,
+                                enemy=enemy)
+                    factor = self.model.number("nd_readiness_survivability_factor", p) if stage else heightened
+                    credit = self.model.number("nd_seen_launch_credit", p)
+                    expected = survivors(12, target, factor, credit, self.model.number("nd_k_ratio", enemy), 40,
+                                         accuracy=accuracy_mult(0.15 if enemy_pgm else 0))
+                    case = (enemy_pgm, authority, stage, readiness)
+                    self.assertTrue(math.isclose(self.model.number("nd_seen_survivors_vs_saved", p), expected), case)
+
+    def test_hidden_inputs_change_nothing(self):
+        enemy = Posture(believed_stockpile=40, icbms=True, pgm=True)
+        base = Posture(readiness=0, authority=3, public_estimate=12, enemy=enemy)
+        figure = self.model.number("nd_seen_survivors_vs_saved", base)
+        for hidden in (dict(stockpile=50), dict(survivability=5), dict(safeguards=3), dict(reliability=20),
+                       dict(readiness=3), dict(believed_stockpile=40)):
+            self.assertEqual(self.model.number("nd_seen_survivors_vs_saved", replace(base, **hidden)), figure, hidden)
+        # Readiness counts only in a crisis with the observer.
+        self.assertNotEqual(self.model.number("nd_seen_survivors_vs_saved", replace(base, stage=1)),
+                            self.model.number("nd_seen_survivors_vs_saved", replace(base, stage=1, readiness=3)))
+
+    def test_readiness_factor_matches_effective_survivability(self):
+        for readiness in range(4):
+            p = Posture(readiness=readiness, survivability=60)
+            self.assertTrue(math.isclose(self.model.number("nd_readiness_survivability_factor", p) * 60,
+                                         self.model.number("nd_effective_survivability", p)), readiness)
+
+    def test_preview_lines_say_what_they_assume(self):
+        for key in ("nd_tt_open_f_survivable", "nd_tt_open_f_armed"):
+            self.assertIn("as secure as their technology allows", loc_value(key), key)
 
 
 class TestSalvoScale(unittest.TestCase):
@@ -363,8 +603,8 @@ class TestCalibration(unittest.TestCase):
 
     def test_hardened_great_power_keeps_a_second_strike(self):
         attacker = Posture(salvo_forces_landed=20, icbms=True, pgm=True)
-        cap = self.model.number("nd_survivability_cap", Posture())
-        victim = Posture(readiness=2, authority=1, survivability=cap, stockpile=20, enemy=attacker)
+        target = self.model.number("nd_survivability_target", Posture())
+        victim = Posture(readiness=2, authority=1, survivability=target, stockpile=20, enemy=attacker)
         self.assertGreaterEqual(self.left_after(victim), 3)
 
     def test_unhardened_small_arsenal_can_be_disarmed(self):
@@ -385,14 +625,20 @@ class TestAiSalvo(unittest.TestCase):
     def mission(self, **attacker):
         return self.model.number("nd_ai_salvo_mission_value", Posture(**attacker))
 
+    # An enemy with bombers alone: the world takes its survivability at their
+    # target of 25, so its command adds 1.25 whatever it has hardened.
+    BOMBERS = dict(radar=False, icbms=False, missile_submarines=False, missile_defense=False, survivability=0)
+
     def test_mission_rule(self):
-        # A large, well-connected enemy under Central Authorization: R = 6
-        # (survivability 0, so the command adds only its technology).
-        hard = Posture(authority=1, believed_stockpile=30, satellite_communications=True, mainframe=False,
-                       survivability=0)
-        # A small one: R = 1.3.
-        small = Posture(authority=1, believed_stockpile=3, satellite_communications=False, mainframe=False,
-                        survivability=0)
+        # A large, well-connected enemy under Central Authorization: R = 1 + 3
+        # + 2 + 1.25 = 7.25, from the world's view (delivery spec owner call 13).
+        hard = Posture(authority=1, believed_stockpile=30, public_estimate=30, satellite_communications=True,
+                       mainframe=False, **self.BOMBERS)
+        self.assertTrue(math.isclose(self.model.number("nd_redundancy_believed", hard), 7.25))
+        # A small one: R = 1 + 0.3 + 1.25 = 2.55.
+        small = Posture(authority=1, believed_stockpile=3, public_estimate=3, satellite_communications=False,
+                        mainframe=False, **self.BOMBERS)
+        self.assertTrue(math.isclose(self.model.number("nd_redundancy_believed", small), 2.55))
         delegated = replace(hard, authority=2)
         # Existential deterrence, an enemy it cannot decapitate: the single strike.
         self.assertEqual(self.mission(doctrine=2, stockpile=9, enemy=hard), 1)
@@ -403,7 +649,7 @@ class TestAiSalvo(unittest.TestCase):
         # Leadership when spare x the capital's hit chance outnumbers R, over Forces.
         self.assertEqual(self.mission(doctrine=5, stockpile=9, capital_hit_share=0.9, enemy=small), 3)
         self.assertEqual(self.mission(doctrine=2, stockpile=9, capital_hit_share=0.9, enemy=small), 3)
-        # Six spare at 0.9 is 5.4, short of 6: Forces under Warfighting, else the single strike.
+        # Six spare at 0.9 is 5.4, short of 7.25: Forces under Warfighting, else the single strike.
         self.assertEqual(self.mission(doctrine=5, stockpile=9, capital_hit_share=0.9, enemy=hard), 2)
         self.assertEqual(self.mission(doctrine=2, stockpile=9, capital_hit_share=0.9, enemy=hard), 1)
         # Not under Central: never Leadership.
@@ -435,13 +681,15 @@ class TestAiSalvo(unittest.TestCase):
                                                                  enemy=replace(enemy, believed_stockpile=7))), 7)
         self.assertEqual(size("nd_ai_salvo_size_value", Posture(doctrine=5, stockpile=6, icbms=True, pgm=True,
                                                                  enemy=enemy)), 4)
-        # Leadership: ceil(2R), here 2 x 1.3.
-        small = Posture(authority=1, believed_stockpile=3, satellite_communications=False, mainframe=False,
-                        survivability=0)
-        self.assertEqual(size("nd_ai_salvo_size_value", Posture(stockpile=9, capital_hit_share=0.9, enemy=small)), 3)
-        # Enough to land 2R on the capital (final review): 2.6 / 0.4 is 6.5,
-        # so 7, where ceil(2R) alone would land 1.2, under R.
-        self.assertEqual(size("nd_ai_salvo_size_value", Posture(stockpile=30, capital_hit_share=0.4, enemy=small)), 7)
+        # Leadership: enough to land 2R on the capital, here 2 x 2.55 / 0.9,
+        # 5.67, so 6, all six spare.
+        small = Posture(authority=1, believed_stockpile=3, public_estimate=3, satellite_communications=False,
+                        mainframe=False, **self.BOMBERS)
+        self.assertEqual(size("nd_ai_salvo_size_value", Posture(stockpile=9, capital_hit_share=0.9, enemy=small)), 6)
+        # At a hit share of 0.4 (final review): 5.1 / 0.4 is 12.75, so 13,
+        # where ceil(2R) alone would land 2.4, under R.
+        self.assertEqual(size("nd_ai_salvo_size_value", Posture(stockpile=30, capital_hit_share=0.4, enemy=small)),
+                         13)
 
     def test_accept_effect_routes_ai_missions(self):
         nuke = (ROOT / "common/diplomatic_actions/nuke.txt").read_text(encoding="utf-8-sig")

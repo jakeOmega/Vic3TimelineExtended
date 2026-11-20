@@ -4,13 +4,14 @@
 # Design: docs/systems/nuclear_crisis_design.md (§0 is what shipped).
 #
 # Declared on je_nuclear_program (scaling_modifiers_while_active, vanilla
-# 1.15), never added: each value is 0 or 1 by the posture variable, or a
-# figure, and only while a posture is in force (nd_posture_in_force). Nothing
-# may add, remove or test them by name (has_modifier cannot see a declared
-# modifier):
+# 1.15), never added: each value is 0 or 1 by the posture variable or a
+# delivery leg, or a figure; the posture's only while a posture is in force
+# (nd_posture_in_force). Nothing may add, remove or test them by name
+# (has_modifier cannot see a declared modifier):
 #   nd_doctrine_mod_*        1 while var:nd_doctrine is its number
 #   nd_readiness_mod_*       1 while var:nd_readiness is its number
 #   nd_upkeep_cost           var:nd_upkeep_weekly_cached (nd_apply_posture_modifiers)
+#   nd_icbm_force            1 while nd_fields_icbms holds (nd_icbm_force_value)
 # One family is *managed*: exactly one member is on at a time and a tracking
 # variable records which, because add_modifier / remove_modifier are invisible
 # to has_modifier inside the block that ran them (scripting_best_practices.md
@@ -91,6 +92,19 @@ nd_readiness_mod_3 = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
 	country_nuclear_weapon_attack_success_add = 0.1
 	country_diplomatic_play_maneuvers_add = 5
+}
+
+# ---- Delivery: the fielded ICBM force (2026-11-20 delivery spec §4.2) -------
+# What the missiles themselves give, as hardware rather than knowledge: the
+# +0.5 nuclear attack success that was the ICBMs technology's (owner call 1),
+# and +0.5 to the counterforce ratio (nd_k_ratio, §3.4). Declared, so it
+# follows nd_fields_icbms, and a revolution's winner keeps it. Its figures are
+# nd_icbm_force_attack_success and nd_icbm_force_k_ratio too, for the fallback
+# (nd_icbm_force_declared_reads); test_nuclear_delivery.py holds them equal.
+nd_icbm_force = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_nuclear_weapon_attack_success_add = 0.5
+	country_nd_k_ratio_add = 0.5
 }
 
 # ---- Display only: never added (NUC-6, 2026-10-27) -------------------------

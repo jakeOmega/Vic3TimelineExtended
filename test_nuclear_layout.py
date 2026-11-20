@@ -536,11 +536,11 @@ class OverviewTest(unittest.TestCase):
         solid = bar[bar.index("# 4. Solid"):]
         self.assertIn("nd_display_survivability_bar_low", solid[:600])
         line = bar[bar.index("# 5."):]
-        for needle in ("ScriptValue('nd_display_survivability_cap')", "size = { 3 24 }",
-                       "gfx/interface/backgrounds/white.dds", 'tooltip = "nd_w_survivability_cap_tt"'):
+        for needle in ("ScriptValue('nd_display_survivability_target')", "size = { 3 24 }",
+                       "gfx/interface/backgrounds/white.dds", 'tooltip = "nd_w_survivability_target_tt"'):
             self.assertIn(needle, line, needle)
         heading = _value_body("nd_display_survivability_heading")
-        for needle in ("value = nd_survivability_cap", "value = nd_survivability_floor", "var:nd_hardening >= 1"):
+        for needle in ("value = nd_survivability_target", "value = nd_survivability_floor", "var:nd_hardening >= 1"):
             self.assertIn(needle, heading, needle)
         self.assertIn("green", _loc("nd_w_survivability_bar_tt"))
 

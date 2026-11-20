@@ -242,6 +242,13 @@ je_nuclear_program = {
 			}
 		}
 	}
+	# The fielded ICBM force (2026-11-20 delivery spec §4.2): its nuclear
+	# attack success and counterforce ratio follow nd_fields_icbms. Not gated on
+	# a posture: the legs are hardware, armed or not.
+	scaling_modifiers_while_active = {
+		modifier = nd_icbm_force
+		value = { value = nd_icbm_force_value }
+	}
 	scaling_modifiers_while_active = {
 		modifier = nd_readiness_mod_3
 		value = {
@@ -378,6 +385,10 @@ je_nuclear_program = {
 			# A TE_NUCLEAR line at 50 warheads and each doubling, whatever
 			# brought the arsenal there (nuclear_weapon_effects.txt).
 			nd_log_arsenal_watch = yes
+
+			# TEMPORARY self-check (nd_icbm_force_sum): does the declared ICBM
+			# force reach a modifier: read? Delete with the effect once it reads OK.
+			nd_icbm_force_selfcheck = yes
 
 			# ==== CUSTODY ====================================================
 			# The arsenal ledger: what the settlement hands on if this country

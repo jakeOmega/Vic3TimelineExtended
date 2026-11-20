@@ -57,7 +57,10 @@ class Posture:
     punished_skeptic: bool = False
     concealed_incident: bool = False
     satellite_communications: bool = True
-    icbms: bool = True
+    radar: bool = True             # radar (the survivability target's warning factor)
+    missile_defense: bool = True   # missile_defense_systems (its last factor)
+    icbms: bool = True             # nd_fields_icbms (phase 1: the technology)
+    missile_submarines: bool = True  # nd_fields_missile_submarines (the technology and a coast)
     war_band: int = 0              # the war's exposure band (nd_war_danger_band) while at war
     talks: bool = False            # the crisis's talks are open
     suspect_readiness: int = 3     # the suspected attacker's readiness
@@ -68,6 +71,7 @@ class Posture:
     second_warning_source: bool = True   # recon_satellites
     stockpile: float = 10          # our true warheads (nd_stockpile)
     believed_stockpile: float = 10 # the world's estimate of them (nd_believed_stockpile)
+    public_estimate: float = 10    # the seeded estimate (var:nd_public_estimate, nd_shown_public_estimate)
     pgm: bool = False              # precision_guided_munitions
     mainframe: bool = True         # mainframe_computers
     enemy: "Posture | None" = None # scope:nd_sv_enemy, for the survivors values
@@ -100,6 +104,16 @@ class RiskModel:
         self.values.update({k: v for k, _, v in parse_script(root / "common/script_values/sr_colony_module_values.txt")
                             if k.startswith("sr_mod_bunker_")})
         self.triggers = {k: v for k, _, v in parse_script(root / "common/scripted_triggers/nuclear_deterrence_triggers.txt")}
+        # The two sources of the precision-weapon fields (2026-11-20 delivery
+        # spec §3.4): the technology, and the ICBM force declared while
+        # fielded. Each is {field: figure}.
+        # A technology file holds bare lists (unlocking_technologies), which
+        # parse_script can't read: take the technology's modifier block alone.
+        era_8 = (root / "common/technology/technologies/era_8.txt").read_text(encoding="utf-8-sig")
+        pgm = re.search(r"(?ms)^precision_guided_munitions = \{.*?^\tmodifier = \{(.*?)^\t\}", era_8)
+        self.pgm_modifier = {k: float(v) for k, v in re.findall(r"(?m)^\s*(\w+)\s*=\s*(-?[\d.]+)", pgm.group(1))}
+        statics = {k: v for k, _, v in parse_script(root / "common/static_modifiers/nuclear_deterrence_modifiers.txt")}
+        self.icbm_force = {k: float(v) for k, _, v in statics["nd_icbm_force"] if k != "icon"}
         effects = {k: v for k, _, v in parse_script(root / "common/scripted_effects/nuclear_deterrence_effects.txt")}
         self.families = next(v for k, _, v in effects["nd_fire_incident_family"] if k == "random_list")
         events = {k: v for k, _, v in parse_script(root / "events/nuclear_incident_events.txt")}
@@ -128,9 +142,19 @@ class RiskModel:
             return posture.capital_hit_share   # reads modifiers at the enemy's capital
         if value == "sr_mod_units_bunker":
             return posture.command_center  # the benchmarks hold no colonies: 0
+        if value.startswith("modifier:"):
+            return self.modifier(value.removeprefix("modifier:"), posture)
         if value in self.values:
             return self.number(self.values[value], posture)
         return float(value)
+
+    def modifier(self, field, p):
+        """A country's modifier sum, from the sources the model knows: the
+        Precision-Guided Munitions technology and the ICBM force. Only the
+        precision-weapon fields are asked for; anything else raises."""
+        if field not in ("country_nd_k_ratio_add", "country_nd_silo_penetration_add"):
+            raise ValueError(f"unmodelled modifier: {field}")
+        return (p.pgm * self.pgm_modifier.get(field, 0)) + (p.icbms * self.icbm_force.get(field, 0))
 
     # Triggers whose body reads game state the model has no field for: each is
     # answered from the posture. Any other unknown key raises (number() below).
@@ -152,6 +176,13 @@ class RiskModel:
             "nd_launch_under_attack_doctrine": lambda: p.doctrine != 1,
             "nd_crisis_talks_open_either": lambda: p.talks,
             "nd_believed_armed": lambda: p.believed_armed,
+            # The world's view: the benchmarks' crisis, when there is one, is
+            # with the posture's enemy.
+            "nd_seen_in_crisis_with": lambda: p.stage >= 1,
+            # The delivery legs (2026-11-20 delivery spec §4): answered from the
+            # posture, since the submarine leg's coast is a state walk.
+            "nd_fields_icbms": lambda: p.icbms,
+            "nd_fields_missile_submarines": lambda: p.missile_submarines,
             # Reach (rework spec §7): the benchmarks are within it.
             "nd_reaches_country": lambda: p.in_reach,
             "nd_leadership_in_reach": lambda: p.capital_in_reach,
@@ -197,6 +228,7 @@ class RiskModel:
                 answer = next(v for k, _, v in value if k == "name") == "nd_based_near" and p.based_near
             elif key == "has_technology_researched":
                 answer = {"satellite_communications": p.satellite_communications, "ICBMs": p.icbms,
+                          "radar": p.radar, "missile_defense_systems": p.missile_defense,
                           "recon_satellites": p.second_warning_source, "precision_guided_munitions": p.pgm,
                           "mainframe_computers": p.mainframe}.get(value, True)
             elif key == "any_scope_diplomatic_pact":

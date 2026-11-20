@@ -115,7 +115,7 @@ te_nuke_attack_icbms = {
 	type = country
 	random_valid = no
 	text = {
-		trigger = { has_technology_researched = ICBMs }
+		trigger = { nd_fields_icbms = yes }
 		localization_key = nuke_attack_line_icbms
 	}
 	text = {

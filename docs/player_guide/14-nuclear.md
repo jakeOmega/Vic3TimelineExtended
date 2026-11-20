@@ -174,7 +174,7 @@ weekly total, and each readiness choice and investment row its own weekly cost.
 The Forces section tracks three numbers on a 0–100 scale, updated monthly, and
 two investment steppers from 0 to 3, Safeguards and Hardening.
 
-- Survivability is how much of your force would survive a first strike. It climbs toward a ceiling set by technology (25, plus 15 for Radar, 20 for Intercontinental Ballistic Missiles, 25 for Advanced Submarine Technology and 10 for Missile Defense Systems, at most 80) only while you pay for hardening, and erodes when you stop. Its bar shows where it is heading: a green stretch while it climbs, a red one while it erodes, and a cream line at the ceiling. Each 20 of it adds 1 to your Command Redundancy.
+- Survivability is how much of your force would survive a first strike. It climbs toward a target set by your forces (below) only while you pay for hardening, and erodes toward three tenths of the target when you stop. Its bar shows where it is heading: a green stretch while it climbs, a red one while it erodes, and a cream line at the target. Each 20 of it adds 1 to your Command Redundancy.
 - Command reliability is how well the chain of command holds. Each safeguards level raises it by about 12; strain, buried incidents and enemy sabotage lower it. Under Central Authorization it also moves your Command Redundancy against a salvo on your capital (see [Salvos and the Strike section](#salvos-and-the-strike-section)).
 - Crew strain rises 5 a month at High Alert, settles around 40 at Heightened, and falls 6 a month at Routine or Recessed.
 
@@ -183,6 +183,29 @@ warheads lost when your arsenal changes hands. A crisis counts survivability at
 your present readiness: all of it at High Alert, nine tenths at Heightened, four
 fifths at Routine and half at Recessed. The Survivability tooltip shows the
 figure that counts now.
+
+Each part of your forces shields a share of what a first strike could still
+reach, so each adds less the more is already protected, and nothing reaches
+100:
+
+| Part | Leaves exposed of the rest | Target with it and the parts above |
+|---|---|---|
+| Bombers, always | 75% | 25 |
+| Radar | 80% | 40 |
+| Intercontinental Ballistic Missiles, in silos | 70% | 58 |
+| Advanced Submarine Technology, if you hold a coastal state | 50% | 79 |
+| Missile Defense Systems | 85% | 82 |
+
+Without submarines, the other four make 64.
+
+Precision Guided Munitions do two things to a rival's forces. Each Forces
+warhead that lands destroys half a warhead more (see
+[Salvos and the Strike section](#salvos-and-the-strike-section)), and a
+country with missiles in silos counts them at 85% exposed instead of 70%
+against whoever has the technology. A full force with missile defense then
+leaves about 22% exposed instead of 18%, and one without submarines about 43%
+instead of 36%. When a rival researches it, your silos protect you less
+against that rival, which is the case for going to sea.
 
 What decides how hard you are to coerce is how many warheads you would have
 left if your main rival spent its whole arsenal, as far as you know it, on
@@ -222,7 +245,8 @@ Until you research Intercontinental Ballistic Missiles, your weapons go only as
 far as your bombers fly. That is every country next to you by land or sea, next
 to one of your direct subjects or next to a country that hosts your weapons, and
 every country with a state in a strategic region where you, a subject or a host
-holds one. Advanced Submarine Technology adds every coastal state. A war goal
+holds one. With a coast of your own, Advanced Submarine Technology adds every
+coastal state. A war goal
 between you and a country puts it in reach, so range matters most in peacetime
 crises and against your enemies' distant allies. No strike, salvo or answer can
 hit a state out of reach, a Leadership salvo needs the capital in reach, and a
@@ -331,8 +355,10 @@ For an AI government, which sometimes gives the launch order on a false
 warning, Delegation with full safeguards is about as risky as Central
 Authorization with none, and makes it harder to coerce. Under Central
 Authorization your own country launches only when you give the order. Hardening is the slow, costly, safe way
-to the same end: survivability's ceiling is 80, and the last stretch of
-security comes from a faster launch authority.
+to the same end, and a faster launch authority saves less the more secure your
+forces are: against a full first strike at High Alert, Launch on Warning saves
+36 points of your force with bombers and Radar, 25 with silos as well, and
+about 13 with submarines too.
 
 The Forces section's Chance of a halt row is the chance that someone in the
 chain halts a launch begun under delegation or launch on warning, or an accident
@@ -474,7 +500,7 @@ us when you are the target), each a word over the figure. Pressure reads Firm
 below 50, Wavering from 50, Yielding from 70 and Breaking from 85.
 
 - Danger (0–100) rises with the stage, time, publicity, readiness, poor command reliability, counter-threats, exercises and a vulnerable force on either side (up to +10 at survivability 0), and falls with open talks. It is lower when the target has no arsenal and no armed protector. High danger makes incidents likelier.
-- Pressure on the target (0–100) is what makes an AI target concede. The issuer's credibility, the danger, a threat that can be carried out, and the issuer's exercises and alerts raise it. The target's ability to answer in kind (up to −25, for three warheads that would survive the issuer's whole arsenal) and an armed protector behind it lower it, as does a threat from an issuer the armed target could disarm first (up to −15). So do the demands at stake: an annexation −30, a subjugation −20, each goal that takes a state or a subject −10 and each lesser goal −4, at most −40; the AI won't back with a nuclear threat a demand so large that it alone keeps an AI target from conceding. In a war, the goals the target would give up by conceding lower it too, on half that scale: an annexation −15, a subjugation −10, each goal that takes a state or a subject −5 and each lesser goal −2, at most −20, and half that while it is losing the war. The course of the war, the target ruler's temperament and the nuclear taboo shift it either way: up to +8 where the taboo is near 0 and threats are believed, down to −8 near 100 where nobody believes them, with the doubt halved for a public ultimatum. When first threatened, an AI target concedes only rarely below 40. Pressed again later, it never concedes below 50, does so about half the time from 70, and two times in three from 85.
+- Pressure on the target (0–100) is what makes an AI target concede. The issuer's credibility, the danger, a threat that can be carried out, and the issuer's exercises and alerts raise it. The target's ability to answer in kind (up to −25, for three warheads that would survive the issuer's whole arsenal) and an armed protector behind it lower it, as does a threat from an issuer the armed target could disarm first (up to −15), counting the issuer's warheads at the world's estimate and its forces as secure as its technology allows. So do the demands at stake: an annexation −30, a subjugation −20, each goal that takes a state or a subject −10 and each lesser goal −4, at most −40; the AI won't back with a nuclear threat a demand so large that it alone keeps an AI target from conceding. In a war, the goals the target would give up by conceding lower it too, on half that scale: an annexation −15, a subjugation −10, each goal that takes a state or a subject −5 and each lesser goal −2, at most −20, and half that while it is losing the war. The course of the war, the target ruler's temperament and the nuclear taboo shift it either way: up to +8 where the taboo is near 0 and threats are believed, down to −8 near 100 where nobody believes them, with the doubt halved for a public ultimatum. When first threatened, an AI target concedes only rarely below 40. Pressed again later, it never concedes below 50, does so about half the time from 70, and two times in three from 85.
 
 From Confrontation on, the target is pressed every six weeks unless talks are
 open. Talks are open while a proposal to stand down or to trade awaits an
@@ -676,14 +702,14 @@ twice as many land. Command Redundancy starts at 1 and adds:
 | Each ten warheads the country holds | +1 |
 | Satellite Communications | +2 |
 | Mainframe Computers | +1 |
-| Each 20 survivability, at any readiness | +1 (+4 at the ceiling of 80) |
+| Each 20 survivability, at any readiness | +1 (about +4 at the highest target, 82) |
 | Each staffed level of a Nuclear Command Center on a colony | +2, at most +6 |
 | Command reliability | +1 for each 10 above 50, −1 for each 10 below |
 
 A power with 20 warheads, both technologies, survivability 50 and command
 reliability 72 has about 11: a full salvo of 25 cuts it off about 82% of the
 time, 15 warheads about half the time, and 10 never. One with 50 warheads at
-the survivability ceiling, reliability 98 and three Command Center levels has
+survivability 80, reliability 98 and three Command Center levels has
 about 24, and 25 warheads cut it off less than one time in ten. Sabotaging its
 communications first wears its reliability down. A country cut off can't order
 a launch, or change its launch authority, for two to four weeks. The salvo's event, "A Nuclear Salvo from …", offers "Our
@@ -1229,7 +1255,7 @@ It retaliates at any taboo.
 - It sets its safeguards from one level: one more for a cautious ruler, a restraint-minded government and Delegation or Launch on Warning, one less for a militarist regime or Warfighting and in a budget deficit. It moves to Automatic Retaliation, Launch on Warning (if militarist) or Delegation only when fewer than three of its warheads would survive its main rival and hardening could not change that, and back to Central once that passes.
 - It goes to High Alert in a war with an armed enemy, and in an Acute crisis when its armed opponent is at Heightened or higher or fewer than three of its warheads would survive short of High Alert; otherwise to Heightened in any war or Confrontation, and to Recessed only at peace with nothing to deter and nobody to protect, and then only under a cautious ruler, No First Use or a default.
 - It strikes first only when its doctrine allows and its survival is at stake, or when it is losing (Flexible), was defied (Compellence) or is at war (Warfighting) against an enemy with no arsenal and no armed protector. An aggressive ruler losing under Flexible First Use strikes whether or not the enemy can answer; a cautious one strikes first only for survival, unless the taboo is below 30. From a taboo of 70, any AI strikes first only when its enemy means to annex or subjugate it, whatever its doctrine. The lower the taboo, the more readily it takes a strike it is allowed, and that includes carrying out a crisis threat: under Warfighting below a taboo of 25 it does so about twice as readily. It is a fifth as likely to carry out a threat against an insurgency, a revolutionary or secessionist state. It keeps a warhead in reserve unless its survival is at stake, waits six months between first uses, and strikes its own rebels only with 40% of its land occupied under Outlawed Dissent or a Secret Police. None of this holds back retaliation.
-- When it strikes, it may fire a salvo instead of one warhead. It aims at the capital of an enemy under Central Authorization when its spare warheads, times the chance each lands there, outnumber the enemy's redundancy as the world sees it; at the forces of an enemy believed armed under Flexible First Use, Compellence or Warfighting; and otherwise at one city. It keeps a third of its warheads, at least one, in reserve. A Forces salvo is sized to destroy the arsenal the world believes the enemy holds; a Leadership salvo to land twice the enemy's redundancy on its command.
+- When it strikes, it may fire a salvo instead of one warhead. It aims at the capital of an enemy under Central Authorization when its spare warheads, times the chance each lands there, outnumber the enemy's redundancy as the world sees it (its warheads at the world's estimate, its survivability as high as its technology allows); at the forces of an enemy believed armed under Flexible First Use, Compellence or Warfighting; and otherwise at one city. It keeps a third of its warheads, at least one, in reserve. A Forces salvo is sized to destroy the arsenal the world believes the enemy holds; a Leadership salvo to land twice the enemy's redundancy on its command.
 - It warns countries that threaten a protégé or its survival, and countries that struck it or a country it covers outside a war, and a great power warns a rival that is building a bomb. Coercive warnings need a hawkish doctrine or regime and a target that can't answer. It never makes a public bluff. The lower the taboo, the more often it threatens: about twice as often at 0 as at 35, and a third as often at 100, except in defense of a country it covers, its survival or its core territory, or over a nuclear strike. From a taboo of 70 it issues a public ultimatum only in defense of a country it covers, its survival or its core territory, and otherwise warns privately.
 - At each posture review it also weighs its arsenal. While its arsenal burdens it and it holds more than half again the stockpile it wants, it sets a ceiling at what it wants; it lifts that ceiling once it wants more, and in a war lifts any ceiling below what it wants. When the burden reaches 30% or the taboo 70, it may begin dismantling, a one-in-five chance each review, provided it is at peace, outside any nuclear crisis or civil war, faces no plausible attacker, has neither a militarist government nor an aggressive ruler, and is covered by a guarantee or umbrella or is not a great power. It halts a dismantling only when an armed enemy at war with it means to annex or subjugate it. A renouncer takes Resume the Nuclear Program only with the standing to run a program, below a taboo of 50, and when an armed country is at war with it or is a rival antagonistic toward it.
 - An armed AI proposes Nuclear Arms Limitation when the taboo is 50 or more or its arsenal burdens it, at a ceiling of three quarters of the larger arsenal.

@@ -2076,14 +2076,14 @@ types nuclear_deterrence_widget_types
 								max = 100
 							}
 						}
-						# 5. The ceiling our technology sets: a thin line with its own hover.
+						# 5. The survivability target: a thin line with its own hover.
 						progressbar = {
 							noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
 							progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
 							size = { 100% 100% }
 							skip_initial_animation = yes
 							direction = horizontal
-							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('nd_display_survivability_cap') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('nd_display_survivability_target') )]"
 							min = 0
 							max = 100
 							marker = {
@@ -2093,7 +2093,7 @@ types nuclear_deterrence_widget_types
 									widgetanchor = center
 									texture = "gfx/interface/backgrounds/white.dds"
 									color = { 0.96 0.90 0.72 0.95 }
-									tooltip = "nd_w_survivability_cap_tt"
+									tooltip = "nd_w_survivability_target_tt"
 								}
 							}
 						}
