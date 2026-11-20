@@ -1757,6 +1757,20 @@ of millions to around 10¹⁵ came before 1917.
    1,000 sit near its neighbours', no term is near +10 (`te_dg_mb`, `te_dg_md`), and its people don't fall by most of
    what was left, as Ingria's did in 1978. A strike that kills under a third steps as before, its dead in the Killed
    slice.
+8. **First sign-3 lines since #1500: two one-province colonies swamped by arrivals** (the owner's 1.15.2 USA game,
+   2026-11-19, the 1982 census). `why=3 state=Cape Colony owner=E00 people=351990 prev=18287 provinces=1 e0=42.60
+   cbr=0.53 cdr=2.19 mig=346237` and `why=3 state=Swedish Gold Coast owner=SWE people=480277 prev=11553 provinces=1
+   e0=36.10 cbr=0.00 cdr=0.28 mig=470116`. In both, net migration is more than the whole rise and births and deaths
+   ran a natural decrease: what sign 5's skip (item 5) was built for, on sign 3, which has no skip. Neither is the
+   model running away: the 1982.10 save reads both sane (life expectancy 42.6 and 36.1). Both owners are one-state
+   countries just freed (`recently_decolonized`): E00 formed on 1981.12.24, and Sweden's piece passed to E03 by the
+   mod's planned decolonization (`decolonization_events.401`) three minutes of play after its census. The Gold
+   Coast's arrivals match Windward Coast's departures that census (D04, `mig_raw` −467,410). The mod's persecution
+   pulse (`trigger_mass_migration`, 80% of a culture to the one most attractive foreign state) is ruled out there:
+   D04 holds Discrimination, and the decree that also sets the flag has an AI weight of 0. So the move looks like the
+   engine's own migration. No matching source was found for Cape Colony. **Owner's call:** give sign 3 the same
+   arrivals skip as sign 5, or keep it as a flag on a tiny state flooded with tens of times its people. Saves:
+   `/mnt/d/vic3_triage_2026-11-19/l6/saves/` (172340 = 1982.4.1 before, 173714 = 1982.10.1 after).
 
 ## W's lead: the census sets the pops past its aim (2026-11-07)
 

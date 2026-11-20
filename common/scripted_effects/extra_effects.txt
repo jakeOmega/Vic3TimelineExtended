@@ -567,6 +567,46 @@ remove_banking_market_modifiers_effect = {
 	banking_strip_tool = { MODIFIER = banking_bail_in_regime                   MARK = off_cb_bail_in_regime }
 }
 
+# The command-economy cascade (banking_law_cascade_on_law_activated,
+# extra_on_actions.txt), run again on an uprising once its laws are built.
+# ROOT = the country it rose against, scope:target = the uprising; called from
+# te_civil_war_on_start (on_revolution_start and on_secession_start), where the
+# uprising's law list is whole: vanilla's own on_revolution_start reads it.
+#
+# The engine builds an uprising's laws group by group, each firing
+# on_law_activated, and copies the origin's law into a group it has not reached
+# yet after the cascade has already written there. Kalat's socialist uprising
+# (1978.10.4, save read 2026-11-19): Economic System went Agrarianism (copied)
+# to Command Economy (the movement's), the cascade then enacted State-Owned
+# Banking, and Financial Regulation's later copy put Kalat's Narrow Banking back
+# over it. So a Command Economy the uprising has and its origin lacks is new,
+# and the cascade's law is owed it here. An origin's own Command Economy, copied
+# with whatever banking law it has since enacted, is left as it is.
+banking_law_cascade_on_uprising = {
+	if = {
+		limit = {
+			NOT = { has_law = law_type:law_command_economy }
+			scope:target = {
+				has_law = law_type:law_command_economy
+				NOT = { has_law = law_type:law_state_owned_banking }
+			}
+		}
+		scope:target = {
+			debug_log = "TE_BANKING: the uprising [THIS.GetCountry.GetNameNoFormatting] came out of its build with Command Economy and no State-Owned Banking; enacting it date=[TimeKeeper.GetCurrentDate.GetString]"
+			set_variable = te_law_sweep_replacing	# te_law_replaced_notice
+			activate_law = law_type:law_state_owned_banking
+			remove_variable = te_law_sweep_replacing
+			# Self-check, once a game: is the law still there a week on? That
+			# this hook runs after the build's last copy is read from vanilla's
+			# on_revolution_start, not measured (te_debug_banking.2).
+			if = {
+				limit = { NOT = { has_global_variable = te_sc_cw_sob_logged } }
+				trigger_event = { id = te_debug_banking.2 days = 7 }
+			}
+		}
+	}
+}
+
 # State scope, around a strike's kill: the state's people as the day's
 # strikes have left them (var:nd_strike_people_left, read by the strikes'
 # killed-population values). state_population doesn't fall until the next
