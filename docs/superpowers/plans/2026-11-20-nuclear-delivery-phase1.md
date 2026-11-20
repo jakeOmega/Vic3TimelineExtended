@@ -66,17 +66,17 @@
 
 **Interfaces:** produces `nd_fields_icbms = yes` and `nd_fields_missile_submarines = yes` (country scope), read by every later task. Nothing else changes for a country that has a coast.
 
-- [ ] Write `TestDeliveryTriggers`: the two bodies per D2, and the state branch asks `is_coastal` and the trigger in that order. Write `TestTechnologyReads`: every `has_technology_researched = ICBMs` or `= advanced_submarine_technology` in `common/`, `events/` and `gui/` is on D3's allowlist, which names each site's reason; `test_landlocked_has_no_submarine_reach` checks that both reach triggers and the survivability part read the submarine trigger. Run: FAIL.
-- [ ] Implement. Update `test_nuclear_basing.py`'s silo prerequisite to the trigger. Run `test_nuclear_delivery.py`, `test_nuclear_reach.py`, `test_nuclear_basing.py`, `test_nuclear_deterrence.py`, `test_nuclear_incident_risk.py`, then `preflight.py --changed`. PASS.
-- [ ] Commit `Nuclear delivery: one trigger per leg; no submarine reach without a coast (spec §9 phase 1)`.
+- [x] Write `TestDeliveryTriggers`: the two bodies per D2, and the state branch asks `is_coastal` and the trigger in that order. Write `TestTechnologyReads`: every `has_technology_researched = ICBMs` or `= advanced_submarine_technology` in `common/`, `events/` and `gui/` is on D3's allowlist, which names each site's reason; `test_landlocked_has_no_submarine_reach` checks that both reach triggers and the survivability part read the submarine trigger. Run: FAIL.
+- [x] Implement. Update `test_nuclear_basing.py`'s silo prerequisite to the trigger. Run `test_nuclear_delivery.py`, `test_nuclear_reach.py`, `test_nuclear_basing.py`, `test_nuclear_deterrence.py`, `test_nuclear_incident_risk.py`, then `preflight.py --changed`. PASS.
+- [x] Commit `Nuclear delivery: one trigger per leg; no submarine reach without a coast (spec §9 phase 1)`.
 
 ### Task 2: Survivability as a product (§3.1–§3.3, D4)
 
 **Files:** `common/script_values/nuclear_deterrence_values.txt` (the factors, `nd_survivability_target`, the floor, the step, `nd_exposed_warheads_target_r2` and its `_vs_saved`, `nd_display_survivability_target`, the display family at `:2315–2348`), `common/scripted_effects/nuclear_deterrence_effects.txt` (`:94`), the rework comment ("The last stretch toward full security…", `:195`), `scripts/analysis/nuclear_survivors.py` (`exposure_factor`, `survivability_target`, the calibration table), `test_nuclear_survivors.py`, `test_nuclear_deterrence.py` (`test_survivability_cap_is_80` → `TestSurvivabilityTarget`), `test_nuclear_layout.py` (`:539–543`).
 
-- [ ] Write `TestSurvivabilityTarget`: each factor's value and its held test (the two legs through Task 1's triggers); the target is 100 × (1 − product) and has no `max = 80`; the table in spec §3.1 reproduced by the mirror (25, 40, 58, 79, 82, 64); the floor is 0.3 × target; no reader names `nd_survivability_cap`. Also `test_lost_share_table`: the mirror reproduces §3.3's Central, Delegation and Launch on Warning rows. Run: FAIL.
-- [ ] Implement. Update the layout test's needles to the new names. Run the nuclear tests, then `preflight.py --changed`. PASS.
-- [ ] Commit `Nuclear survivability: a product of its parts, with no flat ceiling (spec §3.1)`.
+- [x] Write `TestSurvivabilityTarget`: each factor's value and its held test (the two legs through Task 1's triggers); the target is 100 × (1 − product) and has no `max = 80`; the table in spec §3.1 reproduced by the mirror (25, 40, 58, 79, 82, 64); the floor is 0.3 × target; no reader names `nd_survivability_cap`. Also `test_lost_share_table`: the mirror reproduces §3.3's Central, Delegation and Launch on Warning rows. Run: FAIL.
+- [x] Implement. Update the layout test's needles to the new names. Run the nuclear tests, then `preflight.py --changed`. PASS.
+- [x] Commit `Nuclear survivability: a product of its parts, with no flat ceiling (spec §3.1)`.
 
 ### Task 3: Precision weapons and the ICBM force (§3.4, D5–D7)
 
@@ -92,7 +92,7 @@
 - `test_nuclear_survivors.py`, `test_nuclear_delivery.py`;
 - `docs/testing/nuclear-playtest.md` (the Self-checks row).
 
-- [ ] Write `TestPrecisionWeapons`:
+- [x] Write `TestPrecisionWeapons`:
   - `nd_k_ratio` is 1 + the modifier and reads no technology;
   - the technology carries both lines and the ICBMs technology no attack success;
   - `nd_icbm_force` carries both 0.5s and is declared with an inline value block reading `nd_fields_icbms`;
@@ -101,8 +101,8 @@
   - the mirror gives §3.4's 17.9% → 21.7% and 35.7% → 43.4%.
 
   Write `test_icbm_force_self_check`: one-shot, the 14-day gate, the degenerate exclusion, the `scaling_live` control named in the line, OK and BROKEN forms. Run: FAIL.
-- [ ] Implement. Run the nuclear tests, then `preflight.py --changed`; `modifier_field_audit --strict` and `loc_coverage_audit --strict` come with it. PASS.
-- [ ] Commit `Nuclear precision weapons: the counterforce ratio and the silo penalty as modifiers; the ICBM force (spec §3.4)`.
+- [x] Implement. Run the nuclear tests, then `preflight.py --changed`; `modifier_field_audit --strict` and `loc_coverage_audit --strict` come with it. PASS.
+- [x] Commit `Nuclear precision weapons: the counterforce ratio and the silo penalty as modifiers; the ICBM force (spec §3.4)`.
 
 ### Task 4: The world's view (§5.2, D8, D9; owner call 13)
 
@@ -110,16 +110,18 @@
 
 **Interfaces:** produces the `nd_seen_*` family, which Tasks 7 and 8 read for every figure about another country.
 
-- [ ] Write `TestWorldsView`:
+- [x] Write `TestWorldsView`:
   - the `nd_seen_*` values read only public inputs. `nd_shown_public_estimate`, the target and its technology and leg parts, `nd_authority` and readiness inside a crisis are allowed; `nd_survivability`, `nd_safeguards`, `nd_hardening`, `nd_reliability`, the stockpile and readiness outside a crisis are not. The check runs `test_nuclear_layout.py`'s `_true_state` closure over each value;
   - D9's three readers read the seen values;
   - `nd_yp_answer_survivors_value` still reads the true figure;
   - the mirror and the script agree.
 
   Run: FAIL.
-- [ ] Implement. Run the nuclear tests, then `preflight.py --changed`. PASS.
-- [ ] Commit `Nuclear crises: what one side counts of the other is the world's view (spec owner call 13)`.
-- [ ] **PR 1a.** Full `scripts/preflight.py`. Write design §0.18's first half: what shipped, D1–D9, and what phase 2 consumes (the two triggers and the force). Also `mod_systems/nuclear.md` and chapter 14's survivability paragraph, factor table, range sentence (submarines need a coast) and the precision-weapon lines, with the PDF rebuilt. The PR body has a "Player guide" line naming the chapter. Open it with `--base main`, then run the two-reviewer review, one fix pass, and merge on green CI.
+- [x] Implement. Run the nuclear tests, then `preflight.py --changed`. PASS.
+- [x] Commit `Nuclear crises: what one side counts of the other is the world's view (spec owner call 13)`.
+- [x] **PR 1a.** Full `scripts/preflight.py`. Write design §0.18's first half: what shipped, D1–D9, and what phase 2 consumes (the two triggers and the force). Also `mod_systems/nuclear.md` and chapter 14's survivability paragraph, factor table, range sentence (submarines need a coast) and the precision-weapon lines, with the PDF rebuilt. The PR body has a "Player guide" line naming the chapter. Open it with `--base main`, then run the two-reviewer review, one fix pass, and merge on green CI.
+
+**As built (2026-11-20).** Tasks 1–4 shipped as planned, with two changes. The self-check is a scripted effect called from the entry's weekly pulse (`nd_icbm_force_selfcheck`), not a hidden event: the same once-a-game line with less wiring. D6's fallback is wired as one switch, `nd_icbm_force_declared_reads`, which `nd_k_ratio`, `nuclear_strike_attack_rating` and the attack rating's display read. The design record is `nuclear_crisis_design.md` §0.18.
 
 ## PR 1b: the display
 
