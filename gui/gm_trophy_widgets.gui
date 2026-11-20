@@ -12,6 +12,8 @@
 ###     view's monument card (te_state_panel_widgets.gui) that lists the
 ###     monuments standing beside the state's primary
 ###     (docs/superpowers/archive/specs/2026-10-13-multiple-monuments-per-state-design.md §5)
+###   gm_mon_row_short                       a secondary monument's line in Our
+###     Monuments' Short view (te_gm_sec_monuments)
 ### A trophy is a script container (gm_trophy_effects.txt): its rows come from
 ### the country's gm_trophies_held / gm_trophies_abroad and the state's
 ### gm_trophies_here lists, rebuilt by the monthly pass, each item under
@@ -93,12 +95,18 @@ types gm_trophy_widget_types
 
 	### Carry It Off, for the row's or card's monument: shown while the player
 	### could take it (occupied in a war, or our own unincorporated state
-	### holding a monument we did not raise).
+	### holding a monument we did not raise). The size, anchor and label width
+	### are gm_tr_button's blocks, so Our Monuments' Short lines
+	### (gm_monument_row_short) can end with it, small. Its three siblings
+	### below (gm_mon_take_button, gm_clear_button, gm_mon_clear_button) have
+	### the same two blocks.
 	type gm_tr_take_button = button {
 		using = default_button_action
-		size = { 200 28 }
-		parentanchor = hcenter
-		margin_top = 4
+		block "tr_button_layout" {
+			size = { 200 28 }
+			parentanchor = hcenter
+			margin_top = 4
+		}
 		datacontext = "[GetScriptedGui('gm_tr_take_sgui')]"
 		visible = "[And( Not( GetMetaPlayer.IsObserver ), ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End ) )]"
 		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
@@ -109,7 +117,9 @@ types gm_trophy_widget_types
 			parentanchor = center
 			align = center|nobaseline
 			autoresize = yes
-			max_width = 190
+			block "tr_button_text_width" {
+				max_width = 190
+			}
 			elide = right
 			using = gm_fontsize_row
 			text = "gm_button_tr_take"
@@ -2583,9 +2593,11 @@ types gm_trophy_widget_types
 	### Its monument is the row's container.
 	type gm_mon_take_button = button {
 		using = default_button_action
-		size = { 200 28 }
-		parentanchor = hcenter
-		margin_top = 2
+		block "tr_button_layout" {
+			size = { 200 28 }
+			parentanchor = hcenter
+			margin_top = 2
+		}
 		datacontext = "[GetScriptedGui('gm_mon_take_sgui')]"
 		visible = "[And( Not( GetMetaPlayer.IsObserver ), ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End ) )]"
 		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]"
@@ -2596,7 +2608,9 @@ types gm_trophy_widget_types
 			parentanchor = center
 			align = center|nobaseline
 			autoresize = yes
-			max_width = 190
+			block "tr_button_text_width" {
+				max_width = 190
+			}
 			elide = right
 			using = gm_fontsize_row
 			text = "gm_button_tr_take"
@@ -2609,9 +2623,11 @@ types gm_trophy_widget_types
 	### grand of them, contested ones aside (gm_clear_sgui, gm_monument_sguis.txt).
 	type gm_clear_button = button {
 		using = default_button_action
-		size = { 200 28 }
-		parentanchor = hcenter
-		margin_top = 4
+		block "tr_button_layout" {
+			size = { 200 28 }
+			parentanchor = hcenter
+			margin_top = 4
+		}
 		datacontext = "[GetScriptedGui('gm_clear_sgui')]"
 		visible = "[And( ObjectsEqual( State.GetOwner, GetPlayer.Self ), EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_clearable'), '(CFixedPoint)1' ) )]"
 		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
@@ -2622,7 +2638,9 @@ types gm_trophy_widget_types
 			parentanchor = center
 			align = center|nobaseline
 			autoresize = yes
-			max_width = 190
+			block "tr_button_text_width" {
+				max_width = 190
+			}
 			elide = right
 			using = gm_fontsize_row
 			text = "gm_button_clear"
@@ -2633,9 +2651,11 @@ types gm_trophy_widget_types
 	### datacontext; gm_mon_clear_sgui): the same, in our own state.
 	type gm_mon_clear_button = button {
 		using = default_button_action
-		size = { 200 28 }
-		parentanchor = hcenter
-		margin_top = 2
+		block "tr_button_layout" {
+			size = { 200 28 }
+			parentanchor = hcenter
+			margin_top = 2
+		}
 		datacontext = "[GetScriptedGui('gm_mon_clear_sgui')]"
 		visible = "[And( ObjectsEqual( ScriptContainer.MakeScope.Var('gm_tr_origin').GetState.GetOwner, GetPlayer.Self ), EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_mon_disp_clearable'), '(CFixedPoint)1' ) )]"
 		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]"
@@ -2646,7 +2666,9 @@ types gm_trophy_widget_types
 			parentanchor = center
 			align = center|nobaseline
 			autoresize = yes
-			max_width = 190
+			block "tr_button_text_width" {
+				max_width = 190
+			}
 			elide = right
 			using = gm_fontsize_row
 			text = "gm_button_clear"
@@ -2759,6 +2781,63 @@ types gm_trophy_widget_types
 		}
 		### The journal entry's rows: a contested one's choices.
 		block "mon_choices" {}
+	}
+
+	### A monument standing beside another, in Our Monuments' Short view
+	### (te_gm_sec_monuments): one line, no picture. Its name, its status and
+	### its grandeur; the rest (its form and dedication, where it stands, a
+	### landmark's history) on hover, its unique dedication's line left to Full.
+	### Carry It Off and Clear It Away end the line, small, as on the state
+	### monuments' Short line (gm_monument_row_short), the player's own under
+	### the same gate as Full's mon_controls (test_grand_monuments_layout.
+	### ControlsGateTest). 344 + 6 + 130 = 480, the panel's width inside its
+	### margins.
+	type gm_mon_row_short = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 6
+
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			minimumsize = { 344 -1 }
+			maximumsize = { 344 -1 }
+			align = left|nobaseline
+			using = gm_fontsize_row
+			tooltip = "gm_mon_short_tt"
+			text = "gm_mon_short_line"
+		}
+
+		flowcontainer = {
+			visible = "[And( Country.IsLocalPlayer, Or( And( Not( GetMetaPlayer.IsObserver ), GetScriptedGui('gm_mon_take_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End ) ), And( ObjectsEqual( ScriptContainer.MakeScope.Var('gm_tr_origin').GetState.GetOwner, Country.Self ), EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_mon_disp_clearable'), '(CFixedPoint)1' ) ) ) )]"
+			direction = vertical
+			ignoreinvisible = yes
+			parentanchor = vcenter
+
+			flowcontainer = {
+				using = te_own_country_only
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 2
+
+				gm_mon_take_button = {
+					blockoverride "tr_button_layout" {
+						size = { 130 26 }
+					}
+					blockoverride "tr_button_text_width" {
+						max_width = 124
+					}
+				}
+				gm_mon_clear_button = {
+					blockoverride "tr_button_layout" {
+						size = { 130 26 }
+					}
+					blockoverride "tr_button_text_width" {
+						max_width = 124
+					}
+				}
+			}
+		}
 	}
 
 	### The monuments that stand beside a state's own, a section of the state
