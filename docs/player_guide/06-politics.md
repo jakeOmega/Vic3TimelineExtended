@@ -301,7 +301,7 @@ shows last year's rise.
 |---|---|---|---|
 | Universal Basic Income | Welfare | Universal Basic Income | Large welfare payments and higher living-standard expectations. |
 | Post-Scarcity Economy | Welfare | Post-Scarcity Economy | The largest welfare payments; expectations rise further. |
-| Protected Class | Rights of Women | Sexual Revolution | Gender discrimination is illegal: more workers and political participation, lower birth rate. |
+| Protected Class | Rights of Women | Sexual Revolution | Gender discrimination is illegal: more workers and political participation, lower birth rate. As under Women's Suffrage, women can lead interest groups and command armies. |
 | Neocameralism | Governance Principles | Marketing Research, with Laissez-Faire or Interventionism | The state run as a corporation: industrialists and wealth hold power. |
 | Collective Governance | Governance Principles | Political Agitation | No single head of state; see [Collective Governance](#collective-governance). |
 | Contracted Administration | Bureaucracy | Supply Chain Management, with Laissez-Faire or Interventionism | Private firms run the administration under contract; see [Who staffs the administration](#who-staffs-the-administration). |
