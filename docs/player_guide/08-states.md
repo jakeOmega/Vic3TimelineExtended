@@ -366,6 +366,10 @@ if you lead a power bloc, its members. For every core culture:
   best- and worst-off core cultures, their standards of living and the gap.
   Only cultures already held and accepted are measured.
 
+An optional culture's standard of living only has to be less than 3 below the
+best-off core culture's (the merged culture's, once every core culture has
+switched). Living better than the core cultures never keeps it out.
+
 Each constituent culture has a tier, set by how close it is to the others:
 
 | Tier | The culture shares with the others | Technology | Also needed |
@@ -482,10 +486,11 @@ pace.
 If a core culture's hold falls below 50%, or the core cultures' standards of living
 drift more than 4 apart, the whole merge stalls until the hold is back at 60%
 and the gap under 3; so it does while a condition of its own that must keep
-holding fails. An optional culture stalls on its own conditions. A country of
-your sphere whose acceptance of a culture falls below 75 (85 for a tier 1b
-culture) stops converting that culture until it is back at 80 (90), and the rest of the
-sphere carries on. Nothing converted is lost while a merge stalls.
+holding fails. An optional culture also stalls on its own conditions, among
+them a standard of living more than 4 below the best-off core culture's. A
+country of your sphere whose acceptance of a culture falls below 75 (85 for a
+tier 1b culture) stops converting that culture until it is back at 80 (90), and
+the rest of the sphere carries on. Nothing converted is lost while a merge stalls.
 
 <!-- screenshot: a running Cultural Merge journal entry, its status line and Merge Progress bar in view -->
 

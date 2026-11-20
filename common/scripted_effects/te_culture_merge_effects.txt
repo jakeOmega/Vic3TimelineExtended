@@ -376,13 +376,15 @@ te_cm_sol_track = {
 # te_cm_sol_gap_close and reopened below te_cm_sol_gap_open. $MERGE$, $CULTURE$. It reads
 # what the caller just built and needs every core slot met (te_cm_sg_all = 1); a part whose
 # own gates aren't on has no figure of its own, and its gate is closed.
-#   - While some core part still has a figure (te_cm_sg_n > 0), the gap is over the core range
-#     (te_cm_sg_min, te_cm_sg_max) plus this part.
-#   - Once every core part has switched there is no core figure left, and the part is compared
-#     with the result culture instead: the gap is |part - result|, the result's average standard
-#     of living (te_cm_sg_ref, from te_cmg_<m>_result_sol) in the sphere's part of the core parts'
-#     homeland states. With no reference figure either (the walk wasn't needed, or the result has
-#     no pops there) the gate stays as it was.
+# The gap is one-sided (owner, 2026-11-20): how far the part lives below the reference, 0 at
+# or above it, so a better-off optional culture is never kept out. The core parts' own gate
+# (te_cm_sol_ok_<m>) stays two-sided, and stalls the whole merge on the core's spread.
+#   - While some core part still has a figure (te_cm_sg_n > 0), the reference is the best-off
+#     core part (te_cm_sg_max).
+#   - Once every core part has switched there is no core figure left, and the reference is the
+#     result culture: its average standard of living (te_cm_sg_ref, from te_cmg_<m>_result_sol)
+#     in the sphere's part of the core parts' homeland states. With no reference figure either
+#     (the walk wasn't needed, or the result has no pops there) the gate stays as it was.
 te_cm_sol_gate_part = {
 	if = {
 		limit = { NOT = { has_variable = te_cm_sol_ok_$MERGE$_$CULTURE$ } }
@@ -396,32 +398,22 @@ te_cm_sol_gate_part = {
 		set_local_variable = { name = te_cm_sg_known value = 0 }
 		if = {
 			limit = { local_var:te_cm_sg_n > 0 }
-			set_local_variable = { name = te_cm_sg_lo value = local_var:te_cm_sg_min }
-			set_local_variable = { name = te_cm_sg_hi value = local_var:te_cm_sg_max }
-			if = {
-				limit = { var:te_cm_sol_$MERGE$_$CULTURE$ < local_var:te_cm_sg_lo }
-				set_local_variable = { name = te_cm_sg_lo value = var:te_cm_sol_$MERGE$_$CULTURE$ }
-			}
-			if = {
-				limit = { var:te_cm_sol_$MERGE$_$CULTURE$ > local_var:te_cm_sg_hi }
-				set_local_variable = { name = te_cm_sg_hi value = var:te_cm_sol_$MERGE$_$CULTURE$ }
-			}
-			set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_hi }
-			change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_lo }
+			set_local_variable = { name = te_cm_sg_top value = local_var:te_cm_sg_max }
 			set_local_variable = { name = te_cm_sg_known value = 1 }
 		}
 		else_if = {
 			limit = { local_var:te_cm_sg_ref > 0 }
+			set_local_variable = { name = te_cm_sg_top value = local_var:te_cm_sg_ref }
+			set_local_variable = { name = te_cm_sg_known value = 1 }
+		}
+		if = {
+			limit = { local_var:te_cm_sg_known = 1 }
+			set_local_variable = { name = te_cm_sg_gap value = 0 }
 			if = {
-				limit = { var:te_cm_sol_$MERGE$_$CULTURE$ >= local_var:te_cm_sg_ref }
-				set_local_variable = { name = te_cm_sg_gap value = var:te_cm_sol_$MERGE$_$CULTURE$ }
-				change_local_variable = { name = te_cm_sg_gap subtract = local_var:te_cm_sg_ref }
-			}
-			else = {
-				set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_ref }
+				limit = { var:te_cm_sol_$MERGE$_$CULTURE$ < local_var:te_cm_sg_top }
+				set_local_variable = { name = te_cm_sg_gap value = local_var:te_cm_sg_top }
 				change_local_variable = { name = te_cm_sg_gap subtract = var:te_cm_sol_$MERGE$_$CULTURE$ }
 			}
-			set_local_variable = { name = te_cm_sg_known value = 1 }
 		}
 		if = {
 			limit = { local_var:te_cm_sg_known = 1 }

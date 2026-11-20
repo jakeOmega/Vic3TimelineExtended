@@ -2013,7 +2013,10 @@ class OptionalStatusTest(unittest.TestCase):
             calls = re.findall(r"\[ROOT\.GetCountry\.GetCustom\('(\w+)'\)\]", reason)
             self.assertEqual(calls, [gen.optional_status_name(merge, c) for c in cultures], merge.key)
             if cultures:
-                self.assertIn("\\n\\nWhere each optional culture stands:\\n\\n", reason, merge.key)
+                # A bold heading, and a blank line between entries (owner, 2026-11-20: one to a line read as a block).
+                self.assertIn("\\n\\n#b Where each optional culture stands:#!\\n\\n", reason, merge.key)
+                self.assertTrue(reason.endswith("\\n\\n".join("[ROOT.GetCountry.GetCustom('%s')]" % c for c in calls)),
+                                merge.key)
             else:
                 self.assertNotIn("optional culture stands", reason, merge.key)
         # Each alternative of a slot is its own line: Latin's Platinean slot takes cm_platine once that merge is done.
@@ -2037,7 +2040,8 @@ class OptionalStatusTest(unittest.TestCase):
                 for row in rows:
                     self.assertEqual(self.generated[row.key], row.text)
                     self.assertTrue(row.key.startswith(gen.optional_status_name(merge, culture) + "_"), row.key)
-                    self.assertTrue(row.text.startswith("$%s$" % culture), row.key)
+                    # Each entry opens on the culture's name in bold.
+                    self.assertTrue(row.text.startswith("#b $%s$#! " % culture), row.key)
 
     def test_the_ladder_reads_only_triggers_that_exist(self):
         defined = set()
@@ -2094,7 +2098,8 @@ class OptionalStatusTest(unittest.TestCase):
                     for name in re.findall(r"GetGlobalVariable\('(\w+)'\)", row.text):
                         self.assertIn("has_global_variable = %s" % name, row.lines, row.key)
 
-    def test_the_sol_gap_is_the_core_range_widened_to_take_in_the_culture(self):
+    def test_the_sol_gap_is_the_cultures_shortfall_below_the_best_off_core_culture(self):
+        # Owner, 2026-11-20: a culture better off than the core is never kept out, so the gap is 0 at or above the top.
         values = text_of(VALUES)
         self.assertEqual(
             squash(block(values, "te_cmg_anglophone_opt_scottish_sol_gap")),
@@ -2102,18 +2107,11 @@ class OptionalStatusTest(unittest.TestCase):
                 if = {
                     limit = {
                         has_variable = te_cm_sol_hi_anglophone
-                        has_variable = te_cm_sol_lo_anglophone
                         has_variable = te_cm_sol_anglophone_scottish
                     }
                     value = var:te_cm_sol_hi_anglophone
-                    min = var:te_cm_sol_anglophone_scottish
-                    if = {
-                        limit = { var:te_cm_sol_anglophone_scottish < var:te_cm_sol_lo_anglophone }
-                        subtract = var:te_cm_sol_anglophone_scottish
-                    }
-                    else = {
-                        subtract = var:te_cm_sol_lo_anglophone
-                    }
+                    subtract = var:te_cm_sol_anglophone_scottish
+                    min = 0
                 }"""),
         )
         for merge in cfg.MERGES:
