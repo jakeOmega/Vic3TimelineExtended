@@ -32,6 +32,7 @@ The first playable milestone shipped behind the experimental, default-off `te_ta
 | Doc | Status | What's left |
 |-----|--------|-------------|
 | [specs/2026-10-28-nuclear-crisis-rework-design.md](specs/2026-10-28-nuclear-crisis-rework-design.md): survivability measured against the enemy's arsenal, payoffs for Delegation and Launch on Warning, accident risk calibrated to the Cold War, accident claims, a strike planner with counterforce and decapitation, range, and new crisis disputes and concessions | Design only (2026-10-28): the owner's calls in its §1 | All four phases (§13); open question 1 reverses part of a 2026-09-26 ruling |
+| [specs/2026-11-20-nuclear-delivery-and-survivability-design.md](specs/2026-11-20-nuclear-delivery-and-survivability-design.md): survivability as a product of its parts in place of the flat ceiling, silos weaker against precision weapons, ICBMs and missile submarines fielded through programme projects, and every value a nuclear decision rests on shown to the player | Design only (2026-11-20): the owner's calls in its §1 | Both phases (§9); five open questions (§11) |
 
 ### Space Race
 
