@@ -253,7 +253,7 @@ nd_survivability_step = {
 		subtract = var:nd_survivability
 		multiply = {
 			value = var:nd_hardening
-			multiply = 0.02
+			multiply = nd_hardening_rate_per_level
 		}
 	}
 	else_if = {
@@ -261,20 +261,105 @@ nd_survivability_step = {
 			has_variable = nd_survivability
 			var:nd_survivability > nd_survivability_floor
 		}
-		add = var:nd_survivability
-		subtract = nd_survivability_floor
-		multiply = -0.01
+		add = nd_survivability_floor
+		subtract = var:nd_survivability
+		multiply = nd_survivability_erosion_rate
 	}
 }
 
-# Where command reliability is heading.
+# The share of the gap to the target each hardening level closes a month, and
+# the share of the lead over the floor lost a month without hardening.
+nd_hardening_rate_per_level = 0.02
+
+nd_survivability_erosion_rate = 0.01
+
+# The step at one hardening level more or less, for the stepper's buttons
+# (2026-11-20 delivery spec D12): nd_survivability_step at that level.
+nd_survivability_step_at_hardening_up = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_survivability }
+		add = nd_survivability_target
+		subtract = var:nd_survivability
+		multiply = {
+			value = nd_display_hardening
+			add = 1
+			multiply = nd_hardening_rate_per_level
+		}
+	}
+}
+
+nd_survivability_step_at_hardening_down = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = nd_survivability
+			has_variable = nd_hardening
+			var:nd_hardening >= 2
+		}
+		add = nd_survivability_target
+		subtract = var:nd_survivability
+		multiply = {
+			value = var:nd_hardening
+			subtract = 1
+			multiply = nd_hardening_rate_per_level
+		}
+	}
+	else_if = {
+		limit = {
+			has_variable = nd_survivability
+			var:nd_survivability > nd_survivability_floor
+		}
+		add = nd_survivability_floor
+		subtract = var:nd_survivability
+		multiply = nd_survivability_erosion_rate
+	}
+}
+
+# The months it takes to close half the gap to the target at hardening level
+# 1, 2 and 3: round(ln 0.5 ÷ ln(1 − nd_hardening_rate_per_level × level)).
+# Constants, since script values have no logarithm (D12);
+# test_nuclear_deterrence.TestPostureFigures holds them to the rate.
+nd_hardening_half_gap_months_1 = 34
+
+nd_hardening_half_gap_months_2 = 17
+
+nd_hardening_half_gap_months_3 = 11
+
+# Where command reliability is heading: its terms, held between 5 and 98.
 nd_reliability_target = {
+	value = nd_reliability_target_unclamped
+	min = 5
+	max = 98
+}
+
+# At one safeguards level more or less, for the stepper's buttons (2026-11-20
+# delivery spec D13).
+nd_reliability_target_at_safeguards_up = {
+	value = nd_reliability_target_unclamped
+	add = nd_safeguards_reliability_per_level
+	min = 5
+	max = 98
+}
+
+nd_reliability_target_at_safeguards_down = {
+	value = nd_reliability_target_unclamped
+	subtract = nd_safeguards_reliability_per_level
+	min = 5
+	max = 98
+}
+
+# What a safeguards level adds to the reliability target. The safeguards
+# hover prints it from nd_safeguards_level_terms, which a test holds to this.
+nd_safeguards_reliability_per_level = 12
+
+nd_reliability_target_unclamped = {
 	value = 55
 	if = {
 		limit = { has_variable = nd_safeguards }
 		add = {
 			value = var:nd_safeguards
-			multiply = 12
+			multiply = nd_safeguards_reliability_per_level
 		}
 	}
 	if = {
@@ -309,8 +394,6 @@ nd_reliability_target = {
 		}
 		subtract = 10
 	}
-	min = 5
-	max = 98
 }
 
 # This month's reliability step: a quarter of the way to the target.
@@ -548,7 +631,45 @@ nd_routine_mishap_tenth_percent = { value = nd_routine_mishap_monthly_percent mu
 # launch on warning is halted by someone in the chain — the Petrov or
 # Arkhipov who refuses. There is no player veto on these branches (§8.1); this
 # number is the whole of the protection, which is why the panel shows it.
+# Its terms, held between 20 and the moment's ceiling.
 nd_hold_chance = {
+	value = nd_hold_chance_unclamped
+	min = 20
+	# No investment takes the risk away (owner, 2026-10-28).
+	max = nd_hold_ceiling
+}
+
+# Under the other fast authority, for the launch authority choices
+# (2026-11-20 delivery spec D11): Launch on Warning's term is the only one an
+# authority changes, and a halt is possible only under these two.
+nd_hold_chance_at_authority_2 = {
+	value = nd_hold_chance_unclamped
+	if = {
+		limit = { nd_authority_launch_on_warning = yes }
+		add = nd_hold_launch_on_warning_cut
+	}
+	min = 20
+	max = nd_hold_ceiling
+}
+
+nd_hold_chance_at_authority_3 = {
+	value = nd_hold_chance_unclamped
+	if = {
+		limit = { nd_authority_launch_on_warning = no }
+		subtract = nd_hold_launch_on_warning_cut
+	}
+	min = 20
+	max = nd_hold_ceiling
+}
+
+# What Launch on Warning takes from the chance of a halt, and what a
+# safeguards level adds to it (nd_authority_terms_3 and
+# nd_safeguards_level_terms print them; tests hold the figures to these).
+nd_hold_launch_on_warning_cut = 10
+
+nd_safeguards_halt_per_level = 5
+
+nd_hold_chance_unclamped = {
 	value = 60
 	if = {
 		limit = { has_variable = nd_reliability }
@@ -565,7 +686,7 @@ nd_hold_chance = {
 		limit = { has_variable = nd_safeguards }
 		add = {
 			value = var:nd_safeguards
-			multiply = 5
+			multiply = nd_safeguards_halt_per_level
 		}
 	}
 	if = {
@@ -574,7 +695,7 @@ nd_hold_chance = {
 	}
 	if = {
 		limit = { nd_authority_launch_on_warning = yes }
-		subtract = 10
+		subtract = nd_hold_launch_on_warning_cut
 	}
 	# The moment the warning arrives in (the Petrov judgement): at peace with
 	# no crisis, a real first strike makes no sense and a few missiles on a
@@ -619,9 +740,6 @@ nd_hold_chance = {
 	# Our own vulnerability: commanders who fear losing the force are quicker
 	# to use it. The shape of the crisis danger's vulnerability part.
 	subtract = nd_own_vulnerability_value
-	min = 20
-	# No investment takes the risk away (owner, 2026-10-28).
-	max = nd_hold_ceiling
 }
 
 # The highest chance of a halt in this moment: 97 at peace with no crisis, 92
@@ -880,6 +998,42 @@ nd_launch_credit_unguarded = {
 	}
 }
 
+# The credit under a fast authority with our safeguards as they stand, and
+# under ours with one safeguards level more (at most 3), for the posture's
+# choices (2026-11-20 delivery spec D10, D13). Central Authorization and
+# Automatic Retaliation get none.
+nd_launch_credit_at_authority_2 = {
+	value = nd_launch_credit_delegation
+	subtract = {
+		value = nd_display_safeguards
+		multiply = nd_launch_credit_safeguards_cut
+	}
+	min = 0
+}
+
+nd_launch_credit_at_authority_3 = {
+	value = nd_launch_credit_launch_on_warning
+	subtract = {
+		value = nd_display_safeguards
+		multiply = nd_launch_credit_safeguards_cut
+	}
+	min = 0
+}
+
+nd_launch_credit_at_safeguards_up = {
+	value = nd_launch_credit_unguarded
+	if = {
+		limit = { nd_authority_delegated_or_warning = yes }
+		subtract = {
+			value = nd_display_safeguards
+			add = 1
+			max = 3
+			multiply = nd_launch_credit_safeguards_cut
+		}
+	}
+	min = 0
+}
+
 # How many warheads on the command it takes to have any chance of
 # decapitating a country under Central Authorization (rework spec §6.3):
 # 1 + warheads ÷ 10, the command's own redundancy (nd_redundancy_command), and
@@ -1119,6 +1273,47 @@ nd_exposed_warheads_r2_vs_saved = {
 	multiply = nd_stockpile
 }
 
+# The same at each other readiness, whatever ours is now, for the readiness
+# choices (2026-11-20 delivery spec D10).
+nd_exposed_warheads_r0_vs_saved = {
+	value = 100
+	subtract = {
+		value = nd_effective_survivability_at_readiness_0
+		subtract = nd_warning_penalty_saved
+		min = 0
+	}
+	divide = 100
+	multiply = nd_accuracy_mult_saved
+	max = 1
+	multiply = nd_stockpile
+}
+
+nd_exposed_warheads_r1_vs_saved = {
+	value = 100
+	subtract = {
+		value = nd_effective_survivability_at_readiness_1
+		subtract = nd_warning_penalty_saved
+		min = 0
+	}
+	divide = 100
+	multiply = nd_accuracy_mult_saved
+	max = 1
+	multiply = nd_stockpile
+}
+
+nd_exposed_warheads_r3_vs_saved = {
+	value = 100
+	subtract = {
+		value = nd_effective_survivability_at_readiness_3
+		subtract = nd_warning_penalty_saved
+		min = 0
+	}
+	divide = 100
+	multiply = nd_accuracy_mult_saved
+	max = 1
+	multiply = nd_stockpile
+}
+
 nd_exposed_warheads_target_r2_vs_saved = {
 	value = 100
 	subtract = {
@@ -1181,6 +1376,94 @@ nd_survivors_r2_vs_saved = {
 	multiply = -1
 	add = nd_stockpile
 	min = 0
+}
+
+# What a full strike by the saved enemy would destroy of ours (2026-11-20
+# delivery spec D10): its reach, held to our warheads within it, less the
+# share our launch authority gets away first. nd_survivors_vs_saved is our
+# stockpile less this. Then the same under each launch authority, at each
+# readiness and with one safeguards level more, for the posture's choices
+# (nd_refresh_main_rival stores them as nd_lost_main_*).
+nd_lost_vs_saved = {
+	value = nd_counterforce_reach_saved
+	max = nd_exposed_warheads_vs_saved
+	multiply = {
+		value = 1
+		subtract = nd_launch_credit
+	}
+}
+
+nd_lost_vs_saved_at_authority_1 = {
+	value = nd_counterforce_reach_saved
+	max = nd_exposed_warheads_vs_saved
+}
+
+nd_lost_vs_saved_at_authority_2 = {
+	value = nd_counterforce_reach_saved
+	max = nd_exposed_warheads_vs_saved
+	multiply = {
+		value = 1
+		subtract = nd_launch_credit_at_authority_2
+	}
+}
+
+nd_lost_vs_saved_at_authority_3 = {
+	value = nd_counterforce_reach_saved
+	max = nd_exposed_warheads_vs_saved
+	multiply = {
+		value = 1
+		subtract = nd_launch_credit_at_authority_3
+	}
+}
+
+nd_lost_vs_saved_at_authority_4 = {
+	value = nd_counterforce_reach_saved
+	max = nd_exposed_warheads_vs_saved
+}
+
+nd_lost_vs_saved_at_readiness_0 = {
+	value = nd_counterforce_reach_saved
+	max = nd_exposed_warheads_r0_vs_saved
+	multiply = {
+		value = 1
+		subtract = nd_launch_credit
+	}
+}
+
+nd_lost_vs_saved_at_readiness_1 = {
+	value = nd_counterforce_reach_saved
+	max = nd_exposed_warheads_r1_vs_saved
+	multiply = {
+		value = 1
+		subtract = nd_launch_credit
+	}
+}
+
+nd_lost_vs_saved_at_readiness_2 = {
+	value = nd_counterforce_reach_saved
+	max = nd_exposed_warheads_r2_vs_saved
+	multiply = {
+		value = 1
+		subtract = nd_launch_credit
+	}
+}
+
+nd_lost_vs_saved_at_readiness_3 = {
+	value = nd_counterforce_reach_saved
+	max = nd_exposed_warheads_r3_vs_saved
+	multiply = {
+		value = 1
+		subtract = nd_launch_credit
+	}
+}
+
+nd_lost_vs_saved_at_safeguards_up = {
+	value = nd_counterforce_reach_saved
+	max = nd_exposed_warheads_vs_saved
+	multiply = {
+		value = 1
+		subtract = nd_launch_credit_at_safeguards_up
+	}
 }
 
 # The same against a crisis's other party, read through the crisis's own saved
@@ -2658,6 +2941,16 @@ nd_display_survivability_floor = {
 	value = nd_survivability_floor
 }
 
+# This month's survivability step, for the hardening hover (D12).
+nd_display_survivability_step = {
+	value = nd_survivability_step
+}
+
+# Our command redundancy, for Central Authorization's hover (D11).
+nd_display_redundancy = {
+	value = nd_redundancy
+}
+
 # The target's chain, for its hover (2026-11-20 delivery spec §5.4): each
 # part's factor as it stands (1 while the part isn't held), and their product.
 nd_display_exposure_factor_bombers = {
@@ -3560,6 +3853,110 @@ nd_upkeep_weekly_at_readiness_3 = {
 	value = nd_upkeep_units_fixed
 	add = nd_upkeep_units_custody
 	add = nd_upkeep_units_readiness_3
+	max = 40
+	multiply = {
+		value = gdp
+		divide = 100000
+	}
+}
+
+# The upkeep of an arsenal the size of the ceiling stepper's next step down or
+# up (nuclear_taboo_values.txt's nd_taboo_ceiling_lowered_value and
+# _raised_value), at the readiness in force: nd_upkeep_weekly with that size
+# in place of the stockpile (2026-11-20 delivery spec §5.3).
+# test_nuclear_deterrence.TestPostureFigures holds each to nd_upkeep_weekly at
+# the same size.
+nd_ceiling_lowered_capped = {
+	value = nd_taboo_ceiling_lowered_value
+	max = 50
+}
+
+nd_ceiling_raised_capped = {
+	value = nd_taboo_ceiling_raised_value
+	max = 50
+}
+
+nd_upkeep_weekly_at_ceiling_lowered = {
+	value = nd_upkeep_units_fixed
+	add = {
+		value = nd_ceiling_lowered_capped
+		multiply = 0.2
+		if = {
+			limit = { nd_readiness_recessed = yes }
+			multiply = 0.5
+		}
+	}
+	if = {
+		limit = {
+			has_variable = nd_readiness
+			var:nd_readiness = 2
+		}
+		add = {
+			value = nd_ceiling_lowered_capped
+			divide = 50
+			multiply = 0.6
+			add = 0.4
+			multiply = 4
+		}
+	}
+	else_if = {
+		limit = {
+			has_variable = nd_readiness
+			var:nd_readiness = 3
+		}
+		add = {
+			value = nd_ceiling_lowered_capped
+			divide = 50
+			multiply = 0.6
+			add = 0.4
+			multiply = 12
+		}
+	}
+	min = 0
+	max = 40
+	multiply = {
+		value = gdp
+		divide = 100000
+	}
+}
+
+nd_upkeep_weekly_at_ceiling_raised = {
+	value = nd_upkeep_units_fixed
+	add = {
+		value = nd_ceiling_raised_capped
+		multiply = 0.2
+		if = {
+			limit = { nd_readiness_recessed = yes }
+			multiply = 0.5
+		}
+	}
+	if = {
+		limit = {
+			has_variable = nd_readiness
+			var:nd_readiness = 2
+		}
+		add = {
+			value = nd_ceiling_raised_capped
+			divide = 50
+			multiply = 0.6
+			add = 0.4
+			multiply = 4
+		}
+	}
+	else_if = {
+		limit = {
+			has_variable = nd_readiness
+			var:nd_readiness = 3
+		}
+		add = {
+			value = nd_ceiling_raised_capped
+			divide = 50
+			multiply = 0.6
+			add = 0.4
+			multiply = 12
+		}
+	}
+	min = 0
 	max = 40
 	multiply = {
 		value = gdp

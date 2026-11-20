@@ -2122,6 +2122,7 @@
  nd_repudiate_pledge_action_effect_desc_first:0 "[COUNTRY.GetAdjectiveNoFlag] repudiates its non-use pledge with [TARGET_COUNTRY.GetName]"
  nd_repudiate_pledge_action_effect_desc_global:0 "Our non-use pledge with them ends"
  nd_repudiate_pledge_action_effect_desc_third:0 "[COUNTRY.GetName] has repudiated its nuclear non-use pledge with [TARGET_COUNTRY.GetName]"
+ nd_safeguards_level_terms_desc:0 "What each level of safeguards adds to the command of our nuclear forces."
  nd_safeguards_slow_launch_desc:0 "What each level of safeguards takes off a fast launch authority's launch credit: a launch that can be halted is a slower launch."
  nd_status_armed:0 "\nDoctrine: #v [ROOT.GetCountry.GetCustom('nd_doctrine_name')]#! · Readiness: #v [ROOT.GetCountry.GetCustom('nd_readiness_name')]#! · Authority: #v [ROOT.GetCountry.GetCustom('nd_authority_name')]#!"
  nd_status_unarmed:0 "\nWe are party to a nuclear crisis, set out below."

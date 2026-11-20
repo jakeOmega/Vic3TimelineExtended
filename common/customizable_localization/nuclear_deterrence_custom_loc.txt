@@ -2057,3 +2057,131 @@ nd_public_guarantee_figure = {
 		localization_key = nd_public_guarantee_figure_none
 	}
 }
+
+# The posture's strike figures (2026-11-20 delivery spec D10): what a full
+# strike by the main rival would destroy of ours under each launch authority,
+# at each readiness, and with one safeguards level more. Each line shows while
+# nd_refresh_main_rival has stored its figure, so only with a main rival; the
+# safeguards line only while a level more would change it (a fast authority,
+# below the highest level).
+nd_authority_strike_1 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_variable = nd_lost_main_auth_1 }
+		localization_key = nd_w_authority_strike_1
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+nd_authority_strike_2 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_variable = nd_lost_main_auth_2 }
+		localization_key = nd_w_authority_strike_2
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+nd_authority_strike_3 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_variable = nd_lost_main_auth_3 }
+		localization_key = nd_w_authority_strike_3
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+nd_authority_strike_4 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_variable = nd_lost_main_auth_4 }
+		localization_key = nd_w_authority_strike_4
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+nd_readiness_strike_0 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_variable = nd_lost_main_ready_0 }
+		localization_key = nd_w_readiness_strike_0
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+nd_readiness_strike_1 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_variable = nd_lost_main_ready_1 }
+		localization_key = nd_w_readiness_strike_1
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+nd_readiness_strike_2 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_variable = nd_lost_main_ready_2 }
+		localization_key = nd_w_readiness_strike_2
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+nd_readiness_strike_3 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_variable = nd_lost_main_ready_3 }
+		localization_key = nd_w_readiness_strike_3
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+nd_safeguards_strike_up = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_lost_main_safeguards_up
+			has_variable = nd_lost_main
+			nd_authority_delegated_or_warning = yes
+			nd_display_safeguards < 3
+		}
+		localization_key = nd_w_safeguards_strike_up
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}

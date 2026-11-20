@@ -1140,6 +1140,20 @@ nd_refresh_main_rival = {
 		set_variable = { name = nd_main_rival_pgm value = nd_k_ratio_tech_part_saved }
 		set_variable = { name = nd_main_rival_k_force value = nd_k_ratio_force_part_saved }
 		set_variable = { name = nd_main_rival_accuracy_mult value = nd_accuracy_mult_saved }
+		# What a full strike by the rival would destroy of ours now, and under
+		# each launch authority, at each readiness and with one safeguards
+		# level more: the posture's choices print them (2026-11-20 delivery
+		# spec D10). The posture ops rerun this refresh, so they follow a click.
+		set_variable = { name = nd_lost_main value = nd_lost_vs_saved }
+		set_variable = { name = nd_lost_main_auth_1 value = nd_lost_vs_saved_at_authority_1 }
+		set_variable = { name = nd_lost_main_auth_2 value = nd_lost_vs_saved_at_authority_2 }
+		set_variable = { name = nd_lost_main_auth_3 value = nd_lost_vs_saved_at_authority_3 }
+		set_variable = { name = nd_lost_main_auth_4 value = nd_lost_vs_saved_at_authority_4 }
+		set_variable = { name = nd_lost_main_ready_0 value = nd_lost_vs_saved_at_readiness_0 }
+		set_variable = { name = nd_lost_main_ready_1 value = nd_lost_vs_saved_at_readiness_1 }
+		set_variable = { name = nd_lost_main_ready_2 value = nd_lost_vs_saved_at_readiness_2 }
+		set_variable = { name = nd_lost_main_ready_3 value = nd_lost_vs_saved_at_readiness_3 }
+		set_variable = { name = nd_lost_main_safeguards_up value = nd_lost_vs_saved_at_safeguards_up }
 	}
 	else = {
 		if = {
@@ -1189,6 +1203,46 @@ nd_refresh_main_rival = {
 		if = {
 			limit = { has_variable = nd_main_rival_accuracy_mult }
 			remove_variable = nd_main_rival_accuracy_mult
+		}
+		if = {
+			limit = { has_variable = nd_lost_main }
+			remove_variable = nd_lost_main
+		}
+		if = {
+			limit = { has_variable = nd_lost_main_auth_1 }
+			remove_variable = nd_lost_main_auth_1
+		}
+		if = {
+			limit = { has_variable = nd_lost_main_auth_2 }
+			remove_variable = nd_lost_main_auth_2
+		}
+		if = {
+			limit = { has_variable = nd_lost_main_auth_3 }
+			remove_variable = nd_lost_main_auth_3
+		}
+		if = {
+			limit = { has_variable = nd_lost_main_auth_4 }
+			remove_variable = nd_lost_main_auth_4
+		}
+		if = {
+			limit = { has_variable = nd_lost_main_ready_0 }
+			remove_variable = nd_lost_main_ready_0
+		}
+		if = {
+			limit = { has_variable = nd_lost_main_ready_1 }
+			remove_variable = nd_lost_main_ready_1
+		}
+		if = {
+			limit = { has_variable = nd_lost_main_ready_2 }
+			remove_variable = nd_lost_main_ready_2
+		}
+		if = {
+			limit = { has_variable = nd_lost_main_ready_3 }
+			remove_variable = nd_lost_main_ready_3
+		}
+		if = {
+			limit = { has_variable = nd_lost_main_safeguards_up }
+			remove_variable = nd_lost_main_safeguards_up
 		}
 	}
 }

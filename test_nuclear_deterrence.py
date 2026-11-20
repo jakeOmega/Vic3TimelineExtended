@@ -3004,8 +3004,9 @@ class TestPostureTerms(unittest.TestCase):
         self.assertEqual(self.field("nd_readiness_terms_3", "country_nd_threat_pressure_add"), 10.0)
 
     def test_authority_figures_match_the_script(self):
-        hold = block(self.values, "nd_hold_chance")
-        self.assertRegex(hold, r"nd_authority_launch_on_warning = yes \}\s*subtract = 10")
+        hold = block(self.values, "nd_hold_chance_unclamped")
+        self.assertRegex(hold, r"nd_authority_launch_on_warning = yes \}\s*subtract = nd_hold_launch_on_warning_cut")
+        self.assertRegex(self.values, r"(?m)^nd_hold_launch_on_warning_cut = 10$")
         self.assertEqual(self.field("nd_authority_terms_3", "country_nd_halt_chance_add"), -0.1)
         custody = block(strip_comments(read(CUSTODY_VALUES)), "nd_custody_loss_rate")
         self.assertRegex(custody, r"nd_authority_delegated_or_warning = yes \}\s*add = 0.03")
@@ -3028,6 +3029,233 @@ class TestPostureTerms(unittest.TestCase):
                     + [f"nd_w_authority_choice_{a}_tt" for a in range(1, 5)]):
             for word in ("groups approve", "groups disapprove", "popular with", "officers do not"):
                 self.assertNotIn(word, loc_value(key), key)
+
+
+
+TABOO_VALUES = ROOT / "common/script_values/nuclear_taboo_values.txt"
+LOST_FIGURES = ([("nd_lost_main", "nd_lost_vs_saved")]
+                + [(f"nd_lost_main_auth_{a}", f"nd_lost_vs_saved_at_authority_{a}") for a in range(1, 5)]
+                + [(f"nd_lost_main_ready_{r}", f"nd_lost_vs_saved_at_readiness_{r}") for r in range(4)]
+                + [("nd_lost_main_safeguards_up", "nd_lost_vs_saved_at_safeguards_up")])
+
+
+def custom_loc_body(name):
+    return " ".join(block(strip_comments(read(CUSTOM_LOC)), name).split())
+
+
+class TestPostureFigures(unittest.TestCase):
+    """Posture, hardening, safeguards and the arsenal ceiling show what each
+    choice saves, costs and changes, in figures (2026-11-20 delivery spec
+    §5.3, plan Task 6, D10–D13)."""
+
+    @classmethod
+    def setUpClass(cls):
+        from scripts.analysis.nuclear_incident_rates import Posture, RiskModel
+        cls.Posture = Posture
+        cls.model = RiskModel()
+        cls.values = strip_comments(read(VALUES))
+        cls.mods = strip_comments(read(MODIFIERS))
+
+    def number(self, name, posture):
+        return self.model.number(name, posture)
+
+    def rival_postures(self):
+        P = self.Posture
+        enemy = P(believed_stockpile=30, icbms=True, pgm=True)
+        for readiness in range(4):
+            for authority in range(1, 5):
+                for safeguards in range(4):
+                    yield P(readiness=readiness, authority=authority, safeguards=safeguards, survivability=55,
+                            stockpile=12, enemy=enemy)
+        # A rival that can't reach them all, and one next door.
+        yield P(readiness=2, authority=3, safeguards=1, survivability=30, stockpile=40, enemy=P(believed_stockpile=4))
+        yield P(readiness=1, authority=2, safeguards=0, survivability=70, stockpile=8, based_near=True, enemy=enemy)
+
+    # ---- D10: the strike figures -----------------------------------------------
+
+    def test_the_refresh_stores_each_strike_figure(self):
+        body = block(strip_comments(read(EFFECTS)), "nd_refresh_main_rival")
+        keep, clear = body.rsplit("\n\telse = {", 1)
+        for name, source in LOST_FIGURES:
+            self.assertIn(f"set_variable = {{ name = {name} value = {source} }}", keep, name)
+            self.assertIn(f"remove_variable = {name}", clear, name)
+
+    def test_each_figure_is_the_strike_as_that_choice_would_set_it(self):
+        """The figure under the choice in force is what a full strike destroys
+        now (the stockpile less nd_survivors_vs_saved), and each other choice's
+        is the same figure at that choice."""
+        from dataclasses import replace
+        for p in self.rival_postures():
+            now = self.number("nd_lost_vs_saved", p)
+            self.assertAlmostEqual(now, p.stockpile - self.number("nd_survivors_vs_saved", p), places=6, msg=p)
+            for a in range(1, 5):
+                self.assertAlmostEqual(self.number(f"nd_lost_vs_saved_at_authority_{a}", p),
+                                       self.number("nd_lost_vs_saved", replace(p, authority=a)), places=6, msg=(a, p))
+            for r in range(4):
+                self.assertAlmostEqual(self.number(f"nd_lost_vs_saved_at_readiness_{r}", p),
+                                       self.number("nd_lost_vs_saved", replace(p, readiness=r)), places=6, msg=(r, p))
+            up = replace(p, safeguards=min(p.safeguards + 1, 3))
+            self.assertAlmostEqual(self.number("nd_lost_vs_saved_at_safeguards_up", p),
+                                   self.number("nd_lost_vs_saved", up), places=6, msg=p)
+            for a in (2, 3):
+                self.assertAlmostEqual(self.number(f"nd_launch_credit_at_authority_{a}", p),
+                                       self.number("nd_launch_credit", replace(p, authority=a)), places=6)
+
+    def test_the_authority_choices_print_their_figures(self):
+        for a in range(1, 5):
+            tip = loc_value(f"nd_w_authority_choice_{a}_tt")
+            self.assertLess(tip.index(f"GetCustom('nd_authority_strike_{a}')"),
+                            tip.index(f"GetStaticModifier('nd_authority_terms_{a}')"), a)
+            self.assertEqual(custom_loc_body(f"nd_authority_strike_{a}"),
+                             f"type = country random_valid = no text = {{ trigger = {{ has_variable = nd_lost_main_auth_{a} }} "
+                             f"localization_key = nd_w_authority_strike_{a} }} text = {{ trigger = {{ always = yes }} "
+                             f"localization_key = nuke_line_empty }}")
+            self.assertIn(f"Var('nd_lost_main_auth_{a}')", loc_value(f"nd_w_authority_strike_{a}"))
+        # The halt chance under the two authorities a halt can stop; Central's
+        # our command redundancy (D11).
+        for a in (2, 3):
+            self.assertIn(f"ScriptValue('nd_hold_chance_at_authority_{a}')", loc_value(f"nd_w_authority_choice_{a}_tt"))
+        self.assertIn("ScriptValue('nd_display_redundancy')", loc_value("nd_w_authority_choice_1_tt"))
+        self.assertEqual(" ".join(block(self.values, "nd_display_redundancy").split()), "value = nd_redundancy")
+
+    def test_the_halt_chance_per_authority(self):
+        from dataclasses import replace
+        P = self.Posture
+        for p in (P(authority=1), P(authority=2, safeguards=0, reliability=20), P(authority=3, stage=3, danger=80),
+                  P(authority=4, safeguards=3, reliability=98), P(authority=3, reliability=0, safeguards=0, stage=3)):
+            for a in (2, 3):
+                self.assertEqual(self.number(f"nd_hold_chance_at_authority_{a}", p),
+                                 self.number("nd_hold_chance", replace(p, authority=a)), (a, p))
+
+    def test_the_readiness_rows_print_their_figure(self):
+        for r in range(4):
+            tip = loc_value(f"nd_w_readiness_choice_{r}_tt")
+            self.assertLess(tip.index(f"GetCustom('nd_readiness_strike_{r}')"), tip.index("GetStaticModifier("), r)
+            self.assertIn(f"has_variable = nd_lost_main_ready_{r}", custom_loc_body(f"nd_readiness_strike_{r}"))
+            self.assertIn(f"Var('nd_lost_main_ready_{r}')", loc_value(f"nd_w_readiness_strike_{r}"))
+
+    def test_every_strike_line_says_it_is_the_worlds_view(self):
+        """Each rests on the rival's estimated arsenal (owner call 14, D8)."""
+        keys = ([f"nd_w_authority_strike_{a}" for a in range(1, 5)] + [f"nd_w_readiness_strike_{r}" for r in range(4)]
+                + ["nd_w_safeguards_strike_up"])
+        for key in keys:
+            text = loc_value(key)
+            self.assertIn("#tooltippable;tooltip:nd_tt_worlds_view up to#!", text, key)
+            self.assertIn("Var('nd_main_rival').GetCountry", text, key)
+            self.assertIn("ScriptValue('nd_display_stockpile')", text, key)
+
+    def test_the_refresh_runs_after_every_posture_op_behind_a_marker(self):
+        effect = block(strip_comments(read(SGUIS)), "nd_posture_sgui")
+        effect = effect[effect.index("effect = {"):]
+        tail = effect[effect.index("scope:op = 79"):]
+        squashed = " ".join(tail.split())
+        self.assertIn("if = { limit = { exists = scope:op scope:op >= 11 scope:op <= 64 } hidden_effect = { "
+                      "set_variable = nd_posture_click if = { limit = { has_variable = nd_posture_click } "
+                      "remove_variable = nd_posture_click nd_refresh_main_rival = yes } } }", squashed)
+        posture_ops = [op for op in gui_ops(read(GUI), "nd_posture_sgui") if op < 70]
+        self.assertTrue(posture_ops)
+        self.assertTrue(all(11 <= op <= 64 for op in posture_ops), posture_ops)
+
+    # ---- D12: hardening ----------------------------------------------------------
+
+    def test_the_half_gap_constants_equal_the_formula(self):
+        import math
+        rate = float(re.search(r"^nd_hardening_rate_per_level = ([\d.]+)", self.values, re.M).group(1))
+        self.assertIn("multiply = nd_hardening_rate_per_level", block(self.values, "nd_survivability_step"))
+        for level, months in ((1, 34), (2, 17), (3, 11)):
+            self.assertEqual(round(math.log(0.5) / math.log(1 - rate * level)), months)
+            self.assertRegex(self.values, rf"(?m)^nd_hardening_half_gap_months_{level} = {months}$")
+
+    def test_the_hardening_step_at_the_next_level(self):
+        from dataclasses import replace
+        P = self.Posture
+        for hardening in range(4):
+            for survivability in (10, 40, 70, 90):
+                p = P(hardening=hardening, survivability=survivability)
+                if hardening < 3:
+                    self.assertAlmostEqual(self.number("nd_survivability_step_at_hardening_up", p),
+                                           self.number("nd_survivability_step", replace(p, hardening=hardening + 1)), places=6)
+                if hardening > 0:
+                    self.assertAlmostEqual(self.number("nd_survivability_step_at_hardening_down", p),
+                                           self.number("nd_survivability_step", replace(p, hardening=hardening - 1)), places=6)
+
+    def test_the_hardening_hovers_print_figures(self):
+        tip = loc_value("nd_w_hardening_tt")
+        self.assertIn("ScriptValue('nd_display_survivability_step')", tip)
+        for level in (1, 2, 3):
+            self.assertIn(f"ScriptValue('nd_hardening_half_gap_months_{level}')", tip)
+        self.assertIn("ScriptValue('nd_survivability_step_at_hardening_up')", loc_value("nd_tt_nd_hardening_add"))
+        self.assertIn("ScriptValue('nd_survivability_step_at_hardening_down')", loc_value("nd_tt_nd_hardening_subtract"))
+
+    # ---- D13: safeguards -----------------------------------------------------------
+
+    def test_the_safeguards_terms_match_the_script(self):
+        terms = block(self.mods, "nd_safeguards_level_terms")
+        reliability = re.search(r"^nd_safeguards_reliability_per_level = (\d+)", self.values, re.M).group(1)
+        halt = re.search(r"^nd_safeguards_halt_per_level = (\d+)", self.values, re.M).group(1)
+        self.assertIn(f"country_nd_reliability_target_add = {reliability}", terms)
+        self.assertIn(f"country_nd_halt_chance_add = {int(halt) / 100:g}", terms)
+        self.assertIn("multiply = nd_safeguards_reliability_per_level", block(self.values, "nd_reliability_target_unclamped"))
+        self.assertIn("multiply = nd_safeguards_halt_per_level", block(self.values, "nd_hold_chance_unclamped"))
+        tip = loc_value("nd_w_safeguards_tt")
+        self.assertIn("GetStaticModifier('nd_safeguards_level_terms').GetDesc", tip)
+        self.assertIn("GetStaticModifier('nd_safeguards_slow_launch').GetDesc", tip)
+        self.assertIn("GetCustom('nd_safeguards_strike_up')", tip)
+        for needle in ("has_variable = nd_lost_main_safeguards_up", "nd_authority_delegated_or_warning = yes",
+                       "nd_display_safeguards < 3"):
+            self.assertIn(needle, custom_loc_body("nd_safeguards_strike_up"))
+        line = loc_value("nd_w_safeguards_strike_up")
+        self.assertIn("Var('nd_lost_main_safeguards_up')", line)
+        self.assertIn("Var('nd_lost_main')", line)
+
+    def test_the_reliability_target_one_level_either_way(self):
+        from dataclasses import replace
+        P = self.Posture
+        for p in (P(safeguards=0), P(safeguards=2, strain=100, punished_skeptic=True, concealed_incident=True), P(safeguards=3)):
+            if p.safeguards < 3:
+                self.assertEqual(self.number("nd_reliability_target_at_safeguards_up", p),
+                                 self.number("nd_reliability_target", replace(p, safeguards=p.safeguards + 1)))
+            if p.safeguards > 0:
+                self.assertEqual(self.number("nd_reliability_target_at_safeguards_down", p),
+                                 self.number("nd_reliability_target", replace(p, safeguards=p.safeguards - 1)))
+        self.assertIn("ScriptValue('nd_reliability_target_at_safeguards_up')", loc_value("nd_tt_nd_safeguards_add"))
+        self.assertIn("ScriptValue('nd_reliability_target_at_safeguards_down')", loc_value("nd_tt_nd_safeguards_subtract"))
+
+    # ---- the arsenal ceiling ----------------------------------------------------
+
+    def test_the_ceiling_next_size_figures(self):
+        """At a size equal to the stockpile, the next-size burden and upkeep are
+        the burden and upkeep in force."""
+        from scripts.analysis.nuclear_incident_rates import RiskModel, parse_script
+        P = self.Posture
+        model = RiskModel()
+        model.values.update({k: v for k, _, v in parse_script(TABOO_VALUES)})
+        model.values["nd_taboo_value"] = "70"     # a global variable the model can't read
+        model.values["gdp"] = "2000000"
+        for stockpile in (1, 7, 30, 50, 80):
+            for readiness in range(4):
+                for direction in ("lowered", "raised"):
+                    model.values[f"nd_taboo_ceiling_{direction}_value"] = str(stockpile)
+                    p = P(stockpile=stockpile, readiness=readiness, safeguards=2, hardening=1, authority=4)
+                    self.assertAlmostEqual(model.number(f"nd_upkeep_weekly_at_ceiling_{direction}", p),
+                                           model.number("nd_upkeep_weekly", p), places=6, msg=(stockpile, readiness))
+                    self.assertEqual(model.number(f"nd_disp_taboo_burden_pct_at_ceiling_{direction}", p),
+                                     model.number("nd_disp_taboo_burden_pct", p), (stockpile, readiness))
+        for direction, key in (("lowered", "nd_taboo_tt_ceiling_lower"), ("raised", "nd_taboo_tt_ceiling_raise")):
+            text = loc_value(key)
+            for name in (f"nd_disp_taboo_burden_pct_at_ceiling_{direction}", "nd_disp_taboo_burden_pct",
+                         f"nd_upkeep_weekly_at_ceiling_{direction}", "nd_display_upkeep_weekly"):
+                self.assertIn(f"ScriptValue('{name}')", text, (key, name))
+
+    # ---- in figures, not words ----------------------------------------------------
+
+    def test_each_hover_says_it_in_figures(self):
+        for key in ("nd_w_hardening_tt", "nd_w_safeguards_tt", "nd_tt_nd_hardening_add", "nd_tt_nd_hardening_subtract",
+                    "nd_tt_nd_safeguards_add", "nd_tt_nd_safeguards_subtract"):
+            text = loc_value(key)
+            for vague in ("climb faster", "climbs faster", "over the coming months", "grows more slowly",
+                          "improves", "declines"):
+                self.assertNotIn(vague, text, (key, vague))
 
 
 class TestLaunchGate(unittest.TestCase):

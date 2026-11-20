@@ -47,6 +47,7 @@ class Posture:
     authority: int = 1
     doctrine: int = 2
     safeguards: int = 1
+    hardening: int = 1             # var:nd_hardening (the survivability step)
     strain: float = 0
     reliability: float = 60
     danger: int = 0

@@ -265,6 +265,8 @@
  country_nd_k_ratio_add_desc:0 "How many more of an enemy's exposed warheads each of our warheads that lands on its forces destroys."
  country_nd_launch_credit_add:0 "Launch Credit"
  country_nd_launch_credit_add_desc:0 "The share of the warheads a first strike would destroy that get away before it lands. A crisis counts them among the warheads that would survive to answer."
+ country_nd_reliability_target_add:0 "Command Reliability Target"
+ country_nd_reliability_target_add_desc:0 "The level command reliability moves toward each month."
  country_nd_silo_penetration_add:0 "Silo Penetration"
  country_nd_silo_penetration_add_desc:0 "Against a country with missiles in silos, how much more of its force a first strike from us could reach: added to the share its silos leave exposed."
  country_nd_threat_pressure_add:0 "Pressure Our Threats Exert"

@@ -158,7 +158,7 @@
 
 **Files:** `common/scripted_effects/nuclear_deterrence_effects.txt` (`nd_refresh_main_rival`: the `nd_lost_main_*` figures), `common/scripted_guis/nuclear_deterrence_sguis.txt` (`nd_posture_sgui`'s effect: the refresh after each op, behind a click-only marker), `common/script_values/nuclear_deterrence_values.txt` (the readiness 0, 1 and 3 exposure values against the saved enemy, the credit and halt chance per authority, the hardening step at the next level, the half-gap constants, the ceiling's next-size upkeep, a script value of `var:nd_warhead_ceiling` ± 1 mirroring `nd_upkeep_weekly`), `common/script_values/nuclear_taboo_values.txt` (the next-size burden, mirroring `nd_taboo_burden_value`'s arsenal factor, `:608`), `common/static_modifiers/nuclear_deterrence_modifiers.txt` (`nd_safeguards_level_terms`), `common/modifier_type_definitions/nuclear_deterrence_display_types.txt` (`country_nd_reliability_target_add`), the widget (the authority choices, readiness rows, hardening and safeguards steppers, the ceiling stepper), loc, `test_nuclear_deterrence.py`, `test_nuclear_layout.py`.
 
-- [ ] Write `TestPostureFigures`:
+- [x] Write `TestPostureFigures`:
   - each authority option's hover prints its `nd_lost_main_auth_N` and halt chance, Central's adds `nd_redundancy`, and the readiness rows print `nd_lost_main_ready_N`;
   - the refresh runs after every posture op, behind the marker;
   - the half-gap constants equal the formula;
@@ -167,8 +167,15 @@
   - each hover says what it says in figures, not words (no "climbs faster", no "improves over the coming months").
 
   Run: FAIL.
-- [ ] Implement, then the GUI lint, `tooltip_walk_variable_audit --strict`, the nuclear tests and `preflight.py --changed`. PASS.
-- [ ] Commit `Nuclear posture: what each choice saves, costs and changes, in figures (spec §5.3)`.
+- [x] Implement, then the GUI lint, `tooltip_walk_variable_audit --strict`, the nuclear tests and `preflight.py --changed`. PASS.
+- [x] Commit `Nuclear posture: what each choice saves, costs and changes, in figures (spec §5.3)`.
+
+**As built (2026-11-20).** Five changes from the plan:
+- **Terms apart from their clamps.** `nd_hold_chance` and `nd_reliability_target` now clamp `nd_hold_chance_unclamped` and `nd_reliability_target_unclamped`, so the figures per authority and per safeguards level reuse the terms and stay exact at the clamps. Each per-level figure is a named value that the display modifiers and the hovers are tested against: `nd_safeguards_reliability_per_level` (12), `nd_safeguards_halt_per_level` (5), `nd_hold_launch_on_warning_cut` (10), `nd_hardening_rate_per_level` (0.02) and `nd_survivability_erosion_rate` (0.01).
+- **What the refresh stores.** It also stores `nd_lost_main`, the strike now, which the safeguards line sets beside one level more. Each strike figure is `nd_lost_vs_saved_at_*`, and a test holds each to `nd_lost_vs_saved` with that choice made.
+- **Where the figures sit.** Each readiness level's figure is in its own hover, not a new column, so the widget is unchanged. The hardening buttons give this month's step at the next level both up and down.
+- **The ceiling's next size.** The figures are at the stepper's own next step (1, 5 or 25 warheads, `nd_taboo_ceiling_lowered_value` and `_raised_value`), not at the ceiling ± 1, and sit in the − and + buttons' hovers.
+- **One sentence waits for phase 2.** That a ceiling holds warheads only, not a project, waits for phase 2, which brings the projects.
 
 ### Task 7: Strike previews (D14)
 

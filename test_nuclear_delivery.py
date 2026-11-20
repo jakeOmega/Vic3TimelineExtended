@@ -193,7 +193,10 @@ class TestPrecisionWeapons(unittest.TestCase):
     # Every exposure value that compares us with an enemy, and its scope.
     VS_EXPOSURE = {
         "nd_exposed_warheads_vs_saved": "saved",
+        "nd_exposed_warheads_r0_vs_saved": "saved",
+        "nd_exposed_warheads_r1_vs_saved": "saved",
         "nd_exposed_warheads_r2_vs_saved": "saved",
+        "nd_exposed_warheads_r3_vs_saved": "saved",
         "nd_exposed_warheads_target_r2_vs_saved": "saved",
         "nd_exposed_warheads_vs_issuer": "issuer",
         "nd_exposed_warheads_vs_target": "target",

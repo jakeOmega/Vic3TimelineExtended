@@ -355,6 +355,27 @@ nd_posture_sgui = {
 			limit = { exists = scope:op  scope:op = 79 }
 			nd_plan_order = yes
 		}
+		# After every posture op (doctrine, readiness, authority, safeguards,
+		# hardening, the ceiling), the Survivors row and the posture's strike
+		# figures follow the click the same day (2026-11-20 delivery spec D10),
+		# not at the next monthly refresh. Behind a click-only marker: a
+		# tooltip walk writes nothing, so the refresh would read what the op
+		# never set, every frame the button's hover shows.
+		if = {
+			limit = {
+				exists = scope:op
+				scope:op >= 11
+				scope:op <= 64
+			}
+			hidden_effect = {
+				set_variable = nd_posture_click
+				if = {
+					limit = { has_variable = nd_posture_click }
+					remove_variable = nd_posture_click
+					nd_refresh_main_rival = yes
+				}
+			}
+		}
 	}
 }
 
