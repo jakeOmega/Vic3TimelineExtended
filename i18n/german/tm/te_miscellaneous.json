@@ -19040,8 +19040,8 @@
   "de": "Keine"
  },
  "nd_raze_city_tt": {
-  "en": "Destroys a share of the levels of the state's industry, power plants, transport and offices: the share of its urban people living in its largest city, from 10% to 80%, or half outside the Full Demographics rule. The state's owner takes every level still standing in those buildings into state ownership.",
-  "de": "Zerstört einen Teil der Stufen von Industrie, Kraftwerken, Verkehr und Büros des Staates: den Anteil seiner städtischen Bevölkerung, der in der größten Stadt lebt, von 10% bis 80%, oder die Hälfte außerhalb der Demografieregel „Voll“. Der Besitzer des Staates übernimmt jede in diesen Gebäuden noch stehende Stufe in Staatsbesitz."
+  "en": "Destroys a share of the levels of the state's industry, power plants, transport and offices: half the share of its urban people living in its largest city, from 5% to 40%, or a quarter outside the Full Demographics rule. The state's owner takes every level still standing in those buildings into state ownership.",
+  "de": "Zerstört einen Teil der Stufen von Industrie, Kraftwerken, Verkehr und Büros des Staates: die Hälfte des Anteils seiner städtischen Bevölkerung, der in der größten Stadt lebt, von 5% bis 40%, oder ein Viertel außerhalb der Demografieregel „Voll“. Der Besitzer des Staates übernimmt jede in diesen Gebäuden noch stehende Stufe in Staatsbesitz."
  },
  "nd_raze_line_attacker_lost": {
   "en": "\\n\\n#v [ROOT.GetState.MakeScope.Var('nd_raze_lost').GetValue|0]#! levels of buildings in [ROOT.GetState.GetName] have been destroyed.",

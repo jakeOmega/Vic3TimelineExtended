@@ -608,10 +608,10 @@ that fails costs 5 infamy.
 A strategic strike that lands also destroys part of the state's urban buildings:
 its industry, power plants, arts academies, tourism, ports, railways, highways,
 airports, networks, government administration and universities. Each loses the
-same share of its levels: the state's metropolitan share
+same share of its levels: half the state's metropolitan share
 ([the urban pattern](08-states.md#the-urban-pattern-and-a-planned-capital)),
-from 10% in a state of market towns to 80% in a metropolis, or half outside the
-Full Demographics setting. The strike action's confirmation gives the share. The struck
+from 5% in a state of market towns to 40% in a metropolis, or a quarter outside
+the Full Demographics setting. The strike action's confirmation gives the share. The struck
 country's government takes every level still standing in those buildings into
 state ownership, whoever held the shares before; foreign investors who held
 some are told, and a country under Laissez-Faire sells the buildings off again

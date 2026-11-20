@@ -969,6 +969,197 @@ Switching it off once (S1) did not. Use `--game-arg disable_renderframeifneeded`
 for an A/B, not the console twice. The crash left `CrashReporter.exe` up,
 which kept the restore from finishing (#1905).
 
+## The USA of 1992, 2026-11-20: 1.15.2
+
+The owner's game of "The USA of 1977" above, played on through 15 years on
+1.15.2 with `main` deployed, the Very High supply ship setting gone (no
+country holds it in the save; a heuristic match of the token to its country
+reads the United States at Very Low) and the resettlement fix (#1906) in.
+Their own `dedicated_server.log` files, no harness attached, played at
+speed 4: 6.5 s a day over 1977–1979, 3–4 s from late 1981, and 3.94 s over
+1985.7–1992.2. Of that last stretch, by the frame each
+gap starts at:
+
+| Frame | Mean | Share of the day |
+|---|---|---|
+| Hour 0 of the weekly day | 9.3 s | 32% |
+| Other hours 0 | 1.17 s | 25% |
+| Sub-ticks (hours 6, 12, 18) | 0.52 s | 40% |
+| Hour 0 of the 1st | 4.1 s | 3% |
+
+The weekly day's hour 12, inside the sub-ticks, read 1–2.75 s a month over
+1977–1982 and 3–4 s in most months from 1983 (1–2.75 s again over
+1986.4–1987.11 and 1989.7–9, 5–6 s in a few); the other hours 12 read
+0.35–1.15 s until mid-1981 and about 0.2 s after. The save
+(`autosave_exit.v3`, 15 Feb 1992) holds 167 countries, 809 states and
+196,550 pops (189, 826 and 168,657 in May 1977); the United States owns 178
+states holding 565 million people, and its market 215 states and 80,732 pops
+(204 and 76,617 in 1977).
+
+The harness on the save, `--playset current`, two 30-day windows from
+15 February (sessions `20261120T095304Z`, rendering on, and
+`20261120T100803Z`, rendering off), read the owner's figure: 3.23 and 3.73 s a
+day with sub-tick rendering on. Data, scripts and variants:
+`/mnt/d/vic3te-data/perf-2026-11-20/` (`owner_logs/`, `runs/<name>/`,
+`variants/<name>/`; `scripts/outside.py` splits each frame into its tick tasks
+and the rest, `scripts/tasks_by_kind.py` the tasks by frame kind,
+`scripts/wk12.py` the owner's weekly hour 12 by month).
+
+### Where the day goes
+
+| Per day | Rendering on | Off (`-disable_renderframeifneeded`) |
+|---|---|---|
+| Wall | 3.48 s | 2.27 s |
+| Tick tasks | 1.43 s | 1.50 s |
+| Outside the tasks | 2.05 s | 0.78 s |
+| An ordinary hour 0: wall, of it tasks | 1.10 s, 0.29 | 0.54 s, 0.32 |
+| A sub-tick other than the weekly hour 12 | 0.31 s, 0.04 | 0.17 s, 0.06 |
+| The weekly hour 0 | 8.0 s, 4.0 | 5.6 s, 4.4 |
+| The weekly hour 12 | 3.5 s, 3.4 | 3.7 s, 3.4 |
+
+The first three rows are over both windows of each session. The per-frame
+rows are `outside.py`'s means, which leave out every gap that spans a
+harness pause; in S1 that dropped 4 of its 7 weekly hours 0, one of its two
+1sts and one of its 9 weekly hours 12, so read those rows as means per frame,
+not as a day's sum.
+
+- **Sub-tick rendering is the largest single cost**: 3.2–3.7 s a day on,
+  2.1–2.4 off, and the time it adds is all outside the tick tasks. It is the
+  owner's launch option, as it was in 1931 and 1977; the mod can't set it.
+- **The weekly economic migration pass**, `ProcessEconomicMigration` at hour
+  12 of the weekly day, is the largest tick task: 3.2 s a week, about a
+  fifth of a rendering-off day. Below.
+- **The weekly hour 0** holds 4.1–4.7 s of tasks. Over every weekly hour 0
+  of both windows (rendering off, 8 frames; the 1977 save, 6) the
+  investment pass reads 1.42 s against 0.96 (the played country's pool, as
+  in "Where the day goes"; 0.25–3.1 s from week to week) and
+  `UpdateStateTrades` 1.20 s against 0.28, while `UpdateEmployment` (0.77
+  against 0.74) and `UpdateWorldMarket` (0.27 against 0.29, alternating
+  about 130 and 400 ms) held still. The two that grew are engine work that
+  grows with the economy; nothing in script reaches them.
+- **An ordinary hour 0** (rendering off): 0.32 s of tasks
+  (`RecalculateModifierNodes` 0.145 s, `UpdatePopGrowth` 0.053) and 0.23 s
+  outside them.
+- **The mod's own script** is about 0.1 s a day. The call graph over 16 April
+  to 1 May (15 days, 60 ticks, profiled) put the merged yearly state pulse
+  (labelled `te_unemployment_on_actions.txt:8`) at 1,420 ms, the merged
+  monthly country pulse (`wonder_events_on_actions.txt:1`) at 1,132 ms, the
+  journal-entry pulses at 675 ms, the global monthly pulse
+  (`un_on_actions.txt:40`) at 613 ms and the monthly state pulse
+  (`un_mission_on_actions.txt:25`) at 249 ms; with the other mod roots in the
+  top 27 (`zz_te_party_join_weights.txt:3915` 350 ms,
+  `new_ideological_movements.txt:400` 281, `te_construction_market_site.txt:175`
+  233) that is 4,953 ms, 330 ms a day profiled, 0.09–0.13 s unprofiled at
+  the profiler's 2.6–3.5× (3–4% of the day). "Where the day goes" put all of
+  it at most a tenth in 1931; pulse trimming can't move this save either.
+- **The heaviest single script entry is vanilla's**: the alert
+  `low_expected_sol_in_state` (`00_alert_types.txt:1034`), 446 µs a call over
+  each of the player's states: 93 ms a day in the call graph and in the flat
+  dump alike, about 85 ms unprofiled with rendering on and 46 with it off
+  (12,460 calls in 60 days against 7,120 in 62.5: it follows drawn frames,
+  not ticks). The player can switch that alert off.
+
+### The weekly migration pass
+
+`ProcessEconomicMigration` runs on one frame a week, hour 12 of the weekly
+day, and costs almost nothing on the others. On the 1992 save it takes
+3.2 s; on the 1977 save loaded with the same build
+(`20261120T104423Z`) 250–300 ms. The first week after any load costs more
+(2.3 s in 1977, 4.0 s in 1992), so every figure here is from second windows.
+
+| Run (rendering off, second window: about a month, 21 days for the 1977 save) | Weekly frame | Snapshot |
+|---|---|---|
+| 1992 as saved | 3,179 ms (3,247 rendering on) | `20261120T100803Z` |
+| `MIGRATION_MIN_STATE_POPS` 20,000 → 1e9 (no market emigration; a bound) | 64 ms | `20261120T101540Z` |
+| `MIGRATION_MAX_PER_STATE_INFRASTRUCTURE` 5 → 0 and `…_UNEMPLOYMENT_ORIGIN_FRACTION` 0.05 → 0 (caps at the 500 base) | 1,763 ms | `20261120T102217Z` |
+| `MARKET_MIGRATION_STATE_ATTRACTION_FRACTION` 0.75 → 0.9 (fewer states receive) | 989 ms | `20261120T113432Z` |
+| California and Santa Cruz given `state_migration_pull_mult = -0.95` (a setup) | 3,993 ms | `20261120T111303Z` |
+| The 1977 save, today's build | 271 ms | `20261120T104423Z` |
+
+Wall time follows the pass but not cleanly, since the windows hold
+different numbers of weekly days (the hub run's five, the others four):
+2.41 s a day as saved, 2.13 with no market emigration, 2.27 with the caps at
+base, 2.32 at 0.9.
+
+So the cost is market migration (not mass migration: 7 mass-migration
+targets in the save, 8 in 1977). It falls with fewer people moving (the caps
+at base, −45%) and with fewer states receiving them (a receiver needing 90%
+of the best state's pull instead of 75%, −69%). What changed between the
+saves is not the market's size (5% more states and pops) nor unemployment,
+which fell (the census's slack count across the United States' states: 26.9
+million in 1977, 0.7 million in 1992). The save's per-state migration
+statistics (`#21648`, inferred as `pop_migration_statistics`: two figures
+and two lists of states) show the US market's week of flows 1.66 times
+1977's and its pairs of states 1.59 times (world-wide 1.84 and 1.18), and
+one state, California, taking migrants from 157 states (no state took them
+from more than 21 in 1977) and sending its own to Santa Cruz, which takes
+them from 42. Those two are not the cost: given −95% pull the pass got
+dearer, 3.2 → 4.0 s (the pulls after the setup were not read, nor where the
+flows went). Their pulls are not far ahead either (California 95, New York
+97, Texas 92, Illinois 90, Santa Cruz 77, read in game before the setup).
+
+A reading that fits every run, not tested directly: the pass's work goes as
+the pops of the emitting states times the states that receive. With jobs
+everywhere in 1992 the pulls bunch near the top, so many states sit within
+three quarters of the best and receive; the 0.9 threshold cuts that number;
+the hubs, at −95%, would turn from receivers to emitters. Nothing the
+mod adds explains it: the same build runs the 1977 save's pass at a twelfth
+of the cost, and the mod's migration terms on the hubs are small
+(California's climate amenity +7% and crowding −17%; Santa Cruz's +100% is
+vanilla's `amazon_migration`, from the Exploiting the Amazon entry the
+United States runs).
+
+What a mod can do is change the defines, which changes who moves where: the
+0.9 threshold saves about 0.31 s a day of a 2.4 s day (rendering off) and
+sends migrants only to the very best states; the caps at their base save
+0.20 s and slow every state's migration. Both are gameplay changes, the
+owner's to weigh against the migration they want; nothing is proposed here.
+
+### The Timeline Extended window, again (#1760)
+
+Paused, vsync off (console `vsync`), `measure_frame_time` over 8 s, the
+window opened by a probe widget (`variants/openwin`, `openwide`):
+
+| Window | Docked | Full-screen layout |
+|---|---|---|
+| Shut | 6.0–6.6 ms | 5.8–6.5 ms |
+| Open on Nation, as on `main` | 20.5–20.7 ms | 19.7–19.9 ms |
+| Rows' text on `GetFormattedValueFor` (`nat_fmt`; full-screen: the fix branch's text and tooltips, `fix_wide`) | 13.9 ms | 11.9–12.1 ms |
+| `nat_fmt`, and all 136 generated counts a constant 1 (every row shown) | 14.9–15.1 ms | |
+| The fix's rows, the overview panel taken out (`nat_noov`) | 13.8–14.1 ms | |
+| The fix's rows, the five sections taken out, the overview kept (`nat_nosec`) | 8.05–8.45 ms | |
+| The fix's rows, every timed-modifier list emptied (`nat_nolists`) | 10.9–11.0 ms | |
+
+So the rows' breakdown accessor is about half the tab's cost (47% docked,
+57% full-screen). The fix (the figure in the text, the breakdown in the
+row's tooltip) is #1760's pull request. Of the 7.7 ms left docked:
+
+- **The overview** costs nothing measurable, and the window with only the
+  overview in it is about 2 ms over shut.
+- **The five sections** are the other 5.5–6 ms.
+- **About 3 ms of that is their six timed-modifier lists** (`te_nation_list`,
+  the modifiers behind Judicial Independence, the Algorithmic Mandate,
+  Wealth Concentration, construction cost, private construction and global
+  tech). Each walks every timed modifier the country holds, 61 for the
+  United States in 1992, and runs its name filter (one to four `Localize`
+  and string compares, gotchas #40 and #42) on each, every frame: about 370
+  items. A count gate, the pattern Where These Come From's lists use,
+  would save little here: five of the six rows hold one of their modifiers
+  on this save. What would save it changes what the rows show, so it is the
+  owner's call (open item 16).
+- **The rest, about 2.7 ms,** is the sections' own rows, bars and generated
+  rows. The constant counts did not bring the frame down, but they also
+  showed every row, so the 107 counts the rows', groups' and sections'
+  `visible` checks read (84 of them the rows') are not ruled out.
+
+The last three rows used the fix branch's text and tooltip keys, docked;
+the console covered the docked window in their screenshots, so what drew is
+inferred from the frame times (open above shut in each) and from their
+error logs, the same 1,156 lines each. Each row is one session
+(`20261120T102929Z`, `20261120T103400Z`, `20261120T103950Z`,
+`20261120T110308Z`, `20261120T110737Z`, `20261120T114406Z`,
+`20261120T114842Z`, `20261120T115423Z`).
+
 ## Measurements, 2026-10-03: 2072
 
 The same save, 7 Nov 2072 → Jan 2073, measured with the flat dump.
@@ -1387,7 +1578,27 @@ Items 3 and 6 were addressed by #1713. The knockout runs of 2026-11-13
     the rows behind collapsed sections, as the two list panels are, or have
     the generator write the counts into variables once a month. Other
     tabs, the full-screen layout and National Info are unmeasured.
+    **Half done, 2026-11-20** ("The USA of 1992"): the breakdowns are about
+    half the cost (paused, vsync off: open 19.8–20.6 ms, rows on
+    `GetFormattedValueFor` 12.0–13.9, shut about 6). The fix moves each row's
+    breakdown to its tooltip (#1760's pull request). Of the other 6–8 ms,
+    about 3 are the sections' six timed-modifier lists, each walking the
+    country's 61 timed modifiers with its name filter every frame; a count
+    gate saves little, since five of the six rows hold a modifier. Ways
+    out, for the owner: draw each row's one to four modifiers as fixed
+    widgets shown on `has_modifier` (loses the timed modifier's own tooltip
+    and expiry date), or fold the lists behind a toggle like All Modifiers'.
+    The last 2.7 ms are the sections' rows and bars.
 17. **The journal-entry update interval** (2026-11-13). Under 1% of the day
     by its task; four runs at three times the default read 6% faster and a
     run at a quarter of it read no slower, which is unresolved ("Journal
     entries"). Not worth building on without five or more runs each way.
+18. **The weekly economic migration pass** (2026-11-20). 3.2 s a week on
+    the USA of 1992 against 0.27 on its 1977 save with the same build: a
+    fifth of a rendering-off day. It is market migration, cheaper with fewer
+    movers and with fewer receiving states; not the market's size,
+    unemployment, mass migration or the two hub states ("The weekly
+    migration pass"). The only levers are vanilla's migration defines, a
+    gameplay change: `MARKET_MIGRATION_STATE_ATTRACTION_FRACTION` at 0.9
+    cuts it by 69%, the weekly caps at their 500 base by 45%. The owner's
+    call.

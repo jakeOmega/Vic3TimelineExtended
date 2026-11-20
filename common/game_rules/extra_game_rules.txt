@@ -574,15 +574,19 @@ global_commons_rule = {
 # Culture Merges (docs/superpowers/specs/2026-11-07-culture-merges-design.md):
 # related cultures (North and South German) merge into one national culture
 # over a few decades, and once it dominates, every remaining pop of the parts
-# switches. Disabled, no merge starts or runs. Off by default (owner,
-# 2026-11-08): a game begun before the system's 21 new cultures existed has no
-# object for them, and a merge into one added an empty primary culture
-# (#1518). Once most games running have been started with the cultures, the
-# default can turn on. Checked as has_game_rule = culture_merges_enabled
-# (te_cm_system_enabled), so a save that stored no value for the rule, one
-# begun before it existed, stays off whatever the default.
+# switches. Disabled, no merge starts or runs. On by default from 1.3.5
+# (owner, 2026-11-20); off by default from 2026-11-08 to 1.3.4, because a game
+# begun before the system's 21 new cultures existed has no object for them, and
+# a merge into one added an empty primary culture (#1518). Checked positively,
+# as has_game_rule = culture_merges_enabled (te_cm_system_enabled). What it
+# reads in a save begun before the rule existed, which lists no setting for it,
+# is unread (docs/systems/mod_systems/game_rules.md § Old saves); if the default,
+# the candidate check's exists = cu:<r> guard still keeps every merge into one
+# of the new cultures from starting there. A game begun under 1.3.1 to 1.3.4
+# stored the setting it was begun with (a save lists every rule's setting,
+# defaults included), off unless the player turned it on.
 culture_merges_rule = {
-	default = culture_merges_disabled
+	default = culture_merges_enabled
 
 	culture_merges_enabled = {
 		flag = culture_merges_enabled
