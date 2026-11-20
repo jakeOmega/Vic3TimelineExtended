@@ -2664,7 +2664,7 @@ These `script_only = yes` modifiers can be applied from laws, technologies, PMs,
 ```
 
 ### When to Use
-- **Always prefer `GetValueWithBreakdownFor`** over script value display (`ScriptValue('my_display_val')`) when showing a modifier's current value. The breakdown is free — no extra script value needed.
+- **Always prefer `GetValueWithBreakdownFor`** over script value display (`ScriptValue('my_display_val')`) when showing a modifier's current value in a **tooltip**. It needs no extra script value. In text drawn on screen it is not free: see the next section.
 - Works for **any registered modifier**, including custom `modifier_type_definitions`.
 - Especially valuable for modifiers that have multiple contributing sources (techs, PMs, laws, etc.).
 
@@ -2731,6 +2731,19 @@ sorted variable lists built in script. Worked example: the Top Trade Partners ro
 datamodel over `te_tp_top_markets`), their goods tooltip and the Import/Export Partners charts in `gui/market_panel.gui` /
 `gui/te_trade_partner_tooltips.gui` + `common/scripted_effects/trade_partner_effects.txt`
 (drawn from the `alcah/victoria3-tradepartners` mod).
+
+## `GetValueWithBreakdownFor` in On-Screen Text Costs Every Frame: Show `GetFormattedValueFor`, Put `GetTooltipFor` in the Tooltip
+
+A widget's `text` is rebuilt every frame it is shown, paused or running; its `tooltip` only while hovered. `GetValueWithBreakdownFor` assembles the list of every source of the modifier type each time it renders, so in on-screen text it pays for that list every frame. The Timeline Extended window's Nation tab drew about 80 rows that way. On the USA of 1992 (paused, vsync off) the frame took 20.5 ms with the tab open and 6.0–6.5 with it shut; with the rows' text on `GetFormattedValueFor` it took 13.9 ms, so the breakdowns were 6.6 ms of the tab's 14.3. In the window's full-screen layout the frame went from 19.8 to 12.0 ms (#1760; `docs/audits/late_game_performance.md`, "The USA of 1992"). With sub-tick rendering on, a frame's cost is paid again on every frame the tick yields to.
+
+Split what the accessor does between the two places, as vanilla does:
+
+```
+row:     "$country_authority_add$: #v [Country.GetModifier.GetFormattedValueFor('country_authority_add')]#!"
+row_tt:  "$country_authority_add_desc$\n$TOOLTIP_DELIMITER$\n[Country.GetModifier.GetTooltipFor('country_authority_add')]"
+```
+
+`GetFormattedValueFor` formats the figure by the type's own definition, with no breakdown (vanilla `je_tp_imperial_favor_authority_rate_tt`); `GetTooltipFor` gives the breakdown as tooltip text (vanilla `LAND_TEXT_TOOLTIP_BREAKDOWN_SUBSISTENCE_MINIMUM_TOOLTIP`). One or two `GetValueWithBreakdownFor` in a panel's text cost little (vanilla uses it 21 times in its whole interface); a list of them in a panel that stays open is the case to avoid. Measure such a panel paused with vsync off (console `vsync`, then `measure_frame_time start` / `stop`): with vsync on a cheap frame waits for the display, and a fix that leaves a few milliseconds of work reads as "back to normal".
 
 ## Game Concept Tooltips for Breakdowns
 
