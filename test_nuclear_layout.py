@@ -1107,6 +1107,24 @@ class TestSurvivorsRow(unittest.TestCase):
         self.assertIn('text = "nd_w_survivors_value"', row)
         self.assertIn('tooltip = "nd_w_survivors_tt"', row)
 
+    def test_rival_named_through_its_capital(self):
+        """A country read out of a variable can render blank
+        (gui_modding_guide.md gotcha #11): the panel names the main rival
+        through the capital nd_refresh_main_rival stores beside it."""
+        texts = [_read(p) for p in glob.glob(os.path.join(REPO, "gui", "**", "*.gui"), recursive=True)]
+        texts += [_read(p) for p in glob.glob(os.path.join(LOC_DIR, "*.yml"))]
+        for text in texts:
+            self.assertNotIn("Var('nd_main_rival').GetCountry", text)
+        named = "\n".join(t for t in texts if "Var('nd_main_rival_capital').GetState.GetCountry" in t)
+        self.assertIn("nd_w_survivors_tt", named)
+        refresh = _squash(_read(EFFECTS_FILE))
+        self.assertIn(
+            "capital ?= { save_temporary_scope_as = nd_mr_rival_capital scope:nd_mr_self = { "
+            "set_variable = { name = nd_main_rival_capital value = scope:nd_mr_rival_capital } } }",
+            refresh)
+        self.assertEqual(refresh.count("remove_variable = nd_main_rival_capital"), 2,
+                         "cleared before each store and when there is no rival")
+
 
 SURVIVABILITY_PARTS = ("radar", "icbms", "submarines", "missile_defense")
 CUSTOM_LOC_FILE = os.path.join(REPO, "common", "customizable_localization", "nuclear_deterrence_custom_loc.txt")

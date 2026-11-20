@@ -3141,7 +3141,7 @@ class TestPostureFigures(unittest.TestCase):
         for key in keys:
             text = loc_value(key)
             self.assertIn("#tooltippable;tooltip:nd_tt_worlds_view up to#!", text, key)
-            self.assertIn("Var('nd_main_rival').GetCountry", text, key)
+            self.assertIn("Var('nd_main_rival_capital').GetState.GetCountry", text, key)
             self.assertIn("ScriptValue('nd_display_stockpile')", text, key)
 
     def test_the_refresh_runs_after_every_posture_op_behind_a_marker(self):

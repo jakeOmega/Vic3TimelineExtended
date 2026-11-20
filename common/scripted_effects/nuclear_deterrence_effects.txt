@@ -1120,6 +1120,21 @@ nd_refresh_main_rival = {
 	if = {
 		limit = { exists = scope:nd_mr_rival }
 		set_variable = { name = nd_main_rival value = scope:nd_mr_rival }
+		# Its capital, for the panel's text: a country read out of a variable
+		# can render blank (gui_modding_guide.md gotcha #11), a state's
+		# country does not. Cleared when the rival has no capital.
+		if = {
+			limit = { has_variable = nd_main_rival_capital }
+			remove_variable = nd_main_rival_capital
+		}
+		scope:nd_mr_rival = {
+			capital ?= {
+				save_temporary_scope_as = nd_mr_rival_capital
+				scope:nd_mr_self = {
+					set_variable = { name = nd_main_rival_capital value = scope:nd_mr_rival_capital }
+				}
+			}
+		}
 		scope:nd_mr_rival = { save_scope_as = nd_sv_enemy }
 		set_variable = { name = nd_survivors_main value = nd_survivors_vs_saved }
 		set_variable = { name = nd_survivors_main_r2 value = nd_survivors_r2_vs_saved }
@@ -1159,6 +1174,10 @@ nd_refresh_main_rival = {
 		if = {
 			limit = { has_variable = nd_main_rival }
 			remove_variable = nd_main_rival
+		}
+		if = {
+			limit = { has_variable = nd_main_rival_capital }
+			remove_variable = nd_main_rival_capital
 		}
 		if = {
 			limit = { has_variable = nd_survivors_main }
