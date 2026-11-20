@@ -2642,24 +2642,20 @@ def render_values(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) ->
                     out.line("limit = { has_variable = %s }" % counter)
                     out.line("value = var:%s" % counter)
         for culture in optional_cultures(merge):
-            hi, lo, own = "te_cm_sol_hi_%s" % key, "te_cm_sol_lo_%s" % key, "te_cm_sol_%s_%s" % (key, culture)
+            hi, own = "te_cm_sol_hi_%s" % key, "te_cm_sol_%s_%s" % (key, culture)
             out.line()
-            out.line("# Country scope. The standard-of-living gap %s's own gate reads (te_cm_sol_gate_part): the core range at" % culture)
-            out.line("# the last census widened to take in %s, highest minus lowest, for the entry's description. 0 without the figures." % culture)
+            out.line("# Country scope. The standard-of-living gap %s's own gate reads (te_cm_sol_gate_part): how far it lived" % culture)
+            out.line("# below the best-off core culture at the last census, 0 at or above it, for the entry's description. 0 without")
+            out.line("# the figures.")
             with out.block(optional_sol_gap_value(merge, culture)):
                 out.line("value = 0")
                 with out.block("if"):
                     with out.block("limit"):
                         out.line("has_variable = %s" % hi)
-                        out.line("has_variable = %s" % lo)
                         out.line("has_variable = %s" % own)
                     out.line("value = var:%s" % hi)
-                    out.line("min = var:%s" % own)
-                    with out.block("if"):
-                        out.line("limit = { var:%s < var:%s }" % (own, lo))
-                        out.line("subtract = var:%s" % own)
-                    with out.block("else"):
-                        out.line("subtract = var:%s" % lo)
+                    out.line("subtract = var:%s" % own)
+                    out.line("min = 0")
     return out.text()
 
 
@@ -2918,7 +2914,7 @@ def optional_status_name(merge: cfg.Merge, culture: str) -> str:
 
 
 def optional_sol_gap_value(merge: cfg.Merge, culture: str) -> str:
-    """The script value of the standard-of-living gap an optional culture's gate reads against the core range."""
+    """The script value of the standard-of-living gap an optional culture's gate reads: its shortfall below the best-off core culture."""
     return "te_cmg_%s_opt_%s_sol_gap" % (merge.key, culture)
 
 
@@ -2981,7 +2977,7 @@ def optional_rows(merge: cfg.Merge, culture: str, vanilla: dict, merges: tuple[c
             "%s pops have joined, but none convert while our sphere holds only %s of their homeland: conversion "
             "resumes at %s." % (name, var.format(held, "%0"), sv.format("te_cm_hold_open", "%0"))),
         Row(base + "joined_sol", [joined] + _negated(["var:%s ?= 1" % sol_ok]),
-            "%s pops have joined, but none convert while their standard of living is too far from that of the merge's "
+            "%s pops have joined, but none convert while their standard of living is too far below that of the merge's "
             "other cultures: conversion resumes once the gap is under %s." % (name, sv.format("te_cm_sol_gap_open", "0"))),
         Row(base + "joined", [joined, "has_global_variable = %s" % dom],
             "%s pops have joined: in their homeland %s holds [GetGlobalVariable('%s').GetValue|%%0] of the pops, and at "
@@ -3021,8 +3017,9 @@ def optional_rows(merge: cfg.Merge, culture: str, vanilla: dict, merges: tuple[c
         rows.append(Row(base + "years", ["has_variable = %s" % years] + _negated(["te_cmg_%s_%s_years_met = yes" % (key, culture)]),
                         "%s pops have not been held and accepted together long enough: %s of %s years."
                         % (name, var.format(years, "0"), sv.format(_years_clause(tier), "0"))))
-    # The gap: compared only once every core slot is counted, against the core range while a core culture has a figure
-    # (te_cm_sol_hi_<m> and _lo_<m>, kept by the census), else against the result's pops in the core homelands.
+    # The gap: compared only once every core slot is counted, against the best-off core culture while a core culture has a
+    # figure (te_cm_sol_hi_<m>, kept by the census with _lo_<m>), else against the result's pops in the core homelands. It
+    # counts only a shortfall: a culture better off than the core is never kept out.
     sol_shut = _negated(["var:%s ?= 1" % sol_ok])
     gap = sv.format(optional_sol_gap_value(merge, culture), "1")
     core_range = "[ROOT.GetCountry.MakeScope.Var('te_cm_sol_lo_%s').GetValue|1] to [ROOT.GetCountry.MakeScope.Var('te_cm_sol_hi_%s').GetValue|1]" % (key, key)
@@ -3032,17 +3029,17 @@ def optional_rows(merge: cfg.Merge, culture: str, vanilla: dict, merges: tuple[c
             "%s pops are held and accepted. Their standard of living is compared with the core cultures' once every core "
             "culture is held and accepted too." % name),
         Row(base + "sol_wide", sol_shut + figures + ["%s >= te_cm_sol_gap_open" % optional_sol_gap_value(merge, culture)],
-            "%s pops live too far from the core cultures' standard of living: theirs is %s and the core cultures' runs "
-            "from %s, a gap of %s where under %s is needed."
+            "%s pops live too far below the core cultures' standard of living: theirs is %s and the core cultures' runs "
+            "from %s, a gap of %s below the best off where under %s is needed."
             % (name, var.format(sol, "1"), core_range, gap, sv.format("te_cm_sol_gap_open", "0"))),
         Row(base + "sol_close", sol_shut + figures,
             "%s pops' standard of living, %s, is close enough to the core cultures' (%s) now: the next yearly census "
             "counts it." % (name, var.format(sol, "1"), core_range)),
         Row(base + "sol_result", sol_shut + ["has_variable = %s" % sol],
-            "%s pops' standard of living, %s, is too far from that of %s pops in the core cultures' homelands: the gap "
+            "%s pops' standard of living, %s, is too far below that of %s pops in the core cultures' homelands: the gap "
             "must be under %s." % (name, var.format(sol, "1"), result, sv.format("te_cm_sol_gap_open", "0"))),
         Row(base + "sol", sol_shut,
-            "%s pops' standard of living is too far from the core cultures': the gap must be under %s."
+            "%s pops' standard of living is too far below the core cultures': the gap must be under %s."
             % (name, sv.format("te_cm_sol_gap_open", "0"))),
     ]
     if part.wait_for:
@@ -3054,13 +3051,19 @@ def optional_rows(merge: cfg.Merge, culture: str, vanilla: dict, merges: tuple[c
     rows.append(Row(base + "ready_running", ["te_cmg_%s_is_starter = yes" % key],
                     "%s pops qualify and join at the next yearly census." % name))
     rows.append(Row(base + "ready", [], "%s pops qualify and join when the merge begins." % name))
+    # Each line opens on the culture's name in bold, so the list reads as one entry per culture (owner, 2026-11-20).
+    for row in rows:
+        assert row.text.startswith(name), row.key
+        row.text = "#b %s#!%s" % (name, row.text[len(name):])
     return rows
 
 
 def optional_list_text(merge: cfg.Merge) -> str:
-    """The description's closing list: a heading, then one line per optional culture, each its custom loc."""
+    """The description's closing list: a bold heading, then one entry per optional culture, each its custom loc. A
+    blank line parts the entries, since each runs to two or three lines in the entry's text box and, one to a line,
+    they read as one block (owner, 2026-11-20)."""
     lines = ["[ROOT.GetCountry.GetCustom('%s')]" % optional_status_name(merge, c) for c in optional_cultures(merge)]
-    return "\\n\\nWhere each optional culture stands:\\n\\n" + "\\n".join(lines)
+    return "\\n\\n#b Where each optional culture stands:#!\\n\\n" + "\\n\\n".join(lines)
 
 
 def render_optional_custom_loc(vanilla: dict, merges: tuple[cfg.Merge, ...] | None = None) -> str:
