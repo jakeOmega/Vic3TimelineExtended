@@ -691,7 +691,10 @@ class TypeRowsTest(unittest.TestCase):
                 self.assertTrue(generated[key].startswith(f"${kind}$: "))
                 self.assertIn(f"${kind}_desc$", generated[key + "_tt"])
                 if row == "row":
-                    self.assertIn(f"GetValueWithBreakdownFor('{kind}')", generated[key])
+                    # #1760: the figure in the text, the breakdown on hover only
+                    self.assertIn(f"GetFormattedValueFor('{kind}')", generated[key])
+                    self.assertNotIn("GetValueWithBreakdownFor", generated[key])
+                    self.assertIn(f"GetTooltipFor('{kind}')", generated[key + "_tt"])
                 else:
                     self.assertIn(f"GetFullEntryDescFor('{kind}')", generated[key + "_tt"])
                 note = kind.startswith(("state_", "building_", "interest_group_", "character_"))

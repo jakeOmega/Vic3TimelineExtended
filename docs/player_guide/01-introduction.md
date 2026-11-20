@@ -348,10 +348,10 @@ Under the scores, each section has a row for each kind of effect the mod's
 permanent effects give your country, grouped under small headings: "Arable
 Land: +45%" under Production, Prestige under Standing Abroad, each interest
 group's approval under Interest Groups. The figure is your country's whole
-total, and hovering it lists every source: the technologies, laws, institutions
-and principles that add to it as well as the mod's effects, such as
-agricultural diffusion, space race milestones, demographic policies and the UN
-conventions you are bound by. Hover the name for what the effect does. A row
+total. Hover the row for what the effect does and then every source: the
+technologies, laws, institutions and principles that add to it as well as the
+mod's effects, such as agricultural diffusion, space race milestones,
+demographic policies and the UN conventions you are bound by. A row
 appears once one of those permanent effects adds to it. A state, building or
 interest group row is what your country gives each of them; their own panels add
 their local sources.

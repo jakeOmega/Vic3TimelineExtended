@@ -25,7 +25,7 @@ modifier fails the suite until it has a line here.
 
 A second registry places the modifier types those modifiers carry (#1030).
 Each section shows a row per type, "Arable Land: +45%", the engine's
-breakdown of every source on hover:
+breakdown of every source in the row's tooltip (#1760: not in the text):
 
 - TYPE_ROWS: section -> group -> the types its rows show.
 - STATUS_ROWS: the same for `_bool` types, a status line each.
@@ -1025,10 +1025,17 @@ def generated_loc(types):
                     loc[key] = f"${kind}$: #v $te_nation_in_force$#!"
                     loc[key + "_tt"] = f"${kind}_desc$\\n\\n[Country.GetModifier.GetFullEntryDescFor('{kind}')]"
                 else:
-                    loc[key] = f"${kind}$: #v [Country.GetModifier.GetValueWithBreakdownFor('{kind}')]#!"
+                    # The figure alone in the row, its breakdown in the row's
+                    # tooltip (#1760): text is redrawn every frame, a tooltip
+                    # only on hover. GetValueWithBreakdownFor in the row text
+                    # cost 6.6-7.8 ms a frame with the tab open on the 1992
+                    # USA save (docs/audits/late_game_performance.md, "The
+                    # USA of 1992").
+                    loc[key] = f"${kind}$: #v [Country.GetModifier.GetFormattedValueFor('{kind}')]#!"
                     scope = next((s for s in _NOTE_SCOPES if kind.startswith(s + "_")), None)
                     note = f"\\n\\n$te_nation_note_{scope}$" if scope else ""
-                    loc[key + "_tt"] = f"${kind}_desc${note}"
+                    loc[key + "_tt"] = (f"${kind}_desc${note}\\n$TOOLTIP_DELIMITER$\\n"
+                                        f"[Country.GetModifier.GetTooltipFor('{kind}')]")
     return dict(sorted(loc.items()))
 
 

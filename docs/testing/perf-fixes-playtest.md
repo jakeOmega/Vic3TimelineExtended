@@ -72,3 +72,18 @@ ran July at 2.07 s a day and August at 1.60. Until it is fixed, the check is whe
 | Window open against closed, paused | In a late game, paused, with the FPS counter showing (debug mode): opening the Timeline Extended window on Nation roughly halves the frame rate, and closing it brings it back | No difference: the cost is specific to the harness's setup; say what was on screen in July 1931 |
 | Other tabs | The same look on the tabs kept open most (Banking, Demographics, the United Nations) | A tab as slow as Nation: add it to #1760 |
 | Running | At speed 5, days pass visibly slower with the window open on Nation than with it closed | Slower paused but not running: sub-tick rendering was off, or the day is spent elsewhere |
+
+## Nation tab rows: the figure in the text, the breakdown in the tooltip (2026-11-20, #1760)
+
+Each generated row of the Timeline Extended window's Nation tab reads `GetFormattedValueFor` in its text and
+`GetTooltipFor` under its description in its tooltip, in place of `GetValueWithBreakdownFor` in the text. The harness
+session of 2026-11-20 on the USA of 1992 read the frame time with the rows loaded from this branch as a variant, and its
+screenshot showed every figure as before (only the underline that marked the number as hoverable is gone); no row's
+tooltip was hovered, since no harness verb can hover.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| A row's figure | "Authority: +120" or "Arable Land: +45%", signed and formatted as before | A bare number, no sign or no percent: `GetFormattedValueFor` formats unlike the breakdown accessor; take the format from `GetValueFor` with a format code instead |
+| A row's tooltip | The type's description, a delimiter, then every source with its value and the total, as the old hover on the number gave | The description alone: `GetTooltipFor` returned nothing in a widget tooltip; put the breakdown back in the text for that row only |
+| National Info, another country | The same rows and tooltips for the country shown | The player's own figures: `Country` reads the player there |
+| Frame time with the tab open | Well below the old figure, paused (on 2026-11-20, vsync off: 19.8 ms open before, 12.0 with this change, about 6 shut, in the full-screen layout; the rest of the tab's cost is open in #1760) | Unchanged: the replace file or the deployed loc did not load |
