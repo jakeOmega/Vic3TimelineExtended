@@ -186,7 +186,7 @@ Affected vanilla files (all share the same root cause):
 - `common/political_movements/02_cultural_movement.txt:1096`
 - `events/red_scare_events.txt:102, 125, 283, 306, 954`
 - `common/character_interactions/00_character_interactions.txt`
-- `common/political_lobbies/00_political_lobbies.txt:570`
+- `common/political_lobbies/00_political_lobbies.txt:570` (the lobby's ideology terms, `:535` to `:570` in 1.15.2, read each governing group's leader; 2026-11-19, Croatia's Trade Unions, 40 mod-framed lines in one second from a UN ballot's diplomatic catalyst, `un_vote_cast_effects.txt`)
 - `common/journal_entries/00_fascism.txt`
 - `events/agitators_events/government_petition_events.txt`
 - `events/commander_events.txt`
