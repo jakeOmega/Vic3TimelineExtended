@@ -11,7 +11,7 @@ country holds from 1836 and none can replace while the entry runs is therefore
 a fixed push toward revolution in every country: +0.075 activism for a
 strongly_disapprove, +0.0375 for a disapprove (stance values -2 and -1
 assumed, as for interest-group approval).
-Unrestricted Automation (to Humanoid Robotics, era 11) and Unregulated
+Unrestricted Automation (to Industrial Robotics, era 8) and Unregulated
 Donations (to Mass Media or Keynesian Economics, era 6) were two such laws.
 
 These tests hold: the two movements are neutral on both, they still rate above
@@ -154,7 +154,7 @@ class NeutralOnLockedDefaultsTest(unittest.TestCase):
     def test_the_movements_still_back_what_their_lists_backed(self):
         """Every automation law the shared list rated above Unrestricted
         Automation the movement still rates above it, so it backs the same
-        laws once Humanoid Robotics arrives."""
+        laws once Industrial Robotics arrives."""
         import ideology_modifications as im
 
         for ideology, shared in (("ideology_labor_movement", "labor"), ("ideology_socialist_movement", "socialist")):

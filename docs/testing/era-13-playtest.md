@@ -105,10 +105,10 @@ ahead, raised if they fall short.
 
 1. **The group.** In a new game the Economy laws list Automation Policy with
    Unrestricted Automation in force for every country, and its three other
-   laws greyed out until Humanoid Robotics. The group's tooltip shows the
+   laws greyed out until Industrial Robotics (era 8). The group's tooltip shows the
    automated share (0% before the first count). A country released or formed
    later holds Unrestricted Automation, or its creator's law; record which.
-2. **The share.** With Humanoid Robotics, a country whose Tooling Workshops or
+2. **The share.** With Industrial Robotics, a country whose Tooling Workshops or
    Urban Centers run Robotic Assembly Lines or Robotic Service Providers shows
    a share above 0% after the next month, and it rises as more buildings take
    robotic or AI-managed methods. Check it against the buildings' levels for
@@ -183,7 +183,7 @@ ahead, raised if they fall short.
 |---|---|---|---|---|
 | `TE_SELF_CHECK … automation_marker` | once a game: the first monthly count of a country with a building on one of three sample methods (Robotic Assembly Lines in a Tooling Workshop, Robotic Service Providers in an Urban Center, Autonomous Logistics in a Trade Center), once every one of those levels or none reads the marker; a count in between waits a month | `marked` equals `sample`: a method's `unscaled` script-only building line reaches its building's `modifier:` read, so `te_ap_runs_automated_method` counts the buildings that run one | `marked=0`: no building reads the line, so the automated share is 0 everywhere and Robot Tax, the Dividend and Displaced Workers do nothing | First check `debug.log` for `Unknown modifier type: building_robotic_or_ai_managed_bool` (the type didn't load). Otherwise restore the method list in `te_ap_runs_automated_method` (the trigger as it was before this change, one `is_building_type` and `has_active_production_method` block per group, with Autonomous Logistics on `building_trade_center` added), keep the marker for its tooltip line, and have `test_automation_policy.py` hold the list to the marked methods |
 
-No `automation_marker` line after a few years of Humanoid Robotics means no
+No `automation_marker` line after a few years of Industrial Robotics means no
 country runs a sample method; put a Tooling Workshop on Robotic Assembly Lines.
 
 ## Phase 3: Morphological Freedom and Bodily Autonomy

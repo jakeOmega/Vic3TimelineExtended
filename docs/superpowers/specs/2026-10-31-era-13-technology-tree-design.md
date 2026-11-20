@@ -485,7 +485,7 @@ and each group is set for every country at game start, as
 | Category | Law group | Opens with | Laws (default first) |
 |---|---|---|---|
 | Human rights | **Bodily Autonomy** | Morphological Freedom (12) | Natural Form, Licensed Modification, Morphological Freedom, Clade Citizenship (needs Self-Directed Evolution, 13) |
-| Economy | **Automation Policy** | Humanoid Robotics (11) | Unrestricted Automation, Robot Tax, Human Labor Quotas, Automation Dividend |
+| Economy | **Automation Policy** | Industrial Robotics (8; Humanoid Robotics, 11, until 2026-11-20, when the owner moved it to the first robotic methods' technology) | Unrestricted Automation, Robot Tax, Human Labor Quotas, Automation Dividend |
 | Power structure | **Frontier AI Control** | AI Agents (11) | Private Labs, National Licensing, State Monopoly, International Oversight, Open Weights |
 
 **Bodily Autonomy.** Body modification for self-expression, not capability:

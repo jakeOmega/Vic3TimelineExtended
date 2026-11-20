@@ -5,7 +5,7 @@
 # Dividend's scaled modifiers (te_ap_monthly_update,
 # common/scripted_effects/te_automation_policy_effects.txt). A country pulse,
 # so the share's inputs, building levels and methods, are read in the
-# country's own scope. A country without Humanoid Robotics or one of the
+# country's own scope. A country without Industrial Robotics or one of the
 # group's laws skips the building walk: a few law and modifier checks a month.
 # ============================================================================
 

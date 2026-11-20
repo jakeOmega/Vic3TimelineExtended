@@ -255,15 +255,16 @@ or subjugate it, and back to another law once it is at peace.
 | Monetary Policy | Commodity Money, Gold Standard, Fiat Money, Digital Currency, Decentralized Cryptocurrency | Currency regime. |
 | Financial Regulation | Unregulated Banking, Free & Mutual Banking, Universal Banking (Light Prudence), Prudential / Narrow Banking, Directed Credit & Development Banks, State-Owned Banking, Central Bank Independence | How banks are supervised. |
 | Resource Transition | Unrestricted Extraction, Fossil Expansion Moratorium, Managed Fossil Phaseout | Whether coal mines, oil rigs and power plants may be built, and retiring them ([The fossil transition](15-climate.md#the-fossil-transition)). |
-| Automation Policy | Unrestricted Automation, Robot Tax, Human Labor Quotas, Automation Dividend | Robots and AI doing the work of people, from Humanoid Robotics on ([Automation policy](#automation-policy)). |
+| Automation Policy | Unrestricted Automation, Robot Tax, Human Labor Quotas, Automation Dividend | Robots and AI doing the work of people, from Industrial Robotics on ([Automation policy](#automation-policy)). |
 
 Monetary Policy and Financial Regulation are explained in [Banking and monetary
 policy](04-banking.md).
 
 ### Automation policy
 
-Every country starts with Unrestricted Automation. Humanoid Robotics unlocks the
-other three laws. Two of them scale with your automated share: the part of your
+Every country starts with Unrestricted Automation. Industrial Robotics (era 8)
+unlocks the other three laws, along with Robotic Assembly Lines, the first of
+the methods they act on. Two of them scale with your automated share: the part of your
 building levels that run a robotic or AI-managed production method, out of all
 levels of the buildings that have one. The tooltips of the law group and of
 those two laws show the share, counted once a month. The methods are factory

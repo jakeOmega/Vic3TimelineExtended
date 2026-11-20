@@ -184,7 +184,7 @@ lawgroup_resource_transition = {
 }
 
 # Automation Policy (era 13 spec § 7.1): Unrestricted Automation, Robot Tax,
-# Human Labor Quotas, Automation Dividend, from Humanoid Robotics.
+# Human Labor Quotas, Automation Dividend, from Industrial Robotics (era 8).
 # common/laws/te_automation_policy_laws.txt.
 lawgroup_automation_policy = {
 	law_group_category = economy

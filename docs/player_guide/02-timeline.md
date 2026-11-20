@@ -72,7 +72,9 @@ Urban Planning, Pollution Control and the Civil Rights Movement round out the
 era.
 
 Era 8 brings computers and automation. Computer Networks unlocks the Software
-Industry and Network Infrastructure, Industrial Robotics the Robotics Industry,
+Industry and Network Infrastructure, Industrial Robotics the Robotics Industry
+and the Automation Policy laws ([Automation
+policy](06-politics.md#automation-policy)),
 and Modern Pharmaceuticals the Rational Drug Design method for Pharmaceutical
 Industries ([Pharmaceutical Industries and
 Drugs](#pharmaceutical-industries-and-drugs)). Gene Splicing opens the Ban on
