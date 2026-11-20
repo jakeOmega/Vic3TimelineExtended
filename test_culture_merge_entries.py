@@ -1381,18 +1381,30 @@ class LocTest(unittest.TestCase):
     def test_variables_in_the_text_are_ones_the_census_writes(self):
         census = text_of(EFFECTS) + text_of(GEN_EFFECTS)
         shown = ("best", "worst", "hi", "lo", "gap")
+        # An optional culture's own standard of living (te_cm_sol_<m>_<c>), which te_cm_census_part writes.
+        own_sol = {"te_cm_sol_%s_%s" % (m.key, c) for m in cfg.MERGES for c in gen.optional_cultures(m)}
         for key, text in self.generated.items():
-            for name in re.findall(r"Var\('(\w+)'\)", text):
-                if name.startswith(("te_cm_held_", "te_cm_years_")):
+            for name in re.findall(r"(?<!Global)Var\('(\w+)'\)", text):
+                if name.startswith(("te_cm_held_", "te_cm_years_")) or name in own_sol:
                     continue
                 self.assertRegex(name, r"^te_cm_sol_(%s)_" % "|".join(shown), "%s reads %s" % (key, name))
                 self.assertIn("set_variable = { name = %s value = " % name, census, "%s reads %s" % (key, name))
+            # The one global the text reads: a joined culture's dominance, which te_cm_census_dominance writes.
+            for name in re.findall(r"GetGlobalVariable\('(\w+)'\)", text):
+                self.assertRegex(name, r"^te_cm_dom_", "%s reads %s" % (key, name))
         self.assertIn("te_cm_held_$MERGE$_$CULTURE$", census)
         self.assertIn("te_cm_years_$MERGE$_$CULTURE$", census)
+        self.assertIn("set_variable = { name = te_cm_sol_$MERGE$_$CULTURE$ value = 0 }", census)
+        self.assertIn("set_global_variable = { name = te_cm_dom_$MERGE$_$CULTURE$", census)
 
     def test_text_is_american_and_uses_the_house_markup(self):
+        # A description's closing list of optional cultures is laid out one to a line; the prose before it is not.
+        lists = {"je_te_cm_%s_reason" % m.key: gen.optional_list_text(m) for m in cfg.MERGES if m.optional}
         for key, text in {**self.generated, **{k: v for k, v in self.loc.items() if k.startswith("te_cm_")}}.items():
             self.assertNotIn("[b]", text, key)
+            if key in lists:
+                self.assertTrue(text.endswith(lists[key]), key)
+                text = text[: -len(lists[key])]
             if key != "te_cm_speed_tt":  # a hover's body, laid out like vanilla's: header, breakdown, divider, prose
                 self.assertNotIn("\\n", text, key)
             self.assertNotRegex(text, r"\b(?:colour|favour|organis|recognis|neighbour|centre|defence|labour)", key)
@@ -1965,6 +1977,159 @@ class WordingTest(unittest.TestCase):
         for merge in cfg.MERGES:
             for component in merge.components:
                 self.assertIn("has to finish first", self.generated["je_te_cm_%s_status_component_%s" % (merge.key, component)])
+
+
+OPTIONAL_CUSTOM_LOC = ROOT / gen.OPTIONAL_CUSTOM_LOC_OUT
+
+
+class OptionalStatusTest(unittest.TestCase):
+    """Where each optional culture stands (2026-11-20: nothing showed whether one qualified, or what it still needed):
+    the entry's description ends in one line per optional culture, the first row of its country custom loc whose
+    trigger holds."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.generated = loc_of(GEN_LOC)
+        cls.raw = OPTIONAL_CUSTOM_LOC.read_text(encoding="utf-8-sig")
+        nodes, _ = parse_text(cls.raw, OPTIONAL_CUSTOM_LOC.name)
+        cls.locs = {n.key: n for n in nodes}
+
+    def rows(self, merge, culture):
+        return gen.optional_rows(merge, culture, vanilla(), cfg.MERGES)
+
+    def test_the_file_is_planned_with_one_bom_tabs_and_the_header(self):
+        self.assertIn(gen.OPTIONAL_CUSTOM_LOC_OUT, gen.plan_outputs())
+        raw = OPTIONAL_CUSTOM_LOC.read_bytes()
+        self.assertTrue(raw.startswith(BOM))
+        self.assertFalse(raw[3:].startswith(BOM))
+        lines = raw.decode("utf-8-sig").splitlines()
+        self.assertEqual(lines[0], gen.HEADER)
+        self.assertFalse([line for line in lines if line.startswith(" ")])
+
+    def test_every_description_ends_in_one_line_per_optional_culture(self):
+        for merge in cfg.MERGES:
+            reason = self.generated["je_te_cm_%s_reason" % merge.key]
+            cultures = gen.optional_cultures(merge)
+            calls = re.findall(r"\[ROOT\.GetCountry\.GetCustom\('(\w+)'\)\]", reason)
+            self.assertEqual(calls, [gen.optional_status_name(merge, c) for c in cultures], merge.key)
+            if cultures:
+                self.assertIn("\\n\\nWhere each optional culture stands:\\n\\n", reason, merge.key)
+            else:
+                self.assertNotIn("optional culture stands", reason, merge.key)
+        # Each alternative of a slot is its own line: Latin's Platinean slot takes cm_platine once that merge is done.
+        self.assertIn("te_cmg_latin_opt_cm_platine", self.generated["je_te_cm_latin_reason"])
+        self.assertIn("te_cmg_latin_opt_platinean", self.generated["je_te_cm_latin_reason"])
+
+    def test_one_country_custom_loc_per_optional_culture_whose_rows_are_the_ladder(self):
+        expected = [gen.optional_status_name(m, c) for m in cfg.MERGES for c in gen.optional_cultures(m)]
+        self.assertEqual(list(self.locs), expected)
+        for merge in cfg.MERGES:
+            for culture in gen.optional_cultures(merge):
+                node = self.locs[gen.optional_status_name(merge, culture)]
+                self.assertEqual(child(node, "type").value, "country")
+                self.assertEqual(child(node, "random_valid").value, "no")
+                texts = children(node, "text")
+                rows = self.rows(merge, culture)
+                self.assertEqual([child(t, "localization_key").value for t in texts], [r.key for r in rows])
+                # Every row but the last is guarded; the last, every gate passed, has no trigger.
+                self.assertTrue(all(child(t, "trigger") is not None for t in texts[:-1]), culture)
+                self.assertIsNone(child(texts[-1], "trigger"), culture)
+                for row in rows:
+                    self.assertEqual(self.generated[row.key], row.text)
+                    self.assertTrue(row.key.startswith(gen.optional_status_name(merge, culture) + "_"), row.key)
+                    self.assertTrue(row.text.startswith("$%s$" % culture), row.key)
+
+    def test_the_ladder_reads_only_triggers_that_exist(self):
+        defined = set()
+        for name in ("te_culture_merges_generated_triggers", "te_culture_merge_triggers", "te_culture_merge_gate_triggers"):
+            defined |= set(definitions(ROOT / ("common/scripted_triggers/%s.txt" % name)))
+        for name in re.findall(r"^\t+(te_c\w+) = yes$", self.raw, re.M):
+            self.assertIn(name, defined, name)
+        for name in re.findall(r"^\t+(te_cmg_\w+_sol_gap) >= ", self.raw, re.M):
+            self.assertIn(name, definitions(VALUES), name)
+
+    def test_the_last_row_comes_only_once_every_join_condition_holds(self):
+        # Each of can_join's conditions, and the vanilla wait join_ready adds, has a row before the last that shows
+        # while it fails: so "qualify" never shows for a culture that won't join.
+        for merge in cfg.MERGES:
+            for culture in gen.optional_cultures(merge):
+                rows = self.rows(merge, culture)
+                guarded = [squash("\n".join(r.lines)) for r in rows[:-1]]
+                can_join = block(text_of(GEN_TRIGGERS), "te_cmg_%s_%s_can_join" % (merge.key, culture))
+                for clause in [squash(line) for line in can_join.splitlines() if line.strip()]:
+                    if clause == "NOT = { %s }" % gen._result_switched(merge) and not gen.result_can_switch(merge, cfg.MERGES):
+                        continue  # te_cmg_<m>_result_switched is always = no for a result no other merge takes
+                    negated = re.fullmatch(r"NOT = \{ (.*) \}", clause)
+                    wanted = negated.group(1) if negated else "NOT = { %s }" % clause
+                    self.assertTrue(any(wanted in g for g in guarded), "%s %s: no row for %s" % (merge.key, culture, clause))
+                if gen._part_of(merge, culture).wait_for:
+                    self.assertIn("te_cmg_%s_%s_waiting = yes" % (merge.key, culture), guarded)
+
+    def test_the_rows_run_in_the_order_a_culture_goes_through_the_merge(self):
+        order = ["switched", "switched_away", "joined_gate", "joined_hold", "joined_sol", "joined", "joined_new",
+                 "result_gone", "busy", "gate", "tech", "unmeasured", "hold", "accept", "years",
+                 "sol_core", "sol_wide", "sol_close", "sol_result", "sol", "waiting", "paused", "ready_running", "ready"]
+        for merge in cfg.MERGES:
+            for culture in gen.optional_cultures(merge):
+                prefix = gen.optional_status_name(merge, culture) + "_"
+                states = [r.key[len(prefix):] for r in self.rows(merge, culture)]
+                self.assertEqual(states, [s for s in order if s in states], culture)
+                self.assertEqual(states[-2:], ["ready_running", "ready"])
+                # A gate, a tier above 1, a wait and a result that can switch each add their row; nothing else is optional.
+                part = gen._part_of(merge, culture)
+                self.assertEqual("gate" in states, part.gate is not None)
+                self.assertEqual("joined_gate" in states, part.gate is not None)
+                self.assertEqual("years" in states, tier_of(merge, culture) > 1)
+                self.assertEqual("waiting" in states, bool(part.wait_for))
+                self.assertEqual("result_gone" in states, gen.result_can_switch(merge, cfg.MERGES))
+                self.assertEqual("paused" in states, gen.standing_gate(merge))
+
+    def test_every_figure_is_read_behind_its_rows_has_variable(self):
+        # A loc read of an unset variable logs on every redraw.
+        for merge in cfg.MERGES:
+            for culture in gen.optional_cultures(merge):
+                for row in self.rows(merge, culture):
+                    for name in re.findall(r"(?<!Global)Var\('(\w+)'\)", row.text):
+                        self.assertIn("has_variable = %s" % name, row.lines, row.key)
+                    for name in re.findall(r"GetGlobalVariable\('(\w+)'\)", row.text):
+                        self.assertIn("has_global_variable = %s" % name, row.lines, row.key)
+
+    def test_the_sol_gap_is_the_core_range_widened_to_take_in_the_culture(self):
+        values = text_of(VALUES)
+        self.assertEqual(
+            squash(block(values, "te_cmg_anglophone_opt_scottish_sol_gap")),
+            squash("""value = 0
+                if = {
+                    limit = {
+                        has_variable = te_cm_sol_hi_anglophone
+                        has_variable = te_cm_sol_lo_anglophone
+                        has_variable = te_cm_sol_anglophone_scottish
+                    }
+                    value = var:te_cm_sol_hi_anglophone
+                    min = var:te_cm_sol_anglophone_scottish
+                    if = {
+                        limit = { var:te_cm_sol_anglophone_scottish < var:te_cm_sol_lo_anglophone }
+                        subtract = var:te_cm_sol_anglophone_scottish
+                    }
+                    else = {
+                        subtract = var:te_cm_sol_lo_anglophone
+                    }
+                }"""),
+        )
+        for merge in cfg.MERGES:
+            for culture in gen.optional_cultures(merge):
+                self.assertIsNotNone(block(values, gen.optional_sol_gap_value(merge, culture)), culture)
+
+    def test_the_hold_and_acceptance_lines_name_their_tiers_thresholds(self):
+        self.assertIn("te_cm_accept_open", self.generated["te_cmg_anglophone_opt_scottish_accept"])
+        # Afro-American is tier 1b in Anglophone: very high acceptance and 30 years together.
+        self.assertIn("te_cm_accept_high_open", self.generated["te_cmg_anglophone_opt_afro_american_accept"])
+        self.assertIn("te_cm_years_tier2", self.generated["te_cmg_anglophone_opt_afro_american_years"])
+        self.assertIn("$mass_media$", self.generated["te_cmg_anglophone_opt_afro_american_tech"])
+        # American's Afro-American waits for Slavery Banned, joined or not.
+        self.assertIn("$law_slavery_banned$", self.generated["te_cmg_american_opt_afro_american_gate"])
+        self.assertIn("$law_slavery_banned$", self.generated["te_cmg_american_opt_afro_american_joined_gate"])
+        self.assertIn("$je_acw_reincorporate$", self.generated["te_cmg_anglophone_opt_dixie_waiting"])
 
 
 class IconExemptionTest(unittest.TestCase):

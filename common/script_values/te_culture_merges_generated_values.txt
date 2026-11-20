@@ -135,6 +135,50 @@ te_cmg_german_bar_pct = {
 	multiply = 100
 }
 
+# Country scope. The standard-of-living gap alemannic's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in alemannic, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_german_opt_alemannic_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_german
+			has_variable = te_cm_sol_lo_german
+			has_variable = te_cm_sol_german_alemannic
+		}
+		value = var:te_cm_sol_hi_german
+		min = var:te_cm_sol_german_alemannic
+		if = {
+			limit = { var:te_cm_sol_german_alemannic < var:te_cm_sol_lo_german }
+			subtract = var:te_cm_sol_german_alemannic
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_german
+		}
+	}
+}
+
+# Country scope. The standard-of-living gap east_german's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in east_german, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_german_opt_east_german_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_german
+			has_variable = te_cm_sol_lo_german
+			has_variable = te_cm_sol_german_east_german
+		}
+		value = var:te_cm_sol_hi_german
+		min = var:te_cm_sol_german_east_german
+		if = {
+			limit = { var:te_cm_sol_german_east_german < var:te_cm_sol_lo_german }
+			subtract = var:te_cm_sol_german_east_german
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_german
+		}
+	}
+}
+
 # ---- italian ----
 
 # Country scope (the starter). The smallest result share among the core parts of the italian merge that joined and
@@ -254,6 +298,28 @@ te_cmg_italian_progress = {
 te_cmg_italian_bar_pct = {
 	value = te_cmg_italian_progress
 	multiply = 100
+}
+
+# Country scope. The standard-of-living gap corsican's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in corsican, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_italian_opt_corsican_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_italian
+			has_variable = te_cm_sol_lo_italian
+			has_variable = te_cm_sol_italian_corsican
+		}
+		value = var:te_cm_sol_hi_italian
+		min = var:te_cm_sol_italian_corsican
+		if = {
+			limit = { var:te_cm_sol_italian_corsican < var:te_cm_sol_lo_italian }
+			subtract = var:te_cm_sol_italian_corsican
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_italian
+		}
+	}
 }
 
 # ---- scandinavian ----
@@ -403,6 +469,28 @@ te_cmg_scandinavian_progress = {
 te_cmg_scandinavian_bar_pct = {
 	value = te_cmg_scandinavian_progress
 	multiply = 100
+}
+
+# Country scope. The standard-of-living gap icelandic's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in icelandic, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_scandinavian_opt_icelandic_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_scandinavian
+			has_variable = te_cm_sol_lo_scandinavian
+			has_variable = te_cm_sol_scandinavian_icelandic
+		}
+		value = var:te_cm_sol_hi_scandinavian
+		min = var:te_cm_sol_scandinavian_icelandic
+		if = {
+			limit = { var:te_cm_sol_scandinavian_icelandic < var:te_cm_sol_lo_scandinavian }
+			subtract = var:te_cm_sol_scandinavian_icelandic
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_scandinavian
+		}
+	}
 }
 
 # ---- east_slavic ----
@@ -713,6 +801,50 @@ te_cmg_yugoslav_bar_pct = {
 	multiply = 100
 }
 
+# Country scope. The standard-of-living gap slovene's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in slovene, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_yugoslav_opt_slovene_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_yugoslav
+			has_variable = te_cm_sol_lo_yugoslav
+			has_variable = te_cm_sol_yugoslav_slovene
+		}
+		value = var:te_cm_sol_hi_yugoslav
+		min = var:te_cm_sol_yugoslav_slovene
+		if = {
+			limit = { var:te_cm_sol_yugoslav_slovene < var:te_cm_sol_lo_yugoslav }
+			subtract = var:te_cm_sol_yugoslav_slovene
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_yugoslav
+		}
+	}
+}
+
+# Country scope. The standard-of-living gap bulgarian's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in bulgarian, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_yugoslav_opt_bulgarian_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_yugoslav
+			has_variable = te_cm_sol_lo_yugoslav
+			has_variable = te_cm_sol_yugoslav_bulgarian
+		}
+		value = var:te_cm_sol_hi_yugoslav
+		min = var:te_cm_sol_yugoslav_bulgarian
+		if = {
+			limit = { var:te_cm_sol_yugoslav_bulgarian < var:te_cm_sol_lo_yugoslav }
+			subtract = var:te_cm_sol_yugoslav_bulgarian
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_yugoslav
+		}
+	}
+}
+
 # ---- czechoslovak ----
 
 # Country scope (the starter). The smallest result share among the core parts of the czechoslovak merge that joined and
@@ -832,6 +964,28 @@ te_cmg_czechoslovak_progress = {
 te_cmg_czechoslovak_bar_pct = {
 	value = te_cmg_czechoslovak_progress
 	multiply = 100
+}
+
+# Country scope. The standard-of-living gap sorb's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in sorb, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_czechoslovak_opt_sorb_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_czechoslovak
+			has_variable = te_cm_sol_lo_czechoslovak
+			has_variable = te_cm_sol_czechoslovak_sorb
+		}
+		value = var:te_cm_sol_hi_czechoslovak
+		min = var:te_cm_sol_czechoslovak_sorb
+		if = {
+			limit = { var:te_cm_sol_czechoslovak_sorb < var:te_cm_sol_lo_czechoslovak }
+			subtract = var:te_cm_sol_czechoslovak_sorb
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_czechoslovak
+		}
+	}
 }
 
 # ---- hungarian ----
@@ -1178,6 +1332,50 @@ te_cmg_french_bar_pct = {
 	multiply = 100
 }
 
+# Country scope. The standard-of-living gap wallonian's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in wallonian, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_french_opt_wallonian_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_french
+			has_variable = te_cm_sol_lo_french
+			has_variable = te_cm_sol_french_wallonian
+		}
+		value = var:te_cm_sol_hi_french
+		min = var:te_cm_sol_french_wallonian
+		if = {
+			limit = { var:te_cm_sol_french_wallonian < var:te_cm_sol_lo_french }
+			subtract = var:te_cm_sol_french_wallonian
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_french
+		}
+	}
+}
+
+# Country scope. The standard-of-living gap catalan's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in catalan, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_french_opt_catalan_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_french
+			has_variable = te_cm_sol_lo_french
+			has_variable = te_cm_sol_french_catalan
+		}
+		value = var:te_cm_sol_hi_french
+		min = var:te_cm_sol_french_catalan
+		if = {
+			limit = { var:te_cm_sol_french_catalan < var:te_cm_sol_lo_french }
+			subtract = var:te_cm_sol_french_catalan
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_french
+		}
+	}
+}
+
 # ---- british ----
 
 # Country scope (the starter). The smallest result share among the core parts of the british merge that joined and
@@ -1385,6 +1583,28 @@ te_cmg_american_wait_years_so_far = {
 	if = {
 		limit = { has_variable = te_cm_wait_years_american }
 		value = var:te_cm_wait_years_american
+	}
+}
+
+# Country scope. The standard-of-living gap afro_american's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in afro_american, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_american_opt_afro_american_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_american
+			has_variable = te_cm_sol_lo_american
+			has_variable = te_cm_sol_american_afro_american
+		}
+		value = var:te_cm_sol_hi_american
+		min = var:te_cm_sol_american_afro_american
+		if = {
+			limit = { var:te_cm_sol_american_afro_american < var:te_cm_sol_lo_american }
+			subtract = var:te_cm_sol_american_afro_american
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_american
+		}
 	}
 }
 
@@ -1626,6 +1846,116 @@ te_cmg_anglophone_cm_american_years_so_far = {
 	}
 }
 
+# Country scope. The standard-of-living gap anglo_canadian's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in anglo_canadian, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_anglophone_opt_anglo_canadian_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_anglophone
+			has_variable = te_cm_sol_lo_anglophone
+			has_variable = te_cm_sol_anglophone_anglo_canadian
+		}
+		value = var:te_cm_sol_hi_anglophone
+		min = var:te_cm_sol_anglophone_anglo_canadian
+		if = {
+			limit = { var:te_cm_sol_anglophone_anglo_canadian < var:te_cm_sol_lo_anglophone }
+			subtract = var:te_cm_sol_anglophone_anglo_canadian
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_anglophone
+		}
+	}
+}
+
+# Country scope. The standard-of-living gap australian's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in australian, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_anglophone_opt_australian_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_anglophone
+			has_variable = te_cm_sol_lo_anglophone
+			has_variable = te_cm_sol_anglophone_australian
+		}
+		value = var:te_cm_sol_hi_anglophone
+		min = var:te_cm_sol_anglophone_australian
+		if = {
+			limit = { var:te_cm_sol_anglophone_australian < var:te_cm_sol_lo_anglophone }
+			subtract = var:te_cm_sol_anglophone_australian
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_anglophone
+		}
+	}
+}
+
+# Country scope. The standard-of-living gap scottish's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in scottish, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_anglophone_opt_scottish_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_anglophone
+			has_variable = te_cm_sol_lo_anglophone
+			has_variable = te_cm_sol_anglophone_scottish
+		}
+		value = var:te_cm_sol_hi_anglophone
+		min = var:te_cm_sol_anglophone_scottish
+		if = {
+			limit = { var:te_cm_sol_anglophone_scottish < var:te_cm_sol_lo_anglophone }
+			subtract = var:te_cm_sol_anglophone_scottish
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_anglophone
+		}
+	}
+}
+
+# Country scope. The standard-of-living gap dixie's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in dixie, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_anglophone_opt_dixie_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_anglophone
+			has_variable = te_cm_sol_lo_anglophone
+			has_variable = te_cm_sol_anglophone_dixie
+		}
+		value = var:te_cm_sol_hi_anglophone
+		min = var:te_cm_sol_anglophone_dixie
+		if = {
+			limit = { var:te_cm_sol_anglophone_dixie < var:te_cm_sol_lo_anglophone }
+			subtract = var:te_cm_sol_anglophone_dixie
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_anglophone
+		}
+	}
+}
+
+# Country scope. The standard-of-living gap afro_american's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in afro_american, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_anglophone_opt_afro_american_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_anglophone
+			has_variable = te_cm_sol_lo_anglophone
+			has_variable = te_cm_sol_anglophone_afro_american
+		}
+		value = var:te_cm_sol_hi_anglophone
+		min = var:te_cm_sol_anglophone_afro_american
+		if = {
+			limit = { var:te_cm_sol_anglophone_afro_american < var:te_cm_sol_lo_anglophone }
+			subtract = var:te_cm_sol_anglophone_afro_american
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_anglophone
+		}
+	}
+}
+
 # ---- brazilian ----
 
 # Country scope (the starter). The smallest result share among the core parts of the brazilian merge that joined and
@@ -1810,6 +2140,28 @@ te_cmg_brazilian_wait_years_so_far = {
 	if = {
 		limit = { has_variable = te_cm_wait_years_brazilian }
 		value = var:te_cm_wait_years_brazilian
+	}
+}
+
+# Country scope. The standard-of-living gap afro_brazilian's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in afro_brazilian, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_brazilian_opt_afro_brazilian_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_brazilian
+			has_variable = te_cm_sol_lo_brazilian
+			has_variable = te_cm_sol_brazilian_afro_brazilian
+		}
+		value = var:te_cm_sol_hi_brazilian
+		min = var:te_cm_sol_brazilian_afro_brazilian
+		if = {
+			limit = { var:te_cm_sol_brazilian_afro_brazilian < var:te_cm_sol_lo_brazilian }
+			subtract = var:te_cm_sol_brazilian_afro_brazilian
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_brazilian
+		}
 	}
 }
 
@@ -2721,6 +3073,72 @@ te_cmg_arab_bar_pct = {
 	multiply = 100
 }
 
+# Country scope. The standard-of-living gap sudanese's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in sudanese, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_arab_opt_sudanese_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_arab
+			has_variable = te_cm_sol_lo_arab
+			has_variable = te_cm_sol_arab_sudanese
+		}
+		value = var:te_cm_sol_hi_arab
+		min = var:te_cm_sol_arab_sudanese
+		if = {
+			limit = { var:te_cm_sol_arab_sudanese < var:te_cm_sol_lo_arab }
+			subtract = var:te_cm_sol_arab_sudanese
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_arab
+		}
+	}
+}
+
+# Country scope. The standard-of-living gap haratin's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in haratin, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_arab_opt_haratin_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_arab
+			has_variable = te_cm_sol_lo_arab
+			has_variable = te_cm_sol_arab_haratin
+		}
+		value = var:te_cm_sol_hi_arab
+		min = var:te_cm_sol_arab_haratin
+		if = {
+			limit = { var:te_cm_sol_arab_haratin < var:te_cm_sol_lo_arab }
+			subtract = var:te_cm_sol_arab_haratin
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_arab
+		}
+	}
+}
+
+# Country scope. The standard-of-living gap bidan's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in bidan, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_arab_opt_bidan_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_arab
+			has_variable = te_cm_sol_lo_arab
+			has_variable = te_cm_sol_arab_bidan
+		}
+		value = var:te_cm_sol_hi_arab
+		min = var:te_cm_sol_arab_bidan
+		if = {
+			limit = { var:te_cm_sol_arab_bidan < var:te_cm_sol_lo_arab }
+			subtract = var:te_cm_sol_arab_bidan
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_arab
+		}
+	}
+}
+
 # ---- persian ----
 
 # Country scope (the starter). The smallest result share among the core parts of the persian merge that joined and
@@ -2856,6 +3274,94 @@ te_cmg_persian_bar_pct = {
 	multiply = 100
 }
 
+# Country scope. The standard-of-living gap tajik's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in tajik, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_persian_opt_tajik_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_persian
+			has_variable = te_cm_sol_lo_persian
+			has_variable = te_cm_sol_persian_tajik
+		}
+		value = var:te_cm_sol_hi_persian
+		min = var:te_cm_sol_persian_tajik
+		if = {
+			limit = { var:te_cm_sol_persian_tajik < var:te_cm_sol_lo_persian }
+			subtract = var:te_cm_sol_persian_tajik
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_persian
+		}
+	}
+}
+
+# Country scope. The standard-of-living gap hazara's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in hazara, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_persian_opt_hazara_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_persian
+			has_variable = te_cm_sol_lo_persian
+			has_variable = te_cm_sol_persian_hazara
+		}
+		value = var:te_cm_sol_hi_persian
+		min = var:te_cm_sol_persian_hazara
+		if = {
+			limit = { var:te_cm_sol_persian_hazara < var:te_cm_sol_lo_persian }
+			subtract = var:te_cm_sol_persian_hazara
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_persian
+		}
+	}
+}
+
+# Country scope. The standard-of-living gap mazanderani's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in mazanderani, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_persian_opt_mazanderani_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_persian
+			has_variable = te_cm_sol_lo_persian
+			has_variable = te_cm_sol_persian_mazanderani
+		}
+		value = var:te_cm_sol_hi_persian
+		min = var:te_cm_sol_persian_mazanderani
+		if = {
+			limit = { var:te_cm_sol_persian_mazanderani < var:te_cm_sol_lo_persian }
+			subtract = var:te_cm_sol_persian_mazanderani
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_persian
+		}
+	}
+}
+
+# Country scope. The standard-of-living gap baluchi's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in baluchi, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_persian_opt_baluchi_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_persian
+			has_variable = te_cm_sol_lo_persian
+			has_variable = te_cm_sol_persian_baluchi
+		}
+		value = var:te_cm_sol_hi_persian
+		min = var:te_cm_sol_persian_baluchi
+		if = {
+			limit = { var:te_cm_sol_persian_baluchi < var:te_cm_sol_lo_persian }
+			subtract = var:te_cm_sol_persian_baluchi
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_persian
+		}
+	}
+}
+
 # ---- oghuz_turkic ----
 
 # Country scope (the starter). The smallest result share among the core parts of the oghuz_turkic merge that joined and
@@ -2975,6 +3481,28 @@ te_cmg_oghuz_turkic_progress = {
 te_cmg_oghuz_turkic_bar_pct = {
 	value = te_cmg_oghuz_turkic_progress
 	multiply = 100
+}
+
+# Country scope. The standard-of-living gap turkmen's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in turkmen, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_oghuz_turkic_opt_turkmen_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_oghuz_turkic
+			has_variable = te_cm_sol_lo_oghuz_turkic
+			has_variable = te_cm_sol_oghuz_turkic_turkmen
+		}
+		value = var:te_cm_sol_hi_oghuz_turkic
+		min = var:te_cm_sol_oghuz_turkic_turkmen
+		if = {
+			limit = { var:te_cm_sol_oghuz_turkic_turkmen < var:te_cm_sol_lo_oghuz_turkic }
+			subtract = var:te_cm_sol_oghuz_turkic_turkmen
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_oghuz_turkic
+		}
+	}
 }
 
 # ---- hindustani ----
@@ -3289,6 +3817,28 @@ te_cmg_dravidian_bar_pct = {
 	multiply = 100
 }
 
+# Country scope. The standard-of-living gap telegu's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in telegu, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_dravidian_opt_telegu_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_dravidian
+			has_variable = te_cm_sol_lo_dravidian
+			has_variable = te_cm_sol_dravidian_telegu
+		}
+		value = var:te_cm_sol_hi_dravidian
+		min = var:te_cm_sol_dravidian_telegu
+		if = {
+			limit = { var:te_cm_sol_dravidian_telegu < var:te_cm_sol_lo_dravidian }
+			subtract = var:te_cm_sol_dravidian_telegu
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_dravidian
+		}
+	}
+}
+
 # ---- indonesian ----
 
 # Country scope (the starter). The smallest result share among the core parts of the indonesian merge that joined and
@@ -3464,6 +4014,28 @@ te_cmg_indonesian_progress = {
 te_cmg_indonesian_bar_pct = {
 	value = te_cmg_indonesian_progress
 	multiply = 100
+}
+
+# Country scope. The standard-of-living gap balinese's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in balinese, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_indonesian_opt_balinese_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_indonesian
+			has_variable = te_cm_sol_lo_indonesian
+			has_variable = te_cm_sol_indonesian_balinese
+		}
+		value = var:te_cm_sol_hi_indonesian
+		min = var:te_cm_sol_indonesian_balinese
+		if = {
+			limit = { var:te_cm_sol_indonesian_balinese < var:te_cm_sol_lo_indonesian }
+			subtract = var:te_cm_sol_indonesian_balinese
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_indonesian
+		}
+	}
 }
 
 # ---- filipino ----
@@ -4027,6 +4599,138 @@ te_cmg_latin_portuguese_years_so_far = {
 	}
 }
 
+# Country scope. The standard-of-living gap romanian's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in romanian, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_latin_opt_romanian_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_latin
+			has_variable = te_cm_sol_lo_latin
+			has_variable = te_cm_sol_latin_romanian
+		}
+		value = var:te_cm_sol_hi_latin
+		min = var:te_cm_sol_latin_romanian
+		if = {
+			limit = { var:te_cm_sol_latin_romanian < var:te_cm_sol_lo_latin }
+			subtract = var:te_cm_sol_latin_romanian
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_latin
+		}
+	}
+}
+
+# Country scope. The standard-of-living gap platinean's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in platinean, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_latin_opt_platinean_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_latin
+			has_variable = te_cm_sol_lo_latin
+			has_variable = te_cm_sol_latin_platinean
+		}
+		value = var:te_cm_sol_hi_latin
+		min = var:te_cm_sol_latin_platinean
+		if = {
+			limit = { var:te_cm_sol_latin_platinean < var:te_cm_sol_lo_latin }
+			subtract = var:te_cm_sol_latin_platinean
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_latin
+		}
+	}
+}
+
+# Country scope. The standard-of-living gap cm_platine's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in cm_platine, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_latin_opt_cm_platine_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_latin
+			has_variable = te_cm_sol_lo_latin
+			has_variable = te_cm_sol_latin_cm_platine
+		}
+		value = var:te_cm_sol_hi_latin
+		min = var:te_cm_sol_latin_cm_platine
+		if = {
+			limit = { var:te_cm_sol_latin_cm_platine < var:te_cm_sol_lo_latin }
+			subtract = var:te_cm_sol_latin_cm_platine
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_latin
+		}
+	}
+}
+
+# Country scope. The standard-of-living gap argentine's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in argentine, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_latin_opt_argentine_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_latin
+			has_variable = te_cm_sol_lo_latin
+			has_variable = te_cm_sol_latin_argentine
+		}
+		value = var:te_cm_sol_hi_latin
+		min = var:te_cm_sol_latin_argentine
+		if = {
+			limit = { var:te_cm_sol_latin_argentine < var:te_cm_sol_lo_latin }
+			subtract = var:te_cm_sol_latin_argentine
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_latin
+		}
+	}
+}
+
+# Country scope. The standard-of-living gap uruguayan's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in uruguayan, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_latin_opt_uruguayan_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_latin
+			has_variable = te_cm_sol_lo_latin
+			has_variable = te_cm_sol_latin_uruguayan
+		}
+		value = var:te_cm_sol_hi_latin
+		min = var:te_cm_sol_latin_uruguayan
+		if = {
+			limit = { var:te_cm_sol_latin_uruguayan < var:te_cm_sol_lo_latin }
+			subtract = var:te_cm_sol_latin_uruguayan
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_latin
+		}
+	}
+}
+
+# Country scope. The standard-of-living gap chilean's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in chilean, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_latin_opt_chilean_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_latin
+			has_variable = te_cm_sol_lo_latin
+			has_variable = te_cm_sol_latin_chilean
+		}
+		value = var:te_cm_sol_hi_latin
+		min = var:te_cm_sol_latin_chilean
+		if = {
+			limit = { var:te_cm_sol_latin_chilean < var:te_cm_sol_lo_latin }
+			subtract = var:te_cm_sol_latin_chilean
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_latin
+		}
+	}
+}
+
 # ---- pan_slavic ----
 
 # Country scope (the starter). The smallest result share among the core parts of the pan_slavic merge that joined and
@@ -4234,6 +4938,72 @@ te_cmg_pan_slavic_cm_yugoslav_years_so_far = {
 		limit = { has_variable = te_cm_years_pan_slavic_cm_yugoslav }
 		value = var:te_cm_years_pan_slavic_cm_yugoslav
 		max = te_cm_years_tier3
+	}
+}
+
+# Country scope. The standard-of-living gap polish's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in polish, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_pan_slavic_opt_polish_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_pan_slavic
+			has_variable = te_cm_sol_lo_pan_slavic
+			has_variable = te_cm_sol_pan_slavic_polish
+		}
+		value = var:te_cm_sol_hi_pan_slavic
+		min = var:te_cm_sol_pan_slavic_polish
+		if = {
+			limit = { var:te_cm_sol_pan_slavic_polish < var:te_cm_sol_lo_pan_slavic }
+			subtract = var:te_cm_sol_pan_slavic_polish
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_pan_slavic
+		}
+	}
+}
+
+# Country scope. The standard-of-living gap slovene's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in slovene, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_pan_slavic_opt_slovene_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_pan_slavic
+			has_variable = te_cm_sol_lo_pan_slavic
+			has_variable = te_cm_sol_pan_slavic_slovene
+		}
+		value = var:te_cm_sol_hi_pan_slavic
+		min = var:te_cm_sol_pan_slavic_slovene
+		if = {
+			limit = { var:te_cm_sol_pan_slavic_slovene < var:te_cm_sol_lo_pan_slavic }
+			subtract = var:te_cm_sol_pan_slavic_slovene
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_pan_slavic
+		}
+	}
+}
+
+# Country scope. The standard-of-living gap bulgarian's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in bulgarian, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_pan_slavic_opt_bulgarian_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_pan_slavic
+			has_variable = te_cm_sol_lo_pan_slavic
+			has_variable = te_cm_sol_pan_slavic_bulgarian
+		}
+		value = var:te_cm_sol_hi_pan_slavic
+		min = var:te_cm_sol_pan_slavic_bulgarian
+		if = {
+			limit = { var:te_cm_sol_pan_slavic_bulgarian < var:te_cm_sol_lo_pan_slavic }
+			subtract = var:te_cm_sol_pan_slavic_bulgarian
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_pan_slavic
+		}
 	}
 }
 
@@ -4514,6 +5284,94 @@ te_cmg_pan_turkic_tatar_years_so_far = {
 		limit = { has_variable = te_cm_years_pan_turkic_tatar }
 		value = var:te_cm_years_pan_turkic_tatar
 		max = te_cm_years_tier2
+	}
+}
+
+# Country scope. The standard-of-living gap bashkir's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in bashkir, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_pan_turkic_opt_bashkir_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_pan_turkic
+			has_variable = te_cm_sol_lo_pan_turkic
+			has_variable = te_cm_sol_pan_turkic_bashkir
+		}
+		value = var:te_cm_sol_hi_pan_turkic
+		min = var:te_cm_sol_pan_turkic_bashkir
+		if = {
+			limit = { var:te_cm_sol_pan_turkic_bashkir < var:te_cm_sol_lo_pan_turkic }
+			subtract = var:te_cm_sol_pan_turkic_bashkir
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_pan_turkic
+		}
+	}
+}
+
+# Country scope. The standard-of-living gap crimean_tatar's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in crimean_tatar, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_pan_turkic_opt_crimean_tatar_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_pan_turkic
+			has_variable = te_cm_sol_lo_pan_turkic
+			has_variable = te_cm_sol_pan_turkic_crimean_tatar
+		}
+		value = var:te_cm_sol_hi_pan_turkic
+		min = var:te_cm_sol_pan_turkic_crimean_tatar
+		if = {
+			limit = { var:te_cm_sol_pan_turkic_crimean_tatar < var:te_cm_sol_lo_pan_turkic }
+			subtract = var:te_cm_sol_pan_turkic_crimean_tatar
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_pan_turkic
+		}
+	}
+}
+
+# Country scope. The standard-of-living gap caucasian_turk's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in caucasian_turk, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_pan_turkic_opt_caucasian_turk_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_pan_turkic
+			has_variable = te_cm_sol_lo_pan_turkic
+			has_variable = te_cm_sol_pan_turkic_caucasian_turk
+		}
+		value = var:te_cm_sol_hi_pan_turkic
+		min = var:te_cm_sol_pan_turkic_caucasian_turk
+		if = {
+			limit = { var:te_cm_sol_pan_turkic_caucasian_turk < var:te_cm_sol_lo_pan_turkic }
+			subtract = var:te_cm_sol_pan_turkic_caucasian_turk
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_pan_turkic
+		}
+	}
+}
+
+# Country scope. The standard-of-living gap uighur's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in uighur, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_pan_turkic_opt_uighur_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_pan_turkic
+			has_variable = te_cm_sol_lo_pan_turkic
+			has_variable = te_cm_sol_pan_turkic_uighur
+		}
+		value = var:te_cm_sol_hi_pan_turkic
+		min = var:te_cm_sol_pan_turkic_uighur
+		if = {
+			limit = { var:te_cm_sol_pan_turkic_uighur < var:te_cm_sol_lo_pan_turkic }
+			subtract = var:te_cm_sol_pan_turkic_uighur
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_pan_turkic
+		}
 	}
 }
 
@@ -4867,5 +5725,93 @@ te_cmg_east_african_sukuma_years_so_far = {
 		limit = { has_variable = te_cm_years_east_african_sukuma }
 		value = var:te_cm_years_east_african_sukuma
 		max = te_cm_years_tier3
+	}
+}
+
+# Country scope. The standard-of-living gap yao's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in yao, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_east_african_opt_yao_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_east_african
+			has_variable = te_cm_sol_lo_east_african
+			has_variable = te_cm_sol_east_african_yao
+		}
+		value = var:te_cm_sol_hi_east_african
+		min = var:te_cm_sol_east_african_yao
+		if = {
+			limit = { var:te_cm_sol_east_african_yao < var:te_cm_sol_lo_east_african }
+			subtract = var:te_cm_sol_east_african_yao
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_east_african
+		}
+	}
+}
+
+# Country scope. The standard-of-living gap makua's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in makua, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_east_african_opt_makua_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_east_african
+			has_variable = te_cm_sol_lo_east_african
+			has_variable = te_cm_sol_east_african_makua
+		}
+		value = var:te_cm_sol_hi_east_african
+		min = var:te_cm_sol_east_african_makua
+		if = {
+			limit = { var:te_cm_sol_east_african_makua < var:te_cm_sol_lo_east_african }
+			subtract = var:te_cm_sol_east_african_makua
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_east_african
+		}
+	}
+}
+
+# Country scope. The standard-of-living gap lacustrine_bantu's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in lacustrine_bantu, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_east_african_opt_lacustrine_bantu_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_east_african
+			has_variable = te_cm_sol_lo_east_african
+			has_variable = te_cm_sol_east_african_lacustrine_bantu
+		}
+		value = var:te_cm_sol_hi_east_african
+		min = var:te_cm_sol_east_african_lacustrine_bantu
+		if = {
+			limit = { var:te_cm_sol_east_african_lacustrine_bantu < var:te_cm_sol_lo_east_african }
+			subtract = var:te_cm_sol_east_african_lacustrine_bantu
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_east_african
+		}
+	}
+}
+
+# Country scope. The standard-of-living gap kikuyu's own gate reads (te_cm_sol_gate_part): the core range at
+# the last census widened to take in kikuyu, highest minus lowest, for the entry's description. 0 without the figures.
+te_cmg_east_african_opt_kikuyu_sol_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cm_sol_hi_east_african
+			has_variable = te_cm_sol_lo_east_african
+			has_variable = te_cm_sol_east_african_kikuyu
+		}
+		value = var:te_cm_sol_hi_east_african
+		min = var:te_cm_sol_east_african_kikuyu
+		if = {
+			limit = { var:te_cm_sol_east_african_kikuyu < var:te_cm_sol_lo_east_african }
+			subtract = var:te_cm_sol_east_african_kikuyu
+		}
+		else = {
+			subtract = var:te_cm_sol_lo_east_african
+		}
 	}
 }
