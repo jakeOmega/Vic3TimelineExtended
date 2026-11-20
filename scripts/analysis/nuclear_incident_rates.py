@@ -103,6 +103,16 @@ class RiskModel:
         self.values.update({k: v for k, _, v in parse_script(root / "common/script_values/sr_colony_module_values.txt")
                             if k.startswith("sr_mod_bunker_")})
         self.triggers = {k: v for k, _, v in parse_script(root / "common/scripted_triggers/nuclear_deterrence_triggers.txt")}
+        # The two sources of the precision-weapon fields (2026-11-20 delivery
+        # spec §3.4): the technology, and the ICBM force declared while
+        # fielded. Each is {field: figure}.
+        # A technology file holds bare lists (unlocking_technologies), which
+        # parse_script can't read: take the technology's modifier block alone.
+        era_8 = (root / "common/technology/technologies/era_8.txt").read_text(encoding="utf-8-sig")
+        pgm = re.search(r"(?ms)^precision_guided_munitions = \{.*?^\tmodifier = \{(.*?)^\t\}", era_8)
+        self.pgm_modifier = {k: float(v) for k, v in re.findall(r"(?m)^\s*(\w+)\s*=\s*(-?[\d.]+)", pgm.group(1))}
+        statics = {k: v for k, _, v in parse_script(root / "common/static_modifiers/nuclear_deterrence_modifiers.txt")}
+        self.icbm_force = {k: float(v) for k, _, v in statics["nd_icbm_force"] if k != "icon"}
         effects = {k: v for k, _, v in parse_script(root / "common/scripted_effects/nuclear_deterrence_effects.txt")}
         self.families = next(v for k, _, v in effects["nd_fire_incident_family"] if k == "random_list")
         events = {k: v for k, _, v in parse_script(root / "events/nuclear_incident_events.txt")}
@@ -131,9 +141,19 @@ class RiskModel:
             return posture.capital_hit_share   # reads modifiers at the enemy's capital
         if value == "sr_mod_units_bunker":
             return posture.command_center  # the benchmarks hold no colonies: 0
+        if value.startswith("modifier:"):
+            return self.modifier(value.removeprefix("modifier:"), posture)
         if value in self.values:
             return self.number(self.values[value], posture)
         return float(value)
+
+    def modifier(self, field, p):
+        """A country's modifier sum, from the sources the model knows: the
+        Precision-Guided Munitions technology and the ICBM force. Only the
+        precision-weapon fields are asked for; anything else raises."""
+        if field not in ("country_nd_k_ratio_add", "country_nd_silo_penetration_add"):
+            raise ValueError(f"unmodelled modifier: {field}")
+        return (p.pgm * self.pgm_modifier.get(field, 0)) + (p.icbms * self.icbm_force.get(field, 0))
 
     # Triggers whose body reads game state the model has no field for: each is
     # answered from the posture. Any other unknown key raises (number() below).

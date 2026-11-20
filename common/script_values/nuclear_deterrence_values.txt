@@ -752,17 +752,72 @@ nd_effective_survivability_at_readiness_3 = {
 # ----------------------------------------------------------------------------
 
 # How many of the enemy's exposed warheads one landed counterforce warhead
-# destroys.
+# destroys: 1, and country_nd_k_ratio_add's sum (2026-11-20 delivery spec
+# §3.4): +0.5 from the Precision-Guided Munitions technology, +0.5 from the
+# ICBM force while fielded (nd_icbm_force, declared on je_nuclear_program).
 nd_k_ratio = {
 	value = 1
+	add = modifier:country_nd_k_ratio_add
+	# The fallback while the declaration doesn't read (nd_icbm_force_declared_reads).
+	if = {
+		limit = {
+			NOT = { nd_icbm_force_declared_reads = yes }
+			nd_fields_icbms = yes
+		}
+		add = nd_icbm_force_k_ratio
+	}
+}
+
+# The ICBM force (nd_icbm_force, nuclear_deterrence_modifiers.txt): 1 while
+# this country fields ICBMs, for je_nuclear_program's declaration. Its two
+# figures, which the fallback adds by script and the self-check expects.
+nd_icbm_force_value = {
+	value = 0
 	if = {
 		limit = { nd_fields_icbms = yes }
-		add = 0.5
+		value = 1
 	}
+}
+
+nd_icbm_force_k_ratio = 0.5
+
+nd_icbm_force_attack_success = 0.5
+
+# Self-check nd_icbm_force_sum (nd_icbm_force_selfcheck, TEMPORARY): what the
+# parts should give. The technologies' figures are their own (era_8.txt's
+# Precision-Guided Munitions, era_6.txt's Nuclear Weapons); the test holds them.
+nd_sc_icbm_pgm_now = {
+	value = 0
+	if = {
+		limit = { has_technology_researched = precision_guided_munitions }
+		value = 1
+	}
+}
+
+nd_sc_icbm_k_expected = {
+	value = nd_icbm_force_k_ratio
 	if = {
 		limit = { has_technology_researched = precision_guided_munitions }
 		add = 0.5
 	}
+}
+
+nd_sc_icbm_k_gap = {
+	value = modifier:country_nd_k_ratio_add
+	subtract = nd_sc_icbm_k_expected
+}
+
+nd_sc_icbm_attack_floor = {
+	value = nd_icbm_force_attack_success
+	if = {
+		limit = { has_technology_researched = nuclear_weapons }
+		add = 1
+	}
+}
+
+nd_sc_icbm_attack_gap = {
+	value = modifier:country_nuclear_weapon_attack_success_add
+	subtract = nd_sc_icbm_attack_floor
 }
 
 # The share of the warheads a counterforce strike would destroy that get away
@@ -915,6 +970,60 @@ nd_warning_penalty_target = {
 	}
 }
 
+# Precision weapons against silos (2026-11-20 delivery spec §3.4, owner call
+# 7): against an enemy whose silo penetration (country_nd_silo_penetration_add,
+# +0.15 from Precision-Guided Munitions) is above 0, our silos leave
+# nd_exposure_factor_icbms + that penetration exposed. Each reader that
+# compares us with the enemy multiplies its exposed share by (factor +
+# penetration) / factor, after the warning penalty, and holds the share at 1
+# or less: exact at the target, close on a survivability still climbing. 1
+# while we field no ICBMs. One factor per enemy scope, as the warning
+# penalties are; scripts/analysis/nuclear_survivors.py mirrors them.
+nd_accuracy_mult_saved = {
+	value = 1
+	if = {
+		limit = {
+			nd_fields_icbms = yes
+			scope:nd_sv_enemy = { modifier:country_nd_silo_penetration_add > 0 }
+		}
+		value = nd_exposure_factor_icbms
+		scope:nd_sv_enemy = {
+			add = modifier:country_nd_silo_penetration_add
+		}
+		divide = nd_exposure_factor_icbms
+	}
+}
+
+nd_accuracy_mult_issuer = {
+	value = 1
+	if = {
+		limit = {
+			nd_fields_icbms = yes
+			scope:nd_issuer = { modifier:country_nd_silo_penetration_add > 0 }
+		}
+		value = nd_exposure_factor_icbms
+		scope:nd_issuer = {
+			add = modifier:country_nd_silo_penetration_add
+		}
+		divide = nd_exposure_factor_icbms
+	}
+}
+
+nd_accuracy_mult_target = {
+	value = 1
+	if = {
+		limit = {
+			nd_fields_icbms = yes
+			scope:nd_target = { modifier:country_nd_silo_penetration_add > 0 }
+		}
+		value = nd_exposure_factor_icbms
+		scope:nd_target = {
+			add = modifier:country_nd_silo_penetration_add
+		}
+		divide = nd_exposure_factor_icbms
+	}
+}
+
 nd_exposed_warheads_vs_saved = {
 	value = 100
 	subtract = {
@@ -923,6 +1032,8 @@ nd_exposed_warheads_vs_saved = {
 		min = 0
 	}
 	divide = 100
+	multiply = nd_accuracy_mult_saved
+	max = 1
 	multiply = nd_stockpile
 }
 
@@ -934,6 +1045,8 @@ nd_exposed_warheads_r2_vs_saved = {
 		min = 0
 	}
 	divide = 100
+	multiply = nd_accuracy_mult_saved
+	max = 1
 	multiply = nd_stockpile
 }
 
@@ -946,6 +1059,8 @@ nd_exposed_warheads_target_r2_vs_saved = {
 		min = 0
 	}
 	divide = 100
+	multiply = nd_accuracy_mult_saved
+	max = 1
 	multiply = nd_stockpile
 }
 
@@ -957,6 +1072,8 @@ nd_exposed_warheads_vs_issuer = {
 		min = 0
 	}
 	divide = 100
+	multiply = nd_accuracy_mult_issuer
+	max = 1
 	multiply = nd_stockpile
 }
 
@@ -968,6 +1085,8 @@ nd_exposed_warheads_vs_target = {
 		min = 0
 	}
 	divide = 100
+	multiply = nd_accuracy_mult_target
+	max = 1
 	multiply = nd_stockpile
 }
 

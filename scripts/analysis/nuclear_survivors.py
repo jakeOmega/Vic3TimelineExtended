@@ -69,17 +69,29 @@ TARGET_ROWS = (
 )
 
 
-def exposed(stockpile, survivability, readiness_factor, based_near=False):
-    """Our warheads a first strike could reach (nd_exposed_warheads_vs_saved)."""
+def accuracy_mult(enemy_penetration, fields_icbms=True):
+    """How much more of our force an enemy's precision weapons reach (spec
+    §3.4; nd_accuracy_mult_saved): our silos leave the silo factor plus its
+    penetration exposed. 1 when we field no silos or it has none."""
+    if not fields_icbms or enemy_penetration <= 0:
+        return 1.0
+    silo = EXPOSURE_FACTORS["icbms"]
+    return (silo + enemy_penetration) / silo
+
+
+def exposed(stockpile, survivability, readiness_factor, based_near=False, accuracy=1.0):
+    """Our warheads a first strike could reach (nd_exposed_warheads_vs_saved):
+    the warning penalty, then the enemy's accuracy, the share held at 1."""
     effective = survivability * readiness_factor
     if based_near:
         effective = max(0.0, effective - WARNING_TIME_PENALTY)
-    return stockpile * (1 - effective / 100)
+    return stockpile * min(1.0, (1 - effective / 100) * accuracy)
 
 
-def survivors(stockpile, survivability, readiness_factor, credit, enemy_k, enemy_believed, based_near=False):
+def survivors(stockpile, survivability, readiness_factor, credit, enemy_k, enemy_believed, based_near=False,
+              accuracy=1.0):
     """Warheads left after the enemy spends its whole arsenal on ours."""
-    destroyed = min(exposed(stockpile, survivability, readiness_factor, based_near),
+    destroyed = min(exposed(stockpile, survivability, readiness_factor, based_near, accuracy),
                     enemy_k * enemy_believed) * (1 - credit)
     return max(0.0, stockpile - destroyed)
 

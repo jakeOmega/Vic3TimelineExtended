@@ -811,6 +811,15 @@ nd_fields_missile_submarines = {
 	}
 }
 
+# Country scope (any): does nd_icbm_force, declared on je_nuclear_program, reach
+# a modifier: read? Self-check nd_icbm_force_sum measures it. If it reads
+# BROKEN, change this to always = no: nd_k_ratio, nuclear_strike_attack_rating
+# and nuclear_program_display_attack_rating then add the force's figures from
+# nd_fields_icbms directly (the declaration reads 0, so nothing counts twice).
+nd_icbm_force_declared_reads = {
+	always = yes
+}
+
 # REACH (rework spec §7; nd_reach_refresh). State scope: can $COUNTRY$ strike
 # this state? ICBMs reach every state; bombers the countries in its nd_reach;
 # missile submarines every coastal state (nd_fields_missile_submarines, which

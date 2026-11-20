@@ -9,7 +9,7 @@ from pathlib import Path
 
 from scripts.analysis.nuclear_incident_rates import Posture, RiskModel
 from scripts.analysis.nuclear_survivors import (EXPOSURE_FACTORS, TARGET_ROWS, WARNING_TIME_PENALTY,
-                                                counterforce_destroyed, counterforce_saved, decapitation_chance,
+                                                accuracy_mult, counterforce_destroyed, counterforce_saved, decapitation_chance,
                                                 exposed, full_strike_lost_share, redundancy, survivability_target,
                                                 survivors)
 from test_nuclear_deterrence import block, loc_value, read, squash, strip_comments
@@ -232,13 +232,18 @@ class TestWarningTime(unittest.TestCase):
                 bare = exposed(p.stockpile, p.survivability, factor, based_near=based_near)
                 self.assertTrue(math.isclose(self.model.number("nd_exposed_warheads_vs_saved", p), bare), p)
                 self.assertLessEqual(bare, p.stockpile)
+                # An attacker with precision weapons also reaches more of our
+                # silos (delivery spec §3.4), after the warning penalty.
                 attacker = Posture(salvo_forces_landed=3, icbms=True, pgm=True)
                 victim = replace(p, enemy=attacker)
+                aimed = exposed(p.stockpile, p.survivability, factor, based_near=based_near,
+                                accuracy=accuracy_mult(0.15))
                 self.assertTrue(math.isclose(self.model.number("nd_counterforce_destroyed_raw", victim),
-                                             counterforce_destroyed(3, 2, bare, credit), abs_tol=1e-9), p)
+                                             counterforce_destroyed(3, 2, aimed, credit), abs_tol=1e-9), p)
 
     def test_next_door_costs_survivors(self):
-        enemy = Posture(believed_stockpile=40, icbms=True, pgm=True)
+        # No precision weapons, so the warning time alone moves the figure.
+        enemy = Posture(believed_stockpile=40, icbms=True, pgm=False)
         far = Posture(readiness=3, authority=1, survivability=50, stockpile=10, enemy=enemy)
         near = replace(far, based_near=True)
         self.assertTrue(math.isclose(self.model.number("nd_survivors_vs_saved", far), 5))
@@ -279,7 +284,9 @@ class TestCounterforceScript(unittest.TestCase):
                         attacker = Posture(salvo_forces_landed=landed, icbms=icbms, pgm=pgm)
                         victim = Posture(readiness=2, authority=authority, safeguards=safeguards,
                                          survivability=survivability, stockpile=10, enemy=attacker)
-                        exposed = self.model.number("nd_exposed_warheads", victim)
+                        # Our silos against its precision weapons (delivery spec §3.4).
+                        exposed = min(victim.stockpile, self.model.number("nd_exposed_warheads", victim)
+                                      * accuracy_mult(0.15 if pgm else 0, victim.icbms))
                         k = self.model.number("nd_k_ratio", attacker)
                         credit = self.model.number("nd_launch_credit", victim)
                         self.assertTrue(math.isclose(self.destroyed(victim),
@@ -294,7 +301,8 @@ class TestCounterforceScript(unittest.TestCase):
         for stockpile, survivability in ((3, 0), (0, 0), (6, 50)):
             victim = Posture(readiness=3, authority=1, survivability=survivability, stockpile=stockpile, enemy=attacker)
             self.assertLessEqual(self.destroyed(victim), stockpile)
-            self.assertLessEqual(self.destroyed(victim), self.model.number("nd_exposed_warheads", victim) + 1e-9)
+            self.assertLessEqual(self.destroyed(victim),
+                                 self.model.number("nd_exposed_warheads_vs_saved", victim) + 1e-9)
         hidden = Posture(readiness=3, authority=1, survivability=100, stockpile=10, enemy=attacker)
         self.assertEqual(self.destroyed(hidden), 0)
 
