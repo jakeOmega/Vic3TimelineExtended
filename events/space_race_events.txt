@@ -4822,8 +4822,9 @@ space_race_events.94 = {
 	}
 }
 
-# The First Child of <World>: a colony first holds sr_life_first_child_people
-# (sr_life_month, sr_life_first_child_pick).
+# The First Child of <World>: a colony first holds sr_life_first_child_people,
+# sr_life_first_child_wait_months or more after the nation's first colony of
+# sr_free_colony_minimum people (sr_life_month, sr_life_first_child_pick).
 space_race_events.95 = {
 	type = country_event
 	placement = root

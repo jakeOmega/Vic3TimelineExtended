@@ -398,7 +398,11 @@ sr_colony_evacuation_self_check = {
 # Country scope, the entry's pulse. Kept rare (owner, 2026-10-26: a few
 # two-option events seen too often break immersion): the first child once per
 # nation (sr_life_first_child_done), for its first colony to reach
-# sr_life_first_child_people; a strike or a dome breach by chance, at a colony
+# sr_life_first_child_people once sr_life_first_child_wait_months have passed
+# since the nation first held a colony of sr_free_colony_minimum people
+# (sr_life_first_child_from, the month index; owner, 2026-11-20: at 2,000 people
+# alone it came one to four months after the settlers, since a people bar counts
+# months of emigration); a strike or a dome breach by chance, at a colony
 # large enough, at most one in sr_life_cooldown's ten years. One life event is
 # open at a time (sr_life_site, cleared by the event or after 60 days).
 # `random`'s chance takes whole percents here (no fractional chance is used in
@@ -412,11 +416,23 @@ sr_life_month = {
 		}
 		if = {
 			limit = { NOT = { has_variable = sr_life_first_child_done } }
-			sr_life_first_child_pick = yes
+			# The clock starts once, and runs on if the colony is lost.
+			if = {
+				limit = {
+					NOT = { has_variable = sr_life_first_child_from }
+					sr_life_has_colony = { MIN = sr_free_colony_minimum }
+				}
+				set_variable = { name = sr_life_first_child_from value = te_history_month_index }
+			}
+			if = {
+				limit = { sr_life_first_child_months_settled >= sr_life_first_child_wait_months }
+				sr_life_first_child_pick = yes
+			}
 		}
 		if = {
 			limit = { has_variable = sr_life_site }
 			set_variable = { name = sr_life_first_child_done value = yes }
+			remove_variable = sr_life_first_child_from
 			set_variable = { name = sr_life_site_pending value = yes days = 60 }
 			trigger_event = { id = space_race_events.95 }
 		}

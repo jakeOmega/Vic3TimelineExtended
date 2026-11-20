@@ -189,8 +189,8 @@ for `TE_SR_SITES <world> is a free colony`.
    Asks to Join Us": welcome it and it is ours again at autonomy 20, with its people and modules.
 6. **A dead holder.** `annex <TAG>` an AI holder whose capital region nobody can take a colony for: a world with 1,000
    people or more reads Free, not Unclaimed.
-7. **Colony life.** Our first colony to reach 2,000 people gets "The First Child of <World>", and no later colony
-   does. Strikes and dome breaches come rarely, at colonies of 10,000 and 5,000 people, and never within ten years of
+7. **Colony life.** Our first colony to reach 5,000 people gets "The First Child of <World>", three years after our
+   first colony reached 1,000 at the soonest, and no later colony does. Strikes and dome breaches come rarely, at colonies of 10,000 and 5,000 people, and never within ten years of
    the last one (`sr_life_cooldown`). A dome breach names the people lost, and Settlers shows the colony smaller.
 8. **The AI.** In an observer run, AI space powers answer the demand with charters, supply up to two free colonies,
    and welcome a colony that asks to join.
