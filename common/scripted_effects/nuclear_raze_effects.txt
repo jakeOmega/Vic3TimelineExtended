@@ -9,8 +9,8 @@
 # stands into its hands in the crisis.
 #
 # The share destroyed (nd_raze_share_destroyed, nuclear_raze_values.txt) is
-# the state's metropolitan share, the share of its urban people living in its
-# largest city (te_dg_mt, Demographics), held between 10% and 80%; half where
+# half the state's metropolitan share, the share of its urban people living in
+# its largest city (te_dg_mt, Demographics), so from 5% to 40%; a quarter where
 # Demographics is not on Full or the state keeps no share. A loose warhead's
 # device is cruder: its share is multiplied by a factor from 0.1 to 1
 # (nd_raze_roll_terror_factor).

@@ -3,13 +3,15 @@
 # ============================================================================
 
 # State scope: the share of a struck state's urban building levels a city
-# strike destroys, before a loose warhead's factor. The state's metropolitan
-# share (te_dg_mt, 0-100: the share of its urban people living in its largest
-# city, where the warhead falls), held between 10% and 80% (owner, 2026-11-19):
-# a state of market towns still loses a tenth, and one warhead never takes a
-# whole metropolis. Half where the share does not act: Demographics not on Full
-# (its effects act under Full only: te_demog_effects_run), or a state with too
-# few urban people to keep a share.
+# strike destroys, before a loose warhead's factor. Half the state's
+# metropolitan share (te_dg_mt, 0-100: the share of its urban people living in
+# its largest city, where the warhead falls), the share held between 10% and
+# 80% first (owner, 2026-11-19), so from 5% to 40% (owner, 2026-11-20: "half
+# size times the primacy score"): a state of market towns still loses a
+# twentieth, and one warhead never takes even half a metropolis. A quarter
+# where the share does not act: Demographics not on Full (its effects act under
+# Full only: te_demog_effects_run), or a state with too few urban people to
+# keep a share.
 nd_raze_share_base = {
 	value = 0.5
 	if = {
@@ -22,6 +24,7 @@ nd_raze_share_base = {
 		min = 0.1
 		max = 0.8
 	}
+	multiply = 0.5
 }
 
 # State scope: the share this strike destroys. A loose warhead's factor
