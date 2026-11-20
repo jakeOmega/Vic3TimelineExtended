@@ -8,10 +8,10 @@ from dataclasses import replace
 from pathlib import Path
 
 from scripts.analysis.nuclear_incident_rates import Posture, RiskModel
-from scripts.analysis.nuclear_survivors import (EXPOSURE_FACTORS, TARGET_ROWS, WARNING_TIME_PENALTY,
-                                                accuracy_mult, counterforce_destroyed, counterforce_saved, decapitation_chance,
-                                                exposed, full_strike_lost_share, redundancy, survivability_target,
-                                                survivors)
+from scripts.analysis.nuclear_survivors import (EXPOSURE_FACTORS, FLOOR_SHARE, SAFEGUARDS_CREDIT_CUT_MAX,
+                                                TARGET_ROWS, WARNING_TIME_PENALTY, accuracy_mult, counterforce_destroyed,
+                                                counterforce_saved, decapitation_chance, exposed, forces_preview,
+                                                full_strike_lost_share, redundancy, survivability_target, survivors)
 from test_nuclear_deterrence import block, loc_value, read, squash, strip_comments
 
 ROOT = Path(__file__).resolve().parent
@@ -557,6 +557,356 @@ class TestWorldsView(unittest.TestCase):
     def test_preview_lines_say_what_they_assume(self):
         for key in ("nd_tt_open_f_survivable", "nd_tt_open_f_armed"):
             self.assertIn("as secure as their technology allows", loc_value(key), key)
+
+
+# ---- The Strike section's previews (2026-11-20 delivery spec §5.3; plan Task 7, D14) ----
+
+EFFECTS = ROOT / "common/scripted_effects/nuclear_deterrence_effects.txt"
+EXTRA_VALUES = ROOT / "common/script_values/extra_script_values.txt"
+CUSTOM_LOC = ROOT / "common/customizable_localization/nuclear_deterrence_custom_loc.txt"
+SGUIS = ROOT / "common/scripted_guis/nuclear_deterrence_sguis.txt"
+GUI = ROOT / "gui/journal_entry_widgets/nuclear_deterrence_widget.gui"
+
+# Each range the panel prints, as a low and a high end (nd_plan_pv_<range>_lo,
+# _hi). The razed share is the Cities mission's; the rest rest on the world's
+# view of the target (D8).
+PREVIEW_RANGES = ("raze", "destroyed", "kept", "flown", "redundancy", "decap")
+WORLDS_VIEW_RANGES = ("destroyed", "kept", "flown", "redundancy", "decap")
+PREVIEW_VARS = ([f"nd_plan_pv_{kind}_{m}" for kind in ("landed", "deaths") for m in (1, 2, 3)]
+                + [f"nd_plan_pv_{r}_{end}" for r in PREVIEW_RANGES for end in ("lo", "hi")]
+                + ["nd_plan_pv_warheads", "nd_plan_pv_fires_first", "nd_plan_pv_accuracy", "nd_plan_pv_case"])
+# What is stored from the target's own scope (scope:nd_pv_enemy), to a tenth.
+ENEMY_FIGURES = (("nd_plan_pv_warheads", "nd_seen_stockpile"),
+                 ("nd_plan_pv_destroyed_lo", "nd_pv_destroyed_lo"), ("nd_plan_pv_destroyed_hi", "nd_pv_destroyed_hi"),
+                 ("nd_plan_pv_kept_lo", "nd_pv_kept_lo"), ("nd_plan_pv_kept_hi", "nd_pv_kept_hi"),
+                 ("nd_plan_pv_flown_lo", "nd_pv_flown_lo"), ("nd_plan_pv_flown_hi", "nd_pv_flown_hi"),
+                 ("nd_plan_pv_redundancy_lo", "nd_redundancy_believed_floor"),
+                 ("nd_plan_pv_redundancy_hi", "nd_redundancy_believed"))
+# The script's round = yes.
+def tenth(x):
+    return math.floor(x * 10 + 0.5) / 10
+
+
+class TestStrikePreview(unittest.TestCase):
+    """The Strike section previews each mission at the salvo size set
+    (2026-11-20 delivery spec §5.3, plan Task 7, D14): Cities its warheads
+    expected to land, its deaths and the share of a city razed; Forces the
+    warheads it destroys, those flown first and those left to answer;
+    Leadership the chance to cut the chain of command. Of the target only the
+    world's view is read, and every figure resting on it is a range from its
+    worst case for us, with the shared hover (D8, owner call 14)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.model = RiskModel()
+        cls.values = strip_comments(read(TestWorldsView.VALUES))
+        cls.effects = strip_comments(read(EFFECTS))
+        cls.custom = strip_comments(read(CUSTOM_LOC))
+
+    def number(self, name, posture):
+        return self.model.number(name, posture)
+
+    # ---- when it is stored -------------------------------------------------------
+
+    def test_stored_weekly_and_on_every_planner_op(self):
+        """nd_plan_refresh ends with the preview: weekly for a human and on ops
+        72/73. Ops 74-78 (mission, size) run the preview alone, behind the
+        click-only marker, so the enemy doesn't change under the click. Op 79
+        opens the Launch Order, which changes nothing the preview reads."""
+        self.assertTrue(squash(block(self.effects, "nd_plan_refresh")).endswith("nd_plan_preview = yes"))
+        self.assertIn("if = { limit = { is_ai = no nd_is_armed = yes } nd_plan_refresh = yes }",
+                      squash(block(self.effects, "nd_weekly_update")))
+        marker = "if = { limit = { has_variable = nd_plan_click } remove_variable = nd_plan_click "
+        for name, call in (("nd_plan_step_enemy", "nd_plan_refresh = yes"), ("nd_plan_set_mission", "nd_plan_preview = yes"),
+                           ("nd_plan_step_size", "nd_plan_preview = yes")):
+            body = squash(block(self.effects, name))
+            self.assertIn(call, body[body.index(marker):], name)
+        sgui = squash(block(strip_comments(read(SGUIS)), "nd_posture_sgui"))
+        for op, call in ((72, "nd_plan_step_enemy = { OP = subtract }"), (73, "nd_plan_step_enemy = { OP = add }"),
+                         (74, "nd_plan_set_mission = { M = 1 }"), (75, "nd_plan_set_mission = { M = 2 }"),
+                         (76, "nd_plan_set_mission = { M = 3 }"), (77, "nd_plan_step_size = { OP = subtract }"),
+                         (78, "nd_plan_step_size = { OP = add }")):
+            self.assertIn(f"limit = {{ exists = scope:op scope:op = {op} }} {call}", sgui, op)
+
+    def test_each_figure_is_stored_and_cleared(self):
+        body = block(self.effects, "nd_plan_preview")
+        keep, clear = body.rsplit("\n\telse = {", 1)
+        keep, clear = squash(keep), squash(clear)
+        for name, value in ENEMY_FIGURES:
+            self.assertIn(f"nd_plan_pv_store = {{ NAME = {name} VALUE = {value} }}", keep, name)
+        self.assertEqual(squash(block(self.effects, "nd_plan_pv_store")),
+                         "set_variable = { name = $NAME$ value = { value = scope:nd_pv_enemy.$VALUE$ multiply = 10 "
+                         "round = yes divide = 10 } }")
+        for name, value in (("nd_plan_pv_accuracy", "scope:nd_pv_enemy.nd_accuracy_mult_saved"),
+                            ("nd_plan_pv_fires_first", "nd_pv_fires_first"),
+                            ("nd_plan_pv_decap_lo", "nd_pv_decap_chance_lo"),
+                            ("nd_plan_pv_decap_hi", "nd_pv_decap_chance_hi"),
+                            ("nd_plan_pv_case", "nd_pv_leadership_case")):
+            self.assertIn(f"set_variable = {{ name = {name} value = {value} }}", keep, name)
+        for name in PREVIEW_VARS:
+            self.assertIn(f"remove_variable = {name}", clear, name)
+
+    def test_each_mission_runs_the_salvos_own_picker(self):
+        """Expected landed is the salvo's own: its picker, once a warhead, at
+        each picked state's odds, the marks cleared after. The panel's mission
+        is put back, and the scopes the picker reads are cleared, since a
+        saved scope outlives the effect that saved it."""
+        preview = squash(block(self.effects, "nd_plan_preview"))
+        for m in (1, 2, 3):
+            self.assertIn(f"nd_plan_preview_mission = {{ M = {m} }}", preview)
+        self.assertIn("set_variable = { name = nd_salvo_mission value = var:nd_plan_pv_mission_set }", preview)
+        for scope in ("nd_salvo_attacker", "attacking_country", "nd_sv_enemy", "nd_pv_enemy", "nd_salvo_cap_region",
+                      "target_state"):
+            self.assertIn(f"clear_saved_scope = {scope}", preview, scope)
+        mission = squash(block(self.effects, "nd_plan_preview_mission"))
+        self.assertIn("set_variable = { name = nd_salvo_mission value = $M$ }", mission)
+        self.assertIn("while = { count = nd_salvo_size_value nd_plan_preview_warhead = { M = $M$ } }", mission)
+        for name in ("nd_salvo_target", "nd_pv_left", "nd_pv_kill", "nd_pv_raze", "nd_salvo_lead_alt", "nd_salvo_aimed"):
+            self.assertIn(f"remove_variable = {name}", mission, name)
+        warhead = squash(block(self.effects, "nd_plan_preview_warhead"))
+        self.assertTrue(warhead.startswith("scope:nd_pv_enemy = { nd_salvo_pick_target = yes } "
+                                           "if = { limit = { has_variable = nd_salvo_aimed } remove_variable = nd_salvo_aimed"))
+        self.assertIn("set_variable = { name = nd_plan_pv_p value = nd_plan_pv_land_chance }", warhead)
+        self.assertIn("change_variable = { name = nd_plan_pv_landed_$M$ add = var:nd_plan_pv_p }", warhead)
+        self.assertEqual(squash(block(self.values, "nd_plan_pv_land_chance")),
+                         "value = nuclear_strike_success_chance divide = 100")
+        # The order's own warhead: the same picker and the same odds.
+        salvo = squash(block(self.effects, "nd_salvo_warhead"))
+        self.assertIn("scope:nd_salvo_victim = { nd_salvo_pick_target = yes }", salvo)
+        self.assertIn("modifier = nuclear_strike_success_chance nd_salvo_hit = yes", salvo)
+
+    def test_deaths_follow_the_strikes(self):
+        """A tenth of the people the earlier warheads left, a quarter of that
+        on Forces, as the city and the counterforce strikes kill."""
+        extra = strip_comments(read(EXTRA_VALUES))
+        city = float(re.search(r"multiply = ([\d.]+) round = yes",
+                               squash(block(extra, "nuclear_industrial_strike_killed_population")))[1])
+        forces = float(re.search(r"multiply = ([\d.]+) round = yes",
+                                 squash(block(extra, "nd_counterforce_strike_killed_population")))[1])
+        kill = squash(block(self.values, "nd_pv_kill_value"))
+        self.assertEqual(kill, f"value = var:nd_pv_left multiply = {city:g} if = {{ limit = {{ scope:nd_salvo_attacker = "
+                               f"{{ var:nd_salvo_mission = 2 }} }} multiply = {forces / city:g} }} "
+                               f"multiply = scope:nd_salvo_attacker.var:nd_plan_pv_p")
+        self.assertEqual(squash(block(self.values, "nd_pv_people_value")),
+                         "value = state_population if = { limit = { has_variable = nd_strike_people_left } "
+                         "value = var:nd_strike_people_left max = state_population }")
+
+    # ---- the figures -------------------------------------------------------------
+
+    def test_the_other_end_is_the_floor_and_every_safeguard(self):
+        self.assertEqual(squash(block(self.values, "nd_survivability_floor")),
+                         f"value = nd_survivability_target multiply = {FLOOR_SHARE}")
+        self.assertEqual(squash(block(self.values, "nd_seen_survivability_floor")), "value = nd_survivability_floor")
+        self.assertEqual(squash(block(self.values, "nd_seen_launch_credit_low")),
+                         "value = nd_seen_launch_credit subtract = { value = nd_launch_credit_safeguards_cut "
+                         "multiply = 3 } min = 0")
+        self.assertTrue(math.isclose(3 * self.number("nd_launch_credit_safeguards_cut", Posture()),
+                                     SAFEGUARDS_CREDIT_CUT_MAX))
+        seen = squash(block(self.values, "nd_seen_exposed_warheads_vs_saved"))
+        self.assertEqual(squash(block(self.values, "nd_seen_exposed_warheads_floor_vs_saved")),
+                         seen.replace("value = nd_seen_survivability ", "value = nd_seen_survivability_floor "))
+
+    def test_forces_ranges_match_the_mirror(self):
+        heightened = self.number("nd_survivability_factor_heightened", Posture())
+        for pgm in (False, True):
+            for landed in (0, 1.5, 6, 20):
+                us = Posture(icbms=True, pgm=pgm, plan_pv_landed_2=landed)
+                k = self.number("nd_k_ratio", us)
+                for authority in (1, 2, 3):
+                    for stage, readiness in ((0, 0), (2, 3)):
+                        for icbms in (False, True):
+                            for based_near in (False, True):
+                                them = Posture(authority=authority, stage=stage, readiness=readiness, icbms=icbms,
+                                               public_estimate=12, based_near=based_near, enemy=us)
+                                case = (pgm, landed, authority, stage, icbms, based_near)
+                                factor = (self.number("nd_readiness_survivability_factor", them) if stage
+                                          else heightened)
+                                destroyed, flown, kept = forces_preview(
+                                    12, self.number("nd_survivability_target", them), factor,
+                                    self.number("nd_seen_launch_credit", them), k, landed, based_near,
+                                    accuracy_mult(0.15 if pgm else 0, fields_icbms=icbms), fires_first=authority == 3)
+                                for kind, ends in (("destroyed", destroyed), ("flown", flown), ("kept", kept)):
+                                    lo, hi = (self.number(f"nd_pv_{kind}_{end}", them) for end in ("lo", "hi"))
+                                    self.assertTrue(math.isclose(lo, ends[0], abs_tol=1e-9), (kind, case))
+                                    self.assertTrue(math.isclose(hi, ends[1], abs_tol=1e-9), (kind, case))
+                                    self.assertLessEqual(lo, hi, (kind, case))
+        # A salvo of one warhead against a large arsenal: the ends differ only by the credit.
+        them = Posture(authority=3, public_estimate=40, enemy=Posture(plan_pv_landed_2=1))
+        self.assertLess(self.number("nd_pv_destroyed_lo", them), self.number("nd_pv_destroyed_hi", them))
+
+    def test_leadership_chance_matches_the_mirror(self):
+        for estimate in (0, 5, 30):
+            for sat in (False, True):
+                them = Posture(public_estimate=estimate, satellite_communications=sat, stockpile=99, survivability=5,
+                               reliability=10)
+                target = self.number("nd_survivability_target", them)
+                hi = self.number("nd_redundancy_believed", them)
+                lo = self.number("nd_redundancy_believed_floor", them)
+                self.assertTrue(math.isclose(hi, redundancy(estimate, sat, survivability=target)), estimate)
+                self.assertTrue(math.isclose(lo, redundancy(estimate, sat, survivability=target * FLOOR_SHARE)),
+                                estimate)
+                self.assertLessEqual(lo, hi)
+                for landed in (0, 2, 8, 25):
+                    us = Posture(plan_pv_landed_3=landed, plan_pv_redundancy_lo=tenth(lo), plan_pv_redundancy_hi=tenth(hi))
+                    low = self.number("nd_pv_decap_chance_lo", us)
+                    high = self.number("nd_pv_decap_chance_hi", us)
+                    self.assertEqual(low, math.floor(decapitation_chance(landed, tenth(hi)) + 0.5), (estimate, landed))
+                    self.assertEqual(high, math.floor(decapitation_chance(landed, tenth(lo)) + 0.5), (estimate, landed))
+                    self.assertLessEqual(low, high)
+
+    def test_leadership_cases(self):
+        """A chance only against Central Authorization and an arsenal the
+        world knows of; the real salvo's gate is the same (nd_salvo_aftermath)."""
+        self.assertEqual(squash(block(self.values, "nd_pv_leadership_case")),
+                         "value = 1 if = { limit = { scope:nd_pv_enemy = { nd_believed_armed = no } } value = 3 } "
+                         "else_if = { limit = { scope:nd_pv_enemy = { nd_authority_central = no } } value = 2 }")
+        self.assertIn("scope:nd_salvo_victim = { nd_authority_central = yes nd_is_armed = yes }",
+                      squash(block(self.effects, "nd_salvo_aftermath")))
+        self.assertEqual(squash(block(self.values, "nd_pv_fires_first")),
+                         "value = 0 if = { limit = { scope:nd_pv_enemy = { nd_authority_launch_on_warning = yes } } "
+                         "value = 1 }")
+
+    # ---- what it reads of the target -----------------------------------------------
+
+    def test_preview_reads_only_the_worlds_view(self):
+        """Everything read in the target's scope (scope:nd_pv_enemy.<value>,
+        a scope:nd_pv_enemy = { } block, its states through the picker)
+        reaches only public inputs: its estimate, its technology, its
+        authority, readiness only in a crisis with us, its states. PrivateTest
+        covers another country's panel; this covers our panel's reads of an
+        enemy."""
+        from test_nuclear_layout import _NAME_REF, _scripts
+        graph = {**_scripts("script_values"), **_scripts("scripted_triggers"), **_scripts("scripted_effects")}
+        entry = set()
+        for name in ("nd_plan_preview", "nd_plan_preview_mission", "nd_plan_preview_warhead", "nd_pv_leadership_case",
+                     "nd_pv_fires_first"):
+            body = squash(graph[name])
+            entry |= set(re.findall(r"scope:nd_pv_enemy\.(\w+)", body))
+            # nd_plan_pv_store reads its VALUE as scope:nd_pv_enemy.$VALUE$.
+            entry |= set(re.findall(r"nd_plan_pv_store = \{ NAME = \w+ VALUE = (\w+) \}", body))
+            for m in re.finditer(r"scope:(?:nd_pv_enemy|target_state) = \{", body):
+                depth, j = 1, m.end()
+                while depth:
+                    depth += {"{": 1, "}": -1}.get(body[j], 0)
+                    j += 1
+                entry |= set(_NAME_REF.findall(body[m.end():j - 1])) & graph.keys()
+        entry &= graph.keys()  # scope:nd_pv_enemy.capital.region is the engine's
+        for name in ("nd_salvo_pick_target", "nd_seen_stockpile", "nd_pv_destroyed_lo", "nd_pv_flown_hi",
+                     "nd_redundancy_believed_floor", "nd_accuracy_mult_saved", "nd_believed_armed", "nd_pv_kill_value"):
+            self.assertIn(name, entry, name)
+        found, stack, seen = [], [(n, n) for n in entry], set()
+        crisis = {f"nd_seen_readiness_factor_{s}": TestWorldsView.CRISIS_BRANCH.format(o)
+                  for s, o in TestWorldsView.OBSERVERS.items()}
+        while stack:
+            name, path = stack.pop()
+            if name in seen:
+                continue
+            seen.add(name)
+            body = squash(graph[name])
+            if name in crisis:
+                body = body.replace(crisis[name], "")
+            body = TestWorldsView.observed(body)
+            found += [f"{path}: {m.group(0)}" for m in TestWorldsView.HIDDEN.finditer(body)]
+            stack += [(ref, f"{path} > {ref}") for ref in set(_NAME_REF.findall(body)) & graph.keys() if ref != name]
+        self.assertEqual(found, [], "the preview reads the target's true state")
+
+    def test_hidden_inputs_change_nothing(self):
+        us = Posture(plan_pv_landed_2=6, pgm=True)
+        base = Posture(authority=3, public_estimate=12, enemy=us)
+        names = [f"nd_pv_{k}_{e}" for k in ("destroyed", "flown", "kept") for e in ("lo", "hi")]
+        names += ["nd_redundancy_believed", "nd_redundancy_believed_floor"]
+        figures = {n: self.number(n, base) for n in names}
+        for hidden in (dict(stockpile=50), dict(survivability=5), dict(safeguards=3), dict(reliability=20),
+                       dict(readiness=3), dict(believed_stockpile=40)):
+            for n in names:
+                self.assertEqual(self.number(n, replace(base, **hidden)), figures[n], (n, hidden))
+
+    # ---- the panel ----------------------------------------------------------------
+
+    def range_key(self, name):
+        """The custom loc that prints a range, and its two keys."""
+        body = squash(block(self.custom, f"nd_pv_{name}_range"))
+        self.assertEqual(body, f"type = country random_valid = no text = {{ trigger = {{ has_variable = nd_plan_pv_{name}_hi "
+                               f"var:nd_plan_pv_{name}_hi > var:nd_plan_pv_{name}_lo }} localization_key = "
+                               f"nd_w_strike_pv_{name}_range }} text = {{ trigger = {{ always = yes }} "
+                               f"localization_key = nd_w_strike_pv_{name}_one }}")
+        return loc_value(f"nd_w_strike_pv_{name}_range"), loc_value(f"nd_w_strike_pv_{name}_one")
+
+    def test_every_range_prints_both_ends_and_says_so(self):
+        for name in PREVIEW_RANGES:
+            both, one = self.range_key(name)
+            self.assertLess(both.index(f"Var('nd_plan_pv_{name}_lo')"), both.index(f"Var('nd_plan_pv_{name}_hi')"), name)
+            self.assertIn("–", both, name)
+            self.assertIn(f"Var('nd_plan_pv_{name}_lo')", one, name)
+            # A figure about the target from the world's view carries its hover (owner call 14).
+            for text in (both, one):
+                if name in WORLDS_VIEW_RANGES:
+                    self.assertTrue(text.startswith("#tooltippable;tooltip:nd_tt_worlds_view "), (name, text))
+                else:
+                    self.assertNotIn("nd_tt_worlds_view", text, name)
+
+    def test_each_mission_has_a_preview_row(self):
+        gui = read(GUI)
+        sec = gui[gui.index("type te_nuclear_sec_strike"):gui.index("type te_nuclear_sec_world_crises")]
+        for m in (1, 2, 3):
+            choice = sec.index(f'text = "nd_w_strike_mission_{m}"')
+            row = sec[sec.index("nd_row = {", choice):]
+            row = row[:row.index('tooltip = "nd_w_strike_pv_')+40]
+            self.assertLess(choice, sec.index(f'text = "nd_w_strike_pv_{m}_value"'))
+            if m < 3:
+                self.assertLess(sec.index(f'text = "nd_w_strike_pv_{m}_value"'), sec.index(f'text = "nd_w_strike_mission_{m + 1}"'))
+            self.assertIn("GetScriptedGui('nd_plan_preview_sgui').IsShown", row, m)
+            self.assertIn('text = "nd_w_strike_pv_label"', row, m)
+            self.assertIn(f'tooltip = "nd_w_strike_pv_{m}_tt"', row, m)
+        self.assertEqual(squash(block(strip_comments(read(SGUIS)), "nd_plan_preview_sgui")),
+                         "scope = country is_shown = { has_variable = nd_plan_pv_landed_1 } is_valid = { always = no } "
+                         "ai_is_valid = { always = no } effect = { }")
+
+    def test_the_hovers_print_their_figures(self):
+        size = "ScriptValue('nd_salvo_size_value')"
+        cities = loc_value("nd_w_strike_pv_1_tt")
+        for needle in (size, "Var('nd_plan_pv_landed_1')", "Var('nd_plan_pv_deaths_1')", "GetCustom('nd_pv_raze_range')"):
+            self.assertIn(needle, cities, needle)
+        self.assertIn("Var('nd_plan_pv_landed_1')", loc_value("nd_w_strike_pv_1_value"))
+        self.assertIn("Var('nd_plan_pv_deaths_1')", loc_value("nd_w_strike_pv_1_value"))
+        forces = loc_value("nd_w_strike_pv_2_tt")
+        for needle in (size, "Var('nd_plan_pv_landed_2')", "Var('nd_plan_pv_deaths_2')", "Var('nd_plan_pv_warheads')",
+                       "GetCustom('nd_pv_destroyed_range')", "GetCustom('nd_pv_kept_range')",
+                       "GetCustom('nd_pv_flown_line')", "ScriptValue('nd_k_ratio')", "GetCustom('nd_pv_k_force_part')",
+                       "GetCustom('nd_pv_k_tech_part')", "GetCustom('nd_pv_silo_line')"):
+            self.assertIn(needle, forces, needle)
+        self.assertIn("GetCustom('nd_pv_destroyed_range')", loc_value("nd_w_strike_pv_2_value"))
+        leadership = loc_value("nd_w_strike_pv_3_tt")
+        for needle in (size, "Var('nd_plan_pv_landed_3')", "Var('nd_plan_pv_deaths_3')",
+                       "GetCustom('nd_pv_leadership_line')"):
+            self.assertIn(needle, leadership, needle)
+        cut = loc_value("nd_w_strike_pv_3_line_cut")
+        self.assertIn("GetCustom('nd_pv_redundancy_range')", cut)
+        self.assertIn("GetCustom('nd_pv_decap_range')", cut)
+        # Our ratio's parts, and the silo line while their silos are found.
+        for part, value in (("force", "nd_k_ratio_force_part"), ("tech", "nd_k_ratio_tech_part")):
+            self.assertEqual(squash(block(self.custom, f"nd_pv_k_{part}_part")),
+                             f"type = country random_valid = no text = {{ trigger = {{ {value} > 0 }} localization_key = "
+                             f"nd_w_strike_pv_k_{part} }} text = {{ trigger = {{ always = yes }} localization_key = nd_empty }}")
+            self.assertIn(f"ScriptValue('{value}')", loc_value(f"nd_w_strike_pv_k_{part}"))
+        self.assertEqual(squash(block(self.custom, "nd_pv_silo_line")),
+                         "type = country random_valid = no text = { trigger = { has_variable = nd_plan_pv_accuracy "
+                         "var:nd_plan_pv_accuracy > 1 } localization_key = nd_w_strike_pv_silo_line } text = { "
+                         "trigger = { always = yes } localization_key = nd_empty }")
+        self.assertIn("Var('nd_plan_pv_accuracy')", loc_value("nd_w_strike_pv_silo_line"))
+        self.assertIn("GetCustom('nd_pv_flown_range')", loc_value("nd_w_strike_pv_flown_line"))
+        self.assertEqual(squash(block(self.custom, "nd_pv_flown_line")),
+                         "type = country random_valid = no text = { trigger = { var:nd_plan_pv_fires_first ?= 1 } "
+                         "localization_key = nd_w_strike_pv_flown_line } text = { trigger = { always = yes } "
+                         "localization_key = nd_empty }")
+        for custom in ("nd_pv_leadership_line", "nd_pv_leadership_value"):
+            body = squash(block(self.custom, custom))
+            for case in (1, 2, 3):
+                self.assertIn(f"var:nd_plan_pv_case ?= {case}", body, (custom, case))
+        # Each is labelled an estimate.
+        for m in (1, 2, 3):
+            self.assertIn("Estimate", loc_value(f"nd_w_strike_pv_{m}_tt"), m)
+        self.assertEqual(loc_value("nd_w_strike_pv_label"), "Estimate")
 
 
 class TestSalvoScale(unittest.TestCase):

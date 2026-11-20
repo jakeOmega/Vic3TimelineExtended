@@ -595,6 +595,19 @@ nd_plan_shown_sgui = {
 	effect = { }
 }
 
+# The Strike section's preview rows (2026-11-20 delivery spec §5.3, plan D14):
+# once nd_plan_preview has stored them, so a save from before them shows no
+# zeros until the next refresh.
+nd_plan_preview_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = nd_plan_pv_landed_1
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = { }
+}
+
 # The Strike section's target, printed through a temporary scope saved on the
 # branch that prints it (gui_modding_guide.md gotchas #11 and #25, as
 # nd_crisis_opponent_sgui).

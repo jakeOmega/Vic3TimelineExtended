@@ -2185,3 +2185,199 @@ nd_safeguards_strike_up = {
 		localization_key = nuke_line_empty
 	}
 }
+
+# ---- The Strike section's previews (2026-11-20 delivery spec §5.3, plan D14)
+# What nd_plan_preview stores (nd_plan_pv_*). A range prints both ends while
+# they differ, else the one figure; a figure about the target from the world's
+# view opens nd_tt_worlds_view (owner call 14).
+
+nd_pv_raze_range = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_plan_pv_raze_hi
+			var:nd_plan_pv_raze_hi > var:nd_plan_pv_raze_lo
+		}
+		localization_key = nd_w_strike_pv_raze_range
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_strike_pv_raze_one
+	}
+}
+
+nd_pv_destroyed_range = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_plan_pv_destroyed_hi
+			var:nd_plan_pv_destroyed_hi > var:nd_plan_pv_destroyed_lo
+		}
+		localization_key = nd_w_strike_pv_destroyed_range
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_strike_pv_destroyed_one
+	}
+}
+
+nd_pv_kept_range = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_plan_pv_kept_hi
+			var:nd_plan_pv_kept_hi > var:nd_plan_pv_kept_lo
+		}
+		localization_key = nd_w_strike_pv_kept_range
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_strike_pv_kept_one
+	}
+}
+
+nd_pv_flown_range = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_plan_pv_flown_hi
+			var:nd_plan_pv_flown_hi > var:nd_plan_pv_flown_lo
+		}
+		localization_key = nd_w_strike_pv_flown_range
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_strike_pv_flown_one
+	}
+}
+
+nd_pv_redundancy_range = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_plan_pv_redundancy_hi
+			var:nd_plan_pv_redundancy_hi > var:nd_plan_pv_redundancy_lo
+		}
+		localization_key = nd_w_strike_pv_redundancy_range
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_strike_pv_redundancy_one
+	}
+}
+
+nd_pv_decap_range = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_plan_pv_decap_hi
+			var:nd_plan_pv_decap_hi > var:nd_plan_pv_decap_lo
+		}
+		localization_key = nd_w_strike_pv_decap_range
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_strike_pv_decap_one
+	}
+}
+
+# Forces: the line for those that fly first, under Launch on Warning only.
+nd_pv_flown_line = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { var:nd_plan_pv_fires_first ?= 1 }
+		localization_key = nd_w_strike_pv_flown_line
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_empty
+	}
+}
+
+# Forces: a part of our counterforce ratio we hold.
+nd_pv_k_force_part = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_k_ratio_force_part > 0 }
+		localization_key = nd_w_strike_pv_k_force
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_empty
+	}
+}
+
+# Forces: a part of our counterforce ratio we hold.
+nd_pv_k_tech_part = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_k_ratio_tech_part > 0 }
+		localization_key = nd_w_strike_pv_k_tech
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_empty
+	}
+}
+
+# Forces: our precision weapons against their silos (§3.4).
+nd_pv_silo_line = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_plan_pv_accuracy
+			var:nd_plan_pv_accuracy > 1
+		}
+		localization_key = nd_w_strike_pv_silo_line
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_empty
+	}
+}
+
+# Leadership: can a salvo cut them off (nd_pv_leadership_case)?
+nd_pv_leadership_line = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { var:nd_plan_pv_case ?= 1 }
+		localization_key = nd_w_strike_pv_3_line_cut
+	}
+	text = {
+		trigger = { var:nd_plan_pv_case ?= 2 }
+		localization_key = nd_w_strike_pv_3_line_other
+	}
+	text = {
+		trigger = { var:nd_plan_pv_case ?= 3 }
+		localization_key = nd_w_strike_pv_3_line_unarmed
+	}
+}
+
+# Leadership: can a salvo cut them off (nd_pv_leadership_case)?
+nd_pv_leadership_value = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { var:nd_plan_pv_case ?= 1 }
+		localization_key = nd_w_strike_pv_3_value_cut
+	}
+	text = {
+		trigger = { var:nd_plan_pv_case ?= 2 }
+		localization_key = nd_w_strike_pv_3_value_other
+	}
+	text = {
+		trigger = { var:nd_plan_pv_case ?= 3 }
+		localization_key = nd_w_strike_pv_3_value_unarmed
+	}
+}

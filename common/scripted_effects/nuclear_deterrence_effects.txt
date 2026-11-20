@@ -3294,7 +3294,8 @@ nd_salvo_clear = {
 # picks. With none, nd_plan_enemy goes and the section hides
 # (nd_plan_shown_sgui). Run weekly for a human (nd_weekly_update) and by every
 # planner op. The mission and size are set here too the first time, so the
-# panel's rows always read a setting. Country scope = us.
+# panel's rows always read a setting. Last, each mission's preview
+# (nd_plan_preview). Country scope = us.
 nd_plan_refresh = {
 	save_scope_as = nd_plan_self
 	if = {
@@ -3348,6 +3349,229 @@ nd_plan_refresh = {
 		}
 		remove_variable = nd_plan_seen
 	}
+	nd_plan_preview = yes
+}
+
+# ---- The Strike section's previews (2026-11-20 delivery spec §5.3, plan D14)
+# What a salvo of the size set would do to the planner's enemy under each
+# mission, stored on our country (nd_plan_pv_*), since the panel can't take
+# the enemy from a variable as a scope. Run by nd_plan_refresh (weekly for a
+# human, ops 72/73) and by ops 74-78. Country scope = us.
+# - Expected landed is the order's own: each mission runs the salvo's picker
+#   (nd_salvo_pick_target) once a warhead and sums each picked state's chance
+#   of a warhead getting through (nd_plan_preview_warhead). The marks, the
+#   working figures and the scopes the picker reads are cleared after: a
+#   saved scope outlives the effect that saved it.
+# - Deaths follow the strike each warhead would make, times its chance
+#   (nd_pv_kill_value); a Cities warhead also razes a share of its state's
+#   city buildings (nd_raze_share_base), the lowest and the highest printed.
+# - Forces and Leadership read the enemy through the world's view alone (§5.2,
+#   D8), each figure a range from its worst case for us to a force at its floor
+#   with every safeguard's cut (nd_pv_*, nd_redundancy_believed_floor).
+nd_plan_preview = {
+	if = {
+		limit = { exists = var:nd_plan_enemy }
+		save_scope_as = nd_salvo_attacker
+		save_scope_as = attacking_country
+		save_scope_as = nd_sv_enemy
+		var:nd_plan_enemy = { save_scope_as = nd_pv_enemy }
+		if = {
+			limit = { exists = scope:nd_pv_enemy.capital.region }
+			scope:nd_pv_enemy.capital.region = { save_scope_as = nd_salvo_cap_region }
+		}
+		# Each mission's pass sets the mission it previews; the panel's is put
+		# back after.
+		set_variable = { name = nd_plan_pv_mission_set value = nd_display_plan_mission }
+		if = {
+			limit = { has_variable = nd_plan_pv_raze_lo }
+			remove_variable = nd_plan_pv_raze_lo
+			remove_variable = nd_plan_pv_raze_hi
+		}
+		nd_plan_preview_mission = { M = 1 }
+		nd_plan_preview_mission = { M = 2 }
+		nd_plan_preview_mission = { M = 3 }
+		set_variable = { name = nd_salvo_mission value = var:nd_plan_pv_mission_set }
+		remove_variable = nd_plan_pv_mission_set
+		# A Cities salvo with no state in reach razes nothing.
+		if = {
+			limit = { NOT = { has_variable = nd_plan_pv_raze_lo } }
+			set_variable = { name = nd_plan_pv_raze_lo value = 0 }
+			set_variable = { name = nd_plan_pv_raze_hi value = 0 }
+		}
+		# Forces: their warheads the salvo destroys, those that fly first and
+		# those it leaves them, against what the world estimates they hold.
+		nd_plan_pv_store = { NAME = nd_plan_pv_warheads VALUE = nd_seen_stockpile }
+		nd_plan_pv_store = { NAME = nd_plan_pv_destroyed_lo VALUE = nd_pv_destroyed_lo }
+		nd_plan_pv_store = { NAME = nd_plan_pv_destroyed_hi VALUE = nd_pv_destroyed_hi }
+		nd_plan_pv_store = { NAME = nd_plan_pv_kept_lo VALUE = nd_pv_kept_lo }
+		nd_plan_pv_store = { NAME = nd_plan_pv_kept_hi VALUE = nd_pv_kept_hi }
+		nd_plan_pv_store = { NAME = nd_plan_pv_flown_lo VALUE = nd_pv_flown_lo }
+		nd_plan_pv_store = { NAME = nd_plan_pv_flown_hi VALUE = nd_pv_flown_hi }
+		set_variable = { name = nd_plan_pv_fires_first value = nd_pv_fires_first }
+		# Our precision weapons against their silos (§3.4): above 1 when they
+		# field ICBMs and we have the penetration.
+		set_variable = { name = nd_plan_pv_accuracy value = scope:nd_pv_enemy.nd_accuracy_mult_saved }
+		# Leadership: their redundancy as the world sees it, at each end, and
+		# the chance against each.
+		nd_plan_pv_store = { NAME = nd_plan_pv_redundancy_lo VALUE = nd_redundancy_believed_floor }
+		nd_plan_pv_store = { NAME = nd_plan_pv_redundancy_hi VALUE = nd_redundancy_believed }
+		set_variable = { name = nd_plan_pv_decap_lo value = nd_pv_decap_chance_lo }
+		set_variable = { name = nd_plan_pv_decap_hi value = nd_pv_decap_chance_hi }
+		set_variable = { name = nd_plan_pv_case value = nd_pv_leadership_case }
+		clear_saved_scope = nd_salvo_attacker
+		clear_saved_scope = attacking_country
+		clear_saved_scope = nd_sv_enemy
+		clear_saved_scope = nd_pv_enemy
+		if = {
+			limit = { exists = scope:nd_salvo_cap_region }
+			clear_saved_scope = nd_salvo_cap_region
+		}
+		if = {
+			limit = { exists = scope:target_state }
+			clear_saved_scope = target_state
+		}
+	}
+	else = {
+		remove_variable = nd_plan_pv_landed_1
+		remove_variable = nd_plan_pv_landed_2
+		remove_variable = nd_plan_pv_landed_3
+		remove_variable = nd_plan_pv_deaths_1
+		remove_variable = nd_plan_pv_deaths_2
+		remove_variable = nd_plan_pv_deaths_3
+		remove_variable = nd_plan_pv_raze_lo
+		remove_variable = nd_plan_pv_raze_hi
+		remove_variable = nd_plan_pv_warheads
+		remove_variable = nd_plan_pv_destroyed_lo
+		remove_variable = nd_plan_pv_destroyed_hi
+		remove_variable = nd_plan_pv_kept_lo
+		remove_variable = nd_plan_pv_kept_hi
+		remove_variable = nd_plan_pv_flown_lo
+		remove_variable = nd_plan_pv_flown_hi
+		remove_variable = nd_plan_pv_fires_first
+		remove_variable = nd_plan_pv_accuracy
+		remove_variable = nd_plan_pv_redundancy_lo
+		remove_variable = nd_plan_pv_redundancy_hi
+		remove_variable = nd_plan_pv_decap_lo
+		remove_variable = nd_plan_pv_decap_hi
+		remove_variable = nd_plan_pv_case
+	}
+}
+
+# Our country: $NAME$ is the planner's enemy's $VALUE$, to a tenth.
+nd_plan_pv_store = {
+	set_variable = {
+		name = $NAME$
+		value = {
+			value = scope:nd_pv_enemy.$VALUE$
+			multiply = 10
+			round = yes
+			divide = 10
+		}
+	}
+}
+
+# One mission's pass, M = 1 Cities | 2 Forces | 3 Leadership: a warhead at a
+# time for the salvo's size, then the marks and working figures go, so the
+# next mission picks afresh.
+nd_plan_preview_mission = {
+	set_variable = { name = nd_salvo_mission value = $M$ }
+	set_variable = { name = nd_plan_pv_landed_$M$ value = 0 }
+	set_variable = { name = nd_plan_pv_deaths_$M$ value = 0 }
+	while = {
+		count = nd_salvo_size_value
+		nd_plan_preview_warhead = { M = $M$ }
+	}
+	set_variable = {
+		name = nd_plan_pv_deaths_$M$
+		value = {
+			value = var:nd_plan_pv_deaths_$M$
+			round = yes
+		}
+	}
+	scope:nd_pv_enemy = {
+		every_scope_state = {
+			limit = {
+				OR = {
+					has_variable = nd_salvo_target
+					has_variable = nd_pv_left
+				}
+			}
+			if = {
+				limit = { has_variable = nd_salvo_target }
+				remove_variable = nd_salvo_target
+			}
+			if = {
+				limit = { has_variable = nd_pv_left }
+				remove_variable = nd_pv_left
+			}
+			if = {
+				limit = { has_variable = nd_pv_kill }
+				remove_variable = nd_pv_kill
+			}
+			if = {
+				limit = { has_variable = nd_pv_raze }
+				remove_variable = nd_pv_raze
+			}
+		}
+	}
+	if = {
+		limit = { has_variable = nd_salvo_lead_alt }
+		remove_variable = nd_salvo_lead_alt
+	}
+	if = {
+		limit = { has_variable = nd_salvo_aimed }
+		remove_variable = nd_salvo_aimed
+	}
+	if = {
+		limit = { has_variable = nd_plan_pv_p }
+		remove_variable = nd_plan_pv_p
+	}
+}
+
+# One warhead of the preview: aimed by the salvo's picker, as the order would
+# (nd_salvo_warhead), and counted at its chance of landing.
+nd_plan_preview_warhead = {
+	scope:nd_pv_enemy = { nd_salvo_pick_target = yes }
+	if = {
+		limit = { has_variable = nd_salvo_aimed }
+		remove_variable = nd_salvo_aimed
+		set_variable = { name = nd_plan_pv_p value = nd_plan_pv_land_chance }
+		change_variable = { name = nd_plan_pv_landed_$M$ add = var:nd_plan_pv_p }
+		scope:target_state = {
+			if = {
+				limit = { NOT = { has_variable = nd_pv_left } }
+				set_variable = { name = nd_pv_left value = nd_pv_people_value }
+			}
+			set_variable = { name = nd_pv_kill value = nd_pv_kill_value }
+			change_variable = { name = nd_pv_left subtract = var:nd_pv_kill }
+			set_variable = { name = nd_pv_raze value = nd_raze_share_base }
+		}
+		change_variable = { name = nd_plan_pv_deaths_$M$ add = scope:target_state.var:nd_pv_kill }
+		if = {
+			limit = { var:nd_salvo_mission = 1 }
+			if = {
+				limit = { has_variable = nd_plan_pv_raze_lo }
+				set_variable = {
+					name = nd_plan_pv_raze_lo
+					value = {
+						value = var:nd_plan_pv_raze_lo
+						max = scope:target_state.var:nd_pv_raze
+					}
+				}
+				set_variable = {
+					name = nd_plan_pv_raze_hi
+					value = {
+						value = var:nd_plan_pv_raze_hi
+						min = scope:target_state.var:nd_pv_raze
+					}
+				}
+			}
+			else = {
+				set_variable = { name = nd_plan_pv_raze_lo value = scope:target_state.var:nd_pv_raze }
+				set_variable = { name = nd_plan_pv_raze_hi value = scope:target_state.var:nd_pv_raze }
+			}
+		}
+	}
 }
 
 # Ops 72 / 73: the previous or next country we could strike (OP = subtract |
@@ -3364,7 +3588,9 @@ nd_plan_step_enemy = {
 	}
 }
 
-# Ops 74-76: the mission, M = 1 Cities | 2 Forces | 3 Leadership.
+# Ops 74-76: the mission, M = 1 Cities | 2 Forces | 3 Leadership. The
+# previews are refreshed (not the enemy: nd_plan_refresh would recount, and the
+# country under the click could change).
 nd_plan_set_mission = {
 	custom_tooltip = nd_tt_plan_mission_$M$
 	set_variable = nd_plan_click
@@ -3372,13 +3598,14 @@ nd_plan_set_mission = {
 		limit = { has_variable = nd_plan_click }
 		remove_variable = nd_plan_click
 		set_variable = { name = nd_salvo_mission value = $M$ }
+		nd_plan_preview = yes
 	}
 }
 
 # Ops 77 / 78: one warhead fewer or more (OP = subtract | add), kept within
 # the warheads we hold and the salvo's limit (nd_salvo_size_value): stored
 # clamped first, so a setting the stockpile outgrew steps from what an order
-# would fire.
+# would fire. Then the previews, at the new size.
 nd_plan_step_size = {
 	custom_tooltip = nd_tt_plan_size_$OP$
 	set_variable = nd_plan_click
@@ -3388,6 +3615,7 @@ nd_plan_step_size = {
 		set_variable = { name = nd_salvo_size value = nd_salvo_size_value }
 		change_variable = { name = nd_salvo_size $OP$ = 1 }
 		set_variable = { name = nd_salvo_size value = nd_salvo_size_value }
+		nd_plan_preview = yes
 	}
 }
 

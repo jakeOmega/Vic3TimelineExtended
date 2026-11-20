@@ -1534,6 +1534,23 @@ nd_seen_launch_credit = {
 	value = nd_launch_credit_unguarded
 }
 
+# The other end of a range the panel prints (D8): a force left unhardened, at
+# its floor, with safeguards at their highest (three levels), which cut a fast
+# authority's credit. A figure the script decides by takes the cautious end
+# above, never these.
+nd_seen_survivability_floor = {
+	value = nd_survivability_floor
+}
+
+nd_seen_launch_credit_low = {
+	value = nd_seen_launch_credit
+	subtract = {
+		value = nd_launch_credit_safeguards_cut
+		multiply = 3
+	}
+	min = 0
+}
+
 # The readiness factor (nd_effective_survivability's) on its own.
 nd_readiness_survivability_factor = {
 	value = 1
@@ -1571,6 +1588,22 @@ nd_seen_exposed_warheads_vs_saved = {
 	value = 100
 	subtract = {
 		value = nd_seen_survivability
+		multiply = nd_seen_readiness_factor_saved
+		subtract = nd_warning_penalty_saved
+		min = 0
+	}
+	divide = 100
+	multiply = nd_accuracy_mult_saved
+	max = 1
+	multiply = nd_seen_stockpile
+}
+
+# As nd_seen_exposed_warheads_vs_saved, at the floor: the other end of the
+# Strike section's Forces preview (nd_pv_destroyed_hi).
+nd_seen_exposed_warheads_floor_vs_saved = {
+	value = 100
+	subtract = {
+		value = nd_seen_survivability_floor
 		multiply = nd_seen_readiness_factor_saved
 		subtract = nd_warning_penalty_saved
 		min = 0
@@ -1717,6 +1750,21 @@ nd_redundancy_believed = {
 	min = 1
 }
 
+# The same at the force's floor: the low end of the redundancy the Strike
+# section's Leadership preview prints (nd_plan_preview). The AI decides by the
+# cautious end above.
+nd_redundancy_believed_floor = {
+	value = nd_seen_stockpile
+	divide = 10
+	add = 1
+	add = nd_redundancy_command_public
+	add = {
+		value = nd_seen_survivability_floor
+		divide = 20
+	}
+	min = 1
+}
+
 # Attacker scope: the warheads a salvo fires, from var:nd_salvo_size, a whole
 # number from 1 to the stockpile, at most 25.
 nd_salvo_size_value = {
@@ -1748,6 +1796,197 @@ nd_display_plan_mission = {
 		limit = { has_variable = nd_salvo_mission }
 		value = var:nd_salvo_mission
 	}
+}
+
+# ---- The Strike section's previews (2026-11-20 delivery spec §5.3, plan D14)
+# What nd_plan_preview (nuclear_deterrence_effects.txt) reads and stores:
+# what a salvo of the size set would do to the planner's enemy under each
+# mission. scripts/analysis/nuclear_survivors.py mirrors the Forces and
+# Leadership figures (forces_preview, decapitation_chance).
+
+# Attacker scope, scope:target_state the state its picker chose: the chance,
+# 0 to 1, that the warhead gets through (the salvo's own roll, nd_salvo_warhead).
+nd_plan_pv_land_chance = {
+	value = nuclear_strike_success_chance
+	divide = 100
+}
+
+# State scope, at the state's first warhead in the preview: its people, as the
+# day's strikes have left them (nd_strike_people_before).
+nd_pv_people_value = {
+	value = state_population
+	if = {
+		limit = { has_variable = nd_strike_people_left }
+		value = var:nd_strike_people_left
+		max = state_population
+	}
+}
+
+# State scope: the people this warhead would kill, times its chance of landing
+# (the attacker's var:nd_plan_pv_p). A tenth of those the preview's earlier
+# warheads left (var:nd_pv_left), as a city strike kills
+# (nuclear_industrial_strike_killed_population), a quarter of that on Forces
+# (nd_counterforce_strike_killed_population).
+nd_pv_kill_value = {
+	value = var:nd_pv_left
+	multiply = 0.1
+	if = {
+		limit = { scope:nd_salvo_attacker = { var:nd_salvo_mission = 2 } }
+		multiply = 0.25
+	}
+	multiply = scope:nd_salvo_attacker.var:nd_plan_pv_p
+}
+
+# The target's scope, the attacker saved as scope:nd_sv_enemy and holding the
+# warheads expected to land on forces (var:nd_plan_pv_landed_2). Each is
+# nd_counterforce_destroyed_raw's or nd_counterforce_saved_raw's shape on the
+# world's view, as a range (D8): _lo the target's worst case for us, a force as
+# secure as its technology allows with its authority's full credit; _hi a
+# force at its floor with every safeguard's cut.
+nd_pv_cf_reach = {
+	value = 0
+	scope:nd_sv_enemy = {
+		add = nd_k_ratio
+		multiply = var:nd_plan_pv_landed_2
+	}
+}
+
+nd_pv_destroyed_lo = {
+	value = nd_pv_cf_reach
+	max = nd_seen_exposed_warheads_vs_saved
+	multiply = {
+		value = 1
+		subtract = nd_seen_launch_credit
+	}
+	max = nd_seen_stockpile
+	min = 0
+}
+
+nd_pv_destroyed_hi = {
+	value = nd_pv_cf_reach
+	max = nd_seen_exposed_warheads_floor_vs_saved
+	multiply = {
+		value = 1
+		subtract = nd_seen_launch_credit_low
+	}
+	max = nd_seen_stockpile
+	min = 0
+}
+
+# Of those, the ones Launch on Warning gets into the air before ours land, at
+# most 3 (nd_salvo_counterforce), at each end. Which end flies more depends on
+# the salvo, so the range is the lower and the higher of the two.
+nd_pv_flown_at_target = {
+	value = 0
+	if = {
+		limit = { nd_authority_launch_on_warning = yes }
+		value = nd_pv_cf_reach
+		max = nd_seen_exposed_warheads_vs_saved
+		multiply = nd_seen_launch_credit
+		max = 3
+	}
+}
+
+nd_pv_flown_at_floor = {
+	value = 0
+	if = {
+		limit = { nd_authority_launch_on_warning = yes }
+		value = nd_pv_cf_reach
+		max = nd_seen_exposed_warheads_floor_vs_saved
+		multiply = nd_seen_launch_credit_low
+		max = 3
+	}
+}
+
+nd_pv_flown_lo = {
+	value = nd_pv_flown_at_target
+	max = nd_pv_flown_at_floor
+}
+
+nd_pv_flown_hi = {
+	value = nd_pv_flown_at_target
+	min = nd_pv_flown_at_floor
+}
+
+# What the salvo leaves them, those flown first among it.
+nd_pv_kept_lo = {
+	value = nd_seen_stockpile
+	subtract = nd_pv_destroyed_hi
+	min = 0
+}
+
+nd_pv_kept_hi = {
+	value = nd_seen_stockpile
+	subtract = nd_pv_destroyed_lo
+	min = 0
+}
+
+# Attacker scope, the target saved as scope:nd_pv_enemy: 1 when its warheads
+# can fly first (Launch on Warning, public), for the Forces preview's line.
+nd_pv_fires_first = {
+	value = 0
+	if = {
+		limit = { scope:nd_pv_enemy = { nd_authority_launch_on_warning = yes } }
+		value = 1
+	}
+}
+
+# Attacker scope: whether a Leadership salvo can cut the target off, as the
+# salvo's own gate (nd_salvo_aftermath) on the world's view. 1 it can (Central
+# Authorization, an arsenal the world knows of), 2 its launch authority can't
+# be cut off, 3 the world knows of no arsenal.
+nd_pv_leadership_case = {
+	value = 1
+	if = {
+		limit = { scope:nd_pv_enemy = { nd_believed_armed = no } }
+		value = 3
+	}
+	else_if = {
+		limit = { scope:nd_pv_enemy = { nd_authority_central = no } }
+		value = 2
+	}
+}
+
+# Attacker scope: nd_decapitation_chance_value's chance, in whole percent,
+# for the warheads expected on the command (var:nd_plan_pv_landed_3) against
+# the target's redundancy as the world sees it: _lo at its worst case for us,
+# the cautious end (var:nd_plan_pv_redundancy_hi), _hi at its floor.
+nd_pv_decap_chance_lo = {
+	value = 0
+	if = {
+		limit = { var:nd_plan_pv_landed_3 > 0 }
+		add = 1
+		subtract = {
+			value = var:nd_plan_pv_redundancy_hi
+			divide = var:nd_plan_pv_landed_3
+			multiply = {
+				value = var:nd_plan_pv_redundancy_hi
+				divide = var:nd_plan_pv_landed_3
+			}
+		}
+	}
+	multiply = 100
+	min = 0
+	round = yes
+}
+
+nd_pv_decap_chance_hi = {
+	value = 0
+	if = {
+		limit = { var:nd_plan_pv_landed_3 > 0 }
+		add = 1
+		subtract = {
+			value = var:nd_plan_pv_redundancy_lo
+			divide = var:nd_plan_pv_landed_3
+			multiply = {
+				value = var:nd_plan_pv_redundancy_lo
+				divide = var:nd_plan_pv_landed_3
+			}
+		}
+	}
+	multiply = 100
+	min = 0
+	round = yes
 }
 
 # Attacker scope: the loop's count, fixed from nd_salvo_size_value before the

@@ -181,15 +181,30 @@
 
 **Files:** `common/scripted_effects/nuclear_deterrence_effects.txt` (`nd_plan_refresh`: the `nd_plan_pv_*` figures), `common/script_values/nuclear_deterrence_values.txt` (the preview values, ranges per D8), the widget (a preview line under each mission, refreshed by the size stepper's ops 77/78), loc (`nd_w_strike_mission_*_tt` and the preview keys, each labelled an estimate), `test_nuclear_deterrence.py`, `test_nuclear_layout.py`.
 
-- [ ] Write `TestStrikePreview`:
+- [x] Write `TestStrikePreview`:
   - each mission's preview is stored on every planner op (72–79) and weekly;
   - the Forces preview prints our counterforce ratio with its parts, and the silo line when the target holds `nd_fields_icbms` and we have the penetration;
   - each range has its low end at or below its high end, and every preview line carries its qualifier ("at least", "up to" or the range) and `nd_tt_worlds_view` (D8);
   - **`test_preview_reads_only_the_worlds_view`**: the preview values reach the enemy only through `nd_seen_*`, `nd_shown_public_estimate`, public technologies and states, by `_true_state` over the enemy-scope reads. `PrivateTest` covers another country's panel, not our own panel's reads of an enemy.
 
   Run: FAIL.
-- [ ] Implement, then record in the commit which expected-landed method shipped (D14). Run the nuclear tests and `preflight.py --changed`. PASS.
-- [ ] Commit `Nuclear strikes: the planner previews each mission (spec §5.3)`.
+- [x] Implement, then record in the commit which expected-landed method shipped (D14). Run the nuclear tests and `preflight.py --changed`. PASS.
+- [x] Commit `Nuclear strikes: the planner previews each mission (spec §5.3)`.
+
+**As built (2026-11-20).**
+- **Expected landed uses the salvo's own picker.** `nd_plan_preview` runs `nd_salvo_pick_target` once a warhead for each mission, at each picked state's `nuclear_strike_success_chance`. The marks, the working figures and the scopes the picker reads (`nd_salvo_attacker`, `attacking_country`, `nd_salvo_cap_region`, `target_state`, `nd_sv_enemy`) are cleared after, and the panel's mission is put back. The capital-odds fallback wasn't needed: the preview is script, run weekly and behind the click-only marker.
+- **What each row shows.** A row named Estimate sits under each mission; its hover gives the figures.
+  - Cities: expected landed, deaths and the city share each warhead razes, as a range.
+  - Forces: landed, then destroyed and left to them, with those flown first under Launch on Warning. Our counterforce ratio follows with its parts, and the silo line.
+  - Leadership: landed on the command, the target's redundancy, and the chance to cut its command off. The chance is a range too, with the redundancy at the floor as its other end.
+  - Deaths are given for all three missions.
+- **Where the world's view applies.** Cities' figures rest on the target's states and the odds, which are public, not on the world's view. So they carry no `nd_tt_worlds_view`; they are labelled an estimate. Each range prints one figure when its ends agree (`nd_pv_*_range` custom loc).
+- **Which ops refresh it.**
+  - Ops 72/73 run `nd_plan_refresh`, which ends with the preview.
+  - Ops 74–78 run the preview alone. `nd_plan_refresh` recounts the candidates, and the enemy under the click could change.
+  - Op 79 stores nothing. It opens the Launch Order, and a refresh there could swap the country being ordered against.
+- **Not previewed:** a capital hit by a Cities or Forces salvo can cut a Central command too.
+- **Where the tests sit.** `TestStrikePreview` is in `test_nuclear_survivors.py`, beside `TestWorldsView`, whose walk it reuses; `test_nuclear_deterrence.py` can't import from it.
 
 ### Task 8: Crisis, events, articles, the public authority (D15–D17)
 

@@ -125,6 +125,35 @@ def decapitation_chance(landed, redundancy):
     return max(0.0, 1 - (redundancy / landed) ** 2) * 100
 
 
+# The world's view's other end (2026-11-20 delivery spec §5.2, plan D8): a
+# force left unhardened decays to this share of its target, and safeguards at
+# their highest (three levels) cut a fast authority's credit by this much.
+FLOOR_SHARE = 0.3
+SAFEGUARDS_CREDIT_CUT_MAX = 0.15
+
+
+def forces_preview(estimate, target, readiness_factor, credit, k, landed, based_near=False, accuracy=1.0,
+                   fires_first=False):
+    """The Strike section's Forces preview (nd_pv_*, plan D14): what `landed`
+    warheads, each destroying `k`, do to an arsenal the world estimates at
+    `estimate`. Each figure is a range (low, high) from the world's view: one
+    end a force at its target with its authority's full credit, the other at
+    its floor with the credit cut by every safeguards level. Returns
+    (destroyed, flown first, kept): flown first only under Launch on Warning,
+    at most 3; kept is what the salvo leaves them, those flown first among it."""
+    low_credit = max(0.0, credit - SAFEGUARDS_CREDIT_CUT_MAX)
+    at_target = exposed(estimate, target, readiness_factor, based_near, accuracy)
+    at_floor = exposed(estimate, target * FLOOR_SHARE, readiness_factor, based_near, accuracy)
+    low = min(estimate, counterforce_destroyed(landed, k, at_target, credit))
+    high = min(estimate, counterforce_destroyed(landed, k, at_floor, low_credit))
+    flown = (0.0, 0.0)
+    if fires_first:
+        a = min(3.0, counterforce_saved(landed, k, at_target, credit))
+        b = min(3.0, counterforce_saved(landed, k, at_floor, low_credit))
+        flown = (min(a, b), max(a, b))
+    return (low, high), flown, (max(0.0, estimate - high), max(0.0, estimate - low))
+
+
 # Commands a full salvo of 25 might face: (label, nd_redundancy's arguments).
 DECAPITATION_ROWS = (
     ("5 warheads, survivability 40, reliability 72", dict(stockpile=5, survivability=40, reliability=72)),

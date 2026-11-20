@@ -1241,9 +1241,11 @@ types nuclear_deterrence_widget_types
 	### planner's counted pass, nd_plan_refresh, runs in script). The target,
 	### stepped through with the panel's stepper icons (ops 72/73) and named by a
 	### display handler (nd_plan_enemy_sgui, gotcha #11); the mission as three
-	### choice rows, the one in force tinted (74..76); the warheads as a stepper
-	### (77/78); and the order (79), which asks for confirmation
-	### (nuclear_weapon_events.31). A single city stays the diplomatic action.
+	### choice rows, the one in force tinted (74..76), each with its preview
+	### under it (what it would do at the size set, nd_plan_preview); the
+	### warheads as a stepper (77/78); and the order (79), which asks for
+	### confirmation (nuclear_weapon_events.31). A single city stays the
+	### diplomatic action.
 	type te_nuclear_sec_strike = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -1339,6 +1341,21 @@ types nuclear_deterrence_widget_types
 						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)74' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)74' ) ).End ) ) )]"
 					}
 				}
+				### What this mission would do at the salvo size set (nd_plan_preview;
+				### 2026-11-20 delivery spec §5.3, plan D14): an estimate, its figures
+				### on hover.
+				nd_row = {
+					visible = "[GetScriptedGui('nd_plan_preview_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+					blockoverride "row_label" {
+						text = "nd_w_strike_pv_label"
+					}
+					blockoverride "row_value" {
+						text = "nd_w_strike_pv_1_value"
+					}
+					blockoverride "row_tooltip" {
+						tooltip = "nd_w_strike_pv_1_tt"
+					}
+				}
 				nd_choice_row = {
 					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
 					blockoverride "row_current" {
@@ -1357,6 +1374,21 @@ types nuclear_deterrence_widget_types
 						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)75' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)75' ) ).End ) ) )]"
 					}
 				}
+				### What this mission would do at the salvo size set (nd_plan_preview;
+				### 2026-11-20 delivery spec §5.3, plan D14): an estimate, its figures
+				### on hover.
+				nd_row = {
+					visible = "[GetScriptedGui('nd_plan_preview_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+					blockoverride "row_label" {
+						text = "nd_w_strike_pv_label"
+					}
+					blockoverride "row_value" {
+						text = "nd_w_strike_pv_2_value"
+					}
+					blockoverride "row_tooltip" {
+						tooltip = "nd_w_strike_pv_2_tt"
+					}
+				}
 				nd_choice_row = {
 					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
 					blockoverride "row_current" {
@@ -1373,6 +1405,21 @@ types nuclear_deterrence_widget_types
 						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)76' ) ).End )]"
 						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)76' ) ).End )]"
 						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)76' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)76' ) ).End ) ) )]"
+					}
+				}
+				### What this mission would do at the salvo size set (nd_plan_preview;
+				### 2026-11-20 delivery spec §5.3, plan D14): an estimate, its figures
+				### on hover.
+				nd_row = {
+					visible = "[GetScriptedGui('nd_plan_preview_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+					blockoverride "row_label" {
+						text = "nd_w_strike_pv_label"
+					}
+					blockoverride "row_value" {
+						text = "nd_w_strike_pv_3_value"
+					}
+					blockoverride "row_tooltip" {
+						tooltip = "nd_w_strike_pv_3_tt"
 					}
 				}
 
