@@ -316,6 +316,10 @@ nd_posture_sgui = {
 		else_if = {
 			limit = { exists = scope:op  scope:op = 70 }
 			custom_tooltip = nd_tt_disavow_on
+			if = {
+				limit = { has_variable = nd_claim_belief_main }
+				custom_tooltip = nd_tt_disavow_chance
+			}
 			hidden_effect = { set_variable = nd_disavow_strikes }
 		}
 		else_if = {
@@ -732,7 +736,11 @@ nd_crisis_pressure_breakdown_sgui = {
 	effect = {
 		nd_crisis_breakdown_line = { C = nd_yp_base KEY = nd_yp_base_line }
 		nd_crisis_breakdown_line = { C = nd_yp_answer KEY = nd_yp_answer_line }
+		nd_crisis_survivors_line = { C = nd_cs_answer_survivors ABOVE = -1 ISSUER = nd_cs_answer_line_issuer TARGET = nd_cs_answer_line_target }
+		nd_crisis_survivors_line = { C = nd_cs_answer_accuracy ABOVE = 1 ISSUER = nd_cs_answer_accuracy_line_issuer TARGET = nd_cs_answer_accuracy_line_target }
 		nd_crisis_breakdown_line = { C = nd_yp_issuer_exposure KEY = nd_yp_issuer_exposure_line }
+		nd_crisis_survivors_line = { C = nd_cs_exposure_survivors ABOVE = -1 ISSUER = nd_cs_exposure_line_issuer TARGET = nd_cs_exposure_line_target }
+		nd_crisis_survivors_line = { C = nd_cs_exposure_accuracy ABOVE = 1 ISSUER = nd_cs_exposure_accuracy_line_issuer TARGET = nd_cs_exposure_accuracy_line_target }
 		nd_crisis_breakdown_line = { C = nd_yp_protector KEY = nd_yp_protector_line }
 		nd_crisis_breakdown_line = { C = nd_yp_credibility KEY = nd_yp_credibility_line }
 		nd_crisis_breakdown_line = { C = nd_yp_alert KEY = nd_yp_alert_line }

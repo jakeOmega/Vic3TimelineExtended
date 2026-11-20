@@ -219,15 +219,26 @@
 - the Nuclear Powers rows and National Info's public row (D17);
 - `test_nuclear_layout.py` (`TRUE_VARS`), `test_nuclear_basing.py` (D15's pins), `test_nuclear_deterrence.py`.
 
-- [ ] Write the tests:
-  - `TestCrisisFigures`: the stored survivors beside both parts, the seen figure for the issuer's with its qualifier and `nd_tt_worlds_view` (D8); Go public's hover names its danger and stage; the preview prints the opening totals or, per D16's fallback, says where they appear;
+- [x] Write the tests:
+  - `TestCrisisFigures` (as built `TestCrisisDecisionFigures`, beside the older class of that name): the stored survivors beside both parts, the seen figure for the issuer's with its qualifier and `nd_tt_worlds_view` (D8); Go public's hover names its danger and stage; the preview prints the opening totals or, per D16's fallback, says where they appear;
   - `TestDecisionHovers`: `.1.c` and the disavowal print their figures through `custom_tooltip`s (`silent_variable_audit`);
   - `TestArticleFigures` (D15);
   - `TestPublicAuthority`: `nd_authority` is off `TRUE_VARS` with the ruling's comment; the Powers rows and the public row read it.
 
   Run: FAIL.
-- [ ] Implement, then `organize_loc.py`, the event text through the `event-text` skill, the nuclear tests and `preflight.py --changed`. PASS.
-- [ ] Commit `Nuclear decisions: crisis, launch under attack, disavowal and the articles show their figures (spec §5.3)`.
+- [x] Implement, then `organize_loc.py`, the event text through the `event-text` skill, the nuclear tests and `preflight.py --changed`. PASS.
+- [x] Commit `Nuclear decisions: crisis, launch under attack, disavowal and the articles show their figures (spec §5.3)`.
+
+**As built (2026-11-20).**
+- **First, the rival's name** (its own commit). The hovers that named the main rival read `Var('nd_main_rival').GetCountry`, which has rendered blank in this mod (`gui_modding_guide.md` gotcha #11). `nd_refresh_main_rival` now also stores the rival's capital (`nd_main_rival_capital`), and every such hover reads the country through it. A layout test holds the panel to it.
+- **D16 ships its fallback.** The opening preview is a tooltip walk with no crisis record and no saved parties, and the target's readiness and exposure are private until the crisis opens (§5.2). So the preview prints the danger from our side alone (`nd_cd_ours_at_open_private_value` / `_public_value`: the opening stage, the public threat, our readiness, our command's reliability, our exposure) and says the Nuclear tab shows the full danger and pressure as soon as it opens. The pressure parts were already there as ranges.
+- **The crisis survivors are per viewer.** The answer part counts the target's true survivors, so the target's panel prints its own count. The issuer's panel prints the world's view of them (`nd_seen_survivors_vs_issuer`, new, with `nd_seen_exposed_warheads_vs_issuer` and `nd_seen_readiness_factor_issuer`), "up to", with `nd_tt_worlds_view`. The exposure part's figure is the world's view on both panels. Each part has a precision-weapon line while its factor is above 1. All are stored by `nd_crisis_refresh_figures` (`nd_cs_*`) and dropped while the target is believed unarmed.
+- **Go public** names the stage it moves to: Confrontation, or its own stage if the crisis is already past it (`nd_tt_go_public_terms_stage`). Its danger is given as the rise and its two parts. Against a target with no arsenal and no armed protector, the rise is after the 0.7 cut. The parts' points are named values now (`nd_cd_stage_points`, `nd_cd_public_points`, `nd_cd_dampened_factor`).
+- **The disavowal's chance is against the main rival,** after a single warhead (the best case), from `nd_claim_belief_vs_saved`. That value reads the same named terms as the victim's own `nd_claim_belief_value`. It is shown in the row's hover and on the button.
+- **The price of a lie found out** is written in the hover: 20 credibility and 50 relations, with the infamy and the later claims' cut from their values. A test holds the written figures to `nuclear_weapon_events.30`. `.1.c`'s pledge figures (30 and 10) are held to `nd_record_nuclear_use` the same way.
+- **Breaking either treaty costs nothing of its own,** so the descriptions say so. What a guarantor pays is for walking away when called: 15 credibility, 30 relations and five years of the abandonment modifier.
+- **National Info's public row** gains a Row 3 for another country the world believes armed: its doctrine and launch authority cells, with no third line, since when either can next change is the country's own. The overview's tests now allow those two codes their icon twice.
+- **The counterforce row** in Delivery and Defence reuses Task 7's ratio-part lines (`nd_pv_k_force_part`, `nd_pv_k_tech_part`).
 
 ### Task 9: Docs, the play-test list; gate, PR, review
 

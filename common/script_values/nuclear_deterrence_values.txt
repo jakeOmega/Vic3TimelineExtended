@@ -1614,6 +1614,14 @@ nd_seen_exposed_warheads_floor_vs_saved = {
 	multiply = nd_seen_stockpile
 }
 
+nd_seen_readiness_factor_issuer = {
+	value = nd_survivability_factor_heightened
+	if = {
+		limit = { nd_seen_in_crisis_with = { OBSERVER = scope:nd_issuer } }
+		value = nd_readiness_survivability_factor
+	}
+}
+
 nd_seen_exposed_warheads_vs_target = {
 	value = 100
 	subtract = {
@@ -1624,6 +1632,21 @@ nd_seen_exposed_warheads_vs_target = {
 	}
 	divide = 100
 	multiply = nd_accuracy_mult_target
+	max = 1
+	multiply = nd_seen_stockpile
+}
+
+# The target as a crisis's issuer can count it (nd_cs_answer_seen_value).
+nd_seen_exposed_warheads_vs_issuer = {
+	value = 100
+	subtract = {
+		value = nd_seen_survivability
+		multiply = nd_seen_readiness_factor_issuer
+		subtract = nd_warning_penalty_issuer
+		min = 0
+	}
+	divide = 100
+	multiply = nd_accuracy_mult_issuer
 	max = 1
 	multiply = nd_seen_stockpile
 }
@@ -1645,6 +1668,18 @@ nd_seen_survivors_vs_saved = {
 nd_seen_survivors_vs_target = {
 	value = nd_counterforce_reach_target
 	max = nd_seen_exposed_warheads_vs_target
+	multiply = {
+		value = 1
+		subtract = nd_seen_launch_credit
+	}
+	multiply = -1
+	add = nd_seen_stockpile
+	min = 0
+}
+
+nd_seen_survivors_vs_issuer = {
+	value = nd_counterforce_reach_issuer
+	max = nd_seen_exposed_warheads_vs_issuer
 	multiply = {
 		value = 1
 		subtract = nd_seen_launch_credit
@@ -2174,13 +2209,20 @@ nd_salvo_world_relations = {
 
 # ---- Danger, 0–100 (§5.1: a shared assessment, not a trigger for weapons).
 # Issuer scope; needs scope:nd_target.
+# Danger a stage adds, per stage (Warning 1, Confrontation 2, Acute 3), and
+# a public threat's: named, so Go public's hover and the opening preview
+# print them (2026-11-20 delivery spec §5.3).
+nd_cd_stage_points = 10
+
+nd_cd_public_points = 10
+
 nd_cd_stage_value = {
 	value = 0
 	if = {
 		limit = { has_variable = nd_crisis_stage }
 		add = {
 			value = var:nd_crisis_stage
-			multiply = 10
+			multiply = nd_cd_stage_points
 		}
 	}
 }
@@ -2206,8 +2248,61 @@ nd_cd_public_value = {
 	value = 0
 	if = {
 		limit = { nd_crisis_is_public = yes }
-		add = 10
+		add = nd_cd_public_points
 	}
+}
+
+# Issuer scope, a private crisis: what going public adds to the danger
+# (nd_crisis_act_go_public): the public threat's points, and the stage's if
+# it rises to Confrontation (2). Before the 0.7 against a target with no
+# arsenal and no armed protector (nd_crisis_danger_value).
+nd_cd_go_public_rise_value = {
+	value = nd_cd_public_points
+	add = nd_cd_go_public_stage_rise_value
+}
+
+nd_cd_go_public_rise_dampened_value = {
+	value = nd_cd_go_public_rise_value
+	multiply = nd_cd_dampened_factor
+}
+
+nd_cd_go_public_stage_rise_value = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = nd_crisis_stage
+			var:nd_crisis_stage < 2
+		}
+		add = {
+			value = 2
+			subtract = var:nd_crisis_stage
+			multiply = nd_cd_stage_points
+		}
+	}
+}
+
+# Issuer scope, before a crisis exists (the opening preview,
+# nd_crisis_preview; 2026-11-20 delivery spec D16): the danger parts that read
+# only our own side, at the stage a crisis opens at, a private warning at 1 and
+# an ultimatum at 2 and public. The target's readiness, how exposed it is and
+# the cut against a target with no arsenal come once it opens; the panel shows
+# the totals then.
+nd_cd_ours_at_open_value = {
+	value = nd_cd_issuer_readiness_value
+	add = nd_cd_reliability_value
+	add = nd_own_vulnerability_value
+}
+
+nd_cd_ours_at_open_private_value = {
+	value = nd_cd_stage_points
+	add = nd_cd_ours_at_open_value
+}
+
+nd_cd_ours_at_open_public_value = {
+	value = nd_cd_stage_points
+	multiply = 2
+	add = nd_cd_public_points
+	add = nd_cd_ours_at_open_value
 }
 
 nd_cd_counter_value = {
@@ -2300,6 +2395,9 @@ nd_cd_target_vulnerability_value = {
 	}
 }
 
+# The danger's cut against a target with no arsenal and no armed protector.
+nd_cd_dampened_factor = 0.7
+
 nd_crisis_danger_value = {
 	value = nd_cd_stage_value
 	add = nd_cd_issuer_readiness_value
@@ -2316,7 +2414,7 @@ nd_crisis_danger_value = {
 	# misread; the danger is our own hand, not an exchange.
 	if = {
 		limit = { nd_crisis_danger_dampened = yes }
-		multiply = 0.7
+		multiply = nd_cd_dampened_factor
 	}
 	min = 0
 	max = 100
@@ -2361,6 +2459,16 @@ nd_yp_answer_survivors_value = {
 			nd_decapitation_margin_value > 0
 		}
 		multiply = 0.75
+	}
+}
+
+# Issuer scope: the target's survivors against us as we can count them, the
+# world's view (owner call 14): what our crisis panel prints beside the answer
+# part, which counts the target's true survivors (nd_crisis_refresh_figures).
+nd_cs_answer_seen_value = {
+	value = 0
+	scope:nd_target = {
+		add = nd_seen_survivors_vs_issuer
 	}
 }
 
@@ -3063,8 +3171,16 @@ nd_ai_lies_value = {
 # usually larger), 20 less when the launcher is its Acute-crisis opponent, 30
 # less for each of the launcher's lies already found out; 5 to 90. Victim
 # scope, from nuclear_weapon_events.1 (scope:attacking_country saved).
+nd_claim_belief_base = 40
+
+nd_claim_belief_single_warhead = 20
+
+nd_claim_belief_acute = 20
+
+nd_claim_belief_per_lie = 30
+
 nd_claim_belief_value = {
-	value = 40
+	value = nd_claim_belief_base
 	if = {
 		limit = { exists = scope:attacking_country }
 		add = {
@@ -3076,21 +3192,51 @@ nd_claim_belief_value = {
 				has_variable = nd_struck_count
 				var:nd_struck_count <= 1
 			}
-			add = 20
+			add = nd_claim_belief_single_warhead
 		}
 		if = {
 			limit = {
 				var:nd_crisis_opponent ?= scope:attacking_country
 				nd_crisis_stage_at_least = { STAGE = 3 }
 			}
-			subtract = 20
+			subtract = nd_claim_belief_acute
 		}
 		if = {
 			limit = { scope:attacking_country = { has_variable = nd_false_claims } }
 			subtract = {
 				value = scope:attacking_country.var:nd_false_claims
-				multiply = 30
+				multiply = nd_claim_belief_per_lie
 			}
+		}
+	}
+	min = 5
+	max = 90
+}
+
+# The same chance from our side, for the panel's disavowal row (2026-11-20
+# delivery spec §5.3): our country's scope, the struck country saved as
+# scope:nd_sv_enemy (nd_refresh_main_rival's main rival), and a single
+# warhead landed, the case a claim is most believed in. The terms are
+# nd_claim_belief_value's.
+nd_claim_belief_vs_saved = {
+	value = nd_claim_belief_base
+	add = {
+		value = scope:nd_sv_enemy.relations:this
+		divide = 4
+	}
+	add = nd_claim_belief_single_warhead
+	if = {
+		limit = {
+			var:nd_crisis_opponent ?= scope:nd_sv_enemy
+			nd_crisis_stage_at_least = { STAGE = 3 }
+		}
+		subtract = nd_claim_belief_acute
+	}
+	if = {
+		limit = { has_variable = nd_false_claims }
+		subtract = {
+			value = var:nd_false_claims
+			multiply = nd_claim_belief_per_lie
 		}
 	}
 	min = 5

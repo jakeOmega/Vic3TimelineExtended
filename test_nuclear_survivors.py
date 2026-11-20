@@ -440,7 +440,8 @@ class TestWorldsView(unittest.TestCase):
     SEEN = ("nd_seen_stockpile", "nd_seen_survivability", "nd_seen_launch_credit", "nd_seen_readiness_factor_saved",
             "nd_seen_readiness_factor_target", "nd_seen_exposed_warheads_vs_saved", "nd_seen_exposed_warheads_vs_target",
             "nd_seen_survivors_vs_saved", "nd_seen_survivors_vs_target", "nd_redundancy_command_seen",
-            "nd_redundancy_believed")
+            "nd_redundancy_believed", "nd_seen_readiness_factor_issuer", "nd_seen_exposed_warheads_vs_issuer",
+            "nd_seen_survivors_vs_issuer")
     # The true state the world never sees (test_nuclear_layout.TRUE_VARS less
     # launch authority, public since rework spec §14.2, and readiness, which a
     # crisis shows each side of the other: test_readiness_only_in_a_crisis).
@@ -450,7 +451,7 @@ class TestWorldsView(unittest.TestCase):
         r"|nd_dismantle_\w+|nd_safeguards|nd_hardening|nd_loose_\w+|nd_custody_\w+|nd_ar_\w+)\b")
     CRISIS_BRANCH = ("if = {{ limit = {{ nd_seen_in_crisis_with = {{ OBSERVER = {} }} }} "
                      "value = nd_readiness_survivability_factor }}")
-    OBSERVERS = {"saved": "scope:nd_sv_enemy", "target": "scope:nd_target"}
+    OBSERVERS = {"saved": "scope:nd_sv_enemy", "target": "scope:nd_target", "issuer": "scope:nd_issuer"}
 
     @classmethod
     def setUpClass(cls):

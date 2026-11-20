@@ -182,6 +182,17 @@ nuclear_incident.1 = {
 			}
 		}
 		show_as_unavailable = { nd_is_armed = yes }
+		# What the order rests on (2026-11-20 delivery spec §5.3): our
+		# survivors against the suspect if the attack is real and we wait
+		# (stored with the warning, for the AI's chance below too), and what a
+		# first use costs if the warning is false (nuclear_first_strike's and
+		# nd_record_nuclear_use's own figures).
+		custom_tooltip = nd_tt_incident_wait_survivors
+		custom_tooltip = nd_tt_incident_false_price
+		if = {
+			limit = { nd_doctrine_nfu = yes }
+			custom_tooltip = nd_tt_incident_false_pledge
+		}
 		set_variable = { name = nd_warning_launched value = 1 }
 		# The government chose it: the strike events must not say nobody did
 		# (nd_strike_from_incident_of). The warning-launch scope stays, for

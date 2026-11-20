@@ -443,21 +443,31 @@ class OverviewTest(unittest.TestCase):
                 found = _coded(self.ov, value)
                 self.assertEqual(sorted(found), list(codes))
                 for code, textures in found.items():
-                    self.assertEqual(len(textures), 1, f"{value} {code}")
+                    # Doctrine and authority draw in the player's cell and in
+                    # another country's, with the same icon.
+                    self.assertEqual(len(set(textures)), 1, f"{value} {code}")
+                    self.assertEqual(len(textures), 2 if value in THEIR_CODES else 1, f"{value} {code}")
 
     def test_the_cells_are_bankings(self):
         """Banking's own cell, reused as it is: a size, a tooltip, the caption in
         the 154 column, an icon, the word and the figure."""
         cells = _cells(self.panel)
-        self.assertEqual(len(cells), 9)   # 7 for the player, 2 for another country (Row 2's own)
+        self.assertEqual(len(cells), 11)   # 7 for the player, 4 for another country (its Rows 2 and 3)
         for body in cells:
             tip = _cell_tip(body)
             with self.subTest(cell=tip):
                 self.assertIn("size = { 238 70 }", body)
                 self.assertRegex(body, r'blockoverride "caption_width" \{\s*max_width = 154\s*\}')
-                for block in ("caption", "icons", "word", "third_line"):
+                # Another country's doctrine and authority have no third line:
+                # when either can next change is that country's own.
+                blocks = ("caption", "icons", "word") if tip in THEIR_POSTURE else ("caption", "icons", "word",
+                                                                                    "third_line")
+                for block in blocks:
                     self.assertIn(f'blockoverride "{block}"', body)
-                self.assertIn("te_nuclear_ov_figure = {", body)
+                if tip in THEIR_POSTURE:
+                    self.assertNotIn("te_nuclear_ov_figure", body)
+                else:
+                    self.assertIn("te_nuclear_ov_figure = {", body)
                 self.assertTrue(_loc(tip), tip)
         self.assertNotIn("type te_banking_ov_cell", self.ov, "the cell is Banking's, not redefined here")
         for t in ("te_nuclear_ov_word", "te_nuclear_ov_figure"):
@@ -465,7 +475,7 @@ class OverviewTest(unittest.TestCase):
 
     def test_what_needs_the_player_is_on_the_face(self):
         figure = {_cell_tip(b): re.search(r'te_nuclear_ov_figure = \{\s*text = "(\w+)"', b).group(1)
-                  for b in _cells(self.panel)}
+                  for b in _cells(self.panel) if _cell_tip(b) not in THEIR_POSTURE}
         self.assertIn("nd_display_crisis_weeks_left", _loc(figure["je_nuclear_ov_crisis_tt"]))
         self.assertIn("je_nuclear_ov_crisis_deadline_soon", _loc(figure["je_nuclear_ov_crisis_tt"]))
         self.assertTrue(_loc("je_nuclear_ov_crisis_deadline_soon").startswith("#R "))
@@ -551,12 +561,12 @@ class OverviewTest(unittest.TestCase):
         self.assertIn("margin = { 20 8 }", frame)
         self.assertIn("minimumsize = { 480 -1 }", self.panel)
         rows = [r for r in re.split(r"### Row \d", self.panel)[1:]]
-        self.assertEqual(len(rows), 6)   # Rows 1 to 5, and Row 2 for another country
-        for row in rows[:5]:
+        self.assertEqual(len(rows), 7)   # Rows 1 to 5, and Rows 2 and 3 for another country
+        for row in rows[:6]:
             n = row.count("te_banking_ov_cell = {")
             self.assertIn(n, (1, 2))
             self.assertLessEqual(n * 238 + (n - 1) * int(re.search(r"spacing = (\d+)", row).group(1)), 480)
-        taboo = rows[5]
+        taboo = rows[6]
         cells = [int(w) for w in re.findall(r"maximumsize = \{ (\d+) -1 \}", taboo)]
         bar = int(re.search(r"widget = \{\s*size = \{ (\d+) 18 \}", taboo).group(1))
         self.assertEqual(len(cells), 2)
@@ -564,6 +574,10 @@ class OverviewTest(unittest.TestCase):
 
 
 NUCLEAR_ICONS = "gfx/interface/icons/nuclear_icons/"
+# Another country's doctrine and launch authority (its Row 3, 2026-11-20 delivery spec D17): public,
+# drawn with the player's icons, and with no third line.
+THEIR_POSTURE = ("je_nuclear_ov_doctrine_tt_theirs", "je_nuclear_ov_authority_tt_theirs")
+THEIR_CODES = ("nd_display_doctrine_code", "nd_display_authority_code")
 # The overview's own icons (PR #586), per display value, in code order.
 CODED_ICONS = {
     "nuclear_program_display_state": {0: "programme_unfunded", 1: "programme_developing", 2: "programme_producing",
@@ -602,8 +616,8 @@ class NuclearIconsTest(unittest.TestCase):
     def test_each_code_draws_its_own_icon(self):
         for value, names in CODED_ICONS.items():
             with self.subTest(value=value):
-                self.assertEqual(_coded(self.ov, value),
-                                 {code: [f"{NUCLEAR_ICONS}{n}.dds"] for code, n in names.items()})
+                found = {code: sorted(set(t)) for code, t in _coded(self.ov, value).items()}
+                self.assertEqual(found, {code: [f"{NUCLEAR_ICONS}{n}.dds"] for code, n in names.items()})
 
     def test_warheads_crisis_and_credibility(self):
         for name, tooltip in (("warheads", "je_nuclear_ov_warheads_tt"), ("crisis", "je_nuclear_ov_crisis_tt"),
@@ -918,7 +932,8 @@ class LabelBudgetTest(unittest.TestCase):
                 words = set(re.findall(r'te_nuclear_ov_word = \{\s*(?:visible = "[^"]*"\s*)?text = "(\w+)"', body))
                 self._fits(words, 154, OVERVIEW_UNIT, f"{tip} word")
                 figures = set(re.findall(r'te_nuclear_ov_figure = \{\s*text = "(\w+)"', body))
-                self._fits(figures, 154, OVERVIEW_UNIT, f"{tip} figure")
+                if tip not in THEIR_POSTURE:
+                    self._fits(figures, 154, OVERVIEW_UNIT, f"{tip} figure")
         for t in ("te_nuclear_ov_word", "te_nuclear_ov_figure"):
             self.assertIn("max_width = 154", _type_body(ov, t), t)
         self._fits(["je_nuclear_ov_taboo_label"], 60, OVERVIEW_UNIT, "taboo label")
@@ -1298,6 +1313,47 @@ class TestForcesDisplay(unittest.TestCase):
         self.assertNotIn("Var(", _loc("nd_w_reach_value_every"))
 
 
+class TestPublicAuthority(unittest.TestCase):
+    """Launch authority is public (owner, rework spec §14.2; 2026-11-20
+    delivery spec D17): off TRUE_VARS, and shown for another country beside
+    its doctrine in Nuclear Powers and National Info."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.types = gh.mod_types()
+        cls.view = gh.panel_view({WIDE}, cls.types)
+        cls.markup = {n: _drawn(cls.view, cls.types, n) for n in cls.view.open}
+
+    def test_off_the_private_list(self):
+        self.assertIsNone(TRUE_VARS.search("nd_authority"))
+        self.assertIn("rework spec §14.2", _read(__file__)[:_read(__file__).index("TRUE_VARS = ")][-1200:])
+        self.assertNotIn("nd_display_authority_code", _true_state())
+
+    def test_the_powers_rows_show_it(self):
+        row = self.markup["nuclear_program_power_row"]
+        i = row.index("nuclear_program_power_authority_tt")
+        self.assertGreater(i, row.index("nuclear_program_power_doctrine_tt"), "beside the doctrine, after it")
+        for code, icon in ((1, "central"), (2, "delegation"), (3, "on_warning"), (4, "automatic")):
+            self.assertIn("State.GetOwner.MakeScope.ScriptValue('nd_display_authority_code'), "
+                          f"'(CFixedPoint){code}' )]\"\n\t\t\t\t\ttexture = \"gfx/interface/icons/nuclear_icons/"
+                          f"authority_{icon}.dds\"", row, icon)
+        self.assertIn("State.GetOwner.GetCustom('nd_authority_name')", _loc("nuclear_program_power_authority_tt"))
+
+    def test_national_info_shows_it(self):
+        ov = self.markup["te_nuclear_overview_panel"]
+        i = ov.index("je_nuclear_ov_doctrine_tt_theirs")
+        row = ov[ov.rindex("flowcontainer = {", 0, i):]
+        self.assertIn('visible = "[And( Not( Country.IsLocalPlayer ), '
+                      "GetScriptedGui('nd_believed_armed_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]\"",
+                      row)
+        for key in ("je_nuclear_ov_doctrine_tt_theirs", "je_nuclear_ov_authority_tt_theirs"):
+            self.assertIn(key, ov, key)
+        self.assertIn("Country.MakeScope.ScriptValue('nd_display_authority_code')", row)
+        self.assertIn("Country.MakeScope.ScriptValue('nd_display_doctrine_code')", row)
+        # Only what is public: no tenure (the months to the next change).
+        self.assertNotIn("months_left", row[:row.index("je_nuclear_ov_authority_tt_theirs") + 2000])
+
+
 class WideTest(unittest.TestCase):
     """The full-screen columns (spec 2026-11-02-te-window-wide-mode §§ 7, 9.4,
     9.5): te_nuclear_wide_sections places the tab's sections, under the same
@@ -1366,14 +1422,15 @@ COLLAPSED = ["te_nuclear_sec_programme", "te_nuclear_programme_bar", "te_nuclear
              "te_nuclear_sec_reputation"]
 _COLLAPSE = re.compile(r'visible = "\[And\( Country\.IsLocalPlayer, .*\)\]"')
 # What says how many warheads a country truly holds, how close the next one is, its posture or its
-# custody, or whether it is armed at all (nd_armed_sgui reads the true count, nd_has_reputation_sgui
+# custody, or whether it is armed at all (launch authority aside, which is public, as the doctrine
+# is: owner, rework spec §14.2; its tenure is the country's own) (nd_armed_sgui reads the true count, nd_has_reputation_sgui
 # the posture's credibility, created with the first warhead), and the handlers whose hovers print
 # them. None may reach another country's panel. A listed base: _leaks() adds every script value,
 # scripted trigger and scripted GUI that reads the true state at any depth.
 LEAKS = re.compile(
     r"\b(nd_display_stockpile|nuclear_weapon_stockpile|nd_stockpile|nd_display_public_estimate"
     r"|nd_display_survivab\w*|nd_display_safeguards|nd_display_hardening|nd_display_readiness\w*"
-    r"|nd_display_reliability|nd_display_strain|nd_display_upkeep\w*|nd_display_authority\w*"
+    r"|nd_display_reliability|nd_display_strain|nd_display_upkeep\w*|nd_display_authority_months_left"
     r"|nd_display_doctrine_months_left|nd_display_hold\w*|nd_display_loose\w*|nd_display_survivors\w*"
     r"|nuclear_program_display_\w+|nuclear_weapons_program_funding|nuclear_weapon_program_progress"
     r"|nd_disp_taboo_burden\w*|nd_disp_taboo_(?:prestige|leverage)_cost\w*|nd_ar_\w+|nd_custody\w*"
@@ -1382,13 +1439,15 @@ LEAKS = re.compile(
     r"|nd_crisis_next_pressure_sgui|nd_crisis_opponent_sgui|nd_last_crisis_sgui|nd_reach_\w+_sgui"
     r"|nd_posture_sgui|nd_crisis_action_sgui|nuclear_program_funding_sgui|nd_has_main_rival_sgui)\b")
 # The true state's variables: the stockpile, the programme's progress and funding, readiness,
-# survivability, command (reliability, strain, launch authority), the upkeep cached from the arsenal,
+# survivability, command (reliability and strain), the upkeep cached from the arsenal,
 # the ceiling and dismantling, and custody (loose warheads, safeguards, hardening, the arsenal
 # records, the custody transfers). A script value or scripted trigger that reads one, or reads one
 # that does, is true state too (_true_state).
+# Launch authority is not on it: it is public, as the doctrine is (owner, rework spec §14.2; 2026-11-20
+# delivery spec D17), and Nuclear Powers and National Info show another country's.
 TRUE_VARS = re.compile(
     r"\b(nuclear_weapon_stockpile|nuclear_weapon_program_progress|nuclear_weapons_program_funding"
-    r"|nd_readiness\w*|nd_survivability|nd_reliability|nd_strain|nd_authority|nd_upkeep_weekly_cached"
+    r"|nd_readiness\w*|nd_survivability|nd_reliability|nd_strain|nd_upkeep_weekly_cached"
     r"|nd_warhead_ceiling|nd_dismantle_\w+|nd_safeguards|nd_hardening|nd_loose_\w+|nd_custody_\w+|nd_ar_\w+)\b")
 # A bare name in a script body: a script value, trigger or scripted GUI it may call (not var:x, x.y).
 _NAME_REF = re.compile(r"(?<![:.\w])([a-z_]\w*)\b")

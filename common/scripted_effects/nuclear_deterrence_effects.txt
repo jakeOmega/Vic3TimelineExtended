@@ -1155,6 +1155,9 @@ nd_refresh_main_rival = {
 		set_variable = { name = nd_main_rival_pgm value = nd_k_ratio_tech_part_saved }
 		set_variable = { name = nd_main_rival_k_force value = nd_k_ratio_force_part_saved }
 		set_variable = { name = nd_main_rival_accuracy_mult value = nd_accuracy_mult_saved }
+		# The chance the rival would believe a strike of ours was
+		# unauthorized, for the disavowal row (2026-11-20 delivery spec §5.3).
+		set_variable = { name = nd_claim_belief_main value = nd_claim_belief_vs_saved }
 		# What a full strike by the rival would destroy of ours now, and under
 		# each launch authority, at each readiness and with one safeguards
 		# level more: the posture's choices print them (2026-11-20 delivery
@@ -1222,6 +1225,10 @@ nd_refresh_main_rival = {
 		if = {
 			limit = { has_variable = nd_main_rival_accuracy_mult }
 			remove_variable = nd_main_rival_accuracy_mult
+		}
+		if = {
+			limit = { has_variable = nd_claim_belief_main }
+			remove_variable = nd_claim_belief_main
 		}
 		if = {
 			limit = { has_variable = nd_lost_main }

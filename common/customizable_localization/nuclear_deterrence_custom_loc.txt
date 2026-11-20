@@ -1795,6 +1795,21 @@ nd_survivors_silo_line = {
 	}
 }
 
+# The disavowal row's chance against the main rival, while there is one
+# (nd_refresh_main_rival stores it).
+nd_disavow_belief_line = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_variable = nd_claim_belief_main }
+		localization_key = nd_w_disavow_belief
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_empty
+	}
+}
+
 nd_main_rival_k_pgm_part = {
 	type = country
 	random_valid = no

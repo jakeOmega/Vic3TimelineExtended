@@ -1189,8 +1189,12 @@ class TestVictimWeighsTheClaim(unittest.TestCase):
 
     def test_belief_value_terms(self):
         body = block(self.values, "nd_claim_belief_value")
-        for needle in ("value = 40", "divide = 4", "add = 20", "subtract = 20", "multiply = 30", "min = 5", "max = 90"):
+        for needle in ("value = nd_claim_belief_base", "divide = 4", "add = nd_claim_belief_single_warhead",
+                       "subtract = nd_claim_belief_acute", "multiply = nd_claim_belief_per_lie", "min = 5", "max = 90"):
             self.assertIn(needle, body)
+        for name, figure in (("nd_claim_belief_base", 40), ("nd_claim_belief_single_warhead", 20),
+                             ("nd_claim_belief_acute", 20), ("nd_claim_belief_per_lie", 30)):
+            self.assertRegex(self.values, rf"(?m)^{name} = {figure}$", name)
 
     def test_accept_option_gated_on_a_claim(self):
         accept = option_body(self.events, "nuclear_weapon_events.1.k")
@@ -4493,6 +4497,217 @@ class TestCrisisWalkFences(unittest.TestCase):
     def test_no_saved_scope_fence_is_left(self):
         for old in ("nd_crisis_opening", "nd_crisis_closing"):
             self.assertNotIn(old, self.crisis)
+
+
+class TestCrisisDecisionFigures(unittest.TestCase):
+    """The figures a crisis decision rests on (2026-11-20 delivery spec §5.3,
+    plan D16): the survivors behind the two pressure parts that count them,
+    Go public's danger and stage, and the opening preview's danger."""
+
+    def setUp(self):
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+        self.values = strip_comments(read(VALUES))
+        self.sguis = strip_comments(read(SGUIS))
+
+    def test_the_survivors_are_stored_as_each_side_may_know_them(self):
+        refresh = squash(block(self.crisis, "nd_crisis_refresh_figures"))
+        limit = "limit = { scope:nd_target = { nd_believed_armed = yes } }"
+        i = refresh.index(limit) + len(limit)
+        stored = refresh[i:refresh.index("nd_crisis_classify_follow_through")]
+        t0 = stored.index("scope:nd_target = {")
+        depth, t1 = 0, t0
+        while True:
+            depth += {"{": 1, "}": -1}.get(stored[t1], 0)
+            t1 += 1
+            if depth == 0 and stored[t1 - 1] == "}":
+                break
+        target, issuer = stored[t0:t1], stored[:t0] + stored[t1:]
+        # The target: its own true count, and the issuer's as the world sees it.
+        self.assertIn("set_variable = { name = nd_cs_answer_survivors value = nd_yp_answer_survivors_value }", target)
+        self.assertIn("set_variable = { name = nd_cs_answer_accuracy value = nd_accuracy_mult_issuer }", target)
+        for var in ("nd_cs_exposure_survivors", "nd_cs_exposure_accuracy"):
+            self.assertIn(f"set_variable = {{ name = {var} value = scope:nd_issuer.var:{var} }}", target)
+        # The issuer: the target's as the world sees them, its own as the
+        # target counts them (what the part reads).
+        self.assertIn("set_variable = { name = nd_cs_answer_survivors value = nd_cs_answer_seen_value }", issuer)
+        self.assertIn("set_variable = { name = nd_cs_exposure_survivors value = nd_seen_survivors_vs_target }", issuer)
+        self.assertIn("set_variable = { name = nd_cs_exposure_accuracy value = nd_accuracy_mult_target }", issuer)
+        self.assertIn("set_variable = { name = nd_cs_answer_accuracy value = scope:nd_target.var:nd_cs_answer_accuracy }",
+                      issuer)
+        self.assertEqual(squash(block(self.values, "nd_cs_answer_seen_value")),
+                         "value = 0 scope:nd_target = { add = nd_seen_survivors_vs_issuer }")
+        # The part reads the same figure the issuer's row prints.
+        self.assertIn("scope:nd_issuer = { add = nd_seen_survivors_vs_target }",
+                      squash(block(self.values, "nd_yp_issuer_exposure_value")))
+        # Dropped once the target is unarmed, and with the crisis's figures.
+        self.assertIn("else = { nd_crisis_clear_survivors = yes scope:nd_target = { nd_crisis_clear_survivors = yes } }",
+                      stored)
+        self.assertIn("nd_crisis_clear_survivors = yes", squash(block(self.crisis, "nd_crisis_clear_figures")))
+        clear = squash(block(self.crisis, "nd_crisis_clear_survivors"))
+        for var in ("nd_cs_answer_survivors", "nd_cs_exposure_survivors", "nd_cs_answer_accuracy",
+                    "nd_cs_exposure_accuracy"):
+            self.assertIn(f"limit = {{ has_variable = {var} }} remove_variable = {var}", clear, var)
+
+    def test_the_seen_survivors_against_the_issuer(self):
+        seen = squash(block(self.values, "nd_seen_survivors_vs_issuer"))
+        self.assertEqual(seen, squash(block(self.values, "nd_seen_survivors_vs_target")).replace("_target", "_issuer"))
+        exposed = squash(block(self.values, "nd_seen_exposed_warheads_vs_issuer"))
+        self.assertEqual(exposed,
+                         squash(block(self.values, "nd_seen_exposed_warheads_vs_target")).replace("_target", "_issuer"))
+
+    def test_the_breakdown_prints_them_beside_their_parts(self):
+        effect = squash(block(block(self.sguis, "nd_crisis_pressure_breakdown_sgui"), "effect"))
+        answer = "nd_crisis_breakdown_line = { C = nd_yp_answer KEY = nd_yp_answer_line }"
+        exposure = "nd_crisis_breakdown_line = { C = nd_yp_issuer_exposure KEY = nd_yp_issuer_exposure_line }"
+        # The survivors whenever stored; the accuracy factor only above 1.
+        self.assertIn(answer + " nd_crisis_survivors_line = { C = nd_cs_answer_survivors ABOVE = -1 "
+                      "ISSUER = nd_cs_answer_line_issuer TARGET = nd_cs_answer_line_target } "
+                      "nd_crisis_survivors_line = { C = nd_cs_answer_accuracy ABOVE = 1 "
+                      "ISSUER = nd_cs_answer_accuracy_line_issuer TARGET = nd_cs_answer_accuracy_line_target } "
+                      + exposure, effect)
+        self.assertIn(exposure + " nd_crisis_survivors_line = { C = nd_cs_exposure_survivors ABOVE = -1 "
+                      "ISSUER = nd_cs_exposure_line_issuer TARGET = nd_cs_exposure_line_target } "
+                      "nd_crisis_survivors_line = { C = nd_cs_exposure_accuracy ABOVE = 1 "
+                      "ISSUER = nd_cs_exposure_accuracy_line_issuer TARGET = nd_cs_exposure_accuracy_line_target }",
+                      effect)
+        line = squash(block(self.crisis, "nd_crisis_survivors_line"))
+        self.assertEqual(line, "if = { limit = { has_variable = $C$ var:$C$ > $ABOVE$ } "
+                               "if = { limit = { nd_is_crisis_owner = yes } custom_tooltip_no_bullet = $ISSUER$ } "
+                               "else = { custom_tooltip_no_bullet = $TARGET$ } }")
+
+    def test_a_figure_about_the_other_side_says_so(self):
+        # Owner call 14: the world's view carries its qualifier and hover.
+        for key in ("nd_cs_answer_line_issuer", "nd_cs_exposure_line_issuer", "nd_cs_exposure_line_target"):
+            self.assertIn("#tooltippable;tooltip:nd_tt_worlds_view up to#!", loc_value(key), key)
+        # The target's own survivors are its own to know.
+        self.assertNotIn("nd_tt_worlds_view", loc_value("nd_cs_answer_line_target"))
+        for key, var in (("nd_cs_answer_line_issuer", "nd_cs_answer_survivors"),
+                         ("nd_cs_answer_line_target", "nd_cs_answer_survivors"),
+                         ("nd_cs_exposure_line_issuer", "nd_cs_exposure_survivors"),
+                         ("nd_cs_exposure_line_target", "nd_cs_exposure_survivors"),
+                         ("nd_cs_answer_accuracy_line_issuer", "nd_cs_answer_accuracy"),
+                         ("nd_cs_answer_accuracy_line_target", "nd_cs_answer_accuracy"),
+                         ("nd_cs_exposure_accuracy_line_issuer", "nd_cs_exposure_accuracy"),
+                         ("nd_cs_exposure_accuracy_line_target", "nd_cs_exposure_accuracy")):
+            self.assertIn(f"THIS.Var('{var}').GetValue", loc_value(key), key)
+
+    def test_go_public_names_its_danger_and_stage(self):
+        act = squash(block(self.crisis, "nd_crisis_act_go_public"))
+        self.assertIn("if = { limit = { var:nd_cd_dampened ?= 1 } custom_tooltip = nd_tt_go_public_danger_dampened } "
+                      "else = { custom_tooltip = nd_tt_go_public_danger }", act)
+        self.assertIn("multiply = nd_cd_dampened_factor", squash(block(self.values, "nd_crisis_danger_value")))
+        self.assertEqual(squash(block(self.values, "nd_cd_go_public_rise_dampened_value")),
+                         "value = nd_cd_go_public_rise_value multiply = nd_cd_dampened_factor")
+        self.assertIn("ScriptValue('nd_cd_go_public_rise_dampened_value')", loc_value("nd_tt_go_public_danger_dampened"))
+        self.assertIn("ScriptValue('nd_cd_dampened_factor')", loc_value("nd_tt_go_public_danger_dampened"))
+        self.assertIn("if = { limit = { has_variable = nd_crisis_stage var:nd_crisis_stage < 2 } "
+                      "custom_tooltip = nd_tt_go_public_terms } else = { custom_tooltip = nd_tt_go_public_terms_stage }",
+                      act)
+        # The figures are the danger parts' own.
+        self.assertIn("add = nd_cd_public_points", squash(block(self.values, "nd_cd_public_value")))
+        self.assertIn("multiply = nd_cd_stage_points", squash(block(self.values, "nd_cd_stage_value")))
+        self.assertEqual(squash(block(self.values, "nd_cd_go_public_rise_value")),
+                         "value = nd_cd_public_points add = nd_cd_go_public_stage_rise_value")
+        self.assertEqual(squash(block(self.values, "nd_cd_go_public_stage_rise_value")),
+                         "value = 0 if = { limit = { has_variable = nd_crisis_stage var:nd_crisis_stage < 2 } "
+                         "add = { value = 2 subtract = var:nd_crisis_stage multiply = nd_cd_stage_points } }")
+        danger = loc_value("nd_tt_go_public_danger")
+        for value in ("nd_cd_go_public_rise_value", "nd_cd_public_points", "nd_cd_go_public_stage_rise_value"):
+            self.assertIn(f"ScriptValue('{value}')", danger, value)
+        self.assertIn("Confrontation", loc_value("nd_tt_go_public_terms"))
+        self.assertNotIn("Confrontation", loc_value("nd_tt_go_public_terms_stage"))
+
+    def test_the_opening_preview_gives_our_sides_danger(self):
+        """D16's fallback: what reads only our side and the opening's
+        literals, and where the totals appear."""
+        preview = squash(block(self.crisis, "nd_crisis_preview"))
+        self.assertIn("if = { limit = { always = $PUBLIC$ } custom_tooltip = nd_tt_open_danger_public } "
+                      "else = { custom_tooltip = nd_tt_open_danger_private }", preview)
+        common = squash(block(self.values, "nd_cd_ours_at_open_value"))
+        self.assertEqual(common, "value = nd_cd_issuer_readiness_value add = nd_cd_reliability_value "
+                                 "add = nd_own_vulnerability_value")
+        self.assertEqual(squash(block(self.values, "nd_cd_ours_at_open_private_value")),
+                         "value = nd_cd_stage_points add = nd_cd_ours_at_open_value")
+        self.assertEqual(squash(block(self.values, "nd_cd_ours_at_open_public_value")),
+                         "value = nd_cd_stage_points multiply = 2 add = nd_cd_public_points "
+                         "add = nd_cd_ours_at_open_value")
+        # None of them reads the target or a crisis variable.
+        for name in ("nd_cd_ours_at_open_value", "nd_cd_ours_at_open_private_value", "nd_cd_ours_at_open_public_value",
+                     "nd_cd_issuer_readiness_value", "nd_cd_reliability_value", "nd_own_vulnerability_value"):
+            body = squash(block(self.values, name))
+            self.assertNotIn("scope:nd_target", body, name)
+            self.assertNotIn("nd_crisis_", body, name)
+        for key, value in (("nd_tt_open_danger_private", "nd_cd_ours_at_open_private_value"),
+                           ("nd_tt_open_danger_public", "nd_cd_ours_at_open_public_value")):
+            text = loc_value(key)
+            self.assertIn(f"THIS.ScriptValue('{value}')", text, key)
+            self.assertIn("as soon as it opens", text, f"{key}: says when the totals appear")
+
+
+class TestDecisionHovers(unittest.TestCase):
+    """Launch under attack and the disavowal print what they rest on
+    (2026-11-20 delivery spec §5.3), through custom_tooltip lines."""
+
+    def setUp(self):
+        self.option = squash(option_body(strip_comments(read(INCIDENT_EVENTS)), "nuclear_incident.1.c"))
+
+    def test_launch_under_attack(self):
+        effects = self.option[self.option.index("show_as_unavailable"):]
+        self.assertIn("custom_tooltip = nd_tt_incident_wait_survivors custom_tooltip = nd_tt_incident_false_price "
+                      "if = { limit = { nd_doctrine_nfu = yes } custom_tooltip = nd_tt_incident_false_pledge }", effects)
+        self.assertLess(effects.index("nd_tt_incident_false_price"), effects.index("nd_launch_or_intercept"))
+        wait = loc_value("nd_tt_incident_wait_survivors")
+        self.assertIn("ROOT.GetCountry.MakeScope.Var('nd_survivors_vs_suspect').GetValue", wait)
+        price = loc_value("nd_tt_incident_false_price")
+        for value in ("nd_taboo_infamy_strategic", "nd_taboo_world_relations_strategic"):
+            self.assertIn(f"ScriptValue('{value}')", price, value)
+        # What a first use books (nuclear_first_strike, nd_record_nuclear_use).
+        strike = squash(block(strip_comments(read(EXTRA_EFFECTS)), "nuclear_first_strike"))
+        self.assertIn("change_infamy = nd_taboo_infamy_strategic", strike)
+        self.assertIn("value = nd_taboo_world_relations_strategic", strike)
+        record = squash(block(strip_comments(read(EFFECTS)), "nd_record_nuclear_use"))
+        self.assertIn("nd_doctrine_nfu = yes NOT = { nd_was_struck_by = { ENEMY = $VICTIM$ } } } "
+                      "nd_break_pledge_effects = { CREDIBILITY = 30 INFAMY = 10 }", record)
+        pledge = loc_value("nd_tt_incident_false_pledge")
+        self.assertIn("#R 30#! credibility", pledge)
+        self.assertIn("#R 10#! infamy", pledge)
+        # The figure is stored before the event, where the AI's chance reads it.
+        self.assertIn("set_variable = { name = nd_survivors_vs_suspect value = nd_survivors_vs_saved }",
+                      squash(strip_comments(read(EFFECTS))))
+
+    def test_disavowal(self):
+        values = strip_comments(read(VALUES))
+        belief = squash(block(values, "nd_claim_belief_value"))
+        mine = squash(block(values, "nd_claim_belief_vs_saved"))
+        # One set of terms for the victim's chance and the panel's.
+        for term in ("nd_claim_belief_base", "nd_claim_belief_single_warhead", "nd_claim_belief_acute",
+                     "nd_claim_belief_per_lie"):
+            self.assertIn(term, belief, term)
+            self.assertIn(term, mine, term)
+        self.assertIn("scope:nd_sv_enemy.relations:this", mine)
+        self.assertTrue(belief.endswith("min = 5 max = 90") and mine.endswith("min = 5 max = 90"))
+        refresh = squash(block(strip_comments(read(EFFECTS)), "nd_refresh_main_rival"))
+        self.assertIn("set_variable = { name = nd_claim_belief_main value = nd_claim_belief_vs_saved }", refresh)
+        self.assertIn("remove_variable = nd_claim_belief_main", refresh)
+        hover = loc_value("nd_w_disavow_tt")
+        self.assertIn("[Country.GetCustom('nd_disavow_belief_line')]", hover)
+        for value in ("nd_taboo_infamy_threat", "nd_claim_belief_per_lie"):
+            self.assertIn(f"ScriptValue('{value}')", hover, value)
+        # The price of a lie found out (nuclear_weapon_events.30).
+        exposed = squash(block(strip_comments(read(WEAPON_EVENTS)), "nuclear_weapon_events.30"))
+        self.assertIn("nd_change_credibility = { AMOUNT = -20 }", exposed)
+        self.assertIn("change_infamy = nd_taboo_infamy_threat", exposed)
+        self.assertIn("change_relations = { country = scope:nd_truth_victim value = -50 }", exposed)
+        self.assertIn("#R 20#! credibility", hover)
+        self.assertIn("#R 50#!", hover)
+        line = loc_value("nd_w_disavow_belief")
+        self.assertIn("Country.MakeScope.Var('nd_claim_belief_main').GetValue", line)
+        self.assertIn("Var('nd_main_rival_capital').GetState.GetCountry", line)
+        # The button says it too.
+        sgui = squash(strip_comments(read(SGUIS)))
+        self.assertIn("custom_tooltip = nd_tt_disavow_on if = { limit = { has_variable = nd_claim_belief_main } "
+                      "custom_tooltip = nd_tt_disavow_chance }", sgui)
+        self.assertIn("GetPlayer.MakeScope.Var('nd_claim_belief_main')", loc_value("nd_tt_disavow_chance"))
 
 
 if __name__ == "__main__":
