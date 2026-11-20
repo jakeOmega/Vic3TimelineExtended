@@ -1665,6 +1665,109 @@ class ModulesTest(unittest.TestCase):
         self.assertIn("occupancy >= 0.5", runs)
         self.assertIn("sr_mod_storage_self_check = yes", _block(self.modules, "sr_mod_month"))
 
+    # ---- The methods' goods (the owner, 2026-11-20) ----
+
+    FABRICATION = ("pm_sr_fabrication_orbital_assembly", "pm_sr_fabrication_lunar_foundries",
+                   "pm_sr_fabrication_fusion_shipyards")
+    STORAGE = ("pm_sr_storage_component_depot", "pm_sr_storage_orbital_depot")
+
+    @staticmethod
+    def _tech_era(tech):
+        for path in glob.glob(os.path.join(REPO, "common", "technology", "technologies", "era_*.txt")):
+            with open(path, encoding="utf-8-sig") as f:
+                if re.search(rf"(?m)^{tech} = \{{", f.read()):
+                    return int(re.search(r"era_(\d+)\.txt$", path).group(1))
+        raise AssertionError(f"no era file defines {tech}")
+
+    @staticmethod
+    def _bill(body, prices):
+        """A method's weekly bill at full staff and base prices."""
+        return sum(float(qty) * prices[good] for good, qty in re.findall(r"goods_input_(\w+)_add = ([\d.]+)", body))
+
+    def test_no_method_takes_advanced_materials_before_the_fabricator(self):
+        """Orbital Assembly and Component Depot (Cislunar Infrastructure, era 10)
+        once took Advanced Materials, whose fabricator comes in era 11."""
+        industry = _strip(_raw("common", "buildings", "01_zz_te_industry.txt"))
+        fabricator = _block(industry, "building_advanced_material_fabricator")
+        unlock = re.search(r"unlocking_technologies = \{\s*(\w+)", fabricator).group(1)
+        fabricator_era = self._tech_era(unlock)
+        pms = _strip(_raw("common", "production_methods", "sr_colony_module_pms.txt"))
+        for method in self.FABRICATION + self.STORAGE:
+            body = _block(pms, method)
+            era = self._tech_era(re.search(r"unlocking_technologies = \{\s*(\w+)", body).group(1))
+            with self.subTest(method=method, era=era):
+                if era < fabricator_era:
+                    self.assertNotIn("goods_input_advanced_materials_add", body)
+        for method in ("pm_sr_fabrication_orbital_assembly", "pm_sr_storage_component_depot"):
+            self.assertLess(self._tech_era(re.search(r"unlocking_technologies = \{\s*(\w+)",
+                                                     _block(pms, method)).group(1)), fabricator_era)
+
+    def test_each_later_method_costs_more_a_week_and_a_little_less_a_point(self):
+        """At base prices each later method's bill is higher and its cost a point
+        (of fabrication a month, or of storage) 5% to 15% lower than the one before:
+        the owner's 2026-11-20 rule, about 10%. Until then Fusion Shipyards cost a
+        quarter of Orbital Assembly a point, and the Orbital Depot more than the
+        Component Depot."""
+        import pm_costs
+
+        prices = pm_costs.load_goods()
+        pms = _strip(_raw("common", "production_methods", "sr_colony_module_pms.txt"))
+        for methods, field in ((self.FABRICATION, "country_sr_module_fabrication_add"),
+                               (self.STORAGE, "country_sr_module_storage_add")):
+            rows = []
+            for method in methods:
+                body = _block(pms, method)
+                units = float(re.search(rf"{field} = ([\d.]+)", body).group(1))
+                rows.append((method, self._bill(body, prices), units))
+            for (low, low_bill, low_units), (high, high_bill, high_units) in zip(rows, rows[1:]):
+                with self.subTest(low=low, high=high):
+                    self.assertGreater(high_bill, low_bill)
+                    ratio = (high_bill / high_units) / (low_bill / low_units)
+                    self.assertGreaterEqual(ratio, 0.85)
+                    self.assertLessEqual(ratio, 0.95)
+
+    def test_the_ai_takes_the_dearest_method_within_its_budget(self):
+        """The two dearer methods run only while their bill fits in the AI's
+        fabrication budget, half the mission's climbing share; the cheapest one
+        the country has runs whatever the budget."""
+        import pm_costs
+
+        prices = pm_costs.load_goods()
+        pms = _strip(_raw("common", "production_methods", "sr_colony_module_pms.txt"))
+        values = _strip(_raw("common", "script_values", "sr_colony_module_values.txt"))
+        for key in ("lunar_foundries", "fusion_shipyards"):
+            with self.subTest(method=key):
+                base = float(re.search(r"value = ([\d.]+)", _block(values, f"sr_mod_fab_bill_base_{key}")).group(1))
+                self.assertEqual(base, self._bill(_block(pms, f"pm_sr_fabrication_{key}"), prices))
+                room = _block(values, f"sr_mod_ai_fab_room_{key}")
+                self.assertIn("value = sr_mod_ai_fab_budget", room)
+                self.assertIn(f"value = sr_mod_fab_bill_base_{key}", room)
+                self.assertIn("multiply = sr_mod_fab_bill_price_factor", room)
+        factor = _block(values, "sr_mod_fab_bill_price_factor")
+        self.assertIn("value = sr_ai_program_throughput_funded", factor)
+        self.assertIn("add = sr_launch_capacity_price_up", factor)
+        self.assertIn("value = fixed_income", _block(values, "sr_mod_ai_fab_budget"))
+        share = float(re.search(r"value = ([\d.]+)", _block(values, "sr_mod_ai_fab_share")).group(1))
+        budget = _strip(_raw("common", "script_values", "sr_ai_mission_budget_values.txt"))
+        climb = float(re.search(r"(?m)^sr_ai_mission_share_up = ([\d.]+)", budget).group(1))
+        self.assertAlmostEqual(share, climb / 2)
+        # The ladder, dearest first; the budget gates only the two dearer methods.
+        best = _block(self.modules, "sr_mod_activate_best_fabrication")
+        branches = re.findall(r"limit = \{([^{}]*)\}\s*sr_mod_run_method = \{ PM = (\w+) \}", best)
+        self.assertEqual([(" ".join(cond.split()), pm) for cond, pm in branches], [
+            ("has_technology_researched = compact_fusion_reactors sr_mod_ai_fab_room_fusion_shipyards >= 0",
+             "pm_sr_fabrication_fusion_shipyards"),
+            ("has_technology_researched = space_colonization sr_mod_ai_fab_room_lunar_foundries >= 0",
+             "pm_sr_fabrication_lunar_foundries"),
+            ("has_technology_researched = cislunar_infrastructure", "pm_sr_fabrication_orbital_assembly"),
+            ("has_technology_researched = space_colonization", "pm_sr_fabrication_lunar_foundries"),
+            ("has_technology_researched = compact_fusion_reactors", "pm_sr_fabrication_fusion_shipyards"),
+        ])
+        # One chain, so only the first branch that holds runs.
+        self.assertTrue(best.strip().startswith("if = {"))
+        self.assertEqual(len(re.findall(r"\belse_if = \{", best)), 4)
+        self.assertIn("sr_mod_activate_best_fabrication = yes", _block(self.modules, "sr_mod_ai_review"))
+
     def test_a_lunar_module_takes_no_shipment_slot(self):
         lunar = sorted(s.index for s in gss.LUNAR)
         self.assertEqual(len(lunar), 6)

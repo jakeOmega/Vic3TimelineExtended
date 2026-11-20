@@ -62,6 +62,56 @@ sr_mod_fab_rate = {
 	add = { value = sr_mod_units_yard multiply = sr_mod_yard_points }
 }
 
+# ---- The AI's fabrication budget (the owner, 2026-11-20) ---------------------------
+# An AI runs the dearest fabrication method whose bill is within this share of
+# its government's weekly fixed income, half the share a mission may climb to
+# (sr_ai_mission_share_up, sr_ai_mission_budget_values.txt): the two are paid
+# together. Each later method costs about 10% less a point than the one before
+# (sr_colony_module_pms.txt), so a step down slows the modules more than it
+# saves on each. Its cheapest method runs within any budget, as every method
+# did before (sr_mod_activate_best_fabrication).
+sr_mod_ai_fab_share = { value = 0.05 }
+sr_mod_ai_fab_budget = {
+	value = fixed_income
+	multiply = sr_mod_ai_fab_share
+}
+
+# The two dearer methods' weekly bills at full staff and base prices, their
+# goods times their base prices (sr_colony_module_pms.txt; test_solar_sites.py
+# holds them equal). Orbital Assembly needs none: it is the cheapest.
+sr_mod_fab_bill_base_lunar_foundries = { value = 732000 }
+sr_mod_fab_bill_base_fusion_shipyards = { value = 1368000 }
+
+# What the bill costs now, as the mission budget prices a mission's: the
+# program's throughput with its funding (its goods scale with it), times our
+# market's Launch Capacity premium, never below base (sr_launch_capacity_price_up,
+# space_race_values.txt). Launch Capacity is 70% to 76% of every method's bill;
+# the premium stands in for the rest. An estimate: an understaffed programme
+# buys less.
+sr_mod_fab_bill_price_factor = {
+	value = sr_ai_program_throughput_funded
+	multiply = {
+		value = 1
+		add = sr_launch_capacity_price_up
+	}
+}
+
+# What each method's bill leaves of the budget: 0 or more, the AI may run it.
+sr_mod_ai_fab_room_lunar_foundries = {
+	value = sr_mod_ai_fab_budget
+	subtract = {
+		value = sr_mod_fab_bill_base_lunar_foundries
+		multiply = sr_mod_fab_bill_price_factor
+	}
+}
+sr_mod_ai_fab_room_fusion_shipyards = {
+	value = sr_mod_ai_fab_budget
+	subtract = {
+		value = sr_mod_fab_bill_base_fusion_shipyards
+		multiply = sr_mod_fab_bill_price_factor
+	}
+}
+
 # ---- Facilities (colony management design § 7) ---------------------------------------
 # What a staffed level of the hook facilities gives; the rest are the entry
 # modifiers sr_module_<key> (space_race_modifiers.txt). The units are generated

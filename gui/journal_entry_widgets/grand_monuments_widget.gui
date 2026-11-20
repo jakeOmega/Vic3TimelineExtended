@@ -26,7 +26,8 @@
 ###     a bar per stepped total, interest group approval, the fading ledgers
 ###     and the opportunity boons in force (with their months left).
 ###     Our Monuments (open): one row per other monument, from the country's
-###     gm_states list (rebuilt by every gm_country_refresh).
+###     gm_states list (rebuilt by every gm_country_refresh), in one of three
+###     views (Full, Short, Collapsed) as Trophies on Display's.
 ### Every explanation is on the Help page (te_grand_monuments_help_popup, in
 ### gui/te_popups.gui), which the "?" at the top of the entry (te_help_row in
 ### the overview root) and in the tab's header opens.
@@ -1963,6 +1964,76 @@ types grand_monuments_widget_types
 		}
 	}
 
+	### One monument in Our Monuments' Short view: one line, no picture. Its
+	### name, its status word and its grandeur; the rest (its dedication, where
+	### it stands, its levels and years, a landmark's history) on hover, the
+	### inscription and the counts-toward line left to Full. Two boxes, as the
+	### Full row's title, so a typed name is read only once it exists. Carry It
+	### Off and Clear It Away end the line, small, as Trophies on Display's
+	### Short line ends with its button (gm_tr_row_short); Rename and Name It
+	### are Full's. The wrapper round them is gated as the Full row's controls
+	### are, on the player's own country and the two buttons' own visibles
+	### (test_grand_monuments_layout.ControlsGateTest). 344 + 6 + 130 = 480.
+	type gm_monument_row_short = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 6
+
+		textbox = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_has_typed_name'), '(CFixedPoint)0' )]"
+			autoresize = yes
+			multiline = yes
+			minimumsize = { 344 -1 }
+			maximumsize = { 344 -1 }
+			align = left|nobaseline
+			using = gm_fontsize_row
+			tooltip = "gm_row_short_tt"
+			text = "gm_row_short_line"
+		}
+		textbox = {
+			visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_has_typed_name'), '(CFixedPoint)1' )]"
+			autoresize = yes
+			multiline = yes
+			minimumsize = { 344 -1 }
+			maximumsize = { 344 -1 }
+			align = left|nobaseline
+			using = gm_fontsize_row
+			tooltip = "gm_row_short_tt_named"
+			text = "gm_row_short_line_named"
+		}
+
+		flowcontainer = {
+			visible = "[And( Country.IsLocalPlayer, Or( And( Not( GetMetaPlayer.IsObserver ), GetScriptedGui('gm_tr_take_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End ) ), And( ObjectsEqual( State.GetOwner, Country.Self ), EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_clearable'), '(CFixedPoint)1' ) ) ) )]"
+			direction = vertical
+			ignoreinvisible = yes
+			parentanchor = vcenter
+
+			flowcontainer = {
+				using = te_own_country_only
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 2
+
+				gm_tr_take_button = {
+					blockoverride "tr_button_layout" {
+						size = { 130 26 }
+					}
+					blockoverride "tr_button_text_width" {
+						max_width = 124
+					}
+				}
+				gm_clear_button = {
+					blockoverride "tr_button_layout" {
+						size = { 130 26 }
+					}
+					blockoverride "tr_button_text_width" {
+						max_width = 124
+					}
+				}
+			}
+		}
+	}
+
 	### ======================================================================
 	### SECTIONS. Composed, in order, by te_gm_status_sections below.
 	### ======================================================================
@@ -3239,6 +3310,17 @@ types grand_monuments_widget_types
 	### nothing; construction sites are Awaiting Dedication's and contested
 	### monuments Awaiting a Decision's (GM-3). The entry can outlive its last
 	### monument while a ledger fades; the panel then says so.
+	### Three views, as the state view's Trophies on Display card has
+	### (te_state_gm_trophy_card, gui/gm_trophy_widgets.gui), chosen by the
+	### buttons at the top of the panel while it lists a monument, and kept in
+	### the client-side gm_monuments_view (unset is Full, so a fresh session
+	### opens as before):
+	###   Full       the pictured rows, with their buttons
+	###   Short      one line per monument, no pictures, the rest on hover
+	###   Collapsed  the summary line alone: how many, and their grandeur
+	### The summary line shows in every view but a Full one with a single
+	### monument, whose row says the same. The section's header still opens
+	### and closes it (gm_monuments_closed), as every section's does.
 	type te_gm_sec_monuments = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -3273,10 +3355,67 @@ types grand_monuments_widget_types
 				text = "gm_je_monuments_all_awaiting"
 			}
 
+			### The three views, while there is a row to show. 88 * 3 + 4 * 2 =
+			### 272, at the panel's right, in a strip 30 high: the buttons' 24 and
+			### a gap above the summary line.
+			widget = {
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gm_disp_count_listed_rest'), '(CFixedPoint)0' )]"
+				size = { 480 30 }
+
+				flowcontainer = {
+					parentanchor = right|vcenter
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 4
+
+					gm_tr_view_button = {
+						tooltip = "gm_je_mon_view_full_tt"
+						blockoverride "tr_view_button" {
+							enabled = "[GetVariableSystem.Exists('gm_monuments_view')]"
+							onclick = "[GetVariableSystem.Clear('gm_monuments_view')]"
+						}
+						blockoverride "tr_view_button_text" {
+							text = "gm_je_mon_view_full"
+						}
+					}
+					gm_tr_view_button = {
+						tooltip = "gm_je_mon_view_short_tt"
+						blockoverride "tr_view_button" {
+							enabled = "[Not(GetVariableSystem.HasValue('gm_monuments_view', 'short'))]"
+							onclick = "[GetVariableSystem.Set('gm_monuments_view', 'short')]"
+						}
+						blockoverride "tr_view_button_text" {
+							text = "gm_je_mon_view_short"
+						}
+					}
+					gm_tr_view_button = {
+						tooltip = "gm_je_mon_view_collapsed_tt"
+						blockoverride "tr_view_button" {
+							enabled = "[Not(GetVariableSystem.HasValue('gm_monuments_view', 'collapsed'))]"
+							onclick = "[GetVariableSystem.Set('gm_monuments_view', 'collapsed')]"
+						}
+						blockoverride "tr_view_button_text" {
+							text = "gm_je_mon_view_collapsed"
+						}
+					}
+				}
+			}
+
+			### How many, and their grandeur together, in every view but a Full
+			### one with a single monument.
+			gm_text = {
+				visible = "[And( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gm_disp_count_listed_rest'), '(CFixedPoint)0' ), Or( GetVariableSystem.Exists('gm_monuments_view'), GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gm_disp_count_listed_rest'), '(CFixedPoint)1' ) ) )]"
+				tooltip = "gm_je_mon_summary_tt"
+				text = "gm_je_mon_summary"
+			}
+
+			### Full: unset is Full.
 			flowcontainer = {
+				visible = "[Not(GetVariableSystem.Exists('gm_monuments_view'))]"
 				direction = vertical
 				ignoreinvisible = yes
 				spacing = 10
+				margin_top = 8
 				datamodel = "[Country.MakeScope.GetList('gm_states')]"
 
 				item = {
@@ -3293,6 +3432,7 @@ types grand_monuments_widget_types
 			### Decision's. A trophy's container still, so the trophy row's
 			### picture and title serve it (gui/gm_trophy_widgets.gui).
 			flowcontainer = {
+				visible = "[Not(GetVariableSystem.Exists('gm_monuments_view'))]"
 				direction = vertical
 				ignoreinvisible = yes
 				spacing = 10
@@ -3334,6 +3474,39 @@ types grand_monuments_widget_types
 								}
 							}
 						}
+					}
+				}
+			}
+
+			### Short: a line each, the states' monuments, then those beside
+			### another.
+			flowcontainer = {
+				visible = "[GetVariableSystem.HasValue('gm_monuments_view', 'short')]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+				margin_top = 8
+				datamodel = "[Country.MakeScope.GetList('gm_states')]"
+
+				item = {
+					gm_monument_row_short = {
+						datacontext = "[Scope.GetState]"
+						visible = "[And( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_listed'), '(CFixedPoint)1' ), NotEqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)4' ) )]"
+					}
+				}
+			}
+			flowcontainer = {
+				visible = "[GetVariableSystem.HasValue('gm_monuments_view', 'short')]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+				margin_top = 4
+				datamodel = "[Country.MakeScope.GetList('gm_monuments_held')]"
+
+				item = {
+					gm_mon_row_short = {
+						datacontext = "[Scope.GetScriptContainer]"
+						visible = "[NotEqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_mon_status_code'), '(CFixedPoint)4' )]"
 					}
 				}
 			}
