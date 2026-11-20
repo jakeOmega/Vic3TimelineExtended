@@ -2963,6 +2963,10 @@
   "en": "A military doctrine bonus based on [Concept('concept_combat_unit_type', 'unit type')] diversity in formations. Armies that field a mix of infantry, cavalry, artillery, and other unit types receive combat bonuses. Encourages balanced military composition rather than single-type spam.",
   "ru": "Бонус военной доктрины, основанный на разнообразии [Concept('concept_combat_unit_type', 'типов частей')] в соединениях. Армии, выставляющие смесь пехоты, кавалерии, артиллерии и других типов частей, получают боевые бонусы. Поощряет сбалансированный военный состав вместо однотипной массы."
  },
+ "concept_command_redundancy": {
+  "en": "Command Redundancy",
+  "ru": "Резервирование командования"
+ },
  "concept_consortium_guarantee": {
   "en": "Consortium Guarantee",
   "ru": "Гарантия консорциума"

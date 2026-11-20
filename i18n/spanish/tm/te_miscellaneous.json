@@ -4747,6 +4747,10 @@
   "en": "First Past the Post",
   "es": "Escrutinio mayoritario uninominal"
  },
+ "amendment_green_party_dominance": {
+  "en": "Green Party-State",
+  "es": "Estado de partido verde"
+ },
  "amendment_habeas_corpus_suspension": {
   "en": "Suspension of Habeas Corpus",
   "es": "Suspensión del hábeas corpus"
@@ -4867,9 +4871,17 @@
   "en": "No-First-Strike Pledge",
   "es": "Compromiso de no atacar primero"
  },
+ "amendment_populist_party_dominance": {
+  "en": "Populist Party-State",
+  "es": "Estado de partido populista"
+ },
  "amendment_small_donor_matching": {
   "en": "Small Donor Matching",
   "es": "Igualación de pequeños donantes"
+ },
+ "amendment_technocratic_party_dominance": {
+  "en": "Technocratic Party-State",
+  "es": "Estado de partido tecnocrático"
  },
  "amendment_undivided_farm_succession": {
   "en": "Undivided Farm Succession",

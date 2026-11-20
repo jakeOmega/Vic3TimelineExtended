@@ -4747,6 +4747,10 @@
   "en": "First Past the Post",
   "ru": "Мажоритарная система"
  },
+ "amendment_green_party_dominance": {
+  "en": "Green Party-State",
+  "ru": "Партийное государство зелёных"
+ },
  "amendment_habeas_corpus_suspension": {
   "en": "Suspension of Habeas Corpus",
   "ru": "Приостановка хабеас корпус"
@@ -4867,9 +4871,17 @@
   "en": "No-First-Strike Pledge",
   "ru": "Обязательство не наносить первый удар"
  },
+ "amendment_populist_party_dominance": {
+  "en": "Populist Party-State",
+  "ru": "Партийное государство популистов"
+ },
  "amendment_small_donor_matching": {
   "en": "Small Donor Matching",
   "ru": "Софинансирование мелких пожертвований"
+ },
+ "amendment_technocratic_party_dominance": {
+  "en": "Technocratic Party-State",
+  "ru": "Партийное государство технократов"
  },
  "amendment_undivided_farm_succession": {
   "en": "Undivided Farm Succession",
