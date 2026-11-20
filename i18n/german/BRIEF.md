@@ -139,6 +139,9 @@ Earlier passes settled these words too, which are too short or too common for th
 | receivership (a creditor running a debtor's finances) / its receiver | Zwangsverwaltung / Verwalter; the treaty article Debt Receivership is *Schuldenverwaltung* |
 | a rescue of a defaulted member / its terms | Rettung / Bedingungen |
 | a common currency's adopter / issuer | Teilnehmerland / Emittent |
+| infamy (plain text, and the gender around `[concept_infamy]`) | Verrufenheit, feminine: „die [concept_infamy], die wir gezahlt haben“ |
+| the Full Demographics rule | die Demografieregel „Voll“ (the setting's label), not „Volle Demografie“ |
+| a nuclear salvo / the Leadership mission | Salve / Führung |
 
 Proper names stay as they are: companies, people, places, historical buildings, products, real political parties ("Bharatiya Janata Party", "En Marche!"). A generic descriptive name is not a proper name and is translated, as the official German does ("Communist Party" → „Kommunistische Partei", "Technocratic Party" → „Technokratische Partei"). Use an established German name where one exists ("Eiffelturm", "Vereinte Nationen"), and translate the descriptive part of a compound name ("Getzner Bludenz Textile Works" → „Textilwerke Getzner Bludenz“).
 

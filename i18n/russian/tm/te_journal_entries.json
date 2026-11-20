@@ -1888,8 +1888,8 @@
   "ru": "Тайная война"
  },
  "je_covert_warfare_invalid_conclusion_desc": {
-  "en": "The $concept_journal_entry$ ended, and every operation with it, when the Covert Warfare game rule was switched off, or was switched to Late Unlock before $mainframe_computers$, $cyber_warfare$ or the $law_ministry_of_intelligence_and_security$ law. It comes back within two months once the rule is on and the conditions to open it are met.",
-  "ru": "$concept_journal_entry$ завершилась, а с ней и все операции, когда игровое правило «Тайная война» было отключено или переключено на «Позднюю разблокировку» до появления технологии $mainframe_computers$, технологии $cyber_warfare$ или закона $law_ministry_of_intelligence_and_security$. Она вернётся в течение двух месяцев, как только правило будет включено и выполнены условия её открытия."
+  "en": "The $concept_journal_entry$ ended, and every operation with it, when the Covert Warfare game rule was switched off, or was switched to Late Unlock while the country had none of $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ and $law_ministry_of_intelligence_and_security$. It comes back within two months once the rule is on and the conditions to open it are met.",
+  "ru": "$concept_journal_entry$ завершилась, а с ней и все операции, когда игровое правило «Тайная война» было отключено или переключено на «позднее открытие», а у страны не было ни одного из «$mainframe_computers$», «$computer_networks$», «$cyber_warfare$», «$quantum_computing$» и «$law_ministry_of_intelligence_and_security$». Она вернётся в течение двух месяцев, как только правило будет включено и выполнены условия её открытия."
  },
  "je_covert_warfare_reason": {
   "en": "The covert battlefield is invisible but decisive. Our intelligence services wage shadow wars of subversion and sabotage, while our [concept_intelligence_capacity] protects us from foreign interference.",
@@ -1933,7 +1933,7 @@
  },
  "je_cultural_hegemony_invalid_conclusion_desc": {
   "en": "The $concept_journal_entry$ ended when the Cultural Hegemony game rule was switched off, or was switched to Late Unlock before any country had $mass_media$. It comes back within two months once the rule is on and the conditions to open it are met.",
-  "ru": "$concept_journal_entry$ завершилась, когда игровое правило «Культурная гегемония» было отключено или переключено на «Позднюю разблокировку» до того, как у какой-либо страны появилась технология $mass_media$. Она вернётся в течение двух месяцев, как только правило будет включено и выполнены условия её открытия."
+  "ru": "$concept_journal_entry$ завершилась, когда игровое правило «Культурная гегемония» было отключено или переключено на «позднее открытие» до того, как у какой-либо страны появилась технология $mass_media$. Она вернётся в течение двух месяцев, как только правило будет включено и выполнены условия её открытия."
  },
  "je_cultural_hegemony_reason": {
   "en": "Our nation's arts, technology, and way of life project influence across the globe. The world watches, imitates, or resents our cultural dominance.",
@@ -2892,8 +2892,8 @@
   "ru": "Каждая ступень финансирования каждую неделю тратит [Concept('concept_innovation','инновации')] на прогресс к следующему боезаряду — это полоса под программой. Когда первое устройство создано, то же финансирование строит в десять раз быстрее. Помощь программе от другой державы ускоряет её, диверсии и инспекции Организации Объединённых Наций замедляют, а договор о паузе, потолок арсенала или демонтаж останавливают."
  },
  "je_nuclear_how_strike": {
-  "en": "A single city is the [concept_nuclear_strike] diplomatic action. The Strike section orders a salvo: several warheads at one country we are at war with, or in a peacetime nuclear exchange with, by mission. Cities spreads them over the states a single strike would choose. Forces aims at their arsenal, and each warhead that lands destroys some of it before it can fly, unless it would ride out a strike or flies first under Launch on Warning. Leadership aims at the capital, and against Central Authorization enough warheads cut the chain of command for two to four weeks. However many warheads it fires, a salvo is one use: its record grows with the square root of the warheads that land. An order is confirmed before it is carried out.",
-  "ru": "Один город — это дипломатическое действие [concept_nuclear_strike|l]. Раздел «Удар» заказывает залп: несколько боезарядов по одной стране, с которой мы воюем или находимся в ядерном обмене в мирное время, по заданию. «Города» распределяют их по областям, которые выбрал бы одиночный удар. «Силы» целятся в их арсенал, и каждый упавший боезаряд уничтожает его часть до того, как она успеет взлететь, если только она не переждёт удар или не взлетит первой при «Пуске по предупреждению». «Руководство» целится в столицу, и против «Централизованного разрешения» достаточное число боезарядов обрывает цепочку командования на две-четыре недели. Сколько бы боезарядов ни выпустил залп, он считается одним применением: его след растёт как квадратный корень числа долетевших боезарядов. Приказ подтверждается до исполнения."
+  "en": "A single city is the [concept_nuclear_strike] diplomatic action. The Strike section orders a salvo: several warheads at one country we are at war with, or in a peacetime nuclear exchange with, by mission. Cities spreads them over the states a single strike would choose. Forces aims at their arsenal, and each warhead that lands destroys some of it before it can fly, unless it would ride out a strike or flies first under Launch on Warning. Leadership aims half its warheads at the capital and the rest at other states, the military sites first, and against Central Authorization enough warheads cut the chain of command for two to four weeks. However many warheads it fires, a salvo is one use: its record grows with the square root of the warheads that land. An order is confirmed before it is carried out.",
+  "ru": "Один город — это дипломатическое действие [concept_nuclear_strike|l]. Раздел «Удар» заказывает залп: несколько боеголовок по одной стране, с которой мы воюем или находимся в ядерном обмене в мирное время, по заданию. «Города» распределяют их по областям, которые выбрал бы одиночный удар. «Силы» целятся в арсенал противника, и каждая долетевшая боеголовка уничтожает его часть до того, как она успеет взлететь, если только эта часть не переждёт удар или не взлетит первой при «Пуске по предупреждению». «Руководство» направляет половину боеголовок на столицу, остальные — на другие области, в первую очередь на области с военными объектами, и против «Централизованного разрешения» достаточное число боеголовок обрывает цепочку командования на две-четыре недели. Сколько бы боеголовок ни выпустил залп, он считается одним применением: его след растёт как квадратный корень числа долетевших боеголовок. Приказ подтверждается до исполнения."
  },
  "je_nuclear_how_sub_crisis": {
   "en": "Crises",
@@ -5244,8 +5244,8 @@
   "ru": "#header Секретный объект#!\\nОбъект, до которого не доберётся ни один договорной инспектор: #v +1#! к разведывательному потенциалу и #v +3%#! к эффективности тайных операций за каждый укомплектованный уровень."
  },
  "je_space_race_widget_mod_bunker_tt": {
-  "en": "#header Nuclear Command Center#!\\nA command post far beyond a first strike's reach: #v +4#! nuclear command reliability a staffed level, at most #v +12#!.",
-  "ru": "#header Ядерный командный центр#!\\nКомандный пункт далеко за пределами досягаемости первого удара: #v +4#! к надёжности ядерного командования за каждый укомплектованный уровень, не более #v +12#!."
+  "en": "#header Nuclear Command Center#!\\nA command post far beyond a first strike's reach. A staffed level gives #v +4#! nuclear command reliability, at most #v +12#!, and #v +2#! [concept_command_redundancy], at most #v +6#!.",
+  "ru": "#header Ядерный командный центр#!\\nКомандный пункт далеко за пределами досягаемости первого удара. Каждый укомплектованный уровень даёт #v +4#! к надёжности ядерного командования, не более #v +12#!, и #v +2#! к [Concept('concept_command_redundancy','резервированию командования')], не более #v +6#!."
  },
  "je_space_race_widget_mod_coming_down": {
   "en": "Coming down, months left:",
@@ -12505,7 +12505,7 @@
  },
  "je_world_war_invalid_conclusion_desc": {
   "en": "The $concept_journal_entry$ ended when the World War game rule was switched off, or was switched to Late Unlock before $combined_arms$. Switched off, it won't return this campaign; switched to Late Unlock, it returns at $combined_arms$ once no world war is winding down.",
-  "ru": "$concept_journal_entry$ завершилась, когда правило игры «Мировая война» было отключено или переключено на «Позднюю разблокировку» до «$combined_arms$». При отключении она не вернётся в этой кампании; при переключении на «Позднюю разблокировку» она вернётся с «$combined_arms$», как только не будет затухающей мировой войны."
+  "ru": "$concept_journal_entry$ завершилась, когда правило игры «Мировая война» было отключено или переключено на «позднее открытие» до «$combined_arms$». При отключении она не вернётся в этой кампании; при переключении на «позднее открытие» она вернётся с «$combined_arms$», как только не будет затухающей мировой войны."
  },
  "je_world_war_reason": {
   "en": "Ideological tensions between the [Concept('concept_great_power', 'great powers')] are escalating. Democratic, fascist, and communist blocs eye one another with growing hostility. The world teeters on the brink of a conflict unlike any before. Pick a side, prepare, or try to stop it.",

@@ -120,16 +120,16 @@
   "es": "Guerra encubierta: desbloqueo temprano"
  },
  "setting_covert_warfare_early_unlock_desc": {
-  "en": "The [concept_covert_warfare_system] [concept_journal_entry] opens with $central_archives$. Until $mainframe_computers$ or the $law_ministry_of_intelligence_and_security$ law, funding stops at Professional, and only operations whose technology you have can be launched: espionage and wartime sabotage at first.",
-  "es": "La [concept_journal_entry|l] de la [concept_covert_warfare_system|l] se abre con $central_archives$. Hasta que se investigue la tecnología $mainframe_computers$ o se apruebe la ley $law_ministry_of_intelligence_and_security$, la financiación se queda en Profesional, y solo se pueden lanzar las operaciones cuya tecnología tienes: al principio, espionaje y sabotaje en tiempo de guerra."
+  "en": "The [concept_covert_warfare_system] [concept_journal_entry] opens with $central_archives$. Funding above Professional needs what opens it under Late Unlock, and only operations whose technology you have can be launched: espionage and wartime sabotage at first.",
+  "es": "La [concept_journal_entry|l] de la [concept_covert_warfare_system|l] se abre con $central_archives$. La financiación por encima de Profesional necesita lo que la abre con Desbloqueo tardío, y solo se pueden lanzar las operaciones cuya tecnología tienes: al principio, espionaje y sabotaje en tiempo de guerra."
  },
  "setting_covert_warfare_enabled": {
   "en": "Covert Warfare: Late Unlock",
   "es": "Guerra encubierta: desbloqueo tardío"
  },
  "setting_covert_warfare_enabled_desc": {
-  "en": "The [concept_covert_warfare_system] [concept_journal_entry] opens with $mainframe_computers$ or the $law_ministry_of_intelligence_and_security$ law. Nations build [concept_intelligence_capacity] through technology and [concept_literacy], and launch [concept_covert_operations] against rivals.",
-  "es": "La [concept_journal_entry|l] de la [concept_covert_warfare_system|l] se abre con la tecnología $mainframe_computers$ o la ley $law_ministry_of_intelligence_and_security$. Las naciones desarrollan [concept_intelligence_capacity|l] mediante la tecnología y la [concept_literacy|l], y lanzan [concept_covert_operations|l] contra sus rivales."
+  "en": "The [concept_covert_warfare_system] [concept_journal_entry] opens with $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ or $law_ministry_of_intelligence_and_security$. Nations build [concept_intelligence_capacity] through technology and [concept_literacy], and launch [concept_covert_operations] against rivals.",
+  "es": "La [concept_journal_entry|l] de la [concept_covert_warfare_system|l] se abre con $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ o $law_ministry_of_intelligence_and_security$. Las naciones desarrollan [concept_intelligence_capacity|l] mediante la tecnología y la [concept_literacy|l], y lanzan [concept_covert_operations|l] contra sus rivales."
  },
  "setting_cultural_hegemony_disabled": {
   "en": "Cultural Hegemony Disabled",

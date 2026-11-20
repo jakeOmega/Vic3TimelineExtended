@@ -5476,8 +5476,8 @@
   "de": "Eine Vertragsbindung hat keinen Zinssatz von Ihnen, der sie verteidigt, daher bewegt sich ihr [concept_banking_peg_confidence] allein aufgrund der Überbewertung, jeden Monat: +3, solange Sie um 5 Punkte oder weniger überbewertet sind (+2 ab 40, +1 ab 70), −1 für je 2 Punkte über 5 hinaus (ein Viertel davon bei Kapitalverkehrskontrollen) und +2 mit einer $swap_line$. Bei 20 stellen die Märkte die Frage: die Tür schließen, die Bindung brechen oder niedriger neu binden."
  },
  "banking_dash_how_union": {
-  "en": "A power bloc's [concept_banking_monetary_union] principle has three tiers, each including the one before. #b Monetary cooperation:#! every member gets half a swap line from the leader, −0.5 points of risk premium and +1 peg confidence a month; the leader pays the usual cost, scaled by each member's GDP beside its own. #b Common currency:#! members may adopt the leader's money. An adopter has no dial: it takes the leader's rate with no spread, its exchange rate and up to 80% of its credibility, and gains +5% $state_export_advantage_mult$ and $state_import_advantage_mult$. There is no peg to break, so overvaluation beyond 5 points raises the adopter's risk premium by 0.1 a point instead. #b Fiscal backstop:#! the leader is lender of last resort to every adopter, paying half their debt-load premium, and a default calls the guarantee; the overvaluation premium is halved.",
-  "de": "Das Prinzip [concept_banking_monetary_union] eines Machtblocks hat drei Stufen, die jeweils die vorherige einschließen. #b Geldpolitische Zusammenarbeit:#! Jedes Mitglied erhält vom Anführer eine halbe Swap-Linie, −0,5 Punkte Risikoprämie und +1 Bindungsvertrauen pro Monat; der Anführer trägt die üblichen Kosten, skaliert nach dem BIP jedes Mitglieds im Verhältnis zu seinem eigenen. #b Gemeinsame Währung:#! Mitglieder dürfen das Geld des Anführers übernehmen. Ein Teilnehmerland hat keinen Regler: Es übernimmt den Zinssatz des Anführers ohne Zinsaufschlag, dessen Wechselkurs und bis zu 80% von dessen Glaubwürdigkeit und erhält +5% $state_export_advantage_mult$ und $state_import_advantage_mult$. Es gibt keine Bindung, die brechen könnte, daher erhöht eine Überbewertung über 5 Punkte hinaus stattdessen die Risikoprämie des Teilnehmerlands um 0,1 je Punkt. #b Fiskalischer Rückhalt:#! Der Anführer ist Kreditgeber letzter Instanz für jedes Teilnehmerland und zahlt die Hälfte von dessen Schuldenlast-Prämie, und ein Zahlungsausfall ruft die Garantie ab; die Überbewertungsprämie wird halbiert."
+  "en": "A power bloc's [concept_banking_monetary_union] principle has five tiers, each including the ones before.\\n#b $principle_monetary_union_1$:#! every member gets half a swap line from the leader, −0.5 points of risk premium and +1 peg confidence a month; the leader pays the usual cost, scaled by each member's GDP beside its own.\\n#b $principle_monetary_union_2$:#! members may adopt the leader's money. An adopter has no dial: it takes the leader's rate with no spread, its exchange rate and up to 80% of its credibility, and gains +5% $state_export_advantage_mult$ and $state_import_advantage_mult$ and +2% $state_capitalists_investment_pool_contribution_add$ (none under $too_much_private_construction$). There is no peg to break, so overvaluation beyond 5 points raises the adopter's risk premium by 0.1 a point instead.\\n#b $principle_monetary_union_3$:#! the leader is lender of last resort to every adopter, paying half its debt-load premium unless a treaty guarantee or a receivership already does, and a default calls the guarantee; the overvaluation premium is halved.\\n#b $principle_monetary_union_4$:#! an adopter's crashes are 25% less likely and its cycle 25% less volatile, and it gains an intervention point and 3% pool contribution in all. Nobody under $law_unregulated_banking$ is in the banking union.\\n#b $principle_monetary_union_5$:#! adopters gain another +5% export and import advantage, 5% pool contribution in all and −0.25 points of credit standing, and countries pegged to the leader's money by treaty count toward its [concept_banking_currency_reach].\\nOnce a member has adopted the [concept_banking_common_currency], the leader shares its adopters' trade advantage, pool contribution and banking union, and gains up to three more intervention points by tier (none under $law_unregulated_banking$). It also earns seigniorage on the money it issues and a cut in its own risk premium, each the tier's figure times that reach. The Monetary Union row's tooltip gives its figures.",
+  "de": "Das Prinzip [concept_banking_monetary_union] eines Machtblocks hat fünf Stufen, die jeweils die vorherigen einschließen.\\n#b $principle_monetary_union_1$:#! Jedes Mitglied erhält vom Anführer eine halbe Swap-Linie, −0,5 Punkte Risikoprämie und +1 Bindungsvertrauen pro Monat; der Anführer trägt die üblichen Kosten, skaliert nach dem BIP jedes Mitglieds im Verhältnis zu seinem eigenen.\\n#b $principle_monetary_union_2$:#! Mitglieder dürfen das Geld des Anführers übernehmen. Ein Teilnehmerland hat keinen Regler: Es übernimmt den Zinssatz des Anführers ohne Zinsaufschlag, dessen Wechselkurs und bis zu 80% von dessen Glaubwürdigkeit und erhält +5% $state_export_advantage_mult$ und $state_import_advantage_mult$ sowie +2% $state_capitalists_investment_pool_contribution_add$ (keinen unter $too_much_private_construction$). Es gibt keine Bindung, die brechen könnte, daher erhöht eine Überbewertung über 5 Punkte hinaus stattdessen die Risikoprämie des Teilnehmerlands um 0,1 je Punkt.\\n#b $principle_monetary_union_3$:#! Der Anführer ist Kreditgeber letzter Instanz für jedes Teilnehmerland und zahlt die Hälfte von dessen Schuldenlast-Prämie, sofern nicht schon eine Vertragsgarantie oder eine Zwangsverwaltung dafür aufkommt, und ein Zahlungsausfall ruft die Garantie ab; die Überbewertungsprämie wird halbiert.\\n#b $principle_monetary_union_4$:#! Die Crashs eines Teilnehmerlands sind 25% unwahrscheinlicher und sein Zyklus 25% weniger volatil, und es erhält insgesamt einen Interventionspunkt und 3% Poolbeitrag. Wer unter $law_unregulated_banking$ steht, gehört nicht zur Bankenunion.\\n#b $principle_monetary_union_5$:#! Teilnehmerländer erhalten weitere +5% Export- und Importvorteil, insgesamt 5% Poolbeitrag und −0,25 Punkte Kreditwürdigkeit, und Länder, die per Vertrag an das Geld des Anführers gebunden sind, zählen zu dessen [concept_banking_currency_reach].\\nSobald ein Mitglied die [concept_banking_common_currency] übernommen hat, teilt der Anführer den Handelsvorteil, den Poolbeitrag und die Bankenunion seiner Teilnehmerländer und erhält je nach Stufe bis zu drei weitere Interventionspunkte (keine unter $law_unregulated_banking$). Außerdem verdient er Seigniorage auf das von ihm ausgegebene Geld und erhält eine Senkung der eigenen Risikoprämie, jeweils der Wert der Stufe mal diese Reichweite. Der Tooltip der Zeile Währungsunion nennt die Werte."
  },
  "banking_dash_how_union_terms": {
   "en": "To adopt the common currency a member needs a fiat or digital currency with a national bank, inflation within 3 points of the leader's, and debt under half its credit limit, which is waived while the leader is pressing. Leaving drops the currency at once to where it would float, and costs +3 points of credit standing decaying over ten years, an investment-pool loss, radicals, the leader's relations and the bloc's cohesion, with no way back for ten years. A leader may press holdouts to converge at 50 influence per holdout. A pressed holdout loses the cooperation benefit and is put the question, and one that refuses costs the bloc cohesion and gains +250 $country_leverage_resistance_add$ for ten years.",
@@ -9352,12 +9352,12 @@
   "de": "Auf der Erde geschieht nichts. Ab Monat [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0], wenn die Operation #Y im Aufbau#! ist, steigt das Feuer unserer Flotten auf die Verteidigung jeder Kolonie des Ziels um #G +20%#!; ab Monat [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G voll einsatzbereit#!, um #G +40%#!. Ein Netzwerk von uns, das bereits im Ziel besteht, verkürzt die Wartezeit, und Priorität 3 erhöht es auf #G +80%#!. Solange die Operation läuft, zeigt unsere Flottenübersicht die Verteidigung, Integrität und Marineinfanterie der Kolonien des Ziels genau an."
  },
  "covert_warfare_unlock_early_tt": {
-  "en": "$central_archives$, or an [Concept('concept_operation_slots', 'operation slot')] beyond what your rank grants, from $mainframe_computers$, $computer_networks$, $cyber_warfare$ or $quantum_computing$, or the $law_ministry_of_intelligence_and_security$ law",
-  "de": "$central_archives$, oder ein [Concept('concept_operation_slots', 'Operationsplatz')] über das hinaus, was Ihr Rang gewährt, durch $mainframe_computers$, $computer_networks$, $cyber_warfare$ oder $quantum_computing$, oder das Gesetz $law_ministry_of_intelligence_and_security$"
+  "en": "$central_archives$, or an [Concept('concept_operation_slots', 'operation slot')] beyond what your rank grants, from $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ or $law_ministry_of_intelligence_and_security$",
+  "de": "$central_archives$, oder ein [Concept('concept_operation_slots', 'Operationsplatz')] über das hinaus, was Ihr Rang gewährt, durch $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ oder $law_ministry_of_intelligence_and_security$"
  },
  "covert_warfare_unlock_tt": {
-  "en": "An [Concept('concept_operation_slots', 'operation slot')] beyond what your rank grants, from $mainframe_computers$, $computer_networks$, $cyber_warfare$ or $quantum_computing$, or the $law_ministry_of_intelligence_and_security$ law",
-  "de": "Ein [Concept('concept_operation_slots', 'Operationsplatz')] über den Rang hinaus, durch $mainframe_computers$, $computer_networks$, $cyber_warfare$ oder $quantum_computing$ oder das Gesetz $law_ministry_of_intelligence_and_security$"
+  "en": "An [Concept('concept_operation_slots', 'operation slot')] beyond what your rank grants, from $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ or $law_ministry_of_intelligence_and_security$",
+  "de": "Ein [Concept('concept_operation_slots', 'Operationsplatz')] über den Rang hinaus, durch $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ oder $law_ministry_of_intelligence_and_security$"
  },
  "cr_base_drift_tt": {
   "en": "Movement decay",
@@ -12316,8 +12316,8 @@
   "de": "#b Der Augenblick#!\\nWas diese Gelegenheit gebracht hat. Jede Art von Augenblick bringt, wenn die Gelegenheit vollendet wird, ihren eigenen Bonus."
  },
  "gm_je_com_progress_tt": {
-  "en": "#b Grandeur raised#! #v [Country.MakeScope.ScriptValue('gm_disp_com_progress')|1]#! of #v [Country.MakeScope.ScriptValue('gm_disp_com_target')|1]#!\\nCounted in the starting grandeur of fitting monuments of its dedication dedicated since we seized it, a new one or one beside another; their years do not count. A counted monument that becomes contested stops counting.",
-  "de": "#b Aufgestockte Grandeur#! #v [Country.MakeScope.ScriptValue('gm_disp_com_progress')|1]#! von #v [Country.MakeScope.ScriptValue('gm_disp_com_target')|1]#!\\nGezählt wird die Ausgangs-Grandeur passender Monumente ihrer Widmung, die gewidmet wurden, seit wir die Gelegenheit ergriffen haben, ob als neues Monument oder neben einem anderen errichtet; ihre Jahre zählen nicht. Ein gezähltes Monument, das umstritten wird, zählt nicht mehr."
+  "en": "#b Grandeur raised#! #v [Country.MakeScope.ScriptValue('gm_disp_com_progress')|1]#! of #v [Country.MakeScope.ScriptValue('gm_disp_com_target')|1]#!\\nCounted in the starting grandeur of fitting monuments of its dedication dedicated since we seized it, a new one or one beside another; their years do not count. A counted monument that becomes contested stops counting, and a buried site dug up meanwhile never counts.",
+  "de": "#b Aufgestockte Grandeur#! #v [Country.MakeScope.ScriptValue('gm_disp_com_progress')|1]#! von #v [Country.MakeScope.ScriptValue('gm_disp_com_target')|1]#!\\nGezählt wird die Ausgangs-Grandeur passender Monumente ihrer Widmung, die gewidmet wurden, seit wir die Gelegenheit ergriffen haben, ob als neues Monument oder neben einem anderen errichtet; ihre Jahre zählen nicht. Ein gezähltes Monument, das umstritten wird, zählt nicht mehr, und eine in der Zwischenzeit ausgegrabene verschüttete Stätte zählt nie."
  },
  "gm_je_com_reward": {
   "en": "Completed: #G +[Country.MakeScope.ScriptValue('gm_com_gift')|0]#! [concept_grandeur], approval and #b [Country.GetCustom('gm_com_boon_name')]#!",
@@ -17200,8 +17200,8 @@
   "de": "#lore Wird dies aufgedeckt, nachdem der Krieg begonnen hat, zuckt die Welt nur mit den Schultern – Sabotage zwischen Kriegsparteien kostet überhaupt nichts. Wird sie im Vorfeld aufgedeckt, gilt sie als Kriegstreiberei und kostet so viel Verrufenheit wie ein Versuch, eine Regierung zu stürzen.#!"
  },
  "iw_funding_early_cap_tt": {
-  "en": "Funding above Professional needs $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ or the $law_ministry_of_intelligence_and_security$ law (early unlock)",
-  "de": "Finanzierung über „Professionell“ braucht $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ oder das Gesetz $law_ministry_of_intelligence_and_security$ (frühe Freischaltung)"
+  "en": "Funding above Professional needs $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ or $law_ministry_of_intelligence_and_security$ (early unlock)",
+  "de": "Finanzierung über „Professionell“ braucht $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ oder $law_ministry_of_intelligence_and_security$ (frühe Freischaltung)"
  },
  "iw_funding_name_0": {
   "en": "Dormant",
@@ -18276,12 +18276,12 @@
   "de": "Die nachgebende Seite reißt ihre Baustelle für die Orbitale Kampfstation ab, verliert den Fortschritt und beginnt #v 10#! Jahre lang keine neue Baustelle. Bereits fertiggestellte Stufen bleiben."
  },
  "nd_concession_long_2": {
-  "en": "The side that concedes loses #R 15#! war support in the war, and if it leads its side, the side drops its war goals against the other side.",
-  "de": "Die nachgebende Seite verliert #R 15#! Kriegswille im Krieg, und wenn sie ihre Seite anführt, gibt die Seite ihre Kriegsziele gegen die andere Seite auf."
+  "en": "The side that concedes loses #R 15#! war support in the war and drops its own war goals against the other side, whether or not it leads its side. Its allies keep theirs.",
+  "de": "Die nachgebende Seite verliert #R 15#! Kriegswille im Krieg und gibt ihre eigenen Kriegsziele gegen die andere Seite auf, unabhängig davon, ob sie ihre Seite anführt. Ihre Verbündeten behalten ihre."
  },
  "nd_concession_long_3": {
-  "en": "The side that concedes leaves the protected country alone: it backs down in the play, or in a war loses #R 15#! war support and, if it leads its side, drops the side's goals against it.",
-  "de": "Die nachgebende Seite lässt das geschützte Land in Ruhe: Sie zieht sich aus dem Diplomatiespiel zurück oder verliert in einem Krieg #R 15#! Kriegswille und gibt, wenn sie ihre Seite anführt, die Ziele der Seite gegen es auf."
+  "en": "The side that concedes leaves the protected country alone: it backs down in the play, or in a war loses #R 15#! war support and drops its own goals against it. Its allies keep theirs.",
+  "de": "Die nachgebende Seite lässt das geschützte Land in Ruhe: Sie zieht sich aus dem Diplomatiespiel zurück oder verliert in einem Krieg #R 15#! Kriegswille und gibt ihre eigenen Ziele gegen es auf. Ihre Verbündeten behalten ihre."
  },
  "nd_concession_long_4": {
   "en": "The side that concedes has its weapons program frozen for #v 10#! years.",
@@ -18316,12 +18316,12 @@
   "de": "Sie haben ihre Baustelle für die Orbitale Kampfstation abgerissen und neue für zehn Jahre eingefroren."
  },
  "nd_concession_past_they_2": {
-  "en": "Their war support in our war fell by #R 15#!, and if they led their side, it dropped its war goals against us.",
-  "de": "Ihr Kriegswille in unserem Krieg fiel um #R 15#!, und wenn sie ihre Seite anführten, gab diese ihre Kriegsziele gegen uns auf."
+  "en": "Their war support in our war fell by #R 15#!, and they dropped their own war goals against us.",
+  "de": "Ihr Kriegswille in unserem Krieg fiel um #R 15#!, und sie gaben ihre eigenen Kriegsziele gegen uns auf."
  },
  "nd_concession_past_they_3": {
-  "en": "They left the country we protect alone: they backed down in the play, or their war support fell by #R 15#! and, if they led their side, it dropped its goals against it.",
-  "de": "Sie ließen das Land, das wir schützen, in Ruhe: Sie zogen sich aus dem Diplomatiespiel zurück, oder ihr Kriegswille fiel um #R 15#! und, wenn sie ihre Seite anführten, gab diese ihre Ziele dagegen auf."
+  "en": "They left the country we protect alone: they backed down in the play, or their war support fell by #R 15#! and they dropped their own goals against it.",
+  "de": "Sie ließen das Land, das wir schützen, in Ruhe: Sie zogen sich aus dem Diplomatiespiel zurück, oder ihr Kriegswille fiel um #R 15#!, und sie gaben ihre eigenen Ziele dagegen auf."
  },
  "nd_concession_past_they_4": {
   "en": "Their weapons program is frozen for #v 10#! years.",
@@ -18356,12 +18356,12 @@
   "de": "Wir haben unsere Baustelle für die Orbitale Kampfstation abgerissen und neue für zehn Jahre eingefroren."
  },
  "nd_concession_past_we_2": {
-  "en": "Our war support in the war with them fell by #R 15#!, and if we led our side, it dropped its war goals against them.",
-  "de": "Unser Kriegswille im Krieg mit ihnen fiel um #R 15#!, und wenn wir unsere Seite anführten, gab diese ihre Kriegsziele gegen sie auf."
+  "en": "Our war support in the war with them fell by #R 15#!, and we dropped our own war goals against them.",
+  "de": "Unser Kriegswille im Krieg mit ihnen fiel um #R 15#!, und wir gaben unsere eigenen Kriegsziele gegen sie auf."
  },
  "nd_concession_past_we_3": {
-  "en": "We left the country they protect alone: we backed down in the play, or our war support fell by #R 15#! and, if we led our side, it dropped its goals against it.",
-  "de": "Wir ließen das Land, das sie schützen, in Ruhe: Wir zogen uns aus dem Diplomatiespiel zurück, oder unser Kriegswille fiel um #R 15#! und, wenn wir unsere Seite anführten, gab diese ihre Ziele dagegen auf."
+  "en": "We left the country they protect alone: we backed down in the play, or our war support fell by #R 15#! and we dropped our own goals against it.",
+  "de": "Wir ließen das Land, das sie schützen, in Ruhe: Wir zogen uns aus dem Diplomatiespiel zurück, oder unser Kriegswille fiel um #R 15#!, und wir gaben unsere eigenen Ziele dagegen auf."
  },
  "nd_concession_past_we_4": {
   "en": "Our weapons program is frozen for #v 10#! years.",
@@ -19038,6 +19038,42 @@
  "nd_public_guarantee_word_none": {
   "en": "None",
   "de": "Keine"
+ },
+ "nd_raze_city_tt": {
+  "en": "Destroys a share of the levels of the state's industry, power plants, transport and offices: the share of its urban people living in its largest city, from 10% to 80%, or half outside the Full Demographics rule. The state's owner takes every level still standing in those buildings into state ownership.",
+  "de": "Zerstört einen Teil der Stufen von Industrie, Kraftwerken, Verkehr und Büros des Staates: den Anteil seiner städtischen Bevölkerung, der in der größten Stadt lebt, von 10% bis 80%, oder die Hälfte außerhalb der Demografieregel „Voll“. Der Besitzer des Staates übernimmt jede in diesen Gebäuden noch stehende Stufe in Staatsbesitz."
+ },
+ "nd_raze_line_attacker_lost": {
+  "en": "\\n\\n#v [ROOT.GetState.MakeScope.Var('nd_raze_lost').GetValue|0]#! levels of buildings in [ROOT.GetState.GetName] have been destroyed.",
+  "de": "\\n\\n#v [ROOT.GetState.MakeScope.Var('nd_raze_lost').GetValue|0]#! Gebäudestufen in [ROOT.GetState.GetName] wurden zerstört."
+ },
+ "nd_raze_line_attacker_nat": {
+  "en": "\\n\\n#v [ROOT.GetState.MakeScope.Var('nd_raze_lost').GetValue|0]#! levels of buildings in [ROOT.GetState.GetName] have been destroyed. #v [ROOT.GetState.MakeScope.Var('nd_raze_nat').GetValue|0]#! levels still stand in the buildings the blast reached, and the government of [ROOT.GetState.GetOwner.GetName] has taken all of them into state ownership.",
+  "de": "\\n\\n#v [ROOT.GetState.MakeScope.Var('nd_raze_lost').GetValue|0]#! Gebäudestufen in [ROOT.GetState.GetName] wurden zerstört. In den Gebäuden, die die Explosion erreicht hat, stehen noch #v [ROOT.GetState.MakeScope.Var('nd_raze_nat').GetValue|0]#! Stufen, und die Regierung [ROOT.GetState.GetOwner.GetAltName('GEN')] hat sie alle in Staatsbesitz genommen."
+ },
+ "nd_raze_line_victim_lost": {
+  "en": "\\n\\n#R [ROOT.GetState.MakeScope.Var('nd_raze_lost').GetValue|0]#! levels of buildings in [ROOT.GetState.GetName] have been destroyed.",
+  "de": "\\n\\n#R [ROOT.GetState.MakeScope.Var('nd_raze_lost').GetValue|0]#! Gebäudestufen in [ROOT.GetState.GetName] wurden zerstört."
+ },
+ "nd_raze_line_victim_nat": {
+  "en": "\\n\\n#R [ROOT.GetState.MakeScope.Var('nd_raze_lost').GetValue|0]#! levels of buildings in [ROOT.GetState.GetName] have been destroyed. #v [ROOT.GetState.MakeScope.Var('nd_raze_nat').GetValue|0]#! levels still stand in the buildings the blast reached, and we have taken every one of them into state ownership.",
+  "de": "\\n\\n#R [ROOT.GetState.MakeScope.Var('nd_raze_lost').GetValue|0]#! Gebäudestufen in [ROOT.GetState.GetName] wurden zerstört. In den Gebäuden, die die Explosion erreicht hat, stehen noch #v [ROOT.GetState.MakeScope.Var('nd_raze_nat').GetValue|0]#! Stufen, und wir haben jede davon in Staatsbesitz genommen."
+ },
+ "nd_raze_salvo_line_attacker_lost": {
+  "en": "\\n\\nWhere our warheads fell, #v [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_razed').GetValue|0]#! levels of buildings have been destroyed.",
+  "de": "\\n\\nDort, wo unsere Sprengköpfe einschlugen, wurden #v [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_razed').GetValue|0]#! Gebäudestufen zerstört."
+ },
+ "nd_raze_salvo_line_attacker_nat": {
+  "en": "\\n\\nWhere our warheads fell, #v [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_razed').GetValue|0]#! levels of buildings have been destroyed. #v [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_razed_nat').GetValue|0]#! levels still stand in the buildings the blasts reached, and the government of [ROOT.GetCountry.GetName] has taken all of them into state ownership.",
+  "de": "\\n\\nDort, wo unsere Sprengköpfe einschlugen, wurden #v [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_razed').GetValue|0]#! Gebäudestufen zerstört. In den Gebäuden, die die Detonationen erreicht haben, stehen noch #v [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_razed_nat').GetValue|0]#! Stufen, und die Regierung [ROOT.GetCountry.GetAltName('GEN')] hat sie alle in Staatsbesitz genommen."
+ },
+ "nd_raze_salvo_line_victim_lost": {
+  "en": "\\n\\nWhere the warheads fell, #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_razed').GetValue|0]#! levels of buildings have been destroyed.",
+  "de": "\\n\\nDort, wo die Sprengköpfe einschlugen, wurden #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_razed').GetValue|0]#! Gebäudestufen zerstört."
+ },
+ "nd_raze_salvo_line_victim_nat": {
+  "en": "\\n\\nWhere the warheads fell, #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_razed').GetValue|0]#! levels of buildings have been destroyed. #v [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_razed_nat').GetValue|0]#! levels still stand in the buildings the blasts reached, and we have taken every one of them into state ownership.",
+  "de": "\\n\\nDort, wo die Sprengköpfe einschlugen, wurden #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_razed').GetValue|0]#! Gebäudestufen zerstört. In den Gebäuden, die die Detonationen erreicht haben, stehen noch #v [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_razed_nat').GetValue|0]#! Stufen, und wir haben jede davon in Staatsbesitz genommen."
  },
  "nd_readiness_0": {
   "en": "Recessed",
@@ -20263,6 +20299,10 @@
   "en": "  Their arsenal could disarm ours first: up to #R -15#!",
   "de": "  Ihr Arsenal könnte unseres zuerst entwaffnen: bis zu #R -15#!"
  },
+ "nd_tt_open_f_forfeit": {
+  "en": "  Conceding would cost them their own war goals against us: up to #R -20#!",
+  "de": "  Ein Nachgeben würde sie ihre eigenen Kriegsziele gegen uns kosten: bis zu #R -20#!"
+ },
  "nd_tt_open_f_losing": {
   "en": "  They are losing the war to us: #G +15#!",
   "de": "  Sie verlieren den Krieg gegen uns: #G +15#!"
@@ -20308,8 +20348,8 @@
   "de": "Worum es geht: #v ihre Streitkräfte neben uns#!: stationierte Waffen oder eine Garantie in einem Land neben uns oder Raketenabwehr an unserer Grenze. Geben sie nach, ziehen sie alles davon zurück und richten nichts davon #v 10#! Jahre lang neu ein"
  },
  "nd_tt_open_over_guarantee": {
-  "en": "Over: #v the country we protect#!. If they concede, they leave it alone: they back down in the play, or in a war their war support falls by #R 15#! and, if they lead their side, it drops its goals against it",
-  "de": "Worum es geht: #v das Land, das wir schützen#!. Geben sie nach, lassen sie es in Ruhe: Sie ziehen sich aus dem Diplomatiespiel zurück, oder in einem Krieg sinkt ihr Kriegswille um #R 15#!, und wenn sie ihre Seite anführen, lässt diese ihre Ziele gegen das Land fallen"
+  "en": "Over: #v the country we protect#!. If they concede, they leave it alone: they back down in the play, or in a war their war support falls by #R 15#! and they drop their own goals against it, whether or not they lead their side. Their allies keep theirs",
+  "de": "Worum es geht: #v das Land, das wir schützen#!. Geben sie nach, lassen sie es in Ruhe: Sie ziehen sich aus dem Diplomatiespiel zurück, oder in einem Krieg sinkt ihr Kriegswille um #R 15#!, und sie lassen ihre eigenen Ziele gegen das Land fallen, ob sie ihre Seite anführen oder nicht. Ihre Verbündeten behalten ihre"
  },
  "nd_tt_open_over_orbital": {
   "en": "Over: #v their Orbital Battlestation under construction#!. If they concede, they tear the site down, lose its progress and start no new one for #v 10#! years",
@@ -20328,8 +20368,8 @@
   "de": "Worum es geht: #v ihr Waffenprogramm#!. Geben sie nach, wird es für #v 10#! Jahre eingefroren"
  },
  "nd_tt_open_over_war": {
-  "en": "Over: #v our war with them#!. If they concede, their war support falls by #R 15#!, and if they lead their side, it drops its war goals against us",
-  "de": "Worum es geht: #v unser Krieg mit ihnen#!. Geben sie nach, sinkt ihr Kriegswille um #R 15#!, und wenn sie ihre Seite anführen, lässt diese ihre Kriegsziele gegen uns fallen"
+  "en": "Over: #v our war with them#!. If they concede, their war support falls by #R 15#! and they drop their own war goals against us, whether or not they lead their side. Their allies keep theirs",
+  "de": "Worum es geht: #v unser Krieg mit ihnen#!. Geben sie nach, sinkt ihr Kriegswille um #R 15#!, und sie lassen ihre eigenen Kriegsziele gegen uns fallen, ob sie ihre Seite anführen oder nicht. Ihre Verbündeten behalten ihre"
  },
  "nd_tt_open_stakes_bluff": {
   "en": "If this bluff is called, every government will know it: #R 5#! more credibility lost",
@@ -20632,8 +20672,8 @@
   "de": "Unser Waffenprogramm wird für #v 10#! Jahre eingefroren"
  },
  "nd_tt_yield_guarantee": {
-  "en": "We leave the country they protect alone: we back down in the play, or in a war our war support falls by #R 15#! and, if we lead our side, we drop our goals against it",
-  "de": "Wir lassen das von ihnen geschützte Land in Ruhe: Wir ziehen uns aus dem Diplomatiespiel zurück, oder in einem Krieg sinkt unser Kriegswille um #R 15#!, und wenn wir unsere Seite anführen, lassen wir unsere Ziele gegen das Land fallen"
+  "en": "We leave the country they protect alone: we back down in the play, or in a war our war support falls by #R 15#! and we drop our own goals against it, and any to free or take one of its subjects, whether or not we lead our side. Our allies keep theirs. A goal of ours of the same kind against another country in that war may go with them",
+  "de": "Wir lassen das von ihnen geschützte Land in Ruhe: Wir ziehen uns aus dem Diplomatiespiel zurück, oder in einem Krieg sinkt unser Kriegswille um #R 15#!, und wir lassen unsere eigenen Ziele gegen das Land fallen, auch jene, eines seiner Klientelländer zu befreien oder zu übernehmen, ob wir unsere Seite anführen oder nicht. Unsere Verbündeten behalten ihre. Ein gleichartiges Ziel von uns gegen ein anderes Land in diesem Krieg kann mit ihnen fallen"
  },
  "nd_tt_yield_orbital": {
   "en": "We tear down our Orbital Battlestation construction site, losing its progress, and start no new site for #v 10#! years. Levels already finished stay",
@@ -20648,8 +20688,8 @@
   "de": "Wir zahlen Reparationen für unseren Nuklearschlag, etwa ein Zehntel eines Jahreseinkommens, und öffnen unser Arsenal #v 20#! Jahre lang für Inspektionen, wobei wir die Gewahrsamsinspektionen hinnehmen (#R −5#! Legitimität, über zehn Jahre abklingend)"
  },
  "nd_tt_yield_war": {
-  "en": "Our war support in the war falls by #R 15#!. If we lead our side, we drop our war goals against them, and any of the same kind our side holds in that war",
-  "de": "Unser Kriegswille im Krieg sinkt um #R 15#!. Wenn wir unsere Seite anführen, lassen wir unsere Kriegsziele gegen sie fallen, ebenso alle gleichartigen, die unsere Seite in diesem Krieg verfolgt"
+  "en": "Our war support in the war falls by #R 15#!, and we drop our own war goals against them, and any to free or take one of their subjects, whether or not we lead our side. Our allies keep theirs. A goal of ours of the same kind against another country in that war may go with them",
+  "de": "Unser Kriegswille im Krieg sinkt um #R 15#!, und wir lassen unsere eigenen Kriegsziele gegen sie fallen, auch jene, eines ihrer Klientelländer zu befreien oder zu übernehmen, ob wir unsere Seite anführen oder nicht. Unsere Verbündeten behalten ihre. Ein gleichartiges Ziel von uns gegen ein anderes Land in diesem Krieg kann mit ihnen fallen"
  },
  "nd_w_arsenal_label": {
   "en": "Warheads held",
@@ -20800,8 +20840,8 @@
   "de": "Nachgeben"
  },
  "nd_w_crisis_actions_legend": {
-  "en": "Each side makes its own moves: ours are the buttons under Our Moves, and the other side answers through its own decisions. A crisis also ends if the war or play it is about ends, and it lapses after a year. A crisis is over a diplomatic play, a war, a guarantee, a nuclear strike outside a war, a weapons program, forces deployed next to the other side, claims on the other's land, covert operations, an orbital battlestation or forces on alert; the side that concedes backs down in the play, loses 15 war support (and if it leads its side, drops the side's goals), leaves the protected country alone, pays reparations and opens its arsenal to inspection, has its program frozen for ten years, pulls its forces back, renounces its claims, ends the operations it was caught running, tears down its battlestation site (the forces, operations and site each barred for ten years) or stands its forces down for two. Stages are not a ladder to war: a crisis can be settled at any of them. Over deployment, claims, covert operations or a battlestation, when each side holds the same against the other, either side may offer a trade instead: each gives up the same, and neither is seen to back down.",
-  "de": "Jede Seite macht ihre eigenen Züge: Unsere sind die Schaltflächen unter „Unsere Schritte“, und die andere Seite antwortet mit ihren eigenen Entscheidungen. Eine Krise endet auch, wenn der Krieg oder das Diplomatiespiel, um das es geht, endet, und sie verfällt nach einem Jahr. Eine Krise dreht sich um ein Diplomatiespiel, einen Krieg, eine Garantie, einen Nuklearschlag außerhalb eines Krieges, ein Waffenprogramm, neben der anderen Seite stationierte Streitkräfte, Ansprüche auf das Land der anderen Seite, verdeckte Operationen, eine Orbitale Kampfstation oder Streitkräfte in Alarmbereitschaft; die Seite, die nachgibt, zieht sich aus dem Diplomatiespiel zurück, verliert 15 Kriegswille (und lässt, wenn sie ihre Seite anführt, die Ziele der Seite fallen), lässt das geschützte Land in Ruhe, zahlt Reparationen und öffnet ihr Arsenal für Inspektionen, lässt ihr Programm für zehn Jahre einfrieren, zieht ihre Streitkräfte zurück, verzichtet auf ihre Ansprüche, beendet die Operationen, bei denen sie ertappt wurde, reißt die Baustelle ihrer Kampfstation ab (die Streitkräfte, Operationen und die Baustelle sind jeweils zehn Jahre lang gesperrt) oder fährt ihre Streitkräfte für zwei Jahre herunter. Die Stufen sind keine Leiter zum Krieg: Eine Krise kann auf jeder von ihnen beigelegt werden. Geht es um Stationierung, Ansprüche, verdeckte Operationen oder eine Kampfstation und hält jede Seite dasselbe gegen die andere, kann stattdessen jede Seite einen Tausch anbieten: Jede gibt dasselbe auf, und keine gilt als zurückgewichen."
+  "en": "Each side makes its own moves: ours are the buttons under Our Moves, and the other side answers through its own decisions. A crisis also ends if the war or play it is about ends, and it lapses after a year. A crisis is over a diplomatic play, a war, a guarantee, a nuclear strike outside a war, a weapons program, forces deployed next to the other side, claims on the other's land, covert operations, an orbital battlestation or forces on alert; the side that concedes backs down in the play, loses 15 war support and drops its own war goals, leaves the protected country alone, pays reparations and opens its arsenal to inspection, has its program frozen for ten years, pulls its forces back, renounces its claims, ends the operations it was caught running, tears down its battlestation site (the forces, operations and site each barred for ten years) or stands its forces down for two. Stages are not a ladder to war: a crisis can be settled at any of them. Over deployment, claims, covert operations or a battlestation, when each side holds the same against the other, either side may offer a trade instead: each gives up the same, and neither is seen to back down.",
+  "de": "Jede Seite macht ihre eigenen Züge: Unsere sind die Schaltflächen unter „Unsere Schritte“, und die andere Seite antwortet mit ihren eigenen Entscheidungen. Eine Krise endet auch, wenn der Krieg oder das Diplomatiespiel, um das es geht, endet, und sie verfällt nach einem Jahr. Eine Krise dreht sich um ein Diplomatiespiel, einen Krieg, eine Garantie, einen Nuklearschlag außerhalb eines Krieges, ein Waffenprogramm, neben der anderen Seite stationierte Streitkräfte, Ansprüche auf das Land der anderen Seite, verdeckte Operationen, eine Orbitale Kampfstation oder Streitkräfte in Alarmbereitschaft; die Seite, die nachgibt, zieht sich aus dem Diplomatiespiel zurück, verliert 15 Kriegswille und gibt ihre eigenen Kriegsziele auf, lässt das geschützte Land in Ruhe, zahlt Reparationen und öffnet ihr Arsenal für Inspektionen, lässt ihr Programm für zehn Jahre einfrieren, zieht ihre Streitkräfte zurück, verzichtet auf ihre Ansprüche, beendet die Operationen, bei denen sie ertappt wurde, reißt die Baustelle ihrer Kampfstation ab (die Streitkräfte, Operationen und die Baustelle sind jeweils zehn Jahre lang gesperrt) oder fährt ihre Streitkräfte für zwei Jahre herunter. Die Stufen sind keine Leiter zum Krieg: Eine Krise kann auf jeder von ihnen beigelegt werden. Geht es um Stationierung, Ansprüche, verdeckte Operationen oder eine Kampfstation und hält jede Seite dasselbe gegen die andere, kann stattdessen jede Seite einen Tausch anbieten: Jede gibt dasselbe auf, und keine gilt als zurückgewichen."
  },
  "nd_w_crisis_backdown_effect": {
   "en": "Threat dropped",
@@ -21180,8 +21220,8 @@
   "de": "Befehlszuverlässigkeit"
  },
  "nd_w_reliability_tt": {
-  "en": "#tooltip_header Command Reliability#!\\n$TOOLTIP_DELIMITER$\\nHow well the chain of command holds under pressure. Safeguards, satellite communications and a Nuclear Command Center on a colony raise it; crew strain, an enemy's sabotage of our communications, a buried incident or a punished skeptic lower it. It makes incidents rarer and decides whether a delegated launch sequence is halted.",
-  "de": "#tooltip_header Befehlszuverlässigkeit#!\\n$TOOLTIP_DELIMITER$\\nWie gut die Befehlskette unter Druck standhält. Sicherungen, Satellitenkommunikation und eine Nuklearkommandozentrale auf einer Kolonie erhöhen sie; Besatzungsbelastung, feindliche Sabotage unserer Kommunikation, ein vertuschter Zwischenfall oder ein bestrafter Skeptiker senken sie. Sie macht Zwischenfälle seltener und entscheidet, ob eine delegierte Startsequenz gestoppt wird."
+  "en": "#tooltip_header Command Reliability#!\\n$TOOLTIP_DELIMITER$\\nHow well the chain of command holds under pressure. Safeguards, satellite communications and a Nuclear Command Center on a colony raise it; crew strain, an enemy's sabotage of our communications, a buried incident or a punished skeptic lower it. It makes incidents rarer and decides whether a delegated launch sequence is halted. Under [Concept('concept_launch_authority','Central Authorization')] it also moves our [concept_command_redundancy]: #G +1#! for each 10 above 50, #R −1#! for each 10 below.",
+  "de": "#tooltip_header Befehlszuverlässigkeit#!\\n$TOOLTIP_DELIMITER$\\nWie gut die Befehlskette unter Druck standhält. Sicherungen, Satellitenkommunikation und eine Nuklearkommandozentrale auf einer Kolonie erhöhen sie; Besatzungsbelastung, feindliche Sabotage unserer Kommunikation, ein vertuschter Zwischenfall oder ein bestrafter Skeptiker senken sie. Sie macht Zwischenfälle seltener und entscheidet, ob eine delegierte Startsequenz gestoppt wird. Unter [Concept('concept_launch_authority','Zentraler Genehmigung')] verschiebt sie auch unsere [concept_command_redundancy]: #G +1#! je 10 über 50, #R −1#! je 10 darunter."
  },
  "nd_w_reputation_header": {
   "en": "Reputation",
@@ -21244,8 +21284,8 @@
   "de": "Führung"
  },
  "nd_w_strike_mission_3_tt": {
-  "en": "#tooltip_header Leadership#!\\n$TOOLTIP_DELIMITER$\\nEvery warhead on their capital. Under [Concept('concept_launch_authority','Central Authorization')], enough of them can cut the chain of command for two to four weeks, and nobody can order their warheads until it is restored. A country with more warheads, satellite communications or mainframe computers takes more. Other launch authorities cannot be cut off.",
-  "de": "#tooltip_header Führung#!\\n$TOOLTIP_DELIMITER$\\nJeder Sprengkopf auf ihre Hauptstadt. Unter [Concept('concept_launch_authority','Zentraler Genehmigung')] können genug davon die Befehlskette für zwei bis vier Wochen durchtrennen, und bis sie wiederhergestellt ist, kann niemand ihre Sprengköpfe befehlen. Ein Land mit mehr Sprengköpfen, Satellitenkommunikation oder Großrechnern hält mehr aus. Andere Einsatzbefugnisse lassen sich nicht durchtrennen."
+  "en": "#tooltip_header Leadership#!\\n$TOOLTIP_DELIMITER$\\nHalf the warheads on their capital, the first among them, and the rest one each on other states, those with military sites first. Under [Concept('concept_launch_authority','Central Authorization')], enough of them can cut the chain of command for two to four weeks, and nobody can order their warheads until it is restored. Every warhead that lands counts. There is no chance until more land than their [concept_command_redundancy], and then it rises fast: three in four when twice as many land. Other launch authorities cannot be cut off.",
+  "de": "#tooltip_header Führung#!\\n$TOOLTIP_DELIMITER$\\nDie Hälfte der Sprengköpfe auf ihre Hauptstadt, die ersten unter ihnen, und der Rest je einer auf andere Staaten, zuerst auf solche mit militärischen Standorten. Unter [Concept('concept_launch_authority','Zentraler Genehmigung')] können genug davon die Befehlskette für zwei bis vier Wochen durchtrennen, und bis sie wiederhergestellt ist, kann niemand ihre Sprengköpfe befehlen. Jeder Sprengkopf, der trifft, zählt. Es besteht keine Chance, bis mehr einschlagen als ihre [concept_command_redundancy], und dann steigt sie schnell: drei von vier, wenn doppelt so viele einschlagen. Andere Einsatzbefugnisse lassen sich nicht durchtrennen."
  },
  "nd_w_strike_mission_sub": {
   "en": "Mission",
@@ -21292,8 +21332,8 @@
   "de": "Überlebensfähigkeit"
  },
  "nd_w_survivability_tt": {
-  "en": "#tooltip_header Survivability#!\\n$TOOLTIP_DELIMITER$\\nHow much of our force would ride out a first strike. A crisis counts all of it only at High Alert: nine tenths at Heightened, four fifths at Routine, half at Recessed; now #v [Country.MakeScope.ScriptValue('nd_effective_survivability')|0]#!. Below 50 a crisis is more dangerous and a launch less likely to be halted.",
-  "de": "#tooltip_header Überlebensfähigkeit#!\\n$TOOLTIP_DELIMITER$\\nWie viel unserer Streitkräfte einen Erstschlag überstehen würde. Eine Krise zählt alles davon nur bei Hoher Alarmbereitschaft: neun Zehntel bei Erhöht, vier Fünftel bei Routine, die Hälfte bei Eingelagert; derzeit #v [Country.MakeScope.ScriptValue('nd_effective_survivability')|0]#!. Unter 50 ist eine Krise gefährlicher, und ein Start wird seltener gestoppt."
+  "en": "#tooltip_header Survivability#!\\n$TOOLTIP_DELIMITER$\\nHow much of our force would ride out a first strike. A crisis counts all of it only at High Alert: nine tenths at Heightened, four fifths at Routine, half at Recessed; now #v [Country.MakeScope.ScriptValue('nd_effective_survivability')|0]#!. Below 50 a crisis is more dangerous and a launch less likely to be halted. Each 20 adds #G +1#! [concept_command_redundancy].",
+  "de": "#tooltip_header Überlebensfähigkeit#!\\n$TOOLTIP_DELIMITER$\\nWie viel unserer Streitkräfte einen Erstschlag überstehen würde. Eine Krise zählt alles davon nur bei Hoher Alarmbereitschaft: neun Zehntel bei Erhöht, vier Fünftel bei Routine, die Hälfte bei Eingelagert; derzeit #v [Country.MakeScope.ScriptValue('nd_effective_survivability')|0]#!. Unter 50 ist eine Krise gefährlicher, und ein Start wird seltener gestoppt. Je 20 bringen #G +1#! [concept_command_redundancy]."
  },
  "nd_w_survivors_label": {
   "en": "First-strike survivors",
@@ -21430,6 +21470,10 @@
  "nd_yp_follow_through_line": {
   "en": "#v [THIS.Var('nd_yp_follow_through').GetValue|+0]#!  Whether the threat can be carried out",
   "de": "#v [THIS.Var('nd_yp_follow_through').GetValue|+0]#!  Ob die Drohung umgesetzt werden kann"
+ },
+ "nd_yp_forfeit_line": {
+  "en": "#v [THIS.Var('nd_yp_forfeit').GetValue|+0]#!  The war goals the threatened side would give up by conceding",
+  "de": "#v [THIS.Var('nd_yp_forfeit').GetValue|+0]#!  Die Kriegsziele, die die bedrohte Seite durch Nachgeben aufgeben würde"
  },
  "nd_yp_issuer_exposure_line": {
   "en": "#v [THIS.Var('nd_yp_issuer_exposure').GetValue|+0]#!  Whether the threatened side could disarm the threatening side first",
@@ -24076,8 +24120,8 @@
   "de": "Eine Geheimanlage in die Warteschlange stellen: #v +1#! Geheimdienstkapazität und #v +3%#! Effizienz verdeckter Operationen je besetzte Stufe."
  },
  "sr_mod_queue_bunker_tt": {
-  "en": "Queue a Nuclear Command Center: #v +4#! nuclear command reliability a staffed level, at most #v +12#!.",
-  "de": "Eine Nuklearkommandozentrale in die Warteschlange stellen: #v +4#! nukleare Befehlszuverlässigkeit je besetzte Stufe, höchstens #v +12#!."
+  "en": "Queue a Nuclear Command Center: a staffed level gives #v +4#! nuclear command reliability, at most #v +12#!, and #v +2#! [concept_command_redundancy], at most #v +6#!.",
+  "de": "Eine Nuklearkommandozentrale in die Warteschlange stellen: Jede besetzte Stufe gibt #v +4#! nukleare Befehlszuverlässigkeit, höchstens #v +12#!, und #v +2#! [concept_command_redundancy], höchstens #v +6#!."
  },
  "sr_mod_queue_culture_tt": {
   "en": "Queue a Cultural Center: #v +3%#! cultural pull and #v +1%#! prestige a staffed level.",
@@ -28789,7 +28833,7 @@
  },
  "te_demog_ms_rule_tt": {
   "en": "Family policy measures act only under the Full Demographics rule",
-  "de": "Familienpolitische Maßnahmen wirken nur bei der Demografieregel „Vollständig“"
+  "de": "Familienpolitische Maßnahmen wirken nur bei der Demografieregel „Voll“"
  },
  "te_demog_ms_rural_exemption": {
   "en": "Rural Exemption",
@@ -28961,7 +29005,7 @@
  },
  "te_demog_mt_eff_display": {
   "en": "#lore Under the Full Demographics rule, from 40% the largest city would crowd sooner, its people would give more infrastructure, its $building_urban_center$ would work at a larger scale, turmoil would weigh more and families would be smaller, more as its share rises, the crowding and families up to 60% and the rest, more slowly, beyond it; below 20% the state's towns would give less infrastructure.#!",
-  "de": "#lore Unter der Regel „Volle Demografie“ würde die größte Stadt ab 40% früher überfüllt sein, ihre Menschen würden mehr Infrastruktur liefern, ihre $building_urban_center$ würden in größerem Maßstab arbeiten, Aufruhr würde schwerer wiegen und die Familien wären kleiner, umso mehr, je höher ihr Anteil steigt, die Überfüllung und die Familien bis 60% und der Rest darüber hinaus langsamer; unter 20% würden die Städte des Staates weniger Infrastruktur liefern.#!"
+  "de": "#lore Bei der Demografieregel „Voll“ würde die größte Stadt ab 40% früher überfüllt sein, ihre Menschen würden mehr Infrastruktur liefern, ihre $building_urban_center$ würden in größerem Maßstab arbeiten, Aufruhr würde schwerer wiegen und die Familien wären kleiner, umso mehr, je höher ihr Anteil steigt, die Überfüllung und die Familien bis 60% und der Rest darüber hinaus langsamer; unter 20% würden die Städte des Staates weniger Infrastruktur liefern.#!"
  },
  "te_demog_mt_eff_metro": {
   "en": "#b Effects#! at #v [State.MakeScope.ScriptValue('te_demog_mt_e_pos_strength')|%0]#! strength (none at 40%, 100% at 60% and more beyond; the state takes a new figure at its next yearly count): its people give #v +[State.MakeScope.ScriptValue('te_demog_mt_shown_infra_up')|%0]#! [concept_infrastructure], its $building_urban_center$ works at #v +[State.MakeScope.ScriptValue('te_demog_mt_shown_services')|%0]#! [concept_throughput] and [concept_turmoil] weighs #v +[State.MakeScope.ScriptValue('te_demog_mt_shown_turmoil')|%0]#! more. Its crowding and smaller families stop growing at 60%: it crowds #v [State.MakeScope.ScriptValue('te_demog_mt_shown_crowding')|%0]#! sooner ([concept_migration_crowding]), and city life's pull toward smaller families is #v +[State.MakeScope.ScriptValue('te_demog_mt_shown_fertility')|%0]#! stronger.",
@@ -29501,7 +29545,7 @@
  },
  "te_demog_pension_full_only_tt": {
   "en": "The Full Demographics rule is on",
-  "de": "Die Regel „Volle Demografie“ ist aktiv"
+  "de": "Die Demografieregel „Voll“ ist aktiv"
  },
  "te_demog_pension_linked_average_button": {
   "en": "Linked: Average",
@@ -30793,7 +30837,7 @@
  },
  "te_demog_st_wk_need_tt": {
   "en": "#b Health Need#!\\nHow much care this state's people need for their ages, against the world of 1836: the old need several times what the young do, so need rises as a people ages. The country's need sets its health system's bureaucracy cost under the Full Demographics rule.",
-  "de": "#b Gesundheitsbedarf#!\\nWie viel Pflege die Menschen dieses Staates für ihr Alter brauchen, gegenüber der Welt von 1836: Die Alten brauchen ein Vielfaches dessen, was die Jungen brauchen, daher steigt der Bedarf, wenn ein Volk altert. Der Bedarf des Landes bestimmt unter der Regel „Volle Demografie“ die Bürokratiekosten seines Gesundheitssystems."
+  "de": "#b Gesundheitsbedarf#!\\nWie viel Pflege die Menschen dieses Staates für ihr Alter brauchen, gegenüber der Welt von 1836: Die Alten brauchen ein Vielfaches dessen, was die Jungen brauchen, daher steigt der Bedarf, wenn ein Volk altert. Der Bedarf des Landes bestimmt bei der Demografieregel „Voll“ die Bürokratiekosten seines Gesundheitssystems."
  },
  "te_demog_st_wk_need_value": {
   "en": "×#v [State.MakeScope.Var('te_dg_need').GetValue|2]#! of 1836",
@@ -31073,7 +31117,7 @@
  },
  "te_demog_up_eff_display": {
   "en": "#lore Under the Full Demographics rule, a largest city with 25% or more of the urban people would work its $building_urban_center$ and $building_university$ at a larger scale and draw more migrants, and the other states would lose migrants and grow restless, more as its share rises, and more slowly past 50%.#!",
-  "de": "#lore Unter der Regel „Volle Demografie“ würden in einer größten Stadt mit 25% oder mehr der Stadtbevölkerung die Gebäude $building_urban_center$ und $building_university$ in größerem Maßstab arbeiten und mehr Migranten anziehen, und die anderen Staaten würden Migranten verlieren und unruhig werden, umso mehr, je höher ihr Anteil steigt, und ab 50% langsamer.#!"
+  "de": "#lore Bei der Demografieregel „Voll“ würden in einer größten Stadt mit 25% oder mehr der Stadtbevölkerung die Gebäude $building_urban_center$ und $building_university$ in größerem Maßstab arbeiten und mehr Migranten anziehen, und die anderen Staaten würden Migranten verlieren und unruhig werden, umso mehr, je höher ihr Anteil steigt, und ab 50% langsamer.#!"
  },
  "te_demog_up_eff_few": {
   "en": "#b Effects:#! none. A country of fewer than three states has no urban hierarchy to speak of.",
@@ -31633,7 +31677,7 @@
  },
  "te_demog_wk_buttons_full_only": {
   "en": "Pension settings act only under the Full Demographics rule.",
-  "de": "Renteneinstellungen wirken nur unter der Regel „Volle Demografie“."
+  "de": "Renteneinstellungen wirken nur bei der Demografieregel „Voll“."
  },
  "te_demog_wk_buttons_term": {
   "en": "The setting chosen in #v [Country.MakeScope.ScriptValue('te_demog_pension_since_year')|0]#! holds until #v [Country.MakeScope.ScriptValue('te_demog_pension_term_end_year')|0]#!.",
@@ -31665,7 +31709,7 @@
  },
  "te_demog_wk_need_no_bill": {
   "en": "#grey Outside the Full Demographics rule it changes no cost.#!",
-  "de": "#grey Außerhalb der Regel „Volle Demografie“ ändert es keine Kosten.#!"
+  "de": "#grey Außerhalb der Demografieregel „Voll“ ändert es keine Kosten.#!"
  },
  "te_demog_wk_need_saving": {
   "en": "The country's people are younger than the world of 1836, so the $institution_health_system$ costs #v [Country.MakeScope.ScriptValue('te_demog_health_term_saving')|%0]#! less bureaucracy: need #v [Country.MakeScope.ScriptValue('te_demog_health_need_term')|+%0]#!, treating chronic illness #v [Country.MakeScope.ScriptValue('te_demog_health_tech_term')|+%0]#!. Set at each census.",
@@ -31681,7 +31725,7 @@
  },
  "te_demog_wk_not_full": {
   "en": "#grey Outside the Full Demographics rule these figures change nothing: the workforce follows the game's own rules.#!",
-  "de": "#grey Außerhalb der Regel „Volle Demografie“ ändern diese Zahlen nichts: Die Arbeitskräfte folgen den eigenen Regeln des Spiels.#!"
+  "de": "#grey Außerhalb der Demografieregel „Voll“ ändern diese Zahlen nichts: Die Arbeitskräfte folgen den eigenen Regeln des Spiels.#!"
  },
  "te_demog_wk_pending": {
   "en": "#grey Work figures arrive with the next census.#!",
@@ -36046,6 +36090,10 @@
  "te_seabed_weight_tt_southern": {
   "en": "Claim weight in the Southern Ocean: #v [Country.MakeScope.ScriptValue('te_seabed_w_disp_southern')|1]#! of the basin's #v [Country.MakeScope.ScriptValue('te_seabed_world_w_disp_southern')|1]#!, as of the last sharing.\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_home_disp_southern'), '(CFixedPoint)0' ), 'te_seabed_weight_home_southern', 'te_seabed_weight_far_southern' )]",
   "de": "Anspruchsgewicht im Südpolarmeer: #v [Country.MakeScope.ScriptValue('te_seabed_w_disp_southern')|1]#! von insgesamt #v [Country.MakeScope.ScriptValue('te_seabed_world_w_disp_southern')|1]#! im Becken, Stand der letzten Aufteilung.\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_home_disp_southern'), '(CFixedPoint)0' ), 'te_seabed_weight_home_southern', 'te_seabed_weight_far_southern' )]"
+ },
+ "te_single_party_state_another_party_tt": {
+  "en": "We will choose from the other parties in [concept_government] at the first later checkpoint of the enactment that does not stall.",
+  "de": "Wir wählen aus den anderen Parteien in der [concept_government] beim ersten späteren Kontrollpunkt der Verabschiedung, der nicht ins Stocken gerät."
  },
  "te_society_ch_open_journal_tt": {
   "en": "Opens $je_cultural_hegemony$ in the journal, which shows these same panels.",

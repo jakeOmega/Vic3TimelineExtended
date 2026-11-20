@@ -14155,6 +14155,14 @@
   "en": "So this is how it ended.",
   "de": "So also endete es."
  },
+ "nuclear_crisis.6.a_keep": {
+  "en": "Keep our forces at the readiness we have ordered.",
+  "de": "Wir halten unsere Streitkräfte auf der angeordneten Bereitschaftsstufe."
+ },
+ "nuclear_crisis.6.b": {
+  "en": "Stand our forces down to where they were before the crisis.",
+  "de": "Wir fahren unsere Streitkräfte auf den Stand vor der Krise zurück."
+ },
  "nuclear_crisis.6.d_backed_down_issuer": {
   "en": "We have withdrawn our nuclear threat against [SCOPE.sCountry('nd_target').GetName] without getting what we demanded, and the crisis is closed. The retreat has cost us credibility.",
   "de": "Wir haben unsere nukleare Drohung gegen [SCOPE.sCountry('nd_target').GetAltName('AKK')] zurückgenommen, ohne zu bekommen, was wir gefordert hatten, und die Krise ist beendet. Der Rückzug hat uns an Glaubwürdigkeit gekostet."
@@ -15040,8 +15048,8 @@
   "de": "Wir finden heraus, woher die Waffe stammt."
  },
  "nuclear_loose.2.d": {
-  "en": "A nuclear device has exploded in [SCOPE.sState('nd_loose_state').GetName]. No country has claimed it. Nothing was launched at us and nothing crossed our borders by air: the device was carried into the city and set off there. An estimated #v [SCOPE.sState('nd_loose_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! people are dead.",
-  "de": "In [SCOPE.sState('nd_loose_state').GetName] ist ein nuklearer Sprengsatz explodiert. Kein Land hat sich dazu bekannt. Nichts wurde auf uns abgefeuert, und nichts überquerte unsere Grenzen auf dem Luftweg: Der Sprengsatz wurde in die Stadt getragen und dort gezündet. Schätzungsweise #v [SCOPE.sState('nd_loose_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! Menschen sind tot."
+  "en": "A nuclear device has exploded in [SCOPE.sState('nd_loose_state').GetName]. No country has claimed it. Nothing was launched at us and nothing crossed our borders by air: the device was carried into the city and set off there. An estimated #v [SCOPE.sState('nd_loose_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! people are dead.[SCOPE.sState('nd_loose_state').GetCustom('nd_raze_line_victim')]",
+  "de": "In [SCOPE.sState('nd_loose_state').GetName] ist ein nuklearer Sprengsatz explodiert. Kein Land hat sich dazu bekannt. Nichts wurde auf uns abgefeuert, und nichts überquerte unsere Grenzen auf dem Luftweg: Der Sprengsatz wurde in die Stadt getragen und dort gezündet. Schätzungsweise #v [SCOPE.sState('nd_loose_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! Menschen sind tot.[SCOPE.sState('nd_loose_state').GetCustom('nd_raze_line_victim')]"
  },
  "nuclear_loose.2.f": {
   "en": "Orders from the emergency command to the rescue and medical crews going into [SCOPE.sState('nd_loose_state').GetName]:\\n\\nApproach from upwind, and stop at the line the survey teams have marked. Beyond it the ground is still too contaminated to work on for long.\\nWear the dosimeter on the outside of your clothing and hand it in at the end of each shift. Anyone whose reading has passed the limit is not to go back in, however short-handed the crew is.\\nDo not drink water or eat food found in the city. The supply is contaminated, and clean water is being brought in.\\nTake the injured to the reception points on the edge of the city. The hospitals nearest the blast cannot take anyone.\\nHold anyone found carrying parts of the device and hand them to the security services. The investigators need to know who handled it before it was set off.",
@@ -15368,24 +15376,24 @@
   "de": "Niemand kann unsere Sprengköpfe befehligen, bis unsere Führung in zwei bis vier Wochen wiederhergestellt ist. Dann entscheiden wir, wie wir antworten, falls der Krieg oder der Nuklearaustausch in Friedenszeiten mit [SCOPE.sCountry('attacking_country').GetAltName('DAT')] noch andauert"
  },
  "nuclear_weapon_events.1.d": {
-  "en": "A nuclear weapon has been detonated in [SCOPE.sState('target_state').GetName] by [SCOPE.sCountry('attacking_country').GetName].",
-  "de": "[SCOPE.sCountry('attacking_country').GetAltName('NOM')|U] hat in [SCOPE.sState('target_state').GetName] eine Nuklearwaffe gezündet."
+  "en": "A nuclear weapon has been detonated in [SCOPE.sState('target_state').GetName] by [SCOPE.sCountry('attacking_country').GetName].[SCOPE.sState('target_state').GetCustom('nd_raze_line_victim')]",
+  "de": "In [SCOPE.sState('target_state').GetName] wurde eine Nuklearwaffe gezündet, und zwar durch das Land [SCOPE.sCountry('attacking_country').GetName].[SCOPE.sState('target_state').GetCustom('nd_raze_line_victim')]"
  },
  "nuclear_weapon_events.1.d_cut_off": {
-  "en": "[SCOPE.sCountry('attacking_country').GetName] has launched a salvo of nuclear weapons, and #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of its warheads got through, some of them on our capital. The government has gone silent. The chain that authorizes a nuclear launch is cut, and under [Concept('concept_launch_authority','Central Authorization')] nobody else may give the order until it is restored.",
-  "de": "[SCOPE.sCountry('attacking_country').GetAltName('NOM')|U] hat eine Salve Nuklearwaffen abgefeuert, und #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! Sprengköpfe sind durchgekommen, einige davon auf unsere Hauptstadt. Die Regierung ist verstummt. Die Kette, die einen Nuklearstart autorisiert, ist unterbrochen, und unter [Concept('concept_launch_authority','Zentraler Genehmigung')] darf bis zu ihrer Wiederherstellung niemand sonst den Befehl geben."
+  "en": "[SCOPE.sCountry('attacking_country').GetName] has launched a salvo of nuclear weapons, and #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of its warheads got through, some of them on our capital. The government has gone silent. The chain that authorizes a nuclear launch is cut, and under [Concept('concept_launch_authority','Central Authorization')] nobody else may give the order until it is restored.[ROOT.GetCountry.GetCustom('nd_raze_salvo_line_victim')]",
+  "de": "[SCOPE.sCountry('attacking_country').GetAltName('NOM')|U] hat eine Salve Nuklearwaffen abgefeuert, und #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! Sprengköpfe sind durchgekommen, einige davon auf unsere Hauptstadt. Die Regierung ist verstummt. Die Kette, die einen Nuklearstart autorisiert, ist unterbrochen, und unter [Concept('concept_launch_authority','Zentraler Genehmigung')] darf bis zu ihrer Wiederherstellung niemand sonst den Befehl geben.[ROOT.GetCountry.GetCustom('nd_raze_salvo_line_victim')]"
  },
  "nuclear_weapon_events.1.d_salvo_cities": {
-  "en": "[SCOPE.sCountry('attacking_country').GetName] has launched a salvo of nuclear weapons at our cities. #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of its warheads got through our defenses and detonated.",
-  "de": "[SCOPE.sCountry('attacking_country').GetAltName('NOM')|U] hat eine Salve Nuklearwaffen auf unsere Städte abgefeuert. #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! Sprengköpfe sind durch unsere Abwehr gekommen und detoniert."
+  "en": "[SCOPE.sCountry('attacking_country').GetName] has launched a salvo of nuclear weapons at our cities. #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of its warheads got through our defenses and detonated.[ROOT.GetCountry.GetCustom('nd_raze_salvo_line_victim')]",
+  "de": "[SCOPE.sCountry('attacking_country').GetAltName('NOM')|U] hat eine Salve Nuklearwaffen auf unsere Städte abgefeuert. #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! Sprengköpfe sind durch unsere Abwehr gekommen und detoniert.[ROOT.GetCountry.GetCustom('nd_raze_salvo_line_victim')]"
  },
  "nuclear_weapon_events.1.d_salvo_forces": {
   "en": "[SCOPE.sCountry('attacking_country').GetName] has launched a salvo of nuclear weapons at our nuclear forces. #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of its warheads struck the bases of our nuclear forces, and destroyed #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_destroyed').GetValue|0]#! of our warheads before they could fly.",
   "de": "[SCOPE.sCountry('attacking_country').GetAltName('NOM')|U] hat eine Salve Nuklearwaffen auf unsere Nuklearstreitkräfte abgefeuert. #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! seiner Sprengköpfe trafen die Stützpunkte unserer Nuklearstreitkräfte und zerstörten #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_destroyed').GetValue|0]#! unserer Sprengköpfe, bevor sie abheben konnten."
  },
  "nuclear_weapon_events.1.d_salvo_leadership": {
-  "en": "[SCOPE.sCountry('attacking_country').GetName] has launched a salvo of nuclear weapons at our capital. #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of its warheads struck it. The government survived, and our chain of command still holds.",
-  "de": "[SCOPE.sCountry('attacking_country').GetAltName('NOM')|U] hat eine Salve Nuklearwaffen auf unsere Hauptstadt abgefeuert. #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! Sprengköpfe trafen sie. Die Regierung hat überlebt, und unsere Befehlskette hält noch."
+  "en": "[SCOPE.sCountry('attacking_country').GetName] has launched a salvo of nuclear weapons at our capital. #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of its warheads struck it. The government survived, and our chain of command still holds.[ROOT.GetCountry.GetCustom('nd_raze_salvo_line_victim')]",
+  "de": "[SCOPE.sCountry('attacking_country').GetAltName('NOM')|U] hat eine Salve Nuklearwaffen auf unsere Hauptstadt abgefeuert. #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! Sprengköpfe trafen sie. Die Regierung hat überlebt, und unsere Befehlskette hält noch.[ROOT.GetCountry.GetCustom('nd_raze_salvo_line_victim')]"
  },
  "nuclear_weapon_events.1.e": {
   "en": "The system has already answered.",
@@ -15468,8 +15476,8 @@
   "de": "Eine umfassende nukleare Antwort starten"
  },
  "nuclear_weapon_events.11.d": {
-  "en": "A nuclear weapon has been detonated in [SCOPE.sState('target_state').GetName] by [SCOPE.sCountry('target_country').GetName].",
-  "de": "[SCOPE.sCountry('target_country').GetAltName('NOM')|U] hat in [SCOPE.sState('target_state').GetName] eine Nuklearwaffe gezündet."
+  "en": "A nuclear weapon has been detonated in [SCOPE.sState('target_state').GetName] by [SCOPE.sCountry('target_country').GetName].[SCOPE.sState('target_state').GetCustom('nd_raze_line_victim')]",
+  "de": "In [SCOPE.sState('target_state').GetName] wurde eine Nuklearwaffe gezündet, und zwar durch das Land [SCOPE.sCountry('target_country').GetName].[SCOPE.sState('target_state').GetCustom('nd_raze_line_victim')]"
  },
  "nuclear_weapon_events.11.f": {
   "en": "The rescue teams sent to [SCOPE.sState('target_state').GetName] stopped at the outskirts, where fallen buildings blocked the roads and heat still came off the ground. Their leader sent back the first estimate, #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! dead, with a note that it counted only the districts the teams could reach. From where they stood they could see smoke over the center and nothing standing in it. Survivors walked out toward them in ones and twos, burned on the side that had faced the flash. The teams set up a station on the road, gave water to everyone who came, and took down each person's name and the district they had come from.",
@@ -15484,8 +15492,8 @@
   "de": "Es ist mit schwerem Herzen, dass wir die Notwendigkeit dieser schrecklichen Tat anerkennen."
  },
  "nuclear_weapon_events.12.d": {
-  "en": "Our [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] reached its target, and the warhead has detonated.",
-  "de": "Unser [concept_nuclear_strike] auf [SCOPE.sState('target_state').GetName] hat sein Ziel erreicht, und der Sprengkopf ist detoniert."
+  "en": "Our [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] reached its target, and the warhead has detonated.[SCOPE.sState('target_state').GetCustom('nd_raze_line_attacker')]",
+  "de": "Unser [concept_nuclear_strike] auf [SCOPE.sState('target_state').GetName] hat sein Ziel erreicht, und der Sprengkopf ist detoniert.[SCOPE.sState('target_state').GetCustom('nd_raze_line_attacker')]"
  },
  "nuclear_weapon_events.12.f": {
   "en": "\\\"I have come from the command post to tell the government what our answer did. Our warhead detonated over [SCOPE.sState('target_state').GetName]. The first estimate is #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! dead, in [concept_devastation] like the one they made of ours, and it will rise in the coming weeks. The crews did their work as they were trained to, and several of them asked me afterward whether it was over. I told them I did not know. [SCOPE.sCountry('attacking_country').GetName] can still answer us, and our forces will stay ready in case it does.\\\"",
@@ -15672,36 +15680,36 @@
   "de": "Niemand in dieser Regierung hat es gewählt, aber es geschah in unserem Namen. Wir werden dafür geradestehen."
  },
  "nuclear_weapon_events.2.d": {
-  "en": "Our [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] reached its target, and the warhead has detonated.",
-  "de": "Unser [concept_nuclear_strike] auf [SCOPE.sState('target_state').GetName] hat sein Ziel erreicht, und der Sprengkopf ist detoniert."
+  "en": "Our [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] reached its target, and the warhead has detonated.[SCOPE.sState('target_state').GetCustom('nd_raze_line_attacker')]",
+  "de": "Unser [concept_nuclear_strike] auf [SCOPE.sState('target_state').GetName] hat sein Ziel erreicht, und der Sprengkopf ist detoniert.[SCOPE.sState('target_state').GetCustom('nd_raze_line_attacker')]"
  },
  "nuclear_weapon_events.2.d_commander": {
-  "en": "One of our nuclear-armed units, cut off from the capital, has launched a [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] on its own authority, under the delegation we granted it.",
-  "de": "Eine unserer nuklear bestückten Einheiten, von der Hauptstadt abgeschnitten, hat in eigener Verantwortung einen [concept_nuclear_strike] auf [SCOPE.sState('target_state').GetName] gestartet, im Rahmen der Vollmacht, die wir ihr erteilt hatten."
+  "en": "One of our nuclear-armed units, cut off from the capital, has launched a [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] on its own authority, under the delegation we granted it.[SCOPE.sState('target_state').GetCustom('nd_raze_line_attacker')]",
+  "de": "Eine unserer nuklear bestückten Einheiten, von der Hauptstadt abgeschnitten, hat in eigener Verantwortung einen [concept_nuclear_strike] auf [SCOPE.sState('target_state').GetName] gestartet, im Rahmen der Vollmacht, die wir ihr erteilt hatten.[SCOPE.sState('target_state').GetCustom('nd_raze_line_attacker')]"
  },
  "nuclear_weapon_events.2.d_salvo": {
-  "en": "Our salvo has reached [SCOPE.sCountry('target_country').GetName]. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of our warheads got through its defenses and detonated.",
-  "de": "Unsere Salve hat [SCOPE.sCountry('target_country').GetAltName('AKK')] erreicht. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! unserer Sprengköpfe sind durch die gegnerische Abwehr gekommen und detoniert."
+  "en": "Our salvo has reached [SCOPE.sCountry('target_country').GetName]. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of our warheads got through its defenses and detonated.[SCOPE.sCountry('target_country').GetCustom('nd_raze_salvo_line_attacker')]",
+  "de": "Unsere Salve hat [SCOPE.sCountry('target_country').GetAltName('AKK')] erreicht. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! unserer Sprengköpfe sind durch die gegnerische Abwehr gekommen und detoniert.[SCOPE.sCountry('target_country').GetCustom('nd_raze_salvo_line_attacker')]"
  },
  "nuclear_weapon_events.2.d_salvo_cut_off": {
-  "en": "Our salvo has reached [SCOPE.sCountry('target_country').GetName]. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of our warheads got through, some of them on its capital, and its government has gone silent. Under [Concept('concept_launch_authority','Central Authorization')] nobody else there may order a nuclear launch until its command is restored, in two to four weeks.",
-  "de": "Unsere Salve hat [SCOPE.sCountry('target_country').GetAltName('AKK')] erreicht. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! unserer Sprengköpfe sind durchgekommen, einige davon auf die Hauptstadt, und die dortige Regierung ist verstummt. Unter [Concept('concept_launch_authority','Zentraler Genehmigung')] darf dort bis zur Wiederherstellung der Führung in zwei bis vier Wochen niemand sonst einen Nuklearstart befehlen."
+  "en": "Our salvo has reached [SCOPE.sCountry('target_country').GetName]. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of our warheads got through, some of them on its capital, and its government has gone silent. Under [Concept('concept_launch_authority','Central Authorization')] nobody else there may order a nuclear launch until its command is restored, in two to four weeks.[SCOPE.sCountry('target_country').GetCustom('nd_raze_salvo_line_attacker')]",
+  "de": "Unsere Salve hat [SCOPE.sCountry('target_country').GetAltName('AKK')] erreicht. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! unserer Sprengköpfe sind durchgekommen, einige davon auf die Hauptstadt, und die dortige Regierung ist verstummt. Unter [Concept('concept_launch_authority','Zentraler Genehmigung')] darf dort bis zur Wiederherstellung der Führung in zwei bis vier Wochen niemand sonst einen Nuklearstart befehlen.[SCOPE.sCountry('target_country').GetCustom('nd_raze_salvo_line_attacker')]"
  },
  "nuclear_weapon_events.2.d_salvo_forces": {
   "en": "Our salvo has reached the nuclear forces of [SCOPE.sCountry('target_country').GetName]. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of our warheads struck the bases of its nuclear forces, and destroyed #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_destroyed').GetValue|0]#! of its warheads before they could fly.",
   "de": "Unsere Salve hat die Nuklearstreitkräfte [SCOPE.sCountry('target_country').GetAltName('GEN')] erreicht. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! unserer Sprengköpfe trafen die Stützpunkte seiner Nuklearstreitkräfte und zerstörten #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_destroyed').GetValue|0]#! seiner Sprengköpfe, bevor sie abheben konnten."
  },
  "nuclear_weapon_events.2.d_salvo_leadership": {
-  "en": "Our salvo has reached the capital of [SCOPE.sCountry('target_country').GetName]. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of our warheads struck it, but its government survived, and its chain of command still holds.",
-  "de": "Unsere Salve hat die Hauptstadt [SCOPE.sCountry('target_country').GetAltName('GEN')] erreicht. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! unserer Sprengköpfe trafen sie, doch die Regierung hat überlebt, und die Befehlskette hält noch."
+  "en": "Our salvo has reached the capital of [SCOPE.sCountry('target_country').GetName]. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of our warheads struck it, but its government survived, and its chain of command still holds.[SCOPE.sCountry('target_country').GetCustom('nd_raze_salvo_line_attacker')]",
+  "de": "Unsere Salve hat die Hauptstadt [SCOPE.sCountry('target_country').GetAltName('GEN')] erreicht. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! unserer Sprengköpfe trafen sie, doch die Regierung hat überlebt, und die Befehlskette hält noch.[SCOPE.sCountry('target_country').GetCustom('nd_raze_salvo_line_attacker')]"
  },
  "nuclear_weapon_events.2.d_system": {
-  "en": "Our [concept_nuclear_strike] has fallen on [SCOPE.sState('target_state').GetName]. No one in the government ordered it: our automatic retaliation system read an accident on our own soil as an attack, and answered.",
-  "de": "Unser [concept_nuclear_strike] ist auf [SCOPE.sState('target_state').GetName] niedergegangen. Niemand in der Regierung hat ihn befohlen: Unser automatisches Vergeltungssystem deutete einen Unfall auf eigenem Boden als Angriff und antwortete."
+  "en": "Our [concept_nuclear_strike] has fallen on [SCOPE.sState('target_state').GetName]. No one in the government ordered it: our automatic retaliation system read an accident on our own soil as an attack, and answered.[SCOPE.sState('target_state').GetCustom('nd_raze_line_attacker')]",
+  "de": "Unser [concept_nuclear_strike] ist auf [SCOPE.sState('target_state').GetName] niedergegangen. Niemand in der Regierung hat ihn befohlen: Unser automatisches Vergeltungssystem deutete einen Unfall auf eigenem Boden als Angriff und antwortete.[SCOPE.sState('target_state').GetCustom('nd_raze_line_attacker')]"
  },
  "nuclear_weapon_events.2.d_warning": {
-  "en": "Our [concept_nuclear_strike] has fallen on [SCOPE.sState('target_state').GetName]. The order was given on the strength of an early warning that no second source had confirmed.",
-  "de": "Unser [concept_nuclear_strike] ist auf [SCOPE.sState('target_state').GetName] niedergegangen. Der Befehl wurde aufgrund einer Frühwarnung erteilt, die keine zweite Quelle bestätigt hatte."
+  "en": "Our [concept_nuclear_strike] has fallen on [SCOPE.sState('target_state').GetName]. The order was given on the strength of an early warning that no second source had confirmed.[SCOPE.sState('target_state').GetCustom('nd_raze_line_attacker')]",
+  "de": "Unser [concept_nuclear_strike] ist auf [SCOPE.sState('target_state').GetName] niedergegangen. Der Befehl wurde aufgrund einer Frühwarnung erteilt, die keine zweite Quelle bestätigt hatte.[SCOPE.sState('target_state').GetCustom('nd_raze_line_attacker')]"
  },
  "nuclear_weapon_events.2.f": {
   "en": "\\\"This is the strike report the government asked for, from the officers who carried it out. The warhead detonated over [SCOPE.sState('target_state').GetName] at the place we were ordered to strike. Our first estimate is #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! dead in the [concept_devastation], and the figure will rise: people die for weeks after a strike of this kind, from their burns and from the sickness. I have brought the targeting officers' reports, the order as it was given to us, and each confirmation with the hour it arrived. [SCOPE.sCountry('target_country').GetName] has not answered. Our forces are at the readiness the government set, and I am waiting for instructions on what we do if it does.\\\"",
@@ -16008,8 +16016,8 @@
   "de": "Der Befehl liegt bereit: #R [ROOT.GetCountry.MakeScope.ScriptValue('nd_salvo_size_value')|0]#! Sprengköpfe auf die Nuklearstreitkräfte [SCOPE.sCountry('nd_salvo_victim').GetAltName('GEN')] und ihre Stützpunkte. Die Besatzungen haben ihn authentifiziert und warten nur noch auf das Wort. Einmal gegeben, lässt er sich nicht mehr zurückrufen."
  },
  "nuclear_weapon_events.31.d_leadership": {
-  "en": "The order is ready: #R [ROOT.GetCountry.MakeScope.ScriptValue('nd_salvo_size_value')|0]#! warheads at the capital of [SCOPE.sCountry('nd_salvo_victim').GetName]. The crews have authenticated it and wait only for the word. Once it is given it cannot be recalled.",
-  "de": "Der Befehl liegt bereit: #R [ROOT.GetCountry.MakeScope.ScriptValue('nd_salvo_size_value')|0]#! Sprengköpfe auf die Hauptstadt [SCOPE.sCountry('nd_salvo_victim').GetAltName('GEN')]. Die Besatzungen haben ihn authentifiziert und warten nur noch auf das Wort. Einmal gegeben, lässt er sich nicht mehr zurückrufen."
+  "en": "The order is ready: #R [ROOT.GetCountry.MakeScope.ScriptValue('nd_salvo_size_value')|0]#! warheads at the leadership of [SCOPE.sCountry('nd_salvo_victim').GetName]: half at its capital, the rest one to a state, its military sites first. The crews have authenticated it and wait only for the word. Once it is given it cannot be recalled.",
+  "de": "Der Befehl liegt bereit: #R [ROOT.GetCountry.MakeScope.ScriptValue('nd_salvo_size_value')|0]#! Sprengköpfe auf die Führung [SCOPE.sCountry('nd_salvo_victim').GetAltName('GEN')]: die Hälfte auf die Hauptstadt, der Rest je einer auf einen Staat, zuerst auf militärische Standorte. Die Besatzungen haben ihn authentifiziert und warten nur noch auf das Wort. Einmal gegeben, lässt er sich nicht mehr zurückrufen."
  },
  "nuclear_weapon_events.31.f": {
   "en": "The procedure the duty officer will follow once the government gives the word:\\n\\nThe order will be read to the crews in full and acknowledged by each of them, so that no crew acts on part of it.\\nOnce the first weapon has gone, nothing in the procedure allows the rest of the order to be withdrawn, and the crews have been told so.\\nTwo officers at every post will check the authorization against the codes they hold, because no single officer may release a weapon.\\nThe crews will report each launch as it happens, so that the government knows at every moment what has already gone.\\nThe duty officer will stay on the line to the government until the last report is in.",
@@ -25714,6 +25722,34 @@
  "te_seabed.3.t": {
   "en": "The Seabed Rush Begins",
   "de": "Der Run auf den Meeresboden beginnt"
+ },
+ "te_single_party_state.1.a": {
+  "en": "The [SCOPE.sParty('sps_green_party').GetName].",
+  "de": "Die [SCOPE.sParty('sps_green_party').GetName]."
+ },
+ "te_single_party_state.1.b": {
+  "en": "The [SCOPE.sParty('sps_populist_party').GetName].",
+  "de": "Die [SCOPE.sParty('sps_populist_party').GetName]."
+ },
+ "te_single_party_state.1.c": {
+  "en": "The [SCOPE.sParty('sps_technocratic_party').GetName].",
+  "de": "Die [SCOPE.sParty('sps_technocratic_party').GetName]."
+ },
+ "te_single_party_state.1.d": {
+  "en": "[GetLawType('law_single_party_state').GetName] is being enacted. Once it passes, one party will be legal in [ROOT.GetCountry.GetName] and every other will be struck from the register of parties. The clerks drafting the law's final text have left a space for that party's name. It must be a party that is part of our [concept_government].",
+  "de": "Das Gesetz „[GetLawType('law_single_party_state').GetName]“ wird erlassen. Sobald es beschlossen ist, ist in [ROOT.GetCountry.GetAltName('IN')] nur noch eine Partei legal, und jede andere wird aus dem Parteienregister gestrichen. Die Schreiber, die den endgültigen Gesetzestext aufsetzen, haben eine Lücke für den Namen dieser Partei gelassen. Es muss eine Partei sein, die zu unserer [concept_government] gehört."
+ },
+ "te_single_party_state.1.e": {
+  "en": "One of the other parties in [concept_government].",
+  "de": "Eine der anderen Parteien in der [concept_government]."
+ },
+ "te_single_party_state.1.f": {
+  "en": "A party's general secretary, to its branch secretaries:\\n\\n\\\"The law will name one party, and every other will be outlawed. If the government names ours, members of the other parties who hold public posts will come to you asking to join. Take each one's name and old membership card and send them to me. Promise nobody that they will keep a post, because that is not ours to decide. If the government names another party, keep our own lists safe and wait for my instructions.\\\"",
+  "de": "Der Generalsekretär einer Partei an ihre Zweigsekretäre:\\n\\n„Das Gesetz wird eine Partei nennen, und jede andere wird verboten. Nennt die Regierung unsere, werden Mitglieder der anderen Parteien, die öffentliche Ämter innehaben, zu euch kommen und um Aufnahme bitten. Nehmt von jedem den Namen und das alte Mitgliedsbuch und schickt sie mir. Versprecht niemandem, dass er sein Amt behält, denn das zu entscheiden steht uns nicht zu. Nennt die Regierung eine andere Partei, bewahrt unsere eigenen Listen sicher auf und wartet auf meine Anweisungen.“"
+ },
+ "te_single_party_state.1.t": {
+  "en": "The Sole Legal Party",
+  "de": "Die einzige legale Partei"
  },
  "te_union.1.a": {
   "en": "Our future is in the union.",

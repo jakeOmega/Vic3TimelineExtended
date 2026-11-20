@@ -1927,6 +1927,22 @@
   "en": "No War After the Exchange",
   "de": "Kein Krieg nach dem Schlagabtausch"
  },
+ "notification_nd_high_alert_reminder_desc": {
+  "en": "Our nuclear forces have stood at #v High Alert#! for #v [GetPlayer.MakeScope.Var('nd_high_alert_quiet_months').GetValue|0]#! months with no crisis under way. In peacetime, incidents at High Alert are ten times as likely as at Routine, and crew strain, now #v [GetPlayer.MakeScope.ScriptValue('nd_display_strain')|0]#! of 100, raises the odds further. We can lower readiness under $nd_w_posture_header$, in the $te_military_tab_nuclear$ tab of the Military panel.",
+  "de": "Unsere Nuklearstreitkräfte stehen seit #v [GetPlayer.MakeScope.Var('nd_high_alert_quiet_months').GetValue|0]#! Monaten ohne laufende Krise auf #v Hoher Alarmbereitschaft#!. In Friedenszeiten sind Zwischenfälle bei Hoher Alarmbereitschaft zehnmal so wahrscheinlich wie bei Routine, und die Besatzungsbelastung, derzeit #v [GetPlayer.MakeScope.ScriptValue('nd_display_strain')|0]#! von 100, erhöht die Wahrscheinlichkeit weiter. Wir können die Bereitschaft unter $nd_w_posture_header$ senken, im Reiter $te_military_tab_nuclear$ des Militärfensters."
+ },
+ "notification_nd_high_alert_reminder_name": {
+  "en": "Forces Still on High Alert",
+  "de": "Streitkräfte weiter in Hoher Alarmbereitschaft"
+ },
+ "notification_nd_raze_foreign_assets_lost_desc": {
+  "en": "A nuclear weapon has destroyed buildings in [SCOPE.sCountry('nd_raze_owner').GetName] in which our investors held shares, and its government has taken every level still standing into state ownership. Our investors' shares in those buildings are gone.",
+  "de": "Eine Nuklearwaffe hat Gebäude [SCOPE.sCountry('nd_raze_owner').GetAltName('IN')] zerstört, in denen unsere Investoren Anteile hielten, und die dortige Regierung hat jede noch stehende Stufe in Staatsbesitz genommen. Die Anteile unserer Investoren an diesen Gebäuden sind verloren."
+ },
+ "notification_nd_raze_foreign_assets_lost_name": {
+  "en": "Holdings Abroad Nationalized",
+  "de": "Auslandsbeteiligungen verstaatlicht"
+ },
  "notification_rt_coal_retired_notice_desc": {
   "en": "Our retirement program has closed the $building_coal_mine$ in [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! levels, with @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! paid in compensation from the treasury.",
   "de": "Unser Stilllegungsprogramm hat die $building_coal_mine$ in [SCOPE.sState('rt_retire_state').GetName] geschlossen: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! Stufen, wobei @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! als Entschädigung aus der Staatskasse gezahlt wurden."
@@ -2368,8 +2384,8 @@
   "de": "Getreide aus der Welternährungsreserve"
  },
  "notification_un_force_war_goal_struck_notice_desc": {
-  "en": "We added a war goal against [SCOPE.sCountry('un_force_protected').GetName], which hosts a UN peacekeeping or stabilization mission. With the [concept_un_standing_force] in being and the United Nations at the Supranational tier, a member may press no further war goals on a country under its protection: ours have been struck from the play. Only the goal the play opened with, and others of its kind, may stay, at twice the usual [concept_infamy].",
-  "de": "Wir haben ein Kriegsziel gegen [SCOPE.sCountry('un_force_protected').GetAltName('AKK')] hinzugefügt; dort ist eine UN-Friedens- oder Stabilisierungsmission stationiert. Da die [concept_un_standing_force] besteht und sich die Vereinten Nationen auf der Stufe „Supranational“ befinden, darf ein Mitglied einem Land unter ihrem Schutz keine weiteren Kriegsziele aufdrängen: Unsere wurden aus dem Spiel gestrichen. Nur das Ziel, mit dem das Spiel eröffnet wurde, und weitere seiner Art dürfen bleiben, bei doppelter [concept_infamy]."
+  "en": "We added a war goal against [SCOPE.sCountry('un_force_protected').GetName], which hosts a UN peacekeeping or stabilization mission. With the [concept_un_standing_force] in being and the United Nations at the Supranational tier, a member may press no further war goals on a country under its protection: ours have been struck from the play. A goal of ours of the same kind against another country in it may have gone with them, and if so the [concept_infamy] we paid for it has been returned. Only the goal the play opened with, and others of its kind, may stay, at twice the usual infamy.",
+  "de": "Wir haben ein Kriegsziel gegen [SCOPE.sCountry('un_force_protected').GetAltName('AKK')] hinzugefügt; dort ist eine UN-Friedens- oder Stabilisierungsmission stationiert. Da die [concept_un_standing_force] besteht und sich die Vereinten Nationen auf der Stufe „Supranational“ befinden, darf ein Mitglied einem Land unter ihrem Schutz keine weiteren Kriegsziele aufdrängen: Unsere wurden aus dem Spiel gestrichen. Ein gleichartiges Ziel von uns gegen ein anderes Land darin kann mit ihnen gefallen sein, und wenn ja, wurde die [concept_infamy], die wir dafür gezahlt haben, zurückerstattet. Nur das Ziel, mit dem das Spiel eröffnet wurde, und weitere seiner Art dürfen bleiben, bei doppelt so hoher Verrufenheit wie üblich."
  },
  "notification_un_force_war_goal_struck_notice_name": {
   "en": "A War Goal Struck",

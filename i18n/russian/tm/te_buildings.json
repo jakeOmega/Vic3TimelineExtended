@@ -1151,6 +1151,10 @@
   "en": "Hydro Plant",
   "ru": "Гидроэлектростанция"
  },
+ "building_hydro_plant_possible_tt": {
+  "en": "This state is on a river or has a finished great dam: the $building_wonder_hoover_dam$, $building_wonder_aswan_high_dam$, $building_wonder_itaipu_dam$ or $building_wonder_three_gorges_dam$",
+  "ru": "Эта область стоит на реке или в ней есть достроенная большая плотина: $building_wonder_hoover_dam$, $building_wonder_aswan_high_dam$, $building_wonder_itaipu_dam$ или $building_wonder_three_gorges_dam$"
+ },
  "building_hydro_plant_throughput_add": {
   "en": "Hydro Plant [concept_throughput]",
   "ru": "Гидроэлектростанция: [concept_throughput]"

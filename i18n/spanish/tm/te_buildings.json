@@ -1151,6 +1151,10 @@
   "en": "Hydro Plant",
   "es": "Central hidroeléctrica"
  },
+ "building_hydro_plant_possible_tt": {
+  "en": "This state is on a river or has a finished great dam: the $building_wonder_hoover_dam$, $building_wonder_aswan_high_dam$, $building_wonder_itaipu_dam$ or $building_wonder_three_gorges_dam$",
+  "es": "Este estado está junto a un río o tiene una gran presa terminada: $building_wonder_hoover_dam$, $building_wonder_aswan_high_dam$, $building_wonder_itaipu_dam$ o $building_wonder_three_gorges_dam$"
+ },
  "building_hydro_plant_throughput_add": {
   "en": "Hydro Plant [concept_throughput]",
   "es": "[concept_throughput] de la central hidroeléctrica"
