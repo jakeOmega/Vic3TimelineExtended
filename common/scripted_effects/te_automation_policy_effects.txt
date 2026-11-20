@@ -8,9 +8,11 @@
 # Country scope, from on_monthly_pulse_country. The only writer of the share
 # and of the three scaled modifiers (the dynamic-modifier pattern,
 # docs/systems/mod_systems/dynamic_modifier_pattern.md):
-#   1. A country the group is open to (Humanoid Robotics, or a share law held
-#      without it: a revolution's winner, a released country) counts its
-#      automated share. Everyone else skips the walk.
+#   1. A country the group is open to (Industrial Robotics, the laws' own
+#      technology, or a share law held without it: a revolution's winner, a
+#      released country) counts its automated share. Everyone else skips the
+#      walk. The gate is the laws' technology so that Displaced Workers never
+#      runs where no law can answer it.
 #   2. Displacement's year: every twelfth count takes the share's rise since
 #      the count a year before (te_ap_disp_rise). The first count, in a new
 #      country or an old save, only sets the baseline, so what is already
@@ -27,7 +29,7 @@ te_ap_monthly_update = {
 	if = {
 		limit = {
 			OR = {
-				has_technology_researched = humanoid_robotics
+				has_technology_researched = robotics
 				te_ap_share_law = yes
 				has_law = law_type:law_human_labor_quotas
 			}

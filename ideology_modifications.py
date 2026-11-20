@@ -968,11 +968,12 @@ AUTOMATION_LISTS = {
 }
 # The movement ideologies below take these lists too, then
 # NEUTRAL_ON_LOCKED_DEFAULT (end of file) makes each neutral on Unrestricted
-# Automation: every country holds it from 1836 until Humanoid Robotics (era
-# 11), so a movement's stance on it is activism no law can answer. The labor
-# and socialist movements, the two vanilla's Reform or Revolution entry reads,
-# were the first (#1824: labor 0/+/++/+, socialists 0/+/+/++); the interest
-# groups' ideologies keep the lists as they are.
+# Automation: every country holds it from 1836 until Industrial Robotics (era
+# 8; Humanoid Robotics, era 11, until 2026-11-20), so a movement's stance on it
+# is activism no law can answer. The labor and socialist movements, the two
+# vanilla's Reform or Revolution entry reads, were the first (#1824: labor
+# 0/+/++/+, socialists 0/+/+/++); the interest groups' ideologies keep the
+# lists as they are.
 
 AUTOMATION_STANCES = {
     **{k: "free" for k in ("ideology_plutocratic", "ideology_laissez_faire", "ideology_market_liberal")},
@@ -4560,7 +4561,7 @@ for _ideology, _list in FRONTIER_AI_STANCES.items():
 # (test_movement_stance_guard.py covers movements only).
 LOCKED_DEFAULT_GROUPS = {
     # every country from 1836 (extra_history.txt); the first alternative at
-    # Humanoid Robotics, era 11
+    # Industrial Robotics, era 8 (Humanoid Robotics, era 11, until 2026-11-20)
     "law_unrestricted_automation": "lawgroup_automation_policy",
     # every country from 1836; Restorative Justice at Behaviorism (era 5),
     # Rehabilitation at Mental Health Awareness (era 10)

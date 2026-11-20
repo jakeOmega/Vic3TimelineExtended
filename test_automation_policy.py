@@ -39,7 +39,10 @@ LOC_DIR = os.path.join(REPO, "localization", "english")
 GROUP = "lawgroup_automation_policy"
 LAW_ORDER = ["law_unrestricted_automation", "law_robot_tax", "law_human_labor_quotas", "law_automation_dividend"]
 QUOTAS = "law_human_labor_quotas"
-TECH = "humanoid_robotics"
+# Industrial Robotics (era 8), which opens Robotic Assembly Lines, the first
+# marked methods. Humanoid Robotics (era 11) until 2026-11-20, when a country
+# could run three eras of robotic methods before any law could answer them.
+TECH = "robotics"
 SCALED = ("te_automation_robot_tax", "te_automation_dividend", "te_automation_displacement")
 # The robotic or AI-managed marker: a method carries it in its
 # building_modifiers' unscaled block, and te_ap_runs_automated_method reads it.
@@ -144,13 +147,19 @@ def _merged():
         import vanilla_parsed
         from mod_state import ModState
 
-        types = {"Buildings": "buildings", "PM Groups": "production_method_groups", "PMs": "production_methods"}
+        types = {"Buildings": "buildings", "PM Groups": "production_method_groups", "PMs": "production_methods",
+                 "Technologies": os.path.join("technology", "technologies")}
         snapshot = vanilla_parsed.load(os.path.join(REPO, "vanilla_parsed"))
         vanilla = {k: v for k, v in snapshot.data.items() if k in types}
         state = ModState({k: "" for k in types}, {k: os.path.join(REPO, "common", d) for k, d in types.items()},
                          vanilla_data=vanilla)
         _STATE = {k: {name: _body(v) for name, v in state.get_data(k).items()} for k in types}
     return _STATE
+
+
+def _era(techs, tech):
+    """A technology's era as a number (`era_8` -> 8)."""
+    return int(_body(techs[tech]["era"]).split("_")[1])
 
 
 def _body(value):
@@ -192,12 +201,29 @@ class LawTest(unittest.TestCase):
         for p in others:
             self.assertNotIn(GROUP, _read(p), p)
 
-    def test_humanoid_robotics_opens_the_other_three(self):
+    def test_industrial_robotics_opens_the_other_three(self):
         laws = _read(LAWS)
         for law in LAW_ORDER[1:]:
             body = _top_level(laws, law)
             self.assertEqual(_sub(body, "unlocking_technologies").split(), [TECH], law)
             self.assertNotIn("unlocking_laws", body, law)
+
+    def test_no_marked_method_opens_before_the_laws(self):
+        """The laws open with the first method they act on: a method that
+        opened in an earlier era could run unanswered until they did."""
+        techs = _merged()["Technologies"]
+        law_era = _era(techs, TECH)
+        unlocks = {pm: _names(_merged()["PMs"][pm].get("unlocking_technologies")) for pm in _marked()}
+        self.assertIn(TECH, {t for ts in unlocks.values() for t in ts})
+        for pm, ts in unlocks.items():
+            self.assertTrue(ts, pm)
+            self.assertGreaterEqual(min(_era(techs, t) for t in ts), law_era, pm)
+
+    def test_the_share_is_counted_from_the_laws_technology(self):
+        """The monthly count, and so Displaced Workers, starts where the laws
+        do, so no country pays for automating before a law can answer it."""
+        gate = _sub(_code(_top_level(_read(EFFECTS), "te_ap_monthly_update")), "limit")
+        self.assertEqual(re.findall(r"has_technology_researched = (\w+)", gate), [TECH])
 
     def test_every_1836_country_starts_on_the_default(self):
         history = _read(HISTORY)
