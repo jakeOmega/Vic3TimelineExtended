@@ -957,7 +957,7 @@ The engine tries to replace the retired leaders while the country has no culture
 
 After this, the groups keep a leader id that names no character in the save, so the engine never generates a new one. In the France game, 7 of the 8 groups of the rebels, who won and took the Bengal tag, still pointed at deleted characters nine years later. They were the only 7 among the save's 2,503 groups. Every `leader` read on them logs the pair in the `leader = { ... }` entry above. To read a group's leader id from a save, see the BINARY LAYOUT in `scripts/analysis/save_country_probe.py`.
 
-### `common/character_interactions/01_additional_interactions.txt:1007, 1302, 1312` — character interactions read the ruler of a country that has none
+### `common/character_interactions/01_additional_interactions.txt:1302, 1312` — character interactions read the ruler of a country that has none
 - stack: vanilla only
 
 ```
@@ -965,7 +965,7 @@ Event target link 'ruler' returned an invalid object
 Invalid right side during comparison 'ideology'
 ```
 
-The AI weights of vanilla's character interactions read the ruler with no guard: `this.ideology = owner.ruler.ideology` (line 1007) and `scope:actor ?= { ruler = { has_trait = cruel } }` (lines 1302 and 1312; the `?=` guards the actor, not its ruler). A country with no ruler logs the set. 2026-11-09: six lines in one second from the East India Liberal Revolt, twenty seconds after the Indian-revolution hack above had retired its characters (twelve `Invalid Culture scope when creating Character` lines, on the watch list below) and in the same second as its `Could not get leader of interest group` lines. Every line is at vanilla's file; an error in the mod's extra_interactions.txt would name that file.
+The AI weights of vanilla's character interactions read the ruler with no guard: `this.ideology = owner.ruler.ideology` (line 1007) and `scope:actor ?= { ruler = { has_trait = cruel } }` (lines 1302 and 1312; the `?=` guards the actor, not its ruler). A country with no ruler logs the set. 2026-11-09: six lines in one second from the East India Liberal Revolt, twenty seconds after the Indian-revolution hack above had retired its characters (twelve `Invalid Culture scope when creating Character` lines, on the watch list below) and in the same second as its `Could not get leader of interest group` lines. Every line is at vanilla's file; an error in the mod's extra_interactions.txt would name that file. Since 2026-11-20 line 1007 no longer loads: Grant Leadership (`grant_leadership_to_agitator`) is the mod's `REPLACE:` in `te_vanilla_women_in_office.txt`, which opens it to women under Protected Class and reads the ruler only behind `exists = owner.ruler`. A `ruler` line naming that file is the mod's.
 
 ### `common/journal_entries/00_grand_exhibition.txt:50, 56, 63, 70, 116` — the Grand Exhibition entry reads its points before they are set
 - stack: vanilla only
