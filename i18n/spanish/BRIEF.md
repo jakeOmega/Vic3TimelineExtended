@@ -113,6 +113,8 @@ Earlier passes settled these words too, which are too short or too common for th
 | receivership (a creditor running a debtor's finances) / its receiver | intervención («bajo nuestra intervención») / administrador; the treaty article Debt Receivership is *Intervención de la deuda* |
 | a rescue of a defaulted member / its terms | rescate / condiciones |
 | a common currency's adopter / issuer | adoptante, país que la adopta / emisor |
+| tooltip | descripción emergente |
+| the Full Demographics rule | la regla de Demografía completa |
 
 Names and titles take a capital on the first word only, as the official Spanish writes them: «Libre comercio», «Bloque de poder», «Industrias de armamento», «Anotación en el diario». Don't copy English Title Case. Proper names of real organisations keep their capitals («Naciones Unidas», «Banco Mundial»).
 

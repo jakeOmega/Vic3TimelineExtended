@@ -120,16 +120,16 @@
   "ru": "Тайная война: раннее открытие"
  },
  "setting_covert_warfare_early_unlock_desc": {
-  "en": "The [concept_covert_warfare_system] [concept_journal_entry] opens with $central_archives$. Until $mainframe_computers$ or the $law_ministry_of_intelligence_and_security$ law, funding stops at Professional, and only operations whose technology you have can be launched: espionage and wartime sabotage at first.",
-  "ru": "[concept_journal_entry] о [Concept('concept_covert_warfare_system','тайной войне')] открывается с технологией $central_archives$. До появления технологии $mainframe_computers$ или закона «$law_ministry_of_intelligence_and_security$» финансирование не поднимается выше уровня «Профессиональная», а запускать можно только операции, технологии для которых у вас есть: поначалу это шпионаж и диверсии военного времени."
+  "en": "The [concept_covert_warfare_system] [concept_journal_entry] opens with $central_archives$. Funding above Professional needs what opens it under Late Unlock, and only operations whose technology you have can be launched: espionage and wartime sabotage at first.",
+  "ru": "[concept_journal_entry] о [Concept('concept_covert_warfare_system','тайной войне')] открывается с технологией $central_archives$. Финансирование выше уровня «Профессиональная» требует того, что открывает её при позднем открытии, а запускать можно только операции, технологии для которых у вас есть: поначалу это шпионаж и диверсии военного времени."
  },
  "setting_covert_warfare_enabled": {
   "en": "Covert Warfare: Late Unlock",
   "ru": "Тайная война: позднее открытие"
  },
  "setting_covert_warfare_enabled_desc": {
-  "en": "The [concept_covert_warfare_system] [concept_journal_entry] opens with $mainframe_computers$ or the $law_ministry_of_intelligence_and_security$ law. Nations build [concept_intelligence_capacity] through technology and [concept_literacy], and launch [concept_covert_operations] against rivals.",
-  "ru": "[concept_journal_entry] о [Concept('concept_covert_warfare_system','тайной войне')] открывается с технологией $mainframe_computers$ или законом «$law_ministry_of_intelligence_and_security$». Страны наращивают [Concept('concept_intelligence_capacity','разведывательный потенциал')] за счёт технологий и [Concept('concept_literacy','грамотности')] и проводят [Concept('concept_covert_operations','тайные операции')] против соперников."
+  "en": "The [concept_covert_warfare_system] [concept_journal_entry] opens with $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ or $law_ministry_of_intelligence_and_security$. Nations build [concept_intelligence_capacity] through technology and [concept_literacy], and launch [concept_covert_operations] against rivals.",
+  "ru": "[concept_journal_entry] о [Concept('concept_covert_warfare_system','тайной войне')] открывается с «$mainframe_computers$», «$computer_networks$», «$cyber_warfare$», «$quantum_computing$» или «$law_ministry_of_intelligence_and_security$». Страны наращивают [Concept('concept_intelligence_capacity','разведывательный потенциал')] за счёт технологий и [Concept('concept_literacy','грамотности')] и проводят [Concept('concept_covert_operations','тайные операции')] против соперников."
  },
  "setting_cultural_hegemony_disabled": {
   "en": "Cultural Hegemony Disabled",

@@ -1927,6 +1927,22 @@
   "en": "No War After the Exchange",
   "ru": "После обмена войны не последовало"
  },
+ "notification_nd_high_alert_reminder_desc": {
+  "en": "Our nuclear forces have stood at #v High Alert#! for #v [GetPlayer.MakeScope.Var('nd_high_alert_quiet_months').GetValue|0]#! months with no crisis under way. In peacetime, incidents at High Alert are ten times as likely as at Routine, and crew strain, now #v [GetPlayer.MakeScope.ScriptValue('nd_display_strain')|0]#! of 100, raises the odds further. We can lower readiness under $nd_w_posture_header$, in the $te_military_tab_nuclear$ tab of the Military panel.",
+  "ru": "Наши ядерные силы находятся на уровне #v «Повышенная готовность»#! уже #v [GetPlayer.MakeScope.Var('nd_high_alert_quiet_months').GetValue|0]#! мес., хотя кризиса нет. В мирное время инциденты при повышенной готовности в десять раз вероятнее, чем при обычной, а напряжение экипажей, сейчас #v [GetPlayer.MakeScope.ScriptValue('nd_display_strain')|0]#! из 100, повышает шансы ещё больше. Снизить готовность можно в разделе «$nd_w_posture_header$» на вкладке «$te_military_tab_nuclear$» военной панели."
+ },
+ "notification_nd_high_alert_reminder_name": {
+  "en": "Forces Still on High Alert",
+  "ru": "Силы всё ещё в повышенной готовности"
+ },
+ "notification_nd_raze_foreign_assets_lost_desc": {
+  "en": "A nuclear weapon has destroyed buildings in [SCOPE.sCountry('nd_raze_owner').GetName] in which our investors held shares, and its government has taken every level still standing into state ownership. Our investors' shares in those buildings are gone.",
+  "ru": "Ядерное оружие уничтожило здания в стране [SCOPE.sCountry('nd_raze_owner').GetName], в которых наши инвесторы владели долями, и её правительство перевело все уцелевшие уровни в государственную собственность. Доли наших инвесторов в этих зданиях потеряны."
+ },
+ "notification_nd_raze_foreign_assets_lost_name": {
+  "en": "Holdings Abroad Nationalized",
+  "ru": "Активы за рубежом национализированы"
+ },
  "notification_rt_coal_retired_notice_desc": {
   "en": "Our retirement program has closed the $building_coal_mine$ in [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! levels, with @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! paid in compensation from the treasury.",
   "ru": "Наша программа вывода из эксплуатации закрыла здание $building_coal_mine$ в области [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! ур., из казны выплачена компенсация: @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#!."
@@ -2368,8 +2384,8 @@
   "ru": "Зерно из Всемирного продовольственного резерва"
  },
  "notification_un_force_war_goal_struck_notice_desc": {
-  "en": "We added a war goal against [SCOPE.sCountry('un_force_protected').GetName], which hosts a UN peacekeeping or stabilization mission. With the [concept_un_standing_force] in being and the United Nations at the Supranational tier, a member may press no further war goals on a country under its protection: ours have been struck from the play. Only the goal the play opened with, and others of its kind, may stay, at twice the usual [concept_infamy].",
-  "ru": "Мы добавили цель войны против страны [SCOPE.sCountry('un_force_protected').GetName], принимающей миротворческую или стабилизационную миссию ООН. При существующих [Concept('concept_un_standing_force','Постоянных силах ООН')] и Организации Объединённых Наций на уровне «Надгосударственный» член не может выдвигать дальнейшие цели войны против страны под её защитой: наши цели вычеркнуты из игры. Остаться могут только цель, с которой игра началась, и другие того же рода — с удвоенной обычной [Concept('concept_infamy','дурной славой')]."
+  "en": "We added a war goal against [SCOPE.sCountry('un_force_protected').GetName], which hosts a UN peacekeeping or stabilization mission. With the [concept_un_standing_force] in being and the United Nations at the Supranational tier, a member may press no further war goals on a country under its protection: ours have been struck from the play. A goal of ours of the same kind against another country in it may have gone with them, and if so the [concept_infamy] we paid for it has been returned. Only the goal the play opened with, and others of its kind, may stay, at twice the usual infamy.",
+  "ru": "Мы добавили цель войны против страны [SCOPE.sCountry('un_force_protected').GetName], принимающей миротворческую или стабилизационную миссию ООН. При существующих [Concept('concept_un_standing_force','Постоянных силах ООН')] и Организации Объединённых Наций на уровне «Надгосударственный» член не может выдвигать дальнейшие цели войны против страны под её защитой: наши цели вычеркнуты из игры. Цель нашей стороны того же рода против другой страны в этой игре могла уйти вместе с ними, и если так, то [Concept('concept_infamy','дурная слава')], которую мы за неё заплатили, возвращена. Остаться могут только цель, с которой игра началась, и другие того же рода — с удвоенной обычной дурной славой."
  },
  "notification_un_force_war_goal_struck_notice_name": {
   "en": "A War Goal Struck",

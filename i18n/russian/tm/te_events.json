@@ -14155,6 +14155,14 @@
   "en": "So this is how it ended.",
   "ru": "Вот чем всё закончилось."
  },
+ "nuclear_crisis.6.a_keep": {
+  "en": "Keep our forces at the readiness we have ordered.",
+  "ru": "Сохранить готовность наших сил на заданном нами уровне."
+ },
+ "nuclear_crisis.6.b": {
+  "en": "Stand our forces down to where they were before the crisis.",
+  "ru": "Вернуть наши силы к уровню готовности, который был до кризиса."
+ },
  "nuclear_crisis.6.d_backed_down_issuer": {
   "en": "We have withdrawn our nuclear threat against [SCOPE.sCountry('nd_target').GetName] without getting what we demanded, and the crisis is closed. The retreat has cost us credibility.",
   "ru": "Мы отозвали нашу ядерную угрозу в адрес страны [SCOPE.sCountry('nd_target').GetName], не получив того, что требовали, и кризис закрыт. Отступление стоило нам доверия."
@@ -15040,8 +15048,8 @@
   "ru": "Выяснить, откуда взялось оружие."
  },
  "nuclear_loose.2.d": {
-  "en": "A nuclear device has exploded in [SCOPE.sState('nd_loose_state').GetName]. No country has claimed it. Nothing was launched at us and nothing crossed our borders by air: the device was carried into the city and set off there. An estimated #v [SCOPE.sState('nd_loose_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! people are dead.",
-  "ru": "В области [SCOPE.sState('nd_loose_state').GetName] взорвано ядерное устройство. Ни одно государство не взяло ответственность. По нам ничего не запускали, и ничто не пересекало наши границы по воздуху: устройство ввезли в город и взорвали там. По оценкам, погибло #v [SCOPE.sState('nd_loose_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! человек."
+  "en": "A nuclear device has exploded in [SCOPE.sState('nd_loose_state').GetName]. No country has claimed it. Nothing was launched at us and nothing crossed our borders by air: the device was carried into the city and set off there. An estimated #v [SCOPE.sState('nd_loose_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! people are dead.[SCOPE.sState('nd_loose_state').GetCustom('nd_raze_line_victim')]",
+  "ru": "В области [SCOPE.sState('nd_loose_state').GetName] взорвано ядерное устройство. Ни одно государство не взяло ответственность. По нам ничего не запускали, и ничто не пересекало наши границы по воздуху: устройство ввезли в город и взорвали там. По оценкам, погибло #v [SCOPE.sState('nd_loose_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! человек.[SCOPE.sState('nd_loose_state').GetCustom('nd_raze_line_victim')]"
  },
  "nuclear_loose.2.f": {
   "en": "Orders from the emergency command to the rescue and medical crews going into [SCOPE.sState('nd_loose_state').GetName]:\\n\\nApproach from upwind, and stop at the line the survey teams have marked. Beyond it the ground is still too contaminated to work on for long.\\nWear the dosimeter on the outside of your clothing and hand it in at the end of each shift. Anyone whose reading has passed the limit is not to go back in, however short-handed the crew is.\\nDo not drink water or eat food found in the city. The supply is contaminated, and clean water is being brought in.\\nTake the injured to the reception points on the edge of the city. The hospitals nearest the blast cannot take anyone.\\nHold anyone found carrying parts of the device and hand them to the security services. The investigators need to know who handled it before it was set off.",
@@ -15368,24 +15376,24 @@
   "ru": "Никто не может отдавать приказы нашим боеголовкам, пока командование не будет восстановлено через две-четыре недели. Тогда мы решим, как отвечать, если война или мирный ядерный обмен ударами со страной [SCOPE.sCountry('attacking_country').GetName] всё ещё не закончен"
  },
  "nuclear_weapon_events.1.d": {
-  "en": "A nuclear weapon has been detonated in [SCOPE.sState('target_state').GetName] by [SCOPE.sCountry('attacking_country').GetName].",
-  "ru": "Страна [SCOPE.sCountry('attacking_country').GetName] взорвала ядерное оружие в области [SCOPE.sState('target_state').GetName]."
+  "en": "A nuclear weapon has been detonated in [SCOPE.sState('target_state').GetName] by [SCOPE.sCountry('attacking_country').GetName].[SCOPE.sState('target_state').GetCustom('nd_raze_line_victim')]",
+  "ru": "Страна [SCOPE.sCountry('attacking_country').GetName] взорвала ядерное оружие в области [SCOPE.sState('target_state').GetName].[SCOPE.sState('target_state').GetCustom('nd_raze_line_victim')]"
  },
  "nuclear_weapon_events.1.d_cut_off": {
-  "en": "[SCOPE.sCountry('attacking_country').GetName] has launched a salvo of nuclear weapons, and #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of its warheads got through, some of them on our capital. The government has gone silent. The chain that authorizes a nuclear launch is cut, and under [Concept('concept_launch_authority','Central Authorization')] nobody else may give the order until it is restored.",
-  "ru": "Страна [SCOPE.sCountry('attacking_country').GetName] выпустила залп ядерного оружия, и через нашу оборону прошло боеголовок: #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#!, часть из них — по нашей столице. Правительство замолчало. Цепочка санкционирования ядерного пуска разорвана, а по правилам [Concept('concept_launch_authority','Централизованного разрешения')] никто другой не вправе отдать приказ, пока она не будет восстановлена."
+  "en": "[SCOPE.sCountry('attacking_country').GetName] has launched a salvo of nuclear weapons, and #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of its warheads got through, some of them on our capital. The government has gone silent. The chain that authorizes a nuclear launch is cut, and under [Concept('concept_launch_authority','Central Authorization')] nobody else may give the order until it is restored.[ROOT.GetCountry.GetCustom('nd_raze_salvo_line_victim')]",
+  "ru": "Страна [SCOPE.sCountry('attacking_country').GetName] выпустила залп ядерного оружия, и через нашу оборону прошло боеголовок: #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#!, часть из них — по нашей столице. Правительство замолчало. Цепочка санкционирования ядерного пуска разорвана, а по правилам [Concept('concept_launch_authority','Централизованного разрешения')] никто другой не вправе отдать приказ, пока она не будет восстановлена.[ROOT.GetCountry.GetCustom('nd_raze_salvo_line_victim')]"
  },
  "nuclear_weapon_events.1.d_salvo_cities": {
-  "en": "[SCOPE.sCountry('attacking_country').GetName] has launched a salvo of nuclear weapons at our cities. #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of its warheads got through our defenses and detonated.",
-  "ru": "Страна [SCOPE.sCountry('attacking_country').GetName] выпустила залп ядерного оружия по нашим городам. Боеголовок, прорвавшихся через нашу оборону и взорвавшихся: #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#!."
+  "en": "[SCOPE.sCountry('attacking_country').GetName] has launched a salvo of nuclear weapons at our cities. #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of its warheads got through our defenses and detonated.[ROOT.GetCountry.GetCustom('nd_raze_salvo_line_victim')]",
+  "ru": "Страна [SCOPE.sCountry('attacking_country').GetName] выпустила залп ядерного оружия по нашим городам. Боеголовок, прорвавшихся через нашу оборону и взорвавшихся: #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#!.[ROOT.GetCountry.GetCustom('nd_raze_salvo_line_victim')]"
  },
  "nuclear_weapon_events.1.d_salvo_forces": {
   "en": "[SCOPE.sCountry('attacking_country').GetName] has launched a salvo of nuclear weapons at our nuclear forces. #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of its warheads struck the bases of our nuclear forces, and destroyed #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_destroyed').GetValue|0]#! of our warheads before they could fly.",
   "ru": "Страна [SCOPE.sCountry('attacking_country').GetName] выпустила залп ядерного оружия по нашим ядерным силам. Боеголовок, поразивших базы наших ядерных сил: #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#!; наших боеголовок, уничтоженных до пуска: #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_destroyed').GetValue|0]#!."
  },
  "nuclear_weapon_events.1.d_salvo_leadership": {
-  "en": "[SCOPE.sCountry('attacking_country').GetName] has launched a salvo of nuclear weapons at our capital. #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of its warheads struck it. The government survived, and our chain of command still holds.",
-  "ru": "Страна [SCOPE.sCountry('attacking_country').GetName] выпустила залп ядерного оружия по нашей столице. Боеголовок, поразивших её: #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#!. Правительство уцелело, и наша цепочка командования по-прежнему действует."
+  "en": "[SCOPE.sCountry('attacking_country').GetName] has launched a salvo of nuclear weapons at our capital. #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of its warheads struck it. The government survived, and our chain of command still holds.[ROOT.GetCountry.GetCustom('nd_raze_salvo_line_victim')]",
+  "ru": "Страна [SCOPE.sCountry('attacking_country').GetName] выпустила залп ядерного оружия по нашей столице. Боеголовок, поразивших её: #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#!. Правительство уцелело, и наша цепочка командования по-прежнему действует.[ROOT.GetCountry.GetCustom('nd_raze_salvo_line_victim')]"
  },
  "nuclear_weapon_events.1.e": {
   "en": "The system has already answered.",
@@ -15468,8 +15476,8 @@
   "ru": "Начать полномасштабный ядерный ответ"
  },
  "nuclear_weapon_events.11.d": {
-  "en": "A nuclear weapon has been detonated in [SCOPE.sState('target_state').GetName] by [SCOPE.sCountry('target_country').GetName].",
-  "ru": "Страна [SCOPE.sCountry('target_country').GetName] взорвала ядерное оружие в области [SCOPE.sState('target_state').GetName]."
+  "en": "A nuclear weapon has been detonated in [SCOPE.sState('target_state').GetName] by [SCOPE.sCountry('target_country').GetName].[SCOPE.sState('target_state').GetCustom('nd_raze_line_victim')]",
+  "ru": "Страна [SCOPE.sCountry('target_country').GetName] взорвала ядерное оружие в области [SCOPE.sState('target_state').GetName].[SCOPE.sState('target_state').GetCustom('nd_raze_line_victim')]"
  },
  "nuclear_weapon_events.11.f": {
   "en": "The rescue teams sent to [SCOPE.sState('target_state').GetName] stopped at the outskirts, where fallen buildings blocked the roads and heat still came off the ground. Their leader sent back the first estimate, #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! dead, with a note that it counted only the districts the teams could reach. From where they stood they could see smoke over the center and nothing standing in it. Survivors walked out toward them in ones and twos, burned on the side that had faced the flash. The teams set up a station on the road, gave water to everyone who came, and took down each person's name and the district they had come from.",
@@ -15484,8 +15492,8 @@
   "ru": "С тяжёлым сердцем мы признаём необходимость этого страшного шага."
  },
  "nuclear_weapon_events.12.d": {
-  "en": "Our [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] reached its target, and the warhead has detonated.",
-  "ru": "Наш [Concept('concept_nuclear_strike','ядерный удар')] по области [SCOPE.sState('target_state').GetName] достиг цели, боеголовка взорвалась."
+  "en": "Our [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] reached its target, and the warhead has detonated.[SCOPE.sState('target_state').GetCustom('nd_raze_line_attacker')]",
+  "ru": "Наш [Concept('concept_nuclear_strike','ядерный удар')] по области [SCOPE.sState('target_state').GetName] достиг цели, боеголовка взорвалась.[SCOPE.sState('target_state').GetCustom('nd_raze_line_attacker')]"
  },
  "nuclear_weapon_events.12.f": {
   "en": "\\\"I have come from the command post to tell the government what our answer did. Our warhead detonated over [SCOPE.sState('target_state').GetName]. The first estimate is #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! dead, in [concept_devastation] like the one they made of ours, and it will rise in the coming weeks. The crews did their work as they were trained to, and several of them asked me afterward whether it was over. I told them I did not know. [SCOPE.sCountry('attacking_country').GetName] can still answer us, and our forces will stay ready in case it does.\\\"",
@@ -15672,36 +15680,36 @@
   "ru": "Никто в этом правительстве этого не выбирал, но это сделано от нашего имени. Мы ответим за это."
  },
  "nuclear_weapon_events.2.d": {
-  "en": "Our [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] reached its target, and the warhead has detonated.",
-  "ru": "Наш [Concept('concept_nuclear_strike','ядерный удар')] по области [SCOPE.sState('target_state').GetName] достиг цели, боеголовка взорвалась."
+  "en": "Our [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] reached its target, and the warhead has detonated.[SCOPE.sState('target_state').GetCustom('nd_raze_line_attacker')]",
+  "ru": "Наш [Concept('concept_nuclear_strike','ядерный удар')] по области [SCOPE.sState('target_state').GetName] достиг цели, боеголовка взорвалась.[SCOPE.sState('target_state').GetCustom('nd_raze_line_attacker')]"
  },
  "nuclear_weapon_events.2.d_commander": {
-  "en": "One of our nuclear-armed units, cut off from the capital, has launched a [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] on its own authority, under the delegation we granted it.",
-  "ru": "Одна из наших частей с ядерным оружием, отрезанная от столицы, нанесла [Concept('concept_nuclear_strike','ядерный удар')] по области [SCOPE.sState('target_state').GetName] по собственному решению, в рамках делегированных ей нами полномочий."
+  "en": "One of our nuclear-armed units, cut off from the capital, has launched a [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] on its own authority, under the delegation we granted it.[SCOPE.sState('target_state').GetCustom('nd_raze_line_attacker')]",
+  "ru": "Одна из наших частей с ядерным оружием, отрезанная от столицы, нанесла [Concept('concept_nuclear_strike','ядерный удар')] по области [SCOPE.sState('target_state').GetName] по собственному решению, в рамках делегированных ей нами полномочий.[SCOPE.sState('target_state').GetCustom('nd_raze_line_attacker')]"
  },
  "nuclear_weapon_events.2.d_salvo": {
-  "en": "Our salvo has reached [SCOPE.sCountry('target_country').GetName]. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of our warheads got through its defenses and detonated.",
-  "ru": "Наш залп достиг страны [SCOPE.sCountry('target_country').GetName]. Наших боеголовок, прорвавшихся через её оборону и взорвавшихся: #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#!."
+  "en": "Our salvo has reached [SCOPE.sCountry('target_country').GetName]. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of our warheads got through its defenses and detonated.[SCOPE.sCountry('target_country').GetCustom('nd_raze_salvo_line_attacker')]",
+  "ru": "Наш залп достиг страны [SCOPE.sCountry('target_country').GetName]. Наших боеголовок, прорвавшихся через её оборону и взорвавшихся: #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#!.[SCOPE.sCountry('target_country').GetCustom('nd_raze_salvo_line_attacker')]"
  },
  "nuclear_weapon_events.2.d_salvo_cut_off": {
-  "en": "Our salvo has reached [SCOPE.sCountry('target_country').GetName]. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of our warheads got through, some of them on its capital, and its government has gone silent. Under [Concept('concept_launch_authority','Central Authorization')] nobody else there may order a nuclear launch until its command is restored, in two to four weeks.",
-  "ru": "Наш залп достиг страны [SCOPE.sCountry('target_country').GetName]. Наших боеголовок, прорвавшихся к цели: #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#!, часть из них — по её столице, и её правительство замолчало. По правилам [Concept('concept_launch_authority','Централизованного разрешения')] никто другой там не вправе отдать приказ о ядерном пуске, пока командование не будет восстановлено через две-четыре недели."
+  "en": "Our salvo has reached [SCOPE.sCountry('target_country').GetName]. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of our warheads got through, some of them on its capital, and its government has gone silent. Under [Concept('concept_launch_authority','Central Authorization')] nobody else there may order a nuclear launch until its command is restored, in two to four weeks.[SCOPE.sCountry('target_country').GetCustom('nd_raze_salvo_line_attacker')]",
+  "ru": "Наш залп достиг страны [SCOPE.sCountry('target_country').GetName]. Наших боеголовок, прорвавшихся к цели: #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#!, часть из них — по её столице, и её правительство замолчало. По правилам [Concept('concept_launch_authority','Централизованного разрешения')] никто другой там не вправе отдать приказ о ядерном пуске, пока командование не будет восстановлено через две-четыре недели.[SCOPE.sCountry('target_country').GetCustom('nd_raze_salvo_line_attacker')]"
  },
  "nuclear_weapon_events.2.d_salvo_forces": {
   "en": "Our salvo has reached the nuclear forces of [SCOPE.sCountry('target_country').GetName]. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of our warheads struck the bases of its nuclear forces, and destroyed #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_destroyed').GetValue|0]#! of its warheads before they could fly.",
   "ru": "Наш залп достиг ядерных сил страны [SCOPE.sCountry('target_country').GetName]. Наших боеголовок, поразивших базы её ядерных сил: #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#!; её боеголовок, уничтоженных до пуска: #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_destroyed').GetValue|0]#!."
  },
  "nuclear_weapon_events.2.d_salvo_leadership": {
-  "en": "Our salvo has reached the capital of [SCOPE.sCountry('target_country').GetName]. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of our warheads struck it, but its government survived, and its chain of command still holds.",
-  "ru": "Наш залп достиг столицы страны [SCOPE.sCountry('target_country').GetName]. Наших боеголовок, поразивших её: #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#!, но её правительство уцелело, и цепочка командования по-прежнему действует."
+  "en": "Our salvo has reached the capital of [SCOPE.sCountry('target_country').GetName]. #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#! of our warheads struck it, but its government survived, and its chain of command still holds.[SCOPE.sCountry('target_country').GetCustom('nd_raze_salvo_line_attacker')]",
+  "ru": "Наш залп достиг столицы страны [SCOPE.sCountry('target_country').GetName]. Наших боеголовок, поразивших её: #v [SCOPE.sCountry('target_country').MakeScope.Var('nd_salvo_seen_landed').GetValue|0]#!, но её правительство уцелело, и цепочка командования по-прежнему действует.[SCOPE.sCountry('target_country').GetCustom('nd_raze_salvo_line_attacker')]"
  },
  "nuclear_weapon_events.2.d_system": {
-  "en": "Our [concept_nuclear_strike] has fallen on [SCOPE.sState('target_state').GetName]. No one in the government ordered it: our automatic retaliation system read an accident on our own soil as an attack, and answered.",
-  "ru": "Наш [Concept('concept_nuclear_strike','ядерный удар')] пришёлся по области [SCOPE.sState('target_state').GetName]. Никто в правительстве его не приказывал: наша система автоматического возмездия приняла аварию на нашей собственной земле за нападение и ответила."
+  "en": "Our [concept_nuclear_strike] has fallen on [SCOPE.sState('target_state').GetName]. No one in the government ordered it: our automatic retaliation system read an accident on our own soil as an attack, and answered.[SCOPE.sState('target_state').GetCustom('nd_raze_line_attacker')]",
+  "ru": "Наш [Concept('concept_nuclear_strike','ядерный удар')] пришёлся по области [SCOPE.sState('target_state').GetName]. Никто в правительстве его не приказывал: наша система автоматического возмездия приняла аварию на нашей собственной земле за нападение и ответила.[SCOPE.sState('target_state').GetCustom('nd_raze_line_attacker')]"
  },
  "nuclear_weapon_events.2.d_warning": {
-  "en": "Our [concept_nuclear_strike] has fallen on [SCOPE.sState('target_state').GetName]. The order was given on the strength of an early warning that no second source had confirmed.",
-  "ru": "Наш [Concept('concept_nuclear_strike','ядерный удар')] пришёлся по области [SCOPE.sState('target_state').GetName]. Приказ был отдан на основании раннего предупреждения, которое не подтвердил ни один второй источник."
+  "en": "Our [concept_nuclear_strike] has fallen on [SCOPE.sState('target_state').GetName]. The order was given on the strength of an early warning that no second source had confirmed.[SCOPE.sState('target_state').GetCustom('nd_raze_line_attacker')]",
+  "ru": "Наш [Concept('concept_nuclear_strike','ядерный удар')] пришёлся по области [SCOPE.sState('target_state').GetName]. Приказ был отдан на основании раннего предупреждения, которое не подтвердил ни один второй источник.[SCOPE.sState('target_state').GetCustom('nd_raze_line_attacker')]"
  },
  "nuclear_weapon_events.2.f": {
   "en": "\\\"This is the strike report the government asked for, from the officers who carried it out. The warhead detonated over [SCOPE.sState('target_state').GetName] at the place we were ordered to strike. Our first estimate is #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! dead in the [concept_devastation], and the figure will rise: people die for weeks after a strike of this kind, from their burns and from the sickness. I have brought the targeting officers' reports, the order as it was given to us, and each confirmation with the hour it arrived. [SCOPE.sCountry('target_country').GetName] has not answered. Our forces are at the readiness the government set, and I am waiting for instructions on what we do if it does.\\\"",
@@ -16008,8 +16016,8 @@
   "ru": "Приказ готов: #R [ROOT.GetCountry.MakeScope.ScriptValue('nd_salvo_size_value')|0]#! боеголовок по ядерным силам страны [SCOPE.sCountry('nd_salvo_victim').GetName] и их базам. Расчёты удостоверили его подлинность и ждут лишь слова. После его отдачи отозвать приказ невозможно."
  },
  "nuclear_weapon_events.31.d_leadership": {
-  "en": "The order is ready: #R [ROOT.GetCountry.MakeScope.ScriptValue('nd_salvo_size_value')|0]#! warheads at the capital of [SCOPE.sCountry('nd_salvo_victim').GetName]. The crews have authenticated it and wait only for the word. Once it is given it cannot be recalled.",
-  "ru": "Приказ готов: #R [ROOT.GetCountry.MakeScope.ScriptValue('nd_salvo_size_value')|0]#! боеголовок по столице страны [SCOPE.sCountry('nd_salvo_victim').GetName]. Расчёты удостоверили его подлинность и ждут лишь слова. После его отдачи отозвать приказ невозможно."
+  "en": "The order is ready: #R [ROOT.GetCountry.MakeScope.ScriptValue('nd_salvo_size_value')|0]#! warheads at the leadership of [SCOPE.sCountry('nd_salvo_victim').GetName]: half at its capital, the rest one to a state, its military sites first. The crews have authenticated it and wait only for the word. Once it is given it cannot be recalled.",
+  "ru": "Приказ готов: #R [ROOT.GetCountry.MakeScope.ScriptValue('nd_salvo_size_value')|0]#! боеголовок по руководству страны [SCOPE.sCountry('nd_salvo_victim').GetName]: половина — по её столице, остальные — по одной на область, в первую очередь по областям с военными объектами. Расчёты удостоверили его подлинность и ждут лишь слова. После его отдачи отозвать приказ невозможно."
  },
  "nuclear_weapon_events.31.f": {
   "en": "The procedure the duty officer will follow once the government gives the word:\\n\\nThe order will be read to the crews in full and acknowledged by each of them, so that no crew acts on part of it.\\nOnce the first weapon has gone, nothing in the procedure allows the rest of the order to be withdrawn, and the crews have been told so.\\nTwo officers at every post will check the authorization against the codes they hold, because no single officer may release a weapon.\\nThe crews will report each launch as it happens, so that the government knows at every moment what has already gone.\\nThe duty officer will stay on the line to the government until the last report is in.",
@@ -25714,6 +25722,34 @@
  "te_seabed.3.t": {
   "en": "The Seabed Rush Begins",
   "ru": "Начинается гонка за морское дно"
+ },
+ "te_single_party_state.1.a": {
+  "en": "The [SCOPE.sParty('sps_green_party').GetName].",
+  "ru": "[SCOPE.sParty('sps_green_party').GetName]."
+ },
+ "te_single_party_state.1.b": {
+  "en": "The [SCOPE.sParty('sps_populist_party').GetName].",
+  "ru": "[SCOPE.sParty('sps_populist_party').GetName]."
+ },
+ "te_single_party_state.1.c": {
+  "en": "The [SCOPE.sParty('sps_technocratic_party').GetName].",
+  "ru": "[SCOPE.sParty('sps_technocratic_party').GetName]."
+ },
+ "te_single_party_state.1.d": {
+  "en": "[GetLawType('law_single_party_state').GetName] is being enacted. Once it passes, one party will be legal in [ROOT.GetCountry.GetName] and every other will be struck from the register of parties. The clerks drafting the law's final text have left a space for that party's name. It must be a party that is part of our [concept_government].",
+  "ru": "Закон «[GetLawType('law_single_party_state').GetName]» принимается. После его принятия в стране [ROOT.GetCountry.GetName] будет легальна одна партия, а все остальные будут вычеркнуты из реестра партий. Составители итогового текста закона оставили место для названия этой партии. Это должна быть партия, входящая в состав нашего [Concept('concept_government','правительства')]."
+ },
+ "te_single_party_state.1.e": {
+  "en": "One of the other parties in [concept_government].",
+  "ru": "Одна из других партий в [Concept('concept_government','правительстве')]."
+ },
+ "te_single_party_state.1.f": {
+  "en": "A party's general secretary, to its branch secretaries:\\n\\n\\\"The law will name one party, and every other will be outlawed. If the government names ours, members of the other parties who hold public posts will come to you asking to join. Take each one's name and old membership card and send them to me. Promise nobody that they will keep a post, because that is not ours to decide. If the government names another party, keep our own lists safe and wait for my instructions.\\\"",
+  "ru": "Генеральный секретарь одной из партий — секретарям её отделений:\\n\\n«Закон назовёт одну партию, а все остальные будут объявлены вне закона. Если правительство назовёт нашу, к вам придут члены других партий, занимающие государственные должности, и попросят принять их. Записывайте имя каждого и его старый партийный билет и присылайте мне. Никому не обещайте, что он сохранит должность: это не нам решать. Если правительство назовёт другую партию, берегите наши собственные списки и ждите моих указаний.»"
+ },
+ "te_single_party_state.1.t": {
+  "en": "The Sole Legal Party",
+  "ru": "Единственная легальная партия"
  },
  "te_union.1.a": {
   "en": "Our future is in the union.",

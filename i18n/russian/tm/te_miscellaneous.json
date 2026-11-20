@@ -4747,6 +4747,10 @@
   "en": "First Past the Post",
   "ru": "Мажоритарная система"
  },
+ "amendment_green_party_dominance": {
+  "en": "Green Party-State",
+  "ru": "Партийное государство зелёных"
+ },
  "amendment_habeas_corpus_suspension": {
   "en": "Suspension of Habeas Corpus",
   "ru": "Приостановка хабеас корпус"
@@ -4867,9 +4871,17 @@
   "en": "No-First-Strike Pledge",
   "ru": "Обязательство не наносить первый удар"
  },
+ "amendment_populist_party_dominance": {
+  "en": "Populist Party-State",
+  "ru": "Партийное государство популистов"
+ },
  "amendment_small_donor_matching": {
   "en": "Small Donor Matching",
   "ru": "Софинансирование мелких пожертвований"
+ },
+ "amendment_technocratic_party_dominance": {
+  "en": "Technocratic Party-State",
+  "ru": "Партийное государство технократов"
  },
  "amendment_undivided_farm_succession": {
   "en": "Undivided Farm Succession",
@@ -5436,8 +5448,8 @@
   "ru": "Для договорной привязки нет вашей ставки, которая её защищала бы, поэтому её [concept_banking_peg_confidence|l] ежемесячно меняется только по переоценке: +3, пока вы переоценены на 5 пунктов или меньше (+2 с 40, +1 с 70), −1 за каждые 2 пункта сверх 5 (четверть этого при контроле капитала) и +2 при наличии «$swap_line$». При 20 рынки заставляют решать: закрыть дверь, сломать привязку или привязать заново ниже."
  },
  "banking_dash_how_union": {
-  "en": "A power bloc's [concept_banking_monetary_union] principle has three tiers, each including the one before. #b Monetary cooperation:#! every member gets half a swap line from the leader, −0.5 points of risk premium and +1 peg confidence a month; the leader pays the usual cost, scaled by each member's GDP beside its own. #b Common currency:#! members may adopt the leader's money. An adopter has no dial: it takes the leader's rate with no spread, its exchange rate and up to 80% of its credibility, and gains +5% $state_export_advantage_mult$ and $state_import_advantage_mult$. There is no peg to break, so overvaluation beyond 5 points raises the adopter's risk premium by 0.1 a point instead. #b Fiscal backstop:#! the leader is lender of last resort to every adopter, paying half their debt-load premium, and a default calls the guarantee; the overvaluation premium is halved.",
-  "ru": "Принцип «[concept_banking_monetary_union]» силового блока имеет три уровня, каждый включает предыдущий. #b Денежное сотрудничество:#! каждый член получает от лидера половину валютного свопа, −0,5 пункта премии за риск и +1 к доверию к привязке в месяц; лидер платит обычную цену, масштабируемую ВВП каждого члена в сравнении с его собственным. #b Общая валюта:#! члены могут принять деньги лидера. У принявшего нет рычага: он берёт ставку лидера без спреда, его обменный курс и до 80% его доверия, и получает +5% $state_export_advantage_mult$ и $state_import_advantage_mult$. Привязки, которую можно сломать, нет, поэтому переоценка свыше 5 пунктов вместо этого повышает премию за риск принявшего на 0,1 за пункт. #b Бюджетная страховка:#! лидер — кредитор последней инстанции для каждого принявшего, оплачивая половину их премии за долговую нагрузку, а дефолт вызывает гарантию; премия за переоценку уменьшается вдвое."
+  "en": "A power bloc's [concept_banking_monetary_union] principle has five tiers, each including the ones before.\\n#b $principle_monetary_union_1$:#! every member gets half a swap line from the leader, −0.5 points of risk premium and +1 peg confidence a month; the leader pays the usual cost, scaled by each member's GDP beside its own.\\n#b $principle_monetary_union_2$:#! members may adopt the leader's money. An adopter has no dial: it takes the leader's rate with no spread, its exchange rate and up to 80% of its credibility, and gains +5% $state_export_advantage_mult$ and $state_import_advantage_mult$ and +2% $state_capitalists_investment_pool_contribution_add$ (none under $too_much_private_construction$). There is no peg to break, so overvaluation beyond 5 points raises the adopter's risk premium by 0.1 a point instead.\\n#b $principle_monetary_union_3$:#! the leader is lender of last resort to every adopter, paying half its debt-load premium unless a treaty guarantee or a receivership already does, and a default calls the guarantee; the overvaluation premium is halved.\\n#b $principle_monetary_union_4$:#! an adopter's crashes are 25% less likely and its cycle 25% less volatile, and it gains an intervention point and 3% pool contribution in all. Nobody under $law_unregulated_banking$ is in the banking union.\\n#b $principle_monetary_union_5$:#! adopters gain another +5% export and import advantage, 5% pool contribution in all and −0.25 points of credit standing, and countries pegged to the leader's money by treaty count toward its [concept_banking_currency_reach].\\nOnce a member has adopted the [concept_banking_common_currency], the leader shares its adopters' trade advantage, pool contribution and banking union, and gains up to three more intervention points by tier (none under $law_unregulated_banking$). It also earns seigniorage on the money it issues and a cut in its own risk premium, each the tier's figure times that reach. The Monetary Union row's tooltip gives its figures.",
+  "ru": "Принцип «[concept_banking_monetary_union]» силового блока имеет пять уровней, каждый включает предыдущие.\\n#b $principle_monetary_union_1$:#! каждый член получает от лидера половину валютного свопа, −0,5 пункта премии за риск и +1 к доверию к привязке в месяц; лидер платит обычную цену, масштабируемую ВВП каждого члена в сравнении с его собственным.\\n#b $principle_monetary_union_2$:#! члены могут принять деньги лидера. У принявшего нет рычага: он берёт ставку лидера без спреда, его обменный курс и до 80% его доверия, и получает +5% $state_export_advantage_mult$ и $state_import_advantage_mult$ и +2% $state_capitalists_investment_pool_contribution_add$ (ничего, если «$too_much_private_construction$»). Привязки, которую можно сломать, нет, поэтому переоценка свыше 5 пунктов вместо этого повышает премию за риск принявшего на 0,1 за пункт.\\n#b $principle_monetary_union_3$:#! лидер — кредитор последней инстанции для каждого принявшего, оплачивая половину его премии за долговую нагрузку, если её уже не оплачивает договорная гарантия или внешнее управление, а дефолт вызывает гарантию; премия за переоценку уменьшается вдвое.\\n#b $principle_monetary_union_4$:#! вероятность крахов у принявшего на 25% ниже, а волатильность его цикла на 25% меньше, и он получает пункт вмешательства и 3% вклада в пул по всем статьям. Никто при «$law_unregulated_banking$» не входит в банковский союз.\\n#b $principle_monetary_union_5$:#! принявшие получают ещё +5% преимущества экспорта и импорта, 5% вклада в пул по всем статьям и −0,25 пункта кредитоспособности, а страны, привязанные к деньгам лидера по договору, засчитываются в его [concept_banking_currency_reach|l].\\nКогда член принял [Concept('concept_banking_common_currency','общую валюту')], лидер делит с принявшими их торговое преимущество, вклад в пул и банковский союз и получает до трёх дополнительных пунктов вмешательства по уровням (ничего при «$law_unregulated_banking$»). Он также получает сеньораж с выпускаемых им денег и снижение собственной премии за риск, каждое — величина уровня, умноженная на этот охват. Цифры даёт подсказка строки «Валютный союз»."
  },
  "banking_dash_how_union_terms": {
   "en": "To adopt the common currency a member needs a fiat or digital currency with a national bank, inflation within 3 points of the leader's, and debt under half its credit limit, which is waived while the leader is pressing. Leaving drops the currency at once to where it would float, and costs +3 points of credit standing decaying over ten years, an investment-pool loss, radicals, the leader's relations and the bloc's cohesion, with no way back for ten years. A leader may press holdouts to converge at 50 influence per holdout. A pressed holdout loses the cooperation benefit and is put the question, and one that refuses costs the bloc cohesion and gains +250 $country_leverage_resistance_add$ for ten years.",
@@ -9184,12 +9196,12 @@
   "ru": "На Земле ничего не происходит. С месяца [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0], когда операция на этапе #Y Становление#!, огонь наших флотов по обороне каждой колонии цели #G +20%#!; с месяца [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], на #G Полной готовности#!, — #G +40%#!. Наша сеть, уже действующая у цели, сокращает ожидание, а приоритет 3 повышает его до #G +80%#!. Пока операция идёт, наша панель флотов точно показывает оборону, целостность и морскую пехоту колоний цели."
  },
  "covert_warfare_unlock_early_tt": {
-  "en": "$central_archives$, or an [Concept('concept_operation_slots', 'operation slot')] beyond what your rank grants, from $mainframe_computers$, $computer_networks$, $cyber_warfare$ or $quantum_computing$, or the $law_ministry_of_intelligence_and_security$ law",
-  "ru": "$central_archives$, или [Concept('concept_operation_slots', 'слот операции')] сверх положенного по вашему рангу — от «$mainframe_computers$», «$computer_networks$», «$cyber_warfare$» или «$quantum_computing$», либо закон «$law_ministry_of_intelligence_and_security$»"
+  "en": "$central_archives$, or an [Concept('concept_operation_slots', 'operation slot')] beyond what your rank grants, from $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ or $law_ministry_of_intelligence_and_security$",
+  "ru": "$central_archives$, или [Concept('concept_operation_slots', 'слот операции')] сверх положенного по вашему рангу — от «$mainframe_computers$», «$computer_networks$», «$cyber_warfare$», «$quantum_computing$» или «$law_ministry_of_intelligence_and_security$»"
  },
  "covert_warfare_unlock_tt": {
-  "en": "An [Concept('concept_operation_slots', 'operation slot')] beyond what your rank grants, from $mainframe_computers$, $computer_networks$, $cyber_warfare$ or $quantum_computing$, or the $law_ministry_of_intelligence_and_security$ law",
-  "ru": "[Concept('concept_operation_slots', 'Слот операции')] сверх положенного по вашему рангу — от «$mainframe_computers$», «$computer_networks$», «$cyber_warfare$» или «$quantum_computing$», либо закон «$law_ministry_of_intelligence_and_security$»"
+  "en": "An [Concept('concept_operation_slots', 'operation slot')] beyond what your rank grants, from $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ or $law_ministry_of_intelligence_and_security$",
+  "ru": "[Concept('concept_operation_slots', 'Слот операции')] сверх положенного по вашему рангу — от «$mainframe_computers$», «$computer_networks$», «$cyber_warfare$», «$quantum_computing$» или «$law_ministry_of_intelligence_and_security$»"
  },
  "cr_base_drift_tt": {
   "en": "Movement decay",
@@ -12128,8 +12140,8 @@
   "ru": "#b Момент#!\\nЧто принесло эту возможность. Каждый вид момента приносит свой бонус, когда возможность выполнена."
  },
  "gm_je_com_progress_tt": {
-  "en": "#b Grandeur raised#! #v [Country.MakeScope.ScriptValue('gm_disp_com_progress')|1]#! of #v [Country.MakeScope.ScriptValue('gm_disp_com_target')|1]#!\\nCounted in the starting grandeur of fitting monuments of its dedication dedicated since we seized it, a new one or one beside another; their years do not count. A counted monument that becomes contested stops counting.",
-  "ru": "#b Набрано величия#! #v [Country.MakeScope.ScriptValue('gm_disp_com_progress')|1]#! из #v [Country.MakeScope.ScriptValue('gm_disp_com_target')|1]#!\\nСчитается начальное величие подходящих монументов с этим посвящением, посвящённых с тех пор, как мы воспользовались возможностью, — новых или построенных рядом с другими; их возраст не учитывается. Засчитанный монумент, ставший спорным, перестаёт засчитываться."
+  "en": "#b Grandeur raised#! #v [Country.MakeScope.ScriptValue('gm_disp_com_progress')|1]#! of #v [Country.MakeScope.ScriptValue('gm_disp_com_target')|1]#!\\nCounted in the starting grandeur of fitting monuments of its dedication dedicated since we seized it, a new one or one beside another; their years do not count. A counted monument that becomes contested stops counting, and a buried site dug up meanwhile never counts.",
+  "ru": "#b Набрано величия#! #v [Country.MakeScope.ScriptValue('gm_disp_com_progress')|1]#! из #v [Country.MakeScope.ScriptValue('gm_disp_com_target')|1]#!\\nСчитается начальное величие подходящих монументов с этим посвящением, посвящённых с тех пор, как мы воспользовались возможностью, — новых или построенных рядом с другими; их возраст не учитывается. Засчитанный монумент, ставший спорным, перестаёт засчитываться, а захороненный объект, раскопанный за это время, не засчитывается никогда."
  },
  "gm_je_com_reward": {
   "en": "Completed: #G +[Country.MakeScope.ScriptValue('gm_com_gift')|0]#! [concept_grandeur], approval and #b [Country.GetCustom('gm_com_boon_name')]#!",
@@ -16988,8 +17000,8 @@
   "ru": "#lore Если это раскроется, когда война уже началась, мир пожмёт плечами — диверсии между воюющими сторонами ничего не стоят. Если раскроется в преддверии войны, это будет выглядеть как её провоцирование и обойдётся в столько же дурной славы, как попытка свергнуть правительство.#!"
  },
  "iw_funding_early_cap_tt": {
-  "en": "Funding above Professional needs $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ or the $law_ministry_of_intelligence_and_security$ law (early unlock)",
-  "ru": "Финансирование выше уровня «Профессиональная» требует: $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ или закона «$law_ministry_of_intelligence_and_security$» (раннее открытие)"
+  "en": "Funding above Professional needs $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ or $law_ministry_of_intelligence_and_security$ (early unlock)",
+  "ru": "Финансирование выше уровня «Профессиональная» требует: $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ или «$law_ministry_of_intelligence_and_security$» (раннее открытие)"
  },
  "iw_funding_name_0": {
   "en": "Dormant",
@@ -18064,12 +18076,12 @@
   "ru": "Уступающая сторона сносит стройплощадку орбитальной боевой станции, теряя прогресс, и #v 10#! лет не начинает новую. Уже достроенные уровни остаются."
  },
  "nd_concession_long_2": {
-  "en": "The side that concedes loses #R 15#! war support in the war, and if it leads its side, the side drops its war goals against the other side.",
-  "ru": "Уступающая сторона теряет #R 15#! поддержки войны в этой войне, а если она возглавляет свою сторону, эта сторона отказывается от целей войны против другой стороны."
+  "en": "The side that concedes loses #R 15#! war support in the war and drops its own war goals against the other side, whether or not it leads its side. Its allies keep theirs.",
+  "ru": "Уступающая сторона теряет #R 15#! поддержки войны в этой войне и отказывается от собственных целей войны против другой стороны, независимо от того, возглавляет ли она свою сторону. Её союзники свои цели сохраняют."
  },
  "nd_concession_long_3": {
-  "en": "The side that concedes leaves the protected country alone: it backs down in the play, or in a war loses #R 15#! war support and, if it leads its side, drops the side's goals against it.",
-  "ru": "Уступающая сторона оставляет защищаемую страну в покое: отступает в игре, а в войне теряет #R 15#! поддержки войны и, если возглавляет свою сторону, отказывается от целей этой стороны против неё."
+  "en": "The side that concedes leaves the protected country alone: it backs down in the play, or in a war loses #R 15#! war support and drops its own goals against it. Its allies keep theirs.",
+  "ru": "Уступающая сторона оставляет защищаемую страну в покое: отступает в игре, а в войне теряет #R 15#! поддержки войны и отказывается от собственных целей против неё. Её союзники свои цели сохраняют."
  },
  "nd_concession_long_4": {
   "en": "The side that concedes has its weapons program frozen for #v 10#! years.",
@@ -18104,12 +18116,12 @@
   "ru": "Они снесли стройплощадку своей боевой станции и на десять лет заморозили новые."
  },
  "nd_concession_past_they_2": {
-  "en": "Their war support in our war fell by #R 15#!, and if they led their side, it dropped its war goals against us.",
-  "ru": "Их поддержка войны в нашей войне упала на #R 15#!, а если они возглавляли свою сторону, она отказалась от целей войны против нас."
+  "en": "Their war support in our war fell by #R 15#!, and they dropped their own war goals against us.",
+  "ru": "Их поддержка войны в нашей войне упала на #R 15#!, и они отказались от собственных целей войны против нас."
  },
  "nd_concession_past_they_3": {
-  "en": "They left the country we protect alone: they backed down in the play, or their war support fell by #R 15#! and, if they led their side, it dropped its goals against it.",
-  "ru": "Они оставили в покое страну, которую мы защищаем: отступили в игре, или их поддержка войны упала на #R 15#! и, если они возглавляли свою сторону, она отказалась от своих целей против неё."
+  "en": "They left the country we protect alone: they backed down in the play, or their war support fell by #R 15#! and they dropped their own goals against it.",
+  "ru": "Они оставили в покое страну, которую мы защищаем: отступили в игре, или их поддержка войны упала на #R 15#! и они отказались от собственных целей против неё."
  },
  "nd_concession_past_they_4": {
   "en": "Their weapons program is frozen for #v 10#! years.",
@@ -18144,12 +18156,12 @@
   "ru": "Мы снесли стройплощадку нашей боевой станции и на десять лет заморозили новые."
  },
  "nd_concession_past_we_2": {
-  "en": "Our war support in the war with them fell by #R 15#!, and if we led our side, it dropped its war goals against them.",
-  "ru": "Наша поддержка войны в войне с ними упала на #R 15#!, а если мы возглавляли свою сторону, она отказалась от целей войны против них."
+  "en": "Our war support in the war with them fell by #R 15#!, and we dropped our own war goals against them.",
+  "ru": "Наша поддержка войны в войне с ними упала на #R 15#!, и мы отказались от собственных целей войны против них."
  },
  "nd_concession_past_we_3": {
-  "en": "We left the country they protect alone: we backed down in the play, or our war support fell by #R 15#! and, if we led our side, it dropped its goals against it.",
-  "ru": "Мы оставили в покое страну, которую они защищают: отступили в игре, или наша поддержка войны упала на #R 15#! и, если мы возглавляли свою сторону, она отказалась от своих целей против неё."
+  "en": "We left the country they protect alone: we backed down in the play, or our war support fell by #R 15#! and we dropped our own goals against it.",
+  "ru": "Мы оставили в покое страну, которую они защищают: отступили в игре, или наша поддержка войны упала на #R 15#! и мы отказались от собственных целей против неё."
  },
  "nd_concession_past_we_4": {
   "en": "Our weapons program is frozen for #v 10#! years.",
@@ -18810,6 +18822,42 @@
  "nd_public_guarantee_word_none": {
   "en": "None",
   "ru": "Нет"
+ },
+ "nd_raze_city_tt": {
+  "en": "Destroys a share of the levels of the state's industry, power plants, transport and offices: the share of its urban people living in its largest city, from 10% to 80%, or half outside the Full Demographics rule. The state's owner takes every level still standing in those buildings into state ownership.",
+  "ru": "Уничтожает часть уровней промышленности, электростанций, транспорта и учреждений области: долю городского населения, живущего в её крупнейшем городе, от 10% до 80%, или половину вне режима «Полное» правила «Демография». Владелец области переводит все уцелевшие уровни в этих зданиях в государственную собственность."
+ },
+ "nd_raze_line_attacker_lost": {
+  "en": "\\n\\n#v [ROOT.GetState.MakeScope.Var('nd_raze_lost').GetValue|0]#! levels of buildings in [ROOT.GetState.GetName] have been destroyed.",
+  "ru": "\\n\\nУничтожено #v [ROOT.GetState.MakeScope.Var('nd_raze_lost').GetValue|0]#! уровней зданий в области [ROOT.GetState.GetName]."
+ },
+ "nd_raze_line_attacker_nat": {
+  "en": "\\n\\n#v [ROOT.GetState.MakeScope.Var('nd_raze_lost').GetValue|0]#! levels of buildings in [ROOT.GetState.GetName] have been destroyed. #v [ROOT.GetState.MakeScope.Var('nd_raze_nat').GetValue|0]#! levels still stand in the buildings the blast reached, and the government of [ROOT.GetState.GetOwner.GetName] has taken all of them into state ownership.",
+  "ru": "\\n\\nУничтожено #v [ROOT.GetState.MakeScope.Var('nd_raze_lost').GetValue|0]#! уровней зданий в области [ROOT.GetState.GetName]. Уцелело #v [ROOT.GetState.MakeScope.Var('nd_raze_nat').GetValue|0]#! уровней в зданиях, которых достиг взрыв, и правительство страны [ROOT.GetState.GetOwner.GetName] перевело их все в государственную собственность."
+ },
+ "nd_raze_line_victim_lost": {
+  "en": "\\n\\n#R [ROOT.GetState.MakeScope.Var('nd_raze_lost').GetValue|0]#! levels of buildings in [ROOT.GetState.GetName] have been destroyed.",
+  "ru": "\\n\\nУничтожено #R [ROOT.GetState.MakeScope.Var('nd_raze_lost').GetValue|0]#! уровней зданий в области [ROOT.GetState.GetName]."
+ },
+ "nd_raze_line_victim_nat": {
+  "en": "\\n\\n#R [ROOT.GetState.MakeScope.Var('nd_raze_lost').GetValue|0]#! levels of buildings in [ROOT.GetState.GetName] have been destroyed. #v [ROOT.GetState.MakeScope.Var('nd_raze_nat').GetValue|0]#! levels still stand in the buildings the blast reached, and we have taken every one of them into state ownership.",
+  "ru": "\\n\\nУничтожено #R [ROOT.GetState.MakeScope.Var('nd_raze_lost').GetValue|0]#! уровней зданий в области [ROOT.GetState.GetName]. Уцелело #v [ROOT.GetState.MakeScope.Var('nd_raze_nat').GetValue|0]#! уровней в зданиях, которых достиг взрыв, и мы перевели их все в государственную собственность."
+ },
+ "nd_raze_salvo_line_attacker_lost": {
+  "en": "\\n\\nWhere our warheads fell, #v [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_razed').GetValue|0]#! levels of buildings have been destroyed.",
+  "ru": "\\n\\nТам, куда упали наши боеголовки, уничтожено #v [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_razed').GetValue|0]#! уровней зданий."
+ },
+ "nd_raze_salvo_line_attacker_nat": {
+  "en": "\\n\\nWhere our warheads fell, #v [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_razed').GetValue|0]#! levels of buildings have been destroyed. #v [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_razed_nat').GetValue|0]#! levels still stand in the buildings the blasts reached, and the government of [ROOT.GetCountry.GetName] has taken all of them into state ownership.",
+  "ru": "\\n\\nТам, куда упали наши боеголовки, уничтожено #v [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_razed').GetValue|0]#! уровней зданий. Уцелело #v [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_razed_nat').GetValue|0]#! уровней в зданиях, которых достигли взрывы, и правительство страны [ROOT.GetCountry.GetName] перевело их все в государственную собственность."
+ },
+ "nd_raze_salvo_line_victim_lost": {
+  "en": "\\n\\nWhere the warheads fell, #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_razed').GetValue|0]#! levels of buildings have been destroyed.",
+  "ru": "\\n\\nТам, куда упали боеголовки, уничтожено #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_razed').GetValue|0]#! уровней зданий."
+ },
+ "nd_raze_salvo_line_victim_nat": {
+  "en": "\\n\\nWhere the warheads fell, #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_razed').GetValue|0]#! levels of buildings have been destroyed. #v [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_razed_nat').GetValue|0]#! levels still stand in the buildings the blasts reached, and we have taken every one of them into state ownership.",
+  "ru": "\\n\\nТам, куда упали боеголовки, уничтожено #R [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_razed').GetValue|0]#! уровней зданий. Уцелело #v [ROOT.GetCountry.MakeScope.Var('nd_salvo_seen_razed_nat').GetValue|0]#! уровней в зданиях, которых достигли взрывы, и мы перевели их все в государственную собственность."
  },
  "nd_readiness_0": {
   "en": "Recessed",
@@ -20035,6 +20083,10 @@
   "en": "  Their arsenal could disarm ours first: up to #R -15#!",
   "ru": "  Их арсенал мог бы обезвредить наш первым: до #R -15#!"
  },
+ "nd_tt_open_f_forfeit": {
+  "en": "  Conceding would cost them their own war goals against us: up to #R -20#!",
+  "ru": "  Уступка стоила бы им их собственных целей войны против нас: до #R -20#!"
+ },
  "nd_tt_open_f_losing": {
   "en": "  They are losing the war to us: #G +15#!",
   "ru": "  Они проигрывают нам войну: #G +15#!"
@@ -20080,8 +20132,8 @@
   "ru": "Повод: #v их силы рядом с нами#!: базируемое оружие или гарантия в стране рядом с нами, либо противоракетная оборона на нашей границе. Если они уступят, они отводят всё это и #v 10#! лет не возобновляют ничего из этого"
  },
  "nd_tt_open_over_guarantee": {
-  "en": "Over: #v the country we protect#!. If they concede, they leave it alone: they back down in the play, or in a war their war support falls by #R 15#! and, if they lead their side, it drops its goals against it",
-  "ru": "Повод: #v страна, которую мы защищаем#!. Если они уступят, они оставляют её в покое: отступают в игре, а в войне их поддержка войны падает на #R 15#! и, если они возглавляют свою сторону, она отказывается от своих целей против неё"
+  "en": "Over: #v the country we protect#!. If they concede, they leave it alone: they back down in the play, or in a war their war support falls by #R 15#! and they drop their own goals against it, whether or not they lead their side. Their allies keep theirs",
+  "ru": "Повод: #v страна, которую мы защищаем#!. Если они уступят, они оставляют её в покое: отступают в игре, а в войне их поддержка войны падает на #R 15#! и они отказываются от собственных целей против неё, независимо от того, возглавляют ли они свою сторону. Их союзники свои цели сохраняют"
  },
  "nd_tt_open_over_orbital": {
   "en": "Over: #v their Orbital Battlestation under construction#!. If they concede, they tear the site down, lose its progress and start no new one for #v 10#! years",
@@ -20100,8 +20152,8 @@
   "ru": "Повод: #v их программа вооружений#!. Если они уступят, она замораживается на #v 10#! лет"
  },
  "nd_tt_open_over_war": {
-  "en": "Over: #v our war with them#!. If they concede, their war support falls by #R 15#!, and if they lead their side, it drops its war goals against us",
-  "ru": "Повод: #v наша война с ними#!. Если они уступят, их поддержка войны падает на #R 15#!, а если они возглавляют свою сторону, она отказывается от целей войны против нас"
+  "en": "Over: #v our war with them#!. If they concede, their war support falls by #R 15#! and they drop their own war goals against us, whether or not they lead their side. Their allies keep theirs",
+  "ru": "Повод: #v наша война с ними#!. Если они уступят, их поддержка войны падает на #R 15#!, и они отказываются от собственных целей войны против нас, независимо от того, возглавляют ли они свою сторону. Их союзники свои цели сохраняют"
  },
  "nd_tt_open_stakes_bluff": {
   "en": "If this bluff is called, every government will know it: #R 5#! more credibility lost",
@@ -20404,8 +20456,8 @@
   "ru": "Наша программа вооружений заморожена на #v 10#! лет"
  },
  "nd_tt_yield_guarantee": {
-  "en": "We leave the country they protect alone: we back down in the play, or in a war our war support falls by #R 15#! and, if we lead our side, we drop our goals against it",
-  "ru": "Мы оставляем в покое страну, которую они защищают: отступаем в игре, а в войне наша поддержка войны падает на #R 15#! и, если мы возглавляем свою сторону, мы отказываемся от своих целей против неё"
+  "en": "We leave the country they protect alone: we back down in the play, or in a war our war support falls by #R 15#! and we drop our own goals against it, and any to free or take one of its subjects, whether or not we lead our side. Our allies keep theirs. A goal of ours of the same kind against another country in that war may go with them",
+  "ru": "Мы оставляем в покое страну, которую они защищают: отступаем в игре, а в войне наша поддержка войны падает на #R 15#! и мы отказываемся от собственных целей против неё, а также от любых целей освободить или забрать одно из её зависимых государств, независимо от того, возглавляем ли мы свою сторону. Наши союзники свои цели сохраняют. Вместе с ними может уйти и наша цель того же рода против другой страны в этой войне"
  },
  "nd_tt_yield_orbital": {
   "en": "We tear down our Orbital Battlestation construction site, losing its progress, and start no new site for #v 10#! years. Levels already finished stay",
@@ -20420,8 +20472,8 @@
   "ru": "Мы выплачиваем репарации за свой ядерный удар — около десятой части годового дохода — и на #v 20#! лет открываем свой арсенал для инспекций, получая «Инспекции хранения» (#R −5#! легитимности, ослабевает в течение десяти лет)"
  },
  "nd_tt_yield_war": {
-  "en": "Our war support in the war falls by #R 15#!. If we lead our side, we drop our war goals against them, and any of the same kind our side holds in that war",
-  "ru": "Наша поддержка войны в этой войне падает на #R 15#!. Если мы возглавляем свою сторону, мы отказываемся от целей войны против них и от всех таких же целей, которые наша сторона держит в этой войне"
+  "en": "Our war support in the war falls by #R 15#!, and we drop our own war goals against them, and any to free or take one of their subjects, whether or not we lead our side. Our allies keep theirs. A goal of ours of the same kind against another country in that war may go with them",
+  "ru": "Наша поддержка войны в этой войне падает на #R 15#!, и мы отказываемся от собственных целей войны против них, а также от любых целей освободить или забрать одно из их зависимых государств, независимо от того, возглавляем ли мы свою сторону. Наши союзники свои цели сохраняют. Вместе с ними может уйти и наша цель того же рода против другой страны в этой войне"
  },
  "nd_w_arsenal_label": {
   "en": "Warheads held",
@@ -20564,8 +20616,8 @@
   "ru": "Уступить"
  },
  "nd_w_crisis_actions_legend": {
-  "en": "Each side makes its own moves: ours are the buttons under Our Moves, and the other side answers through its own decisions. A crisis also ends if the war or play it is about ends, and it lapses after a year. A crisis is over a diplomatic play, a war, a guarantee, a nuclear strike outside a war, a weapons program, forces deployed next to the other side, claims on the other's land, covert operations, an orbital battlestation or forces on alert; the side that concedes backs down in the play, loses 15 war support (and if it leads its side, drops the side's goals), leaves the protected country alone, pays reparations and opens its arsenal to inspection, has its program frozen for ten years, pulls its forces back, renounces its claims, ends the operations it was caught running, tears down its battlestation site (the forces, operations and site each barred for ten years) or stands its forces down for two. Stages are not a ladder to war: a crisis can be settled at any of them. Over deployment, claims, covert operations or a battlestation, when each side holds the same against the other, either side may offer a trade instead: each gives up the same, and neither is seen to back down.",
-  "ru": "Каждая сторона делает собственные ходы: наши — это кнопки под заголовком «Наши ходы», а другая сторона отвечает своими решениями. Кризис также заканчивается, если заканчивается война или игра, из-за которых он возник, и истекает через год. Кризис возникает из-за дипломатической игры, войны, гарантии, ядерного удара вне войны, программы вооружений, сил, развёрнутых рядом с другой стороной, притязаний на землю другой стороны, тайных операций, орбитальной боевой станции или сил в боевой готовности; уступающая сторона отступает в игре, теряет 15 поддержки войны (а если она возглавляет свою сторону, та отказывается от своих целей), оставляет защищаемую страну в покое, выплачивает репарации и открывает свой арсенал для инспекций, получает заморозку программы на десять лет, отводит свои силы, отказывается от притязаний, прекращает операции, на которых её поймали, сносит стройплощадку боевой станции (силам, операциям и площадке запрещено возвращаться на десять лет) или на два года понижает готовность своих сил. Стадии — не лестница к войне: кризис можно урегулировать на любой из них. Когда из-за развёртывания, притязаний, тайных операций или боевой станции каждая сторона держит против другой одно и то же, любая сторона может предложить обмен вместо этого: каждая отказывается от одного и того же, и никто не выглядит отступившим."
+  "en": "Each side makes its own moves: ours are the buttons under Our Moves, and the other side answers through its own decisions. A crisis also ends if the war or play it is about ends, and it lapses after a year. A crisis is over a diplomatic play, a war, a guarantee, a nuclear strike outside a war, a weapons program, forces deployed next to the other side, claims on the other's land, covert operations, an orbital battlestation or forces on alert; the side that concedes backs down in the play, loses 15 war support and drops its own war goals, leaves the protected country alone, pays reparations and opens its arsenal to inspection, has its program frozen for ten years, pulls its forces back, renounces its claims, ends the operations it was caught running, tears down its battlestation site (the forces, operations and site each barred for ten years) or stands its forces down for two. Stages are not a ladder to war: a crisis can be settled at any of them. Over deployment, claims, covert operations or a battlestation, when each side holds the same against the other, either side may offer a trade instead: each gives up the same, and neither is seen to back down.",
+  "ru": "Каждая сторона делает собственные ходы: наши — это кнопки под заголовком «Наши ходы», а другая сторона отвечает своими решениями. Кризис также заканчивается, если заканчивается война или игра, из-за которых он возник, и истекает через год. Кризис возникает из-за дипломатической игры, войны, гарантии, ядерного удара вне войны, программы вооружений, сил, развёрнутых рядом с другой стороной, притязаний на землю другой стороны, тайных операций, орбитальной боевой станции или сил в боевой готовности; уступающая сторона отступает в игре, теряет 15 поддержки войны и отказывается от собственных целей войны, оставляет защищаемую страну в покое, выплачивает репарации и открывает свой арсенал для инспекций, получает заморозку программы на десять лет, отводит свои силы, отказывается от притязаний, прекращает операции, на которых её поймали, сносит стройплощадку боевой станции (силам, операциям и площадке запрещено возвращаться на десять лет) или на два года понижает готовность своих сил. Стадии — не лестница к войне: кризис можно урегулировать на любой из них. Когда из-за развёртывания, притязаний, тайных операций или боевой станции каждая сторона держит против другой одно и то же, любая сторона может предложить обмен вместо этого: каждая отказывается от одного и того же, и никто не выглядит отступившим."
  },
  "nd_w_crisis_backdown_effect": {
   "en": "Threat dropped",
@@ -20932,8 +20984,8 @@
   "ru": "Надёжность командования"
  },
  "nd_w_reliability_tt": {
-  "en": "#tooltip_header Command Reliability#!\\n$TOOLTIP_DELIMITER$\\nHow well the chain of command holds under pressure. Safeguards, satellite communications and a Nuclear Command Center on a colony raise it; crew strain, an enemy's sabotage of our communications, a buried incident or a punished skeptic lower it. It makes incidents rarer and decides whether a delegated launch sequence is halted.",
-  "ru": "#tooltip_header Надёжность командования#!\\n$TOOLTIP_DELIMITER$\\nНасколько устойчива цепочка командования под давлением. Её повышают меры безопасности, спутниковая связь и Ядерный командный центр в колонии; понижают напряжение экипажей, вражеский саботаж нашей связи, скрытый инцидент или наказанный скептик. Она делает инциденты реже и определяет, будет ли остановлена делегированная последовательность пуска."
+  "en": "#tooltip_header Command Reliability#!\\n$TOOLTIP_DELIMITER$\\nHow well the chain of command holds under pressure. Safeguards, satellite communications and a Nuclear Command Center on a colony raise it; crew strain, an enemy's sabotage of our communications, a buried incident or a punished skeptic lower it. It makes incidents rarer and decides whether a delegated launch sequence is halted. Under [Concept('concept_launch_authority','Central Authorization')] it also moves our [concept_command_redundancy]: #G +1#! for each 10 above 50, #R −1#! for each 10 below.",
+  "ru": "#tooltip_header Надёжность командования#!\\n$TOOLTIP_DELIMITER$\\nНасколько устойчива цепочка командования под давлением. Её повышают меры безопасности, спутниковая связь и Ядерный командный центр в колонии; понижают напряжение экипажей, вражеский саботаж нашей связи, скрытый инцидент или наказанный скептик. Она делает инциденты реже и определяет, будет ли остановлена делегированная последовательность пуска. При [Concept('concept_launch_authority','Централизованном разрешении')] она также меняет наше [Concept('concept_command_redundancy','резервирование командования')]: #G +1#! за каждые 10 выше 50, #R −1#! за каждые 10 ниже."
  },
  "nd_w_reputation_header": {
   "en": "Reputation",
@@ -20996,8 +21048,8 @@
   "ru": "Руководство"
  },
  "nd_w_strike_mission_3_tt": {
-  "en": "#tooltip_header Leadership#!\\n$TOOLTIP_DELIMITER$\\nEvery warhead on their capital. Under [Concept('concept_launch_authority','Central Authorization')], enough of them can cut the chain of command for two to four weeks, and nobody can order their warheads until it is restored. A country with more warheads, satellite communications or mainframe computers takes more. Other launch authorities cannot be cut off.",
-  "ru": "#tooltip_header Руководство#!\\n$TOOLTIP_DELIMITER$\\nВсе боезаряды на их столицу. При [Concept('concept_launch_authority','централизованном разрешении')] их достаточно, чтобы на две-четыре недели разорвать цепочку командования, и никто не сможет отдавать приказы об их боезарядах, пока она не будет восстановлена. Страна с большим числом боезарядов, спутниковой связью или мейнфреймами несёт больший урон. Другие виды права на запуск отрезать нельзя."
+  "en": "#tooltip_header Leadership#!\\n$TOOLTIP_DELIMITER$\\nHalf the warheads on their capital, the first among them, and the rest one each on other states, those with military sites first. Under [Concept('concept_launch_authority','Central Authorization')], enough of them can cut the chain of command for two to four weeks, and nobody can order their warheads until it is restored. Every warhead that lands counts. There is no chance until more land than their [concept_command_redundancy], and then it rises fast: three in four when twice as many land. Other launch authorities cannot be cut off.",
+  "ru": "#tooltip_header Руководство#!\\n$TOOLTIP_DELIMITER$\\nПоловина боеголовок — на их столицу, начиная с первой, остальные — по одной на другие области, в первую очередь на области с военными объектами. При [Concept('concept_launch_authority','Централизованном разрешении')] их достаточно, чтобы на две-четыре недели разорвать цепочку командования, и никто не сможет отдавать приказы об их боеголовках, пока она не будет восстановлена. Учитывается каждая долетевшая боеголовка. Шанса нет, пока не долетит больше боеголовок, чем составляет их [Concept('concept_command_redundancy','резервирование командования')], а затем он быстро растёт: три из четырёх, когда долетает вдвое больше. Другие виды права на запуск отрезать нельзя."
  },
  "nd_w_strike_mission_sub": {
   "en": "Mission",
@@ -21044,8 +21096,8 @@
   "ru": "Живучесть"
  },
  "nd_w_survivability_tt": {
-  "en": "#tooltip_header Survivability#!\\n$TOOLTIP_DELIMITER$\\nHow much of our force would ride out a first strike. A crisis counts all of it only at High Alert: nine tenths at Heightened, four fifths at Routine, half at Recessed; now #v [Country.MakeScope.ScriptValue('nd_effective_survivability')|0]#!. Below 50 a crisis is more dangerous and a launch less likely to be halted.",
-  "ru": "#tooltip_header Живучесть#!\\n$TOOLTIP_DELIMITER$\\nКакая часть наших сил переживёт первый удар. Кризис учитывает её целиком только при повышенной готовности: девять десятых при усиленной, четыре пятых при обычной, половину при пониженной; сейчас #v [Country.MakeScope.ScriptValue('nd_effective_survivability')|0]#!. Ниже 50 кризис опаснее, а пуск с меньшей вероятностью будет остановлен."
+  "en": "#tooltip_header Survivability#!\\n$TOOLTIP_DELIMITER$\\nHow much of our force would ride out a first strike. A crisis counts all of it only at High Alert: nine tenths at Heightened, four fifths at Routine, half at Recessed; now #v [Country.MakeScope.ScriptValue('nd_effective_survivability')|0]#!. Below 50 a crisis is more dangerous and a launch less likely to be halted. Each 20 adds #G +1#! [concept_command_redundancy].",
+  "ru": "#tooltip_header Живучесть#!\\n$TOOLTIP_DELIMITER$\\nКакая часть наших сил переживёт первый удар. Кризис учитывает её целиком только при повышенной готовности: девять десятых при усиленной, четыре пятых при обычной, половину при пониженной; сейчас #v [Country.MakeScope.ScriptValue('nd_effective_survivability')|0]#!. Ниже 50 кризис опаснее, а пуск с меньшей вероятностью будет остановлен. Каждые 20 добавляют #G +1#! к [Concept('concept_command_redundancy','резервированию командования')]."
  },
  "nd_w_survivors_label": {
   "en": "First-strike survivors",
@@ -21182,6 +21234,10 @@
  "nd_yp_follow_through_line": {
   "en": "#v [THIS.Var('nd_yp_follow_through').GetValue|+0]#!  Whether the threat can be carried out",
   "ru": "#v [THIS.Var('nd_yp_follow_through').GetValue|+0]#!  Можно ли привести угрозу в исполнение"
+ },
+ "nd_yp_forfeit_line": {
+  "en": "#v [THIS.Var('nd_yp_forfeit').GetValue|+0]#!  The war goals the threatened side would give up by conceding",
+  "ru": "#v [THIS.Var('nd_yp_forfeit').GetValue|+0]#!  Цели войны, от которых откажется находящаяся под угрозой сторона, уступив"
  },
  "nd_yp_issuer_exposure_line": {
   "en": "#v [THIS.Var('nd_yp_issuer_exposure').GetValue|+0]#!  Whether the threatened side could disarm the threatening side first",
@@ -23828,8 +23884,8 @@
   "ru": "Поставить в очередь Секретный объект: #v +1#! к разведывательному потенциалу и #v +3%#! к эффективности тайных операций за укомплектованный уровень."
  },
  "sr_mod_queue_bunker_tt": {
-  "en": "Queue a Nuclear Command Center: #v +4#! nuclear command reliability a staffed level, at most #v +12#!.",
-  "ru": "Поставить в очередь Ядерный командный центр: #v +4#! к надёжности ядерного командования за укомплектованный уровень, не более #v +12#!."
+  "en": "Queue a Nuclear Command Center: a staffed level gives #v +4#! nuclear command reliability, at most #v +12#!, and #v +2#! [concept_command_redundancy], at most #v +6#!.",
+  "ru": "Поставить в очередь Ядерный командный центр: каждый укомплектованный уровень даёт #v +4#! к надёжности ядерного командования, не более #v +12#!, и #v +2#! к [Concept('concept_command_redundancy','резервированию командования')], не более #v +6#!."
  },
  "sr_mod_queue_culture_tt": {
   "en": "Queue a Cultural Center: #v +3%#! cultural pull and #v +1%#! prestige a staffed level.",
@@ -35718,6 +35774,10 @@
  "te_seabed_weight_tt_southern": {
   "en": "Claim weight in the Southern Ocean: #v [Country.MakeScope.ScriptValue('te_seabed_w_disp_southern')|1]#! of the basin's #v [Country.MakeScope.ScriptValue('te_seabed_world_w_disp_southern')|1]#!, as of the last sharing.\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_home_disp_southern'), '(CFixedPoint)0' ), 'te_seabed_weight_home_southern', 'te_seabed_weight_far_southern' )]",
   "ru": "Вес притязаний в Южном океане: #v [Country.MakeScope.ScriptValue('te_seabed_w_disp_southern')|1]#! из #v [Country.MakeScope.ScriptValue('te_seabed_world_w_disp_southern')|1]#! по бассейну, по состоянию на последний раздел.\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_home_disp_southern'), '(CFixedPoint)0' ), 'te_seabed_weight_home_southern', 'te_seabed_weight_far_southern' )]"
+ },
+ "te_single_party_state_another_party_tt": {
+  "en": "We will choose from the other parties in [concept_government] at the first later checkpoint of the enactment that does not stall.",
+  "ru": "Мы выберем одну из других партий в [Concept('concept_government','правительстве')] на ближайшем последующем этапе принятия закона, который не будет приостановлен."
  },
  "te_society_ch_open_journal_tt": {
   "en": "Opens $je_cultural_hegemony$ in the journal, which shows these same panels.",
