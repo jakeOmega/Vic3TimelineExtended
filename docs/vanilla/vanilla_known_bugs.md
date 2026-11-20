@@ -1518,6 +1518,15 @@ has_law_or_variant trigger [ Given law is a variant, we expect the parent ]
 
 The event's `trigger` asks whether a neighboring state's owner `has_law_or_variant = root.currently_enacting_law.type`, and the trigger takes a parent law, so while the law being enacted is a variant (Okhrana, Bakufu, Homesteading and the rest of vanilla 1.15's 22) every evaluation logs once. 55 lines in three minutes on 2026-11-05. The line predates 1.15; vanilla's variants made it reachable. The mod's only variant is vanilla's `law_official_nationality`, replaced in place.
 
+### `events/law_events/law_events_01.txt:421` — the playwright event's cancellation trigger reads the enacting law after the enactment ends
+- stack: vanilla only
+
+```
+Event target link 'currently_enacting_law' returned an invalid object
+```
+
+`generic_laws.4` (a play for the law being enacted, fired from `on_law_checkpoint_advance`, three days long) saves the enacting law in `immediate` and cancels on `NOT = { currently_enacting_law = scope:current_law_scope }`. Once the enactment has ended (passed, failed or cancelled) while the event waits, there is no enacting law to compare and the link logs; the event is cancelled either way, which is what the trigger is for. Vanilla's: the mod has no copy of `events/law_events/`, never fires `generic_laws.4`, and the line had no mod frame. One line, 2026-11-19 (1978.5.18, 1.15.2).
+
 ### `events/karl_marx_events.txt:428` — Marx's event makes an immortal character immortal again (1.15)
 
 ```
