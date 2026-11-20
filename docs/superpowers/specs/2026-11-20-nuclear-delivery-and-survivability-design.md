@@ -153,51 +153,104 @@ When both 2 and 3 hold, a war or crisis with an out-of-reach country puts ICBMs 
 
 Every value a decision rests on is shown where the decision is made, in the units of its outcome, on the panel or one hover away. A choice shows what it changes, not only what it is called. Numbers live in script values and reach the panel through them; nothing is restated in `.gui` or loc (`docs/guides/gui_style_guide.md`, and the widget's editing rules in `docs/systems/journal_entry_systems.md`). A figure in a hover is a numeric display modifier or a script value, never words in a boolean's name (`.claude/rules/script.md`).
 
-### 5.2 Hidden on purpose
+### 5.2 Hidden on purpose, and the world's view
 
-These stay hidden; the panel shows the world's view in their place, labelled as an estimate.
-
-- **Another country's true arsenal.** The world sees `nd_shown_public_estimate`, never the stockpile, in any figure, hover, loc splice or chart (owner rule, `mod_systems/nuclear.md`, National Info; `test_nuclear_layout.py`'s `PrivateTest`).
-- **Another country's own survivability, readiness, safeguards, hardening and command reliability.** A preview of a strike on it reads what the world can know: its public estimate, its launch authority and doctrine (both public), its technologies and fielded legs (public), so its survivability **target**, taken at Heightened. The believed command redundancy already leaves reliability out (`nd_redundancy_believed`).
-- **Chance itself.** Incident rolls, a strike's roll and attribution are random. Their odds are shown, not their outcomes.
+**Hidden:**
+- **Another country's true arsenal.** The world sees `nd_shown_public_estimate`, never the stockpile, in any figure, hover, loc splice or chart (owner rule; `mod_systems/nuclear.md`, National Info; `test_nuclear_layout.py`'s `PrivateTest`).
+- **Outside a crisis, another country's readiness, survivability, safeguards, hardening and command reliability.** Inside a crisis the danger breakdown already gives each side the other's readiness and the threatening side's command reliability (`nd_cd_*_line`, `te_miscellaneous_l_english.yml:5182–5187`; `nuclear_deterrence_values.txt:1330–1367`), and the more vulnerable side's effective survivability below 50 (`:1426`). That stays.
+- **Chance itself.** Incident rolls, a strike's roll and attribution are random: their odds are shown, not their outcomes.
 - **The AI's weights.**
+
+**Public:** doctrine and launch authority (owner, rework spec §14.2), technologies, and the fielded legs (§2). The leak test still lists `nd_authority` as private (`TRUE_VARS`, `test_nuclear_layout.py:1201`). Phase 1 takes it off that list, citing the owner's ruling, and shows another country's authority beside its doctrine.
+
+**The world's view of another country** is what every preview of it reads:
+- its shown public estimate (`nd_shown_public_estimate`, which is 0 until seeded; never `nd_believed_stockpile`, which falls back to the live count, `nuclear_deterrence_values.txt:2614–2633`);
+- its doctrine, authority, technologies and fielded legs, and so its survivability target;
+- its readiness from the crisis panel in a crisis, else Heightened;
+- its safeguards unknown.
+
+The target is an upper bound: a force that stops hardening decays toward 30% of it. Unknown safeguards can cut a fast authority's credit by up to 0.15 (`:747–757`). So a preview prints a range: against a force at its target with full credit, and against one at its floor with the credit cut by 0.15.
+
+**Where the code reads more than the world's view today** (open question 5):
+- When one side's crisis pressure counts the other side's survivors, it reads the other side's true state (`nd_yp_issuer_exposure_line`; `nuclear_deterrence_values.txt:1479–1533`). The opening preview's "survivable" line reads the target's true survivors (`nuclear_crisis_effects.txt:189–206`). A side's own survivors are its own to know, and stay true.
+- `nd_redundancy_believed`, which the AI's Leadership planning reads, adds the target's true survivability ÷ 20 (`nuclear_deterrence_values.txt:801`). It also reads `nd_believed_stockpile` and its live-count fallback.
 
 ### 5.3 Inventory: each decision and what it rests on
 
-"Today" is what the panel shows as of this spec; the audit in §5.5 checks it against the code.
+"Today" is what the panel shows as of this spec, checked by the audit in §5.5.
 
 | Decision | What it rests on | Today | This spec |
 |---|---|---|---|
 | Programme focus (new) | Each option's progress and months to finish at current funding; what it grants (reach, the survivability target before and after, the counterforce ratio, the authorities it unlocks, attack success, upkeep); warheads not built meanwhile; what holds it | — | The Focus rows (§5.4) |
 | Programme funding | Innovation cost, progress a month, time to the next warhead or to the project's end, what holds funding | Stepper, cost, rate and its sources, time to next warhead | The rate and time follow the focus |
-| Hardening | Cost a week; survivability now, its target and floor; this month's step; months to come within 5 of the target | Cost; bar with target line and the rise or fall still to come; the hover says only "climb faster" | Each level's hover: the monthly step and the months to within 5, at that level and the next |
-| Safeguards | Cost; command reliability; chance of a halt; the launch credit each level takes away | Cost; reliability and halt rows; the credit cut as a modifier line | Unchanged, plus the warheads a full strike would then destroy |
-| Launch authority | Launch credit; warheads a full strike by the main rival would destroy under each; accident exposure under each; decapitation immunity; custody loss; upkeep | Modifier lines (credit, immunity, unapproved launches, halt chance, custody loss) | Each option's hover adds the warheads lost to a full strike under it and the change in incident exposure |
+| Hardening | Cost a week; survivability now, its target and floor; this month's step; how fast the gap closes | Cost; the bar with the ceiling line (`nuclear_deterrence_widget.gui:2096`) and the rise or fall still to come; the floor never printed (`nuclear_deterrence_values.txt:2319–2348`); the stepper says only "climbs faster" (`te_miscellaneous_l_english.yml:5703`) | The target line; the floor printed; each level's hover gives this month's step and the months to close half the gap (about 34, 17 and 11 at levels 1–3: constants, since script values have no logarithm, pinned to the 2% rate by a test) |
+| Safeguards | Cost; reliability target; chance of a halt; the launch credit each level takes away | Cost; reliability and halt rows; the credit cut as a modifier line; the stepper says only "improves over the coming months" (`:5705`); the +12 reliability target and +5 halt chance a level (`nuclear_deterrence_values.txt:243`, `:534`) printed nowhere | Both per level, and the warheads a full strike would destroy at the new level |
+| Launch authority | Launch credit; warheads a full strike by the main rival would destroy; the chance of a halt; whether a warning reaches the government; the cut-off commander's eligibility; decapitation immunity and our own command redundancy; custody loss; upkeep | Modifier lines (credit, immunity, unapproved launches, −10 halt under Launch on Warning, custody loss); Automatic Retaliation's upkeep (`te_miscellaneous_l_english.yml:5602`); Central's three-quarters rule in words (`:5834`). Not shown: our command redundancy as a number (only the concept's formula, `te_concepts_l_english.yml:763`), the halt chance under each option, the warheads saved | Each option's hover adds the warheads lost to a full strike under it and the halt chance under it; Central's adds our command redundancy. Incident exposure has no authority term (`nuclear_deterrence_values.txt:422–433`), so it isn't shown per option |
 | Readiness | Upkeep; the survivability a crisis counts; incident exposure; crisis danger | Upkeep and counted survivability per level; modifier lines | Each level adds the warheads lost to a full strike |
 | Doctrine | Strike gates, taboo and infamy costs, interest-group views | Modifier lines, the taboo section's costs, At Home | Unchanged |
-| Arsenal ceiling and dismantling | Warheads held, the world's estimate, tighter ceilings, restraint groups' easing | Arsenal rows | Unchanged; the ceiling's hover says it holds warheads only, not projects |
-| Strike: Cities | Odds of getting through per state, deaths, the share of buildings razed, taboo, infamy, UN record | Odds; success tooltip with the razed share; the size tooltip's √ rule | Unchanged |
-| Strike: Forces | Warheads the salvo would destroy, how many would fly first under their launch authority, what survives to answer | Words only (`nd_w_strike_mission_2_tt`) | Expected destroyed, expected to fly first and their survivors, from the world's view (§5.2), at the salvo size set |
-| Strike: Leadership | Decapitation chance at the salvo size, their command redundancy as believed | Words and the rule ("three in four when twice as many land") | The chance at the salvo size set, from the believed redundancy |
-| Crisis moves | Pressure and danger by part, survivors on each side, follow-through | Breakdowns of both; follow-through | The survivors parts show the accuracy multiplier when it applies |
-| Others' delivery (new) | Which legs each armed country fields, hence whom it can reach | Reach row lists who we reach by bomber | A delivery line per country in Nuclear Powers and National Info's public row |
+| Arsenal ceiling and dismantling | Warheads held, the world's estimate, tighter ceilings, the burden and upkeep at the new size, restraint groups' easing | Arsenal rows; today's burden and the size at which restraint groups ease (`te_journal_entries_l_english.yml:1038`; `te_miscellaneous_l_english.yml:5484`) | The stepper's hover adds the burden and upkeep at the next size, and says a ceiling holds warheads only, not a project |
+| Strike: Cities | Warheads expected to land, deaths, the share of buildings razed, taboo, infamy, UN record | The mission's hover is words only (`:6007`). The Launch Order gives one warhead's infamy and relations cost and the √ rule (`:5555`). The odds and the razed share are shown only for the single-city diplomatic action (`extra_effects.txt:752–754`) | Expected landed, deaths and razed share for the salvo as set |
+| Strike: Forces | Warheads the salvo would destroy, how many would fly first under their launch authority, what survives to answer | Words only (`:6009`) | The range (§5.2) of destroyed, flown first and their survivors, at the salvo size set |
+| Strike: Leadership | Decapitation chance at the salvo size, their command redundancy | Words and the rule ("three in four when twice as many land", `:6011`) | The chance at the salvo size set, from the world's view of their redundancy |
+| Opening a warning or ultimatum (added) | The pressure and danger it would open at | The preview gives pressure factors as ranges ("up to −25", `:5725–5733`), no starting total and no danger figure | The starting pressure and danger totals |
+| Crisis moves | Pressure and danger by part, survivors on each side, follow-through, what each move changes | Both breakdowns and follow-through. Survivors appear only as pressure points that stop changing at three survivors (`nd_yp_answer_line`, `nd_yp_issuer_exposure_line`, `:6058`, `:6065`). Go public's +10 danger and its move to stage 2 aren't in its hover (`:5580`, `:5671`) | The survivors behind those parts printed beside them, the accuracy multiplier when it applies; Go public's hover gives its danger and stage change |
+| Launch under attack (`nuclear_incident.1.c`, added) | Our survivors against the suspect if we wait; the price of a first use if the warning is false | Words only (`:5692`). Our survivors against the suspect are computed (`nuclear_deterrence_effects.txt:1717`) but read only by the AI's chance | Both figures in the option's hover |
+| Disavow our strikes (added) | The chance the victim believes us; the price of a lie found out | Words only (`:5921`) | Both: the chance from `nd_claim_belief_value` (`nuclear_deterrence_values.txt:2206`), the price from the script values it already applies |
+| Nuclear Basing and Nuclear Guarantee articles (added) | −10 survivability against the guest for the host's neighbors (`nuclear_deterrence_values.txt:849`); a third of the guest's accidents in the host; the −10/−20 pressure a guarantor gives (`:1539`); the cost of leaving | Words only (`te_concepts_l_english.yml:2151`, `:2167`) | The figures in the descriptions, from the script values |
+| Others' delivery (new) | Which legs each armed country fields, hence whom it can reach | The Reach row lists whom we reach by bomber | A delivery column in Nuclear Powers, a row in National Info's public view |
 
 ### 5.4 Panel changes
 
-- **The Programme** (`nuclear_program_widget.gui`). A Focus subsection, open: three choice rows (`nd_choice_row`, the option in focus tinted), shown from the first device on, each greyed with its missing requirement. Each row shows its progress and months to finish. Its hover lists what fielding it grants as display modifier lines (`script_only` numeric types: `country_nd_exposure_mult` for the factor, `country_nd_k_ratio_add`, `country_nuclear_weapon_attack_success_add`, `country_nd_upkeep_units_add`; booleans only for rules without a quantity, such as reach to every state and the authorities it unlocks), then the survivability target before and after, the countries in reach before and after, and the warheads the months in focus will not build. The handler is `nuclear_program_focus_sgui` (ops 1 Warheads, 2 ICBMs, 3 Missile Submarines), `ai_is_valid = { always = no }`, and its op table goes in the sgui header, the `.gui` header and `journal_entry_systems.md`.
+- **The Programme** (`nuclear_program_widget.gui`).
+  - A Focus subsection, open, shown from the first device on: three choice rows (`nd_choice_row`, the option in focus tinted), each greyed with its missing requirement and showing its progress and months to finish.
+  - Each row's hover lists what fielding it grants as display modifier lines. These use `script_only` numeric types: `country_nd_exposure_mult` for the factor, `country_nd_k_ratio_add`, `country_nuclear_weapon_attack_success_add` and `country_nd_upkeep_units_add`. Booleans are only for rules without a quantity, such as reach to every state and the authorities it unlocks. The hover then gives the survivability target before and after, the countries in reach before and after, and the warheads the months in focus will not build.
+  - The handler is `nuclear_program_focus_sgui` (ops 1 Warheads, 2 ICBMs, 3 Missile Submarines), with `ai_is_valid = { always = no }`. Its op table goes in the sgui header, the `.gui` header and `journal_entry_systems.md`.
 - **Forces** (`nuclear_deterrence_widget.gui`).
-  - Survivability: the ceiling line becomes the target line. Its hover is the chain, one line per part with its factor and whether it is held, then the exposed share and the target. The row's hover adds the readiness factor in force.
-  - A new **Launch credit** row after Survivors: the share, its hover naming the authority's credit and each safeguards level's cut.
-  - Survivors' hover adds the accuracy multiplier line when the main rival has Precision-Guided Munitions and we field silos.
-  - Reach reads "every country" with ICBMs, and "and coasts" with fielded submarines (`nd_reach_value`).
-- **Posture.** Each launch authority option's hover and each readiness row add "a full strike by <main rival> would destroy N of our M": a script value per option, like `nd_effective_survivability_at_readiness_0`–`_3`. Authority options also show the weekly incident exposure under them from the factors `nd_risk_breakdown_sgui` already prints.
-- **Strike.** The Forces and Leadership missions show the expected result of the salvo as set (§5.3), labelled as an estimate, and refresh with the size stepper.
-- **Nuclear Powers and National Info.** A delivery column (bombers, ICBMs, submarines as icons) for each listed country; another country's National Info public row shows its legs. `PrivateTest` lists the leg variables as public.
+  - **Survivability.** The ceiling line becomes the target line and the floor is printed. Its hover already gives the readiness factors and the effective figure (`te_miscellaneous_l_english.yml:6025`). The hover then adds the chain: one line per part with its factor and whether it is held, then the exposed share and the target.
+  - **A new Launch credit row** after Survivors: the share, with a hover naming the authority's credit and each safeguards level's cut.
+  - **Survivors.** Today it is refreshed monthly and in the AI review (`nd_refresh_main_rival`, `nuclear_deterrence_effects.txt:451`, `:523`, `:3729`). It now also refreshes on every posture op, so it follows a click. Its hover adds the accuracy multiplier line when the main rival has Precision-Guided Munitions and we field silos.
+  - **Reach.** The row is hidden today once ICBMs are researched (`nd_reach_limited_sgui`, `nuclear_deterrence_sguis.txt:440–446`). It is shown while armed instead, reading "every country" with ICBMs and "and coasts" with fielded submarines (`nd_reach_value`).
+- **Posture.**
+  - Each launch authority option's hover adds "a full strike by <main rival> would destroy N of our M" and the halt chance under it. Each readiness row adds the same strike figure.
+  - The GUI can't take the rival from a variable as a scope (`gui_modding_guide.md` gotchas #11 and #15), so `nd_refresh_main_rival` stores these figures, one per option, as it stores `nd_survivors_main`.
+  - That needs exposure values per readiness (only `_r2_vs_saved` exists, `nuclear_deterrence_values.txt:895`) and a launch credit per authority (`nd_launch_credit` reads the authority in force, `:739`).
+- **Strike.**
+  - The Cities, Forces and Leadership previews are stored on every planner op in `nd_plan_refresh`, which already runs then and weekly. A scripted GUI that saves a temporary scope is the other route; the self-check `nd_trigger_temp_scope` (`nuclear_deterrence_effects.txt:1094–1113`) tests it.
+  - The formulas exist: destroyed and flown first (`nuclear_deterrence_values.txt:1033–1059`), decapitation (`:1070–1088`).
+  - Warheads expected to land: the sum of the per-state odds over the states the mission would pick, picked by the salvo's own picker and the marks cleared after. If that picker can't run outside the salvo, fall back to the capital's odds for every warhead, as the AI does (`nd_ai_capital_hit_share`, `:1184`).
+  - Each preview is labelled an estimate.
+- **Crisis.** The survivors beside the pressure parts that count them; Go public's danger and stage change in its hover; the opening preview's starting totals.
+- **Events.** `nuclear_incident.1.c` and the disavowal's figures, through `custom_tooltip` lines on the options.
+- **Treaty articles.** Nuclear Basing's and Nuclear Guarantee's descriptions take their figures from the script values.
+- **Nuclear Powers and National Info.** A delivery column (bombers, ICBMs, submarines as icons) and the launch authority for each listed country; another country's National Info public row shows both. `PrivateTest` lists the leg variables and `nd_authority` as public.
 - **Help page.** The programme topic explains the focus; the posture and forces topic explains the chain and launch credit.
 
-### 5.5 Visibility audit
+### 5.5 Visibility audit (2026-11-20)
 
-A separate agent reviews §5 against the code and this spec once it is written; its findings and what was done with each are recorded here.
+A separate agent read the code against the first draft of §5, without its conclusions, as owner call 8 asks. Its findings are folded into §§5.2–5.4 above. Each was checked in the code before it went in. In summary:
+
+- **Corrected "Today" cells:**
+  - Strike: Cities (no odds or razed share for a salvo);
+  - Crisis moves (no survivors figure, only pressure points);
+  - Launch authority (upkeep and the three-quarters rule already shown; redundancy and the halt chance not);
+  - Hardening (ceiling line, no floor);
+  - Safeguards (their per-level figures unprinted);
+  - Survivability's hover (it already shows readiness);
+  - Reach (hidden once ICBMs are researched);
+  - Survivors (monthly refresh).
+- **Decisions added:** opening a warning or ultimatum, launch under attack, Go public, Disavow our strikes, the Basing and Guarantee articles, and the arsenal ceiling's next size.
+- **§5.2 changes:**
+  - readiness is private only outside a crisis;
+  - launch authority is public but the leak test lists it as private;
+  - two existing reads go past the world's view (open question 5);
+  - previews show a range, because the target is an upper bound and safeguards are unknown.
+- **Feasibility changes:**
+  - the per-option strike figures are stored by `nd_refresh_main_rival`, not computed in the GUI;
+  - "incident exposure per authority" is replaced by the halt chance, since exposure has no authority term;
+  - hardening's "months to within 5" is replaced by half-gap constants, since script values have no logarithm;
+  - the Strike previews' expected landed count is decided;
+  - open question 5 is restated, since the AI's salvo planning already reads the world's view apart from the redundancy leak.
+- **Unverified:** whether a GUI `ScriptValue` with `AddScope` can take a scope read out of a variable in this panel. The design doesn't rely on it (the stored figures above).
 
 ## 6. Tooling and tests
 
@@ -205,7 +258,8 @@ A separate agent reviews §5 against the code and this spec once it is written; 
 - **A technology-read guard** (new test, `test_nuclear_delivery.py`): outside an allowlist of the knowledge sites in §4.2 and §4.3, nothing in `common/`, `events/` or `gui/` reads `has_technology_researched = ICBMs` or `= advanced_submarine_technology`; delivery reads go through `nd_fields_icbms` / `nd_fields_missile_submarines`. It also pins the holds that exempt a project (§4.1), the migration's single run and the AI's focus order.
 - `test_nuclear_reach.py`: the reach triggers read the two delivery triggers.
 - `test_nuclear_deterrence.py`: the new handler's op table.
-- `test_nuclear_layout.py`: the new public rows read only public variables (`PrivateTest`, `ObserverTest`).
+- `test_nuclear_layout.py`: the new public rows read only public variables (`PrivateTest`, `ObserverTest`), and `nd_authority` leaves `TRUE_VARS` with the owner's ruling cited. `PrivateTest` covers another country's panel, not our own panel's reads of an enemy, so a new check holds every preview of another country (the Strike previews, the opening preview, the crisis survivors lines) to world's-view values (§5.2).
+- The hardening half-gap constants (§5.3) against the 2%-per-level rate.
 - The audits that apply: `je_immediate_reset_audit` (the parked progress is never zeroed in `immediate`), `silent_variable_audit` (every focus change says so in a `custom_tooltip`), `tooltip_walk_variable_audit` (the focus ops behind the click-only marker), `modifier_field_audit` (the new display types registered), `loc_coverage_audit`.
 
 ## 7. Docs and the player guide
@@ -223,10 +277,12 @@ No new engine fact is load-bearing: script values, declared modifiers on the ent
 - A project finished under an arsenal ceiling: the focus returns to Warheads and the hold resumes.
 - An AI great power at its desired stockpile with a distant rival: it funds and fields ICBMs.
 - A landlocked armed country after migration: no coastal reach.
+- A posture click: the Survivors row and the per-option strike figures follow it the same day.
+- The Strike previews against the salvo that follows: the expected landed count and the destroyed range hold the outcome.
 
 ## 9. Phases
 
-1. **Survivability and display** (no projects yet). §3 in full; `nd_fields_icbms` and `nd_fields_missile_submarines` introduced, reading the technologies (the submarine trigger also asks for a coastal state, fixing the landlocked bug), with every delivery read routed through them and the guard test; §5.4's Forces, Posture and Strike changes. Player guide and docs.
+1. **Survivability and display** (no projects yet). §3 in full; `nd_fields_icbms` and `nd_fields_missile_submarines` introduced, reading the technologies (the submarine trigger also asks for a coastal state, fixing the landlocked bug), with every delivery read routed through them and the guard test; every §5 change that needs no project (Forces, Posture, Strike, Crisis, the events, the articles, launch authority public) and open question 5's world's-view fixes. Player guide and docs.
 2. **Delivery projects.** §4: the focus, the two projects, the triggers reading the fielded variables, the attack-success move, the holds, the migration, upkeep, the notices, the AI; §5.4's Programme, Nuclear Powers and National Info changes; the play-test list.
 3. **Later, separate specs** (§10).
 
@@ -242,4 +298,4 @@ No new engine fact is load-bearing: script values, declared modifiers on the ent
 2. With Precision-Guided Munitions, keep the counterforce ratio's +0.5 as well as the silo multiplier (§3.4)? Proposed: keep both.
 3. The submarine leg's upkeep: `nd_upkeep_size_factor × 6` units (as much as Heightened's surcharge and a half).
 4. The AI's warheads-first threshold: half its desired stockpile.
-5. Should the AI's own strike planning read the same world's view of its target that the player's preview shows (§5.2), rather than the target's true state? Proposed: yes, for parity, in phase 1.
+5. Two reads go past the world's view (§5.2). A side's crisis pressure and the opening preview count the other side's true survivors. `nd_redundancy_believed` adds the target's true survivability and can fall back to its live count. Proposed: both read the world's view in phase 1, so the panel's figures and the outcomes agree and the AI knows no more than the player. The AI's Forces sizing (`nd_ai_forces_need`, `nuclear_deterrence_values.txt:1235`) ignores the enemy's exposed share; sizing by it would change the AI's salvos, so it waits for an AI tuning pass.
