@@ -30,6 +30,7 @@ The aim, in the owner's words: model the incentives behind nuclear decisions and
 | 11 | The submarine leg's upkeep starts at the proposed figure and is tuned in play-testing (§4.3) |
 | 12 | The AI builds warheads first until it holds half the arsenal it wants. Better still, it scores how useful short range is against long range: if nobody who matters is in short range, it gets the range first (§4.5) |
 | 13 | The two reads that go past the world's view move to it in phase 1: a side's crisis pressure and the opening preview counting the other side's true survivors, and the believed command redundancy (§5.2) |
+| 14 | A figure about another country that rests on the world's view says so: a short qualifier on the figure itself ("up to", "at least", a range), and a hover that explains the assumption in full (§5.2) |
 
 ## 2. The incentives this models
 
@@ -189,6 +190,8 @@ Every value a decision rests on is shown where the decision is made, in the unit
 - its safeguards unknown.
 
 The target is an upper bound: a force that stops hardening decays toward 30% of it. Unknown safeguards can cut a fast authority's credit by up to 0.15 (`:747–757`). So a preview prints a range: against a force at its target with full credit, and against one at its floor with the credit cut by 0.15.
+
+**Every such figure says so** (owner call 14). On the figure: a short qualifier, "up to" for what survives, "at least" for what a strike destroys, or the range itself. In its hover, one shared explanation (`nd_tt_worlds_view`): what we don't know (their hardening and safeguards), what the figure assumes (forces as secure as their technology allows), and what the other end of the range assumes. A single figure the script uses (crisis pressure, the AI) takes the cautious end, and where the panel shows it, it carries the same qualifier and hover.
 
 **Where the code reads more than the world's view today.** Both move to the world's view in phase 1 (owner call 13):
 - When one side's crisis pressure counts the other side's survivors, it reads the other side's true state (`nd_yp_issuer_exposure_line`; `nuclear_deterrence_values.txt:1479–1533`). The opening preview's "survivable" line reads the target's true survivors (`nuclear_crisis_effects.txt:189–206`). A side's own survivors are its own to know, and stay true.
