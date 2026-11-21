@@ -326,14 +326,14 @@ Left for later tasks:
 - the Help page's forces topic (delivery legs, public);
 - the docs.
 
-- [ ] Write the tests:
+- [x] Write the tests:
   - `TestOthersDelivery`: the icons per leg, bombers always, and reading only through the capital and public values.
   - `TestProjectsArePrivate`: `TRUE_VARS` gains the focus and the slots; no other country's panel reads them.
 
   Run: FAIL.
-- [ ] Implement, then the GUI lint, the nuclear tests and `preflight.py --changed`. PASS.
-- [ ] Commit `Nuclear Powers and National Info: which legs each country fields (spec §5.4)`.
-- [ ] Docs:
+- [x] Implement, then the GUI lint, the nuclear tests and `preflight.py --changed`. PASS.
+- [x] Commit `Nuclear Powers and National Info: which legs each country fields (spec §5.4)`.
+- [x] Docs:
   - §0.19's second half, D16–D19;
   - `mod_systems/nuclear.md`;
   - `journal_entry_systems.md`;
@@ -341,6 +341,12 @@ Left for later tasks:
   - the play-test rows: each focus row's figures against what fielding gives, and the Powers icons after a rival fields;
   - the spec's status line and the README rows.
 - [ ] Full `scripts/preflight.py`. Then PR 2b with `--base main`, the two-reviewer review, one fix pass, and merge on green CI.
+
+**As built (2026-11-21).** As planned, with these choices:
+- **The Powers row:** the legs sit after the launch authority in three fixed 24 slots (a leg keeps its place), each with its own hover. To fit, the name column narrowed from 240 to 184 and the estimate from 110 to 80 (472 of 480); the head's columns follow (230 and 80) and its Warheads hover names what comes after the estimate.
+- **National Info:** the delivery cell is a Row 4 of its own under Row 3's gate, since Row 3's two cells fill the column. Its icon is the farthest-reaching leg, its word the legs (`nd_delivery_word`) and its third line what they reach (`nd_delivery_reach`). The player's own panel gets no cell: Delivery and Defence covers it.
+- **Privacy:** `TRUE_VARS` gains `nd_prog_focus` and `nd_proj_\w+`; the reach counts stay off it, since they follow from public legs and the map.
+- **The Help page:** the Nuclear Powers topic (`je_nuclear_program_widget_powers_legend`) says the legs are public and a project is not; the forces topic needed nothing.
 
 ## Review Focus
 

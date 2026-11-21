@@ -215,6 +215,16 @@ The delivery spec's phase 2a (`docs/superpowers/plans/2026-11-20-nuclear-deliver
 122. **The held status follows the hold.** A warhead built this week brings the stockpile to the ceiling: the status reads "held" only from the month's end, when funding stops. A Focus click at the ceiling shows the new state the same click.
 123. **A lapsed submarine leg and an old save's rows.** Lose the last coastal state with submarines fielded: the row reads "Submarines: in port, no coast", and reach, the factor and upkeep drop the submarines. In a migrated save, a leg's row reads "fielded" with no year.
 
+## Delivery projects, phase 2b (2026-11-21)
+
+The delivery spec's phase 2b (`docs/superpowers/plans/2026-11-20-nuclear-delivery-phase2.md`, Tasks 6–7; design `nuclear_crisis_design.md` §0.20): what each focus grants in figures, and others' delivery legs in Nuclear Powers and National Info. No new engine fact; the GUI reads below are new to this panel.
+
+124. **The Focus hovers against fielding.** Before fielding ICBMs, note the ICBMs row's hover: the survivability target with ICBMs, the countries in reach with them, and the authorities it opens. After fielding, the survivability target line (Forces), the Reach row and the authority choices match those figures, and the row's hover says the terms are in force. Do the same for submarines, with the Upkeep row's submarine part against the hover's weekly figure.
+125. **The forgone warheads.** With a project in focus at 5 funding steps, the hover's warheads not built roughly equals the months left × the warheads a Warheads focus would build a month (the time row's rate), and at an arsenal ceiling it is no more than the room left under it.
+126. **Nuclear Powers' delivery icons.** Each row ends with a bomber icon. After a rival fields ICBMs (or submarines), its row gains that icon within a month (the list's monthly rebuild), and each icon's hover names the country. A long country name elides inside its narrower column, and no row runs past the section.
+127. **Another country's Delivery cell.** Open National Info for a believed-armed country: Row 4 shows Delivery with the farthest-reaching leg's icon, its legs ("Bombers only", "Bombers, ICBMs", "Bombers, subs" or "Full triad") and what they reach. A country with submarines and no coast shows bombers only. An unarmed country, and your own National Info, show no such row.
+128. **Nothing of a project shows for another country.** With a rival's ICBM project in focus (console), its Nuclear Powers row and National Info show no ICBM icon, no progress and no focus until it fields.
+
 ## Self-checks
 
 | Line | What it tests | If BROKEN |

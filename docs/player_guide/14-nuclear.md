@@ -29,8 +29,8 @@ have a program, and the tab ends with an Open Journal Entry button.
 From the world's first warhead, another country's National Info has a Nuclear
 tab with what the world knows of it: its warheads as the world estimates them
 (none known before its first test), the nuclear guarantees it gives and holds,
-its doctrine and launch authority once the world believes it armed, any crisis
-it is in, World Crises, the nuclear taboo's score and history, and Nuclear
+its doctrine, launch authority and delivery legs once the world believes it
+armed, any crisis it is in, World Crises, the nuclear taboo's score and history, and Nuclear
 Powers. Its true count, program, readiness, forces and reputation, and every
 button, are only on your own.
 
@@ -65,7 +65,7 @@ strikes is a switch of its own.
 | Reputation | You have a record | How your last crisis ended and your non-use pledges (your credibility is in the overview) |
 | The Nuclear Taboo | From the world's first warhead | The score, where it is heading and its band, what nuclear acts cost now, your arsenal's burden, and The Taboo Over Time, its history in two charts |
 | Delivery and Defense | Always | Your delivery capability, home defense and counterforce ratio |
-| Nuclear Powers | From the world's first warhead | The ten largest arsenals as the world estimates them, each with its country's flag, public doctrine and launch authority; your own row is tinted |
+| Nuclear Powers | From the world's first warhead | The ten largest arsenals as the world estimates them, each with its country's flag, public doctrine, launch authority and delivery legs; your own row is tinted |
 
 An armed power that loses its rank stops building but keeps its warheads, its
 posture, its upkeep and its accidents.
@@ -115,7 +115,13 @@ chooses what funding builds: Warheads, ICBMs or Submarines. Choosing is free at
 any time, and a project keeps its progress while you build something else. Each
 row gives its progress and the months it needs at current funding, or what
 holds it; the Warheads row says when your ceiling holds them, whatever is in
-focus. A grayed Choose button lists what a project lacks. ICBMs need the
+focus. A grayed Choose button lists what a project lacks. Hover the ICBMs or
+Submarines row for what fielding the leg would change: the share of your
+warheads exposed to a first strike, what the leg reaches and, for ICBMs, the
+launch authorities it opens and the ICBM Force's attack and counterforce
+figures. Then your survivability target and the countries in reach now and with
+the leg, the submarines' upkeep at sea, and the warheads the months in focus
+won't build. ICBMs need the
 Intercontinental Ballistic Missiles technology. Submarines need Advanced
 Submarine Technology, Guided Missiles and a coastal state. When a project
 reaches 100 its leg is fielded and the focus returns to warheads. A fielded leg
@@ -129,7 +135,12 @@ stays in focus for when the hold lifts.
 
 Fielding a leg is public. You get "Missiles in Their Silos" or "Submarines at
 Sea", and a week later so do your rivals, every country believed armed and your
-neighbors. The world's first to field each leg makes the headlines.
+neighbors. The world's first to field each leg makes the headlines. Nuclear
+Powers shows each country's legs as icons after its launch authority, bombers
+always and ICBMs and missile submarines once fielded, and another country's
+National Info has a Delivery cell: its legs, and whether they reach every
+country, every coast or only as far as its bombers. What a program is
+developing stays its own until it fields.
 
 A Nuclear Program Aid article doubles the rate, covert sabotage slows it, United
 Nations inspections slow it (by a quarter at the UN's middle tier of
