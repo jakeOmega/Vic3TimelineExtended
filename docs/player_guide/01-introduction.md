@@ -161,8 +161,9 @@ top left of every journal page fades the page until you click it again or close
 the page, and the map shows through. The faded page still takes your clicks.
 
 National Info, the base game's Census Data window under a new name, shows
-another country's panels. Open it from the foot of that country's Politics tab,
-or for your own country from the Population panel. A row of tabs over the
+another country's panels. Open it from the button above Draft a Treaty at the
+foot of that country's panel, on any of its tabs, or for your own country from
+the Population panel. A row of tabs over the
 window holds Pops, the base game's list, then a tab for each of the mod's
 systems a country shows the world, Demographics and the Seabed among them. For another
 country a tab shows its figures and none of its buttons; for your own it is the
