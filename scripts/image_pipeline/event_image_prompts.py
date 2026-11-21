@@ -1355,11 +1355,15 @@ IMAGES = {
         "style": "oil painting, social realism, dramatic firelight",
         "events": ["society_technology_events.10"],
     },
+    # Pending: the first render filled the frame with a phone screen of
+    # gibberish lettering ("Viral Fabricted Inst News"), so the .dds was deleted
+    # and the event shows interim art (media_moral_panic) until regenerated. The
+    # new prompt keeps the screen turned away and ties to the event's flavor (a
+    # parent who believed a post that the water had been poisoned).
     "misinformation_spreading": {
-        "prompt": "A phone screen showing a viral fabricated news article.",
-        "style": "oil painting, contemporary realism, cool screen light",
+        "prompt": "At the left of the frame, a woman in a grey cardigan stands at a kitchen counter at evening, seen from the side, reading a phone held close in both hands, its screen turned away from the viewer and lighting her face pale blue. On the counter beside her stand four large clear plastic jugs of water. The right of the frame is a dim plain kitchen wall with a curtained window and a single warm lamp.",
+        "style": "oil painting, contemporary realism, cool phone light against warm lamplight",
         "events": ["society_technology_events.13"],
-        "reframed": "shift 0.2",
     },
     "election_interference_cyber": {
         "prompt": "Hackers in a dark room targeting election systems.",

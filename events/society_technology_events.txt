@@ -1207,7 +1207,8 @@ society_technology_events.13 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/misinformation_spreading.dds" }
+	# Interim art: misinformation_spreading is pending a new render (event_image_prompts.py).
+	event_image = { texture = "gfx/event_pictures/media_moral_panic.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
