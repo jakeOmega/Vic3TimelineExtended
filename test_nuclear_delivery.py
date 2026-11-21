@@ -2,11 +2,12 @@
 
 Two country triggers stand for the hardware: nd_fields_icbms and
 nd_fields_missile_submarines. In phase 1 they read the technologies, and the
-submarine leg also needs a coastal state to sail from. Phase 2 swaps their
-bodies for the fielded variables and touches nothing else. So every read of
-the two technologies is a delivery read and goes through the triggers, unless
-it is about knowledge rather than hardware, which ALLOWED lists with its
-reason."""
+submarine leg also needs a coastal state to sail from. Phase 2 (plan D7) swaps
+their bodies for the fielded variables, with a bridge to the technologies
+until the one-time migration has run, and touches nothing else. So every read
+of the two technologies is a delivery read and goes through the triggers,
+unless it is about knowledge rather than hardware, which ALLOWED lists with
+its reason."""
 
 import math
 import re
@@ -52,12 +53,29 @@ TOP_LEVEL = re.compile(r"^([A-Za-z_][\w:]*)\s*=\s*\{", re.M)
 # is listed under block None.
 ALLOWED = {
     ("common/scripted_triggers/nuclear_deterrence_triggers.txt", "nd_fields_icbms"):
-        "the trigger itself",
+        "the trigger's bridge: until the delivery migration has run, a save's legs are its technologies "
+        "(phase 2 plan D7)",
     ("common/scripted_triggers/nuclear_deterrence_triggers.txt", "nd_fields_missile_submarines"):
-        "the trigger itself",
+        "the trigger's bridge: until the delivery migration has run, a save's legs are its technologies "
+        "(phase 2 plan D7)",
+    ("common/scripted_effects/nuclear_deterrence_effects.txt", "nd_delivery_migrate"):
+        "the one-time migration: every country that had a leg from its technology keeps it as fielded "
+        "(phase 2 plan D8)",
     ("common/scripted_triggers/nuclear_taboo_triggers.txt", "nd_taboo_has_programme_standing"):
         "a Major Power's standing to run a programme comes from the technology: a project can't "
         "stand in for it, since only a country with a programme can run one (spec §4.2)",
+    ("common/scripted_triggers/nuke_triggers.txt", "nd_proj_icbms_available"):
+        "a project's prerequisite is knowledge: the technology lets the programme develop the leg it fields "
+        "(phase 2 plan D6)",
+    ("common/scripted_triggers/nuke_triggers.txt", "nd_proj_subs_available"):
+        "a project's prerequisite is knowledge: the technology lets the programme develop the leg it fields "
+        "(phase 2 plan D6)",
+    ("common/scripted_triggers/nuke_triggers.txt", "nd_proj_icbms_lasting"):
+        "the same prerequisite, as the weekly check reads it for a project already in focus "
+        "(the 2a review)",
+    ("common/scripted_triggers/nuke_triggers.txt", "nd_proj_subs_lasting"):
+        "the same prerequisite, as the weekly check reads it for a project already in focus "
+        "(the 2a review)",
     ("common/script_values/extra_script_values.txt", "global_tech_spread_script_value"):
         "the world's technology spread counts research",
     ("common/script_values/te_ai_probe_values.txt", "te_aip_tc_military_7"):
@@ -103,19 +121,40 @@ class TestDeliveryTriggers(unittest.TestCase):
         self.triggers = strip_comments(read(TRIGGERS))
 
     def test_icbm_trigger(self):
+        # Phase 2 (plan D7): the fielded variable, or the technology until
+        # the delivery migration has run.
         body = squash(block(self.triggers, "nd_fields_icbms"))
-        self.assertIn("custom_tooltip = { text = nd_tt_fields_icbms has_technology_researched = ICBMs }", body)
+        self.assertEqual("custom_tooltip = { text = nd_tt_fields_icbms OR = { has_variable = nd_icbms_fielded "
+                         "AND = { NOT = { has_global_variable = nd_delivery_migrated } "
+                         "has_technology_researched = ICBMs } } }", body)
 
     def test_submarine_trigger_needs_a_coast(self):
+        # The coast stays outside the bridge: a fielded leg lapses without one
+        # and returns with it (spec §4.3).
         body = squash(block(self.triggers, "nd_fields_missile_submarines"))
-        self.assertIn("custom_tooltip = { text = nd_tt_fields_missile_submarines "
-                      "has_technology_researched = advanced_submarine_technology "
-                      "any_scope_state = { is_coastal = yes } }", body)
+        self.assertEqual("custom_tooltip = { text = nd_tt_fields_missile_submarines OR = { has_variable = nd_subs_fielded "
+                         "AND = { NOT = { has_global_variable = nd_delivery_migrated } "
+                         "has_technology_researched = advanced_submarine_technology } } "
+                         "any_scope_state = { is_coastal = yes } }", body)
+
+    def test_only_the_migration_closes_the_bridge(self):
+        setters = []
+        for top in ("common", "events"):
+            for path in sorted((ROOT / top).rglob("*.txt")):
+                code = strip_comments(read(path))
+                if re.search(r"\bset_global_variable\s*=\s*(\{\s*name\s*=\s*)?nd_delivery_migrated\b", code):
+                    setters.append(path.relative_to(ROOT).as_posix())
+        self.assertEqual(setters, ["common/scripted_effects/nuclear_deterrence_effects.txt"])
+        body = block(strip_comments(read(EFFECTS)), "nd_delivery_migrate")
+        self.assertIn("set_global_variable = nd_delivery_migrated", body)
 
     def test_tooltips_have_loc(self):
         loc = "\n".join(read(p) for p in LOC.glob("*.yml"))
         for key in ("nd_tt_fields_icbms", "nd_tt_fields_missile_submarines"):
-            self.assertRegex(loc, rf"(?m)^ {key}:0 \"")
+            m = re.search(rf"(?m)^ {key}:0 \"(.*)\"", loc)
+            self.assertIsNotNone(m, key)
+            # A leg is fielded now, not researched (plan D7).
+            self.assertIn("field", m.group(1), key)
 
 
 class TestTechnologyReads(unittest.TestCase):
@@ -150,7 +189,8 @@ class TestIcbmReaders(unittest.TestCase):
             self.assertIn("nd_fields_icbms = yes", squash(block(self.triggers, name)), name)
 
     def test_values(self):
-        self.assertIn("limit = { nd_fields_icbms = yes } value = 0.70", squash(block(self.values, "nd_exposure_factor_icbms")))
+        self.assertIn("limit = { nd_fields_icbms = yes } value = nd_exposure_factor_icbms_held",
+                      squash(block(self.values, "nd_exposure_factor_icbms")))
         # The counterforce ratio's +0.5 comes through the declared force (Task 3).
         self.assertIn("limit = { nd_fields_icbms = yes } value = 1", squash(block(self.values, "nd_icbm_force_value")))
 
@@ -178,7 +218,7 @@ class TestSubmarineReaders(unittest.TestCase):
 
     def test_survivability_incident_and_reach_row(self):
         factor = squash(block(strip_comments(read(VALUES)), "nd_exposure_factor_submarines"))
-        self.assertIn("limit = { nd_fields_missile_submarines = yes } value = 0.50", factor)
+        self.assertIn("limit = { nd_fields_missile_submarines = yes } value = nd_exposure_factor_submarines_held", factor)
         events = squash(strip_comments(read(INCIDENT_EVENTS)))
         self.assertIn("limit = { nd_fields_missile_submarines = yes } set_variable = { name = nd_ic_unit value = 1 }",
                       events)

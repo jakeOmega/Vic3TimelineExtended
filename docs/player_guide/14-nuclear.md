@@ -29,8 +29,8 @@ have a program, and the tab ends with an Open Journal Entry button.
 From the world's first warhead, another country's National Info has a Nuclear
 tab with what the world knows of it: its warheads as the world estimates them
 (none known before its first test), the nuclear guarantees it gives and holds,
-its doctrine and launch authority once the world believes it armed, any crisis
-it is in, World Crises, the nuclear taboo's score and history, and Nuclear
+its doctrine, launch authority and delivery legs once the world believes it
+armed, any crisis it is in, World Crises, the nuclear taboo's score and history, and Nuclear
 Powers. Its true count, program, readiness, forces and reputation, and every
 button, are only on your own.
 
@@ -65,7 +65,7 @@ strikes is a switch of its own.
 | Reputation | You have a record | How your last crisis ended and your non-use pledges (your credibility is in the overview) |
 | The Nuclear Taboo | From the world's first warhead | The score, where it is heading and its band, what nuclear acts cost now, your arsenal's burden, and The Taboo Over Time, its history in two charts |
 | Delivery and Defense | Always | Your delivery capability, home defense and counterforce ratio |
-| Nuclear Powers | From the world's first warhead | The ten largest arsenals as the world estimates them, each with its country's flag, public doctrine and launch authority; your own row is tinted |
+| Nuclear Powers | From the world's first warhead | The ten largest arsenals as the world estimates them, each with its country's flag, public doctrine, launch authority and delivery legs; your own row is tinted |
 
 An armed power that loses its rank stops building but keeps its warheads, its
 posture, its upkeep and its accidents.
@@ -90,7 +90,11 @@ a bomb can't run one while the UN is at its Strong tier or higher and the IAEA
 exists (see [UN authority tiers](10-united-nations.md#un-authority-tiers)). A
 Nuclear Program Freeze holds funding at zero, and so does an arsenal ceiling,
 your own, a Nuclear Arms Limitation treaty's or the UN Prohibition Treaty's,
-while you hold at least that many warheads. Losing the rank that qualified you zeroes funding the same week.
+while you hold at least that many warheads and funding builds warheads. Losing the rank that qualified you zeroes funding the same week.
+
+Intercontinental Ballistic Missiles and Advanced Submarine Technology don't
+put missiles or submarines in the field. Each opens a project that your
+program builds (below).
 
 ### Program funding and warhead production
 
@@ -101,13 +105,48 @@ at most three warheads in a week.
 
 | Stage | Progress per funding step | Example |
 |---|---|---|
-| First device | 1 a month | 5 steps (500 innovation a week) finish it in 20 months |
-| Series production | 10 a month | 5 steps then build a warhead every 2 months |
+| First device | 1 every four weeks | 5 steps (500 innovation a week) finish it in 80 weeks, about 18½ months |
+| Series production | 10 every four weeks | 5 steps then build a warhead every 8 weeks |
+| ICBM project | 1 every four weeks | 5 steps field the ICBM force in 80 weeks |
+| Missile submarine project | 1 every four weeks | 5 steps put the first submarines to sea in 80 weeks |
+
+From the first device on, What Funding Builds, at the end of The Program,
+chooses what funding builds: Warheads, ICBMs or Submarines. Choosing is free at
+any time, and a project keeps its progress while you build something else. Each
+row gives its progress and the months it needs at current funding, or what
+holds it; the Warheads row says when your ceiling holds them, whatever is in
+focus. A grayed Choose button lists what a project lacks. Hover the ICBMs or
+Submarines row for what fielding the leg would change: the share of your
+warheads exposed to a first strike, what the leg reaches and, for ICBMs, the
+launch authorities it opens and the ICBM Force's attack and counterforce
+figures. The hover then gives your survivability target and the countries in
+reach now and with the leg, the submarines' upkeep at sea, and the warheads you
+would not build in the months the project takes. Without a coastal state the
+Submarines row gives none of these, since boats would stay in port. ICBMs need
+the Intercontinental Ballistic Missiles technology. Submarines need Advanced
+Submarine Technology, Guided Missiles and a coastal state. When a project
+reaches 100 its leg is fielded and the focus returns to warheads. A fielded leg
+stays until a Nuclear Disarmament article or a completed dismantling takes it
+away, and submarines lapse while you hold no coastal state, returning with one.
+
+An arsenal ceiling holds warheads only, so a project runs at a ceiling, and the
+hold comes back when it is done. A freeze, a disarmament treaty, dismantling or
+the loss of your rank holds a project as it holds warheads, and the project
+stays in focus for when the hold lifts.
+
+Fielding a leg is public. You get "Missiles in Their Silos" or "Submarines at
+Sea", and a week later so do your rivals, every country believed armed and your
+neighbors. The world's first to field each leg makes the headlines. Nuclear
+Powers shows each country's legs as icons after its launch authority, bombers
+always and ICBMs and missile submarines once fielded, and another country's
+National Info has a Delivery cell: its legs, and whether they reach every
+country, every coast or only as far as its bombers. What a program is
+developing stays its own until it fields.
 
 A Nuclear Program Aid article doubles the rate, covert sabotage slows it, United
 Nations inspections slow it (by a quarter at the UN's middle tier of
 enforcement, more at the higher tiers), and after any nuclear use every funded
-program gets +25%, fading over five years (The Bomb Has Been Used). Events can
+program gets +25%, fading over five years (The Bomb Has Been Used). These apply to a project as well. Events can
 bring a laboratory accident, a discovery with civilian uses, or anti-nuclear
 protests. Most of the accident's and the discovery's choices cost 5 to 25 points
 of progress toward the first device, never taking it below zero.
@@ -168,7 +207,8 @@ weekly total, and each readiness choice and investment row its own weekly cost.
 | Safeguards | About 0.1% per level |
 | Hardening | About 0.16% per level |
 | Automatic Retaliation | About 0.16% |
-| Cap | About 2% |
+| Missile submarines | 0.12–0.3%, rising with arsenal size |
+| Cap | About 2.4% |
 
 ### Survivability, reliability and crew strain
 
@@ -198,8 +238,8 @@ reach, so each adds less the more is already protected, and nothing reaches
 |---|---|---|
 | Bombers, always | 75% | 25 |
 | Radar | 80% | 40 |
-| Intercontinental Ballistic Missiles, in silos | 70% | 58 |
-| Advanced Submarine Technology, if you hold a coastal state | 50% | 79 |
+| ICBMs fielded, in silos | 70% | 58 |
+| Missile submarines fielded, while you hold a coastal state | 50% | 79 |
 | Missile Defense Systems | 85% | 82 |
 
 Without submarines, the other four make 64.
@@ -248,7 +288,7 @@ defense, never below 5% and never above 100%.
 | Delivery | Bonus | Defense | Bonus |
 |---|---|---|---|
 | Nuclear Weapons | +100% | Military Aviation | +25% |
-| Intercontinental Ballistic Missiles | +50% | Radar | +25% |
+| The ICBM force, while ICBMs are fielded | +50% | Radar | +25% |
 | Hypersonic Weapons | +50% | Missile Defense Systems | +50% |
 | Orbital Weapon Platforms | +50% | Directed Energy Defenses | +50% |
 | Heightened readiness | +5% | Orbital Weapon Platforms | +50% |
@@ -268,18 +308,24 @@ section](#salvos-and-the-strike-section)), with its parts on hover.
 
 ### Range and Nuclear Basing
 
-Until you research Intercontinental Ballistic Missiles, your weapons go only as
-far as your bombers fly. That is every country next to you by land or sea, next
+Until you field ICBMs, your weapons go only as far as your bombers fly. That is every country next to you by land or sea, next
 to one of your direct subjects or next to a country that hosts your weapons, and
 every country with a state in a strategic region where you, a subject or a host
-holds one. With a coast of your own, Advanced Submarine Technology adds every
-coastal state. A war goal
+holds one. Missile submarines at sea add every coastal state while you hold a
+coast of your own; without one they stay fielded and return to service when you
+regain a coast. A war goal
 between you and a country puts it in reach, so range matters most in peacetime
 crises and against your enemies' distant allies. No strike, salvo or answer can
 hit a state out of reach, a Leadership salvo needs the capital in reach, and a
 threat against a country you can't reach is a bluff. The Forces section's Reach
-row counts the countries in reach and lists them on hover; with Intercontinental
-Ballistic Missiles it reads Every country.
+row counts the countries in reach and lists them on hover; with ICBMs fielded
+it reads Every country.
+
+In a game saved before the delivery projects, every country that had
+researched Intercontinental Ballistic Missiles keeps its missiles as fielded,
+and every one with Advanced Submarine Technology and a coast keeps its
+submarines, from the first month. A country that gave its arsenal up keeps
+neither.
 
 A Nuclear Basing treaty article stations your weapons in another country. Your
 reach then extends from its states as from your own, and your arsenal covers it
@@ -378,8 +424,12 @@ once a year.
 |---|---|---|
 | Central Authorization | Nothing | Only the government orders a launch. A Leadership salvo, or warheads on your capital, can cut off your command for two to four weeks (see [Salvos and the Strike section](#salvos-and-the-strike-section)), and an issuer believed to hold more warheads than your command could absorb counts your survivors at three quarters |
 | Conditional Delegation | Radar | A quarter of the warheads a first strike would destroy get away first, 5 points fewer per safeguards level. Cut-off commanders may fire, even at peace. In a war, a false warning can also end in a launch you never approved |
-| Launch on Warning | Radar, Intercontinental Ballistic Missiles | 60% of the warheads a first strike would destroy get away first, 5 points fewer per safeguards level, and up to three of them may answer a Forces salvo before it lands. A false warning can become a launch under standing orders |
-| Automatic Retaliation | Radar, Intercontinental Ballistic Missiles, Mainframe Computers | A strategic first strike on you is answered in full, up to three warheads, with no choice left to you. Extra upkeep; restraint-minded groups dislike it; an accident at home during a war or an acute crisis can set it off |
+| Launch on Warning | Radar, fielded ICBMs | 60% of the warheads a first strike would destroy get away first, 5 points fewer per safeguards level, and up to three of them may answer a Forces salvo before it lands. A false warning can become a launch under standing orders |
+| Automatic Retaliation | Radar, fielded ICBMs, Mainframe Computers | A strategic first strike on you is answered in full, up to three warheads, with no choice left to you. Extra upkeep; restraint-minded groups dislike it; an accident at home during a war or an acute crisis can set it off |
+
+If you lose your ICBMs, Launch on Warning and Automatic Retaliation go back to
+Central Authorization, and "Launch Authority Returns to Central" says so. The
+wait before you may choose again runs from your own last choice.
 
 Each option's tooltip gives how many of your warheads a full strike by your
 main rival would destroy under it, which is what a faster authority saves.
@@ -745,7 +795,7 @@ are ranges from the world's view of it (see [Survivability, reliability and crew
 strain](#survivability-reliability-and-crew-strain)).
 
 Each Forces warhead that lands destroys one of the enemy's warheads, or one and
-a half with Intercontinental Ballistic Missiles or Precision Guided Munitions,
+a half with ICBMs fielded or Precision Guided Munitions,
 and two with both. It can only reach the warheads the enemy's survivability
 leaves exposed. A share of those gets away first: a quarter under Conditional
 Delegation and 60% under Launch on Warning, each 5 points fewer per safeguards
@@ -956,7 +1006,9 @@ a foreign custodian helps you in a civil war, for twenty years after opening
 your depots to inspectors over a stolen warhead, while a Nuclear Security
 Assistance article is in force, or as a party to the United Nations' Convention
 on the Physical Protection of Nuclear Material. Missing warheads become [loose
-warheads](#loose-warheads).
+warheads](#loose-warheads). Warheads that change hands, or that rebels seize,
+arrive without missiles or submarines: the new holder delivers them with its
+own fielded legs, or by bomber.
 
 ### Who Holds the Button?
 
@@ -974,7 +1026,8 @@ radicals that your speech and policing laws shrink or enlarge.
 ### When a revolution wins or loses
 
 A winning revolution takes the state's arsenal, less the warheads lost, as a new
-regime: it keeps the old doctrine, investments and warhead progress, restarts at
+regime: it keeps the old doctrine, investments, warhead progress, fielded
+legs and project progress, restarts at
 50 credibility, and is not bound by the old government's pledges. If the
 government wins, the rebels' warheads come back. A winning secession keeps what
 it seized; a crushed one returns it.
@@ -1195,7 +1248,8 @@ falls by 10 and the taboo weakens. If the arsenal goes another way meanwhile (a
 disarmament treaty, or taking the warheads apart in a civil war), the
 dismantling ends without its rewards.
 
-When the last warhead goes, "The Last Warhead" fires. Its option gives The Bomb
+When the last warhead goes, your missiles and submarines go with it, along
+with any project's progress, and "The Last Warhead" fires. Its option gives The Bomb
 Renounced, a prestige bonus of up to +20% in proportion to the taboo (+10% at
 50) that fades over 20 years, and raises relations with every country by a fifth
 of the taboo (+10 at 50). Restraint-minded interest groups approve and hawks
@@ -1208,7 +1262,7 @@ toward the taboo.
 Resume the Nuclear Program is a decision you can take while you hold
 Renounced the Bomb. It ends the renunciation and The Bomb Renounced, and costs
 infamy of a tenth of the taboo and relations with every country of a fifth of
-it. It gives back no warheads. A great power, a major power with Intercontinental
+it. It gives back no warheads and no missiles or submarines. A great power, a major power with Intercontinental
 Ballistic Missiles or a country receiving Nuclear Program Aid can then run a
 program again; a country without the rank for one is warned that resuming only
 ends its renunciation. Once any country that gave up an arsenal, by whatever
@@ -1302,7 +1356,7 @@ upkeep while the treaty is in force.
 
 | Article | Parties | Effect |
 |---|---|---|
-| Nuclear Disarmament | The disarmed country concedes; the demander pays 200 | Stockpile and progress go to zero, Nuclear Power is lost, and no program runs while it lasts |
+| Nuclear Disarmament | The disarmed country concedes; the demander pays 200 | Stockpile and progress go to zero, fielded missiles and submarines and project progress are removed, Nuclear Power is lost, and no program runs while it lasts |
 | Nuclear Program Freeze | The frozen country concedes; the demander pays 100 | Funding held at zero; warheads and progress kept |
 | Nuclear Program Aid | A nuclear power helps a non-nuclear country and pays 500 | The recipient can run a program at any rank, at double the rate. Refused once the IAEA exists and United Nations authority is 60 or more |
 | Nuclear Basing | A nuclear power stations its weapons in a host and pays 100 | Its reach extends from the host's states, and it covers the host as a ready guarantor; not in your own subject. See [Range and Nuclear Basing](#range-and-nuclear-basing) |
@@ -1322,7 +1376,8 @@ bomb as ordinary the AI builds more, threatens more and strikes first more
 readily, and in one that holds it in horror it trims and gives up its arsenal.
 It retaliates at any taboo.
 
-- It funds its program toward a target stockpile that grows with rank, innovation, war and a rival that seems to hold more, and shrinks as the taboo rises: about a third larger at 0 than at 40, and half the size at 100. A war and a rival that seems bigger can carry it past that target, but never past twice it (at most 50 warheads): there it stops funding and builds nothing until its arsenal falls below. From a taboo of 70, an AI at peace that faces no plausible attacker is far slower to fund a program.
+- It funds its program toward a target stockpile that grows with rank, innovation, war and a rival that seems to hold more, and shrinks as the taboo rises: about a third larger at 0 than at 40, and half the size at 100. A war and a rival that seems bigger can carry it past that target, but never past twice it (at most 50 warheads): there it stops funding warheads until its arsenal falls below, but keeps funding a project. From a taboo of 70, an AI at peace that faces no plausible attacker is far slower to fund a program.
+- From its first device it chooses what its funding builds at each posture review. It builds range first when its bombers reach none of the countries it must deter (its rivals, war enemies, crisis opponent and armed antagonistic countries), and warheads while it holds fewer than half the stockpile it wants, unless an arsenal ceiling holds its warheads, when it builds delivery instead. It goes to sea when fewer than three of its warheads would survive its main rival or that rival's precision weapons threaten its silos, and builds range when some of those countries are out of bomber reach. Range is submarines when every such country out of reach has a coast and submarines are open to it, otherwise ICBMs. An AI whose enemies are all within bomber reach builds warheads.
 - It reviews its posture every six months and when a crisis opens. Most AIs keep Existential Deterrence; cautious rulers and democracies lean to No First Use, and militarist regimes (fascist, or with a jingoist ruler or a powerful Armed Forces in government) to Compellence or Warfighting. Above a taboo of 50, No First Use gains favor; below 30, Compellence and Warfighting tempt any ruler who is not cautious; from 70 they, and Flexible First Use, lose favor.
 - It sets its safeguards from one level: one more for a cautious ruler, a restraint-minded government and Delegation or Launch on Warning, one less for a militarist regime or Warfighting and in a budget deficit. It moves to Automatic Retaliation, Launch on Warning (if militarist) or Delegation only when fewer than three of its warheads would survive its main rival and hardening could not change that, and back to Central once that passes.
 - It goes to High Alert in a war with an armed enemy, and in an Acute crisis when its armed opponent is at Heightened or higher or fewer than three of its warheads would survive short of High Alert; otherwise to Heightened in any war or Confrontation, and to Recessed only at peace with nothing to deter and nobody to protect, and then only under a cautious ruler, No First Use or a default.

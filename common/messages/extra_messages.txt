@@ -89,6 +89,17 @@ nd_doctrine_bound_by_law = {
 	color = neutral
 }
 
+# Our launch authority fell back to Central Authorization: Launch on Warning or
+# Automatic Retaliation without the fielded ICBMs it launches, after
+# disarmament or a dismantling (nd_authority_bind_check, phase 2 plan D10).
+# Human players only.
+nd_authority_bound_by_delivery = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/laws.dds"
+	notification_type = feed
+	color = neutral
+}
+
 # A refused nuclear stand-down asked for a war that had not begun 14 days
 # later; the exchange closed without it (nd_exchange_weekly_update).
 nd_exchange_war_failed = {
@@ -1483,6 +1494,27 @@ headlines_tech_nuclear_energy = {
 
 
 headlines_tech_nuclear_weapons = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/technology.dds"
+	group = "headlines_tech_group"
+	notification_type = feed
+	days = 28
+	color = neutral
+}
+
+# The world's first fielded delivery legs (2026-11-20 delivery spec §4.1,
+# phase 2 plan D12): posted by nd_leg_notices_icbms / _subs
+# (nuclear_weapon_effects.txt), once each, to every human.
+headlines_nd_icbms_fielded = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/technology.dds"
+	group = "headlines_tech_group"
+	notification_type = feed
+	days = 28
+	color = neutral
+}
+
+headlines_nd_subs_fielded = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/technology.dds"
 	group = "headlines_tech_group"

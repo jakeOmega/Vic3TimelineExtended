@@ -32,9 +32,19 @@ nd_routine_mishap_cooldown_months_value = 60 # between routine mishaps (nuclear_
 nd_ai_concession_line = 40              # pressure where nuclear_crisis.1's yield weights start (the AI's stake gate)
 nd_ai_trade_danger_line = 40            # danger at which an AI issuer takes a fair trade (nuclear_crisis.8; ruling R4)
 nd_ai_trade_min_weeks = 8               # and not before its threat has run this long: a public ultimatum's first deadline
+nd_ai_range_weight_must = 3             # the AI's range score (nd_ai_choose_focus): a rival either way, a war enemy, the crisis opponent
+nd_ai_range_weight_should = 2           # and an armed country antagonistic toward us (first values, delivery spec §4.5)
+nd_ai_range_score_for_range = 0.5       # at this share out of bomber reach, range comes before submarines' survival (§4.5 step 3)
+nd_ai_focus_warheads_share = 0.5        # warheads first below this share of the desired stockpile (§4.5 step 2)
 nd_survivability_factor_recessed = 0.5   # share of survivability a crisis counts (nd_effective_survivability)
 nd_survivability_factor_routine = 0.8
 nd_survivability_factor_heightened = 0.9 # High Alert counts it all
+
+# The AI builds warheads first below this many (nd_ai_choose_focus, §4.5 step 2).
+nd_ai_focus_warheads_first = {
+	value = nuclear_ai_desired_stockpile
+	multiply = nd_ai_focus_warheads_share
+}
 
 # ----------------------------------------------------------------------------
 # ARSENAL
@@ -78,7 +88,9 @@ nd_upkeep_size_factor = {
 #   safeguards     2 per level (0–3)                       ≤  6 units
 #   hardening      3 per level (0–3)                       ≤  9 units
 #   automatic retaliation (authority 4)                      3 units
-#   cap            40 units ≈ 2 % of GDP a year
+#   missile submarines  6 × size factor (fielded, a coast)  ≤  6 units
+#   cap            46 units ≈ 2.4 % of GDP a year: the sum of the parts, so
+#                  no part is ever free (phase 2 plan D9)
 nd_upkeep_units_custody = {
 	value = nd_stockpile_capped
 	multiply = 0.2
@@ -90,10 +102,35 @@ nd_upkeep_units_custody_recessed = {
 	multiply = 0.5
 }
 
-# What does not depend on readiness: safeguards, hardening, and an Automatic
-# Retaliation system (3 units, as one hardening level).
+# The upkeep's ceiling, in units: the sum of every part at its dearest. It
+# rose from 40 with the submarine leg (phase 2 plan D9): at 40, the dearest
+# posture's submarines would have cost nothing.
+nd_upkeep_units_cap = 46
+
+# The missile submarine leg, the dearest to keep: crews at sea and their boats
+# on patrol (2026-11-20 delivery spec §4.3; owner call 11: a first figure, to
+# tune in play-testing). It scales with the arsenal, as alert does.
+nd_upkeep_units_submarines = {
+	value = 0
+	if = {
+		limit = { nd_fields_missile_submarines = yes }
+		add = nd_upkeep_units_submarines_fielded
+	}
+}
+
+# What the leg costs while at sea, fielded or not yet: the Focus row's figure
+# for the project (phase 2 plan D16) reads it too.
+nd_upkeep_units_submarines_fielded = {
+	value = nd_upkeep_size_factor
+	multiply = 6
+}
+
+# What does not depend on readiness: safeguards, hardening, an Automatic
+# Retaliation system (3 units, as one hardening level) and the missile
+# submarines.
 nd_upkeep_units_fixed = {
 	value = 0
+	add = nd_upkeep_units_submarines
 	if = {
 		limit = { nd_authority_automatic = yes }
 		add = 3
@@ -156,7 +193,7 @@ nd_upkeep_units = {
 	# Clamp the rate before it is scaled by GDP: the order is load-bearing
 	# (scripting_best_practices.md § Script-Value Keys Apply in Written Order).
 	min = 0
-	max = 40
+	max = nd_upkeep_units_cap
 }
 
 # The weekly expense, in money. Cached into nd_upkeep_weekly_cached by
@@ -167,6 +204,17 @@ nd_upkeep_weekly = {
 	divide = 100000
 	multiply = nd_upkeep_units
 	min = 0
+}
+
+# The upkeep's cap as a share of GDP a year, in percent, for the Upkeep hover
+# (nd_w_upkeep_tt): nd_upkeep_units_cap units, at nd_upkeep_weekly's
+# GDP ÷ 100,000 a unit a week, for 52 weeks. test_nuclear_projects.py holds
+# the divisor to nd_upkeep_weekly's.
+nd_display_upkeep_cap_gdp_pct = {
+	value = nd_upkeep_units_cap
+	multiply = 52
+	multiply = 100
+	divide = 100000
 }
 
 # ----------------------------------------------------------------------------
@@ -192,11 +240,17 @@ nd_exposure_factor_radar = {
 	}
 }
 
+# The two legs' factors while fielded, named so the Focus rows' terms and the
+# target with a leg read the same figures (phase 2 plan D16).
+nd_exposure_factor_icbms_held = 0.70            # hardened silos
+
+nd_exposure_factor_submarines_held = 0.50       # missile submarines at sea
+
 nd_exposure_factor_icbms = {
 	value = 1
 	if = {
 		limit = { nd_fields_icbms = yes }
-		value = 0.70                            # hardened silos
+		value = nd_exposure_factor_icbms_held
 	}
 }
 
@@ -204,7 +258,7 @@ nd_exposure_factor_submarines = {
 	value = 1
 	if = {
 		limit = { nd_fields_missile_submarines = yes }
-		value = 0.50                            # missile submarines at sea
+		value = nd_exposure_factor_submarines_held
 	}
 }
 
@@ -228,6 +282,31 @@ nd_survivability_exposed_share = {
 nd_survivability_target = {
 	value = 1
 	subtract = nd_survivability_exposed_share
+	multiply = 100
+}
+
+# The target with a leg fielded, for that project's Focus row (phase 2 plan
+# D16): the product with the leg's factor in place of the one in force, so it
+# equals the target once the leg is in service.
+nd_survivability_target_with_icbms = {
+	value = nd_exposure_factor_bombers
+	multiply = nd_exposure_factor_radar
+	multiply = nd_exposure_factor_icbms_held
+	multiply = nd_exposure_factor_submarines
+	multiply = nd_exposure_factor_missile_defense
+	multiply = -1
+	add = 1
+	multiply = 100
+}
+
+nd_survivability_target_with_submarines = {
+	value = nd_exposure_factor_bombers
+	multiply = nd_exposure_factor_radar
+	multiply = nd_exposure_factor_icbms
+	multiply = nd_exposure_factor_submarines_held
+	multiply = nd_exposure_factor_missile_defense
+	multiply = -1
+	add = 1
 	multiply = 100
 }
 
@@ -3315,6 +3394,51 @@ nd_display_upkeep_weekly = {
 	}
 }
 
+# The missile submarines' part of the weekly upkeep, in money (the Upkeep
+# row's hover). The total's cap can leave it a little above what it adds.
+nd_display_upkeep_submarines_weekly = {
+	value = gdp
+	divide = 100000
+	multiply = nd_upkeep_units_submarines
+	min = 0
+}
+
+# The same before the leg is fielded, for the submarine project's Focus row
+# (phase 2 plan D16): what it would add each week at today's GDP and arsenal.
+nd_display_upkeep_submarines_with_weekly = {
+	value = gdp
+	divide = 100000
+	multiply = nd_upkeep_units_submarines_fielded
+	min = 0
+}
+
+# The countries in reach, now and with each leg, for the Focus rows (phase 2
+# plan D17): stored by nd_reach_refresh on a human's panel from the first
+# device on; 0 until the first rebuild.
+nd_display_reach_count_now = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_reach_count_now }
+		value = var:nd_reach_count_now
+	}
+}
+
+nd_display_reach_count_with_subs = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_reach_count_with_subs }
+		value = var:nd_reach_count_with_subs
+	}
+}
+
+nd_display_reach_count_every = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_reach_count_every }
+		value = var:nd_reach_count_every
+	}
+}
+
 nd_display_survivability = {
 	value = nd_survivability_or_zero
 }
@@ -3511,6 +3635,29 @@ nd_display_authority_code = {
 	if = {
 		limit = { has_variable = nd_authority }
 		value = var:nd_authority
+	}
+}
+
+# The delivery legs a country fields, 1 or 0, for Nuclear Powers' icons and
+# another country's National Info (2026-11-20 delivery spec D18, D19). Public:
+# the world sees missile tests and boats at sea (§2). Each reads only its
+# delivery trigger (the fielded variable, the migration's bridge to the
+# technology, and for submarines a coast), never the focus or a project's
+# progress, which are the country's own. Bombers need no value: every armed
+# country has them.
+nd_display_leg_icbms = {
+	value = 0
+	if = {
+		limit = { nd_fields_icbms = yes }
+		value = 1
+	}
+}
+
+nd_display_leg_subs = {
+	value = 0
+	if = {
+		limit = { nd_fields_missile_submarines = yes }
+		value = 1
 	}
 }
 
@@ -4207,7 +4354,7 @@ nd_disp_ig_shows_business = {
 nd_upkeep_weekly_at_readiness_0 = {
 	value = nd_upkeep_units_fixed
 	add = nd_upkeep_units_custody_recessed
-	max = 40
+	max = nd_upkeep_units_cap
 	multiply = {
 		value = gdp
 		divide = 100000
@@ -4217,7 +4364,7 @@ nd_upkeep_weekly_at_readiness_0 = {
 nd_upkeep_weekly_at_readiness_1 = {
 	value = nd_upkeep_units_fixed
 	add = nd_upkeep_units_custody
-	max = 40
+	max = nd_upkeep_units_cap
 	multiply = {
 		value = gdp
 		divide = 100000
@@ -4228,7 +4375,7 @@ nd_upkeep_weekly_at_readiness_2 = {
 	value = nd_upkeep_units_fixed
 	add = nd_upkeep_units_custody
 	add = nd_upkeep_units_readiness_2
-	max = 40
+	max = nd_upkeep_units_cap
 	multiply = {
 		value = gdp
 		divide = 100000
@@ -4239,7 +4386,7 @@ nd_upkeep_weekly_at_readiness_3 = {
 	value = nd_upkeep_units_fixed
 	add = nd_upkeep_units_custody
 	add = nd_upkeep_units_readiness_3
-	max = 40
+	max = nd_upkeep_units_cap
 	multiply = {
 		value = gdp
 		divide = 100000
@@ -4264,6 +4411,18 @@ nd_ceiling_raised_capped = {
 
 nd_upkeep_weekly_at_ceiling_lowered = {
 	value = nd_upkeep_units_fixed
+	# The submarines' part at this size, not the stockpile's.
+	subtract = nd_upkeep_units_submarines
+	if = {
+		limit = { nd_fields_missile_submarines = yes }
+		add = {
+			value = nd_ceiling_lowered_capped
+			divide = 50
+			multiply = 0.6
+			add = 0.4
+			multiply = 6
+		}
+	}
 	add = {
 		value = nd_ceiling_lowered_capped
 		multiply = 0.2
@@ -4299,7 +4458,7 @@ nd_upkeep_weekly_at_ceiling_lowered = {
 		}
 	}
 	min = 0
-	max = 40
+	max = nd_upkeep_units_cap
 	multiply = {
 		value = gdp
 		divide = 100000
@@ -4308,6 +4467,18 @@ nd_upkeep_weekly_at_ceiling_lowered = {
 
 nd_upkeep_weekly_at_ceiling_raised = {
 	value = nd_upkeep_units_fixed
+	# The submarines' part at this size, not the stockpile's.
+	subtract = nd_upkeep_units_submarines
+	if = {
+		limit = { nd_fields_missile_submarines = yes }
+		add = {
+			value = nd_ceiling_raised_capped
+			divide = 50
+			multiply = 0.6
+			add = 0.4
+			multiply = 6
+		}
+	}
 	add = {
 		value = nd_ceiling_raised_capped
 		multiply = 0.2
@@ -4343,7 +4514,7 @@ nd_upkeep_weekly_at_ceiling_raised = {
 		}
 	}
 	min = 0
-	max = 40
+	max = nd_upkeep_units_cap
 	multiply = {
 		value = gdp
 		divide = 100000

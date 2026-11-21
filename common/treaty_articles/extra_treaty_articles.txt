@@ -1488,10 +1488,19 @@ nuclear_disarmament = {  # REVIEWED 2026-11-03 (involvement): an imposed restric
 			}
 			# The nuclear taboo: an arsenal given up (read before it is zeroed).
 			nd_taboo_note_renunciation = { WARHEADS = nd_stockpile }
+			# The launchers go too (2026-11-20 delivery spec owner call 9):
+			# both fielded legs, both projects and a project focus. Before the
+			# zeroing below, which also clears the warheads' progress the
+			# removal loads back to the bar.
+			nd_delivery_remove_legs = yes
 			set_variable = { name = nuclear_weapon_stockpile value = 0 }
 			set_variable = { name = nuclear_weapon_program_progress value = 0 }
 			set_variable = { name = nuclear_weapons_program_funding value = 0 }
 			remove_modifier = nuclear_power
+			# The removal rebuilt reach while the stockpile still stood. Again
+			# now it is zeroed (nd_is_armed reads the variable), so the list
+			# and the Focus rows' counts are an unarmed country's at once.
+			nd_reach_refresh = yes
 		}
 	}
 }

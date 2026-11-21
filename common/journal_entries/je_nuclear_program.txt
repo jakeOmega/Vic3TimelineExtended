@@ -110,6 +110,9 @@ je_nuclear_program = {
 	}
 
 	progressbar = yes
+	# What the bar is progress toward: the next warhead, or the delivery project
+	# in focus (2026-11-20 delivery spec §4.1; nd_prog_focus_object).
+	progress_desc = je_nuclear_program_progress
 
 	# Body single-sourced in common/scripted_triggers/nuke_triggers.txt. Once
 	# the nuclear taboo exists it holds for every non-decentralized country, so
@@ -292,6 +295,10 @@ je_nuclear_program = {
 				value = 0
 			}
 		}
+		# The live progress is the focus's (2026-11-20 delivery spec §4.1): it
+		# waits in the focus's own slot until the next weekly pulse loads it
+		# back (nd_focus_restore), so a re-activation loses nothing.
+		nd_focus_park_live = yes # REVIEWED 2026-11-21: parks the live progress, only over 0, in the slot of the focus in force, and never lowers a slot already there; the weekly pulse loads it back and removes the slot (phase 2 plan D3)
 		set_variable = { # REVIEWED 2026-11-12: the bar wraps at each warhead; a revolution's winner gets a fresh record (can_revolution_inherit = no) and nd_custody_restore_progress carries the progress over (#467, #472)
 			name = nuclear_weapon_program_progress
 			value = 0
@@ -319,6 +326,11 @@ je_nuclear_program = {
 			# zeroed it (nuclear_custody_effects.txt). Before the programme
 			# block, so this week's progress adds to it.
 			nd_custody_restore_progress = yes
+			# Then the focus's own parked progress, from this record's
+			# immediate (raising only), and a focus whose project is no longer
+			# available returns to Warheads (nuclear_weapon_effects.txt).
+			nd_focus_restore = yes
+			nd_focus_check_available = yes
 
 			if = {
 				limit = {

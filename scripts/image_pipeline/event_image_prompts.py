@@ -2539,12 +2539,20 @@ IMAGES = {
     "missile_parade": {
         "prompt": "At the left of the frame, a long olive-green missile lies on a heavy eight-wheeled transporter rolling along a wide grey boulevard, soldiers in plain olive uniforms and steel helmets standing at attention along its sides; more missile transporters follow in a column behind it. The right of the frame is the column receding between plain grey stone buildings under an overcast sky, crowds watching from the pavements.",
         "style": "oil painting, cold war realism, flat grey light",
-        "events": ["nuclear_taboo.7"],
+        "events": ["nuclear_taboo.7", "nuclear_weapon_events.35"],
     },
     "referendum_ballot_count": {
         "prompt": "At the left of the frame, officials in shirtsleeves sort paper ballots into piles on a long trestle table in a school hall, watched closely by two observers in plain blue armbands standing at the table's end; open wooden ballot boxes sit on the floor beside them. The right of the frame is the hall's tall windows and evening light.",
         "style": "oil painting, social realism, warm evening lamplight",
         "events": ["un_referendum.3", "te_culture_merge.4"],
+    },
+    # Pending (phase 2a review, 2026-11-21): the missile submarine leg's
+    # notice shows missile_launch_crew, a silo's control room, until this is
+    # generated.
+    "missile_submarine_departure": {
+        "prompt": "At the left of the frame, the long black hull of a submarine moves out of a grey harbor before dawn, its tall fin and a few sailors on the deck dark against the water, a small pilot launch pulling away beside it. The right of the frame is the open harbor mouth, a breakwater and a lighthouse under a dim blue sky.",
+        "style": "oil painting, cold war realism, cold blue dawn light",
+        "events": ["nuclear_weapon_events.36"],
     },
 }
 

@@ -30,6 +30,8 @@ def read_records(lines):
 
 
 MISSIONS = {"1": "cities", "2": "forces", "3": "leadership"}
+# The programme's focus codes (nuclear_program_focus_sgui ops, nd_focus_set).
+FOCI = {"1": "warheads", "2": "icbms", "3": "submarines"}
 
 
 def _count(value):
@@ -44,6 +46,7 @@ def summarize(records):
     acute, used = set(), set()
     claims, beliefs, truths = Counter(), Counter(), Counter()
     salvos, decapitations = Counter(), Counter()
+    focus_choices, focus_reasons, legs = Counter(), Counter(), Counter()
     salvo_landed = destroyed = fired_first = 0
     exposure = defaultdict(lambda: {"country_weeks": 0, "expected_incidents": 0.0})
     unresolved = 0
@@ -81,6 +84,11 @@ def summarize(records):
             fired_first += _count(r.get("fired"))
         elif kind == "decapitation":
             decapitations[r.get("result", "unknown")] += 1
+        elif kind == "ai_focus":
+            focus_choices[FOCI.get(r.get("focus", ""), "unknown")] += 1
+            focus_reasons[r.get("reason", "unknown")] += 1
+        elif kind == "leg_fielded":
+            legs[r.get("leg", "unknown")] += 1
         elif kind == "risk":
             try:
                 rate = float(r["incident_weekly_permille"])
@@ -128,6 +136,11 @@ def summarize(records):
         "counterforce_destroyed": destroyed,
         "fired_before_impact": fired_first,
         "decapitations": dict(sorted(decapitations.items())),
+        # Delivery spec phase 2 (§4.5): the AI's focus at each posture review,
+        # by what it chose and why, and the legs fielded by projects.
+        "ai_focus_choices": dict(sorted(focus_choices.items())),
+        "ai_focus_reasons": dict(sorted(focus_reasons.items())),
+        "legs_fielded": dict(sorted(legs.items())),
     }
 
 
@@ -148,7 +161,8 @@ def main():
           f"near misses {report['near_misses']}; launches nobody meant {report['unordered_or_mistaken_launches']}")
     print(f"Claims of an unauthorized strike: {report['claims']}; believed {report['claims_believed']}, "
           f"doubted {report['claims_doubted']}; lies exposed {report['lies_exposed']}")
-    for section in ("incident_families", "crisis_outcomes", "actions"):
+    for section in ("incident_families", "crisis_outcomes", "actions",
+                    "ai_focus_choices", "ai_focus_reasons", "legs_fielded"):
         print(f"\n{section.replace('_', ' ').title()}:")
         for key, count in report[section].items():
             print(f"  {key}: {count}")

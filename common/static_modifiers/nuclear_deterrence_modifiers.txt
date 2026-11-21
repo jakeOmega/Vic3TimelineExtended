@@ -18,6 +18,9 @@
 # § Worked case — swapping one member of a banded modifier family). Its single
 # writer:
 #   nd_posture_approval_*    nd_refresh_domestic_stance  (interest-group scope)
+# Display only, never added: hovers print their lines with GetDesc.
+#   nd_readiness_terms_*, nd_authority_terms_*, nd_safeguards_level_terms,
+#   nd_safeguards_slow_launch, nd_focus_terms_* (the Focus rows, phase 2 D16)
 # Everything else below is a timed one-off applied by an event or a crisis
 # outcome.
 # ============================================================================
@@ -183,6 +186,25 @@ nd_safeguards_level_terms = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
 	country_nd_reliability_target_add = 12
 	country_nd_halt_chance_add = 0.05
+}
+
+# What fielding each delivery leg grants (phase 2 plan D16). Display only,
+# never added: the Focus rows' hovers print them with GetDesc, the ICBM row
+# beside nd_icbm_force's own lines. The factor is the leg's
+# nd_exposure_factor_*_held less 1; test_nuclear_projects.TestFocusTermsMatchScript
+# holds it there.
+nd_focus_terms_icbms = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_nd_exposure_mult = -0.3
+	country_nd_reach_every_state_bool = yes
+	country_nd_unlocks_launch_on_warning_bool = yes
+	country_nd_unlocks_automatic_retaliation_bool = yes
+}
+
+nd_focus_terms_submarines = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_nd_exposure_mult = -0.5
+	country_nd_reach_every_coast_bool = yes
 }
 
 # What each safeguards level takes off a fast authority's launch credit

@@ -1,0 +1,30 @@
+﻿# ============================================================================
+# NUCLEAR DELIVERY — the one-time migration (2026-11-20 delivery spec §4.4;
+# phase 2 plan D8)
+# ============================================================================
+# Global scope. Before phase 2 a technology switched a delivery leg on; now the
+# programme fields it as a project. On the first monthly pulse after the
+# update (or after the rule is switched on), every country that had a leg from
+# its technology keeps it as fielded (nd_delivery_migrate), once, under the
+# global flag nd_delivery_migrated, which also closes the delivery triggers'
+# bridge to the technologies (nd_fields_icbms, nd_fields_missile_submarines).
+# The engine unions same-name on_action declarations across files.
+# ============================================================================
+
+on_monthly_pulse = {
+	on_actions = {
+		nd_delivery_monthly_on_action
+	}
+}
+
+nd_delivery_monthly_on_action = {
+	effect = {
+		if = {
+			limit = {
+				has_game_rule = nuclear_weapons_enabled
+				NOT = { has_global_variable = nd_delivery_migrated }
+			}
+			nd_delivery_migrate = yes
+		}
+	}
+}

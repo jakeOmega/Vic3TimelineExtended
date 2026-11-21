@@ -55,6 +55,13 @@ increase_funding_nuclear_program = {
 			limit = { var:nuclear_weapon_stockpile < nuclear_ai_desired_stockpile }
 			add = 35
 		}
+		# A delivery project in focus is worth funding as a shortfall is
+		# (2026-11-20 delivery spec §4.5): without it an AI at its desired
+		# stockpile defunds the programme and never fields anything.
+		if = {
+			limit = { nd_focus_is_project = yes }
+			add = 35
+		}
 		if = {
 			limit = {
 				var:nuclear_weapons_program_first_nuke_done = 0
@@ -87,8 +94,12 @@ increase_funding_nuclear_program = {
 			limit = { country_innovation < nuclear_weapons_program_current_cost }
 			add = -20
 		}
+		# Enough warheads is no reason to stop a project (phase 2 plan D15).
 		if = {
-			limit = { var:nuclear_weapon_stockpile >= nuclear_ai_desired_stockpile }
+			limit = {
+				var:nuclear_weapon_stockpile >= nuclear_ai_desired_stockpile
+				nd_focus_is_warheads = yes
+			}
 			add = -45
 		}
 		# The nuclear taboo: a norm-bound world does not start or grow a
@@ -100,6 +111,8 @@ increase_funding_nuclear_program = {
 		# The AI's arsenal cap (nuclear_ai_stockpile_cap, twice what it wants):
 		# the race terms above carry it past its wish, never past this
 		# (2026-11-07). nuclear_program_weekly_progress unfunds it there too.
+		# A cap holds warheads only, so not while a project is in focus
+		# (nuclear_program_ai_at_stockpile_cap).
 		if = {
 			limit = { nuclear_program_ai_at_stockpile_cap = yes }
 			multiply = 0
@@ -135,12 +148,20 @@ decrease_funding_nuclear_program = {
 			limit = { country_innovation < nuclear_weapons_program_current_cost }
 			add = 25
 		}
+		# Not while a delivery project is in focus (phase 2 plan D15): the
+		# funding builds the project, not warheads.
 		if = {
-			limit = { var:nuclear_weapon_stockpile >= nuclear_ai_desired_stockpile }
+			limit = {
+				var:nuclear_weapon_stockpile >= nuclear_ai_desired_stockpile
+				nd_focus_is_warheads = yes
+			}
 			add = 35
 		}
 		if = {
-			limit = { var:nuclear_weapon_stockpile > nuclear_ai_desired_stockpile }
+			limit = {
+				var:nuclear_weapon_stockpile > nuclear_ai_desired_stockpile
+				nd_focus_is_warheads = yes
+			}
 			add = 15
 		}
 		if = {

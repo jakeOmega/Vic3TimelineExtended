@@ -3274,3 +3274,126 @@ nuclear_weapon_events.34 = {
 		}
 	}
 }
+
+# ---- .35 / .36 A delivery leg fielded ----------------------------------------
+# 2026-11-20 delivery spec §4.1, phase 2 plan D12. nd_leg_notices_icbms (.35)
+# and nd_leg_notices_subs (.36), from nd_field_leg (nuclear_weapon_effects.txt),
+# send each to the fielder at once and, a week later, to its rivals either way,
+# every country believed armed and its neighbors. scope:nd_leg_fielder is the
+# fielder: its own text and option, or the world's. Fielding is public and
+# isn't use, so neither writes the taboo's ledger. No trigger: the sender's
+# test is the recipient list, and a delayed event whose trigger is false when
+# it is queued is dropped. The fielder's text says when an arsenal ceiling
+# holds the warheads its focus returns to (d_own_held; the 2a review), and
+# .35's flavor splits as its text does: the crews for the fielder, remarks
+# about another country's missiles for the rest.
+nuclear_weapon_events.35 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/missile_parade.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = nuclear_weapon_events.35.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					THIS = scope:nd_leg_fielder
+					nd_taboo_has_ceiling = yes
+					nd_stockpile >= nd_taboo_effective_ceiling_value
+				}
+				desc = nuclear_weapon_events.35.d_own_held
+			}
+			triggered_desc = {
+				trigger = { THIS = scope:nd_leg_fielder }
+				desc = nuclear_weapon_events.35.d_own
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_weapon_events.35.d_world
+			}
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { THIS = scope:nd_leg_fielder }
+				desc = nuclear_weapon_events.35.f_own
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_weapon_events.35.f_world
+			}
+		}
+	}
+
+	duration = 3
+
+	option = {
+		name = nuclear_weapon_events.35.a
+		trigger = { THIS = scope:nd_leg_fielder }
+		default_option = yes
+		ai_chance = { base = 1 }
+	}
+
+	option = {
+		name = nuclear_weapon_events.35.b
+		trigger = { NOT = { THIS = scope:nd_leg_fielder } }
+		default_option = yes
+		ai_chance = { base = 1 }
+	}
+}
+
+nuclear_weapon_events.36 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/missile_launch_crew.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = nuclear_weapon_events.36.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					THIS = scope:nd_leg_fielder
+					nd_taboo_has_ceiling = yes
+					nd_stockpile >= nd_taboo_effective_ceiling_value
+				}
+				desc = nuclear_weapon_events.36.d_own_held
+			}
+			triggered_desc = {
+				trigger = { THIS = scope:nd_leg_fielder }
+				desc = nuclear_weapon_events.36.d_own
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_weapon_events.36.d_world
+			}
+		}
+	}
+	flavor = nuclear_weapon_events.36.f
+
+	duration = 3
+
+	option = {
+		name = nuclear_weapon_events.36.a
+		trigger = { THIS = scope:nd_leg_fielder }
+		default_option = yes
+		ai_chance = { base = 1 }
+	}
+
+	option = {
+		name = nuclear_weapon_events.36.b
+		trigger = { NOT = { THIS = scope:nd_leg_fielder } }
+		default_option = yes
+		ai_chance = { base = 1 }
+	}
+}

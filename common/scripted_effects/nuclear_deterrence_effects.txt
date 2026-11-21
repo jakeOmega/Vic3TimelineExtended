@@ -269,6 +269,11 @@ nd_weekly_update = {
 			post_notification = nd_doctrine_bound_by_law
 		}
 	}
+	# ---- the delivery binds the launch authority (phase 2 plan D10) ---------
+	# The backstop for any path that leaves Launch on Warning or Automatic
+	# Retaliation without the fielded ICBMs they launch; disarmament and a
+	# dismantling check it at once (nd_delivery_remove_legs).
+	nd_authority_bind_check = yes
 	# ---- pulled back for a civil war (nuclear_custody_effects.txt) ----------
 	# The warheads stay in storage until every civil war of ours is over. The
 	# panel greys every raise; any other path that raised the target (an
@@ -827,6 +832,155 @@ nd_set_authority = {
 		custom_tooltip = nd_tt_authority_consequence_automatic
 	}
 	nd_apply_posture_modifiers = yes
+}
+
+# ----------------------------------------------------------------------------
+# DELIVERY LEGS (2026-11-20 delivery spec §4.4; phase 2 plan D8, D10)
+# ----------------------------------------------------------------------------
+# Launch on Warning and Automatic Retaliation launch fielded ICBMs
+# (nd_can_adopt_*). When the ICBMs go (disarmament, a dismantling, a save whose
+# authority outlived its missiles), the authority falls back to Central
+# Authorization. The loss made the change, not the government, so it doesn't
+# start the authority clock: nd_authority_months is put back as it was (tenure
+# satisfied if it was missing), as the No-First-Strike binding does for the
+# doctrine. A human is told (nd_authority_bound_by_delivery). The one writer:
+# called by nd_delivery_remove_legs and weekly by nd_weekly_update.
+nd_authority_bind_check = {
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					nd_authority_launch_on_warning = yes
+					NOT = { nd_can_adopt_launch_on_warning = yes }
+				}
+				AND = {
+					nd_authority_automatic = yes
+					NOT = { nd_can_adopt_automatic_retaliation = yes }
+				}
+			}
+		}
+		if = {
+			limit = { has_variable = nd_authority_months }
+			set_variable = { name = nd_authority_months_before_bind value = var:nd_authority_months }
+		}
+		else = {
+			set_variable = { name = nd_authority_months_before_bind value = nd_authority_tenure_months }
+		}
+		nd_set_authority_1 = yes
+		set_variable = { name = nd_authority_months value = var:nd_authority_months_before_bind }
+		remove_variable = nd_authority_months_before_bind
+		if = {
+			limit = { is_ai = no }
+			post_notification = nd_authority_bound_by_delivery
+		}
+	}
+}
+
+# Disarmament takes the launchers too (owner call 9): the Nuclear Disarmament
+# article's entry into force and a completed dismantling remove both fielded
+# legs and both projects' progress, so a country that resumes rebuilds its
+# delivery. A project in focus goes with them: its live progress was the
+# project's, so the warheads' parked progress comes back to the bar. A
+# warheads slot on a Warheads focus is an activation's park, waiting for the
+# weekly load-back, and stays. Then the authority's gate and reach.
+nd_delivery_remove_legs = {
+	if = {
+		limit = { has_variable = nd_prog_focus }
+		remove_variable = nd_prog_focus
+		if = {
+			limit = { has_variable = nd_proj_warhead_progress }
+			set_variable = { name = nuclear_weapon_program_progress value = var:nd_proj_warhead_progress }
+			remove_variable = nd_proj_warhead_progress
+		}
+		else = {
+			set_variable = { name = nuclear_weapon_program_progress value = 0 }
+		}
+	}
+	if = {
+		limit = { has_variable = nd_icbms_fielded }
+		remove_variable = nd_icbms_fielded
+	}
+	if = {
+		limit = { has_variable = nd_subs_fielded }
+		remove_variable = nd_subs_fielded
+	}
+	if = {
+		limit = { has_variable = nd_proj_icbm_progress }
+		remove_variable = nd_proj_icbm_progress
+	}
+	if = {
+		limit = { has_variable = nd_proj_sub_progress }
+		remove_variable = nd_proj_sub_progress
+	}
+	nd_authority_bind_check = yes
+	nd_reach_refresh = yes
+}
+
+# Once, from nd_delivery_monthly_on_action (global scope; the first monthly
+# pulse after the update, with the system's rule on). Before phase 2 a
+# technology switched a leg on; now the programme fields it. So every country
+# that had a leg keeps it: nd_icbms_fielded with the ICBMs technology,
+# nd_subs_fielded with Advanced Submarine Technology and a coast, armed or not,
+# so no arsenal loses its reach mid-game (spec §4.4). A landlocked country gets
+# no submarine leg: that was the bug phase 1 fixed. A country that gave its
+# arsenal up gets neither (nd_delivery_given_up; owner call 9). A leg granted
+# here drops its project: a focus on it returns to Warheads (nd_focus_set
+# parks its progress) and the slot goes. The world already had these legs, so
+# the fielding headlines are spent (nd_headline_*_fielded; plan D12). A
+# migrated leg holds 0, not a year: when it was fielded is unknown, and the
+# Focus rows print "fielded" without one (nd_focus_row_2, _3).
+nd_delivery_migrate = {
+	set_global_variable = nd_delivery_migrated
+	set_local_variable = { name = nd_mig_icbms value = 0 }
+	set_local_variable = { name = nd_mig_subs value = 0 }
+	every_country = {
+		limit = {
+			has_technology_researched = ICBMs
+			NOT = { has_variable = nd_icbms_fielded }
+			nd_delivery_given_up = no
+		}
+		set_variable = { name = nd_icbms_fielded value = 0 }
+		if = {
+			limit = { nd_focus_is_icbms = yes }
+			nd_focus_set = { F = 1 }
+		}
+		if = {
+			limit = { has_variable = nd_proj_icbm_progress }
+			remove_variable = nd_proj_icbm_progress
+		}
+		change_local_variable = { name = nd_mig_icbms add = 1 }
+	}
+	every_country = {
+		limit = {
+			has_technology_researched = advanced_submarine_technology
+			any_scope_state = { is_coastal = yes }
+			NOT = { has_variable = nd_subs_fielded }
+			nd_delivery_given_up = no
+		}
+		set_variable = { name = nd_subs_fielded value = 0 }
+		if = {
+			limit = { nd_focus_is_submarines = yes }
+			nd_focus_set = { F = 1 }
+		}
+		if = {
+			limit = { has_variable = nd_proj_sub_progress }
+			remove_variable = nd_proj_sub_progress
+		}
+		change_local_variable = { name = nd_mig_subs add = 1 }
+	}
+	if = {
+		limit = { local_var:nd_mig_icbms > 0 }
+		set_global_variable = nd_headline_icbms_fielded
+	}
+	if = {
+		limit = { local_var:nd_mig_subs > 0 }
+		set_global_variable = nd_headline_subs_fielded
+	}
+	set_global_variable = { name = nd_mig_icbms value = local_var:nd_mig_icbms }
+	set_global_variable = { name = nd_mig_subs value = local_var:nd_mig_subs }
+	debug_log = "TE_NUCLEAR: type=delivery_migrated; date=[TimeKeeper.GetCurrentDate.GetString]; icbms=[GetGlobalVariable('nd_mig_icbms').GetValue|0]; subs=[GetGlobalVariable('nd_mig_subs').GetValue|0]"
+	remove_global_variable = nd_mig_icbms
+	remove_global_variable = nd_mig_subs
 }
 
 # After an automatic answer to $ENEMY$: a second first strike by the same
@@ -1675,11 +1829,242 @@ nd_ai_review_posture = {
 	set_variable = { name = nd_safeguards value = var:nd_ai_want_safeguards }
 	set_variable = { name = nd_hardening value = var:nd_ai_want_hardening }
 	nd_apply_posture_modifiers = yes
+	# ---- what funding builds (2026-11-20 delivery spec §4.5) ---------------
+	# After the rival refresh above: the submarine test reads its figures.
+	nd_ai_choose_focus = yes
 	# ---- arsenal size and disarmament (the nuclear taboo) -------------------
 	# Decided by nd_taboo_ai_review_arsenal from the entry's monthly taboo
 	# half, later in this same pulse, which refreshes the programme hold once
 	# after it.
 	set_variable = nd_taboo_ai_arsenal_due
+}
+
+# ----------------------------------------------------------------------------
+# THE AI'S FOCUS (2026-11-20 delivery spec §4.5, owner call 12; phase 2 plan
+# D14). Called from nd_ai_review_posture (every sixth month, and when a crisis
+# opens), never through the Focus rows' buttons, whose handler the AI can't
+# use (nuclear_program_focus_sgui). Nothing before the first device, nor while
+# the programme is lost (standing gone, an aid article lapsed): there is no
+# focus to choose then, and a project in focus waits as it is (spec §4.4).
+# ----------------------------------------------------------------------------
+# The range score: of the countries the AI must be able to strike, weighted
+# (nd_ai_range_must_reach 3, nd_ai_range_should_reach 2, the highest that
+# applies), the share its bombers miss (nd_ai_range_out_of_reach), 0 when
+# there are none. Stored as nd_ai_range_score for the log line.
+#
+# Range is the submarine project when submarines are available and every
+# country that matters out of reach has a coast; else the ICBM project. With
+# no ICBM project open (not researched, or fielded) and an out-of-reach coast,
+# submarines are the only range on offer and count as it. With neither, no
+# step picks range.
+#
+# The order, §4.5's, first that holds:
+#  1. range when the score is 1: no country that matters is in bomber reach;
+#  2. warheads below half the desired stockpile (nd_ai_focus_warheads_first),
+#     but range at war or in a crisis with a country out of reach. Skipped
+#     while an arsenal ceiling would hold a Warheads focus
+#     (nd_taboo_programme_should_be_held's ceiling half): warheads are the one
+#     thing it binds, so an AI under arms control goes on to build delivery
+#     (spec §2) and isn't paused for the rest of the game;
+#  3. range when the score is 0.5 or more (nd_ai_range_score_for_range);
+#  4. missile submarines when available and the AI is vulnerable to its main
+#     rival, or the rival's precision weapons find its silos
+#     (nd_main_rival_accuracy_mult above 1, nd_refresh_main_rival);
+#  5. range when the score is above 0;
+#  6. warheads.
+# When 3 and 4 both hold, a war or crisis with a country out of reach puts
+# range first, else submarines. A score of 0 never builds range: the
+# India-Pakistan rule. The walk's figures are local variables, read in this
+# effect's own limits.
+nd_ai_choose_focus = {
+	if = {
+		limit = {
+			var:nuclear_weapons_program_first_nuke_done ?= 1
+			nuclear_program_has_programme = yes
+		}
+		save_scope_as = nd_rf_self
+		set_local_variable = { name = nd_rf_total value = 0 }
+		set_local_variable = { name = nd_rf_missed value = 0 }
+		set_local_variable = { name = nd_rf_inland value = 0 }
+		set_local_variable = { name = nd_rf_coastal value = 0 }
+		set_local_variable = { name = nd_rf_urgent value = 0 }
+		every_country = {
+			limit = {
+				OR = {
+					nd_ai_range_must_reach = { AI = scope:nd_rf_self }
+					nd_ai_range_should_reach = { AI = scope:nd_rf_self }
+				}
+			}
+			if = {
+				limit = { nd_ai_range_must_reach = { AI = scope:nd_rf_self } }
+				set_local_variable = { name = nd_rf_weight value = nd_ai_range_weight_must }
+			}
+			else = {
+				set_local_variable = { name = nd_rf_weight value = nd_ai_range_weight_should }
+			}
+			change_local_variable = { name = nd_rf_total add = local_var:nd_rf_weight }
+			if = {
+				limit = { nd_ai_range_out_of_reach = { AI = scope:nd_rf_self } }
+				change_local_variable = { name = nd_rf_missed add = local_var:nd_rf_weight }
+				if = {
+					limit = { any_scope_state = { is_coastal = yes } }
+					change_local_variable = { name = nd_rf_coastal add = 1 }
+				}
+				else = {
+					change_local_variable = { name = nd_rf_inland add = 1 }
+				}
+				if = {
+					limit = { nd_ai_range_urgent = { AI = scope:nd_rf_self } }
+					change_local_variable = { name = nd_rf_urgent add = 1 }
+				}
+			}
+		}
+		set_variable = { name = nd_ai_range_score value = 0 }
+		if = {
+			limit = { local_var:nd_rf_total > 0 }
+			set_variable = { name = nd_ai_range_score value = local_var:nd_rf_missed }
+			change_variable = { name = nd_ai_range_score divide = local_var:nd_rf_total }
+		}
+		# What range means here: 3 the submarine project, 2 the ICBM project,
+		# 0 none open.
+		set_local_variable = { name = nd_rf_range value = 0 }
+		if = {
+			limit = {
+				nd_proj_subs_available = yes
+				local_var:nd_rf_coastal > 0
+				OR = {
+					local_var:nd_rf_inland = 0
+					NOT = { nd_proj_icbms_available = yes }
+				}
+			}
+			set_local_variable = { name = nd_rf_range value = 3 }
+		}
+		else_if = {
+			limit = { nd_proj_icbms_available = yes }
+			set_local_variable = { name = nd_rf_range value = 2 }
+		}
+		# Step 4's test, read twice below.
+		set_local_variable = { name = nd_rf_want_subs value = 0 }
+		if = {
+			limit = {
+				nd_proj_subs_available = yes
+				OR = {
+					nd_ai_vulnerable_to_main_rival = yes
+					AND = {
+						has_variable = nd_main_rival_accuracy_mult
+						var:nd_main_rival_accuracy_mult > 1
+					}
+				}
+			}
+			set_local_variable = { name = nd_rf_want_subs value = 1 }
+		}
+		if = {
+			limit = {
+				local_var:nd_rf_range > 0
+				var:nd_ai_range_score >= 1
+			}
+			nd_ai_focus_pick_range = { REASON = range_first }
+		}
+		else_if = {
+			limit = {
+				has_variable = nuclear_weapon_stockpile
+				var:nuclear_weapon_stockpile < nd_ai_focus_warheads_first
+				NOT = {
+					AND = {
+						nd_taboo_has_ceiling = yes
+						nd_stockpile >= nd_taboo_effective_ceiling_value
+					}
+				}
+			}
+			if = {
+				limit = {
+					local_var:nd_rf_range > 0
+					local_var:nd_rf_urgent > 0
+				}
+				nd_ai_focus_pick_range = { REASON = range_urgent }
+			}
+			else = {
+				nd_ai_focus_pick = { F = 1 REASON = warheads_short }
+			}
+		}
+		else_if = {
+			limit = {
+				local_var:nd_rf_range > 0
+				var:nd_ai_range_score >= nd_ai_range_score_for_range
+				local_var:nd_rf_want_subs = 1
+			}
+			if = {
+				limit = { local_var:nd_rf_urgent > 0 }
+				nd_ai_focus_pick_range = { REASON = tie_range }
+			}
+			else = {
+				nd_ai_focus_pick = { F = 3 REASON = tie_submarines }
+			}
+		}
+		else_if = {
+			limit = {
+				local_var:nd_rf_range > 0
+				var:nd_ai_range_score >= nd_ai_range_score_for_range
+			}
+			nd_ai_focus_pick_range = { REASON = range_half }
+		}
+		else_if = {
+			limit = { local_var:nd_rf_want_subs = 1 }
+			nd_ai_focus_pick = { F = 3 REASON = submarines_survival }
+		}
+		else_if = {
+			limit = {
+				local_var:nd_rf_range > 0
+				var:nd_ai_range_score > 0
+			}
+			nd_ai_focus_pick_range = { REASON = range_some }
+		}
+		else = {
+			nd_ai_focus_pick = { F = 1 REASON = warheads }
+		}
+	}
+}
+
+# Range as nd_ai_choose_focus resolved it (local_var:nd_rf_range): the
+# submarine project or the ICBM project.
+nd_ai_focus_pick_range = {
+	if = {
+		limit = { local_var:nd_rf_range = 3 }
+		nd_ai_focus_pick = { F = 3 REASON = $REASON$ }
+	}
+	else = {
+		nd_ai_focus_pick = { F = 2 REASON = $REASON$ }
+	}
+}
+
+# F as nd_focus_set's (1 Warheads, 2 ICBMs, 3 Missile Submarines), set only
+# when it changes: an unchanged focus has nothing to park or load. Through
+# nd_focus_set_core, which leaves the hold to the monthly pass this review
+# runs in (one refresh a block; nd_focus_set_core's comment). Logged on
+# every review, changed or not (observer balancing; nuclear_observer_report.py
+# counts the choices and reasons).
+nd_ai_focus_pick = {
+	set_local_variable = { name = nd_rf_pick value = $F$ }
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					local_var:nd_rf_pick = 1
+					NOT = { nd_focus_is_warheads = yes }
+				}
+				AND = {
+					local_var:nd_rf_pick = 2
+					NOT = { nd_focus_is_icbms = yes }
+				}
+				AND = {
+					local_var:nd_rf_pick = 3
+					NOT = { nd_focus_is_submarines = yes }
+				}
+			}
+		}
+		nd_focus_set_core = { F = $F$ }
+	}
+	debug_log = "TE_NUCLEAR: type=ai_focus; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; score=[THIS.Var('nd_ai_range_score').GetValue|2]; focus=$F$; reason=$REASON$; stockpile=[THIS.Var('nuclear_weapon_stockpile').GetValue|0]; desired=[THIS.ScriptValue('nuclear_ai_desired_stockpile')|0]"
 }
 
 # ----------------------------------------------------------------------------
@@ -2506,6 +2891,54 @@ nd_reach_refresh = {
 			else = {
 				debug_log = "TE_SELF_CHECK BROKEN nd_reach count=[THIS.Var('nd_reach_count').GetValue|0] adjacency=[THIS.Var('nd_reach_adjacency_added').GetValue|0] regions=[THIS.Var('nd_reach_region_added').GetValue|0] (a strategically adjacent country is missing from the list; see docs/testing/nuclear-playtest.md)"
 			}
+		}
+	}
+	# The Focus rows' reach, now and with each leg (phase 2 plan D17): the
+	# countries nd_reaches_country reaches now; those plus every country with
+	# a coast, which missile submarines would add; and every country, which
+	# ICBMs would. Counted here, weekly and at fielding (nd_field_leg), since a
+	# hover can't afford the walk each frame. A human's panel only, from the
+	# first device on, when the rows show.
+	if = {
+		limit = {
+			is_ai = no
+			var:nuclear_weapons_program_first_nuke_done ?= 1
+		}
+		set_variable = { name = nd_reach_count_now value = 0 }
+		set_variable = { name = nd_reach_count_with_subs value = 0 }
+		set_variable = { name = nd_reach_count_every value = 0 }
+		every_country = {
+			limit = { NOT = { THIS = scope:nd_reach_self } }
+			save_scope_as = nd_reach_cnt
+			scope:nd_reach_self = {
+				change_variable = { name = nd_reach_count_every add = 1 }
+				if = {
+					limit = { nd_reaches_country = { TARGET = scope:nd_reach_cnt } }
+					change_variable = { name = nd_reach_count_now add = 1 }
+					change_variable = { name = nd_reach_count_with_subs add = 1 }
+				}
+				else_if = {
+					limit = { scope:nd_reach_cnt = { any_scope_state = { is_coastal = yes } } }
+					change_variable = { name = nd_reach_count_with_subs add = 1 }
+				}
+			}
+		}
+	}
+	# Off a country no human holds, so one a player takes later shows that
+	# its reach isn't counted yet (nd_w_focus_grants_*_uncounted) rather than
+	# the figures from the last time a human held it.
+	else = {
+		if = {
+			limit = { has_variable = nd_reach_count_now }
+			remove_variable = nd_reach_count_now
+		}
+		if = {
+			limit = { has_variable = nd_reach_count_with_subs }
+			remove_variable = nd_reach_count_with_subs
+		}
+		if = {
+			limit = { has_variable = nd_reach_count_every }
+			remove_variable = nd_reach_count_every
 		}
 	}
 }
