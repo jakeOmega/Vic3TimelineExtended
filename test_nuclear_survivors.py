@@ -112,6 +112,12 @@ class TestSurvivabilityTarget(unittest.TestCase):
         for part, held in self.FACTORS.items():
             body = squash(block(self.values, f"nd_exposure_factor_{part}"))
             figure = f"{EXPOSURE_FACTORS[part]:.2f}"
+            # The two legs' factors are named (phase 2 plan D16), so the Focus
+            # rows read the same figure.
+            if part in ("icbms", "submarines"):
+                named = f"nd_exposure_factor_{part}_held"
+                self.assertIn(f"{named} = {figure}", self.values, part)
+                figure = named
             self.assertEqual(body, f"value = 1 if = {{ limit = {{ {held} }} value = {figure} }}", part)
 
     def test_target_is_one_less_the_product(self):

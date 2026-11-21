@@ -769,3 +769,42 @@ nd_focus_row_3 = {
 		localization_key = nd_focus_row_3_stalled
 	}
 }
+
+# A project row's hover, after its terms: what fielding the leg would change,
+# in figures (phase 2 plan D16), the survivability target and the countries in
+# reach now and with the leg, the warheads its months won't build, and for
+# submarines their upkeep. Once in service, only that the terms are in force.
+nd_focus_grants_2 = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { nd_fields_icbms = yes }
+		localization_key = nd_w_focus_grants_fielded
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_focus_grants_2
+	}
+}
+
+nd_focus_grants_3 = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = nd_subs_fielded
+			nd_fields_missile_submarines = no
+		}
+		localization_key = nd_w_focus_grants_lapsed
+	}
+	text = {
+		trigger = { nd_fields_missile_submarines = yes }
+		localization_key = nd_w_focus_grants_fielded
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_focus_grants_3
+	}
+}

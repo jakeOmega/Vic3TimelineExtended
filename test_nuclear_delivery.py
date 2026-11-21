@@ -189,7 +189,8 @@ class TestIcbmReaders(unittest.TestCase):
             self.assertIn("nd_fields_icbms = yes", squash(block(self.triggers, name)), name)
 
     def test_values(self):
-        self.assertIn("limit = { nd_fields_icbms = yes } value = 0.70", squash(block(self.values, "nd_exposure_factor_icbms")))
+        self.assertIn("limit = { nd_fields_icbms = yes } value = nd_exposure_factor_icbms_held",
+                      squash(block(self.values, "nd_exposure_factor_icbms")))
         # The counterforce ratio's +0.5 comes through the declared force (Task 3).
         self.assertIn("limit = { nd_fields_icbms = yes } value = 1", squash(block(self.values, "nd_icbm_force_value")))
 
@@ -217,7 +218,7 @@ class TestSubmarineReaders(unittest.TestCase):
 
     def test_survivability_incident_and_reach_row(self):
         factor = squash(block(strip_comments(read(VALUES)), "nd_exposure_factor_submarines"))
-        self.assertIn("limit = { nd_fields_missile_submarines = yes } value = 0.50", factor)
+        self.assertIn("limit = { nd_fields_missile_submarines = yes } value = nd_exposure_factor_submarines_held", factor)
         events = squash(strip_comments(read(INCIDENT_EVENTS)))
         self.assertIn("limit = { nd_fields_missile_submarines = yes } set_variable = { name = nd_ic_unit value = 1 }",
                       events)

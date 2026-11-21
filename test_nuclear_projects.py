@@ -15,7 +15,7 @@ holds only a Warheads focus, and so does the AI's stockpile cap."""
 import re
 import unittest
 
-from test_nuclear_delivery import constant
+from test_nuclear_delivery import constant, figure
 from test_nuclear_deterrence import ROOT, block, read, squash, strip_comments
 
 NUKE_TRIGGERS = ROOT / "common/scripted_triggers/nuke_triggers.txt"
@@ -485,7 +485,9 @@ class TestSubmarineUpkeep(unittest.TestCase):
     def test_the_part(self):
         body = squash(block(self.values, "nd_upkeep_units_submarines"))
         self.assertEqual("value = 0 if = { limit = { nd_fields_missile_submarines = yes } "
-                         "add = { value = nd_upkeep_size_factor multiply = 6 } }", body)
+                         "add = nd_upkeep_units_submarines_fielded }", body)
+        self.assertEqual(squash(block(self.values, "nd_upkeep_units_submarines_fielded")),
+                         "value = nd_upkeep_size_factor multiply = 6")
         self.assertIn("add = nd_upkeep_units_submarines", squash(block(self.values, "nd_upkeep_units_fixed")))
 
     def test_the_cap(self):
@@ -1158,6 +1160,203 @@ class TestReviewFixes2a(unittest.TestCase):
         from event_image_prompts import IMAGES
         self.assertIn("nuclear_weapon_events.35", IMAGES["missile_parade"]["events"])
         self.assertIn("nuclear_weapon_events.36", IMAGES["missile_submarine_departure"]["events"])
+
+
+
+STATIC_MODIFIERS = ROOT / "common/static_modifiers/nuclear_deterrence_modifiers.txt"
+DISPLAY_TYPES = ROOT / "common/modifier_type_definitions/nuclear_deterrence_display_types.txt"
+TERMS = {
+    "icbms": ("nd_exposure_factor_icbms_held",
+              ("country_nd_reach_every_state_bool", "country_nd_unlocks_launch_on_warning_bool",
+               "country_nd_unlocks_automatic_retaliation_bool")),
+    "submarines": ("nd_exposure_factor_submarines_held", ("country_nd_reach_every_coast_bool",)),
+}
+
+
+def static_modifier_lines(name, loc):
+    """A static modifier's GetDesc, as the hover prints it: one line a field,
+    its type's name and, unless it is a boolean, a figure (six characters)."""
+    body = squash(block(strip_comments(read(STATIC_MODIFIERS)), name))
+    fields = [f for f in re.findall(r"\b(\w+) = ", body) if f != "icon"]
+    names = (re.sub(r"\[(concept_\w+)\]", lambda m: loc.get(m.group(1), m.group(1)), loc.get(f, f)) for f in fields)
+    return "\n".join(name + ("" if f.endswith("_bool") else " +99.9%") for name, f in zip(names, fields))
+
+
+def composed(key, loc, depth=0):
+    """A hover as the player reads it: each GetCustom at its longest branch,
+    each static modifier's GetDesc as its lines, each $key$ spliced, each other
+    data call as five characters, formatting codes stripped."""
+    text = loc.get(key, "")
+    text = re.sub(r"\$([\w.\-]+)\$", lambda m: composed(m.group(1), loc, depth + 1) if m.group(1) in loc
+                  else "X", text)
+
+    def call(m):
+        inner = m.group(1)
+        mod = re.search(r"GetStaticModifier\('(\w+)'\)\.GetDesc", inner)
+        if mod:
+            return static_modifier_lines(mod.group(1), loc)
+        if re.fullmatch(r"concept_\w+", inner):
+            return loc.get(inner, inner)
+        custom = re.search(r"GetCustom\('(\w+)'\)", inner)
+        if custom and depth < 4:
+            keys = [k for _, k in custom_targets_any(custom.group(1))]
+            return max((composed(k, loc, depth + 1) for k in keys), key=len, default="")
+        return "99.9K"
+    text = re.sub(r"\[([^\[\]]*)\]", call, text)
+    text = re.sub(r"#[A-Za-z_]+(;\S*)? ?", "", text).replace("#!", "")
+    return re.sub(r"@\w+!", "X", text).replace("\\n", "\n")
+
+
+def custom_targets_any(name):
+    """custom_targets over every customizable-localization file."""
+    for path in (ROOT / "common/customizable_localization").glob("*.txt"):
+        text = strip_comments(read(path))
+        if re.search(r"(?m)^" + re.escape(name) + r"\s*=\s*\{", text):
+            body = squash(block(text, name))
+            return re.findall(r"text = \{ trigger = \{ (.*?) \} localization_key = (\w+) \}", body)
+    return []
+
+
+class TestFocusTermsMatchScript(unittest.TestCase):
+    """What each project grants, as never-added display modifiers whose figures
+    are the script's (phase 2 plan D16), and the reach counts the hovers read,
+    stored weekly and at fielding (D17)."""
+
+    def setUp(self):
+        self.modifiers = strip_comments(read(STATIC_MODIFIERS))
+        self.values = strip_comments(read(DETERRENCE_VALUES))
+        self.extra = strip_comments(read(EXTRA_VALUES))
+        self.types = strip_comments(read(DISPLAY_TYPES))
+
+    def test_the_factors_are_named(self):
+        self.assertEqual(constant(self.values, "nd_exposure_factor_icbms_held"), 0.70)
+        self.assertEqual(constant(self.values, "nd_exposure_factor_submarines_held"), 0.50)
+        self.assertIn("limit = { nd_fields_icbms = yes } value = nd_exposure_factor_icbms_held",
+                      squash(block(self.values, "nd_exposure_factor_icbms")))
+        self.assertIn("limit = { nd_fields_missile_submarines = yes } value = nd_exposure_factor_submarines_held",
+                      squash(block(self.values, "nd_exposure_factor_submarines")))
+
+    def test_each_terms_modifier_carries_its_factor_and_rules(self):
+        for leg, (held, booleans) in TERMS.items():
+            with self.subTest(leg=leg):
+                body = squash(block(self.modifiers, f"nd_focus_terms_{leg}"))
+                self.assertAlmostEqual(figure(body, "country_nd_exposure_mult"),
+                                       constant(self.values, held) - 1, places=6)
+                for field in booleans:
+                    self.assertIn(f"{field} = yes", body)
+
+    def test_the_types_are_display_only(self):
+        for field in ("country_nd_exposure_mult", "country_nd_reach_every_state_bool",
+                      "country_nd_reach_every_coast_bool", "country_nd_unlocks_launch_on_warning_bool",
+                      "country_nd_unlocks_automatic_retaliation_bool"):
+            with self.subTest(field=field):
+                self.assertIn("script_only = yes", squash(block(self.types, field)))
+        self.assertIn("percent = yes", squash(block(self.types, "country_nd_exposure_mult")))
+        # Less exposure is better: a negative figure shows green.
+        self.assertIn("color = bad", squash(block(self.types, "country_nd_exposure_mult")))
+
+    def test_nothing_adds_them_and_the_header_lists_them(self):
+        for path in list((ROOT / "common").rglob("*.txt")) + list((ROOT / "events").rglob("*.txt")):
+            text = strip_comments(path.read_text(encoding="utf-8-sig", errors="replace"))
+            self.assertNotRegex(text, r"(add|remove)_modifier\s*=\s*\{?\s*(name\s*=\s*)?nd_focus_terms_", path)
+        header = read(STATIC_MODIFIERS)[:4000]
+        self.assertIn("nd_focus_terms_", header)
+
+    def test_the_target_with_each_leg(self):
+        for leg, held in (("icbms", "nd_exposure_factor_icbms_held"),
+                          ("submarines", "nd_exposure_factor_submarines_held")):
+            with self.subTest(leg=leg):
+                parts = ["nd_exposure_factor_bombers", "nd_exposure_factor_radar", "nd_exposure_factor_icbms",
+                         "nd_exposure_factor_submarines", "nd_exposure_factor_missile_defense"]
+                parts[parts.index(f"nd_exposure_factor_{leg}")] = held
+                expected = (f"value = {parts[0]} " + " ".join(f"multiply = {p}" for p in parts[1:])
+                            + " multiply = -1 add = 1 multiply = 100")
+                self.assertEqual(squash(block(self.values, f"nd_survivability_target_with_{leg}")), expected)
+
+    def test_the_forgone_warheads(self):
+        rate = squash(block(self.extra, "nd_display_warheads_monthly"))
+        self.assertEqual(rate, "value = nd_display_proj_monthly_1 divide = nuclear_weapon_program_goal_value "
+                               "max = nd_display_warheads_monthly_cap")
+        cap = squash(block(self.extra, "nd_display_warheads_monthly_cap"))
+        self.assertEqual(cap, "value = nuclear_weapon_program_max_per_week multiply = 52 divide = 12")
+        for n in (2, 3):
+            with self.subTest(n=n):
+                body = squash(block(self.extra, f"nd_proj_forgone_warheads_{n}"))
+                self.assertTrue(body.startswith(f"value = nd_display_proj_months_{n} "
+                                                "multiply = nd_display_warheads_monthly"), body)
+                self.assertIn("max = nd_display_ceiling_room", body)
+        room = squash(block(self.extra, "nd_display_ceiling_room"))
+        self.assertIn("limit = { nd_taboo_has_ceiling = yes } value = nd_taboo_effective_ceiling_value "
+                      "subtract = nd_stockpile", room)
+
+    def test_the_submarine_upkeep_at_fielding(self):
+        self.assertIn("add = nd_upkeep_units_submarines_fielded",
+                      squash(block(self.values, "nd_upkeep_units_submarines")))
+        self.assertEqual(squash(block(self.values, "nd_upkeep_units_submarines_fielded")),
+                         "value = nd_upkeep_size_factor multiply = 6")
+        self.assertEqual(squash(block(self.values, "nd_display_upkeep_submarines_with_weekly")),
+                         "value = gdp divide = 100000 multiply = nd_upkeep_units_submarines_fielded min = 0")
+
+    def test_the_reach_counts_are_stored_weekly_and_at_fielding(self):
+        effects = strip_comments(read(DETERRENCE_EFFECTS))
+        refresh = squash(block(effects, "nd_reach_refresh"))
+        for name in ("nd_reach_count_now", "nd_reach_count_with_subs", "nd_reach_count_every"):
+            self.assertIn(f"set_variable = {{ name = {name} value = 0 }}", refresh)
+        self.assertIn("nd_reaches_country = { TARGET = scope:nd_reach_cnt }", refresh)
+        self.assertIn("scope:nd_reach_cnt = { any_scope_state = { is_coastal = yes } }", refresh)
+        # Our own panel only, from the first device on (D17).
+        self.assertIn("is_ai = no var:nuclear_weapons_program_first_nuke_done ?= 1", refresh)
+        self.assertIn("nd_reach_refresh = yes", squash(block(effects, "nd_weekly_update")))
+        self.assertIn("nd_reach_refresh = yes", squash(block(strip_comments(read(WEAPON_EFFECTS)), "nd_field_leg")))
+        for name in ("nd_reach_count_now", "nd_reach_count_with_subs", "nd_reach_count_every"):
+            self.assertIn(f"limit = {{ has_variable = {name} }} value = var:{name}",
+                          squash(block(self.values, f"nd_display_{name.replace('nd_', '', 1)}")))
+
+
+class TestFocusHovers(unittest.TestCase):
+    """Each project row's hover prints what fielding grants, in figures (spec
+    §5.3's Programme focus row; plan D16)."""
+
+    def setUp(self):
+        self.loc = loc_values()
+
+    def test_each_row_prints_its_terms(self):
+        two, three = self.loc["nd_w_focus_2_tt"], self.loc["nd_w_focus_3_tt"]
+        self.assertIn("[GetStaticModifier('nd_focus_terms_icbms').GetDesc]", two)
+        self.assertIn("[GetStaticModifier('nd_icbm_force').GetDesc]", two)
+        self.assertIn("[Country.GetCustom('nd_focus_grants_2')]", two)
+        self.assertIn("[GetStaticModifier('nd_focus_terms_submarines').GetDesc]", three)
+        self.assertIn("[Country.GetCustom('nd_focus_grants_3')]", three)
+
+    def test_the_figures_before_and_after(self):
+        grants = dict((key, trig) for trig, key in custom_targets("nd_focus_grants_2"))
+        self.assertEqual(list(grants)[-1], "nd_w_focus_grants_2")
+        self.assertEqual(grants["nd_w_focus_grants_fielded"], "nd_fields_icbms = yes")
+        text = self.loc["nd_w_focus_grants_2"]
+        for value in ("nd_display_survivability_target", "nd_survivability_target_with_icbms",
+                      "nd_display_reach_count_now", "nd_display_reach_count_every", "nd_proj_forgone_warheads_2"):
+            self.assertIn(f"ScriptValue('{value}')", text)
+        subs = [key for _, key in custom_targets("nd_focus_grants_3")]
+        self.assertEqual(subs[-1], "nd_w_focus_grants_3")
+        text = self.loc["nd_w_focus_grants_3"]
+        for value in ("nd_display_survivability_target", "nd_survivability_target_with_submarines",
+                      "nd_display_reach_count_now", "nd_display_reach_count_with_subs", "nd_proj_forgone_warheads_3"):
+            self.assertIn(f"ScriptValue('{value}')", text)
+        # The submarines' upkeep in money, as the Upkeep row's hover gives it (D16).
+        self.assertIn("ScriptValue('nd_display_upkeep_submarines_with_weekly')|D]", text)
+
+    def test_every_new_key_has_loc(self):
+        for key in ("nd_focus_terms_icbms", "nd_focus_terms_submarines", "nd_focus_terms_icbms_desc",
+                    "nd_focus_terms_submarines_desc", "country_nd_exposure_mult", "country_nd_exposure_mult_desc",
+                    "country_nd_reach_every_state_bool", "country_nd_reach_every_coast_bool",
+                    "country_nd_unlocks_launch_on_warning_bool", "country_nd_unlocks_automatic_retaliation_bool",
+                    "nd_w_focus_grants_fielded"):
+            self.assertIn(key, self.loc)
+
+    def test_each_hover_fits(self):
+        for key in ("nd_w_focus_1_tt", "nd_w_focus_2_tt", "nd_w_focus_3_tt"):
+            with self.subTest(key=key):
+                self.assertLess(len(composed(key, self.loc)), 500, composed(key, self.loc))
 
 
 if __name__ == "__main__":

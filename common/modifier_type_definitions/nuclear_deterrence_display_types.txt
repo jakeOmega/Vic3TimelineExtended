@@ -124,3 +124,42 @@ country_nd_decapitation_immune_bool = {
 	boolean = yes
 	script_only = yes
 }
+
+# What fielding a delivery leg grants, for the Focus rows' hovers (phase 2 plan
+# D16), carried by nd_focus_terms_icbms and nd_focus_terms_submarines. The
+# leg's survivability factor as the change in the share of the force a first
+# strike could still reach (nd_exposure_factor_icbms_held,
+# nd_exposure_factor_submarines_held, less 1): less is better.
+country_nd_exposure_mult = {
+	color = bad
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+
+# Rules with no quantity: whom the leg reaches (nd_reaches_country,
+# nd_state_in_reach_of), and the launch authorities fielded ICBMs open
+# (nd_can_adopt_launch_on_warning, nd_can_adopt_automatic_retaliation).
+country_nd_reach_every_state_bool = {
+	color = good
+	boolean = yes
+	script_only = yes
+}
+
+country_nd_reach_every_coast_bool = {
+	color = good
+	boolean = yes
+	script_only = yes
+}
+
+country_nd_unlocks_launch_on_warning_bool = {
+	color = good
+	boolean = yes
+	script_only = yes
+}
+
+country_nd_unlocks_automatic_retaliation_bool = {
+	color = good
+	boolean = yes
+	script_only = yes
+}

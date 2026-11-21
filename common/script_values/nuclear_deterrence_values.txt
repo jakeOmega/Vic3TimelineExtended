@@ -114,11 +114,15 @@ nd_upkeep_units_submarines = {
 	value = 0
 	if = {
 		limit = { nd_fields_missile_submarines = yes }
-		add = {
-			value = nd_upkeep_size_factor
-			multiply = 6
-		}
+		add = nd_upkeep_units_submarines_fielded
 	}
+}
+
+# What the leg costs while at sea, fielded or not yet: the Focus row's figure
+# for the project (phase 2 plan D16) reads it too.
+nd_upkeep_units_submarines_fielded = {
+	value = nd_upkeep_size_factor
+	multiply = 6
 }
 
 # What does not depend on readiness: safeguards, hardening, an Automatic
@@ -236,11 +240,17 @@ nd_exposure_factor_radar = {
 	}
 }
 
+# The two legs' factors while fielded, named so the Focus rows' terms and the
+# target with a leg read the same figures (phase 2 plan D16).
+nd_exposure_factor_icbms_held = 0.70            # hardened silos
+
+nd_exposure_factor_submarines_held = 0.50       # missile submarines at sea
+
 nd_exposure_factor_icbms = {
 	value = 1
 	if = {
 		limit = { nd_fields_icbms = yes }
-		value = 0.70                            # hardened silos
+		value = nd_exposure_factor_icbms_held
 	}
 }
 
@@ -248,7 +258,7 @@ nd_exposure_factor_submarines = {
 	value = 1
 	if = {
 		limit = { nd_fields_missile_submarines = yes }
-		value = 0.50                            # missile submarines at sea
+		value = nd_exposure_factor_submarines_held
 	}
 }
 
@@ -272,6 +282,31 @@ nd_survivability_exposed_share = {
 nd_survivability_target = {
 	value = 1
 	subtract = nd_survivability_exposed_share
+	multiply = 100
+}
+
+# The target with a leg fielded, for that project's Focus row (phase 2 plan
+# D16): the product with the leg's factor in place of the one in force, so it
+# equals the target once the leg is in service.
+nd_survivability_target_with_icbms = {
+	value = nd_exposure_factor_bombers
+	multiply = nd_exposure_factor_radar
+	multiply = nd_exposure_factor_icbms_held
+	multiply = nd_exposure_factor_submarines
+	multiply = nd_exposure_factor_missile_defense
+	multiply = -1
+	add = 1
+	multiply = 100
+}
+
+nd_survivability_target_with_submarines = {
+	value = nd_exposure_factor_bombers
+	multiply = nd_exposure_factor_radar
+	multiply = nd_exposure_factor_icbms
+	multiply = nd_exposure_factor_submarines_held
+	multiply = nd_exposure_factor_missile_defense
+	multiply = -1
+	add = 1
 	multiply = 100
 }
 
@@ -3366,6 +3401,42 @@ nd_display_upkeep_submarines_weekly = {
 	divide = 100000
 	multiply = nd_upkeep_units_submarines
 	min = 0
+}
+
+# The same before the leg is fielded, for the submarine project's Focus row
+# (phase 2 plan D16): what it would add each week at today's GDP and arsenal.
+nd_display_upkeep_submarines_with_weekly = {
+	value = gdp
+	divide = 100000
+	multiply = nd_upkeep_units_submarines_fielded
+	min = 0
+}
+
+# The countries in reach, now and with each leg, for the Focus rows (phase 2
+# plan D17): stored by nd_reach_refresh on a human's panel from the first
+# device on; 0 until the first rebuild.
+nd_display_reach_count_now = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_reach_count_now }
+		value = var:nd_reach_count_now
+	}
+}
+
+nd_display_reach_count_with_subs = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_reach_count_with_subs }
+		value = var:nd_reach_count_with_subs
+	}
+}
+
+nd_display_reach_count_every = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_reach_count_every }
+		value = var:nd_reach_count_every
+	}
 }
 
 nd_display_survivability = {

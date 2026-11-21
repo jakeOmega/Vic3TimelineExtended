@@ -290,7 +290,7 @@ Left for later tasks:
 - the Focus rows' hovers in the widget and loc;
 - `test_nuclear_layout.py`, `test_nuclear_projects.py`.
 
-- [ ] Write the tests:
+- [x] Write the tests:
   - `TestFocusHovers`:
     - each row prints its terms and the ICBM row `nd_icbm_force`'s lines;
     - the target now and with the leg;
@@ -305,8 +305,15 @@ Left for later tasks:
     - the reach counts are stored weekly and at fielding.
 
   Run: FAIL.
-- [ ] Implement, then `modifier_field_audit --strict`, `modifier_name_audit`, `long_tooltip_audit`, the nuclear tests and `preflight.py --changed`. PASS.
-- [ ] Commit `Nuclear programme: each focus shows what fielding it would grant (spec §5.3)`.
+- [x] Implement, then `modifier_field_audit --strict`, `modifier_name_audit`, `long_tooltip_audit`, the nuclear tests and `preflight.py --changed`. PASS.
+- [x] Commit `Nuclear programme: each focus shows what fielding it would grant (spec §5.3)`.
+
+**As built (2026-11-21).** As planned, with these choices:
+- **Named factors:** the two legs' factors are named values (`nd_exposure_factor_icbms_held` 0.70, `_submarines_held` 0.50), which the factors, the targets with a leg and the terms' test read. The submarine upkeep's figure is `nd_upkeep_units_submarines_fielded`, read by the leg's upkeep and by `nd_display_upkeep_submarines_with_weekly`.
+- **The forgone warheads** (`nd_proj_forgone_warheads_2` / `_3`) live beside the rows' months in `extra_script_values.txt`. They are the months to finish × the Warheads focus's warheads a month, capped by the weekly limit's 13 a month and by the room an arsenal ceiling leaves, since a ceiling would stop those warheads anyway.
+- **Reach counts** (`nd_reach_count_now`, `_with_subs`, `_every`) are counted in `nd_reach_refresh` on a human's panel only, from the first device on, as `nd_plan_refresh` is: the AI never reads them.
+- **Fielded legs:** the hover's figures give way to "these terms are in force", or for submarines with no coastal state, that they are in port.
+- **The rate in the hover:** the project rows' hovers no longer say "at the first device's rate": the rate row's note and the Choose button say it, and the hover had to fit 500 characters with the terms' lines.
 
 ### Task 7: Others' delivery; docs, gate, PR 2b (§5.4 Nuclear Powers and National Info; D18, D19)
 

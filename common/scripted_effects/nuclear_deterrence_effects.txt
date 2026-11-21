@@ -2893,6 +2893,37 @@ nd_reach_refresh = {
 			}
 		}
 	}
+	# The Focus rows' reach, now and with each leg (phase 2 plan D17): the
+	# countries nd_reaches_country reaches now; those plus every country with
+	# a coast, which missile submarines would add; and every country, which
+	# ICBMs would. Counted here, weekly and at fielding (nd_field_leg), since a
+	# hover can't afford the walk each frame. A human's panel only, from the
+	# first device on, when the rows show.
+	if = {
+		limit = {
+			is_ai = no
+			var:nuclear_weapons_program_first_nuke_done ?= 1
+		}
+		set_variable = { name = nd_reach_count_now value = 0 }
+		set_variable = { name = nd_reach_count_with_subs value = 0 }
+		set_variable = { name = nd_reach_count_every value = 0 }
+		every_country = {
+			limit = { NOT = { THIS = scope:nd_reach_self } }
+			save_scope_as = nd_reach_cnt
+			scope:nd_reach_self = {
+				change_variable = { name = nd_reach_count_every add = 1 }
+				if = {
+					limit = { nd_reaches_country = { TARGET = scope:nd_reach_cnt } }
+					change_variable = { name = nd_reach_count_now add = 1 }
+					change_variable = { name = nd_reach_count_with_subs add = 1 }
+				}
+				else_if = {
+					limit = { scope:nd_reach_cnt = { any_scope_state = { is_coastal = yes } } }
+					change_variable = { name = nd_reach_count_with_subs add = 1 }
+				}
+			}
+		}
+	}
 }
 
 # Warning time (rework spec §7.4): nd_based_near, a list on an armed country

@@ -1031,6 +1031,51 @@ nd_display_proj_months_3 = {
 	min = 0
 }
 
+# Warheads a calendar month at current funding on a Warheads focus, at most the
+# weekly cap's (nuclear_weapon_program_max_per_week, 52 ÷ 12 weeks a month).
+nd_display_warheads_monthly_cap = {
+	value = nuclear_weapon_program_max_per_week
+	multiply = 52
+	divide = 12
+}
+
+nd_display_warheads_monthly = {
+	value = nd_display_proj_monthly_1
+	divide = nuclear_weapon_program_goal_value
+	max = nd_display_warheads_monthly_cap
+}
+
+# The room an arsenal ceiling leaves (nd_taboo_effective_ceiling_value less the
+# stockpile, at least 0); with no ceiling, more than any project's months
+# could build.
+nd_display_ceiling_room = {
+	value = 1000000
+	if = {
+		limit = { nd_taboo_has_ceiling = yes }
+		value = nd_taboo_effective_ceiling_value
+		subtract = nd_stockpile
+		min = 0
+	}
+}
+
+# The warheads a project's months to finish won't build (phase 2 plan D16):
+# those months at the Warheads focus's rate, and no more than a ceiling would
+# let us build anyway, since it holds warheads only. N = 2 ICBMs, 3 missile
+# submarines; 0 while the project isn't progressing.
+nd_proj_forgone_warheads_2 = {
+	value = nd_display_proj_months_2
+	multiply = nd_display_warheads_monthly
+	max = nd_display_ceiling_room
+	min = 0
+}
+
+nd_proj_forgone_warheads_3 = {
+	value = nd_display_proj_months_3
+	multiply = nd_display_warheads_monthly
+	max = nd_display_ceiling_room
+	min = 0
+}
+
 nuclear_industrial_strike_killed_population = {
 	value = state_population
 	# What the day's earlier strikes left (nd_strike_people_before).
