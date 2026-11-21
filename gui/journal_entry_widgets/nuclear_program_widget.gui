@@ -259,6 +259,34 @@ types nuclear_program_widget_types
 					texture = "gfx/interface/icons/nuclear_icons/doctrine_warfighting.dds"
 				}
 			}
+			### Launch authority, public as the doctrine is (owner, rework spec
+			### §14.2; 2026-11-20 delivery spec D17), with the overview's icons.
+			widget = {
+				size = { 28 28 }
+				parentanchor = vcenter
+				tooltip = "nuclear_program_power_authority_tt"
+
+				icon = {
+					size = { 28 28 }
+					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)1' )]"
+					texture = "gfx/interface/icons/nuclear_icons/authority_central.dds"
+				}
+				icon = {
+					size = { 28 28 }
+					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)2' )]"
+					texture = "gfx/interface/icons/nuclear_icons/authority_delegation.dds"
+				}
+				icon = {
+					size = { 28 28 }
+					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)3' )]"
+					texture = "gfx/interface/icons/nuclear_icons/authority_on_warning.dds"
+				}
+				icon = {
+					size = { 28 28 }
+					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)4' )]"
+					texture = "gfx/interface/icons/nuclear_icons/authority_automatic.dds"
+				}
+			}
 		}
 	}
 
@@ -619,6 +647,21 @@ types nuclear_program_widget_types
 				}
 				blockoverride "row_tooltip" {
 					tooltip = "je_nuclear_program_widget_delivery_tt"
+				}
+			}
+
+			### Our counterforce ratio and its parts (2026-11-20 delivery spec
+			### §5.3): what each of our warheads that lands on their forces
+			### destroys.
+			nuclear_program_row = {
+				blockoverride "row_label" {
+					text = "je_nuclear_program_widget_counterforce_label"
+				}
+				blockoverride "row_value" {
+					text = "je_nuclear_program_widget_counterforce_value"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "je_nuclear_program_widget_counterforce_tt"
 				}
 			}
 

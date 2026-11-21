@@ -129,7 +129,7 @@
 
 **Files:** `gui/journal_entry_widgets/nuclear_deterrence_widget.gui` (the survivability bar's target line and floor, a Launch credit row after Survivors, the Reach row's gate), `common/scripted_guis/nuclear_deterrence_sguis.txt` (the Reach row's gate), `common/script_values/nuclear_deterrence_values.txt` (`nd_display_exposure_factor_*`, `nd_display_launch_credit`), `common/scripted_effects/nuclear_deterrence_effects.txt` (`nd_refresh_main_rival` stores `nd_main_rival_k`, `nd_main_rival_pgm` and `nd_main_rival_accuracy_mult`), `nuclear_deterrence_custom_loc.txt` (`nd_reach_value`), loc (`nd_w_survivability_*`, `nd_w_launch_credit_*`, `nd_w_survivors_tt`, `nd_w_reach_*`), `test_nuclear_layout.py`.
 
-- [ ] Write `TestForcesDisplay`:
+- [x] Write `TestForcesDisplay`:
   - the survivability hover prints one line per factor through `nd_display_exposure_factor_*`, then the exposed share and the target;
   - the bar's line reads the target and the floor is printed;
   - the Launch credit row reads `nd_display_launch_credit`, its hover naming the authority's credit and the safeguards cut;
@@ -138,14 +138,27 @@
   - the rival's figures in the Survivors hover carry the qualifier and `nd_tt_worlds_view` (D8).
 
   The rows fit (`_fits`), and `PrivateTest` and `ObserverTest` pass. Run: FAIL.
-- [ ] Implement, then the GUI lint, the nuclear tests and `preflight.py --changed`. PASS.
-- [ ] Commit `Nuclear panel: survivability's parts, launch credit, the rival's counterforce ratio (spec §5.4)`.
+- [x] Implement, then the GUI lint, the nuclear tests and `preflight.py --changed`. PASS.
+- [x] Commit `Nuclear panel: survivability's parts, launch credit, the rival's counterforce ratio (spec §5.4)`.
+
+**As built (2026-11-20).** Four changes from the plan:
+- **Where the chain sits.** It is in the target's hover, not the survivability row's: that hover is at 473 of the 500 characters `long_tooltip_audit` allows. The bar's target line has the hover, and so does a new row under the bar, "Target and floor", which prints both figures. A part not held prints "not researched", or what it needs.
+- **Reach.** `nd_reach_limited_sgui` is gone. The row shows on `nd_armed_sgui`, and `nd_reach_list_sgui` prints one line with ICBMs. Without ICBMs it prints the list's heading, which moved out of `nd_w_reach_tt`, then the list.
+- **The rival's figures.** The refresh stores five values, through `_saved` script values:
+  - `nd_main_rival_warheads`: the shown estimate, `nd_seen_stockpile`;
+  - `nd_main_rival_k`: the counterforce ratio;
+  - `nd_main_rival_pgm`: the ratio's Precision-Guided Munitions part, `nd_k_ratio_tech_part`, the rest of `country_nd_k_ratio_add`;
+  - `nd_main_rival_k_force`: the ICBM force's part, `nd_k_ratio_force_part`;
+  - `nd_main_rival_accuracy_mult`.
+
+  The reach figure still multiplies `nd_believed_stockpile` (D9). So in the days before a new arsenal's estimate is seeded, the warheads line can read 0 under a reach above it.
+- **The qualifier.** "Up to" on the rival's reach is the qualifier, and its hover is `nd_tt_worlds_view`, a nested hover (`#tooltippable;tooltip:`) in plain text. The safeguards cut a level is now one script value, `nd_launch_credit_safeguards_cut`.
 
 ### Task 6: Posture, hardening, safeguards and the ceiling (D10–D13)
 
 **Files:** `common/scripted_effects/nuclear_deterrence_effects.txt` (`nd_refresh_main_rival`: the `nd_lost_main_*` figures), `common/scripted_guis/nuclear_deterrence_sguis.txt` (`nd_posture_sgui`'s effect: the refresh after each op, behind a click-only marker), `common/script_values/nuclear_deterrence_values.txt` (the readiness 0, 1 and 3 exposure values against the saved enemy, the credit and halt chance per authority, the hardening step at the next level, the half-gap constants, the ceiling's next-size upkeep, a script value of `var:nd_warhead_ceiling` ± 1 mirroring `nd_upkeep_weekly`), `common/script_values/nuclear_taboo_values.txt` (the next-size burden, mirroring `nd_taboo_burden_value`'s arsenal factor, `:608`), `common/static_modifiers/nuclear_deterrence_modifiers.txt` (`nd_safeguards_level_terms`), `common/modifier_type_definitions/nuclear_deterrence_display_types.txt` (`country_nd_reliability_target_add`), the widget (the authority choices, readiness rows, hardening and safeguards steppers, the ceiling stepper), loc, `test_nuclear_deterrence.py`, `test_nuclear_layout.py`.
 
-- [ ] Write `TestPostureFigures`:
+- [x] Write `TestPostureFigures`:
   - each authority option's hover prints its `nd_lost_main_auth_N` and halt chance, Central's adds `nd_redundancy`, and the readiness rows print `nd_lost_main_ready_N`;
   - the refresh runs after every posture op, behind the marker;
   - the half-gap constants equal the formula;
@@ -154,22 +167,44 @@
   - each hover says what it says in figures, not words (no "climbs faster", no "improves over the coming months").
 
   Run: FAIL.
-- [ ] Implement, then the GUI lint, `tooltip_walk_variable_audit --strict`, the nuclear tests and `preflight.py --changed`. PASS.
-- [ ] Commit `Nuclear posture: what each choice saves, costs and changes, in figures (spec §5.3)`.
+- [x] Implement, then the GUI lint, `tooltip_walk_variable_audit --strict`, the nuclear tests and `preflight.py --changed`. PASS.
+- [x] Commit `Nuclear posture: what each choice saves, costs and changes, in figures (spec §5.3)`.
+
+**As built (2026-11-20).** Five changes from the plan:
+- **Terms apart from their clamps.** `nd_hold_chance` and `nd_reliability_target` now clamp `nd_hold_chance_unclamped` and `nd_reliability_target_unclamped`, so the figures per authority and per safeguards level reuse the terms and stay exact at the clamps. Each per-level figure is a named value that the display modifiers and the hovers are tested against: `nd_safeguards_reliability_per_level` (12), `nd_safeguards_halt_per_level` (5), `nd_hold_launch_on_warning_cut` (10), `nd_hardening_rate_per_level` (0.02) and `nd_survivability_erosion_rate` (0.01).
+- **What the refresh stores.** It also stores `nd_lost_main`, the strike now, which the safeguards line sets beside one level more. Each strike figure is `nd_lost_vs_saved_at_*`, and a test holds each to `nd_lost_vs_saved` with that choice made.
+- **Where the figures sit.** Each readiness level's figure is in its own hover, not a new column, so the widget is unchanged. The hardening buttons give this month's step at the next level both up and down.
+- **The ceiling's next size.** The figures are at the stepper's own next step (1, 5 or 25 warheads, `nd_taboo_ceiling_lowered_value` and `_raised_value`), not at the ceiling ± 1, and sit in the − and + buttons' hovers.
+- **One sentence waits for phase 2.** That a ceiling holds warheads only, not a project, waits for phase 2, which brings the projects.
 
 ### Task 7: Strike previews (D14)
 
 **Files:** `common/scripted_effects/nuclear_deterrence_effects.txt` (`nd_plan_refresh`: the `nd_plan_pv_*` figures), `common/script_values/nuclear_deterrence_values.txt` (the preview values, ranges per D8), the widget (a preview line under each mission, refreshed by the size stepper's ops 77/78), loc (`nd_w_strike_mission_*_tt` and the preview keys, each labelled an estimate), `test_nuclear_deterrence.py`, `test_nuclear_layout.py`.
 
-- [ ] Write `TestStrikePreview`:
+- [x] Write `TestStrikePreview`:
   - each mission's preview is stored on every planner op (72–79) and weekly;
   - the Forces preview prints our counterforce ratio with its parts, and the silo line when the target holds `nd_fields_icbms` and we have the penetration;
   - each range has its low end at or below its high end, and every preview line carries its qualifier ("at least", "up to" or the range) and `nd_tt_worlds_view` (D8);
   - **`test_preview_reads_only_the_worlds_view`**: the preview values reach the enemy only through `nd_seen_*`, `nd_shown_public_estimate`, public technologies and states, by `_true_state` over the enemy-scope reads. `PrivateTest` covers another country's panel, not our own panel's reads of an enemy.
 
   Run: FAIL.
-- [ ] Implement, then record in the commit which expected-landed method shipped (D14). Run the nuclear tests and `preflight.py --changed`. PASS.
-- [ ] Commit `Nuclear strikes: the planner previews each mission (spec §5.3)`.
+- [x] Implement, then record in the commit which expected-landed method shipped (D14). Run the nuclear tests and `preflight.py --changed`. PASS.
+- [x] Commit `Nuclear strikes: the planner previews each mission (spec §5.3)`.
+
+**As built (2026-11-20).**
+- **Expected landed uses the salvo's own picker.** `nd_plan_preview` runs `nd_salvo_pick_target` once a warhead for each mission, at each picked state's `nuclear_strike_success_chance`. The marks, the working figures and the scopes the picker reads (`nd_salvo_attacker`, `attacking_country`, `nd_salvo_cap_region`, `target_state`, `nd_sv_enemy`) are cleared after, and the panel's mission is put back. The capital-odds fallback wasn't needed: the preview is script, run weekly and behind the click-only marker.
+- **What each row shows.** A row named Estimate sits under each mission; its hover gives the figures.
+  - Cities: expected landed, deaths and the city share each warhead razes, as a range.
+  - Forces: landed, then destroyed and left to them, with those flown first under Launch on Warning. Our counterforce ratio follows with its parts, and the silo line.
+  - Leadership: landed on the command, the target's redundancy, and the chance to cut its command off. The chance is a range too, with the redundancy at the floor as its other end.
+  - Deaths are given for all three missions.
+- **Where the world's view applies.** Cities' figures rest on the target's states and the odds, which are public, not on the world's view. So they carry no `nd_tt_worlds_view`; they are labelled an estimate. Each range prints one figure when its ends agree (`nd_pv_*_range` custom loc).
+- **Which ops refresh it.**
+  - Ops 72/73 run `nd_plan_refresh`, which ends with the preview.
+  - Ops 74–78 run the preview alone. `nd_plan_refresh` recounts the candidates, and the enemy under the click could change.
+  - Op 79 stores nothing. It opens the Launch Order, and a refresh there could swap the country being ordered against.
+- **Not previewed:** a capital hit by a Cities or Forces salvo can cut a Central command too.
+- **Where the tests sit.** `TestStrikePreview` is in `test_nuclear_survivors.py`, beside `TestWorldsView`, whose walk it reuses; `test_nuclear_deterrence.py` can't import from it.
 
 ### Task 8: Crisis, events, articles, the public authority (D15–D17)
 
@@ -184,23 +219,34 @@
 - the Nuclear Powers rows and National Info's public row (D17);
 - `test_nuclear_layout.py` (`TRUE_VARS`), `test_nuclear_basing.py` (D15's pins), `test_nuclear_deterrence.py`.
 
-- [ ] Write the tests:
-  - `TestCrisisFigures`: the stored survivors beside both parts, the seen figure for the issuer's with its qualifier and `nd_tt_worlds_view` (D8); Go public's hover names its danger and stage; the preview prints the opening totals or, per D16's fallback, says where they appear;
+- [x] Write the tests:
+  - `TestCrisisFigures` (as built `TestCrisisDecisionFigures`, beside the older class of that name): the stored survivors beside both parts, the seen figure for the issuer's with its qualifier and `nd_tt_worlds_view` (D8); Go public's hover names its danger and stage; the preview prints the opening totals or, per D16's fallback, says where they appear;
   - `TestDecisionHovers`: `.1.c` and the disavowal print their figures through `custom_tooltip`s (`silent_variable_audit`);
   - `TestArticleFigures` (D15);
   - `TestPublicAuthority`: `nd_authority` is off `TRUE_VARS` with the ruling's comment; the Powers rows and the public row read it.
 
   Run: FAIL.
-- [ ] Implement, then `organize_loc.py`, the event text through the `event-text` skill, the nuclear tests and `preflight.py --changed`. PASS.
-- [ ] Commit `Nuclear decisions: crisis, launch under attack, disavowal and the articles show their figures (spec §5.3)`.
+- [x] Implement, then `organize_loc.py`, the event text through the `event-text` skill, the nuclear tests and `preflight.py --changed`. PASS.
+- [x] Commit `Nuclear decisions: crisis, launch under attack, disavowal and the articles show their figures (spec §5.3)`.
+
+**As built (2026-11-20).**
+- **First, the rival's name** (its own commit). The hovers that named the main rival read `Var('nd_main_rival').GetCountry`, which has rendered blank in this mod (`gui_modding_guide.md` gotcha #11). `nd_refresh_main_rival` now also stores the rival's capital (`nd_main_rival_capital`), and every such hover reads the country through it. A layout test holds the panel to it.
+- **D16 ships its fallback.** The opening preview is a tooltip walk with no crisis record and no saved parties, and the target's readiness and exposure are private until the crisis opens (§5.2). So the preview prints the danger from our side alone (`nd_cd_ours_at_open_private_value` / `_public_value`: the opening stage, the public threat, our readiness, our command's reliability, our exposure) and says the Nuclear tab shows the full danger and pressure as soon as it opens. The pressure parts were already there as ranges.
+- **The crisis survivors are per viewer.** The answer part counts the target's true survivors, so the target's panel prints its own count. The issuer's panel prints the world's view of them (`nd_seen_survivors_vs_issuer`, new, with `nd_seen_exposed_warheads_vs_issuer` and `nd_seen_readiness_factor_issuer`), "up to", with `nd_tt_worlds_view`. The exposure part's figure is the world's view on both panels. Each part has a precision-weapon line while its factor is above 1. All are stored by `nd_crisis_refresh_figures` (`nd_cs_*`) and dropped while the target is believed unarmed.
+- **Go public** names the stage it moves to: Confrontation, or its own stage if the crisis is already past it (`nd_tt_go_public_terms_stage`). Its danger is given as the rise and its two parts. Against a target with no arsenal and no armed protector, the rise is after the 0.7 cut. The parts' points are named values now (`nd_cd_stage_points`, `nd_cd_public_points`, `nd_cd_dampened_factor`).
+- **The disavowal's chance is against the main rival,** after a single warhead (the best case), from `nd_claim_belief_vs_saved`. That value reads the same named terms as the victim's own `nd_claim_belief_value`. It is shown in the row's hover and on the button.
+- **The price of a lie found out** is written in the hover: 20 credibility and 50 relations, with the infamy and the later claims' cut from their values. A test holds the written figures to `nuclear_weapon_events.30`. `.1.c`'s pledge figures (30 and 10) are held to `nd_record_nuclear_use` the same way.
+- **Breaking either treaty costs nothing of its own,** so the descriptions say so. What a guarantor pays is for walking away when called: 15 credibility, 30 relations and five years of the abandonment modifier.
+- **National Info's public row** gains a Row 3 for another country the world believes armed: its doctrine and launch authority cells, with no third line, since when either can next change is the country's own. The overview's tests now allow those two codes their icon twice.
+- **The counterforce row** in Delivery and Defence reuses Task 7's ratio-part lines (`nd_pv_k_force_part`, `nd_pv_k_tech_part`).
 
 ### Task 9: Docs, the play-test list; gate, PR, review
 
-- [ ] Design §0.18's second half: D10–D18, what shipped of D14 and D16, and §5.5's audit as closed. Update `mod_systems/nuclear.md`, `journal_entry_systems.md` (the Forces, Posture and Strike areas and the op table; CRLF), and Help page topics for the chain and launch credit.
-- [ ] Chapter 14 at its peers' depth: launch authority (what each saves, the halt chance), the Strike section's previews, opening a crisis (the totals), moves (Go public), claiming a strike was unauthorized (the chance of belief), incidents (launch under attack), the treaty articles. Then rebuild the PDF.
-- [ ] Play-test list (`docs/testing/nuclear-playtest.md`): spec §8's items for phase 1 (a posture click moves the Survivors row the same day; a Forces preview against the salvo that follows), the target line after a research, the precision-weapon line appearing when a rival researches it, and the self-check row from Task 3.
-- [ ] The spec's status line and the `docs/superpowers/README.md` rows.
-- [ ] Full `scripts/preflight.py`. Then PR 1b with `--base main` (retargeted after 1a merges, per `git_workflow.md`), the two-reviewer review, one fix pass, and merge on green CI.
+- [x] Design §0.18's second half: D10–D18, what shipped of D14 and D16, and §5.5's audit as closed. Update `mod_systems/nuclear.md`, `journal_entry_systems.md` (the Forces, Posture and Strike areas and the op table; CRLF), and Help page topics for the chain and launch credit.
+- [x] Chapter 14 at its peers' depth: launch authority (what each saves, the halt chance), the Strike section's previews, opening a crisis (the totals), moves (Go public), claiming a strike was unauthorized (the chance of belief), incidents (launch under attack), the treaty articles. Then rebuild the PDF.
+- [x] Play-test list (`docs/testing/nuclear-playtest.md`): spec §8's items for phase 1 (a posture click moves the Survivors row the same day; a Forces preview against the salvo that follows), the target line after a research, the precision-weapon line appearing when a rival researches it, and the self-check row from Task 3.
+- [x] The spec's status line and the `docs/superpowers/README.md` rows.
+- [x] Full `scripts/preflight.py`. Then PR 1b with `--base main` (retargeted after 1a merges, per `git_workflow.md`), the two-reviewer review, one fix pass, and merge on green CI. *Two-reviewer review and its fix pass done (the review fixes in design §0.18); the PR is opened by the session.*
 
 ## Review Focus
 

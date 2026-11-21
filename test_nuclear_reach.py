@@ -297,7 +297,8 @@ class TestReasonEight(unittest.TestCase):
 
 class TestReachRow(unittest.TestCase):
     """The Forces section's Reach row (plan 4a R15): display only, after
-    Survivors, while armed without ICBMs."""
+    Survivors, while armed (2026-11-20 delivery plan D18: with ICBMs it reads
+    every country instead of vanishing)."""
 
     def setUp(self):
         self.widget = read(WIDGET)
@@ -309,24 +310,26 @@ class TestReachRow(unittest.TestCase):
         self.assertLess(survivors, reach)
         self.assertLess(reach, self.widget.index('text = "nd_w_reliability_label"'))
         row = self.widget[self.widget.rindex("nd_row = {", 0, reach):self.widget.index('text = "nd_w_reliability_label"')]
-        self.assertIn("GetScriptedGui('nd_reach_limited_sgui').IsShown(", row)
+        self.assertIn("GetScriptedGui('nd_armed_sgui').IsShown(", row)
         self.assertIn('text = "nd_w_reach_value"', row)
         self.assertIn("GetScriptedGui('nd_reach_list_sgui').ExecuteTooltip(", row)
         self.assertNotIn("onclick", row)
 
     def test_sguis(self):
-        shown = squash(block(self.sguis, "nd_reach_limited_sgui"))
-        self.assertIn("is_shown = { nd_reach_limited = yes }", shown)
-        self.assertIn("is_valid = { always = no }", shown)
-        # One list, each host marked on its own line (gotcha #18: a heading
-        # over a script-built list prints above all of it).
+        self.assertNotIn("nd_reach_limited_sgui", self.sguis)
+        # With ICBMs one line; else one heading, then one list, each host
+        # marked on its own line (gotcha #18: a scope's own lines print before
+        # its nested blocks', so one heading over one list is all it holds).
         listed = squash(block(self.sguis, "nd_reach_list_sgui"))
+        self.assertIn("if = { limit = { nd_fields_icbms = yes } custom_tooltip = nd_w_reach_every } else_if = { limit = "
+                      "{ has_variable_list = nd_reach } custom_tooltip = nd_w_reach_list_head every_in_list = {", listed)
         self.assertIn("every_in_list = { variable = nd_reach if = { limit = { nd_hosts_weapons_of = { GUEST = root } }"
                       " custom_tooltip = nd_w_reach_entry_host } else = { custom_tooltip = nd_w_reach_entry } }", listed)
 
     def test_loc(self):
         for key in ("nd_w_reach_label", "nd_w_reach_value", "nd_w_reach_tt", "nd_w_reach_entry", "nd_w_reach_entry_host",
-                    "nd_w_reach_value_bombers", "nd_w_reach_value_subs"):
+                    "nd_w_reach_value_bombers", "nd_w_reach_value_subs", "nd_w_reach_value_every",
+                    "nd_w_reach_every", "nd_w_reach_list_head"):
             self.assertTrue(loc_value(key), key)
         self.assertIn("AddLocalizationIf(THIS.GetCountry.Exists", loc_value("nd_w_reach_entry"))
 

@@ -620,6 +620,41 @@ nd_disp_taboo_burden_pct = {
 	round = yes
 }
 
+# The burden of an arsenal the size of the ceiling stepper's next step down or
+# up: nd_taboo_burden_value with that size in place of the stockpile, for the
+# stepper's buttons (2026-11-20 delivery spec §5.3).
+# test_nuclear_deterrence.TestPostureFigures holds each to the burden at the
+# same size.
+nd_disp_taboo_burden_pct_at_ceiling_lowered = {
+	value = 0
+	if = {
+		limit = { nd_is_armed = yes }
+		value = nd_taboo_arsenal_at_ceiling_lowered
+		max = nd_taboo_arsenal_saturation
+		divide = nd_taboo_arsenal_saturation
+		multiply = nd_taboo_arsenal_span_factor
+		add = nd_taboo_arsenal_floor_factor
+		multiply = nd_taboo_factor_value
+	}
+	multiply = 100
+	round = yes
+}
+
+nd_disp_taboo_burden_pct_at_ceiling_raised = {
+	value = 0
+	if = {
+		limit = { nd_is_armed = yes }
+		value = nd_taboo_ceiling_raised_value
+		max = nd_taboo_arsenal_saturation
+		divide = nd_taboo_arsenal_saturation
+		multiply = nd_taboo_arsenal_span_factor
+		add = nd_taboo_arsenal_floor_factor
+		multiply = nd_taboo_factor_value
+	}
+	multiply = 100
+	round = yes
+}
+
 # What the burden costs now, in the percentages nd_taboo_possession_cost shows
 # (its fields are these constants / 100; test_nuclear_taboo.py pins them).
 nd_disp_taboo_prestige_cost_pct = {
@@ -668,6 +703,15 @@ nd_taboo_ceiling_lowered_value = {
 nd_taboo_ceiling_raised_value = {
 	value = nd_taboo_ceiling_now_value
 	add = nd_taboo_ceiling_step_value
+}
+
+# The arsenal a step down leaves: the lowered ceiling, or the stockpile when
+# that is smaller already, since a ceiling above the arsenal takes nothing apart
+# (the stepper's burden and upkeep at the next size; PR 1b review). A step up
+# is an arsenal that may grow to the raised ceiling, so it reads the ceiling.
+nd_taboo_arsenal_at_ceiling_lowered = {
+	value = nd_taboo_ceiling_lowered_value
+	max = nd_stockpile
 }
 
 nd_taboo_half_arsenal_value = {

@@ -259,6 +259,16 @@ nd_crisis_preview = {
 		}
 		custom_tooltip = nd_tt_open_f_forfeit
 	}
+	# ---- the danger it opens at, from our side (2026-11-20 delivery spec D16) --
+	# The totals need the crisis's record and the target's readiness, which
+	# the world sees only once it opens; the panel shows them then.
+	if = {
+		limit = { always = $PUBLIC$ }
+		custom_tooltip = nd_tt_open_danger_public
+	}
+	else = {
+		custom_tooltip = nd_tt_open_danger_private
+	}
 	# ---- the stakes, and what happens next ------------------------------------
 	if = {
 		limit = { always = $PUBLIC$ }
@@ -653,6 +663,39 @@ nd_crisis_refresh_figures = {
 	scope:nd_target = {
 		set_variable = { name = nd_survivors_crisis value = nd_survivors_vs_issuer }
 	}
+	# The survivors behind the two pressure parts that count them, printed
+	# beside them (2026-11-20 delivery spec §5.3), as each side may know them.
+	# The answer part counts the target's true survivors: the target sees its
+	# own, the issuer only the world's view of them. The exposure part counts
+	# the issuer's as the target can see them, which both are shown. With the
+	# precision weapons' factor on each side's silos (1 when none).
+	if = {
+		limit = { scope:nd_target = { nd_believed_armed = yes } }
+		set_variable = { name = nd_cs_answer_survivors value = nd_cs_answer_seen_value }
+		set_variable = { name = nd_cs_exposure_survivors value = nd_seen_survivors_vs_target }
+		set_variable = { name = nd_cs_exposure_accuracy value = nd_accuracy_mult_target }
+		scope:nd_target = {
+			# Its true survivors, and, while Central Authorization's discount
+			# applies, the share the answer part counts (nd_yp_answer_survivors_value).
+			set_variable = { name = nd_cs_answer_survivors value = nd_survivors_vs_issuer }
+			if = {
+				limit = { nd_yp_answer_discounted = yes }
+				set_variable = { name = nd_cs_answer_counted value = nd_yp_answer_survivors_value }
+			}
+			else_if = {
+				limit = { has_variable = nd_cs_answer_counted }
+				remove_variable = nd_cs_answer_counted
+			}
+			set_variable = { name = nd_cs_answer_accuracy value = nd_accuracy_mult_issuer }
+			set_variable = { name = nd_cs_exposure_survivors value = scope:nd_issuer.var:nd_cs_exposure_survivors }
+			set_variable = { name = nd_cs_exposure_accuracy value = scope:nd_issuer.var:nd_cs_exposure_accuracy }
+		}
+		set_variable = { name = nd_cs_answer_accuracy value = scope:nd_target.var:nd_cs_answer_accuracy }
+	}
+	else = {
+		nd_crisis_clear_survivors = yes
+		scope:nd_target = { nd_crisis_clear_survivors = yes }
+	}
 	# Whose demands the target would concede to (nd_yp_stakes_value): ours,
 	# or in a guarantee dispute the country we cover.
 	if = {
@@ -768,8 +811,33 @@ nd_crisis_store_yp = {
 	}
 }
 
+# Either party: drop the survivors the pressure breakdown prints.
+nd_crisis_clear_survivors = {
+	if = {
+		limit = { has_variable = nd_cs_answer_survivors }
+		remove_variable = nd_cs_answer_survivors
+	}
+	if = {
+		limit = { has_variable = nd_cs_answer_counted }
+		remove_variable = nd_cs_answer_counted
+	}
+	if = {
+		limit = { has_variable = nd_cs_exposure_survivors }
+		remove_variable = nd_cs_exposure_survivors
+	}
+	if = {
+		limit = { has_variable = nd_cs_answer_accuracy }
+		remove_variable = nd_cs_answer_accuracy
+	}
+	if = {
+		limit = { has_variable = nd_cs_exposure_accuracy }
+		remove_variable = nd_cs_exposure_accuracy
+	}
+}
+
 # Either party: drop the stored figures (nd_crisis_clear_vars).
 nd_crisis_clear_figures = {
+	nd_crisis_clear_survivors = yes
 	if = {
 		limit = { has_variable = nd_ft_reason }
 		remove_variable = nd_ft_reason
@@ -898,6 +966,43 @@ nd_crisis_breakdown_line = {
 			NOT = { var:$C$ = 0 }
 		}
 		custom_tooltip_no_bullet = $KEY$
+	}
+}
+
+# Country scope, display only: a pressure part with figures printed under it
+# (nd_crisis_survivors_line), shown while it is not 0 or while SUB, its first
+# figure, is set: then the part prints at +0, so the figure under it explains
+# why it is 0 and never sits under the line above (PR 1b review).
+nd_crisis_breakdown_part_line = {
+	if = {
+		limit = {
+			has_variable = $C$
+			OR = {
+				NOT = { var:$C$ = 0 }
+				has_variable = $SUB$
+			}
+		}
+		custom_tooltip_no_bullet = $KEY$
+	}
+}
+
+# Country scope, display only: a stored figure beside its part, when it is set
+# and above ABOVE, in the words of the side reading it: ISSUER for the
+# threatening side, TARGET for the threatened (nd_crisis_pressure_breakdown_sgui).
+# The keys are passed literally so organize_loc.py sees them.
+nd_crisis_survivors_line = {
+	if = {
+		limit = {
+			has_variable = $C$
+			var:$C$ > $ABOVE$
+		}
+		if = {
+			limit = { nd_is_crisis_owner = yes }
+			custom_tooltip_no_bullet = $ISSUER$
+		}
+		else = {
+			custom_tooltip_no_bullet = $TARGET$
+		}
 	}
 }
 
@@ -2557,7 +2662,27 @@ nd_crisis_act_go_public = {
 		limit = { exists = var:nd_crisis_opponent }
 		change_relations = { country = var:nd_crisis_opponent value = -15 }
 	}
-	custom_tooltip = nd_tt_go_public_terms
+	# The stage it moves to, and what that adds to the danger (2026-11-20
+	# delivery spec §5.3): a crisis already past Confrontation stays where it is.
+	if = {
+		limit = {
+			has_variable = nd_crisis_stage
+			var:nd_crisis_stage < 2
+		}
+		custom_tooltip = nd_tt_go_public_terms
+	}
+	else = {
+		custom_tooltip = nd_tt_go_public_terms_stage
+	}
+	# Against a target with no arsenal and no armed protector, the danger is
+	# cut (nd_crisis_danger_value; the refresh stores whether it is).
+	if = {
+		limit = { var:nd_cd_dampened ?= 1 }
+		custom_tooltip = nd_tt_go_public_danger_dampened
+	}
+	else = {
+		custom_tooltip = nd_tt_go_public_danger
+	}
 	hidden_effect = {
 		nd_crisis_save_parties = yes
 		# A private warning made public: the rest of an ultimatum's toll on

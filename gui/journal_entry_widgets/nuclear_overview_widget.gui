@@ -21,7 +21,9 @@
 ### ANOTHER COUNTRY (National Info; spec 2026-11-02-charts-help-national-info
 ### § 6.4) sees Rows 1 and 5 and, in place of Rows 2 to 4, its own Row 2: the
 ### warheads as the world believes them (nd_shown_public_estimate, nothing before
-### a test, never the live count) and the nuclear guarantees it gives and holds. Rows 2 to 4 are the
+### a test, never the live count) and the nuclear guarantees it gives and holds;
+### and once the world believes it armed, its own Row 3: its doctrine and launch
+### authority, both public (2026-11-20 delivery spec D17). Rows 2 to 4 are the
 ### player's own (te_own_country_only): the program, the true count, and the
 ### posture, which shows only while armed and so would tell whether an arsenal
 ### exists. Row 1's hover ends on the player's moves, or on World Crises.
@@ -195,6 +197,97 @@ types nuclear_overview_widget_types
 						blockoverride "third_line" {
 							te_nuclear_ov_figure = {
 								text = "je_nuclear_ov_guarantees_figure"
+							}
+						}
+					}
+				}
+
+				### Row 3 for another country, once the world believes it armed: its
+				### doctrine and launch authority, both public (owner, rework spec
+				### §14.2; 2026-11-20 delivery spec D17). No third line: when either
+				### can next change is the country's own.
+				flowcontainer = {
+					visible = "[And( Not( Country.IsLocalPlayer ), GetScriptedGui('nd_believed_armed_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_banking_ov_cell = {
+						tooltip = "je_nuclear_ov_doctrine_tt_theirs"
+						size = { 238 70 }
+						blockoverride "caption_width" {
+							max_width = 154
+						}
+						blockoverride "caption" {
+							text = "je_nuclear_ov_doctrine_caption"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)1' )]"
+								texture = "gfx/interface/icons/nuclear_icons/doctrine_nfu.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)2' )]"
+								texture = "gfx/interface/icons/nuclear_icons/doctrine_existential.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)3' )]"
+								texture = "gfx/interface/icons/nuclear_icons/doctrine_flexible.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)4' )]"
+								texture = "gfx/interface/icons/nuclear_icons/doctrine_compellence.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)5' )]"
+								texture = "gfx/interface/icons/nuclear_icons/doctrine_warfighting.dds"
+							}
+						}
+						blockoverride "word" {
+							te_nuclear_ov_word = {
+								text = "je_nuclear_ov_doctrine_word"
+							}
+						}
+					}
+					te_banking_ov_cell = {
+						tooltip = "je_nuclear_ov_authority_tt_theirs"
+						size = { 238 70 }
+						blockoverride "caption_width" {
+							max_width = 154
+						}
+						blockoverride "caption" {
+							text = "je_nuclear_ov_authority_caption"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)1' )]"
+								texture = "gfx/interface/icons/nuclear_icons/authority_central.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)2' )]"
+								texture = "gfx/interface/icons/nuclear_icons/authority_delegation.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)3' )]"
+								texture = "gfx/interface/icons/nuclear_icons/authority_on_warning.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)4' )]"
+								texture = "gfx/interface/icons/nuclear_icons/authority_automatic.dds"
+							}
+						}
+						blockoverride "word" {
+							te_nuclear_ov_word = {
+								text = "je_nuclear_ov_authority_word"
 							}
 						}
 					}

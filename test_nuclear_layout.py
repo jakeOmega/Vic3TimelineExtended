@@ -443,21 +443,31 @@ class OverviewTest(unittest.TestCase):
                 found = _coded(self.ov, value)
                 self.assertEqual(sorted(found), list(codes))
                 for code, textures in found.items():
-                    self.assertEqual(len(textures), 1, f"{value} {code}")
+                    # Doctrine and authority draw in the player's cell and in
+                    # another country's, with the same icon.
+                    self.assertEqual(len(set(textures)), 1, f"{value} {code}")
+                    self.assertEqual(len(textures), 2 if value in THEIR_CODES else 1, f"{value} {code}")
 
     def test_the_cells_are_bankings(self):
         """Banking's own cell, reused as it is: a size, a tooltip, the caption in
         the 154 column, an icon, the word and the figure."""
         cells = _cells(self.panel)
-        self.assertEqual(len(cells), 9)   # 7 for the player, 2 for another country (Row 2's own)
+        self.assertEqual(len(cells), 11)   # 7 for the player, 4 for another country (its Rows 2 and 3)
         for body in cells:
             tip = _cell_tip(body)
             with self.subTest(cell=tip):
                 self.assertIn("size = { 238 70 }", body)
                 self.assertRegex(body, r'blockoverride "caption_width" \{\s*max_width = 154\s*\}')
-                for block in ("caption", "icons", "word", "third_line"):
+                # Another country's doctrine and authority have no third line:
+                # when either can next change is that country's own.
+                blocks = ("caption", "icons", "word") if tip in THEIR_POSTURE else ("caption", "icons", "word",
+                                                                                    "third_line")
+                for block in blocks:
                     self.assertIn(f'blockoverride "{block}"', body)
-                self.assertIn("te_nuclear_ov_figure = {", body)
+                if tip in THEIR_POSTURE:
+                    self.assertNotIn("te_nuclear_ov_figure", body)
+                else:
+                    self.assertIn("te_nuclear_ov_figure = {", body)
                 self.assertTrue(_loc(tip), tip)
         self.assertNotIn("type te_banking_ov_cell", self.ov, "the cell is Banking's, not redefined here")
         for t in ("te_nuclear_ov_word", "te_nuclear_ov_figure"):
@@ -465,7 +475,7 @@ class OverviewTest(unittest.TestCase):
 
     def test_what_needs_the_player_is_on_the_face(self):
         figure = {_cell_tip(b): re.search(r'te_nuclear_ov_figure = \{\s*text = "(\w+)"', b).group(1)
-                  for b in _cells(self.panel)}
+                  for b in _cells(self.panel) if _cell_tip(b) not in THEIR_POSTURE}
         self.assertIn("nd_display_crisis_weeks_left", _loc(figure["je_nuclear_ov_crisis_tt"]))
         self.assertIn("je_nuclear_ov_crisis_deadline_soon", _loc(figure["je_nuclear_ov_crisis_tt"]))
         self.assertTrue(_loc("je_nuclear_ov_crisis_deadline_soon").startswith("#R "))
@@ -551,12 +561,12 @@ class OverviewTest(unittest.TestCase):
         self.assertIn("margin = { 20 8 }", frame)
         self.assertIn("minimumsize = { 480 -1 }", self.panel)
         rows = [r for r in re.split(r"### Row \d", self.panel)[1:]]
-        self.assertEqual(len(rows), 6)   # Rows 1 to 5, and Row 2 for another country
-        for row in rows[:5]:
+        self.assertEqual(len(rows), 7)   # Rows 1 to 5, and Rows 2 and 3 for another country
+        for row in rows[:6]:
             n = row.count("te_banking_ov_cell = {")
             self.assertIn(n, (1, 2))
             self.assertLessEqual(n * 238 + (n - 1) * int(re.search(r"spacing = (\d+)", row).group(1)), 480)
-        taboo = rows[5]
+        taboo = rows[6]
         cells = [int(w) for w in re.findall(r"maximumsize = \{ (\d+) -1 \}", taboo)]
         bar = int(re.search(r"widget = \{\s*size = \{ (\d+) 18 \}", taboo).group(1))
         self.assertEqual(len(cells), 2)
@@ -564,6 +574,10 @@ class OverviewTest(unittest.TestCase):
 
 
 NUCLEAR_ICONS = "gfx/interface/icons/nuclear_icons/"
+# Another country's doctrine and launch authority (its Row 3, 2026-11-20 delivery spec D17): public,
+# drawn with the player's icons, and with no third line.
+THEIR_POSTURE = ("je_nuclear_ov_doctrine_tt_theirs", "je_nuclear_ov_authority_tt_theirs")
+THEIR_CODES = ("nd_display_doctrine_code", "nd_display_authority_code")
 # The overview's own icons (PR #586), per display value, in code order.
 CODED_ICONS = {
     "nuclear_program_display_state": {0: "programme_unfunded", 1: "programme_developing", 2: "programme_producing",
@@ -602,8 +616,8 @@ class NuclearIconsTest(unittest.TestCase):
     def test_each_code_draws_its_own_icon(self):
         for value, names in CODED_ICONS.items():
             with self.subTest(value=value):
-                self.assertEqual(_coded(self.ov, value),
-                                 {code: [f"{NUCLEAR_ICONS}{n}.dds"] for code, n in names.items()})
+                found = {code: sorted(set(t)) for code, t in _coded(self.ov, value).items()}
+                self.assertEqual(found, {code: [f"{NUCLEAR_ICONS}{n}.dds"] for code, n in names.items()})
 
     def test_warheads_crisis_and_credibility(self):
         for name, tooltip in (("warheads", "je_nuclear_ov_warheads_tt"), ("crisis", "je_nuclear_ov_crisis_tt"),
@@ -918,7 +932,8 @@ class LabelBudgetTest(unittest.TestCase):
                 words = set(re.findall(r'te_nuclear_ov_word = \{\s*(?:visible = "[^"]*"\s*)?text = "(\w+)"', body))
                 self._fits(words, 154, OVERVIEW_UNIT, f"{tip} word")
                 figures = set(re.findall(r'te_nuclear_ov_figure = \{\s*text = "(\w+)"', body))
-                self._fits(figures, 154, OVERVIEW_UNIT, f"{tip} figure")
+                if tip not in THEIR_POSTURE:
+                    self._fits(figures, 154, OVERVIEW_UNIT, f"{tip} figure")
         for t in ("te_nuclear_ov_word", "te_nuclear_ov_figure"):
             self.assertIn("max_width = 154", _type_body(ov, t), t)
         self._fits(["je_nuclear_ov_taboo_label"], 60, OVERVIEW_UNIT, "taboo label")
@@ -1107,6 +1122,239 @@ class TestSurvivorsRow(unittest.TestCase):
         self.assertIn('text = "nd_w_survivors_value"', row)
         self.assertIn('tooltip = "nd_w_survivors_tt"', row)
 
+    def test_rival_named_through_its_capital(self):
+        """A country read out of a variable can render blank
+        (gui_modding_guide.md gotcha #11): the panel names the main rival
+        through the capital nd_refresh_main_rival stores beside it."""
+        texts = [_read(p) for p in glob.glob(os.path.join(REPO, "gui", "**", "*.gui"), recursive=True)]
+        texts += [_read(p) for p in glob.glob(os.path.join(LOC_DIR, "*.yml"))]
+        for text in texts:
+            self.assertNotIn("Var('nd_main_rival').GetCountry", text)
+        named = "\n".join(t for t in texts if "Var('nd_main_rival_capital').GetState.GetCountry" in t)
+        self.assertIn("nd_w_survivors_tt", named)
+        refresh = _squash(_read(EFFECTS_FILE))
+        self.assertIn(
+            "capital ?= { save_temporary_scope_as = nd_mr_rival_capital scope:nd_mr_self = { "
+            "set_variable = { name = nd_main_rival_capital value = scope:nd_mr_rival_capital } } }",
+            refresh)
+        self.assertEqual(refresh.count("remove_variable = nd_main_rival_capital"), 2,
+                         "cleared before each store and when there is no rival")
+
+
+SURVIVABILITY_PARTS = ("radar", "icbms", "submarines", "missile_defense")
+CUSTOM_LOC_FILE = os.path.join(REPO, "common", "customizable_localization", "nuclear_deterrence_custom_loc.txt")
+EFFECTS_FILE = os.path.join(REPO, "common", "scripted_effects", "nuclear_deterrence_effects.txt")
+
+
+def _custom_body(name):
+    text = gh._strip_comments(_read(CUSTOM_LOC_FILE))
+    m = re.search(rf"^{name} = \{{", text, re.M)
+    assert m, f"no custom loc {name}"
+    return " ".join(_type_body_generic(text, m.end() - 1).split())
+
+
+def _squash(text):
+    return " ".join(gh._strip_comments(text).split())
+
+
+def _forces_row(body, label):
+    """The nd_row whose label is `label`, from its opening to the next row."""
+    i = body.index(f'text = "{label}"')
+    start = body.rindex("nd_row = {", 0, i)
+    nxt = body.find("nd_row = {", i)
+    return body[start:nxt if nxt > 0 else len(body)]
+
+
+class TestForcesDisplay(unittest.TestCase):
+    """Forces (2026-11-20 delivery spec §5.4, plan Task 5 and D18): the
+    survivability target's chain of parts and its floor, the launch credit,
+    the main rival's counterforce ratio behind the Survivors row, and Reach
+    while armed. Every figure about the rival says it is the world's view
+    (owner call 14, D8)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.forces = _type_body(ALL_GUI, "te_nuclear_sec_forces")
+        effects = _read(EFFECTS_FILE)
+        head = "\nnd_refresh_main_rival = {"
+        cls.refresh = _squash(_type_body_generic(effects, effects.index(head) + len(head) - 1))
+
+    def test_the_target_hover_prints_the_chain(self):
+        """One line per part with its factor or that it isn't held, then the
+        exposed share, the target and the floor."""
+        tip = _loc("nd_w_survivability_target_tt")
+        order = [tip.index("ScriptValue('nd_display_survivability_target')"),
+                 tip.index("$nd_w_surv_part_bombers$")]
+        order += [tip.index(f"GetCustom('nd_surv_part_{p}')") for p in SURVIVABILITY_PARTS]
+        order += [tip.index("ScriptValue('nd_display_survivability_exposed_share')"),
+                  tip.index("ScriptValue('nd_display_survivability_floor')")]
+        self.assertEqual(order, sorted(order))
+        self.assertIn("ScriptValue('nd_display_exposure_factor_bombers')", _loc("nd_w_surv_part_bombers"))
+        for part in ("bombers",) + SURVIVABILITY_PARTS:
+            self.assertEqual(" ".join(_value_body(f"nd_display_exposure_factor_{part}").split()),
+                             f"value = nd_exposure_factor_{part}", part)
+        for part in SURVIVABILITY_PARTS:
+            with self.subTest(part=part):
+                body = _custom_body(f"nd_surv_part_{part}")
+                self.assertEqual(body, f"type = country random_valid = no text = {{ trigger = {{ "
+                                       f"nd_display_exposure_factor_{part} < 1 }} localization_key = "
+                                       f"nd_w_surv_part_{part}_held }} text = {{ trigger = {{ always = yes }} "
+                                       f"localization_key = nd_w_surv_part_{part}_missing }}")
+                self.assertIn(f"ScriptValue('nd_display_exposure_factor_{part}')", _loc(f"nd_w_surv_part_{part}_held"))
+                self.assertNotIn("ScriptValue", _loc(f"nd_w_surv_part_{part}_missing"))
+        self.assertEqual(" ".join(_value_body("nd_display_survivability_exposed_share").split()),
+                         "value = nd_survivability_exposed_share")
+        self.assertEqual(" ".join(_value_body("nd_display_survivability_floor").split()),
+                         "value = nd_survivability_floor")
+
+    def test_the_target_and_floor_are_printed_under_the_bar(self):
+        bar_end = self.forces.index('text = "nd_w_survivability_value"')
+        row = _forces_row(self.forces, "nd_w_survivability_target_label")
+        self.assertLess(bar_end, self.forces.index(row))
+        self.assertLess(self.forces.index(row), self.forces.index('text = "nd_w_survivors_label"'))
+        self.assertIn('text = "nd_w_survivability_target_value"', row)
+        self.assertIn('tooltip = "nd_w_survivability_target_tt"', row)
+        value = _loc("nd_w_survivability_target_value")
+        for name in ("nd_display_survivability_target", "nd_display_survivability_floor"):
+            self.assertIn(f"ScriptValue('{name}')", value, name)
+        # The bar's own line still marks the target, with the same hover.
+        line = self.forces[self.forces.index("# 5. The survivability target"):bar_end]
+        self.assertIn("ScriptValue('nd_display_survivability_target')", line)
+        self.assertIn('tooltip = "nd_w_survivability_target_tt"', line)
+
+    def test_the_launch_credit_row(self):
+        survivors = self.forces.index('text = "nd_w_survivors_label"')
+        row = _forces_row(self.forces, "nd_w_launch_credit_label")
+        self.assertLess(survivors, self.forces.index(row))
+        self.assertLess(self.forces.index(row), self.forces.index('text = "nd_w_reach_label"'))
+        self.assertIn('text = "nd_w_launch_credit_value"', row)
+        self.assertIn('tooltip = "nd_w_launch_credit_tt"', row)
+        self.assertIn("ScriptValue('nd_display_launch_credit')", _loc("nd_w_launch_credit_value"))
+        tip = _loc("nd_w_launch_credit_tt")
+        for name in ("nd_display_launch_credit", "nd_display_launch_credit_unguarded", "nd_display_launch_credit_cut",
+                     "nd_launch_credit_delegation", "nd_launch_credit_launch_on_warning",
+                     "nd_launch_credit_safeguards_cut"):
+            self.assertIn(f"ScriptValue('{name}')", tip, name)
+        for n in range(1, 5):
+            self.assertIn(f"$nd_authority_{n}$", tip)
+        self.assertEqual(" ".join(_value_body("nd_display_launch_credit").split()), "value = nd_launch_credit")
+        self.assertEqual(" ".join(_value_body("nd_display_launch_credit_unguarded").split()),
+                         "value = nd_launch_credit_unguarded")
+        self.assertEqual(" ".join(_value_body("nd_display_launch_credit_cut").split()),
+                         "value = nd_launch_credit_unguarded subtract = nd_launch_credit")
+        # The cut a level is one script value, which nd_launch_credit applies.
+        credit = " ".join(gh._strip_comments(_value_body("nd_launch_credit")).split())
+        self.assertIn("value = var:nd_safeguards multiply = nd_launch_credit_safeguards_cut", credit)
+        self.assertRegex(_read(os.path.join(VALUES, "nuclear_deterrence_values.txt")),
+                         r"(?m)^nd_launch_credit_safeguards_cut = 0\.05$")
+
+    def test_the_survivors_hover_breaks_the_rivals_reach_down(self):
+        """Its warheads as the world estimates them, times its counterforce
+        ratio with the ratio's parts, and the silo line while its precision
+        weapons find our silos."""
+        tip = _loc("nd_w_survivors_tt")
+        order = [tip.index("Var('nd_exposed_main')"), tip.index("GetCustom('nd_survivors_silo_line')"),
+                 tip.index("Var('nd_main_rival_reach')"), tip.index("Var('nd_main_rival_warheads')"),
+                 tip.index("Var('nd_main_rival_k')"), tip.index("GetCustom('nd_main_rival_k_pgm_part')"),
+                 tip.index("GetCustom('nd_main_rival_k_force_part')")]
+        self.assertEqual(order, sorted(order))
+        self.assertEqual(_custom_body("nd_survivors_silo_line"),
+                         "type = country random_valid = no text = { trigger = { has_variable = "
+                         "nd_main_rival_accuracy_mult var:nd_main_rival_accuracy_mult > 1 } localization_key = "
+                         "nd_w_survivors_silo_line } text = { trigger = { always = yes } localization_key = nd_empty }")
+        self.assertIn("Var('nd_main_rival_accuracy_mult')", _loc("nd_w_survivors_silo_line"))
+        for block, var, key in (("nd_main_rival_k_pgm_part", "nd_main_rival_pgm", "nd_w_survivors_k_pgm"),
+                                ("nd_main_rival_k_force_part", "nd_main_rival_k_force", "nd_w_survivors_k_force")):
+            self.assertEqual(_custom_body(block),
+                             f"type = country random_valid = no text = {{ trigger = {{ has_variable = {var} "
+                             f"var:{var} > 0 }} localization_key = {key} }} text = {{ trigger = {{ always = yes }} "
+                             f"localization_key = nd_empty }}", block)
+            self.assertIn(f"Var('{var}')", _loc(key), key)
+        # Stored by the refresh on the rival as the world sees it, and cleared with the rest.
+        for name, value in (("nd_main_rival_k", "nd_k_ratio_saved"), ("nd_main_rival_pgm", "nd_k_ratio_tech_part_saved"),
+                            ("nd_main_rival_k_force", "nd_k_ratio_force_part_saved"),
+                            ("nd_main_rival_accuracy_mult", "nd_accuracy_mult_saved"),
+                            ("nd_main_rival_warheads", "nd_seen_stockpile_saved")):
+            self.assertIn(f"set_variable = {{ name = {name} value = {value} }}", self.refresh, name)
+            self.assertIn(f"remove_variable = {name}", self.refresh, name)
+        for name, inner in (("nd_k_ratio_saved", "nd_k_ratio"), ("nd_k_ratio_tech_part_saved", "nd_k_ratio_tech_part"),
+                            ("nd_k_ratio_force_part_saved", "nd_k_ratio_force_part"),
+                            ("nd_seen_stockpile_saved", "nd_seen_stockpile")):
+            self.assertEqual(" ".join(_value_body(name).split()),
+                             f"value = 0 scope:nd_sv_enemy = {{ add = {inner} }}", name)
+        self.assertEqual(" ".join(gh._strip_comments(_value_body("nd_k_ratio_force_part")).split()),
+                         "value = 0 if = { limit = { nd_fields_icbms = yes } value = nd_icbm_force_k_ratio }")
+        self.assertEqual(" ".join(gh._strip_comments(_value_body("nd_k_ratio_tech_part")).split()),
+                         "value = nd_k_ratio subtract = 1 subtract = nd_k_ratio_force_part min = 0")
+
+    def test_the_rivals_figures_say_they_are_the_worlds_view(self):
+        """Owner call 14: a short qualifier on the figure, and the shared
+        hover that says what it assumes."""
+        tip = _loc("nd_w_survivors_tt")
+        # The rival's reach is its estimated arsenal times its counterforce
+        # ratio: "about", with the estimate's hover (PR 1b review).
+        link = re.search(r"#tooltippable;tooltip:nd_tt_worlds_estimate ([^#]+)#!", tip)
+        self.assertTrue(link, "the rival's reach carries the estimate's qualifier")
+        self.assertIn("about", link.group(1))
+        self.assertLess(tip.index("#tooltippable;tooltip:nd_tt_worlds_estimate"), tip.index("Var('nd_main_rival_reach')"))
+        view = _loc("nd_tt_worlds_view")
+        for word in ("estimate", "hardening", "safeguards", "readiness", "as secure as its technology allows",
+                     "floor"):
+            self.assertIn(word, view, word)
+        self.assertNotIn("[", view, "plain text: the nested hover reads no data")
+
+    def test_reach_shows_while_armed(self):
+        """D18: shown while armed; every country with ICBMs, before the coasts."""
+        row = _forces_row(self.forces, "nd_w_reach_label")
+        self.assertIn("GetScriptedGui('nd_armed_sgui').IsShown(", row)
+        self.assertNotIn("nd_reach_limited_sgui", ALL_GUI)
+        reach = _custom_body("nd_reach_value")
+        self.assertTrue(reach.startswith("type = country random_valid = no text = { trigger = { nd_fields_icbms = yes }"
+                                         " localization_key = nd_w_reach_value_every }"), reach)
+        self.assertLess(reach.index("nd_w_reach_value_every"), reach.index("nd_w_reach_value_subs"))
+        self.assertNotIn("Var(", _loc("nd_w_reach_value_every"))
+
+
+class TestPublicAuthority(unittest.TestCase):
+    """Launch authority is public (owner, rework spec §14.2; 2026-11-20
+    delivery spec D17): off TRUE_VARS, and shown for another country beside
+    its doctrine in Nuclear Powers and National Info."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.types = gh.mod_types()
+        cls.view = gh.panel_view({WIDE}, cls.types)
+        cls.markup = {n: _drawn(cls.view, cls.types, n) for n in cls.view.open}
+
+    def test_off_the_private_list(self):
+        self.assertIsNone(TRUE_VARS.search("nd_authority"))
+        self.assertIn("rework spec §14.2", _read(__file__)[:_read(__file__).index("TRUE_VARS = ")][-1200:])
+        self.assertNotIn("nd_display_authority_code", _true_state())
+
+    def test_the_powers_rows_show_it(self):
+        row = self.markup["nuclear_program_power_row"]
+        i = row.index("nuclear_program_power_authority_tt")
+        self.assertGreater(i, row.index("nuclear_program_power_doctrine_tt"), "beside the doctrine, after it")
+        for code, icon in ((1, "central"), (2, "delegation"), (3, "on_warning"), (4, "automatic")):
+            self.assertIn("State.GetOwner.MakeScope.ScriptValue('nd_display_authority_code'), "
+                          f"'(CFixedPoint){code}' )]\"\n\t\t\t\t\ttexture = \"gfx/interface/icons/nuclear_icons/"
+                          f"authority_{icon}.dds\"", row, icon)
+        self.assertIn("State.GetOwner.GetCustom('nd_authority_name')", _loc("nuclear_program_power_authority_tt"))
+
+    def test_national_info_shows_it(self):
+        ov = self.markup["te_nuclear_overview_panel"]
+        i = ov.index("je_nuclear_ov_doctrine_tt_theirs")
+        row = ov[ov.rindex("flowcontainer = {", 0, i):]
+        self.assertIn('visible = "[And( Not( Country.IsLocalPlayer ), '
+                      "GetScriptedGui('nd_believed_armed_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]\"",
+                      row)
+        for key in ("je_nuclear_ov_doctrine_tt_theirs", "je_nuclear_ov_authority_tt_theirs"):
+            self.assertIn(key, ov, key)
+        self.assertIn("Country.MakeScope.ScriptValue('nd_display_authority_code')", row)
+        self.assertIn("Country.MakeScope.ScriptValue('nd_display_doctrine_code')", row)
+        # Only what is public: no tenure (the months to the next change).
+        self.assertNotIn("months_left", row[:row.index("je_nuclear_ov_authority_tt_theirs") + 2000])
+
 
 class WideTest(unittest.TestCase):
     """The full-screen columns (spec 2026-11-02-te-window-wide-mode §§ 7, 9.4,
@@ -1176,14 +1424,15 @@ COLLAPSED = ["te_nuclear_sec_programme", "te_nuclear_programme_bar", "te_nuclear
              "te_nuclear_sec_reputation"]
 _COLLAPSE = re.compile(r'visible = "\[And\( Country\.IsLocalPlayer, .*\)\]"')
 # What says how many warheads a country truly holds, how close the next one is, its posture or its
-# custody, or whether it is armed at all (nd_armed_sgui reads the true count, nd_has_reputation_sgui
+# custody, or whether it is armed at all (launch authority aside, which is public, as the doctrine
+# is: owner, rework spec §14.2; its tenure is the country's own) (nd_armed_sgui reads the true count, nd_has_reputation_sgui
 # the posture's credibility, created with the first warhead), and the handlers whose hovers print
 # them. None may reach another country's panel. A listed base: _leaks() adds every script value,
 # scripted trigger and scripted GUI that reads the true state at any depth.
 LEAKS = re.compile(
     r"\b(nd_display_stockpile|nuclear_weapon_stockpile|nd_stockpile|nd_display_public_estimate"
     r"|nd_display_survivab\w*|nd_display_safeguards|nd_display_hardening|nd_display_readiness\w*"
-    r"|nd_display_reliability|nd_display_strain|nd_display_upkeep\w*|nd_display_authority\w*"
+    r"|nd_display_reliability|nd_display_strain|nd_display_upkeep\w*|nd_display_authority_months_left"
     r"|nd_display_doctrine_months_left|nd_display_hold\w*|nd_display_loose\w*|nd_display_survivors\w*"
     r"|nuclear_program_display_\w+|nuclear_weapons_program_funding|nuclear_weapon_program_progress"
     r"|nd_disp_taboo_burden\w*|nd_disp_taboo_(?:prestige|leverage)_cost\w*|nd_ar_\w+|nd_custody\w*"
@@ -1192,13 +1441,15 @@ LEAKS = re.compile(
     r"|nd_crisis_next_pressure_sgui|nd_crisis_opponent_sgui|nd_last_crisis_sgui|nd_reach_\w+_sgui"
     r"|nd_posture_sgui|nd_crisis_action_sgui|nuclear_program_funding_sgui|nd_has_main_rival_sgui)\b")
 # The true state's variables: the stockpile, the programme's progress and funding, readiness,
-# survivability, command (reliability, strain, launch authority), the upkeep cached from the arsenal,
+# survivability, command (reliability and strain), the upkeep cached from the arsenal,
 # the ceiling and dismantling, and custody (loose warheads, safeguards, hardening, the arsenal
 # records, the custody transfers). A script value or scripted trigger that reads one, or reads one
 # that does, is true state too (_true_state).
+# Launch authority is not on it: it is public, as the doctrine is (owner, rework spec §14.2; 2026-11-20
+# delivery spec D17), and Nuclear Powers and National Info show another country's.
 TRUE_VARS = re.compile(
     r"\b(nuclear_weapon_stockpile|nuclear_weapon_program_progress|nuclear_weapons_program_funding"
-    r"|nd_readiness\w*|nd_survivability|nd_reliability|nd_strain|nd_authority|nd_upkeep_weekly_cached"
+    r"|nd_readiness\w*|nd_survivability|nd_reliability|nd_strain|nd_upkeep_weekly_cached"
     r"|nd_warhead_ceiling|nd_dismantle_\w+|nd_safeguards|nd_hardening|nd_loose_\w+|nd_custody_\w+|nd_ar_\w+)\b")
 # A bare name in a script body: a script value, trigger or scripted GUI it may call (not var:x, x.y).
 _NAME_REF = re.compile(r"(?<![:.\w])([a-z_]\w*)\b")

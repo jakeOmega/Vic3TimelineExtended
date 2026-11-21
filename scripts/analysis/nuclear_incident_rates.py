@@ -47,6 +47,7 @@ class Posture:
     authority: int = 1
     doctrine: int = 2
     safeguards: int = 1
+    hardening: int = 1             # var:nd_hardening (the survivability step)
     strain: float = 0
     reliability: float = 60
     danger: int = 0
@@ -78,6 +79,13 @@ class Posture:
     salvo_forces_landed: float = 0 # a salvo's warheads landed on forces (the attacker's var:nd_salvo_forces_landed)
     salvo_command_landed: float = 0  # landed on the victim's command: its capital, and a Leadership salvo's other sites (var:nd_salvo_command_landed)
     salvo_victim_r: float = 1      # the victim's redundancy when the salvo began (var:nd_salvo_victim_r)
+    # The Strike section's preview (nd_plan_preview): our expected warheads
+    # landed on their forces and their command, and their redundancy as the
+    # world sees it at each end (var:nd_plan_pv_*).
+    plan_pv_landed_2: float = 0
+    plan_pv_landed_3: float = 0
+    plan_pv_redundancy_lo: float = 1
+    plan_pv_redundancy_hi: float = 1
     believed_armed: bool = True    # the world believes it holds warheads (nd_believed_armed)
     capital_hit_share: float = 0.9 # a warhead's chance on the enemy's capital (nd_ai_capital_hit_share)
     in_reach: bool = True          # our delivery reaches the enemy (nd_reaches_country, rework spec §7)

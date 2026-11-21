@@ -480,7 +480,10 @@ class TestHoldAndExposure(unittest.TestCase):
 
     def test_hold_chance_suspect_optional(self):
         values = strip_comments(read(ROOT / "common/script_values/nuclear_deterrence_values.txt"))
-        body = block(values, "nd_hold_chance")
+        # nd_hold_chance clamps nd_hold_chance_unclamped, which holds the terms
+        # (the per-authority figures read it too, 2026-11-20 delivery spec D11).
+        self.assertIn("value = nd_hold_chance_unclamped", block(values, "nd_hold_chance"))
+        body = block(values, "nd_hold_chance_unclamped")
         self.assertIn("exists = scope:nd_hold_suspect", body)
         self.assertEqual(body.count("scope:nd_hold_suspect = {"), 1)
         effects = strip_comments(read(ROOT / "common/scripted_effects/nuclear_deterrence_effects.txt"))

@@ -4,9 +4,10 @@
 # launch authority does that script applies itself, so the posture's hovers can
 # print it as the engine's coloured modifier lines rather than prose. The engine
 # consumes none of these and no script reads them. They are carried only by the
-# display modifiers nd_readiness_terms_* and nd_authority_terms_*
-# (nuclear_deterrence_modifiers.txt), which nothing adds to a country: the
-# readiness choices', the launch authorities' and the posture rows' hovers print
+# display modifiers nd_readiness_terms_*, nd_authority_terms_* and
+# nd_safeguards_level_terms (nuclear_deterrence_modifiers.txt), which nothing
+# adds to a country: the readiness choices', the launch authorities', the
+# safeguards' and the posture rows' hovers print
 # them with GetStaticModifier(...).GetDesc. Each figure is the one the script
 # uses (nuclear_deterrence_values.txt, nuclear_custody_values.txt); keep them in
 # step when a tuning number changes (test_nuclear_deterrence.py pins them).
@@ -68,6 +69,14 @@ country_nd_order_required_bool = {
 country_nd_unapproved_launch_bool = {
 	color = bad
 	boolean = yes
+	script_only = yes
+}
+
+# A safeguards level: the command reliability target it adds
+# (nd_safeguards_reliability_per_level), carried by nd_safeguards_level_terms.
+country_nd_reliability_target_add = {
+	color = good
+	decimals = 0
 	script_only = yes
 }
 

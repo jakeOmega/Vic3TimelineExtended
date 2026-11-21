@@ -6,6 +6,7 @@ counts as protected by a ready guarantor, weapons next to a country cut its
 warning time, and some of the guest's weapons accidents happen on the host's
 soil."""
 
+import re
 import unittest
 
 from test_nuclear_deterrence import (ROOT, block, loc_value, option_body, read, squash,
@@ -210,6 +211,53 @@ class TestHostAccidents(unittest.TestCase):
                     "nd_host_accident_silence", "nd_host_accident_silence_desc"):
             self.assertTrue(loc_value(key), key)
         self.assertIn("remove_variable = nd_host_accident_kind", squash(block(self.host, "after")))
+
+class TestArticleFigures(unittest.TestCase):
+    """The treaty articles' descriptions write their figures (2026-11-20
+    delivery spec §5.3, plan D15): an article's description has no country
+    scope to call a script value from, so each written number is held here
+    to the script it states."""
+
+    VALUES = ROOT / "common/script_values/nuclear_deterrence_values.txt"
+    GUARANTEE = ROOT / "common/treaty_articles/115_nuclear_guarantee.txt"
+    CRISIS_EFFECTS = ROOT / "common/scripted_effects/nuclear_crisis_effects.txt"
+
+    def setUp(self):
+        self.values = strip_comments(read(self.VALUES))
+
+    def test_basing(self):
+        text = loc_value("nuclear_basing_effects_desc")
+        penalty = re.search(r"(?m)^nd_warning_time_penalty = (\d+)$", self.values).group(1)
+        self.assertIn(f"#R {penalty}#! less survivability", text)
+        # One sited accident in three abroad (nuclear_incident.30's draw).
+        events = strip_comments(read(INCIDENT_EVENTS))
+        self.assertIn("random_list = { 1 = { nd_accident_site_abroad = yes } 2 = { nd_accident_site_home = yes } }",
+                      squash(block(block(events, "nuclear_incident.30"), "immediate")))
+        self.assertIn("one in three", text)
+        # Ending it costs nothing of its own: its break hooks only rebuild reach.
+        article = strip_comments(read(ARTICLE))
+        for hook in ("on_break", "on_withdrawal"):
+            body = squash(block(article, hook))
+            self.assertNotIn("change_", body, hook)
+            self.assertNotIn("add_modifier", body, hook)
+        self.assertIn("no cost of its own", text)
+
+    def test_guarantee(self):
+        text = loc_value("nuclear_guarantee_effects_desc")
+        protector = squash(block(self.values, "nd_yp_protector_value"))
+        for points in re.findall(r"subtract = (\d+)", protector):
+            self.assertIn(f"#R -{points}#!", text, points)
+        self.assertEqual(sorted(re.findall(r"subtract = (\d+)", protector)), ["10", "15", "20"])
+        abandon = squash(block(strip_comments(read(self.CRISIS_EFFECTS)), "nd_guarantee_act_abandon"))
+        guarantee = abandon[abandon.index("custom_tooltip = nd_tt_guarantee_abandon"):]
+        self.assertIn("nd_change_credibility = { AMOUNT = -15 }", guarantee)
+        self.assertIn("name = nd_guarantee_abandoned years = 5", guarantee)
+        self.assertIn("change_relations = { country = scope:nd_guarantor_self value = -30 }", guarantee)
+        for needle in ("#R 15#! credibility", "five years", "#R 30#!"):
+            self.assertIn(needle, text, needle)
+        # Leaving the treaty has no hook of its own.
+        self.assertNotIn("on_break", strip_comments(read(self.GUARANTEE)))
+
 
 if __name__ == "__main__":
     unittest.main()
