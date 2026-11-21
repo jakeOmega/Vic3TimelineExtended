@@ -533,8 +533,10 @@ class TestSurvivorsInCrisis(unittest.TestCase):
     def test_answer_three_quarters_rule(self):
         body = block(self.values, "nd_yp_answer_survivors_value")
         self.assertIn("nd_survivors_vs_issuer", body)
-        self.assertIn("nd_authority_central = yes", body)
-        self.assertIn("nd_decapitation_margin_value > 0", body)
+        self.assertIn("limit = { nd_yp_answer_discounted = yes }", body)
+        discounted = block(strip_comments(read(TRIGGERS)), "nd_yp_answer_discounted")
+        self.assertIn("nd_authority_central = yes", discounted)
+        self.assertIn("nd_decapitation_margin_value > 0", discounted)
         self.assertIn("multiply = 0.75", body)
         margin = block(self.values, "nd_decapitation_margin_value")
         self.assertIn("nd_believed_stockpile", margin)
@@ -2230,6 +2232,23 @@ class TestSurvivorsAgainstRival(unittest.TestCase):
         review = block(effects, "nd_ai_review_posture")
         self.assertLess(review.index("nd_refresh_main_rival = yes"), review.index("nd_set_readiness_target_3"))
 
+    def test_main_rival_refreshed_when_its_figures_go_stale(self):
+        # PR 1b review: a readiness step moves the stored strike figures (the
+        # op only set the target), and a save without the capital, or a
+        # capital that changed hands, refreshes within the week.
+        weekly = squash(block(strip_comments(read(EFFECTS)), "nd_weekly_update"))
+        step = weekly[weekly.index("change_variable = { name = nd_readiness_transition add = 1 }"):]
+        step = step[:step.index("nd_refresh_main_rival = yes") + len("nd_refresh_main_rival = yes")]
+        self.assertIn("nd_apply_posture_modifiers = yes nd_refresh_main_rival = yes", step)
+        self.assertIn("if = { limit = { has_variable = nd_main_rival NOT = { has_variable = nd_main_rival_capital } } "
+                      "nd_refresh_main_rival = yes } else_if = { limit = { has_variable = nd_main_rival "
+                      "has_variable = nd_main_rival_capital var:nd_main_rival = { save_temporary_scope_as = nd_mr_stored } "
+                      "var:nd_main_rival_capital = { NOT = { owner = scope:nd_mr_stored } } } nd_refresh_main_rival = yes }",
+                      weekly)
+        # The Survivors row waits for the figures its hover reads.
+        gate = squash(block(strip_comments(read(SGUIS)), "nd_has_main_rival_sgui"))
+        self.assertIn("has_variable = nd_main_rival has_variable = nd_main_rival_capital", gate)
+
     def test_plausible_attacker_shared(self):
         triggers = strip_comments(read(TRIGGERS))
         self.assertIn("nd_plausible_attacker_of", block(triggers, "nd_has_plausible_attacker"))
@@ -2363,8 +2382,14 @@ class TestCrisisPanel(unittest.TestCase):
     def test_breakdowns_print_every_stored_part(self):
         pressure = block(self.sguis, "nd_crisis_pressure_breakdown_sgui")
         danger = block(self.sguis, "nd_crisis_danger_breakdown_sgui")
+        # The two parts with figures under them print at +0 while those are set.
+        beside = {"nd_yp_answer": "nd_cs_answer_survivors", "nd_yp_issuer_exposure": "nd_cs_exposure_survivors"}
         for part in PRESSURE_PARTS:
-            self.assertIn(f"nd_crisis_breakdown_line = {{ C = {part} KEY = {BREAKDOWN_KEYS[part]} }}", pressure)
+            if part in beside:
+                self.assertIn(f"nd_crisis_breakdown_part_line = {{ C = {part} KEY = {BREAKDOWN_KEYS[part]} "
+                              f"SUB = {beside[part]} }}", pressure)
+            else:
+                self.assertIn(f"nd_crisis_breakdown_line = {{ C = {part} KEY = {BREAKDOWN_KEYS[part]} }}", pressure)
         for part in DANGER_PARTS:
             self.assertIn(f"nd_crisis_breakdown_line = {{ C = {part} KEY = {BREAKDOWN_KEYS[part]} }}", danger)
 
@@ -3139,12 +3164,20 @@ class TestPostureFigures(unittest.TestCase):
             self.assertIn(f"Var('nd_lost_main_ready_{r}')", loc_value(f"nd_w_readiness_strike_{r}"))
 
     def test_every_strike_line_says_it_is_the_worlds_view(self):
-        """Each rests on the rival's estimated arsenal (owner call 14, D8)."""
+        """Each counts our own forces as they are against the rival's estimated
+        arsenal (owner call 14, D8): "about", and the estimate's own hover, not
+        the world's-view one, whose assumptions about the other side's forces
+        these figures don't use (PR 1b review)."""
         keys = ([f"nd_w_authority_strike_{a}" for a in range(1, 5)] + [f"nd_w_readiness_strike_{r}" for r in range(4)]
                 + ["nd_w_safeguards_strike_up"])
+        estimate = loc_value("nd_tt_worlds_estimate")
+        for word in ("our own forces", "estimate", "counterforce ratio", "more warheads"):
+            self.assertIn(word, estimate, word)
+        self.assertNotIn("[", estimate, "plain text: the nested hover reads no data")
         for key in keys:
             text = loc_value(key)
-            self.assertIn("#tooltippable;tooltip:nd_tt_worlds_view up to#!", text, key)
+            self.assertIn("#tooltippable;tooltip:nd_tt_worlds_estimate about#!", text, key)
+            self.assertNotIn("nd_tt_worlds_view", text, key)
             self.assertIn("Var('nd_main_rival_capital').GetState.GetCountry", text, key)
             self.assertIn("ScriptValue('nd_display_stockpile')", text, key)
 
@@ -3245,6 +3278,17 @@ class TestPostureFigures(unittest.TestCase):
                                            model.number("nd_upkeep_weekly", p), places=6, msg=(stockpile, readiness))
                     self.assertEqual(model.number(f"nd_disp_taboo_burden_pct_at_ceiling_{direction}", p),
                                      model.number("nd_disp_taboo_burden_pct", p), (stockpile, readiness))
+        # A step down that stays above the arsenal takes nothing apart: the
+        # figures are those in force (PR 1b review).
+        for stockpile in (1, 7, 30):
+            for readiness in range(4):
+                model.values["nd_taboo_ceiling_lowered_value"] = str(stockpile + 10)
+                p = P(stockpile=stockpile, readiness=readiness, safeguards=2, hardening=1, authority=4)
+                self.assertAlmostEqual(model.number("nd_upkeep_weekly_at_ceiling_lowered", p),
+                                       model.number("nd_upkeep_weekly", p), places=6, msg=(stockpile, readiness))
+                self.assertEqual(model.number("nd_disp_taboo_burden_pct_at_ceiling_lowered", p),
+                                 model.number("nd_disp_taboo_burden_pct", p), (stockpile, readiness))
+        self.assertIn("ScriptValue('nd_taboo_arsenal_at_ceiling_lowered')", loc_value("nd_taboo_tt_ceiling_lower"))
         for direction, key in (("lowered", "nd_taboo_tt_ceiling_lower"), ("raised", "nd_taboo_tt_ceiling_raise")):
             text = loc_value(key)
             for name in (f"nd_disp_taboo_burden_pct_at_ceiling_{direction}", "nd_disp_taboo_burden_pct",
@@ -4523,7 +4567,12 @@ class TestCrisisDecisionFigures(unittest.TestCase):
                 break
         target, issuer = stored[t0:t1], stored[:t0] + stored[t1:]
         # The target: its own true count, and the issuer's as the world sees it.
-        self.assertIn("set_variable = { name = nd_cs_answer_survivors value = nd_yp_answer_survivors_value }", target)
+        self.assertIn("set_variable = { name = nd_cs_answer_survivors value = nd_survivors_vs_issuer }", target)
+        # The share the answer part counts, while Central's discount applies.
+        self.assertIn("if = { limit = { nd_yp_answer_discounted = yes } "
+                      "set_variable = { name = nd_cs_answer_counted value = nd_yp_answer_survivors_value } }", target)
+        self.assertIn("limit = { nd_yp_answer_discounted = yes } multiply = 0.75",
+                      squash(block(self.values, "nd_yp_answer_survivors_value")))
         self.assertIn("set_variable = { name = nd_cs_answer_accuracy value = nd_accuracy_mult_issuer }", target)
         for var in ("nd_cs_exposure_survivors", "nd_cs_exposure_accuracy"):
             self.assertIn(f"set_variable = {{ name = {var} value = scope:nd_issuer.var:{var} }}", target)
@@ -4544,8 +4593,8 @@ class TestCrisisDecisionFigures(unittest.TestCase):
                       stored)
         self.assertIn("nd_crisis_clear_survivors = yes", squash(block(self.crisis, "nd_crisis_clear_figures")))
         clear = squash(block(self.crisis, "nd_crisis_clear_survivors"))
-        for var in ("nd_cs_answer_survivors", "nd_cs_exposure_survivors", "nd_cs_answer_accuracy",
-                    "nd_cs_exposure_accuracy"):
+        for var in ("nd_cs_answer_survivors", "nd_cs_answer_counted", "nd_cs_exposure_survivors",
+                    "nd_cs_answer_accuracy", "nd_cs_exposure_accuracy"):
             self.assertIn(f"limit = {{ has_variable = {var} }} remove_variable = {var}", clear, var)
 
     def test_the_seen_survivors_against_the_issuer(self):
@@ -4557,11 +4606,20 @@ class TestCrisisDecisionFigures(unittest.TestCase):
 
     def test_the_breakdown_prints_them_beside_their_parts(self):
         effect = squash(block(block(self.sguis, "nd_crisis_pressure_breakdown_sgui"), "effect"))
-        answer = "nd_crisis_breakdown_line = { C = nd_yp_answer KEY = nd_yp_answer_line }"
-        exposure = "nd_crisis_breakdown_line = { C = nd_yp_issuer_exposure KEY = nd_yp_issuer_exposure_line }"
+        # A part with figures under it prints, at +0 if need be, while its
+        # first figure is set, so no figure sits under the line above.
+        answer = ("nd_crisis_breakdown_part_line = { C = nd_yp_answer KEY = nd_yp_answer_line "
+                  "SUB = nd_cs_answer_survivors }")
+        exposure = ("nd_crisis_breakdown_part_line = { C = nd_yp_issuer_exposure KEY = nd_yp_issuer_exposure_line "
+                    "SUB = nd_cs_exposure_survivors }")
+        self.assertEqual(squash(block(self.crisis, "nd_crisis_breakdown_part_line")),
+                         "if = { limit = { has_variable = $C$ OR = { NOT = { var:$C$ = 0 } has_variable = $SUB$ } } "
+                         "custom_tooltip_no_bullet = $KEY$ }")
         # The survivors whenever stored; the accuracy factor only above 1.
         self.assertIn(answer + " nd_crisis_survivors_line = { C = nd_cs_answer_survivors ABOVE = -1 "
                       "ISSUER = nd_cs_answer_line_issuer TARGET = nd_cs_answer_line_target } "
+                      "nd_crisis_survivors_line = { C = nd_cs_answer_counted ABOVE = -1 "
+                      "ISSUER = nd_cs_answer_counted_line TARGET = nd_cs_answer_counted_line } "
                       "nd_crisis_survivors_line = { C = nd_cs_answer_accuracy ABOVE = 1 "
                       "ISSUER = nd_cs_answer_accuracy_line_issuer TARGET = nd_cs_answer_accuracy_line_target } "
                       + exposure, effect)
@@ -4653,8 +4711,16 @@ class TestDecisionHovers(unittest.TestCase):
 
     def test_launch_under_attack(self):
         effects = self.option[self.option.index("show_as_unavailable"):]
-        self.assertIn("custom_tooltip = nd_tt_incident_wait_survivors custom_tooltip = nd_tt_incident_false_price "
-                      "if = { limit = { nd_doctrine_nfu = yes } custom_tooltip = nd_tt_incident_false_pledge }", effects)
+        # A launch at a country that has already struck us is an answer, at
+        # neither price (nuclear_first_strike's and nd_record_nuclear_use's
+        # own nd_was_struck_by gates).
+        self.assertIn("custom_tooltip = nd_tt_incident_wait_survivors "
+                      "if = { limit = { nd_was_struck_by = { ENEMY = scope:nd_warning_suspect } } "
+                      "custom_tooltip = nd_tt_incident_false_answer } "
+                      "else = { custom_tooltip = nd_tt_incident_false_price "
+                      "if = { limit = { nd_doctrine_nfu = yes } custom_tooltip = nd_tt_incident_false_pledge } }", effects)
+        self.assertIn("limit = { nd_was_struck_by = { ENEMY = scope:target_country } }",
+                      squash(block(strip_comments(read(EXTRA_EFFECTS)), "nuclear_first_strike")))
         self.assertLess(effects.index("nd_tt_incident_false_price"), effects.index("nd_launch_or_intercept"))
         wait = loc_value("nd_tt_incident_wait_survivors")
         self.assertIn("ROOT.GetCountry.MakeScope.Var('nd_survivors_vs_suspect').GetValue", wait)

@@ -1291,10 +1291,12 @@ class TestForcesDisplay(unittest.TestCase):
         """Owner call 14: a short qualifier on the figure, and the shared
         hover that says what it assumes."""
         tip = _loc("nd_w_survivors_tt")
-        link = re.search(r"#tooltippable;tooltip:nd_tt_worlds_view ([^#]+)#!", tip)
-        self.assertTrue(link, "the rival's reach carries the world's-view qualifier")
-        self.assertIn("up to", link.group(1))
-        self.assertLess(tip.index("#tooltippable;tooltip:nd_tt_worlds_view"), tip.index("Var('nd_main_rival_reach')"))
+        # The rival's reach is its estimated arsenal times its counterforce
+        # ratio: "about", with the estimate's hover (PR 1b review).
+        link = re.search(r"#tooltippable;tooltip:nd_tt_worlds_estimate ([^#]+)#!", tip)
+        self.assertTrue(link, "the rival's reach carries the estimate's qualifier")
+        self.assertIn("about", link.group(1))
+        self.assertLess(tip.index("#tooltippable;tooltip:nd_tt_worlds_estimate"), tip.index("Var('nd_main_rival_reach')"))
         view = _loc("nd_tt_worlds_view")
         for word in ("estimate", "hardening", "safeguards", "readiness", "as secure as its technology allows",
                      "floor"):

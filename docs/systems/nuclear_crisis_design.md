@@ -777,6 +777,14 @@ Built from the delivery spec's §3 and §5.2 (`docs/superpowers/specs/2026-11-20
 - **Articles and the counterforce row** (D15). Nuclear Basing's and Nuclear Guarantee's descriptions carry their figures, held by `test_nuclear_basing.TestArticleFigures`; breaking either treaty costs nothing of its own, and they say so. Delivery and Defence has a counterforce ratio row with its parts.
 - **Launch authority is public** (D17). `nd_authority` is off `test_nuclear_layout.py`'s `TRUE_VARS`, citing the owner's ruling (rework spec §14.2). Nuclear Powers shows it beside the doctrine, and another country's National Info has a Row 3 with both once the world believes it armed.
 - **The rival's name.** Every hover that names the main rival reads it through its capital, `nd_main_rival_capital` (`gui_modding_guide.md` gotcha #11); a layout test fails on `Var('nd_main_rival').GetCountry`.
+- **Review fixes (PR 1b).**
+  - **Qualifiers:** our own losses to a rival's full strike, and the rival's reach in the Survivors hover, read "about" with `nd_tt_worlds_estimate`. They count our true forces against the rival's estimated arsenal, so the world's-view hover's assumptions don't apply, and "up to" was no bound. A preview range whose ends agree keeps "at least" (destroyed, the cut-off chance) or "up to" (kept, flown first, redundancy).
+  - **Launch under attack:** against a suspect that has already struck us, `.1.c` says the launch counts as an answer, at neither price.
+  - **Crisis lines:** a pressure part with warheads under it prints at +0 while they are set (`nd_crisis_breakdown_part_line`). The target's line prints its true survivors, with the three quarters the part counts under Central Authorization (`nd_yp_answer_discounted`, `nd_cs_answer_counted`).
+  - **Freshness:** the readiness walk's step reruns `nd_refresh_main_rival`. The weekly update also reruns it when the stored rival has no `nd_main_rival_capital` (a save from before 1b) or its capital has changed hands, and the Survivors row waits for the capital. The previews print the salvo size they were stored for (`nd_plan_pv_size`).
+  - **The ceiling:** the stepper's lowered figures count the arsenal the lowered ceiling leaves (`nd_taboo_arsenal_at_ceiling_lowered`).
+  - **The counterforce ratio:** its base is `nd_k_ratio_base`.
+  - **Hover lengths:** the hovers that ran past 500 rendered characters with their splices expanded were cut back.
 - **§5.5's visibility audit is closed** for phase 1: its corrected "Today" cells are each now shown as §5.3's "This spec" column says, apart from the Focus, the Programme funding's focus and others' delivery (phase 2) and the opening preview's totals (D16's fallback above).
 
 ## 1. Intent and owner requirements

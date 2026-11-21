@@ -1692,6 +1692,15 @@ nd_seen_in_crisis_with = {
 	var:nd_crisis_opponent ?= $OBSERVER$
 }
 
+# Target scope, parties saved: does the answer part count the target's
+# survivors at three quarters? Under Central Authorization, while the issuer's
+# believed arsenal exceeds our command redundancy (nd_yp_answer_survivors_value;
+# the crisis panel says so beside the survivors).
+nd_yp_answer_discounted = {
+	nd_authority_central = yes
+	nd_decapitation_margin_value > 0
+}
+
 nd_is_crisis_owner = {
 	nd_in_crisis = yes
 	var:nd_crisis_role = 1

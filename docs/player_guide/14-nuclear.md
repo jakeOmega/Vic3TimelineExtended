@@ -232,10 +232,13 @@ A figure about another country rests on what the world can see of it: its
 estimated arsenal, its doctrine, launch authority, technology and delivery, and
 its readiness while it is in a crisis with you. Its true count, hardening and
 safeguards are hidden. Such a figure takes the worst case for you, forces as
-secure as its technology allows, and says so: "up to" on what it could destroy
-or would keep, or a range, whose other end is a force left unhardened with
-safeguards at their highest. Hover the "up to" or the range for what it
-assumes.
+secure as its technology allows, and says so: "at least" on what a strike
+destroys, "up to" on what it would keep, or a range, whose other end is a force
+left unhardened with safeguards at their highest. Hover the qualifier or the
+range for what it assumes. What a rival's full strike would destroy of yours
+counts your own forces as they are against the world's estimate of its arsenal:
+it reads "about", since a rival holding more than the estimate would destroy
+more.
 
 ### Delivery capability and home defense
 
@@ -542,10 +545,12 @@ below 50, Wavering from 50, Yielding from 70 and Breaking from 85.
 
 Under the pressure's two parts that count warheads, its tooltip gives the
 warheads behind them. The target's that would survive the issuer's whole arsenal
-are its own true count on the target's panel and "up to", as the world can count
-them, on the issuer's. The issuer's that would survive the target's are counted
-as the world can see them on both. A line shows how far Precision Guided
-Munitions multiply a side's exposure, when they do.
+are its own true count on the target's panel, with the three quarters the
+pressure counts under Central Authorization when that applies, and "up to", as
+the world can count them, on the issuer's. The issuer's that would survive the
+target's are counted as the world can see them on both. A line shows how far
+Precision Guided Munitions multiply a side's exposure, when they do. A part
+with warheads under it shows even at 0, so you can see why it gives nothing.
 
 From Confrontation on, the target is pressed every six weeks unless talks are
 open. Talks are open while a proposal to stand down or to trade awaits an
@@ -884,10 +889,12 @@ has a 3% chance each month of coming out (Nuclear Cover-Up Exposed: −10 legiti
 When the government decides on a false warning, Give the launch order needs a
 war with the suspected attacker or an Acute crisis against it, and every test
 for a deliberate strike except the doctrine, which only No First Use blocks. If
-the warning was false, the launch is a first use. The event gives how many of
+the warning was false, the launch is a first use, unless the suspect has
+already struck you: then it counts as an answer. The event gives how many of
 your warheads would survive to answer if the strike is real and you hold, and
 what a launch costs if the warning is false: a first strike's infamy and
-relations, and 30 credibility and 10 infamy more under No First Use. Central Authorization cannot
+relations, and 30 credibility and 10 infamy more under No First Use, or, against
+a country that has struck you, that it costs neither. Central Authorization cannot
 launch without this decision. Launch on Warning and
 isolated delegated commanders can fire without it, including at peace.
 Automatic Retaliation can misread a bomber crash or silo explosion as an attack

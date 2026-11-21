@@ -495,6 +495,9 @@ nd_has_main_rival_sgui = {
 	is_shown = {
 		nd_is_armed = yes
 		has_variable = nd_main_rival
+		# The hover names it and breaks its reach down from figures a save
+		# from before 2026-11-20 lacks until the week's refresh writes them.
+		has_variable = nd_main_rival_capital
 	}
 	is_valid = { always = no }
 	ai_is_valid = { always = no }
@@ -735,10 +738,11 @@ nd_crisis_pressure_breakdown_sgui = {
 	ai_is_valid = { always = no }
 	effect = {
 		nd_crisis_breakdown_line = { C = nd_yp_base KEY = nd_yp_base_line }
-		nd_crisis_breakdown_line = { C = nd_yp_answer KEY = nd_yp_answer_line }
+		nd_crisis_breakdown_part_line = { C = nd_yp_answer KEY = nd_yp_answer_line SUB = nd_cs_answer_survivors }
 		nd_crisis_survivors_line = { C = nd_cs_answer_survivors ABOVE = -1 ISSUER = nd_cs_answer_line_issuer TARGET = nd_cs_answer_line_target }
+		nd_crisis_survivors_line = { C = nd_cs_answer_counted ABOVE = -1 ISSUER = nd_cs_answer_counted_line TARGET = nd_cs_answer_counted_line }
 		nd_crisis_survivors_line = { C = nd_cs_answer_accuracy ABOVE = 1 ISSUER = nd_cs_answer_accuracy_line_issuer TARGET = nd_cs_answer_accuracy_line_target }
-		nd_crisis_breakdown_line = { C = nd_yp_issuer_exposure KEY = nd_yp_issuer_exposure_line }
+		nd_crisis_breakdown_part_line = { C = nd_yp_issuer_exposure KEY = nd_yp_issuer_exposure_line SUB = nd_cs_exposure_survivors }
 		nd_crisis_survivors_line = { C = nd_cs_exposure_survivors ABOVE = -1 ISSUER = nd_cs_exposure_line_issuer TARGET = nd_cs_exposure_line_target }
 		nd_crisis_survivors_line = { C = nd_cs_exposure_accuracy ABOVE = 1 ISSUER = nd_cs_exposure_accuracy_line_issuer TARGET = nd_cs_exposure_accuracy_line_target }
 		nd_crisis_breakdown_line = { C = nd_yp_protector KEY = nd_yp_protector_line }

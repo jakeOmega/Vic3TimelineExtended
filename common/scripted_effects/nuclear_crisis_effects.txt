@@ -675,7 +675,17 @@ nd_crisis_refresh_figures = {
 		set_variable = { name = nd_cs_exposure_survivors value = nd_seen_survivors_vs_target }
 		set_variable = { name = nd_cs_exposure_accuracy value = nd_accuracy_mult_target }
 		scope:nd_target = {
-			set_variable = { name = nd_cs_answer_survivors value = nd_yp_answer_survivors_value }
+			# Its true survivors, and, while Central Authorization's discount
+			# applies, the share the answer part counts (nd_yp_answer_survivors_value).
+			set_variable = { name = nd_cs_answer_survivors value = nd_survivors_vs_issuer }
+			if = {
+				limit = { nd_yp_answer_discounted = yes }
+				set_variable = { name = nd_cs_answer_counted value = nd_yp_answer_survivors_value }
+			}
+			else_if = {
+				limit = { has_variable = nd_cs_answer_counted }
+				remove_variable = nd_cs_answer_counted
+			}
 			set_variable = { name = nd_cs_answer_accuracy value = nd_accuracy_mult_issuer }
 			set_variable = { name = nd_cs_exposure_survivors value = scope:nd_issuer.var:nd_cs_exposure_survivors }
 			set_variable = { name = nd_cs_exposure_accuracy value = scope:nd_issuer.var:nd_cs_exposure_accuracy }
@@ -806,6 +816,10 @@ nd_crisis_clear_survivors = {
 	if = {
 		limit = { has_variable = nd_cs_answer_survivors }
 		remove_variable = nd_cs_answer_survivors
+	}
+	if = {
+		limit = { has_variable = nd_cs_answer_counted }
+		remove_variable = nd_cs_answer_counted
 	}
 	if = {
 		limit = { has_variable = nd_cs_exposure_survivors }
@@ -950,6 +964,23 @@ nd_crisis_breakdown_line = {
 		limit = {
 			has_variable = $C$
 			NOT = { var:$C$ = 0 }
+		}
+		custom_tooltip_no_bullet = $KEY$
+	}
+}
+
+# Country scope, display only: a pressure part with figures printed under it
+# (nd_crisis_survivors_line), shown while it is not 0 or while SUB, its first
+# figure, is set: then the part prints at +0, so the figure under it explains
+# why it is 0 and never sits under the line above (PR 1b review).
+nd_crisis_breakdown_part_line = {
+	if = {
+		limit = {
+			has_variable = $C$
+			OR = {
+				NOT = { var:$C$ = 0 }
+				has_variable = $SUB$
+			}
 		}
 		custom_tooltip_no_bullet = $KEY$
 	}

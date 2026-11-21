@@ -321,7 +321,32 @@ nd_weekly_update = {
 				}
 			}
 			nd_apply_posture_modifiers = yes
+			# The strike figures at the readiness now in force: the posture
+			# op only set the target, so this step is what moves them.
+			nd_refresh_main_rival = yes
 		}
+	}
+	# ---- the main rival's stored figures, when stale (PR 1b review) --------
+	# A save from before the panel's figures were stored has no capital to
+	# name the rival by, and a capital that changed hands would name its new
+	# owner: either way refresh this week, not at the month's turn.
+	if = {
+		limit = {
+			has_variable = nd_main_rival
+			NOT = { has_variable = nd_main_rival_capital }
+		}
+		nd_refresh_main_rival = yes
+	}
+	else_if = {
+		limit = {
+			has_variable = nd_main_rival
+			has_variable = nd_main_rival_capital
+			var:nd_main_rival = { save_temporary_scope_as = nd_mr_stored }
+			var:nd_main_rival_capital = {
+				NOT = { owner = scope:nd_mr_stored }
+			}
+		}
+		nd_refresh_main_rival = yes
 	}
 	# ---- an answer that waited for the forces (umbrella/recessed/dead-hand
 	# spec §2.4) ---------------------------------------------------------------
@@ -3405,6 +3430,9 @@ nd_plan_preview = {
 			limit = { exists = scope:nd_pv_enemy.capital.region }
 			scope:nd_pv_enemy.capital.region = { save_scope_as = nd_salvo_cap_region }
 		}
+		# The salvo size these figures are for: the hovers print it, not the
+		# live size, which can drop with the stockpile before the next refresh.
+		set_variable = { name = nd_plan_pv_size value = nd_salvo_size_value }
 		# Each mission's pass sets the mission it previews; the panel's is put
 		# back after.
 		set_variable = { name = nd_plan_pv_mission_set value = nd_display_plan_mission }
@@ -3458,6 +3486,7 @@ nd_plan_preview = {
 		}
 	}
 	else = {
+		remove_variable = nd_plan_pv_size
 		remove_variable = nd_plan_pv_landed_1
 		remove_variable = nd_plan_pv_landed_2
 		remove_variable = nd_plan_pv_landed_3

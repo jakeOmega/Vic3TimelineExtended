@@ -224,7 +224,13 @@ class TestPrecisionWeapons(unittest.TestCase):
 
     def test_k_ratio_is_one_and_the_modifier(self):
         body = squash(block(self.values, "nd_k_ratio"))
-        self.assertTrue(body.startswith("value = 1 add = modifier:country_nd_k_ratio_add"), body)
+        self.assertTrue(body.startswith("value = nd_k_ratio_base add = modifier:country_nd_k_ratio_add"), body)
+        self.assertEqual(constant(self.values, "nd_k_ratio_base"), 1)
+        # The Delivery and Defence row's hover prints the base from it, not a 1.
+        hover = (ROOT / "localization/english/te_journal_entries_l_english.yml").read_text(encoding="utf-8-sig")
+        line = next(ln for ln in hover.splitlines() if ln.startswith(" je_nuclear_program_widget_counterforce_tt:"))
+        self.assertIn("ScriptValue('nd_k_ratio_base')", line)
+        self.assertNotIn("#v 1#!", line)
         self.assertNotIn("has_technology_researched", body)
 
     def test_technologies(self):

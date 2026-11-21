@@ -845,6 +845,11 @@ class TestStrikePreview(unittest.TestCase):
                     self.assertTrue(text.startswith("#tooltippable;tooltip:nd_tt_worlds_view "), (name, text))
                 else:
                     self.assertNotIn("nd_tt_worlds_view", text, name)
+            # Owner call 14: a single figure keeps its qualifier, the cautious
+            # end's: at least what a strike destroys, up to what is left to them.
+            if name in WORLDS_VIEW_RANGES:
+                qualifier = "at least" if name in ("destroyed", "decap") else "up to"
+                self.assertTrue(one.startswith(f"#tooltippable;tooltip:nd_tt_worlds_view {qualifier} #v "), (name, one))
 
     def test_each_mission_has_a_preview_row(self):
         gui = read(GUI)
@@ -864,7 +869,10 @@ class TestStrikePreview(unittest.TestCase):
                          "ai_is_valid = { always = no } effect = { }")
 
     def test_the_hovers_print_their_figures(self):
-        size = "ScriptValue('nd_salvo_size_value')"
+        # The size the figures were stored for, not the live one (PR 1b review).
+        self.assertIn("set_variable = { name = nd_plan_pv_size value = nd_salvo_size_value }",
+                      squash(block(strip_comments(read(EFFECTS)), "nd_plan_preview")))
+        size = "Var('nd_plan_pv_size').GetValue"
         cities = loc_value("nd_w_strike_pv_1_tt")
         for needle in (size, "Var('nd_plan_pv_landed_1')", "Var('nd_plan_pv_deaths_1')", "GetCustom('nd_pv_raze_range')"):
             self.assertIn(needle, cities, needle)

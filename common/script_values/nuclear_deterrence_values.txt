@@ -873,8 +873,12 @@ nd_effective_survivability_at_readiness_3 = {
 # destroys: 1, and country_nd_k_ratio_add's sum (2026-11-20 delivery spec
 # §3.4): +0.5 from the Precision-Guided Munitions technology, +0.5 from the
 # ICBM force while fielded (nd_icbm_force, declared on je_nuclear_program).
+# The warhead itself: what one landed on their forces destroys with no
+# precision weapons and no ICBM force (the Delivery and Defence row prints it).
+nd_k_ratio_base = 1
+
 nd_k_ratio = {
-	value = 1
+	value = nd_k_ratio_base
 	add = modifier:country_nd_k_ratio_add
 	# The fallback while the declaration doesn't read (nd_icbm_force_declared_reads).
 	if = {
@@ -2454,10 +2458,7 @@ nd_yp_answer_value = {
 nd_yp_answer_survivors_value = {
 	value = nd_survivors_vs_issuer
 	if = {
-		limit = {
-			nd_authority_central = yes
-			nd_decapitation_margin_value > 0
-		}
+		limit = { nd_yp_answer_discounted = yes }
 		multiply = 0.75
 	}
 }
@@ -4252,7 +4253,7 @@ nd_upkeep_weekly_at_readiness_3 = {
 # test_nuclear_deterrence.TestPostureFigures holds each to nd_upkeep_weekly at
 # the same size.
 nd_ceiling_lowered_capped = {
-	value = nd_taboo_ceiling_lowered_value
+	value = nd_taboo_arsenal_at_ceiling_lowered
 	max = 50
 }
 

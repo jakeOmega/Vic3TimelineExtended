@@ -186,12 +186,20 @@ nuclear_incident.1 = {
 		# survivors against the suspect if the attack is real and we wait
 		# (stored with the warning, for the AI's chance below too), and what a
 		# first use costs if the warning is false (nuclear_first_strike's and
-		# nd_record_nuclear_use's own figures).
+		# nd_record_nuclear_use's own figures). A launch at a country that has
+		# already struck us is booked as an answer, at neither price
+		# (nd_was_struck_by, as both of those read it).
 		custom_tooltip = nd_tt_incident_wait_survivors
-		custom_tooltip = nd_tt_incident_false_price
 		if = {
-			limit = { nd_doctrine_nfu = yes }
-			custom_tooltip = nd_tt_incident_false_pledge
+			limit = { nd_was_struck_by = { ENEMY = scope:nd_warning_suspect } }
+			custom_tooltip = nd_tt_incident_false_answer
+		}
+		else = {
+			custom_tooltip = nd_tt_incident_false_price
+			if = {
+				limit = { nd_doctrine_nfu = yes }
+				custom_tooltip = nd_tt_incident_false_pledge
+			}
 		}
 		set_variable = { name = nd_warning_launched value = 1 }
 		# The government chose it: the strike events must not say nobody did

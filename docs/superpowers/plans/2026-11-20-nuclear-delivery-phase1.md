@@ -246,7 +246,7 @@
 - [x] Chapter 14 at its peers' depth: launch authority (what each saves, the halt chance), the Strike section's previews, opening a crisis (the totals), moves (Go public), claiming a strike was unauthorized (the chance of belief), incidents (launch under attack), the treaty articles. Then rebuild the PDF.
 - [x] Play-test list (`docs/testing/nuclear-playtest.md`): spec §8's items for phase 1 (a posture click moves the Survivors row the same day; a Forces preview against the salvo that follows), the target line after a research, the precision-weapon line appearing when a rival researches it, and the self-check row from Task 3.
 - [x] The spec's status line and the `docs/superpowers/README.md` rows.
-- [ ] Full `scripts/preflight.py`. Then PR 1b with `--base main` (retargeted after 1a merges, per `git_workflow.md`), the two-reviewer review, one fix pass, and merge on green CI.
+- [x] Full `scripts/preflight.py`. Then PR 1b with `--base main` (retargeted after 1a merges, per `git_workflow.md`), the two-reviewer review, one fix pass, and merge on green CI. *Two-reviewer review and its fix pass done (the review fixes in design §0.18); the PR is opened by the session.*
 
 ## Review Focus
 
