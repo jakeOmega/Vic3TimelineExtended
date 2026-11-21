@@ -1,0 +1,319 @@
+﻿# Grant Leadership and the two Grant Command interactions: Protected Class
+# opens them to women, as Women's Suffrage does.
+#
+# Vanilla lets a woman lead an interest group or take command only while her
+# country has a variant of Women's Suffrage. The mod adds Protected Class to
+# the Rights of Women group beyond suffrage, so without this a country that
+# enacted it shut its women out of both again. Each `possible` below takes
+# `has_law = law_type:law_protected_class` beside vanilla's suffrage line.
+#
+# A REPLACE because an INJECT cannot add the condition: vanilla declares
+# `possible` on all three, and the engine rejects a second trigger block at
+# load (docs/guides/scripting_best_practices.md, "A second trigger block is
+# rejected at load").
+#
+# Everything but the lines marked MOD is vanilla, rebuilt from the committed
+# vanilla_parsed/ snapshot (1.15.2): none of the three repeats a key out of
+# order, so the snapshot holds their statement order, and only vanilla's
+# comments are lost. The second MOD change guards Grant Leadership's AI weight,
+# which reads the owner's ruler with no check (vanilla_known_bugs.md,
+# 01_additional_interactions.txt:1007); a country with no ruler would log it
+# against this file. test_women_in_office_interactions.py takes the MOD lines
+# out and requires vanilla's entry. Re-diff on every Vic3 patch
+# (docs/guides/vanilla_patch_runbook.md sweeps every REPLACE target).
+
+REPLACE:grant_command_to_ruler = {
+	icon = "gfx/interface/character_panel/grant_command.dds"
+	clicksound = "event:/SFX/UI/Military/command_grant"
+
+	potential = {
+		is_ruler_of_own_country = yes
+		NOR = {
+			has_role_of_type = general
+			has_role_of_type = admiral
+		}
+		owner ?= scope:actor
+	}
+
+	possible = {
+		is_adult = yes
+		OR = {
+			is_female = no
+			owner ?= {
+				has_law_or_variant = law_type:law_womens_suffrage
+			}
+			owner ?= {	# MOD: Protected Class
+				has_law = law_type:law_protected_class
+			}
+		}
+		owner ?= {
+			ruler_can_have_command = yes
+		}
+		exists = owner.capital.land_hq
+	}
+
+	effect = {
+		add_character_role = general
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				AND = {
+					age <= 50
+					OR = {
+						has_trait = reckless
+						has_trait = direct
+						has_trait = imposing
+					}
+					NOR = {
+						has_trait = psychological_affliction
+						has_trait = wounded
+						has_trait = shellshocked
+					}
+				}
+			}
+			add = 100
+		}
+	}
+}
+
+REPLACE:grant_leadership_to_agitator = {
+	icon = "gfx/interface/character_panel/grant_command_not.dds"
+	clicksound = "event:/SFX/DLC/1.3_ip1/UI/agitator_promote"
+
+	potential = {
+		has_dlc_feature = agitators
+		has_role_of_type = agitator
+		exists = owner
+		owner ?= scope:actor
+	}
+
+	possible = {
+		interest_group ?= {
+			is_in_government = yes
+		}
+		trigger_if = {
+			limit = {
+				scope:actor ?= {
+					AND = {
+						has_law_or_variant = law_type:law_multicultural
+						has_law_or_variant = law_type:law_total_separation
+					}
+				}
+			}
+			character_acceptance = {
+				target = scope:actor
+				value >= acceptance_status_3
+			}
+		}
+		trigger_else_if = {
+			limit = {
+				owner ?= {
+					has_law_or_variant = law_type:law_state_atheism
+				}
+			}
+			character_acceptance = {
+				target = scope:actor
+				value >= acceptance_status_4
+			}
+			NOR = {
+				has_ideology = ideology:ideology_theocrat
+				has_ideology = ideology:ideology_integralist
+				has_ideology = ideology:ideology_traditionalist
+				has_ideology = ideology:ideology_traditionalist_minoritarian
+			}
+		}
+		trigger_else = {
+			character_acceptance = {
+				target = scope:actor
+				value >= acceptance_status_4
+			}
+		}
+		OR = {
+			is_female = no
+			scope:actor ?= {
+				has_law_or_variant = law_type:law_womens_suffrage
+			}
+			scope:actor ?= {	# MOD: Protected Class
+				has_law = law_type:law_protected_class
+			}
+		}
+		custom_tooltip = {
+			text = grant_leadership_must_be_pressured_ig
+			political_movement ?= {
+				any_influenced_interest_group = {
+					this = root.interest_group
+				}
+			}
+		}
+	}
+
+	effect = {
+		show_as_tooltip = {
+			remove_character_role = agitator
+		}
+		custom_tooltip = {
+			text = make_agitator_ig_leader_tt
+			set_as_interest_group_leader = yes
+		}
+	}
+
+	cooldown = {
+		days = normal_modifier_time
+	}
+
+	ai_chance = {
+		value = -50
+		if = {
+			limit = {
+				popularity > interest_group.leader.popularity
+			}
+			add = 25
+		}
+		if = {
+			limit = {
+				interest_group.leader.popularity <= -50
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				interest_group.leader.popularity >= 50
+			}
+			add = -50
+		}
+		if = {
+			limit = {
+				interest_group ?= {
+					ig_approval <= 0
+				}
+			}
+			add = 25
+		}
+		if = {
+			limit = {
+				exists = owner.ruler	# MOD: ruler guard
+				trigger_if = {	# MOD: ruler guard
+					limit = {
+						exists = owner.ruler
+					}
+					this.ideology = owner.ruler.ideology
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				character_matches_divided_monarchists_ai_path = yes
+				interest_group.leader ?= {
+					NOT = {
+						character_matches_divided_monarchists_ai_path = yes
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				character_is_rival_french_house = yes
+			}
+			multiply = 0
+		}
+	}
+}
+
+REPLACE:grant_command_to_agitator = {
+	icon = "gfx/interface/character_panel/grant_command.dds"
+	clicksound = "event:/SFX/UI/Military/command_grant"
+
+	potential = {
+		has_dlc_feature = agitators
+		has_role_of_type = agitator
+		NOT = {
+			has_role_of_type = general
+		}
+		NOT = {
+			has_role_of_type = admiral
+		}
+		owner ?= scope:actor
+	}
+
+	possible = {
+		is_adult = yes
+		OR = {
+			is_female = no
+			owner ?= {
+				has_law_or_variant = law_type:law_womens_suffrage
+			}
+			owner ?= {	# MOD: Protected Class
+				has_law = law_type:law_protected_class
+			}
+		}
+		exists = owner.capital.land_hq
+		trigger_if = {
+			limit = {
+				has_template = nemo_prince
+			}
+			NOT = {
+				has_template = nemo_prince
+			}
+		}
+	}
+
+	effect = {
+		add_character_role = general
+	}
+
+	cooldown = {
+		days = normal_modifier_time
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				has_commander_traits = yes
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				is_interest_group_type = ig_armed_forces
+			}
+			add = 25
+		}
+		if = {
+			limit = {
+				NOT = {
+					owner ?= {
+						any_scope_general = {
+							exists = this
+						}
+					}
+				}
+			}
+			add = 25
+		}
+		if = {
+			limit = {
+				owner ?= {
+					any_scope_war = {
+						any_scope_front = {
+							is_vulnerable_front = root.owner
+						}
+					}
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				character_matches_divided_monarchists_ai_path = yes
+				has_commander_traits = yes
+			}
+			add = 50
+		}
+	}
+}
