@@ -75,7 +75,9 @@ DO NOT:
     architecture yourself (columned stone building, no dome) and leave flags out
   - Show political figures' faces up close. "Two candidates at podiums on a
     debate stage" drew two likenesses of a real politician. Keep them small,
-    distant, or seen from behind
+    distant, or seen from behind. A screen counts: "officials examining a
+    viral deepfake video" put a real president, before his flag, on the
+    screen. Turn the screen away so only its back and its light are seen
   - Use abstract/symbolic compositions ("split screen", "portraits facing each
     other", "clock ticking to midnight") — FLUX renders these as surreal collages
   - Describe animals in close-up with humans in protective gear — they merge into
@@ -1413,8 +1415,12 @@ IMAGES = {
         "style": "oil painting, social realism, dusk light",
         "events": ["society_technology_events.24"],
     },
+    # Pending (2026-11-21): the first render put a real politician's likeness,
+    # before a US flag, on the screen at the center of the frame, so the .dds
+    # was deleted. Until this is generated, modern_election_events.2 shows
+    # un_assembly and society_technology_events.25 shows diplomatic_meeting.
     "deepfake_crisis_screen": {
-        "prompt": "Officials in a crisis room examining a viral deepfake video.",
+        "prompt": "At the left of the frame, seen from across a dim room at night, three officials in dark suits sit at the near end of a long dark wooden table, leaning forward on their elbows, all turned toward a large television on a wheeled metal stand. The television faces them and away from us, so only its plain black back is seen, and its cold blue glow falls across their shoulders and hands. A fourth official, grey-haired, stands at the corner of the table with his arms folded. A few closed folders and coffee cups lie on the table. The right of the frame is the empty far end of the table and a wall of tall windows hung with heavy grey curtains, in shadow.",
         "style": "oil painting, contemporary realism, cool screen light",
         "events": ["modern_election_events.2", "society_technology_events.25"],
     },
