@@ -419,10 +419,17 @@ institution_ministry_of_the_environment_pollution_generation = {
 }
 
 nuclear_weapon_program_additional_nuke_progress_multiplier = 10
+# A project in focus (ICBMs, missile submarines) runs at the first device's
+# rate: 20 months to its goal at 5 funding steps, ten warheads' worth of
+# effort (2026-11-20 delivery spec §4.1). Only warheads after the first get the
+# series rate.
 nuclear_weapon_program_monthly_progress = {
 	value = var:nuclear_weapons_program_funding
 	if = {
-		limit = { var:nuclear_weapons_program_first_nuke_done > 0 }
+		limit = {
+			var:nuclear_weapons_program_first_nuke_done > 0
+			nd_focus_is_warheads = yes
+		}
 		multiply = nuclear_weapon_program_additional_nuke_progress_multiplier
 	}
 }

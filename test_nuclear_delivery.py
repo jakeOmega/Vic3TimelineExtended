@@ -58,6 +58,12 @@ ALLOWED = {
     ("common/scripted_triggers/nuclear_taboo_triggers.txt", "nd_taboo_has_programme_standing"):
         "a Major Power's standing to run a programme comes from the technology: a project can't "
         "stand in for it, since only a country with a programme can run one (spec §4.2)",
+    ("common/scripted_triggers/nuke_triggers.txt", "nd_proj_icbms_available"):
+        "a project's prerequisite is knowledge: the technology lets the programme develop the leg it fields "
+        "(phase 2 plan D6)",
+    ("common/scripted_triggers/nuke_triggers.txt", "nd_proj_subs_available"):
+        "a project's prerequisite is knowledge: the technology lets the programme develop the leg it fields "
+        "(phase 2 plan D6)",
     ("common/script_values/extra_script_values.txt", "global_tech_spread_script_value"):
         "the world's technology spread counts research",
     ("common/script_values/te_ai_probe_values.txt", "te_aip_tc_military_7"):

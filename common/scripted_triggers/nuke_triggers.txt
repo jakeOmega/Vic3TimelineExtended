@@ -118,10 +118,87 @@ nuclear_program_possible_decrease_funding = {
 # (nuclear_program_weekly_progress), and its increase button is worth nothing
 # to it. A player is never held. Guarded: the stockpile exists only once the
 # entry has activated.
+# The cap limits warheads only: with a project in focus the funding builds
+# delivery, which no stockpile cap counts (2026-11-20 delivery spec §4.1).
 nuclear_program_ai_at_stockpile_cap = {
 	is_ai = yes
+	nd_focus_is_warheads = yes
 	has_variable = nuclear_weapon_stockpile
 	var:nuclear_weapon_stockpile >= nuclear_ai_stockpile_cap
+}
+
+# ---- THE PROGRAMME'S FOCUS (2026-11-20 delivery spec §4.1; phase 2 plan D2) ----
+# Country scope. After the first device, funding builds whatever the focus
+# names: warheads, the ICBM project or the missile submarine project.
+# nd_prog_focus is 2 for ICBMs and 3 for Missile Submarines, and unset for
+# Warheads, so every save and every activation starts on Warheads with nothing
+# written. The focus handler's ops 1-3 are the same codes
+# (nuclear_program_focus_sgui); nd_focus_set is the only writer.
+nd_focus_is_warheads = {
+	NOT = { has_variable = nd_prog_focus }
+}
+
+nd_focus_is_icbms = {
+	var:nd_prog_focus ?= 2
+}
+
+nd_focus_is_submarines = {
+	var:nd_prog_focus ?= 3
+}
+
+# Can this country put a project in focus? (phase 2 plan D6) Each requirement
+# is its own line, so a greyed Focus row says what is missing. A project's
+# prerequisites are knowledge: the technologies (test_nuclear_delivery.py's
+# allowlist) and the first device. A hold (a freeze, a ceiling) doesn't make a
+# project unavailable: it pauses it. Read weekly by nd_focus_check_available,
+# which returns a focus no longer available (a coast lost, the programme gone)
+# to Warheads with its progress kept.
+nd_proj_icbms_available = {
+	custom_tooltip = {
+		text = nuclear_program_tt_has_programme
+		nuclear_program_has_programme = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_proj_first_device
+		var:nuclear_weapons_program_first_nuke_done ?= 1
+	}
+	custom_tooltip = {
+		text = nd_tt_proj_icbms_tech
+		has_technology_researched = ICBMs
+	}
+	custom_tooltip = {
+		text = nd_tt_proj_icbms_not_fielded
+		NOT = { has_variable = nd_icbms_fielded }
+	}
+}
+
+# A submarine needs a missile to fire, and a coast to sail from. ICBMs are not
+# required: a naval power may go to sea first (spec §4.3).
+nd_proj_subs_available = {
+	custom_tooltip = {
+		text = nuclear_program_tt_has_programme
+		nuclear_program_has_programme = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_proj_first_device
+		var:nuclear_weapons_program_first_nuke_done ?= 1
+	}
+	custom_tooltip = {
+		text = nd_tt_proj_subs_tech
+		has_technology_researched = advanced_submarine_technology
+	}
+	custom_tooltip = {
+		text = nd_tt_proj_missiles_tech
+		has_technology_researched = guided_missiles
+	}
+	custom_tooltip = {
+		text = nd_tt_proj_coast
+		any_scope_state = { is_coastal = yes }
+	}
+	custom_tooltip = {
+		text = nd_tt_proj_subs_not_fielded
+		NOT = { has_variable = nd_subs_fielded }
+	}
 }
 
 # Country scope: is this country's nuclear weapons programme funded and

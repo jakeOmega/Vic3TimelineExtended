@@ -34,7 +34,12 @@
 ### the programme. Both of their actions exist below, through
 ### nuclear_program_funding_sgui:
 ###     op 0   step funding down      op 1   step funding up
-### The op table is repeated in common/scripted_guis/nuclear_program_sguis.txt
+### and the programme's focus, through nuclear_program_focus_sgui (2026-11-20
+### delivery spec §4.1; its rows come with the phase 2 plan's Task 3):
+###     op 1   focus Warheads
+###     op 2   focus ICBMs
+###     op 3   focus Missile Submarines
+### The op tables are repeated in common/scripted_guis/nuclear_program_sguis.txt
 ### and in docs/systems/journal_entry_systems.md; keep all three in step.
 ###
 ### The Nuclear Powers leaderboard is a datamodel over nd_powers, a list of

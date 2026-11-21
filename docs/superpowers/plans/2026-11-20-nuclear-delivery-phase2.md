@@ -100,7 +100,7 @@
 
 **Interfaces:** produces `nd_prog_focus`, `nd_proj_*_progress`, `nd_icbms_fielded` / `nd_subs_fielded` (written, not yet read by the triggers), `nd_focus_set`, `nd_field_leg` and the availability triggers.
 
-- [ ] Write `test_nuclear_projects.py`:
+- [x] Write `test_nuclear_projects.py`:
   - `TestFocus`: the three triggers and unset-for-Warheads; no `immediate` writes `nd_prog_focus`.
   - `TestParking`:
     - `nd_focus_set` parks over 0, loads and removes the slot, then refreshes the hold once.
@@ -118,8 +118,17 @@
   - `TestFocusHandler`: ops 1–3, `ai_is_valid = { always = no }`, the click-only marker, and `is_valid` per op reading availability.
 
   Run: FAIL.
-- [ ] Implement. Then run `je_immediate_reset_audit`, `tooltip_walk_variable_audit`, `silent_variable_audit` and `variable_guard_audit`; the nuclear tests; and `preflight.py --changed`. PASS.
-- [ ] Commit `Nuclear programme: a focus, with each project's progress parked (spec §4.1)`.
+- [x] Implement. Then run `je_immediate_reset_audit`, `tooltip_walk_variable_audit`, `silent_variable_audit` and `variable_guard_audit`; the nuclear tests; and `preflight.py --changed`. PASS.
+- [x] Commit `Nuclear programme: a focus, with each project's progress parked (spec §4.1)`.
+
+**As built (2026-11-21).** As planned, with three additions:
+- **Helpers.** `nd_focus_park_into` and `nd_focus_restore_slot` do the slot arithmetic for every focus. Each ops-1–3 click goes through `nd_focus_choose`, behind the click-only marker `nd_focus_click`.
+- **A log line.** `nd_field_leg` logs `TE_NUCLEAR: type=leg_fielded; leg=icbms|subs`, so a play-test can see each fielding.
+- **Reused key.** The "has a programme" requirement line reuses `nuclear_program_tt_has_programme`.
+
+Left for later tasks:
+- **Task 3: the status code.** The click doesn't call `nuclear_program_refresh_state_effect`. Status codes for a project are D11's, and the hold coming off isn't visible in the click's own block anyway. So until the next weekly pulse, a held programme that switches to a project still shows the held status.
+- **Task 2: stale slots.** A slot a fielded leg left behind lingers. Say a country has the ICBM project in focus when the migration grants `nd_icbms_fielded`: the weekly availability check returns the focus to Warheads and parks the ICBM progress. The migration and `nd_delivery_remove_legs` should remove the slots of the legs they set or take.
 
 ### Task 2: The legs follow the fielded variables (§4.2–§4.4; D7–D10, D13)
 
