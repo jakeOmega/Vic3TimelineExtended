@@ -37,6 +37,8 @@
 #   0 authorised but unfunded   1 first device under development
 #   2 in series production      3 frozen by a pause treaty
 #   4 held at our arsenal ceiling 5 being dismantled
+#   9 building the ICBM force    10 building missile submarines (a delivery
+#                                project in focus; 2026-11-20 delivery spec §4.1)
 # ============================================================================
 
 # The journal entry's whole status line. Called from
@@ -115,6 +117,20 @@ nuclear_program_status_line = {
 			var:nuclear_program_last_status = 2
 		}
 		localization_key = nuclear_program_status_producing
+	}
+	text = {
+		trigger = {
+			has_variable = nuclear_program_last_status
+			var:nuclear_program_last_status = 9
+		}
+		localization_key = nuclear_program_status_project_icbms
+	}
+	text = {
+		trigger = {
+			has_variable = nuclear_program_last_status
+			var:nuclear_program_last_status = 10
+		}
+		localization_key = nuclear_program_status_project_subs
 	}
 	# A save from before the status code existed, or the week between activation
 	# and the first refresh.
@@ -218,6 +234,12 @@ nuclear_program_rate_note = {
 		}
 		localization_key = nuclear_program_rate_note_unfunded
 	}
+	# A delivery project in focus runs at the first device's rate
+	# (nuclear_weapon_program_monthly_progress; 2026-11-20 delivery spec §4.1).
+	text = {
+		trigger = { nd_focus_is_warheads = no }
+		localization_key = nuclear_program_rate_note_project
+	}
 	text = {
 		trigger = {
 			has_variable = nuclear_weapons_program_first_nuke_done
@@ -285,8 +307,9 @@ nuclear_program_next_warhead = {
 	}
 }
 
-# The overview's Program cell (NUC-21): when the next warhead comes, short
-# enough for its 154 column. Only a developing or producing program that is
+# The overview's Program cell (NUC-21): when the next warhead comes, or the
+# project in focus is done, short enough for its 154 column. Only a developing
+# or producing program, or one building a delivery project (9, 10), that is
 # funded and free of a pause or a disarmament progresses (the ceiling stops
 # production, and its state is At Ceiling); a country with no program, or one
 # that renounced or was disarmed, gets no line.
@@ -306,7 +329,20 @@ nuclear_program_next_short = {
 		localization_key = nuclear_program_next_short_estimate
 	}
 	text = {
-		trigger = { nuclear_program_display_state >= 6 }
+		trigger = {
+			has_variable = nuclear_weapons_program_funding
+			var:nuclear_weapons_program_funding >= 1
+			NOT = { modifier:country_nuclear_program_pause_bool = yes }
+			NOT = { modifier:country_nuclear_disarmament_bool = yes }
+			nuclear_program_display_state >= 9
+		}
+		localization_key = nuclear_program_next_short_project
+	}
+	text = {
+		trigger = {
+			nuclear_program_display_state >= 6
+			nuclear_program_display_state <= 8
+		}
 		localization_key = nuke_line_empty
 	}
 	text = {
@@ -580,5 +616,139 @@ nd_raze_salvo_line_attacker = {
 	text = {
 		trigger = { always = yes }
 		localization_key = nuke_line_empty
+	}
+}
+
+# ---------------------------------------------------------------------------
+# THE FOCUS (2026-11-20 delivery spec §4.1, §5.4; phase 2 plan D11). What the
+# programme's funding builds: Warheads (nd_prog_focus unset), the ICBM project
+# or the missile submarine project.
+# ---------------------------------------------------------------------------
+
+# What the bar and the rate and time rows are progress toward. Accessor-free,
+# so the entry's progress_desc (ROOT.GetCountry) and the widget (Country) both
+# call it.
+nd_prog_focus_object = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { nd_focus_is_icbms = yes }
+		localization_key = nd_prog_focus_object_icbms
+	}
+	text = {
+		trigger = { nd_focus_is_submarines = yes }
+		localization_key = nd_prog_focus_object_subs
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_prog_focus_object_warheads
+	}
+}
+
+# The rate row's label and the time row's label. Widget only.
+nd_prog_rate_label = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { nd_focus_is_icbms = yes }
+		localization_key = nd_prog_rate_label_icbms
+	}
+	text = {
+		trigger = { nd_focus_is_submarines = yes }
+		localization_key = nd_prog_rate_label_subs
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_prog_rate_label_warheads
+	}
+}
+
+nd_prog_next_label = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { nd_focus_is_icbms = yes }
+		localization_key = nd_prog_next_label_icbms
+	}
+	text = {
+		trigger = { nd_focus_is_submarines = yes }
+		localization_key = nd_prog_next_label_subs
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_prog_next_label_warheads
+	}
+}
+
+# The Focus rows' names: each focus's progress and its months to finish at
+# current funding (nd_display_proj_*, extra_script_values.txt), or what keeps
+# it from moving. Widget only. Warheads not in focus say so when our ceiling
+# would hold them (nd_taboo_programme_should_be_held's ceiling half).
+nd_focus_row_1 = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			nd_focus_is_warheads = no
+			nd_taboo_has_ceiling = yes
+			nd_stockpile >= nd_taboo_effective_ceiling_value
+		}
+		localization_key = nd_focus_row_1_held
+	}
+	text = {
+		trigger = { nd_display_proj_months_1 > 0 }
+		localization_key = nd_focus_row_1_months
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_focus_row_1_stalled
+	}
+}
+
+nd_focus_row_2 = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = nd_icbms_fielded }
+		localization_key = nd_focus_row_2_fielded
+	}
+	text = {
+		trigger = { nd_proj_icbms_available = no }
+		localization_key = nd_focus_row_2_unavailable
+	}
+	text = {
+		trigger = { nd_display_proj_months_2 > 0 }
+		localization_key = nd_focus_row_2_months
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_focus_row_2_stalled
+	}
+}
+
+nd_focus_row_3 = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = nd_subs_fielded }
+		localization_key = nd_focus_row_3_fielded
+	}
+	text = {
+		trigger = { nd_proj_subs_available = no }
+		localization_key = nd_focus_row_3_unavailable
+	}
+	text = {
+		trigger = { nd_display_proj_months_3 > 0 }
+		localization_key = nd_focus_row_3_months
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_focus_row_3_stalled
 	}
 }

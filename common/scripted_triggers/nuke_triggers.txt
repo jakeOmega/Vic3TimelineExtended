@@ -214,6 +214,40 @@ nuclear_program_is_proliferating = {
 	NOT = { modifier:country_nuclear_disarmament_bool = yes }
 }
 
+# Country scope: does the programme gain progress at all this week? Funded, and
+# free of a pause and a disarmament: the Focus rows' months
+# (nd_display_proj_months_*, extra_script_values.txt) are 0 otherwise, as the
+# time to the next warhead is (nuclear_program_display_months_to_next).
+# Display only.
+nuclear_program_display_progressing = {
+	has_variable = nuclear_weapons_program_funding
+	var:nuclear_weapons_program_funding >= 1
+	NOT = { modifier:country_nuclear_program_pause_bool = yes }
+	NOT = { modifier:country_nuclear_disarmament_bool = yes }
+}
+
+# Country scope: is the programme frozen, by a Nuclear Program Freeze article,
+# a crisis's freeze (nd_crisis_programme_freeze) or the console's pause
+# (nuclear_program_debug_pause)? The three things that carry the pause flag
+# apart from our own hold (nd_taboo_programme_held), each read directly: the
+# status code (nuclear_program_refresh_state_effect) is written in the block
+# that adds or removes the hold when the focus changes, where neither
+# has_modifier nor the flag's sum sees that change yet. The article check is
+# nd_taboo_held_by_own_ceiling_only's.
+nuclear_program_is_frozen = {
+	save_temporary_scope_as = nd_frozen_self
+	OR = {
+		has_modifier = nd_crisis_programme_freeze
+		has_modifier = nuclear_program_debug_pause
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = nuclear_program_pause
+				source_country = scope:nd_frozen_self
+			}
+		}
+	}
+}
+
 # Country scope: has this country's programme stopped in a way it cannot undo by
 # itself? A nuclear crisis over its programme (dispute 4) ends as a native
 # back-down only then (nd_crisis_revalidate_dispute); short of it, the target

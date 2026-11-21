@@ -1502,6 +1502,27 @@ headlines_tech_nuclear_weapons = {
 	color = neutral
 }
 
+# The world's first fielded delivery legs (2026-11-20 delivery spec §4.1,
+# phase 2 plan D12): posted by nd_leg_notices_icbms / _subs
+# (nuclear_weapon_effects.txt), once each, to every human.
+headlines_nd_icbms_fielded = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/technology.dds"
+	group = "headlines_tech_group"
+	notification_type = feed
+	days = 28
+	color = neutral
+}
+
+headlines_nd_subs_fielded = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/technology.dds"
+	group = "headlines_tech_group"
+	notification_type = feed
+	days = 28
+	color = neutral
+}
+
 
 headlines_tech_orbital_manufacturing = {
 	type = country

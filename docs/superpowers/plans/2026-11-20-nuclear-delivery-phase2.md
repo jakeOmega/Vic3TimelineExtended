@@ -183,7 +183,7 @@ Left for later tasks:
 - the Help page's programme topic (`te_nuclear_weapons_help_body`);
 - `test_nuclear_layout.py`, `test_nuclear_projects.py`.
 
-- [ ] Write the tests:
+- [x] Write the tests:
   - `TestFocusRows`:
     - three rows behind the first device, the tint on the focus;
     - progress and months per row from the display values;
@@ -199,8 +199,17 @@ Left for later tasks:
   - `TestCeilingSaysWarheadsOnly`.
 
   Run: FAIL.
-- [ ] Implement, then the GUI lint, `organize_loc.py`, `event_image_audit`, `button_reason_audit`, the nuclear tests and `preflight.py --changed`. PASS.
-- [ ] Commit `Nuclear programme: choose what funding builds; the world hears when a leg is fielded (spec §4.1, §5.4)`.
+- [x] Implement, then the GUI lint, `organize_loc.py`, `event_image_audit`, `button_reason_audit`, the nuclear tests and `preflight.py --changed`. PASS.
+- [x] Commit `Nuclear programme: choose what funding builds; the world hears when a leg is fielded (spec §4.1, §5.4)`.
+
+**As built (2026-11-21).** As planned, with these choices where the plan left room:
+- **The rows' place and words.** The rows sit at the end of The Programme under "What Funding Builds", named Warheads, ICBMs and Submarines. Each row's name is its progress as a share of the goal and its months to finish at current funding (`nd_display_proj_share_*`, `_months_*`). It falls back to "not progressing" when funding is 0 or a pause or disarmament holds the programme (`nuclear_program_display_progressing`), and reads differently in three cases:
+  - Warheads not in focus say "held at our ceiling" when our ceiling would hold them;
+  - a project whose requirements fail says "not available", and its greyed button lists why;
+  - a fielded leg gives its year.
+- **Status codes 9 and 10** (the ICBM and submarine projects, on the developing icon). The hold (4), the freeze (3) and dismantling (5) are now each read from what causes it: `nd_taboo_programme_should_be_held`, a new `nuclear_program_is_frozen` (the freeze article, a crisis freeze, the console's pause) and `nd_taboo_is_dismantling`. The hold's modifier and the pause flag aren't read, since a Focus row's click changes the hold in the same block and neither would see it until the next click. The click then refreshes the status code (`nd_focus_choose`), so a held programme that switches to a project shows "unfunded" at once rather than "held".
+- **The bar's label** is the entry's new `progress_desc` (`je_nuclear_program_progress`, through the accessor-free `nd_prog_focus_object`).
+- **Notices.** `nd_field_leg` dispatches to `nd_leg_notices_icbms` / `_subs` (`nd_leg_notices_$LEG$`). ICBMs show `missile_parade.dds`. Submarines show `missile_launch_crew.dds`, a launch control room, as no submarine picture exists; a pending picture can replace it.
 
 ### Task 4: The AI's focus (§4.5; D14, D15)
 

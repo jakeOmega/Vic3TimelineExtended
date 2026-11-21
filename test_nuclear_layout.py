@@ -434,7 +434,7 @@ class OverviewTest(unittest.TestCase):
         cls.panel = _type_body(cls.ov, "te_nuclear_overview_panel")
 
     def test_every_state_has_one_icon(self):
-        for value, codes in (("nuclear_program_display_state", range(0, 9)),
+        for value, codes in (("nuclear_program_display_state", range(0, 11)),
                              ("nd_display_doctrine_code", range(1, 6)),
                              ("nd_display_readiness_code", range(0, 4)),
                              ("nd_display_authority_code", range(1, 5)),
@@ -582,7 +582,9 @@ THEIR_CODES = ("nd_display_doctrine_code", "nd_display_authority_code")
 CODED_ICONS = {
     "nuclear_program_display_state": {0: "programme_unfunded", 1: "programme_developing", 2: "programme_producing",
                                       3: "programme_frozen", 4: "programme_at_ceiling", 5: "programme_dismantling",
-                                      6: "programme_none", 7: "programme_renounced", 8: "programme_disarmed"},
+                                      6: "programme_none", 7: "programme_renounced", 8: "programme_disarmed",
+                                      # A delivery project in focus (2026-11-20 delivery spec §4.1).
+                                      9: "programme_developing", 10: "programme_developing"},
     "nd_display_doctrine_code": {1: "doctrine_nfu", 2: "doctrine_existential", 3: "doctrine_flexible",
                                  4: "doctrine_compellence", 5: "doctrine_warfighting"},
     "nd_display_readiness_code": {0: "readiness_recessed", 1: "readiness_routine", 2: "readiness_heightened",
@@ -708,7 +710,7 @@ class DisplayValueTest(unittest.TestCase):
         order = [body.index(s) for s in ("var:nuclear_program_last_status", "nuclear_program_has_programme = no",
                                           "modifier:country_nuclear_disarmament_bool", "nd_taboo_renounced")]
         self.assertEqual(order, sorted(order), "later ifs must be the status line's earlier branches")
-        for code in range(9):
+        for code in range(11):
             self.assertTrue(_loc(f"je_nuclear_ov_prog_{code}"))
 
 

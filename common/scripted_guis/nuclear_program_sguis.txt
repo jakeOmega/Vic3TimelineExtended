@@ -1,13 +1,14 @@
 ﻿# ============================================================================
 # NUCLEAR PROGRAMME — scripted GUIs for gui/journal_entry_widgets/nuclear_program_widget.gui
 # ============================================================================
-# Six handlers, and that is deliberately all: the programme panel's rows are
+# Seven handlers, and that is deliberately all: the programme panel's rows are
 # ordinary localization reading display-only script values and
 # common/customizable_localization/nuclear_program_custom_loc.txt, which is
 # cheaper per frame than ExecuteTooltip and needs no handler at all. A scripted
 # GUI is used only where nothing else can do the job:
-#   nuclear_program_has_programme_sgui, nuclear_program_funding_sgui,
-#   nuclear_program_focus_sgui, nd_taboo_exists_sgui, nd_taboo_breakdown_sgui;
+#   nuclear_program_has_programme_sgui, nuclear_program_first_device_sgui,
+#   nuclear_program_funding_sgui, nuclear_program_focus_sgui,
+#   nd_taboo_exists_sgui, nd_taboo_breakdown_sgui;
 #   and nd_powers_listed_sgui,
 #   the Nuclear Powers section's second gate. The Nuclear Powers leaderboard is a datamodel over nd_powers, the list
 # update_nuclear_powers_ranking keeps (NUC-14 of the 2026-10-27 GUI audit), and
@@ -18,6 +19,9 @@
 # root asks it, because the entry is also active for an armed power without
 # the standing to build and for a non-nuclear party to a crisis, and neither
 # has anything to fund.
+#
+# ---- nuclear_program_first_device_sgui — display only ----------------------
+# Scope-free yes/no: is the first device built? The Focus rows' gate.
 #
 # ---- nuclear_program_funding_sgui — op table -------------------------------
 # Keep in step with the .gui header and docs/systems/journal_entry_systems.md.
@@ -97,6 +101,18 @@ nuclear_program_has_programme_sgui = {
 	scope = country
 	is_shown = {
 		nuclear_program_has_programme = yes
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = { }
+}
+
+# Is the first device built? The Focus rows show from then on (2026-11-20
+# delivery spec §4.1): before it, funding has nothing to choose between.
+nuclear_program_first_device_sgui = {
+	scope = country
+	is_shown = {
+		var:nuclear_weapons_program_first_nuke_done ?= 1
 	}
 	is_valid = { always = no }
 	ai_is_valid = { always = no }

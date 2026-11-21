@@ -409,6 +409,8 @@ nd_focus_choose = {
 		limit = { has_variable = nd_focus_click }
 		remove_variable = nd_focus_click
 		nd_focus_set = { F = $F$ }
+		# The status line and the overview show the new focus at once.
+		nuclear_program_refresh_state_effect = yes
 	}
 }
 
@@ -440,7 +442,8 @@ nd_focus_check_available = {
 # overflow with it, and the focus returns to Warheads with their parked
 # progress, which refreshes the hold: a ceiling holds warheads again. Then the
 # figures the leg changes: reach, the upkeep cache and the main rival's.
-# Called from nuclear_program_weekly_progress only.
+# Called from nuclear_program_weekly_progress only. Last, the notices
+# (nd_leg_notices_<leg>): fielding is public.
 nd_field_leg = {
 	set_variable = { name = nd_$LEG$_fielded value = year }
 	set_variable = { name = nuclear_weapon_program_progress value = 0 }
@@ -449,6 +452,68 @@ nd_field_leg = {
 	nd_apply_posture_modifiers = yes
 	nd_refresh_main_rival = yes
 	debug_log = "TE_NUCLEAR: type=leg_fielded; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; leg=$LEG$; stockpile=[THIS.Var('nuclear_weapon_stockpile').GetValue|0]; funding=[THIS.Var('nuclear_weapons_program_funding').GetValue|0]; ai=[THIS.ScriptValue('nd_log_is_ai')|0]"
+	nd_leg_notices_$LEG$ = yes
+}
+
+# A leg fielded is public (2026-11-20 delivery spec §4.1, phase 2 plan D12):
+# the fielder hears at once, and a week later its rivals either way, every
+# country believed armed and its neighbors (nuclear_weapon_events.35 for ICBMs,
+# .36 for missile submarines; the fielder's text and the world's split on
+# scope:nd_leg_fielder). The world's first fielder of each leg also makes a
+# headline for every human; the one-time migration of 2026-11-20 sets the same
+# flag when any leg came from a technology (nd_delivery_migrate), so the
+# headline is never late news. Nothing here writes the taboo's ledger:
+# deployment isn't use. ROOT is the fielder.
+nd_leg_notices_icbms = {
+	save_scope_as = nd_leg_fielder
+	if = {
+		limit = { NOT = { has_global_variable = nd_headline_icbms_fielded } }
+		set_global_variable = nd_headline_icbms_fielded
+		every_country = {
+			limit = { is_ai = no }
+			post_notification = headlines_nd_icbms_fielded
+		}
+	}
+	trigger_event = { id = nuclear_weapon_events.35 }
+	every_country = {
+		limit = {
+			NOT = { THIS = scope:nd_leg_fielder }
+			NOT = { is_country_type = decentralized }
+			OR = {
+				any_rival_country = { THIS = scope:nd_leg_fielder }
+				any_rivaling_country = { THIS = scope:nd_leg_fielder }
+				nd_believed_armed = yes
+				any_neighbouring_state = { owner = scope:nd_leg_fielder }
+			}
+		}
+		trigger_event = { id = nuclear_weapon_events.35 days = 7 }
+	}
+}
+
+nd_leg_notices_subs = {
+	save_scope_as = nd_leg_fielder
+	if = {
+		limit = { NOT = { has_global_variable = nd_headline_subs_fielded } }
+		set_global_variable = nd_headline_subs_fielded
+		every_country = {
+			limit = { is_ai = no }
+			post_notification = headlines_nd_subs_fielded
+		}
+	}
+	trigger_event = { id = nuclear_weapon_events.36 }
+	every_country = {
+		limit = {
+			NOT = { THIS = scope:nd_leg_fielder }
+			NOT = { is_country_type = decentralized }
+			OR = {
+				any_rival_country = { THIS = scope:nd_leg_fielder }
+				any_rivaling_country = { THIS = scope:nd_leg_fielder }
+				nd_believed_armed = yes
+				any_neighbouring_state = { owner = scope:nd_leg_fielder }
+			}
+		}
+		trigger_event = { id = nuclear_weapon_events.36 days = 7 }
+	}
 }
 
 # ----------------------------------------------------------------------------
@@ -489,11 +554,12 @@ nd_log_arsenal_watch = {
 # ----------------------------------------------------------------------------
 # The single derivation site for everything the panel displays.
 # ----------------------------------------------------------------------------
-# Called from exactly four places in play, which between them cover every way the
+# Called from exactly five places in play, which between them cover every way the
 # programme's state can move: je_nuclear_program's `immediate` (so an active
 # entry always has a status code), its on_weekly_pulse right after the
-# programme step, and the two button effects above — and therefore both stepper
-# ops in the widget, which delegate to those effects. (events/te_debug_nuclear_events.txt also calls it,
+# programme step, the two button effects above — and therefore both stepper
+# ops in the widget, which delegate to those effects — and a Focus row's click
+# (nd_focus_choose). (events/te_debug_nuclear_events.txt also calls it,
 # from the console only, after forcing state by hand.)
 # Nothing else may write nuclear_program_last_status, and neither the .gui nor
 # the localization may re-derive it — see
@@ -508,17 +574,22 @@ nuclear_program_refresh_state_effect = {
 	# The status code the panel and the status line read. Order matters: a pause
 	# treaty forces funding to 0, so without testing the pause first a frozen
 	# programme would report itself as merely unfunded.
-	# 5 and 4 before 3: the taboo's hold carries the same pause flag.
+	# 5 and 4 before 3: the taboo's hold carries the same pause flag. Each of
+	# 5, 4 and 3 is read from what causes it, not from the hold's modifier or
+	# the pause flag: a Focus row's click changes the hold in this same block
+	# (nd_focus_set, nd_taboo_refresh_held), and neither has_modifier nor the
+	# flag's sum would see it until the click after (2026-11-20 delivery spec
+	# §4.1, phase 2 plan D11). A ceiling holds only a Warheads focus.
 	if = {
 		limit = { nd_taboo_is_dismantling = yes }
 		set_variable = { name = nuclear_program_last_status value = 5 }
 	}
 	else_if = {
-		limit = { has_modifier = nd_taboo_programme_held }
+		limit = { nd_taboo_programme_should_be_held = yes }
 		set_variable = { name = nuclear_program_last_status value = 4 }
 	}
 	else_if = {
-		limit = { modifier:country_nuclear_program_pause_bool = yes }
+		limit = { nuclear_program_is_frozen = yes }
 		set_variable = { name = nuclear_program_last_status value = 3 }
 	}
 	else_if = {
@@ -527,6 +598,16 @@ nuclear_program_refresh_state_effect = {
 			var:nuclear_weapons_program_funding = 0
 		}
 		set_variable = { name = nuclear_program_last_status value = 0 }
+	}
+	# A delivery project in focus (9 ICBMs, 10 missile submarines), funded and
+	# free of a hold: the developing icon.
+	else_if = {
+		limit = { nd_focus_is_icbms = yes }
+		set_variable = { name = nuclear_program_last_status value = 9 }
+	}
+	else_if = {
+		limit = { nd_focus_is_submarines = yes }
+		set_variable = { name = nuclear_program_last_status value = 10 }
 	}
 	else_if = {
 		limit = {

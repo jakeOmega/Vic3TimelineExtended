@@ -366,6 +366,16 @@ types nuclear_overview_widget_types
 									visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)8' )]"
 									texture = "gfx/interface/icons/nuclear_icons/programme_disarmed.dds"
 								}
+								icon = {
+									size = { 100% 100% }
+									visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)9' )]"
+									texture = "gfx/interface/icons/nuclear_icons/programme_developing.dds"
+								}
+								icon = {
+									size = { 100% 100% }
+									visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)10' )]"
+									texture = "gfx/interface/icons/nuclear_icons/programme_developing.dds"
+								}
 							}
 							blockoverride "word" {
 								te_nuclear_ov_word = {
@@ -403,6 +413,14 @@ types nuclear_overview_widget_types
 								te_nuclear_ov_word = {
 									visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)8' )]"
 									text = "je_nuclear_ov_prog_8"
+								}
+								te_nuclear_ov_word = {
+									visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)9' )]"
+									text = "je_nuclear_ov_prog_9"
+								}
+								te_nuclear_ov_word = {
+									visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)10' )]"
+									text = "je_nuclear_ov_prog_10"
 								}
 							}
 							blockoverride "third_line" {

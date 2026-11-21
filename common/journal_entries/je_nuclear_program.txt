@@ -110,6 +110,9 @@ je_nuclear_program = {
 	}
 
 	progressbar = yes
+	# What the bar is progress toward: the next warhead, or the delivery project
+	# in focus (2026-11-20 delivery spec §4.1; nd_prog_focus_object).
+	progress_desc = je_nuclear_program_progress
 
 	# Body single-sourced in common/scripted_triggers/nuke_triggers.txt. Once
 	# the nuclear taboo exists it holds for every non-decentralized country, so

@@ -5,9 +5,10 @@
 ### holds the named roots the entry attaches; see its header for the whole
 ### panel.
 ###
-### te_nuclear_sec_programme   Funding (a stepper), the warhead production
-###                            rate, time to the next warhead and the first
-###                            device (open, only while the country has a
+### te_nuclear_sec_programme   Funding (a stepper), the production rate and
+###                            the time to finish, both of what the focus
+###                            builds, the first device and, from it on, the
+###                            Focus rows (open, only while the country has a
 ###                            programme). Mounted in container_3, just
 ###                            above the entry's native bar.
 ### te_nuclear_sec_taboo       The nuclear taboo (open, from the world's first
@@ -35,7 +36,7 @@
 ### nuclear_program_funding_sgui:
 ###     op 0   step funding down      op 1   step funding up
 ### and the programme's focus, through nuclear_program_focus_sgui (2026-11-20
-### delivery spec §4.1; its rows come with the phase 2 plan's Task 3):
+### delivery spec §4.1), from the Focus rows:
 ###     op 1   focus Warheads
 ###     op 2   focus ICBMs
 ###     op 3   focus Missile Submarines
@@ -404,6 +405,79 @@ types nuclear_program_widget_types
 					}
 					blockoverride "row_value" {
 						text = "je_nuclear_program_widget_first_device_value"
+					}
+				}
+
+				### The Focus rows (2026-11-20 delivery spec §4.1, §5.4; phase 2
+				### plan D11), from the first device on: what funding builds.
+				### Each row's name gives that focus's progress and its months to
+				### finish at current funding (nd_focus_row_N); the focus in force
+				### is tinted. The button says why a row is greyed (its
+				### requirements, one line each) and what choosing it does.
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 1
+					visible = "[GetScriptedGui('nuclear_program_first_device_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+
+					nd_subheader = {
+						blockoverride "subheader_text" {
+							text = "je_nuclear_program_widget_focus_sub"
+						}
+					}
+					nd_choice_row = {
+						datacontext = "[GetScriptedGui('nuclear_program_focus_sgui')]"
+						blockoverride "row_current" {
+							visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_prog_focus'), '(CFixedPoint)1' )]"
+						}
+						blockoverride "choice_name" {
+							text = "nd_w_focus_row_1"
+							tooltip = "nd_w_focus_1_tt"
+						}
+						blockoverride "button_text" {
+							text = "nd_w_btn_choose"
+						}
+						blockoverride "button_binding" {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+						}
+					}
+					nd_choice_row = {
+						datacontext = "[GetScriptedGui('nuclear_program_focus_sgui')]"
+						blockoverride "row_current" {
+							visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_prog_focus'), '(CFixedPoint)2' )]"
+						}
+						blockoverride "choice_name" {
+							text = "nd_w_focus_row_2"
+							tooltip = "nd_w_focus_2_tt"
+						}
+						blockoverride "button_text" {
+							text = "nd_w_btn_choose"
+						}
+						blockoverride "button_binding" {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+						}
+					}
+					nd_choice_row = {
+						datacontext = "[GetScriptedGui('nuclear_program_focus_sgui')]"
+						blockoverride "row_current" {
+							visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_prog_focus'), '(CFixedPoint)3' )]"
+						}
+						blockoverride "choice_name" {
+							text = "nd_w_focus_row_3"
+							tooltip = "nd_w_focus_3_tt"
+						}
+						blockoverride "button_text" {
+							text = "nd_w_btn_choose"
+						}
+						blockoverride "button_binding" {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
+						}
 					}
 				}
 			}

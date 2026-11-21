@@ -505,5 +505,264 @@ class TestSubmarineUpkeep(unittest.TestCase):
         self.assertIn("trigger = { nd_fields_missile_submarines = yes } localization_key = nd_w_upkeep_subs_line", line)
 
 
+# ---------------------------------------------------------------------------
+# Task 3: the Focus rows, the notices and the headline (§4.1, §5.4; D11, D12)
+# ---------------------------------------------------------------------------
+PROGRAM_CUSTOM_LOC = ROOT / "common/customizable_localization/nuclear_program_custom_loc.txt"
+OVERVIEW_GUI = ROOT / "gui/journal_entry_widgets/nuclear_overview_widget.gui"
+LAYOUT_GUI = ROOT / "gui/journal_entry_widgets/nuclear_layout_widget.gui"
+WEAPON_EVENTS = ROOT / "events/nuclear_weapon_events.txt"
+FOCUS_NAMES = {1: "warheads", 2: "icbms", 3: "submarines"}
+LEGS = {"icbms": 35, "subs": 36}
+
+
+def loc_values():
+    values = {}
+    for path in LOC.glob("*.yml"):
+        for line in path.read_text(encoding="utf-8-sig").splitlines():
+            m = re.match(r'\s+([A-Za-z0-9_.\-]+):\d*\s+"(.*)"', line)
+            if m:
+                values[m.group(1)] = m.group(2)
+    return values
+
+
+def custom_targets(name):
+    """The (trigger, key) pairs of a customizable-localization block, in order."""
+    body = squash(block(strip_comments(read(PROGRAM_CUSTOM_LOC)), name))
+    return re.findall(r"text = \{ trigger = \{ (.*?) \} localization_key = (\w+) \}", body)
+
+
+class TestFocusRows(unittest.TestCase):
+    """Three choice rows in The Programme, from the first device on, the focus
+    in force tinted, each printing its progress and its months to finish at
+    current funding (plan D11)."""
+
+    def setUp(self):
+        gui = strip_comments(read(GUI))
+        self.section = gui[gui.index("type te_nuclear_sec_programme"):gui.index("type te_nuclear_sec_taboo")]
+        self.values = strip_comments(read(EXTRA_VALUES))
+        self.loc = loc_values()
+
+    def test_three_rows_behind_the_first_device(self):
+        gate = "GetScriptedGui('nuclear_program_first_device_sgui').IsShown"
+        self.assertIn(gate, self.section)
+        rows = self.section[self.section.index(gate):]
+        self.assertEqual(rows.count("nd_choice_row = {"), 3)
+        for op in (1, 2, 3):
+            with self.subTest(op=op):
+                self.assertIn(f"ScriptValue('nd_display_prog_focus'), '(CFixedPoint){op}'", rows)
+                self.assertIn(f"MakeScopeValue( '(CFixedPoint){op}' )", rows)
+                self.assertIn(f'text = "nd_w_focus_row_{op}"', rows)
+                self.assertIn(f'tooltip = "nd_w_focus_{op}_tt"', rows)
+        self.assertEqual(rows.count("GetScriptedGui('nuclear_program_focus_sgui')"), 3)
+        sgui = squash(block(strip_comments(read(SGUIS)), "nuclear_program_first_device_sgui"))
+        self.assertIn("is_shown = { var:nuclear_weapons_program_first_nuke_done ?= 1 }", sgui)
+        self.assertIn("ai_is_valid = { always = no }", sgui)
+
+    def test_the_focus_in_force_as_a_code(self):
+        body = squash(block(self.values, "nd_display_prog_focus"))
+        self.assertTrue(body.startswith("value = 1 if = { limit = { has_variable = nd_prog_focus } value = var:nd_prog_focus }"))
+
+    def test_progress_reads_the_live_figure_and_the_slot(self):
+        for f, slot in SLOTS.items():
+            with self.subTest(focus=f):
+                body = squash(block(self.values, f"nd_display_proj_progress_{f}"))
+                self.assertIn(f"limit = {{ nd_focus_is_{FOCUS_NAMES[f]} = yes has_variable = {LIVE} }} add = var:{LIVE}", body)
+                self.assertIn(f"limit = {{ has_variable = {slot} }} add = var:{slot}", body)
+                self.assertIn("max = nuclear_weapon_program_goal_value", body)
+                share = squash(block(self.values, f"nd_display_proj_share_{f}"))
+                self.assertEqual(share, f"value = nd_display_proj_progress_{f} divide = nuclear_weapon_program_goal_value")
+
+    def test_months_at_each_focus_rate(self):
+        warheads = squash(block(self.values, "nd_display_proj_monthly_1"))
+        self.assertIn("multiply = nuclear_weapon_program_additional_nuke_progress_multiplier", warheads)
+        self.assertIn("add = modifier:country_nuclear_program_progress_mult", warheads)
+        project = squash(block(self.values, "nd_display_proj_monthly_project"))
+        self.assertNotIn("additional_nuke_progress_multiplier", project)
+        self.assertIn("add = modifier:country_nuclear_program_progress_mult", project)
+        for f, rate in ((1, "nd_display_proj_monthly_1"), (2, "nd_display_proj_monthly_project"),
+                        (3, "nd_display_proj_monthly_project")):
+            with self.subTest(focus=f):
+                body = squash(block(self.values, f"nd_display_proj_months_{f}"))
+                self.assertIn("nuclear_program_display_progressing = yes", body)
+                self.assertIn(f"{rate} > 0", body)
+                self.assertIn(f"subtract = nd_display_proj_progress_{f} divide = {rate}", body)
+        progressing = squash(block(strip_comments(read(NUKE_TRIGGERS)), "nuclear_program_display_progressing"))
+        for clause in ("var:nuclear_weapons_program_funding >= 1",
+                       "NOT = { modifier:country_nuclear_program_pause_bool = yes }",
+                       "NOT = { modifier:country_nuclear_disarmament_bool = yes }"):
+            self.assertIn(clause, progressing)
+
+    def test_each_row_says_what_holds_it(self):
+        warheads = custom_targets("nd_focus_row_1")
+        self.assertIn("nd_focus_is_warheads = no nd_taboo_has_ceiling = yes", warheads[0][0])
+        self.assertEqual([k for _, k in warheads], ["nd_focus_row_1_held", "nd_focus_row_1_months", "nd_focus_row_1_stalled"])
+        for f, leg, var in ((2, "icbms", "nd_icbms_fielded"), (3, "subs", "nd_subs_fielded")):
+            with self.subTest(focus=f):
+                targets = custom_targets(f"nd_focus_row_{f}")
+                self.assertEqual([k for _, k in targets], [f"nd_focus_row_{f}_{s}" for s in
+                                                          ("fielded", "unavailable", "months", "stalled")])
+                self.assertEqual(targets[0][0], f"has_variable = {var}")
+                self.assertEqual(targets[1][0], f"nd_proj_{leg}_available = no")
+        for f in (1, 2, 3):
+            self.assertEqual(self.loc[f"nd_w_focus_row_{f}"], f"[Country.GetCustom('nd_focus_row_{f}')]")
+            self.assertIn(f"ScriptValue('nd_display_proj_share_{f}')|%0", self.loc[f"nd_focus_row_{f}_months"])
+            self.assertIn(f"ScriptValue('nd_display_proj_months_{f}')|0", self.loc[f"nd_focus_row_{f}_months"])
+
+    def test_the_rows_fit(self):
+        from test_nuclear_layout import MARGIN, ROW, _renderings
+        for f in (1, 2, 3):
+            for text in _renderings(f"nd_w_focus_row_{f}"):
+                self.assertLessEqual(len(text) * ROW * MARGIN, 358, text)
+
+    def test_the_header_names_the_rows(self):
+        self.assertNotIn("its rows come with", read(GUI))
+        self.assertIn("the Focus rows", read(GUI))
+
+
+class TestProgrammeFollowsFocus(unittest.TestCase):
+    """The rate and time rows, the bar's label and the status codes follow the
+    focus, and a click shows the new state at once (plan D11)."""
+
+    def setUp(self):
+        self.loc = loc_values()
+        self.effects = strip_comments(read(WEAPON_EFFECTS))
+
+    def test_labels_follow_the_focus(self):
+        for key, custom in (("je_nuclear_program_widget_rate_label", "nd_prog_rate_label"),
+                            ("je_nuclear_program_widget_next_label", "nd_prog_next_label")):
+            self.assertEqual(self.loc[key], f"[Country.GetCustom('{custom}')]")
+            triggers = [t for t, _ in custom_targets(custom)]
+            self.assertEqual(triggers, ["nd_focus_is_icbms = yes", "nd_focus_is_submarines = yes", "always = yes"])
+        for key in ("je_nuclear_program_widget_rate_tt", "je_nuclear_program_widget_next_tt"):
+            self.assertIn("GetCustom('nd_prog_focus_object')", self.loc[key])
+        self.assertNotIn("a warhead takes", self.loc["je_nuclear_program_widget_next_tt"])
+
+    def test_the_bar_says_what_it_builds(self):
+        journal = squash(strip_comments(read(JOURNAL)))
+        self.assertIn("progress_desc = je_nuclear_program_progress", journal)
+        self.assertIn("ROOT.GetCountry.GetCustom('nd_prog_focus_object')", self.loc["je_nuclear_program_progress"])
+        # Accessor-free, so the entry's desc root and the widget's both read it.
+        for _, key in custom_targets("nd_prog_focus_object"):
+            self.assertNotIn("[", self.loc[key])
+
+    def test_the_rate_note_names_the_projects_rate(self):
+        keys = [k for _, k in custom_targets("nuclear_program_rate_note")]
+        self.assertLess(keys.index("nuclear_program_rate_note_project"), keys.index("nuclear_program_rate_note_series"))
+        self.assertIn("additional_nuke_progress_multiplier", self.loc["nuclear_program_rate_note_project"])
+
+    def test_status_codes(self):
+        body = squash(block(self.effects, "nuclear_program_refresh_state_effect"))
+        self.assertIn("limit = { nd_taboo_programme_should_be_held = yes } set_variable = { name = nuclear_program_last_status value = 4 }", body)
+        self.assertNotIn("has_modifier = nd_taboo_programme_held", body)
+        self.assertNotIn("modifier:country_nuclear_program_pause_bool", body)
+        self.assertIn("limit = { nuclear_program_is_frozen = yes } set_variable = { name = nuclear_program_last_status value = 3 }", body)
+        self.assertIn("limit = { nd_focus_is_icbms = yes } set_variable = { name = nuclear_program_last_status value = 9 }", body)
+        self.assertIn("limit = { nd_focus_is_submarines = yes } set_variable = { name = nuclear_program_last_status value = 10 }", body)
+        self.assertLess(body.index("value = 0 }"), body.index("value = 9 }"))
+        frozen = squash(block(strip_comments(read(NUKE_TRIGGERS)), "nuclear_program_is_frozen"))
+        for source in ("has_modifier = nd_crisis_programme_freeze", "has_modifier = nuclear_program_debug_pause",
+                       "has_type = nuclear_program_pause"):
+            self.assertIn(source, frozen)
+
+    def test_a_click_refreshes_the_status(self):
+        body = squash(block(self.effects, "nd_focus_choose"))
+        self.assertIn("nd_focus_set = { F = $F$ } nuclear_program_refresh_state_effect = yes", body)
+
+    def test_the_overview_and_the_status_line_know_the_projects(self):
+        overview = read(OVERVIEW_GUI)
+        for code in (9, 10):
+            with self.subTest(code=code):
+                self.assertIn(f"ScriptValue('nuclear_program_display_state'), '(CFixedPoint){code}' )]\"\n"
+                              "\t\t\t\t\t\t\t\t\ttexture = \"gfx/interface/icons/nuclear_icons/programme_developing.dds\"",
+                              overview)
+                self.assertIn(f"text = \"je_nuclear_ov_prog_{code}\"", overview)
+                self.assertTrue(self.loc[f"je_nuclear_ov_prog_{code}"])
+        status = custom_targets("nuclear_program_status_line")
+        for code, key in ((9, "nuclear_program_status_project_icbms"), (10, "nuclear_program_status_project_subs")):
+            self.assertIn((f"has_variable = nuclear_program_last_status var:nuclear_program_last_status = {code}", key), status)
+        short = custom_targets("nuclear_program_next_short")
+        self.assertEqual([k for _, k in short], ["nuclear_program_next_short_estimate", "nuclear_program_next_short_project",
+                                                  "nuke_line_empty", "nuclear_program_next_warhead_stalled"])
+        self.assertIn("nuclear_program_display_state >= 9", short[1][0])
+        self.assertIn("nuclear_program_display_state <= 8", short[2][0])
+
+
+class TestNotices(unittest.TestCase):
+    """A leg fielded is public: the fielder hears at once, its rivals either
+    way, the countries believed armed and its neighbors a week later; the
+    world's first fielder of each leg also makes a headline (plan D12)."""
+
+    def setUp(self):
+        self.effects = strip_comments(read(WEAPON_EFFECTS))
+        self.events = strip_comments(read(WEAPON_EVENTS))
+        self.loc = loc_values()
+
+    def test_field_leg_sends_them_last(self):
+        body = squash(block(self.effects, "nd_field_leg"))
+        self.assertTrue(body.endswith("nd_leg_notices_$LEG$ = yes"), body[-200:])
+
+    def test_recipients(self):
+        for leg, event in LEGS.items():
+            with self.subTest(leg=leg):
+                body = block(self.effects, f"nd_leg_notices_{leg}")
+                flat = squash(body)
+                self.assertTrue(flat.startswith("save_scope_as = nd_leg_fielder"))
+                self.assertIn(f"trigger_event = {{ id = nuclear_weapon_events.{event} }}", flat)
+                (world,) = every_country_blocks(body.split("post_notification")[-1]) or [None]
+                world = squash(world)
+                for clause in ("NOT = { THIS = scope:nd_leg_fielder }", "NOT = { is_country_type = decentralized }",
+                               "any_rival_country = { THIS = scope:nd_leg_fielder }",
+                               "any_rivaling_country = { THIS = scope:nd_leg_fielder }",
+                               "nd_believed_armed = yes",
+                               "any_neighbouring_state = { owner = scope:nd_leg_fielder }"):
+                    self.assertIn(clause, world)
+                self.assertIn(f"trigger_event = {{ id = nuclear_weapon_events.{event} days = 7 }}", world)
+
+    def test_the_headline_once_per_leg(self):
+        messages = strip_comments(read(MESSAGES))
+        migration = strip_comments(read(DETERRENCE_EFFECTS))
+        for leg in LEGS:
+            with self.subTest(leg=leg):
+                flat = squash(block(self.effects, f"nd_leg_notices_{leg}"))
+                self.assertIn(f"limit = {{ NOT = {{ has_global_variable = nd_headline_{leg}_fielded }} }} "
+                              f"set_global_variable = nd_headline_{leg}_fielded "
+                              f"every_country = {{ limit = {{ is_ai = no }} post_notification = headlines_nd_{leg}_fielded }}",
+                              flat)
+                self.assertIn(f"set_global_variable = nd_headline_{leg}_fielded", migration)
+                self.assertIn("group = \"headlines_tech_group\"", block(messages, f"headlines_nd_{leg}_fielded"))
+                for part in ("name", "desc", "tooltip"):
+                    self.assertIn(f"notification_headlines_nd_{leg}_fielded_{part}", self.loc)
+                self.assertIn("SCOPE.sCountry('nd_leg_fielder')", self.loc[f"notification_headlines_nd_{leg}_fielded_desc"])
+
+    def test_the_events(self):
+        for leg, event in LEGS.items():
+            with self.subTest(leg=leg):
+                body = block(self.events, f"nuclear_weapon_events.{event}")
+                flat = squash(body)
+                self.assertRegex(flat, r'event_image = \{ texture = "gfx/event_pictures/\w+\.dds" \}')
+                self.assertIn("trigger = { THIS = scope:nd_leg_fielder }", flat)
+                for part in ("t", "d_own", "d_world", "f", "a", "b"):
+                    self.assertIn(f"nuclear_weapon_events.{event}.{part}", self.loc)
+                self.assertEqual(flat.count("option = {"), 2)
+                self.assertEqual(flat.count("default_option = yes"), 2)
+                self.assertNotRegex(flat, r"nd_taboo_\w+ = yes|change_global_variable")
+
+
+class TestCeilingSaysWarheadsOnly(unittest.TestCase):
+    """An arsenal ceiling holds warheads, not a delivery project (phase 1's
+    Task 6 deferred the line here; spec §5.3)."""
+
+    def test_the_ceiling_hover(self):
+        loc = loc_values()
+        hover = loc["nd_taboo_w_ceiling_tt"]
+        self.assertNotIn("the program builds nothing", hover)
+        self.assertIn("no warheads", hover)
+        self.assertIn("delivery project", hover)
+        self.assertIn("Warhead production is held", loc["nuclear_program_status_held"])
+        self.assertIn("delivery project", loc["je_nuclear_how_programme"])
+        self.assertIn("focus", loc["je_nuclear_how_programme"])
+
+
 if __name__ == "__main__":
     unittest.main()
