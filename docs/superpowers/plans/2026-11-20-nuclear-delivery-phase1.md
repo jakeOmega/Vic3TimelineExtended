@@ -242,10 +242,10 @@
 
 ### Task 9: Docs, the play-test list; gate, PR, review
 
-- [ ] Design §0.18's second half: D10–D18, what shipped of D14 and D16, and §5.5's audit as closed. Update `mod_systems/nuclear.md`, `journal_entry_systems.md` (the Forces, Posture and Strike areas and the op table; CRLF), and Help page topics for the chain and launch credit.
-- [ ] Chapter 14 at its peers' depth: launch authority (what each saves, the halt chance), the Strike section's previews, opening a crisis (the totals), moves (Go public), claiming a strike was unauthorized (the chance of belief), incidents (launch under attack), the treaty articles. Then rebuild the PDF.
-- [ ] Play-test list (`docs/testing/nuclear-playtest.md`): spec §8's items for phase 1 (a posture click moves the Survivors row the same day; a Forces preview against the salvo that follows), the target line after a research, the precision-weapon line appearing when a rival researches it, and the self-check row from Task 3.
-- [ ] The spec's status line and the `docs/superpowers/README.md` rows.
+- [x] Design §0.18's second half: D10–D18, what shipped of D14 and D16, and §5.5's audit as closed. Update `mod_systems/nuclear.md`, `journal_entry_systems.md` (the Forces, Posture and Strike areas and the op table; CRLF), and Help page topics for the chain and launch credit.
+- [x] Chapter 14 at its peers' depth: launch authority (what each saves, the halt chance), the Strike section's previews, opening a crisis (the totals), moves (Go public), claiming a strike was unauthorized (the chance of belief), incidents (launch under attack), the treaty articles. Then rebuild the PDF.
+- [x] Play-test list (`docs/testing/nuclear-playtest.md`): spec §8's items for phase 1 (a posture click moves the Survivors row the same day; a Forces preview against the salvo that follows), the target line after a research, the precision-weapon line appearing when a rival researches it, and the self-check row from Task 3.
+- [x] The spec's status line and the `docs/superpowers/README.md` rows.
 - [ ] Full `scripts/preflight.py`. Then PR 1b with `--base main` (retargeted after 1a merges, per `git_workflow.md`), the two-reviewer review, one fix pass, and merge on green CI.
 
 ## Review Focus
