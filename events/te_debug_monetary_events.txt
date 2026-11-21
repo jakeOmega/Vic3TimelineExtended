@@ -937,7 +937,7 @@ te_debug_monetary.8 = { # REVIEWED 2026-09-20: console-only test event (`event t
 	type = country_event
 	placement = ROOT
 
-	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1048,7 +1048,7 @@ te_debug_monetary.9 = { # REVIEWED 2026-09-21: console-only test event (`event t
 	type = country_event
 	placement = ROOT
 
-	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1123,7 +1123,7 @@ te_debug_monetary.10 = { # REVIEWED 2026-09-21: console-only test event (`event 
 	type = country_event
 	placement = ROOT
 
-	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -1226,7 +1226,7 @@ te_debug_monetary.11 = { # REVIEWED 2026-09-21: console-only test event (`event 
 	type = country_event
 	placement = ROOT
 
-	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

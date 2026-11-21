@@ -98,7 +98,7 @@ modern_election_events.2 = {
 	desc = modern_election_events.2.d
 	flavor = modern_election_events.2.f
 
-	event_image = { texture = "gfx/event_pictures/deepfake_crisis_screen.dds" }
+	event_image = { texture = "gfx/event_pictures/bureaucratic_turf_war.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -488,7 +488,7 @@ modern_election_events.6 = {
 	desc = modern_election_events.6.d
 	flavor = modern_election_events.6.f
 
-	event_image = { texture = "gfx/event_pictures/social_media_campaign.dds" }
+	event_image = { texture = "gfx/event_pictures/election_campaign_rally.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
@@ -583,7 +583,7 @@ modern_election_events.7 = {
 	desc = modern_election_events.7.d
 	flavor = modern_election_events.7.f
 
-	event_image = { texture = "gfx/event_pictures/social_media_campaign.dds" }
+	event_image = { texture = "gfx/event_pictures/election_campaign_rally.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -682,7 +682,7 @@ modern_election_events.8 = {
 	desc = modern_election_events.8.d
 	flavor = modern_election_events.8.f
 
-	event_image = { texture = "gfx/event_pictures/social_media_campaign.dds" }
+	event_image = { texture = "gfx/event_pictures/election_campaign_rally.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -785,7 +785,7 @@ modern_election_events.9 = {
 	desc = modern_election_events.9.d
 	flavor = modern_election_events.9.f
 
-	event_image = { texture = "gfx/event_pictures/social_media_campaign.dds" }
+	event_image = { texture = "gfx/event_pictures/election_campaign_rally.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -914,7 +914,7 @@ modern_election_events.10 = {
 	desc = modern_election_events.10.d
 	flavor = modern_election_events.10.f
 
-	event_image = { texture = "gfx/event_pictures/social_media_campaign.dds" }
+	event_image = { texture = "gfx/event_pictures/election_campaign_rally.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
