@@ -246,8 +246,8 @@ Left for later tasks:
 
 ### Task 5: Docs, the play-test list; gate, PR 2a
 
-- [ ] `nuclear_crisis_design.md`: a new §0.19, "Delivery projects, phase 2a". It covers what shipped and D1–D15, with the spec's §4 as the reference. Update `mod_systems/nuclear.md`: the focus, the projects, the holds, the migration, the AI, and the new variables in its variable inventory.
-- [ ] Chapter 14 at its peers' depth:
+- [x] `nuclear_crisis_design.md`: a new §0.19, "Delivery projects, phase 2a". It covers what shipped and D1–D15, with the spec's §4 as the reference. Update `mod_systems/nuclear.md`: the focus, the projects, the holds, the migration, the AI, and the new variables in its variable inventory.
+- [x] Chapter 14 at its peers' depth:
   - "Who can run a weapons program": the ICBM technology now unlocks a project.
   - "Program funding and warhead production": the focus and the projects, a row each in the stage table, and the holds (a ceiling binds warheads only).
   - "Range and Nuclear Basing": reach from fielded legs, and the migration of an existing save in a sentence.
@@ -259,7 +259,7 @@ Left for later tasks:
   - A sentence on the AI's choice of range.
   - Chapter 17's glossary entries for reach and the ICBM force.
   - Rebuild the PDF.
-- [ ] Play-test list (`docs/testing/nuclear-playtest.md`), §8's phase-2 items:
+- [x] Play-test list (`docs/testing/nuclear-playtest.md`), §8's phase-2 items:
   - a focus change mid-project;
   - a re-activation with a project in focus;
   - a project finished under a ceiling;
@@ -268,7 +268,7 @@ Left for later tasks:
   - the submarine upkeep against the other costs (owner call 11);
   - an observer game's `type=ai_focus` lines;
   - the `type=delivery_migrated` line in an old save.
-- [ ] The spec's status line and the `docs/superpowers/README.md` rows.
+- [x] The spec's status line and the `docs/superpowers/README.md` rows.
 - [ ] Full `scripts/preflight.py`. Then PR 2a with `--base main`, the two-reviewer review, one fix pass, and merge on green CI.
 
 ## PR 2b: what the panel tells

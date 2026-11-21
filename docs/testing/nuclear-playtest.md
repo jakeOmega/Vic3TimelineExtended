@@ -193,6 +193,23 @@ The delivery spec's phase 1 (`docs/superpowers/specs/2026-11-20-nuclear-delivery
 105. **The counterforce row.** Delivery and Defense reads "×1.0" for a country with neither ICBMs nor Precision Guided Munitions, "×1.5" with one (the ICBM force's half rests on `nd_icbm_force_sum`) and "×2.0" with both; its hover lists the parts held.
 106. **A save from before phase 1b.** Load one with a main rival stored: the Survivors row is hidden for at most a week, then shows with the rival named and its reach broken down. Then take the rival's capital in a peace: within the week the hover names the new main rival, never its capital's new owner.
 
+## Delivery projects, phase 2a (2026-11-21)
+
+The delivery spec's phase 2a (`docs/superpowers/plans/2026-11-20-nuclear-delivery-phase2.md`, Tasks 1–4; design `nuclear_crisis_design.md` §0.19): the programme's focus and its parked progress, the two projects, the legs on the fielded variables with the migration and the removals, submarine upkeep, the notices and the AI's choice of focus. No new engine fact in script is unverified, so there is no new self-check; the items below are what only the game shows.
+
+107. **A focus change mid-project.** With ICBMs at 40%, choose Warheads: the bar shows the warheads' progress at once and its label names them. Choose ICBMs again: 40% is back.
+108. **A re-activation with a project in focus.** Lose the rank that qualifies the programme and regain it (console) with a project in focus: the bar's goal stays 100 and the project's progress returns the next week.
+109. **A project finished under a ceiling.** At your own arsenal ceiling, choose ICBMs: funding can be raised. At 100 the focus returns to Warheads, the row reads "held at our ceiling" and funding goes back to zero.
+110. **A held programme switching to a project.** At the ceiling, choose a project: the overview's programme icon and the status line change the same click, to the project's or to "unfunded", never left at "held".
+111. **The bar's label.** The entry's progress bar names what funding builds (`je_nuclear_program_progress` through `progress_desc`), and changes with a click.
+112. **The notices.** Field ICBMs: the fielder gets "Missiles in Their Silos" at once. A week later its rivals, every country believed armed and its neighbors get the world's text, naming the fielder. The world's first fielder also makes the headline; a second fielder makes none. The same for "Submarines at Sea" (its picture, `missile_launch_crew.dds`, is a stand-in until a submarine picture exists).
+113. **An old save's first month.** Load a save from before phase 2 with an ICBM power at Launch on Warning: through the first month it keeps its reach, Launch on Warning and the ICBM force (the bridge). On the first monthly pulse `debug.log` has one `TE_NUCLEAR: type=delivery_migrated` line with both counts, and a second month adds none.
+114. **A landlocked country after the migration.** A landlocked country with Advanced Submarine Technology gets no submarine leg: no coastal reach, no submarine factor in the survivability hover, no submarine upkeep. A country that had renounced the bomb gets no leg at all.
+115. **Disarmament takes the legs.** Under Launch on Warning with ICBMs fielded, accept a Nuclear Disarmament article: the legs and project progress go, the authority returns to Central with "Launch Authority Returns to Central", and the wait before the next authority choice is the one that was running. Then finish a dismantling the same way.
+116. **The submarine upkeep** (owner call 11). With submarines at sea, the Upkeep row's hover gives their part. Weigh it against the other legs' and the arsenal's other costs at a token, a mid-sized and a fifty-warhead arsenal, and against the cap.
+117. **An AI great power at its desired stockpile with a distant rival** keeps funding its programme while a project is in focus, and fields ICBMs (`type=leg_fielded`).
+118. **An observer game's `type=ai_focus` lines.** Every posture review of an armed AI writes one, with its score, focus and reason. Powers whose rivals are all within bomber reach (India and Pakistan) build warheads; distant rivals bring ICBMs (`range_first`, `range_half`); small, exposed arsenals go to sea (`submarines_survival`). `scripts/analysis/nuclear_observer_report.py` counts the choices, the reasons and the legs fielded.
+
 ## Self-checks
 
 | Line | What it tests | If BROKEN |
