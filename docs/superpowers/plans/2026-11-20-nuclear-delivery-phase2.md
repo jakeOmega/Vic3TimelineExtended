@@ -148,7 +148,7 @@ Left for later tasks:
 
 **Interfaces:** after this task, a leg exists only once fielded or migrated. Every phase 1 reader follows.
 
-- [ ] Write the tests:
+- [x] Write the tests:
   - `TestFieldedTriggers`: the bodies per D7 and the bridge's flag.
   - `TestMigration`: global, monthly, once under the flag; tech and coast; armed or not; the headline flags; the log line.
   - `TestLegRemoval`: both call sites; the variables, slots and focus cleared; the bind called.
@@ -158,8 +158,16 @@ Left for later tasks:
   - The D3 allowlist: each new site with its reason.
 
   Run: FAIL.
-- [ ] Implement, then the nuclear tests, `test_nuclear_reach.py`, `test_nuclear_basing.py`, `test_nuclear_incident_risk.py`, and `preflight.py --changed`. PASS.
-- [ ] Commit `Nuclear delivery: legs are fielded, not researched; disarmament takes them (spec §4.2–§4.4)`.
+- [x] Implement, then the nuclear tests, `test_nuclear_reach.py`, `test_nuclear_basing.py`, `test_nuclear_incident_risk.py`, and `preflight.py --changed`. PASS.
+- [x] Commit `Nuclear delivery: legs are fielded, not researched; disarmament takes them (spec §4.2–§4.4)`.
+
+**As built (2026-11-21).** As planned, with these additions:
+- **What the migration skips.** It grants no leg to a country that gave its arsenal up and hasn't armed again (`nd_delivery_given_up`: `nd_renounced`, `nd_renounced_locked` or the Nuclear Disarmament article in force). Disarmament takes the launchers (owner call 9), so a country renounced before the update would otherwise get its legs back.
+- **The removal and a project focus.** With a project in focus, the live figure is the project's, so the removal loads the warheads' parked progress back to the bar (or 0) as it drops the focus. A warheads slot on a Warheads focus is an activation's park and stays. The disarmament article calls the removal before it zeroes the progress, so the zeroing still clears the warheads.
+- **The upkeep cap.** It is a named value, `nd_upkeep_units_cap` (46), at all seven clamps. The ceiling stepper's two previews take the submarines' part at their own size, not the stockpile's.
+- **The Upkeep row's hover.** It names the submarines and gives their part while fielded (`nd_upkeep_subs_line`, `nd_display_upkeep_submarines_weekly`). Its cap reads "just under two and a half percent of GDP a year".
+- **The interpreter** answers `nd_fields_*` from the posture, as in phase 1, so it needed no `has_variable` answers; only its comments changed.
+- **Kept as it was:** the bind's fallback logs as an ordinary `nd_set_authority_1` action line. The disarmament article's `te_nuclear_disarmament_ended_program` still counts only warheads and progress, not legs.
 
 ### Task 3: The Focus rows, the notices and the headline (§4.1, §5.4 Programme; D11, D12)
 

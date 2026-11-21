@@ -787,27 +787,58 @@ nd_command_intact = {
 	NOT = { has_variable = nd_decapitated }
 }
 
-# DELIVERY (2026-11-20 delivery spec §4; phase 1 plan D2, D3). Country scope:
-# does this country have the leg? Every delivery read asks these two, never the
-# technologies, so phase 2 changes only their bodies, to the fielded variables
-# its projects set. test_nuclear_delivery.py fails on a technology read outside
-# its short list of knowledge sites (a Major Power's standing, tech spread). The
+# DELIVERY (2026-11-20 delivery spec §4; phase 1 plan D2, D3; phase 2 plan
+# D7). Country scope: does this country have the leg? Every delivery read asks
+# these two, never the technologies. A leg is fielded by the programme's
+# project (nd_field_leg) or was granted by the one-time migration
+# (nd_delivery_migrate), and disarmament takes it (nd_delivery_remove_legs).
+# Until the migration has run, a save's legs are still its technologies (the
+# bridge), so no ICBM power loses its reach, Launch on Warning or the ICBM
+# force in the weeks before the first monthly pulse. test_nuclear_delivery.py
+# fails on a technology read outside its short list of knowledge sites. The
 # custom tooltips give a greyed option one readable line.
 nd_fields_icbms = {
 	custom_tooltip = {
 		text = nd_tt_fields_icbms
-		has_technology_researched = ICBMs
+		OR = {
+			has_variable = nd_icbms_fielded
+			AND = {
+				NOT = { has_global_variable = nd_delivery_migrated }
+				has_technology_researched = ICBMs
+			}
+		}
 	}
 }
 
 # Missile submarines need a coast to sail from: until 2026-11-20 a landlocked
 # armed country with the technology reached every coast and counted their
-# survivability.
+# survivability. The coast stays outside the bridge: without one the leg's
+# effects lapse and nd_subs_fielded stays, so they return with a coast (spec
+# §4.3: no rebuild for a port lost in a war).
 nd_fields_missile_submarines = {
 	custom_tooltip = {
 		text = nd_tt_fields_missile_submarines
-		has_technology_researched = advanced_submarine_technology
+		OR = {
+			has_variable = nd_subs_fielded
+			AND = {
+				NOT = { has_global_variable = nd_delivery_migrated }
+				has_technology_researched = advanced_submarine_technology
+			}
+		}
 		any_scope_state = { is_coastal = yes }
+	}
+}
+
+# Has this country given its arsenal up, and not armed again? A dismantling
+# done (nd_renounced until it is armed again, nd_renounced_locked until it
+# resumes) or the Nuclear Disarmament article in force. Disarmament takes the
+# launchers too (2026-11-20 delivery spec owner call 9), so the delivery
+# migration grants such a country no leg: it rebuilds them if it resumes.
+nd_delivery_given_up = {
+	OR = {
+		has_variable = nd_renounced
+		has_variable = nd_renounced_locked
+		modifier:country_nuclear_disarmament_bool = yes
 	}
 }
 

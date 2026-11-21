@@ -290,5 +290,220 @@ class TestFocusHandler(unittest.TestCase):
                 self.assertRegex(doc, rf"\|\s*(`nuclear_program_focus_sgui`)?\s*\|\s*{op}\s*\|\s*focus {meaning}\s*\|")
 
 
+# ---------------------------------------------------------------------------
+# Task 2: the legs follow the fielded variables (§4.2-§4.4; D7-D10, D13)
+# ---------------------------------------------------------------------------
+DETERRENCE_EFFECTS = ROOT / "common/scripted_effects/nuclear_deterrence_effects.txt"
+TABOO_EFFECTS = ROOT / "common/scripted_effects/nuclear_taboo_effects.txt"
+DETERRENCE_TRIGGERS = ROOT / "common/scripted_triggers/nuclear_deterrence_triggers.txt"
+DETERRENCE_VALUES = ROOT / "common/script_values/nuclear_deterrence_values.txt"
+DELIVERY_ON_ACTIONS = ROOT / "common/on_actions/nuclear_delivery_on_actions.txt"
+ARTICLES = ROOT / "common/treaty_articles/extra_treaty_articles.txt"
+MESSAGES = ROOT / "common/messages/extra_messages.txt"
+CUSTOM_LOC = ROOT / "common/customizable_localization/nuclear_deterrence_custom_loc.txt"
+LEG_VARS = ("nd_icbms_fielded", "nd_subs_fielded", "nd_prog_focus",
+            "nd_proj_warhead_progress", "nd_proj_icbm_progress", "nd_proj_sub_progress")
+
+
+def every_country_blocks(body):
+    """The bodies of each every_country block in an effect body."""
+    found = []
+    for m in re.finditer(r"every_country\s*=\s*\{", body):
+        depth, j = 1, m.end()
+        while depth:
+            depth += body[j] == "{"
+            depth -= body[j] == "}"
+            j += 1
+        found.append(body[m.end():j - 1])
+    return found
+
+
+class TestMigration(unittest.TestCase):
+    """Once, on the first monthly pulse: every country that had a leg from
+    its technology keeps it as fielded (plan D8, spec §4.4)."""
+
+    def setUp(self):
+        self.effects = strip_comments(read(DETERRENCE_EFFECTS))
+        self.body = block(self.effects, "nd_delivery_migrate")
+
+    def test_global_monthly_and_once(self):
+        on_actions = strip_comments(read(DELIVERY_ON_ACTIONS))
+        self.assertIn("on_monthly_pulse = { on_actions = { nd_delivery_monthly_on_action } }", squash(on_actions))
+        hook = squash(block(on_actions, "nd_delivery_monthly_on_action"))
+        self.assertIn("limit = { has_game_rule = nuclear_weapons_enabled "
+                      "NOT = { has_global_variable = nd_delivery_migrated } } nd_delivery_migrate = yes", hook)
+        # The flag first, so a second pulse can never run it again.
+        self.assertTrue(squash(self.body).startswith("set_global_variable = nd_delivery_migrated"))
+
+    def test_tech_and_coast_armed_or_not(self):
+        icbms, subs = every_country_blocks(self.body)
+        self.assertIn("has_technology_researched = ICBMs", icbms)
+        self.assertIn("set_variable = { name = nd_icbms_fielded value = year }", squash(icbms))
+        self.assertIn("has_technology_researched = advanced_submarine_technology", subs)
+        self.assertIn("any_scope_state = { is_coastal = yes }", subs)
+        self.assertIn("set_variable = { name = nd_subs_fielded value = year }", squash(subs))
+        for loop in (icbms, subs):
+            self.assertNotIn("nd_is_armed", loop)
+            # Disarmament takes the launchers too (owner call 9).
+            self.assertIn("nd_delivery_given_up = no", loop)
+
+    def test_a_granted_leg_drops_its_project(self):
+        icbms, subs = (squash(b) for b in every_country_blocks(self.body))
+        self.assertIn("if = { limit = { nd_focus_is_icbms = yes } nd_focus_set = { F = 1 } }", icbms)
+        self.assertIn("remove_variable = nd_proj_icbm_progress", icbms)
+        self.assertIn("if = { limit = { nd_focus_is_submarines = yes } nd_focus_set = { F = 1 } }", subs)
+        self.assertIn("remove_variable = nd_proj_sub_progress", subs)
+
+    def test_given_up(self):
+        body = squash(block(strip_comments(read(DETERRENCE_TRIGGERS)), "nd_delivery_given_up"))
+        for part in ("has_variable = nd_renounced", "has_variable = nd_renounced_locked",
+                     "modifier:country_nuclear_disarmament_bool = yes"):
+            self.assertIn(part, body)
+
+    def test_headlines_and_log(self):
+        body = squash(self.body)
+        self.assertIn("limit = { local_var:nd_mig_icbms > 0 } set_global_variable = nd_headline_icbms_fielded", body)
+        self.assertIn("limit = { local_var:nd_mig_subs > 0 } set_global_variable = nd_headline_subs_fielded", body)
+        self.assertIn("TE_NUCLEAR: type=delivery_migrated;", body)
+        self.assertIn("icbms=[GetGlobalVariable('nd_mig_icbms').GetValue|0]", body)
+        self.assertIn("subs=[GetGlobalVariable('nd_mig_subs').GetValue|0]", body)
+
+
+class TestLegRemoval(unittest.TestCase):
+    """The Nuclear Disarmament article and a completed dismantling take the
+    legs, the projects and a project focus (owner call 9; plan D10)."""
+
+    def setUp(self):
+        self.body = squash(block(strip_comments(read(DETERRENCE_EFFECTS)), "nd_delivery_remove_legs"))
+
+    def test_clears_the_legs_slots_and_focus(self):
+        for var in ("nd_icbms_fielded", "nd_subs_fielded", "nd_proj_icbm_progress", "nd_proj_sub_progress"):
+            self.assertIn(f"if = {{ limit = {{ has_variable = {var} }} remove_variable = {var} }}", self.body)
+        # A project in focus: the live figure was the project's, so the
+        # warheads' parked progress comes back to the bar.
+        self.assertIn("limit = { has_variable = nd_prog_focus } remove_variable = nd_prog_focus "
+                      "if = { limit = { has_variable = nd_proj_warhead_progress } "
+                      "set_variable = { name = nuclear_weapon_program_progress value = var:nd_proj_warhead_progress } "
+                      "remove_variable = nd_proj_warhead_progress } "
+                      "else = { set_variable = { name = nuclear_weapon_program_progress value = 0 } }", self.body)
+        self.assertIn("nd_authority_bind_check = yes", self.body)
+
+    def test_both_call_sites(self):
+        article = squash(strip_comments(block(read(ARTICLES), "nuclear_disarmament")))
+        entry = article[article.index("on_entry_into_force"):]
+        # Before the progress is zeroed: the zeroing then also clears the
+        # warheads' progress the removal loaded back.
+        self.assertLess(entry.index("nd_delivery_remove_legs = yes"),
+                        entry.index("set_variable = { name = nuclear_weapon_program_progress value = 0 }"))
+        dismantle = squash(block(strip_comments(read(TABOO_EFFECTS)), "nd_taboo_dismantle_complete"))
+        self.assertLess(dismantle.index("nd_delivery_remove_legs = yes"),
+                        dismantle.index("nd_apply_posture_modifiers = yes"))
+
+
+class TestAuthorityBind(unittest.TestCase):
+    """Launch on Warning and Automatic Retaliation need fielded ICBMs: without
+    them the authority falls back to Central, and its clock isn't restarted
+    (plan D10, the No-First-Strike binding's pattern)."""
+
+    def setUp(self):
+        self.effects = strip_comments(read(DETERRENCE_EFFECTS))
+        self.body = squash(block(self.effects, "nd_authority_bind_check"))
+
+    def test_the_bind(self):
+        self.assertIn("AND = { nd_authority_launch_on_warning = yes NOT = { nd_can_adopt_launch_on_warning = yes } }",
+                      self.body)
+        self.assertIn("AND = { nd_authority_automatic = yes NOT = { nd_can_adopt_automatic_retaliation = yes } }",
+                      self.body)
+        self.assertIn("nd_set_authority_1 = yes", self.body)
+
+    def test_months_put_back(self):
+        save = self.body.index("set_variable = { name = nd_authority_months_before_bind value = var:nd_authority_months }")
+        tenure = self.body.index("set_variable = { name = nd_authority_months_before_bind value = nd_authority_tenure_months }")
+        setter = self.body.index("nd_set_authority_1 = yes")
+        restore = self.body.index("set_variable = { name = nd_authority_months value = var:nd_authority_months_before_bind }")
+        self.assertLess(max(save, tenure), setter)
+        self.assertLess(setter, restore)
+        self.assertIn("remove_variable = nd_authority_months_before_bind", self.body)
+
+    def test_a_human_is_told(self):
+        self.assertIn("limit = { is_ai = no } post_notification = nd_authority_bound_by_delivery", self.body)
+        self.assertIn("nd_authority_bound_by_delivery = {", read(MESSAGES))
+        keys = loc_keys()
+        for suffix in ("name", "desc", "tooltip"):
+            self.assertIn(f"notification_nd_authority_bound_by_delivery_{suffix}", keys)
+
+    def test_weekly_backstop(self):
+        self.assertIn("nd_authority_bind_check = yes", squash(block(self.effects, "nd_weekly_update")))
+
+    def test_one_writer(self):
+        callers = re.findall(r"\bnd_authority_bind_check\s*=\s*yes", self.effects)
+        self.assertEqual(len(callers), 2)  # nd_weekly_update and nd_delivery_remove_legs
+
+
+class TestCustodyAndRevolutions(unittest.TestCase):
+    """Warheads taken into custody arrive without their delivery (owner call
+    3), and a revolution's winner continues the nation with its variables
+    (plan D13): nothing in custody or a civil war writes a leg, the focus or
+    a project's progress."""
+
+    FILES = ("common/on_actions/nuclear_custody_on_actions.txt",
+             "common/on_actions/te_civil_war_on_actions.txt",
+             "common/scripted_effects/nuclear_custody_effects.txt",
+             "common/scripted_effects/te_civil_war_effects.txt",
+             "events/nuclear_custody_events.txt")
+
+    def test_no_writes(self):
+        writes = re.compile(r"\b(set_variable|change_variable|remove_variable|clamp_variable)\s*=\s*"
+                            r"(\{\s*name\s*=\s*)?(" + "|".join(LEG_VARS) + r")\b")
+        for rel in self.FILES:
+            code = strip_comments(read(ROOT / rel))
+            self.assertIsNone(writes.search(code), rel)
+
+
+class TestSubmarineUpkeep(unittest.TestCase):
+    """The submarine leg is the dearest to keep: 6 × the size factor a week
+    (spec §4.3, owner call 11; plan D9)."""
+
+    def setUp(self):
+        self.values = strip_comments(read(DETERRENCE_VALUES))
+
+    def test_the_part(self):
+        body = squash(block(self.values, "nd_upkeep_units_submarines"))
+        self.assertEqual("value = 0 if = { limit = { nd_fields_missile_submarines = yes } "
+                         "add = { value = nd_upkeep_size_factor multiply = 6 } }", body)
+        self.assertIn("add = nd_upkeep_units_submarines", squash(block(self.values, "nd_upkeep_units_fixed")))
+
+    def test_the_cap(self):
+        self.assertEqual(constant(self.values, "nd_upkeep_units_cap"), 46)
+        names = ["nd_upkeep_units", "nd_upkeep_weekly_at_ceiling_lowered", "nd_upkeep_weekly_at_ceiling_raised"]
+        names += [f"nd_upkeep_weekly_at_readiness_{r}" for r in range(4)]
+        for name in names:
+            body = squash(block(self.values, name))
+            self.assertIn("max = nd_upkeep_units_cap", body, name)
+            self.assertNotIn("max = 40", body, name)
+
+    def test_the_unit_table(self):
+        header = read(DETERRENCE_VALUES)
+        self.assertRegex(header, r"#\s+missile submarines\s+6 × size factor")
+        self.assertRegex(header, r"#\s+cap\s+46 units")
+
+    def test_a_ceiling_counts_its_own_size(self):
+        # The submarines' part scales with the arsenal, so a ceiling's preview
+        # takes the part at its own size, not the stockpile's.
+        for name, size in (("nd_upkeep_weekly_at_ceiling_lowered", "nd_ceiling_lowered_capped"),
+                           ("nd_upkeep_weekly_at_ceiling_raised", "nd_ceiling_raised_capped")):
+            body = squash(block(self.values, name))
+            self.assertIn("subtract = nd_upkeep_units_submarines", body, name)
+            self.assertIn(f"limit = {{ nd_fields_missile_submarines = yes }} add = {{ value = {size} "
+                          "divide = 50 multiply = 0.6 add = 0.4 multiply = 6 }", body, name)
+
+    def test_the_upkeep_hover_names_it(self):
+        loc = "\n".join(read(p) for p in LOC.glob("*.yml"))
+        hover = re.search(r"(?m)^ nd_w_upkeep_tt:0 \"(.*)\"", loc).group(1)
+        self.assertIn("GetCustom('nd_upkeep_subs_line')", hover)
+        line = squash(block(strip_comments(read(CUSTOM_LOC)), "nd_upkeep_subs_line"))
+        self.assertIn("trigger = { nd_fields_missile_submarines = yes } localization_key = nd_w_upkeep_subs_line", line)
+
+
 if __name__ == "__main__":
     unittest.main()

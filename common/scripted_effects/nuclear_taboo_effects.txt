@@ -674,6 +674,9 @@ nd_taboo_dismantle_complete = {
 		remove_variable = nd_ai_ceiling_from_review
 	}
 	nd_snap_public_estimate = yes
+	# The launchers go with the warheads (2026-11-20 delivery spec owner call
+	# 9): a country that resumes rebuilds its delivery.
+	nd_delivery_remove_legs = yes
 	nd_apply_posture_modifiers = yes
 	nd_ledger_refresh = yes
 	trigger_event = { id = nuclear_taboo.20 }

@@ -60,8 +60,8 @@ class Posture:
     satellite_communications: bool = True
     radar: bool = True             # radar (the survivability target's warning factor)
     missile_defense: bool = True   # missile_defense_systems (its last factor)
-    icbms: bool = True             # nd_fields_icbms (phase 1: the technology)
-    missile_submarines: bool = True  # nd_fields_missile_submarines (the technology and a coast)
+    icbms: bool = True             # nd_fields_icbms (fielded, or the technology until the delivery migration)
+    missile_submarines: bool = True  # nd_fields_missile_submarines (fielded, and a coast)
     war_band: int = 0              # the war's exposure band (nd_war_danger_band) while at war
     talks: bool = False            # the crisis's talks are open
     suspect_readiness: int = 3     # the suspected attacker's readiness

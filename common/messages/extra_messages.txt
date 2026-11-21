@@ -89,6 +89,17 @@ nd_doctrine_bound_by_law = {
 	color = neutral
 }
 
+# Our launch authority fell back to Central Authorization: Launch on Warning or
+# Automatic Retaliation without the fielded ICBMs it launches, after
+# disarmament or a dismantling (nd_authority_bind_check, phase 2 plan D10).
+# Human players only.
+nd_authority_bound_by_delivery = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/laws.dds"
+	notification_type = feed
+	color = neutral
+}
+
 # A refused nuclear stand-down asked for a war that had not begun 14 days
 # later; the exchange closed without it (nd_exchange_weekly_update).
 nd_exchange_war_failed = {

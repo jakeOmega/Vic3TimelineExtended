@@ -2396,3 +2396,18 @@ nd_pv_leadership_value = {
 		localization_key = nd_w_strike_pv_3_value_unarmed
 	}
 }
+
+# The Upkeep row's hover: the missile submarines' share, while fielded
+# (2026-11-20 delivery spec §4.3; phase 2 plan D9).
+nd_upkeep_subs_line = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_fields_missile_submarines = yes }
+		localization_key = nd_w_upkeep_subs_line
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_empty
+	}
+}

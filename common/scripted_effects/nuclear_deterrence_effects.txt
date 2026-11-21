@@ -269,6 +269,11 @@ nd_weekly_update = {
 			post_notification = nd_doctrine_bound_by_law
 		}
 	}
+	# ---- the delivery binds the launch authority (phase 2 plan D10) ---------
+	# The backstop for any path that leaves Launch on Warning or Automatic
+	# Retaliation without the fielded ICBMs they launch; disarmament and a
+	# dismantling check it at once (nd_delivery_remove_legs).
+	nd_authority_bind_check = yes
 	# ---- pulled back for a civil war (nuclear_custody_effects.txt) ----------
 	# The warheads stay in storage until every civil war of ours is over. The
 	# panel greys every raise; any other path that raised the target (an
@@ -827,6 +832,153 @@ nd_set_authority = {
 		custom_tooltip = nd_tt_authority_consequence_automatic
 	}
 	nd_apply_posture_modifiers = yes
+}
+
+# ----------------------------------------------------------------------------
+# DELIVERY LEGS (2026-11-20 delivery spec §4.4; phase 2 plan D8, D10)
+# ----------------------------------------------------------------------------
+# Launch on Warning and Automatic Retaliation launch fielded ICBMs
+# (nd_can_adopt_*). When the ICBMs go (disarmament, a dismantling, a save whose
+# authority outlived its missiles), the authority falls back to Central
+# Authorization. The loss made the change, not the government, so it doesn't
+# start the authority clock: nd_authority_months is put back as it was (tenure
+# satisfied if it was missing), as the No-First-Strike binding does for the
+# doctrine. A human is told (nd_authority_bound_by_delivery). The one writer:
+# called by nd_delivery_remove_legs and weekly by nd_weekly_update.
+nd_authority_bind_check = {
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					nd_authority_launch_on_warning = yes
+					NOT = { nd_can_adopt_launch_on_warning = yes }
+				}
+				AND = {
+					nd_authority_automatic = yes
+					NOT = { nd_can_adopt_automatic_retaliation = yes }
+				}
+			}
+		}
+		if = {
+			limit = { has_variable = nd_authority_months }
+			set_variable = { name = nd_authority_months_before_bind value = var:nd_authority_months }
+		}
+		else = {
+			set_variable = { name = nd_authority_months_before_bind value = nd_authority_tenure_months }
+		}
+		nd_set_authority_1 = yes
+		set_variable = { name = nd_authority_months value = var:nd_authority_months_before_bind }
+		remove_variable = nd_authority_months_before_bind
+		if = {
+			limit = { is_ai = no }
+			post_notification = nd_authority_bound_by_delivery
+		}
+	}
+}
+
+# Disarmament takes the launchers too (owner call 9): the Nuclear Disarmament
+# article's entry into force and a completed dismantling remove both fielded
+# legs and both projects' progress, so a country that resumes rebuilds its
+# delivery. A project in focus goes with them: its live progress was the
+# project's, so the warheads' parked progress comes back to the bar. A
+# warheads slot on a Warheads focus is an activation's park, waiting for the
+# weekly load-back, and stays. Then the authority's gate and reach.
+nd_delivery_remove_legs = {
+	if = {
+		limit = { has_variable = nd_prog_focus }
+		remove_variable = nd_prog_focus
+		if = {
+			limit = { has_variable = nd_proj_warhead_progress }
+			set_variable = { name = nuclear_weapon_program_progress value = var:nd_proj_warhead_progress }
+			remove_variable = nd_proj_warhead_progress
+		}
+		else = {
+			set_variable = { name = nuclear_weapon_program_progress value = 0 }
+		}
+	}
+	if = {
+		limit = { has_variable = nd_icbms_fielded }
+		remove_variable = nd_icbms_fielded
+	}
+	if = {
+		limit = { has_variable = nd_subs_fielded }
+		remove_variable = nd_subs_fielded
+	}
+	if = {
+		limit = { has_variable = nd_proj_icbm_progress }
+		remove_variable = nd_proj_icbm_progress
+	}
+	if = {
+		limit = { has_variable = nd_proj_sub_progress }
+		remove_variable = nd_proj_sub_progress
+	}
+	nd_authority_bind_check = yes
+	nd_reach_refresh = yes
+}
+
+# Once, from nd_delivery_monthly_on_action (global scope; the first monthly
+# pulse after the update, with the system's rule on). Before phase 2 a
+# technology switched a leg on; now the programme fields it. So every country
+# that had a leg keeps it: nd_icbms_fielded with the ICBMs technology,
+# nd_subs_fielded with Advanced Submarine Technology and a coast, armed or not,
+# so no arsenal loses its reach mid-game (spec §4.4). A landlocked country gets
+# no submarine leg: that was the bug phase 1 fixed. A country that gave its
+# arsenal up gets neither (nd_delivery_given_up; owner call 9). A leg granted
+# here drops its project: a focus on it returns to Warheads (nd_focus_set
+# parks its progress) and the slot goes. The world already had these legs, so
+# the fielding headlines are spent (nd_headline_*_fielded; plan D12).
+nd_delivery_migrate = {
+	set_global_variable = nd_delivery_migrated
+	set_local_variable = { name = nd_mig_icbms value = 0 }
+	set_local_variable = { name = nd_mig_subs value = 0 }
+	every_country = {
+		limit = {
+			has_technology_researched = ICBMs
+			NOT = { has_variable = nd_icbms_fielded }
+			nd_delivery_given_up = no
+		}
+		set_variable = { name = nd_icbms_fielded value = year }
+		if = {
+			limit = { nd_focus_is_icbms = yes }
+			nd_focus_set = { F = 1 }
+		}
+		if = {
+			limit = { has_variable = nd_proj_icbm_progress }
+			remove_variable = nd_proj_icbm_progress
+		}
+		change_local_variable = { name = nd_mig_icbms add = 1 }
+	}
+	every_country = {
+		limit = {
+			has_technology_researched = advanced_submarine_technology
+			any_scope_state = { is_coastal = yes }
+			NOT = { has_variable = nd_subs_fielded }
+			nd_delivery_given_up = no
+		}
+		set_variable = { name = nd_subs_fielded value = year }
+		if = {
+			limit = { nd_focus_is_submarines = yes }
+			nd_focus_set = { F = 1 }
+		}
+		if = {
+			limit = { has_variable = nd_proj_sub_progress }
+			remove_variable = nd_proj_sub_progress
+		}
+		change_local_variable = { name = nd_mig_subs add = 1 }
+	}
+	if = {
+		limit = { local_var:nd_mig_icbms > 0 }
+		set_global_variable = nd_headline_icbms_fielded
+	}
+	if = {
+		limit = { local_var:nd_mig_subs > 0 }
+		set_global_variable = nd_headline_subs_fielded
+	}
+	set_global_variable = { name = nd_mig_icbms value = local_var:nd_mig_icbms }
+	set_global_variable = { name = nd_mig_subs value = local_var:nd_mig_subs }
+	debug_log = "TE_NUCLEAR: type=delivery_migrated; date=[TimeKeeper.GetCurrentDate.GetString]; icbms=[GetGlobalVariable('nd_mig_icbms').GetValue|0]; subs=[GetGlobalVariable('nd_mig_subs').GetValue|0]"
+	remove_global_variable = nd_mig_icbms
+	remove_global_variable = nd_mig_subs
 }
 
 # After an automatic answer to $ENEMY$: a second first strike by the same
