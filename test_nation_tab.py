@@ -736,37 +736,72 @@ class CountryPanelTest(unittest.TestCase):
     """gui/00_te_country_panel_information.gui: vanilla's Information tab type,
     its modifier list replaced by a line leading to the Nation tab's All
     Modifiers (owner, 2026-11-03), the change in one `### MOD: Nation tab`
-    block that keeps every vanilla line it replaces."""
+    block that keeps every vanilla line it replaces; and vanilla's panel type,
+    with another country's National Info in its footer (owner, 2026-11-21), in
+    one `### MOD: National Info` block."""
 
     @staticmethod
-    def _type_lines(text):
-        lines = text.splitlines()
-        start = next(i for i, line in enumerate(lines) if line.strip().startswith(f"type {gen.PANEL_TYPE} = "))
+    def _block(lines, opens):
+        """The lines of the first block whose opening line `opens` accepts."""
+        start = next(i for i, line in enumerate(lines) if opens(line.strip()))
         depth = 0
         for i in range(start, len(lines)):
             depth += lines[i].count("{") - lines[i].count("}")
             if depth == 0:
                 return lines[start:i + 1]
-        raise AssertionError("the type never closes")
+        raise AssertionError("the block never closes")
+
+    @classmethod
+    def _type_lines(cls, text, name=gen.PANEL_TYPE):
+        return cls._block(text.splitlines(), lambda line: line.startswith(f"type {name} = "))
 
     def test_only_marked_blocks_differ_from_vanilla(self):
         """Undo each marked block (drop what it adds, put back the vanilla
-        lines it records) and the type is vanilla's, line for line."""
-        restored, blocks, inside = [], 0, False
-        for line in self._type_lines(_read(gen.PANEL_OUT)):
-            text = line.strip()
-            if text.startswith(gen.MOD_OPEN):
-                blocks, inside = blocks + 1, True
-            elif text == gen.MOD_CLOSE:
-                inside = False
-            elif not inside:
-                restored.append(text)
-            elif text.startswith(gen.VANILLA_LINE):
-                restored.append(text[len(gen.VANILLA_LINE):].strip())
-        self.assertEqual(blocks, 1)
-        self.assertFalse(inside)
-        vanilla = [line.strip() for line in self._type_lines(_read(gen.VANILLA_PANEL))]
-        self.assertEqual([line for line in restored if line], [line for line in vanilla if line])
+        lines it records) and each type is vanilla's, line for line."""
+        for name, marker in ((gen.PANEL_TYPE, gen.MOD_OPEN), (gen.FOOTER_TYPE, gen.FOOTER_OPEN)):
+            with self.subTest(type=name):
+                restored, blocks, inside = [], 0, False
+                for line in self._type_lines(_read(gen.PANEL_OUT), name):
+                    text = line.strip()
+                    if text.startswith("### MOD"):
+                        self.assertTrue(text.startswith(f"{marker}: "), text)
+                        blocks, inside = blocks + 1, True
+                    elif text == gen.MOD_CLOSE:
+                        inside = False
+                    elif not inside:
+                        restored.append(text)
+                    elif text.startswith(gen.VANILLA_LINE):
+                        restored.append(text[len(gen.VANILLA_LINE):].strip())
+                self.assertEqual(blocks, 1)
+                self.assertFalse(inside)
+                vanilla = [line.strip() for line in self._type_lines(_read(gen.VANILLA_PANEL), name)]
+                self.assertEqual([line for line in restored if line], [line for line in vanilla if line])
+
+    def test_national_info_sits_above_draft_a_treaty(self):
+        """Another country's National Info is in the panel's fixed footer, so
+        it shows on every tab whatever the scroll, right above vanilla's Draft
+        a Treaty and on the same test (spec 2026-11-02-charts-help-national-info
+        § 6.2, way in 1, moved out of the Politics tab's scroll). It opens the
+        window as vanilla's Politics-tab button does, under the window's own
+        title (POP_BROWSER, "French National Info")."""
+        panel = self._type_lines(_read(gen.PANEL_OUT), gen.FOOTER_TYPE)
+        footer = self._block(panel, lambda line: line == 'blockoverride "fixed_bottom" {')
+        stripped = [line.strip() for line in footer]
+        at = stripped.index(next(line for line in stripped if line.startswith(f"{gen.FOOTER_OPEN}: ")))
+        end = stripped.index(gen.MOD_CLOSE, at)
+        block = stripped[at + 1:end]
+        self.assertEqual(block[0], "button = {")
+        self.assertEqual(block[-1], "}")
+        self.assertIn('onclick = "[InformationPanelBar.OpenPopBrowserPanel( Country.Self )]"', block)
+        self.assertIn('text = "POP_BROWSER"', block)
+        treaty = stripped[end + 1:]
+        self.assertEqual(treaty[0], "button = {")
+        click = treaty.index(gen._TREATY_CLICK)
+        self.assertNotIn("}", treaty[:click])  # the treaty's own button, not a later one
+        test = [line for line in block if line.startswith("visible = ")]
+        self.assertEqual(test, [gen._TREATY_TEST])
+        self.assertIn(gen._TREATY_TEST, treaty[:click])
+        self.assertIn("National Info", _loc()["POP_BROWSER"])
 
     def test_the_list_is_gone(self):
         """No list, so nothing on the tab compares names or reads a script
@@ -859,7 +894,14 @@ class PanelDriftTest(unittest.TestCase):
 
     def test_a_missing_anchor_raises_value_error(self):
         for old, new, anchor in (("### TIMED MODIFIERS", "### MODIFIERS", "TIMED MODIFIERS"),
-                                 (f"type {gen.PANEL_TYPE} = ", "type something_else = ", gen.PANEL_TYPE)):
+                                 (f"type {gen.PANEL_TYPE} = ", "type something_else = ", gen.PANEL_TYPE),
+                                 (f"type {gen.FOOTER_TYPE} = ", "type something_else = ", gen.FOOTER_TYPE),
+                                 ('blockoverride "fixed_bottom" {', 'blockoverride "fixed_top_2" {', "footer"),
+                                 (gen._TREATY_CLICK, 'onclick = "[InformationPanelBar.OpenTreatyPanel]"',
+                                  "Draft a Treaty"),
+                                 ('visible = "[Not(GetMetaPlayer.IsPlayedOrObservedCountry(Country.Self))]"\n'
+                                  '\t\t\t\t\tsize = { 540 50 }',
+                                  'visible = yes\n\t\t\t\t\tsize = { 540 50 }', "test")):
             with self.subTest(anchor=anchor):
                 with self.assertRaisesRegex(ValueError, anchor):
                     gen.generated_panel(self._mutated(old, new))

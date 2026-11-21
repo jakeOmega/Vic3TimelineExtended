@@ -4210,7 +4210,7 @@ extra_law_events.38 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/bank_run_crowd.dds" }
+	event_image = { texture = "gfx/event_pictures/financial_distress_street.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -6240,7 +6240,7 @@ extra_law_events.59 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/algorithmic_governance_office.dds" }
+	event_image = { texture = "gfx/event_pictures/ministry_reform.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -7746,7 +7746,7 @@ extra_law_events.83 = {
 
 	category = enactment
 
-	event_image = { texture = "gfx/event_pictures/algorithmic_governance_office.dds" }
+	event_image = { texture = "gfx/event_pictures/ministry_reform.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 

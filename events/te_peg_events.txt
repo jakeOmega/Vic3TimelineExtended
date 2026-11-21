@@ -102,7 +102,7 @@ te_peg.1 = {
 		}
 	}
 
-	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -339,7 +339,7 @@ te_peg.2 = {
 	desc = te_peg.2.d
 	flavor = te_peg.2.f
 
-	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -508,7 +508,7 @@ te_peg.3 = {
 	desc = te_peg.3.d
 	flavor = te_peg.3.f
 
-	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
