@@ -155,13 +155,20 @@ nd_focus_is_project = {
 # is its own line, so a greyed Focus row says what is missing. A project's
 # prerequisites are knowledge: the technologies (test_nuclear_delivery.py's
 # allowlist) and the first device. A hold (a freeze, a ceiling) doesn't make a
-# project unavailable: it pauses it. Read weekly by nd_focus_check_available,
-# which returns a focus no longer available (a coast lost, the programme gone)
-# to Warheads with its progress kept.
+# project unavailable: it pauses it. Nor does lost standing once a project is
+# in focus (spec §4.1, §4.4): the weekly check reads only the lasting
+# requirements (nd_proj_icbms_lasting), so a programme lost and regained keeps
+# its project. Until the one-time migration has counted the legs already in
+# service (nd_delivery_migrate), the bridge in nd_fields_icbms already gives
+# them, so no project is offered for one.
 nd_proj_icbms_available = {
 	custom_tooltip = {
 		text = nuclear_program_tt_has_programme
 		nuclear_program_has_programme = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_proj_migrated
+		has_global_variable = nd_delivery_migrated
 	}
 	custom_tooltip = {
 		text = nd_tt_proj_first_device
@@ -185,6 +192,10 @@ nd_proj_subs_available = {
 		nuclear_program_has_programme = yes
 	}
 	custom_tooltip = {
+		text = nd_tt_proj_migrated
+		has_global_variable = nd_delivery_migrated
+	}
+	custom_tooltip = {
 		text = nd_tt_proj_first_device
 		var:nuclear_weapons_program_first_nuke_done ?= 1
 	}
@@ -204,6 +215,26 @@ nd_proj_subs_available = {
 		text = nd_tt_proj_subs_not_fielded
 		NOT = { has_variable = nd_subs_fielded }
 	}
+}
+
+# What a project in focus needs to stay in focus: the lasting requirements of
+# nd_proj_*_available, without the programme (lost standing holds a project;
+# spec §4.1, §4.4) and without the migration line (a project can't be in focus
+# before it). Read weekly by nd_focus_check_available only, never shown, so no
+# custom_tooltip. test_nuclear_projects.py holds each line to its available
+# twin's.
+nd_proj_icbms_lasting = {
+	var:nuclear_weapons_program_first_nuke_done ?= 1
+	has_technology_researched = ICBMs
+	NOT = { has_variable = nd_icbms_fielded }
+}
+
+nd_proj_subs_lasting = {
+	var:nuclear_weapons_program_first_nuke_done ?= 1
+	has_technology_researched = advanced_submarine_technology
+	has_technology_researched = guided_missiles
+	any_scope_state = { is_coastal = yes }
+	NOT = { has_variable = nd_subs_fielded }
 }
 
 # Country scope: is this country's nuclear weapons programme funded and

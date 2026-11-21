@@ -354,8 +354,24 @@ nd_focus_restore_slot = {
 # the moment a project is in focus and goes back on with Warheads
 # (nd_taboo_refresh_held; add_modifier and remove_modifier are not visible in
 # the same block, so it is called once and last). Callers: the Focus rows'
-# click (nd_focus_choose), the weekly availability check and nd_field_leg.
+# click (nd_focus_choose), the weekly availability check, nd_field_leg, the
+# migration and the removal. It marks the block (local nd_focus_hold_refreshed)
+# so the status refresh after it reads the hold from its cause, which this
+# block just changed, not from the modifier, which it can't see yet.
 nd_focus_set = {
+	nd_focus_set_core = { F = $F$ }
+	nd_taboo_refresh_held = yes
+	set_local_variable = { name = nd_focus_hold_refreshed value = 1 }
+}
+
+# nd_focus_set without the hold's refresh, for the AI's choice
+# (nd_ai_focus_pick). Its review runs inside the entry's monthly pulse, whose
+# taboo half refreshes the hold once, later in the same block
+# (nd_taboo_country_monthly): a second refresh here would add the hold a second
+# time, since neither can see the other's add. A review fired outside that
+# pulse (a crisis opening, a new regime) leaves the hold to the next monthly
+# pass, as its arsenal review already does (nd_taboo_ai_arsenal_due).
+nd_focus_set_core = {
 	set_local_variable = { name = nd_focus_new value = $F$ }
 	nd_focus_park_live = yes
 	if = {
@@ -396,7 +412,6 @@ nd_focus_set = {
 			remove_variable = nd_prog_focus
 		}
 	}
-	nd_taboo_refresh_held = yes
 }
 
 # Ops 1-3 of nuclear_program_focus_sgui (F as nd_focus_set's). Behind a
@@ -414,22 +429,23 @@ nd_focus_choose = {
 	}
 }
 
-# The weekly pulse, after nd_focus_restore: a project in focus that is no
-# longer available (the coast lost, the programme or the first device gone,
-# the leg fielded some other way) returns the focus to Warheads, its progress
-# parked for when it is available again. A held project stays in focus: a
-# hold is a pause.
+# The weekly pulse, after nd_focus_restore: a project in focus that lost a
+# lasting requirement (the coast lost, the technology gone, the leg fielded
+# some other way) returns the focus to Warheads, its progress parked for when
+# it is available again. A held project stays in focus: a hold is a pause, and
+# so is lost standing (spec §4.1, §4.4), which holds the whole programme
+# without moving its focus (nd_proj_*_lasting leaves the programme out).
 nd_focus_check_available = {
 	if = {
 		limit = {
 			OR = {
 				AND = {
 					nd_focus_is_icbms = yes
-					NOT = { nd_proj_icbms_available = yes }
+					NOT = { nd_proj_icbms_lasting = yes }
 				}
 				AND = {
 					nd_focus_is_submarines = yes
-					NOT = { nd_proj_subs_available = yes }
+					NOT = { nd_proj_subs_lasting = yes }
 				}
 			}
 		}
@@ -574,18 +590,33 @@ nuclear_program_refresh_state_effect = {
 	# The status code the panel and the status line read. Order matters: a pause
 	# treaty forces funding to 0, so without testing the pause first a frozen
 	# programme would report itself as merely unfunded.
-	# 5 and 4 before 3: the taboo's hold carries the same pause flag. Each of
-	# 5, 4 and 3 is read from what causes it, not from the hold's modifier or
-	# the pause flag: a Focus row's click changes the hold in this same block
-	# (nd_focus_set, nd_taboo_refresh_held), and neither has_modifier nor the
-	# flag's sum would see it until the click after (2026-11-20 delivery spec
-	# §4.1, phase 2 plan D11). A ceiling holds only a Warheads focus.
+	# 5 and 4 before 3: the taboo's hold carries the same pause flag. 5 and 3
+	# are read from what causes them, not from the hold's modifier or the pause
+	# flag. 4 follows the hold in force (has_modifier, on a Warheads focus: a
+	# ceiling holds no other), which the monthly pass refreshes, so the status
+	# never says "held" while warheads are still being built, nor the reverse.
+	# Where this block itself just refreshed the hold (nd_focus_set: a Focus
+	# row's click, a fielding, the weekly availability check), the modifier
+	# can't show the change yet, so 4 reads the hold's cause instead (2026-11-20
+	# delivery spec §4.1, phase 2 plan D11; the 2a review).
 	if = {
 		limit = { nd_taboo_is_dismantling = yes }
 		set_variable = { name = nuclear_program_last_status value = 5 }
 	}
 	else_if = {
-		limit = { nd_taboo_programme_should_be_held = yes }
+		limit = {
+			OR = {
+				AND = {
+					has_local_variable = nd_focus_hold_refreshed
+					nd_taboo_programme_should_be_held = yes
+				}
+				AND = {
+					NOT = { has_local_variable = nd_focus_hold_refreshed }
+					nd_focus_is_warheads = yes
+					has_modifier = nd_taboo_programme_held
+				}
+			}
+		}
 		set_variable = { name = nuclear_program_last_status value = 4 }
 	}
 	else_if = {

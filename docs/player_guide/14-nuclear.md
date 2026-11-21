@@ -105,23 +105,27 @@ at most three warheads in a week.
 
 | Stage | Progress per funding step | Example |
 |---|---|---|
-| First device | 1 a month | 5 steps (500 innovation a week) finish it in 20 months |
-| Series production | 10 a month | 5 steps then build a warhead every 2 months |
-| ICBM project | 1 a month | 5 steps field the ICBM force in 20 months |
-| Missile submarine project | 1 a month | 5 steps put the first submarines to sea in 20 months |
+| First device | 1 every four weeks | 5 steps (500 innovation a week) finish it in 80 weeks, about 18½ months |
+| Series production | 10 every four weeks | 5 steps then build a warhead every 8 weeks |
+| ICBM project | 1 every four weeks | 5 steps field the ICBM force in 80 weeks |
+| Missile submarine project | 1 every four weeks | 5 steps put the first submarines to sea in 80 weeks |
 
 From the first device on, What Funding Builds, at the end of The Program,
 chooses what funding builds: Warheads, ICBMs or Submarines. Choosing is free at
 any time, and a project keeps its progress while you build something else. Each
 row gives its progress and the months it needs at current funding, or what
-holds it. A grayed Choose button lists what a project lacks. ICBMs need the
+holds it; the Warheads row says when your ceiling holds them, whatever is in
+focus. A grayed Choose button lists what a project lacks. ICBMs need the
 Intercontinental Ballistic Missiles technology. Submarines need Advanced
 Submarine Technology, Guided Missiles and a coastal state. When a project
-reaches 100 its leg is fielded for good, and funding goes back to warheads.
+reaches 100 its leg is fielded and the focus returns to warheads. A fielded leg
+stays until a Nuclear Disarmament article or a completed dismantling takes it
+away, and submarines lapse while you hold no coastal state, returning with one.
 
 An arsenal ceiling holds warheads only, so a project runs at a ceiling, and the
 hold comes back when it is done. A freeze, a disarmament treaty, dismantling or
-the loss of your rank holds a project as it holds warheads.
+the loss of your rank holds a project as it holds warheads, and the project
+stays in focus for when the hold lifts.
 
 Fielding a leg is public. You get "Missiles in Their Silos" or "Submarines at
 Sea", and a week later so do your rivals, every country believed armed and your
@@ -1361,7 +1365,7 @@ readily, and in one that holds it in horror it trims and gives up its arsenal.
 It retaliates at any taboo.
 
 - It funds its program toward a target stockpile that grows with rank, innovation, war and a rival that seems to hold more, and shrinks as the taboo rises: about a third larger at 0 than at 40, and half the size at 100. A war and a rival that seems bigger can carry it past that target, but never past twice it (at most 50 warheads): there it stops funding warheads until its arsenal falls below, but keeps funding a project. From a taboo of 70, an AI at peace that faces no plausible attacker is far slower to fund a program.
-- From its first device it chooses what its funding builds at each posture review. It builds range first when its bombers reach none of the countries it must deter (its rivals, war enemies, crisis opponent and armed antagonistic countries), and warheads while it holds fewer than half the stockpile it wants. It goes to sea when fewer than three of its warheads would survive its main rival or that rival's precision weapons threaten its silos, and builds range when some of those countries are out of bomber reach. Range is submarines when every such country out of reach has a coast and submarines are open to it, otherwise ICBMs. An AI whose enemies are all within bomber reach builds warheads.
+- From its first device it chooses what its funding builds at each posture review. It builds range first when its bombers reach none of the countries it must deter (its rivals, war enemies, crisis opponent and armed antagonistic countries), and warheads while it holds fewer than half the stockpile it wants, unless an arsenal ceiling holds its warheads, when it builds delivery instead. It goes to sea when fewer than three of its warheads would survive its main rival or that rival's precision weapons threaten its silos, and builds range when some of those countries are out of bomber reach. Range is submarines when every such country out of reach has a coast and submarines are open to it, otherwise ICBMs. An AI whose enemies are all within bomber reach builds warheads.
 - It reviews its posture every six months and when a crisis opens. Most AIs keep Existential Deterrence; cautious rulers and democracies lean to No First Use, and militarist regimes (fascist, or with a jingoist ruler or a powerful Armed Forces in government) to Compellence or Warfighting. Above a taboo of 50, No First Use gains favor; below 30, Compellence and Warfighting tempt any ruler who is not cautious; from 70 they, and Flexible First Use, lose favor.
 - It sets its safeguards from one level: one more for a cautious ruler, a restraint-minded government and Delegation or Launch on Warning, one less for a militarist regime or Warfighting and in a budget deficit. It moves to Automatic Retaliation, Launch on Warning (if militarist) or Delegation only when fewer than three of its warheads would survive its main rival and hardening could not change that, and back to Central once that passes.
 - It goes to High Alert in a war with an armed enemy, and in an Acute crisis when its armed opponent is at Heightened or higher or fewer than three of its warheads would survive short of High Alert; otherwise to Heightened in any war or Confrontation, and to Recessed only at peace with nothing to deter and nobody to protect, and then only under a cautious ruler, No First Use or a default.

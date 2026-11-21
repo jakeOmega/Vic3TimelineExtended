@@ -199,7 +199,7 @@ The delivery spec's phase 2a (`docs/superpowers/plans/2026-11-20-nuclear-deliver
 
 107. **A focus change mid-project.** With ICBMs at 40%, choose Warheads: the bar shows the warheads' progress at once and its label names them. Choose ICBMs again: 40% is back.
 108. **A re-activation with a project in focus.** Lose the rank that qualifies the programme and regain it (console) with a project in focus: the bar's goal stays 100 and the project's progress returns the next week.
-109. **A project finished under a ceiling.** At your own arsenal ceiling, choose ICBMs: funding can be raised. At 100 the focus returns to Warheads, the row reads "held at our ceiling" and funding goes back to zero.
+109. **A project finished under a ceiling.** At your own arsenal ceiling, choose ICBMs: funding can be raised. At 100 the focus returns to Warheads, the row reads "held at our ceiling" and funding goes back to zero. The fielder's notice says the program builds no warheads while the arsenal is at its ceiling.
 110. **A held programme switching to a project.** At the ceiling, choose a project: the overview's programme icon and the status line change the same click, to the project's or to "unfunded", never left at "held".
 111. **The bar's label.** The entry's progress bar names what funding builds (`je_nuclear_program_progress` through `progress_desc`), and changes with a click.
 112. **The notices.** Field ICBMs: the fielder gets "Missiles in Their Silos" at once. A week later its rivals, every country believed armed and its neighbors get the world's text, naming the fielder. The world's first fielder also makes the headline; a second fielder makes none. The same for "Submarines at Sea" (its picture, `missile_launch_crew.dds`, is a stand-in until a submarine picture exists).
@@ -209,6 +209,11 @@ The delivery spec's phase 2a (`docs/superpowers/plans/2026-11-20-nuclear-deliver
 116. **The submarine upkeep** (owner call 11). With submarines at sea, the Upkeep row's hover gives their part. Weigh it against the other legs' and the arsenal's other costs at a token, a mid-sized and a fifty-warhead arsenal, and against the cap.
 117. **An AI great power at its desired stockpile with a distant rival** keeps funding its programme while a project is in focus, and fields ICBMs (`type=leg_fielded`).
 118. **An observer game's `type=ai_focus` lines.** Every posture review of an armed AI writes one, with its score, focus and reason. Powers whose rivals are all within bomber reach (India and Pakistan) build warheads; distant rivals bring ICBMs (`range_first`, `range_half`); small, exposed arsenals go to sea (`submarines_survival`). `scripts/analysis/nuclear_observer_report.py` counts the choices, the reasons and the legs fielded.
+119. **The months are calendar months.** At 5 funding steps on a project, note the row's months left and the date: the leg is fielded within a week of that many calendar months (about 18½ from the start), and the time row agrees to the tenth.
+120. **Lost standing with a project in focus.** Drop below the programme's rank (console) with ICBMs in focus: the focus stays ICBMs, the progress holds, and on regaining the rank funding builds ICBMs again with no new choice.
+121. **An AI under an arms-control ceiling.** An AI below half its desired stockpile, at a treaty ceiling, with a distant rival: its `type=ai_focus` line picks range (not `warheads_short`), and the programme isn't paused for the rest of the game.
+122. **The held status follows the hold.** A warhead built this week brings the stockpile to the ceiling: the status reads "held" only from the month's end, when funding stops. A Focus click at the ceiling shows the new state the same click.
+123. **A lapsed submarine leg and an old save's rows.** Lose the last coastal state with submarines fielded: the row reads "Submarines: in port, no coast", and reach, the factor and upkeep drop the submarines. In a migrated save, a leg's row reads "fielded" with no year.
 
 ## Self-checks
 

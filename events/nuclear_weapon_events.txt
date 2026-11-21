@@ -3283,7 +3283,10 @@ nuclear_weapon_events.34 = {
 # fielder: its own text and option, or the world's. Fielding is public and
 # isn't use, so neither writes the taboo's ledger. No trigger: the sender's
 # test is the recipient list, and a delayed event whose trigger is false when
-# it is queued is dropped.
+# it is queued is dropped. The fielder's text says when an arsenal ceiling
+# holds the warheads its focus returns to (d_own_held; the 2a review), and
+# .35's flavor splits as its text does: the crews for the fielder, remarks
+# about another country's missiles for the rest.
 nuclear_weapon_events.35 = {
 	type = country_event
 	placement = root
@@ -3298,6 +3301,14 @@ nuclear_weapon_events.35 = {
 	desc = {
 		first_valid = {
 			triggered_desc = {
+				trigger = {
+					THIS = scope:nd_leg_fielder
+					nd_taboo_has_ceiling = yes
+					nd_stockpile >= nd_taboo_effective_ceiling_value
+				}
+				desc = nuclear_weapon_events.35.d_own_held
+			}
+			triggered_desc = {
 				trigger = { THIS = scope:nd_leg_fielder }
 				desc = nuclear_weapon_events.35.d_own
 			}
@@ -3307,7 +3318,18 @@ nuclear_weapon_events.35 = {
 			}
 		}
 	}
-	flavor = nuclear_weapon_events.35.f
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { THIS = scope:nd_leg_fielder }
+				desc = nuclear_weapon_events.35.f_own
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_weapon_events.35.f_world
+			}
+		}
+	}
 
 	duration = 3
 
@@ -3339,6 +3361,14 @@ nuclear_weapon_events.36 = {
 	title = nuclear_weapon_events.36.t
 	desc = {
 		first_valid = {
+			triggered_desc = {
+				trigger = {
+					THIS = scope:nd_leg_fielder
+					nd_taboo_has_ceiling = yes
+					nd_stockpile >= nd_taboo_effective_ceiling_value
+				}
+				desc = nuclear_weapon_events.36.d_own_held
+			}
 			triggered_desc = {
 				trigger = { THIS = scope:nd_leg_fielder }
 				desc = nuclear_weapon_events.36.d_own

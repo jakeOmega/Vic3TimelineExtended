@@ -685,15 +685,17 @@ nd_prog_next_label = {
 
 # The Focus rows' names: each focus's progress and its months to finish at
 # current funding (nd_display_proj_*, extra_script_values.txt), or what keeps
-# it from moving. Widget only. Warheads not in focus say so when our ceiling
-# would hold them (nd_taboo_programme_should_be_held's ceiling half).
+# it from moving. Widget only. Warheads say so whenever an arsenal ceiling
+# holds them or would (nd_taboo_programme_should_be_held's ceiling half), in
+# focus or not: at the ceiling it is the reason all three rows stand still.
+# A migrated leg holds 0 (nd_delivery_migrate) and prints no year; a fielded
+# submarine leg with no coast left has lapsed (spec §4.3) and says so.
 nd_focus_row_1 = {
 	type = country
 	random_valid = no
 
 	text = {
 		trigger = {
-			nd_focus_is_warheads = no
 			nd_taboo_has_ceiling = yes
 			nd_stockpile >= nd_taboo_effective_ceiling_value
 		}
@@ -713,6 +715,10 @@ nd_focus_row_2 = {
 	type = country
 	random_valid = no
 
+	text = {
+		trigger = { var:nd_icbms_fielded ?= 0 }
+		localization_key = nd_focus_row_2_fielded_before
+	}
 	text = {
 		trigger = { has_variable = nd_icbms_fielded }
 		localization_key = nd_focus_row_2_fielded
@@ -735,6 +741,17 @@ nd_focus_row_3 = {
 	type = country
 	random_valid = no
 
+	text = {
+		trigger = {
+			has_variable = nd_subs_fielded
+			nd_fields_missile_submarines = no
+		}
+		localization_key = nd_focus_row_3_lapsed
+	}
+	text = {
+		trigger = { var:nd_subs_fielded ?= 0 }
+		localization_key = nd_focus_row_3_fielded_before
+	}
 	text = {
 		trigger = { has_variable = nd_subs_fielded }
 		localization_key = nd_focus_row_3_fielded

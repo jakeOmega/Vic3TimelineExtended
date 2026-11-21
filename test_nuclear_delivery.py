@@ -70,6 +70,12 @@ ALLOWED = {
     ("common/scripted_triggers/nuke_triggers.txt", "nd_proj_subs_available"):
         "a project's prerequisite is knowledge: the technology lets the programme develop the leg it fields "
         "(phase 2 plan D6)",
+    ("common/scripted_triggers/nuke_triggers.txt", "nd_proj_icbms_lasting"):
+        "the same prerequisite, as the weekly check reads it for a project already in focus "
+        "(the 2a review)",
+    ("common/scripted_triggers/nuke_triggers.txt", "nd_proj_subs_lasting"):
+        "the same prerequisite, as the weekly check reads it for a project already in focus "
+        "(the 2a review)",
     ("common/script_values/extra_script_values.txt", "global_tech_spread_script_value"):
         "the world's technology spread counts research",
     ("common/script_values/te_ai_probe_values.txt", "te_aip_tc_military_7"):

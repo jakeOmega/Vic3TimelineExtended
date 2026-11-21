@@ -926,7 +926,9 @@ nd_delivery_remove_legs = {
 # arsenal up gets neither (nd_delivery_given_up; owner call 9). A leg granted
 # here drops its project: a focus on it returns to Warheads (nd_focus_set
 # parks its progress) and the slot goes. The world already had these legs, so
-# the fielding headlines are spent (nd_headline_*_fielded; plan D12).
+# the fielding headlines are spent (nd_headline_*_fielded; plan D12). A
+# migrated leg holds 0, not a year: when it was fielded is unknown, and the
+# Focus rows print "fielded" without one (nd_focus_row_2, _3).
 nd_delivery_migrate = {
 	set_global_variable = nd_delivery_migrated
 	set_local_variable = { name = nd_mig_icbms value = 0 }
@@ -937,7 +939,7 @@ nd_delivery_migrate = {
 			NOT = { has_variable = nd_icbms_fielded }
 			nd_delivery_given_up = no
 		}
-		set_variable = { name = nd_icbms_fielded value = year }
+		set_variable = { name = nd_icbms_fielded value = 0 }
 		if = {
 			limit = { nd_focus_is_icbms = yes }
 			nd_focus_set = { F = 1 }
@@ -955,7 +957,7 @@ nd_delivery_migrate = {
 			NOT = { has_variable = nd_subs_fielded }
 			nd_delivery_given_up = no
 		}
-		set_variable = { name = nd_subs_fielded value = year }
+		set_variable = { name = nd_subs_fielded value = 0 }
 		if = {
 			limit = { nd_focus_is_submarines = yes }
 			nd_focus_set = { F = 1 }
@@ -1841,8 +1843,9 @@ nd_ai_review_posture = {
 # THE AI'S FOCUS (2026-11-20 delivery spec §4.5, owner call 12; phase 2 plan
 # D14). Called from nd_ai_review_posture (every sixth month, and when a crisis
 # opens), never through the Focus rows' buttons, whose handler the AI can't
-# use (nuclear_program_focus_sgui). Nothing before the first device: there is
-# no focus to choose until then.
+# use (nuclear_program_focus_sgui). Nothing before the first device, nor while
+# the programme is lost (standing gone, an aid article lapsed): there is no
+# focus to choose then, and a project in focus waits as it is (spec §4.4).
 # ----------------------------------------------------------------------------
 # The range score: of the countries the AI must be able to strike, weighted
 # (nd_ai_range_must_reach 3, nd_ai_range_should_reach 2, the highest that
@@ -1858,7 +1861,11 @@ nd_ai_review_posture = {
 # The order, §4.5's, first that holds:
 #  1. range when the score is 1: no country that matters is in bomber reach;
 #  2. warheads below half the desired stockpile (nd_ai_focus_warheads_first),
-#     but range at war or in a crisis with a country out of reach;
+#     but range at war or in a crisis with a country out of reach. Skipped
+#     while an arsenal ceiling would hold a Warheads focus
+#     (nd_taboo_programme_should_be_held's ceiling half): warheads are the one
+#     thing it binds, so an AI under arms control goes on to build delivery
+#     (spec §2) and isn't paused for the rest of the game;
 #  3. range when the score is 0.5 or more (nd_ai_range_score_for_range);
 #  4. missile submarines when available and the AI is vulnerable to its main
 #     rival, or the rival's precision weapons find its silos
@@ -1871,7 +1878,10 @@ nd_ai_review_posture = {
 # effect's own limits.
 nd_ai_choose_focus = {
 	if = {
-		limit = { var:nuclear_weapons_program_first_nuke_done ?= 1 }
+		limit = {
+			var:nuclear_weapons_program_first_nuke_done ?= 1
+			nuclear_program_has_programme = yes
+		}
 		save_scope_as = nd_rf_self
 		set_local_variable = { name = nd_rf_total value = 0 }
 		set_local_variable = { name = nd_rf_missed value = 0 }
@@ -1959,6 +1969,12 @@ nd_ai_choose_focus = {
 			limit = {
 				has_variable = nuclear_weapon_stockpile
 				var:nuclear_weapon_stockpile < nd_ai_focus_warheads_first
+				NOT = {
+					AND = {
+						nd_taboo_has_ceiling = yes
+						nd_stockpile >= nd_taboo_effective_ceiling_value
+					}
+				}
 			}
 			if = {
 				limit = {
@@ -2022,7 +2038,9 @@ nd_ai_focus_pick_range = {
 }
 
 # F as nd_focus_set's (1 Warheads, 2 ICBMs, 3 Missile Submarines), set only
-# when it changes: an unchanged focus has nothing to park or load. Logged on
+# when it changes: an unchanged focus has nothing to park or load. Through
+# nd_focus_set_core, which leaves the hold to the monthly pass this review
+# runs in (one refresh a block; nd_focus_set_core's comment). Logged on
 # every review, changed or not (observer balancing; nuclear_observer_report.py
 # counts the choices and reasons).
 nd_ai_focus_pick = {
@@ -2044,7 +2062,7 @@ nd_ai_focus_pick = {
 				}
 			}
 		}
-		nd_focus_set = { F = $F$ }
+		nd_focus_set_core = { F = $F$ }
 	}
 	debug_log = "TE_NUCLEAR: type=ai_focus; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; score=[THIS.Var('nd_ai_range_score').GetValue|2]; focus=$F$; reason=$REASON$; stockpile=[THIS.Var('nuclear_weapon_stockpile').GetValue|0]; desired=[THIS.ScriptValue('nuclear_ai_desired_stockpile')|0]"
 }

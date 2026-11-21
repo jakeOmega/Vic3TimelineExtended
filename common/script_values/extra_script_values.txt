@@ -699,13 +699,27 @@ nuclear_program_display_monthly_progress = {
 			value = 1
 			add = modifier:country_nuclear_program_progress_mult
 		}
+		multiply = nuclear_program_pulse_month_factor
 	}
 }
 
-# Divisor for the months estimate below, floored so the estimate can never ask
-# the engine to divide by zero. Never displayed.
+# A calendar month's progress against the nominal monthly rate. The weekly
+# step (nuclear_program_weekly_progress) adds a quarter of the nominal rate,
+# and a year has 52 weekly pulses, not 48, so a month of 52 ÷ 12 weeks gains
+# 52 ÷ 48 of it. Every month the panel prints (the rate, the time to the next
+# warhead, the Focus rows' months) is a calendar month; the rate of play is
+# the weekly step's (phase 2a review). test_nuclear_projects.py holds the 48
+# to the weekly step's divide = 4.
+nuclear_program_pulse_month_factor = {
+	value = 52
+	divide = 48
+}
+
+# The weekly step's progress, floored so the estimate below can never ask the
+# engine to divide by zero. Never displayed.
 nuclear_program_display_weekly_progress_floor = {
 	value = nuclear_program_display_monthly_progress
+	divide = nuclear_program_pulse_month_factor
 	divide = 4
 	min = 0.01
 }
@@ -722,9 +736,11 @@ nuclear_program_display_months_to_next = {
 			NOT = { modifier:country_nuclear_program_pause_bool = yes }
 			NOT = { modifier:country_nuclear_disarmament_bool = yes }
 		}
+		# Weeks to go, then calendar months (52 weeks to 12 months).
 		add = nuclear_program_display_progress_remaining
 		divide = nuclear_program_display_weekly_progress_floor
 		divide = 4
+		divide = nuclear_program_pulse_month_factor
 	}
 	min = 0
 }
@@ -930,8 +946,9 @@ nd_display_proj_share_3 = {
 	divide = nuclear_weapon_program_goal_value
 }
 
-# Progress a month at current funding on a Warheads focus: the weekly step's
-# rate (nuclear_weapon_program_monthly_progress and the pulse's multiplier),
+# Progress a calendar month at current funding on a Warheads focus: the weekly
+# step's rate (nuclear_weapon_program_monthly_progress and the pulse's
+# multiplier) over 52 ÷ 12 weeks (nuclear_program_pulse_month_factor),
 # whatever the focus in force.
 nd_display_proj_monthly_1 = {
 	value = 0
@@ -949,6 +966,7 @@ nd_display_proj_monthly_1 = {
 			value = 1
 			add = modifier:country_nuclear_program_progress_mult
 		}
+		multiply = nuclear_program_pulse_month_factor
 	}
 	min = 0
 }
@@ -963,6 +981,7 @@ nd_display_proj_monthly_project = {
 			value = 1
 			add = modifier:country_nuclear_program_progress_mult
 		}
+		multiply = nuclear_program_pulse_month_factor
 	}
 	min = 0
 }

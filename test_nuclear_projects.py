@@ -87,7 +87,11 @@ class TestParking(unittest.TestCase):
         self.journal = read(JOURNAL)
 
     def test_focus_set_parks_then_loads_then_refreshes_the_hold_once(self):
-        body = block(self.effects, "nd_focus_set")
+        outer = squash(block(self.effects, "nd_focus_set"))
+        self.assertEqual(outer, "nd_focus_set_core = { F = $F$ } nd_taboo_refresh_held = yes "
+                                "set_local_variable = { name = nd_focus_hold_refreshed value = 1 }")
+        body = block(self.effects, "nd_focus_set_core")
+        self.assertNotIn("nd_taboo_refresh_held", body)
         park = body.index("nd_focus_park_live = yes")
         for f, slot in SLOTS.items():
             with self.subTest(focus=f):
@@ -99,8 +103,6 @@ class TestParking(unittest.TestCase):
         self.assertIn("set_variable = { name = nd_prog_focus value = 2 }", squash(body))
         self.assertIn("set_variable = { name = nd_prog_focus value = 3 }", squash(body))
         self.assertIn("remove_variable = nd_prog_focus", body)
-        self.assertEqual(body.count("nd_taboo_refresh_held = yes"), 1)
-        self.assertGreater(body.index("nd_taboo_refresh_held = yes"), body.index("remove_variable = nd_prog_focus"))
         # The new focus's slot is gone, so nothing is ever loaded twice.
         self.assertIn(f"set_variable = {{ name = {LIVE} value = 0 }}", squash(body))
 
@@ -212,10 +214,12 @@ class TestAvailability(unittest.TestCase):
 
     REQUIRED = {
         "nd_proj_icbms_available": ["nuclear_program_has_programme = yes",
+                                    "has_global_variable = nd_delivery_migrated",
                                     "var:nuclear_weapons_program_first_nuke_done ?= 1",
                                     "has_technology_researched = ICBMs",
                                     "NOT = { has_variable = nd_icbms_fielded }"],
         "nd_proj_subs_available": ["nuclear_program_has_programme = yes",
+                                   "has_global_variable = nd_delivery_migrated",
                                    "var:nuclear_weapons_program_first_nuke_done ?= 1",
                                    "has_technology_researched = advanced_submarine_technology",
                                    "has_technology_researched = guided_missiles",
@@ -244,9 +248,20 @@ class TestAvailability(unittest.TestCase):
         self.assertLess(pulse.index("nd_focus_restore = yes"), pulse.index("nd_focus_check_available = yes"))
         self.assertLess(pulse.index("nd_focus_check_available = yes"), pulse.index("nuclear_program_weekly_progress = yes"))
         body = squash(block(strip_comments(read(WEAPON_EFFECTS)), "nd_focus_check_available"))
-        self.assertIn("AND = { nd_focus_is_icbms = yes NOT = { nd_proj_icbms_available = yes } }", body)
-        self.assertIn("AND = { nd_focus_is_submarines = yes NOT = { nd_proj_subs_available = yes } }", body)
+        self.assertIn("AND = { nd_focus_is_icbms = yes NOT = { nd_proj_icbms_lasting = yes } }", body)
+        self.assertIn("AND = { nd_focus_is_submarines = yes NOT = { nd_proj_subs_lasting = yes } }", body)
         self.assertIn("nd_focus_set = { F = 1 }", body)
+
+    def test_the_weekly_check_reads_only_the_lasting_requirements(self):
+        """Lost standing holds a project in focus, it doesn't move it (spec
+        §4.1, §4.4; the 2a review): the weekly check's triggers are the
+        available ones less the programme and the migration lines."""
+        for leg in ("icbms", "subs"):
+            with self.subTest(leg=leg):
+                lasting = squash(block(self.triggers, f"nd_proj_{leg}_lasting"))
+                required = self.REQUIRED[f"nd_proj_{leg}_available"]
+                self.assertEqual(lasting, " ".join(required[2:]))
+                self.assertNotIn("nuclear_program_has_programme", lasting)
 
 
 class TestFocusHandler(unittest.TestCase):
@@ -338,10 +353,10 @@ class TestMigration(unittest.TestCase):
     def test_tech_and_coast_armed_or_not(self):
         icbms, subs = every_country_blocks(self.body)
         self.assertIn("has_technology_researched = ICBMs", icbms)
-        self.assertIn("set_variable = { name = nd_icbms_fielded value = year }", squash(icbms))
+        self.assertIn("set_variable = { name = nd_icbms_fielded value = 0 }", squash(icbms))
         self.assertIn("has_technology_researched = advanced_submarine_technology", subs)
         self.assertIn("any_scope_state = { is_coastal = yes }", subs)
-        self.assertIn("set_variable = { name = nd_subs_fielded value = year }", squash(subs))
+        self.assertIn("set_variable = { name = nd_subs_fielded value = 0 }", squash(subs))
         for loop in (icbms, subs):
             self.assertNotIn("nd_is_armed", loop)
             # Disarmament takes the launchers too (owner call 9).
@@ -595,19 +610,33 @@ class TestFocusRows(unittest.TestCase):
 
     def test_each_row_says_what_holds_it(self):
         warheads = custom_targets("nd_focus_row_1")
-        self.assertIn("nd_focus_is_warheads = no nd_taboo_has_ceiling = yes", warheads[0][0])
+        # Held whatever the focus: at the ceiling it is why every row stands
+        # still (the 2a review).
+        self.assertEqual(warheads[0][0], "nd_taboo_has_ceiling = yes nd_stockpile >= nd_taboo_effective_ceiling_value")
         self.assertEqual([k for _, k in warheads], ["nd_focus_row_1_held", "nd_focus_row_1_months", "nd_focus_row_1_stalled"])
-        for f, leg, var in ((2, "icbms", "nd_icbms_fielded"), (3, "subs", "nd_subs_fielded")):
-            with self.subTest(focus=f):
-                targets = custom_targets(f"nd_focus_row_{f}")
-                self.assertEqual([k for _, k in targets], [f"nd_focus_row_{f}_{s}" for s in
-                                                          ("fielded", "unavailable", "months", "stalled")])
-                self.assertEqual(targets[0][0], f"has_variable = {var}")
-                self.assertEqual(targets[1][0], f"nd_proj_{leg}_available = no")
+        icbms = custom_targets("nd_focus_row_2")
+        self.assertEqual([k for _, k in icbms], ["nd_focus_row_2_fielded_before", "nd_focus_row_2_fielded",
+                                                  "nd_focus_row_2_unavailable", "nd_focus_row_2_months",
+                                                  "nd_focus_row_2_stalled"])
+        self.assertEqual(icbms[0][0], "var:nd_icbms_fielded ?= 0")
+        self.assertEqual(icbms[1][0], "has_variable = nd_icbms_fielded")
+        self.assertEqual(icbms[2][0], "nd_proj_icbms_available = no")
+        subs = custom_targets("nd_focus_row_3")
+        self.assertEqual([k for _, k in subs], ["nd_focus_row_3_lapsed", "nd_focus_row_3_fielded_before",
+                                                 "nd_focus_row_3_fielded", "nd_focus_row_3_unavailable",
+                                                 "nd_focus_row_3_months", "nd_focus_row_3_stalled"])
+        # A leg with no coast left has lapsed (spec §4.3), before "at sea".
+        self.assertEqual(subs[0][0], "has_variable = nd_subs_fielded nd_fields_missile_submarines = no")
+        self.assertEqual(subs[1][0], "var:nd_subs_fielded ?= 0")
+        self.assertEqual(subs[2][0], "has_variable = nd_subs_fielded")
+        self.assertEqual(subs[3][0], "nd_proj_subs_available = no")
+        for key in ("nd_focus_row_2_fielded_before", "nd_focus_row_3_fielded_before"):
+            self.assertNotIn("GetValue", self.loc[key], "a migrated leg holds 0, not a year")
         for f in (1, 2, 3):
             self.assertEqual(self.loc[f"nd_w_focus_row_{f}"], f"[Country.GetCustom('nd_focus_row_{f}')]")
             self.assertIn(f"ScriptValue('nd_display_proj_share_{f}')|%0", self.loc[f"nd_focus_row_{f}_months"])
-            self.assertIn(f"ScriptValue('nd_display_proj_months_{f}')|0", self.loc[f"nd_focus_row_{f}_months"])
+            # Tenths, as the time row: under a month never reads 0 (the 2a review).
+            self.assertIn(f"ScriptValue('nd_display_proj_months_{f}')|1", self.loc[f"nd_focus_row_{f}_months"])
 
     def test_the_rows_fit(self):
         from test_nuclear_layout import MARGIN, ROW, _renderings
@@ -653,8 +682,8 @@ class TestProgrammeFollowsFocus(unittest.TestCase):
 
     def test_status_codes(self):
         body = squash(block(self.effects, "nuclear_program_refresh_state_effect"))
-        self.assertIn("limit = { nd_taboo_programme_should_be_held = yes } set_variable = { name = nuclear_program_last_status value = 4 }", body)
-        self.assertNotIn("has_modifier = nd_taboo_programme_held", body)
+        # 4's timing: TestReviewFixes2a.test_status_4_follows_the_hold_in_force.
+        self.assertIn("set_variable = { name = nuclear_program_last_status value = 4 }", body)
         self.assertNotIn("modifier:country_nuclear_program_pause_bool", body)
         self.assertIn("limit = { nuclear_program_is_frozen = yes } set_variable = { name = nuclear_program_last_status value = 3 }", body)
         self.assertIn("limit = { nd_focus_is_icbms = yes } set_variable = { name = nuclear_program_last_status value = 9 }", body)
@@ -742,11 +771,16 @@ class TestNotices(unittest.TestCase):
                 flat = squash(body)
                 self.assertRegex(flat, r'event_image = \{ texture = "gfx/event_pictures/\w+\.dds" \}')
                 self.assertIn("trigger = { THIS = scope:nd_leg_fielder }", flat)
-                for part in ("t", "d_own", "d_world", "f", "a", "b"):
+                # .35's flavor splits as its text does (the 2a review).
+                flavors = ("f_own", "f_world") if event == 35 else ("f",)
+                for part in ("t", "d_own", "d_own_held", "d_world", "a", "b") + flavors:
                     self.assertIn(f"nuclear_weapon_events.{event}.{part}", self.loc)
                 self.assertEqual(flat.count("option = {"), 2)
                 self.assertEqual(flat.count("default_option = yes"), 2)
-                self.assertNotRegex(flat, r"nd_taboo_\w+ = yes|change_global_variable")
+                # Nothing writes the taboo's ledger. The fielder's text reads
+                # the ceiling's triggers, which write nothing.
+                effects = flat.replace(squash(block(body, "desc")), "")
+                self.assertNotRegex(effects, r"nd_taboo_\w+ = yes|change_global_variable")
 
 
 class TestCeilingSaysWarheadsOnly(unittest.TestCase):
@@ -848,9 +882,12 @@ class TestFocusOrder(unittest.TestCase):
         # After the review's rival refresh, which the submarine test reads.
         self.assertLess(review.index("nd_refresh_main_rival = yes"), review.index("nd_ai_choose_focus = yes"))
 
-    def test_only_after_the_first_device(self):
+    def test_only_after_the_first_device_and_with_a_programme(self):
+        # Lost standing leaves a project in focus waiting, not re-chosen (the
+        # 2a review; spec §4.4).
         self.assertTrue(self.body.startswith(
-            "if = { limit = { var:nuclear_weapons_program_first_nuke_done ?= 1 } save_scope_as = nd_rf_self"))
+            "if = { limit = { var:nuclear_weapons_program_first_nuke_done ?= 1 "
+            "nuclear_program_has_programme = yes } save_scope_as = nd_rf_self"))
 
     def test_six_steps_in_order(self):
         positions = [self.order.index(f"REASON = {reason} ") for reason in AI_FOCUS_REASONS]
@@ -863,9 +900,13 @@ class TestFocusOrder(unittest.TestCase):
         self.assertIn(f"if = {{ limit = {{ {has_range} var:nd_ai_range_score >= 1 }} "
                       "nd_ai_focus_pick_range = { REASON = range_first } }", o)
         # 2. Warheads below half the desired stockpile, unless at war or in a
-        # crisis with a country out of reach.
+        # crisis with a country out of reach, and never while a ceiling would
+        # hold them: arms control binds warheads only, so the walk goes on to
+        # delivery (the 2a review; spec §2).
         self.assertIn("else_if = { limit = { has_variable = nuclear_weapon_stockpile "
-                      "var:nuclear_weapon_stockpile < nd_ai_focus_warheads_first } "
+                      "var:nuclear_weapon_stockpile < nd_ai_focus_warheads_first "
+                      "NOT = { AND = { nd_taboo_has_ceiling = yes "
+                      "nd_stockpile >= nd_taboo_effective_ceiling_value } } } "
                       f"if = {{ limit = {{ {has_range} local_var:nd_rf_urgent > 0 }} "
                       "nd_ai_focus_pick_range = { REASON = range_urgent } } "
                       "else = { nd_ai_focus_pick = { F = 1 REASON = warheads_short } } }", o)
@@ -928,10 +969,16 @@ class TestFocusOrder(unittest.TestCase):
         self.assertIn("has_war_with = $AI$", urgent)
         self.assertIn("$AI$ = { nd_in_crisis = yes var:nd_crisis_opponent ?= scope:nd_ru_cand }", urgent)
 
-    def test_the_focus_set_through_nd_focus_set(self):
+    def test_the_focus_set_through_nd_focus_set_core(self):
         self.assertNotIn("nd_prog_focus", self.body)
         pick = squash(block(self.effects, "nd_ai_focus_pick"))
-        self.assertIn("nd_focus_set = { F = $F$ }", pick)
+        # The core, without the hold's refresh: the review runs inside the
+        # monthly pulse whose taboo half refreshes the hold once (the 2a
+        # review: a second refresh in one block adds the hold twice).
+        self.assertIn("nd_focus_set_core = { F = $F$ }", pick)
+        self.assertNotIn("nd_focus_set = {", pick)
+        self.assertNotIn("nd_taboo_refresh_held", pick)
+        self.assertNotIn("nd_taboo_refresh_held", self.body)
         # Only a change: an unchanged focus parks and reloads nothing.
         self.assertIn("AND = { local_var:nd_rf_pick = 1 NOT = { nd_focus_is_warheads = yes } } "
                       "AND = { local_var:nd_rf_pick = 2 NOT = { nd_focus_is_icbms = yes } } "
@@ -985,7 +1032,7 @@ class TestAiFocusLog(unittest.TestCase):
                       "desired=[THIS.ScriptValue('nuclear_ai_desired_stockpile')|0]"):
             self.assertIn(field, line.group(1))
         # Logged on every review, the focus changed or not.
-        self.assertGreater(pick.index("debug_log"), pick.index("nd_focus_set = { F = $F$ }"))
+        self.assertGreater(pick.index("debug_log"), pick.index("nd_focus_set_core = { F = $F$ }"))
 
     def test_the_observer_report_counts_it(self):
         from scripts.analysis.nuclear_observer_report import read_records, summarize
@@ -1004,6 +1051,113 @@ class TestAiFocusLog(unittest.TestCase):
         body = squash(block(strip_comments(read(DETERRENCE_EFFECTS)), "nd_ai_choose_focus"))
         found = set(re.findall(r"REASON = (\w+)", body))
         self.assertEqual(found, set(AI_FOCUS_REASONS))
+
+
+class TestReviewFixes2a(unittest.TestCase):
+    """What phase 2a's review changed (2026-11-21): calendar months on the
+    panel, the cap from its script value, the status's timing, the fielding
+    texts, the Help topic and the funding hover."""
+
+    def setUp(self):
+        self.values = strip_comments(read(EXTRA_VALUES))
+        self.effects = strip_comments(read(WEAPON_EFFECTS))
+        self.loc = loc_values()
+
+    def test_the_month_factor_is_the_weekly_step_s(self):
+        """The weekly step adds a quarter of the nominal monthly rate, and a
+        year has 52 pulses: a calendar month gains 52 / (4 x 12) of it."""
+        step = squash(block(self.effects, "nuclear_program_weekly_progress"))
+        weekly = re.search(r"change_variable = \{ name = nuclear_weapon_program_progress add = \{ "
+                           r"value = nuclear_weapon_program_monthly_progress divide = (\d+) ", step)
+        self.assertIsNotNone(weekly)
+        factor = squash(block(self.values, "nuclear_program_pulse_month_factor"))
+        m = re.fullmatch(r"value = 52 divide = (\d+)", factor)
+        self.assertIsNotNone(m, factor)
+        self.assertEqual(int(m.group(1)), int(weekly.group(1)) * 12)
+
+    def test_every_month_the_panel_prints_is_a_calendar_month(self):
+        for name in ("nuclear_program_display_monthly_progress", "nd_display_proj_monthly_1",
+                     "nd_display_proj_monthly_project"):
+            with self.subTest(value=name):
+                self.assertIn("multiply = nuclear_program_pulse_month_factor", squash(block(self.values, name)))
+        floor = squash(block(self.values, "nuclear_program_display_weekly_progress_floor"))
+        self.assertIn("divide = nuclear_program_pulse_month_factor divide = 4", floor)
+        months = squash(block(self.values, "nuclear_program_display_months_to_next"))
+        self.assertIn("divide = nuclear_program_display_weekly_progress_floor divide = 4 "
+                      "divide = nuclear_program_pulse_month_factor", months)
+
+    def test_the_upkeep_cap_from_its_script_value(self):
+        values = strip_comments(read(DETERRENCE_VALUES))
+        weekly = squash(block(values, "nd_upkeep_weekly"))
+        divisor = re.search(r"value = gdp divide = (\d+) multiply = nd_upkeep_units", weekly).group(1)
+        cap = squash(block(values, "nd_display_upkeep_cap_gdp_pct"))
+        self.assertEqual(cap, f"value = nd_upkeep_units_cap multiply = 52 multiply = 100 divide = {divisor}")
+        tt = self.loc["nd_w_upkeep_tt"]
+        self.assertIn("ScriptValue('nd_display_upkeep_cap_gdp_pct')|1]%", tt)
+        self.assertNotIn("two and a half", tt)
+
+    def test_status_4_follows_the_hold_in_force(self):
+        """The hold in force (the modifier, on a Warheads focus), except in a
+        block that just refreshed it (nd_focus_set marks the block)."""
+        refresh = squash(block(self.effects, "nuclear_program_refresh_state_effect"))
+        self.assertIn("else_if = { limit = { OR = { "
+                      "AND = { has_local_variable = nd_focus_hold_refreshed nd_taboo_programme_should_be_held = yes } "
+                      "AND = { NOT = { has_local_variable = nd_focus_hold_refreshed } nd_focus_is_warheads = yes "
+                      "has_modifier = nd_taboo_programme_held } } } "
+                      "set_variable = { name = nuclear_program_last_status value = 4 } }", refresh)
+        self.assertLess(refresh.index("value = 5"), refresh.index("value = 4"))
+        choose = squash(block(self.effects, "nd_focus_choose"))
+        self.assertLess(choose.index("nd_focus_set = { F = $F$ }"),
+                        choose.index("nuclear_program_refresh_state_effect = yes"))
+
+    def test_the_fielding_texts_promise_only_what_holds(self):
+        """Readiness is tracked, so nothing says the missiles are on alert; the
+        focus returns to warheads, which a ceiling may hold."""
+        keys = [k for k in self.loc if k.startswith(("nuclear_weapon_events.35.", "nuclear_weapon_events.36.",
+                                                      "notification_headlines_nd_icbms_fielded",
+                                                      "notification_headlines_nd_subs_fielded"))]
+        self.assertTrue(keys)
+        for key in keys:
+            with self.subTest(key=key):
+                self.assertNotIn("on alert", self.loc[key].lower())
+                self.assertNotIn("goes back to building warheads", self.loc[key])
+        events = strip_comments(read(WEAPON_EVENTS))
+        for n in ("35", "36"):
+            with self.subTest(event=n):
+                desc = squash(block(block(events, f"nuclear_weapon_events.{n}"), "desc"))
+                self.assertLess(desc.index(f"nuclear_weapon_events.{n}.d_own_held"),
+                                desc.index(f"nuclear_weapon_events.{n}.d_own "))
+                self.assertIn("THIS = scope:nd_leg_fielder nd_taboo_has_ceiling = yes "
+                              "nd_stockpile >= nd_taboo_effective_ceiling_value", desc)
+                self.assertIn("at its ceiling", self.loc[f"nuclear_weapon_events.{n}.d_own_held"])
+        flavor = squash(block(block(events, "nuclear_weapon_events.35"), "flavor"))
+        self.assertIn("trigger = { THIS = scope:nd_leg_fielder } desc = nuclear_weapon_events.35.f_own", flavor)
+        self.assertIn("desc = nuclear_weapon_events.35.f_world", flavor)
+
+    def test_the_help_topic_and_the_funding_hover(self):
+        how = self.loc["je_nuclear_how_programme"]
+        self.assertNotIn("for good", how)
+        self.assertNotIn("ten times", how)
+        self.assertIn("ScriptValue('nuclear_weapon_program_additional_nuke_progress_multiplier')", how)
+        self.assertIn("Nuclear Disarmament", how)
+        funding = self.loc["je_nuclear_program_widget_funding_tt"]
+        self.assertNotIn("warhead progress a month", funding)
+        self.assertIn("GetCustom('nd_prog_focus_object')", funding)
+        self.assertIn("ScriptValue('nuclear_weapon_program_additional_nuke_progress_multiplier')", funding)
+
+    def test_the_project_buttons_say_one_thing(self):
+        """Op 3's hover lists eight requirement lines; the rows' own hovers say
+        a project's progress is kept and no ceiling holds it."""
+        for op in (2, 3):
+            with self.subTest(op=op):
+                self.assertEqual(self.loc[f"nd_tt_focus_set_{op}"].count(". "), 0)
+
+    def test_the_pictures_are_registered(self):
+        import sys
+        sys.path.insert(0, str(ROOT / "scripts" / "image_pipeline"))
+        from event_image_prompts import IMAGES
+        self.assertIn("nuclear_weapon_events.35", IMAGES["missile_parade"]["events"])
+        self.assertIn("nuclear_weapon_events.36", IMAGES["missile_submarine_departure"]["events"])
 
 
 if __name__ == "__main__":

@@ -202,6 +202,17 @@ nd_upkeep_weekly = {
 	min = 0
 }
 
+# The upkeep's cap as a share of GDP a year, in percent, for the Upkeep hover
+# (nd_w_upkeep_tt): nd_upkeep_units_cap units, at nd_upkeep_weekly's
+# GDP ÷ 100,000 a unit a week, for 52 weeks. test_nuclear_projects.py holds
+# the divisor to nd_upkeep_weekly's.
+nd_display_upkeep_cap_gdp_pct = {
+	value = nd_upkeep_units_cap
+	multiply = 52
+	multiply = 100
+	divide = 100000
+}
+
 # ----------------------------------------------------------------------------
 # CAPABILITY TARGETS (§4)
 # ----------------------------------------------------------------------------

@@ -269,7 +269,14 @@ Left for later tasks:
   - an observer game's `type=ai_focus` lines;
   - the `type=delivery_migrated` line in an old save.
 - [x] The spec's status line and the `docs/superpowers/README.md` rows.
-- [ ] Full `scripts/preflight.py`. Then PR 2a with `--base main`, the two-reviewer review, one fix pass, and merge on green CI.
+- [ ] Full `scripts/preflight.py`. Then PR 2a with `--base main`, the two-reviewer review, one fix pass, and merge on green CI. (Review and fix pass done, 2026-11-21: the PR waits for PR 1b to merge, since this session can push only the branch 1b is on.)
+
+**As built: the review's fixes (2026-11-21).** Two reviewers read Tasks 1–4; one fix pass (`Nuclear phase 2a: review fixes`) changed these, all recorded in design §0.19:
+- **D4's 20 months** are 80 weekly pulses, about 18½ calendar months. The weekly step adds a quarter of the monthly figure, and a year has 52 pulses, so the panel's months divide by `nuclear_program_pulse_month_factor` (52 ÷ 48). The rate of play is unchanged; the spec and chapter 14 say so.
+- **D5 and D6, lost standing:** the weekly check reads `nd_proj_*_lasting` (no programme or migration line), so lost standing holds a project in focus rather than switching it to Warheads; the AI chooses nothing without a programme.
+- **D6, before the migration:** both availability triggers gain a `nd_delivery_migrated` line, and a migrated leg holds 0, printed with no year.
+- **D14:** step 2 is skipped while a ceiling would hold a Warheads focus, and the AI's pick goes through `nd_focus_set_core`, leaving the hold to the monthly pass. D11's status 4 follows the hold in force except in a block that just refreshed it (local `nd_focus_hold_refreshed`).
+- **D11 and D12, the texts:** months in tenths, the Warheads row held whatever the focus, a lapsed submarine row, no "on alert", the ceiling variant of each fielder's text, `.35`'s flavor split, the Help topic and funding hover, the Upkeep cap from a script value, and a pending submarine picture.
 
 ## PR 2b: what the panel tells
 
