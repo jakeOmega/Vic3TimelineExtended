@@ -119,10 +119,11 @@ focus. A grayed Choose button lists what a project lacks. Hover the ICBMs or
 Submarines row for what fielding the leg would change: the share of your
 warheads exposed to a first strike, what the leg reaches and, for ICBMs, the
 launch authorities it opens and the ICBM Force's attack and counterforce
-figures. Then your survivability target and the countries in reach now and with
-the leg, the submarines' upkeep at sea, and the warheads the months in focus
-won't build. ICBMs need the
-Intercontinental Ballistic Missiles technology. Submarines need Advanced
+figures. The hover then gives your survivability target and the countries in
+reach now and with the leg, the submarines' upkeep at sea, and the warheads you
+would not build in the months the project takes. Without a coastal state the
+Submarines row gives none of these, since boats would stay in port. ICBMs need
+the Intercontinental Ballistic Missiles technology. Submarines need Advanced
 Submarine Technology, Guided Missiles and a coastal state. When a project
 reaches 100 its leg is fielded and the focus returns to warheads. A fielded leg
 stays until a Nuclear Disarmament article or a completed dismantling takes it

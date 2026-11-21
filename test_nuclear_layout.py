@@ -236,11 +236,11 @@ class WidthTest(unittest.TestCase):
 
     def test_the_powers_head_is_as_wide_as_its_rows(self):
         # With no rows yet (up to a month after the first warhead) the panel
-        # was centred at the head's 414 (328 since the delivery icons narrowed its
+        # was centred at the head's 414 (350 since the delivery icons narrowed its
         # columns) and ran past the section once rows came.
         types = _types(PROGRAM)
         head, row = types["nuclear_program_powers_head"], types["nuclear_program_power_row"]
-        self.assertEqual(_row_width(head), 328)
+        self.assertEqual(_row_width(head), 350)
         self.assertEqual(gui_tree.size(head, "minimumsize"), (gui_tree.size(row)[0], -1))
 
     def test_the_reputation_panel_keeps_one_width(self):
@@ -923,7 +923,7 @@ class LabelBudgetTest(unittest.TestCase):
             self._fits([key], width, ROW, "world crisis head")
         self.assertIn("size = { 168 28 }", wc)
         self._fits(["nuclear_program_power_estimate"], 80, ROW, "power estimate")
-        for key, width in zip(re.findall(r'text = "(\w+)"', _type_body(prog, "nuclear_program_powers_head")), (230, 80)):
+        for key, width in zip(re.findall(r'text = "(\w+)"', _type_body(prog, "nuclear_program_powers_head")), (254, 80)):
             self._fits([key], width, ROW, "powers head")
 
     def test_overview(self):
@@ -1422,15 +1422,19 @@ class TestOthersDelivery(unittest.TestCase):
         row = types["nuclear_program_power_row"]
         (flow,) = [c for c in row.children if c.kind == "flowcontainer"]
         x = gui_tree.size(flow, "position")[0]
-        self.assertEqual(x + width(flow), 472)
+        self.assertEqual(x + width(flow), 476)
         self.assertLessEqual(x + width(flow), gui_tree.size(row)[0])
         (legs,) = [c for c in gui_tree.widgets(flow) if c.kind == "flowcontainer"]
-        self.assertEqual(width(legs), 3 * 24 + 2 * 2)
+        self.assertEqual(width(legs), 3 * 24)
         # The head's columns sit over the rows': the country over the flag and name,
         # the warheads over the estimate.
         cells = [width(c) for c in gui_tree.widgets(flow)]
         head = [gui_tree.size(c)[0] for c in gui_tree.widgets(types["nuclear_program_powers_head"])]
-        self.assertEqual(head, [cells[0] + 6 + cells[1], cells[2]])
+        self.assertEqual(head, [cells[0] + 4 + cells[1], cells[2]])
+        # The name holds about 25 characters at the row's font: "United States
+        # of America" and "People's Republic of China" are the rows most often
+        # in the table (phase 2b review).
+        self.assertGreaterEqual(cells[1], 220)
         self.assertIn("launch authority", _loc("je_nuclear_program_widget_powers_head_warheads_tt"))
         self.assertIn("delivery", _loc("je_nuclear_program_widget_powers_head_warheads_tt"))
 

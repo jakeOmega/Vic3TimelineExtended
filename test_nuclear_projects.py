@@ -1359,5 +1359,67 @@ class TestFocusHovers(unittest.TestCase):
                 self.assertLess(len(composed(key, self.loc)), 500, composed(key, self.loc))
 
 
+class TestReviewFixes2b(unittest.TestCase):
+    """Phase 2b's review: the reach counts a human's country hasn't had yet,
+    a country with no coast, disarmament's rebuild, and the reach texts."""
+
+    REACH = ("nd_reach_count_now", "nd_reach_count_with_subs", "nd_reach_count_every")
+
+    def setUp(self):
+        self.loc = loc_values()
+
+    def test_uncounted_reach_has_its_own_form(self):
+        # A country a player has just taken, or a save from before 2b, has no
+        # counts yet: the hover leaves the reach line out and says when it comes.
+        for n, after in ((2, "nd_survivability_target_with_icbms"), (3, "nd_survivability_target_with_submarines")):
+            with self.subTest(row=n):
+                pairs = custom_targets(f"nd_focus_grants_{n}")
+                keys = [key for _, key in pairs]
+                self.assertEqual(keys[-2:], [f"nd_w_focus_grants_{n}_uncounted", f"nd_w_focus_grants_{n}"])
+                self.assertEqual(pairs[-2][0], "NOT = { has_variable = nd_reach_count_now }")
+                text = self.loc[f"nd_w_focus_grants_{n}_uncounted"]
+                self.assertNotIn("reach_count", text)
+                self.assertIn(f"ScriptValue('{after}')", text)
+                self.assertIn(f"ScriptValue('nd_proj_forgone_warheads_{n}')", text)
+                self.assertIn("next weekly update", text)
+
+    def test_no_coast_prints_no_figures(self):
+        pairs = custom_targets("nd_focus_grants_3")
+        keys = [key for _, key in pairs]
+        # After the fielded branches, before the figures.
+        self.assertLess(keys.index("nd_w_focus_grants_fielded"), keys.index("nd_w_focus_grants_no_coast"))
+        self.assertLess(keys.index("nd_w_focus_grants_no_coast"), keys.index("nd_w_focus_grants_3_uncounted"))
+        self.assertEqual(dict((k, t) for t, k in pairs)["nd_w_focus_grants_no_coast"],
+                         "NOT = { any_scope_state = { is_coastal = yes } }")
+        self.assertNotIn("ScriptValue", self.loc["nd_w_focus_grants_no_coast"])
+
+    def test_an_ai_country_keeps_no_counts(self):
+        refresh = squash(block(strip_comments(read(DETERRENCE_EFFECTS)), "nd_reach_refresh"))
+        tail = refresh[refresh.index("is_ai = no var:nuclear_weapons_program_first_nuke_done ?= 1"):]
+        others = tail[tail.index("else = {"):]
+        for name in self.REACH:
+            self.assertIn(f"if = {{ limit = {{ has_variable = {name} }} remove_variable = {name} }}", others)
+
+    def test_disarmament_rebuilds_reach_after_the_zeroing(self):
+        article = squash(strip_comments(block(read(ARTICLES), "nuclear_disarmament")))
+        entry = article[article.index("on_entry_into_force"):]
+        zeroed = entry.index("set_variable = { name = nuclear_weapon_stockpile value = 0 }")
+        self.assertLess(entry.index("nd_delivery_remove_legs = yes"), zeroed)
+        self.assertGreater(entry.index("nd_reach_refresh = yes"), zeroed)
+        # nd_is_armed reads the variable, so the rebuild sees the zero at once.
+        self.assertIn("var:nuclear_weapon_stockpile >= 1",
+                      squash(block(strip_comments(read(DETERRENCE_TRIGGERS)), "nd_is_armed")))
+
+    def test_the_bomber_texts_name_a_subjects_and_a_hosts_neighbors(self):
+        for key in ("je_nuclear_ov_delivery_tt_theirs", "nuclear_program_power_leg_bombers_tt"):
+            with self.subTest(key=key):
+                self.assertIn("neighbors of a subject or a host of", self.loc[key])
+
+    def test_the_exposure_line_describes_the_cut(self):
+        desc = self.loc["country_nd_exposure_mult_desc"]
+        self.assertIn("cuts the share", desc)
+        self.assertNotIn("stays", desc)
+
+
 if __name__ == "__main__":
     unittest.main()

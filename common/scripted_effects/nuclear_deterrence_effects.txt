@@ -2924,6 +2924,23 @@ nd_reach_refresh = {
 			}
 		}
 	}
+	# Off a country no human holds, so one a player takes later shows that
+	# its reach isn't counted yet (nd_w_focus_grants_*_uncounted) rather than
+	# the figures from the last time a human held it.
+	else = {
+		if = {
+			limit = { has_variable = nd_reach_count_now }
+			remove_variable = nd_reach_count_now
+		}
+		if = {
+			limit = { has_variable = nd_reach_count_with_subs }
+			remove_variable = nd_reach_count_with_subs
+		}
+		if = {
+			limit = { has_variable = nd_reach_count_every }
+			remove_variable = nd_reach_count_every
+		}
+	}
 }
 
 # Warning time (rework spec §7.4): nd_based_near, a list on an armed country

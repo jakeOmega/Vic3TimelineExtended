@@ -195,7 +195,8 @@ types nuclear_program_widget_types
 	### (2026-11-20 delivery spec D19): the technologies' own icons in three
 	### fixed slots, bombers always (every listed country is believed armed),
 	### ICBMs and missile submarines while it fields them. Our own row is tinted.
-	### 6 + 40 + 6 + 184 + 6 + 80 + 6 + 28 + 6 + 28 + 6 + 76 = 472.
+	### 6 + 30 + 4 + 220 + 4 + 80 + 4 + 24 + 4 + 24 + 4 + 72 = 476: the name
+	### holds about 25 characters, "United States of America" whole.
 	type nuclear_program_power_row = widget {
 		size = { 480 30 }
 
@@ -208,12 +209,12 @@ types nuclear_program_widget_types
 		flowcontainer = {
 			direction = horizontal
 			ignoreinvisible = yes
-			spacing = 6
+			spacing = 4
 			position = { 6 0 }
 			parentanchor = vcenter
 
 			widget = {
-				size = { 40 28 }
+				size = { 30 28 }
 				parentanchor = vcenter
 
 				tiny_flag = {
@@ -222,7 +223,7 @@ types nuclear_program_widget_types
 				}
 			}
 			textbox = {
-				size = { 184 28 }
+				size = { 220 28 }
 				align = left|nobaseline
 				using = te_nuclear_fontsize_row
 				parentanchor = vcenter
@@ -238,32 +239,37 @@ types nuclear_program_widget_types
 				text = "nuclear_program_power_estimate"
 			}
 			widget = {
-				size = { 28 28 }
+				size = { 24 28 }
 				parentanchor = vcenter
 				tooltip = "nuclear_program_power_doctrine_tt"
 
 				icon = {
-					size = { 28 28 }
+					size = { 24 24 }
+					parentanchor = vcenter
 					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)1' )]"
 					texture = "gfx/interface/icons/nuclear_icons/doctrine_nfu.dds"
 				}
 				icon = {
-					size = { 28 28 }
+					size = { 24 24 }
+					parentanchor = vcenter
 					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)2' )]"
 					texture = "gfx/interface/icons/nuclear_icons/doctrine_existential.dds"
 				}
 				icon = {
-					size = { 28 28 }
+					size = { 24 24 }
+					parentanchor = vcenter
 					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)3' )]"
 					texture = "gfx/interface/icons/nuclear_icons/doctrine_flexible.dds"
 				}
 				icon = {
-					size = { 28 28 }
+					size = { 24 24 }
+					parentanchor = vcenter
 					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)4' )]"
 					texture = "gfx/interface/icons/nuclear_icons/doctrine_compellence.dds"
 				}
 				icon = {
-					size = { 28 28 }
+					size = { 24 24 }
+					parentanchor = vcenter
 					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)5' )]"
 					texture = "gfx/interface/icons/nuclear_icons/doctrine_warfighting.dds"
 				}
@@ -271,27 +277,31 @@ types nuclear_program_widget_types
 			### Launch authority, public as the doctrine is (owner, rework spec
 			### §14.2; 2026-11-20 delivery spec D17), with the overview's icons.
 			widget = {
-				size = { 28 28 }
+				size = { 24 28 }
 				parentanchor = vcenter
 				tooltip = "nuclear_program_power_authority_tt"
 
 				icon = {
-					size = { 28 28 }
+					size = { 24 24 }
+					parentanchor = vcenter
 					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)1' )]"
 					texture = "gfx/interface/icons/nuclear_icons/authority_central.dds"
 				}
 				icon = {
-					size = { 28 28 }
+					size = { 24 24 }
+					parentanchor = vcenter
 					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)2' )]"
 					texture = "gfx/interface/icons/nuclear_icons/authority_delegation.dds"
 				}
 				icon = {
-					size = { 28 28 }
+					size = { 24 24 }
+					parentanchor = vcenter
 					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)3' )]"
 					texture = "gfx/interface/icons/nuclear_icons/authority_on_warning.dds"
 				}
 				icon = {
-					size = { 28 28 }
+					size = { 24 24 }
+					parentanchor = vcenter
 					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)4' )]"
 					texture = "gfx/interface/icons/nuclear_icons/authority_automatic.dds"
 				}
@@ -301,7 +311,7 @@ types nuclear_program_widget_types
 			### others show. Each icon has its own hover.
 			flowcontainer = {
 				direction = horizontal
-				spacing = 2
+				spacing = 0
 				parentanchor = vcenter
 
 				widget = {
@@ -342,19 +352,19 @@ types nuclear_program_widget_types
 		}
 	}
 
-	### The leaderboard's column heads, in its rows' cells (6 + 230 + 6 + 80
-	### + 6 = 328), held at the rows' 480: the panel is centred, and with no
+	### The leaderboard's column heads, in its rows' cells (6 + 254 + 4 + 80
+	### + 6 = 350), held at the rows' 480: the panel is centred, and with no
 	### rows yet (up to a month after the first warhead) it was centred at the
 	### head's width and ran past the section once they came (gotcha #43).
 	type nuclear_program_powers_head = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
-		spacing = 6
+		spacing = 4
 		margin = { 6 1 }
 		minimumsize = { 480 -1 }
 
 		textbox = {
-			size = { 230 24 }
+			size = { 254 24 }
 			align = left|nobaseline
 			using = te_nuclear_fontsize_row
 			parentanchor = vcenter

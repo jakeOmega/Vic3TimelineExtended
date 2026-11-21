@@ -340,7 +340,7 @@ Left for later tasks:
   - chapter 14: the focus rows' figures, and the Nuclear Powers and National Info delivery cells. Rebuild the PDF;
   - the play-test rows: each focus row's figures against what fielding gives, and the Powers icons after a rival fields;
   - the spec's status line and the README rows.
-- [ ] Full `scripts/preflight.py`. Then PR 2b with `--base main`, the two-reviewer review, one fix pass, and merge on green CI.
+- [ ] Full `scripts/preflight.py`. Then PR 2b with `--base main`, the two-reviewer review, one fix pass, and merge on green CI. (Review fix pass done, 2026-11-21; PR to be opened once pushed. Fixes: the reach counts' `_uncounted` form and their removal on an AI country, disarmament's second reach rebuild, a no-coast Submarines branch, the Powers name column back to 220, the bomber-reach texts, the exposure line's description; design §0.20.)
 
 **As built (2026-11-21).** As planned, with these choices:
 - **The Powers row:** the legs sit after the launch authority in three fixed 24 slots (a leg keeps its place), each with its own hover. To fit, the name column narrowed from 240 to 184 and the estimate from 110 to 80 (472 of 480); the head's columns follow (230 and 80) and its Warheads hover names what comes after the estimate.

@@ -968,7 +968,7 @@
  je_nuclear_ov_crisis_tt_theirs:0 "#tooltip_header Nuclear Crisis#!\n$TOOLTIP_DELIMITER$\nStage: [Country.GetCustom('nd_crisis_stage_word')]\nDanger: [Country.GetCustom('nd_crisis_danger_word')] #lore ([Country.MakeScope.ScriptValue('nd_display_crisis_danger')|0])#!\nWeeks to the deadline: #v [Country.MakeScope.ScriptValue('nd_display_crisis_weeks_left')|0]#!\n\nWorld Crises names both parties and the dispute."
  je_nuclear_ov_delivery_caption:0 "Delivery"
  je_nuclear_ov_delivery_figure:0 "[Country.GetCustom('nd_delivery_reach')]"
- je_nuclear_ov_delivery_tt_theirs:0 "#tooltip_header Delivery: [Country.GetCustom('nd_delivery_word')]#!\n$TOOLTIP_DELIMITER$\nHow their warheads would reach a target, public as missile tests and boats at sea are.\n\nBombers: their neighbors, and every country with a state in a strategic region where they, a subject or a host of their weapons holds one.[Country.GetCustom('nd_delivery_icbm_line')][Country.GetCustom('nd_delivery_subs_line')]"
+ je_nuclear_ov_delivery_tt_theirs:0 "#tooltip_header Delivery: [Country.GetCustom('nd_delivery_word')]#!\n$TOOLTIP_DELIMITER$\nHow their warheads would reach a target. The world sees missile tests and boats at sea, so this is public.\n\nBombers: their neighbors and the neighbors of a subject or a host of their weapons, and every country with a state in a strategic region where one of them holds one.[Country.GetCustom('nd_delivery_icbm_line')][Country.GetCustom('nd_delivery_subs_line')]"
  je_nuclear_ov_delivery_word:0 "[Country.GetCustom('nd_delivery_word')]"
  je_nuclear_ov_doctrine_caption:0 "[Concept('concept_nuclear_doctrine','Doctrine')]"
  je_nuclear_ov_doctrine_change_in:0 "Change in #v [Country.MakeScope.ScriptValue('nd_display_doctrine_months_left')|0]#! mo"

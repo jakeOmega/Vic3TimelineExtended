@@ -258,7 +258,7 @@
  country_nd_custody_loss_add:0 "Warheads Lost When Custody Changes Hands"
  country_nd_custody_loss_add_desc:0 "The share of the arsenal that goes missing when it changes hands, in a civil war or when an arsenal passes to another country. Commanders who hold launch authority can also take their weapons with them."
  country_nd_exposure_mult:0 "Share Exposed to a First Strike"
- country_nd_exposure_mult_desc:0 "How much of the force a first strike could still reach stays within its reach once this part is in service."
+ country_nd_exposure_mult_desc:0 "How much this part cuts the share of our warheads a first strike could destroy, as a share of what the other parts leave exposed."
  country_nd_halt_chance_add:0 "Chance of a Halt"
  country_nd_halt_chance_add_desc:0 "The chance that someone in the chain stops a launch the government never ordered."
  country_nd_incident_rate_mult:0 "Everyday Incident Rate"

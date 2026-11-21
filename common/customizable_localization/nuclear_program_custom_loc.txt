@@ -774,6 +774,11 @@ nd_focus_row_3 = {
 # in figures (phase 2 plan D16), the survivability target and the countries in
 # reach now and with the leg, the warheads its months won't build, and for
 # submarines their upkeep. Once in service, only that the terms are in force.
+# The reach counts are written weekly for a human's country only
+# (nd_reach_refresh), so a country a player has just taken, or a save from
+# before phase 2b, has none yet: the _uncounted forms leave the reach line out
+# and say when it comes. A country with no coast can't put boats to sea, so
+# its submarine row gives no figures it can't get.
 nd_focus_grants_2 = {
 	type = country
 	random_valid = no
@@ -781,6 +786,10 @@ nd_focus_grants_2 = {
 	text = {
 		trigger = { nd_fields_icbms = yes }
 		localization_key = nd_w_focus_grants_fielded
+	}
+	text = {
+		trigger = { NOT = { has_variable = nd_reach_count_now } }
+		localization_key = nd_w_focus_grants_2_uncounted
 	}
 	text = {
 		trigger = { always = yes }
@@ -802,6 +811,14 @@ nd_focus_grants_3 = {
 	text = {
 		trigger = { nd_fields_missile_submarines = yes }
 		localization_key = nd_w_focus_grants_fielded
+	}
+	text = {
+		trigger = { NOT = { any_scope_state = { is_coastal = yes } } }
+		localization_key = nd_w_focus_grants_no_coast
+	}
+	text = {
+		trigger = { NOT = { has_variable = nd_reach_count_now } }
+		localization_key = nd_w_focus_grants_3_uncounted
 	}
 	text = {
 		trigger = { always = yes }
