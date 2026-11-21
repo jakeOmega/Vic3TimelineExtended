@@ -293,6 +293,57 @@ types nuclear_overview_widget_types
 					}
 				}
 
+				### Row 4 for another country, once the world believes it armed: its
+				### delivery, public as missile tests and boats at sea are (2026-11-20
+				### delivery spec §2, D19). The icon is the farthest-reaching leg it
+				### fields, the word its legs and the figure what they reach; the
+				### hover lists each leg's reach. A row with one cell keeps it in the
+				### left column.
+				flowcontainer = {
+					visible = "[And( Not( Country.IsLocalPlayer ), GetScriptedGui('nd_believed_armed_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_banking_ov_cell = {
+						tooltip = "je_nuclear_ov_delivery_tt_theirs"
+						size = { 238 70 }
+						blockoverride "caption_width" {
+							max_width = 154
+						}
+						blockoverride "caption" {
+							text = "je_nuclear_ov_delivery_caption"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[And( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_leg_icbms'), '(CFixedPoint)0' ), EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_leg_subs'), '(CFixedPoint)0' ) )]"
+								texture = "gfx/interface/icons/invention_icons/bombing_aircraft.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_leg_icbms'), '(CFixedPoint)1' )]"
+								texture = "gfx/interface/icons/invention_icons/ICBMs.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[And( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_leg_icbms'), '(CFixedPoint)0' ), EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_leg_subs'), '(CFixedPoint)1' ) )]"
+								texture = "gfx/interface/icons/invention_icons/advanced_submarine_technology.dds"
+							}
+						}
+						blockoverride "word" {
+							te_nuclear_ov_word = {
+								text = "je_nuclear_ov_delivery_word"
+							}
+						}
+						blockoverride "third_line" {
+							te_nuclear_ov_figure = {
+								text = "je_nuclear_ov_delivery_figure"
+							}
+						}
+					}
+				}
+
 				### Rows 2 to 4, the player's own (spec 2026-11-02-charts-help-national-info
 				### § 6.4): the program, the true count, the posture and credibility.
 				### Rows 3 and 4 show only while armed, which for another country would

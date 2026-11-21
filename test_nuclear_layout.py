@@ -236,10 +236,11 @@ class WidthTest(unittest.TestCase):
 
     def test_the_powers_head_is_as_wide_as_its_rows(self):
         # With no rows yet (up to a month after the first warhead) the panel
-        # was centred at the head's 414 and ran past the section once rows came.
+        # was centred at the head's 414 (328 since the delivery icons narrowed its
+        # columns) and ran past the section once rows came.
         types = _types(PROGRAM)
         head, row = types["nuclear_program_powers_head"], types["nuclear_program_power_row"]
-        self.assertEqual(_row_width(head), 414)
+        self.assertEqual(_row_width(head), 328)
         self.assertEqual(gui_tree.size(head, "minimumsize"), (gui_tree.size(row)[0], -1))
 
     def test_the_reputation_panel_keeps_one_width(self):
@@ -452,7 +453,7 @@ class OverviewTest(unittest.TestCase):
         """Banking's own cell, reused as it is: a size, a tooltip, the caption in
         the 154 column, an icon, the word and the figure."""
         cells = _cells(self.panel)
-        self.assertEqual(len(cells), 11)   # 7 for the player, 4 for another country (its Rows 2 and 3)
+        self.assertEqual(len(cells), 12)   # 7 for the player, 5 for another country (its Rows 2 to 4)
         for body in cells:
             tip = _cell_tip(body)
             with self.subTest(cell=tip):
@@ -561,12 +562,12 @@ class OverviewTest(unittest.TestCase):
         self.assertIn("margin = { 20 8 }", frame)
         self.assertIn("minimumsize = { 480 -1 }", self.panel)
         rows = [r for r in re.split(r"### Row \d", self.panel)[1:]]
-        self.assertEqual(len(rows), 7)   # Rows 1 to 5, and Rows 2 and 3 for another country
-        for row in rows[:6]:
+        self.assertEqual(len(rows), 8)   # Rows 1 to 5, and Rows 2 to 4 for another country
+        for row in rows[:7]:
             n = row.count("te_banking_ov_cell = {")
             self.assertIn(n, (1, 2))
             self.assertLessEqual(n * 238 + (n - 1) * int(re.search(r"spacing = (\d+)", row).group(1)), 480)
-        taboo = rows[6]
+        taboo = rows[7]
         cells = [int(w) for w in re.findall(r"maximumsize = \{ (\d+) -1 \}", taboo)]
         bar = int(re.search(r"widget = \{\s*size = \{ (\d+) 18 \}", taboo).group(1))
         self.assertEqual(len(cells), 2)
@@ -598,6 +599,10 @@ VANILLA_KEPT = {"gfx/interface/icons/generic_icons/trend_up.dds", "gfx/interface
 # The mod's own icons from elsewhere: another country's guarantees cell draws the
 # nuclear_guarantee treaty article's (115_nuclear_guarantee.txt).
 MOD_KEPT = {"gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_guarantee.dds"}
+# Another country's delivery cell draws the delivery technologies' own icons (2026-11-20 delivery spec D19).
+MOD_KEPT |= {"gfx/interface/icons/invention_icons/bombing_aircraft.dds",
+             "gfx/interface/icons/invention_icons/ICBMs.dds",
+             "gfx/interface/icons/invention_icons/advanced_submarine_technology.dds"}
 # Placeholders until the art exists (style guide rule 10), each listed in
 # docs/systems/nuclear_gui_icons.md. None since icon batch 7 painted credibility's.
 PLACEHOLDERS = set()
@@ -917,8 +922,8 @@ class LabelBudgetTest(unittest.TestCase):
         for key, width in zip(re.findall(r'text = "(\w+)"', _type_body(det, "nd_world_crisis_head")), (108, 168, 180)):
             self._fits([key], width, ROW, "world crisis head")
         self.assertIn("size = { 168 28 }", wc)
-        self._fits(["nuclear_program_power_estimate"], 110, ROW, "power estimate")
-        for key, width in zip(re.findall(r'text = "(\w+)"', _type_body(prog, "nuclear_program_powers_head")), (286, 110)):
+        self._fits(["nuclear_program_power_estimate"], 80, ROW, "power estimate")
+        for key, width in zip(re.findall(r'text = "(\w+)"', _type_body(prog, "nuclear_program_powers_head")), (230, 80)):
             self._fits([key], width, ROW, "powers head")
 
     def test_overview(self):
@@ -1358,6 +1363,121 @@ class TestPublicAuthority(unittest.TestCase):
         self.assertNotIn("months_left", row[:row.index("je_nuclear_ov_authority_tt_theirs") + 2000])
 
 
+# The delivery legs' icons: the technologies' own (2026-11-20 delivery spec D19), no new art.
+LEG_ICONS = {"bombers": "gfx/interface/icons/invention_icons/bombing_aircraft.dds",
+             "icbms": "gfx/interface/icons/invention_icons/ICBMs.dds",
+             "subs": "gfx/interface/icons/invention_icons/advanced_submarine_technology.dds"}
+
+
+class TestOthersDelivery(unittest.TestCase):
+    """Which legs a country fields is public, as missile tests and boats at sea
+    are (2026-11-20 delivery spec §2, D18, D19). Nuclear Powers draws an icon per
+    leg on each row, bombers always (every listed country is believed armed),
+    and another country's National Info a delivery cell. Both read the legs
+    only through nd_display_leg_icbms / _subs, which read only the delivery
+    triggers."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.types = gh.mod_types()
+        cls.view = gh.panel_view({WIDE}, cls.types)
+        cls.markup = {n: _drawn(cls.view, cls.types, n) for n in cls.view.open}
+
+    def test_the_display_values_read_only_the_triggers(self):
+        for leg, trigger in (("icbms", "nd_fields_icbms"), ("subs", "nd_fields_missile_submarines")):
+            with self.subTest(leg=leg):
+                body = _value_body(f"nd_display_leg_{leg}")
+                self.assertRegex(body, rf"value = 0\s+if = \{{\s+limit = \{{ {trigger} = yes \}}\s+value = 1\s+\}}")
+                self.assertNotIn(f"nd_display_leg_{leg}", _true_state())
+                self.assertNotIn(trigger, _true_state(), "the fielded variable, the migration, technology, a coast")
+
+    def test_the_powers_rows_show_each_leg(self):
+        row = self.markup["nuclear_program_power_row"]
+        i = row.index("nuclear_program_power_leg_bombers_tt")
+        self.assertGreater(i, row.index("nuclear_program_power_authority_tt"), "after the authority")
+        self.assertLess(i, row.index("nuclear_program_power_leg_icbms_tt"))
+        self.assertLess(row.index("nuclear_program_power_leg_icbms_tt"), row.index("nuclear_program_power_leg_subs_tt"))
+        slot = row[row.rindex("widget = {", 0, i):row.index("widget = {", i)]
+        self.assertIn(LEG_ICONS["bombers"], slot)
+        self.assertNotIn("visible", slot, "bombers always")
+        for leg in ("icbms", "subs"):
+            with self.subTest(leg=leg):
+                self.assertRegex(row, r'visible = "\[EqualTo_CFixedPoint\( State\.GetOwner\.MakeScope\.ScriptValue'
+                                      rf"\('nd_display_leg_{leg}'\), '\(CFixedPoint\)1' \)\]\"\s+"
+                                      rf'tooltip = "nuclear_program_power_leg_{leg}_tt"\s+icon = \{{\s+size = \{{ 24 24 \}}\s+'
+                                      rf'texture = "{re.escape(LEG_ICONS[leg])}"')
+        for leg in LEG_ICONS:
+            self.assertIn("State.GetOwner.GetNameNoFormatting", _loc(f"nuclear_program_power_leg_{leg}_tt"), leg)
+
+    def test_the_powers_row_fits(self):
+        def width(node):
+            # A cell's own size, or a nested horizontal flowcontainer's cells and spacing.
+            if node.kind != "flowcontainer":
+                return gui_tree.size(node)[0]
+            cells = [width(c) for c in gui_tree.widgets(node)]
+            spacing = int(node.prop("spacing").value) if node.prop("spacing") else 0
+            return sum(cells) + spacing * (len(cells) - 1)
+
+        types = _types(PROGRAM)
+        row = types["nuclear_program_power_row"]
+        (flow,) = [c for c in row.children if c.kind == "flowcontainer"]
+        x = gui_tree.size(flow, "position")[0]
+        self.assertEqual(x + width(flow), 472)
+        self.assertLessEqual(x + width(flow), gui_tree.size(row)[0])
+        (legs,) = [c for c in gui_tree.widgets(flow) if c.kind == "flowcontainer"]
+        self.assertEqual(width(legs), 3 * 24 + 2 * 2)
+        # The head's columns sit over the rows': the country over the flag and name,
+        # the warheads over the estimate.
+        cells = [width(c) for c in gui_tree.widgets(flow)]
+        head = [gui_tree.size(c)[0] for c in gui_tree.widgets(types["nuclear_program_powers_head"])]
+        self.assertEqual(head, [cells[0] + 6 + cells[1], cells[2]])
+        self.assertIn("launch authority", _loc("je_nuclear_program_widget_powers_head_warheads_tt"))
+        self.assertIn("delivery", _loc("je_nuclear_program_widget_powers_head_warheads_tt"))
+
+    def test_national_info_shows_the_cell(self):
+        ov = self.markup["te_nuclear_overview_panel"]
+        i = ov.index("je_nuclear_ov_delivery_tt_theirs")
+        row = ov[ov.rindex("flowcontainer = {", 0, i):]
+        self.assertIn('visible = "[And( Not( Country.IsLocalPlayer ), '
+                      "GetScriptedGui('nd_believed_armed_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]\"",
+                      row)
+        cell = _cells(row)[0]
+        for leg in ("icbms", "subs"):
+            self.assertIn(f"Country.MakeScope.ScriptValue('nd_display_leg_{leg}')", cell, leg)
+        for path in LEG_ICONS.values():
+            self.assertIn(path, cell, path)
+        for key in ("je_nuclear_ov_delivery_caption", "je_nuclear_ov_delivery_word", "je_nuclear_ov_delivery_figure"):
+            self.assertIn(key, cell, key)
+        self.assertIn("Country.GetCustom('nd_delivery_word')", _loc("je_nuclear_ov_delivery_word"))
+        self.assertIn("Country.GetCustom('nd_delivery_reach')", _loc("je_nuclear_ov_delivery_figure"))
+
+    def test_the_icons_are_the_mods(self):
+        import subprocess
+        out = subprocess.run(["git", "ls-files", *LEG_ICONS.values()], cwd=REPO, capture_output=True, text=True)
+        self.assertEqual(set(out.stdout.split()), set(LEG_ICONS.values()))
+
+
+class TestProjectsArePrivate(unittest.TestCase):
+    """What a programme is developing is its own until it fields the leg
+    (2026-11-20 delivery spec D18): the focus and the project slots are on
+    TRUE_VARS, so nothing another country's panel draws reads them, and
+    PrivateTest's walk holds that. The fielded legs are not, and neither are
+    the reach counts, which follow from public legs and geography."""
+
+    def test_on_the_private_list(self):
+        for name in ("nd_prog_focus", "nd_proj_warhead_progress", "nd_proj_icbm_progress", "nd_proj_sub_progress"):
+            self.assertIsNotNone(TRUE_VARS.search(name), name)
+        for name in ("nd_icbms_fielded", "nd_subs_fielded", "nd_reach_count_now", "nd_reach_count_every"):
+            self.assertIsNone(TRUE_VARS.search(name), name)
+
+    def test_the_focus_is_true_state(self):
+        derived = _true_state()
+        for name in ("nd_focus_is_warheads", "nd_focus_is_icbms", "nd_focus_is_submarines"):
+            self.assertIn(name, derived, name)
+        for name in ("nd_fields_icbms", "nd_fields_missile_submarines", "nd_display_leg_icbms", "nd_display_leg_subs"):
+            self.assertNotIn(name, derived, name)
+
+
 class WideTest(unittest.TestCase):
     """The full-screen columns (spec 2026-11-02-te-window-wide-mode §§ 7, 9.4,
     9.5): te_nuclear_wide_sections places the tab's sections, under the same
@@ -1449,10 +1569,14 @@ LEAKS = re.compile(
 # that does, is true state too (_true_state).
 # Launch authority is not on it: it is public, as the doctrine is (owner, rework spec §14.2; 2026-11-20
 # delivery spec D17), and Nuclear Powers and National Info show another country's.
+# The programme's focus and its projects' parked progress are on it: what a programme is developing
+# is its own until it fields the leg (2026-11-20 delivery spec D18). The fielded legs (nd_icbms_fielded,
+# nd_subs_fielded) are not: the world sees missile tests and boats at sea (§2).
 TRUE_VARS = re.compile(
     r"\b(nuclear_weapon_stockpile|nuclear_weapon_program_progress|nuclear_weapons_program_funding"
     r"|nd_readiness\w*|nd_survivability|nd_reliability|nd_strain|nd_upkeep_weekly_cached"
-    r"|nd_warhead_ceiling|nd_dismantle_\w+|nd_safeguards|nd_hardening|nd_loose_\w+|nd_custody_\w+|nd_ar_\w+)\b")
+    r"|nd_warhead_ceiling|nd_dismantle_\w+|nd_safeguards|nd_hardening|nd_loose_\w+|nd_custody_\w+|nd_ar_\w+"
+    r"|nd_prog_focus|nd_proj_\w+)\b")
 # A bare name in a script body: a script value, trigger or scripted GUI it may call (not var:x, x.y).
 _NAME_REF = re.compile(r"(?<![:.\w])([a-z_]\w*)\b")
 # A key another country's panel renders that may name one of the estimate's two script values, and

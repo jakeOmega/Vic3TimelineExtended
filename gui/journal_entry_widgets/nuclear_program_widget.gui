@@ -190,9 +190,12 @@ types nuclear_program_widget_types
 	### datacontext is the country's capital and the country is State.GetOwner
 	### (gui_modding_guide.md gotcha #15). Vanilla's flag gives the name on
 	### hover and opens the country on a click; then the name, the arsenal as
-	### the world estimates it, and the public doctrine as the overview's icon
-	### (its name on hover). Our own row is tinted.
-	### 6 + 40 + 6 + 240 + 6 + 110 + 6 + 28 = 442.
+	### the world estimates it, the public doctrine and launch authority as the
+	### overview's icons (each name on hover), and the delivery legs it fields
+	### (2026-11-20 delivery spec D19): the technologies' own icons in three
+	### fixed slots, bombers always (every listed country is believed armed),
+	### ICBMs and missile submarines while it fields them. Our own row is tinted.
+	### 6 + 40 + 6 + 184 + 6 + 80 + 6 + 28 + 6 + 28 + 6 + 76 = 472.
 	type nuclear_program_power_row = widget {
 		size = { 480 30 }
 
@@ -219,7 +222,7 @@ types nuclear_program_widget_types
 				}
 			}
 			textbox = {
-				size = { 240 28 }
+				size = { 184 28 }
 				align = left|nobaseline
 				using = te_nuclear_fontsize_row
 				parentanchor = vcenter
@@ -227,7 +230,7 @@ types nuclear_program_widget_types
 				text = "[State.GetOwner.GetNameNoFormatting]"
 			}
 			textbox = {
-				size = { 110 28 }
+				size = { 80 28 }
 				align = right|nobaseline
 				using = te_nuclear_fontsize_row
 				parentanchor = vcenter
@@ -293,11 +296,54 @@ types nuclear_program_widget_types
 					texture = "gfx/interface/icons/nuclear_icons/authority_automatic.dds"
 				}
 			}
+			### The delivery legs, public (2026-11-20 delivery spec §2, D18, D19):
+			### three fixed 24 slots, so a leg keeps its place whether or not the
+			### others show. Each icon has its own hover.
+			flowcontainer = {
+				direction = horizontal
+				spacing = 2
+				parentanchor = vcenter
+
+				widget = {
+					size = { 24 24 }
+					tooltip = "nuclear_program_power_leg_bombers_tt"
+					icon = {
+						size = { 24 24 }
+						texture = "gfx/interface/icons/invention_icons/bombing_aircraft.dds"
+					}
+				}
+				widget = {
+					size = { 24 24 }
+
+					widget = {
+						size = { 24 24 }
+						visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_leg_icbms'), '(CFixedPoint)1' )]"
+						tooltip = "nuclear_program_power_leg_icbms_tt"
+						icon = {
+							size = { 24 24 }
+							texture = "gfx/interface/icons/invention_icons/ICBMs.dds"
+						}
+					}
+				}
+				widget = {
+					size = { 24 24 }
+
+					widget = {
+						size = { 24 24 }
+						visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_leg_subs'), '(CFixedPoint)1' )]"
+						tooltip = "nuclear_program_power_leg_subs_tt"
+						icon = {
+							size = { 24 24 }
+							texture = "gfx/interface/icons/invention_icons/advanced_submarine_technology.dds"
+						}
+					}
+				}
+			}
 		}
 	}
 
-	### The leaderboard's column heads, in its rows' cells (6 + 286 + 6 + 110
-	### + 6 = 414), held at the rows' 480: the panel is centred, and with no
+	### The leaderboard's column heads, in its rows' cells (6 + 230 + 6 + 80
+	### + 6 = 328), held at the rows' 480: the panel is centred, and with no
 	### rows yet (up to a month after the first warhead) it was centred at the
 	### head's width and ran past the section once they came (gotcha #43).
 	type nuclear_program_powers_head = flowcontainer {
@@ -308,7 +354,7 @@ types nuclear_program_widget_types
 		minimumsize = { 480 -1 }
 
 		textbox = {
-			size = { 286 24 }
+			size = { 230 24 }
 			align = left|nobaseline
 			using = te_nuclear_fontsize_row
 			parentanchor = vcenter
@@ -317,7 +363,7 @@ types nuclear_program_widget_types
 			text = "je_nuclear_program_widget_powers_head_country"
 		}
 		textbox = {
-			size = { 110 24 }
+			size = { 80 24 }
 			align = right|nobaseline
 			using = te_nuclear_fontsize_row
 			parentanchor = vcenter

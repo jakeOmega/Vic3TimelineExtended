@@ -755,6 +755,77 @@ nd_authority_short = {
 	}
 }
 
+# Another country's delivery legs, for its National Info cell (2026-11-20
+# delivery spec D19): public, read only through the delivery triggers. The word
+# names the legs, the figure what they reach, and the two lines go in the cell's
+# hover. Bombers need no test: every armed country has them.
+nd_delivery_word = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			nd_fields_icbms = yes
+			nd_fields_missile_submarines = yes
+		}
+		localization_key = nd_delivery_word_triad
+	}
+	text = {
+		trigger = { nd_fields_icbms = yes }
+		localization_key = nd_delivery_word_icbms
+	}
+	text = {
+		trigger = { nd_fields_missile_submarines = yes }
+		localization_key = nd_delivery_word_subs
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_delivery_word_bombers
+	}
+}
+
+nd_delivery_reach = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_fields_icbms = yes }
+		localization_key = nd_delivery_reach_every
+	}
+	text = {
+		trigger = { nd_fields_missile_submarines = yes }
+		localization_key = nd_delivery_reach_coasts
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_delivery_reach_bombers
+	}
+}
+
+nd_delivery_icbm_line = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_fields_icbms = yes }
+		localization_key = nd_delivery_icbm_line_yes
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_empty
+	}
+}
+
+nd_delivery_subs_line = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_fields_missile_submarines = yes }
+		localization_key = nd_delivery_subs_line_yes
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_empty
+	}
+}
+
 # Credibility in a word, for the overview's cell: what our threats can lean on.
 # A crisis reads (credibility - 50) / 2 into the target's pressure
 # (nd_credibility_pressure_term), so the middle band adds or takes little.

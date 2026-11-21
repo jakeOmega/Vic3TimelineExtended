@@ -3638,6 +3638,29 @@ nd_display_authority_code = {
 	}
 }
 
+# The delivery legs a country fields, 1 or 0, for Nuclear Powers' icons and
+# another country's National Info (2026-11-20 delivery spec D18, D19). Public:
+# the world sees missile tests and boats at sea (§2). Each reads only its
+# delivery trigger (the fielded variable, the migration's bridge to the
+# technology, and for submarines a coast), never the focus or a project's
+# progress, which are the country's own. Bombers need no value: every armed
+# country has them.
+nd_display_leg_icbms = {
+	value = 0
+	if = {
+		limit = { nd_fields_icbms = yes }
+		value = 1
+	}
+}
+
+nd_display_leg_subs = {
+	value = 0
+	if = {
+		limit = { nd_fields_missile_submarines = yes }
+		value = 1
+	}
+}
+
 # Direct subjects under our nuclear umbrella (umbrella/recessed/dead-hand spec
 # §1.6). Vanilla precedent for an iterator in a script value: india_values.txt.
 nd_display_umbrella_count = {
