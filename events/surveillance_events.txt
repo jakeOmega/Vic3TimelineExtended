@@ -601,7 +601,7 @@ surveillance_events.200 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/digital_freedom_secured.dds" }
+	event_image = { texture = "gfx/event_pictures/civil_rights_victory.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 

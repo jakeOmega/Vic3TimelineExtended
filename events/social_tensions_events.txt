@@ -1122,7 +1122,7 @@ social_tensions_events.13 = {
 	}
 	flavor = social_tensions_events.13.f
 
-	event_image = { texture = "gfx/event_pictures/religious_extremism_clash.dds" }
+	event_image = { texture = "gfx/event_pictures/anti_globalization_riot.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -1197,7 +1197,7 @@ social_tensions_events.14 = {
 	desc = social_tensions_events.14.d
 	flavor = social_tensions_events.14.f
 
-	event_image = { texture = "gfx/event_pictures/religious_extremism_clash.dds" }
+	event_image = { texture = "gfx/event_pictures/anti_globalization_riot.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 

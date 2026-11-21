@@ -132,7 +132,6 @@ ai-word	sr_colony_ceres_observatory_desc
 ai-word	sr_mars_orbital_first_desc
 ai-word	sr_probe_target_venus_desc
 ai-word	ste_av_crash_investigation_desc
-ai-word	ste_misinfo_free_speech_desc
 ai-word	summit_host_modifier_desc
 ai-word	te_inflation_band_elevated
 ai-word	telepathic_communities_desc
