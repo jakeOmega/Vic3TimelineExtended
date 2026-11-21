@@ -764,5 +764,247 @@ class TestCeilingSaysWarheadsOnly(unittest.TestCase):
         self.assertIn("focus", loc["je_nuclear_how_programme"])
 
 
+# ---------------------------------------------------------------------------
+# Task 4: the AI's focus (§4.5, owner call 12; D14, D15)
+# ---------------------------------------------------------------------------
+BUTTONS = ROOT / "common/scripted_buttons/nuclear_program_buttons.txt"
+# The log's reason words, in the order §4.5 tries them (the tie rule's two
+# outcomes sit where steps 3 and 4 meet).
+AI_FOCUS_REASONS = ("range_first", "range_urgent", "warheads_short", "tie_range",
+                    "tie_submarines", "range_half", "submarines_survival", "range_some", "warheads")
+
+
+class TestRangeScore(unittest.TestCase):
+    """How much the bombers miss: the weighted share of the countries the AI
+    must be able to strike that nd_reaches_country does not reach, 0 when there
+    are none (spec §4.5, owner call 12; plan D14)."""
+
+    def setUp(self):
+        self.values = strip_comments(read(DETERRENCE_VALUES))
+        self.triggers = strip_comments(read(DETERRENCE_TRIGGERS))
+        self.effect = strip_comments(block(strip_comments(read(DETERRENCE_EFFECTS)), "nd_ai_choose_focus"))
+
+    def test_the_weights(self):
+        self.assertEqual(constant(self.values, "nd_ai_range_weight_must"), 3)
+        self.assertEqual(constant(self.values, "nd_ai_range_weight_should"), 2)
+
+    def test_who_must_be_reached(self):
+        must = squash(block(self.triggers, "nd_ai_range_must_reach"))
+        self.assertIn("NOT = { THIS = $AI$ }", must)
+        for part in ("$AI$ = { any_rival_country = { THIS = scope:nd_rw_cand } }",
+                     "$AI$ = { any_rivaling_country = { THIS = scope:nd_rw_cand } }",
+                     "has_war_with = $AI$",
+                     "$AI$ = { nd_in_crisis = yes var:nd_crisis_opponent ?= scope:nd_rw_cand }"):
+            self.assertIn(part, must)
+        # A rival, an enemy or the crisis opponent counts armed or not.
+        self.assertNotIn("nd_believed_armed", must)
+        should = squash(block(self.triggers, "nd_ai_range_should_reach"))
+        self.assertIn("NOT = { THIS = $AI$ }", should)
+        self.assertIn("nd_believed_armed = yes", should)
+        self.assertIn("has_attitude = { who = $AI$ attitude = antagonistic }", should)
+
+    def test_reach_is_nd_reaches_country(self):
+        out = squash(block(self.triggers, "nd_ai_range_out_of_reach"))
+        self.assertIn("save_temporary_scope_as = nd_ro_cand", out)
+        self.assertIn("$AI$ = { NOT = { nd_reaches_country = { TARGET = scope:nd_ro_cand } } }", out)
+
+    def test_the_highest_weight_per_country(self):
+        body = squash(self.effect)
+        walk = squash(every_country_blocks(self.effect)[0])
+        self.assertTrue(walk.startswith("limit = { OR = { nd_ai_range_must_reach = { AI = scope:nd_rf_self } "
+                                        "nd_ai_range_should_reach = { AI = scope:nd_rf_self } } }"))
+        self.assertIn("if = { limit = { nd_ai_range_must_reach = { AI = scope:nd_rf_self } } "
+                      "set_local_variable = { name = nd_rf_weight value = nd_ai_range_weight_must } } "
+                      "else = { set_local_variable = { name = nd_rf_weight value = nd_ai_range_weight_should } }", walk)
+        self.assertIn("change_local_variable = { name = nd_rf_total add = local_var:nd_rf_weight }", walk)
+        self.assertIn("limit = { nd_ai_range_out_of_reach = { AI = scope:nd_rf_self } } "
+                      "change_local_variable = { name = nd_rf_missed add = local_var:nd_rf_weight }", walk)
+        # Every sum starts at 0 before the walk.
+        for name in ("nd_rf_total", "nd_rf_missed", "nd_rf_inland", "nd_rf_coastal", "nd_rf_urgent"):
+            self.assertLess(body.index(f"set_local_variable = {{ name = {name} value = 0 }}"),
+                            body.index("every_country"))
+
+    def test_zero_with_none(self):
+        body = squash(self.effect)
+        self.assertIn("set_variable = { name = nd_ai_range_score value = 0 } "
+                      "if = { limit = { local_var:nd_rf_total > 0 } "
+                      "set_variable = { name = nd_ai_range_score value = local_var:nd_rf_missed } "
+                      "change_variable = { name = nd_ai_range_score divide = local_var:nd_rf_total } }", body)
+
+
+class TestFocusOrder(unittest.TestCase):
+    """§4.5's six steps, its tie rule and the India-Pakistan rule: a score of
+    0 never builds range (plan D14)."""
+
+    def setUp(self):
+        self.effects = strip_comments(read(DETERRENCE_EFFECTS))
+        self.effect = block(self.effects, "nd_ai_choose_focus")
+        self.body = squash(self.effect)
+        self.order = self.body[self.body.index("set_local_variable = { name = nd_rf_want_subs value = 0 }"):]
+
+    def test_called_from_the_review(self):
+        review = squash(block(self.effects, "nd_ai_review_posture"))
+        self.assertIn("nd_ai_choose_focus = yes", review)
+        # After the review's rival refresh, which the submarine test reads.
+        self.assertLess(review.index("nd_refresh_main_rival = yes"), review.index("nd_ai_choose_focus = yes"))
+
+    def test_only_after_the_first_device(self):
+        self.assertTrue(self.body.startswith(
+            "if = { limit = { var:nuclear_weapons_program_first_nuke_done ?= 1 } save_scope_as = nd_rf_self"))
+
+    def test_six_steps_in_order(self):
+        positions = [self.order.index(f"REASON = {reason} ") for reason in AI_FOCUS_REASONS]
+        self.assertEqual(positions, sorted(positions))
+
+    def test_each_step_s_test(self):
+        o = self.order
+        has_range = "local_var:nd_rf_range > 0"
+        # 1. Range first when the bombers reach nobody who matters.
+        self.assertIn(f"if = {{ limit = {{ {has_range} var:nd_ai_range_score >= 1 }} "
+                      "nd_ai_focus_pick_range = { REASON = range_first } }", o)
+        # 2. Warheads below half the desired stockpile, unless at war or in a
+        # crisis with a country out of reach.
+        self.assertIn("else_if = { limit = { has_variable = nuclear_weapon_stockpile "
+                      "var:nuclear_weapon_stockpile < nd_ai_focus_warheads_first } "
+                      f"if = {{ limit = {{ {has_range} local_var:nd_rf_urgent > 0 }} "
+                      "nd_ai_focus_pick_range = { REASON = range_urgent } } "
+                      "else = { nd_ai_focus_pick = { F = 1 REASON = warheads_short } } }", o)
+        # 3 and 4 together: the tie rule.
+        self.assertIn(f"else_if = {{ limit = {{ {has_range} var:nd_ai_range_score >= nd_ai_range_score_for_range "
+                      "local_var:nd_rf_want_subs = 1 } "
+                      "if = { limit = { local_var:nd_rf_urgent > 0 } nd_ai_focus_pick_range = { REASON = tie_range } } "
+                      "else = { nd_ai_focus_pick = { F = 3 REASON = tie_submarines } } }", o)
+        # 3. Range at half the score or more.
+        self.assertIn(f"else_if = {{ limit = {{ {has_range} var:nd_ai_range_score >= nd_ai_range_score_for_range }} "
+                      "nd_ai_focus_pick_range = { REASON = range_half } }", o)
+        # 4. Submarines for survival.
+        self.assertIn("else_if = { limit = { local_var:nd_rf_want_subs = 1 } "
+                      "nd_ai_focus_pick = { F = 3 REASON = submarines_survival } }", o)
+        # 5. Range when the score is above 0.
+        self.assertIn(f"else_if = {{ limit = {{ {has_range} var:nd_ai_range_score > 0 }} "
+                      "nd_ai_focus_pick_range = { REASON = range_some } }", o)
+        # 6. Otherwise warheads.
+        self.assertIn("else = { nd_ai_focus_pick = { F = 1 REASON = warheads } }", o)
+
+    def test_the_constants(self):
+        values = strip_comments(read(DETERRENCE_VALUES))
+        self.assertEqual(constant(values, "nd_ai_range_score_for_range"), 0.5)
+        self.assertEqual(constant(values, "nd_ai_focus_warheads_share"), 0.5)
+        first = squash(block(values, "nd_ai_focus_warheads_first"))
+        self.assertEqual(first, "value = nuclear_ai_desired_stockpile multiply = nd_ai_focus_warheads_share")
+
+    def test_never_range_at_zero(self):
+        # Every range pick but the urgent one tests the score above 0 (1, 0.5
+        # or > 0); an urgent country is out of reach, so its score is above 0.
+        picks = re.findall(r"nd_ai_focus_pick_range = \{", self.order)
+        self.assertEqual(len(picks), 5)
+        walk = squash(every_country_blocks(self.effect)[0])
+        missed = walk[walk.index("limit = { nd_ai_range_out_of_reach"):]
+        self.assertIn("if = { limit = { nd_ai_range_urgent = { AI = scope:nd_rf_self } } "
+                      "change_local_variable = { name = nd_rf_urgent add = 1 } }", missed)
+
+    def test_submarines_as_range_only_with_every_coast(self):
+        body = self.body
+        self.assertIn("set_local_variable = { name = nd_rf_range value = 0 } "
+                      "if = { limit = { nd_proj_subs_available = yes local_var:nd_rf_coastal > 0 "
+                      "OR = { local_var:nd_rf_inland = 0 NOT = { nd_proj_icbms_available = yes } } } "
+                      "set_local_variable = { name = nd_rf_range value = 3 } } "
+                      "else_if = { limit = { nd_proj_icbms_available = yes } "
+                      "set_local_variable = { name = nd_rf_range value = 2 } }", body)
+        walk = squash(every_country_blocks(self.effect)[0])
+        self.assertIn("if = { limit = { any_scope_state = { is_coastal = yes } } "
+                      "change_local_variable = { name = nd_rf_coastal add = 1 } } "
+                      "else = { change_local_variable = { name = nd_rf_inland add = 1 } }", walk)
+
+    def test_submarines_for_survival(self):
+        self.assertIn("if = { limit = { nd_proj_subs_available = yes OR = { "
+                      "nd_ai_vulnerable_to_main_rival = yes "
+                      "AND = { has_variable = nd_main_rival_accuracy_mult var:nd_main_rival_accuracy_mult > 1 } } } "
+                      "set_local_variable = { name = nd_rf_want_subs value = 1 } }", self.body)
+
+    def test_the_urgent_test(self):
+        urgent = squash(block(strip_comments(read(DETERRENCE_TRIGGERS)), "nd_ai_range_urgent"))
+        self.assertIn("save_temporary_scope_as = nd_ru_cand", urgent)
+        self.assertIn("has_war_with = $AI$", urgent)
+        self.assertIn("$AI$ = { nd_in_crisis = yes var:nd_crisis_opponent ?= scope:nd_ru_cand }", urgent)
+
+    def test_the_focus_set_through_nd_focus_set(self):
+        self.assertNotIn("nd_prog_focus", self.body)
+        pick = squash(block(self.effects, "nd_ai_focus_pick"))
+        self.assertIn("nd_focus_set = { F = $F$ }", pick)
+        # Only a change: an unchanged focus parks and reloads nothing.
+        self.assertIn("AND = { local_var:nd_rf_pick = 1 NOT = { nd_focus_is_warheads = yes } } "
+                      "AND = { local_var:nd_rf_pick = 2 NOT = { nd_focus_is_icbms = yes } } "
+                      "AND = { local_var:nd_rf_pick = 3 NOT = { nd_focus_is_submarines = yes } }", pick)
+        pick_range = squash(block(self.effects, "nd_ai_focus_pick_range"))
+        self.assertIn("if = { limit = { local_var:nd_rf_range = 3 } nd_ai_focus_pick = { F = 3 REASON = $REASON$ } } "
+                      "else = { nd_ai_focus_pick = { F = 2 REASON = $REASON$ } }", pick_range)
+
+
+class TestFundingAiChance(unittest.TestCase):
+    """A project in focus is a reason to fund, never a reason to stop at the
+    desired stockpile (spec §4.5's last paragraph; plan D15)."""
+
+    def setUp(self):
+        buttons = strip_comments(read(BUTTONS))
+        self.up = squash(block(block(buttons, "increase_funding_nuclear_program"), "ai_chance"))
+        self.down = squash(block(block(buttons, "decrease_funding_nuclear_program"), "ai_chance"))
+
+    def test_plus_35_with_a_project(self):
+        self.assertIn("if = { limit = { nd_focus_is_project = yes } add = 35 }", self.up)
+        trigger = squash(block(strip_comments(read(NUKE_TRIGGERS)), "nd_focus_is_project"))
+        self.assertEqual(trigger, "has_variable = nd_prog_focus")
+
+    def test_the_stockpile_terms_skipped_then(self):
+        self.assertIn("limit = { var:nuclear_weapon_stockpile >= nuclear_ai_desired_stockpile "
+                      "nd_focus_is_warheads = yes } add = -45", self.up)
+        self.assertIn("limit = { var:nuclear_weapon_stockpile >= nuclear_ai_desired_stockpile "
+                      "nd_focus_is_warheads = yes } add = 35", self.down)
+        self.assertIn("limit = { var:nuclear_weapon_stockpile > nuclear_ai_desired_stockpile "
+                      "nd_focus_is_warheads = yes } add = 15", self.down)
+
+    def test_the_cap_is_focus_aware(self):
+        self.assertIn("limit = { nuclear_program_ai_at_stockpile_cap = yes } multiply = 0", self.up)
+        cap = squash(block(strip_comments(read(NUKE_TRIGGERS)), "nuclear_program_ai_at_stockpile_cap"))
+        self.assertIn("nd_focus_is_warheads = yes", cap)
+
+
+class TestAiFocusLog(unittest.TestCase):
+    """Each review logs its score and the focus it chose, for observer
+    balancing (spec §4.5; plan D14)."""
+
+    def test_the_line(self):
+        pick = squash(block(strip_comments(read(DETERRENCE_EFFECTS)), "nd_ai_focus_pick"))
+        line = re.search(r'debug_log = "(TE_NUCLEAR: type=ai_focus;[^"]*)"', pick)
+        self.assertIsNotNone(line)
+        for field in ("date=[TimeKeeper.GetCurrentDate.GetString]",
+                      "country=[THIS.GetCountry.GetNameNoFormatting]",
+                      "score=[THIS.Var('nd_ai_range_score').GetValue|2]",
+                      "focus=$F$", "reason=$REASON$",
+                      "stockpile=[THIS.Var('nuclear_weapon_stockpile').GetValue|0]",
+                      "desired=[THIS.ScriptValue('nuclear_ai_desired_stockpile')|0]"):
+            self.assertIn(field, line.group(1))
+        # Logged on every review, the focus changed or not.
+        self.assertGreater(pick.index("debug_log"), pick.index("nd_focus_set = { F = $F$ }"))
+
+    def test_the_observer_report_counts_it(self):
+        from scripts.analysis.nuclear_observer_report import read_records, summarize
+        lines = ["[x] TE_NUCLEAR: type=ai_focus; country=A; score=1.00; focus=2; reason=range_first",
+                 "[x] TE_NUCLEAR: type=ai_focus; country=B; score=0.00; focus=1; reason=warheads",
+                 "[x] TE_NUCLEAR: type=ai_focus; country=C; score=0.40; focus=3; reason=submarines_survival",
+                 "[x] TE_NUCLEAR: type=ai_focus; country=D; score=0.00; focus=1; reason=warheads",
+                 "[x] TE_NUCLEAR: type=leg_fielded; country=A; leg=icbms"]
+        summary = summarize(read_records(lines))
+        self.assertEqual(summary["ai_focus_choices"], {"icbms": 1, "submarines": 1, "warheads": 2})
+        self.assertEqual(summary["ai_focus_reasons"],
+                         {"range_first": 1, "submarines_survival": 1, "warheads": 2})
+        self.assertEqual(summary["legs_fielded"], {"icbms": 1})
+
+    def test_every_reason_is_a_known_word(self):
+        body = squash(block(strip_comments(read(DETERRENCE_EFFECTS)), "nd_ai_choose_focus"))
+        found = set(re.findall(r"REASON = (\w+)", body))
+        self.assertEqual(found, set(AI_FOCUS_REASONS))
+
+
 if __name__ == "__main__":
     unittest.main()

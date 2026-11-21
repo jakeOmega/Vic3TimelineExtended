@@ -1827,11 +1827,226 @@ nd_ai_review_posture = {
 	set_variable = { name = nd_safeguards value = var:nd_ai_want_safeguards }
 	set_variable = { name = nd_hardening value = var:nd_ai_want_hardening }
 	nd_apply_posture_modifiers = yes
+	# ---- what funding builds (2026-11-20 delivery spec §4.5) ---------------
+	# After the rival refresh above: the submarine test reads its figures.
+	nd_ai_choose_focus = yes
 	# ---- arsenal size and disarmament (the nuclear taboo) -------------------
 	# Decided by nd_taboo_ai_review_arsenal from the entry's monthly taboo
 	# half, later in this same pulse, which refreshes the programme hold once
 	# after it.
 	set_variable = nd_taboo_ai_arsenal_due
+}
+
+# ----------------------------------------------------------------------------
+# THE AI'S FOCUS (2026-11-20 delivery spec §4.5, owner call 12; phase 2 plan
+# D14). Called from nd_ai_review_posture (every sixth month, and when a crisis
+# opens), never through the Focus rows' buttons, whose handler the AI can't
+# use (nuclear_program_focus_sgui). Nothing before the first device: there is
+# no focus to choose until then.
+# ----------------------------------------------------------------------------
+# The range score: of the countries the AI must be able to strike, weighted
+# (nd_ai_range_must_reach 3, nd_ai_range_should_reach 2, the highest that
+# applies), the share its bombers miss (nd_ai_range_out_of_reach), 0 when
+# there are none. Stored as nd_ai_range_score for the log line.
+#
+# Range is the submarine project when submarines are available and every
+# country that matters out of reach has a coast; else the ICBM project. With
+# no ICBM project open (not researched, or fielded) and an out-of-reach coast,
+# submarines are the only range on offer and count as it. With neither, no
+# step picks range.
+#
+# The order, §4.5's, first that holds:
+#  1. range when the score is 1: no country that matters is in bomber reach;
+#  2. warheads below half the desired stockpile (nd_ai_focus_warheads_first),
+#     but range at war or in a crisis with a country out of reach;
+#  3. range when the score is 0.5 or more (nd_ai_range_score_for_range);
+#  4. missile submarines when available and the AI is vulnerable to its main
+#     rival, or the rival's precision weapons find its silos
+#     (nd_main_rival_accuracy_mult above 1, nd_refresh_main_rival);
+#  5. range when the score is above 0;
+#  6. warheads.
+# When 3 and 4 both hold, a war or crisis with a country out of reach puts
+# range first, else submarines. A score of 0 never builds range: the
+# India-Pakistan rule. The walk's figures are local variables, read in this
+# effect's own limits.
+nd_ai_choose_focus = {
+	if = {
+		limit = { var:nuclear_weapons_program_first_nuke_done ?= 1 }
+		save_scope_as = nd_rf_self
+		set_local_variable = { name = nd_rf_total value = 0 }
+		set_local_variable = { name = nd_rf_missed value = 0 }
+		set_local_variable = { name = nd_rf_inland value = 0 }
+		set_local_variable = { name = nd_rf_coastal value = 0 }
+		set_local_variable = { name = nd_rf_urgent value = 0 }
+		every_country = {
+			limit = {
+				OR = {
+					nd_ai_range_must_reach = { AI = scope:nd_rf_self }
+					nd_ai_range_should_reach = { AI = scope:nd_rf_self }
+				}
+			}
+			if = {
+				limit = { nd_ai_range_must_reach = { AI = scope:nd_rf_self } }
+				set_local_variable = { name = nd_rf_weight value = nd_ai_range_weight_must }
+			}
+			else = {
+				set_local_variable = { name = nd_rf_weight value = nd_ai_range_weight_should }
+			}
+			change_local_variable = { name = nd_rf_total add = local_var:nd_rf_weight }
+			if = {
+				limit = { nd_ai_range_out_of_reach = { AI = scope:nd_rf_self } }
+				change_local_variable = { name = nd_rf_missed add = local_var:nd_rf_weight }
+				if = {
+					limit = { any_scope_state = { is_coastal = yes } }
+					change_local_variable = { name = nd_rf_coastal add = 1 }
+				}
+				else = {
+					change_local_variable = { name = nd_rf_inland add = 1 }
+				}
+				if = {
+					limit = { nd_ai_range_urgent = { AI = scope:nd_rf_self } }
+					change_local_variable = { name = nd_rf_urgent add = 1 }
+				}
+			}
+		}
+		set_variable = { name = nd_ai_range_score value = 0 }
+		if = {
+			limit = { local_var:nd_rf_total > 0 }
+			set_variable = { name = nd_ai_range_score value = local_var:nd_rf_missed }
+			change_variable = { name = nd_ai_range_score divide = local_var:nd_rf_total }
+		}
+		# What range means here: 3 the submarine project, 2 the ICBM project,
+		# 0 none open.
+		set_local_variable = { name = nd_rf_range value = 0 }
+		if = {
+			limit = {
+				nd_proj_subs_available = yes
+				local_var:nd_rf_coastal > 0
+				OR = {
+					local_var:nd_rf_inland = 0
+					NOT = { nd_proj_icbms_available = yes }
+				}
+			}
+			set_local_variable = { name = nd_rf_range value = 3 }
+		}
+		else_if = {
+			limit = { nd_proj_icbms_available = yes }
+			set_local_variable = { name = nd_rf_range value = 2 }
+		}
+		# Step 4's test, read twice below.
+		set_local_variable = { name = nd_rf_want_subs value = 0 }
+		if = {
+			limit = {
+				nd_proj_subs_available = yes
+				OR = {
+					nd_ai_vulnerable_to_main_rival = yes
+					AND = {
+						has_variable = nd_main_rival_accuracy_mult
+						var:nd_main_rival_accuracy_mult > 1
+					}
+				}
+			}
+			set_local_variable = { name = nd_rf_want_subs value = 1 }
+		}
+		if = {
+			limit = {
+				local_var:nd_rf_range > 0
+				var:nd_ai_range_score >= 1
+			}
+			nd_ai_focus_pick_range = { REASON = range_first }
+		}
+		else_if = {
+			limit = {
+				has_variable = nuclear_weapon_stockpile
+				var:nuclear_weapon_stockpile < nd_ai_focus_warheads_first
+			}
+			if = {
+				limit = {
+					local_var:nd_rf_range > 0
+					local_var:nd_rf_urgent > 0
+				}
+				nd_ai_focus_pick_range = { REASON = range_urgent }
+			}
+			else = {
+				nd_ai_focus_pick = { F = 1 REASON = warheads_short }
+			}
+		}
+		else_if = {
+			limit = {
+				local_var:nd_rf_range > 0
+				var:nd_ai_range_score >= nd_ai_range_score_for_range
+				local_var:nd_rf_want_subs = 1
+			}
+			if = {
+				limit = { local_var:nd_rf_urgent > 0 }
+				nd_ai_focus_pick_range = { REASON = tie_range }
+			}
+			else = {
+				nd_ai_focus_pick = { F = 3 REASON = tie_submarines }
+			}
+		}
+		else_if = {
+			limit = {
+				local_var:nd_rf_range > 0
+				var:nd_ai_range_score >= nd_ai_range_score_for_range
+			}
+			nd_ai_focus_pick_range = { REASON = range_half }
+		}
+		else_if = {
+			limit = { local_var:nd_rf_want_subs = 1 }
+			nd_ai_focus_pick = { F = 3 REASON = submarines_survival }
+		}
+		else_if = {
+			limit = {
+				local_var:nd_rf_range > 0
+				var:nd_ai_range_score > 0
+			}
+			nd_ai_focus_pick_range = { REASON = range_some }
+		}
+		else = {
+			nd_ai_focus_pick = { F = 1 REASON = warheads }
+		}
+	}
+}
+
+# Range as nd_ai_choose_focus resolved it (local_var:nd_rf_range): the
+# submarine project or the ICBM project.
+nd_ai_focus_pick_range = {
+	if = {
+		limit = { local_var:nd_rf_range = 3 }
+		nd_ai_focus_pick = { F = 3 REASON = $REASON$ }
+	}
+	else = {
+		nd_ai_focus_pick = { F = 2 REASON = $REASON$ }
+	}
+}
+
+# F as nd_focus_set's (1 Warheads, 2 ICBMs, 3 Missile Submarines), set only
+# when it changes: an unchanged focus has nothing to park or load. Logged on
+# every review, changed or not (observer balancing; nuclear_observer_report.py
+# counts the choices and reasons).
+nd_ai_focus_pick = {
+	set_local_variable = { name = nd_rf_pick value = $F$ }
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					local_var:nd_rf_pick = 1
+					NOT = { nd_focus_is_warheads = yes }
+				}
+				AND = {
+					local_var:nd_rf_pick = 2
+					NOT = { nd_focus_is_icbms = yes }
+				}
+				AND = {
+					local_var:nd_rf_pick = 3
+					NOT = { nd_focus_is_submarines = yes }
+				}
+			}
+		}
+		nd_focus_set = { F = $F$ }
+	}
+	debug_log = "TE_NUCLEAR: type=ai_focus; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; score=[THIS.Var('nd_ai_range_score').GetValue|2]; focus=$F$; reason=$REASON$; stockpile=[THIS.Var('nuclear_weapon_stockpile').GetValue|0]; desired=[THIS.ScriptValue('nuclear_ai_desired_stockpile')|0]"
 }
 
 # ----------------------------------------------------------------------------

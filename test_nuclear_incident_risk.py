@@ -179,13 +179,17 @@ class TestObserverRecords(unittest.TestCase):
                 for record in re.findall(r'debug_log = "(TE_NUCLEAR: [^"]*)"', line):
                     yield name, record
 
-    def test_no_parameter_inside_a_record(self):
-        # A $PARAM$ inside a debug_log string logs garbled
-        # (scripting_best_practices.md, "Runtime Debugging with debug_log").
+    def test_no_parameter_inside_a_record_accessor(self):
+        # 1.15 substitutes a scripted-effect argument inside a quoted string
+        # (the C19 probe, 2026-11-05: scripting_best_practices.md, "1.15
+        # substitutes a scripted-effect argument inside a quoted string"), so a
+        # plain `reason=$REASON$` field logs its word. A $X$ inside a [...]
+        # accessor (`Var('x_$MODE$')`) wasn't probed: keep those out.
         records = list(self.records())
         self.assertGreater(len(records), 100)
         for name, record in records:
-            self.assertNotIn("$", record, f"{name}: {record[:80]}")
+            for accessor in re.findall(r"\[[^\]]*\]", record):
+                self.assertNotIn("$", accessor, f"{name}: {record[:80]}")
 
     def test_every_record_parses_with_a_name(self):
         for name, record in self.records():

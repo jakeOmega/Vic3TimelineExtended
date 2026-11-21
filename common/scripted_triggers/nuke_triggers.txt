@@ -146,6 +146,11 @@ nd_focus_is_submarines = {
 	var:nd_prog_focus ?= 3
 }
 
+# A delivery project is in focus (the AI's funding, plan D15).
+nd_focus_is_project = {
+	has_variable = nd_prog_focus
+}
+
 # Can this country put a project in focus? (phase 2 plan D6) Each requirement
 # is its own line, so a greyed Focus row says what is missing. A project's
 # prerequisites are knowledge: the technologies (test_nuclear_delivery.py's

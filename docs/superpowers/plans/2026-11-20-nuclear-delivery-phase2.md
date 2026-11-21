@@ -220,7 +220,7 @@ Left for later tasks:
 - the log-triage registry, if it lists `TE_NUCLEAR` types;
 - `test_nuclear_projects.py`.
 
-- [ ] Write the tests:
+- [x] Write the tests:
   - `TestRangeScore`: the weights, the highest per country, `nd_reaches_country` as reach, and 0 with none.
   - `TestFocusOrder`:
     - §4.5's six steps in order;
@@ -232,8 +232,17 @@ Left for later tasks:
   - `TestAiFocusLog`.
 
   Run: FAIL.
-- [ ] Implement, then the nuclear tests and `preflight.py --changed`. PASS.
-- [ ] Commit `Nuclear AI: builds range when the bombers reach nobody who matters (spec §4.5)`.
+- [x] Implement, then the nuclear tests and `preflight.py --changed`. PASS.
+- [x] Commit `Nuclear AI: builds range when the bombers reach nobody who matters (spec §4.5)`.
+
+**As built (2026-11-21).** As planned, with these choices where the plan left room:
+- **The submarine test sits in the effect**, not in a trigger `nd_ai_range_means_submarines`: it reads the walk's local variables, and a `local_var` read inside a scripted trigger is still unread in game (`scripting_best_practices.md`, the tax code's pending read).
+- **Submarines count as range in one more case:** with no ICBM project open (not researched, or fielded) and at least one country that matters out of reach on a coast, the submarine project is the only range on offer. With neither project open, no step picks range.
+- **Weight 2 covers belligerent too**, the attitude past antagonistic, as `nd_plausible_attacker_of` does.
+- **Step 4's precision test** reads `nd_main_rival_accuracy_mult` (`nd_refresh_main_rival`), which is above 1 only when we field ICBMs and the rival's precision weapons give it silo penetration. The review refreshes the rival before it chooses.
+- **Nothing before the first device**, and the focus is set only when it changes; every review logs. The log's `focus` is the op code (1 Warheads, 2 ICBMs, 3 Missile Submarines) and its `reason` one of `range_first`, `range_urgent`, `warheads_short`, `tie_range`, `tie_submarines`, `range_half`, `submarines_survival`, `range_some` and `warheads`.
+- **`nuclear_observer_report.py`** counts the choices, the reasons and the legs fielded (`type=leg_fielded`, Task 1). There is no `TE_NUCLEAR` type registry in the log-triage skill to extend.
+- **A stale test retired.** `test_nuclear_incident_risk.py`'s ban on any `$` in a `TE_NUCLEAR` record predates 1.15, which substitutes an argument inside a quoted string (the C19 probe). It now bans one only inside a `[...]` accessor, the unprobed case.
 
 ### Task 5: Docs, the play-test list; gate, PR 2a
 

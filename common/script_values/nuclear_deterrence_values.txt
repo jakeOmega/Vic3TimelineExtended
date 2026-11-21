@@ -32,9 +32,19 @@ nd_routine_mishap_cooldown_months_value = 60 # between routine mishaps (nuclear_
 nd_ai_concession_line = 40              # pressure where nuclear_crisis.1's yield weights start (the AI's stake gate)
 nd_ai_trade_danger_line = 40            # danger at which an AI issuer takes a fair trade (nuclear_crisis.8; ruling R4)
 nd_ai_trade_min_weeks = 8               # and not before its threat has run this long: a public ultimatum's first deadline
+nd_ai_range_weight_must = 3             # the AI's range score (nd_ai_choose_focus): a rival either way, a war enemy, the crisis opponent
+nd_ai_range_weight_should = 2           # and an armed country antagonistic toward us (first values, delivery spec §4.5)
+nd_ai_range_score_for_range = 0.5       # at this share out of bomber reach, range comes before submarines' survival (§4.5 step 3)
+nd_ai_focus_warheads_share = 0.5        # warheads first below this share of the desired stockpile (§4.5 step 2)
 nd_survivability_factor_recessed = 0.5   # share of survivability a crisis counts (nd_effective_survivability)
 nd_survivability_factor_routine = 0.8
 nd_survivability_factor_heightened = 0.9 # High Alert counts it all
+
+# The AI builds warheads first below this many (nd_ai_choose_focus, §4.5 step 2).
+nd_ai_focus_warheads_first = {
+	value = nuclear_ai_desired_stockpile
+	multiply = nd_ai_focus_warheads_share
+}
 
 # ----------------------------------------------------------------------------
 # ARSENAL

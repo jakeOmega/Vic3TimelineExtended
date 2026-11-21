@@ -1472,6 +1472,58 @@ nd_ai_hardening_cannot_close = {
 	var:nd_survivors_main_ceiling_bare_r2 < 3
 }
 
+# ---- The AI's focus: who it must be able to strike (2026-11-20 delivery
+# spec §4.5, owner call 12; phase 2 plan D14) --------------------------------
+# Candidate scope; $AI$ the country choosing (scope:nd_rf_self). Weight 3
+# (nd_ai_range_weight_must): a rival either way, an enemy in a war, or the
+# crisis opponent, armed or not: a warhead that can't reach them deters none of
+# them. nd_ai_choose_focus takes the highest weight that applies.
+nd_ai_range_must_reach = {
+	NOT = { THIS = $AI$ }
+	save_temporary_scope_as = nd_rw_cand
+	OR = {
+		$AI$ = { any_rival_country = { THIS = scope:nd_rw_cand } }
+		$AI$ = { any_rivaling_country = { THIS = scope:nd_rw_cand } }
+		has_war_with = $AI$
+		$AI$ = {
+			nd_in_crisis = yes
+			var:nd_crisis_opponent ?= scope:nd_rw_cand
+		}
+	}
+}
+
+# Weight 2 (nd_ai_range_weight_should): an armed country antagonistic toward
+# us, or worse.
+nd_ai_range_should_reach = {
+	NOT = { THIS = $AI$ }
+	nd_believed_armed = yes
+	OR = {
+		has_attitude = { who = $AI$ attitude = antagonistic }
+		has_attitude = { who = $AI$ attitude = belligerent }
+	}
+}
+
+# Out of $AI$'s reach: nd_reaches_country, which already counts the legs
+# fielded, so a power with missile submarines no longer scores a coastal enemy
+# as out of reach.
+nd_ai_range_out_of_reach = {
+	save_temporary_scope_as = nd_ro_cand
+	$AI$ = { NOT = { nd_reaches_country = { TARGET = scope:nd_ro_cand } } }
+}
+
+# At war or in a crisis with $AI$: range can't wait for the warheads (§4.5
+# steps 2 and the tie between 3 and 4).
+nd_ai_range_urgent = {
+	save_temporary_scope_as = nd_ru_cand
+	OR = {
+		has_war_with = $AI$
+		$AI$ = {
+			nd_in_crisis = yes
+			var:nd_crisis_opponent ?= scope:nd_ru_cand
+		}
+	}
+}
+
 # A militarist or expansionist regime, for AI judgement and the Monopoly Window.
 nd_regime_is_militarist = {
 	OR = {
