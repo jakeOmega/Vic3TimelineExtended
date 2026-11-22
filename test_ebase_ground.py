@@ -154,5 +154,76 @@ class Basket(unittest.TestCase):
                 self.assertAlmostEqual(typed, 1600, delta=0.5)
 
 
+def _parse_dir(*parts):
+    from paradox_file_parser import ParadoxFileParser
+
+    parser = ParadoxFileParser()
+    folder = os.path.join(REPO, *parts)
+    for name in sorted(os.listdir(folder)):
+        if name.endswith(".txt"):
+            parser.parse_file(os.path.join(folder, name))
+    return {key: eg._unwrap(value) for key, value in parser.data.items()}
+
+
+def _english_loc():
+    import re
+
+    line = re.compile(r'^\s+([\w.]+):\d*\s*"(.*)"\s*(#.*)?$')
+    folder = os.path.join(REPO, "localization", "english")
+    loc = {}
+    for name in sorted(os.listdir(folder)):
+        if name.endswith(".yml"):
+            with open(os.path.join(folder, name), encoding="utf-8-sig") as f:
+                for text in f:
+                    m = line.match(text)
+                    if m:
+                        loc[m.group(1)] = m.group(2)
+    return loc
+
+
+class Modifiers(unittest.TestCase):
+    """§ 5.3 and § 9.5: fourteen unit modifiers, a bonus and a penalty for each good of
+    the basket, which the refresh adds to every Extraplanetary Base building scaled by
+    the base's mix."""
+
+    def test_fourteen_unit_modifiers(self):
+        statics = _parse_dir("common", "static_modifiers")
+        for g in eg.GOODS:
+            for kind, value in (("bonus", 0.01), ("penalty", -0.01)):
+                name = f"sr_ebase_mix_{g}_{kind}"
+                with self.subTest(modifier=name):
+                    block = statics[name]
+                    lines = {k: float(eg._unwrap(v)) for k, v in block.items() if k != "icon"}
+                    self.assertEqual(lines, {f"goods_output_{g}_mult": value})
+                    self.assertTrue(str(eg._unwrap(block["icon"])).startswith(
+                        "gfx/interface/icons/timed_modifier_icons/modifier_gear_"))
+
+    def test_every_good_has_its_output_mult_display_entry(self):
+        types = _parse_dir("common", "modifier_type_definitions")
+        loc = _english_loc()
+        glass = types["goods_output_glass_mult"]
+        for g in eg.GOODS:
+            with self.subTest(good=g):
+                entry = types[f"goods_output_{g}_mult"]
+                for field in ("color", "percent"):
+                    self.assertEqual(eg._unwrap(entry[field]), eg._unwrap(glass[field]))
+                self.assertIn(f"${g}$", loc[f"goods_output_{g}_mult"])
+        self.assertEqual(eg._unwrap(types["goods_output_lead_mult"]["color"]), "good")
+        self.assertEqual(eg._unwrap(types["goods_output_lead_mult"]["percent"]), "yes")
+
+    def test_names_and_descriptions(self):
+        loc = _english_loc()
+        for g in eg.GOODS:
+            for kind in ("bonus", "penalty"):
+                name = f"sr_ebase_mix_{g}_{kind}"
+                with self.subTest(modifier=name):
+                    self.assertEqual(loc.get(name), "Extraplanetary Base Ground")
+                    desc = loc.get(f"{name}_desc", "")
+                    self.assertIn(f"${g}$", desc)
+                    # On top of Extraplanetary Base Room, which carries the grade (§ 9.5).
+                    self.assertIn("on top of $sr_ebase_room_bonus$, which carries the sites' grade", desc)
+        self.assertEqual(loc["sr_ebase_room_bonus"], "Extraplanetary Base Room")
+
+
 if __name__ == "__main__":
     unittest.main()
