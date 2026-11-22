@@ -2290,7 +2290,9 @@ class EbaseRefreshTest(unittest.TestCase):
         self.assertIn("hidden = yes", event)
         immediate = _block(event, "immediate")
         self.assertIn("sr_ebase_refresh = yes", immediate)
-        self.assertLess(immediate.index("remove_variable = sr_ebase_hook_pending"), immediate.index("sr_ebase_refresh = yes"))
+        # The marker goes after the refresh, so TE_SELF_CHECK ebase_mix waits through it
+        # (test_ebase_assignment.MixSelfCheckTest); nothing in the refresh fires the hook.
+        self.assertLess(immediate.index("sr_ebase_refresh = yes"), immediate.index("remove_variable = sr_ebase_hook_pending"))
 
 
 if __name__ == "__main__":

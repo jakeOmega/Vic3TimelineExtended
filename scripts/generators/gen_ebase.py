@@ -156,6 +156,11 @@ def at(fam: str, k: str) -> str:
     return f"{fam}_at_{k}"
 
 
+def _cut_inputs(pm: str) -> tuple[str, ...]:
+    """The inputs of mining method `pm` that the building's other method groups cut."""
+    return tuple(g for g in eg.cut_goods() if g in eg.mining_methods()[pm].inputs)
+
+
 # --- Script values ------------------------------------------------------------------
 
 def render_values() -> str:
@@ -204,21 +209,31 @@ def render_values() -> str:
                 f"\tif = {{ limit = {{ has_variable = sr_eb_lv_{pm} }} value = var:sr_eb_lv_{pm} }}",
                 "}",
                 f"sr_eb_share_{pm} = {{ value = sr_eb_levels_{pm} divide = sr_eb_mining_divisor }}"]
+        for g in _cut_inputs(pm):
+            out += [f"sr_eb_levels_{pm}_in_{g} = {{",
+                    "\tvalue = 0",
+                    f"\tif = {{ limit = {{ has_variable = sr_eb_lv_{pm}_in_{g} }} value = var:sr_eb_lv_{pm}_in_{g} }}",
+                    "}"]
     out += ["",
             "# ---- Each type's margin (§ 8.3): a level's profit a week at grade 0 on its ground ----",
             "# sum over methods m and goods g of f(m) x term(m, g) x (1 + premium(g)). A term is",
             "# out x base price x (1 + mix) for an output, -(in x base price) for an input",
             "# (ebase_ground.margin_terms). Fixed point: each term is multiplied by the method's",
             "# levels and the sum divided by the mining levels once, at the end, rather than",
-            "# multiplied by a share cut to five decimals."]
+            "# multiplied by a share cut to five decimals. An input the building's other method",
+            f"# groups cut ({', '.join(eg.cut_goods()) or 'none'}: era 12's logistics methods) is multiplied by the",
+            "# method's levels weighted by their buildings' cuts, sr_eb_levels_<pm>_in_<good>",
+            "# (ebase_ground.method_cuts). Each good at our market's price, Digital Access too: it",
+            "# is a local good, and the margin reads the market's price, not each state's."]
     for t in eg.TYPES:
         terms = eg.margin_terms(t)
         out += [f"sr_eb_margin_{t} = {{", "\tvalue = 0"]
         for pm, row in terms.items():
-            out.append(f"\t# {pm}: {sum(row.values()):,.2f} a level at base prices")
+            out.append(f"\t# {pm}: {sum(row.values()):,.2f} a level at base prices, before any cut")
             for g, v in row.items():
+                levels = f"sr_eb_levels_{pm}_in_{g}" if g in _cut_inputs(pm) else f"sr_eb_levels_{pm}"
                 out.append(f"\tadd = {{ value = sr_eb_price_rel_{g} add = 1 multiply = {num(v)} "
-                           f"multiply = sr_eb_levels_{pm} }}")
+                           f"multiply = {levels} }}")
         out += ["\tdivide = sr_eb_mining_divisor", "}"]
     out += ["",
             "# ---- Each place's profit a level a week (§ 8.3): (1 + grade) x its type's margin ----"]
@@ -227,10 +242,14 @@ def render_values() -> str:
                    f"multiply = {100 + grade_pct(k)} divide = 100 }}")
     out += ["",
             "# The yardstick (§ 8.3): our methods' profit a level at grade 0 and base prices,",
-            "# weighted by their levels. A move must gain 5% of it a level.",
+            "# weighted by their levels, the input cuts counted as in the margins. A move must gain",
+            "# 5% of it a level.",
             "sr_eb_yardstick = {", "\tvalue = 0"]
-    for pm in eg.mining_methods():
-        out.append(f"\tadd = {{ value = sr_eb_levels_{pm} multiply = {num(eg.margin('mixed', {pm: 1.0}, {}))} }}")
+    for pm, row in eg.margin_terms("mixed").items():
+        cut = _cut_inputs(pm)
+        out.append(f"\tadd = {{ value = sr_eb_levels_{pm} multiply = "
+                   f"{num(sum(v for g, v in row.items() if g not in cut))} }}")
+        out += [f"\tadd = {{ value = sr_eb_levels_{pm}_in_{g} multiply = {num(row[g])} }}" for g in cut]
     out += ["\tdivide = sr_eb_mining_divisor",
             "}",
             "",
@@ -897,18 +916,34 @@ def render_forecast(effect: str = "sr_eb_forecast", fam: str = FORECAST) -> list
 def render_count_methods() -> list[str]:
     pms = list(eg.mining_methods())
     out = ["# Our levels on each mining method, and on all of them (§ 8.3's f(m)), into",
-           "# var:sr_eb_lv_<pm> and var:sr_eb_lv_mining for sr_eb_share_<pm>: one walk of our",
-           "# Extraplanetary Bases. A method outside the seven goods is not counted.",
+           "# var:sr_eb_lv_<pm> and var:sr_eb_lv_mining for sr_eb_share_<pm>, and each method's",
+           "# levels weighted by its buildings' input cuts into var:sr_eb_lv_<pm>_in_<good>: one",
+           "# walk of our Extraplanetary Bases. A method outside the seven goods is not counted.",
            "sr_eb_count_methods = {"]
     out += [f"\tset_local_variable = {{ name = sr_ebc_{pm} value = 0 }}" for pm in pms]
+    out += [f"\tset_local_variable = {{ name = sr_ebc_{pm}_in_{g} value = 0 }}" for pm in pms for g in _cut_inputs(pm)]
     out += ["\tevery_scope_state = {",
             "\t\tevery_scope_building = {",
             f"\t\t\tlimit = {{ is_building_type = {BUILDING} }}"]
+    cuts = eg.input_cuts()
+    if cuts:
+        out.append("\t\t\t# The building's factor on each cut input: 1 + the cuts of its active methods "
+                   "(ebase_ground.input_factor).")
+    for g in eg.cut_goods():
+        out.append(f"\t\t\tset_local_variable = {{ name = sr_ebc_f_{g} value = 1 }}")
+        out += [f"\t\t\tif = {{ limit = {{ has_active_production_method = {lpm} }} "
+                f"change_local_variable = {{ name = sr_ebc_f_{g} add = {num(c[g])} }} }}"
+                for lpm, c in cuts.items() if g in c]
     for n, pm in enumerate(pms):
+        adds = [f"change_local_variable = {{ name = sr_ebc_{pm} add = level }}"]
+        adds += [f"change_local_variable = {{ name = sr_ebc_{pm}_in_{g} add = {{ value = level multiply = local_var:sr_ebc_f_{g} }} }}"
+                 for g in _cut_inputs(pm)]
         out.append(f"\t\t\t{'if' if n == 0 else 'else_if'} = {{ limit = {{ has_active_production_method = {pm} }} "
-                   f"change_local_variable = {{ name = sr_ebc_{pm} add = level }} }}")
+                   f"{' '.join(adds)} }}")
     out += ["\t\t}", "\t}"]
     out += [f"\tset_variable = {{ name = sr_eb_lv_{pm} value = local_var:sr_ebc_{pm} }}" for pm in pms]
+    out += [f"\tset_variable = {{ name = sr_eb_lv_{pm}_in_{g} value = local_var:sr_ebc_{pm}_in_{g} }}"
+            for pm in pms for g in _cut_inputs(pm)]
     out += ["\tset_variable = {", "\t\tname = sr_eb_lv_mining", "\t\tvalue = {", "\t\t\tvalue = 0"]
     out += [f"\t\t\tadd = local_var:sr_ebc_{pm}" for pm in pms]
     out += ["\t\t}", "\t}",

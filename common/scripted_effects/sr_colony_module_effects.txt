@@ -601,20 +601,24 @@ sr_mod_storage_self_check = {
 }
 
 # Country scope, from sr_ebase_refresh before it strips anything. TE_SELF_CHECK
-# ebase_mix (ground types design § 10, stage 2): a base building's
+# ebase_mix (ground types design § 10, stage 2): each base building's
 # modifier:goods_output_tech_metals_mult must read the base's Tech-Critical
 # Metals mix as the last refresh gave it, var:sr_ebase_mix_tech_metals / 100,
-# within 0.005: the unit modifiers on the building reach its goods output at
-# their multiplier. Armed on the first country under Simple or Full Colonies
-# with a base and a mix of at least 1.5% either way (smaller, a modifier that
-# never arrived would read 0 and still pass); the verdict a month later, once
-# the last refresh is two days old (sr_eb_mix_fresh, a modifier sum can lag a
-# day) and no level is waiting for its refresh (sr_ebase_hook_pending).
-# Re-armed if it no longer qualifies by then. Once a game. Tech-Critical Metals,
-# because nothing else in the mod or vanilla touches their output (Vale's and
-# the unique mines' multipliers are on Structural and Conductive Metals), so
-# no state needs skipping. A base captured or built the day before is the one
-# false BROKEN: it has no mix of ours yet.
+# within 0.001 (it matches to about 1e-5; a multiplier read as 1 would be off
+# by 0.01 at the 1.5% arming floor): the unit modifiers on the building reach
+# its goods output at their multiplier. Armed on the first country under Simple
+# or Full Colonies with a base and a mix of at least 1.5% either way (smaller, a
+# modifier that never arrived would read 0 and still pass); the verdict a month
+# later, once the last refresh is two days old (sr_eb_mix_fresh, a modifier sum
+# can lag a day) and no level is waiting for its refresh (sr_ebase_hook_pending:
+# space_race_events.110 removes it after its refresh). Every base building is
+# read: OK if all match, BROKEN if none does, and re-armed for a month later if
+# some do and some don't (a building new to us, built or captured with its old
+# owner's mix, that no refresh has reached). Re-armed too if it no longer
+# qualifies by then. Once a game. Tech-Critical Metals, because nothing else in
+# the mod or vanilla touches their output (Vale's and the unique mines'
+# multipliers are on Structural and Conductive Metals), so no state needs
+# skipping.
 sr_eb_mix_self_check = {
 	if = {
 		limit = {
@@ -638,16 +642,6 @@ sr_eb_mix_self_check = {
 				NOT = { has_variable = sr_eb_mix_fresh }
 				NOT = { has_variable = sr_ebase_hook_pending }
 			}
-			set_global_variable = { name = sr_eb_mix_checked value = yes }
-			set_local_variable = { name = sr_ebk_read value = 0 }
-			random_scope_building = {
-				limit = {
-					is_building_type = building_space_mine
-					level >= 1
-				}
-				set_local_variable = { name = sr_ebk_read value = modifier:goods_output_tech_metals_mult }
-			}
-			set_variable = { name = sr_eb_mix_check_read value = local_var:sr_ebk_read }
 			set_variable = {
 				name = sr_eb_mix_check_want
 				value = {
@@ -655,22 +649,55 @@ sr_eb_mix_self_check = {
 					divide = 100
 				}
 			}
-			set_local_variable = {
-				name = sr_ebk_gap
-				value = {
-					value = var:sr_eb_mix_check_read
-					subtract = var:sr_eb_mix_check_want
+			set_local_variable = { name = sr_ebk_want value = var:sr_eb_mix_check_want }
+			set_local_variable = { name = sr_ebk_read value = 0 }
+			set_local_variable = { name = sr_ebk_match value = 0 }
+			set_local_variable = { name = sr_ebk_miss value = 0 }
+			# Each base building: matched or missed; `read` is a missed one's, or with none a matched one's.
+			every_scope_building = {
+				limit = {
+					is_building_type = building_space_mine
+					level >= 1
+				}
+				set_local_variable = {
+					name = sr_ebk_gap
+					value = {
+						value = modifier:goods_output_tech_metals_mult
+						subtract = local_var:sr_ebk_want
+					}
+				}
+				if = {
+					limit = {
+						local_var:sr_ebk_gap <= 0.001
+						local_var:sr_ebk_gap >= -0.001
+					}
+					change_local_variable = { name = sr_ebk_match add = 1 }
+					if = {
+						limit = { local_var:sr_ebk_miss = 0 }
+						set_local_variable = { name = sr_ebk_read value = modifier:goods_output_tech_metals_mult }
+					}
+				}
+				else = {
+					change_local_variable = { name = sr_ebk_miss add = 1 }
+					set_local_variable = { name = sr_ebk_read value = modifier:goods_output_tech_metals_mult }
 				}
 			}
+			set_variable = { name = sr_eb_mix_check_read value = local_var:sr_ebk_read }
+			set_variable = { name = sr_eb_mix_check_match value = local_var:sr_ebk_match }
+			set_variable = { name = sr_eb_mix_check_miss value = local_var:sr_ebk_miss }
 			if = {
-				limit = {
-					local_var:sr_ebk_gap <= 0.005
-					local_var:sr_ebk_gap >= -0.005
-				}
-				debug_log = "TE_SELF_CHECK OK ebase_mix country=[THIS.GetCountry.GetTagName] read=[THIS.Var('sr_eb_mix_check_read').GetValue|3] want=[THIS.Var('sr_eb_mix_check_want').GetValue|3] (an Extraplanetary Base building's Tech-Critical Metals output multiplier is the base's ground mix: the unit modifiers reach the building at their multiplier) date=[TimeKeeper.GetCurrentDate.GetString]"
+				limit = { local_var:sr_ebk_miss = 0 }
+				set_global_variable = { name = sr_eb_mix_checked value = yes }
+				debug_log = "TE_SELF_CHECK OK ebase_mix country=[THIS.GetCountry.GetTagName] read=[THIS.Var('sr_eb_mix_check_read').GetValue|3] want=[THIS.Var('sr_eb_mix_check_want').GetValue|3] buildings=[THIS.Var('sr_eb_mix_check_match').GetValue|0] (every Extraplanetary Base building's Tech-Critical Metals output multiplier is the base's ground mix: the unit modifiers reach the building at their multiplier) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else_if = {
+				limit = { local_var:sr_ebk_match = 0 }
+				set_global_variable = { name = sr_eb_mix_checked value = yes }
+				debug_log = "TE_SELF_CHECK BROKEN ebase_mix country=[THIS.GetCountry.GetTagName] read=[THIS.Var('sr_eb_mix_check_read').GetValue|3] want=[THIS.Var('sr_eb_mix_check_want').GetValue|3] buildings=[THIS.Var('sr_eb_mix_check_miss').GetValue|0] (no Extraplanetary Base building's Tech-Critical Metals output multiplier is the base's ground mix: read 0 means sr_ebase_mix_tech_metals_bonus or _penalty never reached the buildings; another figure, that the multiplier or another line is off; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 			}
 			else = {
-				debug_log = "TE_SELF_CHECK BROKEN ebase_mix country=[THIS.GetCountry.GetTagName] read=[THIS.Var('sr_eb_mix_check_read').GetValue|3] want=[THIS.Var('sr_eb_mix_check_want').GetValue|3] (an Extraplanetary Base building's Tech-Critical Metals output multiplier is not the base's ground mix: read 0 means sr_ebase_mix_tech_metals_bonus or _penalty never reached the building; another figure, that the multiplier or another line is off; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				# Some match and some don't: a building no refresh has reached yet. A month later.
+				set_variable = { name = sr_eb_mix_check_armed value = te_history_month_index }
 			}
 		}
 		else_if = {

@@ -213,6 +213,92 @@ def mining_methods() -> dict[str, MethodGoods]:
     return {pm: m for pm, m in base_methods().items() if set(m.outputs) <= set(GOODS)}
 
 
+BUILDING = "building_space_mine"
+
+
+@functools.lru_cache(maxsize=1)
+def _read_input_cuts() -> tuple[tuple[str, tuple[tuple[str, float], ...]], ...]:
+    buildings = _parse_dir("common", "buildings")
+    groups = _parse_dir("common", "production_method_groups")
+    pms = _parse_dir("common", "production_methods")
+    listed = _unwrap(buildings[BUILDING]["production_method_groups"])
+    listed = listed if isinstance(listed, list) else [listed]
+    out, worst = [], {}
+    for group in map(str, listed):
+        if group == BASE_GROUP:
+            continue
+        methods = _unwrap(groups[group]["production_methods"])
+        methods = methods if isinstance(methods, list) else [methods]
+        least: dict[str, float] = {}
+        for pm in map(str, methods):
+            mods = _unwrap(_unwrap(pms[pm]).get("building_modifiers", {})) or {}
+            cuts: list[tuple[str, float]] = []
+            for scale, block in mods.items():
+                block = _unwrap(block)
+                for key, v in block.items():
+                    if not (key.startswith("goods_") and key.endswith("_mult")):
+                        continue
+                    if scale != "unscaled" or not key.startswith("goods_input_"):
+                        raise ValueError(f"{pm}: {key} in {scale} is not an input cut in `unscaled`, "
+                                         "which the margin can't count")
+                    good = key[len("goods_input_"):-len("_mult")]
+                    cuts.append((good, float(_unwrap(v))))
+                    least[good] = min(least.get(good, 0.0), float(_unwrap(v)))
+            if cuts:
+                out.append((pm, tuple(cuts)))
+        for good, v in least.items():
+            worst[good] = worst.get(good, 0.0) + v
+    for good, v in worst.items():
+        if 1 + v < 0:
+            raise ValueError(f"the logistics methods can cut {good} below nothing ({v:+})")
+    return tuple(out)
+
+
+def input_cuts() -> dict[str, dict[str, float]]:
+    """The methods of the base building's other production method groups that cut an
+    input (§ 8.3, F1 of the Tasks 5 and 6 review): pm -> {good: its goods_input_<good>_mult},
+    from each method's `unscaled` block, read from the mod's files on first use (era 12's
+    Tethered Launch and Fusion Tugs each cut Launch Capacity). One method of each group
+    is active, so a building's cuts add up. Only `_mult` lines count: a method's own goods
+    (pm_maintenance_intensive's construction, a `level_scaled` add) are left out. Never a
+    hard-coded list."""
+    return {pm: dict(cuts) for pm, cuts in _read_input_cuts()}
+
+
+def cut_goods() -> tuple[str, ...]:
+    """The goods some input cut applies to, in method_goods() order."""
+    cut = {g for cuts in input_cuts().values() for g in cuts}
+    return tuple(g for g in method_goods() if g in cut)
+
+
+def input_factor(active: Iterable[str]) -> dict[str, float]:
+    """A building's factor on each cut good, from its active methods: 1 + the sum of
+    their cuts."""
+    cuts = input_cuts()
+    out = {g: 1.0 for g in cut_goods()}
+    for pm in active:
+        for g, v in cuts.get(pm, {}).items():
+            out[g] += v
+    return out
+
+
+def method_cuts(buildings: Iterable[tuple[str, int, Iterable[str]]]) -> dict[str, dict[str, float]]:
+    """§ 8.3's input factor of each mining method and cut good: over our base buildings,
+    given as (mining method, levels, active methods of the other groups), each level
+    weighted by its building's input_factor, divided by the method's levels. The `cuts`
+    margin() and the rest take."""
+    weighted: dict[str, dict[str, float]] = {}
+    levels: dict[str, int] = {}
+    for pm, n, active in buildings:
+        if pm not in mining_methods() or not n:
+            continue
+        levels[pm] = levels.get(pm, 0) + n
+        row = weighted.setdefault(pm, {})
+        for g, f in input_factor(active).items():
+            row[g] = row.get(g, 0.0) + n * f
+    return {pm: {g: w / levels[pm] for g, w in row.items()} for pm, row in weighted.items()}
+
+
 def method_goods() -> tuple[str, ...]:
     """Every good any mining method makes or uses, GOODS first and then the inputs in
     the order the methods name them: each needs a price (§ 8.3)."""
@@ -280,28 +366,36 @@ class BaseState:
 
 # --- Prices and profit (§ 8.3) ---
 
-def margin_terms(type_: str) -> dict[str, dict[str, float]]:
+Cuts = dict[str, dict[str, float]] | None
+
+
+def margin_terms(type_: str, cuts: Cuts = None) -> dict[str, dict[str, float]]:
     """For each mining method, a level's signed £ a week of each good at grade 0 and
     base prices on ground of `type_`: outputs out × price × (1 + mix), inputs
-    -(in × price). The constants the generator bakes into sr_eb_margin_<type>."""
+    -(in × price) × the method's input factor for that good (`cuts`, method_cuts();
+    none given, 1). With no cuts, the constants the generator bakes into
+    sr_eb_margin_<type>."""
     mix_t = mix(type_)
+    cuts = cuts or {}
     terms = {}
     for pm, m in mining_methods().items():
         row: dict[str, float] = {}
         for g, qty in m.outputs.items():
             row[g] = row.get(g, 0.0) + qty * good_base_price(g) * (1 + mix_t[g])
         for g, qty in m.inputs.items():
-            row[g] = row.get(g, 0.0) - qty * good_base_price(g)
+            row[g] = row.get(g, 0.0) - qty * good_base_price(g) * cuts.get(pm, {}).get(g, 1.0)
         terms[pm] = row
     return terms
 
 
-def margin(type_: str, method_shares: dict[str, float], price_rel: dict[str, float]) -> float:
+def margin(type_: str, method_shares: dict[str, float], price_rel: dict[str, float], cuts: Cuts = None) -> float:
     """A level's profit a week at grade 0 on ground of `type_` (§ 8.3's bracket):
     Σ_m f(m) × Σ_g term(m, g) × (1 + price_rel(g)). `method_shares` is f(m), the share
     of our mining levels on each mining method; `price_rel` the signed premium of each
-    good on our market, inputs included (0 = base price)."""
-    terms = margin_terms(type_)
+    good on our market, inputs included (0 = base price); `cuts` each method's input
+    factor on each cut good (method_cuts(): the era-12 logistics methods' Launch
+    Capacity cut, weighted by the levels that run them)."""
+    terms = margin_terms(type_, cuts)
     unknown = set(method_shares) - set(terms)
     if unknown:
         raise ValueError(f"not mining methods of {BASE_GROUP}: {sorted(unknown)}")
@@ -309,21 +403,24 @@ def margin(type_: str, method_shares: dict[str, float], price_rel: dict[str, flo
                for pm, f in method_shares.items())
 
 
-def profit_a_level(place: str, method_shares: dict[str, float], price_rel: dict[str, float]) -> float:
+def profit_a_level(place: str, method_shares: dict[str, float], price_rel: dict[str, float],
+                   cuts: Cuts = None) -> float:
     """§ 8.3: a level's profit a week at `place`, (1 + G) × its type's margin."""
-    return (1 + grade(place)) * margin(GROUND[place], method_shares, price_rel)
+    return (1 + grade(place)) * margin(GROUND[place], method_shares, price_rel, cuts)
 
 
-def profits(method_shares: dict[str, float], price_rel: dict[str, float]) -> dict[str, float]:
+def profits(method_shares: dict[str, float], price_rel: dict[str, float], cuts: Cuts = None) -> dict[str, float]:
     """profit_a_level at every place."""
-    return {p: profit_a_level(p, method_shares, price_rel) for p in PLACES}
+    return {p: profit_a_level(p, method_shares, price_rel, cuts) for p in PLACES}
 
 
-def yardstick(method_shares: dict[str, float]) -> float:
+def yardstick(method_shares: dict[str, float], cuts: Cuts = None) -> float:
     """§ 8.3: our methods' profit a level at grade 0 and base prices, weighted by their
-    levels (£7,250 for an Asteroid Mine). Fixed, so the rule behaves the same when
+    levels, the input cuts counted (£7,250 for an Asteroid Mine, £21,650 with both
+    era-12 Launch Capacity cuts: the coordinator's reading of § 8.3's "our methods'
+    profit", 2026-11-21). Fixed at base prices, so the rule behaves the same when
     profits are small or negative."""
-    return margin("mixed", method_shares, {})
+    return margin("mixed", method_shares, {}, cuts)
 
 
 def lead_method(levels: dict[str, int]) -> int:
@@ -623,7 +720,8 @@ def output_a_level(method_shares: dict[str, float]) -> dict[str, float]:
     return {g: sum(f * methods[pm].outputs.get(g, 0.0) for pm, f in method_shares.items()) for g in GOODS}
 
 
-def totals(state: BaseState, method_shares: dict[str, float], price_rel: dict[str, float]) -> dict[str, float]:
+def totals(state: BaseState, method_shares: dict[str, float], price_rel: dict[str, float],
+           cuts: Cuts = None) -> dict[str, float]:
     """§ 9.1's totals, before other modifiers: what the base makes a week from where its
     levels work. Each good's output is the sum over places of levels x (1 + grade) x
     (1 + mix) x output_a_level, plus the levels past the room at OVERFLOW_GRADE as
@@ -634,8 +732,8 @@ def totals(state: BaseState, method_shares: dict[str, float], price_rel: dict[st
     past = state.over * (1 + OVERFLOW_GRADE)
     result = {g: out[g] * (sum(n * (1 + grade(p)) * (1 + mix(GROUND[p])[g]) for p, n in state.at.items()) + past)
               for g in GOODS}
-    result["profit"] = (sum(n * profit_a_level(p, method_shares, price_rel) for p, n in state.at.items())
-                        + past * margin("mixed", method_shares, price_rel))
+    result["profit"] = (sum(n * profit_a_level(p, method_shares, price_rel, cuts) for p, n in state.at.items())
+                        + past * margin("mixed", method_shares, price_rel, cuts))
     return result
 
 

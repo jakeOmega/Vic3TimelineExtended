@@ -412,31 +412,51 @@ sr_eb_levels_pm_regolith_processing = {
 	if = { limit = { has_variable = sr_eb_lv_pm_regolith_processing } value = var:sr_eb_lv_pm_regolith_processing }
 }
 sr_eb_share_pm_regolith_processing = { value = sr_eb_levels_pm_regolith_processing divide = sr_eb_mining_divisor }
+sr_eb_levels_pm_regolith_processing_in_launch_capacity = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_lv_pm_regolith_processing_in_launch_capacity } value = var:sr_eb_lv_pm_regolith_processing_in_launch_capacity }
+}
 sr_eb_levels_pm_space_mine = {
 	value = 0
 	if = { limit = { has_variable = sr_eb_lv_pm_space_mine } value = var:sr_eb_lv_pm_space_mine }
 }
 sr_eb_share_pm_space_mine = { value = sr_eb_levels_pm_space_mine divide = sr_eb_mining_divisor }
+sr_eb_levels_pm_space_mine_in_launch_capacity = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_lv_pm_space_mine_in_launch_capacity } value = var:sr_eb_lv_pm_space_mine_in_launch_capacity }
+}
 sr_eb_levels_pm_space_colony_mining = {
 	value = 0
 	if = { limit = { has_variable = sr_eb_lv_pm_space_colony_mining } value = var:sr_eb_lv_pm_space_colony_mining }
 }
 sr_eb_share_pm_space_colony_mining = { value = sr_eb_levels_pm_space_colony_mining divide = sr_eb_mining_divisor }
+sr_eb_levels_pm_space_colony_mining_in_launch_capacity = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_lv_pm_space_colony_mining_in_launch_capacity } value = var:sr_eb_lv_pm_space_colony_mining_in_launch_capacity }
+}
 sr_eb_levels_pm_self_replicating_miners = {
 	value = 0
 	if = { limit = { has_variable = sr_eb_lv_pm_self_replicating_miners } value = var:sr_eb_lv_pm_self_replicating_miners }
 }
 sr_eb_share_pm_self_replicating_miners = { value = sr_eb_levels_pm_self_replicating_miners divide = sr_eb_mining_divisor }
+sr_eb_levels_pm_self_replicating_miners_in_launch_capacity = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_lv_pm_self_replicating_miners_in_launch_capacity } value = var:sr_eb_lv_pm_self_replicating_miners_in_launch_capacity }
+}
 
 # ---- Each type's margin (§ 8.3): a level's profit a week at grade 0 on its ground ----
 # sum over methods m and goods g of f(m) x term(m, g) x (1 + premium(g)). A term is
 # out x base price x (1 + mix) for an output, -(in x base price) for an input
 # (ebase_ground.margin_terms). Fixed point: each term is multiplied by the method's
 # levels and the sum divided by the mining levels once, at the end, rather than
-# multiplied by a share cut to five decimals.
+# multiplied by a share cut to five decimals. An input the building's other method
+# groups cut (launch_capacity: era 12's logistics methods) is multiplied by the
+# method's levels weighted by their buildings' cuts, sr_eb_levels_<pm>_in_<good>
+# (ebase_ground.method_cuts). Each good at our market's price, Digital Access too: it
+# is a local good, and the margin reads the market's price, not each state's.
 sr_eb_margin_mixed = {
 	value = 0
-	# pm_regolith_processing: 1,600.00 a level at base prices
+	# pm_regolith_processing: 1,600.00 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 4456.4 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_tech_metals add = 1 multiply = 6240 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 2227 multiply = sr_eb_levels_pm_regolith_processing }
@@ -447,8 +467,8 @@ sr_eb_margin_mixed = {
 	add = { value = sr_eb_price_rel_electronic_components add = 1 multiply = -1200 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_radios add = 1 multiply = -1200 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -600 multiply = sr_eb_levels_pm_regolith_processing }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -12000 multiply = sr_eb_levels_pm_regolith_processing }
-	# pm_space_mine: 7,250.00 a level at base prices
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -12000 multiply = sr_eb_levels_pm_regolith_processing_in_launch_capacity }
+	# pm_space_mine: 7,250.00 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 5000 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 10000 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_copper add = 1 multiply = 3800 multiply = sr_eb_levels_pm_space_mine }
@@ -459,8 +479,8 @@ sr_eb_margin_mixed = {
 	add = { value = sr_eb_price_rel_electronic_components add = 1 multiply = -2400 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_radios add = 1 multiply = -2400 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -1200 multiply = sr_eb_levels_pm_space_mine }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -24000 multiply = sr_eb_levels_pm_space_mine }
-	# pm_space_colony_mining: 37,000.00 a level at base prices
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -24000 multiply = sr_eb_levels_pm_space_mine_in_launch_capacity }
+	# pm_space_colony_mining: 37,000.00 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 20000 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 40000 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_copper add = 1 multiply = 15200 multiply = sr_eb_levels_pm_space_colony_mining }
@@ -472,8 +492,8 @@ sr_eb_margin_mixed = {
 	add = { value = sr_eb_price_rel_radios add = 1 multiply = -2400 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -1200 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_advanced_materials add = 1 multiply = -10000 multiply = sr_eb_levels_pm_space_colony_mining }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -96000 multiply = sr_eb_levels_pm_space_colony_mining }
-	# pm_self_replicating_miners: 104,050.00 a level at base prices
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -96000 multiply = sr_eb_levels_pm_space_colony_mining_in_launch_capacity }
+	# pm_self_replicating_miners: 104,050.00 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 25000 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 50000 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_copper add = 1 multiply = 19000 multiply = sr_eb_levels_pm_self_replicating_miners }
@@ -486,12 +506,12 @@ sr_eb_margin_mixed = {
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -1800 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_advanced_materials add = 1 multiply = -10000 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_robotics add = 1 multiply = -1600 multiply = sr_eb_levels_pm_self_replicating_miners }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -64000 multiply = sr_eb_levels_pm_self_replicating_miners }
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -64000 multiply = sr_eb_levels_pm_self_replicating_miners_in_launch_capacity }
 	divide = sr_eb_mining_divisor
 }
 sr_eb_margin_metallic = {
 	value = 0
-	# pm_regolith_processing: 1,599.88 a level at base prices
+	# pm_regolith_processing: 1,599.88 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 4978.1602 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_tech_metals add = 1 multiply = 6389.7039 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 2902.3629 multiply = sr_eb_levels_pm_regolith_processing }
@@ -502,8 +522,8 @@ sr_eb_margin_metallic = {
 	add = { value = sr_eb_price_rel_electronic_components add = 1 multiply = -1200 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_radios add = 1 multiply = -1200 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -600 multiply = sr_eb_levels_pm_regolith_processing }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -12000 multiply = sr_eb_levels_pm_regolith_processing }
-	# pm_space_mine: 7,250.00 a level at base prices
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -12000 multiply = sr_eb_levels_pm_regolith_processing_in_launch_capacity }
+	# pm_space_mine: 7,250.00 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 6516.3064 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 11170.8109 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_copper add = 1 multiply = 4244.9082 multiply = sr_eb_levels_pm_space_mine }
@@ -514,8 +534,8 @@ sr_eb_margin_metallic = {
 	add = { value = sr_eb_price_rel_electronic_components add = 1 multiply = -2400 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_radios add = 1 multiply = -2400 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -1200 multiply = sr_eb_levels_pm_space_mine }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -24000 multiply = sr_eb_levels_pm_space_mine }
-	# pm_space_colony_mining: 37,000.00 a level at base prices
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -24000 multiply = sr_eb_levels_pm_space_mine_in_launch_capacity }
+	# pm_space_colony_mining: 37,000.00 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 26065.2255 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 44683.2438 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_copper add = 1 multiply = 16979.6326 multiply = sr_eb_levels_pm_space_colony_mining }
@@ -527,8 +547,8 @@ sr_eb_margin_metallic = {
 	add = { value = sr_eb_price_rel_radios add = 1 multiply = -2400 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -1200 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_advanced_materials add = 1 multiply = -10000 multiply = sr_eb_levels_pm_space_colony_mining }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -96000 multiply = sr_eb_levels_pm_space_colony_mining }
-	# pm_self_replicating_miners: 104,050.00 a level at base prices
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -96000 multiply = sr_eb_levels_pm_space_colony_mining_in_launch_capacity }
+	# pm_self_replicating_miners: 104,050.00 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 32581.5319 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 55854.0547 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_copper add = 1 multiply = 21224.5408 multiply = sr_eb_levels_pm_self_replicating_miners }
@@ -541,12 +561,12 @@ sr_eb_margin_metallic = {
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -1800 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_advanced_materials add = 1 multiply = -10000 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_robotics add = 1 multiply = -1600 multiply = sr_eb_levels_pm_self_replicating_miners }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -64000 multiply = sr_eb_levels_pm_self_replicating_miners }
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -64000 multiply = sr_eb_levels_pm_self_replicating_miners_in_launch_capacity }
 	divide = sr_eb_mining_divisor
 }
 sr_eb_margin_rocky = {
 	value = 0
-	# pm_regolith_processing: 1,600.46 a level at base prices
+	# pm_regolith_processing: 1,600.46 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 5624.949 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_tech_metals add = 1 multiply = 6058.6472 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 1081.1384 multiply = sr_eb_levels_pm_regolith_processing }
@@ -557,8 +577,8 @@ sr_eb_margin_rocky = {
 	add = { value = sr_eb_price_rel_electronic_components add = 1 multiply = -1200 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_radios add = 1 multiply = -1200 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -600 multiply = sr_eb_levels_pm_regolith_processing }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -12000 multiply = sr_eb_levels_pm_regolith_processing }
-	# pm_space_mine: 7,250.00 a level at base prices
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -12000 multiply = sr_eb_levels_pm_regolith_processing_in_launch_capacity }
+	# pm_space_mine: 7,250.00 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 2427.3426 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 12622.1817 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_copper add = 1 multiply = 3136.1267 multiply = sr_eb_levels_pm_space_mine }
@@ -569,8 +589,8 @@ sr_eb_margin_rocky = {
 	add = { value = sr_eb_price_rel_electronic_components add = 1 multiply = -2400 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_radios add = 1 multiply = -2400 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -1200 multiply = sr_eb_levels_pm_space_mine }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -24000 multiply = sr_eb_levels_pm_space_mine }
-	# pm_space_colony_mining: 37,000.00 a level at base prices
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -24000 multiply = sr_eb_levels_pm_space_mine_in_launch_capacity }
+	# pm_space_colony_mining: 37,000.00 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 9709.3705 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 50488.7267 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_copper add = 1 multiply = 12544.5067 multiply = sr_eb_levels_pm_space_colony_mining }
@@ -582,8 +602,8 @@ sr_eb_margin_rocky = {
 	add = { value = sr_eb_price_rel_radios add = 1 multiply = -2400 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -1200 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_advanced_materials add = 1 multiply = -10000 multiply = sr_eb_levels_pm_space_colony_mining }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -96000 multiply = sr_eb_levels_pm_space_colony_mining }
-	# pm_self_replicating_miners: 104,050.00 a level at base prices
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -96000 multiply = sr_eb_levels_pm_space_colony_mining_in_launch_capacity }
+	# pm_self_replicating_miners: 104,050.00 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 12136.7132 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 63110.9084 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_copper add = 1 multiply = 15680.6334 multiply = sr_eb_levels_pm_self_replicating_miners }
@@ -596,12 +616,12 @@ sr_eb_margin_rocky = {
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -1800 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_advanced_materials add = 1 multiply = -10000 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_robotics add = 1 multiply = -1600 multiply = sr_eb_levels_pm_self_replicating_miners }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -64000 multiply = sr_eb_levels_pm_self_replicating_miners }
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -64000 multiply = sr_eb_levels_pm_self_replicating_miners_in_launch_capacity }
 	divide = sr_eb_mining_divisor
 }
 sr_eb_margin_carbonaceous = {
 	value = 0
-	# pm_regolith_processing: 1,600.02 a level at base prices
+	# pm_regolith_processing: 1,600.02 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 3687.8845 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_tech_metals add = 1 multiply = 5809.3863 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 1497.3962 multiply = sr_eb_levels_pm_regolith_processing }
@@ -612,8 +632,8 @@ sr_eb_margin_carbonaceous = {
 	add = { value = sr_eb_price_rel_electronic_components add = 1 multiply = -1200 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_radios add = 1 multiply = -1200 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -600 multiply = sr_eb_levels_pm_regolith_processing }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -12000 multiply = sr_eb_levels_pm_regolith_processing }
-	# pm_space_mine: 7,250.00 a level at base prices
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -12000 multiply = sr_eb_levels_pm_regolith_processing_in_launch_capacity }
+	# pm_space_mine: 7,250.00 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 3361.9134 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 8275.479 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_copper add = 1 multiply = 3537.7673 multiply = sr_eb_levels_pm_space_mine }
@@ -624,8 +644,8 @@ sr_eb_margin_carbonaceous = {
 	add = { value = sr_eb_price_rel_electronic_components add = 1 multiply = -2400 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_radios add = 1 multiply = -2400 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -1200 multiply = sr_eb_levels_pm_space_mine }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -24000 multiply = sr_eb_levels_pm_space_mine }
-	# pm_space_colony_mining: 37,000.00 a level at base prices
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -24000 multiply = sr_eb_levels_pm_space_mine_in_launch_capacity }
+	# pm_space_colony_mining: 37,000.00 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 13447.6534 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 33101.9161 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_copper add = 1 multiply = 14151.0691 multiply = sr_eb_levels_pm_space_colony_mining }
@@ -637,8 +657,8 @@ sr_eb_margin_carbonaceous = {
 	add = { value = sr_eb_price_rel_radios add = 1 multiply = -2400 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -1200 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_advanced_materials add = 1 multiply = -10000 multiply = sr_eb_levels_pm_space_colony_mining }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -96000 multiply = sr_eb_levels_pm_space_colony_mining }
-	# pm_self_replicating_miners: 104,050.00 a level at base prices
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -96000 multiply = sr_eb_levels_pm_space_colony_mining_in_launch_capacity }
+	# pm_self_replicating_miners: 104,050.00 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 16809.5668 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 41377.3952 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_copper add = 1 multiply = 17688.8364 multiply = sr_eb_levels_pm_self_replicating_miners }
@@ -651,12 +671,12 @@ sr_eb_margin_carbonaceous = {
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -1800 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_advanced_materials add = 1 multiply = -10000 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_robotics add = 1 multiply = -1600 multiply = sr_eb_levels_pm_self_replicating_miners }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -64000 multiply = sr_eb_levels_pm_self_replicating_miners }
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -64000 multiply = sr_eb_levels_pm_self_replicating_miners_in_launch_capacity }
 	divide = sr_eb_mining_divisor
 }
 sr_eb_margin_sulfurous = {
 	value = 0
-	# pm_regolith_processing: 1,600.14 a level at base prices
+	# pm_regolith_processing: 1,600.14 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 3745.0852 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_tech_metals add = 1 multiply = 5571.7428 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 1403.6506 multiply = sr_eb_levels_pm_regolith_processing }
@@ -667,8 +687,8 @@ sr_eb_margin_sulfurous = {
 	add = { value = sr_eb_price_rel_electronic_components add = 1 multiply = -1200 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_radios add = 1 multiply = -1200 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -600 multiply = sr_eb_levels_pm_regolith_processing }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -12000 multiply = sr_eb_levels_pm_regolith_processing }
-	# pm_space_mine: 7,250.00 a level at base prices
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -12000 multiply = sr_eb_levels_pm_regolith_processing_in_launch_capacity }
+	# pm_space_mine: 7,250.00 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 3151.4382 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 8403.8353 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_copper add = 1 multiply = 3991.8218 multiply = sr_eb_levels_pm_space_mine }
@@ -679,8 +699,8 @@ sr_eb_margin_sulfurous = {
 	add = { value = sr_eb_price_rel_electronic_components add = 1 multiply = -2400 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_radios add = 1 multiply = -2400 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -1200 multiply = sr_eb_levels_pm_space_mine }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -24000 multiply = sr_eb_levels_pm_space_mine }
-	# pm_space_colony_mining: 37,000.00 a level at base prices
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -24000 multiply = sr_eb_levels_pm_space_mine_in_launch_capacity }
+	# pm_space_colony_mining: 37,000.00 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 12605.753 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 33615.3412 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_copper add = 1 multiply = 15967.2871 multiply = sr_eb_levels_pm_space_colony_mining }
@@ -692,8 +712,8 @@ sr_eb_margin_sulfurous = {
 	add = { value = sr_eb_price_rel_radios add = 1 multiply = -2400 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -1200 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_advanced_materials add = 1 multiply = -10000 multiply = sr_eb_levels_pm_space_colony_mining }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -96000 multiply = sr_eb_levels_pm_space_colony_mining }
-	# pm_self_replicating_miners: 104,050.00 a level at base prices
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -96000 multiply = sr_eb_levels_pm_space_colony_mining_in_launch_capacity }
+	# pm_self_replicating_miners: 104,050.00 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 15757.1912 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 42019.1765 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_copper add = 1 multiply = 19959.1089 multiply = sr_eb_levels_pm_self_replicating_miners }
@@ -706,12 +726,12 @@ sr_eb_margin_sulfurous = {
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -1800 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_advanced_materials add = 1 multiply = -10000 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_robotics add = 1 multiply = -1600 multiply = sr_eb_levels_pm_self_replicating_miners }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -64000 multiply = sr_eb_levels_pm_self_replicating_miners }
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -64000 multiply = sr_eb_levels_pm_self_replicating_miners_in_launch_capacity }
 	divide = sr_eb_mining_divisor
 }
 sr_eb_margin_hydrocarbon = {
 	value = 0
-	# pm_regolith_processing: 1,599.86 a level at base prices
+	# pm_regolith_processing: 1,599.86 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 3336.9251 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_tech_metals add = 1 multiply = 5295.4704 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 1111.7093 multiply = sr_eb_levels_pm_regolith_processing }
@@ -722,8 +742,8 @@ sr_eb_margin_hydrocarbon = {
 	add = { value = sr_eb_price_rel_electronic_components add = 1 multiply = -1200 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_radios add = 1 multiply = -1200 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -600 multiply = sr_eb_levels_pm_regolith_processing }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -12000 multiply = sr_eb_levels_pm_regolith_processing }
-	# pm_space_mine: 7,250.00 a level at base prices
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -12000 multiply = sr_eb_levels_pm_regolith_processing_in_launch_capacity }
+	# pm_space_mine: 7,250.00 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 2495.9796 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 7487.9389 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_copper add = 1 multiply = 3035.1112 multiply = sr_eb_levels_pm_space_mine }
@@ -734,8 +754,8 @@ sr_eb_margin_hydrocarbon = {
 	add = { value = sr_eb_price_rel_electronic_components add = 1 multiply = -2400 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_radios add = 1 multiply = -2400 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -1200 multiply = sr_eb_levels_pm_space_mine }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -24000 multiply = sr_eb_levels_pm_space_mine }
-	# pm_space_colony_mining: 37,000.00 a level at base prices
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -24000 multiply = sr_eb_levels_pm_space_mine_in_launch_capacity }
+	# pm_space_colony_mining: 37,000.00 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 9983.9185 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 29951.7556 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_copper add = 1 multiply = 12140.4449 multiply = sr_eb_levels_pm_space_colony_mining }
@@ -747,8 +767,8 @@ sr_eb_margin_hydrocarbon = {
 	add = { value = sr_eb_price_rel_radios add = 1 multiply = -2400 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -1200 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_advanced_materials add = 1 multiply = -10000 multiply = sr_eb_levels_pm_space_colony_mining }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -96000 multiply = sr_eb_levels_pm_space_colony_mining }
-	# pm_self_replicating_miners: 104,050.00 a level at base prices
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -96000 multiply = sr_eb_levels_pm_space_colony_mining_in_launch_capacity }
+	# pm_self_replicating_miners: 104,050.00 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 12479.8982 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 37439.6945 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_copper add = 1 multiply = 15175.5562 multiply = sr_eb_levels_pm_self_replicating_miners }
@@ -761,12 +781,12 @@ sr_eb_margin_hydrocarbon = {
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -1800 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_advanced_materials add = 1 multiply = -10000 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_robotics add = 1 multiply = -1600 multiply = sr_eb_levels_pm_self_replicating_miners }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -64000 multiply = sr_eb_levels_pm_self_replicating_miners }
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -64000 multiply = sr_eb_levels_pm_self_replicating_miners_in_launch_capacity }
 	divide = sr_eb_mining_divisor
 }
 sr_eb_margin_icy = {
 	value = 0
-	# pm_regolith_processing: 1,600.21 a level at base prices
+	# pm_regolith_processing: 1,600.21 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 4472.007 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_tech_metals add = 1 multiply = 5948.7608 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 1340.8796 multiply = sr_eb_levels_pm_regolith_processing }
@@ -777,8 +797,8 @@ sr_eb_margin_icy = {
 	add = { value = sr_eb_price_rel_electronic_components add = 1 multiply = -1200 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_radios add = 1 multiply = -1200 multiply = sr_eb_levels_pm_regolith_processing }
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -600 multiply = sr_eb_levels_pm_regolith_processing }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -12000 multiply = sr_eb_levels_pm_regolith_processing }
-	# pm_space_mine: 7,250.00 a level at base prices
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -12000 multiply = sr_eb_levels_pm_regolith_processing_in_launch_capacity }
+	# pm_space_mine: 7,250.00 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 3010.5065 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 10035.0216 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_copper add = 1 multiply = 3431.9774 multiply = sr_eb_levels_pm_space_mine }
@@ -789,8 +809,8 @@ sr_eb_margin_icy = {
 	add = { value = sr_eb_price_rel_electronic_components add = 1 multiply = -2400 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_radios add = 1 multiply = -2400 multiply = sr_eb_levels_pm_space_mine }
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -1200 multiply = sr_eb_levels_pm_space_mine }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -24000 multiply = sr_eb_levels_pm_space_mine }
-	# pm_space_colony_mining: 37,000.00 a level at base prices
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -24000 multiply = sr_eb_levels_pm_space_mine_in_launch_capacity }
+	# pm_space_colony_mining: 37,000.00 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 12042.0259 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 40140.0862 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_copper add = 1 multiply = 13727.9095 multiply = sr_eb_levels_pm_space_colony_mining }
@@ -802,8 +822,8 @@ sr_eb_margin_icy = {
 	add = { value = sr_eb_price_rel_radios add = 1 multiply = -2400 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -1200 multiply = sr_eb_levels_pm_space_colony_mining }
 	add = { value = sr_eb_price_rel_advanced_materials add = 1 multiply = -10000 multiply = sr_eb_levels_pm_space_colony_mining }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -96000 multiply = sr_eb_levels_pm_space_colony_mining }
-	# pm_self_replicating_miners: 104,050.00 a level at base prices
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -96000 multiply = sr_eb_levels_pm_space_colony_mining_in_launch_capacity }
+	# pm_self_replicating_miners: 104,050.00 a level at base prices, before any cut
 	add = { value = sr_eb_price_rel_gold add = 1 multiply = 15052.5323 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_iron add = 1 multiply = 50175.1078 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_copper add = 1 multiply = 17159.8869 multiply = sr_eb_levels_pm_self_replicating_miners }
@@ -816,7 +836,7 @@ sr_eb_margin_icy = {
 	add = { value = sr_eb_price_rel_digital_access add = 1 multiply = -1800 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_advanced_materials add = 1 multiply = -10000 multiply = sr_eb_levels_pm_self_replicating_miners }
 	add = { value = sr_eb_price_rel_robotics add = 1 multiply = -1600 multiply = sr_eb_levels_pm_self_replicating_miners }
-	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -64000 multiply = sr_eb_levels_pm_self_replicating_miners }
+	add = { value = sr_eb_price_rel_launch_capacity add = 1 multiply = -64000 multiply = sr_eb_levels_pm_self_replicating_miners_in_launch_capacity }
 	divide = sr_eb_mining_divisor
 }
 
@@ -864,13 +884,18 @@ sr_eb_profit_daedalus = { value = sr_eb_margin_rocky multiply = 100 divide = 100
 sr_eb_profit_imbrium = { value = sr_eb_margin_rocky multiply = 100 divide = 100 }
 
 # The yardstick (§ 8.3): our methods' profit a level at grade 0 and base prices,
-# weighted by their levels. A move must gain 5% of it a level.
+# weighted by their levels, the input cuts counted as in the margins. A move must gain
+# 5% of it a level.
 sr_eb_yardstick = {
 	value = 0
-	add = { value = sr_eb_levels_pm_regolith_processing multiply = 1600 }
-	add = { value = sr_eb_levels_pm_space_mine multiply = 7250 }
-	add = { value = sr_eb_levels_pm_space_colony_mining multiply = 37000 }
-	add = { value = sr_eb_levels_pm_self_replicating_miners multiply = 104050 }
+	add = { value = sr_eb_levels_pm_regolith_processing multiply = 13600 }
+	add = { value = sr_eb_levels_pm_regolith_processing_in_launch_capacity multiply = -12000 }
+	add = { value = sr_eb_levels_pm_space_mine multiply = 31250 }
+	add = { value = sr_eb_levels_pm_space_mine_in_launch_capacity multiply = -24000 }
+	add = { value = sr_eb_levels_pm_space_colony_mining multiply = 133000 }
+	add = { value = sr_eb_levels_pm_space_colony_mining_in_launch_capacity multiply = -96000 }
+	add = { value = sr_eb_levels_pm_self_replicating_miners multiply = 168050 }
+	add = { value = sr_eb_levels_pm_self_replicating_miners_in_launch_capacity multiply = -64000 }
 	divide = sr_eb_mining_divisor
 }
 

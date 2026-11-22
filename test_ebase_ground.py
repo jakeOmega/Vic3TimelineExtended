@@ -266,6 +266,47 @@ class Month(unittest.TestCase):
                 self.assertEqual(max(six, key=profit.get), best)
                 self.assertEqual(round(profit[best]), figure)
 
+    def test_the_logistics_cuts_are_read_from_the_building(self):
+        """F1 of the Tasks 5 and 6 review: the base building's other method groups' input
+        cuts, read from the files (era 12's two Launch Capacity cuts, -30% each)."""
+        cuts = eg.input_cuts()
+        self.assertEqual(cuts, {"pm_tethered_launch_building_space_mine": {"launch_capacity": -0.3},
+                                "pm_fusion_tugs_building_space_mine": {"launch_capacity": -0.3}})
+        self.assertEqual(eg.cut_goods(), ("launch_capacity",))
+        self.assertAlmostEqual(eg.input_factor(cuts)["launch_capacity"], 0.4)
+        self.assertEqual(eg.input_factor(()), {"launch_capacity": 1.0})
+        # Each method's factor is its levels' average; a method outside the seven isn't counted.
+        both = tuple(cuts)
+        got = eg.method_cuts([("pm_space_mine", 30, both), ("pm_space_mine", 10, ()),
+                              ("pm_space_colony_vacation", 5, both)])
+        self.assertEqual(set(got), {"pm_space_mine"})
+        self.assertAlmostEqual(got["pm_space_mine"]["launch_capacity"], (30 * 0.4 + 10) / 40)
+
+    def test_the_cuts_lower_the_input_bill(self):
+        """The cut multiplies the input's term: with both cuts an Asteroid Mine level's
+        Launch Capacity bill is 40%, and the yardstick £21,650 (the coordinator's decision:
+        it counts the cuts), so a move must gain about £1,083 a level."""
+        both = eg.method_cuts([("pm_space_mine", 1, tuple(eg.input_cuts()))])
+        self.assertAlmostEqual(eg.yardstick(ASTEROID, both), 21650, delta=1e-6)
+        self.assertAlmostEqual(eg.MARGIN * eg.yardstick(ASTEROID, both), 1082.5, delta=1e-6)
+        lc = -eg.base_methods()["pm_space_mine"].inputs["launch_capacity"] * eg.good_base_price("launch_capacity")
+        for t in eg.TYPES:
+            for rel in ({}, {"launch_capacity": 0.5, "glass": -0.2}):
+                with self.subTest(type=t, rel=rel):
+                    self.assertAlmostEqual(eg.margin(t, ASTEROID, rel, both),
+                                           eg.margin(t, ASTEROID, rel) - 0.6 * lc * (1 + rel.get("launch_capacity", 0)),
+                                           delta=1e-6)
+
+    def test_the_cuts_change_the_best_site(self):
+        """The review's scenario: Asteroid Mines with both cuts and Chemical and Industrial
+        Minerals 75% dear. Uncut, Io looks best; with the cuts counted, 16 Psyche is."""
+        six = ("psyche", "vesta", "ceres", "io", "titan", "ganymede")
+        both = eg.method_cuts([("pm_space_mine", 1, tuple(eg.input_cuts()))])
+        for cuts, best in ((None, "io"), (both, "psyche")):
+            with self.subTest(cuts=bool(cuts)):
+                profit = {p: eg.profit_a_level(p, ASTEROID, {"sulfur": 0.75}, cuts) for p in six}
+                self.assertEqual(max(six, key=profit.get), best)
+
     def test_every_type_s_margin_at_base_prices_is_the_yardstick(self):
         shares = {pm: 1 / len(eg.mining_methods()) for pm in eg.mining_methods()}
         for t in eg.TYPES:

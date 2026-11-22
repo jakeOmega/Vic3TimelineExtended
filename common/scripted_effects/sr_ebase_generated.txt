@@ -4,26 +4,39 @@
 # calls them.
 
 # Our levels on each mining method, and on all of them (§ 8.3's f(m)), into
-# var:sr_eb_lv_<pm> and var:sr_eb_lv_mining for sr_eb_share_<pm>: one walk of our
-# Extraplanetary Bases. A method outside the seven goods is not counted.
+# var:sr_eb_lv_<pm> and var:sr_eb_lv_mining for sr_eb_share_<pm>, and each method's
+# levels weighted by its buildings' input cuts into var:sr_eb_lv_<pm>_in_<good>: one
+# walk of our Extraplanetary Bases. A method outside the seven goods is not counted.
 sr_eb_count_methods = {
 	set_local_variable = { name = sr_ebc_pm_regolith_processing value = 0 }
 	set_local_variable = { name = sr_ebc_pm_space_mine value = 0 }
 	set_local_variable = { name = sr_ebc_pm_space_colony_mining value = 0 }
 	set_local_variable = { name = sr_ebc_pm_self_replicating_miners value = 0 }
+	set_local_variable = { name = sr_ebc_pm_regolith_processing_in_launch_capacity value = 0 }
+	set_local_variable = { name = sr_ebc_pm_space_mine_in_launch_capacity value = 0 }
+	set_local_variable = { name = sr_ebc_pm_space_colony_mining_in_launch_capacity value = 0 }
+	set_local_variable = { name = sr_ebc_pm_self_replicating_miners_in_launch_capacity value = 0 }
 	every_scope_state = {
 		every_scope_building = {
 			limit = { is_building_type = building_space_mine }
-			if = { limit = { has_active_production_method = pm_regolith_processing } change_local_variable = { name = sr_ebc_pm_regolith_processing add = level } }
-			else_if = { limit = { has_active_production_method = pm_space_mine } change_local_variable = { name = sr_ebc_pm_space_mine add = level } }
-			else_if = { limit = { has_active_production_method = pm_space_colony_mining } change_local_variable = { name = sr_ebc_pm_space_colony_mining add = level } }
-			else_if = { limit = { has_active_production_method = pm_self_replicating_miners } change_local_variable = { name = sr_ebc_pm_self_replicating_miners add = level } }
+			# The building's factor on each cut input: 1 + the cuts of its active methods (ebase_ground.input_factor).
+			set_local_variable = { name = sr_ebc_f_launch_capacity value = 1 }
+			if = { limit = { has_active_production_method = pm_tethered_launch_building_space_mine } change_local_variable = { name = sr_ebc_f_launch_capacity add = -0.3 } }
+			if = { limit = { has_active_production_method = pm_fusion_tugs_building_space_mine } change_local_variable = { name = sr_ebc_f_launch_capacity add = -0.3 } }
+			if = { limit = { has_active_production_method = pm_regolith_processing } change_local_variable = { name = sr_ebc_pm_regolith_processing add = level } change_local_variable = { name = sr_ebc_pm_regolith_processing_in_launch_capacity add = { value = level multiply = local_var:sr_ebc_f_launch_capacity } } }
+			else_if = { limit = { has_active_production_method = pm_space_mine } change_local_variable = { name = sr_ebc_pm_space_mine add = level } change_local_variable = { name = sr_ebc_pm_space_mine_in_launch_capacity add = { value = level multiply = local_var:sr_ebc_f_launch_capacity } } }
+			else_if = { limit = { has_active_production_method = pm_space_colony_mining } change_local_variable = { name = sr_ebc_pm_space_colony_mining add = level } change_local_variable = { name = sr_ebc_pm_space_colony_mining_in_launch_capacity add = { value = level multiply = local_var:sr_ebc_f_launch_capacity } } }
+			else_if = { limit = { has_active_production_method = pm_self_replicating_miners } change_local_variable = { name = sr_ebc_pm_self_replicating_miners add = level } change_local_variable = { name = sr_ebc_pm_self_replicating_miners_in_launch_capacity add = { value = level multiply = local_var:sr_ebc_f_launch_capacity } } }
 		}
 	}
 	set_variable = { name = sr_eb_lv_pm_regolith_processing value = local_var:sr_ebc_pm_regolith_processing }
 	set_variable = { name = sr_eb_lv_pm_space_mine value = local_var:sr_ebc_pm_space_mine }
 	set_variable = { name = sr_eb_lv_pm_space_colony_mining value = local_var:sr_ebc_pm_space_colony_mining }
 	set_variable = { name = sr_eb_lv_pm_self_replicating_miners value = local_var:sr_ebc_pm_self_replicating_miners }
+	set_variable = { name = sr_eb_lv_pm_regolith_processing_in_launch_capacity value = local_var:sr_ebc_pm_regolith_processing_in_launch_capacity }
+	set_variable = { name = sr_eb_lv_pm_space_mine_in_launch_capacity value = local_var:sr_ebc_pm_space_mine_in_launch_capacity }
+	set_variable = { name = sr_eb_lv_pm_space_colony_mining_in_launch_capacity value = local_var:sr_ebc_pm_space_colony_mining_in_launch_capacity }
+	set_variable = { name = sr_eb_lv_pm_self_replicating_miners_in_launch_capacity value = local_var:sr_ebc_pm_self_replicating_miners_in_launch_capacity }
 	set_variable = {
 		name = sr_eb_lv_mining
 		value = {

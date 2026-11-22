@@ -131,8 +131,9 @@ class Building:
     """A building fixture: its state, type, level, active methods and the static
     modifiers on it (name -> the multipliers of each copy, so a stack shows)."""
 
-    def __init__(self, state, type_="building_space_mine", level=1, pm="pm_space_mine", mods=None):
-        self.state, self.type, self.level, self.pms = state, type_, level, {pm} if pm else set()
+    def __init__(self, state, type_="building_space_mine", level=1, pm="pm_space_mine", mods=None, logistics=()):
+        self.state, self.type, self.level = state, type_, level
+        self.pms = ({pm} if pm else set()) | set(logistics)
         self.mods: dict[str, list[int]] = {k: [fx(v)] for k, v in (mods or {}).items()}
 
 
@@ -586,8 +587,13 @@ class ValuesTest(unittest.TestCase):
         for t in eg.TYPES:
             with self.subTest(type=t):
                 body = _block(VALUES, f"sr_eb_margin_{t}")
-                named = set(re.findall(r"multiply = sr_eb_levels_(\w+)", body))
+                named = set(re.findall(r"multiply = sr_eb_levels_(\w+?)(?:_in_\w+)? }", body))
                 self.assertEqual(named, mining)
+                # A cut input reads the method's levels weighted by the cuts.
+                for pm in mining:
+                    for g in eg.cut_goods():
+                        self.assertEqual(f"multiply = sr_eb_levels_{pm}_in_{g} }}" in body,
+                                         g in eg.mining_methods()[pm].inputs)
                 # Multiplied by each method's levels, divided once by all of them.
                 self.assertTrue(body.rstrip().endswith("divide = sr_eb_mining_divisor"))
         for pm in eg.base_methods():
@@ -599,7 +605,8 @@ class ValuesTest(unittest.TestCase):
             body = _block(VALUES, f"sr_eb_margin_{t}")
             for pm in eg.mining_methods():
                 with self.subTest(type=t, pm=pm):
-                    terms = re.findall(rf"add = 1 multiply = (-?[\d.]+) multiply = sr_eb_levels_{pm} }}", body)
+                    terms = re.findall(rf"add = 1 multiply = (-?[\d.]+) multiply = sr_eb_levels_{pm}(?:_in_\w+)? }}",
+                                       body)
                     self.assertAlmostEqual(sum(map(float, terms)), eg.margin(t, {pm: 1.0}, {}), delta=0.01)
 
     def test_every_good_has_a_signed_premium(self):
@@ -617,8 +624,8 @@ class ValuesTest(unittest.TestCase):
         yard = _block(VALUES, "sr_eb_yardstick")
         for pm in eg.mining_methods():
             with self.subTest(pm=pm):
-                self.assertIn(f"add = {{ value = sr_eb_levels_{pm} multiply = "
-                              f"{ge.num(eg.margin('mixed', {pm: 1.0}, {}))} }}", yard)
+                terms = re.findall(rf"add = {{ value = sr_eb_levels_{pm}(?:_in_\w+)? multiply = (-?[\d.]+) }}", yard)
+                self.assertAlmostEqual(sum(map(float, terms)), eg.margin("mixed", {pm: 1.0}, {}), delta=0.01)
         self.assertTrue(yard.rstrip().endswith("divide = sr_eb_mining_divisor"))
 
     def test_profit_runs_the_model_at_market_prices(self):
@@ -630,22 +637,28 @@ class ValuesTest(unittest.TestCase):
             levels = {pm: rng.choice((0, 0, 3, 10, 40)) for pm in eg.mining_methods()}
             if not sum(levels.values()):
                 levels["pm_space_mine"] = 5
-            for n, (pm, lv) in enumerate(levels.items()):
+            fleet = []   # (method, levels, logistics): two buildings a method, each on its own cuts
+            for pm, lv in levels.items():
                 if lv:
-                    tw.buildings.append(Building(n, level=lv, pm=pm))
-            tw.buildings.append(Building(9, level=7, pm="pm_space_colony_vacation"))  # outside the seven goods
+                    fleet += [(pm, lv, tuple(c for c in eg.input_cuts() if rng.random() < 0.5)),
+                              (pm, rng.choice((1, 6)), tuple(c for c in eg.input_cuts() if rng.random() < 0.5))]
+            for n, (pm, lv, logistics) in enumerate(fleet):
+                tw.buildings.append(Building(n, level=lv, pm=pm, logistics=logistics))
+            tw.buildings.append(Building(9, level=7, pm="pm_space_colony_vacation",  # outside the seven goods
+                                         logistics=tuple(eg.input_cuts())))
             prices = {g: rng.uniform(-0.75, 1.5) for g in eg.method_goods()}
             for g, r in prices.items():
                 tw.price(g, r)
             tw.effect("sr_eb_count_methods")
-            total = sum(levels.values())
-            shares = {pm: lv / total for pm, lv in levels.items() if lv}
+            total = sum(lv for _, lv, _ in fleet)
+            shares = {pm: sum(lv for m, lv, _ in fleet if m == pm) / total for pm in levels if levels[pm]}
+            cuts = eg.method_cuts(fleet)
             rel = {g: round(r, 5) for g, r in prices.items()}
             for k in ("near_earth", "psyche", "ceres", "io", "titan", "ganymede", "vesta", "sedna"):
                 with self.subTest(trial=trial, place=k):
-                    self.assertAlmostEqual(unfx(tw.num(f"sr_eb_profit_{k}")), eg.profit_a_level(k, shares, rel),
+                    self.assertAlmostEqual(unfx(tw.num(f"sr_eb_profit_{k}")), eg.profit_a_level(k, shares, rel, cuts),
                                            delta=0.05)
-            self.assertAlmostEqual(unfx(tw.num("sr_eb_yardstick")), eg.yardstick(shares), delta=0.05)
+            self.assertAlmostEqual(unfx(tw.num("sr_eb_yardstick")), eg.yardstick(shares, cuts), delta=0.05)
         # No mining level at all: every share, margin and the yardstick read 0.
         tw = Twin()
         tw.effect("sr_eb_count_methods")
@@ -1482,6 +1495,61 @@ class MixSelfCheckTest(unittest.TestCase):
         self.assertNotIn("sr_eb_mix_check_armed", tw.vars)
         self.assertEqual(tw.logs, [])
 
+    def test_a_new_building_waits_for_its_refresh(self):
+        """F2 of the Tasks 5 and 6 review: a base building built in the verdict's month
+        gets its refresh from space_race_events.110 the next day. Its immediate, as the
+        events file has it, gives no verdict that day (the marker stands through the
+        refresh), and the month's pulse then reads OK on both buildings."""
+        events = _raw("events", "space_race_events.txt")
+        body = _block(_strip(events), "space_race_events.110")
+        immediate = _block(body, "immediate")
+        tw = self._twin({"psyche": 100}, {})
+        self._month(tw, 100)
+        self._month(tw, 101)
+        tw.stub_values["te_history_month_index"] = fx(102)
+        tw.vars.pop("sr_eb_mix_fresh", None)
+        tw.buildings.insert(0, Building(2, level=5))   # finished yesterday: no mix of ours yet
+        tw.stub_values["sr_ebase_levels"] = fx(105)
+        tw.vars["sr_ebase_hook_pending"] = SCALE
+        tw.run(_parse(_tokens(immediate))[0])
+        self.assertEqual(tw.logs, [])
+        self.assertNotIn("sr_ebase_hook_pending", tw.vars)
+        self._month(tw, 102)
+        self.assertEqual(len(tw.logs), 1)
+        self.assertIn("TE_SELF_CHECK OK ebase_mix", tw.logs[0])
+        self.assertEqual(unfx(tw.vars["sr_eb_mix_check_match"]), 2)
+
+    def test_every_building_is_read(self):
+        """OK only if every base building matches, BROKEN if none does, and a month
+        later if some do (a building no refresh has reached)."""
+        tw = self._twin({"psyche": 100}, {})
+        tw.buildings.append(Building(3, level=1))
+        self._month(tw, 100)
+        self._month(tw, 101)
+        tw.buildings[1].mods.clear()              # one building lost its mix
+        tw.stub_values["te_history_month_index"] = fx(102)
+        tw.vars.pop("sr_eb_mix_fresh", None)
+        tw.effect("sr_eb_mix_self_check")
+        self.assertEqual(tw.logs, [])
+        self.assertEqual(unfx(tw.vars["sr_eb_mix_check_armed"]), 102)
+        self.assertNotIn("sr_eb_mix_checked", tw.globals)
+        for b in tw.buildings:
+            b.mods.clear()
+        tw.stub_values["te_history_month_index"] = fx(103)
+        tw.effect("sr_eb_mix_self_check")
+        self.assertIn("TE_SELF_CHECK BROKEN ebase_mix", tw.logs[0])
+        self.assertEqual(unfx(tw.vars["sr_eb_mix_check_miss"]), 2)
+        self.assertEqual(unfx(tw.vars["sr_eb_mix_check_read"]), 0)
+
+    def test_the_tolerance_catches_a_multiplier_read_as_1(self):
+        """F3: a unit modifier at multiplier 1 reads 0.01 against a mix at the 1.5% floor
+        (0.015, gap 0.005): BROKEN, where the old 0.005 tolerance let it pass."""
+        body = _block(_strip(_raw("common", "scripted_effects", "sr_colony_module_effects.txt")), "sr_eb_mix_self_check")
+        self.assertIn("local_var:sr_ebk_gap <= 0.001", body)
+        self.assertIn("local_var:sr_ebk_gap >= -0.001", body)
+        self.assertNotIn("0.005", body)
+        self.assertNotIn("random_scope_building", body)
+
     def test_the_self_check_row(self):
         playtest = _raw("docs", "testing", "solar-colonies-playtest.md")
         self.assertIn("`TE_SELF_CHECK OK/BROKEN ebase_mix", playtest)
@@ -1520,22 +1588,25 @@ def _callers(effect):
 
 
 def _market_twin(state, *, room, serves=None, built, queued=0, prices=None, methods=None, is_ai=False,
-                 month_index=24000):
+                 month_index=24000, logistics=None):
     """A month twin whose profits come from the real reader: base buildings on `methods`
-    (pm -> levels, default all Asteroid Mines) and these market premiums."""
+    (pm -> levels, default all Asteroid Mines), each on the logistics methods `logistics`
+    gives it (pm -> methods, default none), and these market premiums."""
     serves = {p: True for p in room} if serves is None else serves
     tw = _month_twin(state, room=room, serves=serves, built=built, queued=queued, profit={}, yard=YARD,
                      month_index=month_index)
     del tw.stub_effects["sr_eb_read_profits"]
     tw.is_ai = is_ai
     methods = methods or {"pm_space_mine": max(built, 1)}
+    logistics = logistics or {}
     for n, (pm, levels) in enumerate(methods.items()):
-        tw.buildings.append(Building(n, level=levels, pm=pm))
+        tw.buildings.append(Building(n, level=levels, pm=pm, logistics=logistics.get(pm, ())))
     for g, r in (prices or {}).items():
         tw.price(g, r)
     tw.effect("sr_eb_count_methods")
     total = sum(methods.values())
     tw.shares = {pm: n / total for pm, n in methods.items()}
+    tw.cuts = eg.method_cuts([(pm, n, logistics.get(pm, ())) for pm, n in methods.items()])
     tw.rel = {g: round(r, 5) for g, r in (prices or {}).items()}
     return tw
 
@@ -1781,7 +1852,8 @@ class ControlsTwinTest(unittest.TestCase):
             methods = {pm: n for pm, n in methods.items() if n}
             tw = _market_twin(state, room={p: r for p, r in room.items() if held[p]},
                               serves={p: serves[p] for p in room if held[p]}, built=built, prices=prices,
-                              methods=methods)
+                              methods=methods,
+                              logistics={pm: tuple(c for c in eg.input_cuts() if rng.random() < 0.5) for pm in methods})
             tw.effect("sr_eb_month")
             for path in ("refresh", "click"):
                 with self.subTest(case=case, path=path):
@@ -1800,7 +1872,7 @@ class ControlsTwinTest(unittest.TestCase):
                                if tw.locals[f"sr_ebf_at_{p}"]}
                     self.assertEqual(got_end, end.at)
                     for row, st in (("now", now), ("end", end)):
-                        want = eg.totals(st, tw.shares, tw.rel)
+                        want = eg.totals(st, tw.shares, tw.rel, tw.cuts)
                         for g in (*eg.GOODS, "profit"):
                             got = unfx(tw.vars[f"sr_eb_{row}_{g}"])
                             self.assertAlmostEqual(got, want[g], delta=0.5 + 2e-6 * abs(want[g]), msg=f"{row} {g}")
@@ -1816,13 +1888,14 @@ class ControlsTwinTest(unittest.TestCase):
             methods = {pm: n for pm, n in zip(pms, [rng.choice((0, 3, 20)) for _ in pms]) if n} or {pms[1]: 4}
             tw = _market_twin(state, room={p: r for p, r in room.items() if held[p]}, built=built,
                               prices={g: rng.uniform(-0.5, 0.8) for g in eg.method_goods()}, methods=methods,
-                              is_ai=rng.random() < 0.5)
+                              is_ai=rng.random() < 0.5,
+                              logistics={pm: tuple(c for c in eg.input_cuts() if rng.random() < 0.5) for pm in methods})
             tw.effect("sr_eb_month")
             with self.subTest(case=case):
                 for k in eg.PLACES:
                     self.assertAlmostEqual(unfx(tw.vars[f"sr_eb_level_profit_{k}"]),
-                                           eg.profit_a_level(k, tw.shares, tw.rel), delta=0.05)
-                self.assertAlmostEqual(unfx(tw.vars["sr_eb_yardstick"]), eg.yardstick(tw.shares), delta=0.05)
+                                           eg.profit_a_level(k, tw.shares, tw.rel, tw.cuts), delta=0.05)
+                self.assertAlmostEqual(unfx(tw.vars["sr_eb_yardstick"]), eg.yardstick(tw.shares, tw.cuts), delta=0.05)
                 self.assertEqual(unfx(tw.vars["sr_eb_lead_method"]), eg.lead_method(methods))
                 fresh = {k: v for k, v in tw.locals.items() if k.startswith("sr_ebi_")}
                 tw.locals, tw.values_read = {}, []
@@ -2004,15 +2077,16 @@ class CustomLocTest(unittest.TestCase):
         for case in range(20):
             room = {p: rng.choice((0, 50, 100)) for p in rng.sample(eg.PLACES, 5)}
             tw = _market_twin(eg.BaseState(), room=room, built=rng.randint(0, 250), queued=rng.randint(0, 50),
-                              prices={g: rng.uniform(-0.5, 0.5) for g in eg.method_goods()})
+                              prices={g: rng.uniform(-0.5, 0.5) for g in eg.method_goods()},
+                              logistics={"pm_space_mine": tuple(eg.input_cuts())[:case % 3]})
             tw.effect("sr_eb_month")
             tw.effect("sr_eb_next_place")
             k = int(unfx(tw.vars["sr_ebase_next_place"]))
             with self.subTest(case=case, next=k):
                 if k < 0:
-                    want = eg.margin("mixed", tw.shares, tw.rel) * (1 + eg.OVERFLOW_GRADE)
+                    want = eg.margin("mixed", tw.shares, tw.rel, tw.cuts) * (1 + eg.OVERFLOW_GRADE)
                 else:
-                    want = eg.profit_a_level(eg.PLACES[k], tw.shares, tw.rel)
+                    want = eg.profit_a_level(eg.PLACES[k], tw.shares, tw.rel, tw.cuts)
                 self.assertAlmostEqual(unfx(tw.vars["sr_ebase_next_profit"]), want, delta=0.05)
 
     def test_the_room_modifiers_say_the_new_rule(self):
