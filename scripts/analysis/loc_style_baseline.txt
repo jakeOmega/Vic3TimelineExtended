@@ -159,7 +159,6 @@ spaced-hyphen	TE_STATE_SEABED_ROW_LONG_HAUL_TT
 spaced-hyphen	UN_LOBBY_ACCEPT_RELATIONS
 spaced-hyphen	amendment_langreform_revived_pali_desc
 spaced-hyphen	climate_adaptation_modifier_desc
-spaced-hyphen	combined_arms_desc
 spaced-hyphen	concept_funding_stealth_desc
 spaced-hyphen	gm_je_tt_ig_armed_forces
 spaced-hyphen	gm_je_tt_ig_devout
