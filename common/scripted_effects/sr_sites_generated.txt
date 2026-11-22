@@ -22078,6 +22078,15 @@ sr_mod_ai_plan_valles_marineris = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_resort_valles_marineris = yes
+				sr_mod_slots_used_valles_marineris < sr_site_slots_valles_marineris
+				OR = { sr_site_crews_valles_marineris >= sr_site_levels_valles_marineris has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = valles_marineris TYPE = resort INDEX = 1 CODE = 10 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_terra_valles_marineris = yes
 				sr_mod_slots_used_valles_marineris < sr_site_slots_valles_marineris
 				OR = { sr_site_crews_valles_marineris >= sr_site_levels_valles_marineris has_technology_researched = artificial_intelligence }
@@ -22312,6 +22321,15 @@ sr_mod_ai_plan_olympus_mons = {
 				sr_ebase_levels > sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = olympus_mons TYPE = mine INDEX = 2 CODE = 6 }
+		}
+		else_if = {
+			limit = {
+				sr_mod_can_queue_resort_olympus_mons = yes
+				sr_mod_slots_used_olympus_mons < sr_site_slots_olympus_mons
+				OR = { sr_site_crews_olympus_mons >= sr_site_levels_olympus_mons has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = olympus_mons TYPE = resort INDEX = 2 CODE = 10 }
 		}
 		else_if = {
 			limit = {
@@ -22552,6 +22570,15 @@ sr_mod_ai_plan_hellas_planitia = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_resort_hellas_planitia = yes
+				sr_mod_slots_used_hellas_planitia < sr_site_slots_hellas_planitia
+				OR = { sr_site_crews_hellas_planitia >= sr_site_levels_hellas_planitia has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = hellas_planitia TYPE = resort INDEX = 3 CODE = 10 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_terra_hellas_planitia = yes
 				sr_mod_slots_used_hellas_planitia < sr_site_slots_hellas_planitia
 				OR = { sr_site_crews_hellas_planitia >= sr_site_levels_hellas_planitia has_technology_researched = artificial_intelligence }
@@ -22786,6 +22813,15 @@ sr_mod_ai_plan_utopia_planitia = {
 				sr_ebase_levels > sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = utopia_planitia TYPE = mine INDEX = 4 CODE = 6 }
+		}
+		else_if = {
+			limit = {
+				sr_mod_can_queue_resort_utopia_planitia = yes
+				sr_mod_slots_used_utopia_planitia < sr_site_slots_utopia_planitia
+				OR = { sr_site_crews_utopia_planitia >= sr_site_levels_utopia_planitia has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = utopia_planitia TYPE = resort INDEX = 4 CODE = 10 }
 		}
 		else_if = {
 			limit = {
@@ -23026,6 +23062,15 @@ sr_mod_ai_plan_arcadia_planitia = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_resort_arcadia_planitia = yes
+				sr_mod_slots_used_arcadia_planitia < sr_site_slots_arcadia_planitia
+				OR = { sr_site_crews_arcadia_planitia >= sr_site_levels_arcadia_planitia has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = arcadia_planitia TYPE = resort INDEX = 5 CODE = 10 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_terra_arcadia_planitia = yes
 				sr_mod_slots_used_arcadia_planitia < sr_site_slots_arcadia_planitia
 				OR = { sr_site_crews_arcadia_planitia >= sr_site_levels_arcadia_planitia has_technology_researched = artificial_intelligence }
@@ -23258,6 +23303,15 @@ sr_mod_ai_plan_ceres = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_resort_ceres = yes
+				sr_mod_slots_used_ceres < sr_site_slots_ceres
+				OR = { sr_site_crews_ceres >= sr_site_levels_ceres has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = ceres TYPE = resort INDEX = 6 CODE = 10 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_ceres = yes
 				sr_mod_slots_used_ceres < sr_site_slots_ceres
 				OR = { sr_site_crews_ceres >= sr_site_levels_ceres has_technology_researched = artificial_intelligence }
@@ -23453,6 +23507,15 @@ sr_mod_ai_plan_vesta = {
 				sr_ebase_levels > sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = vesta TYPE = mine INDEX = 7 CODE = 6 }
+		}
+		else_if = {
+			limit = {
+				sr_mod_can_queue_resort_vesta = yes
+				sr_mod_slots_used_vesta < sr_site_slots_vesta
+				OR = { sr_site_crews_vesta >= sr_site_levels_vesta has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = vesta TYPE = resort INDEX = 7 CODE = 10 }
 		}
 		else_if = {
 			limit = {
@@ -23654,6 +23717,15 @@ sr_mod_ai_plan_psyche = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_resort_psyche = yes
+				sr_mod_slots_used_psyche < sr_site_slots_psyche
+				OR = { sr_site_crews_psyche >= sr_site_levels_psyche has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = psyche TYPE = resort INDEX = 8 CODE = 10 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_psyche = yes
 				sr_mod_slots_used_psyche < sr_site_slots_psyche
 				OR = { sr_site_crews_psyche >= sr_site_levels_psyche has_technology_researched = artificial_intelligence }
@@ -23849,6 +23921,15 @@ sr_mod_ai_plan_pallas = {
 				sr_ebase_levels > sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = pallas TYPE = mine INDEX = 9 CODE = 6 }
+		}
+		else_if = {
+			limit = {
+				sr_mod_can_queue_resort_pallas = yes
+				sr_mod_slots_used_pallas < sr_site_slots_pallas
+				OR = { sr_site_crews_pallas >= sr_site_levels_pallas has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = pallas TYPE = resort INDEX = 9 CODE = 10 }
 		}
 		else_if = {
 			limit = {
@@ -24050,6 +24131,15 @@ sr_mod_ai_plan_hygiea = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_resort_hygiea = yes
+				sr_mod_slots_used_hygiea < sr_site_slots_hygiea
+				OR = { sr_site_crews_hygiea >= sr_site_levels_hygiea has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = hygiea TYPE = resort INDEX = 10 CODE = 10 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_hygiea = yes
 				sr_mod_slots_used_hygiea < sr_site_slots_hygiea
 				OR = { sr_site_crews_hygiea >= sr_site_levels_hygiea has_technology_researched = artificial_intelligence }
@@ -24248,6 +24338,15 @@ sr_mod_ai_plan_io = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_resort_io = yes
+				sr_mod_slots_used_io < sr_site_slots_io
+				OR = { sr_site_crews_io >= sr_site_levels_io has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = io TYPE = resort INDEX = 11 CODE = 10 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_io = yes
 				sr_mod_slots_used_io < sr_site_slots_io
 				OR = { sr_site_crews_io >= sr_site_levels_io has_technology_researched = artificial_intelligence }
@@ -24443,6 +24542,15 @@ sr_mod_ai_plan_europa = {
 				sr_ebase_levels > sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = europa TYPE = mine INDEX = 12 CODE = 6 }
+		}
+		else_if = {
+			limit = {
+				sr_mod_can_queue_resort_europa = yes
+				sr_mod_slots_used_europa < sr_site_slots_europa
+				OR = { sr_site_crews_europa >= sr_site_levels_europa has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = europa TYPE = resort INDEX = 12 CODE = 10 }
 		}
 		else_if = {
 			limit = {
@@ -24646,6 +24754,15 @@ sr_mod_ai_plan_ganymede = {
 				sr_ebase_levels > sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = ganymede TYPE = mine INDEX = 13 CODE = 6 }
+		}
+		else_if = {
+			limit = {
+				sr_mod_can_queue_resort_ganymede = yes
+				sr_mod_slots_used_ganymede < sr_site_slots_ganymede
+				OR = { sr_site_crews_ganymede >= sr_site_levels_ganymede has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = ganymede TYPE = resort INDEX = 13 CODE = 10 }
 		}
 		else_if = {
 			limit = {
@@ -24886,6 +25003,15 @@ sr_mod_ai_plan_callisto = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_resort_callisto = yes
+				sr_mod_slots_used_callisto < sr_site_slots_callisto
+				OR = { sr_site_crews_callisto >= sr_site_levels_callisto has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = callisto TYPE = resort INDEX = 14 CODE = 10 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_terra_callisto = yes
 				sr_mod_slots_used_callisto < sr_site_slots_callisto
 				OR = { sr_site_crews_callisto >= sr_site_levels_callisto has_technology_researched = artificial_intelligence }
@@ -25118,6 +25244,15 @@ sr_mod_ai_plan_himalia = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_resort_himalia = yes
+				sr_mod_slots_used_himalia < sr_site_slots_himalia
+				OR = { sr_site_crews_himalia >= sr_site_levels_himalia has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = himalia TYPE = resort INDEX = 15 CODE = 10 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_himalia = yes
 				sr_mod_slots_used_himalia < sr_site_slots_himalia
 				OR = { sr_site_crews_himalia >= sr_site_levels_himalia has_technology_researched = artificial_intelligence }
@@ -25313,6 +25448,15 @@ sr_mod_ai_plan_amalthea = {
 				sr_ebase_levels > sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = amalthea TYPE = mine INDEX = 16 CODE = 6 }
+		}
+		else_if = {
+			limit = {
+				sr_mod_can_queue_resort_amalthea = yes
+				sr_mod_slots_used_amalthea < sr_site_slots_amalthea
+				OR = { sr_site_crews_amalthea >= sr_site_levels_amalthea has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = amalthea TYPE = resort INDEX = 16 CODE = 10 }
 		}
 		else_if = {
 			limit = {
@@ -25516,6 +25660,15 @@ sr_mod_ai_plan_venus = {
 				sr_ebase_levels > sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = venus TYPE = mine INDEX = 17 CODE = 6 }
+		}
+		else_if = {
+			limit = {
+				sr_mod_can_queue_resort_venus = yes
+				sr_mod_slots_used_venus < sr_site_slots_venus
+				OR = { sr_site_crews_venus >= sr_site_levels_venus has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = venus TYPE = resort INDEX = 17 CODE = 10 }
 		}
 		else_if = {
 			limit = {
@@ -25751,6 +25904,15 @@ sr_mod_ai_plan_mercury = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_resort_mercury = yes
+				sr_mod_slots_used_mercury < sr_site_slots_mercury
+				OR = { sr_site_crews_mercury >= sr_site_levels_mercury has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = mercury TYPE = resort INDEX = 18 CODE = 10 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_mercury = yes
 				sr_mod_slots_used_mercury < sr_site_slots_mercury
 				OR = { sr_site_crews_mercury >= sr_site_levels_mercury has_technology_researched = artificial_intelligence }
@@ -25951,6 +26113,15 @@ sr_mod_ai_plan_titan = {
 				sr_ebase_levels > sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = titan TYPE = mine INDEX = 19 CODE = 6 }
+		}
+		else_if = {
+			limit = {
+				sr_mod_can_queue_resort_titan = yes
+				sr_mod_slots_used_titan < sr_site_slots_titan
+				OR = { sr_site_crews_titan >= sr_site_levels_titan has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = titan TYPE = resort INDEX = 19 CODE = 10 }
 		}
 		else_if = {
 			limit = {
@@ -26186,6 +26357,15 @@ sr_mod_ai_plan_enceladus = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_resort_enceladus = yes
+				sr_mod_slots_used_enceladus < sr_site_slots_enceladus
+				OR = { sr_site_crews_enceladus >= sr_site_levels_enceladus has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = enceladus TYPE = resort INDEX = 20 CODE = 10 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_enceladus = yes
 				sr_mod_slots_used_enceladus < sr_site_slots_enceladus
 				OR = { sr_site_crews_enceladus >= sr_site_levels_enceladus has_technology_researched = artificial_intelligence }
@@ -26381,6 +26561,15 @@ sr_mod_ai_plan_rhea = {
 				sr_ebase_levels > sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = rhea TYPE = mine INDEX = 21 CODE = 6 }
+		}
+		else_if = {
+			limit = {
+				sr_mod_can_queue_resort_rhea = yes
+				sr_mod_slots_used_rhea < sr_site_slots_rhea
+				OR = { sr_site_crews_rhea >= sr_site_levels_rhea has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = rhea TYPE = resort INDEX = 21 CODE = 10 }
 		}
 		else_if = {
 			limit = {
@@ -26582,6 +26771,15 @@ sr_mod_ai_plan_mimas = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_resort_mimas = yes
+				sr_mod_slots_used_mimas < sr_site_slots_mimas
+				OR = { sr_site_crews_mimas >= sr_site_levels_mimas has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = mimas TYPE = resort INDEX = 22 CODE = 10 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_mimas = yes
 				sr_mod_slots_used_mimas < sr_site_slots_mimas
 				OR = { sr_site_crews_mimas >= sr_site_levels_mimas has_technology_researched = artificial_intelligence }
@@ -26777,6 +26975,15 @@ sr_mod_ai_plan_iapetus = {
 				sr_ebase_levels > sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = iapetus TYPE = mine INDEX = 23 CODE = 6 }
+		}
+		else_if = {
+			limit = {
+				sr_mod_can_queue_resort_iapetus = yes
+				sr_mod_slots_used_iapetus < sr_site_slots_iapetus
+				OR = { sr_site_crews_iapetus >= sr_site_levels_iapetus has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = iapetus TYPE = resort INDEX = 23 CODE = 10 }
 		}
 		else_if = {
 			limit = {
@@ -26978,6 +27185,15 @@ sr_mod_ai_plan_titania = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_resort_titania = yes
+				sr_mod_slots_used_titania < sr_site_slots_titania
+				OR = { sr_site_crews_titania >= sr_site_levels_titania has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = titania TYPE = resort INDEX = 24 CODE = 10 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_titania = yes
 				sr_mod_slots_used_titania < sr_site_slots_titania
 				OR = { sr_site_crews_titania >= sr_site_levels_titania has_technology_researched = artificial_intelligence }
@@ -27173,6 +27389,15 @@ sr_mod_ai_plan_oberon = {
 				sr_ebase_levels > sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = oberon TYPE = mine INDEX = 25 CODE = 6 }
+		}
+		else_if = {
+			limit = {
+				sr_mod_can_queue_resort_oberon = yes
+				sr_mod_slots_used_oberon < sr_site_slots_oberon
+				OR = { sr_site_crews_oberon >= sr_site_levels_oberon has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = oberon TYPE = resort INDEX = 25 CODE = 10 }
 		}
 		else_if = {
 			limit = {
@@ -27374,6 +27599,15 @@ sr_mod_ai_plan_miranda = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_resort_miranda = yes
+				sr_mod_slots_used_miranda < sr_site_slots_miranda
+				OR = { sr_site_crews_miranda >= sr_site_levels_miranda has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = miranda TYPE = resort INDEX = 26 CODE = 10 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_miranda = yes
 				sr_mod_slots_used_miranda < sr_site_slots_miranda
 				OR = { sr_site_crews_miranda >= sr_site_levels_miranda has_technology_researched = artificial_intelligence }
@@ -27569,6 +27803,15 @@ sr_mod_ai_plan_ariel = {
 				sr_ebase_levels > sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = ariel TYPE = mine INDEX = 27 CODE = 6 }
+		}
+		else_if = {
+			limit = {
+				sr_mod_can_queue_resort_ariel = yes
+				sr_mod_slots_used_ariel < sr_site_slots_ariel
+				OR = { sr_site_crews_ariel >= sr_site_levels_ariel has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = ariel TYPE = resort INDEX = 27 CODE = 10 }
 		}
 		else_if = {
 			limit = {
@@ -27770,6 +28013,15 @@ sr_mod_ai_plan_triton = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_resort_triton = yes
+				sr_mod_slots_used_triton < sr_site_slots_triton
+				OR = { sr_site_crews_triton >= sr_site_levels_triton has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = triton TYPE = resort INDEX = 28 CODE = 10 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_triton = yes
 				sr_mod_slots_used_triton < sr_site_slots_triton
 				OR = { sr_site_crews_triton >= sr_site_levels_triton has_technology_researched = artificial_intelligence }
@@ -27965,6 +28217,15 @@ sr_mod_ai_plan_proteus = {
 				sr_ebase_levels > sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = proteus TYPE = mine INDEX = 29 CODE = 6 }
+		}
+		else_if = {
+			limit = {
+				sr_mod_can_queue_resort_proteus = yes
+				sr_mod_slots_used_proteus < sr_site_slots_proteus
+				OR = { sr_site_crews_proteus >= sr_site_levels_proteus has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = proteus TYPE = resort INDEX = 29 CODE = 10 }
 		}
 		else_if = {
 			limit = {
@@ -28166,6 +28427,15 @@ sr_mod_ai_plan_pluto = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_resort_pluto = yes
+				sr_mod_slots_used_pluto < sr_site_slots_pluto
+				OR = { sr_site_crews_pluto >= sr_site_levels_pluto has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = pluto TYPE = resort INDEX = 30 CODE = 10 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_pluto = yes
 				sr_mod_slots_used_pluto < sr_site_slots_pluto
 				OR = { sr_site_crews_pluto >= sr_site_levels_pluto has_technology_researched = artificial_intelligence }
@@ -28361,6 +28631,15 @@ sr_mod_ai_plan_eris = {
 				sr_ebase_levels > sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = eris TYPE = mine INDEX = 31 CODE = 6 }
+		}
+		else_if = {
+			limit = {
+				sr_mod_can_queue_resort_eris = yes
+				sr_mod_slots_used_eris < sr_site_slots_eris
+				OR = { sr_site_crews_eris >= sr_site_levels_eris has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = eris TYPE = resort INDEX = 31 CODE = 10 }
 		}
 		else_if = {
 			limit = {
@@ -28562,6 +28841,15 @@ sr_mod_ai_plan_makemake = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_resort_makemake = yes
+				sr_mod_slots_used_makemake < sr_site_slots_makemake
+				OR = { sr_site_crews_makemake >= sr_site_levels_makemake has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = makemake TYPE = resort INDEX = 32 CODE = 10 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_makemake = yes
 				sr_mod_slots_used_makemake < sr_site_slots_makemake
 				OR = { sr_site_crews_makemake >= sr_site_levels_makemake has_technology_researched = artificial_intelligence }
@@ -28757,6 +29045,15 @@ sr_mod_ai_plan_haumea = {
 				sr_ebase_levels > sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = haumea TYPE = mine INDEX = 33 CODE = 6 }
+		}
+		else_if = {
+			limit = {
+				sr_mod_can_queue_resort_haumea = yes
+				sr_mod_slots_used_haumea < sr_site_slots_haumea
+				OR = { sr_site_crews_haumea >= sr_site_levels_haumea has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = haumea TYPE = resort INDEX = 33 CODE = 10 }
 		}
 		else_if = {
 			limit = {
@@ -28958,6 +29255,15 @@ sr_mod_ai_plan_sedna = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_resort_sedna = yes
+				sr_mod_slots_used_sedna < sr_site_slots_sedna
+				OR = { sr_site_crews_sedna >= sr_site_levels_sedna has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = sedna TYPE = resort INDEX = 34 CODE = 10 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_sedna = yes
 				sr_mod_slots_used_sedna < sr_site_slots_sedna
 				OR = { sr_site_crews_sedna >= sr_site_levels_sedna has_technology_researched = artificial_intelligence }
@@ -29148,6 +29454,15 @@ sr_mod_ai_plan_shackleton = {
 				sr_ebase_levels > sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = shackleton TYPE = mine INDEX = 35 CODE = 6 }
+		}
+		else_if = {
+			limit = {
+				sr_mod_can_queue_resort_shackleton = yes
+				sr_mod_slots_used_shackleton < sr_site_slots_shackleton
+				OR = { sr_site_crews_shackleton >= sr_site_levels_shackleton has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = shackleton TYPE = resort INDEX = 35 CODE = 10 }
 		}
 		else_if = {
 			limit = {
@@ -29344,6 +29659,15 @@ sr_mod_ai_plan_peary = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_resort_peary = yes
+				sr_mod_slots_used_peary < sr_site_slots_peary
+				OR = { sr_site_crews_peary >= sr_site_levels_peary has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = peary TYPE = resort INDEX = 36 CODE = 10 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_peary = yes
 				sr_mod_slots_used_peary < sr_site_slots_peary
 				OR = { sr_site_crews_peary >= sr_site_levels_peary has_technology_researched = artificial_intelligence }
@@ -29534,6 +29858,15 @@ sr_mod_ai_plan_tranquility = {
 				sr_ebase_levels > sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = tranquility TYPE = mine INDEX = 37 CODE = 6 }
+		}
+		else_if = {
+			limit = {
+				sr_mod_can_queue_resort_tranquility = yes
+				sr_mod_slots_used_tranquility < sr_site_slots_tranquility
+				OR = { sr_site_crews_tranquility >= sr_site_levels_tranquility has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = tranquility TYPE = resort INDEX = 37 CODE = 10 }
 		}
 		else_if = {
 			limit = {
@@ -29730,6 +30063,15 @@ sr_mod_ai_plan_marius_hills = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_resort_marius_hills = yes
+				sr_mod_slots_used_marius_hills < sr_site_slots_marius_hills
+				OR = { sr_site_crews_marius_hills >= sr_site_levels_marius_hills has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = marius_hills TYPE = resort INDEX = 38 CODE = 10 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_marius_hills = yes
 				sr_mod_slots_used_marius_hills < sr_site_slots_marius_hills
 				OR = { sr_site_crews_marius_hills >= sr_site_levels_marius_hills has_technology_researched = artificial_intelligence }
@@ -29923,6 +30265,15 @@ sr_mod_ai_plan_daedalus = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_resort_daedalus = yes
+				sr_mod_slots_used_daedalus < sr_site_slots_daedalus
+				OR = { sr_site_crews_daedalus >= sr_site_levels_daedalus has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = daedalus TYPE = resort INDEX = 39 CODE = 10 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_daedalus = yes
 				sr_mod_slots_used_daedalus < sr_site_slots_daedalus
 				OR = { sr_site_crews_daedalus >= sr_site_levels_daedalus has_technology_researched = artificial_intelligence }
@@ -30113,6 +30464,15 @@ sr_mod_ai_plan_imbrium = {
 				sr_ebase_levels > sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = imbrium TYPE = mine INDEX = 40 CODE = 6 }
+		}
+		else_if = {
+			limit = {
+				sr_mod_can_queue_resort_imbrium = yes
+				sr_mod_slots_used_imbrium < sr_site_slots_imbrium
+				OR = { sr_site_crews_imbrium >= sr_site_levels_imbrium has_technology_researched = artificial_intelligence }
+				sr_resort_queued_levels >= sr_resort_room_total
+			}
+			sr_mod_queue = { KEY = imbrium TYPE = resort INDEX = 40 CODE = 10 }
 		}
 		else_if = {
 			limit = {

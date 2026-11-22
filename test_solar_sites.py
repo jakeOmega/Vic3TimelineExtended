@@ -1516,8 +1516,10 @@ class ModulesTest(unittest.TestCase):
             with self.subTest(site=k):
                 queued = re.findall(r"sr_mod_queue = \{ KEY = \w+ TYPE = (\w+) ", body)
                 terra = {"terra"} if gss.terraformable(site) else set()
-                self.assertEqual(set(queued), {"hab", "a", "b", "admin", "mine", "bunker", "yard", "lab"} | terra)
-                self.assertEqual(body.count(f"sr_mod_slots_used_{k} < sr_site_slots_{k}"), 6 + len(terra))
+                # The Off-World Resort since #1948, once the Resort Colony room is full.
+                self.assertEqual(set(queued), {"hab", "a", "b", "admin", "mine", "resort", "bunker", "yard", "lab"}
+                                 | terra)
+                self.assertEqual(body.count(f"sr_mod_slots_used_{k} < sr_site_slots_{k}"), 7 + len(terra))
         review = _block(self.modules, "sr_mod_ai_review")
         self.assertIn("is_ai = yes", review)
         self.assertIn("days = 360", review)

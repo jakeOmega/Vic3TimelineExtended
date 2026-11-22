@@ -348,7 +348,8 @@ FACILITIES: tuple[Facility, ...] = (
     Facility("yard", "Orbital Yard", "Yard", True, False),
     Facility("lab", "Research Station", "Lab", False, True),
     Facility("culture", "Cultural Center", "Arts", False, True),
-    Facility("resort", "Off-World Resort", "Tour", True, True),
+    # A hook since #1948: Resort Colony room at its world (+3% tourism output before).
+    Facility("resort", "Off-World Resort", "Tour", True, False),
     Facility("black", "Black Site", "Spy", False, True),
     Facility("train", "Training Ground", "Camp", False, True),
     Facility("bunker", "Nuclear Command Center", "Nuke", False, False),
@@ -2242,6 +2243,9 @@ def _module_ai(site: Site) -> list[str]:
     plan = (("admin", f"sr_site_autonomy_value_{k} >= sr_mod_ai_admin_autonomy"
                       f" sr_site_aut_pressure_{k} >= sr_mod_ai_admin_pressure"),
             ("mine", "sr_ebase_levels > sr_ebase_room_total"),
+            # An Off-World Resort once the Resort Colony room is full, queued levels
+            # counted (#1948 design § 7): the AI and private investors stop at the room.
+            ("resort", "sr_resort_queued_levels >= sr_resort_room_total"),
             ("terra", f"sr_site_fill_{k} >= sr_mod_ai_terra_fill"),
             ("bunker", "nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max"),
             ("yard", "any_scope_building = { is_building_type = building_space_command }"),
@@ -2654,6 +2658,10 @@ def render_module_triggers() -> list[str]:
                     "\tsr_mq_has_room = yes",
                     f"\tsr_mod_slots_used_{k} < sr_site_slots_max_{k}",
                     f"\tsr_mod_next_cost_{k} <= sr_mod_fab_stock_cap"]
+            if t == "resort":
+                # The Off-World Resort is room for Resort Colony levels (#1948 design § 7),
+                # so it waits for the building's technology.
+                out.append(f"\thas_technology_researched = {RESORT_TECH}")
             if t == "terra":
                 # Terraforming (era 13 spec § 7.11): the technology's marker, at most
                 # sr_terra_max_levels at once, and only while the world is unfinished.

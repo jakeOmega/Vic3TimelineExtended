@@ -312,5 +312,56 @@ class ResortRefreshTest(unittest.TestCase):
         self.assertIn("sr_resort_room_*", str(gen_nation_tab.SECTIONS["science_and_space"]))
 
 
+class ResortModuleTest(unittest.TestCase):
+    def test_facility_is_a_hook(self):
+        resort = gss.FACILITY["resort"]
+        self.assertFalse(resort.modifier)
+        self.assertTrue(resort.ships)
+        self.assertEqual(gss.MODULE_CODES["resort"], 10)
+        self.assertNotIn("sr_module_resort", _raw(*gss.ENTRY_OUT.parts))
+        modifiers = _strip(_raw("common", "static_modifiers", "space_race_modifiers.txt"))
+        self.assertNotRegex(modifiers, r"(?m)^sr_module_resort\s*=")
+
+    def test_queue_needs_the_technology(self):
+        triggers = _strip(_raw(*gss.TRIGGERS_OUT.parts))
+        for site in gss.SITES:
+            for t in gss.generic_types(site):
+                with self.subTest(site=site.key, type=t):
+                    body = _block(triggers, f"sr_mod_can_queue_{t}_{site.key}")
+                    if t == "resort":
+                        self.assertIn("has_technology_researched = space_colonization", body)
+                    else:
+                        self.assertNotIn("space_colonization", body)
+
+    def test_reason_line(self):
+        sguis = _strip(_raw("common", "scripted_guis", "sr_colony_sguis.txt"))
+        self.assertRegex(sguis, r"limit = \{ scope:op = 10 \}\s+custom_tooltip = \{\s+text = sr_mod_req_resort_tech_tt"
+                                r"\s+has_technology_researched = space_colonization")
+        loc = _raw("localization", "english", "te_miscellaneous_l_english.yml")
+        self.assertIn(" sr_mod_req_resort_tech_tt:0 ", loc)
+
+    def test_ai_plans_a_resort_when_room_is_full(self):
+        effects = _strip(_raw(*gss.EFFECTS_OUT.parts))
+        for site in gss.SITES:
+            with self.subTest(site=site.key):
+                plan = _block(effects, f"sr_mod_ai_plan_{site.key}")
+                resort = plan.index(f"sr_mod_can_queue_resort_{site.key} = yes")
+                self.assertLess(plan.index(f"sr_mod_can_queue_mine_{site.key} = yes"), resort)
+                branch = plan[resort:plan.index("}", plan.index("sr_resort_queued_levels", resort))]
+                self.assertIn("sr_resort_queued_levels >= sr_resort_room_total", branch)
+
+    def test_no_three_percent_text(self):
+        for path, key in ((("localization", "english", "te_journal_entries_l_english.yml"),
+                           "je_space_race_widget_mod_resort_tt"),
+                          (("localization", "english", "te_miscellaneous_l_english.yml"), "sr_mod_queue_resort_tt")):
+            with self.subTest(key=key):
+                line = re.search(rf"(?m)^ {key}:0 \"(.*)\"$", _raw(*path)).group(1)
+                self.assertNotIn("+3%", line)
+                self.assertIn("$building_space_resort$", line)
+        concepts = _raw("localization", "english", "te_concepts_l_english.yml")
+        self.assertNotIn(" sr_module_resort:0", concepts)
+        self.assertNotIn(" sr_module_resort_desc:0", concepts)
+
+
 if __name__ == "__main__":
     unittest.main()
