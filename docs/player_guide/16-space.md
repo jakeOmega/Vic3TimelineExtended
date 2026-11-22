@@ -893,7 +893,8 @@ Asteroid Mining, the near-Earth asteroids give every country room for 10 levels,
 and each colony you hold adds its own, from 50 levels on the small outer moons to 300 at 16 Psyche,
 and 50 more for each staffed level of its Mining Complexes.
 Each colony's room has a base grade (Base Grade, a term you can hover in game),
-which raises or lowers the output of the levels that work it:
+which raises or lowers the throughput of the levels that work it, their inputs
+with their output:
 
 | Sites | Grade |
 |---|---|
@@ -907,21 +908,87 @@ which raises or lowers the output of the levels that work it:
 | Uranus's and Neptune's moons | −25% to −35% |
 | The Kuiper Belt | −35% to −45% |
 
-Your levels fill the best room first, and any past all of your room work at
-−75%. Before Asteroid Mining, a country with no colony has no room at all. One
-country modifier, Extraplanetary Base Room, carries the average over
-all your levels, so only the levels past the room pay the penalty: with room for
-10 and 20 levels built, the base works at −37.5%. A new poor colony adds room
-without lowering what your levels already earn, and taking a rival's Psyche
-colony raises your average and lowers theirs. The overview's Base Room cell
-shows your levels, built and queued, against your room and the grade the next
-level would work at, counting the levels you have queued; that grade updates
-monthly and the day after a level finishes, except that it reads −75% at once
-when your queue passes all of your room. The Colonies section's Modules view shows
-your levels against your room, any queued, and each colony's Bases figure its
-own room and grade. Private investors don't build past your room,
-and AI governments don't either; your government can, at the penalty. Under
-Races Only, bases have no room limit.
+Each site also has a ground type (Ground Type), which decides which goods its
+levels make more and less of. The four mining methods make the same seven goods
+in the same proportions, and the type shifts that mix:
+
+| Type | Rich in | Poor in | Sites |
+|---|---|---|---|
+| Mixed | Nothing: the method's own mix | Nothing | The near-Earth asteroids |
+| Metallic | Gold, Structural and Conductive Metals | Chemical and Industrial Minerals, Glass and Plastics | 16 Psyche |
+| Rocky | Structural Metals, Glass and Plastics | Gold, Conductive and Base Metals | 4 Vesta, Valles Marineris, Olympus Mons, Hellas Planitia, Mercury, the Moon's four sites away from the poles |
+| Carbonaceous | Chemical and Industrial Minerals, Glass and Plastics, about twice over | Gold | Ceres, 2 Pallas, 10 Hygiea, Himalia, Callisto, Enceladus |
+| Sulfurous | Chemical and Industrial Minerals, four times over | Gold | Amalthea, Io, Europa, Venus |
+| Hydrocarbon | Glass and Plastics, three and a half times over, and Chemical and Industrial Minerals | Every metal | Titan, Iapetus, Pluto-Charon, Makemake, Sedna |
+| Icy | Chemical and Industrial Minerals, Glass and Plastics, less than Carbonaceous | Gold | The Utopia and Arcadia plains, the Moon's two poles, Ganymede, Rhea, Mimas, Uranus's four moons, Triton, Proteus, Eris, Haumea |
+
+At base prices every type earns the same a level, so the grade alone says what
+a site earns, and prices decide which type is best. Among sites of one type,
+the better grade always earns more. The type matters most on the thin-margin
+methods (Regolith Processing, then the Asteroid Mine) and when a good is expensive or
+glutted: with Glass and Plastics 50% above its base price, Ceres earns almost a
+quarter more a level than 16 Psyche on the Asteroid Mine. Once
+Self-Replicating Miners widen the margin, the best grade nearly always wins. A
+site's base room hover in Solar System gives its type's figures, so you can
+weigh a site before you colonize or seize it.
+
+Levels past all of your room work at −75% and count as Mixed. Before Asteroid
+Mining, a country with no colony has no room at all. One country modifier,
+Extraplanetary Base Room, carries the average grade over all your levels, so
+only the levels past the room pay the penalty: with room for 10 and 20 levels
+built, the base works at −37.5%. Each base building carries the mix of the sites
+your levels work (Extraplanetary Base Ground), so a base working one site shows
+that site's grade and type. A new poor colony adds room without lowering what
+your levels already earn. The overview's Base Room cell shows your levels, built
+and queued, against your room, and names the site the next level goes to, its
+hover giving that site's type, grade and profit a level; it reads −75% at once
+when your queue passes all of your room. Private investors don't build past your
+room, and AI governments don't either; your government can, at the penalty.
+Under Races Only, bases have no room limit and no ground types.
+
+#### The Bases view
+
+The Colonies section's Bases view, shown under Simple and Full Colonies once you
+have In-Situ Resource Utilization, says where your levels work and what they
+make. At the top are:
+
+- the Assign for the most profit checkbox;
+- your levels against your room;
+- what is moving and why: the pace, the two sites and the gain, or why levels
+  stay where they are;
+- what your bases make of each good and their profit a week, before other
+  modifiers: Now, and If prices hold with the checkbox on or At our assignments
+  with it off.
+
+Below them, the Near-Earth Asteroids row and each colony you hold show their type
+and grade, the levels working there against the room, − and + buttons, and a
+level's profit and output a week at today's prices. A blockaded or occupied
+colony says how many of its levels are working elsewhere.
+
+**Assign for the most profit** is on by default, and the AI always uses it.
+Each month it moves levels from the site that earns least a level to the one
+with room that earns most, while the gap is at least 5% of what a level earns at
+grade 0 and base prices: about £360 a week on the Asteroid Mine, and about £1,080
+once Tethered Launch and Fusion Tugs cut its Launch Capacity. It never moves
+levels to a site that loses money, so when every site loses money, levels stay
+where they are until prices recover. A feed notice tells you when it starts
+moving your bases to a different type of ground.
+
+**By hand**, the − and + buttons on a site set how many levels you want there:
+5 a click, 25 a right-click. A click switches the checkbox off, keeping where
+your levels are now as the starting point. + works only while some of your built
+and queued levels aren't assigned, and up to the site's room. Levels you haven't
+assigned go to the best grade with room when they're built. Switching the
+checkbox back on drops your assignments.
+
+**Every move is paced**, whoever decides it: a quarter of your levels a year,
+4 a month for a base of 150 levels. New levels go straight to their place, so
+switching the checkbox off and on gains nothing, and a large base can't flip its
+own market in a month.
+
+**A blockaded or occupied colony** gives no room: its levels move at once to
+your other room, or past it, and come back at once when it is freed. A colony
+you lose for good drops its assignment, and its levels move to your other room.
 
 ### Resort Colony room
 

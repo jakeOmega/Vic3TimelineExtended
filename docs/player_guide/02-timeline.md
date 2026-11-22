@@ -334,12 +334,13 @@ years of that saving, so the switch pays back sooner while Motor Ships are
 expensive. The
 Extraplanetary Base (In-Situ Resource Utilization) costs 20,000 construction per
 level. Its staff is the same at any size: a large base needs no more workers
-than a small one. It starts on Regolith Processing, which makes Structural Metals,
-Tech-Critical Metals and Glass and Plastics at a thin margin: about £1,600 a
+than a small one. It starts on Regolith Processing, at a thin margin: about £1,600 a
 level a week at base prices. Asteroid Mining brings the Asteroid Mine method,
-which mines mostly Structural and Tech-Critical Metals, with some gold and
-Conductive Metals and a little Base Metals and Chemical and Industrial Minerals.
-Space Colonization brings the larger Mining Colony, with the same mix. Von Neumann Machines (era 13)
+and Space Colonization the larger Mining Colony. Every mining method makes the
+same seven goods in the same proportions: mostly Structural and Tech-Critical
+Metals, with some gold, Conductive Metals and Glass and Plastics, and a little
+Base Metals and Chemical and Industrial Minerals. Each site's ground type then
+shifts that mix. Von Neumann Machines (era 13)
 brings Self-Replicating Miners, which build their copies from the ore they dig:
 against a Mining Colony, a level uses a third less Launch Capacity and mines a
 quarter more of each good. With
