@@ -83,6 +83,9 @@ sr_eb_month = {
 	set_local_variable = { name = sr_ebm_mfrom value = -1 }
 	set_local_variable = { name = sr_ebm_mto value = -1 }
 	set_local_variable = { name = sr_ebm_mn value = 0 }
+	set_local_variable = { name = sr_ebm_mft value = -1 }
+	set_local_variable = { name = sr_ebm_mtt value = -1 }
+	set_local_variable = { name = sr_ebm_mtn value = 0 }
 	if = {
 		limit = {
 			has_variable = sr_eb_placed
@@ -5751,6 +5754,9 @@ sr_eb_moves = {
 	set_local_variable = { name = sr_ebm_mfrom value = -1 }
 	set_local_variable = { name = sr_ebm_mto value = -1 }
 	set_local_variable = { name = sr_ebm_mn value = 0 }
+	set_local_variable = { name = sr_ebm_mft value = -1 }
+	set_local_variable = { name = sr_ebm_mtt value = -1 }
+	set_local_variable = { name = sr_ebm_mtn value = 0 }
 	while = {
 		limit = { local_var:sr_ebm_go = 1 local_var:sr_ebm_left > 0 local_var:sr_ebm_pass < 42 }
 		change_local_variable = { name = sr_ebm_pass add = 1 }
@@ -6284,335 +6290,419 @@ sr_eb_move_pass = {
 		if = {
 			limit = { local_var:sr_ebm_src = 0 }
 			change_local_variable = { name = sr_ebm_at_near_earth subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 0 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 1 }
 			change_local_variable = { name = sr_ebm_at_valles_marineris subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 2 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 2 }
 			change_local_variable = { name = sr_ebm_at_olympus_mons subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 2 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 3 }
 			change_local_variable = { name = sr_ebm_at_hellas_planitia subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 2 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 4 }
 			change_local_variable = { name = sr_ebm_at_utopia_planitia subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 5 }
 			change_local_variable = { name = sr_ebm_at_arcadia_planitia subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 6 }
 			change_local_variable = { name = sr_ebm_at_ceres subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 3 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 7 }
 			change_local_variable = { name = sr_ebm_at_vesta subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 2 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 8 }
 			change_local_variable = { name = sr_ebm_at_psyche subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 1 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 9 }
 			change_local_variable = { name = sr_ebm_at_pallas subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 3 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 10 }
 			change_local_variable = { name = sr_ebm_at_hygiea subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 3 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 11 }
 			change_local_variable = { name = sr_ebm_at_io subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 4 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 12 }
 			change_local_variable = { name = sr_ebm_at_europa subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 4 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 13 }
 			change_local_variable = { name = sr_ebm_at_ganymede subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 14 }
 			change_local_variable = { name = sr_ebm_at_callisto subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 3 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 15 }
 			change_local_variable = { name = sr_ebm_at_himalia subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 3 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 16 }
 			change_local_variable = { name = sr_ebm_at_amalthea subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 4 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 17 }
 			change_local_variable = { name = sr_ebm_at_venus subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 4 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 18 }
 			change_local_variable = { name = sr_ebm_at_mercury subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 2 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 19 }
 			change_local_variable = { name = sr_ebm_at_titan subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 5 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 20 }
 			change_local_variable = { name = sr_ebm_at_enceladus subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 3 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 21 }
 			change_local_variable = { name = sr_ebm_at_rhea subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 22 }
 			change_local_variable = { name = sr_ebm_at_mimas subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 23 }
 			change_local_variable = { name = sr_ebm_at_iapetus subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 5 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 24 }
 			change_local_variable = { name = sr_ebm_at_titania subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 25 }
 			change_local_variable = { name = sr_ebm_at_oberon subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 26 }
 			change_local_variable = { name = sr_ebm_at_miranda subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 27 }
 			change_local_variable = { name = sr_ebm_at_ariel subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 28 }
 			change_local_variable = { name = sr_ebm_at_triton subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 29 }
 			change_local_variable = { name = sr_ebm_at_proteus subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 30 }
 			change_local_variable = { name = sr_ebm_at_pluto subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 5 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 31 }
 			change_local_variable = { name = sr_ebm_at_eris subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 32 }
 			change_local_variable = { name = sr_ebm_at_makemake subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 5 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 33 }
 			change_local_variable = { name = sr_ebm_at_haumea subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 34 }
 			change_local_variable = { name = sr_ebm_at_sedna subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 5 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 35 }
 			change_local_variable = { name = sr_ebm_at_shackleton subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 36 }
 			change_local_variable = { name = sr_ebm_at_peary subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 37 }
 			change_local_variable = { name = sr_ebm_at_tranquility subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 2 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 38 }
 			change_local_variable = { name = sr_ebm_at_marius_hills subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 2 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 39 }
 			change_local_variable = { name = sr_ebm_at_daedalus subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 2 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_src = 40 }
 			change_local_variable = { name = sr_ebm_at_imbrium subtract = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_st value = 2 }
 		}
 		if = {
 			limit = { local_var:sr_ebm_dst = 0 }
 			change_local_variable = { name = sr_ebm_at_near_earth add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 0 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 1 }
 			change_local_variable = { name = sr_ebm_at_valles_marineris add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 2 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 2 }
 			change_local_variable = { name = sr_ebm_at_olympus_mons add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 2 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 3 }
 			change_local_variable = { name = sr_ebm_at_hellas_planitia add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 2 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 4 }
 			change_local_variable = { name = sr_ebm_at_utopia_planitia add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 5 }
 			change_local_variable = { name = sr_ebm_at_arcadia_planitia add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 6 }
 			change_local_variable = { name = sr_ebm_at_ceres add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 3 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 7 }
 			change_local_variable = { name = sr_ebm_at_vesta add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 2 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 8 }
 			change_local_variable = { name = sr_ebm_at_psyche add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 1 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 9 }
 			change_local_variable = { name = sr_ebm_at_pallas add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 3 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 10 }
 			change_local_variable = { name = sr_ebm_at_hygiea add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 3 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 11 }
 			change_local_variable = { name = sr_ebm_at_io add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 4 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 12 }
 			change_local_variable = { name = sr_ebm_at_europa add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 4 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 13 }
 			change_local_variable = { name = sr_ebm_at_ganymede add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 14 }
 			change_local_variable = { name = sr_ebm_at_callisto add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 3 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 15 }
 			change_local_variable = { name = sr_ebm_at_himalia add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 3 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 16 }
 			change_local_variable = { name = sr_ebm_at_amalthea add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 4 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 17 }
 			change_local_variable = { name = sr_ebm_at_venus add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 4 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 18 }
 			change_local_variable = { name = sr_ebm_at_mercury add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 2 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 19 }
 			change_local_variable = { name = sr_ebm_at_titan add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 5 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 20 }
 			change_local_variable = { name = sr_ebm_at_enceladus add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 3 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 21 }
 			change_local_variable = { name = sr_ebm_at_rhea add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 22 }
 			change_local_variable = { name = sr_ebm_at_mimas add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 23 }
 			change_local_variable = { name = sr_ebm_at_iapetus add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 5 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 24 }
 			change_local_variable = { name = sr_ebm_at_titania add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 25 }
 			change_local_variable = { name = sr_ebm_at_oberon add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 26 }
 			change_local_variable = { name = sr_ebm_at_miranda add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 27 }
 			change_local_variable = { name = sr_ebm_at_ariel add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 28 }
 			change_local_variable = { name = sr_ebm_at_triton add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 29 }
 			change_local_variable = { name = sr_ebm_at_proteus add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 30 }
 			change_local_variable = { name = sr_ebm_at_pluto add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 5 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 31 }
 			change_local_variable = { name = sr_ebm_at_eris add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 32 }
 			change_local_variable = { name = sr_ebm_at_makemake add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 5 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 33 }
 			change_local_variable = { name = sr_ebm_at_haumea add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 34 }
 			change_local_variable = { name = sr_ebm_at_sedna add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 5 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 35 }
 			change_local_variable = { name = sr_ebm_at_shackleton add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 36 }
 			change_local_variable = { name = sr_ebm_at_peary add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 6 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 37 }
 			change_local_variable = { name = sr_ebm_at_tranquility add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 2 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 38 }
 			change_local_variable = { name = sr_ebm_at_marius_hills add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 2 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 39 }
 			change_local_variable = { name = sr_ebm_at_daedalus add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 2 }
 		}
 		else_if = {
 			limit = { local_var:sr_ebm_dst = 40 }
 			change_local_variable = { name = sr_ebm_at_imbrium add = local_var:sr_ebm_n }
+			set_local_variable = { name = sr_ebm_dt value = 2 }
 		}
 		change_local_variable = { name = sr_ebm_left subtract = local_var:sr_ebm_n }
-		# The month's move (§ 9.1, § 9.4): its first pair, and the levels it carried
-		if = { limit = { local_var:sr_ebm_mfrom < 0 } set_local_variable = { name = sr_ebm_mfrom value = local_var:sr_ebm_src } set_local_variable = { name = sr_ebm_mto value = local_var:sr_ebm_dst } }
+		# The month's move (§ 9.1, § 9.4): its first pair, and the levels it carried; and its
+		# first pair's types, and the levels every pass between them carried (the notice's)
+		if = { limit = { local_var:sr_ebm_mfrom < 0 } set_local_variable = { name = sr_ebm_mfrom value = local_var:sr_ebm_src } set_local_variable = { name = sr_ebm_mto value = local_var:sr_ebm_dst } set_local_variable = { name = sr_ebm_mft value = local_var:sr_ebm_st } set_local_variable = { name = sr_ebm_mtt value = local_var:sr_ebm_dt } }
 		if = { limit = { local_var:sr_ebm_mfrom = local_var:sr_ebm_src local_var:sr_ebm_mto = local_var:sr_ebm_dst } change_local_variable = { name = sr_ebm_mn add = local_var:sr_ebm_n } }
+		if = { limit = { local_var:sr_ebm_mft = local_var:sr_ebm_st local_var:sr_ebm_mtt = local_var:sr_ebm_dt } change_local_variable = { name = sr_ebm_mtn add = local_var:sr_ebm_n } }
 	}
 	else = { set_local_variable = { name = sr_ebm_go value = 0 } }
 }
@@ -6623,8 +6713,10 @@ sr_eb_move_pass = {
 # levels it has carried (sr_eb_move_carried, for the notice's 5%); the last move's
 # (sr_eb_last_from, _to, _began, _ended: its first and last months). A month's move is
 # its first pass's pair; while the pair holds it adds the levels that pair carried;
-# another pair starts a new move; a month with none ends it.
-# Only the paced moves count (not new levels, displacement or return).
+# another pair starts a new move; a month with none ends it, and so does switching the
+# checkbox either way (sr_eb_checkbox_off, _on), so a record is all the checkbox's or all
+# the player's. Only the paced moves count (not new levels, displacement or return). The
+# notice's 5% counts by pair of types instead (sr_eb_type_move_carried, below).
 sr_eb_end_move = {
 	if = {
 		limit = { has_variable = sr_eb_move_from }
@@ -6660,6 +6752,28 @@ sr_eb_record_move = {
 		set_variable = { name = sr_eb_move_carried value = local_var:sr_ebm_mn }
 	}
 	else = { sr_eb_end_move = yes }
+	# The notice's count by pair of ground types (§ 9.4, ebase_ground.type_move): the levels the
+	# checkbox has carried between the types of its moves' first pair, whichever sites; a month
+	# whose first pair is another pair of types starts it again; a month with no move, or the
+	# checkbox off, leaves it. sr_eb_type_move_ft and _tt are the types' indices in TYPES.
+	if = {
+		limit = { local_var:sr_ebm_mfrom >= 0 NOT = { has_variable = sr_eb_manual } }
+		if = {
+			limit = {
+				has_variable = sr_eb_type_move_ft
+				has_variable = sr_eb_type_move_tt
+				has_variable = sr_eb_type_move_carried
+				var:sr_eb_type_move_ft = local_var:sr_ebm_mft
+				var:sr_eb_type_move_tt = local_var:sr_ebm_mtt
+			}
+			change_variable = { name = sr_eb_type_move_carried add = local_var:sr_ebm_mtn }
+		}
+		else = {
+			set_variable = { name = sr_eb_type_move_ft value = local_var:sr_ebm_mft }
+			set_variable = { name = sr_eb_type_move_tt value = local_var:sr_ebm_mtt }
+			set_variable = { name = sr_eb_type_move_carried value = local_var:sr_ebm_mtn }
+		}
+	}
 }
 
 # The base's two layers (§ 5.2) from where its levels work: T, the average grade
@@ -8511,7 +8625,7 @@ sr_eb_next_give = {
 
 # § 9.1's second row (ebase_ground.forecast): the rule in force run to where it stops,
 # with no pace, on a copy of our counts (sr_ebf_at_<k>). After sr_eb_read_inputs and the
-# targets' load; writes no variable.
+# targets' load; writes only var:sr_eb_move_due.
 sr_eb_forecast = {
 	set_local_variable = { name = sr_ebf_at_near_earth value = 0 }
 	if = { limit = { has_variable = sr_eb_at_near_earth } set_local_variable = { name = sr_ebf_at_near_earth value = var:sr_eb_at_near_earth } }
@@ -8598,6 +8712,14 @@ sr_eb_forecast = {
 	set_local_variable = { name = sr_ebf_over value = 0 }
 	if = { limit = { has_variable = sr_eb_over } set_local_variable = { name = sr_ebf_over value = var:sr_eb_over } }
 	sr_eb_forecast_moves = yes
+	# With the checkbox on, whether its first pass found a move (ebase_ground.move_due; a pass
+	# that finds none ends the loop): while no move is under way, the Bases view says the
+	# levels start moving next month.
+	if = {
+		limit = { NOT = { has_variable = sr_eb_manual } local_var:sr_ebf_pass > 1 }
+		set_variable = { name = sr_eb_move_due value = yes }
+	}
+	else_if = { limit = { has_variable = sr_eb_move_due } remove_variable = sr_eb_move_due }
 }
 sr_eb_forecast_moves = {
 	set_local_variable = { name = sr_ebf_pass value = 0 }
@@ -10260,282 +10382,973 @@ sr_eb_after_click = {
 	sr_eb_next_place = yes
 }
 
+# What switching Assign for the most profit off takes off each place's levels, so that each
+# target is what the place will hold once every blockade has returned (ebase_ground.switch_cuts):
+# a blockaded site is owed its away; the return takes those levels from the levels past the
+# room first and then along the checkbox's take order, the worst stored profit a level first
+# (var:sr_eb_level_profit_<k>), ties to the higher index, so max(0, sum(away) - over) comes off
+# the places owed nothing, never below 0. Into var:sr_eb_switch_cut_<k>, set only above 0: from
+# the refresh (players) and sr_eb_checkbox_off; sr_eb_assigned and sr_eb_scope_target read them
+# while the checkbox is on. Its own locals: it runs beside the month's.
+sr_eb_switch_cuts = {
+	set_local_variable = { name = sr_eba_need value = 0 }
+	if = { limit = { has_variable = sr_eb_away_near_earth } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_near_earth } }
+	if = { limit = { has_variable = sr_eb_away_valles_marineris } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_valles_marineris } }
+	if = { limit = { has_variable = sr_eb_away_olympus_mons } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_olympus_mons } }
+	if = { limit = { has_variable = sr_eb_away_hellas_planitia } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_hellas_planitia } }
+	if = { limit = { has_variable = sr_eb_away_utopia_planitia } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_utopia_planitia } }
+	if = { limit = { has_variable = sr_eb_away_arcadia_planitia } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_arcadia_planitia } }
+	if = { limit = { has_variable = sr_eb_away_ceres } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_ceres } }
+	if = { limit = { has_variable = sr_eb_away_vesta } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_vesta } }
+	if = { limit = { has_variable = sr_eb_away_psyche } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_psyche } }
+	if = { limit = { has_variable = sr_eb_away_pallas } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_pallas } }
+	if = { limit = { has_variable = sr_eb_away_hygiea } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_hygiea } }
+	if = { limit = { has_variable = sr_eb_away_io } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_io } }
+	if = { limit = { has_variable = sr_eb_away_europa } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_europa } }
+	if = { limit = { has_variable = sr_eb_away_ganymede } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_ganymede } }
+	if = { limit = { has_variable = sr_eb_away_callisto } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_callisto } }
+	if = { limit = { has_variable = sr_eb_away_himalia } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_himalia } }
+	if = { limit = { has_variable = sr_eb_away_amalthea } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_amalthea } }
+	if = { limit = { has_variable = sr_eb_away_venus } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_venus } }
+	if = { limit = { has_variable = sr_eb_away_mercury } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_mercury } }
+	if = { limit = { has_variable = sr_eb_away_titan } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_titan } }
+	if = { limit = { has_variable = sr_eb_away_enceladus } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_enceladus } }
+	if = { limit = { has_variable = sr_eb_away_rhea } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_rhea } }
+	if = { limit = { has_variable = sr_eb_away_mimas } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_mimas } }
+	if = { limit = { has_variable = sr_eb_away_iapetus } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_iapetus } }
+	if = { limit = { has_variable = sr_eb_away_titania } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_titania } }
+	if = { limit = { has_variable = sr_eb_away_oberon } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_oberon } }
+	if = { limit = { has_variable = sr_eb_away_miranda } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_miranda } }
+	if = { limit = { has_variable = sr_eb_away_ariel } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_ariel } }
+	if = { limit = { has_variable = sr_eb_away_triton } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_triton } }
+	if = { limit = { has_variable = sr_eb_away_proteus } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_proteus } }
+	if = { limit = { has_variable = sr_eb_away_pluto } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_pluto } }
+	if = { limit = { has_variable = sr_eb_away_eris } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_eris } }
+	if = { limit = { has_variable = sr_eb_away_makemake } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_makemake } }
+	if = { limit = { has_variable = sr_eb_away_haumea } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_haumea } }
+	if = { limit = { has_variable = sr_eb_away_sedna } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_sedna } }
+	if = { limit = { has_variable = sr_eb_away_shackleton } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_shackleton } }
+	if = { limit = { has_variable = sr_eb_away_peary } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_peary } }
+	if = { limit = { has_variable = sr_eb_away_tranquility } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_tranquility } }
+	if = { limit = { has_variable = sr_eb_away_marius_hills } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_marius_hills } }
+	if = { limit = { has_variable = sr_eb_away_daedalus } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_daedalus } }
+	if = { limit = { has_variable = sr_eb_away_imbrium } change_local_variable = { name = sr_eba_need add = var:sr_eb_away_imbrium } }
+	if = { limit = { has_variable = sr_eb_over } change_local_variable = { name = sr_eba_need subtract = var:sr_eb_over } }
+	set_local_variable = { name = sr_eba_cut_near_earth value = 0 }
+	set_local_variable = { name = sr_eba_left_near_earth value = 0 }
+	if = { limit = { has_variable = sr_eb_at_near_earth NOT = { has_variable = sr_eb_away_near_earth } } set_local_variable = { name = sr_eba_left_near_earth value = var:sr_eb_at_near_earth } }
+	set_local_variable = { name = sr_eba_p_near_earth value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_near_earth } set_local_variable = { name = sr_eba_p_near_earth value = var:sr_eb_level_profit_near_earth } }
+	set_local_variable = { name = sr_eba_cut_valles_marineris value = 0 }
+	set_local_variable = { name = sr_eba_left_valles_marineris value = 0 }
+	if = { limit = { has_variable = sr_eb_at_valles_marineris NOT = { has_variable = sr_eb_away_valles_marineris } } set_local_variable = { name = sr_eba_left_valles_marineris value = var:sr_eb_at_valles_marineris } }
+	set_local_variable = { name = sr_eba_p_valles_marineris value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_valles_marineris } set_local_variable = { name = sr_eba_p_valles_marineris value = var:sr_eb_level_profit_valles_marineris } }
+	set_local_variable = { name = sr_eba_cut_olympus_mons value = 0 }
+	set_local_variable = { name = sr_eba_left_olympus_mons value = 0 }
+	if = { limit = { has_variable = sr_eb_at_olympus_mons NOT = { has_variable = sr_eb_away_olympus_mons } } set_local_variable = { name = sr_eba_left_olympus_mons value = var:sr_eb_at_olympus_mons } }
+	set_local_variable = { name = sr_eba_p_olympus_mons value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_olympus_mons } set_local_variable = { name = sr_eba_p_olympus_mons value = var:sr_eb_level_profit_olympus_mons } }
+	set_local_variable = { name = sr_eba_cut_hellas_planitia value = 0 }
+	set_local_variable = { name = sr_eba_left_hellas_planitia value = 0 }
+	if = { limit = { has_variable = sr_eb_at_hellas_planitia NOT = { has_variable = sr_eb_away_hellas_planitia } } set_local_variable = { name = sr_eba_left_hellas_planitia value = var:sr_eb_at_hellas_planitia } }
+	set_local_variable = { name = sr_eba_p_hellas_planitia value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_hellas_planitia } set_local_variable = { name = sr_eba_p_hellas_planitia value = var:sr_eb_level_profit_hellas_planitia } }
+	set_local_variable = { name = sr_eba_cut_utopia_planitia value = 0 }
+	set_local_variable = { name = sr_eba_left_utopia_planitia value = 0 }
+	if = { limit = { has_variable = sr_eb_at_utopia_planitia NOT = { has_variable = sr_eb_away_utopia_planitia } } set_local_variable = { name = sr_eba_left_utopia_planitia value = var:sr_eb_at_utopia_planitia } }
+	set_local_variable = { name = sr_eba_p_utopia_planitia value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_utopia_planitia } set_local_variable = { name = sr_eba_p_utopia_planitia value = var:sr_eb_level_profit_utopia_planitia } }
+	set_local_variable = { name = sr_eba_cut_arcadia_planitia value = 0 }
+	set_local_variable = { name = sr_eba_left_arcadia_planitia value = 0 }
+	if = { limit = { has_variable = sr_eb_at_arcadia_planitia NOT = { has_variable = sr_eb_away_arcadia_planitia } } set_local_variable = { name = sr_eba_left_arcadia_planitia value = var:sr_eb_at_arcadia_planitia } }
+	set_local_variable = { name = sr_eba_p_arcadia_planitia value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_arcadia_planitia } set_local_variable = { name = sr_eba_p_arcadia_planitia value = var:sr_eb_level_profit_arcadia_planitia } }
+	set_local_variable = { name = sr_eba_cut_ceres value = 0 }
+	set_local_variable = { name = sr_eba_left_ceres value = 0 }
+	if = { limit = { has_variable = sr_eb_at_ceres NOT = { has_variable = sr_eb_away_ceres } } set_local_variable = { name = sr_eba_left_ceres value = var:sr_eb_at_ceres } }
+	set_local_variable = { name = sr_eba_p_ceres value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_ceres } set_local_variable = { name = sr_eba_p_ceres value = var:sr_eb_level_profit_ceres } }
+	set_local_variable = { name = sr_eba_cut_vesta value = 0 }
+	set_local_variable = { name = sr_eba_left_vesta value = 0 }
+	if = { limit = { has_variable = sr_eb_at_vesta NOT = { has_variable = sr_eb_away_vesta } } set_local_variable = { name = sr_eba_left_vesta value = var:sr_eb_at_vesta } }
+	set_local_variable = { name = sr_eba_p_vesta value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_vesta } set_local_variable = { name = sr_eba_p_vesta value = var:sr_eb_level_profit_vesta } }
+	set_local_variable = { name = sr_eba_cut_psyche value = 0 }
+	set_local_variable = { name = sr_eba_left_psyche value = 0 }
+	if = { limit = { has_variable = sr_eb_at_psyche NOT = { has_variable = sr_eb_away_psyche } } set_local_variable = { name = sr_eba_left_psyche value = var:sr_eb_at_psyche } }
+	set_local_variable = { name = sr_eba_p_psyche value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_psyche } set_local_variable = { name = sr_eba_p_psyche value = var:sr_eb_level_profit_psyche } }
+	set_local_variable = { name = sr_eba_cut_pallas value = 0 }
+	set_local_variable = { name = sr_eba_left_pallas value = 0 }
+	if = { limit = { has_variable = sr_eb_at_pallas NOT = { has_variable = sr_eb_away_pallas } } set_local_variable = { name = sr_eba_left_pallas value = var:sr_eb_at_pallas } }
+	set_local_variable = { name = sr_eba_p_pallas value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_pallas } set_local_variable = { name = sr_eba_p_pallas value = var:sr_eb_level_profit_pallas } }
+	set_local_variable = { name = sr_eba_cut_hygiea value = 0 }
+	set_local_variable = { name = sr_eba_left_hygiea value = 0 }
+	if = { limit = { has_variable = sr_eb_at_hygiea NOT = { has_variable = sr_eb_away_hygiea } } set_local_variable = { name = sr_eba_left_hygiea value = var:sr_eb_at_hygiea } }
+	set_local_variable = { name = sr_eba_p_hygiea value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_hygiea } set_local_variable = { name = sr_eba_p_hygiea value = var:sr_eb_level_profit_hygiea } }
+	set_local_variable = { name = sr_eba_cut_io value = 0 }
+	set_local_variable = { name = sr_eba_left_io value = 0 }
+	if = { limit = { has_variable = sr_eb_at_io NOT = { has_variable = sr_eb_away_io } } set_local_variable = { name = sr_eba_left_io value = var:sr_eb_at_io } }
+	set_local_variable = { name = sr_eba_p_io value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_io } set_local_variable = { name = sr_eba_p_io value = var:sr_eb_level_profit_io } }
+	set_local_variable = { name = sr_eba_cut_europa value = 0 }
+	set_local_variable = { name = sr_eba_left_europa value = 0 }
+	if = { limit = { has_variable = sr_eb_at_europa NOT = { has_variable = sr_eb_away_europa } } set_local_variable = { name = sr_eba_left_europa value = var:sr_eb_at_europa } }
+	set_local_variable = { name = sr_eba_p_europa value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_europa } set_local_variable = { name = sr_eba_p_europa value = var:sr_eb_level_profit_europa } }
+	set_local_variable = { name = sr_eba_cut_ganymede value = 0 }
+	set_local_variable = { name = sr_eba_left_ganymede value = 0 }
+	if = { limit = { has_variable = sr_eb_at_ganymede NOT = { has_variable = sr_eb_away_ganymede } } set_local_variable = { name = sr_eba_left_ganymede value = var:sr_eb_at_ganymede } }
+	set_local_variable = { name = sr_eba_p_ganymede value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_ganymede } set_local_variable = { name = sr_eba_p_ganymede value = var:sr_eb_level_profit_ganymede } }
+	set_local_variable = { name = sr_eba_cut_callisto value = 0 }
+	set_local_variable = { name = sr_eba_left_callisto value = 0 }
+	if = { limit = { has_variable = sr_eb_at_callisto NOT = { has_variable = sr_eb_away_callisto } } set_local_variable = { name = sr_eba_left_callisto value = var:sr_eb_at_callisto } }
+	set_local_variable = { name = sr_eba_p_callisto value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_callisto } set_local_variable = { name = sr_eba_p_callisto value = var:sr_eb_level_profit_callisto } }
+	set_local_variable = { name = sr_eba_cut_himalia value = 0 }
+	set_local_variable = { name = sr_eba_left_himalia value = 0 }
+	if = { limit = { has_variable = sr_eb_at_himalia NOT = { has_variable = sr_eb_away_himalia } } set_local_variable = { name = sr_eba_left_himalia value = var:sr_eb_at_himalia } }
+	set_local_variable = { name = sr_eba_p_himalia value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_himalia } set_local_variable = { name = sr_eba_p_himalia value = var:sr_eb_level_profit_himalia } }
+	set_local_variable = { name = sr_eba_cut_amalthea value = 0 }
+	set_local_variable = { name = sr_eba_left_amalthea value = 0 }
+	if = { limit = { has_variable = sr_eb_at_amalthea NOT = { has_variable = sr_eb_away_amalthea } } set_local_variable = { name = sr_eba_left_amalthea value = var:sr_eb_at_amalthea } }
+	set_local_variable = { name = sr_eba_p_amalthea value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_amalthea } set_local_variable = { name = sr_eba_p_amalthea value = var:sr_eb_level_profit_amalthea } }
+	set_local_variable = { name = sr_eba_cut_venus value = 0 }
+	set_local_variable = { name = sr_eba_left_venus value = 0 }
+	if = { limit = { has_variable = sr_eb_at_venus NOT = { has_variable = sr_eb_away_venus } } set_local_variable = { name = sr_eba_left_venus value = var:sr_eb_at_venus } }
+	set_local_variable = { name = sr_eba_p_venus value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_venus } set_local_variable = { name = sr_eba_p_venus value = var:sr_eb_level_profit_venus } }
+	set_local_variable = { name = sr_eba_cut_mercury value = 0 }
+	set_local_variable = { name = sr_eba_left_mercury value = 0 }
+	if = { limit = { has_variable = sr_eb_at_mercury NOT = { has_variable = sr_eb_away_mercury } } set_local_variable = { name = sr_eba_left_mercury value = var:sr_eb_at_mercury } }
+	set_local_variable = { name = sr_eba_p_mercury value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_mercury } set_local_variable = { name = sr_eba_p_mercury value = var:sr_eb_level_profit_mercury } }
+	set_local_variable = { name = sr_eba_cut_titan value = 0 }
+	set_local_variable = { name = sr_eba_left_titan value = 0 }
+	if = { limit = { has_variable = sr_eb_at_titan NOT = { has_variable = sr_eb_away_titan } } set_local_variable = { name = sr_eba_left_titan value = var:sr_eb_at_titan } }
+	set_local_variable = { name = sr_eba_p_titan value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_titan } set_local_variable = { name = sr_eba_p_titan value = var:sr_eb_level_profit_titan } }
+	set_local_variable = { name = sr_eba_cut_enceladus value = 0 }
+	set_local_variable = { name = sr_eba_left_enceladus value = 0 }
+	if = { limit = { has_variable = sr_eb_at_enceladus NOT = { has_variable = sr_eb_away_enceladus } } set_local_variable = { name = sr_eba_left_enceladus value = var:sr_eb_at_enceladus } }
+	set_local_variable = { name = sr_eba_p_enceladus value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_enceladus } set_local_variable = { name = sr_eba_p_enceladus value = var:sr_eb_level_profit_enceladus } }
+	set_local_variable = { name = sr_eba_cut_rhea value = 0 }
+	set_local_variable = { name = sr_eba_left_rhea value = 0 }
+	if = { limit = { has_variable = sr_eb_at_rhea NOT = { has_variable = sr_eb_away_rhea } } set_local_variable = { name = sr_eba_left_rhea value = var:sr_eb_at_rhea } }
+	set_local_variable = { name = sr_eba_p_rhea value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_rhea } set_local_variable = { name = sr_eba_p_rhea value = var:sr_eb_level_profit_rhea } }
+	set_local_variable = { name = sr_eba_cut_mimas value = 0 }
+	set_local_variable = { name = sr_eba_left_mimas value = 0 }
+	if = { limit = { has_variable = sr_eb_at_mimas NOT = { has_variable = sr_eb_away_mimas } } set_local_variable = { name = sr_eba_left_mimas value = var:sr_eb_at_mimas } }
+	set_local_variable = { name = sr_eba_p_mimas value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_mimas } set_local_variable = { name = sr_eba_p_mimas value = var:sr_eb_level_profit_mimas } }
+	set_local_variable = { name = sr_eba_cut_iapetus value = 0 }
+	set_local_variable = { name = sr_eba_left_iapetus value = 0 }
+	if = { limit = { has_variable = sr_eb_at_iapetus NOT = { has_variable = sr_eb_away_iapetus } } set_local_variable = { name = sr_eba_left_iapetus value = var:sr_eb_at_iapetus } }
+	set_local_variable = { name = sr_eba_p_iapetus value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_iapetus } set_local_variable = { name = sr_eba_p_iapetus value = var:sr_eb_level_profit_iapetus } }
+	set_local_variable = { name = sr_eba_cut_titania value = 0 }
+	set_local_variable = { name = sr_eba_left_titania value = 0 }
+	if = { limit = { has_variable = sr_eb_at_titania NOT = { has_variable = sr_eb_away_titania } } set_local_variable = { name = sr_eba_left_titania value = var:sr_eb_at_titania } }
+	set_local_variable = { name = sr_eba_p_titania value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_titania } set_local_variable = { name = sr_eba_p_titania value = var:sr_eb_level_profit_titania } }
+	set_local_variable = { name = sr_eba_cut_oberon value = 0 }
+	set_local_variable = { name = sr_eba_left_oberon value = 0 }
+	if = { limit = { has_variable = sr_eb_at_oberon NOT = { has_variable = sr_eb_away_oberon } } set_local_variable = { name = sr_eba_left_oberon value = var:sr_eb_at_oberon } }
+	set_local_variable = { name = sr_eba_p_oberon value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_oberon } set_local_variable = { name = sr_eba_p_oberon value = var:sr_eb_level_profit_oberon } }
+	set_local_variable = { name = sr_eba_cut_miranda value = 0 }
+	set_local_variable = { name = sr_eba_left_miranda value = 0 }
+	if = { limit = { has_variable = sr_eb_at_miranda NOT = { has_variable = sr_eb_away_miranda } } set_local_variable = { name = sr_eba_left_miranda value = var:sr_eb_at_miranda } }
+	set_local_variable = { name = sr_eba_p_miranda value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_miranda } set_local_variable = { name = sr_eba_p_miranda value = var:sr_eb_level_profit_miranda } }
+	set_local_variable = { name = sr_eba_cut_ariel value = 0 }
+	set_local_variable = { name = sr_eba_left_ariel value = 0 }
+	if = { limit = { has_variable = sr_eb_at_ariel NOT = { has_variable = sr_eb_away_ariel } } set_local_variable = { name = sr_eba_left_ariel value = var:sr_eb_at_ariel } }
+	set_local_variable = { name = sr_eba_p_ariel value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_ariel } set_local_variable = { name = sr_eba_p_ariel value = var:sr_eb_level_profit_ariel } }
+	set_local_variable = { name = sr_eba_cut_triton value = 0 }
+	set_local_variable = { name = sr_eba_left_triton value = 0 }
+	if = { limit = { has_variable = sr_eb_at_triton NOT = { has_variable = sr_eb_away_triton } } set_local_variable = { name = sr_eba_left_triton value = var:sr_eb_at_triton } }
+	set_local_variable = { name = sr_eba_p_triton value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_triton } set_local_variable = { name = sr_eba_p_triton value = var:sr_eb_level_profit_triton } }
+	set_local_variable = { name = sr_eba_cut_proteus value = 0 }
+	set_local_variable = { name = sr_eba_left_proteus value = 0 }
+	if = { limit = { has_variable = sr_eb_at_proteus NOT = { has_variable = sr_eb_away_proteus } } set_local_variable = { name = sr_eba_left_proteus value = var:sr_eb_at_proteus } }
+	set_local_variable = { name = sr_eba_p_proteus value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_proteus } set_local_variable = { name = sr_eba_p_proteus value = var:sr_eb_level_profit_proteus } }
+	set_local_variable = { name = sr_eba_cut_pluto value = 0 }
+	set_local_variable = { name = sr_eba_left_pluto value = 0 }
+	if = { limit = { has_variable = sr_eb_at_pluto NOT = { has_variable = sr_eb_away_pluto } } set_local_variable = { name = sr_eba_left_pluto value = var:sr_eb_at_pluto } }
+	set_local_variable = { name = sr_eba_p_pluto value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_pluto } set_local_variable = { name = sr_eba_p_pluto value = var:sr_eb_level_profit_pluto } }
+	set_local_variable = { name = sr_eba_cut_eris value = 0 }
+	set_local_variable = { name = sr_eba_left_eris value = 0 }
+	if = { limit = { has_variable = sr_eb_at_eris NOT = { has_variable = sr_eb_away_eris } } set_local_variable = { name = sr_eba_left_eris value = var:sr_eb_at_eris } }
+	set_local_variable = { name = sr_eba_p_eris value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_eris } set_local_variable = { name = sr_eba_p_eris value = var:sr_eb_level_profit_eris } }
+	set_local_variable = { name = sr_eba_cut_makemake value = 0 }
+	set_local_variable = { name = sr_eba_left_makemake value = 0 }
+	if = { limit = { has_variable = sr_eb_at_makemake NOT = { has_variable = sr_eb_away_makemake } } set_local_variable = { name = sr_eba_left_makemake value = var:sr_eb_at_makemake } }
+	set_local_variable = { name = sr_eba_p_makemake value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_makemake } set_local_variable = { name = sr_eba_p_makemake value = var:sr_eb_level_profit_makemake } }
+	set_local_variable = { name = sr_eba_cut_haumea value = 0 }
+	set_local_variable = { name = sr_eba_left_haumea value = 0 }
+	if = { limit = { has_variable = sr_eb_at_haumea NOT = { has_variable = sr_eb_away_haumea } } set_local_variable = { name = sr_eba_left_haumea value = var:sr_eb_at_haumea } }
+	set_local_variable = { name = sr_eba_p_haumea value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_haumea } set_local_variable = { name = sr_eba_p_haumea value = var:sr_eb_level_profit_haumea } }
+	set_local_variable = { name = sr_eba_cut_sedna value = 0 }
+	set_local_variable = { name = sr_eba_left_sedna value = 0 }
+	if = { limit = { has_variable = sr_eb_at_sedna NOT = { has_variable = sr_eb_away_sedna } } set_local_variable = { name = sr_eba_left_sedna value = var:sr_eb_at_sedna } }
+	set_local_variable = { name = sr_eba_p_sedna value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_sedna } set_local_variable = { name = sr_eba_p_sedna value = var:sr_eb_level_profit_sedna } }
+	set_local_variable = { name = sr_eba_cut_shackleton value = 0 }
+	set_local_variable = { name = sr_eba_left_shackleton value = 0 }
+	if = { limit = { has_variable = sr_eb_at_shackleton NOT = { has_variable = sr_eb_away_shackleton } } set_local_variable = { name = sr_eba_left_shackleton value = var:sr_eb_at_shackleton } }
+	set_local_variable = { name = sr_eba_p_shackleton value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_shackleton } set_local_variable = { name = sr_eba_p_shackleton value = var:sr_eb_level_profit_shackleton } }
+	set_local_variable = { name = sr_eba_cut_peary value = 0 }
+	set_local_variable = { name = sr_eba_left_peary value = 0 }
+	if = { limit = { has_variable = sr_eb_at_peary NOT = { has_variable = sr_eb_away_peary } } set_local_variable = { name = sr_eba_left_peary value = var:sr_eb_at_peary } }
+	set_local_variable = { name = sr_eba_p_peary value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_peary } set_local_variable = { name = sr_eba_p_peary value = var:sr_eb_level_profit_peary } }
+	set_local_variable = { name = sr_eba_cut_tranquility value = 0 }
+	set_local_variable = { name = sr_eba_left_tranquility value = 0 }
+	if = { limit = { has_variable = sr_eb_at_tranquility NOT = { has_variable = sr_eb_away_tranquility } } set_local_variable = { name = sr_eba_left_tranquility value = var:sr_eb_at_tranquility } }
+	set_local_variable = { name = sr_eba_p_tranquility value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_tranquility } set_local_variable = { name = sr_eba_p_tranquility value = var:sr_eb_level_profit_tranquility } }
+	set_local_variable = { name = sr_eba_cut_marius_hills value = 0 }
+	set_local_variable = { name = sr_eba_left_marius_hills value = 0 }
+	if = { limit = { has_variable = sr_eb_at_marius_hills NOT = { has_variable = sr_eb_away_marius_hills } } set_local_variable = { name = sr_eba_left_marius_hills value = var:sr_eb_at_marius_hills } }
+	set_local_variable = { name = sr_eba_p_marius_hills value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_marius_hills } set_local_variable = { name = sr_eba_p_marius_hills value = var:sr_eb_level_profit_marius_hills } }
+	set_local_variable = { name = sr_eba_cut_daedalus value = 0 }
+	set_local_variable = { name = sr_eba_left_daedalus value = 0 }
+	if = { limit = { has_variable = sr_eb_at_daedalus NOT = { has_variable = sr_eb_away_daedalus } } set_local_variable = { name = sr_eba_left_daedalus value = var:sr_eb_at_daedalus } }
+	set_local_variable = { name = sr_eba_p_daedalus value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_daedalus } set_local_variable = { name = sr_eba_p_daedalus value = var:sr_eb_level_profit_daedalus } }
+	set_local_variable = { name = sr_eba_cut_imbrium value = 0 }
+	set_local_variable = { name = sr_eba_left_imbrium value = 0 }
+	if = { limit = { has_variable = sr_eb_at_imbrium NOT = { has_variable = sr_eb_away_imbrium } } set_local_variable = { name = sr_eba_left_imbrium value = var:sr_eb_at_imbrium } }
+	set_local_variable = { name = sr_eba_p_imbrium value = 0 }
+	if = { limit = { has_variable = sr_eb_level_profit_imbrium } set_local_variable = { name = sr_eba_p_imbrium value = var:sr_eb_level_profit_imbrium } }
+	set_local_variable = { name = sr_eba_tpass value = 0 }
+	while = {
+		limit = { local_var:sr_eba_need > 0 local_var:sr_eba_tpass < 42 }
+		change_local_variable = { name = sr_eba_tpass add = 1 }
+		set_local_variable = { name = sr_eba_tsrc value = -1 }
+		set_local_variable = { name = sr_eba_tsrcp value = 1000000000 }
+		if = { limit = { local_var:sr_eba_left_near_earth > 0 local_var:sr_eba_p_near_earth <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 0 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_near_earth } }
+		if = { limit = { local_var:sr_eba_left_valles_marineris > 0 local_var:sr_eba_p_valles_marineris <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 1 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_valles_marineris } }
+		if = { limit = { local_var:sr_eba_left_olympus_mons > 0 local_var:sr_eba_p_olympus_mons <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 2 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_olympus_mons } }
+		if = { limit = { local_var:sr_eba_left_hellas_planitia > 0 local_var:sr_eba_p_hellas_planitia <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 3 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_hellas_planitia } }
+		if = { limit = { local_var:sr_eba_left_utopia_planitia > 0 local_var:sr_eba_p_utopia_planitia <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 4 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_utopia_planitia } }
+		if = { limit = { local_var:sr_eba_left_arcadia_planitia > 0 local_var:sr_eba_p_arcadia_planitia <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 5 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_arcadia_planitia } }
+		if = { limit = { local_var:sr_eba_left_ceres > 0 local_var:sr_eba_p_ceres <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 6 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_ceres } }
+		if = { limit = { local_var:sr_eba_left_vesta > 0 local_var:sr_eba_p_vesta <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 7 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_vesta } }
+		if = { limit = { local_var:sr_eba_left_psyche > 0 local_var:sr_eba_p_psyche <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 8 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_psyche } }
+		if = { limit = { local_var:sr_eba_left_pallas > 0 local_var:sr_eba_p_pallas <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 9 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_pallas } }
+		if = { limit = { local_var:sr_eba_left_hygiea > 0 local_var:sr_eba_p_hygiea <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 10 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_hygiea } }
+		if = { limit = { local_var:sr_eba_left_io > 0 local_var:sr_eba_p_io <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 11 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_io } }
+		if = { limit = { local_var:sr_eba_left_europa > 0 local_var:sr_eba_p_europa <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 12 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_europa } }
+		if = { limit = { local_var:sr_eba_left_ganymede > 0 local_var:sr_eba_p_ganymede <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 13 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_ganymede } }
+		if = { limit = { local_var:sr_eba_left_callisto > 0 local_var:sr_eba_p_callisto <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 14 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_callisto } }
+		if = { limit = { local_var:sr_eba_left_himalia > 0 local_var:sr_eba_p_himalia <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 15 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_himalia } }
+		if = { limit = { local_var:sr_eba_left_amalthea > 0 local_var:sr_eba_p_amalthea <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 16 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_amalthea } }
+		if = { limit = { local_var:sr_eba_left_venus > 0 local_var:sr_eba_p_venus <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 17 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_venus } }
+		if = { limit = { local_var:sr_eba_left_mercury > 0 local_var:sr_eba_p_mercury <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 18 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_mercury } }
+		if = { limit = { local_var:sr_eba_left_titan > 0 local_var:sr_eba_p_titan <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 19 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_titan } }
+		if = { limit = { local_var:sr_eba_left_enceladus > 0 local_var:sr_eba_p_enceladus <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 20 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_enceladus } }
+		if = { limit = { local_var:sr_eba_left_rhea > 0 local_var:sr_eba_p_rhea <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 21 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_rhea } }
+		if = { limit = { local_var:sr_eba_left_mimas > 0 local_var:sr_eba_p_mimas <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 22 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_mimas } }
+		if = { limit = { local_var:sr_eba_left_iapetus > 0 local_var:sr_eba_p_iapetus <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 23 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_iapetus } }
+		if = { limit = { local_var:sr_eba_left_titania > 0 local_var:sr_eba_p_titania <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 24 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_titania } }
+		if = { limit = { local_var:sr_eba_left_oberon > 0 local_var:sr_eba_p_oberon <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 25 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_oberon } }
+		if = { limit = { local_var:sr_eba_left_miranda > 0 local_var:sr_eba_p_miranda <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 26 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_miranda } }
+		if = { limit = { local_var:sr_eba_left_ariel > 0 local_var:sr_eba_p_ariel <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 27 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_ariel } }
+		if = { limit = { local_var:sr_eba_left_triton > 0 local_var:sr_eba_p_triton <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 28 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_triton } }
+		if = { limit = { local_var:sr_eba_left_proteus > 0 local_var:sr_eba_p_proteus <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 29 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_proteus } }
+		if = { limit = { local_var:sr_eba_left_pluto > 0 local_var:sr_eba_p_pluto <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 30 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_pluto } }
+		if = { limit = { local_var:sr_eba_left_eris > 0 local_var:sr_eba_p_eris <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 31 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_eris } }
+		if = { limit = { local_var:sr_eba_left_makemake > 0 local_var:sr_eba_p_makemake <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 32 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_makemake } }
+		if = { limit = { local_var:sr_eba_left_haumea > 0 local_var:sr_eba_p_haumea <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 33 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_haumea } }
+		if = { limit = { local_var:sr_eba_left_sedna > 0 local_var:sr_eba_p_sedna <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 34 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_sedna } }
+		if = { limit = { local_var:sr_eba_left_shackleton > 0 local_var:sr_eba_p_shackleton <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 35 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_shackleton } }
+		if = { limit = { local_var:sr_eba_left_peary > 0 local_var:sr_eba_p_peary <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 36 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_peary } }
+		if = { limit = { local_var:sr_eba_left_tranquility > 0 local_var:sr_eba_p_tranquility <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 37 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_tranquility } }
+		if = { limit = { local_var:sr_eba_left_marius_hills > 0 local_var:sr_eba_p_marius_hills <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 38 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_marius_hills } }
+		if = { limit = { local_var:sr_eba_left_daedalus > 0 local_var:sr_eba_p_daedalus <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 39 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_daedalus } }
+		if = { limit = { local_var:sr_eba_left_imbrium > 0 local_var:sr_eba_p_imbrium <= local_var:sr_eba_tsrcp } set_local_variable = { name = sr_eba_tsrc value = 40 } set_local_variable = { name = sr_eba_tsrcp value = local_var:sr_eba_p_imbrium } }
+		if = { limit = { local_var:sr_eba_tsrc < 0 } set_local_variable = { name = sr_eba_need value = 0 } }
+		else = {
+			if = {
+				limit = { local_var:sr_eba_tsrc = 0 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_near_earth max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_near_earth subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_near_earth add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 1 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_valles_marineris max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_valles_marineris subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_valles_marineris add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 2 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_olympus_mons max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_olympus_mons subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_olympus_mons add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 3 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_hellas_planitia max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_hellas_planitia subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_hellas_planitia add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 4 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_utopia_planitia max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_utopia_planitia subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_utopia_planitia add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 5 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_arcadia_planitia max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_arcadia_planitia subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_arcadia_planitia add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 6 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_ceres max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_ceres subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_ceres add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 7 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_vesta max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_vesta subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_vesta add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 8 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_psyche max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_psyche subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_psyche add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 9 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_pallas max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_pallas subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_pallas add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 10 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_hygiea max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_hygiea subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_hygiea add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 11 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_io max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_io subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_io add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 12 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_europa max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_europa subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_europa add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 13 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_ganymede max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_ganymede subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_ganymede add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 14 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_callisto max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_callisto subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_callisto add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 15 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_himalia max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_himalia subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_himalia add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 16 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_amalthea max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_amalthea subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_amalthea add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 17 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_venus max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_venus subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_venus add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 18 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_mercury max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_mercury subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_mercury add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 19 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_titan max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_titan subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_titan add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 20 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_enceladus max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_enceladus subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_enceladus add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 21 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_rhea max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_rhea subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_rhea add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 22 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_mimas max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_mimas subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_mimas add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 23 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_iapetus max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_iapetus subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_iapetus add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 24 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_titania max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_titania subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_titania add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 25 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_oberon max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_oberon subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_oberon add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 26 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_miranda max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_miranda subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_miranda add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 27 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_ariel max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_ariel subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_ariel add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 28 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_triton max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_triton subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_triton add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 29 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_proteus max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_proteus subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_proteus add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 30 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_pluto max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_pluto subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_pluto add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 31 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_eris max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_eris subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_eris add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 32 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_makemake max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_makemake subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_makemake add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 33 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_haumea max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_haumea subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_haumea add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 34 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_sedna max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_sedna subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_sedna add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 35 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_shackleton max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_shackleton subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_shackleton add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 36 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_peary max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_peary subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_peary add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 37 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_tranquility max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_tranquility subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_tranquility add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 38 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_marius_hills max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_marius_hills subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_marius_hills add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 39 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_daedalus max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_daedalus subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_daedalus add = local_var:sr_eba_tk }
+			}
+			else_if = {
+				limit = { local_var:sr_eba_tsrc = 40 }
+				set_local_variable = { name = sr_eba_tk value = { value = local_var:sr_eba_left_imbrium max = local_var:sr_eba_need } }
+				change_local_variable = { name = sr_eba_left_imbrium subtract = local_var:sr_eba_tk }
+				change_local_variable = { name = sr_eba_cut_imbrium add = local_var:sr_eba_tk }
+			}
+			change_local_variable = { name = sr_eba_need subtract = local_var:sr_eba_tk }
+		}
+	}
+	if = { limit = { local_var:sr_eba_cut_near_earth > 0 } set_variable = { name = sr_eb_switch_cut_near_earth value = local_var:sr_eba_cut_near_earth } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_near_earth } remove_variable = sr_eb_switch_cut_near_earth }
+	if = { limit = { local_var:sr_eba_cut_valles_marineris > 0 } set_variable = { name = sr_eb_switch_cut_valles_marineris value = local_var:sr_eba_cut_valles_marineris } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_valles_marineris } remove_variable = sr_eb_switch_cut_valles_marineris }
+	if = { limit = { local_var:sr_eba_cut_olympus_mons > 0 } set_variable = { name = sr_eb_switch_cut_olympus_mons value = local_var:sr_eba_cut_olympus_mons } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_olympus_mons } remove_variable = sr_eb_switch_cut_olympus_mons }
+	if = { limit = { local_var:sr_eba_cut_hellas_planitia > 0 } set_variable = { name = sr_eb_switch_cut_hellas_planitia value = local_var:sr_eba_cut_hellas_planitia } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_hellas_planitia } remove_variable = sr_eb_switch_cut_hellas_planitia }
+	if = { limit = { local_var:sr_eba_cut_utopia_planitia > 0 } set_variable = { name = sr_eb_switch_cut_utopia_planitia value = local_var:sr_eba_cut_utopia_planitia } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_utopia_planitia } remove_variable = sr_eb_switch_cut_utopia_planitia }
+	if = { limit = { local_var:sr_eba_cut_arcadia_planitia > 0 } set_variable = { name = sr_eb_switch_cut_arcadia_planitia value = local_var:sr_eba_cut_arcadia_planitia } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_arcadia_planitia } remove_variable = sr_eb_switch_cut_arcadia_planitia }
+	if = { limit = { local_var:sr_eba_cut_ceres > 0 } set_variable = { name = sr_eb_switch_cut_ceres value = local_var:sr_eba_cut_ceres } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_ceres } remove_variable = sr_eb_switch_cut_ceres }
+	if = { limit = { local_var:sr_eba_cut_vesta > 0 } set_variable = { name = sr_eb_switch_cut_vesta value = local_var:sr_eba_cut_vesta } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_vesta } remove_variable = sr_eb_switch_cut_vesta }
+	if = { limit = { local_var:sr_eba_cut_psyche > 0 } set_variable = { name = sr_eb_switch_cut_psyche value = local_var:sr_eba_cut_psyche } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_psyche } remove_variable = sr_eb_switch_cut_psyche }
+	if = { limit = { local_var:sr_eba_cut_pallas > 0 } set_variable = { name = sr_eb_switch_cut_pallas value = local_var:sr_eba_cut_pallas } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_pallas } remove_variable = sr_eb_switch_cut_pallas }
+	if = { limit = { local_var:sr_eba_cut_hygiea > 0 } set_variable = { name = sr_eb_switch_cut_hygiea value = local_var:sr_eba_cut_hygiea } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_hygiea } remove_variable = sr_eb_switch_cut_hygiea }
+	if = { limit = { local_var:sr_eba_cut_io > 0 } set_variable = { name = sr_eb_switch_cut_io value = local_var:sr_eba_cut_io } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_io } remove_variable = sr_eb_switch_cut_io }
+	if = { limit = { local_var:sr_eba_cut_europa > 0 } set_variable = { name = sr_eb_switch_cut_europa value = local_var:sr_eba_cut_europa } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_europa } remove_variable = sr_eb_switch_cut_europa }
+	if = { limit = { local_var:sr_eba_cut_ganymede > 0 } set_variable = { name = sr_eb_switch_cut_ganymede value = local_var:sr_eba_cut_ganymede } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_ganymede } remove_variable = sr_eb_switch_cut_ganymede }
+	if = { limit = { local_var:sr_eba_cut_callisto > 0 } set_variable = { name = sr_eb_switch_cut_callisto value = local_var:sr_eba_cut_callisto } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_callisto } remove_variable = sr_eb_switch_cut_callisto }
+	if = { limit = { local_var:sr_eba_cut_himalia > 0 } set_variable = { name = sr_eb_switch_cut_himalia value = local_var:sr_eba_cut_himalia } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_himalia } remove_variable = sr_eb_switch_cut_himalia }
+	if = { limit = { local_var:sr_eba_cut_amalthea > 0 } set_variable = { name = sr_eb_switch_cut_amalthea value = local_var:sr_eba_cut_amalthea } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_amalthea } remove_variable = sr_eb_switch_cut_amalthea }
+	if = { limit = { local_var:sr_eba_cut_venus > 0 } set_variable = { name = sr_eb_switch_cut_venus value = local_var:sr_eba_cut_venus } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_venus } remove_variable = sr_eb_switch_cut_venus }
+	if = { limit = { local_var:sr_eba_cut_mercury > 0 } set_variable = { name = sr_eb_switch_cut_mercury value = local_var:sr_eba_cut_mercury } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_mercury } remove_variable = sr_eb_switch_cut_mercury }
+	if = { limit = { local_var:sr_eba_cut_titan > 0 } set_variable = { name = sr_eb_switch_cut_titan value = local_var:sr_eba_cut_titan } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_titan } remove_variable = sr_eb_switch_cut_titan }
+	if = { limit = { local_var:sr_eba_cut_enceladus > 0 } set_variable = { name = sr_eb_switch_cut_enceladus value = local_var:sr_eba_cut_enceladus } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_enceladus } remove_variable = sr_eb_switch_cut_enceladus }
+	if = { limit = { local_var:sr_eba_cut_rhea > 0 } set_variable = { name = sr_eb_switch_cut_rhea value = local_var:sr_eba_cut_rhea } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_rhea } remove_variable = sr_eb_switch_cut_rhea }
+	if = { limit = { local_var:sr_eba_cut_mimas > 0 } set_variable = { name = sr_eb_switch_cut_mimas value = local_var:sr_eba_cut_mimas } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_mimas } remove_variable = sr_eb_switch_cut_mimas }
+	if = { limit = { local_var:sr_eba_cut_iapetus > 0 } set_variable = { name = sr_eb_switch_cut_iapetus value = local_var:sr_eba_cut_iapetus } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_iapetus } remove_variable = sr_eb_switch_cut_iapetus }
+	if = { limit = { local_var:sr_eba_cut_titania > 0 } set_variable = { name = sr_eb_switch_cut_titania value = local_var:sr_eba_cut_titania } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_titania } remove_variable = sr_eb_switch_cut_titania }
+	if = { limit = { local_var:sr_eba_cut_oberon > 0 } set_variable = { name = sr_eb_switch_cut_oberon value = local_var:sr_eba_cut_oberon } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_oberon } remove_variable = sr_eb_switch_cut_oberon }
+	if = { limit = { local_var:sr_eba_cut_miranda > 0 } set_variable = { name = sr_eb_switch_cut_miranda value = local_var:sr_eba_cut_miranda } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_miranda } remove_variable = sr_eb_switch_cut_miranda }
+	if = { limit = { local_var:sr_eba_cut_ariel > 0 } set_variable = { name = sr_eb_switch_cut_ariel value = local_var:sr_eba_cut_ariel } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_ariel } remove_variable = sr_eb_switch_cut_ariel }
+	if = { limit = { local_var:sr_eba_cut_triton > 0 } set_variable = { name = sr_eb_switch_cut_triton value = local_var:sr_eba_cut_triton } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_triton } remove_variable = sr_eb_switch_cut_triton }
+	if = { limit = { local_var:sr_eba_cut_proteus > 0 } set_variable = { name = sr_eb_switch_cut_proteus value = local_var:sr_eba_cut_proteus } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_proteus } remove_variable = sr_eb_switch_cut_proteus }
+	if = { limit = { local_var:sr_eba_cut_pluto > 0 } set_variable = { name = sr_eb_switch_cut_pluto value = local_var:sr_eba_cut_pluto } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_pluto } remove_variable = sr_eb_switch_cut_pluto }
+	if = { limit = { local_var:sr_eba_cut_eris > 0 } set_variable = { name = sr_eb_switch_cut_eris value = local_var:sr_eba_cut_eris } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_eris } remove_variable = sr_eb_switch_cut_eris }
+	if = { limit = { local_var:sr_eba_cut_makemake > 0 } set_variable = { name = sr_eb_switch_cut_makemake value = local_var:sr_eba_cut_makemake } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_makemake } remove_variable = sr_eb_switch_cut_makemake }
+	if = { limit = { local_var:sr_eba_cut_haumea > 0 } set_variable = { name = sr_eb_switch_cut_haumea value = local_var:sr_eba_cut_haumea } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_haumea } remove_variable = sr_eb_switch_cut_haumea }
+	if = { limit = { local_var:sr_eba_cut_sedna > 0 } set_variable = { name = sr_eb_switch_cut_sedna value = local_var:sr_eba_cut_sedna } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_sedna } remove_variable = sr_eb_switch_cut_sedna }
+	if = { limit = { local_var:sr_eba_cut_shackleton > 0 } set_variable = { name = sr_eb_switch_cut_shackleton value = local_var:sr_eba_cut_shackleton } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_shackleton } remove_variable = sr_eb_switch_cut_shackleton }
+	if = { limit = { local_var:sr_eba_cut_peary > 0 } set_variable = { name = sr_eb_switch_cut_peary value = local_var:sr_eba_cut_peary } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_peary } remove_variable = sr_eb_switch_cut_peary }
+	if = { limit = { local_var:sr_eba_cut_tranquility > 0 } set_variable = { name = sr_eb_switch_cut_tranquility value = local_var:sr_eba_cut_tranquility } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_tranquility } remove_variable = sr_eb_switch_cut_tranquility }
+	if = { limit = { local_var:sr_eba_cut_marius_hills > 0 } set_variable = { name = sr_eb_switch_cut_marius_hills value = local_var:sr_eba_cut_marius_hills } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_marius_hills } remove_variable = sr_eb_switch_cut_marius_hills }
+	if = { limit = { local_var:sr_eba_cut_daedalus > 0 } set_variable = { name = sr_eb_switch_cut_daedalus value = local_var:sr_eba_cut_daedalus } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_daedalus } remove_variable = sr_eb_switch_cut_daedalus }
+	if = { limit = { local_var:sr_eba_cut_imbrium > 0 } set_variable = { name = sr_eb_switch_cut_imbrium value = local_var:sr_eba_cut_imbrium } }
+	else_if = { limit = { has_variable = sr_eb_switch_cut_imbrium } remove_variable = sr_eb_switch_cut_imbrium }
+}
+
 # Switching Assign for the most profit off (§ 8.4, ebase_ground.set_checkbox): each place's
-# target becomes its levels and those it is owed (a blockaded site's levels, back, meet
-# their own target), so nothing moves until the player changes one. Only the two scripted
-# GUIs call it: the AI never sets sr_eb_manual. Moves no level.
+# target becomes the levels it will hold once every blockade has returned, its levels and
+# those it is owed less what the return will take back from it (sr_eb_switch_cuts), so
+# nothing moves until the player changes one, and the targets sum to the built levels at
+# most. The running move ends: its record is the checkbox's, and the next is the player's.
+# Only the two scripted GUIs call it: the AI never sets sr_eb_manual. Moves no level.
 sr_eb_checkbox_off = {
 	if = {
 		limit = { NOT = { has_variable = sr_eb_manual } }
+		sr_eb_switch_cuts = yes
+		sr_eb_end_move = yes
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_near_earth } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_near_earth } }
 		if = { limit = { has_variable = sr_eb_away_near_earth } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_near_earth } }
+		if = { limit = { has_variable = sr_eb_switch_cut_near_earth } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_near_earth } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_near_earth value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_near_earth } remove_variable = sr_eb_target_near_earth }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_valles_marineris } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_valles_marineris } }
 		if = { limit = { has_variable = sr_eb_away_valles_marineris } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_valles_marineris } }
+		if = { limit = { has_variable = sr_eb_switch_cut_valles_marineris } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_valles_marineris } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_valles_marineris value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_valles_marineris } remove_variable = sr_eb_target_valles_marineris }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_olympus_mons } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_olympus_mons } }
 		if = { limit = { has_variable = sr_eb_away_olympus_mons } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_olympus_mons } }
+		if = { limit = { has_variable = sr_eb_switch_cut_olympus_mons } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_olympus_mons } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_olympus_mons value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_olympus_mons } remove_variable = sr_eb_target_olympus_mons }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_hellas_planitia } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_hellas_planitia } }
 		if = { limit = { has_variable = sr_eb_away_hellas_planitia } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_hellas_planitia } }
+		if = { limit = { has_variable = sr_eb_switch_cut_hellas_planitia } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_hellas_planitia } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_hellas_planitia value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_hellas_planitia } remove_variable = sr_eb_target_hellas_planitia }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_utopia_planitia } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_utopia_planitia } }
 		if = { limit = { has_variable = sr_eb_away_utopia_planitia } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_utopia_planitia } }
+		if = { limit = { has_variable = sr_eb_switch_cut_utopia_planitia } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_utopia_planitia } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_utopia_planitia value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_utopia_planitia } remove_variable = sr_eb_target_utopia_planitia }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_arcadia_planitia } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_arcadia_planitia } }
 		if = { limit = { has_variable = sr_eb_away_arcadia_planitia } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_arcadia_planitia } }
+		if = { limit = { has_variable = sr_eb_switch_cut_arcadia_planitia } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_arcadia_planitia } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_arcadia_planitia value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_arcadia_planitia } remove_variable = sr_eb_target_arcadia_planitia }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_ceres } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_ceres } }
 		if = { limit = { has_variable = sr_eb_away_ceres } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_ceres } }
+		if = { limit = { has_variable = sr_eb_switch_cut_ceres } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_ceres } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_ceres value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_ceres } remove_variable = sr_eb_target_ceres }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_vesta } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_vesta } }
 		if = { limit = { has_variable = sr_eb_away_vesta } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_vesta } }
+		if = { limit = { has_variable = sr_eb_switch_cut_vesta } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_vesta } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_vesta value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_vesta } remove_variable = sr_eb_target_vesta }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_psyche } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_psyche } }
 		if = { limit = { has_variable = sr_eb_away_psyche } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_psyche } }
+		if = { limit = { has_variable = sr_eb_switch_cut_psyche } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_psyche } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_psyche value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_psyche } remove_variable = sr_eb_target_psyche }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_pallas } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_pallas } }
 		if = { limit = { has_variable = sr_eb_away_pallas } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_pallas } }
+		if = { limit = { has_variable = sr_eb_switch_cut_pallas } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_pallas } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_pallas value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_pallas } remove_variable = sr_eb_target_pallas }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_hygiea } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_hygiea } }
 		if = { limit = { has_variable = sr_eb_away_hygiea } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_hygiea } }
+		if = { limit = { has_variable = sr_eb_switch_cut_hygiea } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_hygiea } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_hygiea value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_hygiea } remove_variable = sr_eb_target_hygiea }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_io } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_io } }
 		if = { limit = { has_variable = sr_eb_away_io } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_io } }
+		if = { limit = { has_variable = sr_eb_switch_cut_io } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_io } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_io value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_io } remove_variable = sr_eb_target_io }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_europa } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_europa } }
 		if = { limit = { has_variable = sr_eb_away_europa } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_europa } }
+		if = { limit = { has_variable = sr_eb_switch_cut_europa } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_europa } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_europa value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_europa } remove_variable = sr_eb_target_europa }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_ganymede } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_ganymede } }
 		if = { limit = { has_variable = sr_eb_away_ganymede } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_ganymede } }
+		if = { limit = { has_variable = sr_eb_switch_cut_ganymede } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_ganymede } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_ganymede value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_ganymede } remove_variable = sr_eb_target_ganymede }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_callisto } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_callisto } }
 		if = { limit = { has_variable = sr_eb_away_callisto } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_callisto } }
+		if = { limit = { has_variable = sr_eb_switch_cut_callisto } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_callisto } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_callisto value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_callisto } remove_variable = sr_eb_target_callisto }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_himalia } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_himalia } }
 		if = { limit = { has_variable = sr_eb_away_himalia } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_himalia } }
+		if = { limit = { has_variable = sr_eb_switch_cut_himalia } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_himalia } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_himalia value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_himalia } remove_variable = sr_eb_target_himalia }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_amalthea } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_amalthea } }
 		if = { limit = { has_variable = sr_eb_away_amalthea } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_amalthea } }
+		if = { limit = { has_variable = sr_eb_switch_cut_amalthea } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_amalthea } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_amalthea value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_amalthea } remove_variable = sr_eb_target_amalthea }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_venus } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_venus } }
 		if = { limit = { has_variable = sr_eb_away_venus } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_venus } }
+		if = { limit = { has_variable = sr_eb_switch_cut_venus } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_venus } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_venus value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_venus } remove_variable = sr_eb_target_venus }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_mercury } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_mercury } }
 		if = { limit = { has_variable = sr_eb_away_mercury } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_mercury } }
+		if = { limit = { has_variable = sr_eb_switch_cut_mercury } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_mercury } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_mercury value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_mercury } remove_variable = sr_eb_target_mercury }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_titan } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_titan } }
 		if = { limit = { has_variable = sr_eb_away_titan } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_titan } }
+		if = { limit = { has_variable = sr_eb_switch_cut_titan } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_titan } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_titan value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_titan } remove_variable = sr_eb_target_titan }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_enceladus } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_enceladus } }
 		if = { limit = { has_variable = sr_eb_away_enceladus } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_enceladus } }
+		if = { limit = { has_variable = sr_eb_switch_cut_enceladus } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_enceladus } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_enceladus value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_enceladus } remove_variable = sr_eb_target_enceladus }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_rhea } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_rhea } }
 		if = { limit = { has_variable = sr_eb_away_rhea } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_rhea } }
+		if = { limit = { has_variable = sr_eb_switch_cut_rhea } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_rhea } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_rhea value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_rhea } remove_variable = sr_eb_target_rhea }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_mimas } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_mimas } }
 		if = { limit = { has_variable = sr_eb_away_mimas } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_mimas } }
+		if = { limit = { has_variable = sr_eb_switch_cut_mimas } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_mimas } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_mimas value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_mimas } remove_variable = sr_eb_target_mimas }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_iapetus } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_iapetus } }
 		if = { limit = { has_variable = sr_eb_away_iapetus } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_iapetus } }
+		if = { limit = { has_variable = sr_eb_switch_cut_iapetus } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_iapetus } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_iapetus value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_iapetus } remove_variable = sr_eb_target_iapetus }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_titania } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_titania } }
 		if = { limit = { has_variable = sr_eb_away_titania } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_titania } }
+		if = { limit = { has_variable = sr_eb_switch_cut_titania } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_titania } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_titania value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_titania } remove_variable = sr_eb_target_titania }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_oberon } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_oberon } }
 		if = { limit = { has_variable = sr_eb_away_oberon } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_oberon } }
+		if = { limit = { has_variable = sr_eb_switch_cut_oberon } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_oberon } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_oberon value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_oberon } remove_variable = sr_eb_target_oberon }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_miranda } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_miranda } }
 		if = { limit = { has_variable = sr_eb_away_miranda } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_miranda } }
+		if = { limit = { has_variable = sr_eb_switch_cut_miranda } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_miranda } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_miranda value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_miranda } remove_variable = sr_eb_target_miranda }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_ariel } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_ariel } }
 		if = { limit = { has_variable = sr_eb_away_ariel } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_ariel } }
+		if = { limit = { has_variable = sr_eb_switch_cut_ariel } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_ariel } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_ariel value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_ariel } remove_variable = sr_eb_target_ariel }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_triton } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_triton } }
 		if = { limit = { has_variable = sr_eb_away_triton } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_triton } }
+		if = { limit = { has_variable = sr_eb_switch_cut_triton } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_triton } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_triton value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_triton } remove_variable = sr_eb_target_triton }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_proteus } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_proteus } }
 		if = { limit = { has_variable = sr_eb_away_proteus } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_proteus } }
+		if = { limit = { has_variable = sr_eb_switch_cut_proteus } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_proteus } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_proteus value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_proteus } remove_variable = sr_eb_target_proteus }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_pluto } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_pluto } }
 		if = { limit = { has_variable = sr_eb_away_pluto } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_pluto } }
+		if = { limit = { has_variable = sr_eb_switch_cut_pluto } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_pluto } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_pluto value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_pluto } remove_variable = sr_eb_target_pluto }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_eris } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_eris } }
 		if = { limit = { has_variable = sr_eb_away_eris } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_eris } }
+		if = { limit = { has_variable = sr_eb_switch_cut_eris } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_eris } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_eris value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_eris } remove_variable = sr_eb_target_eris }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_makemake } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_makemake } }
 		if = { limit = { has_variable = sr_eb_away_makemake } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_makemake } }
+		if = { limit = { has_variable = sr_eb_switch_cut_makemake } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_makemake } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_makemake value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_makemake } remove_variable = sr_eb_target_makemake }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_haumea } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_haumea } }
 		if = { limit = { has_variable = sr_eb_away_haumea } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_haumea } }
+		if = { limit = { has_variable = sr_eb_switch_cut_haumea } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_haumea } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_haumea value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_haumea } remove_variable = sr_eb_target_haumea }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_sedna } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_sedna } }
 		if = { limit = { has_variable = sr_eb_away_sedna } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_sedna } }
+		if = { limit = { has_variable = sr_eb_switch_cut_sedna } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_sedna } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_sedna value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_sedna } remove_variable = sr_eb_target_sedna }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_shackleton } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_shackleton } }
 		if = { limit = { has_variable = sr_eb_away_shackleton } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_shackleton } }
+		if = { limit = { has_variable = sr_eb_switch_cut_shackleton } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_shackleton } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_shackleton value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_shackleton } remove_variable = sr_eb_target_shackleton }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_peary } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_peary } }
 		if = { limit = { has_variable = sr_eb_away_peary } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_peary } }
+		if = { limit = { has_variable = sr_eb_switch_cut_peary } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_peary } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_peary value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_peary } remove_variable = sr_eb_target_peary }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_tranquility } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_tranquility } }
 		if = { limit = { has_variable = sr_eb_away_tranquility } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_tranquility } }
+		if = { limit = { has_variable = sr_eb_switch_cut_tranquility } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_tranquility } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_tranquility value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_tranquility } remove_variable = sr_eb_target_tranquility }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_marius_hills } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_marius_hills } }
 		if = { limit = { has_variable = sr_eb_away_marius_hills } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_marius_hills } }
+		if = { limit = { has_variable = sr_eb_switch_cut_marius_hills } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_marius_hills } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_marius_hills value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_marius_hills } remove_variable = sr_eb_target_marius_hills }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_daedalus } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_daedalus } }
 		if = { limit = { has_variable = sr_eb_away_daedalus } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_daedalus } }
+		if = { limit = { has_variable = sr_eb_switch_cut_daedalus } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_daedalus } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_daedalus value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_daedalus } remove_variable = sr_eb_target_daedalus }
 		set_local_variable = { name = sr_eba_n value = 0 }
 		if = { limit = { has_variable = sr_eb_at_imbrium } change_local_variable = { name = sr_eba_n add = var:sr_eb_at_imbrium } }
 		if = { limit = { has_variable = sr_eb_away_imbrium } change_local_variable = { name = sr_eba_n add = var:sr_eb_away_imbrium } }
+		if = { limit = { has_variable = sr_eb_switch_cut_imbrium } change_local_variable = { name = sr_eba_n subtract = var:sr_eb_switch_cut_imbrium } }
 		if = { limit = { local_var:sr_eba_n > 0 } set_variable = { name = sr_eb_target_imbrium value = local_var:sr_eba_n } }
 		else_if = { limit = { has_variable = sr_eb_target_imbrium } remove_variable = sr_eb_target_imbrium }
 		set_variable = { name = sr_eb_manual value = yes }
 	}
 }
-# Switching it back on: the targets are dropped, and the checkbox's moves start from where
-# the levels are, at the same pace.
+# Switching it back on: the targets are dropped, the running move (the player's) ends, and
+# the checkbox's moves start from where the levels are, at the same pace. Also the refresh's,
+# for a country the AI now runs.
 sr_eb_checkbox_on = {
-	if = { limit = { has_variable = sr_eb_target_near_earth } remove_variable = sr_eb_target_near_earth }
-	if = { limit = { has_variable = sr_eb_target_valles_marineris } remove_variable = sr_eb_target_valles_marineris }
-	if = { limit = { has_variable = sr_eb_target_olympus_mons } remove_variable = sr_eb_target_olympus_mons }
-	if = { limit = { has_variable = sr_eb_target_hellas_planitia } remove_variable = sr_eb_target_hellas_planitia }
-	if = { limit = { has_variable = sr_eb_target_utopia_planitia } remove_variable = sr_eb_target_utopia_planitia }
-	if = { limit = { has_variable = sr_eb_target_arcadia_planitia } remove_variable = sr_eb_target_arcadia_planitia }
-	if = { limit = { has_variable = sr_eb_target_ceres } remove_variable = sr_eb_target_ceres }
-	if = { limit = { has_variable = sr_eb_target_vesta } remove_variable = sr_eb_target_vesta }
-	if = { limit = { has_variable = sr_eb_target_psyche } remove_variable = sr_eb_target_psyche }
-	if = { limit = { has_variable = sr_eb_target_pallas } remove_variable = sr_eb_target_pallas }
-	if = { limit = { has_variable = sr_eb_target_hygiea } remove_variable = sr_eb_target_hygiea }
-	if = { limit = { has_variable = sr_eb_target_io } remove_variable = sr_eb_target_io }
-	if = { limit = { has_variable = sr_eb_target_europa } remove_variable = sr_eb_target_europa }
-	if = { limit = { has_variable = sr_eb_target_ganymede } remove_variable = sr_eb_target_ganymede }
-	if = { limit = { has_variable = sr_eb_target_callisto } remove_variable = sr_eb_target_callisto }
-	if = { limit = { has_variable = sr_eb_target_himalia } remove_variable = sr_eb_target_himalia }
-	if = { limit = { has_variable = sr_eb_target_amalthea } remove_variable = sr_eb_target_amalthea }
-	if = { limit = { has_variable = sr_eb_target_venus } remove_variable = sr_eb_target_venus }
-	if = { limit = { has_variable = sr_eb_target_mercury } remove_variable = sr_eb_target_mercury }
-	if = { limit = { has_variable = sr_eb_target_titan } remove_variable = sr_eb_target_titan }
-	if = { limit = { has_variable = sr_eb_target_enceladus } remove_variable = sr_eb_target_enceladus }
-	if = { limit = { has_variable = sr_eb_target_rhea } remove_variable = sr_eb_target_rhea }
-	if = { limit = { has_variable = sr_eb_target_mimas } remove_variable = sr_eb_target_mimas }
-	if = { limit = { has_variable = sr_eb_target_iapetus } remove_variable = sr_eb_target_iapetus }
-	if = { limit = { has_variable = sr_eb_target_titania } remove_variable = sr_eb_target_titania }
-	if = { limit = { has_variable = sr_eb_target_oberon } remove_variable = sr_eb_target_oberon }
-	if = { limit = { has_variable = sr_eb_target_miranda } remove_variable = sr_eb_target_miranda }
-	if = { limit = { has_variable = sr_eb_target_ariel } remove_variable = sr_eb_target_ariel }
-	if = { limit = { has_variable = sr_eb_target_triton } remove_variable = sr_eb_target_triton }
-	if = { limit = { has_variable = sr_eb_target_proteus } remove_variable = sr_eb_target_proteus }
-	if = { limit = { has_variable = sr_eb_target_pluto } remove_variable = sr_eb_target_pluto }
-	if = { limit = { has_variable = sr_eb_target_eris } remove_variable = sr_eb_target_eris }
-	if = { limit = { has_variable = sr_eb_target_makemake } remove_variable = sr_eb_target_makemake }
-	if = { limit = { has_variable = sr_eb_target_haumea } remove_variable = sr_eb_target_haumea }
-	if = { limit = { has_variable = sr_eb_target_sedna } remove_variable = sr_eb_target_sedna }
-	if = { limit = { has_variable = sr_eb_target_shackleton } remove_variable = sr_eb_target_shackleton }
-	if = { limit = { has_variable = sr_eb_target_peary } remove_variable = sr_eb_target_peary }
-	if = { limit = { has_variable = sr_eb_target_tranquility } remove_variable = sr_eb_target_tranquility }
-	if = { limit = { has_variable = sr_eb_target_marius_hills } remove_variable = sr_eb_target_marius_hills }
-	if = { limit = { has_variable = sr_eb_target_daedalus } remove_variable = sr_eb_target_daedalus }
-	if = { limit = { has_variable = sr_eb_target_imbrium } remove_variable = sr_eb_target_imbrium }
-	if = { limit = { has_variable = sr_eb_manual } remove_variable = sr_eb_manual }
+	if = {
+		limit = { has_variable = sr_eb_manual }
+		sr_eb_end_move = yes
+		if = { limit = { has_variable = sr_eb_target_near_earth } remove_variable = sr_eb_target_near_earth }
+		if = { limit = { has_variable = sr_eb_target_valles_marineris } remove_variable = sr_eb_target_valles_marineris }
+		if = { limit = { has_variable = sr_eb_target_olympus_mons } remove_variable = sr_eb_target_olympus_mons }
+		if = { limit = { has_variable = sr_eb_target_hellas_planitia } remove_variable = sr_eb_target_hellas_planitia }
+		if = { limit = { has_variable = sr_eb_target_utopia_planitia } remove_variable = sr_eb_target_utopia_planitia }
+		if = { limit = { has_variable = sr_eb_target_arcadia_planitia } remove_variable = sr_eb_target_arcadia_planitia }
+		if = { limit = { has_variable = sr_eb_target_ceres } remove_variable = sr_eb_target_ceres }
+		if = { limit = { has_variable = sr_eb_target_vesta } remove_variable = sr_eb_target_vesta }
+		if = { limit = { has_variable = sr_eb_target_psyche } remove_variable = sr_eb_target_psyche }
+		if = { limit = { has_variable = sr_eb_target_pallas } remove_variable = sr_eb_target_pallas }
+		if = { limit = { has_variable = sr_eb_target_hygiea } remove_variable = sr_eb_target_hygiea }
+		if = { limit = { has_variable = sr_eb_target_io } remove_variable = sr_eb_target_io }
+		if = { limit = { has_variable = sr_eb_target_europa } remove_variable = sr_eb_target_europa }
+		if = { limit = { has_variable = sr_eb_target_ganymede } remove_variable = sr_eb_target_ganymede }
+		if = { limit = { has_variable = sr_eb_target_callisto } remove_variable = sr_eb_target_callisto }
+		if = { limit = { has_variable = sr_eb_target_himalia } remove_variable = sr_eb_target_himalia }
+		if = { limit = { has_variable = sr_eb_target_amalthea } remove_variable = sr_eb_target_amalthea }
+		if = { limit = { has_variable = sr_eb_target_venus } remove_variable = sr_eb_target_venus }
+		if = { limit = { has_variable = sr_eb_target_mercury } remove_variable = sr_eb_target_mercury }
+		if = { limit = { has_variable = sr_eb_target_titan } remove_variable = sr_eb_target_titan }
+		if = { limit = { has_variable = sr_eb_target_enceladus } remove_variable = sr_eb_target_enceladus }
+		if = { limit = { has_variable = sr_eb_target_rhea } remove_variable = sr_eb_target_rhea }
+		if = { limit = { has_variable = sr_eb_target_mimas } remove_variable = sr_eb_target_mimas }
+		if = { limit = { has_variable = sr_eb_target_iapetus } remove_variable = sr_eb_target_iapetus }
+		if = { limit = { has_variable = sr_eb_target_titania } remove_variable = sr_eb_target_titania }
+		if = { limit = { has_variable = sr_eb_target_oberon } remove_variable = sr_eb_target_oberon }
+		if = { limit = { has_variable = sr_eb_target_miranda } remove_variable = sr_eb_target_miranda }
+		if = { limit = { has_variable = sr_eb_target_ariel } remove_variable = sr_eb_target_ariel }
+		if = { limit = { has_variable = sr_eb_target_triton } remove_variable = sr_eb_target_triton }
+		if = { limit = { has_variable = sr_eb_target_proteus } remove_variable = sr_eb_target_proteus }
+		if = { limit = { has_variable = sr_eb_target_pluto } remove_variable = sr_eb_target_pluto }
+		if = { limit = { has_variable = sr_eb_target_eris } remove_variable = sr_eb_target_eris }
+		if = { limit = { has_variable = sr_eb_target_makemake } remove_variable = sr_eb_target_makemake }
+		if = { limit = { has_variable = sr_eb_target_haumea } remove_variable = sr_eb_target_haumea }
+		if = { limit = { has_variable = sr_eb_target_sedna } remove_variable = sr_eb_target_sedna }
+		if = { limit = { has_variable = sr_eb_target_shackleton } remove_variable = sr_eb_target_shackleton }
+		if = { limit = { has_variable = sr_eb_target_peary } remove_variable = sr_eb_target_peary }
+		if = { limit = { has_variable = sr_eb_target_tranquility } remove_variable = sr_eb_target_tranquility }
+		if = { limit = { has_variable = sr_eb_target_marius_hills } remove_variable = sr_eb_target_marius_hills }
+		if = { limit = { has_variable = sr_eb_target_daedalus } remove_variable = sr_eb_target_daedalus }
+		if = { limit = { has_variable = sr_eb_target_imbrium } remove_variable = sr_eb_target_imbrium }
+		remove_variable = sr_eb_manual
+	}
 }
 
 # § 8.4's - and + (ebase_ground.assign), from sr_ebase_assign_sgui: scope:site is the place's
-# index, scope:op 1 = +5, 2 = -5, 3 = +25, 4 = -25. A click with the checkbox on
-# switches it off first, keeping where the levels are as the targets. Minus stops at 0;
-# plus at the place's room while we hold it, and at the unassigned levels (built and
-# queued, sr_ebase_queued_levels, less the targets). Moves no level.
+# index, scope:op 1 = +5, 2 = -5, 3 = +25, 4 = -25. The new target first, from
+# sr_eb_scope_target (with the checkbox on, what switching it off would set, from switch cuts
+# worked out afresh); only a click that changes it switches the checkbox off (keeping where
+# the levels will be as the targets) and sets it. Minus stops at 0; plus at the place's room
+# while we hold it, and at the unassigned levels (built and queued, sr_ebase_queued_levels,
+# less the targets). Moves no level.
 sr_eb_assign = {
-	sr_eb_checkbox_off = yes
+	if = { limit = { NOT = { has_variable = sr_eb_manual } } sr_eb_switch_cuts = yes }
 	set_local_variable = { name = sr_eba_step value = 5 }
 	if = { limit = { OR = { scope:op = 3 scope:op = 4 } } set_local_variable = { name = sr_eba_step value = 25 } }
 	set_local_variable = { name = sr_eba_free value = { value = sr_ebase_queued_levels subtract = sr_eb_assigned } }
+	set_local_variable = { name = sr_eba_tg value = sr_eb_scope_target }
+	set_local_variable = { name = sr_eba_old value = local_var:sr_eba_tg }
 	if = {
 		limit = { scope:site = 0 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_near_earth } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_near_earth } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10545,13 +11358,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_near_earth subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_near_earth value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_near_earth } remove_variable = sr_eb_target_near_earth }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_near_earth value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_near_earth } remove_variable = sr_eb_target_near_earth }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 1 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_valles_marineris } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_valles_marineris } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10561,13 +11376,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_valles_marineris subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_valles_marineris value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_valles_marineris } remove_variable = sr_eb_target_valles_marineris }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_valles_marineris value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_valles_marineris } remove_variable = sr_eb_target_valles_marineris }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 2 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_olympus_mons } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_olympus_mons } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10577,13 +11394,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_olympus_mons subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_olympus_mons value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_olympus_mons } remove_variable = sr_eb_target_olympus_mons }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_olympus_mons value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_olympus_mons } remove_variable = sr_eb_target_olympus_mons }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 3 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_hellas_planitia } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_hellas_planitia } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10593,13 +11412,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_hellas_planitia subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_hellas_planitia value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_hellas_planitia } remove_variable = sr_eb_target_hellas_planitia }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_hellas_planitia value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_hellas_planitia } remove_variable = sr_eb_target_hellas_planitia }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 4 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_utopia_planitia } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_utopia_planitia } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10609,13 +11430,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_utopia_planitia subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_utopia_planitia value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_utopia_planitia } remove_variable = sr_eb_target_utopia_planitia }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_utopia_planitia value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_utopia_planitia } remove_variable = sr_eb_target_utopia_planitia }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 5 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_arcadia_planitia } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_arcadia_planitia } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10625,13 +11448,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_arcadia_planitia subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_arcadia_planitia value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_arcadia_planitia } remove_variable = sr_eb_target_arcadia_planitia }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_arcadia_planitia value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_arcadia_planitia } remove_variable = sr_eb_target_arcadia_planitia }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 6 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_ceres } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_ceres } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10641,13 +11466,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_ceres subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_ceres value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_ceres } remove_variable = sr_eb_target_ceres }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_ceres value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_ceres } remove_variable = sr_eb_target_ceres }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 7 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_vesta } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_vesta } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10657,13 +11484,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_vesta subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_vesta value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_vesta } remove_variable = sr_eb_target_vesta }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_vesta value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_vesta } remove_variable = sr_eb_target_vesta }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 8 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_psyche } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_psyche } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10673,13 +11502,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_psyche subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_psyche value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_psyche } remove_variable = sr_eb_target_psyche }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_psyche value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_psyche } remove_variable = sr_eb_target_psyche }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 9 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_pallas } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_pallas } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10689,13 +11520,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_pallas subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_pallas value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_pallas } remove_variable = sr_eb_target_pallas }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_pallas value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_pallas } remove_variable = sr_eb_target_pallas }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 10 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_hygiea } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_hygiea } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10705,13 +11538,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_hygiea subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_hygiea value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_hygiea } remove_variable = sr_eb_target_hygiea }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_hygiea value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_hygiea } remove_variable = sr_eb_target_hygiea }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 11 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_io } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_io } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10721,13 +11556,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_io subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_io value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_io } remove_variable = sr_eb_target_io }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_io value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_io } remove_variable = sr_eb_target_io }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 12 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_europa } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_europa } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10737,13 +11574,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_europa subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_europa value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_europa } remove_variable = sr_eb_target_europa }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_europa value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_europa } remove_variable = sr_eb_target_europa }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 13 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_ganymede } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_ganymede } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10753,13 +11592,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_ganymede subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_ganymede value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_ganymede } remove_variable = sr_eb_target_ganymede }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_ganymede value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_ganymede } remove_variable = sr_eb_target_ganymede }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 14 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_callisto } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_callisto } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10769,13 +11610,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_callisto subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_callisto value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_callisto } remove_variable = sr_eb_target_callisto }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_callisto value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_callisto } remove_variable = sr_eb_target_callisto }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 15 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_himalia } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_himalia } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10785,13 +11628,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_himalia subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_himalia value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_himalia } remove_variable = sr_eb_target_himalia }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_himalia value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_himalia } remove_variable = sr_eb_target_himalia }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 16 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_amalthea } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_amalthea } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10801,13 +11646,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_amalthea subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_amalthea value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_amalthea } remove_variable = sr_eb_target_amalthea }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_amalthea value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_amalthea } remove_variable = sr_eb_target_amalthea }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 17 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_venus } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_venus } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10817,13 +11664,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_venus subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_venus value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_venus } remove_variable = sr_eb_target_venus }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_venus value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_venus } remove_variable = sr_eb_target_venus }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 18 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_mercury } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_mercury } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10833,13 +11682,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_mercury subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_mercury value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_mercury } remove_variable = sr_eb_target_mercury }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_mercury value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_mercury } remove_variable = sr_eb_target_mercury }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 19 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_titan } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_titan } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10849,13 +11700,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_titan subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_titan value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_titan } remove_variable = sr_eb_target_titan }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_titan value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_titan } remove_variable = sr_eb_target_titan }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 20 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_enceladus } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_enceladus } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10865,13 +11718,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_enceladus subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_enceladus value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_enceladus } remove_variable = sr_eb_target_enceladus }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_enceladus value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_enceladus } remove_variable = sr_eb_target_enceladus }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 21 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_rhea } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_rhea } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10881,13 +11736,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_rhea subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_rhea value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_rhea } remove_variable = sr_eb_target_rhea }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_rhea value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_rhea } remove_variable = sr_eb_target_rhea }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 22 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_mimas } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_mimas } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10897,13 +11754,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_mimas subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_mimas value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_mimas } remove_variable = sr_eb_target_mimas }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_mimas value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_mimas } remove_variable = sr_eb_target_mimas }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 23 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_iapetus } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_iapetus } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10913,13 +11772,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_iapetus subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_iapetus value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_iapetus } remove_variable = sr_eb_target_iapetus }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_iapetus value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_iapetus } remove_variable = sr_eb_target_iapetus }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 24 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_titania } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_titania } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10929,13 +11790,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_titania subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_titania value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_titania } remove_variable = sr_eb_target_titania }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_titania value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_titania } remove_variable = sr_eb_target_titania }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 25 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_oberon } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_oberon } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10945,13 +11808,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_oberon subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_oberon value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_oberon } remove_variable = sr_eb_target_oberon }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_oberon value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_oberon } remove_variable = sr_eb_target_oberon }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 26 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_miranda } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_miranda } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10961,13 +11826,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_miranda subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_miranda value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_miranda } remove_variable = sr_eb_target_miranda }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_miranda value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_miranda } remove_variable = sr_eb_target_miranda }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 27 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_ariel } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_ariel } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10977,13 +11844,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_ariel subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_ariel value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_ariel } remove_variable = sr_eb_target_ariel }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_ariel value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_ariel } remove_variable = sr_eb_target_ariel }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 28 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_triton } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_triton } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -10993,13 +11862,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_triton subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_triton value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_triton } remove_variable = sr_eb_target_triton }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_triton value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_triton } remove_variable = sr_eb_target_triton }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 29 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_proteus } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_proteus } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -11009,13 +11880,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_proteus subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_proteus value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_proteus } remove_variable = sr_eb_target_proteus }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_proteus value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_proteus } remove_variable = sr_eb_target_proteus }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 30 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_pluto } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_pluto } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -11025,13 +11898,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_pluto subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_pluto value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_pluto } remove_variable = sr_eb_target_pluto }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_pluto value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_pluto } remove_variable = sr_eb_target_pluto }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 31 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_eris } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_eris } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -11041,13 +11916,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_eris subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_eris value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_eris } remove_variable = sr_eb_target_eris }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_eris value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_eris } remove_variable = sr_eb_target_eris }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 32 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_makemake } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_makemake } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -11057,13 +11934,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_makemake subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_makemake value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_makemake } remove_variable = sr_eb_target_makemake }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_makemake value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_makemake } remove_variable = sr_eb_target_makemake }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 33 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_haumea } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_haumea } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -11073,13 +11952,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_haumea subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_haumea value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_haumea } remove_variable = sr_eb_target_haumea }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_haumea value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_haumea } remove_variable = sr_eb_target_haumea }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 34 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_sedna } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_sedna } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -11089,13 +11970,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_sedna subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_sedna value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_sedna } remove_variable = sr_eb_target_sedna }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_sedna value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_sedna } remove_variable = sr_eb_target_sedna }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 35 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_shackleton } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_shackleton } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -11105,13 +11988,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_shackleton subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_shackleton value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_shackleton } remove_variable = sr_eb_target_shackleton }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_shackleton value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_shackleton } remove_variable = sr_eb_target_shackleton }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 36 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_peary } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_peary } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -11121,13 +12006,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_peary subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_peary value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_peary } remove_variable = sr_eb_target_peary }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_peary value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_peary } remove_variable = sr_eb_target_peary }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 37 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_tranquility } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_tranquility } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -11137,13 +12024,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_tranquility subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_tranquility value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_tranquility } remove_variable = sr_eb_target_tranquility }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_tranquility value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_tranquility } remove_variable = sr_eb_target_tranquility }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 38 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_marius_hills } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_marius_hills } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -11153,13 +12042,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_marius_hills subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_marius_hills value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_marius_hills } remove_variable = sr_eb_target_marius_hills }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_marius_hills value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_marius_hills } remove_variable = sr_eb_target_marius_hills }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 39 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_daedalus } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_daedalus } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -11169,13 +12060,15 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_daedalus subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_daedalus value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_daedalus } remove_variable = sr_eb_target_daedalus }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_daedalus value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_daedalus } remove_variable = sr_eb_target_daedalus }
+		}
 	}
 	else_if = {
 		limit = { scope:site = 40 }
-		set_local_variable = { name = sr_eba_tg value = 0 }
-		if = { limit = { has_variable = sr_eb_target_imbrium } set_local_variable = { name = sr_eba_tg value = var:sr_eb_target_imbrium } }
 		if = {
 			limit = { OR = { scope:op = 2 scope:op = 4 } }
 			set_local_variable = { name = sr_eba_tg value = { value = local_var:sr_eba_tg subtract = local_var:sr_eba_step min = 0 } }
@@ -11185,14 +12078,19 @@ sr_eb_assign = {
 			set_local_variable = { name = sr_eba_add value = { value = sr_eb_held_room_imbrium subtract = local_var:sr_eba_tg max = local_var:sr_eba_add min = 0 } }
 			change_local_variable = { name = sr_eba_tg add = local_var:sr_eba_add }
 		}
-		if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_imbrium value = local_var:sr_eba_tg } }
-		else_if = { limit = { has_variable = sr_eb_target_imbrium } remove_variable = sr_eb_target_imbrium }
+		if = {
+			limit = { NOT = { local_var:sr_eba_tg = local_var:sr_eba_old } }
+			sr_eb_checkbox_off = yes
+			if = { limit = { local_var:sr_eba_tg > 0 } set_variable = { name = sr_eb_target_imbrium value = local_var:sr_eba_tg } }
+			else_if = { limit = { has_variable = sr_eb_target_imbrium } remove_variable = sr_eb_target_imbrium }
+		}
 	}
 }
 
 # § 9.4, the move notice (ebase_ground.notice_due), from the refresh after the month:
 # when Assign for the most profit is moving levels toward a different ground type, once the
-# move has carried 0.05 of our levels (sr_eb_notice_threshold), for a pair of types
+# checkbox has carried 0.05 of our levels between the move's two types, whichever
+# sites (sr_eb_type_move_carried, sr_eb_notice_threshold), for a pair of types
 # other than the last notice's, and at least 12 months after it. Players only; never for
 # the player's own moves (the checkbox off). It names the good whose value a level gains
 # most from the source to the destination at today's prices (ebase_ground.notice_good).
@@ -11206,8 +12104,10 @@ sr_eb_move_notice = {
 			NOT = { has_variable = sr_eb_manual }
 			has_variable = sr_eb_move_from
 			has_variable = sr_eb_move_to
-			has_variable = sr_eb_move_carried
-			var:sr_eb_move_carried >= sr_eb_notice_threshold
+			has_variable = sr_eb_type_move_ft
+			has_variable = sr_eb_type_move_tt
+			has_variable = sr_eb_type_move_carried
+			var:sr_eb_type_move_carried >= sr_eb_notice_threshold
 			OR = {
 				NOT = { has_variable = sr_eb_notice_next }
 				te_history_month_index >= var:sr_eb_notice_next
@@ -12129,7 +13029,7 @@ sr_eb_move_notice = {
 			set_local_variable = { name = sr_ebq_same value = 1 }
 		}
 		if = {
-			limit = { local_var:sr_ebq_same = 0 NOT = { local_var:sr_ebq_ft = local_var:sr_ebq_tt } }
+			limit = { local_var:sr_ebq_same = 0 NOT = { local_var:sr_ebq_ft = local_var:sr_ebq_tt } var:sr_eb_type_move_ft = local_var:sr_ebq_ft var:sr_eb_type_move_tt = local_var:sr_ebq_tt }
 			# The good whose value a level gains most, at today's prices (ties to the first)
 			set_local_variable = { name = sr_ebq_best value = -1000000000 }
 			set_local_variable = { name = sr_ebq_good value = 0 }

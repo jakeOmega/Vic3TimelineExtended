@@ -1130,7 +1130,8 @@ sr_eb_held_room_imbrium = {
 	if = { limit = { global_var:sr_site_holder_imbrium ?= this } value = sr_site_ebase_room_imbrium }
 }
 # The levels assigned: the targets with the checkbox off; with it on, what switching it off
-# would set them to, each place's levels and those it is owed (ebase_ground.set_checkbox).
+# would set them to, each place's levels and those it is owed, less what the return will
+# take back from it (ebase_ground.set_checkbox, the refresh's sr_eb_switch_cut_<k>).
 sr_eb_assigned = {
 	value = 0
 	if = {
@@ -1180,86 +1181,127 @@ sr_eb_assigned = {
 	else = {
 		if = { limit = { has_variable = sr_eb_at_near_earth } add = var:sr_eb_at_near_earth }
 		if = { limit = { has_variable = sr_eb_away_near_earth } add = var:sr_eb_away_near_earth }
+		if = { limit = { has_variable = sr_eb_switch_cut_near_earth } subtract = var:sr_eb_switch_cut_near_earth }
 		if = { limit = { has_variable = sr_eb_at_valles_marineris } add = var:sr_eb_at_valles_marineris }
 		if = { limit = { has_variable = sr_eb_away_valles_marineris } add = var:sr_eb_away_valles_marineris }
+		if = { limit = { has_variable = sr_eb_switch_cut_valles_marineris } subtract = var:sr_eb_switch_cut_valles_marineris }
 		if = { limit = { has_variable = sr_eb_at_olympus_mons } add = var:sr_eb_at_olympus_mons }
 		if = { limit = { has_variable = sr_eb_away_olympus_mons } add = var:sr_eb_away_olympus_mons }
+		if = { limit = { has_variable = sr_eb_switch_cut_olympus_mons } subtract = var:sr_eb_switch_cut_olympus_mons }
 		if = { limit = { has_variable = sr_eb_at_hellas_planitia } add = var:sr_eb_at_hellas_planitia }
 		if = { limit = { has_variable = sr_eb_away_hellas_planitia } add = var:sr_eb_away_hellas_planitia }
+		if = { limit = { has_variable = sr_eb_switch_cut_hellas_planitia } subtract = var:sr_eb_switch_cut_hellas_planitia }
 		if = { limit = { has_variable = sr_eb_at_utopia_planitia } add = var:sr_eb_at_utopia_planitia }
 		if = { limit = { has_variable = sr_eb_away_utopia_planitia } add = var:sr_eb_away_utopia_planitia }
+		if = { limit = { has_variable = sr_eb_switch_cut_utopia_planitia } subtract = var:sr_eb_switch_cut_utopia_planitia }
 		if = { limit = { has_variable = sr_eb_at_arcadia_planitia } add = var:sr_eb_at_arcadia_planitia }
 		if = { limit = { has_variable = sr_eb_away_arcadia_planitia } add = var:sr_eb_away_arcadia_planitia }
+		if = { limit = { has_variable = sr_eb_switch_cut_arcadia_planitia } subtract = var:sr_eb_switch_cut_arcadia_planitia }
 		if = { limit = { has_variable = sr_eb_at_ceres } add = var:sr_eb_at_ceres }
 		if = { limit = { has_variable = sr_eb_away_ceres } add = var:sr_eb_away_ceres }
+		if = { limit = { has_variable = sr_eb_switch_cut_ceres } subtract = var:sr_eb_switch_cut_ceres }
 		if = { limit = { has_variable = sr_eb_at_vesta } add = var:sr_eb_at_vesta }
 		if = { limit = { has_variable = sr_eb_away_vesta } add = var:sr_eb_away_vesta }
+		if = { limit = { has_variable = sr_eb_switch_cut_vesta } subtract = var:sr_eb_switch_cut_vesta }
 		if = { limit = { has_variable = sr_eb_at_psyche } add = var:sr_eb_at_psyche }
 		if = { limit = { has_variable = sr_eb_away_psyche } add = var:sr_eb_away_psyche }
+		if = { limit = { has_variable = sr_eb_switch_cut_psyche } subtract = var:sr_eb_switch_cut_psyche }
 		if = { limit = { has_variable = sr_eb_at_pallas } add = var:sr_eb_at_pallas }
 		if = { limit = { has_variable = sr_eb_away_pallas } add = var:sr_eb_away_pallas }
+		if = { limit = { has_variable = sr_eb_switch_cut_pallas } subtract = var:sr_eb_switch_cut_pallas }
 		if = { limit = { has_variable = sr_eb_at_hygiea } add = var:sr_eb_at_hygiea }
 		if = { limit = { has_variable = sr_eb_away_hygiea } add = var:sr_eb_away_hygiea }
+		if = { limit = { has_variable = sr_eb_switch_cut_hygiea } subtract = var:sr_eb_switch_cut_hygiea }
 		if = { limit = { has_variable = sr_eb_at_io } add = var:sr_eb_at_io }
 		if = { limit = { has_variable = sr_eb_away_io } add = var:sr_eb_away_io }
+		if = { limit = { has_variable = sr_eb_switch_cut_io } subtract = var:sr_eb_switch_cut_io }
 		if = { limit = { has_variable = sr_eb_at_europa } add = var:sr_eb_at_europa }
 		if = { limit = { has_variable = sr_eb_away_europa } add = var:sr_eb_away_europa }
+		if = { limit = { has_variable = sr_eb_switch_cut_europa } subtract = var:sr_eb_switch_cut_europa }
 		if = { limit = { has_variable = sr_eb_at_ganymede } add = var:sr_eb_at_ganymede }
 		if = { limit = { has_variable = sr_eb_away_ganymede } add = var:sr_eb_away_ganymede }
+		if = { limit = { has_variable = sr_eb_switch_cut_ganymede } subtract = var:sr_eb_switch_cut_ganymede }
 		if = { limit = { has_variable = sr_eb_at_callisto } add = var:sr_eb_at_callisto }
 		if = { limit = { has_variable = sr_eb_away_callisto } add = var:sr_eb_away_callisto }
+		if = { limit = { has_variable = sr_eb_switch_cut_callisto } subtract = var:sr_eb_switch_cut_callisto }
 		if = { limit = { has_variable = sr_eb_at_himalia } add = var:sr_eb_at_himalia }
 		if = { limit = { has_variable = sr_eb_away_himalia } add = var:sr_eb_away_himalia }
+		if = { limit = { has_variable = sr_eb_switch_cut_himalia } subtract = var:sr_eb_switch_cut_himalia }
 		if = { limit = { has_variable = sr_eb_at_amalthea } add = var:sr_eb_at_amalthea }
 		if = { limit = { has_variable = sr_eb_away_amalthea } add = var:sr_eb_away_amalthea }
+		if = { limit = { has_variable = sr_eb_switch_cut_amalthea } subtract = var:sr_eb_switch_cut_amalthea }
 		if = { limit = { has_variable = sr_eb_at_venus } add = var:sr_eb_at_venus }
 		if = { limit = { has_variable = sr_eb_away_venus } add = var:sr_eb_away_venus }
+		if = { limit = { has_variable = sr_eb_switch_cut_venus } subtract = var:sr_eb_switch_cut_venus }
 		if = { limit = { has_variable = sr_eb_at_mercury } add = var:sr_eb_at_mercury }
 		if = { limit = { has_variable = sr_eb_away_mercury } add = var:sr_eb_away_mercury }
+		if = { limit = { has_variable = sr_eb_switch_cut_mercury } subtract = var:sr_eb_switch_cut_mercury }
 		if = { limit = { has_variable = sr_eb_at_titan } add = var:sr_eb_at_titan }
 		if = { limit = { has_variable = sr_eb_away_titan } add = var:sr_eb_away_titan }
+		if = { limit = { has_variable = sr_eb_switch_cut_titan } subtract = var:sr_eb_switch_cut_titan }
 		if = { limit = { has_variable = sr_eb_at_enceladus } add = var:sr_eb_at_enceladus }
 		if = { limit = { has_variable = sr_eb_away_enceladus } add = var:sr_eb_away_enceladus }
+		if = { limit = { has_variable = sr_eb_switch_cut_enceladus } subtract = var:sr_eb_switch_cut_enceladus }
 		if = { limit = { has_variable = sr_eb_at_rhea } add = var:sr_eb_at_rhea }
 		if = { limit = { has_variable = sr_eb_away_rhea } add = var:sr_eb_away_rhea }
+		if = { limit = { has_variable = sr_eb_switch_cut_rhea } subtract = var:sr_eb_switch_cut_rhea }
 		if = { limit = { has_variable = sr_eb_at_mimas } add = var:sr_eb_at_mimas }
 		if = { limit = { has_variable = sr_eb_away_mimas } add = var:sr_eb_away_mimas }
+		if = { limit = { has_variable = sr_eb_switch_cut_mimas } subtract = var:sr_eb_switch_cut_mimas }
 		if = { limit = { has_variable = sr_eb_at_iapetus } add = var:sr_eb_at_iapetus }
 		if = { limit = { has_variable = sr_eb_away_iapetus } add = var:sr_eb_away_iapetus }
+		if = { limit = { has_variable = sr_eb_switch_cut_iapetus } subtract = var:sr_eb_switch_cut_iapetus }
 		if = { limit = { has_variable = sr_eb_at_titania } add = var:sr_eb_at_titania }
 		if = { limit = { has_variable = sr_eb_away_titania } add = var:sr_eb_away_titania }
+		if = { limit = { has_variable = sr_eb_switch_cut_titania } subtract = var:sr_eb_switch_cut_titania }
 		if = { limit = { has_variable = sr_eb_at_oberon } add = var:sr_eb_at_oberon }
 		if = { limit = { has_variable = sr_eb_away_oberon } add = var:sr_eb_away_oberon }
+		if = { limit = { has_variable = sr_eb_switch_cut_oberon } subtract = var:sr_eb_switch_cut_oberon }
 		if = { limit = { has_variable = sr_eb_at_miranda } add = var:sr_eb_at_miranda }
 		if = { limit = { has_variable = sr_eb_away_miranda } add = var:sr_eb_away_miranda }
+		if = { limit = { has_variable = sr_eb_switch_cut_miranda } subtract = var:sr_eb_switch_cut_miranda }
 		if = { limit = { has_variable = sr_eb_at_ariel } add = var:sr_eb_at_ariel }
 		if = { limit = { has_variable = sr_eb_away_ariel } add = var:sr_eb_away_ariel }
+		if = { limit = { has_variable = sr_eb_switch_cut_ariel } subtract = var:sr_eb_switch_cut_ariel }
 		if = { limit = { has_variable = sr_eb_at_triton } add = var:sr_eb_at_triton }
 		if = { limit = { has_variable = sr_eb_away_triton } add = var:sr_eb_away_triton }
+		if = { limit = { has_variable = sr_eb_switch_cut_triton } subtract = var:sr_eb_switch_cut_triton }
 		if = { limit = { has_variable = sr_eb_at_proteus } add = var:sr_eb_at_proteus }
 		if = { limit = { has_variable = sr_eb_away_proteus } add = var:sr_eb_away_proteus }
+		if = { limit = { has_variable = sr_eb_switch_cut_proteus } subtract = var:sr_eb_switch_cut_proteus }
 		if = { limit = { has_variable = sr_eb_at_pluto } add = var:sr_eb_at_pluto }
 		if = { limit = { has_variable = sr_eb_away_pluto } add = var:sr_eb_away_pluto }
+		if = { limit = { has_variable = sr_eb_switch_cut_pluto } subtract = var:sr_eb_switch_cut_pluto }
 		if = { limit = { has_variable = sr_eb_at_eris } add = var:sr_eb_at_eris }
 		if = { limit = { has_variable = sr_eb_away_eris } add = var:sr_eb_away_eris }
+		if = { limit = { has_variable = sr_eb_switch_cut_eris } subtract = var:sr_eb_switch_cut_eris }
 		if = { limit = { has_variable = sr_eb_at_makemake } add = var:sr_eb_at_makemake }
 		if = { limit = { has_variable = sr_eb_away_makemake } add = var:sr_eb_away_makemake }
+		if = { limit = { has_variable = sr_eb_switch_cut_makemake } subtract = var:sr_eb_switch_cut_makemake }
 		if = { limit = { has_variable = sr_eb_at_haumea } add = var:sr_eb_at_haumea }
 		if = { limit = { has_variable = sr_eb_away_haumea } add = var:sr_eb_away_haumea }
+		if = { limit = { has_variable = sr_eb_switch_cut_haumea } subtract = var:sr_eb_switch_cut_haumea }
 		if = { limit = { has_variable = sr_eb_at_sedna } add = var:sr_eb_at_sedna }
 		if = { limit = { has_variable = sr_eb_away_sedna } add = var:sr_eb_away_sedna }
+		if = { limit = { has_variable = sr_eb_switch_cut_sedna } subtract = var:sr_eb_switch_cut_sedna }
 		if = { limit = { has_variable = sr_eb_at_shackleton } add = var:sr_eb_at_shackleton }
 		if = { limit = { has_variable = sr_eb_away_shackleton } add = var:sr_eb_away_shackleton }
+		if = { limit = { has_variable = sr_eb_switch_cut_shackleton } subtract = var:sr_eb_switch_cut_shackleton }
 		if = { limit = { has_variable = sr_eb_at_peary } add = var:sr_eb_at_peary }
 		if = { limit = { has_variable = sr_eb_away_peary } add = var:sr_eb_away_peary }
+		if = { limit = { has_variable = sr_eb_switch_cut_peary } subtract = var:sr_eb_switch_cut_peary }
 		if = { limit = { has_variable = sr_eb_at_tranquility } add = var:sr_eb_at_tranquility }
 		if = { limit = { has_variable = sr_eb_away_tranquility } add = var:sr_eb_away_tranquility }
+		if = { limit = { has_variable = sr_eb_switch_cut_tranquility } subtract = var:sr_eb_switch_cut_tranquility }
 		if = { limit = { has_variable = sr_eb_at_marius_hills } add = var:sr_eb_at_marius_hills }
 		if = { limit = { has_variable = sr_eb_away_marius_hills } add = var:sr_eb_away_marius_hills }
+		if = { limit = { has_variable = sr_eb_switch_cut_marius_hills } subtract = var:sr_eb_switch_cut_marius_hills }
 		if = { limit = { has_variable = sr_eb_at_daedalus } add = var:sr_eb_at_daedalus }
 		if = { limit = { has_variable = sr_eb_away_daedalus } add = var:sr_eb_away_daedalus }
+		if = { limit = { has_variable = sr_eb_switch_cut_daedalus } subtract = var:sr_eb_switch_cut_daedalus }
 		if = { limit = { has_variable = sr_eb_at_imbrium } add = var:sr_eb_at_imbrium }
 		if = { limit = { has_variable = sr_eb_away_imbrium } add = var:sr_eb_away_imbrium }
+		if = { limit = { has_variable = sr_eb_switch_cut_imbrium } subtract = var:sr_eb_switch_cut_imbrium }
 	}
 }
 # scope:site's target, the same way, and its room while we hold it.
@@ -1437,206 +1479,247 @@ sr_eb_scope_target = {
 			limit = { scope:site = 0 }
 			if = { limit = { has_variable = sr_eb_at_near_earth } add = var:sr_eb_at_near_earth }
 			if = { limit = { has_variable = sr_eb_away_near_earth } add = var:sr_eb_away_near_earth }
+			if = { limit = { has_variable = sr_eb_switch_cut_near_earth } subtract = var:sr_eb_switch_cut_near_earth }
 		}
 		else_if = {
 			limit = { scope:site = 1 }
 			if = { limit = { has_variable = sr_eb_at_valles_marineris } add = var:sr_eb_at_valles_marineris }
 			if = { limit = { has_variable = sr_eb_away_valles_marineris } add = var:sr_eb_away_valles_marineris }
+			if = { limit = { has_variable = sr_eb_switch_cut_valles_marineris } subtract = var:sr_eb_switch_cut_valles_marineris }
 		}
 		else_if = {
 			limit = { scope:site = 2 }
 			if = { limit = { has_variable = sr_eb_at_olympus_mons } add = var:sr_eb_at_olympus_mons }
 			if = { limit = { has_variable = sr_eb_away_olympus_mons } add = var:sr_eb_away_olympus_mons }
+			if = { limit = { has_variable = sr_eb_switch_cut_olympus_mons } subtract = var:sr_eb_switch_cut_olympus_mons }
 		}
 		else_if = {
 			limit = { scope:site = 3 }
 			if = { limit = { has_variable = sr_eb_at_hellas_planitia } add = var:sr_eb_at_hellas_planitia }
 			if = { limit = { has_variable = sr_eb_away_hellas_planitia } add = var:sr_eb_away_hellas_planitia }
+			if = { limit = { has_variable = sr_eb_switch_cut_hellas_planitia } subtract = var:sr_eb_switch_cut_hellas_planitia }
 		}
 		else_if = {
 			limit = { scope:site = 4 }
 			if = { limit = { has_variable = sr_eb_at_utopia_planitia } add = var:sr_eb_at_utopia_planitia }
 			if = { limit = { has_variable = sr_eb_away_utopia_planitia } add = var:sr_eb_away_utopia_planitia }
+			if = { limit = { has_variable = sr_eb_switch_cut_utopia_planitia } subtract = var:sr_eb_switch_cut_utopia_planitia }
 		}
 		else_if = {
 			limit = { scope:site = 5 }
 			if = { limit = { has_variable = sr_eb_at_arcadia_planitia } add = var:sr_eb_at_arcadia_planitia }
 			if = { limit = { has_variable = sr_eb_away_arcadia_planitia } add = var:sr_eb_away_arcadia_planitia }
+			if = { limit = { has_variable = sr_eb_switch_cut_arcadia_planitia } subtract = var:sr_eb_switch_cut_arcadia_planitia }
 		}
 		else_if = {
 			limit = { scope:site = 6 }
 			if = { limit = { has_variable = sr_eb_at_ceres } add = var:sr_eb_at_ceres }
 			if = { limit = { has_variable = sr_eb_away_ceres } add = var:sr_eb_away_ceres }
+			if = { limit = { has_variable = sr_eb_switch_cut_ceres } subtract = var:sr_eb_switch_cut_ceres }
 		}
 		else_if = {
 			limit = { scope:site = 7 }
 			if = { limit = { has_variable = sr_eb_at_vesta } add = var:sr_eb_at_vesta }
 			if = { limit = { has_variable = sr_eb_away_vesta } add = var:sr_eb_away_vesta }
+			if = { limit = { has_variable = sr_eb_switch_cut_vesta } subtract = var:sr_eb_switch_cut_vesta }
 		}
 		else_if = {
 			limit = { scope:site = 8 }
 			if = { limit = { has_variable = sr_eb_at_psyche } add = var:sr_eb_at_psyche }
 			if = { limit = { has_variable = sr_eb_away_psyche } add = var:sr_eb_away_psyche }
+			if = { limit = { has_variable = sr_eb_switch_cut_psyche } subtract = var:sr_eb_switch_cut_psyche }
 		}
 		else_if = {
 			limit = { scope:site = 9 }
 			if = { limit = { has_variable = sr_eb_at_pallas } add = var:sr_eb_at_pallas }
 			if = { limit = { has_variable = sr_eb_away_pallas } add = var:sr_eb_away_pallas }
+			if = { limit = { has_variable = sr_eb_switch_cut_pallas } subtract = var:sr_eb_switch_cut_pallas }
 		}
 		else_if = {
 			limit = { scope:site = 10 }
 			if = { limit = { has_variable = sr_eb_at_hygiea } add = var:sr_eb_at_hygiea }
 			if = { limit = { has_variable = sr_eb_away_hygiea } add = var:sr_eb_away_hygiea }
+			if = { limit = { has_variable = sr_eb_switch_cut_hygiea } subtract = var:sr_eb_switch_cut_hygiea }
 		}
 		else_if = {
 			limit = { scope:site = 11 }
 			if = { limit = { has_variable = sr_eb_at_io } add = var:sr_eb_at_io }
 			if = { limit = { has_variable = sr_eb_away_io } add = var:sr_eb_away_io }
+			if = { limit = { has_variable = sr_eb_switch_cut_io } subtract = var:sr_eb_switch_cut_io }
 		}
 		else_if = {
 			limit = { scope:site = 12 }
 			if = { limit = { has_variable = sr_eb_at_europa } add = var:sr_eb_at_europa }
 			if = { limit = { has_variable = sr_eb_away_europa } add = var:sr_eb_away_europa }
+			if = { limit = { has_variable = sr_eb_switch_cut_europa } subtract = var:sr_eb_switch_cut_europa }
 		}
 		else_if = {
 			limit = { scope:site = 13 }
 			if = { limit = { has_variable = sr_eb_at_ganymede } add = var:sr_eb_at_ganymede }
 			if = { limit = { has_variable = sr_eb_away_ganymede } add = var:sr_eb_away_ganymede }
+			if = { limit = { has_variable = sr_eb_switch_cut_ganymede } subtract = var:sr_eb_switch_cut_ganymede }
 		}
 		else_if = {
 			limit = { scope:site = 14 }
 			if = { limit = { has_variable = sr_eb_at_callisto } add = var:sr_eb_at_callisto }
 			if = { limit = { has_variable = sr_eb_away_callisto } add = var:sr_eb_away_callisto }
+			if = { limit = { has_variable = sr_eb_switch_cut_callisto } subtract = var:sr_eb_switch_cut_callisto }
 		}
 		else_if = {
 			limit = { scope:site = 15 }
 			if = { limit = { has_variable = sr_eb_at_himalia } add = var:sr_eb_at_himalia }
 			if = { limit = { has_variable = sr_eb_away_himalia } add = var:sr_eb_away_himalia }
+			if = { limit = { has_variable = sr_eb_switch_cut_himalia } subtract = var:sr_eb_switch_cut_himalia }
 		}
 		else_if = {
 			limit = { scope:site = 16 }
 			if = { limit = { has_variable = sr_eb_at_amalthea } add = var:sr_eb_at_amalthea }
 			if = { limit = { has_variable = sr_eb_away_amalthea } add = var:sr_eb_away_amalthea }
+			if = { limit = { has_variable = sr_eb_switch_cut_amalthea } subtract = var:sr_eb_switch_cut_amalthea }
 		}
 		else_if = {
 			limit = { scope:site = 17 }
 			if = { limit = { has_variable = sr_eb_at_venus } add = var:sr_eb_at_venus }
 			if = { limit = { has_variable = sr_eb_away_venus } add = var:sr_eb_away_venus }
+			if = { limit = { has_variable = sr_eb_switch_cut_venus } subtract = var:sr_eb_switch_cut_venus }
 		}
 		else_if = {
 			limit = { scope:site = 18 }
 			if = { limit = { has_variable = sr_eb_at_mercury } add = var:sr_eb_at_mercury }
 			if = { limit = { has_variable = sr_eb_away_mercury } add = var:sr_eb_away_mercury }
+			if = { limit = { has_variable = sr_eb_switch_cut_mercury } subtract = var:sr_eb_switch_cut_mercury }
 		}
 		else_if = {
 			limit = { scope:site = 19 }
 			if = { limit = { has_variable = sr_eb_at_titan } add = var:sr_eb_at_titan }
 			if = { limit = { has_variable = sr_eb_away_titan } add = var:sr_eb_away_titan }
+			if = { limit = { has_variable = sr_eb_switch_cut_titan } subtract = var:sr_eb_switch_cut_titan }
 		}
 		else_if = {
 			limit = { scope:site = 20 }
 			if = { limit = { has_variable = sr_eb_at_enceladus } add = var:sr_eb_at_enceladus }
 			if = { limit = { has_variable = sr_eb_away_enceladus } add = var:sr_eb_away_enceladus }
+			if = { limit = { has_variable = sr_eb_switch_cut_enceladus } subtract = var:sr_eb_switch_cut_enceladus }
 		}
 		else_if = {
 			limit = { scope:site = 21 }
 			if = { limit = { has_variable = sr_eb_at_rhea } add = var:sr_eb_at_rhea }
 			if = { limit = { has_variable = sr_eb_away_rhea } add = var:sr_eb_away_rhea }
+			if = { limit = { has_variable = sr_eb_switch_cut_rhea } subtract = var:sr_eb_switch_cut_rhea }
 		}
 		else_if = {
 			limit = { scope:site = 22 }
 			if = { limit = { has_variable = sr_eb_at_mimas } add = var:sr_eb_at_mimas }
 			if = { limit = { has_variable = sr_eb_away_mimas } add = var:sr_eb_away_mimas }
+			if = { limit = { has_variable = sr_eb_switch_cut_mimas } subtract = var:sr_eb_switch_cut_mimas }
 		}
 		else_if = {
 			limit = { scope:site = 23 }
 			if = { limit = { has_variable = sr_eb_at_iapetus } add = var:sr_eb_at_iapetus }
 			if = { limit = { has_variable = sr_eb_away_iapetus } add = var:sr_eb_away_iapetus }
+			if = { limit = { has_variable = sr_eb_switch_cut_iapetus } subtract = var:sr_eb_switch_cut_iapetus }
 		}
 		else_if = {
 			limit = { scope:site = 24 }
 			if = { limit = { has_variable = sr_eb_at_titania } add = var:sr_eb_at_titania }
 			if = { limit = { has_variable = sr_eb_away_titania } add = var:sr_eb_away_titania }
+			if = { limit = { has_variable = sr_eb_switch_cut_titania } subtract = var:sr_eb_switch_cut_titania }
 		}
 		else_if = {
 			limit = { scope:site = 25 }
 			if = { limit = { has_variable = sr_eb_at_oberon } add = var:sr_eb_at_oberon }
 			if = { limit = { has_variable = sr_eb_away_oberon } add = var:sr_eb_away_oberon }
+			if = { limit = { has_variable = sr_eb_switch_cut_oberon } subtract = var:sr_eb_switch_cut_oberon }
 		}
 		else_if = {
 			limit = { scope:site = 26 }
 			if = { limit = { has_variable = sr_eb_at_miranda } add = var:sr_eb_at_miranda }
 			if = { limit = { has_variable = sr_eb_away_miranda } add = var:sr_eb_away_miranda }
+			if = { limit = { has_variable = sr_eb_switch_cut_miranda } subtract = var:sr_eb_switch_cut_miranda }
 		}
 		else_if = {
 			limit = { scope:site = 27 }
 			if = { limit = { has_variable = sr_eb_at_ariel } add = var:sr_eb_at_ariel }
 			if = { limit = { has_variable = sr_eb_away_ariel } add = var:sr_eb_away_ariel }
+			if = { limit = { has_variable = sr_eb_switch_cut_ariel } subtract = var:sr_eb_switch_cut_ariel }
 		}
 		else_if = {
 			limit = { scope:site = 28 }
 			if = { limit = { has_variable = sr_eb_at_triton } add = var:sr_eb_at_triton }
 			if = { limit = { has_variable = sr_eb_away_triton } add = var:sr_eb_away_triton }
+			if = { limit = { has_variable = sr_eb_switch_cut_triton } subtract = var:sr_eb_switch_cut_triton }
 		}
 		else_if = {
 			limit = { scope:site = 29 }
 			if = { limit = { has_variable = sr_eb_at_proteus } add = var:sr_eb_at_proteus }
 			if = { limit = { has_variable = sr_eb_away_proteus } add = var:sr_eb_away_proteus }
+			if = { limit = { has_variable = sr_eb_switch_cut_proteus } subtract = var:sr_eb_switch_cut_proteus }
 		}
 		else_if = {
 			limit = { scope:site = 30 }
 			if = { limit = { has_variable = sr_eb_at_pluto } add = var:sr_eb_at_pluto }
 			if = { limit = { has_variable = sr_eb_away_pluto } add = var:sr_eb_away_pluto }
+			if = { limit = { has_variable = sr_eb_switch_cut_pluto } subtract = var:sr_eb_switch_cut_pluto }
 		}
 		else_if = {
 			limit = { scope:site = 31 }
 			if = { limit = { has_variable = sr_eb_at_eris } add = var:sr_eb_at_eris }
 			if = { limit = { has_variable = sr_eb_away_eris } add = var:sr_eb_away_eris }
+			if = { limit = { has_variable = sr_eb_switch_cut_eris } subtract = var:sr_eb_switch_cut_eris }
 		}
 		else_if = {
 			limit = { scope:site = 32 }
 			if = { limit = { has_variable = sr_eb_at_makemake } add = var:sr_eb_at_makemake }
 			if = { limit = { has_variable = sr_eb_away_makemake } add = var:sr_eb_away_makemake }
+			if = { limit = { has_variable = sr_eb_switch_cut_makemake } subtract = var:sr_eb_switch_cut_makemake }
 		}
 		else_if = {
 			limit = { scope:site = 33 }
 			if = { limit = { has_variable = sr_eb_at_haumea } add = var:sr_eb_at_haumea }
 			if = { limit = { has_variable = sr_eb_away_haumea } add = var:sr_eb_away_haumea }
+			if = { limit = { has_variable = sr_eb_switch_cut_haumea } subtract = var:sr_eb_switch_cut_haumea }
 		}
 		else_if = {
 			limit = { scope:site = 34 }
 			if = { limit = { has_variable = sr_eb_at_sedna } add = var:sr_eb_at_sedna }
 			if = { limit = { has_variable = sr_eb_away_sedna } add = var:sr_eb_away_sedna }
+			if = { limit = { has_variable = sr_eb_switch_cut_sedna } subtract = var:sr_eb_switch_cut_sedna }
 		}
 		else_if = {
 			limit = { scope:site = 35 }
 			if = { limit = { has_variable = sr_eb_at_shackleton } add = var:sr_eb_at_shackleton }
 			if = { limit = { has_variable = sr_eb_away_shackleton } add = var:sr_eb_away_shackleton }
+			if = { limit = { has_variable = sr_eb_switch_cut_shackleton } subtract = var:sr_eb_switch_cut_shackleton }
 		}
 		else_if = {
 			limit = { scope:site = 36 }
 			if = { limit = { has_variable = sr_eb_at_peary } add = var:sr_eb_at_peary }
 			if = { limit = { has_variable = sr_eb_away_peary } add = var:sr_eb_away_peary }
+			if = { limit = { has_variable = sr_eb_switch_cut_peary } subtract = var:sr_eb_switch_cut_peary }
 		}
 		else_if = {
 			limit = { scope:site = 37 }
 			if = { limit = { has_variable = sr_eb_at_tranquility } add = var:sr_eb_at_tranquility }
 			if = { limit = { has_variable = sr_eb_away_tranquility } add = var:sr_eb_away_tranquility }
+			if = { limit = { has_variable = sr_eb_switch_cut_tranquility } subtract = var:sr_eb_switch_cut_tranquility }
 		}
 		else_if = {
 			limit = { scope:site = 38 }
 			if = { limit = { has_variable = sr_eb_at_marius_hills } add = var:sr_eb_at_marius_hills }
 			if = { limit = { has_variable = sr_eb_away_marius_hills } add = var:sr_eb_away_marius_hills }
+			if = { limit = { has_variable = sr_eb_switch_cut_marius_hills } subtract = var:sr_eb_switch_cut_marius_hills }
 		}
 		else_if = {
 			limit = { scope:site = 39 }
 			if = { limit = { has_variable = sr_eb_at_daedalus } add = var:sr_eb_at_daedalus }
 			if = { limit = { has_variable = sr_eb_away_daedalus } add = var:sr_eb_away_daedalus }
+			if = { limit = { has_variable = sr_eb_switch_cut_daedalus } subtract = var:sr_eb_switch_cut_daedalus }
 		}
 		else_if = {
 			limit = { scope:site = 40 }
 			if = { limit = { has_variable = sr_eb_at_imbrium } add = var:sr_eb_at_imbrium }
 			if = { limit = { has_variable = sr_eb_away_imbrium } add = var:sr_eb_away_imbrium }
+			if = { limit = { has_variable = sr_eb_switch_cut_imbrium } subtract = var:sr_eb_switch_cut_imbrium }
 		}
 	}
 }

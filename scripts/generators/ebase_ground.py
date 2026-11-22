@@ -677,32 +677,58 @@ def next_place(state: BaseState, *, room: dict[str, int], serves: dict[str, bool
 
 # --- The checkbox and the buttons (§ 8.4) ---
 
-def set_checkbox(state: BaseState, on: bool) -> BaseState:
-    """§ 8.4. Off: every place's target is set to the levels on record there, its `at`
-    and its `away`, so nothing moves until the player changes one (a blockaded site's
-    levels, back, meet their own target). On: the targets are dropped, and the
-    checkbox's moves start from where the levels are. Neither moves a level."""
+def switch_cuts(state: BaseState, profit: dict[str, float] | None = None) -> dict[str, int]:
+    """What switching the checkbox off takes off each place's `at`, so that each target
+    is the levels the place will hold once every blockade has returned (the final
+    review's S1). A blockaded site is owed its `away`; the return takes those levels
+    from the levels past the room first and then along the checkbox's take order (the
+    worst profit a level first, ties to the higher index: _take_steps), so that is what
+    comes off: max(0, sum(away) - over) from the places not owed any, never below 0.
+    `profit`: the stored profits a level (var:sr_eb_level_profit_<k>)."""
+    owed = {p for p in PLACES if state.away.get(p, 0) > 0}
+    need = sum(state.away.values()) - state.over
+    if need <= 0:
+        return {}
+    left = {p: state.at.get(p, 0) for p in PLACES if p not in owed}
+    _take(left, need, _take_steps(replace(state, manual=False), profit or {}))
+    return {p: state.at.get(p, 0) - n for p, n in left.items() if state.at.get(p, 0) > n}
+
+
+def set_checkbox(state: BaseState, on: bool, profit: dict[str, float] | None = None) -> BaseState:
+    """§ 8.4. Off: every place's target is set to the levels it will hold once every
+    blockade has returned: a blockaded site's at + away, and the other places' at less
+    what the return will take back from them (switch_cuts), so nothing moves until the
+    player changes one, and the targets sum to the built levels at most. Switching
+    either way ends the running move (it becomes the last). On: the targets are
+    dropped, and the checkbox's moves start from where the levels are. Neither moves a
+    level. `profit`: the stored profits a level, for the cut's order."""
     s = state.copy()
     if on:
         s.manual, s.target = False, {}
     elif not s.manual:
         s.manual = True
-        s.target = _clean({p: s.at.get(p, 0) + s.away.get(p, 0) for p in PLACES})
+        cuts = switch_cuts(s, profit)
+        s.target = _clean({p: s.at.get(p, 0) + s.away.get(p, 0) - cuts.get(p, 0) for p in PLACES})
     return s
 
 
-def assign(state: BaseState, place: str, step: int, *, room: dict[str, int], built: int, queued: int) -> BaseState:
+def assign(state: BaseState, place: str, step: int, *, room: dict[str, int], built: int, queued: int,
+           profit: dict[str, float] | None = None) -> BaseState:
     """§ 8.4's - and + buttons: change `place`'s target by `step` levels. A click while
-    the checkbox is on switches it off first. Minus stops at 0. Plus stops at the
-    place's room and at the unassigned levels (built and queued less the targets), and
-    does nothing without one. Never moves a level."""
-    s = set_checkbox(state, on=False)
+    the checkbox is on switches it off first, but only when the target changes (a
+    click that changes nothing leaves the checkbox as it was: the final review's S3).
+    Minus stops at 0. Plus stops at the place's room and at the unassigned levels
+    (built and queued less the targets), and does nothing without one. Never moves a
+    level. `profit`: as set_checkbox's."""
+    s = set_checkbox(state, on=False, profit=profit)
     now = s.target.get(place, 0)
     if step < 0:
         new = max(0, now + step)
     else:
         unassigned = built + queued - sum(s.target.values())
         new = now + max(0, min(step, room.get(place, 0) - now, unassigned))
+    if new == now:
+        return state.copy()
     s.target[place] = new
     s.target = _clean(s.target)
     return s
@@ -737,13 +763,38 @@ def totals(state: BaseState, method_shares: dict[str, float], price_rel: dict[st
     return result
 
 
+def type_move(types: tuple[str, str] | None, carried: int, moves: Iterable[tuple[str, str, int]],
+              manual: bool) -> tuple[tuple[str, str] | None, int]:
+    """§ 9.4's count for the notice, by pair of ground types: a month's checkbox moves
+    (`moves`, as month() gives them) add the levels of every pass between the types of
+    its first pass's pair; a month whose first pair is another pair of types starts the
+    count again. A month with no move, or with the checkbox off, changes nothing.
+    Returns the pair of types and the levels carried between them."""
+    moves = list(moves)
+    if manual or not moves:
+        return types, carried
+    pair = (GROUND[moves[0][0]], GROUND[moves[0][1]])
+    n = sum(k for src, dst, k in moves if (GROUND[src], GROUND[dst]) == pair)
+    return pair, (carried + n if pair == types else n)
+
+
+def move_due(state: BaseState, *, room: dict[str, int], serves: dict[str, bool] | None,
+             profit: dict[str, float], yard: float) -> bool:
+    """With the checkbox on, whether the checkbox has a move to make from where the
+    levels are (the forecast's first pass finds a pair): the Bases view says "Levels
+    start moving next month" while no move is under way."""
+    return not state.manual and _checkbox_pair(state, _room_now(room, serves), profit, yard) is not None
+
+
 def notice_due(src: str, dst: str, *, carried: int, levels: int, month: int,
                last_types: tuple[str, str] | None = None, next_month: int | None = None) -> bool:
     """§ 9.4: whether the move notice goes out for the checkbox's move from `src` to `dst`
     (the caller has checked that the checkbox is on and the country a player's). Only a
-    move toward a different type, once it has carried NOTICE_SHARE of the levels, for a
-    pair of types other than the last notice's (`last_types`), and no sooner than
-    `next_month`, NOTICE_GAP_MONTHS after the last notice."""
+    move toward a different type, once the checkbox has carried NOTICE_SHARE of the
+    levels between those two types (`carried`, type_move's count, whichever sites the
+    levels moved between), for a pair of types other than the last notice's
+    (`last_types`), and no sooner than `next_month`, NOTICE_GAP_MONTHS after the last
+    notice."""
     types = (GROUND[src], GROUND[dst])
     share = round(NOTICE_SHARE * 100)
     return (types[0] != types[1] and carried * 100 >= share * levels and types != last_types

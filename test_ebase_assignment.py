@@ -919,6 +919,19 @@ def _model(state, tw):
     return s
 
 
+def _stored(tw):
+    """The profits a level the last month stored (var:sr_eb_level_profit_<k>), as the model
+    takes them for the switch cuts' order."""
+    return {k: unfx(tw.vars.get(f"sr_eb_level_profit_{k}", 0)) for k in eg.PLACES}
+
+
+def _refresh_month(tw):
+    """sr_eb_month and, as the refresh does for a player after it, the switch cuts the
+    buttons read while the checkbox is on."""
+    tw.effect("sr_eb_month")
+    tw.effect("sr_eb_switch_cuts")
+
+
 class MonthTwinTest(unittest.TestCase):
     """The generated sr_eb_month, run in the twin, does what ebase_ground.month does on
     test_ebase_ground.Month's scenarios and the review focus's: the same at, target,
@@ -1259,10 +1272,13 @@ class MonthTwinTest(unittest.TestCase):
                 tw.effect("sr_eb_month")
                 before = dict(tw.vars)
                 tw.effect("sr_eb_forecast")
+                due = tw.vars.pop("sr_eb_move_due", None) is not None
                 self.assertEqual(tw.vars, before)
                 after = _model(state, tw)
                 i = tw.model_inputs
                 want = eg.forecast(after, room=i["room"], serves=i["serves"], profit=i["profit"], yard=YARD)
+                self.assertEqual(due, eg.move_due(after, room=i["room"], serves=i["serves"], profit=i["profit"],
+                                                  yard=YARD))
                 got = {p: int(unfx(tw.locals[f"sr_ebf_at_{p}"])) for p in eg.PLACES if tw.locals[f"sr_ebf_at_{p}"]}
                 self.assertEqual(got, want.at)
                 self.assertTrue(all(n <= ge.FORECAST_PASSES for n in tw.loops[-1:]))
@@ -1667,14 +1683,15 @@ class ControlsStructureTest(unittest.TestCase):
     def test_notice_threshold_and_throttle(self):
         notice = _block(EFFECTS, "sr_eb_move_notice")
         limit = _block(notice, "limit")
-        for line in ("is_ai = no", "NOT = { has_variable = sr_eb_manual }", "has_variable = sr_eb_move_carried",
-                     "var:sr_eb_move_carried >= sr_eb_notice_threshold",
+        for line in ("is_ai = no", "NOT = { has_variable = sr_eb_manual }", "has_variable = sr_eb_type_move_carried",
+                     "var:sr_eb_type_move_carried >= sr_eb_notice_threshold",
                      "NOT = { has_variable = sr_eb_notice_next }", "te_history_month_index >= var:sr_eb_notice_next"):
             with self.subTest(line=line):
                 self.assertIn(line, limit)
         self.assertEqual(_block(VALUES, "sr_eb_notice_threshold").strip(),
                          f"value = sr_ebase_levels multiply = {ge.num(eg.NOTICE_SHARE)}")
-        self.assertIn("local_var:sr_ebq_same = 0 NOT = { local_var:sr_ebq_ft = local_var:sr_ebq_tt }", notice)
+        self.assertIn("local_var:sr_ebq_same = 0 NOT = { local_var:sr_ebq_ft = local_var:sr_ebq_tt } "
+                      "var:sr_eb_type_move_ft = local_var:sr_ebq_ft var:sr_eb_type_move_tt = local_var:sr_ebq_tt", notice)
         self.assertIn(f"value = {{ value = te_history_month_index add = {eg.NOTICE_GAP_MONTHS} }}", notice)
         self.assertEqual(eg.NOTICE_GAP_MONTHS, 12)
         self.assertEqual(notice.count("post_notification = sr_ebase_move_notice"), 1)
@@ -1741,10 +1758,12 @@ class ControlsTwinTest(unittest.TestCase):
         tw.effect("sr_eb_month")
         for _ in range(rng.randint(0, 2)):
             tw.effect("sr_eb_month")
+        tw.effect("sr_eb_switch_cuts")
         return tw
 
     def test_the_checkbox_is_the_model_s(self):
-        """Off: every target is the place's at + away, sr_eb_manual set; on: the targets
+        """Off: every target is what the place will hold once every blockade has returned
+        (eg.set_checkbox with the stored profits), sr_eb_manual set; on: the targets
         dropped, sr_eb_manual cleared. No level moves either way."""
         rng = random.Random(71)
         for case in range(40):
@@ -1752,20 +1771,103 @@ class ControlsTwinTest(unittest.TestCase):
             before = _state_of(tw)
             with self.subTest(case=case, manual=before.manual):
                 tw.click(AUTO)
-                want = eg.set_checkbox(before, on=before.manual)
+                want = eg.set_checkbox(before, on=before.manual, profit=_stored(tw))
                 self.assertEqual(_state_of(tw), want)
+                self.assertLessEqual(sum(want.target.values()), want.levels)
                 tw.click(AUTO)
-                self.assertEqual(_state_of(tw), eg.set_checkbox(want, on=want.manual))
+                self.assertEqual(_state_of(tw), eg.set_checkbox(want, on=want.manual, profit=_stored(tw)))
                 self.assertEqual(_state_of(tw).at, before.at)
                 self.assertEqual(_state_of(tw).over, before.over)
-        # A blockaded 16 Psyche: its levels work at Ceres and are owed back, so switching
-        # the checkbox off assigns them to both (ebase_ground.set_checkbox's at + away).
+        # A blockaded 16 Psyche (the final review's S1): its levels work at Ceres and are
+        # owed back, so they are assigned to Psyche only: once each, nothing moves while
+        # the blockade holds, and the return lands both sites on their targets.
         tw = _month_twin(_state({"psyche": 150}), room=TWO_SITES, serves={"psyche": False, "ceres": True},
                          held=BOTH, built=150, profit=SKETCH, yard=YARD)
-        tw.effect("sr_eb_month")
+        _refresh_month(tw)
         self.assertEqual((_state_of(tw).at, _state_of(tw).away), ({"ceres": 150}, {"psyche": 150}))
+        self.assertEqual(unfx(tw.vars["sr_eb_switch_cut_ceres"]), 150)
         tw.click(AUTO)
-        self.assertEqual(_state_of(tw).target, {"psyche": 150, "ceres": 150})
+        self.assertEqual(_state_of(tw).target, {"psyche": 150})
+        kw = dict(room=TWO_SITES, held=BOTH, built=150, profit=SKETCH, yard=YARD)
+        tw = _month_twin(None, serves={"psyche": False, "ceres": True}, vars_=tw.vars, month_index=24001, **kw)
+        _refresh_month(tw)
+        self.assertEqual(_state_of(tw).at, {"ceres": 150})
+        tw = _month_twin(None, serves=BOTH, vars_=tw.vars, month_index=24002, **kw)
+        _refresh_month(tw)
+        self.assertEqual(_state_of(tw).at, {"psyche": 150})
+        self.assertEqual(_state_of(tw).target, _state_of(tw).at)
+
+    def test_a_click_during_a_blockade(self):
+        """The final review's S1 scenario: 150 levels, 16 Psyche 100, Ceres 30 and Io 20;
+        Psyche blockaded; − on Io. The levels Psyche is owed count once, so + at Ceres can
+        still take the one level left, and once the blockade lifts the return ends with
+        every place at its target, and nothing left to move."""
+        room = {"near_earth": 10, "psyche": 300, "ceres": 200, "io": 100}
+        profit = {"near_earth": 8650, "psyche": 9425, "ceres": 8000, "io": 9500}
+        held = {p: True for p in room}
+        blockaded = {p: p != "psyche" for p in room}
+        kw = dict(room=room, held=held, built=150, profit=profit, yard=YARD)
+        tw = _month_twin(_state({"psyche": 100, "ceres": 30, "io": 20}), serves=blockaded, **kw)
+        _refresh_month(tw)
+        during = _state_of(tw)
+        self.assertEqual(during.away, {"psyche": 100})
+        io, ceres = eg.PLACES.index("io"), eg.PLACES.index("ceres")
+        self.assertTrue(tw.valid(ASSIGN_SGUI, site=io, op=2))
+        tw.click(ASSIGN_SGUI, site=io, op=2)
+        want = eg.assign(during, "io", -5, room=room, built=150, queued=0, profit=_stored(tw))
+        self.assertEqual(_state_of(tw), want)
+        self.assertEqual(sum(want.target.values()), 145)
+        self.assertEqual(want.target["psyche"], 100)
+        self.assertTrue(tw.valid(ASSIGN_SGUI, site=ceres, op=1))
+        tw.click(ASSIGN_SGUI, site=ceres, op=1)
+        self.assertEqual(sum(_state_of(tw).target.values()), 150)
+        self.assertFalse(tw.valid(ASSIGN_SGUI, site=ceres, op=1))   # every level assigned
+        state = _state_of(tw)
+        for m, serves in ((24001, blockaded), (24002, {p: True for p in room}), (24003, {p: True for p in room})):
+            tw = _month_twin(None, serves=serves, vars_=tw.vars, month_index=m, **kw)
+            _refresh_month(tw)
+            state = eg.month(state, **tw.model_inputs)
+            with self.subTest(month=m):
+                self.assertEqual(_state_of(tw).at, state.at)
+                if m == 24001:
+                    self.assertEqual(state.at, during.at, "nothing moves while the blockade holds")
+        self.assertEqual(state.away, {})
+        self.assertEqual(state.at, state.target)
+        self.assertEqual(state.moves, ())
+
+    def test_switching_ends_the_move(self):
+        """Docs review finding 5 B: switching the checkbox either way ends the running move,
+        which becomes the last; a record is all the checkbox's or all the player's."""
+        tw = _month_twin(_state({"psyche": 150}), room=TWO_SITES, serves=BOTH, built=150, profit=SKETCH, yard=YARD)
+        _refresh_month(tw)
+        tw = _month_twin(None, room=TWO_SITES, serves=BOTH, built=150, profit=SKETCH, yard=YARD, vars_=tw.vars,
+                         month_index=24001)
+        _refresh_month(tw)
+        self.assertIn("sr_eb_move_from", tw.vars)
+        move = (tw.vars["sr_eb_move_from"], tw.vars["sr_eb_move_to"])
+        tw.click(AUTO)
+        self.assertNotIn("sr_eb_move_from", tw.vars)
+        self.assertEqual((tw.vars["sr_eb_last_from"], tw.vars["sr_eb_last_to"]), move)
+        tw.vars["sr_eb_move_from"], tw.vars["sr_eb_move_to"] = fx(1), fx(2)   # a move of the player's
+        for v in ("began", "latest", "carried"):
+            tw.vars[f"sr_eb_move_{v}"] = fx(24001)
+        tw.click(AUTO)
+        self.assertNotIn("sr_eb_move_from", tw.vars)
+        self.assertEqual((unfx(tw.vars["sr_eb_last_from"]), unfx(tw.vars["sr_eb_last_to"])), (1, 2))
+
+    def test_the_ai_gets_the_checkbox_back(self):
+        """The final review's S4: a country the AI now runs has its checkbox switched back
+        on at the refresh."""
+        refresh = _block(MODULES, "sr_ebase_refresh")
+        gated = refresh[refresh.index("sr_colonies_contested_enabled = yes"):]
+        head = gated[:gated.index("sr_eb_month = yes")]
+        self.assertRegex(head, r"limit = \{\s*is_ai = yes\s*has_variable = sr_eb_manual\s*\}\s*sr_eb_checkbox_on = yes")
+        tw = _month_twin(_state({"psyche": 150}, manual=True, target={"psyche": 150}), room=TWO_SITES, serves=BOTH,
+                         built=150, profit=SKETCH, yard=YARD)
+        tw.is_ai = True
+        tw.run(_parse(_tokens(head[head.index("if = {"):]))[0])
+        self.assertNotIn("sr_eb_manual", tw.vars)
+        self.assertEqual(_state_of(tw).target, {})
 
     def test_the_buttons_are_the_model_s(self):
         """Each op at each place held or not: the click sets the target eg.assign sets
@@ -1786,18 +1888,35 @@ class ControlsTwinTest(unittest.TestCase):
                         before = _state_of(tw)
                         valid = tw.valid(ASSIGN_SGUI, site=site, op=op)
                         tw.click(ASSIGN_SGUI, site=site, op=op)
-                        want = eg.assign(before, place, step, room=room, built=built, queued=int(queued))
+                        want = eg.assign(before, place, step, room=room, built=built, queued=int(queued),
+                                         profit=_stored(tw))
                         self.assertEqual(_state_of(tw), want)
-                        changed = want.target.get(place, 0) != eg.set_checkbox(before, on=False).target.get(place, 0)
+                        # Valid exactly when the click changes something; one that changes no
+                        # target leaves the checkbox as it was too (the final review's S3).
+                        off = eg.set_checkbox(before, on=False, profit=_stored(tw))
+                        changed = want.target.get(place, 0) != off.target.get(place, 0) and want.manual
                         self.assertEqual(valid, changed)
-        # A blockaded 16 Psyche owes 150 back, which counts as assigned: with 20 queued,
-        # 300 assigned against 170 built and queued, so + at Ceres can't add one.
+                        self.assertEqual(want != before, changed)
+        # A blockaded 16 Psyche owes 150 back, which work at Ceres meanwhile: they count once,
+        # as Psyche's (the final review's S1). With 20 queued, 150 assigned against 170 built
+        # and queued, so + at Ceres can add one; Ceres would be assigned none, so − there can't.
         tw = _month_twin(_state({"psyche": 150}), room=TWO_SITES, serves={"psyche": False, "ceres": True},
                          held=BOTH, built=150, queued=20, profit=SKETCH, yard=YARD)
-        tw.effect("sr_eb_month")
-        ceres = eg.PLACES.index("ceres")
-        self.assertFalse(tw.valid(ASSIGN_SGUI, site=ceres, op=1))
-        self.assertTrue(tw.valid(ASSIGN_SGUI, site=ceres, op=2))
+        _refresh_month(tw)
+        ceres, psyche = eg.PLACES.index("ceres"), eg.PLACES.index("psyche")
+        self.assertTrue(tw.valid(ASSIGN_SGUI, site=ceres, op=1))
+        self.assertFalse(tw.valid(ASSIGN_SGUI, site=ceres, op=2))
+        self.assertTrue(tw.valid(ASSIGN_SGUI, site=psyche, op=2))
+        # A right-click on a greyed + (the final review's S3): every level placed, the
+        # checkbox on. Should the engine run it anyway, it changes nothing.
+        tw = _month_twin(_state({"psyche": 150}), room=TWO_SITES, serves=BOTH, built=150, profit=SKETCH, yard=YARD)
+        _refresh_month(tw)
+        before = _state_of(tw)
+        for op in (1, 3):
+            self.assertFalse(tw.valid(ASSIGN_SGUI, site=ceres, op=op))
+            tw.click(ASSIGN_SGUI, site=ceres, op=op)
+            self.assertEqual(_state_of(tw), before)
+            self.assertNotIn("sr_eb_manual", tw.vars)
         # − below the step stops at 0: an assignment of 3 at Ceres, −5 or −25.
         for op in (2, 4):
             with self.subTest(op=op):
@@ -1941,7 +2060,9 @@ class ControlsTwinTest(unittest.TestCase):
         for g, r in (prices or {}).items():
             tw.price(g, r)
         tw.vars.update({"sr_eb_move_from": fx(eg.PLACES.index(src)), "sr_eb_move_to": fx(eg.PLACES.index(dst)),
-                        "sr_eb_move_carried": fx(carried)})
+                        "sr_eb_move_carried": fx(carried),
+                        "sr_eb_type_move_ft": fx(eg.TYPES.index(eg.GROUND[src])),
+                        "sr_eb_type_move_tt": fx(eg.TYPES.index(eg.GROUND[dst])), "sr_eb_type_move_carried": fx(carried)})
         if manual:
             tw.vars["sr_eb_manual"] = SCALE
         if last:
@@ -2004,6 +2125,58 @@ class ControlsTwinTest(unittest.TestCase):
         # Psyche to Ceres moves 4 a month from 24000: 8 carried at 24001. Ceres back to
         # Psyche from 24010 (40 levels to move), carried 8 by 24011, waits for 24013.
         self.assertEqual(posted, [24001, 24013])
+
+    def test_the_notice_counts_by_pair_of_types(self):
+        """The final review's S6: Europa empties, then Io, both Sulfurous, into Ceres. No
+        pair of sites carries 5% of the 200 levels (10), but the pair of types does by the
+        second month, and the notice goes out then (eg.type_move)."""
+        room = {"psyche": 190, "europa": 10, "io": 10, "ceres": 50}
+        profit = {"europa": 5000, "io": 6000, "psyche": 9000, "ceres": 8000}
+        kw = dict(room=room, serves={p: True for p in room}, built=200, profit=profit, yard=YARD)
+        vars_, posted, types, carried = None, [], None, 0
+        state = _state({"psyche": 190, "europa": 3, "io": 7})
+        for m in range(4):
+            tw = _month_twin(state, vars_=vars_, month_index=24000 + m, **kw)
+            tw.effect("sr_eb_month")
+            tw.effect("sr_eb_move_notice")
+            posted += [24000 + m] * len(tw.notifications)
+            model = eg.month(state, **tw.model_inputs)
+            types, carried = eg.type_move(types, carried, model.moves, model.manual)
+            with self.subTest(month=m):
+                if carried:
+                    self.assertEqual(unfx(tw.vars["sr_eb_type_move_carried"]), carried)
+                    self.assertEqual(tuple(eg.TYPES[int(unfx(tw.vars[f"sr_eb_type_move_{x}"]))] for x in ("ft", "tt")),
+                                     types)
+            state, vars_ = model, tw.vars
+        self.assertEqual(types, ("sulfurous", "carbonaceous"))
+        self.assertEqual(carried, 10)
+        self.assertEqual(posted, [24001])
+
+    def test_a_move_due_next_month(self):
+        """Docs review finding 5 A: with the checkbox on and no move under way, the move area
+        says "Levels start moving next month" when the forecast's first pass finds a move,
+        in place of why nothing moves."""
+        display = _strip(_raw("common", "script_values", "space_race_display_values.txt"))
+        self.assertIn("if = { limit = { has_variable = sr_eb_move_due } value = 1 }", _block(display, "sr_disp_eb_due"))
+        gui = _raw("gui", "journal_entry_widgets", "space_race_widget.gui")
+        stay = gui[gui.index('tooltip = "je_space_race_widget_eb_stay_tt"'):]
+        stay = stay[:stay.index('tooltip = "je_space_race_widget_eb_last_tt"')]
+        due = "EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_due'), '(CFixedPoint)1' )"
+        self.assertRegex(stay, re.escape(f'visible = "[{due}]"') + r'\s*text = "je_space_race_widget_eb_next_month"')
+        no_gain = stay[stay.rindex("visible", 0, stay.index('"je_space_race_widget_eb_no_gain"')):]
+        self.assertIn("ScriptValue('sr_disp_eb_due'), '(CFixedPoint)0'", no_gain[:no_gain.index("\n")])
+        # Switched back on mid-month, after the month's moves: the forecast finds the move,
+        # the record has none.
+        tw = _month_twin(_state({"psyche": 130, "ceres": 20}, manual=True, target={"psyche": 130, "ceres": 20}),
+                         room=TWO_SITES, serves=BOTH, built=150, profit={"psyche": 9594, "ceres": 11835}, yard=YARD)
+        _refresh_month(tw)
+        self.assertNotIn("sr_eb_move_from", tw.vars)
+        tw.click(AUTO)
+        self.assertNotIn("sr_eb_manual", tw.vars)
+        self.assertIn("sr_eb_move_due", tw.vars)
+        self.assertNotIn("sr_eb_move_from", tw.vars)
+        tw.click(AUTO)
+        self.assertNotIn("sr_eb_move_due", tw.vars)   # off: the flag is the checkbox's
 
 
 # ---------------------------------------------------------------------------

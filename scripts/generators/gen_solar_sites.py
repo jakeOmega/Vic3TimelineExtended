@@ -2525,8 +2525,9 @@ def render_module_effects() -> list[str]:
 
 def render_resort_fill() -> list[str]:
     """The Resort Colony room filled best draw first, and the draw the next level
-    would work at (#1948 design § 6.3): the twins of sr_ebase_fill and
-    sr_ebase_next_fill, over resort_tiers()."""
+    would work at (#1948 design § 6.3), over resort_tiers(). It began as the twin of
+    the Extraplanetary Base's best-grade-first fill, which gen_ebase.py's month (the
+    ground types design § 8) has since replaced."""
     def tier_parts(tier: Site | None) -> tuple[str, int, str, str]:
         if tier is None:
             return str(ORBIT_RESORT_ROOM), 0, "Earth orbit", f" has_technology_researched = {RESORT_TECH}"
