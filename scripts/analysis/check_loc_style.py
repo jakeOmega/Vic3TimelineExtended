@@ -9,7 +9,8 @@
 It checks what a word list can check: stock metaphors, verdict words, the
 machine-writing words and phrases the player guide's lint already bans (shared
 from check_player_guide_style.py), " - " used as a dash, and a text that ends in
-an ellipsis or a line break. The judgment in the guide (is this sentence
+an ellipsis or a line break, and a technology description that lists what the
+technology unlocks (the technology panel lists that itself). The judgment in the guide (is this sentence
 particular, could a game make it false, does it end on a kicker) is not here
 and cannot be.
 
@@ -87,6 +88,7 @@ RULES = {
     "spaced-hyphen": "' - ' used as a dash: use a comma, a colon or a new sentence",
     "ellipsis-end": "the text ends in an ellipsis (news-headline notifications excepted)",
     "trailing-newline": "the text ends in \\n",
+    "tech-unlocks": "a technology description lists what it unlocks: the panel shows that; keep the description to the world",
 }
 
 _PATTERNS = {
@@ -98,6 +100,12 @@ _PATTERNS = {
     "spaced-hyphen": [re.compile(r"\w - \w")],
     "ellipsis-end": [re.compile(r"(?:\.\.\.|\u2026)\s*(?:#!)?\s*$")],
     "trailing-newline": [re.compile(r"\\n\s*$")],
+}
+
+# Rules that hold for one kind of key only: rule -> (loc file, key test, pattern).
+_SCOPED = {
+    "tech-unlocks": ("te_technologies_l_english.yml", lambda key: key.endswith("_desc"),
+                     re.compile(r"(?:^|(?<=[.!?:]\s))Unlocks\b[^.]*")),
 }
 
 _MARKUP = re.compile(r"\[[^\]]*\]|\$[^$\s]*\$|@\w+!|#[A-Za-z_;:,\[\]().']+\s|#!")
@@ -148,6 +156,10 @@ def scan(loc_dir=LOC_DIR):
                     if rule == "ellipsis-end" and key.startswith(_HEADLINE_PREFIX):
                         continue  # a news headline trails off, as the base game's do
                     findings.append((rule, key, matched, path.name, number))
+                for rule, (name, wants_key, pattern) in _SCOPED.items():
+                    match = path.name == name and wants_key(key) and pattern.search(prose(value))
+                    if match:
+                        findings.append((rule, key, match.group(0).strip(), path.name, number))
     return findings
 
 

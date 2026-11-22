@@ -115,7 +115,8 @@ class TechnologyTest(unittest.TestCase):
         self.assertRegex(_read("common/technology/technologies/era_13.txt"),
                          r'terraforming = \{[^}]*texture = "gfx/interface/icons/invention_icons/terraforming\.dds"\n')
         self.assertEqual(LOC["terraforming"], "Terraforming")
-        self.assertIn("Unlocks the Terraforming colony module", LOC["terraforming_desc"])
+        # The tooltip names the module through the marker; the description stays in the world.
+        self.assertNotIn("Unlocks", LOC["terraforming_desc"])
         prompts = _read("scripts/image_pipeline/icon_prompts.py")
         self.assertRegex(prompts, r'"terraforming": \{"subject": "[^"]+", "seed": \d+\}')
 
