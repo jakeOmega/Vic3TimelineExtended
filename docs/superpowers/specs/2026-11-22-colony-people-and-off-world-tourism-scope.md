@@ -71,6 +71,9 @@ merges); and the ground-types design
   (§ 3.7).
 - **Settlers can reuse the Settlement Authority's code** for taking people
   from many states (§ 3.5).
+- **A world's Habitat cap is shown prominently where a colony fleet's
+  destination is chosen** (§ 3.9). It is now what decides how far a colony can
+  grow, so a player must see it before committing a fleet.
 
 ## 1. Today
 
@@ -336,7 +339,14 @@ against crews available. Scope:
 - **Habitats:** levels over cap, and the next one's price.
 - **People view:** crews, and how many people the queued modules will need.
 - **Overview:** a count of understaffed colonies, with their names on hover.
-- **Solar System:** each world's Habitat cap and room in place of its slots.
+- **Choosing a destination (owner).** The Habitat cap is prominent wherever a
+  colony fleet's destination is picked: on each world's Solar System line
+  beside its Target button, and on the Colony Fleets section's destination
+  line. Today the slots are a small line under the world's name. Shown with
+  the cap: the people the world can hold at its cap and the crews that makes,
+  so two worlds can be compared at a glance. The automatic pick
+  (population-and-transit design § 7) should weigh the cap too, or say that it
+  doesn't.
 - **The How it Works text and the concepts** rewritten around people.
 
 The ground-types build is redoing the Modules view's base cells and #1950 adds
