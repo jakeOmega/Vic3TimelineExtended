@@ -1539,8 +1539,11 @@ def colony_row_overrides(place: str) -> list[str]:
         room = "sr_disp_eb_room_near_earth"
     else:
         serve = f"sr_disp_eb_serve_{k}"
+        # Only while some of its levels work elsewhere: a blockaded colony that held
+        # none says nothing (the final review's finding 13).
         out += _override("eb_away_visible",
-                         f"visible = \"[GreaterThanOrEqualTo_CFixedPoint( {_sv(serve)}, '(CFixedPoint)1' )]\"")
+                         f"visible = \"[And( GreaterThanOrEqualTo_CFixedPoint( {_sv(serve)}, '(CFixedPoint)1' ), "
+                         f"GreaterThan_CFixedPoint( {_sv(f'sr_disp_eb_away_{k}')}, '(CFixedPoint)0' ) )]\"")
         out += _override("eb_blockaded_visible", f'visible = "[{_eq(serve, 1)}]"')
         out += _override("eb_occupied_visible", f'visible = "[{_eq(serve, 2)}]"')
         out += _override("eb_away", f'raw_text = "#v [{_sv(f"sr_disp_eb_away_{k}")}|0]#!"')

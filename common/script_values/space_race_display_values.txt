@@ -1488,3 +1488,12 @@ sr_disp_eb_months = {
 	divide = sr_disp_eb_pace
 	ceiling = yes
 }
+# With the checkbox off, the levels built and queued that no site is assigned
+# (§ 8.4): what + can still place. They are placed by grade as they arrive, and
+# those already working stay where they are. sr_ebase_queued_levels walks the
+# buildings: the row reads it once, and only with the checkbox off.
+sr_disp_eb_unassigned = {
+	value = sr_ebase_queued_levels
+	subtract = sr_eb_assigned
+	min = 0
+}
