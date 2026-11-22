@@ -4113,6 +4113,8 @@ def _site_row(site: Site, *, picker: bool) -> list[str]:
     # Colony Module Slots, and its own Extraplanetary Base room and grade.
     out += _override("site_slots", f'raw_text = "#v [{_sv(f"sr_disp_ss_slots_{k}")}|0]#!"')
     out += _override("site_bases", f'raw_text = "#v {site.ebase_room}#! ({_signed(site.ebase_grade)}%)"')
+    # Its own Resort Colony room and draw (#1948 design § 9).
+    out += _override("site_resorts", f'raw_text = "#v {site.resort_room}#! ({_signed(site.resort_draw)}%)"')
     return out + ["\t\t}"]
 
 
@@ -4171,6 +4173,10 @@ def _colony_row(site: Site) -> list[str]:
     out += _override("module_bases", f'raw_text = "[{_sv(f"sr_disp_site_ebase_room_{k}")}|0]"')
     # Its grade beside the room, as Solar System prints it (the owner, 2026-10-31).
     out += _override("module_grade", f'raw_text = "({_signed(site.ebase_grade)}%)"')
+    # Its Resort Colony room and draw, on the colony's page (#1948 design § 9).
+    out += _override("module_resorts_tooltip", 'tooltip = "je_space_race_widget_resorts_tt"')
+    out += _override("module_resorts", f'raw_text = "[{_sv(f"sr_disp_site_resort_room_{k}")}|0]"')
+    out += _override("module_draw", f'raw_text = "({_signed(site.resort_draw)}%)"')
     spec_tt = {slot: f"je_space_race_widget_colony_{m[len('sr_colony_'):]}_tt"
                for slot, m in zip(("a", "b"), spec_modifiers(site))}
     # A colony's page names its specializations in full (design § 8).

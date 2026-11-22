@@ -2368,6 +2368,7 @@
  concept_sr_colony_fleet:0 "Colony Fleet"
  concept_sr_free_colony:0 "Free Colony"
  concept_sr_launch_window:0 "Launch Window"
+ concept_sr_resort_draw:0 "Resort Draw"
  concept_sr_role_carrier:0 "Assault Carrier"
  concept_sr_role_rapid:0 "Rapid Response Ship"
  concept_sr_role_siege:0 "Siege Ship"

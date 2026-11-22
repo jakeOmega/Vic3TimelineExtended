@@ -363,5 +363,50 @@ class ResortModuleTest(unittest.TestCase):
         self.assertNotIn(" sr_module_resort_desc:0", concepts)
 
 
+class ResortPanelTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.display = _strip(_raw("common", "script_values", "space_race_display_values.txt"))
+        cls.gui = _raw("gui", "journal_entry_widgets", "space_race_widget.gui")
+        cls.rows = _raw(*gss.GUI_OUT.parts)
+
+    def test_display_values(self):
+        for suffix in ("levels", "room", "draw", "queued", "next_draw", "past", "total", "split", "shown"):
+            with self.subTest(value=suffix):
+                _block(self.display, f"sr_disp_resort_{suffix}")
+        nxt = _block(self.display, "sr_disp_resort_next_draw")
+        self.assertIn("if = { limit = { sr_resort_queued_levels >= sr_resort_room_total } value = -75 }", nxt)
+        self.assertIn("has_technology_researched = space_colonization", _block(self.display, "sr_disp_resort_shown"))
+        self.assertIn("sr_resort_queued_levels > sr_resort_room_total", _block(self.display, "sr_disp_resort_past"))
+
+    def test_overview_cell(self):
+        self.assertIn('tooltip = "je_space_race_widget_ovc_resort_tt"', self.gui)
+        self.assertIn('text = "je_space_race_widget_ovc_resort_cap"', self.gui)
+        self.assertRegex(self.gui, r"visible = \"\[Or\( EqualTo_CFixedPoint\( Country\.MakeScope\.ScriptValue\('sr_disp_ebase_shown'\)"
+                                   r"[^\n]*sr_disp_resort_shown")
+
+    def test_summary_rows(self):
+        self.assertIn('text = "je_space_race_widget_resort_label"', self.gui)
+        self.assertIn('text = "je_space_race_widget_resort_queued_label"', self.gui)
+
+    def test_generated_overrides(self):
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                self.assertRegex(self.rows, rf"sr_disp_site_resort_room_{k}'\)\|0\]")
+                draw = gss._signed(site.resort_draw)
+                self.assertIn(f'raw_text = "({draw}%)"', self.rows)
+                self.assertIn(f'raw_text = "#v {site.resort_room}#! ({draw}%)"', self.rows)
+        self.assertIn('block "module_resorts"', self.gui)
+        self.assertIn('block "module_draw"', self.gui)
+        self.assertIn('block "site_resorts"', self.gui)
+
+    def test_concept(self):
+        concepts = _strip(_raw("common", "game_concepts", "extra_concepts.txt"))
+        self.assertRegex(concepts, r"(?m)^concept_sr_resort_draw = \{\}")
+        self.assertIn(' concept_sr_resort_draw:0 "Resort Draw"', _raw("localization", "english", "te_miscellaneous_l_english.yml"))
+        self.assertIn(" concept_sr_resort_draw_desc:0 ", _raw("localization", "english", "te_concepts_l_english.yml"))
+
+
 if __name__ == "__main__":
     unittest.main()
