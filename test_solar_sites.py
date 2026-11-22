@@ -1110,7 +1110,10 @@ class PopulationTest(unittest.TestCase):
         for site in gss.SITES:
             k = site.key
             with self.subTest(site=k):
-                self.assertIn(f"sr_site_base_room_{k} = {{ value = {site.room * 1000} }}", self.values)
+                # The table's room times the base room factor (Space Colonization,
+                # Terraforming; test_colony_people.BaseRoomTest).
+                self.assertIn(f"sr_site_base_room_{k} = {{ value = sr_site_room_mult_value_{k} "
+                              f"multiply = {site.room * 1000} }}", self.values)
                 # Habitats add the world's Habitat share of the base room a level
                 # (colony people design § 4.4; half before the technologies).
                 room = _block(self.values, f"sr_site_room_{k}")

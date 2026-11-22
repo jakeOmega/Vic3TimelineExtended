@@ -318,6 +318,16 @@ GROWTH_PER_MONTH = 0.002
 # sr_site_growth_<key> reads it through the holder, as the Habitat share reads
 # HABITAT_MODIFIER; a free colony has no holder and grows at the base rate.
 GROWTH_MODIFIER = "country_sr_colony_growth_add"
+# A world's base room for people, before Habitats and Terraforming (the owner,
+# 2026-11-22): its table `room` times 1 plus its holder's ROOM_MODIFIER, a
+# script-only type (space_race_modifier_types.txt) that Space Colonization and
+# Terraforming carry at +0.5 each, so the base room doubles with both. A Habitat
+# and Terraforming add shares of the base room, so they grow with it. Read through
+# the holder as the Habitat share is, and the world keeps the best factor it has
+# had (sr_site_room_mult_<key>, global, set in its monthly step and cleared on
+# release), so a cession or a break-away doesn't cut its people (colony people
+# design § 4.4's rule). A free colony has no holder and keeps its record.
+ROOM_MODIFIER = "country_sr_colony_room_add"
 # A crew of one module level (colony people design § 4.2; owner, 2026-11-22):
 # 10,000 people, half with Artificial Intelligence, read through the world's
 # holder (sr_site_crew_per_level_<key>), so a cession changes it with the holder.
@@ -806,7 +816,8 @@ def _release(site: Site) -> list[str]:
            f"\tif = {{ limit = {{ has_global_variable = sr_site_spec_{k} }} remove_global_variable = sr_site_spec_{k} }}",
            f"\tif = {{ limit = {{ has_global_variable = sr_site_region_{k} }} remove_global_variable = sr_site_region_{k} }}",
            f"\tif = {{ limit = {{ has_global_variable = sr_site_pop_{k} }} remove_global_variable = sr_site_pop_{k} }}",
-           f"\tif = {{ limit = {{ has_global_variable = sr_site_hab_share_{k} }} remove_global_variable = sr_site_hab_share_{k} }}"]
+           f"\tif = {{ limit = {{ has_global_variable = sr_site_hab_share_{k} }} remove_global_variable = sr_site_hab_share_{k} }}",
+           f"\tif = {{ limit = {{ has_global_variable = sr_site_room_mult_{k} }} remove_global_variable = sr_site_room_mult_{k} }}"]
     out += [f"\tif = {{ limit = {{ has_global_variable = {var} }} remove_global_variable = {var} }}"
             for var in module_vars(site)]
     for d in site.discoveries:
@@ -920,6 +931,8 @@ def _monthly(site: Site) -> list[str]:
         f"\t\t\tset_global_variable = {{ name = sr_site_region_{k} value = capital.state_region }}",
         "\t\t\t# The best Habitat share the world has had (colony people design § 4.4).",
         f"\t\t\tset_global_variable = {{ name = sr_site_hab_share_{k} value = sr_site_hab_share_value_{k} }}",
+        "\t\t\t# ... and the best base room factor (Space Colonization, Terraforming).",
+        f"\t\t\tset_global_variable = {{ name = sr_site_room_mult_{k} value = sr_site_room_mult_value_{k} }}",
         "\t\t}",
         "\t}",
         "\t# 2. A dead holder: its capital region's owner inherits, or the world is released.",
@@ -1217,7 +1230,7 @@ def render_debug() -> list[str]:
                 "\t}",
                 "\tif = {",
                 f"\t\tlimit = {{ has_global_variable = sr_site_pop_{k} }}",
-                f"\t\tdebug_log = \"TE_SR_SETTLERS {k}: [GetGlobalVariable('sr_site_pop_{k}').GetValue|0] people of {site.room * 1000}\"",
+                f"\t\tdebug_log = \"TE_SR_SETTLERS {k}: [GetGlobalVariable('sr_site_pop_{k}').GetValue|0] people of [THIS.ScriptValue('sr_site_room_{k}')|0] room\"",
                 "\t}"]
     out.append("}")
     out += ["# A fleet now for the first world ROOT may target, its cost added first so the",
@@ -1778,7 +1791,8 @@ def render_fleet_values() -> list[str]:
            f"#                        - {SCORE_PER_INBOUND} a fleet inbound - {SCORE_BEATEN} if one lands first",
            f"#                        + {SCORE_PER_CREW_ROOM} a {CREW_PER_LEVEL:,} people at its cap",
            "#   sr_site_people_at_cap_<key> the people the world holds at its Habitat cap at THIS's",
-           "#                        share: base room x (1 + share x cap), the panel's figure too"]
+           "#                        share and base room factor: the table's room x THIS's",
+           "#                        sr_our_room_mult x (1 + share x cap), the panel's figure too"]
     for site in SITES:
         k, tb = site.key, transit_body(site)
         # Our Moon Landing named this world (design § 3.4).
@@ -1804,7 +1818,8 @@ def render_fleet_values() -> list[str]:
                 f"\tadd = modifier:{HABITAT_MODIFIER}",
                 f"\tmultiply = sr_site_hab_cap_{k}",
                 "\tadd = 1",
-                f"\tmultiply = sr_site_base_room_{k}",
+                f"\tmultiply = {site.room * 1000}",
+                "\tmultiply = sr_our_room_mult",
                 "}",
                 f"sr_cf_score_{k} = {{",
                 f"\tvalue = {SCORE_BASE - SCORE_PER_STAGE * site.stage}",
@@ -1847,7 +1862,10 @@ def render_population_values() -> list[str]:
     weights = PRIORITY_WEIGHTS
     out = ["# ===== Population (slices 2-3 design § 10) =====",
            "",
-           "# Per world, any scope: its base room (people, before Habitats), its Habitat share",
+           "# Per world, any scope: its base room factor (now: 1 plus the holder's",
+           f"# {ROOM_MODIFIER}, Space Colonization and Terraforming; value: never below the",
+           "# factor the world has had, sr_site_room_mult_<key>), its base room (people, before",
+           "# Habitats: the table's room times that factor), its Habitat share",
            f"# (now: {HABITAT_BASE_SHARE} plus the holder's {HABITAT_MODIFIER}; value: never below the",
            "# share the world has had, sr_site_hab_share_<key>), its room (the share of the base a",
            "# Habitat level, colony people design § 4.4, and on a world that takes it the",
@@ -1861,7 +1879,16 @@ def render_population_values() -> list[str]:
            f"# holder's {GROWTH_MODIFIER} (Self-Directed Evolution, era 13 spec § 7.3)."]
     for site in SITES:
         k = site.key
-        out += [f"sr_site_base_room_{k} = {{ value = {site.room * 1000} }}",
+        out += [f"sr_site_room_mult_now_{k} = {{",
+                "\tvalue = 1",
+                f"\tif = {{ limit = {{ exists = global_var:sr_site_holder_{k} }} "
+                f"global_var:sr_site_holder_{k} = {{ add = modifier:{ROOM_MODIFIER} }} }}",
+                "}",
+                f"sr_site_room_mult_value_{k} = {{",
+                f"\tvalue = sr_site_room_mult_now_{k}",
+                f"\tif = {{ limit = {{ has_global_variable = sr_site_room_mult_{k} }} min = global_var:sr_site_room_mult_{k} }}",
+                "}",
+                f"sr_site_base_room_{k} = {{ value = sr_site_room_mult_value_{k} multiply = {site.room * 1000} }}",
                 f"sr_site_hab_share_now_{k} = {{",
                 f"\tvalue = {HABITAT_BASE_SHARE}",
                 f"\tif = {{ limit = {{ exists = global_var:sr_site_holder_{k} }} "
@@ -1917,6 +1944,9 @@ def render_population_values() -> list[str]:
                 f"\tif = {{ limit = {{ {site_serves(site)} }} "
                 f"value = sr_emig_prio_weight_{k} multiply = sr_site_free_room_{k} }}",
                 "}"]
+    out += ["", "# Country scope: THIS's base room factor, what a world's base room would be",
+            f"# multiplied by were it THIS's (1 plus its {ROOM_MODIFIER}).",
+            f"sr_our_room_mult = {{ value = 1 add = modifier:{ROOM_MODIFIER} }}"]
     out += ["", "# Country scope: the sum of THIS's emigration weights; the free room of the",
             "# colonies it holds that are open to settlers; its people off Earth.",
             "sr_emig_weight_total = {", "\tvalue = 0"]

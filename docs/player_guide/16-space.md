@@ -701,7 +701,10 @@ an automated outpost with no one in it, so it grows only once settlers arrive:
 then by about 2.4% a year up to its room (3.7% once you have Self-Directed
 Evolution, era 13, whose people are adapted to low gravity and radiation), from 10,000 people on the smallest
 moons and the farthest dwarf planets to 50,000 at Valles Marineris and the Hellas
-and Utopia plains. The Colonies section's People view in Solar System
+and Utopia plains. That starting room is 50% larger with Space Colonization and
+50% more with Terraforming, so double with both, and what Habitats and
+Terraforming add grows with it, since each adds a share of it. A colony keeps
+the most starting room it has had when it changes hands. The Colonies section's People view in Solar System
 Colonization sets how many settlers you send from Earth each month: Off, or 500,
 doubling with each press of + (1,000, 2,000, 4,000 and on) and halving with each
 press of −. A month sends no more than your colonies' free room, and no more than
@@ -779,7 +782,8 @@ so a world takes at least 25 years to finish, at +300%, where a Habitat gives
 to the world: it stays when the colony changes hands, is released, or takes a
 level down. A finished world's Terraforming levels stand down and free their
 crews. An occupation stops the work, and a colony short of crews works at its
-staffing share. Once you have the technology, the Modules view shows a
+staffing share. The technology also makes every colony's starting room 50% larger, on
+top of Space Colonization's 50%. Once you have the technology, the Modules view shows a
 Terraforming line under the facilities, with the room added so far and the
 years to go at this month's pace; the colony's page shows the same in its
 Terraformed tile.
@@ -787,7 +791,8 @@ Terraformed tile.
 Each Habitat holds half of the colony's starting room, and 10 points more each
 with Nuclear Thermal Propulsion, Orbital Manufacturing, Advanced Nanofabrication,
 Space Colonization and Molecular Assemblers, whose tooltips list Habitat Room:
-with all five, a Habitat doubles the starting room. A colony keeps the best
+with all five, a Habitat doubles the starting room, itself doubled by Space
+Colonization and Terraforming (see [Colony settlers](#colony-settlers)). A colony keeps the best
 Habitat room it has had when it changes hands. Past its cap a colony still takes Habitats,
 each costing 100 fabrication points more than the last: 200, then 300, with no
 top. You can queue one only while your module stock can hold its price (see

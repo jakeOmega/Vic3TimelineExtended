@@ -107,7 +107,7 @@ def shares(outputs: dict[str, float]) -> dict[str, float]:
     """Each good's share of the outputs' value at base prices (fractions summing to 1).
     Goods outside the seven are priced from the goods files."""
     values = {g: qty * good_base_price(g) for g, qty in outputs.items()}
-    total = sum(values.values())
+    total = math.fsum(values.values())
     return {g: v / total for g, v in values.items()}
 
 
@@ -117,7 +117,9 @@ def mix(type_: str) -> dict[str, float]:
     the basket, less one, so the mix's own value-weighted mean is exactly zero."""
     composition = COMPOSITION[type_]
     basket = shares(BASKET)
-    mean = sum(basket[g] * composition[g] for g in GOODS)
+    # math.fsum, not sum: Python 3.11's sum leaves Mixed's mean at 1 - 2e-16 and its
+    # mix 2e-16 off zero; 3.12's sum compensates, so CI's 3.11 job alone failed.
+    mean = math.fsum(basket[g] * composition[g] for g in GOODS)
     return {g: composition[g] / mean - 1 for g in GOODS}
 
 
