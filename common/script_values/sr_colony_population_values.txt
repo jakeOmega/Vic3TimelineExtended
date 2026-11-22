@@ -13,18 +13,40 @@ sr_emig_batch_people = {
 	value = 500
 }
 
-# The programme's level: 0 Off, 1 Low, 2 Steady, 3 High.
+# The programme's step (colony people design § 6.1): 0 Off, and step n sends
+# 500 x 2^(n - 1) a month, so 1, 2 and 3 are the old Low, Steady and High.
 sr_emig_level_value = {
 	value = 0
 	if = { limit = { has_variable = sr_emig_level } value = var:sr_emig_level }
 }
 
-# Batches a month at the level: Low 1, Steady 2, High 4 (500, 1,000, 2,000 people).
+# Batches a month at the step: 2^(n - 1), to step 16 (16.4 million people a
+# month, past every world's room together, so the open room stops + first:
+# sr_settlers_sgui).
 sr_emig_level_batches = {
 	value = 0
 	if = { limit = { sr_emig_level_value = 1 } value = 1 }
 	else_if = { limit = { sr_emig_level_value = 2 } value = 2 }
-	else_if = { limit = { sr_emig_level_value >= 3 } value = 4 }
+	else_if = { limit = { sr_emig_level_value = 3 } value = 4 }
+	else_if = { limit = { sr_emig_level_value = 4 } value = 8 }
+	else_if = { limit = { sr_emig_level_value = 5 } value = 16 }
+	else_if = { limit = { sr_emig_level_value = 6 } value = 32 }
+	else_if = { limit = { sr_emig_level_value = 7 } value = 64 }
+	else_if = { limit = { sr_emig_level_value = 8 } value = 128 }
+	else_if = { limit = { sr_emig_level_value = 9 } value = 256 }
+	else_if = { limit = { sr_emig_level_value = 10 } value = 512 }
+	else_if = { limit = { sr_emig_level_value = 11 } value = 1024 }
+	else_if = { limit = { sr_emig_level_value = 12 } value = 2048 }
+	else_if = { limit = { sr_emig_level_value = 13 } value = 4096 }
+	else_if = { limit = { sr_emig_level_value = 14 } value = 8192 }
+	else_if = { limit = { sr_emig_level_value = 15 } value = 16384 }
+	else_if = { limit = { sr_emig_level_value = 16 } value = 32768 }
+}
+# The settlers the step sends a month while the colonies have room and the
+# country has the people (sr_emig_month).
+sr_emig_amount = {
+	value = sr_emig_level_batches
+	multiply = sr_emig_batch_people
 }
 
 # This month's batches: the level's, never more than the open colonies' free

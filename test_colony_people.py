@@ -343,5 +343,61 @@ class ColonyAiTest(unittest.TestCase):
                 self.assertIn(f"add = {{ value = sr_site_people_at_cap_{k} divide = 10000 }}", score)
 
 
+class SettlerAmountTest(unittest.TestCase):
+    """Design § 6.1: step n sends 500 x 2^(n - 1) a month (1, 2 and 3 keep
+    today's Low, Steady and High); - halves to Off, + doubles while the amount
+    is below the open colonies' free room; the panel shows the number."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.values = _strip(_raw("common", "script_values", "sr_colony_population_values.txt"))
+        cls.effects = _strip(_raw("common", "scripted_effects", "sr_colony_population_effects.txt"))
+        cls.sguis = _strip(_raw("common", "scripted_guis", "sr_colony_sguis.txt"))
+
+    def test_the_amount_doubles_from_500(self):
+        ladder = _block(self.values, "sr_emig_level_batches")
+        steps = {int(n): int(v) for n, v in re.findall(r"sr_emig_level_value = (\d+) \} value = (\d+)", ladder)}
+        self.assertEqual(steps[1], 1)
+        self.assertEqual(steps[2], 2)
+        self.assertEqual(steps[3], 4)
+        self.assertEqual(steps[8], 128)
+        self.assertEqual(sorted(steps), list(range(1, gss_top() + 1)))
+        for n, batches in steps.items():
+            self.assertEqual(batches, 2 ** (n - 1), n)
+        amount = _block(self.values, "sr_emig_amount")
+        self.assertIn("value = sr_emig_level_batches", amount)
+        self.assertIn("multiply = sr_emig_batch_people", amount)
+
+    def test_minus_halves_to_off_and_plus_doubles(self):
+        step = _block(self.effects, "sr_emig_step_level")
+        self.assertRegex(step, r"limit = \{ sr_emig_level_value <= 1 \}\s*sr_emig_set_level = \{ LEVEL = 0 \}")
+        self.assertIn("change_variable = { name = sr_emig_level subtract = 1 }", step)
+        self.assertIn("change_variable = { name = sr_emig_level add = 1 }", step)
+        self.assertIn(f"sr_emig_level_value < {gss_top()}", step)
+
+    def test_plus_is_valid_below_the_open_room(self):
+        sgui = _block(self.sguis, "sr_settlers_sgui")
+        self.assertRegex(sgui, r"text = sr_emig_room_used_tt\s*sr_emig_amount < sr_emig_open_room_total")
+        self.assertNotIn("sr_emig_at_highest_tt", sgui)
+        self.assertNotIn("sr_emig_level_value <= 2", sgui)
+        loc = _raw("localization", "english", "te_miscellaneous_l_english.yml")
+        self.assertFalse("sr_emig_at_highest_tt" in loc, "sr_emig_at_highest_tt is still in the loc")
+        self.assertTrue(" sr_emig_room_used_tt:0 " in loc, "no loc for sr_emig_room_used_tt")
+
+    def test_the_panel_shows_the_amount(self):
+        gui = _raw("gui", "journal_entry_widgets", "space_race_widget.gui")
+        self.assertTrue("ScriptValue('sr_disp_emig_amount')" in gui, "the stepper doesn't show the amount")
+        for n in (1, 2, 3):
+            self.assertFalse(f"je_space_race_widget_emig_level_{n}" in gui, f"level name {n} still shown")
+        display = _strip(_raw("common", "script_values", "space_race_display_values.txt"))
+        self.assertTrue("sr_disp_emig_amount = { value = sr_emig_amount }" in display, "no sr_disp_emig_amount")
+
+
+def gss_top():
+    """The ladder's last step: 500 x 2^15 = 16.4 million a month, past every
+    world's room together, so the room, not the ladder, stops +."""
+    return 16
+
+
 if __name__ == "__main__":
     unittest.main()

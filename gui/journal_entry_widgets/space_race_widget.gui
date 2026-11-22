@@ -4363,24 +4363,8 @@ types space_race_widget_types
 							elide = right
 						}
 						textbox = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_emig_level'), '(CFixedPoint)1' )]"
-							text = "je_space_race_widget_emig_level_1"
-							size = { 84 26 }
-							align = center|nobaseline
-							using = te_sr_fontsize_row
-							elide = right
-						}
-						textbox = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_emig_level'), '(CFixedPoint)2' )]"
-							text = "je_space_race_widget_emig_level_2"
-							size = { 84 26 }
-							align = center|nobaseline
-							using = te_sr_fontsize_row
-							elide = right
-						}
-						textbox = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_emig_level'), '(CFixedPoint)3' )]"
-							text = "je_space_race_widget_emig_level_3"
+							visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_emig_level'), '(CFixedPoint)0' )]"
+							raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_emig_amount')|D]#!"
 							size = { 84 26 }
 							align = center|nobaseline
 							using = te_sr_fontsize_row

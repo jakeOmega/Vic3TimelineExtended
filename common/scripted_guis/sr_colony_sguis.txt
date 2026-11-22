@@ -182,10 +182,12 @@ sr_settlers_sgui = {
 				sr_emig_level_value >= 1
 			}
 		}
+		# No fixed top (colony people design § 6.1): a doubling past the open
+		# colonies' free room would send no one more.
 		trigger_else = {
 			custom_tooltip = {
-				text = sr_emig_at_highest_tt
-				sr_emig_level_value <= 2
+				text = sr_emig_room_used_tt
+				sr_emig_amount < sr_emig_open_room_total
 			}
 		}
 	}

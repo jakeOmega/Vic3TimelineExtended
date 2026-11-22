@@ -1105,11 +1105,13 @@ sr_disp_cf_in_flight = {
 	value = 0
 	if = { limit = { has_variable = sr_cf_in_flight } value = var:sr_cf_in_flight }
 }
-# The emigration programme's level, 0 Off to 3 High.
+# The emigration programme's step, 0 Off; and the amount it sends a month
+# (colony people design § 6.1: the panel shows the number, not a name).
 sr_disp_emig_level = {
 	value = 0
 	if = { limit = { has_variable = sr_emig_level } value = var:sr_emig_level }
 }
+sr_disp_emig_amount = { value = sr_emig_amount }
 # The settlers it sends a month while colonies have room.
 sr_disp_emig_per_month = {
 	value = sr_emig_level_batches

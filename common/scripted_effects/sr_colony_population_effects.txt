@@ -84,8 +84,8 @@ sr_emig_self_check = {
 }
 
 # ---- The programme and the priorities --------------------------------------------------
-# Country scope. LEVEL 0-3. The entry declares the programme's upkeep from the
-# level (sr_emigration_programme, je_space_race.txt).
+# Country scope. LEVEL a step, 0 Off. The entry declares the programme's upkeep
+# from the step (sr_emigration_programme, je_space_race.txt).
 sr_emig_set_level = {
 	set_variable = { name = sr_emig_level value = $LEVEL$ }
 	if = {
@@ -99,7 +99,8 @@ sr_emig_set_level = {
 	}
 }
 
-# Country scope, the Settlers section's - and + (scope:op 0 and 1).
+# Country scope, the Settlers section's - and + (scope:op 0 and 1): - halves
+# the amount (500 to Off), + doubles it (colony people design § 6.1).
 sr_emig_step_level = {
 	if = {
 		limit = { scope:op = 0 }
@@ -107,26 +108,17 @@ sr_emig_step_level = {
 			limit = { sr_emig_level_value <= 1 }
 			sr_emig_set_level = { LEVEL = 0 }
 		}
-		else_if = {
-			limit = { sr_emig_level_value = 2 }
-			sr_emig_set_level = { LEVEL = 1 }
-		}
 		else = {
-			sr_emig_set_level = { LEVEL = 2 }
+			change_variable = { name = sr_emig_level subtract = 1 }
 		}
 	}
-	else = {
-		if = {
-			limit = { sr_emig_level_value = 0 }
-			sr_emig_set_level = { LEVEL = 1 }
-		}
-		else_if = {
-			limit = { sr_emig_level_value = 1 }
-			sr_emig_set_level = { LEVEL = 2 }
-		}
-		else = {
-			sr_emig_set_level = { LEVEL = 3 }
-		}
+	else_if = {
+		limit = { sr_emig_level_value = 0 }
+		sr_emig_set_level = { LEVEL = 1 }
+	}
+	else_if = {
+		limit = { sr_emig_level_value < 16 }
+		change_variable = { name = sr_emig_level add = 1 }
 	}
 }
 
