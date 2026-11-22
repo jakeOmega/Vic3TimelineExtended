@@ -49,14 +49,42 @@ sr_emig_amount = {
 	multiply = sr_emig_batch_people
 }
 
-# This month's batches: the level's, never more than the open colonies' free
+# This month's batches: the step's, never more than the open colonies' free
 # room holds (sr_emig_open_room_total: the room of the colonies held and not
-# Closed).
+# Closed) ...
 sr_emig_batches_now = {
 	value = sr_emig_open_room_total
 	divide = sr_emig_batch_people
 	floor = yes
 	max = sr_emig_level_batches
+}
+# ... or 1% of our people (colony people design § 6.3: a country can't send more
+# than 1% of its people in a month, however high the step).
+sr_emig_people_cap = { value = 0.01 }
+sr_emig_people_batches = {
+	value = total_population
+	multiply = sr_emig_people_cap
+	divide = sr_emig_batch_people
+	floor = yes
+}
+sr_emig_month_batches = {
+	value = sr_emig_batches_now
+	max = sr_emig_people_batches
+}
+# The share of every state's people the month takes (sr_emig_month).
+sr_emig_share = {
+	value = 0
+	if = {
+		limit = { total_population > 0 }
+		value = sr_emig_month_batches
+		multiply = sr_emig_batch_people
+		divide = total_population
+	}
+}
+# State scope: what the state owes this month (sr_emig_month's two passes).
+sr_emig_due_value = {
+	value = 0
+	if = { limit = { has_variable = sr_emig_due } value = var:sr_emig_due }
 }
 
 # The off-world population's bonus (design § 10.5): one unit per
@@ -76,9 +104,9 @@ sr_offworld_units = {
 	divide = sr_offworld_bonus_people
 	max = sr_offworld_bonus_cap
 }
-# The emigration_batch self-check's reading: how much the Space Program's state
-# fell, and 90% of what was sent. Any scope; the globals are set just before
-# (sr_emig_month).
+# The emigration_batch self-check's reading: how much the states taken from fell
+# between them, and 90% of what was sent. Any scope; the globals are set just
+# before (sr_emig_self_check).
 sr_emig_log_fell = {
 	value = 0
 	if = {

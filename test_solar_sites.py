@@ -1153,14 +1153,16 @@ class PopulationTest(unittest.TestCase):
                 share = _block(self.effects, "sr_emig_distribute")
                 self.assertIn(f"max = sr_site_free_room_{k}", share)
 
-    def test_a_batch_is_half_middle_and_half_lower_from_the_space_program_s_state(self):
+    def test_a_batch_is_half_middle_and_half_lower_from_every_state(self):
+        """Every state gives in proportion to its people (colony people design
+        § 6.3; test_sr_settler_draw.py holds the rule)."""
         month = _block(self.population, "sr_emig_month")
         kills = re.findall(r"kill_population_in_state = \{ value = (\d+) strata = (\w+) \}", month)
         self.assertEqual(kills, [("250", "middle"), ("250", "lower")])
         batch = float(re.search(r"sr_emig_batch_people = \{\s*value = (\d+)", self.pop_values).group(1))
         self.assertEqual(sum(int(v) for v, _ in kills), batch)
-        self.assertIn("is_building_type = building_space_program", month)
-        self.assertIn("count = local_var:sr_emig_batches", month)
+        self.assertNotIn("building_space_program", month)
+        self.assertIn("count = local_var:sr_emig_take", month)
         self.assertIn("sr_colonies_contested_enabled = yes", month)
 
     def test_the_entry_declares_its_population_modifiers(self):

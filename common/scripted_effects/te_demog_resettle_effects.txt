@@ -49,6 +49,26 @@ te_demog_rs_note_move = {
 	}
 }
 
+# THIS = a state the settler programme took from this month (sr_emig_month), local sr_emig_took_now its people
+# (whole batches of 500). They leave for space, so there is no destination on the map: the census books the source
+# side only (te_dg_rs_out, te_dg_rs_o_*), as te_demog_rs_note_move books a source's, by Organized Colonization's
+# profile (code 3, RESETTLE_PROFILES: families; colony people design § 6.3), so its step takes them off the residual
+# as a count. The family profile reads no labour share: te_dg_rs_lf is set only so the helper reads no unset local.
+te_demog_sr_note_settlers = {
+	if = {
+		limit = {
+			te_demog_cohorts_run = yes
+			te_demog_has_census = yes
+			local_var:sr_emig_took_now > 0
+		}
+		set_local_variable = { name = te_dg_rs_code value = 3 }
+		set_local_variable = { name = te_dg_rs_amt value = local_var:sr_emig_took_now }
+		set_local_variable = { name = te_dg_rs_lf value = 0 }
+		te_demog_rs_add = { SIDE = o }
+		te_demog_rs_total = { NAME = te_dg_rs_out }
+	}
+}
+
 # THIS = a source, in resettlement_source_consequences after this month's transit dead are counted (local
 # rs_dead_people, a multiple of 100, killed below by the programme's kill_population_in_state). scope:rs_destination
 # saved. The census books them as known deaths here (te_demog_note_kills, as nuclear strikes and Violent Hostility do),
