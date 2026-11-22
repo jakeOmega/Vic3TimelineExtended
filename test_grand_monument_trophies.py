@@ -558,7 +558,8 @@ class PanelTests(unittest.TestCase):
         """Gotcha #24: a datamodel row renders its tooltips without JournalEntry."""
         gui = read(TR_GUI)
         L = loc()
-        for row in ("gm_tr_row_held", "gm_tr_row_abroad", "gm_tr_row_site", "gm_tr_take_button"):
+        for row in ("gm_tr_row_held", "gm_tr_row_abroad", "gm_tr_row_site", "gm_tr_take_button", "gm_tr_row_short",
+                    "gm_tr_row_held_short", "gm_tr_row_abroad_short", "gm_mon_row_site_short"):
             body = raw_block_at(gui, rf"(?m)^\ttype {row} = \w+ \{{")
             self.assertNotIn("JournalEntry", body, row)
             for key in re.findall(r'(?:text|tooltip) = "(\w+)"', body):
