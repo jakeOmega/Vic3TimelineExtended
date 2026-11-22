@@ -912,6 +912,21 @@ class FigureBudgetTest(unittest.TestCase):
         figure_box = _textbox_with(body, 'block "site_bases"')
         self.assertLessEqual(icon + _width(figure_box) + _width(box) + 2 * spacing, int(m.group(1)))
 
+    def test_a_site_s_second_line_fits_the_row(self):
+        """Solar System's line under a site's name (slots, base room and ground
+        type, resort room and draw) fits the row inside its margins: the first
+        line's 24 icon + 180 name + 122 holder + 65 inbound + 3 x 3 spacing,
+        400 in Solar System's 408. Each cell's width is held to its figure by the
+        tests above; this holds the cells' sum, which each side's own test missed
+        when the ground word and the resort cell landed together (#1950)."""
+        body = _type_body(_read(GUI), "te_sr_site_row")
+        line = body[body.index("sr_disp_colonies_contested"):]
+        spacing = int(re.search(r"spacing = (\d+)", line).group(1))
+        margin = int(re.search(r"margin_left = (\d+)", line).group(1))
+        widths = [int(w) for w in re.findall(r"\n\t\t\twidget = \{\s*size = \{ (\d+) 22 \}", line)]
+        self.assertEqual(len(widths), 3, "slots, base room and resort room")
+        self.assertLessEqual(margin + sum(widths) + spacing * (len(widths) - 1), 24 + 180 + 122 + 65 + 3 * 3)
+
     def test_colony_rows(self):
         self._check("te_sr_colony_row", self.FIGURES)
         self._check("te_sr_mod_cell", self.CELL)

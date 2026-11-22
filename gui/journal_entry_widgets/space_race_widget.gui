@@ -4412,17 +4412,22 @@ types space_race_widget_types
 		### ground types design § 9.2), each an icon and a figure with its
 		### meaning on hover; the base room's hover is its type's
 		### (je_space_race_widget_ss_bases_tt_<type>, block site_bases_tooltip).
-		### 254 for the bases: 18 icon + 108 figure + 120 word + 2 × 4 spacing.
-		### Simple and Full Colonies only.
+		### Then its Resort Colony room and draw (#1948). Each cell holds its longest
+		### figure at test_space_race_labels.py's measure and no more, so the line
+		### fits the row's 400 inside its margins: 3 margin + 41 slots (18 icon +
+		### 4 + 19 for "99") + 8 + 233 bases (18 icon + 4 + 94 for "300 (+30%)" +
+		### 4 + 113 for "Carbonaceous") + 8 + 107 resorts (18 icon + 4 + 85 for
+		### "10 (+30%)") = 400. It starts under the icon, not the name, to make
+		### that room. Simple and Full Colonies only.
 		flowcontainer = {
 			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
 			direction = horizontal
 			ignoreinvisible = yes
-			spacing = 12
-			margin_left = 27
+			spacing = 8
+			margin_left = 3
 
 			widget = {
-				size = { 64 22 }
+				size = { 41 22 }
 				parentanchor = vcenter
 				tooltip = "je_space_race_widget_ss_slots_tt"
 
@@ -4439,7 +4444,7 @@ types space_race_widget_types
 					textbox = {
 						parentanchor = vcenter
 						autoresize = yes
-						max_width = 40
+						max_width = 19
 						align = left|nobaseline
 						using = te_sr_fontsize_row
 						elide = right
@@ -4448,7 +4453,7 @@ types space_race_widget_types
 				}
 			}
 			widget = {
-				size = { 254 22 }
+				size = { 233 22 }
 				parentanchor = vcenter
 				block "site_bases_tooltip" {}
 
@@ -4465,7 +4470,7 @@ types space_race_widget_types
 					textbox = {
 						parentanchor = vcenter
 						autoresize = yes
-						max_width = 108
+						max_width = 94
 						align = left|nobaseline
 						using = te_sr_fontsize_row
 						elide = right
@@ -4474,7 +4479,7 @@ types space_race_widget_types
 					textbox = {
 						parentanchor = vcenter
 						autoresize = yes
-						max_width = 120
+						max_width = 113
 						align = left|nobaseline
 						using = te_sr_fontsize_row
 						elide = right
@@ -4484,7 +4489,7 @@ types space_race_widget_types
 			}
 			### Its Resort Colony room and draw (#1948 design § 9).
 			widget = {
-				size = { 120 22 }
+				size = { 107 22 }
 				parentanchor = vcenter
 				tooltip = "je_space_race_widget_ss_resorts_tt"
 
@@ -4501,7 +4506,7 @@ types space_race_widget_types
 					textbox = {
 						parentanchor = vcenter
 						autoresize = yes
-						max_width = 96
+						max_width = 85
 						align = left|nobaseline
 						using = te_sr_fontsize_row
 						elide = right
