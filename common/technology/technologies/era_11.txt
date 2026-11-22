@@ -394,8 +394,8 @@ nuclear_thermal_propulsion = {
 	modifier = {
 		country_space_race_max_funding_add = 1
 		country_sr_nuclear_thermal_launches_bool = yes
-		# a module slot at every colony (colony management design § 5; sr_site_slots_<key>)
-		country_sr_colony_slots_add = 1
+		# +10 points of Habitat room at every colony (colony people design § 5; sr_site_hab_share_now_<key>)
+		country_sr_habitat_room_add = 0.1
 	}
 
 	ai_weight = {

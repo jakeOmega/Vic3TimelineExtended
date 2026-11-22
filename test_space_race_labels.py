@@ -67,7 +67,8 @@ TRANSIT_MONTHS = 132      # sr_interstellar_transit_value, pinned by the waiting
 WORLDS = 40               # sr_total_global_colonies, the 40 worlds; sr_disp_colonies_held is a share of them
 SECTION_HEADER_WIDTH = 400  # the text of the 520-wide section_header_button, less its arrow
 FLEET_SLOTS = 6           # sr_disp_cf_in_flight, "6 of 6": gen_solar_sites.FLEET_SLOTS
-SETTLERS_A_MONTH = 2000   # sr_disp_emig_per_month at High (sr_emig_level_batches 4 x sr_emig_batch_people 500)
+SETTLERS_SENT = 4_096_000  # sr_disp_emig_last_sent: the step at or past the open room (every world's, ~3.4 million at the cap)
+SETTLERS_LC_WEEK = 2_835_693  # sr_disp_emig_bill_week: that many settlers x 3 x 12 / 52
 OFFWORLD_PEOPLE = 9_999_999  # sr_disp_offworld_pop: the rooms' sum is 945,000 before modules; seven digits
 TRANSIT_CEILING = 999     # sr_disp_cf_slot_<n>_months: the longest transit is 611 (chemical, the Kuiper Belt)
 END_YEAR = 2136           # sr_disp_cf_slot_<n>_year: END_DATE's year
@@ -262,7 +263,9 @@ def _longest_figure(name):
     fixed = {"sr_current_colonization_stage": STAGE_CEILING, "sr_disp_mq_next_months": 999,
              "sr_interstellar_transit_value": TRANSIT_MONTHS, "sr_total_global_colonies": WORLDS, "sr_sites_world_count": WORLDS,
              "sr_disp_colonies_held": WORLDS, "sr_disp_cf_in_flight": FLEET_SLOTS,
-             "sr_disp_emig_per_month": SETTLERS_A_MONTH, "sr_disp_offworld_pop": OFFWORLD_PEOPLE,
+             # The overview's Crews cell (colony people design § 10): our colonies short of crews.
+             "sr_disp_understaffed_count": WORLDS,
+             "sr_disp_emig_last_sent": SETTLERS_SENT, "sr_disp_emig_bill_week": SETTLERS_LC_WEEK, "sr_disp_offworld_pop": OFFWORLD_PEOPLE,
              "sr_disp_fab_rate": FAB_RATE_CEILING, "sr_disp_fab_stock": FAB_STOCK,
              "sr_disp_ms_waiting": SHIP_SLOTS, "sr_disp_ms_flying": SHIP_SLOTS,
              "sr_disp_mod_upkeep_pct": UPKEEP_CEILING, "sr_disp_ebase_levels": EBASE_LEVELS,
@@ -405,13 +408,13 @@ CELLS = {
     "value-row label (te_sr_value_row)": (
         ("te_sr_value_row", 'block "row_label"'),
         r"je_space_race_widget_(setbacks_label|eta_label|colonies_held_label|cf_in_flight_label"
-        r"|emig_month_label|offworld_label|orbit_\w+_label|fab_label|shipments_label|mod_upkeep_label"
+        r"|emig_sent_label|emig_bill_label|offworld_label|orbit_\w+_label|fab_label|shipments_label|mod_upkeep_label"
         r"|ebase_label|ebase_queued_label|eb_unassigned_label|resort_label|resort_queued_label|free_trade_label|sc_rate_label|sc_strength_label|sc_upkeep_label|sc_reserve_label"
         r"|cf_drive_label|mq_next_label)"),
     "value-row figure (te_sr_value_row)": (
         ("te_sr_value_row", 'block "row_value"'),
         r"je_space_race_widget_((setbacks|eta)_(?!label)\w+|colonies_held_figure|cf_in_flight_figure"
-        r"|emig_month_figure|offworld_figure|fab_figure|shipments_figure|mod_upkeep_figure|ebase_figure|ebase_queued_figure"
+        r"|emig_sent_figure|emig_bill_figure|offworld_figure|fab_figure|shipments_figure|mod_upkeep_figure|ebase_figure|ebase_queued_figure"
         r"|eb_unassigned_figure"
         r"|resort_figure|resort_queued_figure"
         r"|free_trade_figure|sc_rate_figure|sc_rate_paused|sc_strength_figure|sc_upkeep_figure|sc_reserve_figure"
@@ -474,9 +477,6 @@ CELLS = {
     "a fleet's landing (te_sr_cf_slot_row)": (
         ("te_sr_cf_slot_row", 'block "slot_eta"'),
         r"je_space_race_widget_cf_slot_\d_eta"),
-    "a colony's crews under AGI (te_sr_colony_row)": (
-        ("te_sr_colony_row", 'text = "je_space_race_widget_settlers_agi"'),
-        r"je_space_race_widget_settlers_agi"),
     "a colony's priority (te_sr_colony_row)": (
         ("te_sr_colony_row", 'text = "je_space_race_widget_emig_prio_0"'),
         r"je_space_race_widget_emig_prio_\d"),
@@ -498,15 +498,15 @@ CELLS = {
     **{f"terraforming's {word} (te_sr_colony_row)": (
         ("te_sr_colony_row", f'text = "je_space_race_widget_terra_{word}"'), f"je_space_race_widget_terra_{word}")
        for word in ("years_left", "finished", "idle")},
-    "a colony's slots label (te_sr_colony_row)": (
+    "a colony's Habitats label (te_sr_colony_row)": (
         ("te_sr_colony_row", 'text = "je_space_race_widget_modules_col_slots"'),
         r"je_space_race_widget_modules_col_slots"),
     "a colony's bases label (te_sr_colony_row)": (
         ("te_sr_colony_row", 'text = "je_space_race_widget_modules_col_bases"'),
         r"je_space_race_widget_modules_col_bases"),
-    "the crew share's label (te_sr_colony_row)": (
-        ("te_sr_colony_row", 'text = "je_space_race_widget_modules_col_staffing"'),
-        r"je_space_race_widget_modules_col_staffing"),
+    "the crews' label (te_sr_colony_row)": (
+        ("te_sr_colony_row", 'text = "je_space_race_widget_modules_col_crews"'),
+        r"je_space_race_widget_modules_col_crews"),
     **{f"the colonies' {head} head ({heads})": (
         (heads, f'text = "je_space_race_widget_ch_{head}"'), f"je_space_race_widget_ch_{head}")
        for heads, names in (("te_sr_colony_heads_people", ("people", "crews")),
@@ -522,7 +522,7 @@ CELLS = {
         r"je_space_race_widget_(page_(staffing|bases|resorts|status|terraformed)|ch_\w+|modules_col_slots)"),
     "a word beside a page heading, or a page tile's word (te_sr_page_value)": (
         ("te_sr_page_value", None),
-        r"je_space_race_widget_(page_settlers|autonomy_status_\w+|def_status_\w+|settlers_agi"
+        r"je_space_race_widget_(page_settlers|autonomy_status_\w+|def_status_\w+"
         r"|terra_(?:years_left|finished|idle))"),
     "a module's name on a colony's page (te_sr_page_mod_row)": (
         ("te_sr_page_mod_row", 'block "row_name"'),
@@ -889,6 +889,7 @@ class FigureBudgetTest(unittest.TestCase):
         # Colonies (te_sr_colony_row): people and room in K, crews, crew share,
         # a module level and what is on its way, autonomy and drift, Defenses
         "settler_people": "999.9K / 999.9K", "settler_crews": "99", "module_staffing": "100%",
+        "module_crews": "99/99", "module_crews_short": "99/99",
         "aut_figure": "100%", "aut_drift": "+0.99", "def_level": "99", "def_integrity": "100%", "def_marines": "99",
         # slots used of slots (4 + 5 technologies + 4 past), base room (60 + 10 levels x 10),
         # what the colony builds of its own (colony management design §§ 4.3, 5)
@@ -900,8 +901,9 @@ class FigureBudgetTest(unittest.TestCase):
         # shown up to 999 (one level at the least staffing would take longer)
         "terra_pct": "+300%", "terra_years": "999",
     }
-    # a module cell (te_sr_mod_cell): a level (10 past a world's slots at most) and what is on its way
-    CELL = {"cell_level": "8", "cell_pending": "+8"}
+    # a module cell (te_sr_mod_cell): a level, two digits with no slots (colony people design § 10),
+    # and what is on its way
+    CELL = {"cell_level": "88", "cell_pending": "+8"}
     FREE = {"free_people": "999.9K", "free_ties": "100"}
     # A fleet's card: its number and, rolled up, its strength in the head; a bar's
     # figure, now of full (strength, and propellant at 5000 km/s the longest); a

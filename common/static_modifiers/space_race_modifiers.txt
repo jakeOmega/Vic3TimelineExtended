@@ -237,13 +237,14 @@ sr_solar_system_trade = {
 }
 
 # ======= Solar System Colonization - colony population (simple and full colonies)
-# Both declared on the entry (je_space_race.txt; 1.15
-# scaling_modifiers_while_active, #1404; slices 2-3 design § 10). The
-# programme's upkeep, per level of emigration: the Space Program's Launch
-# Capacity bill, as funding raises it.
-sr_emigration_programme = {
+# The settlers' bill (colony people design § 6.2): 3 Launch Capacity a settler,
+# on the Space Program at sr_emig_bill_units (100 x the week's bill / the
+# building's Launch Capacity x (1 + its throughput); sr_emig_bill_refresh, the one
+# refresh site, sr_colony_population_effects.txt). A unit adds 1% to its Launch
+# Capacity input. The off-world bonus is declared on the entry (je_space_race.txt).
+sr_settler_launches = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	building_space_program_throughput_add = 0.05
+	goods_input_launch_capacity_mult = 0.01
 }
 
 # The nation's people off Earth, per 100,000 (at most ten times).
@@ -267,8 +268,17 @@ sr_module_upkeep = {
 # docs/superpowers/specs/2026-10-30-colony-management-design.md § 7)
 # Declared on the entry, each at its staffed levels at the colonies that serve
 # us (sr_mod_units_<key>; common/journal_entries/sr_sites_generated.txt). The Mining
-# Complex, Orbital Yard, Off-World Resort (since #1948), Nuclear Command Center and
-# Administration have no modifier: they feed other numbers (sr_colony_module_values.txt).
+# Complex, Orbital Yard, Off-World Resort (since #1948) and Nuclear Command Center
+# have no modifier: they feed other numbers (sr_colony_module_values.txt). The
+# Administration feeds autonomy, and its modifier is only its cost.
+# An Administration's staff are governed from home: 25 authority a staffed level,
+# a positive cost, never a negative country_authority_add (colony people design
+# § 7; the owner, 2026-11-22: "~25 per level").
+sr_module_admin = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_authority_cost_add = 25
+}
+
 sr_module_lab = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_tech_research_speed_mult = 0.02

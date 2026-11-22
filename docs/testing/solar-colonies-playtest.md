@@ -82,7 +82,7 @@ Grep `debug.log` for `TE_SR_FLEETS` and `TE_SR_SETTLERS` after option a.
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
 | `TE_SELF_CHECK OK colony_fleet_arrival world=<index> flown=<months> …` | once a game, the first fleet that lands in its arrival month | the global step landed it in its month; `flown` should be the transit `docs/engine/launch_windows_report.md` gives its body and drive for its departure month | `TE_SELF_CHECK BROKEN colony_fleet_arrival … late=<months>`: a fleet landed two or more months after its month, so the step missed it | land fleets from the entry's monthly pulse as well, for the country's own slots |
-| `TE_SELF_CHECK OK/BROKEN emigration_batch before=… after=… sent=…` | once a game, the first month a country sends settlers | the Space Program's state lost at least 90% of what was sent | it lost less: the strata filter removed fewer people than asked, or `state_population` reads the change only later | if the state's population falls by the batch a month later instead, read the change at the next month's step; if the filter falls short, take the batch without `strata` |
+| `TE_SELF_CHECK OK/BROKEN emigration_batch before=… after=… sent=…` | once a game, the first month a country sends settlers | the states taken from lost at least 90% of what was sent between them (colony people design § 6.3: every state gives in proportion to its people) | they lost less: the strata filter removed fewer people than asked, or `state_population` reads the change only on the next tick, as it does after `kill_population_percent_in_state` (scripting_best_practices § "`state_population` Doesn't Fall Until the Next Tick"); then read a state's people a month on | if the states' people fall by the batches |
 
 1. **Targets, under every setting.** With a programme running, open the Solar System list: unclaimed worlds the
    programme can reach show Target. Under Races Only only the current stage's worlds (and any released one) do. Pick
@@ -106,9 +106,9 @@ Grep `debug.log` for `TE_SR_FLEETS` and `TE_SR_SETTLERS` after option a.
    none.
 8. **The bonus.** Option g (half the room): People off Earth reads the sum, and Off-World Population is on Solar System
    Colonization at the multiplier its tooltip shows.
-9. **Crews and AGI.** Crews read one per 5,000 people; with Artificial General Intelligence they read AGI.
+9. **Crews and AGI.** Crews read one per 5,000 people; with Artificial General Intelligence they read AGI. *Superseded by § Colony people limit modules (#1954 Part B).*
 10. **The AI's settlers.** In an observer run under Simple Colonies, a top-three space power holding colonies sets
-    Emigration to Steady within a year; its colonies' people grow.
+    Emigration to Steady within a year; its colonies' people grow. *Superseded by § Colony people limit modules (#1954 Part B).*
 
 ## From the 2026-10-25 log triage
 
@@ -524,20 +524,20 @@ Design: `docs/superpowers/specs/2026-10-30-colony-management-design.md` (the own
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
 | `TE_SELF_CHECK OK/BROKEN drive_marker country=… level=…` | once a game, a month after a country running colonization first has Fusion Power | Fusion Power's `country_sr_drive_fusion_bool` (a script-only boolean) reaches the country and `sr_drive_level` reads 1 or more | the country reads no fusion drive: `modifier:` does not read a technology's script-only boolean, so every drive is lost | drop `script_only = yes` from the three drive types, as Nuclear Thermal Propulsion's boolean is declared; failing that, read `has_technology_researched` again in `sr_drive_level`, `sr_launch_has_fusion` and `sr_launch_has_antimatter`, keeping the markers for the tooltips |
-| `TE_SELF_CHECK OK/BROKEN slot_marker country=… modifier=… seen=…` | once a game, a month after a country holding a colony first has a slot technology | the technology's `country_sr_colony_slots_add` reaches the country (`modifier` 1 or more) and its first colony's `sr_site_slots_<key>` reads it through the holder's scope (`seen` equal to it) | `modifier` 0: the technology's script-only count does not reach the country; `seen` below it: the scope switch (`global_var:sr_site_holder_<key> = { add = modifier:… }`) reads nothing | `modifier` 0: as `drive_marker`'s fallback, drop `script_only = yes`; `seen` short: read the holder's technologies again in `sr_site_slots_<key>` (`gen_solar_sites._slot_values`), keeping the marker for the tooltips |
+| `TE_SELF_CHECK OK/BROKEN habitat_marker country=… modifier=… seen=…` | once a game, a month after a country holding a colony first has one of the five Habitat room technologies | the technology's `country_sr_habitat_room_add` reaches the country (`modifier` 0.1 or more) and its first colony's `sr_site_hab_share_now_<key>` reads it through the holder's scope (`seen`, the share less 0.5, at least it; more where the world keeps a better share from an earlier holder) | `modifier` 0: the technology's script-only share does not reach the country; `seen` below it: the scope switch (`global_var:sr_site_holder_<key> = { add = modifier:… }`) reads nothing | `modifier` 0: as `drive_marker`'s fallback, drop `script_only = yes`; `seen` short: read the holder's five technologies in `sr_site_hab_share_now_<key>` (`gen_solar_sites.render_population_values`), keeping the marker for the tooltips |
 
 
 1. **Drift colors.** In the Autonomy view a colony whose autonomy is rising shows its drift in red, one falling in green; the hover's terms the same way, and its last line says where the colony settles.
 2. **Settling.** A colony with a hover reading "settles near 30%" moves toward 30 from either side over the following years, and a chartered colony settles near 0 instead of drifting back up.
 3. **Next Windows.** On chemical rockets, with stage-4 and stage-5 worlds unclaimed and targetable: the Uranus, Neptune and Kuiper Belt rows are absent, and the line under the table counts them. Each row's transit matches `docs/engine/launch_windows_report.md` for the month; with a fusion drive the Window column reads Any month, and with Asteroid Mining a closed window reads the premium and the months. The Staged in Orbit hover lists the same destinations.
-4. **Slots and the price past them.** Queue modules at a 2-slot colony until its Slots reads 3/2 (red): the hover's next price reads 300; the module past the slots leaves fabrication's stock 200 lower when it is built, the next 300 lower. Five past the slots, the + buttons grey out with the room line crossed. With Advanced Nanofabrication the colony reads one more slot.
+4. **Slots and the price past them.** Queue modules at a 2-slot colony until its Slots reads 3/2 (red): the hover's next price reads 300; the module past the slots leaves fabrication's stock 200 lower when it is built, the next 300 lower. Five past the slots, the + buttons grey out with the room line crossed. With Advanced Nanofabrication the colony reads one more slot. *Superseded by § Colony people limit modules (#1954 Part B).*
 5. **Facilities.** Build one of each at a fully crewed colony: the entry shows Off-World Research Stations, Cultural Centers, Resorts, Black Sites, Training Grounds and Materials Foundries at multiplier 1; the colony's Bases rises by 50 with a Mining Complex; Module Fabrication's rate rises by 4 with an Orbital Yard (and Space Command's month by 0.5 under Full Colonies); the nuclear Command Reliability target rises by 4 with a Nuclear Command Center; the colony's drift hover shows −0.15 for its Administration. Blockade the colony: the Mining Complex, Yard, Resort and Foundry stop, the rest keep running.
 6. **The Training Ground reaches the army.** With Off-World Training Grounds on the entry, a battalion's experience gain in the military panel's breakdown includes it. If it doesn't, stop declaring `sr_module_train` on the entry and add it to the country instead, at `multiplier = sr_mod_units_train` on the colony month (`sr_mod_month`), removing the old copy first.
 7. **A colony's own modules.** A colony at autonomy 50 with 30,000 people shows Building climbing by 1.5 a month; at 100% it gains a module (`TE_SR_MODULES <key> built a module of its own`), Building restarts at 0, and a specialization level shows in its modifiers at once. A colony with no slot or specialization level left holds at 100%.
 8. **A colony's page.** Click a colony's name, or the arrow beside it (which shows on the list, not the page): only that colony shows, with People, Modules, Autonomy and (Full) Defenses one under another, each heading with its control on the right (Settlers and the priority button, Clear, Abandon), the figures in tiles two to a row with an icon each, and the fifteen modules one to a line with their full names (a site's specializations by name) and nothing cut short. Hover a tile: its breakdown, as the list's figure gave. Back returns to the list, and so does any view button. Every button on the page works as it does in the list. Nothing on the panel is underlined but a word inside a tooltip.
 9. **The AI.** In an observer run, an AI outside the top three that holds a colony sets Emigration to Steady with a positive income, queues a module a year, and answers a self-government demand with a charter; it lets a colony go only after losing its Space Program. Cede Colony: asking an AI for its empty lunar outpost shows about −60 for the colony in the acceptance breakdown, and for a large built-up colony −200.
-10. **Solar System's second line.** Under Simple Colonies, each site in Solar System shows the module icon with its slots as ours (its size's plus our Colony Module Slots) and the Extraplanetary Base icon with its room and grade ("300 (+30%)" at 16 Psyche); each hover says what it means, and the base hover's Base Grade is a link to its concept, as in the Mining Complex's hover and a colony's Bases hover. Under Races Only the line is gone.
-11. **The technologies' tooltips.** Nuclear Thermal Propulsion, Orbital Manufacturing, Advanced Nanofabrication, Space Colonization and Molecular Assemblers each list +1 Colony Module Slots, and each adds a slot at every colony we hold (the Modules view's Slots, the page's Slots tile). Fusion Power lists Fusion Drive for Colony Fleets, Muon-Catalyzed Fusion Reactors Fusion Torch for Colony Fleets and Antimatter Production Antimatter Drive for Colony Fleets, and Next Windows' transit falls with each as before.
+10. **Solar System's second line.** Under Simple Colonies, each site in Solar System shows the module icon with its slots as ours (its size's plus our Colony Module Slots) and the Extraplanetary Base icon with its room and grade ("300 (+30%)" at 16 Psyche); each hover says what it means, and the base hover's Base Grade is a link to its concept, as in the Mining Complex's hover and a colony's Bases hover. Under Races Only the line is gone. *Superseded by § Colony people limit modules (#1954 Part B).*
+11. **The technologies' tooltips.** Nuclear Thermal Propulsion, Orbital Manufacturing, Advanced Nanofabrication, Space Colonization and Molecular Assemblers each list +1 Colony Module Slots, and each adds a slot at every colony we hold (the Modules view's Slots, the page's Slots tile). Fusion Power lists Fusion Drive for Colony Fleets, Muon-Catalyzed Fusion Reactors Fusion Torch for Colony Fleets and Antimatter Production Antimatter Drive for Colony Fleets, and Next Windows' transit falls with each as before. *Superseded by § Colony people limit modules (#1954 Part B).*
 12. **The race to the Moon.** Hover Solar System Colonization's reward in the milestone grid: the race to the Moon is named as the old Moon Base milestone's prize and the one race among the sites; a lunar site's hover in Solar System points to it.
 
 ## Extraplanetary Bases: −75% past the room and a flat crew (2026-10-31)
@@ -1038,7 +1038,7 @@ queue behind them. The console is `event te_debug_space_race.4` as above.
 3. **Past the slots.** At a colony four past its slots, with only the base stock, the + button greys out with "Our
    module stock can hold its price" crossed; with an Orbital Depot it allows up to eight past, the Slots hover giving
    the price (up to 900) and the stock's cap. Queue one, then switch storage off: when it reaches the top the stock
-   still fills to its price (the Next Module hover counts down) and it is built.
+   still fills to its price (the Next Module hover counts down) and it is built. *Superseded by § Colony people limit modules (#1954 Part B).*
 4. **The Moon needs no slot.** With all eight shipment slots taken by modules for Mars, queue a Mining Complex at a
    lunar colony behind a Mars module. Next month the lunar module jumps to the top of the queue and is installed
    that month (the level rises, Shipments stays 8 / 0); the Mars module waits behind it. With the stock below the
@@ -1194,3 +1194,54 @@ Art output multipliers (the state's read less its owner's) back off the building
 3. **Studios.** A Resort Colony in the state of a Sony Pictures Studios, Netflix Animation Studios, Nintendo
    Development Center or Universal Studios Hollywood: its Art and Entertainment breakdown shows the studio's line and
    an Off-World Hotels line that cancels it.
+
+## Colony people limit modules (#1954 Part B, 2026-11-22)
+
+Slots are gone: a colony takes as many modules as its people can crew, a crew being 10,000 people (5,000 with
+Artificial General Intelligence), and only Habitats have a cap, past which each costs more with no top. Five
+technologies add 10 points of Habitat room each. Settlers are an amount that halves and doubles, drawn from every
+state by its people, and each takes 3 Launch Capacity that the Space Program buys. An Administration costs 25
+authority a staffed level. Design: `docs/superpowers/specs/2026-11-22-colony-people-limit-modules-design.md`
+(§ 13 for the engine questions). The self-checks are `emigration_batch` (§ Targets, colony fleets and settlers) and
+`habitat_marker` (§ Colony management), both reworded for this design; read them a week after the first month.
+
+Console: `event te_debug_space_race.3` (g fills our colonies to half their room, e sets settlers to 2,000 a month and
+sends them) and `event te_debug_space_race.4` (b fills the stock, c queues one of each module, e lands them).
+
+1. **Crews at a large colony.** A colony of 45,000 people with eight crewed levels: the Modules view's Crews reads
+   4/7 in red, its hover says what a short crew costs and how to get more, and every crewed module runs at
+   (4 + 1) ÷ 8, 62.5%, in the specialization's multiplier on the entry. The People view's row shows its 4 crews and "7 needed" in
+   red, and the overview shows a Crews cell, "1 short". With Artificial General Intelligence the same
+   colony reads 9/7, not red, and the cell goes.
+2. **The + button's crew line.** At that colony the + button on a facility shows "No crew to spare" in red and
+   still lets us queue; at a fully crewed colony with one crew to spare it reads "Needs a crew: this colony's people
+   have one to spare", and after one more crewed module is queued it reads short; on a Habitat the line is absent.
+   Under Full Colonies the colony's Defenses fire at its staffing: at half strength at 50%.
+3. **The Habitat cap and its price.** At a 2-cap world with two Habitats, the Modules view's Habitats reads 2/2; the
+   hover gives the people each holds, its share of the starting room (50% without the technologies, 100% with
+   all five) and the next price, 200, then 300 for the one after. Once the next price passes the module stock's cap
+   (the Fabrication hover) the Habitat's + button greys out with the price line crossed; with an Orbital Depot it
+   goes on.
+4. **Room from the technologies.** Research Nuclear Thermal Propulsion with a colony held: its tooltip lists
+   +10% Habitat Room, and within a month each Habitat at our colonies holds 60% of the starting room (the colony's
+   room rises by a tenth of its base a Habitat). Cede the colony to a country without it: its room doesn't fall.
+5. **The settler bill at two amounts.** Set settlers to 4,000 a month (step 4): the People view's "Sent last month"
+   reads 4,000 and "Launch Capacity a week" 2,769. The Space Program's Launch Capacity input breakdown has a Settler
+   Launches line that adds about that much at full staff, and the same with modules built (the throughput term: if
+   the line is off by the throughput, drop the throughput from `sr_emig_bill_divisor`). Step up to 32,000: the
+   line grows eightfold. Set settlers Off: the line is gone within two months, also after the entry ends.
+6. **Settlers from several states.** A country of three states, 4 million, 2 million and 100,000 people, at 32,000 a
+   month: "Sent last month" reads 32,000 every month, and over a year the states lose about 256,000, 128,000 and
+   6,000 (the census's emigrants by state), each within 500 of that, the small state a batch every few months. Strata: in the largest state, middle and lower pops each fall, spread over the
+   state's pops, not one pop emptied (`kill_population_in_state` by stratum). A country of 1 million at 32,000 a
+   month sends 10,000 (the 1% cap).
+7. **An Administration's authority.** Build one at a fully crewed colony: the country's authority breakdown lists
+   Off-World Administrations at 25 more authority cost; a second staffed level makes it 50; understaffed at 50%,
+   25 for the two. An AI builds one only with 50 authority to spare.
+8. **The two room modules at one world.** At a Mars colony with a Habitat and a Terraforming level, the colony's room
+   is the base × (1 + share × Habitats + terraformed share). The Habitat comes down only while the people fit
+   the room without it.
+9. **The pick.** With no target set, Colony Fleets' destination prefers a 4-cap world over an otherwise equal
+   2-cap one; the target line's hover gives the cap and the people and crews it holds at the cap at our share.
+10. **The AI's settlers.** In an observer run a colony-holding AI with a positive income steps its settlers up while
+    fabrication's 5% leaves room, and never past its colonies' free room; in default it sets them Off.

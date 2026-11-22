@@ -76,9 +76,11 @@ sr_mod_ai_fab_budget = {
 	multiply = sr_mod_ai_fab_share
 }
 
-# The two dearer methods' weekly bills at full staff and base prices, their
-# goods times their base prices (sr_colony_module_pms.txt; test_solar_sites.py
-# holds them equal). Orbital Assembly needs none: it is the cheapest.
+# The methods' weekly bills at full staff and base prices, their goods times
+# their base prices (sr_colony_module_pms.txt; test_solar_sites.py holds them
+# equal). The ladder below gates only the two dearer; the AI's settlers read all
+# three (sr_mod_ai_fab_bill_now).
+sr_mod_fab_bill_base_orbital_assembly = { value = 340000 }
 sr_mod_fab_bill_base_lunar_foundries = { value = 732000 }
 sr_mod_fab_bill_base_fusion_shipyards = { value = 1368000 }
 
@@ -94,6 +96,17 @@ sr_mod_fab_bill_price_factor = {
 		value = 1
 		add = sr_launch_capacity_price_up
 	}
+}
+
+# The bill of the method the Space Program runs now, at today's prices; 0 with
+# none. What it leaves of the budget is the AI's settlers' (sr_emig_ai_room,
+# colony people design § 9; the owner: "Share fabrication's 5%").
+sr_mod_ai_fab_bill_now = {
+	value = 0
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_sr_fabrication_fusion_shipyards } } value = sr_mod_fab_bill_base_fusion_shipyards }
+	else_if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_sr_fabrication_lunar_foundries } } value = sr_mod_fab_bill_base_lunar_foundries }
+	else_if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_sr_fabrication_orbital_assembly } } value = sr_mod_fab_bill_base_orbital_assembly }
+	multiply = sr_mod_fab_bill_price_factor
 }
 
 # What each method's bill leaves of the budget: 0 or more, the AI may run it.
@@ -152,6 +165,9 @@ sr_mod_bunker_redundancy = {
 # test is on the pressure: the same settling point at any autonomy, where a
 # floor on the month's rise would ask more of a colony the higher it already is.
 sr_mod_ai_admin_autonomy = { value = 25 }
+# ... and only with twice its cost in authority to spare: an Administration costs
+# 25 a staffed level (sr_module_admin; colony people design §§ 7, 9).
+sr_mod_ai_admin_authority = { value = 50 }
 sr_mod_ai_admin_settles_at = { value = 45 }
 sr_mod_ai_admin_pressure = {
 	value = sr_mod_ai_admin_settles_at
@@ -160,14 +176,15 @@ sr_mod_ai_admin_pressure = {
 sr_mod_ai_bunker_max = { value = 3 }
 
 # The technology markers' self-checks (colony management design § 11): the
-# country's Colony Module Slots, and how far a colony's slots read through its
-# holder fall from them (0 when the scope switch reads it).
-sr_colony_slots_modifier = {
-	value = modifier:country_sr_colony_slots_add
+# country's Habitat Room (colony people design § 5), and how far a colony's
+# share read through its holder falls from it (0 when the scope switch reads it;
+# above 0 where the world keeps a better share from an earlier holder).
+sr_habitat_room_modifier = {
+	value = modifier:country_sr_habitat_room_add
 }
-sr_slots_marker_gap = {
-	value = sr_site_slots_tech_seen
-	subtract = sr_colony_slots_modifier
+sr_habitat_marker_gap = {
+	value = sr_site_hab_share_seen
+	subtract = sr_habitat_room_modifier
 }
 
 # Country scope. The months until the module in shipment slot n lands, 999 while

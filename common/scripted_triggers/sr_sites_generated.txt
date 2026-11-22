@@ -1464,12 +1464,12 @@ sr_cf_scope_site_held = {
 # ===== Modules (slice 4 design §§ 2, 5-6) =====
 # Per world, country scope:
 #   sr_mq_any_<key>               THIS has a module of it queued
-#   sr_mod_can_queue_<type>_<key> THIS may queue one more: it holds the world, the
-#                                 queue has a free place, the cap has room counting
-#                                 queue and shipments, and a specialization's
-#                                 founding choice is made; past a world's slots,
-#                                 only while the module stock can hold the price
-#                                 (the owner, 2026-11-15), or it could never be built
+#   sr_mod_can_queue_<type>_<key> THIS may queue one more: it holds the world and the
+#                                 queue has a free place; a specialization while the
+#                                 budget has room counting queue and shipments and the
+#                                 founding choice is made; a Habitat only while the
+#                                 module stock can hold its price (the owner, 2026-11-15;
+#                                 colony people design § 4.3), or it could never be built
 #   sr_mod_departs_<key>          a module can leave for it this month at no premium
 # Any scope: sr_site_shipping_<key>, a module is on its way there.
 sr_mq_any_valles_marineris = {
@@ -1507,87 +1507,60 @@ sr_mod_can_queue_b_valles_marineris = {
 sr_mod_can_queue_hab_valles_marineris = {
 	global_var:sr_site_holder_valles_marineris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_valles_marineris < sr_site_slots_max_valles_marineris
-	sr_mod_next_cost_valles_marineris <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_valles_marineris <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_valles_marineris = {
 	global_var:sr_site_holder_valles_marineris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_valles_marineris < sr_site_slots_max_valles_marineris
-	sr_mod_next_cost_valles_marineris <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_valles_marineris = {
 	global_var:sr_site_holder_valles_marineris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_valles_marineris < sr_site_slots_max_valles_marineris
-	sr_mod_next_cost_valles_marineris <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_valles_marineris = {
 	global_var:sr_site_holder_valles_marineris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_valles_marineris < sr_site_slots_max_valles_marineris
-	sr_mod_next_cost_valles_marineris <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_valles_marineris = {
 	global_var:sr_site_holder_valles_marineris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_valles_marineris < sr_site_slots_max_valles_marineris
-	sr_mod_next_cost_valles_marineris <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_valles_marineris = {
 	global_var:sr_site_holder_valles_marineris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_valles_marineris < sr_site_slots_max_valles_marineris
-	sr_mod_next_cost_valles_marineris <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_valles_marineris = {
 	global_var:sr_site_holder_valles_marineris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_valles_marineris < sr_site_slots_max_valles_marineris
-	sr_mod_next_cost_valles_marineris <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_valles_marineris = {
 	global_var:sr_site_holder_valles_marineris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_valles_marineris < sr_site_slots_max_valles_marineris
-	sr_mod_next_cost_valles_marineris <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_valles_marineris = {
 	global_var:sr_site_holder_valles_marineris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_valles_marineris < sr_site_slots_max_valles_marineris
-	sr_mod_next_cost_valles_marineris <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_valles_marineris = {
 	global_var:sr_site_holder_valles_marineris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_valles_marineris < sr_site_slots_max_valles_marineris
-	sr_mod_next_cost_valles_marineris <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_valles_marineris = {
 	global_var:sr_site_holder_valles_marineris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_valles_marineris < sr_site_slots_max_valles_marineris
-	sr_mod_next_cost_valles_marineris <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_valles_marineris = {
 	global_var:sr_site_holder_valles_marineris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_valles_marineris < sr_site_slots_max_valles_marineris
-	sr_mod_next_cost_valles_marineris <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_valles_marineris = {
 	global_var:sr_site_holder_valles_marineris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_valles_marineris < sr_site_slots_max_valles_marineris
-	sr_mod_next_cost_valles_marineris <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_terra_valles_marineris = {
 	global_var:sr_site_holder_valles_marineris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_valles_marineris < sr_site_slots_max_valles_marineris
-	sr_mod_next_cost_valles_marineris <= sr_mod_fab_stock_cap
 	modifier:country_sr_terraforming_bool = yes
 	sr_mod_terra_used_valles_marineris < sr_terra_max_levels
 	sr_site_terra_open_valles_marineris = yes
@@ -1650,87 +1623,60 @@ sr_mod_can_queue_b_olympus_mons = {
 sr_mod_can_queue_hab_olympus_mons = {
 	global_var:sr_site_holder_olympus_mons ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_olympus_mons < sr_site_slots_max_olympus_mons
-	sr_mod_next_cost_olympus_mons <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_olympus_mons <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_olympus_mons = {
 	global_var:sr_site_holder_olympus_mons ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_olympus_mons < sr_site_slots_max_olympus_mons
-	sr_mod_next_cost_olympus_mons <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_olympus_mons = {
 	global_var:sr_site_holder_olympus_mons ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_olympus_mons < sr_site_slots_max_olympus_mons
-	sr_mod_next_cost_olympus_mons <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_olympus_mons = {
 	global_var:sr_site_holder_olympus_mons ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_olympus_mons < sr_site_slots_max_olympus_mons
-	sr_mod_next_cost_olympus_mons <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_olympus_mons = {
 	global_var:sr_site_holder_olympus_mons ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_olympus_mons < sr_site_slots_max_olympus_mons
-	sr_mod_next_cost_olympus_mons <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_olympus_mons = {
 	global_var:sr_site_holder_olympus_mons ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_olympus_mons < sr_site_slots_max_olympus_mons
-	sr_mod_next_cost_olympus_mons <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_olympus_mons = {
 	global_var:sr_site_holder_olympus_mons ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_olympus_mons < sr_site_slots_max_olympus_mons
-	sr_mod_next_cost_olympus_mons <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_olympus_mons = {
 	global_var:sr_site_holder_olympus_mons ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_olympus_mons < sr_site_slots_max_olympus_mons
-	sr_mod_next_cost_olympus_mons <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_olympus_mons = {
 	global_var:sr_site_holder_olympus_mons ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_olympus_mons < sr_site_slots_max_olympus_mons
-	sr_mod_next_cost_olympus_mons <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_olympus_mons = {
 	global_var:sr_site_holder_olympus_mons ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_olympus_mons < sr_site_slots_max_olympus_mons
-	sr_mod_next_cost_olympus_mons <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_olympus_mons = {
 	global_var:sr_site_holder_olympus_mons ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_olympus_mons < sr_site_slots_max_olympus_mons
-	sr_mod_next_cost_olympus_mons <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_olympus_mons = {
 	global_var:sr_site_holder_olympus_mons ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_olympus_mons < sr_site_slots_max_olympus_mons
-	sr_mod_next_cost_olympus_mons <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_olympus_mons = {
 	global_var:sr_site_holder_olympus_mons ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_olympus_mons < sr_site_slots_max_olympus_mons
-	sr_mod_next_cost_olympus_mons <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_terra_olympus_mons = {
 	global_var:sr_site_holder_olympus_mons ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_olympus_mons < sr_site_slots_max_olympus_mons
-	sr_mod_next_cost_olympus_mons <= sr_mod_fab_stock_cap
 	modifier:country_sr_terraforming_bool = yes
 	sr_mod_terra_used_olympus_mons < sr_terra_max_levels
 	sr_site_terra_open_olympus_mons = yes
@@ -1793,87 +1739,60 @@ sr_mod_can_queue_b_hellas_planitia = {
 sr_mod_can_queue_hab_hellas_planitia = {
 	global_var:sr_site_holder_hellas_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hellas_planitia < sr_site_slots_max_hellas_planitia
-	sr_mod_next_cost_hellas_planitia <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_hellas_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_hellas_planitia = {
 	global_var:sr_site_holder_hellas_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hellas_planitia < sr_site_slots_max_hellas_planitia
-	sr_mod_next_cost_hellas_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_hellas_planitia = {
 	global_var:sr_site_holder_hellas_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hellas_planitia < sr_site_slots_max_hellas_planitia
-	sr_mod_next_cost_hellas_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_hellas_planitia = {
 	global_var:sr_site_holder_hellas_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hellas_planitia < sr_site_slots_max_hellas_planitia
-	sr_mod_next_cost_hellas_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_hellas_planitia = {
 	global_var:sr_site_holder_hellas_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hellas_planitia < sr_site_slots_max_hellas_planitia
-	sr_mod_next_cost_hellas_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_hellas_planitia = {
 	global_var:sr_site_holder_hellas_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hellas_planitia < sr_site_slots_max_hellas_planitia
-	sr_mod_next_cost_hellas_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_hellas_planitia = {
 	global_var:sr_site_holder_hellas_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hellas_planitia < sr_site_slots_max_hellas_planitia
-	sr_mod_next_cost_hellas_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_hellas_planitia = {
 	global_var:sr_site_holder_hellas_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hellas_planitia < sr_site_slots_max_hellas_planitia
-	sr_mod_next_cost_hellas_planitia <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_hellas_planitia = {
 	global_var:sr_site_holder_hellas_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hellas_planitia < sr_site_slots_max_hellas_planitia
-	sr_mod_next_cost_hellas_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_hellas_planitia = {
 	global_var:sr_site_holder_hellas_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hellas_planitia < sr_site_slots_max_hellas_planitia
-	sr_mod_next_cost_hellas_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_hellas_planitia = {
 	global_var:sr_site_holder_hellas_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hellas_planitia < sr_site_slots_max_hellas_planitia
-	sr_mod_next_cost_hellas_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_hellas_planitia = {
 	global_var:sr_site_holder_hellas_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hellas_planitia < sr_site_slots_max_hellas_planitia
-	sr_mod_next_cost_hellas_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_hellas_planitia = {
 	global_var:sr_site_holder_hellas_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hellas_planitia < sr_site_slots_max_hellas_planitia
-	sr_mod_next_cost_hellas_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_terra_hellas_planitia = {
 	global_var:sr_site_holder_hellas_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hellas_planitia < sr_site_slots_max_hellas_planitia
-	sr_mod_next_cost_hellas_planitia <= sr_mod_fab_stock_cap
 	modifier:country_sr_terraforming_bool = yes
 	sr_mod_terra_used_hellas_planitia < sr_terra_max_levels
 	sr_site_terra_open_hellas_planitia = yes
@@ -1936,87 +1855,60 @@ sr_mod_can_queue_b_utopia_planitia = {
 sr_mod_can_queue_hab_utopia_planitia = {
 	global_var:sr_site_holder_utopia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_utopia_planitia < sr_site_slots_max_utopia_planitia
-	sr_mod_next_cost_utopia_planitia <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_utopia_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_utopia_planitia = {
 	global_var:sr_site_holder_utopia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_utopia_planitia < sr_site_slots_max_utopia_planitia
-	sr_mod_next_cost_utopia_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_utopia_planitia = {
 	global_var:sr_site_holder_utopia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_utopia_planitia < sr_site_slots_max_utopia_planitia
-	sr_mod_next_cost_utopia_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_utopia_planitia = {
 	global_var:sr_site_holder_utopia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_utopia_planitia < sr_site_slots_max_utopia_planitia
-	sr_mod_next_cost_utopia_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_utopia_planitia = {
 	global_var:sr_site_holder_utopia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_utopia_planitia < sr_site_slots_max_utopia_planitia
-	sr_mod_next_cost_utopia_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_utopia_planitia = {
 	global_var:sr_site_holder_utopia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_utopia_planitia < sr_site_slots_max_utopia_planitia
-	sr_mod_next_cost_utopia_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_utopia_planitia = {
 	global_var:sr_site_holder_utopia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_utopia_planitia < sr_site_slots_max_utopia_planitia
-	sr_mod_next_cost_utopia_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_utopia_planitia = {
 	global_var:sr_site_holder_utopia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_utopia_planitia < sr_site_slots_max_utopia_planitia
-	sr_mod_next_cost_utopia_planitia <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_utopia_planitia = {
 	global_var:sr_site_holder_utopia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_utopia_planitia < sr_site_slots_max_utopia_planitia
-	sr_mod_next_cost_utopia_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_utopia_planitia = {
 	global_var:sr_site_holder_utopia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_utopia_planitia < sr_site_slots_max_utopia_planitia
-	sr_mod_next_cost_utopia_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_utopia_planitia = {
 	global_var:sr_site_holder_utopia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_utopia_planitia < sr_site_slots_max_utopia_planitia
-	sr_mod_next_cost_utopia_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_utopia_planitia = {
 	global_var:sr_site_holder_utopia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_utopia_planitia < sr_site_slots_max_utopia_planitia
-	sr_mod_next_cost_utopia_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_utopia_planitia = {
 	global_var:sr_site_holder_utopia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_utopia_planitia < sr_site_slots_max_utopia_planitia
-	sr_mod_next_cost_utopia_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_terra_utopia_planitia = {
 	global_var:sr_site_holder_utopia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_utopia_planitia < sr_site_slots_max_utopia_planitia
-	sr_mod_next_cost_utopia_planitia <= sr_mod_fab_stock_cap
 	modifier:country_sr_terraforming_bool = yes
 	sr_mod_terra_used_utopia_planitia < sr_terra_max_levels
 	sr_site_terra_open_utopia_planitia = yes
@@ -2079,87 +1971,60 @@ sr_mod_can_queue_b_arcadia_planitia = {
 sr_mod_can_queue_hab_arcadia_planitia = {
 	global_var:sr_site_holder_arcadia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_arcadia_planitia < sr_site_slots_max_arcadia_planitia
-	sr_mod_next_cost_arcadia_planitia <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_arcadia_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_arcadia_planitia = {
 	global_var:sr_site_holder_arcadia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_arcadia_planitia < sr_site_slots_max_arcadia_planitia
-	sr_mod_next_cost_arcadia_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_arcadia_planitia = {
 	global_var:sr_site_holder_arcadia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_arcadia_planitia < sr_site_slots_max_arcadia_planitia
-	sr_mod_next_cost_arcadia_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_arcadia_planitia = {
 	global_var:sr_site_holder_arcadia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_arcadia_planitia < sr_site_slots_max_arcadia_planitia
-	sr_mod_next_cost_arcadia_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_arcadia_planitia = {
 	global_var:sr_site_holder_arcadia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_arcadia_planitia < sr_site_slots_max_arcadia_planitia
-	sr_mod_next_cost_arcadia_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_arcadia_planitia = {
 	global_var:sr_site_holder_arcadia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_arcadia_planitia < sr_site_slots_max_arcadia_planitia
-	sr_mod_next_cost_arcadia_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_arcadia_planitia = {
 	global_var:sr_site_holder_arcadia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_arcadia_planitia < sr_site_slots_max_arcadia_planitia
-	sr_mod_next_cost_arcadia_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_arcadia_planitia = {
 	global_var:sr_site_holder_arcadia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_arcadia_planitia < sr_site_slots_max_arcadia_planitia
-	sr_mod_next_cost_arcadia_planitia <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_arcadia_planitia = {
 	global_var:sr_site_holder_arcadia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_arcadia_planitia < sr_site_slots_max_arcadia_planitia
-	sr_mod_next_cost_arcadia_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_arcadia_planitia = {
 	global_var:sr_site_holder_arcadia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_arcadia_planitia < sr_site_slots_max_arcadia_planitia
-	sr_mod_next_cost_arcadia_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_arcadia_planitia = {
 	global_var:sr_site_holder_arcadia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_arcadia_planitia < sr_site_slots_max_arcadia_planitia
-	sr_mod_next_cost_arcadia_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_arcadia_planitia = {
 	global_var:sr_site_holder_arcadia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_arcadia_planitia < sr_site_slots_max_arcadia_planitia
-	sr_mod_next_cost_arcadia_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_arcadia_planitia = {
 	global_var:sr_site_holder_arcadia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_arcadia_planitia < sr_site_slots_max_arcadia_planitia
-	sr_mod_next_cost_arcadia_planitia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_terra_arcadia_planitia = {
 	global_var:sr_site_holder_arcadia_planitia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_arcadia_planitia < sr_site_slots_max_arcadia_planitia
-	sr_mod_next_cost_arcadia_planitia <= sr_mod_fab_stock_cap
 	modifier:country_sr_terraforming_bool = yes
 	sr_mod_terra_used_arcadia_planitia < sr_terra_max_levels
 	sr_site_terra_open_arcadia_planitia = yes
@@ -2221,81 +2086,56 @@ sr_mod_can_queue_b_ceres = {
 sr_mod_can_queue_hab_ceres = {
 	global_var:sr_site_holder_ceres ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ceres < sr_site_slots_max_ceres
-	sr_mod_next_cost_ceres <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_ceres <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_ceres = {
 	global_var:sr_site_holder_ceres ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ceres < sr_site_slots_max_ceres
-	sr_mod_next_cost_ceres <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_ceres = {
 	global_var:sr_site_holder_ceres ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ceres < sr_site_slots_max_ceres
-	sr_mod_next_cost_ceres <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_ceres = {
 	global_var:sr_site_holder_ceres ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ceres < sr_site_slots_max_ceres
-	sr_mod_next_cost_ceres <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_ceres = {
 	global_var:sr_site_holder_ceres ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ceres < sr_site_slots_max_ceres
-	sr_mod_next_cost_ceres <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_ceres = {
 	global_var:sr_site_holder_ceres ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ceres < sr_site_slots_max_ceres
-	sr_mod_next_cost_ceres <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_ceres = {
 	global_var:sr_site_holder_ceres ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ceres < sr_site_slots_max_ceres
-	sr_mod_next_cost_ceres <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_ceres = {
 	global_var:sr_site_holder_ceres ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ceres < sr_site_slots_max_ceres
-	sr_mod_next_cost_ceres <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_ceres = {
 	global_var:sr_site_holder_ceres ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ceres < sr_site_slots_max_ceres
-	sr_mod_next_cost_ceres <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_ceres = {
 	global_var:sr_site_holder_ceres ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ceres < sr_site_slots_max_ceres
-	sr_mod_next_cost_ceres <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_ceres = {
 	global_var:sr_site_holder_ceres ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ceres < sr_site_slots_max_ceres
-	sr_mod_next_cost_ceres <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_ceres = {
 	global_var:sr_site_holder_ceres ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ceres < sr_site_slots_max_ceres
-	sr_mod_next_cost_ceres <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_ceres = {
 	global_var:sr_site_holder_ceres ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ceres < sr_site_slots_max_ceres
-	sr_mod_next_cost_ceres <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_ceres = { sr_mod_departs = { BODY = ceres } }
 sr_site_shipping_ceres = {
@@ -2351,81 +2191,56 @@ sr_mod_can_queue_b_vesta = {
 sr_mod_can_queue_hab_vesta = {
 	global_var:sr_site_holder_vesta ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_vesta < sr_site_slots_max_vesta
-	sr_mod_next_cost_vesta <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_vesta <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_vesta = {
 	global_var:sr_site_holder_vesta ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_vesta < sr_site_slots_max_vesta
-	sr_mod_next_cost_vesta <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_vesta = {
 	global_var:sr_site_holder_vesta ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_vesta < sr_site_slots_max_vesta
-	sr_mod_next_cost_vesta <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_vesta = {
 	global_var:sr_site_holder_vesta ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_vesta < sr_site_slots_max_vesta
-	sr_mod_next_cost_vesta <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_vesta = {
 	global_var:sr_site_holder_vesta ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_vesta < sr_site_slots_max_vesta
-	sr_mod_next_cost_vesta <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_vesta = {
 	global_var:sr_site_holder_vesta ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_vesta < sr_site_slots_max_vesta
-	sr_mod_next_cost_vesta <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_vesta = {
 	global_var:sr_site_holder_vesta ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_vesta < sr_site_slots_max_vesta
-	sr_mod_next_cost_vesta <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_vesta = {
 	global_var:sr_site_holder_vesta ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_vesta < sr_site_slots_max_vesta
-	sr_mod_next_cost_vesta <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_vesta = {
 	global_var:sr_site_holder_vesta ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_vesta < sr_site_slots_max_vesta
-	sr_mod_next_cost_vesta <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_vesta = {
 	global_var:sr_site_holder_vesta ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_vesta < sr_site_slots_max_vesta
-	sr_mod_next_cost_vesta <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_vesta = {
 	global_var:sr_site_holder_vesta ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_vesta < sr_site_slots_max_vesta
-	sr_mod_next_cost_vesta <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_vesta = {
 	global_var:sr_site_holder_vesta ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_vesta < sr_site_slots_max_vesta
-	sr_mod_next_cost_vesta <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_vesta = {
 	global_var:sr_site_holder_vesta ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_vesta < sr_site_slots_max_vesta
-	sr_mod_next_cost_vesta <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_vesta = { sr_mod_departs = { BODY = vesta } }
 sr_site_shipping_vesta = {
@@ -2481,81 +2296,56 @@ sr_mod_can_queue_b_psyche = {
 sr_mod_can_queue_hab_psyche = {
 	global_var:sr_site_holder_psyche ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_psyche < sr_site_slots_max_psyche
-	sr_mod_next_cost_psyche <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_psyche <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_psyche = {
 	global_var:sr_site_holder_psyche ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_psyche < sr_site_slots_max_psyche
-	sr_mod_next_cost_psyche <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_psyche = {
 	global_var:sr_site_holder_psyche ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_psyche < sr_site_slots_max_psyche
-	sr_mod_next_cost_psyche <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_psyche = {
 	global_var:sr_site_holder_psyche ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_psyche < sr_site_slots_max_psyche
-	sr_mod_next_cost_psyche <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_psyche = {
 	global_var:sr_site_holder_psyche ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_psyche < sr_site_slots_max_psyche
-	sr_mod_next_cost_psyche <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_psyche = {
 	global_var:sr_site_holder_psyche ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_psyche < sr_site_slots_max_psyche
-	sr_mod_next_cost_psyche <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_psyche = {
 	global_var:sr_site_holder_psyche ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_psyche < sr_site_slots_max_psyche
-	sr_mod_next_cost_psyche <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_psyche = {
 	global_var:sr_site_holder_psyche ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_psyche < sr_site_slots_max_psyche
-	sr_mod_next_cost_psyche <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_psyche = {
 	global_var:sr_site_holder_psyche ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_psyche < sr_site_slots_max_psyche
-	sr_mod_next_cost_psyche <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_psyche = {
 	global_var:sr_site_holder_psyche ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_psyche < sr_site_slots_max_psyche
-	sr_mod_next_cost_psyche <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_psyche = {
 	global_var:sr_site_holder_psyche ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_psyche < sr_site_slots_max_psyche
-	sr_mod_next_cost_psyche <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_psyche = {
 	global_var:sr_site_holder_psyche ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_psyche < sr_site_slots_max_psyche
-	sr_mod_next_cost_psyche <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_psyche = {
 	global_var:sr_site_holder_psyche ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_psyche < sr_site_slots_max_psyche
-	sr_mod_next_cost_psyche <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_psyche = { sr_mod_departs = { BODY = psyche } }
 sr_site_shipping_psyche = {
@@ -2611,81 +2401,56 @@ sr_mod_can_queue_b_pallas = {
 sr_mod_can_queue_hab_pallas = {
 	global_var:sr_site_holder_pallas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pallas < sr_site_slots_max_pallas
-	sr_mod_next_cost_pallas <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_pallas <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_pallas = {
 	global_var:sr_site_holder_pallas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pallas < sr_site_slots_max_pallas
-	sr_mod_next_cost_pallas <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_pallas = {
 	global_var:sr_site_holder_pallas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pallas < sr_site_slots_max_pallas
-	sr_mod_next_cost_pallas <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_pallas = {
 	global_var:sr_site_holder_pallas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pallas < sr_site_slots_max_pallas
-	sr_mod_next_cost_pallas <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_pallas = {
 	global_var:sr_site_holder_pallas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pallas < sr_site_slots_max_pallas
-	sr_mod_next_cost_pallas <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_pallas = {
 	global_var:sr_site_holder_pallas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pallas < sr_site_slots_max_pallas
-	sr_mod_next_cost_pallas <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_pallas = {
 	global_var:sr_site_holder_pallas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pallas < sr_site_slots_max_pallas
-	sr_mod_next_cost_pallas <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_pallas = {
 	global_var:sr_site_holder_pallas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pallas < sr_site_slots_max_pallas
-	sr_mod_next_cost_pallas <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_pallas = {
 	global_var:sr_site_holder_pallas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pallas < sr_site_slots_max_pallas
-	sr_mod_next_cost_pallas <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_pallas = {
 	global_var:sr_site_holder_pallas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pallas < sr_site_slots_max_pallas
-	sr_mod_next_cost_pallas <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_pallas = {
 	global_var:sr_site_holder_pallas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pallas < sr_site_slots_max_pallas
-	sr_mod_next_cost_pallas <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_pallas = {
 	global_var:sr_site_holder_pallas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pallas < sr_site_slots_max_pallas
-	sr_mod_next_cost_pallas <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_pallas = {
 	global_var:sr_site_holder_pallas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pallas < sr_site_slots_max_pallas
-	sr_mod_next_cost_pallas <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_pallas = { sr_mod_departs = { BODY = pallas } }
 sr_site_shipping_pallas = {
@@ -2741,81 +2506,56 @@ sr_mod_can_queue_b_hygiea = {
 sr_mod_can_queue_hab_hygiea = {
 	global_var:sr_site_holder_hygiea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hygiea < sr_site_slots_max_hygiea
-	sr_mod_next_cost_hygiea <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_hygiea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_hygiea = {
 	global_var:sr_site_holder_hygiea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hygiea < sr_site_slots_max_hygiea
-	sr_mod_next_cost_hygiea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_hygiea = {
 	global_var:sr_site_holder_hygiea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hygiea < sr_site_slots_max_hygiea
-	sr_mod_next_cost_hygiea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_hygiea = {
 	global_var:sr_site_holder_hygiea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hygiea < sr_site_slots_max_hygiea
-	sr_mod_next_cost_hygiea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_hygiea = {
 	global_var:sr_site_holder_hygiea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hygiea < sr_site_slots_max_hygiea
-	sr_mod_next_cost_hygiea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_hygiea = {
 	global_var:sr_site_holder_hygiea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hygiea < sr_site_slots_max_hygiea
-	sr_mod_next_cost_hygiea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_hygiea = {
 	global_var:sr_site_holder_hygiea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hygiea < sr_site_slots_max_hygiea
-	sr_mod_next_cost_hygiea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_hygiea = {
 	global_var:sr_site_holder_hygiea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hygiea < sr_site_slots_max_hygiea
-	sr_mod_next_cost_hygiea <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_hygiea = {
 	global_var:sr_site_holder_hygiea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hygiea < sr_site_slots_max_hygiea
-	sr_mod_next_cost_hygiea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_hygiea = {
 	global_var:sr_site_holder_hygiea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hygiea < sr_site_slots_max_hygiea
-	sr_mod_next_cost_hygiea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_hygiea = {
 	global_var:sr_site_holder_hygiea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hygiea < sr_site_slots_max_hygiea
-	sr_mod_next_cost_hygiea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_hygiea = {
 	global_var:sr_site_holder_hygiea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hygiea < sr_site_slots_max_hygiea
-	sr_mod_next_cost_hygiea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_hygiea = {
 	global_var:sr_site_holder_hygiea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_hygiea < sr_site_slots_max_hygiea
-	sr_mod_next_cost_hygiea <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_hygiea = { sr_mod_departs = { BODY = hygiea } }
 sr_site_shipping_hygiea = {
@@ -2871,81 +2611,56 @@ sr_mod_can_queue_b_io = {
 sr_mod_can_queue_hab_io = {
 	global_var:sr_site_holder_io ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_io < sr_site_slots_max_io
-	sr_mod_next_cost_io <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_io <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_io = {
 	global_var:sr_site_holder_io ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_io < sr_site_slots_max_io
-	sr_mod_next_cost_io <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_io = {
 	global_var:sr_site_holder_io ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_io < sr_site_slots_max_io
-	sr_mod_next_cost_io <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_io = {
 	global_var:sr_site_holder_io ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_io < sr_site_slots_max_io
-	sr_mod_next_cost_io <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_io = {
 	global_var:sr_site_holder_io ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_io < sr_site_slots_max_io
-	sr_mod_next_cost_io <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_io = {
 	global_var:sr_site_holder_io ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_io < sr_site_slots_max_io
-	sr_mod_next_cost_io <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_io = {
 	global_var:sr_site_holder_io ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_io < sr_site_slots_max_io
-	sr_mod_next_cost_io <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_io = {
 	global_var:sr_site_holder_io ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_io < sr_site_slots_max_io
-	sr_mod_next_cost_io <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_io = {
 	global_var:sr_site_holder_io ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_io < sr_site_slots_max_io
-	sr_mod_next_cost_io <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_io = {
 	global_var:sr_site_holder_io ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_io < sr_site_slots_max_io
-	sr_mod_next_cost_io <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_io = {
 	global_var:sr_site_holder_io ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_io < sr_site_slots_max_io
-	sr_mod_next_cost_io <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_io = {
 	global_var:sr_site_holder_io ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_io < sr_site_slots_max_io
-	sr_mod_next_cost_io <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_io = {
 	global_var:sr_site_holder_io ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_io < sr_site_slots_max_io
-	sr_mod_next_cost_io <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_io = { sr_mod_departs = { BODY = jupiter } }
 sr_site_shipping_io = {
@@ -3001,81 +2716,56 @@ sr_mod_can_queue_b_europa = {
 sr_mod_can_queue_hab_europa = {
 	global_var:sr_site_holder_europa ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_europa < sr_site_slots_max_europa
-	sr_mod_next_cost_europa <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_europa <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_europa = {
 	global_var:sr_site_holder_europa ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_europa < sr_site_slots_max_europa
-	sr_mod_next_cost_europa <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_europa = {
 	global_var:sr_site_holder_europa ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_europa < sr_site_slots_max_europa
-	sr_mod_next_cost_europa <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_europa = {
 	global_var:sr_site_holder_europa ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_europa < sr_site_slots_max_europa
-	sr_mod_next_cost_europa <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_europa = {
 	global_var:sr_site_holder_europa ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_europa < sr_site_slots_max_europa
-	sr_mod_next_cost_europa <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_europa = {
 	global_var:sr_site_holder_europa ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_europa < sr_site_slots_max_europa
-	sr_mod_next_cost_europa <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_europa = {
 	global_var:sr_site_holder_europa ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_europa < sr_site_slots_max_europa
-	sr_mod_next_cost_europa <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_europa = {
 	global_var:sr_site_holder_europa ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_europa < sr_site_slots_max_europa
-	sr_mod_next_cost_europa <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_europa = {
 	global_var:sr_site_holder_europa ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_europa < sr_site_slots_max_europa
-	sr_mod_next_cost_europa <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_europa = {
 	global_var:sr_site_holder_europa ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_europa < sr_site_slots_max_europa
-	sr_mod_next_cost_europa <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_europa = {
 	global_var:sr_site_holder_europa ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_europa < sr_site_slots_max_europa
-	sr_mod_next_cost_europa <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_europa = {
 	global_var:sr_site_holder_europa ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_europa < sr_site_slots_max_europa
-	sr_mod_next_cost_europa <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_europa = {
 	global_var:sr_site_holder_europa ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_europa < sr_site_slots_max_europa
-	sr_mod_next_cost_europa <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_europa = { sr_mod_departs = { BODY = jupiter } }
 sr_site_shipping_europa = {
@@ -3132,87 +2822,60 @@ sr_mod_can_queue_b_ganymede = {
 sr_mod_can_queue_hab_ganymede = {
 	global_var:sr_site_holder_ganymede ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ganymede < sr_site_slots_max_ganymede
-	sr_mod_next_cost_ganymede <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_ganymede <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_ganymede = {
 	global_var:sr_site_holder_ganymede ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ganymede < sr_site_slots_max_ganymede
-	sr_mod_next_cost_ganymede <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_ganymede = {
 	global_var:sr_site_holder_ganymede ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ganymede < sr_site_slots_max_ganymede
-	sr_mod_next_cost_ganymede <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_ganymede = {
 	global_var:sr_site_holder_ganymede ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ganymede < sr_site_slots_max_ganymede
-	sr_mod_next_cost_ganymede <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_ganymede = {
 	global_var:sr_site_holder_ganymede ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ganymede < sr_site_slots_max_ganymede
-	sr_mod_next_cost_ganymede <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_ganymede = {
 	global_var:sr_site_holder_ganymede ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ganymede < sr_site_slots_max_ganymede
-	sr_mod_next_cost_ganymede <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_ganymede = {
 	global_var:sr_site_holder_ganymede ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ganymede < sr_site_slots_max_ganymede
-	sr_mod_next_cost_ganymede <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_ganymede = {
 	global_var:sr_site_holder_ganymede ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ganymede < sr_site_slots_max_ganymede
-	sr_mod_next_cost_ganymede <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_ganymede = {
 	global_var:sr_site_holder_ganymede ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ganymede < sr_site_slots_max_ganymede
-	sr_mod_next_cost_ganymede <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_ganymede = {
 	global_var:sr_site_holder_ganymede ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ganymede < sr_site_slots_max_ganymede
-	sr_mod_next_cost_ganymede <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_ganymede = {
 	global_var:sr_site_holder_ganymede ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ganymede < sr_site_slots_max_ganymede
-	sr_mod_next_cost_ganymede <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_ganymede = {
 	global_var:sr_site_holder_ganymede ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ganymede < sr_site_slots_max_ganymede
-	sr_mod_next_cost_ganymede <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_ganymede = {
 	global_var:sr_site_holder_ganymede ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ganymede < sr_site_slots_max_ganymede
-	sr_mod_next_cost_ganymede <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_terra_ganymede = {
 	global_var:sr_site_holder_ganymede ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ganymede < sr_site_slots_max_ganymede
-	sr_mod_next_cost_ganymede <= sr_mod_fab_stock_cap
 	modifier:country_sr_terraforming_bool = yes
 	sr_mod_terra_used_ganymede < sr_terra_max_levels
 	sr_site_terra_open_ganymede = yes
@@ -3275,87 +2938,60 @@ sr_mod_can_queue_b_callisto = {
 sr_mod_can_queue_hab_callisto = {
 	global_var:sr_site_holder_callisto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_callisto < sr_site_slots_max_callisto
-	sr_mod_next_cost_callisto <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_callisto <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_callisto = {
 	global_var:sr_site_holder_callisto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_callisto < sr_site_slots_max_callisto
-	sr_mod_next_cost_callisto <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_callisto = {
 	global_var:sr_site_holder_callisto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_callisto < sr_site_slots_max_callisto
-	sr_mod_next_cost_callisto <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_callisto = {
 	global_var:sr_site_holder_callisto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_callisto < sr_site_slots_max_callisto
-	sr_mod_next_cost_callisto <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_callisto = {
 	global_var:sr_site_holder_callisto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_callisto < sr_site_slots_max_callisto
-	sr_mod_next_cost_callisto <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_callisto = {
 	global_var:sr_site_holder_callisto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_callisto < sr_site_slots_max_callisto
-	sr_mod_next_cost_callisto <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_callisto = {
 	global_var:sr_site_holder_callisto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_callisto < sr_site_slots_max_callisto
-	sr_mod_next_cost_callisto <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_callisto = {
 	global_var:sr_site_holder_callisto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_callisto < sr_site_slots_max_callisto
-	sr_mod_next_cost_callisto <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_callisto = {
 	global_var:sr_site_holder_callisto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_callisto < sr_site_slots_max_callisto
-	sr_mod_next_cost_callisto <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_callisto = {
 	global_var:sr_site_holder_callisto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_callisto < sr_site_slots_max_callisto
-	sr_mod_next_cost_callisto <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_callisto = {
 	global_var:sr_site_holder_callisto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_callisto < sr_site_slots_max_callisto
-	sr_mod_next_cost_callisto <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_callisto = {
 	global_var:sr_site_holder_callisto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_callisto < sr_site_slots_max_callisto
-	sr_mod_next_cost_callisto <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_callisto = {
 	global_var:sr_site_holder_callisto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_callisto < sr_site_slots_max_callisto
-	sr_mod_next_cost_callisto <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_terra_callisto = {
 	global_var:sr_site_holder_callisto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_callisto < sr_site_slots_max_callisto
-	sr_mod_next_cost_callisto <= sr_mod_fab_stock_cap
 	modifier:country_sr_terraforming_bool = yes
 	sr_mod_terra_used_callisto < sr_terra_max_levels
 	sr_site_terra_open_callisto = yes
@@ -3417,81 +3053,56 @@ sr_mod_can_queue_b_himalia = {
 sr_mod_can_queue_hab_himalia = {
 	global_var:sr_site_holder_himalia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_himalia < sr_site_slots_max_himalia
-	sr_mod_next_cost_himalia <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_himalia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_himalia = {
 	global_var:sr_site_holder_himalia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_himalia < sr_site_slots_max_himalia
-	sr_mod_next_cost_himalia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_himalia = {
 	global_var:sr_site_holder_himalia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_himalia < sr_site_slots_max_himalia
-	sr_mod_next_cost_himalia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_himalia = {
 	global_var:sr_site_holder_himalia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_himalia < sr_site_slots_max_himalia
-	sr_mod_next_cost_himalia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_himalia = {
 	global_var:sr_site_holder_himalia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_himalia < sr_site_slots_max_himalia
-	sr_mod_next_cost_himalia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_himalia = {
 	global_var:sr_site_holder_himalia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_himalia < sr_site_slots_max_himalia
-	sr_mod_next_cost_himalia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_himalia = {
 	global_var:sr_site_holder_himalia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_himalia < sr_site_slots_max_himalia
-	sr_mod_next_cost_himalia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_himalia = {
 	global_var:sr_site_holder_himalia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_himalia < sr_site_slots_max_himalia
-	sr_mod_next_cost_himalia <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_himalia = {
 	global_var:sr_site_holder_himalia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_himalia < sr_site_slots_max_himalia
-	sr_mod_next_cost_himalia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_himalia = {
 	global_var:sr_site_holder_himalia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_himalia < sr_site_slots_max_himalia
-	sr_mod_next_cost_himalia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_himalia = {
 	global_var:sr_site_holder_himalia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_himalia < sr_site_slots_max_himalia
-	sr_mod_next_cost_himalia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_himalia = {
 	global_var:sr_site_holder_himalia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_himalia < sr_site_slots_max_himalia
-	sr_mod_next_cost_himalia <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_himalia = {
 	global_var:sr_site_holder_himalia ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_himalia < sr_site_slots_max_himalia
-	sr_mod_next_cost_himalia <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_himalia = { sr_mod_departs = { BODY = jupiter } }
 sr_site_shipping_himalia = {
@@ -3547,81 +3158,56 @@ sr_mod_can_queue_b_amalthea = {
 sr_mod_can_queue_hab_amalthea = {
 	global_var:sr_site_holder_amalthea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_amalthea < sr_site_slots_max_amalthea
-	sr_mod_next_cost_amalthea <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_amalthea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_amalthea = {
 	global_var:sr_site_holder_amalthea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_amalthea < sr_site_slots_max_amalthea
-	sr_mod_next_cost_amalthea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_amalthea = {
 	global_var:sr_site_holder_amalthea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_amalthea < sr_site_slots_max_amalthea
-	sr_mod_next_cost_amalthea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_amalthea = {
 	global_var:sr_site_holder_amalthea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_amalthea < sr_site_slots_max_amalthea
-	sr_mod_next_cost_amalthea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_amalthea = {
 	global_var:sr_site_holder_amalthea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_amalthea < sr_site_slots_max_amalthea
-	sr_mod_next_cost_amalthea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_amalthea = {
 	global_var:sr_site_holder_amalthea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_amalthea < sr_site_slots_max_amalthea
-	sr_mod_next_cost_amalthea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_amalthea = {
 	global_var:sr_site_holder_amalthea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_amalthea < sr_site_slots_max_amalthea
-	sr_mod_next_cost_amalthea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_amalthea = {
 	global_var:sr_site_holder_amalthea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_amalthea < sr_site_slots_max_amalthea
-	sr_mod_next_cost_amalthea <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_amalthea = {
 	global_var:sr_site_holder_amalthea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_amalthea < sr_site_slots_max_amalthea
-	sr_mod_next_cost_amalthea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_amalthea = {
 	global_var:sr_site_holder_amalthea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_amalthea < sr_site_slots_max_amalthea
-	sr_mod_next_cost_amalthea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_amalthea = {
 	global_var:sr_site_holder_amalthea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_amalthea < sr_site_slots_max_amalthea
-	sr_mod_next_cost_amalthea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_amalthea = {
 	global_var:sr_site_holder_amalthea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_amalthea < sr_site_slots_max_amalthea
-	sr_mod_next_cost_amalthea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_amalthea = {
 	global_var:sr_site_holder_amalthea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_amalthea < sr_site_slots_max_amalthea
-	sr_mod_next_cost_amalthea <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_amalthea = { sr_mod_departs = { BODY = jupiter } }
 sr_site_shipping_amalthea = {
@@ -3678,87 +3264,60 @@ sr_mod_can_queue_b_venus = {
 sr_mod_can_queue_hab_venus = {
 	global_var:sr_site_holder_venus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_venus < sr_site_slots_max_venus
-	sr_mod_next_cost_venus <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_venus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_venus = {
 	global_var:sr_site_holder_venus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_venus < sr_site_slots_max_venus
-	sr_mod_next_cost_venus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_venus = {
 	global_var:sr_site_holder_venus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_venus < sr_site_slots_max_venus
-	sr_mod_next_cost_venus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_venus = {
 	global_var:sr_site_holder_venus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_venus < sr_site_slots_max_venus
-	sr_mod_next_cost_venus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_venus = {
 	global_var:sr_site_holder_venus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_venus < sr_site_slots_max_venus
-	sr_mod_next_cost_venus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_venus = {
 	global_var:sr_site_holder_venus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_venus < sr_site_slots_max_venus
-	sr_mod_next_cost_venus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_venus = {
 	global_var:sr_site_holder_venus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_venus < sr_site_slots_max_venus
-	sr_mod_next_cost_venus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_venus = {
 	global_var:sr_site_holder_venus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_venus < sr_site_slots_max_venus
-	sr_mod_next_cost_venus <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_venus = {
 	global_var:sr_site_holder_venus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_venus < sr_site_slots_max_venus
-	sr_mod_next_cost_venus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_venus = {
 	global_var:sr_site_holder_venus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_venus < sr_site_slots_max_venus
-	sr_mod_next_cost_venus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_venus = {
 	global_var:sr_site_holder_venus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_venus < sr_site_slots_max_venus
-	sr_mod_next_cost_venus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_venus = {
 	global_var:sr_site_holder_venus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_venus < sr_site_slots_max_venus
-	sr_mod_next_cost_venus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_venus = {
 	global_var:sr_site_holder_venus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_venus < sr_site_slots_max_venus
-	sr_mod_next_cost_venus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_terra_venus = {
 	global_var:sr_site_holder_venus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_venus < sr_site_slots_max_venus
-	sr_mod_next_cost_venus <= sr_mod_fab_stock_cap
 	modifier:country_sr_terraforming_bool = yes
 	sr_mod_terra_used_venus < sr_terra_max_levels
 	sr_site_terra_open_venus = yes
@@ -3820,81 +3379,56 @@ sr_mod_can_queue_b_mercury = {
 sr_mod_can_queue_hab_mercury = {
 	global_var:sr_site_holder_mercury ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mercury < sr_site_slots_max_mercury
-	sr_mod_next_cost_mercury <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_mercury <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_mercury = {
 	global_var:sr_site_holder_mercury ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mercury < sr_site_slots_max_mercury
-	sr_mod_next_cost_mercury <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_mercury = {
 	global_var:sr_site_holder_mercury ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mercury < sr_site_slots_max_mercury
-	sr_mod_next_cost_mercury <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_mercury = {
 	global_var:sr_site_holder_mercury ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mercury < sr_site_slots_max_mercury
-	sr_mod_next_cost_mercury <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_mercury = {
 	global_var:sr_site_holder_mercury ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mercury < sr_site_slots_max_mercury
-	sr_mod_next_cost_mercury <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_mercury = {
 	global_var:sr_site_holder_mercury ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mercury < sr_site_slots_max_mercury
-	sr_mod_next_cost_mercury <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_mercury = {
 	global_var:sr_site_holder_mercury ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mercury < sr_site_slots_max_mercury
-	sr_mod_next_cost_mercury <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_mercury = {
 	global_var:sr_site_holder_mercury ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mercury < sr_site_slots_max_mercury
-	sr_mod_next_cost_mercury <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_mercury = {
 	global_var:sr_site_holder_mercury ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mercury < sr_site_slots_max_mercury
-	sr_mod_next_cost_mercury <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_mercury = {
 	global_var:sr_site_holder_mercury ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mercury < sr_site_slots_max_mercury
-	sr_mod_next_cost_mercury <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_mercury = {
 	global_var:sr_site_holder_mercury ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mercury < sr_site_slots_max_mercury
-	sr_mod_next_cost_mercury <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_mercury = {
 	global_var:sr_site_holder_mercury ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mercury < sr_site_slots_max_mercury
-	sr_mod_next_cost_mercury <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_mercury = {
 	global_var:sr_site_holder_mercury ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mercury < sr_site_slots_max_mercury
-	sr_mod_next_cost_mercury <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_mercury = { always = yes }
 sr_site_shipping_mercury = {
@@ -3951,87 +3485,60 @@ sr_mod_can_queue_b_titan = {
 sr_mod_can_queue_hab_titan = {
 	global_var:sr_site_holder_titan ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titan < sr_site_slots_max_titan
-	sr_mod_next_cost_titan <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_titan <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_titan = {
 	global_var:sr_site_holder_titan ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titan < sr_site_slots_max_titan
-	sr_mod_next_cost_titan <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_titan = {
 	global_var:sr_site_holder_titan ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titan < sr_site_slots_max_titan
-	sr_mod_next_cost_titan <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_titan = {
 	global_var:sr_site_holder_titan ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titan < sr_site_slots_max_titan
-	sr_mod_next_cost_titan <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_titan = {
 	global_var:sr_site_holder_titan ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titan < sr_site_slots_max_titan
-	sr_mod_next_cost_titan <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_titan = {
 	global_var:sr_site_holder_titan ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titan < sr_site_slots_max_titan
-	sr_mod_next_cost_titan <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_titan = {
 	global_var:sr_site_holder_titan ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titan < sr_site_slots_max_titan
-	sr_mod_next_cost_titan <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_titan = {
 	global_var:sr_site_holder_titan ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titan < sr_site_slots_max_titan
-	sr_mod_next_cost_titan <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_titan = {
 	global_var:sr_site_holder_titan ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titan < sr_site_slots_max_titan
-	sr_mod_next_cost_titan <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_titan = {
 	global_var:sr_site_holder_titan ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titan < sr_site_slots_max_titan
-	sr_mod_next_cost_titan <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_titan = {
 	global_var:sr_site_holder_titan ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titan < sr_site_slots_max_titan
-	sr_mod_next_cost_titan <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_titan = {
 	global_var:sr_site_holder_titan ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titan < sr_site_slots_max_titan
-	sr_mod_next_cost_titan <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_titan = {
 	global_var:sr_site_holder_titan ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titan < sr_site_slots_max_titan
-	sr_mod_next_cost_titan <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_terra_titan = {
 	global_var:sr_site_holder_titan ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titan < sr_site_slots_max_titan
-	sr_mod_next_cost_titan <= sr_mod_fab_stock_cap
 	modifier:country_sr_terraforming_bool = yes
 	sr_mod_terra_used_titan < sr_terra_max_levels
 	sr_site_terra_open_titan = yes
@@ -4093,81 +3600,56 @@ sr_mod_can_queue_b_enceladus = {
 sr_mod_can_queue_hab_enceladus = {
 	global_var:sr_site_holder_enceladus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_enceladus < sr_site_slots_max_enceladus
-	sr_mod_next_cost_enceladus <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_enceladus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_enceladus = {
 	global_var:sr_site_holder_enceladus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_enceladus < sr_site_slots_max_enceladus
-	sr_mod_next_cost_enceladus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_enceladus = {
 	global_var:sr_site_holder_enceladus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_enceladus < sr_site_slots_max_enceladus
-	sr_mod_next_cost_enceladus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_enceladus = {
 	global_var:sr_site_holder_enceladus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_enceladus < sr_site_slots_max_enceladus
-	sr_mod_next_cost_enceladus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_enceladus = {
 	global_var:sr_site_holder_enceladus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_enceladus < sr_site_slots_max_enceladus
-	sr_mod_next_cost_enceladus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_enceladus = {
 	global_var:sr_site_holder_enceladus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_enceladus < sr_site_slots_max_enceladus
-	sr_mod_next_cost_enceladus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_enceladus = {
 	global_var:sr_site_holder_enceladus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_enceladus < sr_site_slots_max_enceladus
-	sr_mod_next_cost_enceladus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_enceladus = {
 	global_var:sr_site_holder_enceladus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_enceladus < sr_site_slots_max_enceladus
-	sr_mod_next_cost_enceladus <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_enceladus = {
 	global_var:sr_site_holder_enceladus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_enceladus < sr_site_slots_max_enceladus
-	sr_mod_next_cost_enceladus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_enceladus = {
 	global_var:sr_site_holder_enceladus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_enceladus < sr_site_slots_max_enceladus
-	sr_mod_next_cost_enceladus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_enceladus = {
 	global_var:sr_site_holder_enceladus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_enceladus < sr_site_slots_max_enceladus
-	sr_mod_next_cost_enceladus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_enceladus = {
 	global_var:sr_site_holder_enceladus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_enceladus < sr_site_slots_max_enceladus
-	sr_mod_next_cost_enceladus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_enceladus = {
 	global_var:sr_site_holder_enceladus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_enceladus < sr_site_slots_max_enceladus
-	sr_mod_next_cost_enceladus <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_enceladus = { sr_mod_departs = { BODY = saturn } }
 sr_site_shipping_enceladus = {
@@ -4223,81 +3705,56 @@ sr_mod_can_queue_b_rhea = {
 sr_mod_can_queue_hab_rhea = {
 	global_var:sr_site_holder_rhea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_rhea < sr_site_slots_max_rhea
-	sr_mod_next_cost_rhea <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_rhea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_rhea = {
 	global_var:sr_site_holder_rhea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_rhea < sr_site_slots_max_rhea
-	sr_mod_next_cost_rhea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_rhea = {
 	global_var:sr_site_holder_rhea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_rhea < sr_site_slots_max_rhea
-	sr_mod_next_cost_rhea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_rhea = {
 	global_var:sr_site_holder_rhea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_rhea < sr_site_slots_max_rhea
-	sr_mod_next_cost_rhea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_rhea = {
 	global_var:sr_site_holder_rhea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_rhea < sr_site_slots_max_rhea
-	sr_mod_next_cost_rhea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_rhea = {
 	global_var:sr_site_holder_rhea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_rhea < sr_site_slots_max_rhea
-	sr_mod_next_cost_rhea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_rhea = {
 	global_var:sr_site_holder_rhea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_rhea < sr_site_slots_max_rhea
-	sr_mod_next_cost_rhea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_rhea = {
 	global_var:sr_site_holder_rhea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_rhea < sr_site_slots_max_rhea
-	sr_mod_next_cost_rhea <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_rhea = {
 	global_var:sr_site_holder_rhea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_rhea < sr_site_slots_max_rhea
-	sr_mod_next_cost_rhea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_rhea = {
 	global_var:sr_site_holder_rhea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_rhea < sr_site_slots_max_rhea
-	sr_mod_next_cost_rhea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_rhea = {
 	global_var:sr_site_holder_rhea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_rhea < sr_site_slots_max_rhea
-	sr_mod_next_cost_rhea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_rhea = {
 	global_var:sr_site_holder_rhea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_rhea < sr_site_slots_max_rhea
-	sr_mod_next_cost_rhea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_rhea = {
 	global_var:sr_site_holder_rhea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_rhea < sr_site_slots_max_rhea
-	sr_mod_next_cost_rhea <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_rhea = { sr_mod_departs = { BODY = saturn } }
 sr_site_shipping_rhea = {
@@ -4353,81 +3810,56 @@ sr_mod_can_queue_b_mimas = {
 sr_mod_can_queue_hab_mimas = {
 	global_var:sr_site_holder_mimas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mimas < sr_site_slots_max_mimas
-	sr_mod_next_cost_mimas <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_mimas <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_mimas = {
 	global_var:sr_site_holder_mimas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mimas < sr_site_slots_max_mimas
-	sr_mod_next_cost_mimas <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_mimas = {
 	global_var:sr_site_holder_mimas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mimas < sr_site_slots_max_mimas
-	sr_mod_next_cost_mimas <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_mimas = {
 	global_var:sr_site_holder_mimas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mimas < sr_site_slots_max_mimas
-	sr_mod_next_cost_mimas <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_mimas = {
 	global_var:sr_site_holder_mimas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mimas < sr_site_slots_max_mimas
-	sr_mod_next_cost_mimas <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_mimas = {
 	global_var:sr_site_holder_mimas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mimas < sr_site_slots_max_mimas
-	sr_mod_next_cost_mimas <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_mimas = {
 	global_var:sr_site_holder_mimas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mimas < sr_site_slots_max_mimas
-	sr_mod_next_cost_mimas <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_mimas = {
 	global_var:sr_site_holder_mimas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mimas < sr_site_slots_max_mimas
-	sr_mod_next_cost_mimas <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_mimas = {
 	global_var:sr_site_holder_mimas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mimas < sr_site_slots_max_mimas
-	sr_mod_next_cost_mimas <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_mimas = {
 	global_var:sr_site_holder_mimas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mimas < sr_site_slots_max_mimas
-	sr_mod_next_cost_mimas <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_mimas = {
 	global_var:sr_site_holder_mimas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mimas < sr_site_slots_max_mimas
-	sr_mod_next_cost_mimas <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_mimas = {
 	global_var:sr_site_holder_mimas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mimas < sr_site_slots_max_mimas
-	sr_mod_next_cost_mimas <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_mimas = {
 	global_var:sr_site_holder_mimas ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_mimas < sr_site_slots_max_mimas
-	sr_mod_next_cost_mimas <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_mimas = { sr_mod_departs = { BODY = saturn } }
 sr_site_shipping_mimas = {
@@ -4483,81 +3915,56 @@ sr_mod_can_queue_b_iapetus = {
 sr_mod_can_queue_hab_iapetus = {
 	global_var:sr_site_holder_iapetus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_iapetus < sr_site_slots_max_iapetus
-	sr_mod_next_cost_iapetus <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_iapetus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_iapetus = {
 	global_var:sr_site_holder_iapetus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_iapetus < sr_site_slots_max_iapetus
-	sr_mod_next_cost_iapetus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_iapetus = {
 	global_var:sr_site_holder_iapetus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_iapetus < sr_site_slots_max_iapetus
-	sr_mod_next_cost_iapetus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_iapetus = {
 	global_var:sr_site_holder_iapetus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_iapetus < sr_site_slots_max_iapetus
-	sr_mod_next_cost_iapetus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_iapetus = {
 	global_var:sr_site_holder_iapetus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_iapetus < sr_site_slots_max_iapetus
-	sr_mod_next_cost_iapetus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_iapetus = {
 	global_var:sr_site_holder_iapetus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_iapetus < sr_site_slots_max_iapetus
-	sr_mod_next_cost_iapetus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_iapetus = {
 	global_var:sr_site_holder_iapetus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_iapetus < sr_site_slots_max_iapetus
-	sr_mod_next_cost_iapetus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_iapetus = {
 	global_var:sr_site_holder_iapetus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_iapetus < sr_site_slots_max_iapetus
-	sr_mod_next_cost_iapetus <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_iapetus = {
 	global_var:sr_site_holder_iapetus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_iapetus < sr_site_slots_max_iapetus
-	sr_mod_next_cost_iapetus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_iapetus = {
 	global_var:sr_site_holder_iapetus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_iapetus < sr_site_slots_max_iapetus
-	sr_mod_next_cost_iapetus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_iapetus = {
 	global_var:sr_site_holder_iapetus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_iapetus < sr_site_slots_max_iapetus
-	sr_mod_next_cost_iapetus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_iapetus = {
 	global_var:sr_site_holder_iapetus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_iapetus < sr_site_slots_max_iapetus
-	sr_mod_next_cost_iapetus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_iapetus = {
 	global_var:sr_site_holder_iapetus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_iapetus < sr_site_slots_max_iapetus
-	sr_mod_next_cost_iapetus <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_iapetus = { sr_mod_departs = { BODY = saturn } }
 sr_site_shipping_iapetus = {
@@ -4613,81 +4020,56 @@ sr_mod_can_queue_b_titania = {
 sr_mod_can_queue_hab_titania = {
 	global_var:sr_site_holder_titania ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titania < sr_site_slots_max_titania
-	sr_mod_next_cost_titania <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_titania <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_titania = {
 	global_var:sr_site_holder_titania ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titania < sr_site_slots_max_titania
-	sr_mod_next_cost_titania <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_titania = {
 	global_var:sr_site_holder_titania ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titania < sr_site_slots_max_titania
-	sr_mod_next_cost_titania <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_titania = {
 	global_var:sr_site_holder_titania ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titania < sr_site_slots_max_titania
-	sr_mod_next_cost_titania <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_titania = {
 	global_var:sr_site_holder_titania ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titania < sr_site_slots_max_titania
-	sr_mod_next_cost_titania <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_titania = {
 	global_var:sr_site_holder_titania ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titania < sr_site_slots_max_titania
-	sr_mod_next_cost_titania <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_titania = {
 	global_var:sr_site_holder_titania ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titania < sr_site_slots_max_titania
-	sr_mod_next_cost_titania <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_titania = {
 	global_var:sr_site_holder_titania ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titania < sr_site_slots_max_titania
-	sr_mod_next_cost_titania <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_titania = {
 	global_var:sr_site_holder_titania ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titania < sr_site_slots_max_titania
-	sr_mod_next_cost_titania <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_titania = {
 	global_var:sr_site_holder_titania ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titania < sr_site_slots_max_titania
-	sr_mod_next_cost_titania <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_titania = {
 	global_var:sr_site_holder_titania ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titania < sr_site_slots_max_titania
-	sr_mod_next_cost_titania <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_titania = {
 	global_var:sr_site_holder_titania ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titania < sr_site_slots_max_titania
-	sr_mod_next_cost_titania <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_titania = {
 	global_var:sr_site_holder_titania ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_titania < sr_site_slots_max_titania
-	sr_mod_next_cost_titania <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_titania = { sr_mod_departs = { BODY = uranus } }
 sr_site_shipping_titania = {
@@ -4743,81 +4125,56 @@ sr_mod_can_queue_b_oberon = {
 sr_mod_can_queue_hab_oberon = {
 	global_var:sr_site_holder_oberon ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_oberon < sr_site_slots_max_oberon
-	sr_mod_next_cost_oberon <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_oberon <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_oberon = {
 	global_var:sr_site_holder_oberon ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_oberon < sr_site_slots_max_oberon
-	sr_mod_next_cost_oberon <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_oberon = {
 	global_var:sr_site_holder_oberon ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_oberon < sr_site_slots_max_oberon
-	sr_mod_next_cost_oberon <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_oberon = {
 	global_var:sr_site_holder_oberon ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_oberon < sr_site_slots_max_oberon
-	sr_mod_next_cost_oberon <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_oberon = {
 	global_var:sr_site_holder_oberon ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_oberon < sr_site_slots_max_oberon
-	sr_mod_next_cost_oberon <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_oberon = {
 	global_var:sr_site_holder_oberon ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_oberon < sr_site_slots_max_oberon
-	sr_mod_next_cost_oberon <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_oberon = {
 	global_var:sr_site_holder_oberon ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_oberon < sr_site_slots_max_oberon
-	sr_mod_next_cost_oberon <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_oberon = {
 	global_var:sr_site_holder_oberon ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_oberon < sr_site_slots_max_oberon
-	sr_mod_next_cost_oberon <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_oberon = {
 	global_var:sr_site_holder_oberon ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_oberon < sr_site_slots_max_oberon
-	sr_mod_next_cost_oberon <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_oberon = {
 	global_var:sr_site_holder_oberon ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_oberon < sr_site_slots_max_oberon
-	sr_mod_next_cost_oberon <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_oberon = {
 	global_var:sr_site_holder_oberon ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_oberon < sr_site_slots_max_oberon
-	sr_mod_next_cost_oberon <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_oberon = {
 	global_var:sr_site_holder_oberon ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_oberon < sr_site_slots_max_oberon
-	sr_mod_next_cost_oberon <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_oberon = {
 	global_var:sr_site_holder_oberon ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_oberon < sr_site_slots_max_oberon
-	sr_mod_next_cost_oberon <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_oberon = { sr_mod_departs = { BODY = uranus } }
 sr_site_shipping_oberon = {
@@ -4873,81 +4230,56 @@ sr_mod_can_queue_b_miranda = {
 sr_mod_can_queue_hab_miranda = {
 	global_var:sr_site_holder_miranda ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_miranda < sr_site_slots_max_miranda
-	sr_mod_next_cost_miranda <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_miranda <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_miranda = {
 	global_var:sr_site_holder_miranda ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_miranda < sr_site_slots_max_miranda
-	sr_mod_next_cost_miranda <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_miranda = {
 	global_var:sr_site_holder_miranda ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_miranda < sr_site_slots_max_miranda
-	sr_mod_next_cost_miranda <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_miranda = {
 	global_var:sr_site_holder_miranda ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_miranda < sr_site_slots_max_miranda
-	sr_mod_next_cost_miranda <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_miranda = {
 	global_var:sr_site_holder_miranda ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_miranda < sr_site_slots_max_miranda
-	sr_mod_next_cost_miranda <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_miranda = {
 	global_var:sr_site_holder_miranda ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_miranda < sr_site_slots_max_miranda
-	sr_mod_next_cost_miranda <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_miranda = {
 	global_var:sr_site_holder_miranda ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_miranda < sr_site_slots_max_miranda
-	sr_mod_next_cost_miranda <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_miranda = {
 	global_var:sr_site_holder_miranda ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_miranda < sr_site_slots_max_miranda
-	sr_mod_next_cost_miranda <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_miranda = {
 	global_var:sr_site_holder_miranda ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_miranda < sr_site_slots_max_miranda
-	sr_mod_next_cost_miranda <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_miranda = {
 	global_var:sr_site_holder_miranda ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_miranda < sr_site_slots_max_miranda
-	sr_mod_next_cost_miranda <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_miranda = {
 	global_var:sr_site_holder_miranda ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_miranda < sr_site_slots_max_miranda
-	sr_mod_next_cost_miranda <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_miranda = {
 	global_var:sr_site_holder_miranda ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_miranda < sr_site_slots_max_miranda
-	sr_mod_next_cost_miranda <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_miranda = {
 	global_var:sr_site_holder_miranda ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_miranda < sr_site_slots_max_miranda
-	sr_mod_next_cost_miranda <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_miranda = { sr_mod_departs = { BODY = uranus } }
 sr_site_shipping_miranda = {
@@ -5003,81 +4335,56 @@ sr_mod_can_queue_b_ariel = {
 sr_mod_can_queue_hab_ariel = {
 	global_var:sr_site_holder_ariel ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ariel < sr_site_slots_max_ariel
-	sr_mod_next_cost_ariel <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_ariel <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_ariel = {
 	global_var:sr_site_holder_ariel ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ariel < sr_site_slots_max_ariel
-	sr_mod_next_cost_ariel <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_ariel = {
 	global_var:sr_site_holder_ariel ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ariel < sr_site_slots_max_ariel
-	sr_mod_next_cost_ariel <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_ariel = {
 	global_var:sr_site_holder_ariel ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ariel < sr_site_slots_max_ariel
-	sr_mod_next_cost_ariel <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_ariel = {
 	global_var:sr_site_holder_ariel ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ariel < sr_site_slots_max_ariel
-	sr_mod_next_cost_ariel <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_ariel = {
 	global_var:sr_site_holder_ariel ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ariel < sr_site_slots_max_ariel
-	sr_mod_next_cost_ariel <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_ariel = {
 	global_var:sr_site_holder_ariel ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ariel < sr_site_slots_max_ariel
-	sr_mod_next_cost_ariel <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_ariel = {
 	global_var:sr_site_holder_ariel ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ariel < sr_site_slots_max_ariel
-	sr_mod_next_cost_ariel <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_ariel = {
 	global_var:sr_site_holder_ariel ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ariel < sr_site_slots_max_ariel
-	sr_mod_next_cost_ariel <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_ariel = {
 	global_var:sr_site_holder_ariel ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ariel < sr_site_slots_max_ariel
-	sr_mod_next_cost_ariel <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_ariel = {
 	global_var:sr_site_holder_ariel ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ariel < sr_site_slots_max_ariel
-	sr_mod_next_cost_ariel <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_ariel = {
 	global_var:sr_site_holder_ariel ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ariel < sr_site_slots_max_ariel
-	sr_mod_next_cost_ariel <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_ariel = {
 	global_var:sr_site_holder_ariel ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_ariel < sr_site_slots_max_ariel
-	sr_mod_next_cost_ariel <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_ariel = { sr_mod_departs = { BODY = uranus } }
 sr_site_shipping_ariel = {
@@ -5133,81 +4440,56 @@ sr_mod_can_queue_b_triton = {
 sr_mod_can_queue_hab_triton = {
 	global_var:sr_site_holder_triton ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_triton < sr_site_slots_max_triton
-	sr_mod_next_cost_triton <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_triton <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_triton = {
 	global_var:sr_site_holder_triton ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_triton < sr_site_slots_max_triton
-	sr_mod_next_cost_triton <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_triton = {
 	global_var:sr_site_holder_triton ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_triton < sr_site_slots_max_triton
-	sr_mod_next_cost_triton <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_triton = {
 	global_var:sr_site_holder_triton ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_triton < sr_site_slots_max_triton
-	sr_mod_next_cost_triton <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_triton = {
 	global_var:sr_site_holder_triton ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_triton < sr_site_slots_max_triton
-	sr_mod_next_cost_triton <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_triton = {
 	global_var:sr_site_holder_triton ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_triton < sr_site_slots_max_triton
-	sr_mod_next_cost_triton <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_triton = {
 	global_var:sr_site_holder_triton ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_triton < sr_site_slots_max_triton
-	sr_mod_next_cost_triton <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_triton = {
 	global_var:sr_site_holder_triton ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_triton < sr_site_slots_max_triton
-	sr_mod_next_cost_triton <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_triton = {
 	global_var:sr_site_holder_triton ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_triton < sr_site_slots_max_triton
-	sr_mod_next_cost_triton <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_triton = {
 	global_var:sr_site_holder_triton ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_triton < sr_site_slots_max_triton
-	sr_mod_next_cost_triton <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_triton = {
 	global_var:sr_site_holder_triton ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_triton < sr_site_slots_max_triton
-	sr_mod_next_cost_triton <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_triton = {
 	global_var:sr_site_holder_triton ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_triton < sr_site_slots_max_triton
-	sr_mod_next_cost_triton <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_triton = {
 	global_var:sr_site_holder_triton ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_triton < sr_site_slots_max_triton
-	sr_mod_next_cost_triton <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_triton = { sr_mod_departs = { BODY = neptune } }
 sr_site_shipping_triton = {
@@ -5263,81 +4545,56 @@ sr_mod_can_queue_b_proteus = {
 sr_mod_can_queue_hab_proteus = {
 	global_var:sr_site_holder_proteus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_proteus < sr_site_slots_max_proteus
-	sr_mod_next_cost_proteus <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_proteus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_proteus = {
 	global_var:sr_site_holder_proteus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_proteus < sr_site_slots_max_proteus
-	sr_mod_next_cost_proteus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_proteus = {
 	global_var:sr_site_holder_proteus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_proteus < sr_site_slots_max_proteus
-	sr_mod_next_cost_proteus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_proteus = {
 	global_var:sr_site_holder_proteus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_proteus < sr_site_slots_max_proteus
-	sr_mod_next_cost_proteus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_proteus = {
 	global_var:sr_site_holder_proteus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_proteus < sr_site_slots_max_proteus
-	sr_mod_next_cost_proteus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_proteus = {
 	global_var:sr_site_holder_proteus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_proteus < sr_site_slots_max_proteus
-	sr_mod_next_cost_proteus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_proteus = {
 	global_var:sr_site_holder_proteus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_proteus < sr_site_slots_max_proteus
-	sr_mod_next_cost_proteus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_proteus = {
 	global_var:sr_site_holder_proteus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_proteus < sr_site_slots_max_proteus
-	sr_mod_next_cost_proteus <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_proteus = {
 	global_var:sr_site_holder_proteus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_proteus < sr_site_slots_max_proteus
-	sr_mod_next_cost_proteus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_proteus = {
 	global_var:sr_site_holder_proteus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_proteus < sr_site_slots_max_proteus
-	sr_mod_next_cost_proteus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_proteus = {
 	global_var:sr_site_holder_proteus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_proteus < sr_site_slots_max_proteus
-	sr_mod_next_cost_proteus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_proteus = {
 	global_var:sr_site_holder_proteus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_proteus < sr_site_slots_max_proteus
-	sr_mod_next_cost_proteus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_proteus = {
 	global_var:sr_site_holder_proteus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_proteus < sr_site_slots_max_proteus
-	sr_mod_next_cost_proteus <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_proteus = { sr_mod_departs = { BODY = neptune } }
 sr_site_shipping_proteus = {
@@ -5393,81 +4650,56 @@ sr_mod_can_queue_b_pluto = {
 sr_mod_can_queue_hab_pluto = {
 	global_var:sr_site_holder_pluto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pluto < sr_site_slots_max_pluto
-	sr_mod_next_cost_pluto <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_pluto <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_pluto = {
 	global_var:sr_site_holder_pluto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pluto < sr_site_slots_max_pluto
-	sr_mod_next_cost_pluto <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_pluto = {
 	global_var:sr_site_holder_pluto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pluto < sr_site_slots_max_pluto
-	sr_mod_next_cost_pluto <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_pluto = {
 	global_var:sr_site_holder_pluto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pluto < sr_site_slots_max_pluto
-	sr_mod_next_cost_pluto <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_pluto = {
 	global_var:sr_site_holder_pluto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pluto < sr_site_slots_max_pluto
-	sr_mod_next_cost_pluto <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_pluto = {
 	global_var:sr_site_holder_pluto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pluto < sr_site_slots_max_pluto
-	sr_mod_next_cost_pluto <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_pluto = {
 	global_var:sr_site_holder_pluto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pluto < sr_site_slots_max_pluto
-	sr_mod_next_cost_pluto <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_pluto = {
 	global_var:sr_site_holder_pluto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pluto < sr_site_slots_max_pluto
-	sr_mod_next_cost_pluto <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_pluto = {
 	global_var:sr_site_holder_pluto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pluto < sr_site_slots_max_pluto
-	sr_mod_next_cost_pluto <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_pluto = {
 	global_var:sr_site_holder_pluto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pluto < sr_site_slots_max_pluto
-	sr_mod_next_cost_pluto <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_pluto = {
 	global_var:sr_site_holder_pluto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pluto < sr_site_slots_max_pluto
-	sr_mod_next_cost_pluto <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_pluto = {
 	global_var:sr_site_holder_pluto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pluto < sr_site_slots_max_pluto
-	sr_mod_next_cost_pluto <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_pluto = {
 	global_var:sr_site_holder_pluto ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_pluto < sr_site_slots_max_pluto
-	sr_mod_next_cost_pluto <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_pluto = { sr_mod_departs = { BODY = kuiper } }
 sr_site_shipping_pluto = {
@@ -5523,81 +4755,56 @@ sr_mod_can_queue_b_eris = {
 sr_mod_can_queue_hab_eris = {
 	global_var:sr_site_holder_eris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_eris < sr_site_slots_max_eris
-	sr_mod_next_cost_eris <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_eris <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_eris = {
 	global_var:sr_site_holder_eris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_eris < sr_site_slots_max_eris
-	sr_mod_next_cost_eris <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_eris = {
 	global_var:sr_site_holder_eris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_eris < sr_site_slots_max_eris
-	sr_mod_next_cost_eris <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_eris = {
 	global_var:sr_site_holder_eris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_eris < sr_site_slots_max_eris
-	sr_mod_next_cost_eris <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_eris = {
 	global_var:sr_site_holder_eris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_eris < sr_site_slots_max_eris
-	sr_mod_next_cost_eris <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_eris = {
 	global_var:sr_site_holder_eris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_eris < sr_site_slots_max_eris
-	sr_mod_next_cost_eris <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_eris = {
 	global_var:sr_site_holder_eris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_eris < sr_site_slots_max_eris
-	sr_mod_next_cost_eris <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_eris = {
 	global_var:sr_site_holder_eris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_eris < sr_site_slots_max_eris
-	sr_mod_next_cost_eris <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_eris = {
 	global_var:sr_site_holder_eris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_eris < sr_site_slots_max_eris
-	sr_mod_next_cost_eris <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_eris = {
 	global_var:sr_site_holder_eris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_eris < sr_site_slots_max_eris
-	sr_mod_next_cost_eris <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_eris = {
 	global_var:sr_site_holder_eris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_eris < sr_site_slots_max_eris
-	sr_mod_next_cost_eris <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_eris = {
 	global_var:sr_site_holder_eris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_eris < sr_site_slots_max_eris
-	sr_mod_next_cost_eris <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_eris = {
 	global_var:sr_site_holder_eris ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_eris < sr_site_slots_max_eris
-	sr_mod_next_cost_eris <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_eris = { sr_mod_departs = { BODY = kuiper } }
 sr_site_shipping_eris = {
@@ -5653,81 +4860,56 @@ sr_mod_can_queue_b_makemake = {
 sr_mod_can_queue_hab_makemake = {
 	global_var:sr_site_holder_makemake ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_makemake < sr_site_slots_max_makemake
-	sr_mod_next_cost_makemake <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_makemake <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_makemake = {
 	global_var:sr_site_holder_makemake ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_makemake < sr_site_slots_max_makemake
-	sr_mod_next_cost_makemake <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_makemake = {
 	global_var:sr_site_holder_makemake ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_makemake < sr_site_slots_max_makemake
-	sr_mod_next_cost_makemake <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_makemake = {
 	global_var:sr_site_holder_makemake ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_makemake < sr_site_slots_max_makemake
-	sr_mod_next_cost_makemake <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_makemake = {
 	global_var:sr_site_holder_makemake ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_makemake < sr_site_slots_max_makemake
-	sr_mod_next_cost_makemake <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_makemake = {
 	global_var:sr_site_holder_makemake ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_makemake < sr_site_slots_max_makemake
-	sr_mod_next_cost_makemake <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_makemake = {
 	global_var:sr_site_holder_makemake ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_makemake < sr_site_slots_max_makemake
-	sr_mod_next_cost_makemake <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_makemake = {
 	global_var:sr_site_holder_makemake ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_makemake < sr_site_slots_max_makemake
-	sr_mod_next_cost_makemake <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_makemake = {
 	global_var:sr_site_holder_makemake ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_makemake < sr_site_slots_max_makemake
-	sr_mod_next_cost_makemake <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_makemake = {
 	global_var:sr_site_holder_makemake ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_makemake < sr_site_slots_max_makemake
-	sr_mod_next_cost_makemake <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_makemake = {
 	global_var:sr_site_holder_makemake ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_makemake < sr_site_slots_max_makemake
-	sr_mod_next_cost_makemake <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_makemake = {
 	global_var:sr_site_holder_makemake ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_makemake < sr_site_slots_max_makemake
-	sr_mod_next_cost_makemake <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_makemake = {
 	global_var:sr_site_holder_makemake ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_makemake < sr_site_slots_max_makemake
-	sr_mod_next_cost_makemake <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_makemake = { sr_mod_departs = { BODY = kuiper } }
 sr_site_shipping_makemake = {
@@ -5783,81 +4965,56 @@ sr_mod_can_queue_b_haumea = {
 sr_mod_can_queue_hab_haumea = {
 	global_var:sr_site_holder_haumea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_haumea < sr_site_slots_max_haumea
-	sr_mod_next_cost_haumea <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_haumea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_haumea = {
 	global_var:sr_site_holder_haumea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_haumea < sr_site_slots_max_haumea
-	sr_mod_next_cost_haumea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_haumea = {
 	global_var:sr_site_holder_haumea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_haumea < sr_site_slots_max_haumea
-	sr_mod_next_cost_haumea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_haumea = {
 	global_var:sr_site_holder_haumea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_haumea < sr_site_slots_max_haumea
-	sr_mod_next_cost_haumea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_haumea = {
 	global_var:sr_site_holder_haumea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_haumea < sr_site_slots_max_haumea
-	sr_mod_next_cost_haumea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_haumea = {
 	global_var:sr_site_holder_haumea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_haumea < sr_site_slots_max_haumea
-	sr_mod_next_cost_haumea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_haumea = {
 	global_var:sr_site_holder_haumea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_haumea < sr_site_slots_max_haumea
-	sr_mod_next_cost_haumea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_haumea = {
 	global_var:sr_site_holder_haumea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_haumea < sr_site_slots_max_haumea
-	sr_mod_next_cost_haumea <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_haumea = {
 	global_var:sr_site_holder_haumea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_haumea < sr_site_slots_max_haumea
-	sr_mod_next_cost_haumea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_haumea = {
 	global_var:sr_site_holder_haumea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_haumea < sr_site_slots_max_haumea
-	sr_mod_next_cost_haumea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_haumea = {
 	global_var:sr_site_holder_haumea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_haumea < sr_site_slots_max_haumea
-	sr_mod_next_cost_haumea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_haumea = {
 	global_var:sr_site_holder_haumea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_haumea < sr_site_slots_max_haumea
-	sr_mod_next_cost_haumea <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_haumea = {
 	global_var:sr_site_holder_haumea ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_haumea < sr_site_slots_max_haumea
-	sr_mod_next_cost_haumea <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_haumea = { sr_mod_departs = { BODY = kuiper } }
 sr_site_shipping_haumea = {
@@ -5913,81 +5070,56 @@ sr_mod_can_queue_b_sedna = {
 sr_mod_can_queue_hab_sedna = {
 	global_var:sr_site_holder_sedna ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_sedna < sr_site_slots_max_sedna
-	sr_mod_next_cost_sedna <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_sedna <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_sedna = {
 	global_var:sr_site_holder_sedna ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_sedna < sr_site_slots_max_sedna
-	sr_mod_next_cost_sedna <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_port_sedna = {
 	global_var:sr_site_holder_sedna ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_sedna < sr_site_slots_max_sedna
-	sr_mod_next_cost_sedna <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_sedna = {
 	global_var:sr_site_holder_sedna ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_sedna < sr_site_slots_max_sedna
-	sr_mod_next_cost_sedna <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_sedna = {
 	global_var:sr_site_holder_sedna ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_sedna < sr_site_slots_max_sedna
-	sr_mod_next_cost_sedna <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_sedna = {
 	global_var:sr_site_holder_sedna ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_sedna < sr_site_slots_max_sedna
-	sr_mod_next_cost_sedna <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_sedna = {
 	global_var:sr_site_holder_sedna ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_sedna < sr_site_slots_max_sedna
-	sr_mod_next_cost_sedna <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_sedna = {
 	global_var:sr_site_holder_sedna ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_sedna < sr_site_slots_max_sedna
-	sr_mod_next_cost_sedna <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_sedna = {
 	global_var:sr_site_holder_sedna ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_sedna < sr_site_slots_max_sedna
-	sr_mod_next_cost_sedna <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_sedna = {
 	global_var:sr_site_holder_sedna ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_sedna < sr_site_slots_max_sedna
-	sr_mod_next_cost_sedna <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_sedna = {
 	global_var:sr_site_holder_sedna ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_sedna < sr_site_slots_max_sedna
-	sr_mod_next_cost_sedna <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_sedna = {
 	global_var:sr_site_holder_sedna ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_sedna < sr_site_slots_max_sedna
-	sr_mod_next_cost_sedna <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_sedna = {
 	global_var:sr_site_holder_sedna ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_sedna < sr_site_slots_max_sedna
-	sr_mod_next_cost_sedna <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_sedna = { sr_mod_departs = { BODY = kuiper } }
 sr_site_shipping_sedna = {
@@ -6042,75 +5174,52 @@ sr_mod_can_queue_b_shackleton = {
 sr_mod_can_queue_hab_shackleton = {
 	global_var:sr_site_holder_shackleton ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_shackleton < sr_site_slots_max_shackleton
-	sr_mod_next_cost_shackleton <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_shackleton <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_shackleton = {
 	global_var:sr_site_holder_shackleton ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_shackleton < sr_site_slots_max_shackleton
-	sr_mod_next_cost_shackleton <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_shackleton = {
 	global_var:sr_site_holder_shackleton ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_shackleton < sr_site_slots_max_shackleton
-	sr_mod_next_cost_shackleton <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_shackleton = {
 	global_var:sr_site_holder_shackleton ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_shackleton < sr_site_slots_max_shackleton
-	sr_mod_next_cost_shackleton <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_shackleton = {
 	global_var:sr_site_holder_shackleton ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_shackleton < sr_site_slots_max_shackleton
-	sr_mod_next_cost_shackleton <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_shackleton = {
 	global_var:sr_site_holder_shackleton ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_shackleton < sr_site_slots_max_shackleton
-	sr_mod_next_cost_shackleton <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_shackleton = {
 	global_var:sr_site_holder_shackleton ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_shackleton < sr_site_slots_max_shackleton
-	sr_mod_next_cost_shackleton <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_shackleton = {
 	global_var:sr_site_holder_shackleton ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_shackleton < sr_site_slots_max_shackleton
-	sr_mod_next_cost_shackleton <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_shackleton = {
 	global_var:sr_site_holder_shackleton ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_shackleton < sr_site_slots_max_shackleton
-	sr_mod_next_cost_shackleton <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_shackleton = {
 	global_var:sr_site_holder_shackleton ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_shackleton < sr_site_slots_max_shackleton
-	sr_mod_next_cost_shackleton <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_shackleton = {
 	global_var:sr_site_holder_shackleton ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_shackleton < sr_site_slots_max_shackleton
-	sr_mod_next_cost_shackleton <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_shackleton = {
 	global_var:sr_site_holder_shackleton ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_shackleton < sr_site_slots_max_shackleton
-	sr_mod_next_cost_shackleton <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_shackleton = { always = yes }
 sr_site_shipping_shackleton = {
@@ -6164,75 +5273,52 @@ sr_mod_can_queue_b_peary = {
 sr_mod_can_queue_hab_peary = {
 	global_var:sr_site_holder_peary ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_peary < sr_site_slots_max_peary
-	sr_mod_next_cost_peary <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_peary <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_peary = {
 	global_var:sr_site_holder_peary ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_peary < sr_site_slots_max_peary
-	sr_mod_next_cost_peary <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_peary = {
 	global_var:sr_site_holder_peary ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_peary < sr_site_slots_max_peary
-	sr_mod_next_cost_peary <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_peary = {
 	global_var:sr_site_holder_peary ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_peary < sr_site_slots_max_peary
-	sr_mod_next_cost_peary <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_peary = {
 	global_var:sr_site_holder_peary ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_peary < sr_site_slots_max_peary
-	sr_mod_next_cost_peary <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_peary = {
 	global_var:sr_site_holder_peary ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_peary < sr_site_slots_max_peary
-	sr_mod_next_cost_peary <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_peary = {
 	global_var:sr_site_holder_peary ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_peary < sr_site_slots_max_peary
-	sr_mod_next_cost_peary <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_peary = {
 	global_var:sr_site_holder_peary ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_peary < sr_site_slots_max_peary
-	sr_mod_next_cost_peary <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_peary = {
 	global_var:sr_site_holder_peary ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_peary < sr_site_slots_max_peary
-	sr_mod_next_cost_peary <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_peary = {
 	global_var:sr_site_holder_peary ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_peary < sr_site_slots_max_peary
-	sr_mod_next_cost_peary <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_peary = {
 	global_var:sr_site_holder_peary ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_peary < sr_site_slots_max_peary
-	sr_mod_next_cost_peary <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_peary = {
 	global_var:sr_site_holder_peary ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_peary < sr_site_slots_max_peary
-	sr_mod_next_cost_peary <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_peary = { always = yes }
 sr_site_shipping_peary = {
@@ -6286,75 +5372,52 @@ sr_mod_can_queue_b_tranquility = {
 sr_mod_can_queue_hab_tranquility = {
 	global_var:sr_site_holder_tranquility ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_tranquility < sr_site_slots_max_tranquility
-	sr_mod_next_cost_tranquility <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_tranquility <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_tranquility = {
 	global_var:sr_site_holder_tranquility ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_tranquility < sr_site_slots_max_tranquility
-	sr_mod_next_cost_tranquility <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_tranquility = {
 	global_var:sr_site_holder_tranquility ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_tranquility < sr_site_slots_max_tranquility
-	sr_mod_next_cost_tranquility <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_tranquility = {
 	global_var:sr_site_holder_tranquility ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_tranquility < sr_site_slots_max_tranquility
-	sr_mod_next_cost_tranquility <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_tranquility = {
 	global_var:sr_site_holder_tranquility ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_tranquility < sr_site_slots_max_tranquility
-	sr_mod_next_cost_tranquility <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_tranquility = {
 	global_var:sr_site_holder_tranquility ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_tranquility < sr_site_slots_max_tranquility
-	sr_mod_next_cost_tranquility <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_tranquility = {
 	global_var:sr_site_holder_tranquility ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_tranquility < sr_site_slots_max_tranquility
-	sr_mod_next_cost_tranquility <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_tranquility = {
 	global_var:sr_site_holder_tranquility ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_tranquility < sr_site_slots_max_tranquility
-	sr_mod_next_cost_tranquility <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_tranquility = {
 	global_var:sr_site_holder_tranquility ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_tranquility < sr_site_slots_max_tranquility
-	sr_mod_next_cost_tranquility <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_tranquility = {
 	global_var:sr_site_holder_tranquility ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_tranquility < sr_site_slots_max_tranquility
-	sr_mod_next_cost_tranquility <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_tranquility = {
 	global_var:sr_site_holder_tranquility ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_tranquility < sr_site_slots_max_tranquility
-	sr_mod_next_cost_tranquility <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_tranquility = {
 	global_var:sr_site_holder_tranquility ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_tranquility < sr_site_slots_max_tranquility
-	sr_mod_next_cost_tranquility <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_tranquility = { always = yes }
 sr_site_shipping_tranquility = {
@@ -6408,75 +5471,52 @@ sr_mod_can_queue_b_marius_hills = {
 sr_mod_can_queue_hab_marius_hills = {
 	global_var:sr_site_holder_marius_hills ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_marius_hills < sr_site_slots_max_marius_hills
-	sr_mod_next_cost_marius_hills <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_marius_hills <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_marius_hills = {
 	global_var:sr_site_holder_marius_hills ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_marius_hills < sr_site_slots_max_marius_hills
-	sr_mod_next_cost_marius_hills <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_marius_hills = {
 	global_var:sr_site_holder_marius_hills ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_marius_hills < sr_site_slots_max_marius_hills
-	sr_mod_next_cost_marius_hills <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_marius_hills = {
 	global_var:sr_site_holder_marius_hills ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_marius_hills < sr_site_slots_max_marius_hills
-	sr_mod_next_cost_marius_hills <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_marius_hills = {
 	global_var:sr_site_holder_marius_hills ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_marius_hills < sr_site_slots_max_marius_hills
-	sr_mod_next_cost_marius_hills <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_marius_hills = {
 	global_var:sr_site_holder_marius_hills ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_marius_hills < sr_site_slots_max_marius_hills
-	sr_mod_next_cost_marius_hills <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_marius_hills = {
 	global_var:sr_site_holder_marius_hills ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_marius_hills < sr_site_slots_max_marius_hills
-	sr_mod_next_cost_marius_hills <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_marius_hills = {
 	global_var:sr_site_holder_marius_hills ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_marius_hills < sr_site_slots_max_marius_hills
-	sr_mod_next_cost_marius_hills <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_marius_hills = {
 	global_var:sr_site_holder_marius_hills ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_marius_hills < sr_site_slots_max_marius_hills
-	sr_mod_next_cost_marius_hills <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_marius_hills = {
 	global_var:sr_site_holder_marius_hills ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_marius_hills < sr_site_slots_max_marius_hills
-	sr_mod_next_cost_marius_hills <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_marius_hills = {
 	global_var:sr_site_holder_marius_hills ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_marius_hills < sr_site_slots_max_marius_hills
-	sr_mod_next_cost_marius_hills <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_marius_hills = {
 	global_var:sr_site_holder_marius_hills ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_marius_hills < sr_site_slots_max_marius_hills
-	sr_mod_next_cost_marius_hills <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_marius_hills = { always = yes }
 sr_site_shipping_marius_hills = {
@@ -6530,75 +5570,52 @@ sr_mod_can_queue_b_daedalus = {
 sr_mod_can_queue_hab_daedalus = {
 	global_var:sr_site_holder_daedalus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_daedalus < sr_site_slots_max_daedalus
-	sr_mod_next_cost_daedalus <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_daedalus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_daedalus = {
 	global_var:sr_site_holder_daedalus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_daedalus < sr_site_slots_max_daedalus
-	sr_mod_next_cost_daedalus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_daedalus = {
 	global_var:sr_site_holder_daedalus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_daedalus < sr_site_slots_max_daedalus
-	sr_mod_next_cost_daedalus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_daedalus = {
 	global_var:sr_site_holder_daedalus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_daedalus < sr_site_slots_max_daedalus
-	sr_mod_next_cost_daedalus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_daedalus = {
 	global_var:sr_site_holder_daedalus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_daedalus < sr_site_slots_max_daedalus
-	sr_mod_next_cost_daedalus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_daedalus = {
 	global_var:sr_site_holder_daedalus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_daedalus < sr_site_slots_max_daedalus
-	sr_mod_next_cost_daedalus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_daedalus = {
 	global_var:sr_site_holder_daedalus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_daedalus < sr_site_slots_max_daedalus
-	sr_mod_next_cost_daedalus <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_daedalus = {
 	global_var:sr_site_holder_daedalus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_daedalus < sr_site_slots_max_daedalus
-	sr_mod_next_cost_daedalus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_daedalus = {
 	global_var:sr_site_holder_daedalus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_daedalus < sr_site_slots_max_daedalus
-	sr_mod_next_cost_daedalus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_daedalus = {
 	global_var:sr_site_holder_daedalus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_daedalus < sr_site_slots_max_daedalus
-	sr_mod_next_cost_daedalus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_daedalus = {
 	global_var:sr_site_holder_daedalus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_daedalus < sr_site_slots_max_daedalus
-	sr_mod_next_cost_daedalus <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_daedalus = {
 	global_var:sr_site_holder_daedalus ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_daedalus < sr_site_slots_max_daedalus
-	sr_mod_next_cost_daedalus <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_daedalus = { always = yes }
 sr_site_shipping_daedalus = {
@@ -6652,75 +5669,52 @@ sr_mod_can_queue_b_imbrium = {
 sr_mod_can_queue_hab_imbrium = {
 	global_var:sr_site_holder_imbrium ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_imbrium < sr_site_slots_max_imbrium
-	sr_mod_next_cost_imbrium <= sr_mod_fab_stock_cap
+	sr_mod_next_hab_cost_imbrium <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_def_imbrium = {
 	global_var:sr_site_holder_imbrium ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_imbrium < sr_site_slots_max_imbrium
-	sr_mod_next_cost_imbrium <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_mine_imbrium = {
 	global_var:sr_site_holder_imbrium ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_imbrium < sr_site_slots_max_imbrium
-	sr_mod_next_cost_imbrium <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_yard_imbrium = {
 	global_var:sr_site_holder_imbrium ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_imbrium < sr_site_slots_max_imbrium
-	sr_mod_next_cost_imbrium <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_lab_imbrium = {
 	global_var:sr_site_holder_imbrium ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_imbrium < sr_site_slots_max_imbrium
-	sr_mod_next_cost_imbrium <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_culture_imbrium = {
 	global_var:sr_site_holder_imbrium ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_imbrium < sr_site_slots_max_imbrium
-	sr_mod_next_cost_imbrium <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_resort_imbrium = {
 	global_var:sr_site_holder_imbrium ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_imbrium < sr_site_slots_max_imbrium
-	sr_mod_next_cost_imbrium <= sr_mod_fab_stock_cap
 	has_technology_researched = space_colonization
 }
 sr_mod_can_queue_black_imbrium = {
 	global_var:sr_site_holder_imbrium ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_imbrium < sr_site_slots_max_imbrium
-	sr_mod_next_cost_imbrium <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_train_imbrium = {
 	global_var:sr_site_holder_imbrium ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_imbrium < sr_site_slots_max_imbrium
-	sr_mod_next_cost_imbrium <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_bunker_imbrium = {
 	global_var:sr_site_holder_imbrium ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_imbrium < sr_site_slots_max_imbrium
-	sr_mod_next_cost_imbrium <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_foundry_imbrium = {
 	global_var:sr_site_holder_imbrium ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_imbrium < sr_site_slots_max_imbrium
-	sr_mod_next_cost_imbrium <= sr_mod_fab_stock_cap
 }
 sr_mod_can_queue_admin_imbrium = {
 	global_var:sr_site_holder_imbrium ?= this
 	sr_mq_has_room = yes
-	sr_mod_slots_used_imbrium < sr_site_slots_max_imbrium
-	sr_mod_next_cost_imbrium <= sr_mod_fab_stock_cap
 }
 sr_mod_departs_imbrium = { always = yes }
 sr_site_shipping_imbrium = {
@@ -7592,139 +6586,140 @@ sr_mod_scope_spec_room = {
 		AND = { scope:site = 40 sr_mod_spec_used_imbrium < sr_mod_spec_budget }
 	}
 }
-# It has a slot left for a Habitat, Spaceport or Defences, counting queue and shipments.
-sr_mod_scope_slot_room = {
+# Its people can crew one more module level, counting the crewed modules queued and
+# on their way (colony people design § 10: the + button's line; the final review of #1958).
+sr_mod_scope_crew_spare = {
 	OR = {
-		AND = { scope:site = 1 sr_mod_slots_used_valles_marineris < sr_site_slots_max_valles_marineris }
-		AND = { scope:site = 2 sr_mod_slots_used_olympus_mons < sr_site_slots_max_olympus_mons }
-		AND = { scope:site = 3 sr_mod_slots_used_hellas_planitia < sr_site_slots_max_hellas_planitia }
-		AND = { scope:site = 4 sr_mod_slots_used_utopia_planitia < sr_site_slots_max_utopia_planitia }
-		AND = { scope:site = 5 sr_mod_slots_used_arcadia_planitia < sr_site_slots_max_arcadia_planitia }
-		AND = { scope:site = 6 sr_mod_slots_used_ceres < sr_site_slots_max_ceres }
-		AND = { scope:site = 7 sr_mod_slots_used_vesta < sr_site_slots_max_vesta }
-		AND = { scope:site = 8 sr_mod_slots_used_psyche < sr_site_slots_max_psyche }
-		AND = { scope:site = 9 sr_mod_slots_used_pallas < sr_site_slots_max_pallas }
-		AND = { scope:site = 10 sr_mod_slots_used_hygiea < sr_site_slots_max_hygiea }
-		AND = { scope:site = 11 sr_mod_slots_used_io < sr_site_slots_max_io }
-		AND = { scope:site = 12 sr_mod_slots_used_europa < sr_site_slots_max_europa }
-		AND = { scope:site = 13 sr_mod_slots_used_ganymede < sr_site_slots_max_ganymede }
-		AND = { scope:site = 14 sr_mod_slots_used_callisto < sr_site_slots_max_callisto }
-		AND = { scope:site = 15 sr_mod_slots_used_himalia < sr_site_slots_max_himalia }
-		AND = { scope:site = 16 sr_mod_slots_used_amalthea < sr_site_slots_max_amalthea }
-		AND = { scope:site = 17 sr_mod_slots_used_venus < sr_site_slots_max_venus }
-		AND = { scope:site = 18 sr_mod_slots_used_mercury < sr_site_slots_max_mercury }
-		AND = { scope:site = 19 sr_mod_slots_used_titan < sr_site_slots_max_titan }
-		AND = { scope:site = 20 sr_mod_slots_used_enceladus < sr_site_slots_max_enceladus }
-		AND = { scope:site = 21 sr_mod_slots_used_rhea < sr_site_slots_max_rhea }
-		AND = { scope:site = 22 sr_mod_slots_used_mimas < sr_site_slots_max_mimas }
-		AND = { scope:site = 23 sr_mod_slots_used_iapetus < sr_site_slots_max_iapetus }
-		AND = { scope:site = 24 sr_mod_slots_used_titania < sr_site_slots_max_titania }
-		AND = { scope:site = 25 sr_mod_slots_used_oberon < sr_site_slots_max_oberon }
-		AND = { scope:site = 26 sr_mod_slots_used_miranda < sr_site_slots_max_miranda }
-		AND = { scope:site = 27 sr_mod_slots_used_ariel < sr_site_slots_max_ariel }
-		AND = { scope:site = 28 sr_mod_slots_used_triton < sr_site_slots_max_triton }
-		AND = { scope:site = 29 sr_mod_slots_used_proteus < sr_site_slots_max_proteus }
-		AND = { scope:site = 30 sr_mod_slots_used_pluto < sr_site_slots_max_pluto }
-		AND = { scope:site = 31 sr_mod_slots_used_eris < sr_site_slots_max_eris }
-		AND = { scope:site = 32 sr_mod_slots_used_makemake < sr_site_slots_max_makemake }
-		AND = { scope:site = 33 sr_mod_slots_used_haumea < sr_site_slots_max_haumea }
-		AND = { scope:site = 34 sr_mod_slots_used_sedna < sr_site_slots_max_sedna }
-		AND = { scope:site = 35 sr_mod_slots_used_shackleton < sr_site_slots_max_shackleton }
-		AND = { scope:site = 36 sr_mod_slots_used_peary < sr_site_slots_max_peary }
-		AND = { scope:site = 37 sr_mod_slots_used_tranquility < sr_site_slots_max_tranquility }
-		AND = { scope:site = 38 sr_mod_slots_used_marius_hills < sr_site_slots_max_marius_hills }
-		AND = { scope:site = 39 sr_mod_slots_used_daedalus < sr_site_slots_max_daedalus }
-		AND = { scope:site = 40 sr_mod_slots_used_imbrium < sr_site_slots_max_imbrium }
+		AND = { scope:site = 1 sr_site_crews_valles_marineris >= sr_mod_crewed_pending_valles_marineris }
+		AND = { scope:site = 2 sr_site_crews_olympus_mons >= sr_mod_crewed_pending_olympus_mons }
+		AND = { scope:site = 3 sr_site_crews_hellas_planitia >= sr_mod_crewed_pending_hellas_planitia }
+		AND = { scope:site = 4 sr_site_crews_utopia_planitia >= sr_mod_crewed_pending_utopia_planitia }
+		AND = { scope:site = 5 sr_site_crews_arcadia_planitia >= sr_mod_crewed_pending_arcadia_planitia }
+		AND = { scope:site = 6 sr_site_crews_ceres >= sr_mod_crewed_pending_ceres }
+		AND = { scope:site = 7 sr_site_crews_vesta >= sr_mod_crewed_pending_vesta }
+		AND = { scope:site = 8 sr_site_crews_psyche >= sr_mod_crewed_pending_psyche }
+		AND = { scope:site = 9 sr_site_crews_pallas >= sr_mod_crewed_pending_pallas }
+		AND = { scope:site = 10 sr_site_crews_hygiea >= sr_mod_crewed_pending_hygiea }
+		AND = { scope:site = 11 sr_site_crews_io >= sr_mod_crewed_pending_io }
+		AND = { scope:site = 12 sr_site_crews_europa >= sr_mod_crewed_pending_europa }
+		AND = { scope:site = 13 sr_site_crews_ganymede >= sr_mod_crewed_pending_ganymede }
+		AND = { scope:site = 14 sr_site_crews_callisto >= sr_mod_crewed_pending_callisto }
+		AND = { scope:site = 15 sr_site_crews_himalia >= sr_mod_crewed_pending_himalia }
+		AND = { scope:site = 16 sr_site_crews_amalthea >= sr_mod_crewed_pending_amalthea }
+		AND = { scope:site = 17 sr_site_crews_venus >= sr_mod_crewed_pending_venus }
+		AND = { scope:site = 18 sr_site_crews_mercury >= sr_mod_crewed_pending_mercury }
+		AND = { scope:site = 19 sr_site_crews_titan >= sr_mod_crewed_pending_titan }
+		AND = { scope:site = 20 sr_site_crews_enceladus >= sr_mod_crewed_pending_enceladus }
+		AND = { scope:site = 21 sr_site_crews_rhea >= sr_mod_crewed_pending_rhea }
+		AND = { scope:site = 22 sr_site_crews_mimas >= sr_mod_crewed_pending_mimas }
+		AND = { scope:site = 23 sr_site_crews_iapetus >= sr_mod_crewed_pending_iapetus }
+		AND = { scope:site = 24 sr_site_crews_titania >= sr_mod_crewed_pending_titania }
+		AND = { scope:site = 25 sr_site_crews_oberon >= sr_mod_crewed_pending_oberon }
+		AND = { scope:site = 26 sr_site_crews_miranda >= sr_mod_crewed_pending_miranda }
+		AND = { scope:site = 27 sr_site_crews_ariel >= sr_mod_crewed_pending_ariel }
+		AND = { scope:site = 28 sr_site_crews_triton >= sr_mod_crewed_pending_triton }
+		AND = { scope:site = 29 sr_site_crews_proteus >= sr_mod_crewed_pending_proteus }
+		AND = { scope:site = 30 sr_site_crews_pluto >= sr_mod_crewed_pending_pluto }
+		AND = { scope:site = 31 sr_site_crews_eris >= sr_mod_crewed_pending_eris }
+		AND = { scope:site = 32 sr_site_crews_makemake >= sr_mod_crewed_pending_makemake }
+		AND = { scope:site = 33 sr_site_crews_haumea >= sr_mod_crewed_pending_haumea }
+		AND = { scope:site = 34 sr_site_crews_sedna >= sr_mod_crewed_pending_sedna }
+		AND = { scope:site = 35 sr_site_crews_shackleton >= sr_mod_crewed_pending_shackleton }
+		AND = { scope:site = 36 sr_site_crews_peary >= sr_mod_crewed_pending_peary }
+		AND = { scope:site = 37 sr_site_crews_tranquility >= sr_mod_crewed_pending_tranquility }
+		AND = { scope:site = 38 sr_site_crews_marius_hills >= sr_mod_crewed_pending_marius_hills }
+		AND = { scope:site = 39 sr_site_crews_daedalus >= sr_mod_crewed_pending_daedalus }
+		AND = { scope:site = 40 sr_site_crews_imbrium >= sr_mod_crewed_pending_imbrium }
 	}
 }
-# ... is at or past its slots, so the next one costs more (design § 5).
-sr_mod_scope_past_slots = {
+# Its Habitats are at or past its cap, so the next one costs more (colony people design § 4.3).
+sr_mod_scope_past_hab_cap = {
 	OR = {
-		AND = { scope:site = 1 sr_mod_slots_used_valles_marineris >= sr_site_slots_valles_marineris }
-		AND = { scope:site = 2 sr_mod_slots_used_olympus_mons >= sr_site_slots_olympus_mons }
-		AND = { scope:site = 3 sr_mod_slots_used_hellas_planitia >= sr_site_slots_hellas_planitia }
-		AND = { scope:site = 4 sr_mod_slots_used_utopia_planitia >= sr_site_slots_utopia_planitia }
-		AND = { scope:site = 5 sr_mod_slots_used_arcadia_planitia >= sr_site_slots_arcadia_planitia }
-		AND = { scope:site = 6 sr_mod_slots_used_ceres >= sr_site_slots_ceres }
-		AND = { scope:site = 7 sr_mod_slots_used_vesta >= sr_site_slots_vesta }
-		AND = { scope:site = 8 sr_mod_slots_used_psyche >= sr_site_slots_psyche }
-		AND = { scope:site = 9 sr_mod_slots_used_pallas >= sr_site_slots_pallas }
-		AND = { scope:site = 10 sr_mod_slots_used_hygiea >= sr_site_slots_hygiea }
-		AND = { scope:site = 11 sr_mod_slots_used_io >= sr_site_slots_io }
-		AND = { scope:site = 12 sr_mod_slots_used_europa >= sr_site_slots_europa }
-		AND = { scope:site = 13 sr_mod_slots_used_ganymede >= sr_site_slots_ganymede }
-		AND = { scope:site = 14 sr_mod_slots_used_callisto >= sr_site_slots_callisto }
-		AND = { scope:site = 15 sr_mod_slots_used_himalia >= sr_site_slots_himalia }
-		AND = { scope:site = 16 sr_mod_slots_used_amalthea >= sr_site_slots_amalthea }
-		AND = { scope:site = 17 sr_mod_slots_used_venus >= sr_site_slots_venus }
-		AND = { scope:site = 18 sr_mod_slots_used_mercury >= sr_site_slots_mercury }
-		AND = { scope:site = 19 sr_mod_slots_used_titan >= sr_site_slots_titan }
-		AND = { scope:site = 20 sr_mod_slots_used_enceladus >= sr_site_slots_enceladus }
-		AND = { scope:site = 21 sr_mod_slots_used_rhea >= sr_site_slots_rhea }
-		AND = { scope:site = 22 sr_mod_slots_used_mimas >= sr_site_slots_mimas }
-		AND = { scope:site = 23 sr_mod_slots_used_iapetus >= sr_site_slots_iapetus }
-		AND = { scope:site = 24 sr_mod_slots_used_titania >= sr_site_slots_titania }
-		AND = { scope:site = 25 sr_mod_slots_used_oberon >= sr_site_slots_oberon }
-		AND = { scope:site = 26 sr_mod_slots_used_miranda >= sr_site_slots_miranda }
-		AND = { scope:site = 27 sr_mod_slots_used_ariel >= sr_site_slots_ariel }
-		AND = { scope:site = 28 sr_mod_slots_used_triton >= sr_site_slots_triton }
-		AND = { scope:site = 29 sr_mod_slots_used_proteus >= sr_site_slots_proteus }
-		AND = { scope:site = 30 sr_mod_slots_used_pluto >= sr_site_slots_pluto }
-		AND = { scope:site = 31 sr_mod_slots_used_eris >= sr_site_slots_eris }
-		AND = { scope:site = 32 sr_mod_slots_used_makemake >= sr_site_slots_makemake }
-		AND = { scope:site = 33 sr_mod_slots_used_haumea >= sr_site_slots_haumea }
-		AND = { scope:site = 34 sr_mod_slots_used_sedna >= sr_site_slots_sedna }
-		AND = { scope:site = 35 sr_mod_slots_used_shackleton >= sr_site_slots_shackleton }
-		AND = { scope:site = 36 sr_mod_slots_used_peary >= sr_site_slots_peary }
-		AND = { scope:site = 37 sr_mod_slots_used_tranquility >= sr_site_slots_tranquility }
-		AND = { scope:site = 38 sr_mod_slots_used_marius_hills >= sr_site_slots_marius_hills }
-		AND = { scope:site = 39 sr_mod_slots_used_daedalus >= sr_site_slots_daedalus }
-		AND = { scope:site = 40 sr_mod_slots_used_imbrium >= sr_site_slots_imbrium }
+		AND = { scope:site = 1 sr_mod_hab_used_valles_marineris >= sr_site_hab_cap_valles_marineris }
+		AND = { scope:site = 2 sr_mod_hab_used_olympus_mons >= sr_site_hab_cap_olympus_mons }
+		AND = { scope:site = 3 sr_mod_hab_used_hellas_planitia >= sr_site_hab_cap_hellas_planitia }
+		AND = { scope:site = 4 sr_mod_hab_used_utopia_planitia >= sr_site_hab_cap_utopia_planitia }
+		AND = { scope:site = 5 sr_mod_hab_used_arcadia_planitia >= sr_site_hab_cap_arcadia_planitia }
+		AND = { scope:site = 6 sr_mod_hab_used_ceres >= sr_site_hab_cap_ceres }
+		AND = { scope:site = 7 sr_mod_hab_used_vesta >= sr_site_hab_cap_vesta }
+		AND = { scope:site = 8 sr_mod_hab_used_psyche >= sr_site_hab_cap_psyche }
+		AND = { scope:site = 9 sr_mod_hab_used_pallas >= sr_site_hab_cap_pallas }
+		AND = { scope:site = 10 sr_mod_hab_used_hygiea >= sr_site_hab_cap_hygiea }
+		AND = { scope:site = 11 sr_mod_hab_used_io >= sr_site_hab_cap_io }
+		AND = { scope:site = 12 sr_mod_hab_used_europa >= sr_site_hab_cap_europa }
+		AND = { scope:site = 13 sr_mod_hab_used_ganymede >= sr_site_hab_cap_ganymede }
+		AND = { scope:site = 14 sr_mod_hab_used_callisto >= sr_site_hab_cap_callisto }
+		AND = { scope:site = 15 sr_mod_hab_used_himalia >= sr_site_hab_cap_himalia }
+		AND = { scope:site = 16 sr_mod_hab_used_amalthea >= sr_site_hab_cap_amalthea }
+		AND = { scope:site = 17 sr_mod_hab_used_venus >= sr_site_hab_cap_venus }
+		AND = { scope:site = 18 sr_mod_hab_used_mercury >= sr_site_hab_cap_mercury }
+		AND = { scope:site = 19 sr_mod_hab_used_titan >= sr_site_hab_cap_titan }
+		AND = { scope:site = 20 sr_mod_hab_used_enceladus >= sr_site_hab_cap_enceladus }
+		AND = { scope:site = 21 sr_mod_hab_used_rhea >= sr_site_hab_cap_rhea }
+		AND = { scope:site = 22 sr_mod_hab_used_mimas >= sr_site_hab_cap_mimas }
+		AND = { scope:site = 23 sr_mod_hab_used_iapetus >= sr_site_hab_cap_iapetus }
+		AND = { scope:site = 24 sr_mod_hab_used_titania >= sr_site_hab_cap_titania }
+		AND = { scope:site = 25 sr_mod_hab_used_oberon >= sr_site_hab_cap_oberon }
+		AND = { scope:site = 26 sr_mod_hab_used_miranda >= sr_site_hab_cap_miranda }
+		AND = { scope:site = 27 sr_mod_hab_used_ariel >= sr_site_hab_cap_ariel }
+		AND = { scope:site = 28 sr_mod_hab_used_triton >= sr_site_hab_cap_triton }
+		AND = { scope:site = 29 sr_mod_hab_used_proteus >= sr_site_hab_cap_proteus }
+		AND = { scope:site = 30 sr_mod_hab_used_pluto >= sr_site_hab_cap_pluto }
+		AND = { scope:site = 31 sr_mod_hab_used_eris >= sr_site_hab_cap_eris }
+		AND = { scope:site = 32 sr_mod_hab_used_makemake >= sr_site_hab_cap_makemake }
+		AND = { scope:site = 33 sr_mod_hab_used_haumea >= sr_site_hab_cap_haumea }
+		AND = { scope:site = 34 sr_mod_hab_used_sedna >= sr_site_hab_cap_sedna }
+		AND = { scope:site = 35 sr_mod_hab_used_shackleton >= sr_site_hab_cap_shackleton }
+		AND = { scope:site = 36 sr_mod_hab_used_peary >= sr_site_hab_cap_peary }
+		AND = { scope:site = 37 sr_mod_hab_used_tranquility >= sr_site_hab_cap_tranquility }
+		AND = { scope:site = 38 sr_mod_hab_used_marius_hills >= sr_site_hab_cap_marius_hills }
+		AND = { scope:site = 39 sr_mod_hab_used_daedalus >= sr_site_hab_cap_daedalus }
+		AND = { scope:site = 40 sr_mod_hab_used_imbrium >= sr_site_hab_cap_imbrium }
 	}
 }
-# ... and its next costs no more than the module stock can hold (the owner, 2026-11-15).
-sr_mod_scope_price_fits = {
+# ... and its next Habitat costs no more than the module stock can hold (the owner, 2026-11-15).
+sr_mod_scope_hab_price_fits = {
 	OR = {
-		AND = { scope:site = 1 sr_mod_next_cost_valles_marineris <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 2 sr_mod_next_cost_olympus_mons <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 3 sr_mod_next_cost_hellas_planitia <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 4 sr_mod_next_cost_utopia_planitia <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 5 sr_mod_next_cost_arcadia_planitia <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 6 sr_mod_next_cost_ceres <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 7 sr_mod_next_cost_vesta <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 8 sr_mod_next_cost_psyche <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 9 sr_mod_next_cost_pallas <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 10 sr_mod_next_cost_hygiea <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 11 sr_mod_next_cost_io <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 12 sr_mod_next_cost_europa <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 13 sr_mod_next_cost_ganymede <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 14 sr_mod_next_cost_callisto <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 15 sr_mod_next_cost_himalia <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 16 sr_mod_next_cost_amalthea <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 17 sr_mod_next_cost_venus <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 18 sr_mod_next_cost_mercury <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 19 sr_mod_next_cost_titan <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 20 sr_mod_next_cost_enceladus <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 21 sr_mod_next_cost_rhea <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 22 sr_mod_next_cost_mimas <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 23 sr_mod_next_cost_iapetus <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 24 sr_mod_next_cost_titania <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 25 sr_mod_next_cost_oberon <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 26 sr_mod_next_cost_miranda <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 27 sr_mod_next_cost_ariel <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 28 sr_mod_next_cost_triton <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 29 sr_mod_next_cost_proteus <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 30 sr_mod_next_cost_pluto <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 31 sr_mod_next_cost_eris <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 32 sr_mod_next_cost_makemake <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 33 sr_mod_next_cost_haumea <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 34 sr_mod_next_cost_sedna <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 35 sr_mod_next_cost_shackleton <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 36 sr_mod_next_cost_peary <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 37 sr_mod_next_cost_tranquility <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 38 sr_mod_next_cost_marius_hills <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 39 sr_mod_next_cost_daedalus <= sr_mod_fab_stock_cap }
-		AND = { scope:site = 40 sr_mod_next_cost_imbrium <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 1 sr_mod_next_hab_cost_valles_marineris <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 2 sr_mod_next_hab_cost_olympus_mons <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 3 sr_mod_next_hab_cost_hellas_planitia <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 4 sr_mod_next_hab_cost_utopia_planitia <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 5 sr_mod_next_hab_cost_arcadia_planitia <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 6 sr_mod_next_hab_cost_ceres <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 7 sr_mod_next_hab_cost_vesta <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 8 sr_mod_next_hab_cost_psyche <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 9 sr_mod_next_hab_cost_pallas <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 10 sr_mod_next_hab_cost_hygiea <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 11 sr_mod_next_hab_cost_io <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 12 sr_mod_next_hab_cost_europa <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 13 sr_mod_next_hab_cost_ganymede <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 14 sr_mod_next_hab_cost_callisto <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 15 sr_mod_next_hab_cost_himalia <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 16 sr_mod_next_hab_cost_amalthea <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 17 sr_mod_next_hab_cost_venus <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 18 sr_mod_next_hab_cost_mercury <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 19 sr_mod_next_hab_cost_titan <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 20 sr_mod_next_hab_cost_enceladus <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 21 sr_mod_next_hab_cost_rhea <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 22 sr_mod_next_hab_cost_mimas <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 23 sr_mod_next_hab_cost_iapetus <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 24 sr_mod_next_hab_cost_titania <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 25 sr_mod_next_hab_cost_oberon <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 26 sr_mod_next_hab_cost_miranda <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 27 sr_mod_next_hab_cost_ariel <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 28 sr_mod_next_hab_cost_triton <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 29 sr_mod_next_hab_cost_proteus <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 30 sr_mod_next_hab_cost_pluto <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 31 sr_mod_next_hab_cost_eris <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 32 sr_mod_next_hab_cost_makemake <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 33 sr_mod_next_hab_cost_haumea <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 34 sr_mod_next_hab_cost_sedna <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 35 sr_mod_next_hab_cost_shackleton <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 36 sr_mod_next_hab_cost_peary <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 37 sr_mod_next_hab_cost_tranquility <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 38 sr_mod_next_hab_cost_marius_hills <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 39 sr_mod_next_hab_cost_daedalus <= sr_mod_fab_stock_cap }
+		AND = { scope:site = 40 sr_mod_next_hab_cost_imbrium <= sr_mod_fab_stock_cap }
 	}
 }
 # ... has a queue to clear.

@@ -115,7 +115,7 @@ Polarity is heuristically classified; override in
 | `country_sol_expectations_upper_offset_add` | 3 | -1 | 0.5 | 0.5 | negative-good | 0.5‡ |
 | `country_space_race_max_funding_add` | 18 | 1 | 1 | 2 | positive-good | 1‡ |
 | `country_space_race_progress_add` | 2 | 0.2 | 0.2 | 0.2 | positive-good | 0.2‡ |
-| `country_sr_colony_slots_add` | 5 | 1 | 1 | 1 | positive-good | 1‡ |
+| `country_sr_habitat_room_add` | 5 | 0.1 | 0.1 | 0.1 | positive-good | 0.1‡ |
 | `country_st_res_aeroplanes_decay_add` | 10 | -0.007 | 0.005 | 0.005 | negative-good | 0.005‡ |
 | `country_st_res_ammunition_decay_add` | 2 | -0.005 | 0.005 | -0.005 | negative-good | 0.005‡ |
 | `country_st_res_artillery_decay_add` | 4 | -0.002 | 0.0015 | -0.001 | negative-good | 0.0015‡ |

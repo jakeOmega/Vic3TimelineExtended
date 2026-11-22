@@ -1105,15 +1105,22 @@ sr_disp_cf_in_flight = {
 	value = 0
 	if = { limit = { has_variable = sr_cf_in_flight } value = var:sr_cf_in_flight }
 }
-# The emigration programme's level, 0 Off to 3 High.
+# The emigration programme's step, 0 Off; and the amount it sends a month
+# (colony people design § 6.1: the panel shows the number, not a name).
 sr_disp_emig_level = {
 	value = 0
 	if = { limit = { has_variable = sr_emig_level } value = var:sr_emig_level }
 }
-# The settlers it sends a month while colonies have room.
-sr_disp_emig_per_month = {
-	value = sr_emig_level_batches
-	multiply = sr_emig_batch_people
+sr_disp_emig_amount = { value = sr_emig_amount }
+# Last month's settlers, and the Launch Capacity they take a week (colony people
+# design § 6.2).
+sr_disp_emig_last_sent = {
+	value = 0
+	if = { limit = { has_variable = sr_emig_last_sent } value = var:sr_emig_last_sent }
+}
+sr_disp_emig_bill_week = {
+	value = sr_emig_bill_week
+	round = yes
 }
 # Our people off Earth, and the off-world bonus's multiplier.
 sr_disp_offworld_pop = {
@@ -1122,11 +1129,6 @@ sr_disp_offworld_pop = {
 }
 sr_disp_offworld_units = {
 	value = sr_offworld_units
-}
-# 1 with Artificial General Intelligence: modules need no crews.
-sr_disp_agi = {
-	value = 0
-	if = { limit = { has_technology_researched = artificial_intelligence } value = 1 }
 }
 
 # ======= Autonomy and free colonies (slice 5 design § 9) =======

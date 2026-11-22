@@ -32,11 +32,11 @@ ENTRY = "je_space_race_solar_colonization"
 JE = ROOT / "common/journal_entries/je_space_race.txt"
 GENERATED = ROOT / gss.ENTRY_OUT
 
-# The hand-written seven: modifier -> (the conjuncts of its value's limit, what it adds).
+# The hand-written six (the emigration programme went: colony people design § 6.2):
+# modifier -> (the conjuncts of its value's limit, what it adds).
 CONTESTED = "sr_colonies_contested_enabled = yes"
 HAND = {
     "sr_solar_system_trade": (["has_variable = sr_completed_solar_colonization"], "1"),
-    "sr_emigration_programme": ([CONTESTED, "sr_emig_level_value >= 1"], "sr_emig_level_value"),
     "sr_offworld_population": ([CONTESTED, "sr_offworld_pop_total >= sr_offworld_bonus_minimum"], "sr_offworld_units"),
     "sr_module_upkeep": ([CONTESTED, "sr_mod_upkeep_levels >= 1"], "sr_mod_upkeep_levels"),
     "sr_free_colony_supply": ([CONTESTED, "sr_free_supply_count >= 1"], "sr_free_supply_count"),
@@ -120,8 +120,9 @@ class GeneratedDeclarationTests(unittest.TestCase):
 
     def test_nothing_else_is_declared(self):
         expected = {m for m, _, _ in gss.entry_declarations()}
-        # 5 facility modifiers: the Off-World Resort became a room hook (#1948).
-        self.assertEqual(len(expected), 80 + 40 + 5)
+        # 5 facility modifiers: the Off-World Resort became a room hook (#1948);
+        # and the Administration's authority cost (colony people design § 7).
+        self.assertEqual(len(expected), 80 + 40 + 5 + 1)
         self.assertEqual(set(self.declared), expected)
 
     def test_the_multiplier_reads_the_global_record_only(self):
@@ -159,7 +160,7 @@ class HandWrittenDeclarationTests(unittest.TestCase):
     MILESTONE_KEYS = {"sr_space_program_cost", "sr_funding_progress", "sr_funding_throughput",
                       "sr_safe_approach", "sr_ambitious_approach"}
 
-    def test_the_entry_declares_exactly_the_seven_once_each(self):
+    def test_the_entry_declares_exactly_the_six_once_each(self):
         self.assertEqual(set(self.declared) - self.MILESTONE_KEYS, set(HAND))
         for modifier, texts in self.declared.items():
             self.assertEqual(len(texts), 1, modifier)

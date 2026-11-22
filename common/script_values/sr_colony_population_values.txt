@@ -13,28 +13,181 @@ sr_emig_batch_people = {
 	value = 500
 }
 
-# The programme's level: 0 Off, 1 Low, 2 Steady, 3 High.
+# The programme's step (colony people design § 6.1): 0 Off, and step n sends
+# 500 x 2^(n - 1) a month, so 1, 2 and 3 are the old Low, Steady and High.
 sr_emig_level_value = {
 	value = 0
 	if = { limit = { has_variable = sr_emig_level } value = var:sr_emig_level }
 }
 
-# Batches a month at the level: Low 1, Steady 2, High 4 (500, 1,000, 2,000 people).
+# Batches a month at the step: 2^(n - 1), to step 16 (16.4 million people a
+# month, past every world's room together, so the open room stops + first:
+# sr_settlers_sgui).
 sr_emig_level_batches = {
 	value = 0
 	if = { limit = { sr_emig_level_value = 1 } value = 1 }
 	else_if = { limit = { sr_emig_level_value = 2 } value = 2 }
-	else_if = { limit = { sr_emig_level_value >= 3 } value = 4 }
+	else_if = { limit = { sr_emig_level_value = 3 } value = 4 }
+	else_if = { limit = { sr_emig_level_value = 4 } value = 8 }
+	else_if = { limit = { sr_emig_level_value = 5 } value = 16 }
+	else_if = { limit = { sr_emig_level_value = 6 } value = 32 }
+	else_if = { limit = { sr_emig_level_value = 7 } value = 64 }
+	else_if = { limit = { sr_emig_level_value = 8 } value = 128 }
+	else_if = { limit = { sr_emig_level_value = 9 } value = 256 }
+	else_if = { limit = { sr_emig_level_value = 10 } value = 512 }
+	else_if = { limit = { sr_emig_level_value = 11 } value = 1024 }
+	else_if = { limit = { sr_emig_level_value = 12 } value = 2048 }
+	else_if = { limit = { sr_emig_level_value = 13 } value = 4096 }
+	else_if = { limit = { sr_emig_level_value = 14 } value = 8192 }
+	else_if = { limit = { sr_emig_level_value = 15 } value = 16384 }
+	else_if = { limit = { sr_emig_level_value = 16 } value = 32768 }
+}
+# The settlers the step sends a month while the colonies have room and the
+# country has the people (sr_emig_month).
+sr_emig_amount = {
+	value = sr_emig_level_batches
+	multiply = sr_emig_batch_people
 }
 
-# This month's batches: the level's, never more than the open colonies' free
+# This month's batches: the step's, never more than the open colonies' free
 # room holds (sr_emig_open_room_total: the room of the colonies held and not
-# Closed).
+# Closed) ...
 sr_emig_batches_now = {
 	value = sr_emig_open_room_total
 	divide = sr_emig_batch_people
 	floor = yes
 	max = sr_emig_level_batches
+}
+# ... or 1% of our people (colony people design § 6.3: a country can't send more
+# than 1% of its people in a month, however high the step).
+sr_emig_people_cap = { value = 0.01 }
+sr_emig_people_batches = {
+	value = total_population
+	multiply = sr_emig_people_cap
+	divide = sr_emig_batch_people
+	floor = yes
+}
+sr_emig_month_batches = {
+	value = sr_emig_batches_now
+	max = sr_emig_people_batches
+}
+# The share of every state's people the month takes (sr_emig_month).
+sr_emig_share = {
+	value = 0
+	if = {
+		limit = { total_population > 0 }
+		value = sr_emig_month_batches
+		multiply = sr_emig_batch_people
+		divide = total_population
+	}
+}
+# State scope: what the state owes this month (sr_emig_month's two passes).
+sr_emig_due_value = {
+	value = 0
+	if = { limit = { has_variable = sr_emig_due } value = var:sr_emig_due }
+}
+
+# ---- The settlers' bill (colony people design § 6.2) ----------------------------
+# 3 Launch Capacity a settler, for every world: a week's bill is last month's
+# settlers x 3 x 12 / 52. It is charged on the Space Program as
+# sr_settler_launches, a goods_input_launch_capacity_mult of 0.01 a unit
+# (space_race_modifiers.txt), so the price of Launch Capacity rises as the
+# programme buys more: the brake.
+sr_emig_lc_per_settler = { value = 3 }
+sr_emig_bill_week = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_emig_last_sent }
+		value = var:sr_emig_last_sent
+		multiply = sr_emig_lc_per_settler
+		multiply = 12
+		divide = 52
+	}
+}
+# The Space Program's Launch Capacity at full staff: its active methods' lines
+# (workforce_scaled; the building is one level, expandable = no). A test holds the
+# figures to the methods' files (test_colony_people.py).
+sr_emig_lc_base = {
+	value = 0
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_earth_orbit } } add = 500 }
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_moon_mission } } add = 1500 }
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_mars_mission } } add = 5000 }
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_solar_colonization } } add = 10000 }
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_deep_space_exploration } } add = 50000 }
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_interstellar_mission } } add = 100000 }
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_debris_active_removal } } add = 300 }
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_debris_laser_broom } } add = 300 }
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_debris_fusion_sweepers } } add = 150 }
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_sr_fabrication_orbital_assembly } } add = 1300 }
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_sr_fabrication_lunar_foundries } } add = 2600 }
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_sr_fabrication_fusion_shipyards } } add = 4800 }
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_sr_storage_orbital_depot } } add = 450 }
+}
+# The building's Launch Capacity as the engine bills it: the base times the
+# country's Space Program throughput (module upkeep, free colony supply), which
+# the mult would otherwise multiply the settlers' bill by. Floored at 1: a base
+# of 0 divides by nothing (Review Focus 5). State-scope throughput (devastation,
+# riots) is not divided out.
+sr_emig_bill_divisor = {
+	value = modifier:building_space_program_throughput_add
+	add = 1
+	multiply = sr_emig_lc_base
+	min = 1
+}
+# The mult's units: 100 x the week's bill / the divisor (sr_emig_bill_refresh
+# stores it as var:sr_emig_bill_units for the building's multiplier).
+sr_emig_bill_units_value = {
+	value = sr_emig_bill_week
+	multiply = 100
+	divide = sr_emig_bill_divisor
+}
+
+# ---- The AI's settlers (colony people design § 9) ----------------------------------
+# They share fabrication's 5% of weekly fixed income (sr_mod_ai_fab_budget) with
+# the method it runs: what that method's bill leaves (sr_mod_ai_fab_bill_now).
+sr_emig_ai_room = {
+	value = sr_mod_ai_fab_budget
+	subtract = sr_mod_ai_fab_bill_now
+}
+# A week of step 1 (500 settlers a month) at today's Launch Capacity price: its
+# base of 200 times our market's premium, never below base. The throughput is
+# divided out of the settlers' bill (sr_emig_bill_divisor), so not multiplied in.
+sr_emig_ai_week_cost = {
+	value = sr_emig_batch_people
+	multiply = sr_emig_lc_per_settler
+	multiply = 12
+	divide = 52
+	multiply = 200
+	multiply = {
+		value = 1
+		add = sr_launch_capacity_price_up
+	}
+}
+# How many step 1s the room holds: step n costs 2^(n - 1) of them.
+sr_emig_ai_fits = {
+	value = sr_emig_ai_room
+	divide = sr_emig_ai_week_cost
+}
+# The largest step that fits, never past the open colonies' free room; step 1
+# at the least. Each line overrides the one before (no else), so it reads the
+# highest that holds.
+sr_emig_ai_step = {
+	value = 1
+	if = { limit = { sr_emig_ai_fits >= 2 sr_emig_open_room_total >= 1000 } value = 2 }
+	if = { limit = { sr_emig_ai_fits >= 4 sr_emig_open_room_total >= 2000 } value = 3 }
+	if = { limit = { sr_emig_ai_fits >= 8 sr_emig_open_room_total >= 4000 } value = 4 }
+	if = { limit = { sr_emig_ai_fits >= 16 sr_emig_open_room_total >= 8000 } value = 5 }
+	if = { limit = { sr_emig_ai_fits >= 32 sr_emig_open_room_total >= 16000 } value = 6 }
+	if = { limit = { sr_emig_ai_fits >= 64 sr_emig_open_room_total >= 32000 } value = 7 }
+	if = { limit = { sr_emig_ai_fits >= 128 sr_emig_open_room_total >= 64000 } value = 8 }
+	if = { limit = { sr_emig_ai_fits >= 256 sr_emig_open_room_total >= 128000 } value = 9 }
+	if = { limit = { sr_emig_ai_fits >= 512 sr_emig_open_room_total >= 256000 } value = 10 }
+	if = { limit = { sr_emig_ai_fits >= 1024 sr_emig_open_room_total >= 512000 } value = 11 }
+	if = { limit = { sr_emig_ai_fits >= 2048 sr_emig_open_room_total >= 1024000 } value = 12 }
+	if = { limit = { sr_emig_ai_fits >= 4096 sr_emig_open_room_total >= 2048000 } value = 13 }
+	if = { limit = { sr_emig_ai_fits >= 8192 sr_emig_open_room_total >= 4096000 } value = 14 }
+	if = { limit = { sr_emig_ai_fits >= 16384 sr_emig_open_room_total >= 8192000 } value = 15 }
+	if = { limit = { sr_emig_ai_fits >= 32768 sr_emig_open_room_total >= 16384000 } value = 16 }
 }
 
 # The off-world population's bonus (design § 10.5): one unit per
@@ -54,9 +207,9 @@ sr_offworld_units = {
 	divide = sr_offworld_bonus_people
 	max = sr_offworld_bonus_cap
 }
-# The emigration_batch self-check's reading: how much the Space Program's state
-# fell, and 90% of what was sent. Any scope; the globals are set just before
-# (sr_emig_month).
+# The emigration_batch self-check's reading: how much the states taken from fell
+# between them, and 90% of what was sent. Any scope; the globals are set just
+# before (sr_emig_self_check).
 sr_emig_log_fell = {
 	value = 0
 	if = {

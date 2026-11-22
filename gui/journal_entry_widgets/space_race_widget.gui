@@ -1666,30 +1666,37 @@ types space_race_widget_types
 					block "settler_people" {}
 				}
 			}
+			### Its crews, and red while its people are short the crews it needs
+			### (colony people design § 10).
 			widget = {
-				size = { 60 24 }
+				size = { 120 24 }
 				parentanchor = vcenter
 				tooltip = "je_space_race_widget_settlers_crews_tt"
 
-				textbox = {
+				flowcontainer = {
+					direction = horizontal
+					spacing = 4
 					parentanchor = left|vcenter
-					autoresize = yes
-					max_width = 60
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_agi'), '(CFixedPoint)0' )]"
-					block "settler_crews" {}
-				}
-				textbox = {
-					parentanchor = left|vcenter
-					autoresize = yes
-					max_width = 60
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_agi'), '(CFixedPoint)1' )]"
-					text = "je_space_race_widget_settlers_agi"
+					ignoreinvisible = yes
+
+					textbox = {
+						parentanchor = left|vcenter
+						autoresize = yes
+						max_width = 24
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						block "settler_crews" {}
+					}
+					textbox = {
+						parentanchor = left|vcenter
+						autoresize = yes
+						max_width = 88
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						block "settler_crews_short" {}
+					}
 				}
 			}
 		}
@@ -1712,24 +1719,47 @@ types space_race_widget_types
 				ignoreinvisible = yes
 				spacing = 8
 
+				### Crews needed / available, red when short, and the share they
+				### run (colony people design § 10).
 				widget = {
-					size = { 84 24 }
+					size = { 148 24 }
 					parentanchor = vcenter
-					tooltip = "je_space_race_widget_modules_staffing_tt"
+					tooltip = "je_space_race_widget_modules_crews_tt"
 
 					flowcontainer = {
 						direction = horizontal
 						spacing = 4
 						parentanchor = left|vcenter
+						ignoreinvisible = yes
 
 						textbox = {
 							parentanchor = left|vcenter
 							autoresize = yes
-							max_width = 40
+							max_width = 48
 							align = left|nobaseline
 							using = te_sr_fontsize_row
 							elide = right
-							text = "je_space_race_widget_modules_col_staffing"
+							text = "je_space_race_widget_modules_col_crews"
+						}
+						textbox = {
+							parentanchor = left|vcenter
+							autoresize = yes
+							max_width = 48
+							align = left|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							default_format = "#v"
+							block "module_crews" {}
+						}
+						textbox = {
+							parentanchor = left|vcenter
+							autoresize = yes
+							max_width = 48
+							align = left|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							default_format = "#R"
+							block "module_crews_short" {}
 						}
 						textbox = {
 							parentanchor = left|vcenter
@@ -1743,8 +1773,9 @@ types space_race_widget_types
 						}
 					}
 				}
+				### Habitats against the world's cap (colony people design § 4.3).
 				widget = {
-					size = { 96 24 }
+					size = { 120 24 }
 					parentanchor = vcenter
 
 					flowcontainer = {
@@ -1756,7 +1787,7 @@ types space_race_widget_types
 						textbox = {
 							parentanchor = left|vcenter
 							autoresize = yes
-							max_width = 52
+							max_width = 76
 							align = left|nobaseline
 							using = te_sr_fontsize_row
 							elide = right
@@ -2431,7 +2462,7 @@ types space_race_widget_types
 				}
 				te_sr_page_tile = {
 					blockoverride "tile_tooltip" {
-						tooltip = "je_space_race_widget_settlers_crews_tt"
+						tooltip = "je_space_race_widget_modules_crews_tt"
 					}
 					blockoverride "tile_icon" {
 						texture = "gfx/interface/icons/space_race_icons/page_crews.dds"
@@ -2441,12 +2472,12 @@ types space_race_widget_types
 					}
 					blockoverride "tile_value" {
 						te_sr_page_value = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_agi'), '(CFixedPoint)0' )]"
-							block "settler_crews" {}
+							default_format = "#v"
+							block "module_crews" {}
 						}
 						te_sr_page_value = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_agi'), '(CFixedPoint)1' )]"
-							text = "je_space_race_widget_settlers_agi"
+							default_format = "#R"
+							block "module_crews_short" {}
 						}
 					}
 				}
@@ -3670,13 +3701,13 @@ types space_race_widget_types
 			}
 		}
 		widget = {
-			size = { 12 24 }
+			size = { 20 24 }
 			parentanchor = vcenter
 
 			textbox = {
 				parentanchor = center
 				autoresize = yes
-				max_width = 12
+				max_width = 20
 				align = center|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
@@ -4378,24 +4409,8 @@ types space_race_widget_types
 							elide = right
 						}
 						textbox = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_emig_level'), '(CFixedPoint)1' )]"
-							text = "je_space_race_widget_emig_level_1"
-							size = { 84 26 }
-							align = center|nobaseline
-							using = te_sr_fontsize_row
-							elide = right
-						}
-						textbox = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_emig_level'), '(CFixedPoint)2' )]"
-							text = "je_space_race_widget_emig_level_2"
-							size = { 84 26 }
-							align = center|nobaseline
-							using = te_sr_fontsize_row
-							elide = right
-						}
-						textbox = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_emig_level'), '(CFixedPoint)3' )]"
-							text = "je_space_race_widget_emig_level_3"
+							visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_emig_level'), '(CFixedPoint)0' )]"
+							raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_emig_amount')|D]#!"
 							size = { 84 26 }
 							align = center|nobaseline
 							using = te_sr_fontsize_row
@@ -4412,13 +4427,24 @@ types space_race_widget_types
 					}
 				}
 
+				### Last month's settlers, and the Launch Capacity they take a week
+				### (colony people design §§ 6.2, 10).
 				te_sr_value_row = {
 					tooltip = "je_space_race_widget_emig_month_tt"
 					blockoverride "row_label" {
-						text = "je_space_race_widget_emig_month_label"
+						text = "je_space_race_widget_emig_sent_label"
 					}
 					blockoverride "row_value" {
-						text = "je_space_race_widget_emig_month_figure"
+						text = "je_space_race_widget_emig_sent_figure"
+					}
+				}
+				te_sr_value_row = {
+					tooltip = "je_space_race_widget_emig_month_tt"
+					blockoverride "row_label" {
+						text = "je_space_race_widget_emig_bill_label"
+					}
+					blockoverride "row_value" {
+						text = "je_space_race_widget_emig_bill_figure"
 					}
 				}
 				te_sr_value_row = {
@@ -5218,7 +5244,8 @@ types space_race_widget_types
 		}
 		### Under the name, what the site offers a colony (the owner, 2026-10-30:
 		### the Colonies list showed slots and base room only for colonies held):
-		### its module slots, its size's and our Colony Module Slots, and its
+		### its Habitat cap, on hover the people and crews it holds at the cap at
+		### our share (colony people design § 10), and its
 		### Extraplanetary Base room, grade and ground type ("300 (+30%) Metallic",
 		### ground types design § 9.2), each an icon and a figure with its
 		### meaning on hover; the base room's hover is its type's
@@ -5240,7 +5267,9 @@ types space_race_widget_types
 			widget = {
 				size = { 41 22 }
 				parentanchor = vcenter
-				tooltip = "je_space_race_widget_ss_slots_tt"
+				block "site_slots_tooltip" {
+					tooltip = "je_space_race_widget_ss_slots_tt"
+				}
 
 				flowcontainer = {
 					direction = horizontal
@@ -5746,6 +5775,7 @@ types space_race_widget_types
 				}
 				blockoverride "dest_value" {
 					text = "je_space_race_widget_cf_target_value"
+					tooltip = "je_space_race_widget_cf_target_habs_tt"
 				}
 				blockoverride "dest_button" {
 					button = {
@@ -10509,6 +10539,39 @@ types space_race_widget_types
 										position = { 78 46 }
 										visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' ) )]"
 										text = "je_space_race_widget_ovc_window_fig_moon"
+									}
+								}
+							}
+						}
+						### Crews (colony people design § 10): shown while any colony of ours
+						### is short of crews, how many, its hover what that costs and the cure.
+						flowcontainer = {
+							visible = "[GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_understaffed_count'), '(CFixedPoint)1' )]"
+							direction = horizontal
+							ignoreinvisible = yes
+							spacing = 4
+							parentanchor = hcenter
+
+							te_banking_ov_cell = {
+								tooltip = "je_space_race_widget_ovc_crews_tt"
+								blockoverride "caption" {
+									text = "je_space_race_widget_ovc_crews_cap"
+								}
+								blockoverride "icons" {
+									icon = {
+										size = { 100% 100% }
+										texture = "gfx/interface/icons/space_race_icons/page_crews.dds"
+									}
+								}
+								blockoverride "word" {
+									te_banking_ov_word = {
+										text = "je_space_race_widget_ovc_crews_word"
+									}
+								}
+								blockoverride "third_line" {
+									te_banking_ov_word = {
+										position = { 78 46 }
+										text = "je_space_race_widget_ovc_crews_fig"
 									}
 								}
 							}

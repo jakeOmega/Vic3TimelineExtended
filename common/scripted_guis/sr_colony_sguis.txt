@@ -182,10 +182,12 @@ sr_settlers_sgui = {
 				sr_emig_level_value >= 1
 			}
 		}
+		# No fixed top (colony people design § 6.1): a doubling past the open
+		# colonies' free room would send no one more.
 		trigger_else = {
 			custom_tooltip = {
-				text = sr_emig_at_highest_tt
-				sr_emig_level_value <= 2
+				text = sr_emig_room_used_tt
+				sr_emig_amount < sr_emig_open_room_total
 			}
 		}
 	}
@@ -257,15 +259,15 @@ sr_colony_module_sgui = {
 				}
 			}
 			trigger_else = {
-				custom_tooltip = {
-					text = sr_mod_req_slot_room_tt
-					sr_mod_scope_slot_room = yes
-				}
-				# Past its slots, only while the module stock can hold the price (the
-				# owner, 2026-11-15).
-				custom_tooltip = {
-					text = sr_mod_req_price_fits_tt
-					sr_mod_scope_price_fits = yes
+				# A Habitat (code 3), the one capped module: past its cap, only while
+				# the module stock can hold the price (the owner, 2026-11-15; colony
+				# people design § 4.3). Every other module has no cap.
+				trigger_if = {
+					limit = { scope:op = 3 }
+					custom_tooltip = {
+						text = sr_mod_req_hab_price_fits_tt
+						sr_mod_scope_hab_price_fits = yes
+					}
 				}
 				# The Off-World Resort (code 10; #1948 design § 7): room for Resort Colony
 				# levels, so it waits for the building's technology.
@@ -420,13 +422,30 @@ sr_colony_module_sgui = {
 				sr_mod_queue_from_scope = yes
 			}
 		}
-		# Past the world's slots the module costs more fabrication (design § 5).
+		# A crewed module (every one but the Habitat): whether the colony's people
+		# can crew it, or every crewed module there runs short (colony people
+		# design § 10). Crews never bar a module.
 		if = {
 			limit = {
-				scope:op >= 3
-				sr_mod_scope_past_slots = yes
+				scope:op >= 1
+				NOT = { scope:op = 3 }
 			}
-			custom_tooltip = sr_mod_queue_past_slots_tt
+			if = {
+				limit = { sr_mod_scope_crew_spare = yes }
+				custom_tooltip = sr_mod_queue_crew_spare_tt
+			}
+			else = {
+				custom_tooltip = sr_mod_queue_crew_short_tt
+			}
+		}
+		# Past the world's Habitat cap a Habitat costs more fabrication (colony
+		# people design § 4.3).
+		if = {
+			limit = {
+				scope:op = 3
+				sr_mod_scope_past_hab_cap = yes
+			}
+			custom_tooltip = sr_mod_queue_past_hab_cap_tt
 		}
 	}
 }

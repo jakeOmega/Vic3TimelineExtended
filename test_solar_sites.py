@@ -1111,10 +1111,11 @@ class PopulationTest(unittest.TestCase):
             k = site.key
             with self.subTest(site=k):
                 self.assertIn(f"sr_site_base_room_{k} = {{ value = {site.room * 1000} }}", self.values)
-                # Habitats add half the base room a level (colony modules design § 3).
+                # Habitats add the world's Habitat share of the base room a level
+                # (colony people design § 4.4; half before the technologies).
                 room = _block(self.values, f"sr_site_room_{k}")
                 self.assertIn(f"value = sr_site_hab_value_{k}", room)
-                self.assertIn(f"multiply = {gss.HABITAT_ROOM_SHARE}", room)
+                self.assertIn(f"multiply = sr_site_hab_share_value_{k}", room)
                 self.assertIn(f"multiply = sr_site_base_room_{k}", room)
                 for kind in ("sr_site_pop_value", "sr_site_free_room", "sr_site_crews", "sr_emig_prio_weight",
                              "sr_emig_weight"):
@@ -1152,26 +1153,30 @@ class PopulationTest(unittest.TestCase):
                 share = _block(self.effects, "sr_emig_distribute")
                 self.assertIn(f"max = sr_site_free_room_{k}", share)
 
-    def test_a_batch_is_half_middle_and_half_lower_from_the_space_program_s_state(self):
+    def test_a_batch_is_half_middle_and_half_lower_from_every_state(self):
+        """Every state gives in proportion to its people (colony people design
+        § 6.3; test_sr_settler_draw.py holds the rule)."""
         month = _block(self.population, "sr_emig_month")
-        kills = re.findall(r"kill_population_in_state = \{ value = (\d+) strata = (\w+) \}", month)
+        # The batches are taken in sr_emig_take_batches, from both of the month's passes.
+        give = _block(self.population, "sr_emig_take_batches")
+        self.assertEqual(month.count("sr_emig_take_batches = yes"), 2)
+        kills = re.findall(r"kill_population_in_state = \{ value = (\d+) strata = (\w+) \}", give)
         self.assertEqual(kills, [("250", "middle"), ("250", "lower")])
         batch = float(re.search(r"sr_emig_batch_people = \{\s*value = (\d+)", self.pop_values).group(1))
         self.assertEqual(sum(int(v) for v, _ in kills), batch)
-        self.assertIn("is_building_type = building_space_program", month)
-        self.assertIn("count = local_var:sr_emig_batches", month)
+        self.assertNotIn("building_space_program", month)
+        self.assertIn("count = local_var:sr_emig_take", give)
         self.assertIn("sr_colonies_contested_enabled = yes", month)
 
     def test_the_entry_declares_its_population_modifiers(self):
-        # 1.15 scaling modifiers (#1404): the emigration programme's upkeep and
-        # the off-world bonus are declared on the entry from the country values
-        # the monthly refresh used to apply them at (test_sr_solar_scaling_modifiers
-        # pins all six); no refresh is left to call.
+        # 1.15 scaling modifiers (#1404): the off-world bonus is declared on the
+        # entry from the country value the monthly refresh used to apply it at
+        # (test_sr_solar_scaling_modifiers pins them; the emigration programme went:
+        # colony people design § 6.2, settlers bill on the Space Program); no refresh is left to call.
         je = _strip(_raw("common", "journal_entries", "je_space_race.txt"))
         entry = _block(je, "je_space_race_solar_colonization")
         for name, limit, value in (
-                ("sr_emigration_programme", "sr_emig_level_value >= 1", "sr_emig_level_value"),
-                ("sr_offworld_population", "sr_offworld_pop_total >= sr_offworld_bonus_minimum", "sr_offworld_units")):
+                ("sr_offworld_population", "sr_offworld_pop_total >= sr_offworld_bonus_minimum", "sr_offworld_units"),):
             with self.subTest(modifier=name):
                 self.assertRegex(entry, r"scaling_modifiers_while_active = \{\s*modifier = " + name + r"\s*value = \{"
                                  r"\s*value = 0\s*if = \{\s*limit = \{\s*sr_colonies_contested_enabled = yes\s*"
@@ -1245,13 +1250,13 @@ class ModulesTest(unittest.TestCase):
         means = [sum(s.ebase_grade for s in gss.stage_sites(n)) / len(gss.stage_sites(n)) for n in range(1, 6)]
         self.assertEqual(means, sorted(means, reverse=True))
 
-    def test_the_slot_technologies_carry_the_slots_the_worlds_read(self):
-        """Colony management design § 5, as a technology marker
-        (scripting_best_practices.md § Technology markers): five technologies
-        carry +1 Colony Module Slots each (the owner added three on
-        2026-10-30), so their tooltips say so, and each world's slots read the
-        holder's modifier, not the technologies."""
-        name = gss.SLOTS_MODIFIER
+    def test_the_slot_technologies_carry_the_habitat_room_the_worlds_read(self):
+        """Colony people design § 5, as a technology marker
+        (scripting_best_practices.md § Technology markers): the five
+        technologies that gave a module slot each (colony management design
+        § 5) carry +0.1 Habitat Room instead, so their tooltips say so, and each
+        world's Habitat share reads the holder's modifier, not the technologies."""
+        name = gss.HABITAT_MODIFIER
         types = _strip(_raw("common", "modifier_type_definitions", "space_race_modifier_types.txt"))
         self.assertIn("script_only = yes", _block(types, name))
         carriers = {"era_11.txt": ("nuclear_thermal_propulsion",),
@@ -1261,8 +1266,8 @@ class ModulesTest(unittest.TestCase):
             text = _strip(_raw("common", "technology", "technologies", era))
             for tech in techs:
                 with self.subTest(tech=tech):
-                    self.assertIn(f"{name} = 1", _block(text, tech))
-            self.assertEqual(len(re.findall(rf"\b{name} = 1\b", text)), len(techs), era)
+                    self.assertIn(f"{name} = 0.1", _block(text, tech))
+            self.assertEqual(len(re.findall(rf"\b{name} = 0\.1\b", text)), len(techs), era)
         found = []
         for root, _, files in os.walk(os.path.join(REPO, "common")):
             for f in files:
@@ -1273,8 +1278,8 @@ class ModulesTest(unittest.TestCase):
         for site in gss.SITES:
             k = site.key
             with self.subTest(site=k):
-                body = _block(self.values, f"sr_site_slots_{k}")
-                self.assertIn(f"value = {site.slots}", body)
+                body = _block(self.values, f"sr_site_hab_share_now_{k}")
+                self.assertIn(f"value = {gss.HABITAT_BASE_SHARE}", body)
                 self.assertIn(f"global_var:sr_site_holder_{k} = {{ add = modifier:{name} }}", body)
                 self.assertNotIn("has_technology_researched", body)
 
@@ -1299,7 +1304,8 @@ class ModulesTest(unittest.TestCase):
                 staffing = _block(self.values, f"sr_site_staffing_{k}")
                 self.assertIn("sr_colonies_contested_enabled = yes", staffing)
                 self.assertIn(f"sr_site_crews_{k} < sr_site_crew_needed_{k}", staffing)
-                self.assertIn("has_technology_researched = artificial_intelligence", staffing)
+                # Artificial Intelligence halves the crew; it no longer waives it (colony people design § 4.2).
+                self.assertNotIn("artificial_intelligence", staffing)
                 self.assertIn(f"value = sr_site_crews_{k}\n\t\tadd = 1\n\t\tdivide = sr_site_levels_{k}", staffing)
                 for slot in ("a", "b"):
                     mult = _block(self.values, f"sr_site_mult_{slot}_{k}")
@@ -1349,10 +1355,13 @@ class ModulesTest(unittest.TestCase):
                     self.assertIn(f"global_var:sr_site_holder_{k} ?= this", can)
                     self.assertIn(f"has_global_variable = sr_site_spec_{k}", can)
                     self.assertIn(f"sr_mod_spec_used_{k} < sr_mod_spec_budget", can)
-                # Up to SLOTS_PAST_MAX past the world's slots (colony management design § 5).
+                # No slots (colony people design § 4.1): a generic module needs only the
+                # world and a queue place; a Habitat's price must fit in the stock (§ 4.3).
                 for t in gss.generic_types(site):
-                    self.assertIn(f"sr_mod_slots_used_{k} < sr_site_slots_max_{k}",
-                                  _block(self.triggers, f"sr_mod_can_queue_{t}_{k}"))
+                    can = _block(self.triggers, f"sr_mod_can_queue_{t}_{k}")
+                    self.assertIn(f"global_var:sr_site_holder_{k} ?= this", can)
+                    self.assertIn("sr_mq_has_room = yes", can)
+                    self.assertNotIn("slots", can)
                 # no Spaceport on a lunar world: no queue, shipment or level of one
                 no_port = site.key in gss.NO_SPACEPORT
                 self.assertEqual(f"sr_mod_can_queue_port_{k} =" in self.triggers, not no_port)
@@ -1360,7 +1369,7 @@ class ModulesTest(unittest.TestCase):
                 self.assertEqual(f"sr_site_ship_port_{k}" in self.effects + self.values, not no_port)
                 if no_port:
                     self.assertIn(f"sr_site_port_value_{k} = {{ value = 0 }}", self.values)
-                for name, types in (("spec_used", ("a", "b")), ("slots_used", gss.generic_types(site))):
+                for name, types in (("spec_used", ("a", "b")), ("hab_used", ("hab",))):
                     used = _block(self.values, f"sr_mod_{name}_{k}")
                     for t in types:
                         self.assertIn(f"add = var:sr_mq_{t}_{k}", used)
@@ -1373,10 +1382,13 @@ class ModulesTest(unittest.TestCase):
             body = _block(self.effects, f"sr_mod_install_{k}")
             with self.subTest(site=k):
                 self.assertIn(f"has_global_variable = sr_colony_{k}", body)
-                for t in ("a", "b", *gss.generic_types(site)):
-                    cap = (f"sr_site_spec_built_{k} < sr_mod_spec_budget" if t in ("a", "b")
-                           else f"sr_site_generic_built_{k} < sr_site_slots_max_{k}")
-                    self.assertIn(f"local_var:sr_ms_type_now = {gss.MODULE_CODES[t]} {cap}", body)
+                for t in ("a", "b"):
+                    self.assertIn(f"local_var:sr_ms_type_now = {gss.MODULE_CODES[t]} sr_site_spec_built_{k} < "
+                                  "sr_mod_spec_budget", body)
+                # Every other module has no cap but Terraforming's (colony people design § 4.1).
+                for t in gss.generic_types(site):
+                    self.assertIn(f"local_var:sr_ms_type_now = {gss.MODULE_CODES[t]}", body)
+                    self.assertNotIn("slots", body)
                 self.assertIn(f"sr_site_sync_{k} = yes", body)
 
     def test_fabrication_builds_the_queue_first_in_first_out(self):
@@ -1508,8 +1520,9 @@ class ModulesTest(unittest.TestCase):
                 self.assertLess(button.index("click_modifiers = {"), button.index("ondefault"))
 
     def test_the_ai_never_queues_a_placeholder(self):
-        """Never Defences or a Spaceport; a Habitat or a facility only within the
-        world's slots, never at the price past them (colony management design § 7.3)."""
+        """Never Defences or a Spaceport; a Habitat only within the world's cap,
+        never at the price past it (colony management design § 7.3; colony people
+        design § 9)."""
         for site in gss.SITES:
             k = site.key
             body = _block(self.effects, f"sr_mod_ai_plan_{k}")
@@ -1519,7 +1532,7 @@ class ModulesTest(unittest.TestCase):
                 # The Off-World Resort since #1948, once the Resort Colony room is full.
                 self.assertEqual(set(queued), {"hab", "a", "b", "admin", "mine", "resort", "bunker", "yard", "lab"}
                                  | terra)
-                self.assertEqual(body.count(f"sr_mod_slots_used_{k} < sr_site_slots_{k}"), 7 + len(terra))
+                self.assertEqual(body.count(f"sr_mod_hab_used_{k} < sr_site_hab_cap_{k}"), 1)
         review = _block(self.modules, "sr_mod_ai_review")
         self.assertIn("is_ai = yes", review)
         self.assertIn("days = 360", review)
@@ -1731,10 +1744,12 @@ class ModulesTest(unittest.TestCase):
         prices = pm_costs.load_goods()
         pms = _strip(_raw("common", "production_methods", "sr_colony_module_pms.txt"))
         values = _strip(_raw("common", "script_values", "sr_colony_module_values.txt"))
-        for key in ("lunar_foundries", "fusion_shipyards"):
+        for key in ("orbital_assembly", "lunar_foundries", "fusion_shipyards"):
             with self.subTest(method=key):
                 base = float(re.search(r"value = ([\d.]+)", _block(values, f"sr_mod_fab_bill_base_{key}")).group(1))
                 self.assertEqual(base, self._bill(_block(pms, f"pm_sr_fabrication_{key}"), prices))
+                if key == "orbital_assembly":
+                    continue
                 room = _block(values, f"sr_mod_ai_fab_room_{key}")
                 self.assertIn("value = sr_mod_ai_fab_budget", room)
                 self.assertIn(f"value = sr_mod_fab_bill_base_{key}", room)
@@ -1820,8 +1835,8 @@ class ModulesTest(unittest.TestCase):
                     self.assertIn(f"var:sr_mq_{n}_site ?= {site.index} NOT = {{ has_global_variable = sr_site_blockaded_{site.key} }} "
                                   f"NOT = {{ has_global_variable = sr_site_occupier_{site.key} }} "
                                   "sr_mod_fab_stock_value >= sr_module_points "
-                                  f"OR = {{ var:sr_mq_{n}_type ?= 1 var:sr_mq_{n}_type ?= 2 "
-                                  f"sr_mod_fab_stock_value >= sr_mod_generic_cost_{site.key} }}", test)
+                                  f"OR = {{ NOT = {{ var:sr_mq_{n}_type ?= 3 }} "
+                                  f"sr_mod_fab_stock_value >= sr_mod_hab_cost_{site.key} }}", test)
         # The hover's Moon note reads the same entries behind the head.
         behind = _block(self.triggers, "sr_mq_lunar_behind")
         self.assertNotIn("var:sr_mq_1_site", behind)
@@ -1833,19 +1848,19 @@ class ModulesTest(unittest.TestCase):
         loop = _block(month, "while")
         self.assertLess(loop.index("sr_mod_fab_head = yes"), loop.index("sr_mq_promote_lunar = yes"))
 
-    def test_past_its_slots_a_module_needs_its_price_in_stock(self):
-        self.assertEqual(gss.SLOTS_PAST_MAX, 8)
+    def test_past_its_cap_a_habitat_needs_its_price_in_stock(self):
+        """No top past the cap (the owner's call 7, colony people design § 4.3):
+        the stock alone limits how far."""
         for site in gss.SITES:
             k = site.key
             with self.subTest(site=k):
-                self.assertIn(f"sr_site_slots_max_{k} = {{ value = sr_site_slots_{k} add = 8 }}", self.values)
-                for t in gss.generic_types(site):
-                    self.assertIn(f"sr_mod_next_cost_{k} <= sr_mod_fab_stock_cap",
-                                  _block(self.triggers, f"sr_mod_can_queue_{t}_{k}"))
-                self.assertIn(f"AND = {{ scope:site = {site.index} sr_mod_next_cost_{k} <= sr_mod_fab_stock_cap }}",
-                              _block(self.triggers, "sr_mod_scope_price_fits"))
+                self.assertNotIn(f"sr_site_slots_max_{k}", self.values)
+                self.assertIn(f"sr_mod_next_hab_cost_{k} <= sr_mod_fab_stock_cap",
+                              _block(self.triggers, f"sr_mod_can_queue_hab_{k}"))
+                self.assertIn(f"AND = {{ scope:site = {site.index} sr_mod_next_hab_cost_{k} <= sr_mod_fab_stock_cap }}",
+                              _block(self.triggers, "sr_mod_scope_hab_price_fits"))
         sgui = _strip(_raw("common", "scripted_guis", "sr_colony_sguis.txt"))
-        self.assertRegex(sgui, r"text = sr_mod_req_price_fits_tt\s*sr_mod_scope_price_fits = yes")
+        self.assertRegex(sgui, r"text = sr_mod_req_hab_price_fits_tt\s*sr_mod_scope_hab_price_fits = yes")
 
     def test_the_hover_reads_each_waiting_shipment_s_window(self):
         gated = [s for s in gss.SITES if s.body]

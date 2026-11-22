@@ -20,8 +20,8 @@ molecular_assemblers = {
 		# the census's chronic treatment: with Biological Immortality's it takes era 12's 0.90 to the cap, 0.99 (era 13
 		# spec call 6, 2026-10-31; 0.12 until then, when the cap came in era 12)
 		state_chronic_treatment_add = 0.04
-		# a module slot at every colony (colony management design § 5; sr_site_slots_<key>)
-		country_sr_colony_slots_add = 1
+		# +10 points of Habitat room at every colony (colony people design § 5; sr_site_hab_share_now_<key>)
+		country_sr_habitat_room_add = 0.1
 	}
 
 	ai_weight = {

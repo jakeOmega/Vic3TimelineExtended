@@ -15,46 +15,135 @@
 # ============================================================================
 
 # ---- The month's emigrants (the entry's pulse) --------------------------------
-# Country scope. Batches of sr_emig_batch_people (half middle strata, half
-# lower; kill_population_in_state takes a constant), as many as the level
-# sends and the open colonies have room for. People taken from Earth and not
-# booked as known kills are read by the Demographics census as emigrants,
-# which is what they are. Under Full Colonies none leave while Earth is
-# blockaded or the launch site is occupied (slice 6 fleets design § 15).
+# Country scope. The month's settlers (sr_emig_month_batches: the step's amount,
+# never more than the open colonies' free room or 1% of our people) come from
+# every state we own, in proportion to its people (colony people design § 6.3;
+# the owner, 2026-11-22: "Spread by population"); the Python twin is
+# scripts/analysis/sr_settler_draw.py, and test_sr_settler_draw.py holds both to
+# one rule. In batches of sr_emig_batch_people (half middle strata, half lower;
+# kill_population_in_state takes a constant):
+#   1. each state's due is the share x its people + its carry (sr_emig_carry,
+#      what it owed and didn't give before), one pass reading only
+#      state_population, so no count of its pops;
+#   2. the floors, largest due first: each state gives its whole batches while
+#      the month has batches left (local sr_emig_left); a state the month runs
+#      out before keeps its whole due, so it comes earlier next month;
+#   3. the remainders (the final review of #1958): the batches the floors left go
+#      one each to the largest dues still owed, and every state keeps what it
+#      owes as its carry, below 0 for one that gave a batch more than it owed.
+# So every month sends its settlers, the carries sum to 0, and each state's
+# running total stays within a batch of its share. With the floors alone a
+# country of 48 states at 500 a month sent nothing for a year. The census books each state's take as known
+# moves out, by Organized Colonization's profile (te_demog_sr_note_settlers).
+# Under Full Colonies none leave while Earth is blockaded or the launch site is
+# occupied (slice 6 fleets design § 15).
+# State scope, from sr_emig_month's passes 2 and 3: this state gives
+# local_var:sr_emig_take batches (half middle strata, half lower;
+# kill_population_in_state takes a constant), the census books them, and they
+# come off its due and the month's batches left.
+sr_emig_take_batches = {
+	set_local_variable = {
+		name = sr_emig_took_now
+		value = {
+			value = local_var:sr_emig_take
+			multiply = sr_emig_batch_people
+		}
+	}
+	change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_take }
+	change_local_variable = { name = sr_emig_sent add = local_var:sr_emig_took_now }
+	# The emigration_batch self-check's reading (sr_emig_self_check).
+	change_local_variable = { name = sr_emig_fell_before add = state_population }
+	while = {
+		count = local_var:sr_emig_take
+		kill_population_in_state = { value = 250 strata = middle }
+		kill_population_in_state = { value = 250 strata = lower }
+	}
+	change_local_variable = { name = sr_emig_fell_after add = state_population }
+	te_demog_sr_note_settlers = yes
+	change_variable = { name = sr_emig_due subtract = local_var:sr_emig_took_now }
+}
+
 sr_emig_month = {
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
-			sr_emig_batches_now >= 1
+			sr_emig_month_batches >= 1
 			sr_has_space_program = yes
 			NOT = { sr_launches_barred = yes }
 		}
-		set_local_variable = { name = sr_emig_batches value = sr_emig_batches_now }
-		random_scope_building = {
-			limit = { is_building_type = building_space_program }
-			state = { save_scope_as = sr_emig_state }
-		}
-		if = {
-			limit = { exists = scope:sr_emig_state }
-			set_local_variable = {
-				name = sr_emig_sent
+		set_local_variable = { name = sr_emig_left value = sr_emig_month_batches }
+		set_local_variable = { name = sr_emig_share value = sr_emig_share }
+		set_local_variable = { name = sr_emig_sent value = 0 }
+		set_local_variable = { name = sr_emig_fell_before value = 0 }
+		set_local_variable = { name = sr_emig_fell_after value = 0 }
+		# 1. Each state's due.
+		every_scope_state = {
+			set_variable = {
+				name = sr_emig_due
 				value = {
-					value = local_var:sr_emig_batches
-					multiply = sr_emig_batch_people
+					value = state_population
+					multiply = local_var:sr_emig_share
+					if = { limit = { has_variable = sr_emig_carry } add = var:sr_emig_carry }
 				}
 			}
-			scope:sr_emig_state = {
-				set_global_variable = { name = sr_emig_log_before_now value = state_population }
-				while = {
-					count = local_var:sr_emig_batches
-					kill_population_in_state = { value = 250 strata = middle }
-					kill_population_in_state = { value = 250 strata = lower }
+			if = { limit = { has_variable = sr_emig_carry } remove_variable = sr_emig_carry }
+		}
+		# 2. The floors, largest due first: whole batches; the due stays for 3.
+		ordered_scope_state = {
+			limit = { has_variable = sr_emig_due }
+			order_by = sr_emig_due_value
+			max = 1000
+			check_range_bounds = no
+			if = {
+				limit = {
+					local_var:sr_emig_left >= 1
+					sr_emig_due_value >= sr_emig_batch_people
 				}
-				set_global_variable = { name = sr_emig_log_after_now value = state_population }
+				set_local_variable = {
+					name = sr_emig_take
+					value = {
+						value = sr_emig_due_value
+						divide = sr_emig_batch_people
+						floor = yes
+						max = local_var:sr_emig_left
+					}
+				}
+				sr_emig_take_batches = yes
 			}
+		}
+		# 3. The remainders, largest due first: a batch each while batches are
+		#    left; then every state keeps what it owes, below 0 too.
+		ordered_scope_state = {
+			limit = { has_variable = sr_emig_due }
+			order_by = sr_emig_due_value
+			max = 1000
+			check_range_bounds = no
+			if = {
+				limit = {
+					local_var:sr_emig_left >= 1
+					sr_emig_due_value > 0
+				}
+				set_local_variable = { name = sr_emig_take value = 1 }
+				sr_emig_take_batches = yes
+			}
+			if = {
+				limit = { NOT = { var:sr_emig_due = 0 } }
+				set_variable = { name = sr_emig_carry value = var:sr_emig_due }
+			}
+			remove_variable = sr_emig_due
+		}
+		# What the distribution shares out, the bill charges and the panel shows.
+		if = {
+			limit = { local_var:sr_emig_sent > 0 }
 			sr_emig_distribute = yes
-			set_variable = { name = sr_emig_last_sent value = local_var:sr_emig_sent }
+			# 40 days, past a month's pulse: if the entry's pulse stops, the sent
+			# lapses and the always-on pulse takes the bill off (space_race_on_actions.txt).
+			set_variable = { name = sr_emig_last_sent value = local_var:sr_emig_sent days = 40 }
 			sr_emig_self_check = yes
+		}
+		else_if = {
+			limit = { has_variable = sr_emig_last_sent }
+			remove_variable = sr_emig_last_sent
 		}
 	}
 	else_if = {
@@ -63,29 +152,52 @@ sr_emig_month = {
 	}
 }
 
-# ---- Self-check: emigration_batch (design § 12) -------------------------------------
-# Country scope, after the first month's batches: OK when the Space Program's
-# state lost at least 90% of what was sent (both read in the same run, so a
-# month's births can't hide it); BROKEN otherwise, with the numbers: the
-# filter removed less, or state_population reads the change only later.
+# ---- The settlers' bill (colony people design § 6.2) ------------------------------
+# Country scope, after sr_emig_month in the entry's pulse: the one refresh site of
+# sr_settler_launches. Off every Space Program, then on at the month's units,
+# skipped at 0 (the dynamic-modifier pattern: a same-name add stacks).
+sr_emig_bill_refresh = {
+	every_scope_building = {
+		limit = { is_building_type = building_space_program }
+		remove_modifier_if_exists_effect = { MODIFIER = sr_settler_launches }
+	}
+	set_variable = { name = sr_emig_bill_units value = sr_emig_bill_units_value }
+	every_scope_building = {
+		limit = { is_building_type = building_space_program }
+		if = {
+			limit = { root.var:sr_emig_bill_units > 0 }
+			add_modifier = { name = sr_settler_launches multiplier = root.var:sr_emig_bill_units }
+		}
+	}
+}
+
+# ---- Self-check: emigration_batch (design § 12; colony people design § 6.3) ---------
+# Country scope, after the first month's batches: OK when the states taken from
+# lost at least 90% of what was sent between them (both read in the same run, so
+# a month's births can't hide it); BROKEN otherwise, with the numbers: the strata
+# filter removed less, or state_population reads the change only on the next
+# tick, as it does after kill_population_percent_in_state (scripting_best_practices
+# § "state_population Doesn't Fall Until the Next Tick").
 sr_emig_self_check = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_emig_batch_checked } }
 		set_global_variable = { name = sr_emig_batch_checked value = yes }
+		set_global_variable = { name = sr_emig_log_before_now value = local_var:sr_emig_fell_before }
+		set_global_variable = { name = sr_emig_log_after_now value = local_var:sr_emig_fell_after }
 		set_global_variable = { name = sr_emig_log_sent_now value = local_var:sr_emig_sent }
 		if = {
 			limit = { sr_emig_log_fell >= sr_emig_log_fell_needed }
-			debug_log = "TE_SELF_CHECK OK emigration_batch before=[GetGlobalVariable('sr_emig_log_before_now').GetValue|0] after=[GetGlobalVariable('sr_emig_log_after_now').GetValue|0] sent=[GetGlobalVariable('sr_emig_log_sent_now').GetValue|0] country=[THIS.GetCountry.GetNameNoFormatting] (the Space Program's state lost the batches it sent) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK OK emigration_batch before=[GetGlobalVariable('sr_emig_log_before_now').GetValue|0] after=[GetGlobalVariable('sr_emig_log_after_now').GetValue|0] sent=[GetGlobalVariable('sr_emig_log_sent_now').GetValue|0] country=[THIS.GetCountry.GetNameNoFormatting] (the states taken from lost the batches sent) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN emigration_batch before=[GetGlobalVariable('sr_emig_log_before_now').GetValue|0] after=[GetGlobalVariable('sr_emig_log_after_now').GetValue|0] sent=[GetGlobalVariable('sr_emig_log_sent_now').GetValue|0] country=[THIS.GetCountry.GetNameNoFormatting] (the state lost less than 90% of the emigrants sent: the strata filter removed fewer, or state_population reads the change later; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK BROKEN emigration_batch before=[GetGlobalVariable('sr_emig_log_before_now').GetValue|0] after=[GetGlobalVariable('sr_emig_log_after_now').GetValue|0] sent=[GetGlobalVariable('sr_emig_log_sent_now').GetValue|0] country=[THIS.GetCountry.GetNameNoFormatting] (the states taken from lost less than 90% of the settlers sent: the strata filter removed fewer, or state_population reads the change only on the next tick; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 	}
 }
 
 # ---- The programme and the priorities --------------------------------------------------
-# Country scope. LEVEL 0-3. The entry declares the programme's upkeep from the
-# level (sr_emigration_programme, je_space_race.txt).
+# Country scope. LEVEL a step, 0 Off. The month's settlers are billed on the
+# Space Program (sr_emig_bill_refresh).
 sr_emig_set_level = {
 	set_variable = { name = sr_emig_level value = $LEVEL$ }
 	if = {
@@ -99,7 +211,8 @@ sr_emig_set_level = {
 	}
 }
 
-# Country scope, the Settlers section's - and + (scope:op 0 and 1).
+# Country scope, the Settlers section's - and + (scope:op 0 and 1): - halves
+# the amount (500 to Off), + doubles it (colony people design § 6.1).
 sr_emig_step_level = {
 	if = {
 		limit = { scope:op = 0 }
@@ -107,26 +220,17 @@ sr_emig_step_level = {
 			limit = { sr_emig_level_value <= 1 }
 			sr_emig_set_level = { LEVEL = 0 }
 		}
-		else_if = {
-			limit = { sr_emig_level_value = 2 }
-			sr_emig_set_level = { LEVEL = 1 }
-		}
 		else = {
-			sr_emig_set_level = { LEVEL = 2 }
+			change_variable = { name = sr_emig_level subtract = 1 }
 		}
 	}
-	else = {
-		if = {
-			limit = { sr_emig_level_value = 0 }
-			sr_emig_set_level = { LEVEL = 1 }
-		}
-		else_if = {
-			limit = { sr_emig_level_value = 1 }
-			sr_emig_set_level = { LEVEL = 2 }
-		}
-		else = {
-			sr_emig_set_level = { LEVEL = 3 }
-		}
+	else_if = {
+		limit = { sr_emig_level_value = 0 }
+		sr_emig_set_level = { LEVEL = 1 }
+	}
+	else_if = {
+		limit = { sr_emig_level_value < 16 }
+		change_variable = { name = sr_emig_level add = 1 }
 	}
 }
 
@@ -157,11 +261,13 @@ sr_emig_step_prio = {
 # applied at monthly, with the facilities' (common/journal_entries/
 # sr_sites_generated.txt). They follow a change within days, with no refresh.
 
-# ---- AI (design § 10.6) ---------------------------------------------------------------------
-# Country scope, from the entry's pulse; once a year. Off in default, without
-# a Space Program or with no open colony that has room for a batch; Steady
-# for a holder or top-three space power (sr_ai_tends_colonies) with a positive
-# weekly income; Low otherwise.
+# ---- AI (design § 10.6; colony people design § 9) ----------------------------------------
+# Country scope, from the entry's pulse, after the modules' review has picked the
+# fabrication method; once a year. Off in default, without a Space Program or
+# with no open colony that has room for a batch; for a holder or top-three space
+# power (sr_ai_tends_colonies) with a positive weekly income, the largest step
+# whose bill fits in what the fabrication method leaves of its 5% (sr_emig_ai_step,
+# step 1 at the least); step 1 otherwise.
 # Priorities stay Normal: the weights by free room fill the emptiest first.
 sr_emig_ai_review = {
 	if = {
@@ -190,8 +296,8 @@ sr_emig_ai_review = {
 				net_fixed_income > 0
 			}
 			if = {
-				limit = { NOT = { sr_emig_level_value = 2 } }
-				sr_emig_set_level = { LEVEL = 2 }
+				limit = { NOT = { sr_emig_level_value = sr_emig_ai_step } }
+				sr_emig_set_level = { LEVEL = sr_emig_ai_step }
 			}
 		}
 		else_if = {
