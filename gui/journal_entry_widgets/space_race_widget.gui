@@ -5032,7 +5032,8 @@ types space_race_widget_types
 	###   § 5): the launch window toward it (te_sr_site_window_cell, block
 	###   site_window) and the Target button (sr_colony_target_sgui,
 	###   scope:site = the world's index; Clear on our target), on every world
-	###   so a greyed one says why. 391 + 152 window + 66 button + 5 × 3
+	###   so a greyed one says why, and under the name, first, the world's
+	###   people room (te_sr_site_people_cell, block site_people). 391 + 152 window + 66 button + 5 × 3
 	###   spacing + 2 × 4 margin = 632, in the popup's 760. Shown while the popup lists every world or we can
 	###   target it.
 	type te_sr_site_row = flowcontainer {
@@ -5256,7 +5257,9 @@ types space_race_widget_types
 		### 4 + 19 for "99") + 8 + 233 bases (18 icon + 4 + 94 for "300 (+30%)" +
 		### 4 + 113 for "Carbonaceous") + 8 + 107 resorts (18 icon + 4 + 85 for
 		### "10 (+30%)") = 400. It starts under the icon, not the name, to make
-		### that room. Simple and Full Colonies only.
+		### that room. Simple and Full Colonies only. The colony target popup
+		### puts the world's people room first (te_sr_site_people_cell, block
+		### site_people): 79 + 8 more, 487 in its row's 624.
 		flowcontainer = {
 			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
 			direction = horizontal
@@ -5264,6 +5267,7 @@ types space_race_widget_types
 			spacing = 8
 			margin_left = 3
 
+			block "site_people" {}
 			widget = {
 				size = { 41 22 }
 				parentanchor = vcenter
@@ -5404,6 +5408,37 @@ types space_race_widget_types
 			using = te_sr_fontsize_row
 			elide = right
 			block "win_paid" {}
+		}
+	}
+
+	### A site's people room in the colony target popup (the owner, 2026-11-22):
+	### the people the world holds before any Habitat, its base room
+	### (gen_solar_sites.SITES' room, sr_site_base_room_<key>), of which each
+	### Habitat adds its share. 79 wide: 18 icon + 4 + 57 for "50,000".
+	type te_sr_site_people_cell = widget {
+		size = { 79 22 }
+		parentanchor = vcenter
+		tooltip = "je_space_race_widget_tp_people_tt"
+
+		flowcontainer = {
+			direction = horizontal
+			spacing = 4
+			parentanchor = left|vcenter
+
+			icon = {
+				size = { 18 18 }
+				parentanchor = vcenter
+				texture = "gfx/interface/icons/generic_icons/population.dds"
+			}
+			textbox = {
+				parentanchor = vcenter
+				autoresize = yes
+				max_width = 57
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				block "people_room" {}
+			}
 		}
 	}
 

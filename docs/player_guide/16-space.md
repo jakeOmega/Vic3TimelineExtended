@@ -640,8 +640,8 @@ Colony Fleets, in Solar System Colonization, says where your next colony fleet
 goes. Click Choose there (Change once you have a target) to open the Colony
 Target window. It lists the unclaimed sites your program can send its next fleet
 to this month, under their locations, each with who holds it and its launch
-window (under Simple and Full Colonies, also its Habitat cap, its base room and grade,
-and the fleets on their way); Show all
+window (under Simple and Full Colonies, also its people room, its Habitat cap, its base room
+and grade, and the fleets on their way); Show all
 lists all 40, and a site you can't target says why on its button. Hover a site's
 name for what it offers: its stage, its two specializations and how long your
 drive takes to reach it. Click Target to choose that site: Colony Fleets names

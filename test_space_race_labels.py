@@ -1011,6 +1011,33 @@ class FigureBudgetTest(unittest.TestCase):
         self.assertEqual(len(widths), 3, "slots, base room and resort room")
         self.assertLessEqual(margin + sum(widths) + spacing * (len(widths) - 1), 24 + 180 + 122 + 65 + 3 * 3)
 
+    def test_the_target_popup_s_people_room(self):
+        """The colony target popup's line under a site's name starts with the
+        world's people room (the owner, 2026-11-22): each figure, as the popup's
+        rows print it, fits its cell, the icon and the figure fit the cell's
+        widget, and the line with it fits the popup's rows inside their margins."""
+        gui = _read(GUI)
+        cell = _type_body(gui, "te_sr_site_people_cell")
+        box = _textbox_with(cell, 'block "people_room"')
+        figures = re.findall(r'blockoverride "people_room" \{\s*raw_text = "([^"]*)"', _read(ROWS))
+        self.assertEqual(len(figures), 40)   # the popup's rows; Solar System's line has no width for it
+        for figure in figures:
+            with self.subTest(figure=figure):
+                text = _render(figure)
+                self.assertLessEqual(len(text) * UNITS_PER_CHAR[_font(box)] * MARGIN, _width(box), text)
+        cell_width = int(re.search(r"size = \{ (\d+) 22 \}", cell).group(1))
+        icon = int(re.search(r"icon = \{\s*size = \{ (\d+) \d+ \}", cell).group(1))
+        self.assertLessEqual(icon + int(re.search(r"spacing = (\d+)", cell).group(1)) + _width(box), cell_width)
+        body = _type_body(gui, "te_sr_site_row")
+        line = body[body.index("sr_disp_colonies_contested"):]
+        self.assertIn('block "site_people" {}', line)
+        spacing = int(re.search(r"spacing = (\d+)", line).group(1))
+        margin = int(re.search(r"margin_left = (\d+)", line).group(1))
+        widths = [cell_width] + [int(w) for w in re.findall(r"\n\t\t\twidget = \{\s*size = \{ (\d+) 22 \}", line)]
+        row = int(re.search(r"minimumsize = \{ (\d+) -1 \}", _type_body(gui, "te_sr_target_popup_body")).group(1))
+        row_margin = int(re.search(r"margin = \{ (\d+) \d+ \}", body).group(1))
+        self.assertLessEqual(margin + sum(widths) + spacing * (len(widths) - 1), row - 2 * row_margin)
+
     def test_colony_rows(self):
         self._check("te_sr_colony_row", self.FIGURES)
         self._check("te_sr_mod_cell", self.CELL)
