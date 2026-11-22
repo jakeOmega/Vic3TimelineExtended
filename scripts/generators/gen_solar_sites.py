@@ -353,6 +353,10 @@ class Facility:
     head: str  # the Modules view's column head
     ships: bool
     modifier: bool
+    # A cost the entry declares at its staffed levels, though it is a hook and
+    # has no benefit modifier: the Administration's authority (colony people
+    # design § 7; the owner, 2026-11-22: "~25 per level").
+    bills: bool = False
 
 
 FACILITIES: tuple[Facility, ...] = (
@@ -366,7 +370,7 @@ FACILITIES: tuple[Facility, ...] = (
     Facility("train", "Training Ground", "Camp", False, True),
     Facility("bunker", "Nuclear Command Center", "Nuke", False, False),
     Facility("foundry", "Materials Foundry", "Mat", True, True),
-    Facility("admin", "Administration", "Gov", False, False),
+    Facility("admin", "Administration", "Gov", False, False, bills=True),
     Facility("terra", "Terraforming", "Terr", False, False),
 )
 FACILITY_TYPES = tuple(f.key for f in FACILITIES)
@@ -4509,7 +4513,7 @@ def entry_declarations() -> list[tuple[str, str, str]]:
     each world's two specializations at sr_site_mult_<a|b>_<key> and its
     discoveries' two outcomes at 1, while the holder's <modifier>_held record
     (the world's sync) names it; each facility's at its staffed levels under
-    simple and full colonies."""
+    simple and full colonies, a hook's cost (Facility.bills) the same way."""
     out = []
     for site in SITES:
         for slot, modifier in zip(("a", "b"), spec_modifiers(site)):
@@ -4518,7 +4522,7 @@ def entry_declarations() -> list[tuple[str, str, str]]:
             for modifier in discovery_modifiers(d):
                 out.append((modifier, f"has_variable = {modifier}_held", "1"))
     for f in FACILITIES:
-        if f.modifier:
+        if f.modifier or f.bills:
             out.append((f"sr_module_{f.key}",
                         f"sr_colonies_contested_enabled = yes sr_mod_units_{f.key} > 0", f"sr_mod_units_{f.key}"))
     return out

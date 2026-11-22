@@ -254,5 +254,33 @@ class HabitatCapTest(unittest.TestCase):
         self.assertRegex(module, r"limit = \{ scope:op = 3 \}\s*custom_tooltip = \{\s*text = sr_mod_req_hab_price_fits_tt")
 
 
+class AdminAuthorityTest(unittest.TestCase):
+    """Design § 7 (the owner, 2026-11-22: "~25 per level"): an Administration
+    costs 25 authority a staffed level, a positive country_authority_cost_add,
+    declared on the entry at sr_mod_units_admin; it stays a hook on autonomy."""
+
+    def test_the_modifier_costs_25_authority(self):
+        text = _strip(_raw("common", "static_modifiers", "space_race_modifiers.txt"))
+        body = _block(text, "sr_module_admin")
+        self.assertIn("country_authority_cost_add = 25", body)
+        self.assertNotIn("country_authority_add", body)
+        self.assertIn("icon = gfx/interface/icons/timed_modifier_icons/", body)
+
+    def test_it_is_declared_at_the_staffed_levels(self):
+        self.assertIn(("sr_module_admin", "sr_colonies_contested_enabled = yes sr_mod_units_admin > 0",
+                       "sr_mod_units_admin"), gss.entry_declarations())
+        self.assertFalse(gss.FACILITY["admin"].modifier)
+        self.assertTrue(gss.FACILITY["admin"].bills)
+        declared = _strip(_raw("common", "journal_entries", "sr_sites_generated.txt"))
+        self.assertIn("modifier = sr_module_admin", declared)
+
+    def test_it_still_lowers_autonomy(self):
+        values = _strip(_raw(str(gss.VALUES_OUT)))
+        self.assertIn("sr_site_admin_value_valles_marineris", values)
+        loc = _raw("localization", "english", "te_concepts_l_english.yml")
+        for key in ("sr_module_admin", "sr_module_admin_desc"):
+            self.assertTrue(re.search(rf"(?m)^ {key}:0 ", loc), f"no loc for {key}")
+
+
 if __name__ == "__main__":
     unittest.main()

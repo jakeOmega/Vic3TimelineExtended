@@ -1347,4 +1347,14 @@ INJECT:je_space_race_solar_colonization = { # REVIEWED 2026-11-06: generated dec
 			}
 		}
 	}
+	scaling_modifiers_while_active = {
+		modifier = sr_module_admin
+		value = {
+			value = 0
+			if = {
+				limit = { sr_colonies_contested_enabled = yes sr_mod_units_admin > 0 }
+				add = sr_mod_units_admin
+			}
+		}
+	}
 }
