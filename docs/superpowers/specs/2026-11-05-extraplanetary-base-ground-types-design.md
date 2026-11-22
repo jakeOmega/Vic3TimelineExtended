@@ -162,7 +162,7 @@ output multiplier. `scripting_best_practices.md` § "A Building's `modifier:`
 Read Carries Its Country's Lines, and Throughput Scales Script-Set Goods Lines"
 measured that throughput scales goods lines set by script-applied `_mult`
 modifiers (the Grid Transfer Stations, #1248). So the product form is the
-expected one, and the self-check of § 10 confirms it on a base.
+expected one, and a play-test item confirms it on a base (§ 10).
 
 ### 5.3 Where the modifiers go
 
@@ -337,8 +337,8 @@ of each method's sales, the owner's 2026-11-15 floor that
   Minerals 0.25 points over would alone give a Sulfurous site about 8% more
   profit at base prices, past the checkbox's margin. With two decimals every
   type earns £1,600 a level at grade 0 and base prices to within £0.50.
-- **What changes on update, by method** (review point 6), for the changelog and
-  the player guide:
+- **What changes on update, by method** (review point 6), for the build PR's
+  description (the release notes are written from it) and the player guide:
   - Regolith Processing: Structural Metals −36%, Tech-Critical Metals −18%,
     Glass and Plastics −38%, and it now makes Gold, Conductive Metals, Base
     Metals and Chemical and Industrial Minerals.
@@ -359,7 +359,7 @@ of each method's sales, the owner's 2026-11-15 floor that
   also make Glass and Plastics, which the seabed can't: it has no plastics
   feedstock. The test's two other checks (input cost and crew) are unchanged.
 - **The Resort Colony leaves this building.** The owner may move it to a building
-  type of its own (2026-11-21), as another session's work, so this design
+  type of its own (2026-11-21), as another session's work (#1948), so this design
   assumes the four mining methods are the only ones in its base group. A resort's
   draw has nothing to do with ore, and it works at the mining grade today, which
   makes 16 Psyche, the richest metal mine, the best resort. If it stays instead,
@@ -655,7 +655,9 @@ Solar System view give.
   grade wins.
 - **The Help page** (How Solar Colonization Works) gains the § 6.2 table and the
   checkbox's rule. The 40 per-site hovers (`je_space_race_widget_bases_tt_<site>`)
-  become generated, from the type and the grade, in place of hand-written loc.
+  stay hand-written, each splicing its type's description key, and a test keeps
+  each naming its own site's type. That needs no new generated loc category in
+  `organize_loc.py`.
 
 ### 9.7 The player guide
 
@@ -663,18 +665,19 @@ Solar System view give.
 seven types as a table with each one's sites, the patterns of § 6.4 in a few
 sentences, and a subsection of its own on the Bases view and the checkbox,
 since it is a system the player works through. `02-timeline.md` gives Regolith
-Processing's goods. The basket's changes go in the changelog (§ 7). The PDF is
-rebuilt with the chapters.
+Processing's goods. The basket's changes go in the build PR's description, for
+the release notes (§ 7). The PDF is rebuilt with the chapters.
 
 ## 10. What changes (the build)
 
 **One implementation PR, built in stages** (owner's call 13): the release waits
 for all of it, and one PR writes the player guide and the PDF once rather than
-twice and needs no interim panel on today's order. The stages are commits, in this
-order, each with its tests:
+twice and needs no interim panel on today's order. The stages are commits, in
+this order, each with its tests. The plan is
+`docs/superpowers/plans/2026-11-21-extraplanetary-base-ground-types.md`:
 
 1. **The types, the sites and the basket.** `gen_solar_sites.py`: the seven
-   types and each site's, the normalization, generated per-site hovers.
+   types and each site's, and the normalization.
    `extra_pms.txt`: the basket (§ 7); the cost comments are rewritten by
    `pm_costs` on reload, and the note above `pm_space_mine` is rewritten by hand.
    Tests: every type's mean is zero; every derived grade is the site's; for
@@ -686,9 +689,10 @@ order, each with its tests:
    the `at` counts, computes `T` and the seven `D(g)` and applies them per
    building (§ 5.3). The display entry for `goods_output_lead_mult` (the other
    six exist), the fourteen unit modifiers, their loc and Nation tab lines. Self-check
-   `TE_SELF_CHECK ebase_mix`: a base's building carries the `D(g)` it was given,
-   and its Tech-Critical Metals output is base × (1 + its throughput) ×
-   (1 + `D`), which confirms § 5.2's product form. Play-test list:
+   `TE_SELF_CHECK ebase_mix`: a base's building carries the `D(g)` it was given.
+   Script can't read a building's output of a good, so § 5.2's product form is a
+   play-test item: one base's output tooltip at one site reads base ×
+   (1 + its throughput) × (1 + `D`). Play-test list:
    `docs/testing/solar-colonies-playtest.md`.
 3. **Where the levels work.** The variables, the month's six steps (§ 8.2), the
    checkbox's rule and its prices (§ 8.3), the pace, displacement and return.
@@ -700,7 +704,7 @@ order, each with its tests:
    Solar System word, the Base Room cell, the notice, the concepts and the Help
    page.
 5. **Docs.** `space_race.md`, `production_methods.md`, the player guide and its
-   PDF, the changelog, the play-test items: the acceptance test of § 2, a large
+   PDF, the play-test items: the acceptance test of § 2, a large
    base under a glut watched for a back-and-forth, a blockade and its return.
 
 If review load argues for two PRs instead, stages 1 and 2 are the first and 3
