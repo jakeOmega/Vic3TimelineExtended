@@ -132,8 +132,8 @@ _PRICES: dict[str, float] | None = None
 
 def good_base_price(good: str) -> float:
     """A good's base price: BASE_PRICE for the seven, the goods files for any other
-    (the inputs, the Resort Colony's goods), read once on first use, as pm_costs
-    prices the cost comments."""
+    (the mining methods' inputs), read once on first use, as pm_costs prices the cost
+    comments."""
     if good in BASE_PRICE:
         return BASE_PRICE[good]
     global _PRICES
@@ -194,16 +194,22 @@ def _read_base_methods() -> tuple[tuple[str, MethodGoods], ...]:
 def base_methods() -> dict[str, MethodGoods]:
     """Every method of the Extraplanetary Base's base group (BASE_GROUP), in the group's
     order, with its `workforce_scaled` goods a level, read from the mod's production
-    method files on first use. Never a hard-coded list: the Resort Colony may leave the
-    group (#1948). A method's goods outside GOODS get no mix."""
+    method files on first use. Never a hard-coded list."""
     return {pm: MethodGoods(dict(m.outputs), dict(m.inputs)) for pm, m in _read_base_methods()}
 
 
+def mining_methods() -> dict[str, MethodGoods]:
+    """The base methods whose outputs are all within GOODS, in the group's order: the
+    ones the basket, the mix and the month count. Methods with goods outside the seven
+    are left out."""
+    return {pm: m for pm, m in base_methods().items() if set(m.outputs) <= set(GOODS)}
+
+
 def method_goods() -> tuple[str, ...]:
-    """Every good any base method makes or uses, GOODS first and then the rest in the
-    order the methods name them: each needs a price (§ 8.3)."""
+    """Every good any mining method makes or uses, GOODS first and then the inputs in
+    the order the methods name them: each needs a price (§ 8.3)."""
     seen = list(GOODS)
-    for m in base_methods().values():
+    for m in mining_methods().values():
         for g in (*m.outputs, *m.inputs):
             if g not in seen:
                 seen.append(g)

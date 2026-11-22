@@ -91,7 +91,20 @@ class Basket(unittest.TestCase):
 
     def setUp(self):
         self.methods = eg.base_methods()
-        self.mining = {pm: m for pm, m in self.methods.items() if set(m.outputs) <= set(eg.GOODS)}
+        self.mining = eg.mining_methods()
+
+    def test_mining_methods_are_those_within_the_seven_goods(self):
+        self.assertEqual(list(self.mining), [pm for pm, m in self.methods.items()
+                                             if set(m.outputs) <= set(eg.GOODS)])
+
+    def test_method_goods_are_the_seven_and_the_mining_inputs(self):
+        goods = eg.method_goods()
+        self.assertEqual(goods[:len(eg.GOODS)], eg.GOODS)
+        inputs = {g for m in self.mining.values() for g in m.inputs}
+        self.assertEqual(set(goods), set(eg.GOODS) | inputs)
+        for g in goods:
+            with self.subTest(good=g):
+                self.assertGreater(eg.good_base_price(g), 0)
 
     @staticmethod
     def _value(goods):
