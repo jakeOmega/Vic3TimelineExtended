@@ -234,11 +234,13 @@ sr_emig_step_prio = {
 # applied at monthly, with the facilities' (common/journal_entries/
 # sr_sites_generated.txt). They follow a change within days, with no refresh.
 
-# ---- AI (design § 10.6) ---------------------------------------------------------------------
-# Country scope, from the entry's pulse; once a year. Off in default, without
-# a Space Program or with no open colony that has room for a batch; Steady
-# for a holder or top-three space power (sr_ai_tends_colonies) with a positive
-# weekly income; Low otherwise.
+# ---- AI (design § 10.6; colony people design § 9) ----------------------------------------
+# Country scope, from the entry's pulse, after the modules' review has picked the
+# fabrication method; once a year. Off in default, without a Space Program or
+# with no open colony that has room for a batch; for a holder or top-three space
+# power (sr_ai_tends_colonies) with a positive weekly income, the largest step
+# whose bill fits in what the fabrication method leaves of its 5% (sr_emig_ai_step,
+# step 1 at the least); step 1 otherwise.
 # Priorities stay Normal: the weights by free room fill the emptiest first.
 sr_emig_ai_review = {
 	if = {
@@ -267,8 +269,8 @@ sr_emig_ai_review = {
 				net_fixed_income > 0
 			}
 			if = {
-				limit = { NOT = { sr_emig_level_value = 2 } }
-				sr_emig_set_level = { LEVEL = 2 }
+				limit = { NOT = { sr_emig_level_value = sr_emig_ai_step } }
+				sr_emig_set_level = { LEVEL = sr_emig_ai_step }
 			}
 		}
 		else_if = {

@@ -1741,10 +1741,12 @@ class ModulesTest(unittest.TestCase):
         prices = pm_costs.load_goods()
         pms = _strip(_raw("common", "production_methods", "sr_colony_module_pms.txt"))
         values = _strip(_raw("common", "script_values", "sr_colony_module_values.txt"))
-        for key in ("lunar_foundries", "fusion_shipyards"):
+        for key in ("orbital_assembly", "lunar_foundries", "fusion_shipyards"):
             with self.subTest(method=key):
                 base = float(re.search(r"value = ([\d.]+)", _block(values, f"sr_mod_fab_bill_base_{key}")).group(1))
                 self.assertEqual(base, self._bill(_block(pms, f"pm_sr_fabrication_{key}"), prices))
+                if key == "orbital_assembly":
+                    continue
                 room = _block(values, f"sr_mod_ai_fab_room_{key}")
                 self.assertIn("value = sr_mod_ai_fab_budget", room)
                 self.assertIn(f"value = sr_mod_fab_bill_base_{key}", room)

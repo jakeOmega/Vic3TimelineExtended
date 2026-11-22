@@ -18,6 +18,7 @@ import unittest
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(REPO, "scripts", "generators"))
+sys.path.insert(0, os.path.join(REPO, "scripts", "analysis"))
 
 import gen_solar_sites as gss  # noqa: E402
 
@@ -484,6 +485,70 @@ class SettlerBillTest(unittest.TestCase):
                          "sr_emigration_programme's loc is left")
         import gen_nation_tab
         self.assertIn("sr_settler_launches", gen_nation_tab.NOT_ON_COUNTRY)
+
+
+class AiSettlersTest(unittest.TestCase):
+    """Design § 9 (the owner, on the builder check: "Share fabrication's 5%"):
+    an AI's settlers take the largest step whose weekly bill at today's Launch
+    Capacity price fits in fabrication's 5% of its weekly fixed income less the
+    chosen method's bill, never past the open room; at least step 1 for a
+    tending AI with a positive income, step 1 for any other; Off as before."""
+
+    FABRICATION = ("orbital_assembly", "lunar_foundries", "fusion_shipyards")
+
+    @classmethod
+    def setUpClass(cls):
+        cls.pop_values = _strip(_raw("common", "script_values", "sr_colony_population_values.txt"))
+        cls.mod_values = _strip(_raw("common", "script_values", "sr_colony_module_values.txt"))
+        cls.effects = _strip(_raw("common", "scripted_effects", "sr_colony_population_effects.txt"))
+
+    def test_the_room_is_the_budget_less_the_method_s_bill(self):
+        now = _block(self.mod_values, "sr_mod_ai_fab_bill_now")
+        self.assertIn("value = 0", now)
+        for key in self.FABRICATION:
+            self.assertIn(f"has_active_production_method = pm_sr_fabrication_{key} }} }}", now)
+            self.assertIn(f"value = sr_mod_fab_bill_base_{key}", now)
+        self.assertIn("multiply = sr_mod_fab_bill_price_factor", now)
+        self.assertIn("sr_mod_fab_bill_base_orbital_assembly = { value = 340000 }", self.mod_values)
+        room = _block(self.pop_values, "sr_emig_ai_room")
+        self.assertIn("value = sr_mod_ai_fab_budget", room)
+        self.assertIn("subtract = sr_mod_ai_fab_bill_now", room)
+
+    def test_a_step_s_bill_at_today_s_price(self):
+        import pm_costs
+        price = pm_costs.load_goods()["launch_capacity"]
+        week = _block(self.pop_values, "sr_emig_ai_week_cost")
+        for term in ("value = sr_emig_batch_people", "multiply = sr_emig_lc_per_settler", "multiply = 12",
+                     "divide = 52", f"multiply = {price}", "add = sr_launch_capacity_price_up"):
+            self.assertIn(term, week)
+
+    def test_the_largest_step_that_fits(self):
+        step = _block(self.pop_values, "sr_emig_ai_step")
+        self.assertIn("value = 1", step)
+        found = re.findall(r"if = \{ limit = \{ sr_emig_ai_fits >= (\d+) sr_emig_open_room_total >= (\d+) \} "
+                           r"value = (\d+) \}", step)
+        self.assertEqual([int(n) for _, _, n in found], list(range(2, gss_top() + 1)))
+        for fits, room, n in found:
+            n = int(n)
+            self.assertEqual(int(fits), 2 ** (n - 1))
+            self.assertEqual(int(room), 500 * 2 ** (n - 1))
+        self.assertNotIn("else_if", step)
+        fits = _block(self.pop_values, "sr_emig_ai_fits")
+        self.assertIn("value = sr_emig_ai_room", fits)
+        self.assertIn("divide = sr_emig_ai_week_cost", fits)
+
+    def test_the_review(self):
+        review = _block(self.effects, "sr_emig_ai_review")
+        self.assertIn("sr_emig_open_room_total < sr_emig_batch_people", review)
+        self.assertIn("in_default = yes", review)
+        self.assertRegex(review, r"sr_ai_tends_colonies = yes\s*net_fixed_income > 0\s*\}\s*"
+                                 r"if = \{\s*limit = \{ NOT = \{ sr_emig_level_value = sr_emig_ai_step \} \}\s*"
+                                 r"sr_emig_set_level = \{ LEVEL = sr_emig_ai_step \}")
+        self.assertIn("sr_emig_set_level = { LEVEL = 1 }", review)
+        self.assertNotIn("LEVEL = 2", review)
+        je = _strip(_raw("common", "journal_entries", "je_space_race.txt"))
+        self.assertLess(je.index("sr_mod_ai_review = yes"), je.index("sr_emig_ai_review = yes"))
+        self.assertLess(je.index("sr_emig_ai_review = yes"), je.index("sr_emig_month = yes"))
 
 
 def gss_top():

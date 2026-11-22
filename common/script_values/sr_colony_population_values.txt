@@ -142,6 +142,54 @@ sr_emig_bill_units_value = {
 	divide = sr_emig_bill_divisor
 }
 
+# ---- The AI's settlers (colony people design § 9) ----------------------------------
+# They share fabrication's 5% of weekly fixed income (sr_mod_ai_fab_budget) with
+# the method it runs: what that method's bill leaves (sr_mod_ai_fab_bill_now).
+sr_emig_ai_room = {
+	value = sr_mod_ai_fab_budget
+	subtract = sr_mod_ai_fab_bill_now
+}
+# A week of step 1 (500 settlers a month) at today's Launch Capacity price: its
+# base of 200 times our market's premium, never below base. The throughput is
+# divided out of the settlers' bill (sr_emig_bill_divisor), so not multiplied in.
+sr_emig_ai_week_cost = {
+	value = sr_emig_batch_people
+	multiply = sr_emig_lc_per_settler
+	multiply = 12
+	divide = 52
+	multiply = 200
+	multiply = {
+		value = 1
+		add = sr_launch_capacity_price_up
+	}
+}
+# How many step 1s the room holds: step n costs 2^(n - 1) of them.
+sr_emig_ai_fits = {
+	value = sr_emig_ai_room
+	divide = sr_emig_ai_week_cost
+}
+# The largest step that fits, never past the open colonies' free room; step 1
+# at the least. Each line overrides the one before (no else), so it reads the
+# highest that holds.
+sr_emig_ai_step = {
+	value = 1
+	if = { limit = { sr_emig_ai_fits >= 2 sr_emig_open_room_total >= 1000 } value = 2 }
+	if = { limit = { sr_emig_ai_fits >= 4 sr_emig_open_room_total >= 2000 } value = 3 }
+	if = { limit = { sr_emig_ai_fits >= 8 sr_emig_open_room_total >= 4000 } value = 4 }
+	if = { limit = { sr_emig_ai_fits >= 16 sr_emig_open_room_total >= 8000 } value = 5 }
+	if = { limit = { sr_emig_ai_fits >= 32 sr_emig_open_room_total >= 16000 } value = 6 }
+	if = { limit = { sr_emig_ai_fits >= 64 sr_emig_open_room_total >= 32000 } value = 7 }
+	if = { limit = { sr_emig_ai_fits >= 128 sr_emig_open_room_total >= 64000 } value = 8 }
+	if = { limit = { sr_emig_ai_fits >= 256 sr_emig_open_room_total >= 128000 } value = 9 }
+	if = { limit = { sr_emig_ai_fits >= 512 sr_emig_open_room_total >= 256000 } value = 10 }
+	if = { limit = { sr_emig_ai_fits >= 1024 sr_emig_open_room_total >= 512000 } value = 11 }
+	if = { limit = { sr_emig_ai_fits >= 2048 sr_emig_open_room_total >= 1024000 } value = 12 }
+	if = { limit = { sr_emig_ai_fits >= 4096 sr_emig_open_room_total >= 2048000 } value = 13 }
+	if = { limit = { sr_emig_ai_fits >= 8192 sr_emig_open_room_total >= 4096000 } value = 14 }
+	if = { limit = { sr_emig_ai_fits >= 16384 sr_emig_open_room_total >= 8192000 } value = 15 }
+	if = { limit = { sr_emig_ai_fits >= 32768 sr_emig_open_room_total >= 16384000 } value = 16 }
+}
+
 # The off-world population's bonus (design § 10.5): one unit per
 # sr_offworld_bonus_people of the nation's people off Earth, at most
 # sr_offworld_bonus_cap; nothing below sr_offworld_bonus_minimum.

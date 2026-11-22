@@ -2367,10 +2367,12 @@ je_space_race_solar_colonization = {
 			# month's colony life. A colony holder's entry is always open, so
 			# this runs for every holder, programme or not. The entry's modifiers
 			# follow what these change by themselves (declared below).
+			# The modules' review first: the AI's settlers take what its
+			# fabrication method leaves of the 5% (colony people design § 9).
+			sr_mod_ai_review = yes
 			sr_emig_ai_review = yes
 			sr_emig_month = yes
 			sr_emig_bill_refresh = yes
-			sr_mod_ai_review = yes
 			sr_mod_month = yes
 			sr_site_events_clear_stale = yes
 			sr_free_ai_review = yes

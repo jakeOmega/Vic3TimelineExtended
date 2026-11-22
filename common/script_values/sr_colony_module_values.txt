@@ -76,9 +76,11 @@ sr_mod_ai_fab_budget = {
 	multiply = sr_mod_ai_fab_share
 }
 
-# The two dearer methods' weekly bills at full staff and base prices, their
-# goods times their base prices (sr_colony_module_pms.txt; test_solar_sites.py
-# holds them equal). Orbital Assembly needs none: it is the cheapest.
+# The methods' weekly bills at full staff and base prices, their goods times
+# their base prices (sr_colony_module_pms.txt; test_solar_sites.py holds them
+# equal). The ladder below gates only the two dearer; the AI's settlers read all
+# three (sr_mod_ai_fab_bill_now).
+sr_mod_fab_bill_base_orbital_assembly = { value = 340000 }
 sr_mod_fab_bill_base_lunar_foundries = { value = 732000 }
 sr_mod_fab_bill_base_fusion_shipyards = { value = 1368000 }
 
@@ -94,6 +96,17 @@ sr_mod_fab_bill_price_factor = {
 		value = 1
 		add = sr_launch_capacity_price_up
 	}
+}
+
+# The bill of the method the Space Program runs now, at today's prices; 0 with
+# none. What it leaves of the budget is the AI's settlers' (sr_emig_ai_room,
+# colony people design § 9; the owner: "Share fabrication's 5%").
+sr_mod_ai_fab_bill_now = {
+	value = 0
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_sr_fabrication_fusion_shipyards } } value = sr_mod_fab_bill_base_fusion_shipyards }
+	else_if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_sr_fabrication_lunar_foundries } } value = sr_mod_fab_bill_base_lunar_foundries }
+	else_if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_sr_fabrication_orbital_assembly } } value = sr_mod_fab_bill_base_orbital_assembly }
+	multiply = sr_mod_fab_bill_price_factor
 }
 
 # What each method's bill leaves of the budget: 0 or more, the AI may run it.
