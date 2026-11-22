@@ -282,5 +282,66 @@ class AdminAuthorityTest(unittest.TestCase):
             self.assertTrue(re.search(rf"(?m)^ {key}:0 ", loc), f"no loc for {key}")
 
 
+class ColonyAiTest(unittest.TestCase):
+    """Design § 9: the AI and a colony's own builds stay within the Habitat cap
+    and their crews; an Administration waits for twice its authority; the
+    automatic pick weighs the people a world holds at its cap."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = _strip(_raw(str(gss.EFFECTS_OUT)))
+        cls.values = _strip(_raw(str(gss.VALUES_OUT)))
+        cls.module_values = _strip(_raw("common", "script_values", "sr_colony_module_values.txt"))
+
+    def _branches(self, body):
+        return re.findall(r"limit = \{(.*?)\}\s*(sr_mod_queue = \{ KEY = \w+ TYPE = (\w+) )", body, re.S)
+
+    def test_the_ai_plan_keeps_its_habitat_in_the_cap_and_the_rest_in_its_crews(self):
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                body = _block(self.effects, f"sr_mod_ai_plan_{k}")
+                branches = self._branches(body)
+                self.assertTrue(branches)
+                for limit, _, t in branches:
+                    self.assertNotIn("slots", limit)
+                    if t == "hab":
+                        self.assertIn(f"sr_mod_hab_used_{k} < sr_site_hab_cap_{k}", limit)
+                        self.assertIn(f"sr_site_fill_{k} >= 0.75", limit)
+                    else:
+                        self.assertIn(f"sr_site_crews_{k} >= sr_site_levels_{k}", limit)
+                    if t == "admin":
+                        self.assertIn("authority >= sr_mod_ai_admin_authority", limit)
+        self.assertIn("sr_mod_ai_admin_authority = { value = 50 }", self.module_values)
+
+    def test_a_colony_s_own_builds_stay_in_the_cap_and_its_crews(self):
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                body = _block(self.effects, f"sr_site_self_build_{k}")
+                limits = re.findall(r"limit = \{(.*?)\}", body, re.S)
+                hab = [lim for lim in limits if f"sr_mod_hab_used_{k}" in lim]
+                self.assertEqual(len(hab), 1)
+                self.assertIn(f"sr_mod_hab_used_{k} < sr_site_hab_cap_{k}", hab[0])
+                others = [lim for lim in limits if "sr_mod_spec_used" in lim or "sr_site_lab_value" in lim]
+                self.assertTrue(others)
+                for lim in others:
+                    self.assertIn(f"sr_site_crews_{k} >= sr_site_levels_{k}", lim)
+
+    def test_the_pick_weighs_the_people_at_the_cap(self):
+        self.assertEqual(gss.SCORE_PER_CREW_ROOM, 1)
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                cap = _block(self.values, f"sr_site_people_at_cap_{k}")
+                self.assertIn("value = 0.5", cap)
+                self.assertIn(f"add = modifier:{gss.HABITAT_MODIFIER}", cap)
+                self.assertIn(f"multiply = sr_site_hab_cap_{k}", cap)
+                self.assertIn("add = 1", cap)
+                self.assertIn(f"multiply = sr_site_base_room_{k}", cap)
+                score = _block(self.values, f"sr_cf_score_{k}")
+                self.assertIn(f"add = {{ value = sr_site_people_at_cap_{k} divide = 10000 }}", score)
+
+
 if __name__ == "__main__":
     unittest.main()

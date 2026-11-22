@@ -22183,7 +22183,7 @@ sr_mod_ai_plan_valles_marineris = {
 			limit = {
 				sr_mod_can_queue_admin_valles_marineris = yes
 				sr_site_crews_valles_marineris >= sr_site_levels_valles_marineris
-				sr_site_autonomy_value_valles_marineris >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_valles_marineris >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_valles_marineris >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_valles_marineris >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = valles_marineris TYPE = admin INDEX = 1 CODE = 15 }
 		}
@@ -22423,7 +22423,7 @@ sr_mod_ai_plan_olympus_mons = {
 			limit = {
 				sr_mod_can_queue_admin_olympus_mons = yes
 				sr_site_crews_olympus_mons >= sr_site_levels_olympus_mons
-				sr_site_autonomy_value_olympus_mons >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_olympus_mons >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_olympus_mons >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_olympus_mons >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = olympus_mons TYPE = admin INDEX = 2 CODE = 15 }
 		}
@@ -22663,7 +22663,7 @@ sr_mod_ai_plan_hellas_planitia = {
 			limit = {
 				sr_mod_can_queue_admin_hellas_planitia = yes
 				sr_site_crews_hellas_planitia >= sr_site_levels_hellas_planitia
-				sr_site_autonomy_value_hellas_planitia >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_hellas_planitia >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_hellas_planitia >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_hellas_planitia >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = hellas_planitia TYPE = admin INDEX = 3 CODE = 15 }
 		}
@@ -22903,7 +22903,7 @@ sr_mod_ai_plan_utopia_planitia = {
 			limit = {
 				sr_mod_can_queue_admin_utopia_planitia = yes
 				sr_site_crews_utopia_planitia >= sr_site_levels_utopia_planitia
-				sr_site_autonomy_value_utopia_planitia >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_utopia_planitia >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_utopia_planitia >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_utopia_planitia >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = utopia_planitia TYPE = admin INDEX = 4 CODE = 15 }
 		}
@@ -23143,7 +23143,7 @@ sr_mod_ai_plan_arcadia_planitia = {
 			limit = {
 				sr_mod_can_queue_admin_arcadia_planitia = yes
 				sr_site_crews_arcadia_planitia >= sr_site_levels_arcadia_planitia
-				sr_site_autonomy_value_arcadia_planitia >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_arcadia_planitia >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_arcadia_planitia >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_arcadia_planitia >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = arcadia_planitia TYPE = admin INDEX = 5 CODE = 15 }
 		}
@@ -23378,7 +23378,7 @@ sr_mod_ai_plan_ceres = {
 			limit = {
 				sr_mod_can_queue_admin_ceres = yes
 				sr_site_crews_ceres >= sr_site_levels_ceres
-				sr_site_autonomy_value_ceres >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_ceres >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_ceres >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_ceres >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = ceres TYPE = admin INDEX = 6 CODE = 15 }
 		}
@@ -23580,7 +23580,7 @@ sr_mod_ai_plan_vesta = {
 			limit = {
 				sr_mod_can_queue_admin_vesta = yes
 				sr_site_crews_vesta >= sr_site_levels_vesta
-				sr_site_autonomy_value_vesta >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_vesta >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_vesta >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_vesta >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = vesta TYPE = admin INDEX = 7 CODE = 15 }
 		}
@@ -23782,7 +23782,7 @@ sr_mod_ai_plan_psyche = {
 			limit = {
 				sr_mod_can_queue_admin_psyche = yes
 				sr_site_crews_psyche >= sr_site_levels_psyche
-				sr_site_autonomy_value_psyche >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_psyche >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_psyche >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_psyche >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = psyche TYPE = admin INDEX = 8 CODE = 15 }
 		}
@@ -23984,7 +23984,7 @@ sr_mod_ai_plan_pallas = {
 			limit = {
 				sr_mod_can_queue_admin_pallas = yes
 				sr_site_crews_pallas >= sr_site_levels_pallas
-				sr_site_autonomy_value_pallas >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_pallas >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_pallas >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_pallas >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = pallas TYPE = admin INDEX = 9 CODE = 15 }
 		}
@@ -24186,7 +24186,7 @@ sr_mod_ai_plan_hygiea = {
 			limit = {
 				sr_mod_can_queue_admin_hygiea = yes
 				sr_site_crews_hygiea >= sr_site_levels_hygiea
-				sr_site_autonomy_value_hygiea >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_hygiea >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_hygiea >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_hygiea >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = hygiea TYPE = admin INDEX = 10 CODE = 15 }
 		}
@@ -24388,7 +24388,7 @@ sr_mod_ai_plan_io = {
 			limit = {
 				sr_mod_can_queue_admin_io = yes
 				sr_site_crews_io >= sr_site_levels_io
-				sr_site_autonomy_value_io >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_io >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_io >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_io >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = io TYPE = admin INDEX = 11 CODE = 15 }
 		}
@@ -24590,7 +24590,7 @@ sr_mod_ai_plan_europa = {
 			limit = {
 				sr_mod_can_queue_admin_europa = yes
 				sr_site_crews_europa >= sr_site_levels_europa
-				sr_site_autonomy_value_europa >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_europa >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_europa >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_europa >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = europa TYPE = admin INDEX = 12 CODE = 15 }
 		}
@@ -24797,7 +24797,7 @@ sr_mod_ai_plan_ganymede = {
 			limit = {
 				sr_mod_can_queue_admin_ganymede = yes
 				sr_site_crews_ganymede >= sr_site_levels_ganymede
-				sr_site_autonomy_value_ganymede >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_ganymede >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_ganymede >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_ganymede >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = ganymede TYPE = admin INDEX = 13 CODE = 15 }
 		}
@@ -25037,7 +25037,7 @@ sr_mod_ai_plan_callisto = {
 			limit = {
 				sr_mod_can_queue_admin_callisto = yes
 				sr_site_crews_callisto >= sr_site_levels_callisto
-				sr_site_autonomy_value_callisto >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_callisto >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_callisto >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_callisto >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = callisto TYPE = admin INDEX = 14 CODE = 15 }
 		}
@@ -25272,7 +25272,7 @@ sr_mod_ai_plan_himalia = {
 			limit = {
 				sr_mod_can_queue_admin_himalia = yes
 				sr_site_crews_himalia >= sr_site_levels_himalia
-				sr_site_autonomy_value_himalia >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_himalia >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_himalia >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_himalia >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = himalia TYPE = admin INDEX = 15 CODE = 15 }
 		}
@@ -25474,7 +25474,7 @@ sr_mod_ai_plan_amalthea = {
 			limit = {
 				sr_mod_can_queue_admin_amalthea = yes
 				sr_site_crews_amalthea >= sr_site_levels_amalthea
-				sr_site_autonomy_value_amalthea >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_amalthea >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_amalthea >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_amalthea >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = amalthea TYPE = admin INDEX = 16 CODE = 15 }
 		}
@@ -25681,7 +25681,7 @@ sr_mod_ai_plan_venus = {
 			limit = {
 				sr_mod_can_queue_admin_venus = yes
 				sr_site_crews_venus >= sr_site_levels_venus
-				sr_site_autonomy_value_venus >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_venus >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_venus >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_venus >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = venus TYPE = admin INDEX = 17 CODE = 15 }
 		}
@@ -25916,7 +25916,7 @@ sr_mod_ai_plan_mercury = {
 			limit = {
 				sr_mod_can_queue_admin_mercury = yes
 				sr_site_crews_mercury >= sr_site_levels_mercury
-				sr_site_autonomy_value_mercury >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_mercury >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_mercury >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_mercury >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = mercury TYPE = admin INDEX = 18 CODE = 15 }
 		}
@@ -26123,7 +26123,7 @@ sr_mod_ai_plan_titan = {
 			limit = {
 				sr_mod_can_queue_admin_titan = yes
 				sr_site_crews_titan >= sr_site_levels_titan
-				sr_site_autonomy_value_titan >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_titan >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_titan >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_titan >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = titan TYPE = admin INDEX = 19 CODE = 15 }
 		}
@@ -26358,7 +26358,7 @@ sr_mod_ai_plan_enceladus = {
 			limit = {
 				sr_mod_can_queue_admin_enceladus = yes
 				sr_site_crews_enceladus >= sr_site_levels_enceladus
-				sr_site_autonomy_value_enceladus >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_enceladus >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_enceladus >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_enceladus >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = enceladus TYPE = admin INDEX = 20 CODE = 15 }
 		}
@@ -26560,7 +26560,7 @@ sr_mod_ai_plan_rhea = {
 			limit = {
 				sr_mod_can_queue_admin_rhea = yes
 				sr_site_crews_rhea >= sr_site_levels_rhea
-				sr_site_autonomy_value_rhea >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_rhea >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_rhea >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_rhea >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = rhea TYPE = admin INDEX = 21 CODE = 15 }
 		}
@@ -26762,7 +26762,7 @@ sr_mod_ai_plan_mimas = {
 			limit = {
 				sr_mod_can_queue_admin_mimas = yes
 				sr_site_crews_mimas >= sr_site_levels_mimas
-				sr_site_autonomy_value_mimas >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_mimas >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_mimas >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_mimas >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = mimas TYPE = admin INDEX = 22 CODE = 15 }
 		}
@@ -26964,7 +26964,7 @@ sr_mod_ai_plan_iapetus = {
 			limit = {
 				sr_mod_can_queue_admin_iapetus = yes
 				sr_site_crews_iapetus >= sr_site_levels_iapetus
-				sr_site_autonomy_value_iapetus >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_iapetus >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_iapetus >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_iapetus >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = iapetus TYPE = admin INDEX = 23 CODE = 15 }
 		}
@@ -27166,7 +27166,7 @@ sr_mod_ai_plan_titania = {
 			limit = {
 				sr_mod_can_queue_admin_titania = yes
 				sr_site_crews_titania >= sr_site_levels_titania
-				sr_site_autonomy_value_titania >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_titania >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_titania >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_titania >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = titania TYPE = admin INDEX = 24 CODE = 15 }
 		}
@@ -27368,7 +27368,7 @@ sr_mod_ai_plan_oberon = {
 			limit = {
 				sr_mod_can_queue_admin_oberon = yes
 				sr_site_crews_oberon >= sr_site_levels_oberon
-				sr_site_autonomy_value_oberon >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_oberon >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_oberon >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_oberon >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = oberon TYPE = admin INDEX = 25 CODE = 15 }
 		}
@@ -27570,7 +27570,7 @@ sr_mod_ai_plan_miranda = {
 			limit = {
 				sr_mod_can_queue_admin_miranda = yes
 				sr_site_crews_miranda >= sr_site_levels_miranda
-				sr_site_autonomy_value_miranda >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_miranda >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_miranda >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_miranda >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = miranda TYPE = admin INDEX = 26 CODE = 15 }
 		}
@@ -27772,7 +27772,7 @@ sr_mod_ai_plan_ariel = {
 			limit = {
 				sr_mod_can_queue_admin_ariel = yes
 				sr_site_crews_ariel >= sr_site_levels_ariel
-				sr_site_autonomy_value_ariel >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_ariel >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_ariel >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_ariel >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = ariel TYPE = admin INDEX = 27 CODE = 15 }
 		}
@@ -27974,7 +27974,7 @@ sr_mod_ai_plan_triton = {
 			limit = {
 				sr_mod_can_queue_admin_triton = yes
 				sr_site_crews_triton >= sr_site_levels_triton
-				sr_site_autonomy_value_triton >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_triton >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_triton >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_triton >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = triton TYPE = admin INDEX = 28 CODE = 15 }
 		}
@@ -28176,7 +28176,7 @@ sr_mod_ai_plan_proteus = {
 			limit = {
 				sr_mod_can_queue_admin_proteus = yes
 				sr_site_crews_proteus >= sr_site_levels_proteus
-				sr_site_autonomy_value_proteus >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_proteus >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_proteus >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_proteus >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = proteus TYPE = admin INDEX = 29 CODE = 15 }
 		}
@@ -28378,7 +28378,7 @@ sr_mod_ai_plan_pluto = {
 			limit = {
 				sr_mod_can_queue_admin_pluto = yes
 				sr_site_crews_pluto >= sr_site_levels_pluto
-				sr_site_autonomy_value_pluto >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_pluto >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_pluto >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_pluto >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = pluto TYPE = admin INDEX = 30 CODE = 15 }
 		}
@@ -28580,7 +28580,7 @@ sr_mod_ai_plan_eris = {
 			limit = {
 				sr_mod_can_queue_admin_eris = yes
 				sr_site_crews_eris >= sr_site_levels_eris
-				sr_site_autonomy_value_eris >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_eris >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_eris >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_eris >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = eris TYPE = admin INDEX = 31 CODE = 15 }
 		}
@@ -28782,7 +28782,7 @@ sr_mod_ai_plan_makemake = {
 			limit = {
 				sr_mod_can_queue_admin_makemake = yes
 				sr_site_crews_makemake >= sr_site_levels_makemake
-				sr_site_autonomy_value_makemake >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_makemake >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_makemake >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_makemake >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = makemake TYPE = admin INDEX = 32 CODE = 15 }
 		}
@@ -28984,7 +28984,7 @@ sr_mod_ai_plan_haumea = {
 			limit = {
 				sr_mod_can_queue_admin_haumea = yes
 				sr_site_crews_haumea >= sr_site_levels_haumea
-				sr_site_autonomy_value_haumea >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_haumea >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_haumea >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_haumea >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = haumea TYPE = admin INDEX = 33 CODE = 15 }
 		}
@@ -29186,7 +29186,7 @@ sr_mod_ai_plan_sedna = {
 			limit = {
 				sr_mod_can_queue_admin_sedna = yes
 				sr_site_crews_sedna >= sr_site_levels_sedna
-				sr_site_autonomy_value_sedna >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_sedna >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_sedna >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_sedna >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = sedna TYPE = admin INDEX = 34 CODE = 15 }
 		}
@@ -29383,7 +29383,7 @@ sr_mod_ai_plan_shackleton = {
 			limit = {
 				sr_mod_can_queue_admin_shackleton = yes
 				sr_site_crews_shackleton >= sr_site_levels_shackleton
-				sr_site_autonomy_value_shackleton >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_shackleton >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_shackleton >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_shackleton >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = shackleton TYPE = admin INDEX = 35 CODE = 15 }
 		}
@@ -29580,7 +29580,7 @@ sr_mod_ai_plan_peary = {
 			limit = {
 				sr_mod_can_queue_admin_peary = yes
 				sr_site_crews_peary >= sr_site_levels_peary
-				sr_site_autonomy_value_peary >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_peary >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_peary >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_peary >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = peary TYPE = admin INDEX = 36 CODE = 15 }
 		}
@@ -29777,7 +29777,7 @@ sr_mod_ai_plan_tranquility = {
 			limit = {
 				sr_mod_can_queue_admin_tranquility = yes
 				sr_site_crews_tranquility >= sr_site_levels_tranquility
-				sr_site_autonomy_value_tranquility >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_tranquility >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_tranquility >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_tranquility >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = tranquility TYPE = admin INDEX = 37 CODE = 15 }
 		}
@@ -29974,7 +29974,7 @@ sr_mod_ai_plan_marius_hills = {
 			limit = {
 				sr_mod_can_queue_admin_marius_hills = yes
 				sr_site_crews_marius_hills >= sr_site_levels_marius_hills
-				sr_site_autonomy_value_marius_hills >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_marius_hills >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_marius_hills >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_marius_hills >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = marius_hills TYPE = admin INDEX = 38 CODE = 15 }
 		}
@@ -30171,7 +30171,7 @@ sr_mod_ai_plan_daedalus = {
 			limit = {
 				sr_mod_can_queue_admin_daedalus = yes
 				sr_site_crews_daedalus >= sr_site_levels_daedalus
-				sr_site_autonomy_value_daedalus >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_daedalus >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_daedalus >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_daedalus >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = daedalus TYPE = admin INDEX = 39 CODE = 15 }
 		}
@@ -30368,7 +30368,7 @@ sr_mod_ai_plan_imbrium = {
 			limit = {
 				sr_mod_can_queue_admin_imbrium = yes
 				sr_site_crews_imbrium >= sr_site_levels_imbrium
-				sr_site_autonomy_value_imbrium >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_imbrium >= sr_mod_ai_admin_pressure
+				sr_site_autonomy_value_imbrium >= sr_mod_ai_admin_autonomy sr_site_aut_pressure_imbrium >= sr_mod_ai_admin_pressure authority >= sr_mod_ai_admin_authority
 			}
 			sr_mod_queue = { KEY = imbrium TYPE = admin INDEX = 40 CODE = 15 }
 		}

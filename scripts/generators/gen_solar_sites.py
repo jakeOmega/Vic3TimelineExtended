@@ -294,7 +294,10 @@ AI_VALUE_MAX = 170
 
 # Colony fleets (slices 2-3 design §§ 4-8). Slots per country; the automatic
 # pick's score, 100 - 10 x stage - transit months / 2 - 40 x premium - 10 a
-# fleet inbound - 60 if another fleet lands first, within the horizon.
+# fleet inbound - 60 if another fleet lands first, within the horizon, + 1 a
+# 10,000 people the world would hold at its Habitat cap at our share
+# (SCORE_PER_CREW_ROOM; colony people design § 9): a large world beats a near
+# small one, but not a near large one.
 FLEET_SLOTS = 6
 SCORE_BASE = 100
 SCORE_PER_STAGE = 10
@@ -302,6 +305,7 @@ SCORE_TRANSIT_DIVISOR = 2
 SCORE_PER_PREMIUM = 40
 SCORE_PER_INBOUND = 10
 SCORE_BEATEN = 60
+SCORE_PER_CREW_ROOM = 1
 SCORE_FLOOR = -900  # above sr_cf_no_score (-1000), the "nothing eligible" mark
 HORIZON_MONTHS = 180
 
@@ -1771,7 +1775,10 @@ def render_fleet_values() -> list[str]:
            "#   sr_cf_arrival_<key>  the month a fleet leaving now lands, by THIS's drive",
            f"#   sr_cf_score_<key>    the automatic pick: {SCORE_BASE} - {SCORE_PER_STAGE} x stage - transit / "
            f"{SCORE_TRANSIT_DIVISOR} - {SCORE_PER_PREMIUM} x premium",
-           f"#                        - {SCORE_PER_INBOUND} a fleet inbound - {SCORE_BEATEN} if one lands first"]
+           f"#                        - {SCORE_PER_INBOUND} a fleet inbound - {SCORE_BEATEN} if one lands first",
+           f"#                        + {SCORE_PER_CREW_ROOM} a {CREW_PER_LEVEL:,} people at its cap",
+           "#   sr_site_people_at_cap_<key> the people the world holds at its Habitat cap at THIS's",
+           "#                        share: base room x (1 + share x cap), the panel's figure too"]
     for site in SITES:
         k, tb = site.key, transit_body(site)
         # Our Moon Landing named this world (design § 3.4).
@@ -1792,12 +1799,22 @@ def render_fleet_values() -> list[str]:
         else:
             out.append(f"sr_cf_cost_{k} = {{ value = sr_cf_goal_{k} }}")
         out += [f"sr_cf_arrival_{k} = {{", "\tvalue = te_history_month_index", f"\tadd = sr_transit_months_{tb}", "}",
+                f"sr_site_people_at_cap_{k} = {{",
+                f"\tvalue = {HABITAT_BASE_SHARE}",
+                f"\tadd = modifier:{HABITAT_MODIFIER}",
+                f"\tmultiply = sr_site_hab_cap_{k}",
+                "\tadd = 1",
+                f"\tmultiply = sr_site_base_room_{k}",
+                "}",
                 f"sr_cf_score_{k} = {{",
                 f"\tvalue = {SCORE_BASE - SCORE_PER_STAGE * site.stage}",
                 f"\tsubtract = {{ value = sr_transit_months_{tb} divide = {SCORE_TRANSIT_DIVISOR} }}"]
         if site.body:
             out.append(f"\tsubtract = {{ value = sr_launch_target_cost_{site.body} multiply = {SCORE_PER_PREMIUM} }}")
-        out += [f"\tif = {{ limit = {{ has_global_variable = sr_site_inbound_{k} }} "
+        crew_room = (f"divide = {CREW_PER_LEVEL}" if SCORE_PER_CREW_ROOM == 1
+                     else f"divide = {CREW_PER_LEVEL} multiply = {SCORE_PER_CREW_ROOM}")
+        out += [f"\tadd = {{ value = sr_site_people_at_cap_{k} {crew_room} }}",
+                f"\tif = {{ limit = {{ has_global_variable = sr_site_inbound_{k} }} "
                 f"subtract = {{ value = global_var:sr_site_inbound_{k} multiply = {SCORE_PER_INBOUND} }} }}",
                 f"\tif = {{ limit = {{ sr_cf_beaten_{k} = yes }} subtract = {SCORE_BEATEN} }}",
                 f"\tmin = {SCORE_FLOOR}",
@@ -2264,11 +2281,13 @@ def _module_ai(site: Site) -> list[str]:
                     f"\t\t\t{_queue_call(site, slot)}",
                     "\t\t}"]
     # An Administration once autonomy reaches 25 and it is heading for 45 or more
-    # (the owner, 2026-10-31, when the demand came down to 50).
+    # (the owner, 2026-10-31, when the demand came down to 50), and only with twice
+    # its authority cost to spare (colony people design § 9).
     # Terraforming (era 13 spec § 7.11) once the world's people fill half its room:
     # decades of work for room it will need.
     plan = (("admin", f"sr_site_autonomy_value_{k} >= sr_mod_ai_admin_autonomy"
-                      f" sr_site_aut_pressure_{k} >= sr_mod_ai_admin_pressure"),
+                      f" sr_site_aut_pressure_{k} >= sr_mod_ai_admin_pressure"
+                      " authority >= sr_mod_ai_admin_authority"),
             ("mine", "sr_ebase_levels > sr_ebase_room_total"),
             # An Off-World Resort once the Resort Colony room is full, queued levels
             # counted (#1948 design § 7): the AI and private investors stop at the room.

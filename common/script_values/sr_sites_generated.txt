@@ -212,6 +212,9 @@ sr_cf_no_score = { value = -1000 }
 #   sr_cf_arrival_<key>  the month a fleet leaving now lands, by THIS's drive
 #   sr_cf_score_<key>    the automatic pick: 100 - 10 x stage - transit / 2 - 40 x premium
 #                        - 10 a fleet inbound - 60 if one lands first
+#                        + 1 a 10,000 people at its cap
+#   sr_site_people_at_cap_<key> the people the world holds at its Habitat cap at THIS's
+#                        share: base room x (1 + share x cap), the panel's figure too
 sr_cf_base_goal_valles_marineris = {
 	value = sr_colonization_goal_stage_1
 }
@@ -231,10 +234,18 @@ sr_cf_arrival_valles_marineris = {
 	value = te_history_month_index
 	add = sr_transit_months_mars
 }
+sr_site_people_at_cap_valles_marineris = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_valles_marineris
+	add = 1
+	multiply = sr_site_base_room_valles_marineris
+}
 sr_cf_score_valles_marineris = {
 	value = 90
 	subtract = { value = sr_transit_months_mars divide = 2 }
 	subtract = { value = sr_launch_target_cost_mars multiply = 40 }
+	add = { value = sr_site_people_at_cap_valles_marineris divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_valles_marineris } subtract = { value = global_var:sr_site_inbound_valles_marineris multiply = 10 } }
 	if = { limit = { sr_cf_beaten_valles_marineris = yes } subtract = 60 }
 	min = -900
@@ -258,10 +269,18 @@ sr_cf_arrival_olympus_mons = {
 	value = te_history_month_index
 	add = sr_transit_months_mars
 }
+sr_site_people_at_cap_olympus_mons = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_olympus_mons
+	add = 1
+	multiply = sr_site_base_room_olympus_mons
+}
 sr_cf_score_olympus_mons = {
 	value = 90
 	subtract = { value = sr_transit_months_mars divide = 2 }
 	subtract = { value = sr_launch_target_cost_mars multiply = 40 }
+	add = { value = sr_site_people_at_cap_olympus_mons divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_olympus_mons } subtract = { value = global_var:sr_site_inbound_olympus_mons multiply = 10 } }
 	if = { limit = { sr_cf_beaten_olympus_mons = yes } subtract = 60 }
 	min = -900
@@ -285,10 +304,18 @@ sr_cf_arrival_hellas_planitia = {
 	value = te_history_month_index
 	add = sr_transit_months_mars
 }
+sr_site_people_at_cap_hellas_planitia = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_hellas_planitia
+	add = 1
+	multiply = sr_site_base_room_hellas_planitia
+}
 sr_cf_score_hellas_planitia = {
 	value = 90
 	subtract = { value = sr_transit_months_mars divide = 2 }
 	subtract = { value = sr_launch_target_cost_mars multiply = 40 }
+	add = { value = sr_site_people_at_cap_hellas_planitia divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_hellas_planitia } subtract = { value = global_var:sr_site_inbound_hellas_planitia multiply = 10 } }
 	if = { limit = { sr_cf_beaten_hellas_planitia = yes } subtract = 60 }
 	min = -900
@@ -312,10 +339,18 @@ sr_cf_arrival_utopia_planitia = {
 	value = te_history_month_index
 	add = sr_transit_months_mars
 }
+sr_site_people_at_cap_utopia_planitia = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_utopia_planitia
+	add = 1
+	multiply = sr_site_base_room_utopia_planitia
+}
 sr_cf_score_utopia_planitia = {
 	value = 90
 	subtract = { value = sr_transit_months_mars divide = 2 }
 	subtract = { value = sr_launch_target_cost_mars multiply = 40 }
+	add = { value = sr_site_people_at_cap_utopia_planitia divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_utopia_planitia } subtract = { value = global_var:sr_site_inbound_utopia_planitia multiply = 10 } }
 	if = { limit = { sr_cf_beaten_utopia_planitia = yes } subtract = 60 }
 	min = -900
@@ -339,10 +374,18 @@ sr_cf_arrival_arcadia_planitia = {
 	value = te_history_month_index
 	add = sr_transit_months_mars
 }
+sr_site_people_at_cap_arcadia_planitia = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_arcadia_planitia
+	add = 1
+	multiply = sr_site_base_room_arcadia_planitia
+}
 sr_cf_score_arcadia_planitia = {
 	value = 90
 	subtract = { value = sr_transit_months_mars divide = 2 }
 	subtract = { value = sr_launch_target_cost_mars multiply = 40 }
+	add = { value = sr_site_people_at_cap_arcadia_planitia divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_arcadia_planitia } subtract = { value = global_var:sr_site_inbound_arcadia_planitia multiply = 10 } }
 	if = { limit = { sr_cf_beaten_arcadia_planitia = yes } subtract = 60 }
 	min = -900
@@ -366,10 +409,18 @@ sr_cf_arrival_ceres = {
 	value = te_history_month_index
 	add = sr_transit_months_ceres
 }
+sr_site_people_at_cap_ceres = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_ceres
+	add = 1
+	multiply = sr_site_base_room_ceres
+}
 sr_cf_score_ceres = {
 	value = 90
 	subtract = { value = sr_transit_months_ceres divide = 2 }
 	subtract = { value = sr_launch_target_cost_ceres multiply = 40 }
+	add = { value = sr_site_people_at_cap_ceres divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_ceres } subtract = { value = global_var:sr_site_inbound_ceres multiply = 10 } }
 	if = { limit = { sr_cf_beaten_ceres = yes } subtract = 60 }
 	min = -900
@@ -393,10 +444,18 @@ sr_cf_arrival_vesta = {
 	value = te_history_month_index
 	add = sr_transit_months_vesta
 }
+sr_site_people_at_cap_vesta = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_vesta
+	add = 1
+	multiply = sr_site_base_room_vesta
+}
 sr_cf_score_vesta = {
 	value = 90
 	subtract = { value = sr_transit_months_vesta divide = 2 }
 	subtract = { value = sr_launch_target_cost_vesta multiply = 40 }
+	add = { value = sr_site_people_at_cap_vesta divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_vesta } subtract = { value = global_var:sr_site_inbound_vesta multiply = 10 } }
 	if = { limit = { sr_cf_beaten_vesta = yes } subtract = 60 }
 	min = -900
@@ -420,10 +479,18 @@ sr_cf_arrival_psyche = {
 	value = te_history_month_index
 	add = sr_transit_months_psyche
 }
+sr_site_people_at_cap_psyche = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_psyche
+	add = 1
+	multiply = sr_site_base_room_psyche
+}
 sr_cf_score_psyche = {
 	value = 90
 	subtract = { value = sr_transit_months_psyche divide = 2 }
 	subtract = { value = sr_launch_target_cost_psyche multiply = 40 }
+	add = { value = sr_site_people_at_cap_psyche divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_psyche } subtract = { value = global_var:sr_site_inbound_psyche multiply = 10 } }
 	if = { limit = { sr_cf_beaten_psyche = yes } subtract = 60 }
 	min = -900
@@ -447,10 +514,18 @@ sr_cf_arrival_pallas = {
 	value = te_history_month_index
 	add = sr_transit_months_pallas
 }
+sr_site_people_at_cap_pallas = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_pallas
+	add = 1
+	multiply = sr_site_base_room_pallas
+}
 sr_cf_score_pallas = {
 	value = 90
 	subtract = { value = sr_transit_months_pallas divide = 2 }
 	subtract = { value = sr_launch_target_cost_pallas multiply = 40 }
+	add = { value = sr_site_people_at_cap_pallas divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_pallas } subtract = { value = global_var:sr_site_inbound_pallas multiply = 10 } }
 	if = { limit = { sr_cf_beaten_pallas = yes } subtract = 60 }
 	min = -900
@@ -474,10 +549,18 @@ sr_cf_arrival_hygiea = {
 	value = te_history_month_index
 	add = sr_transit_months_hygiea
 }
+sr_site_people_at_cap_hygiea = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_hygiea
+	add = 1
+	multiply = sr_site_base_room_hygiea
+}
 sr_cf_score_hygiea = {
 	value = 90
 	subtract = { value = sr_transit_months_hygiea divide = 2 }
 	subtract = { value = sr_launch_target_cost_hygiea multiply = 40 }
+	add = { value = sr_site_people_at_cap_hygiea divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_hygiea } subtract = { value = global_var:sr_site_inbound_hygiea multiply = 10 } }
 	if = { limit = { sr_cf_beaten_hygiea = yes } subtract = 60 }
 	min = -900
@@ -501,10 +584,18 @@ sr_cf_arrival_io = {
 	value = te_history_month_index
 	add = sr_transit_months_jupiter
 }
+sr_site_people_at_cap_io = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_io
+	add = 1
+	multiply = sr_site_base_room_io
+}
 sr_cf_score_io = {
 	value = 80
 	subtract = { value = sr_transit_months_jupiter divide = 2 }
 	subtract = { value = sr_launch_target_cost_jupiter multiply = 40 }
+	add = { value = sr_site_people_at_cap_io divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_io } subtract = { value = global_var:sr_site_inbound_io multiply = 10 } }
 	if = { limit = { sr_cf_beaten_io = yes } subtract = 60 }
 	min = -900
@@ -528,10 +619,18 @@ sr_cf_arrival_europa = {
 	value = te_history_month_index
 	add = sr_transit_months_jupiter
 }
+sr_site_people_at_cap_europa = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_europa
+	add = 1
+	multiply = sr_site_base_room_europa
+}
 sr_cf_score_europa = {
 	value = 80
 	subtract = { value = sr_transit_months_jupiter divide = 2 }
 	subtract = { value = sr_launch_target_cost_jupiter multiply = 40 }
+	add = { value = sr_site_people_at_cap_europa divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_europa } subtract = { value = global_var:sr_site_inbound_europa multiply = 10 } }
 	if = { limit = { sr_cf_beaten_europa = yes } subtract = 60 }
 	min = -900
@@ -555,10 +654,18 @@ sr_cf_arrival_ganymede = {
 	value = te_history_month_index
 	add = sr_transit_months_jupiter
 }
+sr_site_people_at_cap_ganymede = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_ganymede
+	add = 1
+	multiply = sr_site_base_room_ganymede
+}
 sr_cf_score_ganymede = {
 	value = 80
 	subtract = { value = sr_transit_months_jupiter divide = 2 }
 	subtract = { value = sr_launch_target_cost_jupiter multiply = 40 }
+	add = { value = sr_site_people_at_cap_ganymede divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_ganymede } subtract = { value = global_var:sr_site_inbound_ganymede multiply = 10 } }
 	if = { limit = { sr_cf_beaten_ganymede = yes } subtract = 60 }
 	min = -900
@@ -582,10 +689,18 @@ sr_cf_arrival_callisto = {
 	value = te_history_month_index
 	add = sr_transit_months_jupiter
 }
+sr_site_people_at_cap_callisto = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_callisto
+	add = 1
+	multiply = sr_site_base_room_callisto
+}
 sr_cf_score_callisto = {
 	value = 80
 	subtract = { value = sr_transit_months_jupiter divide = 2 }
 	subtract = { value = sr_launch_target_cost_jupiter multiply = 40 }
+	add = { value = sr_site_people_at_cap_callisto divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_callisto } subtract = { value = global_var:sr_site_inbound_callisto multiply = 10 } }
 	if = { limit = { sr_cf_beaten_callisto = yes } subtract = 60 }
 	min = -900
@@ -609,10 +724,18 @@ sr_cf_arrival_himalia = {
 	value = te_history_month_index
 	add = sr_transit_months_jupiter
 }
+sr_site_people_at_cap_himalia = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_himalia
+	add = 1
+	multiply = sr_site_base_room_himalia
+}
 sr_cf_score_himalia = {
 	value = 80
 	subtract = { value = sr_transit_months_jupiter divide = 2 }
 	subtract = { value = sr_launch_target_cost_jupiter multiply = 40 }
+	add = { value = sr_site_people_at_cap_himalia divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_himalia } subtract = { value = global_var:sr_site_inbound_himalia multiply = 10 } }
 	if = { limit = { sr_cf_beaten_himalia = yes } subtract = 60 }
 	min = -900
@@ -636,10 +759,18 @@ sr_cf_arrival_amalthea = {
 	value = te_history_month_index
 	add = sr_transit_months_jupiter
 }
+sr_site_people_at_cap_amalthea = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_amalthea
+	add = 1
+	multiply = sr_site_base_room_amalthea
+}
 sr_cf_score_amalthea = {
 	value = 80
 	subtract = { value = sr_transit_months_jupiter divide = 2 }
 	subtract = { value = sr_launch_target_cost_jupiter multiply = 40 }
+	add = { value = sr_site_people_at_cap_amalthea divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_amalthea } subtract = { value = global_var:sr_site_inbound_amalthea multiply = 10 } }
 	if = { limit = { sr_cf_beaten_amalthea = yes } subtract = 60 }
 	min = -900
@@ -663,10 +794,18 @@ sr_cf_arrival_venus = {
 	value = te_history_month_index
 	add = sr_transit_months_venus
 }
+sr_site_people_at_cap_venus = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_venus
+	add = 1
+	multiply = sr_site_base_room_venus
+}
 sr_cf_score_venus = {
 	value = 80
 	subtract = { value = sr_transit_months_venus divide = 2 }
 	subtract = { value = sr_launch_target_cost_venus multiply = 40 }
+	add = { value = sr_site_people_at_cap_venus divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_venus } subtract = { value = global_var:sr_site_inbound_venus multiply = 10 } }
 	if = { limit = { sr_cf_beaten_venus = yes } subtract = 60 }
 	min = -900
@@ -686,9 +825,17 @@ sr_cf_arrival_mercury = {
 	value = te_history_month_index
 	add = sr_transit_months_mercury
 }
+sr_site_people_at_cap_mercury = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_mercury
+	add = 1
+	multiply = sr_site_base_room_mercury
+}
 sr_cf_score_mercury = {
 	value = 70
 	subtract = { value = sr_transit_months_mercury divide = 2 }
+	add = { value = sr_site_people_at_cap_mercury divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_mercury } subtract = { value = global_var:sr_site_inbound_mercury multiply = 10 } }
 	if = { limit = { sr_cf_beaten_mercury = yes } subtract = 60 }
 	min = -900
@@ -712,10 +859,18 @@ sr_cf_arrival_titan = {
 	value = te_history_month_index
 	add = sr_transit_months_saturn
 }
+sr_site_people_at_cap_titan = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_titan
+	add = 1
+	multiply = sr_site_base_room_titan
+}
 sr_cf_score_titan = {
 	value = 70
 	subtract = { value = sr_transit_months_saturn divide = 2 }
 	subtract = { value = sr_launch_target_cost_saturn multiply = 40 }
+	add = { value = sr_site_people_at_cap_titan divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_titan } subtract = { value = global_var:sr_site_inbound_titan multiply = 10 } }
 	if = { limit = { sr_cf_beaten_titan = yes } subtract = 60 }
 	min = -900
@@ -739,10 +894,18 @@ sr_cf_arrival_enceladus = {
 	value = te_history_month_index
 	add = sr_transit_months_saturn
 }
+sr_site_people_at_cap_enceladus = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_enceladus
+	add = 1
+	multiply = sr_site_base_room_enceladus
+}
 sr_cf_score_enceladus = {
 	value = 70
 	subtract = { value = sr_transit_months_saturn divide = 2 }
 	subtract = { value = sr_launch_target_cost_saturn multiply = 40 }
+	add = { value = sr_site_people_at_cap_enceladus divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_enceladus } subtract = { value = global_var:sr_site_inbound_enceladus multiply = 10 } }
 	if = { limit = { sr_cf_beaten_enceladus = yes } subtract = 60 }
 	min = -900
@@ -766,10 +929,18 @@ sr_cf_arrival_rhea = {
 	value = te_history_month_index
 	add = sr_transit_months_saturn
 }
+sr_site_people_at_cap_rhea = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_rhea
+	add = 1
+	multiply = sr_site_base_room_rhea
+}
 sr_cf_score_rhea = {
 	value = 70
 	subtract = { value = sr_transit_months_saturn divide = 2 }
 	subtract = { value = sr_launch_target_cost_saturn multiply = 40 }
+	add = { value = sr_site_people_at_cap_rhea divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_rhea } subtract = { value = global_var:sr_site_inbound_rhea multiply = 10 } }
 	if = { limit = { sr_cf_beaten_rhea = yes } subtract = 60 }
 	min = -900
@@ -793,10 +964,18 @@ sr_cf_arrival_mimas = {
 	value = te_history_month_index
 	add = sr_transit_months_saturn
 }
+sr_site_people_at_cap_mimas = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_mimas
+	add = 1
+	multiply = sr_site_base_room_mimas
+}
 sr_cf_score_mimas = {
 	value = 70
 	subtract = { value = sr_transit_months_saturn divide = 2 }
 	subtract = { value = sr_launch_target_cost_saturn multiply = 40 }
+	add = { value = sr_site_people_at_cap_mimas divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_mimas } subtract = { value = global_var:sr_site_inbound_mimas multiply = 10 } }
 	if = { limit = { sr_cf_beaten_mimas = yes } subtract = 60 }
 	min = -900
@@ -820,10 +999,18 @@ sr_cf_arrival_iapetus = {
 	value = te_history_month_index
 	add = sr_transit_months_saturn
 }
+sr_site_people_at_cap_iapetus = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_iapetus
+	add = 1
+	multiply = sr_site_base_room_iapetus
+}
 sr_cf_score_iapetus = {
 	value = 70
 	subtract = { value = sr_transit_months_saturn divide = 2 }
 	subtract = { value = sr_launch_target_cost_saturn multiply = 40 }
+	add = { value = sr_site_people_at_cap_iapetus divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_iapetus } subtract = { value = global_var:sr_site_inbound_iapetus multiply = 10 } }
 	if = { limit = { sr_cf_beaten_iapetus = yes } subtract = 60 }
 	min = -900
@@ -847,10 +1034,18 @@ sr_cf_arrival_titania = {
 	value = te_history_month_index
 	add = sr_transit_months_uranus
 }
+sr_site_people_at_cap_titania = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_titania
+	add = 1
+	multiply = sr_site_base_room_titania
+}
 sr_cf_score_titania = {
 	value = 60
 	subtract = { value = sr_transit_months_uranus divide = 2 }
 	subtract = { value = sr_launch_target_cost_uranus multiply = 40 }
+	add = { value = sr_site_people_at_cap_titania divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_titania } subtract = { value = global_var:sr_site_inbound_titania multiply = 10 } }
 	if = { limit = { sr_cf_beaten_titania = yes } subtract = 60 }
 	min = -900
@@ -874,10 +1069,18 @@ sr_cf_arrival_oberon = {
 	value = te_history_month_index
 	add = sr_transit_months_uranus
 }
+sr_site_people_at_cap_oberon = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_oberon
+	add = 1
+	multiply = sr_site_base_room_oberon
+}
 sr_cf_score_oberon = {
 	value = 60
 	subtract = { value = sr_transit_months_uranus divide = 2 }
 	subtract = { value = sr_launch_target_cost_uranus multiply = 40 }
+	add = { value = sr_site_people_at_cap_oberon divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_oberon } subtract = { value = global_var:sr_site_inbound_oberon multiply = 10 } }
 	if = { limit = { sr_cf_beaten_oberon = yes } subtract = 60 }
 	min = -900
@@ -901,10 +1104,18 @@ sr_cf_arrival_miranda = {
 	value = te_history_month_index
 	add = sr_transit_months_uranus
 }
+sr_site_people_at_cap_miranda = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_miranda
+	add = 1
+	multiply = sr_site_base_room_miranda
+}
 sr_cf_score_miranda = {
 	value = 60
 	subtract = { value = sr_transit_months_uranus divide = 2 }
 	subtract = { value = sr_launch_target_cost_uranus multiply = 40 }
+	add = { value = sr_site_people_at_cap_miranda divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_miranda } subtract = { value = global_var:sr_site_inbound_miranda multiply = 10 } }
 	if = { limit = { sr_cf_beaten_miranda = yes } subtract = 60 }
 	min = -900
@@ -928,10 +1139,18 @@ sr_cf_arrival_ariel = {
 	value = te_history_month_index
 	add = sr_transit_months_uranus
 }
+sr_site_people_at_cap_ariel = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_ariel
+	add = 1
+	multiply = sr_site_base_room_ariel
+}
 sr_cf_score_ariel = {
 	value = 60
 	subtract = { value = sr_transit_months_uranus divide = 2 }
 	subtract = { value = sr_launch_target_cost_uranus multiply = 40 }
+	add = { value = sr_site_people_at_cap_ariel divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_ariel } subtract = { value = global_var:sr_site_inbound_ariel multiply = 10 } }
 	if = { limit = { sr_cf_beaten_ariel = yes } subtract = 60 }
 	min = -900
@@ -955,10 +1174,18 @@ sr_cf_arrival_triton = {
 	value = te_history_month_index
 	add = sr_transit_months_neptune
 }
+sr_site_people_at_cap_triton = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_triton
+	add = 1
+	multiply = sr_site_base_room_triton
+}
 sr_cf_score_triton = {
 	value = 60
 	subtract = { value = sr_transit_months_neptune divide = 2 }
 	subtract = { value = sr_launch_target_cost_neptune multiply = 40 }
+	add = { value = sr_site_people_at_cap_triton divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_triton } subtract = { value = global_var:sr_site_inbound_triton multiply = 10 } }
 	if = { limit = { sr_cf_beaten_triton = yes } subtract = 60 }
 	min = -900
@@ -982,10 +1209,18 @@ sr_cf_arrival_proteus = {
 	value = te_history_month_index
 	add = sr_transit_months_neptune
 }
+sr_site_people_at_cap_proteus = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_proteus
+	add = 1
+	multiply = sr_site_base_room_proteus
+}
 sr_cf_score_proteus = {
 	value = 60
 	subtract = { value = sr_transit_months_neptune divide = 2 }
 	subtract = { value = sr_launch_target_cost_neptune multiply = 40 }
+	add = { value = sr_site_people_at_cap_proteus divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_proteus } subtract = { value = global_var:sr_site_inbound_proteus multiply = 10 } }
 	if = { limit = { sr_cf_beaten_proteus = yes } subtract = 60 }
 	min = -900
@@ -1009,10 +1244,18 @@ sr_cf_arrival_pluto = {
 	value = te_history_month_index
 	add = sr_transit_months_kuiper
 }
+sr_site_people_at_cap_pluto = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_pluto
+	add = 1
+	multiply = sr_site_base_room_pluto
+}
 sr_cf_score_pluto = {
 	value = 50
 	subtract = { value = sr_transit_months_kuiper divide = 2 }
 	subtract = { value = sr_launch_target_cost_kuiper multiply = 40 }
+	add = { value = sr_site_people_at_cap_pluto divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_pluto } subtract = { value = global_var:sr_site_inbound_pluto multiply = 10 } }
 	if = { limit = { sr_cf_beaten_pluto = yes } subtract = 60 }
 	min = -900
@@ -1036,10 +1279,18 @@ sr_cf_arrival_eris = {
 	value = te_history_month_index
 	add = sr_transit_months_kuiper
 }
+sr_site_people_at_cap_eris = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_eris
+	add = 1
+	multiply = sr_site_base_room_eris
+}
 sr_cf_score_eris = {
 	value = 50
 	subtract = { value = sr_transit_months_kuiper divide = 2 }
 	subtract = { value = sr_launch_target_cost_kuiper multiply = 40 }
+	add = { value = sr_site_people_at_cap_eris divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_eris } subtract = { value = global_var:sr_site_inbound_eris multiply = 10 } }
 	if = { limit = { sr_cf_beaten_eris = yes } subtract = 60 }
 	min = -900
@@ -1063,10 +1314,18 @@ sr_cf_arrival_makemake = {
 	value = te_history_month_index
 	add = sr_transit_months_kuiper
 }
+sr_site_people_at_cap_makemake = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_makemake
+	add = 1
+	multiply = sr_site_base_room_makemake
+}
 sr_cf_score_makemake = {
 	value = 50
 	subtract = { value = sr_transit_months_kuiper divide = 2 }
 	subtract = { value = sr_launch_target_cost_kuiper multiply = 40 }
+	add = { value = sr_site_people_at_cap_makemake divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_makemake } subtract = { value = global_var:sr_site_inbound_makemake multiply = 10 } }
 	if = { limit = { sr_cf_beaten_makemake = yes } subtract = 60 }
 	min = -900
@@ -1090,10 +1349,18 @@ sr_cf_arrival_haumea = {
 	value = te_history_month_index
 	add = sr_transit_months_kuiper
 }
+sr_site_people_at_cap_haumea = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_haumea
+	add = 1
+	multiply = sr_site_base_room_haumea
+}
 sr_cf_score_haumea = {
 	value = 50
 	subtract = { value = sr_transit_months_kuiper divide = 2 }
 	subtract = { value = sr_launch_target_cost_kuiper multiply = 40 }
+	add = { value = sr_site_people_at_cap_haumea divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_haumea } subtract = { value = global_var:sr_site_inbound_haumea multiply = 10 } }
 	if = { limit = { sr_cf_beaten_haumea = yes } subtract = 60 }
 	min = -900
@@ -1117,10 +1384,18 @@ sr_cf_arrival_sedna = {
 	value = te_history_month_index
 	add = sr_transit_months_kuiper
 }
+sr_site_people_at_cap_sedna = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_sedna
+	add = 1
+	multiply = sr_site_base_room_sedna
+}
 sr_cf_score_sedna = {
 	value = 50
 	subtract = { value = sr_transit_months_kuiper divide = 2 }
 	subtract = { value = sr_launch_target_cost_kuiper multiply = 40 }
+	add = { value = sr_site_people_at_cap_sedna divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_sedna } subtract = { value = global_var:sr_site_inbound_sedna multiply = 10 } }
 	if = { limit = { sr_cf_beaten_sedna = yes } subtract = 60 }
 	min = -900
@@ -1142,9 +1417,17 @@ sr_cf_arrival_shackleton = {
 	value = te_history_month_index
 	add = sr_transit_months_moon
 }
+sr_site_people_at_cap_shackleton = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_shackleton
+	add = 1
+	multiply = sr_site_base_room_shackleton
+}
 sr_cf_score_shackleton = {
 	value = 100
 	subtract = { value = sr_transit_months_moon divide = 2 }
+	add = { value = sr_site_people_at_cap_shackleton divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_shackleton } subtract = { value = global_var:sr_site_inbound_shackleton multiply = 10 } }
 	if = { limit = { sr_cf_beaten_shackleton = yes } subtract = 60 }
 	min = -900
@@ -1164,9 +1447,17 @@ sr_cf_arrival_peary = {
 	value = te_history_month_index
 	add = sr_transit_months_moon
 }
+sr_site_people_at_cap_peary = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_peary
+	add = 1
+	multiply = sr_site_base_room_peary
+}
 sr_cf_score_peary = {
 	value = 100
 	subtract = { value = sr_transit_months_moon divide = 2 }
+	add = { value = sr_site_people_at_cap_peary divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_peary } subtract = { value = global_var:sr_site_inbound_peary multiply = 10 } }
 	if = { limit = { sr_cf_beaten_peary = yes } subtract = 60 }
 	min = -900
@@ -1188,9 +1479,17 @@ sr_cf_arrival_tranquility = {
 	value = te_history_month_index
 	add = sr_transit_months_moon
 }
+sr_site_people_at_cap_tranquility = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_tranquility
+	add = 1
+	multiply = sr_site_base_room_tranquility
+}
 sr_cf_score_tranquility = {
 	value = 100
 	subtract = { value = sr_transit_months_moon divide = 2 }
+	add = { value = sr_site_people_at_cap_tranquility divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_tranquility } subtract = { value = global_var:sr_site_inbound_tranquility multiply = 10 } }
 	if = { limit = { sr_cf_beaten_tranquility = yes } subtract = 60 }
 	min = -900
@@ -1212,9 +1511,17 @@ sr_cf_arrival_marius_hills = {
 	value = te_history_month_index
 	add = sr_transit_months_moon
 }
+sr_site_people_at_cap_marius_hills = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_marius_hills
+	add = 1
+	multiply = sr_site_base_room_marius_hills
+}
 sr_cf_score_marius_hills = {
 	value = 100
 	subtract = { value = sr_transit_months_moon divide = 2 }
+	add = { value = sr_site_people_at_cap_marius_hills divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_marius_hills } subtract = { value = global_var:sr_site_inbound_marius_hills multiply = 10 } }
 	if = { limit = { sr_cf_beaten_marius_hills = yes } subtract = 60 }
 	min = -900
@@ -1236,9 +1543,17 @@ sr_cf_arrival_daedalus = {
 	value = te_history_month_index
 	add = sr_transit_months_moon
 }
+sr_site_people_at_cap_daedalus = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_daedalus
+	add = 1
+	multiply = sr_site_base_room_daedalus
+}
 sr_cf_score_daedalus = {
 	value = 100
 	subtract = { value = sr_transit_months_moon divide = 2 }
+	add = { value = sr_site_people_at_cap_daedalus divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_daedalus } subtract = { value = global_var:sr_site_inbound_daedalus multiply = 10 } }
 	if = { limit = { sr_cf_beaten_daedalus = yes } subtract = 60 }
 	min = -900
@@ -1258,9 +1573,17 @@ sr_cf_arrival_imbrium = {
 	value = te_history_month_index
 	add = sr_transit_months_moon
 }
+sr_site_people_at_cap_imbrium = {
+	value = 0.5
+	add = modifier:country_sr_habitat_room_add
+	multiply = sr_site_hab_cap_imbrium
+	add = 1
+	multiply = sr_site_base_room_imbrium
+}
 sr_cf_score_imbrium = {
 	value = 100
 	subtract = { value = sr_transit_months_moon divide = 2 }
+	add = { value = sr_site_people_at_cap_imbrium divide = 10000 }
 	if = { limit = { has_global_variable = sr_site_inbound_imbrium } subtract = { value = global_var:sr_site_inbound_imbrium multiply = 10 } }
 	if = { limit = { sr_cf_beaten_imbrium = yes } subtract = 60 }
 	min = -900

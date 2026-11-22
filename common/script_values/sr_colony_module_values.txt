@@ -152,6 +152,9 @@ sr_mod_bunker_redundancy = {
 # test is on the pressure: the same settling point at any autonomy, where a
 # floor on the month's rise would ask more of a colony the higher it already is.
 sr_mod_ai_admin_autonomy = { value = 25 }
+# ... and only with twice its cost in authority to spare: an Administration costs
+# 25 a staffed level (sr_module_admin; colony people design §§ 7, 9).
+sr_mod_ai_admin_authority = { value = 50 }
 sr_mod_ai_admin_settles_at = { value = 45 }
 sr_mod_ai_admin_pressure = {
 	value = sr_mod_ai_admin_settles_at
