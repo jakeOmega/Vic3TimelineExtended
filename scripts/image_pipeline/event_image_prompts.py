@@ -1384,8 +1384,8 @@ IMAGES = {
         "style": "oil painting, warm domestic realism, television glow",
         "events": ["society_technology_events.6"],
     },
-    # Rendered again 2026-11-21 (s1): the first render had prominent garbled lettering (large painted letters on the
-    # factory wall).
+    # Rendered again 2026-11-21 (s2): the first render had prominent garbled lettering (large painted letters on the
+    # factory wall). Not s1, the hand on the wire: the mesh crossed his arm, which read as passing through the fence.
     "factory_outsourced_closed": {
         "prompt": "At the left of the frame, an older worker in a work jacket stands at a closed chain-link gate, one hand on the wire, looking through at an empty factory yard where weeds grow between the paving stones. The right of the frame is the long, clean brick wall of the factory, its windows dark, under a grey sky.",
         "style": "oil painting, social realism, desolate light",
