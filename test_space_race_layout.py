@@ -686,9 +686,9 @@ class HowItWorksTest(unittest.TestCase):
         at = how.index('text = "je_space_race_widget_howc_header"')
         self.assertGreater(at, how.index(f'"{HOW_KEYS[-1]}"'))
         how_colonies = how[at:]
-        for topic in ("fleets", "windows", "settlers", "modules", "autonomy", "space_command", "defences"):
+        for topic in ("fleets", "windows", "settlers", "modules", "bases", "autonomy", "space_command", "defences"):
             self.assertIn(f'"je_space_race_widget_howc_{topic}"', how_colonies, topic)
-        for rule, n in (("sr_disp_colonies_contested", 6), ("sr_disp_colonies_full", 4)):
+        for rule, n in (("sr_disp_colonies_contested", 8), ("sr_disp_colonies_full", 4)):
             self.assertEqual(how_colonies.count(f"GetPlayer.MakeScope.ScriptValue('{rule}')"), n, rule)
         for sec in ("te_sr_sec_control", "te_sr_sec_rivals", "te_sr_overview_milestone",
                     "te_sr_overview_transit", "te_sr_sec_colonies", "te_sr_sec_colony_fleets",
@@ -704,7 +704,8 @@ class HowItWorksTest(unittest.TestCase):
         colonies rule (or none), read on the player: swapping two topics'
         gates keeps the counts above but fails here."""
         rules = {"fleets": None, "windows": None, "settlers": "sr_disp_colonies_contested",
-                 "modules": "sr_disp_colonies_contested", "autonomy": "sr_disp_colonies_contested",
+                 "modules": "sr_disp_colonies_contested", "bases": "sr_disp_colonies_contested",
+                 "autonomy": "sr_disp_colonies_contested",
                  "space_command": "sr_disp_colonies_full", "defences": "sr_disp_colonies_full"}
         how = _strip_comments(_type_body(_read(GUI), "te_space_race_help_body"))
         gates = {}

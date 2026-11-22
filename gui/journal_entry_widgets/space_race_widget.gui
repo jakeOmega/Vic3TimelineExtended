@@ -4358,8 +4358,12 @@ types space_race_widget_types
 		### Under the name, what the site offers a colony (the owner, 2026-10-30:
 		### the Colonies list showed slots and base room only for colonies held):
 		### its module slots, its size's and our Colony Module Slots, and its
-		### Extraplanetary Base room and grade, each an icon and a figure with its
-		### meaning on hover. Simple and Full Colonies only.
+		### Extraplanetary Base room, grade and ground type ("300 (+30%) Metallic",
+		### ground types design § 9.2), each an icon and a figure with its
+		### meaning on hover; the base room's hover is its type's
+		### (je_space_race_widget_ss_bases_tt_<type>, block site_bases_tooltip).
+		### 254 for the bases: 18 icon + 108 figure + 120 word + 2 × 4 spacing.
+		### Simple and Full Colonies only.
 		flowcontainer = {
 			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
 			direction = horizontal
@@ -4394,9 +4398,9 @@ types space_race_widget_types
 				}
 			}
 			widget = {
-				size = { 132 22 }
+				size = { 254 22 }
 				parentanchor = vcenter
-				tooltip = "je_space_race_widget_ss_bases_tt"
+				block "site_bases_tooltip" {}
 
 				flowcontainer = {
 					direction = horizontal
@@ -4416,6 +4420,15 @@ types space_race_widget_types
 						using = te_sr_fontsize_row
 						elide = right
 						block "site_bases" {}
+					}
+					textbox = {
+						parentanchor = vcenter
+						autoresize = yes
+						max_width = 120
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						block "site_ground" {}
 					}
 				}
 			}
@@ -8313,6 +8326,18 @@ types space_race_widget_types
 		te_sr_note = {
 			visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
 			text = "je_space_race_widget_howc_modules"
+		}
+		### Extraplanetary Bases (ground types design § 9.6): the grade, a line per
+		### ground type, and the Bases view's checkbox in a sentence.
+		te_sr_subheader = {
+			visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+			blockoverride "subheader_text" {
+				text = "je_space_race_widget_howc_sub_bases"
+			}
+		}
+		te_sr_note = {
+			visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+			text = "je_space_race_widget_howc_bases"
 		}
 		te_sr_subheader = {
 			visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"

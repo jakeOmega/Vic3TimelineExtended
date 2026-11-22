@@ -56,6 +56,7 @@ A post-load regenerator (``mod_state_server.POST_LOAD_REGENERATORS``).
 from __future__ import annotations
 
 import argparse
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -3915,6 +3916,18 @@ def _window_cell(body: str) -> list[str]:
     return ["te_sr_site_window_cell = {", *["\t" + line[3:] for line in cell], "}"]
 
 
+def ground_type(site: Site) -> str:
+    """The site's Extraplanetary Base ground type (ebase_ground.GROUND; ground types
+    design § 6.3). Imported here, not at the top: ebase_ground reads this module's
+    grades."""
+    here = str(Path(__file__).resolve().parent)
+    if here not in sys.path:
+        sys.path.insert(0, here)
+    import ebase_ground
+
+    return ebase_ground.GROUND[site.key]
+
+
 def _site_row(site: Site, *, picker: bool) -> list[str]:
     """One world: in Solar System (a list to read), or in the colony target
     popup (UI pass design § 5) with its Target button and launch window."""
@@ -3955,9 +3968,13 @@ def _site_row(site: Site, *, picker: bool) -> list[str]:
     else:
         out += _override("site_target_button", "visible = no")
     # What the site offers a colony (the owner, 2026-10-30): its slots with our
-    # Colony Module Slots, and its own Extraplanetary Base room and grade.
+    # Colony Module Slots, and its own Extraplanetary Base room and grade, then its
+    # ground type's word, with that type's mix on hover (ground types design § 9.2).
+    ground = ground_type(site)
     out += _override("site_slots", f'raw_text = "#v [{_sv(f"sr_disp_ss_slots_{k}")}|0]#!"')
+    out += _override("site_bases_tooltip", f'tooltip = "je_space_race_widget_ss_bases_tt_{ground}"')
     out += _override("site_bases", f'raw_text = "#v {site.ebase_room}#! ({_signed(site.ebase_grade)}%)"')
+    out += _override("site_ground", f'text = "sr_ground_{ground}"')
     return out + ["\t\t}"]
 
 

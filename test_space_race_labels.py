@@ -859,6 +859,28 @@ class FigureBudgetTest(unittest.TestCase):
                 text = _render(figure)
                 self.assertLessEqual(len(text) * UNITS_PER_CHAR[_font(box)] * MARGIN, _width(box), text)
 
+    def test_a_site_s_ground_type(self):
+        """The same line ends in the site's ground type ("300 (+30%) Metallic",
+        ground types design § 9.2): each type's word fits its cell, and the icon,
+        the figure's cell and the word's cell, with their spacing, fit the widget
+        that holds them and carries the type's hover."""
+        body = _type_body(_read(GUI), "te_sr_site_row")
+        box = _textbox_with(body, 'block "site_ground"')
+        words = re.findall(r'blockoverride "site_ground" \{\s*text = "(sr_ground_\w+)"', _read(ROWS))
+        self.assertEqual(len(words), 80)   # Solar System's and the colony target popup's
+        for key in sorted(set(words)):
+            with self.subTest(key=key):
+                text = _render(_loc(key))
+                self.assertLessEqual(len(text) * UNITS_PER_CHAR[_font(box)] * MARGIN, _width(box), text)
+        m = re.search(r'widget = \{\s*size = \{ (\d+) 22 \}\s*parentanchor = vcenter\s*block "site_bases_tooltip" \{\}'
+                      r'(.*?)block "site_ground"', body, re.S)
+        self.assertTrue(m, "the base room's widget holds the type's word")
+        inner = m.group(2)
+        icon = int(re.search(r"icon = \{\s*size = \{ (\d+) \d+ \}", inner).group(1))
+        spacing = int(re.search(r"spacing = (\d+)", inner).group(1))
+        figure_box = _textbox_with(body, 'block "site_bases"')
+        self.assertLessEqual(icon + _width(figure_box) + _width(box) + 2 * spacing, int(m.group(1)))
+
     def test_colony_rows(self):
         self._check("te_sr_colony_row", self.FIGURES)
         self._check("te_sr_mod_cell", self.CELL)

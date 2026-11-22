@@ -90,8 +90,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_shackleton')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (+0%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -151,8 +157,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_peary')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (+0%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -212,8 +224,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_tranquility')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (+5%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_rocky"
 			}
 		}
 
@@ -273,8 +291,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_marius_hills')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 125#! (+5%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_rocky"
 			}
 		}
 
@@ -334,8 +358,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_daedalus')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (+0%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_rocky"
 			}
 		}
 
@@ -395,8 +425,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_imbrium')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 125#! (+0%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_rocky"
 			}
 		}
 
@@ -463,8 +499,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_venus')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_sulfurous"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−10%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_sulfurous"
 			}
 		}
 
@@ -524,8 +566,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_mercury')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 200#! (+5%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_rocky"
 			}
 		}
 
@@ -592,8 +640,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_valles_marineris')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 200#! (+10%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_rocky"
 			}
 		}
 
@@ -653,8 +707,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_olympus_mons')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 150#! (+10%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_rocky"
 			}
 		}
 
@@ -714,8 +774,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_hellas_planitia')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 200#! (+10%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_rocky"
 			}
 		}
 
@@ -775,8 +841,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_utopia_planitia')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 200#! (+10%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -836,8 +908,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_arcadia_planitia')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 150#! (+10%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -904,8 +982,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_ceres')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 200#! (+15%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_carbonaceous"
 			}
 		}
 
@@ -965,8 +1049,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_vesta')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 200#! (+20%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_rocky"
 			}
 		}
 
@@ -1026,8 +1116,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_psyche')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_metallic"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 300#! (+30%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_metallic"
 			}
 		}
 
@@ -1087,8 +1183,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_pallas')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 150#! (+10%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_carbonaceous"
 			}
 		}
 
@@ -1148,8 +1250,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_hygiea')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (+5%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_carbonaceous"
 			}
 		}
 
@@ -1216,8 +1324,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_io')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_sulfurous"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (−5%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_sulfurous"
 			}
 		}
 
@@ -1277,8 +1391,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_europa')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_sulfurous"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (−5%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_sulfurous"
 			}
 		}
 
@@ -1338,8 +1458,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_ganymede')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 150#! (+0%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -1399,8 +1525,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_callisto')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 150#! (+0%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_carbonaceous"
 			}
 		}
 
@@ -1460,8 +1592,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_himalia')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (+5%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_carbonaceous"
 			}
 		}
 
@@ -1521,8 +1659,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_amalthea')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_sulfurous"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (+0%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_sulfurous"
 			}
 		}
 
@@ -1589,8 +1733,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_titan')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (−15%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_hydrocarbon"
 			}
 		}
 
@@ -1650,8 +1800,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_enceladus')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (−20%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_carbonaceous"
 			}
 		}
 
@@ -1711,8 +1867,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_rhea')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (−15%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -1772,8 +1934,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_mimas')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−20%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -1833,8 +2001,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_iapetus')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (−20%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_hydrocarbon"
 			}
 		}
 
@@ -1901,8 +2075,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_titania')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (−25%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -1962,8 +2142,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_oberon')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (−25%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -2023,8 +2209,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_miranda')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−30%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -2084,8 +2276,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_ariel')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−30%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -2152,8 +2350,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_triton')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (−30%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -2213,8 +2417,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_proteus')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−35%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -2281,8 +2491,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_pluto')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (−35%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_hydrocarbon"
 			}
 		}
 
@@ -2342,8 +2558,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_eris')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−40%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -2403,8 +2625,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_makemake')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−40%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_hydrocarbon"
 			}
 		}
 
@@ -2464,8 +2692,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_haumea')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−40%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -2525,8 +2759,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_sedna')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−45%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_hydrocarbon"
 			}
 		}
 	}
@@ -2624,8 +2864,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_shackleton')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (+0%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -2710,8 +2956,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_peary')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (+0%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -2796,8 +3048,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_tranquility')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (+5%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_rocky"
 			}
 		}
 
@@ -2882,8 +3140,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_marius_hills')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 125#! (+5%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_rocky"
 			}
 		}
 
@@ -2968,8 +3232,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_daedalus')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (+0%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_rocky"
 			}
 		}
 
@@ -3054,8 +3324,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_imbrium')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 125#! (+0%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_rocky"
 			}
 		}
 
@@ -3149,8 +3425,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_venus')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_sulfurous"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−10%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_sulfurous"
 			}
 		}
 
@@ -3235,8 +3517,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_mercury')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 200#! (+5%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_rocky"
 			}
 		}
 
@@ -3330,8 +3618,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_valles_marineris')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 200#! (+10%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_rocky"
 			}
 		}
 
@@ -3418,8 +3712,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_olympus_mons')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 150#! (+10%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_rocky"
 			}
 		}
 
@@ -3506,8 +3806,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_hellas_planitia')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 200#! (+10%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_rocky"
 			}
 		}
 
@@ -3594,8 +3900,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_utopia_planitia')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 200#! (+10%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -3682,8 +3994,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_arcadia_planitia')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 150#! (+10%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -3777,8 +4095,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_ceres')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 200#! (+15%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_carbonaceous"
 			}
 		}
 
@@ -3865,8 +4189,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_vesta')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 200#! (+20%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_rocky"
 			}
 		}
 
@@ -3953,8 +4283,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_psyche')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_metallic"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 300#! (+30%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_metallic"
 			}
 		}
 
@@ -4041,8 +4377,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_pallas')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 150#! (+10%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_carbonaceous"
 			}
 		}
 
@@ -4129,8 +4471,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_hygiea')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (+5%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_carbonaceous"
 			}
 		}
 
@@ -4224,8 +4572,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_io')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_sulfurous"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (−5%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_sulfurous"
 			}
 		}
 
@@ -4312,8 +4666,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_europa')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_sulfurous"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (−5%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_sulfurous"
 			}
 		}
 
@@ -4400,8 +4760,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_ganymede')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 150#! (+0%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -4488,8 +4854,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_callisto')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 150#! (+0%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_carbonaceous"
 			}
 		}
 
@@ -4576,8 +4948,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_himalia')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (+5%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_carbonaceous"
 			}
 		}
 
@@ -4664,8 +5042,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_amalthea')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_sulfurous"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (+0%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_sulfurous"
 			}
 		}
 
@@ -4759,8 +5143,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_titan')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (−15%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_hydrocarbon"
 			}
 		}
 
@@ -4847,8 +5237,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_enceladus')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (−20%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_carbonaceous"
 			}
 		}
 
@@ -4935,8 +5331,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_rhea')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (−15%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -5023,8 +5425,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_mimas')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−20%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -5111,8 +5519,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_iapetus')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (−20%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_hydrocarbon"
 			}
 		}
 
@@ -5206,8 +5620,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_titania')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (−25%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -5294,8 +5714,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_oberon')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (−25%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -5382,8 +5808,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_miranda')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−30%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -5470,8 +5902,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_ariel')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−30%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -5565,8 +6003,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_triton')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (−30%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -5653,8 +6097,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_proteus')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−35%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -5748,8 +6198,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_pluto')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (−35%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_hydrocarbon"
 			}
 		}
 
@@ -5836,8 +6292,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_eris')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−40%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -5924,8 +6386,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_makemake')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−40%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_hydrocarbon"
 			}
 		}
 
@@ -6012,8 +6480,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_haumea')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_icy"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−40%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_icy"
 			}
 		}
 
@@ -6100,8 +6574,14 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_sedna')|0]#!"
 			}
+			blockoverride "site_bases_tooltip" {
+				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
+			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−45%)"
+			}
+			blockoverride "site_ground" {
+				text = "sr_ground_hydrocarbon"
 			}
 		}
 	}
