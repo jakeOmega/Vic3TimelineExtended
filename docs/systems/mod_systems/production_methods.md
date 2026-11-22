@@ -50,7 +50,7 @@ Twenty-one methods that left 10 to 200 a level took a flat crew on 2026-11-13: A
 
 ### Deep-Sea Mine and Extraplanetary Base logistics (Global Commons § 1)
 
-The Deep-Sea Mine (`building_ocean_mine`) and the Extraplanetary Base (`building_space_mine`) both mine the five metal and mineral goods. Seabed licences cap the first, so each of its levels earns more than an Extraplanetary Base level until era 12's propulsion (spec `docs/superpowers/archive/specs/2026-10-16-global-commons-design.md` § 1). Per level at base prices, the shared `pmg_maintenance_intensive` left out; a Deep-Sea profit is on Motor Ship Tenders / Magnetic Drive Tenders (support vessels, below):
+The Deep-Sea Mine (`building_ocean_mine`) and the Extraplanetary Base (`building_space_mine`) both mine metal and mineral goods; the base's four mining methods also make Glass and Plastics. Seabed licences cap the first, so each of its levels earns more than an Extraplanetary Base level until era 12's propulsion (spec `docs/superpowers/archive/specs/2026-10-16-global-commons-design.md` § 1). Per level at base prices, the shared `pmg_maintenance_intensive` left out; a Deep-Sea profit is on Motor Ship Tenders / Magnetic Drive Tenders (support vessels, below):
 
 | Method (era) | Construction | Staff | Profit | With Fusion Tugs | With both upgrades |
 |---|---|---|---|---|---|
@@ -59,7 +59,6 @@ The Deep-Sea Mine (`building_ocean_mine`) and the Extraplanetary Base (`building
 | Automated Deep-Sea Mining (12, Artificial General Intelligence) | | 1,000 flat | 43,400 (141%) / 44,400 (149%) | | |
 | Asteroid Mine (11) | 20,000 | 1,000 flat | 7,250 (24%) | 14,450 | 21,650 |
 | Mining Colony (12, Space Colonization) | | 1,000 flat | 37,000 (33%) | 65,800 | 94,600 |
-| Resort Colony (12, Space Colonization) | | 1,000 flat | 38,000 (34%) | 66,800 | 95,600 |
 | Self-Replicating Miners (13, Von Neumann Machines) | | 500 flat | 104,050 (127%) | 123,250 | 142,450 |
 
 - `pm_ocean_mine` mines the polymetallic-nodule mix and covers every output of the Asteroid Mine but Tech-Critical Metals on lower inputs, with a level's staff the size of the base's whole crew. The era-12 methods produce twice its output on their own inputs. The base method's margin stays under the late land tech-metal mines' (Smart Miners, 172%) on either tender; of the era-12 ones only Advanced Deep-Sea Mining exceeds it since the deposit mix (spec § 11 #3 had both).
