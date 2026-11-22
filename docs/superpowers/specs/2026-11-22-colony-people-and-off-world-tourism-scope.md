@@ -196,9 +196,28 @@ pulse hook, loc, a test, the play-test item, and a few sentences in
 The Habitat is the one module with a cap. The world's `slots` figure (1 to 4)
 becomes its Habitat cap. Past the cap, the rising price that slots have today
 moves to Habitats alone: the n-th past costs (1 + n) times the price, **with no
-top** (owner, call 7: today's limit of 8 past goes). Module Storage's sizing
-follows the dearest Habitat today; with no top, the design says what it follows
-instead (the next Habitat's price at the colony that needs most is one answer).
+top** (owner, call 7: today's limit of 8 past goes).
+
+What then limits Habitats past the cap is the module stock. A module past the
+cap is queued only while its price fits in the stock
+(`sr_mod_can_queue_<type>_<key>`: `sr_mod_next_cost_<key> <= sr_mod_fab_stock_cap`).
+The stock is 500 (sized to hold the fourth past), plus a year of fabrication,
+plus Module Storage (+1,000 or +3,000). Today the limit of 8 past (900 points)
+binds first once a country has a Component Depot. Without it, the stock binds:
+
+| Country | Stock | Furthest Habitat past the cap |
+|---|---|---|
+| No storage, 5 points a month | 560 | 4th |
+| Component Depot, 12.5 a month | 1,650 | 15th |
+| Orbital Depot, 25 a month | 3,800 | 37th |
+
+Time binds too: 8 past cost 4,400 points in all (about 15 years at 25 a
+month), and 20 past cost 23,000 (about 77 years). The stock still fills to the
+queue head's price (`sr_mod_fab_stock_fill_cap`), so a Habitat queued while the
+stock was larger is still built. **For the design to settle:** keep the stock
+rule for Habitats, so storage buys reach past the cap (recommended: a soft cap
+the player pays for, and a clear job for Module Storage), or drop it and leave
+only the price and the time.
 
 ### 3.3 The five slot technologies
 
