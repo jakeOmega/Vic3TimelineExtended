@@ -17629,7 +17629,8 @@ pm_ai_optimized_operations = {
 	required_input_goods = digital_access
 }
 
-# The Extraplanetary Base's five base methods hire a flat crew in `unscaled`, the same
+# The Extraplanetary Base's four base methods, and the Resort Colony's Luxury Resorts
+# (#1948), hire a flat crew in `unscaled`, the same
 # at any level (owner, 2026-10-31): a base needs its colonies' room to pay, so its
 # levels are off-world work, not jobs on Earth. Each crew is a very attractive job
 # (building_job_attractiveness_mult, as every flat crew: pm_ai_managed_* and the Grid
@@ -17771,6 +17772,13 @@ pm_space_colony_mining = {
 	required_input_goods = digital_access
 }
 
+# Luxury Resorts, the Resort Colony's one method (#1948,
+# docs/superpowers/specs/2026-11-21-resort-colony-building-design.md § 5): on the
+# Extraplanetary Base, as the Resort Colony, until 2026-11. With room of its own
+# (until then its levels took base room) the owner asked for a modest buff: four
+# fifths of the Advanced Materials and half the Electronic Components out, a smaller
+# bill of luxuries for the guests in (no services, a local good), 42,000 a level at
+# base prices against 38,000 before.
 pm_space_colony_vacation = {
 	texture = "gfx/interface/icons/production_method_icons/film_art.dds"
 
@@ -17781,19 +17789,22 @@ pm_space_colony_vacation = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_electronic_components_add = 30           # Price:   80, Total cost:  2400.0 (2.14%)
-			goods_input_radios_add = 30                          # Price:   80, Total cost:  2400.0 (2.14%)
-			goods_input_digital_access_add = 10                  # Price:  120, Total cost:  1200.0 (1.07%)
-			goods_input_advanced_materials_add = 2.5             # Price: 4000, Total cost: 10000.0 (8.93%)
-			goods_input_launch_capacity_add = 480                # Price:  200, Total cost: 96000.0 (85.71%)
+			goods_input_electronic_components_add = 15           # Price:   80, Total cost:  1200.0 (1.11%)
+			goods_input_radios_add = 30                          # Price:   80, Total cost:  2400.0 (2.22%)
+			goods_input_digital_access_add = 10                  # Price:  120, Total cost:  1200.0 (1.11%)
+			goods_input_advanced_materials_add = 0.5             # Price: 4000, Total cost:  2000.0 (1.85%)
+			goods_input_launch_capacity_add = 480                # Price:  200, Total cost: 96000.0 (88.89%)
+			goods_input_wine_add = 50                            # Price:   50, Total cost:  2500.0 (2.31%)
+			goods_input_luxury_furniture_add = 30                # Price:   60, Total cost:  1800.0 (1.67%)
+			goods_input_fruit_add = 30                           # Price:   30, Total cost:   900.0 (0.83%)
 			# Output goods
 			goods_output_fine_art_add = 300                      # Price:  200, Total cost: 60000.0 (40.00%)
 			goods_output_tourism_add = 900                       # Price:  100, Total cost: 90000.0 (60.00%)
-			# Total input cost: 112000.0
+			# Total input cost: 108000.0
 			# Total output cost: 150000.0
-			# Profit: 38000.0
-			# Profit margin: 33.93%
-			# Zero profit price multiplier: 0.75
+			# Profit: 42000.0
+			# Profit margin: 38.89%
+			# Zero profit price multiplier: 0.72
 			# Employment: 0
 			# Wage breakeven: 0.00
 		}

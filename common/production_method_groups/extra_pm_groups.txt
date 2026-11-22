@@ -1102,8 +1102,14 @@ REPLACE_OR_CREATE:pmg_base_building_space_mine = {
 		pm_regolith_processing
 		pm_space_mine
 		pm_space_colony_mining
-		pm_space_colony_vacation
 		pm_self_replicating_miners
+	}
+}
+# The Resort Colony's one method (#1948): Luxury Resorts, off the base since 2026-11.
+REPLACE_OR_CREATE:pmg_base_building_space_resort = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	production_methods = {
+		pm_space_colony_vacation
 	}
 }
 REPLACE_OR_CREATE:pmg_base_building_ocean_mine = {

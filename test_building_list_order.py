@@ -39,7 +39,7 @@ TAIL_FILES = {"company_buildings.txt", "sr_site_buildings_generated.txt", "te_co
 # The space buildings and megastructures, which close the list as a block of their own.
 TAIL_BUILDINGS = {
     "extra_buildings.txt": {
-        "building_space_program", "building_space_mine",
+        "building_space_program", "building_space_mine", "building_space_resort",
         "building_space_elevator_construction_site", "building_space_elevator",
         "building_solar_collector_construction_site", "building_solar_collector", "building_solar_receiver",
         "building_orbital_battlestation_construction_site", "building_orbital_battlestation",

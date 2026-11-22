@@ -545,6 +545,7 @@
  building_space_program:0 "Space Program"
  building_space_program_throughput_add:0 "Space Program [concept_throughput]"
  building_space_program_throughput_add_desc:0 "Space Program [concept_throughput]"
+ building_space_resort:0 "Resort Colony"
  building_spacex_starbase:0 "Starbase"
  building_specialty_alloy_metal_mine:0 "Specialty Alloy Metal Mine"
  building_specialty_alloy_metal_mine_throughput_add:0 "$building_specialty_alloy_metal_mine$ building [concept_throughput]"

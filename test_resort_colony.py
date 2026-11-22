@@ -9,6 +9,7 @@ orbit) best draw first, -75% past it: the twin of base room.
 Run: python3 -m pytest test_resort_colony.py -q
 """
 import os
+import re
 import sys
 import unittest
 
@@ -135,6 +136,92 @@ class ResortRoomTest(unittest.TestCase):
             with self.subTest(site=site.key):
                 self.assertIn(f"sr_disp_site_resort_room_{site.key} = {{ value = sr_site_resort_room_{site.key} }}",
                               display)
+
+
+def _goods():
+    """{good: (base price, local)} from vanilla_parsed and the mod's goods files,
+    prices as pm_costs.py reads them."""
+    import json
+    import pm_costs
+    prices = pm_costs.load_goods()
+    local = set()
+    with open(os.path.join(REPO, "vanilla_parsed", "common", "goods.json"), encoding="utf-8") as f:
+        for key, value in json.load(f).items():
+            if value[1].get("local", [None, None])[1] == "yes":
+                local.add(key)
+    goods_dir = os.path.join(REPO, "common", "goods")
+    for name in os.listdir(goods_dir):
+        text = _strip(_raw("common", "goods", name))
+        for m in re.finditer(r"(?m)^(?:\w+:)?(\w+)\s*=\s*\{", text):
+            if re.search(r"\blocal\s*=\s*yes", _block(text, m.group(0).split("=")[0].strip())):
+                local.add(m.group(1))
+    return {good: (price, good in local) for good, price in prices.items()}
+
+
+class ResortBuildingTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.buildings = _strip(_raw("common", "buildings", "extra_buildings.txt"))
+        cls.groups = _strip(_raw("common", "production_method_groups", "extra_pm_groups.txt"))
+        cls.pms = _strip(_raw("common", "production_methods", "extra_pms.txt"))
+
+    def test_building_shape(self):
+        resort = _block(self.buildings, "REPLACE_OR_CREATE:building_space_resort")
+        self.assertIn("building_group = bg_exotic", resort)
+        self.assertIn("space_colonization", _block(resort, "unlocking_technologies"))
+        groups = _block(resort, "production_method_groups").split()
+        self.assertEqual(groups, ["pmg_base_building_space_resort", "pmg_launch_to_orbit_building_space_mine",
+                                  "pmg_transport_in_space_building_space_mine", "pmg_maintenance_intensive"])
+        self.assertIn("required_construction = construction_cost_space_mine", resort)
+        self.assertIn("ownership_type = self", resort)
+        self.assertIn("owner ?= { sr_resort_may_build_government = yes }", _block(resort, "can_build_government"))
+        self.assertIn("owner ?= { sr_resort_may_build_private = yes }", _block(resort, "can_build_private"))
+
+    def test_base_group_is_the_four_mining_methods(self):
+        base = _block(self.groups, "REPLACE_OR_CREATE:pmg_base_building_space_mine")
+        self.assertEqual(_block(base, "production_methods").split(),
+                         ["pm_regolith_processing", "pm_space_mine", "pm_space_colony_mining",
+                          "pm_self_replicating_miners"])
+        resort = _block(self.groups, "REPLACE_OR_CREATE:pmg_base_building_space_resort")
+        self.assertEqual(_block(resort, "production_methods").split(), ["pm_space_colony_vacation"])
+
+    def test_method_figures(self):
+        goods = _goods()
+        body = _block(_block(self.pms, "pm_space_colony_vacation"), "workforce_scaled")
+        inputs = {g: float(n) for g, n in re.findall(r"goods_input_(\w+)_add = ([\d.]+)", body)}
+        outputs = {g: float(n) for g, n in re.findall(r"goods_output_(\w+)_add = ([\d.]+)", body)}
+        self.assertEqual(inputs, {"electronic_components": 15, "radios": 30, "digital_access": 10,
+                                  "advanced_materials": 0.5, "launch_capacity": 480, "wine": 50,
+                                  "luxury_furniture": 30, "fruit": 30})
+        self.assertEqual(outputs, {"fine_art": 300, "tourism": 900})
+        cost = sum(n * goods[g][0] for g, n in inputs.items())
+        value = sum(n * goods[g][0] for g, n in outputs.items())
+        self.assertEqual((cost, value, value - cost), (108000, 150000, 42000))
+        # Call 4: no services (a local good), and no local good added; Digital
+        # Access, local, stays as the required input.
+        self.assertNotIn("services", inputs)
+        self.assertEqual([g for g in inputs if goods[g][1]], ["digital_access"])
+        self.assertIn("required_input_goods = digital_access", _block(self.pms, "pm_space_colony_vacation"))
+        self.assertEqual(inputs["advanced_materials"], 2.5 / 5)
+
+    def test_axiom_lists_the_resort(self):
+        companies = _strip(_raw("common", "company_types", "extra_companies_flavored.txt"))
+        types = _block(_block(companies, "company_axiom_space"), "building_types").split()
+        self.assertIn("building_space_resort", types)
+        self.assertIn("building_space_mine", types)
+
+    def test_lists_name_the_resort(self):
+        misc = _strip(_raw("common", "scripted_triggers", "misc_triggers.txt"))
+        self.assertIn("is_building_type = building_space_resort", _block(misc, "is_privately_expandable_building_type"))
+        debris = _strip(_raw("common", "scripted_triggers", "te_orbital_debris_triggers.txt"))
+        self.assertIn("is_building_type = building_space_resort", _block(debris, "te_debris_uses_orbit"))
+
+    def test_loc(self):
+        buildings = _raw("localization", "english", "te_buildings_l_english.yml")
+        self.assertIn(' building_space_resort:0 "Resort Colony"', buildings)
+        methods = _raw("localization", "english", "te_production_methods_l_english.yml")
+        self.assertIn(' pm_space_colony_vacation:0 "Luxury Resorts"', methods)
+        self.assertIn(" pmg_base_building_space_resort:0 ", methods)
 
 
 if __name__ == "__main__":

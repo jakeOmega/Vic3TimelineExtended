@@ -158,6 +158,7 @@ is_privately_expandable_building_type = {
 		is_building_type = building_advanced_material_fabricator
 		is_building_type = building_aerospace_industry
 		is_building_type = building_space_mine
+		is_building_type = building_space_resort
 		is_building_type = building_steel_mill
 		is_building_type = building_food_industry
 		is_building_type = building_glassworks
