@@ -40,7 +40,8 @@ class RuleTests(unittest.TestCase):
         self.assertEqual(rules("$unprecedented_growth$ is in force."), [])
 
     def test_every_rule_has_a_pattern_and_a_message(self):
-        self.assertEqual(set(cls.RULES), set(cls._PATTERNS))
+        self.assertEqual(set(cls.RULES), set(cls._PATTERNS) | set(cls._SCOPED))
+        self.assertFalse(set(cls._PATTERNS) & set(cls._SCOPED))
 
 
 class ScanTests(unittest.TestCase):
@@ -60,6 +61,22 @@ class ScanTests(unittest.TestCase):
             ' te_debug_x:0 "A robust bench."\n'
         )
         self.assertEqual(found, [("ai-word", "a"), ("ai-word", "c"), ("ellipsis-end", "other_desc")])
+
+    def test_technology_description_listing_its_unlocks(self):
+        """Only a technology's own description, in the technology file, and only
+        a sentence that opens on "Unlocks" (the panel lists the unlocks)."""
+        body = (
+            ' tech_a_desc:0 "We can catch the carbon. Unlocks the Carbon Removal Support policy."\n'
+            ' tech_b_desc:0 "Unlocks Carbon Conversion Works."\n'
+            ' tech_c_desc:0 "A fuel of great density. This unlocks new power for our ships."\n'
+            ' tech_d:0 "Unlocks Everything"\n'
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            for name in ("te_technologies_l_english.yml", "te_sample_l_english.yml"):
+                (Path(tmp) / name).write_text("\ufeffl_english:\n" + body, encoding="utf-8")
+            found = [(rule, key, file) for rule, key, _, file, _ in cls.scan(Path(tmp))]
+        self.assertEqual(found, [("tech-unlocks", "tech_a_desc", "te_technologies_l_english.yml"),
+                                 ("tech-unlocks", "tech_b_desc", "te_technologies_l_english.yml")])
 
     def test_generated_and_unused_files_are_skipped(self):
         names = {p.name for p in cls.loc_files()}

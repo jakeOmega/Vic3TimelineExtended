@@ -136,6 +136,7 @@ Lengths are in words, counting a scope reference or a spliced name as one. "Now"
 | Modifier type description | `<modifier type>_desc` | When the line applies and how it is counted; the rule goes in a concept | 1–2 sentences | |
 | Modifier description | `*_modifier_desc` | Why the country has this, in the world's terms | one sentence, under 20 | 15, 26 |
 | Law description | `law_*_desc` | What the law provides, concretely enough to tell it from its neighbors | 1–3 sentences, under 45 | 23, 42 |
+| Technology description | `<technology>_desc` | What the invention or idea is and what it lets us do, in the world's terms. Never what it unlocks or its figures: the technology panel lists both (lint `tech-unlocks`) | 1–4 sentences | 28, 40 |
 | Button | `*_button`, `*_button_desc` | Name: the action as a verb. Description: what pressing it does, then what it costs or ends | name 2–5; description 1–2 sentences | 15, 21 |
 | Tooltip | `*_tt`, `*_tooltip` | Answer the question the hover asks: what is this, why this value, why greyed | 1–3 sentences; a breakdown is one "Label: value" line each | 13, 46 |
 | Concept description | `concept_*_desc` | The rule, complete enough to plan around, with links to the concepts it touches | 40–120 | 54, 145 |
@@ -319,7 +320,7 @@ The same event in three forms, none ending on a turn:
 
 Two lints run in `scripts/preflight.py` and CI. Both are ratchets: the mod's older text is recorded in a baseline, and only new text is held to the rule.
 
-- `python3 scripts/analysis/check_loc_style.py --check` fails on a new stock metaphor, verdict word, inflated word or phrase, "not just X but Y", ` - ` as a dash, or a text ending in an ellipsis or `\n`. A use that is meant takes `# REVIEWED YYYY-MM-DD (loc_style): why` trailing on the loc line. After rewriting old text, run it with `--update` and commit the smaller baseline.
+- `python3 scripts/analysis/check_loc_style.py --check` fails on a new stock metaphor, verdict word, inflated word or phrase, "not just X but Y", ` - ` as a dash, a text ending in an ellipsis or `\n`, or a technology description with a sentence that opens on "Unlocks". A use that is meant takes `# REVIEWED YYYY-MM-DD (loc_style): why` trailing on the loc line. After rewriting old text, run it with `--update` and commit the smaller baseline.
 - `python3 scripts/analysis/flavor_forms.py --check` fails when a form that is over a third of its chain gains a text. After rewriting a chain, `--update`.
 
 Neither can judge whether a sentence is particular, whether a game could make it false, or whether it ends on a kicker. Those are the writer's.

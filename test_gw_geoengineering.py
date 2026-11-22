@@ -63,7 +63,9 @@ class TechnologyTest(unittest.TestCase):
         self.assertRegex(_text("common/technology/technologies/era_12.txt"),   # painted in icon batch 9
                          r'geoengineering = \{[^}]*texture = "gfx/interface/icons/invention_icons/geoengineering\.dds"\n')
         self.assertTrue(_loc("geoengineering"))
-        self.assertIn("Stratospheric Aerosol Injection", _loc("geoengineering_desc"))
+        # The tooltip names the policy through its marker (test_its_tooltip_names_the_policy);
+        # the description stays in the world (check_loc_style.py's tech-unlocks).
+        self.assertNotIn("Unlocks", _loc("geoengineering_desc"))
 
     def test_its_tooltip_names_the_policy(self):
         """The policy is all it unlocks, and the engine lists no climate policy,
