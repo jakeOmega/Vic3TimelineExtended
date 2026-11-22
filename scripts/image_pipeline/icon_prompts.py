@@ -451,6 +451,14 @@ CATEGORIES = {
                     "lower third, no objects, no spacecraft, stylized hand-painted video game background "
                     "art with visible brush strokes")),
         style="{subject}, one chunky readable object, " + PAINTED),
+    # Journal entries a generator writes, which all share one picture: the
+    # culture merges' 32 (gen_culture_merges.py's JE_ICON, #1508). GUI-hosted
+    # in effect, like company_logo: the generator points every entry at
+    # event_icons/<key>.dds, so the key is the file name and writing it is the
+    # whole change (wiring a generated file by hand would be overwritten).
+    "journal_entry_shared": dict(
+        folder="event_icons", size=150, mode="cutout", fill=0.89, panel_preview=True, gui=(),
+        style="{subject}, one chunky readable object, " + PAINTED),
     # Power bloc principles (210 px, PowerBlocPrinciple.GetIcon): painted
     # objects on transparency, one per group, which all its tiers share.
     # Vanilla's span 0.72-0.85 of the side (median 0.79).
@@ -899,6 +907,9 @@ ICONS: dict[str, dict[str, dict]] = {
         # so each has its own file of one picture; on vanilla's goods transfer crates until now.
         **{f"te_seabed_lease_{basin}": {"subject": "a heavy brass key lying on a small heap of round black manganese nodules on a patch of sandy seabed", "seed": 1}
            for basin in ("pacific", "atlantic", "indian", "arctic", "southern")},
+        # Reparations (#1671), on vanilla's Money Transfer coins until now: a sum paid once to settle a
+        # wrong, so payment and settlement in one group. Bars, not coins (coins come stamped with $).
+        "te_reparations": {"subject": "a small open wooden strongbox full of plain unmarked gold bars, a folded parchment sealed with red wax leaning against its front", "seed": 0},
     },
     "diplomatic_action": {
         # Mod-added diplomatic actions on a borrowed icon. Three have a better
@@ -952,6 +963,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "colonial_culture_change": {"use": "gfx/interface/icons/diplomatic_action_icons/change_culture.dds"},  # culture change; the borrowed crest was religion's
         "force_cultural_acceptance": {"use": "gfx/interface/icons/diplomatic_action_icons/force_culture.dds"},  # the culture crest; the borrowed one was religion's
         "force_cultural_adoption": {"use": "gfx/interface/icons/diplomatic_action_icons/force_culture.dds"},  # the culture crest; the borrowed one was religion's
+        # Research Commons (#1865), on vanilla's Knowledge Sharing until now: cuts a rival's technology spread.
+        "te_rc_technology_embargo": {"subject": "a brass laboratory microscope wrapped tightly in a heavy dark iron chain fastened by a big closed padlock", "seed": 0},
     },
     "building": {
         # Mod-added buildings on another building's (or a good's) icon. Company
@@ -1135,6 +1148,9 @@ ICONS: dict[str, dict[str, dict]] = {
         "building_robotics_industry": {"subject": "a modern robotics factory: long white halls with sawtooth roofs, through the open end of one hall a line of big yellow robotic arms welding car bodies in showers of sparks, loosely hand-painted with visible brush strokes", "seed": 1},  # fallback: restyle robot.dds, crop 0.08
         "building_electronic_components_and_semiconductor_industry": {"subject": "a semiconductor plant: a big boxy windowless white cleanroom building with rows of rooftop air handlers and silver exhaust stacks, a glass entrance hall glowing golden, car parks and green lawns around, loosely hand-painted with visible brush strokes", "seed": 1},  # fallback: restyle semiconductor.dds
         "building_tourism_industry": {"subject": "a seaside resort: a tall white hotel with balconies above a sandy beach lined with rows of colourful parasols, palm trees and a promenade with cafes, a turquoise sea with small sailing boats", "seed": 2},  # fallback: restyle tourism.dds
+        # Resort Colony (#1948), on the Tourism Industry's icon until now: the off-world resort, so the
+        # pool and palms say resort and the dome, moon and Earth say off-world.
+        "building_space_resort": {"subject": "a luxury resort under a huge clear glass dome on a grey cratered moon surface: a curved white hotel with balconies around a bright turquoise swimming pool, palm trees and sun loungers inside the dome, the blue Earth in the black starry sky above, loosely hand-painted with visible brush strokes", "seed": 2},
         "building_network_infrastructure": {"subject": "a telecommunications hub: a tall red-and-white steel radio mast and several big white satellite dishes beside a low grey exchange building, telephone poles and cable trenches running away across green countryside toward a distant city", "seed": 0},  # fallback: restyle network.dds
         "building_advanced_material_fabricator": {"subject": "a high-tech materials plant: a sleek dark grey factory hall with a glowing orange furnace seen through its open doors, stacks of black carbon-fibre sheets and dark composite panels in its yard, loosely hand-painted with visible brush strokes", "seed": 0},  # fallback: restyle advanced_materials.dds
         # Power grids (#1107), on the power plant's icon until now. A substation, not a plant:
@@ -1663,6 +1679,16 @@ ICONS: dict[str, dict[str, dict]] = {
         "je_space_race_interstellar_results": {"subject": "three large grey radio-telescope dishes in a row, tilted up toward the sky on steel frames", "seed": 1},
         "je_space_race_solar_colonization": {"subject": "a large banded tan-and-brown ringed gas giant planet beside a small rust-red planet and a small blue-and-green planet", "seed": 1},
     },
+    # Shared by the 32 culture merge entries: the melting pot, two cultures
+    # poured into one new one. Not braided threads, which is Cultural Unity's
+    # principle icon. The other idea reviewed (2026-11-21), "two chunky jigsaw
+    # puzzle pieces, one red and one blue, fitted snugly together", kept the two
+    # apart; its raws are under journal_entry_shared__je_te_culture_merge_alt.
+    # s1 carried a painted signature.
+    "journal_entry_shared": {
+        "je_te_culture_merge": {"subject": "a heavy black iron cauldron in which a bright red liquid and a bright blue liquid pour in from two sides and swirl together into purple", "seed": 0,
+                                "now": f"{_GI}/event_icons/waving_flag.dds"},
+    },
     # Mod principle groups on one of four vanilla icons (spec, mod placeholders
     # audit). One picture per group, as vanilla gives; tiers 2-5 use tier 1's.
     "principle": {
@@ -1743,6 +1769,16 @@ ICONS: dict[str, dict[str, dict]] = {
         "principle_welfare_3": {"use": f"{_GI}/principles_icons/principle_welfare_1.dds"},
         "principle_welfare_4": {"use": f"{_GI}/principles_icons/principle_welfare_1.dds"},
         "principle_welfare_5": {"use": f"{_GI}/principles_icons/principle_welfare_1.dds"},
+        # The two identities of #1865, on vanilla's Foreign Investment, Construction and custom
+        # placeholder icons until now. Conditionality: the terms a rescue loan sets ("strings attached").
+        "principle_conditionality_1": {"subject": "a small stack of plain unmarked gold bars hanging from taut red strings tied to a wooden puppeteer's control bar above them", "seed": 0},
+        **{f"principle_conditionality_{t}": {"use": f"{_GI}/principles_icons/principle_conditionality_1.dds"} for t in range(2, 6)},
+        # Development Lending: the richer members pay for the poorer members' building.
+        "principle_development_lending_1": {"subject": "a rolled blue construction blueprint tied with a gold ribbon, lying across a short stack of plain unmarked gold bars beside a few red bricks and a mason's trowel", "seed": 2},
+        **{f"principle_development_lending_{t}": {"use": f"{_GI}/principles_icons/principle_development_lending_1.dds"} for t in range(2, 6)},
+        # Technology Controls: export licensing, research guarded from outsiders.
+        "principle_technology_controls_1": {"subject": "a rolled blue blueprint inside a small locked glass display case with a brass frame and a big brass padlock on its lid", "seed": 3},
+        **{f"principle_technology_controls_{t}": {"use": f"{_GI}/principles_icons/principle_technology_controls_1.dds"} for t in range(2, 6)},
     },
     # The nine new basic industries, on vanilla basic_* icons until now (spec, mod placeholders audit).
     "company": {

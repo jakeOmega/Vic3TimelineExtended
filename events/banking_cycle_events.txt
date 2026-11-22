@@ -181,7 +181,7 @@ banking_cycle_events.151 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/cooperative_assembly_hall.dds" }
+	event_image = { texture = "gfx/event_pictures/cooperative_market_success.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
@@ -576,7 +576,7 @@ banking_cycle_events.4 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/financial_distress_street.dds" }
+	event_image = { texture = "gfx/event_pictures/bank_run_crowd.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
@@ -884,7 +884,7 @@ banking_cycle_events.8 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
+	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
@@ -1047,7 +1047,7 @@ banking_cycle_events.10 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
+	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
@@ -1495,7 +1495,7 @@ banking_cycle_events.15 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
+	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
@@ -1711,7 +1711,7 @@ banking_cycle_events.16 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
+	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
@@ -2073,7 +2073,7 @@ banking_cycle_events.167 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/cooperative_assembly_hall.dds" }
+	event_image = { texture = "gfx/event_pictures/cooperative_market_success.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -2206,7 +2206,7 @@ banking_cycle_events.19 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
+	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
@@ -2408,7 +2408,7 @@ banking_cycle_events.170 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/cooperative_assembly_hall.dds" }
+	event_image = { texture = "gfx/event_pictures/cooperative_market_success.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -2700,7 +2700,7 @@ banking_cycle_events.25 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
+	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
@@ -3014,7 +3014,7 @@ banking_cycle_events.30 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
+	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
@@ -3088,7 +3088,7 @@ banking_cycle_events.31 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/financial_distress_street.dds" }
+	event_image = { texture = "gfx/event_pictures/bank_run_crowd.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
@@ -3324,7 +3324,7 @@ banking_cycle_events.34 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
+	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
@@ -3689,7 +3689,7 @@ banking_cycle_events.39 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
+	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
@@ -4156,7 +4156,7 @@ banking_cycle_events.45 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
+	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
@@ -4376,7 +4376,7 @@ banking_cycle_events.69 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
+	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
@@ -5151,7 +5151,7 @@ banking_cycle_events.64 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/cooperative_assembly_hall.dds" }
+	event_image = { texture = "gfx/event_pictures/cooperative_market_success.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -5463,7 +5463,7 @@ banking_cycle_events.47 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/financial_distress_street.dds" }
+	event_image = { texture = "gfx/event_pictures/bank_run_crowd.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -5633,7 +5633,7 @@ banking_cycle_events.58 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
+	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 

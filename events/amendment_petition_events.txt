@@ -839,7 +839,7 @@ amendment_petition_events.9 = {
 	desc = amendment_petition_events.9.d
 	flavor = amendment_petition_events.9.f
 
-	event_image = { texture = "gfx/event_pictures/political_scandal_expose.dds" }
+	event_image = { texture = "gfx/event_pictures/institutional_abuse_exposed.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

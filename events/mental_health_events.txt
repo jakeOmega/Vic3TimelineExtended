@@ -344,7 +344,7 @@ mental_health_events.5 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/political_scandal_expose.dds" }
+	event_image = { texture = "gfx/event_pictures/institutional_abuse_exposed.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"

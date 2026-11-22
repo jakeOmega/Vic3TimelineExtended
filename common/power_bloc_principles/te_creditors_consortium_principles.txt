@@ -55,7 +55,7 @@
 # ============================================================================
 
 principle_conditionality_1 = {
-	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_conditionality_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
 	visible = {
@@ -86,7 +86,7 @@ principle_conditionality_1 = {
 }
 
 principle_conditionality_2 = {
-	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_conditionality_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	visible = {
@@ -112,7 +112,7 @@ principle_conditionality_2 = {
 }
 
 principle_conditionality_3 = {
-	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_conditionality_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	visible = {
@@ -138,7 +138,7 @@ principle_conditionality_3 = {
 }
 
 principle_conditionality_4 = {
-	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_conditionality_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	visible = {
@@ -165,7 +165,7 @@ principle_conditionality_4 = {
 }
 
 principle_conditionality_5 = {
-	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_conditionality_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	visible = {
@@ -192,7 +192,7 @@ principle_conditionality_5 = {
 }
 
 principle_development_lending_1 = {
-	icon = "gfx/interface/icons/principles_icons/construction.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_development_lending_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
 	visible = {
@@ -230,7 +230,7 @@ principle_development_lending_1 = {
 }
 
 principle_development_lending_2 = {
-	icon = "gfx/interface/icons/principles_icons/construction.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_development_lending_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
@@ -255,7 +255,7 @@ principle_development_lending_2 = {
 }
 
 principle_development_lending_3 = {
-	icon = "gfx/interface/icons/principles_icons/construction.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_development_lending_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
@@ -280,7 +280,7 @@ principle_development_lending_3 = {
 }
 
 principle_development_lending_4 = {
-	icon = "gfx/interface/icons/principles_icons/construction.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_development_lending_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
@@ -306,7 +306,7 @@ principle_development_lending_4 = {
 }
 
 principle_development_lending_5 = {
-	icon = "gfx/interface/icons/principles_icons/construction.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_development_lending_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {

@@ -505,7 +505,7 @@ inheritance_events.7 = {
 	desc = inheritance_events.7.d
 	flavor = inheritance_events.7.f
 
-	event_image = { texture = "gfx/event_pictures/grassroots_canvassing.dds" }
+	event_image = { texture = "gfx/event_pictures/digital_activism_screens.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
