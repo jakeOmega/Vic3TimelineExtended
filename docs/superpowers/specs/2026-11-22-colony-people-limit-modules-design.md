@@ -557,7 +557,7 @@ crew.
 
 | Reader | Today | At the new sizes | Change |
 |---|---|---|---|
-| Off-World Population (+1% prestige, +2% pull a 100,000) | at most 10 units (1 million) | reachable by a big programme | none: the cap stays (my call) |
+| Off-World Population (+1% prestige, +2% pull a 100,000) | the modifier counts at most 10 units, so it stops growing at 1 million people; the people themselves have no cap | reachable by a big programme (3.36 million built out would be +34% prestige, +67% pull uncapped) | none: the modifier's cap stays (my call) |
 | Militia (a battalion a 20,000) | 2 at a full Mars plain | 12 at Valles Marineris | none: a larger colony is harder to seize |
 | War support's weight (full at 75,000) | most colonies below it | big colonies at it | none |
 | A colony's own builds (autonomy × people, at most 5 a month) | rarely at the cap | at the cap from 50,000 people at autonomy 100 | none; within crews and the cap (§ 9) |
@@ -646,6 +646,6 @@ throughput out of the bill
 (§ 6.2); + valid while the amount is below the open room (§ 6.1); the world
 keeping its best Habitat share (§ 4.4); every owned state a source (§ 6.3);
 the AI's authority margin of 50 (§ 9); the destination score's weight (§ 9);
-the Off-World Population cap kept (§ 11); the Settlement Authority's budget
+the Off-World Population modifier's cap kept (§ 11); the Settlement Authority's budget
 not shared (§ 6.3); settlers booked in the census by Organized Colonization's
 profile (§ 6.3).
