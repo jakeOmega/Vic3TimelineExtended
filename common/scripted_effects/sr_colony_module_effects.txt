@@ -436,12 +436,16 @@ sr_mod_ai_review = {
 # producers of the good. Both are stripped first, every run, from every base the
 # country owns; they come back only under Simple or Full Colonies with the
 # technology. Under Races Only, with the rule switched off mid-game, or without
-# the technology the refresh only strips, and the counts (var:sr_eb_at_<k>,
-# var:sr_eb_over) wait in their variables for the rule to come back. The
-# generated parts are sr_ebase_generated.txt (scripts/generators/gen_ebase.py).
-# It also stores the grade the next level would work at, built and queued
-# levels counted (var:sr_ebase_next_grade, sr_ebase_next_fill), for the
-# overview's Extraplanetary Bases cell (UI pass design § 8).
+# the technology the refresh only strips, and the record (var:sr_eb_at_<k>,
+# _target_<k>, _away_<k>, var:sr_eb_over, sr_eb_manual, the move record) waits
+# in its variables for the rule to come back. Where the levels work is the
+# month (sr_eb_month, § 8.2): by the checkbox, for the most profit, or by hand,
+# toward the player's targets, every move paced. The generated parts are
+# sr_ebase_generated.txt (scripts/generators/gen_ebase.py, from the model
+# ebase_ground.py). It also stores where the next level goes, built and queued
+# levels counted (var:sr_ebase_next_place, and its grade in
+# var:sr_ebase_next_grade, sr_eb_next_place), for the overview's
+# Extraplanetary Bases cell (UI pass design § 8, ground types design § 9.3).
 sr_ebase_refresh = {
 	# Before anything is stripped: the self-check reads a base's mix as the last
 	# refresh left it.
@@ -462,8 +466,8 @@ sr_ebase_refresh = {
 		}
 		set_variable = { name = sr_ebase_room value = sr_ebase_room_total }
 		sr_eb_count_methods = yes
-		# Where the levels work: today's order, best grade first (§ 4).
-		sr_eb_fill_by_grade = yes
+		# Where the levels work (§ 8.2's steps 1 to 5).
+		sr_eb_month = yes
 		sr_eb_compute_mix = yes
 		if = {
 			limit = { var:sr_ebase_grade > 0 }
@@ -485,9 +489,10 @@ sr_ebase_refresh = {
 		# The self-check reads a mix at least two days old (a modifier sum can lag
 		# a day): this run's lapses before the next monthly one.
 		set_variable = { name = sr_eb_mix_fresh value = yes days = 2 }
-		# Where the next level would work, counting queued levels (UI pass
-		# design § 8): the overview's Extraplanetary Bases cell.
-		sr_ebase_next_fill = yes
+		# Where the next level would go, counting queued levels (UI pass
+		# design § 8, ground types design § 9.3): the overview's
+		# Extraplanetary Bases cell.
+		sr_eb_next_place = yes
 	}
 }
 

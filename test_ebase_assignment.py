@@ -15,6 +15,7 @@ files to the model two ways:
 from __future__ import annotations
 
 import os
+import dataclasses
 import random
 import re
 import sys
@@ -633,7 +634,7 @@ class RefreshTest(unittest.TestCase):
         # Without the technology the refresh only strips.
         guarded = self.refresh[self.refresh.index("sr_colonies_contested_enabled = yes"):]
         self.assertIn("has_technology_researched = in_situ_resource_utilization", guarded[:200])
-        for call in ("sr_eb_count_methods", "sr_eb_fill_by_grade", "sr_eb_compute_mix", "sr_eb_apply_mix"):
+        for call in ("sr_eb_count_methods", "sr_eb_month", "sr_eb_compute_mix", "sr_eb_apply_mix", "sr_eb_next_place"):
             with self.subTest(call=call):
                 self.assertGreater(self.refresh.index(f"{call} = yes"), self.refresh.index("sr_colonies_contested_enabled = yes"))
 
@@ -688,17 +689,19 @@ class RefreshTest(unittest.TestCase):
         self.assertTrue(all(len(c) == 1 for c in tw.country_mods.values()))
 
 
-class TodayOrderTest(unittest.TestCase):
-    """Task 5's order (§ 4): the levels fill the room serving us best grade first, and
-    T and D(g) are the model's mix_now for those counts."""
+class MixTest(unittest.TestCase):
+    """§ 5.2: T and D(g) from where the levels work are the model's mix_now, run from a
+    first month (every level placed by grade at base prices)."""
 
-    def _fill(self, rooms, built, blockaded=()):
-        tw = _twin_base(built=built, rooms=rooms, blockaded=blockaded)
-        tw.effect("sr_eb_fill_by_grade")
+    def _first(self, rooms, built, blockaded=()):
+        serves = {p: p not in blockaded for p in rooms}
+        tw = _month_twin(eg.BaseState(), room=rooms, serves=serves, held={p: True for p in rooms}, built=built,
+                         profit={}, yard=YARD)
+        tw.effect("sr_eb_month")
         tw.effect("sr_eb_compute_mix")
         return tw
 
-    def test_fill_and_mix_match_the_model(self):
+    def test_mix_matches_the_model(self):
         rng = random.Random(5)
         cases = [({"psyche": 300, "ceres": 200}, 150, ()), ({"psyche": 300, "ceres": 200}, 650, ()),
                  ({"near_earth": 10, "titan": 100, "io": 100}, 150, ("io",)), ({}, 20, ())]
@@ -709,13 +712,11 @@ class TodayOrderTest(unittest.TestCase):
             cases.append((rooms, rng.randint(0, 900), blockaded))
         for rooms, built, blockaded in cases:
             with self.subTest(rooms=rooms, built=built, blockaded=blockaded):
-                tw = self._fill(rooms, built, blockaded)
-                state = eg.BaseState()
+                tw = self._first(rooms, built, blockaded)
                 serves = {p: p not in blockaded for p in rooms}
-                state = eg.month(state, room=rooms, serves=serves, held={p: True for p in rooms}, built=built,
-                                 profit={}, yard=7250)
-                self.assertEqual(tw.counts("sr_eb_at_"), state.at)
-                self.assertEqual(unfx(tw.vars["sr_eb_over"]), state.over)
+                state = eg.month(eg.BaseState(), room=rooms, serves=serves, held={p: True for p in rooms},
+                                 built=built, profit={}, yard=YARD)
+                self.assertEqual(_state_of(tw), state)
                 t, d = eg.mix_now(state)
                 self.assertAlmostEqual(unfx(tw.vars["sr_ebase_grade"]), 100 * t, delta=1e-4)
                 for g in eg.GOODS:
@@ -723,23 +724,639 @@ class TodayOrderTest(unittest.TestCase):
                     self.assertEqual(tw.vars[f"sr_ebase_mix_{g}_units"], abs(tw.vars[f"sr_ebase_mix_{g}"]))
 
     def test_one_type_base_carries_the_type_mix(self):
-        tw = self._fill({"vesta": 100, "valles_marineris": 50, "daedalus": 30, "mercury": 7}, 187)
+        tw = self._first({"vesta": 100, "valles_marineris": 50, "daedalus": 30, "mercury": 7}, 187)
         for g in eg.GOODS:
             with self.subTest(good=g):
                 self.assertAlmostEqual(unfx(tw.vars[f"sr_ebase_mix_{g}"]), 100 * eg.mix("rocky")[g], delta=2e-4)
 
     def test_no_levels_no_mix(self):
-        tw = self._fill({"psyche": 300}, 0)
+        tw = self._first({"psyche": 300}, 0)
         self.assertEqual(tw.vars["sr_ebase_grade"], 0)
         self.assertEqual({g: tw.vars[f"sr_ebase_mix_{g}"] for g in eg.GOODS}, {g: 0 for g in eg.GOODS})
 
-    def test_next_grade_is_kept_for_the_cell(self):
-        """var:sr_ebase_next_grade stays until Task 9's Base Room cell stops reading it."""
-        for queued, want in ((150, 30), (300, 15), (500, gss.OVERFLOW_GRADE)):
-            with self.subTest(queued=queued):
-                tw = _twin_base(built=150, rooms={"psyche": 300, "ceres": 200}, queued=queued)
-                tw.effect("sr_ebase_next_fill")
-                self.assertEqual(unfx(tw.vars["sr_ebase_next_grade"]), want)
+    def test_levels_past_the_room_count_at_minus_75_as_mixed(self):
+        """Review focus 1: every place full, the rest at -75% and Mixed."""
+        tw = self._first({"psyche": 300, "ceres": 200}, 600)
+        state = eg.BaseState(at={"psyche": 300, "ceres": 200}, over=100, placed=True)
+        self.assertEqual(_state_of(tw), state)
+        t, d = eg.mix_now(state)
+        self.assertAlmostEqual(unfx(tw.vars["sr_ebase_grade"]), 100 * t, delta=1e-4)
+        for g in eg.GOODS:
+            self.assertAlmostEqual(unfx(tw.vars[f"sr_ebase_mix_{g}"]), 100 * d[g], delta=2e-4, msg=g)
+
+
+# ---------------------------------------------------------------------------
+# Task 6: where the levels work, in script, against ebase_ground.month
+# ---------------------------------------------------------------------------
+
+TWO_SITES = {"psyche": 300, "ceres": 200}
+BOTH = {"psyche": True, "ceres": True}
+SKETCH = {"psyche": 9594, "ceres": 11835}
+YARD = 7250
+
+
+def _state(at, **kw):
+    return eg.BaseState(at=dict(at), placed=True, **kw)
+
+
+def _norm(room, serves, held):
+    """The model's inputs as the script can have them: the near-Earth asteroids are held
+    and serve together (Asteroid Mining) with 10 levels of room."""
+    held = dict(serves if held is None else held)
+    room, serves = dict(room), dict(serves)
+    ne = bool(serves.get(eg.NEAR_EARTH) or held.get(eg.NEAR_EARTH))
+    serves[eg.NEAR_EARTH] = held[eg.NEAR_EARTH] = ne
+    room[eg.NEAR_EARTH] = gss.NEAR_EARTH_ROOM if ne else 0
+    return room, serves, held
+
+
+def _month_twin(state, *, room, serves, held=None, built, profit, yard, queued=0, month_index=24000, vars_=None):
+    """A twin of a country with In-Situ Resource Utilization and this record (or, with
+    `vars_`, the variables a previous twin left), the engine's reads fixed to the
+    arguments. Profits are fixed through sr_eb_read_profits, which sets exactly the
+    locals the real one does (MonthStructureTest holds them in step); the real one is
+    run against the model in ValuesTest."""
+    room, serves, held = _norm(room, serves, held)
+    tw = Twin()
+    tw.techs.add("in_situ_resource_utilization")
+    if serves[eg.NEAR_EARTH]:
+        tw.techs.add(gss.NEAR_EARTH_TECH)
+    for s in gss.SITES:
+        k = s.key
+        tw.stub_values[f"sr_site_ebase_room_{k}"] = fx(room.get(k, 0))
+        if held.get(k):
+            tw.globals[f"sr_site_holder_{k}"] = "THIS"
+            if not serves.get(k):
+                tw.globals[f"sr_site_blockaded_{k}"] = "OTHER"
+    tw.stub_values["sr_ebase_levels"] = fx(built)
+    tw.stub_values["sr_ebase_queued_levels"] = fx(built + queued)
+    tw.stub_values["te_history_month_index"] = fx(month_index)
+    fixed = {k: fx(round(profit.get(k, 0.0), 5)) for k in eg.PLACES}
+
+    def read_profits(t):
+        for k in eg.PLACES:
+            t.locals[f"sr_ebi_p_{k}"] = fixed[k]
+        for type_ in eg.TYPES:
+            t.locals[f"sr_ebi_m_{type_}"] = 0
+        t.locals["sr_ebi_yard"] = fx(yard)
+        t.locals["sr_ebi_margin"] = _cut(fx(yard) * fx(ge.num(eg.MARGIN)), SCALE)
+
+    tw.stub_effects["sr_eb_read_profits"] = read_profits
+    if vars_ is not None:
+        tw.vars = dict(vars_)
+    else:
+        for prefix, counts in (("sr_eb_at_", state.at), ("sr_eb_target_", state.target), ("sr_eb_away_", state.away)):
+            for p, n in counts.items():
+                if n:
+                    tw.vars[f"{prefix}{p}"] = fx(n)
+        if state.over:
+            tw.vars["sr_eb_over"] = fx(state.over)
+        if state.manual:
+            tw.vars["sr_eb_manual"] = SCALE
+        if state.placed:
+            tw.vars["sr_eb_placed"] = SCALE
+    tw.model_inputs = dict(room=room, serves=serves, held=held, built=built,
+                           profit={k: unfx(v) for k, v in fixed.items()}, yard=yard)
+    return tw
+
+
+def _state_of(tw):
+    """The twin's record as a BaseState (moves left out); every count a whole level."""
+    for name_, v in tw.vars.items():
+        if name_.startswith(("sr_eb_at_", "sr_eb_target_", "sr_eb_away_", "sr_eb_over")):
+            assert v % SCALE == 0, f"{name_} = {unfx(v)}: a fraction of a level"
+    as_int = {k: int(v) for k, v in tw.counts("sr_eb_at_").items()}
+    return eg.BaseState(at=as_int, target={k: int(v) for k, v in tw.counts("sr_eb_target_").items()},
+                        away={k: int(v) for k, v in tw.counts("sr_eb_away_").items()},
+                        over=int(unfx(tw.vars.get("sr_eb_over", 0))), manual="sr_eb_manual" in tw.vars,
+                        placed="sr_eb_placed" in tw.vars)
+
+
+def _model(state, tw):
+    s = eg.month(state, **tw.model_inputs)
+    return s
+
+
+class MonthTwinTest(unittest.TestCase):
+    """The generated sr_eb_month, run in the twin, does what ebase_ground.month does on
+    test_ebase_ground.Month's scenarios and the review focus's: the same at, target,
+    away, over and placed, month after month."""
+
+    def check(self, state, **kw):
+        tw = _month_twin(state, **kw)
+        tw.effect("sr_eb_month")
+        want = _model(state, tw)
+        got = _state_of(tw)
+        want_cmp = eg.BaseState(at=want.at, target=want.target, away=want.away, over=want.over,
+                                manual=want.manual, placed=want.placed)
+        self.assertEqual(got, want_cmp)
+        self.assertTrue(all(n <= ge.MONTH_PASSES for n in tw.loops), tw.loops)
+        return got, want, tw
+
+    def test_first_month_places_everything_at_once(self):
+        got, _, _ = self.check(eg.BaseState(), room=TWO_SITES, serves=BOTH, built=150,
+                               profit=eg.profits(ASTEROID, {}), yard=YARD)
+        self.assertEqual((got.at, got.placed), ({"psyche": 150}, True))
+
+    def test_checkbox_moves_at_the_pace(self):
+        got, _, tw = self.check(_state({"psyche": 150}), room=TWO_SITES, serves=BOTH, built=150, profit=SKETCH,
+                                yard=YARD)
+        self.assertEqual(got.at, {"psyche": 146, "ceres": 4})
+        self.assertEqual((unfx(tw.vars["sr_eb_move_from"]), unfx(tw.vars["sr_eb_move_to"])),
+                         (eg.PLACES.index("psyche"), eg.PLACES.index("ceres")))
+        self.assertEqual(unfx(tw.vars["sr_eb_move_carried"]), 4)
+
+    def test_checkbox_stops_inside_the_margin(self):
+        edge = eg.MARGIN * YARD
+        for gap, moved in ((edge - 0.5, 0), (edge - 0.00001, 0), (edge, 4)):
+            with self.subTest(gap=gap):
+                got, _, _ = self.check(_state({"psyche": 150}), room=TWO_SITES, serves=BOTH, built=150,
+                                       profit={"psyche": 9594, "ceres": 9594 + gap}, yard=YARD)
+                self.assertEqual(got.at.get("ceres", 0), moved)
+
+    def test_never_to_a_losing_site(self):
+        """Review focus 4: every site loses money: nothing moves, and new levels go by
+        grade (16 Psyche), not to the site that loses least."""
+        got, _, tw = self.check(_state({"ceres": 150}), room=TWO_SITES, serves=BOTH, built=160,
+                                profit={"psyche": -500, "ceres": -100}, yard=YARD)
+        self.assertEqual(got.at, {"ceres": 150, "psyche": 10})
+        self.assertNotIn("sr_eb_move_from", tw.vars)
+
+    def test_new_levels_go_to_the_best_site_that_makes_money(self):
+        got, _, _ = self.check(_state({"psyche": 150}), room=TWO_SITES, serves=BOTH, built=160, profit=SKETCH,
+                               yard=YARD)
+        self.assertEqual(got.at, {"psyche": 146, "ceres": 14})
+
+    def test_by_hand(self):
+        cases = (
+            (_state({"psyche": 150}, manual=True, target={"psyche": 50, "ceres": 100}), 150, {"psyche": 146, "ceres": 4}),
+            (_state({"ceres": 150}, manual=True, target={"psyche": 150}), 150, {"ceres": 146, "psyche": 4}),
+            (_state({"psyche": 150}, manual=True, target={"psyche": 100}), 150, {"psyche": 150}),
+            (_state({"psyche": 100}, manual=True, target={"psyche": 100, "ceres": 30}), 150, {"psyche": 120, "ceres": 30}),
+        )
+        for state, built, at in cases:
+            with self.subTest(state=state):
+                got, _, _ = self.check(state, room=TWO_SITES, serves=BOTH, built=built, profit=SKETCH, yard=YARD)
+                self.assertEqual(got.at, at)
+                self.assertEqual(got.target, state.target)
+
+    def _run(self, state, months, **kw):
+        """Month after month from the twin's own variables; each month's record against
+        the model's."""
+        vars_ = None
+        for n, inputs in enumerate(months):
+            merged = {**kw, **inputs}
+            tw = _month_twin(state, vars_=vars_, month_index=24000 + n, **merged)
+            tw.effect("sr_eb_month")
+            state = _model(state, tw)
+            self.assertEqual(_state_of(tw), eg.BaseState(at=state.at, target=state.target, away=state.away,
+                                                         over=state.over, manual=state.manual, placed=state.placed),
+                             f"month {n}")
+            vars_ = tw.vars
+        return state, tw
+
+    def test_a_second_run_in_a_month_moves_nothing(self):
+        """The refresh also runs the day after a base level is built (space_race_events.110):
+        that run places the new levels and follows any blockade, but the month's pace and
+        the move record belong to the month's first run (§ 8.5, a pace a month)."""
+        kw = dict(room=TWO_SITES, serves=BOTH, profit=SKETCH, yard=YARD)
+        first = _month_twin(_state({"psyche": 150}), built=150, month_index=24000, **kw)
+        first.effect("sr_eb_month")
+        self.assertEqual(_state_of(first).at, {"psyche": 146, "ceres": 4})
+        again = _month_twin(None, vars_=first.vars, built=160, month_index=24000, **kw)
+        again.effect("sr_eb_month")
+        steps_2_to_4 = eg.month(dataclasses.replace(_state_of(first), placed=False), **again.model_inputs)
+        self.assertEqual(_state_of(again), dataclasses.replace(steps_2_to_4, moves=()))
+        self.assertEqual(_state_of(again).at, {"psyche": 146, "ceres": 14})
+        self.assertEqual(unfx(again.vars["sr_eb_move_carried"]), 4)
+        later = _month_twin(None, vars_=again.vars, built=160, month_index=24001, **kw)
+        later.effect("sr_eb_month")
+        self.assertEqual(_state_of(later).at, {"psyche": 142, "ceres": 18})
+        self.assertEqual((unfx(later.vars["sr_eb_move_carried"]), unfx(later.vars["sr_eb_move_began"])), (8, 24000))
+
+    def test_the_last_move_ends_on_the_last_month_it_carried(self):
+        """§ 9.4's "Last move: 16 Psyche to Ceres, March 2071 to May 2074": the move's first
+        and last months that carried levels, even when the month that finds it over comes
+        after a pause (the rule switched off: no month runs)."""
+        kw = dict(room=TWO_SITES, serves=BOTH, yard=YARD)
+        tw = _month_twin(_state({"psyche": 150}), built=150, month_index=24000, profit=SKETCH, **kw)
+        tw.effect("sr_eb_month")
+        tw = _month_twin(None, vars_=tw.vars, built=150, month_index=24001, profit=SKETCH, **kw)
+        tw.effect("sr_eb_month")
+        self.assertEqual(unfx(tw.vars["sr_eb_move_carried"]), 8)
+        level = {"psyche": 9594, "ceres": 9594}
+        tw = _month_twin(None, vars_=tw.vars, built=150, month_index=24009, profit=level, **kw)
+        tw.effect("sr_eb_month")
+        self.assertNotIn("sr_eb_move_from", tw.vars)
+        self.assertNotIn("sr_eb_move_latest", tw.vars)
+        got = [unfx(tw.vars[f"sr_eb_last_{x}"]) for x in ("from", "to", "began", "ended")]
+        self.assertEqual(got, [eg.PLACES.index("psyche"), eg.PLACES.index("ceres"), 24000, 24001])
+
+    def test_the_first_placement_waits_a_month_to_move(self):
+        """A first placement made mid-month (the day after the first base is built) leaves
+        the moves to the next month, as the model's `placed` before this month."""
+        kw = dict(room=TWO_SITES, serves=BOTH, profit=SKETCH, yard=YARD)
+        first = _month_twin(eg.BaseState(), built=150, month_index=24000, **kw)
+        first.effect("sr_eb_month")
+        self.assertEqual(_state_of(first).at, {"ceres": 150})
+        flipped = {"psyche": 11835, "ceres": 9594}
+        same = _month_twin(None, vars_=first.vars, built=150, month_index=24000, **{**kw, "profit": flipped})
+        same.effect("sr_eb_month")
+        self.assertEqual(_state_of(same).at, {"ceres": 150})
+        nxt = _month_twin(None, vars_=same.vars, built=150, month_index=24001, **{**kw, "profit": flipped})
+        nxt.effect("sr_eb_month")
+        self.assertEqual(_state_of(nxt).at, {"ceres": 146, "psyche": 4})
+
+    def test_blockade_and_return_are_at_once(self):
+        """Review focus 2: the levels leave at once into away, the target kept, no pace
+        spent; they come back at once when the site serves again."""
+        held = {"psyche": True, "ceres": True}
+        for manual in (False, True):
+            with self.subTest(manual=manual):
+                target = {"psyche": 150} if manual else {}
+                months = [dict(serves={"psyche": False, "ceres": True}, held=held), dict(serves=BOTH, held=held)]
+                state, tw = self._run(_state({"psyche": 150}, manual=manual, target=target), months,
+                                      room=TWO_SITES, built=150, profit=eg.profits(ASTEROID, {}), yard=YARD)
+                self.assertEqual((state.at, state.away, state.target), ({"psyche": 150}, {}, target))
+                self.assertNotIn("sr_eb_move_from", tw.vars)
+
+    def test_blockade_with_room_short_goes_past_the_room_then_returns_from_there(self):
+        room = {"psyche": 300, "ceres": 100}
+        held = {"psyche": True, "ceres": True}
+        months = [dict(serves={"psyche": False, "ceres": True}, held=held), dict(serves=held, held=held)]
+        state, _ = self._run(_state({"psyche": 150}), months, room=room, built=150,
+                             profit=eg.profits(ASTEROID, {}), yard=YARD)
+        self.assertEqual((state.at, state.away, state.over), ({"psyche": 150}, {}, 0))
+
+    def test_a_return_never_takes_from_a_site_that_returned(self):
+        """Step 3's exclusion: a site coming back with too few levels in the pool takes the
+        rest along the take order, never from itself (here the worst earner, so first in
+        the checkbox's take order) or from a site that came back before it this month."""
+        held = {"psyche": True, "ceres": True}
+        room = {"psyche": 140, "ceres": 50}
+        months = [dict(serves={"psyche": True, "ceres": False}, held=held), dict(serves=held, held=held)]
+        state, _ = self._run(_state({"psyche": 100, "ceres": 50}), months, room=room, built=150,
+                             profit={"psyche": 12000, "ceres": 9000}, yard=YARD)
+        # Ceres takes its 50 back (10 from the pool, 40 from Psyche); then the month's move.
+        self.assertEqual(state.at, {"psyche": 100 + eg.pace(150), "ceres": 50 - eg.pace(150)})
+        held3 = {"psyche": True, "ceres": True, "vesta": True}
+        room3 = {"psyche": 100, "ceres": 100, "vesta": 60}
+        for manual in (False, True):
+            with self.subTest(manual=manual):
+                target = {"psyche": 100, "ceres": 100} if manual else {}
+                months = [dict(serves={"psyche": False, "ceres": False, "vesta": True}, held=held3),
+                          dict(serves=held3, held=held3)]
+                start = _state({"psyche": 100, "ceres": 100}, manual=manual, target=target)
+                state, _ = self._run(start, months, room=room3, built=200,
+                                     profit={"psyche": 5000, "ceres": 4000, "vesta": 3000}, yard=YARD)
+                self.assertEqual(sum(state.at.values()) + state.over, 200)
+
+    def test_a_captured_or_ceded_site_loses_its_record(self):
+        state = _state({"psyche": 100, "ceres": 50}, manual=True, target={"psyche": 100, "ceres": 50}, away={"psyche": 5})
+        got, _, _ = self.check(state, room=TWO_SITES, serves={"ceres": True}, built=150, profit=SKETCH, yard=YARD)
+        self.assertEqual((got.at, got.target, got.away), ({"ceres": 150}, {"ceres": 50}, {}))
+
+    def test_room_that_shrinks_while_serving_owes_nothing_back(self):
+        got, _, _ = self.check(_state({"psyche": 300}), room={"psyche": 250, "ceres": 200}, serves=BOTH, built=300,
+                               profit=eg.profits(ASTEROID, {}), yard=YARD)
+        self.assertEqual((got.at, got.away), ({"psyche": 250, "ceres": 50}, {}))
+
+    def test_overflow_moves_into_new_room_at_once(self):
+        profit = eg.profits(ASTEROID, {})
+        months = [dict(room={"psyche": 250}, serves={"psyche": True}),
+                  dict(room={"psyche": 250, "ceres": 200}, serves=BOTH)]
+        state, _ = self._run(eg.BaseState(), months, built=400, profit=profit, yard=YARD)
+        self.assertEqual((state.at, state.over), ({"psyche": 250, "ceres": 150}, 0))
+
+    def test_more_levels_than_room(self):
+        """Review focus 1: every place full: nothing moves."""
+        got, _, tw = self.check(_state({"psyche": 300, "ceres": 200}, over=100), room=TWO_SITES, serves=BOTH,
+                                built=600, profit=SKETCH, yard=YARD)
+        self.assertEqual((got.at, got.over), ({"psyche": 300, "ceres": 200}, 100))
+        self.assertNotIn("sr_eb_move_from", tw.vars)
+
+    def test_lost_levels(self):
+        got, _, _ = self.check(_state({"psyche": 250}, over=150), room={"psyche": 250}, serves={"psyche": True},
+                               built=350, profit=eg.profits(ASTEROID, {}), yard=YARD)
+        self.assertEqual((got.at, got.over), ({"psyche": 250}, 100))
+        got, _, _ = self.check(_state({"psyche": 100, "ceres": 50}), room=TWO_SITES, serves=BOTH, built=130,
+                               profit=SKETCH, yard=YARD)
+        self.assertEqual(got.at["psyche"], 100 - 20 - eg.pace(130))
+
+    def test_ties_go_by_place_order(self):
+        """Three Rocky +10% sites earn the same: new levels fill the lowest index first, a
+        move takes from the highest index first."""
+        room = {"valles_marineris": 20, "olympus_mons": 20, "hellas_planitia": 20, "ceres": 300}
+        serves = {p: True for p in room}
+        profit = {p: 1000 for p in ("valles_marineris", "olympus_mons", "hellas_planitia")} | {"ceres": 5000}
+        got, _, _ = self.check(eg.BaseState(), room=room, serves=serves, built=50, profit=profit | {"ceres": 0},
+                               yard=YARD)
+        self.assertEqual(got.at, {"valles_marineris": 20, "olympus_mons": 20, "hellas_planitia": 10})
+        got, _, _ = self.check(got, room=room, serves=serves, built=50, profit=profit, yard=YARD)
+        # The pace for 50 levels is 2, from the highest index among the tied.
+        self.assertEqual(got.at, {"valles_marineris": 20, "olympus_mons": 20, "hellas_planitia": 8, "ceres": 2})
+
+    def test_a_glut_stops_inside_the_margin_with_no_back_and_forth(self):
+        """§ 10 stage 3, in script: 150 levels at 16 Psyche when Glass and Plastics go 50%
+        dear; the moves stop inside the margin, all one way, and the move record follows
+        (one move, Psyche to Ceres, its levels carried; then the last move)."""
+        yard = eg.yardstick(ASTEROID)
+
+        def glass(s):
+            return sum(n * 70 * (1 + eg.score(p, "glass")) for p, n in s.at.items())
+
+        for lag in (1.0, 0.25):
+            with self.subTest(lag=lag):
+                state, vars_, premium = _state({"psyche": 150}), None, 0.5
+                start = glass(state)
+                run, began, latest, ran = 0, None, None, []
+                for m in range(72):
+                    premium += lag * (0.5 - 0.6 * (glass(state) - start) / 26000 - premium)
+                    tw = _month_twin(state, vars_=vars_, month_index=24000 + m, room=TWO_SITES, serves=BOTH,
+                                     built=150, profit=eg.profits(ASTEROID, {"glass": premium}), yard=yard)
+                    tw.effect("sr_eb_month")
+                    nxt = _model(state, tw)
+                    self.assertEqual(_state_of(tw).at, nxt.at, f"month {m}")
+                    self.assertTrue(all(pair[:2] == ("psyche", "ceres") for pair in nxt.moves))
+                    if nxt.moves:
+                        began = 24000 + m if not run else began
+                        latest = 24000 + m
+                        run += sum(n for _, _, n in nxt.moves)
+                        self.assertEqual(unfx(tw.vars["sr_eb_move_carried"]), run)
+                        self.assertEqual(unfx(tw.vars["sr_eb_move_began"]), began)
+                        self.assertEqual(unfx(tw.vars["sr_eb_move_latest"]), latest)
+                    elif run:
+                        # "Last move: ..., March 2071 to May 2074": its first and last months.
+                        ran.append((began, latest))
+                        run = 0
+                    state, vars_ = nxt, tw.vars
+                self.assertTrue(ran)
+                self.assertNotIn("sr_eb_move_from", tw.vars)
+                self.assertEqual((unfx(tw.vars["sr_eb_last_from"]), unfx(tw.vars["sr_eb_last_to"])),
+                                 (eg.PLACES.index("psyche"), eg.PLACES.index("ceres")))
+                self.assertEqual((unfx(tw.vars["sr_eb_last_began"]), unfx(tw.vars["sr_eb_last_ended"])), ran[-1])
+
+    def test_random_months_match_the_model(self):
+        """Random rooms, blockades, captures, losses, gains, prices, ties and toggles
+        (eg.set_checkbox, eg.assign between months, as the buttons will): month after
+        month the twin's record is the model's, and no loop reaches its ceiling."""
+        rng = random.Random(1397)
+        places = eg.PLACES
+        for game in range(30):
+            state = eg.BaseState()
+            room = {p: rng.choice((0, 0, 50, 100, 200)) for p in places}
+            for month_ in range(18):
+                built = max(0, state.levels + rng.randint(-40, 60))
+                held = {p: rng.random() < 0.9 for p in places}
+                serves = {p: held[p] and rng.random() < 0.9 for p in places}
+                if rng.random() < 0.2:
+                    room = {p: max(0, r + rng.choice((-50, 0, 50))) for p, r in room.items()}
+                prices = {g: rng.uniform(-0.6, 0.8) for g in eg.method_goods()}
+                profit = {p: round(v) for p, v in eg.profits(ASTEROID, prices).items()}
+                if rng.random() < 0.15:
+                    state = eg.set_checkbox(state, on=state.manual)
+                if state.manual and rng.random() < 0.3:
+                    state = eg.assign(state, rng.choice(places), rng.choice((-25, -5, 5, 25)), room=room,
+                                      built=built, queued=rng.randint(0, 20))
+                with self.subTest(game=game, month=month_):
+                    got, want, tw = self.check(state, room=room, serves=serves, held=held, built=built, profit=profit,
+                                               yard=YARD)
+                state = want
+
+    def test_next_place(self):
+        """§ 9.3: where the next level goes, by the rule in force, queued levels counted;
+        and its grade, which the Base Room cell reads until Task 9."""
+        rng = random.Random(93)
+        cases = [(_state({"psyche": 290}), TWO_SITES, BOTH, 290, 5, eg.profits(ASTEROID, {})),
+                 (_state({"psyche": 290}), TWO_SITES, BOTH, 290, 10, eg.profits(ASTEROID, {})),
+                 (_state({"psyche": 290}), TWO_SITES, BOTH, 290, 210, eg.profits(ASTEROID, {})),
+                 (_state({"psyche": 150}), TWO_SITES, BOTH, 150, 0, SKETCH),
+                 (_state({"psyche": 150}, manual=True, target={"ceres": 20}), TWO_SITES, BOTH, 150, 19, SKETCH),
+                 (_state({"psyche": 150}, manual=True, target={"ceres": 20}), TWO_SITES, BOTH, 150, 21, SKETCH)]
+        for _ in range(40):
+            room = {p: rng.choice((0, 50, 100)) for p in rng.sample(eg.PLACES, 6)}
+            serves = {p: rng.random() < 0.85 for p in room}
+            built = rng.randint(0, 300)
+            prices = {g: rng.uniform(-0.6, 0.8) for g in eg.method_goods()}
+            cases.append((eg.BaseState(), room, serves, built, rng.randint(0, 80),
+                          {p: round(v) for p, v in eg.profits(ASTEROID, prices).items()}))
+        for state, room, serves, built, queued, profit in cases:
+            with self.subTest(state=state, room=room, queued=queued):
+                tw = _month_twin(state, room=room, serves=serves, built=built, queued=queued, profit=profit,
+                                 yard=YARD)
+                tw.effect("sr_eb_month")
+                tw.effect("sr_eb_next_place")
+                after = _model(state, tw)
+                i = tw.model_inputs
+                want = eg.next_place(after, room=i["room"], serves=i["serves"], queued=queued, profit=i["profit"])
+                self.assertEqual(unfx(tw.vars["sr_ebase_next_place"]), -1 if want is None else eg.PLACES.index(want))
+                grade = gss.OVERFLOW_GRADE if want is None else ge.grade_pct(want)
+                self.assertEqual(unfx(tw.vars["sr_ebase_next_grade"]), grade)
+
+    def test_the_forecast_writer_is_ready(self):
+        """Task 7's "If prices hold" and "At our assignments" row: gen_ebase.render_forecast,
+        run in the twin after the month, is ebase_ground.forecast from the month's state,
+        and writes no variable."""
+        extra = _top_raw("\n".join(ge.render_forecast()))
+        rng = random.Random(7)
+        cases = [(_state({"psyche": 130, "ceres": 20}), TWO_SITES, BOTH, 150, SKETCH),
+                 (_state({"psyche": 130, "ceres": 20}), TWO_SITES, BOTH, 150, {"psyche": 9594, "ceres": 9894}),
+                 (_state({"psyche": 150}, manual=True, target={"psyche": 50, "ceres": 100}), TWO_SITES, BOTH, 150, SKETCH)]
+        for _ in range(30):
+            room = {p: rng.choice((0, 50, 100, 200)) for p in rng.sample(eg.PLACES, 8)}
+            serves = {p: rng.random() < 0.9 for p in room}
+            prices = {g: rng.uniform(-0.6, 0.8) for g in eg.method_goods()}
+            manual = rng.random() < 0.4
+            target = {p: rng.choice((0, 25, 50)) for p in room} if manual else {}
+            cases.append((eg.BaseState(manual=manual, target=target), room, serves, rng.randint(0, 600),
+                          {p: round(v) for p, v in eg.profits(ASTEROID, prices).items()}))
+        for state, room, serves, built, profit in cases:
+            with self.subTest(state=state, room=room):
+                tw = _month_twin(state, room=room, serves=serves, built=built, profit=profit, yard=YARD)
+                tw.effects = {**tw.effects, **extra}
+                tw.effect("sr_eb_month")
+                before = dict(tw.vars)
+                tw.effect("sr_eb_forecast")
+                self.assertEqual(tw.vars, before)
+                after = _model(state, tw)
+                i = tw.model_inputs
+                want = eg.forecast(after, room=i["room"], serves=i["serves"], profit=i["profit"], yard=YARD)
+                got = {p: int(unfx(tw.locals[f"sr_ebf_at_{p}"])) for p in eg.PLACES if tw.locals[f"sr_ebf_at_{p}"]}
+                self.assertEqual(got, want.at)
+                self.assertTrue(all(n <= ge.FORECAST_PASSES for n in tw.loops[-1:]))
+
+
+class MonthStructureTest(unittest.TestCase):
+    """The plan's Task 6 structure tests."""
+
+    def test_month_runs_the_steps_in_order(self):
+        month = _block(EFFECTS, "sr_eb_month")
+        calls = ["sr_eb_read_inputs", "sr_eb_load", "sr_eb_displace", "sr_eb_return", "sr_eb_gain_lose",
+                 "sr_eb_moves", "sr_eb_record_move", "sr_eb_store"]
+        where = [month.index(f"{c} = yes") for c in calls]
+        self.assertEqual(where, sorted(where))
+        refresh = _block(MODULES, "sr_ebase_refresh")
+        order = [refresh.index(f"{c} = yes") for c in ("sr_eb_count_methods", "sr_eb_month", "sr_eb_compute_mix",
+                                                         "sr_eb_apply_mix", "sr_eb_next_place")]
+        self.assertEqual(order, sorted(order))
+
+    def test_every_loop_has_a_counted_ceiling(self):
+        """A `while` with a `limit` runs to the engine's 1,000 passes if its exit runs away
+        and logs nothing: each one's limit reads a pass counter its body increments."""
+        text = EFFECTS
+        loops = [m.start() for m in re.finditer(r"while = \{", text)]
+        self.assertGreater(len(loops), 0)
+        for at_ in loops:
+            body = _block(text[at_:], "while")
+            limit = _block(body, "limit")
+            counter = re.search(r"local_var:(\w+_(?:pass|tpass|gpass)) < (\d+)", limit)
+            self.assertIsNotNone(counter, limit)
+            self.assertIn(f"change_local_variable = {{ name = {counter.group(1)} add = 1 }}", body)
+            self.assertLessEqual(int(counter.group(2)), len(eg.PLACES) + 1)
+            self.assertNotIn("count =", body)
+
+    def test_move_loop_is_bounded_by_the_pace(self):
+        moves = _block(EFFECTS, "sr_eb_moves")
+        self.assertIn("set_local_variable = { name = sr_ebm_left value = local_var:sr_ebi_pace }", moves)
+        limit = _block(_block(moves, "while"), "limit")
+        self.assertIn("local_var:sr_ebm_left > 0", limit)
+        self.assertIn(f"local_var:sr_ebm_pass < {ge.MONTH_PASSES}", limit)
+        self.assertEqual(ge.MONTH_PASSES, 42)
+        move = _block(EFFECTS, "sr_eb_move_pass")
+        self.assertIn("set_local_variable = { name = sr_ebm_n value = { value = local_var:sr_ebm_srcn "
+                      "max = local_var:sr_ebm_dstn max = local_var:sr_ebm_left } }", move)
+        self.assertIn("change_local_variable = { name = sr_ebm_left subtract = local_var:sr_ebm_n }", move)
+        inputs = _block(EFFECTS, "sr_eb_read_inputs")
+        self.assertIn(f"value = {{ value = local_var:sr_ebi_built divide = {eg.PACE_MONTHS} ceiling = yes min = 1 }}",
+                      inputs)
+        self.assertIn("set_local_variable = { name = sr_ebi_built value = sr_ebase_levels }", inputs)
+
+    def test_checkbox_margin_reads_the_yardstick(self):
+        move = _block(EFFECTS, "sr_eb_move_pass")
+        self.assertIn("local_var:sr_ebm_dstp > 0 local_var:sr_ebm_gap > 0 local_var:sr_ebm_gap >= local_var:sr_ebi_margin",
+                      move)
+        profits = _block(EFFECTS, "sr_eb_read_profits")
+        self.assertIn("set_local_variable = { name = sr_ebi_yard value = sr_eb_yardstick }", profits)
+        self.assertIn(f"set_local_variable = {{ name = sr_ebi_margin value = {{ value = local_var:sr_ebi_yard "
+                      f"multiply = {ge.num(eg.MARGIN)} }} }}", profits)
+
+    def test_the_profit_stub_sets_what_the_real_reader_sets(self):
+        profits = _block(EFFECTS, "sr_eb_read_profits")
+        sets = set(re.findall(r"set_local_variable = \{ name = (\w+)", profits))
+        want = ({f"sr_ebi_p_{k}" for k in eg.PLACES} | {f"sr_ebi_m_{t}" for t in eg.TYPES}
+                | {"sr_ebi_yard", "sr_ebi_margin"})
+        self.assertEqual(sets, want)
+        for k in eg.PLACES:
+            with self.subTest(place=k):
+                self.assertIn(f"set_local_variable = {{ name = sr_ebi_p_{k} value = {{ value = "
+                              f"local_var:sr_ebi_m_{eg.GROUND[k]} multiply = {100 + ge.grade_pct(k)} divide = 100 }} }}",
+                              profits)
+        # Only the reader reads the margins' locals.
+        outside = EFFECTS.replace(profits, "")
+        self.assertNotIn("local_var:sr_ebi_m_", outside)
+
+    def test_every_place_in_every_pass(self):
+        for effect in ("sr_eb_displace", "sr_eb_return", "sr_eb_place_new", "sr_eb_take_return", "sr_eb_take_lost",
+                       "sr_eb_move_pass", "sr_eb_load", "sr_eb_store", "sr_eb_next_give"):
+            body = _block(EFFECTS, effect)
+            fam = "sr_ebn" if effect == "sr_eb_next_give" else "sr_ebm"
+            for k in eg.PLACES:
+                with self.subTest(effect=effect, place=k):
+                    self.assertRegex(body, rf"\b{fam}_at_{k}\b")
+        move = _block(EFFECTS, "sr_eb_move_pass")
+        manual, checkbox = move.split("else = {", 1)
+        for k in eg.PLACES:
+            with self.subTest(place=k):
+                # By hand, both chains; with the checkbox, both searches.
+                self.assertEqual(manual.count(f"local_var:sr_ebm_at_{k} > local_var:sr_ebr_tg_{k}"), 1)
+                self.assertEqual(manual.count(f"local_var:sr_ebm_at_{k} < local_var:sr_ebr_tg_{k}"), 1)
+                self.assertIn(f"local_var:sr_ebm_at_{k} > 0 local_var:sr_ebi_p_{k} <= local_var:sr_ebm_srcp", checkbox)
+                self.assertIn(f"local_var:sr_ebi_room_{k} > local_var:sr_ebm_at_{k} local_var:sr_ebi_p_{k} > "
+                              "local_var:sr_ebm_dstp", checkbox)
+
+    def test_profit_searches_break_ties_by_place_order(self):
+        """Every place, in index order: the worst earner in use keeps ties to the higher
+        index (<=), the best with free room keeps them to the lower (>), in the move pass,
+        the give and the take."""
+        for effect, fam, worst, best in (("sr_eb_move_pass", "sr_ebm", "srcp", "dstp"),
+                                         ("sr_eb_place_new", "sr_ebm", None, "gdstp"),
+                                         ("sr_eb_next_give", "sr_ebn", None, "gdstp"),
+                                         ("sr_eb_take_lost", "sr_ebm", "tsrcp", None),
+                                         ("sr_eb_take_return", "sr_ebm", "tsrcp", None)):
+            body = _block(EFFECTS, effect)
+            if worst:
+                found = re.findall(rf"local_var:{fam}_at_(\w+) > 0(?: local_var:sr_ebr_ret_\w+ = 0)? "
+                                   rf"local_var:sr_ebi_p_(\w+) <= local_var:{fam}_{worst} \}}", body)
+                with self.subTest(effect=effect, search="worst"):
+                    self.assertEqual([a for a, b in found if a == b], list(eg.PLACES))
+            if best:
+                found = re.findall(rf"local_var:sr_ebi_room_(\w+) > local_var:{fam}_at_(\w+) "
+                                   rf"local_var:sr_ebi_p_(\w+) > local_var:{fam}_{best} \}}", body)
+                with self.subTest(effect=effect, search="best"):
+                    self.assertEqual([a for a, b, c in found if a == b == c], list(eg.PLACES))
+        take = _block(EFFECTS, "sr_eb_take_return")
+        for k in eg.PLACES:
+            with self.subTest(place=k):
+                self.assertEqual(take.count(f"local_var:sr_ebr_ret_{k} = 0"), 3)
+        self.assertNotIn("sr_ebr_ret_", _block(EFFECTS, "sr_eb_take_lost"))
+
+    def test_orders_are_the_model_s(self):
+        """By grade, best first, ties by place order (ebase_ground.by_grade, which is
+        gen_solar_sites.ebase_tiers); taking, the reverse."""
+        tiers = [eg.NEAR_EARTH if t is None else t.key for t in gss.ebase_tiers()]
+        self.assertEqual(eg.by_grade(), tiers)
+        give = _block(EFFECTS, "sr_eb_place_new")
+        grade_pass = give[give.rindex("while = {"):]
+        found = re.findall(r"limit = \{ local_var:sr_ebm_pool > 0 local_var:sr_ebi_room_(\w+) > ", grade_pass)
+        self.assertEqual(found, eg.by_grade())
+        take = _block(EFFECTS, "sr_eb_take_lost")
+        found = re.findall(r"local_var:sr_ebm_need > 0 local_var:sr_ebm_at_(\w+) > 0 \}", take)
+        self.assertEqual(found, list(reversed(eg.by_grade())))
+
+    def test_first_placement_is_unpaced(self):
+        month = _block(EFFECTS, "sr_eb_month")
+        paced = _block(month[month.index("set_local_variable = { name = sr_ebm_mn value = 0 }"):], "if")
+        limit = _block(paced, "limit")
+        self.assertIn("has_variable = sr_eb_placed", limit)
+        self.assertIn("var:sr_eb_moved_month < te_history_month_index", limit)
+        self.assertIn("NOT = { has_variable = sr_eb_moved_month }", limit)
+        self.assertIn("sr_eb_moves = yes", paced)
+        self.assertIn("sr_eb_record_move = yes", paced)
+        self.assertEqual(month.count("sr_eb_moves = yes"), 1)
+        self.assertEqual(month.count("sr_eb_record_move = yes"), 1)
+        self.assertLess(month.index("sr_eb_moves = yes"), month.index("set_variable = { name = sr_eb_placed value = yes }"))
+        self.assertIn("local_var:sr_ebi_built > 0 NOT = { has_variable = sr_eb_placed }", month)
+
+    def test_variables_on_the_country(self):
+        """A revolution's winner keeps country variables, not modifiers or lists: no
+        variable is set or read in a state or a building, and every count is stored."""
+        text = EFFECTS
+        for m in re.finditer(r"every_scope_(?:state|building) = \{", text):
+            body = _block(text[m.start():], m.group(0)[:-4].strip())
+            self.assertNotRegex(body, r"\b(set|change|remove)_variable\b")
+            self.assertNotRegex(body, r"(?<!root\.)\bvar:")
+        store = _block(EFFECTS, "sr_eb_store")
+        for k in eg.PLACES:
+            for var in (f"sr_eb_at_{k}", f"sr_eb_target_{k}", f"sr_eb_away_{k}"):
+                with self.subTest(var=var):
+                    self.assertIn(f"set_variable = {{ name = {var} value = ", store)
+        self.assertNotIn("_list", text)
+
+    def test_locals_have_their_own_prefixes(self):
+        """Locals are shared by every effect a call runs: the generated effects use only
+        their own families, and no other file uses them."""
+        prefixes = ("sr_ebm_", "sr_ebf_", "sr_ebn_", "sr_ebi_", "sr_ebr_", "sr_ebc_", "sr_ebx_")
+        names = set(re.findall(r"(?:set|change)_local_variable = \{ name = (\w+)", EFFECTS))
+        names |= set(re.findall(r"local_var:(\w+)", EFFECTS))
+        names -= {"sr_eb_next_left", "sr_eb_next_found"}
+        self.assertTrue(all(n.startswith(prefixes) for n in names), sorted(n for n in names if not n.startswith(prefixes)))
+        import glob
+        for path in glob.glob(os.path.join(REPO, "common", "**", "*.txt"), recursive=True):
+            if os.path.samefile(path, os.path.join(REPO, ge.EFFECTS_OUT)):
+                continue
+            text = open(path, encoding="utf-8-sig").read()
+            with self.subTest(path=os.path.relpath(path, REPO)):
+                self.assertNotRegex(text, r"local_var:sr_eb[mfnircx]_|name = sr_eb[mfnircx]_")
 
 
 class MixSelfCheckTest(unittest.TestCase):

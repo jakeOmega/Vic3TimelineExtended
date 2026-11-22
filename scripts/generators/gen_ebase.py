@@ -67,6 +67,27 @@ GOOD_NAMES = {
 # place, `<fam>_pool` the levels without a place, `<fam>_over` those past all of the
 # room. The month works on its own family and writes it back to the country variables.
 MONTH = "sr_ebm"
+# The forecast's counts (§ 9.1's "If prices hold" / "At our assignments" row, Task 7)
+# and the next level's (§ 9.3): the same writers over their own families.
+FORECAST = "sr_ebf"
+NEXT = "sr_ebn"
+# What the month reads once (`sr_ebi_`: each place's held, serves, room and profit, the
+# yardstick, the margin, the built levels, the pace) and the record beside the counts
+# (`sr_ebr_`: each place's target and away, and the return step's marks).
+INPUTS = "sr_ebi"
+RECORDS = "sr_ebr"
+# The worst-in-use search starts above any profit a level, the best-with-room search
+# below any (a level's profit a week is far inside a billion either way).
+BIG = 1_000_000_000
+# Loop ceilings, each a counted local in the loop's limit (a `while` whose exit ran
+# away would run to the engine's 1,000 passes and log nothing). A move pass empties
+# its source or fills its destination for good, so the month's moves take at most one
+# pass a place, plus one the pace cuts short: 42; the forecast's, with no pace, 41
+# (ebase_ground._moves). A selection pass (where levels go or leave by profit) fills or
+# empties a place, plus the pass that finds none: 42.
+MONTH_PASSES = len(eg.PLACES) + 1
+FORECAST_PASSES = len(eg.PLACES)
+SELECT_PASSES = len(eg.PLACES) + 1
 
 
 # --- Places -------------------------------------------------------------------------
@@ -201,17 +222,555 @@ def render_values() -> str:
 
 # --- Effects: the pieces ------------------------------------------------------------
 
-def _store_counts(fam: str) -> list[str]:
-    """The family's counts written back to the country (§ 8.1): `sr_eb_at_<k>` while
-    above 0 (removed at 0) and `sr_eb_over`."""
+def lv(name_: str) -> str:
+    return f"local_var:{name_}"
+
+
+def _setl(name_: str, value: str) -> str:
+    return f"set_local_variable = {{ name = {name_} value = {value} }}"
+
+
+def _chg(name_: str, op: str, value: str) -> str:
+    return f"change_local_variable = {{ name = {name_} {op} = {value} }}"
+
+
+def _ind(lines: list[str], depth: int) -> list[str]:
+    return ["\t" * depth + line for line in lines]
+
+
+def _dispatch(index: str, body) -> list[str]:
+    """An else_if chain over the places' indices: body(k), a list of lines, for the
+    place whose index is local_var:<index>."""
+    out = []
+    for i, k in places():
+        out += [f"{'if' if i == 0 else 'else_if'} = {{", f"\tlimit = {{ {lv(index)} = {i} }}"]
+        out += _ind(body(k), 1)
+        out.append("}")
+    return out
+
+
+def _inputs(k: str) -> tuple[str, str, str, str]:
+    """A place's held, serves, room and profit locals (sr_eb_read_inputs)."""
+    return f"{INPUTS}_held_{k}", f"{INPUTS}_sv_{k}", f"{INPUTS}_room_{k}", f"{INPUTS}_p_{k}"
+
+
+def tg(k: str) -> str:
+    return f"{RECORDS}_tg_{k}"
+
+
+def aw(k: str) -> str:
+    return f"{RECORDS}_aw_{k}"
+
+
+def ret(k: str) -> str:
+    return f"{RECORDS}_ret_{k}"
+
+
+# --- The month's inputs, read once (§ 8.2 step 1, § 8.3, § 8.5) --------------------
+
+def render_read_inputs() -> list[str]:
+    out = ["# The month's inputs, read once into locals (§ 8.2 step 1, § 8.3, § 8.5): each",
+           f"# place's held ({INPUTS}_held_<k>, 1 or 0), serving us ({INPUTS}_sv_<k>: held, not",
+           f"# blockaded, not occupied), room serving us ({INPUTS}_room_<k>, 0 when it doesn't) and",
+           f"# profit a level ({INPUTS}_p_<k>, sr_eb_read_profits); the built levels and the pace.",
+           "# The passes then compare locals. Also the forecast's and a click's (Task 7).",
+           "sr_eb_read_inputs = {"]
+    built = f"{INPUTS}_built"
+    pace = f"{{ value = {lv(built)} divide = {eg.PACE_MONTHS} ceiling = yes min = 1 }}"
+    out += [f"\t{_setl(built, 'sr_ebase_levels')}", f"\t{_setl(f'{INPUTS}_pace', pace)}"]
+    for i, k in places():
+        h, sv, room, _ = _inputs(k)
+        out += [f"\t# {name(k)} (place {i})",
+                f"\t{_setl(h, '0')}", f"\t{_setl(sv, '0')}", f"\t{_setl(room, '0')}",
+                f"\tif = {{ limit = {{ {held(k)} }} {_setl(h, '1')} }}",
+                "\tif = {",
+                f"\t\tlimit = {{ {serves(k)} }}",
+                f"\t\t{_setl(sv, '1')}",
+                f"\t\t{_setl(room, room_value(k))}",
+                "\t}"]
+    out += ["\tsr_eb_read_profits = yes", "}"]
+    return out
+
+
+def render_read_profits() -> list[str]:
+    out = ["# The seven margins once (sr_eb_margin_<type>), then each place's profit a level,",
+           f"# (1 + grade) x its type's margin ({INPUTS}_p_<k>, as sr_eb_profit_<k> reads it); the",
+           f"# yardstick ({INPUTS}_yard) and the move's margin, {num(eg.MARGIN)} of it ({INPUTS}_margin).",
+           "sr_eb_read_profits = {"]
+    out += [f"\t{_setl(f'{INPUTS}_m_{t}', f'sr_eb_margin_{t}')}" for t in eg.TYPES]
+    yard = f"{INPUTS}_yard"
+    margin = f"{{ value = {lv(yard)} multiply = {num(eg.MARGIN)} }}"
+    out += [f"\t{_setl(yard, 'sr_eb_yardstick')}", f"\t{_setl(f'{INPUTS}_margin', margin)}"]
+    for _, k in places():
+        profit = f"{{ value = {lv(f'{INPUTS}_m_{eg.GROUND[k]}')} multiply = {100 + grade_pct(k)} divide = 100 }}"
+        out.append(f"\t{_setl(_inputs(k)[3], profit)}")
+    out.append("}")
+    return out
+
+
+# --- The record: loaded once, written back once (§ 8.1) -----------------------------
+
+def _load_lines(fam: str, *, records: bool) -> list[str]:
+    """The country's counts into the family's locals (0 where unset), and with
+    `records` its targets and away."""
     out = []
     for _, k in places():
-        out += ["\tif = {",
-                f"\t\tlimit = {{ local_var:{at(fam, k)} > 0 }}",
-                f"\t\tset_variable = {{ name = sr_eb_at_{k} value = local_var:{at(fam, k)} }}",
+        pairs = [(at(fam, k), f"sr_eb_at_{k}")]
+        if records:
+            pairs += [(tg(k), f"sr_eb_target_{k}"), (aw(k), f"sr_eb_away_{k}")]
+        for local, var in pairs:
+            out += [_setl(local, "0"), f"if = {{ limit = {{ has_variable = {var} }} {_setl(local, f'var:{var}')} }}"]
+    out += [_setl(f"{fam}_over", "0"),
+            f"if = {{ limit = {{ has_variable = sr_eb_over }} {_setl(f'{fam}_over', 'var:sr_eb_over')} }}"]
+    return out
+
+
+def render_load(effect: str = "sr_eb_load", fam: str = MONTH, *, records: bool = True) -> list[str]:
+    out = [f"# The country's record into locals (§ 8.1): the levels at each place ({fam}_at_<k>),",
+           f"# past the room ({fam}_over){', each place target and away' if records else ''}. Unset",
+           "# reads 0 (a place's variables are removed at 0).",
+           f"{effect} = {{"]
+    out += _ind(_load_lines(fam, records=records), 1)
+    out.append("}")
+    return out
+
+
+def render_store(effect: str = "sr_eb_store", fam: str = MONTH) -> list[str]:
+    out = ["# The month's record back to the country (§ 8.1: country variables, so a revolution's",
+           "# winner keeps them): each place's levels, target and away while above 0, removed at 0;",
+           "# the levels past the room.",
+           f"{effect} = {{"]
+    for _, k in places():
+        for local, var in ((at(fam, k), f"sr_eb_at_{k}"), (tg(k), f"sr_eb_target_{k}"), (aw(k), f"sr_eb_away_{k}")):
+            out += ["\tif = {",
+                    f"\t\tlimit = {{ {lv(local)} > 0 }}",
+                    f"\t\tset_variable = {{ name = {var} value = {lv(local)} }}",
+                    "\t}",
+                    f"\telse_if = {{ limit = {{ has_variable = {var} }} remove_variable = {var} }}"]
+    out += [f"\tset_variable = {{ name = sr_eb_over value = {lv(fam + '_over')} }}", "}"]
+    return out
+
+
+# --- § 8.2 step 2: displacement, at once ---------------------------------------------
+
+def render_displace(effect: str = "sr_eb_displace", fam: str = MONTH) -> list[str]:
+    pool = f"{fam}_pool"
+    out = ["# § 8.2 step 2, displacement, at once (ebase_ground.month): where the levels at a place",
+           "# exceed its room serving us, the excess leaves for the pool, the levels without a",
+           "# place (it starts as the levels past the room). A site held that doesn't serve us",
+           "# (blockaded or occupied) owes them back (away); room that shrank while it serves",
+           "# (a Mining Complex unstaffed) owes nothing. A place not held (ceded, captured,",
+           "# abandoned) loses its levels, target and away.",
+           f"{effect} = {{",
+           f"\t{_setl(pool, lv(fam + '_over'))}"]
+    for i, k in places():
+        h, sv, room, _ = _inputs(k)
+        a = at(fam, k)
+        out += [f"\t# {name(k)} (place {i})",
+                "\tif = {",
+                f"\t\tlimit = {{ {lv(h)} = 0 }}",
+                f"\t\t{_chg(pool, 'add', lv(a))}",
+                f"\t\t{_setl(a, '0')}", f"\t\t{_setl(tg(k), '0')}", f"\t\t{_setl(aw(k), '0')}",
                 "\t}",
-                f"\telse_if = {{ limit = {{ has_variable = sr_eb_at_{k} }} remove_variable = sr_eb_at_{k} }}"]
-    out.append(f"\tset_variable = {{ name = sr_eb_over value = local_var:{fam}_over }}")
+                "\telse_if = {",
+                f"\t\tlimit = {{ {lv(a)} > {lv(room)} }}",
+                f"\t\t{_setl(fam + '_x', f'{{ value = {lv(a)} subtract = {lv(room)} }}')}",
+                f"\t\t{_setl(a, lv(room))}",
+                f"\t\t{_chg(pool, 'add', lv(fam + '_x'))}",
+                f"\t\tif = {{ limit = {{ {lv(sv)} = 0 }} {_chg(aw(k), 'add', lv(fam + '_x'))} }}",
+                "\t}"]
+    out.append("}")
+    return out
+
+
+# --- Taking levels: the take order (§ 8.2 steps 3 and 4) -----------------------------
+
+def render_take(effect: str, fam: str, *, exclude: bool) -> list[str]:
+    """Take up to local_var:<fam>_need levels along the take order (ebase_ground._take_steps,
+    _take), counting them into local_var:<fam>_got. With the checkbox on: the worst place
+    by profit a level first, ties to the higher index, found pass by pass. Off: places
+    above their target down to it, worst grade first, then every place down to 0, worst
+    grade first. With `exclude`, never from a place marked returned this month."""
+    need, got, tk = f"{fam}_need", f"{fam}_got", f"{fam}_tk"
+    skip = (lambda k: f" {lv(ret(k))} = 0") if exclude else (lambda k: "")
+    worst = list(reversed(eg.by_grade()))
+    out = [f"{effect} = {{",
+           f"\t{_setl(got, '0')}",
+           "\tif = {",
+           "\t\tlimit = { has_variable = sr_eb_manual }",
+           "\t\t# Above their target first, worst grade first, down to the target"]
+    for k in worst:
+        a = at(fam, k)
+        out += ["\t\tif = {",
+                f"\t\t\tlimit = {{ {lv(need)} > 0{skip(k)} {lv(a)} > {lv(tg(k))} }}",
+                f"\t\t\t{_setl(tk, f'{{ value = {lv(a)} subtract = {lv(tg(k))} max = {lv(need)} }}')}",
+                f"\t\t\t{_chg(a, 'subtract', lv(tk))}", f"\t\t\t{_chg(need, 'subtract', lv(tk))}",
+                f"\t\t\t{_chg(got, 'add', lv(tk))}",
+                "\t\t}"]
+    out.append("\t\t# Then any place, worst grade first, down to 0")
+    for k in worst:
+        a = at(fam, k)
+        out += ["\t\tif = {",
+                f"\t\t\tlimit = {{ {lv(need)} > 0{skip(k)} {lv(a)} > 0 }}",
+                f"\t\t\t{_setl(tk, f'{{ value = {lv(a)} max = {lv(need)} }}')}",
+                f"\t\t\t{_chg(a, 'subtract', lv(tk))}", f"\t\t\t{_chg(need, 'subtract', lv(tk))}",
+                f"\t\t\t{_chg(got, 'add', lv(tk))}",
+                "\t\t}"]
+    src, srcp, passes = f"{fam}_tsrc", f"{fam}_tsrcp", f"{fam}_tpass"
+    out += ["\t}",
+            "\telse = {",
+            "\t\t# The worst place in use by profit a level, ties to the higher index, pass by pass",
+            f"\t\t{_setl(passes, '0')}",
+            "\t\twhile = {",
+            f"\t\t\tlimit = {{ {lv(need)} > 0 {lv(passes)} < {SELECT_PASSES} }}",
+            f"\t\t\t{_chg(passes, 'add', '1')}",
+            f"\t\t\t{_setl(src, '-1')}", f"\t\t\t{_setl(srcp, str(BIG))}"]
+    for i, k in places():
+        p = _inputs(k)[3]
+        out.append(f"\t\t\tif = {{ limit = {{ {lv(at(fam, k))} > 0{skip(k)} {lv(p)} <= {lv(srcp)} }} "
+                   f"{_setl(src, str(i))} {_setl(srcp, lv(p))} }}")
+    out += [f"\t\t\tif = {{ limit = {{ {lv(src)} < 0 }} {_setl(need, '0')} }}",
+            "\t\t\telse = {"]
+    out += _ind(_dispatch(src, lambda k: [_setl(tk, f"{{ value = {lv(at(fam, k))} max = {lv(need)} }}"),
+                                         _chg(at(fam, k), "subtract", lv(tk))]), 4)
+    out += [f"\t\t\t\t{_chg(need, 'subtract', lv(tk))}", f"\t\t\t\t{_chg(got, 'add', lv(tk))}",
+            "\t\t\t}", "\t\t}", "\t}", "}"]
+    return out
+
+
+# --- Placing levels: the give order (§ 8.2 step 4, § 8.4) ----------------------------
+
+def render_give(effect: str, fam: str) -> list[str]:
+    """Place local_var:<fam>_pool levels where new levels go (ebase_ground._give_steps,
+    _place); what fits nowhere stays in the pool. local_var:<fam>_put is the index of the
+    last place given a level. With the checkbox on: the place with free room that earns
+    most a level, while it makes money, ties to the lower index, found pass by pass. Off:
+    places below their target, best grade first, up to it (and the room). Then any place
+    by grade."""
+    pool, gv, put = f"{fam}_pool", f"{fam}_gv", f"{fam}_put"
+
+    def fill(k: str, cap: str) -> list[str]:
+        a = at(fam, k)
+        return [_setl(gv, cap), _chg(a, "add", lv(gv)), _chg(pool, "subtract", lv(gv)), _setl(put, str(eg.PLACES.index(k)))]
+
+    out = [f"{effect} = {{",
+           "\tif = {",
+           "\t\tlimit = { has_variable = sr_eb_manual }",
+           "\t\t# Below their target first, best grade first, up to the target and the room"]
+    for k in eg.by_grade():
+        a, room = at(fam, k), _inputs(k)[2]
+        out += ["\t\tif = {",
+                f"\t\t\tlimit = {{ {lv(pool)} > 0 {lv(tg(k))} > {lv(a)} {lv(room)} > {lv(a)} }}"]
+        out += _ind(fill(k, f"{{ value = {lv(tg(k))} max = {lv(room)} subtract = {lv(a)} max = {lv(pool)} }}"), 3)
+        out.append("\t\t}")
+    dst, dstp, passes, go = f"{fam}_gdst", f"{fam}_gdstp", f"{fam}_gpass", f"{fam}_ggo"
+    out += ["\t}",
+            "\telse = {",
+            "\t\t# The place with free room that earns most a level, while it makes money, ties to the",
+            "\t\t# lower index, pass by pass",
+            f"\t\t{_setl(passes, '0')}", f"\t\t{_setl(go, '1')}",
+            "\t\twhile = {",
+            f"\t\t\tlimit = {{ {lv(pool)} > 0 {lv(go)} = 1 {lv(passes)} < {SELECT_PASSES} }}",
+            f"\t\t\t{_chg(passes, 'add', '1')}",
+            f"\t\t\t{_setl(dst, '-1')}", f"\t\t\t{_setl(dstp, '0')}"]
+    for i, k in places():
+        room, p = _inputs(k)[2], _inputs(k)[3]
+        out.append(f"\t\t\tif = {{ limit = {{ {lv(room)} > {lv(at(fam, k))} {lv(p)} > {lv(dstp)} }} "
+                   f"{_setl(dst, str(i))} {_setl(dstp, lv(p))} }}")
+    out += [f"\t\t\tif = {{ limit = {{ {lv(dst)} < 0 }} {_setl(go, '0')} }}",
+            "\t\t\telse = {"]
+    out += _ind(_dispatch(dst, lambda k: fill(k, f"{{ value = {lv(_inputs(k)[2])} subtract = {lv(at(fam, k))} "
+                                                 f"max = {lv(pool)} }}")), 4)
+    out += ["\t\t\t}", "\t\t}", "\t}",
+            "\t# Then by grade, best first, up to the room"]
+    for k in eg.by_grade():
+        a, room = at(fam, k), _inputs(k)[2]
+        out += ["\tif = {",
+                f"\t\tlimit = {{ {lv(pool)} > 0 {lv(room)} > {lv(a)} }}"]
+        out += _ind(fill(k, f"{{ value = {lv(room)} subtract = {lv(a)} max = {lv(pool)} }}"), 2)
+        out.append("\t}")
+    out.append("}")
+    return out
+
+
+# --- § 8.2 step 3: return, at once -------------------------------------------------
+
+def render_return(effect: str = "sr_eb_return", fam: str = MONTH, take: str = "sr_eb_take_return") -> list[str]:
+    pool, owed, fp, need, got = f"{fam}_pool", f"{fam}_owed", f"{fam}_fp", f"{fam}_need", f"{fam}_got"
+    out = ["# § 8.2 step 3, return, at once (ebase_ground.month): a site that serves us again takes",
+           "# back up to what it is owed (away), as far as its room allows, from the levels without",
+           "# a place first, then along the take order, never from itself or a site that returned",
+           "# before it this month; its debt is then settled. Best grade first.",
+           f"{effect} = {{"]
+    out += [f"\t{_setl(ret(k), '0')}" for _, k in places()]
+    for k in eg.by_grade():
+        _, sv, room, _p = _inputs(k)
+        a = at(fam, k)
+        out += [f"\t# {name(k)} ({grade_pct(k):+d}%)",
+                "\tif = {",
+                f"\t\tlimit = {{ {lv(sv)} = 1 {lv(aw(k))} > 0 }}",
+                f"\t\t{_setl(owed, f'{{ value = {lv(room)} subtract = {lv(a)} max = {lv(aw(k))} }}')}",
+                f"\t\t{_setl(aw(k), '0')}",
+                f"\t\t{_setl(ret(k), '1')}",
+                "\t\tif = {",
+                f"\t\t\tlimit = {{ {lv(owed)} > 0 }}",
+                f"\t\t\t{_setl(fp, f'{{ value = {lv(owed)} max = {lv(pool)} }}')}",
+                f"\t\t\t{_chg(pool, 'subtract', lv(fp))}",
+                f"\t\t\t{_chg(a, 'add', lv(fp))}",
+                f"\t\t\t{_setl(need, f'{{ value = {lv(owed)} subtract = {lv(fp)} }}')}",
+                "\t\t\tif = {",
+                f"\t\t\t\tlimit = {{ {lv(need)} > 0 }}",
+                f"\t\t\t\t{take} = yes",
+                f"\t\t\t\t{_chg(a, 'add', lv(got))}",
+                "\t\t\t}",
+                "\t\t}",
+                "\t}"]
+    out.append("}")
+    return out
+
+
+# --- § 8.2 step 4: levels gained or lost ---------------------------------------------
+
+def render_gain_lose(effect: str = "sr_eb_gain_lose", fam: str = MONTH, take: str = "sr_eb_take_lost",
+                     give: str = "sr_eb_place_new") -> list[str]:
+    pool, have, lose, cut, need = f"{fam}_pool", f"{fam}_have", f"{fam}_lose", f"{fam}_cut", f"{fam}_need"
+    built = lv(f"{INPUTS}_built")
+    out = ["# § 8.2 step 4, levels gained or lost (ebase_ground.month): the built levels against",
+           "# those on record. New levels join the pool; lost levels come off the pool first (the",
+           "# levels past the room, and those displaced this month), then along the take order. The",
+           "# pool then goes where new levels go; what fits nowhere is past the room.",
+           f"{effect} = {{",
+           "\tset_local_variable = {", f"\t\tname = {have}", "\t\tvalue = {", f"\t\t\tvalue = {lv(pool)}"]
+    out += [f"\t\t\tadd = {lv(at(fam, k))}" for _, k in places()]
+    out += ["\t\t}", "\t}",
+            "\tif = {",
+            f"\t\tlimit = {{ {built} > {lv(have)} }}",
+            f"\t\t{_setl(pool, f'{{ value = {lv(pool)} add = {built} subtract = {lv(have)} }}')}",
+            "\t}",
+            "\telse_if = {",
+            f"\t\tlimit = {{ {built} < {lv(have)} }}",
+            f"\t\t{_setl(lose, f'{{ value = {lv(have)} subtract = {built} }}')}",
+            f"\t\t{_setl(cut, f'{{ value = {lv(lose)} max = {lv(pool)} }}')}",
+            f"\t\t{_chg(pool, 'subtract', lv(cut))}",
+            f"\t\t{_setl(need, f'{{ value = {lv(lose)} subtract = {lv(cut)} }}')}",
+            f"\t\tif = {{ limit = {{ {lv(need)} > 0 }} {take} = yes }}",
+            "\t}",
+            f"\t{give} = yes",
+            f"\t{_setl(fam + '_over', lv(pool))}",
+            "}"]
+    return out
+
+
+# --- § 8.2 step 5: the paced moves (§ 8.3, § 8.4, § 8.5) ------------------------------
+
+def render_move_pass(effect: str, fam: str, *, paced: bool, record: bool) -> list[str]:
+    """One pass: the pair a move takes (ebase_ground._checkbox_pair, _manual_pair) and, if
+    one qualifies, min(the source's excess, the destination's free room, the pace left)
+    levels from one to the other. local_var:<fam>_go = 0 when no pair qualifies."""
+    src, dst, srcp, dstp = f"{fam}_src", f"{fam}_dst", f"{fam}_srcp", f"{fam}_dstp"
+    srcn, dstn, gap, ok, n = f"{fam}_srcn", f"{fam}_dstn", f"{fam}_gap", f"{fam}_ok", f"{fam}_n"
+    cap = f" max = {lv(fam + '_left')}" if paced else ""
+    out = [f"{effect} = {{",
+           f"\t{_setl(src, '-1')}", f"\t{_setl(dst, '-1')}", f"\t{_setl(ok, '0')}",
+           "\tif = {",
+           "\t\tlimit = { has_variable = sr_eb_manual }",
+           "\t\t# By hand (§ 8.4): from the first place above its target, worst grade first, to the",
+           "\t\t# first below it with free room, best grade first. A level no target calls for stays."]
+    for n_, k in enumerate(reversed(eg.by_grade())):
+        a = at(fam, k)
+        out += [f"\t\t{'if' if n_ == 0 else 'else_if'} = {{",
+                f"\t\t\tlimit = {{ {lv(a)} > {lv(tg(k))} }}",
+                f"\t\t\t{_setl(src, str(eg.PLACES.index(k)))}",
+                f"\t\t\t{_setl(srcn, f'{{ value = {lv(a)} subtract = {lv(tg(k))} }}')}",
+                "\t\t}"]
+    for n_, k in enumerate(eg.by_grade()):
+        a, room = at(fam, k), _inputs(k)[2]
+        out += [f"\t\t{'if' if n_ == 0 else 'else_if'} = {{",
+                f"\t\t\tlimit = {{ {lv(a)} < {lv(tg(k))} {lv(a)} < {lv(room)} }}",
+                f"\t\t\t{_setl(dst, str(eg.PLACES.index(k)))}",
+                f"\t\t\t{_setl(dstn, f'{{ value = {lv(tg(k))} max = {lv(room)} subtract = {lv(a)} }}')}",
+                "\t\t}"]
+    out += [f"\t\tif = {{ limit = {{ {lv(src)} >= 0 {lv(dst)} >= 0 }} {_setl(ok, '1')} }}",
+            "\t}",
+            "\telse = {",
+            "\t\t# The checkbox (§ 8.3): from the place in use that earns least a level (ties to the",
+            "\t\t# higher index) to the place with free room that earns most (ties to the lower), while",
+            "\t\t# the gap is at least the margin, and never to a place that loses money.",
+            f"\t\t{_setl(srcp, str(BIG))}", f"\t\t{_setl(dstp, str(-BIG))}"]
+    for i, k in places():
+        a, room, p = at(fam, k), _inputs(k)[2], _inputs(k)[3]
+        out += [f"\t\tif = {{ limit = {{ {lv(a)} > 0 {lv(p)} <= {lv(srcp)} }} "
+                f"{_setl(src, str(i))} {_setl(srcp, lv(p))} {_setl(srcn, lv(a))} }}",
+                f"\t\tif = {{ limit = {{ {lv(room)} > {lv(a)} {lv(p)} > {lv(dstp)} }} "
+                f"{_setl(dst, str(i))} {_setl(dstp, lv(p))} {_setl(dstn, f'{{ value = {lv(room)} subtract = {lv(a)} }}')} }}"]
+    out += [f"\t\t{_setl(gap, f'{{ value = {lv(dstp)} subtract = {lv(srcp)} }}')}",
+            "\t\tif = {",
+            f"\t\t\tlimit = {{ {lv(src)} >= 0 {lv(dst)} >= 0 {lv(dstp)} > 0 {lv(gap)} > 0 "
+            f"{lv(gap)} >= {lv(INPUTS + '_margin')} }}",
+            f"\t\t\t{_setl(ok, '1')}",
+            "\t\t}",
+            "\t}",
+            "\tif = {",
+            f"\t\tlimit = {{ {lv(ok)} = 1 }}",
+            f"\t\t{_setl(n, f'{{ value = {lv(srcn)} max = {lv(dstn)}{cap} }}')}"]
+    out += _ind(_dispatch(src, lambda k: [_chg(at(fam, k), "subtract", lv(n))]), 2)
+    out += _ind(_dispatch(dst, lambda k: [_chg(at(fam, k), "add", lv(n))]), 2)
+    if paced:
+        out.append(f"\t\t{_chg(fam + '_left', 'subtract', lv(n))}")
+    if record:
+        mfrom, mto, mn = f"{fam}_mfrom", f"{fam}_mto", f"{fam}_mn"
+        out += ["\t\t# The month's move (§ 9.1, § 9.4): its first pair, and the levels it carried",
+                f"\t\tif = {{ limit = {{ {lv(mfrom)} < 0 }} {_setl(mfrom, lv(src))} {_setl(mto, lv(dst))} }}",
+                f"\t\tif = {{ limit = {{ {lv(mfrom)} = {lv(src)} {lv(mto)} = {lv(dst)} }} {_chg(mn, 'add', lv(n))} }}"]
+    out += ["\t}",
+            f"\telse = {{ {_setl(fam + '_go', '0')} }}",
+            "}"]
+    return out
+
+
+def render_move_loop(effect: str, fam: str, pass_effect: str, *, ceiling: int, paced: bool, record: bool,
+                     log: bool) -> list[str]:
+    """Move pass after pass until the pace is spent (`paced`) or no pair qualifies,
+    within `ceiling` passes."""
+    passes, go, left = f"{fam}_pass", f"{fam}_go", f"{fam}_left"
+    out = [f"{effect} = {{"]
+    if paced:
+        out.append(f"\t{_setl(left, lv(INPUTS + '_pace'))}")
+    out += [f"\t{_setl(passes, '0')}", f"\t{_setl(go, '1')}"]
+    if record:
+        out += [f"\t{_setl(fam + '_mfrom', '-1')}", f"\t{_setl(fam + '_mto', '-1')}", f"\t{_setl(fam + '_mn', '0')}"]
+    out += ["\twhile = {",
+            f"\t\tlimit = {{ {lv(go)} = 1{f' {lv(left)} > 0' if paced else ''} {lv(passes)} < {ceiling} }}",
+            f"\t\t{_chg(passes, 'add', '1')}",
+            f"\t\t{pass_effect} = yes",
+            "\t}"]
+    if log:
+        out += ["\t# Never, if the rule above holds: a pass empties a place or fills one for good.",
+                "\tif = {",
+                f"\t\tlimit = {{ {lv(go)} = 1{f' {lv(left)} > 0' if paced else ''} {lv(passes)} >= {ceiling} }}",
+                f"\t\tdebug_log = \"TE_SR_EBASE {effect}: the moves stopped at their ceiling of {ceiling} passes with "
+                f"pace left; country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString]\"",
+                "\t}"]
+    out.append("}")
+    return out
+
+
+def render_record_move(effect: str = "sr_eb_record_move", fam: str = MONTH) -> list[str]:
+    """The move record (§ 9.1's move line, § 9.4's notice): the month's first pair, while
+    it is the same as the current move's, adds its levels to the move; a different pair
+    starts a new move and makes the old one the last; a month with no move ends it."""
+    mfrom, mto, mn, same = f"{fam}_mfrom", f"{fam}_mto", f"{fam}_mn", f"{fam}_same"
+    end = ["\tif = {",
+           "\t\tlimit = { has_variable = sr_eb_move_from }",
+           "\t\tset_variable = { name = sr_eb_last_from value = var:sr_eb_move_from }",
+           "\t\tset_variable = { name = sr_eb_last_to value = var:sr_eb_move_to }",
+           "\t\tset_variable = { name = sr_eb_last_began value = var:sr_eb_move_began }",
+           "\t\tset_variable = { name = sr_eb_last_ended value = var:sr_eb_move_latest }",
+           "\t\tremove_variable = sr_eb_move_from",
+           "\t\tremove_variable = sr_eb_move_to",
+           "\t\tremove_variable = sr_eb_move_began",
+           "\t\tremove_variable = sr_eb_move_latest",
+           "\t\tremove_variable = sr_eb_move_carried",
+           "\t}"]
+    out = ["# The move record (§ 9.1, § 9.4), country variables: the current move's source and",
+           "# destination (sr_eb_move_from, _to, place indices), the month it began and the latest",
+           "# month it carried levels (sr_eb_move_began, _latest, te_history_month_index) and the",
+           "# levels it has carried (sr_eb_move_carried, for the notice's 5%); the last move's",
+           "# (sr_eb_last_from, _to, _began, _ended: its first and last months). A month's move is",
+           "# its first pass's pair; while the pair holds it adds the levels that pair carried;",
+           "# another pair starts a new move; a month with none ends it.",
+           "# Only the paced moves count (not new levels, displacement or return).",
+           "sr_eb_end_move = {"]
+    out += end
+    out += ["}",
+            f"{effect} = {{",
+            f"\t{_setl(same, '0')}",
+            "\tif = {",
+            "\t\tlimit = { has_variable = sr_eb_move_from }",
+            f"\t\tif = {{ limit = {{ var:sr_eb_move_from = {lv(mfrom)} var:sr_eb_move_to = {lv(mto)} }} {_setl(same, '1')} }}",
+            "\t}",
+            "\tif = {",
+            f"\t\tlimit = {{ {lv(mfrom)} >= 0 {lv(same)} = 1 }}",
+            f"\t\tchange_variable = {{ name = sr_eb_move_carried add = {lv(mn)} }}",
+            "\t\tset_variable = { name = sr_eb_move_latest value = te_history_month_index }",
+            "\t}",
+            "\telse_if = {",
+            f"\t\tlimit = {{ {lv(mfrom)} >= 0 }}",
+            "\t\tsr_eb_end_move = yes",
+            f"\t\tset_variable = {{ name = sr_eb_move_from value = {lv(mfrom)} }}",
+            f"\t\tset_variable = {{ name = sr_eb_move_to value = {lv(mto)} }}",
+            "\t\tset_variable = { name = sr_eb_move_began value = te_history_month_index }",
+            "\t\tset_variable = { name = sr_eb_move_latest value = te_history_month_index }",
+            f"\t\tset_variable = {{ name = sr_eb_move_carried value = {lv(mn)} }}",
+            "\t}",
+            "\telse = { sr_eb_end_move = yes }",
+            "}"]
+    return out
+
+
+# --- The month (§ 8.2) ---------------------------------------------------------------
+
+def render_month() -> list[str]:
+    return ["# The month (§ 8.2's steps 1 to 5, ebase_ground.month rule for rule): where the",
+            "# country's levels work. The inputs are read once and the record loaded into locals;",
+            "# displacement, return and levels gained or lost follow what happened, at once;",
+            "# then, once the first placement is made (sr_eb_placed, § 8.8: a country with no",
+            "# record places all its levels at once by the rule in force), the paced moves. The",
+            "# record goes back to the country's variables at the end.",
+            "sr_eb_month = {",
+            "\tsr_eb_read_inputs = yes",
+            "\tsr_eb_load = yes",
+            "\t# Step 2: displacement",
+            "\tsr_eb_displace = yes",
+            "\t# Step 3: return",
+            "\tsr_eb_return = yes",
+            "\t# Step 4: levels gained or lost",
+            "\tsr_eb_gain_lose = yes",
+            "\t# Step 5: the paced moves, the month's pace once a calendar month (§ 8.5). The",
+            "\t# refresh also runs the day after a base level is built (space_race_events.110):",
+            "\t# that run follows what happened (steps 2 to 4, which change nothing run again",
+            "\t# on the same inputs) and leaves the moves and their record to the month's first",
+            "\t# run (sr_eb_moved_month, te_history_month_index).",
+            f"\t{_setl(MONTH + '_mfrom', '-1')}",
+            f"\t{_setl(MONTH + '_mto', '-1')}",
+            f"\t{_setl(MONTH + '_mn', '0')}",
+            "\tif = {",
+            "\t\tlimit = {",
+            "\t\t\thas_variable = sr_eb_placed",
+            "\t\t\tOR = {",
+            "\t\t\t\tNOT = { has_variable = sr_eb_moved_month }",
+            "\t\t\t\tvar:sr_eb_moved_month < te_history_month_index",
+            "\t\t\t}",
+            "\t\t}",
+            "\t\tset_variable = { name = sr_eb_moved_month value = te_history_month_index }",
+            "\t\tsr_eb_moves = yes",
+            "\t\tsr_eb_record_move = yes",
+            "\t}",
+            "\t# The first placement (§ 8.8): every level at once; the moves begin next month.",
+            "\tif = {",
+            f"\t\tlimit = {{ {lv(INPUTS + '_built')} > 0 NOT = {{ has_variable = sr_eb_placed }} }}",
+            "\t\tset_variable = { name = sr_eb_placed value = yes }",
+            "\t\tset_variable = { name = sr_eb_moved_month value = te_history_month_index }",
+            "\t}",
+            "\tsr_eb_store = yes",
+            "}"]
+
+
+def render_forecast(effect: str = "sr_eb_forecast", fam: str = FORECAST) -> list[str]:
+    """§ 9.1's second row (Task 7 calls this; ebase_ground.forecast): step 5's rule in force
+    run from where the levels are to where it stops, with no pace, on a copy of the
+    country's counts (<fam>_at_<k>, <fam>_over). Needs the inputs (sr_eb_read_inputs) and
+    the targets (sr_ebr_tg_<k>, from sr_eb_load or render_load(records=True)) already in
+    locals; reads and writes no country variable."""
+    out = ["# § 9.1's second row (ebase_ground.forecast): the rule in force run to where it stops,",
+           f"# with no pace, on a copy of our counts ({fam}_at_<k>). After sr_eb_read_inputs and the",
+           "# targets' load; writes no variable.",
+           f"{effect} = {{"]
+    out += _ind(_load_lines(fam, records=False), 1)
+    out += [f"\t{effect}_moves = yes", "}"]
+    out += render_move_loop(f"{effect}_moves", fam, f"{effect}_pass", ceiling=FORECAST_PASSES, paced=False,
+                            record=False, log=False)
+    out += render_move_pass(f"{effect}_pass", fam, paced=False, record=False)
     return out
 
 
@@ -233,25 +792,6 @@ def render_count_methods() -> list[str]:
     out += ["\tset_variable = {", "\t\tname = sr_eb_lv_mining", "\t\tvalue = {", "\t\t\tvalue = 0"]
     out += [f"\t\t\tadd = local_var:sr_ebc_{pm}" for pm in pms]
     out += ["\t\t}", "\t}", "}"]
-    return out
-
-
-def render_fill_by_grade() -> list[str]:
-    """Today's order (§ 4): the built levels fill the room serving us best grade first,
-    the rest past all of it."""
-    out = ["# Today's order (§ 4): our built levels fill the room serving us best grade first",
-           f"# ({MONTH}_at_<k>), the rest past all of it ({MONTH}_over); written to",
-           "# var:sr_eb_at_<k> and var:sr_eb_over.",
-           "sr_eb_fill_by_grade = {",
-           f"\tset_local_variable = {{ name = {MONTH}_pool value = sr_ebase_levels }}"]
-    for k in eg.by_grade():
-        out += [f"\t# {name(k)} ({grade_pct(k):+d}%)",
-                f"\tset_local_variable = {{ name = {at(MONTH, k)} value = {{ value = sr_eb_room_{k} "
-                f"max = local_var:{MONTH}_pool }} }}",
-                f"\tchange_local_variable = {{ name = {MONTH}_pool subtract = local_var:{at(MONTH, k)} }}"]
-    out.append(f"\tset_local_variable = {{ name = {MONTH}_over value = local_var:{MONTH}_pool }}")
-    out += _store_counts(MONTH)
-    out.append("}")
     return out
 
 
@@ -351,36 +891,31 @@ def render_mix_modifiers() -> list[str]:
     return out
 
 
-def render_next_fill() -> list[str]:
-    """The grade the next level would work at (UI pass design § 8): built and queued
-    levels fill the room best grade first; the first room left unfilled is where the
-    next one goes, past all of it OVERFLOW_GRADE. Into var:sr_ebase_next_grade."""
-    out = ["# The grade the next Extraplanetary Base level would work at (UI pass design § 8):",
-           "# built and queued levels fill the room best grade first, as sr_eb_fill_by_grade does;",
-           "# the first room left unfilled is where the next one goes, past all of it",
-           f"# {gss.OVERFLOW_GRADE}%. Into var:sr_ebase_next_grade, from sr_ebase_refresh.",
-           "sr_ebase_next_fill = {",
-           "\tset_local_variable = { name = sr_eb_next_left value = sr_ebase_queued_levels }",
-           "\tset_local_variable = { name = sr_eb_next_found value = 0 }",
-           f"\tset_variable = {{ name = sr_ebase_next_grade value = {gss.OVERFLOW_GRADE} }}"]
-    for tier in gss.ebase_tiers():
-        room = gss.NEAR_EARTH_ROOM if tier is None else f"sr_site_ebase_room_{tier.key}"
-        grade = 0 if tier is None else tier.ebase_grade
-        label = "near-Earth" if tier is None else tier.name
-        test = f" has_technology_researched = {gss.NEAR_EARTH_TECH}" if tier is None else f" {gss.site_serves(tier)}"
-        out += [f"\t# {label} at {grade:+d}%",
-                "\tif = {",
-                f"\t\tlimit = {{ local_var:sr_eb_next_found = 0{test} }}",
-                "\t\tif = {",
-                f"\t\t\tlimit = {{ local_var:sr_eb_next_left >= {room} }}",
-                f"\t\t\tchange_local_variable = {{ name = sr_eb_next_left subtract = {room} }}",
-                "\t\t}",
-                "\t\telse = {",
-                f"\t\t\tset_variable = {{ name = sr_ebase_next_grade value = {grade} }}",
-                "\t\t\tset_local_variable = { name = sr_eb_next_found value = 1 }",
-                "\t\t}",
-                "\t}"]
-    out.append("}")
+def render_next_place() -> list[str]:
+    """§ 9.3 (ebase_ground.next_place): where the next level goes once the queued levels
+    are placed, by the rule in force, from where the month left the levels."""
+    pool, put = f"{NEXT}_pool", f"{NEXT}_put"
+    out = ["# § 9.3, the Base Room cell (ebase_ground.next_place): where the next level goes once",
+           "# the queued levels are placed, by the rule in force, from where the month left the",
+           "# levels: the queued levels and one more go where new levels go, on a copy of the",
+           f"# counts ({NEXT}_at_<k>). var:sr_ebase_next_place is that place's index, -1 past all",
+           f"# of the room; var:sr_ebase_next_grade its grade ({gss.OVERFLOW_GRADE} past the room), which the",
+           "# cell reads until Task 9 names the place. After sr_eb_month.",
+           "sr_eb_next_place = {"]
+    out += [f"\t{_setl(at(NEXT, k), lv(at(MONTH, k)))}" for _, k in places()]
+    queued = f"{{ value = sr_ebase_queued_levels subtract = {lv(f'{INPUTS}_built')} min = 0 add = 1 }}"
+    out += [f"\t{_setl(pool, queued)}",
+            f"\t{_setl(put, '-1')}",
+            "\tsr_eb_next_give = yes",
+            "\tif = {",
+            f"\t\tlimit = {{ {lv(pool)} > 0 }}",
+            "\t\tset_variable = { name = sr_ebase_next_place value = -1 }",
+            f"\t\tset_variable = {{ name = sr_ebase_next_grade value = {gss.OVERFLOW_GRADE} }}",
+            "\t}",
+            "\telse = {",
+            f"\t\tset_variable = {{ name = sr_ebase_next_place value = {lv(put)} }}"]
+    out += _ind(_dispatch(put, lambda k: [f"set_variable = {{ name = sr_ebase_next_grade value = {grade_pct(k)} }}"]), 2)
+    out += ["\t}", "}"]
     return out
 
 
@@ -391,10 +926,31 @@ def render_effects() -> str:
            "# calls them.",
            ""]
     out += render_count_methods() + [""]
-    out += render_fill_by_grade() + [""]
+    out += render_month() + [""]
+    out += render_read_inputs() + [""]
+    out += render_read_profits() + [""]
+    out += render_load() + [""]
+    out += render_store() + [""]
+    out += render_displace() + [""]
+    out += render_return() + [""]
+    out += ["# Where levels leave first, for a return (never from a site that returned this month)."]
+    out += render_take("sr_eb_take_return", MONTH, exclude=True) + [""]
+    out += ["# Where levels leave first, for levels lost."]
+    out += render_take("sr_eb_take_lost", MONTH, exclude=False) + [""]
+    out += render_gain_lose() + [""]
+    out += ["# Where new levels go (§ 8.2 step 4, owner's call 9: unassigned levels by grade)."]
+    out += render_give("sr_eb_place_new", MONTH) + [""]
+    out += ["# § 8.2 step 5, the paced moves: up to the pace (sr_ebi_pace), pass after pass."]
+    out += render_move_loop("sr_eb_moves", MONTH, "sr_eb_move_pass", ceiling=MONTH_PASSES, paced=True,
+                            record=True, log=True) + [""]
+    out += ["# One move pass (§ 8.3 with the checkbox on, § 8.4 with it off)."]
+    out += render_move_pass("sr_eb_move_pass", MONTH, paced=True, record=True) + [""]
+    out += render_record_move() + [""]
     out += render_compute_mix() + [""]
     out += render_mix_modifiers() + [""]
-    out += render_next_fill()
+    out += render_next_place() + [""]
+    out += ["# Where the next level goes, on its own copy of the counts."]
+    out += render_give("sr_eb_next_give", NEXT)
     return "\n".join(out) + "\n"
 
 
