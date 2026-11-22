@@ -18,6 +18,8 @@
  te_nation_type_building_space_elevator_throughput_add_tt:0 "$building_space_elevator_throughput_add_desc$\n\n$te_nation_note_building$\n$TOOLTIP_DELIMITER$\n[Country.GetModifier.GetTooltipFor('building_space_elevator_throughput_add')]"
  te_nation_type_building_space_mine_throughput_add:0 "$building_space_mine_throughput_add$: #v [Country.GetModifier.GetFormattedValueFor('building_space_mine_throughput_add')]#!"
  te_nation_type_building_space_mine_throughput_add_tt:0 "$building_space_mine_throughput_add_desc$\n\n$te_nation_note_building$\n$TOOLTIP_DELIMITER$\n[Country.GetModifier.GetTooltipFor('building_space_mine_throughput_add')]"
+ te_nation_type_building_space_resort_throughput_add:0 "$building_space_resort_throughput_add$: #v [Country.GetModifier.GetFormattedValueFor('building_space_resort_throughput_add')]#!"
+ te_nation_type_building_space_resort_throughput_add_tt:0 "$building_space_resort_throughput_add_desc$\n\n$te_nation_note_building$\n$TOOLTIP_DELIMITER$\n[Country.GetModifier.GetTooltipFor('building_space_resort_throughput_add')]"
  te_nation_type_character_coup_strength_mult:0 "$character_coup_strength_mult$: #v [Country.GetModifier.GetFormattedValueFor('character_coup_strength_mult')]#!"
  te_nation_type_character_coup_strength_mult_tt:0 "$character_coup_strength_mult_desc$\n\n$te_nation_note_character$\n$TOOLTIP_DELIMITER$\n[Country.GetModifier.GetTooltipFor('character_coup_strength_mult')]"
  te_nation_type_country_acceptance_no_shared_heritage_trait_add:0 "$country_acceptance_no_shared_heritage_trait_add$: #v [Country.GetModifier.GetFormattedValueFor('country_acceptance_no_shared_heritage_trait_add')]#!"
