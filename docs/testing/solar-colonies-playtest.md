@@ -555,7 +555,8 @@ Colonies, In-Situ Resource Utilization, a few colonies held and a base of 50 lev
 are the refresh's: give a new base a month before reading them.
 
 1. **The look.** The Colonies switch shows five buttons on one line, People to Bases, none clipped. Bases shows the
-   checkbox and "Assign for the most profit"; the levels rows; the move lines; "Output a Week, Before Other
+   checkbox and "Assign for the most profit"; the levels rows (with the checkbox off, "Unassigned levels" too); the
+   move lines; "Output a Week, Before Other
    Modifiers" with Now and If prices hold, each a profit on the right and seven goods icons under it; then, with
    Asteroid Mining, the near-Earth asteroids' box; then each colony's box: its name, its ground type and grade on
    the first line, "levels / room", − and + and "£… a level" on the second, seven goods on the third. Nothing
@@ -570,12 +571,14 @@ are the refresh's: give a new base a month before reading them.
    scripted GUI's button in the mod before: if a right-click does nothing, give each box ±25 buttons of its own. A
    click with the checkbox on unticks it first.
 5. **The move lines.** With the checkbox on and a move under way (raise one good's price until a site of another
-   type earns more): "Moving up to N levels a month, since <year>", "From <site> to <site>", and "<site> earns N%
-   more a level", or "<site> loses money a level". With nothing moving: "Levels stay where they are" and why. With
-   the checkbox off: the levels to go and about how many months; at the assignments, "no levels left to move".
+   type earns more): "Moving since <year>, up to N a month", "From <site> to <site>", and "<site> earns N% more a
+   level", or "<site> loses money a level". With nothing moving: "Levels stay where they are" and why. With the
+   checkbox off: "Levels to move to our assignments: N" and "Months to go: about M, at up to P a month"; at the
+   assignments, "no levels left to move".
    Once a move has ended, "Last move: <year> to <year>" and its sites. The lines give years, not months.
-6. **A colony that doesn't serve us.** A blockaded colony stays listed, its box reading "Blockaded: N levels
-   elsewhere until freed" in red; an occupied one reads "Occupied:" and is still listed.
+6. **A colony that doesn't serve us.** A blockaded colony stays listed, its box reading "Blockaded: N working
+   elsewhere until freed" in red; an occupied one reads "Occupied:" and is still listed. A blockaded colony that
+   held no levels shows no such line.
 7. **The hovers.** The view button's hover, and each good's hover in a box, name the method most of our levels run.
    The totals heading's hover ends with our country's breakdown of Extraplanetary Base throughput, and says its
    Extraplanetary Base Room line is the grade, already in the figures: with no other throughput, Now's goods match
@@ -589,6 +592,10 @@ are the refresh's: give a new base a month before reading them.
    `enabled` read a free count (queued less assigned) that the refresh and each click store, and keep the live
    check in `is_valid` for the hover and the effect's clamp; a level queued between updates then leaves + greyed
    until the next one.
+9. **The switch row when Bases appears.** Open the Colonies tab before In-Situ Resource Utilization, with four view
+   buttons, and research it with the tab open: the Bases button appears at the right end of the row and nothing
+   runs past the panel's edge. The row sits in a fixed 476 slot, its buttons from the left (style rule 8: a centred
+   row is placed once, at its first width).
 
 ## Taking a module down (2026-10-31)
 

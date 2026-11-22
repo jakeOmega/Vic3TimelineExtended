@@ -647,11 +647,12 @@ any site, and here they earn least a level, so they hold none:
     it;
   - the totals are rows, each a label and the profit a week over a line of the
     seven goods, since a table with a label column doesn't fit;
-  - the not-serving line is "Blockaded: 30 levels elsewhere until freed", with
-    the rule on hover;
+  - the not-serving line is "Blockaded: 30 working elsewhere until freed", with
+    the rule on hover, and only while the site is owed levels;
   - the gain is a percentage of the source's profit, capped at 999%, and the
     profits are compact ("£+9.59K");
-  - with the checkbox off, a line above the rows counts the unassigned levels.
+  - with the checkbox off, an Unassigned levels row beside the levels rows counts
+    built and queued levels less those assigned.
 
 ### 9.2 Solar System (choosing a site before holding it)
 
