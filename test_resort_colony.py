@@ -408,9 +408,6 @@ class ResortPanelTest(unittest.TestCase):
         self.assertIn(" concept_sr_resort_draw_desc:0 ", _raw("localization", "english", "te_concepts_l_english.yml"))
 
 
-if __name__ == "__main__":
-    unittest.main()
-
 
 def _read(rel):
     with open(os.path.join(REPO, rel), encoding="utf-8-sig") as f:
@@ -473,3 +470,7 @@ class ResortTextTest(unittest.TestCase):
         ai = ai[:ai.index("\n\n")]
         self.assertTrue("Off-World Resort" in ai, "the AI's module plan leaves out the Off-World Resort")
         self.assertFalse("the rest of the Kuiper Belt" in space, "Proteus is a moon of Neptune")
+
+
+if __name__ == "__main__":
+    unittest.main()
