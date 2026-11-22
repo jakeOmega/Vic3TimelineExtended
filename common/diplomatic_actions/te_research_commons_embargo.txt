@@ -15,7 +15,7 @@
 # ============================================================================
 te_rc_technology_embargo = {
 	# Placeholder art: vanilla's Knowledge Sharing icon.
-	texture = "gfx/interface/icons/diplomatic_action_icons/knowledge_sharing.dds"
+	texture = "gfx/interface/icons/diplomatic_action_icons/te_rc_technology_embargo.dds"
 	groups = {
 		general
 	}

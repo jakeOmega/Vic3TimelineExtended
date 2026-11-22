@@ -2494,8 +2494,9 @@ def render_government_types(inventory: dict | None = None) -> str:
 # Starting a merge: values, bars, buttons, journal entries and their loc
 # ---------------------------------------------------------------------------
 
-# Vanilla's waving flag, the icon Russification and the cultural renaissances use.
-JE_ICON = "gfx/interface/icons/event_icons/waving_flag.dds"
+# The merges' shared icon (icon_prompts.py, category journal_entry_shared, #1508); until then they borrowed
+# vanilla's waving flag, the icon of Russification and the cultural renaissances.
+JE_ICON = "gfx/interface/icons/event_icons/je_te_culture_merge.dds"
 # The journal section (common/journal_entry_groups/00_a_te_journal_entry_groups.txt).
 JE_GROUP = "je_group_te_systems"
 # The technology that opens each tier (te_cm_tier_tech_<tier> in te_culture_merge_triggers.txt).

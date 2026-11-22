@@ -192,9 +192,9 @@ class RegistryTests(unittest.TestCase):
         The Map Room (te_journal_maps.txt) borrows vanilla's event_map.dds while it is under test
         (docs/testing/journal-map-modes-playtest.md); its page is opened only by buttons. The World Climate
         entry (je_world_climate.txt, #1448) shares Global Warming's icon, as the same climate seen from the world.
-        The culture merge entries (te_culture_merges_generated.txt, one per merge) all use vanilla's waving flag, the
-        icon of Russification and the cultural renaissances; one picture for thirty-two entries is a placeholder the
-        owner can replace.
+        The culture merge entries (te_culture_merges_generated.txt, one per merge) share one picture, the
+        journal_entry_shared entry the generator points them all at (#1508): checked here by its path, since the
+        registry does not wire a generated file.
         REPLACE:-ed vanilla entries do not match the pattern, and the registry cannot wire them."""
         import re
         defined = set()
@@ -205,6 +205,11 @@ class RegistryTests(unittest.TestCase):
         import culture_merges_config as cfg
         merges = {"je_te_cm_%s" % m.key for m in cfg.MERGES}  # exactly the roster's, not whatever carries the prefix
         self.assertEqual({name for name in defined if name.startswith("je_te_cm_")}, merges)
+        import gen_culture_merges as gcm
+        self.assertEqual(gcm.JE_ICON, ip.icon_path("journal_entry_shared", "je_te_culture_merge"))
+        self.assertIn("je_te_culture_merge", ip.ICONS["journal_entry_shared"])
+        generated = Path(MOD_ROOT, "common", "journal_entries", "te_culture_merges_generated.txt").read_text(encoding="utf-8-sig")
+        self.assertEqual(len(re.findall(r'^\ticon = "%s"$' % re.escape(gcm.JE_ICON), generated, re.M)), len(merges))
         self.assertEqual(defined - registered - merges,
                          {"je_nuclear_program", "je_te_map_room", "je_world_climate"})
         self.assertEqual(registered - defined, set())

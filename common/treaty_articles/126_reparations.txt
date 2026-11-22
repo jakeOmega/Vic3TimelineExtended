@@ -14,7 +14,7 @@
 # helper's check (te_treaty_transfer.2) pays directly if it did not.
 # ============================================================================
 te_reparations = {  # REVIEWED 2026-11-12 (involvement): a one-off payment, like vanilla's state, ship and money transfers, which build none
-	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/bankroll_treaties.dds"
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/te_reparations.dds"
 	kind = directed
 	cost = 0
 

@@ -25,7 +25,7 @@
 ### below (principle_tier_audit).
 
 principle_technology_controls_1 = {
-	icon = "gfx/interface/icons/principles_icons/custom_principles_placeholder.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_technology_controls_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
 	visible = {
@@ -59,7 +59,7 @@ principle_technology_controls_1 = {
 }
 
 principle_technology_controls_2 = {
-	icon = "gfx/interface/icons/principles_icons/custom_principles_placeholder.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_technology_controls_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	possible = {
@@ -82,7 +82,7 @@ principle_technology_controls_2 = {
 }
 
 principle_technology_controls_3 = {
-	icon = "gfx/interface/icons/principles_icons/custom_principles_placeholder.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_technology_controls_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	possible = {
@@ -107,7 +107,7 @@ principle_technology_controls_3 = {
 }
 
 principle_technology_controls_4 = {
-	icon = "gfx/interface/icons/principles_icons/custom_principles_placeholder.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_technology_controls_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_4.dds"
 
 	possible = {
@@ -132,7 +132,7 @@ principle_technology_controls_4 = {
 }
 
 principle_technology_controls_5 = {
-	icon = "gfx/interface/icons/principles_icons/custom_principles_placeholder.dds"
+	icon = "gfx/interface/icons/principles_icons/principle_technology_controls_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_5.dds"
 
 	possible = {
