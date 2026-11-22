@@ -681,9 +681,6 @@ def gss_top():
     return 16
 
 
-if __name__ == "__main__":
-    unittest.main()
-
 
 class ReviewFixesTest(unittest.TestCase):
     """The final review's findings (PR #1958): Defences thin with a short crew,
@@ -730,3 +727,7 @@ class ReviewFixesTest(unittest.TestCase):
         self.assertNotIn("slot", port)
         hab = re.search(r'(?m)^ sr_mod_queue_hab_tt:0 "([^\n]*)"', self.loc).group(1)
         self.assertNotIn("half", hab)
+
+
+if __name__ == "__main__":
+    unittest.main()
