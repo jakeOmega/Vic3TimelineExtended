@@ -338,7 +338,7 @@ than a small one. It starts on Regolith Processing, at a thin margin: about £1,
 level a week at base prices. Asteroid Mining brings the Asteroid Mine method,
 and Space Colonization the larger Mining Colony. Every mining method makes the
 same seven goods in the same proportions: mostly Structural and Tech-Critical
-Metals, with some gold, Conductive Metals and Glass and Plastics, and a little
+Metals, with some Gold, Conductive Metals and Glass and Plastics, and a little
 Base Metals and Chemical and Industrial Minerals. Each site's ground type then
 shifts that mix. Von Neumann Machines (era 13)
 brings Self-Replicating Miners, which build their copies from the ore they dig:

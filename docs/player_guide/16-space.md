@@ -223,7 +223,7 @@ needs you, with the detail on hover. A word turns red when something is due:
 | Defense | Under Full Colonies only. Calm; or, in red, what threatens you (Under assault, Blockaded, Occupied, Interdicted, Earth blockaded or Launch site lost) and the colony it threatens. Hover it for every colony under threat and any hostile fleet on its way. |
 | Modules | How many modules are queued, and fabrication's stock. Queue empty turns red once the stock is full and waiting. |
 | Next Window | The months to your chemical rockets' next launch window, Open now, Any month once your drive needs no window, or No site left; and the stage. |
-| Base Room | Once you have In-Situ Resource Utilization: your Extraplanetary Base levels, built and queued, against your room (120 +20 / 400 with 20 queued, or their sum once the figures run long), red once they pass it, and the grade the next level would work at, queued levels counted (see [Extraplanetary Base room](#extraplanetary-base-room)). |
+| Base Room | Once you have In-Situ Resource Utilization: your Extraplanetary Base levels, built and queued, against your room (120 +20 / 400 with 20 queued, or their sum once the figures run long), red once they pass it, and the site the next level goes to, queued levels counted, or "next at −75%" once they pass all of your room. Hover it for that site's type, grade and profit a level (see [Extraplanetary Base room](#extraplanetary-base-room)). |
 | Resort Room | Once you have Space Colonization: the same for your Resort Colony levels and their room, and the draw the next level would work at (see [Resort Colony room](#resort-colony-room)). |
 | Hostile Fleet | Under Full Colonies, while a fleet of a country at war with you is on its way to Earth: Earth in the months until the first lands, and their strength at and bound for Earth against your fleets there. Red while a landing would tip the balance: you have no fleet at Earth and it isn't blockaded already, or yours holds against what is there now but not against what is coming too. Hover it for how many are coming. |
 
@@ -255,6 +255,7 @@ shows:
 | Modules | Each colony's crews' share of its modules, its slots in use (red past them) and its Extraplanetary Base room and grade, then every module's level with a button to queue one more | Fabrication, shipments, module upkeep, Extraplanetary Base and Resort Colony room, and the queue in a box of its own with when its next module is built |
 | Autonomy | Each colony's autonomy, how much it moves a month (hover it for that colony's terms), what it is building of its own, its charter or garrison, and Abandon | Free colony trade; the free colonies are listed below the rows |
 | Defenses | Each colony's Defenses, integrity and marines, and what threatens it | |
+| Bases | With In-Situ Resource Utilization, the Near-Earth Asteroids and each colony: its ground type and grade, your levels there against its room with − and + to assign them, and a level's profit and output (see [The Bases view](#the-bases-view)) | The Assign for the most profit checkbox, your levels against your room, what is moving and why, and your bases' output and profit a week |
 
 The section stays on the panel when the program is Idle, so you can always see
 where your colony modifiers come from. Under Races Only, Colonies lists your
@@ -916,7 +917,7 @@ in the same proportions, and the type shifts that mix:
 |---|---|---|---|
 | Mixed | Nothing: the method's own mix | Nothing | The near-Earth asteroids |
 | Metallic | Gold, Structural and Conductive Metals | Chemical and Industrial Minerals, Glass and Plastics | 16 Psyche |
-| Rocky | Structural Metals, Glass and Plastics | Gold, Conductive and Base Metals | 4 Vesta, Valles Marineris, Olympus Mons, Hellas Planitia, Mercury, the Moon's four sites away from the poles |
+| Rocky | Structural Metals, Glass and Plastics | Gold | 4 Vesta, Valles Marineris, Olympus Mons, Hellas Planitia, Mercury, the Moon's four sites away from the poles |
 | Carbonaceous | Chemical and Industrial Minerals, Glass and Plastics, about twice over | Gold | Ceres, 2 Pallas, 10 Hygiea, Himalia, Callisto, Enceladus |
 | Sulfurous | Chemical and Industrial Minerals, four times over | Gold | Amalthea, Io, Europa, Venus |
 | Hydrocarbon | Glass and Plastics, three and a half times over, and Chemical and Industrial Minerals | Every metal | Titan, Iapetus, Pluto-Charon, Makemake, Sedna |
@@ -936,9 +937,9 @@ Levels past all of your room work at −75% and count as Mixed. Before Asteroid
 Mining, a country with no colony has no room at all. One country modifier,
 Extraplanetary Base Room, carries the average grade over all your levels, so
 only the levels past the room pay the penalty: with room for 10 and 20 levels
-built, the base works at −37.5%. Each base building carries the mix of the sites
-your levels work (Extraplanetary Base Ground), so a base working one site shows
-that site's grade and type. A new poor colony adds room without lowering what
+built, the base works at −37.5%. Every base building carries the same mix, the
+average over the sites all your levels work (Extraplanetary Base Ground), so
+with every level at one site each building shows that site's type. A new poor colony adds room without lowering what
 your levels already earn. The overview's Base Room cell shows your levels, built
 and queued, against your room, and names the site the next level goes to, its
 hover giving that site's type, grade and profit a level; it reads −75% at once
@@ -976,18 +977,24 @@ moving your bases to a different type of ground.
 
 **By hand**, the − and + buttons on a site set how many levels you want there:
 5 a click, 25 a right-click. A click switches the checkbox off, keeping where
-your levels are now as the starting point. + works only while some of your built
-and queued levels aren't assigned, and up to the site's room. Levels you haven't
-assigned go to the best grade with room when they're built. Switching the
-checkbox back on drops your assignments.
+your levels are now as the starting point, a blockaded colony's levels counted
+as its own. + needs a level no site is assigned, up to the site's room: with
+the checkbox on every built level counts as assigned where it works, so free
+some with − elsewhere or queue more. A level you take off a site keeps working
+there until + assigns it somewhere else, and the view counts your unassigned
+levels above the rows. Queued levels you haven't assigned go to the best grade
+with room when they're built. Switching the checkbox back on drops your
+assignments.
 
-**Every move is paced**, whoever decides it: a quarter of your levels a year,
-4 a month for a base of 150 levels. New levels go straight to their place, so
-switching the checkbox off and on gains nothing, and a large base can't flip its
-own market in a month.
+**Every move is paced**, whoever decides it: a 48th of your levels a month,
+rounded up and at least one, so 4 a month for a base of 150 levels and at least
+a quarter of the base a year. Since the checkbox and your buttons share the
+pace, switching the checkbox off and on gains nothing, and a large base can't
+flip its own market in a month. New levels go straight to their place.
 
-**A blockaded or occupied colony** gives no room: its levels move at once to
-your other room, or past it, and come back at once when it is freed. A colony
+**A blockaded or occupied colony** gives no room: at the next monthly update its
+levels move, outside the pace, to your other room or past it, and they come back
+the same way the month it is freed. A colony
 you lose for good drops its assignment, and its levels move to your other room.
 
 ### Resort Colony room

@@ -577,11 +577,18 @@ are the refresh's: give a new base a month before reading them.
 6. **A colony that doesn't serve us.** A blockaded colony stays listed, its box reading "Blockaded: N levels
    elsewhere until freed" in red; an occupied one reads "Occupied:" and is still listed.
 7. **The hovers.** The view button's hover, and each good's hover in a box, name the method most of our levels run.
-   The totals heading's hover ends with our country's breakdown of Extraplanetary Base throughput; if that line
-   prints nothing or raw text, drop it from `je_space_race_widget_eb_totals_tt`.
-8. **Frame time.** With Bases open on a save holding 20 colonies, the panel's frame time is about that of People
-   (measure with `wall2.py`). Every figure is a stored variable or a short trigger, so it should be. If it isn't,
-   store the view's per-place values (the arrow, the levels to go, every site losing money) at the refresh as well.
+   The totals heading's hover ends with our country's breakdown of Extraplanetary Base throughput, and says its
+   Extraplanetary Base Room line is the grade, already in the figures: with no other throughput, Now's goods match
+   the base buildings' output added up. If the breakdown prints nothing or raw text, drop it from
+   `je_space_race_widget_eb_totals_tt`.
+8. **Frame time.** With Bases open on a large country's save holding about 20 colonies, the panel's frame time is
+   about that of People (the wall clock of `docs/audits/late_game_performance.md`, "Reading the wall clock"). Most
+   figures are stored variables, but each box's + reads `sr_ebase_queued_levels` for its validity, and the levels
+   rows and the unassigned line read `sr_ebase_levels` and `sr_ebase_queued_levels`: each a walk over the
+   country's states and buildings, up to 41 boxes a frame (final review S2). If it is slower, have the + buttons'
+   `enabled` read a free count (queued less assigned) that the refresh and each click store, and keep the live
+   check in `is_valid` for the hover and the effect's clamp; a level queued between updates then leaves + greyed
+   until the next one.
 
 ## Taking a module down (2026-10-31)
 
@@ -670,14 +677,15 @@ The colonization overview's Base Room cell and the refresh when a base is built 
 `docs/systems/mod_systems/space_race.md` § Colony modules and Extraplanetary Base room).
 
 1. **The cell.** With In-Situ Resource Utilization, the overview's third row shows Base Room: our Extraplanetary Base
-   levels against our room ("120 / 400"), and "next at +5%" under it. Without the technology the row is gone.
+   levels against our room ("120 / 400"), and under it the site the next level goes to (since the ground types
+   build; see "Extraplanetary Base ground types: the controls", item 8, below). Without the technology the row is gone.
 2. **Queued levels.** Queue 20 levels: the cell reads "120 +20 / 400" at once (owner, 2026-11-04; it had read "120 / 400"
    with the queue left out), the hover counts them, the Modules view gains "Extraplanetary Base levels
-   queued +20", and by the next month (or the day after a level finishes) "next at" moves to the grade of the room
-   those levels would leave (counting them, not only the built ones). Queue past all of our room: the figure turns red
-   and reads "next at -75%" at once, and with nothing built and 80 queued against room for 75, "0 +80 / 75" in red. Nothing elides; with room of
+   queued +20", and by the next month (or the day after a level finishes) the next site moves to the one those
+   levels would leave (counting them, not only the built ones). Queue past all of our room: the figure turns red
+   and reads "next at −75%" at once, and with nothing built and 80 queued against room for 75, "0 +80 / 75" in red. Nothing elides; with room of
    10,000 or more (Mining Complexes) or 1,000 levels queued, the cell shows their sum instead ("12000 / 14335").
-3. **On completion.** When a queued level finishes, the cell's average and "next at" change the next day, not at the
+3. **On completion.** When a queued level finishes, the cell's average and its next site change the next day, not at the
    next month. If nothing changes until the month turns, `on_building_built` / `on_building_expanded` never reached
    `te_on_building_*` (unverified, `scripting_best_practices.md`); fallback: drop the hook, the monthly pulse stays.
 4. **A batch stacks nothing.** Let several levels finish on one day (queue them in several states at once) and compare
@@ -1119,7 +1127,7 @@ colonies of different types (16 Psyche and Ceres are the design's example).
 7. **Tick time.** On a late save with many AI bases, the first of the month is no slower than before this build
    (the wall clock of `docs/audits/late_game_performance.md`, "Reading the wall clock", against the same save on
    `main`).
-8. **Solar System's line.** Under each site's name, "300 (+30%) Carbonaceous" and the resort room fit without "...",
+8. **Solar System's line.** Under each site's name, "300 (+30%) Metallic" at 16 Psyche and "200 (+15%) Carbonaceous" at Ceres, and the resort room, fit without "...",
    in Solar System and in the colony target popup. The base room's hover gives its type's seven figures, each good
    named, no raw `$key$`.
 9. **The Help page.** How Solar Colonization Works shows its Extraplanetary Bases topic under Simple and Full Colonies

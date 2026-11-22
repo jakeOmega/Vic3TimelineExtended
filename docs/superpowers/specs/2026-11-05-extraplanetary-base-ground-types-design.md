@@ -14,9 +14,12 @@ to where this document answers it.
 **Built** (2026-11-21, `feature/ebase-ground-types`, one PR as § 10 planned). Where
 the build differs from the text below, the build is right and the section says so:
 the moves run once a calendar month (§ 8.2, § 8.5); switching the checkbox off
-keeps the levels a blockaded site is owed as its target (§ 8.4); profit a level and
-the yardstick count the cuts the base's other method groups make to its inputs
-(§ 8.3); the Base Room cell names the next site alone (§ 9.3). The Resort Colony
+gives each site the levels it will hold once every blockade has returned (§ 8.4);
+profit a level and the yardstick count the cuts the base's other method groups
+make to its inputs (§ 8.3); the Bases view's layout fits its column (§ 9.1); the
+per-type hovers are hand-written (§ 9.2); the Base Room cell names the next site
+alone (§ 9.3); the notice counts its 5% by the pair of types, and the move record
+gives years (§ 9.4). The Resort Colony
 left the building first (#1950), so the four mining methods are the base's only
 methods and § 7's fallback for a resort that stays is moot. § 4 describes the
 base before this build.
@@ -498,8 +501,15 @@ unsmoothed prices.
 ### 8.4 Assigning by hand
 
 - **Switching the checkbox off** sets every site's `target` to its `at` and its
-  `away` (as built: with `at` alone, a blockaded site's levels came back at once and
-  then moved out again at the pace), so nothing moves until the player changes one.
+  `away`, so nothing moves until the player changes one. **As built**, the targets
+  are the levels each site will hold once every blockade has returned: a blockaded
+  site its `at` and `away`, and the others less the levels the return will take
+  from them (all of `away` past what `over` covers), worst profit a level first.
+  With `at` alone, a blockaded site's levels came back at once and then moved out
+  again at the pace. With `at` and `away` alone, the displaced levels were
+  assigned twice, at the site they work and at the site that owes them, so +
+  stayed greyed and the return left targets no move would reach (final review,
+  2026-11-21). The buttons read the same targets while the checkbox is on.
 - **The − and + buttons** on a site's row change its `target`. Minus stops at 0.
   Plus stops at the site's room, and only works while some levels are
   unassigned, that is while the targets sum to less than built plus queued
@@ -630,6 +640,18 @@ any site, and here they earn least a level, so they hold none:
 - **Width**: the column is 480. Seven goods of an icon and up to five digits fit
   in about 450. `test_space_race_labels.py` measures the widest, as it
   measures the other views.
+- **As built**, to fit the column:
+  - dates are years, as the mod shows the month index elsewhere ("since 2071");
+  - the move area is up to three short lines (the pace and the year, From and
+    To, the gain), since one line doesn't fit 472 with "Near-Earth Asteroids" in
+    it;
+  - the totals are rows, each a label and the profit a week over a line of the
+    seven goods, since a table with a label column doesn't fit;
+  - the not-serving line is "Blockaded: 30 levels elsewhere until freed", with
+    the rule on hover;
+  - the gain is a percentage of the source's profit, capped at 999%, and the
+    profits are compact ("£+9.59K");
+  - with the checkbox off, a line above the rows counts the unassigned levels.
 
 ### 9.2 Solar System (choosing a site before holding it)
 
@@ -638,7 +660,9 @@ today ("300 (+30%)"). It gains the type's word or icon ("300 (+30%) Metallic"),
 whichever fits (`test_space_race_labels.py` measures it). Its hover,
 `je_space_race_widget_ss_bases_tt`, is one static key for every site today
 (`space_race_widget.gui`), so it becomes a generated key per type that adds the
-type's mix. A player weighing which site to colonize
+type's mix. **As built**, six hand-written keys, `je_space_race_widget_ss_bases_tt_<type>`
+(no site is Mixed), chosen per site by the generated row's override; the word sits
+after the grade in a cell of its own. A player weighing which site to colonize
 or seize then sees what it holds before the choice (review point 4).
 
 ### 9.3 The Base Room cell
@@ -664,6 +688,11 @@ Marineris, is 16; the hover says what it is.
   blockade's own notices cover.
 - **The move line** of § 9.1 stays as the record while the move runs; after it
   ends, "Last move: 16 Psyche to Ceres, March 2071 to May 2074".
+- **As built**, the notice's 5% counts the levels moved between the pair of
+  types, so a move that passes from one site of a type to another of the same
+  type keeps its count; the record still follows the sites. The last move reads
+  "Last move: 2071 to 2074", then "From 16 Psyche to Ceres". Switching the
+  checkbox either way ends the running move.
 
 ### 9.5 The building and its modifiers
 
