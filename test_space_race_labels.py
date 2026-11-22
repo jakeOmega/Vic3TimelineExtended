@@ -87,6 +87,12 @@ WINDOW_MONTHS = 999       # sr_window_disp_next: capped at 999 (the cell reads "
 WINDOW_WAIT = 99          # sr_window_wait_months_<body>: the longest wait is Mars's synodic period, 26 months
 WINDOW_PREMIUM_SHOWN = 9.99  # sr_disp_win_premium_<body>: capped at +999% for its cell
 WINDOW_DESTINATIONS = 14  # sr_disp_win_beyond: gen_solar_sites.WINDOW_ORDER
+# The Bases view (Extraplanetary Base ground types design § 9.1)
+EB_PACE = 9999            # sr_disp_eb_pace: a 48th of the levels on record, 2,084 at EBASE_LEVELS; four digits
+EB_MONTHS = 99            # sr_disp_eb_months: the levels to go over the pace, 49 at most (all of them at a 48th a month)
+EB_GAP = 9.99             # sr_disp_eb_gap: clamped to "999%"
+EB_MARGIN = 9999          # sr_disp_eb_margin: 5% of the yardstick, £1,812 with every level on Self-Replicating Miners
+EB_PROFIT = 999_000_000   # sr_disp_eb_now_profit / _end_profit, £ a week: unbounded by script; "+999M"
 
 
 def _read(path):
@@ -274,7 +280,12 @@ def _longest_figure(name):
              # the colonization overview's cells (audit SPC-6)
              "sr_disp_aut_restless_more": WORLDS - 1, "sr_disp_mq_count": QUEUE_PLACES,
              "sr_mod_fab_stock_cap": FAB_STOCK, "sr_window_disp_next": WINDOW_MONTHS,
-             "sr_disp_win_beyond": WINDOW_DESTINATIONS}
+             "sr_disp_win_beyond": WINDOW_DESTINATIONS,
+             # the Bases view's move area and totals (ground types design § 9.1)
+             "sr_disp_eb_pace": EB_PACE, "sr_disp_eb_months": EB_MONTHS, "sr_disp_eb_to_go": EBASE_LEVELS,
+             "sr_disp_eb_gap": EB_GAP, "sr_disp_eb_margin": EB_MARGIN, "sr_disp_eb_move_began_year": END_YEAR,
+             "sr_disp_eb_last_began_year": END_YEAR, "sr_disp_eb_last_ended_year": END_YEAR,
+             "sr_disp_eb_now_profit": EB_PROFIT, "sr_disp_eb_end_profit": EB_PROFIT}
     assert name in fixed, f"no longest figure known for {name}: add one to _longest_figure"
     return fixed[name]
 
@@ -294,9 +305,21 @@ def _custom_options(name):
     return _CUSTOM[name]
 
 
+def _k(x):
+    """A figure in `|K`, at three significant figures and the suffix ("1.81K",
+    "100.0K" at 99,999: a character long, as a bound should be)."""
+    for div, suffix in ((1e9, "B"), (1e6, "M"), (1e3, "K"), (1, "")):
+        if abs(x) >= div:
+            break
+    v = abs(x) / div
+    return (f"{v:.0f}" if v >= 100 else f"{v:.1f}" if v >= 10 else f"{v:.2f}") + suffix
+
+
 def _render(value, bounds=None):
     """The loc value as the player reads it, every figure at its longest, or
-    at its bound in `bounds` for a word shown only under one."""
+    at its bound in `bounds` for a word shown only under one. `|K` prints a
+    figure abbreviated, `+` or `=` with its sign; the money icon is two
+    characters wide."""
     for _ in range(5):
         value = re.sub(r"\$(\w+)\$", lambda m: _loc(m.group(1)), value)
     value = re.sub(r"\[[^\[\]]*GetCustom\('(\w+)'\)\]",
@@ -307,14 +330,18 @@ def _render(value, bounds=None):
         assert fmt is not None, f"a figure with no format: {m.group(0)}"
         longest = (bounds or {}).get(name)
         longest = _longest_figure(name) if longest is None else longest
+        sign = "+" if set(m.group(5) or "") & {"+", "="} else ""
+        if fmt == "K":
+            return sign + _k(longest)
         if fmt == "D":  # a whole number with thousands separators
-            return f"{longest:,.0f}"
+            return sign + f"{longest:,.0f}"
         if pct:
-            return f"{longest * 100:.{int(fmt)}f}%"
-        return f"{longest:.{int(fmt)}f}"
+            return sign + f"{longest * 100:.{int(fmt)}f}%"
+        return sign + f"{longest:.{int(fmt)}f}"
 
-    value = re.sub(r"\[[^\[\]]*?(?:ScriptValue\('(\w+)'\)|Var\('(\w+)'\)\.GetValue)(?:\|(%?)(\d|D))?\]",
+    value = re.sub(r"\[[^\[\]]*?(?:ScriptValue\('(\w+)'\)|Var\('(\w+)'\)\.GetValue)(?:\|(%?)(\d|D|K)([+=]*))?\]",
                    figure, value)
+    value = value.replace("@money!", "\u00a3\u00a3")
     value = value.replace("[State.GetCountry.GetName]", _longest_country_name())
     value = re.sub(r"\[Concept\('\w+',\s*'([^']*)'\)\]", r"\1", value)
     value = re.sub(r"\[(concept_\w+)\]", lambda m: _loc(m.group(1)), value)
@@ -408,7 +435,7 @@ CELLS = {
     "colony stage and location heading (te_sr_subheader)": (
         ("te_sr_subheader", 'block "subheader_text"'),
         r"je_space_race_widget_(ss_loc_\w+|powers_others|mq_header|free_header|sc_mix_header|howc_sub_\w+"
-        r"|windows_header)"),
+        r"|windows_header|eb_totals_header)"),
     "a world's holder: ours (te_sr_site_row)": (
         ("te_sr_site_row", 'text = "je_space_race_widget_ss_ours"'),
         r"je_space_race_widget_ss_ours"),
@@ -506,7 +533,31 @@ CELLS = {
         r"je_space_race_widget_tab_(mission|system)"),
     "the colony views (te_sr_colony_view_button)": (
         ("te_sr_colony_view_button", 'block "view_label"'),
-        r"je_space_race_widget_cv_(people|modules|autonomy|defences|back)"),
+        r"je_space_race_widget_cv_(people|modules|autonomy|defences|bases|back)"),
+    # The Bases view (Extraplanetary Base ground types design § 9.1): the
+    # checkbox, a box's words, the totals' rows, and the move area's lines
+    # that name no place (MOVE_PLACES has those).
+    "the Bases checkbox's label (te_sr_sec_colonies)": (
+        ("te_sr_sec_colonies", 'text = "je_space_race_widget_eb_auto"'),
+        r"je_space_race_widget_eb_auto"),
+    "a base box's profit word (te_sr_eb_level_line)": (
+        ("te_sr_eb_level_line", 'text = "je_space_race_widget_eb_a_level"'),
+        r"je_space_race_widget_eb_a_level"),
+    "a base box's not-serving word (te_sr_eb_level_line)": (
+        ("te_sr_eb_level_line", 'text = "je_space_race_widget_eb_blockaded"'),
+        r"je_space_race_widget_eb_(blockaded|occupied)"),
+    "a base box's levels elsewhere (te_sr_eb_level_line)": (
+        ("te_sr_eb_level_line", 'text = "je_space_race_widget_eb_elsewhere"'),
+        r"je_space_race_widget_eb_elsewhere"),
+    "a Bases totals row's name (te_sr_eb_total_row)": (
+        ("te_sr_eb_total_row", 'block "total_label"'),
+        r"je_space_race_widget_eb_(now|if_prices_hold|at_assignments)"),
+    "a Bases totals row's profit (te_sr_eb_total_row)": (
+        ("te_sr_eb_total_row", 'block "total_value"'),
+        r"je_space_race_widget_eb_(now|end)_profit"),
+    "a line of the Bases move area (te_sr_eb_move_text)": (
+        ("te_sr_eb_move_text", None),
+        r"je_space_race_widget_eb_(toward|toward_months|at_assignments_line|moving|stay|all_lose|no_gain|last|last_one)"),
     "the next fleet's label (te_sr_cf_dest_row)": (
         ("te_sr_cf_dest_row", 'block "dest_label"'),
         r"je_space_race_widget_cf_(target_label|next_label)"),
@@ -657,6 +708,11 @@ SECTION_HEADERS = (r"je_space_race_widget_(control_header|rivals_header|colonies
                    r"|sc_header|space_fleets_header|locations_header|tp_title|xf_title|dp_title|ft_title)")
 
 
+# The Bases move area's lines that name a place, through the controls' custom
+# loc (sr_eb_place_*): measured at the longest place name (test_the_move_line_fits).
+MOVE_PLACES = r"je_space_race_widget_eb_(from_to|gain|loss|last_from_to)"
+
+
 # Cells that wrap to a second line on purpose: the overview's state cell, where
 # Safe and Ambitious carry their weekly cost under the word (audit SPC-11).
 TWO_LINE = {"te_sr_ov_icon_label": 2}
@@ -767,7 +823,7 @@ class LabelBudgetTest(unittest.TestCase):
 
     def test_every_key_is_measured_or_wraps(self):
         """A new label must join a cell above, or be multi-line text."""
-        patterns = [p for _, p in CELLS.values()] + [SECTION_HEADERS, MULTILINE]
+        patterns = [p for _, p in CELLS.values()] + [SECTION_HEADERS, MULTILINE, MOVE_PLACES]
         for key in self.keys:
             with self.subTest(key=key):
                 self.assertTrue(any(re.fullmatch(p, key) for p in patterns), f"{key} is in no cell")
@@ -789,6 +845,27 @@ class LabelBudgetTest(unittest.TestCase):
         self.assertEqual(_longest_country_name(), "United Socialist Council Republics of California")
         self.assertEqual(_render(_loc("je_space_race_widget_rival_range_mars_landing")), "100%–100%")
         self.assertEqual(_render(_loc("je_space_race_widget_power_lead_suborbital")), "Suborbital Flight: 100%–100%")
+
+    def test_the_move_line_fits(self):
+        """The Bases view's move area (ground types design § 9.1): each line
+        that names a place, at the longest of the 41 places' names, fits the
+        line it shows in, its figures at their longest."""
+        sys.path.insert(0, os.path.join(REPO, "scripts", "generators"))
+        import ebase_ground as eg
+        longest = max((_loc(f"sr_site_name_{k}") for k in eg.PLACES), key=len)
+        self.assertEqual(longest, "Near-Earth Asteroids")
+        width, font = _cell(self.gui, "te_sr_eb_move_text", None)
+        self.assertEqual(width, 472)
+        keys = [k for k in self.keys if re.fullmatch(MOVE_PLACES, k)]
+        self.assertEqual(len(keys), 4)
+        for key in keys:
+            with self.subTest(key=key):
+                text = re.sub(r"\[JournalEntry\.GetCountry\.GetCustom\('sr_eb_place_\w+'\)\]", longest, _loc(key))
+                self.assertNotIn("GetCustom", text)
+                need = len(_render(text)) * UNITS_PER_CHAR[font] * MARGIN
+                self.assertLessEqual(need, width, f"{key} renders {_render(text)!r}: {need:.0f} units")
+        self.assertEqual(_render(_loc("je_space_race_widget_eb_toward")), "Moving toward our assignments: 99999 levels to go")
+        self.assertEqual(_render(_loc("je_space_race_widget_eb_moving")), "Moving up to 9999 levels a month, since 2136")
 
     def test_the_owners_overrun_is_caught(self):
         """The budget flags what the owner saw: "Next Colony" in the old 90."""
@@ -933,6 +1010,58 @@ class FigureBudgetTest(unittest.TestCase):
         self._check("te_sr_free_row", self.FREE)
         self._check("te_sr_mq_row", self.QUEUE)
         self._check("te_sr_site_row", self.SITE)
+
+    def test_a_base_box(self):
+        """The Bases view's boxes (ground types design § 9.1): the levels over
+        the room ("99999 / 99999", "→ 99999"), the profit a level ("+999K"
+        and the money icon), the levels away; a good's figure at five digits
+        (seven to a line); the grade; each ground type's word, as each row
+        prints it; and the near-Earth asteroids' name in its wider cell."""
+        self._check("te_sr_eb_level_line", {"ebl_levels": "99999 / 99999", "ebl_target": "\u2192 99999",
+                                            "ebl_profit": "\u00a3\u00a3+999K", "ebl_away": "99999"})
+        self._check("te_sr_eb_good_cell", {"good_figure": "99999"})
+        self._check("te_sr_eb_ground_part", {"ebg_grade": "\u221245%"})
+        gui, rows = _read(GUI), _read(ROWS)
+        box = _textbox_with(_type_body(gui, "te_sr_eb_ground_part"), 'block "ebg_ground"')
+        words = re.findall(r'blockoverride "eb_ground" \{\s*text = "(sr_ground_\w+)"', rows)
+        self.assertEqual(len(words), 41)   # the 40 colonies' rows and the near-Earth box
+        for key in sorted(set(words)):
+            with self.subTest(key=key):
+                self.assertLessEqual(len(_loc(key)) * UNITS_PER_CHAR[_font(box)] * MARGIN, _width(box), _loc(key))
+        grade = _textbox_with(_type_body(gui, "te_sr_eb_ground_part"), 'block "ebg_grade"')
+        for figure in re.findall(r'blockoverride "eb_grade" \{\s*raw_text = "([^"]*)"', rows):
+            self.assertLessEqual(len(figure) * UNITS_PER_CHAR[_font(grade)] * MARGIN, _width(grade), figure)
+        name = _textbox_with(_type_body(gui, "te_sr_eb_near_earth_box"), 'text = "sr_site_name_near_earth"')
+        self.assertLessEqual(len(_loc("sr_site_name_near_earth")) * UNITS_PER_CHAR[_font(name)] * MARGIN, _width(name))
+
+    def test_a_base_box_fits_a_row(self):
+        """A box's lines in a colony row's 472 (the 480 column less the row's
+        margins): line 1 with the ground part, line 2's cells and buttons,
+        and the seven goods."""
+        gui = _read(GUI)
+        part = _type_body(gui, "te_sr_eb_ground_part")
+        part_width = sum(_width(b) for b in _textboxes(part)) + int(re.search(r"spacing = (\d+)", part).group(1))
+        row = _type_body(gui, "te_sr_colony_row")
+        self.assertIn("size = { 180 24 }", row)
+        self.assertLessEqual(24 + 4 + 180 + 4 + 24 + 4 + part_width, 472)
+        line = _type_body(gui, "te_sr_eb_level_line")
+        second = line[:line.index('block "ebl_away_visible"')]
+        cells = [int(w) for w in re.findall(r"size = \{ (\d+) 24 \}", second)]
+        self.assertEqual(cells, [200, 24, 24, 150])
+        self.assertLessEqual(28 + sum(cells) + 4 * (len(cells) - 1), 472)
+        levels = [_width(b) for b in _textboxes(second) if 'block "ebl_levels"' in b or 'block "ebl_target"' in b]
+        self.assertLessEqual(sum(levels) + 4, 200)
+        profit = [_width(b) for b in _textboxes(second) if 'block "ebl_profit"' in b or "eb_a_level" in b]
+        self.assertLessEqual(sum(profit) + 4, 150)
+        away = [_width(b) for b in _textboxes(line[line.index('block "ebl_away_visible"'):])]
+        self.assertLessEqual(28 + max(away[:2]) + sum(away[2:]) + 4 * 2, 472)
+        cell = int(re.search(r"size = \{ (\d+) 22 \}", _type_body(gui, "te_sr_eb_good_cell")).group(1))
+        goods = _type_body(gui, "te_sr_eb_goods_line")
+        self.assertEqual(goods.count("te_sr_eb_good_cell = {"), 7)
+        spacing, margin = (int(re.search(rf"{w} = (\d+)", goods).group(1)) for w in ("spacing", "margin_left"))
+        self.assertLessEqual(margin + 7 * cell + 6 * spacing, 472)
+        figure = _textbox_with(_type_body(gui, "te_sr_eb_good_cell"), 'block "good_figure"')
+        self.assertLessEqual(17 + _width(figure), cell)
 
     def test_fleet_and_location_rows(self):
         self._check("te_sr_fleet_row", self.FLEET)

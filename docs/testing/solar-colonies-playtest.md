@@ -548,6 +548,41 @@ Owner, 2026-10-31: a level past all of a country's room works at −75% (`gen_so
 2. **The crew.** A base of 20 levels or more on the Asteroid Mine shows about 500 machinists, 400 engineers and 100 academics, and no more after another level. Its output is the method's per level × its levels (× throughput), as the output tooltip lists, once the crew is in.
 3. **The crew fills.** A month or two after a base is built or grows, its staff reads at or near the crew; if many bases sit well below it, look for a state short of engineers before raising the attractiveness.
 
+## Extraplanetary Base ground types: the Bases view (2026-11-21)
+
+Design: `docs/superpowers/specs/2026-11-05-extraplanetary-base-ground-types-design.md` § 9.1. Simple or Full
+Colonies, In-Situ Resource Utilization, a few colonies held and a base of 50 levels or more. The view's figures
+are the refresh's: give a new base a month before reading them.
+
+1. **The look.** The Colonies switch shows five buttons on one line, People to Bases, none clipped. Bases shows the
+   checkbox and "Assign for the most profit"; the levels rows; the move lines; "Output a Week, Before Other
+   Modifiers" with Now and If prices hold, each a profit on the right and seven goods icons under it; then, with
+   Asteroid Mining, the near-Earth asteroids' box; then each colony's box: its name, its ground type and grade on
+   the first line, "levels / room", − and + and "£… a level" on the second, seven goods on the third. Nothing
+   overlaps or runs past the panel's edge, and "Near-Earth Asteroids" is not cut off.
+2. **`|K` in the totals.** The totals' goods read at most five characters ("12.3K", "1.23M"). If the game prints
+   six ("123.4K"), the cell cuts them off: widen `te_sr_eb_good_cell` by narrowing its icon, or print the totals
+   with `|0` on two lines.
+3. **The checkbox.** The mod's first `checkbutton`: it draws ticked with the checkbox on, at 24 × 24, and a click
+   unticks it (`sr_ebase_auto_sgui`), the second row turning to "At our assignments". Its hover gives the rule.
+4. **− and +.** With the checkbox off, a click on a colony's + raises its assignment by 5 and "→ N" appears beside
+   its levels; a right-click raises it by 25, and − lowers it the same ways. `onrightclick` has not been used on a
+   scripted GUI's button in the mod before: if a right-click does nothing, give each box ±25 buttons of its own. A
+   click with the checkbox on unticks it first.
+5. **The move lines.** With the checkbox on and a move under way (raise one good's price until a site of another
+   type earns more): "Moving up to N levels a month, since <year>", "From <site> to <site>", and "<site> earns N%
+   more a level", or "<site> loses money a level". With nothing moving: "Levels stay where they are" and why. With
+   the checkbox off: the levels to go and about how many months; at the assignments, "no levels left to move".
+   Once a move has ended, "Last move: <year> to <year>" and its sites. The lines give years, not months.
+6. **A colony that doesn't serve us.** A blockaded colony stays listed, its box reading "Blockaded: N levels
+   elsewhere until freed" in red; an occupied one reads "Occupied:" and is still listed.
+7. **The hovers.** The view button's hover, and each good's hover in a box, name the method most of our levels run.
+   The totals heading's hover ends with our country's breakdown of Extraplanetary Base throughput; if that line
+   prints nothing or raw text, drop it from `je_space_race_widget_eb_totals_tt`.
+8. **Frame time.** With Bases open on a save holding 20 colonies, the panel's frame time is about that of People
+   (measure with `wall2.py`). Every figure is a stored variable or a short trigger, so it should be. If it isn't,
+   store the view's per-place values (the arrow, the levels to go, every site losing money) at the refresh as well.
+
 ## Taking a module down (2026-10-31)
 
 Owner, 2026-10-31: on a colony's page each module has a minus button that takes one level down over 12 months
