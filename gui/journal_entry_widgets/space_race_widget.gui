@@ -2457,11 +2457,39 @@ types space_race_widget_types
 						}
 					}
 				}
-				### Terraforming (era 13 spec § 7.11), where the list shows its line.
+				### Its Resort Colony room and draw (#1948 design § 9). The list row has no
+				### width left for them, so they are on the page and in Solar System.
 				te_sr_page_tile = {
-					block "terra_visible" {
-						visible = no
+					blockoverride "tile_tooltip" {
+						block "module_resorts_tooltip" {}
 					}
+					blockoverride "tile_icon" {
+						texture = "gfx/interface/icons/building_icons/building_tourism_industry.dds"
+					}
+					blockoverride "tile_caption" {
+						text = "je_space_race_widget_page_resorts"
+					}
+					blockoverride "tile_value" {
+						te_sr_page_value = {
+							default_format = "#v"
+							block "module_resorts" {}
+						}
+						te_sr_page_value = {
+							block "module_draw" {}
+						}
+					}
+				}
+			}
+			### Terraforming (era 13 spec § 7.11), where the list shows its line: a row
+			### of its own, as Base Room and Resort Room fill this one (#1948).
+			flowcontainer = {
+				block "terra_visible" {
+					visible = no
+				}
+				direction = horizontal
+				spacing = 6
+
+				te_sr_page_tile = {
 					blockoverride "tile_tooltip" {
 						tooltip = "je_space_race_widget_terra_progress_tt"
 					}
@@ -3916,6 +3944,28 @@ types space_race_widget_types
 						text = "je_space_race_widget_ebase_queued_figure"
 					}
 				}
+				### Resort Colony levels against their room, and those queued while
+				### there are any (#1948 design § 9), shown with Space Colonization.
+				te_sr_value_row = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_resort_shown'), '(CFixedPoint)1' )]"
+					tooltip = "je_space_race_widget_resort_tt"
+					blockoverride "row_label" {
+						text = "je_space_race_widget_resort_label"
+					}
+					blockoverride "row_value" {
+						text = "je_space_race_widget_resort_figure"
+					}
+				}
+				te_sr_value_row = {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_resort_queued'), '(CFixedPoint)0' )]"
+					tooltip = "je_space_race_widget_resort_tt"
+					blockoverride "row_label" {
+						text = "je_space_race_widget_resort_queued_label"
+					}
+					blockoverride "row_value" {
+						text = "je_space_race_widget_resort_queued_figure"
+					}
+				}
 				### The queue on its own (the owner, 2026-10-31: "visually separate
 				### the Queue better"): its heading with the count, then an inset
 				### box holding when the next module is built and the places, and
@@ -4429,6 +4479,33 @@ types space_race_widget_types
 						using = te_sr_fontsize_row
 						elide = right
 						block "site_ground" {}
+					}
+				}
+			}
+			### Its Resort Colony room and draw (#1948 design § 9).
+			widget = {
+				size = { 120 22 }
+				parentanchor = vcenter
+				tooltip = "je_space_race_widget_ss_resorts_tt"
+
+				flowcontainer = {
+					direction = horizontal
+					spacing = 4
+					parentanchor = left|vcenter
+
+					icon = {
+						size = { 18 18 }
+						parentanchor = vcenter
+						texture = "gfx/interface/icons/building_icons/building_tourism_industry.dds"
+					}
+					textbox = {
+						parentanchor = vcenter
+						autoresize = yes
+						max_width = 96
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						block "site_resorts" {}
 					}
 				}
 			}
@@ -9628,10 +9705,10 @@ types space_race_widget_types
 						### the building is ours to build. Levels, queue and room are read live; the
 						### grades come from the monthly refresh and the one when a base is built
 						### (space_race_events.110).
-						### The row also holds the Earth alert's Hostile Fleet cell (§ 9), so it
-						### shows while either cell does.
+						### The row also holds the Resort Room cell (#1948) and the Earth alert's
+						### Hostile Fleet cell (§ 9), so it shows while any of them does.
 						flowcontainer = {
-							visible = "[Or( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' ), And( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)1' ) ) )]"
+							visible = "[Or( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' ), Or( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_resort_shown'), '(CFixedPoint)1' ), And( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)1' ) ) ) )]"
 							direction = horizontal
 							ignoreinvisible = yes
 							spacing = 4
@@ -9679,6 +9756,54 @@ types space_race_widget_types
 										position = { 78 46 }
 										visible = "[Not( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_next_past'), '(CFixedPoint)1' ) )]"
 										text = "je_space_race_widget_ovc_ebase_fig"
+									}
+								}
+							}
+							# Resort Room (#1948 design § 9): the twin of Base Room for the Resort
+							# Colony, built and queued levels against its room, red past it, and the
+							# draw the next level would work at. Shown with Space Colonization.
+							te_banking_ov_cell = {
+								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_resort_shown'), '(CFixedPoint)1' )]"
+								tooltip = "je_space_race_widget_ovc_resort_tt"
+								blockoverride "caption" {
+									text = "je_space_race_widget_ovc_resort_cap"
+								}
+								blockoverride "icons" {
+									icon = {
+										size = { 100% 100% }
+										texture = "gfx/interface/icons/building_icons/building_tourism_industry.dds"
+									}
+								}
+								blockoverride "word" {
+									# Built and queued levels against the room: apart while they fit
+									# (sr_disp_resort_split), their sum when not; red past the room.
+									te_banking_ov_word = {
+										visible = "[And( Not( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_resort_past'), '(CFixedPoint)1' ) ), Not( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_resort_split'), '(CFixedPoint)1' ) ) )]"
+										text = "je_space_race_widget_ovc_resort_word"
+									}
+									te_banking_ov_word = {
+										visible = "[And( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_resort_past'), '(CFixedPoint)1' ), Not( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_resort_split'), '(CFixedPoint)1' ) ) )]"
+										text = "je_space_race_widget_ovc_resort_word_past"
+									}
+									te_banking_ov_word = {
+										visible = "[And( Not( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_resort_past'), '(CFixedPoint)1' ) ), EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_resort_split'), '(CFixedPoint)1' ) )]"
+										text = "je_space_race_widget_ovc_resort_word_split"
+									}
+									te_banking_ov_word = {
+										visible = "[And( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_resort_past'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_resort_split'), '(CFixedPoint)1' ) )]"
+										text = "je_space_race_widget_ovc_resort_word_split_past"
+									}
+								}
+								blockoverride "third_line" {
+									te_banking_ov_word = {
+										position = { 78 46 }
+										visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_resort_next_draw'), '(CFixedPoint)0' )]"
+										text = "je_space_race_widget_ovc_resort_fig_plus"
+									}
+									te_banking_ov_word = {
+										position = { 78 46 }
+										visible = "[Not( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_resort_next_draw'), '(CFixedPoint)0' ) )]"
+										text = "je_space_race_widget_ovc_resort_fig"
 									}
 								}
 							}

@@ -109,6 +109,7 @@ concept_sr_module = {}
 concept_sr_base_grade = {}
 # Which goods a site's ground holds for Extraplanetary Bases (ground types design § 9.6).
 concept_sr_ground_type = {}
+concept_sr_resort_draw = {}
 concept_sr_colony_autonomy = {}
 concept_sr_free_colony = {}
 concept_sr_blockade = {}

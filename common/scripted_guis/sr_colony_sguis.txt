@@ -267,6 +267,15 @@ sr_colony_module_sgui = {
 					text = sr_mod_req_price_fits_tt
 					sr_mod_scope_price_fits = yes
 				}
+				# The Off-World Resort (code 10; #1948 design § 7): room for Resort Colony
+				# levels, so it waits for the building's technology.
+				trigger_if = {
+					limit = { scope:op = 10 }
+					custom_tooltip = {
+						text = sr_mod_req_resort_tech_tt
+						has_technology_researched = space_colonization
+					}
+				}
 				# Terraforming (code 16; era 13 spec § 7.11): the technology's marker, at
 				# most three at a world at once, and only while the world is unfinished.
 				# Only the worlds that take it have its button.

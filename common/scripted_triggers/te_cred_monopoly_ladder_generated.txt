@@ -220,6 +220,7 @@ te_cred_company_can_take_monopoly_generated = {
 						is_building_type = building_aerospace_industry
 						is_building_type = building_tourism_industry
 						is_building_type = building_space_mine
+						is_building_type = building_space_resort
 						is_building_type = building_axiom_space_hq
 					}
 				}

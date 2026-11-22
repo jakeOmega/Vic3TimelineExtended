@@ -517,6 +517,8 @@
  goods_input_launch_capacity_mult_desc:0 "The amount of @launch_capacity! $launch_capacity$ consumed by buildings"
  goods_input_luxury_clothes_add:0 "@luxury_clothes! $luxury_clothes$ Input"
  goods_input_luxury_clothes_add_desc:0 "The amount of @luxury_clothes! $luxury_clothes$ consumed by buildings"
+ goods_input_luxury_furniture_add:0 "@luxury_furniture! $luxury_furniture$ Input"
+ goods_input_luxury_furniture_add_desc:0 "The amount of @luxury_furniture! $luxury_furniture$ consumed by buildings"
  goods_input_magnetic_drive_ships_add:0 "@magnetic_drive_ships! $magnetic_drive_ships$ Input"
  goods_input_magnetic_drive_ships_add_desc:0 "The amount of @magnetic_drive_ships! $magnetic_drive_ships$ consumed by buildings"
  goods_input_merchant_marine_mult:0 "@merchant_marine! $merchant_marine$ Input"

@@ -448,6 +448,44 @@ REPLACE_OR_CREATE:building_space_mine = {
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
 
+# The Resort Colony (#1948, docs/superpowers/specs/2026-11-21-resort-colony-building-design.md):
+# hotels at the colonies, sold and staffed from Earth, as the Extraplanetary Base's
+# mines are. Its Luxury Resorts method left the base in 2026-11, where its levels
+# took base room and worked at the mining grade. Its levels work their own room
+# instead: 10 in Earth orbit, each colony's own and its Off-World Resorts' (§ 6),
+# best draw first, -75% past it. It shares the base's logistics groups, which cut
+# its Launch Capacity bill.
+REPLACE_OR_CREATE:building_space_resort = {
+	building_group = bg_exotic
+	icon = "gfx/interface/icons/building_icons/building_tourism_industry.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	unlocking_technologies = {
+		space_colonization
+	}
+
+	production_method_groups = {
+		pmg_base_building_space_resort
+		pmg_launch_to_orbit_building_space_mine
+		pmg_transport_in_space_building_space_mine
+		pmg_maintenance_intensive
+	}
+
+	required_construction = construction_cost_space_mine
+	# Simple and full colonies: no private investor builds past the room, and no AI
+	# government; a player's government can, at the penalty. Under races only both
+	# always pass (sr_resort_has_room).
+	can_build_government = {
+		owner ?= { sr_resort_may_build_government = yes }
+	}
+	can_build_private = {
+		owner ?= { sr_resort_may_build_private = yes }
+	}
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
 INJECT:building_university = {
 
 	production_method_groups = {

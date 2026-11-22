@@ -3272,6 +3272,11 @@ sr_site_ebase_room_valles_marineris = {
 	value = 200
 	add = { value = sr_site_mine_staffed_valles_marineris multiply = sr_mod_mine_room floor = yes }
 }
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_valles_marineris = {
+	value = 50
+	add = { value = sr_site_resort_staffed_valles_marineris multiply = sr_mod_resort_room floor = yes }
+}
 sr_mod_spec_used_valles_marineris = {
 	value = sr_site_spec_built_valles_marineris
 	if = { limit = { has_variable = sr_mq_a_valles_marineris } add = var:sr_mq_a_valles_marineris }
@@ -3498,6 +3503,11 @@ sr_site_ebase_room_olympus_mons = {
 	value = 150
 	add = { value = sr_site_mine_staffed_olympus_mons multiply = sr_mod_mine_room floor = yes }
 }
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_olympus_mons = {
+	value = 40
+	add = { value = sr_site_resort_staffed_olympus_mons multiply = sr_mod_resort_room floor = yes }
+}
 sr_mod_spec_used_olympus_mons = {
 	value = sr_site_spec_built_olympus_mons
 	if = { limit = { has_variable = sr_mq_a_olympus_mons } add = var:sr_mq_a_olympus_mons }
@@ -3722,6 +3732,11 @@ sr_site_terra_staffed_hellas_planitia = { value = sr_site_terra_value_hellas_pla
 sr_site_ebase_room_hellas_planitia = {
 	value = 200
 	add = { value = sr_site_mine_staffed_hellas_planitia multiply = sr_mod_mine_room floor = yes }
+}
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_hellas_planitia = {
+	value = 50
+	add = { value = sr_site_resort_staffed_hellas_planitia multiply = sr_mod_resort_room floor = yes }
 }
 sr_mod_spec_used_hellas_planitia = {
 	value = sr_site_spec_built_hellas_planitia
@@ -3950,6 +3965,11 @@ sr_site_ebase_room_utopia_planitia = {
 	value = 200
 	add = { value = sr_site_mine_staffed_utopia_planitia multiply = sr_mod_mine_room floor = yes }
 }
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_utopia_planitia = {
+	value = 50
+	add = { value = sr_site_resort_staffed_utopia_planitia multiply = sr_mod_resort_room floor = yes }
+}
 sr_mod_spec_used_utopia_planitia = {
 	value = sr_site_spec_built_utopia_planitia
 	if = { limit = { has_variable = sr_mq_a_utopia_planitia } add = var:sr_mq_a_utopia_planitia }
@@ -4175,6 +4195,11 @@ sr_site_ebase_room_arcadia_planitia = {
 	value = 150
 	add = { value = sr_site_mine_staffed_arcadia_planitia multiply = sr_mod_mine_room floor = yes }
 }
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_arcadia_planitia = {
+	value = 40
+	add = { value = sr_site_resort_staffed_arcadia_planitia multiply = sr_mod_resort_room floor = yes }
+}
 sr_mod_spec_used_arcadia_planitia = {
 	value = sr_site_spec_built_arcadia_planitia
 	if = { limit = { has_variable = sr_mq_a_arcadia_planitia } add = var:sr_mq_a_arcadia_planitia }
@@ -4393,6 +4418,11 @@ sr_site_ebase_room_ceres = {
 	value = 200
 	add = { value = sr_site_mine_staffed_ceres multiply = sr_mod_mine_room floor = yes }
 }
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_ceres = {
+	value = 40
+	add = { value = sr_site_resort_staffed_ceres multiply = sr_mod_resort_room floor = yes }
+}
 sr_mod_spec_used_ceres = {
 	value = sr_site_spec_built_ceres
 	if = { limit = { has_variable = sr_mq_a_ceres } add = var:sr_mq_a_ceres }
@@ -4608,6 +4638,11 @@ sr_site_admin_staffed_vesta = { value = sr_site_admin_value_vesta multiply = sr_
 sr_site_ebase_room_vesta = {
 	value = 200
 	add = { value = sr_site_mine_staffed_vesta multiply = sr_mod_mine_room floor = yes }
+}
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_vesta = {
+	value = 25
+	add = { value = sr_site_resort_staffed_vesta multiply = sr_mod_resort_room floor = yes }
 }
 sr_mod_spec_used_vesta = {
 	value = sr_site_spec_built_vesta
@@ -4825,6 +4860,11 @@ sr_site_ebase_room_psyche = {
 	value = 300
 	add = { value = sr_site_mine_staffed_psyche multiply = sr_mod_mine_room floor = yes }
 }
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_psyche = {
+	value = 20
+	add = { value = sr_site_resort_staffed_psyche multiply = sr_mod_resort_room floor = yes }
+}
 sr_mod_spec_used_psyche = {
 	value = sr_site_spec_built_psyche
 	if = { limit = { has_variable = sr_mq_a_psyche } add = var:sr_mq_a_psyche }
@@ -5040,6 +5080,11 @@ sr_site_admin_staffed_pallas = { value = sr_site_admin_value_pallas multiply = s
 sr_site_ebase_room_pallas = {
 	value = 150
 	add = { value = sr_site_mine_staffed_pallas multiply = sr_mod_mine_room floor = yes }
+}
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_pallas = {
+	value = 20
+	add = { value = sr_site_resort_staffed_pallas multiply = sr_mod_resort_room floor = yes }
 }
 sr_mod_spec_used_pallas = {
 	value = sr_site_spec_built_pallas
@@ -5258,6 +5303,11 @@ sr_site_ebase_room_hygiea = {
 	value = 100
 	add = { value = sr_site_mine_staffed_hygiea multiply = sr_mod_mine_room floor = yes }
 }
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_hygiea = {
+	value = 15
+	add = { value = sr_site_resort_staffed_hygiea multiply = sr_mod_resort_room floor = yes }
+}
 sr_mod_spec_used_hygiea = {
 	value = sr_site_spec_built_hygiea
 	if = { limit = { has_variable = sr_mq_a_hygiea } add = var:sr_mq_a_hygiea }
@@ -5474,6 +5524,11 @@ sr_site_ebase_room_io = {
 	value = 100
 	add = { value = sr_site_mine_staffed_io multiply = sr_mod_mine_room floor = yes }
 }
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_io = {
+	value = 15
+	add = { value = sr_site_resort_staffed_io multiply = sr_mod_resort_room floor = yes }
+}
 sr_mod_spec_used_io = {
 	value = sr_site_spec_built_io
 	if = { limit = { has_variable = sr_mq_a_io } add = var:sr_mq_a_io }
@@ -5688,6 +5743,11 @@ sr_site_admin_staffed_europa = { value = sr_site_admin_value_europa multiply = s
 sr_site_ebase_room_europa = {
 	value = 100
 	add = { value = sr_site_mine_staffed_europa multiply = sr_mod_mine_room floor = yes }
+}
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_europa = {
+	value = 30
+	add = { value = sr_site_resort_staffed_europa multiply = sr_mod_resort_room floor = yes }
 }
 sr_mod_spec_used_europa = {
 	value = sr_site_spec_built_europa
@@ -5911,6 +5971,11 @@ sr_site_terra_staffed_ganymede = { value = sr_site_terra_value_ganymede multiply
 sr_site_ebase_room_ganymede = {
 	value = 150
 	add = { value = sr_site_mine_staffed_ganymede multiply = sr_mod_mine_room floor = yes }
+}
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_ganymede = {
+	value = 40
+	add = { value = sr_site_resort_staffed_ganymede multiply = sr_mod_resort_room floor = yes }
 }
 sr_mod_spec_used_ganymede = {
 	value = sr_site_spec_built_ganymede
@@ -6137,6 +6202,11 @@ sr_site_ebase_room_callisto = {
 	value = 150
 	add = { value = sr_site_mine_staffed_callisto multiply = sr_mod_mine_room floor = yes }
 }
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_callisto = {
+	value = 40
+	add = { value = sr_site_resort_staffed_callisto multiply = sr_mod_resort_room floor = yes }
+}
 sr_mod_spec_used_callisto = {
 	value = sr_site_spec_built_callisto
 	if = { limit = { has_variable = sr_mq_a_callisto } add = var:sr_mq_a_callisto }
@@ -6355,6 +6425,11 @@ sr_site_ebase_room_himalia = {
 	value = 100
 	add = { value = sr_site_mine_staffed_himalia multiply = sr_mod_mine_room floor = yes }
 }
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_himalia = {
+	value = 10
+	add = { value = sr_site_resort_staffed_himalia multiply = sr_mod_resort_room floor = yes }
+}
 sr_mod_spec_used_himalia = {
 	value = sr_site_spec_built_himalia
 	if = { limit = { has_variable = sr_mq_a_himalia } add = var:sr_mq_a_himalia }
@@ -6570,6 +6645,11 @@ sr_site_admin_staffed_amalthea = { value = sr_site_admin_value_amalthea multiply
 sr_site_ebase_room_amalthea = {
 	value = 50
 	add = { value = sr_site_mine_staffed_amalthea multiply = sr_mod_mine_room floor = yes }
+}
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_amalthea = {
+	value = 10
+	add = { value = sr_site_resort_staffed_amalthea multiply = sr_mod_resort_room floor = yes }
 }
 sr_mod_spec_used_amalthea = {
 	value = sr_site_spec_built_amalthea
@@ -6795,6 +6875,11 @@ sr_site_ebase_room_venus = {
 	value = 50
 	add = { value = sr_site_mine_staffed_venus multiply = sr_mod_mine_room floor = yes }
 }
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_venus = {
+	value = 30
+	add = { value = sr_site_resort_staffed_venus multiply = sr_mod_resort_room floor = yes }
+}
 sr_mod_spec_used_venus = {
 	value = sr_site_spec_built_venus
 	if = { limit = { has_variable = sr_mq_a_venus } add = var:sr_mq_a_venus }
@@ -7013,6 +7098,11 @@ sr_site_admin_staffed_mercury = { value = sr_site_admin_value_mercury multiply =
 sr_site_ebase_room_mercury = {
 	value = 200
 	add = { value = sr_site_mine_staffed_mercury multiply = sr_mod_mine_room floor = yes }
+}
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_mercury = {
+	value = 25
+	add = { value = sr_site_resort_staffed_mercury multiply = sr_mod_resort_room floor = yes }
 }
 sr_mod_spec_used_mercury = {
 	value = sr_site_spec_built_mercury
@@ -7238,6 +7328,11 @@ sr_site_ebase_room_titan = {
 	value = 100
 	add = { value = sr_site_mine_staffed_titan multiply = sr_mod_mine_room floor = yes }
 }
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_titan = {
+	value = 40
+	add = { value = sr_site_resort_staffed_titan multiply = sr_mod_resort_room floor = yes }
+}
 sr_mod_spec_used_titan = {
 	value = sr_site_spec_built_titan
 	if = { limit = { has_variable = sr_mq_a_titan } add = var:sr_mq_a_titan }
@@ -7456,6 +7551,11 @@ sr_site_ebase_room_enceladus = {
 	value = 75
 	add = { value = sr_site_mine_staffed_enceladus multiply = sr_mod_mine_room floor = yes }
 }
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_enceladus = {
+	value = 20
+	add = { value = sr_site_resort_staffed_enceladus multiply = sr_mod_resort_room floor = yes }
+}
 sr_mod_spec_used_enceladus = {
 	value = sr_site_spec_built_enceladus
 	if = { limit = { has_variable = sr_mq_a_enceladus } add = var:sr_mq_a_enceladus }
@@ -7672,6 +7772,11 @@ sr_site_ebase_room_rhea = {
 	value = 100
 	add = { value = sr_site_mine_staffed_rhea multiply = sr_mod_mine_room floor = yes }
 }
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_rhea = {
+	value = 20
+	add = { value = sr_site_resort_staffed_rhea multiply = sr_mod_resort_room floor = yes }
+}
 sr_mod_spec_used_rhea = {
 	value = sr_site_spec_built_rhea
 	if = { limit = { has_variable = sr_mq_a_rhea } add = var:sr_mq_a_rhea }
@@ -7886,6 +7991,11 @@ sr_site_admin_staffed_mimas = { value = sr_site_admin_value_mimas multiply = sr_
 sr_site_ebase_room_mimas = {
 	value = 50
 	add = { value = sr_site_mine_staffed_mimas multiply = sr_mod_mine_room floor = yes }
+}
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_mimas = {
+	value = 10
+	add = { value = sr_site_resort_staffed_mimas multiply = sr_mod_resort_room floor = yes }
 }
 sr_mod_spec_used_mimas = {
 	value = sr_site_spec_built_mimas
@@ -8103,6 +8213,11 @@ sr_site_ebase_room_iapetus = {
 	value = 75
 	add = { value = sr_site_mine_staffed_iapetus multiply = sr_mod_mine_room floor = yes }
 }
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_iapetus = {
+	value = 15
+	add = { value = sr_site_resort_staffed_iapetus multiply = sr_mod_resort_room floor = yes }
+}
 sr_mod_spec_used_iapetus = {
 	value = sr_site_spec_built_iapetus
 	if = { limit = { has_variable = sr_mq_a_iapetus } add = var:sr_mq_a_iapetus }
@@ -8319,6 +8434,11 @@ sr_site_ebase_room_titania = {
 	value = 75
 	add = { value = sr_site_mine_staffed_titania multiply = sr_mod_mine_room floor = yes }
 }
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_titania = {
+	value = 20
+	add = { value = sr_site_resort_staffed_titania multiply = sr_mod_resort_room floor = yes }
+}
 sr_mod_spec_used_titania = {
 	value = sr_site_spec_built_titania
 	if = { limit = { has_variable = sr_mq_a_titania } add = var:sr_mq_a_titania }
@@ -8534,6 +8654,11 @@ sr_site_ebase_room_oberon = {
 	value = 75
 	add = { value = sr_site_mine_staffed_oberon multiply = sr_mod_mine_room floor = yes }
 }
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_oberon = {
+	value = 20
+	add = { value = sr_site_resort_staffed_oberon multiply = sr_mod_resort_room floor = yes }
+}
 sr_mod_spec_used_oberon = {
 	value = sr_site_spec_built_oberon
 	if = { limit = { has_variable = sr_mq_a_oberon } add = var:sr_mq_a_oberon }
@@ -8748,6 +8873,11 @@ sr_site_admin_staffed_miranda = { value = sr_site_admin_value_miranda multiply =
 sr_site_ebase_room_miranda = {
 	value = 50
 	add = { value = sr_site_mine_staffed_miranda multiply = sr_mod_mine_room floor = yes }
+}
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_miranda = {
+	value = 10
+	add = { value = sr_site_resort_staffed_miranda multiply = sr_mod_resort_room floor = yes }
 }
 sr_mod_spec_used_miranda = {
 	value = sr_site_spec_built_miranda
@@ -8965,6 +9095,11 @@ sr_site_ebase_room_ariel = {
 	value = 50
 	add = { value = sr_site_mine_staffed_ariel multiply = sr_mod_mine_room floor = yes }
 }
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_ariel = {
+	value = 15
+	add = { value = sr_site_resort_staffed_ariel multiply = sr_mod_resort_room floor = yes }
+}
 sr_mod_spec_used_ariel = {
 	value = sr_site_spec_built_ariel
 	if = { limit = { has_variable = sr_mq_a_ariel } add = var:sr_mq_a_ariel }
@@ -9180,6 +9315,11 @@ sr_site_admin_staffed_triton = { value = sr_site_admin_value_triton multiply = s
 sr_site_ebase_room_triton = {
 	value = 75
 	add = { value = sr_site_mine_staffed_triton multiply = sr_mod_mine_room floor = yes }
+}
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_triton = {
+	value = 20
+	add = { value = sr_site_resort_staffed_triton multiply = sr_mod_resort_room floor = yes }
 }
 sr_mod_spec_used_triton = {
 	value = sr_site_spec_built_triton
@@ -9397,6 +9537,11 @@ sr_site_ebase_room_proteus = {
 	value = 50
 	add = { value = sr_site_mine_staffed_proteus multiply = sr_mod_mine_room floor = yes }
 }
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_proteus = {
+	value = 10
+	add = { value = sr_site_resort_staffed_proteus multiply = sr_mod_resort_room floor = yes }
+}
 sr_mod_spec_used_proteus = {
 	value = sr_site_spec_built_proteus
 	if = { limit = { has_variable = sr_mq_a_proteus } add = var:sr_mq_a_proteus }
@@ -9612,6 +9757,11 @@ sr_site_admin_staffed_pluto = { value = sr_site_admin_value_pluto multiply = sr_
 sr_site_ebase_room_pluto = {
 	value = 75
 	add = { value = sr_site_mine_staffed_pluto multiply = sr_mod_mine_room floor = yes }
+}
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_pluto = {
+	value = 20
+	add = { value = sr_site_resort_staffed_pluto multiply = sr_mod_resort_room floor = yes }
 }
 sr_mod_spec_used_pluto = {
 	value = sr_site_spec_built_pluto
@@ -9829,6 +9979,11 @@ sr_site_ebase_room_eris = {
 	value = 50
 	add = { value = sr_site_mine_staffed_eris multiply = sr_mod_mine_room floor = yes }
 }
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_eris = {
+	value = 10
+	add = { value = sr_site_resort_staffed_eris multiply = sr_mod_resort_room floor = yes }
+}
 sr_mod_spec_used_eris = {
 	value = sr_site_spec_built_eris
 	if = { limit = { has_variable = sr_mq_a_eris } add = var:sr_mq_a_eris }
@@ -10043,6 +10198,11 @@ sr_site_admin_staffed_makemake = { value = sr_site_admin_value_makemake multiply
 sr_site_ebase_room_makemake = {
 	value = 50
 	add = { value = sr_site_mine_staffed_makemake multiply = sr_mod_mine_room floor = yes }
+}
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_makemake = {
+	value = 10
+	add = { value = sr_site_resort_staffed_makemake multiply = sr_mod_resort_room floor = yes }
 }
 sr_mod_spec_used_makemake = {
 	value = sr_site_spec_built_makemake
@@ -10260,6 +10420,11 @@ sr_site_ebase_room_haumea = {
 	value = 50
 	add = { value = sr_site_mine_staffed_haumea multiply = sr_mod_mine_room floor = yes }
 }
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_haumea = {
+	value = 10
+	add = { value = sr_site_resort_staffed_haumea multiply = sr_mod_resort_room floor = yes }
+}
 sr_mod_spec_used_haumea = {
 	value = sr_site_spec_built_haumea
 	if = { limit = { has_variable = sr_mq_a_haumea } add = var:sr_mq_a_haumea }
@@ -10475,6 +10640,11 @@ sr_site_ebase_room_sedna = {
 	value = 50
 	add = { value = sr_site_mine_staffed_sedna multiply = sr_mod_mine_room floor = yes }
 }
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_sedna = {
+	value = 10
+	add = { value = sr_site_resort_staffed_sedna multiply = sr_mod_resort_room floor = yes }
+}
 sr_mod_spec_used_sedna = {
 	value = sr_site_spec_built_sedna
 	if = { limit = { has_variable = sr_mq_a_sedna } add = var:sr_mq_a_sedna }
@@ -10685,6 +10855,11 @@ sr_site_ebase_room_shackleton = {
 	value = 75
 	add = { value = sr_site_mine_staffed_shackleton multiply = sr_mod_mine_room floor = yes }
 }
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_shackleton = {
+	value = 25
+	add = { value = sr_site_resort_staffed_shackleton multiply = sr_mod_resort_room floor = yes }
+}
 sr_mod_spec_used_shackleton = {
 	value = sr_site_spec_built_shackleton
 	if = { limit = { has_variable = sr_mq_a_shackleton } add = var:sr_mq_a_shackleton }
@@ -10892,6 +11067,11 @@ sr_site_admin_staffed_peary = { value = sr_site_admin_value_peary multiply = sr_
 sr_site_ebase_room_peary = {
 	value = 50
 	add = { value = sr_site_mine_staffed_peary multiply = sr_mod_mine_room floor = yes }
+}
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_peary = {
+	value = 15
+	add = { value = sr_site_resort_staffed_peary multiply = sr_mod_resort_room floor = yes }
 }
 sr_mod_spec_used_peary = {
 	value = sr_site_spec_built_peary
@@ -11102,6 +11282,11 @@ sr_site_ebase_room_tranquility = {
 	value = 100
 	add = { value = sr_site_mine_staffed_tranquility multiply = sr_mod_mine_room floor = yes }
 }
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_tranquility = {
+	value = 20
+	add = { value = sr_site_resort_staffed_tranquility multiply = sr_mod_resort_room floor = yes }
+}
 sr_mod_spec_used_tranquility = {
 	value = sr_site_spec_built_tranquility
 	if = { limit = { has_variable = sr_mq_a_tranquility } add = var:sr_mq_a_tranquility }
@@ -11309,6 +11494,11 @@ sr_site_ebase_room_marius_hills = {
 	value = 125
 	add = { value = sr_site_mine_staffed_marius_hills multiply = sr_mod_mine_room floor = yes }
 }
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_marius_hills = {
+	value = 40
+	add = { value = sr_site_resort_staffed_marius_hills multiply = sr_mod_resort_room floor = yes }
+}
 sr_mod_spec_used_marius_hills = {
 	value = sr_site_spec_built_marius_hills
 	if = { limit = { has_variable = sr_mq_a_marius_hills } add = var:sr_mq_a_marius_hills }
@@ -11515,6 +11705,11 @@ sr_site_admin_staffed_daedalus = { value = sr_site_admin_value_daedalus multiply
 sr_site_ebase_room_daedalus = {
 	value = 50
 	add = { value = sr_site_mine_staffed_daedalus multiply = sr_mod_mine_room floor = yes }
+}
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_daedalus = {
+	value = 10
+	add = { value = sr_site_resort_staffed_daedalus multiply = sr_mod_resort_room floor = yes }
 }
 sr_mod_spec_used_daedalus = {
 	value = sr_site_spec_built_daedalus
@@ -11724,6 +11919,11 @@ sr_site_admin_staffed_imbrium = { value = sr_site_admin_value_imbrium multiply =
 sr_site_ebase_room_imbrium = {
 	value = 125
 	add = { value = sr_site_mine_staffed_imbrium multiply = sr_mod_mine_room floor = yes }
+}
+# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
+sr_site_resort_room_imbrium = {
+	value = 25
+	add = { value = sr_site_resort_staffed_imbrium multiply = sr_mod_resort_room floor = yes }
 }
 sr_mod_spec_used_imbrium = {
 	value = sr_site_spec_built_imbrium
@@ -12411,6 +12611,54 @@ sr_ebase_room_total = {
 	if = { limit = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_blockaded_marius_hills } NOT = { has_global_variable = sr_site_occupier_marius_hills } } add = sr_site_ebase_room_marius_hills }
 	if = { limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_blockaded_daedalus } NOT = { has_global_variable = sr_site_occupier_daedalus } } add = sr_site_ebase_room_daedalus }
 	if = { limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_blockaded_imbrium } NOT = { has_global_variable = sr_site_occupier_imbrium } } add = sr_site_ebase_room_imbrium }
+}
+
+# Country scope: THIS's Resort Colony room, in levels (#1948 design § 6.1): Earth
+# orbit's 10 with space_colonization, the building's technology, and every colony
+# that serves it.
+sr_resort_room_total = {
+	value = 0
+	if = { limit = { has_technology_researched = space_colonization } add = 10 }
+	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_blockaded_valles_marineris } NOT = { has_global_variable = sr_site_occupier_valles_marineris } } add = sr_site_resort_room_valles_marineris }
+	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_blockaded_olympus_mons } NOT = { has_global_variable = sr_site_occupier_olympus_mons } } add = sr_site_resort_room_olympus_mons }
+	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_hellas_planitia } NOT = { has_global_variable = sr_site_occupier_hellas_planitia } } add = sr_site_resort_room_hellas_planitia }
+	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_utopia_planitia } NOT = { has_global_variable = sr_site_occupier_utopia_planitia } } add = sr_site_resort_room_utopia_planitia }
+	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_arcadia_planitia } NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } } add = sr_site_resort_room_arcadia_planitia }
+	if = { limit = { global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_blockaded_ceres } NOT = { has_global_variable = sr_site_occupier_ceres } } add = sr_site_resort_room_ceres }
+	if = { limit = { global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_blockaded_vesta } NOT = { has_global_variable = sr_site_occupier_vesta } } add = sr_site_resort_room_vesta }
+	if = { limit = { global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_blockaded_psyche } NOT = { has_global_variable = sr_site_occupier_psyche } } add = sr_site_resort_room_psyche }
+	if = { limit = { global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_blockaded_pallas } NOT = { has_global_variable = sr_site_occupier_pallas } } add = sr_site_resort_room_pallas }
+	if = { limit = { global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_blockaded_hygiea } NOT = { has_global_variable = sr_site_occupier_hygiea } } add = sr_site_resort_room_hygiea }
+	if = { limit = { global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_blockaded_io } NOT = { has_global_variable = sr_site_occupier_io } } add = sr_site_resort_room_io }
+	if = { limit = { global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_blockaded_europa } NOT = { has_global_variable = sr_site_occupier_europa } } add = sr_site_resort_room_europa }
+	if = { limit = { global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_blockaded_ganymede } NOT = { has_global_variable = sr_site_occupier_ganymede } } add = sr_site_resort_room_ganymede }
+	if = { limit = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_blockaded_callisto } NOT = { has_global_variable = sr_site_occupier_callisto } } add = sr_site_resort_room_callisto }
+	if = { limit = { global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_blockaded_himalia } NOT = { has_global_variable = sr_site_occupier_himalia } } add = sr_site_resort_room_himalia }
+	if = { limit = { global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_blockaded_amalthea } NOT = { has_global_variable = sr_site_occupier_amalthea } } add = sr_site_resort_room_amalthea }
+	if = { limit = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_blockaded_venus } NOT = { has_global_variable = sr_site_occupier_venus } } add = sr_site_resort_room_venus }
+	if = { limit = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_blockaded_mercury } NOT = { has_global_variable = sr_site_occupier_mercury } } add = sr_site_resort_room_mercury }
+	if = { limit = { global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_blockaded_titan } NOT = { has_global_variable = sr_site_occupier_titan } } add = sr_site_resort_room_titan }
+	if = { limit = { global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_blockaded_enceladus } NOT = { has_global_variable = sr_site_occupier_enceladus } } add = sr_site_resort_room_enceladus }
+	if = { limit = { global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_blockaded_rhea } NOT = { has_global_variable = sr_site_occupier_rhea } } add = sr_site_resort_room_rhea }
+	if = { limit = { global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_blockaded_mimas } NOT = { has_global_variable = sr_site_occupier_mimas } } add = sr_site_resort_room_mimas }
+	if = { limit = { global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_blockaded_iapetus } NOT = { has_global_variable = sr_site_occupier_iapetus } } add = sr_site_resort_room_iapetus }
+	if = { limit = { global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_blockaded_titania } NOT = { has_global_variable = sr_site_occupier_titania } } add = sr_site_resort_room_titania }
+	if = { limit = { global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_blockaded_oberon } NOT = { has_global_variable = sr_site_occupier_oberon } } add = sr_site_resort_room_oberon }
+	if = { limit = { global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_blockaded_miranda } NOT = { has_global_variable = sr_site_occupier_miranda } } add = sr_site_resort_room_miranda }
+	if = { limit = { global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_blockaded_ariel } NOT = { has_global_variable = sr_site_occupier_ariel } } add = sr_site_resort_room_ariel }
+	if = { limit = { global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_blockaded_triton } NOT = { has_global_variable = sr_site_occupier_triton } } add = sr_site_resort_room_triton }
+	if = { limit = { global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_blockaded_proteus } NOT = { has_global_variable = sr_site_occupier_proteus } } add = sr_site_resort_room_proteus }
+	if = { limit = { global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_blockaded_pluto } NOT = { has_global_variable = sr_site_occupier_pluto } } add = sr_site_resort_room_pluto }
+	if = { limit = { global_var:sr_site_holder_eris ?= this NOT = { has_global_variable = sr_site_blockaded_eris } NOT = { has_global_variable = sr_site_occupier_eris } } add = sr_site_resort_room_eris }
+	if = { limit = { global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_blockaded_makemake } NOT = { has_global_variable = sr_site_occupier_makemake } } add = sr_site_resort_room_makemake }
+	if = { limit = { global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_blockaded_haumea } NOT = { has_global_variable = sr_site_occupier_haumea } } add = sr_site_resort_room_haumea }
+	if = { limit = { global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_blockaded_sedna } NOT = { has_global_variable = sr_site_occupier_sedna } } add = sr_site_resort_room_sedna }
+	if = { limit = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_blockaded_shackleton } NOT = { has_global_variable = sr_site_occupier_shackleton } } add = sr_site_resort_room_shackleton }
+	if = { limit = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_blockaded_peary } NOT = { has_global_variable = sr_site_occupier_peary } } add = sr_site_resort_room_peary }
+	if = { limit = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_blockaded_tranquility } NOT = { has_global_variable = sr_site_occupier_tranquility } } add = sr_site_resort_room_tranquility }
+	if = { limit = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_blockaded_marius_hills } NOT = { has_global_variable = sr_site_occupier_marius_hills } } add = sr_site_resort_room_marius_hills }
+	if = { limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_blockaded_daedalus } NOT = { has_global_variable = sr_site_occupier_daedalus } } add = sr_site_resort_room_daedalus }
+	if = { limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_blockaded_imbrium } NOT = { has_global_variable = sr_site_occupier_imbrium } } add = sr_site_resort_room_imbrium }
 }
 
 # Country scope: the months until a module waiting at Earth for the world can leave

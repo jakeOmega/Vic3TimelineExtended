@@ -83,7 +83,7 @@ building:
 | 0.05 | Trade Centers, Arts Academies, State Youth Centers, Software Industries, the tech metals mines (lithium, nickel and cobalt, rare earths, platinum group metals), every other mine once it runs a mechanized pump; Railways, Ports and Power Plants on their early methods |
 | 0.1 | Factories of every kind, military industry, synthetic and biotechnology plants, Shipyards, Skyscrapers, Tourism Industries, Public Housing; Railways, Ports and Power Plants on their middle methods |
 | 0.15 | Highways, Airports, Network Infrastructure, Hydro Plants, Renewable Energy Plants, Grid Transfer Stations, HVDC Undersea Interconnectors, Oil Rigs; Railways and Ports on their latest methods |
-| 0.2 | Nuclear Plants, Fusion Plants, Deep-Sea Mines, Extraplanetary Bases |
+| 0.2 | Nuclear Plants, Fusion Plants, Deep-Sea Mines, Extraplanetary Bases, Resort Colonies |
 
 Railways, Ports and Power Plants pay by the method they run, because a level on
 an early method carries a fraction of the traffic or power of a level on a late

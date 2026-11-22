@@ -113,6 +113,7 @@ te_cred_monopoly_ladder_generated = {
 		te_cred_try_monopoly = { BT = building_aerospace_industry }
 		te_cred_try_monopoly = { BT = building_tourism_industry }
 		te_cred_try_monopoly = { BT = building_space_mine }
+		te_cred_try_monopoly = { BT = building_space_resort }
 		te_cred_try_monopoly = { BT = building_axiom_space_hq }
 	}
 	else_if = {

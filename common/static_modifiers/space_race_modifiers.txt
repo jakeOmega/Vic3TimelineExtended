@@ -267,8 +267,8 @@ sr_module_upkeep = {
 # docs/superpowers/specs/2026-10-30-colony-management-design.md § 7)
 # Declared on the entry, each at its staffed levels at the colonies that serve
 # us (sr_mod_units_<key>; common/journal_entries/sr_sites_generated.txt). The Mining
-# Complex, Orbital Yard, Nuclear Command Center and Administration have no
-# modifier: they feed other numbers (sr_colony_module_values.txt).
+# Complex, Orbital Yard, Off-World Resort (since #1948), Nuclear Command Center and
+# Administration have no modifier: they feed other numbers (sr_colony_module_values.txt).
 sr_module_lab = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_tech_research_speed_mult = 0.02
@@ -278,11 +278,6 @@ sr_module_culture = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
 	country_cultural_pull_mult = 0.03
 	country_prestige_mult = 0.01
-}
-
-sr_module_resort = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	goods_output_tourism_mult = 0.03
 }
 
 sr_module_black = {
@@ -412,6 +407,16 @@ sr_ebase_room_penalty = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	building_space_mine_throughput_add = -0.01
 }
+# Resort Colony room (#1948 design § 6.3): the average draw, a unit a percent,
+# from sr_resort_refresh.
+sr_resort_room_bonus = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_space_resort_throughput_add = 0.01
+}
+sr_resort_room_penalty = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	building_space_resort_throughput_add = -0.01
+}
 
 # Extraplanetary Base ground (ground types design § 5.3,
 # docs/superpowers/specs/2026-11-05-extraplanetary-base-ground-types-design.md): the
@@ -488,6 +493,8 @@ sr_ebase_mix_glass_penalty = {
 sr_commercial_space_dividend = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	building_space_mine_throughput_add = 0.05
+	# The Resort Colony is commercial space too (#1948 design § 8); keep the two equal.
+	building_space_resort_throughput_add = 0.05
 }
 
 # ======= Space Race - Funding Cost (legacy, kept for migration)

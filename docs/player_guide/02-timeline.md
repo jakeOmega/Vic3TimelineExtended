@@ -339,14 +339,18 @@ Tech-Critical Metals and Glass and Plastics at a thin margin: about £1,600 a
 level a week at base prices. Asteroid Mining brings the Asteroid Mine method,
 which mines mostly Structural and Tech-Critical Metals, with some gold and
 Conductive Metals and a little Base Metals and Chemical and Industrial Minerals.
-Space Colonization brings the larger Mining Colony, with the same mix, or the
-Resort Colony production method, which produces art and tourism instead. Von Neumann Machines (era 13)
+Space Colonization brings the larger Mining Colony, with the same mix. Von Neumann Machines (era 13)
 brings Self-Replicating Miners, which build their copies from the ore they dig:
 against a Mining Colony, a level uses a third less Launch Capacity and mines a
 quarter more of each good. With
 the Space Race rule on Simple Colonies or Full Colonies its levels need room,
 from the near-Earth asteroids (with Asteroid Mining) and your colonies, and work at −75% past it (see
 [Extraplanetary Base room](16-space.md#extraplanetary-base-room)).
+Space Colonization also brings the Resort Colony, a building of its own whose
+Luxury Resorts make Fine Art and Tourism, about £42,000 a level a week at base
+prices. Its levels need room of their own, in Earth orbit and at your colonies,
+and the Moon's landing sites and the wonders of Mars draw the most guests (see
+[Resort Colony room](16-space.md#resort-colony-room)).
 
 The Deep-Sea Mine mines mostly Structural and Conductive Metals, as the seabed's
 nodules are mostly manganese, nickel and copper, with a little of the
