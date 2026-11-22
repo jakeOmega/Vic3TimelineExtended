@@ -22,6 +22,7 @@ the mod's, dynamic names included. The longest today is 48 characters
 ("United Socialist Council Republics of California"), which is why the rival
 row gives the name a line of its own.
 """
+import functools
 import glob
 import json
 import os
@@ -260,6 +261,8 @@ def _longest_figure(name):
         return END_YEAR
     if re.fullmatch(r"sr_fl_\d_strength", name):  # the Transfer popup's Into buttons, "Antimatter 99999"
         return FLEET_STRENGTH
+    if m := re.fullmatch(r"sr_disp_ss_people_room_(\w+)", name):
+        return _site_room(m.group(1)) * _room_factor_ceiling()
     fixed = {"sr_current_colonization_stage": STAGE_CEILING, "sr_disp_mq_next_months": 999,
              "sr_interstellar_transit_value": TRANSIT_MONTHS, "sr_total_global_colonies": WORLDS, "sr_sites_world_count": WORLDS,
              "sr_disp_colonies_held": WORLDS, "sr_disp_cf_in_flight": FLEET_SLOTS,
@@ -291,6 +294,28 @@ def _longest_figure(name):
              "sr_disp_eb_now_profit": EB_PROFIT, "sr_disp_eb_end_profit": EB_PROFIT, "sr_disp_eb_unassigned": EBASE_LEVELS}
     assert name in fixed, f"no longest figure known for {name}: add one to _longest_figure"
     return fixed[name]
+
+
+def _site_room(key):
+    """A world's people room before Habitats, from the table (gen_solar_sites.SITES)."""
+    sys.path.insert(0, os.path.join(REPO, "scripts", "generators"))
+    import gen_solar_sites as gss
+    return next(s.room for s in gss.SITES if s.key == key) * 1000
+
+
+@functools.lru_cache(maxsize=None)
+def _room_factor_ceiling():
+    """The most sr_our_room_mult can reach: 1 plus every country_sr_colony_room_add
+    a mod file grants (Space Colonization's and Terraforming's +0.5 today), so a
+    new source widens the measure without an edit here."""
+    total = 0.0
+    for path in glob.glob(os.path.join(REPO, "common", "**", "*.txt"), recursive=True):
+        if os.sep + "modifier_type_definitions" + os.sep in path:
+            continue
+        with open(path, encoding="utf-8-sig", errors="replace") as f:
+            text = f.read()
+        total += sum(max(0.0, float(v)) for v in re.findall(r"\bcountry_sr_colony_room_add = (-?[\d.]+)", text))
+    return 1 + total
 
 
 _CUSTOM = {}
@@ -1010,6 +1035,35 @@ class FigureBudgetTest(unittest.TestCase):
         widths = [int(w) for w in re.findall(r"\n\t\t\twidget = \{\s*size = \{ (\d+) 22 \}", line)]
         self.assertEqual(len(widths), 3, "slots, base room and resort room")
         self.assertLessEqual(margin + sum(widths) + spacing * (len(widths) - 1), 24 + 180 + 122 + 65 + 3 * 3)
+
+    def test_the_target_popup_s_people_room(self):
+        """The colony target popup's line under a site's name starts with the
+        world's people room as ours (the owner, 2026-11-22): each figure, as the
+        popup's rows print it at the most our room factor reaches ("100,000" at
+        Valles Marineris with Space Colonization and Terraforming), fits its cell,
+        the icon and the figure fit the cell's widget, and the line with it fits
+        the popup's rows inside their margins."""
+        gui = _read(GUI)
+        cell = _type_body(gui, "te_sr_site_people_cell")
+        box = _textbox_with(cell, 'block "people_room"')
+        figures = re.findall(r'blockoverride "people_room" \{\s*raw_text = "([^"]*)"', _read(ROWS))
+        self.assertEqual(len(figures), 40)   # the popup's rows; Solar System's line has no width for it
+        for figure in figures:
+            with self.subTest(figure=figure):
+                text = _render(figure)
+                self.assertLessEqual(len(text) * UNITS_PER_CHAR[_font(box)] * MARGIN, _width(box), text)
+        cell_width = int(re.search(r"size = \{ (\d+) 22 \}", cell).group(1))
+        icon = int(re.search(r"icon = \{\s*size = \{ (\d+) \d+ \}", cell).group(1))
+        self.assertLessEqual(icon + int(re.search(r"spacing = (\d+)", cell).group(1)) + _width(box), cell_width)
+        body = _type_body(gui, "te_sr_site_row")
+        line = body[body.index("sr_disp_colonies_contested"):]
+        self.assertIn('block "site_people" {}', line)
+        spacing = int(re.search(r"spacing = (\d+)", line).group(1))
+        margin = int(re.search(r"margin_left = (\d+)", line).group(1))
+        widths = [cell_width] + [int(w) for w in re.findall(r"\n\t\t\twidget = \{\s*size = \{ (\d+) 22 \}", line)]
+        row = int(re.search(r"minimumsize = \{ (\d+) -1 \}", _type_body(gui, "te_sr_target_popup_body")).group(1))
+        row_margin = int(re.search(r"margin = \{ (\d+) \d+ \}", body).group(1))
+        self.assertLessEqual(margin + sum(widths) + spacing * (len(widths) - 1), row - 2 * row_margin)
 
     def test_colony_rows(self):
         self._check("te_sr_colony_row", self.FIGURES)

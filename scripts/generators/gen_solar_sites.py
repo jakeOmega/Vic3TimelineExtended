@@ -3887,6 +3887,9 @@ def render_display() -> str:
                 # design § 10), the people and crews it would hold at the cap at
                 # our share and our crew size.
                 f"sr_disp_ss_people_at_cap_{k} = {{ value = sr_site_people_at_cap_{k} floor = yes }}",
+                # ... and its people room as ours, the colony target popup's (the owner,
+                # 2026-11-22): the table's room at our base room factor.
+                f"sr_disp_ss_people_room_{k} = {{ value = {site.room * 1000} multiply = sr_our_room_mult floor = yes }}",
                 f"sr_disp_ss_crews_at_cap_{k} = {{",
                 f"\tvalue = sr_site_people_at_cap_{k}",
                 f"\tdivide = {CREW_PER_LEVEL}",
@@ -4214,6 +4217,12 @@ def _site_row(site: Site, *, picker: bool) -> list[str]:
                          f'tooltip = "{_reasoned("sr_colony_target_sgui", _site_scope(site))}"')
         out += _override("site_target_set_visible", f'visible = "[Not( {_eq(target, 2)} )]"')
         out += _override("site_target_clear_visible", f'visible = "[{_eq(target, 2)}]"')
+        # Its people room as ours, the people it would hold before any Habitat (the
+        # owner, 2026-11-22: the popup didn't show it). Solar System's line has no width for it.
+        out += _override("site_people", "te_sr_site_people_cell = {",
+                         '\tblockoverride "people_room" {',
+                         f'\t\traw_text = "#v [{_sv(f"sr_disp_ss_people_room_{k}")}|D]#!"',
+                         "\t}", "}")
     else:
         out += _override("site_target_button", "visible = no")
     # What the site offers a colony (the owner, 2026-10-30): its Habitat cap, and
@@ -4514,8 +4523,8 @@ def render_gui() -> str:
            "### te_sr_cede_site_list_war and _treaty are Cede Colony's picker, the worlds the",
            "### ceding country holds by location; its tile, te_sr_cede_site_tile, is in",
            "### right_click_menu.gui. te_sr_target_picker_rows is the colony target popup's",
-           "### list (UI pass design § 5): every world by location, with its launch window",
-           "### and Target button, filtered to the worlds we can target by default.",
+           "### list (UI pass design § 5): every world by location, with its launch window,",
+           "### Target button and people room, filtered to the worlds we can target by default.",
            "### te_sr_colony_brief_rows is another country's Colonies (National Info):",
            "### every world, shown while the shown Country holds it, read on Country,",
            "### with nothing to press (te_sr_colony_brief_row).",
