@@ -233,6 +233,8 @@ space_colonization = {
 		country_space_race_progress_add = 0.2
 		# +10 points of Habitat room at every colony (colony people design § 5; sr_site_hab_share_now_<key>)
 		country_sr_habitat_room_add = 0.1
+		# +50% base room for people at every colony, so its Habitats hold more too (sr_site_room_mult_now_<key>)
+		country_sr_colony_room_add = 0.5
 	}
 
 	ai_weight = {

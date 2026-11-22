@@ -160,6 +160,78 @@ class HabitatRoomTest(unittest.TestCase):
         self.assertNotIn("sr_site_slots_tech_seen", self.values)
 
 
+ROOM_TECHS = ("space_colonization", "terraforming")
+
+
+class BaseRoomTest(unittest.TestCase):
+    """The owner, 2026-11-22: Space Colonization and Terraforming each give
+    +50% of every colony's base room for people, so both double it, and the
+    Habitats' and Terraforming's shares of it with it. Read through the
+    holder, and the world keeps the best factor it has had, as the Habitat
+    share does (design § 4.4)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.values = _strip(_raw(str(gss.VALUES_OUT)))
+        cls.effects = _strip(_raw(str(gss.EFFECTS_OUT)))
+        cls.types = _strip(_raw("common", "modifier_type_definitions", "space_race_modifier_types.txt"))
+        cls.loc = _raw("localization", "english", "te_modifiers_l_english.yml")
+
+    def test_the_two_technologies_double_the_base_room(self):
+        self.assertEqual(gss.ROOM_MODIFIER, "country_sr_colony_room_add")
+        total = 0.0
+        for tech in ROOM_TECHS:
+            with self.subTest(tech=tech):
+                found = re.findall(r"\bcountry_sr_colony_room_add = (\S+)", _tech_block(tech))
+                self.assertEqual(found, ["0.5"])
+                total += float(found[0])
+        self.assertEqual(1 + total, 2.0)
+        kind = _block(self.types, "country_sr_colony_room_add")
+        self.assertIn("script_only = yes", kind)
+        self.assertIn("percent = yes", kind)
+        for key in ("country_sr_colony_room_add", "country_sr_colony_room_add_desc"):
+            self.assertTrue(f" {key}:0 " in self.loc, f"no loc for {key}")
+
+    def test_no_other_technology_carries_it(self):
+        for era in ("era_11", "era_12", "era_13"):
+            text = _strip(_raw("common", "technology", "technologies", f"{era}.txt"))
+            for name in re.findall(r"(?m)^([a-z_\-]+) = \{", text):
+                if name not in ROOM_TECHS:
+                    self.assertNotIn("country_sr_colony_room_add", _block(text, name), name)
+
+    def test_the_base_room_is_the_table_s_times_the_factor(self):
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                now = _block(self.values, f"sr_site_room_mult_now_{k}")
+                self.assertIn("value = 1", now)
+                self.assertIn(f"global_var:sr_site_holder_{k} = {{ add = modifier:country_sr_colony_room_add }}", now)
+                factor = _block(self.values, f"sr_site_room_mult_value_{k}")
+                self.assertIn(f"value = sr_site_room_mult_now_{k}", factor)
+                self.assertIn(f"min = global_var:sr_site_room_mult_{k}", factor)
+                self.assertIn(f"sr_site_base_room_{k} = {{ value = sr_site_room_mult_value_{k} "
+                              f"multiply = {site.room * 1000} }}", self.values)
+                # Habitats and Terraforming are shares of the base room, so they grow with it.
+                for room in (f"sr_site_room_{k}", f"sr_md_room_less_hab_{k}"):
+                    self.assertIn(f"multiply = sr_site_base_room_{k}", _block(self.values, room))
+        self.assertIn("add = modifier:country_sr_colony_room_add", _block(self.values, "sr_our_room_mult"))
+
+    def test_a_cession_keeps_the_base_room(self):
+        """The record only rises: written only to the live factor, which never
+        falls below it, and cleared only on release."""
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                writes = re.findall(rf"set_global_variable = \{{ name = sr_site_room_mult_{k} value = (\S+) \}}",
+                                    self.effects)
+                self.assertEqual(writes, [f"sr_site_room_mult_value_{k}"])
+                self.assertIn(f"name = sr_site_room_mult_{k} value = sr_site_room_mult_value_{k}",
+                              _block(self.effects, f"sr_site_monthly_{k}"))
+                self.assertIn(f"remove_global_variable = sr_site_room_mult_{k}",
+                              _block(self.effects, f"sr_site_release_{k}"))
+                self.assertEqual(len(re.findall(rf"remove_global_variable = sr_site_room_mult_{k}\b", self.effects)), 1)
+
+
 def _walk_text(*dirs, exts=(".txt", ".gui")):
     for d in dirs:
         for root, _, files in os.walk(os.path.join(REPO, d)):
@@ -340,7 +412,10 @@ class ColonyAiTest(unittest.TestCase):
                 self.assertIn(f"add = modifier:{gss.HABITAT_MODIFIER}", cap)
                 self.assertIn(f"multiply = sr_site_hab_cap_{k}", cap)
                 self.assertIn("add = 1", cap)
-                self.assertIn(f"multiply = sr_site_base_room_{k}", cap)
+                # At THIS's base room factor, not the world's holder's.
+                self.assertIn(f"multiply = {site.room * 1000}", cap)
+                self.assertIn("multiply = sr_our_room_mult", cap)
+                self.assertNotIn("sr_site_base_room", cap)
                 score = _block(self.values, f"sr_cf_score_{k}")
                 self.assertIn(f"add = {{ value = sr_site_people_at_cap_{k} divide = 10000 }}", score)
 
