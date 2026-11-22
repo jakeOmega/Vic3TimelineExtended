@@ -205,6 +205,15 @@ class LintTest(unittest.TestCase):
                 "'(CFixedPoint)1' ), 'key_a', 'key_b' )")
         self.assertEqual(lint.loc_args(expr), ["key_a", "key_b"])
 
+    def test_loc_line_with_a_trailing_comment(self):
+        """A loc line keeps its key with the long_tooltip exemption after it, and the
+        comment is not part of the value (80 false 'in neither mod nor vanilla loc'
+        errors on the ground-type hovers, 2026-11-21)."""
+        m = lint.LOC_LINE.match(' k_tt:0 "a [b] \\"q\\" c" # REVIEWED 2026-11-21 (long_tooltip): why')
+        self.assertEqual(m.groups(), ("k_tt", 'a [b] \\"q\\" c'))
+        self.assertEqual(lint.LOC_LINE.match(' k:0 "plain"').groups(), ("k", "plain"))
+        self.assertIsNone(lint.LOC_LINE.match(" # a comment line"))
+
 
 
 class GlossaryLintTest(unittest.TestCase):
