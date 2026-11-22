@@ -149,7 +149,8 @@ class ScriptTest(unittest.TestCase):
         self.assertIn("name = sr_emig_carry", take)
         self.assertIn("remove_variable = sr_emig_due", take)
         self.assertLess(self.month.index("ordered_scope_state = {"), self.month.index("sr_emig_distribute = yes"))
-        self.assertIn("set_variable = { name = sr_emig_last_sent value = local_var:sr_emig_sent }", self.month)
+        # 40 days: the always-on pulse clears the bill once it lapses (Task 8, Review Focus 3).
+        self.assertIn("set_variable = { name = sr_emig_last_sent value = local_var:sr_emig_sent days = 40 }", self.month)
 
     def test_the_census_books_the_source_side_by_the_family_profile(self):
         body = _block(self.census, "te_demog_sr_note_settlers")
