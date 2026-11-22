@@ -551,6 +551,63 @@ class AiSettlersTest(unittest.TestCase):
         self.assertLess(je.index("sr_emig_ai_review = yes"), je.index("sr_emig_month = yes"))
 
 
+class ModulesViewTest(unittest.TestCase):
+    """Design § 10: a colony's header line reads Crews needed / available (red
+    when short) with the share, and Habitats against the cap; its page's Crews
+    tile the same; the + button says whether a crewed module has a crew; the
+    level field takes two digits."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _strip(_raw("gui", "journal_entry_widgets", "space_race_widget.gui"))
+        cls.rows = _strip(_raw(str(gss.GUI_OUT)))
+        cls.display = _strip(_raw(str(gss.DISPLAY_OUT)))
+        cls.sguis = _strip(_raw("common", "scripted_guis", "sr_colony_sguis.txt"))
+        cls.triggers = _strip(_raw(str(gss.TRIGGERS_OUT)))
+
+    def test_the_crews_values(self):
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                self.assertIn(f"sr_disp_site_crews_needed_{k} = {{ value = sr_site_crew_needed_{k} }}", self.display)
+                self.assertIn(f"sr_disp_site_crews_{k} = {{ value = sr_site_crews_{k} }}", self.display)
+                short = _block(self.display, f"sr_disp_site_crews_short_{k}")
+                self.assertIn(f"limit = {{ sr_site_crew_needed_{k} > sr_site_crews_{k} }} value = 1", short)
+
+    def test_the_header_cell_and_the_page_tile(self):
+        row = _block(self.gui, "type te_sr_colony_row") if "type te_sr_colony_row = {" in self.gui else self.gui
+        for needle in ('block "module_crews" {}', 'block "module_crews_short" {}',
+                       'text = "je_space_race_widget_modules_col_crews"',
+                       'tooltip = "je_space_race_widget_modules_crews_tt"'):
+            self.assertGreaterEqual(row.count(needle), 1 if "col_crews" in needle else 2, needle)
+        self.assertFalse("je_space_race_widget_modules_col_staffing" in self.gui, "the Staffing label is left")
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                self.assertIn(f"ScriptValue('sr_disp_site_crews_short_{k}'), '(CFixedPoint)0' )]", self.rows)
+                self.assertIn(f"ScriptValue('sr_disp_site_crews_short_{k}'), '(CFixedPoint)1' )]", self.rows)
+        loc = _raw("localization", "english", "te_journal_entries_l_english.yml")
+        for key in ("je_space_race_widget_modules_col_crews", "je_space_race_widget_modules_crews_tt"):
+            self.assertTrue(f" {key}:0 " in loc, f"no loc for {key}")
+
+    def test_the_plus_button_says_whether_a_crew_is_free(self):
+        self.assertRegex(self.triggers, r"(?m)^sr_mod_scope_crew_spare = \{")
+        for site in gss.SITES:
+            self.assertIn(f"AND = {{ scope:site = {site.index} sr_site_crews_{site.key} >= sr_site_levels_{site.key} }}",
+                          _block(self.triggers, "sr_mod_scope_crew_spare"))
+        module = _block(self.sguis, "sr_colony_module_sgui")
+        self.assertRegex(module, r"sr_mod_scope_crew_spare = yes\s*\}\s*custom_tooltip = sr_mod_queue_crew_spare_tt")
+        self.assertIn("custom_tooltip = sr_mod_queue_crew_short_tt", module)
+        loc = _raw("localization", "english", "te_miscellaneous_l_english.yml")
+        for key in ("sr_mod_queue_crew_spare_tt", "sr_mod_queue_crew_short_tt"):
+            self.assertTrue(f" {key}:0 " in loc, f"no loc for {key}")
+
+    def test_the_level_takes_two_digits(self):
+        import test_space_race_labels as L
+        holder = [c for c in vars(L).values() if isinstance(c, type) and "CELL" in vars(c)][0]
+        self.assertEqual(holder.CELL["cell_level"], "88")
+
+
 def gss_top():
     """The ladder's last step: 500 x 2^15 = 16.4 million a month, past every
     world's room together, so the room, not the ladder, stops +."""

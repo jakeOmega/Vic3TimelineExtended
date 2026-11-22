@@ -1701,24 +1701,47 @@ types space_race_widget_types
 				ignoreinvisible = yes
 				spacing = 8
 
+				### Crews needed / available, red when short, and the share they
+				### run (colony people design § 10).
 				widget = {
-					size = { 84 24 }
+					size = { 148 24 }
 					parentanchor = vcenter
-					tooltip = "je_space_race_widget_modules_staffing_tt"
+					tooltip = "je_space_race_widget_modules_crews_tt"
 
 					flowcontainer = {
 						direction = horizontal
 						spacing = 4
 						parentanchor = left|vcenter
+						ignoreinvisible = yes
 
 						textbox = {
 							parentanchor = left|vcenter
 							autoresize = yes
-							max_width = 40
+							max_width = 48
 							align = left|nobaseline
 							using = te_sr_fontsize_row
 							elide = right
-							text = "je_space_race_widget_modules_col_staffing"
+							text = "je_space_race_widget_modules_col_crews"
+						}
+						textbox = {
+							parentanchor = left|vcenter
+							autoresize = yes
+							max_width = 48
+							align = left|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							default_format = "#v"
+							block "module_crews" {}
+						}
+						textbox = {
+							parentanchor = left|vcenter
+							autoresize = yes
+							max_width = 48
+							align = left|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							default_format = "#R"
+							block "module_crews_short" {}
 						}
 						textbox = {
 							parentanchor = left|vcenter
@@ -2421,7 +2444,7 @@ types space_race_widget_types
 				}
 				te_sr_page_tile = {
 					blockoverride "tile_tooltip" {
-						tooltip = "je_space_race_widget_settlers_crews_tt"
+						tooltip = "je_space_race_widget_modules_crews_tt"
 					}
 					blockoverride "tile_icon" {
 						texture = "gfx/interface/icons/space_race_icons/page_crews.dds"
@@ -2431,7 +2454,12 @@ types space_race_widget_types
 					}
 					blockoverride "tile_value" {
 						te_sr_page_value = {
-							block "settler_crews" {}
+							default_format = "#v"
+							block "module_crews" {}
+						}
+						te_sr_page_value = {
+							default_format = "#R"
+							block "module_crews_short" {}
 						}
 					}
 				}
@@ -3655,13 +3683,13 @@ types space_race_widget_types
 			}
 		}
 		widget = {
-			size = { 12 24 }
+			size = { 20 24 }
 			parentanchor = vcenter
 
 			textbox = {
 				parentanchor = center
 				autoresize = yes
-				max_width = 12
+				max_width = 20
 				align = center|nobaseline
 				using = te_sr_fontsize_row
 				elide = right

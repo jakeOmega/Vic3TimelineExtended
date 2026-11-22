@@ -495,15 +495,15 @@ CELLS = {
     **{f"terraforming's {word} (te_sr_colony_row)": (
         ("te_sr_colony_row", f'text = "je_space_race_widget_terra_{word}"'), f"je_space_race_widget_terra_{word}")
        for word in ("years_left", "finished", "idle")},
-    "a colony's slots label (te_sr_colony_row)": (
+    "a colony's Habitats label (te_sr_colony_row)": (
         ("te_sr_colony_row", 'text = "je_space_race_widget_modules_col_slots"'),
         r"je_space_race_widget_modules_col_slots"),
     "a colony's bases label (te_sr_colony_row)": (
         ("te_sr_colony_row", 'text = "je_space_race_widget_modules_col_bases"'),
         r"je_space_race_widget_modules_col_bases"),
-    "the crew share's label (te_sr_colony_row)": (
-        ("te_sr_colony_row", 'text = "je_space_race_widget_modules_col_staffing"'),
-        r"je_space_race_widget_modules_col_staffing"),
+    "the crews' label (te_sr_colony_row)": (
+        ("te_sr_colony_row", 'text = "je_space_race_widget_modules_col_crews"'),
+        r"je_space_race_widget_modules_col_crews"),
     **{f"the colonies' {head} head ({heads})": (
         (heads, f'text = "je_space_race_widget_ch_{head}"'), f"je_space_race_widget_ch_{head}")
        for heads, names in (("te_sr_colony_heads_people", ("people", "crews")),
@@ -886,6 +886,7 @@ class FigureBudgetTest(unittest.TestCase):
         # Colonies (te_sr_colony_row): people and room in K, crews, crew share,
         # a module level and what is on its way, autonomy and drift, Defenses
         "settler_people": "999.9K / 999.9K", "settler_crews": "99", "module_staffing": "100%",
+        "module_crews": "99/99", "module_crews_short": "99/99",
         "aut_figure": "100%", "aut_drift": "+0.99", "def_level": "99", "def_integrity": "100%", "def_marines": "99",
         # slots used of slots (4 + 5 technologies + 4 past), base room (60 + 10 levels x 10),
         # what the colony builds of its own (colony management design §§ 4.3, 5)
@@ -897,8 +898,9 @@ class FigureBudgetTest(unittest.TestCase):
         # shown up to 999 (one level at the least staffing would take longer)
         "terra_pct": "+300%", "terra_years": "999",
     }
-    # a module cell (te_sr_mod_cell): a level (10 past a world's slots at most) and what is on its way
-    CELL = {"cell_level": "8", "cell_pending": "+8"}
+    # a module cell (te_sr_mod_cell): a level, two digits with no slots (colony people design § 10),
+    # and what is on its way
+    CELL = {"cell_level": "88", "cell_pending": "+8"}
     FREE = {"free_people": "999.9K", "free_ties": "100"}
     # A fleet's card: its number and, rolled up, its strength in the head; a bar's
     # figure, now of full (strength, and propellant at 5000 km/s the longest); a

@@ -6954,6 +6954,8 @@
  sr_mod_queue_admin_tt:0 "Queue an Administration: #v -0.15#! a month to the colony's autonomy a staffed level."
  sr_mod_queue_black_tt:0 "Queue a Black Site: #v +1#! intelligence capacity and #v +3%#! covert operation efficiency a staffed level."
  sr_mod_queue_bunker_tt:0 "Queue a Nuclear Command Center: a staffed level gives #v +4#! nuclear command reliability, at most #v +12#!, and #v +2#! [concept_command_redundancy], at most #v +6#!."
+ sr_mod_queue_crew_short_tt:0 "#R No crew to spare:#! every crewed module here will run below full strength until more people arrive."
+ sr_mod_queue_crew_spare_tt:0 "Needs a crew: this colony's people have one to spare."
  sr_mod_queue_culture_tt:0 "Queue a Cultural Center: #v +3%#! cultural pull and #v +1%#! prestige a staffed level."
  sr_mod_queue_def_tt:0 "Queue Defenses, which fire on enemy [concept_sr_space_fleet]s closing in on the colony (Full Colonies only)."
  sr_mod_queue_foundry_tt:0 "Queue a Materials Foundry: #v +3%#! advanced materials output a staffed level."

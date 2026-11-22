@@ -1823,6 +1823,12 @@ sr_disp_mod_pending_terra_valles_marineris = {
 	if = { limit = { has_variable = sr_mq_terra_valles_marineris } add = var:sr_mq_terra_valles_marineris }
 	if = { limit = { has_global_variable = sr_site_ship_terra_valles_marineris } add = global_var:sr_site_ship_terra_valles_marineris }
 }
+sr_disp_site_crews_needed_valles_marineris = { value = sr_site_crew_needed_valles_marineris }
+sr_disp_site_crews_valles_marineris = { value = sr_site_crews_valles_marineris }
+sr_disp_site_crews_short_valles_marineris = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_valles_marineris > sr_site_crews_valles_marineris } value = 1 }
+}
 sr_disp_site_staffing_valles_marineris = {
 	value = sr_site_staffing_valles_marineris
 	multiply = 100
@@ -1919,6 +1925,12 @@ sr_disp_mod_pending_terra_olympus_mons = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_terra_olympus_mons } add = var:sr_mq_terra_olympus_mons }
 	if = { limit = { has_global_variable = sr_site_ship_terra_olympus_mons } add = global_var:sr_site_ship_terra_olympus_mons }
+}
+sr_disp_site_crews_needed_olympus_mons = { value = sr_site_crew_needed_olympus_mons }
+sr_disp_site_crews_olympus_mons = { value = sr_site_crews_olympus_mons }
+sr_disp_site_crews_short_olympus_mons = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_olympus_mons > sr_site_crews_olympus_mons } value = 1 }
 }
 sr_disp_site_staffing_olympus_mons = {
 	value = sr_site_staffing_olympus_mons
@@ -2017,6 +2029,12 @@ sr_disp_mod_pending_terra_hellas_planitia = {
 	if = { limit = { has_variable = sr_mq_terra_hellas_planitia } add = var:sr_mq_terra_hellas_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_terra_hellas_planitia } add = global_var:sr_site_ship_terra_hellas_planitia }
 }
+sr_disp_site_crews_needed_hellas_planitia = { value = sr_site_crew_needed_hellas_planitia }
+sr_disp_site_crews_hellas_planitia = { value = sr_site_crews_hellas_planitia }
+sr_disp_site_crews_short_hellas_planitia = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_hellas_planitia > sr_site_crews_hellas_planitia } value = 1 }
+}
 sr_disp_site_staffing_hellas_planitia = {
 	value = sr_site_staffing_hellas_planitia
 	multiply = 100
@@ -2113,6 +2131,12 @@ sr_disp_mod_pending_terra_utopia_planitia = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_terra_utopia_planitia } add = var:sr_mq_terra_utopia_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_terra_utopia_planitia } add = global_var:sr_site_ship_terra_utopia_planitia }
+}
+sr_disp_site_crews_needed_utopia_planitia = { value = sr_site_crew_needed_utopia_planitia }
+sr_disp_site_crews_utopia_planitia = { value = sr_site_crews_utopia_planitia }
+sr_disp_site_crews_short_utopia_planitia = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_utopia_planitia > sr_site_crews_utopia_planitia } value = 1 }
 }
 sr_disp_site_staffing_utopia_planitia = {
 	value = sr_site_staffing_utopia_planitia
@@ -2211,6 +2235,12 @@ sr_disp_mod_pending_terra_arcadia_planitia = {
 	if = { limit = { has_variable = sr_mq_terra_arcadia_planitia } add = var:sr_mq_terra_arcadia_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_terra_arcadia_planitia } add = global_var:sr_site_ship_terra_arcadia_planitia }
 }
+sr_disp_site_crews_needed_arcadia_planitia = { value = sr_site_crew_needed_arcadia_planitia }
+sr_disp_site_crews_arcadia_planitia = { value = sr_site_crews_arcadia_planitia }
+sr_disp_site_crews_short_arcadia_planitia = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_arcadia_planitia > sr_site_crews_arcadia_planitia } value = 1 }
+}
 sr_disp_site_staffing_arcadia_planitia = {
 	value = sr_site_staffing_arcadia_planitia
 	multiply = 100
@@ -2302,6 +2332,12 @@ sr_disp_mod_pending_admin_ceres = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_admin_ceres } add = var:sr_mq_admin_ceres }
 	if = { limit = { has_global_variable = sr_site_ship_admin_ceres } add = global_var:sr_site_ship_admin_ceres }
+}
+sr_disp_site_crews_needed_ceres = { value = sr_site_crew_needed_ceres }
+sr_disp_site_crews_ceres = { value = sr_site_crews_ceres }
+sr_disp_site_crews_short_ceres = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_ceres > sr_site_crews_ceres } value = 1 }
 }
 sr_disp_site_staffing_ceres = {
 	value = sr_site_staffing_ceres
@@ -2395,6 +2431,12 @@ sr_disp_mod_pending_admin_vesta = {
 	if = { limit = { has_variable = sr_mq_admin_vesta } add = var:sr_mq_admin_vesta }
 	if = { limit = { has_global_variable = sr_site_ship_admin_vesta } add = global_var:sr_site_ship_admin_vesta }
 }
+sr_disp_site_crews_needed_vesta = { value = sr_site_crew_needed_vesta }
+sr_disp_site_crews_vesta = { value = sr_site_crews_vesta }
+sr_disp_site_crews_short_vesta = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_vesta > sr_site_crews_vesta } value = 1 }
+}
 sr_disp_site_staffing_vesta = {
 	value = sr_site_staffing_vesta
 	multiply = 100
@@ -2486,6 +2528,12 @@ sr_disp_mod_pending_admin_psyche = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_admin_psyche } add = var:sr_mq_admin_psyche }
 	if = { limit = { has_global_variable = sr_site_ship_admin_psyche } add = global_var:sr_site_ship_admin_psyche }
+}
+sr_disp_site_crews_needed_psyche = { value = sr_site_crew_needed_psyche }
+sr_disp_site_crews_psyche = { value = sr_site_crews_psyche }
+sr_disp_site_crews_short_psyche = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_psyche > sr_site_crews_psyche } value = 1 }
 }
 sr_disp_site_staffing_psyche = {
 	value = sr_site_staffing_psyche
@@ -2579,6 +2627,12 @@ sr_disp_mod_pending_admin_pallas = {
 	if = { limit = { has_variable = sr_mq_admin_pallas } add = var:sr_mq_admin_pallas }
 	if = { limit = { has_global_variable = sr_site_ship_admin_pallas } add = global_var:sr_site_ship_admin_pallas }
 }
+sr_disp_site_crews_needed_pallas = { value = sr_site_crew_needed_pallas }
+sr_disp_site_crews_pallas = { value = sr_site_crews_pallas }
+sr_disp_site_crews_short_pallas = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_pallas > sr_site_crews_pallas } value = 1 }
+}
 sr_disp_site_staffing_pallas = {
 	value = sr_site_staffing_pallas
 	multiply = 100
@@ -2670,6 +2724,12 @@ sr_disp_mod_pending_admin_hygiea = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_admin_hygiea } add = var:sr_mq_admin_hygiea }
 	if = { limit = { has_global_variable = sr_site_ship_admin_hygiea } add = global_var:sr_site_ship_admin_hygiea }
+}
+sr_disp_site_crews_needed_hygiea = { value = sr_site_crew_needed_hygiea }
+sr_disp_site_crews_hygiea = { value = sr_site_crews_hygiea }
+sr_disp_site_crews_short_hygiea = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_hygiea > sr_site_crews_hygiea } value = 1 }
 }
 sr_disp_site_staffing_hygiea = {
 	value = sr_site_staffing_hygiea
@@ -2763,6 +2823,12 @@ sr_disp_mod_pending_admin_io = {
 	if = { limit = { has_variable = sr_mq_admin_io } add = var:sr_mq_admin_io }
 	if = { limit = { has_global_variable = sr_site_ship_admin_io } add = global_var:sr_site_ship_admin_io }
 }
+sr_disp_site_crews_needed_io = { value = sr_site_crew_needed_io }
+sr_disp_site_crews_io = { value = sr_site_crews_io }
+sr_disp_site_crews_short_io = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_io > sr_site_crews_io } value = 1 }
+}
 sr_disp_site_staffing_io = {
 	value = sr_site_staffing_io
 	multiply = 100
@@ -2854,6 +2920,12 @@ sr_disp_mod_pending_admin_europa = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_admin_europa } add = var:sr_mq_admin_europa }
 	if = { limit = { has_global_variable = sr_site_ship_admin_europa } add = global_var:sr_site_ship_admin_europa }
+}
+sr_disp_site_crews_needed_europa = { value = sr_site_crew_needed_europa }
+sr_disp_site_crews_europa = { value = sr_site_crews_europa }
+sr_disp_site_crews_short_europa = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_europa > sr_site_crews_europa } value = 1 }
 }
 sr_disp_site_staffing_europa = {
 	value = sr_site_staffing_europa
@@ -2952,6 +3024,12 @@ sr_disp_mod_pending_terra_ganymede = {
 	if = { limit = { has_variable = sr_mq_terra_ganymede } add = var:sr_mq_terra_ganymede }
 	if = { limit = { has_global_variable = sr_site_ship_terra_ganymede } add = global_var:sr_site_ship_terra_ganymede }
 }
+sr_disp_site_crews_needed_ganymede = { value = sr_site_crew_needed_ganymede }
+sr_disp_site_crews_ganymede = { value = sr_site_crews_ganymede }
+sr_disp_site_crews_short_ganymede = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_ganymede > sr_site_crews_ganymede } value = 1 }
+}
 sr_disp_site_staffing_ganymede = {
 	value = sr_site_staffing_ganymede
 	multiply = 100
@@ -3049,6 +3127,12 @@ sr_disp_mod_pending_terra_callisto = {
 	if = { limit = { has_variable = sr_mq_terra_callisto } add = var:sr_mq_terra_callisto }
 	if = { limit = { has_global_variable = sr_site_ship_terra_callisto } add = global_var:sr_site_ship_terra_callisto }
 }
+sr_disp_site_crews_needed_callisto = { value = sr_site_crew_needed_callisto }
+sr_disp_site_crews_callisto = { value = sr_site_crews_callisto }
+sr_disp_site_crews_short_callisto = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_callisto > sr_site_crews_callisto } value = 1 }
+}
 sr_disp_site_staffing_callisto = {
 	value = sr_site_staffing_callisto
 	multiply = 100
@@ -3141,6 +3225,12 @@ sr_disp_mod_pending_admin_himalia = {
 	if = { limit = { has_variable = sr_mq_admin_himalia } add = var:sr_mq_admin_himalia }
 	if = { limit = { has_global_variable = sr_site_ship_admin_himalia } add = global_var:sr_site_ship_admin_himalia }
 }
+sr_disp_site_crews_needed_himalia = { value = sr_site_crew_needed_himalia }
+sr_disp_site_crews_himalia = { value = sr_site_crews_himalia }
+sr_disp_site_crews_short_himalia = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_himalia > sr_site_crews_himalia } value = 1 }
+}
 sr_disp_site_staffing_himalia = {
 	value = sr_site_staffing_himalia
 	multiply = 100
@@ -3232,6 +3322,12 @@ sr_disp_mod_pending_admin_amalthea = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_admin_amalthea } add = var:sr_mq_admin_amalthea }
 	if = { limit = { has_global_variable = sr_site_ship_admin_amalthea } add = global_var:sr_site_ship_admin_amalthea }
+}
+sr_disp_site_crews_needed_amalthea = { value = sr_site_crew_needed_amalthea }
+sr_disp_site_crews_amalthea = { value = sr_site_crews_amalthea }
+sr_disp_site_crews_short_amalthea = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_amalthea > sr_site_crews_amalthea } value = 1 }
 }
 sr_disp_site_staffing_amalthea = {
 	value = sr_site_staffing_amalthea
@@ -3330,6 +3426,12 @@ sr_disp_mod_pending_terra_venus = {
 	if = { limit = { has_variable = sr_mq_terra_venus } add = var:sr_mq_terra_venus }
 	if = { limit = { has_global_variable = sr_site_ship_terra_venus } add = global_var:sr_site_ship_terra_venus }
 }
+sr_disp_site_crews_needed_venus = { value = sr_site_crew_needed_venus }
+sr_disp_site_crews_venus = { value = sr_site_crews_venus }
+sr_disp_site_crews_short_venus = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_venus > sr_site_crews_venus } value = 1 }
+}
 sr_disp_site_staffing_venus = {
 	value = sr_site_staffing_venus
 	multiply = 100
@@ -3421,6 +3523,12 @@ sr_disp_mod_pending_admin_mercury = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_admin_mercury } add = var:sr_mq_admin_mercury }
 	if = { limit = { has_global_variable = sr_site_ship_admin_mercury } add = global_var:sr_site_ship_admin_mercury }
+}
+sr_disp_site_crews_needed_mercury = { value = sr_site_crew_needed_mercury }
+sr_disp_site_crews_mercury = { value = sr_site_crews_mercury }
+sr_disp_site_crews_short_mercury = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_mercury > sr_site_crews_mercury } value = 1 }
 }
 sr_disp_site_staffing_mercury = {
 	value = sr_site_staffing_mercury
@@ -3519,6 +3627,12 @@ sr_disp_mod_pending_terra_titan = {
 	if = { limit = { has_variable = sr_mq_terra_titan } add = var:sr_mq_terra_titan }
 	if = { limit = { has_global_variable = sr_site_ship_terra_titan } add = global_var:sr_site_ship_terra_titan }
 }
+sr_disp_site_crews_needed_titan = { value = sr_site_crew_needed_titan }
+sr_disp_site_crews_titan = { value = sr_site_crews_titan }
+sr_disp_site_crews_short_titan = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_titan > sr_site_crews_titan } value = 1 }
+}
 sr_disp_site_staffing_titan = {
 	value = sr_site_staffing_titan
 	multiply = 100
@@ -3610,6 +3724,12 @@ sr_disp_mod_pending_admin_enceladus = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_admin_enceladus } add = var:sr_mq_admin_enceladus }
 	if = { limit = { has_global_variable = sr_site_ship_admin_enceladus } add = global_var:sr_site_ship_admin_enceladus }
+}
+sr_disp_site_crews_needed_enceladus = { value = sr_site_crew_needed_enceladus }
+sr_disp_site_crews_enceladus = { value = sr_site_crews_enceladus }
+sr_disp_site_crews_short_enceladus = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_enceladus > sr_site_crews_enceladus } value = 1 }
 }
 sr_disp_site_staffing_enceladus = {
 	value = sr_site_staffing_enceladus
@@ -3703,6 +3823,12 @@ sr_disp_mod_pending_admin_rhea = {
 	if = { limit = { has_variable = sr_mq_admin_rhea } add = var:sr_mq_admin_rhea }
 	if = { limit = { has_global_variable = sr_site_ship_admin_rhea } add = global_var:sr_site_ship_admin_rhea }
 }
+sr_disp_site_crews_needed_rhea = { value = sr_site_crew_needed_rhea }
+sr_disp_site_crews_rhea = { value = sr_site_crews_rhea }
+sr_disp_site_crews_short_rhea = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_rhea > sr_site_crews_rhea } value = 1 }
+}
 sr_disp_site_staffing_rhea = {
 	value = sr_site_staffing_rhea
 	multiply = 100
@@ -3794,6 +3920,12 @@ sr_disp_mod_pending_admin_mimas = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_admin_mimas } add = var:sr_mq_admin_mimas }
 	if = { limit = { has_global_variable = sr_site_ship_admin_mimas } add = global_var:sr_site_ship_admin_mimas }
+}
+sr_disp_site_crews_needed_mimas = { value = sr_site_crew_needed_mimas }
+sr_disp_site_crews_mimas = { value = sr_site_crews_mimas }
+sr_disp_site_crews_short_mimas = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_mimas > sr_site_crews_mimas } value = 1 }
 }
 sr_disp_site_staffing_mimas = {
 	value = sr_site_staffing_mimas
@@ -3887,6 +4019,12 @@ sr_disp_mod_pending_admin_iapetus = {
 	if = { limit = { has_variable = sr_mq_admin_iapetus } add = var:sr_mq_admin_iapetus }
 	if = { limit = { has_global_variable = sr_site_ship_admin_iapetus } add = global_var:sr_site_ship_admin_iapetus }
 }
+sr_disp_site_crews_needed_iapetus = { value = sr_site_crew_needed_iapetus }
+sr_disp_site_crews_iapetus = { value = sr_site_crews_iapetus }
+sr_disp_site_crews_short_iapetus = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_iapetus > sr_site_crews_iapetus } value = 1 }
+}
 sr_disp_site_staffing_iapetus = {
 	value = sr_site_staffing_iapetus
 	multiply = 100
@@ -3978,6 +4116,12 @@ sr_disp_mod_pending_admin_titania = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_admin_titania } add = var:sr_mq_admin_titania }
 	if = { limit = { has_global_variable = sr_site_ship_admin_titania } add = global_var:sr_site_ship_admin_titania }
+}
+sr_disp_site_crews_needed_titania = { value = sr_site_crew_needed_titania }
+sr_disp_site_crews_titania = { value = sr_site_crews_titania }
+sr_disp_site_crews_short_titania = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_titania > sr_site_crews_titania } value = 1 }
 }
 sr_disp_site_staffing_titania = {
 	value = sr_site_staffing_titania
@@ -4071,6 +4215,12 @@ sr_disp_mod_pending_admin_oberon = {
 	if = { limit = { has_variable = sr_mq_admin_oberon } add = var:sr_mq_admin_oberon }
 	if = { limit = { has_global_variable = sr_site_ship_admin_oberon } add = global_var:sr_site_ship_admin_oberon }
 }
+sr_disp_site_crews_needed_oberon = { value = sr_site_crew_needed_oberon }
+sr_disp_site_crews_oberon = { value = sr_site_crews_oberon }
+sr_disp_site_crews_short_oberon = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_oberon > sr_site_crews_oberon } value = 1 }
+}
 sr_disp_site_staffing_oberon = {
 	value = sr_site_staffing_oberon
 	multiply = 100
@@ -4162,6 +4312,12 @@ sr_disp_mod_pending_admin_miranda = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_admin_miranda } add = var:sr_mq_admin_miranda }
 	if = { limit = { has_global_variable = sr_site_ship_admin_miranda } add = global_var:sr_site_ship_admin_miranda }
+}
+sr_disp_site_crews_needed_miranda = { value = sr_site_crew_needed_miranda }
+sr_disp_site_crews_miranda = { value = sr_site_crews_miranda }
+sr_disp_site_crews_short_miranda = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_miranda > sr_site_crews_miranda } value = 1 }
 }
 sr_disp_site_staffing_miranda = {
 	value = sr_site_staffing_miranda
@@ -4255,6 +4411,12 @@ sr_disp_mod_pending_admin_ariel = {
 	if = { limit = { has_variable = sr_mq_admin_ariel } add = var:sr_mq_admin_ariel }
 	if = { limit = { has_global_variable = sr_site_ship_admin_ariel } add = global_var:sr_site_ship_admin_ariel }
 }
+sr_disp_site_crews_needed_ariel = { value = sr_site_crew_needed_ariel }
+sr_disp_site_crews_ariel = { value = sr_site_crews_ariel }
+sr_disp_site_crews_short_ariel = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_ariel > sr_site_crews_ariel } value = 1 }
+}
 sr_disp_site_staffing_ariel = {
 	value = sr_site_staffing_ariel
 	multiply = 100
@@ -4346,6 +4508,12 @@ sr_disp_mod_pending_admin_triton = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_admin_triton } add = var:sr_mq_admin_triton }
 	if = { limit = { has_global_variable = sr_site_ship_admin_triton } add = global_var:sr_site_ship_admin_triton }
+}
+sr_disp_site_crews_needed_triton = { value = sr_site_crew_needed_triton }
+sr_disp_site_crews_triton = { value = sr_site_crews_triton }
+sr_disp_site_crews_short_triton = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_triton > sr_site_crews_triton } value = 1 }
 }
 sr_disp_site_staffing_triton = {
 	value = sr_site_staffing_triton
@@ -4439,6 +4607,12 @@ sr_disp_mod_pending_admin_proteus = {
 	if = { limit = { has_variable = sr_mq_admin_proteus } add = var:sr_mq_admin_proteus }
 	if = { limit = { has_global_variable = sr_site_ship_admin_proteus } add = global_var:sr_site_ship_admin_proteus }
 }
+sr_disp_site_crews_needed_proteus = { value = sr_site_crew_needed_proteus }
+sr_disp_site_crews_proteus = { value = sr_site_crews_proteus }
+sr_disp_site_crews_short_proteus = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_proteus > sr_site_crews_proteus } value = 1 }
+}
 sr_disp_site_staffing_proteus = {
 	value = sr_site_staffing_proteus
 	multiply = 100
@@ -4530,6 +4704,12 @@ sr_disp_mod_pending_admin_pluto = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_admin_pluto } add = var:sr_mq_admin_pluto }
 	if = { limit = { has_global_variable = sr_site_ship_admin_pluto } add = global_var:sr_site_ship_admin_pluto }
+}
+sr_disp_site_crews_needed_pluto = { value = sr_site_crew_needed_pluto }
+sr_disp_site_crews_pluto = { value = sr_site_crews_pluto }
+sr_disp_site_crews_short_pluto = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_pluto > sr_site_crews_pluto } value = 1 }
 }
 sr_disp_site_staffing_pluto = {
 	value = sr_site_staffing_pluto
@@ -4623,6 +4803,12 @@ sr_disp_mod_pending_admin_eris = {
 	if = { limit = { has_variable = sr_mq_admin_eris } add = var:sr_mq_admin_eris }
 	if = { limit = { has_global_variable = sr_site_ship_admin_eris } add = global_var:sr_site_ship_admin_eris }
 }
+sr_disp_site_crews_needed_eris = { value = sr_site_crew_needed_eris }
+sr_disp_site_crews_eris = { value = sr_site_crews_eris }
+sr_disp_site_crews_short_eris = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_eris > sr_site_crews_eris } value = 1 }
+}
 sr_disp_site_staffing_eris = {
 	value = sr_site_staffing_eris
 	multiply = 100
@@ -4714,6 +4900,12 @@ sr_disp_mod_pending_admin_makemake = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_admin_makemake } add = var:sr_mq_admin_makemake }
 	if = { limit = { has_global_variable = sr_site_ship_admin_makemake } add = global_var:sr_site_ship_admin_makemake }
+}
+sr_disp_site_crews_needed_makemake = { value = sr_site_crew_needed_makemake }
+sr_disp_site_crews_makemake = { value = sr_site_crews_makemake }
+sr_disp_site_crews_short_makemake = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_makemake > sr_site_crews_makemake } value = 1 }
 }
 sr_disp_site_staffing_makemake = {
 	value = sr_site_staffing_makemake
@@ -4807,6 +4999,12 @@ sr_disp_mod_pending_admin_haumea = {
 	if = { limit = { has_variable = sr_mq_admin_haumea } add = var:sr_mq_admin_haumea }
 	if = { limit = { has_global_variable = sr_site_ship_admin_haumea } add = global_var:sr_site_ship_admin_haumea }
 }
+sr_disp_site_crews_needed_haumea = { value = sr_site_crew_needed_haumea }
+sr_disp_site_crews_haumea = { value = sr_site_crews_haumea }
+sr_disp_site_crews_short_haumea = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_haumea > sr_site_crews_haumea } value = 1 }
+}
 sr_disp_site_staffing_haumea = {
 	value = sr_site_staffing_haumea
 	multiply = 100
@@ -4899,6 +5097,12 @@ sr_disp_mod_pending_admin_sedna = {
 	if = { limit = { has_variable = sr_mq_admin_sedna } add = var:sr_mq_admin_sedna }
 	if = { limit = { has_global_variable = sr_site_ship_admin_sedna } add = global_var:sr_site_ship_admin_sedna }
 }
+sr_disp_site_crews_needed_sedna = { value = sr_site_crew_needed_sedna }
+sr_disp_site_crews_sedna = { value = sr_site_crews_sedna }
+sr_disp_site_crews_short_sedna = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_sedna > sr_site_crews_sedna } value = 1 }
+}
 sr_disp_site_staffing_sedna = {
 	value = sr_site_staffing_sedna
 	multiply = 100
@@ -4985,6 +5189,12 @@ sr_disp_mod_pending_admin_shackleton = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_admin_shackleton } add = var:sr_mq_admin_shackleton }
 	if = { limit = { has_global_variable = sr_site_ship_admin_shackleton } add = global_var:sr_site_ship_admin_shackleton }
+}
+sr_disp_site_crews_needed_shackleton = { value = sr_site_crew_needed_shackleton }
+sr_disp_site_crews_shackleton = { value = sr_site_crews_shackleton }
+sr_disp_site_crews_short_shackleton = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_shackleton > sr_site_crews_shackleton } value = 1 }
 }
 sr_disp_site_staffing_shackleton = {
 	value = sr_site_staffing_shackleton
@@ -5073,6 +5283,12 @@ sr_disp_mod_pending_admin_peary = {
 	if = { limit = { has_variable = sr_mq_admin_peary } add = var:sr_mq_admin_peary }
 	if = { limit = { has_global_variable = sr_site_ship_admin_peary } add = global_var:sr_site_ship_admin_peary }
 }
+sr_disp_site_crews_needed_peary = { value = sr_site_crew_needed_peary }
+sr_disp_site_crews_peary = { value = sr_site_crews_peary }
+sr_disp_site_crews_short_peary = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_peary > sr_site_crews_peary } value = 1 }
+}
 sr_disp_site_staffing_peary = {
 	value = sr_site_staffing_peary
 	multiply = 100
@@ -5159,6 +5375,12 @@ sr_disp_mod_pending_admin_tranquility = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_admin_tranquility } add = var:sr_mq_admin_tranquility }
 	if = { limit = { has_global_variable = sr_site_ship_admin_tranquility } add = global_var:sr_site_ship_admin_tranquility }
+}
+sr_disp_site_crews_needed_tranquility = { value = sr_site_crew_needed_tranquility }
+sr_disp_site_crews_tranquility = { value = sr_site_crews_tranquility }
+sr_disp_site_crews_short_tranquility = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_tranquility > sr_site_crews_tranquility } value = 1 }
 }
 sr_disp_site_staffing_tranquility = {
 	value = sr_site_staffing_tranquility
@@ -5247,6 +5469,12 @@ sr_disp_mod_pending_admin_marius_hills = {
 	if = { limit = { has_variable = sr_mq_admin_marius_hills } add = var:sr_mq_admin_marius_hills }
 	if = { limit = { has_global_variable = sr_site_ship_admin_marius_hills } add = global_var:sr_site_ship_admin_marius_hills }
 }
+sr_disp_site_crews_needed_marius_hills = { value = sr_site_crew_needed_marius_hills }
+sr_disp_site_crews_marius_hills = { value = sr_site_crews_marius_hills }
+sr_disp_site_crews_short_marius_hills = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_marius_hills > sr_site_crews_marius_hills } value = 1 }
+}
 sr_disp_site_staffing_marius_hills = {
 	value = sr_site_staffing_marius_hills
 	multiply = 100
@@ -5334,6 +5562,12 @@ sr_disp_mod_pending_admin_daedalus = {
 	if = { limit = { has_variable = sr_mq_admin_daedalus } add = var:sr_mq_admin_daedalus }
 	if = { limit = { has_global_variable = sr_site_ship_admin_daedalus } add = global_var:sr_site_ship_admin_daedalus }
 }
+sr_disp_site_crews_needed_daedalus = { value = sr_site_crew_needed_daedalus }
+sr_disp_site_crews_daedalus = { value = sr_site_crews_daedalus }
+sr_disp_site_crews_short_daedalus = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_daedalus > sr_site_crews_daedalus } value = 1 }
+}
 sr_disp_site_staffing_daedalus = {
 	value = sr_site_staffing_daedalus
 	multiply = 100
@@ -5420,6 +5654,12 @@ sr_disp_mod_pending_admin_imbrium = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_admin_imbrium } add = var:sr_mq_admin_imbrium }
 	if = { limit = { has_global_variable = sr_site_ship_admin_imbrium } add = global_var:sr_site_ship_admin_imbrium }
+}
+sr_disp_site_crews_needed_imbrium = { value = sr_site_crew_needed_imbrium }
+sr_disp_site_crews_imbrium = { value = sr_site_crews_imbrium }
+sr_disp_site_crews_short_imbrium = {
+	value = 0
+	if = { limit = { sr_site_crew_needed_imbrium > sr_site_crews_imbrium } value = 1 }
 }
 sr_disp_site_staffing_imbrium = {
 	value = sr_site_staffing_imbrium

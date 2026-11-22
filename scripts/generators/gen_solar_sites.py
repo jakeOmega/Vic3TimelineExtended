@@ -2715,6 +2715,10 @@ def render_module_triggers() -> list[str]:
             "sr_mod_scope_spec_room = {", "\tOR = {"]
     out += [f"\t\tAND = {{ scope:site = {s.index} sr_mod_spec_used_{s.key} < sr_mod_spec_budget }}" for s in SITES]
     out += ["\t}", "}",
+            "# Its people can crew one more module level (colony people design § 10: the + button's line).",
+            "sr_mod_scope_crew_spare = {", "\tOR = {"]
+    out += [f"\t\tAND = {{ scope:site = {s.index} sr_site_crews_{s.key} >= sr_site_levels_{s.key} }}" for s in SITES]
+    out += ["\t}", "}",
             "# Its Habitats are at or past its cap, so the next one costs more (colony people design § 4.3).",
             "sr_mod_scope_past_hab_cap = {", "\tOR = {"]
     out += [f"\t\tAND = {{ scope:site = {s.index} sr_mod_hab_used_{s.key} >= sr_site_hab_cap_{s.key} }}" for s in SITES]
@@ -3788,6 +3792,14 @@ def render_display() -> str:
                     f"\tif = {{ limit = {{ has_variable = sr_mq_{t}_{k} }} add = var:sr_mq_{t}_{k} }}",
                     f"\tif = {{ limit = {{ has_global_variable = sr_site_ship_{t}_{k} }} add = global_var:sr_site_ship_{t}_{k} }}",
                     "}"]
+        # Crews needed (the crewed levels less the founding one) against the
+        # people's crews, and whether it is short (colony people design § 10).
+        out += [f"sr_disp_site_crews_needed_{k} = {{ value = sr_site_crew_needed_{k} }}",
+                f"sr_disp_site_crews_{k} = {{ value = sr_site_crews_{k} }}",
+                f"sr_disp_site_crews_short_{k} = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ sr_site_crew_needed_{k} > sr_site_crews_{k} }} value = 1 }}",
+                "}"]
         out += [f"sr_disp_site_staffing_{k} = {{",
                 f"\tvalue = sr_site_staffing_{k}",
                 "\tmultiply = 100",
@@ -4192,6 +4204,12 @@ def _colony_row(site: Site) -> list[str]:
     out += _override("settler_people", f'raw_text = "#v [{_sv(f"sr_disp_site_pop_{k}")}|K] / [{_sv(f"sr_site_room_{k}")}|K]#!"')
     out += _override("settler_crews", f'raw_text = "[{_sv(f"sr_site_crews_{k}")}|0]"')
     # Modules
+    # Crews needed / available, red when short, then the share they run (colony
+    # people design § 10).
+    crews = f"[{_sv(f'sr_disp_site_crews_needed_{k}')}|0]/[{_sv(f'sr_disp_site_crews_{k}')}|0]"
+    out += _override("module_crews", f'visible = "[{_eq(f"sr_disp_site_crews_short_{k}", 0)}]"', f'raw_text = "{crews}"')
+    out += _override("module_crews_short", f'visible = "[{_eq(f"sr_disp_site_crews_short_{k}", 1)}]"',
+                     f'raw_text = "{crews}"')
     out += _override("module_staffing", f'raw_text = "[{_sv(f"sr_disp_site_staffing_{k}")}|0]%"')
     # Its Habitats against the cap, red past it (colony people design § 10), and its
     # Extraplanetary Base room (design § 5).

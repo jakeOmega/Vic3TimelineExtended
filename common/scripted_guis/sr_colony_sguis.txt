@@ -422,6 +422,22 @@ sr_colony_module_sgui = {
 				sr_mod_queue_from_scope = yes
 			}
 		}
+		# A crewed module (every one but the Habitat): whether the colony's people
+		# can crew it, or every crewed module there runs short (colony people
+		# design § 10). Crews never bar a module.
+		if = {
+			limit = {
+				scope:op >= 1
+				NOT = { scope:op = 3 }
+			}
+			if = {
+				limit = { sr_mod_scope_crew_spare = yes }
+				custom_tooltip = sr_mod_queue_crew_spare_tt
+			}
+			else = {
+				custom_tooltip = sr_mod_queue_crew_short_tt
+			}
+		}
 		# Past the world's Habitat cap a Habitat costs more fabrication (colony
 		# people design § 4.3).
 		if = {
