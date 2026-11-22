@@ -567,8 +567,10 @@ are the refresh's: give a new base a month before reading them.
 3. **The checkbox.** The mod's first `checkbutton`: it draws ticked with the checkbox on, at 24 × 24, and a click
    unticks it (`sr_ebase_auto_sgui`), the second row turning to "At our assignments". Its hover gives the rule.
 4. **− and +.** With the checkbox off, a click on a colony's + raises its assignment by 5 and "→ N" appears beside
-   its levels; a right-click raises it by 25, and − lowers it the same ways. `onrightclick` has not been used on a
-   scripted GUI's button in the mod before: if a right-click does nothing, give each box ±25 buttons of its own. A
+   its levels; a right-click raises it by 25, and − lowers it the same ways. The tax workbench's steppers right-click a
+   scripted GUI the same way (`onrightclick` with an `op` scope, on a button greyed by another op's `IsValid`): if a
+   right-click does nothing here, compare them, and failing that give each box ±25 buttons of its own. A right-click
+   on a greyed + changes nothing, the checkbox included (the effect sets nothing unless the target changes). A
    click with the checkbox on unticks it first.
 5. **The move lines.** With the checkbox on and a move under way (raise one good's price until a site of another
    type earns more): "Moving since <year>, up to N a month", "From <site> to <site>", and "<site> earns N% more a
@@ -1106,6 +1108,17 @@ Bases view with In-Situ Resource Utilization and a base of a hundred or more lev
 9. **The room modifiers' descriptions.** Hover Extraplanetary Base Room in the Nation tab's modifiers: the
    description says the levels work at their sites' Base Grade where the Bases view puts them, not "the richest
    first".
+10. **Switching off during a blockade.** With 150 levels at 16 Psyche, Ceres and Io and the checkbox on, blockade
+    Psyche until its levels work elsewhere, then click − on Io: + at Ceres stays usable (the cuts the refresh stored,
+    `sr_eb_switch_cut_<k>`), the unassigned row reads the 5 levels − freed, and the boxes' arrows show where the
+    levels will sit once Psyche is freed. Lift the blockade: the levels come back to Psyche, every site reads its
+    assignment with no arrow left, and "At our assignments: no levels left to move".
+11. **Ticked back on mid-month.** With the checkbox off and a site that earns well more than another, tick it on
+    after the first of the month: the move area reads "Levels start moving next month", not "No site with room
+    earns ...", and the move starts on the first. The no-gain line, when it shows, wraps to two lines inside the
+    column. Ticking either way ends a running move: it shows as the last move, never as the checkbox's.
+12. **A country handed to the AI.** Switch the checkbox off, then `play` another country for a month: the first
+    country's checkbox is back on (its levels move for the most profit again), and switching back finds it on.
 
 ## Extraplanetary Base ground types: the month and the readings (2026-11-21)
 
