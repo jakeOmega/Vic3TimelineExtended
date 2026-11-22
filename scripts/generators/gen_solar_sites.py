@@ -311,8 +311,8 @@ GROWTH_PER_MONTH = 0.002
 # A held colony grows faster by its holder's GROWTH_MODIFIER, a script-only type
 # (space_race_modifier_types.txt) that Self-Directed Evolution carries at +0.001,
 # people adapted to low gravity and radiation (era 13 spec § 7.3). Each world's
-# sr_site_growth_<key> reads it through the holder, as the slots read
-# SLOTS_MODIFIER; a free colony has no holder and grows at the base rate.
+# sr_site_growth_<key> reads it through the holder, as the Habitat share reads
+# HABITAT_MODIFIER; a free colony has no holder and grows at the base rate.
 GROWTH_MODIFIER = "country_sr_colony_growth_add"
 # A crew of one module level (colony people design § 4.2; owner, 2026-11-22):
 # 10,000 people, half with Artificial Intelligence, read through the world's
@@ -383,18 +383,15 @@ MODULE_NAMES = {"a": "Specialization I", "b": "Specialization II", "hab": "Habit
                 "def": "Defences", "port": "Spaceport", **{f.key: f.name for f in FACILITIES}}
 MODULE_AI_VALUE = 8  # Cede Colony's AI value of a module level past the first
 
-# Slots (colony management design § 5): the table's slots plus the holder's
-# SLOTS_MODIFIER, a script-only type that five technologies carry (+1 each:
-# Nuclear Thermal Propulsion, Orbital Manufacturing, Advanced Nanofabrication,
-# Space Colonization, Molecular Assemblers), so their tooltips show it, and up to
-# SLOTS_PAST_MAX modules past them, the n-th past costing sr_module_points x
-# (1 + n). A module past them is queued only while the module stock can hold
-# its price (sr_mod_fab_stock_cap, sr_colony_module_values.txt): the base stock
-# of 500 holds the fourth's, and storage and a year's fabrication the rest (the
-# owner, 2026-11-15: "increase the max you can go over the limit, since you can
-# store more now too").
-SLOTS_MODIFIER = "country_sr_colony_slots_add"
-SLOTS_PAST_MAX = 8
+# No slots (colony people design § 4.1; owner, 2026-11-22): any module may be
+# queued at any colony at the flat price, sr_module_points, and crews are the
+# limit. The Habitat is the one capped module (§ 4.3): the table's `slots` (1 to
+# 4) is its cap, sr_site_hab_cap_<key>, which no technology changes. Past it the
+# n-th Habitat costs sr_module_points x (1 + n), with no top (the owner's call 7:
+# today's limit of 8 past went), and one is queued only while the module stock
+# can hold its price (sr_mod_fab_stock_cap, sr_colony_module_values.txt): the
+# base stock of 500 holds the fourth's, and storage and a year's fabrication the
+# rest, so Module Storage buys reach past the cap.
 
 # The Modules view's lines of cells (colony management design § 8), in order;
 # Terraforming on a fourth line of its own, shown on the worlds that take it.
@@ -453,20 +450,20 @@ def lunar_open_test(var: str, place_type: str | None = None) -> str:
     that can take a module now, neither blockaded nor occupied (a module built
     for one would be lost at once; review of #1847); false while it is unset.
     With `place_type` (the place's type variable), also one the stock can pay
-    for: a specialization at sr_module_points, a slot module at the world's
-    sr_mod_generic_cost_<key> (sr_mq_head_cost's prices)."""
+    for: every module at sr_module_points, a Habitat at the world's
+    sr_mod_hab_cost_<key> (sr_mq_head_cost's prices)."""
     parts = []
     for s in LUNAR:
         terms = [f"{var} ?= {s.index}", f"NOT = {{ has_global_variable = sr_site_blockaded_{s.key} }}",
                  f"NOT = {{ has_global_variable = sr_site_occupier_{s.key} }}"]
         if place_type:
             terms += ["sr_mod_fab_stock_value >= sr_module_points",
-                      f"OR = {{ {place_type} ?= 1 {place_type} ?= 2 sr_mod_fab_stock_value >= sr_mod_generic_cost_{s.key} }}"]
+                      f"OR = {{ NOT = {{ {place_type} ?= {MODULE_CODES['hab']} }} sr_mod_fab_stock_value >= sr_mod_hab_cost_{s.key} }}"]
         parts.append("AND = { " + " ".join(terms) + " }")
     return "OR = { " + " ".join(parts) + " }"
 
 # No Spaceport on a lunar world (design § 3.1): fleets dock at Earth, the same
-# location. Its slots hold Habitats and Defences. module_types() and its kin
+# location. module_types() and its kin
 # drop the Spaceport for these, so no queue, shipment, building or panel cell
 # is emitted for one; sr_site_port_value_<key> stays, a constant 0, because the
 # integrity step (sr_fleet_combat_effects.txt) reads it for every world.
@@ -1939,7 +1936,8 @@ def render_module_values() -> list[str]:
            "#                                  x the charter's share (slice 5 design § 2)",
            "#   sr_site_<spec|generic>_built_<key>  the levels against each cap",
            "# Country scope, counting THIS's queue and every shipment on its way:",
-           "#   sr_mod_spec_used_<key>, sr_mod_slots_used_<key>"]
+           "#   sr_mod_spec_used_<key> (against sr_mod_spec_budget), sr_mod_hab_used_<key> (against",
+           "#   sr_site_hab_cap_<key>, colony people design § 4.3)"]
     for site in SITES:
         k = site.key
         for slot, option in (("a", 1), ("b", 2)):
@@ -1993,19 +1991,19 @@ def render_module_values() -> list[str]:
                 f"sr_site_generic_built_{k} = {{",
                 *[f"\t{'value' if i == 0 else 'add'} = sr_site_{t}_value_{k}" for i, t in enumerate(generic_types(site))],
                 "}"]
-        out += _slot_values(site)
-        for name, types, built in (("spec_used", ("a", "b"), "spec_built"), ("slots_used", generic_types(site), "generic_built")):
-            out += [f"sr_mod_{name}_{k} = {{", f"\tvalue = sr_site_{built}_{k}"]
+        out += _hab_values(site)
+        for name, types, built in (("spec_used", ("a", "b"), "sr_site_spec_built"), ("hab_used", ("hab",), "sr_site_hab_value")):
+            out += [f"sr_mod_{name}_{k} = {{", f"\tvalue = {built}_{k}"]
             for t in types:
                 out += [f"\tif = {{ limit = {{ has_variable = sr_mq_{t}_{k} }} add = var:sr_mq_{t}_{k} }}",
                         f"\tif = {{ limit = {{ has_global_variable = sr_site_ship_{t}_{k} }} add = global_var:sr_site_ship_{t}_{k} }}"]
             out.append("}")
-        out += [f"# The next module THIS queues at {site.name} costs this (design § 5): past its slots,",
-                "# a hundred points more than the last.",
-                f"sr_mod_next_cost_{k} = {{",
+        out += [f"# The next Habitat THIS queues at {site.name} costs this (colony people design § 4.3):",
+                "# past its cap, a hundred points more than the last. Every other module costs sr_module_points.",
+                f"sr_mod_next_hab_cost_{k} = {{",
                 "\tvalue = sr_module_points",
-                f"\tif = {{ limit = {{ sr_mod_slots_used_{k} >= sr_site_slots_{k} }} value = sr_mod_slots_used_{k} "
-                f"subtract = sr_site_slots_{k} add = 2 multiply = sr_module_points }}",
+                f"\tif = {{ limit = {{ sr_mod_hab_used_{k} >= sr_site_hab_cap_{k} }} value = sr_mod_hab_used_{k} "
+                f"subtract = sr_site_hab_cap_{k} add = 2 multiply = sr_module_points }}",
                 "}"]
     out += render_facility_values()
     out += ["", "# Country scope, the habitat_marker self-check's reading (colony management design",
@@ -2071,31 +2069,24 @@ def render_shipment_wait_values() -> list[str]:
     return out
 
 
-def _slot_values(site: Site) -> list[str]:
-    """A world's slots and the price past them (colony management design § 5),
-    and each facility's staffed levels (§ 7). Any scope."""
+def _hab_values(site: Site) -> list[str]:
+    """A world's Habitat cap and the price past it (colony people design § 4.3),
+    and each facility's staffed levels (colony management design § 7). Any scope."""
     k = site.key
-    out = [f"# {site.name}'s slots: {site.slots} by its size, plus the holder's {SLOTS_MODIFIER};",
-           f"# up to {SLOTS_PAST_MAX} modules past them.",
-           f"sr_site_slots_{k} = {{",
-           f"\tvalue = {site.slots}",
-           f"\tif = {{ limit = {{ exists = global_var:sr_site_holder_{k} }} "
-           f"global_var:sr_site_holder_{k} = {{ add = modifier:{SLOTS_MODIFIER} }} }}",
+    out = [f"# {site.name}'s Habitat cap: {site.slots} by its size; past it the n-th costs",
+           "# sr_module_points x (1 + n), with no top.",
+           f"sr_site_hab_cap_{k} = {{ value = {site.slots} }}",
+           "# Its Habitats built or on their way, every shipper's: what the queue's head pays past.",
+           f"sr_site_hab_pending_{k} = {{",
+           f"\tvalue = sr_site_hab_value_{k}",
+           f"\tif = {{ limit = {{ has_global_variable = sr_site_ship_hab_{k} }} add = global_var:sr_site_ship_hab_{k} }}",
+           "}",
+           "# A Habitat built for it now costs this.",
+           f"sr_mod_hab_cost_{k} = {{",
+           "\tvalue = sr_module_points",
+           f"\tif = {{ limit = {{ sr_site_hab_pending_{k} >= sr_site_hab_cap_{k} }} value = sr_site_hab_pending_{k} "
+           f"subtract = sr_site_hab_cap_{k} add = 2 multiply = sr_module_points }}",
            "}"]
-    out += [f"sr_site_slots_max_{k} = {{ value = sr_site_slots_{k} add = {SLOTS_PAST_MAX} }}",
-            "# Its slots built or on their way, every shipper's: what the queue's head pays past.",
-            f"sr_site_generic_pending_{k} = {{",
-            f"\tvalue = sr_site_generic_built_{k}"]
-    out += [f"\tif = {{ limit = {{ has_global_variable = sr_site_ship_{t}_{k} }} add = global_var:sr_site_ship_{t}_{k} }}"
-            for t in generic_types(site)]
-    out += ["}",
-            "# A slot module built for it now costs this: past its slots, the n-th past",
-            "# sr_module_points x (1 + n).",
-            f"sr_mod_generic_cost_{k} = {{",
-            "\tvalue = sr_module_points",
-            f"\tif = {{ limit = {{ sr_site_generic_pending_{k} >= sr_site_slots_{k} }} value = sr_site_generic_pending_{k} "
-            f"subtract = sr_site_slots_{k} add = 2 multiply = sr_module_points }}",
-            "}"]
     for t in FACILITY_TYPES:
         if t in generic_types(site):
             out.append(f"sr_site_{t}_staffed_{k} = {{ value = sr_site_{t}_value_{k} multiply = sr_site_staffing_{k} }}")
@@ -2174,15 +2165,16 @@ def render_facility_values() -> list[str]:
         out += [f"\tif = {{ limit = {{ {_facility_serves(s, f)} }} add = sr_site_{f.key}_staffed_{s.key} }}" for s in SITES
                 if f.key in generic_types(s)]
         out.append("}")
-    out += ["# The queue's head (sr_mq_1_site, sr_mq_1_type) costs this to build: a slot module",
-            "# (code 3 on) the world's sr_mod_generic_cost_<key>, a specialization level the base.",
+    out += ["# The queue's head (sr_mq_1_site, sr_mq_1_type) costs this to build: a Habitat",
+            "# (code 3) the world's sr_mod_hab_cost_<key>, every other module the base (colony",
+            "# people design § 4.3).",
             "sr_mq_head_cost = {",
             "\tvalue = sr_module_points",
             "\tif = {",
-            "\t\tlimit = { has_variable = sr_mq_1_site has_variable = sr_mq_1_type var:sr_mq_1_type >= 3 }"]
+            f"\t\tlimit = {{ has_variable = sr_mq_1_site has_variable = sr_mq_1_type var:sr_mq_1_type = {MODULE_CODES['hab']} }}"]
     for n, site in enumerate(SITES):
         out.append(f"\t\t{'if' if n == 0 else 'else_if'} = {{ limit = {{ var:sr_mq_1_site = {site.index} }} "
-                   f"value = sr_mod_generic_cost_{site.key} }}")
+                   f"value = sr_mod_hab_cost_{site.key} }}")
     out += ["\t}", "}"]
     return out
 
@@ -2190,7 +2182,8 @@ def render_facility_values() -> list[str]:
 def _module_install(site: Site) -> list[str]:
     k = site.key
     out = [f"# A module lands at {site.name} (local_var:sr_ms_type_now): installed for whoever holds",
-           "# the world while its cap has room, else lost (design § 6).",
+           "# the world, a specialization or Terraforming while its cap has room, else lost (design § 6;",
+           "# every other module has no cap, colony people design § 4.1).",
            f"sr_mod_install_{k} = {{",
            "\tif = {",
            "\t\tlimit = {",
@@ -2202,14 +2195,14 @@ def _module_install(site: Site) -> list[str]:
     first = True
     for t in ("a", "b", *generic_types(site)):
         if t in ("a", "b"):
-            cap, var = f"sr_site_spec_built_{k} < sr_mod_spec_budget", f"sr_site_lvl_{t}_{k}"
+            cap, var = f" sr_site_spec_built_{k} < sr_mod_spec_budget", f"sr_site_lvl_{t}_{k}"
         else:
-            cap, var = f"sr_site_generic_built_{k} < sr_site_slots_max_{k}", f"sr_site_{t}_{k}"
+            cap, var = "", f"sr_site_{t}_{k}"
         if t == "terra":
             # No more than sr_terra_max_levels, and none on a world already finished.
             cap += f" sr_site_terra_value_{k} < sr_terra_max_levels sr_site_terra_open_{k} = yes"
         out += ["\t\tif = {" if first else "\t\telse_if = {",
-                f"\t\t\tlimit = {{ local_var:sr_ms_type_now = {MODULE_CODES[t]} {cap} }}",
+                f"\t\t\tlimit = {{ local_var:sr_ms_type_now = {MODULE_CODES[t]}{cap} }}",
                 f"\t\t\tset_global_variable = {{ name = {var} value = {{ value = {level_value(t, site)} add = 1 }} }}",
                 "\t\t\tset_local_variable = { name = sr_ms_installed value = 1 }",
                 "\t\t}"]
@@ -2234,11 +2227,12 @@ def _module_ai(site: Site) -> list[str]:
     """The AI's one module for a colony with nothing queued or shipping (design
     § 10): a Habitat when it fills up, its specialization levels, then a
     facility (colony management design § 7.3), Terraforming among them where
-    the world takes it. Slot modules only within its slots: the AI never pays
-    the price past them."""
+    the world takes it. A Habitat only within its cap: the AI never pays the price
+    past it; everything else only while its crews can run one more (colony people
+    design § 9)."""
     k = site.key
     crew = f"sr_site_crews_{k} >= sr_site_levels_{k}"
-    room = f"sr_mod_slots_used_{k} < sr_site_slots_{k}"
+    room = f"sr_mod_hab_used_{k} < sr_site_hab_cap_{k}"
     out = [f"sr_mod_ai_plan_{k} = {{",
            "\tif = {",
            "\t\tlimit = {",
@@ -2283,7 +2277,6 @@ def _module_ai(site: Site) -> list[str]:
         out += ["\t\telse_if = {",
                 "\t\t\tlimit = {",
                 f"\t\t\t\tsr_mod_can_queue_{t}_{k} = yes",
-                f"\t\t\t\t{room}",
                 f"\t\t\t\t{crew}"]
         if why:
             out.append(f"\t\t\t\t{why}")
@@ -2520,8 +2513,7 @@ def render_module_effects() -> list[str]:
         if terraformable(site):
             levels += f" terraformed=[SCOPE.ScriptValue('sr_site_terra_done_value_{k}')|0]/{TERRA_FULL_MONTHS} months"
         queue = (f"specializations [THIS.ScriptValue('sr_mod_spec_used_{k}')|0] of {SPEC_BUDGET}, "
-                 f"generic [THIS.ScriptValue('sr_mod_slots_used_{k}')|0] of "
-                 f"[THIS.ScriptValue('sr_site_slots_{k}')|0]")
+                 f"Habitats [THIS.ScriptValue('sr_mod_hab_used_{k}')|0] of a cap of {site.slots}")
         out += ["\tif = {",
                 f"\t\tlimit = {{ has_global_variable = sr_colony_{k} }}",
                 f"\t\tdebug_log = \"TE_SR_MODULES {k}: {levels.replace('SCOPE.', 'THIS.')} "
@@ -2612,12 +2604,12 @@ def render_module_triggers() -> list[str]:
     out = ["# ===== Modules (slice 4 design §§ 2, 5-6) =====",
            "# Per world, country scope:",
            "#   sr_mq_any_<key>               THIS has a module of it queued",
-           "#   sr_mod_can_queue_<type>_<key> THIS may queue one more: it holds the world, the",
-           "#                                 queue has a free place, the cap has room counting",
-           "#                                 queue and shipments, and a specialization's",
-           "#                                 founding choice is made; past a world's slots,",
-           "#                                 only while the module stock can hold the price",
-           "#                                 (the owner, 2026-11-15), or it could never be built",
+           "#   sr_mod_can_queue_<type>_<key> THIS may queue one more: it holds the world and the",
+           "#                                 queue has a free place; a specialization while the",
+           "#                                 budget has room counting queue and shipments and the",
+           "#                                 founding choice is made; a Habitat only while the",
+           "#                                 module stock can hold its price (the owner, 2026-11-15;",
+           "#                                 colony people design § 4.3), or it could never be built",
            "#   sr_mod_departs_<key>          a module can leave for it this month at no premium",
            "# Any scope: sr_site_shipping_<key>, a module is on its way there."]
     for site in SITES:
@@ -2635,9 +2627,9 @@ def render_module_triggers() -> list[str]:
         for t in generic_types(site):
             out += [f"sr_mod_can_queue_{t}_{k} = {{",
                     f"\tglobal_var:sr_site_holder_{k} ?= this",
-                    "\tsr_mq_has_room = yes",
-                    f"\tsr_mod_slots_used_{k} < sr_site_slots_max_{k}",
-                    f"\tsr_mod_next_cost_{k} <= sr_mod_fab_stock_cap"]
+                    "\tsr_mq_has_room = yes"]
+            if t == "hab":
+                out.append(f"\tsr_mod_next_hab_cost_{k} <= sr_mod_fab_stock_cap")
             if t == "resort":
                 # The Off-World Resort is room for Resort Colony levels (#1948 design § 7),
                 # so it waits for the building's technology.
@@ -2700,17 +2692,13 @@ def render_module_triggers() -> list[str]:
             "sr_mod_scope_spec_room = {", "\tOR = {"]
     out += [f"\t\tAND = {{ scope:site = {s.index} sr_mod_spec_used_{s.key} < sr_mod_spec_budget }}" for s in SITES]
     out += ["\t}", "}",
-            "# It has a slot left for a Habitat, Spaceport or Defences, counting queue and shipments.",
-            "sr_mod_scope_slot_room = {", "\tOR = {"]
-    out += [f"\t\tAND = {{ scope:site = {s.index} sr_mod_slots_used_{s.key} < sr_site_slots_max_{s.key} }}" for s in SITES]
+            "# Its Habitats are at or past its cap, so the next one costs more (colony people design § 4.3).",
+            "sr_mod_scope_past_hab_cap = {", "\tOR = {"]
+    out += [f"\t\tAND = {{ scope:site = {s.index} sr_mod_hab_used_{s.key} >= sr_site_hab_cap_{s.key} }}" for s in SITES]
     out += ["\t}", "}",
-            "# ... is at or past its slots, so the next one costs more (design § 5).",
-            "sr_mod_scope_past_slots = {", "\tOR = {"]
-    out += [f"\t\tAND = {{ scope:site = {s.index} sr_mod_slots_used_{s.key} >= sr_site_slots_{s.key} }}" for s in SITES]
-    out += ["\t}", "}",
-            "# ... and its next costs no more than the module stock can hold (the owner, 2026-11-15).",
-            "sr_mod_scope_price_fits = {", "\tOR = {"]
-    out += [f"\t\tAND = {{ scope:site = {s.index} sr_mod_next_cost_{s.key} <= sr_mod_fab_stock_cap }}" for s in SITES]
+            "# ... and its next Habitat costs no more than the module stock can hold (the owner, 2026-11-15).",
+            "sr_mod_scope_hab_price_fits = {", "\tOR = {"]
+    out += [f"\t\tAND = {{ scope:site = {s.index} sr_mod_next_hab_cost_{s.key} <= sr_mod_fab_stock_cap }}" for s in SITES]
     out += ["\t}", "}",
             "# ... has a queue to clear.",
             "sr_mod_scope_has_queue = {", "\tOR = {"]
@@ -3069,14 +3057,16 @@ def _autonomy_world(site: Site) -> list[str]:
 
 
 def _self_build(site: Site) -> list[str]:
-    """The colony's own module, free and installed at once, within its slots and
-    specialization levels (colony management design § 4.3): a Habitat once it
-    fills up, its founding specialization's level up to 3, the other's, then a
-    Research Station or a Cultural Center, whichever it has fewer of. Holder
-    scope. With nothing to build its points wait at sr_module_points."""
+    """The colony's own module, free and installed at once (colony management
+    design § 4.3): a Habitat within its cap once it fills up, then, within its
+    crews (colony people design § 9), its founding specialization's level up to
+    3, the other's, then a Research Station or a Cultural Center, whichever it
+    has fewer of. Holder scope. With nothing to build its points wait at
+    sr_module_points."""
     k = site.key
-    room = f"sr_mod_slots_used_{k} < sr_site_slots_{k}"
-    spec = f"sr_mod_spec_used_{k} < sr_mod_spec_budget"
+    room = f"sr_mod_hab_used_{k} < sr_site_hab_cap_{k}"
+    crew = f"sr_site_crews_{k} >= sr_site_levels_{k}"
+    spec = f"sr_mod_spec_used_{k} < sr_mod_spec_budget {crew}"
 
     def build(var: str, value: str) -> str:
         return f"set_global_variable = {{ name = {var} value = {{ value = {value} add = 1 }} }}"
@@ -3088,9 +3078,9 @@ def _self_build(site: Site) -> list[str]:
                          f"sr_site_lvl_{own}_value_{k} < 3",
                          build(f"sr_site_lvl_{own}_{k}", f"sr_site_lvl_{own}_value_{k}")))
     branches.append((f"has_global_variable = sr_site_spec_{k} {spec}", "SPEC_OTHER"))
-    branches.append((f"{room} sr_site_lab_value_{k} <= sr_site_culture_value_{k}",
+    branches.append((f"{crew} sr_site_lab_value_{k} <= sr_site_culture_value_{k}",
                      build(f"sr_site_lab_{k}", f"sr_site_lab_value_{k}")))
-    branches.append((room, build(f"sr_site_culture_{k}", f"sr_site_culture_value_{k}")))
+    branches.append((crew, build(f"sr_site_culture_{k}", f"sr_site_culture_value_{k}")))
     out = [f"# {site.name} builds a module of its own (its autonomy's step, holder scope).",
            f"sr_site_self_build_{k} = {{",
            "\tset_local_variable = { name = sr_self_built value = 1 }"]
@@ -3780,18 +3770,21 @@ def render_display() -> str:
                 "\tmultiply = 100",
                 "\tfloor = yes",
                 "}",
-                # Slots and bases (colony management design § 5): ours, counting our queue.
-                f"sr_disp_site_slots_used_{k} = {{ value = sr_mod_slots_used_{k} }}",
-                f"sr_disp_site_slots_{k} = {{ value = sr_site_slots_{k} }}",
+                # Habitats against the cap (colony people design § 4.3): ours, counting our
+                # queue; the share of the base room each holds, and its people.
+                f"sr_disp_site_hab_used_{k} = {{ value = sr_mod_hab_used_{k} }}",
+                f"sr_disp_site_hab_cap_{k} = {{ value = sr_site_hab_cap_{k} }}",
                 f"sr_disp_mod_past_{k} = {{",
                 "\tvalue = 0",
-                f"\tif = {{ limit = {{ sr_mod_slots_used_{k} > sr_site_slots_{k} }} value = 1 }}",
+                f"\tif = {{ limit = {{ sr_mod_hab_used_{k} > sr_site_hab_cap_{k} }} value = 1 }}",
                 "}",
-                f"sr_disp_mod_next_cost_{k} = {{ value = sr_mod_next_cost_{k} }}",
+                f"sr_disp_mod_next_hab_cost_{k} = {{ value = sr_mod_next_hab_cost_{k} }}",
+                f"sr_disp_site_hab_share_{k} = {{ value = sr_site_hab_share_value_{k} multiply = 100 round = yes }}",
+                f"sr_disp_site_hab_people_{k} = {{ value = sr_site_hab_share_value_{k} multiply = sr_site_base_room_{k} }}",
                 f"sr_disp_site_ebase_room_{k} = {{ value = sr_site_ebase_room_{k} }}",
                 f"sr_disp_site_resort_room_{k} = {{ value = sr_site_resort_room_{k} }}",
-                # Solar System's line under the name: the slots it would have as ours.
-                f"sr_disp_ss_slots_{k} = {{ value = {site.slots} add = modifier:{SLOTS_MODIFIER} }}"]
+                # Solar System's line under the name: the world's Habitat cap.
+                f"sr_disp_ss_hab_cap_{k} = {{ value = {site.slots} }}"]
     out += render_terra_display()
     out += render_dismantle_display()
     out += render_autonomy_display()
@@ -4119,7 +4112,7 @@ def _site_row(site: Site, *, picker: bool) -> list[str]:
     # Colony Module Slots, and its own Extraplanetary Base room and grade, then its
     # ground type's word, with that type's mix on hover (ground types design § 9.2).
     ground = ground_type(site)
-    out += _override("site_slots", f'raw_text = "#v [{_sv(f"sr_disp_ss_slots_{k}")}|0]#!"')
+    out += _override("site_slots", f'raw_text = "#v [{_sv(f"sr_disp_ss_hab_cap_{k}")}|0]#!"')
     out += _override("site_bases_tooltip", f'tooltip = "je_space_race_widget_ss_bases_tt_{ground}"')
     out += _override("site_bases", f'raw_text = "#v {site.ebase_room}#! ({_signed(site.ebase_grade)}%)"')
     out += _override("site_ground", f'text = "sr_ground_{ground}"')
@@ -4177,10 +4170,11 @@ def _colony_row(site: Site) -> list[str]:
     out += _override("settler_crews", f'raw_text = "[{_sv(f"sr_site_crews_{k}")}|0]"')
     # Modules
     out += _override("module_staffing", f'raw_text = "[{_sv(f"sr_disp_site_staffing_{k}")}|0]%"')
-    # Its slots, red past them, and its Extraplanetary Base room (design § 5).
-    used, slots, past = f"sr_disp_site_slots_used_{k}", f"sr_disp_site_slots_{k}", f"sr_disp_mod_past_{k}"
-    figure = f"[{_sv(used)}|0]/[{_sv(slots)}|0]"
-    out += _override("module_slots_tooltip", f'tooltip = "je_space_race_widget_slots_tt_{k}"')
+    # Its Habitats against the cap, red past it (colony people design § 10), and its
+    # Extraplanetary Base room (design § 5).
+    used, cap, past = f"sr_disp_site_hab_used_{k}", f"sr_disp_site_hab_cap_{k}", f"sr_disp_mod_past_{k}"
+    figure = f"[{_sv(used)}|0]/[{_sv(cap)}|0]"
+    out += _override("module_slots_tooltip", f'tooltip = "je_space_race_widget_habs_tt_{k}"')
     out += _override("module_slots", f'visible = "[{_eq(past, 0)}]"', f'raw_text = "{figure}"')
     out += _override("module_slots_past", f'visible = "[{_eq(past, 1)}]"', f'raw_text = "{figure}"')
     out += _override("module_bases_tooltip", f'tooltip = "je_space_race_widget_bases_tt_{k}"')

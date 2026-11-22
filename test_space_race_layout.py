@@ -732,17 +732,22 @@ class ColoniesTest(unittest.TestCase):
                               f"[AddLocalizationIf( {unpeopled}, 'sr_aut_line_unpeopled' )]", drift)
                 self.assertLess(drift.index("sr_aut_line_unpeopled"), drift.index("• the pull of home"))
 
-    def test_the_slots_hover_reads_the_slots_modifier(self):
-        """Colony management design § 5: a world's Slots hover gives its size's
-        slots and our Colony Module Slots from the modifier itself, so a new
-        source of the modifier shows there without an edit."""
+    def test_the_habitat_hover_reads_the_cap_and_the_share(self):
+        """Colony people design §§ 4.3, 5: a world's Habitats hover gives its cap
+        and what a Habitat holds there, from the world's own values, and names the
+        five technologies that raise the share."""
         for site in gss.SITES:
             k = site.key
             with self.subTest(world=k):
-                hover = self.loc[f"je_space_race_widget_slots_tt_{k}"]
-                self.assertIn(f"#v {site.slots}#! here for its size", hover)
-                self.assertIn(f"GetModifier.GetValueWithBreakdownFor('{gss.SLOTS_MODIFIER}')", hover)
-                self.assertIn(f"${gss.SLOTS_MODIFIER}$", hover)
+                hover = self.loc[f"je_space_race_widget_habs_tt_{k}"]
+                self.assertIn(f"#v {site.slots}#! here for the world's size", hover)
+                self.assertIn(f"sr_disp_site_hab_share_{k}", hover)
+                self.assertIn(f"sr_disp_site_hab_people_{k}", hover)
+                self.assertIn(f"sr_disp_mod_next_hab_cost_{k}", hover)
+                for tech in ("nuclear_thermal_propulsion", "orbital_manufacturing", "advanced_nanofabrication",
+                             "space_colonization", "molecular_assemblers"):
+                    self.assertIn(f"${tech}$", hover)
+                self.assertNotIn(f"je_space_race_widget_slots_tt_{k}", self.loc)
 
     def test_the_drift_and_its_terms_are_colored_as_a_cost(self):
         """Colony management design § 4.1: more autonomy is the holder's loss, so

@@ -88,7 +88,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_shackleton')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_shackleton')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -158,7 +158,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_peary')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_peary')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -228,7 +228,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_tranquility')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_tranquility')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -298,7 +298,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_marius_hills')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_marius_hills')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -368,7 +368,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_daedalus')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_daedalus')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -438,7 +438,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_imbrium')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_imbrium')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -515,7 +515,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_venus')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_venus')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_sulfurous"
@@ -585,7 +585,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_mercury')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_mercury')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -662,7 +662,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_valles_marineris')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_valles_marineris')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -732,7 +732,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_olympus_mons')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_olympus_mons')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -802,7 +802,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_hellas_planitia')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_hellas_planitia')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -872,7 +872,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_utopia_planitia')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_utopia_planitia')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -942,7 +942,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_arcadia_planitia')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_arcadia_planitia')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -1019,7 +1019,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_ceres')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_ceres')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
@@ -1089,7 +1089,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_vesta')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_vesta')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -1159,7 +1159,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_psyche')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_psyche')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_metallic"
@@ -1229,7 +1229,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_pallas')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_pallas')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
@@ -1299,7 +1299,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_hygiea')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_hygiea')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
@@ -1376,7 +1376,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_io')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_io')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_sulfurous"
@@ -1446,7 +1446,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_europa')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_europa')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_sulfurous"
@@ -1516,7 +1516,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_ganymede')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_ganymede')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -1586,7 +1586,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_callisto')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_callisto')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
@@ -1656,7 +1656,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_himalia')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_himalia')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
@@ -1726,7 +1726,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_amalthea')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_amalthea')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_sulfurous"
@@ -1803,7 +1803,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_titan')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_titan')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
@@ -1873,7 +1873,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_enceladus')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_enceladus')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
@@ -1943,7 +1943,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_rhea')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_rhea')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -2013,7 +2013,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_mimas')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_mimas')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -2083,7 +2083,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_iapetus')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_iapetus')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
@@ -2160,7 +2160,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_titania')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_titania')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -2230,7 +2230,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_oberon')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_oberon')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -2300,7 +2300,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_miranda')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_miranda')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -2370,7 +2370,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_ariel')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_ariel')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -2447,7 +2447,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_triton')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_triton')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -2517,7 +2517,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_proteus')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_proteus')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -2594,7 +2594,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_pluto')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_pluto')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
@@ -2664,7 +2664,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_eris')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_eris')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -2734,7 +2734,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_makemake')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_makemake')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
@@ -2804,7 +2804,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_haumea')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_haumea')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -2874,7 +2874,7 @@ types sr_sites_generated_rows_types
 				visible = no
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_sedna')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_sedna')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
@@ -2982,7 +2982,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_shackleton'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_shackleton')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_shackleton')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -3077,7 +3077,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_peary'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_peary')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_peary')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -3172,7 +3172,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_tranquility'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_tranquility')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_tranquility')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -3267,7 +3267,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_marius_hills'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_marius_hills')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_marius_hills')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -3362,7 +3362,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_daedalus'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_daedalus')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_daedalus')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -3457,7 +3457,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_imbrium'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_imbrium')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_imbrium')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -3561,7 +3561,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_venus'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_venus')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_venus')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_sulfurous"
@@ -3656,7 +3656,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_mercury'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_mercury')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_mercury')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -3760,7 +3760,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_valles_marineris'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_valles_marineris')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_valles_marineris')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -3857,7 +3857,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_olympus_mons'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_olympus_mons')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_olympus_mons')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -3954,7 +3954,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_hellas_planitia'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_hellas_planitia')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_hellas_planitia')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -4051,7 +4051,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_utopia_planitia'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_utopia_planitia')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_utopia_planitia')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -4148,7 +4148,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_arcadia_planitia'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_arcadia_planitia')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_arcadia_planitia')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -4252,7 +4252,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_ceres'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_ceres')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_ceres')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
@@ -4349,7 +4349,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_vesta'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_vesta')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_vesta')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -4446,7 +4446,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_psyche'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_psyche')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_psyche')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_metallic"
@@ -4543,7 +4543,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_pallas'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_pallas')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_pallas')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
@@ -4640,7 +4640,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_hygiea'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_hygiea')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_hygiea')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
@@ -4744,7 +4744,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_io'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_io')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_io')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_sulfurous"
@@ -4841,7 +4841,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_europa'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_europa')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_europa')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_sulfurous"
@@ -4938,7 +4938,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_ganymede'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_ganymede')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_ganymede')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -5035,7 +5035,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_callisto'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_callisto')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_callisto')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
@@ -5132,7 +5132,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_himalia'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_himalia')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_himalia')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
@@ -5229,7 +5229,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_amalthea'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_amalthea')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_amalthea')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_sulfurous"
@@ -5333,7 +5333,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_titan'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_titan')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_titan')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
@@ -5430,7 +5430,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_enceladus'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_enceladus')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_enceladus')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
@@ -5527,7 +5527,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_rhea'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_rhea')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_rhea')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -5624,7 +5624,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_mimas'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_mimas')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_mimas')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -5721,7 +5721,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_iapetus'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_iapetus')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_iapetus')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
@@ -5825,7 +5825,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_titania'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_titania')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_titania')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -5922,7 +5922,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_oberon'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_oberon')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_oberon')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -6019,7 +6019,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_miranda'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_miranda')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_miranda')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -6116,7 +6116,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_ariel'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_ariel')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_ariel')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -6220,7 +6220,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_triton'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_triton')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_triton')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -6317,7 +6317,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_proteus'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_proteus')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_proteus')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -6421,7 +6421,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_pluto'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_pluto')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_pluto')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
@@ -6518,7 +6518,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_eris'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_eris')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_eris')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -6615,7 +6615,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_makemake'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_makemake')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_makemake')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
@@ -6712,7 +6712,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_haumea'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_haumea')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_haumea')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -6809,7 +6809,7 @@ types sr_sites_generated_rows_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_target_sedna'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "site_slots" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_slots_sedna')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_sedna')|0]#!"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
@@ -6873,15 +6873,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_shackleton')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_shackleton"
+				tooltip = "je_space_race_widget_habs_tt_shackleton"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_shackleton'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_shackleton')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_shackleton')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_shackleton')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_shackleton')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_shackleton'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_shackleton')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_shackleton')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_shackleton')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_shackleton')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_shackleton"
@@ -7434,15 +7434,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_peary')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_peary"
+				tooltip = "je_space_race_widget_habs_tt_peary"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_peary'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_peary')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_peary')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_peary')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_peary')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_peary'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_peary')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_peary')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_peary')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_peary')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_peary"
@@ -7995,15 +7995,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_tranquility')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_tranquility"
+				tooltip = "je_space_race_widget_habs_tt_tranquility"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_tranquility'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_tranquility')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_tranquility')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_tranquility')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_tranquility')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_tranquility'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_tranquility')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_tranquility')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_tranquility')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_tranquility')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_tranquility"
@@ -8556,15 +8556,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_marius_hills')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_marius_hills"
+				tooltip = "je_space_race_widget_habs_tt_marius_hills"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_marius_hills'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_marius_hills')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_marius_hills')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_marius_hills')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_marius_hills')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_marius_hills'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_marius_hills')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_marius_hills')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_marius_hills')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_marius_hills')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_marius_hills"
@@ -9117,15 +9117,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_daedalus')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_daedalus"
+				tooltip = "je_space_race_widget_habs_tt_daedalus"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_daedalus'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_daedalus')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_daedalus')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_daedalus')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_daedalus')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_daedalus'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_daedalus')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_daedalus')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_daedalus')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_daedalus')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_daedalus"
@@ -9678,15 +9678,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_imbrium')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_imbrium"
+				tooltip = "je_space_race_widget_habs_tt_imbrium"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_imbrium'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_imbrium')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_imbrium')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_imbrium')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_imbrium')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_imbrium'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_imbrium')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_imbrium')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_imbrium')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_imbrium')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_imbrium"
@@ -10239,15 +10239,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_venus')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_venus"
+				tooltip = "je_space_race_widget_habs_tt_venus"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_venus'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_venus')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_venus')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_venus')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_venus')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_venus'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_venus')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_venus')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_venus')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_venus')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_venus"
@@ -10850,15 +10850,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_mercury')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_mercury"
+				tooltip = "je_space_race_widget_habs_tt_mercury"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_mercury'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_mercury')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_mercury')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_mercury')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_mercury')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_mercury'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_mercury')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_mercury')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_mercury')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_mercury')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_mercury"
@@ -11419,15 +11419,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_valles_marineris')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_valles_marineris"
+				tooltip = "je_space_race_widget_habs_tt_valles_marineris"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_valles_marineris'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_valles_marineris')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_valles_marineris')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_valles_marineris')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_valles_marineris')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_valles_marineris'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_valles_marineris')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_valles_marineris')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_valles_marineris')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_valles_marineris')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_valles_marineris"
@@ -12030,15 +12030,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_olympus_mons')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_olympus_mons"
+				tooltip = "je_space_race_widget_habs_tt_olympus_mons"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_olympus_mons'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_olympus_mons')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_olympus_mons')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_olympus_mons')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_olympus_mons')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_olympus_mons'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_olympus_mons')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_olympus_mons')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_olympus_mons')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_olympus_mons')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_olympus_mons"
@@ -12641,15 +12641,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_hellas_planitia')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_hellas_planitia"
+				tooltip = "je_space_race_widget_habs_tt_hellas_planitia"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_hellas_planitia'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_hellas_planitia')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_hellas_planitia')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_hellas_planitia')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_hellas_planitia')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_hellas_planitia'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_hellas_planitia')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_hellas_planitia')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_hellas_planitia')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_hellas_planitia')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_hellas_planitia"
@@ -13252,15 +13252,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_utopia_planitia')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_utopia_planitia"
+				tooltip = "je_space_race_widget_habs_tt_utopia_planitia"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_utopia_planitia'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_utopia_planitia')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_utopia_planitia')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_utopia_planitia')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_utopia_planitia')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_utopia_planitia'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_utopia_planitia')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_utopia_planitia')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_utopia_planitia')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_utopia_planitia')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_utopia_planitia"
@@ -13863,15 +13863,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_arcadia_planitia')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_arcadia_planitia"
+				tooltip = "je_space_race_widget_habs_tt_arcadia_planitia"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_arcadia_planitia'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_arcadia_planitia')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_arcadia_planitia')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_arcadia_planitia')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_arcadia_planitia')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_arcadia_planitia'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_arcadia_planitia')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_arcadia_planitia')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_arcadia_planitia')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_arcadia_planitia')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_arcadia_planitia"
@@ -14474,15 +14474,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_ceres')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_ceres"
+				tooltip = "je_space_race_widget_habs_tt_ceres"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_ceres'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_ceres')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_ceres')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_ceres')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_ceres')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_ceres'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_ceres')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_ceres')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_ceres')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_ceres')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_ceres"
@@ -15043,15 +15043,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_vesta')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_vesta"
+				tooltip = "je_space_race_widget_habs_tt_vesta"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_vesta'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_vesta')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_vesta')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_vesta')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_vesta')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_vesta'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_vesta')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_vesta')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_vesta')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_vesta')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_vesta"
@@ -15612,15 +15612,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_psyche')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_psyche"
+				tooltip = "je_space_race_widget_habs_tt_psyche"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_psyche'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_psyche')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_psyche')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_psyche')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_psyche')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_psyche'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_psyche')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_psyche')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_psyche')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_psyche')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_psyche"
@@ -16181,15 +16181,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_pallas')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_pallas"
+				tooltip = "je_space_race_widget_habs_tt_pallas"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_pallas'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_pallas')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_pallas')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_pallas')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_pallas')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_pallas'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_pallas')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_pallas')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_pallas')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_pallas')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_pallas"
@@ -16750,15 +16750,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_hygiea')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_hygiea"
+				tooltip = "je_space_race_widget_habs_tt_hygiea"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_hygiea'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_hygiea')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_hygiea')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_hygiea')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_hygiea')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_hygiea'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_hygiea')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_hygiea')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_hygiea')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_hygiea')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_hygiea"
@@ -17319,15 +17319,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_io')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_io"
+				tooltip = "je_space_race_widget_habs_tt_io"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_io'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_io')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_io')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_io')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_io')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_io'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_io')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_io')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_io')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_io')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_io"
@@ -17888,15 +17888,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_europa')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_europa"
+				tooltip = "je_space_race_widget_habs_tt_europa"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_europa'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_europa')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_europa')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_europa')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_europa')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_europa'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_europa')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_europa')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_europa')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_europa')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_europa"
@@ -18457,15 +18457,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_ganymede')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_ganymede"
+				tooltip = "je_space_race_widget_habs_tt_ganymede"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_ganymede'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_ganymede')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_ganymede')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_ganymede')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_ganymede')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_ganymede'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_ganymede')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_ganymede')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_ganymede')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_ganymede')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_ganymede"
@@ -19068,15 +19068,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_callisto')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_callisto"
+				tooltip = "je_space_race_widget_habs_tt_callisto"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_callisto'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_callisto')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_callisto')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_callisto')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_callisto')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_callisto'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_callisto')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_callisto')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_callisto')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_callisto')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_callisto"
@@ -19679,15 +19679,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_himalia')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_himalia"
+				tooltip = "je_space_race_widget_habs_tt_himalia"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_himalia'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_himalia')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_himalia')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_himalia')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_himalia')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_himalia'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_himalia')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_himalia')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_himalia')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_himalia')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_himalia"
@@ -20248,15 +20248,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_amalthea')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_amalthea"
+				tooltip = "je_space_race_widget_habs_tt_amalthea"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_amalthea'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_amalthea')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_amalthea')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_amalthea')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_amalthea')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_amalthea'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_amalthea')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_amalthea')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_amalthea')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_amalthea')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_amalthea"
@@ -20817,15 +20817,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_titan')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_titan"
+				tooltip = "je_space_race_widget_habs_tt_titan"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_titan'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_titan')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_titan')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_titan')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_titan')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_titan'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_titan')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_titan')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_titan')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_titan')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_titan"
@@ -21428,15 +21428,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_enceladus')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_enceladus"
+				tooltip = "je_space_race_widget_habs_tt_enceladus"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_enceladus'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_enceladus')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_enceladus')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_enceladus')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_enceladus')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_enceladus'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_enceladus')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_enceladus')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_enceladus')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_enceladus')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_enceladus"
@@ -21997,15 +21997,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_rhea')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_rhea"
+				tooltip = "je_space_race_widget_habs_tt_rhea"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_rhea'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_rhea')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_rhea')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_rhea')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_rhea')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_rhea'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_rhea')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_rhea')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_rhea')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_rhea')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_rhea"
@@ -22566,15 +22566,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_mimas')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_mimas"
+				tooltip = "je_space_race_widget_habs_tt_mimas"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_mimas'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_mimas')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_mimas')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_mimas')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_mimas')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_mimas'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_mimas')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_mimas')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_mimas')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_mimas')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_mimas"
@@ -23135,15 +23135,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_iapetus')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_iapetus"
+				tooltip = "je_space_race_widget_habs_tt_iapetus"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_iapetus'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_iapetus')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_iapetus')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_iapetus')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_iapetus')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_iapetus'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_iapetus')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_iapetus')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_iapetus')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_iapetus')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_iapetus"
@@ -23704,15 +23704,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_titania')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_titania"
+				tooltip = "je_space_race_widget_habs_tt_titania"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_titania'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_titania')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_titania')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_titania')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_titania')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_titania'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_titania')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_titania')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_titania')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_titania')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_titania"
@@ -24273,15 +24273,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_oberon')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_oberon"
+				tooltip = "je_space_race_widget_habs_tt_oberon"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_oberon'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_oberon')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_oberon')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_oberon')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_oberon')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_oberon'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_oberon')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_oberon')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_oberon')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_oberon')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_oberon"
@@ -24842,15 +24842,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_miranda')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_miranda"
+				tooltip = "je_space_race_widget_habs_tt_miranda"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_miranda'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_miranda')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_miranda')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_miranda')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_miranda')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_miranda'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_miranda')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_miranda')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_miranda')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_miranda')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_miranda"
@@ -25411,15 +25411,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_ariel')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_ariel"
+				tooltip = "je_space_race_widget_habs_tt_ariel"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_ariel'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_ariel')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_ariel')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_ariel')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_ariel')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_ariel'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_ariel')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_ariel')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_ariel')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_ariel')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_ariel"
@@ -25980,15 +25980,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_triton')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_triton"
+				tooltip = "je_space_race_widget_habs_tt_triton"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_triton'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_triton')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_triton')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_triton')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_triton')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_triton'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_triton')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_triton')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_triton')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_triton')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_triton"
@@ -26549,15 +26549,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_proteus')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_proteus"
+				tooltip = "je_space_race_widget_habs_tt_proteus"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_proteus'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_proteus')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_proteus')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_proteus')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_proteus')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_proteus'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_proteus')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_proteus')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_proteus')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_proteus')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_proteus"
@@ -27118,15 +27118,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_pluto')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_pluto"
+				tooltip = "je_space_race_widget_habs_tt_pluto"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_pluto'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_pluto')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_pluto')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_pluto')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_pluto')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_pluto'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_pluto')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_pluto')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_pluto')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_pluto')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_pluto"
@@ -27687,15 +27687,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_eris')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_eris"
+				tooltip = "je_space_race_widget_habs_tt_eris"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_eris'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_eris')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_eris')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_eris')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_eris')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_eris'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_eris')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_eris')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_eris')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_eris')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_eris"
@@ -28256,15 +28256,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_makemake')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_makemake"
+				tooltip = "je_space_race_widget_habs_tt_makemake"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_makemake'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_makemake')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_makemake')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_makemake')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_makemake')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_makemake'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_makemake')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_makemake')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_makemake')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_makemake')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_makemake"
@@ -28825,15 +28825,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_haumea')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_haumea"
+				tooltip = "je_space_race_widget_habs_tt_haumea"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_haumea'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_haumea')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_haumea')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_haumea')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_haumea')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_haumea'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_haumea')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_haumea')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_haumea')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_haumea')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_haumea"
@@ -29394,15 +29394,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_staffing_sedna')|0]%"
 			}
 			blockoverride "module_slots_tooltip" {
-				tooltip = "je_space_race_widget_slots_tt_sedna"
+				tooltip = "je_space_race_widget_habs_tt_sedna"
 			}
 			blockoverride "module_slots" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_sedna'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_sedna')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_sedna')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_sedna')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_sedna')|0]"
 			}
 			blockoverride "module_slots_past" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_past_sedna'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_used_sedna')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_slots_sedna')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_used_sedna')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hab_cap_sedna')|0]"
 			}
 			blockoverride "module_bases_tooltip" {
 				tooltip = "je_space_race_widget_bases_tt_sedna"

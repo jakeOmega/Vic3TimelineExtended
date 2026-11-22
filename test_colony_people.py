@@ -158,5 +158,101 @@ class HabitatRoomTest(unittest.TestCase):
         self.assertNotIn("sr_site_slots_tech_seen", self.values)
 
 
+def _walk_text(*dirs, exts=(".txt", ".gui")):
+    for d in dirs:
+        for root, _, files in os.walk(os.path.join(REPO, d)):
+            for f in files:
+                if f.endswith(exts):
+                    path = os.path.join(root, f)
+                    yield os.path.relpath(path, REPO), _strip(open(path, encoding="utf-8-sig").read())
+
+
+class HabitatCapTest(unittest.TestCase):
+    """Design §§ 4.1 and 4.3: no slots; any module may be queued at the flat
+    price; the Habitat alone has a cap, the table's old slots, past which the
+    n-th costs (1 + n) times the price while the module stock holds it."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.values = _strip(_raw(str(gss.VALUES_OUT)))
+        cls.triggers = _strip(_raw(str(gss.TRIGGERS_OUT)))
+        cls.effects = _strip(_raw(str(gss.EFFECTS_OUT)))
+        cls.sguis = _strip(_raw("common", "scripted_guis", "sr_colony_sguis.txt"))
+
+    def test_no_slot_reads_remain(self):
+        self.assertFalse(hasattr(gss, "SLOTS_MODIFIER"))
+        self.assertFalse(hasattr(gss, "SLOTS_PAST_MAX"))
+        pattern = re.compile(r"sr_site_slots|sr_mod_slots_used|sr_site_slots_max|country_sr_colony_slots_add|sr_disp_ss_slots"
+                             r"|sr_mod_scope_slot_room|sr_mod_scope_past_slots|sr_mod_generic_cost|sr_disp_site_slots")
+        found = [path for path, text in _walk_text("common", "gui", "events") if pattern.search(text)]
+        self.assertEqual(found, [])
+        loc = _raw("localization", "english", "te_miscellaneous_l_english.yml")
+        self.assertNotIn("sr_mod_req_slot_room_tt", loc)
+        self.assertNotIn("sr_mod_queue_past_slots_tt", loc)
+
+    def test_the_habitat_cap_is_the_table_s_slots(self):
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                self.assertIn(f"sr_site_hab_cap_{k} = {{ value = {site.slots} }}", self.values)
+
+    def test_only_a_habitat_queue_checks_the_price(self):
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                hab = _block(self.triggers, f"sr_mod_can_queue_hab_{k}")
+                self.assertIn(f"sr_mod_next_hab_cost_{k} <= sr_mod_fab_stock_cap", hab)
+                for t in gss.generic_types(site):
+                    if t == "hab":
+                        continue
+                    body = _block(self.triggers, f"sr_mod_can_queue_{t}_{k}")
+                    self.assertNotIn("cost", body)
+                    self.assertNotIn("slots", body)
+
+    def test_a_habitat_landing_always_installs(self):
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                install = _block(self.effects, f"sr_mod_install_{k}")
+                for t in gss.generic_types(site):
+                    if t == "terra":
+                        continue
+                    self.assertIn(f"limit = {{ local_var:sr_ms_type_now = {gss.MODULE_CODES[t]} }}", install)
+
+    def test_the_habitat_price_rises_past_the_cap(self):
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                pending = _block(self.values, f"sr_site_hab_pending_{k}")
+                self.assertIn(f"value = sr_site_hab_value_{k}", pending)
+                self.assertIn(f"global_var:sr_site_ship_hab_{k}", pending)
+                cost = _block(self.values, f"sr_mod_hab_cost_{k}")
+                self.assertIn("value = sr_module_points", cost)
+                self.assertIn(f"limit = {{ sr_site_hab_pending_{k} >= sr_site_hab_cap_{k} }} value = sr_site_hab_pending_{k} "
+                              f"subtract = sr_site_hab_cap_{k} add = 2 multiply = sr_module_points", cost)
+                used = _block(self.values, f"sr_mod_hab_used_{k}")
+                self.assertIn(f"var:sr_mq_hab_{k}", used)
+                nxt = _block(self.values, f"sr_mod_next_hab_cost_{k}")
+                self.assertIn(f"limit = {{ sr_mod_hab_used_{k} >= sr_site_hab_cap_{k} }}", nxt)
+
+    def test_only_a_habitat_head_pays_more(self):
+        """Review Focus 4: every other queue head costs the flat price."""
+        head = _block(self.values, "sr_mq_head_cost")
+        self.assertIn("var:sr_mq_1_type = 3", head)
+        self.assertNotIn(">= 3", head)
+        self.assertIn("value = sr_mod_hab_cost_valles_marineris", head)
+        test = gss.lunar_open_test("var:sr_mq_2_site", "var:sr_mq_2_type")
+        self.assertIn("NOT = { var:sr_mq_2_type ?= 3 }", test)
+        self.assertIn("sr_mod_fab_stock_value >= sr_mod_hab_cost_shackleton", test)
+
+    def test_the_button_s_price_lines_are_the_habitat_s(self):
+        self.assertRegex(self.triggers, r"(?m)^sr_mod_scope_past_hab_cap = \{")
+        self.assertRegex(self.triggers, r"(?m)^sr_mod_scope_hab_price_fits = \{")
+        module = _block(self.sguis, "sr_colony_module_sgui")
+        self.assertIn("sr_mod_scope_hab_price_fits = yes", module)
+        self.assertIn("sr_mod_scope_past_hab_cap = yes", module)
+        self.assertRegex(module, r"limit = \{ scope:op = 3 \}\s*custom_tooltip = \{\s*text = sr_mod_req_hab_price_fits_tt")
+
+
 if __name__ == "__main__":
     unittest.main()

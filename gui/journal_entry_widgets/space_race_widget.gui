@@ -1732,8 +1732,9 @@ types space_race_widget_types
 						}
 					}
 				}
+				### Habitats against the world's cap (colony people design § 4.3).
 				widget = {
-					size = { 96 24 }
+					size = { 120 24 }
 					parentanchor = vcenter
 
 					flowcontainer = {
@@ -1745,7 +1746,7 @@ types space_race_widget_types
 						textbox = {
 							parentanchor = left|vcenter
 							autoresize = yes
-							max_width = 52
+							max_width = 76
 							align = left|nobaseline
 							using = te_sr_fontsize_row
 							elide = right

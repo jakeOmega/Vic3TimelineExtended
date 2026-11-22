@@ -257,15 +257,15 @@ sr_colony_module_sgui = {
 				}
 			}
 			trigger_else = {
-				custom_tooltip = {
-					text = sr_mod_req_slot_room_tt
-					sr_mod_scope_slot_room = yes
-				}
-				# Past its slots, only while the module stock can hold the price (the
-				# owner, 2026-11-15).
-				custom_tooltip = {
-					text = sr_mod_req_price_fits_tt
-					sr_mod_scope_price_fits = yes
+				# A Habitat (code 3), the one capped module: past its cap, only while
+				# the module stock can hold the price (the owner, 2026-11-15; colony
+				# people design § 4.3). Every other module has no cap.
+				trigger_if = {
+					limit = { scope:op = 3 }
+					custom_tooltip = {
+						text = sr_mod_req_hab_price_fits_tt
+						sr_mod_scope_hab_price_fits = yes
+					}
 				}
 				# The Off-World Resort (code 10; #1948 design § 7): room for Resort Colony
 				# levels, so it waits for the building's technology.
@@ -420,13 +420,14 @@ sr_colony_module_sgui = {
 				sr_mod_queue_from_scope = yes
 			}
 		}
-		# Past the world's slots the module costs more fabrication (design § 5).
+		# Past the world's Habitat cap a Habitat costs more fabrication (colony
+		# people design § 4.3).
 		if = {
 			limit = {
-				scope:op >= 3
-				sr_mod_scope_past_slots = yes
+				scope:op = 3
+				sr_mod_scope_past_hab_cap = yes
 			}
-			custom_tooltip = sr_mod_queue_past_slots_tt
+			custom_tooltip = sr_mod_queue_past_hab_cap_tt
 		}
 	}
 }

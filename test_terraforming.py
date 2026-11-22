@@ -285,8 +285,9 @@ class QueueTest(unittest.TestCase):
             k = site.key
             with self.subTest(site=k):
                 can = _squash(_block(TRIGGERS, f"sr_mod_can_queue_terra_{k}"))
+                self.assertNotIn("slots", can)
                 for cond in (f"global_var:sr_site_holder_{k} ?= this", "sr_mq_has_room = yes",
-                             f"sr_mod_slots_used_{k} < sr_site_slots_max_{k}", f"modifier:{gss.TERRA_MARKER} = yes",
+                             f"modifier:{gss.TERRA_MARKER} = yes",
                              f"sr_mod_terra_used_{k} < sr_terra_max_levels", f"sr_site_terra_open_{k} = yes"):
                     self.assertIn(cond, can)
                 used = _squash(_block(VALUES, f"sr_mod_terra_used_{k}"))
@@ -313,21 +314,21 @@ class QueueTest(unittest.TestCase):
             k = site.key
             with self.subTest(site=k):
                 install = _squash(_block(EFFECTS, f"sr_mod_install_{k}"))
-                self.assertIn(f"local_var:sr_ms_type_now = {CODE} sr_site_generic_built_{k} < sr_site_slots_max_{k} "
+                self.assertIn(f"local_var:sr_ms_type_now = {CODE} "
                               f"sr_site_terra_value_{k} < sr_terra_max_levels sr_site_terra_open_{k} = yes", install)
                 self.assertIn(f"local_var:sr_mq_head_site = {site.index}", _block(EFFECTS, "sr_mod_fab_head"))
                 self.assertIn(f"local_var:sr_mq_head_type = {CODE} sr_site_terra_open_{k} = yes }} sr_mod_fab_build",
                               _squash(_block(EFFECTS, "sr_mod_fab_head")))
 
-    def test_the_ai_terraforms_a_filling_world_within_its_slots(self):
+    def test_the_ai_terraforms_a_filling_world_within_its_crews(self):
         for site in TERRA:
             k = site.key
             with self.subTest(site=k):
                 plan = _squash(_block(EFFECTS, f"sr_mod_ai_plan_{k}"))
                 terra = plan[plan.index(f"sr_mod_can_queue_terra_{k} = yes"):]
                 terra = terra[:terra.index("}", terra.index("sr_mod_queue = {"))]
-                for cond in (f"sr_mod_slots_used_{k} < sr_site_slots_{k}", f"sr_site_fill_{k} >= sr_mod_ai_terra_fill",
-                             f"sr_site_crews_{k} >= sr_site_levels_{k}"):
+                self.assertNotIn("slots", terra)
+                for cond in (f"sr_site_fill_{k} >= sr_mod_ai_terra_fill", f"sr_site_crews_{k} >= sr_site_levels_{k}"):
                     self.assertIn(cond, terra)
                 order = [plan.index(f"sr_mod_can_queue_{t}_{k}") for t in ("mine", "terra", "bunker")]
                 self.assertEqual(order, sorted(order))

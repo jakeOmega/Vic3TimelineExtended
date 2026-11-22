@@ -1351,10 +1351,13 @@ class ModulesTest(unittest.TestCase):
                     self.assertIn(f"global_var:sr_site_holder_{k} ?= this", can)
                     self.assertIn(f"has_global_variable = sr_site_spec_{k}", can)
                     self.assertIn(f"sr_mod_spec_used_{k} < sr_mod_spec_budget", can)
-                # Up to SLOTS_PAST_MAX past the world's slots (colony management design § 5).
+                # No slots (colony people design § 4.1): a generic module needs only the
+                # world and a queue place; a Habitat's price must fit in the stock (§ 4.3).
                 for t in gss.generic_types(site):
-                    self.assertIn(f"sr_mod_slots_used_{k} < sr_site_slots_max_{k}",
-                                  _block(self.triggers, f"sr_mod_can_queue_{t}_{k}"))
+                    can = _block(self.triggers, f"sr_mod_can_queue_{t}_{k}")
+                    self.assertIn(f"global_var:sr_site_holder_{k} ?= this", can)
+                    self.assertIn("sr_mq_has_room = yes", can)
+                    self.assertNotIn("slots", can)
                 # no Spaceport on a lunar world: no queue, shipment or level of one
                 no_port = site.key in gss.NO_SPACEPORT
                 self.assertEqual(f"sr_mod_can_queue_port_{k} =" in self.triggers, not no_port)
@@ -1362,7 +1365,7 @@ class ModulesTest(unittest.TestCase):
                 self.assertEqual(f"sr_site_ship_port_{k}" in self.effects + self.values, not no_port)
                 if no_port:
                     self.assertIn(f"sr_site_port_value_{k} = {{ value = 0 }}", self.values)
-                for name, types in (("spec_used", ("a", "b")), ("slots_used", gss.generic_types(site))):
+                for name, types in (("spec_used", ("a", "b")), ("hab_used", ("hab",))):
                     used = _block(self.values, f"sr_mod_{name}_{k}")
                     for t in types:
                         self.assertIn(f"add = var:sr_mq_{t}_{k}", used)
@@ -1375,10 +1378,13 @@ class ModulesTest(unittest.TestCase):
             body = _block(self.effects, f"sr_mod_install_{k}")
             with self.subTest(site=k):
                 self.assertIn(f"has_global_variable = sr_colony_{k}", body)
-                for t in ("a", "b", *gss.generic_types(site)):
-                    cap = (f"sr_site_spec_built_{k} < sr_mod_spec_budget" if t in ("a", "b")
-                           else f"sr_site_generic_built_{k} < sr_site_slots_max_{k}")
-                    self.assertIn(f"local_var:sr_ms_type_now = {gss.MODULE_CODES[t]} {cap}", body)
+                for t in ("a", "b"):
+                    self.assertIn(f"local_var:sr_ms_type_now = {gss.MODULE_CODES[t]} sr_site_spec_built_{k} < "
+                                  "sr_mod_spec_budget", body)
+                # Every other module has no cap but Terraforming's (colony people design § 4.1).
+                for t in gss.generic_types(site):
+                    self.assertIn(f"local_var:sr_ms_type_now = {gss.MODULE_CODES[t]}", body)
+                    self.assertNotIn("slots", body)
                 self.assertIn(f"sr_site_sync_{k} = yes", body)
 
     def test_fabrication_builds_the_queue_first_in_first_out(self):
@@ -1510,8 +1516,9 @@ class ModulesTest(unittest.TestCase):
                 self.assertLess(button.index("click_modifiers = {"), button.index("ondefault"))
 
     def test_the_ai_never_queues_a_placeholder(self):
-        """Never Defences or a Spaceport; a Habitat or a facility only within the
-        world's slots, never at the price past them (colony management design § 7.3)."""
+        """Never Defences or a Spaceport; a Habitat only within the world's cap,
+        never at the price past it (colony management design § 7.3; colony people
+        design § 9)."""
         for site in gss.SITES:
             k = site.key
             body = _block(self.effects, f"sr_mod_ai_plan_{k}")
@@ -1521,7 +1528,7 @@ class ModulesTest(unittest.TestCase):
                 # The Off-World Resort since #1948, once the Resort Colony room is full.
                 self.assertEqual(set(queued), {"hab", "a", "b", "admin", "mine", "resort", "bunker", "yard", "lab"}
                                  | terra)
-                self.assertEqual(body.count(f"sr_mod_slots_used_{k} < sr_site_slots_{k}"), 7 + len(terra))
+                self.assertEqual(body.count(f"sr_mod_hab_used_{k} < sr_site_hab_cap_{k}"), 1)
         review = _block(self.modules, "sr_mod_ai_review")
         self.assertIn("is_ai = yes", review)
         self.assertIn("days = 360", review)
@@ -1822,8 +1829,8 @@ class ModulesTest(unittest.TestCase):
                     self.assertIn(f"var:sr_mq_{n}_site ?= {site.index} NOT = {{ has_global_variable = sr_site_blockaded_{site.key} }} "
                                   f"NOT = {{ has_global_variable = sr_site_occupier_{site.key} }} "
                                   "sr_mod_fab_stock_value >= sr_module_points "
-                                  f"OR = {{ var:sr_mq_{n}_type ?= 1 var:sr_mq_{n}_type ?= 2 "
-                                  f"sr_mod_fab_stock_value >= sr_mod_generic_cost_{site.key} }}", test)
+                                  f"OR = {{ NOT = {{ var:sr_mq_{n}_type ?= 3 }} "
+                                  f"sr_mod_fab_stock_value >= sr_mod_hab_cost_{site.key} }}", test)
         # The hover's Moon note reads the same entries behind the head.
         behind = _block(self.triggers, "sr_mq_lunar_behind")
         self.assertNotIn("var:sr_mq_1_site", behind)
@@ -1835,19 +1842,19 @@ class ModulesTest(unittest.TestCase):
         loop = _block(month, "while")
         self.assertLess(loop.index("sr_mod_fab_head = yes"), loop.index("sr_mq_promote_lunar = yes"))
 
-    def test_past_its_slots_a_module_needs_its_price_in_stock(self):
-        self.assertEqual(gss.SLOTS_PAST_MAX, 8)
+    def test_past_its_cap_a_habitat_needs_its_price_in_stock(self):
+        """No top past the cap (the owner's call 7, colony people design § 4.3):
+        the stock alone limits how far."""
         for site in gss.SITES:
             k = site.key
             with self.subTest(site=k):
-                self.assertIn(f"sr_site_slots_max_{k} = {{ value = sr_site_slots_{k} add = 8 }}", self.values)
-                for t in gss.generic_types(site):
-                    self.assertIn(f"sr_mod_next_cost_{k} <= sr_mod_fab_stock_cap",
-                                  _block(self.triggers, f"sr_mod_can_queue_{t}_{k}"))
-                self.assertIn(f"AND = {{ scope:site = {site.index} sr_mod_next_cost_{k} <= sr_mod_fab_stock_cap }}",
-                              _block(self.triggers, "sr_mod_scope_price_fits"))
+                self.assertNotIn(f"sr_site_slots_max_{k}", self.values)
+                self.assertIn(f"sr_mod_next_hab_cost_{k} <= sr_mod_fab_stock_cap",
+                              _block(self.triggers, f"sr_mod_can_queue_hab_{k}"))
+                self.assertIn(f"AND = {{ scope:site = {site.index} sr_mod_next_hab_cost_{k} <= sr_mod_fab_stock_cap }}",
+                              _block(self.triggers, "sr_mod_scope_hab_price_fits"))
         sgui = _strip(_raw("common", "scripted_guis", "sr_colony_sguis.txt"))
-        self.assertRegex(sgui, r"text = sr_mod_req_price_fits_tt\s*sr_mod_scope_price_fits = yes")
+        self.assertRegex(sgui, r"text = sr_mod_req_hab_price_fits_tt\s*sr_mod_scope_hab_price_fits = yes")
 
     def test_the_hover_reads_each_waiting_shipment_s_window(self):
         gated = [s for s in gss.SITES if s.body]
