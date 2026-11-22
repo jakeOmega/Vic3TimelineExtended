@@ -211,6 +211,10 @@ People a world holds at its cap, every world built out:
 | Peary Crater | 15,000 | 1 | 30,000 | 3 | 6 |
 | The ten 10,000 worlds (Himalia, Sedna, …) | 10,000 | 1 | 20,000 | 2 | 4 |
 
+Since built (the owner, 2026-11-22): Space Colonization and Terraforming each add
++50% to every world's base room (`country_sr_colony_room_add`, the world keeping
+its best factor as it keeps its share), so with both every figure above doubles.
+
 ## 5. The five technologies
 
 Nuclear Thermal Propulsion, Orbital Manufacturing, Advanced Nanofabrication,

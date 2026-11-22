@@ -214,7 +214,8 @@ sr_cf_no_score = { value = -1000 }
 #                        - 10 a fleet inbound - 60 if one lands first
 #                        + 1 a 10,000 people at its cap
 #   sr_site_people_at_cap_<key> the people the world holds at its Habitat cap at THIS's
-#                        share: base room x (1 + share x cap), the panel's figure too
+#                        share and base room factor: the table's room x THIS's
+#                        sr_our_room_mult x (1 + share x cap), the panel's figure too
 sr_cf_base_goal_valles_marineris = {
 	value = sr_colonization_goal_stage_1
 }
@@ -239,7 +240,8 @@ sr_site_people_at_cap_valles_marineris = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_valles_marineris
 	add = 1
-	multiply = sr_site_base_room_valles_marineris
+	multiply = 50000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_valles_marineris = {
 	value = 90
@@ -274,7 +276,8 @@ sr_site_people_at_cap_olympus_mons = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_olympus_mons
 	add = 1
-	multiply = sr_site_base_room_olympus_mons
+	multiply = 40000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_olympus_mons = {
 	value = 90
@@ -309,7 +312,8 @@ sr_site_people_at_cap_hellas_planitia = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_hellas_planitia
 	add = 1
-	multiply = sr_site_base_room_hellas_planitia
+	multiply = 50000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_hellas_planitia = {
 	value = 90
@@ -344,7 +348,8 @@ sr_site_people_at_cap_utopia_planitia = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_utopia_planitia
 	add = 1
-	multiply = sr_site_base_room_utopia_planitia
+	multiply = 50000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_utopia_planitia = {
 	value = 90
@@ -379,7 +384,8 @@ sr_site_people_at_cap_arcadia_planitia = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_arcadia_planitia
 	add = 1
-	multiply = sr_site_base_room_arcadia_planitia
+	multiply = 40000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_arcadia_planitia = {
 	value = 90
@@ -414,7 +420,8 @@ sr_site_people_at_cap_ceres = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_ceres
 	add = 1
-	multiply = sr_site_base_room_ceres
+	multiply = 40000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_ceres = {
 	value = 90
@@ -449,7 +456,8 @@ sr_site_people_at_cap_vesta = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_vesta
 	add = 1
-	multiply = sr_site_base_room_vesta
+	multiply = 25000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_vesta = {
 	value = 90
@@ -484,7 +492,8 @@ sr_site_people_at_cap_psyche = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_psyche
 	add = 1
-	multiply = sr_site_base_room_psyche
+	multiply = 20000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_psyche = {
 	value = 90
@@ -519,7 +528,8 @@ sr_site_people_at_cap_pallas = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_pallas
 	add = 1
-	multiply = sr_site_base_room_pallas
+	multiply = 20000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_pallas = {
 	value = 90
@@ -554,7 +564,8 @@ sr_site_people_at_cap_hygiea = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_hygiea
 	add = 1
-	multiply = sr_site_base_room_hygiea
+	multiply = 15000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_hygiea = {
 	value = 90
@@ -589,7 +600,8 @@ sr_site_people_at_cap_io = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_io
 	add = 1
-	multiply = sr_site_base_room_io
+	multiply = 15000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_io = {
 	value = 80
@@ -624,7 +636,8 @@ sr_site_people_at_cap_europa = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_europa
 	add = 1
-	multiply = sr_site_base_room_europa
+	multiply = 30000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_europa = {
 	value = 80
@@ -659,7 +672,8 @@ sr_site_people_at_cap_ganymede = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_ganymede
 	add = 1
-	multiply = sr_site_base_room_ganymede
+	multiply = 40000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_ganymede = {
 	value = 80
@@ -694,7 +708,8 @@ sr_site_people_at_cap_callisto = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_callisto
 	add = 1
-	multiply = sr_site_base_room_callisto
+	multiply = 40000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_callisto = {
 	value = 80
@@ -729,7 +744,8 @@ sr_site_people_at_cap_himalia = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_himalia
 	add = 1
-	multiply = sr_site_base_room_himalia
+	multiply = 10000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_himalia = {
 	value = 80
@@ -764,7 +780,8 @@ sr_site_people_at_cap_amalthea = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_amalthea
 	add = 1
-	multiply = sr_site_base_room_amalthea
+	multiply = 10000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_amalthea = {
 	value = 80
@@ -799,7 +816,8 @@ sr_site_people_at_cap_venus = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_venus
 	add = 1
-	multiply = sr_site_base_room_venus
+	multiply = 30000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_venus = {
 	value = 80
@@ -830,7 +848,8 @@ sr_site_people_at_cap_mercury = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_mercury
 	add = 1
-	multiply = sr_site_base_room_mercury
+	multiply = 25000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_mercury = {
 	value = 70
@@ -864,7 +883,8 @@ sr_site_people_at_cap_titan = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_titan
 	add = 1
-	multiply = sr_site_base_room_titan
+	multiply = 40000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_titan = {
 	value = 70
@@ -899,7 +919,8 @@ sr_site_people_at_cap_enceladus = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_enceladus
 	add = 1
-	multiply = sr_site_base_room_enceladus
+	multiply = 20000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_enceladus = {
 	value = 70
@@ -934,7 +955,8 @@ sr_site_people_at_cap_rhea = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_rhea
 	add = 1
-	multiply = sr_site_base_room_rhea
+	multiply = 20000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_rhea = {
 	value = 70
@@ -969,7 +991,8 @@ sr_site_people_at_cap_mimas = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_mimas
 	add = 1
-	multiply = sr_site_base_room_mimas
+	multiply = 10000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_mimas = {
 	value = 70
@@ -1004,7 +1027,8 @@ sr_site_people_at_cap_iapetus = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_iapetus
 	add = 1
-	multiply = sr_site_base_room_iapetus
+	multiply = 15000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_iapetus = {
 	value = 70
@@ -1039,7 +1063,8 @@ sr_site_people_at_cap_titania = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_titania
 	add = 1
-	multiply = sr_site_base_room_titania
+	multiply = 20000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_titania = {
 	value = 60
@@ -1074,7 +1099,8 @@ sr_site_people_at_cap_oberon = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_oberon
 	add = 1
-	multiply = sr_site_base_room_oberon
+	multiply = 20000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_oberon = {
 	value = 60
@@ -1109,7 +1135,8 @@ sr_site_people_at_cap_miranda = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_miranda
 	add = 1
-	multiply = sr_site_base_room_miranda
+	multiply = 10000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_miranda = {
 	value = 60
@@ -1144,7 +1171,8 @@ sr_site_people_at_cap_ariel = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_ariel
 	add = 1
-	multiply = sr_site_base_room_ariel
+	multiply = 15000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_ariel = {
 	value = 60
@@ -1179,7 +1207,8 @@ sr_site_people_at_cap_triton = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_triton
 	add = 1
-	multiply = sr_site_base_room_triton
+	multiply = 20000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_triton = {
 	value = 60
@@ -1214,7 +1243,8 @@ sr_site_people_at_cap_proteus = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_proteus
 	add = 1
-	multiply = sr_site_base_room_proteus
+	multiply = 10000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_proteus = {
 	value = 60
@@ -1249,7 +1279,8 @@ sr_site_people_at_cap_pluto = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_pluto
 	add = 1
-	multiply = sr_site_base_room_pluto
+	multiply = 20000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_pluto = {
 	value = 50
@@ -1284,7 +1315,8 @@ sr_site_people_at_cap_eris = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_eris
 	add = 1
-	multiply = sr_site_base_room_eris
+	multiply = 10000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_eris = {
 	value = 50
@@ -1319,7 +1351,8 @@ sr_site_people_at_cap_makemake = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_makemake
 	add = 1
-	multiply = sr_site_base_room_makemake
+	multiply = 10000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_makemake = {
 	value = 50
@@ -1354,7 +1387,8 @@ sr_site_people_at_cap_haumea = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_haumea
 	add = 1
-	multiply = sr_site_base_room_haumea
+	multiply = 10000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_haumea = {
 	value = 50
@@ -1389,7 +1423,8 @@ sr_site_people_at_cap_sedna = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_sedna
 	add = 1
-	multiply = sr_site_base_room_sedna
+	multiply = 10000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_sedna = {
 	value = 50
@@ -1422,7 +1457,8 @@ sr_site_people_at_cap_shackleton = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_shackleton
 	add = 1
-	multiply = sr_site_base_room_shackleton
+	multiply = 25000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_shackleton = {
 	value = 100
@@ -1452,7 +1488,8 @@ sr_site_people_at_cap_peary = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_peary
 	add = 1
-	multiply = sr_site_base_room_peary
+	multiply = 15000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_peary = {
 	value = 100
@@ -1484,7 +1521,8 @@ sr_site_people_at_cap_tranquility = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_tranquility
 	add = 1
-	multiply = sr_site_base_room_tranquility
+	multiply = 20000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_tranquility = {
 	value = 100
@@ -1516,7 +1554,8 @@ sr_site_people_at_cap_marius_hills = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_marius_hills
 	add = 1
-	multiply = sr_site_base_room_marius_hills
+	multiply = 40000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_marius_hills = {
 	value = 100
@@ -1548,7 +1587,8 @@ sr_site_people_at_cap_daedalus = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_daedalus
 	add = 1
-	multiply = sr_site_base_room_daedalus
+	multiply = 10000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_daedalus = {
 	value = 100
@@ -1578,7 +1618,8 @@ sr_site_people_at_cap_imbrium = {
 	add = modifier:country_sr_habitat_room_add
 	multiply = sr_site_hab_cap_imbrium
 	add = 1
-	multiply = sr_site_base_room_imbrium
+	multiply = 25000
+	multiply = sr_our_room_mult
 }
 sr_cf_score_imbrium = {
 	value = 100
@@ -1684,7 +1725,10 @@ sr_cf_target_goal = {
 
 # ===== Population (slices 2-3 design § 10) =====
 
-# Per world, any scope: its base room (people, before Habitats), its Habitat share
+# Per world, any scope: its base room factor (now: 1 plus the holder's
+# country_sr_colony_room_add, Space Colonization and Terraforming; value: never below the
+# factor the world has had, sr_site_room_mult_<key>), its base room (people, before
+# Habitats: the table's room times that factor), its Habitat share
 # (now: 0.5 plus the holder's country_sr_habitat_room_add; value: never below the
 # share the world has had, sr_site_hab_share_<key>), its room (the share of the base a
 # Habitat level, colony people design § 4.4, and on a world that takes it the
@@ -1696,7 +1740,15 @@ sr_cf_target_goal = {
 # unset) and its emigration weight, priority x free room, 0 unless THIS holds it.
 # Any scope: its growth a month, sr_site_growth_<key>, 1 + 0.002 and its
 # holder's country_sr_colony_growth_add (Self-Directed Evolution, era 13 spec § 7.3).
-sr_site_base_room_valles_marineris = { value = 50000 }
+sr_site_room_mult_now_valles_marineris = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_valles_marineris } global_var:sr_site_holder_valles_marineris = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_valles_marineris = {
+	value = sr_site_room_mult_now_valles_marineris
+	if = { limit = { has_global_variable = sr_site_room_mult_valles_marineris } min = global_var:sr_site_room_mult_valles_marineris }
+}
+sr_site_base_room_valles_marineris = { value = sr_site_room_mult_value_valles_marineris multiply = 50000 }
 sr_site_hab_share_now_valles_marineris = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_valles_marineris } global_var:sr_site_holder_valles_marineris = { add = modifier:country_sr_habitat_room_add } }
@@ -1748,7 +1800,15 @@ sr_emig_weight_valles_marineris = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_blockaded_valles_marineris } NOT = { has_global_variable = sr_site_occupier_valles_marineris } } value = sr_emig_prio_weight_valles_marineris multiply = sr_site_free_room_valles_marineris }
 }
-sr_site_base_room_olympus_mons = { value = 40000 }
+sr_site_room_mult_now_olympus_mons = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_olympus_mons } global_var:sr_site_holder_olympus_mons = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_olympus_mons = {
+	value = sr_site_room_mult_now_olympus_mons
+	if = { limit = { has_global_variable = sr_site_room_mult_olympus_mons } min = global_var:sr_site_room_mult_olympus_mons }
+}
+sr_site_base_room_olympus_mons = { value = sr_site_room_mult_value_olympus_mons multiply = 40000 }
 sr_site_hab_share_now_olympus_mons = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_olympus_mons } global_var:sr_site_holder_olympus_mons = { add = modifier:country_sr_habitat_room_add } }
@@ -1800,7 +1860,15 @@ sr_emig_weight_olympus_mons = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_blockaded_olympus_mons } NOT = { has_global_variable = sr_site_occupier_olympus_mons } } value = sr_emig_prio_weight_olympus_mons multiply = sr_site_free_room_olympus_mons }
 }
-sr_site_base_room_hellas_planitia = { value = 50000 }
+sr_site_room_mult_now_hellas_planitia = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_hellas_planitia } global_var:sr_site_holder_hellas_planitia = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_hellas_planitia = {
+	value = sr_site_room_mult_now_hellas_planitia
+	if = { limit = { has_global_variable = sr_site_room_mult_hellas_planitia } min = global_var:sr_site_room_mult_hellas_planitia }
+}
+sr_site_base_room_hellas_planitia = { value = sr_site_room_mult_value_hellas_planitia multiply = 50000 }
 sr_site_hab_share_now_hellas_planitia = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_hellas_planitia } global_var:sr_site_holder_hellas_planitia = { add = modifier:country_sr_habitat_room_add } }
@@ -1852,7 +1920,15 @@ sr_emig_weight_hellas_planitia = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_hellas_planitia } NOT = { has_global_variable = sr_site_occupier_hellas_planitia } } value = sr_emig_prio_weight_hellas_planitia multiply = sr_site_free_room_hellas_planitia }
 }
-sr_site_base_room_utopia_planitia = { value = 50000 }
+sr_site_room_mult_now_utopia_planitia = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_utopia_planitia } global_var:sr_site_holder_utopia_planitia = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_utopia_planitia = {
+	value = sr_site_room_mult_now_utopia_planitia
+	if = { limit = { has_global_variable = sr_site_room_mult_utopia_planitia } min = global_var:sr_site_room_mult_utopia_planitia }
+}
+sr_site_base_room_utopia_planitia = { value = sr_site_room_mult_value_utopia_planitia multiply = 50000 }
 sr_site_hab_share_now_utopia_planitia = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_utopia_planitia } global_var:sr_site_holder_utopia_planitia = { add = modifier:country_sr_habitat_room_add } }
@@ -1904,7 +1980,15 @@ sr_emig_weight_utopia_planitia = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_utopia_planitia } NOT = { has_global_variable = sr_site_occupier_utopia_planitia } } value = sr_emig_prio_weight_utopia_planitia multiply = sr_site_free_room_utopia_planitia }
 }
-sr_site_base_room_arcadia_planitia = { value = 40000 }
+sr_site_room_mult_now_arcadia_planitia = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_arcadia_planitia } global_var:sr_site_holder_arcadia_planitia = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_arcadia_planitia = {
+	value = sr_site_room_mult_now_arcadia_planitia
+	if = { limit = { has_global_variable = sr_site_room_mult_arcadia_planitia } min = global_var:sr_site_room_mult_arcadia_planitia }
+}
+sr_site_base_room_arcadia_planitia = { value = sr_site_room_mult_value_arcadia_planitia multiply = 40000 }
 sr_site_hab_share_now_arcadia_planitia = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_arcadia_planitia } global_var:sr_site_holder_arcadia_planitia = { add = modifier:country_sr_habitat_room_add } }
@@ -1956,7 +2040,15 @@ sr_emig_weight_arcadia_planitia = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_arcadia_planitia } NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } } value = sr_emig_prio_weight_arcadia_planitia multiply = sr_site_free_room_arcadia_planitia }
 }
-sr_site_base_room_ceres = { value = 40000 }
+sr_site_room_mult_now_ceres = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_ceres } global_var:sr_site_holder_ceres = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_ceres = {
+	value = sr_site_room_mult_now_ceres
+	if = { limit = { has_global_variable = sr_site_room_mult_ceres } min = global_var:sr_site_room_mult_ceres }
+}
+sr_site_base_room_ceres = { value = sr_site_room_mult_value_ceres multiply = 40000 }
 sr_site_hab_share_now_ceres = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_ceres } global_var:sr_site_holder_ceres = { add = modifier:country_sr_habitat_room_add } }
@@ -2007,7 +2099,15 @@ sr_emig_weight_ceres = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_blockaded_ceres } NOT = { has_global_variable = sr_site_occupier_ceres } } value = sr_emig_prio_weight_ceres multiply = sr_site_free_room_ceres }
 }
-sr_site_base_room_vesta = { value = 25000 }
+sr_site_room_mult_now_vesta = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_vesta } global_var:sr_site_holder_vesta = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_vesta = {
+	value = sr_site_room_mult_now_vesta
+	if = { limit = { has_global_variable = sr_site_room_mult_vesta } min = global_var:sr_site_room_mult_vesta }
+}
+sr_site_base_room_vesta = { value = sr_site_room_mult_value_vesta multiply = 25000 }
 sr_site_hab_share_now_vesta = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_vesta } global_var:sr_site_holder_vesta = { add = modifier:country_sr_habitat_room_add } }
@@ -2058,7 +2158,15 @@ sr_emig_weight_vesta = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_blockaded_vesta } NOT = { has_global_variable = sr_site_occupier_vesta } } value = sr_emig_prio_weight_vesta multiply = sr_site_free_room_vesta }
 }
-sr_site_base_room_psyche = { value = 20000 }
+sr_site_room_mult_now_psyche = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_psyche } global_var:sr_site_holder_psyche = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_psyche = {
+	value = sr_site_room_mult_now_psyche
+	if = { limit = { has_global_variable = sr_site_room_mult_psyche } min = global_var:sr_site_room_mult_psyche }
+}
+sr_site_base_room_psyche = { value = sr_site_room_mult_value_psyche multiply = 20000 }
 sr_site_hab_share_now_psyche = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_psyche } global_var:sr_site_holder_psyche = { add = modifier:country_sr_habitat_room_add } }
@@ -2109,7 +2217,15 @@ sr_emig_weight_psyche = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_blockaded_psyche } NOT = { has_global_variable = sr_site_occupier_psyche } } value = sr_emig_prio_weight_psyche multiply = sr_site_free_room_psyche }
 }
-sr_site_base_room_pallas = { value = 20000 }
+sr_site_room_mult_now_pallas = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_pallas } global_var:sr_site_holder_pallas = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_pallas = {
+	value = sr_site_room_mult_now_pallas
+	if = { limit = { has_global_variable = sr_site_room_mult_pallas } min = global_var:sr_site_room_mult_pallas }
+}
+sr_site_base_room_pallas = { value = sr_site_room_mult_value_pallas multiply = 20000 }
 sr_site_hab_share_now_pallas = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_pallas } global_var:sr_site_holder_pallas = { add = modifier:country_sr_habitat_room_add } }
@@ -2160,7 +2276,15 @@ sr_emig_weight_pallas = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_blockaded_pallas } NOT = { has_global_variable = sr_site_occupier_pallas } } value = sr_emig_prio_weight_pallas multiply = sr_site_free_room_pallas }
 }
-sr_site_base_room_hygiea = { value = 15000 }
+sr_site_room_mult_now_hygiea = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_hygiea } global_var:sr_site_holder_hygiea = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_hygiea = {
+	value = sr_site_room_mult_now_hygiea
+	if = { limit = { has_global_variable = sr_site_room_mult_hygiea } min = global_var:sr_site_room_mult_hygiea }
+}
+sr_site_base_room_hygiea = { value = sr_site_room_mult_value_hygiea multiply = 15000 }
 sr_site_hab_share_now_hygiea = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_hygiea } global_var:sr_site_holder_hygiea = { add = modifier:country_sr_habitat_room_add } }
@@ -2211,7 +2335,15 @@ sr_emig_weight_hygiea = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_blockaded_hygiea } NOT = { has_global_variable = sr_site_occupier_hygiea } } value = sr_emig_prio_weight_hygiea multiply = sr_site_free_room_hygiea }
 }
-sr_site_base_room_io = { value = 15000 }
+sr_site_room_mult_now_io = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_io } global_var:sr_site_holder_io = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_io = {
+	value = sr_site_room_mult_now_io
+	if = { limit = { has_global_variable = sr_site_room_mult_io } min = global_var:sr_site_room_mult_io }
+}
+sr_site_base_room_io = { value = sr_site_room_mult_value_io multiply = 15000 }
 sr_site_hab_share_now_io = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_io } global_var:sr_site_holder_io = { add = modifier:country_sr_habitat_room_add } }
@@ -2262,7 +2394,15 @@ sr_emig_weight_io = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_blockaded_io } NOT = { has_global_variable = sr_site_occupier_io } } value = sr_emig_prio_weight_io multiply = sr_site_free_room_io }
 }
-sr_site_base_room_europa = { value = 30000 }
+sr_site_room_mult_now_europa = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_europa } global_var:sr_site_holder_europa = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_europa = {
+	value = sr_site_room_mult_now_europa
+	if = { limit = { has_global_variable = sr_site_room_mult_europa } min = global_var:sr_site_room_mult_europa }
+}
+sr_site_base_room_europa = { value = sr_site_room_mult_value_europa multiply = 30000 }
 sr_site_hab_share_now_europa = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_europa } global_var:sr_site_holder_europa = { add = modifier:country_sr_habitat_room_add } }
@@ -2313,7 +2453,15 @@ sr_emig_weight_europa = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_blockaded_europa } NOT = { has_global_variable = sr_site_occupier_europa } } value = sr_emig_prio_weight_europa multiply = sr_site_free_room_europa }
 }
-sr_site_base_room_ganymede = { value = 40000 }
+sr_site_room_mult_now_ganymede = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_ganymede } global_var:sr_site_holder_ganymede = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_ganymede = {
+	value = sr_site_room_mult_now_ganymede
+	if = { limit = { has_global_variable = sr_site_room_mult_ganymede } min = global_var:sr_site_room_mult_ganymede }
+}
+sr_site_base_room_ganymede = { value = sr_site_room_mult_value_ganymede multiply = 40000 }
 sr_site_hab_share_now_ganymede = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_ganymede } global_var:sr_site_holder_ganymede = { add = modifier:country_sr_habitat_room_add } }
@@ -2365,7 +2513,15 @@ sr_emig_weight_ganymede = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_blockaded_ganymede } NOT = { has_global_variable = sr_site_occupier_ganymede } } value = sr_emig_prio_weight_ganymede multiply = sr_site_free_room_ganymede }
 }
-sr_site_base_room_callisto = { value = 40000 }
+sr_site_room_mult_now_callisto = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_callisto } global_var:sr_site_holder_callisto = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_callisto = {
+	value = sr_site_room_mult_now_callisto
+	if = { limit = { has_global_variable = sr_site_room_mult_callisto } min = global_var:sr_site_room_mult_callisto }
+}
+sr_site_base_room_callisto = { value = sr_site_room_mult_value_callisto multiply = 40000 }
 sr_site_hab_share_now_callisto = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_callisto } global_var:sr_site_holder_callisto = { add = modifier:country_sr_habitat_room_add } }
@@ -2417,7 +2573,15 @@ sr_emig_weight_callisto = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_blockaded_callisto } NOT = { has_global_variable = sr_site_occupier_callisto } } value = sr_emig_prio_weight_callisto multiply = sr_site_free_room_callisto }
 }
-sr_site_base_room_himalia = { value = 10000 }
+sr_site_room_mult_now_himalia = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_himalia } global_var:sr_site_holder_himalia = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_himalia = {
+	value = sr_site_room_mult_now_himalia
+	if = { limit = { has_global_variable = sr_site_room_mult_himalia } min = global_var:sr_site_room_mult_himalia }
+}
+sr_site_base_room_himalia = { value = sr_site_room_mult_value_himalia multiply = 10000 }
 sr_site_hab_share_now_himalia = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_himalia } global_var:sr_site_holder_himalia = { add = modifier:country_sr_habitat_room_add } }
@@ -2468,7 +2632,15 @@ sr_emig_weight_himalia = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_blockaded_himalia } NOT = { has_global_variable = sr_site_occupier_himalia } } value = sr_emig_prio_weight_himalia multiply = sr_site_free_room_himalia }
 }
-sr_site_base_room_amalthea = { value = 10000 }
+sr_site_room_mult_now_amalthea = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_amalthea } global_var:sr_site_holder_amalthea = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_amalthea = {
+	value = sr_site_room_mult_now_amalthea
+	if = { limit = { has_global_variable = sr_site_room_mult_amalthea } min = global_var:sr_site_room_mult_amalthea }
+}
+sr_site_base_room_amalthea = { value = sr_site_room_mult_value_amalthea multiply = 10000 }
 sr_site_hab_share_now_amalthea = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_amalthea } global_var:sr_site_holder_amalthea = { add = modifier:country_sr_habitat_room_add } }
@@ -2519,7 +2691,15 @@ sr_emig_weight_amalthea = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_blockaded_amalthea } NOT = { has_global_variable = sr_site_occupier_amalthea } } value = sr_emig_prio_weight_amalthea multiply = sr_site_free_room_amalthea }
 }
-sr_site_base_room_venus = { value = 30000 }
+sr_site_room_mult_now_venus = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_venus } global_var:sr_site_holder_venus = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_venus = {
+	value = sr_site_room_mult_now_venus
+	if = { limit = { has_global_variable = sr_site_room_mult_venus } min = global_var:sr_site_room_mult_venus }
+}
+sr_site_base_room_venus = { value = sr_site_room_mult_value_venus multiply = 30000 }
 sr_site_hab_share_now_venus = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_venus } global_var:sr_site_holder_venus = { add = modifier:country_sr_habitat_room_add } }
@@ -2571,7 +2751,15 @@ sr_emig_weight_venus = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_blockaded_venus } NOT = { has_global_variable = sr_site_occupier_venus } } value = sr_emig_prio_weight_venus multiply = sr_site_free_room_venus }
 }
-sr_site_base_room_mercury = { value = 25000 }
+sr_site_room_mult_now_mercury = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_mercury } global_var:sr_site_holder_mercury = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_mercury = {
+	value = sr_site_room_mult_now_mercury
+	if = { limit = { has_global_variable = sr_site_room_mult_mercury } min = global_var:sr_site_room_mult_mercury }
+}
+sr_site_base_room_mercury = { value = sr_site_room_mult_value_mercury multiply = 25000 }
 sr_site_hab_share_now_mercury = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_mercury } global_var:sr_site_holder_mercury = { add = modifier:country_sr_habitat_room_add } }
@@ -2622,7 +2810,15 @@ sr_emig_weight_mercury = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_blockaded_mercury } NOT = { has_global_variable = sr_site_occupier_mercury } } value = sr_emig_prio_weight_mercury multiply = sr_site_free_room_mercury }
 }
-sr_site_base_room_titan = { value = 40000 }
+sr_site_room_mult_now_titan = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_titan } global_var:sr_site_holder_titan = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_titan = {
+	value = sr_site_room_mult_now_titan
+	if = { limit = { has_global_variable = sr_site_room_mult_titan } min = global_var:sr_site_room_mult_titan }
+}
+sr_site_base_room_titan = { value = sr_site_room_mult_value_titan multiply = 40000 }
 sr_site_hab_share_now_titan = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_titan } global_var:sr_site_holder_titan = { add = modifier:country_sr_habitat_room_add } }
@@ -2674,7 +2870,15 @@ sr_emig_weight_titan = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_blockaded_titan } NOT = { has_global_variable = sr_site_occupier_titan } } value = sr_emig_prio_weight_titan multiply = sr_site_free_room_titan }
 }
-sr_site_base_room_enceladus = { value = 20000 }
+sr_site_room_mult_now_enceladus = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_enceladus } global_var:sr_site_holder_enceladus = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_enceladus = {
+	value = sr_site_room_mult_now_enceladus
+	if = { limit = { has_global_variable = sr_site_room_mult_enceladus } min = global_var:sr_site_room_mult_enceladus }
+}
+sr_site_base_room_enceladus = { value = sr_site_room_mult_value_enceladus multiply = 20000 }
 sr_site_hab_share_now_enceladus = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_enceladus } global_var:sr_site_holder_enceladus = { add = modifier:country_sr_habitat_room_add } }
@@ -2725,7 +2929,15 @@ sr_emig_weight_enceladus = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_blockaded_enceladus } NOT = { has_global_variable = sr_site_occupier_enceladus } } value = sr_emig_prio_weight_enceladus multiply = sr_site_free_room_enceladus }
 }
-sr_site_base_room_rhea = { value = 20000 }
+sr_site_room_mult_now_rhea = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_rhea } global_var:sr_site_holder_rhea = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_rhea = {
+	value = sr_site_room_mult_now_rhea
+	if = { limit = { has_global_variable = sr_site_room_mult_rhea } min = global_var:sr_site_room_mult_rhea }
+}
+sr_site_base_room_rhea = { value = sr_site_room_mult_value_rhea multiply = 20000 }
 sr_site_hab_share_now_rhea = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_rhea } global_var:sr_site_holder_rhea = { add = modifier:country_sr_habitat_room_add } }
@@ -2776,7 +2988,15 @@ sr_emig_weight_rhea = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_blockaded_rhea } NOT = { has_global_variable = sr_site_occupier_rhea } } value = sr_emig_prio_weight_rhea multiply = sr_site_free_room_rhea }
 }
-sr_site_base_room_mimas = { value = 10000 }
+sr_site_room_mult_now_mimas = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_mimas } global_var:sr_site_holder_mimas = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_mimas = {
+	value = sr_site_room_mult_now_mimas
+	if = { limit = { has_global_variable = sr_site_room_mult_mimas } min = global_var:sr_site_room_mult_mimas }
+}
+sr_site_base_room_mimas = { value = sr_site_room_mult_value_mimas multiply = 10000 }
 sr_site_hab_share_now_mimas = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_mimas } global_var:sr_site_holder_mimas = { add = modifier:country_sr_habitat_room_add } }
@@ -2827,7 +3047,15 @@ sr_emig_weight_mimas = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_blockaded_mimas } NOT = { has_global_variable = sr_site_occupier_mimas } } value = sr_emig_prio_weight_mimas multiply = sr_site_free_room_mimas }
 }
-sr_site_base_room_iapetus = { value = 15000 }
+sr_site_room_mult_now_iapetus = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_iapetus } global_var:sr_site_holder_iapetus = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_iapetus = {
+	value = sr_site_room_mult_now_iapetus
+	if = { limit = { has_global_variable = sr_site_room_mult_iapetus } min = global_var:sr_site_room_mult_iapetus }
+}
+sr_site_base_room_iapetus = { value = sr_site_room_mult_value_iapetus multiply = 15000 }
 sr_site_hab_share_now_iapetus = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_iapetus } global_var:sr_site_holder_iapetus = { add = modifier:country_sr_habitat_room_add } }
@@ -2878,7 +3106,15 @@ sr_emig_weight_iapetus = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_blockaded_iapetus } NOT = { has_global_variable = sr_site_occupier_iapetus } } value = sr_emig_prio_weight_iapetus multiply = sr_site_free_room_iapetus }
 }
-sr_site_base_room_titania = { value = 20000 }
+sr_site_room_mult_now_titania = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_titania } global_var:sr_site_holder_titania = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_titania = {
+	value = sr_site_room_mult_now_titania
+	if = { limit = { has_global_variable = sr_site_room_mult_titania } min = global_var:sr_site_room_mult_titania }
+}
+sr_site_base_room_titania = { value = sr_site_room_mult_value_titania multiply = 20000 }
 sr_site_hab_share_now_titania = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_titania } global_var:sr_site_holder_titania = { add = modifier:country_sr_habitat_room_add } }
@@ -2929,7 +3165,15 @@ sr_emig_weight_titania = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_blockaded_titania } NOT = { has_global_variable = sr_site_occupier_titania } } value = sr_emig_prio_weight_titania multiply = sr_site_free_room_titania }
 }
-sr_site_base_room_oberon = { value = 20000 }
+sr_site_room_mult_now_oberon = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_oberon } global_var:sr_site_holder_oberon = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_oberon = {
+	value = sr_site_room_mult_now_oberon
+	if = { limit = { has_global_variable = sr_site_room_mult_oberon } min = global_var:sr_site_room_mult_oberon }
+}
+sr_site_base_room_oberon = { value = sr_site_room_mult_value_oberon multiply = 20000 }
 sr_site_hab_share_now_oberon = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_oberon } global_var:sr_site_holder_oberon = { add = modifier:country_sr_habitat_room_add } }
@@ -2980,7 +3224,15 @@ sr_emig_weight_oberon = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_blockaded_oberon } NOT = { has_global_variable = sr_site_occupier_oberon } } value = sr_emig_prio_weight_oberon multiply = sr_site_free_room_oberon }
 }
-sr_site_base_room_miranda = { value = 10000 }
+sr_site_room_mult_now_miranda = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_miranda } global_var:sr_site_holder_miranda = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_miranda = {
+	value = sr_site_room_mult_now_miranda
+	if = { limit = { has_global_variable = sr_site_room_mult_miranda } min = global_var:sr_site_room_mult_miranda }
+}
+sr_site_base_room_miranda = { value = sr_site_room_mult_value_miranda multiply = 10000 }
 sr_site_hab_share_now_miranda = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_miranda } global_var:sr_site_holder_miranda = { add = modifier:country_sr_habitat_room_add } }
@@ -3031,7 +3283,15 @@ sr_emig_weight_miranda = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_blockaded_miranda } NOT = { has_global_variable = sr_site_occupier_miranda } } value = sr_emig_prio_weight_miranda multiply = sr_site_free_room_miranda }
 }
-sr_site_base_room_ariel = { value = 15000 }
+sr_site_room_mult_now_ariel = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_ariel } global_var:sr_site_holder_ariel = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_ariel = {
+	value = sr_site_room_mult_now_ariel
+	if = { limit = { has_global_variable = sr_site_room_mult_ariel } min = global_var:sr_site_room_mult_ariel }
+}
+sr_site_base_room_ariel = { value = sr_site_room_mult_value_ariel multiply = 15000 }
 sr_site_hab_share_now_ariel = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_ariel } global_var:sr_site_holder_ariel = { add = modifier:country_sr_habitat_room_add } }
@@ -3082,7 +3342,15 @@ sr_emig_weight_ariel = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_blockaded_ariel } NOT = { has_global_variable = sr_site_occupier_ariel } } value = sr_emig_prio_weight_ariel multiply = sr_site_free_room_ariel }
 }
-sr_site_base_room_triton = { value = 20000 }
+sr_site_room_mult_now_triton = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_triton } global_var:sr_site_holder_triton = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_triton = {
+	value = sr_site_room_mult_now_triton
+	if = { limit = { has_global_variable = sr_site_room_mult_triton } min = global_var:sr_site_room_mult_triton }
+}
+sr_site_base_room_triton = { value = sr_site_room_mult_value_triton multiply = 20000 }
 sr_site_hab_share_now_triton = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_triton } global_var:sr_site_holder_triton = { add = modifier:country_sr_habitat_room_add } }
@@ -3133,7 +3401,15 @@ sr_emig_weight_triton = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_blockaded_triton } NOT = { has_global_variable = sr_site_occupier_triton } } value = sr_emig_prio_weight_triton multiply = sr_site_free_room_triton }
 }
-sr_site_base_room_proteus = { value = 10000 }
+sr_site_room_mult_now_proteus = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_proteus } global_var:sr_site_holder_proteus = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_proteus = {
+	value = sr_site_room_mult_now_proteus
+	if = { limit = { has_global_variable = sr_site_room_mult_proteus } min = global_var:sr_site_room_mult_proteus }
+}
+sr_site_base_room_proteus = { value = sr_site_room_mult_value_proteus multiply = 10000 }
 sr_site_hab_share_now_proteus = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_proteus } global_var:sr_site_holder_proteus = { add = modifier:country_sr_habitat_room_add } }
@@ -3184,7 +3460,15 @@ sr_emig_weight_proteus = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_blockaded_proteus } NOT = { has_global_variable = sr_site_occupier_proteus } } value = sr_emig_prio_weight_proteus multiply = sr_site_free_room_proteus }
 }
-sr_site_base_room_pluto = { value = 20000 }
+sr_site_room_mult_now_pluto = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_pluto } global_var:sr_site_holder_pluto = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_pluto = {
+	value = sr_site_room_mult_now_pluto
+	if = { limit = { has_global_variable = sr_site_room_mult_pluto } min = global_var:sr_site_room_mult_pluto }
+}
+sr_site_base_room_pluto = { value = sr_site_room_mult_value_pluto multiply = 20000 }
 sr_site_hab_share_now_pluto = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_pluto } global_var:sr_site_holder_pluto = { add = modifier:country_sr_habitat_room_add } }
@@ -3235,7 +3519,15 @@ sr_emig_weight_pluto = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_blockaded_pluto } NOT = { has_global_variable = sr_site_occupier_pluto } } value = sr_emig_prio_weight_pluto multiply = sr_site_free_room_pluto }
 }
-sr_site_base_room_eris = { value = 10000 }
+sr_site_room_mult_now_eris = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_eris } global_var:sr_site_holder_eris = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_eris = {
+	value = sr_site_room_mult_now_eris
+	if = { limit = { has_global_variable = sr_site_room_mult_eris } min = global_var:sr_site_room_mult_eris }
+}
+sr_site_base_room_eris = { value = sr_site_room_mult_value_eris multiply = 10000 }
 sr_site_hab_share_now_eris = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_eris } global_var:sr_site_holder_eris = { add = modifier:country_sr_habitat_room_add } }
@@ -3286,7 +3578,15 @@ sr_emig_weight_eris = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_eris ?= this NOT = { has_global_variable = sr_site_blockaded_eris } NOT = { has_global_variable = sr_site_occupier_eris } } value = sr_emig_prio_weight_eris multiply = sr_site_free_room_eris }
 }
-sr_site_base_room_makemake = { value = 10000 }
+sr_site_room_mult_now_makemake = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_makemake } global_var:sr_site_holder_makemake = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_makemake = {
+	value = sr_site_room_mult_now_makemake
+	if = { limit = { has_global_variable = sr_site_room_mult_makemake } min = global_var:sr_site_room_mult_makemake }
+}
+sr_site_base_room_makemake = { value = sr_site_room_mult_value_makemake multiply = 10000 }
 sr_site_hab_share_now_makemake = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_makemake } global_var:sr_site_holder_makemake = { add = modifier:country_sr_habitat_room_add } }
@@ -3337,7 +3637,15 @@ sr_emig_weight_makemake = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_blockaded_makemake } NOT = { has_global_variable = sr_site_occupier_makemake } } value = sr_emig_prio_weight_makemake multiply = sr_site_free_room_makemake }
 }
-sr_site_base_room_haumea = { value = 10000 }
+sr_site_room_mult_now_haumea = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_haumea } global_var:sr_site_holder_haumea = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_haumea = {
+	value = sr_site_room_mult_now_haumea
+	if = { limit = { has_global_variable = sr_site_room_mult_haumea } min = global_var:sr_site_room_mult_haumea }
+}
+sr_site_base_room_haumea = { value = sr_site_room_mult_value_haumea multiply = 10000 }
 sr_site_hab_share_now_haumea = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_haumea } global_var:sr_site_holder_haumea = { add = modifier:country_sr_habitat_room_add } }
@@ -3388,7 +3696,15 @@ sr_emig_weight_haumea = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_blockaded_haumea } NOT = { has_global_variable = sr_site_occupier_haumea } } value = sr_emig_prio_weight_haumea multiply = sr_site_free_room_haumea }
 }
-sr_site_base_room_sedna = { value = 10000 }
+sr_site_room_mult_now_sedna = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_sedna } global_var:sr_site_holder_sedna = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_sedna = {
+	value = sr_site_room_mult_now_sedna
+	if = { limit = { has_global_variable = sr_site_room_mult_sedna } min = global_var:sr_site_room_mult_sedna }
+}
+sr_site_base_room_sedna = { value = sr_site_room_mult_value_sedna multiply = 10000 }
 sr_site_hab_share_now_sedna = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_sedna } global_var:sr_site_holder_sedna = { add = modifier:country_sr_habitat_room_add } }
@@ -3439,7 +3755,15 @@ sr_emig_weight_sedna = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_blockaded_sedna } NOT = { has_global_variable = sr_site_occupier_sedna } } value = sr_emig_prio_weight_sedna multiply = sr_site_free_room_sedna }
 }
-sr_site_base_room_shackleton = { value = 25000 }
+sr_site_room_mult_now_shackleton = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_shackleton } global_var:sr_site_holder_shackleton = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_shackleton = {
+	value = sr_site_room_mult_now_shackleton
+	if = { limit = { has_global_variable = sr_site_room_mult_shackleton } min = global_var:sr_site_room_mult_shackleton }
+}
+sr_site_base_room_shackleton = { value = sr_site_room_mult_value_shackleton multiply = 25000 }
 sr_site_hab_share_now_shackleton = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_shackleton } global_var:sr_site_holder_shackleton = { add = modifier:country_sr_habitat_room_add } }
@@ -3490,7 +3814,15 @@ sr_emig_weight_shackleton = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_blockaded_shackleton } NOT = { has_global_variable = sr_site_occupier_shackleton } } value = sr_emig_prio_weight_shackleton multiply = sr_site_free_room_shackleton }
 }
-sr_site_base_room_peary = { value = 15000 }
+sr_site_room_mult_now_peary = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_peary } global_var:sr_site_holder_peary = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_peary = {
+	value = sr_site_room_mult_now_peary
+	if = { limit = { has_global_variable = sr_site_room_mult_peary } min = global_var:sr_site_room_mult_peary }
+}
+sr_site_base_room_peary = { value = sr_site_room_mult_value_peary multiply = 15000 }
 sr_site_hab_share_now_peary = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_peary } global_var:sr_site_holder_peary = { add = modifier:country_sr_habitat_room_add } }
@@ -3541,7 +3873,15 @@ sr_emig_weight_peary = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_blockaded_peary } NOT = { has_global_variable = sr_site_occupier_peary } } value = sr_emig_prio_weight_peary multiply = sr_site_free_room_peary }
 }
-sr_site_base_room_tranquility = { value = 20000 }
+sr_site_room_mult_now_tranquility = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_tranquility } global_var:sr_site_holder_tranquility = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_tranquility = {
+	value = sr_site_room_mult_now_tranquility
+	if = { limit = { has_global_variable = sr_site_room_mult_tranquility } min = global_var:sr_site_room_mult_tranquility }
+}
+sr_site_base_room_tranquility = { value = sr_site_room_mult_value_tranquility multiply = 20000 }
 sr_site_hab_share_now_tranquility = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_tranquility } global_var:sr_site_holder_tranquility = { add = modifier:country_sr_habitat_room_add } }
@@ -3592,7 +3932,15 @@ sr_emig_weight_tranquility = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_blockaded_tranquility } NOT = { has_global_variable = sr_site_occupier_tranquility } } value = sr_emig_prio_weight_tranquility multiply = sr_site_free_room_tranquility }
 }
-sr_site_base_room_marius_hills = { value = 40000 }
+sr_site_room_mult_now_marius_hills = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_marius_hills } global_var:sr_site_holder_marius_hills = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_marius_hills = {
+	value = sr_site_room_mult_now_marius_hills
+	if = { limit = { has_global_variable = sr_site_room_mult_marius_hills } min = global_var:sr_site_room_mult_marius_hills }
+}
+sr_site_base_room_marius_hills = { value = sr_site_room_mult_value_marius_hills multiply = 40000 }
 sr_site_hab_share_now_marius_hills = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_marius_hills } global_var:sr_site_holder_marius_hills = { add = modifier:country_sr_habitat_room_add } }
@@ -3643,7 +3991,15 @@ sr_emig_weight_marius_hills = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_blockaded_marius_hills } NOT = { has_global_variable = sr_site_occupier_marius_hills } } value = sr_emig_prio_weight_marius_hills multiply = sr_site_free_room_marius_hills }
 }
-sr_site_base_room_daedalus = { value = 10000 }
+sr_site_room_mult_now_daedalus = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_daedalus } global_var:sr_site_holder_daedalus = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_daedalus = {
+	value = sr_site_room_mult_now_daedalus
+	if = { limit = { has_global_variable = sr_site_room_mult_daedalus } min = global_var:sr_site_room_mult_daedalus }
+}
+sr_site_base_room_daedalus = { value = sr_site_room_mult_value_daedalus multiply = 10000 }
 sr_site_hab_share_now_daedalus = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_daedalus } global_var:sr_site_holder_daedalus = { add = modifier:country_sr_habitat_room_add } }
@@ -3694,7 +4050,15 @@ sr_emig_weight_daedalus = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_blockaded_daedalus } NOT = { has_global_variable = sr_site_occupier_daedalus } } value = sr_emig_prio_weight_daedalus multiply = sr_site_free_room_daedalus }
 }
-sr_site_base_room_imbrium = { value = 25000 }
+sr_site_room_mult_now_imbrium = {
+	value = 1
+	if = { limit = { exists = global_var:sr_site_holder_imbrium } global_var:sr_site_holder_imbrium = { add = modifier:country_sr_colony_room_add } }
+}
+sr_site_room_mult_value_imbrium = {
+	value = sr_site_room_mult_now_imbrium
+	if = { limit = { has_global_variable = sr_site_room_mult_imbrium } min = global_var:sr_site_room_mult_imbrium }
+}
+sr_site_base_room_imbrium = { value = sr_site_room_mult_value_imbrium multiply = 25000 }
 sr_site_hab_share_now_imbrium = {
 	value = 0.5
 	if = { limit = { exists = global_var:sr_site_holder_imbrium } global_var:sr_site_holder_imbrium = { add = modifier:country_sr_habitat_room_add } }
@@ -3745,6 +4109,10 @@ sr_emig_weight_imbrium = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_blockaded_imbrium } NOT = { has_global_variable = sr_site_occupier_imbrium } } value = sr_emig_prio_weight_imbrium multiply = sr_site_free_room_imbrium }
 }
+
+# Country scope: THIS's base room factor, what a world's base room would be
+# multiplied by were it THIS's (1 plus its country_sr_colony_room_add).
+sr_our_room_mult = { value = 1 add = modifier:country_sr_colony_room_add }
 
 # Country scope: the sum of THIS's emigration weights; the free room of the
 # colonies it holds that are open to settlers; its people off Earth.

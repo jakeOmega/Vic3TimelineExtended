@@ -84,6 +84,21 @@ country_sr_habitat_room_add = {
 	script_only = yes
 }
 
+# Base room for people at every colony we hold, before Habitats and Terraforming
+# (the owner, 2026-11-22): Space Colonization and Terraforming carry +0.5 each, so
+# double with both. Each world's sr_site_room_mult_now_<key> adds its holder's, the
+# world keeps the best factor it has had (sr_site_room_mult_<key>), and a Habitat's
+# and Terraforming's shares are of this base room. The engine consumes nothing.
+country_sr_colony_room_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+
 # Growth a month at every colony we hold, beside the 0.2% every colony grows by
 # (slices 2-3 design § 10.2): Self-Directed Evolution carries +0.1%, people
 # adapted to low gravity and radiation (era 13 spec § 7.3), and each world's

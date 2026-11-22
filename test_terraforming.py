@@ -102,9 +102,10 @@ class TechnologyTest(unittest.TestCase):
         self.assertIn("category = society", tech)
         self.assertEqual(re.findall(r"^\t\t(\w+)$", _block(tech, "unlocking_technologies"), re.M),
                          ["space_colonization", "geoengineering"])
-        # The colonies' marker, and Local Climate's Winter Sun Relief at home (test_local_climate_comfort.py).
+        # The colonies' marker, +50% base room at every colony (test_colony_people.BaseRoomTest),
+        # and Local Climate's Winter Sun Relief at home (test_local_climate_comfort.py).
         self.assertEqual(_squash(_block(tech, "modifier")),
-                         f"{gss.TERRA_MARKER} = yes state_climate_sun_relief_add = 0.7")
+                         f"{gss.TERRA_MARKER} = yes {gss.ROOM_MODIFIER} = 0.5 state_climate_sun_relief_add = 0.7")
         self.assertIn("ai_weight = { value = 1 }", _squash(tech))
         # Both prerequisites are society technologies (same-category rule).
         era_12 = _strip(_read("common/technology/technologies/era_12.txt"))

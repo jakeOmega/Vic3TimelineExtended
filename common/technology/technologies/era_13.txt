@@ -333,6 +333,9 @@ terraforming = {
 	modifier = {
 		# the colonies' Terraforming module (gen_solar_sites.TERRA_MARKER)
 		country_sr_terraforming_bool = yes
+		# +50% base room for people at every colony, so its Habitats and Terraforming hold more too
+		# (sr_site_room_mult_now_<key>); with Space Colonization's, double
+		country_sr_colony_room_add = 0.5
 		state_climate_sun_relief_add = 0.7 # Local Climate: orbital mirrors and cloud control give every winter its sun
 	}
 
