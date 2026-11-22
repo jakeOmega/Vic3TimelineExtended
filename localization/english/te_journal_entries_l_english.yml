@@ -2289,7 +2289,7 @@
  je_space_race_widget_tp_gone:0 "Solar System Colonization isn't running."
  je_space_race_widget_tp_intro:0 "Where our next colony fleet goes. Hover a site's name for what it offers and our transit there."
  je_space_race_widget_tp_none:0 "No site can be targeted this month. Show all lists every site, with the reason on its button."
- je_space_race_widget_tp_people_tt:0 "#header People Room#!\nThe colony's starting room for people: how many a colony here holds before it has a Habitat. Each Habitat adds #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_our_hab_share')|0]%#! of it at our technology, and the Habitat Cap's hover gives the people it holds at the cap."
+ je_space_race_widget_tp_people_tt:0 "#header People Room#!\nThe colony's starting room for people at our technology: how many a colony here would hold before it has a Habitat. $space_colonization$ and $terraforming$ each add #v 50%#! to it. Each Habitat adds #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_our_hab_share')|0]%#! of it, and the Habitat Cap's hover gives the people it holds at the cap."
  je_space_race_widget_tp_title:0 "Colony Target"
  je_space_race_widget_tp_toggle_tt:0 "The list shows the sites our next colony fleet can be sent to this month; Show all lists every site, with the reason on the button of each one we can't target."
  je_space_race_widget_tp_window_tt:0 "The launch window toward this site: open now, the months until it opens, or with propellant depots the premium to leave now."

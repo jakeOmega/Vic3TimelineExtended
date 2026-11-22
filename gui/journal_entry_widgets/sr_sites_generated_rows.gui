@@ -3104,7 +3104,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 25,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_shackleton')|D]#!"
 					}
 				}
 			}
@@ -3209,7 +3209,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 15,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_peary')|D]#!"
 					}
 				}
 			}
@@ -3314,7 +3314,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 20,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_tranquility')|D]#!"
 					}
 				}
 			}
@@ -3419,7 +3419,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 40,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_marius_hills')|D]#!"
 					}
 				}
 			}
@@ -3524,7 +3524,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 10,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_daedalus')|D]#!"
 					}
 				}
 			}
@@ -3629,7 +3629,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 25,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_imbrium')|D]#!"
 					}
 				}
 			}
@@ -3743,7 +3743,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 30,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_venus')|D]#!"
 					}
 				}
 			}
@@ -3848,7 +3848,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 25,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_mercury')|D]#!"
 					}
 				}
 			}
@@ -3962,7 +3962,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 50,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_valles_marineris')|D]#!"
 					}
 				}
 			}
@@ -4069,7 +4069,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 40,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_olympus_mons')|D]#!"
 					}
 				}
 			}
@@ -4176,7 +4176,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 50,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_hellas_planitia')|D]#!"
 					}
 				}
 			}
@@ -4283,7 +4283,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 50,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_utopia_planitia')|D]#!"
 					}
 				}
 			}
@@ -4390,7 +4390,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 40,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_arcadia_planitia')|D]#!"
 					}
 				}
 			}
@@ -4504,7 +4504,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 40,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_ceres')|D]#!"
 					}
 				}
 			}
@@ -4611,7 +4611,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 25,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_vesta')|D]#!"
 					}
 				}
 			}
@@ -4718,7 +4718,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 20,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_psyche')|D]#!"
 					}
 				}
 			}
@@ -4825,7 +4825,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 20,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_pallas')|D]#!"
 					}
 				}
 			}
@@ -4932,7 +4932,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 15,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_hygiea')|D]#!"
 					}
 				}
 			}
@@ -5046,7 +5046,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 15,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_io')|D]#!"
 					}
 				}
 			}
@@ -5153,7 +5153,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 30,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_europa')|D]#!"
 					}
 				}
 			}
@@ -5260,7 +5260,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 40,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_ganymede')|D]#!"
 					}
 				}
 			}
@@ -5367,7 +5367,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 40,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_callisto')|D]#!"
 					}
 				}
 			}
@@ -5474,7 +5474,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 10,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_himalia')|D]#!"
 					}
 				}
 			}
@@ -5581,7 +5581,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 10,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_amalthea')|D]#!"
 					}
 				}
 			}
@@ -5695,7 +5695,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 40,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_titan')|D]#!"
 					}
 				}
 			}
@@ -5802,7 +5802,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 20,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_enceladus')|D]#!"
 					}
 				}
 			}
@@ -5909,7 +5909,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 20,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_rhea')|D]#!"
 					}
 				}
 			}
@@ -6016,7 +6016,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 10,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_mimas')|D]#!"
 					}
 				}
 			}
@@ -6123,7 +6123,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 15,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_iapetus')|D]#!"
 					}
 				}
 			}
@@ -6237,7 +6237,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 20,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_titania')|D]#!"
 					}
 				}
 			}
@@ -6344,7 +6344,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 20,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_oberon')|D]#!"
 					}
 				}
 			}
@@ -6451,7 +6451,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 10,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_miranda')|D]#!"
 					}
 				}
 			}
@@ -6558,7 +6558,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 15,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_ariel')|D]#!"
 					}
 				}
 			}
@@ -6672,7 +6672,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 20,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_triton')|D]#!"
 					}
 				}
 			}
@@ -6779,7 +6779,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 10,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_proteus')|D]#!"
 					}
 				}
 			}
@@ -6893,7 +6893,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 20,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_pluto')|D]#!"
 					}
 				}
 			}
@@ -7000,7 +7000,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 10,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_eris')|D]#!"
 					}
 				}
 			}
@@ -7107,7 +7107,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 10,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_makemake')|D]#!"
 					}
 				}
 			}
@@ -7214,7 +7214,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 10,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_haumea')|D]#!"
 					}
 				}
 			}
@@ -7321,7 +7321,7 @@ types sr_sites_generated_rows_types
 			blockoverride "site_people" {
 				te_sr_site_people_cell = {
 					blockoverride "people_room" {
-						raw_text = "#v 10,000#!"
+						raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_people_room_sedna')|D]#!"
 					}
 				}
 			}

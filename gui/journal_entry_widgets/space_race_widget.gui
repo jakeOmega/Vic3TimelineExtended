@@ -5259,7 +5259,7 @@ types space_race_widget_types
 		### "10 (+30%)") = 400. It starts under the icon, not the name, to make
 		### that room. Simple and Full Colonies only. The colony target popup
 		### puts the world's people room first (te_sr_site_people_cell, block
-		### site_people): 79 + 8 more, 487 in its row's 624.
+		### site_people): 88 + 8 more, 496 in its row's 624.
 		flowcontainer = {
 			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
 			direction = horizontal
@@ -5412,11 +5412,12 @@ types space_race_widget_types
 	}
 
 	### A site's people room in the colony target popup (the owner, 2026-11-22):
-	### the people the world holds before any Habitat, its base room
-	### (gen_solar_sites.SITES' room, sr_site_base_room_<key>), of which each
-	### Habitat adds its share. 79 wide: 18 icon + 4 + 57 for "50,000".
+	### the people the world would hold as ours before any Habitat, its base room
+	### at our factor (sr_disp_ss_people_room_<key>: the table's room x
+	### sr_our_room_mult, up to double with Space Colonization and Terraforming),
+	### of which each Habitat adds its share. 88 wide: 18 icon + 4 + 66 for "100,000".
 	type te_sr_site_people_cell = widget {
-		size = { 79 22 }
+		size = { 88 22 }
 		parentanchor = vcenter
 		tooltip = "je_space_race_widget_tp_people_tt"
 
@@ -5433,7 +5434,7 @@ types space_race_widget_types
 			textbox = {
 				parentanchor = vcenter
 				autoresize = yes
-				max_width = 57
+				max_width = 66
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right

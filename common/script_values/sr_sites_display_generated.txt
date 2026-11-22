@@ -1847,6 +1847,7 @@ sr_disp_site_ebase_room_valles_marineris = { value = sr_site_ebase_room_valles_m
 sr_disp_site_resort_room_valles_marineris = { value = sr_site_resort_room_valles_marineris }
 sr_disp_ss_hab_cap_valles_marineris = { value = 4 }
 sr_disp_ss_people_at_cap_valles_marineris = { value = sr_site_people_at_cap_valles_marineris floor = yes }
+sr_disp_ss_people_room_valles_marineris = { value = 50000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_valles_marineris = {
 	value = sr_site_people_at_cap_valles_marineris
 	divide = 10000
@@ -1957,6 +1958,7 @@ sr_disp_site_ebase_room_olympus_mons = { value = sr_site_ebase_room_olympus_mons
 sr_disp_site_resort_room_olympus_mons = { value = sr_site_resort_room_olympus_mons }
 sr_disp_ss_hab_cap_olympus_mons = { value = 3 }
 sr_disp_ss_people_at_cap_olympus_mons = { value = sr_site_people_at_cap_olympus_mons floor = yes }
+sr_disp_ss_people_room_olympus_mons = { value = 40000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_olympus_mons = {
 	value = sr_site_people_at_cap_olympus_mons
 	divide = 10000
@@ -2067,6 +2069,7 @@ sr_disp_site_ebase_room_hellas_planitia = { value = sr_site_ebase_room_hellas_pl
 sr_disp_site_resort_room_hellas_planitia = { value = sr_site_resort_room_hellas_planitia }
 sr_disp_ss_hab_cap_hellas_planitia = { value = 4 }
 sr_disp_ss_people_at_cap_hellas_planitia = { value = sr_site_people_at_cap_hellas_planitia floor = yes }
+sr_disp_ss_people_room_hellas_planitia = { value = 50000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_hellas_planitia = {
 	value = sr_site_people_at_cap_hellas_planitia
 	divide = 10000
@@ -2177,6 +2180,7 @@ sr_disp_site_ebase_room_utopia_planitia = { value = sr_site_ebase_room_utopia_pl
 sr_disp_site_resort_room_utopia_planitia = { value = sr_site_resort_room_utopia_planitia }
 sr_disp_ss_hab_cap_utopia_planitia = { value = 4 }
 sr_disp_ss_people_at_cap_utopia_planitia = { value = sr_site_people_at_cap_utopia_planitia floor = yes }
+sr_disp_ss_people_room_utopia_planitia = { value = 50000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_utopia_planitia = {
 	value = sr_site_people_at_cap_utopia_planitia
 	divide = 10000
@@ -2287,6 +2291,7 @@ sr_disp_site_ebase_room_arcadia_planitia = { value = sr_site_ebase_room_arcadia_
 sr_disp_site_resort_room_arcadia_planitia = { value = sr_site_resort_room_arcadia_planitia }
 sr_disp_ss_hab_cap_arcadia_planitia = { value = 3 }
 sr_disp_ss_people_at_cap_arcadia_planitia = { value = sr_site_people_at_cap_arcadia_planitia floor = yes }
+sr_disp_ss_people_room_arcadia_planitia = { value = 40000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_arcadia_planitia = {
 	value = sr_site_people_at_cap_arcadia_planitia
 	divide = 10000
@@ -2392,6 +2397,7 @@ sr_disp_site_ebase_room_ceres = { value = sr_site_ebase_room_ceres }
 sr_disp_site_resort_room_ceres = { value = sr_site_resort_room_ceres }
 sr_disp_ss_hab_cap_ceres = { value = 3 }
 sr_disp_ss_people_at_cap_ceres = { value = sr_site_people_at_cap_ceres floor = yes }
+sr_disp_ss_people_room_ceres = { value = 40000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_ceres = {
 	value = sr_site_people_at_cap_ceres
 	divide = 10000
@@ -2497,6 +2503,7 @@ sr_disp_site_ebase_room_vesta = { value = sr_site_ebase_room_vesta }
 sr_disp_site_resort_room_vesta = { value = sr_site_resort_room_vesta }
 sr_disp_ss_hab_cap_vesta = { value = 2 }
 sr_disp_ss_people_at_cap_vesta = { value = sr_site_people_at_cap_vesta floor = yes }
+sr_disp_ss_people_room_vesta = { value = 25000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_vesta = {
 	value = sr_site_people_at_cap_vesta
 	divide = 10000
@@ -2602,6 +2609,7 @@ sr_disp_site_ebase_room_psyche = { value = sr_site_ebase_room_psyche }
 sr_disp_site_resort_room_psyche = { value = sr_site_resort_room_psyche }
 sr_disp_ss_hab_cap_psyche = { value = 2 }
 sr_disp_ss_people_at_cap_psyche = { value = sr_site_people_at_cap_psyche floor = yes }
+sr_disp_ss_people_room_psyche = { value = 20000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_psyche = {
 	value = sr_site_people_at_cap_psyche
 	divide = 10000
@@ -2707,6 +2715,7 @@ sr_disp_site_ebase_room_pallas = { value = sr_site_ebase_room_pallas }
 sr_disp_site_resort_room_pallas = { value = sr_site_resort_room_pallas }
 sr_disp_ss_hab_cap_pallas = { value = 2 }
 sr_disp_ss_people_at_cap_pallas = { value = sr_site_people_at_cap_pallas floor = yes }
+sr_disp_ss_people_room_pallas = { value = 20000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_pallas = {
 	value = sr_site_people_at_cap_pallas
 	divide = 10000
@@ -2812,6 +2821,7 @@ sr_disp_site_ebase_room_hygiea = { value = sr_site_ebase_room_hygiea }
 sr_disp_site_resort_room_hygiea = { value = sr_site_resort_room_hygiea }
 sr_disp_ss_hab_cap_hygiea = { value = 2 }
 sr_disp_ss_people_at_cap_hygiea = { value = sr_site_people_at_cap_hygiea floor = yes }
+sr_disp_ss_people_room_hygiea = { value = 15000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_hygiea = {
 	value = sr_site_people_at_cap_hygiea
 	divide = 10000
@@ -2917,6 +2927,7 @@ sr_disp_site_ebase_room_io = { value = sr_site_ebase_room_io }
 sr_disp_site_resort_room_io = { value = sr_site_resort_room_io }
 sr_disp_ss_hab_cap_io = { value = 2 }
 sr_disp_ss_people_at_cap_io = { value = sr_site_people_at_cap_io floor = yes }
+sr_disp_ss_people_room_io = { value = 15000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_io = {
 	value = sr_site_people_at_cap_io
 	divide = 10000
@@ -3022,6 +3033,7 @@ sr_disp_site_ebase_room_europa = { value = sr_site_ebase_room_europa }
 sr_disp_site_resort_room_europa = { value = sr_site_resort_room_europa }
 sr_disp_ss_hab_cap_europa = { value = 3 }
 sr_disp_ss_people_at_cap_europa = { value = sr_site_people_at_cap_europa floor = yes }
+sr_disp_ss_people_room_europa = { value = 30000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_europa = {
 	value = sr_site_people_at_cap_europa
 	divide = 10000
@@ -3132,6 +3144,7 @@ sr_disp_site_ebase_room_ganymede = { value = sr_site_ebase_room_ganymede }
 sr_disp_site_resort_room_ganymede = { value = sr_site_resort_room_ganymede }
 sr_disp_ss_hab_cap_ganymede = { value = 3 }
 sr_disp_ss_people_at_cap_ganymede = { value = sr_site_people_at_cap_ganymede floor = yes }
+sr_disp_ss_people_room_ganymede = { value = 40000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_ganymede = {
 	value = sr_site_people_at_cap_ganymede
 	divide = 10000
@@ -3242,6 +3255,7 @@ sr_disp_site_ebase_room_callisto = { value = sr_site_ebase_room_callisto }
 sr_disp_site_resort_room_callisto = { value = sr_site_resort_room_callisto }
 sr_disp_ss_hab_cap_callisto = { value = 3 }
 sr_disp_ss_people_at_cap_callisto = { value = sr_site_people_at_cap_callisto floor = yes }
+sr_disp_ss_people_room_callisto = { value = 40000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_callisto = {
 	value = sr_site_people_at_cap_callisto
 	divide = 10000
@@ -3347,6 +3361,7 @@ sr_disp_site_ebase_room_himalia = { value = sr_site_ebase_room_himalia }
 sr_disp_site_resort_room_himalia = { value = sr_site_resort_room_himalia }
 sr_disp_ss_hab_cap_himalia = { value = 1 }
 sr_disp_ss_people_at_cap_himalia = { value = sr_site_people_at_cap_himalia floor = yes }
+sr_disp_ss_people_room_himalia = { value = 10000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_himalia = {
 	value = sr_site_people_at_cap_himalia
 	divide = 10000
@@ -3452,6 +3467,7 @@ sr_disp_site_ebase_room_amalthea = { value = sr_site_ebase_room_amalthea }
 sr_disp_site_resort_room_amalthea = { value = sr_site_resort_room_amalthea }
 sr_disp_ss_hab_cap_amalthea = { value = 1 }
 sr_disp_ss_people_at_cap_amalthea = { value = sr_site_people_at_cap_amalthea floor = yes }
+sr_disp_ss_people_room_amalthea = { value = 10000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_amalthea = {
 	value = sr_site_people_at_cap_amalthea
 	divide = 10000
@@ -3562,6 +3578,7 @@ sr_disp_site_ebase_room_venus = { value = sr_site_ebase_room_venus }
 sr_disp_site_resort_room_venus = { value = sr_site_resort_room_venus }
 sr_disp_ss_hab_cap_venus = { value = 2 }
 sr_disp_ss_people_at_cap_venus = { value = sr_site_people_at_cap_venus floor = yes }
+sr_disp_ss_people_room_venus = { value = 30000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_venus = {
 	value = sr_site_people_at_cap_venus
 	divide = 10000
@@ -3667,6 +3684,7 @@ sr_disp_site_ebase_room_mercury = { value = sr_site_ebase_room_mercury }
 sr_disp_site_resort_room_mercury = { value = sr_site_resort_room_mercury }
 sr_disp_ss_hab_cap_mercury = { value = 3 }
 sr_disp_ss_people_at_cap_mercury = { value = sr_site_people_at_cap_mercury floor = yes }
+sr_disp_ss_people_room_mercury = { value = 25000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_mercury = {
 	value = sr_site_people_at_cap_mercury
 	divide = 10000
@@ -3777,6 +3795,7 @@ sr_disp_site_ebase_room_titan = { value = sr_site_ebase_room_titan }
 sr_disp_site_resort_room_titan = { value = sr_site_resort_room_titan }
 sr_disp_ss_hab_cap_titan = { value = 3 }
 sr_disp_ss_people_at_cap_titan = { value = sr_site_people_at_cap_titan floor = yes }
+sr_disp_ss_people_room_titan = { value = 40000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_titan = {
 	value = sr_site_people_at_cap_titan
 	divide = 10000
@@ -3882,6 +3901,7 @@ sr_disp_site_ebase_room_enceladus = { value = sr_site_ebase_room_enceladus }
 sr_disp_site_resort_room_enceladus = { value = sr_site_resort_room_enceladus }
 sr_disp_ss_hab_cap_enceladus = { value = 2 }
 sr_disp_ss_people_at_cap_enceladus = { value = sr_site_people_at_cap_enceladus floor = yes }
+sr_disp_ss_people_room_enceladus = { value = 20000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_enceladus = {
 	value = sr_site_people_at_cap_enceladus
 	divide = 10000
@@ -3987,6 +4007,7 @@ sr_disp_site_ebase_room_rhea = { value = sr_site_ebase_room_rhea }
 sr_disp_site_resort_room_rhea = { value = sr_site_resort_room_rhea }
 sr_disp_ss_hab_cap_rhea = { value = 2 }
 sr_disp_ss_people_at_cap_rhea = { value = sr_site_people_at_cap_rhea floor = yes }
+sr_disp_ss_people_room_rhea = { value = 20000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_rhea = {
 	value = sr_site_people_at_cap_rhea
 	divide = 10000
@@ -4092,6 +4113,7 @@ sr_disp_site_ebase_room_mimas = { value = sr_site_ebase_room_mimas }
 sr_disp_site_resort_room_mimas = { value = sr_site_resort_room_mimas }
 sr_disp_ss_hab_cap_mimas = { value = 1 }
 sr_disp_ss_people_at_cap_mimas = { value = sr_site_people_at_cap_mimas floor = yes }
+sr_disp_ss_people_room_mimas = { value = 10000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_mimas = {
 	value = sr_site_people_at_cap_mimas
 	divide = 10000
@@ -4197,6 +4219,7 @@ sr_disp_site_ebase_room_iapetus = { value = sr_site_ebase_room_iapetus }
 sr_disp_site_resort_room_iapetus = { value = sr_site_resort_room_iapetus }
 sr_disp_ss_hab_cap_iapetus = { value = 2 }
 sr_disp_ss_people_at_cap_iapetus = { value = sr_site_people_at_cap_iapetus floor = yes }
+sr_disp_ss_people_room_iapetus = { value = 15000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_iapetus = {
 	value = sr_site_people_at_cap_iapetus
 	divide = 10000
@@ -4302,6 +4325,7 @@ sr_disp_site_ebase_room_titania = { value = sr_site_ebase_room_titania }
 sr_disp_site_resort_room_titania = { value = sr_site_resort_room_titania }
 sr_disp_ss_hab_cap_titania = { value = 2 }
 sr_disp_ss_people_at_cap_titania = { value = sr_site_people_at_cap_titania floor = yes }
+sr_disp_ss_people_room_titania = { value = 20000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_titania = {
 	value = sr_site_people_at_cap_titania
 	divide = 10000
@@ -4407,6 +4431,7 @@ sr_disp_site_ebase_room_oberon = { value = sr_site_ebase_room_oberon }
 sr_disp_site_resort_room_oberon = { value = sr_site_resort_room_oberon }
 sr_disp_ss_hab_cap_oberon = { value = 2 }
 sr_disp_ss_people_at_cap_oberon = { value = sr_site_people_at_cap_oberon floor = yes }
+sr_disp_ss_people_room_oberon = { value = 20000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_oberon = {
 	value = sr_site_people_at_cap_oberon
 	divide = 10000
@@ -4512,6 +4537,7 @@ sr_disp_site_ebase_room_miranda = { value = sr_site_ebase_room_miranda }
 sr_disp_site_resort_room_miranda = { value = sr_site_resort_room_miranda }
 sr_disp_ss_hab_cap_miranda = { value = 1 }
 sr_disp_ss_people_at_cap_miranda = { value = sr_site_people_at_cap_miranda floor = yes }
+sr_disp_ss_people_room_miranda = { value = 10000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_miranda = {
 	value = sr_site_people_at_cap_miranda
 	divide = 10000
@@ -4617,6 +4643,7 @@ sr_disp_site_ebase_room_ariel = { value = sr_site_ebase_room_ariel }
 sr_disp_site_resort_room_ariel = { value = sr_site_resort_room_ariel }
 sr_disp_ss_hab_cap_ariel = { value = 2 }
 sr_disp_ss_people_at_cap_ariel = { value = sr_site_people_at_cap_ariel floor = yes }
+sr_disp_ss_people_room_ariel = { value = 15000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_ariel = {
 	value = sr_site_people_at_cap_ariel
 	divide = 10000
@@ -4722,6 +4749,7 @@ sr_disp_site_ebase_room_triton = { value = sr_site_ebase_room_triton }
 sr_disp_site_resort_room_triton = { value = sr_site_resort_room_triton }
 sr_disp_ss_hab_cap_triton = { value = 2 }
 sr_disp_ss_people_at_cap_triton = { value = sr_site_people_at_cap_triton floor = yes }
+sr_disp_ss_people_room_triton = { value = 20000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_triton = {
 	value = sr_site_people_at_cap_triton
 	divide = 10000
@@ -4827,6 +4855,7 @@ sr_disp_site_ebase_room_proteus = { value = sr_site_ebase_room_proteus }
 sr_disp_site_resort_room_proteus = { value = sr_site_resort_room_proteus }
 sr_disp_ss_hab_cap_proteus = { value = 1 }
 sr_disp_ss_people_at_cap_proteus = { value = sr_site_people_at_cap_proteus floor = yes }
+sr_disp_ss_people_room_proteus = { value = 10000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_proteus = {
 	value = sr_site_people_at_cap_proteus
 	divide = 10000
@@ -4932,6 +4961,7 @@ sr_disp_site_ebase_room_pluto = { value = sr_site_ebase_room_pluto }
 sr_disp_site_resort_room_pluto = { value = sr_site_resort_room_pluto }
 sr_disp_ss_hab_cap_pluto = { value = 2 }
 sr_disp_ss_people_at_cap_pluto = { value = sr_site_people_at_cap_pluto floor = yes }
+sr_disp_ss_people_room_pluto = { value = 20000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_pluto = {
 	value = sr_site_people_at_cap_pluto
 	divide = 10000
@@ -5037,6 +5067,7 @@ sr_disp_site_ebase_room_eris = { value = sr_site_ebase_room_eris }
 sr_disp_site_resort_room_eris = { value = sr_site_resort_room_eris }
 sr_disp_ss_hab_cap_eris = { value = 1 }
 sr_disp_ss_people_at_cap_eris = { value = sr_site_people_at_cap_eris floor = yes }
+sr_disp_ss_people_room_eris = { value = 10000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_eris = {
 	value = sr_site_people_at_cap_eris
 	divide = 10000
@@ -5142,6 +5173,7 @@ sr_disp_site_ebase_room_makemake = { value = sr_site_ebase_room_makemake }
 sr_disp_site_resort_room_makemake = { value = sr_site_resort_room_makemake }
 sr_disp_ss_hab_cap_makemake = { value = 1 }
 sr_disp_ss_people_at_cap_makemake = { value = sr_site_people_at_cap_makemake floor = yes }
+sr_disp_ss_people_room_makemake = { value = 10000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_makemake = {
 	value = sr_site_people_at_cap_makemake
 	divide = 10000
@@ -5247,6 +5279,7 @@ sr_disp_site_ebase_room_haumea = { value = sr_site_ebase_room_haumea }
 sr_disp_site_resort_room_haumea = { value = sr_site_resort_room_haumea }
 sr_disp_ss_hab_cap_haumea = { value = 1 }
 sr_disp_ss_people_at_cap_haumea = { value = sr_site_people_at_cap_haumea floor = yes }
+sr_disp_ss_people_room_haumea = { value = 10000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_haumea = {
 	value = sr_site_people_at_cap_haumea
 	divide = 10000
@@ -5352,6 +5385,7 @@ sr_disp_site_ebase_room_sedna = { value = sr_site_ebase_room_sedna }
 sr_disp_site_resort_room_sedna = { value = sr_site_resort_room_sedna }
 sr_disp_ss_hab_cap_sedna = { value = 1 }
 sr_disp_ss_people_at_cap_sedna = { value = sr_site_people_at_cap_sedna floor = yes }
+sr_disp_ss_people_room_sedna = { value = 10000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_sedna = {
 	value = sr_site_people_at_cap_sedna
 	divide = 10000
@@ -5452,6 +5486,7 @@ sr_disp_site_ebase_room_shackleton = { value = sr_site_ebase_room_shackleton }
 sr_disp_site_resort_room_shackleton = { value = sr_site_resort_room_shackleton }
 sr_disp_ss_hab_cap_shackleton = { value = 2 }
 sr_disp_ss_people_at_cap_shackleton = { value = sr_site_people_at_cap_shackleton floor = yes }
+sr_disp_ss_people_room_shackleton = { value = 25000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_shackleton = {
 	value = sr_site_people_at_cap_shackleton
 	divide = 10000
@@ -5552,6 +5587,7 @@ sr_disp_site_ebase_room_peary = { value = sr_site_ebase_room_peary }
 sr_disp_site_resort_room_peary = { value = sr_site_resort_room_peary }
 sr_disp_ss_hab_cap_peary = { value = 1 }
 sr_disp_ss_people_at_cap_peary = { value = sr_site_people_at_cap_peary floor = yes }
+sr_disp_ss_people_room_peary = { value = 15000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_peary = {
 	value = sr_site_people_at_cap_peary
 	divide = 10000
@@ -5652,6 +5688,7 @@ sr_disp_site_ebase_room_tranquility = { value = sr_site_ebase_room_tranquility }
 sr_disp_site_resort_room_tranquility = { value = sr_site_resort_room_tranquility }
 sr_disp_ss_hab_cap_tranquility = { value = 2 }
 sr_disp_ss_people_at_cap_tranquility = { value = sr_site_people_at_cap_tranquility floor = yes }
+sr_disp_ss_people_room_tranquility = { value = 20000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_tranquility = {
 	value = sr_site_people_at_cap_tranquility
 	divide = 10000
@@ -5752,6 +5789,7 @@ sr_disp_site_ebase_room_marius_hills = { value = sr_site_ebase_room_marius_hills
 sr_disp_site_resort_room_marius_hills = { value = sr_site_resort_room_marius_hills }
 sr_disp_ss_hab_cap_marius_hills = { value = 3 }
 sr_disp_ss_people_at_cap_marius_hills = { value = sr_site_people_at_cap_marius_hills floor = yes }
+sr_disp_ss_people_room_marius_hills = { value = 40000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_marius_hills = {
 	value = sr_site_people_at_cap_marius_hills
 	divide = 10000
@@ -5852,6 +5890,7 @@ sr_disp_site_ebase_room_daedalus = { value = sr_site_ebase_room_daedalus }
 sr_disp_site_resort_room_daedalus = { value = sr_site_resort_room_daedalus }
 sr_disp_ss_hab_cap_daedalus = { value = 1 }
 sr_disp_ss_people_at_cap_daedalus = { value = sr_site_people_at_cap_daedalus floor = yes }
+sr_disp_ss_people_room_daedalus = { value = 10000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_daedalus = {
 	value = sr_site_people_at_cap_daedalus
 	divide = 10000
@@ -5952,6 +5991,7 @@ sr_disp_site_ebase_room_imbrium = { value = sr_site_ebase_room_imbrium }
 sr_disp_site_resort_room_imbrium = { value = sr_site_resort_room_imbrium }
 sr_disp_ss_hab_cap_imbrium = { value = 2 }
 sr_disp_ss_people_at_cap_imbrium = { value = sr_site_people_at_cap_imbrium floor = yes }
+sr_disp_ss_people_room_imbrium = { value = 25000 multiply = sr_our_room_mult floor = yes }
 sr_disp_ss_crews_at_cap_imbrium = {
 	value = sr_site_people_at_cap_imbrium
 	divide = 10000

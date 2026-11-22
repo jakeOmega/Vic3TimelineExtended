@@ -735,7 +735,8 @@ opened it.
 10. **The people room** (the owner, 2026-11-22). Under Simple or Full Colonies, the line under each site's name starts
     with the population icon and its people room before Habitats ("25,000" at Shackleton, "50,000" at Valles
     Marineris, in full, not elided), then the Habitat cap; its hover gives our Habitat share as a percent, not 0%.
-    Solar System's own rows have no such cell.
+    With Space Colonization the figures read 50% higher (37,500 and 75,000), and with Terraforming too, double
+    ("100,000" at Valles Marineris, still in full). Solar System's own rows have no such cell.
 
 ## The owner's UI pass: the Earth alert (PR 6, 2026-10-31)
 
