@@ -242,6 +242,8 @@ NOT_ON_COUNTRY = {
     "sr_space_command_paused": "a Space Command building",
     # The ground mix, on each base building (ground types design § 5.3, sr_eb_apply_mix).
     "sr_ebase_mix_*": "an Extraplanetary Base building",
+    # The state's share taken back off each Resort Colony (#1953, sr_resort_state_refresh).
+    "sr_resort_state_*": "a Resort Colony building",
     "te_seabed_long_haul": "a Deep-Sea Mine building (Long-Haul Seabed Operations)",
     "un_bloc_vacuum_modifier": "power blocs", "un_sovereignty_*": "interest groups",
     "un_standing_*": "je_united_nations", "un_member_*": "je_united_nations",

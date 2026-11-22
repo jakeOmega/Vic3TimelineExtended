@@ -417,6 +417,26 @@ sr_resort_room_penalty = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	building_space_resort_throughput_add = -0.01
 }
+# The Resort Colony free of its state (#1953): the state's share of the building's
+# Tourism and Fine Art output multipliers, taken back off (a unit a percent), from
+# sr_resort_state_refresh on the state's monthly pulse. On the building only, never the
+# state, where it would reach the Tourism Industry.
+sr_resort_state_tourism_bonus = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	goods_output_tourism_mult = 0.01
+}
+sr_resort_state_tourism_penalty = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	goods_output_tourism_mult = -0.01
+}
+sr_resort_state_fine_art_bonus = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	goods_output_fine_art_mult = 0.01
+}
+sr_resort_state_fine_art_penalty = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	goods_output_fine_art_mult = -0.01
+}
 
 # Extraplanetary Base ground (ground types design § 5.3,
 # docs/superpowers/specs/2026-11-05-extraplanetary-base-ground-types-design.md): the

@@ -1000,7 +1000,7 @@ you lose for good drops its assignment, and its levels move to your other room.
 ### Resort Colony room
 
 Space Colonization brings the Resort Colony, a building of its own. Its Luxury
-Resorts method makes Fine Art and Tourism from Launch Capacity, a little
+Resorts method makes Art and Entertainment and Tourism from Launch Capacity, a little
 electronics and Advanced Materials, and wine, furniture and fruit for the
 guests: about £42,000 a level a week at base prices. Under Simple Colonies and
 Full Colonies its levels need room, as bases do, but room of their own. Earth
@@ -1032,6 +1032,14 @@ each colony's page and its line in Solar System its own room and draw. Private
 investors and AI governments don't build past your room; your government can, at
 the penalty. An AI that tends its colonies queues an Off-World Resort once its Resort
 Colonies, built and queued, fill all of its resort room. Under Races Only, Resort Colonies have no room limit.
+
+A Resort Colony's hotels are off-world, so the Tourism and Art and Entertainment
+bonuses and penalties of the state you build it in don't reach it. The state's
+appeal, airports and roads, monuments, studios, pollution, turmoil and
+obstinance all stop at the building: a line on it, Off-World Hotels, takes them off its output each
+month. Your country's bonuses still reach it. From the state, each staffed
+Spaceport level there still gives it +1% throughput, and what slows every
+building in the state, such as devastation, slows it too.
 
 ### Who holds a colony
 

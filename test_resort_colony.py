@@ -312,6 +312,167 @@ class ResortRefreshTest(unittest.TestCase):
         self.assertIn("sr_resort_room_*", str(gen_nation_tab.SECTIONS["science_and_space"]))
 
 
+def _top_block(text, name):
+    """A top-level definition's body: `name = {` at the start of a line, not a call to it."""
+    m = re.search(rf"(?m)^{re.escape(name)} = \{{", text)
+    if not m:
+        raise AssertionError(f"no definition {name}")
+    return _block(text[m.start():], name)
+
+
+class ResortStateCancelTest(unittest.TestCase):
+    """The Resort Colony free of its state (#1953; the scope
+    docs/superpowers/specs/2026-11-22-colony-people-and-off-world-tourism-scope.md § 2):
+    the state's share of its Tourism and Fine Art output multipliers, the state's
+    read less its owner's, taken back off the building each month."""
+
+    GOODS = ("tourism", "fine_art")
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = _strip(_raw("common", "scripted_effects", "sr_colony_module_effects.txt"))
+        cls.modifiers = _strip(_raw("common", "static_modifiers", "space_race_modifiers.txt"))
+        cls.refresh = _top_block(cls.effects, "sr_resort_state_refresh")
+        cls.good = _top_block(cls.effects, "sr_resort_state_good")
+        cls.check = _top_block(cls.effects, "sr_resort_state_self_check")
+
+    def test_unit_pairs(self):
+        for good in self.GOODS:
+            for side, value in (("bonus", "0.01"), ("penalty", "-0.01")):
+                with self.subTest(good=good, side=side):
+                    body = _block(self.modifiers, f"sr_resort_state_{good}_{side}")
+                    self.assertRegex(body, rf"(?m)^\s*goods_output_{good}_mult = {re.escape(value)}\s*$")
+                    # Only the good's output: no throughput, no other good.
+                    self.assertEqual(len(re.findall(r"(?m)^\s*\w+_(?:mult|add) = ", body)), 1)
+
+    def test_share_is_the_state_read_less_the_owners(self):
+        self.assertRegex(self.good, r"name = sr_resort_state_\$GOOD\$\s+value = \{\s+"
+                                    r"value = modifier:goods_output_\$GOOD\$_mult\s+"
+                                    r"subtract = owner\.modifier:goods_output_\$GOOD\$_mult\s+"
+                                    r"multiply = 100\s+\}")
+
+    def test_removed_before_added_and_signed(self):
+        building = _block(self.good, "b:building_space_resort")
+        first_add = building.index("add_modifier")
+        for side in ("bonus", "penalty"):
+            self.assertLess(building.index(f"remove_modifier = sr_resort_state_$GOOD$_{side}"), first_add)
+        # A share above 0 (the state lifts the good) takes the penalty; below 0, the bonus.
+        self.assertRegex(building, r"root\.var:sr_resort_state_\$GOOD\$ > 0 \}\s+add_modifier = \{ name = "
+                                   r"sr_resort_state_\$GOOD\$_penalty multiplier = root\.var:sr_resort_state_\$GOOD\$_units \}")
+        self.assertRegex(building, r"root\.var:sr_resort_state_\$GOOD\$ < 0 \}\s+add_modifier = \{ name = "
+                                   r"sr_resort_state_\$GOOD\$_bonus multiplier = root\.var:sr_resort_state_\$GOOD\$_units \}")
+        # The size is the share's absolute value.
+        self.assertIn("set_variable = { name = sr_resort_state_$GOOD$_units value = var:sr_resort_state_$GOOD$ }", self.good)
+        self.assertRegex(self.good, r"value = var:sr_resort_state_\$GOOD\$\s+multiply = -1")
+
+    def test_refresh_covers_both_goods_after_the_check(self):
+        calls = [m.group(1) for m in re.finditer(r"sr_resort_state_good = \{ GOOD = (\w+) \}", self.refresh)]
+        self.assertEqual(calls, list(self.GOODS))
+        self.assertLess(self.refresh.index("sr_resort_state_self_check = yes"),
+                        self.refresh.index("sr_resort_state_good = {"))
+        self.assertIn("has_building = building_space_resort", self.refresh)
+        # Whatever the game rule: the hotels are off-world under Races Only too.
+        self.assertNotIn("sr_colonies_contested_enabled", self.refresh)
+        # A state that lost its building drops its figures.
+        for var in ("sr_resort_state_tourism", "sr_resort_state_tourism_units",
+                    "sr_resort_state_fine_art", "sr_resort_state_fine_art_units"):
+            self.assertIn(f"remove_variable = {var}\n", self.refresh)
+
+    def test_one_refresh_site_on_the_monthly_state_pulse(self):
+        hooks = _strip(_raw("common", "on_actions", "extra_on_actions.txt"))
+        pulse = _block(_block(hooks, "on_monthly_pulse_state"), "on_actions").split()
+        self.assertEqual(pulse[0], "sr_resort_state_on_action")
+        self.assertLess(pulse.index("sr_resort_state_on_action"), pulse.index("tourism_on_action"))
+        self.assertIn("sr_resort_state_refresh = yes", _block(hooks, "sr_resort_state_on_action"))
+        callers, adders = [], []
+        for top in ("common", "events"):
+            for dirpath, _dirs, files in os.walk(os.path.join(REPO, top)):
+                for name in files:
+                    if not name.endswith(".txt"):
+                        continue
+                    rel = os.path.relpath(os.path.join(dirpath, name), REPO)
+                    text = _strip(_raw(rel))
+                    callers += [rel] * len(re.findall(r"\bsr_resort_state_refresh = yes", text))
+                    adders += [rel] * len(re.findall(r"name = sr_resort_state_[\w$]+_(?:bonus|penalty)", text))
+        self.assertEqual(callers, ["common/on_actions/extra_on_actions.txt"])
+        self.assertEqual(adders, ["common/scripted_effects/sr_colony_module_effects.txt"] * 2)
+
+    def test_self_check(self):
+        limit = _block(self.check, "limit")
+        self.assertIn("NOT = { has_global_variable = sr_resort_state_checked }", limit)
+        # Armed only where no failure can land in the band: a share of 40% or more on a building
+        # that carries its cancel, a country line of 30% or more, and a share that has held.
+        self.assertIn("var:sr_resort_state_tourism_units >= 40", limit)
+        self.assertIn("has_modifier = sr_resort_state_tourism_bonus", limit)
+        self.assertIn("has_modifier = sr_resort_state_tourism_penalty", limit)
+        self.assertRegex(limit, r"owner = \{\s+OR = \{\s+modifier:goods_output_tourism_mult >= 0\.3\s+"
+                                r"modifier:goods_output_tourism_mult <= -0\.3\s+\}")
+        self.assertRegex(self.check, r"name = sr_rsc_drift\s+value = \{\s+value = modifier:goods_output_tourism_mult\s+"
+                                     r"subtract = owner\.modifier:goods_output_tourism_mult\s+multiply = 100\s+"
+                                     r"subtract = var:sr_resort_state_tourism\s+\}")
+        drift = self.check.index("local_var:sr_rsc_drift <= 5")
+        self.assertIn("local_var:sr_rsc_drift >= -5", self.check)
+        # The once-a-game flag is set only once a verdict is reached.
+        self.assertLess(drift, self.check.index("set_global_variable = { name = sr_resort_state_checked value = yes }"))
+        self.assertIn("set_variable = { name = sr_rsc_check_building value = prev.modifier:goods_output_tourism_mult }",
+                      self.check)
+        self.assertRegex(self.check, r"value = var:sr_rsc_check_building\s+subtract = var:sr_rsc_check_state\s+"
+                                     r"add = \{\s+value = var:sr_resort_state_tourism\s+divide = 100\s+\}")
+        self.assertIn("var:sr_rsc_check_own >= -0.05", self.check)
+        self.assertIn("var:sr_rsc_check_own <= 0.25", self.check)
+        self.assertIn('debug_log = "TE_SELF_CHECK OK resort_state ', self.check)
+        self.assertIn('debug_log = "TE_SELF_CHECK BROKEN resort_state ', self.check)
+
+    def test_self_check_failures_miss_the_band(self):
+        """Each failure the check names lands 0.3 or more outside -0.05..+0.25 at the arming floors
+        (share 40 points, a country line of 0.3, 5 points of drift), whatever the building's own line."""
+        lo, hi = -0.05, 0.25
+        for own in (0.0, 0.2):
+            for share in (0.40, -0.40):
+                for drift in (-0.05, 0.05):
+                    now = share + drift
+                    for country in (0.3, -0.3):
+                        readings = {
+                            # the cancel never reached the building
+                            "missing cancel": own + share,
+                            # the state's read leaves the country's lines out
+                            "state without country": country + own,
+                            # the building's read leaves the state's lines out
+                            "building without state": own - now,
+                        }
+                        for name, reading in readings.items():
+                            with self.subTest(failure=name, own=own, share=share, drift=drift, country=country):
+                                self.assertFalse(lo <= reading <= hi, reading)
+                    # and the working case reads the building's own line, whatever the drift
+                    self.assertTrue(lo <= own <= hi)
+
+    def test_loc(self):
+        names = _raw("localization", "english", "te_miscellaneous_l_english.yml")
+        descs = _raw("localization", "english", "te_concepts_l_english.yml")
+        for good in self.GOODS:
+            for side in ("bonus", "penalty"):
+                key = f"sr_resort_state_{good}_{side}"
+                with self.subTest(key=key):
+                    self.assertIn(f' {key}:0 "Off-World Hotels"', names)
+                    self.assertRegex(descs, rf'(?m)^ {key}_desc:0 "Our \$building_space_resort\$ hotels are off-world')
+        draw = re.search(r'^ concept_sr_resort_draw_desc:0 "(.*)"$', descs, re.M).group(1)
+        self.assertIn("The $tourism$ and $fine_art$ bonuses and penalties of the Earth state", draw)
+        self.assertIn("$pm_spaceport$ level there gives it #v +1%#! throughput", draw)
+
+    def test_nation_tab_places_the_pair_on_the_building(self):
+        import gen_nation_tab
+        self.assertEqual(gen_nation_tab.NOT_ON_COUNTRY["sr_resort_state_*"], "a Resort Colony building")
+
+    def test_guide_and_play_test(self):
+        space = _read("docs/player_guide/16-space.md")
+        section = space[space.index("### Resort Colony room"):space.index("### Who holds a colony")]
+        self.assertIn("Off-World Hotels", section)
+        self.assertIn("+1% throughput", section)
+        playtest = _read("docs/testing/solar-colonies-playtest.md")
+        self.assertIn("`TE_SELF_CHECK OK/BROKEN resort_state ", playtest)
+        self.assertIn("**A polluted state.**", playtest)
+
+
 class ResortModuleTest(unittest.TestCase):
     def test_facility_is_a_hook(self):
         resort = gss.FACILITY["resort"]
