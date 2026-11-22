@@ -240,6 +240,8 @@ NOT_ON_COUNTRY = {
     "sr_choice_*": "the milestone's entry (je_space_race_<milestone>)",
     "sr_fleet_upkeep_goods": "a Space Command building",
     "sr_space_command_paused": "a Space Command building",
+    # The settlers' Launch Capacity bill (colony people design § 6.2, sr_emig_bill_refresh).
+    "sr_settler_launches": "the Space Program building",
     # The ground mix, on each base building (ground types design § 5.3, sr_eb_apply_mix).
     "sr_ebase_mix_*": "an Extraplanetary Base building",
     # The state's share taken back off each Resort Colony (#1953, sr_resort_state_refresh).

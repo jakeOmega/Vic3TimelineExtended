@@ -10,6 +10,7 @@ costs authority. These tests hold the generated and hand-written script to
 that rule.
 """
 
+import glob
 import os
 import re
 import sys
@@ -31,7 +32,7 @@ def _strip(text):
 
 
 def _block(text, name):
-    m = re.search(rf"(?m)^\s*{re.escape(name)}\s*=\s*\{{", text)
+    m = re.search(rf"(?m)^\s*(?:[A-Z_]+:)?{re.escape(name)}\s*=\s*\{{", text)
     if not m:
         raise AssertionError(f"no block {name}")
     depth, i = 1, m.end()
@@ -391,6 +392,98 @@ class SettlerAmountTest(unittest.TestCase):
             self.assertFalse(f"je_space_race_widget_emig_level_{n}" in gui, f"level name {n} still shown")
         display = _strip(_raw("common", "script_values", "space_race_display_values.txt"))
         self.assertTrue("sr_disp_emig_amount = { value = sr_emig_amount }" in display, "no sr_disp_emig_amount")
+
+
+SPACE_PROGRAM_GROUPS = ("pmg_base_building_space_program", "pmg_space_program_debris_removal",
+                        "pmg_space_program_module_fabrication", "pmg_space_program_module_storage",
+                        "pmg_space_program_mission_ceiling")
+
+
+def _space_program_launch_capacity():
+    """{method: its goods_input_launch_capacity_add} for every Space Program
+    method with one, read from the method groups and the methods' files."""
+    groups = "".join(_strip(open(f, encoding="utf-8-sig").read())
+                     for f in glob.glob(os.path.join(REPO, "common", "production_method_groups", "*.txt")))
+    methods = "".join(_strip(open(f, encoding="utf-8-sig").read())
+                      for f in glob.glob(os.path.join(REPO, "common", "production_methods", "*.txt")))
+    out = {}
+    for group in SPACE_PROGRAM_GROUPS:
+        listed = re.search(r"production_methods = \{([^}]*)\}", _block(groups, group)).group(1).split()
+        for method in listed:
+            lc = re.search(r"goods_input_launch_capacity_add = (\d+)", _block(methods, method))
+            if lc:
+                out[method] = int(lc.group(1))
+    return out
+
+
+class SettlerBillTest(unittest.TestCase):
+    """Design § 6.2: 3 Launch Capacity a settler, on the Space Program as a
+    goods_input_launch_capacity_mult at 100 x the week's bill / (its Launch
+    Capacity x (1 + the country's throughput)), from one refresh site; the
+    emigration programme's throughput goes."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.values = _strip(_raw("common", "script_values", "sr_colony_population_values.txt"))
+        cls.effects = _strip(_raw("common", "scripted_effects", "sr_colony_population_effects.txt"))
+        cls.modifiers = _strip(_raw("common", "static_modifiers", "space_race_modifiers.txt"))
+
+    def test_the_base_reads_every_method_s_launch_capacity(self):
+        expected = _space_program_launch_capacity()
+        self.assertEqual(len(expected), 13)  # six missions, three debris, three fabrication, the Orbital Depot
+        base = _block(self.values, "sr_emig_lc_base")
+        found = {m: int(v) for m, v in re.findall(
+            r"has_active_production_method = (\w+) \} \} add = (\d+)", base)}
+        self.assertEqual(found, expected)
+
+    def test_the_units_divide_out_the_throughput(self):
+        self.assertIn("sr_emig_lc_per_settler = { value = 3 }", self.values)
+        week = _block(self.values, "sr_emig_bill_week")
+        for term in ("value = var:sr_emig_last_sent", "multiply = sr_emig_lc_per_settler", "multiply = 12",
+                     "divide = 52"):
+            self.assertIn(term, week)
+        divisor = _block(self.values, "sr_emig_bill_divisor")
+        for term in ("value = modifier:building_space_program_throughput_add", "add = 1",
+                     "multiply = sr_emig_lc_base", "min = 1"):
+            self.assertIn(term, divisor)
+        units = _block(self.values, "sr_emig_bill_units_value")
+        for term in ("value = sr_emig_bill_week", "multiply = 100", "divide = sr_emig_bill_divisor"):
+            self.assertIn(term, units)
+
+    def test_one_refresh_removes_first_and_adds_only_above_zero(self):
+        refresh = _block(self.effects, "sr_emig_bill_refresh")
+        self.assertLess(refresh.index("remove_modifier"), refresh.index("add_modifier"))
+        self.assertIn("every_scope_building = {", refresh)
+        self.assertIn("is_building_type = building_space_program", refresh)
+        self.assertRegex(refresh, r"limit = \{ root\.var:sr_emig_bill_units > 0 \}\s*add_modifier = \{ "
+                                  r"name = sr_settler_launches multiplier = root\.var:sr_emig_bill_units \}")
+        self.assertEqual(refresh.count("add_modifier"), 1)
+        je = _strip(_raw("common", "journal_entries", "je_space_race.txt"))
+        pulse = je[je.index("sr_emig_month = yes"):]
+        self.assertTrue(pulse.lstrip().split("\n", 1)[1].lstrip().startswith("sr_emig_bill_refresh = yes"))
+        found = [path for path, text in _walk_text("common", "events") if "add_modifier = { name = sr_settler_launches" in text]
+        self.assertEqual(found, ["common/scripted_effects/sr_colony_population_effects.txt"])
+
+    def test_the_bill_comes_off_once_settlers_stop(self):
+        """Review Focus 3: the sent lasts 40 days, past a month's pulse, and the
+        always-on pulse takes the bill off a country whose sent has lapsed."""
+        month = _block(self.effects, "sr_emig_month")
+        self.assertIn("set_variable = { name = sr_emig_last_sent value = local_var:sr_emig_sent days = 40 }", month)
+        always = _strip(_raw("common", "on_actions", "space_race_on_actions.txt"))
+        self.assertRegex(always, r"NOT = \{ has_variable = sr_emig_last_sent \}\s*any_scope_building = \{\s*"
+                                 r"is_building_type = building_space_program\s*has_modifier = sr_settler_launches")
+        self.assertIn("remove_modifier_if_exists_effect = { MODIFIER = sr_settler_launches }", always)
+
+    def test_the_modifier_and_the_old_throughput(self):
+        body = _block(self.modifiers, "sr_settler_launches")
+        self.assertIn("goods_input_launch_capacity_mult = 0.01", body)
+        found = [path for path, text in _walk_text("common", "events", "gui", exts=(".txt", ".gui", ".yml"))
+                 if "sr_emigration_programme" in text]
+        self.assertEqual(found, [])
+        self.assertFalse("sr_emigration_programme" in _raw("localization", "english", "te_concepts_l_english.yml"),
+                         "sr_emigration_programme's loc is left")
+        import gen_nation_tab
+        self.assertIn("sr_settler_launches", gen_nation_tab.NOT_ON_COUNTRY)
 
 
 def gss_top():

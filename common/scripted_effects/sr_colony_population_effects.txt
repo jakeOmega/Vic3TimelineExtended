@@ -109,7 +109,9 @@ sr_emig_month = {
 		if = {
 			limit = { local_var:sr_emig_sent > 0 }
 			sr_emig_distribute = yes
-			set_variable = { name = sr_emig_last_sent value = local_var:sr_emig_sent }
+			# 40 days, past a month's pulse: if the entry's pulse stops, the sent
+			# lapses and the always-on pulse takes the bill off (space_race_on_actions.txt).
+			set_variable = { name = sr_emig_last_sent value = local_var:sr_emig_sent days = 40 }
 			sr_emig_self_check = yes
 		}
 		else_if = {
@@ -120,6 +122,25 @@ sr_emig_month = {
 	else_if = {
 		limit = { has_variable = sr_emig_last_sent }
 		remove_variable = sr_emig_last_sent
+	}
+}
+
+# ---- The settlers' bill (colony people design § 6.2) ------------------------------
+# Country scope, after sr_emig_month in the entry's pulse: the one refresh site of
+# sr_settler_launches. Off every Space Program, then on at the month's units,
+# skipped at 0 (the dynamic-modifier pattern: a same-name add stacks).
+sr_emig_bill_refresh = {
+	every_scope_building = {
+		limit = { is_building_type = building_space_program }
+		remove_modifier_if_exists_effect = { MODIFIER = sr_settler_launches }
+	}
+	set_variable = { name = sr_emig_bill_units value = sr_emig_bill_units_value }
+	every_scope_building = {
+		limit = { is_building_type = building_space_program }
+		if = {
+			limit = { root.var:sr_emig_bill_units > 0 }
+			add_modifier = { name = sr_settler_launches multiplier = root.var:sr_emig_bill_units }
+		}
 	}
 }
 
@@ -148,8 +169,8 @@ sr_emig_self_check = {
 }
 
 # ---- The programme and the priorities --------------------------------------------------
-# Country scope. LEVEL a step, 0 Off. The entry declares the programme's upkeep
-# from the step (sr_emigration_programme, je_space_race.txt).
+# Country scope. LEVEL a step, 0 Off. The month's settlers are billed on the
+# Space Program (sr_emig_bill_refresh).
 sr_emig_set_level = {
 	set_variable = { name = sr_emig_level value = $LEVEL$ }
 	if = {

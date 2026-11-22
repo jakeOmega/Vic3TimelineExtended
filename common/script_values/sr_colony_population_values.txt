@@ -87,6 +87,61 @@ sr_emig_due_value = {
 	if = { limit = { has_variable = sr_emig_due } value = var:sr_emig_due }
 }
 
+# ---- The settlers' bill (colony people design § 6.2) ----------------------------
+# 3 Launch Capacity a settler, for every world: a week's bill is last month's
+# settlers x 3 x 12 / 52. It is charged on the Space Program as
+# sr_settler_launches, a goods_input_launch_capacity_mult of 0.01 a unit
+# (space_race_modifiers.txt), so the price of Launch Capacity rises as the
+# programme buys more: the brake.
+sr_emig_lc_per_settler = { value = 3 }
+sr_emig_bill_week = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_emig_last_sent }
+		value = var:sr_emig_last_sent
+		multiply = sr_emig_lc_per_settler
+		multiply = 12
+		divide = 52
+	}
+}
+# The Space Program's Launch Capacity at full staff: its active methods' lines
+# (workforce_scaled; the building is one level, expandable = no). A test holds the
+# figures to the methods' files (test_colony_people.py).
+sr_emig_lc_base = {
+	value = 0
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_earth_orbit } } add = 500 }
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_moon_mission } } add = 1500 }
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_mars_mission } } add = 5000 }
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_solar_colonization } } add = 10000 }
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_deep_space_exploration } } add = 50000 }
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_interstellar_mission } } add = 100000 }
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_debris_active_removal } } add = 300 }
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_debris_laser_broom } } add = 300 }
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_debris_fusion_sweepers } } add = 150 }
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_sr_fabrication_orbital_assembly } } add = 1300 }
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_sr_fabrication_lunar_foundries } } add = 2600 }
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_sr_fabrication_fusion_shipyards } } add = 4800 }
+	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_sr_storage_orbital_depot } } add = 450 }
+}
+# The building's Launch Capacity as the engine bills it: the base times the
+# country's Space Program throughput (module upkeep, free colony supply), which
+# the mult would otherwise multiply the settlers' bill by. Floored at 1: a base
+# of 0 divides by nothing (Review Focus 5). State-scope throughput (devastation,
+# riots) is not divided out.
+sr_emig_bill_divisor = {
+	value = modifier:building_space_program_throughput_add
+	add = 1
+	multiply = sr_emig_lc_base
+	min = 1
+}
+# The mult's units: 100 x the week's bill / the divisor (sr_emig_bill_refresh
+# stores it as var:sr_emig_bill_units for the building's multiplier).
+sr_emig_bill_units_value = {
+	value = sr_emig_bill_week
+	multiply = 100
+	divide = sr_emig_bill_divisor
+}
+
 # The off-world population's bonus (design § 10.5): one unit per
 # sr_offworld_bonus_people of the nation's people off Earth, at most
 # sr_offworld_bonus_cap; nothing below sr_offworld_bonus_minimum.

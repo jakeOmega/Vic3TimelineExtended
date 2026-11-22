@@ -1112,6 +1112,16 @@ sr_disp_emig_level = {
 	if = { limit = { has_variable = sr_emig_level } value = var:sr_emig_level }
 }
 sr_disp_emig_amount = { value = sr_emig_amount }
+# Last month's settlers, and the Launch Capacity they take a week (colony people
+# design § 6.2).
+sr_disp_emig_last_sent = {
+	value = 0
+	if = { limit = { has_variable = sr_emig_last_sent } value = var:sr_emig_last_sent }
+}
+sr_disp_emig_bill_week = {
+	value = sr_emig_bill_week
+	round = yes
+}
 # The settlers it sends a month while colonies have room.
 sr_disp_emig_per_month = {
 	value = sr_emig_level_batches

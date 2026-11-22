@@ -237,13 +237,14 @@ sr_solar_system_trade = {
 }
 
 # ======= Solar System Colonization - colony population (simple and full colonies)
-# Both declared on the entry (je_space_race.txt; 1.15
-# scaling_modifiers_while_active, #1404; slices 2-3 design § 10). The
-# programme's upkeep, per level of emigration: the Space Program's Launch
-# Capacity bill, as funding raises it.
-sr_emigration_programme = {
+# The settlers' bill (colony people design § 6.2): 3 Launch Capacity a settler,
+# on the Space Program at sr_emig_bill_units (100 x the week's bill / the
+# building's Launch Capacity x (1 + its throughput); sr_emig_bill_refresh, the one
+# refresh site, sr_colony_population_effects.txt). A unit adds 1% to its Launch
+# Capacity input. The off-world bonus is declared on the entry (je_space_race.txt).
+sr_settler_launches = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	building_space_program_throughput_add = 0.05
+	goods_input_launch_capacity_mult = 0.01
 }
 
 # The nation's people off Earth, per 100,000 (at most ten times).

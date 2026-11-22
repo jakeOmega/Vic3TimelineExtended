@@ -1585,7 +1585,7 @@
  je_space_race_widget_emig_level_0:0 "Off"
  je_space_race_widget_emig_month_figure:0 "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_emig_per_month')|D]"
  je_space_race_widget_emig_month_label:0 "Settlers a month"
- je_space_race_widget_emig_month_tt:0 "#header Emigration#!\nLow sends 500 settlers a month, Steady 1,000 and High 2,000, half middle strata and half lower, from the state of our Space Program, while our colonies have room. Each colony's share is its priority times its free room.\nEach level raises the Space Program's Launch Capacity bill:\n[GetStaticModifier('sr_emigration_programme').GetDesc]"
+ je_space_race_widget_emig_month_tt:0 "#header Emigration#!\nEach step doubles the settlers we send a month, from 500, half middle strata and half lower, taken from every state in proportion to its people. A month sends no more than our open colonies' free room, or 1% of our people. Each colony's share is its priority times its free room.\nEach settler takes 3 Launch Capacity, which our Space Program buys: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_emig_bill_week')|D]#! a week for last month's #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_emig_last_sent')|D]#!."
  je_space_race_widget_emig_prio_0:0 "Closed"
  je_space_race_widget_emig_prio_1:0 "Low"
  je_space_race_widget_emig_prio_2:0 "Normal"

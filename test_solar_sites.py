@@ -1166,15 +1166,14 @@ class PopulationTest(unittest.TestCase):
         self.assertIn("sr_colonies_contested_enabled = yes", month)
 
     def test_the_entry_declares_its_population_modifiers(self):
-        # 1.15 scaling modifiers (#1404): the emigration programme's upkeep and
-        # the off-world bonus are declared on the entry from the country values
-        # the monthly refresh used to apply them at (test_sr_solar_scaling_modifiers
-        # pins all six); no refresh is left to call.
+        # 1.15 scaling modifiers (#1404): the off-world bonus is declared on the
+        # entry from the country value the monthly refresh used to apply it at
+        # (test_sr_solar_scaling_modifiers pins them; the emigration programme went:
+        # colony people design § 6.2, settlers bill on the Space Program); no refresh is left to call.
         je = _strip(_raw("common", "journal_entries", "je_space_race.txt"))
         entry = _block(je, "je_space_race_solar_colonization")
         for name, limit, value in (
-                ("sr_emigration_programme", "sr_emig_level_value >= 1", "sr_emig_level_value"),
-                ("sr_offworld_population", "sr_offworld_pop_total >= sr_offworld_bonus_minimum", "sr_offworld_units")):
+                ("sr_offworld_population", "sr_offworld_pop_total >= sr_offworld_bonus_minimum", "sr_offworld_units"),):
             with self.subTest(modifier=name):
                 self.assertRegex(entry, r"scaling_modifiers_while_active = \{\s*modifier = " + name + r"\s*value = \{"
                                  r"\s*value = 0\s*if = \{\s*limit = \{\s*sr_colonies_contested_enabled = yes\s*"
