@@ -1057,6 +1057,39 @@ Bases view with In-Situ Resource Utilization and a base of a hundred or more lev
    description says the levels work at their sites' Base Grade where the Bases view puts them, not "the richest
    first".
 
+## Extraplanetary Base ground types: the month and the readings (2026-11-21)
+
+Where the levels work and what they make (ground types design §§ 2, 5, 8, 9.2, 9.6; `sr_ebase_generated.txt`,
+`ebase_ground.py`). `test_ebase_assignment.py` runs the generated month against the model offline; these are what only
+the game shows. Use a save under Full Colonies with In-Situ Resource Utilization, Asteroid Mining and two or three
+colonies of different types (16 Psyche and Ceres are the design's example).
+
+1. **The acceptance test (§ 2).** From the UI alone, with no console: say where your levels work, what the base makes
+   of each good, and why it last moved. Note anything you had to guess.
+2. **Two layers multiply.** With a base whose levels all work one site, its building's output tooltip for one good reads
+   the method's figure × (1 + the Extraplanetary Base Room throughput) × (1 + that good's Extraplanetary Base Ground
+   line), and the building shows the site's type's mix (at 16 Psyche alone: Glass and Plastics −91%). If the two add
+   instead, profit at base prices is off a site's grade times its mix, and `ebase_mix` can't see it.
+3. **A glut.** Let one good fall well below base price (or set it from the console) with a base of 150 levels or more:
+   the checkbox moves levels one way at the pace and stops while the gap is still inside the margin. Watch two or
+   three years for a move back. The model moves back once if a price closes only a tenth of its gap a month, so a
+   back-and-forth here says the game's prices answer slower than assumed: note the price path.
+4. **A blockade and its return.** Blockade a colony that holds levels: within a month they work elsewhere (or past the
+   room), its box says why, its assignment is kept, and no notice of a move is posted. Lift it: they come back the
+   next refresh, at once, not at the pace.
+5. **The pace.** A base of 150 levels moves 4 a month. Build a level mid-month: the day-after refresh places it and
+   moves nothing more that month.
+6. **The logistics cuts.** On a base with Tethered Launch and Fusion Tugs at base prices, profit a level at a grade-0
+   site reads about £21,650 on the Asteroid Mine (£7,250 without them), and a move needs about £1,083 a level more.
+7. **Tick time.** On a late save with many AI bases, the first of the month is no slower than before this build
+   (the wall clock of `docs/audits/late_game_performance.md`, "Reading the wall clock", against the same save on
+   `main`).
+8. **Solar System's line.** Under each site's name, "300 (+30%) Carbonaceous" and the resort room fit without "...",
+   in Solar System and in the colony target popup. The base room's hover gives its type's seven figures, each good
+   named, no raw `$key$`.
+9. **The Help page.** How Solar Colonization Works shows its Extraplanetary Bases topic under Simple and Full Colonies
+   only, with a line per ground type and the checkbox's rule.
+
 ## The Resort Colony, a building of its own (#1948, 2026-11-21)
 
 The Resort Colony method left the Extraplanetary Base for `building_space_resort`, whose levels work their own room

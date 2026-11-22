@@ -11,6 +11,16 @@ choice of where a country's levels work in a panel. § 12 records the owner's
 answers to its calls (2026-11-21); the appendix maps each point of the review
 to where this document answers it.
 
+**Built** (2026-11-21, `feature/ebase-ground-types`, one PR as § 10 planned). Where
+the build differs from the text below, the build is right and the section says so:
+the moves run once a calendar month (§ 8.2, § 8.5); switching the checkbox off
+keeps the levels a blockaded site is owed as its target (§ 8.4); profit a level and
+the yardstick count the cuts the base's other method groups make to its inputs
+(§ 8.3); the Base Room cell names the next site alone (§ 9.3). The Resort Colony
+left the building first (#1950), so the four mining methods are the base's only
+methods and § 7's fallback for a resort that stays is moot. § 4 describes the
+base before this build.
+
 ## 1. The owner's calls
 
 **2026-11-05**, when the first draft was written:
@@ -89,7 +99,7 @@ out of scope.
 
 The owner chose B.
 
-## 4. What one grade does today
+## 4. What one grade did before this build
 
 - `gen_solar_sites.SITES` gives each site an `ebase_grade` in percent, from +30
   at 16 Psyche to −45 at Sedna, and an `ebase_room` of 50 to 300 levels, plus
@@ -424,14 +434,21 @@ And once per country:
 Steps 2 to 4 only follow what happened (a blockade, a cession, a level built or
 lost, room gained), so they are not paced. Only step 5's choices are.
 
+**As built, step 5 runs once a calendar month** (`sr_eb_moved_month`). Steps 1 to 4
+and 6 run on every refresh, the monthly pulse and the day after a level is built,
+and change nothing when repeated on the same inputs; the moves and the move record
+wait for the month's first run, so a build day never spends a second month's pace.
+A first placement made mid-month moves from the next month, as the model's "placed
+before this month" says.
+
 ### 8.3 The checkbox
 
 With the checkbox on, each month moves levels from the site in use that earns
 least a level to the site with free room that earns most. It moves only while
 the gap is at least **5% of the yardstick**, which is our methods' profit a
 level at grade 0 and base prices, weighted by their levels (£7,250 for an
-Asteroid Mine). The yardstick is
-fixed, so the rule behaves the same when profits are small or negative. It
+Asteroid Mine, £21,650 with both era-12 logistics upgrades: see below). The
+yardstick is fixed, so the rule behaves the same when profits are small or negative. It
 never moves levels to a site that loses money a level. When every site loses
 money, nothing moves, and the panel says why (§ 9.1). The two alternatives
 both chase something worse. Least loss sends the base to the poorest sites,
@@ -449,7 +466,16 @@ waits for the price to come back.
 
 Here `f(m)` is the share of our levels running method `m` (read with
 `has_active_production_method`), and `p` is this month's price on our own
-market: `market = { mg:<good> = { market_goods_pricier / market_goods_cheaper } }`
+market. **As built, each input term also carries the cuts the base's other method
+groups make to it** (the build's review, 2026-11-21): Tethered Launch and Fusion Tugs
+each take 30% off a level's Launch Capacity, about 80% of its input bill, so a
+level's inputs are `in(m, i)` × (1 + the sum of its building's active
+`goods_input_<i>_mult`), weighted by levels as `f(m)` is. Left out, from era 12 the
+rule overweighted the ground type against the grade and could call every site a
+loser when none was. The yardstick counts the cuts too, since it is our methods'
+profit a level: with both, the move margin on an Asteroid Mine is about £1,083.
+Digital Access is local, and is read at the market's price. The price reads:
+`market = { mg:<good> = { market_goods_pricier / market_goods_cheaper } }`
 times the base price, read the way `st_res_<good>_price_rel` reads it. The
 generator writes
 each method's outputs and inputs from the production method files, and a test
@@ -471,8 +497,9 @@ unsmoothed prices.
 
 ### 8.4 Assigning by hand
 
-- **Switching the checkbox off** sets every site's `target` to its `at`, so
-  nothing moves until the player changes one.
+- **Switching the checkbox off** sets every site's `target` to its `at` and its
+  `away` (as built: with `at` alone, a blockaded site's levels came back at once and
+  then moved out again at the pace), so nothing moves until the player changes one.
 - **The − and + buttons** on a site's row change its `target`. Minus stops at 0.
   Plus stops at the site's room, and only works while some levels are
   unassigned, that is while the targets sum to less than built plus queued
@@ -619,7 +646,9 @@ or seize then sees what it holds before the choice (review point 4).
 The overview cell keeps "120 +20 / 400" and its red. "Next at" names where the
 next level goes instead of a grade, "next: Ceres", and its hover gives that
 site's type, grade and profit a level (review point 11). With all the room in
-use it reads −75%, as today.
+use it reads −75%, as today. **As built**, the line names the site alone ("Ceres"):
+the cell's column holds about 16 characters, and the longest name, Valles
+Marineris, is 16; the hover says what it is.
 
 ### 9.4 When levels start to move (why it last moved)
 
