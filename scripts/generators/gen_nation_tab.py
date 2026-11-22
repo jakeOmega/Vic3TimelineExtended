@@ -238,6 +238,8 @@ NOT_ON_COUNTRY = {
     "sr_choice_*": "the milestone's entry (je_space_race_<milestone>)",
     "sr_fleet_upkeep_goods": "a Space Command building",
     "sr_space_command_paused": "a Space Command building",
+    # The ground mix, on each base building (ground types design § 5.3, sr_eb_apply_mix).
+    "sr_ebase_mix_*": "an Extraplanetary Base building",
     "te_seabed_long_haul": "a Deep-Sea Mine building (Long-Haul Seabed Operations)",
     "un_bloc_vacuum_modifier": "power blocs", "un_sovereignty_*": "interest groups",
     "un_standing_*": "je_united_nations", "un_member_*": "je_united_nations",

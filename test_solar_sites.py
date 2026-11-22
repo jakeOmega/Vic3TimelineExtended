@@ -1535,23 +1535,13 @@ class ModulesTest(unittest.TestCase):
             self.assertIn(f"sr_ms_count_slot = {{ N = {n} }}", step)
             self.assertIn(f"NOT = {{ has_variable = sr_ms_{n}_site }}", _block(self.modules, "sr_ms_store_new"))
 
-    def test_the_base_room_fills_best_grade_first(self):
-        fill = _block(self.effects, "sr_ebase_fill")
-        grades = [int(g) for g in re.findall(r"# [^:]+: \d+ levels(?: and its Mining Complexes')? at ([+-]\d+)%",
-                                             _raw(str(gss.EFFECTS_OUT)))]
-        self.assertEqual(len(grades), len(gss.SITES) + 1)
-        self.assertEqual(grades, sorted(grades, reverse=True))
-        self.assertIn(f"value = local_var:sr_eb_left max = {gss.NEAR_EARTH_ROOM}", fill)
+    def test_the_base_room(self):
+        """The room the bases fill (design § 9). Where the levels work, the fill, the
+        mix and the refresh's figures are gen_ebase.py's (ground types design § 8),
+        and test_ebase_assignment.py holds them."""
         # The near-Earth room needs Asteroid Mining; the base itself comes a technology
         # earlier (lunar colonization design § 6).
         self.assertEqual(gss.NEAR_EARTH_TECH, "asteroid_mining")
-        self.assertIn(f"limit = {{ local_var:sr_eb_left > 0 has_technology_researched = {gss.NEAR_EARTH_TECH} }}",
-                      fill)
-        for site in gss.SITES:
-            with self.subTest(site=site.key):
-                self.assertIn(f"global_var:sr_site_holder_{site.key} ?= this", fill)
-        self.assertTrue(fill.rstrip().endswith(
-            f"multiply = {gss.OVERFLOW_GRADE} add = local_var:sr_eb_sum }} }}\n\t}}"))
         room = _block(self.values, "sr_ebase_room_total")
         self.assertIn("value = 0", room)
         self.assertIn(f"if = {{ limit = {{ has_technology_researched = {gss.NEAR_EARTH_TECH} }} "
@@ -1567,13 +1557,17 @@ class ModulesTest(unittest.TestCase):
                 world = _block(self.values, f"sr_site_ebase_room_{k}")
                 self.assertIn(f"value = {site.ebase_room}", world)
                 self.assertIn(f"add = {{ value = sr_site_mine_staffed_{k} multiply = sr_mod_mine_room floor = yes }}", world)
-                self.assertIn(f"max = sr_site_ebase_room_{k}", fill)
+        # The order by grade, best first, the near-Earth room first among grade 0.
+        grades = [0 if t is None else t.ebase_grade for t in gss.ebase_tiers()]
+        self.assertEqual(len(grades), len(gss.SITES) + 1)
+        self.assertEqual(grades, sorted(grades, reverse=True))
+        self.assertIsNone(gss.ebase_tiers()[grades.index(0)])
 
     def test_the_refresh_averages_over_every_level(self):
         refresh = _block(self.modules, "sr_ebase_refresh")
         self.assertLess(refresh.index("remove_modifier = sr_ebase_room_bonus"), refresh.index("add_modifier"))
         self.assertLess(refresh.index("remove_modifier = sr_ebase_room_penalty"), refresh.index("add_modifier"))
-        self.assertIn("value = local_var:sr_eb_sum\n\t\t\t\t\tdivide = local_var:sr_eb_levels", refresh)
+        self.assertLess(refresh.index("sr_eb_compute_mix = yes"), refresh.index("add_modifier"))
         self.assertIn("sr_colonies_contested_enabled = yes", refresh)
         modifiers = _strip(_raw("common", "static_modifiers", "space_race_modifiers.txt"))
         self.assertIn("building_space_mine_throughput_add = 0.01", _block(modifiers, "sr_ebase_room_bonus"))
@@ -2169,7 +2163,8 @@ class EbaseCellTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.effects = _strip(_raw(str(gss.EFFECTS_OUT)))
+        # The next level's grade is gen_ebase.py's since the ground types (design § 8).
+        cls.effects = _strip(_raw("common", "scripted_effects", "sr_ebase_generated.txt"))
         cls.modules = _strip(_raw("common", "scripted_effects", "sr_colony_module_effects.txt"))
         cls.display = _strip(_raw("common", "script_values", "space_race_display_values.txt"))
         cls.widget = _raw("gui", "journal_entry_widgets", "space_race_widget.gui")
@@ -2187,7 +2182,7 @@ class EbaseCellTest(unittest.TestCase):
         self.assertEqual(grades[1:], [str(0 if t is None else t.ebase_grade) for t in gss.ebase_tiers()])
         # A tier is skipped once the next level has found its place.
         self.assertEqual(fill.count("local_var:sr_eb_next_found = 0"), len(gss.ebase_tiers()))
-        # Each tier, in order: counted only while held, as sr_ebase_fill counts
+        # Each tier, in order: counted only while held, as the fill by grade counts
         # it; a full tier takes its own room from the levels left, else the next
         # level works there.
         arms = fill.split("limit = { local_var:sr_eb_next_found = 0")[1:]

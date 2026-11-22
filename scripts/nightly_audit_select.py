@@ -89,6 +89,8 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/customizable_localization/sr_sites_generated_custom_loc.txt",
     "common/buildings/sr_site_buildings_generated.txt",
     "gui/journal_entry_widgets/sr_sites_generated_rows.gui",
+    "common/script_values/sr_ebase_generated.txt",
+    "common/scripted_effects/sr_ebase_generated.txt",
     "common/scripted_effects/sr_fleets_generated.txt",
     "common/scripted_triggers/sr_fleets_generated.txt",
     "common/script_values/sr_fleets_generated.txt",
