@@ -1846,6 +1846,13 @@ sr_disp_site_hab_people_valles_marineris = { value = sr_site_hab_share_value_val
 sr_disp_site_ebase_room_valles_marineris = { value = sr_site_ebase_room_valles_marineris }
 sr_disp_site_resort_room_valles_marineris = { value = sr_site_resort_room_valles_marineris }
 sr_disp_ss_hab_cap_valles_marineris = { value = 4 }
+sr_disp_ss_people_at_cap_valles_marineris = { value = sr_site_people_at_cap_valles_marineris floor = yes }
+sr_disp_ss_crews_at_cap_valles_marineris = {
+	value = sr_site_people_at_cap_valles_marineris
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_olympus_mons = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_olympus_mons } add = var:sr_mq_a_olympus_mons }
@@ -1949,6 +1956,13 @@ sr_disp_site_hab_people_olympus_mons = { value = sr_site_hab_share_value_olympus
 sr_disp_site_ebase_room_olympus_mons = { value = sr_site_ebase_room_olympus_mons }
 sr_disp_site_resort_room_olympus_mons = { value = sr_site_resort_room_olympus_mons }
 sr_disp_ss_hab_cap_olympus_mons = { value = 3 }
+sr_disp_ss_people_at_cap_olympus_mons = { value = sr_site_people_at_cap_olympus_mons floor = yes }
+sr_disp_ss_crews_at_cap_olympus_mons = {
+	value = sr_site_people_at_cap_olympus_mons
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_hellas_planitia = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_hellas_planitia } add = var:sr_mq_a_hellas_planitia }
@@ -2052,6 +2066,13 @@ sr_disp_site_hab_people_hellas_planitia = { value = sr_site_hab_share_value_hell
 sr_disp_site_ebase_room_hellas_planitia = { value = sr_site_ebase_room_hellas_planitia }
 sr_disp_site_resort_room_hellas_planitia = { value = sr_site_resort_room_hellas_planitia }
 sr_disp_ss_hab_cap_hellas_planitia = { value = 4 }
+sr_disp_ss_people_at_cap_hellas_planitia = { value = sr_site_people_at_cap_hellas_planitia floor = yes }
+sr_disp_ss_crews_at_cap_hellas_planitia = {
+	value = sr_site_people_at_cap_hellas_planitia
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_utopia_planitia = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_utopia_planitia } add = var:sr_mq_a_utopia_planitia }
@@ -2155,6 +2176,13 @@ sr_disp_site_hab_people_utopia_planitia = { value = sr_site_hab_share_value_utop
 sr_disp_site_ebase_room_utopia_planitia = { value = sr_site_ebase_room_utopia_planitia }
 sr_disp_site_resort_room_utopia_planitia = { value = sr_site_resort_room_utopia_planitia }
 sr_disp_ss_hab_cap_utopia_planitia = { value = 4 }
+sr_disp_ss_people_at_cap_utopia_planitia = { value = sr_site_people_at_cap_utopia_planitia floor = yes }
+sr_disp_ss_crews_at_cap_utopia_planitia = {
+	value = sr_site_people_at_cap_utopia_planitia
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_arcadia_planitia = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_arcadia_planitia } add = var:sr_mq_a_arcadia_planitia }
@@ -2258,6 +2286,13 @@ sr_disp_site_hab_people_arcadia_planitia = { value = sr_site_hab_share_value_arc
 sr_disp_site_ebase_room_arcadia_planitia = { value = sr_site_ebase_room_arcadia_planitia }
 sr_disp_site_resort_room_arcadia_planitia = { value = sr_site_resort_room_arcadia_planitia }
 sr_disp_ss_hab_cap_arcadia_planitia = { value = 3 }
+sr_disp_ss_people_at_cap_arcadia_planitia = { value = sr_site_people_at_cap_arcadia_planitia floor = yes }
+sr_disp_ss_crews_at_cap_arcadia_planitia = {
+	value = sr_site_people_at_cap_arcadia_planitia
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_ceres = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_ceres } add = var:sr_mq_a_ceres }
@@ -2356,6 +2391,13 @@ sr_disp_site_hab_people_ceres = { value = sr_site_hab_share_value_ceres multiply
 sr_disp_site_ebase_room_ceres = { value = sr_site_ebase_room_ceres }
 sr_disp_site_resort_room_ceres = { value = sr_site_resort_room_ceres }
 sr_disp_ss_hab_cap_ceres = { value = 3 }
+sr_disp_ss_people_at_cap_ceres = { value = sr_site_people_at_cap_ceres floor = yes }
+sr_disp_ss_crews_at_cap_ceres = {
+	value = sr_site_people_at_cap_ceres
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_vesta = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_vesta } add = var:sr_mq_a_vesta }
@@ -2454,6 +2496,13 @@ sr_disp_site_hab_people_vesta = { value = sr_site_hab_share_value_vesta multiply
 sr_disp_site_ebase_room_vesta = { value = sr_site_ebase_room_vesta }
 sr_disp_site_resort_room_vesta = { value = sr_site_resort_room_vesta }
 sr_disp_ss_hab_cap_vesta = { value = 2 }
+sr_disp_ss_people_at_cap_vesta = { value = sr_site_people_at_cap_vesta floor = yes }
+sr_disp_ss_crews_at_cap_vesta = {
+	value = sr_site_people_at_cap_vesta
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_psyche = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_psyche } add = var:sr_mq_a_psyche }
@@ -2552,6 +2601,13 @@ sr_disp_site_hab_people_psyche = { value = sr_site_hab_share_value_psyche multip
 sr_disp_site_ebase_room_psyche = { value = sr_site_ebase_room_psyche }
 sr_disp_site_resort_room_psyche = { value = sr_site_resort_room_psyche }
 sr_disp_ss_hab_cap_psyche = { value = 2 }
+sr_disp_ss_people_at_cap_psyche = { value = sr_site_people_at_cap_psyche floor = yes }
+sr_disp_ss_crews_at_cap_psyche = {
+	value = sr_site_people_at_cap_psyche
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_pallas = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_pallas } add = var:sr_mq_a_pallas }
@@ -2650,6 +2706,13 @@ sr_disp_site_hab_people_pallas = { value = sr_site_hab_share_value_pallas multip
 sr_disp_site_ebase_room_pallas = { value = sr_site_ebase_room_pallas }
 sr_disp_site_resort_room_pallas = { value = sr_site_resort_room_pallas }
 sr_disp_ss_hab_cap_pallas = { value = 2 }
+sr_disp_ss_people_at_cap_pallas = { value = sr_site_people_at_cap_pallas floor = yes }
+sr_disp_ss_crews_at_cap_pallas = {
+	value = sr_site_people_at_cap_pallas
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_hygiea = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_hygiea } add = var:sr_mq_a_hygiea }
@@ -2748,6 +2811,13 @@ sr_disp_site_hab_people_hygiea = { value = sr_site_hab_share_value_hygiea multip
 sr_disp_site_ebase_room_hygiea = { value = sr_site_ebase_room_hygiea }
 sr_disp_site_resort_room_hygiea = { value = sr_site_resort_room_hygiea }
 sr_disp_ss_hab_cap_hygiea = { value = 2 }
+sr_disp_ss_people_at_cap_hygiea = { value = sr_site_people_at_cap_hygiea floor = yes }
+sr_disp_ss_crews_at_cap_hygiea = {
+	value = sr_site_people_at_cap_hygiea
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_io = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_io } add = var:sr_mq_a_io }
@@ -2846,6 +2916,13 @@ sr_disp_site_hab_people_io = { value = sr_site_hab_share_value_io multiply = sr_
 sr_disp_site_ebase_room_io = { value = sr_site_ebase_room_io }
 sr_disp_site_resort_room_io = { value = sr_site_resort_room_io }
 sr_disp_ss_hab_cap_io = { value = 2 }
+sr_disp_ss_people_at_cap_io = { value = sr_site_people_at_cap_io floor = yes }
+sr_disp_ss_crews_at_cap_io = {
+	value = sr_site_people_at_cap_io
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_europa = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_europa } add = var:sr_mq_a_europa }
@@ -2944,6 +3021,13 @@ sr_disp_site_hab_people_europa = { value = sr_site_hab_share_value_europa multip
 sr_disp_site_ebase_room_europa = { value = sr_site_ebase_room_europa }
 sr_disp_site_resort_room_europa = { value = sr_site_resort_room_europa }
 sr_disp_ss_hab_cap_europa = { value = 3 }
+sr_disp_ss_people_at_cap_europa = { value = sr_site_people_at_cap_europa floor = yes }
+sr_disp_ss_crews_at_cap_europa = {
+	value = sr_site_people_at_cap_europa
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_ganymede = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_ganymede } add = var:sr_mq_a_ganymede }
@@ -3047,6 +3131,13 @@ sr_disp_site_hab_people_ganymede = { value = sr_site_hab_share_value_ganymede mu
 sr_disp_site_ebase_room_ganymede = { value = sr_site_ebase_room_ganymede }
 sr_disp_site_resort_room_ganymede = { value = sr_site_resort_room_ganymede }
 sr_disp_ss_hab_cap_ganymede = { value = 3 }
+sr_disp_ss_people_at_cap_ganymede = { value = sr_site_people_at_cap_ganymede floor = yes }
+sr_disp_ss_crews_at_cap_ganymede = {
+	value = sr_site_people_at_cap_ganymede
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_callisto = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_callisto } add = var:sr_mq_a_callisto }
@@ -3150,6 +3241,13 @@ sr_disp_site_hab_people_callisto = { value = sr_site_hab_share_value_callisto mu
 sr_disp_site_ebase_room_callisto = { value = sr_site_ebase_room_callisto }
 sr_disp_site_resort_room_callisto = { value = sr_site_resort_room_callisto }
 sr_disp_ss_hab_cap_callisto = { value = 3 }
+sr_disp_ss_people_at_cap_callisto = { value = sr_site_people_at_cap_callisto floor = yes }
+sr_disp_ss_crews_at_cap_callisto = {
+	value = sr_site_people_at_cap_callisto
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_himalia = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_himalia } add = var:sr_mq_a_himalia }
@@ -3248,6 +3346,13 @@ sr_disp_site_hab_people_himalia = { value = sr_site_hab_share_value_himalia mult
 sr_disp_site_ebase_room_himalia = { value = sr_site_ebase_room_himalia }
 sr_disp_site_resort_room_himalia = { value = sr_site_resort_room_himalia }
 sr_disp_ss_hab_cap_himalia = { value = 1 }
+sr_disp_ss_people_at_cap_himalia = { value = sr_site_people_at_cap_himalia floor = yes }
+sr_disp_ss_crews_at_cap_himalia = {
+	value = sr_site_people_at_cap_himalia
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_amalthea = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_amalthea } add = var:sr_mq_a_amalthea }
@@ -3346,6 +3451,13 @@ sr_disp_site_hab_people_amalthea = { value = sr_site_hab_share_value_amalthea mu
 sr_disp_site_ebase_room_amalthea = { value = sr_site_ebase_room_amalthea }
 sr_disp_site_resort_room_amalthea = { value = sr_site_resort_room_amalthea }
 sr_disp_ss_hab_cap_amalthea = { value = 1 }
+sr_disp_ss_people_at_cap_amalthea = { value = sr_site_people_at_cap_amalthea floor = yes }
+sr_disp_ss_crews_at_cap_amalthea = {
+	value = sr_site_people_at_cap_amalthea
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_venus = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_venus } add = var:sr_mq_a_venus }
@@ -3449,6 +3561,13 @@ sr_disp_site_hab_people_venus = { value = sr_site_hab_share_value_venus multiply
 sr_disp_site_ebase_room_venus = { value = sr_site_ebase_room_venus }
 sr_disp_site_resort_room_venus = { value = sr_site_resort_room_venus }
 sr_disp_ss_hab_cap_venus = { value = 2 }
+sr_disp_ss_people_at_cap_venus = { value = sr_site_people_at_cap_venus floor = yes }
+sr_disp_ss_crews_at_cap_venus = {
+	value = sr_site_people_at_cap_venus
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_mercury = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_mercury } add = var:sr_mq_a_mercury }
@@ -3547,6 +3666,13 @@ sr_disp_site_hab_people_mercury = { value = sr_site_hab_share_value_mercury mult
 sr_disp_site_ebase_room_mercury = { value = sr_site_ebase_room_mercury }
 sr_disp_site_resort_room_mercury = { value = sr_site_resort_room_mercury }
 sr_disp_ss_hab_cap_mercury = { value = 3 }
+sr_disp_ss_people_at_cap_mercury = { value = sr_site_people_at_cap_mercury floor = yes }
+sr_disp_ss_crews_at_cap_mercury = {
+	value = sr_site_people_at_cap_mercury
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_titan = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_titan } add = var:sr_mq_a_titan }
@@ -3650,6 +3776,13 @@ sr_disp_site_hab_people_titan = { value = sr_site_hab_share_value_titan multiply
 sr_disp_site_ebase_room_titan = { value = sr_site_ebase_room_titan }
 sr_disp_site_resort_room_titan = { value = sr_site_resort_room_titan }
 sr_disp_ss_hab_cap_titan = { value = 3 }
+sr_disp_ss_people_at_cap_titan = { value = sr_site_people_at_cap_titan floor = yes }
+sr_disp_ss_crews_at_cap_titan = {
+	value = sr_site_people_at_cap_titan
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_enceladus = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_enceladus } add = var:sr_mq_a_enceladus }
@@ -3748,6 +3881,13 @@ sr_disp_site_hab_people_enceladus = { value = sr_site_hab_share_value_enceladus 
 sr_disp_site_ebase_room_enceladus = { value = sr_site_ebase_room_enceladus }
 sr_disp_site_resort_room_enceladus = { value = sr_site_resort_room_enceladus }
 sr_disp_ss_hab_cap_enceladus = { value = 2 }
+sr_disp_ss_people_at_cap_enceladus = { value = sr_site_people_at_cap_enceladus floor = yes }
+sr_disp_ss_crews_at_cap_enceladus = {
+	value = sr_site_people_at_cap_enceladus
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_rhea = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_rhea } add = var:sr_mq_a_rhea }
@@ -3846,6 +3986,13 @@ sr_disp_site_hab_people_rhea = { value = sr_site_hab_share_value_rhea multiply =
 sr_disp_site_ebase_room_rhea = { value = sr_site_ebase_room_rhea }
 sr_disp_site_resort_room_rhea = { value = sr_site_resort_room_rhea }
 sr_disp_ss_hab_cap_rhea = { value = 2 }
+sr_disp_ss_people_at_cap_rhea = { value = sr_site_people_at_cap_rhea floor = yes }
+sr_disp_ss_crews_at_cap_rhea = {
+	value = sr_site_people_at_cap_rhea
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_mimas = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_mimas } add = var:sr_mq_a_mimas }
@@ -3944,6 +4091,13 @@ sr_disp_site_hab_people_mimas = { value = sr_site_hab_share_value_mimas multiply
 sr_disp_site_ebase_room_mimas = { value = sr_site_ebase_room_mimas }
 sr_disp_site_resort_room_mimas = { value = sr_site_resort_room_mimas }
 sr_disp_ss_hab_cap_mimas = { value = 1 }
+sr_disp_ss_people_at_cap_mimas = { value = sr_site_people_at_cap_mimas floor = yes }
+sr_disp_ss_crews_at_cap_mimas = {
+	value = sr_site_people_at_cap_mimas
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_iapetus = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_iapetus } add = var:sr_mq_a_iapetus }
@@ -4042,6 +4196,13 @@ sr_disp_site_hab_people_iapetus = { value = sr_site_hab_share_value_iapetus mult
 sr_disp_site_ebase_room_iapetus = { value = sr_site_ebase_room_iapetus }
 sr_disp_site_resort_room_iapetus = { value = sr_site_resort_room_iapetus }
 sr_disp_ss_hab_cap_iapetus = { value = 2 }
+sr_disp_ss_people_at_cap_iapetus = { value = sr_site_people_at_cap_iapetus floor = yes }
+sr_disp_ss_crews_at_cap_iapetus = {
+	value = sr_site_people_at_cap_iapetus
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_titania = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_titania } add = var:sr_mq_a_titania }
@@ -4140,6 +4301,13 @@ sr_disp_site_hab_people_titania = { value = sr_site_hab_share_value_titania mult
 sr_disp_site_ebase_room_titania = { value = sr_site_ebase_room_titania }
 sr_disp_site_resort_room_titania = { value = sr_site_resort_room_titania }
 sr_disp_ss_hab_cap_titania = { value = 2 }
+sr_disp_ss_people_at_cap_titania = { value = sr_site_people_at_cap_titania floor = yes }
+sr_disp_ss_crews_at_cap_titania = {
+	value = sr_site_people_at_cap_titania
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_oberon = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_oberon } add = var:sr_mq_a_oberon }
@@ -4238,6 +4406,13 @@ sr_disp_site_hab_people_oberon = { value = sr_site_hab_share_value_oberon multip
 sr_disp_site_ebase_room_oberon = { value = sr_site_ebase_room_oberon }
 sr_disp_site_resort_room_oberon = { value = sr_site_resort_room_oberon }
 sr_disp_ss_hab_cap_oberon = { value = 2 }
+sr_disp_ss_people_at_cap_oberon = { value = sr_site_people_at_cap_oberon floor = yes }
+sr_disp_ss_crews_at_cap_oberon = {
+	value = sr_site_people_at_cap_oberon
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_miranda = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_miranda } add = var:sr_mq_a_miranda }
@@ -4336,6 +4511,13 @@ sr_disp_site_hab_people_miranda = { value = sr_site_hab_share_value_miranda mult
 sr_disp_site_ebase_room_miranda = { value = sr_site_ebase_room_miranda }
 sr_disp_site_resort_room_miranda = { value = sr_site_resort_room_miranda }
 sr_disp_ss_hab_cap_miranda = { value = 1 }
+sr_disp_ss_people_at_cap_miranda = { value = sr_site_people_at_cap_miranda floor = yes }
+sr_disp_ss_crews_at_cap_miranda = {
+	value = sr_site_people_at_cap_miranda
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_ariel = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_ariel } add = var:sr_mq_a_ariel }
@@ -4434,6 +4616,13 @@ sr_disp_site_hab_people_ariel = { value = sr_site_hab_share_value_ariel multiply
 sr_disp_site_ebase_room_ariel = { value = sr_site_ebase_room_ariel }
 sr_disp_site_resort_room_ariel = { value = sr_site_resort_room_ariel }
 sr_disp_ss_hab_cap_ariel = { value = 2 }
+sr_disp_ss_people_at_cap_ariel = { value = sr_site_people_at_cap_ariel floor = yes }
+sr_disp_ss_crews_at_cap_ariel = {
+	value = sr_site_people_at_cap_ariel
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_triton = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_triton } add = var:sr_mq_a_triton }
@@ -4532,6 +4721,13 @@ sr_disp_site_hab_people_triton = { value = sr_site_hab_share_value_triton multip
 sr_disp_site_ebase_room_triton = { value = sr_site_ebase_room_triton }
 sr_disp_site_resort_room_triton = { value = sr_site_resort_room_triton }
 sr_disp_ss_hab_cap_triton = { value = 2 }
+sr_disp_ss_people_at_cap_triton = { value = sr_site_people_at_cap_triton floor = yes }
+sr_disp_ss_crews_at_cap_triton = {
+	value = sr_site_people_at_cap_triton
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_proteus = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_proteus } add = var:sr_mq_a_proteus }
@@ -4630,6 +4826,13 @@ sr_disp_site_hab_people_proteus = { value = sr_site_hab_share_value_proteus mult
 sr_disp_site_ebase_room_proteus = { value = sr_site_ebase_room_proteus }
 sr_disp_site_resort_room_proteus = { value = sr_site_resort_room_proteus }
 sr_disp_ss_hab_cap_proteus = { value = 1 }
+sr_disp_ss_people_at_cap_proteus = { value = sr_site_people_at_cap_proteus floor = yes }
+sr_disp_ss_crews_at_cap_proteus = {
+	value = sr_site_people_at_cap_proteus
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_pluto = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_pluto } add = var:sr_mq_a_pluto }
@@ -4728,6 +4931,13 @@ sr_disp_site_hab_people_pluto = { value = sr_site_hab_share_value_pluto multiply
 sr_disp_site_ebase_room_pluto = { value = sr_site_ebase_room_pluto }
 sr_disp_site_resort_room_pluto = { value = sr_site_resort_room_pluto }
 sr_disp_ss_hab_cap_pluto = { value = 2 }
+sr_disp_ss_people_at_cap_pluto = { value = sr_site_people_at_cap_pluto floor = yes }
+sr_disp_ss_crews_at_cap_pluto = {
+	value = sr_site_people_at_cap_pluto
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_eris = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_eris } add = var:sr_mq_a_eris }
@@ -4826,6 +5036,13 @@ sr_disp_site_hab_people_eris = { value = sr_site_hab_share_value_eris multiply =
 sr_disp_site_ebase_room_eris = { value = sr_site_ebase_room_eris }
 sr_disp_site_resort_room_eris = { value = sr_site_resort_room_eris }
 sr_disp_ss_hab_cap_eris = { value = 1 }
+sr_disp_ss_people_at_cap_eris = { value = sr_site_people_at_cap_eris floor = yes }
+sr_disp_ss_crews_at_cap_eris = {
+	value = sr_site_people_at_cap_eris
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_makemake = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_makemake } add = var:sr_mq_a_makemake }
@@ -4924,6 +5141,13 @@ sr_disp_site_hab_people_makemake = { value = sr_site_hab_share_value_makemake mu
 sr_disp_site_ebase_room_makemake = { value = sr_site_ebase_room_makemake }
 sr_disp_site_resort_room_makemake = { value = sr_site_resort_room_makemake }
 sr_disp_ss_hab_cap_makemake = { value = 1 }
+sr_disp_ss_people_at_cap_makemake = { value = sr_site_people_at_cap_makemake floor = yes }
+sr_disp_ss_crews_at_cap_makemake = {
+	value = sr_site_people_at_cap_makemake
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_haumea = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_haumea } add = var:sr_mq_a_haumea }
@@ -5022,6 +5246,13 @@ sr_disp_site_hab_people_haumea = { value = sr_site_hab_share_value_haumea multip
 sr_disp_site_ebase_room_haumea = { value = sr_site_ebase_room_haumea }
 sr_disp_site_resort_room_haumea = { value = sr_site_resort_room_haumea }
 sr_disp_ss_hab_cap_haumea = { value = 1 }
+sr_disp_ss_people_at_cap_haumea = { value = sr_site_people_at_cap_haumea floor = yes }
+sr_disp_ss_crews_at_cap_haumea = {
+	value = sr_site_people_at_cap_haumea
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_sedna = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_sedna } add = var:sr_mq_a_sedna }
@@ -5120,6 +5351,13 @@ sr_disp_site_hab_people_sedna = { value = sr_site_hab_share_value_sedna multiply
 sr_disp_site_ebase_room_sedna = { value = sr_site_ebase_room_sedna }
 sr_disp_site_resort_room_sedna = { value = sr_site_resort_room_sedna }
 sr_disp_ss_hab_cap_sedna = { value = 1 }
+sr_disp_ss_people_at_cap_sedna = { value = sr_site_people_at_cap_sedna floor = yes }
+sr_disp_ss_crews_at_cap_sedna = {
+	value = sr_site_people_at_cap_sedna
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_shackleton = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_shackleton } add = var:sr_mq_a_shackleton }
@@ -5213,6 +5451,13 @@ sr_disp_site_hab_people_shackleton = { value = sr_site_hab_share_value_shackleto
 sr_disp_site_ebase_room_shackleton = { value = sr_site_ebase_room_shackleton }
 sr_disp_site_resort_room_shackleton = { value = sr_site_resort_room_shackleton }
 sr_disp_ss_hab_cap_shackleton = { value = 2 }
+sr_disp_ss_people_at_cap_shackleton = { value = sr_site_people_at_cap_shackleton floor = yes }
+sr_disp_ss_crews_at_cap_shackleton = {
+	value = sr_site_people_at_cap_shackleton
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_peary = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_peary } add = var:sr_mq_a_peary }
@@ -5306,6 +5551,13 @@ sr_disp_site_hab_people_peary = { value = sr_site_hab_share_value_peary multiply
 sr_disp_site_ebase_room_peary = { value = sr_site_ebase_room_peary }
 sr_disp_site_resort_room_peary = { value = sr_site_resort_room_peary }
 sr_disp_ss_hab_cap_peary = { value = 1 }
+sr_disp_ss_people_at_cap_peary = { value = sr_site_people_at_cap_peary floor = yes }
+sr_disp_ss_crews_at_cap_peary = {
+	value = sr_site_people_at_cap_peary
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_tranquility = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_tranquility } add = var:sr_mq_a_tranquility }
@@ -5399,6 +5651,13 @@ sr_disp_site_hab_people_tranquility = { value = sr_site_hab_share_value_tranquil
 sr_disp_site_ebase_room_tranquility = { value = sr_site_ebase_room_tranquility }
 sr_disp_site_resort_room_tranquility = { value = sr_site_resort_room_tranquility }
 sr_disp_ss_hab_cap_tranquility = { value = 2 }
+sr_disp_ss_people_at_cap_tranquility = { value = sr_site_people_at_cap_tranquility floor = yes }
+sr_disp_ss_crews_at_cap_tranquility = {
+	value = sr_site_people_at_cap_tranquility
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_marius_hills = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_marius_hills } add = var:sr_mq_a_marius_hills }
@@ -5492,6 +5751,13 @@ sr_disp_site_hab_people_marius_hills = { value = sr_site_hab_share_value_marius_
 sr_disp_site_ebase_room_marius_hills = { value = sr_site_ebase_room_marius_hills }
 sr_disp_site_resort_room_marius_hills = { value = sr_site_resort_room_marius_hills }
 sr_disp_ss_hab_cap_marius_hills = { value = 3 }
+sr_disp_ss_people_at_cap_marius_hills = { value = sr_site_people_at_cap_marius_hills floor = yes }
+sr_disp_ss_crews_at_cap_marius_hills = {
+	value = sr_site_people_at_cap_marius_hills
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_daedalus = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_daedalus } add = var:sr_mq_a_daedalus }
@@ -5585,6 +5851,13 @@ sr_disp_site_hab_people_daedalus = { value = sr_site_hab_share_value_daedalus mu
 sr_disp_site_ebase_room_daedalus = { value = sr_site_ebase_room_daedalus }
 sr_disp_site_resort_room_daedalus = { value = sr_site_resort_room_daedalus }
 sr_disp_ss_hab_cap_daedalus = { value = 1 }
+sr_disp_ss_people_at_cap_daedalus = { value = sr_site_people_at_cap_daedalus floor = yes }
+sr_disp_ss_crews_at_cap_daedalus = {
+	value = sr_site_people_at_cap_daedalus
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 sr_disp_mod_pending_a_imbrium = {
 	value = 0
 	if = { limit = { has_variable = sr_mq_a_imbrium } add = var:sr_mq_a_imbrium }
@@ -5678,6 +5951,13 @@ sr_disp_site_hab_people_imbrium = { value = sr_site_hab_share_value_imbrium mult
 sr_disp_site_ebase_room_imbrium = { value = sr_site_ebase_room_imbrium }
 sr_disp_site_resort_room_imbrium = { value = sr_site_resort_room_imbrium }
 sr_disp_ss_hab_cap_imbrium = { value = 2 }
+sr_disp_ss_people_at_cap_imbrium = { value = sr_site_people_at_cap_imbrium floor = yes }
+sr_disp_ss_crews_at_cap_imbrium = {
+	value = sr_site_people_at_cap_imbrium
+	divide = 10000
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 2 }
+	floor = yes
+}
 
 # Terraforming (era 13 spec § 7.11), per world that takes it:
 #   sr_disp_terra_shown_<key>  1 once we have the technology, or the world has
@@ -9340,6 +9620,197 @@ sr_disp_aut_restless_count = {
 }
 # ... less the one the cell names.
 sr_disp_aut_restless_more = { value = sr_disp_aut_restless_count subtract = 1 min = 0 }
+
+# The overview's Crews cell (colony people design § 10): our colonies whose people
+# can't crew all their crewed module levels.
+sr_disp_understaffed_count = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this sr_site_crew_needed_valles_marineris > sr_site_crews_valles_marineris } add = 1 }
+	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this sr_site_crew_needed_olympus_mons > sr_site_crews_olympus_mons } add = 1 }
+	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this sr_site_crew_needed_hellas_planitia > sr_site_crews_hellas_planitia } add = 1 }
+	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this sr_site_crew_needed_utopia_planitia > sr_site_crews_utopia_planitia } add = 1 }
+	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this sr_site_crew_needed_arcadia_planitia > sr_site_crews_arcadia_planitia } add = 1 }
+	if = { limit = { global_var:sr_site_holder_ceres ?= this sr_site_crew_needed_ceres > sr_site_crews_ceres } add = 1 }
+	if = { limit = { global_var:sr_site_holder_vesta ?= this sr_site_crew_needed_vesta > sr_site_crews_vesta } add = 1 }
+	if = { limit = { global_var:sr_site_holder_psyche ?= this sr_site_crew_needed_psyche > sr_site_crews_psyche } add = 1 }
+	if = { limit = { global_var:sr_site_holder_pallas ?= this sr_site_crew_needed_pallas > sr_site_crews_pallas } add = 1 }
+	if = { limit = { global_var:sr_site_holder_hygiea ?= this sr_site_crew_needed_hygiea > sr_site_crews_hygiea } add = 1 }
+	if = { limit = { global_var:sr_site_holder_io ?= this sr_site_crew_needed_io > sr_site_crews_io } add = 1 }
+	if = { limit = { global_var:sr_site_holder_europa ?= this sr_site_crew_needed_europa > sr_site_crews_europa } add = 1 }
+	if = { limit = { global_var:sr_site_holder_ganymede ?= this sr_site_crew_needed_ganymede > sr_site_crews_ganymede } add = 1 }
+	if = { limit = { global_var:sr_site_holder_callisto ?= this sr_site_crew_needed_callisto > sr_site_crews_callisto } add = 1 }
+	if = { limit = { global_var:sr_site_holder_himalia ?= this sr_site_crew_needed_himalia > sr_site_crews_himalia } add = 1 }
+	if = { limit = { global_var:sr_site_holder_amalthea ?= this sr_site_crew_needed_amalthea > sr_site_crews_amalthea } add = 1 }
+	if = { limit = { global_var:sr_site_holder_venus ?= this sr_site_crew_needed_venus > sr_site_crews_venus } add = 1 }
+	if = { limit = { global_var:sr_site_holder_mercury ?= this sr_site_crew_needed_mercury > sr_site_crews_mercury } add = 1 }
+	if = { limit = { global_var:sr_site_holder_titan ?= this sr_site_crew_needed_titan > sr_site_crews_titan } add = 1 }
+	if = { limit = { global_var:sr_site_holder_enceladus ?= this sr_site_crew_needed_enceladus > sr_site_crews_enceladus } add = 1 }
+	if = { limit = { global_var:sr_site_holder_rhea ?= this sr_site_crew_needed_rhea > sr_site_crews_rhea } add = 1 }
+	if = { limit = { global_var:sr_site_holder_mimas ?= this sr_site_crew_needed_mimas > sr_site_crews_mimas } add = 1 }
+	if = { limit = { global_var:sr_site_holder_iapetus ?= this sr_site_crew_needed_iapetus > sr_site_crews_iapetus } add = 1 }
+	if = { limit = { global_var:sr_site_holder_titania ?= this sr_site_crew_needed_titania > sr_site_crews_titania } add = 1 }
+	if = { limit = { global_var:sr_site_holder_oberon ?= this sr_site_crew_needed_oberon > sr_site_crews_oberon } add = 1 }
+	if = { limit = { global_var:sr_site_holder_miranda ?= this sr_site_crew_needed_miranda > sr_site_crews_miranda } add = 1 }
+	if = { limit = { global_var:sr_site_holder_ariel ?= this sr_site_crew_needed_ariel > sr_site_crews_ariel } add = 1 }
+	if = { limit = { global_var:sr_site_holder_triton ?= this sr_site_crew_needed_triton > sr_site_crews_triton } add = 1 }
+	if = { limit = { global_var:sr_site_holder_proteus ?= this sr_site_crew_needed_proteus > sr_site_crews_proteus } add = 1 }
+	if = { limit = { global_var:sr_site_holder_pluto ?= this sr_site_crew_needed_pluto > sr_site_crews_pluto } add = 1 }
+	if = { limit = { global_var:sr_site_holder_eris ?= this sr_site_crew_needed_eris > sr_site_crews_eris } add = 1 }
+	if = { limit = { global_var:sr_site_holder_makemake ?= this sr_site_crew_needed_makemake > sr_site_crews_makemake } add = 1 }
+	if = { limit = { global_var:sr_site_holder_haumea ?= this sr_site_crew_needed_haumea > sr_site_crews_haumea } add = 1 }
+	if = { limit = { global_var:sr_site_holder_sedna ?= this sr_site_crew_needed_sedna > sr_site_crews_sedna } add = 1 }
+	if = { limit = { global_var:sr_site_holder_shackleton ?= this sr_site_crew_needed_shackleton > sr_site_crews_shackleton } add = 1 }
+	if = { limit = { global_var:sr_site_holder_peary ?= this sr_site_crew_needed_peary > sr_site_crews_peary } add = 1 }
+	if = { limit = { global_var:sr_site_holder_tranquility ?= this sr_site_crew_needed_tranquility > sr_site_crews_tranquility } add = 1 }
+	if = { limit = { global_var:sr_site_holder_marius_hills ?= this sr_site_crew_needed_marius_hills > sr_site_crews_marius_hills } add = 1 }
+	if = { limit = { global_var:sr_site_holder_daedalus ?= this sr_site_crew_needed_daedalus > sr_site_crews_daedalus } add = 1 }
+	if = { limit = { global_var:sr_site_holder_imbrium ?= this sr_site_crew_needed_imbrium > sr_site_crews_imbrium } add = 1 }
+}
+
+# Our Habitat share, in percent: what a Habitat would hold of a world's starting
+# room were the world ours (the Solar System hovers).
+sr_disp_our_hab_share = { value = 0.5 add = modifier:country_sr_habitat_room_add multiply = 100 round = yes }
+
+# Our next colony fleet's target (var:sr_cf_target, a world's index): its Habitat
+# cap and the people and crews it would hold there (the target line's hover).
+sr_disp_cf_target_hab_cap = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_cf_target }
+		if = { limit = { var:sr_cf_target = 1 } value = sr_disp_ss_hab_cap_valles_marineris }
+		else_if = { limit = { var:sr_cf_target = 2 } value = sr_disp_ss_hab_cap_olympus_mons }
+		else_if = { limit = { var:sr_cf_target = 3 } value = sr_disp_ss_hab_cap_hellas_planitia }
+		else_if = { limit = { var:sr_cf_target = 4 } value = sr_disp_ss_hab_cap_utopia_planitia }
+		else_if = { limit = { var:sr_cf_target = 5 } value = sr_disp_ss_hab_cap_arcadia_planitia }
+		else_if = { limit = { var:sr_cf_target = 6 } value = sr_disp_ss_hab_cap_ceres }
+		else_if = { limit = { var:sr_cf_target = 7 } value = sr_disp_ss_hab_cap_vesta }
+		else_if = { limit = { var:sr_cf_target = 8 } value = sr_disp_ss_hab_cap_psyche }
+		else_if = { limit = { var:sr_cf_target = 9 } value = sr_disp_ss_hab_cap_pallas }
+		else_if = { limit = { var:sr_cf_target = 10 } value = sr_disp_ss_hab_cap_hygiea }
+		else_if = { limit = { var:sr_cf_target = 11 } value = sr_disp_ss_hab_cap_io }
+		else_if = { limit = { var:sr_cf_target = 12 } value = sr_disp_ss_hab_cap_europa }
+		else_if = { limit = { var:sr_cf_target = 13 } value = sr_disp_ss_hab_cap_ganymede }
+		else_if = { limit = { var:sr_cf_target = 14 } value = sr_disp_ss_hab_cap_callisto }
+		else_if = { limit = { var:sr_cf_target = 15 } value = sr_disp_ss_hab_cap_himalia }
+		else_if = { limit = { var:sr_cf_target = 16 } value = sr_disp_ss_hab_cap_amalthea }
+		else_if = { limit = { var:sr_cf_target = 17 } value = sr_disp_ss_hab_cap_venus }
+		else_if = { limit = { var:sr_cf_target = 18 } value = sr_disp_ss_hab_cap_mercury }
+		else_if = { limit = { var:sr_cf_target = 19 } value = sr_disp_ss_hab_cap_titan }
+		else_if = { limit = { var:sr_cf_target = 20 } value = sr_disp_ss_hab_cap_enceladus }
+		else_if = { limit = { var:sr_cf_target = 21 } value = sr_disp_ss_hab_cap_rhea }
+		else_if = { limit = { var:sr_cf_target = 22 } value = sr_disp_ss_hab_cap_mimas }
+		else_if = { limit = { var:sr_cf_target = 23 } value = sr_disp_ss_hab_cap_iapetus }
+		else_if = { limit = { var:sr_cf_target = 24 } value = sr_disp_ss_hab_cap_titania }
+		else_if = { limit = { var:sr_cf_target = 25 } value = sr_disp_ss_hab_cap_oberon }
+		else_if = { limit = { var:sr_cf_target = 26 } value = sr_disp_ss_hab_cap_miranda }
+		else_if = { limit = { var:sr_cf_target = 27 } value = sr_disp_ss_hab_cap_ariel }
+		else_if = { limit = { var:sr_cf_target = 28 } value = sr_disp_ss_hab_cap_triton }
+		else_if = { limit = { var:sr_cf_target = 29 } value = sr_disp_ss_hab_cap_proteus }
+		else_if = { limit = { var:sr_cf_target = 30 } value = sr_disp_ss_hab_cap_pluto }
+		else_if = { limit = { var:sr_cf_target = 31 } value = sr_disp_ss_hab_cap_eris }
+		else_if = { limit = { var:sr_cf_target = 32 } value = sr_disp_ss_hab_cap_makemake }
+		else_if = { limit = { var:sr_cf_target = 33 } value = sr_disp_ss_hab_cap_haumea }
+		else_if = { limit = { var:sr_cf_target = 34 } value = sr_disp_ss_hab_cap_sedna }
+		else_if = { limit = { var:sr_cf_target = 35 } value = sr_disp_ss_hab_cap_shackleton }
+		else_if = { limit = { var:sr_cf_target = 36 } value = sr_disp_ss_hab_cap_peary }
+		else_if = { limit = { var:sr_cf_target = 37 } value = sr_disp_ss_hab_cap_tranquility }
+		else_if = { limit = { var:sr_cf_target = 38 } value = sr_disp_ss_hab_cap_marius_hills }
+		else_if = { limit = { var:sr_cf_target = 39 } value = sr_disp_ss_hab_cap_daedalus }
+		else_if = { limit = { var:sr_cf_target = 40 } value = sr_disp_ss_hab_cap_imbrium }
+	}
+}
+sr_disp_cf_target_people_at_cap = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_cf_target }
+		if = { limit = { var:sr_cf_target = 1 } value = sr_disp_ss_people_at_cap_valles_marineris }
+		else_if = { limit = { var:sr_cf_target = 2 } value = sr_disp_ss_people_at_cap_olympus_mons }
+		else_if = { limit = { var:sr_cf_target = 3 } value = sr_disp_ss_people_at_cap_hellas_planitia }
+		else_if = { limit = { var:sr_cf_target = 4 } value = sr_disp_ss_people_at_cap_utopia_planitia }
+		else_if = { limit = { var:sr_cf_target = 5 } value = sr_disp_ss_people_at_cap_arcadia_planitia }
+		else_if = { limit = { var:sr_cf_target = 6 } value = sr_disp_ss_people_at_cap_ceres }
+		else_if = { limit = { var:sr_cf_target = 7 } value = sr_disp_ss_people_at_cap_vesta }
+		else_if = { limit = { var:sr_cf_target = 8 } value = sr_disp_ss_people_at_cap_psyche }
+		else_if = { limit = { var:sr_cf_target = 9 } value = sr_disp_ss_people_at_cap_pallas }
+		else_if = { limit = { var:sr_cf_target = 10 } value = sr_disp_ss_people_at_cap_hygiea }
+		else_if = { limit = { var:sr_cf_target = 11 } value = sr_disp_ss_people_at_cap_io }
+		else_if = { limit = { var:sr_cf_target = 12 } value = sr_disp_ss_people_at_cap_europa }
+		else_if = { limit = { var:sr_cf_target = 13 } value = sr_disp_ss_people_at_cap_ganymede }
+		else_if = { limit = { var:sr_cf_target = 14 } value = sr_disp_ss_people_at_cap_callisto }
+		else_if = { limit = { var:sr_cf_target = 15 } value = sr_disp_ss_people_at_cap_himalia }
+		else_if = { limit = { var:sr_cf_target = 16 } value = sr_disp_ss_people_at_cap_amalthea }
+		else_if = { limit = { var:sr_cf_target = 17 } value = sr_disp_ss_people_at_cap_venus }
+		else_if = { limit = { var:sr_cf_target = 18 } value = sr_disp_ss_people_at_cap_mercury }
+		else_if = { limit = { var:sr_cf_target = 19 } value = sr_disp_ss_people_at_cap_titan }
+		else_if = { limit = { var:sr_cf_target = 20 } value = sr_disp_ss_people_at_cap_enceladus }
+		else_if = { limit = { var:sr_cf_target = 21 } value = sr_disp_ss_people_at_cap_rhea }
+		else_if = { limit = { var:sr_cf_target = 22 } value = sr_disp_ss_people_at_cap_mimas }
+		else_if = { limit = { var:sr_cf_target = 23 } value = sr_disp_ss_people_at_cap_iapetus }
+		else_if = { limit = { var:sr_cf_target = 24 } value = sr_disp_ss_people_at_cap_titania }
+		else_if = { limit = { var:sr_cf_target = 25 } value = sr_disp_ss_people_at_cap_oberon }
+		else_if = { limit = { var:sr_cf_target = 26 } value = sr_disp_ss_people_at_cap_miranda }
+		else_if = { limit = { var:sr_cf_target = 27 } value = sr_disp_ss_people_at_cap_ariel }
+		else_if = { limit = { var:sr_cf_target = 28 } value = sr_disp_ss_people_at_cap_triton }
+		else_if = { limit = { var:sr_cf_target = 29 } value = sr_disp_ss_people_at_cap_proteus }
+		else_if = { limit = { var:sr_cf_target = 30 } value = sr_disp_ss_people_at_cap_pluto }
+		else_if = { limit = { var:sr_cf_target = 31 } value = sr_disp_ss_people_at_cap_eris }
+		else_if = { limit = { var:sr_cf_target = 32 } value = sr_disp_ss_people_at_cap_makemake }
+		else_if = { limit = { var:sr_cf_target = 33 } value = sr_disp_ss_people_at_cap_haumea }
+		else_if = { limit = { var:sr_cf_target = 34 } value = sr_disp_ss_people_at_cap_sedna }
+		else_if = { limit = { var:sr_cf_target = 35 } value = sr_disp_ss_people_at_cap_shackleton }
+		else_if = { limit = { var:sr_cf_target = 36 } value = sr_disp_ss_people_at_cap_peary }
+		else_if = { limit = { var:sr_cf_target = 37 } value = sr_disp_ss_people_at_cap_tranquility }
+		else_if = { limit = { var:sr_cf_target = 38 } value = sr_disp_ss_people_at_cap_marius_hills }
+		else_if = { limit = { var:sr_cf_target = 39 } value = sr_disp_ss_people_at_cap_daedalus }
+		else_if = { limit = { var:sr_cf_target = 40 } value = sr_disp_ss_people_at_cap_imbrium }
+	}
+}
+sr_disp_cf_target_crews_at_cap = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_cf_target }
+		if = { limit = { var:sr_cf_target = 1 } value = sr_disp_ss_crews_at_cap_valles_marineris }
+		else_if = { limit = { var:sr_cf_target = 2 } value = sr_disp_ss_crews_at_cap_olympus_mons }
+		else_if = { limit = { var:sr_cf_target = 3 } value = sr_disp_ss_crews_at_cap_hellas_planitia }
+		else_if = { limit = { var:sr_cf_target = 4 } value = sr_disp_ss_crews_at_cap_utopia_planitia }
+		else_if = { limit = { var:sr_cf_target = 5 } value = sr_disp_ss_crews_at_cap_arcadia_planitia }
+		else_if = { limit = { var:sr_cf_target = 6 } value = sr_disp_ss_crews_at_cap_ceres }
+		else_if = { limit = { var:sr_cf_target = 7 } value = sr_disp_ss_crews_at_cap_vesta }
+		else_if = { limit = { var:sr_cf_target = 8 } value = sr_disp_ss_crews_at_cap_psyche }
+		else_if = { limit = { var:sr_cf_target = 9 } value = sr_disp_ss_crews_at_cap_pallas }
+		else_if = { limit = { var:sr_cf_target = 10 } value = sr_disp_ss_crews_at_cap_hygiea }
+		else_if = { limit = { var:sr_cf_target = 11 } value = sr_disp_ss_crews_at_cap_io }
+		else_if = { limit = { var:sr_cf_target = 12 } value = sr_disp_ss_crews_at_cap_europa }
+		else_if = { limit = { var:sr_cf_target = 13 } value = sr_disp_ss_crews_at_cap_ganymede }
+		else_if = { limit = { var:sr_cf_target = 14 } value = sr_disp_ss_crews_at_cap_callisto }
+		else_if = { limit = { var:sr_cf_target = 15 } value = sr_disp_ss_crews_at_cap_himalia }
+		else_if = { limit = { var:sr_cf_target = 16 } value = sr_disp_ss_crews_at_cap_amalthea }
+		else_if = { limit = { var:sr_cf_target = 17 } value = sr_disp_ss_crews_at_cap_venus }
+		else_if = { limit = { var:sr_cf_target = 18 } value = sr_disp_ss_crews_at_cap_mercury }
+		else_if = { limit = { var:sr_cf_target = 19 } value = sr_disp_ss_crews_at_cap_titan }
+		else_if = { limit = { var:sr_cf_target = 20 } value = sr_disp_ss_crews_at_cap_enceladus }
+		else_if = { limit = { var:sr_cf_target = 21 } value = sr_disp_ss_crews_at_cap_rhea }
+		else_if = { limit = { var:sr_cf_target = 22 } value = sr_disp_ss_crews_at_cap_mimas }
+		else_if = { limit = { var:sr_cf_target = 23 } value = sr_disp_ss_crews_at_cap_iapetus }
+		else_if = { limit = { var:sr_cf_target = 24 } value = sr_disp_ss_crews_at_cap_titania }
+		else_if = { limit = { var:sr_cf_target = 25 } value = sr_disp_ss_crews_at_cap_oberon }
+		else_if = { limit = { var:sr_cf_target = 26 } value = sr_disp_ss_crews_at_cap_miranda }
+		else_if = { limit = { var:sr_cf_target = 27 } value = sr_disp_ss_crews_at_cap_ariel }
+		else_if = { limit = { var:sr_cf_target = 28 } value = sr_disp_ss_crews_at_cap_triton }
+		else_if = { limit = { var:sr_cf_target = 29 } value = sr_disp_ss_crews_at_cap_proteus }
+		else_if = { limit = { var:sr_cf_target = 30 } value = sr_disp_ss_crews_at_cap_pluto }
+		else_if = { limit = { var:sr_cf_target = 31 } value = sr_disp_ss_crews_at_cap_eris }
+		else_if = { limit = { var:sr_cf_target = 32 } value = sr_disp_ss_crews_at_cap_makemake }
+		else_if = { limit = { var:sr_cf_target = 33 } value = sr_disp_ss_crews_at_cap_haumea }
+		else_if = { limit = { var:sr_cf_target = 34 } value = sr_disp_ss_crews_at_cap_sedna }
+		else_if = { limit = { var:sr_cf_target = 35 } value = sr_disp_ss_crews_at_cap_shackleton }
+		else_if = { limit = { var:sr_cf_target = 36 } value = sr_disp_ss_crews_at_cap_peary }
+		else_if = { limit = { var:sr_cf_target = 37 } value = sr_disp_ss_crews_at_cap_tranquility }
+		else_if = { limit = { var:sr_cf_target = 38 } value = sr_disp_ss_crews_at_cap_marius_hills }
+		else_if = { limit = { var:sr_cf_target = 39 } value = sr_disp_ss_crews_at_cap_daedalus }
+		else_if = { limit = { var:sr_cf_target = 40 } value = sr_disp_ss_crews_at_cap_imbrium }
+	}
+}
 
 # Next Windows (colony management design § 6), per destination, the viewer's scope:
 #   sr_disp_win_row_<body>    sr_window_reach_<body>: 1 shown, 2 beyond our drive, 0 neither

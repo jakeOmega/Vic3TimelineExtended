@@ -1666,19 +1666,37 @@ types space_race_widget_types
 					block "settler_people" {}
 				}
 			}
+			### Its crews, and red while its people are short the crews it needs
+			### (colony people design § 10).
 			widget = {
-				size = { 60 24 }
+				size = { 120 24 }
 				parentanchor = vcenter
 				tooltip = "je_space_race_widget_settlers_crews_tt"
 
-				textbox = {
+				flowcontainer = {
+					direction = horizontal
+					spacing = 4
 					parentanchor = left|vcenter
-					autoresize = yes
-					max_width = 60
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					block "settler_crews" {}
+					ignoreinvisible = yes
+
+					textbox = {
+						parentanchor = left|vcenter
+						autoresize = yes
+						max_width = 24
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						block "settler_crews" {}
+					}
+					textbox = {
+						parentanchor = left|vcenter
+						autoresize = yes
+						max_width = 88
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						block "settler_crews_short" {}
+					}
 				}
 			}
 		}
@@ -4409,13 +4427,24 @@ types space_race_widget_types
 					}
 				}
 
+				### Last month's settlers, and the Launch Capacity they take a week
+				### (colony people design §§ 6.2, 10).
 				te_sr_value_row = {
 					tooltip = "je_space_race_widget_emig_month_tt"
 					blockoverride "row_label" {
-						text = "je_space_race_widget_emig_month_label"
+						text = "je_space_race_widget_emig_sent_label"
 					}
 					blockoverride "row_value" {
-						text = "je_space_race_widget_emig_month_figure"
+						text = "je_space_race_widget_emig_sent_figure"
+					}
+				}
+				te_sr_value_row = {
+					tooltip = "je_space_race_widget_emig_month_tt"
+					blockoverride "row_label" {
+						text = "je_space_race_widget_emig_bill_label"
+					}
+					blockoverride "row_value" {
+						text = "je_space_race_widget_emig_bill_figure"
 					}
 				}
 				te_sr_value_row = {
@@ -5215,7 +5244,8 @@ types space_race_widget_types
 		}
 		### Under the name, what the site offers a colony (the owner, 2026-10-30:
 		### the Colonies list showed slots and base room only for colonies held):
-		### its module slots, its size's and our Colony Module Slots, and its
+		### its Habitat cap, on hover the people and crews it holds at the cap at
+		### our share (colony people design § 10), and its
 		### Extraplanetary Base room, grade and ground type ("300 (+30%) Metallic",
 		### ground types design § 9.2), each an icon and a figure with its
 		### meaning on hover; the base room's hover is its type's
@@ -5237,7 +5267,9 @@ types space_race_widget_types
 			widget = {
 				size = { 41 22 }
 				parentanchor = vcenter
-				tooltip = "je_space_race_widget_ss_slots_tt"
+				block "site_slots_tooltip" {
+					tooltip = "je_space_race_widget_ss_slots_tt"
+				}
 
 				flowcontainer = {
 					direction = horizontal
@@ -5743,6 +5775,7 @@ types space_race_widget_types
 				}
 				blockoverride "dest_value" {
 					text = "je_space_race_widget_cf_target_value"
+					tooltip = "je_space_race_widget_cf_target_habs_tt"
 				}
 				blockoverride "dest_button" {
 					button = {
@@ -10506,6 +10539,39 @@ types space_race_widget_types
 										position = { 78 46 }
 										visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' ) )]"
 										text = "je_space_race_widget_ovc_window_fig_moon"
+									}
+								}
+							}
+						}
+						### Crews (colony people design § 10): shown while any colony of ours
+						### is short of crews, how many, its hover what that costs and the cure.
+						flowcontainer = {
+							visible = "[GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_understaffed_count'), '(CFixedPoint)1' )]"
+							direction = horizontal
+							ignoreinvisible = yes
+							spacing = 4
+							parentanchor = hcenter
+
+							te_banking_ov_cell = {
+								tooltip = "je_space_race_widget_ovc_crews_tt"
+								blockoverride "caption" {
+									text = "je_space_race_widget_ovc_crews_cap"
+								}
+								blockoverride "icons" {
+									icon = {
+										size = { 100% 100% }
+										texture = "gfx/interface/icons/space_race_icons/page_crews.dds"
+									}
+								}
+								blockoverride "word" {
+									te_banking_ov_word = {
+										text = "je_space_race_widget_ovc_crews_word"
+									}
+								}
+								blockoverride "third_line" {
+									te_banking_ov_word = {
+										position = { 78 46 }
+										text = "je_space_race_widget_ovc_crews_fig"
 									}
 								}
 							}

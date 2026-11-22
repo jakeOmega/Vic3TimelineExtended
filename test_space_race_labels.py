@@ -67,7 +67,8 @@ TRANSIT_MONTHS = 132      # sr_interstellar_transit_value, pinned by the waiting
 WORLDS = 40               # sr_total_global_colonies, the 40 worlds; sr_disp_colonies_held is a share of them
 SECTION_HEADER_WIDTH = 400  # the text of the 520-wide section_header_button, less its arrow
 FLEET_SLOTS = 6           # sr_disp_cf_in_flight, "6 of 6": gen_solar_sites.FLEET_SLOTS
-SETTLERS_A_MONTH = 2000   # sr_disp_emig_per_month at High (sr_emig_level_batches 4 x sr_emig_batch_people 500)
+SETTLERS_SENT = 4_096_000  # sr_disp_emig_last_sent: the step at or past the open room (every world's, ~3.4 million at the cap)
+SETTLERS_LC_WEEK = 2_835_693  # sr_disp_emig_bill_week: that many settlers x 3 x 12 / 52
 OFFWORLD_PEOPLE = 9_999_999  # sr_disp_offworld_pop: the rooms' sum is 945,000 before modules; seven digits
 TRANSIT_CEILING = 999     # sr_disp_cf_slot_<n>_months: the longest transit is 611 (chemical, the Kuiper Belt)
 END_YEAR = 2136           # sr_disp_cf_slot_<n>_year: END_DATE's year
@@ -262,7 +263,9 @@ def _longest_figure(name):
     fixed = {"sr_current_colonization_stage": STAGE_CEILING, "sr_disp_mq_next_months": 999,
              "sr_interstellar_transit_value": TRANSIT_MONTHS, "sr_total_global_colonies": WORLDS, "sr_sites_world_count": WORLDS,
              "sr_disp_colonies_held": WORLDS, "sr_disp_cf_in_flight": FLEET_SLOTS,
-             "sr_disp_emig_per_month": SETTLERS_A_MONTH, "sr_disp_offworld_pop": OFFWORLD_PEOPLE,
+             # The overview's Crews cell (colony people design § 10): our colonies short of crews.
+             "sr_disp_understaffed_count": WORLDS,
+             "sr_disp_emig_last_sent": SETTLERS_SENT, "sr_disp_emig_bill_week": SETTLERS_LC_WEEK, "sr_disp_offworld_pop": OFFWORLD_PEOPLE,
              "sr_disp_fab_rate": FAB_RATE_CEILING, "sr_disp_fab_stock": FAB_STOCK,
              "sr_disp_ms_waiting": SHIP_SLOTS, "sr_disp_ms_flying": SHIP_SLOTS,
              "sr_disp_mod_upkeep_pct": UPKEEP_CEILING, "sr_disp_ebase_levels": EBASE_LEVELS,
@@ -405,13 +408,13 @@ CELLS = {
     "value-row label (te_sr_value_row)": (
         ("te_sr_value_row", 'block "row_label"'),
         r"je_space_race_widget_(setbacks_label|eta_label|colonies_held_label|cf_in_flight_label"
-        r"|emig_month_label|offworld_label|orbit_\w+_label|fab_label|shipments_label|mod_upkeep_label"
+        r"|emig_sent_label|emig_bill_label|offworld_label|orbit_\w+_label|fab_label|shipments_label|mod_upkeep_label"
         r"|ebase_label|ebase_queued_label|eb_unassigned_label|resort_label|resort_queued_label|free_trade_label|sc_rate_label|sc_strength_label|sc_upkeep_label|sc_reserve_label"
         r"|cf_drive_label|mq_next_label)"),
     "value-row figure (te_sr_value_row)": (
         ("te_sr_value_row", 'block "row_value"'),
         r"je_space_race_widget_((setbacks|eta)_(?!label)\w+|colonies_held_figure|cf_in_flight_figure"
-        r"|emig_month_figure|offworld_figure|fab_figure|shipments_figure|mod_upkeep_figure|ebase_figure|ebase_queued_figure"
+        r"|emig_sent_figure|emig_bill_figure|offworld_figure|fab_figure|shipments_figure|mod_upkeep_figure|ebase_figure|ebase_queued_figure"
         r"|eb_unassigned_figure"
         r"|resort_figure|resort_queued_figure"
         r"|free_trade_figure|sc_rate_figure|sc_rate_paused|sc_strength_figure|sc_upkeep_figure|sc_reserve_figure"

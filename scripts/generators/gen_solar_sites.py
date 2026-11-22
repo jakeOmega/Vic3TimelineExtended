@@ -3538,7 +3538,28 @@ def render_overview_display() -> list[str]:
             for s in SITES]
     out += ["}",
             "# ... less the one the cell names.",
-            "sr_disp_aut_restless_more = { value = sr_disp_aut_restless_count subtract = 1 min = 0 }"]
+            "sr_disp_aut_restless_more = { value = sr_disp_aut_restless_count subtract = 1 min = 0 }",
+            "",
+            "# The overview's Crews cell (colony people design § 10): our colonies whose people",
+            "# can't crew all their crewed module levels.",
+            "sr_disp_understaffed_count = {", "\tvalue = 0"]
+    out += [f"\tif = {{ limit = {{ global_var:sr_site_holder_{s.key} ?= this sr_site_crew_needed_{s.key} > sr_site_crews_{s.key} }} "
+            "add = 1 }" for s in SITES]
+    out += ["}",
+            "",
+            "# Our Habitat share, in percent: what a Habitat would hold of a world's starting",
+            "# room were the world ours (the Solar System hovers).",
+            f"sr_disp_our_hab_share = {{ value = {HABITAT_BASE_SHARE} add = modifier:{HABITAT_MODIFIER} multiply = 100 round = yes }}",
+            "",
+            "# Our next colony fleet's target (var:sr_cf_target, a world's index): its Habitat",
+            "# cap and the people and crews it would hold there (the target line's hover).",
+            ]
+    for name, src in (("hab_cap", "sr_disp_ss_hab_cap"), ("people_at_cap", "sr_disp_ss_people_at_cap"),
+                      ("crews_at_cap", "sr_disp_ss_crews_at_cap")):
+        out += [f"sr_disp_cf_target_{name} = {{", "\tvalue = 0", "\tif = {", "\t\tlimit = { has_variable = sr_cf_target }"]
+        out += [f"\t\t{'if' if n == 0 else 'else_if'} = {{ limit = {{ var:sr_cf_target = {s.index} }} value = {src}_{s.key} }}"
+                for n, s in enumerate(SITES)]
+        out += ["\t}", "}"]
     return out
 
 
@@ -3819,7 +3840,17 @@ def render_display() -> str:
                 f"sr_disp_site_ebase_room_{k} = {{ value = sr_site_ebase_room_{k} }}",
                 f"sr_disp_site_resort_room_{k} = {{ value = sr_site_resort_room_{k} }}",
                 # Solar System's line under the name: the world's Habitat cap.
-                f"sr_disp_ss_hab_cap_{k} = {{ value = {site.slots} }}"]
+                f"sr_disp_ss_hab_cap_{k} = {{ value = {site.slots} }}",
+                # ... and, where a destination is picked (the owner; colony people
+                # design § 10), the people and crews it would hold at the cap at
+                # our share and our crew size.
+                f"sr_disp_ss_people_at_cap_{k} = {{ value = sr_site_people_at_cap_{k} floor = yes }}",
+                f"sr_disp_ss_crews_at_cap_{k} = {{",
+                f"\tvalue = sr_site_people_at_cap_{k}",
+                f"\tdivide = {CREW_PER_LEVEL}",
+                f"\tif = {{ limit = {{ has_technology_researched = {AI_CREW_TECH} }} multiply = {CREW_PER_LEVEL // AI_CREW_PER_LEVEL} }}",
+                "\tfloor = yes",
+                "}"]
     out += render_terra_display()
     out += render_dismantle_display()
     out += render_autonomy_display()
@@ -4143,11 +4174,14 @@ def _site_row(site: Site, *, picker: bool) -> list[str]:
         out += _override("site_target_clear_visible", f'visible = "[{_eq(target, 2)}]"')
     else:
         out += _override("site_target_button", "visible = no")
-    # What the site offers a colony (the owner, 2026-10-30): its slots with our
-    # Colony Module Slots, and its own Extraplanetary Base room and grade, then its
+    # What the site offers a colony (the owner, 2026-10-30): its Habitat cap, and
+    # its own Extraplanetary Base room and grade, then its
     # ground type's word, with that type's mix on hover (ground types design § 9.2).
     ground = ground_type(site)
     out += _override("site_slots", f'raw_text = "#v [{_sv(f"sr_disp_ss_hab_cap_{k}")}|0]#!"')
+    # Its Habitat cap, and the people and crews it holds at the cap at our share
+    # (the owner: the cap wherever a destination is picked; colony people design § 10).
+    out += _override("site_slots_tooltip", f'tooltip = "je_space_race_widget_ss_habs_tt_{k}"')
     out += _override("site_bases_tooltip", f'tooltip = "je_space_race_widget_ss_bases_tt_{ground}"')
     out += _override("site_bases", f'raw_text = "#v {site.ebase_room}#! ({_signed(site.ebase_grade)}%)"')
     out += _override("site_ground", f'text = "sr_ground_{ground}"')
@@ -4203,6 +4237,9 @@ def _colony_row(site: Site) -> list[str]:
     # here keeps the value color the type's format used to give them.
     out += _override("settler_people", f'raw_text = "#v [{_sv(f"sr_disp_site_pop_{k}")}|K] / [{_sv(f"sr_site_room_{k}")}|K]#!"')
     out += _override("settler_crews", f'raw_text = "[{_sv(f"sr_site_crews_{k}")}|0]"')
+    # ... and, red, the crews it needs while its people are short (colony people design § 10).
+    out += _override("settler_crews_short", f'visible = "[{_eq(f"sr_disp_site_crews_short_{k}", 1)}]"',
+                     f'raw_text = "#R [{_sv(f"sr_disp_site_crews_needed_{k}")}|0] needed#!"')
     # Modules
     # Crews needed / available, red when short, then the share they run (colony
     # people design § 10).

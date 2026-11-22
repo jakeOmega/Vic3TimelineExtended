@@ -608,6 +608,73 @@ class ModulesViewTest(unittest.TestCase):
         self.assertEqual(holder.CELL["cell_level"], "88")
 
 
+class PeopleViewTest(unittest.TestCase):
+    """Design § 10: the programme line shows the amount, last month's sent and
+    the week's Launch Capacity; each colony its crews and, red, how many it
+    needs when short; the overview a cell while any colony is short; and the
+    Habitat cap, with the people and crews it holds at our share, wherever a
+    destination is picked (the owner)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _strip(_raw("gui", "journal_entry_widgets", "space_race_widget.gui"))
+        cls.rows = _strip(_raw(str(gss.GUI_OUT)))
+        cls.display = _strip(_raw(str(gss.DISPLAY_OUT)))
+        cls.loc = _raw("localization", "english", "te_journal_entries_l_english.yml")
+
+    def _has_loc(self, key):
+        self.assertTrue(f" {key}:0 " in self.loc, f"no loc for {key}")
+
+    def test_the_programme_line(self):
+        for value in ("sr_disp_emig_last_sent", "sr_disp_emig_bill_week"):
+            self.assertTrue(f"ScriptValue('{value}')" in self.loc, value)
+        for key in ("je_space_race_widget_emig_sent_label", "je_space_race_widget_emig_sent_figure",
+                    "je_space_race_widget_emig_bill_label", "je_space_race_widget_emig_bill_figure"):
+            self._has_loc(key)
+            self.assertTrue(f'"{key}"' in self.gui, f"{key} isn't shown")
+
+    def test_each_colony_says_how_many_crews_it_needs(self):
+        self.assertTrue('block "settler_crews_short" {}' in self.gui, "no short crews cell")
+        rows = _raw(str(gss.GUI_OUT))  # unstripped: the figure's #R reads as a comment to _strip
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                self.assertIn(f"ScriptValue('sr_disp_site_crews_short_{k}'), '(CFixedPoint)1' )]\"\n\t\t\t\traw_text = "
+                              f"\"#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_{k}')|0] needed#!\"",
+                              rows)
+
+    def test_the_overview_counts_the_understaffed(self):
+        count = _block(self.display, "sr_disp_understaffed_count")
+        for site in gss.SITES:
+            k = site.key
+            self.assertIn(f"if = {{ limit = {{ global_var:sr_site_holder_{k} ?= this sr_site_crew_needed_{k} > sr_site_crews_{k} }} "
+                          "add = 1 }", count)
+        self.assertTrue("ScriptValue('sr_disp_understaffed_count'), '(CFixedPoint)1' )]" in self.gui, "no overview cell")
+        for key in ("je_space_race_widget_ovc_crews_cap", "je_space_race_widget_ovc_crews_word",
+                    "je_space_race_widget_ovc_crews_fig", "je_space_race_widget_ovc_crews_tt"):
+            self._has_loc(key)
+
+    def test_the_cap_where_a_destination_is_picked(self):
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                self.assertIn(f"sr_disp_ss_people_at_cap_{k} = {{ value = sr_site_people_at_cap_{k} floor = yes }}", self.display)
+                crews = _block(self.display, f"sr_disp_ss_crews_at_cap_{k}")
+                self.assertIn(f"value = sr_site_people_at_cap_{k}", crews)
+                self.assertIn(f"has_technology_researched = {gss.AI_CREW_TECH}", crews)
+                self.assertIn(f'tooltip = "je_space_race_widget_ss_habs_tt_{k}"', self.rows)
+                hover = self.loc[self.loc.index(f" je_space_race_widget_ss_habs_tt_{k}:0 "):].split("\n", 1)[0]
+                for value in (f"sr_disp_ss_people_at_cap_{k}", f"sr_disp_ss_crews_at_cap_{k}", "sr_disp_our_hab_share"):
+                    self.assertIn(value, hover)
+                self.assertIn(f"#v {site.slots}#!", hover)
+        self.assertTrue('block "site_slots_tooltip" {' in self.gui, "the cap cell's hover is fixed")
+        target = _block(self.display, "sr_disp_cf_target_people_at_cap")
+        self.assertIn("var:sr_cf_target = 1", target)
+        self.assertIn("value = sr_disp_ss_people_at_cap_valles_marineris", target)
+        self.assertTrue('tooltip = "je_space_race_widget_cf_target_habs_tt"' in self.gui, "no hover on the target line")
+        self._has_loc("je_space_race_widget_cf_target_habs_tt")
+
+
 def gss_top():
     """The ladder's last step: 500 x 2^15 = 16.4 million a month, past every
     world's room together, so the room, not the ladder, stops +."""

@@ -1122,11 +1122,6 @@ sr_disp_emig_bill_week = {
 	value = sr_emig_bill_week
 	round = yes
 }
-# The settlers it sends a month while colonies have room.
-sr_disp_emig_per_month = {
-	value = sr_emig_level_batches
-	multiply = sr_emig_batch_people
-}
 # Our people off Earth, and the off-world bonus's multiplier.
 sr_disp_offworld_pop = {
 	value = sr_offworld_pop_total

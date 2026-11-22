@@ -90,6 +90,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_shackleton')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_shackleton"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
 			}
@@ -159,6 +162,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_peary')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_peary"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -230,6 +236,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_tranquility')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_tranquility"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
 			}
@@ -299,6 +308,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_marius_hills')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_marius_hills"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -370,6 +382,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_daedalus')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_daedalus"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
 			}
@@ -439,6 +454,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_imbrium')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_imbrium"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -517,6 +535,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_venus')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_venus"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_sulfurous"
 			}
@@ -586,6 +607,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_mercury')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_mercury"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -664,6 +688,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_valles_marineris')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_valles_marineris"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
 			}
@@ -733,6 +760,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_olympus_mons')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_olympus_mons"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -804,6 +834,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_hellas_planitia')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_hellas_planitia"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
 			}
@@ -874,6 +907,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_utopia_planitia')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_utopia_planitia"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
 			}
@@ -943,6 +979,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_arcadia_planitia')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_arcadia_planitia"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -1021,6 +1060,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_ceres')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_ceres"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
 			}
@@ -1090,6 +1132,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_vesta')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_vesta"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -1161,6 +1206,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_psyche')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_psyche"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_metallic"
 			}
@@ -1231,6 +1279,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_pallas')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_pallas"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
 			}
@@ -1300,6 +1351,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_hygiea')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_hygiea"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
@@ -1378,6 +1432,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_io')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_io"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_sulfurous"
 			}
@@ -1447,6 +1504,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_europa')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_europa"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_sulfurous"
@@ -1518,6 +1578,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_ganymede')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_ganymede"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
 			}
@@ -1587,6 +1650,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_callisto')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_callisto"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
@@ -1658,6 +1724,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_himalia')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_himalia"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
 			}
@@ -1727,6 +1796,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_amalthea')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_amalthea"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_sulfurous"
@@ -1805,6 +1877,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_titan')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_titan"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
 			}
@@ -1874,6 +1949,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_enceladus')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_enceladus"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
@@ -1945,6 +2023,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_rhea')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_rhea"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
 			}
@@ -2015,6 +2096,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_mimas')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_mimas"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
 			}
@@ -2084,6 +2168,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_iapetus')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_iapetus"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
@@ -2162,6 +2249,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_titania')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_titania"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
 			}
@@ -2231,6 +2321,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_oberon')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_oberon"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -2302,6 +2395,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_miranda')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_miranda"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
 			}
@@ -2371,6 +2467,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_ariel')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_ariel"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -2449,6 +2548,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_triton')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_triton"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
 			}
@@ -2518,6 +2620,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_proteus')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_proteus"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -2596,6 +2701,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_pluto')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_pluto"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
 			}
@@ -2665,6 +2773,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_eris')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_eris"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -2736,6 +2847,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_makemake')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_makemake"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
 			}
@@ -2806,6 +2920,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_haumea')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_haumea"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
 			}
@@ -2875,6 +2992,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_sedna')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_sedna"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
@@ -2984,6 +3104,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_shackleton')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_shackleton"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
 			}
@@ -3078,6 +3201,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_peary')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_peary"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -3174,6 +3300,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_tranquility')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_tranquility"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
 			}
@@ -3268,6 +3397,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_marius_hills')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_marius_hills"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -3364,6 +3496,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_daedalus')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_daedalus"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
 			}
@@ -3458,6 +3593,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_imbrium')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_imbrium"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -3563,6 +3701,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_venus')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_venus"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_sulfurous"
 			}
@@ -3657,6 +3798,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_mercury')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_mercury"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -3762,6 +3906,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_valles_marineris')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_valles_marineris"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
 			}
@@ -3858,6 +4005,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_olympus_mons')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_olympus_mons"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -3956,6 +4106,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_hellas_planitia')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_hellas_planitia"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
 			}
@@ -4053,6 +4206,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_utopia_planitia')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_utopia_planitia"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
 			}
@@ -4149,6 +4305,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_arcadia_planitia')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_arcadia_planitia"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -4254,6 +4413,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_ceres')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_ceres"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
 			}
@@ -4350,6 +4512,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_vesta')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_vesta"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_rocky"
@@ -4448,6 +4613,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_psyche')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_psyche"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_metallic"
 			}
@@ -4545,6 +4713,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_pallas')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_pallas"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
 			}
@@ -4641,6 +4812,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_hygiea')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_hygiea"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
@@ -4746,6 +4920,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_io')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_io"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_sulfurous"
 			}
@@ -4842,6 +5019,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_europa')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_europa"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_sulfurous"
@@ -4940,6 +5120,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_ganymede')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_ganymede"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
 			}
@@ -5036,6 +5219,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_callisto')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_callisto"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
@@ -5134,6 +5320,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_himalia')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_himalia"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
 			}
@@ -5230,6 +5419,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_amalthea')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_amalthea"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_sulfurous"
@@ -5335,6 +5527,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_titan')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_titan"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
 			}
@@ -5431,6 +5626,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_enceladus')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_enceladus"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_carbonaceous"
@@ -5529,6 +5727,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_rhea')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_rhea"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
 			}
@@ -5626,6 +5827,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_mimas')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_mimas"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
 			}
@@ -5722,6 +5926,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_iapetus')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_iapetus"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
@@ -5827,6 +6034,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_titania')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_titania"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
 			}
@@ -5923,6 +6133,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_oberon')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_oberon"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -6021,6 +6234,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_miranda')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_miranda"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
 			}
@@ -6117,6 +6333,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_ariel')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_ariel"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -6222,6 +6441,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_triton')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_triton"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
 			}
@@ -6318,6 +6540,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_proteus')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_proteus"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -6423,6 +6648,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_pluto')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_pluto"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
 			}
@@ -6519,6 +6747,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_eris')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_eris"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -6617,6 +6848,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_makemake')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_makemake"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
 			}
@@ -6713,6 +6947,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_haumea')|0]#!"
+			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_haumea"
 			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_icy"
@@ -6811,6 +7048,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_slots" {
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ss_hab_cap_sedna')|0]#!"
 			}
+			blockoverride "site_slots_tooltip" {
+				tooltip = "je_space_race_widget_ss_habs_tt_sedna"
+			}
 			blockoverride "site_bases_tooltip" {
 				tooltip = "je_space_race_widget_ss_bases_tt_hydrocarbon"
 			}
@@ -6868,6 +7108,10 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_shackleton')|0]"
+			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_shackleton'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_shackleton')|0] needed#!"
 			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_shackleton'), '(CFixedPoint)0' )]"
@@ -7438,6 +7682,10 @@ types sr_sites_generated_rows_types
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_peary')|0]"
 			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_peary'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_peary')|0] needed#!"
+			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_peary'), '(CFixedPoint)0' )]"
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_peary')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_peary')|0]"
@@ -8006,6 +8254,10 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_tranquility')|0]"
+			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_tranquility'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_tranquility')|0] needed#!"
 			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_tranquility'), '(CFixedPoint)0' )]"
@@ -8576,6 +8828,10 @@ types sr_sites_generated_rows_types
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_marius_hills')|0]"
 			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_marius_hills'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_marius_hills')|0] needed#!"
+			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_marius_hills'), '(CFixedPoint)0' )]"
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_marius_hills')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_marius_hills')|0]"
@@ -9144,6 +9400,10 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_daedalus')|0]"
+			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_daedalus'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_daedalus')|0] needed#!"
 			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_daedalus'), '(CFixedPoint)0' )]"
@@ -9714,6 +9974,10 @@ types sr_sites_generated_rows_types
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_imbrium')|0]"
 			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_imbrium'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_imbrium')|0] needed#!"
+			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_imbrium'), '(CFixedPoint)0' )]"
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_imbrium')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_imbrium')|0]"
@@ -10282,6 +10546,10 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_venus')|0]"
+			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_venus'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_venus')|0] needed#!"
 			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_venus'), '(CFixedPoint)0' )]"
@@ -10902,6 +11170,10 @@ types sr_sites_generated_rows_types
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_mercury')|0]"
 			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_mercury'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_mercury')|0] needed#!"
+			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_mercury'), '(CFixedPoint)0' )]"
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_mercury')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_mercury')|0]"
@@ -11478,6 +11750,10 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_valles_marineris')|0]"
+			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_valles_marineris'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_valles_marineris')|0] needed#!"
 			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_valles_marineris'), '(CFixedPoint)0' )]"
@@ -12098,6 +12374,10 @@ types sr_sites_generated_rows_types
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_olympus_mons')|0]"
 			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_olympus_mons'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_olympus_mons')|0] needed#!"
+			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_olympus_mons'), '(CFixedPoint)0' )]"
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_olympus_mons')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_olympus_mons')|0]"
@@ -12716,6 +12996,10 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_hellas_planitia')|0]"
+			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_hellas_planitia'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_hellas_planitia')|0] needed#!"
 			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_hellas_planitia'), '(CFixedPoint)0' )]"
@@ -13336,6 +13620,10 @@ types sr_sites_generated_rows_types
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_utopia_planitia')|0]"
 			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_utopia_planitia'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_utopia_planitia')|0] needed#!"
+			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_utopia_planitia'), '(CFixedPoint)0' )]"
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_utopia_planitia')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_utopia_planitia')|0]"
@@ -13954,6 +14242,10 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_arcadia_planitia')|0]"
+			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_arcadia_planitia'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_arcadia_planitia')|0] needed#!"
 			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_arcadia_planitia'), '(CFixedPoint)0' )]"
@@ -14574,6 +14866,10 @@ types sr_sites_generated_rows_types
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_ceres')|0]"
 			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_ceres'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_ceres')|0] needed#!"
+			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_ceres'), '(CFixedPoint)0' )]"
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_ceres')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_ceres')|0]"
@@ -15150,6 +15446,10 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_vesta')|0]"
+			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_vesta'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_vesta')|0] needed#!"
 			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_vesta'), '(CFixedPoint)0' )]"
@@ -15728,6 +16028,10 @@ types sr_sites_generated_rows_types
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_psyche')|0]"
 			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_psyche'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_psyche')|0] needed#!"
+			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_psyche'), '(CFixedPoint)0' )]"
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_psyche')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_psyche')|0]"
@@ -16304,6 +16608,10 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_pallas')|0]"
+			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_pallas'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_pallas')|0] needed#!"
 			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_pallas'), '(CFixedPoint)0' )]"
@@ -16882,6 +17190,10 @@ types sr_sites_generated_rows_types
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_hygiea')|0]"
 			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_hygiea'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_hygiea')|0] needed#!"
+			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_hygiea'), '(CFixedPoint)0' )]"
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_hygiea')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_hygiea')|0]"
@@ -17458,6 +17770,10 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_io')|0]"
+			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_io'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_io')|0] needed#!"
 			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_io'), '(CFixedPoint)0' )]"
@@ -18036,6 +18352,10 @@ types sr_sites_generated_rows_types
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_europa')|0]"
 			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_europa'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_europa')|0] needed#!"
+			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_europa'), '(CFixedPoint)0' )]"
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_europa')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_europa')|0]"
@@ -18612,6 +18932,10 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_ganymede')|0]"
+			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_ganymede'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_ganymede')|0] needed#!"
 			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_ganymede'), '(CFixedPoint)0' )]"
@@ -19232,6 +19556,10 @@ types sr_sites_generated_rows_types
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_callisto')|0]"
 			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_callisto'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_callisto')|0] needed#!"
+			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_callisto'), '(CFixedPoint)0' )]"
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_callisto')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_callisto')|0]"
@@ -19851,6 +20179,10 @@ types sr_sites_generated_rows_types
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_himalia')|0]"
 			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_himalia'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_himalia')|0] needed#!"
+			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_himalia'), '(CFixedPoint)0' )]"
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_himalia')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_himalia')|0]"
@@ -20428,6 +20760,10 @@ types sr_sites_generated_rows_types
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_amalthea')|0]"
 			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_amalthea'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_amalthea')|0] needed#!"
+			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_amalthea'), '(CFixedPoint)0' )]"
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_amalthea')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_amalthea')|0]"
@@ -21004,6 +21340,10 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_titan')|0]"
+			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_titan'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_titan')|0] needed#!"
 			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_titan'), '(CFixedPoint)0' )]"
@@ -21624,6 +21964,10 @@ types sr_sites_generated_rows_types
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_enceladus')|0]"
 			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_enceladus'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_enceladus')|0] needed#!"
+			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_enceladus'), '(CFixedPoint)0' )]"
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_enceladus')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_enceladus')|0]"
@@ -22200,6 +22544,10 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_rhea')|0]"
+			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_rhea'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_rhea')|0] needed#!"
 			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_rhea'), '(CFixedPoint)0' )]"
@@ -22778,6 +23126,10 @@ types sr_sites_generated_rows_types
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_mimas')|0]"
 			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_mimas'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_mimas')|0] needed#!"
+			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_mimas'), '(CFixedPoint)0' )]"
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_mimas')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_mimas')|0]"
@@ -23354,6 +23706,10 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_iapetus')|0]"
+			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_iapetus'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_iapetus')|0] needed#!"
 			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_iapetus'), '(CFixedPoint)0' )]"
@@ -23932,6 +24288,10 @@ types sr_sites_generated_rows_types
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_titania')|0]"
 			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_titania'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_titania')|0] needed#!"
+			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_titania'), '(CFixedPoint)0' )]"
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_titania')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_titania')|0]"
@@ -24508,6 +24868,10 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_oberon')|0]"
+			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_oberon'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_oberon')|0] needed#!"
 			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_oberon'), '(CFixedPoint)0' )]"
@@ -25086,6 +25450,10 @@ types sr_sites_generated_rows_types
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_miranda')|0]"
 			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_miranda'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_miranda')|0] needed#!"
+			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_miranda'), '(CFixedPoint)0' )]"
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_miranda')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_miranda')|0]"
@@ -25662,6 +26030,10 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_ariel')|0]"
+			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_ariel'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_ariel')|0] needed#!"
 			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_ariel'), '(CFixedPoint)0' )]"
@@ -26240,6 +26612,10 @@ types sr_sites_generated_rows_types
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_triton')|0]"
 			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_triton'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_triton')|0] needed#!"
+			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_triton'), '(CFixedPoint)0' )]"
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_triton')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_triton')|0]"
@@ -26816,6 +27192,10 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_proteus')|0]"
+			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_proteus'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_proteus')|0] needed#!"
 			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_proteus'), '(CFixedPoint)0' )]"
@@ -27394,6 +27774,10 @@ types sr_sites_generated_rows_types
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_pluto')|0]"
 			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_pluto'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_pluto')|0] needed#!"
+			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_pluto'), '(CFixedPoint)0' )]"
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_pluto')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_pluto')|0]"
@@ -27970,6 +28354,10 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_eris')|0]"
+			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_eris'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_eris')|0] needed#!"
 			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_eris'), '(CFixedPoint)0' )]"
@@ -28548,6 +28936,10 @@ types sr_sites_generated_rows_types
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_makemake')|0]"
 			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_makemake'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_makemake')|0] needed#!"
+			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_makemake'), '(CFixedPoint)0' )]"
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_makemake')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_makemake')|0]"
@@ -29125,6 +29517,10 @@ types sr_sites_generated_rows_types
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_haumea')|0]"
 			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_haumea'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_haumea')|0] needed#!"
+			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_haumea'), '(CFixedPoint)0' )]"
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_haumea')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_haumea')|0]"
@@ -29701,6 +30097,10 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "settler_crews" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_crews_sedna')|0]"
+			}
+			blockoverride "settler_crews_short" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_sedna'), '(CFixedPoint)1' )]"
+				raw_text = "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_sedna')|0] needed#!"
 			}
 			blockoverride "module_crews" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_short_sedna'), '(CFixedPoint)0' )]"
