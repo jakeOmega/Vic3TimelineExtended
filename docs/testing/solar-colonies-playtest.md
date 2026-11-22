@@ -1014,3 +1014,22 @@ budget reads `fixed_income` and the programme's throughput as the mission budget
    with Compact Fusion Reactors and weekly fixed income well over 27M runs Fusion Shipyards; one with it and
    income under about 15M runs Orbital Assembly (or its cheapest method), not Fusion Shipyards. Funding raises the
    line with the throughput.
+
+## The Resort Colony, a building of its own (#1948, 2026-11-21)
+
+The Resort Colony method left the Extraplanetary Base for `building_space_resort`, whose levels work their own room
+(10 in Earth orbit, each colony's `RESORTS` figure, 10 a staffed Off-World Resort level) best draw first, −75% past
+it. No self-check: the fill, the refresh and the building's throughput type are the base's, which work.
+
+1. **It appears and is held to the room.** With Space Colonization, the Resort Colony is in the build list, and the
+   base's production methods no longer list the Resort Colony. Under Simple or Full Colonies an AI government and
+   private investors stop at the room (built and queued); your government builds past it.
+2. **The draw.** Holding Tranquility Base with its room filled, the building's throughput breakdown shows Resort
+   Colony Room at the average draw (+30% with 30 levels in Tranquility's 20 and Earth orbit's 10: +20%). One level
+   past all of the room pulls it toward −75%. The overview's Resort Room cell reads built and queued against room,
+   red past it, and "next at" the next level's draw.
+3. **The module.** Before Space Colonization the Off-World Resort's + button is grayed with "We have Space
+   Colonization". After it, a staffed level raises the colony's resort room by 10 within a month, on its page's
+   Resort Room tile and in the overview.
+4. **An old save.** A base still on the Resort Colony method (if a pre-#1948 save is at hand): note which method the
+   engine gives it, and that the log names nothing about the missing method.

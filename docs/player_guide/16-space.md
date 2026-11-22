@@ -15,7 +15,8 @@ the room colonies give, let a colony change hands, and let colonies grow
 restless and break away (see [Colony fleets in
 flight](#colony-fleets-in-flight), [Colony settlers](#colony-settlers),
 [Colony modules](#colony-modules), [Extraplanetary Base
-room](#extraplanetary-base-room), [Ceding a colony](#ceding-a-colony) and
+room](#extraplanetary-base-room), [Resort Colony room](#resort-colony-room),
+[Ceding a colony](#ceding-a-colony) and
 [Colony autonomy and free colonies](#colony-autonomy-and-free-colonies)).
 Full Colonies adds warships in space: fleets you build, move between the
 planets and fight with, to blockade, seize or destroy colonies, and to hold
@@ -223,6 +224,7 @@ needs you, with the detail on hover. A word turns red when something is due:
 | Modules | How many modules are queued, and fabrication's stock. Queue empty turns red once the stock is full and waiting. |
 | Next Window | The months to your chemical rockets' next launch window, Open now, Any month once your drive needs no window, or No site left; and the stage. |
 | Base Room | Once you have In-Situ Resource Utilization: your Extraplanetary Base levels, built and queued, against your room (120 +20 / 400 with 20 queued, or their sum once the figures run long), red once they pass it, and the grade the next level would work at, queued levels counted (see [Extraplanetary Base room](#extraplanetary-base-room)). |
+| Resort Room | Once you have Space Colonization: the same for your Resort Colony levels and their room, and the draw the next level would work at (see [Resort Colony room](#resort-colony-room)). |
 | Hostile Fleet | Under Full Colonies, while a fleet of a country at war with you is on its way to Earth: Earth in the months until the first lands, and their strength at and bound for Earth against your fleets there. Red while a landing would tip the balance: you have no fleet at Earth and it isn't blockaded already, or yours holds against what is there now but not against what is coming too. Hover it for how many are coming. |
 
 Below its overview, Solar System Colonization has four tabs, and the one you
@@ -250,7 +252,7 @@ shows:
 | View | Shows | Above the rows |
 |---|---|---|
 | People (the default) | Each colony's people and room, its crews and its settler priority | Emigration, settlers a month and your people off Earth |
-| Modules | Each colony's crews' share of its modules, its slots in use (red past them) and its Extraplanetary Base room and grade, then every module's level with a button to queue one more | Fabrication, shipments, module upkeep, Extraplanetary Base room, and the queue in a box of its own with when its next module is built |
+| Modules | Each colony's crews' share of its modules, its slots in use (red past them) and its Extraplanetary Base room and grade, then every module's level with a button to queue one more | Fabrication, shipments, module upkeep, Extraplanetary Base and Resort Colony room, and the queue in a box of its own with when its next module is built |
 | Autonomy | Each colony's autonomy, how much it moves a month (hover it for that colony's terms), what it is building of its own, its charter or garrison, and Abandon | Free colony trade; the free colonies are listed below the rows |
 | Defenses | Each colony's Defenses, integrity and marines, and what threatens it | |
 
@@ -754,7 +756,7 @@ colonies:
 | Orbital Yard | +4 module fabrication points a month; under Full Colonies, +0.5 Space Command strength a month |
 | Research Station | +2% research speed |
 | Cultural Center | +3% cultural pull, +1% prestige |
-| Off-World Resort | +3% tourism output |
+| Off-World Resort | +10 Resort Colony room at the colony; it needs Space Colonization |
 | Black Site | +1 intelligence capacity, +3% covert operation efficiency |
 | Training Ground | +4% army experience gain |
 | Nuclear Command Center | +4 nuclear command reliability, at most +12; +2 Command Redundancy against a salvo on the capital, at most +6 |
@@ -787,8 +789,8 @@ your module stock can hold its price (see below), so without storage or much
 fabrication you stop at the fourth, at 500. One already queued is still built if
 the stock shrinks later. The Modules view's Slots figure turns
 red past them, and its hover gives the next module's price. Solar System shows
-each site's slots and Extraplanetary Base room under its name, so you can weigh
-a site before you settle it.
+each site's slots, Extraplanetary Base room and Resort Colony room under its
+name, so you can weigh a site before you settle it.
 
 The founding event has to be answered before you can add a specialization
 level. Each row's buttons add one more level of a module to the end of your
@@ -919,6 +921,42 @@ your levels against your room, any queued, and each colony's Bases figure its
 own room and grade. Private investors don't build past your room,
 and AI governments don't either; your government can, at the penalty. Under
 Races Only, bases have no room limit.
+
+### Resort Colony room
+
+Space Colonization brings the Resort Colony, a building of its own. Its Luxury
+Resorts method makes Fine Art and Tourism from Launch Capacity, a little
+electronics and Advanced Materials, and wine, furniture and fruit for the
+guests: about £42,000 a level a week at base prices. Under Simple Colonies and
+Full Colonies its levels need room, as bases do, but room of their own. Earth
+orbit gives every country room for 10 levels, and each colony you hold adds its
+own, from 10 levels on the small moons to 50 on Mars, and 10 more
+for each staffed level of its Off-World Resorts. Each colony's room has a draw
+(Resort Draw, a term you can hover in game): how many guests it brings in, the
+spectacle against the length of the trip. It raises or lowers the output of the
+levels that work it, as the grade does for bases:
+
+| Sites | Draw |
+|---|---|
+| Tranquility Base | +30% |
+| Olympus Mons, Valles Marineris | +25% |
+| Shackleton Crater, Marius Hills, Venus, Iapetus, Enceladus | +15% |
+| Mare Imbrium, Peary Crater, 4 Vesta, Callisto, Titan | +10% |
+| Hellas Planitia, Ceres, Rhea, Mimas | +5% |
+| Earth orbit, Daedalus Crater, the Utopia and Arcadia plains, 16 Psyche, Europa, Ganymede, Miranda | 0 |
+| Mercury, 2 Pallas, Io, Amalthea, Triton | −5% |
+| 10 Hygiea, Pluto-Charon, Himalia, Uranus's other moons | −10% to −15% |
+| Proteus and the rest of the Kuiper Belt | −25% to −35% |
+
+Your levels fill the best room first, and any past all of it work at −75%. One
+country modifier, Resort Colony Room, carries the average over all your levels,
+as Extraplanetary Base Room does for bases. The overview's Resort Room cell
+shows your levels, built and queued, against your room and the draw the next
+level would work at. The Modules view shows your levels against your room, and
+each colony's page and its line in Solar System its own room and draw. Private
+investors and AI governments don't build past your room; your government can, at
+the penalty. An AI that tends its colonies queues an Off-World Resort once its
+room is full. Under Races Only, Resort Colonies have no room limit.
 
 ### Who holds a colony
 
@@ -1368,9 +1406,9 @@ The race is over for you once you have finished all six single-goal
 milestones, all 40 sites have been claimed by anyone, and no program of yours is
 still running. A power that gets there after the last site is gone qualifies as
 soon as its own six milestones are done. From then on, the progress your
-sources still give each month goes into your Extraplanetary Bases as
-Commercial Space Industry: each point of monthly progress adds +5%
-Extraplanetary Base throughput, up to +50% at 10 points. The first time it
+sources still give each month goes into your Extraplanetary Bases and Resort
+Colonies as Commercial Space Industry: each point of monthly progress adds +5%
+throughput to both, up to +50% at 10 points. The first time it
 applies, the event The Commercial Space Age tells you.
 
 Only the flat sources in the table under [Space race funding and
@@ -1414,13 +1452,13 @@ up.
 
 Every country that uses orbit pays for each point of the index: one with a
 Space Program, a Space Elevator, an Orbital Solar Collector, an Orbital
-Battlestation or an Extraplanetary Base.
+Battlestation, an Extraplanetary Base or a Resort Colony.
 
 | Each point | At 50 | At 100 |
 |---|---|---|
 | +1% setback risk | +50% | +100% (risk still stops at 50% a month) |
 | −0.3% space race pace | −15% | −30% (pace never drops below 0.5 a month) |
-| −0.2% throughput for Extraplanetary Bases, Space Elevators, Orbital Battlestations and Solar Receivers | −10% | −20% |
+| −0.2% throughput for Extraplanetary Bases, Resort Colonies, Space Elevators, Orbital Battlestations and Solar Receivers | −10% | −20% |
 
 Nothing stops: your milestones keep moving, and every cost fades as the debris
 does. An Orbital Battlestation's lower throughput also lowers the military

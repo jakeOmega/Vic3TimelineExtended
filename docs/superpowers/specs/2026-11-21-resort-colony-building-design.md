@@ -158,16 +158,17 @@ The tiers, filled best draw first:
   no colony can still run a few levels without the penalty (the design default
   for soft caps). My call; `ORBIT_RESORT_ROOM = 10`.
 - **Each world that serves the country** (`site_serves`: held, not blockaded,
-  not occupied, as for bases): its resort room is a new `resort_room` column in
-  `SITES`, plus `sr_mod_resort_room` (10) for each staffed Off-World Resort
-  level there (§ 7).
+  not occupied, as for bases): its resort room is its row in a new `RESORTS`
+  table beside `SITES` (read through `Site.resort_room`, as `SHIPPING` is read,
+  so the ground-types build's edits to every `SITES` row don't conflict), plus
+  `sr_mod_resort_room` (10) for each staffed Off-World Resort level there (§ 7).
 - **Past all of it:** the resort's own `RESORT_OVERFLOW_DRAW`, −75%, set equal
   to the base's `OVERFLOW_GRADE` but kept as its own constant.
 
-**The table's resort room.** As a starting value, each world's `resort_room` is
+**The table's resort room.** As a starting value, each world's resort room is
 its room for people in thousands (`room`, 10 to 50): a world that houses more
 people can house more guests. That makes 945 levels across the 40 worlds, about
-a fifth of base room (4,325), with an average of 24 a world. The column is
+a fifth of base room (4,325), with an average of 24 a world. The figure is
 written out, not derived, so a world can be tuned on its own later. It stays
 fixed: Habitats and Terraforming raise the room for people but not the room for
 guests, and the Off-World Resort module is the way to raise that.
@@ -191,8 +192,8 @@ for the largest, which seems right.
 
 A world's draw is how many guests a level there serves: spectacle against the
 length of the trip. It acts as throughput, like the grade, so a draw of +30
-earns 30% more profit a level at any price. A new `resort_draw` column in
-`SITES` holds it, set by hand. My table, for the owner to review:
+earns 30% more profit a level at any price. The `RESORTS` table holds it
+(`Site.resort_draw`), set by hand. My table, for the owner to review:
 
 | Draw | Worlds | Why |
 |---|---|---|
@@ -346,12 +347,13 @@ Whether it wants a cap is a question for its own issue.
   `te_banking_ov_cell` for Base Room, with its `_split`, `_past` and `_next`
   display values, and its hover gives the average draw now and the rule. The
   icon is the building's.
-- **The Modules view:** each colony's box shows its resort room and draw beside
-  its base room and grade (`module_resorts` and `module_draw` blocks beside
-  `module_bases` and `module_grade`, overridden in the generated rows). The
-  summary adds "Resort Colony levels / room" under base levels / room, and a
-  queued-levels row while there are any. The ground-types build is redoing these
-  base cells, so whichever PR lands second merges by hand.
+- **The Modules view:** each colony's page shows its resort room and draw in a
+  Resort Room tile beside Base Room (`module_resorts` and `module_draw` blocks,
+  overridden in the generated rows). The colony list row has no width left for
+  them (built: staffing, slots and bases fill it). The summary adds "Resort
+  Colony levels / room" under base levels / room, and a queued-levels row while
+  there are any. The ground-types build is redoing the base cells, so whichever
+  PR lands second merges by hand.
 - **Solar System:** each site's line gives its resort room and draw after its
   base room and grade (`site_resorts`), so a player can weigh a world before
   founding a colony there.
