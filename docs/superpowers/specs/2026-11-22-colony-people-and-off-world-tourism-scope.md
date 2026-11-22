@@ -1,8 +1,12 @@
 # Colony people as the limit on modules, and a Resort Colony free of its state: scope
 
 Drafted 2026-11-22 from a discussion with the owner. This is a scoping document:
-what to build, in what order, and the calls still open. It is not yet a design,
-and it has no implementation plan. Later sessions write both.
+what to build, in what order, and the calls the owner settled. It is not yet a
+design, and it has no implementation plan. Later sessions write both.
+
+**Status (2026-11-22):** Part A is built (#1957, closing #1953). The owner
+answered all ten open calls the same day (§ 5), so Part B's design can start;
+the ground-types build it waited for (#1955) has merged.
 
 It covers two pieces of work that share a subject and little else:
 
@@ -191,8 +195,10 @@ pulse hook, loc, a test, the play-test item, and a few sentences in
 
 The Habitat is the one module with a cap. The world's `slots` figure (1 to 4)
 becomes its Habitat cap. Past the cap, the rising price that slots have today
-moves to Habitats alone: the n-th past costs (1 + n) times the price, up to 8
-past. Module Storage's sizing follows the dearest Habitat.
+moves to Habitats alone: the n-th past costs (1 + n) times the price, **with no
+top** (owner, call 7: today's limit of 8 past goes). Module Storage's sizing
+follows the dearest Habitat today; with no top, the design says what it follows
+instead (the next Habitat's price at the colony that needs most is one answer).
 
 ### 3.3 The five slot technologies
 
@@ -204,19 +210,22 @@ built out (from the site table, at 5,000 a crew):
 | Option | People, all 40 worlds | Crews | Himalia (10,000, cap 1) | Valles Marineris (50,000, cap 4) |
 |---|---|---|---|---|
 | Today's Habitats within the table's caps, no technology | 2.15 million | 430 | 15,000 | 150,000 |
-| **More people per Habitat**: +10% of base room each, so 100% with all five | 3.36 million | 671 | 20,000 | 250,000 |
+| **More people per Habitat**: a Habitat holds 50% of its world's base room today (`HABITAT_ROOM_SHARE`); each technology adds 10 points, so 100% with all five | 3.36 million | 671 | 20,000 | 250,000 |
 | **Habitat slots**: +1 cap each | 4.51 million | 902 | 40,000 | 275,000 |
 
 For comparison, today's slots with all five technologies hold 284 slot modules.
 
-**Recommendation: more people per Habitat.** It keeps the table's difference
-between a small world and a large one (Himalia stays an outpost), and it asks
-for no extra modules to be queued and shipped to get the benefit.
+**Chosen (owner, call 1): more people per Habitat, +10 points each.** It keeps
+the table's difference between a small world and a large one (Himalia stays an
+outpost), and it asks for no extra modules to be queued and shipped to get the
+benefit. At the chosen crew of 10,000 (call 4), every world built out holds 335
+crews.
 
 ### 3.4 Artificial Intelligence
 
-It stops waiving crews. Recommendation: it halves the crew a level needs
-(2,500 people), so it is still a large prize and people still count after it.
+It stops waiving crews. **Chosen (owner, call 2): it halves the crew a level
+needs**, 5,000 people at the chosen crew of 10,000, so it is still a large prize
+and people still count after it.
 
 ### 3.5 Settlers
 
@@ -370,8 +379,9 @@ are not repaired, as for #1950.
 ## 4. Build order
 
 1. **Part A**, after #1950 merges. One PR. Closes #1953.
-2. **Part B's design**, after the ground-types build merges: this scope's open
-   calls answered, the numbers tabulated (§§ 3.3, 3.6, 3.7), the panel drawn.
+2. **Part B's design**, after the ground-types build merges (it has, #1955):
+   the open calls are answered (§ 5); the design tabulates the numbers at the
+   chosen figures (§§ 3.3, 3.6, 3.7) and draws the panel.
 3. **Part B's build**, likely in three stages in one PR or a short stack:
    the rule (slots out, Habitat cap, technologies, Artificial Intelligence,
    the AI); settlers; the panel and the guide.
@@ -379,30 +389,40 @@ are not repaired, as for #1950.
 Both parts update `docs/player_guide/16-space.md` and rebuild the PDF. Part B
 also updates `02-timeline.md` where the five technologies are described.
 
-## 5. Open calls
+## 5. The open calls, answered (owner, 2026-11-22)
 
-Each has a recommendation where I have one. None blocks Part A except the
-last two.
+Part A's two (9 and 10) were answered by the build the owner accepted; the
+other eight in one sitting the same day. Each line gives the answer, and the
+recommendation where the owner chose otherwise.
 
-1. **The slot technologies' reward:** more people per Habitat (recommended) or
-   Habitat slots (§ 3.3).
-2. **Artificial Intelligence:** halve the crew (recommended), or another
-   figure (§ 3.4).
-3. **A colony short of crews:** every module at the same share, as today
-   (recommended, no new control), or an order the player sets.
-4. **Module effects at many crews:** the crew size (7,500 reproduces today's
-   built-out total; recommended as the starting point), and which answer to
-   concentration, for the room modules above all (§ 3.7).
-5. **Settlers' bill:** Launch Capacity per settler on the Space Program
-   building (recommended). Should a farther world cost more per settler?
-6. **Settlers' origin:** the Settlement Authority's walk over the country's
-   states (the owner's suggestion). Who is eligible to go?
-7. **Past the Habitat cap:** keep today's 8 at a rising price (recommended).
-8. **The Administration's further cost:** authority a level (recommended),
-   bureaucracy or money, a falling effect, or the larger crew alone (§ 3.6).
-9. **Part A, a state zeroed by pollution or turmoil:** cancel it in full, so
-   the resort is at par (recommended, it is what "the state doesn't matter"
-   means), or let a state in crisis still hurt it.
-10. **Part A, turmoil specifically:** a strike or unrest in the state is local
-   to the ground crew. Cancel it with the rest (recommended), or keep it as
-   the one local penalty.
+1. **The slot technologies' reward: more people per Habitat**, +10 points of
+   the world's base room each, so a Habitat holds 100% of base room with all
+   five, up from 50% (§ 3.3). Not Habitat slots.
+2. **Artificial Intelligence halves the crew** a level needs (§ 3.4).
+3. **A colony short of crews runs every crewed module at the same share**, as
+   today. No order the player sets.
+4. **Module effects at many crews.** The crew is **10,000 people** (the
+   recommendation was 7,500): 335 crews with every world built out, against
+   today's ceiling of 444 crewed levels, and 25 at Valles Marineris. **No
+   limit on concentration for now**: "We may add limits later, but let's see
+   how it does without first." Autonomy and the price of settlers are the
+   checks. The design still tabulates each module at a built-out world and
+   country (§ 3.7), so the play-test knows what to look for.
+5. **Settlers' bill: Launch Capacity per settler** on the Space Program
+   building, **the same price for every world**; distance already costs
+   through autonomy and the launch windows.
+6. **Settlers' origin: the Settlement Authority's walk** over the country's
+   states, and **who goes stays as today, half middle and half lower strata**.
+7. **Past the Habitat cap: no limit, at the rising price** (the recommendation
+   was to keep today's 8). § 3.2 has what it changes for Module Storage.
+8. **The Administration's further cost: authority a level** (a positive
+   `country_authority_cost_add` at its staffed levels). With the crew at
+   10,000, holding the largest colony takes seven Administrations of its 25
+   crews, plus their authority. The AI's plan tests authority before it
+   queues one.
+9. **Part A, a state zeroed by pollution or turmoil: cancelled in full**, so
+   the resort is at par.
+10. **Part A, turmoil: cancelled with the rest.**
+
+One more, from § 3.9: **the automatic destination pick weighs the Habitat
+cap**, alongside what it weighs today.
