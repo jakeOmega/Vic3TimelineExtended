@@ -3955,6 +3955,7 @@ company_axiom_space = {
 		building_aerospace_industry
 		building_tourism_industry
 		building_space_mine
+		building_space_resort # its space tourism (#1948)
 		building_axiom_space_hq
 	}
 	extension_building_types = {

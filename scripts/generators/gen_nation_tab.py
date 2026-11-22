@@ -163,6 +163,8 @@ SECTIONS = {
         "te_seabed_policy_*",
         # Extraplanetary Base room from the near-Earth asteroids and colonies
         "sr_ebase_room_*",
+        # Resort Colony room from Earth orbit and colonies (#1948)
+        "sr_resort_room_*",
         # The Mind Upload Nexus's research at its hosted minds (the Demographics rule's uploaded minds, under Full)
         "te_demog_um_research",
     ),
@@ -434,6 +436,7 @@ TYPE_ROWS = {
         ),
         "space_and_seabed": (
             "country_space_race_progress_mult", "country_space_race_risk_mult", "building_space_mine_throughput_add",
+            "building_space_resort_throughput_add",
             "building_solar_receiver_throughput_add", "building_space_elevator_throughput_add",
             "building_orbital_battlestation_throughput_add",
         ),

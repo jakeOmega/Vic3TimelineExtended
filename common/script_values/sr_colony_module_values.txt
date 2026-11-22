@@ -118,6 +118,9 @@ sr_mod_ai_fab_room_fusion_shipyards = {
 # (sr_mod_units_<key>, sr_sites_generated.txt).
 # Mining Complex: Extraplanetary Base room at its world.
 sr_mod_mine_room = { value = 50 }
+# Off-World Resort: Resort Colony room at its world (#1948 design § 6.1), half
+# the average world's resort room as the Mining Complex's 50 is half its base room.
+sr_mod_resort_room = { value = 10 }
 # Orbital Yard: module fabrication points a month, and under Full Colonies
 # Space Command strength a month (sr_sc_rate).
 sr_mod_yard_points = { value = 4 }
@@ -202,6 +205,28 @@ sr_ebase_queued_levels = {
 	every_scope_state = {
 		every_scope_building = {
 			limit = { is_building_type = building_space_mine }
+			add = level_after_queued_constructions
+		}
+	}
+}
+
+# ---- Resort Colony room (#1948 design § 6) --------------------------------------------
+# Country scope. Its Resort Colony levels, built, and built and queued.
+sr_resort_levels = {
+	value = 0
+	every_scope_state = {
+		every_scope_building = {
+			limit = { is_building_type = building_space_resort }
+			add = level
+		}
+	}
+}
+
+sr_resort_queued_levels = {
+	value = 0
+	every_scope_state = {
+		every_scope_building = {
+			limit = { is_building_type = building_space_resort }
 			add = level_after_queued_constructions
 		}
 	}

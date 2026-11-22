@@ -168,6 +168,12 @@ goods_input_coffee_add = {
 	percent = no
 }
 
+# The Resort Colony's Luxury Resorts (#1948): no vanilla building takes the good in.
+goods_input_luxury_furniture_add = {
+	color = bad
+	percent = no
+}
+
 goods_output_luxury_furniture_mult = {
 	color = good
 	percent = yes
@@ -921,6 +927,13 @@ building_tourism_industry_throughput_add = {
 }
 
 building_space_mine_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+# The Resort Colony (#1948): its room's draw, and the space economy's lines the base has.
+building_space_resort_throughput_add = {
 	color = good
 	percent = yes
 	decimals = 0

@@ -736,6 +736,13 @@ te_on_building_built = {
 			}
 			owner = { sr_ebase_hook_fire = yes }
 		}
+		if = {
+			limit = {
+				is_building_type = building_space_resort
+				exists = owner
+			}
+			owner = { sr_resort_hook_fire = yes }
+		}
 	}
 }
 te_on_building_expanded = {
@@ -746,6 +753,13 @@ te_on_building_expanded = {
 				exists = owner
 			}
 			owner = { sr_ebase_hook_fire = yes }
+		}
+		if = {
+			limit = {
+				is_building_type = building_space_resort
+				exists = owner
+			}
+			owner = { sr_resort_hook_fire = yes }
 		}
 	}
 }

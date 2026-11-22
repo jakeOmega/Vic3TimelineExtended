@@ -232,7 +232,8 @@ class MaintenanceTiers(unittest.TestCase):
                                       "building_network_infrastructure", "building_hydro_plant",
                                       "building_renewable_energy_plant", "building_oil_rig"],
             "pmg_maintenance_intensive": ["building_nuclear_plant", "building_fusion_plant",
-                                          "building_ocean_mine", "building_space_mine"],
+                                          "building_ocean_mine", "building_space_mine",
+                                          "building_space_resort"],
         }
         buildings = _buildings()
         for group, names in expected.items():

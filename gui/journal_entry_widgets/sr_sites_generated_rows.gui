@@ -93,6 +93,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (+0%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 25#! (+15%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -153,6 +156,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (+0%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 15#! (+10%)"
 			}
 		}
 
@@ -215,6 +221,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (+5%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 20#! (+30%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -275,6 +284,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 125#! (+5%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 40#! (+15%)"
 			}
 		}
 
@@ -337,6 +349,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (+0%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 10#! (+0%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -397,6 +412,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 125#! (+0%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 25#! (+10%)"
 			}
 		}
 
@@ -466,6 +484,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−10%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 30#! (+15%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -526,6 +547,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 200#! (+5%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 25#! (−5%)"
 			}
 		}
 
@@ -595,6 +619,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 200#! (+10%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 50#! (+25%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -655,6 +682,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 150#! (+10%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 40#! (+25%)"
 			}
 		}
 
@@ -717,6 +747,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 200#! (+10%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 50#! (+5%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -778,6 +811,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 200#! (+10%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 50#! (+0%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -838,6 +874,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 150#! (+10%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 40#! (+0%)"
 			}
 		}
 
@@ -907,6 +946,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 200#! (+15%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 40#! (+5%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -967,6 +1009,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 200#! (+20%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 25#! (+10%)"
 			}
 		}
 
@@ -1029,6 +1074,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 300#! (+30%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 20#! (+0%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -1090,6 +1138,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 150#! (+10%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 20#! (−5%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -1150,6 +1201,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (+5%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 15#! (−10%)"
 			}
 		}
 
@@ -1219,6 +1273,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (−5%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 15#! (−5%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -1279,6 +1336,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (−5%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 30#! (+0%)"
 			}
 		}
 
@@ -1341,6 +1401,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 150#! (+0%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 40#! (+0%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -1401,6 +1464,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 150#! (+0%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 40#! (+10%)"
 			}
 		}
 
@@ -1463,6 +1529,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (+5%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 10#! (−15%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -1523,6 +1592,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (+0%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 10#! (−5%)"
 			}
 		}
 
@@ -1592,6 +1664,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (−15%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 40#! (+10%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -1652,6 +1727,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (−20%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 20#! (+15%)"
 			}
 		}
 
@@ -1714,6 +1792,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (−15%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 20#! (+5%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -1775,6 +1856,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−20%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 10#! (+5%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -1835,6 +1919,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (−20%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 15#! (+15%)"
 			}
 		}
 
@@ -1904,6 +1991,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (−25%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 20#! (−15%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -1964,6 +2054,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (−25%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 20#! (−15%)"
 			}
 		}
 
@@ -2026,6 +2119,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−30%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 10#! (+0%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -2086,6 +2182,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−30%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 15#! (−15%)"
 			}
 		}
 
@@ -2155,6 +2254,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (−30%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 20#! (−5%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -2215,6 +2317,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−35%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 10#! (−25%)"
 			}
 		}
 
@@ -2284,6 +2389,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (−35%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 20#! (−10%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -2344,6 +2452,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−40%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 10#! (−30%)"
 			}
 		}
 
@@ -2406,6 +2517,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−40%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 10#! (−30%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -2467,6 +2581,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−40%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 10#! (−25%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -2527,6 +2644,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−45%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 10#! (−35%)"
 			}
 		}
 	}
@@ -2627,6 +2747,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (+0%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 25#! (+15%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -2712,6 +2835,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (+0%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 15#! (+10%)"
 			}
 		}
 
@@ -2799,6 +2925,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (+5%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 20#! (+30%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -2884,6 +3013,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 125#! (+5%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 40#! (+15%)"
 			}
 		}
 
@@ -2971,6 +3103,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (+0%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 10#! (+0%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -3056,6 +3191,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 125#! (+0%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 25#! (+10%)"
 			}
 		}
 
@@ -3152,6 +3290,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−10%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 30#! (+15%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -3237,6 +3378,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 200#! (+5%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 25#! (−5%)"
 			}
 		}
 
@@ -3333,6 +3477,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 200#! (+10%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 50#! (+25%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -3420,6 +3567,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 150#! (+10%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 40#! (+25%)"
 			}
 		}
 
@@ -3509,6 +3659,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 200#! (+10%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 50#! (+5%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -3597,6 +3750,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 200#! (+10%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 50#! (+0%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -3684,6 +3840,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 150#! (+10%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 40#! (+0%)"
 			}
 		}
 
@@ -3780,6 +3939,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 200#! (+15%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 40#! (+5%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -3867,6 +4029,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 200#! (+20%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 25#! (+10%)"
 			}
 		}
 
@@ -3956,6 +4121,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 300#! (+30%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 20#! (+0%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -4044,6 +4212,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 150#! (+10%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 20#! (−5%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -4131,6 +4302,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (+5%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 15#! (−10%)"
 			}
 		}
 
@@ -4227,6 +4401,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (−5%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 15#! (−5%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -4314,6 +4491,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (−5%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 30#! (+0%)"
 			}
 		}
 
@@ -4403,6 +4583,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 150#! (+0%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 40#! (+0%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -4490,6 +4673,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 150#! (+0%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 40#! (+10%)"
 			}
 		}
 
@@ -4579,6 +4765,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (+5%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 10#! (−15%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -4666,6 +4855,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (+0%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 10#! (−5%)"
 			}
 		}
 
@@ -4762,6 +4954,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (−15%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 40#! (+10%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -4849,6 +5044,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (−20%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 20#! (+15%)"
 			}
 		}
 
@@ -4938,6 +5136,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 100#! (−15%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 20#! (+5%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -5026,6 +5227,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−20%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 10#! (+5%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -5113,6 +5317,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (−20%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 15#! (+15%)"
 			}
 		}
 
@@ -5209,6 +5416,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (−25%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 20#! (−15%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -5296,6 +5506,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (−25%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 20#! (−15%)"
 			}
 		}
 
@@ -5385,6 +5598,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−30%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 10#! (+0%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -5472,6 +5688,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−30%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 15#! (−15%)"
 			}
 		}
 
@@ -5568,6 +5787,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (−30%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 20#! (−5%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -5655,6 +5877,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−35%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 10#! (−25%)"
 			}
 		}
 
@@ -5751,6 +5976,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 75#! (−35%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 20#! (−10%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -5838,6 +6066,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−40%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 10#! (−30%)"
 			}
 		}
 
@@ -5927,6 +6158,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−40%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 10#! (−30%)"
+			}
 		}
 
 		te_sr_site_row = {
@@ -6014,6 +6248,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−40%)"
+			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 10#! (−25%)"
 			}
 		}
 
@@ -6103,6 +6340,9 @@ types sr_sites_generated_rows_types
 			blockoverride "site_bases" {
 				raw_text = "#v 50#! (−45%)"
 			}
+			blockoverride "site_resorts" {
+				raw_text = "#v 10#! (−35%)"
+			}
 		}
 	}
 
@@ -6171,6 +6411,15 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "module_grade" {
 				raw_text = "(+0%)"
+			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_shackleton')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(+15%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_shackleton_depot"
@@ -6660,6 +6909,15 @@ types sr_sites_generated_rows_types
 			blockoverride "module_grade" {
 				raw_text = "(+0%)"
 			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_peary')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(+10%)"
+			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_peary_solar"
 				tooltip = "je_space_race_widget_colony_peary_solar_tt"
@@ -7147,6 +7405,15 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "module_grade" {
 				raw_text = "(+5%)"
+			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_tranquility')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(+30%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_tranquility_heritage"
@@ -7636,6 +7903,15 @@ types sr_sites_generated_rows_types
 			blockoverride "module_grade" {
 				raw_text = "(+5%)"
 			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_marius_hills')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(+15%)"
+			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_marius_lavatubes"
 				tooltip = "je_space_race_widget_colony_marius_lavatubes_tt"
@@ -8122,6 +8398,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ebase_room_daedalus')|0]"
 			}
 			blockoverride "module_grade" {
+				raw_text = "(+0%)"
+			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_daedalus')|0]"
+			}
+			blockoverride "module_draw" {
 				raw_text = "(+0%)"
 			}
 			blockoverride "page_name_a" {
@@ -8612,6 +8897,15 @@ types sr_sites_generated_rows_types
 			blockoverride "module_grade" {
 				raw_text = "(+0%)"
 			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_imbrium')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(+10%)"
+			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_imbrium_massdriver"
 				tooltip = "je_space_race_widget_colony_imbrium_massdriver_tt"
@@ -9099,6 +9393,15 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "module_grade" {
 				raw_text = "(−10%)"
+			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_venus')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(+15%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_venus_atmospheric"
@@ -9638,6 +9941,15 @@ types sr_sites_generated_rows_types
 			blockoverride "module_grade" {
 				raw_text = "(+5%)"
 			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_mercury')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(−5%)"
+			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_mercury_solar"
 				tooltip = "je_space_race_widget_colony_mercury_solar_tt"
@@ -10133,6 +10445,15 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "module_grade" {
 				raw_text = "(+10%)"
+			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_valles_marineris')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(+25%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_valles_marineris_research"
@@ -10672,6 +10993,15 @@ types sr_sites_generated_rows_types
 			blockoverride "module_grade" {
 				raw_text = "(+10%)"
 			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_olympus_mons')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(+25%)"
+			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_olympus_mons_atmospheric"
 				tooltip = "je_space_race_widget_colony_olympus_mons_atmospheric_tt"
@@ -11209,6 +11539,15 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "module_grade" {
 				raw_text = "(+10%)"
+			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_hellas_planitia')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(+5%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_hellas_settlement"
@@ -11748,6 +12087,15 @@ types sr_sites_generated_rows_types
 			blockoverride "module_grade" {
 				raw_text = "(+10%)"
 			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_utopia_planitia')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(+0%)"
+			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_utopia_ice"
 				tooltip = "je_space_race_widget_colony_utopia_ice_tt"
@@ -12285,6 +12633,15 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "module_grade" {
 				raw_text = "(+10%)"
+			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_arcadia_planitia')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(+0%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_arcadia_civilian"
@@ -12824,6 +13181,15 @@ types sr_sites_generated_rows_types
 			blockoverride "module_grade" {
 				raw_text = "(+15%)"
 			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_ceres')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(+5%)"
+			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_ceres_waystation"
 				tooltip = "je_space_race_widget_colony_ceres_waystation_tt"
@@ -13319,6 +13685,15 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "module_grade" {
 				raw_text = "(+20%)"
+			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_vesta')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(+10%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_vesta_mining"
@@ -13816,6 +14191,15 @@ types sr_sites_generated_rows_types
 			blockoverride "module_grade" {
 				raw_text = "(+30%)"
 			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_psyche')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(+0%)"
+			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_psyche_industrial"
 				tooltip = "je_space_race_widget_colony_psyche_industrial_tt"
@@ -14311,6 +14695,15 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "module_grade" {
 				raw_text = "(+10%)"
+			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_pallas')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(−5%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_pallas_composites"
@@ -14808,6 +15201,15 @@ types sr_sites_generated_rows_types
 			blockoverride "module_grade" {
 				raw_text = "(+5%)"
 			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_hygiea')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(−10%)"
+			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_hygiea_volatiles"
 				tooltip = "je_space_race_widget_colony_hygiea_volatiles_tt"
@@ -15302,6 +15704,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ebase_room_io')|0]"
 			}
 			blockoverride "module_grade" {
+				raw_text = "(−5%)"
+			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_io')|0]"
+			}
+			blockoverride "module_draw" {
 				raw_text = "(−5%)"
 			}
 			blockoverride "page_name_a" {
@@ -15800,6 +16211,15 @@ types sr_sites_generated_rows_types
 			blockoverride "module_grade" {
 				raw_text = "(−5%)"
 			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_europa')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(+0%)"
+			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_europa_drilling"
 				tooltip = "je_space_race_widget_colony_europa_drilling_tt"
@@ -16294,6 +16714,15 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ebase_room_ganymede')|0]"
 			}
 			blockoverride "module_grade" {
+				raw_text = "(+0%)"
+			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_ganymede')|0]"
+			}
+			blockoverride "module_draw" {
 				raw_text = "(+0%)"
 			}
 			blockoverride "page_name_a" {
@@ -16834,6 +17263,15 @@ types sr_sites_generated_rows_types
 			blockoverride "module_grade" {
 				raw_text = "(+0%)"
 			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_callisto')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(+10%)"
+			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_callisto_gateway"
 				tooltip = "je_space_race_widget_colony_callisto_gateway_tt"
@@ -17372,6 +17810,15 @@ types sr_sites_generated_rows_types
 			blockoverride "module_grade" {
 				raw_text = "(+5%)"
 			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_himalia')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(−15%)"
+			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_himalia_telescope"
 				tooltip = "je_space_race_widget_colony_himalia_telescope_tt"
@@ -17868,6 +18315,15 @@ types sr_sites_generated_rows_types
 			blockoverride "module_grade" {
 				raw_text = "(+0%)"
 			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_amalthea')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(−5%)"
+			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_amalthea_physics"
 				tooltip = "je_space_race_widget_colony_amalthea_physics_tt"
@@ -18363,6 +18819,15 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "module_grade" {
 				raw_text = "(−15%)"
+			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_titan')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(+10%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_titan_hydrocarbons"
@@ -18902,6 +19367,15 @@ types sr_sites_generated_rows_types
 			blockoverride "module_grade" {
 				raw_text = "(−20%)"
 			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_enceladus')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(+15%)"
+			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_enceladus_astrobiology"
 				tooltip = "je_space_race_widget_colony_enceladus_astrobiology_tt"
@@ -19397,6 +19871,15 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "module_grade" {
 				raw_text = "(−15%)"
+			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_rhea')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(+5%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_rhea_propellant"
@@ -19894,6 +20377,15 @@ types sr_sites_generated_rows_types
 			blockoverride "module_grade" {
 				raw_text = "(−20%)"
 			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_mimas')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(+5%)"
+			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_mimas_installation"
 				tooltip = "je_space_race_widget_colony_mimas_installation_tt"
@@ -20389,6 +20881,15 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "module_grade" {
 				raw_text = "(−20%)"
+			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_iapetus')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(+15%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_iapetus_ridge"
@@ -20886,6 +21387,15 @@ types sr_sites_generated_rows_types
 			blockoverride "module_grade" {
 				raw_text = "(−25%)"
 			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_titania')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(−15%)"
+			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_titania_mining"
 				tooltip = "je_space_race_widget_colony_titania_mining_tt"
@@ -21381,6 +21891,15 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "module_grade" {
 				raw_text = "(−25%)"
+			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_oberon')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(−15%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_oberon_relay"
@@ -21878,6 +22397,15 @@ types sr_sites_generated_rows_types
 			blockoverride "module_grade" {
 				raw_text = "(−30%)"
 			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_miranda')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(+0%)"
+			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_miranda_rupes"
 				tooltip = "je_space_race_widget_colony_miranda_rupes_tt"
@@ -22373,6 +22901,15 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "module_grade" {
 				raw_text = "(−30%)"
+			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_ariel')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(−15%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_ariel_cryovolcanic"
@@ -22870,6 +23407,15 @@ types sr_sites_generated_rows_types
 			blockoverride "module_grade" {
 				raw_text = "(−30%)"
 			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_triton')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(−5%)"
+			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_triton_geyser"
 				tooltip = "je_space_race_widget_colony_triton_geyser_tt"
@@ -23365,6 +23911,15 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "module_grade" {
 				raw_text = "(−35%)"
+			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_proteus')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(−25%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_proteus_probe"
@@ -23862,6 +24417,15 @@ types sr_sites_generated_rows_types
 			blockoverride "module_grade" {
 				raw_text = "(−35%)"
 			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_pluto')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(−10%)"
+			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_pluto_research"
 				tooltip = "je_space_race_widget_colony_pluto_research_tt"
@@ -24357,6 +24921,15 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "module_grade" {
 				raw_text = "(−40%)"
+			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_eris')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(−30%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_eris_selfsufficiency"
@@ -24854,6 +25427,15 @@ types sr_sites_generated_rows_types
 			blockoverride "module_grade" {
 				raw_text = "(−40%)"
 			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_makemake')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(−30%)"
+			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_makemake_chemistry"
 				tooltip = "je_space_race_widget_colony_makemake_chemistry_tt"
@@ -25350,6 +25932,15 @@ types sr_sites_generated_rows_types
 			blockoverride "module_grade" {
 				raw_text = "(−40%)"
 			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_haumea')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(−25%)"
+			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_haumea_dynamics"
 				tooltip = "je_space_race_widget_colony_haumea_dynamics_tt"
@@ -25845,6 +26436,15 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "module_grade" {
 				raw_text = "(−45%)"
+			}
+			blockoverride "module_resorts_tooltip" {
+				tooltip = "je_space_race_widget_resorts_tt"
+			}
+			blockoverride "module_resorts" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_sedna')|0]"
+			}
+			blockoverride "module_draw" {
+				raw_text = "(−35%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_sedna_outpost"

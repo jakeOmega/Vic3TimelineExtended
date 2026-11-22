@@ -120,7 +120,8 @@ class GeneratedDeclarationTests(unittest.TestCase):
 
     def test_nothing_else_is_declared(self):
         expected = {m for m, _, _ in gss.entry_declarations()}
-        self.assertEqual(len(expected), 80 + 40 + 6)
+        # 5 facility modifiers: the Off-World Resort became a room hook (#1948).
+        self.assertEqual(len(expected), 80 + 40 + 5)
         self.assertEqual(set(self.declared), expected)
 
     def test_the_multiplier_reads_the_global_record_only(self):

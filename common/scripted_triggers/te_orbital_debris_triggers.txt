@@ -26,6 +26,7 @@ te_debris_uses_orbit = {
 			is_building_type = building_solar_collector
 			is_building_type = building_orbital_battlestation
 			is_building_type = building_space_mine
+			is_building_type = building_space_resort
 		}
 	}
 }

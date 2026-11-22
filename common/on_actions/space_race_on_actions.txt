@@ -11,6 +11,14 @@ on_monthly_pulse_country = {
 
 space_race_on_action = {
 	effect = {
+		# Resort Colony room (sr_colony_module_effects.txt; #1948 design § 6.3): the
+		# same for every country that can build a Resort Colony (Space
+		# Colonization); space_race_events.112 refreshes it the day after one is
+		# built or gains a level.
+		if = {
+			limit = { has_technology_researched = space_colonization }
+			sr_resort_refresh = yes
+		}
 		# Extraplanetary Base room (sr_colony_module_effects.txt; colony modules
 		# design § 9): its monthly refresh, for every country that can build
 		# a base (In-Situ Resource Utilization, the building's technology),
