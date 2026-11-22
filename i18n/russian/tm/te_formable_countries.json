@@ -131,6 +131,18 @@
   "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the African [Concept('concept_unification', '$concept_major_unification|q$')].",
   "ru": "Задаёт [Concept('concept_war_goal','цель войны')] инициатора: исключить целевую [Concept('concept_country','страну')] из числа [Concept('concept_unification_candidate','кандидатов')] африканского [Concept('concept_unification','крупного объединения')]."
  },
+ "dp_leadership_bharat": {
+  "en": "Indian Leadership",
+  "ru": "Индийское лидерство"
+ },
+ "dp_leadership_bharat_desc": {
+  "en": "Start a $dp_leadership_bharat$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_bharat_tooltip_desc$",
+  "ru": "Начать [Concept('concept_diplomatic_play','дипломатическую игру')]: $dp_leadership_bharat$\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_bharat_tooltip_desc$"
+ },
+ "dp_leadership_bharat_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Indian [Concept('concept_unification', '$concept_major_unification|q$')].",
+  "ru": "Задаёт [Concept('concept_war_goal','цель войны')] инициатора: исключить целевую [Concept('concept_country','страну')] из числа [Concept('concept_unification_candidate','кандидатов')] индийского [Concept('concept_unification','крупного объединения')]."
+ },
  "dp_leadership_china": {
   "en": "Contest Leadership of China",
   "ru": "Борьба за лидерство в Китае"
@@ -178,18 +190,6 @@
  "dp_leadership_european_union_tooltip_desc": {
   "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the European [Concept('concept_unification', '$concept_major_unification|q$')].",
   "ru": "Задаёт [Concept('concept_war_goal','цель войны')] инициатора: исключить целевую [Concept('concept_country','страну')] из числа [Concept('concept_unification_candidate','кандидатов')] европейского [Concept('concept_unification','крупного объединения')]."
- },
- "dp_leadership_india": {
-  "en": "Indian Leadership",
-  "ru": "Индийское лидерство"
- },
- "dp_leadership_india_desc": {
-  "en": "Start a $dp_leadership_india$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_india_tooltip_desc$",
-  "ru": "Начать [Concept('concept_diplomatic_play','дипломатическую игру')]: $dp_leadership_india$\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_india_tooltip_desc$"
- },
- "dp_leadership_india_tooltip_desc": {
-  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Indian [Concept('concept_unification', '$concept_major_unification|q$')].",
-  "ru": "Задаёт [Concept('concept_war_goal','цель войны')] инициатора: исключить целевую [Concept('concept_country','страну')] из числа [Concept('concept_unification_candidate','кандидатов')] индийского [Concept('concept_unification','крупного объединения')]."
  },
  "dp_leadership_indonesia": {
   "en": "Indonesian Leadership",

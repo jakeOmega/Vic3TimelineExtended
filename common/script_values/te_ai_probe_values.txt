@@ -2685,7 +2685,7 @@ te_aip_play_type_index = {
 	else_if = { limit = { is_diplomatic_play_type = dp_te_un_mandate_restore_state } value = 62 }
 	else_if = { limit = { is_diplomatic_play_type = dp_unify_african_union } value = 63 }
 	else_if = { limit = { is_diplomatic_play_type = dp_leadership_african_union } value = 64 }
-	else_if = { limit = { is_diplomatic_play_type = dp_leadership_india } value = 65 }
+	else_if = { limit = { is_diplomatic_play_type = dp_leadership_bharat } value = 65 }
 	else_if = { limit = { is_diplomatic_play_type = dp_leadership_indonesia } value = 66 }
 	else_if = { limit = { is_diplomatic_play_type = dp_unify_european_union } value = 67 }
 	else_if = { limit = { is_diplomatic_play_type = dp_leadership_european_union } value = 68 }

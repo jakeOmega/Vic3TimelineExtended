@@ -26,3 +26,16 @@ state_region = s:STATE_X }`, which the mod already uses in its power bloc names.
 |---|---|---|
 | **The holdout still gets it.** As India, with an independent, Muslim-ruled, insignificant Hyderabad on the border, wait out the monthly pulse (or clear `operation_polo_cooldown`). | "The Holdout" names Hyderabad. | Nothing fires: the capital test is false for a capital in the core. Check `te_is_india_core_state` against the capital's state region in the console. |
 | **Persia doesn't.** India borders Persia (Baluchistan taken), Persia independent and below Minor Power, no holdout in the core. | "The Holdout" never fires; Persia keeps its independence. | It fires naming Persia: the capital test passes outside the core. |
+
+## Bharat's leadership play renamed `dp_leadership_bharat` (2026-11-22)
+
+The play that contests leadership of the Indian unification was `dp_leadership_india`, a plain key that Realism Ai
+Historical Flavor Mod (Workshop `2893069455`) also defines, so a playset with both dropped one copy (`Duplicated key`).
+It is now `dp_leadership_bharat` (`common/diplomatic_plays/te_unification_plays.txt`, BHA's `leadership_play`), with
+the same name and text, and its German, Spanish and Russian translations kept under the new keys. Analysis:
+#712 (closed).
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The play is offered.** As one of two Indian unification candidates, open the other's diplomatic actions. | "Indian Leadership" is listed, with its description and tooltip, in English and in German. | A raw `dp_leadership_bharat` key: the loc or the translation memory lost the rename. No play: BHA's `leadership_play`. |
+| **No collision line.** Launch with Realism AI enabled, if a playset has it. | `debug.log` has no `Duplicated key dp_leadership_` line. | A line naming `dp_leadership_bharat`: another mod defines it too. |
