@@ -1241,7 +1241,7 @@ space_race_events.35 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/mission_delay_hangar.dds" }
+	event_image = { texture = "gfx/event_pictures/supply_logistics_planning.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -1554,7 +1554,7 @@ space_race_events.41 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/mission_delay_hangar.dds" }
+	event_image = { texture = "gfx/event_pictures/supply_logistics_planning.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -2299,7 +2299,7 @@ space_race_events.49 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/mission_delay_hangar.dds" }
+	event_image = { texture = "gfx/event_pictures/supply_logistics_planning.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -2800,7 +2800,7 @@ space_race_events.55 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/mission_delay_hangar.dds" }
+	event_image = { texture = "gfx/event_pictures/supply_logistics_planning.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -3291,7 +3291,7 @@ space_race_events.18 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/budget_hearing_congress.dds" }
+	event_image = { texture = "gfx/event_pictures/program_scandal_newsroom.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
@@ -3942,7 +3942,7 @@ space_race_events.73 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/budget_hearing_congress.dds" }
+	event_image = { texture = "gfx/event_pictures/program_scandal_newsroom.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_skull.dds"
 
@@ -5280,7 +5280,7 @@ space_race_events.105 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/mission_delay_hangar.dds" }
+	event_image = { texture = "gfx/event_pictures/supply_logistics_planning.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 

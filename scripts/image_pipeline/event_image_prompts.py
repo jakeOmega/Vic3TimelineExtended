@@ -163,8 +163,8 @@ IMAGES = {
             "decolonization_events.50", "minor_events_timelineextended.7",
         ],
     },
-    # Pending: the render had prominent garbled lettering (lettered plaques beside the doors), so the
-    # .dds was deleted and its events show financial_distress_street until regenerated.
+    # Rendered again 2026-11-21 (s0): the first render had prominent garbled lettering (lettered plaques beside the
+    # doors). Retouched: the lettering on the brass plaque beside the doors painted out.
     "bank_run_crowd": {
         "prompt": "At the left of the frame, a single guard in a dark greatcoat stands with clasped hands before a closed pair of heavy bronze doors at the top of granite steps. A crowd of men and women in overcoats and hats packs the steps below him, several holding up small passbooks. The right of the frame is a wet city street in grey morning light, with more people gathered at the foot of the steps.",
         "style": "oil painting, chiaroscuro, early twentieth-century realism",
@@ -187,8 +187,8 @@ IMAGES = {
             "te_union.2",
         ],
     },
-    # Pending: the render had prominent garbled lettering (a lettered chart board, an eagle crest and US flags), so the
-    # .dds was deleted and its events show banking_boardroom until regenerated.
+    # Rendered again 2026-11-21 (s0): the first render had prominent garbled lettering (a lettered chart board, an
+    # eagle crest and US flags).
     "central_bank_policy": {
         "prompt": "At the left of the frame, a grey-haired official in a dark suit stands at the end of a long mahogany table in a high neoclassical chamber, one hand resting on a closed folder, speaking to a row of seated officials in dark suits. The right of the frame is tall curtained windows between marble pilasters under a coffered ceiling.",
         "style": "oil painting, academic art, institutional grandeur",
@@ -304,8 +304,8 @@ IMAGES = {
             "banking_cycle_events.165",
         ],
     },
-    # Pending: the render had prominent garbled lettering (lettered stall signs), so the
-    # .dds was deleted and its events show cooperative_assembly_hall until regenerated.
+    # Rendered again 2026-11-21 (s2): the first render had prominent garbled lettering (lettered stall signs).
+    # Retouched: a faint painted mark on the floor painted out.
     "cooperative_market_success": {
         "prompt": "At the left of the frame, a woman in a canvas apron stands at a long trestle table in a whitewashed warehouse, packing jars of preserves into straw-filled wooden crates, other workers packing crates further along the same table. The right of the frame is the warehouse's open double doors and a sunlit yard beyond.",
         "style": "oil painting, warm light, community realism",
@@ -399,8 +399,8 @@ IMAGES = {
         "style": "oil painting, social realism, warm golden light",
         "events": ["decolonization_events.3", "decolonization_events.19"],
     },
-    # Pending: the render had prominent garbled lettering (a map covered in invented place names), so the
-    # .dds was deleted and its events show diplomatic_meeting until regenerated.
+    # Rendered again 2026-11-21 (s1): the first render had prominent garbled lettering (a map covered in invented
+    # place names). Retouched: a painted signature in the bottom left corner painted out.
     "partition_border_drawing": {
         "prompt": "At the left of the frame, a white-painted stone boundary marker stands on a dry hillside, and a surveyor in a sun hat stands a few paces behind it, looking down the slope along a line of identical markers that runs away into the valley. The right of the frame is a wide valley of terraced fields and distant hills under a hazy sky.",
         "style": "oil painting, social realism, warm golden light",
@@ -753,8 +753,8 @@ IMAGES = {
     # =========================================================================
     # LGBTQ EVENTS
     # =========================================================================
-    # Pending: the render had prominent garbled lettering (a large lettered shop sign and placards), so the
-    # .dds was deleted and its events show civil_rights_peaceful_march until regenerated.
+    # Rendered again 2026-11-21 (s0): the first render had prominent garbled lettering (a large lettered shop sign and
+    # placards).
     "pride_march_colorful": {
         "prompt": "At the left of the frame, seen from a high rooftop, a joyful march fills a broad city avenue between tall stone buildings, the marchers carrying rainbow-striped pennants and streamers, confetti in the air. The right of the frame is the avenue's far side, more rooftops and a bright summer sky.",
         "style": "oil painting, impressionist, vibrant summer light",
@@ -816,8 +816,8 @@ IMAGES = {
         "style": "oil painting, intimate realism, empathetic light",
         "events": ["mental_health_events.4"],
     },
-    # Pending: the render had prominent garbled lettering (newspapers with invented headlines), so the
-    # .dds was deleted and its events show political_scandal_expose until regenerated.
+    # Rendered again 2026-11-21 (s2): the first render had prominent garbled lettering (newspapers with invented
+    # headlines).
     "institutional_abuse_exposed": {
         "prompt": "At the left of the frame, a journalist in a rumpled jacket sits at a kitchen table at night, laying out a row of black-and-white photographs face up under a lamp, holding one close to her eyes. The right of the frame is a dim kitchen with a dark window and a kettle on the stove.",
         "style": "oil painting, intimate realism, empathetic light",
@@ -937,8 +937,8 @@ IMAGES = {
         ],
         "reframed": "mirror",
     },
-    # Pending: the render had prominent garbled lettering (a whiteboard of scrawled headings and a US map), so the
-    # .dds was deleted and its events show election_campaign_rally until regenerated.
+    # Rendered again 2026-11-21 (s0): the first render had prominent garbled lettering (a whiteboard of scrawled
+    # headings and a US map).
     "social_media_campaign": {
         "prompt": "At the left of the frame, a campaign manager in rolled shirtsleeves stands with arms folded at the head of a long table, watching a row of young staff seated at laptops whose screens face away from the viewer. Takeaway boxes, coffee cups and tangled phone chargers crowd the table. The right of the frame is a dim open office with bare brick walls and a row of tall dark windows.",
         "style": "oil painting, social realism, late-night office light",
@@ -1023,8 +1023,8 @@ IMAGES = {
         ],
         "reframed": "shift 0.2",
     },
-    # Pending: the render had prominent garbled lettering (a wall of screens full of posts and captions), so the
-    # .dds was deleted and its events show grassroots_canvassing until regenerated.
+    # Rendered again 2026-11-21 (s0): the first render had prominent garbled lettering (a wall of screens full of
+    # posts and captions). Retouched: a painted signature in the bottom right corner painted out.
     "digital_activism_screens": {
         "prompt": "At the left of the frame, a young man in a hooded jacket stands at the end of a kitchen table in a crowded apartment at night, one hand flat on the table, speaking to five people seated around it with phones and an open laptop, every screen turned away from the viewer. Mugs and a teapot crowd the table. The right of the frame is a dark curtained window and a bare plaster wall lit by a single hanging bulb.",
         "style": "oil painting, contemporary realism, warm bulb light",
@@ -1335,8 +1335,8 @@ IMAGES = {
         "style": "oil painting, social realism, empathetic light",
         "events": ["social_tensions_events.11", "social_tensions_events.12"],
     },
-    # Pending: the render had prominent garbled lettering (rows of lettered placards and printed jackets), so the
-    # .dds was deleted and its events show anti_globalization_riot until regenerated.
+    # Rendered again 2026-11-21 (s2): the first render had prominent garbled lettering (rows of lettered placards and
+    # printed jackets).
     "religious_extremism_clash": {
         "prompt": "At the left of the frame, seen from a high rooftop, a robed elder stands on the steps of a columned stone building with both arms raised, addressing a dense crowd that fills the square below him. The right of the frame is the far side of the square, old stone facades and a pale overcast sky.",
         "style": "oil painting, social realism, overcast daylight",
@@ -1353,8 +1353,8 @@ IMAGES = {
     # =========================================================================
     # SOCIETY TECHNOLOGY EVENTS
     # =========================================================================
-    # Pending: the render had prominent garbled lettering (lettered wartime posters and a US flag), so the
-    # .dds was deleted and its events show home_front_factory until regenerated.
+    # Rendered again 2026-11-21 (s2): the first render had prominent garbled lettering (lettered wartime posters and a
+    # US flag).
     "women_workforce_revolution": {
         "prompt": "At the left of the frame, a woman in a plain grey suit sits at a steel desk in a large open-plan office of the nineteen-sixties, writing in a ledger, the only woman among the men at the rows of identical desks behind her. The right of the frame is the long office receding into the distance under rows of fluorescent lights and tall windows.",
         "style": "oil painting, social realism, cool office light",
@@ -1377,15 +1377,15 @@ IMAGES = {
         "style": "oil painting, social realism, warm light",
         "events": ["society_technology_events.5"],
     },
-    # Pending: the render had prominent garbled lettering (lettered cabinet signs and a famous game's name), so the
-    # .dds was deleted and its events show meaning_crisis_abundance until regenerated.
+    # Rendered again 2026-11-21 (s2): the first render had prominent garbled lettering (lettered cabinet signs and a
+    # famous game's name).
     "gaming_industry_arcade": {
         "prompt": "At the left of the frame, a boy and a girl sit cross-legged on a living-room carpet at evening, seen from behind, each holding a corded game controller, leaning toward a boxy television whose screen is a bright blur of color that lights the room blue and pink. The right of the frame is a dim living room with a sofa, a standing lamp and a closed curtain.",
         "style": "oil painting, warm domestic realism, television glow",
         "events": ["society_technology_events.6"],
     },
-    # Pending: the render had prominent garbled lettering (large painted letters on the factory wall), so the
-    # .dds was deleted and its events show labor_strike_picket until regenerated.
+    # Rendered again 2026-11-21 (s1): the first render had prominent garbled lettering (large painted letters on the
+    # factory wall).
     "factory_outsourced_closed": {
         "prompt": "At the left of the frame, an older worker in a work jacket stands at a closed chain-link gate, one hand on the wire, looking through at an empty factory yard where weeds grow between the paving stones. The right of the frame is the long, clean brick wall of the factory, its windows dark, under a grey sky.",
         "style": "oil painting, social realism, desolate light",
@@ -1396,10 +1396,8 @@ IMAGES = {
         "style": "oil painting, social realism, dramatic firelight",
         "events": ["society_technology_events.10"],
     },
-    # Pending: the first render filled the frame with a phone screen of
-    # gibberish lettering ("Viral Fabricted Inst News"), so the .dds was deleted
-    # and the event shows interim art (media_moral_panic) until regenerated. The
-    # new prompt keeps the screen turned away and ties to the event's flavor (a
+    # Rendered again 2026-11-21 (s0): the first render filled the frame with a phone screen of gibberish lettering
+    # ("Viral Fabricted Inst News"). The prompt keeps the screen turned away and ties to the event's flavor (a
     # parent who believed a post that the water had been poisoned).
     "misinformation_spreading": {
         "prompt": "At the left of the frame, a woman in a grey cardigan stands at a kitchen counter at evening, seen from the side, reading a phone held close in both hands, its screen turned away from the viewer and lighting her face pale blue. On the counter beside her stand four large clear plastic jugs of water. The right of the frame is a dim plain kitchen wall with a curtained window and a single warm lamp.",
@@ -1458,10 +1456,9 @@ IMAGES = {
         "style": "oil painting, social realism, dusk light",
         "events": ["society_technology_events.24"],
     },
-    # Pending (2026-11-21): the first render put a real politician's likeness,
-    # before a US flag, on the screen at the center of the frame, so the .dds
-    # was deleted. Until this is generated, modern_election_events.2 shows
-    # un_assembly and society_technology_events.25 shows diplomatic_meeting.
+    # Rendered again 2026-11-21 (s0): the first render put a real politician's likeness, before a US flag, on the
+    # screen at the center of the frame. The television shows a plain blank screen. Retouched: a faint painted
+    # signature on the floor painted out.
     "deepfake_crisis_screen": {
         "prompt": "At the left of the frame, seen from across a dim room at night, three officials in dark suits sit at the near end of a long dark wooden table, leaning forward on their elbows, all turned toward a large television on a wheeled metal stand. The television faces them and away from us, so only its plain black back is seen, and its cold blue glow falls across their shoulders and hands. A fourth official, grey-haired, stands at the corner of the table with his arms folded. A few closed folders and coffee cups lie on the table. The right of the frame is the empty far end of the table and a wall of tall windows hung with heavy grey curtains, in shadow.",
         "style": "oil painting, contemporary realism, cool screen light",
@@ -1473,8 +1470,8 @@ IMAGES = {
         "events": ["society_technology_events.26", "repeatable_events.100"],
         "reframed": "shift 0.2",
     },
-    # Pending: the render had prominent garbled lettering (wall screens full of lettered notices), so the
-    # .dds was deleted and its events show ministry_reform until regenerated.
+    # Rendered again 2026-11-21 (s0): the first render had prominent garbled lettering (wall screens full of lettered
+    # notices).
     "algorithmic_governance_office": {
         "prompt": "At the left of the frame, a middle-aged clerk in a cardigan sits at a desk in a quiet government office with his hands folded, watching a printer feed out a long sheet of paper, a monitor beside him turned away from the viewer. Behind him a few citizens wait on a row of plastic chairs. The right of the frame is a pale, empty corridor of plain frosted glass doors under fluorescent light.",
         "style": "oil painting, contemporary realism, sterile light",
@@ -1948,8 +1945,8 @@ IMAGES = {
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.17"],
     },
-    # Pending: the render had prominent garbled lettering (headlines on the newsroom wall), so the
-    # .dds was deleted and its events show budget_hearing_congress until regenerated.
+    # Rendered again 2026-11-21 (s2): the first render had prominent garbled lettering (headlines on the newsroom
+    # wall).
     "program_scandal_newsroom": {
         "prompt": "At the left of the frame, a journalist in shirtsleeves sits at a cluttered wooden desk late at night under a green-shaded lamp, leaning over a thick stack of loose papers with a pencil in one hand and a telephone receiver held to his ear with the other. Two colleagues stand just behind his chair, bending to look at the papers. The right of the frame is a dark open office of empty desks and tall windows onto a city at night.",
         "style": "oil painting, contemporary realism, warm lamplight in a dark room",
@@ -1985,8 +1982,8 @@ IMAGES = {
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.32", "space_race_events.80"],
     },
-    # Pending: the render had prominent garbled lettering (wall charts with lettered titles), so the
-    # .dds was deleted and its events show mission_delay_hangar until regenerated.
+    # Rendered again 2026-11-21 (s0): the first render had prominent garbled lettering (wall charts with lettered
+    # titles).
     "supply_logistics_planning": {
         "prompt": "At the left of the frame, a logistics officer in a blue work shirt stands in a vast warehouse among towering steel racks of plain white cargo containers, holding a clipboard, while a forklift carries a container toward a loading bay. The right of the frame is the warehouse's far end, an open bay door and a launch tower on a flat plain under a pale sky.",
         "style": "digital painting, cinematic light, hard sci-fi",
@@ -2101,8 +2098,8 @@ IMAGES = {
         "events": ["surveillance_events.100"],
         "reframed": "shift 0.2",
     },
-    # Pending: the render had prominent garbled lettering (a held-up sign of near-English words), so the
-    # .dds was deleted and its events show civil_rights_victory until regenerated.
+    # Rendered again 2026-11-21 (s2): the first render had prominent garbled lettering (a held-up sign of near-English
+    # words).
     "digital_freedom_secured": {
         "prompt": "At the left of the frame, a young woman stands on the stone steps of a columned building at dusk with both arms raised in celebration, a phone in one hand. Behind her a crowd of young people on the steps embrace and cheer. The right of the frame is the building's pale columns and a warm evening sky.",
         "style": "oil painting, impressionist, bright hopeful light",
@@ -2606,9 +2603,8 @@ IMAGES = {
         "style": "oil painting, social realism, warm evening lamplight",
         "events": ["un_referendum.3", "te_culture_merge.4"],
     },
-    # Pending (phase 2a review, 2026-11-21): the missile submarine leg's
-    # notice shows missile_launch_crew, a silo's control room, until this is
-    # generated.
+    # Rendered 2026-11-21 (s2): first render (phase 2a review); the missile submarine leg's notice showed
+    # missile_launch_crew, a silo's control room, until then.
     "missile_submarine_departure": {
         "prompt": "At the left of the frame, the long black hull of a submarine moves out of a grey harbor before dawn, its tall fin and a few sailors on the deck dark against the water, a small pilot launch pulling away beside it. The right of the frame is the open harbor mouth, a breakwater and a lighthouse under a dim blue sky.",
         "style": "oil painting, cold war realism, cold blue dawn light",

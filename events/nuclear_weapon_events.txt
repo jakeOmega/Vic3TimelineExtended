@@ -3352,7 +3352,7 @@ nuclear_weapon_events.36 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/missile_launch_crew.dds" }
+	event_image = { texture = "gfx/event_pictures/missile_submarine_departure.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
