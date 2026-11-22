@@ -7,9 +7,9 @@ replaces the single grade a site of
 `2026-10-25-solar-colonization-modules-and-bases-design.md` § 9 with a grade and
 a ground type, gives the four mining methods of
 `2026-10-29-lunar-colonization-design.md` § 6 one basket of goods, and puts the
-choice of where a country's levels work in a panel. § 12 lists the calls still
-open; the appendix maps each point of the review to where this document
-answers it.
+choice of where a country's levels work in a panel. § 12 records the owner's
+answers to its calls (2026-11-21); the appendix maps each point of the review
+to where this document answers it.
 
 ## 1. The owner's calls
 
@@ -262,7 +262,7 @@ Metals, +33% Tech-Critical Metals, +69% Gold and −88% Glass and Plastics;
 Titan −36%, −28%, −58% and +197%; Ceres −5%, +7%, −23% and +150%, with +138%
 Chemical and Industrial Minerals.
 
-Sites whose character changed from the first draft are listed in § 12, call 3.
+Sites whose character changed from the first draft are in § 12, answer 3.
 
 ### 6.4 What the types do at the prices of the day
 
@@ -291,13 +291,13 @@ Read across:
   Self-Replicating Miners (era 13, a 127% margin) the edges are 1% to 16%, and
   Psyche is best under every move but that one (Ceres, +1%). So the choice
   matters most in eras 10 to 12 and in a glut, and the grade decides once
-  margins are wide. That fits the owner's call 7: the checkbox has its work
+  margins are wide. That fits the owner's call 7 (§ 1): the checkbox has its work
   when a good falls.
 - **A rich site of a so-so type often beats a poor site of the right type.**
   Ceres, Carbonaceous at +15%, is the best place for Glass and Plastics among
   these six, ahead of Titan, Hydrocarbon at −15%.
 - **Icy is never the best for one good alone.** It is a hedge, and most of its
-  sites are poor, so the type mostly says what the site is (§ 12, call 2).
+  sites are poor, so the type mostly says what the site is (§ 12, answer 2).
 
 ## 7. One basket for the four mining methods
 
@@ -358,9 +358,13 @@ of each method's sales, the owner's 2026-11-15 floor that
   50). The asteroids are where Tech-Critical Metals come from, and the bases
   also make Glass and Plastics, which the seabed can't: it has no plastics
   feedstock. The test's two other checks (input cost and crew) are unchanged.
-- **The Resort Colony** makes art and tourism, which have no mix. It works at
-  the grade alone, as today: its levels take room and count in `T`, and the
-  goods modifiers on its building touch nothing it makes.
+- **The Resort Colony leaves this building.** The owner may move it to a building
+  type of its own (2026-11-21), as another session's work, so this design
+  assumes the four mining methods are the only ones in its base group. A resort's
+  draw has nothing to do with ore, and it works at the mining grade today, which
+  makes 16 Psyche, the richest metal mine, the best resort. If it stays instead,
+  it works at the grade with no mix, and the checkbox's profit a level weights
+  it in by its share of levels.
 
 ## 8. Where the levels work
 
@@ -429,7 +433,15 @@ level at grade 0 and base prices, weighted by their levels (£7,250 for an
 Asteroid Mine). The yardstick is
 fixed, so the rule behaves the same when profits are small or negative. It
 never moves levels to a site that loses money a level. When every site loses
-money, nothing moves, and the panel says why (§ 9.1).
+money, nothing moves, and the panel says why (§ 9.1). The two alternatives
+both chase something worse. Least loss sends the base to the poorest sites,
+since low throughput buys fewer inputs, which reads as a bug. Most revenue
+sends it to the richest. A level's inputs scale with its grade, and Launch
+Capacity, 80% of a base's input cost, is what makes every site lose. So more
+revenue raises the base's demand for the very input that is too dear, keeps its
+price up longer and deepens the loss. It would also jump at the switch, from
+the best profit to the best revenue, often a different site. Holding still
+waits for the price to come back.
 
 **Profit a level** at site `w` of type `t`:
 
@@ -439,7 +451,7 @@ Here `f(m)` is the share of our levels running method `m` (read with
 `has_active_production_method`), and `p` is this month's price on our own
 market: `market = { mg:<good> = { market_goods_pricier / market_goods_cheaper } }`
 times the base price, read the way `st_res_<good>_price_rel` reads it. The
-Resort Colony's term uses its own outputs, with no mix. The generator writes
+generator writes
 each method's outputs and inputs from the production method files, and a test
 keeps them in step.
 
@@ -482,7 +494,7 @@ unsmoothed prices.
 The pace is `ceil(L / 48)` levels a month, at least 1: a quarter of the base a
 year, whoever decided the move. New levels, displacement and return don't count
 against it. A base of 150 levels moves 4 a month, so it moves from Psyche to
-Ceres in about three years. The figure is a call (§ 12, call 4).
+Ceres in about three years (§ 12, answer 4).
 
 ### 8.6 What is unchanged
 
@@ -614,8 +626,11 @@ use it reads −75%, as today.
 - **A notice** (`post_notification`, as Banking's and the decolonization wars'
   notices do) when the checkbox starts moving levels toward a different type:
   "Our Extraplanetary Bases are moving from 16 Psyche to Ceres: Glass and
-  Plastics earn more there at today's prices." Once per new pair of types, and
-  at most once a year, so a base settling at the margin doesn't repeat it. No
+  Plastics earn more there at today's prices." Once per new pair of types, at
+  most once a year, so a base settling at the margin doesn't repeat it, and
+  only once the move has carried at least 5% of the base's levels: one level of
+  a thousand needs no notice (owner, 2026-11-21). The threshold counts levels
+  moved, because a move at the margin can't know its size in advance. No
   notice for the player's own moves, or for displacement, which the
   blockade's own notices cover.
 - **The move line** of § 9.1 stays as the record while the move runs; after it
@@ -697,36 +712,33 @@ and the types, and the second writes the rest.
 - Price smoothing, a yearly ranking or a plan margin (§ 8.3 replaces them).
 - A separate priority per colony (the first draft's option B).
 - Any change to room, to the grades, or to the build gates.
-- A mix for the Resort Colony.
+- The Resort Colony's new home (§ 7), another session's work.
 
-## 12. Calls for the owner
+## 12. The owner's answers to the calls (2026-11-21)
 
-1. **The basket** (§ 7): Glass and Plastics 7.5% of the later methods' output
-   value, taken from Tech-Critical Metals (−17%), with Conductive Metals kept at
-   the tenth of sales set on 2026-11-15; Regolith Processing's Structural Metals
-   −36%, and its outputs with two decimals.
-2. **The seven types and their mixes** (§ 6.2). In particular, Icy is never the
-   best for one good alone; giving it a lean of its own (more Chemical and
-   Industrial Minerals than Carbonaceous, less Glass and Plastics) would make it
-   a pick when that good is dear.
-3. **Sites whose character changed from the first draft**: Mare Imbrium is Rocky,
-   dropping its KREEP lean to Tech-Critical Metals (its `kreep` specialization
-   keeps the flavor); the Venus Cloud Habitat is Sulfurous, dropping most of the
-   first draft's plastics (Glass and Plastics +13% there, not +256%); Enceladus is
-   Carbonaceous (plume salts, silica, organics); Mercury is Rocky; the Moon's two
-   polar sites, Utopia Planitia and Arcadia Planitia are Icy; Eris is Icy, not
-   Hydrocarbon. A one-site type for Imbrium or Venus is the alternative to
-   each, at the cost of more types to learn.
-4. **The pace and the margin** (§ 8.3, § 8.5): a quarter of the base a year,
-   and 5% of the yardstick.
-5. **When every site loses money a level, nothing moves** (§ 8.3). Moving to the
-   site that loses least would rank the poorest site first, which reads as a
-   bug.
-6. **The notice** (§ 9.4): once per new pair of types, at most once a year.
-7. **The Resort Colony in the panel** (§ 7, § 9.1): its levels take room and
-   count, but output a level shows the mining method most levels run, and
-   profit a level blends the methods by their share of levels.
-8. **One PR or two** (§ 10): one, unless review load argues otherwise.
+1. **The basket** (§ 7): as drafted. Glass and Plastics are 7.5% of output value,
+   taken from Tech-Critical Metals (−17% on the later methods). Conductive Metals
+   keep the tenth of sales set on 2026-11-15. Regolith Processing's Structural
+   Metals fall 36%, and its outputs have two decimals.
+2. **The seven types and their mixes** (§ 6.2): as drafted. Icy stays a hedge,
+   the middle of the road, never the best for one good alone.
+3. **The sites** (§ 6.3): as drafted. Mare Imbrium is Rocky (its `kreep`
+   specialization keeps the flavor). The Venus Cloud Habitat is Sulfurous
+   (Glass and Plastics +13% there). Utopia and Arcadia Planitia are Icy, and the
+   other three Mars sites Rocky. Enceladus is Carbonaceous, Mercury Rocky, and
+   the two lunar poles and Eris Icy.
+4. **The pace and the margin** (§ 8.3, § 8.5): a quarter of the base a year, and
+   5% of the yardstick.
+5. **When every site loses money a level, nothing moves** (§ 8.3). The owner
+   suggested maximizing revenue in this case, or else nothing moving. § 8.3
+   gives the reason for holding: more revenue raises the demand for the dear
+   input that causes the loss.
+6. **The notice** (§ 9.4): once per new pair of types, at most once a year, and
+   only once the move has carried 5% of the base's levels. The owner asked for
+   a threshold on move size, and the 5% is this document's.
+7. **The Resort Colony** leaves this building (§ 7). The owner is considering a
+   building type of its own, as another session's work.
+8. **One implementation PR in five stages** (§ 10).
 
 ## Appendix: the review's points and where they are answered
 
