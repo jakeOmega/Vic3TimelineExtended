@@ -57,7 +57,9 @@ TYPEDEF = re.compile(r"\btype\s+(\w+)\s*=\s*\w+")
 TEXTURE = re.compile(r'"((?:gfx|fonts)/[^"\]\[]+?\.(?:dds|png|tga))"', re.I)
 FUNC = re.compile(r"(?<![.\w])([A-Za-z_]\w*)\s*\(")
 METHOD = re.compile(r"\.([A-Za-z_]\w*)")
-LOC_LINE = re.compile(r'^\s*([\w.\-]+):\d*\s*"(.*)"\s*$')
+# A loc line: key, version, quoted value, and an optional trailing comment (the
+# `# REVIEWED ... (long_tooltip)` exemption sits there), which is not the value.
+LOC_LINE = re.compile(r'^\s*([\w.\-]+):\d*\s*"(.*?)"\s*(?:#[^"]*)?$')
 LOC_CALL = re.compile(r"\b(Localize|SelectLocalization|AddLocalizationIf|AddTextIf)\(")
 BARE_KEY = re.compile(r'\b(?:text|tooltip|raw_text|raw_tooltip)\s*=\s*"([A-Za-z][\w.\-]*)"')
 ALWAYS_KNOWN = {"types", "template", "blockoverride", "block", "state", "on_start", "on_finish"}

@@ -125,6 +125,7 @@ module at our first colony and fabricate now; land our shipments now; recompute 
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
 | `TE_SELF_CHECK OK/BROKEN module_fabrication country=… points=…` | once a game, a month after a Space Program first runs a fabrication method at half staff or more | the method's `country_sr_module_fabrication_add` reaches its country | the country has no points: the secondary group's workforce-scaled country modifier does not reach it | give the points from script instead: `sr_mod_fab_rate` reads which method the Space Program runs (`sr_mod_fabrication_runs`) and its occupancy |
+| `TE_SELF_CHECK OK/BROKEN ebase_mix country=… read=… want=… buildings=…` | once a game, the month after a country under Simple or Full Colonies first has an Extraplanetary Base with a Tech-Critical Metals mix of 1.5% or more either way (ground types design § 5.3), read before that month's refresh strips anything, on a mix at least two days old; a month later again while some base buildings match and some don't (one no refresh has reached yet) | every base building's `modifier:goods_output_tech_metals_mult` is the base's mix, `var:sr_ebase_mix_tech_metals` / 100 (`want`), within 0.001 (OK: `buildings` counts them; BROKEN: none matches, `buildings` counts them, `read` is one's figure): `sr_ebase_mix_tech_metals_bonus` / `_penalty`, added to the building at `multiplier = root.var:sr_ebase_mix_tech_metals_units`, reach its output | `read` 0: the unit modifiers never reach the building (`add_modifier` on a building, or the multiplier through `root.var:`); another figure: the multiplier or another line is off | for 0, apply the mix as `goods_output_<good>_mult` on the base's state instead (it reaches only the state's producers of the good), or set the multiplier from a local read in country scope; for another figure, read the building's output tooltip |
 
 1. **The method group.** Under Simple Colonies, the Space Program's panel shows a third group, Module Fabrication,
    starting on No Module Fabrication. Orbital Assembly (Cislunar Infrastructure) shows +5 Colony Module Fabrication per
@@ -547,6 +548,57 @@ Owner, 2026-10-31: a level past all of a country's room works at −75% (`gen_so
 2. **The crew.** A base of 20 levels or more on the Asteroid Mine shows about 500 machinists, 400 engineers and 100 academics, and no more after another level. Its output is the method's per level × its levels (× throughput), as the output tooltip lists, once the crew is in.
 3. **The crew fills.** A month or two after a base is built or grows, its staff reads at or near the crew; if many bases sit well below it, look for a state short of engineers before raising the attractiveness.
 
+## Extraplanetary Base ground types: the Bases view (2026-11-21)
+
+Design: `docs/superpowers/specs/2026-11-05-extraplanetary-base-ground-types-design.md` § 9.1. Simple or Full
+Colonies, In-Situ Resource Utilization, a few colonies held and a base of 50 levels or more. The view's figures
+are the refresh's: give a new base a month before reading them.
+
+1. **The look.** The Colonies switch shows five buttons on one line, People to Bases, none clipped. Bases shows the
+   checkbox and "Assign for the most profit"; the levels rows (with the checkbox off, "Unassigned levels" too); the
+   move lines; "Output a Week, Before Other
+   Modifiers" with Now and If prices hold, each a profit on the right and seven goods icons under it; then, with
+   Asteroid Mining, the near-Earth asteroids' box; then each colony's box: its name, its ground type and grade on
+   the first line, "levels / room", − and + and "£… a level" on the second, seven goods on the third. Nothing
+   overlaps or runs past the panel's edge, and "Near-Earth Asteroids" is not cut off.
+2. **`|K` in the totals.** The totals' goods read at most five characters ("12.3K", "1.23M"). If the game prints
+   six ("123.4K"), the cell cuts them off: widen `te_sr_eb_good_cell` by narrowing its icon, or print the totals
+   with `|0` on two lines.
+3. **The checkbox.** The mod's first `checkbutton`: it draws ticked with the checkbox on, at 24 × 24, and a click
+   unticks it (`sr_ebase_auto_sgui`), the second row turning to "At our assignments". Its hover gives the rule.
+4. **− and +.** With the checkbox off, a click on a colony's + raises its assignment by 5 and "→ N" appears beside
+   its levels; a right-click raises it by 25, and − lowers it the same ways. The tax workbench's steppers right-click a
+   scripted GUI the same way (`onrightclick` with an `op` scope, on a button greyed by another op's `IsValid`): if a
+   right-click does nothing here, compare them, and failing that give each box ±25 buttons of its own. A right-click
+   on a greyed + changes nothing, the checkbox included (the effect sets nothing unless the target changes). A
+   click with the checkbox on unticks it first.
+5. **The move lines.** With the checkbox on and a move under way (raise one good's price until a site of another
+   type earns more): "Moving since <year>, up to N a month", "From <site> to <site>", and "<site> earns N% more a
+   level", or "<site> loses money a level". With nothing moving: "Levels stay where they are" and why. With the
+   checkbox off: "Levels to move to our assignments: N" and "Months to go: about M, at up to P a month"; at the
+   assignments, "no levels left to move".
+   Once a move has ended, "Last move: <year> to <year>" and its sites. The lines give years, not months.
+6. **A colony that doesn't serve us.** A blockaded colony stays listed, its box reading "Blockaded: N working
+   elsewhere until freed" in red; an occupied one reads "Occupied:" and is still listed. A blockaded colony that
+   held no levels shows no such line.
+7. **The hovers.** The view button's hover, and each good's hover in a box, name the method most of our levels run.
+   The totals heading's hover ends with our country's breakdown of Extraplanetary Base throughput, and says its
+   Extraplanetary Base Room line is the grade, already in the figures: with no other throughput, Now's goods match
+   the base buildings' output added up. If the breakdown prints nothing or raw text, drop it from
+   `je_space_race_widget_eb_totals_tt`.
+8. **Frame time.** With Bases open on a large country's save holding about 20 colonies, the panel's frame time is
+   about that of People (the wall clock of `docs/audits/late_game_performance.md`, "Reading the wall clock"). Most
+   figures are stored variables, but each box's + reads `sr_ebase_queued_levels` for its validity, and the levels
+   rows and the unassigned line read `sr_ebase_levels` and `sr_ebase_queued_levels`: each a walk over the
+   country's states and buildings, up to 41 boxes a frame (final review S2). If it is slower, have the + buttons'
+   `enabled` read a free count (queued less assigned) that the refresh and each click store, and keep the live
+   check in `is_valid` for the hover and the effect's clamp; a level queued between updates then leaves + greyed
+   until the next one.
+9. **The switch row when Bases appears.** Open the Colonies tab before In-Situ Resource Utilization, with four view
+   buttons, and research it with the tab open: the Bases button appears at the right end of the row and nothing
+   runs past the panel's edge. The row sits in a fixed 476 slot, its buttons from the left (style rule 8: a centred
+   row is placed once, at its first width).
+
 ## Taking a module down (2026-10-31)
 
 Owner, 2026-10-31: on a colony's page each module has a minus button that takes one level down over 12 months
@@ -634,14 +686,15 @@ The colonization overview's Base Room cell and the refresh when a base is built 
 `docs/systems/mod_systems/space_race.md` § Colony modules and Extraplanetary Base room).
 
 1. **The cell.** With In-Situ Resource Utilization, the overview's third row shows Base Room: our Extraplanetary Base
-   levels against our room ("120 / 400"), and "next at +5%" under it. Without the technology the row is gone.
+   levels against our room ("120 / 400"), and under it the site the next level goes to (since the ground types
+   build; see "Extraplanetary Base ground types: the controls", item 8, below). Without the technology the row is gone.
 2. **Queued levels.** Queue 20 levels: the cell reads "120 +20 / 400" at once (owner, 2026-11-04; it had read "120 / 400"
    with the queue left out), the hover counts them, the Modules view gains "Extraplanetary Base levels
-   queued +20", and by the next month (or the day after a level finishes) "next at" moves to the grade of the room
-   those levels would leave (counting them, not only the built ones). Queue past all of our room: the figure turns red
-   and reads "next at -75%" at once, and with nothing built and 80 queued against room for 75, "0 +80 / 75" in red. Nothing elides; with room of
+   queued +20", and by the next month (or the day after a level finishes) the next site moves to the one those
+   levels would leave (counting them, not only the built ones). Queue past all of our room: the figure turns red
+   and reads "next at −75%" at once, and with nothing built and 80 queued against room for 75, "0 +80 / 75" in red. Nothing elides; with room of
    10,000 or more (Mining Complexes) or 1,000 levels queued, the cell shows their sum instead ("12000 / 14335").
-3. **On completion.** When a queued level finishes, the cell's average and "next at" change the next day, not at the
+3. **On completion.** When a queued level finishes, the cell's average and its next site change the next day, not at the
    next month. If nothing changes until the month turns, `on_building_built` / `on_building_expanded` never reached
    `te_on_building_*` (unverified, `scripting_best_practices.md`); fallback: drop the hook, the monthly pulse stays.
 4. **A batch stacks nothing.** Let several levels finish on one day (queue them in several states at once) and compare
@@ -1014,6 +1067,91 @@ budget reads `fixed_income` and the programme's throughput as the mission budget
    with Compact Fusion Reactors and weekly fixed income well over 27M runs Fusion Shipyards; one with it and
    income under about 15M runs Orbital Assembly (or its cheapest method), not Fusion Shipyards. Funding raises the
    line with the throughput.
+
+## Extraplanetary Base ground types: the controls (2026-11-21)
+
+The checkbox, the − and + buttons, the totals and the move notice (ground types design § 8.3, § 8.4, § 9.1, § 9.4;
+`sr_colony_sguis.txt`, `sr_ebase_generated.txt`). No self-check: each rests on effects the mod already uses, and
+`test_ebase_assignment.py` runs the generated script against the model (`ebase_ground.py`). Open the Colonies section's
+Bases view with In-Situ Resource Utilization and a base of a hundred or more levels.
+
+1. **A hover writes nothing.** Hover the checkbox and a site's − and + for ten seconds each: `debug.log` and
+   `error.log` gain no `Failed to fetch variable`, `Value of wrong type` or `Event target link 'var' returned an unset
+   scope` line from `sr_ebase_generated.txt` or `sr_colony_sguis.txt`, and the game doesn't stutter. Each hover says
+   what the click does, and with the checkbox on, − and + add that Assign for the most profit goes off first.
+2. **Switching the checkbox off and on.** With the checkbox on, click it: every site's assignment reads the levels it
+   has now (a blockaded site's, the levels it is owed), and nothing moves the next month. Click it again: the
+   assignments go, and the next month moves up to the pace from the site that earns least a level.
+3. **− and +.** With the checkbox off, − on a site lowers its assignment by 5 (a right-click by 25, if the view binds
+   it), and the levels above it move at the pace to a site below its assignment. + is greyed while every built and
+   queued level is assigned, with that reason crossed; with levels queued it adds up to them and up to the site's
+   room. A click with the checkbox on switches it off first.
+4. **The totals at once.** A click changes the totals' second row the same moment, without waiting for the month:
+   "At our assignments" with the checkbox off, "If prices hold" on. "Now" is the base's goods a week before other
+   modifiers: one Asteroid Mine level at 16 Psyche reads about 363 Structural Metals.
+5. **Toggling gains nothing.** Switch the checkbox off and on again twice in one month: that month moves no more
+   levels than the pace (review focus 5).
+6. **The move notice.** A base of 150 levels at 16 Psyche with Glass and Plastics 50% dear (§ 10 stage 3, the console
+   can set the price): the feed notice "Extraplanetary Base Levels Moving" arrives in the second month of the move,
+   once it has carried 8 levels (5% of 150), naming 16 Psyche, Ceres and Glass and Plastics, with the pace. No
+   second notice while the move runs, none within a year of the last, none with the checkbox off and none for a
+   move between two sites of one type. Weeks later, after the move has ended, the notice in the feed still names
+   the same sites and good.
+7. **A click's cost.** On a late save with a large base, a click on − or + doesn't hitch: the forecast behind the
+   totals (up to 41 passes over the 41 places) runs once on the click, from the figures the last refresh stored.
+8. **The Base Room cell names the next place.** The overview's Base Room cell's last line names the site the next
+   level goes to (queued levels counted) in the overview's short names: "Ceres", "Near-Earth", "Valles Marineris"
+   without "...". With built and queued levels at or past the room it reads "next at -75%" the moment levels are
+   queued, before any refresh. The hover's second paragraph gives that site's Ground Type, Base Grade and profit a
+   level a week, both concept links working, or past the room the −75% line; neither shows a raw key (the two
+   `AddLocalizationIf` sub-keys). A click on − or + that changes where the next level goes changes the line at once.
+9. **The room modifiers' descriptions.** Hover Extraplanetary Base Room in the Nation tab's modifiers: the
+   description says the levels work at their sites' Base Grade where the Bases view puts them, not "the richest
+   first".
+10. **Switching off during a blockade.** With 150 levels at 16 Psyche, Ceres and Io and the checkbox on, blockade
+    Psyche until its levels work elsewhere, then click − on Io: + at Ceres stays usable (the cuts the refresh stored,
+    `sr_eb_switch_cut_<k>`), the unassigned row reads the 5 levels − freed, and the boxes' arrows show where the
+    levels will sit once Psyche is freed. Lift the blockade: the levels come back to Psyche, every site reads its
+    assignment with no arrow left, and "At our assignments: no levels left to move".
+11. **Ticked back on mid-month.** With the checkbox off and a site that earns well more than another, tick it on
+    after the first of the month: the move area reads "Levels start moving next month", not "No site with room
+    earns ...", and the move starts on the first. The no-gain line, when it shows, wraps to two lines inside the
+    column. Ticking either way ends a running move: it shows as the last move, never as the checkbox's.
+12. **A country handed to the AI.** Switch the checkbox off, then `play` another country for a month: the first
+    country's checkbox is back on (its levels move for the most profit again), and switching back finds it on.
+
+## Extraplanetary Base ground types: the month and the readings (2026-11-21)
+
+Where the levels work and what they make (ground types design §§ 2, 5, 8, 9.2, 9.6; `sr_ebase_generated.txt`,
+`ebase_ground.py`). `test_ebase_assignment.py` runs the generated month against the model offline; these are what only
+the game shows. Use a save under Full Colonies with In-Situ Resource Utilization, Asteroid Mining and two or three
+colonies of different types (16 Psyche and Ceres are the design's example).
+
+1. **The acceptance test (§ 2).** From the UI alone, with no console: say where your levels work, what the base makes
+   of each good, and why it last moved. Note anything you had to guess.
+2. **Two layers multiply.** With a base whose levels all work one site, its building's output tooltip for one good reads
+   the method's figure × (1 + the Extraplanetary Base Room throughput) × (1 + that good's Extraplanetary Base Ground
+   line), and the building shows the site's type's mix (at 16 Psyche alone: Glass and Plastics −91%). If the two add
+   instead, profit at base prices is off a site's grade times its mix, and `ebase_mix` can't see it.
+3. **A glut.** Let one good fall well below base price (or set it from the console) with a base of 150 levels or more:
+   the checkbox moves levels one way at the pace and stops while the gap is still inside the margin. Watch two or
+   three years for a move back. The model moves back once if a price closes only a tenth of its gap a month, so a
+   back-and-forth here says the game's prices answer slower than assumed: note the price path.
+4. **A blockade and its return.** Blockade a colony that holds levels: within a month they work elsewhere (or past the
+   room), its box says why, its assignment is kept, and no notice of a move is posted. Lift it: they come back the
+   next refresh, at once, not at the pace.
+5. **The pace.** A base of 150 levels moves 4 a month. Build a level mid-month: the day-after refresh places it and
+   moves nothing more that month.
+6. **The logistics cuts.** On a base with Tethered Launch and Fusion Tugs at base prices, profit a level at a grade-0
+   site reads about £21,650 on the Asteroid Mine (£7,250 without them), and a move needs about £1,083 a level more.
+7. **Tick time.** On a late save with many AI bases, the first of the month is no slower than before this build
+   (the wall clock of `docs/audits/late_game_performance.md`, "Reading the wall clock", against the same save on
+   `main`).
+8. **Solar System's line.** Under each site's name, "300 (+30%) Metallic" at 16 Psyche and "200 (+15%) Carbonaceous" at Ceres, and the resort room, fit without "...",
+   in Solar System and in the colony target popup. The base room's hover gives its type's seven figures, each good
+   named, no raw `$key$`.
+9. **The Help page.** How Solar Colonization Works shows its Extraplanetary Bases topic under Simple and Full Colonies
+   only, with a line per ground type and the checkbox's rule.
 
 ## The Resort Colony, a building of its own (#1948, 2026-11-21)
 

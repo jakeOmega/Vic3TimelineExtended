@@ -19,13 +19,21 @@ space_race_on_action = {
 			limit = { has_technology_researched = space_colonization }
 			sr_resort_refresh = yes
 		}
-		# Extraplanetary Base room (sr_colony_module_effects.txt; colony modules
-		# design § 9): its monthly refresh, for every country that can build
-		# a base (In-Situ Resource Utilization, the building's technology),
-		# colony or not; space_race_events.110 refreshes it too, the day after
-		# a base is built or gains a level (UI pass design § 8).
+		# Extraplanetary Base room and ground (sr_colony_module_effects.txt;
+		# colony modules design § 9, ground types design § 5.3): its monthly
+		# refresh, for every country that can build a base (In-Situ Resource
+		# Utilization, the building's technology), colony or not, and every
+		# country that owns one without it (a base captured from its builder),
+		# whose refresh only strips the old owner's mix off it;
+		# space_race_events.110 refreshes it too, the day after a base is built
+		# or gains a level (UI pass design § 8).
 		if = {
-			limit = { has_technology_researched = in_situ_resource_utilization }
+			limit = {
+				OR = {
+					has_technology_researched = in_situ_resource_utilization
+					any_scope_building = { is_building_type = building_space_mine }
+				}
+			}
 			sr_ebase_refresh = yes
 		}
 		# The AI's Space Program budget (sr_ai_mission_budget_effects.txt): an AI

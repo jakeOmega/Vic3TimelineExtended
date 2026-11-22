@@ -12026,6 +12026,29 @@ sr_ov_restless_site = {
 	}
 }
 
+# The Bases view (Extraplanetary Base ground types design § 9.1, gen_ebase.view_custom_loc):
+# the method most of our mining levels run (var:sr_eb_lead_method), the group's first with none.
+sr_eb_method_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = sr_eb_lead_method var:sr_eb_lead_method = 1 }
+		localization_key = pm_space_mine
+	}
+	text = {
+		trigger = { has_variable = sr_eb_lead_method var:sr_eb_lead_method = 2 }
+		localization_key = pm_space_colony_mining
+	}
+	text = {
+		trigger = { has_variable = sr_eb_lead_method var:sr_eb_lead_method = 3 }
+		localization_key = pm_self_replicating_miners
+	}
+	text = {
+		localization_key = pm_regolith_processing
+	}
+}
+
 # Each queue place's module, from its type code.
 sr_mq_1_module_name = {
 	type = country

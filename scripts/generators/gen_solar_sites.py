@@ -56,6 +56,7 @@ A post-load regenerator (``mod_state_server.POST_LOAD_REGENERATORS``).
 from __future__ import annotations
 
 import argparse
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -2478,61 +2479,11 @@ def render_module_effects() -> list[str]:
         out += ["\tif = {" if i == 0 else "\telse_if = {", f"\t\tlimit = {{ scope:op = {op} }}",
                 f"\t\t{effect} = yes", "\t}"]
     out += ["}"]
-    out += ["", "# Extraplanetary Base room filled best grade first (design § 9): local_var:sr_eb_left",
-            "# levels to place, local_var:sr_eb_sum the levels x grade so far (percent).",
-            "sr_ebase_fill = {"]
-    for tier in ebase_tiers():
-        room = NEAR_EARTH_ROOM if tier is None else f"sr_site_ebase_room_{tier.key}"
-        grade = 0 if tier is None else tier.ebase_grade
-        name = "near-Earth" if tier is None else tier.name
-        held = f" has_technology_researched = {NEAR_EARTH_TECH}" if tier is None else f" {site_serves(tier)}"
-        size = f"{NEAR_EARTH_ROOM} levels" if tier is None else f"{tier.ebase_room} levels and its Mining Complexes'"
-        out += [f"\t# {name}: {size} at {grade:+d}%",
-                "\tif = {",
-                f"\t\tlimit = {{ local_var:sr_eb_left > 0{held} }}",
-                f"\t\tset_local_variable = {{ name = sr_eb_take value = {{ value = local_var:sr_eb_left max = {room} }} }}"]
-        if grade:
-            out.append("\t\tset_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take "
-                       f"multiply = {grade} add = local_var:sr_eb_sum }} }}")
-        out += ["\t\tchange_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }", "\t}"]
-    out += ["\t# Past all of it",
-            "\tif = {",
-            "\t\tlimit = { local_var:sr_eb_left > 0 }",
-            "\t\tset_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_left "
-            f"multiply = {OVERFLOW_GRADE} add = local_var:sr_eb_sum }} }}",
-            "\t}",
-            "}", ""]
-    # Where the next level would work (UI pass design § 8): the same room in
-    # the same order, filled with built and queued levels, so "next at" in the
-    # overview doesn't overstate while levels are queued.
-    out += ["# The grade the next Extraplanetary Base level would work at (UI pass design § 8):",
-            "# built and queued levels fill the room best grade first, as sr_ebase_fill does;",
-            "# the first room left unfilled is where the next one goes, past all of it",
-            f"# {OVERFLOW_GRADE}%. Into var:sr_ebase_next_grade, from sr_ebase_refresh.",
-            "sr_ebase_next_fill = {",
-            "\tset_local_variable = { name = sr_eb_next_left value = sr_ebase_queued_levels }",
-            "\tset_local_variable = { name = sr_eb_next_found value = 0 }",
-            f"\tset_variable = {{ name = sr_ebase_next_grade value = {OVERFLOW_GRADE} }}"]
-    for tier in ebase_tiers():
-        room = NEAR_EARTH_ROOM if tier is None else f"sr_site_ebase_room_{tier.key}"
-        grade = 0 if tier is None else tier.ebase_grade
-        name = "near-Earth" if tier is None else tier.name
-        held = f" has_technology_researched = {NEAR_EARTH_TECH}" if tier is None else f" {site_serves(tier)}"
-        out += [f"\t# {name} at {grade:+d}%",
-                "\tif = {",
-                f"\t\tlimit = {{ local_var:sr_eb_next_found = 0{held} }}",
-                "\t\tif = {",
-                f"\t\t\tlimit = {{ local_var:sr_eb_next_left >= {room} }}",
-                f"\t\t\tchange_local_variable = {{ name = sr_eb_next_left subtract = {room} }}",
-                "\t\t}",
-                "\t\telse = {",
-                f"\t\t\tset_variable = {{ name = sr_ebase_next_grade value = {grade} }}",
-                "\t\t\tset_local_variable = { name = sr_eb_next_found value = 1 }",
-                "\t\t}",
-                "\t}"]
-    out += ["}", ""]
+    # The Extraplanetary Base's fill and its next level's place are gen_ebase.py's
+    # (ground types design § 8); ebase_tiers() above stays the order by grade.
     out += render_resort_fill()
-    out += ["# Console (te_debug_space_race.4): every colony's modules, and its caps' use counting",
+    out += ["",
+            "# Console (te_debug_space_race.4): every colony's modules, and its caps' use counting",
             "# our queue and every shipment.",
             "sr_mod_debug_log = {"]
     for site in SITES:
@@ -2574,8 +2525,9 @@ def render_module_effects() -> list[str]:
 
 def render_resort_fill() -> list[str]:
     """The Resort Colony room filled best draw first, and the draw the next level
-    would work at (#1948 design § 6.3): the twins of sr_ebase_fill and
-    sr_ebase_next_fill, over resort_tiers()."""
+    would work at (#1948 design § 6.3), over resort_tiers(). It began as the twin of
+    the Extraplanetary Base's best-grade-first fill, which gen_ebase.py's month (the
+    ground types design § 8) has since replaced."""
     def tier_parts(tier: Site | None) -> tuple[str, int, str, str]:
         if tier is None:
             return str(ORBIT_RESORT_ROOM), 0, "Earth orbit", f" has_technology_researched = {RESORT_TECH}"
@@ -3817,6 +3769,7 @@ def render_display() -> str:
     out += render_autonomy_display()
     out += render_overview_display()
     out += render_window_display()
+    out += _ebase_view().render_view_display()
     return "\n".join(out) + "\n"
 
 
@@ -3998,6 +3951,7 @@ def render_custom_loc() -> str:
                 f"\t\tlocalization_key = {overview_name_key(site)}",
                 "\t}"]
     out += ["\ttext = {", "\t\tlocalization_key = sr_site_name_unknown", "\t}", "}", ""]
+    out += _ebase_view().view_custom_loc()
     out += ["# Each queue place's module, from its type code."]
     for n in range(1, QUEUE_SLOTS + 1):
         out += [f"sr_mq_{n}_module_name = {{", "\ttype = country", "\trandom_valid = no", ""]
@@ -4070,6 +4024,30 @@ def _window_cell(body: str) -> list[str]:
     return ["te_sr_site_window_cell = {", *["\t" + line[3:] for line in cell], "}"]
 
 
+def ground_type(site: Site) -> str:
+    """The site's Extraplanetary Base ground type (ebase_ground.GROUND; ground types
+    design § 6.3). Imported here, not at the top: ebase_ground reads this module's
+    grades."""
+    here = str(Path(__file__).resolve().parent)
+    if here not in sys.path:
+        sys.path.insert(0, here)
+    import ebase_ground
+
+    return ebase_ground.GROUND[site.key]
+
+
+def _ebase_view():
+    """gen_ebase, for the Colonies section's Bases view (ground types design § 9.1): its
+    rows' blocks, display values and custom loc are written there and land in this
+    module's outputs. Imported here, not at the top: gen_ebase imports this module."""
+    here = str(Path(__file__).resolve().parent)
+    if here not in sys.path:
+        sys.path.insert(0, here)
+    import gen_ebase
+
+    return gen_ebase
+
+
 def _site_row(site: Site, *, picker: bool) -> list[str]:
     """One world: in Solar System (a list to read), or in the colony target
     popup (UI pass design § 5) with its Target button and launch window."""
@@ -4110,9 +4088,13 @@ def _site_row(site: Site, *, picker: bool) -> list[str]:
     else:
         out += _override("site_target_button", "visible = no")
     # What the site offers a colony (the owner, 2026-10-30): its slots with our
-    # Colony Module Slots, and its own Extraplanetary Base room and grade.
+    # Colony Module Slots, and its own Extraplanetary Base room and grade, then its
+    # ground type's word, with that type's mix on hover (ground types design § 9.2).
+    ground = ground_type(site)
     out += _override("site_slots", f'raw_text = "#v [{_sv(f"sr_disp_ss_slots_{k}")}|0]#!"')
+    out += _override("site_bases_tooltip", f'tooltip = "je_space_race_widget_ss_bases_tt_{ground}"')
     out += _override("site_bases", f'raw_text = "#v {site.ebase_room}#! ({_signed(site.ebase_grade)}%)"')
+    out += _override("site_ground", f'text = "sr_ground_{ground}"')
     # Its own Resort Colony room and draw (#1948 design § 9).
     out += _override("site_resorts", f'raw_text = "#v {site.resort_room}#! ({_signed(site.resort_draw)}%)"')
     return out + ["\t\t}"]
@@ -4123,6 +4105,9 @@ _CONTESTED = "EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue
 _FULL = "EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' )"
 _VIEW_DEFENCES = f"And( {_FULL}, GetVariableSystem.HasValue('sr_colony_view', 'defences') )"
 _VIEW_DETAIL = "GetVariableSystem.HasValue('sr_colony_view', 'detail')"
+# The Bases view (ground types design § 9.1), with In-Situ Resource Utilization.
+_EBASE_SHOWN = "EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' )"
+_VIEW_BASES = f"And( {_EBASE_SHOWN}, GetVariableSystem.HasValue('sr_colony_view', 'bases') )"
 
 
 def _FOCUS(k: str) -> str:
@@ -4132,16 +4117,17 @@ TP_ALL = "sr_panel_target_popup_all_open"   # the colony target popup's Show all
 
 
 def _colony_row(site: Site) -> list[str]:
-    """One colony in Colonies: under every view but Defenses while it is ours
-    and not occupied (sr_disp_site_<key> 1), under Defenses while it is ours at
-    all (sr_disp_def_<key>, gen_space_fleets), so an occupied colony shows there
-    with its occupier."""
+    """One colony in Colonies: under every view but Defenses and Bases while it
+    is ours and not occupied (sr_disp_site_<key> 1), under Defenses and Bases
+    while it is ours at all (sr_disp_def_<key>, gen_space_fleets), so an
+    occupied colony shows there with its occupier, or with its levels away."""
     k = site.key
     prio, status, dstatus = f"sr_disp_site_prio_{k}", f"sr_disp_site_aut_status_{k}", f"sr_disp_def_status_{k}"
     out = ["\t\tte_sr_colony_row = {"]
     # A colony's page shows this row alone (colony management design § 8).
-    listed = (f"Or( And( {_VIEW_DEFENCES}, {_eq(f'sr_disp_def_{k}', 1)} ), "
-              f"And( Not( {_VIEW_DEFENCES} ), {_eq(f'sr_disp_site_{k}', 1)} ) )")
+    held_all = f"Or( {_VIEW_DEFENCES}, {_VIEW_BASES} )"
+    listed = (f"Or( And( {held_all}, {_eq(f'sr_disp_def_{k}', 1)} ), "
+              f"And( Not( {held_all} ), {_eq(f'sr_disp_site_{k}', 1)} ) )")
     paged = (f"And( {_FOCUS(k)}, Or( {_eq(f'sr_disp_def_{k}', 1)}, {_eq(f'sr_disp_site_{k}', 1)} ) )")
     out += _override("colony_visible",
                      f'visible = "[Or( And( Not( {_VIEW_DETAIL} ), {listed} ), And( {_VIEW_DETAIL}, {paged} ) )]"')
@@ -4249,6 +4235,8 @@ def _colony_row(site: Site) -> list[str]:
     out += _override("def_occupier_context",
                      f"datacontext = \"[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_{k}').GetState]\"",
                      f'visible = "[{_eq(f"sr_disp_def_occupier_{k}", 1)}]"')
+    # Bases (gen_ebase.colony_row_overrides; ground types design § 9.1)
+    out += _ebase_view().colony_row_overrides(k)
     return out + ["\t\t}"]
 
 
@@ -4428,7 +4416,10 @@ def render_gui() -> str:
             "\t\tspacing = 4"]
     for site in panel_order():
         out += [""] + _colony_row(site)
-    out += ["\t}", "",
+    out += ["\t}", ""]
+    # The near-Earth asteroids' box in the Bases view (gen_ebase.near_earth_row).
+    out += _ebase_view().near_earth_row()
+    out += ["",
             "\ttype te_sr_cf_slot_rows = flowcontainer {",
             "\t\tdirection = vertical",
             "\t\tignoreinvisible = yes",

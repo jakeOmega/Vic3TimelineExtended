@@ -1332,6 +1332,20 @@ sr_disp_ebase_next_grade = {
 	# freshly queued batch (or read 0 before any refresh has run).
 	if = { limit = { sr_ebase_queued_levels >= sr_ebase_room_total } value = -75 }
 }
+# Where the next level goes (ground types design § 9.3): 1 once it is past all of
+# the room, read live as sr_disp_ebase_next_grade's -75 is (the cell then reads
+# "next at -75%", and otherwise the place's name, sr_eb_place_next_short); and that
+# place's profit a level, from the refresh (sr_eb_next_place) or a click.
+sr_disp_ebase_next_past = {
+	value = 0
+	# The index is -1 past the room, 0 to 40 for a place: 1, else 0.
+	if = { limit = { has_variable = sr_ebase_next_place } value = { value = var:sr_ebase_next_place multiply = -1 min = 0 max = 1 } }
+	if = { limit = { sr_ebase_queued_levels >= sr_ebase_room_total } value = 1 }
+}
+sr_disp_ebase_next_profit = {
+	value = 0
+	if = { limit = { has_variable = sr_ebase_next_profit } value = var:sr_ebase_next_profit }
+}
 sr_disp_ebase_past = {
 	value = 0
 	if = { limit = { sr_ebase_queued_levels > sr_ebase_room_total } value = 1 }
@@ -1410,4 +1424,83 @@ sr_disp_resort_split = {
 sr_disp_resort_shown = {
 	value = 0
 	if = { limit = { has_technology_researched = space_colonization } value = 1 }
+}
+# The Bases view (Extraplanetary Base ground types design § 9.1): 1 with the
+# checkbox off; 1 once a level has been placed; 1 while a move runs (in
+# either mode); 1 once a move has ended. The per-place and per-good values
+# are generated (gen_ebase.render_view_display, sr_sites_display_generated.txt).
+sr_disp_eb_manual = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual } value = 1 }
+}
+sr_disp_eb_placed = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_placed } value = 1 }
+}
+sr_disp_eb_moving = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_move_from } value = 1 }
+}
+# 1 while the checkbox has a move to make that waits for next month's turn
+# (the forecast's sr_eb_move_due): the move area says so in place of why
+# nothing moves.
+sr_disp_eb_due = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_move_due } value = 1 }
+}
+sr_disp_eb_last = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_last_from } value = 1 }
+}
+# The move line's years, from te_history_month_index (year * 12 + the month
+# from 0): when the current move began, and the last move's first and last
+# months; 1 when the last move began and ended in the same year.
+sr_disp_eb_move_began_year = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_move_began } value = var:sr_eb_move_began divide = 12 }
+	floor = yes
+}
+sr_disp_eb_last_began_year = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_last_began } value = var:sr_eb_last_began divide = 12 }
+	floor = yes
+}
+sr_disp_eb_last_ended_year = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_last_ended } value = var:sr_eb_last_ended divide = 12 }
+	floor = yes
+}
+sr_disp_eb_last_one_year = {
+	value = 0
+	if = { limit = { sr_disp_eb_last_began_year = sr_disp_eb_last_ended_year } value = 1 }
+}
+# With the checkbox on and a move running, how much more a level earns at its
+# destination than at its source, a fraction of the source's (0 while the
+# source loses money, when the line says so instead); "999%" at most.
+sr_disp_eb_gap = {
+	value = 0
+	if = {
+		limit = { sr_disp_eb_move_from_profit > 0 }
+		value = sr_eb_view_move_to_profit
+		subtract = sr_disp_eb_move_from_profit
+		divide = sr_disp_eb_move_from_profit
+		min = 0
+		max = 9.99
+	}
+}
+# With the checkbox off, about how many months the levels left to move take
+# at our pace.
+sr_disp_eb_months = {
+	value = sr_disp_eb_to_go
+	divide = sr_disp_eb_pace
+	ceiling = yes
+}
+# With the checkbox off, the levels built and queued that no site is assigned
+# (§ 8.4): what + can still place. They are placed by grade as they arrive, and
+# those already working stay where they are. sr_ebase_queued_levels walks the
+# buildings: the row reads it once, and only with the checkbox off.
+sr_disp_eb_unassigned = {
+	value = sr_ebase_queued_levels
+	subtract = sr_eb_assigned
+	min = 0
 }
