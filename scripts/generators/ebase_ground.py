@@ -326,6 +326,16 @@ def yardstick(method_shares: dict[str, float]) -> float:
     return margin("mixed", method_shares, {})
 
 
+def lead_method(levels: dict[str, int]) -> int:
+    """The mining method most of our levels run, as its position in mining_methods()'s
+    order (the first on a tie), -1 with no mining levels. `levels`: pm -> our levels."""
+    best, lead = 0, -1
+    for n, pm in enumerate(mining_methods()):
+        if levels.get(pm, 0) > best:
+            best, lead = levels[pm], n
+    return lead
+
+
 def pace(levels: int) -> int:
     """§ 8.5: ceil(L / 48) levels a month, at least 1."""
     return max(1, math.ceil(levels / PACE_MONTHS))
@@ -599,6 +609,58 @@ def assign(state: BaseState, place: str, step: int, *, room: dict[str, int], bui
     s.target[place] = new
     s.target = _clean(s.target)
     return s
+
+
+# --- The totals (§ 9.1) and the move notice (§ 9.4) ---
+
+NOTICE_GAP_MONTHS = 12  # § 9.4: at most one notice a year
+
+
+def output_a_level(method_shares: dict[str, float]) -> dict[str, float]:
+    """A level's output of each good a week at grade 0 on Mixed ground, our mining
+    methods weighted by their share of our mining levels (`method_shares`, f(m))."""
+    methods = mining_methods()
+    return {g: sum(f * methods[pm].outputs.get(g, 0.0) for pm, f in method_shares.items()) for g in GOODS}
+
+
+def totals(state: BaseState, method_shares: dict[str, float], price_rel: dict[str, float]) -> dict[str, float]:
+    """§ 9.1's totals, before other modifiers: what the base makes a week from where its
+    levels work. Each good's output is the sum over places of levels x (1 + grade) x
+    (1 + mix) x output_a_level, plus the levels past the room at OVERFLOW_GRADE as
+    Mixed; "profit" is the sum of levels x profit a level (§ 8.3), the levels past the
+    room included at OVERFLOW_GRADE on Mixed ground. "Now" is totals of the record;
+    "If prices hold" and "At our assignments" are totals of forecast()."""
+    out = output_a_level(method_shares)
+    past = state.over * (1 + OVERFLOW_GRADE)
+    result = {g: out[g] * (sum(n * (1 + grade(p)) * (1 + mix(GROUND[p])[g]) for p, n in state.at.items()) + past)
+              for g in GOODS}
+    result["profit"] = (sum(n * profit_a_level(p, method_shares, price_rel) for p, n in state.at.items())
+                        + past * margin("mixed", method_shares, price_rel))
+    return result
+
+
+def notice_due(src: str, dst: str, *, carried: int, levels: int, month: int,
+               last_types: tuple[str, str] | None = None, next_month: int | None = None) -> bool:
+    """§ 9.4: whether the move notice goes out for the checkbox's move from `src` to `dst`
+    (the caller has checked that the checkbox is on and the country a player's). Only a
+    move toward a different type, once it has carried NOTICE_SHARE of the levels, for a
+    pair of types other than the last notice's (`last_types`), and no sooner than
+    `next_month`, NOTICE_GAP_MONTHS after the last notice."""
+    types = (GROUND[src], GROUND[dst])
+    share = round(NOTICE_SHARE * 100)
+    return (types[0] != types[1] and carried * 100 >= share * levels and types != last_types
+            and (next_month is None or month >= next_month))
+
+
+def notice_good(src: str, dst: str, price_rel: dict[str, float]) -> str:
+    """§ 9.4: the good the notice names, the one whose value a level gains most from
+    `src` to `dst` at today's prices: the basket's value of it x (1 + its premium) x the
+    gain in score. The basket's proportions are every mining method's, so the Asteroid
+    Mine's stands for all. Ties go to the first in GOODS."""
+    def gain(g: str) -> float:
+        return BASKET[g] * BASE_PRICE[g] * (1 + price_rel.get(g, 0.0)) * (score(dst, g) - score(src, g))
+
+    return max(GOODS, key=lambda g: (gain(g), -GOODS.index(g)))
 
 
 # --- The modifiers (§ 5.2) ---

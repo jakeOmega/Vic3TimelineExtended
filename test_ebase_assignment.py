@@ -159,13 +159,14 @@ class Twin:
             for path in (str(ge.EFFECTS_OUT), "common/scripted_effects/sr_colony_module_effects.txt"):
                 effects.update(_top_raw(_raw(path)))
             triggers = _top_raw(_raw("common", "scripted_triggers", "sr_site_triggers.txt"))
+            sguis = _top_raw(_raw("common", "scripted_guis", "sr_colony_sguis.txt"))
             statics = {}
             for k, v in _top_raw(_raw("common", "static_modifiers", "space_race_modifiers.txt")).items():
                 body = _parse(_tokens(v))[0]
                 statics[k] = {key: fx(x) for key, _, x in body
                               if isinstance(x, str) and re.fullmatch(r"-?[\d.]+", x)}
-            Twin._sources = values, effects, triggers, statics, {}
-        self.values, self.effects, self.triggers, self.statics, self._parsed = Twin._sources
+            Twin._sources = values, effects, triggers, statics, sguis, {}
+        self.values, self.effects, self.triggers, self.statics, self.sguis, self._parsed = Twin._sources
         self.vars: dict[str, int] = {}
         self.locals: dict[str, int] = {}
         self.globals: dict[str, object] = {}
@@ -180,6 +181,15 @@ class Twin:
         self.calls: list[str] = []
         self.logs: list[str] = []
         self.loops: list[int] = []
+        # Task 7: a scripted GUI's saved scopes (scope:site, scope:op), whether the country
+        # is an AI's, the notifications posted, the tooltip lines shown, and the tooltip
+        # walk (`walk`: every limit and value evaluated, nothing written).
+        self.saved: dict[str, int] = {}
+        self.is_ai = False
+        self.notifications: list[str] = []
+        self.tooltips: list[str] = []
+        self.walk = False
+        self.values_read: list[str] = []
 
     # -- fixtures ------------------------------------------------------------
     def hold(self, place, *, serves=True, occupied=False):
@@ -222,6 +232,9 @@ class Twin:
         if v.startswith("local_var:"):
             assert v[10:] in self.locals, f"{v} read, never set"
             return self.locals[v[10:]]
+        if v.startswith("scope:"):
+            assert v[6:] in self.saved, f"{v} read, never saved"
+            return self.saved[v[6:]]
         if v.startswith("global_var:"):
             value = self.globals[v[11:]]
             assert isinstance(value, int), f"{v} is not a number"
@@ -240,6 +253,7 @@ class Twin:
         if v in self.stub_values:
             return self.stub_values[v]
         if v in self.values:
+            self.values_read.append(v)
             return self.calc(self._value_block(v))
         try:
             return fx(v)
@@ -307,7 +321,18 @@ class Twin:
         return self._parsed[key]
 
     def test(self, block):
-        return all(self.cond(*c) for c in block)
+        taken = False
+        for key, op, v in block:
+            if key in ("trigger_if", "trigger_else_if", "trigger_else"):
+                taken = False if key == "trigger_if" else taken
+                if taken or (key != "trigger_else" and not self.test(next(x for k, _, x in v if k == "limit"))):
+                    continue
+                taken = True
+                if not self.test([e for e in v if e[0] != "limit"]):
+                    return False
+            elif not self.cond(key, op, v):
+                return False
+        return True
 
     def _buildings(self, block):
         state = self.scope[-1]
@@ -330,6 +355,12 @@ class Twin:
         if key == "NOT":
             assert len(v) == 1, "NOT over more than one trigger"
             return not self.cond(*v[0])
+        if key == "is_ai":
+            return self.is_ai == (v == "yes")
+        if key == "always":
+            return v == "yes"
+        if key == "custom_tooltip":
+            return self.test([e for e in v if e[0] != "text"]) if isinstance(v, list) else True
         if key == "has_variable":
             assert where == "country", "has_variable in a building: buildings hold no variables"
             return v in self.vars
@@ -383,27 +414,41 @@ class Twin:
                 assert passes < 1000, "a while ran to the engine's cap"
                 self.loops.append(passes)
             elif key in ("set_variable", "set_local_variable"):
-                d = {k: x for k, _, x in v}
+                d = {k: x for k, _, x in v} if isinstance(v, list) else {"name": v}
                 assert self.scope[-1] == "country" or key == "set_local_variable", \
                     f"{key} in {self.scope[-1]}: buildings hold no variables"
                 value = SCALE if d.get("value", "yes") == "yes" else self.num(d["value"])
-                (self.locals if key == "set_local_variable" else self.vars)[d["name"]] = value
+                if not self.walk:
+                    (self.locals if key == "set_local_variable" else self.vars)[d["name"]] = value
             elif key in ("change_variable", "change_local_variable"):
                 d = {k: x for k, _, x in v}
                 store = self.locals if key == "change_local_variable" else self.vars
-                assert d["name"] in store, f"{key} on {d['name']}, never set"
                 assert set(d) <= {"name", "add", "subtract"}, f"{key} with {set(d)}"
-                store[d["name"]] += self.num(d["add"]) if "add" in d else -self.num(d["subtract"])
+                change = self.num(d["add"]) if "add" in d else -self.num(d["subtract"])
+                if not self.walk:
+                    assert d["name"] in store, f"{key} on {d['name']}, never set"
+                    store[d["name"]] += change
             elif key == "remove_variable":
-                assert v in self.vars, f"remove_variable {v}, not set"
-                del self.vars[v]
+                if not self.walk:
+                    assert v in self.vars, f"remove_variable {v}, not set"
+                    del self.vars[v]
+            elif key == "custom_tooltip":
+                self.tooltips.append(v if isinstance(v, str) else next(x for k, _, x in v if k == "text"))
+                if isinstance(v, list):
+                    self.run([e for e in v if e[0] != "text"])
+            elif key == "post_notification":
+                if not self.walk:
+                    self.notifications.append(v)
             elif key == "set_global_variable":
                 d = {k: x for k, _, x in v} if isinstance(v, list) else {"name": v}
                 self.globals[d["name"]] = SCALE if d.get("value", "yes") == "yes" else self.num(d["value"])
             elif key == "add_modifier":
                 d = {k: x for k, _, x in v} if isinstance(v, list) else {"name": v}
                 mult = self.num(d["multiplier"]) if "multiplier" in d else SCALE
-                self._mods().setdefault(d["name"], []).append(mult)
+                if not self.walk:
+                    self._mods().setdefault(d["name"], []).append(mult)
+            elif key == "remove_modifier" and self.walk:
+                pass
             elif key == "remove_modifier":
                 mods = self._mods()
                 assert mods.get(v), f"remove_modifier {v}, not there"
@@ -436,6 +481,29 @@ class Twin:
 
     def effect(self, name):
         self.run([(name, "=", "yes")])
+
+    def _sgui(self, name, part):
+        key = ("sgui", name)
+        if key not in self._parsed:
+            self._parsed[key] = _parse(_tokens(self.sguis[name]))[0]
+        return next(v for k, _, v in self._parsed[key] if k == part)
+
+    def click(self, name, *, walk=False, **saved):
+        """A scripted GUI's effect, run on a click (or, with `walk`, walked for its
+        tooltip as the engine does each frame of a hover: nothing written)."""
+        self.saved = {k: fx(v) for k, v in saved.items()}
+        self.walk = walk
+        try:
+            self.run(self._sgui(name, "effect"))
+        finally:
+            self.walk = False
+
+    def valid(self, name, **saved):
+        self.saved = {k: fx(v) for k, v in saved.items()}
+        return self.test(self._sgui(name, "is_valid"))
+
+    def shown(self, name):
+        return self.test(self._sgui(name, "is_shown"))
 
     # -- reading back ---------------------------------------------------------
     def counts(self, prefix):
@@ -800,6 +868,7 @@ def _month_twin(state, *, room, serves, held=None, built, profit, yard, queued=0
             t.locals[f"sr_ebi_m_{type_}"] = 0
         t.locals["sr_ebi_yard"] = fx(yard)
         t.locals["sr_ebi_margin"] = _cut(fx(yard) * fx(ge.num(eg.MARGIN)), SCALE)
+        t.locals["sr_ebi_p_over"] = 0
 
     tw.stub_effects["sr_eb_read_profits"] = read_profits
     if vars_ is not None:
@@ -1226,7 +1295,7 @@ class MonthStructureTest(unittest.TestCase):
         self.assertIn("set_local_variable = { name = sr_ebm_n value = { value = local_var:sr_ebm_srcn "
                       "max = local_var:sr_ebm_dstn max = local_var:sr_ebm_left } }", move)
         self.assertIn("change_local_variable = { name = sr_ebm_left subtract = local_var:sr_ebm_n }", move)
-        inputs = _block(EFFECTS, "sr_eb_read_inputs")
+        inputs = _block(EFFECTS, "sr_eb_read_places")
         self.assertIn(f"value = {{ value = local_var:sr_ebi_built divide = {eg.PACE_MONTHS} ceiling = yes min = 1 }}",
                       inputs)
         self.assertIn("set_local_variable = { name = sr_ebi_built value = sr_ebase_levels }", inputs)
@@ -1244,7 +1313,7 @@ class MonthStructureTest(unittest.TestCase):
         profits = _block(EFFECTS, "sr_eb_read_profits")
         sets = set(re.findall(r"set_local_variable = \{ name = (\w+)", profits))
         want = ({f"sr_ebi_p_{k}" for k in eg.PLACES} | {f"sr_ebi_m_{t}" for t in eg.TYPES}
-                | {"sr_ebi_yard", "sr_ebi_margin"})
+                | {"sr_ebi_yard", "sr_ebi_margin", "sr_ebi_p_over"})
         self.assertEqual(sets, want)
         for k in eg.PLACES:
             with self.subTest(place=k):
@@ -1345,7 +1414,8 @@ class MonthStructureTest(unittest.TestCase):
     def test_locals_have_their_own_prefixes(self):
         """Locals are shared by every effect a call runs: the generated effects use only
         their own families, and no other file uses them."""
-        prefixes = ("sr_ebm_", "sr_ebf_", "sr_ebn_", "sr_ebi_", "sr_ebr_", "sr_ebc_", "sr_ebx_")
+        prefixes = ("sr_ebm_", "sr_ebf_", "sr_ebn_", "sr_ebi_", "sr_ebr_", "sr_ebc_", "sr_ebx_", "sr_ebt_", "sr_eba_",
+                    "sr_ebq_")
         names = set(re.findall(r"(?:set|change)_local_variable = \{ name = (\w+)", EFFECTS))
         names |= set(re.findall(r"local_var:(\w+)", EFFECTS))
         names -= {"sr_eb_next_left", "sr_eb_next_found"}
@@ -1356,7 +1426,7 @@ class MonthStructureTest(unittest.TestCase):
                 continue
             text = open(path, encoding="utf-8-sig").read()
             with self.subTest(path=os.path.relpath(path, REPO)):
-                self.assertNotRegex(text, r"local_var:sr_eb[mfnircx]_|name = sr_eb[mfnircx]_")
+                self.assertNotRegex(text, r"local_var:sr_eb[mfnircxtaq]_|name = sr_eb[mfnircxtaq]_")
 
 
 class MixSelfCheckTest(unittest.TestCase):
@@ -1415,6 +1485,515 @@ class MixSelfCheckTest(unittest.TestCase):
     def test_the_self_check_row(self):
         playtest = _raw("docs", "testing", "solar-colonies-playtest.md")
         self.assertIn("`TE_SELF_CHECK OK/BROKEN ebase_mix", playtest)
+
+
+
+# ---------------------------------------------------------------------------
+# Task 7: the checkbox, the buttons, the forecast, the totals and the notice
+# ---------------------------------------------------------------------------
+
+SGUIS = _strip(_raw("common", "scripted_guis", "sr_colony_sguis.txt"))
+AUTO, ASSIGN_SGUI = "sr_ebase_auto_sgui", "sr_ebase_assign_sgui"
+OPS = {1: 5, 2: -5, 3: 25, 4: -25}  # scope:op: the step it makes
+_SCRIPTED = {**_top_raw(_raw(str(ge.EFFECTS_OUT))),
+             **_top_raw(_raw("common", "scripted_effects", "sr_colony_module_effects.txt"))}
+
+
+def _calls(body):
+    """The scripted effects a body calls, and those they call, all the way down."""
+    seen, todo = set(), [body]
+    while todo:
+        for name_ in re.findall(r"\b(\w+) = yes\b", _strip(todo.pop())):
+            if name_ in _SCRIPTED and name_ not in seen:
+                seen.add(name_)
+                todo.append(_SCRIPTED[name_])
+    return seen
+
+
+def _callers(effect):
+    """Every block in common/ that calls `effect`: scripted effects by name, and each
+    scripted GUI."""
+    out = {n for n, b in _SCRIPTED.items() if re.search(rf"\b{effect} = yes", _strip(b))}
+    out |= {n for n, b in _top_raw(_raw("common", "scripted_guis", "sr_colony_sguis.txt")).items()
+            if re.search(rf"\b{effect} = yes", _strip(b))}
+    return out
+
+
+def _market_twin(state, *, room, serves=None, built, queued=0, prices=None, methods=None, is_ai=False,
+                 month_index=24000):
+    """A month twin whose profits come from the real reader: base buildings on `methods`
+    (pm -> levels, default all Asteroid Mines) and these market premiums."""
+    serves = {p: True for p in room} if serves is None else serves
+    tw = _month_twin(state, room=room, serves=serves, built=built, queued=queued, profit={}, yard=YARD,
+                     month_index=month_index)
+    del tw.stub_effects["sr_eb_read_profits"]
+    tw.is_ai = is_ai
+    methods = methods or {"pm_space_mine": max(built, 1)}
+    for n, (pm, levels) in enumerate(methods.items()):
+        tw.buildings.append(Building(n, level=levels, pm=pm))
+    for g, r in (prices or {}).items():
+        tw.price(g, r)
+    tw.effect("sr_eb_count_methods")
+    total = sum(methods.values())
+    tw.shares = {pm: n / total for pm, n in methods.items()}
+    tw.rel = {g: round(r, 5) for g, r in (prices or {}).items()}
+    return tw
+
+
+def _model_room(tw):
+    """The room the buttons cap at, place by place: a place's room while we hold it."""
+    i = tw.model_inputs
+    return {p: i["room"].get(p, 0) if i["held"].get(p) else 0 for p in eg.PLACES}
+
+
+class ControlsStructureTest(unittest.TestCase):
+    """The plan's Task 7 structure tests."""
+
+    def test_buttons_never_move_levels(self):
+        """Neither scripted GUI's effect, nor anything it calls, writes where the levels
+        work, so a click moves no level and switching the checkbox twice gains nothing
+        (review focus 5: only the month moves, once a month, at its pace)."""
+        for sgui in (AUTO, ASSIGN_SGUI):
+            effect = _block(_block(SGUIS, sgui), "effect")
+            called = _calls(effect)
+            with self.subTest(sgui=sgui):
+                self.assertIn("sr_eb_after_click", called)
+                self.assertTrue(called.isdisjoint({"sr_eb_month", "sr_eb_moves", "sr_eb_store", "sr_eb_place_new",
+                                                   "sr_eb_gain_lose"}), called)
+                for body in [effect] + [_SCRIPTED[c] for c in called]:
+                    self.assertNotRegex(_strip(body), r"(?:set|change|remove)_variable = (?:\{ name = )?sr_eb_(?:at_|over\b)")
+
+    def test_the_work_waits_for_the_click(self):
+        """A tooltip walks a scripted GUI's effect every frame of a hover: every call in
+        each effect sits behind the click-only marker, set just before and removed
+        first inside (scripting_best_practices.md, "An Option's Tooltip Walks Its
+        Effects")."""
+        for sgui in (AUTO, ASSIGN_SGUI):
+            effect = _block(_block(SGUIS, sgui), "effect")
+            with self.subTest(sgui=sgui):
+                at_ = effect.index("set_variable = sr_eb_click")
+                guarded = _block(effect[at_:], "if")
+                self.assertTrue(guarded.strip().startswith("limit = { has_variable = sr_eb_click }"))
+                self.assertIn("remove_variable = sr_eb_click", guarded.split("\n")[1] + guarded.split("\n")[2])
+                outside = effect.replace(guarded, "")
+                self.assertEqual(re.findall(r"\b(\w+) = yes", outside), [])
+
+    def test_plus_needs_an_unassigned_level(self):
+        """is_valid: plus (ops 1 and 3) needs the targets' sum below built plus queued
+        levels and the place below its room; minus (2 and 4) a target above 0. Each
+        condition is a custom_tooltip, so the button carries its reasons."""
+        valid = _block(_block(SGUIS, ASSIGN_SGUI), "is_valid")
+        minus = _block(valid, "trigger_if")
+        self.assertIn("scope:op = 2", minus)
+        self.assertIn("scope:op = 4", minus)
+        self.assertRegex(minus, r"custom_tooltip = \{\s*text = sr_ebase_assign_req_assigned_tt\s*sr_eb_scope_target > 0\s*\}")
+        plus = _block(valid, "trigger_else")
+        self.assertRegex(plus, r"custom_tooltip = \{\s*text = sr_ebase_assign_req_unassigned_tt\s*"
+                               r"sr_eb_assigned < sr_ebase_queued_levels\s*\}")
+        self.assertRegex(plus, r"custom_tooltip = \{\s*text = sr_ebase_assign_req_room_tt\s*"
+                               r"sr_eb_scope_target < sr_eb_scope_room\s*\}")
+
+    def test_notice_threshold_and_throttle(self):
+        notice = _block(EFFECTS, "sr_eb_move_notice")
+        limit = _block(notice, "limit")
+        for line in ("is_ai = no", "NOT = { has_variable = sr_eb_manual }", "has_variable = sr_eb_move_carried",
+                     "var:sr_eb_move_carried >= sr_eb_notice_threshold",
+                     "NOT = { has_variable = sr_eb_notice_next }", "te_history_month_index >= var:sr_eb_notice_next"):
+            with self.subTest(line=line):
+                self.assertIn(line, limit)
+        self.assertEqual(_block(VALUES, "sr_eb_notice_threshold").strip(),
+                         f"value = sr_ebase_levels multiply = {ge.num(eg.NOTICE_SHARE)}")
+        self.assertIn("local_var:sr_ebq_same = 0 NOT = { local_var:sr_ebq_ft = local_var:sr_ebq_tt }", notice)
+        self.assertIn(f"value = {{ value = te_history_month_index add = {eg.NOTICE_GAP_MONTHS} }}", notice)
+        self.assertEqual(eg.NOTICE_GAP_MONTHS, 12)
+        self.assertEqual(notice.count("post_notification = sr_ebase_move_notice"), 1)
+        messages = _strip(_raw("common", "messages", "extra_messages.txt"))
+        body = _block(messages, "sr_ebase_move_notice")
+        self.assertIn("type = country", body)
+        self.assertIn("notification_type = feed", body)
+
+    def test_totals_skip_the_ai(self):
+        refresh = _block(MODULES, "sr_ebase_refresh")
+        players = refresh[refresh.index("limit = { is_ai = no }"):]
+        players = players[:players.index("}", players.index("sr_eb_move_notice = yes"))]
+        for call in ("sr_eb_forecast", "sr_eb_totals", "sr_eb_move_notice"):
+            with self.subTest(call=call):
+                self.assertIn(f"{call} = yes", players)
+                self.assertEqual(refresh.count(f"{call} = yes"), 1)
+        self.assertLess(refresh.index("sr_eb_month = yes"), refresh.index("sr_eb_totals = yes"))
+        self.assertEqual(_callers("sr_eb_totals"), {"sr_ebase_refresh", "sr_eb_after_click"})
+        self.assertEqual(_callers("sr_eb_after_click"), {AUTO, ASSIGN_SGUI})
+
+    def test_only_the_checkbox_sets_manual(self):
+        """sr_eb_manual is set only by sr_eb_checkbox_off, which only the two scripted
+        GUIs reach, and both are shown only to players (the AI always runs the
+        checkbox)."""
+        import glob
+        setters = []
+        for path in glob.glob(os.path.join(REPO, "common", "**", "*.txt"), recursive=True):
+            text = _strip(open(path, encoding="utf-8-sig").read())
+            for name_, body in _top_raw(text).items():
+                if re.search(r"set_variable = (?:\{ name = )?sr_eb_manual\b", body):
+                    setters.append(name_)
+        self.assertEqual(setters, ["sr_eb_checkbox_off"])
+        self.assertEqual(_callers("sr_eb_checkbox_off"), {AUTO, "sr_eb_assign"})
+        self.assertEqual(_callers("sr_eb_assign"), {ASSIGN_SGUI})
+        for sgui in (AUTO, ASSIGN_SGUI):
+            with self.subTest(sgui=sgui):
+                self.assertEqual(_block(_block(SGUIS, sgui), "is_shown").strip(), "is_ai = no")
+                self.assertEqual(_block(_block(SGUIS, sgui), "ai_is_valid").strip(), "always = no")
+        self.assertIn("saved_scopes = { site op }", _block(SGUIS, ASSIGN_SGUI))
+        self.assertNotIn("saved_scopes", _block(SGUIS, AUTO))
+
+
+class ControlsTwinTest(unittest.TestCase):
+    """The scripted GUIs, the totals and the notice run in the twin against the model:
+    eg.set_checkbox, eg.assign, eg.totals and eg.forecast, eg.notice_due and
+    eg.notice_good."""
+
+    def _random_state(self, rng):
+        room = {p: rng.choice((0, 50, 100, 200)) for p in rng.sample(eg.PLACES, 8)}
+        held = {p: rng.random() < 0.9 for p in room}
+        serves = {p: held[p] and rng.random() < 0.85 for p in room}
+        built = rng.randint(0, 500)
+        manual = rng.random() < 0.5
+        state = eg.BaseState(manual=manual, target={p: rng.choice((0, 5, 25, 60)) for p in room} if manual else {})
+        return state, room, held, serves, built
+
+    def _after_month(self, rng, **extra):
+        """A twin after a random month (a first placement, then a month that moves)."""
+        state, room, held, serves, built = self._random_state(rng)
+        tw = _month_twin(state, room=room, serves=serves, held=held, built=built, queued=rng.randint(0, 30),
+                         profit={p: round(v) for p, v in eg.profits(ASTEROID, {g: rng.uniform(-0.5, 0.6) for g in
+                                                                             eg.method_goods()}).items()},
+                         yard=YARD, **extra)
+        tw.effect("sr_eb_month")
+        for _ in range(rng.randint(0, 2)):
+            tw.effect("sr_eb_month")
+        return tw
+
+    def test_the_checkbox_is_the_model_s(self):
+        """Off: every target is the place's at + away, sr_eb_manual set; on: the targets
+        dropped, sr_eb_manual cleared. No level moves either way."""
+        rng = random.Random(71)
+        for case in range(40):
+            tw = self._after_month(rng)
+            before = _state_of(tw)
+            with self.subTest(case=case, manual=before.manual):
+                tw.click(AUTO)
+                want = eg.set_checkbox(before, on=before.manual)
+                self.assertEqual(_state_of(tw), want)
+                tw.click(AUTO)
+                self.assertEqual(_state_of(tw), eg.set_checkbox(want, on=want.manual))
+                self.assertEqual(_state_of(tw).at, before.at)
+                self.assertEqual(_state_of(tw).over, before.over)
+        # A blockaded 16 Psyche: its levels work at Ceres and are owed back, so switching
+        # the checkbox off assigns them to both (ebase_ground.set_checkbox's at + away).
+        tw = _month_twin(_state({"psyche": 150}), room=TWO_SITES, serves={"psyche": False, "ceres": True},
+                         held=BOTH, built=150, profit=SKETCH, yard=YARD)
+        tw.effect("sr_eb_month")
+        self.assertEqual((_state_of(tw).at, _state_of(tw).away), ({"ceres": 150}, {"psyche": 150}))
+        tw.click(AUTO)
+        self.assertEqual(_state_of(tw).target, {"psyche": 150, "ceres": 150})
+
+    def test_the_buttons_are_the_model_s(self):
+        """Each op at each place held or not: the click sets the target eg.assign sets
+        (the checkbox switched off first), and is_valid holds exactly when the model's
+        click changes the target."""
+        rng = random.Random(72)
+        for case in range(30):
+            tw = self._after_month(rng)
+            room = _model_room(tw)
+            built, queued = tw.model_inputs["built"], unfx(tw.stub_values["sr_ebase_queued_levels"]) - tw.model_inputs["built"]
+            vars_ = dict(tw.vars)
+            ours = {eg.PLACES.index(p) for p, r in tw.model_inputs["room"].items() if r}
+            for site in sorted(ours | set(rng.sample(range(len(eg.PLACES)), 2))):
+                place = eg.PLACES[site]
+                for op, step in OPS.items():
+                    with self.subTest(case=case, place=place, op=op):
+                        tw.vars = dict(vars_)
+                        before = _state_of(tw)
+                        valid = tw.valid(ASSIGN_SGUI, site=site, op=op)
+                        tw.click(ASSIGN_SGUI, site=site, op=op)
+                        want = eg.assign(before, place, step, room=room, built=built, queued=int(queued))
+                        self.assertEqual(_state_of(tw), want)
+                        changed = want.target.get(place, 0) != eg.set_checkbox(before, on=False).target.get(place, 0)
+                        self.assertEqual(valid, changed)
+        # A blockaded 16 Psyche owes 150 back, which counts as assigned: with 20 queued,
+        # 300 assigned against 170 built and queued, so + at Ceres can't add one.
+        tw = _month_twin(_state({"psyche": 150}), room=TWO_SITES, serves={"psyche": False, "ceres": True},
+                         held=BOTH, built=150, queued=20, profit=SKETCH, yard=YARD)
+        tw.effect("sr_eb_month")
+        ceres = eg.PLACES.index("ceres")
+        self.assertFalse(tw.valid(ASSIGN_SGUI, site=ceres, op=1))
+        self.assertTrue(tw.valid(ASSIGN_SGUI, site=ceres, op=2))
+
+    def test_a_hover_writes_nothing_and_runs_no_heavy_work(self):
+        """The tooltip walk of each scripted GUI: no variable changes, no read of an unset
+        variable or local (the twin fails on one, as the engine logs one), and none of
+        the work behind the marker runs; the lines it shows say what the click does."""
+        rng = random.Random(73)
+        for case in range(10):
+            tw = self._after_month(rng)
+            vars_ = dict(tw.vars)
+            for sgui, saved in ((AUTO, {}), *((ASSIGN_SGUI, {"site": s, "op": o}) for s in (0, 8, 40) for o in OPS)):
+                with self.subTest(case=case, sgui=sgui, saved=saved):
+                    tw.calls, tw.tooltips, tw.locals = [], [], {}
+                    tw.click(sgui, walk=True, **saved)
+                    self.assertEqual(tw.vars, vars_)
+                    self.assertEqual(tw.calls, [])
+                    self.assertTrue(tw.tooltips)
+                    if sgui == ASSIGN_SGUI:
+                        manual = "sr_eb_manual" in vars_
+                        self.assertEqual("sr_ebase_assign_switch_off_tt" in tw.tooltips, not manual)
+                        sign = "plus" if OPS[saved["op"]] > 0 else "minus"
+                        self.assertIn(f"sr_ebase_assign_{sign}_{abs(OPS[saved['op']])}_tt", tw.tooltips)
+                    else:
+                        self.assertEqual(tw.tooltips, ["sr_ebase_auto_on_tt" if "sr_eb_manual" in vars_
+                                                       else "sr_ebase_auto_off_tt"])
+
+    def test_switching_twice_in_a_month_moves_no_more_than_the_pace(self):
+        """Review focus 5: off and on again within a month; the month's second run (a
+        build day) moves nothing more; the next month moves the pace."""
+        kw = dict(room=TWO_SITES, serves=BOTH, profit=SKETCH, yard=YARD)
+        tw = _month_twin(_state({"psyche": 150}), built=150, month_index=24000, **kw)
+        tw.effect("sr_eb_month")
+        self.assertEqual(_state_of(tw).at, {"psyche": 146, "ceres": 4})
+        tw.click(AUTO)
+        tw.click(AUTO)
+        again = _month_twin(None, vars_=tw.vars, built=150, month_index=24000, **kw)
+        again.effect("sr_eb_month")
+        self.assertEqual(_state_of(again).at, {"psyche": 146, "ceres": 4})
+        nxt = _month_twin(None, vars_=again.vars, built=150, month_index=24001, **kw)
+        nxt.effect("sr_eb_month")
+        self.assertEqual(_state_of(nxt).at, {"psyche": 142, "ceres": 8})
+
+    def test_totals_match_the_model(self):
+        """"Now" is eg.totals of the record; the second row eg.totals of eg.forecast,
+        from the refresh's path (after the month) and from a click's
+        (sr_eb_after_click), at market prices and on mixed methods."""
+        rng = random.Random(74)
+        pms = list(eg.mining_methods())
+        for case in range(16):
+            state, room, held, serves, built = self._random_state(rng)
+            prices = {g: rng.uniform(-0.6, 0.9) for g in eg.method_goods()}
+            methods = {pm: rng.choice((0, 5, 40)) for pm in pms} | {pms[0]: rng.randint(1, 60)}
+            methods = {pm: n for pm, n in methods.items() if n}
+            tw = _market_twin(state, room={p: r for p, r in room.items() if held[p]},
+                              serves={p: serves[p] for p in room if held[p]}, built=built, prices=prices,
+                              methods=methods)
+            tw.effect("sr_eb_month")
+            for path in ("refresh", "click"):
+                with self.subTest(case=case, path=path):
+                    if path == "refresh":
+                        tw.effect("sr_eb_forecast")
+                        tw.effect("sr_eb_totals")
+                    else:
+                        tw.locals = {}
+                        tw.effect("sr_eb_after_click")
+                    now = _state_of(tw)
+                    i = tw.model_inputs
+                    profit = {k: unfx(tw.locals[f"sr_ebi_p_{k}"]) for k in eg.PLACES}
+                    end = eg.forecast(now, room=i["room"], serves=i["serves"], profit=profit,
+                                      yard=unfx(tw.locals["sr_ebi_yard"]))
+                    got_end = {p: int(unfx(tw.locals[f"sr_ebf_at_{p}"])) for p in eg.PLACES
+                               if tw.locals[f"sr_ebf_at_{p}"]}
+                    self.assertEqual(got_end, end.at)
+                    for row, st in (("now", now), ("end", end)):
+                        want = eg.totals(st, tw.shares, tw.rel)
+                        for g in (*eg.GOODS, "profit"):
+                            got = unfx(tw.vars[f"sr_eb_{row}_{g}"])
+                            self.assertAlmostEqual(got, want[g], delta=0.5 + 2e-6 * abs(want[g]), msg=f"{row} {g}")
+
+    def test_the_month_s_figures_are_stored(self):
+        """The contract's stored readings (F4 of the Tasks 5 and 6 review): each place's
+        profit a level, the yardstick and the lead method, at every refresh for every
+        country; a click reads them back and evaluates no margin."""
+        rng = random.Random(76)
+        pms = list(eg.mining_methods())
+        for case in range(8):
+            state, room, held, serves, built = self._random_state(rng)
+            methods = {pm: n for pm, n in zip(pms, [rng.choice((0, 3, 20)) for _ in pms]) if n} or {pms[1]: 4}
+            tw = _market_twin(state, room={p: r for p, r in room.items() if held[p]}, built=built,
+                              prices={g: rng.uniform(-0.5, 0.8) for g in eg.method_goods()}, methods=methods,
+                              is_ai=rng.random() < 0.5)
+            tw.effect("sr_eb_month")
+            with self.subTest(case=case):
+                for k in eg.PLACES:
+                    self.assertAlmostEqual(unfx(tw.vars[f"sr_eb_level_profit_{k}"]),
+                                           eg.profit_a_level(k, tw.shares, tw.rel), delta=0.05)
+                self.assertAlmostEqual(unfx(tw.vars["sr_eb_yardstick"]), eg.yardstick(tw.shares), delta=0.05)
+                self.assertEqual(unfx(tw.vars["sr_eb_lead_method"]), eg.lead_method(methods))
+                fresh = {k: v for k, v in tw.locals.items() if k.startswith("sr_ebi_")}
+                tw.locals, tw.values_read = {}, []
+                tw.effect("sr_eb_after_click")
+                self.assertFalse([v for v in tw.values_read if v.startswith(("sr_eb_margin_", "sr_eb_profit_",
+                                                                             "sr_eb_price_", "sr_eb_yardstick"))])
+                for k in [f"sr_ebi_p_{p}" for p in eg.PLACES] + ["sr_ebi_yard", "sr_ebi_margin", "sr_ebi_p_over"]:
+                    self.assertAlmostEqual(tw.locals[k], fresh[k], delta=2, msg=k)
+        tw = Twin()
+        tw.effect("sr_eb_count_methods")
+        self.assertEqual(unfx(tw.vars["sr_eb_lead_method"]), -1)
+        self.assertEqual(eg.lead_method({}), -1)
+        self.assertEqual(eg.lead_method({pms[0]: 5, pms[1]: 5}), 0)
+
+    def test_the_totals_formula(self):
+        """eg.totals by hand: 150 Asteroid Mine levels, 130 at 16 Psyche and 20 past the
+        room, at base prices."""
+        state = eg.BaseState(at={"psyche": 130}, over=20)
+        got = eg.totals(state, ASTEROID, {})
+        for g in eg.GOODS:
+            want = eg.BASKET[g] * (130 * (1 + eg.score("psyche", g)) + 20 * 0.25)
+            self.assertAlmostEqual(got[g], want, places=6)
+        self.assertAlmostEqual(got["profit"], 130 * eg.profit_a_level("psyche", ASTEROID, {}) + 20 * 0.25 * YARD,
+                               places=3)
+        self.assertAlmostEqual(eg.yardstick(ASTEROID), YARD, delta=0.01)
+
+    def _notice_twin(self, *, src, dst, carried, levels, month, manual=False, is_ai=False, last=None, next_month=None,
+                     prices=None):
+        tw = _month_twin(_state({src: 10}), room={src: 100, dst: 100}, serves={src: True, dst: True}, built=levels,
+                         profit={}, yard=YARD, month_index=month)
+        tw.is_ai = is_ai
+        for g, r in (prices or {}).items():
+            tw.price(g, r)
+        tw.vars.update({"sr_eb_move_from": fx(eg.PLACES.index(src)), "sr_eb_move_to": fx(eg.PLACES.index(dst)),
+                        "sr_eb_move_carried": fx(carried)})
+        if manual:
+            tw.vars["sr_eb_manual"] = SCALE
+        if last:
+            tw.vars["sr_eb_notice_ft"], tw.vars["sr_eb_notice_tt"] = (fx(eg.TYPES.index(t)) for t in last)
+        if next_month is not None:
+            tw.vars["sr_eb_notice_next"] = fx(next_month)
+        tw.effect("sr_eb_move_notice")
+        return tw
+
+    def test_the_notice_is_the_model_s(self):
+        """eg.notice_due on its edges: the 5% threshold (7 of 140 fires, 6 doesn't), a
+        same-type move, the last notice's pair, the year's wait; never for the player's
+        own moves or an AI. The good it names is eg.notice_good's, and its record is
+        kept for the next."""
+        rng = random.Random(75)
+        cases = []
+        for carried in (6, 7, 8):
+            for last in (None, ("metallic", "carbonaceous"), ("carbonaceous", "metallic")):
+                for next_month in (None, 24005, 24006):
+                    cases.append(dict(src="psyche", dst="ceres", carried=carried, levels=140, month=24005, last=last,
+                                      next_month=next_month))
+        cases += [dict(src="vesta", dst="valles_marineris", carried=50, levels=140, month=24005),
+                  dict(src="near_earth", dst="titan", carried=50, levels=140, month=24005),
+                  dict(src="psyche", dst="ceres", carried=50, levels=140, month=24005, manual=True),
+                  dict(src="psyche", dst="ceres", carried=50, levels=140, month=24005, is_ai=True)]
+        for _ in range(30):
+            src, dst = rng.sample(eg.PLACES, 2)
+            cases.append(dict(src=src, dst=dst, carried=rng.randint(1, 30), levels=rng.randint(20, 400), month=24005,
+                              prices={g: rng.uniform(-0.6, 0.9) for g in eg.GOODS}))
+        for c in cases:
+            with self.subTest(**{k: v for k, v in c.items() if k != "prices"}):
+                tw = self._notice_twin(**c)
+                due = (not c.get("manual") and not c.get("is_ai")
+                       and eg.notice_due(c["src"], c["dst"], carried=c["carried"], levels=c["levels"], month=c["month"],
+                                         last_types=c.get("last"), next_month=c.get("next_month")))
+                self.assertEqual(tw.notifications, ["sr_ebase_move_notice"] if due else [])
+                if due:
+                    rel = {g: round(r, 5) for g, r in (c.get("prices") or {}).items()}
+                    self.assertEqual(eg.GOODS[int(unfx(tw.vars["sr_eb_notice_good"]))], eg.notice_good(c["src"], c["dst"], rel))
+                    self.assertEqual([unfx(tw.vars[f"sr_eb_notice_{x}"]) for x in ("from", "to", "ft", "tt", "next")],
+                                     [eg.PLACES.index(c["src"]), eg.PLACES.index(c["dst"]),
+                                      eg.TYPES.index(eg.GROUND[c["src"]]), eg.TYPES.index(eg.GROUND[c["dst"]]),
+                                      c["month"] + eg.NOTICE_GAP_MONTHS])
+        self.assertEqual(eg.notice_good("psyche", "ceres", {"glass": 0.5}), "glass")
+
+    def test_the_notice_through_the_months(self):
+        """150 levels moving from 16 Psyche to Ceres: the notice goes out once the move has
+        carried 8 (5% is 7.5), once; a move back within the year tells nothing; after
+        the year it does."""
+        kw = dict(room=TWO_SITES, serves=BOTH, yard=YARD)
+        flipped = {"psyche": SKETCH["ceres"], "ceres": SKETCH["psyche"]}
+        vars_, posted = None, []
+        for m in range(30):
+            profit = SKETCH if m < 10 else flipped
+            tw = _month_twin(_state({"psyche": 150}), vars_=vars_, built=150, month_index=24000 + m, profit=profit, **kw)
+            tw.effect("sr_eb_month")
+            tw.effect("sr_eb_move_notice")
+            posted += [24000 + m] * len(tw.notifications)
+            vars_ = tw.vars
+        # Psyche to Ceres moves 4 a month from 24000: 8 carried at 24001. Ceres back to
+        # Psyche from 24010 (40 levels to move), carried 8 by 24011, waits for 24013.
+        self.assertEqual(posted, [24001, 24013])
+
+
+# ---------------------------------------------------------------------------
+# Task 9 (second half): a place's name from its index
+# ---------------------------------------------------------------------------
+
+CUSTOM = _strip(_raw(str(ge.CUSTOM_LOC_OUT)))
+
+
+def _entries(name_):
+    body = _block(CUSTOM, name_)
+    texts = re.findall(r"text = \{\s*(?:trigger = \{([^{}]*)\}\s*)?localization_key = (\w+)\s*\}", body)
+    out = []
+    for trigger, key in texts:
+        m = re.fullmatch(r"\s*has_variable = (\w+)\s*var:(\w+) = (-?\d+)\s*", trigger) if trigger else None
+        if trigger:
+            assert m and m.group(1) == m.group(2), trigger
+        out.append((m.group(1) if m else None, int(m.group(3)) if m else None, key))
+    return out
+
+
+class CustomLocTest(unittest.TestCase):
+    def test_custom_loc_names_every_place(self):
+        """The contract's names: 41 entries keyed by index, 0 to 40, each naming its place,
+        then the fallback; the next place's has -1 past the room."""
+        for name_, var in (("sr_eb_place_move_from", "sr_eb_move_from"), ("sr_eb_place_move_to", "sr_eb_move_to"),
+                           ("sr_eb_place_last_from", "sr_eb_last_from"), ("sr_eb_place_last_to", "sr_eb_last_to"),
+                           ("sr_eb_place_next", "sr_ebase_next_place"),
+                           ("sr_eb_place_notice_from", "sr_eb_notice_from"), ("sr_eb_place_notice_to", "sr_eb_notice_to")):
+            with self.subTest(name=name_):
+                entries = _entries(name_)
+                places = [(v, i, k) for v, i, k in entries if i is not None and i >= 0]
+                self.assertEqual(places, [(var, i, f"sr_site_name_{k}") for i, k in enumerate(eg.PLACES)])
+                self.assertEqual(entries[-1], (None, None, "sr_eb_place_unknown"))
+                self.assertEqual([e for e in entries if e[1] is not None and e[1] < 0],
+                                 [(var, -1, "sr_eb_place_past_room")] if var == "sr_ebase_next_place" else [])
+        short = _entries("sr_eb_place_next_short")
+        self.assertEqual([k for _, i, k in short if i is not None and i >= 0],
+                         ["sr_site_short_near_earth"] + [gss.overview_name_key(SITES[k]) for k in eg.PLACES[1:]])
+        self.assertEqual([k for _, i, k in _entries("sr_eb_place_next_type") if i is not None],
+                         [f"sr_ground_{eg.GROUND[k]}" for k in eg.PLACES])
+        self.assertEqual([k for _, i, k in _entries("sr_eb_notice_good_name") if i is not None], list(eg.GOODS))
+        self.assertEqual(eg.PLACES[0], "near_earth")
+        self.assertEqual([s.index for s in sorted(gss.SITES, key=lambda s: s.index)], list(range(1, 41)))
+
+    def test_every_key_the_custom_loc_names_has_loc(self):
+        """The mod's loc or vanilla's (Gold is vanilla's name)."""
+        import glob
+        import json
+        with open(os.path.join(REPO, "vanilla_parsed", "localization_english.json"), encoding="utf-8") as f:
+            loc = set(dict(json.load(f)))
+        for path in glob.glob(os.path.join(REPO, "localization", "english", "**", "*.yml"), recursive=True):
+            loc |= set(re.findall(r"(?m)^ ([\w.]+):\d*", open(path, encoding="utf-8-sig").read()))
+        for key in sorted(set(re.findall(r"localization_key = (\w+)", CUSTOM))):
+            with self.subTest(key=key):
+                self.assertIn(key, loc)
+
+    def test_the_next_place_s_figures(self):
+        """sr_eb_next_place stores the next place's profit a level beside its grade: the
+        place's own, or past the room a Mixed level's at -75%."""
+        rng = random.Random(93)
+        for case in range(20):
+            room = {p: rng.choice((0, 50, 100)) for p in rng.sample(eg.PLACES, 5)}
+            tw = _market_twin(eg.BaseState(), room=room, built=rng.randint(0, 250), queued=rng.randint(0, 50),
+                              prices={g: rng.uniform(-0.5, 0.5) for g in eg.method_goods()})
+            tw.effect("sr_eb_month")
+            tw.effect("sr_eb_next_place")
+            k = int(unfx(tw.vars["sr_ebase_next_place"]))
+            with self.subTest(case=case, next=k):
+                if k < 0:
+                    want = eg.margin("mixed", tw.shares, tw.rel) * (1 + eg.OVERFLOW_GRADE)
+                else:
+                    want = eg.profit_a_level(eg.PLACES[k], tw.shares, tw.rel)
+                self.assertAlmostEqual(unfx(tw.vars["sr_ebase_next_profit"]), want, delta=0.05)
 
 
 if __name__ == "__main__":

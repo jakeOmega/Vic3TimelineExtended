@@ -634,3 +634,126 @@ sr_free_supply_sgui = {
 		}
 	}
 }
+
+# The Bases view's checkbox, Assign for the most profit (Extraplanetary Base ground
+# types design § 8.3, § 8.4): on, the default and the AI's, levels move by profit a
+# level; off (sr_eb_manual), each site keeps an assignment the player sets with - and
+# +. Switching it off makes every site's assignment the levels it has now and those it
+# is owed (sr_eb_checkbox_off); switching it on drops them (sr_eb_checkbox_on). Neither
+# moves a level: only the month does, at its pace, so toggling within a month gains
+# nothing. Players only: the AI never sets sr_eb_manual.
+sr_ebase_auto_sgui = {
+	scope = country
+
+	is_shown = {
+		is_ai = no
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	effect = {
+		if = {
+			limit = { has_variable = sr_eb_manual }
+			custom_tooltip = sr_ebase_auto_on_tt
+		}
+		else = {
+			custom_tooltip = sr_ebase_auto_off_tt
+		}
+		# The work on the click only (scripting_best_practices.md, "An Option's Tooltip
+		# Walks Its Effects"): a hover walks this effect every frame, and the forecast
+		# behind the totals is tens of passes over the 41 places. The marker is false in
+		# the walk, which writes nothing.
+		set_variable = sr_eb_click
+		if = {
+			limit = { has_variable = sr_eb_click }
+			remove_variable = sr_eb_click
+			if = {
+				limit = { has_variable = sr_eb_manual }
+				sr_eb_checkbox_on = yes
+			}
+			else = {
+				sr_eb_checkbox_off = yes
+			}
+			# The totals, the forecast and the Base Room cell's next place, at once.
+			sr_eb_after_click = yes
+		}
+	}
+}
+
+# The Bases view's - and + (§ 8.4): scope:site is the place's index
+# (ebase_ground.PLACES: 0 the near-Earth asteroids, 1 to 40 the sites by
+# gen_solar_sites Site.index), scope:op 1 = +5, 2 = -5, 3 = +25, 4 = -25. A
+# click changes the site's assignment (sr_eb_target_<k>) and moves no level; with
+# the checkbox on it switches it off first. Minus stops at 0; plus at the site's
+# room while we hold it, and only while some built or queued levels are unassigned.
+sr_ebase_assign_sgui = {
+	scope = country
+	saved_scopes = { site op }
+
+	is_shown = {
+		is_ai = no
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	# With the checkbox on, the assignments are the ones switching it off would set
+	# (sr_eb_scope_target, sr_eb_assigned).
+	is_valid = {
+		trigger_if = {
+			limit = {
+				OR = {
+					scope:op = 2
+					scope:op = 4
+				}
+			}
+			custom_tooltip = {
+				text = sr_ebase_assign_req_assigned_tt
+				sr_eb_scope_target > 0
+			}
+		}
+		trigger_else = {
+			custom_tooltip = {
+				text = sr_ebase_assign_req_unassigned_tt
+				sr_eb_assigned < sr_ebase_queued_levels
+			}
+			custom_tooltip = {
+				text = sr_ebase_assign_req_room_tt
+				sr_eb_scope_target < sr_eb_scope_room
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { NOT = { has_variable = sr_eb_manual } }
+			custom_tooltip = sr_ebase_assign_switch_off_tt
+		}
+		if = {
+			limit = { scope:op = 1 }
+			custom_tooltip = sr_ebase_assign_plus_5_tt
+		}
+		else_if = {
+			limit = { scope:op = 2 }
+			custom_tooltip = sr_ebase_assign_minus_5_tt
+		}
+		else_if = {
+			limit = { scope:op = 3 }
+			custom_tooltip = sr_ebase_assign_plus_25_tt
+		}
+		else = {
+			custom_tooltip = sr_ebase_assign_minus_25_tt
+		}
+		# The work on the click only, as the checkbox's.
+		set_variable = sr_eb_click
+		if = {
+			limit = { has_variable = sr_eb_click }
+			remove_variable = sr_eb_click
+			sr_eb_assign = yes
+			sr_eb_after_click = yes
+		}
+	}
+}

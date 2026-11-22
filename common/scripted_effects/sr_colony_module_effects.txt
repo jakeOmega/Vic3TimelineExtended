@@ -468,6 +468,14 @@ sr_ebase_refresh = {
 		sr_eb_count_methods = yes
 		# Where the levels work (§ 8.2's steps 1 to 5).
 		sr_eb_month = yes
+		# The Bases view's totals and the move notice (§ 9.1, § 9.4), players only: the
+		# forecast runs from this month's result while the month's locals are set.
+		if = {
+			limit = { is_ai = no }
+			sr_eb_forecast = yes
+			sr_eb_totals = yes
+			sr_eb_move_notice = yes
+		}
 		sr_eb_compute_mix = yes
 		if = {
 			limit = { var:sr_ebase_grade > 0 }

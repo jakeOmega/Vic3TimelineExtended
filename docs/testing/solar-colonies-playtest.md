@@ -1015,3 +1015,35 @@ budget reads `fixed_income` and the programme's throughput as the mission budget
    with Compact Fusion Reactors and weekly fixed income well over 27M runs Fusion Shipyards; one with it and
    income under about 15M runs Orbital Assembly (or its cheapest method), not Fusion Shipyards. Funding raises the
    line with the throughput.
+
+## Extraplanetary Base ground types: the controls (2026-11-21)
+
+The checkbox, the − and + buttons, the totals and the move notice (ground types design § 8.3, § 8.4, § 9.1, § 9.4;
+`sr_colony_sguis.txt`, `sr_ebase_generated.txt`). No self-check: each rests on effects the mod already uses, and
+`test_ebase_assignment.py` runs the generated script against the model (`ebase_ground.py`). Open the Colonies section's
+Bases view with In-Situ Resource Utilization and a base of a hundred or more levels.
+
+1. **A hover writes nothing.** Hover the checkbox and a site's − and + for ten seconds each: `debug.log` and
+   `error.log` gain no `Failed to fetch variable`, `Value of wrong type` or `Event target link 'var' returned an unset
+   scope` line from `sr_ebase_generated.txt` or `sr_colony_sguis.txt`, and the game doesn't stutter. Each hover says
+   what the click does, and with the checkbox on, − and + add that Assign for the most profit goes off first.
+2. **Switching the checkbox off and on.** With the checkbox on, click it: every site's assignment reads the levels it
+   has now (a blockaded site's, the levels it is owed), and nothing moves the next month. Click it again: the
+   assignments go, and the next month moves up to the pace from the site that earns least a level.
+3. **− and +.** With the checkbox off, − on a site lowers its assignment by 5 (a right-click by 25, if the view binds
+   it), and the levels above it move at the pace to a site below its assignment. + is greyed while every built and
+   queued level is assigned, with that reason crossed; with levels queued it adds up to them and up to the site's
+   room. A click with the checkbox on switches it off first.
+4. **The totals at once.** A click changes the totals' second row the same moment, without waiting for the month:
+   "At our assignments" with the checkbox off, "If prices hold" on. "Now" is the base's goods a week before other
+   modifiers: one Asteroid Mine level at 16 Psyche reads about 363 Structural Metals.
+5. **Toggling gains nothing.** Switch the checkbox off and on again twice in one month: that month moves no more
+   levels than the pace (review focus 5).
+6. **The move notice.** A base of 150 levels at 16 Psyche with Glass and Plastics 50% dear (§ 10 stage 3, the console
+   can set the price): the feed notice "Extraplanetary Base Levels Moving" arrives in the second month of the move,
+   once it has carried 8 levels (5% of 150), naming 16 Psyche, Ceres and Glass and Plastics, with the pace. No
+   second notice while the move runs, none within a year of the last, none with the checkbox off and none for a
+   move between two sites of one type. Weeks later, after the move has ended, the notice in the feed still names
+   the same sites and good.
+7. **A click's cost.** On a late save with a large base, a click on − or + doesn't hitch: the forecast behind the
+   totals (up to 41 passes over the 41 places) runs once on the click, from the figures the last refresh stored.
