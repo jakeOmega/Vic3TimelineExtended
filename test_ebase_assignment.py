@@ -1798,6 +1798,17 @@ class ControlsTwinTest(unittest.TestCase):
         ceres = eg.PLACES.index("ceres")
         self.assertFalse(tw.valid(ASSIGN_SGUI, site=ceres, op=1))
         self.assertTrue(tw.valid(ASSIGN_SGUI, site=ceres, op=2))
+        # − below the step stops at 0: an assignment of 3 at Ceres, −5 or −25.
+        for op in (2, 4):
+            with self.subTest(op=op):
+                tw = _month_twin(_state({"psyche": 147, "ceres": 3}, manual=True, target={"psyche": 147, "ceres": 3}),
+                                 room=TWO_SITES, held=BOTH, serves=BOTH, built=150, profit=SKETCH, yard=YARD)
+                tw.effect("sr_eb_month")
+                before = _state_of(tw)
+                tw.click(ASSIGN_SGUI, site=ceres, op=op)
+                want = eg.assign(before, "ceres", OPS[op], room=_model_room(tw), built=150, queued=0)
+                self.assertEqual(want.target.get("ceres", 0), 0)
+                self.assertEqual(_state_of(tw), want)
 
     def test_a_hover_writes_nothing_and_runs_no_heavy_work(self):
         """The tooltip walk of each scripted GUI: no variable changes, no read of an unset
