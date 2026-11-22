@@ -2604,3 +2604,14 @@ te_cm_merge_complete_notice = {
 	notification_type = feed
 	color = neutral
 }
+
+# Extraplanetary Base ground types (design § 9.4): Assign for the most profit has
+# begun moving base levels toward a site of another ground type, once the move has
+# carried 5% of the levels; once per new pair of types, at most once a year, never
+# for the player's own moves (to the country, players only; sr_eb_move_notice).
+sr_ebase_move_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/buildings.dds"
+	notification_type = feed
+	color = neutral
+}

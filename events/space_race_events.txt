@@ -5443,8 +5443,10 @@ space_race_events.110 = {
 	}
 
 	immediate = {
-		if = { limit = { has_variable = sr_ebase_hook_pending } remove_variable = sr_ebase_hook_pending }
+		# The refresh first: while the marker stands, TE_SELF_CHECK ebase_mix waits for
+		# the next refresh, which reads the new building's mix.
 		sr_ebase_refresh = yes
+		if = { limit = { has_variable = sr_ebase_hook_pending } remove_variable = sr_ebase_hook_pending }
 	}
 }
 

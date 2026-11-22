@@ -418,6 +418,69 @@ sr_resort_room_penalty = {
 	building_space_resort_throughput_add = -0.01
 }
 
+# Extraplanetary Base ground (ground types design § 5.3,
+# docs/superpowers/specs/2026-11-05-extraplanetary-base-ground-types-design.md): the
+# base's mix D(g), a unit modifier a good and sign, added to each Extraplanetary Base
+# building (never the country, where it would reach every producer of the good) with
+# multiplier = root.var:sr_ebase_mix_<good>_units. The grade stays throughput, on the
+# country, in sr_ebase_room_bonus / _penalty above.
+sr_ebase_mix_iron_bonus = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	goods_output_iron_mult = 0.01
+}
+sr_ebase_mix_iron_penalty = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	goods_output_iron_mult = -0.01
+}
+sr_ebase_mix_tech_metals_bonus = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	goods_output_tech_metals_mult = 0.01
+}
+sr_ebase_mix_tech_metals_penalty = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	goods_output_tech_metals_mult = -0.01
+}
+sr_ebase_mix_gold_bonus = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	goods_output_gold_mult = 0.01
+}
+sr_ebase_mix_gold_penalty = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	goods_output_gold_mult = -0.01
+}
+sr_ebase_mix_copper_bonus = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	goods_output_copper_mult = 0.01
+}
+sr_ebase_mix_copper_penalty = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	goods_output_copper_mult = -0.01
+}
+sr_ebase_mix_lead_bonus = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	goods_output_lead_mult = 0.01
+}
+sr_ebase_mix_lead_penalty = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	goods_output_lead_mult = -0.01
+}
+sr_ebase_mix_sulfur_bonus = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	goods_output_sulfur_mult = 0.01
+}
+sr_ebase_mix_sulfur_penalty = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	goods_output_sulfur_mult = -0.01
+}
+sr_ebase_mix_glass_bonus = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	goods_output_glass_mult = 0.01
+}
+sr_ebase_mix_glass_penalty = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	goods_output_glass_mult = -0.01
+}
+
 # ======= Space Race - After the race: Commercial Space Industry
 # Once a country has nothing left to race for (sr_space_race_concluded), the
 # flat progress its sources still give each month (Space Elevator, companies,

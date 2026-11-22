@@ -417,6 +417,18 @@ goods_input_copper_mult = {
 	}
 }
 
+# Vanilla 1.15 registers no goods_output_lead_mult. The Extraplanetary Base's ground mix
+# (sr_ebase_mix_lead_bonus / _penalty) needs its display entry, as the other six goods
+# of the base's basket have theirs.
+goods_output_lead_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
 goods_output_gold_mult = {
 	color = good
 	percent = yes

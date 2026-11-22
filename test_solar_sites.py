@@ -1537,23 +1537,13 @@ class ModulesTest(unittest.TestCase):
             self.assertIn(f"sr_ms_count_slot = {{ N = {n} }}", step)
             self.assertIn(f"NOT = {{ has_variable = sr_ms_{n}_site }}", _block(self.modules, "sr_ms_store_new"))
 
-    def test_the_base_room_fills_best_grade_first(self):
-        fill = _block(self.effects, "sr_ebase_fill")
-        grades = [int(g) for g in re.findall(r"# [^:]+: \d+ levels(?: and its Mining Complexes')? at ([+-]\d+)%",
-                                             _raw(str(gss.EFFECTS_OUT)))]
-        self.assertEqual(len(grades), len(gss.SITES) + 1)
-        self.assertEqual(grades, sorted(grades, reverse=True))
-        self.assertIn(f"value = local_var:sr_eb_left max = {gss.NEAR_EARTH_ROOM}", fill)
+    def test_the_base_room(self):
+        """The room the bases fill (design § 9). Where the levels work, the fill, the
+        mix and the refresh's figures are gen_ebase.py's (ground types design § 8),
+        and test_ebase_assignment.py holds them."""
         # The near-Earth room needs Asteroid Mining; the base itself comes a technology
         # earlier (lunar colonization design § 6).
         self.assertEqual(gss.NEAR_EARTH_TECH, "asteroid_mining")
-        self.assertIn(f"limit = {{ local_var:sr_eb_left > 0 has_technology_researched = {gss.NEAR_EARTH_TECH} }}",
-                      fill)
-        for site in gss.SITES:
-            with self.subTest(site=site.key):
-                self.assertIn(f"global_var:sr_site_holder_{site.key} ?= this", fill)
-        self.assertTrue(fill.rstrip().endswith(
-            f"multiply = {gss.OVERFLOW_GRADE} add = local_var:sr_eb_sum }} }}\n\t}}"))
         room = _block(self.values, "sr_ebase_room_total")
         self.assertIn("value = 0", room)
         self.assertIn(f"if = {{ limit = {{ has_technology_researched = {gss.NEAR_EARTH_TECH} }} "
@@ -1569,13 +1559,17 @@ class ModulesTest(unittest.TestCase):
                 world = _block(self.values, f"sr_site_ebase_room_{k}")
                 self.assertIn(f"value = {site.ebase_room}", world)
                 self.assertIn(f"add = {{ value = sr_site_mine_staffed_{k} multiply = sr_mod_mine_room floor = yes }}", world)
-                self.assertIn(f"max = sr_site_ebase_room_{k}", fill)
+        # The order by grade, best first, the near-Earth room first among grade 0.
+        grades = [0 if t is None else t.ebase_grade for t in gss.ebase_tiers()]
+        self.assertEqual(len(grades), len(gss.SITES) + 1)
+        self.assertEqual(grades, sorted(grades, reverse=True))
+        self.assertIsNone(gss.ebase_tiers()[grades.index(0)])
 
     def test_the_refresh_averages_over_every_level(self):
         refresh = _block(self.modules, "sr_ebase_refresh")
         self.assertLess(refresh.index("remove_modifier = sr_ebase_room_bonus"), refresh.index("add_modifier"))
         self.assertLess(refresh.index("remove_modifier = sr_ebase_room_penalty"), refresh.index("add_modifier"))
-        self.assertIn("value = local_var:sr_eb_sum\n\t\t\t\t\tdivide = local_var:sr_eb_levels", refresh)
+        self.assertLess(refresh.index("sr_eb_compute_mix = yes"), refresh.index("add_modifier"))
         self.assertIn("sr_colonies_contested_enabled = yes", refresh)
         modifiers = _strip(_raw("common", "static_modifiers", "space_race_modifiers.txt"))
         self.assertIn("building_space_mine_throughput_add = 0.01", _block(modifiers, "sr_ebase_room_bonus"))
@@ -2171,44 +2165,33 @@ class EbaseCellTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.effects = _strip(_raw(str(gss.EFFECTS_OUT)))
+        # The next level's grade is gen_ebase.py's since the ground types (design § 8).
+        cls.effects = _strip(_raw("common", "scripted_effects", "sr_ebase_generated.txt"))
         cls.modules = _strip(_raw("common", "scripted_effects", "sr_colony_module_effects.txt"))
         cls.display = _strip(_raw("common", "script_values", "space_race_display_values.txt"))
         cls.widget = _raw("gui", "journal_entry_widgets", "space_race_widget.gui")
 
-    def test_next_fill_walks_the_tiers_with_queued_levels(self):
-        fill = _block(self.effects, "sr_ebase_next_fill")
-        self.assertIn("set_local_variable = { name = sr_eb_next_left value = sr_ebase_queued_levels }", fill)
-        # Past all of the room by default; each tier, best first, either takes its
-        # room from the levels left or is where the next level goes.
-        self.assertIn(f"set_variable = {{ name = sr_ebase_next_grade value = {gss.OVERFLOW_GRADE} }}", fill)
-        rooms = re.findall(r"local_var:sr_eb_next_left >= (\w+) \}", fill)
-        expected = [str(gss.NEAR_EARTH_ROOM) if t is None else f"sr_site_ebase_room_{t.key}" for t in gss.ebase_tiers()]
-        self.assertEqual(rooms, expected)
-        grades = re.findall(r"set_variable = \{ name = sr_ebase_next_grade value = (-?\d+) \}", fill)
-        self.assertEqual(grades[1:], [str(0 if t is None else t.ebase_grade) for t in gss.ebase_tiers()])
-        # A tier is skipped once the next level has found its place.
-        self.assertEqual(fill.count("local_var:sr_eb_next_found = 0"), len(gss.ebase_tiers()))
-        # Each tier, in order: counted only while held, as sr_ebase_fill counts
-        # it; a full tier takes its own room from the levels left, else the next
-        # level works there.
-        arms = fill.split("limit = { local_var:sr_eb_next_found = 0")[1:]
-        self.assertEqual(len(arms), len(gss.ebase_tiers()))
-        for tier, arm in zip(gss.ebase_tiers(), arms):
-            room = str(gss.NEAR_EARTH_ROOM) if tier is None else f"sr_site_ebase_room_{tier.key}"
-            held = (f"has_technology_researched = {gss.NEAR_EARTH_TECH}" if tier is None else gss.site_serves(tier))
-            grade = 0 if tier is None else tier.ebase_grade
-            with self.subTest(tier="near-Earth" if tier is None else tier.key):
-                self.assertTrue(arm.startswith(f" {held} }}"), arm[:120])
-                self.assertRegex(arm, rf"limit = \{{ local_var:sr_eb_next_left >= {re.escape(room)} \}}\s*"
-                                      rf"change_local_variable = \{{ name = sr_eb_next_left subtract = {re.escape(room)} \}}")
-                self.assertRegex(arm, rf"else = \{{\s*set_variable = \{{ name = sr_ebase_next_grade value = {grade} \}}\s*"
-                                      r"set_local_variable = \{ name = sr_eb_next_found value = 1 \}")
+    def test_next_place_sets_the_next_grade_with_queued_levels(self):
+        """Where the next level goes is the month's rule in force (gen_ebase.py,
+        test_ebase_assignment.MonthTwinTest.test_next_place runs it against the model);
+        the cell reads its grade: each place's, or the overflow grade past the room."""
+        nxt = _block(self.effects, "sr_eb_next_place")
+        self.assertIn("value = sr_ebase_queued_levels subtract = local_var:sr_ebi_built min = 0 add = 1", nxt)
+        self.assertIn("set_variable = { name = sr_ebase_next_place value = -1 }", nxt)
+        self.assertIn(f"set_variable = {{ name = sr_ebase_next_grade value = {gss.OVERFLOW_GRADE} }}", nxt)
+        grades = re.findall(r"limit = \{ local_var:sr_ebn_put = (\d+) \}\s*set_variable = \{ name = "
+                            r"sr_ebase_next_grade value = (-?\d+) \}", nxt)
+        import ebase_ground as eg
+        import gen_ebase as ge
+        self.assertEqual({int(i): int(g) for i, g in grades}, {i: ge.grade_pct(k) for i, k in enumerate(eg.PLACES)})
+        self.assertEqual(sorted(ge.grade_pct(k) for k in eg.PLACES),
+                         sorted(0 if t is None else t.ebase_grade for t in gss.ebase_tiers()))
 
     def test_the_refresh_sets_the_next_grade(self):
         refresh = _block(self.modules, "sr_ebase_refresh")
-        self.assertIn("sr_ebase_next_fill = yes", refresh)
-        self.assertLess(refresh.index("sr_colonies_contested_enabled = yes"), refresh.index("sr_ebase_next_fill = yes"))
+        self.assertIn("sr_eb_next_place = yes", refresh)
+        self.assertLess(refresh.index("sr_colonies_contested_enabled = yes"), refresh.index("sr_eb_next_place = yes"))
+        self.assertLess(refresh.index("sr_eb_month = yes"), refresh.index("sr_eb_next_place = yes"))
 
     def test_the_display_values(self):
         queued = _block(self.display, "sr_disp_ebase_queued")
@@ -2242,12 +2225,14 @@ class EbaseCellTest(unittest.TestCase):
         self.assertIn("ScriptValue('sr_disp_ebase_shown')", self.widget[start:cell.start()])
         self.assertEqual(cell.group(1), "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' )]")
         self.assertIn('text = "je_space_race_widget_ovc_ebase_cap"', body)
-        for word in ("word", "word_past", "word_split", "word_split_past", "fig", "fig_plus"):
+        for word in ("word", "word_past", "word_split", "word_split_past", "fig", "fig_past"):
             with self.subTest(word=word):
                 self.assertIn(f'text = "je_space_race_widget_ovc_ebase_{word}"', body)
         self.assertIn("ScriptValue('sr_disp_ebase_past')", body)
         self.assertIn("ScriptValue('sr_disp_ebase_split')", body)
-        self.assertIn("ScriptValue('sr_disp_ebase_next_grade')", body)
+        # Its last line: the next place's name, or past the room "next at -75%" (ground
+        # types design § 9.3), read live.
+        self.assertIn("ScriptValue('sr_disp_ebase_next_past')", body)
         self.assertIn("building_space_mine.dds", body)
         # It sits after the Modules cell, on a row of its own, in the grid that
         # shows under Simple and Full Colonies only.
@@ -2307,7 +2292,9 @@ class EbaseRefreshTest(unittest.TestCase):
         self.assertIn("hidden = yes", event)
         immediate = _block(event, "immediate")
         self.assertIn("sr_ebase_refresh = yes", immediate)
-        self.assertLess(immediate.index("remove_variable = sr_ebase_hook_pending"), immediate.index("sr_ebase_refresh = yes"))
+        # The marker goes after the refresh, so TE_SELF_CHECK ebase_mix waits through it
+        # (test_ebase_assignment.MixSelfCheckTest); nothing in the refresh fires the hook.
+        self.assertLess(immediate.index("sr_ebase_refresh = yes"), immediate.index("remove_variable = sr_ebase_hook_pending"))
 
 
 if __name__ == "__main__":

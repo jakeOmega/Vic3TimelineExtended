@@ -597,6 +597,8 @@
  goods_output_launch_capacity_add_desc:0 "The amount of @launch_capacity! $launch_capacity$ produced by buildings"
  goods_output_launch_capacity_mult:0 "Building @launch_capacity! $launch_capacity$ output"
  goods_output_launch_capacity_mult_desc:0 "A bonus or penalty to the amount of @launch_capacity! $launch_capacity$ produced by buildings"
+ goods_output_lead_mult:0 "Building @lead! $lead$ output"
+ goods_output_lead_mult_desc:0 "A bonus or penalty to the amount of @lead! $lead$ produced by buildings"
  goods_output_luxury_clothes_mult:0 "Building @luxury_clothes! $luxury_clothes$ output"
  goods_output_luxury_clothes_mult_desc:0 "A bonus or penalty to the amount of @luxury_clothes! $luxury_clothes$ produced by buildings"
  goods_output_luxury_furniture_mult:0 "Building @luxury_furniture! $luxury_furniture$ output"
