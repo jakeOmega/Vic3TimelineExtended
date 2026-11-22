@@ -224,5 +224,93 @@ class ResortBuildingTest(unittest.TestCase):
         self.assertIn(" pmg_base_building_space_resort:0 ", methods)
 
 
+class ResortRefreshTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = _strip(_raw("common", "scripted_effects", "sr_colony_module_effects.txt"))
+        cls.triggers = _strip(_raw("common", "scripted_triggers", "sr_colony_module_triggers.txt"))
+        cls.modifiers = _strip(_raw("common", "static_modifiers", "space_race_modifiers.txt"))
+
+    def test_refresh_removes_first_and_averages(self):
+        refresh = _block(self.effects, "sr_resort_refresh")
+        adds = refresh.index("add_modifier")
+        for name in ("sr_resort_room_bonus", "sr_resort_room_penalty"):
+            self.assertLess(refresh.index(f"remove_modifier = {name}"), adds)
+            # Removed before the rule's test, so Races Only mid-game drops them (Review Focus 3).
+            self.assertLess(refresh.index(f"remove_modifier = {name}"),
+                            refresh.index("sr_colonies_contested_enabled = yes"))
+        self.assertIn("sr_resort_fill = yes", refresh)
+        self.assertIn("sr_resort_next_fill = yes", refresh)
+        self.assertRegex(refresh, r"value = local_var:sr_rs_sum\s+divide = local_var:sr_rs_levels")
+        self.assertIn("set_local_variable = { name = sr_rs_levels value = sr_resort_levels }", refresh)
+        self.assertIn("add_modifier = { name = sr_resort_room_bonus multiplier = var:sr_resort_units }", refresh)
+        self.assertIn("add_modifier = { name = sr_resort_room_penalty multiplier = var:sr_resort_units }", refresh)
+
+    def test_modifier_pair(self):
+        self.assertIn("building_space_resort_throughput_add = 0.01", _block(self.modifiers, "sr_resort_room_bonus"))
+        self.assertIn("building_space_resort_throughput_add = -0.01", _block(self.modifiers, "sr_resort_room_penalty"))
+        types = _strip(_raw("common", "modifier_type_definitions", "mod_entity_modifier_types.txt"))
+        self.assertIn("percent = yes", _block(types, "building_space_resort_throughput_add"))
+        loc = _raw("localization", "english", "te_buildings_l_english.yml")
+        self.assertIn(' building_space_resort_throughput_add:0 "$building_space_resort$ [concept_throughput]"', loc)
+
+    def test_gates(self):
+        room = _block(self.triggers, "sr_resort_has_room")
+        self.assertIn("NOT = { sr_colonies_contested_enabled = yes }", room)
+        self.assertIn("sr_resort_queued_levels < sr_resort_room_total", room)
+        self.assertIn("is_ai = no", _block(self.triggers, "sr_resort_may_build_government"))
+        self.assertIn("sr_resort_has_room = yes", _block(self.triggers, "sr_resort_may_build_government"))
+        private = _block(self.triggers, "sr_resort_may_build_private")
+        self.assertNotIn("is_ai", private)
+        self.assertIn("sr_resort_has_room = yes", private)
+        self.assertIn("text = sr_resort_room_full_tt", private)
+
+    def test_monthly_and_hook(self):
+        monthly = _strip(_raw("common", "on_actions", "space_race_on_actions.txt"))
+        self.assertRegex(monthly, r"limit = \{ has_technology_researched = space_colonization \}\s+sr_resort_refresh = yes")
+        hooks = _strip(_raw("common", "on_actions", "extra_on_actions.txt"))
+        for name in ("te_on_building_built", "te_on_building_expanded"):
+            with self.subTest(on_action=name):
+                self.assertRegex(_block(hooks, name), r"is_building_type = building_space_resort\s+exists = owner\s+\}"
+                                                      r"\s+owner = \{ sr_resort_hook_fire = yes \}")
+        fire = _block(self.effects, "sr_resort_hook_fire")
+        self.assertIn("NOT = { has_variable = sr_resort_hook_pending }", fire)
+        self.assertIn("set_variable = { name = sr_resort_hook_pending value = yes days = 2 }", fire)
+        self.assertIn("trigger_event = { id = space_race_events.112 days = 1 }", fire)
+        events = _raw("events", "space_race_events.txt")
+        event = _block(_strip(events), "space_race_events.112")
+        self.assertIn("hidden = yes", event)
+        self.assertIn("has_technology_researched = space_colonization", _block(event, "trigger"))
+        self.assertIn("remove_variable = sr_resort_hook_pending", event)
+        self.assertIn("sr_resort_refresh = yes", event)
+        self.assertRegex(events, r"space_race_events\.112 = \{[^}]*# REVIEWED 2026-11-21 \(delayed_trigger\)")
+
+    def test_carry_over_lines(self):
+        debris = _strip(_raw("common", "static_modifiers", "te_orbital_debris_modifiers.txt"))
+        pms = _strip(_raw("common", "production_methods", "extra_pms.txt"))
+        for name, body in (("sr_commercial_space_dividend", _block(self.modifiers, "sr_commercial_space_dividend")),
+                           ("te_orbital_debris", _block(debris, "te_orbital_debris")),
+                           ("pm_spaceport", _block(_block(pms, "pm_spaceport"), "state_modifiers"))):
+            with self.subTest(modifier=name):
+                mine = re.search(r"building_space_mine_throughput_add = (-?[\d.]+)", body).group(1)
+                resort = re.search(r"building_space_resort_throughput_add = (-?[\d.]+)", body).group(1)
+                self.assertEqual(float(mine), float(resort))
+
+    def test_no_mining_bonus_reaches_the_resort(self):
+        for path in (("common", "static_modifiers", "space_race_modifiers.txt"),
+                     ("common", "static_modifiers", "space_race_discovery_modifiers.txt")):
+            text = _strip(_raw(*path))
+            for m in re.finditer(r"(?m)^(\w+) = \{", text):
+                name = m.group(1)
+                if (name.startswith(("sr_colony_", "sr_discovery_"))
+                        or name in ("sr_mars_robotic_precursor", "sr_extraplanetary_commercial")):
+                    with self.subTest(modifier=name):
+                        self.assertNotIn("building_space_resort_throughput_add", _block(text, name))
+
+    def test_nation_tab_lists_the_pair(self):
+        import gen_nation_tab
+        self.assertIn("sr_resort_room_*", str(gen_nation_tab.SECTIONS["science_and_space"]))
+
+
 if __name__ == "__main__":
     unittest.main()

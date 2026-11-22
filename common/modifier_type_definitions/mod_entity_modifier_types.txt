@@ -926,6 +926,13 @@ building_space_mine_throughput_add = {
 	decimals = 0
 }
 
+# The Resort Colony (#1948): its room's draw, and the space economy's lines the base has.
+building_space_resort_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
 # Custom-mine throughput modifiers (GH #110). State traits in common/state_traits/te_mining_traits.txt
 # reference these; without registration the engine silently no-ops them.
 building_manganese_mine_throughput_add = {

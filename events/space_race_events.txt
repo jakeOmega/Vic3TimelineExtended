@@ -5448,6 +5448,22 @@ space_race_events.110 = {
 	}
 }
 
+# Resort Colony room's refresh the day after a Resort Colony is built or gains a
+# level (sr_resort_hook_fire; #1948 design § 6.3), the twin of .110.
+space_race_events.112 = {
+	type = country_event
+	hidden = yes
+
+	trigger = { # REVIEWED 2026-11-21 (delayed_trigger): the building's technology does not arrive overnight: true when queued for a Resort Colony its owner researched, and false both days for one it did not; a filter
+		has_technology_researched = space_colonization
+	}
+
+	immediate = {
+		if = { limit = { has_variable = sr_resort_hook_pending } remove_variable = sr_resort_hook_pending }
+		sr_resort_refresh = yes
+	}
+}
+
 # A hostile fleet bound for our Earth whose landing would tip the balance (UI
 # pass design § 9, sr_earth_alert_loud): we have no fleet at Earth and it isn't
 # blockaded already, or ours holds against theirs there now but not with what

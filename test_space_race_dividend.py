@@ -142,7 +142,12 @@ class ModifierTests(unittest.TestCase):
     def test_modifier_only_pays_throughput(self):
         body = _block(MODIFIERS, "sr_commercial_space_dividend")
         keys = re.findall(r"^\s*(\w+)\s*=", body, re.M)
-        self.assertEqual(sorted(keys), ["building_space_mine_throughput_add", "icon"])
+        self.assertEqual(sorted(keys), ["building_space_mine_throughput_add", "building_space_resort_throughput_add",
+                                        "icon"])
+        # The Resort Colony is commercial space too (#1948): the same unit, so the
+        # display value and the text hold for both.
+        resort = float(re.search(r"building_space_resort_throughput_add\s*=\s*([\d.]+)", body).group(1))
+        self.assertEqual(resort, _unit())
 
     def test_one_refresh_site(self):
         sites = []

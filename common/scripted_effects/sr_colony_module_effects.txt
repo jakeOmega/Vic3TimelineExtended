@@ -496,6 +496,75 @@ sr_ebase_hook_fire = {
 	}
 }
 
+# ---- Resort Colony room (#1948 design § 6.3) ----------------------------------------------
+# Country scope, from the monthly country pulse, for every country with Space
+# Colonization (the building's technology): the one refresh site of the two
+# resort room modifiers, the twin of sr_ebase_refresh. Its built levels fill its
+# room best draw first (sr_resort_fill: Earth orbit's 10, each colony's own and its
+# Off-World Resorts'); the average draw over all of them, past the room at -75%,
+# is one country modifier, so only the levels past the room pay the penalty. Both
+# are removed first, before the rule's test, so under races only neither is
+# added. It also stores the draw the next level would work at, built and queued
+# levels counted (var:sr_resort_next_draw, sr_resort_next_fill), for the
+# overview's Resort Room cell.
+sr_resort_refresh = {
+	if = {
+		limit = { has_modifier = sr_resort_room_bonus }
+		remove_modifier = sr_resort_room_bonus
+	}
+	if = {
+		limit = { has_modifier = sr_resort_room_penalty }
+		remove_modifier = sr_resort_room_penalty
+	}
+	if = {
+		limit = { sr_colonies_contested_enabled = yes }
+		set_local_variable = { name = sr_rs_levels value = sr_resort_levels }
+		set_local_variable = { name = sr_rs_left value = local_var:sr_rs_levels }
+		set_local_variable = { name = sr_rs_sum value = 0 }
+		sr_resort_fill = yes
+		sr_resort_next_fill = yes
+		set_variable = { name = sr_resort_draw value = 0 }
+		if = {
+			limit = { local_var:sr_rs_levels > 0 }
+			set_variable = {
+				name = sr_resort_draw
+				value = {
+					value = local_var:sr_rs_sum
+					divide = local_var:sr_rs_levels
+				}
+			}
+		}
+		if = {
+			limit = { var:sr_resort_draw > 0 }
+			set_variable = { name = sr_resort_units value = var:sr_resort_draw }
+			add_modifier = { name = sr_resort_room_bonus multiplier = var:sr_resort_units }
+		}
+		else_if = {
+			limit = { var:sr_resort_draw < 0 }
+			set_variable = {
+				name = sr_resort_units
+				value = {
+					value = var:sr_resort_draw
+					multiply = -1
+				}
+			}
+			add_modifier = { name = sr_resort_room_penalty multiplier = var:sr_resort_units }
+		}
+	}
+}
+
+# Country scope, the owner of a Resort Colony just built or expanded
+# (te_on_building_built, te_on_building_expanded): the room's refresh the next
+# day (space_race_events.112), as sr_ebase_hook_fire does for bases, with a
+# marker of its own. One event a day however many levels finish.
+sr_resort_hook_fire = {
+	if = {
+		limit = { NOT = { has_variable = sr_resort_hook_pending } }
+		set_variable = { name = sr_resort_hook_pending value = yes days = 2 }
+		trigger_event = { id = space_race_events.112 days = 1 }
+	}
+}
+
 # ---- Self-checks (design § 12) -----------------------------------------------------------
 # Country scope, from sr_mod_month. TE_SELF_CHECK module_fabrication: a Space
 # Program that runs a fabrication method at half staff or more must give its

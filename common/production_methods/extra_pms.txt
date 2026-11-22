@@ -11613,6 +11613,7 @@ pm_spaceport = {
 			state_infrastructure_from_aeroplanes_consumption_add = 2
 			goods_output_tourism_mult = 0.15
 			building_space_mine_throughput_add = 0.01
+			building_space_resort_throughput_add = 0.01 # the Resort Colony launches here too (#1948)
 		}
 	}
 

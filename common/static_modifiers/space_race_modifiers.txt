@@ -412,6 +412,16 @@ sr_ebase_room_penalty = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	building_space_mine_throughput_add = -0.01
 }
+# Resort Colony room (#1948 design § 6.3): the average draw, a unit a percent,
+# from sr_resort_refresh.
+sr_resort_room_bonus = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_space_resort_throughput_add = 0.01
+}
+sr_resort_room_penalty = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	building_space_resort_throughput_add = -0.01
+}
 
 # ======= Space Race - After the race: Commercial Space Industry
 # Once a country has nothing left to race for (sr_space_race_concluded), the
@@ -425,6 +435,8 @@ sr_ebase_room_penalty = {
 sr_commercial_space_dividend = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	building_space_mine_throughput_add = 0.05
+	# The Resort Colony is commercial space too (#1948 design § 8); keep the two equal.
+	building_space_resort_throughput_add = 0.05
 }
 
 # ======= Space Race - Funding Cost (legacy, kept for migration)
