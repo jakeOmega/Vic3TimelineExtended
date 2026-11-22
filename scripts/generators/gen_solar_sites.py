@@ -324,11 +324,16 @@ AI_CREW_TECH = "artificial_intelligence"
 PRIORITY_WEIGHTS = (0, 1, 2, 4)
 
 # Modules (slice 4 design §§ 2-8). The two specializations share SPEC_BUDGET
-# levels (the owner's D18); the generic modules share the world's slots. A
-# Habitat adds HABITAT_ROOM_SHARE of the base room a level. Types, in the order
+# levels (the owner's D18). A Habitat adds HABITAT_BASE_SHARE of the base room a
+# level plus the holder's HABITAT_MODIFIER, which the five slot technologies
+# carry at +0.1 each (colony people design § 5), and the world keeps the best
+# share it has had (sr_site_hab_share_<key>, global, set in its monthly step and
+# cleared on release; § 4.4), so a cession to a holder with fewer of them, or a
+# break-away, keeps the room its Habitats were built with. Types, in the order
 # fabrication takes a colony's queue, with the code a shipment slot records.
 SPEC_BUDGET = 4
-HABITAT_ROOM_SHARE = 0.5
+HABITAT_BASE_SHARE = 0.5
+HABITAT_MODIFIER = "country_sr_habitat_room_add"
 
 
 # The facilities (colony management design § 7): generic modules that take a
@@ -795,7 +800,8 @@ def _release(site: Site) -> list[str]:
            f"\tif = {{ limit = {{ has_global_variable = sr_colony_{k} }} remove_global_variable = sr_colony_{k} }}",
            f"\tif = {{ limit = {{ has_global_variable = sr_site_spec_{k} }} remove_global_variable = sr_site_spec_{k} }}",
            f"\tif = {{ limit = {{ has_global_variable = sr_site_region_{k} }} remove_global_variable = sr_site_region_{k} }}",
-           f"\tif = {{ limit = {{ has_global_variable = sr_site_pop_{k} }} remove_global_variable = sr_site_pop_{k} }}"]
+           f"\tif = {{ limit = {{ has_global_variable = sr_site_pop_{k} }} remove_global_variable = sr_site_pop_{k} }}",
+           f"\tif = {{ limit = {{ has_global_variable = sr_site_hab_share_{k} }} remove_global_variable = sr_site_hab_share_{k} }}"]
     out += [f"\tif = {{ limit = {{ has_global_variable = {var} }} remove_global_variable = {var} }}"
             for var in module_vars(site)]
     for d in site.discoveries:
@@ -907,6 +913,8 @@ def _monthly(site: Site) -> list[str]:
         "\t\tif = {",
         "\t\t\tlimit = { is_country_alive = yes exists = capital }",
         f"\t\t\tset_global_variable = {{ name = sr_site_region_{k} value = capital.state_region }}",
+        "\t\t\t# The best Habitat share the world has had (colony people design § 4.4).",
+        f"\t\t\tset_global_variable = {{ name = sr_site_hab_share_{k} value = sr_site_hab_share_value_{k} }}",
         "\t\t}",
         "\t}",
         "\t# 2. A dead holder: its capital region's owner inherits, or the world is released.",
@@ -1821,8 +1829,10 @@ def render_population_values() -> list[str]:
     weights = PRIORITY_WEIGHTS
     out = ["# ===== Population (slices 2-3 design § 10) =====",
            "",
-           "# Per world, any scope: its base room (people, before Habitats), its room (+50% of",
-           "# the base a Habitat level, slice 4 design § 3, and on a world that takes it the",
+           "# Per world, any scope: its base room (people, before Habitats), its Habitat share",
+           f"# (now: {HABITAT_BASE_SHARE} plus the holder's {HABITAT_MODIFIER}; value: never below the",
+           "# share the world has had, sr_site_hab_share_<key>), its room (the share of the base a",
+           "# Habitat level, colony people design § 4.4, and on a world that takes it the",
            "# share its Terraforming has done, era 13 spec § 7.11), its people, its free room (of the",
            "# room held while a Habitat comes down, sr_site_room_held_<key>), and",
            "# the module levels above the first its people can crew, at its holder's crew size",
@@ -1834,9 +1844,18 @@ def render_population_values() -> list[str]:
     for site in SITES:
         k = site.key
         out += [f"sr_site_base_room_{k} = {{ value = {site.room * 1000} }}",
+                f"sr_site_hab_share_now_{k} = {{",
+                f"\tvalue = {HABITAT_BASE_SHARE}",
+                f"\tif = {{ limit = {{ exists = global_var:sr_site_holder_{k} }} "
+                f"global_var:sr_site_holder_{k} = {{ add = modifier:{HABITAT_MODIFIER} }} }}",
+                "}",
+                f"sr_site_hab_share_value_{k} = {{",
+                f"\tvalue = sr_site_hab_share_now_{k}",
+                f"\tif = {{ limit = {{ has_global_variable = sr_site_hab_share_{k} }} min = global_var:sr_site_hab_share_{k} }}",
+                "}",
                 f"sr_site_room_{k} = {{",
                 f"\tvalue = sr_site_hab_value_{k}",
-                f"\tmultiply = {HABITAT_ROOM_SHARE}",
+                f"\tmultiply = sr_site_hab_share_value_{k}",
                 "\tadd = 1",
                 *_terra_room_line(site),
                 f"\tmultiply = sr_site_base_room_{k}",
@@ -1989,13 +2008,13 @@ def render_module_values() -> list[str]:
                 f"subtract = sr_site_slots_{k} add = 2 multiply = sr_module_points }}",
                 "}"]
     out += render_facility_values()
-    out += ["", "# Country scope, the slot_marker self-check's reading (colony management design",
-            "# § 11): what the holder's Colony Module Slots add at the first colony THIS holds,",
-            "# read through that world's own slots (the holder's scope), or -1 with none.",
-            "sr_site_slots_tech_seen = {", "\tvalue = -1"]
+    out += ["", "# Country scope, the habitat_marker self-check's reading (colony management design",
+            f"# § 11; colony people design § 5): what the holder's {HABITAT_MODIFIER} adds at the first",
+            "# colony THIS holds, read through that world's own share (the holder's scope), or -1 with none.",
+            "sr_site_hab_share_seen = {", "\tvalue = -1"]
     for n, s in enumerate(SITES):
         out.append(f"\t{'if' if n == 0 else 'else_if'} = {{ limit = {{ global_var:sr_site_holder_{s.key} ?= this }} "
-                   f"value = sr_site_slots_{s.key} subtract = {s.slots} }}")
+                   f"value = sr_site_hab_share_value_{s.key} subtract = {HABITAT_BASE_SHARE} }}")
     out.append("}")
     out += ["", "# Country scope: the module levels past the first at the colonies THIS holds, the",
             "# upkeep's multiplier (design § 8).",
@@ -2751,7 +2770,7 @@ def render_dismantle_values() -> list[str]:
                 f"\tvalue = sr_site_hab_value_{k}",
                 "\tsubtract = 1",
                 "\tmin = 0",
-                f"\tmultiply = {HABITAT_ROOM_SHARE}",
+                f"\tmultiply = sr_site_hab_share_value_{k}",
                 "\tadd = 1",
                 *_terra_room_line(site),
                 f"\tmultiply = sr_site_base_room_{k}",

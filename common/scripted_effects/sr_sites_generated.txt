@@ -2130,6 +2130,7 @@ sr_site_release_valles_marineris = {
 	if = { limit = { has_global_variable = sr_site_spec_valles_marineris } remove_global_variable = sr_site_spec_valles_marineris }
 	if = { limit = { has_global_variable = sr_site_region_valles_marineris } remove_global_variable = sr_site_region_valles_marineris }
 	if = { limit = { has_global_variable = sr_site_pop_valles_marineris } remove_global_variable = sr_site_pop_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_hab_share_valles_marineris } remove_global_variable = sr_site_hab_share_valles_marineris }
 	if = { limit = { has_global_variable = sr_site_lvl_a_valles_marineris } remove_global_variable = sr_site_lvl_a_valles_marineris }
 	if = { limit = { has_global_variable = sr_site_lvl_b_valles_marineris } remove_global_variable = sr_site_lvl_b_valles_marineris }
 	if = { limit = { has_global_variable = sr_site_hab_valles_marineris } remove_global_variable = sr_site_hab_valles_marineris }
@@ -2198,6 +2199,8 @@ sr_site_monthly_valles_marineris = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_valles_marineris value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_valles_marineris value = sr_site_hab_share_value_valles_marineris }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -2415,6 +2418,7 @@ sr_site_release_olympus_mons = {
 	if = { limit = { has_global_variable = sr_site_spec_olympus_mons } remove_global_variable = sr_site_spec_olympus_mons }
 	if = { limit = { has_global_variable = sr_site_region_olympus_mons } remove_global_variable = sr_site_region_olympus_mons }
 	if = { limit = { has_global_variable = sr_site_pop_olympus_mons } remove_global_variable = sr_site_pop_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_hab_share_olympus_mons } remove_global_variable = sr_site_hab_share_olympus_mons }
 	if = { limit = { has_global_variable = sr_site_lvl_a_olympus_mons } remove_global_variable = sr_site_lvl_a_olympus_mons }
 	if = { limit = { has_global_variable = sr_site_lvl_b_olympus_mons } remove_global_variable = sr_site_lvl_b_olympus_mons }
 	if = { limit = { has_global_variable = sr_site_hab_olympus_mons } remove_global_variable = sr_site_hab_olympus_mons }
@@ -2485,6 +2489,8 @@ sr_site_monthly_olympus_mons = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_olympus_mons value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_olympus_mons value = sr_site_hab_share_value_olympus_mons }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -2702,6 +2708,7 @@ sr_site_release_hellas_planitia = {
 	if = { limit = { has_global_variable = sr_site_spec_hellas_planitia } remove_global_variable = sr_site_spec_hellas_planitia }
 	if = { limit = { has_global_variable = sr_site_region_hellas_planitia } remove_global_variable = sr_site_region_hellas_planitia }
 	if = { limit = { has_global_variable = sr_site_pop_hellas_planitia } remove_global_variable = sr_site_pop_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_hab_share_hellas_planitia } remove_global_variable = sr_site_hab_share_hellas_planitia }
 	if = { limit = { has_global_variable = sr_site_lvl_a_hellas_planitia } remove_global_variable = sr_site_lvl_a_hellas_planitia }
 	if = { limit = { has_global_variable = sr_site_lvl_b_hellas_planitia } remove_global_variable = sr_site_lvl_b_hellas_planitia }
 	if = { limit = { has_global_variable = sr_site_hab_hellas_planitia } remove_global_variable = sr_site_hab_hellas_planitia }
@@ -2772,6 +2779,8 @@ sr_site_monthly_hellas_planitia = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_hellas_planitia value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_hellas_planitia value = sr_site_hab_share_value_hellas_planitia }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -2989,6 +2998,7 @@ sr_site_release_utopia_planitia = {
 	if = { limit = { has_global_variable = sr_site_spec_utopia_planitia } remove_global_variable = sr_site_spec_utopia_planitia }
 	if = { limit = { has_global_variable = sr_site_region_utopia_planitia } remove_global_variable = sr_site_region_utopia_planitia }
 	if = { limit = { has_global_variable = sr_site_pop_utopia_planitia } remove_global_variable = sr_site_pop_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_hab_share_utopia_planitia } remove_global_variable = sr_site_hab_share_utopia_planitia }
 	if = { limit = { has_global_variable = sr_site_lvl_a_utopia_planitia } remove_global_variable = sr_site_lvl_a_utopia_planitia }
 	if = { limit = { has_global_variable = sr_site_lvl_b_utopia_planitia } remove_global_variable = sr_site_lvl_b_utopia_planitia }
 	if = { limit = { has_global_variable = sr_site_hab_utopia_planitia } remove_global_variable = sr_site_hab_utopia_planitia }
@@ -3059,6 +3069,8 @@ sr_site_monthly_utopia_planitia = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_utopia_planitia value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_utopia_planitia value = sr_site_hab_share_value_utopia_planitia }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -3276,6 +3288,7 @@ sr_site_release_arcadia_planitia = {
 	if = { limit = { has_global_variable = sr_site_spec_arcadia_planitia } remove_global_variable = sr_site_spec_arcadia_planitia }
 	if = { limit = { has_global_variable = sr_site_region_arcadia_planitia } remove_global_variable = sr_site_region_arcadia_planitia }
 	if = { limit = { has_global_variable = sr_site_pop_arcadia_planitia } remove_global_variable = sr_site_pop_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_hab_share_arcadia_planitia } remove_global_variable = sr_site_hab_share_arcadia_planitia }
 	if = { limit = { has_global_variable = sr_site_lvl_a_arcadia_planitia } remove_global_variable = sr_site_lvl_a_arcadia_planitia }
 	if = { limit = { has_global_variable = sr_site_lvl_b_arcadia_planitia } remove_global_variable = sr_site_lvl_b_arcadia_planitia }
 	if = { limit = { has_global_variable = sr_site_hab_arcadia_planitia } remove_global_variable = sr_site_hab_arcadia_planitia }
@@ -3346,6 +3359,8 @@ sr_site_monthly_arcadia_planitia = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_arcadia_planitia value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_arcadia_planitia value = sr_site_hab_share_value_arcadia_planitia }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -3563,6 +3578,7 @@ sr_site_release_ceres = {
 	if = { limit = { has_global_variable = sr_site_spec_ceres } remove_global_variable = sr_site_spec_ceres }
 	if = { limit = { has_global_variable = sr_site_region_ceres } remove_global_variable = sr_site_region_ceres }
 	if = { limit = { has_global_variable = sr_site_pop_ceres } remove_global_variable = sr_site_pop_ceres }
+	if = { limit = { has_global_variable = sr_site_hab_share_ceres } remove_global_variable = sr_site_hab_share_ceres }
 	if = { limit = { has_global_variable = sr_site_lvl_a_ceres } remove_global_variable = sr_site_lvl_a_ceres }
 	if = { limit = { has_global_variable = sr_site_lvl_b_ceres } remove_global_variable = sr_site_lvl_b_ceres }
 	if = { limit = { has_global_variable = sr_site_hab_ceres } remove_global_variable = sr_site_hab_ceres }
@@ -3632,6 +3648,8 @@ sr_site_monthly_ceres = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_ceres value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_ceres value = sr_site_hab_share_value_ceres }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -3839,6 +3857,7 @@ sr_site_release_vesta = {
 	if = { limit = { has_global_variable = sr_site_spec_vesta } remove_global_variable = sr_site_spec_vesta }
 	if = { limit = { has_global_variable = sr_site_region_vesta } remove_global_variable = sr_site_region_vesta }
 	if = { limit = { has_global_variable = sr_site_pop_vesta } remove_global_variable = sr_site_pop_vesta }
+	if = { limit = { has_global_variable = sr_site_hab_share_vesta } remove_global_variable = sr_site_hab_share_vesta }
 	if = { limit = { has_global_variable = sr_site_lvl_a_vesta } remove_global_variable = sr_site_lvl_a_vesta }
 	if = { limit = { has_global_variable = sr_site_lvl_b_vesta } remove_global_variable = sr_site_lvl_b_vesta }
 	if = { limit = { has_global_variable = sr_site_hab_vesta } remove_global_variable = sr_site_hab_vesta }
@@ -3908,6 +3927,8 @@ sr_site_monthly_vesta = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_vesta value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_vesta value = sr_site_hab_share_value_vesta }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -4115,6 +4136,7 @@ sr_site_release_psyche = {
 	if = { limit = { has_global_variable = sr_site_spec_psyche } remove_global_variable = sr_site_spec_psyche }
 	if = { limit = { has_global_variable = sr_site_region_psyche } remove_global_variable = sr_site_region_psyche }
 	if = { limit = { has_global_variable = sr_site_pop_psyche } remove_global_variable = sr_site_pop_psyche }
+	if = { limit = { has_global_variable = sr_site_hab_share_psyche } remove_global_variable = sr_site_hab_share_psyche }
 	if = { limit = { has_global_variable = sr_site_lvl_a_psyche } remove_global_variable = sr_site_lvl_a_psyche }
 	if = { limit = { has_global_variable = sr_site_lvl_b_psyche } remove_global_variable = sr_site_lvl_b_psyche }
 	if = { limit = { has_global_variable = sr_site_hab_psyche } remove_global_variable = sr_site_hab_psyche }
@@ -4184,6 +4206,8 @@ sr_site_monthly_psyche = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_psyche value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_psyche value = sr_site_hab_share_value_psyche }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -4391,6 +4415,7 @@ sr_site_release_pallas = {
 	if = { limit = { has_global_variable = sr_site_spec_pallas } remove_global_variable = sr_site_spec_pallas }
 	if = { limit = { has_global_variable = sr_site_region_pallas } remove_global_variable = sr_site_region_pallas }
 	if = { limit = { has_global_variable = sr_site_pop_pallas } remove_global_variable = sr_site_pop_pallas }
+	if = { limit = { has_global_variable = sr_site_hab_share_pallas } remove_global_variable = sr_site_hab_share_pallas }
 	if = { limit = { has_global_variable = sr_site_lvl_a_pallas } remove_global_variable = sr_site_lvl_a_pallas }
 	if = { limit = { has_global_variable = sr_site_lvl_b_pallas } remove_global_variable = sr_site_lvl_b_pallas }
 	if = { limit = { has_global_variable = sr_site_hab_pallas } remove_global_variable = sr_site_hab_pallas }
@@ -4460,6 +4485,8 @@ sr_site_monthly_pallas = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_pallas value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_pallas value = sr_site_hab_share_value_pallas }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -4648,6 +4675,7 @@ sr_site_release_hygiea = {
 	if = { limit = { has_global_variable = sr_site_spec_hygiea } remove_global_variable = sr_site_spec_hygiea }
 	if = { limit = { has_global_variable = sr_site_region_hygiea } remove_global_variable = sr_site_region_hygiea }
 	if = { limit = { has_global_variable = sr_site_pop_hygiea } remove_global_variable = sr_site_pop_hygiea }
+	if = { limit = { has_global_variable = sr_site_hab_share_hygiea } remove_global_variable = sr_site_hab_share_hygiea }
 	if = { limit = { has_global_variable = sr_site_lvl_a_hygiea } remove_global_variable = sr_site_lvl_a_hygiea }
 	if = { limit = { has_global_variable = sr_site_lvl_b_hygiea } remove_global_variable = sr_site_lvl_b_hygiea }
 	if = { limit = { has_global_variable = sr_site_hab_hygiea } remove_global_variable = sr_site_hab_hygiea }
@@ -4715,6 +4743,8 @@ sr_site_monthly_hygiea = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_hygiea value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_hygiea value = sr_site_hab_share_value_hygiea }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -4922,6 +4952,7 @@ sr_site_release_io = {
 	if = { limit = { has_global_variable = sr_site_spec_io } remove_global_variable = sr_site_spec_io }
 	if = { limit = { has_global_variable = sr_site_region_io } remove_global_variable = sr_site_region_io }
 	if = { limit = { has_global_variable = sr_site_pop_io } remove_global_variable = sr_site_pop_io }
+	if = { limit = { has_global_variable = sr_site_hab_share_io } remove_global_variable = sr_site_hab_share_io }
 	if = { limit = { has_global_variable = sr_site_lvl_a_io } remove_global_variable = sr_site_lvl_a_io }
 	if = { limit = { has_global_variable = sr_site_lvl_b_io } remove_global_variable = sr_site_lvl_b_io }
 	if = { limit = { has_global_variable = sr_site_hab_io } remove_global_variable = sr_site_hab_io }
@@ -4991,6 +5022,8 @@ sr_site_monthly_io = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_io value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_io value = sr_site_hab_share_value_io }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -5217,6 +5250,7 @@ sr_site_release_europa = {
 	if = { limit = { has_global_variable = sr_site_spec_europa } remove_global_variable = sr_site_spec_europa }
 	if = { limit = { has_global_variable = sr_site_region_europa } remove_global_variable = sr_site_region_europa }
 	if = { limit = { has_global_variable = sr_site_pop_europa } remove_global_variable = sr_site_pop_europa }
+	if = { limit = { has_global_variable = sr_site_hab_share_europa } remove_global_variable = sr_site_hab_share_europa }
 	if = { limit = { has_global_variable = sr_site_lvl_a_europa } remove_global_variable = sr_site_lvl_a_europa }
 	if = { limit = { has_global_variable = sr_site_lvl_b_europa } remove_global_variable = sr_site_lvl_b_europa }
 	if = { limit = { has_global_variable = sr_site_hab_europa } remove_global_variable = sr_site_hab_europa }
@@ -5288,6 +5322,8 @@ sr_site_monthly_europa = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_europa value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_europa value = sr_site_hab_share_value_europa }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -5495,6 +5531,7 @@ sr_site_release_ganymede = {
 	if = { limit = { has_global_variable = sr_site_spec_ganymede } remove_global_variable = sr_site_spec_ganymede }
 	if = { limit = { has_global_variable = sr_site_region_ganymede } remove_global_variable = sr_site_region_ganymede }
 	if = { limit = { has_global_variable = sr_site_pop_ganymede } remove_global_variable = sr_site_pop_ganymede }
+	if = { limit = { has_global_variable = sr_site_hab_share_ganymede } remove_global_variable = sr_site_hab_share_ganymede }
 	if = { limit = { has_global_variable = sr_site_lvl_a_ganymede } remove_global_variable = sr_site_lvl_a_ganymede }
 	if = { limit = { has_global_variable = sr_site_lvl_b_ganymede } remove_global_variable = sr_site_lvl_b_ganymede }
 	if = { limit = { has_global_variable = sr_site_hab_ganymede } remove_global_variable = sr_site_hab_ganymede }
@@ -5565,6 +5602,8 @@ sr_site_monthly_ganymede = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_ganymede value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_ganymede value = sr_site_hab_share_value_ganymede }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -5782,6 +5821,7 @@ sr_site_release_callisto = {
 	if = { limit = { has_global_variable = sr_site_spec_callisto } remove_global_variable = sr_site_spec_callisto }
 	if = { limit = { has_global_variable = sr_site_region_callisto } remove_global_variable = sr_site_region_callisto }
 	if = { limit = { has_global_variable = sr_site_pop_callisto } remove_global_variable = sr_site_pop_callisto }
+	if = { limit = { has_global_variable = sr_site_hab_share_callisto } remove_global_variable = sr_site_hab_share_callisto }
 	if = { limit = { has_global_variable = sr_site_lvl_a_callisto } remove_global_variable = sr_site_lvl_a_callisto }
 	if = { limit = { has_global_variable = sr_site_lvl_b_callisto } remove_global_variable = sr_site_lvl_b_callisto }
 	if = { limit = { has_global_variable = sr_site_hab_callisto } remove_global_variable = sr_site_hab_callisto }
@@ -5852,6 +5892,8 @@ sr_site_monthly_callisto = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_callisto value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_callisto value = sr_site_hab_share_value_callisto }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -6050,6 +6092,7 @@ sr_site_release_himalia = {
 	if = { limit = { has_global_variable = sr_site_spec_himalia } remove_global_variable = sr_site_spec_himalia }
 	if = { limit = { has_global_variable = sr_site_region_himalia } remove_global_variable = sr_site_region_himalia }
 	if = { limit = { has_global_variable = sr_site_pop_himalia } remove_global_variable = sr_site_pop_himalia }
+	if = { limit = { has_global_variable = sr_site_hab_share_himalia } remove_global_variable = sr_site_hab_share_himalia }
 	if = { limit = { has_global_variable = sr_site_lvl_a_himalia } remove_global_variable = sr_site_lvl_a_himalia }
 	if = { limit = { has_global_variable = sr_site_lvl_b_himalia } remove_global_variable = sr_site_lvl_b_himalia }
 	if = { limit = { has_global_variable = sr_site_hab_himalia } remove_global_variable = sr_site_hab_himalia }
@@ -6117,6 +6160,8 @@ sr_site_monthly_himalia = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_himalia value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_himalia value = sr_site_hab_share_value_himalia }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -6305,6 +6350,7 @@ sr_site_release_amalthea = {
 	if = { limit = { has_global_variable = sr_site_spec_amalthea } remove_global_variable = sr_site_spec_amalthea }
 	if = { limit = { has_global_variable = sr_site_region_amalthea } remove_global_variable = sr_site_region_amalthea }
 	if = { limit = { has_global_variable = sr_site_pop_amalthea } remove_global_variable = sr_site_pop_amalthea }
+	if = { limit = { has_global_variable = sr_site_hab_share_amalthea } remove_global_variable = sr_site_hab_share_amalthea }
 	if = { limit = { has_global_variable = sr_site_lvl_a_amalthea } remove_global_variable = sr_site_lvl_a_amalthea }
 	if = { limit = { has_global_variable = sr_site_lvl_b_amalthea } remove_global_variable = sr_site_lvl_b_amalthea }
 	if = { limit = { has_global_variable = sr_site_hab_amalthea } remove_global_variable = sr_site_hab_amalthea }
@@ -6372,6 +6418,8 @@ sr_site_monthly_amalthea = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_amalthea value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_amalthea value = sr_site_hab_share_value_amalthea }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -6579,6 +6627,7 @@ sr_site_release_venus = {
 	if = { limit = { has_global_variable = sr_site_spec_venus } remove_global_variable = sr_site_spec_venus }
 	if = { limit = { has_global_variable = sr_site_region_venus } remove_global_variable = sr_site_region_venus }
 	if = { limit = { has_global_variable = sr_site_pop_venus } remove_global_variable = sr_site_pop_venus }
+	if = { limit = { has_global_variable = sr_site_hab_share_venus } remove_global_variable = sr_site_hab_share_venus }
 	if = { limit = { has_global_variable = sr_site_lvl_a_venus } remove_global_variable = sr_site_lvl_a_venus }
 	if = { limit = { has_global_variable = sr_site_lvl_b_venus } remove_global_variable = sr_site_lvl_b_venus }
 	if = { limit = { has_global_variable = sr_site_hab_venus } remove_global_variable = sr_site_hab_venus }
@@ -6649,6 +6698,8 @@ sr_site_monthly_venus = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_venus value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_venus value = sr_site_hab_share_value_venus }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -6866,6 +6917,7 @@ sr_site_release_mercury = {
 	if = { limit = { has_global_variable = sr_site_spec_mercury } remove_global_variable = sr_site_spec_mercury }
 	if = { limit = { has_global_variable = sr_site_region_mercury } remove_global_variable = sr_site_region_mercury }
 	if = { limit = { has_global_variable = sr_site_pop_mercury } remove_global_variable = sr_site_pop_mercury }
+	if = { limit = { has_global_variable = sr_site_hab_share_mercury } remove_global_variable = sr_site_hab_share_mercury }
 	if = { limit = { has_global_variable = sr_site_lvl_a_mercury } remove_global_variable = sr_site_lvl_a_mercury }
 	if = { limit = { has_global_variable = sr_site_lvl_b_mercury } remove_global_variable = sr_site_lvl_b_mercury }
 	if = { limit = { has_global_variable = sr_site_hab_mercury } remove_global_variable = sr_site_hab_mercury }
@@ -6935,6 +6987,8 @@ sr_site_monthly_mercury = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_mercury value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_mercury value = sr_site_hab_share_value_mercury }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -7142,6 +7196,7 @@ sr_site_release_titan = {
 	if = { limit = { has_global_variable = sr_site_spec_titan } remove_global_variable = sr_site_spec_titan }
 	if = { limit = { has_global_variable = sr_site_region_titan } remove_global_variable = sr_site_region_titan }
 	if = { limit = { has_global_variable = sr_site_pop_titan } remove_global_variable = sr_site_pop_titan }
+	if = { limit = { has_global_variable = sr_site_hab_share_titan } remove_global_variable = sr_site_hab_share_titan }
 	if = { limit = { has_global_variable = sr_site_lvl_a_titan } remove_global_variable = sr_site_lvl_a_titan }
 	if = { limit = { has_global_variable = sr_site_lvl_b_titan } remove_global_variable = sr_site_lvl_b_titan }
 	if = { limit = { has_global_variable = sr_site_hab_titan } remove_global_variable = sr_site_hab_titan }
@@ -7212,6 +7267,8 @@ sr_site_monthly_titan = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_titan value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_titan value = sr_site_hab_share_value_titan }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -7429,6 +7486,7 @@ sr_site_release_enceladus = {
 	if = { limit = { has_global_variable = sr_site_spec_enceladus } remove_global_variable = sr_site_spec_enceladus }
 	if = { limit = { has_global_variable = sr_site_region_enceladus } remove_global_variable = sr_site_region_enceladus }
 	if = { limit = { has_global_variable = sr_site_pop_enceladus } remove_global_variable = sr_site_pop_enceladus }
+	if = { limit = { has_global_variable = sr_site_hab_share_enceladus } remove_global_variable = sr_site_hab_share_enceladus }
 	if = { limit = { has_global_variable = sr_site_lvl_a_enceladus } remove_global_variable = sr_site_lvl_a_enceladus }
 	if = { limit = { has_global_variable = sr_site_lvl_b_enceladus } remove_global_variable = sr_site_lvl_b_enceladus }
 	if = { limit = { has_global_variable = sr_site_hab_enceladus } remove_global_variable = sr_site_hab_enceladus }
@@ -7498,6 +7556,8 @@ sr_site_monthly_enceladus = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_enceladus value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_enceladus value = sr_site_hab_share_value_enceladus }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -7686,6 +7746,7 @@ sr_site_release_rhea = {
 	if = { limit = { has_global_variable = sr_site_spec_rhea } remove_global_variable = sr_site_spec_rhea }
 	if = { limit = { has_global_variable = sr_site_region_rhea } remove_global_variable = sr_site_region_rhea }
 	if = { limit = { has_global_variable = sr_site_pop_rhea } remove_global_variable = sr_site_pop_rhea }
+	if = { limit = { has_global_variable = sr_site_hab_share_rhea } remove_global_variable = sr_site_hab_share_rhea }
 	if = { limit = { has_global_variable = sr_site_lvl_a_rhea } remove_global_variable = sr_site_lvl_a_rhea }
 	if = { limit = { has_global_variable = sr_site_lvl_b_rhea } remove_global_variable = sr_site_lvl_b_rhea }
 	if = { limit = { has_global_variable = sr_site_hab_rhea } remove_global_variable = sr_site_hab_rhea }
@@ -7753,6 +7814,8 @@ sr_site_monthly_rhea = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_rhea value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_rhea value = sr_site_hab_share_value_rhea }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -7941,6 +8004,7 @@ sr_site_release_mimas = {
 	if = { limit = { has_global_variable = sr_site_spec_mimas } remove_global_variable = sr_site_spec_mimas }
 	if = { limit = { has_global_variable = sr_site_region_mimas } remove_global_variable = sr_site_region_mimas }
 	if = { limit = { has_global_variable = sr_site_pop_mimas } remove_global_variable = sr_site_pop_mimas }
+	if = { limit = { has_global_variable = sr_site_hab_share_mimas } remove_global_variable = sr_site_hab_share_mimas }
 	if = { limit = { has_global_variable = sr_site_lvl_a_mimas } remove_global_variable = sr_site_lvl_a_mimas }
 	if = { limit = { has_global_variable = sr_site_lvl_b_mimas } remove_global_variable = sr_site_lvl_b_mimas }
 	if = { limit = { has_global_variable = sr_site_hab_mimas } remove_global_variable = sr_site_hab_mimas }
@@ -8008,6 +8072,8 @@ sr_site_monthly_mimas = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_mimas value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_mimas value = sr_site_hab_share_value_mimas }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -8196,6 +8262,7 @@ sr_site_release_iapetus = {
 	if = { limit = { has_global_variable = sr_site_spec_iapetus } remove_global_variable = sr_site_spec_iapetus }
 	if = { limit = { has_global_variable = sr_site_region_iapetus } remove_global_variable = sr_site_region_iapetus }
 	if = { limit = { has_global_variable = sr_site_pop_iapetus } remove_global_variable = sr_site_pop_iapetus }
+	if = { limit = { has_global_variable = sr_site_hab_share_iapetus } remove_global_variable = sr_site_hab_share_iapetus }
 	if = { limit = { has_global_variable = sr_site_lvl_a_iapetus } remove_global_variable = sr_site_lvl_a_iapetus }
 	if = { limit = { has_global_variable = sr_site_lvl_b_iapetus } remove_global_variable = sr_site_lvl_b_iapetus }
 	if = { limit = { has_global_variable = sr_site_hab_iapetus } remove_global_variable = sr_site_hab_iapetus }
@@ -8263,6 +8330,8 @@ sr_site_monthly_iapetus = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_iapetus value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_iapetus value = sr_site_hab_share_value_iapetus }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -8470,6 +8539,7 @@ sr_site_release_titania = {
 	if = { limit = { has_global_variable = sr_site_spec_titania } remove_global_variable = sr_site_spec_titania }
 	if = { limit = { has_global_variable = sr_site_region_titania } remove_global_variable = sr_site_region_titania }
 	if = { limit = { has_global_variable = sr_site_pop_titania } remove_global_variable = sr_site_pop_titania }
+	if = { limit = { has_global_variable = sr_site_hab_share_titania } remove_global_variable = sr_site_hab_share_titania }
 	if = { limit = { has_global_variable = sr_site_lvl_a_titania } remove_global_variable = sr_site_lvl_a_titania }
 	if = { limit = { has_global_variable = sr_site_lvl_b_titania } remove_global_variable = sr_site_lvl_b_titania }
 	if = { limit = { has_global_variable = sr_site_hab_titania } remove_global_variable = sr_site_hab_titania }
@@ -8539,6 +8609,8 @@ sr_site_monthly_titania = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_titania value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_titania value = sr_site_hab_share_value_titania }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -8727,6 +8799,7 @@ sr_site_release_oberon = {
 	if = { limit = { has_global_variable = sr_site_spec_oberon } remove_global_variable = sr_site_spec_oberon }
 	if = { limit = { has_global_variable = sr_site_region_oberon } remove_global_variable = sr_site_region_oberon }
 	if = { limit = { has_global_variable = sr_site_pop_oberon } remove_global_variable = sr_site_pop_oberon }
+	if = { limit = { has_global_variable = sr_site_hab_share_oberon } remove_global_variable = sr_site_hab_share_oberon }
 	if = { limit = { has_global_variable = sr_site_lvl_a_oberon } remove_global_variable = sr_site_lvl_a_oberon }
 	if = { limit = { has_global_variable = sr_site_lvl_b_oberon } remove_global_variable = sr_site_lvl_b_oberon }
 	if = { limit = { has_global_variable = sr_site_hab_oberon } remove_global_variable = sr_site_hab_oberon }
@@ -8794,6 +8867,8 @@ sr_site_monthly_oberon = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_oberon value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_oberon value = sr_site_hab_share_value_oberon }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -8982,6 +9057,7 @@ sr_site_release_miranda = {
 	if = { limit = { has_global_variable = sr_site_spec_miranda } remove_global_variable = sr_site_spec_miranda }
 	if = { limit = { has_global_variable = sr_site_region_miranda } remove_global_variable = sr_site_region_miranda }
 	if = { limit = { has_global_variable = sr_site_pop_miranda } remove_global_variable = sr_site_pop_miranda }
+	if = { limit = { has_global_variable = sr_site_hab_share_miranda } remove_global_variable = sr_site_hab_share_miranda }
 	if = { limit = { has_global_variable = sr_site_lvl_a_miranda } remove_global_variable = sr_site_lvl_a_miranda }
 	if = { limit = { has_global_variable = sr_site_lvl_b_miranda } remove_global_variable = sr_site_lvl_b_miranda }
 	if = { limit = { has_global_variable = sr_site_hab_miranda } remove_global_variable = sr_site_hab_miranda }
@@ -9049,6 +9125,8 @@ sr_site_monthly_miranda = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_miranda value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_miranda value = sr_site_hab_share_value_miranda }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -9237,6 +9315,7 @@ sr_site_release_ariel = {
 	if = { limit = { has_global_variable = sr_site_spec_ariel } remove_global_variable = sr_site_spec_ariel }
 	if = { limit = { has_global_variable = sr_site_region_ariel } remove_global_variable = sr_site_region_ariel }
 	if = { limit = { has_global_variable = sr_site_pop_ariel } remove_global_variable = sr_site_pop_ariel }
+	if = { limit = { has_global_variable = sr_site_hab_share_ariel } remove_global_variable = sr_site_hab_share_ariel }
 	if = { limit = { has_global_variable = sr_site_lvl_a_ariel } remove_global_variable = sr_site_lvl_a_ariel }
 	if = { limit = { has_global_variable = sr_site_lvl_b_ariel } remove_global_variable = sr_site_lvl_b_ariel }
 	if = { limit = { has_global_variable = sr_site_hab_ariel } remove_global_variable = sr_site_hab_ariel }
@@ -9304,6 +9383,8 @@ sr_site_monthly_ariel = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_ariel value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_ariel value = sr_site_hab_share_value_ariel }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -9511,6 +9592,7 @@ sr_site_release_triton = {
 	if = { limit = { has_global_variable = sr_site_spec_triton } remove_global_variable = sr_site_spec_triton }
 	if = { limit = { has_global_variable = sr_site_region_triton } remove_global_variable = sr_site_region_triton }
 	if = { limit = { has_global_variable = sr_site_pop_triton } remove_global_variable = sr_site_pop_triton }
+	if = { limit = { has_global_variable = sr_site_hab_share_triton } remove_global_variable = sr_site_hab_share_triton }
 	if = { limit = { has_global_variable = sr_site_lvl_a_triton } remove_global_variable = sr_site_lvl_a_triton }
 	if = { limit = { has_global_variable = sr_site_lvl_b_triton } remove_global_variable = sr_site_lvl_b_triton }
 	if = { limit = { has_global_variable = sr_site_hab_triton } remove_global_variable = sr_site_hab_triton }
@@ -9580,6 +9662,8 @@ sr_site_monthly_triton = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_triton value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_triton value = sr_site_hab_share_value_triton }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -9768,6 +9852,7 @@ sr_site_release_proteus = {
 	if = { limit = { has_global_variable = sr_site_spec_proteus } remove_global_variable = sr_site_spec_proteus }
 	if = { limit = { has_global_variable = sr_site_region_proteus } remove_global_variable = sr_site_region_proteus }
 	if = { limit = { has_global_variable = sr_site_pop_proteus } remove_global_variable = sr_site_pop_proteus }
+	if = { limit = { has_global_variable = sr_site_hab_share_proteus } remove_global_variable = sr_site_hab_share_proteus }
 	if = { limit = { has_global_variable = sr_site_lvl_a_proteus } remove_global_variable = sr_site_lvl_a_proteus }
 	if = { limit = { has_global_variable = sr_site_lvl_b_proteus } remove_global_variable = sr_site_lvl_b_proteus }
 	if = { limit = { has_global_variable = sr_site_hab_proteus } remove_global_variable = sr_site_hab_proteus }
@@ -9835,6 +9920,8 @@ sr_site_monthly_proteus = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_proteus value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_proteus value = sr_site_hab_share_value_proteus }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -10042,6 +10129,7 @@ sr_site_release_pluto = {
 	if = { limit = { has_global_variable = sr_site_spec_pluto } remove_global_variable = sr_site_spec_pluto }
 	if = { limit = { has_global_variable = sr_site_region_pluto } remove_global_variable = sr_site_region_pluto }
 	if = { limit = { has_global_variable = sr_site_pop_pluto } remove_global_variable = sr_site_pop_pluto }
+	if = { limit = { has_global_variable = sr_site_hab_share_pluto } remove_global_variable = sr_site_hab_share_pluto }
 	if = { limit = { has_global_variable = sr_site_lvl_a_pluto } remove_global_variable = sr_site_lvl_a_pluto }
 	if = { limit = { has_global_variable = sr_site_lvl_b_pluto } remove_global_variable = sr_site_lvl_b_pluto }
 	if = { limit = { has_global_variable = sr_site_hab_pluto } remove_global_variable = sr_site_hab_pluto }
@@ -10111,6 +10199,8 @@ sr_site_monthly_pluto = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_pluto value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_pluto value = sr_site_hab_share_value_pluto }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -10299,6 +10389,7 @@ sr_site_release_eris = {
 	if = { limit = { has_global_variable = sr_site_spec_eris } remove_global_variable = sr_site_spec_eris }
 	if = { limit = { has_global_variable = sr_site_region_eris } remove_global_variable = sr_site_region_eris }
 	if = { limit = { has_global_variable = sr_site_pop_eris } remove_global_variable = sr_site_pop_eris }
+	if = { limit = { has_global_variable = sr_site_hab_share_eris } remove_global_variable = sr_site_hab_share_eris }
 	if = { limit = { has_global_variable = sr_site_lvl_a_eris } remove_global_variable = sr_site_lvl_a_eris }
 	if = { limit = { has_global_variable = sr_site_lvl_b_eris } remove_global_variable = sr_site_lvl_b_eris }
 	if = { limit = { has_global_variable = sr_site_hab_eris } remove_global_variable = sr_site_hab_eris }
@@ -10366,6 +10457,8 @@ sr_site_monthly_eris = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_eris value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_eris value = sr_site_hab_share_value_eris }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -10554,6 +10647,7 @@ sr_site_release_makemake = {
 	if = { limit = { has_global_variable = sr_site_spec_makemake } remove_global_variable = sr_site_spec_makemake }
 	if = { limit = { has_global_variable = sr_site_region_makemake } remove_global_variable = sr_site_region_makemake }
 	if = { limit = { has_global_variable = sr_site_pop_makemake } remove_global_variable = sr_site_pop_makemake }
+	if = { limit = { has_global_variable = sr_site_hab_share_makemake } remove_global_variable = sr_site_hab_share_makemake }
 	if = { limit = { has_global_variable = sr_site_lvl_a_makemake } remove_global_variable = sr_site_lvl_a_makemake }
 	if = { limit = { has_global_variable = sr_site_lvl_b_makemake } remove_global_variable = sr_site_lvl_b_makemake }
 	if = { limit = { has_global_variable = sr_site_hab_makemake } remove_global_variable = sr_site_hab_makemake }
@@ -10621,6 +10715,8 @@ sr_site_monthly_makemake = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_makemake value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_makemake value = sr_site_hab_share_value_makemake }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -10809,6 +10905,7 @@ sr_site_release_haumea = {
 	if = { limit = { has_global_variable = sr_site_spec_haumea } remove_global_variable = sr_site_spec_haumea }
 	if = { limit = { has_global_variable = sr_site_region_haumea } remove_global_variable = sr_site_region_haumea }
 	if = { limit = { has_global_variable = sr_site_pop_haumea } remove_global_variable = sr_site_pop_haumea }
+	if = { limit = { has_global_variable = sr_site_hab_share_haumea } remove_global_variable = sr_site_hab_share_haumea }
 	if = { limit = { has_global_variable = sr_site_lvl_a_haumea } remove_global_variable = sr_site_lvl_a_haumea }
 	if = { limit = { has_global_variable = sr_site_lvl_b_haumea } remove_global_variable = sr_site_lvl_b_haumea }
 	if = { limit = { has_global_variable = sr_site_hab_haumea } remove_global_variable = sr_site_hab_haumea }
@@ -10876,6 +10973,8 @@ sr_site_monthly_haumea = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_haumea value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_haumea value = sr_site_hab_share_value_haumea }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -11064,6 +11163,7 @@ sr_site_release_sedna = {
 	if = { limit = { has_global_variable = sr_site_spec_sedna } remove_global_variable = sr_site_spec_sedna }
 	if = { limit = { has_global_variable = sr_site_region_sedna } remove_global_variable = sr_site_region_sedna }
 	if = { limit = { has_global_variable = sr_site_pop_sedna } remove_global_variable = sr_site_pop_sedna }
+	if = { limit = { has_global_variable = sr_site_hab_share_sedna } remove_global_variable = sr_site_hab_share_sedna }
 	if = { limit = { has_global_variable = sr_site_lvl_a_sedna } remove_global_variable = sr_site_lvl_a_sedna }
 	if = { limit = { has_global_variable = sr_site_lvl_b_sedna } remove_global_variable = sr_site_lvl_b_sedna }
 	if = { limit = { has_global_variable = sr_site_hab_sedna } remove_global_variable = sr_site_hab_sedna }
@@ -11131,6 +11231,8 @@ sr_site_monthly_sedna = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_sedna value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_sedna value = sr_site_hab_share_value_sedna }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -11319,6 +11421,7 @@ sr_site_release_shackleton = {
 	if = { limit = { has_global_variable = sr_site_spec_shackleton } remove_global_variable = sr_site_spec_shackleton }
 	if = { limit = { has_global_variable = sr_site_region_shackleton } remove_global_variable = sr_site_region_shackleton }
 	if = { limit = { has_global_variable = sr_site_pop_shackleton } remove_global_variable = sr_site_pop_shackleton }
+	if = { limit = { has_global_variable = sr_site_hab_share_shackleton } remove_global_variable = sr_site_hab_share_shackleton }
 	if = { limit = { has_global_variable = sr_site_lvl_a_shackleton } remove_global_variable = sr_site_lvl_a_shackleton }
 	if = { limit = { has_global_variable = sr_site_lvl_b_shackleton } remove_global_variable = sr_site_lvl_b_shackleton }
 	if = { limit = { has_global_variable = sr_site_hab_shackleton } remove_global_variable = sr_site_hab_shackleton }
@@ -11384,6 +11487,8 @@ sr_site_monthly_shackleton = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_shackleton value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_shackleton value = sr_site_hab_share_value_shackleton }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -11572,6 +11677,7 @@ sr_site_release_peary = {
 	if = { limit = { has_global_variable = sr_site_spec_peary } remove_global_variable = sr_site_spec_peary }
 	if = { limit = { has_global_variable = sr_site_region_peary } remove_global_variable = sr_site_region_peary }
 	if = { limit = { has_global_variable = sr_site_pop_peary } remove_global_variable = sr_site_pop_peary }
+	if = { limit = { has_global_variable = sr_site_hab_share_peary } remove_global_variable = sr_site_hab_share_peary }
 	if = { limit = { has_global_variable = sr_site_lvl_a_peary } remove_global_variable = sr_site_lvl_a_peary }
 	if = { limit = { has_global_variable = sr_site_lvl_b_peary } remove_global_variable = sr_site_lvl_b_peary }
 	if = { limit = { has_global_variable = sr_site_hab_peary } remove_global_variable = sr_site_hab_peary }
@@ -11637,6 +11743,8 @@ sr_site_monthly_peary = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_peary value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_peary value = sr_site_hab_share_value_peary }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -11825,6 +11933,7 @@ sr_site_release_tranquility = {
 	if = { limit = { has_global_variable = sr_site_spec_tranquility } remove_global_variable = sr_site_spec_tranquility }
 	if = { limit = { has_global_variable = sr_site_region_tranquility } remove_global_variable = sr_site_region_tranquility }
 	if = { limit = { has_global_variable = sr_site_pop_tranquility } remove_global_variable = sr_site_pop_tranquility }
+	if = { limit = { has_global_variable = sr_site_hab_share_tranquility } remove_global_variable = sr_site_hab_share_tranquility }
 	if = { limit = { has_global_variable = sr_site_lvl_a_tranquility } remove_global_variable = sr_site_lvl_a_tranquility }
 	if = { limit = { has_global_variable = sr_site_lvl_b_tranquility } remove_global_variable = sr_site_lvl_b_tranquility }
 	if = { limit = { has_global_variable = sr_site_hab_tranquility } remove_global_variable = sr_site_hab_tranquility }
@@ -11890,6 +11999,8 @@ sr_site_monthly_tranquility = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_tranquility value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_tranquility value = sr_site_hab_share_value_tranquility }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -12078,6 +12189,7 @@ sr_site_release_marius_hills = {
 	if = { limit = { has_global_variable = sr_site_spec_marius_hills } remove_global_variable = sr_site_spec_marius_hills }
 	if = { limit = { has_global_variable = sr_site_region_marius_hills } remove_global_variable = sr_site_region_marius_hills }
 	if = { limit = { has_global_variable = sr_site_pop_marius_hills } remove_global_variable = sr_site_pop_marius_hills }
+	if = { limit = { has_global_variable = sr_site_hab_share_marius_hills } remove_global_variable = sr_site_hab_share_marius_hills }
 	if = { limit = { has_global_variable = sr_site_lvl_a_marius_hills } remove_global_variable = sr_site_lvl_a_marius_hills }
 	if = { limit = { has_global_variable = sr_site_lvl_b_marius_hills } remove_global_variable = sr_site_lvl_b_marius_hills }
 	if = { limit = { has_global_variable = sr_site_hab_marius_hills } remove_global_variable = sr_site_hab_marius_hills }
@@ -12143,6 +12255,8 @@ sr_site_monthly_marius_hills = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_marius_hills value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_marius_hills value = sr_site_hab_share_value_marius_hills }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -12331,6 +12445,7 @@ sr_site_release_daedalus = {
 	if = { limit = { has_global_variable = sr_site_spec_daedalus } remove_global_variable = sr_site_spec_daedalus }
 	if = { limit = { has_global_variable = sr_site_region_daedalus } remove_global_variable = sr_site_region_daedalus }
 	if = { limit = { has_global_variable = sr_site_pop_daedalus } remove_global_variable = sr_site_pop_daedalus }
+	if = { limit = { has_global_variable = sr_site_hab_share_daedalus } remove_global_variable = sr_site_hab_share_daedalus }
 	if = { limit = { has_global_variable = sr_site_lvl_a_daedalus } remove_global_variable = sr_site_lvl_a_daedalus }
 	if = { limit = { has_global_variable = sr_site_lvl_b_daedalus } remove_global_variable = sr_site_lvl_b_daedalus }
 	if = { limit = { has_global_variable = sr_site_hab_daedalus } remove_global_variable = sr_site_hab_daedalus }
@@ -12396,6 +12511,8 @@ sr_site_monthly_daedalus = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_daedalus value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_daedalus value = sr_site_hab_share_value_daedalus }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.
@@ -12584,6 +12701,7 @@ sr_site_release_imbrium = {
 	if = { limit = { has_global_variable = sr_site_spec_imbrium } remove_global_variable = sr_site_spec_imbrium }
 	if = { limit = { has_global_variable = sr_site_region_imbrium } remove_global_variable = sr_site_region_imbrium }
 	if = { limit = { has_global_variable = sr_site_pop_imbrium } remove_global_variable = sr_site_pop_imbrium }
+	if = { limit = { has_global_variable = sr_site_hab_share_imbrium } remove_global_variable = sr_site_hab_share_imbrium }
 	if = { limit = { has_global_variable = sr_site_lvl_a_imbrium } remove_global_variable = sr_site_lvl_a_imbrium }
 	if = { limit = { has_global_variable = sr_site_lvl_b_imbrium } remove_global_variable = sr_site_lvl_b_imbrium }
 	if = { limit = { has_global_variable = sr_site_hab_imbrium } remove_global_variable = sr_site_hab_imbrium }
@@ -12649,6 +12767,8 @@ sr_site_monthly_imbrium = {
 		if = {
 			limit = { is_country_alive = yes exists = capital }
 			set_global_variable = { name = sr_site_region_imbrium value = capital.state_region }
+			# The best Habitat share the world has had (colony people design § 4.4).
+			set_global_variable = { name = sr_site_hab_share_imbrium value = sr_site_hab_share_value_imbrium }
 		}
 	}
 	# 2. A dead holder: its capital region's owner inherits, or the world is released.

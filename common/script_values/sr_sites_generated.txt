@@ -1361,8 +1361,10 @@ sr_cf_target_goal = {
 
 # ===== Population (slices 2-3 design § 10) =====
 
-# Per world, any scope: its base room (people, before Habitats), its room (+50% of
-# the base a Habitat level, slice 4 design § 3, and on a world that takes it the
+# Per world, any scope: its base room (people, before Habitats), its Habitat share
+# (now: 0.5 plus the holder's country_sr_habitat_room_add; value: never below the
+# share the world has had, sr_site_hab_share_<key>), its room (the share of the base a
+# Habitat level, colony people design § 4.4, and on a world that takes it the
 # share its Terraforming has done, era 13 spec § 7.11), its people, its free room (of the
 # room held while a Habitat comes down, sr_site_room_held_<key>), and
 # the module levels above the first its people can crew, at its holder's crew size
@@ -1372,9 +1374,17 @@ sr_cf_target_goal = {
 # Any scope: its growth a month, sr_site_growth_<key>, 1 + 0.002 and its
 # holder's country_sr_colony_growth_add (Self-Directed Evolution, era 13 spec § 7.3).
 sr_site_base_room_valles_marineris = { value = 50000 }
+sr_site_hab_share_now_valles_marineris = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_valles_marineris } global_var:sr_site_holder_valles_marineris = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_valles_marineris = {
+	value = sr_site_hab_share_now_valles_marineris
+	if = { limit = { has_global_variable = sr_site_hab_share_valles_marineris } min = global_var:sr_site_hab_share_valles_marineris }
+}
 sr_site_room_valles_marineris = {
 	value = sr_site_hab_value_valles_marineris
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_valles_marineris
 	add = 1
 	add = sr_site_terra_share_valles_marineris
 	multiply = sr_site_base_room_valles_marineris
@@ -1416,9 +1426,17 @@ sr_emig_weight_valles_marineris = {
 	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_blockaded_valles_marineris } NOT = { has_global_variable = sr_site_occupier_valles_marineris } } value = sr_emig_prio_weight_valles_marineris multiply = sr_site_free_room_valles_marineris }
 }
 sr_site_base_room_olympus_mons = { value = 40000 }
+sr_site_hab_share_now_olympus_mons = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_olympus_mons } global_var:sr_site_holder_olympus_mons = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_olympus_mons = {
+	value = sr_site_hab_share_now_olympus_mons
+	if = { limit = { has_global_variable = sr_site_hab_share_olympus_mons } min = global_var:sr_site_hab_share_olympus_mons }
+}
 sr_site_room_olympus_mons = {
 	value = sr_site_hab_value_olympus_mons
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_olympus_mons
 	add = 1
 	add = sr_site_terra_share_olympus_mons
 	multiply = sr_site_base_room_olympus_mons
@@ -1460,9 +1478,17 @@ sr_emig_weight_olympus_mons = {
 	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_blockaded_olympus_mons } NOT = { has_global_variable = sr_site_occupier_olympus_mons } } value = sr_emig_prio_weight_olympus_mons multiply = sr_site_free_room_olympus_mons }
 }
 sr_site_base_room_hellas_planitia = { value = 50000 }
+sr_site_hab_share_now_hellas_planitia = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_hellas_planitia } global_var:sr_site_holder_hellas_planitia = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_hellas_planitia = {
+	value = sr_site_hab_share_now_hellas_planitia
+	if = { limit = { has_global_variable = sr_site_hab_share_hellas_planitia } min = global_var:sr_site_hab_share_hellas_planitia }
+}
 sr_site_room_hellas_planitia = {
 	value = sr_site_hab_value_hellas_planitia
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_hellas_planitia
 	add = 1
 	add = sr_site_terra_share_hellas_planitia
 	multiply = sr_site_base_room_hellas_planitia
@@ -1504,9 +1530,17 @@ sr_emig_weight_hellas_planitia = {
 	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_hellas_planitia } NOT = { has_global_variable = sr_site_occupier_hellas_planitia } } value = sr_emig_prio_weight_hellas_planitia multiply = sr_site_free_room_hellas_planitia }
 }
 sr_site_base_room_utopia_planitia = { value = 50000 }
+sr_site_hab_share_now_utopia_planitia = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_utopia_planitia } global_var:sr_site_holder_utopia_planitia = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_utopia_planitia = {
+	value = sr_site_hab_share_now_utopia_planitia
+	if = { limit = { has_global_variable = sr_site_hab_share_utopia_planitia } min = global_var:sr_site_hab_share_utopia_planitia }
+}
 sr_site_room_utopia_planitia = {
 	value = sr_site_hab_value_utopia_planitia
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_utopia_planitia
 	add = 1
 	add = sr_site_terra_share_utopia_planitia
 	multiply = sr_site_base_room_utopia_planitia
@@ -1548,9 +1582,17 @@ sr_emig_weight_utopia_planitia = {
 	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_utopia_planitia } NOT = { has_global_variable = sr_site_occupier_utopia_planitia } } value = sr_emig_prio_weight_utopia_planitia multiply = sr_site_free_room_utopia_planitia }
 }
 sr_site_base_room_arcadia_planitia = { value = 40000 }
+sr_site_hab_share_now_arcadia_planitia = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_arcadia_planitia } global_var:sr_site_holder_arcadia_planitia = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_arcadia_planitia = {
+	value = sr_site_hab_share_now_arcadia_planitia
+	if = { limit = { has_global_variable = sr_site_hab_share_arcadia_planitia } min = global_var:sr_site_hab_share_arcadia_planitia }
+}
 sr_site_room_arcadia_planitia = {
 	value = sr_site_hab_value_arcadia_planitia
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_arcadia_planitia
 	add = 1
 	add = sr_site_terra_share_arcadia_planitia
 	multiply = sr_site_base_room_arcadia_planitia
@@ -1592,9 +1634,17 @@ sr_emig_weight_arcadia_planitia = {
 	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_arcadia_planitia } NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } } value = sr_emig_prio_weight_arcadia_planitia multiply = sr_site_free_room_arcadia_planitia }
 }
 sr_site_base_room_ceres = { value = 40000 }
+sr_site_hab_share_now_ceres = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_ceres } global_var:sr_site_holder_ceres = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_ceres = {
+	value = sr_site_hab_share_now_ceres
+	if = { limit = { has_global_variable = sr_site_hab_share_ceres } min = global_var:sr_site_hab_share_ceres }
+}
 sr_site_room_ceres = {
 	value = sr_site_hab_value_ceres
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_ceres
 	add = 1
 	multiply = sr_site_base_room_ceres
 }
@@ -1635,9 +1685,17 @@ sr_emig_weight_ceres = {
 	if = { limit = { global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_blockaded_ceres } NOT = { has_global_variable = sr_site_occupier_ceres } } value = sr_emig_prio_weight_ceres multiply = sr_site_free_room_ceres }
 }
 sr_site_base_room_vesta = { value = 25000 }
+sr_site_hab_share_now_vesta = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_vesta } global_var:sr_site_holder_vesta = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_vesta = {
+	value = sr_site_hab_share_now_vesta
+	if = { limit = { has_global_variable = sr_site_hab_share_vesta } min = global_var:sr_site_hab_share_vesta }
+}
 sr_site_room_vesta = {
 	value = sr_site_hab_value_vesta
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_vesta
 	add = 1
 	multiply = sr_site_base_room_vesta
 }
@@ -1678,9 +1736,17 @@ sr_emig_weight_vesta = {
 	if = { limit = { global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_blockaded_vesta } NOT = { has_global_variable = sr_site_occupier_vesta } } value = sr_emig_prio_weight_vesta multiply = sr_site_free_room_vesta }
 }
 sr_site_base_room_psyche = { value = 20000 }
+sr_site_hab_share_now_psyche = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_psyche } global_var:sr_site_holder_psyche = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_psyche = {
+	value = sr_site_hab_share_now_psyche
+	if = { limit = { has_global_variable = sr_site_hab_share_psyche } min = global_var:sr_site_hab_share_psyche }
+}
 sr_site_room_psyche = {
 	value = sr_site_hab_value_psyche
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_psyche
 	add = 1
 	multiply = sr_site_base_room_psyche
 }
@@ -1721,9 +1787,17 @@ sr_emig_weight_psyche = {
 	if = { limit = { global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_blockaded_psyche } NOT = { has_global_variable = sr_site_occupier_psyche } } value = sr_emig_prio_weight_psyche multiply = sr_site_free_room_psyche }
 }
 sr_site_base_room_pallas = { value = 20000 }
+sr_site_hab_share_now_pallas = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_pallas } global_var:sr_site_holder_pallas = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_pallas = {
+	value = sr_site_hab_share_now_pallas
+	if = { limit = { has_global_variable = sr_site_hab_share_pallas } min = global_var:sr_site_hab_share_pallas }
+}
 sr_site_room_pallas = {
 	value = sr_site_hab_value_pallas
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_pallas
 	add = 1
 	multiply = sr_site_base_room_pallas
 }
@@ -1764,9 +1838,17 @@ sr_emig_weight_pallas = {
 	if = { limit = { global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_blockaded_pallas } NOT = { has_global_variable = sr_site_occupier_pallas } } value = sr_emig_prio_weight_pallas multiply = sr_site_free_room_pallas }
 }
 sr_site_base_room_hygiea = { value = 15000 }
+sr_site_hab_share_now_hygiea = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_hygiea } global_var:sr_site_holder_hygiea = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_hygiea = {
+	value = sr_site_hab_share_now_hygiea
+	if = { limit = { has_global_variable = sr_site_hab_share_hygiea } min = global_var:sr_site_hab_share_hygiea }
+}
 sr_site_room_hygiea = {
 	value = sr_site_hab_value_hygiea
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_hygiea
 	add = 1
 	multiply = sr_site_base_room_hygiea
 }
@@ -1807,9 +1889,17 @@ sr_emig_weight_hygiea = {
 	if = { limit = { global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_blockaded_hygiea } NOT = { has_global_variable = sr_site_occupier_hygiea } } value = sr_emig_prio_weight_hygiea multiply = sr_site_free_room_hygiea }
 }
 sr_site_base_room_io = { value = 15000 }
+sr_site_hab_share_now_io = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_io } global_var:sr_site_holder_io = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_io = {
+	value = sr_site_hab_share_now_io
+	if = { limit = { has_global_variable = sr_site_hab_share_io } min = global_var:sr_site_hab_share_io }
+}
 sr_site_room_io = {
 	value = sr_site_hab_value_io
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_io
 	add = 1
 	multiply = sr_site_base_room_io
 }
@@ -1850,9 +1940,17 @@ sr_emig_weight_io = {
 	if = { limit = { global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_blockaded_io } NOT = { has_global_variable = sr_site_occupier_io } } value = sr_emig_prio_weight_io multiply = sr_site_free_room_io }
 }
 sr_site_base_room_europa = { value = 30000 }
+sr_site_hab_share_now_europa = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_europa } global_var:sr_site_holder_europa = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_europa = {
+	value = sr_site_hab_share_now_europa
+	if = { limit = { has_global_variable = sr_site_hab_share_europa } min = global_var:sr_site_hab_share_europa }
+}
 sr_site_room_europa = {
 	value = sr_site_hab_value_europa
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_europa
 	add = 1
 	multiply = sr_site_base_room_europa
 }
@@ -1893,9 +1991,17 @@ sr_emig_weight_europa = {
 	if = { limit = { global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_blockaded_europa } NOT = { has_global_variable = sr_site_occupier_europa } } value = sr_emig_prio_weight_europa multiply = sr_site_free_room_europa }
 }
 sr_site_base_room_ganymede = { value = 40000 }
+sr_site_hab_share_now_ganymede = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_ganymede } global_var:sr_site_holder_ganymede = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_ganymede = {
+	value = sr_site_hab_share_now_ganymede
+	if = { limit = { has_global_variable = sr_site_hab_share_ganymede } min = global_var:sr_site_hab_share_ganymede }
+}
 sr_site_room_ganymede = {
 	value = sr_site_hab_value_ganymede
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_ganymede
 	add = 1
 	add = sr_site_terra_share_ganymede
 	multiply = sr_site_base_room_ganymede
@@ -1937,9 +2043,17 @@ sr_emig_weight_ganymede = {
 	if = { limit = { global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_blockaded_ganymede } NOT = { has_global_variable = sr_site_occupier_ganymede } } value = sr_emig_prio_weight_ganymede multiply = sr_site_free_room_ganymede }
 }
 sr_site_base_room_callisto = { value = 40000 }
+sr_site_hab_share_now_callisto = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_callisto } global_var:sr_site_holder_callisto = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_callisto = {
+	value = sr_site_hab_share_now_callisto
+	if = { limit = { has_global_variable = sr_site_hab_share_callisto } min = global_var:sr_site_hab_share_callisto }
+}
 sr_site_room_callisto = {
 	value = sr_site_hab_value_callisto
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_callisto
 	add = 1
 	add = sr_site_terra_share_callisto
 	multiply = sr_site_base_room_callisto
@@ -1981,9 +2095,17 @@ sr_emig_weight_callisto = {
 	if = { limit = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_blockaded_callisto } NOT = { has_global_variable = sr_site_occupier_callisto } } value = sr_emig_prio_weight_callisto multiply = sr_site_free_room_callisto }
 }
 sr_site_base_room_himalia = { value = 10000 }
+sr_site_hab_share_now_himalia = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_himalia } global_var:sr_site_holder_himalia = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_himalia = {
+	value = sr_site_hab_share_now_himalia
+	if = { limit = { has_global_variable = sr_site_hab_share_himalia } min = global_var:sr_site_hab_share_himalia }
+}
 sr_site_room_himalia = {
 	value = sr_site_hab_value_himalia
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_himalia
 	add = 1
 	multiply = sr_site_base_room_himalia
 }
@@ -2024,9 +2146,17 @@ sr_emig_weight_himalia = {
 	if = { limit = { global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_blockaded_himalia } NOT = { has_global_variable = sr_site_occupier_himalia } } value = sr_emig_prio_weight_himalia multiply = sr_site_free_room_himalia }
 }
 sr_site_base_room_amalthea = { value = 10000 }
+sr_site_hab_share_now_amalthea = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_amalthea } global_var:sr_site_holder_amalthea = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_amalthea = {
+	value = sr_site_hab_share_now_amalthea
+	if = { limit = { has_global_variable = sr_site_hab_share_amalthea } min = global_var:sr_site_hab_share_amalthea }
+}
 sr_site_room_amalthea = {
 	value = sr_site_hab_value_amalthea
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_amalthea
 	add = 1
 	multiply = sr_site_base_room_amalthea
 }
@@ -2067,9 +2197,17 @@ sr_emig_weight_amalthea = {
 	if = { limit = { global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_blockaded_amalthea } NOT = { has_global_variable = sr_site_occupier_amalthea } } value = sr_emig_prio_weight_amalthea multiply = sr_site_free_room_amalthea }
 }
 sr_site_base_room_venus = { value = 30000 }
+sr_site_hab_share_now_venus = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_venus } global_var:sr_site_holder_venus = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_venus = {
+	value = sr_site_hab_share_now_venus
+	if = { limit = { has_global_variable = sr_site_hab_share_venus } min = global_var:sr_site_hab_share_venus }
+}
 sr_site_room_venus = {
 	value = sr_site_hab_value_venus
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_venus
 	add = 1
 	add = sr_site_terra_share_venus
 	multiply = sr_site_base_room_venus
@@ -2111,9 +2249,17 @@ sr_emig_weight_venus = {
 	if = { limit = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_blockaded_venus } NOT = { has_global_variable = sr_site_occupier_venus } } value = sr_emig_prio_weight_venus multiply = sr_site_free_room_venus }
 }
 sr_site_base_room_mercury = { value = 25000 }
+sr_site_hab_share_now_mercury = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_mercury } global_var:sr_site_holder_mercury = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_mercury = {
+	value = sr_site_hab_share_now_mercury
+	if = { limit = { has_global_variable = sr_site_hab_share_mercury } min = global_var:sr_site_hab_share_mercury }
+}
 sr_site_room_mercury = {
 	value = sr_site_hab_value_mercury
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_mercury
 	add = 1
 	multiply = sr_site_base_room_mercury
 }
@@ -2154,9 +2300,17 @@ sr_emig_weight_mercury = {
 	if = { limit = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_blockaded_mercury } NOT = { has_global_variable = sr_site_occupier_mercury } } value = sr_emig_prio_weight_mercury multiply = sr_site_free_room_mercury }
 }
 sr_site_base_room_titan = { value = 40000 }
+sr_site_hab_share_now_titan = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_titan } global_var:sr_site_holder_titan = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_titan = {
+	value = sr_site_hab_share_now_titan
+	if = { limit = { has_global_variable = sr_site_hab_share_titan } min = global_var:sr_site_hab_share_titan }
+}
 sr_site_room_titan = {
 	value = sr_site_hab_value_titan
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_titan
 	add = 1
 	add = sr_site_terra_share_titan
 	multiply = sr_site_base_room_titan
@@ -2198,9 +2352,17 @@ sr_emig_weight_titan = {
 	if = { limit = { global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_blockaded_titan } NOT = { has_global_variable = sr_site_occupier_titan } } value = sr_emig_prio_weight_titan multiply = sr_site_free_room_titan }
 }
 sr_site_base_room_enceladus = { value = 20000 }
+sr_site_hab_share_now_enceladus = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_enceladus } global_var:sr_site_holder_enceladus = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_enceladus = {
+	value = sr_site_hab_share_now_enceladus
+	if = { limit = { has_global_variable = sr_site_hab_share_enceladus } min = global_var:sr_site_hab_share_enceladus }
+}
 sr_site_room_enceladus = {
 	value = sr_site_hab_value_enceladus
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_enceladus
 	add = 1
 	multiply = sr_site_base_room_enceladus
 }
@@ -2241,9 +2403,17 @@ sr_emig_weight_enceladus = {
 	if = { limit = { global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_blockaded_enceladus } NOT = { has_global_variable = sr_site_occupier_enceladus } } value = sr_emig_prio_weight_enceladus multiply = sr_site_free_room_enceladus }
 }
 sr_site_base_room_rhea = { value = 20000 }
+sr_site_hab_share_now_rhea = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_rhea } global_var:sr_site_holder_rhea = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_rhea = {
+	value = sr_site_hab_share_now_rhea
+	if = { limit = { has_global_variable = sr_site_hab_share_rhea } min = global_var:sr_site_hab_share_rhea }
+}
 sr_site_room_rhea = {
 	value = sr_site_hab_value_rhea
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_rhea
 	add = 1
 	multiply = sr_site_base_room_rhea
 }
@@ -2284,9 +2454,17 @@ sr_emig_weight_rhea = {
 	if = { limit = { global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_blockaded_rhea } NOT = { has_global_variable = sr_site_occupier_rhea } } value = sr_emig_prio_weight_rhea multiply = sr_site_free_room_rhea }
 }
 sr_site_base_room_mimas = { value = 10000 }
+sr_site_hab_share_now_mimas = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_mimas } global_var:sr_site_holder_mimas = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_mimas = {
+	value = sr_site_hab_share_now_mimas
+	if = { limit = { has_global_variable = sr_site_hab_share_mimas } min = global_var:sr_site_hab_share_mimas }
+}
 sr_site_room_mimas = {
 	value = sr_site_hab_value_mimas
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_mimas
 	add = 1
 	multiply = sr_site_base_room_mimas
 }
@@ -2327,9 +2505,17 @@ sr_emig_weight_mimas = {
 	if = { limit = { global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_blockaded_mimas } NOT = { has_global_variable = sr_site_occupier_mimas } } value = sr_emig_prio_weight_mimas multiply = sr_site_free_room_mimas }
 }
 sr_site_base_room_iapetus = { value = 15000 }
+sr_site_hab_share_now_iapetus = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_iapetus } global_var:sr_site_holder_iapetus = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_iapetus = {
+	value = sr_site_hab_share_now_iapetus
+	if = { limit = { has_global_variable = sr_site_hab_share_iapetus } min = global_var:sr_site_hab_share_iapetus }
+}
 sr_site_room_iapetus = {
 	value = sr_site_hab_value_iapetus
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_iapetus
 	add = 1
 	multiply = sr_site_base_room_iapetus
 }
@@ -2370,9 +2556,17 @@ sr_emig_weight_iapetus = {
 	if = { limit = { global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_blockaded_iapetus } NOT = { has_global_variable = sr_site_occupier_iapetus } } value = sr_emig_prio_weight_iapetus multiply = sr_site_free_room_iapetus }
 }
 sr_site_base_room_titania = { value = 20000 }
+sr_site_hab_share_now_titania = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_titania } global_var:sr_site_holder_titania = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_titania = {
+	value = sr_site_hab_share_now_titania
+	if = { limit = { has_global_variable = sr_site_hab_share_titania } min = global_var:sr_site_hab_share_titania }
+}
 sr_site_room_titania = {
 	value = sr_site_hab_value_titania
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_titania
 	add = 1
 	multiply = sr_site_base_room_titania
 }
@@ -2413,9 +2607,17 @@ sr_emig_weight_titania = {
 	if = { limit = { global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_blockaded_titania } NOT = { has_global_variable = sr_site_occupier_titania } } value = sr_emig_prio_weight_titania multiply = sr_site_free_room_titania }
 }
 sr_site_base_room_oberon = { value = 20000 }
+sr_site_hab_share_now_oberon = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_oberon } global_var:sr_site_holder_oberon = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_oberon = {
+	value = sr_site_hab_share_now_oberon
+	if = { limit = { has_global_variable = sr_site_hab_share_oberon } min = global_var:sr_site_hab_share_oberon }
+}
 sr_site_room_oberon = {
 	value = sr_site_hab_value_oberon
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_oberon
 	add = 1
 	multiply = sr_site_base_room_oberon
 }
@@ -2456,9 +2658,17 @@ sr_emig_weight_oberon = {
 	if = { limit = { global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_blockaded_oberon } NOT = { has_global_variable = sr_site_occupier_oberon } } value = sr_emig_prio_weight_oberon multiply = sr_site_free_room_oberon }
 }
 sr_site_base_room_miranda = { value = 10000 }
+sr_site_hab_share_now_miranda = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_miranda } global_var:sr_site_holder_miranda = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_miranda = {
+	value = sr_site_hab_share_now_miranda
+	if = { limit = { has_global_variable = sr_site_hab_share_miranda } min = global_var:sr_site_hab_share_miranda }
+}
 sr_site_room_miranda = {
 	value = sr_site_hab_value_miranda
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_miranda
 	add = 1
 	multiply = sr_site_base_room_miranda
 }
@@ -2499,9 +2709,17 @@ sr_emig_weight_miranda = {
 	if = { limit = { global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_blockaded_miranda } NOT = { has_global_variable = sr_site_occupier_miranda } } value = sr_emig_prio_weight_miranda multiply = sr_site_free_room_miranda }
 }
 sr_site_base_room_ariel = { value = 15000 }
+sr_site_hab_share_now_ariel = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_ariel } global_var:sr_site_holder_ariel = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_ariel = {
+	value = sr_site_hab_share_now_ariel
+	if = { limit = { has_global_variable = sr_site_hab_share_ariel } min = global_var:sr_site_hab_share_ariel }
+}
 sr_site_room_ariel = {
 	value = sr_site_hab_value_ariel
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_ariel
 	add = 1
 	multiply = sr_site_base_room_ariel
 }
@@ -2542,9 +2760,17 @@ sr_emig_weight_ariel = {
 	if = { limit = { global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_blockaded_ariel } NOT = { has_global_variable = sr_site_occupier_ariel } } value = sr_emig_prio_weight_ariel multiply = sr_site_free_room_ariel }
 }
 sr_site_base_room_triton = { value = 20000 }
+sr_site_hab_share_now_triton = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_triton } global_var:sr_site_holder_triton = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_triton = {
+	value = sr_site_hab_share_now_triton
+	if = { limit = { has_global_variable = sr_site_hab_share_triton } min = global_var:sr_site_hab_share_triton }
+}
 sr_site_room_triton = {
 	value = sr_site_hab_value_triton
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_triton
 	add = 1
 	multiply = sr_site_base_room_triton
 }
@@ -2585,9 +2811,17 @@ sr_emig_weight_triton = {
 	if = { limit = { global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_blockaded_triton } NOT = { has_global_variable = sr_site_occupier_triton } } value = sr_emig_prio_weight_triton multiply = sr_site_free_room_triton }
 }
 sr_site_base_room_proteus = { value = 10000 }
+sr_site_hab_share_now_proteus = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_proteus } global_var:sr_site_holder_proteus = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_proteus = {
+	value = sr_site_hab_share_now_proteus
+	if = { limit = { has_global_variable = sr_site_hab_share_proteus } min = global_var:sr_site_hab_share_proteus }
+}
 sr_site_room_proteus = {
 	value = sr_site_hab_value_proteus
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_proteus
 	add = 1
 	multiply = sr_site_base_room_proteus
 }
@@ -2628,9 +2862,17 @@ sr_emig_weight_proteus = {
 	if = { limit = { global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_blockaded_proteus } NOT = { has_global_variable = sr_site_occupier_proteus } } value = sr_emig_prio_weight_proteus multiply = sr_site_free_room_proteus }
 }
 sr_site_base_room_pluto = { value = 20000 }
+sr_site_hab_share_now_pluto = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_pluto } global_var:sr_site_holder_pluto = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_pluto = {
+	value = sr_site_hab_share_now_pluto
+	if = { limit = { has_global_variable = sr_site_hab_share_pluto } min = global_var:sr_site_hab_share_pluto }
+}
 sr_site_room_pluto = {
 	value = sr_site_hab_value_pluto
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_pluto
 	add = 1
 	multiply = sr_site_base_room_pluto
 }
@@ -2671,9 +2913,17 @@ sr_emig_weight_pluto = {
 	if = { limit = { global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_blockaded_pluto } NOT = { has_global_variable = sr_site_occupier_pluto } } value = sr_emig_prio_weight_pluto multiply = sr_site_free_room_pluto }
 }
 sr_site_base_room_eris = { value = 10000 }
+sr_site_hab_share_now_eris = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_eris } global_var:sr_site_holder_eris = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_eris = {
+	value = sr_site_hab_share_now_eris
+	if = { limit = { has_global_variable = sr_site_hab_share_eris } min = global_var:sr_site_hab_share_eris }
+}
 sr_site_room_eris = {
 	value = sr_site_hab_value_eris
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_eris
 	add = 1
 	multiply = sr_site_base_room_eris
 }
@@ -2714,9 +2964,17 @@ sr_emig_weight_eris = {
 	if = { limit = { global_var:sr_site_holder_eris ?= this NOT = { has_global_variable = sr_site_blockaded_eris } NOT = { has_global_variable = sr_site_occupier_eris } } value = sr_emig_prio_weight_eris multiply = sr_site_free_room_eris }
 }
 sr_site_base_room_makemake = { value = 10000 }
+sr_site_hab_share_now_makemake = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_makemake } global_var:sr_site_holder_makemake = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_makemake = {
+	value = sr_site_hab_share_now_makemake
+	if = { limit = { has_global_variable = sr_site_hab_share_makemake } min = global_var:sr_site_hab_share_makemake }
+}
 sr_site_room_makemake = {
 	value = sr_site_hab_value_makemake
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_makemake
 	add = 1
 	multiply = sr_site_base_room_makemake
 }
@@ -2757,9 +3015,17 @@ sr_emig_weight_makemake = {
 	if = { limit = { global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_blockaded_makemake } NOT = { has_global_variable = sr_site_occupier_makemake } } value = sr_emig_prio_weight_makemake multiply = sr_site_free_room_makemake }
 }
 sr_site_base_room_haumea = { value = 10000 }
+sr_site_hab_share_now_haumea = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_haumea } global_var:sr_site_holder_haumea = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_haumea = {
+	value = sr_site_hab_share_now_haumea
+	if = { limit = { has_global_variable = sr_site_hab_share_haumea } min = global_var:sr_site_hab_share_haumea }
+}
 sr_site_room_haumea = {
 	value = sr_site_hab_value_haumea
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_haumea
 	add = 1
 	multiply = sr_site_base_room_haumea
 }
@@ -2800,9 +3066,17 @@ sr_emig_weight_haumea = {
 	if = { limit = { global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_blockaded_haumea } NOT = { has_global_variable = sr_site_occupier_haumea } } value = sr_emig_prio_weight_haumea multiply = sr_site_free_room_haumea }
 }
 sr_site_base_room_sedna = { value = 10000 }
+sr_site_hab_share_now_sedna = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_sedna } global_var:sr_site_holder_sedna = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_sedna = {
+	value = sr_site_hab_share_now_sedna
+	if = { limit = { has_global_variable = sr_site_hab_share_sedna } min = global_var:sr_site_hab_share_sedna }
+}
 sr_site_room_sedna = {
 	value = sr_site_hab_value_sedna
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_sedna
 	add = 1
 	multiply = sr_site_base_room_sedna
 }
@@ -2843,9 +3117,17 @@ sr_emig_weight_sedna = {
 	if = { limit = { global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_blockaded_sedna } NOT = { has_global_variable = sr_site_occupier_sedna } } value = sr_emig_prio_weight_sedna multiply = sr_site_free_room_sedna }
 }
 sr_site_base_room_shackleton = { value = 25000 }
+sr_site_hab_share_now_shackleton = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_shackleton } global_var:sr_site_holder_shackleton = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_shackleton = {
+	value = sr_site_hab_share_now_shackleton
+	if = { limit = { has_global_variable = sr_site_hab_share_shackleton } min = global_var:sr_site_hab_share_shackleton }
+}
 sr_site_room_shackleton = {
 	value = sr_site_hab_value_shackleton
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_shackleton
 	add = 1
 	multiply = sr_site_base_room_shackleton
 }
@@ -2886,9 +3168,17 @@ sr_emig_weight_shackleton = {
 	if = { limit = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_blockaded_shackleton } NOT = { has_global_variable = sr_site_occupier_shackleton } } value = sr_emig_prio_weight_shackleton multiply = sr_site_free_room_shackleton }
 }
 sr_site_base_room_peary = { value = 15000 }
+sr_site_hab_share_now_peary = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_peary } global_var:sr_site_holder_peary = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_peary = {
+	value = sr_site_hab_share_now_peary
+	if = { limit = { has_global_variable = sr_site_hab_share_peary } min = global_var:sr_site_hab_share_peary }
+}
 sr_site_room_peary = {
 	value = sr_site_hab_value_peary
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_peary
 	add = 1
 	multiply = sr_site_base_room_peary
 }
@@ -2929,9 +3219,17 @@ sr_emig_weight_peary = {
 	if = { limit = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_blockaded_peary } NOT = { has_global_variable = sr_site_occupier_peary } } value = sr_emig_prio_weight_peary multiply = sr_site_free_room_peary }
 }
 sr_site_base_room_tranquility = { value = 20000 }
+sr_site_hab_share_now_tranquility = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_tranquility } global_var:sr_site_holder_tranquility = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_tranquility = {
+	value = sr_site_hab_share_now_tranquility
+	if = { limit = { has_global_variable = sr_site_hab_share_tranquility } min = global_var:sr_site_hab_share_tranquility }
+}
 sr_site_room_tranquility = {
 	value = sr_site_hab_value_tranquility
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_tranquility
 	add = 1
 	multiply = sr_site_base_room_tranquility
 }
@@ -2972,9 +3270,17 @@ sr_emig_weight_tranquility = {
 	if = { limit = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_blockaded_tranquility } NOT = { has_global_variable = sr_site_occupier_tranquility } } value = sr_emig_prio_weight_tranquility multiply = sr_site_free_room_tranquility }
 }
 sr_site_base_room_marius_hills = { value = 40000 }
+sr_site_hab_share_now_marius_hills = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_marius_hills } global_var:sr_site_holder_marius_hills = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_marius_hills = {
+	value = sr_site_hab_share_now_marius_hills
+	if = { limit = { has_global_variable = sr_site_hab_share_marius_hills } min = global_var:sr_site_hab_share_marius_hills }
+}
 sr_site_room_marius_hills = {
 	value = sr_site_hab_value_marius_hills
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_marius_hills
 	add = 1
 	multiply = sr_site_base_room_marius_hills
 }
@@ -3015,9 +3321,17 @@ sr_emig_weight_marius_hills = {
 	if = { limit = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_blockaded_marius_hills } NOT = { has_global_variable = sr_site_occupier_marius_hills } } value = sr_emig_prio_weight_marius_hills multiply = sr_site_free_room_marius_hills }
 }
 sr_site_base_room_daedalus = { value = 10000 }
+sr_site_hab_share_now_daedalus = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_daedalus } global_var:sr_site_holder_daedalus = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_daedalus = {
+	value = sr_site_hab_share_now_daedalus
+	if = { limit = { has_global_variable = sr_site_hab_share_daedalus } min = global_var:sr_site_hab_share_daedalus }
+}
 sr_site_room_daedalus = {
 	value = sr_site_hab_value_daedalus
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_daedalus
 	add = 1
 	multiply = sr_site_base_room_daedalus
 }
@@ -3058,9 +3372,17 @@ sr_emig_weight_daedalus = {
 	if = { limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_blockaded_daedalus } NOT = { has_global_variable = sr_site_occupier_daedalus } } value = sr_emig_prio_weight_daedalus multiply = sr_site_free_room_daedalus }
 }
 sr_site_base_room_imbrium = { value = 25000 }
+sr_site_hab_share_now_imbrium = {
+	value = 0.5
+	if = { limit = { exists = global_var:sr_site_holder_imbrium } global_var:sr_site_holder_imbrium = { add = modifier:country_sr_habitat_room_add } }
+}
+sr_site_hab_share_value_imbrium = {
+	value = sr_site_hab_share_now_imbrium
+	if = { limit = { has_global_variable = sr_site_hab_share_imbrium } min = global_var:sr_site_hab_share_imbrium }
+}
 sr_site_room_imbrium = {
 	value = sr_site_hab_value_imbrium
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_imbrium
 	add = 1
 	multiply = sr_site_base_room_imbrium
 }
@@ -12592,51 +12914,51 @@ sr_mq_head_cost = {
 	}
 }
 
-# Country scope, the slot_marker self-check's reading (colony management design
-# § 11): what the holder's Colony Module Slots add at the first colony THIS holds,
-# read through that world's own slots (the holder's scope), or -1 with none.
-sr_site_slots_tech_seen = {
+# Country scope, the habitat_marker self-check's reading (colony management design
+# § 11; colony people design § 5): what the holder's country_sr_habitat_room_add adds at the first
+# colony THIS holds, read through that world's own share (the holder's scope), or -1 with none.
+sr_site_hab_share_seen = {
 	value = -1
-	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this } value = sr_site_slots_valles_marineris subtract = 4 }
-	else_if = { limit = { global_var:sr_site_holder_olympus_mons ?= this } value = sr_site_slots_olympus_mons subtract = 3 }
-	else_if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this } value = sr_site_slots_hellas_planitia subtract = 4 }
-	else_if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this } value = sr_site_slots_utopia_planitia subtract = 4 }
-	else_if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this } value = sr_site_slots_arcadia_planitia subtract = 3 }
-	else_if = { limit = { global_var:sr_site_holder_ceres ?= this } value = sr_site_slots_ceres subtract = 3 }
-	else_if = { limit = { global_var:sr_site_holder_vesta ?= this } value = sr_site_slots_vesta subtract = 2 }
-	else_if = { limit = { global_var:sr_site_holder_psyche ?= this } value = sr_site_slots_psyche subtract = 2 }
-	else_if = { limit = { global_var:sr_site_holder_pallas ?= this } value = sr_site_slots_pallas subtract = 2 }
-	else_if = { limit = { global_var:sr_site_holder_hygiea ?= this } value = sr_site_slots_hygiea subtract = 2 }
-	else_if = { limit = { global_var:sr_site_holder_io ?= this } value = sr_site_slots_io subtract = 2 }
-	else_if = { limit = { global_var:sr_site_holder_europa ?= this } value = sr_site_slots_europa subtract = 3 }
-	else_if = { limit = { global_var:sr_site_holder_ganymede ?= this } value = sr_site_slots_ganymede subtract = 3 }
-	else_if = { limit = { global_var:sr_site_holder_callisto ?= this } value = sr_site_slots_callisto subtract = 3 }
-	else_if = { limit = { global_var:sr_site_holder_himalia ?= this } value = sr_site_slots_himalia subtract = 1 }
-	else_if = { limit = { global_var:sr_site_holder_amalthea ?= this } value = sr_site_slots_amalthea subtract = 1 }
-	else_if = { limit = { global_var:sr_site_holder_venus ?= this } value = sr_site_slots_venus subtract = 2 }
-	else_if = { limit = { global_var:sr_site_holder_mercury ?= this } value = sr_site_slots_mercury subtract = 3 }
-	else_if = { limit = { global_var:sr_site_holder_titan ?= this } value = sr_site_slots_titan subtract = 3 }
-	else_if = { limit = { global_var:sr_site_holder_enceladus ?= this } value = sr_site_slots_enceladus subtract = 2 }
-	else_if = { limit = { global_var:sr_site_holder_rhea ?= this } value = sr_site_slots_rhea subtract = 2 }
-	else_if = { limit = { global_var:sr_site_holder_mimas ?= this } value = sr_site_slots_mimas subtract = 1 }
-	else_if = { limit = { global_var:sr_site_holder_iapetus ?= this } value = sr_site_slots_iapetus subtract = 2 }
-	else_if = { limit = { global_var:sr_site_holder_titania ?= this } value = sr_site_slots_titania subtract = 2 }
-	else_if = { limit = { global_var:sr_site_holder_oberon ?= this } value = sr_site_slots_oberon subtract = 2 }
-	else_if = { limit = { global_var:sr_site_holder_miranda ?= this } value = sr_site_slots_miranda subtract = 1 }
-	else_if = { limit = { global_var:sr_site_holder_ariel ?= this } value = sr_site_slots_ariel subtract = 2 }
-	else_if = { limit = { global_var:sr_site_holder_triton ?= this } value = sr_site_slots_triton subtract = 2 }
-	else_if = { limit = { global_var:sr_site_holder_proteus ?= this } value = sr_site_slots_proteus subtract = 1 }
-	else_if = { limit = { global_var:sr_site_holder_pluto ?= this } value = sr_site_slots_pluto subtract = 2 }
-	else_if = { limit = { global_var:sr_site_holder_eris ?= this } value = sr_site_slots_eris subtract = 1 }
-	else_if = { limit = { global_var:sr_site_holder_makemake ?= this } value = sr_site_slots_makemake subtract = 1 }
-	else_if = { limit = { global_var:sr_site_holder_haumea ?= this } value = sr_site_slots_haumea subtract = 1 }
-	else_if = { limit = { global_var:sr_site_holder_sedna ?= this } value = sr_site_slots_sedna subtract = 1 }
-	else_if = { limit = { global_var:sr_site_holder_shackleton ?= this } value = sr_site_slots_shackleton subtract = 2 }
-	else_if = { limit = { global_var:sr_site_holder_peary ?= this } value = sr_site_slots_peary subtract = 1 }
-	else_if = { limit = { global_var:sr_site_holder_tranquility ?= this } value = sr_site_slots_tranquility subtract = 2 }
-	else_if = { limit = { global_var:sr_site_holder_marius_hills ?= this } value = sr_site_slots_marius_hills subtract = 3 }
-	else_if = { limit = { global_var:sr_site_holder_daedalus ?= this } value = sr_site_slots_daedalus subtract = 1 }
-	else_if = { limit = { global_var:sr_site_holder_imbrium ?= this } value = sr_site_slots_imbrium subtract = 2 }
+	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this } value = sr_site_hab_share_value_valles_marineris subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_olympus_mons ?= this } value = sr_site_hab_share_value_olympus_mons subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this } value = sr_site_hab_share_value_hellas_planitia subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this } value = sr_site_hab_share_value_utopia_planitia subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this } value = sr_site_hab_share_value_arcadia_planitia subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_ceres ?= this } value = sr_site_hab_share_value_ceres subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_vesta ?= this } value = sr_site_hab_share_value_vesta subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_psyche ?= this } value = sr_site_hab_share_value_psyche subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_pallas ?= this } value = sr_site_hab_share_value_pallas subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_hygiea ?= this } value = sr_site_hab_share_value_hygiea subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_io ?= this } value = sr_site_hab_share_value_io subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_europa ?= this } value = sr_site_hab_share_value_europa subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_ganymede ?= this } value = sr_site_hab_share_value_ganymede subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_callisto ?= this } value = sr_site_hab_share_value_callisto subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_himalia ?= this } value = sr_site_hab_share_value_himalia subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_amalthea ?= this } value = sr_site_hab_share_value_amalthea subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_venus ?= this } value = sr_site_hab_share_value_venus subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_mercury ?= this } value = sr_site_hab_share_value_mercury subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_titan ?= this } value = sr_site_hab_share_value_titan subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_enceladus ?= this } value = sr_site_hab_share_value_enceladus subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_rhea ?= this } value = sr_site_hab_share_value_rhea subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_mimas ?= this } value = sr_site_hab_share_value_mimas subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_iapetus ?= this } value = sr_site_hab_share_value_iapetus subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_titania ?= this } value = sr_site_hab_share_value_titania subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_oberon ?= this } value = sr_site_hab_share_value_oberon subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_miranda ?= this } value = sr_site_hab_share_value_miranda subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_ariel ?= this } value = sr_site_hab_share_value_ariel subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_triton ?= this } value = sr_site_hab_share_value_triton subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_proteus ?= this } value = sr_site_hab_share_value_proteus subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_pluto ?= this } value = sr_site_hab_share_value_pluto subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_eris ?= this } value = sr_site_hab_share_value_eris subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_makemake ?= this } value = sr_site_hab_share_value_makemake subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_haumea ?= this } value = sr_site_hab_share_value_haumea subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_sedna ?= this } value = sr_site_hab_share_value_sedna subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_shackleton ?= this } value = sr_site_hab_share_value_shackleton subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_peary ?= this } value = sr_site_hab_share_value_peary subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_tranquility ?= this } value = sr_site_hab_share_value_tranquility subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_marius_hills ?= this } value = sr_site_hab_share_value_marius_hills subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_daedalus ?= this } value = sr_site_hab_share_value_daedalus subtract = 0.5 }
+	else_if = { limit = { global_var:sr_site_holder_imbrium ?= this } value = sr_site_hab_share_value_imbrium subtract = 0.5 }
 }
 
 # Country scope: the module levels past the first at the colonies THIS holds, the
@@ -13328,7 +13650,7 @@ sr_md_room_less_hab_valles_marineris = {
 	value = sr_site_hab_value_valles_marineris
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_valles_marineris
 	add = 1
 	add = sr_site_terra_share_valles_marineris
 	multiply = sr_site_base_room_valles_marineris
@@ -13343,7 +13665,7 @@ sr_md_room_less_hab_olympus_mons = {
 	value = sr_site_hab_value_olympus_mons
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_olympus_mons
 	add = 1
 	add = sr_site_terra_share_olympus_mons
 	multiply = sr_site_base_room_olympus_mons
@@ -13358,7 +13680,7 @@ sr_md_room_less_hab_hellas_planitia = {
 	value = sr_site_hab_value_hellas_planitia
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_hellas_planitia
 	add = 1
 	add = sr_site_terra_share_hellas_planitia
 	multiply = sr_site_base_room_hellas_planitia
@@ -13373,7 +13695,7 @@ sr_md_room_less_hab_utopia_planitia = {
 	value = sr_site_hab_value_utopia_planitia
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_utopia_planitia
 	add = 1
 	add = sr_site_terra_share_utopia_planitia
 	multiply = sr_site_base_room_utopia_planitia
@@ -13388,7 +13710,7 @@ sr_md_room_less_hab_arcadia_planitia = {
 	value = sr_site_hab_value_arcadia_planitia
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_arcadia_planitia
 	add = 1
 	add = sr_site_terra_share_arcadia_planitia
 	multiply = sr_site_base_room_arcadia_planitia
@@ -13403,7 +13725,7 @@ sr_md_room_less_hab_ceres = {
 	value = sr_site_hab_value_ceres
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_ceres
 	add = 1
 	multiply = sr_site_base_room_ceres
 }
@@ -13417,7 +13739,7 @@ sr_md_room_less_hab_vesta = {
 	value = sr_site_hab_value_vesta
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_vesta
 	add = 1
 	multiply = sr_site_base_room_vesta
 }
@@ -13431,7 +13753,7 @@ sr_md_room_less_hab_psyche = {
 	value = sr_site_hab_value_psyche
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_psyche
 	add = 1
 	multiply = sr_site_base_room_psyche
 }
@@ -13445,7 +13767,7 @@ sr_md_room_less_hab_pallas = {
 	value = sr_site_hab_value_pallas
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_pallas
 	add = 1
 	multiply = sr_site_base_room_pallas
 }
@@ -13459,7 +13781,7 @@ sr_md_room_less_hab_hygiea = {
 	value = sr_site_hab_value_hygiea
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_hygiea
 	add = 1
 	multiply = sr_site_base_room_hygiea
 }
@@ -13473,7 +13795,7 @@ sr_md_room_less_hab_io = {
 	value = sr_site_hab_value_io
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_io
 	add = 1
 	multiply = sr_site_base_room_io
 }
@@ -13487,7 +13809,7 @@ sr_md_room_less_hab_europa = {
 	value = sr_site_hab_value_europa
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_europa
 	add = 1
 	multiply = sr_site_base_room_europa
 }
@@ -13501,7 +13823,7 @@ sr_md_room_less_hab_ganymede = {
 	value = sr_site_hab_value_ganymede
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_ganymede
 	add = 1
 	add = sr_site_terra_share_ganymede
 	multiply = sr_site_base_room_ganymede
@@ -13516,7 +13838,7 @@ sr_md_room_less_hab_callisto = {
 	value = sr_site_hab_value_callisto
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_callisto
 	add = 1
 	add = sr_site_terra_share_callisto
 	multiply = sr_site_base_room_callisto
@@ -13531,7 +13853,7 @@ sr_md_room_less_hab_himalia = {
 	value = sr_site_hab_value_himalia
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_himalia
 	add = 1
 	multiply = sr_site_base_room_himalia
 }
@@ -13545,7 +13867,7 @@ sr_md_room_less_hab_amalthea = {
 	value = sr_site_hab_value_amalthea
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_amalthea
 	add = 1
 	multiply = sr_site_base_room_amalthea
 }
@@ -13559,7 +13881,7 @@ sr_md_room_less_hab_venus = {
 	value = sr_site_hab_value_venus
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_venus
 	add = 1
 	add = sr_site_terra_share_venus
 	multiply = sr_site_base_room_venus
@@ -13574,7 +13896,7 @@ sr_md_room_less_hab_mercury = {
 	value = sr_site_hab_value_mercury
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_mercury
 	add = 1
 	multiply = sr_site_base_room_mercury
 }
@@ -13588,7 +13910,7 @@ sr_md_room_less_hab_titan = {
 	value = sr_site_hab_value_titan
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_titan
 	add = 1
 	add = sr_site_terra_share_titan
 	multiply = sr_site_base_room_titan
@@ -13603,7 +13925,7 @@ sr_md_room_less_hab_enceladus = {
 	value = sr_site_hab_value_enceladus
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_enceladus
 	add = 1
 	multiply = sr_site_base_room_enceladus
 }
@@ -13617,7 +13939,7 @@ sr_md_room_less_hab_rhea = {
 	value = sr_site_hab_value_rhea
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_rhea
 	add = 1
 	multiply = sr_site_base_room_rhea
 }
@@ -13631,7 +13953,7 @@ sr_md_room_less_hab_mimas = {
 	value = sr_site_hab_value_mimas
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_mimas
 	add = 1
 	multiply = sr_site_base_room_mimas
 }
@@ -13645,7 +13967,7 @@ sr_md_room_less_hab_iapetus = {
 	value = sr_site_hab_value_iapetus
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_iapetus
 	add = 1
 	multiply = sr_site_base_room_iapetus
 }
@@ -13659,7 +13981,7 @@ sr_md_room_less_hab_titania = {
 	value = sr_site_hab_value_titania
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_titania
 	add = 1
 	multiply = sr_site_base_room_titania
 }
@@ -13673,7 +13995,7 @@ sr_md_room_less_hab_oberon = {
 	value = sr_site_hab_value_oberon
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_oberon
 	add = 1
 	multiply = sr_site_base_room_oberon
 }
@@ -13687,7 +14009,7 @@ sr_md_room_less_hab_miranda = {
 	value = sr_site_hab_value_miranda
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_miranda
 	add = 1
 	multiply = sr_site_base_room_miranda
 }
@@ -13701,7 +14023,7 @@ sr_md_room_less_hab_ariel = {
 	value = sr_site_hab_value_ariel
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_ariel
 	add = 1
 	multiply = sr_site_base_room_ariel
 }
@@ -13715,7 +14037,7 @@ sr_md_room_less_hab_triton = {
 	value = sr_site_hab_value_triton
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_triton
 	add = 1
 	multiply = sr_site_base_room_triton
 }
@@ -13729,7 +14051,7 @@ sr_md_room_less_hab_proteus = {
 	value = sr_site_hab_value_proteus
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_proteus
 	add = 1
 	multiply = sr_site_base_room_proteus
 }
@@ -13743,7 +14065,7 @@ sr_md_room_less_hab_pluto = {
 	value = sr_site_hab_value_pluto
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_pluto
 	add = 1
 	multiply = sr_site_base_room_pluto
 }
@@ -13757,7 +14079,7 @@ sr_md_room_less_hab_eris = {
 	value = sr_site_hab_value_eris
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_eris
 	add = 1
 	multiply = sr_site_base_room_eris
 }
@@ -13771,7 +14093,7 @@ sr_md_room_less_hab_makemake = {
 	value = sr_site_hab_value_makemake
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_makemake
 	add = 1
 	multiply = sr_site_base_room_makemake
 }
@@ -13785,7 +14107,7 @@ sr_md_room_less_hab_haumea = {
 	value = sr_site_hab_value_haumea
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_haumea
 	add = 1
 	multiply = sr_site_base_room_haumea
 }
@@ -13799,7 +14121,7 @@ sr_md_room_less_hab_sedna = {
 	value = sr_site_hab_value_sedna
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_sedna
 	add = 1
 	multiply = sr_site_base_room_sedna
 }
@@ -13813,7 +14135,7 @@ sr_md_room_less_hab_shackleton = {
 	value = sr_site_hab_value_shackleton
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_shackleton
 	add = 1
 	multiply = sr_site_base_room_shackleton
 }
@@ -13827,7 +14149,7 @@ sr_md_room_less_hab_peary = {
 	value = sr_site_hab_value_peary
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_peary
 	add = 1
 	multiply = sr_site_base_room_peary
 }
@@ -13841,7 +14163,7 @@ sr_md_room_less_hab_tranquility = {
 	value = sr_site_hab_value_tranquility
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_tranquility
 	add = 1
 	multiply = sr_site_base_room_tranquility
 }
@@ -13855,7 +14177,7 @@ sr_md_room_less_hab_marius_hills = {
 	value = sr_site_hab_value_marius_hills
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_marius_hills
 	add = 1
 	multiply = sr_site_base_room_marius_hills
 }
@@ -13869,7 +14191,7 @@ sr_md_room_less_hab_daedalus = {
 	value = sr_site_hab_value_daedalus
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_daedalus
 	add = 1
 	multiply = sr_site_base_room_daedalus
 }
@@ -13883,7 +14205,7 @@ sr_md_room_less_hab_imbrium = {
 	value = sr_site_hab_value_imbrium
 	subtract = 1
 	min = 0
-	multiply = 0.5
+	multiply = sr_site_hab_share_value_imbrium
 	add = 1
 	multiply = sr_site_base_room_imbrium
 }

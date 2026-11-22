@@ -160,14 +160,15 @@ sr_mod_ai_admin_pressure = {
 sr_mod_ai_bunker_max = { value = 3 }
 
 # The technology markers' self-checks (colony management design § 11): the
-# country's Colony Module Slots, and how far a colony's slots read through its
-# holder fall from them (0 when the scope switch reads it).
-sr_colony_slots_modifier = {
-	value = modifier:country_sr_colony_slots_add
+# country's Habitat Room (colony people design § 5), and how far a colony's
+# share read through its holder falls from it (0 when the scope switch reads it;
+# above 0 where the world keeps a better share from an earlier holder).
+sr_habitat_room_modifier = {
+	value = modifier:country_sr_habitat_room_add
 }
-sr_slots_marker_gap = {
-	value = sr_site_slots_tech_seen
-	subtract = sr_colony_slots_modifier
+sr_habitat_marker_gap = {
+	value = sr_site_hab_share_seen
+	subtract = sr_habitat_room_modifier
 }
 
 # Country scope. The months until the module in shipment slot n lands, 999 while

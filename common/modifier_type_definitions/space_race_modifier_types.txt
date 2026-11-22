@@ -68,14 +68,15 @@ country_sr_module_storage_add = {
 	script_only = yes
 }
 
-# Module slots at every colony we hold, beside its size's (colony management
-# design § 5): Nuclear Thermal Propulsion, Orbital Manufacturing, Advanced
-# Nanofabrication, Space Colonization and Molecular Assemblers carry +1 each,
-# and each world's sr_site_slots_<key> adds its holder's. The engine consumes
-# nothing.
-country_sr_colony_slots_add = {
+# Habitat room at every colony we hold (colony people design § 5): a Habitat
+# holds half its world's base room, and Nuclear Thermal Propulsion, Orbital
+# Manufacturing, Advanced Nanofabrication, Space Colonization and Molecular
+# Assemblers carry +0.1 each (+10 points), so 100% with all five. Each world's
+# sr_site_hab_share_now_<key> adds its holder's, and the world keeps the best
+# share it has had (sr_site_hab_share_<key>). The engine consumes nothing.
+country_sr_habitat_room_add = {
 	color = good
-	percent = no
+	percent = yes
 	decimals = 0
 	game_data = {
 		ai_value = 0

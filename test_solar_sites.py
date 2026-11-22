@@ -1111,10 +1111,11 @@ class PopulationTest(unittest.TestCase):
             k = site.key
             with self.subTest(site=k):
                 self.assertIn(f"sr_site_base_room_{k} = {{ value = {site.room * 1000} }}", self.values)
-                # Habitats add half the base room a level (colony modules design § 3).
+                # Habitats add the world's Habitat share of the base room a level
+                # (colony people design § 4.4; half before the technologies).
                 room = _block(self.values, f"sr_site_room_{k}")
                 self.assertIn(f"value = sr_site_hab_value_{k}", room)
-                self.assertIn(f"multiply = {gss.HABITAT_ROOM_SHARE}", room)
+                self.assertIn(f"multiply = sr_site_hab_share_value_{k}", room)
                 self.assertIn(f"multiply = sr_site_base_room_{k}", room)
                 for kind in ("sr_site_pop_value", "sr_site_free_room", "sr_site_crews", "sr_emig_prio_weight",
                              "sr_emig_weight"):
@@ -1245,13 +1246,13 @@ class ModulesTest(unittest.TestCase):
         means = [sum(s.ebase_grade for s in gss.stage_sites(n)) / len(gss.stage_sites(n)) for n in range(1, 6)]
         self.assertEqual(means, sorted(means, reverse=True))
 
-    def test_the_slot_technologies_carry_the_slots_the_worlds_read(self):
-        """Colony management design § 5, as a technology marker
-        (scripting_best_practices.md § Technology markers): five technologies
-        carry +1 Colony Module Slots each (the owner added three on
-        2026-10-30), so their tooltips say so, and each world's slots read the
-        holder's modifier, not the technologies."""
-        name = gss.SLOTS_MODIFIER
+    def test_the_slot_technologies_carry_the_habitat_room_the_worlds_read(self):
+        """Colony people design § 5, as a technology marker
+        (scripting_best_practices.md § Technology markers): the five
+        technologies that gave a module slot each (colony management design
+        § 5) carry +0.1 Habitat Room instead, so their tooltips say so, and each
+        world's Habitat share reads the holder's modifier, not the technologies."""
+        name = gss.HABITAT_MODIFIER
         types = _strip(_raw("common", "modifier_type_definitions", "space_race_modifier_types.txt"))
         self.assertIn("script_only = yes", _block(types, name))
         carriers = {"era_11.txt": ("nuclear_thermal_propulsion",),
@@ -1261,8 +1262,8 @@ class ModulesTest(unittest.TestCase):
             text = _strip(_raw("common", "technology", "technologies", era))
             for tech in techs:
                 with self.subTest(tech=tech):
-                    self.assertIn(f"{name} = 1", _block(text, tech))
-            self.assertEqual(len(re.findall(rf"\b{name} = 1\b", text)), len(techs), era)
+                    self.assertIn(f"{name} = 0.1", _block(text, tech))
+            self.assertEqual(len(re.findall(rf"\b{name} = 0\.1\b", text)), len(techs), era)
         found = []
         for root, _, files in os.walk(os.path.join(REPO, "common")):
             for f in files:
@@ -1273,8 +1274,8 @@ class ModulesTest(unittest.TestCase):
         for site in gss.SITES:
             k = site.key
             with self.subTest(site=k):
-                body = _block(self.values, f"sr_site_slots_{k}")
-                self.assertIn(f"value = {site.slots}", body)
+                body = _block(self.values, f"sr_site_hab_share_now_{k}")
+                self.assertIn(f"value = {gss.HABITAT_BASE_SHARE}", body)
                 self.assertIn(f"global_var:sr_site_holder_{k} = {{ add = modifier:{name} }}", body)
                 self.assertNotIn("has_technology_researched", body)
 
