@@ -1123,11 +1123,6 @@ sr_disp_offworld_pop = {
 sr_disp_offworld_units = {
 	value = sr_offworld_units
 }
-# 1 with Artificial General Intelligence: modules need no crews.
-sr_disp_agi = {
-	value = 0
-	if = { limit = { has_technology_researched = artificial_intelligence } value = 1 }
-}
 
 # ======= Autonomy and free colonies (slice 5 design § 9) =======
 # The Colonies table's Autonomy view (te_sr_sec_colonies); the per-world values are generated

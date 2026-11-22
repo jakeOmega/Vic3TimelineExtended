@@ -1678,18 +1678,7 @@ types space_race_widget_types
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_agi'), '(CFixedPoint)0' )]"
 					block "settler_crews" {}
-				}
-				textbox = {
-					parentanchor = left|vcenter
-					autoresize = yes
-					max_width = 60
-					align = left|nobaseline
-					using = te_sr_fontsize_row
-					elide = right
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_agi'), '(CFixedPoint)1' )]"
-					text = "je_space_race_widget_settlers_agi"
 				}
 			}
 		}
@@ -2441,12 +2430,7 @@ types space_race_widget_types
 					}
 					blockoverride "tile_value" {
 						te_sr_page_value = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_agi'), '(CFixedPoint)0' )]"
 							block "settler_crews" {}
-						}
-						te_sr_page_value = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_agi'), '(CFixedPoint)1' )]"
-							text = "je_space_race_widget_settlers_agi"
 						}
 					}
 				}

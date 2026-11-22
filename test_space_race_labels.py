@@ -474,9 +474,6 @@ CELLS = {
     "a fleet's landing (te_sr_cf_slot_row)": (
         ("te_sr_cf_slot_row", 'block "slot_eta"'),
         r"je_space_race_widget_cf_slot_\d_eta"),
-    "a colony's crews under AGI (te_sr_colony_row)": (
-        ("te_sr_colony_row", 'text = "je_space_race_widget_settlers_agi"'),
-        r"je_space_race_widget_settlers_agi"),
     "a colony's priority (te_sr_colony_row)": (
         ("te_sr_colony_row", 'text = "je_space_race_widget_emig_prio_0"'),
         r"je_space_race_widget_emig_prio_\d"),
@@ -522,7 +519,7 @@ CELLS = {
         r"je_space_race_widget_(page_(staffing|bases|resorts|status|terraformed)|ch_\w+|modules_col_slots)"),
     "a word beside a page heading, or a page tile's word (te_sr_page_value)": (
         ("te_sr_page_value", None),
-        r"je_space_race_widget_(page_settlers|autonomy_status_\w+|def_status_\w+|settlers_agi"
+        r"je_space_race_widget_(page_settlers|autonomy_status_\w+|def_status_\w+"
         r"|terra_(?:years_left|finished|idle))"),
     "a module's name on a colony's page (te_sr_page_mod_row)": (
         ("te_sr_page_mod_row", 'block "row_name"'),

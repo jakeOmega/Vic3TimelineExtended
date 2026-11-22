@@ -1299,7 +1299,8 @@ class ModulesTest(unittest.TestCase):
                 staffing = _block(self.values, f"sr_site_staffing_{k}")
                 self.assertIn("sr_colonies_contested_enabled = yes", staffing)
                 self.assertIn(f"sr_site_crews_{k} < sr_site_crew_needed_{k}", staffing)
-                self.assertIn("has_technology_researched = artificial_intelligence", staffing)
+                # Artificial Intelligence halves the crew; it no longer waives it (colony people design § 4.2).
+                self.assertNotIn("artificial_intelligence", staffing)
                 self.assertIn(f"value = sr_site_crews_{k}\n\t\tadd = 1\n\t\tdivide = sr_site_levels_{k}", staffing)
                 for slot in ("a", "b"):
                     mult = _block(self.values, f"sr_site_mult_{slot}_{k}")

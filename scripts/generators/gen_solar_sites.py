@@ -314,7 +314,13 @@ GROWTH_PER_MONTH = 0.002
 # sr_site_growth_<key> reads it through the holder, as the slots read
 # SLOTS_MODIFIER; a free colony has no holder and grows at the base rate.
 GROWTH_MODIFIER = "country_sr_colony_growth_add"
-CREW_PER_LEVEL = 5000
+# A crew of one module level (colony people design § 4.2; owner, 2026-11-22):
+# 10,000 people, half with Artificial Intelligence, read through the world's
+# holder (sr_site_crew_per_level_<key>), so a cession changes it with the holder.
+# A free colony has no holder and counts at the full crew.
+CREW_PER_LEVEL = 10000
+AI_CREW_PER_LEVEL = 5000
+AI_CREW_TECH = "artificial_intelligence"
 PRIORITY_WEIGHTS = (0, 1, 2, 4)
 
 # Modules (slice 4 design §§ 2-8). The two specializations share SPEC_BUDGET
@@ -1814,13 +1820,13 @@ def _terra_room_line(site: Site) -> list[str]:
 def render_population_values() -> list[str]:
     weights = PRIORITY_WEIGHTS
     out = ["# ===== Population (slices 2-3 design § 10) =====",
-           f"sr_site_crew_per_level = {{ value = {CREW_PER_LEVEL} }}",
            "",
            "# Per world, any scope: its base room (people, before Habitats), its room (+50% of",
            "# the base a Habitat level, slice 4 design § 3, and on a world that takes it the",
            "# share its Terraforming has done, era 13 spec § 7.11), its people, its free room (of the",
            "# room held while a Habitat comes down, sr_site_room_held_<key>), and",
-           "# the module levels above the first its people can crew. Country scope:",
+           "# the module levels above the first its people can crew, at its holder's crew size",
+           f"# (sr_site_crew_per_level_<key>: {CREW_PER_LEVEL}, {AI_CREW_PER_LEVEL} with {AI_CREW_TECH}). Country scope:",
            "# THIS's priority weight for it (Closed 0, Low 1, Normal 2, High 4; Normal when",
            "# unset) and its emigration weight, priority x free room, 0 unless THIS holds it.",
            f"# Any scope: its growth a month, sr_site_growth_<key>, 1 + {GROWTH_PER_MONTH} and its",
@@ -1848,9 +1854,14 @@ def render_population_values() -> list[str]:
                 f"\tvalue = sr_site_pop_value_{k}",
                 f"\tdivide = sr_site_room_{k}",
                 "}",
+                f"sr_site_crew_per_level_{k} = {{",
+                f"\tvalue = {CREW_PER_LEVEL}",
+                f"\tif = {{ limit = {{ global_var:sr_site_holder_{k} ?= {{ has_technology_researched = {AI_CREW_TECH} }} }} "
+                f"value = {AI_CREW_PER_LEVEL} }}",
+                "}",
                 f"sr_site_crews_{k} = {{",
                 f"\tvalue = sr_site_pop_value_{k}",
-                "\tdivide = sr_site_crew_per_level",
+                f"\tdivide = sr_site_crew_per_level_{k}",
                 "\tfloor = yes",
                 "}",
                 f"sr_site_growth_{k} = {{",
@@ -1903,7 +1914,7 @@ def render_module_values() -> list[str]:
            "#                                  Spaceport a constant 0: it has none)",
            "#   sr_site_levels_<key>          the levels that need crews (Habitats house them)",
            "#   sr_site_extra_levels_<key>    every module level past the founding outpost's",
-           "#   sr_site_staffing_<key>        1 with the crews, AGI or under races only; else",
+           "#   sr_site_staffing_<key>        1 with the crews or under races only; else",
            "#                                  (crews + 1) / levels (design § 4)",
            "#   sr_site_mult_<a|b>_<key>      a specialization's multiplier: level x staffing",
            "#                                  x the charter's share (slice 5 design § 2)",
@@ -1944,7 +1955,6 @@ def render_module_values() -> list[str]:
                 "\t\tlimit = {",
                 "\t\t\tsr_colonies_contested_enabled = yes",
                 f"\t\t\tsr_site_crews_{k} < sr_site_crew_needed_{k}",
-                f"\t\t\tNOT = {{ global_var:sr_site_holder_{k} ?= {{ has_technology_researched = artificial_intelligence }} }}",
                 "\t\t}",
                 f"\t\tvalue = sr_site_crews_{k}",
                 "\t\tadd = 1",
@@ -2208,8 +2218,7 @@ def _module_ai(site: Site) -> list[str]:
     the world takes it. Slot modules only within its slots: the AI never pays
     the price past them."""
     k = site.key
-    crew = (f"OR = {{ sr_site_crews_{k} >= sr_site_levels_{k} "
-            "has_technology_researched = artificial_intelligence }")
+    crew = f"sr_site_crews_{k} >= sr_site_levels_{k}"
     room = f"sr_mod_slots_used_{k} < sr_site_slots_{k}"
     out = [f"sr_mod_ai_plan_{k} = {{",
            "\tif = {",
