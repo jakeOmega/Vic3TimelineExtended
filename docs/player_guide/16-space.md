@@ -878,7 +878,8 @@ top three, queues one module a year at each colony when it has money to spare:
 a Habitat once its people fill three quarters of its room, otherwise the next
 specialization level its crews can run, its founding specialization first, then
 a facility: an Administration where autonomy has reached 25 and is heading for 45
-or more, a Mining Complex when its bases outgrow their room, Terraforming once its
+or more, a Mining Complex when its bases outgrow their room, an Off-World Resort once
+its Resort Colonies, built and queued, fill all of its resort room, Terraforming once its
 people fill half its room, a Nuclear Command Center with nuclear weapons, an Orbital Yard with a Space Command, otherwise a Research Station. While
 anything is queued it runs the best fabrication method it has whose cost fits
 in a twentieth of its government's weekly income, or its cheapest one if none
@@ -946,7 +947,7 @@ levels that work it, as the grade does for bases:
 | Earth orbit, Daedalus Crater, the Utopia and Arcadia plains, 16 Psyche, Europa, Ganymede, Miranda | 0 |
 | Mercury, 2 Pallas, Io, Amalthea, Triton | −5% |
 | 10 Hygiea, Pluto-Charon, Himalia, Uranus's other moons | −10% to −15% |
-| Proteus and the rest of the Kuiper Belt | −25% to −35% |
+| Proteus, and the Kuiper Belt past Pluto | −25% to −35% |
 
 Your levels fill the best room first, and any past all of it work at −75%. One
 country modifier, Resort Colony Room, carries the average over all your levels,
@@ -955,8 +956,8 @@ shows your levels, built and queued, against your room and the draw the next
 level would work at. The Modules view shows your levels against your room, and
 each colony's page and its line in Solar System its own room and draw. Private
 investors and AI governments don't build past your room; your government can, at
-the penalty. An AI that tends its colonies queues an Off-World Resort once its
-room is full. Under Races Only, Resort Colonies have no room limit.
+the penalty. An AI that tends its colonies queues an Off-World Resort once its Resort
+Colonies, built and queued, fill all of its resort room. Under Races Only, Resort Colonies have no room limit.
 
 ### Who holds a colony
 

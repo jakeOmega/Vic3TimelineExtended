@@ -2479,11 +2479,17 @@ types space_race_widget_types
 						}
 					}
 				}
-				### Terraforming (era 13 spec § 7.11), where the list shows its line.
+			}
+			### Terraforming (era 13 spec § 7.11), where the list shows its line: a row
+			### of its own, as Base Room and Resort Room fill this one (#1948).
+			flowcontainer = {
+				block "terra_visible" {
+					visible = no
+				}
+				direction = horizontal
+				spacing = 6
+
 				te_sr_page_tile = {
-					block "terra_visible" {
-						visible = no
-					}
 					blockoverride "tile_tooltip" {
 						tooltip = "je_space_race_widget_terra_progress_tt"
 					}

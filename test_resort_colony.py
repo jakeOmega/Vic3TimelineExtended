@@ -410,3 +410,66 @@ class ResortPanelTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def _read(rel):
+    with open(os.path.join(REPO, rel), encoding="utf-8-sig") as f:
+        return f.read()
+
+
+def _containers(text, opener):
+    """Each `opener = {` block's body, brace-matched."""
+    for m in re.finditer(rf"\b{opener} = \{{", text):
+        depth, i = 1, m.end()
+        while depth:
+            depth += {"{": 1, "}": -1}.get(text[i], 0)
+            i += 1
+        yield text[m.end():i - 1]
+
+
+class ResortTextTest(unittest.TestCase):
+    """What the final review of #1950 found in the panel, loc and guide."""
+
+    def test_a_colony_page_row_holds_two_tiles(self):
+        """te_sr_page_tile is 233 wide, so a 480 column holds two a row; the
+        Resort Room tile must not push Terraformed past the panel's edge."""
+        gui = _strip(_read("gui/journal_entry_widgets/space_race_widget.gui"))
+        rows = 0
+        for body in _containers(gui, "flowcontainer"):
+            if "direction = horizontal" not in body.split("\n", 3)[1] + body.split("\n", 3)[0]:
+                continue
+            # the row's own tiles, not those of a container nested in it
+            top, depth = [], 0
+            for line in body.split("\n"):
+                if depth == 0 and re.match(r"\s*te_sr_page_tile = \{", line):
+                    top.append(line)
+                depth += line.count("{") - line.count("}")
+            if top:
+                rows += 1
+                self.assertLessEqual(len(top), 2, "a row of three 233-wide tiles overflows the 480 column")
+        self.assertGreaterEqual(rows, 3)
+
+    def test_the_building_name_is_never_pluralized_with_s(self):
+        """"Resort Colonys": a name ending in -y takes no bare s."""
+        for name in sorted(os.listdir(os.path.join(REPO, "localization", "english"))):
+            if not name.endswith(".yml"):
+                continue
+            with self.subTest(file=name):
+                text = _read(os.path.join("localization", "english", name))
+                self.assertFalse("$building_space_resort$s" in text, f"{name} writes $building_space_resort$s")
+
+    def test_the_draw_concept_gives_the_fill_order(self):
+        """Colonies of positive draw fill before Earth orbit's 10 levels at 0."""
+        text = _read("localization/english/te_concepts_l_english.yml")
+        desc = re.search(r'^ concept_sr_resort_draw_desc:0 "(.*)"$', text, re.M).group(1)
+        self.assertFalse("then each colony" in desc, "the concept puts Earth orbit first")
+        self.assertTrue("ahead of" in desc, "the concept doesn't say what Earth orbit fills ahead of")
+
+    def test_the_guide_lists_the_resort_colony(self):
+        economy = _read("docs/player_guide/03-economy.md")
+        self.assertRegex(economy, r"\| 0\.2 \| [^\n]*Resort Colonies")
+        space = _read("docs/player_guide/16-space.md")
+        ai = space[space.index("queues one module a year at each colony"):]
+        ai = ai[:ai.index("\n\n")]
+        self.assertTrue("Off-World Resort" in ai, "the AI's module plan leaves out the Off-World Resort")
+        self.assertFalse("the rest of the Kuiper Belt" in space, "Proteus is a moon of Neptune")
