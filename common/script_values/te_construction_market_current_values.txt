@@ -12,7 +12,8 @@ te_construction_market_price = {
 	multiply = {
 		value = 1
 		add = construction_cost_scaling_mult
-		min = 1
+		# X is negative for a small economy under te_small_economy_construction_rule
+		min = construction_cost_small_economy_min_factor
 	}
 }
 

@@ -147,9 +147,9 @@ class MovementStancesTests(unittest.TestCase):
         self.assertEqual(mvs._stance(block, "law_total_war", {}), ("strongly_disapprove", True))
 
     def test_external_switch_table_adds_rows(self):
-        self.assertIn(("ideology_vanguardist_movement", "set_core_ideology"),
-                      mvs.movement_ideologies({"ideology": ("=", "ideology_communist_movement")},
-                                              "movement_communist"))
+        self.assertIn(("ideology_revolutionary_socialist_movement", "set_core_ideology"),
+                      mvs.movement_ideologies({"ideology": ("=", "ideology_socialist_movement")},
+                                              "movement_socialist"))
 
     def test_comparative_mode_lists_laws_rated_above_current(self):
         out = self.stances(current="law_total_war")
@@ -234,7 +234,7 @@ class SnapshotTests(unittest.TestCase):
         if not game:
             self.skipTest("no vanilla game files")
         found = self._switch_targets_outside_movements(game)
-        self.assertIn("ideology_vanguardist_movement", found)  # the scan works
+        self.assertIn("ideology_revolutionary_socialist_movement", found)  # the scan works
         self.assertEqual(found - self._known_switch_targets(), set())
 
 

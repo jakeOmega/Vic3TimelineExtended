@@ -1,0 +1,23 @@
+﻿# te_automation_policy_modifier_types.txt
+#
+# Automation Policy (common/laws/te_automation_policy_laws.txt): the marker of
+# a robotic or AI-managed production method.
+#
+# A method where robots or AI do the work people did carries
+# `building_robotic_or_ai_managed_bool = yes` in its building_modifiers'
+# `unscaled` block, so it holds on a building at any staffing. The automated
+# share reads it (te_ap_runs_automated_method,
+# common/scripted_triggers/te_automation_policy_triggers.txt), and Human Labor
+# Quotas withdraws exactly the methods that carry it
+# (`disallowing_laws = { law_human_labor_quotas }`, test_automation_policy.py).
+# Which methods count, and which are left out on purpose, is explained in the
+# trigger file. The engine consumes nothing; the line shows in the method's
+# tooltip, so a player sees which methods the laws act on. Only production
+# methods may carry it: a building's modifier: read also carries its
+# country's lines, so one on a law or a technology would mark every building
+# (test_automation_policy.py).
+building_robotic_or_ai_managed_bool = {
+	color = neutral
+	boolean = yes
+	script_only = yes
+}

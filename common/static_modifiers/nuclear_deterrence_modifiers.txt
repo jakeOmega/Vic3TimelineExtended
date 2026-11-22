@@ -3,16 +3,24 @@
 # ============================================================================
 # Design: docs/systems/nuclear_crisis_design.md (§0 is what shipped).
 #
-# Three families are *managed*: exactly one member is on at a time and a
-# tracking variable records which, because add_modifier / remove_modifier are
-# invisible to has_modifier inside the block that ran them
-# (scripting_best_practices.md § Worked case — swapping one member of a banded
-# modifier family). Their single writers:
-#   nd_doctrine_mod_*        nd_apply_posture_modifiers  (je_nuclear_program scope)
-#   nd_readiness_mod_*       nd_apply_posture_modifiers  (je_nuclear_program scope)
-#   nd_upkeep_cost           nd_apply_posture_modifiers  (je_nuclear_program scope,
-#                            multiplier = root.var:nd_upkeep_weekly_cached)
+# Declared on je_nuclear_program (scaling_modifiers_while_active, vanilla
+# 1.15), never added: each value is 0 or 1 by the posture variable or a
+# delivery leg, or a figure; the posture's only while a posture is in force
+# (nd_posture_in_force). Nothing may add, remove or test them by name
+# (has_modifier cannot see a declared modifier):
+#   nd_doctrine_mod_*        1 while var:nd_doctrine is its number
+#   nd_readiness_mod_*       1 while var:nd_readiness is its number
+#   nd_upkeep_cost           var:nd_upkeep_weekly_cached (nd_apply_posture_modifiers)
+#   nd_icbm_force            1 while nd_fields_icbms holds (nd_icbm_force_value)
+# One family is *managed*: exactly one member is on at a time and a tracking
+# variable records which, because add_modifier / remove_modifier are invisible
+# to has_modifier inside the block that ran them (scripting_best_practices.md
+# § Worked case — swapping one member of a banded modifier family). Its single
+# writer:
 #   nd_posture_approval_*    nd_refresh_domestic_stance  (interest-group scope)
+# Display only, never added: hovers print their lines with GetDesc.
+#   nd_readiness_terms_*, nd_authority_terms_*, nd_safeguards_level_terms,
+#   nd_safeguards_slow_launch, nd_focus_terms_* (the Focus rows, phase 2 D16)
 # Everything else below is a timed one-off applied by an event or a crisis
 # outcome.
 # ============================================================================
@@ -89,12 +97,25 @@ nd_readiness_mod_3 = {
 	country_diplomatic_play_maneuvers_add = 5
 }
 
+# ---- Delivery: the fielded ICBM force (2026-11-20 delivery spec §4.2) -------
+# What the missiles themselves give, as hardware rather than knowledge: the
+# +0.5 nuclear attack success that was the ICBMs technology's (owner call 1),
+# and +0.5 to the counterforce ratio (nd_k_ratio, §3.4). Declared, so it
+# follows nd_fields_icbms, and a revolution's winner keeps it. Its figures are
+# nd_icbm_force_attack_success and nd_icbm_force_k_ratio too, for the fallback
+# (nd_icbm_force_declared_reads); test_nuclear_delivery.py holds them equal.
+nd_icbm_force = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_nuclear_weapon_attack_success_add = 0.5
+	country_nd_k_ratio_add = 0.5
+}
+
 # ---- Display only: never added (NUC-6, 2026-10-27) -------------------------
 # What each readiness level and each launch authority does through script, as
 # display lines (nuclear_deterrence_display_types.txt). The posture's hovers
-# print them with GetStaticModifier(...).GetDesc. Nothing adds or removes them,
-# so they are no managed family. Readiness 0 is named _terms_, never _mod_
-# (nd_readiness_mod_on uses 0 for "none"). Figures: Routine is the baseline of
+# print them with GetStaticModifier(...).GetDesc. Nothing adds, removes or
+# declares them. Readiness 0 is named _terms_, never _mod_: Recessed carries no
+# modifier. Figures: Routine is the baseline of
 # the incident rate (x0.5 / x1 / x4 / x10), strain moves -6 / -6 / +1.5 / +5
 # a month, readiness adds (level - 1) x 8 to a crisis's danger, and a threat
 # made from Recessed or High Alert presses the target 10 less or more.
@@ -156,6 +177,36 @@ nd_authority_terms_4 = {
 	country_nd_automatic_answer_bool = yes
 }
 
+# What each safeguards level gives (2026-11-20 delivery spec D13): the
+# reliability target's nd_safeguards_reliability_per_level and the chance of a
+# halt's nd_safeguards_halt_per_level, in percent. Display only: the
+# safeguards hover prints it; test_nuclear_deterrence.TestPostureFigures holds
+# both figures to those script values.
+nd_safeguards_level_terms = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_nd_reliability_target_add = 12
+	country_nd_halt_chance_add = 0.05
+}
+
+# What fielding each delivery leg grants (phase 2 plan D16). Display only,
+# never added: the Focus rows' hovers print them with GetDesc, the ICBM row
+# beside nd_icbm_force's own lines. The factor is the leg's
+# nd_exposure_factor_*_held less 1; test_nuclear_projects.TestFocusTermsMatchScript
+# holds it there.
+nd_focus_terms_icbms = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_nd_exposure_mult = -0.3
+	country_nd_reach_every_state_bool = yes
+	country_nd_unlocks_launch_on_warning_bool = yes
+	country_nd_unlocks_automatic_retaliation_bool = yes
+}
+
+nd_focus_terms_submarines = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_nd_exposure_mult = -0.5
+	country_nd_reach_every_coast_bool = yes
+}
+
 # What each safeguards level takes off a fast authority's launch credit
 # (nd_launch_credit, rework spec §4.2). Display only: the safeguards hover
 # prints it under Delegation or Launch on Warning.
@@ -165,9 +216,9 @@ nd_safeguards_slow_launch = {
 }
 
 # ---- Upkeep ---------------------------------------------------------------
-# Applied once with multiplier = root.var:nd_upkeep_weekly_cached; the monthly
-# pulse and every panel change rewrite the cached figure, and the engine
-# re-evaluates the multiplier continuously (un_buttons.txt precedent).
+# Declared on je_nuclear_program with value var:nd_upkeep_weekly_cached; the
+# monthly pulse and every panel change rewrite the cached figure, and the
+# entry re-reads it on its update.
 nd_upkeep_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1

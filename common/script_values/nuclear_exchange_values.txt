@@ -77,5 +77,102 @@ nd_log_crisis_dispute = {
 	}
 }
 
+# What the arsenal watch's TE_NUCLEAR lines print about the country building or
+# holding warheads (type=build_burst, build_cap, ai_stockpile_cap,
+# arsenal_milestone; 2026-11-07, after France reached some 1,200 warheads in an
+# observer game with nothing logged). Read with THIS.ScriptValue from the
+# entry's weekly pulse, where the country is ROOT. Country scope.
+nd_log_is_ai = {
+	value = 0
+	if = {
+		limit = { is_ai = yes }
+		value = 1
+	}
+}
+nd_log_at_war = {
+	value = 0
+	if = {
+		limit = { is_at_war = yes }
+		value = 1
+	}
+}
+nd_log_progress_mult = {
+	value = modifier:country_nuclear_program_progress_mult
+}
+# Weekly innovation as the funding buttons' ai_chance reads it, in their bands
+# (country_innovation is a trigger): the band's floor.
+nd_log_innovation = {
+	value = 0
+	if = {
+		limit = { country_innovation >= 2000 }
+		value = 2000
+	}
+	else_if = {
+		limit = { country_innovation >= 1000 }
+		value = 1000
+	}
+	else_if = {
+		limit = { country_innovation >= 500 }
+		value = 500
+	}
+	else_if = {
+		limit = { country_innovation >= 300 }
+		value = 300
+	}
+	else_if = {
+		limit = { country_innovation >= 200 }
+		value = 200
+	}
+	else_if = {
+		limit = { country_innovation >= 150 }
+		value = 150
+	}
+	else_if = {
+		limit = { country_innovation > 100 }
+		value = 100
+	}
+}
+# 1 while a rival with warheads is believed to hold more than our true count:
+# the funding buttons' race term (+20 to the increase, -20 to the decrease).
+nd_log_rival_bigger = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = nuclear_weapon_stockpile
+			any_rival_country = {
+				has_modifier = nuclear_power
+				has_variable = nd_public_estimate
+				var:nd_public_estimate > ROOT.var:nuclear_weapon_stockpile
+			}
+		}
+		value = 1
+	}
+}
+# Every warhead this country has taken into custody (nd_log_custody_total: an
+# ended arsenal it succeeded to, or its share at a civil war's outbreak), 0
+# with none: whether an arsenal grew by building or by inheriting.
+nd_log_custody_total_value = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_log_custody_total }
+		value = var:nd_log_custody_total
+	}
+}
+# Below this the arsenal watch's next milestone goes back to 50: a quarter of it
+# (nd_log_arsenal_watch). Country scope, with nd_log_next_milestone set.
+nd_log_milestone_reset_line = {
+	value = var:nd_log_next_milestone
+	divide = 4
+}
+# The warheads a settlement hands on, copied to a global just before its
+# TE_CUSTODY line (nd_custody_settle_record), since the record is a container.
+nd_log_custody_moving = {
+	value = 0
+	if = {
+		limit = { has_global_variable = nd_log_custody_moving_now }
+		value = global_var:nd_log_custody_moving_now
+	}
+}
+
 # Console-only helper: put the exchange seven days into its quiet period.
 nd_debug_exchange_aged_date = { value = game_date subtract = 7 }

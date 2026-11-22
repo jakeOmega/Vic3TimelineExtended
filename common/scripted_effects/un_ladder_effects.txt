@@ -205,19 +205,20 @@ un_ladder_dissolution_check = {
 
 # Power blocs fill the vacuum while the UN is Moribund, and while no UN
 # exists after a dissolution: every bloc carries un_bloc_vacuum_modifier.
-# The single refresh site for that modifier.
+# The single refresh site for that modifier. The leader is told when its bloc
+# gains it (un_bloc_vacuum_notice): a bloc leader need not be a member or a
+# great power, so no UN event is sure to reach it.
 # Scope: none (every month, founded or not)
 un_ladder_bloc_vacuum_update = {
 	if = {
 		limit = { un_bloc_vacuum_active = yes }
 		every_country = {
-			limit = { is_power_bloc_leader = yes }
-			power_bloc ?= {
-				if = {
-					limit = { NOT = { has_modifier = un_bloc_vacuum_modifier } }
-					add_modifier = { name = un_bloc_vacuum_modifier }
-				}
+			limit = {
+				is_power_bloc_leader = yes
+				power_bloc ?= { NOT = { has_modifier = un_bloc_vacuum_modifier } }
 			}
+			power_bloc ?= { add_modifier = { name = un_bloc_vacuum_modifier } }
+			post_notification = un_bloc_vacuum_notice
 		}
 	}
 	else = {
@@ -307,7 +308,9 @@ un_dissolve = {
 		trigger_event = { id = un_events.30 }
 	}
 
-	# 3. Power blocs fill the vacuum.
+	# 3. Power blocs fill the vacuum. Every leader is told what its bloc
+	#    gains: un_events.30 above does not name the modifier, and does not
+	#    reach a leader that is neither a member nor a great power.
 	every_country = {
 		limit = { is_power_bloc_leader = yes }
 		power_bloc ?= {
@@ -317,8 +320,23 @@ un_dissolve = {
 				is_decaying = yes
 			}
 		}
+		post_notification = un_dissolution_vacuum_notice
 	}
 
+	# 4–9. The organisation's business, members, headquarters, agencies and
+	#      state: what a rule switched off mid-game ends too
+	#      (un_dissolve_quiet, below).
+	un_dissolve_quiet = yes
+}
+
+# The quiet half of a dissolution: everything after the record, the world
+# moment and the power blocs' vacuum (un_dissolve's steps 1–3). From
+# un_dissolve, and from un_stop_for_rule when the United Nations rule is
+# switched off mid-game, which ends the organisation without a dissolution.
+# Mandates are voided as the rule-off sweep voids them (un_mandate_close
+# tells the holder).
+# Scope: any
+un_dissolve_quiet = {
 	# 4. The business before the Assembly lapses. un_resolution_archive frees
 	#    the lock when the open resolution held it; the flags below cover a
 	#    reservation and any orphan.
@@ -423,9 +441,6 @@ un_dissolve = {
 	un_dissolve_remove_global = { NAME = un_charter_pressure_months }
 	un_dissolve_remove_global = { NAME = un_crisis_active }
 	un_dissolve_remove_global = { NAME = un_crisis_months }
-	# The five-year founding window of earlier versions (seats went to the
-	# first great powers to join); nothing reads it now, but a save may hold it.
-	un_dissolve_remove_global = { NAME = un_founding_window_active }
 	un_dissolve_remove_global = { NAME = un_seat_signing_months_left }
 	un_dissolve_remove_global = { NAME = un_recess_months }
 	# The docket (redesign phase 4). A refounded UN seeds it afresh.
@@ -473,6 +488,40 @@ un_dissolve = {
 	un_dissolve_remove_global = { NAME = un_pillar_policy }
 }
 
+# The United Nations rule switched off mid-game, from the screen that changes
+# country (2026-11-08): from un_global_authority_on_action every month the rule
+# is off, and from je_united_nations' invalid outcome, so the organisation ends
+# the day the first entry does. The UN ends as if it had never been founded:
+# un_dissolve_quiet strips every country (un_dissolve_strip_country: the
+# mirrors other systems read, International Oversight's licence and the
+# sanctions among them), demolishes the headquarters, and lifts the agencies
+# and the organisation's globals, with no dissolution record, no refounding
+# cooldown, no world-moment event and no power-bloc vacuum. A founding
+# conference breaks up, and a vacuum modifier from an earlier dissolution
+# comes off, since un_ladder_bloc_vacuum_update stops with the rule. Timed
+# penalties and costs run out as after a dissolution. Idempotent: a month with
+# nothing left does nothing.
+# Scope: any
+un_stop_for_rule = {
+	if = {
+		limit = { has_global_variable = un_founded }
+		un_dissolve_quiet = yes
+	}
+	if = {
+		limit = { has_global_variable = un_founding_conference }
+		un_conference_clear = yes
+	}
+	every_country = {
+		limit = { is_power_bloc_leader = yes }
+		power_bloc ?= {
+			if = {
+				limit = { has_modifier = un_bloc_vacuum_modifier }
+				remove_modifier = un_bloc_vacuum_modifier
+			}
+		}
+	}
+}
+
 # Remove a global variable if it is set.
 # Parameters: $NAME$
 # Scope: any
@@ -499,7 +548,10 @@ un_dissolve_strip_country = {
 	je:je_united_nations ?= { remove_modifier = un_nonmember_pariah_strong_modifier }
 	un_state_off = { MODIFIER = un_headquarters_modifier }
 	un_standing_clear_tier_modifiers = yes
-	remove_modifier = un_sanctions_target_modifier
+	if = {
+		limit = { has_variable = un_sanctions_target_on }
+		remove_variable = un_sanctions_target_on
+	}
 	if = {
 		limit = { has_variable = un_sanctions_enforced_by }
 		remove_variable = un_sanctions_enforced_by
@@ -507,10 +559,10 @@ un_dissolve_strip_country = {
 	remove_modifier = un_sanctions_voluntary_target_modifier
 	remove_modifier = un_sanctions_enforcement_modifier
 	remove_modifier = un_sanctions_partial_modifier
-	# Resolutions with teeth (redesign phase 5): the Assembly's embargoes and
-	# the mandate holder's war support end with it.
+	# Resolutions with teeth (redesign phase 5): the Assembly's embargoes end
+	# with it, and the mandate holder's war support (declared on the entry,
+	# under global_var:un_founded) with the UN itself.
 	un_teeth_lift_embargoes = yes
-	remove_modifier = un_mandate_war_support_modifier
 	if = {
 		limit = { has_variable = un_charter_signed }
 		remove_variable = un_charter_signed
@@ -541,7 +593,7 @@ un_membership_end_effect = {
 	je:je_united_nations ?= { remove_modifier = un_member_privileges_modifier }
 	# Dues stop with membership; arrears do not (redesign phase 5): a member
 	# that walks out owing money rejoins still withholding.
-	remove_modifier = un_dues_modifier
+	un_dues_stop_paying = yes
 	# So do the convention regimes' terms (redesign phase 5); the stamp goes
 	# so that a member that rejoins reads them afresh.
 	un_regime_clear_country = yes
@@ -551,10 +603,11 @@ un_membership_end_effect = {
 	}
 	# The decolonisation regime reached our colonies through our membership.
 	every_direct_subject = {
-		limit = { has_modifier = un_regime_colony_liberty_modifier }
-		remove_modifier = un_regime_colony_liberty_modifier
+		limit = { has_variable = un_regime_colony_liberty_modifier_on }
+		un_regime_term_off = { TERM = colony_liberty }
 	}
-	je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
+	# The membership benefits are declared on the entry and end with the
+	# membership modifier (un_member_draws_benefits).
 	# NPT enforcement binds members only (je_un_preview_npt_tt), so a member
 	# held to disarmament is released the day it goes; otherwise its programme
 	# and stockpile were zeroed every week until it rejoined.
@@ -569,39 +622,17 @@ un_membership_end_effect = {
 	un_state_off = { MODIFIER = un_permanent_member_modifier }
 	un_state_off = { MODIFIER = un_founding_member_modifier }
 	remove_modifier = un_sanctions_enforcer_modifier
-	un_state_off = { MODIFIER = un_peacekeeping_contributor_modifier }
-	un_state_off = { MODIFIER = un_peacekeeping_contributor_cost }
-	un_state_off = { MODIFIER = un_development_contributor_modifier }
-	un_state_off = { MODIFIER = un_development_contributor_cost }
+	# Every programme and stance, and their costs (declared on the entry
+	# while their mirrors are set).
+	un_programmes_end = yes
 	# The aid programme ends with its cost; keeping the prestige marker
 	# while dropping the bill made leaving a way to stop paying for aid.
 	remove_modifier = un_humanitarian_aid_modifier
 	remove_modifier = un_humanitarian_aid_cost
-	un_state_off = { MODIFIER = un_human_rights_champion_modifier }
-	un_state_off = { MODIFIER = un_arms_control_participant_modifier }
-	un_state_off = { MODIFIER = un_champion_order_cost }
-	un_state_off = { MODIFIER = un_undermine_order_cost }
-	# Permanent treaty commitments
-	un_state_off = { MODIFIER = un_human_rights_declaration_modifier }
-	un_state_off = { MODIFIER = un_nonproliferation_modifier }
-	un_state_off = { MODIFIER = un_climate_binding_modifier }
-	un_state_off = { MODIFIER = un_heritage_program_modifier }
-	un_state_off = { MODIFIER = un_pandemic_cooperation_modifier }
-	un_state_off = { MODIFIER = un_refugee_program_modifier }
-	un_state_off = { MODIFIER = un_space_partnership_modifier }
-	# The nine conventions that sit on the country rather than the journal
-	# entry. un_apply_ratified_conventions re-adds them on rejoining,
-	# exactly as it does the journal-entry ones above (except an Antarctic
-	# Treaty its member denounced).
-	un_state_country_off = { MODIFIER = un_law_of_sea_modifier }
-	un_state_country_off = { MODIFIER = un_icc_member_modifier }
-	un_state_country_off = { MODIFIER = un_physical_protection_modifier }
-	un_state_country_off = { MODIFIER = un_narcotics_control_modifier }
-	un_state_country_off = { MODIFIER = un_cultural_diversity_modifier }
-	un_state_country_off = { MODIFIER = un_nuclear_ban_modifier }
-	un_state_country_off = { MODIFIER = un_antarctic_treaty_modifier }
-	un_state_country_off = { MODIFIER = un_asat_moratorium_modifier }
-	un_state_country_off = { MODIFIER = un_colony_protection_modifier }
+	# Every convention we ratified (declared on the entry while its mirror is
+	# set). un_apply_ratified_conventions ratifies them again on rejoining
+	# (except an Antarctic Treaty its member denounced).
+	un_conventions_end = yes
 
 	# The overview's Security Council flags (un_overview_display_effects.txt).
 	un_p5_display_refresh = yes
@@ -825,6 +856,7 @@ un_conference_conclude = {
 			has_global_variable = un_conference_top_power_joins
 			has_global_variable = un_conference_top_power
 			exists = global_var:un_conference_top_power
+			global_var:un_conference_top_power = { is_revolutionary = no }	# as the Join button
 		}
 		global_var:un_conference_top_power = {
 			un_join_organisation = yes

@@ -270,10 +270,7 @@ sr_battlestation_held = {
 # (sr_fleet_values.txt's prices of force).
 sr_colony_convention_party = {
 	has_global_variable = un_agency_copuos
-	OR = {
-		has_modifier = un_colony_protection_modifier
-		has_variable = un_colony_protection_modifier_on
-	}
+	has_variable = un_colony_protection_modifier_on
 }
 
 # ---- Earth orbit (6d; sr_earth_orbit_effects.txt) ---------------------------------------------

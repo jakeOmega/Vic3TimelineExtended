@@ -1,0 +1,172 @@
+﻿# Culture Merges: every number the system reads, and the per-pop conversion rate
+# (docs/superpowers/specs/2026-11-07-culture-merges-design.md; plan Task 3).
+# Mirrored in test_culture_merge_values.py, which reads this file for its coefficients.
+#
+# One hysteresis convention: a gate first opens, and reopens, at its spec value,
+# and closes only past a looser one.
+
+# ---- Holding most of each part (spec 4.2) ----
+# The sphere's share of a part's homeland-state pops: opens at 60%, closes below 50%.
+te_cm_hold_open = 0.60
+te_cm_hold_close = 0.50
+
+# ---- Accepted, and very high acceptance ----
+# Accepted is vanilla's Full Acceptance, acceptance_status_5 (80): a country where
+# a part's pops hold only acceptance_status_4 (60 to 79; vanilla's Second-class
+# Citizen, which the mod's replace/ loc calls Provisional Acceptance) treats them
+# as less than equals and can't merge them (owner, R39). A part is accepted in a
+# sphere country at 80 and stops being accepted below 75; very high, for a tier-1b
+# part, is 90, lost below 85.
+te_cm_accept_open = {
+	value = acceptance_status_5
+}
+te_cm_accept_close = 75
+te_cm_accept_high_open = 90
+te_cm_accept_high_close = 85
+
+# ---- The standard-of-living gap between a part and the sphere ----
+# The gate opens below a gap of 3 and closes above 4.
+te_cm_sol_gap_close = 4
+te_cm_sol_gap_open = 3
+
+# ---- Shares ----
+# A meaningful share: a sphere that holds this much of a part's homeland pops
+# counts it. The switch: once the result holds this share of result + part pops
+# in a part's homeland states, every remaining pop of the part switches. It
+# equals te_cm_hold_open (owner, 2026-11-07: "drop it to 60%"), so a sphere that
+# holds a part's homeland at 60% can only finish by converting all of it, and one
+# that holds more finishes sooner: gaining more of the homeland is the lever.
+te_cm_meaningful_share = 0.10
+te_cm_switch_share = 0.60
+
+# ---- Waiting and counters, in years ----
+# Tiers 1b and 2 count years of holding the parts together before a merge may
+# start; a merge that qualifies while waiting for a vanilla entry waits at most
+# te_cm_wait_cap_years.
+te_cm_years_tier2 = 30
+te_cm_years_tier3 = 50
+te_cm_wait_cap_years = 20
+
+# A subject or bloc member converts at half the starter's rate.
+te_cm_sphere_rate_factor = 0.5
+
+# ---- The conversion rate's coefficients (tuned against the pace targets) ----
+# te_cm_pop_rate is a fraction of one pop that converts each year. With the
+# remaining share (1 - f) ** n, the switch comes at n = ln(1 - 0.60) / ln(1 - f)
+# for a sphere that holds the part's whole homeland, and at ln(1 - 0.60 / h) / ln(1 - f)
+# for one that holds a share h of it (developed: 19 years at h = 1, 28 at 0.8, 40 at 0.7).
+# Owner's targets: about 20 years for a developed country, about 40 for a slow one,
+# the spread coming about half from the pop's circumstances (literacy, urbanization)
+# and half from policy (the speed modifier).
+#   developed: literacy 0.8, urbanization 0.4, Public Schools + Ministry of Culture
+#              level 3 + Radio + Film (speed +40%): f = 4.8%, n = 18.7 years
+#   slow:      literacy 0.3, urbanization 0.1, none of them:  f = 2.3%, n = 39.6 years
+# Between those profiles literacy alone multiplies the rate by 1.28, urbanization
+# alone by 1.17 and policy by 1.4 (test_culture_merge_values.py pins each). The
+# speed sources are 0.10 Public Schools, 0.05 per Ministry level, 0.10 Radio,
+# 0.05 Film, 0.10 Mass Propaganda.
+te_cm_base_rate = 0.012
+te_cm_literacy_base = 1.5
+te_cm_urban_weight = 0.6
+
+# A discriminated pop barely converts; one living outside the part's homeland
+# states converts faster (the homeland shares gate the merge, and diaspora pops
+# convert at the switch regardless).
+# "Discriminated" is per pop and exact: pop_acceptance below acceptance_status_4
+# (60), Open Prejudice or worse. It stays at 60 though
+# the country's gate opens at Full Acceptance (80, R39): the gate reads a country's
+# average, this factor each pop, and only a pop vanilla treats as discriminated is
+# slowed. A pop at 57 in a country whose average keeps the gate open (75 or more)
+# therefore converts at a tenth; the factor is not softened to follow the gate.
+te_cm_discriminated_factor = 0.1
+te_cm_diaspora_factor = 2
+
+# ---- The rate ----
+# Pop scope. Reads the saved scopes scope:te_cm_part (the part's culture) and
+# scope:te_cm_starter (the starting country); the caller sets both. Returns this
+# year's converted fraction of the pop, 0 to 0.5. The clamp is also the guard for
+# a caller that forgot a scope: a missing scope can't make the rate negative or
+# above 0.5.
+#
+#   rate = base
+#        * (literacy base + literacy_rate)         literacy_rate is the pop's, 0 to 1
+#        * (1 + urban weight * urbanization)       state.state_urbanization_rate (vanilla, building_values.txt):
+#                                                  total_urbanization / state_population * 1000, clamped to a
+#                                                  share, 0 to 1 (0.4 is a state 40% urban)
+#        * (1 + owner's country_culture_merge_speed_mult)
+#        * 0.1 if pop_acceptance < acceptance_status_4   (vanilla has no pop_is_discriminated;
+#                                                         a per-pop cliff at 60, see te_cm_discriminated_factor)
+#        * 2   if the pop's state region is not a homeland of the part
+#        * 0.5 if its owner is not the starter
+te_cm_pop_rate = {
+	value = te_cm_base_rate
+
+	multiply = {
+		value = te_cm_literacy_base
+		add = literacy_rate
+	}
+
+	multiply = {
+		value = 1
+		add = {
+			value = state.state_urbanization_rate
+			multiply = te_cm_urban_weight
+		}
+	}
+
+	multiply = {
+		value = 1
+		add = owner.modifier:country_culture_merge_speed_mult
+	}
+
+	if = {
+		limit = {
+			pop_acceptance < acceptance_status_4
+		}
+		multiply = te_cm_discriminated_factor
+	}
+
+	if = {
+		limit = {
+			NOT = {
+				state = {
+					state_region = { is_homeland = scope:te_cm_part }
+				}
+			}
+		}
+		multiply = te_cm_diaspora_factor
+	}
+
+	if = {
+		limit = {
+			NOT = { owner = scope:te_cm_starter }
+		}
+		multiply = te_cm_sphere_rate_factor
+	}
+
+	min = 0
+	max = 0.5
+}
+
+# ---- Russification (spec section 7; plan Task 7) ----
+# State scope. The share of the state's pops that are Russian or East Slavic (0 to 1).
+# Vanilla's Russification entry completes on a state's Russian share
+# (culture_percent_state target = cu:russian, at je_russification_state_russian_culture_min),
+# and a Russian pop that merged into East Slavic no longer counts there. The injected
+# outcome (journal_entries/te_vanilla_russification_merge.txt) reads this instead, through
+# te_cm_russification_state_ok. The sum of the two cultures' shares of the state's pops, in
+# the quoted culture_percent_state form vanilla's own Russification value uses
+# (event_values.txt:321), which needs no division and so no floor.
+te_cm_russian_or_east_slavic_share = {
+	value = "culture_percent_state(cu:russian)"
+	add = "culture_percent_state(cu:cm_east_slavic)"
+}
+
+# ---- Fervor (owner, 2026-11-07; in place of the German unification and Balkan League waits) ----
+# Any scope. The current fervor of scope:te_cm_fervor_source (0 to 100), in the dotted form vanilla's
+# movement_values.txt reads it (cu:north_german.culture_current_fervor). Read only in comparisons and
+# by the self-check, never passed to set_fervor: that effect is documented with a literal
+# (set_fervor = 3.0), so the copy sets through a ladder of literals (te_cmg_set_fervor_from_source).
+te_cm_fervor_of_source = {
+	value = scope:te_cm_fervor_source.culture_current_fervor
+}

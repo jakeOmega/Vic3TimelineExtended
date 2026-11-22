@@ -105,6 +105,26 @@ te_pb_remove_principle_in_scope = {
 		remove_principle = principle_companies_5
 	}
 	else_if = {
+		limit = { scope:te_principle ?= principle:principle_conditionality_1 }
+		remove_principle = principle_conditionality_1
+	}
+	else_if = {
+		limit = { scope:te_principle ?= principle:principle_conditionality_2 }
+		remove_principle = principle_conditionality_2
+	}
+	else_if = {
+		limit = { scope:te_principle ?= principle:principle_conditionality_3 }
+		remove_principle = principle_conditionality_3
+	}
+	else_if = {
+		limit = { scope:te_principle ?= principle:principle_conditionality_4 }
+		remove_principle = principle_conditionality_4
+	}
+	else_if = {
+		limit = { scope:te_principle ?= principle:principle_conditionality_5 }
+		remove_principle = principle_conditionality_5
+	}
+	else_if = {
 		limit = { scope:te_principle ?= principle:principle_construction_1 }
 		remove_principle = principle_construction_1
 	}
@@ -203,6 +223,26 @@ te_pb_remove_principle_in_scope = {
 	else_if = {
 		limit = { scope:te_principle ?= principle:principle_defensive_cooperation_5 }
 		remove_principle = principle_defensive_cooperation_5
+	}
+	else_if = {
+		limit = { scope:te_principle ?= principle:principle_development_lending_1 }
+		remove_principle = principle_development_lending_1
+	}
+	else_if = {
+		limit = { scope:te_principle ?= principle:principle_development_lending_2 }
+		remove_principle = principle_development_lending_2
+	}
+	else_if = {
+		limit = { scope:te_principle ?= principle:principle_development_lending_3 }
+		remove_principle = principle_development_lending_3
+	}
+	else_if = {
+		limit = { scope:te_principle ?= principle:principle_development_lending_4 }
+		remove_principle = principle_development_lending_4
+	}
+	else_if = {
+		limit = { scope:te_principle ?= principle:principle_development_lending_5 }
+		remove_principle = principle_development_lending_5
 	}
 	else_if = {
 		limit = { scope:te_principle ?= principle:principle_diplomacy_1 }
@@ -683,6 +723,26 @@ te_pb_remove_principle_in_scope = {
 	else_if = {
 		limit = { scope:te_principle ?= principle:principle_shared_canon_5 }
 		remove_principle = principle_shared_canon_5
+	}
+	else_if = {
+		limit = { scope:te_principle ?= principle:principle_technology_controls_1 }
+		remove_principle = principle_technology_controls_1
+	}
+	else_if = {
+		limit = { scope:te_principle ?= principle:principle_technology_controls_2 }
+		remove_principle = principle_technology_controls_2
+	}
+	else_if = {
+		limit = { scope:te_principle ?= principle:principle_technology_controls_3 }
+		remove_principle = principle_technology_controls_3
+	}
+	else_if = {
+		limit = { scope:te_principle ?= principle:principle_technology_controls_4 }
+		remove_principle = principle_technology_controls_4
+	}
+	else_if = {
+		limit = { scope:te_principle ?= principle:principle_technology_controls_5 }
+		remove_principle = principle_technology_controls_5
 	}
 	else_if = {
 		limit = { scope:te_principle ?= principle:principle_transport_1 }

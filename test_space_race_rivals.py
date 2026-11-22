@@ -25,7 +25,7 @@ ON_ACTIONS = os.path.join(REPO, "common", "on_actions", "space_race_on_actions.t
 COVERT_EFFECTS = os.path.join(REPO, "common", "scripted_effects", "covert_warfare_effects.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
-MILESTONES = ("suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
+MILESTONES = ("suborbital", "orbital", "moon_landing", "probe", "mars_landing",
               "interstellar_probe", "solar_colonization")  # je_space_race.txt's order
 FUZZ_STEPS = [-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1]
 ROW_VALUE = ("[FixedPointToFloat( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope )"
@@ -177,9 +177,10 @@ class RefreshTest(unittest.TestCase):
         clear = _body(self.effects, "sr_clear_rival_slots")
         self.assertIn("limit = { has_variable_list = sr_rivals_list_$MILESTONE$ } "
                       "clear_variable_list = sr_rivals_list_$MILESTONE$", clear)
-        # the count and five slots an older save still holds
+        # the count and five slots from before SPC-9 went with vanilla 1.15,
+        # which loads no older save (#1407)
         for var in ["sr_rival_total_$MILESTONE$"] + [f"sr_rival_$MILESTONE$_{n}" for n in range(1, 6)]:
-            self.assertIn(f"limit = {{ has_variable = {var} }} remove_variable = {var}", clear)
+            self.assertNotIn(var, self.effects)
         cleanup = _body(self.effects, "sr_cleanup_milestone_if_inactive_base")
         for var in ("sr_fuzz_$MILESTONE$", "sr_fuzz_until_$MILESTONE$"):
             self.assertRegex(cleanup, rf"has_variable = {re.escape(var)}\s*\}}\s*remove_variable = {re.escape(var)}")

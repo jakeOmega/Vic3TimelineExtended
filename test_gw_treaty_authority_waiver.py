@@ -21,9 +21,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 TREATY = ROOT / "common/treaty_articles/109_enforce_emissions_reduction.txt"
 MODIFIERS = ROOT / "common/static_modifiers/extra_modifiers.txt"
+TRIGGERS = ROOT / "common/scripted_triggers/global_warming_triggers.txt"
+JE = ROOT / "common/journal_entries/je_global_warming.txt"
 
-# The modifiers the treaty's on_entry_into_force adds to the source's journal
-# entry, read from the article so a policy added to the treaty is counted.
+# The policies the treaty's on_entry_into_force forces on the source, read from
+# the article so a policy added to the treaty is counted.
 NOT_FORCED = "climate_adaptation_modifier"
 
 
@@ -55,10 +57,19 @@ class TreatyAuthorityWaiver(unittest.TestCase):
         self.source = _block(self.treaty, "source_modifier")
 
     def _forced(self):
-        # Every policy modifier the treaty adds is named in its non_fulfillment
-        # check, which lists exactly the policies whose removal freezes it.
+        # Every policy the treaty forces is named in its non_fulfillment check,
+        # which lists exactly the policies whose removal freezes it, by their
+        # in-force triggers. Each trigger reads the policy's variable, and the
+        # climate entry declares the policy's modifier while it is set (#1466).
         block = _block(self.treaty, "non_fulfillment")
-        return sorted(set(re.findall(r"has_modifier = (\w+_modifier)", block)))
+        triggers = _text(TRIGGERS)
+        entry = _text(JE)
+        out = set()
+        for trigger in re.findall(r"(gw_policy_\w+_active) = yes", block):
+            variable = re.search(r"has_variable = (\w+)", _block(triggers, trigger)).group(1)
+            out.add(re.search(r"modifier = (\w+)\s*value = \{\s*value = 0\s*if = \{\s*limit = \{ has_variable = "
+                              + variable + r" \}", entry).group(1))
+        return sorted(out)
 
     def test_forced_set_is_the_seven_policies(self):
         self.assertEqual(len(self._forced()), 7)

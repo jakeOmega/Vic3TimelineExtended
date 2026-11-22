@@ -2948,6 +2948,42 @@
          }
         ]
        }
+      ],
+      [
+       "=",
+       {
+        "desc": [
+         "=",
+         "\"HAS_FACTORY_COUNCILS\""
+        ],
+        "value": [
+         "=",
+         "1.0"
+        ],
+        "if": [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "owner": [
+             "=",
+             {
+              "has_factory_councils_law_or_amendment": [
+               "=",
+               "yes"
+              ]
+             }
+            ]
+           }
+          ],
+          "value": [
+           "=",
+           "1.5"
+          ]
+         }
+        ]
+       }
       ]
      ]
     }
@@ -3150,6 +3186,42 @@
               "has_technology_researched": [
                "=",
                "political_agitation"
+              ]
+             }
+            ]
+           }
+          ],
+          "value": [
+           "=",
+           "1.5"
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "desc": [
+         "=",
+         "\"HAS_FACTORY_COUNCILS\""
+        ],
+        "value": [
+         "=",
+         "1.0"
+        ],
+        "if": [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "owner": [
+             "=",
+             {
+              "has_factory_councils_law_or_amendment": [
+               "=",
+               "yes"
               ]
              }
             ]

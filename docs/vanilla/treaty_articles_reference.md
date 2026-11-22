@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document is the reference for all custom treaty articles in the Vic3TimelineExtended mod. Each article includes historical motivation, mechanical design, implementation details (required inputs, modifiers, effects, AI weights), and engine constraints. Articles 1–4, 6 and 8 and the two "additional" articles (Forced Disarmament, Cultural Exchange) are implemented; Articles 5, 7, 9, 11, 12 and 13 are **unbuilt designs**, each marked at its heading, and Article 10 was dropped. When adding new treaty articles, follow the patterns and constraints documented here.
+This document is the reference for all custom treaty articles in the Vic3TimelineExtended mod. Each article includes historical motivation, mechanical design, implementation details (required inputs, modifiers, effects, AI weights), and engine constraints. Articles 1–4, 6 and 8 and the two "additional" articles (Forced Disarmament, Cultural Exchange) are implemented; Articles 5, 7, 9, 11, 12 and 13 are **unbuilt designs**, each marked at its heading, and Article 10 was dropped. When adding new treaty articles, follow the patterns and constraints documented here. Each enforceable article's AI demand weight (`proposal_weight` and `wargoal_score_multiplier`), or the reason it has none, is listed in `docs/systems/mod_systems/treaties.md` § "AI demand weights".
 
 ### Engine Constraints Reference
 
@@ -54,7 +54,7 @@ Russia's claims to protect Orthodox Christians in the Ottoman Empire; Austria's 
 No non-fulfillment conditions - the treaty is enforced via the state modifier.
 
 ### Can Ratify
-Besides the duplicate check (`no_duplicate_treaty_article`), the protector — the **target**, which pays the upkeep, gains the prestige and whose culture and religion the AI block weighs — must belong to a power bloc with the `identity_cultural` or `identity_religious` identity (since 2026-10-05). Religious counts too because the AI asks on behalf of a faith as well as a people. The gate is not in `requirement_to_maintain`, so protection already in force stays when the protector leaves its bloc, but a renegotiated treaty must pass it (owner ruling 2026-10-05).
+Besides the duplicate check (`no_duplicate_treaty_article`), the protector — the **target**, which pays the upkeep, gains the prestige and whose culture and religion the AI block weighs — must belong to a power bloc with the `identity_cultural` or `identity_religious` identity (since 2026-10-05). Religious counts too because the AI asks on behalf of a faith as well as a people. The gate is not in `requirement_to_maintain`, so protection already in force stays when the protector leaves its bloc, but a renegotiated treaty must pass it (owner ruling 2026-10-05). Since 2026-11-08 `possible` tests it too, on `scope:other_country`, because a war goal enforcing the article checks `possible` and not `can_ratify`.
 
 ### AI Design
 - `article_ai_usage = { request }` — AI demands this from others
@@ -521,7 +521,7 @@ non_fulfillment = {
 ```
 
 ### Can Ratify
-Besides the duplicate check (`no_duplicate_treaty_article`), the missionary power — the **target**, which `on_entry_into_force` stores on the state and toward whose religion `religious_mission_conversion_on_action` converts — must belong to a power bloc with the `identity_religious` identity (since 2026-10-05). The gate is not in `requirement_to_maintain`, so missions already in force stay, but a renegotiated treaty must pass it (owner ruling 2026-10-05).
+Besides the duplicate check (`no_duplicate_treaty_article`), the missionary power — the **target**, which `on_entry_into_force` stores on the state and toward whose religion `religious_mission_conversion_on_action` converts — must belong to a power bloc with the `identity_religious` identity (since 2026-10-05). The gate is not in `requirement_to_maintain`, so missions already in force stay, but a renegotiated treaty must pass it (owner ruling 2026-10-05). Since 2026-11-08 `possible` tests it too, on `scope:other_country`, because a war goal enforcing the article checks `possible` and not `can_ratify`.
 
 ### AI Design
 - `article_ai_usage = { request }` — Religious powers demand mission rights
@@ -689,7 +689,7 @@ state_valid_trigger = {
 
 ## Article 9: Climate Accords
 
-> **Unbuilt design.** The mutual Climate Accords article below was never implemented (checked against `common/treaty_articles/` on 2026-09-26). The climate treaty that shipped is a different article, `enforce_emissions_reduction` (`common/treaty_articles/109_enforce_emissions_reduction.txt`): a directed article that holds a market leader to its major mitigation policies (see `docs/systems/mod_systems/treaties.md` § Enforce Emissions Reduction Treaty).
+> **Unbuilt design.** The mutual Climate Accords article below was never implemented (checked against `common/treaty_articles/` on 2026-09-26). The climate treaty that shipped is a different article, `enforce_emissions_reduction` (`common/treaty_articles/109_enforce_emissions_reduction.txt`): a directed article that holds a market leader to its major mitigation policies (see `docs/systems/mod_systems/treaties.md` § Emissions Reduction Treaty).
 
 > **Design uncertainty:** This article may not be mechanically interesting enough to justify implementation. The existing Global Warming journal entry system already handles climate policy via scripted buttons. A treaty article would need to add something meaningfully different from what the JE provides. Consider whether this should be kept or folded into the JE system.
 
@@ -939,7 +939,7 @@ Monetary policy phases 5a and 6 (`docs/systems/monetary_policy_design.md` §15A.
 
 **Pattern worth copying — and the reason these three look empty.** Their `source_modifier` / `target_modifier` blocks carry prestige only. Every monetary term is GDP- or share-scaled (*provider cost = recipient benefit × clamp(recipient GDP ÷ provider GDP)*), which a static treaty block cannot express, so the articles are **markers**: their hooks dispatch `te_monetary_internal.2`, an idempotent discovery that walks the country's in-force treaties (`any_scope_treaty = { any_scope_article = { has_type = X source_country = root } }`), and the monthly monetary update applies three managed scaled modifiers from what it found. The treaty is the source of truth; the hooks only make it prompt.
 
-**Gating.** Symmetric conditions in `possible`; everything directional in `requirement_to_maintain` (the anchor keeps a dial; the provider keeps a national bank; the guarantor is not in default) or `can_ratify` (rank / GDP tests, one peg at a time, one guarantor per ward, one swap-line provider per recipient — the existing-treaty checks use the vanilla `is_renegotiation` / `amended_treaty` guard and only resolve there). **The two hostile articles' pretext is the exception, and is tested twice**: `possible` reads it one way round (ROOT is the prospective source, the conceding pegger or debtor, and `scope:other_country` the imposer), and `can_ratify` repeats it with the named scopes and carries the tooltip. A war goal enforcing an article checks `possible` but not `can_ratify`, so a pretext that `possible` accepted in *either* direction let the defaulted country demand the peg or the receivership of its creditor; corrected 2026-10-13, with `return_cultural_property`, which had copied the pattern.
+**Gating.** Symmetric conditions in `possible`; everything directional in `requirement_to_maintain` (the anchor keeps a dial; the provider keeps a national bank; the guarantor is not in default; and, for the swap line, the guarantee and the receivership, `te_mon_full_system`, so an article in force ends with no breach penalty when the banking rule leaves Full, as the pegs already did through the anchor's dial: `mod_systems/banking_cycle.md`, "Full to Simplified mid-game") or `can_ratify` (rank / GDP tests, one peg at a time, one guarantor per ward, one swap-line provider per recipient — the existing-treaty checks use the vanilla `is_renegotiation` / `amended_treaty` guard and only resolve there). **The two hostile articles' pretext is the exception, and is tested twice**: `possible` reads it one way round (ROOT is the prospective source, the conceding pegger or debtor, and `scope:other_country` the imposer), and `can_ratify` repeats it with the named scopes and carries the tooltip. A war goal enforcing an article checks `possible` but not `can_ratify`, so a pretext that `possible` accepted in *either* direction let the defaulted country demand the peg or the receivership of its creditor; corrected 2026-10-13, with `return_cultural_property`, which had copied the pattern.
 
 ## Seabed leases: Lease <Basin> Seabed Claims
 

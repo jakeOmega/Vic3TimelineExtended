@@ -257,7 +257,25 @@ class HookTests(unittest.TestCase):
         self.assertIn("un_charter_on_carried = yes", _read(VOTE_EVENTS))
         self.assertIn("add = un_lean_charter_interests", _block(_read(DOSSIER), "un_lean_interests"))
         self.assertIn("un_charter_monthly_update = yes", _read(ON_ACTIONS))
-        self.assertIn("un_charter_on_dissolve = yes", _block(_read(LADDER), "un_dissolve"))
+        # In the dissolution's quiet half, which the rule switched off mid-game runs too (2026-11-08).
+        self.assertIn("un_dissolve_quiet = yes", _block(_read(LADDER), "un_dissolve"))
+        self.assertIn("un_charter_on_dissolve = yes", _block(_read(LADDER), "un_dissolve_quiet"))
+
+
+def _inner(text, name):
+    """The body of the first `name = { ... }` anywhere in text, not only at a line's start."""
+    m = re.search(r"\b" + re.escape(name) + r"\s*=\s*\{", text)
+    if m is None:
+        raise AssertionError(f"{name} not found")
+    depth = 0
+    for i in range(m.end() - 1, len(text)):
+        if text[i] == "{":
+            depth += 1
+        elif text[i] == "}":
+            depth -= 1
+            if depth == 0:
+                return text[m.end():i]
+    raise AssertionError(f"{name} is not closed")
 
 
 class ButtonTests(unittest.TestCase):
@@ -269,12 +287,16 @@ class ButtonTests(unittest.TestCase):
                 body = _flat(_block(buttons, f"un_propose_{t.key}_button"))
                 # The AI's alone (is_ai, the 2026-10-27 audit's UN-9): a human
                 # tables from the chamber's Propose row.
+                visible = _flat(_inner(body, "visible")).strip()
                 if t.reform == 2:
                     # Out of view until Reform I carries, like its chamber row.
-                    self.assertIn(f"visible = {{ is_ai = yes un_charter_reform_ii_in_view = yes "
-                                  f"un_propose_{t.key}_available = yes }}", body)
+                    self.assertTrue(visible.startswith("is_ai = yes un_charter_reform_ii_in_view = yes "), visible)
                 else:
-                    self.assertIn(f"visible = {{ is_ai = yes un_propose_{t.key}_available = yes }}", body)
+                    self.assertTrue(visible.startswith("is_ai = yes "), visible)
+                # possible's cheap gates come before the case scan
+                # (test_un_propose_ai_gates.py checks each is possible's).
+                self.assertIn("un_propose_ai_floor_open = yes", visible)
+                self.assertTrue(visible.endswith(f"un_propose_{t.key}_available = yes"), visible)
                 self.assertIn(f"possible = {{ un_propose_{t.key}_possible = yes }}", body)
                 self.assertIn(f"value = un_{t.key}_ai_chance", body)
                 self.assertIn(f"effect = {{ un_propose_{t.key}_effect = yes }}", body)
@@ -445,7 +467,8 @@ class DevelopmentProgramsGateTests(unittest.TestCase):
         lapse = _flat(_block(effects, "un_dev_fund_lapse_contributions"))
         self.assertIn("limit = { NOT = { has_global_variable = un_inst_development_fund } }", lapse)
         for modifier in ("un_development_contributor_modifier", "un_development_contributor_cost"):
-            self.assertIn(f"un_state_off = {{ MODIFIER = {modifier} }}", lapse)
+            # The entry declares both while their mirrors are set (#1404).
+            self.assertIn(f"un_mirror_clear = {{ MIRROR = {modifier}_on }}", lapse)
         self.assertIn("post_notification = un_dev_fund_contribution_lapsed_notice", lapse)
         # It runs first, so the month's contributions never count a lapsed one.
         update = _flat(_block(effects, "un_dev_fund_monthly_update"))

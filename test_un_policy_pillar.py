@@ -42,6 +42,9 @@ GRANTS = {
     ("common/laws/extra_laws.txt", "law_humanitarian_regulations"): 1,
     ("common/laws/extra_laws.txt", "law_limited_war"): 1.5,
     ("common/laws/extra_laws.txt", "INJECT:law_isolationism"): -1.5,
+    # Isolationism's variants carry its line (#1406); one law group, so they don't stack with it.
+    ("common/laws/extra_laws.txt", "INJECT:law_canton_system"): -1.5,
+    ("common/laws/extra_laws.txt", "INJECT:law_sakoku"): -1.5,
     ("common/institutions/extra_institutions.txt", "institution_ministry_of_international_aid"): 0.15,
     ("common/static_modifiers/nuclear_deterrence_modifiers.txt", "nd_doctrine_mod_1"): 0.5,
     ("common/static_modifiers/nuclear_deterrence_modifiers.txt", "nd_doctrine_mod_3"): -0.5,
@@ -271,7 +274,11 @@ class GoodStandingTest(unittest.TestCase):
         body = re.sub(r"\s+", " ", self.trigger)
         self.assertIn("je:je_united_nations ?= {", body)
         self.assertIn("has_modifier = un_member_modifier", body)
-        self.assertIn("NOT = { has_modifier = un_undermine_order_cost }", body)
+        # The entry declares the stance while its mirror is set (#1404);
+        # un_undermines_the_order reads the mirror.
+        self.assertIn("NOT = { un_undermines_the_order = yes }", body)
+        undermines = re.sub(r"\s+", " ", _block(_read(MEMBERSHIP_TRIGGERS), "un_undermines_the_order"))
+        self.assertIn("has_variable = un_undermine_order_cost_on", undermines)
         self.assertNotIn("un_champion_order_cost", body,
                          "championing is rewarded by commitment; it must not change policy")
 

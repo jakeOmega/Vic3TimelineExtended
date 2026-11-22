@@ -462,8 +462,8 @@ un_vote.1 = {
 		# sanctions resolution against ROOT means accepting the verdict. Only
 		# on a resolution whose verdict the target can accept
 		# (un_resolution_target_may_accept): a refugee resolution names the
-		# country its refugees flee, and an expulsion, a mandate or a court
-		# referral lands in full whatever the target votes.
+		# country its refugees flee, and an expulsion or a mandate lands in
+		# full whatever the target votes.
 		name = {
 			trigger = {
 				scope:un_vote_target ?= this
@@ -1073,6 +1073,12 @@ un_vote.2 = {
 
 	# scope:un_resolution comes from un_resolution_open. A resolution the
 	# watchdog already lapsed, or a queued event from before containers, fails here.
+	# Opened undelayed by the relay un_vote.9 a year after the vote opens, so
+	# this is read on the day the results are due: a resolution that lapsed
+	# meanwhile (un_dissolve_quiet tags it un_res_lapsed, archives it and frees
+	# the lock) is not decided again and its outcome is not applied. A copy a
+	# save from before the relay still holds queued with its delay rests on the
+	# engine reading the trigger when it fires, as it always did.
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		scope:un_resolution ?= { has_tag = un_res_voting }
@@ -1445,6 +1451,9 @@ un_vote.2 = {
 							days = normal_modifier_time
 							is_decaying = yes
 						}
+						# Each colonial power hears of it, member or not: this
+						# block is hidden, and un_vote.3 reaches members only.
+						post_notification = un_decolonization_pressure_notice
 					}
 				}
 			}
@@ -1580,10 +1589,10 @@ un_vote.2 = {
 				hidden_effect = {
 					every_country = {
 						limit = {
-							je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
-							NOT = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_cost } }
+							has_variable = un_peacekeeping_contributor_modifier_on
+							NOT = { has_variable = un_peacekeeping_contributor_cost_on }
 						}
-						un_state_off = { MODIFIER = un_peacekeeping_contributor_modifier }
+						un_mirror_clear = { MIRROR = un_peacekeeping_contributor_modifier_on }
 					}
 				}
 			}
@@ -1653,6 +1662,12 @@ un_vote.2 = {
 				# a target that voted for its own sanctions carries none, and
 				# an enforcer with nothing to enforce could table no sanctions
 				# again until it paid credibility to lift nothing.
+				# The three months wait in the hidden un_events.43, which opens
+				# un_events.5 on the day if the regime still stands (#1596):
+				# queued directly, .5's trigger was false when queued (the
+				# enforcer modifier added here is not readable in this block, and
+				# the target's regime variable is set below), and a delayed event
+				# whose trigger is false when queued seems to be dropped.
 				if = {
 					limit = {
 						exists = scope:un_vote_target
@@ -1661,7 +1676,7 @@ un_vote.2 = {
 					add_modifier = { name = un_sanctions_enforcer_modifier }
 					hidden_effect = {
 						scope:un_vote_target = { save_scope_as = sanctioned_country }
-						trigger_event = { id = un_events.5 days = 90 }
+						trigger_event = { id = un_events.43 days = 90 }
 					}
 				}
 				# Apply sanctions to target
@@ -1670,13 +1685,13 @@ un_vote.2 = {
 					scope:un_vote_target = {
 						if = {
 							limit = { NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } } }
-							# Scaled by the UN's enforcement (redesign phase 2).
-							# un_enforcement reads only globals, so the stored
-							# multiplier is sound whenever the engine re-reads it.
-							add_modifier = {
-								name = un_sanctions_target_modifier
-								multiplier = un_enforcement
+							# Scaled by the UN's enforcement (redesign phase 2):
+							# the entry declares the modifier at E while the
+							# regime's variable is set (#1404).
+							show_as_tooltip = {
+								je:je_united_nations ?= { add_modifier = { name = un_sanctions_target_modifier multiplier = un_enforcement } }
 							}
+							set_variable = un_sanctions_target_on
 							# The regime names its enforcer: two regimes can
 							# run at once, and un_lift_sanctions_button lifts
 							# only the one its presser enforces.
@@ -1978,10 +1993,10 @@ un_vote.2 = {
 					limit = { scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request } }
 					every_country = {
 						limit = {
-							je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
-							NOT = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_cost } }
+							has_variable = un_peacekeeping_contributor_modifier_on
+							NOT = { has_variable = un_peacekeeping_contributor_cost_on }
 						}
-						un_state_off = { MODIFIER = un_peacekeeping_contributor_modifier }
+						un_mirror_clear = { MIRROR = un_peacekeeping_contributor_modifier_on }
 					}
 				}
 				if = {
@@ -2000,14 +2015,32 @@ un_vote.2 = {
 		# ---- Notify all other UN members of the result ----
 		# Not a member whose representation is suspended (§0.8): complying or
 		# ratifying is foreign policy, which its overlord conducts.
+		# The country a verdict was passed on hears it in un_vote.8 instead,
+		# member or not (un_resolution_tells_target): un_vote.3 would only
+		# tell it that a resolution had carried.
 		hidden_effect = {
 			every_country = {
 				limit = {
 					je:je_united_nations ?= { has_modifier = un_member_modifier }
 					NOT = { un_representation_suspended = yes }
 					NOT = { THIS = ROOT }
+					NOT = {
+						AND = {
+							scope:un_resolution ?= { un_resolution_tells_target = yes }
+							exists = scope:un_vote_target
+							THIS = scope:un_vote_target
+						}
+					}
 				}
 				trigger_event = { id = un_vote.3 }
+			}
+			if = {
+				limit = {
+					scope:un_resolution ?= { un_resolution_tells_target = yes }
+					exists = scope:un_vote_target
+					NOT = { scope:un_vote_target = ROOT }
+				}
+				scope:un_vote_target = { trigger_event = { id = un_vote.8 } }
 			}
 		}
 
@@ -2044,13 +2077,22 @@ un_vote.3 = {
 		# that held has blocked it or left only a form that binds no one, so
 		# answering it is a statement only (options B and C).
 		first_valid = {
+			# ...and when no answer of ours would change anything, there is
+			# no choice to describe (un_vote_3_can_refuse).
 			triggered_desc = {
 				trigger = {
 					scope:un_resolution ?= {
 						has_tag = un_res_passed
-						has_tag = un_res_vetoed
 						un_resolution_has_vote = { LIST = un_res_no }
 					}
+					NOT = { un_vote_3_can_refuse = yes }
+				}
+				desc = un_vote.3.d_choice_none
+			}
+			triggered_desc = {
+				trigger = {
+					un_vote_3_can_refuse = yes
+					scope:un_resolution ?= { has_tag = un_res_vetoed }
 				}
 				desc = un_vote.3.d_choice_vetoed
 			}
@@ -2097,21 +2139,23 @@ un_vote.3 = {
 		}
 	}
 
-	# Option A: Catch-all "acknowledge" — vote failed, you voted yes, or you
+	# Option A: Catch-all "acknowledge" — vote failed, you voted yes, you
 	# cast no ballot (joined the UN after vote.1 fired, or lost the vote under
-	# Article 19). In the last case the country is still bound by a passed
+	# Article 19), or you voted no and refusing would change nothing
+	# (un_vote_3_can_refuse: an answer that only costs is not offered). A
+	# no-voter here takes what accepting gave it before, less the compliance
+	# standing: it was asked for nothing, so it complied with nothing. In the
+	# no-ballot case the country is still bound by a passed
 	# convention (default acceptance), since the apply blocks below gate on
-	# the passed tag; but what only a ballot commits a member to — a great
-	# power's anti-colonial stance, a pledge of peacekeepers or aid — is
-	# gated inside those effects on having voted (un_lobby_has_voted).
+	# the passed tag; but what only a ballot commits a member to is gated
+	# inside those effects: a pledge of peacekeepers or aid on having voted
+	# (un_lobby_has_voted), a great power's anti-colonial stance on a yes
+	# vote (un_res_yes), so a no voter here takes no stance.
 	option = {
 		name = un_vote.3.a
 		default_option = yes
 		trigger = {
-			OR = {
-				NOT = { scope:un_resolution ?= { has_tag = un_res_passed } }
-				NOT = { scope:un_resolution ?= { un_resolution_has_vote = { LIST = un_res_no } } }
-			}
+			NOT = { un_vote_3_can_refuse = yes }
 		}
 
 		# Apply the persistent treaty/declaration modifier directly in the
@@ -2138,12 +2182,7 @@ un_vote.3 = {
 			trigger = { always = yes }
 			text = un_vote.3.b
 		}
-		trigger = {
-			scope:un_resolution ?= {
-				has_tag = un_res_passed
-				un_resolution_has_vote = { LIST = un_res_no }
-			}
-		}
+		trigger = { un_vote_3_can_refuse = yes }
 
 		# Same effects as yes voters - you accept the majority decision
 		un_vote_apply_treaty_modifier = yes
@@ -2200,8 +2239,9 @@ un_vote.3 = {
 		ai_chance = {
 			base = 50
 			# Ratifying against itself: an armed power does not accept its own
-			# disarmament, and the cultural hegemon does not give up its pull
-			# (option C's weights).
+			# disarmament, the cultural hegemon does not give up its pull
+			# (option C's weights), and a colonial empire does not condemn
+			# colonialism (below).
 			modifier = {
 				trigger = {
 					scope:un_resolution ?= { has_tag = un_topic_nuclear_ban }
@@ -2213,6 +2253,18 @@ un_vote.3 = {
 				trigger = {
 					scope:un_resolution ?= { has_tag = un_topic_cultural_diversity }
 					un_regime_cultural_hegemon = yes
+				}
+				factor = 0
+			}
+			# A colonial empire does not accept a decolonization declaration
+			# it voted against (issue #1373). Option B is not offered on that
+			# topic today (un_vote_3_can_refuse), and a no voter takes no
+			# stance either way (un_vote_apply_treaty_modifier); this keeps
+			# an empire's acceptance at zero should B return.
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_decolonization }
+					decol_holds_colonial_empire = yes
 				}
 				factor = 0
 			}
@@ -2237,13 +2289,14 @@ un_vote.3 = {
 		}
 	}
 
-	# Option C: Vote passed AND you voted no - refuse to comply. What that
-	# means depends on the resolution, and the name and first tooltip line say
-	# which: stay outside a convention, take no part in a request for aid or
-	# peacekeepers, or — for every decision of the whole Assembly (a mandate,
-	# sanctions, a condemnation, an expulsion, a reform) — denounce it on the
-	# record. Refusing never stops or weakens the resolution itself; the
-	# effects below are the whole of it.
+	# Option C: Vote passed AND you voted no - refuse to comply. Offered only
+	# where refusing changes something (un_vote_3_can_refuse), and the name
+	# and first tooltip line say what: stay outside a convention, take no part
+	# in a request for aid or peacekeepers that would bill us, or — for a
+	# decision of the whole Assembly that accuses another country (a mandate,
+	# sanctions, a condemnation, an expulsion) — denounce it and stand with
+	# the accused, which earns its goodwill. Refusing never stops or weakens
+	# the resolution itself; the effects below are the whole of it.
 	option = {
 		name = {
 			trigger = { scope:un_resolution ?= { un_resolution_is_convention = yes } }
@@ -2257,12 +2310,7 @@ un_vote.3 = {
 			trigger = { always = yes }
 			text = un_vote.3.c_decision
 		}
-		trigger = {
-			scope:un_resolution ?= {
-				has_tag = un_res_passed
-				un_resolution_has_vote = { LIST = un_res_no }
-			}
-		}
+		trigger = { un_vote_3_can_refuse = yes }
 
 		if = {
 			limit = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
@@ -2287,6 +2335,18 @@ un_vote.3 = {
 			create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:un_vote_proposer }
 		}
 		change_infamy = 3
+
+		# Standing with the accused: what denouncing a decision buys. The
+		# ballot against it already earned 15 (un_vote_cast_no); saying so
+		# again once it has carried, at the price above, earns more.
+		if = {
+			limit = {
+				scope:un_resolution ?= { un_resolution_kind_is_decision = yes }
+				un_vote_3_can_stand_with_target = yes
+			}
+			change_relations = { country = scope:un_vote_target value = un_vote_3_stand_with_target_relations }
+			create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:un_vote_target }
+		}
 
 		# International standing: openly refusing a BINDING decision is the
 		# defiance the brief asks to punish. Refusing a recommendatory one is
@@ -2349,6 +2409,27 @@ un_vote.3 = {
 			modifier = {
 				trigger = { country_rank >= rank_value:great_power }
 				add = 20
+			}
+			# Standing with the accused: a friend of the target does, and
+			# nobody takes the costs to side with a rival or a country it is
+			# cold towards.
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { un_resolution_kind_is_decision = yes }
+					scope:un_vote_target ?= { relations:root >= relations_threshold:cordial }
+				}
+				add = 30
+			}
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { un_resolution_kind_is_decision = yes }
+					exists = scope:un_vote_target
+					OR = {
+						has_diplomatic_pact = { who = scope:un_vote_target type = rivalry }
+						scope:un_vote_target ?= { relations:root <= relations_threshold:poor }
+					}
+				}
+				factor = 0
 			}
 			# NPT: nuclear powers refuse rather than disarm
 			modifier = {
@@ -2446,6 +2527,168 @@ un_vote.3 = {
 	}
 }
 
+# ---- The verdict, told to the country it was passed on (#1555) ----
+# Fired by un_vote.2's option on scope:un_vote_target when a condemnation,
+# sanctions or the motion to strip a permanent seat carried and the target had
+# not accepted it (un_resolution_tells_target), whatever the target's
+# membership: a non-member or a member whose representation is suspended is
+# reached too. It replaces un_vote.3 for the target. The option changes
+# nothing: every line in it mirrors what un_vote.2's option has already done,
+# shown and not run again. Keep the two in step.
+# Scope: the target. scope:un_resolution, scope:un_vote_proposer and
+# scope:un_vote_target come from un_vote.2.
+un_vote.8 = {
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/un_assembly_hall_vote.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = un_vote.8.t
+
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_expulsion } }
+				desc = un_vote.8.d_expulsion
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_condemn has_tag = un_res_vetoed } }
+				desc = un_vote.8.d_rebuke
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_condemn } }
+				desc = un_vote.8.d_condemned
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_sanctions has_tag = un_res_vetoed } }
+				desc = un_vote.8.d_voluntary
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = un_vote.8.d_sanctions
+			}
+		}
+	}
+	flavor = un_vote.8.f
+
+	duration = 3
+
+	trigger = {
+		scope:un_resolution ?= { un_resolution_tells_target = yes }
+		exists = scope:un_vote_proposer
+	}
+
+	immediate = {
+		# Vote counts as country vars for loc display (loc has no accessor
+		# for a script container held in a saved scope)
+		set_variable = {
+			name = un_display_support
+			value = scope:un_resolution.var:un_res_support
+		}
+		set_variable = {
+			name = un_display_oppose
+			value = scope:un_resolution.var:un_res_oppose
+		}
+	}
+
+	option = {
+		name = un_vote.8.a
+		default_option = yes
+		ai_chance = { base = 1 }
+
+		show_as_tooltip = {
+			# ---- The permanent seat voted away ----
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_expulsion } }
+				custom_tooltip = un_vote.8.seat_lost_tt
+				add_modifier = {
+					name = un_withdrawal_penalty_modifier
+					days = long_modifier_time
+					is_decaying = yes
+				}
+				custom_tooltip = un_standing_seat_stripped_tt
+				if = {
+					limit = { un_vote_relations_reachable = { WHO = scope:un_vote_proposer } }
+					change_relations = { country = scope:un_vote_proposer value = -25 }
+				}
+			}
+			# ---- Condemned ----
+			else_if = {
+				limit = {
+					scope:un_resolution ?= { has_tag = un_topic_condemn }
+					NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
+				}
+				add_modifier = {
+					name = un_condemned_modifier
+					multiplier = un_enforcement
+					days = long_modifier_time
+					is_decaying = yes
+				}
+				un_teeth_condemn_by_tier = yes
+				custom_tooltip = un_standing_censured_tt
+				if = {
+					limit = { un_vote_relations_reachable = { WHO = scope:un_vote_proposer } }
+					change_relations = { country = scope:un_vote_proposer value = -30 }
+				}
+			}
+			# ---- Condemned, but vetoed: the non-binding rebuke ----
+			else_if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_condemn } }
+				add_modifier = {
+					name = un_non_binding_rebuke_modifier
+					multiplier = un_enforcement
+					days = normal_modifier_time
+					is_decaying = yes
+				}
+				custom_tooltip = un_standing_rebuked_tt
+				if = {
+					limit = { un_vote_relations_reachable = { WHO = scope:un_vote_proposer } }
+					change_relations = { country = scope:un_vote_proposer value = -10 }
+				}
+			}
+			# ---- Sanctions ----
+			else_if = {
+				limit = {
+					scope:un_resolution ?= { has_tag = un_topic_sanctions }
+					NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
+				}
+				je:je_united_nations ?= { add_modifier = { name = un_sanctions_target_modifier multiplier = un_enforcement } }
+				if = {
+					limit = { un_tier_is_supranational = yes }
+					custom_tooltip = un_vote.8.embargo_all_tt
+				}
+				else_if = {
+					limit = { un_tier_at_least_strong = yes }
+					custom_tooltip = un_vote.8.embargo_voters_tt
+				}
+				custom_tooltip = un_standing_sanctioned_tt
+				if = {
+					limit = { un_vote_relations_reachable = { WHO = scope:un_vote_proposer } }
+					change_relations = { country = scope:un_vote_proposer value = -30 }
+				}
+			}
+			# ---- Sanctions, but vetoed: voluntary measures ----
+			else = {
+				add_modifier = {
+					name = un_sanctions_voluntary_target_modifier
+					multiplier = un_enforcement
+					days = normal_modifier_time
+					is_decaying = yes
+				}
+				custom_tooltip = un_standing_sanctioned_partial_tt
+				if = {
+					limit = { un_vote_relations_reachable = { WHO = scope:un_vote_proposer } }
+					change_relations = { country = scope:un_vote_proposer value = -10 }
+				}
+			}
+		}
+	}
+}
+
 # ---- The ballot in script (redesign phase 3; late ballots 2026-09-27) ----
 # docs/systems/un_redesign_design.md §6.2 and
 # docs/superpowers/archive/specs/2026-09-27-un-vote-lobbying-design.md §1. The AI never
@@ -2514,33 +2757,6 @@ un_vote.4 = {
 	}
 }
 
-# Before the late ballots this sent the AI members their ballots thirty days
-# after a resolution opened. un_resolution_open no longer queues it; an event
-# queued in a save from before the change still arrives, and now only
-# refreshes the leans, so no AI member votes early. Hidden.
-un_vote.5 = { # REVIEWED 2026-09-27: kept only for un_vote.5 events queued in saves from before the late ballots (it now refreshes leans); nothing queues it any more
-	type = country_event
-	hidden = yes
-
-	trigger = {
-		OR = {
-			scope:un_resolution ?= { has_tag = un_res_voting }
-			AND = {
-				NOT = { exists = scope:un_resolution }
-				global_var:un_active_resolution ?= { has_tag = un_res_voting }
-			}
-		}
-	}
-
-	immediate = {
-		if = {
-			limit = { NOT = { exists = scope:un_resolution } }
-			global_var:un_active_resolution = { save_scope_as = un_resolution }
-		}
-		un_vote_refresh_leans = yes
-	}
-}
-
 # The last call (spec §1). Five days before the proposer reports back, every AI
 # member still without a vote casts, whatever month it drew: above all a
 # member that joined after its month came. Hidden; queued to the proposer by
@@ -2556,7 +2772,7 @@ un_vote.6 = {
 	type = country_event
 	hidden = yes
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: un_resolution_open creates the resolution with its un_res_voting tag before the call; its immediate checks again, so a resolution closed early takes no last call
 		OR = {
 			scope:un_resolution ?= { has_tag = un_res_voting }
 			AND = {
@@ -2569,15 +2785,21 @@ un_vote.6 = {
 	immediate = {
 		if = {
 			limit = { NOT = { exists = scope:un_resolution } }
-			global_var:un_active_resolution = { save_scope_as = un_resolution }
+			global_var:un_active_resolution ?= { save_scope_as = un_resolution }
 		}
-		scope:un_resolution = {
-			if = {
-				limit = { NOT = { has_variable = un_res_last_call } }
-				set_variable = un_res_last_call
+		# The trigger again (#1596): it was read when this was queued, 360
+		# days ago, and whether it is read again when due is unverified. A
+		# resolution closed in the meantime takes no last call.
+		if = {
+			limit = { scope:un_resolution ?= { has_tag = un_res_voting } }
+			scope:un_resolution = {
+				if = {
+					limit = { NOT = { has_variable = un_res_last_call } }
+					set_variable = un_res_last_call
+				}
 			}
+			un_vote_refresh_leans = yes
 		}
-		un_vote_refresh_leans = yes
 	}
 }
 
@@ -2590,7 +2812,7 @@ un_vote.7 = {
 	type = country_event
 	hidden = yes
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: un_vote_refresh_leans runs while a resolution is voting; its immediate checks again, so a resolution closed overnight is not sorted
 		OR = {
 			scope:un_resolution ?= { has_tag = un_res_voting }
 			AND = {
@@ -2603,10 +2825,34 @@ un_vote.7 = {
 	immediate = {
 		if = {
 			limit = { NOT = { exists = scope:un_resolution } }
-			global_var:un_active_resolution = { save_scope_as = un_resolution }
+			global_var:un_active_resolution ?= { save_scope_as = un_resolution }
 		}
-		scope:un_resolution = {
-			un_deleg_reassign_rows = yes
+		# The trigger again (#1596), as un_vote.6: whether it is read when the
+		# event is due is unverified, and a vote that closed overnight leaves
+		# the lock's variable gone and nothing to sort.
+		if = {
+			limit = { scope:un_resolution ?= { has_tag = un_res_voting } }
+			scope:un_resolution = {
+				un_deleg_reassign_rows = yes
+			}
 		}
+	}
+}
+
+# The results' year (un_resolution_open), for un_vote.2 (#1596). Hidden, with
+# no trigger: a delayed trigger_event seems to read its event's trigger on
+# the day it is queued, and whether it reads it again when due is not
+# established (scripting_best_practices.md § "A Delayed `trigger_event`
+# Re-Checks Its Trigger When It Fires"). un_vote.2's trigger is what stops the
+# results of a resolution that lapsed within the year, and its immediate
+# decides the vote, archives it and its option applies the outcome, so it must
+# be read on the day. Opened undelayed from here it is. scope:un_resolution
+# rides along.
+un_vote.9 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		trigger_event = { id = un_vote.2 }
 	}
 }

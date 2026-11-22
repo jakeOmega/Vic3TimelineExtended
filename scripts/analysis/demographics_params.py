@@ -252,6 +252,22 @@ DEMOG_TYPES = (DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES + (DIFFUSION_TYPE,)
 WORKING_ADULT_BASE = 0.25      # the define WORKING_ADULT_RATIO_BASE (vanilla 00_defines.txt); the term nets only it
 WF_POP_RATIO_MIN = 0.05        # the guard: no pop's own ratio below this (W is raised instead; no cap above)
 POP_BASE_RATIO_MIN = min(min(POP_BASE_RATIO.values()), POP_BASE_RATIO_DEFAULT)   # aristocrats' 0.2
+# W's lead (2026-11-07): the engine's pull is its births. A pop's newborns join it at the ratio it is set to and its
+# dead leave at its own, so its share moves b x (set - share) a year, b its births per head (the Paradox forum's account,
+# "Workforce ratio drift: how fast?", 2024-08-30; it fits the saves' 4-6% of a gap a year in 1836, and
+# workforce_follows_target's BROKEN of 2026-10-25). Left there, a state at 12 births per 1,000 takes about 58 years to
+# cover half a move, and one at 6 never does. So at each census step W runs past its target by as much as makes the
+# game's figure close WF_LEAD_HALF of its gap to the aim in the census year to come, at most WF_LEAD_CAP either way:
+# lead = gap x (WF_LEAD_HALF / (1 - e^-b) - 1). It shrinks as the gap closes, so the figure ends on the aim, the saves'
+# steady 0.01-0.03 off it included. The lead never takes the highest pop base (slaves' 0.5) + W + the lines on top past
+# WF_POP_RATIO_MAX, and never takes W's target itself (late-game call 10: no cap on it). The self-check
+# workforce_pull_births reads a capital's move a year on against the births' prediction.
+WF_LEAD_HALF = 0.5             # the share of the gap the game's figure is to close in one census year
+WF_LEAD_CAP = 0.20             # the lead's size either way, past the target
+WF_POP_RATIO_MAX = 0.95        # the lead's ceiling: no pop set past this by the lead
+POP_BASE_RATIO_MAX = max(max(POP_BASE_RATIO.values()), POP_BASE_RATIO_DEFAULT)   # slaves' 0.5
+WF_PULL_B_MAX = 0.5            # births per head a step at most, in the pull's share (a clamp on te_dg_cbr / 1000)
+WF_PULL_SHARE_MIN = 0.0001     # the pull's share at least this as a divisor (no births: the lead stands at its cap)
 # The pension setting (late-game §2.2): five positions, the country variable te_dg_pension_pos (absent = Standard).
 # The linked positions follow the country's people-weighted old-age threshold less PENSION_LINK_OFFSET, at least
 # PENSION_LINK_FLOOR, moving at most PENSION_LINK_STEP a year. Every position holds for PENSION_TERM_YEARS.
@@ -416,7 +432,7 @@ _ITALY = ("STATE_PIEDMONT", "STATE_EMILIA", "STATE_TUSCANY", "STATE_LAZIO", "STA
           "STATE_ABRUZZO", "STATE_ROMAGNA", "STATE_VENETIA", "STATE_ISTRIA", "STATE_LOMBARDY", "STATE_SOUTH_TYROL")
 _WEST_OF_THE_LINE = ("STATE_COURLAND", "STATE_TARTU", "STATE_RIGA", "STATE_TALINN", "STATE_EAST_PRUSSIA",
                      "STATE_WEST_PRUSSIA", "STATE_POSEN", "STATE_GREATER_POLAND", "STATE_SLOVENIA")
-_THE_GRADIENT = ("STATE_MAZOVIA", "STATE_LESSER_POLAND", "STATE_WEST_GALICIA", "STATE_KAUNAS", "STATE_VILNIUS",
+_THE_GRADIENT = ("STATE_MAZOVIA", "STATE_LESSER_POLAND", "STATE_WEST_GALICIA", "STATE_LITHUANIA", "STATE_VILNIUS",
                  "STATE_CROATIA", "STATE_TRANSDANUBIA", "STATE_SLOVAKIA")
 _JAPAN = ("STATE_HOKKAIDO", "STATE_TOHOKU", "STATE_KANTO", "STATE_HOKUSHINETSU", "STATE_TOKAI", "STATE_KYOTO",
           "STATE_KANSAI", "STATE_CHUGOKU", "STATE_SHIKOKU", "STATE_KYUSHU")
@@ -573,8 +589,14 @@ INFECTION_ADULT_MEDICINE = 0.8
 # floor adds almost nothing, the 1837 median crowded person +4%, a state at ten times the floor +45%. The Ministry
 # of Urban Planning and Urban Engineering (sewerage, steel frames) lower it through the crowding itself.
 MIGRATION_CROWDING_PULL_PER_MULT = 0.1   # the modifier's pull penalty a unit of multiplier (a test pins it)
-CROWDING_INFECTION_PER_PULL = 1.0        # infection rises by the share migration attraction falls, with no ceiling
+CROWDING_INFECTION_PER_PULL = 1.0        # infection rises by the share migration attraction falls
 # (owner, 2026-10-20: the old +50% cap was a guess; Ile-de-France's pull 1.008 doubles its infection)
+# ... up to a pull of 5, infection x 6 (#1476, 2026-11-06: a guard, not a calibration). Past it the factor has outrun
+# anything the census was built for: Sindh's 91 in the 1.15 observer game (1.2 billion people, a runaway) killed every
+# age group at 55-100% a year, so the ring emptied and its rates turned to nonsense; at 5 a poor state's infants all
+# die but its adults die at 4-5% a year. No sane state reached it: the most crowded of the 2020, 1940 and 1926 saves
+# read 1.64 (the runaway tripwire's sign 6 is the same bound, on the uncapped input te_dg_in_crowd).
+CROWDING_INFECTION_PULL_MAX = 5.0
 
 # ---- Causes of Death (owner, 2026-10-11; docs/superpowers/archive/plans/2026-10-11-demographics-causes-of-death.md) ----
 # Each cause's multiplier is the product of these factors, in this order. The generator writes one script value per
@@ -680,10 +702,38 @@ STARVATION_BUCKET = 0.05   # both penalties are read in food-security steps this
 # gave no deaths at all. The state read with M in it stays at or above this, and when the lines left on top alone
 # are past it, M is 0. The self-check rate_below_measured watches the stretch from -0.9 down.
 RATE_TOTAL_FLOOR = -1.0
-# M has no ceiling (until 2026-10-20 +3, "a guard against a nonsense target"). target / bare is at most the model's rate
-# over the curves' lowest (80 births, 100 deaths a month per 100,000), so M stays finite; the script skips a state whose
-# walk found less than one person at the lowest curve (te_demog_k_rate_bare_min, the walk's units: people x the curve).
+# M had no ceiling from 2026-10-20 (until then +3, "a guard against a nonsense target"). target / bare is at most the
+# model's rate over the curves' lowest (80 births, 100 deaths a month per 100,000), so M stays finite; the script skips a
+# state whose walk found less than one person at the lowest curve (te_demog_k_rate_bare_min, the walk's units: people x
+# the curve).
 RATE_BARE_MIN = 80.0
+# The census's guards (#1476, 2026-11-06), after the 1.15 observer game's East Bengal reached some 9e15 people. Each sits
+# where the census's own figures stop meaning anything, past every sane state of the 2020, 1940 and 1926 saves, and at
+# the same bound as the runaway tripwire's sign for it (te_debug_demog_runaway_selfcheck), so a sane game never meets one.
+# Out of range, the census clears its terms (te_demog_rates_clear) and the engine's own rates run, as under Display only,
+# instead of setting M from nonsense (Sindh's model death rate of -474 per 1,000 put deaths at the floor, so the engine
+# killed nobody there): its people's sum below 0 (wrapped) or above RATE_GUARD_PEOPLE_MAX, life expectancy under
+# RATE_GUARD_E0_MIN, the model's birth or death rate below 0, or known kills of RATE_GUARD_KILLS_SHARE or more of its
+# people in the step's window (demographics_model.census_out_of_range).
+# RATE_GUARD_PEOPLE_MAX: four times the largest sane state (128 million, 2020), and below the first of the census's sums
+# to wrap at the script's fixed-point limit (about 9.2e13): a seed's normalization, people x 100,000, at 9.2e8.
+RATE_GUARD_PEOPLE_MAX = 500_000_000
+# RATE_GUARD_E0_MIN: sane states read 26 or more; a life table this short has all but its adults dying.
+RATE_GUARD_E0_MIN = 5.0
+# RATE_GUARD_KILLS_SHARE (owner, 2026-11-19), the fourth guard: a census a year on whose window holds the mod's own known
+# kills (te_demog_note_kills: nuclear strikes, the Violent Hostility pulse, Internal Resettlement's transit dead) of this
+# share or more of the people at its last count. The step counts a year's births and deaths from the people before the
+# kills and divides them over the survivors, so the model's rates, M's next target and the scales come out of range:
+# 25 warheads on Sankt-Peterburg in 1977 left 197,774 of 3,995,846 people, at 840 births and 6,369 deaths per 1,000,
+# and the births term at its ceiling (demog_runaway why=7). A share above 1 (a salvo's kills booked against a stale
+# state_population, #1917) is past the bound too (demographics_model.census_out_of_range, kill_share).
+RATE_GUARD_KILLS_SHARE = 1 / 3
+# A ceiling on M for births, the guard behind the guard (the 2026-10-20 "no ceiling" stands for any figure in range):
+# target / bare reaches about 6 at most (the highest model birth rate over the lowest curve), and the largest sane term
+# was +4.05 (Turkmenia, 2020). Past the sums' fixed-point limit M would be computed from wrapped numbers with no ceiling;
+# the people guard clears the terms long before that, and this bounds what anything it misses can do. Births only: deaths
+# have the floor, and a high deaths term shrinks a state rather than running it away.
+RATE_BIRTHS_CEILING = 10.0
 # The step's births and deaths scales (the engine's events over the model's target, less 1) have only the natural
 # floor, -1 (no events), and no ceiling (until 2026-10-20 -0.9 and +4): each age's probability is already capped at 1.
 # Under 1 + scale = ON_TOP_FACTOR_MIN the ring's events are too few to read the model's own rate back from, so the step
@@ -696,6 +746,12 @@ ON_TOP_FACTOR_MIN = 0.01
 # a famine starts or ends inside the window and lags a one-off by half a window (demographics_model.window_events).
 WINDOW_START_WEIGHT = 0.5
 LITERACY_BIRTH_PENALTY = -0.1 # literacy_penalty's state_birth_rate_mult (the mod's REPLACE keeps vanilla's)
+# Vanilla 1.15's birth lines by stratum (state_<stratum>_strata_birth_rate_mult; the Malthusian Foundations amendment's
+# -1% for the lower strata, Sweden's sweden_law_birth's -2%). The engine applies each to its stratum's pops, so the
+# walk reads it in te_demog_pop_birth_mult as it reads a class's mortality line: on top of the census at the bare
+# curve's weight, and in the window's events, so the residual no longer books the births they cut as migrants
+# (owner, 2026-11-06, #1407). The by-acceptance types are country-scoped and have no vanilla user.
+BIRTH_STRATA = ("lower", "middle", "upper")
 # Owner, 2026-10-11 (docs/superpowers/archive/plans/2026-10-11-demographics-engine-lines-script-only.md): the engine's birth and
 # mortality lines on laws, technologies and institutions move to script-only types, one per field and family
 # (demographics_engine_line_types.txt). The mod re-applies both families while the census doesn't set a state's births
@@ -731,30 +787,23 @@ STARVATION_MILD_CAP = 0.5     # (threshold - severe threshold) x scaling factor:
 # (this gives +11%), West Bengal at about 167-176 showed +32% (+36% to +38%). The census reads the real line.
 POLLUTION_HEALTH_MORTALITY = 0.55
 POLLUTION_MAX = 255
-# Phase 2 step 4 (plan §3 (a), owner amendment 2026-10-10): carriers whose birth or mortality lines stay on top
-# of the census's term: their lines sit on the on-top family's script-only types (state_demog_ontop_*), which under
-# Full the census adds at its rate. Every other law, technology or institution line is on the absorbed family's
-# (state_demog_absorbed_*), which under Full the engine doesn't apply (the engine-lines plan, 2026-10-11).
-# Hand-kept, not derived: TestEngineRateLines.test_the_families_match_the_on_top_lists pins it to the carriers'
-# types. The women's-rights laws left this list in Task 8: Task 7's natural-fertility term
-# (NATURAL_FERTILITY_BY_LAW) carries their effect.
-ENGINE_LINES_ON_TOP = frozenset({
-    # Communal Child-Rearing's -20%, which a State Youth Center's method cancels (phase 2 §3.2, call 9). Pro-Natalist
-    # Policy's and Population Control Measures' births lines are absorbed since phase 2 step 3b: their force under Full
-    # comes from desired fertility and the measures
-    "law_communal_child_rearing",
-    # late-era lines with no census term; revisit with step 6. Of the LGBTQ+ Rights laws only Full Equality and
-    # Protection keeps a birth line, a token -0.01 (#881, owner, 2026-10-10). Mental Health Awareness, Biological
-    # Immortality and Mind Backups left this list in phase 3 (the late-game design §8.4, call 19): the census carries them
-    # under Full (LATE_EXTERNAL_LINES, LATE_WORK_LINES, the ageing ladder), their flat lines on the absorbed family
-    "law_full_equality_and_protection", "law_state_eugenics_program", "second_wave_feminism", "sexual_revolution",
-})
-# Fields whose lines stay on top wherever they sit: wealth mortality's per-pop scaling ("per Wealth") waits on probe P6,
-# so M doesn't net it out yet. Private Health Insurance's -0.002 a level is its main source (owner, 2026-10-10: on top
-# for now). Nobody holds the law in the owner's 1949 save; had the rich health-law countries held it at their own
-# level, France would lose about a fifth of its deaths (results doc, phase 2 step 4). Absorbing it per pop under Full,
-# as mild starvation, is proposed.
-ENGINE_FIELDS_ON_TOP = frozenset({"state_mortality_wealth_mult"})
+# Phase 2 step 4 (plan §3 (a), owner amendment 2026-10-10): carriers whose birth or mortality lines stay on top of the
+# census's term have them on the on-top family's script-only types (state_demog_ontop_*), which under Full the census
+# adds at its rate; every other law, technology or institution line is on the absorbed family's (state_demog_absorbed_*),
+# which under Full the engine doesn't apply (the engine-lines plan, 2026-10-11). The family is written on the carrier
+# itself, so the list of on-top carriers is read from the files (demographics_modifiers.engine_lines_on_top(); #1046:
+# it was kept by hand here). Today: Communal Child-Rearing's -20%, which a State Youth Center's method cancels (phase 2
+# §3.2, call 9), and the late-era lines with no census term (Full Equality and Protection's token -0.01, State Eugenics,
+# Second-Wave Feminism, the Sexual Revolution). Pro-Natalist Policy's, Population Control Measures' and the
+# women's-rights laws' births lines are absorbed: desired fertility, the measures and the natural-fertility term
+# (NATURAL_FERTILITY_BY_LAW) carry them under Full.
+# Fields whose lines stay on top wherever they sit: those with an on-top type and no absorbed one. That is wealth
+# mortality: its per-pop scaling ("per Wealth") waits on probe P6, so M doesn't net it out yet. Private Health
+# Insurance's -0.002 a level is its main source (owner, 2026-10-10: on top for now). Nobody holds the law in the owner's
+# 1949 save; had the rich health-law countries held it at their own level, France would lose about a fifth of its deaths
+# (results doc, phase 2 step 4). Absorbing it per pop under Full, as mild starvation, is proposed.
+ENGINE_FIELDS_ON_TOP = frozenset(f for fam, f in ENGINE_LINE_TYPES if fam == "ontop"
+                                 and ("absorbed", f) not in ENGINE_LINE_TYPES)
 # Causes of Death (owner, 2026-10-22): the deaths the engine adds on top of the census count under their own causes, not
 # as a slice of their own. Every state-level mortality line the census leaves on top carries a tag: a script-only copy
 # of its value on the type of the cause its deaths count under (demographics_modifier_types.txt), which the engine sums
@@ -774,11 +823,14 @@ CAUSE_SCALE_MIN_DEATHS = 1.0
 CAUSE_SCALE_MIN = 0.0001
 # Vanilla's carriers, tagged by generated INJECTs (gen_demographics.py, te_demog_cause_tags_generated.txt): {database:
 # (folder, the block that holds the line, or None for the entity itself)}. Static modifiers the mod already INJECTs or
-# REPLACEs carry their tag in that block, by hand.
+# REPLACEs carry their tag in that block, by hand. Harvest conditions since 2026-11-16: an earthquake's or a tsunami's
+# 0.05 is per point of intensity (1 to 6 by region), so one read 0.121 untagged in Umbria (cause_tags_read's BROKEN).
+# The first INJECT into a harvest condition: the self-check harvest_tags_read says whether it adds to vanilla's block.
 DEATH_CAUSE_TAG_DATABASES = {
     "modifiers": ("static_modifiers", None),
     "interest_group_traits": ("interest_group_traits", "modifier"),
     "character_traits": ("character_traits", "country_modifier"),
+    "harvest_condition_types": ("harvest_condition_types", "modifier"),
 }
 DEATH_CAUSE_TAGS = {
     # infection and hunger: epidemics, famines, food relief, medicine and nursing
@@ -798,14 +850,15 @@ DEATH_CAUSE_TAGS = {
         "crop_failure_modifier", "water_crisis_rationing_modifier", "tropical_disease_spread_modifier",
         "tropical_disease_research_modifier", "tropical_disease_public_health_modifier", "un_mission_aid_state_modifier",
         "un_humanitarian_aid_received_modifier", "un_aid_received_modifier", "un_food_reserve_relief_state_modifier",
-        "reproductive_rights_progressive_modifier", "te_demog_wave_overspill_sprawl", "healthcare_aid",
+        "reproductive_rights_progressive_modifier", "te_demog_wave_overspill_sprawl",
         "company_pfizer", "company_biontech", "pm_pfizer_rd_campus", "pm_biontech_mainz_campus",
     ),
     # chronic illness and old age: pollution, the climate's heat, drugs and addiction, radiation, care of the old
     "chr": (
         "state_region_pollution_health", "modifier_radio_opium", "opium_wars_lost", "opium_wars_addiction_modifier",
         "opium_health_focus", "opium_addiction_state_mod", "china_welfare", "ig_trait_the_best_revenge",
-        "global_warming", "climate_adaptation_modifier", "emergency_climate_spending_modifier",
+        "global_warming", "global_warming_tropics", "global_warming_high_latitudes",
+        "climate_adaptation_modifier", "emergency_climate_spending_modifier",
         "climate_crisis_emergency_modifier", "climate_fortress_modifier", "climate_carrying_on_modifier",
         "arctic_melting_modifier", "un_regime_climate_adaptation_modifier", "ste_reactor_leak_coverup",
         "drugs_shortage_rationing", "addiction_public_health_modifier", "institutional_reform_modifier",
@@ -821,6 +874,8 @@ DEATH_CAUSE_TAGS = {
         "krakatoa_eruption_no_help_modifier", "modifier_terror_cell_crackdown_state", "decree_put_the_riot_down",
         "harbingers_of_order_modifier", "modifier_slaughter_with_decrees", "congo_massacre_mortality_modifier",
         "modifier_kazakh_ungovernable_provinces", "sweden_law_birth_two",
+        # vanilla's two harvest conditions with a mortality line, 0.05 a point of intensity
+        "earthquake", "tsunami",
         "mental_health_crisis_active_modifier", "mental_health_infrastructure_modifier", "mental_health_neglect_modifier",
         "mental_health_leave_modifier", "youth_mental_health_funding_modifier", "mental_health_crisis_ignored_modifier",
         "veteran_mental_health_modifier",
@@ -846,13 +901,14 @@ assert len(DEATH_CAUSE_OF) == sum(len(v) for v in DEATH_CAUSE_TAGS.values()), "a
 # Lines that stay untagged (their deaths spread over the census's own causes, as the census's lag does): the census's own
 # terms and pairs, the engine's per-pop starvation penalties (the walk reads them), the moved laws' cancels, and vanilla
 # databases whose INJECT into a nested modifier block no read has shown to add rather than replace (companies'
-# prosperity_modifier, amendments' and harvest conditions' modifier: five lines of at most 5%).
+# prosperity_modifier and an amendment's modifier: four lines of at most 5%). The two harvest conditions stood here
+# too until 2026-11-16, as lines of 5%, but theirs is 5% a point of intensity (above).
 DEATH_CAUSE_UNTAGGED = frozenset({
     "starvation_penalty", "severe_starvation_penalty",
     "te_demog_census_deaths_up", "te_demog_census_deaths_down", "te_demog_line_deaths_up", "te_demog_line_deaths_down",
     "te_demog_fast_deaths", "law_charitable_health_system", "law_public_health_insurance",
     "company_oriental_consolidated_mining", "company_noda_shoyu", "company_ingolstadt_electrical_company",
-    "amendment_draconian_blasphemy_laws", "tsunami", "earthquake",
+    "amendment_draconian_blasphemy_laws",
 })
 # Phase 2 step 1 (the design §1.7; late-game call 11; the owner's call 3, 2026-10-12): every working-adult line on two
 # script-only families (demographics_workforce_line_types.txt), each at its old flat value, re-applied by their own pair
@@ -1348,6 +1404,8 @@ MT_FERTILITY = 0.10
 # range (survivors at a radix of 100,000 x 100,000 / q). The old-age threshold still reads the table to 150.
 LT_TAIL_RATE_MIN = 1.0
 # The panel shows life expectancy as it is up to this and "over" it past (owner, 2026-10-20); the stored figure stays
-# exact. The history chart's axis runs to the largest figure it holds, at least E0_AXIS_MIN, at most this.
+# exact. The history chart's axis runs to the largest figure it holds, at least E0_AXIS_MIN, at most this. The
+# minimum was 100, the chart's fixed axis, until 2026-11-14 (owner: the charts fit their figures, with a small
+# minimum); a save whose census hasn't set the axis still draws on 100 (te_demog_hist_e0_axis_unset).
 E0_SHOWN_MAX = 10000
-E0_AXIS_MIN = 100
+E0_AXIS_MIN = 10

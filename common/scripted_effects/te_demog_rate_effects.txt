@@ -12,7 +12,10 @@
 #
 # State variables:
 #   te_dg_mb, te_dg_md  M for births and deaths (signed), behind the te_demog_census_* pair
-#   te_dg_rate_clamped  1 when the last refresh clamped either term
+#   te_dg_rate_clamped  1 when the last refresh clamped either term (the floor, or births' ceiling)
+#   te_dg_rate_guard    while the census's own figures are out of range and its terms cleared (#1476): which bound
+#                       held, 1 its people, 2 life expectancy, 3 a model rate below 0, 4 known kills of a third or more
+#                       of its people in the step's window (te_demog_census_out_of_range)
 #   te_dg_bz, te_dg_dz  the scales the last step used (te_dg_eb or te_dg_ed over the target,
 #                       less 1)
 #   te_dg_eb_target, te_dg_ed_target  that target: the births and deaths the model's rates gave
@@ -579,9 +582,21 @@ te_demog_on_top_cause_scale = {
 # the walk's units (te_dg_w_eb0, te_dg_w_ed0). Clamped: the state read without the census's and
 # fast mode's own terms ("other") plus M stays at or above te_demog_k_rate_total_floor, the engine's own per-pop floor
 # (-1: a plain pop's events reach 0 there; owner, 2026-10-20), and M is never below 0 when other alone is past it. No
-# ceiling: target / bare is at most the model's rate over the curves' lowest, so M stays finite. A walk under
-# te_demog_k_rate_bare_min (less than one person at the curves' lowest, 80 births or 100 deaths a month per 100,000)
-# has nothing to fit M to, and leaves the terms as they are, as a seed does.
+# ceiling for deaths (owner, 2026-10-20). Births have one at te_demog_k_rate_births_ceiling (#1476), where no figure
+# in range reaches: target / bare is at most the model's rate over the curves' lowest, about 6 (te_demog_rate_ceiling).
+# A walk under te_demog_k_rate_bare_min (less than one person at the curves' lowest, 80 births or 100 deaths a month per
+# 100,000) has nothing to fit M to, and leaves the terms as they are, as a seed does.
+# The census's guards (#1476): under Full, a state whose census's own figures are out of range
+# (te_demog_census_out_of_range: its people's sum wrapped or past half a billion, life expectancy under 5, a model rate
+# below 0, or known kills of a third or more of its people in the step's window, the local te_dg_kill_share that
+# te_demog_state_census sets) has its terms cleared (te_demog_rates_clear), so the engine's own rates run there, as under
+# Display only, rather than terms set from nonsense: Sindh's model death rate of -474 per 1,000 put its deaths term at
+# the floor, and the engine killed nobody (the 1.15 observer game); 25 warheads on Sankt-Peterburg in 1977 put its births
+# term at the ceiling. The moved lines' pairs come back at the state's next monthly refresh (te_demog_lines_apply holds
+# once te_dg_mb is gone), and the census sets its terms again at the first step whose figures are back in range (after
+# the fourth guard, the step after the census's seed). te_dg_rate_guard keeps which bound held (1 people, 2 life
+# expectancy, 3 a model rate, 4 known kills) while it holds, for the runaway tripwire (te_debug_demog_runaway_selfcheck)
+# and for a save.
 # Always leaves two pairs of locals for fast mode, which runs next in the same effect:
 #   te_dg_rate_prev_b/_d  the terms the walk's window ran with (read through has_modifier
 #                         before anything here touches the modifiers)
@@ -599,13 +614,42 @@ te_demog_rates_refresh = {
 	# the moved lines' pairs this refresh clears (fast mode takes them off the walk's average): 0 unless it does
 	set_local_variable = { name = te_dg_rate_lines_b value = 0 }
 	set_local_variable = { name = te_dg_rate_lines_d value = 0 }
+	# and the class pairs' share of the walk's average (te_dg_w_edl over the bare deaths, #1046): 0 unless it does
+	set_local_variable = { name = te_dg_rate_lines_q value = 0 }
 	# 1 once this refresh stores the next window's start rate (the trapezoid)
 	set_local_variable = { name = te_dg_rate_sr value = 0 }
+	# the guards' verdict holds only for the step that reached it (#1476)
+	if = {
+		limit = { has_variable = te_dg_rate_guard }
+		remove_variable = te_dg_rate_guard
+	}
 	if = {
 		limit = { NOT = { te_demog_effects_run = yes } }
 		te_demog_rates_clear = yes
 		set_local_variable = { name = te_dg_rate_new_b value = 0 }
 		set_local_variable = { name = te_dg_rate_new_d value = 0 }
+	}
+	# the census's own figures out of range (#1476): no terms, so the engine's own rates run
+	else_if = {
+		limit = { te_demog_census_out_of_range = yes }
+		te_demog_rates_clear = yes
+		set_local_variable = { name = te_dg_rate_new_b value = 0 }
+		set_local_variable = { name = te_dg_rate_new_d value = 0 }
+		if = {
+			limit = { te_demog_census_people_out_of_range = yes }
+			set_variable = { name = te_dg_rate_guard value = 1 }
+		}
+		else_if = {
+			limit = { te_demog_census_e0_out_of_range = yes }
+			set_variable = { name = te_dg_rate_guard value = 2 }
+		}
+		else_if = {
+			limit = { te_demog_census_rates_out_of_range = yes }
+			set_variable = { name = te_dg_rate_guard value = 3 }
+		}
+		else = {
+			set_variable = { name = te_dg_rate_guard value = 4 }
+		}
 	}
 	else_if = {
 		limit = {
@@ -675,6 +719,7 @@ te_demog_rates_refresh = {
 				}
 			}
 			te_demog_rate_clamp = yes
+			te_demog_rate_ceiling = yes
 			set_variable = { name = te_dg_mb value = local_var:te_dg_rate_m }
 			set_variable = { name = te_dg_tb_b value = local_var:te_dg_rate_tb }
 			set_variable = { name = te_dg_os_b value = local_var:te_dg_rate_os }
@@ -745,8 +790,10 @@ te_demog_rates_refresh = {
 			set_variable = { name = te_dg_md value = local_var:te_dg_rate_m }
 			set_variable = { name = te_dg_tb_d value = local_var:te_dg_rate_tb }
 			set_variable = { name = te_dg_os_d value = local_var:te_dg_rate_os }
-			# once a game: the tags against the lines on top (Causes of Death; te_debug_demog_effects.txt)
+			# once a game: the tags against the lines on top (Causes of Death; te_debug_demog_effects.txt), and the same
+			# where an earthquake or a tsunami is, whose tags are the first INJECT into a harvest condition
 			te_debug_demog_cause_tags_selfcheck = yes
+			te_debug_demog_harvest_tags_selfcheck = yes
 			set_variable = { name = te_dg_q_d value = local_var:te_dg_rate_q }
 			# Private Health Insurance's wealth line (the on-top family's wealth field; owner, 2026-10-11, option b):
 			# at the census's share of the bare curve, at least te_demog_k_wealth_line_floor a wealth level first
@@ -763,6 +810,12 @@ te_demog_rates_refresh = {
 			# mode, next in this effect, takes what they were adding off the walk's average
 			set_local_variable = { name = te_dg_rate_lines_b value = te_demog_line_births_applied }
 			set_local_variable = { name = te_dg_rate_lines_d value = te_demog_line_deaths_applied }
+			# the class pairs (farmers', laborers', machinists', peasants') reach their class's pops only: the walk
+			# summed each at its pops' bare deaths (te_dg_w_edl, te_demog_absorbed_walk_pop; #1046)
+			set_local_variable = {
+				name = te_dg_rate_lines_q
+				value = { value = local_var:te_dg_w_edl divide = { value = local_var:te_dg_w_ed0 min = 0.00001 } }
+			}
 			te_demog_lines_clear = yes
 			set_variable = { name = te_dg_rate_clamped value = local_var:te_dg_rate_clamped }
 			set_variable = { name = te_dg_rep_b value = { value = local_var:te_dg_w_ebr divide = { value = local_var:te_dg_w_eb0 min = 1 } } }
@@ -850,7 +903,8 @@ te_demog_rates_refresh = {
 }
 
 # local te_dg_rate_m at least local_var:te_dg_rate_lo, noting a clamp, and whether the floor bit this term in
-# te_dg_rate_side (0 no, 1 yes; reset at each call, so deaths never keep births'). No ceiling (owner, 2026-10-20).
+# te_dg_rate_side (0 no, 1 yes; reset at each call, so deaths never keep births'). Births' ceiling is
+# te_demog_rate_ceiling (#1476); deaths have none (owner, 2026-10-20).
 te_demog_rate_clamp = {
 	set_local_variable = { name = te_dg_rate_side value = 0 }
 	if = {
@@ -858,6 +912,18 @@ te_demog_rate_clamp = {
 		set_local_variable = { name = te_dg_rate_m value = local_var:te_dg_rate_lo }
 		set_local_variable = { name = te_dg_rate_clamped value = 1 }
 		set_local_variable = { name = te_dg_rate_side value = 1 }
+	}
+}
+
+# local te_dg_rate_m at most te_demog_k_rate_births_ceiling, noting a clamp (births only; #1476). No figure in range
+# reaches it: target / bare is at most the model's birth rate over the curves' lowest, about 6, and the largest sane term
+# was +4.05 (Turkmenia, 2020). It bounds a term computed from figures the census's guards (te_demog_census_out_of_range)
+# let through; the runaway tripwire's sign 7 is a term at it.
+te_demog_rate_ceiling = {
+	if = {
+		limit = { local_var:te_dg_rate_m > te_demog_k_rate_births_ceiling }
+		set_local_variable = { name = te_dg_rate_m value = te_demog_k_rate_births_ceiling }
+		set_local_variable = { name = te_dg_rate_clamped value = 1 }
 	}
 }
 
@@ -1038,6 +1104,11 @@ te_demog_rates_clear = {
 	if = {
 		limit = { has_variable = te_dg_ed_clamp_d }
 		remove_variable = te_dg_ed_clamp_d
+	}
+	# the census's guards' verdict (#1476): te_demog_rates_refresh sets it again after its own clear
+	if = {
+		limit = { has_variable = te_dg_rate_guard }
+		remove_variable = te_dg_rate_guard
 	}
 }
 

@@ -1,7 +1,11 @@
 ﻿# ============================================================================
 # AUTOMATION POLICY (era 13 spec § 7.1)
 # ============================================================================
-# Four laws in lawgroup_automation_policy (Economy), from Humanoid Robotics:
+# Four laws in lawgroup_automation_policy (Economy), from Industrial Robotics
+# (`robotics`, era 8), which opens the first robotic methods (Robotic Assembly
+# Lines), so the laws are there as soon as any method they act on is.
+# test_automation_policy.py fails on a marked method that opens in an earlier
+# era. (Humanoid Robotics, era 11, until 2026-11-20.)
 #
 #   law_unrestricted_automation   the default; nothing changes
 #   law_robot_tax                 the machines stay and are taxed
@@ -25,9 +29,10 @@
 #   (te_automation_displacement, scaled by the year's rise, so automating
 #   slowly stays cheap); Robot Tax halves it, Automation Dividend and Human
 #   Labor Quotas end it. The cost of changing fast, not of being automated.
-# - Human Labor Quotas works through the production methods: the 37 methods
-#   te_ap_runs_automated_method lists (common/scripted_triggers/
-#   te_automation_policy_triggers.txt, where the choice is explained) carry
+# - Human Labor Quotas works through the production methods: the 40 methods
+#   marked robotic or AI-managed (`building_robotic_or_ai_managed_bool = yes`,
+#   which te_ap_runs_automated_method reads; common/scripted_triggers/
+#   te_automation_policy_triggers.txt explains the choice) also carry
 #   `disallowing_laws = { law_human_labor_quotas }`, as vanilla's slavery and
 #   Industry Banned methods are withdrawn. Every group keeps an ungated method.
 #   Since the government picks a building's methods, the withdrawal alone
@@ -65,7 +70,7 @@ law_robot_tax = {
 	progressiveness = 25
 
 	unlocking_technologies = {
-		humanoid_robotics
+		robotics
 	}
 
 	on_enact = {
@@ -83,7 +88,7 @@ law_human_labor_quotas = {
 	progressiveness = 50
 
 	unlocking_technologies = {
-		humanoid_robotics
+		robotics
 	}
 
 	modifier = {
@@ -107,7 +112,7 @@ law_automation_dividend = {
 	progressiveness = 75
 
 	unlocking_technologies = {
-		humanoid_robotics
+		robotics
 	}
 
 	on_enact = {

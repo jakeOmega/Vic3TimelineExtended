@@ -88,6 +88,8 @@ gm_state_tr_take = {
 		# One monument of the state: a secondary monument named by
 		# gm_mon_tr_order_take or the AI's choice (gm_monument_effects.txt), else
 		# the primary, as before.
+		# A carry-off logs a line (log triage 2026-11-06): it was silent, so an
+		# observer run read a landmark carried off as one lost.
 		if = {
 			limit = { has_variable = gm_tr_take_target }
 			gm_mon_tr_take = yes
@@ -104,6 +106,13 @@ gm_state_tr_take = {
 			if = {
 				limit = { exists = scope:gm_tr_new }
 				if = {
+					limit = { has_variable = gm_landmark }
+					debug_log = "TE_MONUMENTS: carried off: landmark [THIS.Var('gm_landmark').GetFlagName], [THIS.Var('gm_tr_take_levels').GetValue|0] levels (whole [THIS.Var('gm_tr_take_whole').GetValue|0]), from [THIS.GetState.GetOwner.GetTagName]'s part of [THIS.GetState.GetNameNoFormatting] by [SCOPE.sCountry('gm_tr_taker').GetTagName]"
+				}
+				else = {
+					debug_log = "TE_MONUMENTS: carried off: a monument, [THIS.Var('gm_tr_take_levels').GetValue|0] levels (whole [THIS.Var('gm_tr_take_whole').GetValue|0]), from [THIS.GetState.GetOwner.GetTagName]'s part of [THIS.GetState.GetNameNoFormatting] by [SCOPE.sCountry('gm_tr_taker').GetTagName]"
+				}
+				if = {
 					limit = { var:gm_tr_take_whole = 1 }
 					gm_state_tr_remove_whole = yes
 				}
@@ -115,6 +124,13 @@ gm_state_tr_take = {
 		if = {
 			limit = { exists = scope:gm_tr_new }
 			gm_state_tr_consequences_$ROUTE$ = yes
+		}
+		if = {
+			limit = {
+				exists = scope:gm_tr_new
+				has_variable = gm_tr_take_target
+			}
+			debug_log = "TE_MONUMENTS: carried off: a monument beside another, from [THIS.GetState.GetOwner.GetTagName]'s part of [THIS.GetState.GetNameNoFormatting] by [SCOPE.sCountry('gm_tr_taker').GetTagName]"
 		}
 		gm_remove_state_var = { VAR = gm_tr_take_target }
 		gm_remove_state_var = { VAR = gm_tr_take_levels }
@@ -284,6 +300,8 @@ gm_state_tr_remove_whole = {
 	else = {
 		set_variable = { name = gm_rebuilding days = 1 }
 		remove_building = building_grand_monument
+		# No building of script's here any more (#1409, as gm_state_tear_down).
+		gm_remove_state_var = { VAR = gm_migrated }
 	}
 	owner = { trigger_event = { id = monument_events.20 } }
 }
@@ -444,15 +462,12 @@ gm_tr_return_home = {
 	var:gm_tr_site ?= {
 		owner = { save_scope_as = gm_tr_giver }
 	}
-	# No return waits any more (sites spec 2026-10-18 §3.3: records, no
-	# rebuild); one an older save queued (gm_tr_return_queued) comes home from
-	# the monthly pass. A building raised in its origin today (gm_rebuilding)
-	# counts as standing (gm_tr_stands_apart), so a second trophy home the same
-	# day stands beside the first.
+	# No return waits (sites spec 2026-10-18 §3.3: records, no rebuild). A
+	# building raised in its origin today (gm_rebuilding) counts as standing
+	# (gm_tr_stands_apart), so a second trophy home the same day stands beside
+	# the first.
 	if = {
 		limit = { exists = scope:gm_tr_receiver }
-		gm_remove_state_var = { VAR = gm_tr_return_queued }
-		gm_remove_state_var = { VAR = gm_tr_return_relations }
 		# A piece of a secondary rejoins it; anything else with a monument
 		# standing in its origin becomes a monument of its own (spec
 		# 2026-10-13 §4.1); a piece of the primary, or with none standing, is
@@ -602,6 +617,7 @@ gm_state_tr_take_records_from_moving = {
 	gm_tr_copy_to_state = { FROM = gm_tr_supporter_ig TO = gm_supporter_ig }
 	gm_tr_copy_to_state = { FROM = gm_tr_signature TO = gm_signature }
 	gm_tr_copy_to_state = { FROM = gm_tr_sig_parent TO = gm_sig_parent }
+	gm_tr_copy_to_state = { FROM = gm_tr_unearthed_for_com TO = gm_unearthed_for_com }
 	# Finished as it was: frozen at its own levels (spec 2026-10-16 §3.1), and
 	# never an older save's monument to migrate (sites spec 2026-10-18 §3.5).
 	set_variable = { name = gm_levels value = scope:gm_tr_moving.var:gm_tr_levels }
@@ -872,26 +888,8 @@ gm_trophy_monthly = {
 			# its landmark's unique dedication (signatures spec §4.4).
 			gm_tr_sig_backfill = yes
 		}
-		# Returns that waited for a rebuild (gm_tr_return_home): one to each
-		# state now; another bound for the same state waits again.
 		every_in_global_list = {
 			variable = gm_trophies
-			limit = { has_variable = gm_tr_return_queued }
-			add_to_temporary_list = gm_tr_queued_home
-		}
-		every_in_list = {
-			list = gm_tr_queued_home
-			if = {
-				limit = { has_variable = gm_tr_return_relations }
-				gm_tr_return_home = { RELATIONS = yes }
-			}
-			else = {
-				gm_tr_return_home = { RELATIONS = no }
-			}
-		}
-		every_in_global_list = {
-			variable = gm_trophies
-			limit = { NOT = { has_variable = gm_tr_return_queued } }
 			gm_tr_monthly_one = yes
 		}
 		every_in_list = {
@@ -920,14 +918,14 @@ gm_tr_repair_places = {
 	if = {
 		limit = {
 			has_tag = gm_monument
-			NOT = { exists = var:gm_tr_origin }
+			gm_tr_origin_gone = yes
 			has_variable = gm_tr_origin_region
 		}
 		gm_mon_repair_origin = yes
 	}
 	if = {
 		limit = {
-			NOT = { exists = var:gm_tr_origin }
+			gm_tr_origin_gone = yes
 			has_variable = gm_tr_origin_region
 		}
 		clear_saved_scope = gm_tr_repair_state
@@ -1188,19 +1186,10 @@ gm_tr_count_add = {
 }
 
 # ---- The national pulse and the Homecoming (spec §3) -----------------------------------------
-# Country scope, from gm_country_monthly: a month off the Homecoming.
+# Country scope, from gm_country_monthly: a month off the Homecoming. The
+# journal entry declares gm_boon_homecoming while it runs (je_grand_monuments.txt).
 gm_tr_country_monthly = {
 	gm_tick_boon = { SRC = homecoming }
-}
-
-# Journal-entry scope (ROOT = the country), from gm_apply_national_modifiers.
-gm_tr_add_national = {
-	gm_add_boon = { SRC = homecoming }
-}
-
-# Journal-entry scope, from gm_remove_national_modifiers.
-gm_tr_remove_national = {
-	remove_modifier = gm_boon_homecoming
 }
 
 # ---- The trophies of 1836 (loot spec 2026-10-12 §2) ---------------------------------------
@@ -1305,11 +1294,16 @@ gm_seed_trophy = {
 				gm_tr_sig_backfill = yes
 				gm_tr_update_picture = yes
 			}
-			debug_log = "TE_MONUMENTS: trophy $LANDMARK$ placed: from $ORIGIN_TAG$'s part of $ORIGIN$, standing in $SITE_TAG$'s part of $SITE$, $LEVELS$ levels"
+			# its records, not its arguments (no $X$ inside a debug_log string: te_debug_log_arg_effects.txt)
+			scope:gm_tr_new = {
+				debug_log = "TE_MONUMENTS: trophy [THIS.Var('gm_tr_landmark').GetFlagName] placed: from [THIS.Var('gm_tr_origin').GetState.GetOwner.GetTagName]'s part of [THIS.Var('gm_tr_origin').GetState.GetNameNoFormatting], standing in [THIS.Var('gm_tr_site').GetState.GetOwner.GetTagName]'s part of [THIS.Var('gm_tr_site').GetState.GetNameNoFormatting], [THIS.Var('gm_tr_levels').GetValue|0] levels"
+			}
 		}
 	}
 	else = {
-		debug_log = "TE_MONUMENTS: trophy $LANDMARK$ not placed: $ORIGIN$ not held by $ORIGIN_TAG$, $SITE$ not held by $SITE_TAG$, one country holds both, or it is already abroad"
+		te_log_args_set = { A = $LANDMARK$ B = $ORIGIN$ C = $ORIGIN_TAG$ D = $SITE$ E = $SITE_TAG$ }
+		debug_log = "TE_MONUMENTS: trophy [GetGlobalVariable('te_log_arg_1').GetFlagName] not placed: [GetGlobalVariable('te_log_arg_2').GetFlagName] not held by [GetGlobalVariable('te_log_arg_3').GetFlagName], [GetGlobalVariable('te_log_arg_4').GetFlagName] not held by [GetGlobalVariable('te_log_arg_5').GetFlagName], one country holds both, or it is already abroad"
+		te_log_args_clear = yes
 	}
 }
 

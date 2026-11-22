@@ -223,6 +223,8 @@ STATE_BAHAMAS = {
         building_fishing_wharf = 5
     }
     naval_exit_id = 3061
+    min_cold_effect = 0.00
+    max_cold_effect = 0.03
 }
 
 STATE_WEST_INDIES = {
@@ -298,6 +300,8 @@ STATE_WESTERN_CUBA = {
         undiscovered_amount = 10
     }
     naval_exit_id = 3026
+    min_cold_effect = 0.00
+    max_cold_effect = 0.02
 }
 
 STATE_EASTERN_CUBA = {
@@ -330,7 +334,14 @@ STATE_EASTERN_CUBA = {
         type = "building_nickel_cobalt_mine"
         undiscovered_amount = 95
     }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
+    }
     naval_exit_id = 3026
+    min_cold_effect = 0.00
+    max_cold_effect = 0.01
 }
 
 STATE_CENTRAL_CUBA = {
@@ -351,4 +362,6 @@ STATE_CENTRAL_CUBA = {
         building_fishing_wharf = 3
     }
     naval_exit_id = 3026
+    min_cold_effect = 0.00
+    max_cold_effect = 0.02
 }

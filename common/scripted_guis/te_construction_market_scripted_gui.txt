@@ -174,6 +174,7 @@ te_construction_market_decrease_target_1 = {
 		always = no
 	}
 	is_valid = {
+		has_variable = te_construction_market_public_target
 		var:te_construction_market_public_target >= 1
 	}
 
@@ -201,6 +202,7 @@ te_construction_market_decrease_target_10 = {
 		always = no
 	}
 	is_valid = {
+		has_variable = te_construction_market_public_target
 		var:te_construction_market_public_target >= 10
 	}
 
@@ -228,6 +230,7 @@ te_construction_market_decrease_target_100 = {
 		always = no
 	}
 	is_valid = {
+		has_variable = te_construction_market_public_target
 		var:te_construction_market_public_target >= 100
 	}
 
@@ -255,6 +258,7 @@ te_construction_market_decrease_target_1000 = {
 		always = no
 	}
 	is_valid = {
+		has_variable = te_construction_market_public_target
 		var:te_construction_market_public_target >= 1000
 	}
 
@@ -282,6 +286,7 @@ te_construction_market_decrease_target_reset = {
 		always = no
 	}
 	is_valid = {
+		has_variable = te_construction_market_public_target
 		var:te_construction_market_public_target >= 1
 	}
 

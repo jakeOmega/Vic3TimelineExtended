@@ -92,10 +92,36 @@ te_grid_lays_cable = {
 	}
 }
 
+# Country scope. Its power bloc joins its members' grids as a Grid
+# Interconnection Agreement would (2026-11-14): the bloc holds Market
+# Unification IV or V, or Internal Trade IV or V
+# (common/power_bloc_principles/extra_power_bloc_principles.txt), each of which
+# carries the script-only marker power_bloc_grid_interconnection_bool for its
+# tooltip. Read through has_principle, as the Monetary Union reads its tiers
+# (te_mon_bloc_union_tier_*, te_monetary_union_triggers.txt): whether a
+# script-only power bloc bool reads from country scope is unverified, and
+# TE_SELF_CHECK grid_bloc_link compares the two reads
+# (te_grid_bloc_link_selfcheck_effect). Tiers replace the tier below, so this
+# names every tier that qualifies: a tier VI of either group must be added
+# here, or a bloc that took it would read as having none.
+te_grid_bloc_links_grids = {
+	is_in_power_bloc = yes
+	power_bloc ?= {
+		OR = {
+			has_principle = principle:principle_market_unification_4
+			has_principle = principle:principle_market_unification_5
+			has_principle = principle:principle_internal_trade_4
+			has_principle = principle:principle_internal_trade_5
+		}
+	}
+}
+
 # State scope, during the balancing: the owner and the owner of $FROM$ (a state)
-# have a Grid Interconnection Agreement in force. Reads the partner list each
-# owner's stations are refreshed with at the start of the run
-# (te_grid_refresh_partners_effect), so no treaty is walked per neighbour.
+# are grid partners: they have a Grid Interconnection Agreement in force, or
+# are members of one power bloc whose principle joins their grids
+# (te_grid_bloc_links_grids). Reads the partner list each owner's stations are
+# refreshed with at the start of the run (te_grid_refresh_partners_effect), so
+# no treaty or bloc is walked per neighbour.
 te_grid_owners_interconnected = {
 	owner = {
 		is_target_in_variable_list = { name = te_grid_partners target = $FROM$.owner }
@@ -106,8 +132,10 @@ te_grid_owners_interconnected = {
 # sea), during the balancing: the two may be joined by cable. Both have one;
 # whether either reaches the other is te_grid_cable_in_range (the caller,
 # te_grid_cable_links_effect, walks the sea from $FROM$). Within one country
-# that is enough; between two it takes a Grid Interconnection Agreement, in one
-# market or across two (te_grid_cross_market_effect settles what crosses).
+# that is enough; between two it takes a Grid Interconnection Agreement or a
+# power bloc whose principle joins their grids (te_grid_owners_interconnected),
+# in one market or across two (te_grid_cross_market_effect settles what
+# crosses).
 te_grid_sea_link = {
 	te_grid_has_interconnector = yes
 	OR = {
@@ -131,8 +159,9 @@ te_grid_cable_in_range = {
 # State scope (a waiting station), during the balancing: joined to the grid of
 # $FROM$ (a member station of another country) across a land border. The two
 # states border each other (the caller iterates $FROM$'s
-# every_neighbouring_state) and their owners have a Grid Interconnection
-# Agreement in force, in one market or across two.
+# every_neighbouring_state) and their owners are grid partners (a Grid
+# Interconnection Agreement in force, or one power bloc whose principle joins
+# their grids: te_grid_owners_interconnected), in one market or across two.
 te_grid_land_link = {
 	NOT = { owner = $FROM$.owner }
 	te_grid_owners_interconnected = { FROM = $FROM$ }
@@ -142,7 +171,12 @@ te_grid_land_link = {
 # te_grid_ai_interconnectors_effect, after te_grid_sea_reach_effect has walked
 # the sea as far as its cable would reach. A station within that reach would
 # join it to another grid by cable: one of the same country in another market
-# area, or an agreement partner's.
+# area, or a grid partner's (an agreement, or a power bloc whose principle
+# joins their grids). The partnership is read from the AI's own
+# partner list, which the run refreshed just before this pass: the far owner's
+# may be last month's (the run reaches it later) or never kept at all (its
+# only station is still queued), and a station judged against a stale list
+# waited out its six months before it was judged again.
 te_grid_ai_interconnector_wanted = {
 	any_in_global_list = {
 		variable = te_grid_sea_reach
@@ -155,7 +189,10 @@ te_grid_ai_interconnector_wanted = {
 			}
 			AND = {
 				NOT = { owner = scope:te_grid_ai_end.owner }
-				te_grid_owners_interconnected = { FROM = scope:te_grid_ai_end }
+				save_temporary_scope_as = te_grid_ai_far
+				scope:te_grid_ai_end = {
+					te_grid_owners_interconnected = { FROM = scope:te_grid_ai_far }
+				}
 			}
 		}
 	}
@@ -165,14 +202,104 @@ te_grid_ai_interconnector_wanted = {
 
 # State scope. Its owner makes Electricity in a state of its market area, this
 # one included, so a station here joins a grid with power to share. A station
-# that downloads counts as making it, so a group fed through an interconnector
-# or an agreement counts too.
+# that downloads counts as making it, and so does one on a grid that has both
+# power and use for it (te_grid_region_ratio above 0: an idle station keeps
+# none), so a group joined to a partner's grid or to the owner's own across
+# the sea counts before any of its states receives: a state with no power
+# uses none, and its station downloads nothing until something there does.
 te_grid_ai_market_area_has_power = {
 	save_temporary_scope_as = te_grid_ai_powered
 	owner = {
 		any_scope_state = {
 			is_in_same_market_area = scope:te_grid_ai_powered
-			te_grid_electricity_production > 0
+			OR = {
+				te_grid_electricity_production > 0
+				AND = {
+					has_variable = te_grid_region_ratio
+					var:te_grid_region_ratio > 0
+				}
+			}
+		}
+	}
+}
+
+# State scope, a site the AI weighs (te_grid_ai_station_site,
+# te_grid_station_ai_value). A state of one of its owner's grid partners (a
+# Grid Interconnection Agreement, or a power bloc whose principle joins their
+# grids, te_grid_refresh_partners_effect) lies where a station here could join it:
+# across a land border (te_grid_land_link), or, once the owner can lay an
+# undersea cable (Clean Energy Technologies), on a Sea Node this state is on.
+# One Sea Node only, whatever the cable's range: a trigger can't walk the sea
+# farther, and the cable pass's walk (te_grid_sea_reach_effect) is too dear to
+# run for every state without a station. With ANY = no only a partner's state
+# with a station counts, built or queued; with ANY = yes any of its states
+# does, while the partner has Electrical Capacitors (te_grid_ai_partner_end).
+# Reads the owner's own partner list, which te_grid_ai_build_effect
+# refreshes for an AI country whether or not it has a station.
+te_grid_ai_partner_near = {
+	owner = { has_variable_list = te_grid_partners }
+	save_temporary_scope_as = te_grid_ai_site
+	OR = {
+		any_neighbouring_state = {
+			te_grid_ai_partner_end = { ANY = $ANY$ }
+		}
+		AND = {
+			is_coastal = yes
+			owner = { has_technology_researched = clean_energy_technologies }
+			any_sea_node_adjacent_state = {
+				te_grid_ai_partner_end = { ANY = $ANY$ }
+			}
+		}
+	}
+}
+
+# State scope, a state beside scope:te_grid_ai_site (te_grid_ai_partner_near):
+# another country's, whose owner is a grid partner of the site's owner. With
+# ANY = yes a state with no station counts only if its owner has Electrical
+# Capacitors and so can build one there: a bloc partner needn't (an agreement
+# partner always has it, since the article needs it on both sides), and one
+# without it would never answer the AI's station (the 2026-11-14 review). The
+# technology is read first, so a state is walked for a station only if need be.
+te_grid_ai_partner_end = {
+	NOT = { owner = scope:te_grid_ai_site.owner }
+	OR = {
+		AND = {
+			always = $ANY$
+			owner = { has_technology_researched = electrical_capacitors }
+		}
+		te_grid_state_has_station = yes
+	}
+	save_temporary_scope_as = te_grid_ai_near
+	scope:te_grid_ai_site = {
+		te_grid_owners_interconnected = { FROM = scope:te_grid_ai_near }
+	}
+}
+
+# State scope. A station here would have another to share power with: the
+# owner holds a second state in the market area, where its grid can grow; or
+# an agreement partner's state is near (te_grid_ai_partner_near); or the state
+# is on a coast, the owner can lay an undersea cable, and it holds states in
+# another market area for one to reach. Without any of these a station is a
+# grid of one, which moves nothing and still costs its staff and upkeep: a
+# one-state country's, or an island colony's before cables.
+te_grid_ai_station_has_use = {
+	save_temporary_scope_as = te_grid_ai_lone
+	OR = {
+		owner = {
+			any_scope_state = {
+				NOT = { this = scope:te_grid_ai_lone }
+				is_in_same_market_area = scope:te_grid_ai_lone
+			}
+		}
+		te_grid_ai_partner_near = { ANY = yes }
+		AND = {
+			is_coastal = yes
+			owner = {
+				has_technology_researched = clean_energy_technologies
+				any_scope_state = {
+					NOT = { is_in_same_market_area = scope:te_grid_ai_lone }
+				}
+			}
 		}
 	}
 }
@@ -200,10 +327,24 @@ te_grid_station_placeable = {
 }
 
 # State scope, in te_grid_ai_build_effect: a state the AI queues a station in.
+# Either its owner has power in the market area and the station would have
+# another to share it with (te_grid_ai_station_has_use), or an agreement
+# partner's station is near enough to join (te_grid_ai_partner_near), which
+# brings power to a country that makes none: until 2026-11-11 such a country
+# never built a station, so its agreement did nothing. A partner's station is
+# asked for there, not just its state, since the power has to come from that
+# side; a country with power goes first, so two neighbours that each wait for
+# the other's station can't arise.
 te_grid_ai_station_site = {
 	te_grid_state_has_station = no
-	te_grid_ai_market_area_has_power = yes
 	te_grid_station_placeable = yes
+	OR = {
+		AND = {
+			te_grid_ai_market_area_has_power = yes
+			te_grid_ai_station_has_use = yes
+		}
+		te_grid_ai_partner_near = { ANY = no }
+	}
 }
 
 # State scope, for TE_SELF_CHECK grid_price: a sending state whose station
@@ -227,4 +368,31 @@ te_grid_chk_price_above_base = {
 	te_grid_electricity_consumption >= 100
 	te_grid_chk_now_ratio_value >= 0.28
 	te_grid_chk_now_ratio_value <= 0.48
+}
+
+# Country scope: the Power Grids tab's checklist (te_window_power_grids_tab_unlock_sgui),
+# its open gate as one line (an OR stays one custom_tooltip: style guide rule 9).
+te_grid_tab_unlocked = {
+	custom_tooltip = {
+		text = te_grid_tab_unlock_tech_tt
+		OR = {
+			has_technology_researched = electrical_capacitors
+			any_scope_state = { has_building = building_grid_transfer_station }
+		}
+	}
+}
+
+# Country scope, in te_grid_map_color_effect with te_grid_region holding the
+# grid being balanced: does a state bordering one of its members, on another
+# grid, hold the color the effect is trying (local te_grid_color)? The Map
+# Room's Power Grids map then shows two grids apart.
+te_grid_map_color_taken = {
+	any_in_global_list = {
+		variable = te_grid_region
+		any_neighbouring_state = {
+			has_variable = te_grid_map_color
+			var:te_grid_map_color = local_var:te_grid_color
+			NOT = { is_target_in_global_variable_list = { name = te_grid_region target = this } }
+		}
+	}
 }

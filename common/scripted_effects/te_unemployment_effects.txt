@@ -63,9 +63,9 @@ te_unemp_count_pop = {
 }
 
 # TE_SELF_CHECK unemployment_share_read (docs/testing/ai-economy-playtest.md, Self-checks). Once a game, the first
-# state at its yearly walk with a workforce of at least 10,000 and at least 2% of it with no workplace: the conversion
-# readers use (te_state_unemployment_share, read after the walk stored the state's workforce share) against the walk's
-# own count of the workforce with no workplace over all the workforce.
+# state at its yearly walk with a workforce of at least 10,000, at least 2% of it with no workplace and the engine's
+# figure above 0 (#1597): the conversion readers use (te_state_unemployment_share, read after the walk stored the
+# state's workforce share) against the walk's own count of the workforce with no workplace over all the workforce.
 #   OK      within a quarter below or a third above: the engine's figure is the idle workforce over all the state's
 #           people (the 2026-10-17 diagnosis), so the conversion is the share of the workforce the readers mean.
 #   BROKEN  anything else. About 4 x: the figure is already per worker, and the conversion counts it four times. The
@@ -83,8 +83,13 @@ te_unemp_share_selfcheck = {
 			name = te_unemp_c_exact
 			value = { value = local_var:te_unemp_w_idle divide = { value = local_var:te_unemp_w_wf min = 1 } }
 		}
+		# te_unemp_engine_read > 0: the engine has computed unemployment (it reads 0 in the first days of a game,
+		# #1597). It sits in the limit, before the once-a-game flag, so a read of nothing cannot spend the check.
 		if = {
-			limit = { local_var:te_unemp_c_exact >= 0.02 }
+			limit = {
+				local_var:te_unemp_c_exact >= 0.02
+				te_unemp_engine_read > 0
+			}
 			set_global_variable = { name = te_unemp_share_check_done value = yes }
 			set_variable = { name = te_unemp_chk_read value = te_unemp_engine_read }
 			set_variable = { name = te_unemp_chk_conv value = te_state_unemployment_share }

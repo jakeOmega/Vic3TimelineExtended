@@ -9,6 +9,7 @@ import unittest
 
 import gui_test_helpers
 from gui_test_helpers import assert_wide_matches_narrow
+from je_test_helpers import entry_text, old_block, outcome_texts
 from scripts.generators import gen_te_systems_window as window_gen
 
 REPO = os.path.dirname(os.path.abspath(__file__))
@@ -787,8 +788,11 @@ class HoldingsTest(unittest.TestCase):
                 self.assertIn(f"GetPlayer.MakeScope.ScriptValue('{value}')", desc, (concept, value))
             self.assertNotRegex(re.sub(r"\[[^\]]*\]|#\w+", "", desc), r"\d", "editing rule 1: no number typed in loc")
         self.assertIn("concept_unincorporated_state", self.loc["concept_overseas_colony_desc"])
-        # The colonies it counts are the entry's own test.
-        self.assertIn("value = colonial_state_count", _block(_read(DISPLAY), "colonial_empire_refresh_display"))
+        # The colonies it counts are the entry's own test: since 2026-11-06 read from the marks the same pass sets
+        # with it (te_jmap_ce_colony, for the Colonies map), so the test runs once per state.
+        refresh = _block(_read(DISPLAY), "colonial_empire_refresh_display")
+        self.assertIn("value = te_jmap_ce_colony_count", refresh)
+        self.assertLess(refresh.index("is_overseas_colonial_state = yes"), refresh.index("name = te_jmap_ce_colony"))
 
     def test_each_definition_is_written_once(self):
         """CE-4: the hovers that wrote out what a territory, a colony and a
@@ -1011,16 +1015,25 @@ class LiveBandTest(unittest.TestCase):
 
 
 class QuietTooltipsTest(unittest.TestCase):
-    """Play-test round 1 (2026-09-29): the journal panel renders on_complete and
-    on_fail as tooltips every frame, so a bare var: read of a counter that does
+    """Play-test round 1 (2026-09-29): the journal panel renders the outcomes'
+    effects as tooltips every frame, so a bare var: read of a counter that does
     not exist yet, or a remove_modifier of a modifier the scope lacks, logged an
     error per frame."""
 
     def test_no_bare_read_of_the_programme_months(self):
         je = _read(JE)
         decol = _read(DECOLONIZATION)
-        for name, body in (("on_complete", _block_in(je, "on_complete")), ("on_fail", _block_in(je, "on_fail")),
-                           ("decol_path_legacy", _block(decol, "decol_path_legacy"))):
+        entry = entry_text(je, "je_colonial_empire")
+        # Since #1432 the path tests are the outcomes' triggers (one outcome
+        # per ending), which the panel renders every frame too.
+        endings = outcome_texts(entry)
+        self.assertEqual(len(endings), 10)
+        for i, body in enumerate(endings):
+            with self.subTest(outcome=i):
+                self.assertNotRegex(body, r"var:colonial_(invest|garrison|assimilate)_months")
+        path_tests = [body for body in endings if "_months_value" in body]
+        self.assertEqual(len(path_tests), 6, "four paths of a held bar and two collapses")
+        for name, body in (("decol_path_legacy", _block(decol, "decol_path_legacy")),):
             with self.subTest(block=name):
                 self.assertNotRegex(body, r"var:colonial_(invest|garrison|assimilate)_months")
                 self.assertRegex(body, r"colonial_(invest|garrison|assimilate)_months_value")
@@ -1034,7 +1047,9 @@ class QuietTooltipsTest(unittest.TestCase):
     def test_every_remove_modifier_in_the_cleanup_is_guarded(self):
         cleanup = _strip_comments(_block(_read(DECOLONIZATION), "colonial_empire_je_cleanup_effect"))
         removes = re.findall(r"remove_modifier = (\w+)", cleanup)
-        self.assertEqual(len(removes), 9)
+        # Two movement and three subject modifiers. The programmes' four went in
+        # 1.15: the entry declares them, and they leave with it (#1404).
+        self.assertEqual(len(removes), 5)
         for mod in removes:
             with self.subTest(modifier=mod):
                 self.assertEqual(len(re.findall(rf"remove_modifier = {mod}\b", cleanup)),
@@ -1066,9 +1081,13 @@ class CompletionClocksTest(unittest.TestCase):
     def test_the_targets_are_shared_and_unchanged(self):
         self.assertRegex(self.values, r"(?m)^colonial_empire_completion_months = 60$")
         self.assertRegex(self.values, r"(?m)^colonial_empire_federation_months = 36$")
-        complete = _block_in(_read(JE), "complete")
-        self.assertIn("var:colonial_at_100_months >= colonial_empire_completion_months", complete)
-        self.assertNotRegex(complete, r">= 60\b")
+        # The four paths of a held bar (#1432: success outcomes 2-5, after the Acts').
+        entry = entry_text(_read(JE), "je_colonial_empire")
+        for index in range(2, 6):
+            complete = old_block(entry, "complete", index)
+            with self.subTest(outcome=index):
+                self.assertIn("var:colonial_at_100_months >= colonial_empire_completion_months", complete)
+                self.assertNotRegex(complete, r">= 60\b")
         decisions = _read(DECISIONS)
         for d in ("imperial_federation_act_iron_fist", "imperial_federation_act_civilizing_mission"):
             with self.subTest(decision=d):
@@ -1080,10 +1099,13 @@ class CompletionClocksTest(unittest.TestCase):
                 self.assertNotRegex(body, r"colonial_solidified_months(_value)? >= 36")
         self.assertRegex(self.values, r"(?s)colonial_solidified_months_value = \{\s*value = 0\s*if = \{\s*"
                                       r"limit = \{ has_variable = colonial_solidified_months \}")
-        tt = _loc()["je_colonial_empire_complete_tt"]
-        for sv in ("colonial_empire_completion_months", "colonial_empire_federation_months"):
-            self.assertIn(f"ScriptValue('{sv}')", tt, sv)
-        self.assertNotIn(".Var(", tt, "the completion tooltip reads the guarded counts")
+        loc = _loc()
+        for key, sv in (("je_colonial_empire_complete_tt", "colonial_empire_completion_months"),
+                        ("je_colonial_empire_act_iron_fist_tt", "colonial_empire_federation_months"),
+                        ("je_colonial_empire_act_civilizing_tt", "colonial_empire_federation_months")):
+            with self.subTest(key=key):
+                self.assertIn(f"ScriptValue('{sv}')", loc[key], sv)
+                self.assertNotIn(".Var(", loc[key], "the completion tooltips read the guarded counts")
 
     def test_the_clocks_show_in_the_top_band_only(self):
         m = re.search(r"### Row 4, in the top band only", self.body)
@@ -2180,8 +2202,9 @@ class ObserverTest(unittest.TestCase):
 
 class ScriptTooltipTest(unittest.TestCase):
     """The lines a public scripted GUI's tooltip prints for another country's
-    panel. Its effect's or trigger's custom_tooltip keys are reached by no
-    panel's loc closure, so BindingTest can't see them. The readout's unlock
+    panel. Its effect's or trigger's custom_tooltip keys were reached by no
+    panel's loc closure when this was written (BindingTest follows them since
+    #1361; this holds the two by name). The readout's unlock
     checklist (te_window_colonial_empire_entry_unlock_sgui's IsValidTooltip)
     and the history charts' markers (te_history_marker_tooltip) are the two:
     they read no player and no entry, and don't speak as the player."""

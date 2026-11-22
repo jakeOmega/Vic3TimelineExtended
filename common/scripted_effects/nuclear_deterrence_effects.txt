@@ -24,15 +24,12 @@
 # Never call them from an event, a scripted GUI or a diplomatic action; the
 # console harness (events/te_debug_deterrence_events.txt) is the one exception
 # and says so. Panel actions call the nd_set_* / nd_step_* effects, which only
-# write their own variable and re-apply modifiers.
+# write their own variable and refresh the upkeep (nd_apply_posture_modifiers).
 #
 # ROOT. Every effect here runs in the country's own scope with ROOT = that
 # country: the journal entry's pulses, its immediate, the scripted GUI (scope =
 # country), country events and the diplomatic actions' accept_effect all
-# satisfy this. nd_apply_posture_modifiers depends on it —
-# `multiplier = root.var:nd_upkeep_weekly_cached` resolves against ROOT
-# (scripting_best_practices.md § add_modifier { multiplier = var:X } Resolves
-# Against ROOT).
+# satisfy this. Effects for another country go through a country event.
 # ============================================================================
 
 # ----------------------------------------------------------------------------
@@ -94,7 +91,7 @@ nd_init_posture = {
 		set_variable = {
 			name = nd_survivability
 			value = {
-				value = nd_survivability_cap
+				value = nd_survivability_target
 				multiply = 0.4
 			}
 		}
@@ -123,65 +120,6 @@ nd_init_posture = {
 		limit = { NOT = { has_variable = nd_public_estimate } }
 		set_variable = { name = nd_public_estimate value = nd_stockpile }
 		set_variable = { name = nd_estimate_year value = year }
-	}
-}
-
-# Puts the posture modifiers on the entry from scratch, once per activation,
-# from the first weekly pulse after it. Two cases need it:
-#   * The week after activation. The entry's immediate only zeroes the
-#     trackers and clears the marker: whether `je:je_nuclear_program` resolves
-#     while the entry is still being activated is untested, and if it did not,
-#     applying there would set the trackers to "on" with nothing on the entry,
-#     and nothing would ever re-add them. A running pulse is known to resolve.
-#   * A save made while posture had its own entry. Until 2026-09-25 the
-#     posture modifiers sat on je_nuclear_deterrence; that entry's definition
-#     is gone and its modifiers with it, but the trackers still say they are
-#     on, and je_nuclear_program — already active in such a save — never
-#     re-runs its immediate. The marker did not exist then, so this runs.
-# Every member is taken off first (guarded: a remove_modifier on a missing
-# modifier logs), so it is safe however the trackers and the entry disagree.
-nd_rebuild_posture_modifiers = {
-	if = {
-		limit = { NOT = { has_variable = nd_posture_on_merged_entry } }
-		je:je_nuclear_program ?= {
-			if = {
-				limit = { has_modifier = nd_doctrine_mod_1 }
-				remove_modifier = nd_doctrine_mod_1
-			}
-			if = {
-				limit = { has_modifier = nd_doctrine_mod_2 }
-				remove_modifier = nd_doctrine_mod_2
-			}
-			if = {
-				limit = { has_modifier = nd_doctrine_mod_3 }
-				remove_modifier = nd_doctrine_mod_3
-			}
-			if = {
-				limit = { has_modifier = nd_doctrine_mod_4 }
-				remove_modifier = nd_doctrine_mod_4
-			}
-			if = {
-				limit = { has_modifier = nd_doctrine_mod_5 }
-				remove_modifier = nd_doctrine_mod_5
-			}
-			if = {
-				limit = { has_modifier = nd_readiness_mod_2 }
-				remove_modifier = nd_readiness_mod_2
-			}
-			if = {
-				limit = { has_modifier = nd_readiness_mod_3 }
-				remove_modifier = nd_readiness_mod_3
-			}
-			if = {
-				limit = { has_modifier = nd_upkeep_cost }
-				remove_modifier = nd_upkeep_cost
-			}
-		}
-		set_variable = { name = nd_doctrine_mod_on value = 0 }
-		set_variable = { name = nd_readiness_mod_on value = 0 }
-		set_variable = { name = nd_upkeep_mod_on value = 0 }
-		set_variable = { name = nd_posture_on_merged_entry value = 1 }
-		nd_apply_posture_modifiers = yes
 	}
 }
 
@@ -215,152 +153,30 @@ nd_refresh_risk_band = {
 }
 
 # ----------------------------------------------------------------------------
-# MODIFIERS — the single writer of the three managed families
+# THE POSTURE'S COST — what the entry's declared modifiers read
 # ----------------------------------------------------------------------------
-# Decides from tracking variables, never from has_modifier: add/remove results
-# are invisible inside the block that ran them, and this effect is called from
-# button effects that may run it twice in one block. The trackers:
-#   nd_doctrine_mod_on   which nd_doctrine_mod_N is on the entry (0 = none)
-#   nd_readiness_mod_on  which nd_readiness_mod_N is on (0 = none; routine has none)
-#   nd_upkeep_mod_on     1 if nd_upkeep_cost is on
-# je_nuclear_program's immediate zeroes all three: a freshly activated entry
-# is a new object with no modifiers, whatever the old variables say.
+# je_nuclear_program declares the posture's modifiers
+# (scaling_modifiers_while_active): the doctrine and readiness modifiers read
+# var:nd_doctrine / var:nd_readiness directly, and nd_upkeep_cost reads
+# var:nd_upkeep_weekly_cached, all while nd_posture_in_force. This keeps that
+# cache and the risk band current. The upkeep reads the cache rather than
+# nd_upkeep_weekly live so that the bill and the panel's figure
+# (nd_display_upkeep_weekly) are one number. Called monthly, by every posture
+# change and the arsenal's other moves, and from the entry's immediate for an
+# armed country. Writes only country variables, so it needs neither the entry
+# nor a resolved je: scope.
 nd_apply_posture_modifiers = {
 	if = {
-		limit = {
-			has_journal_entry = je_nuclear_program
-			nd_is_armed = yes
-			nd_is_initialized = yes
-		}
-		# ---- doctrine -------------------------------------------------------
-		if = {
-			limit = {
-				OR = {
-					NOT = { has_variable = nd_doctrine_mod_on }
-					NOT = { var:nd_doctrine_mod_on = var:nd_doctrine }
-				}
-			}
-			nd_remove_doctrine_modifier = yes
-			if = {
-				limit = { var:nd_doctrine = 1 }
-				je:je_nuclear_program ?= { add_modifier = { name = nd_doctrine_mod_1 } }
-			}
-			else_if = {
-				limit = { var:nd_doctrine = 3 }
-				je:je_nuclear_program ?= { add_modifier = { name = nd_doctrine_mod_3 } }
-			}
-			else_if = {
-				limit = { var:nd_doctrine = 4 }
-				je:je_nuclear_program ?= { add_modifier = { name = nd_doctrine_mod_4 } }
-			}
-			else_if = {
-				limit = { var:nd_doctrine = 5 }
-				je:je_nuclear_program ?= { add_modifier = { name = nd_doctrine_mod_5 } }
-			}
-			else = {
-				je:je_nuclear_program ?= { add_modifier = { name = nd_doctrine_mod_2 } }
-			}
-			set_variable = { name = nd_doctrine_mod_on value = var:nd_doctrine }
-		}
-		# ---- readiness ------------------------------------------------------
-		if = {
-			limit = {
-				OR = {
-					NOT = { has_variable = nd_readiness_mod_on }
-					NOT = { var:nd_readiness_mod_on = var:nd_readiness }
-				}
-			}
-			nd_remove_readiness_modifier = yes
-			if = {
-				limit = { var:nd_readiness = 2 }
-				je:je_nuclear_program ?= { add_modifier = { name = nd_readiness_mod_2 } }
-			}
-			else_if = {
-				limit = { var:nd_readiness = 3 }
-				je:je_nuclear_program ?= { add_modifier = { name = nd_readiness_mod_3 } }
-			}
-			set_variable = { name = nd_readiness_mod_on value = var:nd_readiness }
-		}
-		# ---- upkeep ---------------------------------------------------------
-		# The cache is what the multiplier reads; it must never be removed
-		# while the modifier is on (modifier_multiplier_var_audit).
+		limit = { nd_posture_in_force = yes }
 		set_variable = { name = nd_upkeep_weekly_cached value = nd_upkeep_weekly }
-		if = {
-			limit = {
-				OR = {
-					NOT = { has_variable = nd_upkeep_mod_on }
-					var:nd_upkeep_mod_on = 0
-				}
-			}
-			je:je_nuclear_program ?= {
-				add_modifier = {
-					name = nd_upkeep_cost
-					multiplier = root.var:nd_upkeep_weekly_cached
-				}
-			}
-			set_variable = { name = nd_upkeep_mod_on value = 1 }
-		}
 		nd_refresh_risk_band = yes
 	}
 	# Unarmed (the last warhead was used, a non-nuclear crisis party, or a
 	# programme that has not built one yet): nothing to maintain, nothing to
-	# pay.
-	else_if = {
-		limit = { has_journal_entry = je_nuclear_program }
-		nd_remove_doctrine_modifier = yes
-		set_variable = { name = nd_doctrine_mod_on value = 0 }
-		nd_remove_readiness_modifier = yes
-		set_variable = { name = nd_readiness_mod_on value = 0 }
-		if = {
-			limit = {
-				has_variable = nd_upkeep_mod_on
-				var:nd_upkeep_mod_on = 1
-			}
-			je:je_nuclear_program ?= { remove_modifier = nd_upkeep_cost }
-			set_variable = { name = nd_upkeep_mod_on value = 0 }
-		}
+	# pay. The declaration's own gate already reads 0; this keeps the panel's
+	# figure in step.
+	else = {
 		set_variable = { name = nd_upkeep_weekly_cached value = 0 }
-	}
-}
-
-# Removes whichever doctrine modifier the tracker says is on.
-nd_remove_doctrine_modifier = {
-	if = {
-		limit = { has_variable = nd_doctrine_mod_on }
-		if = {
-			limit = { var:nd_doctrine_mod_on = 1 }
-			je:je_nuclear_program ?= { remove_modifier = nd_doctrine_mod_1 }
-		}
-		else_if = {
-			limit = { var:nd_doctrine_mod_on = 2 }
-			je:je_nuclear_program ?= { remove_modifier = nd_doctrine_mod_2 }
-		}
-		else_if = {
-			limit = { var:nd_doctrine_mod_on = 3 }
-			je:je_nuclear_program ?= { remove_modifier = nd_doctrine_mod_3 }
-		}
-		else_if = {
-			limit = { var:nd_doctrine_mod_on = 4 }
-			je:je_nuclear_program ?= { remove_modifier = nd_doctrine_mod_4 }
-		}
-		else_if = {
-			limit = { var:nd_doctrine_mod_on = 5 }
-			je:je_nuclear_program ?= { remove_modifier = nd_doctrine_mod_5 }
-		}
-	}
-}
-
-nd_remove_readiness_modifier = {
-	if = {
-		limit = { has_variable = nd_readiness_mod_on }
-		if = {
-			limit = { var:nd_readiness_mod_on = 2 }
-			je:je_nuclear_program ?= { remove_modifier = nd_readiness_mod_2 }
-		}
-		else_if = {
-			limit = { var:nd_readiness_mod_on = 3 }
-			je:je_nuclear_program ?= { remove_modifier = nd_readiness_mod_3 }
-		}
 	}
 }
 
@@ -453,6 +269,11 @@ nd_weekly_update = {
 			post_notification = nd_doctrine_bound_by_law
 		}
 	}
+	# ---- the delivery binds the launch authority (phase 2 plan D10) ---------
+	# The backstop for any path that leaves Launch on Warning or Automatic
+	# Retaliation without the fielded ICBMs they launch; disarmament and a
+	# dismantling check it at once (nd_delivery_remove_legs).
+	nd_authority_bind_check = yes
 	# ---- pulled back for a civil war (nuclear_custody_effects.txt) ----------
 	# The warheads stay in storage until every civil war of ours is over. The
 	# panel greys every raise; any other path that raised the target (an
@@ -505,7 +326,32 @@ nd_weekly_update = {
 				}
 			}
 			nd_apply_posture_modifiers = yes
+			# The strike figures at the readiness now in force: the posture
+			# op only set the target, so this step is what moves them.
+			nd_refresh_main_rival = yes
 		}
+	}
+	# ---- the main rival's stored figures, when stale (PR 1b review) --------
+	# A save from before the panel's figures were stored has no capital to
+	# name the rival by, and a capital that changed hands would name its new
+	# owner: either way refresh this week, not at the month's turn.
+	if = {
+		limit = {
+			has_variable = nd_main_rival
+			NOT = { has_variable = nd_main_rival_capital }
+		}
+		nd_refresh_main_rival = yes
+	}
+	else_if = {
+		limit = {
+			has_variable = nd_main_rival
+			has_variable = nd_main_rival_capital
+			var:nd_main_rival = { save_temporary_scope_as = nd_mr_stored }
+			var:nd_main_rival_capital = {
+				NOT = { owner = scope:nd_mr_stored }
+			}
+		}
+		nd_refresh_main_rival = yes
 	}
 	# ---- an answer that waited for the forces (umbrella/recessed/dead-hand
 	# spec §2.4) ---------------------------------------------------------------
@@ -559,6 +405,61 @@ nd_weekly_update = {
 	nd_log_strike_eligibility = yes
 }
 
+# Country scope, armed (nd_monthly_update, after nd_readiness_months has
+# counted this month). A hold at a crisis's deadline puts the forces on High
+# Alert, the panel is the only place that shows it, and nothing takes them off
+# once the crisis is over (2026-11-19: a player left on High Alert for two
+# years, at strain 100, met four false warnings in six weeks of a war with an
+# armed power). nd_high_alert_quiet_months counts the months at High Alert
+# with no crisis under way (nd_high_alert_quiet): a crisis restarts it, and so
+# does a readiness step during the month, which nd_readiness_months shows.
+# Six such months (the months at which nd_incident_eligible_permanent_alert
+# raises the weapons-accident weight; test_nuclear_alert_standdown.py holds
+# the two together) post one notice. A restart below six re-arms it. Human
+# players only: the AI reviews its posture every sixth month.
+nd_remind_high_alert = {
+	if = {
+		limit = { is_ai = no }
+		# First month under a player (a save from before 2026-11-19, a switch
+		# of country): the months at this readiness stand in, crisis or not.
+		# change_variable does not create a variable, so it is set either way.
+		if = {
+			limit = { NOT = { has_variable = nd_high_alert_quiet_months } }
+			set_variable = { name = nd_high_alert_quiet_months value = 0 }
+			if = {
+				limit = { nd_high_alert_quiet = yes }
+				set_variable = { name = nd_high_alert_quiet_months value = var:nd_readiness_months }
+			}
+		}
+		if = {
+			limit = { nd_high_alert_quiet = yes }
+			change_variable = { name = nd_high_alert_quiet_months add = 1 }
+			if = {
+				limit = { var:nd_high_alert_quiet_months > var:nd_readiness_months }
+				set_variable = { name = nd_high_alert_quiet_months value = var:nd_readiness_months }
+			}
+		}
+		else = {
+			set_variable = { name = nd_high_alert_quiet_months value = 0 }
+		}
+		if = {
+			limit = {
+				has_variable = nd_high_alert_reminded
+				var:nd_high_alert_quiet_months < 6
+			}
+			remove_variable = nd_high_alert_reminded
+		}
+		if = {
+			limit = {
+				NOT = { has_variable = nd_high_alert_reminded }
+				var:nd_high_alert_quiet_months >= 6
+			}
+			set_variable = nd_high_alert_reminded
+			post_notification = nd_high_alert_reminder
+		}
+	}
+}
+
 nd_monthly_update = {
 	if = {
 		limit = { nd_is_armed = yes }
@@ -568,6 +469,8 @@ nd_monthly_update = {
 		change_variable = { name = nd_authority_months add = 1 }
 		change_variable = { name = nd_readiness_months add = 1 }
 		change_variable = { name = nd_months_since_incident add = 1 }
+		# ---- a High Alert that outlasts its crisis: one reminder --------------
+		nd_remind_high_alert = yes
 		# ---- capabilities -----------------------------------------------------
 		change_variable = { name = nd_strain add = nd_strain_step }
 		clamp_variable = { name = nd_strain min = 0 max = 100 }
@@ -677,6 +580,47 @@ nd_tick_countdown = {
 	}
 }
 
+# A conceded programme freeze (dispute 4, nd_crisis_act_yield) binds the
+# nation, not the regime (#758; the continuity ruling of #460-#465). The
+# ten-year timed modifier carries it in normal play; nd_crisis_freeze_months,
+# set beside it at 122, is what a revolution's winner inherits, since the
+# winner takes the loser's variables but none of its modifiers. While the
+# countdown runs, a country without the modifier gets it back without a
+# duration (add_modifier takes no computed one) and is marked
+# nd_crisis_freeze_untimed; when the countdown ends, that copy goes. The
+# countdown is in country pulses, which come every 30 days, not per calendar
+# month (scripting_best_practices.md § "`on_monthly_pulse_country` Is a
+# 30-Day Timer"): the first within 30 days of the concession, the 121st, the
+# last that reads the modifier, at most 3,630 days after it, before the timed
+# copy's 3,650 run out, so normal play never re-adds it. An untimed copy on a
+# winner goes at the 122nd, between day 3,630 and 3,660. Every country,
+# monthly (nd_country_monthly_cleanup): the frozen target need not have the
+# entry.
+nd_crisis_freeze_monthly = {
+	if = {
+		limit = { has_variable = nd_crisis_freeze_months }
+		if = {
+			limit = { var:nd_crisis_freeze_months > 1 }
+			change_variable = { name = nd_crisis_freeze_months subtract = 1 }
+			if = {
+				limit = { NOT = { has_modifier = nd_crisis_programme_freeze } }
+				add_modifier = { name = nd_crisis_programme_freeze }
+				set_variable = nd_crisis_freeze_untimed
+				nd_log_context = yes
+				debug_log = "TE_NUCLEAR: type=action; action=crisis_freeze_restored; months_left=[THIS.Var('nd_crisis_freeze_months').GetValue|0]; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+			}
+		}
+		else = {
+			remove_variable = nd_crisis_freeze_months
+			if = {
+				limit = { has_variable = nd_crisis_freeze_untimed }
+				remove_modifier = nd_crisis_programme_freeze
+				remove_variable = nd_crisis_freeze_untimed
+			}
+		}
+	}
+}
+
 nd_yearly_update = {
 	if = {
 		limit = { nd_is_armed = yes }
@@ -714,8 +658,9 @@ nd_snap_public_estimate = {
 
 # ----------------------------------------------------------------------------
 # POSTURE CHANGES — shared by the panel (nuclear_deterrence_sguis.txt) and the
-# AI review below. Each writes its own variable and re-applies modifiers;
-# none advances time.
+# AI review below. Each writes its own variable and refreshes the upkeep
+# (nd_apply_posture_modifiers); the entry's declared posture modifiers follow
+# the variables. None advances time.
 # ----------------------------------------------------------------------------
 
 # ---- The three axes. Callers use the per-value wrappers (nd_set_doctrine_3 =
@@ -869,8 +814,8 @@ nd_set_authority_3 = { nd_set_authority = { A = 3 DELEGATED = yes AUTOMATIC = no
 nd_set_authority_4 = { nd_set_authority = { A = 4 DELEGATED = no AUTOMATIC = yes } }
 
 # A = 1..4 (4 = Automatic Retaliation). The caller has checked
-# nd_can_set_authority. Re-applies the posture modifiers because Automatic
-# Retaliation carries upkeep of its own.
+# nd_can_set_authority. Refreshes the upkeep (nd_apply_posture_modifiers)
+# because Automatic Retaliation carries upkeep of its own.
 nd_set_authority = {
 	custom_tooltip = {
 		text = nd_tt_authority_adopted_$A$
@@ -887,6 +832,155 @@ nd_set_authority = {
 		custom_tooltip = nd_tt_authority_consequence_automatic
 	}
 	nd_apply_posture_modifiers = yes
+}
+
+# ----------------------------------------------------------------------------
+# DELIVERY LEGS (2026-11-20 delivery spec §4.4; phase 2 plan D8, D10)
+# ----------------------------------------------------------------------------
+# Launch on Warning and Automatic Retaliation launch fielded ICBMs
+# (nd_can_adopt_*). When the ICBMs go (disarmament, a dismantling, a save whose
+# authority outlived its missiles), the authority falls back to Central
+# Authorization. The loss made the change, not the government, so it doesn't
+# start the authority clock: nd_authority_months is put back as it was (tenure
+# satisfied if it was missing), as the No-First-Strike binding does for the
+# doctrine. A human is told (nd_authority_bound_by_delivery). The one writer:
+# called by nd_delivery_remove_legs and weekly by nd_weekly_update.
+nd_authority_bind_check = {
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					nd_authority_launch_on_warning = yes
+					NOT = { nd_can_adopt_launch_on_warning = yes }
+				}
+				AND = {
+					nd_authority_automatic = yes
+					NOT = { nd_can_adopt_automatic_retaliation = yes }
+				}
+			}
+		}
+		if = {
+			limit = { has_variable = nd_authority_months }
+			set_variable = { name = nd_authority_months_before_bind value = var:nd_authority_months }
+		}
+		else = {
+			set_variable = { name = nd_authority_months_before_bind value = nd_authority_tenure_months }
+		}
+		nd_set_authority_1 = yes
+		set_variable = { name = nd_authority_months value = var:nd_authority_months_before_bind }
+		remove_variable = nd_authority_months_before_bind
+		if = {
+			limit = { is_ai = no }
+			post_notification = nd_authority_bound_by_delivery
+		}
+	}
+}
+
+# Disarmament takes the launchers too (owner call 9): the Nuclear Disarmament
+# article's entry into force and a completed dismantling remove both fielded
+# legs and both projects' progress, so a country that resumes rebuilds its
+# delivery. A project in focus goes with them: its live progress was the
+# project's, so the warheads' parked progress comes back to the bar. A
+# warheads slot on a Warheads focus is an activation's park, waiting for the
+# weekly load-back, and stays. Then the authority's gate and reach.
+nd_delivery_remove_legs = {
+	if = {
+		limit = { has_variable = nd_prog_focus }
+		remove_variable = nd_prog_focus
+		if = {
+			limit = { has_variable = nd_proj_warhead_progress }
+			set_variable = { name = nuclear_weapon_program_progress value = var:nd_proj_warhead_progress }
+			remove_variable = nd_proj_warhead_progress
+		}
+		else = {
+			set_variable = { name = nuclear_weapon_program_progress value = 0 }
+		}
+	}
+	if = {
+		limit = { has_variable = nd_icbms_fielded }
+		remove_variable = nd_icbms_fielded
+	}
+	if = {
+		limit = { has_variable = nd_subs_fielded }
+		remove_variable = nd_subs_fielded
+	}
+	if = {
+		limit = { has_variable = nd_proj_icbm_progress }
+		remove_variable = nd_proj_icbm_progress
+	}
+	if = {
+		limit = { has_variable = nd_proj_sub_progress }
+		remove_variable = nd_proj_sub_progress
+	}
+	nd_authority_bind_check = yes
+	nd_reach_refresh = yes
+}
+
+# Once, from nd_delivery_monthly_on_action (global scope; the first monthly
+# pulse after the update, with the system's rule on). Before phase 2 a
+# technology switched a leg on; now the programme fields it. So every country
+# that had a leg keeps it: nd_icbms_fielded with the ICBMs technology,
+# nd_subs_fielded with Advanced Submarine Technology and a coast, armed or not,
+# so no arsenal loses its reach mid-game (spec §4.4). A landlocked country gets
+# no submarine leg: that was the bug phase 1 fixed. A country that gave its
+# arsenal up gets neither (nd_delivery_given_up; owner call 9). A leg granted
+# here drops its project: a focus on it returns to Warheads (nd_focus_set
+# parks its progress) and the slot goes. The world already had these legs, so
+# the fielding headlines are spent (nd_headline_*_fielded; plan D12). A
+# migrated leg holds 0, not a year: when it was fielded is unknown, and the
+# Focus rows print "fielded" without one (nd_focus_row_2, _3).
+nd_delivery_migrate = {
+	set_global_variable = nd_delivery_migrated
+	set_local_variable = { name = nd_mig_icbms value = 0 }
+	set_local_variable = { name = nd_mig_subs value = 0 }
+	every_country = {
+		limit = {
+			has_technology_researched = ICBMs
+			NOT = { has_variable = nd_icbms_fielded }
+			nd_delivery_given_up = no
+		}
+		set_variable = { name = nd_icbms_fielded value = 0 }
+		if = {
+			limit = { nd_focus_is_icbms = yes }
+			nd_focus_set = { F = 1 }
+		}
+		if = {
+			limit = { has_variable = nd_proj_icbm_progress }
+			remove_variable = nd_proj_icbm_progress
+		}
+		change_local_variable = { name = nd_mig_icbms add = 1 }
+	}
+	every_country = {
+		limit = {
+			has_technology_researched = advanced_submarine_technology
+			any_scope_state = { is_coastal = yes }
+			NOT = { has_variable = nd_subs_fielded }
+			nd_delivery_given_up = no
+		}
+		set_variable = { name = nd_subs_fielded value = 0 }
+		if = {
+			limit = { nd_focus_is_submarines = yes }
+			nd_focus_set = { F = 1 }
+		}
+		if = {
+			limit = { has_variable = nd_proj_sub_progress }
+			remove_variable = nd_proj_sub_progress
+		}
+		change_local_variable = { name = nd_mig_subs add = 1 }
+	}
+	if = {
+		limit = { local_var:nd_mig_icbms > 0 }
+		set_global_variable = nd_headline_icbms_fielded
+	}
+	if = {
+		limit = { local_var:nd_mig_subs > 0 }
+		set_global_variable = nd_headline_subs_fielded
+	}
+	set_global_variable = { name = nd_mig_icbms value = local_var:nd_mig_icbms }
+	set_global_variable = { name = nd_mig_subs value = local_var:nd_mig_subs }
+	debug_log = "TE_NUCLEAR: type=delivery_migrated; date=[TimeKeeper.GetCurrentDate.GetString]; icbms=[GetGlobalVariable('nd_mig_icbms').GetValue|0]; subs=[GetGlobalVariable('nd_mig_subs').GetValue|0]"
+	remove_global_variable = nd_mig_icbms
+	remove_global_variable = nd_mig_subs
 }
 
 # After an automatic answer to $ENEMY$: a second first strike by the same
@@ -988,23 +1082,6 @@ nd_refresh_domestic_stance = {
 	# Marks that bands may be on our interest groups, so the country pulse can
 	# take them off if the entry deactivates (nd_country_monthly_cleanup).
 	set_variable = { name = nd_stance_applied value = 1 }
-	# The country-level class scores before 2026-09-25, in an old save.
-	if = {
-		limit = { has_variable = nd_stance_warfighting }
-		remove_variable = nd_stance_warfighting
-	}
-	if = {
-		limit = { has_variable = nd_stance_professional }
-		remove_variable = nd_stance_professional
-	}
-	if = {
-		limit = { has_variable = nd_stance_dove }
-		remove_variable = nd_stance_dove
-	}
-	if = {
-		limit = { has_variable = nd_stance_business }
-		remove_variable = nd_stance_business
-	}
 	every_interest_group = {
 		if = {
 			limit = {
@@ -1222,20 +1299,67 @@ nd_refresh_main_rival = {
 	if = {
 		limit = { exists = scope:nd_mr_rival }
 		set_variable = { name = nd_main_rival value = scope:nd_mr_rival }
+		# Its capital, for the panel's text: a country read out of a variable
+		# can render blank (gui_modding_guide.md gotcha #11), a state's
+		# country does not. Cleared when the rival has no capital.
+		if = {
+			limit = { has_variable = nd_main_rival_capital }
+			remove_variable = nd_main_rival_capital
+		}
+		scope:nd_mr_rival = {
+			capital ?= {
+				save_temporary_scope_as = nd_mr_rival_capital
+				scope:nd_mr_self = {
+					set_variable = { name = nd_main_rival_capital value = scope:nd_mr_rival_capital }
+				}
+			}
+		}
 		scope:nd_mr_rival = { save_scope_as = nd_sv_enemy }
 		set_variable = { name = nd_survivors_main value = nd_survivors_vs_saved }
 		set_variable = { name = nd_survivors_main_r2 value = nd_survivors_r2_vs_saved }
 		set_variable = { name = nd_survivors_main_bare_r2 value = nd_survivors_bare_r2_vs_saved }
-		set_variable = { name = nd_survivors_main_ceiling_bare_r2 value = nd_survivors_ceiling_bare_r2_vs_saved }
+		# "ceiling" here is the survivability target since 2026-11-20: the
+		# variable keeps its name so a save's copy is overwritten, not stranded.
+		set_variable = { name = nd_survivors_main_ceiling_bare_r2 value = nd_survivors_target_bare_r2_vs_saved }
 		# The panel's hover: what the rival could destroy, and how much of
 		# ours is within reach.
 		set_variable = { name = nd_main_rival_reach value = nd_counterforce_reach_saved }
 		set_variable = { name = nd_exposed_main value = nd_exposed_warheads_vs_saved }
+		# And what that rests on, as the world sees the rival (2026-11-20
+		# delivery spec §5.4): the warheads it is estimated to hold, its
+		# counterforce ratio with the ratio's two parts, and what its precision
+		# weapons do to our silos (1 when nothing).
+		set_variable = { name = nd_main_rival_warheads value = nd_seen_stockpile_saved }
+		set_variable = { name = nd_main_rival_k value = nd_k_ratio_saved }
+		set_variable = { name = nd_main_rival_pgm value = nd_k_ratio_tech_part_saved }
+		set_variable = { name = nd_main_rival_k_force value = nd_k_ratio_force_part_saved }
+		set_variable = { name = nd_main_rival_accuracy_mult value = nd_accuracy_mult_saved }
+		# The chance the rival would believe a strike of ours was
+		# unauthorized, for the disavowal row (2026-11-20 delivery spec §5.3).
+		set_variable = { name = nd_claim_belief_main value = nd_claim_belief_vs_saved }
+		# What a full strike by the rival would destroy of ours now, and under
+		# each launch authority, at each readiness and with one safeguards
+		# level more: the posture's choices print them (2026-11-20 delivery
+		# spec D10). The posture ops rerun this refresh, so they follow a click.
+		set_variable = { name = nd_lost_main value = nd_lost_vs_saved }
+		set_variable = { name = nd_lost_main_auth_1 value = nd_lost_vs_saved_at_authority_1 }
+		set_variable = { name = nd_lost_main_auth_2 value = nd_lost_vs_saved_at_authority_2 }
+		set_variable = { name = nd_lost_main_auth_3 value = nd_lost_vs_saved_at_authority_3 }
+		set_variable = { name = nd_lost_main_auth_4 value = nd_lost_vs_saved_at_authority_4 }
+		set_variable = { name = nd_lost_main_ready_0 value = nd_lost_vs_saved_at_readiness_0 }
+		set_variable = { name = nd_lost_main_ready_1 value = nd_lost_vs_saved_at_readiness_1 }
+		set_variable = { name = nd_lost_main_ready_2 value = nd_lost_vs_saved_at_readiness_2 }
+		set_variable = { name = nd_lost_main_ready_3 value = nd_lost_vs_saved_at_readiness_3 }
+		set_variable = { name = nd_lost_main_safeguards_up value = nd_lost_vs_saved_at_safeguards_up }
 	}
 	else = {
 		if = {
 			limit = { has_variable = nd_main_rival }
 			remove_variable = nd_main_rival
+		}
+		if = {
+			limit = { has_variable = nd_main_rival_capital }
+			remove_variable = nd_main_rival_capital
 		}
 		if = {
 			limit = { has_variable = nd_survivors_main }
@@ -1260,6 +1384,70 @@ nd_refresh_main_rival = {
 		if = {
 			limit = { has_variable = nd_exposed_main }
 			remove_variable = nd_exposed_main
+		}
+		if = {
+			limit = { has_variable = nd_main_rival_warheads }
+			remove_variable = nd_main_rival_warheads
+		}
+		if = {
+			limit = { has_variable = nd_main_rival_k }
+			remove_variable = nd_main_rival_k
+		}
+		if = {
+			limit = { has_variable = nd_main_rival_pgm }
+			remove_variable = nd_main_rival_pgm
+		}
+		if = {
+			limit = { has_variable = nd_main_rival_k_force }
+			remove_variable = nd_main_rival_k_force
+		}
+		if = {
+			limit = { has_variable = nd_main_rival_accuracy_mult }
+			remove_variable = nd_main_rival_accuracy_mult
+		}
+		if = {
+			limit = { has_variable = nd_claim_belief_main }
+			remove_variable = nd_claim_belief_main
+		}
+		if = {
+			limit = { has_variable = nd_lost_main }
+			remove_variable = nd_lost_main
+		}
+		if = {
+			limit = { has_variable = nd_lost_main_auth_1 }
+			remove_variable = nd_lost_main_auth_1
+		}
+		if = {
+			limit = { has_variable = nd_lost_main_auth_2 }
+			remove_variable = nd_lost_main_auth_2
+		}
+		if = {
+			limit = { has_variable = nd_lost_main_auth_3 }
+			remove_variable = nd_lost_main_auth_3
+		}
+		if = {
+			limit = { has_variable = nd_lost_main_auth_4 }
+			remove_variable = nd_lost_main_auth_4
+		}
+		if = {
+			limit = { has_variable = nd_lost_main_ready_0 }
+			remove_variable = nd_lost_main_ready_0
+		}
+		if = {
+			limit = { has_variable = nd_lost_main_ready_1 }
+			remove_variable = nd_lost_main_ready_1
+		}
+		if = {
+			limit = { has_variable = nd_lost_main_ready_2 }
+			remove_variable = nd_lost_main_ready_2
+		}
+		if = {
+			limit = { has_variable = nd_lost_main_ready_3 }
+			remove_variable = nd_lost_main_ready_3
+		}
+		if = {
+			limit = { has_variable = nd_lost_main_safeguards_up }
+			remove_variable = nd_lost_main_safeguards_up
 		}
 	}
 }
@@ -1641,11 +1829,242 @@ nd_ai_review_posture = {
 	set_variable = { name = nd_safeguards value = var:nd_ai_want_safeguards }
 	set_variable = { name = nd_hardening value = var:nd_ai_want_hardening }
 	nd_apply_posture_modifiers = yes
+	# ---- what funding builds (2026-11-20 delivery spec §4.5) ---------------
+	# After the rival refresh above: the submarine test reads its figures.
+	nd_ai_choose_focus = yes
 	# ---- arsenal size and disarmament (the nuclear taboo) -------------------
 	# Decided by nd_taboo_ai_review_arsenal from the entry's monthly taboo
 	# half, later in this same pulse, which refreshes the programme hold once
 	# after it.
 	set_variable = nd_taboo_ai_arsenal_due
+}
+
+# ----------------------------------------------------------------------------
+# THE AI'S FOCUS (2026-11-20 delivery spec §4.5, owner call 12; phase 2 plan
+# D14). Called from nd_ai_review_posture (every sixth month, and when a crisis
+# opens), never through the Focus rows' buttons, whose handler the AI can't
+# use (nuclear_program_focus_sgui). Nothing before the first device, nor while
+# the programme is lost (standing gone, an aid article lapsed): there is no
+# focus to choose then, and a project in focus waits as it is (spec §4.4).
+# ----------------------------------------------------------------------------
+# The range score: of the countries the AI must be able to strike, weighted
+# (nd_ai_range_must_reach 3, nd_ai_range_should_reach 2, the highest that
+# applies), the share its bombers miss (nd_ai_range_out_of_reach), 0 when
+# there are none. Stored as nd_ai_range_score for the log line.
+#
+# Range is the submarine project when submarines are available and every
+# country that matters out of reach has a coast; else the ICBM project. With
+# no ICBM project open (not researched, or fielded) and an out-of-reach coast,
+# submarines are the only range on offer and count as it. With neither, no
+# step picks range.
+#
+# The order, §4.5's, first that holds:
+#  1. range when the score is 1: no country that matters is in bomber reach;
+#  2. warheads below half the desired stockpile (nd_ai_focus_warheads_first),
+#     but range at war or in a crisis with a country out of reach. Skipped
+#     while an arsenal ceiling would hold a Warheads focus
+#     (nd_taboo_programme_should_be_held's ceiling half): warheads are the one
+#     thing it binds, so an AI under arms control goes on to build delivery
+#     (spec §2) and isn't paused for the rest of the game;
+#  3. range when the score is 0.5 or more (nd_ai_range_score_for_range);
+#  4. missile submarines when available and the AI is vulnerable to its main
+#     rival, or the rival's precision weapons find its silos
+#     (nd_main_rival_accuracy_mult above 1, nd_refresh_main_rival);
+#  5. range when the score is above 0;
+#  6. warheads.
+# When 3 and 4 both hold, a war or crisis with a country out of reach puts
+# range first, else submarines. A score of 0 never builds range: the
+# India-Pakistan rule. The walk's figures are local variables, read in this
+# effect's own limits.
+nd_ai_choose_focus = {
+	if = {
+		limit = {
+			var:nuclear_weapons_program_first_nuke_done ?= 1
+			nuclear_program_has_programme = yes
+		}
+		save_scope_as = nd_rf_self
+		set_local_variable = { name = nd_rf_total value = 0 }
+		set_local_variable = { name = nd_rf_missed value = 0 }
+		set_local_variable = { name = nd_rf_inland value = 0 }
+		set_local_variable = { name = nd_rf_coastal value = 0 }
+		set_local_variable = { name = nd_rf_urgent value = 0 }
+		every_country = {
+			limit = {
+				OR = {
+					nd_ai_range_must_reach = { AI = scope:nd_rf_self }
+					nd_ai_range_should_reach = { AI = scope:nd_rf_self }
+				}
+			}
+			if = {
+				limit = { nd_ai_range_must_reach = { AI = scope:nd_rf_self } }
+				set_local_variable = { name = nd_rf_weight value = nd_ai_range_weight_must }
+			}
+			else = {
+				set_local_variable = { name = nd_rf_weight value = nd_ai_range_weight_should }
+			}
+			change_local_variable = { name = nd_rf_total add = local_var:nd_rf_weight }
+			if = {
+				limit = { nd_ai_range_out_of_reach = { AI = scope:nd_rf_self } }
+				change_local_variable = { name = nd_rf_missed add = local_var:nd_rf_weight }
+				if = {
+					limit = { any_scope_state = { is_coastal = yes } }
+					change_local_variable = { name = nd_rf_coastal add = 1 }
+				}
+				else = {
+					change_local_variable = { name = nd_rf_inland add = 1 }
+				}
+				if = {
+					limit = { nd_ai_range_urgent = { AI = scope:nd_rf_self } }
+					change_local_variable = { name = nd_rf_urgent add = 1 }
+				}
+			}
+		}
+		set_variable = { name = nd_ai_range_score value = 0 }
+		if = {
+			limit = { local_var:nd_rf_total > 0 }
+			set_variable = { name = nd_ai_range_score value = local_var:nd_rf_missed }
+			change_variable = { name = nd_ai_range_score divide = local_var:nd_rf_total }
+		}
+		# What range means here: 3 the submarine project, 2 the ICBM project,
+		# 0 none open.
+		set_local_variable = { name = nd_rf_range value = 0 }
+		if = {
+			limit = {
+				nd_proj_subs_available = yes
+				local_var:nd_rf_coastal > 0
+				OR = {
+					local_var:nd_rf_inland = 0
+					NOT = { nd_proj_icbms_available = yes }
+				}
+			}
+			set_local_variable = { name = nd_rf_range value = 3 }
+		}
+		else_if = {
+			limit = { nd_proj_icbms_available = yes }
+			set_local_variable = { name = nd_rf_range value = 2 }
+		}
+		# Step 4's test, read twice below.
+		set_local_variable = { name = nd_rf_want_subs value = 0 }
+		if = {
+			limit = {
+				nd_proj_subs_available = yes
+				OR = {
+					nd_ai_vulnerable_to_main_rival = yes
+					AND = {
+						has_variable = nd_main_rival_accuracy_mult
+						var:nd_main_rival_accuracy_mult > 1
+					}
+				}
+			}
+			set_local_variable = { name = nd_rf_want_subs value = 1 }
+		}
+		if = {
+			limit = {
+				local_var:nd_rf_range > 0
+				var:nd_ai_range_score >= 1
+			}
+			nd_ai_focus_pick_range = { REASON = range_first }
+		}
+		else_if = {
+			limit = {
+				has_variable = nuclear_weapon_stockpile
+				var:nuclear_weapon_stockpile < nd_ai_focus_warheads_first
+				NOT = {
+					AND = {
+						nd_taboo_has_ceiling = yes
+						nd_stockpile >= nd_taboo_effective_ceiling_value
+					}
+				}
+			}
+			if = {
+				limit = {
+					local_var:nd_rf_range > 0
+					local_var:nd_rf_urgent > 0
+				}
+				nd_ai_focus_pick_range = { REASON = range_urgent }
+			}
+			else = {
+				nd_ai_focus_pick = { F = 1 REASON = warheads_short }
+			}
+		}
+		else_if = {
+			limit = {
+				local_var:nd_rf_range > 0
+				var:nd_ai_range_score >= nd_ai_range_score_for_range
+				local_var:nd_rf_want_subs = 1
+			}
+			if = {
+				limit = { local_var:nd_rf_urgent > 0 }
+				nd_ai_focus_pick_range = { REASON = tie_range }
+			}
+			else = {
+				nd_ai_focus_pick = { F = 3 REASON = tie_submarines }
+			}
+		}
+		else_if = {
+			limit = {
+				local_var:nd_rf_range > 0
+				var:nd_ai_range_score >= nd_ai_range_score_for_range
+			}
+			nd_ai_focus_pick_range = { REASON = range_half }
+		}
+		else_if = {
+			limit = { local_var:nd_rf_want_subs = 1 }
+			nd_ai_focus_pick = { F = 3 REASON = submarines_survival }
+		}
+		else_if = {
+			limit = {
+				local_var:nd_rf_range > 0
+				var:nd_ai_range_score > 0
+			}
+			nd_ai_focus_pick_range = { REASON = range_some }
+		}
+		else = {
+			nd_ai_focus_pick = { F = 1 REASON = warheads }
+		}
+	}
+}
+
+# Range as nd_ai_choose_focus resolved it (local_var:nd_rf_range): the
+# submarine project or the ICBM project.
+nd_ai_focus_pick_range = {
+	if = {
+		limit = { local_var:nd_rf_range = 3 }
+		nd_ai_focus_pick = { F = 3 REASON = $REASON$ }
+	}
+	else = {
+		nd_ai_focus_pick = { F = 2 REASON = $REASON$ }
+	}
+}
+
+# F as nd_focus_set's (1 Warheads, 2 ICBMs, 3 Missile Submarines), set only
+# when it changes: an unchanged focus has nothing to park or load. Through
+# nd_focus_set_core, which leaves the hold to the monthly pass this review
+# runs in (one refresh a block; nd_focus_set_core's comment). Logged on
+# every review, changed or not (observer balancing; nuclear_observer_report.py
+# counts the choices and reasons).
+nd_ai_focus_pick = {
+	set_local_variable = { name = nd_rf_pick value = $F$ }
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					local_var:nd_rf_pick = 1
+					NOT = { nd_focus_is_warheads = yes }
+				}
+				AND = {
+					local_var:nd_rf_pick = 2
+					NOT = { nd_focus_is_icbms = yes }
+				}
+				AND = {
+					local_var:nd_rf_pick = 3
+					NOT = { nd_focus_is_submarines = yes }
+				}
+			}
+		}
+		nd_focus_set_core = { F = $F$ }
+	}
+	debug_log = "TE_NUCLEAR: type=ai_focus; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; score=[THIS.Var('nd_ai_range_score').GetValue|2]; focus=$F$; reason=$REASON$; stockpile=[THIS.Var('nuclear_weapon_stockpile').GetValue|0]; desired=[THIS.ScriptValue('nuclear_ai_desired_stockpile')|0]"
 }
 
 # ----------------------------------------------------------------------------
@@ -2428,7 +2847,7 @@ nd_reach_refresh = {
 	if = {
 		limit = {
 			nd_is_armed = yes
-			NOT = { has_technology_researched = ICBMs }
+			NOT = { nd_fields_icbms = yes }
 		}
 		nd_reach_add_from = yes
 		every_direct_subject = { nd_reach_add_from = yes }
@@ -2472,6 +2891,54 @@ nd_reach_refresh = {
 			else = {
 				debug_log = "TE_SELF_CHECK BROKEN nd_reach count=[THIS.Var('nd_reach_count').GetValue|0] adjacency=[THIS.Var('nd_reach_adjacency_added').GetValue|0] regions=[THIS.Var('nd_reach_region_added').GetValue|0] (a strategically adjacent country is missing from the list; see docs/testing/nuclear-playtest.md)"
 			}
+		}
+	}
+	# The Focus rows' reach, now and with each leg (phase 2 plan D17): the
+	# countries nd_reaches_country reaches now; those plus every country with
+	# a coast, which missile submarines would add; and every country, which
+	# ICBMs would. Counted here, weekly and at fielding (nd_field_leg), since a
+	# hover can't afford the walk each frame. A human's panel only, from the
+	# first device on, when the rows show.
+	if = {
+		limit = {
+			is_ai = no
+			var:nuclear_weapons_program_first_nuke_done ?= 1
+		}
+		set_variable = { name = nd_reach_count_now value = 0 }
+		set_variable = { name = nd_reach_count_with_subs value = 0 }
+		set_variable = { name = nd_reach_count_every value = 0 }
+		every_country = {
+			limit = { NOT = { THIS = scope:nd_reach_self } }
+			save_scope_as = nd_reach_cnt
+			scope:nd_reach_self = {
+				change_variable = { name = nd_reach_count_every add = 1 }
+				if = {
+					limit = { nd_reaches_country = { TARGET = scope:nd_reach_cnt } }
+					change_variable = { name = nd_reach_count_now add = 1 }
+					change_variable = { name = nd_reach_count_with_subs add = 1 }
+				}
+				else_if = {
+					limit = { scope:nd_reach_cnt = { any_scope_state = { is_coastal = yes } } }
+					change_variable = { name = nd_reach_count_with_subs add = 1 }
+				}
+			}
+		}
+	}
+	# Off a country no human holds, so one a player takes later shows that
+	# its reach isn't counted yet (nd_w_focus_grants_*_uncounted) rather than
+	# the figures from the last time a human held it.
+	else = {
+		if = {
+			limit = { has_variable = nd_reach_count_now }
+			remove_variable = nd_reach_count_now
+		}
+		if = {
+			limit = { has_variable = nd_reach_count_with_subs }
+			remove_variable = nd_reach_count_with_subs
+		}
+		if = {
+			limit = { has_variable = nd_reach_count_every }
+			remove_variable = nd_reach_count_every
 		}
 	}
 }
@@ -2654,6 +3121,9 @@ nd_order_salvo = {
 			scope:nd_salvo_victim = {
 				save_scope_as = target_country
 				save_scope_as = nd_strike_victim
+				# The buildings the warheads raze, summed (nd_raze_city_run).
+				set_variable = { name = nd_raze_tally_lost value = 0 }
+				set_variable = { name = nd_raze_tally_nat value = 0 }
 			}
 			if = {
 				limit = { exists = scope:nd_salvo_victim.capital.region }
@@ -2667,7 +3137,7 @@ nd_order_salvo = {
 			set_variable = { name = nd_salvo_fired value = 0 }
 			set_variable = { name = nd_salvo_landed value = 0 }
 			set_variable = { name = nd_salvo_forces_landed value = 0 }
-			set_variable = { name = nd_salvo_capital_landed value = 0 }
+			set_variable = { name = nd_salvo_command_landed value = 0 }
 			set_variable = { name = nd_salvo_destroyed value = 0 }
 			set_variable = { name = nd_salvo_victim_r value = scope:nd_salvo_victim.nd_redundancy }
 			while = {
@@ -2710,8 +3180,11 @@ nd_salvo_warhead = {
 
 # Victim scope: the next warhead's state, saved as scope:target_state (§6.1),
 # always one the attacker reaches (§7, nd_state_in_reach_of). Leadership: the
-# capital, every warhead. Forces: a state with a military target, then the
-# capital's region, then the capital. Cities, and Forces when none of those is
+# capital, then one of the command's other sites (nd_salvo_pick_command_site),
+# by turns, so the capital takes the first warhead and half of the rest
+# (owner, 2026-11-19: not all of a country's leadership sits in its capital).
+# Forces: a state with a military target, then the capital's region, then the
+# capital. Cities, and Forces when none of those is
 # in reach: the states the strike action would choose. An ordered_* position
 # is a literal, so the warheads spread by marks: each pick is the best state
 # not yet aimed at, and once every state is, the best of all.
@@ -2722,7 +3195,16 @@ nd_salvo_pick_target = {
 			exists = capital
 			capital = { nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker } }
 		}
-		capital = { nd_salvo_aim_here = yes }
+		# nd_salvo_lead_alt: the warhead before went to the capital.
+		if = {
+			limit = { scope:nd_salvo_attacker = { has_variable = nd_salvo_lead_alt } }
+			scope:nd_salvo_attacker = { remove_variable = nd_salvo_lead_alt }
+			nd_salvo_pick_command_site = yes
+		}
+		else = {
+			scope:nd_salvo_attacker = { set_variable = nd_salvo_lead_alt }
+			capital = { nd_salvo_aim_here = yes }
+		}
 	}
 	else_if = {
 		limit = {
@@ -2803,6 +3285,78 @@ nd_salvo_pick_target = {
 	}
 }
 
+# Victim scope: a Leadership warhead that doesn't go to the capital goes to
+# the command's other sites, one each, the best first: a state with a military
+# target, where the hardened command posts are, then a state in the capital's
+# region, then any state in reach; once every one is marked, the capital.
+nd_salvo_pick_command_site = {
+	if = {
+		limit = {
+			any_scope_state = {
+				is_capital = no
+				nd_state_has_military_target = yes
+				NOT = { has_variable = nd_salvo_target }
+				nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker }
+			}
+		}
+		ordered_scope_state = {
+			limit = {
+				is_capital = no
+				nd_state_has_military_target = yes
+				NOT = { has_variable = nd_salvo_target }
+				nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker }
+			}
+			order_by = nuclear_strike_target_score
+			position = 0
+			nd_salvo_aim_here = yes
+		}
+	}
+	else_if = {
+		limit = {
+			exists = scope:nd_salvo_cap_region
+			any_scope_state = {
+				is_capital = no
+				region ?= scope:nd_salvo_cap_region
+				NOT = { has_variable = nd_salvo_target }
+				nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker }
+			}
+		}
+		ordered_scope_state = {
+			limit = {
+				is_capital = no
+				region ?= scope:nd_salvo_cap_region
+				NOT = { has_variable = nd_salvo_target }
+				nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker }
+			}
+			order_by = nuclear_strike_target_score
+			position = 0
+			nd_salvo_aim_here = yes
+		}
+	}
+	else_if = {
+		limit = {
+			any_scope_state = {
+				is_capital = no
+				NOT = { has_variable = nd_salvo_target }
+				nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker }
+			}
+		}
+		ordered_scope_state = {
+			limit = {
+				is_capital = no
+				NOT = { has_variable = nd_salvo_target }
+				nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker }
+			}
+			order_by = nuclear_strike_target_score
+			position = 0
+			nd_salvo_aim_here = yes
+		}
+	}
+	else = {
+		capital = { nd_salvo_aim_here = yes }
+	}
+}
+
 # State scope: this is the next warhead's state. Marked for the spread, and
 # the attacker told a warhead was aimed (nd_salvo_warhead).
 nd_salvo_aim_here = {
@@ -2822,8 +3376,19 @@ nd_salvo_hit = {
 	scope:target_state = { save_scope_as = nd_salvo_hit_state }
 	if = {
 		limit = { scope:target_state = { is_capital = yes } }
-		change_variable = { name = nd_salvo_capital_landed add = 1 }
 		scope:target_state = { save_scope_as = nd_salvo_hit_capital }
+	}
+	# On the command, for the decapitation (§6.3): the capital, whatever the
+	# mission, and every state a Leadership warhead hits, the command's other
+	# sites (owner, 2026-11-19).
+	if = {
+		limit = {
+			OR = {
+				scope:target_state = { is_capital = yes }
+				var:nd_salvo_mission = 3
+			}
+		}
+		change_variable = { name = nd_salvo_command_landed add = 1 }
 	}
 	if = {
 		limit = { var:nd_salvo_mission = 2 }
@@ -2871,7 +3436,7 @@ nd_salvo_aftermath = {
 		}
 		if = {
 			limit = {
-				var:nd_salvo_capital_landed > 0
+				var:nd_salvo_command_landed > 0
 				scope:nd_salvo_victim = {
 					nd_authority_central = yes
 					nd_is_armed = yes
@@ -2886,6 +3451,8 @@ nd_salvo_aftermath = {
 			set_variable = { name = nd_salvo_seen_landed value = scope:nd_salvo_attacker.var:nd_salvo_landed days = 30 }
 			set_variable = { name = nd_salvo_seen_destroyed value = scope:nd_salvo_attacker.var:nd_salvo_destroyed days = 30 }
 			set_variable = { name = nd_salvo_seen_mission value = scope:nd_salvo_attacker.var:nd_salvo_mission days = 30 }
+			set_variable = { name = nd_salvo_seen_razed value = var:nd_raze_tally_lost days = 30 }
+			set_variable = { name = nd_salvo_seen_razed_nat value = var:nd_raze_tally_nat days = 30 }
 			trigger_event = { id = nuclear_weapon_events.1 popup = yes }
 			change_relations = {
 				country = scope:nd_salvo_attacker
@@ -3077,6 +3644,11 @@ nd_salvo_decapitation = {
 	save_scope_as = nd_sv_enemy
 	scope:nd_salvo_victim = {
 		set_variable = { name = nd_dc_result value = 0 }
+		# For the log line: the warheads on the command, the redundancy and
+		# the chance they were rolled against.
+		set_variable = { name = nd_dc_landed value = scope:nd_salvo_attacker.var:nd_salvo_command_landed }
+		set_variable = { name = nd_dc_r value = scope:nd_salvo_attacker.var:nd_salvo_victim_r }
+		set_variable = { name = nd_dc_chance value = nd_decapitation_chance_value }
 		random = {
 			chance = nd_decapitation_chance_value
 			set_variable = { name = nd_dc_result value = 1 }
@@ -3091,12 +3663,15 @@ nd_salvo_decapitation = {
 			}
 			set_variable = { name = nd_pending_retaliation value = scope:nd_salvo_attacker }
 			set_variable = { name = nd_restored_from_decapitation days = 60 }
-			debug_log = "TE_NUCLEAR: type=decapitation; result=yes; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+			debug_log = "TE_NUCLEAR: type=decapitation; result=yes; landed=[THIS.Var('nd_dc_landed').GetValue|0]; r=[THIS.Var('nd_dc_r').GetValue|1]; chance=[THIS.Var('nd_dc_chance').GetValue|0]; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 		}
 		else = {
-			debug_log = "TE_NUCLEAR: type=decapitation; result=no; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+			debug_log = "TE_NUCLEAR: type=decapitation; result=no; landed=[THIS.Var('nd_dc_landed').GetValue|0]; r=[THIS.Var('nd_dc_r').GetValue|1]; chance=[THIS.Var('nd_dc_chance').GetValue|0]; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 		}
 		remove_variable = nd_dc_result
+		remove_variable = nd_dc_landed
+		remove_variable = nd_dc_r
+		remove_variable = nd_dc_chance
 	}
 }
 
@@ -3165,12 +3740,24 @@ nd_salvo_clear = {
 			limit = { has_variable = nd_salvo_target }
 			remove_variable = nd_salvo_target
 		}
+		if = {
+			limit = { has_variable = nd_raze_tally_lost }
+			remove_variable = nd_raze_tally_lost
+		}
+		if = {
+			limit = { has_variable = nd_raze_tally_nat }
+			remove_variable = nd_raze_tally_nat
+		}
 	}
 	remove_variable = nd_salvo_count
 	remove_variable = nd_salvo_fired
 	remove_variable = nd_salvo_landed
 	remove_variable = nd_salvo_forces_landed
-	remove_variable = nd_salvo_capital_landed
+	remove_variable = nd_salvo_command_landed
+	if = {
+		limit = { has_variable = nd_salvo_lead_alt }
+		remove_variable = nd_salvo_lead_alt
+	}
 	remove_variable = nd_salvo_destroyed
 	remove_variable = nd_salvo_victim_r
 	if = {
@@ -3191,7 +3778,8 @@ nd_salvo_clear = {
 # picks. With none, nd_plan_enemy goes and the section hides
 # (nd_plan_shown_sgui). Run weekly for a human (nd_weekly_update) and by every
 # planner op. The mission and size are set here too the first time, so the
-# panel's rows always read a setting. Country scope = us.
+# panel's rows always read a setting. Last, each mission's preview
+# (nd_plan_preview). Country scope = us.
 nd_plan_refresh = {
 	save_scope_as = nd_plan_self
 	if = {
@@ -3245,6 +3833,233 @@ nd_plan_refresh = {
 		}
 		remove_variable = nd_plan_seen
 	}
+	nd_plan_preview = yes
+}
+
+# ---- The Strike section's previews (2026-11-20 delivery spec §5.3, plan D14)
+# What a salvo of the size set would do to the planner's enemy under each
+# mission, stored on our country (nd_plan_pv_*), since the panel can't take
+# the enemy from a variable as a scope. Run by nd_plan_refresh (weekly for a
+# human, ops 72/73) and by ops 74-78. Country scope = us.
+# - Expected landed is the order's own: each mission runs the salvo's picker
+#   (nd_salvo_pick_target) once a warhead and sums each picked state's chance
+#   of a warhead getting through (nd_plan_preview_warhead). The marks, the
+#   working figures and the scopes the picker reads are cleared after: a
+#   saved scope outlives the effect that saved it.
+# - Deaths follow the strike each warhead would make, times its chance
+#   (nd_pv_kill_value); a Cities warhead also razes a share of its state's
+#   city buildings (nd_raze_share_base), the lowest and the highest printed.
+# - Forces and Leadership read the enemy through the world's view alone (§5.2,
+#   D8), each figure a range from its worst case for us to a force at its floor
+#   with every safeguard's cut (nd_pv_*, nd_redundancy_believed_floor).
+nd_plan_preview = {
+	if = {
+		limit = { exists = var:nd_plan_enemy }
+		save_scope_as = nd_salvo_attacker
+		save_scope_as = attacking_country
+		save_scope_as = nd_sv_enemy
+		var:nd_plan_enemy = { save_scope_as = nd_pv_enemy }
+		if = {
+			limit = { exists = scope:nd_pv_enemy.capital.region }
+			scope:nd_pv_enemy.capital.region = { save_scope_as = nd_salvo_cap_region }
+		}
+		# The salvo size these figures are for: the hovers print it, not the
+		# live size, which can drop with the stockpile before the next refresh.
+		set_variable = { name = nd_plan_pv_size value = nd_salvo_size_value }
+		# Each mission's pass sets the mission it previews; the panel's is put
+		# back after.
+		set_variable = { name = nd_plan_pv_mission_set value = nd_display_plan_mission }
+		if = {
+			limit = { has_variable = nd_plan_pv_raze_lo }
+			remove_variable = nd_plan_pv_raze_lo
+			remove_variable = nd_plan_pv_raze_hi
+		}
+		nd_plan_preview_mission = { M = 1 }
+		nd_plan_preview_mission = { M = 2 }
+		nd_plan_preview_mission = { M = 3 }
+		set_variable = { name = nd_salvo_mission value = var:nd_plan_pv_mission_set }
+		remove_variable = nd_plan_pv_mission_set
+		# A Cities salvo with no state in reach razes nothing.
+		if = {
+			limit = { NOT = { has_variable = nd_plan_pv_raze_lo } }
+			set_variable = { name = nd_plan_pv_raze_lo value = 0 }
+			set_variable = { name = nd_plan_pv_raze_hi value = 0 }
+		}
+		# Forces: their warheads the salvo destroys, those that fly first and
+		# those it leaves them, against what the world estimates they hold.
+		nd_plan_pv_store = { NAME = nd_plan_pv_warheads VALUE = nd_seen_stockpile }
+		nd_plan_pv_store = { NAME = nd_plan_pv_destroyed_lo VALUE = nd_pv_destroyed_lo }
+		nd_plan_pv_store = { NAME = nd_plan_pv_destroyed_hi VALUE = nd_pv_destroyed_hi }
+		nd_plan_pv_store = { NAME = nd_plan_pv_kept_lo VALUE = nd_pv_kept_lo }
+		nd_plan_pv_store = { NAME = nd_plan_pv_kept_hi VALUE = nd_pv_kept_hi }
+		nd_plan_pv_store = { NAME = nd_plan_pv_flown_lo VALUE = nd_pv_flown_lo }
+		nd_plan_pv_store = { NAME = nd_plan_pv_flown_hi VALUE = nd_pv_flown_hi }
+		set_variable = { name = nd_plan_pv_fires_first value = nd_pv_fires_first }
+		# Our precision weapons against their silos (§3.4): above 1 when they
+		# field ICBMs and we have the penetration.
+		set_variable = { name = nd_plan_pv_accuracy value = scope:nd_pv_enemy.nd_accuracy_mult_saved }
+		# Leadership: their redundancy as the world sees it, at each end, and
+		# the chance against each.
+		nd_plan_pv_store = { NAME = nd_plan_pv_redundancy_lo VALUE = nd_redundancy_believed_floor }
+		nd_plan_pv_store = { NAME = nd_plan_pv_redundancy_hi VALUE = nd_redundancy_believed }
+		set_variable = { name = nd_plan_pv_decap_lo value = nd_pv_decap_chance_lo }
+		set_variable = { name = nd_plan_pv_decap_hi value = nd_pv_decap_chance_hi }
+		set_variable = { name = nd_plan_pv_case value = nd_pv_leadership_case }
+		clear_saved_scope = nd_salvo_attacker
+		clear_saved_scope = attacking_country
+		clear_saved_scope = nd_sv_enemy
+		clear_saved_scope = nd_pv_enemy
+		if = {
+			limit = { exists = scope:nd_salvo_cap_region }
+			clear_saved_scope = nd_salvo_cap_region
+		}
+		if = {
+			limit = { exists = scope:target_state }
+			clear_saved_scope = target_state
+		}
+	}
+	else = {
+		remove_variable = nd_plan_pv_size
+		remove_variable = nd_plan_pv_landed_1
+		remove_variable = nd_plan_pv_landed_2
+		remove_variable = nd_plan_pv_landed_3
+		remove_variable = nd_plan_pv_deaths_1
+		remove_variable = nd_plan_pv_deaths_2
+		remove_variable = nd_plan_pv_deaths_3
+		remove_variable = nd_plan_pv_raze_lo
+		remove_variable = nd_plan_pv_raze_hi
+		remove_variable = nd_plan_pv_warheads
+		remove_variable = nd_plan_pv_destroyed_lo
+		remove_variable = nd_plan_pv_destroyed_hi
+		remove_variable = nd_plan_pv_kept_lo
+		remove_variable = nd_plan_pv_kept_hi
+		remove_variable = nd_plan_pv_flown_lo
+		remove_variable = nd_plan_pv_flown_hi
+		remove_variable = nd_plan_pv_fires_first
+		remove_variable = nd_plan_pv_accuracy
+		remove_variable = nd_plan_pv_redundancy_lo
+		remove_variable = nd_plan_pv_redundancy_hi
+		remove_variable = nd_plan_pv_decap_lo
+		remove_variable = nd_plan_pv_decap_hi
+		remove_variable = nd_plan_pv_case
+	}
+}
+
+# Our country: $NAME$ is the planner's enemy's $VALUE$, to a tenth.
+nd_plan_pv_store = {
+	set_variable = {
+		name = $NAME$
+		value = {
+			value = scope:nd_pv_enemy.$VALUE$
+			multiply = 10
+			round = yes
+			divide = 10
+		}
+	}
+}
+
+# One mission's pass, M = 1 Cities | 2 Forces | 3 Leadership: a warhead at a
+# time for the salvo's size, then the marks and working figures go, so the
+# next mission picks afresh.
+nd_plan_preview_mission = {
+	set_variable = { name = nd_salvo_mission value = $M$ }
+	set_variable = { name = nd_plan_pv_landed_$M$ value = 0 }
+	set_variable = { name = nd_plan_pv_deaths_$M$ value = 0 }
+	while = {
+		count = nd_salvo_size_value
+		nd_plan_preview_warhead = { M = $M$ }
+	}
+	set_variable = {
+		name = nd_plan_pv_deaths_$M$
+		value = {
+			value = var:nd_plan_pv_deaths_$M$
+			round = yes
+		}
+	}
+	scope:nd_pv_enemy = {
+		every_scope_state = {
+			limit = {
+				OR = {
+					has_variable = nd_salvo_target
+					has_variable = nd_pv_left
+				}
+			}
+			if = {
+				limit = { has_variable = nd_salvo_target }
+				remove_variable = nd_salvo_target
+			}
+			if = {
+				limit = { has_variable = nd_pv_left }
+				remove_variable = nd_pv_left
+			}
+			if = {
+				limit = { has_variable = nd_pv_kill }
+				remove_variable = nd_pv_kill
+			}
+			if = {
+				limit = { has_variable = nd_pv_raze }
+				remove_variable = nd_pv_raze
+			}
+		}
+	}
+	if = {
+		limit = { has_variable = nd_salvo_lead_alt }
+		remove_variable = nd_salvo_lead_alt
+	}
+	if = {
+		limit = { has_variable = nd_salvo_aimed }
+		remove_variable = nd_salvo_aimed
+	}
+	if = {
+		limit = { has_variable = nd_plan_pv_p }
+		remove_variable = nd_plan_pv_p
+	}
+}
+
+# One warhead of the preview: aimed by the salvo's picker, as the order would
+# (nd_salvo_warhead), and counted at its chance of landing.
+nd_plan_preview_warhead = {
+	scope:nd_pv_enemy = { nd_salvo_pick_target = yes }
+	if = {
+		limit = { has_variable = nd_salvo_aimed }
+		remove_variable = nd_salvo_aimed
+		set_variable = { name = nd_plan_pv_p value = nd_plan_pv_land_chance }
+		change_variable = { name = nd_plan_pv_landed_$M$ add = var:nd_plan_pv_p }
+		scope:target_state = {
+			if = {
+				limit = { NOT = { has_variable = nd_pv_left } }
+				set_variable = { name = nd_pv_left value = nd_pv_people_value }
+			}
+			set_variable = { name = nd_pv_kill value = nd_pv_kill_value }
+			change_variable = { name = nd_pv_left subtract = var:nd_pv_kill }
+			set_variable = { name = nd_pv_raze value = nd_raze_share_base }
+		}
+		change_variable = { name = nd_plan_pv_deaths_$M$ add = scope:target_state.var:nd_pv_kill }
+		if = {
+			limit = { var:nd_salvo_mission = 1 }
+			if = {
+				limit = { has_variable = nd_plan_pv_raze_lo }
+				set_variable = {
+					name = nd_plan_pv_raze_lo
+					value = {
+						value = var:nd_plan_pv_raze_lo
+						max = scope:target_state.var:nd_pv_raze
+					}
+				}
+				set_variable = {
+					name = nd_plan_pv_raze_hi
+					value = {
+						value = var:nd_plan_pv_raze_hi
+						min = scope:target_state.var:nd_pv_raze
+					}
+				}
+			}
+			else = {
+				set_variable = { name = nd_plan_pv_raze_lo value = scope:target_state.var:nd_pv_raze }
+				set_variable = { name = nd_plan_pv_raze_hi value = scope:target_state.var:nd_pv_raze }
+			}
+		}
+	}
 }
 
 # Ops 72 / 73: the previous or next country we could strike (OP = subtract |
@@ -3261,7 +4076,9 @@ nd_plan_step_enemy = {
 	}
 }
 
-# Ops 74-76: the mission, M = 1 Cities | 2 Forces | 3 Leadership.
+# Ops 74-76: the mission, M = 1 Cities | 2 Forces | 3 Leadership. The
+# previews are refreshed (not the enemy: nd_plan_refresh would recount, and the
+# country under the click could change).
 nd_plan_set_mission = {
 	custom_tooltip = nd_tt_plan_mission_$M$
 	set_variable = nd_plan_click
@@ -3269,13 +4086,14 @@ nd_plan_set_mission = {
 		limit = { has_variable = nd_plan_click }
 		remove_variable = nd_plan_click
 		set_variable = { name = nd_salvo_mission value = $M$ }
+		nd_plan_preview = yes
 	}
 }
 
 # Ops 77 / 78: one warhead fewer or more (OP = subtract | add), kept within
 # the warheads we hold and the salvo's limit (nd_salvo_size_value): stored
 # clamped first, so a setting the stockpile outgrew steps from what an order
-# would fire.
+# would fire. Then the previews, at the new size.
 nd_plan_step_size = {
 	custom_tooltip = nd_tt_plan_size_$OP$
 	set_variable = nd_plan_click
@@ -3285,6 +4103,7 @@ nd_plan_step_size = {
 		set_variable = { name = nd_salvo_size value = nd_salvo_size_value }
 		change_variable = { name = nd_salvo_size $OP$ = 1 }
 		set_variable = { name = nd_salvo_size value = nd_salvo_size_value }
+		nd_plan_preview = yes
 	}
 }
 
@@ -3476,7 +4295,10 @@ nd_accident_site_home = {
 # damage and the politics fall there (nuclear_incident.31); nd_accident_abroad
 # tells .30's texts and options, and nd_system_reads_attack, so. Called only
 # when such a host exists. Country scope = the guest, saved as
-# scope:nd_accident_guest.
+# scope:nd_accident_guest. nd_accident_abroad is set only once a host is
+# saved, and with none the accident happens at home: on 2026-11-07 a French
+# accident was marked abroad with no host saved, though .30's own check had
+# found one, and its host branch read the unset scope (cause not found).
 nd_accident_site_abroad = {
 	random_country = {
 		limit = {
@@ -3489,7 +4311,26 @@ nd_accident_site_abroad = {
 			save_scope_as = nd_accident_state
 		}
 	}
-	set_variable = nd_accident_abroad
+	if = {
+		limit = { exists = scope:nd_accident_host }
+		set_variable = nd_accident_abroad
+	}
+	else = { nd_accident_site_home = yes }
+	# TE_SELF_CHECK: does this random_country find the host .30's any_country,
+	# with the same limit, found? OK once a game; BROKEN each time it doesn't,
+	# since each is an accident moved home with nothing else to show for it.
+	# The 2026-11-07 session's one attempt failed, and no .31 ever fired.
+	if = {
+		limit = { exists = scope:nd_accident_host }
+		if = {
+			limit = { NOT = { has_global_variable = nd_accident_host_pick_self_check_done } }
+			set_global_variable = nd_accident_host_pick_self_check_done
+			debug_log = "TE_SELF_CHECK OK nd_accident_host_pick: [THIS.GetCountry.GetNameNoFormatting]'s accident found the host nuclear_incident.30's check had found"
+		}
+	}
+	else = {
+		debug_log = "TE_SELF_CHECK BROKEN nd_accident_host_pick: [THIS.GetCountry.GetNameNoFormatting]'s accident found no host, though nuclear_incident.30's check had found one; it happened at home"
+	}
 }
 
 # A weapons accident: local contamination in the state the event picked
@@ -3654,6 +4495,24 @@ nd_country_monthly_cleanup = {
 		}
 		else_if = { limit = { NOT = { has_journal_entry = je_nuclear_program } } nd_exchange_weekly_update = yes }
 	}
+	# The rule switched off mid-game, from the screen that changes country
+	# (2026-11-08). The entry deactivates (can_deactivate, the rule first in
+	# possible) and takes its declared modifiers along, but nothing it runs
+	# can take what it put on the country: nuclear_power (prestige, leverage,
+	# the strike actions' potential, about 25 readers) and the taboo's
+	# held-programme marker. A crisis closes as invalid (OUTCOME 9: no notice,
+	# no consequence). The stockpile and doctrine stay, read by nothing while
+	# the rule is off (nd_is_armed reads it).
+	if = {
+		limit = { NOT = { has_game_rule = nuclear_weapons_enabled } }
+		if = { limit = { has_modifier = nuclear_power } remove_modifier = nuclear_power }
+		if = { limit = { has_modifier = nd_taboo_programme_held } remove_modifier = nd_taboo_programme_held }
+		if = {
+			limit = { nd_is_crisis_owner = yes }
+			nd_crisis_save_parties = yes
+			nd_crisis_close = { OUTCOME = 9 }
+		}
+	}
 	if = {
 		limit = {
 			has_variable = nd_stance_applied
@@ -3718,6 +4577,7 @@ nd_country_monthly_cleanup = {
 	# A government losing a revolution while armed is asked what becomes of
 	# its warheads; a custodian's help lapses with the civil war.
 	nd_cw_monthly_check = yes
+	nd_crisis_freeze_monthly = yes
 	# Warheads unaccounted for that someone is paying to find
 	# (nuclear_loose_effects.txt).
 	nd_loose_monthly = yes
@@ -3730,5 +4590,70 @@ nd_country_monthly_cleanup = {
 			nd_in_civil_war = no
 		}
 		remove_variable = nd_cw_withdrawn
+	}
+}
+
+# ---- Self-check: nd_icbm_force_sum (2026-11-20 delivery plan D6) -----------
+# TEMPORARY. Does a script-only numeric field in a modifier declared on
+# je_nuclear_program reach a modifier: read? The ICBM force's attack success
+# and counterforce ratio (nd_icbm_force) rest on it, as do the readiness
+# levels' attack success. Once a game, from the entry's weekly pulse, on a
+# country's third pulse in a row with ICBMs fielded and its Precision-Guided
+# Munitions unchanged, so the force has been declared for 14 days or more,
+# past the declaration's 2 to 5 day lag:
+#   OK      modifier:country_nd_k_ratio_add is the force's figure plus the
+#           technology's 0.5 if held, within 0.01, and the attack success is
+#           at least the force's figure plus Nuclear Weapons' 1 if held
+#   BROKEN  otherwise. Fallback: nd_icbm_force_declared_reads = { always = no }
+#           (nuclear_deterrence_triggers.txt); docs/testing/nuclear-playtest.md.
+# The country fields ICBMs by construction, so the expected counterforce sum
+# is at least 0.5 and a field that reads 0 can't pass. The control is
+# scaling_live's line in the same log: the Strategic Reserve's declared
+# income, a money field, read the same way. Delete this effect, its call in
+# je_nuclear_program and the nd_sc_icbm_* values once it reads OK.
+nd_icbm_force_selfcheck = {
+	if = {
+		limit = { NOT = { has_global_variable = nd_icbm_force_sum_done } }
+		if = {
+			limit = {
+				nd_fields_icbms = yes
+				has_variable = nd_sc_icbm_pgm
+				var:nd_sc_icbm_pgm = nd_sc_icbm_pgm_now
+			}
+			change_variable = { name = nd_sc_icbm_weeks add = 1 }
+		}
+		else = {
+			set_variable = { name = nd_sc_icbm_weeks value = 0 }
+		}
+		set_variable = { name = nd_sc_icbm_pgm value = nd_sc_icbm_pgm_now }
+		if = {
+			limit = { var:nd_sc_icbm_weeks >= 3 }
+			set_global_variable = nd_icbm_force_sum_done
+			set_variable = { name = nd_sc_icbm_k value = modifier:country_nd_k_ratio_add }
+			set_variable = { name = nd_sc_icbm_k_expected value = nd_sc_icbm_k_expected }
+			set_variable = { name = nd_sc_icbm_attack value = modifier:country_nuclear_weapon_attack_success_add }
+			set_variable = { name = nd_sc_icbm_attack_floor value = nd_sc_icbm_attack_floor }
+			if = {
+				limit = {
+					nd_sc_icbm_k_gap > -0.01
+					nd_sc_icbm_k_gap < 0.01
+					nd_sc_icbm_attack_gap > -0.01
+				}
+				debug_log = "TE_SELF_CHECK OK nd_icbm_force_sum: [THIS.GetCountry.GetNameNoFormatting]'s declared ICBM force reaches modifier: reads (counterforce k_add=[THIS.Var('nd_sc_icbm_k').GetValue|2] expected=[THIS.Var('nd_sc_icbm_k_expected').GetValue|2], attack=[THIS.Var('nd_sc_icbm_attack').GetValue|2] at_least=[THIS.Var('nd_sc_icbm_attack_floor').GetValue|2], pgm=[THIS.Var('nd_sc_icbm_pgm').GetValue|0]; control: this log's scaling_live line; date=[TimeKeeper.GetCurrentDate.GetString])"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN nd_icbm_force_sum: [THIS.GetCountry.GetNameNoFormatting]'s declared ICBM force (counterforce k_add=[THIS.Var('nd_sc_icbm_k').GetValue|2] expected=[THIS.Var('nd_sc_icbm_k_expected').GetValue|2], attack=[THIS.Var('nd_sc_icbm_attack').GetValue|2] at_least=[THIS.Var('nd_sc_icbm_attack_floor').GetValue|2], pgm=[THIS.Var('nd_sc_icbm_pgm').GetValue|0]). If this log's scaling_live line reads OK, a script-only field in a declared modifier stays at 0: set nd_icbm_force_declared_reads to always = no (docs/testing/nuclear-playtest.md; date=[TimeKeeper.GetCurrentDate.GetString])"
+			}
+			remove_variable = nd_sc_icbm_k
+			remove_variable = nd_sc_icbm_k_expected
+			remove_variable = nd_sc_icbm_attack
+			remove_variable = nd_sc_icbm_attack_floor
+		}
+	}
+	# Once read, nothing more to count: clear what other countries kept.
+	else_if = {
+		limit = { has_variable = nd_sc_icbm_weeks }
+		remove_variable = nd_sc_icbm_weeks
+		remove_variable = nd_sc_icbm_pgm
 	}
 }

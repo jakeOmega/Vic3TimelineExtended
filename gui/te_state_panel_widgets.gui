@@ -548,7 +548,8 @@ types te_state_panel_widget_types
 	###
 	### Under the picture and details, full width, the monuments that stand beside
 	### this one (te_state_gm_beside, gui/gm_trophy_widgets.gui): a row each, only
-	### while one does. This card is the state's whole: its Grandeur, tourism and
+	### while one does, in the Full, Short and Collapsed views the Trophies on
+	### Display card has. This card is the state's whole: its Grandeur, tourism and
 	### local effect are the building's, at every monument's levels together.
 	###
 	### Columns: 120 picture + 10 + 380 = 510, the tourism card's inner width.
@@ -1230,6 +1231,22 @@ types te_state_panel_widget_types
 			}
 			blockoverride "row_value" {
 				text = "te_state_climate_winter_value"
+			}
+		}
+
+		# Winter sunshine (spec § 13): hours of sun a day around midwinter.
+		te_state_climate_row = {
+			blockoverride "row_visible" {
+				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0')]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "te_state_climate_sun_tt"
+			}
+			blockoverride "row_label" {
+				text = "TE_STATE_CLIMATE_ROW_SUN"
+			}
+			blockoverride "row_value" {
+				text = "te_state_climate_sun_value"
 			}
 		}
 

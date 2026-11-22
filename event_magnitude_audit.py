@@ -13,11 +13,20 @@ like `value = prestige`) is available before adding.
 Suppress an intentional hardcoded value with a same-line comment:
 
     multiplier = 2000  # REVIEWED 2026-05-04: tech-gated; intentionally large
+
+Run standalone it builds its own small ModState (the mod's static modifiers
+over the committed `vanilla_parsed/` snapshot), so it needs no game install and
+runs in CI: `python3 event_magnitude_audit.py --strict` exits 1 on any
+unreviewed flag. Until 2026-11-12 only a server reload ran it, and a flag
+reached `main` unseen by the offline gate (#1593).
 """
 import os
 import re
 from dataclasses import dataclass, field
 from typing import Callable
+
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
 
 
 @dataclass(frozen=True)
@@ -122,21 +131,20 @@ def _is_literal_number(token: str) -> bool:
         return False
 
 
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
-)
-
-
 def parse_reviewed_comment(line: str) -> dict | None:
     """Look for `# REVIEWED YYYY-MM-DD: rationale` on the given line.
 
     Returns {date, rationale} or None. Both date and rationale are required
     so that suppressions stay accountable — drive-by `# REVIEWED` doesn't work.
+
+    `audit_common.parse_reviewed` reads it; this keeps the old name and shape
+    (no `tag`) for `mod_state_server`'s event-balance scan, which returns the
+    dict as it is.
     """
-    m = _REVIEWED_RE.search(line)
-    if not m:
+    rev = parse_reviewed(line)
+    if rev is None:
         return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
+    return {"date": rev["date"], "rationale": rev["rationale"]}
 
 
 def find_event_id_at_line(text: str, line_no: int) -> str | None:
@@ -245,7 +253,7 @@ def scan_named_modifiers(
 
         anchor_line = _offset_to_line(line_starts, anchor_offset)
         line_text = lines[anchor_line - 1] if 0 < anchor_line <= len(lines) else ""
-        exemption = parse_reviewed_comment(line_text)
+        exemption = parse_reviewed(line_text)
 
         for field_name, field_value, meta in fast_fields:
             shown = display_value if mult_m else f"{field_name}={field_value} (in {name})"
@@ -294,7 +302,7 @@ def scan_inline_modifier_types(text: str, file_path: str) -> list[AuditFlag]:
                 value=value,
                 resource=meta.resource,
                 fix_hint=meta.fix_hint,
-                exemption=parse_reviewed_comment(line),
+                exemption=parse_reviewed(line),
             ))
     return flags
 
@@ -322,7 +330,7 @@ def scan_direct_effects(text: str, file_path: str) -> list[AuditFlag]:
                 value=value,
                 resource=meta.resource,
                 fix_hint=meta.fix_hint,
-                exemption=parse_reviewed_comment(line),
+                exemption=parse_reviewed(line),
             ))
     return flags
 
@@ -333,7 +341,7 @@ def scan_direct_effects(text: str, file_path: str) -> list[AuditFlag]:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[AuditFlag] = field(default_factory=list)
     coverage: dict = field(default_factory=dict)
 
@@ -364,16 +372,50 @@ def _make_static_modifier_lookup(ms) -> Callable[[str], dict | None]:
     return lookup
 
 
-def audit(ms, mod_path: str | None = None) -> AuditResult:
+# The one entity type the audit reads: ModState's label for static modifiers
+# and their directory under `common/`.
+ENTITY_TYPES = {"Modifiers": "static_modifiers"}
+
+
+def load_state(mod_path: str, vanilla_data: dict | None = None):
+    """A ModState holding only static modifiers: vanilla from `vanilla_data`
+    (default: the committed `vanilla_parsed/` snapshot), the mod from
+    `mod_path`. Vanilla's are needed because events reuse them by name
+    (`unification_prestige`)."""
+    from mod_state import ModState
+
+    if vanilla_data is None:
+        import json
+
+        import vanilla_parsed
+
+        snap_dir = os.path.join(mod_path, "vanilla_parsed")
+        manifest = vanilla_parsed.read_manifest(snap_dir) or {}
+        vanilla_data = {}
+        for et in ENTITY_TYPES:
+            info = manifest.get("entity_types", {}).get(et)
+            if not info:
+                continue
+            with open(os.path.join(snap_dir, info["file"]), "r", encoding="utf-8") as fh:
+                vanilla_data[et] = vanilla_parsed.decode(json.load(fh))
+    base = {et: "" for et in ENTITY_TYPES}
+    mod = {et: os.path.join(mod_path, "common", d) for et, d in ENTITY_TYPES.items()}
+    return ModState(base, mod, vanilla_data=vanilla_data)
+
+
+def audit(ms=None, mod_path: str | None = None) -> AuditResult:
     """Walk every events/*.txt file, return all magnitude flags.
 
     `mod_path` defaults to whatever `path_constants.mod_path` resolves to so
     tests can pass a tempdir explicitly without touching the global config.
+    `ms` defaults to `load_state(mod_path)`, for a run with no server.
     """
     if mod_path is None:
         # Lazy import so tests that don't need real paths don't import path_constants.
         from path_constants import mod_path as _default
         mod_path = _default
+    if ms is None:
+        ms = load_state(mod_path)
     lookup = _make_static_modifier_lookup(ms)
     events_dir = os.path.join(mod_path, "events")
     if not os.path.isdir(events_dir):
@@ -398,8 +440,8 @@ def audit(ms, mod_path: str | None = None) -> AuditResult:
 
 def render_report(result: AuditResult) -> str:
     """Render a markdown report. Top section is the actionable inbox."""
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
 
     out = [
         "# Event magnitude audit report",
@@ -478,15 +520,24 @@ def regenerate(mod_state) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
     report = render_report(result)
-    out_path = os.path.join(mod_path, "docs", "engine", "event_magnitude_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as f:
-        f.write(report)
-    unrev = sum(1 for f_ in result.flags if not f_.exemption)
-    exemp = sum(1 for f_ in result.flags if f_.exemption)
+    write_text(os.path.join(mod_path, "docs", "engine", "event_magnitude_report.md"), report)
+    unrev = len(result.unreviewed)
+    exemp = len(result.exemptions)
     return {
         "files_audited": result.coverage.get("files_audited", 0),
         "total_flags": len(result.flags),
         "unreviewed": unrev,
         "exempted": exemp,
     }
+
+
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 if any flag lacks a
+    `# REVIEWED ...` exemption."""
+    from path_constants import mod_path
+    return cli_main(lambda args: audit(mod_path=mod_path), lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

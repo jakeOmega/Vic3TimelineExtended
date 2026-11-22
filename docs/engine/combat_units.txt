@@ -32,7 +32,7 @@ Infantry:
 		Robotic soldiers are autonomous combat units that can be deployed in place of human soldiers.
 		Cost at base prices: #N @money!5950 #!
 		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_robotic_soldiers')|0] #!
-		Unlocking Technology: Joint All-Domain Command and Control (JADC2)
+		Unlocking Technology: Autonomous Weapons
 		Stats: max_manpower=600, supply_capacity=150, offense=240, defense=585, morale_loss=1
 	Swarm Bots
 		Swarm bots are small, autonomous robots that can be deployed in large numbers to overwhelm enemy forces.
@@ -196,7 +196,7 @@ Heavy Tanks:
 		DEW tanks are equipped with directed-energy weapons, which can fire powerful beams of energy at enemy targets.
 		Cost at base prices: #N @money!89100 #!
 		Cost at current [Concept('concept_market_price', 'market prices')]: #N @money![GetPlayer.MakeScope.ScriptValue('value_combat_unit_market_cost_DEW_tank')|0] #!
-		Unlocking Technology: Muon-Catalyzed Fusion Reactors
+		Unlocking Technology: Compact Fusion Reactors
 		Stats: max_manpower=1000, supply_capacity=280, offense=1610, defense=1610, morale_loss=4
 Aircraft:
 	Propeller Aircraft

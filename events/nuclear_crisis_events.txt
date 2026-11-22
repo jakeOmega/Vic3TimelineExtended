@@ -72,7 +72,7 @@ nuclear_crisis.1 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: nd_crisis_send_event_in_transit sets the token from the crisis just opened, so it matches when queued; cancels a message whose crisis closed in transit
 		nd_crisis_event_matches = yes
 	}
 
@@ -958,28 +958,38 @@ nuclear_crisis.6 = {
 		}
 	}
 
+	# Keep the forces where they are. Under the stand-down's own test the
+	# label says so; otherwise it is the plain acknowledgement.
 	option = {
-		name = nuclear_crisis.6.a
+		name = {
+			trigger = { nd_crisis_notice_offers_standdown = yes }
+			text = nuclear_crisis.6.a_keep
+		}
+		name = {
+			trigger = { always = yes }
+			text = nuclear_crisis.6.a
+		}
 		nd_log_context = yes
 		debug_log = "TE_NUCLEAR: type=action; action=choice_nuclear_crisis.6.a; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 		default_option = yes
-		# Apply this notice's record: the pending record is this pair's, or
-		# the other party no longer exists (annexed after conceding a war), in
-		# which case no newer record about it can have replaced this one.
-		if = {
-			limit = {
-				has_variable = nd_crisis_pending_outcome
-				OR = {
-					NOT = { exists = scope:nd_outcome_other }
-					NOT = { exists = var:nd_crisis_pending_opponent }
-					var:nd_crisis_pending_opponent ?= scope:nd_outcome_other
-				}
-			}
-			nd_crisis_apply_outcome_side = yes
-		}
-		else = {
-			custom_tooltip = nd_tt_outcome_already_settled
-		}
+		nd_crisis_notice_settle = yes
+		ai_chance = { base = 100 }
+	}
+
+	# Stand down to the readiness we had ordered when the crisis opened. A
+	# hold at the deadline puts the forces on High Alert and a counter-threat
+	# on Heightened, and nothing else takes them off again once the crisis is
+	# over (2026-11-19: a player left on High Alert for two years). The AI
+	# keeps to its own posture review (nd_ai_review_posture, every sixth
+	# month), as before.
+	option = {
+		name = nuclear_crisis.6.b
+		trigger = { nd_crisis_notice_offers_standdown = yes }
+		nd_log_context = yes
+		debug_log = "TE_NUCLEAR: type=action; action=choice_nuclear_crisis.6.b; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+		nd_crisis_notice_settle = yes
+		nd_stand_down_to_pre_crisis = yes
+		ai_chance = { base = 0 }
 	}
 }
 
@@ -1575,13 +1585,22 @@ nuclear_crisis.24 = {
 
 # ---- .25 Hidden: the Suez self-check ---------------------------------------------
 # A day after the first war concession that dropped goals (nd_crisis_concede_war,
-# rework spec §8.1): does the yielding side still hold a goal against the other
-# side? Read a day later, as the probe read its removals (2026-10-28), not in
-# the block that removed them. If the war is already over, nothing is judged
-# and the next concession checks again, so an ended war cannot read as OK. A
-# goal script added stays (the probe), and a goal from another war between the
-# two counts too, so read a BROKEN line against the war it names
-# (docs/testing/nuclear-playtest.md).
+# rework spec §8.1): does the yielder still hold a goal of its own against the
+# other side? Its allies' goals are not its to give up and stay (owner,
+# 2026-11-18). Read a day later, as the probe read its removals (2026-10-28),
+# not in the block that removed them. If the war is already over, nothing is
+# judged and the next concession checks again, so an ended war cannot read as
+# OK. A goal from another war between the two counts too, so read a BROKEN
+# line against the war it names (docs/testing/nuclear-playtest.md). The line
+# counts the wars the two fight on opposite sides (wars=): wars=1 leaves a
+# goal the removal missed. Before 2026-11-18 the removal named only the leader
+# and removed one goal per type, and read BROKEN twice (Great Britain,
+# 2026-11-17; France, in a war on Brazil the United States had joined,
+# 2026-11-18); _v4 re-arms it for the removal that takes the yielder's own
+# goals, leader or not, and repeats.
+# The other country is named from its own scope on the TE_NUCLEAR
+# suez_check_other line just before: the saved scope's name printed blank in
+# the verdict line (2026-11-17), though it is kept there in case it prints.
 nuclear_crisis.25 = {
 	type = country_event
 	hidden = yes
@@ -1594,16 +1613,37 @@ nuclear_crisis.25 = {
 		var:nd_suez_check_other = { save_scope_as = nd_suez_check_other }
 		if = {
 			limit = { has_war_with = scope:nd_suez_check_other }
+			set_variable = { name = nd_suez_chk_wars value = 0 }
+			every_scope_war = {
+				limit = {
+					is_war_participant = scope:nd_suez_check_other
+					OR = {
+						AND = {
+							is_on_defending_side = ROOT
+							NOT = { is_on_defending_side = scope:nd_suez_check_other }
+						}
+						AND = {
+							is_on_defending_side = scope:nd_suez_check_other
+							NOT = { is_on_defending_side = ROOT }
+						}
+					}
+				}
+				ROOT = { change_variable = { name = nd_suez_chk_wars add = 1 } }
+			}
+			scope:nd_suez_check_other = {
+				debug_log = "TE_NUCLEAR: type=suez_check_other; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]"
+			}
 			if = {
-				limit = { nd_side_holds_any_goal_against = { TARGET = scope:nd_suez_check_other } }
-				debug_log = "TE_SELF_CHECK BROKEN nd_suez_goals: the side of [THIS.GetCountry.GetNameNoFormatting] still holds a goal against [SCOPE.sCountry('nd_suez_check_other').GetNameNoFormatting] a day after remove_war_goal"
+				limit = { nd_holds_any_goal_against = { TARGET = scope:nd_suez_check_other } }
+				debug_log = "TE_SELF_CHECK BROKEN nd_suez_goals: [THIS.GetCountry.GetNameNoFormatting] still holds a goal against [SCOPE.sCountry('nd_suez_check_other').GetNameNoFormatting] a day after remove_war_goal; wars=[THIS.Var('nd_suez_chk_wars').GetValue|0]"
 			}
 			else = {
-				debug_log = "TE_SELF_CHECK OK nd_suez_goals: the side of [THIS.GetCountry.GetNameNoFormatting] holds no goal against [SCOPE.sCountry('nd_suez_check_other').GetNameNoFormatting] a day after remove_war_goal"
+				debug_log = "TE_SELF_CHECK OK nd_suez_goals: [THIS.GetCountry.GetNameNoFormatting] holds no goal against [SCOPE.sCountry('nd_suez_check_other').GetNameNoFormatting] a day after remove_war_goal; wars=[THIS.Var('nd_suez_chk_wars').GetValue|0]"
 			}
+			remove_variable = nd_suez_chk_wars
 		}
 		else = {
-			remove_global_variable = nd_suez_self_check_done
+			remove_global_variable = nd_suez_self_check_v4_done
 		}
 		remove_variable = nd_suez_check_other
 	}
@@ -1732,7 +1772,7 @@ nuclear_crisis.100 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): nd_init_posture reaches this only for an armed country (every human caller tests nd_is_armed first); a filter
 		nd_is_armed = yes
 	}
 

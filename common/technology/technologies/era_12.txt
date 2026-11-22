@@ -204,7 +204,7 @@ bioenhanced_soldiers = {
 
 	modifier = {
 		country_weekly_innovation_max_add = 100
-		unit_recovery_rate_add = 0.5
+		unit_recovery_rate_add = 0.25 # 0.5 until 1.15.2 halved vanilla's recovery sources
 		unit_army_offense_mult = 0.1
 		unit_army_defense_mult = 0.1
 		country_institution_ministry_of_war_max_investment_add = 1
@@ -378,6 +378,7 @@ geoengineering = {
 		state_harvest_condition_drought_impact_mult = -0.10
 		state_harvest_condition_drought_duration_mult = -0.10
 		state_harvest_condition_hailstorm_impact_mult = -0.20
+		state_climate_sun_relief_add = 0.3 # Local Climate: cloud seeding thins the winter overcast
 	}
 
 	ai_weight = {

@@ -570,6 +570,9 @@ world_war_events.5 = {
 			remove_global_variable = ww_outbreak_pending
 			# A new world war: forget the outcome of any earlier one
 			ww_clear_stale_outcome_latches = yes
+			# Which of the early unlock's two wars this is, for every entry that
+			# closes after it (ww_mark_entry_resolved).
+			ww_record_war_kind = yes
 			# Mark only the two primary belligerents
 			set_variable = ww_active_phase
 			set_variable = ww_aggressor_side
@@ -745,8 +748,10 @@ world_war_events.11 = {
 				add = 2
 			}
 		}
+		# Its own modifier, not a copy of ww_home_front_strain_modifier, which
+		# the yearly pulse adds only when the entry holds none (#1617).
 		je:je_world_war = { add_modifier = {
-				name = ww_home_front_strain_modifier
+				name = ww_air_raid_relief_modifier
 				days = short_modifier_time
 				is_decaying = yes
 			} }
@@ -891,7 +896,24 @@ world_war_events.20 = {
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
 	title = world_war_events.20.t
-	desc = world_war_events.20.d
+	# The two sides are named only when ww_save_entry_sides found a pair at war
+	# with each other (the same test that shows option a); the trigger's
+	# ww_world_war_is_being_fought does not promise one.
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					exists = scope:ww_main_defender
+					exists = scope:ww_main_aggressor
+				}
+				desc = world_war_events.20.d
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = world_war_events.20.d_no_side
+			}
+		}
+	}
 	flavor = world_war_events.20.f
 
 	duration = 3
@@ -943,6 +965,19 @@ world_war_events.20 = {
 			}
 			modifier = {
 				trigger = { country_rank >= rank_value:great_power }
+				add = 3
+			}
+			# Our entry would join an important land theater of the war to the
+			# other side's (1.15's rule for violating sovereignty).
+			modifier = {
+				trigger = {
+					scope:ww_main_defender = {
+						any_scope_war = {
+							is_war_participant = scope:ww_main_aggressor
+							connects_important_war_theaters = ROOT
+						}
+					}
+				}
 				add = 3
 			}
 		}
@@ -1078,8 +1113,14 @@ world_war_events.30 = {
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_very_negative_modifier DAYS = normal_modifier_time }
 	}
 }
-# Stalemate on the front: the war is old, the front is frozen and our own war
-# goals have stalled (1.14 war reads). Fires from the je_world_war monthly pulse.
+# Stalemate on the front. Fires from the je_world_war monthly pulse. A war is
+# stuck when the engine counts it down to a stalemate (1.15
+# war_is_in_stalemate: both leaders at minimum war support) and we lead our
+# side of it, or by the 1.14 reads it used before: old, many battles, and our
+# own war goals stalled. Only a war leader's war support drives the countdown,
+# so a co-belligerent hears of it only through the 1.14 reads. In the engine's
+# case the options are the real decision: holding the line lifts us off the
+# floor and stops the countdown, armistice talks let it run.
 world_war_events.31 = {
 	type = country_event
 	placement = root
@@ -1102,22 +1143,41 @@ world_war_events.31 = {
 		# ww_years_elapsed counts the whole world war; the per-war duration and
 		# battle count are a second gate on the war that is actually stuck.
 		any_scope_war = {
-			war_duration_months >= 24
-			num_significant_battles >= 10
-			has_stalled_wargoal_held_by = ROOT
+			OR = {
+				AND = {
+					war_is_in_stalemate = yes
+					is_warleader = ROOT
+				}
+				AND = {
+					war_duration_months >= 24
+					num_significant_battles >= 10
+					has_stalled_wargoal_held_by = ROOT
+				}
+			}
 		}
 	}
 
 	cooldown = { days = long_modifier_time }
 
 	immediate = {
+		# The engine's stalemate first: it is the war whose countdown runs.
 		random_scope_war = {
 			limit = {
-				war_duration_months >= 24
-				num_significant_battles >= 10
-				has_stalled_wargoal_held_by = ROOT
+				war_is_in_stalemate = yes
+				is_warleader = ROOT
 			}
 			save_scope_as = ww_stalemate_war
+		}
+		if = {
+			limit = { NOT = { exists = scope:ww_stalemate_war } }
+			random_scope_war = {
+				limit = {
+					war_duration_months >= 24
+					num_significant_battles >= 10
+					has_stalled_wargoal_held_by = ROOT
+				}
+				save_scope_as = ww_stalemate_war
+			}
 		}
 	}
 
@@ -1526,7 +1586,14 @@ world_war_events.102 = {
 	option = {
 		name = world_war_events.102.a
 		default_option = yes
-		ai_chance = { base = 7 }
+		# A country the war wrecked takes the aid (average_devastation is 0-1).
+		ai_chance = {
+			base = 7
+			modifier = {
+				trigger = { average_devastation >= 0.2 }
+				add = 5
+			}
+		}
 		add_modifier = {
 			name = ww_defeated_modifier
 			days = normal_modifier_time
@@ -1556,7 +1623,14 @@ world_war_events.102 = {
 	# Option B: Reject foreign aid - rebuild independently, slower but sovereign
 	option = {
 		name = world_war_events.102.b
-		ai_chance = { base = 3 }
+		# One the war barely touched can afford to refuse it.
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { average_devastation < 0.05 }
+				add = 4
+			}
+		}
 		add_modifier = {
 			name = ww_defeated_modifier
 			days = long_modifier_time
@@ -1824,7 +1898,9 @@ world_war_events.105 = {
 			NOT = { this = root }
 			NOT = { has_war_with = root }
 			ww_fought_alongside = { COUNTRY = root }
-			ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+			# The ideological pairs only, not the early unlock's liberal-against-
+			# autocratic one: those two were "opposed" all through the war.
+			ROOT = { country_has_ideological_opposition = { TARGET = prev } }
 		}
 	}
 
@@ -1837,7 +1913,7 @@ world_war_events.105 = {
 				NOT = { this = root }
 				NOT = { has_war_with = root }
 				ww_fought_alongside = { COUNTRY = root }
-				ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+				ROOT = { country_has_ideological_opposition = { TARGET = prev } }
 			}
 			save_scope_as = new_rival_power
 		}

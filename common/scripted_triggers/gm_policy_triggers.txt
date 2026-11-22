@@ -3,9 +3,7 @@
 # ============================================================================
 # Country scope. gm_policy is a flag (open, ceremonial, culture, education);
 # a country that never chose one reads as the default, Cultural Promotion
-# (STANDARD = yes). An older save's Mothballed or Standard reads as the default
-# too until gm_policy_migrate drops it on the next refresh, so its button is
-# never valid for nothing (policy spec 2026-10-23 § 6).
+# (STANDARD = yes).
 gm_policy_is = {
 	OR = {
 		AND = {
@@ -14,11 +12,7 @@ gm_policy_is = {
 		}
 		AND = {
 			always = $STANDARD$
-			OR = {
-				NOT = { has_variable = gm_policy }
-				var:gm_policy = flag:standard
-				var:gm_policy = flag:mothballed
-			}
+			NOT = { has_variable = gm_policy }
 		}
 	}
 }

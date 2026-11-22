@@ -6,6 +6,36 @@ Reads deposits_config.json for subgood-to-state mappings (Manganese, Chromium,
 Copper, Bauxite, etc.), computes deposit amounts from scores, and writes
 updated state region files to map_data/state_regions/.
 
+The output is a full copy of every vanilla state-region file (vanilla's text
+passes through untouched: provinces, hubs, `min_cold_effect` /
+`max_cold_effect`, ...) with two kinds of edits, deposits from
+deposits_config.json and traits from state_trait_config.json. A `.txt` in
+map_data/state_regions/ that vanilla no longer ships is deleted, and a config
+key that names no vanilla state is an error (exit 1; on a post-load run,
+`hard_fails` in the reload's warnings): after a map change, point the key at
+its successor (docs/guides/vanilla_patch_runbook.md § 4).
+
+How a deposit lands depends on its building's group, read the way the engine
+reads it (vanilla's and the mod's common/buildings and common/building_groups,
+a bare redefinition of a vanilla key losing to the copy whose file sorts
+first, REPLACE/INJECT applied on top). The engine reads a `resource = { }`
+block only for a building whose group chain sets `discoverable_resource = yes`
+(bg_discoverable_mining for the mod's mines, vanilla's oil, rubber and gold
+fields), and `capped_resources` for the rest. The config's figure is the
+state's whole endowment, so where vanilla already places the building in
+that state (since 1.15 that is vanilla's copper mine, capped in 84 states)
+the larger of the two figures is kept, never both added:
+  - discoverable building: one `resource` block, `discovered_amount` =
+    vanilla's cap (available from the start, as vanilla had it) and
+    `undiscovered_amount` = the rest of the config's figure. Vanilla writes the
+    same pair for its gold fields and rubber. Vanilla's capped entry for the
+    building goes, in every state, since a cap means nothing to a
+    discoverable building.
+  - capped building: vanilla's cap is raised to the config's figure; no
+    `resource` block (the engine would not read it).
+An existing vanilla `resource` block for the building keeps the larger
+`undiscovered_amount`.
+
 Usage:
     python resources.py              # Inject deposits + print score table
     python resources.py --table      # Only print deposit score table (no file writes)
@@ -80,6 +110,87 @@ UNDISC_LINE_RE = re.compile(r"(?m)^\s*undiscovered_amount\s*=\s*(\d+)\s*$")
 # [ \t]*, not \s*: the indent must not reach back across a blank line, which a removal would then delete.
 TRAITS_RE = re.compile(r"(?m)^([ \t]*)traits\s*=\s*\{([^}]*)\}")
 SUBSISTENCE_RE = re.compile(r'(?m)^(\s*)subsistence_building\s*=\s*"[^"]*"\s*$')
+CAPPED_RE = re.compile(r"(?m)^([ \t]*)capped_resources\s*=\s*\{([^}]*)\}[ \t]*\n?")
+CAPPED_ENTRY_RE = re.compile(r"(\w+)\s*=\s*(\d+)")
+
+_REPLACE_FORMS = ("REPLACE", "TRY_REPLACE", "REPLACE_OR_CREATE")
+_INJECT_FORMS = ("INJECT", "TRY_INJECT", "INJECT_OR_CREATE")
+
+
+def _field(value, name):
+    """`name`'s value in a parsed entity, ParadoxFileParser's ('=', {...}) form, or None."""
+    body = value[1] if isinstance(value, tuple) and len(value) == 2 else value
+    if not isinstance(body, dict) or name not in body:
+        return None
+    v = body[name]
+    v = v[1] if isinstance(v, tuple) and len(v) == 2 else v
+    return v.strip('"') if isinstance(v, str) else None
+
+
+def effective_fields(vanilla_dir: Path, mod_dir: Path, names: set, fields: tuple) -> dict:
+    """{entity: {field: value}} for `names` as the engine loads one database.
+
+    Files load in name order across vanilla and the mod, a mod file replacing
+    vanilla's of the same name. The first bare definition of a key stands (a
+    later one logs `Duplicated key` and is dropped: vanilla's 1.15 copper mine
+    in 03_mines.txt beats the mod's in 03_zz_te_mines.txt), a REPLACE form
+    replaces it, and an INJECT form sets the fields it names. Only files that
+    mention one of `names` are parsed.
+    """
+    from paradox_file_parser import ParadoxFileParser
+
+    files = {p.name: p for p in sorted(vanilla_dir.glob("*.txt"))}
+    files.update({p.name: p for p in sorted(mod_dir.glob("*.txt"))})
+    out = {}
+    for fname in sorted(files):
+        path = files[fname]
+        text = path.read_text(encoding="utf-8-sig", errors="replace")
+        if not any(n in text for n in names):
+            continue
+        parser = ParadoxFileParser()
+        parser.parse_file(str(path), apply_directives=False)
+        for raw_key, value in parser.data.items():
+            directive, _, key = raw_key.rpartition(":")
+            if key not in names:
+                continue
+            got = {f: _field(value, f) for f in fields}
+            if not directive:
+                out.setdefault(key, got)
+            elif directive in _REPLACE_FORMS:
+                if key in out or directive == "REPLACE_OR_CREATE":
+                    out[key] = got
+            elif directive in _INJECT_FORMS:
+                if key in out or directive == "INJECT_OR_CREATE":
+                    out.setdefault(key, {f: None for f in fields})
+                    out[key].update({f: v for f, v in got.items() if v is not None})
+    return out
+
+
+def discoverable_buildings(game_root: Path, mod_root: Path, buildings: set) -> dict:
+    """{building: True if its group chain sets discoverable_resource = yes, False if not}.
+
+    A building neither vanilla nor the mod defines is left out. The closest
+    group that sets the flag decides; a chain that never sets it is capped.
+    """
+    defs = effective_fields(game_root / "common" / "buildings", mod_root / "common" / "buildings",
+                            set(buildings), ("building_group",))
+    group_dirs = (game_root / "common" / "building_groups", mod_root / "common" / "building_groups")
+    groups = {}
+    wanted = {d["building_group"] for d in defs.values() if d.get("building_group")}
+    while wanted - set(groups):
+        found = effective_fields(*group_dirs, wanted - set(groups), ("parent_group", "discoverable_resource"))
+        for g in wanted - set(groups):
+            groups[g] = found.get(g, {"parent_group": None, "discoverable_resource": None})
+        wanted |= {g["parent_group"] for g in groups.values() if g.get("parent_group")}
+    out = {}
+    for b, d in defs.items():
+        group, seen, flag = d.get("building_group"), set(), None
+        while group and group not in seen and flag is None:
+            seen.add(group)
+            flag = groups.get(group, {}).get("discoverable_resource")
+            group = groups.get(group, {}).get("parent_group")
+        out[b] = flag == "yes"
+    return out
 
 
 def load_mapping(path: Path) -> dict:
@@ -243,13 +354,56 @@ def process_traits_block(block_text: str, state_name: str, trait_mapping: dict) 
     return block_text[: sm.end()] + line + block_text[sm.end():]
 
 
+def rewrite_capped(block_text: str, indent: str, changes: dict) -> str:
+    """Apply {building: cap, or None to remove it} to a state's capped_resources block.
+
+    The block is rebuilt in vanilla's layout only when a change applies; a
+    block left empty goes, and a missing one is added before `naval_exit_id`
+    (or the closing brace).
+    """
+    m = CAPPED_RE.search(block_text)
+    entries = [(b, int(n)) for b, n in CAPPED_ENTRY_RE.findall(m.group(2))] if m else []
+    names = [b for b, _ in entries]
+    for building, cap in changes.items():
+        if building in names:
+            entries[names.index(building)] = (building, cap)
+        elif cap is not None:
+            entries.append((building, cap))
+            names.append(building)
+    entries = [(b, n) for b, n in entries if n is not None]
+    ind = m.group(1) if m else indent
+    block = "".join(
+        [f"{ind}capped_resources = {{\n", *(f"{ind}    {b} = {n}\n" for b, n in entries), f"{ind}}}\n"]
+    ) if entries else ""
+    if m:
+        return block_text[: m.start()] + block + block_text[m.end():]
+    at = compute_insert_position(block_text)
+    return block_text[:at] + block + block_text[at:]
+
+
+def discovered_resource_block(indent: str, building_type: str, undiscovered: int, discovered: int) -> str:
+    """A resource block in vanilla's field order (type, undiscovered_amount, discovered_amount)."""
+    lines = [f"{indent}resource = {{", f'{indent}    type = "{building_type}"']
+    if undiscovered:
+        lines.append(f"{indent}    undiscovered_amount = {undiscovered}")
+    if discovered:
+        lines.append(f"{indent}    discovered_amount = {discovered}")
+    return "\n" + "\n".join(lines) + f"\n{indent}}}\n"
+
+
 def process_state_block(
     block_text: str,
     state_name: str,
     mapping: dict,
     trait_mapping: dict | None = None,
+    discoverable: dict | None = None,
 ) -> str:
-    """Add/merge resource blocks for this state and return modified block text."""
+    """Add/merge resource blocks for this state and return modified block text.
+
+    `discoverable` is discoverable_buildings()'s answer. None treats every
+    configured building as discoverable and leaves vanilla's caps alone (the
+    behavior before 1.15, when no configured building was a vanilla one).
+    """
     # Determine indentation based on other keys; default to 4 spaces
     # Find first non-empty line within block to steal indentation
     indent = "    "
@@ -259,9 +413,9 @@ def process_state_block(
             indent = line[: len(line) - len(line.lstrip())]
             break
 
-    existing = extract_existing_resource_types(block_text)
-    insert_at = compute_insert_position(block_text)
-
+    capped_m = CAPPED_RE.search(block_text)
+    vanilla_caps = {b: int(n) for b, n in CAPPED_ENTRY_RE.findall(capped_m.group(2))} if capped_m else {}
+    wanted = {}
     for subgood, score in mapping.get(state_name, {}).items():
         building_type = SUBGOOD_TO_BGTYPE.get(subgood)
         if not building_type:
@@ -270,15 +424,33 @@ def process_state_block(
                 file=sys.stderr,
             )
             continue
-        amount = int(new_amount(score, subgood))
-        block_text, did = upsert_resource(
-            block_text, insert_at, indent, building_type, amount, existing
-        )
-        if did:
-            # If we inserted a new block before insert_at, future insert_at moves forward
-            # Recompute existing and insertion point to remain safe for subsequent inserts
-            existing = extract_existing_resource_types(block_text)
-            insert_at = compute_insert_position(block_text)
+        wanted[building_type] = max(wanted.get(building_type, 0), int(new_amount(score, subgood)))
+    if discoverable is not None:
+        # A vanilla cap on a building the mod reads as discoverable becomes a discovered deposit.
+        for building_type in vanilla_caps:
+            if discoverable.get(building_type):
+                wanted.setdefault(building_type, 0)
+
+    for building_type, amount in wanted.items():
+        is_discoverable = True if discoverable is None else discoverable.get(building_type, True)
+        cap = vanilla_caps.get(building_type)
+        if not is_discoverable:
+            # Capped building: vanilla's cap rises to the config's figure.
+            if cap is None or amount > cap:
+                block_text = rewrite_capped(block_text, indent, {building_type: amount})
+            continue
+        existing = extract_existing_resource_types(block_text)
+        if cap is not None and discoverable is not None and building_type not in existing:
+            # Vanilla's cap stays known from the start; the rest of the config's figure is to discover.
+            block_text = rewrite_capped(block_text, indent, {building_type: None})
+            at = compute_insert_position(block_text)
+            new_block = discovered_resource_block(indent, building_type, max(amount - cap, 0), cap)
+            block_text = block_text[:at] + new_block + block_text[at:]
+            continue
+        if amount:
+            block_text, _ = upsert_resource(
+                block_text, compute_insert_position(block_text), indent, building_type, amount, existing
+            )
 
     #prefix_re = re.compile(rf"(?m)^(\s*){re.escape(state_name)}(\s*=\s*\{{)")
     #block_text = prefix_re.sub(r"\1REPLACE:" + state_name + r"\2", block_text, count=1)
@@ -295,6 +467,7 @@ def process_file(
     mapping: dict,
     trait_mapping: dict | None = None,
     verbose: bool = True,
+    discoverable: dict | None = None,
 ):
     # utf-8-sig strips any leading BOM so the utf-8-sig write below emits one BOM.
     text = in_path.read_text(encoding="utf-8-sig")
@@ -304,7 +477,7 @@ def process_file(
 
     for name, start, end in iter_state_blocks(text):
         block = text[start : end + 1]
-        updated = process_state_block(block, name, mapping, trait_mapping)
+        updated = process_state_block(block, name, mapping, trait_mapping, discoverable)
         pieces.append(text[last:start])
         pieces.append(updated)
         last = end + 1
@@ -352,24 +525,78 @@ def load_trait_mapping(path: Path) -> dict:
     return out
 
 
-def _run(verbose: bool):
+def state_names(files) -> set:
+    """Every state key the given state-region files define."""
+    names = set()
+    for path in files:
+        names.update(name for name, _, _ in iter_state_blocks(path.read_text(encoding="utf-8-sig")))
+    return names
+
+
+def _run(verbose: bool) -> dict:
     mapping = load_mapping(mod_path / "deposits_config.json")
     trait_mapping = load_trait_mapping(mod_path / "state_trait_config.json")
     input = base_game_path / "game" / "map_data" / "state_regions"
     output = mod_path / "map_data" / "state_regions"
 
     files = list(discover_files(input, recursive=True))
-    if not files and verbose:
-        print(f"[INFO] No .txt files found in {input}", file=sys.stderr)
+    if not files:
+        print(f"[ERROR] No .txt files found in {input}; map_data/state_regions/ left as it was.", file=sys.stderr)
+        return {"files": 0, "hard_fails": 1}
 
+    # A key vanilla no longer has (a renamed, merged or split state) would be skipped without a word.
+    known = state_names(files)
+    unmatched = sorted(
+        {f"deposits_config.json: {k}" for k in mapping if k not in known}
+        | {f"state_trait_config.json: {k}" for k in trait_mapping if k not in known}
+    )
+    for entry in unmatched:
+        print(f"[ERROR] {entry} names no vanilla state region; point it at its successor.", file=sys.stderr)
+
+    capped = set()
+    for path in files:
+        capped.update(b for m in CAPPED_RE.finditer(path.read_text(encoding="utf-8-sig"))
+                      for b, _ in CAPPED_ENTRY_RE.findall(m.group(2)))
+    configured = set(SUBGOOD_TO_BGTYPE.values())
+    discoverable = discoverable_buildings(base_game_path / "game", mod_path, configured | capped)
+    missing = sorted(configured - set(discoverable))
+    for building in missing:
+        print(f"[ERROR] {building} (SUBGOOD_TO_BGTYPE) is defined by neither vanilla nor the mod.", file=sys.stderr)
+    if verbose:
+        for building in sorted(configured & set(discoverable)):
+            if not discoverable[building]:
+                print(f"[INFO] {building} is a capped building: its deposits raise capped_resources.")
+        for building in sorted(capped - configured):
+            if discoverable.get(building):
+                print(f"[INFO] {building}: vanilla's caps become discovered deposits (its group is discoverable).")
+
+    written = set()
     for in_path in files:
         rel = in_path.relative_to(input)
         out_path = output / rel
-        process_file(in_path, out_path, mapping, trait_mapping=trait_mapping, verbose=verbose)
+        process_file(in_path, out_path, mapping, trait_mapping=trait_mapping, verbose=verbose,
+                     discoverable=discoverable)
+        written.add(out_path.resolve())
+
+    # Every .txt here is this script's copy of a vanilla file; one vanilla dropped or renamed is stale.
+    deleted = []
+    for stale in sorted(p for p in discover_files(output, recursive=True) if p.resolve() not in written):
+        stale.unlink()
+        deleted.append(str(stale.relative_to(mod_path)))
+        print(f"[deleted] {stale} (no vanilla file of that name)", file=sys.stderr)
+
+    return {
+        "files": len(files),
+        "deleted": len(deleted),
+        "hard_fails": len(unmatched) + len(missing),
+        "unmatched_config_keys": unmatched,
+        "undefined_buildings": missing,
+        "deleted_files": deleted,
+    }
 
 
-def main():
-    _run(verbose=True)
+def main() -> int:
+    return 1 if _run(verbose=True)["hard_fails"] else 0
 
 
 mod_path = Path(mod_path)
@@ -377,8 +604,12 @@ base_game_path = Path(base_game_path)
 
 
 def regenerate(mod_state=None):
-    """Auto-run entrypoint invoked by mod_state_server post-load."""
-    _run(verbose=False)
+    """Auto-run entrypoint invoked by mod_state_server post-load.
+
+    The summary's `hard_fails` (a config key naming no vanilla state, or a
+    configured building nobody defines) lands in the reload's `warnings`.
+    """
+    return _run(verbose=False)
 
 
 def print_score_table():
@@ -398,4 +629,4 @@ if __name__ == "__main__":
     print_score_table()
     if not args.table:
         print()
-        main()
+        sys.exit(main())

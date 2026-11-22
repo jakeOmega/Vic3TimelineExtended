@@ -27,12 +27,12 @@ space_race_discovery_events.1 = {
 		name = space_race_discovery_events.1.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_europa_life_a }
+		sr_site_choose_sr_discovery_europa_life_a = yes
 	}
 	option = {
 		name = space_race_discovery_events.1.b
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_europa_life_b }
+		sr_site_choose_sr_discovery_europa_life_b = yes
 	}
 }
 
@@ -61,12 +61,12 @@ space_race_discovery_events.2 = {
 		name = space_race_discovery_events.2.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_europa_vents_a }
+		sr_site_choose_sr_discovery_europa_vents_a = yes
 	}
 	option = {
 		name = space_race_discovery_events.2.b
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_europa_vents_b }
+		sr_site_choose_sr_discovery_europa_vents_b = yes
 	}
 }
 
@@ -95,12 +95,12 @@ space_race_discovery_events.3 = {
 		name = space_race_discovery_events.3.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_enceladus_life_a }
+		sr_site_choose_sr_discovery_enceladus_life_a = yes
 	}
 	option = {
 		name = space_race_discovery_events.3.b
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_enceladus_life_b }
+		sr_site_choose_sr_discovery_enceladus_life_b = yes
 	}
 }
 
@@ -129,12 +129,12 @@ space_race_discovery_events.4 = {
 		name = space_race_discovery_events.4.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_titan_chemistry_a }
+		sr_site_choose_sr_discovery_titan_chemistry_a = yes
 	}
 	option = {
 		name = space_race_discovery_events.4.b
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_titan_chemistry_b }
+		sr_site_choose_sr_discovery_titan_chemistry_b = yes
 	}
 }
 
@@ -163,12 +163,12 @@ space_race_discovery_events.5 = {
 		name = space_race_discovery_events.5.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_hellas_fossils_a }
+		sr_site_choose_sr_discovery_hellas_fossils_a = yes
 	}
 	option = {
 		name = space_race_discovery_events.5.b
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_hellas_fossils_b }
+		sr_site_choose_sr_discovery_hellas_fossils_b = yes
 	}
 }
 
@@ -197,12 +197,12 @@ space_race_discovery_events.6 = {
 		name = space_race_discovery_events.6.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_olympus_tubes_a }
+		sr_site_choose_sr_discovery_olympus_tubes_a = yes
 	}
 	option = {
 		name = space_race_discovery_events.6.b
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_olympus_tubes_b }
+		sr_site_choose_sr_discovery_olympus_tubes_b = yes
 	}
 }
 
@@ -231,12 +231,12 @@ space_race_discovery_events.7 = {
 		name = space_race_discovery_events.7.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_utopia_glacier_a }
+		sr_site_choose_sr_discovery_utopia_glacier_a = yes
 	}
 	option = {
 		name = space_race_discovery_events.7.b
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_utopia_glacier_b }
+		sr_site_choose_sr_discovery_utopia_glacier_b = yes
 	}
 }
 
@@ -265,12 +265,12 @@ space_race_discovery_events.8 = {
 		name = space_race_discovery_events.8.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_arcadia_brines_a }
+		sr_site_choose_sr_discovery_arcadia_brines_a = yes
 	}
 	option = {
 		name = space_race_discovery_events.8.b
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_arcadia_brines_b }
+		sr_site_choose_sr_discovery_arcadia_brines_b = yes
 	}
 }
 
@@ -299,12 +299,12 @@ space_race_discovery_events.9 = {
 		name = space_race_discovery_events.9.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_ceres_reservoir_a }
+		sr_site_choose_sr_discovery_ceres_reservoir_a = yes
 	}
 	option = {
 		name = space_race_discovery_events.9.b
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_ceres_reservoir_b }
+		sr_site_choose_sr_discovery_ceres_reservoir_b = yes
 	}
 }
 
@@ -333,12 +333,12 @@ space_race_discovery_events.10 = {
 		name = space_race_discovery_events.10.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_vesta_impactor_a }
+		sr_site_choose_sr_discovery_vesta_impactor_a = yes
 	}
 	option = {
 		name = space_race_discovery_events.10.b
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_vesta_impactor_b }
+		sr_site_choose_sr_discovery_vesta_impactor_b = yes
 	}
 }
 
@@ -367,12 +367,12 @@ space_race_discovery_events.11 = {
 		name = space_race_discovery_events.11.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_psyche_metal_a }
+		sr_site_choose_sr_discovery_psyche_metal_a = yes
 	}
 	option = {
 		name = space_race_discovery_events.11.b
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_psyche_metal_b }
+		sr_site_choose_sr_discovery_psyche_metal_b = yes
 	}
 }
 
@@ -401,12 +401,12 @@ space_race_discovery_events.12 = {
 		name = space_race_discovery_events.12.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_pallas_water_a }
+		sr_site_choose_sr_discovery_pallas_water_a = yes
 	}
 	option = {
 		name = space_race_discovery_events.12.b
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_pallas_water_b }
+		sr_site_choose_sr_discovery_pallas_water_b = yes
 	}
 }
 
@@ -435,12 +435,12 @@ space_race_discovery_events.13 = {
 		name = space_race_discovery_events.13.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_venus_waves_a }
+		sr_site_choose_sr_discovery_venus_waves_a = yes
 	}
 	option = {
 		name = space_race_discovery_events.13.b
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_venus_waves_b }
+		sr_site_choose_sr_discovery_venus_waves_b = yes
 	}
 }
 
@@ -469,12 +469,12 @@ space_race_discovery_events.14 = {
 		name = space_race_discovery_events.14.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_mercury_archive_a }
+		sr_site_choose_sr_discovery_mercury_archive_a = yes
 	}
 	option = {
 		name = space_race_discovery_events.14.b
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_mercury_archive_b }
+		sr_site_choose_sr_discovery_mercury_archive_b = yes
 	}
 }
 
@@ -503,12 +503,12 @@ space_race_discovery_events.15 = {
 		name = space_race_discovery_events.15.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_io_roof_a }
+		sr_site_choose_sr_discovery_io_roof_a = yes
 	}
 	option = {
 		name = space_race_discovery_events.15.b
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_io_roof_b }
+		sr_site_choose_sr_discovery_io_roof_b = yes
 	}
 }
 
@@ -537,12 +537,12 @@ space_race_discovery_events.16 = {
 		name = space_race_discovery_events.16.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_ganymede_layers_a }
+		sr_site_choose_sr_discovery_ganymede_layers_a = yes
 	}
 	option = {
 		name = space_race_discovery_events.16.b
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_ganymede_layers_b }
+		sr_site_choose_sr_discovery_ganymede_layers_b = yes
 	}
 }
 
@@ -571,12 +571,12 @@ space_race_discovery_events.17 = {
 		name = space_race_discovery_events.17.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_callisto_archive_a }
+		sr_site_choose_sr_discovery_callisto_archive_a = yes
 	}
 	option = {
 		name = space_race_discovery_events.17.b
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_callisto_archive_b }
+		sr_site_choose_sr_discovery_callisto_archive_b = yes
 	}
 }
 
@@ -605,12 +605,12 @@ space_race_discovery_events.18 = {
 		name = space_race_discovery_events.18.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_titania_ocean_a }
+		sr_site_choose_sr_discovery_titania_ocean_a = yes
 	}
 	option = {
 		name = space_race_discovery_events.18.b
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_titania_ocean_b }
+		sr_site_choose_sr_discovery_titania_ocean_b = yes
 	}
 }
 
@@ -639,12 +639,12 @@ space_race_discovery_events.19 = {
 		name = space_race_discovery_events.19.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_triton_jet_a }
+		sr_site_choose_sr_discovery_triton_jet_a = yes
 	}
 	option = {
 		name = space_race_discovery_events.19.b
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_triton_jet_b }
+		sr_site_choose_sr_discovery_triton_jet_b = yes
 	}
 }
 
@@ -673,12 +673,12 @@ space_race_discovery_events.20 = {
 		name = space_race_discovery_events.20.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_pluto_antifreeze_a }
+		sr_site_choose_sr_discovery_pluto_antifreeze_a = yes
 	}
 	option = {
 		name = space_race_discovery_events.20.b
 		ai_chance = { base = 5 }
-		sr_grant_colony_modifier = { MODIFIER = sr_discovery_pluto_antifreeze_b }
+		sr_site_choose_sr_discovery_pluto_antifreeze_b = yes
 	}
 }
 

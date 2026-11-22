@@ -65,6 +65,12 @@ principle_internal_trade_4 = {
 		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
 	}
 
+	power_bloc_modifier = {
+		# Members' power grids join as under a Grid Interconnection Agreement
+		# (te_grid_bloc_links_grids reads the principle; this labels it)
+		power_bloc_grid_interconnection_bool = yes
+	}
+
 	institution = institution_ministry_of_commerce
 	institution_modifier = {
 		country_company_throughput_bonus_add = 0.01
@@ -92,6 +98,12 @@ principle_internal_trade_5 = {
 		country_port_connection_cost_mult = -0.25
 		country_enactment_success_chance_law_ministry_of_commerce_add = 0.1
 		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
+	}
+
+	power_bloc_modifier = {
+		# Members' power grids join as under a Grid Interconnection Agreement
+		# (te_grid_bloc_links_grids reads the principle; this labels it)
+		power_bloc_grid_interconnection_bool = yes
 	}
 
 	institution = institution_ministry_of_commerce
@@ -129,6 +141,9 @@ principle_market_unification_4 = {
 	power_bloc_modifier = {
 		# Members are permanently part of the same Customs Union
 		power_bloc_customs_union_bool = yes
+		# Members' power grids join as under a Grid Interconnection Agreement
+		# (te_grid_bloc_links_grids reads the principle; this labels it)
+		power_bloc_grid_interconnection_bool = yes
 	}
 
 	institution = institution_ministry_of_commerce
@@ -165,6 +180,9 @@ principle_market_unification_5 = {
 	power_bloc_modifier = {
 		# Members are permanently part of the same Customs Union
 		power_bloc_customs_union_bool = yes
+		# Members' power grids join as under a Grid Interconnection Agreement
+		# (te_grid_bloc_links_grids reads the principle; this labels it)
+		power_bloc_grid_interconnection_bool = yes
 	}
 
 	institution = institution_ministry_of_commerce
@@ -232,6 +250,9 @@ principle_vassalization_5 = {
 
 		country_allow_enacting_decrees_in_subject_bool = yes
 		country_leader_has_law_enactment_success_mult = 0.1
+		# A subject member passes the laws its overlord enacts in it more
+		# easily (1.15; vanilla's Congress Poland carries it on the subject).
+		country_overlord_law_enactment_success_add = 0.1
 		country_aggressor_diplomatic_play_escalation_weekly_add = 0.5
 	}
 
@@ -600,6 +621,12 @@ principle_external_trade_4 = {
 		state_trade_capacity_mult = 0.25
 		state_trade_advantage_mult = 0.25
 		country_no_advantage_loss_from_lack_of_interest_bool = yes
+		# Graded by the member's interest tier in the trade's region (1.15,
+		# #1458), on top of tier III's flat +25%, which this tier restates.
+		country_interest_tier_engaged_trade_advantage_mult = 0.05
+		country_interest_tier_influential_trade_advantage_mult = 0.1
+		country_interest_tier_pervasive_trade_advantage_mult = 0.15
+		country_interest_tier_hegemonic_trade_advantage_mult = 0.2
 		country_enactment_success_chance_law_ministry_of_commerce_add = 0.1
 		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
 		country_influence_add = 100
@@ -629,6 +656,11 @@ principle_external_trade_5 = {
 		state_trade_capacity_mult = 0.25
 		state_trade_advantage_mult = 0.25
 		country_no_advantage_loss_from_lack_of_interest_bool = yes
+		# Tier IV's interest grades, doubled.
+		country_interest_tier_engaged_trade_advantage_mult = 0.1
+		country_interest_tier_influential_trade_advantage_mult = 0.2
+		country_interest_tier_pervasive_trade_advantage_mult = 0.3
+		country_interest_tier_hegemonic_trade_advantage_mult = 0.4
 		country_max_companies_add = 1
 		country_enactment_success_chance_law_ministry_of_commerce_add = 0.1
 		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
@@ -694,7 +726,7 @@ principle_food_standardization_5 = {
 		state_food_security_add = 0.2
 		country_institution_cost_institution_health_system_mult = -0.1
 		country_institution_cost_institution_ministry_of_consumer_protection_mult = -0.5
-		unit_recovery_rate_add = 0.1
+		unit_recovery_rate_add = 0.05 # 0.1 until 1.15.2 halved vanilla's recovery sources
 	}
 
 	institution = institution_ministry_of_consumer_protection
@@ -1337,7 +1369,11 @@ principle_exploit_members_4 = {
 
 		if = {
 			limit = {
-				current_cohesion_number < 50
+				# The weight is read in the country's scope: reach the bloc for
+				# its cohesion. Vanilla's tiers 2 and 3 read it bare and log
+				# "Wrong scope for trigger: country, expected power_bloc"
+				# (docs/vanilla/vanilla_known_bugs.md).
+				power_bloc ?= { current_cohesion_number < 50 }
 			}
 			multiply = 0.0
 		}
@@ -1379,7 +1415,11 @@ principle_exploit_members_5 = {
 
 		if = {
 			limit = {
-				current_cohesion_number < 50
+				# The weight is read in the country's scope: reach the bloc for
+				# its cohesion. Vanilla's tiers 2 and 3 read it bare and log
+				# "Wrong scope for trigger: country, expected power_bloc"
+				# (docs/vanilla/vanilla_known_bugs.md).
+				power_bloc ?= { current_cohesion_number < 50 }
 			}
 			multiply = 0.0
 		}
@@ -3227,6 +3267,18 @@ principle_global_security_5 = {
 	}
 }
 
+# Healthcare (owner, 2026-11-14): the ladder works through the census (docs/systems/mod_systems/demographics.md,
+# "The Healthcare principles"). Technology decides what medicine can do (the treatment types stay on the
+# technologies); the bloc decides how far and how fast it reaches. Every tier restates the tier below.
+#   member_modifier (flat): the Health System's cost, which under Full offsets the census's health bill;
+#     Spread of Medicine and Malaria Control (census inputs; Malaria Control also eases Local Climate's malaria
+#     part, whatever the rule); Family Policy Upkeep (the measures' money upkeep, te_demog_ms_cost_*); Longevity
+#     Care Price Fall (the late game's market threshold).
+#   institution_modifier (a level of the Health System): Health Care Access under Full, paired with the absorbed
+#     mortality line the health laws carry, which the census drops under Full and the moved lines' pair applies
+#     outside it (te_demog_lines_refresh), so a tier still lowers deaths with the census off.
+# Access and the absorbed line show one decimal for the half-percent steps (owner, 2026-11-14).
+# test_healthcare_principles.py pins every line.
 principle_healthcare_1 = {
 	icon = "gfx/interface/icons/principles_icons/principle_healthcare_1.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
@@ -3247,6 +3299,8 @@ principle_healthcare_1 = {
 	institution = institution_health_system
 	institution_modifier = {
 		unit_recovery_rate_add = 0.05
+		state_health_care_access_add = 0.005
+		state_demog_absorbed_mortality_mult = -0.005
 	}
 
 	ai_weight = {
@@ -3276,13 +3330,17 @@ principle_healthcare_2 = {
 	}
 
 	member_modifier = {
+		# Modifiers from previous level(s)
 		country_institution_cost_institution_health_system_mult = -0.2
+		state_medical_diffusion_add = 0.05
 	}
 
 	institution = institution_health_system
 	institution_modifier = {
+		# Modifiers from previous level(s)
 		unit_recovery_rate_add = 0.05
-		country_loyalism_increases_full_acceptance_mult = 0.02
+		state_health_care_access_add = 0.005
+		state_demog_absorbed_mortality_mult = -0.005
 	}
 
 	ai_weight = {
@@ -3300,15 +3358,19 @@ principle_healthcare_3 = {
 	}
 
 	member_modifier = {
+		# Modifiers from previous level(s)
 		country_institution_cost_institution_health_system_mult = -0.3
+		state_medical_diffusion_add = 0.05
+		state_malaria_control_add = 0.25
+		country_family_policy_upkeep_mult = -0.1
 	}
 
 	institution = institution_health_system
 	institution_modifier = {
 		# Modifiers from previous level(s)
 		unit_recovery_rate_add = 0.05
-		state_birth_rate_mult = 0.02
-		country_loyalism_increases_full_acceptance_mult = 0.02
+		state_health_care_access_add = 0.01
+		state_demog_absorbed_mortality_mult = -0.01
 	}
 
 	ai_weight = {
@@ -3326,7 +3388,11 @@ principle_healthcare_4 = {
 	}
 
 	member_modifier = {
+		# Modifiers from previous level(s)
 		country_institution_cost_institution_health_system_mult = -0.4
+		state_medical_diffusion_add = 0.1
+		state_malaria_control_add = 0.5
+		country_family_policy_upkeep_mult = -0.2
 	}
 
 	power_bloc_modifier = {
@@ -3337,9 +3403,8 @@ principle_healthcare_4 = {
 	institution_modifier = {
 		# Modifiers from previous level(s)
 		unit_recovery_rate_add = 0.05
-		state_birth_rate_mult = 0.02
-		country_loyalism_increases_full_acceptance_mult = 0.02
-		country_authority_add = 50
+		state_health_care_access_add = 0.01
+		state_demog_absorbed_mortality_mult = -0.01
 	}
 
 	ai_weight = {
@@ -3357,7 +3422,12 @@ principle_healthcare_5 = {
 	}
 
 	member_modifier = {
+		# Modifiers from previous level(s)
 		country_institution_cost_institution_health_system_mult = -0.5
+		state_medical_diffusion_add = 0.1
+		state_malaria_control_add = 0.5
+		country_family_policy_upkeep_mult = -0.3
+		country_longevity_care_price_fall_mult = 0.25
 	}
 
 	power_bloc_modifier = {
@@ -3368,10 +3438,8 @@ principle_healthcare_5 = {
 	institution_modifier = {
 		# Modifiers from previous level(s)
 		unit_recovery_rate_add = 0.05
-		state_birth_rate_mult = 0.02
-		country_loyalism_increases_full_acceptance_mult = 0.02
-		country_authority_add = 100
-		country_sol_expectations_target_add = -0.25
+		state_health_care_access_add = 0.015
+		state_demog_absorbed_mortality_mult = -0.015
 	}
 
 	ai_weight = {
@@ -4388,31 +4456,31 @@ principle_multilateral_institutions_5 = {
 # ============================================================================
 # TIERS DO NOT STACK: each restates the full list.
 #
-# THE BLOCKS CARRY MARKERS, NOT MECHANICS. Everything a monetary union does is
-# GDP-scaled, per-member, or conditional on a member having ADOPTED, and none of
-# that can live in a static modifier block. So each tier grants script-only
-# bools, and the monthly monetary update does the work
-# (common/scripted_effects/te_monetary_union_effects.txt):
+# THE BLOCKS CARRY DISPLAY FIELDS, NOT MECHANICS. Everything a monetary union
+# does is GDP-scaled, per-member, or conditional on a member having ADOPTED, and
+# none of that can live in a static modifier block. So each tier carries
+# script-only fields that only print its terms, and the monthly monetary update
+# does the work (common/scripted_effects/te_monetary_union_effects.txt):
 #
 #   1  Monetary cooperation  every member gets half a swap line from the leader
-#                            (-0.5pp premium, +1 peg confidence a month); the
+#                            (risk premium off, peg confidence a month); the
 #                            leader pays the GDP-scaled cost. No anchoring.
 #   2  Common currency       + members MAY ADOPT the leader's currency (kind 2:
-#                            the leader's rate, no spread, its credibility; +5%
-#                            trade advantage). The leader sets the rate with its
-#                            own dial. No peg to break, so an adopter's
-#                            overvaluation raises its premium instead.
+#                            the leader's rate, no spread, its credibility; a
+#                            trade edge and capitalists' credit). The leader
+#                            sets the rate with its own dial. No peg to break,
+#                            so an adopter's overvaluation raises its premium
+#                            instead.
 #   3  Fiscal backstop       + the leader is lender of last resort to every
 #                            adopter, and the overvaluation premium is halved.
 #                            What makes the union safe is what makes it
 #                            expensive to lead.
 #   4  Banking union         + one supervisor and one deposit guarantee over
-#                            every adopter's banks: a quarter off their crash
-#                            chance and their random momentum, one more
-#                            intervention held in reserve, and a crash next
-#                            door travels down the shared currency far less
-#                            readily. The leader pays a supervision cost per
-#                            adopter, as it pays for every other tier.
+#                            every adopter's banks: fewer crashes, a steadier
+#                            cycle, one more intervention point, and a crash
+#                            next door travels down the shared currency far
+#                            less readily. The leader pays a supervision cost
+#                            per adopter, as it pays for every other tier.
 #   5  Reserve currency      + the money is held outside the bloc. The leader's
 #                            reserve-currency standing cut may reach a full
 #                            point instead of half and it mints against the
@@ -4420,10 +4488,61 @@ principle_multilateral_institutions_5 = {
 #                            adopters get a second helping of the trade edge
 #                            and a cut of structural premium.
 #
-# Script reads the TIER through has_principle (te_mon_bloc_union_tier_*), not
-# through the bools: whether a script-only power_bloc bool can be read from
-# country scope is an open engine check (§17 check 16). The bools are what the
-# principle's tooltip prints.
+# Script reads the TIER through has_principle (te_mon_bloc_union_tier_*), never
+# through the fields: whether a script-only power_bloc modifier can be read
+# from country scope is an open engine check (§17 check 16).
+#
+# HOW THE TOOLTIP READS (owner, 2026-11-15). A figure is a numeric field the
+# engine formats, not a number written into a name; a name is a short label;
+# its _desc says when it applies, and the rules sit in two concepts,
+# concept_banking_common_currency and concept_banking_currency_reach. Four
+# bools remain for the rules with no quantity (adoption, the backstop, the
+# banking union, the reserve currency). Each line sits in the block whose
+# heading names who gets it, so its name need not: the currency's terms
+# under Power Bloc, what only members get under non_leader_modifier, the
+# issuer's under leader_modifier. The types are named for what they describe,
+# not for a tier, so each tier restates and raises the same fields:
+#
+#                                1     2     3     4     5    paid by
+#   power_bloc_modifier (Power Bloc)
+#   currency trade_adv.          -  0.05    =     =  0.10    te_mon_union_adopter (+ _reserve)
+#   currency invest. pool        -  0.02 0.02  0.03  0.05    te_mon_union_credit_points_N
+#   currency crash chance        -     -     - -0.25     =    te_mon_union_banking_union
+#   currency volatility          -     -     - -0.25     =    te_mon_union_banking_union
+#   currency interventions       -     -     -     1     =    te_mon_union_banking_union
+#   non_leader_modifier (Non-leader Bloc Members)
+#   swap premium_add        -0.005    =     =     =     =    te_mon_union_cooperation_cut
+#   swap confidence_add          1    =     =     =     =    te_mon_union_cooperation_confidence
+#   adopter overvaluation        -     - -0.5     =     =    te_mon_premium_union_overvaluation
+#   adopter credit standing      -     -     -     - -0.0025  te_mon_union_reserve_standing_cut
+#
+# test_monetary_union_leader.TooltipTest holds every one of them to its source.
+#
+# WHAT THE LEADER GETS (owner, 2026-11-14; §0.14). From tier 2, once a member
+# has adopted, the leader uses its own currency: it carries what its adopters
+# carry (the power_bloc_te_mon_currency_* lines), earns seigniorage and a cut of
+# risk premium in proportion to its currency's reach (how large the economies
+# using its money are beside its own), and its central bank can keep more tools
+# in force at once. That is script too (te_monetary_update_union), for the
+# reason above and because none of it may outlive an adopter, a dial, a
+# regulated banking law or the Full banking rule, which a static block cannot
+# test. Each tier's `leader_modifier` carries three display fields
+# (country_te_mon_issuer_*, banking_cycle_modifier_types.txt) so the engine
+# prints the tier's figures under the principle's Leader heading.
+#
+#                            seigniorage, of own    risk premium   the issuer's
+#                            GDP a year, at full    at full reach  own extra
+#                            reach                                 interventions
+#   2  Common currency       0.5%                   -0.5pp         +1
+#   3  Fiscal backstop       0.75%                  -0.75pp        +2
+#   4  Banking union         1.0%                   -1.0pp         +2 (+1 Power Bloc)
+#   5  Reserve currency      1.5%                   -1.5pp         +3 (+1 Power Bloc)
+#
+# THE AI. Tiers 1 to 3 weigh what the tier is now worth to a leader: the mod's
+# ordinary 100, more where a member's money could adopt (a currency nobody can
+# share earns nothing) and where the leader carries debt for the cut to bite
+# on; never for a leader that cannot issue. Tiers 4 and 5 keep the mod-wide
+# 1000. The same weights serve a player's bloc and an AI's: no is_ai test.
 #
 # TIERS 4 AND 5 ARE GATED TWICE. `has_technology_researched = central_banking`
 # is the group's own gate, carried down from tier 1; the `_pb_principles_bool`
@@ -4449,12 +4568,21 @@ principle_monetary_union_1 = {
 		has_technology_researched = central_banking
 	}
 
-	power_bloc_modifier = {
-		power_bloc_monetary_cooperation_bool = yes
+	# What only members get, under the Non-leader heading (display fields).
+	non_leader_modifier = {
+		country_te_mon_swap_premium_add = -0.005
+		country_te_mon_swap_confidence_add = 1
 	}
 
 	ai_weight = {
 		value = 50
+		# [2026-11-14] The door to a currency that now pays its issuer: the
+		# mod's ordinary weight for a leader that could go on to issue one.
+		# Cooperation alone, for a leader on metal, stays at half.
+		if = {
+			limit = { te_mon_can_lead_union = yes }
+			add = 50
+		}
 		# A leader with no dial of its own has nothing to cooperate WITH.
 		if = {
 			limit = { NOT = { te_mon_has_dial = yes } }
@@ -4481,17 +4609,48 @@ principle_monetary_union_2 = {
 	}
 
 	power_bloc_modifier = {
-		# Modifiers from previous level(s)
-		power_bloc_monetary_cooperation_bool = yes
-
 		power_bloc_shared_currency_bool = yes
+		power_bloc_te_mon_currency_trade_advantage_mult = 0.05
+		power_bloc_te_mon_currency_investment_pool_add = 0.02
 		# Common money binds: §15A.3's "cohesion per adopter", which no script
 		# can apply to a bloc, approximated per member (§0.8 ruling G10).
 		power_bloc_cohesion_per_member_add = 1
 	}
 
+	non_leader_modifier = {
+		# Modifiers from previous level(s)
+		country_te_mon_swap_premium_add = -0.005
+		country_te_mon_swap_confidence_add = 1
+	}
+
+	# What the tier hands the leader, for the tooltip: display fields, paid by
+	# te_monetary_update_union (the header's table).
+	leader_modifier = {
+		country_te_mon_issuer_seigniorage_gdp_add = 0.005
+		country_te_mon_issuer_premium_add = -0.005
+		country_te_mon_issuer_interventions_add = 1
+	}
+
 	ai_weight = {
 		value = 100
+		# [2026-11-14] A currency earns for its issuer once somebody uses it:
+		# worth more to a leader with a member whose money could adopt, and to
+		# one whose debt gives the premium cut something to bite on.
+		if = {
+			limit = {
+				power_bloc ?= {
+					any_power_bloc_member = {
+						is_power_bloc_leader = no
+						te_mon_union_regime_fits = yes
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = { scaled_debt >= 0.25 }
+			add = 50
+		}
 		# The principle is inert unless the leader is fiat / digital with a dial.
 		if = {
 			limit = { NOT = { te_mon_can_lead_union = yes } }
@@ -4519,15 +4678,37 @@ principle_monetary_union_3 = {
 
 	power_bloc_modifier = {
 		# Modifiers from previous level(s)
-		power_bloc_monetary_cooperation_bool = yes
 		power_bloc_shared_currency_bool = yes
+		power_bloc_te_mon_currency_trade_advantage_mult = 0.05
+		power_bloc_te_mon_currency_investment_pool_add = 0.02
 		power_bloc_cohesion_per_member_add = 1
 
 		power_bloc_fiscal_backstop_bool = yes
 	}
 
+	non_leader_modifier = {
+		# Modifiers from previous level(s)
+		country_te_mon_swap_premium_add = -0.005
+		country_te_mon_swap_confidence_add = 1
+
+		country_te_mon_adopter_overvaluation_premium_mult = -0.5
+	}
+
+	leader_modifier = {
+		# Modifiers from previous level(s), raised
+		country_te_mon_issuer_seigniorage_gdp_add = 0.0075
+		country_te_mon_issuer_premium_add = -0.0075
+		country_te_mon_issuer_interventions_add = 2
+	}
+
 	ai_weight = {
 		value = 100
+		# [2026-11-14] Half as much seigniorage and cut again, and a second
+		# intervention, for a leader whose currency is already in use.
+		if = {
+			limit = { te_mon_union_is_issuer = yes }
+			add = 50
+		}
 		if = {
 			limit = { NOT = { te_mon_can_lead_union = yes } }
 			multiply = 0
@@ -4559,13 +4740,31 @@ principle_monetary_union_4 = {
 	}
 
 	power_bloc_modifier = {
-		# Modifiers from previous level(s)
-		power_bloc_monetary_cooperation_bool = yes
+		# Modifiers from previous level(s), raised
 		power_bloc_shared_currency_bool = yes
+		power_bloc_te_mon_currency_trade_advantage_mult = 0.05
+		power_bloc_te_mon_currency_investment_pool_add = 0.03
 		power_bloc_cohesion_per_member_add = 1
 		power_bloc_fiscal_backstop_bool = yes
 
 		power_bloc_banking_union_bool = yes
+		power_bloc_te_mon_currency_crash_chance_mult = -0.25
+		power_bloc_te_mon_currency_volatility_mult = -0.25
+		power_bloc_te_mon_currency_interventions_add = 1
+	}
+
+	non_leader_modifier = {
+		# Modifiers from previous level(s)
+		country_te_mon_swap_premium_add = -0.005
+		country_te_mon_swap_confidence_add = 1
+		country_te_mon_adopter_overvaluation_premium_mult = -0.5
+	}
+
+	leader_modifier = {
+		# Modifiers from previous level(s), raised
+		country_te_mon_issuer_seigniorage_gdp_add = 0.01
+		country_te_mon_issuer_premium_add = -0.01
+		country_te_mon_issuer_interventions_add = 2
 	}
 
 	ai_weight = {
@@ -4603,17 +4802,39 @@ principle_monetary_union_5 = {
 	}
 
 	power_bloc_modifier = {
-		# Modifiers from previous level(s)
-		power_bloc_monetary_cooperation_bool = yes
+		# Modifiers from previous level(s), raised
 		power_bloc_shared_currency_bool = yes
 		power_bloc_fiscal_backstop_bool = yes
 		power_bloc_banking_union_bool = yes
+		power_bloc_te_mon_currency_crash_chance_mult = -0.25
+		power_bloc_te_mon_currency_volatility_mult = -0.25
+		power_bloc_te_mon_currency_interventions_add = 1
 
 		# A currency the world holds is a reason of its own to be in the bloc.
 		# Tiers do not stack, so this REPLACES tier 2-4's +1 rather than adding.
 		power_bloc_cohesion_per_member_add = 2
 
 		power_bloc_reserve_currency_bool = yes
+		# te_mon_union_reserve's second helping of the trade edge, and more
+		# capitalists' credit: the tier's totals.
+		power_bloc_te_mon_currency_trade_advantage_mult = 0.1
+		power_bloc_te_mon_currency_investment_pool_add = 0.05
+	}
+
+	non_leader_modifier = {
+		# Modifiers from previous level(s)
+		country_te_mon_swap_premium_add = -0.005
+		country_te_mon_swap_confidence_add = 1
+		country_te_mon_adopter_overvaluation_premium_mult = -0.5
+
+		country_te_mon_adopter_credit_standing_add = -0.0025
+	}
+
+	leader_modifier = {
+		# Modifiers from previous level(s), raised
+		country_te_mon_issuer_seigniorage_gdp_add = 0.015
+		country_te_mon_issuer_premium_add = -0.015
+		country_te_mon_issuer_interventions_add = 3
 	}
 
 	ai_weight = {

@@ -169,6 +169,45 @@ class TestCauseTags(unittest.TestCase):
         doc = (ROOT / "docs" / "testing" / "demographics-playtest.md").read_text(encoding="utf-8")
         self.assertIn("cause_tags_read", doc)
 
+    def test_the_harvest_conditions_are_tagged_by_intensity(self):
+        """cause_tags_read read BROKEN in Umbria on 2026-11-16 (0.121 on top, no tag): an earthquake's 0.05 is per point
+        of intensity, 2 to 4 in the Alpide belt, so the harvest conditions aren't lines of 5% to leave untagged. Their
+        tags go in the condition's own modifier block, which the engine scales with the line."""
+        self.assertIn("harvest_condition_types", P.DEATH_CAUSE_TAG_DATABASES)
+        self.assertEqual(P.DEATH_CAUSE_TAG_DATABASES["harvest_condition_types"],
+                         ("harvest_condition_types", "modifier"))
+        for name in ("earthquake", "tsunami"):
+            with self.subTest(name=name):
+                self.assertEqual(P.DEATH_CAUSE_OF.get(name), "ext")
+                self.assertNotIn(name, P.DEATH_CAUSE_UNTAGGED)
+        rows = {r[0]: r for r in G.cause_tag_lines(ROOT)["harvest_condition_types"]}
+        self.assertEqual(rows["earthquake"], ("earthquake", "modifier", "ext", 0.05))
+        self.assertEqual(rows["tsunami"], ("tsunami", "modifier", "ext", 0.05))
+
+    def test_the_harvest_self_check_reads_the_new_inject(self):
+        """TE_SELF_CHECK harvest_tags_read: once a game, beside cause_tags_read, the first state whose region has an
+        earthquake or a tsunami; armed by the lines or the tag alone, so a block the INJECT replaced still reads."""
+        text = (ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt").read_text(encoding="utf-8-sig")
+        body = text.split("te_debug_demog_harvest_tags_selfcheck = {", 1)[1].split("\n}\n", 1)[0]
+        self.assertIn("NOT = { has_global_variable = te_demog_selfcheck_harvest_tags_done }", body)
+        self.assertIn("set_global_variable = { name = te_demog_selfcheck_harvest_tags_done value = yes }", body)
+        self.assertIn("te_debug_demog_selfchecks_run = yes", body)
+        self.assertIn("has_harvest_condition = earthquake", body)
+        self.assertIn("has_harvest_condition = tsunami", body)
+        self.assertIn("local_var:te_dg_rate_os >= 0.1", body)
+        self.assertIn("modifier:state_death_cause_ext_mult >= 0.1", body)
+        for t in TAG_TYPES:
+            self.assertIn(f"modifier:{t}", body)
+        self.assertEqual(body.count("TE_SELF_CHECK OK harvest_tags_read"), 1)
+        self.assertEqual(body.count("TE_SELF_CHECK BROKEN harvest_tags_read"), 2)
+        self.assertNotRegex(body, r"[<>]=? \{", "no comparison with an inline value block")
+        rates = (ROOT / "common" / "scripted_effects" / "te_demog_rate_effects.txt").read_text(encoding="utf-8-sig")
+        refresh = rates.split("te_demog_rates_refresh = {", 1)[1]
+        self.assertLess(refresh.index("set_variable = { name = te_dg_os_d value = local_var:te_dg_rate_os }"),
+                        refresh.index("te_debug_demog_harvest_tags_selfcheck = yes"))
+        doc = (ROOT / "docs" / "testing" / "demographics-playtest.md").read_text(encoding="utf-8")
+        self.assertIn("harvest_tags_read", doc)
+
 
 if __name__ == "__main__":
     unittest.main()

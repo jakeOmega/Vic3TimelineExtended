@@ -1,0 +1,9 @@
+﻿# Culture Merges: how fast the pops of a running merge convert in this country.
+# Granted by Public Schools, the Ministry of Culture (per level), Radio, Film and
+# Mass Propaganda, so its tooltip lists every source. Read by te_cm_pop_rate
+# (common/script_values/te_culture_merge_values.txt) as owner.modifier:...
+country_culture_merge_speed_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+}

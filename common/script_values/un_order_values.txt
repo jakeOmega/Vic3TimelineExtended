@@ -210,6 +210,18 @@ un_lean_interests_ceasefire = {
 			}
 			add = -30
 		}
+		# A war with the target that the engine counts down to a stalemate
+		# (1.15 war_is_in_stalemate: both leaders at minimum war support):
+		# whichever side we are on, a ceasefire is a way out of it.
+		if = {
+			limit = {
+				any_scope_war = {
+					war_is_in_stalemate = yes
+					is_war_participant = scope:un_vote_target
+				}
+			}
+			add = 15
+		}
 	}
 	if = { limit = { has_law = law_type:law_humanitarian_regulations } add = 15 }
 	if = { limit = { has_law = law_type:law_total_war } add = -20 }
@@ -255,6 +267,25 @@ un_ceasefire_ai_chance = {
 			}
 		}
 		add = 40
+	}
+	# More so when that war has frozen: the engine counts it down to a
+	# stalemate (1.15 war_is_in_stalemate: both leaders at minimum war support).
+	if = {
+		limit = {
+			save_temporary_scope_as = un_order_proposer
+			any_country = {
+				has_war_with = scope:un_order_proposer
+				un_ceasefire_target_eligible = yes
+				save_temporary_scope_as = un_order_stalemate_enemy
+				scope:un_order_proposer = {
+					any_scope_war = {
+						war_is_in_stalemate = yes
+						is_war_participant = scope:un_order_stalemate_enemy
+					}
+				}
+			}
+		}
+		add = 20
 	}
 	if = {
 		limit = {

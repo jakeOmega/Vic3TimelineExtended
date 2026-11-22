@@ -5,9 +5,10 @@
 ### holds the named roots the entry attaches; see its header for the whole
 ### panel.
 ###
-### te_nuclear_sec_programme   Funding (a stepper), the warhead production
-###                            rate, time to the next warhead and the first
-###                            device (open, only while the country has a
+### te_nuclear_sec_programme   Funding (a stepper), the production rate and
+###                            the time to finish, both of what the focus
+###                            builds, the first device and, from it on, the
+###                            Focus rows (open, only while the country has a
 ###                            programme). Mounted in container_3, just
 ###                            above the entry's native bar.
 ### te_nuclear_sec_taboo       The nuclear taboo (open, from the world's first
@@ -34,7 +35,12 @@
 ### the programme. Both of their actions exist below, through
 ### nuclear_program_funding_sgui:
 ###     op 0   step funding down      op 1   step funding up
-### The op table is repeated in common/scripted_guis/nuclear_program_sguis.txt
+### and the programme's focus, through nuclear_program_focus_sgui (2026-11-20
+### delivery spec §4.1), from the Focus rows:
+###     op 1   focus Warheads
+###     op 2   focus ICBMs
+###     op 3   focus Missile Submarines
+### The op tables are repeated in common/scripted_guis/nuclear_program_sguis.txt
 ### and in docs/systems/journal_entry_systems.md; keep all three in step.
 ###
 ### The Nuclear Powers leaderboard is a datamodel over nd_powers, a list of
@@ -184,9 +190,13 @@ types nuclear_program_widget_types
 	### datacontext is the country's capital and the country is State.GetOwner
 	### (gui_modding_guide.md gotcha #15). Vanilla's flag gives the name on
 	### hover and opens the country on a click; then the name, the arsenal as
-	### the world estimates it, and the public doctrine as the overview's icon
-	### (its name on hover). Our own row is tinted.
-	### 6 + 40 + 6 + 240 + 6 + 110 + 6 + 28 = 442.
+	### the world estimates it, the public doctrine and launch authority as the
+	### overview's icons (each name on hover), and the delivery legs it fields
+	### (2026-11-20 delivery spec D19): the technologies' own icons in three
+	### fixed slots, bombers always (every listed country is believed armed),
+	### ICBMs and missile submarines while it fields them. Our own row is tinted.
+	### 6 + 30 + 4 + 220 + 4 + 80 + 4 + 24 + 4 + 24 + 4 + 72 = 476: the name
+	### holds about 25 characters, "United States of America" whole.
 	type nuclear_program_power_row = widget {
 		size = { 480 30 }
 
@@ -199,12 +209,12 @@ types nuclear_program_widget_types
 		flowcontainer = {
 			direction = horizontal
 			ignoreinvisible = yes
-			spacing = 6
+			spacing = 4
 			position = { 6 0 }
 			parentanchor = vcenter
 
 			widget = {
-				size = { 40 28 }
+				size = { 30 28 }
 				parentanchor = vcenter
 
 				tiny_flag = {
@@ -213,7 +223,7 @@ types nuclear_program_widget_types
 				}
 			}
 			textbox = {
-				size = { 240 28 }
+				size = { 220 28 }
 				align = left|nobaseline
 				using = te_nuclear_fontsize_row
 				parentanchor = vcenter
@@ -221,7 +231,7 @@ types nuclear_program_widget_types
 				text = "[State.GetOwner.GetNameNoFormatting]"
 			}
 			textbox = {
-				size = { 110 28 }
+				size = { 80 28 }
 				align = right|nobaseline
 				using = te_nuclear_fontsize_row
 				parentanchor = vcenter
@@ -229,52 +239,132 @@ types nuclear_program_widget_types
 				text = "nuclear_program_power_estimate"
 			}
 			widget = {
-				size = { 28 28 }
+				size = { 24 28 }
 				parentanchor = vcenter
 				tooltip = "nuclear_program_power_doctrine_tt"
 
 				icon = {
-					size = { 28 28 }
+					size = { 24 24 }
+					parentanchor = vcenter
 					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)1' )]"
 					texture = "gfx/interface/icons/nuclear_icons/doctrine_nfu.dds"
 				}
 				icon = {
-					size = { 28 28 }
+					size = { 24 24 }
+					parentanchor = vcenter
 					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)2' )]"
 					texture = "gfx/interface/icons/nuclear_icons/doctrine_existential.dds"
 				}
 				icon = {
-					size = { 28 28 }
+					size = { 24 24 }
+					parentanchor = vcenter
 					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)3' )]"
 					texture = "gfx/interface/icons/nuclear_icons/doctrine_flexible.dds"
 				}
 				icon = {
-					size = { 28 28 }
+					size = { 24 24 }
+					parentanchor = vcenter
 					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)4' )]"
 					texture = "gfx/interface/icons/nuclear_icons/doctrine_compellence.dds"
 				}
 				icon = {
-					size = { 28 28 }
+					size = { 24 24 }
+					parentanchor = vcenter
 					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)5' )]"
 					texture = "gfx/interface/icons/nuclear_icons/doctrine_warfighting.dds"
+				}
+			}
+			### Launch authority, public as the doctrine is (owner, rework spec
+			### §14.2; 2026-11-20 delivery spec D17), with the overview's icons.
+			widget = {
+				size = { 24 28 }
+				parentanchor = vcenter
+				tooltip = "nuclear_program_power_authority_tt"
+
+				icon = {
+					size = { 24 24 }
+					parentanchor = vcenter
+					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)1' )]"
+					texture = "gfx/interface/icons/nuclear_icons/authority_central.dds"
+				}
+				icon = {
+					size = { 24 24 }
+					parentanchor = vcenter
+					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)2' )]"
+					texture = "gfx/interface/icons/nuclear_icons/authority_delegation.dds"
+				}
+				icon = {
+					size = { 24 24 }
+					parentanchor = vcenter
+					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)3' )]"
+					texture = "gfx/interface/icons/nuclear_icons/authority_on_warning.dds"
+				}
+				icon = {
+					size = { 24 24 }
+					parentanchor = vcenter
+					visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)4' )]"
+					texture = "gfx/interface/icons/nuclear_icons/authority_automatic.dds"
+				}
+			}
+			### The delivery legs, public (2026-11-20 delivery spec §2, D18, D19):
+			### three fixed 24 slots, so a leg keeps its place whether or not the
+			### others show. Each icon has its own hover.
+			flowcontainer = {
+				direction = horizontal
+				spacing = 0
+				parentanchor = vcenter
+
+				widget = {
+					size = { 24 24 }
+					tooltip = "nuclear_program_power_leg_bombers_tt"
+					icon = {
+						size = { 24 24 }
+						texture = "gfx/interface/icons/invention_icons/bombing_aircraft.dds"
+					}
+				}
+				widget = {
+					size = { 24 24 }
+
+					widget = {
+						size = { 24 24 }
+						visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_leg_icbms'), '(CFixedPoint)1' )]"
+						tooltip = "nuclear_program_power_leg_icbms_tt"
+						icon = {
+							size = { 24 24 }
+							texture = "gfx/interface/icons/invention_icons/ICBMs.dds"
+						}
+					}
+				}
+				widget = {
+					size = { 24 24 }
+
+					widget = {
+						size = { 24 24 }
+						visible = "[EqualTo_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('nd_display_leg_subs'), '(CFixedPoint)1' )]"
+						tooltip = "nuclear_program_power_leg_subs_tt"
+						icon = {
+							size = { 24 24 }
+							texture = "gfx/interface/icons/invention_icons/advanced_submarine_technology.dds"
+						}
+					}
 				}
 			}
 		}
 	}
 
-	### The leaderboard's column heads, in its rows' cells (6 + 286 + 6 + 110
-	### + 6 = 414), held at the rows' 480: the panel is centred, and with no
+	### The leaderboard's column heads, in its rows' cells (6 + 254 + 4 + 80
+	### + 6 = 350), held at the rows' 480: the panel is centred, and with no
 	### rows yet (up to a month after the first warhead) it was centred at the
 	### head's width and ran past the section once they came (gotcha #43).
 	type nuclear_program_powers_head = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
-		spacing = 6
+		spacing = 4
 		margin = { 6 1 }
 		minimumsize = { 480 -1 }
 
 		textbox = {
-			size = { 286 24 }
+			size = { 254 24 }
 			align = left|nobaseline
 			using = te_nuclear_fontsize_row
 			parentanchor = vcenter
@@ -283,7 +373,7 @@ types nuclear_program_widget_types
 			text = "je_nuclear_program_widget_powers_head_country"
 		}
 		textbox = {
-			size = { 110 24 }
+			size = { 80 24 }
 			align = right|nobaseline
 			using = te_nuclear_fontsize_row
 			parentanchor = vcenter
@@ -371,6 +461,79 @@ types nuclear_program_widget_types
 					}
 					blockoverride "row_value" {
 						text = "je_nuclear_program_widget_first_device_value"
+					}
+				}
+
+				### The Focus rows (2026-11-20 delivery spec §4.1, §5.4; phase 2
+				### plan D11), from the first device on: what funding builds.
+				### Each row's name gives that focus's progress and its months to
+				### finish at current funding (nd_focus_row_N); the focus in force
+				### is tinted. The button says why a row is greyed (its
+				### requirements, one line each) and what choosing it does.
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 1
+					visible = "[GetScriptedGui('nuclear_program_first_device_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+
+					nd_subheader = {
+						blockoverride "subheader_text" {
+							text = "je_nuclear_program_widget_focus_sub"
+						}
+					}
+					nd_choice_row = {
+						datacontext = "[GetScriptedGui('nuclear_program_focus_sgui')]"
+						blockoverride "row_current" {
+							visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_prog_focus'), '(CFixedPoint)1' )]"
+						}
+						blockoverride "choice_name" {
+							text = "nd_w_focus_row_1"
+							tooltip = "nd_w_focus_1_tt"
+						}
+						blockoverride "button_text" {
+							text = "nd_w_btn_choose"
+						}
+						blockoverride "button_binding" {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+						}
+					}
+					nd_choice_row = {
+						datacontext = "[GetScriptedGui('nuclear_program_focus_sgui')]"
+						blockoverride "row_current" {
+							visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_prog_focus'), '(CFixedPoint)2' )]"
+						}
+						blockoverride "choice_name" {
+							text = "nd_w_focus_row_2"
+							tooltip = "nd_w_focus_2_tt"
+						}
+						blockoverride "button_text" {
+							text = "nd_w_btn_choose"
+						}
+						blockoverride "button_binding" {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+						}
+					}
+					nd_choice_row = {
+						datacontext = "[GetScriptedGui('nuclear_program_focus_sgui')]"
+						blockoverride "row_current" {
+							visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_prog_focus'), '(CFixedPoint)3' )]"
+						}
+						blockoverride "choice_name" {
+							text = "nd_w_focus_row_3"
+							tooltip = "nd_w_focus_3_tt"
+						}
+						blockoverride "button_text" {
+							text = "nd_w_btn_choose"
+						}
+						blockoverride "button_binding" {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
+						}
 					}
 				}
 			}
@@ -619,6 +782,21 @@ types nuclear_program_widget_types
 				}
 				blockoverride "row_tooltip" {
 					tooltip = "je_nuclear_program_widget_delivery_tt"
+				}
+			}
+
+			### Our counterforce ratio and its parts (2026-11-20 delivery spec
+			### §5.3): what each of our warheads that lands on their forces
+			### destroys.
+			nuclear_program_row = {
+				blockoverride "row_label" {
+					text = "je_nuclear_program_widget_counterforce_label"
+				}
+				blockoverride "row_value" {
+					text = "je_nuclear_program_widget_counterforce_value"
+				}
+				blockoverride "row_tooltip" {
+					tooltip = "je_nuclear_program_widget_counterforce_tt"
 				}
 			}
 

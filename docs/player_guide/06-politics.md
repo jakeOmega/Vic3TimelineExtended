@@ -1,6 +1,6 @@
 # Government, laws and characters
 
-The mod adds 165 laws, most of them in 39 new law groups, with the institutions,
+The mod adds 166 laws, most of them in 39 new law groups, with the institutions,
 amendments, government types, ideologies, parties and movements that go with
 them. The new law groups exist from 1836: every country starts with a law in
 each, and most of the others unlock with technology. The chapter also covers
@@ -214,7 +214,7 @@ War.
 | Humanitarian Regulations | Nuclear Weapons | Allies and treaties. +6 diplomatic reputation, the most of any law, so other countries sign treaties with you and back your plays more readily; 10% more of your wounded survive; half the devastation. | Kill rate −0.05; no strategic nuclear strikes |
 | Limited War | Intercontinental Ballistic Missiles | Small wars for limited aims. You gain 25% less infamy, plays escalate 30% slower, battles move war support 20% less either way, the anti-war movement is weaker and devastation falls by three quarters. | War goals in plays you start cost twice the maneuvers, so each play takes fewer states; kill rate −0.05; no nuclear strikes at all |
 
-Patriotic, Fascist and Vanguardist groups and Jingoist leaders favor Total War,
+Patriotic, Militarist, Fascist and Vanguardist groups and Jingoist leaders favor Total War,
 Traditionalists and Theocrats Traditional Rules of War, Reformers and the Pious
 War Crimes Forbidden, Liberals, Market Liberals and Humanitarians both
 Humanitarian Regulations and Limited War, and Pacifists and Anarchists Limited
@@ -255,28 +255,30 @@ or subjugate it, and back to another law once it is at peace.
 | Monetary Policy | Commodity Money, Gold Standard, Fiat Money, Digital Currency, Decentralized Cryptocurrency | Currency regime. |
 | Financial Regulation | Unregulated Banking, Free & Mutual Banking, Universal Banking (Light Prudence), Prudential / Narrow Banking, Directed Credit & Development Banks, State-Owned Banking, Central Bank Independence | How banks are supervised. |
 | Resource Transition | Unrestricted Extraction, Fossil Expansion Moratorium, Managed Fossil Phaseout | Whether coal mines, oil rigs and power plants may be built, and retiring them ([The fossil transition](15-climate.md#the-fossil-transition)). |
-| Automation Policy | Unrestricted Automation, Robot Tax, Human Labor Quotas, Automation Dividend | Robots and AI doing the work of people, from Humanoid Robotics on ([Automation policy](#automation-policy)). |
+| Automation Policy | Unrestricted Automation, Robot Tax, Human Labor Quotas, Automation Dividend | Robots and AI doing the work of people, from Industrial Robotics on ([Automation policy](#automation-policy)). |
 
 Monetary Policy and Financial Regulation are explained in [Banking and monetary
 policy](04-banking.md).
 
 ### Automation policy
 
-Every country starts with Unrestricted Automation. Humanoid Robotics unlocks the
-other three laws. Two of them scale with your automated share: the part of your
+Every country starts with Unrestricted Automation. Industrial Robotics (era 8)
+unlocks the other three laws, along with Robotic Assembly Lines, the first of
+the methods they act on. Two of them scale with your automated share: the part of your
 building levels that run a robotic or AI-managed production method, out of all
 levels of the buildings that have one. The tooltips of the law group and of
 those two laws show the share, counted once a month. The methods are factory
 automation from robotic assembly up and the AI-managed tier, AI-managed power
 plants and networks, Fully Automated Content Creation, Automated Labs, the
-automated Deep-Sea Mine, robot and drone services in Urban Centers, and
-self-driving trains, highways and harvesters.
+automated Deep-Sea Mine, robot and drone services in Urban Centers, Autonomous
+Logistics in Trade Centers, self-driving trains, highways and harvesters, and
+Robotic Barns on ranches. Each one says Robotic or AI-Managed in its tooltip.
 
 | Law | At an automated share of 100% | You pay |
 |---|---|---|
 | Unrestricted Automation | Nothing changes. | Displaced Workers when the share rises (below) |
 | Robot Tax | +10% taxes collected from pops | Capitalists invest 5% less of their profits; Displaced Workers at half size |
-| Human Labor Quotas | The Trade Unions gain 10% political strength and movements create 10% fewer radicals; the methods above can't be used, so the buildings on them keep their workers; no Neo-Luddite Terrorism | The output those methods add |
+| Human Labor Quotas | The Trade Unions gain 10% political strength and movements create 10% fewer radicals; the methods above can't be used, so the buildings on them keep their workers; the event The New Luddites can't fire | The output those methods add |
 | Automation Dividend | +2 standard of living for the lower strata and +1 for the middle strata, half as much again with Universal Basic Income or Post-Scarcity Economy | Capitalists invest 10% less of their profits |
 
 At a share of 40%, Robot Tax gives +4% taxes. Its effect and the Dividend's
@@ -299,36 +301,37 @@ shows last year's rise.
 |---|---|---|---|
 | Universal Basic Income | Welfare | Universal Basic Income | Large welfare payments and higher living-standard expectations. |
 | Post-Scarcity Economy | Welfare | Post-Scarcity Economy | The largest welfare payments; expectations rise further. |
-| Protected Class | Rights of Women | Sexual Revolution | Gender discrimination is illegal: more workers and political participation, lower birth rate. |
+| Protected Class | Rights of Women | Sexual Revolution | Gender discrimination is illegal: more workers and political participation, lower birth rate. As under Women's Suffrage, women can lead interest groups and command armies. |
 | Neocameralism | Governance Principles | Marketing Research, with Laissez-Faire or Interventionism | The state run as a corporation: industrialists and wealth hold power. |
 | Collective Governance | Governance Principles | Political Agitation | No single head of state; see [Collective Governance](#collective-governance). |
 | Contracted Administration | Bureaucracy | Supply Chain Management, with Laissez-Faire or Interventionism | Private firms run the administration under contract; see [Who staffs the administration](#who-staffs-the-administration). |
-| Communal Administration | Bureaucracy | Council Republic, Anarchy or Collective Governance | Local assemblies and recallable delegates run the administration; see [Who staffs the administration](#who-staffs-the-administration). |
 | Automated Bureaucracy | Bureaucracy | AI Agents | Machines run the administration under your government: institutions cost less bureaucracy and change size faster. |
 | Algorithmic Governance | Distribution of Power | Artificial General Intelligence | Machines hold supreme authority and run the administration too. |
 | Liquid Democracy | Distribution of Power | Liquid Democracy | Everyone votes on every question or lends the vote to someone they trust, and can take it back at any time. A voting law with Universal Suffrage's franchise: ideological incoherence costs less legitimacy and enacted laws stir their opponents less, but laws pass more slowly. With Neural Lace you also gain the Continuous Vote, checked once a year: more enactment success and fewer radicals from movements, but the groups in government draw less support. Women's Suffrage, Elected Bureaucrats, the campaign finance laws and the Tradition of Free Elections work with it as with any voting law; First Past the Post and the voting-age amendments don't. |
 | Neocolonialism | Colonization | Decolonization | See [Colonial empires and decolonization](12-decolonization.md). |
 | Private Policing | Policing | Computer Networks, with Laissez-Faire or Interventionism | Licensed private firms do most police work for whoever pays them; see [Who polices](#who-polices). |
-| Private Military Contractors | Army Model | Guided Missiles | Deniable force: 20% less infamy, faster infamy decay, fewer radicals from conquest and +0.25 war support a month, but casualties cost 30% more war support; −10% authority, 30% less conscription, 20% dearer military goods and −10% unit offense and defense. |
+| Private Military Contractors | Army Model | Guided Missiles | Deniable force: 20% less infamy, faster infamy decay, fewer radicals from conquest and +0.25 war support a month, but casualties cost 30% more war support; −10% authority, 30% less conscription, 20% costlier military goods and −10% unit offense and defense. |
 | Littoral Defense | Navy Model | Naval Convoy Defense | A coastal navy: ships operate only half as far from port, torpedo craft build faster and capital ships slower, navy goods cost 20% less, and Naval Fortifications get two more levels and resist invasion better. Coastal countries only. |
 | Auxiliary Fleet | Navy Model | Predictive Logistics | A navy that carries the army: ships reach 50% farther from port, naval invasions go better, ships carry 30% more marines and supply ships 30% more supply, supply ships build faster and capital ships slower. Coastal countries only. |
 | Legislated Tax Code | Taxation | The Legislated Tax Code game rule (off by default), except under its Light Tax Code setting | Replaces the five taxation laws: every rate is set by a tax bill. See [Taxation (experimental)](05-tax-code.md). |
 
 ### Who staffs the administration
 
-Three of the mod's Bureaucracy laws decide who does the work of your
-Government Administrations: Contracted Administration, Communal Administration
-and Automated Bureaucracy. Each replaces Professional Bureaucrats there with its
-own staffing, and each moves political strength away from bureaucrats.
+Three Bureaucracy laws decide who does the work of your Government
+Administrations in ways this chapter covers: the mod's Contracted
+Administration and Automated Bureaucracy, and the base game's Communal
+Administration, which the mod opens to more governments. Each replaces
+Professional Bureaucrats there with its own staffing, and each moves political
+strength away from bureaucrats.
 Automated Bureaucracy is covered further in [Machine administration and machine
 rule](#machine-administration-and-machine-rule).
 
 | | Contracted Administration | Communal Administration | Automated Bureaucracy |
 |---|---|---|---|
-| Available | From Supply Chain Management, with Laissez-Faire or Interventionism; not in a Council Republic | In a Council Republic, under Anarchy or under Collective Governance; not with Technocracy or Elder Council | From AI Agents |
-| Staffing | Service Contractors: 250 bureaucrats a level, buying 20 Services | Recallable Delegates: 250 bureaucrats and 250 clerks a level | Automated Casework: 150 bureaucrats and 100 engineers a level, buying Digital Access and Software |
-| You gain | Institutions change size 25% faster; capitalists +15% political strength | Movements 5% less radical; Trade Unions and Rural Folk +10% political strength | Institutions cost 20% less bureaucracy and change size 50% faster; engineers +15% political strength; Legislative Override Capacity +1 |
-| You pay | Institutions cost 5% more bureaucracy | Tax capacity −10%; Legislative Override Capacity −2 | Nothing beyond the staffing |
+| Available | From Supply Chain Management, with Laissez-Faire or Interventionism; not in a Council Republic | From Socialism; in a Council Republic or with Factory Councils (the base game's rule), or under Anarchy or Collective Governance; not with Technocracy, Elder Council or Algorithmic Governance | From AI Agents |
+| Staffing | Service Contractors: 250 bureaucrats a level, buying 20 Services | Communal Representatives: 250 bureaucrats and 500 clerks a level | Automated Casework: 150 bureaucrats and 100 engineers a level, buying Digital Access and Software |
+| You gain | Institutions change size 25% faster; capitalists +15% political strength | Bureaucracy cost from population −25%; government wages −15% | Institutions cost 20% less bureaucracy and change size 50% faster; engineers +15% political strength; Legislative Override Capacity +1 |
+| You pay | Institutions cost 5% more bureaucracy | Legislative Override Capacity −2 | Nothing beyond the staffing |
 | Bureaucrats | −25% political strength | −25% political strength | −25% political strength |
 
 Contracted Administration suits a market economy with high wages. Each
@@ -340,14 +343,14 @@ shrinks or disappears, and a shortage cuts the building's output. Contracts also
 budget, so every institution costs more bureaucracy.
 
 Communal Administration is the bureaucracy for a council republic or an
-anarchist society. Delegates from local assemblies do half the work as clerks,
-who earn less than bureaucrats and qualify at lower literacy, so Government
-Administrations cost less and fill faster. The assemblies meet local needs
-first, which costs tax capacity, and delegates answer to the assembly that can
-recall them, which costs override capacity. If a Council Republic or a country
-under Collective Governance loses Elected Bureaucrats because its Distribution
-of Power stops being a voting law, it moves to Communal Administration rather
-than Appointed Bureaucrats. A country that can no longer hold Contracted
+anarchist society. Two thirds of its representatives work as clerks, who earn
+less than bureaucrats and qualify at lower literacy, so Government
+Administrations fill faster, though each level employs 750 people rather than
+500. Representatives answer to the assemblies that elected them, which costs
+override capacity. If a Council Republic or a country under Collective
+Governance loses Elected Bureaucrats because its Distribution of Power stops
+being a voting law, it moves to Communal Administration rather than Appointed
+Bureaucrats, once it has Socialism. A country that can no longer hold Contracted
 Administration moves to Appointed Bureaucrats (Automated Bureaucracy under
 Algorithmic Governance), and one that can no longer hold
 Communal Administration moves to Elected Bureaucrats where it can, otherwise to
@@ -400,7 +403,7 @@ switching between them keeps its investment.
 |---|---|
 | Available | From Computer Networks, with Laissez-Faire or Interventionism; not in a Council Republic |
 | Ministry of Public Safety | Costs 40% less bureaucracy, as base-game Private Schools and Private Health Insurance do for theirs |
-| Each Ministry level | Upper strata +0.25 standard of living, middle strata +0.1; the Ministry's turmoil reduction is halved, to 5% a level; under the Full Demographics rule deaths from accidents and violence −2% a level, against a Dedicated Police Force's 3%; Services output −1% |
+| Each Ministry level | Upper strata +0.25 standard of living, middle strata +0.15; the Ministry's turmoil reduction is halved, to 5% a level; under the Full Demographics rule deaths from accidents and violence −2% a level, against a Dedicated Police Force's 3%; Services output −1% |
 | Also | Trade Unions −10% political strength; Labor Movement pop attraction +15%; Legislative Override Capacity −0.5 |
 
 Protection follows money. In every state the wealthy districts are guarded
@@ -507,9 +510,10 @@ state:
 | Above 50, in farming states | Land Hunger | Migration +30%, Land Reform movement support +25%, radicals +10%, scaled by the state's share of Peasants and Farmers |
 | Below 50 | Dispersed Property | Political strength from wealth −10%; qualifications +10%; education access +10%; radicals −10% |
 
-Every effect reaches its full size at 80 or 20, so a state at 65 gets half of
-it, and keeps growing beyond: the concentrated side to two thirds more at 100,
-the dispersed side to a third more at 0. A state's modifiers update with its yearly count, so a war loss or an event
+Every effect starts at 50 and grows with the distance from it, so a state at 65
+gets half the table's figure. Past 80 or 20 it keeps growing: the concentrated
+side to two thirds more at 100, the dispersed side, more slowly, to a third more
+at 0. A state's modifiers update with its yearly count, so a war loss or an event
 that moves the scores reaches them within a year. A capital full of Financial
 Districts can carry Concentrated Property while your country as a whole sits
 below 50. The Inheritance group's description shows the score and where it is
@@ -626,7 +630,7 @@ included, from 5 levels to 9.
 | Ministry | Technology | Also needs | Each level of investment |
 |---|---|---|---|
 | Ministry of Foreign Affairs | International Relations | | +100 influence and +10% influence, faster relations changes, more leverage |
-| Ministry of War | Wargaming | | More army experience and military research, +2% offense and defense, dearer military wages and goods |
+| Ministry of War | Wargaming | | More army experience and military research, +2% offense and defense, costlier military wages and goods |
 | Ministry of Commerce | International Exchange Standards | | +5% trade advantage and trade capacity |
 | National Bank | Central Banking | not Traditionalism | Lower borrowing premium, larger gold reserves, better investment efficiency; see [Financial regulation laws](04-banking.md#financial-regulation-laws) |
 | Ministry of Culture | Mass Propaganda | | +10% assimilation and conversion, cultural pull, cultural program funding; see [Cultural programs](11-influence.md#cultural-programs) |
@@ -634,18 +638,33 @@ included, from 5 levels to 9.
 | Ministry of the Environment | Pollution Control | | −5% pollution and emissions, larger national parks, slightly lower extraction output |
 | Ministry of Intelligence and Security | Mass Surveillance | | +4 intelligence capacity and one more covert operation slot |
 | Ministry of Refugee Affairs | Civil Rights Movement | Any migration law except Closed Borders | Faster cultural acceptance, more mass migration |
-| Ministry of Propaganda | Mass Media | Single-Party State, Secret Police or Outlawed Dissent | +100 authority and primary-culture fervor; the law also steadies war support through battles |
+| Ministry of Propaganda | Mass Media | Single-Party State, Secret Police (or a variant) or Outlawed Dissent | +100 authority and primary-culture fervor; the law also steadies war support through battles |
 | Ministry of Science | Nuclear Weapons | | +5% research speed, academics' political strength |
-| Ministry of Thought Control | Television Broadcasting | Single-Party State, Secret Police or Outlawed Dissent | Loyalists every month; low electoral confidence hurts less |
+| Ministry of Thought Control | Television Broadcasting | Single-Party State, Secret Police (or a variant) or Outlawed Dissent | Loyalists every month; low electoral confidence hurts less |
 | Ministry of Consumer Protection | Consumer Credit | Regulatory Bodies or Workers' Protections | +0.5 standard of living, lower mortality, production research, −10% opium plantation throughput a level |
 | Ministry of Urban Planning | Urbanization | | Urban centers produce more and need less urbanization per level; +10% [migration crowding tolerance](08-states.md#raising-crowding-tolerance); faster recovery from devastation |
-| Ministry of Religion | Mass Media | State Religion or Freedom of Conscience | +20% conversion, clergy political strength, acceptance of the state religion |
+| Ministry of Religion | Mass Media | State Religion (or a variant) or Freedom of Conscience | +20% conversion, clergy political strength, acceptance of the state religion |
 | Ministry of International Aid | Intergovernmental Organizations | | Strengthens the Ministry of Foreign Affairs, which also costs more; +0.15 UN Authority Target a level (see [What counts toward Policy](10-united-nations.md#what-counts-toward-policy)) |
 
+Five ministries take another name where it fits. The Ministry of War becomes
+the Ministry of Defense once you have Combined Arms, and a Department of War or
+of Defense in a presidential republic. The National Bank is a State Bank under
+State-Owned Banking, and otherwise the Bank of England, the Bank of France, the
+Bank of Japan, or in America the Bank of the United States (the Federal Reserve
+from 1913). Labor, Intelligence and Security, and Propaganda follow the form of
+government: a council republic has a People's Commissariat of Labor, a
+Committee for State Security and a Department of Agitation and Propaganda; a
+corporate state a Ministry of Corporations, a Directorate of State Security and
+a Ministry of Popular Culture; a presidential republic a Department of Labor
+and a National Intelligence Agency. Propaganda is the Ministry of Guidance in a
+theocracy and the Ministry of Information in a parliamentary or presidential
+republic. The laws keep their names.
+
 The Environmental Movement radicalizes while your Ministry of the Environment is
-missing or funded below its cap, and the Anti-War Movement does the same over
-the foreign affairs, international aid and refugee ministries (see [New
-political movements](#new-political-movements)).
+funded below its cap, or missing once you have researched the Environmental
+Movement technology. The Anti-War Movement does the same over the foreign
+affairs, international aid and refugee ministries (see [New political
+movements](#new-political-movements)).
 
 The mod also adds one institution that isn't a ministry: the base game's
 Migration Controls law now sets up a Migration Controls institution in place of
@@ -696,7 +715,7 @@ bills change them (see [Taxation (experimental)](05-tax-code.md)).
 | Suspension of Habeas Corpus | Statutory Courts, Constitutional Review | Suppression 25% cheaper; Judicial Independence ceiling −20%; −5 legitimacy. Only at war, and it lapses when the war ends. Judged as Secret Police; the Armed Forces ask for it |
 | Judicial Elections | Statutory Courts, Constitutional Review | +5 legitimacy; Judicial Independence ceiling −20. Under an elected government. Judged as Universal Suffrage; offered while either law is enacted |
 | Mixed Commercial Courts | Religious Courts, Executive Tribunals | Half a point off credit standing; ceiling +10; Devout −5% political strength. Judged as Free Trade; the Industrialists or Petite Bourgeoisie ask for it |
-| Jury Trials | Statutory Courts, Constitutional Review | Ceiling +10; +3 legitimacy; suppression 10% dearer. Judged as Guaranteed Liberties; offered while either law is enacted |
+| Jury Trials | Statutory Courts, Constitutional Review | Ceiling +10; +3 legitimacy; suppression 10% costlier. Judged as Guaranteed Liberties; offered while either law is enacted |
 | Military Tribunals for Civilians | Executive Tribunals, Statutory Courts | Suppression 15% cheaper; Armed Forces +10% political strength; ceiling −20%. Judged as Outlawed Dissent; the Armed Forces ask for it in unrest |
 | People's Tribunals | Executive Tribunals under a Single-Party State | Suppression 20% cheaper; movements give 10% more loyalists; half a point on credit standing. It lapses without the Single-Party State. Judged as Single-Party State |
 | Human-in-the-Loop Appeals | Algorithmic Jurisprudence | +5 legitimacy; ceiling +10; local administration costs 5% more; ends the override a captured court gives under Algorithmic Governance. Judged as Strong Privacy Rights; offered while the law is enacted |
@@ -809,7 +828,9 @@ Protected Class, the higher LGBTQ+ Rights laws and related technologies.
 | Technocratic Party | Machine Learning | Industrialists and Intelligentsia, Corpocrat, transhumanist and market-liberal leaders |
 
 All three need a voting franchise and take national names in some countries,
-such as Die Grünen or Movimento 5 Stelle.
+such as Die Grünen or Movimento 5 Stelle. Enacting a Single-Party State while
+one of them is in the government lets you name it the one legal party, as you
+can one of the base game's parties.
 
 ### Two-party politics
 
@@ -922,8 +943,8 @@ The tutors' net lean sets the heir's ideology.
 
 | Tutors' net lean | Possible ideologies, likeliest first |
 |---|---|
-| Strong progressive (4 points or more) | Reformer, Liberal, Social Democrat, Humanitarian, Radical, Communist or Vanguardist; rarely Moderate |
-| Light progressive | Reformer, Liberal, Humanitarian or Social Democrat; often Moderate |
+| Strong progressive (4 points or more) | Reformer, Liberal, State Socialist, Humanitarian, Radical, Communist or Vanguardist; rarely Moderate |
+| Light progressive | Reformer, Liberal, Humanitarian or State Socialist; often Moderate |
 | None | Usually Moderate, sometimes Reformer, Traditionalist or Liberal |
 | Light conservative | Royalist, Traditionalist, Authoritarian or Theocrat; often Moderate |
 | Strong conservative (4 points or more) | Royalist, Traditionalist, Authoritarian, Theocrat, Ethno-Nationalist or Jingoist; rarely Moderate |
@@ -934,7 +955,7 @@ chance to rebel and take the opposite lean.
 
 Only ideologies your country can have are rolled. Reformer needs Egalitarianism
 and is no longer possible once you have Feminism; Radical also needs
-Egalitarianism, Liberal needs Democracy, Social Democrat and Communist need
+Egalitarianism, Liberal needs Democracy, State Socialist and Communist need
 Socialism, Vanguardist needs Political Agitation, Humanitarian needs Feminism
 and Ethno-Nationalist needs Pan-nationalism. France never gets a Royalist or
 Traditionalist heir, and countries with a strong republican tradition never get
@@ -1012,6 +1033,7 @@ government administrations.
 foreign leverage, the governing interest groups lose half their attraction, and
 subsistence farms produce twice as much.
 
+An event, The State Collapses, reports each collapse and lists what was lost.
 The count then starts again. A second collapse restarts Failed State's ten
 years; it does not add a second one. Raising the average standard of living to
 4 or more stops the count, and it restarts from zero if living standards fall
@@ -1053,14 +1075,15 @@ the old government built. UN membership, seat and programs, the central bank's
 gold and monetary settings, the banking cycle's position, nuclear arsenals,
 space-race rewards and milestone progress, the arable-land bonuses from
 farming breakthroughs, and under the Legislated Tax Code rule the tax code with
-its passed bills and promises (under the Light Tax Code, its rates), all carry
-over. So do UN sanctions on the nation, which return within a month. A Civil
+its passed bills and promises (under the Light Tax Code, its rates), and the
+national climate policies in force all carry over. So do UN sanctions on the
+nation. A Civil
 Rights Movement, Human
 Augmentation Debate, Morphological Freedom Debate or Mental Health Crisis
 journal entry you already finished
 does not start over. Some things are still lost: policies switched on from
-journal-entry buttons, such as banking tools and climate policies, have to be
-switched on again, and history charts start empty. The colonial empire is the
+journal-entry buttons, such as banking tools, have to be switched on again, and
+history charts start empty. The colonial empire is the
 exception: the winner keeps the colonial programs you were running while the
 Colonial Empire entry is open, Colonial Empire Solidified and the path rewards
 of a finished empire, and the Imperial Federation and Mandate System modifiers

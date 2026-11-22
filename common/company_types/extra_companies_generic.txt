@@ -41,12 +41,7 @@
 		building_advanced_material_fabricator
 	}
 	ai_will_do = {
-		any_scope_state = {
-			any_scope_building = {
-				is_building_type = building_construction_sector
-				level >= 3
-			}
-		}
+		always = yes
 	}
 }
 
@@ -202,6 +197,7 @@ REPLACE:company_basic_electrics = {
 	}
 
 	extension_building_types = {
+		building_copper_mine
 		building_network_infrastructure
 		building_electronic_components_and_semiconductor_industry
 		building_software_industry
@@ -236,16 +232,7 @@ REPLACE:company_basic_electrics = {
 	}
 
 	ai_will_do = {
-		any_scope_state = {
-			any_scope_building = {
-				OR = {
-					is_building_type = building_electrics_industry
-					is_building_type = building_electrics_industry_radio
-					is_building_type = building_electrics_industry_appliances
-				}
-				level >= 3
-			}
-		}
+		always = yes
 	}
 }
 
@@ -784,7 +771,6 @@ INJECT:company_basic_metal_mining = {
 		building_chromium_mine
 		building_manganese_mine
 		building_specialty_alloy_metal_mine
-		building_copper_mine
 		building_precious_minor_base_metal_mine
 		building_nickel_cobalt_mine
 		building_lithium_mine

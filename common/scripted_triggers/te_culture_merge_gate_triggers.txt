@@ -1,0 +1,135 @@
+﻿# Culture Merges: the bespoke gates (owner, 2026-11-09). Each is one merge's own historical precondition, beyond the
+# gates every merge has (hold, acceptance, the standard-of-living gap, years together): what had to be settled before
+# these peoples became one. The roster (scripts/generators/culture_merges_config.py, Gate) says which merge, or which
+# optional culture, reads which trigger, and gives the player text; the generator calls them from te_cmg_<m>_gate_ok,
+# can_start, can_join and the yearly conversion. Docs: docs/systems/mod_systems/culture_merges.md, section Bespoke Gates.
+#
+# All country scope: the candidate, or the merge's starter. A milestone (a formation, the Meiji restoration) is read
+# only to start, and the census latches it in te_cm_gate_met_<m>, so a later formation (Germany into United Europe)
+# keeps it. A standing condition (slavery, schooling, independence) is read for as long as the merge runs.
+
+# ---- Formations (milestones): only a union of their own made these peoples one ----
+
+# German. Princes and confessions split north from south until the nation-state; Central Europe is the larger union
+# vanilla allows where Germany is not formed.
+te_cm_gate_formed_germany = {
+	OR = {
+		c:GER ?= this
+		c:HRE ?= this
+	}
+}
+
+# Italian. "Having made Italy, we must make Italians."
+te_cm_gate_formed_italy = {
+	c:ITA ?= this
+}
+
+# Scandinavian. Pan-Scandinavianism had no state, and faded when Sweden-Norway left Denmark alone in 1864.
+te_cm_gate_formed_scandinavia = {
+	c:SCA ?= this
+}
+
+# Yugoslav. Integral Yugoslavism was the doctrine of the common kingdom (1929); nothing else tried to make one nation
+# of Serbs, Croats and Bosniaks.
+te_cm_gate_formed_yugoslavia = {
+	c:YUG ?= this
+}
+
+# Czechoslovak. Czechs were Austria's and Slovaks Hungary's; one Czechoslovak people was the First Republic's doctrine.
+te_cm_gate_formed_czechoslovakia = {
+	c:CZH ?= this
+}
+
+# Platine, Gran Colombian and Andean: vanilla's je_south_american_national_identity_emergence ("The [Adjective]
+# Nation") is what splits the regional cultures into national ones, and it never shows for GCO, PBC, FND or PLT. So in
+# vanilla too, only the union undoes what separate statehood made.
+te_cm_gate_formed_la_plata = {
+	c:PLT ?= this
+}
+
+te_cm_gate_formed_gran_colombia = {
+	c:GCO ?= this
+}
+
+# The Peru-Bolivian Confederation (1836-39) or Bolivar's Federation of the Andes (dlc008's je_andean_federation).
+te_cm_gate_formed_andes = {
+	OR = {
+		c:PBC ?= this
+		c:FND ?= this
+	}
+}
+
+# Dravidian. The four languages each won a state of their own (Andhra 1953, Kerala and Mysore 1956), and Dravidian
+# identity was a Tamil-led movement against Brahmin dominance and Hindi; a united India never made one people of them.
+# Only the counterfactual in which Dravida Nadu wins its state makes this merge (owner, 2026-11-09).
+te_cm_gate_formed_dravida_nadu = {
+	c:DRA ?= this
+}
+
+# Indonesian. The Youth Pledge (1928) and the republic made one national language; the mod's Nusantara counts too.
+te_cm_gate_formed_indonesia = {
+	OR = {
+		c:IDN ?= this
+		c:NUS ?= this
+	}
+}
+
+# ---- The Meiji restoration (a milestone) ----
+
+# Japanese. Satsuma kept Ryukyu nominally foreign to protect its trade with China; the Meiji state annexed it (1879) and
+# schooled it in standard Japanese. Every outcome of je_meiji_restoration sets japan_restoration_complete; a Japan that
+# never had the entry counts once the shogunate's law is gone.
+te_cm_gate_meiji = {
+	OR = {
+		has_variable = japan_restoration_complete
+		AND = {
+			NOT = { has_law = law_type:law_bakufu }
+			NOT = { has_journal_entry = je_meiji_restoration }
+		}
+	}
+}
+
+# ---- Slavery (standing) ----
+
+# American. A house divided: the USA starts under Legacy Slavery, slave states beside free ones, and that keeps Yankee
+# and Dixie apart. Settled either way, with no Civil War under way: banned, with the Slavery Debate (je_acw_countdown)
+# no longer open, whether it completed or failed into the war; or legal in every state (Slave Trade, Debt Slavery). The
+# Colonial Slavery compromise doesn't count (owner, 2026-11-09).
+te_cm_gate_slavery_settled = {
+	NOT = { has_journal_entry = je_acw_war }
+	OR = {
+		AND = {
+			has_law_or_variant = law_type:law_slavery_banned
+			NOT = { has_journal_entry = je_acw_countdown }
+		}
+		has_law_or_variant = law_type:law_slave_trade
+		has_law_or_variant = law_type:law_debt_slavery
+	}
+}
+
+# Anglophone as a whole (Britain abolished in 1833, and the Anglo-American rapprochement came after 1865), and the
+# Afro-American and Afro-Brazilian cultures in the American and Brazilian merges (Brazil's Golden Law, 1888).
+te_cm_gate_slavery_banned = {
+	has_law_or_variant = law_type:law_slavery_banned
+}
+
+# ---- Schooling and independence (standing) ----
+
+# French and Chinese. Occitan gave way to French under the Ferry laws (1881-82); Yue, Min and Hakka to one spoken
+# standard once the national language was taught in primary schools (Guoyu, from 1920).
+te_cm_gate_public_schools = {
+	has_law_or_variant = law_type:law_public_schools
+}
+
+# Filipino and Hindustani. The Filipino nation came out of the 1896 revolution (vanilla's je_philippines_main has the
+# same independence outcome); Hindi as a national language out of Indian nationalism, not the Raj.
+te_cm_gate_independent = {
+	is_subject = no
+}
+
+# Arab and East African. A shared standard language spread through the schools and broadcasts of independent states:
+# the Arabization of schooling after independence, Nyerere's Swahili-medium primary schools.
+te_cm_gate_independent_schools = {
+	is_subject = no
+	has_law_or_variant = law_type:law_public_schools
+}

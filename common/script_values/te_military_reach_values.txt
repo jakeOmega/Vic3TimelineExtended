@@ -1,0 +1,27 @@
+﻿# Military reach thresholds (vanilla 1.15, #1450).
+#
+# 1.15's has_military_reach = { target = <state or country> min_reach = X
+# min_shippable_strength = Y } is always true with a land route (through our
+# own territory, our subjects, a chain of military access, or a war goal
+# adjacency). Otherwise military_reach (0-1: the best landing on a coast of the
+# target's owner, falling with the sea supply distance from our closest port
+# and the march from the landing; 0 when no strait-aware sea route reaches a
+# coast) must be at least min_reach, and, when min_shippable_strength is set,
+# shippable_army_strength_against the target (the army power projection we can
+# ship at once over the target's army power projection; naval carrying
+# capacity over standing battalions) must be at least that.
+#
+# Six checks that used army size or "both coastal" as a stand-in read these
+# instead. The values are a first guess and on the play-test list
+# (docs/testing/vanilla-1-15-playtest.md, "1.15 opportunities").
+
+# An army could realistically get there: the example threshold the 1.15
+# script docs give for military_reach.
+te_reach_realistic = 0.4
+
+# Two nations are linked closely enough for a union, by land or by a sea
+# route: a lower bar than an army's, since no army has to be supplied there.
+te_reach_union_link = 0.2
+
+# We can ship, at once, army strength equal to the target's whole army.
+te_reach_ship_match = 1

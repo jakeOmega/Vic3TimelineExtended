@@ -6,6 +6,8 @@ and what it rejects.
 """
 from __future__ import annotations
 
+import contextlib
+import io
 import json
 import os
 import sys
@@ -55,6 +57,13 @@ class MarkupCheckAcceptsTests(unittest.TestCase):
 
 
 class MarkupCheckRejectsTests(unittest.TestCase):
+    def test_unescaped_reference_in_a_quoted_argument(self):
+        # 1.15: a $key$ inside a loc function's quoted argument needs |q.
+        en = "[Concept('concept_state', '$concept_states|q$')] grow"
+        errors = _errors(en, "[Concept('concept_state', '$concept_states$')] wachsen")
+        self.assertTrue(any("quote-escaping" in e for e in errors), errors)
+        self.assertEqual(_errors(en, "[Concept('concept_state', '$concept_states|q$')] wachsen"), [])
+
     def test_dropped_concept_link(self):
         errors = _errors("Raises [concept_legitimacy]", "Erhöht die Legitimität")
         self.assertTrue(any("concept links" in e for e in errors), errors)
@@ -76,6 +85,9 @@ class MarkupCheckRejectsTests(unittest.TestCase):
         errors = t.check_translation(en, "Protege a [TARGET_COUNTRY.GetAltName('DAT')]", "spanish")[0]
         self.assertTrue(any("GetAltName" in e for e in errors), errors)
         self.assertEqual(t.check_translation(en, "Protege a [TARGET_COUNTRY.GetName]", "spanish")[0], [])
+        errors = t.check_translation(en, "Защитить [TARGET_COUNTRY.GetAltName('RU_CL_VP')]", "russian")[0]
+        self.assertTrue(any("GetAltName" in e for e in errors), errors)
+        self.assertEqual(t.check_translation(en, "Защитить страну [TARGET_COUNTRY.GetName]", "russian")[0], [])
 
     def test_lost_reference_icon_code_and_line_break(self):
         errors = _errors("#b $VAL$#! @money!\\nMore", "fett Geld mehr")
@@ -162,6 +174,12 @@ class NumberFormatTests(unittest.TestCase):
         self.assertEqual(t.localize_numbers(en, es, "spanish"),
                          "Cuesta 2,5 veces más, hasta 1\u00a0000 unidades, o 12\u00a0000 al 5%.")
 
+    def test_russian_decimal_comma_no_break_space_closed_percent(self):
+        en = "Costs 2.5 times as much, up to 1,000 units, at 5%."
+        ru = "Стоит в 2.5 раза больше, до 1,000 единиц, при 5 %."
+        self.assertEqual(t.localize_numbers(en, ru, "russian"),
+                         "Стоит в 2,5 раза больше, до 1\u00a0000 единиц, при 5%.")
+
     def test_english_formats_kept_for_other_languages(self):
         self.assertEqual(t.localize_numbers("2.5", "2.5", "japanese"), "2.5")
 
@@ -185,6 +203,12 @@ class QuoteFormatTests(unittest.TestCase):
         self.assertEqual(t.localize_quotes('\\"Empezar con “sí”.\\"', "spanish"), "«Empezar con “sí”.»")
         self.assertEqual(t.localize_quotes("La acción “Resolver la crisis”", "spanish"), "La acción «Resolver la crisis»")
 
+    def test_russian_guillemets_outside_low_high_inside(self):
+        self.assertEqual(t.localize_quotes('\\"Начать с „да“.\\"', "russian"), "«Начать с „да“.»")
+        self.assertEqual(t.localize_quotes("Действие „Разрешить кризис”", "russian"), "Действие «Разрешить кризис»")
+        # English-style “…” would close where nothing is open: left for the reader
+        self.assertEqual(t.localize_quotes("Действие “Разрешить кризис”", "russian"), "Действие “Разрешить кризис”")
+
     def test_spanish_apostrophe_is_not_a_quote(self):
         self.assertEqual(t.localize_quotes('O’Higgins dijo \\"no\\"', "spanish"), "O’Higgins dijo «no»")
 
@@ -201,6 +225,14 @@ class TermCheckTests(unittest.TestCase):
                          [("b", "Tradecraft", "Spionagehandwerk")])
 
 
+class RussianTermCheckTests(unittest.TestCase):
+    def test_yo_and_ye_match(self):
+        tm = {"a": {"en": "Strategic Reserve rises", "ru": "Стратегический резерв растет"},
+              "b": {"en": "Strategic Reserve falls", "ru": "Запас падает"}}
+        self.assertEqual(t.term_mismatches(tm, {"Strategic Reserve": "Стратегический резерв растёт"}, "ru"),
+                         [("b", "Strategic Reserve", "Стратегический резерв растёт")])
+
+
 class QuoteRepairTests(unittest.TestCase):
     def test_plain_closing_quote_after_german_opening(self):
         line = ' k:0 "„Man hört es." \\n\\n— Kommandant"\n'
@@ -212,6 +244,9 @@ class QuoteRepairTests(unittest.TestCase):
     def test_spanish_marks(self):
         self.assertEqual(t.repair_bare_quotes(' k:0 "Dijo "Hola" en voz alta"', "spanish"), "Dijo «Hola» en voz alta")
         self.assertEqual(t.repair_bare_quotes(' k:0 "«Se oye." \\n— Comandante"', "spanish"), "«Se oye.» \\n— Comandante")
+
+    def test_russian_marks(self):
+        self.assertEqual(t.repair_bare_quotes(' k:0 "Он сказал "Привет" громко"', "russian"), "Он сказал «Привет» громко")
 
 
 class ChunkingTests(unittest.TestCase):
@@ -231,6 +266,10 @@ class ChunkingTests(unittest.TestCase):
 
 
 class GlossarySelectionTests(unittest.TestCase):
+    def test_referenced_keys_read_through_format_flags(self):
+        keys = t.referenced_keys("[Concept('concept_ship_group', '$ship_group_cruisers|q$')] $iron$")
+        self.assertTrue({"ship_group_cruisers", "iron", "concept_ship_group"} <= keys, keys)
+
     def test_names_are_selected_descriptions_are_not(self):
         self.assertTrue(t.is_glossary_entry(t.Entry("te_laws_l_english.yml", "law_x", "Ancestral Citizenship")))
         self.assertFalse(t.is_glossary_entry(t.Entry("te_laws_l_english.yml", "law_x_desc", "Citizenship is…")))
@@ -334,6 +373,246 @@ class RoundTripTests(unittest.TestCase):
             text = fh.read()
         self.assertIn("=== COUNTRY NAME FORMS ===", text)
         self.assertIn("# PREVIOUS TRANSLATION: Alt", text)
+
+    def test_refresh_no_vanilla_needs_no_game(self):
+        # A cloud container has no game install: --no-vanilla must not read it.
+        def no_game(language):
+            raise AssertionError("refresh --no-vanilla read the base game's loc")
+        with mock.patch.object(t, "VanillaTerms", no_game):
+            t.cmd_refresh(mock.Mock(language="german", field="de", chunks=["names-001"], no_vanilla=True))
+        with open(os.path.join(self.dirs[1], "chunks", "names-001.txt"), encoding="utf-8") as fh:
+            self.assertNotIn("VANILLA TERMS", fh.read())
+
+
+class RespellTests(unittest.TestCase):
+    """respell keeps a translation whose English changed only to American
+    spelling, and leaves any other change stale."""
+
+    def test_spelling_only_change_is_re_pointed(self):
+        entries = [
+            t.Entry("te_laws_l_english.yml", "law_a", "A license for the center"),
+            t.Entry("te_laws_l_english.yml", "law_b", "Ten policies are national"),
+            t.Entry("te_formable_countries_l_english.yml", "AFU", "African Labor Union"),
+        ]
+        tm = {
+            "law_a": {"en": "A licence for the centre", "de": "Eine Lizenz für das Zentrum"},
+            "law_b": {"en": "Nine policies are national", "de": "Neun Maßnahmen sind national"},
+            "AFU": {"en": "African Labour Union", "de": "Afrikanische Arbeiterunion"},
+            "AFU_DAT": {"en": "African Labour Union", "de": "der Afrikanischen Arbeiterunion", "base": "AFU"},
+        }
+        with tempfile.TemporaryDirectory() as root:
+            dirs = (os.path.join(root, "i18n", "german"), os.path.join(root, "build", "i18n", "german"))
+            with mock.patch.object(t, "language_dirs", lambda language: dirs), \
+                    mock.patch.object(t, "load_english", lambda english_dir=None: entries):
+                t.save_tm(tm, entries, "german")
+                self.assertEqual(t.respelled_keys(t.load_tm("german"), entries), ["AFU", "AFU_DAT", "law_a"])
+                self.assertEqual(t.main(["respell"]), 0)
+                after = t.load_tm("german")
+        self.assertEqual(after["law_a"], {"en": "A license for the center", "de": "Eine Lizenz für das Zentrum"})
+        self.assertEqual(after["AFU_DAT"]["en"], "African Labor Union")
+        self.assertEqual(after["law_b"]["en"], "Nine policies are national")  # a real change stays stale
+
+
+CM_FILE = "te_culture_merges_generated_l_english.yml"
+
+
+def _merge_lines(merges: dict[str, tuple[str, str]], switched: str = "have all switched to") -> list:
+    """Two culture-merge templates, as gen_culture_merges.py writes them, per merge."""
+    out = []
+    for merge, (core_1, core_2) in merges.items():
+        out.append(t.Entry(CM_FILE, f"te_cmg_start_{merge}_button", f"Begin the $cm_{merge}$ Merge"))
+        out.append(t.Entry(CM_FILE, f"te_cmg_{merge}_done_core_tt", f"${core_1}$ and ${core_2}$ pops {switched} $cm_{merge}$."))
+    return out
+
+
+class TemplateTests(unittest.TestCase):
+    """prepare --templates groups a generated file's lines by template; expand
+    writes each example's siblings by swapping in their tokens."""
+
+    def test_expanding_an_examples_english_reproduces_each_sibling(self):
+        hold = ("${b}$ pops are out of reach: our sphere holds only "
+                "[ROOT.GetCountry.MakeScope.Var('te_cm_held_{m}_{b}').GetValue|%0] of them in their homeland, "
+                "and [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_hold_open')|%0] is needed.")
+        merges = {"american": ("yankee", "dixie"), "iberian": ("spanish", "portuguese"), "nordic": ("norwegian", "swedish")}
+        entries = _merge_lines(merges) + [
+            t.Entry(CM_FILE, f"je_te_cm_{m}_status_hold_{b}", hold.format(m=m, b=b)) for m, (_, b) in merges.items()]
+        groups = t.template_groups(entries)
+        self.assertEqual([[e.key for e in g] for g in groups], [
+            ["te_cmg_start_american_button", "te_cmg_start_iberian_button", "te_cmg_start_nordic_button"],
+            ["te_cmg_american_done_core_tt", "te_cmg_iberian_done_core_tt", "te_cmg_nordic_done_core_tt"],
+            ["je_te_cm_american_status_hold_dixie", "je_te_cm_iberian_status_hold_portuguese",
+             "je_te_cm_nordic_status_hold_swedish"],
+        ])
+        for example, *siblings in groups:
+            for sibling in siblings:
+                self.assertEqual(t.expand_template(example.en, example.en, sibling.en), (sibling.en, None))
+        # The translation takes the same swaps, wherever it moved the tokens.
+        example, sibling = groups[1][0], groups[1][2]
+        de = "Alle Pops der Kulturen $yankee$ und $dixie$ sind zu $cm_american$ übergegangen."
+        self.assertEqual(t.expand_template(example.en, de, sibling.en),
+                         ("Alle Pops der Kulturen $norwegian$ und $swedish$ sind zu $cm_nordic$ übergegangen.", None))
+
+    def test_a_line_the_swap_cannot_reproduce_starts_its_own_group(self):
+        # $dixie$ varies, but the call holding another $dixie$ doesn't, and
+        # the swap would change both.
+        entries = [t.Entry(CM_FILE, "a", "$dixie$ joins [Concept('concept_culture', '$dixie$ kin')]"),
+                   t.Entry(CM_FILE, "b", "$yankee$ joins [Concept('concept_culture', '$dixie$ kin')]")]
+        self.assertIsNotNone(t.token_mapping(entries[0].en, entries[1].en))
+        self.assertNotEqual(t.expand_template(entries[0].en, entries[0].en, entries[1].en)[0], entries[1].en)
+        self.assertEqual(len(t.template_groups(entries)), 2)
+
+    def test_inconsistent_token_mapping_starts_its_own_group(self):
+        entries = [t.Entry(CM_FILE, k, en) for k, en in [
+            ("a", "$x$ and $x$ join"), ("b", "$y$ and $y$ join"),  # x -> y, consistently
+            ("c", "$y$ and $z$ join"),  # x -> y and x -> z: a's swap can't make it
+            ("d", "$w$ and $v$ join"),  # c's template: y -> w, z -> v
+        ]]
+        self.assertIsNone(t.token_mapping(entries[0].en, entries[2].en))
+        self.assertEqual([[e.key for e in g] for g in t.template_groups(entries)], [["a", "b"], ["c", "d"]])
+
+    def test_a_surviving_example_token_blocks_a_sibling(self):
+        # A concept call's display text is free, so the translation may change
+        # it, and merge's markup check would pass the unswapped copy.
+        example = "Merges [Concept('concept_culture', '$dixie|q$')] pops"
+        sibling = "Merges [Concept('concept_culture', '$yankee|q$')] pops"
+        de = "Verschmilzt Pops der [Concept('concept_culture', 'Kultur $dixie|q$')]"
+        self.assertEqual(t.check_translation(sibling, de)[0], [])
+        value, problem = t.expand_template(example, de, sibling)
+        self.assertIsNone(value)
+        self.assertIn("dixie", problem)
+        # A case flag on a varying call: its literal form isn't there to swap.
+        example = "[ROOT.Var('te_cm_sol_best_american').GetCulture.GetName] pops are the best off"
+        sibling = "[ROOT.Var('te_cm_sol_best_iberian').GetCulture.GetName] pops are the best off"
+        de = "Am besten gestellt sind die [ROOT.Var('te_cm_sol_best_american').GetCulture.GetName|l]en Pops"
+        value, problem = t.expand_template(example, de, sibling)
+        self.assertIsNone(value)
+        self.assertIn("te_cm_sol_best_american", problem)
+        # A seed whose translation can't expand onto a line doesn't take it.
+        entries = [t.Entry(CM_FILE, "a", example), t.Entry(CM_FILE, "b", sibling)]
+        self.assertEqual(len(t.template_groups(entries, {"a": de})), 2)
+
+
+class TemplateRunTests(unittest.TestCase):
+    """prepare --templates, merge, expand and merge again, on a mock English."""
+
+    MERGES = {"american": ("yankee", "dixie"), "iberian": ("spanish", "portuguese"), "nordic": ("norwegian", "swedish")}
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        root = self.tmp.name
+        self.dirs = (os.path.join(root, "i18n", "german"), os.path.join(root, "build", "i18n", "german"))
+        self.entries = _merge_lines(self.MERGES) + [
+            t.Entry("te_culture_merges_l_english.yml", "te_cm_panel_hint", "Merges run for decades.")]
+        self.patches = [
+            mock.patch.object(t, "language_dirs", lambda language: self.dirs),
+            mock.patch.object(t, "load_english", lambda english_dir=None: self.entries),
+        ]
+        for p in self.patches:
+            p.start()
+
+    def tearDown(self):
+        for p in self.patches:
+            p.stop()
+        self.tmp.cleanup()
+
+    def manifest(self) -> dict:
+        with open(os.path.join(self.dirs[1], "manifest.json"), encoding="utf-8") as fh:
+            return json.load(fh)
+
+    def agent_writes(self, cid: str, values: dict[str, str]) -> None:
+        os.makedirs(os.path.join(self.dirs[1], "out"), exist_ok=True)
+        with open(os.path.join(self.dirs[1], "out", cid + ".01.txt"), "w", encoding="utf-8") as fh:
+            fh.write("".join(f' {k}:0 "{v}"\n' for k, v in values.items()))
+
+    def test_examples_merge_then_copies_expand_and_a_changed_template_is_redone(self):
+        t.main(["prepare", "--templates", "te_culture_merges_generated", "--no-vanilla"])
+        manifest = self.manifest()
+        self.assertEqual(list(manifest["c-001"]["keys"]), [
+            "te_cmg_start_american_button", "te_cmg_american_done_core_tt", "te_cm_panel_hint"])
+        self.assertEqual(manifest["x-001"]["examples"], {
+            "te_cmg_start_iberian_button": "te_cmg_start_american_button",
+            "te_cmg_start_nordic_button": "te_cmg_start_american_button",
+            "te_cmg_iberian_done_core_tt": "te_cmg_american_done_core_tt",
+            "te_cmg_nordic_done_core_tt": "te_cmg_american_done_core_tt",
+        })
+        with open(os.path.join(self.dirs[1], "chunks", "c-001.txt"), encoding="utf-8") as fh:
+            lines = fh.read().splitlines()
+        i = lines.index(' te_cmg_american_done_core_tt:0 "$yankee$ and $dixie$ pops have all switched to $cm_american$."')
+        self.assertTrue(lines[i - 1].startswith("# TEMPLATE: the script copies this translation to 2 more lines, "
+                                                "replacing $yankee$, $dixie$, $cm_american$ with each line's own."),
+                        lines[i - 1])
+        self.assertIn("2 of them are templates a script copies to other lines", self._prompt("c-001"))
+
+        self.assertEqual(t.main(["expand"]), 1)  # nothing has merged: every copy waits
+        self.assertFalse(os.path.exists(os.path.join(self.dirs[1], "out", "x-001.01.txt")))
+        self.agent_writes("c-001", {
+            "te_cmg_start_american_button": "Verschmelzung $cm_american$ beginnen",
+            "te_cmg_american_done_core_tt": "Alle Pops der Kulturen $yankee$ und $dixie$ sind zu $cm_american$ übergegangen.",
+            "te_cm_panel_hint": "Verschmelzungen dauern Jahrzehnte.",
+        })
+        self.assertEqual(t.main(["merge", "c-001"]), 0)
+        self.assertEqual(t.main(["expand"]), 0)
+        self.assertEqual(t.main(["merge", "x-001"]), 0)
+        tm = t.load_tm("german")
+        self.assertEqual(tm["te_cmg_start_nordic_button"], {"en": "Begin the $cm_nordic$ Merge",
+                                                            "de": "Verschmelzung $cm_nordic$ beginnen"})
+        self.assertEqual(tm["te_cmg_iberian_done_core_tt"]["de"],
+                         "Alle Pops der Kulturen $spanish$ und $portuguese$ sind zu $cm_iberian$ übergegangen.")
+
+        # The generator rewrites one template: all its copies go stale together.
+        self.entries[:] = _merge_lines(self.MERGES, "have all become") + self.entries[-1:]
+        t.main(["prepare", "--templates", "te_culture_merges_generated", "--no-vanilla"])
+        manifest = self.manifest()
+        self.assertEqual(list(manifest["c-002"]["keys"]), ["te_cmg_american_done_core_tt"])
+        self.assertIn("te_cmg_american_done_core_tt", manifest["c-002"]["previous"])
+        self.assertEqual(sorted(manifest["x-002"]["examples"]), ["te_cmg_iberian_done_core_tt", "te_cmg_nordic_done_core_tt"])
+        # Until the new example merges, its old translation is not copied.
+        self.assertEqual(t.main(["expand", "x-002"]), 1)
+        self.assertFalse(os.path.exists(os.path.join(self.dirs[1], "out", "x-002.01.txt")))
+        self.agent_writes("c-002", {"te_cmg_american_done_core_tt":
+                                    "Alle Pops der Kulturen $yankee$ und $dixie$ sind nun $cm_american$."})
+        t.main(["merge", "c-002"])
+        self.assertEqual(t.main(["expand", "x-002"]), 0)
+        self.assertEqual(t.main(["merge", "x-002"]), 0)
+        tm = t.load_tm("german")
+        self.assertEqual(tm["te_cmg_nordic_done_core_tt"], {
+            "en": "$norwegian$ and $swedish$ pops have all become $cm_nordic$.",
+            "de": "Alle Pops der Kulturen $norwegian$ und $swedish$ sind nun $cm_nordic$."})
+        self.assertEqual(t.classify(self.entries, tm)["translated"], self.entries)
+
+    def test_a_new_copy_expands_from_the_memory_without_an_agent(self):
+        sol = "[ROOT.Var('te_cm_sol_best_{m}').GetCulture.GetName] pops are the best off"
+        known = {"american": ("yankee", "dixie")}
+        self.entries[:] = _merge_lines(known) + [t.Entry(CM_FILE, "te_cm_american_sol", sol.format(m="american"))]
+        tm = {
+            "te_cmg_start_american_button": {"en": "Begin the $cm_american$ Merge", "de": "Verschmelzung $cm_american$ beginnen"},
+            "te_cmg_american_done_core_tt": {"en": self.entries[1].en, "de": "Alle Pops von $yankee$ und $dixie$ sind $cm_american$."},
+            # A case flag on the varying call: this translation can't be copied.
+            "te_cm_american_sol": {"en": self.entries[2].en,
+                                   "de": "Die [ROOT.Var('te_cm_sol_best_american').GetCulture.GetName|l]en Pops stehen am besten da"},
+        }
+        t.save_tm(tm, self.entries, "german")
+        # The generator adds a merge.
+        self.entries[:] = self.entries + _merge_lines({"nordic": ("norwegian", "swedish")}) + [
+            t.Entry(CM_FILE, "te_cm_nordic_sol", sol.format(m="nordic"))]
+        t.main(["prepare", "--templates", "te_culture_merges_generated", "--no-vanilla"])
+        manifest = self.manifest()
+        self.assertEqual(list(manifest["c-001"]["keys"]), ["te_cm_nordic_sol"])  # an agent writes it
+        self.assertNotIn("templates", manifest["c-001"])
+        self.assertEqual(manifest["x-001"]["examples"], {
+            "te_cmg_start_nordic_button": "te_cmg_start_american_button",
+            "te_cmg_nordic_done_core_tt": "te_cmg_american_done_core_tt",
+        })
+        self.assertEqual(t.main(["expand"]), 0)  # no agent needed for these
+        self.assertEqual(t.main(["merge", "x-001"]), 0)
+        self.assertEqual(t.load_tm("german")["te_cmg_nordic_done_core_tt"]["de"],
+                         "Alle Pops von $norwegian$ und $swedish$ sind $cm_nordic$.")
+
+    def _prompt(self, cid: str) -> str:
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            t.main(["prompt", cid])
+        return out.getvalue()
 
 
 class SpanishNamesTests(unittest.TestCase):

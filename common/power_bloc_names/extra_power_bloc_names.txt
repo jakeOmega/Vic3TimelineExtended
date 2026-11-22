@@ -52,6 +52,27 @@ mutual_assistance_pact = {
 	}
 }
 
+## Research Commons power bloc names
+# Bodies that pooled their members' science: the leader's council or academy,
+# not a list of its members.
+te_rc_name_joint_research_council = {
+	trigger = {
+		scope:selected_identity = identity:identity_research_commons
+	}
+}
+
+te_rc_name_academy_of_nations = {
+	trigger = {
+		scope:selected_identity = identity:identity_research_commons
+	}
+}
+
+te_rc_name_scientific_union = {
+	trigger = {
+		scope:selected_identity = identity:identity_research_commons
+	}
+}
+
 ## historical names any bloc can take
 # For the AI, these replace vanilla's catch-all names (end of file): as many
 # names open to any country, each the name of a standing body, league or union
@@ -384,13 +405,35 @@ REPLACE:joint_front = {
 	}
 }
 
-# The AI keeps Imperial Circle for a monarchy's Sovereign Empire.
-REPLACE:imperial_circle = {
+# Imperial Circle is vanilla's own since 1.15: it passes only for a Sovereign
+# Empire (1.14.5 passed it for any monarchy, and the mod held the AI to a
+# monarchy's Sovereign Empire with a REPLACE).
+
+## generic Creditors' Consortium names (2026-11-16): the bodies creditors set
+## up to collect: the Corporation of Foreign Bondholders (1868), the
+## International Financial Commission over Greece (1898), the League of
+## Nations' stabilization loans of the 1920s.
+bondholders_council = {
 	trigger = {
-		coa_monarchy_trigger = yes
-		OR = {
-			is_ai = no
-			scope:selected_identity = identity:identity_sovereign_empire
-		}
+		scope:selected_identity = identity:identity_creditors_consortium
 	}
 }
+
+financial_commission = {
+	trigger = {
+		scope:selected_identity = identity:identity_creditors_consortium
+	}
+}
+
+concert_of_lenders = {
+	trigger = {
+		scope:selected_identity = identity:identity_creditors_consortium
+	}
+}
+
+stabilization_fund = {
+	trigger = {
+		scope:selected_identity = identity:identity_creditors_consortium
+	}
+}
+

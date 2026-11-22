@@ -1,0 +1,48 @@
+﻿namespace = te_qa_probe
+
+# A6: would a false trigger stop a console `event`?
+te_qa_probe.3 = {
+	type = country_event
+	hidden = yes
+	trigger = { always = no }
+	immediate = { debug_log = "TE_QA_PROBE A6 false_trigger_fired" }
+}
+# A6: would a cooldown stop a second console `event`?
+te_qa_probe.4 = {
+	type = country_event
+	hidden = yes
+	cooldown = { days = 365 }
+	immediate = { debug_log = "TE_QA_PROBE A6 cooldown_fired" }
+}
+# A1: an event that reads a scope its caller saved.
+te_qa_probe.5 = {
+	type = country_event
+	placement = ROOT
+	event_image = { video = "africa_desert_expedition" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	title = te_qa_probe.2.t
+	desc = te_qa_probe.2.d
+	flavor = te_qa_probe.2.f
+	duration = 3
+	immediate = { debug_log = "TE_QA_PROBE A1 opened rival=[SCOPE.sCountry('te_qa_rival').GetTagName]" }
+	option = { name = te_qa_probe.2.a default_option = yes debug_log = "TE_QA_PROBE A1 option=A" }
+	option = { name = te_qa_probe.2.b debug_log = "TE_QA_PROBE A1 option=B" }
+}
+# A1 and A4: the carrier saves the scope, sets a variable, triggers the event.
+te_qa_probe.6 = {
+	type = country_event
+	hidden = yes
+	immediate = {
+		c:GBR = { save_scope_as = te_qa_rival }
+		set_variable = { name = te_qa_probe_var value = 42 }
+		trigger_event = { id = te_qa_probe.5 popup = yes }
+		debug_log = "TE_QA_PROBE A1 carrier_done date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+}
+# A5: sixty lines of padding, about 5 KB.
+te_qa_probe.7 = {
+	type = country_event
+	hidden = yes
+	immediate = { te_qa_probe_pad = yes }
+}

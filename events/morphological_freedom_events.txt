@@ -360,6 +360,10 @@ morphological_freedom_events.5 = {
 
 	trigger = {
 		has_technology_researched = morphological_freedom
+		# The congregations picket clinics working within the law, and the
+		# options keep their doors open or give their staff a conscience
+		# clause. Natural Form has only back-street clinics (#1616).
+		NOT = { has_law = law_type:law_natural_form }
 		any_interest_group = {
 			is_interest_group_type = ig_devout
 			is_powerful = yes

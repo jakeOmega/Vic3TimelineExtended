@@ -1,6 +1,7 @@
 """The Timeline Extended window (gui/te_systems_window.gui): the mod's own
-window. One strip of five tabs: Nation (always open), the Space Race, Grand
-Monuments, the Colonial Empire and the Seabed (Global Commons).
+window. Its own strip of six tabs: Nation (always open), the Space Race, Grand
+Monuments, the Colonial Empire, the Seabed (Global Commons) and Power Grids;
+then the strips that mirror the vanilla panels' system tabs.
 Opened from a button under the sidebar
 (docs/systems/system_panels_feasibility.md §3.1, §3.5, §3.6; style guide rule 9).
 The strip, the selection templates and the tabs' mounts are generated from the
@@ -46,7 +47,10 @@ RULES = {"space_race": "sr_space_race_on = yes",
 # read, its slot on its strip). Nation (always open, no rule) is the first
 # slot of the first strip, then these.
 SLOTS = ["first", "second", "third", "fourth", "fifth"]
-ALL_TABS = [(t.key, RULES[t.key], SLOTS[[u.key for u in gen.TABS if u.row == t.row].index(t.key)])
+# The first strip's six (owner, 2026-11-05: Power Grids the sixth), on
+# te_tab_buttons_six.
+SLOTS_SIX = SLOTS + ["sixth"]
+ALL_TABS = [(t.key, RULES[t.key], SLOTS_SIX[[u.key for u in gen.TABS if u.row == t.row].index(t.key)])
             for t in gen.TABS[1:] if t.key in RULES]
 
 
@@ -94,17 +98,18 @@ MIRRORED = [
     ("covert_warfare", 3, "te_military_tab_covert_tt", "te_window_tab_covert_warfare_locked_tt",
      _shown("te_military_covert_tab_sgui"), "te_military_covert_tab_unlock_sgui", "te_covert_tab_body"),
 ]
-# spec § 5.1: three strips of five
-STRIP_ORDER = {1: ["nation", "space_race", "grand_monuments", "colonial_empire", "seabed"],
+# spec § 5.1: three strips of five, the first of six since Power Grids
+# (owner, 2026-11-05)
+STRIP_ORDER = {1: ["nation", "space_race", "grand_monuments", "colonial_empire", "seabed", "power_grids"],
                2: ["banking", "tax_code", "budget_breakdown", "strategic_reserve", "global_warming"],
                3: ["demographics", "cultural_hegemony", "united_nations", "nuclear_weapons", "covert_warfare"]}
 SR = gen.SR_MILESTONES   # je_space_race.txt order (test_the_gates_read_the_rule_and_the_entries)
 # The systems' full names (owner, 2026-09-30), and the width a tab's name gets:
 # five slots share 540 less vanilla tab_buttons' 3 px margins and two 5 px
 # dividers, 104.8 each, less tab_text_properties' 10 px margin each side (no
-# icon): 84.8.
+# icon): 84.8; six, on te_tab_buttons_six (the first strip), 67.3.
 FULL_NAMES = {"nation": "Nation", "space_race": "Space Race", "colonial_empire": "Colonial Empire",
-              "grand_monuments": "Grand Monuments", "seabed": "Seabed",
+              "grand_monuments": "Grand Monuments", "seabed": "Seabed", "power_grids": "Power Grids",
               # the mirrored tabs: the entries' names (owner, 2026-11-02), not
               # the Market tabs' Climate and Reserve
               "banking": "Banking", "tax_code": "Tax Code", "budget_breakdown": "Budget Breakdown",
@@ -112,7 +117,11 @@ FULL_NAMES = {"nation": "Nation", "space_race": "Space Race", "colonial_empire":
               "demographics": "Demographics", "cultural_hegemony": "Cultural Hegemony",
               "united_nations": "United Nations", "nuclear_weapons": "Nuclear Weapons",
               "covert_warfare": "Covert Warfare"}
-NAME_WIDTH = (540 - 2 * 3 - 2 * 5) / 5 - 2 * 10
+def _name_width(slots):
+    return (540 - 2 * 3 - 2 * 5) / slots - 2 * 10
+
+
+NAME_WIDTH = _name_width(5)
 # tab_text_properties wraps a name (multiline = yes) and shrinks it from the
 # tab font's 17 down to fontsize_min = 12 before it elides.
 TAB_FONT, TAB_FONT_MIN = 17, 12
@@ -146,6 +155,14 @@ def _top_level(text, name):
         if re.search(rf'^\tname = "{name}"$', block, re.M):
             return block
     raise AssertionError(f"no top-level widget {name}")
+
+
+def _own_state(widget, name):
+    """A widget's own state `name`: its direct child, one tab in, not the
+    state of a widget inside it."""
+    found = [_block_at(widget, m.start()) for m in re.finditer(rf"^\tstate = \{{\n\t\tname = {name}$", widget, re.M)]
+    assert len(found) == 1, f"{len(found)} states named {name} of the widget's own"
+    return found[0]
 
 
 def _txt_block(text, name):
@@ -214,7 +231,7 @@ class RegistrationTest(unittest.TestCase):
             self.assertTrue(os.path.isfile(path), m.group(1))
             _top_level(_read(path), m.group(2))
             found.append(m.group(2))
-        self.assertEqual(found, ["te_systems_window_launcher", "te_systems_window", "te_popups"])
+        self.assertEqual(found, ["te_systems_window_launcher", "te_systems_window", "te_popups", "te_jmap_repainter"])
 
     def test_the_files_carry_a_bom(self):
         for path in (REGISTRATION, GUI, GENERATED):
@@ -535,8 +552,9 @@ class StripTest(unittest.TestCase):
         cls.sguis = _read(TAB_SGUIS)
 
     def _strip(self, row=1):
-        """A strip of the registry: the strips type's row-th tab_buttons."""
-        at = [m.start() for m in re.finditer(r"\btab_buttons = \{", self.strips)]
+        """A strip of the registry: the strips type's row-th tab_buttons (or
+        te_tab_buttons_six, for a strip of six)."""
+        at = [m.start() for m in re.finditer(r"\b(?:te_tab_buttons_six|tab_buttons) = \{", self.strips)]
         return _block_at(self.strips, at[row - 1])
 
     def _override(self, name, within):
@@ -568,7 +586,7 @@ class StripTest(unittest.TestCase):
 
     def test_nation_is_first_and_always_open(self):
         first = self._strip()
-        self.assertRegex(first, r'^tab_buttons = \{\s*### nation\s*blockoverride "first_button" \{\s*text = "te_window_tab_nation"')
+        self.assertRegex(first, r'^te_tab_buttons_six = \{\s*### nation\s*blockoverride "first_button" \{\s*text = "te_window_tab_nation"')
         click = self._override("first_button_click", first)
         self.assertNotIn("enabled =", click)
         self.assertIn("onclick = \"[GetVariableSystem.Set('te_systems_window_tab', 'nation')]\"", click)
@@ -577,25 +595,31 @@ class StripTest(unittest.TestCase):
         self.assertIn("using = te_systems_window_nation_unselected",
                       self._override("first_button_visibility_checked", first))
 
-    def test_three_strips_of_five(self):
-        """Spec § 5.1 (owner, 2026-11-02): the window's own five, then the
-        Budget and Market panels' five, then the Population, Society,
-        Diplomacy and Military panels' five, each vanilla's five-slot
-        tab_buttons with no gate of its own (Nation always shows). Only the
-        developer tax-probes tab keeps a strip of its own, after them."""
+    def test_three_strips(self):
+        """Spec § 5.1 (owner, 2026-11-02): the window's own, then the Budget
+        and Market panels' five, then the Population, Society, Diplomacy and
+        Military panels' five, each with no gate of its own (Nation always
+        shows). The window's own strip holds six since Power Grids (owner,
+        2026-11-05), on te_tab_buttons_six, vanilla's strip with a sixth slot
+        as the Budget, Diplomacy and Market panels use; the others are
+        vanilla's five-slot tab_buttons. Only the developer tax-probes tab
+        keeps a strip of its own, after them."""
         self.assertEqual({row: [t.key for t in gen.TABS if t.row == row] for row in (1, 2, 3)}, STRIP_ORDER)
-        self.assertEqual(len(gen.TABS), 15)
+        self.assertEqual(len(gen.TABS), 16)
         for row, keys in STRIP_ORDER.items():
             with self.subTest(strip=row):
                 strip = self._strip(row)
-                self.assertTrue(strip.startswith("tab_buttons = {"))
+                six = len(keys) == 6
+                self.assertTrue(strip.startswith("te_tab_buttons_six = {" if six else "tab_buttons = {"))
                 self.assertNotIn("visible =", strip.split("blockoverride")[0])
                 at = [strip.index(f'text = "{_tab(k).label}"') for k in keys]
                 self.assertEqual(at, sorted(at))
-                for slot in SLOTS:
+                for slot in (SLOTS_SIX if six else SLOTS):
                     self.assertIn(f'blockoverride "{slot}_button"', strip)
-                self.assertNotIn("sixth_button", strip)
-        self.assertEqual(len(re.findall(r"\btab_buttons = \{", _strip_comments(self.strips))), 4)
+                if not six:
+                    self.assertNotIn("sixth_button", strip)
+        self.assertEqual(len(re.findall(r"\btab_buttons = \{", _strip_comments(self.strips))), 3)
+        self.assertEqual(len(re.findall(r"\bte_tab_buttons_six = \{", _strip_comments(self.strips))), 1)
         last = self._strip(3)
         rest = self.strips[self.strips.index(last) + len(last):]
         self.assertNotIn("te_window_tab_", rest)
@@ -608,7 +632,7 @@ class StripTest(unittest.TestCase):
             with self.subTest(tab=key):
                 t = _tab(key)
                 self.assertEqual((t.row, t.body, t.label), (row, body, f"te_window_tab_{key}"))
-                slot = SLOTS[STRIP_ORDER[row].index(key)]
+                slot = SLOTS_SIX[STRIP_ORDER[row].index(key)]
                 within = self._strip(row)
                 click = self._override(f"{slot}_button_click", within)
                 self.assertIn(f"onclick = \"[GetVariableSystem.Set('te_systems_window_tab', '{key}')]\"", click)
@@ -677,6 +701,35 @@ class StripTest(unittest.TestCase):
         on = _txt_block(_read(os.path.join(TRIGGERS, "banking_policy_triggers.txt")), "te_banking_system_on")
         self.assertIn("has_game_rule = banking_system_enabled", full)
         self.assertIn("has_game_rule = banking_system_enabled", on)
+
+    def test_the_strategic_reserve_never_opens_off_the_strip(self):
+        """The one mirrored tab whose open gate doesn't follow from its strip
+        gate by their triggers: open is holding the entry, on the strip is
+        Logistics and not being a revolution's rebels. It follows from the
+        entry instead (#1338). The entry starts only while the journal shows
+        it greyed, which is the strip gate word for word; a technology isn't
+        unlearned; and the rebels of a revolution, who start none, get no
+        running one either: a hub that falls to them stays the nation's
+        (st_res_hub_stays_within_nation), and the entry with its holder.
+        Three engine facts under that are named here, not shown: an entry
+        auto-activates only while is_shown_when_inactive holds as well as
+        possible (scripting_best_practices.md, "JE Auto-Activation Requires
+        BOTH"), a technology isn't unlearned, and a revolution's rebels take
+        over no running entry. test_strategic_reserve_lifecycle.py holds the
+        script's side."""
+        reserve = _tab("strategic_reserve")
+        tab, unlock = "te_market_strategic_reserve_tab_sgui", "te_market_strategic_reserve_tab_unlock_sgui"
+        self.assertEqual((reserve.open_, reserve.strip, reserve.unlock), (_shown(tab), _shown(unlock), unlock))
+        self.assertIn("is_shown = { has_journal_entry = je_strategic_reserve }", _txt_block(self.sguis, tab))
+        strip = re.search(r"is_shown = \{ (.*) \}", _txt_block(self.sguis, unlock)).group(1)
+        self.assertEqual(strip, "has_technology_researched = logistics is_revolutionary = no")
+        je = _txt_block(_strip_comments(_read(os.path.join(JE_DIR, "je_strategic_reserve.txt"))).replace("\n\t", "\n"),
+                        "je_strategic_reserve")
+        self.assertEqual(" ".join(_txt_block(je, "is_shown_when_inactive").split()), strip)
+        kept = _txt_block(_read(os.path.join(REPO, "common", "on_actions", "st_res_on_actions.txt")),
+                          "st_res_on_state_owner_change")
+        self.assertRegex(kept, r"limit = \{\s*NOT = \{ st_res_hub_stays_within_nation = yes \}\s*\}\s*"
+                               r"remove_building = building_strategic_reserve_hub")
 
     def test_demographics_opens_with_its_first_census(self):
         """As the Population panel's tab: its gate and its checklist passing."""
@@ -1044,9 +1097,23 @@ class WideTest(unittest.TestCase):
         self.assertEqual(wide.strip(), f'te_systems_window_panel_wide = {{\n\t\tvisible = "[{WIDE}]"\n\t}}')
         self.assertIn("type te_systems_window_panel_wide = te_fullscreen_block_window {", self.gui)
         self.assertNotIn("margin_widget", _strip_comments(self.gui))
-        # the state that closes vanilla's panels stays on the root: switching
-        # width doesn't rerun it
+        # the state that closes vanilla's panels stays on the root, its own
+        # and its only one: switching width doesn't rerun it
         self.assertEqual(self.root.count("name = _show"), 1)
+        self.assertIn('on_start = "[InformationPanelBar.ClosePanel]"', _own_state(self.root, "_show"))
+
+    def test_the_show_state_is_the_roots_own(self):
+        """Counted alone, the state could move into the side-panel branch and
+        still be one: there it would run again each time the width switches
+        back, and not at all for a window opened full screen (#1338)."""
+        state = _own_state(self.root, "_show")
+        branch = "\twidget = {\n\t\tsize = { 100% 100% }\n"
+        self.assertEqual(self.root.count(branch), 1)
+        moved = self.root.replace(state + "\n", "").replace(branch, branch + "\t" + state.replace("\n", "\n\t") + "\n")
+        self.assertEqual(moved.count("name = _show"), 1)
+        self.assertIn("\t\tstate = {\n\t\t\tname = _show\n", moved)
+        with self.assertRaisesRegex(AssertionError, "0 states named _show of the widget's own"):
+            _own_state(moved, "_show")
 
     def test_the_toggle_keeps_the_tab(self):
         on = _override(self.narrow, "fixed_top")
@@ -1075,8 +1142,10 @@ class WideTest(unittest.TestCase):
         for the session. So the full-screen frame's toggle sits at the left,
         under Back; the side panel's stays at its right."""
         toggle_type = _type_body(self.gui, "te_systems_window_toggle")
-        self.assertRegex(toggle_type, r'block "toggle_lead" \{\s*expand = \{\}\s*\}\s*button = \{')
-        button = toggle_type.index("button = {")
+        # the Map Room button (te_map_widgets.gui) sits just left of the toggle in both frames
+        self.assertRegex(toggle_type, r'block "toggle_lead" \{\s*expand = \{\}\s*\}\s*te_jmap_window_button = \{\}\s*'
+                                      r'button = \{')
+        button = re.search(r"(?<!\w)button = \{", toggle_type).start()
         self.assertRegex(toggle_type[_close(toggle_type, button + len("button = {") - 1):],
                          r'^\}\s*block "toggle_trail" \{\}\s*$')
         narrow = _override(self.narrow, "fixed_top")
@@ -1100,8 +1169,8 @@ class WideTest(unittest.TestCase):
     def test_the_wide_strip_is_the_narrow_strips_side_by_side(self):
         narrow = _type_body(self.generated, "te_systems_window_strips_narrow")
         wide = _type_body(self.generated, "te_systems_window_strips_wide")
-        n = [_block_at(narrow, m.start()) for m in re.finditer(r"\btab_buttons = \{", narrow)]
-        w = [_block_at(wide, m.start()) for m in re.finditer(r"\btab_buttons = \{", wide)]
+        n = [_block_at(narrow, m.start()) for m in re.finditer(r"\b(?:te_tab_buttons_six|tab_buttons) = \{", narrow)]
+        w = [_block_at(wide, m.start()) for m in re.finditer(r"\b(?:te_tab_buttons_six|tab_buttons) = \{", wide)]
         self.assertEqual(len(n), len(w))
         size = "minimumsize = { 540 -1 }\nmaximumsize = { 540 -1 }"
         for a, b in zip(n, w):
@@ -1113,10 +1182,10 @@ class WideTest(unittest.TestCase):
                              [ln.strip() for ln in a.splitlines() if ln.strip() and not ln.strip().startswith("visible")])
         # the system strips in one centered row, then the developer strip
         row = _block_at(wide, wide.index("hbox = {"))
-        self.assertRegex(row, r"^hbox = \{[^{}]*expand = \{\}\s*tab_buttons = \{")
+        self.assertRegex(row, r"^hbox = \{[^{}]*expand = \{\}\s*(?:te_tab_buttons_six|tab_buttons) = \{")
         self.assertRegex(row, r"\}\s*expand = \{\}\s*\}$")
-        self.assertEqual(row.count("tab_buttons = {"), len({t.row for t in gen.TABS}))
-        self.assertNotIn("visible", row.split("tab_buttons = {")[0])    # the system strips show to all
+        self.assertEqual(len(re.findall(r"\b(?:te_tab_buttons_six|tab_buttons) = \{", row)), len({t.row for t in gen.TABS}))
+        self.assertNotIn("visible", re.split(r"\b(?:te_tab_buttons_six|tab_buttons) = \{", row)[0])    # the system strips show to all
         # the developer strip's row carries its gate (its strip, as the wide
         # strips do, carries none)
         dev = _block_at(wide, wide.index("hbox = {", wide.index("TEMPORARY")))
@@ -1206,6 +1275,22 @@ class GeneratorTest(unittest.TestCase):
                          "stale: run python3 scripts/generators/gen_te_systems_window.py")
         self.assertEqual(gen.main(["--check"]), 0)
 
+    def test_the_generated_files_pass_the_tab_check(self):
+        """scripts/format_paradox_tabs.py, which preflight runs over common/
+        and events/ only, so nothing held these to it: vanilla's
+        fullscreen_block_window has a line of tabs alone, which the copy
+        kept (#1338). No line ends in whitespace either."""
+        sys.path.insert(0, os.path.join(REPO, "scripts"))
+        try:
+            import format_paradox_tabs
+        finally:
+            sys.path.pop(0)
+        for path in (gen.GUI_OUT, gen.NI_OUT):
+            with self.subTest(path=path.name):
+                text = path.read_text(encoding="utf-8-sig")
+                self.assertEqual(format_paradox_tabs.format_text(text), text)
+                self.assertEqual([n for n, ln in enumerate(text.split("\n"), 1) if ln != ln.rstrip()], [])
+
     def test_the_gates_take_a_root(self):
         """The gates root on the player by default, the window's as before
         (the committed file, above), and on another root when asked: National
@@ -1245,7 +1330,7 @@ class GeneratorTest(unittest.TestCase):
         """A tab with no open gate (as Budget Breakdown) is shown whenever it
         was last chosen, and Nation's fallback reads it so. (On a strip of its
         own: the three are full.)"""
-        extra = gen.Tab("always_open", 4, label="te_x", tooltip="te_x_tt", body="te_x_body")
+        extra = gen.Tab("always_open", 4, label="te_x", tooltip="te_x_tt", body="te_x_body", wide="te_x_wide_sections")
         with mock.patch.object(gen, "TABS", gen.TABS + [extra]):
             text = gen.render()
         self.assertNotIn("None", text)
@@ -1261,18 +1346,34 @@ class GeneratorTest(unittest.TestCase):
     def test_a_gated_tab_needs_its_checklist(self):
         """A tab with an open gate shows a checklist while grayed, so it names
         the scripted GUI and the locked line, unless it brings its own tooltip."""
-        bad = gen.Tab("no_checklist", 4, label="te_x", tooltip="te_x_tt", body="te_x_body", open_=gen.shown("te_x_sgui"))
+        bad = gen.Tab("no_checklist", 4, label="te_x", tooltip="te_x_tt", body="te_x_body", wide="te_x_wide_sections",
+                      open_=gen.shown("te_x_sgui"))
         with mock.patch.object(gen, "TABS", gen.TABS + [bad]):
             with self.assertRaisesRegex(ValueError, "no_checklist"):
                 gen.render()
-        own = gen.Tab("own_tooltip", 4, label="te_x", tooltip="te_x_tt", body="te_x_body",
+        own = gen.Tab("own_tooltip", 4, label="te_x", tooltip="te_x_tt", body="te_x_body", wide="te_x_wide_sections",
                       open_=gen.shown("te_x_sgui"), tooltip_expr="Localize( 'te_x_tt' )")
         with mock.patch.object(gen, "TABS", gen.TABS + [own]):
             self.assertIn("tooltip = \"[Localize( 'te_x_tt' )]\"", gen.render())
 
     def test_a_system_tab_can_sit_on_any_strip(self):
-        self.assertEqual(gen._system("x", "te_x_tab_body", "te_x_tab_layout", row=3).row, 3)
-        self.assertEqual(gen._system("x", "te_x_tab_body", "te_x_tab_layout").row, 1)
+        self.assertEqual(gen._system("x", "te_x_tab_body", "te_x_tab_layout", row=3, wide="te_x_wide_sections").row, 3)
+        self.assertEqual(gen._system("x", "te_x_tab_body", "te_x_tab_layout", wide="te_x_wide_sections").row, 1)
+
+    def test_a_tab_needs_its_wide_layout(self):
+        """Every tab has a full-screen layout (spec § 7), so the registry
+        takes none without: `wide` is required, and no mount falls back to
+        the body (#1338)."""
+        with self.assertRaisesRegex(TypeError, "wide"):
+            gen.Tab("no_wide", 4, label="te_x", tooltip="te_x_tt", body="te_x_body")
+        with self.assertRaisesRegex(TypeError, "wide"):
+            gen._system("x", "te_x_tab_body", "te_x_tab_layout")
+        with self.assertRaisesRegex(TypeError, "wide"):
+            gen._mirror("x", 2, "te_x_tt", "te_x_tab_body", "te_x_tab_layout", "te_x_tab_sgui", "te_x_tab_unlock_sgui")
+        for t in gen.TABS:
+            with self.subTest(tab=t.key):
+                self.assertIn(f"{t.wide} = {{}}", [ln.strip() for ln in gen._content(t, wide=True)])
+                self.assertEqual(gen._content(t), [f"{t.body} = {{}}"])
 
     def test_check_fails_on_a_file_without_its_bom(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -1329,7 +1430,8 @@ class LocTest(unittest.TestCase):
 
     def test_each_tab_shows_its_full_name(self):
         """The tabs carry no icon, so a name gets its slot less
-        tab_text_properties' 10 px margins: 84.8 with five on the strip. A
+        tab_text_properties' 10 px margins: 84.8 with five on the strip, 67.3
+        with six. A
         two-word name such as "Colonial Empire" is wider than that on one line
         at 17, as vanilla's "Release Subject" and "Nation Formation" are on
         its own five-slot Diplomacy strip in this window; tab_text_properties
@@ -1342,18 +1444,47 @@ class LocTest(unittest.TestCase):
         self.assertEqual(set(FULL_NAMES), {t.key for t in gen.TABS})
         for tab, full in FULL_NAMES.items():
             with self.subTest(tab=tab):
-                # a label may splice its entry's name ($je_x$), single-sourced
+                # a label may splice its entry's name ($je_x$), single-sourced;
+                # a name guarded for no player reads its plain fallback here
+                # (the United Nations': test_the_league_name_wraps_to_two_lines)
                 name = re.sub(r"\$(\w+)\$", lambda m: loc[m.group(1)], loc[_tab(tab).label])
+                name = re.sub(r"\[SelectLocalization\(GetPlayer\.IsValid,'\w+_ingame','(\w+)'\)\]",
+                              lambda m: loc[m.group(1)], name)
                 self.assertEqual(name, full)
                 words = name.split()
                 self.assertLessEqual(len(words), 2, name)
+                width = _name_width(len(STRIP_ORDER[_tab(tab).row]))
                 for word in words:
-                    self.assertLessEqual(len(word) * per_char, NAME_WIDTH, word)
+                    self.assertLessEqual(len(word) * per_char, width, word)
                 if tab in RULES or tab == "nation":
                     # the mirrored tabs take the entries' names, the owner's
                     # call, however long; "Demographics" shrinks toward 12
                     self.assertLessEqual(len(name), len(VANILLA_FIVE_SLOT_NAME), name)
                     self.assertLessEqual(max(len(w) for w in words), vanilla_word, name)
+
+    def test_the_league_name_wraps_to_two_lines(self):
+        """Under Early Unlock, before the age of Intergovernmental
+        Organizations, the United Nations tab reads "League of Nations"
+        (un_ov_league_sgui): three words, one more than the rule above allows and a
+        character longer than vanilla's longest. At fontsize_min it packs into
+        two lines ("League of" / "Nations"), as a two-word name does, and no
+        word is longer than "Nations"; the play-test checks it in game
+        (early-unlock-rules-playtest.md, United Nations item 6)."""
+        loc = _all_loc()
+        name = loc["un_org_name_league"]
+        self.assertEqual(name, "League of Nations")
+        per_char = TAB_UNITS_PER_CHAR * 1.1 * TAB_FONT_MIN / TAB_FONT
+        width = _name_width(len(STRIP_ORDER[_tab("united_nations").row]))
+        lines = [""]
+        for word in name.split():
+            joined = f"{lines[-1]} {word}".strip()
+            if len(joined) * per_char <= width:
+                lines[-1] = joined
+            else:
+                lines.append(word)
+        self.assertLessEqual(len(lines), 2, lines)
+        vanilla_word = max(len(w) for w in VANILLA_FIVE_SLOT_NAME.split())
+        self.assertLessEqual(max(len(w) for w in name.split()), vanilla_word)
 
 
 class IconsTest(unittest.TestCase):

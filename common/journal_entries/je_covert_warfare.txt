@@ -18,7 +18,13 @@
 je_covert_warfare = {
 	icon = "gfx/interface/icons/event_icons/je_covert_warfare.dds"
 
-	group = je_group_covert_warfare
+	group = je_group_te_systems
+
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
 
 	# The overview, the live sections and the explanations, in that order
 	# (gui/journal_entry_widgets/covert_operations_widget.gui). Funding's stepper
@@ -36,33 +42,63 @@ je_covert_warfare = {
 		container = "custom_widget_container_2"
 	}
 
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry ends through its
+	# invalid outcome on the rule.
+	disable_evaluation = {
+		NOT = { te_covert_warfare_on = yes }
+	}
 	is_shown_when_inactive = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
-	# Activate only when slots exceed the base (1) + rank bonus (GP +2, Major +1):
-	# tech / law / institution has granted at least one extra slot beyond what
-	# every country of this rank gets for free.
+	# Activate once the setting's gate is met (covert_warfare_entry_unlocked,
+	# covert_warfare_triggers.txt): under the late unlock a named source of an
+	# operation slot beyond the base slot and the rank bonus, a technology or the
+	# Ministry of Intelligence and Security's law (covert_warfare_slot_source,
+	# which says why each source is named rather than counted); under the early
+	# unlock also Central Archives, with the budget capped at Professional until
+	# the late gate (covert_agency_limited). One trigger, so the Military panel's
+	# Covert tab shows the same checklist as one line.
 	possible = {
-		OR = {
-			AND = {
-				country_rank >= rank_value:great_power
-				covert_operation_max_slots >= 4
-			}
-			AND = {
-				country_rank = rank_value:major_power
-				covert_operation_max_slots >= 3
-			}
-			AND = {
-				NOT = { country_rank >= rank_value:major_power }
-				covert_operation_max_slots >= 2
-			}
-		}
+		covert_warfare_entry_unlocked = yes
 	}
 
 	# Funding management buttons (operations launched via diplomatic actions)
 	scripted_button = iw_increase_funding_button
 	scripted_button = iw_decrease_funding_button
+
+	# ---- The agency's five standing modifiers ----
+	# Held on this entry while it is active (1.15's scaling modifiers): the
+	# engine re-reads each value from the owning country about every four days,
+	# so nothing adds, removes or refreshes them. Each value is 0 wherever the
+	# old monthly pulse removed its modifier. has_modifier can't see them: test
+	# the value's inputs instead.
+	# Defense from intelligence capacity (off below 1 total capacity).
+	scaling_modifiers_while_active = {
+		modifier = intelligence_capacity_defense
+		value = { value = intelligence_capacity_modifier_mult }
+	}
+	# Each unused operation slot redirected to domestic intelligence.
+	scaling_modifiers_while_active = {
+		modifier = iw_domestic_defense
+		value = { value = covert_operations_available_slots }
+	}
+	# Counterintelligence from funding: funding level − 1, from level 2.
+	scaling_modifiers_while_active = {
+		modifier = iw_funding_defense
+		value = { value = covert_ops_funding_ci_mult }
+	}
+	# The weekly expense, GDP-scaled; 0 at funding 0.
+	scaling_modifiers_while_active = {
+		modifier = covert_operation_funding_cost
+		value = { value = covert_operation_cost_mult }
+	}
+	# Tradecraft: one stack per tier above Untested.
+	scaling_modifiers_while_active = {
+		modifier = iw_tradecraft_bonus
+		value = { value = covert_tradecraft_bonus_mult }
+	}
 
 	immediate = {
 		# Initialize funding variable if missing
@@ -73,14 +109,20 @@ je_covert_warfare = {
 		# Agency experience starts at 0 (slice 5). Also seeded by the monthly
 		# pass, for saves whose entry was already active.
 		covert_tradecraft_init = yes
-	}
-
-	complete = {
-		always = no
+		# Opened under the early unlock, before the late gate: marked, so that
+		# a switch to the late unlock closes the entry until the late gate (the
+		# invalid outcome below). Cleared by the pulse once the late gate is
+		# met. Set only while the condition holds, so a re-run (a revolution's
+		# inherited entry) writes the same.
+		if = {
+			limit = { covert_agency_limited = yes }
+			set_variable = iw_opened_early
+		}
 	}
 
 	on_monthly_pulse = {
 		effect = {
+			te_scaling_inherited_selfcheck_rebel_entry = yes		# TEMPORARY (#1404): te_scaling_selfcheck_effects.txt
 			# ---- AI Funding Management ----
 			# AI automatically manages funding level based on financial health,
 			# strategic need, active operations, and cost awareness.
@@ -105,6 +147,26 @@ je_covert_warfare = {
 					}
 					if = {
 						limit = { covert_operations_active >= 1 }
+						set_variable = { name = iw_funding_level value = 1 }
+					}
+					else = {
+						set_variable = { name = iw_funding_level value = 0 }
+					}
+				}
+				# Borrowing toward bankruptcy: step down to the floor before the
+				# default, keeping running operations (and a war's) at 1.
+				else_if = {
+					limit = {
+						taking_loans = yes
+						weeks_until_bankruptcy < iw_ai_funding_bankruptcy_weeks
+					}
+					if = {
+						limit = {
+							OR = {
+								covert_operations_active >= 1
+								is_at_war = yes
+							}
+						}
 						set_variable = { name = iw_funding_level value = 1 }
 					}
 					else = {
@@ -168,62 +230,50 @@ je_covert_warfare = {
 				}
 			}
 
-			# ---- Track global max IC for relative tier display ----
-			ordered_country = {
-				limit = { intelligence_capacity_total >= 1 }
-				order_by = intelligence_capacity_total
-				max = 1
-				set_global_variable = { name = global_max_ic value = intelligence_capacity_total }
-			}
-
-			# ---- Update intelligence capacity defense modifier ----
-			# NOTE: Script values use owner={} internally to access country data
-			# from JE scope (owner is a no-op from country scope).
-			if = {
-				limit = { intelligence_capacity_total >= 1 }
-				je:je_covert_warfare = { remove_modifier = intelligence_capacity_defense }
-				je:je_covert_warfare = { add_modifier = { name = intelligence_capacity_defense multiplier = intelligence_capacity_modifier_mult } }
-			}
-			else_if = {
-				limit = { je:je_covert_warfare = { has_modifier = intelligence_capacity_defense } }
-				je:je_covert_warfare = { remove_modifier = intelligence_capacity_defense }
-			}
-
-			# ---- Domestic defense from unused operation slots ----
-			if = {
-				limit = { covert_operations_available_slots >= 1 }
-				je:je_covert_warfare = { remove_modifier = iw_domestic_defense }
-				je:je_covert_warfare = { add_modifier = { name = iw_domestic_defense multiplier = covert_operations_available_slots } }
-			}
-			else_if = {
-				limit = { je:je_covert_warfare = { has_modifier = iw_domestic_defense } }
-				je:je_covert_warfare = { remove_modifier = iw_domestic_defense }
-			}
-
-			# ---- Counterintelligence bonus from funding level ----
-			if = {
-				limit = { covert_ops_funding_ci_mult >= 1 }
-				je:je_covert_warfare = { remove_modifier = iw_funding_defense }
-				je:je_covert_warfare = { add_modifier = { name = iw_funding_defense multiplier = covert_ops_funding_ci_mult } }
-			}
-			else_if = {
-				limit = { je:je_covert_warfare = { has_modifier = iw_funding_defense } }
-				je:je_covert_warfare = { remove_modifier = iw_funding_defense }
-			}
-
-			# ---- Apply operation funding cost ----
+			# ---- The early unlock's budget cap ----
+			# Before the late gate an early agency's funding stops at
+			# Professional (covert_agency_funding_cap): the AI's levels above
+			# are cut to it, and so is a level set before a switch to the early
+			# unlock. The steppers stop there on their own
+			# (covert_possible_increase_funding).
 			if = {
 				limit = {
+					covert_agency_limited = yes
 					has_variable = iw_funding_level
-					var:iw_funding_level >= 1
+					var:iw_funding_level > covert_agency_funding_cap
 				}
-				je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
-				je:je_covert_warfare = { add_modifier = { name = covert_operation_funding_cost multiplier = covert_operation_cost_mult } }
+				set_variable = { name = iw_funding_level value = covert_agency_funding_cap }
 			}
-			else_if = {
-				limit = { je:je_covert_warfare = { has_modifier = covert_operation_funding_cost } }
-				je:je_covert_warfare = { remove_modifier = covert_operation_funding_cost }
+			if = {
+				limit = {
+					has_variable = iw_opened_early
+					covert_warfare_slot_source = yes
+				}
+				remove_variable = iw_opened_early
 			}
+
+			# ---- The world's best intelligence capacity, for the panel ----
+			# Display only: intelligence_capacity_relative turns it into the
+			# standing tier, the capacity bar and the overview tooltip. It is a
+			# pass over every country, the same for every holder, so the first
+			# holder to pulse takes it and the lock spares the rest for 25
+			# days: one census each 1st, when the entries pulse together. Every
+			# holder took it before, in the same frame, the last one's figure
+			# kept: about 250 passes a month, the pulse's largest part in a 1931
+			# game (docs/audits/late_game_performance.md).
+			if = {
+				limit = { NOT = { has_global_variable = iw_max_ic_lock } }
+				set_global_variable = { name = iw_max_ic_lock value = yes days = 25 }
+				ordered_country = {
+					limit = { intelligence_capacity_total >= 1 }
+					order_by = intelligence_capacity_total
+					max = 1
+					set_global_variable = { name = global_max_ic value = intelligence_capacity_total }
+				}
+			}
+
+			# The agency's standing modifiers are the entry's
+			# scaling_modifiers_while_active (above): nothing to refresh here.
 
 			# The exposure record's age (iw_last_exposed_age) and the defender
 			# event's cooldown are aged by covert_warfare_monthly_country
@@ -295,9 +345,79 @@ je_covert_warfare = {
 		}
 	}
 
+	# The rule switched off mid-game, from the screen that changes country
+	# (2026-11-08). Nothing else ends this entry, so its declared modifiers, its
+	# pulse and every operation ran on. It ends on its next update and takes the
+	# modifiers along; covert_stop_for_rule ends the operations and the agent
+	# networks, which other systems read (Space Race intelligence, loose
+	# material, the map).
+	# Also the early unlock switched to the late one while an entry opened
+	# early (iw_opened_early) is still short of the late gate: the same
+	# teardown.
+	# Either way covert_warfare_monthly_country's net adds the entry back once
+	# the rule is on and the gate of the setting in force is met. The trigger is
+	# covert_warfare_entry_would_end, which the net reads too, so the two can't
+	# drift apart; a loop from a rule read that differs between this outcome and
+	# the on_action is caught by the net's self-check and held.
+	# covert_log_entry_end writes a debug.log line saying which branch held and
+	# what the three settings read (covert_warfare.md, "Coming back").
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_covert_warfare_invalid_conclusion_desc
+		trigger = {
+			covert_warfare_entry_would_end = yes
+		}
+		effect = {
+			covert_log_entry_end = yes
+			covert_stop_for_rule = yes
+			# For the net's log line (ended_before=yes), removed at the add.
+			set_variable = iw_reopen_at_gate
+			if = {
+				limit = { has_variable = iw_opened_early }
+				remove_variable = iw_opened_early
+			}
+		}
+	}
+
 	weight = 800
 	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = no
 	should_update_on_player_command = yes
+
+	# The map (vanilla 1.15 journal entry map mode; docs/systems/mod_systems/journal_map_modes.md): the viewer's covert
+	# network in each country. Root: the state being painted, every state in the world. The Map Room draws the same map as
+	# its selector 20, from the same triggers in the same order (common/scripted_triggers/te_journal_map_triggers.txt; the
+	# parity test in test_journal_map_modes.py).
+	map_color = {
+		if = {
+			limit = { te_jmap_owner_is_viewer = yes }
+			value = "te_jmap_net_you"
+		}
+		else_if = {
+			limit = { te_jmap_net_some = yes }
+			lerp = {
+				min_color = "te_jmap_net_low"
+				max_color = "te_jmap_net_high"
+				factor = te_jmap_net_factor
+			}
+		}
+		else = {
+			value = "te_jmap_none"
+		}
+	}
+
+	map_tooltip = {
+		if = {
+			limit = { te_jmap_owner_is_viewer = yes }
+			custom_tooltip_no_bullet = te_jmap_tt_net_you
+		}
+		else_if = {
+			limit = { te_jmap_net_some = yes }
+			custom_tooltip_no_bullet = te_jmap_tt_net
+		}
+		else = {
+			custom_tooltip_no_bullet = te_jmap_tt_net_none
+		}
+	}
 }

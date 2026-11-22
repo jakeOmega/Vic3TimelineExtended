@@ -222,15 +222,6 @@ goods_output_digital_access_mult = {
 	}
 }
 
-goods_output_fine_art_mult = {
-	color = good
-	percent = yes
-
-	game_data = {
-		ai_value = 250
-	}
-}
-
 goods_output_clothes_mult = {
 	color = good
 	percent = yes
@@ -399,8 +390,20 @@ goods_output_iron_mult = {
 	}
 }
 
-goods_output_lead_mult = {
+goods_output_copper_mult = {
 	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
+# Vanilla 1.15 registers neither copper mult axis. The Strategic Reserve's
+# st_res_copper_store_flow needs the input axis (#1405), or the hub's copper
+# intake silently no-ops, as aeroplanes' once did.
+goods_input_copper_mult = {
+	color = bad
 	percent = yes
 
 	game_data = {
@@ -938,12 +941,6 @@ building_chromium_mine_throughput_add = {
 }
 
 building_specialty_alloy_metal_mine_throughput_add = {
-	color = good
-	percent = yes
-	decimals = 0
-}
-
-building_copper_mine_throughput_add = {
 	color = good
 	percent = yes
 	decimals = 0
@@ -3755,6 +3752,25 @@ country_enactment_success_chance_law_ministry_of_culture_add = {
 country_enactment_success_chance_law_slavery_banned_add = {
 	color = good
 	percent = yes
+}
+
+
+# === Ideologies (leader chance for mod character ideologies) ===
+# Vanilla 1.15 declares interest_group_ideology_<ideology>_leader_chance_mult
+# in script (modifier_types.json, script_only) for each of its 47 character
+# ideologies, and each ideology's two leader weights read it as
+# `multiply = { value = 1 add = modifier:<type> }`. Nothing generates it for a
+# mod ideology, so Environmentalist's is declared here, and its weights in
+# common/ideologies/extra_ideologies.txt read it the same way. Set by
+# environmentalist_leader_pull_modifier (environmentalism events, #1446).
+interest_group_ideology_environmentalists_leader_chance_mult = {
+	script_only = yes
+	decimals = 0
+	color = neutral
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
 }
 
 

@@ -11,6 +11,7 @@ against the parameters, the wiring, and the harness scenario.
 
 import dataclasses
 import functools
+import json
 import re
 import sys
 import unittest
@@ -445,13 +446,15 @@ class TestNexus(unittest.TestCase):
         self.assertIn(f"country_tech_research_speed_mult = {P.UM_RESEARCH_PER_LEVEL}", body)
 
     def test_the_mult_axes_are_registered(self):
-        """The engine ignores an unregistered goods mult axis (the Strategic Reserve's lesson)."""
+        """The engine ignores an unregistered goods mult axis (the Strategic Reserve's lesson). Vanilla's
+        registration counts (1.15 registers goods_output_fine_art_mult, so the mod's copy went)."""
         defs = "".join(p.read_text(encoding="utf-8-sig")
                        for p in (ROOT / "common" / "modifier_type_definitions").glob("*.txt"))
-        for good in P.UM_OUTPUT_FACTORS:
-            self.assertRegex(defs, rf"(?m)^goods_output_{good}_mult = \{{")
-        for good in P.UM_INPUT_FACTORS:
-            self.assertRegex(defs, rf"(?m)^goods_input_{good}_mult = \{{")
+        vanilla = set(json.loads((ROOT / "vanilla_parsed" / "common" / "modifier_types.json").read_text(encoding="utf-8")))
+        for axis in [f"goods_output_{good}_mult" for good in P.UM_OUTPUT_FACTORS] + \
+                    [f"goods_input_{good}_mult" for good in P.UM_INPUT_FACTORS]:
+            with self.subTest(axis=axis):
+                self.assertTrue(axis in vanilla or re.search(rf"(?m)^{axis} = \{{", defs), f"{axis} is not registered")
 
     def test_a_full_level_makes_about_the_calibration(self):
         """A full level, 1,000,000 minds, makes about UM_MIND_OUTPUT a mind a week at base prices, leaning on digital

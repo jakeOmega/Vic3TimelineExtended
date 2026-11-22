@@ -189,13 +189,24 @@ class RegistryTests(unittest.TestCase):
 
     def test_journal_categories_cover_every_mod_entry_but_the_nuclear_one(self):
         """Every mod-defined journal entry is in the registry, except the nuclear one (own art).
+        The Map Room (te_journal_maps.txt) borrows vanilla's event_map.dds while it is under test
+        (docs/testing/journal-map-modes-playtest.md); its page is opened only by buttons. The World Climate
+        entry (je_world_climate.txt, #1448) shares Global Warming's icon, as the same climate seen from the world.
+        The culture merge entries (te_culture_merges_generated.txt, one per merge) all use vanilla's waving flag, the
+        icon of Russification and the cultural renaissances; one picture for thirty-two entries is a placeholder the
+        owner can replace.
         REPLACE:-ed vanilla entries do not match the pattern, and the registry cannot wire them."""
         import re
         defined = set()
         for path in Path(MOD_ROOT, "common", "journal_entries").glob("*.txt"):
             defined |= set(re.findall(r"^([A-Za-z0-9_]+)\s*=\s*\{", path.read_text(encoding="utf-8-sig"), re.M))
         registered = set(ip.ICONS["journal_entry"]) | set(ip.ICONS["journal_entry_space"])
-        self.assertEqual(defined - registered, {"je_nuclear_program"})
+        sys.path.insert(0, str(Path(MOD_ROOT, "scripts", "generators")))
+        import culture_merges_config as cfg
+        merges = {"je_te_cm_%s" % m.key for m in cfg.MERGES}  # exactly the roster's, not whatever carries the prefix
+        self.assertEqual({name for name in defined if name.startswith("je_te_cm_")}, merges)
+        self.assertEqual(defined - registered - merges,
+                         {"je_nuclear_program", "je_te_map_room", "je_world_climate"})
         self.assertEqual(registered - defined, set())
 
 
@@ -491,6 +502,36 @@ class StripTests(unittest.TestCase):
                          "gfx/interface/illustrations/institutions/institution_ministry_of_war.dds")
         self.assertEqual(ip.icon_path("institution", "institution_ministry_of_war"),
                          "gfx/interface/icons/institution_icons/institution_ministry_of_war.dds")
+
+
+class BannerTests(unittest.TestCase):
+    """compose_banner fits a wide render to the banner's own size; the category is written where the GUI reads it."""
+
+    @unittest.skipIf(icon_dds is None, "Pillow is not installed")
+    def test_the_render_covers_the_banner_and_is_cropped_about_its_centre(self):
+        import icon_render
+        self.r = icon_render
+        spec = ip.CATEGORIES["space_banner"]
+        w, h = spec["gen_size"]
+        raw = np.zeros((h, w, 3), dtype=np.uint8)
+        raw[:, :, 0] = np.linspace(0, 255, w).astype(np.uint8)[None, :]    # red runs left to right
+        raw[h // 2 - 8:h // 2 + 8, :, 1] = 255                            # a green band across the middle
+        out = np.asarray(self.r.compose_banner(Image.fromarray(raw), spec))
+        self.assertEqual(out.shape, (spec["size"][1], spec["size"][0], 4))
+        self.assertTrue((out[..., 3] == 255).all())
+        self.assertLess(out[:, :8, 0].mean(), 8)                           # the full width is kept
+        self.assertGreater(out[:, -8:, 0].mean(), 247)
+        rows = np.where(out[:, out.shape[1] // 2, 1] > 128)[0]
+        self.assertAlmostEqual(rows.mean(), (spec["size"][1] - 1) / 2, delta=1)   # the middle stays in the middle
+
+    def test_the_shape_is_the_render_s_and_block_compression_s(self):
+        spec = ip.CATEGORIES["space_banner"]
+        (w, h), (gw, gh) = spec["size"], spec["gen_size"]
+        self.assertEqual((w % 4, h % 4), (0, 0))            # BC7 works in 4 x 4 blocks
+        self.assertEqual((gw % 16, gh % 16), (0, 0))        # FLUX renders in 16 px patches
+        self.assertLess(abs(gw / gh - w / h), 0.1)          # so the crop takes a few rows at most
+        self.assertEqual(ip.icon_path("space_banner", "fleet_banner_chemical"),
+                         "gfx/interface/illustrations/space_race/fleet_banner_chemical.dds")
 
 
 class BackdropPlumbingTests(unittest.TestCase):

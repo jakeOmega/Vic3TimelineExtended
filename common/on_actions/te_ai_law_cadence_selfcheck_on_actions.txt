@@ -1,0 +1,125 @@
+﻿# TEMPORARY self-check (2026-11-15; the rate moved into the agendas 2026-11-16): does the political agendas'
+# INJECTed change_law_chance take?
+#
+# edited_political_strategies.txt adds 39 to every political agenda's own change_law_chance (vanilla 1.15.1: 2.5
+# conservative to 20 confrontation). No trigger or script value reads an AI strategy's value, and nothing has shown
+# that an INJECT reaches an AI strategy's script-value field (the one AI-strategy read, a subsidies block, kept
+# vanilla's value: scripting_best_practices.md). This check reads the effect instead: the share of AI countries in the
+# middle of a law enactment, conservatives (has_strategy = ai_strategy_conservative_agenda, only which strategy a
+# country holds) apart from the rest. Conservatives are where the rate moves most, about 3% a roll to 41.5-42.5%.
+#
+# First verdict, on the build that had the 39 in the default strategy's field instead (dab9335f1, an unattended
+# AI-only game from 1836): TE_SELF_CHECK BROKEN ai_law_cadence cons=23/121=0.19 rest=21/98=0.21 date=January 1, 1890.
+# The play-test list records it with the run's law starts by agenda.
+#
+# ai_law_cadence, once, at the first global monthly pulse on or after 1890.1.1 that is also at least 36 months after
+# the first pulse this build ran (te_alc2_months counts them), over AI countries that are not decentralized nations
+# (those never change a law: 121 of the 123 AI countries in an 1864 save that had changed none). The 36 months let a
+# save begun on the build before settle at the new rate first: enactments under way then take a median 17 months to
+# end. 1890, because early in a game few AI countries have a law to start: conservatives read 0.09-0.10 in 1849 and
+# 1867 on the build before, and a working change could read as low. The latch and the count are te_alc2_* from
+# 2026-11-16, so a save that logged the first verdict (it set te_alc_checked) logs this build's 36 months after it is
+# first loaded on this one.
+#
+# The margin, from 20 saves of six games on the build before (1849-2054), counted as this check counts: conservatives
+# 0.00-0.26, 0.06-0.26 from 1890 (the highest 25 of 96, 1958); the rest 0.21-0.47, 0.26-0.43 from 1890. At about 100
+# countries a share's sampling error is about 0.045: OK's 0.40 is three errors above the conservatives' highest (two
+# at the 40-country floor), and the rest's 0.55 is 2.3 above theirs. With the change working, three ways of modelling
+# "has a law to start" put conservatives at 0.23-0.42 / 0.47-0.65 / 0.69-0.77 (idle stretch after each enactment /
+# fixed share of countries / each roll on its own, from before-shares of 0.14-0.19), the rest at 0.47-0.62 /
+# 0.58-0.70 / 0.73-0.79. So only OK settles anything; BROKEN and NO_VERDICT can come with the change working.
+# No line yet: the game hasn't reached 1890, or 36 months since this build was first loaded.
+#   START       a plain marker, logged first: with no verdict line after it, the templated line was dropped.
+#   OK          conservatives at 0.40 or more (40 or more counted): the raised rate is in force, so an INJECT reaches
+#               a political agenda's change_law_chance.
+#   BROKEN      conservatives under 0.30 (40 or more counted) and the rest under 0.55: nothing rose. Two causes fit:
+#               (a) the agendas' INJECT is ignored; (c) these countries have no law they would start. The first
+#               verdict's third cause, (b) the default's field not adding to an agenda's own, no longer applies: the
+#               39 is in the agenda's own field. Not grounds for the REPLACE alone:
+#               docs/testing/ai-economy-playtest.md § AI law cadence says how to tell (a) from (c).
+#   NO_VERDICT  fewer than 40 conservatives counted; conservatives at 0.30-0.40; or conservatives under 0.30 with the
+#               rest at 0.55 or more (the rate looks in force; conservatives have nothing to start).
+# With another mod that raises the agendas' own rates (kai_political_strategies.txt), OK can come from that mod alone.
+#
+# Play-test row: docs/testing/ai-economy-playtest.md § AI law cadence. Delete this file and
+# te_ai_law_cadence_selfcheck_values.txt once it reads OK.
+on_monthly_pulse = {
+	on_actions = {
+		te_ai_law_cadence_selfcheck_settle
+		te_ai_law_cadence_selfcheck
+	}
+}
+
+# The settling count: one a month from the first pulse this build runs, up to 36.
+te_ai_law_cadence_selfcheck_settle = {
+	trigger = {
+		NOT = { has_global_variable = te_alc2_checked }
+	}
+	effect = {
+		if = {
+			limit = { NOT = { has_global_variable = te_alc2_months } }
+			set_global_variable = { name = te_alc2_months value = 0 }
+		}
+		if = {
+			limit = { global_var:te_alc2_months < 36 }
+			change_global_variable = { name = te_alc2_months add = 1 }
+		}
+	}
+}
+
+# The verdict, once (the latch is the first thing it sets).
+te_ai_law_cadence_selfcheck = {
+	trigger = {
+		NOT = { has_global_variable = te_alc2_checked }
+		has_global_variable = te_alc2_months
+		global_var:te_alc2_months >= 36
+		game_date >= 1890.1.1
+	}
+	effect = {
+		set_global_variable = te_alc2_checked
+		set_global_variable = { name = te_alc_chk_countries value = 0 }
+		set_global_variable = { name = te_alc_chk_enacting value = 0 }
+		set_global_variable = { name = te_alc_chk_cons value = 0 }
+		set_global_variable = { name = te_alc_chk_cons_enacting value = 0 }
+		every_country = {
+			limit = {
+				is_ai = yes
+				NOT = { is_country_type = decentralized }
+			}
+			change_global_variable = { name = te_alc_chk_countries add = 1 }
+			if = {
+				limit = { enacting_any_law = yes }
+				change_global_variable = { name = te_alc_chk_enacting add = 1 }
+			}
+			if = {
+				limit = { has_strategy = ai_strategy_conservative_agenda }
+				change_global_variable = { name = te_alc_chk_cons add = 1 }
+				if = {
+					limit = { enacting_any_law = yes }
+					change_global_variable = { name = te_alc_chk_cons_enacting add = 1 }
+				}
+			}
+		}
+		debug_log = "TE_SELF_CHECK START ai_law_cadence (the verdict line follows; none after this one means the engine dropped the templated line)"
+		random_country = {
+			if = {
+				limit = {
+					te_alc_chk_cons_g >= 40
+					te_alc_chk_cons_share >= 0.40
+				}
+				debug_log = "TE_SELF_CHECK OK ai_law_cadence cons=[SCOPE.ScriptValue('te_alc_chk_cons_enacting_g')|0]/[SCOPE.ScriptValue('te_alc_chk_cons_g')|0]=[SCOPE.ScriptValue('te_alc_chk_cons_share')|2] rest=[SCOPE.ScriptValue('te_alc_chk_rest_enacting_g')|0]/[SCOPE.ScriptValue('te_alc_chk_rest_g')|0]=[SCOPE.ScriptValue('te_alc_chk_rest_share')|2] date=[TimeKeeper.GetCurrentDate.GetString] (AI conservatives mid-enactment, against at most 0.26 from 1890 on the build before: the political agendas' raised change_law_chance is in force)"
+			}
+			else_if = {
+				limit = {
+					te_alc_chk_cons_g >= 40
+					te_alc_chk_cons_share < 0.30
+					te_alc_chk_rest_share < 0.55
+				}
+				debug_log = "TE_SELF_CHECK BROKEN ai_law_cadence cons=[SCOPE.ScriptValue('te_alc_chk_cons_enacting_g')|0]/[SCOPE.ScriptValue('te_alc_chk_cons_g')|0]=[SCOPE.ScriptValue('te_alc_chk_cons_share')|2] rest=[SCOPE.ScriptValue('te_alc_chk_rest_enacting_g')|0]/[SCOPE.ScriptValue('te_alc_chk_rest_g')|0]=[SCOPE.ScriptValue('te_alc_chk_rest_share')|2] date=[TimeKeeper.GetCurrentDate.GetString] (nothing rose above the build before's 0.26 and 0.43 with the 39 in each agenda's own change_law_chance; two causes fit: the agendas' INJECT is ignored, or these countries have no law to start; not grounds for the REPLACE alone: docs/testing/ai-economy-playtest.md)"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK NO_VERDICT ai_law_cadence cons=[SCOPE.ScriptValue('te_alc_chk_cons_enacting_g')|0]/[SCOPE.ScriptValue('te_alc_chk_cons_g')|0]=[SCOPE.ScriptValue('te_alc_chk_cons_share')|2] rest=[SCOPE.ScriptValue('te_alc_chk_rest_enacting_g')|0]/[SCOPE.ScriptValue('te_alc_chk_rest_g')|0]=[SCOPE.ScriptValue('te_alc_chk_rest_share')|2] date=[TimeKeeper.GetCurrentDate.GetString] (fewer than 40 conservatives, conservatives at 0.30-0.40, or the rest at 0.55 or more with conservatives low, which says the rate is in force and conservatives have nothing to start: read the saves as docs/testing/ai-economy-playtest.md says)"
+			}
+		}
+	}
+}

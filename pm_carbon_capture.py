@@ -51,10 +51,15 @@ EXCLUDED_BUILDINGS = {
                     "building_west_ural_oil_depot"),
                    "Oil is refinery/feedstock or storage inventory, not a capturable combustion stream."),
 }
-EXCLUDED_GROUPS = dict.fromkeys(("pmg_synthetic_dyes", "pmg_synthetic_rubber", "pmg_synthetic_silk",
-                               "pmg_ig_farben_buna_werke", "pmg_jsr_yokkaichi_complex",
-                               "pmg_sibur_tobolsk_complex", "pmg_generic_dye_fiber_park"),
-                              "Oil/coal used as chemical feedstock rather than burnt fuel.")
+EXCLUDED_GROUPS = {
+    **dict.fromkeys(("pmg_synthetic_dyes", "pmg_synthetic_rubber", "pmg_synthetic_silk",
+                     "pmg_ig_farben_buna_werke", "pmg_jsr_yokkaichi_complex",
+                     "pmg_sibur_tobolsk_complex", "pmg_generic_dye_fiber_park"),
+                    "Oil/coal used as chemical feedstock rather than burnt fuel."),
+    # A plantation's harvesters, as a farm's: its sugar mill keeps its capture group.
+    **dict.fromkeys(("pmg_harvesting_process_plantation", "pmg_harvesting_process_building_rubber_plantation"),
+                    "Dispersed agricultural machinery."),
+}
 EXCLUDED_METHODS = dict.fromkeys(("pm_houseware_plastics", "pm_injection_molding", "pm_blow_molding",
                                 "pm_massed_produced_plastics"),
                                "Oil used as plastics feedstock.")

@@ -88,19 +88,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_textile_mill"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_LOWER_EGYPT"
+       ],
+       "building": [
+        "=",
+        "building_textile_mill"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -666,19 +674,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_steel_mill"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_RIO_GRANDE"
+       ],
+       "building": [
+        "=",
+        "building_steel_mill"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ],
@@ -1011,19 +1027,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_sulfur_mine"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_ANTOFAGASTA"
+       ],
+       "building": [
+        "=",
+        "building_sulfur_mine"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -1630,19 +1654,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_arms_industry"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_BAJO_PARAGUAY"
+       ],
+       "building": [
+        "=",
+        "building_arms_industry"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -1821,19 +1853,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_arms_industry"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_SANTIAGO"
+       ],
+       "building": [
+        "=",
+        "building_arms_industry"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -1976,25 +2016,20 @@
       "=",
       "rubber_mastication"
      ],
-     "any_scope_state": [
+     "has_building_levels_in_state_region": [
       "=",
       {
-       "state_region": [
+       "region": [
         "=",
-        "s:STATE_PASTAZA"
+        "STATE_PASTAZA"
        ],
-       "any_scope_building": [
+       "building": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_rubber_plantation"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "building_rubber_plantation"
+       ],
+       "levels": [
+        ">=",
+        "5"
        ]
       }
      ]
@@ -2339,19 +2374,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_food_industry"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_MANITOBA"
+       ],
+       "building": [
+        "=",
+        "building_food_industry"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -2972,19 +3015,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_shipyard"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_EASTERN_THRACE"
+       ],
+       "building": [
+        "=",
+        "building_shipyard"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -3331,19 +3382,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_wheat_farm"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_MACEDONIA"
+       ],
+       "building": [
+        "=",
+        "building_wheat_farm"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -4321,19 +4380,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_textile_mill"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_TONKIN"
+       ],
+       "building": [
+        "=",
+        "building_textile_mill"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ],
@@ -4867,19 +4934,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_steel_mill"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_NEW_SOUTH_WALES"
+       ],
+       "building": [
+        "=",
+        "building_steel_mill"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -5048,19 +5123,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_rice_farm"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_BANGKOK"
+       ],
+       "building": [
+        "=",
+        "building_rice_farm"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -5163,7 +5246,8 @@
    "extension_building_types": [
     "=",
     [
-     "building_automotive_industry"
+     "building_automotive_industry",
+     "building_arms_industry"
     ]
    ],
    "possible_prestige_goods": [
@@ -5249,7 +5333,7 @@
             ],
             [
              "=",
-             "building_arms_industry"
+             "building_motor_industry"
             ],
             [
              "=",
@@ -5324,7 +5408,7 @@
        ]
       }
      ],
-     "building_arms_industry": [
+     "building_motor_industry": [
       "=",
       {
        "level": [
@@ -5480,19 +5564,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_motor_industry"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_CENTRAL_HUNGARY"
+       ],
+       "building": [
+        "=",
+        "building_motor_industry"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -5667,19 +5759,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_steel_mill"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_CENTRAL_HUNGARY"
+       ],
+       "building": [
+        "=",
+        "building_steel_mill"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -6074,19 +6174,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_arms_industry"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_AUSTRIA"
+       ],
+       "building": [
+        "=",
+        "building_arms_industry"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -6493,19 +6601,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_arms_industry"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_EASTERN_HUBEI"
+       ],
+       "building": [
+        "=",
+        "building_arms_industry"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -6670,19 +6786,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_shipyard"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_FUJIAN"
+       ],
+       "building": [
+        "=",
+        "building_shipyard"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -6847,19 +6971,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_glassworks"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_JIANGXI"
+       ],
+       "building": [
+        "=",
+        "building_glassworks"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -7456,19 +7588,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_textile_mill"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_PERNAMBUCO"
+       ],
+       "building": [
+        "=",
+        "building_textile_mill"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -7642,19 +7782,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_steel_mill"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_SAO_PAULO"
+       ],
+       "building": [
+        "=",
+        "building_steel_mill"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -7846,19 +7994,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_arms_industry"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_RIO_GRANDE_DO_SUL"
+       ],
+       "building": [
+        "=",
+        "building_arms_industry"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -7953,7 +8109,8 @@
    "building_types": [
     "=",
     [
-     "building_lead_mine"
+     "building_lead_mine",
+     "building_copper_mine"
     ]
    ],
    "extension_building_types": [
@@ -8008,19 +8165,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_lead_mine"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_POTOSI"
+       ],
+       "building": [
+        "=",
+        "building_lead_mine"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -8263,13 +8428,13 @@
    "building_types": [
     "=",
     [
-     "building_port"
+     "building_shipyard"
     ]
    ],
    "extension_building_types": [
     "=",
     [
-     "building_shipyard",
+     "building_port",
      "building_logging_camp"
     ]
    ],
@@ -8322,19 +8487,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_shipyard"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_SANTIAGO"
+       ],
+       "building": [
+        "=",
+        "building_shipyard"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -8492,19 +8665,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_power_plant"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_MIRANDA"
+       ],
+       "building": [
+        "=",
+        "building_power_plant"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -8806,7 +8987,8 @@
    "extension_building_types": [
     "=",
     [
-     "building_coal_mine"
+     "building_coal_mine",
+     "building_copper_mine"
     ]
    ],
    "potential": [
@@ -8858,19 +9040,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_power_plant"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_LIMA"
+       ],
+       "building": [
+        "=",
+        "building_power_plant"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -8969,7 +9159,7 @@
    "building_types": [
     "=",
     [
-     "building_lead_mine",
+     "building_copper_mine",
      "building_steel_mill",
      "building_chemical_plant"
     ]
@@ -9065,7 +9255,7 @@
              "is_building_type": [
               [
                "=",
-               "building_lead_mine"
+               "building_copper_mine"
               ],
               [
                "=",
@@ -9124,7 +9314,7 @@
    "ai_construction_targets": [
     "=",
     {
-     "building_lead_mine": [
+     "building_copper_mine": [
       "=",
       {
        "level": [
@@ -10048,7 +10238,7 @@
     "=",
     [
      "building_gold_mine",
-     "building_lead_mine"
+     "building_copper_mine"
     ]
    ],
    "extension_building_types": [
@@ -10130,7 +10320,7 @@
               ],
               [
                "=",
-               "building_lead_mine"
+               "building_copper_mine"
               ]
              ]
             }
@@ -10154,7 +10344,7 @@
       "=",
       "0.05"
      ],
-     "building_lead_mine_throughput_add": [
+     "building_copper_mine_throughput_add": [
       "=",
       "0.1"
      ]
@@ -10195,7 +10385,7 @@
        ]
       }
      ],
-     "building_lead_mine": [
+     "building_copper_mine": [
       "=",
       {
        "level": [
@@ -13531,7 +13721,8 @@
    "extension_building_types": [
     "=",
     [
-     "building_iron_mine"
+     "building_iron_mine",
+     "building_copper_mine"
     ]
    ],
    "possible_prestige_goods": [
@@ -13585,19 +13776,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_electrics_industry"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_SVEALAND"
+       ],
+       "building": [
+        "=",
+        "building_electrics_industry"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -14164,19 +14363,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_shipyard"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_EASTERN_NORWAY"
+       ],
+       "building": [
+        "=",
+        "building_shipyard"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -14355,19 +14562,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_paper_mill"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_UUSIMAA"
+       ],
+       "building": [
+        "=",
+        "building_paper_mill"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -14521,19 +14736,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_motor_industry"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_GREATER_POLAND"
+       ],
+       "building": [
+        "=",
+        "building_motor_industry"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -15218,19 +15441,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_steel_mill"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_BASQUE_COUNTRY"
+       ],
+       "building": [
+        "=",
+        "building_steel_mill"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -15405,19 +15636,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_coal_mine"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_ASTURIAS"
+       ],
+       "building": [
+        "=",
+        "building_coal_mine"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -15595,19 +15834,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_textile_mill"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_CATALONIA"
+       ],
+       "building": [
+        "=",
+        "building_textile_mill"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -15782,19 +16029,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_arms_industry"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_ASTURIAS"
+       ],
+       "building": [
+        "=",
+        "building_arms_industry"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -15972,19 +16227,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_arms_industry"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_WESTERN_SERBIA"
+       ],
+       "building": [
+        "=",
+        "building_arms_industry"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -16294,13 +16557,13 @@
    "building_types": [
     "=",
     [
-     "building_port"
+     "building_shipyard"
     ]
    ],
    "extension_building_types": [
     "=",
     [
-     "building_shipyard",
+     "building_port",
      "building_logging_camp"
     ]
    ],
@@ -16369,19 +16632,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_shipyard"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_ZEALAND"
+       ],
+       "building": [
+        "=",
+        "building_shipyard"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -16697,19 +16968,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_oil_rig"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_WALLACHIA"
+       ],
+       "building": [
+        "=",
+        "building_oil_rig"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -16849,25 +17128,20 @@
       "=",
       "bessemer_process"
      ],
-     "any_scope_state": [
+     "has_building_levels_in_state_region": [
       "=",
       {
-       "state_region": [
+       "region": [
         "=",
-        "s:STATE_CONSTANTINE"
+        "STATE_CONSTANTINE"
        ],
-       "any_scope_building": [
+       "building": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_iron_mine"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "building_iron_mine"
+       ],
+       "levels": [
+        ">=",
+        "5"
        ]
       }
      ]
@@ -17025,19 +17299,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_steel_mill"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_BURGUNDY"
+       ],
+       "building": [
+        "=",
+        "building_steel_mill"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -17107,6 +17389,24 @@
      "value": [
       "=",
       "3"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "divided_monarchists_ai_backs_orleanist": [
+          "=",
+          "yes"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "6"
+       ]
+      }
      ]
     }
    ]
@@ -17212,19 +17512,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_textile_mill"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_BURGUNDY"
+       ],
+       "building": [
+        "=",
+        "building_textile_mill"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ],
@@ -17290,6 +17598,24 @@
      "value": [
       "=",
       "3"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "divided_monarchists_ai_backs_orleanist": [
+          "=",
+          "yes"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "6"
+       ]
+      }
      ]
     }
    ]
@@ -17375,19 +17701,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_vineyard"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_CHAMPAGNE"
+       ],
+       "building": [
+        "=",
+        "building_vineyard"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -17548,19 +17882,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_arms_industry"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_RHONE"
+       ],
+       "building": [
+        "=",
+        "building_arms_industry"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -17630,6 +17972,24 @@
      "value": [
       "=",
       "3"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "divided_monarchists_ai_backs_orleanist": [
+          "=",
+          "yes"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "6"
+       ]
+      }
      ]
     }
    ]
@@ -17714,19 +18074,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_shipyard"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_PROVENCE"
+       ],
+       "building": [
+        "=",
+        "building_shipyard"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -17796,6 +18164,24 @@
      "value": [
       "=",
       "3"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "divided_monarchists_ai_backs_orleanist": [
+          "=",
+          "yes"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "6"
+       ]
+      }
      ]
     }
    ]
@@ -17875,19 +18261,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_coal_mine"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_FRENCH_LOW_COUNTRIES"
+       ],
+       "building": [
+        "=",
+        "building_coal_mine"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -18789,19 +19183,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_electrics_industry"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_BRANDENBURG"
+       ],
+       "building": [
+        "=",
+        "building_electrics_industry"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -19115,19 +19517,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_synthetics_plant"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_BADEN"
+       ],
+       "building": [
+        "=",
+        "building_synthetics_plant"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -19304,19 +19714,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_textile_mill"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_LOWLANDS"
+       ],
+       "building": [
+        "=",
+        "building_textile_mill"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -19481,19 +19899,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_shipyard"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_YORKSHIRE"
+       ],
+       "building": [
+        "=",
+        "building_shipyard"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -19665,19 +20091,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_shipyard"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_LOWLANDS"
+       ],
+       "building": [
+        "=",
+        "building_shipyard"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -20227,19 +20661,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_coal_mine"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_WEST_BENGAL"
+       ],
+       "building": [
+        "=",
+        "building_coal_mine"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -20416,19 +20858,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_textile_mill"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_BOMBAY"
+       ],
+       "building": [
+        "=",
+        "building_textile_mill"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -20607,19 +21057,6 @@
         "is_incorporated": [
          "=",
          "yes"
-        ],
-        "any_scope_building": [
-         "=",
-         {
-          "is_building_type": [
-           "=",
-           "building_cotton_plantation"
-          ],
-          "level": [
-           ">=",
-           "5"
-          ]
-         }
         ]
        }
       ],
@@ -20645,6 +21082,27 @@
         ]
        }
       ]
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
+        "=",
+        "STATE_BOMBAY"
+       ],
+       "building": [
+        "=",
+        "building_cotton_plantation"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
      ]
     }
    ],
@@ -21130,19 +21588,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_textile_mill"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_MADRAS"
+       ],
+       "building": [
+        "=",
+        "building_textile_mill"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ],
@@ -21301,19 +21767,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_tea_plantation"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_ASSAM"
+       ],
+       "building": [
+        "=",
+        "building_tea_plantation"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -21464,19 +21938,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_shipyard"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_BOMBAY"
+       ],
+       "building": [
+        "=",
+        "building_shipyard"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ],
@@ -22175,19 +22657,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_power_plant"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_WEST_BENGAL"
+       ],
+       "building": [
+        "=",
+        "building_power_plant"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -22526,19 +23016,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_food_industry"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_CROATIA"
+       ],
+       "building": [
+        "=",
+        "building_food_industry"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -22660,15 +23158,34 @@
      "hidden_trigger": [
       "=",
       {
-       "s:STATE_DALMATIA": [
+       "OR": [
         "=",
         {
-         "any_scope_state": [
+         "s:STATE_CROATIA": [
           "=",
           {
-           "owner": [
+           "any_scope_state": [
             "=",
-            "root"
+            {
+             "owner": [
+              "=",
+              "root"
+             ]
+            }
+           ]
+          }
+         ],
+         "s:STATE_DALMATIA": [
+          "=",
+          {
+           "any_scope_state": [
+            "=",
+            {
+             "owner": [
+              "=",
+              "root"
+             ]
+            }
            ]
           }
          ]
@@ -22688,9 +23205,20 @@
      "any_scope_state": [
       "=",
       {
-       "state_region": [
+       "OR": [
         "=",
-        "s:STATE_DALMATIA"
+        {
+         "state_region": [
+          [
+           "=",
+           "s:STATE_CROATIA"
+          ],
+          [
+           "=",
+           "s:STATE_DALMATIA"
+          ]
+         ]
+        }
        ],
        "is_incorporated": [
         "=",
@@ -22743,9 +23271,20 @@
      "any_scope_state": [
       "=",
       {
-       "state_region": [
+       "OR": [
         "=",
-        "s:STATE_DALMATIA"
+        {
+         "state_region": [
+          [
+           "=",
+           "s:STATE_CROATIA"
+          ],
+          [
+           "=",
+           "s:STATE_DALMATIA"
+          ]
+         ]
+        }
        ],
        "is_incorporated": [
         "=",
@@ -22768,9 +23307,20 @@
        "state_trigger": [
         "=",
         {
-         "state_region": [
+         "OR": [
           "=",
-          "s:STATE_DALMATIA"
+          {
+           "state_region": [
+            [
+             "=",
+             "s:STATE_CROATIA"
+            ],
+            [
+             "=",
+             "s:STATE_DALMATIA"
+            ]
+           ]
+          }
          ]
         }
        ]
@@ -23415,7 +23965,8 @@
     "=",
     [
      "building_lead_mine",
-     "building_sulfur_mine"
+     "building_sulfur_mine",
+     "building_copper_mine"
     ]
    ],
    "potential": [
@@ -24236,19 +24787,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_vineyard"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_ENTRE_DOURO_E_MINHO"
+       ],
+       "building": [
+        "=",
+        "building_vineyard"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -25419,25 +25978,20 @@
    "possible": [
     "=",
     {
-     "any_scope_state": [
+     "has_building_levels_in_state_region": [
       "=",
       {
-       "state_region": [
+       "region": [
         "=",
-        "s:STATE_MARRAKECH"
+        "STATE_MARRAKECH"
        ],
-       "any_scope_building": [
+       "building": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_sulfur_mine"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "building_sulfur_mine"
+       ],
+       "levels": [
+        ">=",
+        "5"
        ]
       }
      ]
@@ -25863,25 +26417,20 @@
    "possible": [
     "=",
     {
-     "any_scope_state": [
+     "has_building_levels_in_state_region": [
       "=",
       {
-       "state_region": [
+       "region": [
         "=",
-        "s:STATE_LOWER_ANDALUSIA"
+        "STATE_LOWER_ANDALUSIA"
        ],
-       "any_scope_building": [
+       "building": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_vineyard"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "building_vineyard"
+       ],
+       "levels": [
+        ">=",
+        "5"
        ]
       }
      ]
@@ -26017,25 +26566,20 @@
    "possible": [
     "=",
     {
-     "any_scope_state": [
+     "has_building_levels_in_state_region": [
       "=",
       {
-       "state_region": [
+       "region": [
         "=",
-        "s:STATE_EASTERN_CUBA"
+        "STATE_EASTERN_CUBA"
        ],
-       "any_scope_building": [
+       "building": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_food_industry"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "building_food_industry"
+       ],
+       "levels": [
+        ">=",
+        "5"
        ]
       }
      ]
@@ -26165,25 +26709,20 @@
    "possible": [
     "=",
     {
-     "any_scope_state": [
+     "has_building_levels_in_state_region": [
       "=",
       {
-       "state_region": [
+       "region": [
         "=",
-        "s:STATE_CATALONIA"
+        "STATE_CATALONIA"
        ],
-       "any_scope_building": [
+       "building": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_automotive_industry"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "building_automotive_industry"
+       ],
+       "levels": [
+        ">=",
+        "5"
        ]
       }
      ]
@@ -26236,6 +26775,1849 @@
          "state_region": [
           "=",
           "s:STATE_CATALONIA"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "3"
+     ]
+    }
+   ]
+  }
+ ],
+ "company_dobrush_paper": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/company_icons/historical_company_icons/company_dobrushskaya_pische_bumazhnaya_fabrika.dds\""
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds\""
+   ],
+   "flavored_company": [
+    "=",
+    "yes"
+   ],
+   "preferred_headquarters": [
+    "=",
+    [
+     "STATE_MOGILEV"
+    ]
+   ],
+   "building_types": [
+    "=",
+    [
+     "building_paper_mill"
+    ]
+   ],
+   "extension_building_types": [
+    "=",
+    [
+     "building_logging_camp"
+    ]
+   ],
+   "possible_prestige_goods": [
+    "=",
+    [
+     "prestige_good_generic_paper"
+    ]
+   ],
+   "prestige_goods_trigger": [
+    "=",
+    {
+     "custom_tooltip": [
+      "=",
+      {
+       "text": [
+        "=",
+        "je_prestige_goods_paper_complete_tt"
+       ],
+       "has_variable": [
+        "=",
+        "prestige_good_generic_paper_var"
+       ]
+      }
+     ]
+    }
+   ],
+   "potential": [
+    "=",
+    {
+     "has_interest_marker_in_region": [
+      "=",
+      "sr:region_eastern_europe"
+     ]
+    }
+   ],
+   "attainable": [
+    "=",
+    {
+     "hidden_trigger": [
+      "=",
+      {
+       "any_scope_state": [
+        "=",
+        {
+         "state_region": [
+          "=",
+          "s:STATE_MOGILEV"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "any_scope_state": [
+      "=",
+      {
+       "state_region": [
+        "=",
+        "s:STATE_MOGILEV"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
+        "=",
+        "STATE_MOGILEV"
+       ],
+       "building": [
+        "=",
+        "building_paper_mill"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ]
+    }
+   ],
+   "prosperity_modifier": [
+    "=",
+    {
+     "country_institution_cost_institution_schools_mult": [
+      "=",
+      "-0.05"
+     ]
+    }
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "any_scope_state": [
+      "=",
+      {
+       "state_region": [
+        "=",
+        "s:STATE_MOGILEV"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_construction_targets": [
+    "=",
+    {
+     "building_paper_mill": [
+      "=",
+      {
+       "level": [
+        "=",
+        "5"
+       ],
+       "state_trigger": [
+        "=",
+        {
+         "state_region": [
+          "=",
+          "s:STATE_MOGILEV"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "3"
+     ]
+    }
+   ]
+  }
+ ],
+ "company_grodno_tobacco": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/company_icons/historical_company_icons/company_tabachnaya_manufaktura_leyba_shereshevskogo.dds\""
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds\""
+   ],
+   "flavored_company": [
+    "=",
+    "yes"
+   ],
+   "preferred_headquarters": [
+    "=",
+    [
+     "STATE_BREST"
+    ]
+   ],
+   "building_types": [
+    "=",
+    [
+     "building_tobacco_plantation"
+    ]
+   ],
+   "extension_building_types": [
+    "=",
+    [
+     "building_railway"
+    ]
+   ],
+   "potential": [
+    "=",
+    {
+     "has_interest_marker_in_region": [
+      "=",
+      "sr:region_eastern_europe"
+     ]
+    }
+   ],
+   "attainable": [
+    "=",
+    {
+     "hidden_trigger": [
+      "=",
+      {
+       "any_scope_state": [
+        "=",
+        {
+         "state_region": [
+          "=",
+          "s:STATE_BREST"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "any_scope_state": [
+      "=",
+      {
+       "state_region": [
+        "=",
+        "s:STATE_BREST"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ],
+     "country_has_building_type_levels": [
+      "=",
+      {
+       "target": [
+        "=",
+        "bt:building_tobacco_plantation"
+       ],
+       "value": [
+        ">=",
+        "5"
+       ]
+      }
+     ]
+    }
+   ],
+   "prosperity_modifier": [
+    "=",
+    {
+     "building_group_bg_light_industry_throughput_add": [
+      "=",
+      "0.05"
+     ]
+    }
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "any_scope_state": [
+      [
+       "=",
+       {
+        "state_region": [
+         "=",
+         "s:STATE_MOGILEV"
+        ],
+        "is_incorporated": [
+         "=",
+         "yes"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "is_incorporated": [
+         "=",
+         "yes"
+        ],
+        "has_potential_resource": [
+         "=",
+         "building_tobacco_plantation"
+        ],
+        "count": [
+         ">=",
+         "4"
+        ]
+       }
+      ]
+     ]
+    }
+   ],
+   "ai_construction_targets": [
+    "=",
+    {
+     "building_tobacco_plantation": [
+      "=",
+      {
+       "level": [
+        "=",
+        "5"
+       ],
+       "state_trigger": [
+        "=",
+        {
+         "has_potential_resource": [
+          "=",
+          "building_tobacco_plantation"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "3"
+     ]
+    }
+   ]
+  }
+ ],
+ "company_russo-baltic_wagon_factory": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/company_icons/historical_company_icons/company_russisch_baltische_waggon_fabrik.dds\""
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds\""
+   ],
+   "flavored_company": [
+    "=",
+    "yes"
+   ],
+   "preferred_headquarters": [
+    "=",
+    [
+     "STATE_RIGA"
+    ]
+   ],
+   "building_types": [
+    "=",
+    [
+     "building_automotive_industry"
+    ]
+   ],
+   "extension_building_types": [
+    "=",
+    [
+     "building_motor_industry"
+    ]
+   ],
+   "possible_prestige_goods": [
+    "=",
+    [
+     "prestige_good_sikorsky_aeroplanes"
+    ]
+   ],
+   "potential": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "ip5_content"
+     ],
+     "has_interest_marker_in_region": [
+      "=",
+      "sr:region_eastern_europe"
+     ]
+    }
+   ],
+   "attainable": [
+    "=",
+    {
+     "hidden_trigger": [
+      "=",
+      {
+       "any_scope_state": [
+        "=",
+        {
+         "state_region": [
+          "=",
+          "s:STATE_RIGA"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "any_scope_state": [
+      "=",
+      {
+       "state_region": [
+        "=",
+        "s:STATE_RIGA"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
+        "=",
+        "STATE_RIGA"
+       ],
+       "building": [
+        "=",
+        "building_automotive_industry"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ]
+    }
+   ],
+   "prosperity_modifier": [
+    "=",
+    {
+     "country_military_tech_spread_mult": [
+      "=",
+      "0.05"
+     ],
+     "country_weekly_innovation_max_add": [
+      "=",
+      "15"
+     ]
+    }
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "any_scope_state": [
+      "=",
+      {
+       "state_region": [
+        "=",
+        "s:STATE_RIGA"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_construction_targets": [
+    "=",
+    {
+     "building_automotive_industry": [
+      "=",
+      {
+       "level": [
+        "=",
+        "5"
+       ],
+       "state_trigger": [
+        "=",
+        {
+         "state_region": [
+          "=",
+          "s:STATE_RIGA"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "3"
+     ]
+    }
+   ]
+  }
+ ],
+ "company_maslosoyuz": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/company_icons/historical_company_icons/company_maslosoyuz.dds\""
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/company_icons/company_backgrounds/comp_illu_farm_wheat.dds\""
+   ],
+   "category": [
+    "=",
+    "shopkeeper_owned"
+   ],
+   "flavored_company": [
+    "=",
+    "yes"
+   ],
+   "preferred_headquarters": [
+    "=",
+    [
+     "STATE_EAST_GALICIA"
+    ]
+   ],
+   "building_types": [
+    "=",
+    [
+     "building_livestock_ranch",
+     "building_food_industry"
+    ]
+   ],
+   "extension_building_types": [
+    "=",
+    [
+     "building_wheat_farm"
+    ]
+   ],
+   "possible_prestige_goods": [
+    "=",
+    [
+     "prestige_good_maslosoyuz_butter"
+    ]
+   ],
+   "potential": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "ip5_content"
+     ],
+     "has_interest_marker_in_region": [
+      "=",
+      "sr:region_eastern_europe"
+     ]
+    }
+   ],
+   "attainable": [
+    "=",
+    {
+     "hidden_trigger": [
+      "=",
+      {
+       "any_scope_state": [
+        "=",
+        {
+         "state_region": [
+          "=",
+          "s:STATE_EAST_GALICIA"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "any_scope_state": [
+      "=",
+      {
+       "state_region": [
+        "=",
+        "s:STATE_EAST_GALICIA"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
+        "=",
+        "STATE_EAST_GALICIA"
+       ],
+       "building": [
+        "=",
+        "building_livestock_ranch"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ]
+    }
+   ],
+   "prosperity_modifier": [
+    "=",
+    {
+     "state_peasants_education_access_add": [
+      "=",
+      "0.10"
+     ],
+     "country_fervor_target_ukrainian_add": [
+      "=",
+      "5"
+     ],
+     "building_group_bg_ranching_standard_of_living_add": [
+      "=",
+      "1"
+     ]
+    }
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "any_scope_state": [
+      "=",
+      {
+       "state_region": [
+        "=",
+        "s:STATE_EAST_GALICIA"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_construction_targets": [
+    "=",
+    {
+     "building_livestock_ranch": [
+      "=",
+      {
+       "level": [
+        "=",
+        "5"
+       ],
+       "state_trigger": [
+        "=",
+        {
+         "state_region": [
+          "=",
+          "s:STATE_EAST_GALICIA"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "3"
+     ]
+    }
+   ]
+  }
+ ],
+ "company_kreenholmi_manufaktuur": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/company_icons/historical_company_icons/company_kreenholmi_manufaktuur.dds\""
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds\""
+   ],
+   "flavored_company": [
+    "=",
+    "yes"
+   ],
+   "preferred_headquarters": [
+    "=",
+    [
+     "STATE_TALINN"
+    ]
+   ],
+   "building_types": [
+    "=",
+    [
+     "building_textile_mill",
+     "building_livestock_ranch"
+    ]
+   ],
+   "extension_building_types": [
+    "=",
+    [
+     "building_cotton_plantation",
+     "building_power_plant"
+    ]
+   ],
+   "possible_prestige_goods": [
+    "=",
+    [
+     "prestige_good_sateen_clothes"
+    ]
+   ],
+   "potential": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "ip5_content"
+     ],
+     "has_interest_marker_in_region": [
+      "=",
+      "sr:region_eastern_europe"
+     ]
+    }
+   ],
+   "attainable": [
+    "=",
+    {
+     "hidden_trigger": [
+      "=",
+      {
+       "any_scope_state": [
+        "=",
+        {
+         "state_region": [
+          "=",
+          "s:STATE_TALINN"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "mechanized_workshops"
+     ],
+     "any_scope_state": [
+      "=",
+      {
+       "state_region": [
+        "=",
+        "s:STATE_TALINN"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
+        "=",
+        "STATE_TALINN"
+       ],
+       "building": [
+        "=",
+        "building_textile_mill"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ]
+    }
+   ],
+   "prosperity_modifier": [
+    "=",
+    {
+     "country_production_tech_spread_mult": [
+      "=",
+      "0.1"
+     ],
+     "interest_group_ig_trade_unions_pop_attraction_mult": [
+      "=",
+      "0.1"
+     ]
+    }
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "any_scope_state": [
+      "=",
+      {
+       "state_region": [
+        "=",
+        "s:STATE_TALINN"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_construction_targets": [
+    "=",
+    {
+     "building_textile_mill": [
+      "=",
+      {
+       "level": [
+        "=",
+        "5"
+       ],
+       "state_trigger": [
+        "=",
+        {
+         "state_region": [
+          "=",
+          "s:STATE_TALINN"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "3"
+     ]
+    }
+   ]
+  }
+ ],
+ "company_kharitonenko_and_son": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/company_icons/historical_company_icons/company_kharitonenko_i_sin.dds\""
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/company_icons/company_backgrounds/comp_illu_farm_wheat.dds\""
+   ],
+   "category": [
+    "=",
+    "aristocrat_owned"
+   ],
+   "flavored_company": [
+    "=",
+    "yes"
+   ],
+   "preferred_headquarters": [
+    "=",
+    [
+     "STATE_KHARKOV"
+    ]
+   ],
+   "building_types": [
+    "=",
+    [
+     "building_wheat_farm",
+     "building_rye_farm"
+    ]
+   ],
+   "extension_building_types": [
+    "=",
+    [
+     "building_logging_camp",
+     "building_art_academy"
+    ]
+   ],
+   "possible_prestige_goods": [
+    "=",
+    [
+     "prestige_good_generic_grain"
+    ]
+   ],
+   "prestige_goods_trigger": [
+    "=",
+    {
+     "custom_tooltip": [
+      "=",
+      {
+       "text": [
+        "=",
+        "je_prestige_goods_grain_complete_tt"
+       ],
+       "has_variable": [
+        "=",
+        "prestige_good_generic_grain_var"
+       ]
+      }
+     ]
+    }
+   ],
+   "potential": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "ip5_content"
+     ],
+     "has_interest_marker_in_region": [
+      "=",
+      "sr:region_eastern_europe"
+     ]
+    }
+   ],
+   "attainable": [
+    "=",
+    {
+     "hidden_trigger": [
+      "=",
+      {
+       "any_scope_state": [
+        "=",
+        {
+         "state_region": [
+          "=",
+          "s:STATE_KHARKOV"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "any_scope_state": [
+      "=",
+      {
+       "state_region": [
+        "=",
+        "s:STATE_KHARKOV"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
+        "=",
+        "STATE_KHARKOV"
+       ],
+       "building": [
+        "=",
+        "building_wheat_farm"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ]
+    }
+   ],
+   "prosperity_modifier": [
+    "=",
+    {
+     "state_aristocrats_investment_pool_efficiency_mult": [
+      "=",
+      "0.15"
+     ],
+     "building_art_academy_throughput_add": [
+      "=",
+      "0.05"
+     ]
+    }
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "any_scope_state": [
+      "=",
+      {
+       "state_region": [
+        "=",
+        "s:STATE_KHARKOV"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_construction_targets": [
+    "=",
+    {
+     "building_wheat_farm": [
+      "=",
+      {
+       "level": [
+        "=",
+        "5"
+       ],
+       "state_trigger": [
+        "=",
+        {
+         "state_region": [
+          "=",
+          "s:STATE_KHARKOV"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "3"
+     ]
+    }
+   ]
+  }
+ ],
+ "company_fiskars": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/company_icons/historical_company_icons/company_fiskars_aktiebolag.dds\""
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds\""
+   ],
+   "flavored_company": [
+    "=",
+    "yes"
+   ],
+   "preferred_headquarters": [
+    "=",
+    [
+     "STATE_UUSIMAA"
+    ]
+   ],
+   "building_types": [
+    "=",
+    [
+     "building_tooling_workshop",
+     "building_motor_industry",
+     "building_iron_mine"
+    ]
+   ],
+   "extension_building_types": [
+    "=",
+    [
+     "building_steel_mill",
+     "building_livestock_ranch"
+    ]
+   ],
+   "possible_prestige_goods": [
+    "=",
+    [
+     "prestige_good_fiskars_tools"
+    ]
+   ],
+   "potential": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "ip5_content"
+     ],
+     "has_interest_marker_in_region": [
+      "=",
+      "sr:region_eastern_europe"
+     ]
+    }
+   ],
+   "attainable": [
+    "=",
+    {
+     "hidden_trigger": [
+      "=",
+      {
+       "any_scope_state": [
+        "=",
+        {
+         "state_region": [
+          "=",
+          "s:STATE_UUSIMAA"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "any_scope_state": [
+      "=",
+      {
+       "state_region": [
+        "=",
+        "s:STATE_UUSIMAA"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
+        "=",
+        "STATE_UUSIMAA"
+       ],
+       "building": [
+        "=",
+        "building_tooling_workshop"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ]
+    }
+   ],
+   "prosperity_modifier": [
+    "=",
+    {
+     "building_group_bg_agriculture_throughput_add": [
+      "=",
+      "0.15"
+     ]
+    }
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "any_scope_state": [
+      "=",
+      {
+       "state_region": [
+        "=",
+        "s:STATE_UUSIMAA"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_construction_targets": [
+    "=",
+    {
+     "building_tooling_workshop": [
+      "=",
+      {
+       "level": [
+        "=",
+        "5"
+       ],
+       "state_trigger": [
+        "=",
+        {
+         "state_region": [
+          "=",
+          "s:STATE_UUSIMAA"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "3"
+     ]
+    }
+   ]
+  }
+ ],
+ "company_poznanski_cotton_products": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/company_icons/historical_company_icons/company_ik_poznanski_cotton_products.dds\""
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds\""
+   ],
+   "flavored_company": [
+    "=",
+    "yes"
+   ],
+   "preferred_headquarters": [
+    "=",
+    [
+     "STATE_GREATER_POLAND"
+    ]
+   ],
+   "building_types": [
+    "=",
+    [
+     "building_textile_mill"
+    ]
+   ],
+   "extension_building_types": [
+    "=",
+    [
+     "building_cotton_plantation"
+    ]
+   ],
+   "possible_prestige_goods": [
+    "=",
+    [
+     "prestige_good_generic_clothes"
+    ]
+   ],
+   "prestige_goods_trigger": [
+    "=",
+    {
+     "custom_tooltip": [
+      "=",
+      {
+       "text": [
+        "=",
+        "je_prestige_goods_clothes_complete_tt"
+       ],
+       "has_variable": [
+        "=",
+        "prestige_good_generic_clothes_var"
+       ]
+      }
+     ]
+    }
+   ],
+   "potential": [
+    "=",
+    {
+     "has_interest_marker_in_region": [
+      "=",
+      "sr:region_eastern_europe"
+     ]
+    }
+   ],
+   "attainable": [
+    "=",
+    {
+     "hidden_trigger": [
+      "=",
+      {
+       "any_scope_state": [
+        "=",
+        {
+         "state_region": [
+          "=",
+          "s:STATE_GREATER_POLAND"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "any_scope_state": [
+      "=",
+      {
+       "state_region": [
+        "=",
+        "s:STATE_GREATER_POLAND"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
+        "=",
+        "STATE_GREATER_POLAND"
+       ],
+       "building": [
+        "=",
+        "building_textile_mill"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ]
+    }
+   ],
+   "prosperity_modifier": [
+    "=",
+    {
+     "building_construction_sector_throughput_add": [
+      "=",
+      "0.05"
+     ],
+     "country_ashkenazi_cultural_acceptance_add": [
+      "=",
+      "10"
+     ]
+    }
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "any_scope_state": [
+      "=",
+      {
+       "state_region": [
+        "=",
+        "s:STATE_GREATER_POLAND"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_construction_targets": [
+    "=",
+    {
+     "building_textile_mill": [
+      "=",
+      {
+       "level": [
+        "=",
+        "5"
+       ],
+       "state_trigger": [
+        "=",
+        {
+         "state_region": [
+          "=",
+          "s:STATE_GREATER_POLAND"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "3"
+     ]
+    }
+   ]
+  }
+ ],
+ "company_resita_works": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/company_icons/historical_company_icons/company_uzinele_de_fier_si_domeniile_resita.dds\""
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds\""
+   ],
+   "flavored_company": [
+    "=",
+    "yes"
+   ],
+   "preferred_headquarters": [
+    "=",
+    [
+     "STATE_BANAT"
+    ]
+   ],
+   "building_types": [
+    "=",
+    [
+     "building_iron_mine",
+     "building_tooling_workshop",
+     "building_steel_mill"
+    ]
+   ],
+   "extension_building_types": [
+    "=",
+    [
+     "building_motor_industry",
+     "building_electrics_industry"
+    ]
+   ],
+   "possible_prestige_goods": [
+    "=",
+    [
+     "prestige_good_generic_steel"
+    ]
+   ],
+   "prestige_goods_trigger": [
+    "=",
+    {
+     "custom_tooltip": [
+      "=",
+      {
+       "text": [
+        "=",
+        "je_prestige_goods_steel_complete_tt"
+       ],
+       "has_variable": [
+        "=",
+        "prestige_good_generic_steel_var"
+       ]
+      }
+     ]
+    }
+   ],
+   "potential": [
+    "=",
+    {
+     "has_interest_marker_in_region": [
+      "=",
+      "sr:region_eastern_europe"
+     ]
+    }
+   ],
+   "attainable": [
+    "=",
+    {
+     "hidden_trigger": [
+      "=",
+      {
+       "any_scope_state": [
+        "=",
+        {
+         "state_region": [
+          "=",
+          "s:STATE_BANAT"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "any_scope_state": [
+      "=",
+      {
+       "state_region": [
+        "=",
+        "s:STATE_BANAT"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
+        "=",
+        "STATE_BANAT"
+       ],
+       "building": [
+        "=",
+        "building_tooling_workshop"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ]
+    }
+   ],
+   "prosperity_modifier": [
+    "=",
+    {
+     "building_railway_throughput_add": [
+      "=",
+      "0.1"
+     ],
+     "building_artillery_foundry_throughput_add": [
+      "=",
+      "0.1"
+     ]
+    }
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "any_scope_state": [
+      "=",
+      {
+       "state_region": [
+        "=",
+        "s:STATE_BANAT"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_construction_targets": [
+    "=",
+    {
+     "building_tooling_workshop": [
+      "=",
+      {
+       "level": [
+        "=",
+        "5"
+       ],
+       "state_trigger": [
+        "=",
+        {
+         "state_region": [
+          "=",
+          "s:STATE_BANAT"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "3"
+     ]
+    }
+   ]
+  }
+ ],
+ "company_malaxa": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/company_icons/historical_company_icons/company_malaxa.dds\""
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_heavy.dds\""
+   ],
+   "flavored_company": [
+    "=",
+    "yes"
+   ],
+   "preferred_headquarters": [
+    "=",
+    [
+     "STATE_WALLACHIA"
+    ]
+   ],
+   "building_types": [
+    "=",
+    [
+     "building_motor_industry",
+     "building_steel_mill"
+    ]
+   ],
+   "extension_building_types": [
+    "=",
+    [
+     "building_automotive_industry",
+     "building_railway",
+     "building_arms_industry"
+    ]
+   ],
+   "possible_prestige_goods": [
+    "=",
+    [
+     "prestige_good_generic_steel"
+    ]
+   ],
+   "prestige_goods_trigger": [
+    "=",
+    {
+     "custom_tooltip": [
+      "=",
+      {
+       "text": [
+        "=",
+        "je_prestige_goods_steel_complete_tt"
+       ],
+       "has_variable": [
+        "=",
+        "prestige_good_generic_steel_var"
+       ]
+      }
+     ]
+    }
+   ],
+   "potential": [
+    "=",
+    {
+     "has_interest_marker_in_region": [
+      "=",
+      "sr:region_eastern_europe"
+     ]
+    }
+   ],
+   "attainable": [
+    "=",
+    {
+     "hidden_trigger": [
+      "=",
+      {
+       "any_scope_state": [
+        "=",
+        {
+         "state_region": [
+          "=",
+          "s:STATE_WALLACHIA"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "any_scope_state": [
+      "=",
+      {
+       "state_region": [
+        "=",
+        "s:STATE_WALLACHIA"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
+        "=",
+        "STATE_WALLACHIA"
+       ],
+       "building": [
+        "=",
+        "building_motor_industry"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ]
+    }
+   ],
+   "prosperity_modifier": [
+    "=",
+    {
+     "country_production_tech_research_speed_mult": [
+      "=",
+      "0.05"
+     ],
+     "interest_group_ig_industrialists_pol_str_mult": [
+      "=",
+      "0.1"
+     ]
+    }
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "any_scope_state": [
+      "=",
+      {
+       "state_region": [
+        "=",
+        "s:STATE_WALLACHIA"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_construction_targets": [
+    "=",
+    {
+     "building_motor_industry": [
+      "=",
+      {
+       "level": [
+        "=",
+        "5"
+       ],
+       "state_trigger": [
+        "=",
+        {
+         "state_region": [
+          "=",
+          "s:STATE_WALLACHIA"
          ]
         }
        ]
@@ -26357,19 +28739,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_steel_mill"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_PIEDMONT"
+       ],
+       "building": [
+        "=",
+        "building_steel_mill"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -26756,19 +29146,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_art_academy"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_LOMBARDY"
+       ],
+       "building": [
+        "=",
+        "building_art_academy"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -27126,19 +29524,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_shipyard"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_ISTRIA"
+       ],
+       "building": [
+        "=",
+        "building_shipyard"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -27302,19 +29708,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_textile_mill"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_KANSAI"
+       ],
+       "building": [
+        "=",
+        "building_textile_mill"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -27489,19 +29903,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_shipyard"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_KYUSHU"
+       ],
+       "building": [
+        "=",
+        "building_shipyard"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -27926,19 +30348,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_glassworks"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_BOHEMIA"
+       ],
+       "building": [
+        "=",
+        "building_glassworks"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -28104,19 +30534,6 @@
         "is_incorporated": [
          "=",
          "yes"
-        ],
-        "any_scope_building": [
-         "=",
-         {
-          "is_building_type": [
-           "=",
-           "building_food_industry"
-          ],
-          "level": [
-           ">=",
-           "5"
-          ]
-         }
         ]
        }
       ],
@@ -28146,6 +30563,27 @@
         ]
        }
       ]
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
+        "=",
+        "STATE_BUENOS_AIRES"
+       ],
+       "building": [
+        "=",
+        "building_food_industry"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
+       ]
+      }
      ]
     }
    ],
@@ -28329,19 +30767,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_glassworks"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_SAXONY"
+       ],
+       "building": [
+        "=",
+        "building_glassworks"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -29101,19 +31547,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_textile_mill"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_ILE_DE_FRANCE"
+       ],
+       "building": [
+        "=",
+        "building_textile_mill"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -29183,6 +31637,24 @@
      "value": [
       "=",
       "3"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "divided_monarchists_ai_backs_orleanist": [
+          "=",
+          "yes"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "6"
+       ]
+      }
      ]
     }
    ]
@@ -29480,19 +31952,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_arms_industry"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_CONNECTICUT"
+       ],
+       "building": [
+        "=",
+        "building_arms_industry"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -29652,19 +32132,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_furniture_manufactory"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_AUSTRIA"
+       ],
+       "building": [
+        "=",
+        "building_furniture_manufactory"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -29828,19 +32316,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_glassworks"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_KANSAI"
+       ],
+       "building": [
+        "=",
+        "building_glassworks"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -30004,19 +32500,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_furniture_manufactory"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_HOME_COUNTIES"
+       ],
+       "building": [
+        "=",
+        "building_furniture_manufactory"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -30357,19 +32861,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_sulfur_mine"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_SICILY"
+       ],
+       "building": [
+        "=",
+        "building_sulfur_mine"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ],
@@ -30691,7 +33203,8 @@
    "extension_building_types": [
     "=",
     [
-     "building_sulfur_mine"
+     "building_sulfur_mine",
+     "building_copper_mine"
     ]
    ],
    "potential": [
@@ -30968,19 +33481,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_motor_industry"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_ONTARIO"
+       ],
+       "building": [
+        "=",
+        "building_motor_industry"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -32415,25 +34936,20 @@
       "=",
       "pumpjacks"
      ],
-     "any_scope_state": [
+     "has_building_levels_in_state_region": [
       "=",
       {
-       "state_region": [
+       "region": [
         "=",
-        "s:STATE_AZERBAIJAN"
+        "STATE_AZERBAIJAN"
        ],
-       "any_scope_building": [
+       "building": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_oil_rig"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "building_oil_rig"
+       ],
+       "levels": [
+        ">=",
+        "5"
        ]
       }
      ]
@@ -32612,19 +35128,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_arms_industry"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_PERM"
+       ],
+       "building": [
+        "=",
+        "building_arms_industry"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -32797,19 +35321,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_textile_mill"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_MOSCOW"
+       ],
+       "building": [
+        "=",
+        "building_textile_mill"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -33289,19 +35821,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_textile_mill"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_BALKH"
+       ],
+       "building": [
+        "=",
+        "building_textile_mill"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -33858,19 +36398,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_oil_rig"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_URALSK"
+       ],
+       "building": [
+        "=",
+        "building_oil_rig"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -34023,19 +36571,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_cotton_plantation"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_BALKH"
+       ],
+       "building": [
+        "=",
+        "building_cotton_plantation"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -34402,19 +36958,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_textile_mill"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_ISFAHAN"
+       ],
+       "building": [
+        "=",
+        "building_textile_mill"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -34559,19 +37123,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_silk_plantation"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_LEBANON"
+       ],
+       "building": [
+        "=",
+        "building_silk_plantation"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -34736,19 +37308,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_power_plant"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_SEOUL"
+       ],
+       "building": [
+        "=",
+        "building_power_plant"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -34911,19 +37491,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_coal_mine"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_SEMIRECHE"
+       ],
+       "building": [
+        "=",
+        "building_coal_mine"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -35580,19 +38168,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_cotton_plantation"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_FERGANA"
+       ],
+       "building": [
+        "=",
+        "building_cotton_plantation"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -35794,19 +38390,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_food_industry"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_LEINSTER"
+       ],
+       "building": [
+        "=",
+        "building_food_industry"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -36574,19 +39178,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_oil_rig"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_KHUZESTAN"
+       ],
+       "building": [
+        "=",
+        "building_oil_rig"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -36810,19 +39422,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_oil_rig"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_KHUZESTAN"
+       ],
+       "building": [
+        "=",
+        "building_oil_rig"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -36955,7 +39575,8 @@
     "=",
     [
      "building_textile_mill",
-     "building_livestock_ranch"
+     "building_livestock_ranch",
+     "building_copper_mine"
     ]
    ],
    "possible_prestige_goods": [
@@ -37359,19 +39980,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_sugar_plantation"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_LOUISIANA"
+       ],
+       "building": [
+        "=",
+        "building_sugar_plantation"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ],
@@ -37647,19 +40276,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_steel_mill"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_PENNSYLVANIA"
+       ],
+       "building": [
+        "=",
+        "building_steel_mill"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -37766,7 +40403,8 @@
    "extension_building_types": [
     "=",
     [
-     "building_motor_industry"
+     "building_motor_industry",
+     "building_copper_mine"
     ]
    ],
    "possible_prestige_goods": [
@@ -38273,19 +40911,27 @@
        "is_incorporated": [
         "=",
         "yes"
-       ],
-       "any_scope_building": [
+       ]
+      }
+     ],
+     "has_building_levels_in_state_region": [
+      "=",
+      {
+       "region": [
         "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_motor_industry"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
+        "STATE_MICHIGAN"
+       ],
+       "building": [
+        "=",
+        "building_motor_industry"
+       ],
+       "levels": [
+        ">=",
+        "5"
+       ],
+       "is_incorporated": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -38476,34 +41122,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "any_scope_building": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "is_building_type": [
-            [
-             "=",
-             "building_wheat_farm"
-            ],
-            [
-             "=",
-             "building_rye_farm"
-            ]
-           ]
-          }
-         ],
-         "level": [
-          ">=",
-          "3"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]
@@ -38634,38 +41255,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "any_scope_building": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "is_building_type": [
-            [
-             "=",
-             "building_millet_farm"
-            ],
-            [
-             "=",
-             "building_rice_farm"
-            ],
-            [
-             "=",
-             "building_maize_farm"
-            ]
-           ]
-          }
-         ],
-         "level": [
-          ">=",
-          "3"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]
@@ -38787,34 +41379,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "any_scope_building": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "is_building_type": [
-            [
-             "=",
-             "building_cotton_plantation"
-            ],
-            [
-             "=",
-             "building_livestock_ranch"
-            ]
-           ]
-          }
-         ],
-         "level": [
-          ">=",
-          "3"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]
@@ -38935,34 +41502,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "any_scope_building": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "is_building_type": [
-            [
-             "=",
-             "building_opium_plantation"
-            ],
-            [
-             "=",
-             "building_tea_plantation"
-            ]
-           ]
-          }
-         ],
-         "level": [
-          ">=",
-          "3"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]
@@ -39088,38 +41630,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "any_scope_building": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "is_building_type": [
-            [
-             "=",
-             "building_coffee_plantation"
-            ],
-            [
-             "=",
-             "building_sugar_plantation"
-            ],
-            [
-             "=",
-             "building_tobacco_plantation"
-            ]
-           ]
-          }
-         ],
-         "level": [
-          ">=",
-          "3"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]
@@ -39221,34 +41734,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "any_scope_building": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "is_building_type": [
-            [
-             "=",
-             "building_silk_plantation"
-            ],
-            [
-             "=",
-             "building_dye_plantation"
-            ]
-           ]
-          }
-         ],
-         "level": [
-          ">=",
-          "3"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]
@@ -39346,34 +41834,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "any_scope_building": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "is_building_type": [
-            [
-             "=",
-             "building_vineyard"
-            ],
-            [
-             "=",
-             "building_banana_plantation"
-            ]
-           ]
-          }
-         ],
-         "level": [
-          ">=",
-          "3"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]
@@ -39497,34 +41960,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "any_scope_building": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "is_building_type": [
-            [
-             "=",
-             "building_fishing_wharf"
-            ],
-            [
-             "=",
-             "building_whaling_station"
-            ]
-           ]
-          }
-         ],
-         "level": [
-          ">=",
-          "3"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]
@@ -39628,34 +42066,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "any_scope_building": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "is_building_type": [
-            [
-             "=",
-             "building_logging_camp"
-            ],
-            [
-             "=",
-             "building_rubber_plantation"
-            ]
-           ]
-          }
-         ],
-         "level": [
-          ">=",
-          "3"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]
@@ -39738,23 +42151,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "any_scope_building": [
-        "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_oil_rig"
-         ],
-         "level": [
-          ">=",
-          "3"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]
@@ -39841,23 +42240,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "any_scope_building": [
-        "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_gold_mine"
-         ],
-         "level": [
-          ">=",
-          "3"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]
@@ -39898,7 +42283,8 @@
     "=",
     [
      "building_iron_mine",
-     "building_lead_mine"
+     "building_lead_mine",
+     "building_copper_mine"
     ]
    ],
    "extension_building_types": [
@@ -39927,6 +42313,10 @@
             [
              "=",
              "building_lead_mine"
+            ],
+            [
+             "=",
+             "building_copper_mine"
             ]
            ]
           }
@@ -39957,34 +42347,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "any_scope_building": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "is_building_type": [
-            [
-             "=",
-             "building_iron_mine"
-            ],
-            [
-             "=",
-             "building_lead_mine"
-            ]
-           ]
-          }
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]
@@ -40080,34 +42445,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "any_scope_building": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "is_building_type": [
-            [
-             "=",
-             "building_sulfur_mine"
-            ],
-            [
-             "=",
-             "building_coal_mine"
-            ]
-           ]
-          }
-         ],
-         "level": [
-          ">=",
-          "3"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]
@@ -40223,27 +42563,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "is_incorporated": [
-        "=",
-        "yes"
-       ],
-       "any_scope_building": [
-        "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_food_industry"
-         ],
-         "level": [
-          ">=",
-          "3"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]
@@ -40354,27 +42676,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "is_incorporated": [
-        "=",
-        "yes"
-       ],
-       "any_scope_building": [
-        "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_paper_mill"
-         ],
-         "level": [
-          ">=",
-          "3"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]
@@ -40498,38 +42802,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "is_incorporated": [
-        "=",
-        "yes"
-       ],
-       "any_scope_building": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "is_building_type": [
-            [
-             "=",
-             "building_glassworks"
-            ],
-            [
-             "=",
-             "building_furniture_manufactory"
-            ]
-           ]
-          }
-         ],
-         "level": [
-          ">=",
-          "3"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]
@@ -40641,27 +42916,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "is_incorporated": [
-        "=",
-        "yes"
-       ],
-       "any_scope_building": [
-        "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_textile_mill"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]
@@ -40773,27 +43030,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "is_incorporated": [
-        "=",
-        "yes"
-       ],
-       "any_scope_building": [
-        "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_steel_mill"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]
@@ -40909,42 +43148,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "is_incorporated": [
-        "=",
-        "yes"
-       ],
-       "any_scope_building": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "is_building_type": [
-            [
-             "=",
-             "building_tooling_workshop"
-            ],
-            [
-             "=",
-             "building_arms_industry"
-            ],
-            [
-             "=",
-             "building_artillery_foundry"
-            ]
-           ]
-          }
-         ],
-         "level": [
-          ">=",
-          "3"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]
@@ -41031,27 +43237,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "is_incorporated": [
-        "=",
-        "yes"
-       ],
-       "any_scope_building": [
-        "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_shipyard"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]
@@ -41178,38 +43366,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "is_incorporated": [
-        "=",
-        "yes"
-       ],
-       "any_scope_building": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "is_building_type": [
-            [
-             "=",
-             "building_chemical_plant"
-            ],
-            [
-             "=",
-             "building_synthetics_plant"
-            ]
-           ]
-          }
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]
@@ -41312,38 +43471,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "is_incorporated": [
-        "=",
-        "yes"
-       ],
-       "any_scope_building": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "is_building_type": [
-            [
-             "=",
-             "building_motor_industry"
-            ],
-            [
-             "=",
-             "building_automotive_industry"
-            ]
-           ]
-          }
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]
@@ -41467,38 +43597,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "is_incorporated": [
-        "=",
-        "yes"
-       ],
-       "any_scope_building": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "is_building_type": [
-            [
-             "=",
-             "building_munition_plant"
-            ],
-            [
-             "=",
-             "building_explosives_factory"
-            ]
-           ]
-          }
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]
@@ -41543,6 +43644,7 @@
    "extension_building_types": [
     "=",
     [
+     "building_copper_mine",
      "building_iron_mine",
      "building_rubber_plantation"
     ]
@@ -41582,23 +43684,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "any_scope_building": [
-        "=",
-        {
-         "is_building_type": [
-          "=",
-          "building_electrics_industry"
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]
@@ -41726,38 +43814,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "is_incorporated": [
-        "=",
-        "yes"
-       ],
-       "any_scope_building": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "is_building_type": [
-            [
-             "=",
-             "building_arms_industry"
-            ],
-            [
-             "=",
-             "building_artillery_foundry"
-            ]
-           ]
-          }
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]
@@ -41857,38 +43916,9 @@
    "ai_will_do": [
     "=",
     {
-     "any_scope_state": [
+     "always": [
       "=",
-      {
-       "any_scope_building": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "is_building_type": [
-            [
-             "=",
-             "building_steel_mill"
-            ],
-            [
-             "=",
-             "building_tooling_workshop"
-            ],
-            [
-             "=",
-             "building_glassworks"
-            ]
-           ]
-          }
-         ],
-         "level": [
-          ">=",
-          "5"
-         ]
-        }
-       ]
-      }
+      "yes"
      ]
     }
    ]

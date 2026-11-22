@@ -23,6 +23,14 @@ INJECT:law_child_labor_allowed = {
 		state_demog_absorbed_peasants_mortality_mult = 0.05
 	}
 }
+# Vanilla 1.15's Extraordinary Commission (a new Internal Security law): +0.001 wealth mortality a level of Home Affairs,
+# its secret police reaching the well-off. On top, like Private Health Insurance's (P.ENGINE_FIELDS_ON_TOP).
+INJECT:law_extraordinary_commission = {
+	institution_modifier = {
+		state_mortality_wealth_mult = -0.001
+		state_demog_ontop_mortality_wealth_mult = 0.001
+	}
+}
 INJECT:law_no_womens_rights = {
 	modifier = {
 		state_birth_rate_mult = -0.05

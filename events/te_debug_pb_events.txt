@@ -1,5 +1,5 @@
 ﻿# ============================================================================
-# POWER BLOC PRINCIPLE SLOTS TEST CONSOLE — fired only from the console:
+# POWER BLOC TEST CONSOLE — fired only from the console:
 # `event te_debug_pb.1`
 # ============================================================================
 # Forms a small bloc, fills slots without waiting for mandates, adds or takes
@@ -7,6 +7,17 @@
 # slot technologies) and speeds up mandates, so the slot count
 # (te_pb_principle_slot_cap) and the panel can be checked in minutes. Nothing in
 # the mod fires this event.
+#
+# Mandate test (#1442): Add runs add_power_bloc_mandate = 1, Remove runs
+# add_power_bloc_mandate = -1. The script docs promise only adding, and the mod
+# wants to know whether a negative value takes one away before it builds ways to
+# spend mandates. Add is the control: if Add fails too, the test is broken and
+# says nothing about removing. Each click logs the count straight after the
+# effect, and te_debug_pb.2 compares it with the count before a day later, logs
+# a TE_DEBUG_PB_MANDATE verdict and reopens this console with it in the flavor
+# text. Both are hidden while fast mandates are on, since a mandate earned
+# during the day would spoil the count. Steps:
+# docs/testing/vanilla-1-15-playtest.md, "Power bloc mandates".
 # ============================================================================
 namespace = te_debug_pb
 
@@ -22,7 +33,20 @@ te_debug_pb.1 = { # REVIEWED 2026-10-06: console-only test event (`event te_debu
 
 	title = te_debug_pb.1.t
 	desc = te_debug_pb.1.d
-	flavor = te_debug_pb.1.f
+	# The last mandate test's verdict, set by te_debug_pb.2.
+	flavor = {
+		first_valid = {
+			triggered_desc = { trigger = { var:te_debug_pb_mandate_verdict ?= 1 } desc = te_debug_pb.1.f_add_ok }
+			triggered_desc = { trigger = { var:te_debug_pb_mandate_verdict ?= 2 } desc = te_debug_pb.1.f_add_none }
+			triggered_desc = { trigger = { var:te_debug_pb_mandate_verdict ?= 3 } desc = te_debug_pb.1.f_add_cap }
+			triggered_desc = { trigger = { var:te_debug_pb_mandate_verdict ?= 4 } desc = te_debug_pb.1.f_remove_ok }
+			triggered_desc = { trigger = { var:te_debug_pb_mandate_verdict ?= 5 } desc = te_debug_pb.1.f_remove_none }
+			triggered_desc = { trigger = { var:te_debug_pb_mandate_verdict ?= 6 } desc = te_debug_pb.1.f_remove_floor }
+			triggered_desc = { trigger = { var:te_debug_pb_mandate_verdict ?= 7 } desc = te_debug_pb.1.f_remove_negative }
+			triggered_desc = { trigger = { var:te_debug_pb_mandate_verdict ?= 8 } desc = te_debug_pb.1.f_unexpected }
+			triggered_desc = { trigger = { always = yes } desc = te_debug_pb.1.f }
+		}
+	}
 
 	# The option tooltips read var:te_debug_pb_tech_slots every frame; set it
 	# here so they never read a missing variable.
@@ -174,7 +198,142 @@ te_debug_pb.1 = { # REVIEWED 2026-10-06: console-only test event (`event te_debu
 		}
 	}
 
+	# Mandate test: add one. The control for Remove; at the cap of 5 it should
+	# change nothing.
+	option = {
+		name = te_debug_pb.1.g
+		trigger = {
+			is_power_bloc_leader = yes
+			power_bloc = {
+				NOT = { has_modifier = te_debug_pb_fast_mandates }
+			}
+		}
+		set_variable = {
+			name = te_debug_pb_mandates_before
+			value = te_debug_pb_mandates_by_trigger
+		}
+		set_variable = {
+			name = te_debug_pb_mandate_test
+			value = 1
+		}
+		power_bloc = {
+			add_power_bloc_mandate = 1
+		}
+		debug_log = "TE_DEBUG_PB_MANDATE add clicked: before=[SCOPE.ScriptValue('te_debug_pb_mandates_before_view')|0] straight_after=[SCOPE.ScriptValue('te_debug_pb_mandates_by_trigger')|0] link=[SCOPE.ScriptValue('te_debug_pb_mandates_by_link')|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+		trigger_event = { id = te_debug_pb.2 days = 1 }
+	}
+
+	# Mandate test: take one away with a negative value. Shown with no mandates
+	# too, so a click at 0 shows whether the count can go below 0.
+	option = {
+		name = te_debug_pb.1.h
+		trigger = {
+			is_power_bloc_leader = yes
+			power_bloc = {
+				NOT = { has_modifier = te_debug_pb_fast_mandates }
+			}
+		}
+		set_variable = {
+			name = te_debug_pb_mandates_before
+			value = te_debug_pb_mandates_by_trigger
+		}
+		set_variable = {
+			name = te_debug_pb_mandate_test
+			value = 2
+		}
+		power_bloc = {
+			add_power_bloc_mandate = -1
+		}
+		debug_log = "TE_DEBUG_PB_MANDATE remove clicked: before=[SCOPE.ScriptValue('te_debug_pb_mandates_before_view')|0] straight_after=[SCOPE.ScriptValue('te_debug_pb_mandates_by_trigger')|0] link=[SCOPE.ScriptValue('te_debug_pb_mandates_by_link')|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+		trigger_event = { id = te_debug_pb.2 days = 1 }
+	}
+
 	option = {
 		name = te_debug_pb.1.m
+	}
+}
+
+# The mandate test's verdict, a day after Add or Remove: compares the trigger's
+# count with the one before the click, logs it and reopens the console, whose
+# flavor text shows it (verdicts 1-8, te_debug_pb.1's flavor). The reopen is
+# safe undelayed: nothing here runs again until the next click.
+te_debug_pb.2 = { # REVIEWED 2026-11-06: console-only, fired by te_debug_pb.1 options g and h
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		has_variable = te_debug_pb_mandate_test
+	}
+
+	immediate = {
+		set_variable = {
+			name = te_debug_pb_mandates_after
+			value = te_debug_pb_mandates_by_trigger
+		}
+		set_variable = {
+			name = te_debug_pb_mandate_change
+			value = var:te_debug_pb_mandates_after
+		}
+		change_variable = {
+			name = te_debug_pb_mandate_change
+			subtract = var:te_debug_pb_mandates_before
+		}
+		if = {
+			limit = { var:te_debug_pb_mandate_test = 1 }
+			if = {
+				limit = { var:te_debug_pb_mandate_change = 1 }
+				set_variable = { name = te_debug_pb_mandate_verdict value = 1 }
+				debug_log = "TE_DEBUG_PB_MANDATE add OK: one more mandate"
+			}
+			else_if = {
+				limit = {
+					var:te_debug_pb_mandate_change = 0
+					var:te_debug_pb_mandates_before >= 5
+				}
+				set_variable = { name = te_debug_pb_mandate_verdict value = 3 }
+				debug_log = "TE_DEBUG_PB_MANDATE add AT_CAP: no change at the cap of 5, as expected; remove one and try again"
+			}
+			else_if = {
+				limit = { var:te_debug_pb_mandate_change = 0 }
+				set_variable = { name = te_debug_pb_mandate_verdict value = 2 }
+				debug_log = "TE_DEBUG_PB_MANDATE add NO_CHANGE: below the cap and nothing changed, so the test or add_power_bloc_mandate is broken; Remove's result means nothing"
+			}
+			else = {
+				set_variable = { name = te_debug_pb_mandate_verdict value = 8 }
+				debug_log = "TE_DEBUG_PB_MANDATE add UNEXPECTED"
+			}
+		}
+		else = {
+			if = {
+				limit = { var:te_debug_pb_mandates_after < 0 }
+				set_variable = { name = te_debug_pb_mandate_verdict value = 7 }
+				debug_log = "TE_DEBUG_PB_MANDATE remove NEGATIVE: the count went below 0"
+			}
+			else_if = {
+				limit = { var:te_debug_pb_mandate_change = -1 }
+				set_variable = { name = te_debug_pb_mandate_verdict value = 4 }
+				debug_log = "TE_DEBUG_PB_MANDATE remove OK: a negative value takes a mandate away"
+			}
+			else_if = {
+				limit = {
+					var:te_debug_pb_mandate_change = 0
+					var:te_debug_pb_mandates_before = 0
+				}
+				set_variable = { name = te_debug_pb_mandate_verdict value = 6 }
+				debug_log = "TE_DEBUG_PB_MANDATE remove FLOOR: with no mandates nothing changed; the count stays at 0"
+			}
+			else_if = {
+				limit = { var:te_debug_pb_mandate_change = 0 }
+				set_variable = { name = te_debug_pb_mandate_verdict value = 5 }
+				debug_log = "TE_DEBUG_PB_MANDATE remove NO_CHANGE: a negative value is ignored (trust this only if Add read OK)"
+			}
+			else = {
+				set_variable = { name = te_debug_pb_mandate_verdict value = 8 }
+				debug_log = "TE_DEBUG_PB_MANDATE remove UNEXPECTED"
+			}
+		}
+		debug_log = "TE_DEBUG_PB_MANDATE counts a day later: before=[SCOPE.ScriptValue('te_debug_pb_mandates_before_view')|0] after=[SCOPE.ScriptValue('te_debug_pb_mandates_by_trigger')|0] link=[SCOPE.ScriptValue('te_debug_pb_mandates_by_link')|0] (after 6 means 6 or more; link should equal after) date=[TimeKeeper.GetCurrentDate.GetString]"
+		remove_variable = te_debug_pb_mandate_test
+		trigger_event = { id = te_debug_pb.1 }
 	}
 }

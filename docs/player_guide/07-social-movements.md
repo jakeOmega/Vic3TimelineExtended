@@ -12,9 +12,9 @@ movements carried by events run either way.
 
 ## Movement journal entries at a glance
 
-All six sit in the journal's Domestic Affairs group, except the Post-Scarcity
-Transition (Development). Decentralized countries never get them. The laws are
-described in [The mod's new laws](06-politics.md#the-mods-new-laws).
+All six sit in the journal's Rights and Society section. Decentralized
+countries never get them. The laws are described in
+[The mod's new laws](06-politics.md#the-mods-new-laws).
 
 | Journal entry | Appears with | Succeeds when | Fails when | Time limit |
 |---|---|---|---|---|
@@ -60,7 +60,8 @@ once.
 
 As support climbs, the bar's phase adds turmoil penalties and radicals from
 political movements, and from 90 it also raises your chance of enacting laws.
-The bar's tooltip lists every line. The full list of what moves the bar, with
+The panel's lists beside the bar show every line, ticking those that apply this
+month, so you can see what is left to switch on. The full list of what moves the bar, with
 the phase effects, is in [Appendix: social movement
 details](18-appendix-social-movements.md#what-moves-movement-support).
 
@@ -73,11 +74,11 @@ groups exclude each other. Cooptation is limited only by its law requirement.
 | Policy | Requires | What it does |
 |---|---|---|
 | Grassroots Organizing | No crackdown | Raises support; helps enact laws but brings more radicals |
-| Federal Protection | Indifference, Protection or Affirmative Action; Minor Power rank or above; no crackdown | Raises support the most of the three; raises acceptance, costs bureaucracy and authority |
+| Federal Protection | Indifference, Protection or Affirmative Action; Minor Power rank or above; no crackdown | Raises support the most of the three; raises acceptance and speeds enacting Multicultural, costs bureaucracy and authority |
 | Gradualist Accommodation | No crackdown | Raises support a little; eases turmoil, raises acceptance slightly |
 | Cooptation / Token Reform | Discrimination, Indifference or Cultural Assimilation | Raises support for 12 months only; eases turmoil, costs legitimacy through ideological incoherence |
 | Suppression / Crackdown | No pro-movement policy | Lowers support; adds authority and turmoil |
-| Segregationist Consolidation | A discriminatory minority law; no pro-movement policy | Lowers support fast; adds authority, but lowers acceptance and brings more radicals |
+| Segregationist Consolidation | A discriminatory minority law; no pro-movement policy | Lowers support fast; adds authority, but lowers acceptance, slows enacting Multicultural and brings more radicals |
 
 The discriminatory minority laws are Violent Hostility, Ghettoization, Cultural
 Assimilation and Discrimination. Cooptation stops pushing the bar after 12
@@ -128,8 +129,10 @@ policy must run more than 18 months to count. Results decay over ten years.
 | The Movement Fades (failure) | Otherwise | Radicals among lower-strata pops |
 
 Ties between pro-movement policies go to Federal Protection, then Grassroots.
-The entry's status lists the months each policy has run and names the ending
-the movement would reach if it won or collapsed now.
+The journal panel lists all ten endings in this order, each with the condition
+that leads to it, ticked when it holds; the first one whose conditions all hold
+is the ending. The entry's status lists the months each policy has run and names
+the ending the movement would reach if it won or collapsed now.
 
 ### How the AI handles civil rights
 
@@ -190,10 +193,11 @@ no two of them within two years of each other.
 Cybersecurity, the era 9 technology that opens the entry, unlocks Strong
 Privacy Rights; if Automated Surveillance opened it, research Cybersecurity
 first. The law also needs Guaranteed Liberties, which needs Right of Assembly or
-Protected Speech, and the Paternalistic, Patriotic and Traditionalist ideologies
-strongly oppose it, so the twenty years are mostly a political fight. The
-entry's status line names the step you are missing. Running out the clock under
-Moderate Data Privacy costs half the time-out penalty and no radicals.
+Protected Speech, and the Paternalistic, Patriotic, Militarist and
+Traditionalist ideologies strongly oppose it, so the twenty years are mostly a
+political fight. The entry's status line names the step you are missing.
+Running out the clock under Moderate Data Privacy costs half the time-out
+penalty and no radicals.
 The events bring a whistleblower, a data breach, hackers, predictive policing
 and foreign cyber-espionage. The first three are leaks, and no two of them
 come within two years of each other. With Covert Warfare on, the last follows
@@ -228,7 +232,7 @@ Social Movements rule doesn't stop them.
 | Movement | Needs | Events |
 |---|---|---|
 | Second-wave feminism | Second Wave Feminism (era 7) | The Second Shift and Half the Salary, once each, over women's work and equal pay |
-| LGBTQ+ rights | LGBTQ+ Rights Movement (era 9) | Pride and Protest, at most once in ten years until you enact Full Equality and Protection; The Marriage Equality Question, once, under Basic Protections or Anti-Discrimination Laws |
+| LGBTQ+ rights | LGBTQ+ Rights Movement (era 9) | Pride and Protest, at most once in ten years until you enact Full Equality and Protection; A Test Case, once, under Basic Protections or Anti-Discrimination Laws |
 | Secularization | One of several technologies, such as Sexual Revolution or Social Media, or the Total Separation law | Religious Revival Sweeps the Nation and Faith Against Modernity, each at most once in ten years and never under State Atheism |
 | Environmentalism | The Global Warming journal entry | Climate events as world temperature crosses thresholds, under the Global Warming rule; see [Climate and pollution](15-climate.md) |
 

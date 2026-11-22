@@ -147,6 +147,7 @@ resettlement_pop_urban_worker = {
 		pop_employment_building_group = bg_ranching
 		pop_employment_building_group = bg_subsistence_agriculture
 		pop_employment_building_group = bg_subsistence_ranching
+		pop_employment_building_group = bg_cossack_host # 1.15: its laborers work the land
 	}
 }
 
@@ -169,18 +170,22 @@ resettlement_state_is_damaged = {
 	}
 }
 
-# State scope, scope:rs_destination saved. A state the walk may take from.
-resettlement_valid_source = {
+# State scope, scope:rs_destination saved. A state the walk may take from,
+# by its eligible population as resettlement_run_destination counted it this
+# month (var:rs_elig; see there). A state with no count is the destination,
+# one with an Authority, or one this destination's walk has already taken from.
+resettlement_valid_source_counted = {
 	NOT = { this = scope:rs_destination }
 	NOT = { has_building = building_resettlement_colony }
-	resettlement_state_eligible_pop >= resettlement_min_take
+	has_variable = rs_elig
+	var:rs_elig >= resettlement_min_take
 }
 
 # ---- The political layer and the Declaration (§7.2, §7.4) -------------------
 # Country scope. Party to the Universal Declaration of Human Rights (read as
 # un_human_rights_signatories does).
 resettlement_is_declaration_party = {
-	je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier }
+	has_variable = un_human_rights_declaration_modifier_on
 }
 
 # Country scope. A program's political reaction has not yet faded.

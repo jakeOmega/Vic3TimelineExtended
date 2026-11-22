@@ -6,13 +6,45 @@
 # ============================================================================
 
 # ---- Fabrication (design § 5) ------------------------------------------------------
-# Every module's points; at most this many modules a month; the stock kept
-# while fabrication stalls.
-# The stock's cap is the dearest module's price: the fourth past a world's
-# slots, 5 x sr_module_points (colony management design § 5).
+# Every module's points; at most this many modules a month.
 sr_module_points = { value = 100 }
 sr_mod_fab_per_month = { value = 2 }
-sr_mod_fab_stock_cap = { value = 500 }
+
+# Country scope. The module stock, the points kept while fabrication stalls (the
+# owner, 2026-11-15): a base that holds the fourth module past a world's slots
+# (5 x sr_module_points, colony management design § 5), a year of this month's
+# fabrication (the methods and Orbital Yards pay for their own storage), and the
+# Space Program's Module Storage method (country_sr_module_storage_add,
+# sr_colony_module_pms.txt). A module past a world's slots is queued only while
+# the stock can hold its price (sr_mod_can_queue_<type>_<key>). sr_mod_month adds
+# no points past it (or past the queue's first module's price, where that is
+# more: sr_mod_fab_stock_fill_cap), but never takes away a stock above it.
+sr_mod_fab_stock_base = { value = 500 }
+sr_mod_fab_stock_months = { value = 12 }
+sr_mod_fab_stock_cap = {
+	value = sr_mod_fab_stock_base
+	add = sr_mod_fab_stock_year
+	add = sr_mod_fab_storage
+	floor = yes
+}
+sr_mod_fab_stock_year = {
+	value = sr_mod_fab_rate
+	multiply = sr_mod_fab_stock_months
+}
+sr_mod_fab_storage = {
+	value = modifier:country_sr_module_storage_add
+}
+# Country scope. What sr_mod_month fills the stock to: its cap, or the queue's
+# first module's price where that is more, so a module queued while the cap was
+# higher (more fabrication then, or a storage method since switched off) is still
+# built rather than stopping the queue (review of #1847).
+sr_mod_fab_stock_fill_cap = {
+	value = sr_mod_fab_stock_cap
+	if = {
+		limit = { has_variable = sr_mq_1_site }
+		min = sr_mq_head_cost
+	}
+}
 
 # Dismantling (owner, 2026-10-31): the months a module level takes to come
 # down, one level at a time a world, so a colony can't be stripped bare when a
@@ -28,6 +60,56 @@ sr_mod_fab_rate_method = {
 sr_mod_fab_rate = {
 	value = sr_mod_fab_rate_method
 	add = { value = sr_mod_units_yard multiply = sr_mod_yard_points }
+}
+
+# ---- The AI's fabrication budget (the owner, 2026-11-20) ---------------------------
+# An AI runs the dearest fabrication method whose bill is within this share of
+# its government's weekly fixed income, half the share a mission may climb to
+# (sr_ai_mission_share_up, sr_ai_mission_budget_values.txt): the two are paid
+# together. Each later method costs about 10% less a point than the one before
+# (sr_colony_module_pms.txt), so a step down slows the modules more than it
+# saves on each. Its cheapest method runs within any budget, as every method
+# did before (sr_mod_activate_best_fabrication).
+sr_mod_ai_fab_share = { value = 0.05 }
+sr_mod_ai_fab_budget = {
+	value = fixed_income
+	multiply = sr_mod_ai_fab_share
+}
+
+# The two dearer methods' weekly bills at full staff and base prices, their
+# goods times their base prices (sr_colony_module_pms.txt; test_solar_sites.py
+# holds them equal). Orbital Assembly needs none: it is the cheapest.
+sr_mod_fab_bill_base_lunar_foundries = { value = 732000 }
+sr_mod_fab_bill_base_fusion_shipyards = { value = 1368000 }
+
+# What the bill costs now, as the mission budget prices a mission's: the
+# program's throughput with its funding (its goods scale with it), times our
+# market's Launch Capacity premium, never below base (sr_launch_capacity_price_up,
+# space_race_values.txt). Launch Capacity is 70% to 76% of every method's bill;
+# the premium stands in for the rest. An estimate: an understaffed programme
+# buys less.
+sr_mod_fab_bill_price_factor = {
+	value = sr_ai_program_throughput_funded
+	multiply = {
+		value = 1
+		add = sr_launch_capacity_price_up
+	}
+}
+
+# What each method's bill leaves of the budget: 0 or more, the AI may run it.
+sr_mod_ai_fab_room_lunar_foundries = {
+	value = sr_mod_ai_fab_budget
+	subtract = {
+		value = sr_mod_fab_bill_base_lunar_foundries
+		multiply = sr_mod_fab_bill_price_factor
+	}
+}
+sr_mod_ai_fab_room_fusion_shipyards = {
+	value = sr_mod_ai_fab_budget
+	subtract = {
+		value = sr_mod_fab_bill_base_fusion_shipyards
+		multiply = sr_mod_fab_bill_price_factor
+	}
 }
 
 # ---- Facilities (colony management design § 7) ---------------------------------------
@@ -48,6 +130,15 @@ sr_mod_bunker_reliability = {
 	value = sr_mod_units_bunker
 	multiply = sr_mod_bunker_reliability_per_level
 	max = sr_mod_bunker_reliability_max
+}
+# And the command's redundancy against a Leadership salvo
+# (nd_redundancy_command), at most sr_mod_bunker_redundancy_max.
+sr_mod_bunker_redundancy_per_level = { value = 2 }
+sr_mod_bunker_redundancy_max = { value = 6 }
+sr_mod_bunker_redundancy = {
+	value = sr_mod_units_bunker
+	multiply = sr_mod_bunker_redundancy_per_level
+	max = sr_mod_bunker_redundancy_max
 }
 # The AI's plan (sr_mod_ai_plan_<key>): an Administration from this autonomy
 # while the colony is still heading for sr_mod_ai_admin_settles_at or more (the
@@ -76,19 +167,24 @@ sr_slots_marker_gap = {
 	subtract = sr_colony_slots_modifier
 }
 
+# Country scope. The months until the module in shipment slot n lands, 999 while
+# the slot is empty or waiting (sr_disp_ms_first_land takes the least; the
+# months until a waiting one can leave are sr_ms_wait_months_<n>, generated).
+sr_ms_land_months_1 = { value = 999 if = { limit = { has_variable = sr_ms_1_arrive } value = var:sr_ms_1_arrive subtract = te_history_month_index } }
+sr_ms_land_months_2 = { value = 999 if = { limit = { has_variable = sr_ms_2_arrive } value = var:sr_ms_2_arrive subtract = te_history_month_index } }
+sr_ms_land_months_3 = { value = 999 if = { limit = { has_variable = sr_ms_3_arrive } value = var:sr_ms_3_arrive subtract = te_history_month_index } }
+sr_ms_land_months_4 = { value = 999 if = { limit = { has_variable = sr_ms_4_arrive } value = var:sr_ms_4_arrive subtract = te_history_month_index } }
+sr_ms_land_months_5 = { value = 999 if = { limit = { has_variable = sr_ms_5_arrive } value = var:sr_ms_5_arrive subtract = te_history_month_index } }
+sr_ms_land_months_6 = { value = 999 if = { limit = { has_variable = sr_ms_6_arrive } value = var:sr_ms_6_arrive subtract = te_history_month_index } }
+sr_ms_land_months_7 = { value = 999 if = { limit = { has_variable = sr_ms_7_arrive } value = var:sr_ms_7_arrive subtract = te_history_month_index } }
+sr_ms_land_months_8 = { value = 999 if = { limit = { has_variable = sr_ms_8_arrive } value = var:sr_ms_8_arrive subtract = te_history_month_index } }
+
 sr_mod_fab_stock_value = {
 	value = 0
 	if = { limit = { has_variable = sr_fab_stock } value = var:sr_fab_stock }
 }
 
 # ---- Upkeep (design § 8) -------------------------------------------------------------
-# Journal entry scope (the multiplier of sr_module_upkeep): the module
-# levels past the first at the colonies its country holds, read through owner.
-sr_mod_upkeep_units = {
-	value = 0
-	owner = { add = sr_mod_upkeep_levels }
-}
-
 # ---- Extraplanetary Base room (design § 9) --------------------------------------------
 # Country scope. Its Extraplanetary Base levels, built, and built and queued.
 sr_ebase_levels = {

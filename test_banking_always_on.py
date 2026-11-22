@@ -134,7 +134,8 @@ class EntryTest(unittest.TestCase):
 
     def test_running_is_the_entry_and_the_latch(self):
         self.assertEqual(_norm(_top_block(self.triggers, "te_banking_cycle_running")),
-                         "{ has_journal_entry = je_banking_cycle has_variable = finance_cycle_value }")
+                         "{ te_banking_system_on = yes has_journal_entry = je_banking_cycle "
+                         "has_variable = finance_cycle_value }")
         self.assertEqual(_norm(_top_block(self.triggers, "te_banking_controls_open")),
                          "{ te_banking_cycle_running = yes }")
         self.assertEqual(_norm(_top_block(self.triggers, "te_banking_cycle_started_tt")),
@@ -160,20 +161,32 @@ class EntryTest(unittest.TestCase):
         effect = _key_block(_key_block(self.je, "on_monthly_pulse"), "effect")
         first_if = _key_block(effect, "if")
         self.assertIn("limit = { te_banking_cycle_running = no }", _norm(first_if))
-        self.assertIn(_norm("if = { limit = { te_banking_cycle_unlocked = yes } banking_cycle_start = yes "
+        # The rule too: with it off the cycle doesn't run, and until the
+        # invalid outcome ends the entry this would announce a start monthly.
+        self.assertIn(_norm("if = { limit = { te_banking_system_on = yes te_banking_cycle_unlocked = yes } "
+                            "banking_cycle_start = yes "
                             "if = { limit = { is_ai = no } post_notification = banking_cycle_started_notice } }"),
                       _norm(first_if))
         running = _key_block(effect[effect.index(first_if) + len(first_if):], "else")
         for step in ("banking_cycle_advance_variables", "banking_cycle_check_and_execute_crash",
-                     "banking_cycle_random_event_effect", "banking_cycle_apply_phase_modifiers",
+                     "banking_cycle_random_event_effect", "banking_cycle_update_ce_pool_balance",
                      "te_history_record_banking_samples"):
             self.assertIn(f"{step} = yes", running, step)
             self.assertNotIn(f"{step} = yes", first_if, step)
 
-    def test_the_weekly_pulse_waits_for_the_cycle(self):
+    def test_the_weekly_pulse_moves_the_pool_and_waits_for_the_cycle(self):
+        # The pool's weekly add runs for every holder, the cycle started or not
+        # (owner, 2026-11-07); the cycle's own weekly effects wait for it.
         effect = _norm(_key_block(_key_block(self.je, "on_weekly_pulse"), "effect"))
-        self.assertEqual(effect, "{ if = { limit = { te_banking_cycle_running = yes } "
+        self.assertEqual(effect, "{ banking_weekly_investment_pool_add = yes "
+                                 "if = { limit = { te_banking_cycle_running = yes } "
                                  "banking_cycle_weekly_effects = yes } }")
+
+    def test_the_pool_add_lives_only_in_the_ungated_effect(self):
+        effects = _strip_comments(_read(CYCLE_EFFECTS))
+        self.assertEqual(_norm(_top_block(effects, "banking_weekly_investment_pool_add")),
+                         "{ add_investment_pool = investment_pool_banking_cycle_add }")
+        self.assertNotIn("add_investment_pool", _top_block(effects, "banking_cycle_weekly_effects"))
 
     def test_no_status_text(self):
         # The dormant entry draws an overview (its Not Started cell), so the
@@ -241,11 +254,14 @@ ENTRY_OBJECT_READERS = {
     ("common/scripted_effects/te_monetary_effects.txt", "te_monetary_settle_modifier_home"),
     ("common/scripted_effects/te_monetary_effects.txt", "te_mon_mod_strip"),
     ("common/scripted_triggers/te_monetary_triggers.txt", "te_mon_mod_has"),
-    ("common/scripted_effects/te_monetary_fx_effects.txt", "te_monetary_init_fx_variables"),
-    ("common/scripted_effects/te_monetary_arrangement_effects.txt", "te_monetary_init_arrangement_variables"),
+    # The banking rule leaving Full: the tools' Disable effects work on the entry object.
+    ("common/scripted_effects/te_monetary_rule_switch_effects.txt", "te_monetary_leave_full_system"),
     ("common/on_actions/extra_on_actions.txt", "te_banking_law_change_cleanup"),
     ("common/on_actions/extra_on_actions.txt", "te_banking_economy_law_cleanup"),
     ("common/on_actions/te_banking_entry_on_actions.txt", "te_banking_entry_net"),
+    # the UN grant goes into the pool wherever the entry's weekly pulse moves
+    # it, which since 2026-11-07 is every holder, the cycle started or not
+    ("common/scripted_triggers/un_economy_triggers.txt", "un_dev_fund_pays_into_pool"),
     ("common/script_values/te_banking_entry_values.txt", "te_banking_entry_missing_count"),
     # the self-check names the countries te_banking_entry_missing_count counts
     ("events/te_debug_banking_events.txt", "te_debug_banking.1"),
@@ -263,7 +279,6 @@ CYCLE_READERS = {
     "common/scripted_triggers/legacy_event_integration_triggers.txt": (
         "banking_is_bailout_recipient", "banking_can_offer_bailout"),
     "common/scripted_triggers/banking_debt_triggers.txt": ("banking_restructuring_shown",),
-    "common/scripted_triggers/un_economy_triggers.txt": ("un_dev_fund_pays_into_pool",),
     "common/scripted_triggers/un_docket_triggers.txt": ("un_docket_loan_candidate",),
     "common/scripted_triggers/amendment_petition_triggers.txt": ("te_ap_economy_faltering",),
     "common/scripted_triggers/banking_policy_triggers.txt": ("banking_external_available",),
@@ -411,7 +426,9 @@ class SafetyNetTest(unittest.TestCase):
         self.assertIn(_norm("on_yearly_pulse_country = { on_actions = { te_banking_entry_selfcheck } }"), _norm(text))
         self.assertIn(_norm("on_monthly_pulse_country = { on_actions = { te_banking_entry_net } }"), _norm(text))
         net = _norm(_top_block(text, "te_banking_entry_net"))
-        self.assertIn("limit = { te_banking_entry_expected = yes NOT = { has_journal_entry = je_banking_cycle } } "
+        # No record at all: not over an inactive copy, which refuses the add (#1416).
+        self.assertIn("limit = { te_banking_entry_expected = yes NOT = { has_journal_entry = je_banking_cycle } "
+                      "NOT = { has_inactive_journal_entry = je_banking_cycle } } "
                       "add_journal_entry = { type = je_banking_cycle }", net)
         self.assertIn("change_global_variable = { name = te_banking_entry_net_added add = 1 }", net)
 
@@ -426,8 +443,46 @@ class SafetyNetTest(unittest.TestCase):
         # would otherwise hide an engine that left records out.
         self.assertIn("te_banking_entry_missing_count < 1 te_banking_entry_net_added_g < 1", _norm(event))
         self.assertIn("banking_entry_everywhere", _read(PLAYTEST))
-        # BROKEN names the countries still missing, one line each.
-        self.assertIn("TE_SELF_CHECK INFO banking_entry_everywhere missing: [THIS.GetCountry.GetNameNoFormatting]", event)
+        # BROKEN names the countries still missing, one line each, and whether
+        # each holds an inactive copy (the net leaves it) or no record (it adds).
+        for record in ("inactive", "none"):
+            self.assertIn("TE_SELF_CHECK INFO banking_entry_everywhere missing: [THIS.GetCountry.GetNameNoFormatting] "
+                          f"record={record}", event)
+
+
+class RuleSwitchedOffTest(unittest.TestCase):
+    """A game rule can change mid-game, from the screen that changes country.
+    With banking switched off the cycle stops, the entry ends and the cycle's
+    variables go (Workshop report, 2026-11-08: the entry, its bonuses and its
+    bubble-pressure events ran on with the rule off)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.je = _strip_comments(_read(JE))
+        cls.effects = _strip_comments(_read(CYCLE_EFFECTS))
+        cls.net = _norm(_top_block(_strip_comments(_read(NET)), "te_banking_entry_net"))
+
+    def test_the_entry_ends_on_the_rule(self):
+        outcomes = [_block_from(self.je, m.end() - 1)
+                    for m in re.finditer(r"\boutcome = \{", self.je)]
+        self.assertEqual(len(outcomes), 1, "the entry's only ending is the rule's")
+        outcome = _norm(outcomes[0])
+        self.assertIn("flags = { hidden invalid_outcome }", outcome)
+        self.assertIn("trigger = { NOT = { te_banking_system_on = yes } }", outcome)
+        self.assertIn("conclusion_desc = je_banking_cycle_invalid_conclusion_desc", outcome)
+        self.assertIn("je_banking_cycle_invalid_conclusion_desc", _loc())
+        # The same test as the prune of the inactive record.
+        self.assertEqual(_norm(_key_block(self.je, "disable_evaluation")),
+                         "{ NOT = { te_banking_system_on = yes } }")
+
+    def test_the_net_clears_a_stopped_cycle(self):
+        self.assertIn("if = { limit = { NOT = { te_banking_system_on = yes } "
+                      "has_variable = finance_cycle_value } te_banking_cycle_stop_for_rule = yes }", self.net)
+
+    def test_the_stop_takes_every_variable_the_start_seeds(self):
+        stop = _norm(_top_block(self.effects, "te_banking_cycle_stop_for_rule"))
+        for var in CYCLE_VARS:
+            self.assertIn(f"if = {{ limit = {{ has_variable = {var} }} remove_variable = {var} }}", stop)
 
 
 if __name__ == "__main__":

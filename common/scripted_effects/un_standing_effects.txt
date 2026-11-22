@@ -245,7 +245,7 @@ un_standing_program_tick = {
 # Scope: country (a member)
 un_standing_undermine_tick = {
 	if = {
-		limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+		limit = { un_undermines_the_order = yes }
 		if = {
 			limit = { NOT = { has_variable = un_standing_months_undermine } }
 			set_variable = { name = un_standing_months_undermine value = 0 }

@@ -34,8 +34,10 @@ import re
 from bisect import bisect_right
 from dataclasses import dataclass, field
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
 from iterator_limit_audit import blank_comments_and_strings
-from prev_scope_audit import _TOKEN_RE, _parse_reviewed
+from prev_scope_audit import _TOKEN_RE
 
 # Directories scanned, relative to the mod root: every scripted surface.
 AUDIT_DIRS = ("common", "events")
@@ -61,7 +63,7 @@ class Flag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[Flag] = field(default_factory=list)
     files_audited: int = 0
 
@@ -93,8 +95,8 @@ def scan_text(text: str, rel_path: str) -> list[Flag]:
                             value=value,
                             name=state["name"],
                             exemption=(
-                                _parse_reviewed(comments.get(line))
-                                or _parse_reviewed(comments.get(opener_line))
+                                parse_reviewed(comments.get(line))
+                                or parse_reviewed(comments.get(opener_line))
                             ),
                         ))
             continue
@@ -159,8 +161,8 @@ def _describe(f: Flag) -> str:
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
 
     out = [
         "# change_variable clamp audit report",
@@ -232,26 +234,22 @@ def regenerate(mod_state=None) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
     report = render_report(result)
-    out_path = os.path.join(mod_path, "docs", "engine", "change_variable_clamp_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(report)
-    unrev = sum(1 for f in result.flags if not f.exemption)
-    exemp = sum(1 for f in result.flags if f.exemption)
+    write_text(os.path.join(mod_path, "docs", "engine", "change_variable_clamp_report.md"), report)
     return {
         "files_audited": result.files_audited,
         "total_flags": len(result.flags),
-        "unreviewed": unrev,
-        "exempted": exemp,
+        "unreviewed": len(result.unreviewed),
+        "exempted": len(result.exemptions),
     }
 
 
-if __name__ == "__main__":
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 if any flag lacks a
+    `# REVIEWED ...` exemption."""
     from path_constants import mod_path
-    result = audit(mod_path=mod_path)
-    print(render_report(result))
-    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ...` exemption.
-    if "--strict" in sys.argv:
-        raise SystemExit(1 if any(not f.exemption for f in result.flags) else 0)
+    return cli_main(lambda args: audit(mod_path=mod_path), lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

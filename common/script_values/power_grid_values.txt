@@ -660,6 +660,16 @@ te_grid_region_ratio_disp = {
 	}
 }
 
+# The grid's demand without its stations: 0 on a grid nothing uses power on,
+# whose ratio is 0 too (te_grid_region_demand).
+te_grid_region_demand_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_region_demand }
+		value = var:te_grid_region_demand
+	}
+}
+
 # The Electricity price the flow set brings the state to, over its base
 # (te_grid_price_target); 0 for a station that moves nothing.
 te_grid_price_target_disp = {
@@ -763,25 +773,711 @@ te_grid_import_disp = {
 	}
 }
 
+# --- Power Grids tab (read every frame, so every read is guarded) -------------
+#
+# The tab (gui/te_grid_widgets.gui) and the station's building panel read the
+# grid's record (te_grid_record_effect, power_grid_effects.txt): the country's
+# lists te_grid_hubs and te_grid_stations and the hub's te_grid_rec_*. Country
+# scope unless marked state.
+
+# The country's stations, built (has_building misses a queued one). Live,
+# where the lists below are as of the last run.
+te_grid_tab_stations_disp = {
+	value = 0
+	every_scope_state = {
+		limit = { has_building = building_grid_transfer_station }
+		add = 1
+	}
+}
+
+# Its stations on a grid at the last run (te_grid_hub: an idle station has
+# none).
+te_grid_tab_on_grid_disp = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			has_building = building_grid_transfer_station
+			has_variable = te_grid_hub
+		}
+		add = 1
+	}
+}
+
+# Its stations still being built: a queued building exists at level 0.
+te_grid_tab_queued_disp = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			any_scope_building = {
+				is_building_type = building_grid_transfer_station
+				level < 1
+			}
+		}
+		add = 1
+	}
+}
+
+# The grids its stations are on, and how many stations those grids join in
+# all, the other countries' among them.
+te_grid_tab_grids_disp = {
+	value = 0
+	if = {
+		limit = { has_variable_list = te_grid_hubs }
+		every_in_list = {
+			variable = te_grid_hubs
+			add = 1
+		}
+	}
+}
+
+te_grid_tab_grid_stations_disp = {
+	value = 0
+	if = {
+		limit = { has_variable_list = te_grid_hubs }
+		every_in_list = {
+			variable = te_grid_hubs
+			add = te_grid_region_size_disp
+		}
+	}
+}
+
+# What its sending stations send a week, and how many send; what its
+# receiving stations deliver after losses, and how many receive (the tile's
+# mode and Flow, te_grid_mode_disp and te_grid_electricity_moved_disp).
+te_grid_tab_sent_disp = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			has_building = building_grid_transfer_station
+			te_grid_mode_disp = 1
+		}
+		add = te_grid_electricity_moved_disp
+	}
+}
+
+te_grid_tab_senders_disp = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			has_building = building_grid_transfer_station
+			te_grid_mode_disp = 1
+		}
+		add = 1
+	}
+}
+
+te_grid_tab_received_disp = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			has_building = building_grid_transfer_station
+			te_grid_mode_disp = 2
+		}
+		add = te_grid_electricity_moved_disp
+	}
+}
+
+te_grid_tab_receivers_disp = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			has_building = building_grid_transfer_station
+			te_grid_mode_disp = 2
+		}
+		add = 1
+	}
+}
+
+# The country's transmission efficiency, as each of its states uses it
+# (te_grid_state_efficiency_value's clamp).
+te_grid_tab_efficiency_disp = {
+	value = modifier:country_grid_transmission_efficiency_add
+	min = 0.1
+	max = 1
+}
+
+# The share lost on the way.
+te_grid_tab_loss_disp = {
+	value = 1
+	subtract = te_grid_tab_efficiency_disp
+}
+
+# Its Grid Interconnection Agreements, counted live from its treaties as
+# te_grid_refresh_partners_effect reads them (its te_grid_partners list is
+# refreshed only while it has a station, or monthly for an AI country with
+# Electrical Capacitors); its bloc partners, the other members of its power
+# bloc while the bloc's principle joins their grids (te_grid_bloc_links_grids),
+# counted live too, and only those it has no agreement with, so the two add up
+# to its partners (held so by test_power_grid.py's BlocPartnerTest); and the
+# countries whose
+# undersea cables reach its own, or are reached by them, that aren't partners
+# yet (te_grid_cable_reach; each of those has a station, so its partner list is
+# fresh, and the lists are mutual, so the other side's is read, bloc partners
+# included).
+te_grid_tab_partners_disp = {
+	value = 0
+	every_scope_treaty = {
+		limit = {
+			any_scope_article = { has_type = grid_interconnection_agreement }
+		}
+		add = 1
+	}
+}
+
+# As te_grid_refresh_partners_effect lists them: a member at war with it is no
+# partner. ROOT is the country the tab shows.
+te_grid_tab_bloc_partners_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_bloc_links_grids = yes }
+		power_bloc ?= {
+			every_power_bloc_member = {
+				limit = {
+					NOT = { this = root }
+					NOT = { has_war_with = root }
+					save_temporary_scope_as = te_grid_tab_bloc_member
+					NOT = {
+						root = {
+							any_scope_treaty = {
+								binds = scope:te_grid_tab_bloc_member
+								any_scope_article = { has_type = grid_interconnection_agreement }
+							}
+						}
+					}
+				}
+				add = 1
+			}
+		}
+	}
+}
+
+te_grid_tab_reach_disp = {
+	value = 0
+	if = {
+		limit = { has_variable_list = te_grid_cable_reach }
+		every_in_list = {
+			variable = te_grid_cable_reach
+			limit = {
+				exists = this
+				NOT = { is_target_in_variable_list = { name = te_grid_partners target = root } }
+			}
+			add = 1
+		}
+	}
+}
+
+# State scope, a hub: the grid's sending price, over Electricity's base.
+te_grid_rec_price_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_price }
+		value = var:te_grid_rec_price
+	}
+}
+
+# State scope, a hub: what the grid's stations send a week, what its
+# receivers deliver after losses, and the difference, the losses.
+te_grid_rec_sent_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_sent }
+		value = var:te_grid_rec_sent
+	}
+}
+
+te_grid_rec_delivered_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_delivered }
+		value = var:te_grid_rec_delivered
+	}
+}
+
+te_grid_rec_losses_disp = {
+	value = te_grid_rec_sent_disp
+	subtract = te_grid_rec_delivered_disp
+	min = 0
+}
+
+# State scope, a hub: the grid's members' Electricity made and used a week,
+# without their stations (the ratio's two sides).
+te_grid_rec_supply_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_supply }
+		value = var:te_grid_rec_supply
+	}
+}
+
+te_grid_rec_demand_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_demand }
+		value = var:te_grid_rec_demand
+	}
+}
+
+# State scope, a hub: how many countries own a station on the grid, and how
+# many markets it crosses.
+te_grid_rec_countries_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_countries }
+		value = var:te_grid_rec_countries
+	}
+}
+
+te_grid_rec_markets_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_markets }
+		value = var:te_grid_rec_markets
+	}
+}
+
+# State scope, a hub: the grid's generation by source a week, every member's
+# own, whoever owns it (te_grid_rec_mix_<source>, te_grid_record_effect), the
+# total, and each source's share of it, for the grid's card.
+te_grid_rec_mix_total_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_mix_total }
+		value = var:te_grid_rec_mix_total
+	}
+}
+
+te_grid_rec_mix_coal_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_mix_coal }
+		value = var:te_grid_rec_mix_coal
+	}
+}
+
+te_grid_rec_mix_oil_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_mix_oil }
+		value = var:te_grid_rec_mix_oil
+	}
+}
+
+te_grid_rec_mix_hydro_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_mix_hydro }
+		value = var:te_grid_rec_mix_hydro
+	}
+}
+
+te_grid_rec_mix_nuclear_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_mix_nuclear }
+		value = var:te_grid_rec_mix_nuclear
+	}
+}
+
+te_grid_rec_mix_renewable_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_mix_renewable }
+		value = var:te_grid_rec_mix_renewable
+	}
+}
+
+te_grid_rec_mix_fusion_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_mix_fusion }
+		value = var:te_grid_rec_mix_fusion
+	}
+}
+
+te_grid_rec_mix_space_solar_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_mix_space_solar }
+		value = var:te_grid_rec_mix_space_solar
+	}
+}
+
+te_grid_rec_mix_coal_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_rec_mix_total_disp > 0 }
+		value = te_grid_rec_mix_coal_disp
+		divide = te_grid_rec_mix_total_disp
+	}
+}
+
+te_grid_rec_mix_oil_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_rec_mix_total_disp > 0 }
+		value = te_grid_rec_mix_oil_disp
+		divide = te_grid_rec_mix_total_disp
+	}
+}
+
+te_grid_rec_mix_hydro_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_rec_mix_total_disp > 0 }
+		value = te_grid_rec_mix_hydro_disp
+		divide = te_grid_rec_mix_total_disp
+	}
+}
+
+te_grid_rec_mix_nuclear_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_rec_mix_total_disp > 0 }
+		value = te_grid_rec_mix_nuclear_disp
+		divide = te_grid_rec_mix_total_disp
+	}
+}
+
+te_grid_rec_mix_renewable_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_rec_mix_total_disp > 0 }
+		value = te_grid_rec_mix_renewable_disp
+		divide = te_grid_rec_mix_total_disp
+	}
+}
+
+te_grid_rec_mix_fusion_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_rec_mix_total_disp > 0 }
+		value = te_grid_rec_mix_fusion_disp
+		divide = te_grid_rec_mix_total_disp
+	}
+}
+
+te_grid_rec_mix_space_solar_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_rec_mix_total_disp > 0 }
+		value = te_grid_rec_mix_space_solar_disp
+		divide = te_grid_rec_mix_total_disp
+	}
+}
+
+# State scope, a station: its staffing, 0 to 1, for the Stations table.
+te_grid_station_staffing_disp = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_grid_transfer_station }
+		add = occupancy
+	}
+}
+
+# --- Generation by source (the Power Grids tab's Generation panel) ------------
+#
+# The script can read a state's Electricity production but not a building's,
+# so te_grid_mix_record_effect (power_grid_effects.txt) splits each state's own
+# generation (te_grid_local_production_value: what it made, less what its
+# station delivered) among its power plants by what their methods make at
+# full staff, times their levels and staffing, and keeps the country's sum
+# for each source. The state's total is measured; only the split within a
+# state of more than one source is an estimate (throughput bonuses of one
+# plant type alone, and economies of scale, aren't in it).
+
+# Building scope: the Electricity a level of this building's methods makes a
+# week at full staff, its base method's line and its carbon capture's cut
+# (every one workforce_scaled). test_power_grid_tab.py's GenerationTableTest
+# holds this to every method that makes Electricity: a new one, or a changed
+# figure, fails it.
+te_grid_mix_output_per_level_value = {
+	value = 0
+	if = {
+		limit = { is_building_type = building_power_plant }
+		if = { limit = { has_active_production_method = pm_early_power_plant } add = 25 }
+		if = { limit = { has_active_production_method = pm_coal-fired_plant } add = 50 }
+		if = { limit = { has_active_production_method = pm_oil-fired_plant } add = 80 }
+		if = { limit = { has_active_production_method = pm_modern_coal-fired_plant } add = 90 }
+		if = { limit = { has_active_production_method = pm_modern_oil-fired_plant } add = 140 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_base_building_power_plant_coal0_oil20 } add = -5 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_base_building_power_plant_coal0_oil20 } add = -8 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_base_building_power_plant_coal0_oil20 } add = -9 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_base_building_power_plant_coal0_oil30 } add = -7 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_base_building_power_plant_coal0_oil30 } add = -12 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_base_building_power_plant_coal0_oil30 } add = -13 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_base_building_power_plant_coal5_oil0 } add = -1 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_base_building_power_plant_coal5_oil0 } add = -2 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_base_building_power_plant_coal5_oil0 } add = -3 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_base_building_power_plant_coal15_oil0 } add = -4 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_base_building_power_plant_coal15_oil0 } add = -7 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_base_building_power_plant_coal15_oil0 } add = -8 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_base_building_power_plant_coal20_oil0 } add = -5 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_base_building_power_plant_coal20_oil0 } add = -9 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_base_building_power_plant_coal20_oil0 } add = -10 }
+	}
+	else_if = {
+		limit = { is_building_type = building_hydro_plant }
+		if = { limit = { has_active_production_method = pm_base_building_hydro_power } add = 750 }
+	}
+	else_if = {
+		limit = { is_building_type = building_nuclear_plant }
+		if = { limit = { has_active_production_method = pm_base_building_nuclear_power } add = 2000 }
+		if = { limit = { has_active_production_method = pm_base_building_advanced_fission_power } add = 3500 }
+	}
+	else_if = {
+		limit = { is_building_type = building_renewable_energy_plant }
+		if = { limit = { has_active_production_method = pm_base_building_renewable_power } add = 450 }
+		if = { limit = { has_active_production_method = pm_base_building_advanced_renewable_power } add = 1000 }
+	}
+	else_if = {
+		limit = { is_building_type = building_fusion_plant }
+		if = { limit = { has_active_production_method = pm_base_building_tokamak_fusion_power } add = 5000 }
+		if = { limit = { has_active_production_method = pm_base_building_inertial_fusion_power } add = 8000 }
+		if = { limit = { has_active_production_method = pm_base_building_compact_modular_fusion_power } add = 12000 }
+		if = { limit = { has_active_production_method = pm_base_building_aneutronic_fusion_power } add = 16000 }
+	}
+	else_if = {
+		limit = { is_building_type = building_solar_receiver }
+		if = { limit = { has_active_production_method = pm_solar_receiver } add = 1000000 }
+	}
+	# The companies' power stations.
+	else_if = {
+		limit = { is_building_type = building_rosatom_mayak_association }
+		if = { limit = { has_active_production_method = pm_rosatom_mayak_association } add = 300 }
+	}
+	else_if = {
+		limit = { is_building_type = building_generic_power_hub }
+		if = { limit = { has_active_production_method = pm_generic_power_hub } add = 200 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_generic_power_hub_coal20_oil0 } add = -5 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_generic_power_hub_coal20_oil0 } add = -9 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_generic_power_hub_coal20_oil0 } add = -10 }
+	}
+	else_if = {
+		limit = { is_building_type = building_tokyo_electric_asakusa_station }
+		if = { limit = { has_active_production_method = pm_tokyo_electric_asakusa_station } add = 50 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_tokyo_electric_asakusa_station_coal20_oil0 } add = -5 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_tokyo_electric_asakusa_station_coal20_oil0 } add = -9 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_tokyo_electric_asakusa_station_coal20_oil0 } add = -10 }
+	}
+	else_if = {
+		limit = { is_building_type = building_siam_electric_wat_liab_station }
+		if = { limit = { has_active_production_method = pm_siam_electric_wat_liab_station } add = 40 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_siam_electric_wat_liab_station_coal15_oil0 } add = -4 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_siam_electric_wat_liab_station_coal15_oil0 } add = -7 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_siam_electric_wat_liab_station_coal15_oil0 } add = -8 }
+	}
+	else_if = {
+		limit = { is_building_type = building_calcutta_electric_victoria_house }
+		if = { limit = { has_active_production_method = pm_calcutta_electric_victoria_house } add = 30 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_calcutta_electric_victoria_house_coal15_oil0 } add = -4 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_calcutta_electric_victoria_house_coal15_oil0 } add = -7 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_calcutta_electric_victoria_house_coal15_oil0 } add = -8 }
+	}
+	else_if = {
+		limit = { is_building_type = building_eea_dock_sud_power_station }
+		if = { limit = { has_active_production_method = pm_eea_dock_sud_power_station } add = 30 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_eea_dock_sud_power_station_coal15_oil0 } add = -4 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_eea_dock_sud_power_station_coal15_oil0 } add = -7 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_eea_dock_sud_power_station_coal15_oil0 } add = -8 }
+	}
+	else_if = {
+		limit = { is_building_type = building_electricidad_caracas_power_house }
+		if = { limit = { has_active_production_method = pm_electricidad_caracas_power_house } add = 30 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_electricidad_caracas_power_house_coal15_oil0 } add = -4 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_electricidad_caracas_power_house_coal15_oil0 } add = -7 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_electricidad_caracas_power_house_coal15_oil0 } add = -8 }
+	}
+	else_if = {
+		limit = { is_building_type = building_hanseong_jeongi_gwanghwamun_station }
+		if = { limit = { has_active_production_method = pm_hanseong_jeongi_gwanghwamun_station } add = 30 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_hanseong_jeongi_gwanghwamun_station_coal15_oil0 } add = -4 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_hanseong_jeongi_gwanghwamun_station_coal15_oil0 } add = -7 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_hanseong_jeongi_gwanghwamun_station_coal15_oil0 } add = -8 }
+	}
+	else_if = {
+		limit = { is_building_type = building_ingolstadt_power_station }
+		if = { limit = { has_active_production_method = pm_ingolstadt_power_station } add = 30 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_1_ingolstadt_power_station_coal15_oil0 } add = -4 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_2_ingolstadt_power_station_coal15_oil0 } add = -7 }
+		if = { limit = { has_active_production_method = pm_carbon_capture_3_ingolstadt_power_station_coal15_oil0 } add = -8 }
+	}
+	min = 0
+}
+
+# Building scope: what the building makes a week at its levels and staffing,
+# by its methods (the split's weight), and at full staff (the weight of a
+# state whose plants all read no staff: they made last week's power).
+te_grid_mix_staffed_output_value = {
+	value = te_grid_mix_output_per_level_value
+	multiply = level
+	multiply = occupancy
+}
+
+te_grid_mix_capacity_output_value = {
+	value = te_grid_mix_output_per_level_value
+	multiply = level
+}
+
+# For the tab (country scope, read every frame, so every read is guarded):
+# what each source made a week at the last monthly count, the total, and
+# each source's share of it.
+te_grid_tab_mix_total_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_mix_total }
+		value = var:te_grid_mix_total
+	}
+}
+
+te_grid_tab_mix_coal_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_mix_coal }
+		value = var:te_grid_mix_coal
+	}
+}
+
+te_grid_tab_mix_oil_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_mix_oil }
+		value = var:te_grid_mix_oil
+	}
+}
+
+te_grid_tab_mix_hydro_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_mix_hydro }
+		value = var:te_grid_mix_hydro
+	}
+}
+
+te_grid_tab_mix_nuclear_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_mix_nuclear }
+		value = var:te_grid_mix_nuclear
+	}
+}
+
+te_grid_tab_mix_renewable_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_mix_renewable }
+		value = var:te_grid_mix_renewable
+	}
+}
+
+te_grid_tab_mix_fusion_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_mix_fusion }
+		value = var:te_grid_mix_fusion
+	}
+}
+
+te_grid_tab_mix_space_solar_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_mix_space_solar }
+		value = var:te_grid_mix_space_solar
+	}
+}
+
+te_grid_tab_mix_coal_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_tab_mix_total_disp > 0 }
+		value = te_grid_tab_mix_coal_disp
+		divide = te_grid_tab_mix_total_disp
+	}
+}
+
+te_grid_tab_mix_oil_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_tab_mix_total_disp > 0 }
+		value = te_grid_tab_mix_oil_disp
+		divide = te_grid_tab_mix_total_disp
+	}
+}
+
+te_grid_tab_mix_hydro_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_tab_mix_total_disp > 0 }
+		value = te_grid_tab_mix_hydro_disp
+		divide = te_grid_tab_mix_total_disp
+	}
+}
+
+te_grid_tab_mix_nuclear_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_tab_mix_total_disp > 0 }
+		value = te_grid_tab_mix_nuclear_disp
+		divide = te_grid_tab_mix_total_disp
+	}
+}
+
+te_grid_tab_mix_renewable_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_tab_mix_total_disp > 0 }
+		value = te_grid_tab_mix_renewable_disp
+		divide = te_grid_tab_mix_total_disp
+	}
+}
+
+te_grid_tab_mix_fusion_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_tab_mix_total_disp > 0 }
+		value = te_grid_tab_mix_fusion_disp
+		divide = te_grid_tab_mix_total_disp
+	}
+}
+
+te_grid_tab_mix_space_solar_share_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_tab_mix_total_disp > 0 }
+		value = te_grid_tab_mix_space_solar_disp
+		divide = te_grid_tab_mix_total_disp
+	}
+}
+
 # --- AI -----------------------------------------------------------------------
 
 # The building's ai_value, and the order te_grid_ai_build_effect picks the AI's
 # sites in. Zero unless the owner makes Electricity somewhere in the state's
-# market area (te_grid_ai_market_area_has_power): a grid with no power plant
-# has nothing to share. The state's own use of Electricity is no test, since a
-# state without power can't run the methods that use it and so reads as
-# needing none. Otherwise 4000 (twice vanilla's railway and university), plus
+# market area (te_grid_ai_market_area_has_power), or a Grid Interconnection
+# Agreement partner's station is near enough to join
+# (te_grid_ai_partner_near): a grid with no power plant has nothing to share,
+# unless a partner's grid brings it. The state's own use of Electricity is no
+# test, since a state without power can't run the methods that use it and so
+# reads as needing none. Otherwise 4000 (twice vanilla's railway and
+# university), plus
 #   20 per Electricity the state makes a week, up to 4000: the grid's power
 #     starts where it is made, so the first station goes there;
 #   1 per 1,000 people, up to 2000: the larger states, where a grid would
 #     find the most demand once it brings power;
 #   10 000 per unit of the gap between the state's Electricity price and its
 #     base (1 = 100% off, either way), up to 2000;
+#   3000 beside a partner's state, with a station or not: the agreement joins
+#     nothing until both sides of the border have one, so of the states the
+#     placement rule allows this month, the border comes first;
 # at most 10 000, vanilla's monument value.
 te_grid_station_ai_value = {
 	value = 0
 	if = {
-		limit = { te_grid_ai_market_area_has_power = yes }
+		limit = {
+			OR = {
+				te_grid_ai_market_area_has_power = yes
+				te_grid_ai_partner_near = { ANY = no }
+			}
+		}
 		value = 4000
 		add = {
 			value = te_grid_electricity_production
@@ -807,6 +1503,10 @@ te_grid_station_ai_value = {
 			}
 			multiply = 10000
 			max = 2000
+		}
+		if = {
+			limit = { te_grid_ai_partner_near = { ANY = yes } }
+			add = 3000
 		}
 		max = 10000
 	}
@@ -1005,3 +1705,16 @@ te_grid_st_quarter_g = { value = global_var:te_grid_st_quarter }
 te_grid_st_half_g = { value = global_var:te_grid_st_half }
 te_grid_st_most_g = { value = global_var:te_grid_st_most }
 te_grid_st_full_g = { value = global_var:te_grid_st_full }
+
+# TE_SELF_CHECK grid_bloc_link: the two reads of the bloc's principle (1 or 0),
+# the other members the country isn't at war with, and how many of them its
+# partner list holds.
+te_grid_chk_bloc_principle_g = { value = global_var:te_grid_chk_bloc_principle }
+te_grid_chk_bloc_marker_g = { value = global_var:te_grid_chk_bloc_marker }
+te_grid_chk_bloc_members_g = { value = global_var:te_grid_chk_bloc_members }
+te_grid_chk_bloc_listed_g = { value = global_var:te_grid_chk_bloc_listed }
+
+# TE_SELF_CHECK grid_mix_staffing: the first plant state's weighted staffing,
+# and its generation over its staffed weight.
+te_grid_chk_mix_staffed_g = { value = global_var:te_grid_chk_mix_staffed }
+te_grid_chk_mix_scale_g = { value = global_var:te_grid_chk_mix_scale }

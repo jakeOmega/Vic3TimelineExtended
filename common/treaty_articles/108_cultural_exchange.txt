@@ -15,6 +15,7 @@ cultural_exchange_program = {
 	target_involvement_applies_to = mutual
 
 	flags = {
+		show_in_lens
 		can_be_renegotiated
 		friendly
 	}

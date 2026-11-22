@@ -8,6 +8,7 @@ import os
 import re
 import sys
 import unittest
+from unittest import mock
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(REPO, "scripts", "generators"))
@@ -45,13 +46,48 @@ class SeaTableTest(unittest.TestCase):
                 self.assertEqual(gen.SEA_BASIN["STATE_" + sea], basin, sea)
 
 
+class OverrideTest(unittest.TestCase):
+    """STATE_BASIN_OVERRIDE pins the few states whose sea would split a country."""
+
+    def test_new_zealand_is_one_basin(self):
+        """The North Island exits to the Tasman Sea (Southern) and the South
+        Island to the Western Polynesian Sea (Pacific). New Zealand is a
+        south-west Pacific country, so both are Pacific."""
+        basins = gen.state_basins()
+        self.assertEqual(basins["STATE_NORTH_ISLAND"], basins["STATE_SOUTH_ISLAND"])
+        self.assertEqual(gen.BASINS[basins["STATE_NORTH_ISLAND"]], "pacific")
+
+    def test_the_australian_tasman_coast_stays_southern(self):
+        """The spec's Tasman Sea is south-east Australia; the pin moves only
+        the North Island, not the sea."""
+        basins = gen.state_basins()
+        for state in ("STATE_NEW_SOUTH_WALES", "STATE_VICTORIA", "STATE_TASMANIA"):
+            self.assertEqual(gen.BASINS[basins[state]], "southern", state)
+
+    def test_every_override_changes_its_state(self):
+        """state_basins raises on a pin that is redundant; this names the rule."""
+        seas = gen.read_seas()
+        exits = gen.read_naval_exits()
+        for state, basin in gen.STATE_BASIN_OVERRIDE.items():
+            sea = seas[exits[state][0]]
+            self.assertNotEqual(gen.SEA_BASIN[sea], basin, f"{state} is already {basin} by {sea}")
+
+    def test_a_bad_override_raises(self):
+        for bad, why in (({"STATE_NO_SUCH_PLACE": "pacific"}, "not a coastal"),
+                         ({"STATE_NORTH_ISLAND": "lunar"}, "unknown basin"),
+                         ({"STATE_SOUTH_ISLAND": "pacific"}, "already pacific")):
+            with mock.patch.object(gen, "STATE_BASIN_OVERRIDE", bad):
+                with self.assertRaisesRegex(ValueError, why):
+                    gen.state_basins()
+
+
 class CoastalStatesTest(unittest.TestCase):
     def test_every_coastal_state_maps_to_a_basin(self):
         exits = gen.read_naval_exits()
         coastal = {s for s, ids in exits.items() if ids}
         basins = gen.state_basins()   # raises on an unmapped sea or a double exit
         self.assertEqual(set(basins), coastal)
-        self.assertEqual(len(coastal), 372)
+        self.assertEqual(len(coastal), 371)   # 1.15 merged coastal Chukotka into Kamchatka
         for state, n in basins.items():
             self.assertIn(n, gen.BASINS, state)
 

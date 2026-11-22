@@ -174,9 +174,20 @@ sol_expectations_reapply_modifier = {
 
 # Internal helper: remove and re-apply the 3 per-class strata shift modifiers.
 # Each uses multiplier = clamped shift + class offset.
-# Scope: country
+# Scope: country, and ROOT must be that country: the multiplier reads
+# var:sol_expectations_<class>_shift_applied against ROOT (scripting_best_practices.md
+# § "`add_modifier { multiplier = var:X }` Resolves Against ROOT"). The one caller
+# that runs is sol_expectations_monthly_update, from on_monthly_pulse_country.
+#
+# Each class's shift is read once into a variable, then tested and applied from it.
+# The shift value adds the global awareness term, whose global_average_sol is a pass
+# over every country: read in the test (twice) and the multiplier, it made nine world
+# passes per country a month, the SoL pulse's whole cost in a 1931 game
+# (docs/audits/late_game_performance.md). The variable is set before the old modifier
+# is removed, which changes nothing: a removal isn't seen in the same effect block.
 sol_expectations_apply_strata_shifts = {
 	# Upper strata
+	set_variable = { name = sol_expectations_upper_shift_applied value = sol_expectations_upper_shift_value }
 	if = {
 		limit = { has_modifier = sol_expectations_upper_strata_shift }
 		remove_modifier = sol_expectations_upper_strata_shift
@@ -184,17 +195,18 @@ sol_expectations_apply_strata_shifts = {
 	if = {
 		limit = {
 			OR = {
-				sol_expectations_upper_shift_value > 0.1
-				sol_expectations_upper_shift_value < -0.1
+				var:sol_expectations_upper_shift_applied > 0.1
+				var:sol_expectations_upper_shift_applied < -0.1
 			}
 		}
 		add_modifier = {
 			name = sol_expectations_upper_strata_shift
-			multiplier = sol_expectations_upper_shift_value
+			multiplier = var:sol_expectations_upper_shift_applied
 		}
 	}
 
 	# Middle strata
+	set_variable = { name = sol_expectations_middle_shift_applied value = sol_expectations_middle_shift_value }
 	if = {
 		limit = { has_modifier = sol_expectations_middle_strata_shift }
 		remove_modifier = sol_expectations_middle_strata_shift
@@ -202,17 +214,18 @@ sol_expectations_apply_strata_shifts = {
 	if = {
 		limit = {
 			OR = {
-				sol_expectations_middle_shift_value > 0.1
-				sol_expectations_middle_shift_value < -0.1
+				var:sol_expectations_middle_shift_applied > 0.1
+				var:sol_expectations_middle_shift_applied < -0.1
 			}
 		}
 		add_modifier = {
 			name = sol_expectations_middle_strata_shift
-			multiplier = sol_expectations_middle_shift_value
+			multiplier = var:sol_expectations_middle_shift_applied
 		}
 	}
 
 	# Lower strata
+	set_variable = { name = sol_expectations_lower_shift_applied value = sol_expectations_lower_shift_value }
 	if = {
 		limit = { has_modifier = sol_expectations_lower_strata_shift }
 		remove_modifier = sol_expectations_lower_strata_shift
@@ -220,13 +233,13 @@ sol_expectations_apply_strata_shifts = {
 	if = {
 		limit = {
 			OR = {
-				sol_expectations_lower_shift_value > 0.1
-				sol_expectations_lower_shift_value < -0.1
+				var:sol_expectations_lower_shift_applied > 0.1
+				var:sol_expectations_lower_shift_applied < -0.1
 			}
 		}
 		add_modifier = {
 			name = sol_expectations_lower_strata_shift
-			multiplier = sol_expectations_lower_shift_value
+			multiplier = var:sol_expectations_lower_shift_applied
 		}
 	}
 }

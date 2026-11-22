@@ -192,7 +192,22 @@ colonial_empire_refresh_display = {
 		# count is every territory the Colonial Holdings list and Planned Full
 		# Decolonization can take (is_decolonization_eligible_state, a superset
 		# of the colonies); the list's rows and "+N more" read it.
-		set_variable = { name = colonial_empire_colony_count value = colonial_state_count }
+		# Each colony is marked with its owner first, for the colonial map (te_jmap_ce_colony,
+		# te_journal_map_triggers.txt; a paint can't run the colony test, which walks pops), and the count is read from
+		# the marks: one colony test per state, as before. A mark lasts two months, so an empire's marks go by
+		# themselves once its entry stops refreshing them, and a state taken since names its old owner, which the
+		# map reads as no colony.
+		every_scope_state = {
+			if = {
+				limit = { is_overseas_colonial_state = yes }
+				set_variable = { name = te_jmap_ce_colony value = owner days = 62 }
+			}
+			else_if = {
+				limit = { has_variable = te_jmap_ce_colony }
+				remove_variable = te_jmap_ce_colony
+			}
+		}
+		set_variable = { name = colonial_empire_colony_count value = te_jmap_ce_colony_count }
 		# And every other state of ours, the overreach ratio's denominator: the
 		# territory list's per-territory weight reads the two counts.
 		set_variable = { name = colonial_empire_metropole_count value = metropole_state_count }

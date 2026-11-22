@@ -88,6 +88,15 @@ class LocValueTest(unittest.TestCase):
         self.assertEqual(value("Founds the UN Environment Programme (UNEP), a programme."),
                          "Founds the UN Environment Programme (UNEP), a program.")
 
+    def test_dear_means_expensive_but_not_my_dear(self):
+        # Workshop report, 2026-11-08: American players misread "dear" for expensive.
+        self.assertEqual(value("from where it is cheap to where it is dear"),
+                         "from where it is cheap to where it is expensive")
+        self.assertEqual(value("Dearer imports, the dearest module"),
+                         "Costlier imports, the costliest module")
+        self.assertEqual(value("It is theater, my dear boy. It cost them dearly."),
+                         "It is theater, my dear boy. It cost them dearly.")
+
     def test_vanilla_text_for_the_key_is_kept(self):
         keep = spell._vanilla_keep("The theatre of European politics")
         self.assertEqual(value("The theatre of European politics, a theatre", keep),

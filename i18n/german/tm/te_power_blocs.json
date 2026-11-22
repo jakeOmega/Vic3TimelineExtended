@@ -1,7 +1,11 @@
 {
  "power_bloc_banking_union_bool": {
-  "en": "One supervisor and one deposit guarantee across the union: adopters get #G −25%#! banking crash chance, #G −25%#! random momentum and #G +1#! banking intervention in reserve, and a crash elsewhere in the currency spreads far less readily",
-  "de": "Ein Aufseher und eine Einlagensicherung für die gesamte Union: Mitglieder erhalten #G −25%#! Bankencrash-Wahrscheinlichkeit, #G −25%#! zufälliges Momentum und #G +1#! Bankeninterventionen in Reserve, und ein Crash anderswo in der Währung breitet sich weit weniger leicht aus"
+  "en": "[concept_banking_common_currency] Banking Union",
+  "de": "Bankenunion der [Concept('concept_banking_common_currency','Gemeinsamen Währung')]"
+ },
+ "power_bloc_banking_union_bool_desc": {
+  "en": "One supervisor and one deposit guarantee for the banks of every country using the currency, under any banking law but $law_unregulated_banking$. A [concept_banking_crash] spreads down the shared currency far less readily, and the leader pays a supervision cost for each adopter.",
+  "de": "Ein Aufseher und eine Einlagensicherung für die Banken jedes Landes, das die Währung nutzt, unter jedem Bankengesetz außer $law_unregulated_banking$. Ein [concept_banking_crash] breitet sich in der gemeinsamen Währung weit weniger leicht aus, und der Anführer zahlt für jedes Teilnehmerland Aufsichtskosten."
  },
  "power_bloc_can_enact_decree_cultural_emigration_initiative_bool": {
   "en": "Can Enact Cultural Emigration Initiative [Concept('concept_decree', 'Decree')]",
@@ -40,8 +44,8 @@
   "de": "Mitglieder können Gesundheitshilfe leisten"
  },
  "power_bloc_can_give_healthcare_aid_bool_desc": {
-  "en": "Can give healthcare aid to another country, at the cost of [concept_bureaucracy], decreasing mortality, increasing [concept_sol], and reducing [concept_pollution_impact] in the target country.",
-  "de": "Kann einem anderen Land auf Kosten von [concept_bureaucracy] Gesundheitshilfe leisten, was die Sterblichkeit senkt, den [concept_sol] erhöht und die [concept_pollution_impact] im Zielland verringert."
+  "en": "Can give healthcare aid to another country, at the cost of [concept_bureaucracy], widening [concept_health_care_access], decreasing mortality and increasing [concept_sol] in the target country.",
+  "de": "Kann einem anderen Land auf Kosten von [concept_bureaucracy] Gesundheitshilfe leisten, was im Zielland den [concept_health_care_access] erweitert, die Sterblichkeit senkt und den [concept_sol] erhöht."
  },
  "power_bloc_can_give_humanitarian_aid_bool": {
   "en": "Members Can Give Humanitarian Aid",
@@ -80,8 +84,8 @@
   "de": "Anführer kann die [concept_diplomatic_action] „Krisenlösung“ nutzen"
  },
  "power_bloc_can_use_crisis_resolution_bool_desc": {
-  "en": "Leader can use the Crisis Resolution [concept_diplomatic_action] to resolve crises and stabilize [Concept('concept_power_bloc_member', '$concept_power_bloc_members$')], at the cost of [concept_authority].",
-  "de": "Anführer kann die [concept_diplomatic_action] „Krisenlösung“ auf Kosten von [concept_authority] nutzen, um Krisen zu lösen und [Concept('concept_power_bloc_member', '$concept_power_bloc_members$')] zu stabilisieren."
+  "en": "Leader can use the Crisis Resolution [concept_diplomatic_action] to resolve crises and stabilize [Concept('concept_power_bloc_member', '$concept_power_bloc_members|q$')], at the cost of [concept_authority].",
+  "de": "Anführer kann die [concept_diplomatic_action] „Krisenlösung“ auf Kosten von [concept_authority] nutzen, um Krisen zu lösen und [Concept('concept_power_bloc_member', '$concept_power_bloc_members|q$')] zu stabilisieren."
  },
  "power_bloc_can_use_extend_influence_bool": {
   "en": "Can Use Extend Influence [concept_diplomatic_action]",
@@ -96,48 +100,96 @@
   "de": "Anführer kann UN-Mitgliedschaft verlangen"
  },
  "power_bloc_can_use_join_united_nations_bool_desc": {
-  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] can add the Require UN Membership article to treaties, binding another country into the United Nations.",
-  "de": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] kann den Artikel „UN-Mitgliedschaft verlangen“ zu Verträgen hinzufügen und so ein anderes Land in die Vereinten Nationen binden."
+  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] can add the Require UN Membership article to treaties, binding another country into the United Nations.",
+  "de": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] kann den Artikel „UN-Mitgliedschaft verlangen“ zu Verträgen hinzufügen und so ein anderes Land in die Vereinten Nationen binden."
+ },
+ "power_bloc_can_use_technology_embargo_bool": {
+  "en": "Leader Can Use Technology Embargo [concept_diplomatic_action]",
+  "de": "Anführer kann Technologieembargo als [concept_diplomatic_action] nutzen"
+ },
+ "power_bloc_can_use_technology_embargo_bool_desc": {
+  "en": "The [concept_power_bloc_leader] can place one [concept_country] outside the [concept_power_bloc] at a time under a $te_rc_technology_embargo$, cutting its [concept_technology_spread].",
+  "de": "Der [concept_power_bloc_leader] kann jeweils ein [concept_country] außerhalb des [Concept('concept_power_bloc','Machtblocks')] mit einem $te_rc_technology_embargo$ belegen und so seine [concept_technology_spread] senken."
+ },
+ "power_bloc_debt_administration_bool": {
+  "en": "Leader Guarantees Member Debts",
+  "de": "Anführer garantiert Mitgliederschulden"
+ },
+ "power_bloc_debt_administration_bool_desc": {
+  "en": "Under the [concept_consortium_guarantee], the leader takes part of each member's debt-load [concept_banking_risk_premium] off it, and is called on when a member defaults.",
+  "de": "Unter der [concept_consortium_guarantee] übernimmt der Anführer einen Teil der [concept_banking_risk_premium] jedes Mitglieds für dessen Schuldenlast und wird in Anspruch genommen, wenn ein Mitglied zahlungsunfähig wird."
  },
  "power_bloc_fiscal_backstop_bool": {
-  "en": "The leader is lender of last resort to every adopter, and their overvaluation premium is halved",
-  "de": "Der Anführer ist Kreditgeber letzter Instanz für jedes Mitglied, und dessen Überbewertungsaufschlag wird halbiert"
+  "en": "Leader Is Lender of Last Resort to Adopters",
+  "de": "Anführer ist Kreditgeber letzter Instanz für Teilnehmerländer"
+ },
+ "power_bloc_fiscal_backstop_bool_desc": {
+  "en": "The leader backs every adopter's debts: it takes part of each one's debt-load [concept_banking_risk_premium] off it, and pays for that in premium of its own, scaled by the adopter's GDP beside its own. A default calls the guarantee.",
+  "de": "Der Anführer steht für die Schulden jedes Teilnehmerlands ein: Er übernimmt einen Teil der [concept_banking_risk_premium] jedes Teilnehmerlands für dessen Schuldenlast und bezahlt dies mit eigener Prämie, gestaffelt nach dem BIP des Teilnehmerlands im Verhältnis zu seinem eigenen. Ein Zahlungsausfall ruft die Garantie auf."
+ },
+ "power_bloc_grid_interconnection_bool": {
+  "en": "Members’ Power Grids Interconnect",
+  "de": "Stromnetze der Mitglieder werden verbunden"
+ },
+ "power_bloc_grid_interconnection_bool_desc": {
+  "en": "Members' $building_grid_transfer_station$s join where they border, and their undersea cables where either one's range reaches the other, as under a $grid_interconnection_agreement$.",
+  "de": "Die Gebäude vom Typ $building_grid_transfer_station$ der Mitglieder schließen sich an der Grenze an und ihre Seekabel dort, wo die Reichweite des einen die des anderen erreicht, wie unter einem $grid_interconnection_agreement$."
  },
  "power_bloc_leader_can_force_cultural_acceptance_bool": {
   "en": "Leader Can Force Cultural Acceptance",
   "de": "Anführer kann kulturelle Akzeptanz erzwingen"
  },
  "power_bloc_leader_can_force_cultural_acceptance_bool_desc": {
-  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] can force [Concept('concept_power_bloc_member', '$concept_power_bloc_members$')] to add the leader's [concept_primary_cultures] to their primary cultures.",
-  "de": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] kann [Concept('concept_power_bloc_member', '$concept_power_bloc_members$')] zwingen, die [concept_primary_cultures] des Anführers zu ihren Hauptkulturen hinzuzufügen."
+  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] can force [Concept('concept_power_bloc_member', '$concept_power_bloc_members|q$')] to add the leader's [concept_primary_cultures] to their primary cultures.",
+  "de": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] kann [Concept('concept_power_bloc_member', '$concept_power_bloc_members|q$')] zwingen, die [concept_primary_cultures] des Anführers zu ihren Hauptkulturen hinzuzufügen."
  },
  "power_bloc_leader_can_force_cultural_adoption_bool": {
   "en": "Leader Can Force Cultural Adoption",
   "de": "Anführer kann kulturelle Übernahme erzwingen"
  },
  "power_bloc_leader_can_force_cultural_adoption_bool_desc": {
-  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] can force [Concept('concept_power_bloc_member', '$concept_power_bloc_members$')] to replace their [concept_primary_cultures] with the leader's primary cultures.",
-  "de": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] kann [Concept('concept_power_bloc_member', '$concept_power_bloc_members$')] zwingen, ihre [concept_primary_cultures] durch die Hauptkulturen des Anführers zu ersetzen."
+  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] can force [Concept('concept_power_bloc_member', '$concept_power_bloc_members|q$')] to replace their [concept_primary_cultures] with the leader's primary cultures.",
+  "de": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] kann [Concept('concept_power_bloc_member', '$concept_power_bloc_members|q$')] zwingen, ihre [concept_primary_cultures] durch die Hauptkulturen des Anführers zu ersetzen."
  },
  "power_bloc_leader_can_peacefully_annex_bool": {
   "en": "Leader Can Peacefully Annex Subjects",
   "de": "Anführer kann Klientelländer friedlich annektieren"
  },
  "power_bloc_leader_can_peacefully_annex_bool_desc": {
-  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] can peacefully annex [Concept('concept_subject', '$concept_subjects$')] without a [concept_diplomatic_play], if the subject has low [concept_liberty_desire] and a sufficiently low [Concept('concept_gdp', 'GDP')].",
-  "de": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] kann [Concept('concept_subject', '$concept_subjects$')] ohne [concept_diplomatic_play] friedlich annektieren, sofern das Klientelland einen niedrigen [concept_liberty_desire] und ein ausreichend niedriges [Concept('concept_gdp', 'BIP')] hat."
+  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] can peacefully annex [Concept('concept_subject', '$concept_subjects|q$')] without a [concept_diplomatic_play], if the subject has low [concept_liberty_desire] and a sufficiently low [Concept('concept_gdp', 'GDP')].",
+  "de": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] kann [Concept('concept_subject', '$concept_subjects|q$')] ohne [concept_diplomatic_play] friedlich annektieren, sofern das Klientelland einen niedrigen [concept_liberty_desire] und ein ausreichend niedriges [Concept('concept_gdp', 'BIP')] hat."
  },
- "power_bloc_monetary_cooperation_bool": {
-  "en": "The leader’s central bank backs every member: #G −0.5#! points of risk premium and #G +1#! peg confidence a month",
-  "de": "Die Zentralbank des Anführers steht hinter jedem Mitglied: #G −0,5#! Punkte Risikoaufschlag und #G +1#! Bindungsvertrauen pro Monat"
+ "power_bloc_research_pool_bool": {
+  "en": "Members’ Research Goes to the Leader",
+  "de": "Forschung der Mitglieder geht an den Anführer"
+ },
+ "power_bloc_research_pool_bool_desc": {
+  "en": "Members other than the [concept_power_bloc_leader] research nothing themselves. Each sends the leader 75% of its weekly [concept_innovation], counted before its multipliers and after what its own programs spend, and the leader's innovation cap rises by a tenth of what they send. Every member is given each [concept_technology] another member knows, once a month and whenever one acquires a new one.",
+  "de": "Mitglieder außer dem [concept_power_bloc_leader] erforschen selbst nichts. Jedes schickt dem Anführer 75% seiner wöchentlichen [concept_innovation], gezählt vor seinen Multiplikatoren und nach dem, was seine eigenen Programme ausgeben, und die Innovationsobergrenze des Anführers steigt um ein Zehntel dessen, was sie schicken. Jedes Mitglied erhält jede [concept_technology], die ein anderes Mitglied kennt, einmal im Monat und immer dann, wenn eines eine neue erwirbt."
  },
  "power_bloc_reserve_currency_bool": {
-  "en": "The union’s money is held the world over: the leader mints against those balances and may cut up to #G −1#! point of risk premium, and adopters get a further #G +5%#! trade advantage and #G −0.25#! points of premium",
-  "de": "Das Geld der Union wird weltweit gehalten: Der Anführer kann auf Basis dieser Bestände Geld schöpfen und bis zu #G −1#! Punkt Risikoaufschlag senken, und Mitglieder erhalten zusätzlich #G +5%#! Handelsvorteil und #G −0,25#! Punkte Aufschlag"
+  "en": "[concept_banking_common_currency] Is a Reserve Currency",
+  "de": "[concept_banking_common_currency] ist Reservewährung"
+ },
+ "power_bloc_reserve_currency_bool_desc": {
+  "en": "Once a member has adopted, every country anchored on the leader's money counts toward its [concept_banking_currency_reach], treaty peggers included, and the most the world's holdings can take off the leader's [concept_banking_credit_standing] is doubled.",
+  "de": "Sobald ein Mitglied die Währung eingeführt hat, zählt jedes Land, das am Geld des Anführers verankert ist, zu deren [concept_banking_currency_reach], per Vertrag gebundene Länder eingeschlossen, und das Höchstmaß, um das die Bestände der Welt die [concept_banking_credit_standing] des Anführers senken können, wird verdoppelt."
  },
  "power_bloc_shared_currency_bool": {
-  "en": "Members may adopt the leader’s currency",
-  "de": "Mitglieder dürfen die Währung des Anführers übernehmen"
+  "en": "Members May Adopt the [concept_banking_common_currency]",
+  "de": "Mitglieder dürfen die [concept_banking_common_currency] einführen"
+ },
+ "power_bloc_shared_currency_bool_desc": {
+  "en": "Any member may give up its own money for the leader's. How Banking Works, in the Banking tab, lists what adopting requires and what leaving costs.",
+  "de": "Jedes Mitglied darf sein eigenes Geld zugunsten des Geldes des Anführers aufgeben. „Wie das Bankwesen funktioniert“ im Reiter „Bankwesen“ listet auf, was die Einführung voraussetzt und was der Austritt kostet."
+ },
+ "power_bloc_technology_controls_bool": {
+  "en": "No $science_aid$ Outside the Bloc",
+  "de": "Keine $science_aid$ außerhalb des Blocks"
+ },
+ "power_bloc_technology_controls_bool_desc": {
+  "en": "Members can't propose $science_aid$ or $science_aid_2$ to a [concept_country] outside the [concept_power_bloc]. Treaties already signed are not affected.",
+  "de": "Mitglieder können einem [concept_country] außerhalb des [Concept('concept_power_bloc','Machtblocks')] weder $science_aid$ noch $science_aid_2$ anbieten. Bereits unterzeichnete Verträge bleiben unberührt."
  },
  "principle_group_artistic_expression": {
   "en": "Artistic Expression",
@@ -146,6 +198,14 @@
  "principle_group_artistic_expression_desc": {
   "en": "The [concept_power_bloc] encourages artistic expression and the development of culture.",
   "de": "Der [concept_power_bloc] fördert künstlerischen Ausdruck und die Entwicklung der Kultur."
+ },
+ "principle_group_conditionality": {
+  "en": "Conditionality",
+  "de": "Konditionalität"
+ },
+ "principle_group_conditionality_desc": {
+  "en": "The terms on which the [concept_power_bloc] rescues a member that defaults: how much of its government the leader takes over, and for how long.",
+  "de": "Die Bedingungen, unter denen der [concept_power_bloc] ein zahlungsunfähiges Mitglied rettet: wie viel von dessen Regierung der Anführer übernimmt und für wie lange."
  },
  "principle_group_cultural_plurality": {
   "en": "Cultural Plurality",
@@ -162,6 +222,14 @@
  "principle_group_cultural_unity_desc": {
   "en": "The [concept_power_bloc] enforces cultural unity among its members in the public sphere.",
   "de": "Der [concept_power_bloc] erzwingt kulturelle Einheit unter seinen Mitgliedern im öffentlichen Raum."
+ },
+ "principle_group_development_lending": {
+  "en": "Development Lending",
+  "de": "Entwicklungskredite"
+ },
+ "principle_group_development_lending_desc": {
+  "en": "The [concept_power_bloc]'s richer members lend to its poorer ones: part of their private investment goes to build up the rest of the bloc.",
+  "de": "Die reicheren Mitglieder des [Concept('concept_power_bloc','Machtblocks')] leihen den ärmeren: Ein Teil ihrer privaten Investitionen fließt in den Aufbau des übrigen Blocks."
  },
  "principle_group_education": {
   "en": "Education",
@@ -234,6 +302,14 @@
  "principle_group_rural_desc": {
   "en": "The [concept_power_bloc] encourages rural development and the improvement of rural [concept_infrastructure].",
   "de": "Der [concept_power_bloc] fördert die ländliche Entwicklung und den Ausbau der ländlichen [concept_infrastructure]."
+ },
+ "principle_group_technology_controls": {
+  "en": "Technology Controls",
+  "de": "Technologiekontrollen"
+ },
+ "principle_group_technology_controls_desc": {
+  "en": "The [concept_power_bloc] keeps what its members know among its members: no $science_aid$ leaves the bloc, members guard their research against foreign spies, and from tier III the leader can cut a rival's [concept_technology_spread].",
+  "de": "Der [concept_power_bloc] behält, was seine Mitglieder wissen, unter sich: Keine $science_aid$ verlässt den Block, Mitglieder schützen ihre Forschung vor ausländischen Spionen, und ab Stufe III kann der Anführer die [concept_technology_spread] eines Rivalen senken."
  },
  "principle_group_urban_planning": {
   "en": "Urban Planning",

@@ -24,15 +24,18 @@ VALUES = os.path.join(REPO, "common", "script_values", "space_race_values.txt")
 DISPLAY = os.path.join(REPO, "common", "script_values", "space_race_display_values.txt")
 EFFECTS = os.path.join(REPO, "common", "scripted_effects", "space_race_effects.txt")
 TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "space_race_triggers.txt")
+# sr_space_race_on, the rule test sr_solar_colonization_running starts with (2026-11-08).
+SITE_TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "sr_site_triggers.txt")
+# The game rule's default setting: a context without "rules" plays under it.
+DEFAULT_RULES = frozenset(("space_race_colonies_full",))
 BUTTONS = os.path.join(REPO, "common", "scripted_buttons", "space_race_buttons.txt")
-ON_ACTIONS = os.path.join(REPO, "common", "on_actions", "space_race_on_actions.txt")
+JE = os.path.join(REPO, "common", "journal_entries", "je_space_race.txt")
 SGUIS = os.path.join(REPO, "common", "scripted_guis", "space_race_sguis.txt")
 MODIFIERS = os.path.join(REPO, "common", "static_modifiers", "space_race_modifiers.txt")
 GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "space_race_widget.gui")
-NATION_TAB = os.path.join(REPO, "scripts", "generators", "gen_nation_tab.py")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
-MILESTONES = ("suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
+MILESTONES = ("suborbital", "orbital", "moon_landing", "probe", "mars_landing",
               "interstellar_probe", "solar_colonization")
 STEPS = 6
 # The design's table: effective levels past the cap after 1..6 levels past it.
@@ -60,15 +63,29 @@ def _block(text, name):
     raise AssertionError("unclosed block")
 
 
+_OPS = frozenset(("=", "?=", "<", ">", "<=", ">=", "!=", "=="))
+
+
 def _parse(text):
-    tokens = iter(t.strip() for t in ParadoxFileParser().tokenize(text))
+    """(key, op, value) triples, a block's value a list of them. A bare list item, such as an outcome's
+    `flags = { hidden invalid_outcome }`, is (item, None, None); read as a key it took the next item for its operator
+    and cut the entry's parse short (the rule-off outcomes, 2026-11-08)."""
+    tokens = [t.strip() for t in ParadoxFileParser().tokenize(text)]
+    pos = 0
 
     def body():
+        nonlocal pos
         out = []
-        for key in tokens:
+        while pos < len(tokens):
+            key = tokens[pos]
+            pos += 1
             if key == "}":
                 return out
-            op, value = next(tokens), next(tokens)
+            if pos >= len(tokens) or tokens[pos] not in _OPS:
+                out.append((key, None, None))
+                continue
+            op, value = tokens[pos], tokens[pos + 1]
+            pos += 2
             out.append((key, op, body() if value == "{" else value))
         return out
 
@@ -83,8 +100,10 @@ def _cut(x):
 class Script:
     """A fail-closed evaluator for the script values this test reads.
 
-    `owner = { }` is transparent: the multiplier runs in the entry's scope and
-    reads the country through it, and here the country is the one context."""
+    `owner = { }` is transparent: an entry's declaration reads from the
+    country, where owner is the country itself, an old save's added copy from
+    the entry, which reaches the country through it, and here the country is
+    the one context."""
 
     COMPARE = {"<": lambda a, b: a < b, ">": lambda a, b: a > b, "<=": lambda a, b: a <= b,
                ">=": lambda a, b: a >= b, "=": lambda a, b: a == b}
@@ -94,7 +113,7 @@ class Script:
         for path in (VALUES, DISPLAY):
             for key, _, body in _parse(_read(path)):
                 self.values[key] = body
-        self.triggers = {key: body for key, _, body in _parse(_read(TRIGGERS))}
+        self.triggers = {key: body for path in (TRIGGERS, SITE_TRIGGERS) for key, _, body in _parse(_read(path))}
 
     def number(self, token, ctx):
         if isinstance(token, list):
@@ -116,6 +135,8 @@ class Script:
         for key, op, value in body:
             if key == "has_variable":
                 ok = value in ctx["vars"]
+            elif key == "has_game_rule":
+                ok = value in ctx.get("rules", DEFAULT_RULES)
             elif key == "has_global_variable":
                 # none set: the race isn't over (sr_colonization_by_choice)
                 ok = value in ctx.get("globals", ())
@@ -245,8 +266,10 @@ class EffectiveLevelTest(unittest.TestCase):
                     self.assertEqual(SCRIPT.value(f"sr_funding_{m}_{suffix}", ctx), 0)
 
     def test_the_entry_scoped_value_reads_the_country_through_owner(self):
-        """The multiplier runs in the journal entry's scope: every read of the
-        country (the variable, the cap's modifier) sits inside owner = { }."""
+        """Every read of the country (the variable, the cap's modifier) sits
+        inside owner = { }, so the value reads right from the country (the
+        entry's declaration, #1404) and from the entry (an old save's added
+        copy, until the strip removes it)."""
         values = _read(VALUES)
         for m in MILESTONES:
             with self.subTest(milestone=m):
@@ -267,11 +290,17 @@ class ThroughputAndCostTest(unittest.TestCase):
         self.assertNotIn("progress", throughput)
 
     def test_the_pace_takes_the_effective_level_and_the_throughput_the_level(self):
-        body = _block(_read(EFFECTS), "sr_apply_milestone_cost_modifiers_base")
-        pairs = dict(re.findall(r"name = (\w+)\s+multiplier = (\S+)", body))
-        self.assertEqual(pairs["sr_funding_progress"], "sr_funding_$MILESTONE$_effective")
-        self.assertEqual(pairs["sr_funding_throughput"], "sr_funding_$MILESTONE$_level")
-        self.assertEqual(pairs["sr_space_program_cost"], "sr_$MILESTONE$_cost")
+        """Each billed entry's declarations (#1404; evaluated in
+        test_space_race_scaling_modifiers.py)."""
+        je = _read(JE)
+        for m in MILESTONES:
+            entry = _block(je, f"je_space_race_{m}")
+            pairs = dict(re.findall(r"modifier = (\w+)\s*value = \{\s*value = 0\s*if = \{\s*"
+                                    r"limit = \{ sr_milestone_billed_\w+ = yes \}\s*add = (\S+)", entry))
+            with self.subTest(milestone=m):
+                self.assertEqual(pairs["sr_funding_progress"], f"sr_funding_{m}_effective")
+                self.assertEqual(pairs["sr_funding_throughput"], f"sr_funding_{m}_level")
+                self.assertEqual(pairs["sr_space_program_cost"], f"sr_{m}_cost")
 
     def test_the_throughput_multiplier_is_the_raw_level_past_the_cap(self):
         for m in MILESTONES:
@@ -288,32 +317,12 @@ class ThroughputAndCostTest(unittest.TestCase):
                 self.assertIn(f"add = var:sr_funding_{m}", body)
                 self.assertNotIn("effective", body)
 
-    def test_both_are_removed_before_they_are_added(self):
-        recalc = _block(_read(EFFECTS), "sr_recalculate_cost")
-        self.assertLess(recalc.index("sr_clear_milestone_cost_modifiers_base"),
-                        recalc.index("sr_apply_milestone_cost_modifiers_base"))
-        clear = _block(_read(EFFECTS), "sr_clear_milestone_cost_modifiers_base")
-        for name in ("sr_space_program_cost", "sr_funding_progress", "sr_funding_throughput"):
-            self.assertIn(f"if = {{ limit = {{ has_modifier = {name} }} remove_modifier = {name} }}",
-                          re.sub(r" +", " ", clear))
-
-    def test_an_old_save_picks_the_split_up(self):
-        """Its entries carry sr_funding_progress and no sr_funding_throughput:
-        the monthly repair recalculates them."""
-        check = _block(_read(TRIGGERS), "sr_cost_modifiers_missing_base")
-        self.assertRegex(check, r"sr_funding_\$MILESTONE\$_level > 0\s*NOT = \{ has_modifier = sr_funding_throughput \}")
-        self.assertRegex(check, r"sr_funding_\$MILESTONE\$_effective > 0\s*NOT = \{ has_modifier = sr_funding_progress \}")
-
-    def test_the_nation_tab_places_both(self):
-        text = _read(NATION_TAB)
-        for name in ("sr_funding_progress", "sr_funding_throughput"):
-            self.assertRegex(text, rf'"{name}": "the running milestone\'s entry"')
-
 
 class EverySiteTest(unittest.TestCase):
     """Every definition that handles sr_funding_progress handles
     sr_funding_throughput as well; a missed site leaks or never applies the
-    throughput half, and the engine says nothing."""
+    throughput half, and the engine says nothing. Since #1404 the sites are the
+    seven billed entries' declarations."""
 
     def test_every_site(self):
         files = [p for sub in ("common", "events", "gui")
@@ -332,7 +341,7 @@ class EverySiteTest(unittest.TestCase):
                     seen += 1
                     with self.subTest(file=os.path.relpath(path, REPO), definition=m.group(1)):
                         self.assertRegex(body, r"\bsr_funding_throughput\b")
-        self.assertGreaterEqual(seen, 3)  # clear, apply, the repair trigger
+        self.assertGreaterEqual(seen, 7)  # the seven billed entries
 
 
 class CeilingTest(unittest.TestCase):
@@ -381,36 +390,6 @@ class CeilingTest(unittest.TestCase):
                     with self.subTest(file=os.path.relpath(path, REPO), write=m.group(0)):
                         self.assertIn(m.group(2).strip(), ("value = 1", "add = 1", "subtract = 1"))
         self.assertGreaterEqual(writes, 10)  # each entry's creation, the debug seed, the two clicks
-
-
-class CapCacheTest(unittest.TestCase):
-    """The pace multiplier reads the cap, which technologies and Advanced
-    Research V move with no button press. sr_recalculate_cost records the cap
-    it computed with, and the monthly pulse recalculates when that is missing
-    or differs from the live cap, as it does for participation."""
-
-    def test_the_cap_is_recorded_with_the_costs(self):
-        recalc = _block(_read(EFFECTS), "sr_recalculate_cost")
-        self.assertIn("set_variable = { name = sr_cost_funding_cap value = sr_max_funding_level }", recalc)
-        self.assertLess(recalc.index("sr_apply_milestone_cost_modifiers_base"), recalc.index("sr_cost_funding_cap"))
-
-    def test_the_pulse_recalculates_when_the_cap_moves(self):
-        pulse = re.sub(r"\s+", " ", _block(_read(ON_ACTIONS), "space_race_on_action"))
-        self.assertIn("else_if = { limit = { NOT = { has_variable = sr_cost_funding_cap } } sr_recalculate_cost = yes }",
-                      pulse)
-        m = re.search(r"else_if = \{ limit = \{ (OR = \{ var:sr_cost_funding_cap < sr_max_funding_level "
-                      r"var:sr_cost_funding_cap > sr_max_funding_level \}) \} sr_recalculate_cost = yes \}", pulse)
-        self.assertIsNotNone(m, "no recalculation on a cap that moved")
-        # in the participants' chain, after the participation check and before
-        # the missing-modifier repair
-        self.assertGreater(m.start(), pulse.index("NOT = { has_variable = sr_cost_participation }"))
-        self.assertLess(m.start(), pulse.index("sr_cost_modifiers_missing = yes"))
-        stale = _parse(m.group(1))
-        for cached, cap, fires in ((7, 7, False), (7, 8, True), (7, 6, True), (22, 23, True)):
-            with self.subTest(cached=cached, cap=cap):
-                ctx = _ctx("probe", 9, cap)
-                ctx["vars"]["sr_cost_funding_cap"] = cached
-                self.assertEqual(SCRIPT.check(stale, ctx), fires)
 
 
 class PanelTest(unittest.TestCase):

@@ -420,6 +420,8 @@ Electricity per unit of fuel (power plant, mod values):
 | Coal-Fired (Steam Turbine, era 4) / Oil-Fired (Oil Turbine, era 5) | 20 → 50: 2.5 | 25 → 80: 3.2 | 1.28 |
 | Modern Coal-Fired / Modern Oil-Fired (both Modern Urban Planning, era 7) | 25 → 90: 3.6 | 35 → 140: 4.0 | 1.11 |
 
+These are the recipes this section was written from. Vanilla 1.15 swapped part of its plants' fuel for copper (Coal-Fired 15 → 50, Oil-Fired 20 → 80), and #1405 cut the modern pair by the same 5 units (20 coal → 90, 30 oil → 140), so the ratios now read 1.20 and 1.04. The 0.87 factor rests on the IPCC figures below, not on these ratios, so it stands.
+
 The modern pair shares a technology, so it separates fuel from plant vintage. The first pair also contains an era of progress: the coal ladder gains 44% over three eras (2.5 → 3.6), 13% an era, and dividing that out of 1.28 leaves 1.13. **Both pairs agree that an oil unit holds about 1.12 times a coal unit's energy**, assuming equal plant efficiency within an era.
 
 Carbon per unit of energy (IPCC 2006 defaults): bituminous coal 94.6 kg CO₂/GJ, crude oil 73.3 (residual fuel oil 77.4, diesel 74.1, natural gas 56.1). Per unit, oil ÷ coal = 1.11–1.13 × 0.775 = **0.86–0.88. Use 0.87.** At a 40%-efficient modern plant, one coal unit is 9 thermal MWh-units, or 3.07 t-units of CO₂; one oil unit is 2.64.

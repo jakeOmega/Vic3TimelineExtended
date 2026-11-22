@@ -148,11 +148,11 @@ class BuildingEmissionsTest(unittest.TestCase):
 
     def test_covered_fuel_methods_use_merged_inputs(self):
         outputs, count = emissions.plan_outputs(self.state, ROOT)
-        self.assertEqual(count, 250)
+        self.assertEqual(count, 346)
         self.assertEqual(set(outputs), {emissions.OUTPUT})
         pms = self.state.mod_parsers["PMs"].data
-        for name, expected in (("pm_modern_coal-fired_plant", "5.00"),
-                               ("pm_modern_oil-fired_plant", "6.09"),
+        for name, expected in (("pm_modern_coal-fired_plant", "4.00"),
+                               ("pm_modern_oil-fired_plant", "5.22"),
                                ("pm_electric_arc_process", "2.00"),
                                ("pm_rotary_valve_engine_building_steel_mill", "2.00"),
                                ("pm_flow_chemistry_production", "38.28")):
@@ -247,7 +247,7 @@ class BuildingEmissionsTest(unittest.TestCase):
         # The historical probe predates the state line and keeps its building-scoped cut.
         probe = parsed("docs/testing/carbon_capture_probe/common/production_methods/te_cc_probe_pms.txt")
         pms = self.state.mod_parsers["PMs"].data
-        for fuel, expected in (("coal", "2.50"), ("oil", "3.04")):
+        for fuel, expected in (("coal", "1.50"), ("oil", "2.17")):
             gross = scalar(state_scaled(pms[f"pm_modern_{fuel}-fired_plant"]), emissions.STATE_MODIFIER)
             capture = scalar(workforce(probe[f"pm_te_cc_probe_{fuel}"]), "building_greenhouse_gas_emissions_add")
             self.assertLess(capture, 0)
@@ -305,7 +305,7 @@ class BuildingEmissionsTest(unittest.TestCase):
                 (root / relative).write_bytes((ROOT / relative).read_bytes())
             method["goods_input_coal_add"] = ("=", "30")
             output, count = emissions.plan_outputs(state, root)
-            self.assertEqual(count, 250)
+            self.assertEqual(count, 346)
             rewritten = output[Path("common/production_methods/extra_pms.txt")]
             parser = ParadoxFileParser()
             parsed_path = root / "result.txt"
@@ -314,7 +314,7 @@ class BuildingEmissionsTest(unittest.TestCase):
             self.assertEqual(scalar(state_scaled(parser.data["pm_modern_coal-fired_plant"]), emissions.STATE_MODIFIER), 6)
             method["goods_input_coal_add"] = ("=", "0")
             output, count = emissions.plan_outputs(state, root)
-            self.assertEqual(count, 249)
+            self.assertEqual(count, 345)
             parser = ParadoxFileParser()
             parsed_path.write_text(output[Path("common/production_methods/extra_pms.txt")], encoding="utf-8-sig")
             parser.parse_file(str(parsed_path), apply_directives=False)
@@ -416,7 +416,7 @@ class DirectAirCaptureTest(unittest.TestCase):
                 "gw_direct_air_capture_coal_equivalent = 210", "gw_direct_air_capture_coal_equivalent = 420"),
                 encoding="utf-8-sig")
             outputs, count = emissions.plan_outputs(self.state, root)
-            self.assertEqual(count, 250)
+            self.assertEqual(count, 346)
             text = outputs[Path("common/production_methods/direct_air_capture.txt")]
             self.assertIn(f"{emissions.ATMOSPHERIC_MODIFIER} = 84.00", text)
             self.assertNotIn("goods_output_coal_add", text)
@@ -433,22 +433,28 @@ class DirectAirCaptureTest(unittest.TestCase):
         self.assertEqual(scalar(modifier, "country_authority_cost_add"), 100)
         self.assertNotIn("country_greenhouse_gas_emissions_mult", modifier)
 
-    def test_support_can_be_rebuilt_from_inherited_country_state_and_repealed(self):
+    def test_support_is_a_country_variable_the_entry_declares_its_modifier_from(self):
+        """A civil war's winner inherits variables but no modifiers, so the policy is the variable and
+        je_global_warming declares carbon_removal_modifier at 1 while it is set (#1404); nothing adds,
+        removes or rebuilds the modifier any more, and has_modifier cannot see it."""
+        from test_tax_code_rule import load
         effects = parsed("common/scripted_effects/global_warming_effects.txt")
         adopt = body(body(effects, "gw_effect_carbon_removal"), "custom_tooltip")
         repeal = body(body(effects, "gw_effect_remove_carbon_removal"), "custom_tooltip")
         flag = body(body(body(adopt, "hidden_effect"), "set_variable"), "name")
+        self.assertEqual(flag, "gw_carbon_removal_policy")
         self.assertEqual(body(body(repeal, "hidden_effect"), "remove_variable"), flag)
         self.assertNotIn("every_country", adopt)
-        restore = body(body(effects, "gw_restore_carbon_removal_policy_effect"), "if")
-        self.assertEqual(body(body(restore, "limit"), "has_variable"), flag)
-        self.assertEqual(body(body(body(restore, "je:je_global_warming"), "add_modifier"), "name"),
-                         "carbon_removal_modifier")
-        self.assertEqual(body(body(repeal, "je:je_global_warming"), "remove_modifier"),
-                         "carbon_removal_modifier")
-        je = body(parsed("common/journal_entries/je_global_warming.txt"), "je_global_warming")
-        pulse = body(body(je, "on_monthly_pulse"), "effect")
-        self.assertEqual(body(pulse, "gw_restore_carbon_removal_policy_effect"), "yes")
+        for block in (adopt, repeal):
+            self.assertNotIn("je:je_global_warming", block)
+        self.assertNotIn("gw_restore_carbon_removal_policy_effect", effects)
+        je = load("common/journal_entries/je_global_warming.txt")["je_global_warming"]
+        declared = {d["modifier"]: d["value"] for d in je["scaling_modifiers_while_active"]}
+        self.assertEqual(declared["carbon_removal_modifier"],
+                         {"value": "0", "if": {"limit": {"has_variable": flag}, "add": "1"}})
+        self.assertNotIn("gw_restore_carbon_removal_policy_effect", str(je["on_monthly_pulse"]))
+        active = load("common/scripted_triggers/global_warming_triggers.txt")["gw_policy_carbon_removal_active"]
+        self.assertEqual(active, {"has_journal_entry": "je_global_warming", "has_variable": flag})
         debug = parsed("common/scripted_effects/te_debug_gw_effects.txt")
         self.assertEqual(body(body(debug, "te_debug_gw_adopt_all"), "gw_effect_carbon_removal"), "yes")
         self.assertEqual(body(body(debug, "te_debug_gw_repeal_all"), "gw_effect_remove_carbon_removal"), "yes")

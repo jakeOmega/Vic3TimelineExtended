@@ -32,10 +32,11 @@ state_natural_fertility_mult = {
 # Techs' and laws' modifier blocks reach every state the country owns; a law's institution_modifier
 # or an institution's own modifier is per investment level and reaches incorporated states only.
 # Values are on the carriers (scripts/analysis/demographics_modifiers.py).
+# One decimal (owner, 2026-11-14): the Healthcare principles add half a point a level of the Health System.
 state_health_care_access_add = {
 	color = good
 	percent = yes
-	decimals = 0
+	decimals = 1
 	script_only = yes
 }
 state_infection_treatment_add = {
@@ -177,6 +178,16 @@ state_birth_limit_relief_add = {
 state_sex_ratio_at_birth_add = {
 	color = neutral
 	percent = no
+	decimals = 0
+	script_only = yes
+}
+# The measures' money upkeep (owner, 2026-11-14): the four te_demog_ms_cost_<measure> values multiply by 1 + it, at
+# least 0 (te_demog_ms_upkeep_factor), so the _cost modifiers and their Budget Breakdown mirror follow. Country scope;
+# the Healthcare principles III to V carry it. Not a census input, but the measures run only under Full, so it is named
+# and released as one (a release comments its lines out with the rest).
+country_family_policy_upkeep_mult = {
+	color = bad
+	percent = yes
 	decimals = 0
 	script_only = yes
 }

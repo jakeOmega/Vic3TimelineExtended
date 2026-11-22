@@ -179,10 +179,12 @@ environmentalism_events.3 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		# Environmentalist IG leader gains ideology
+		# The Intelligentsia lean towards an Environmentalist leader next time
+		# they choose one (a leader-chance modifier, not a conversion; #1446)
 		ig:ig_intelligentsia ?= {
-			leader ?= {
-				set_ideology = ideology:ideology_environmentalists
+			add_modifier = {
+				name = environmentalist_leader_pull_modifier
+				days = long_modifier_time
 			}
 		}
 		add_radicals = { value = medium_radicals }
@@ -238,15 +240,18 @@ environmentalism_events.4 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
-		# Convert both Intelligentsia and Trade Union leaders to environmentalists
+		# The Reckoning converts the Intelligentsia's sitting leader outright: the
+		# one instant flip kept (#1446), for the one-off 3 C threshold. The Trade
+		# Unions only lean towards an Environmentalist leader next time.
 		ig:ig_intelligentsia ?= {
 			leader ?= {
 				set_ideology = ideology:ideology_environmentalists
 			}
 		}
 		ig:ig_trade_unions ?= {
-			leader ?= {
-				set_ideology = ideology:ideology_environmentalists
+			add_modifier = {
+				name = environmentalist_leader_pull_modifier
+				days = long_modifier_time
 			}
 		}
 		add_radicals = { value = large_radicals }
@@ -282,7 +287,7 @@ environmentalism_events.5 = {
 			has_modifier = crop_failure_modifier
 			has_modifier = crop_failure_ministry_modifier
 		}
-		je:je_global_warming = { has_modifier = global_warming }
+		gw_warming_felt = yes
 		temperature_anomaly_display >= 2.0
 		# Strong environment ministry (level 5) prevents widespread crop failures
 		NOT = {
@@ -376,7 +381,7 @@ environmentalism_events.6 = {
 			has_modifier = climate_refugee_welcome_modifier
 			has_modifier = climate_refugee_rejection_modifier
 		}
-		je:je_global_warming = { has_modifier = global_warming }
+		gw_warming_felt = yes
 		temperature_anomaly_display >= 1.0
 	}
 
@@ -522,7 +527,7 @@ environmentalism_events.8 = {
 			has_modifier = climate_political_turmoil_modifier
 			has_modifier = environmentalist_momentum_modifier
 		}
-		je:je_global_warming = { has_modifier = global_warming }
+		gw_warming_felt = yes
 		temperature_anomaly_display >= 0.5
 		has_technology_researched = pollution_control
 	}
@@ -577,7 +582,9 @@ environmentalism_events.8 = {
 				add = 3
 			}
 		}
-		# Embrace green policies - environmentalist momentum + IG leader conversion
+		# Embrace green policies - environmentalist momentum, and the Intelligentsia
+		# lean towards an Environmentalist leader (a recurring event, so no
+		# outright conversion; #1446)
 		add_modifier = {
 			name = environmentalist_momentum_modifier
 			days = long_modifier_time
@@ -592,8 +599,9 @@ environmentalism_events.8 = {
 			}
 		}
 		ig:ig_intelligentsia ?= {
-			leader ?= {
-				set_ideology = ideology:ideology_environmentalists
+			add_modifier = {
+				name = environmentalist_leader_pull_modifier
+				days = long_modifier_time
 			}
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
@@ -629,7 +637,7 @@ environmentalism_events.9 = {
 			has_modifier = coastal_flooding_modifier
 			has_modifier = coastal_relocation_modifier
 		}
-		je:je_global_warming = { has_modifier = global_warming }
+		gw_warming_felt = yes
 		temperature_anomaly_display >= 1.0
 		any_scope_state = {
 			is_incorporated = yes
@@ -715,7 +723,7 @@ environmentalism_events.10 = {
 			has_modifier = water_crisis_rationing_modifier
 			has_modifier = water_crisis_infrastructure_modifier
 		}
-		je:je_global_warming = { has_modifier = global_warming }
+		gw_warming_felt = yes
 		temperature_anomaly_display >= 2.0
 	}
 
@@ -799,7 +807,7 @@ environmentalism_events.11 = {
 			has_modifier = green_tech_boom_modifier
 			has_modifier = green_tech_market_modifier
 		}
-		je:je_global_warming = { has_modifier = global_warming }
+		gw_warming_felt = yes
 		has_technology_researched = environmental_movement
 		any_scope_state = {
 			has_building = building_renewable_energy_plant
@@ -869,9 +877,9 @@ environmentalism_events.12 = {
 	trigger = {
 		NOT = { has_modifier = fossil_lobby_concessions_modifier }
 		OR = {
-			je:je_global_warming = { has_modifier = carbon_tax_modifier }
-			je:je_global_warming = { has_modifier = emission_standards_modifier }
-			je:je_global_warming = { has_modifier = fossil_fuel_divestment_modifier }
+			gw_policy_carbon_tax_active = yes
+			gw_policy_emission_standards_active = yes
+			gw_policy_fossil_fuel_divestment_active = yes
 		}
 		any_scope_state = {
 			any_scope_building = {
@@ -948,7 +956,7 @@ environmentalism_events.13 = {
 			has_modifier = climate_summit_leader_modifier
 			has_modifier = climate_summit_pledge_modifier
 		}
-		je:je_global_warming = { has_modifier = global_warming }
+		gw_warming_felt = yes
 		temperature_anomaly_display >= 1.0
 		country_rank >= rank_value:major_power
 		has_technology_researched = pollution_control
@@ -1040,8 +1048,13 @@ environmentalism_events.14 = {
 			has_modifier = tropical_disease_research_modifier
 			has_modifier = tropical_disease_public_health_modifier
 		}
-		je:je_global_warming = { has_modifier = global_warming }
+		gw_warming_felt = yes
 		temperature_anomaly_display >= 2.0
+		# A tropical disease needs the tropics (in_tropics: the state region's centre point)
+		any_scope_state = {
+			is_incorporated = yes
+			in_tropics = yes
+		}
 		# Strong consumer protection (level 5) prevents outbreaks through public health systems
 		NOT = {
 			has_consumer_protection_ministry_5 = yes
@@ -1124,7 +1137,7 @@ environmentalism_events.15 = {
 
 	trigger = {
 		NOT = { has_modifier = climate_political_turmoil_modifier }
-		je:je_global_warming = { has_modifier = global_warming }
+		gw_warming_felt = yes
 		temperature_anomaly_display >= 3.0
 		has_technology_researched = clean_energy_technologies
 		ig:ig_industrialists ?= { is_in_government = yes }
@@ -1143,11 +1156,14 @@ environmentalism_events.15 = {
 				add = 3
 			}
 		}
-		# Side with environmentalists - even the industrialists must concede at 3 C
+		# Side with environmentalists - even the industrialists must concede at 3 C,
+		# so the Industrialists lean towards an Environmentalist leader (a
+		# recurring event, and their sitting leader stays who they are; #1446)
 		# Comes with severe economic and political fallout
 		ig:ig_industrialists ?= {
-			leader ?= {
-				set_ideology = ideology:ideology_environmentalists
+			add_modifier = {
+				name = environmentalist_leader_pull_modifier
+				days = long_modifier_time
 			}
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
@@ -1231,7 +1247,7 @@ environmentalism_events.16 = {
 			has_modifier = arctic_melting_modifier
 			has_modifier = arctic_adaptation_modifier
 		}
-		je:je_global_warming = { has_modifier = global_warming }
+		gw_warming_felt = yes
 		temperature_anomaly_display >= 2.5
 		any_scope_state = {
 			is_coastal = yes

@@ -118,7 +118,8 @@ class ReleaseCensusInputsTest(unittest.TestCase):
             old = self.before[path].decode("utf-8-sig").split("\n")
             new = self.after[path].decode("utf-8-sig").split("\n")
             rest = [line[len(TAG):] if line.startswith(TAG) else line for line in new]
-            rest = [line for line in rest if line.strip() != "always = no"]
+            if path.name == "te_demog_triggers.txt":   # the gates' file: no other file gains the line, and the
+                rest = [line for line in rest if line.strip() != "always = no"]   # principles file holds its own
             self.assertEqual(rest, old, path.relative_to(self.root))
 
     def _entry_lines(self, text, name):
@@ -143,7 +144,8 @@ class ReleaseCensusInputsTest(unittest.TestCase):
                          "common/technology/technologies/te_demog_tech_injections.txt",
                          "common/static_modifiers/te_demog_cause_tags_generated.txt",
                          "common/interest_group_traits/te_demog_cause_tags_generated.txt",
-                         "common/character_traits/te_demog_cause_tags_generated.txt"}
+                         "common/character_traits/te_demog_cause_tags_generated.txt",
+                         "common/harvest_condition_types/te_demog_cause_tags_generated.txt"}
         decrees = "common/decrees/extra_decrees.txt"
         outreach = self._entry_lines(self.before[self.root / decrees].decode("utf-8-sig"), "decree_medical_outreach")
         self.assertTrue(outreach, "decree_medical_outreach found")

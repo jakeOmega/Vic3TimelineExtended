@@ -274,9 +274,11 @@ class TestTradeSelfCheck(unittest.TestCase):
         self.assertIn("var:nd_tc_code = $CODE$", block(helper, "limit"))
         self.assertIn("nd_dispute_$WHAT$_by = { TARGET = scope:nd_tc_other }", helper)
         self.assertIn("scope:nd_tc_other = { nd_dispute_$WHAT$_by = { TARGET = scope:nd_tc_self } }", helper)
-        self.assertIn('"TE_SELF_CHECK OK nd_trade_$CODE$', helper)
+        # the code read from nd_tc_code, which is still set (no $CODE$ inside a debug_log string)
+        code = "[THIS.Var('nd_tc_code').GetValue|0]"
+        self.assertIn(f'"TE_SELF_CHECK OK nd_trade_{code}', helper)
         # the demanded half; the matching half with and without the swap
-        self.assertEqual(helper.count('"TE_SELF_CHECK BROKEN nd_trade_$CODE$'), 3)
+        self.assertEqual(helper.count(f'"TE_SELF_CHECK BROKEN nd_trade_{code}'), 3)
 
 
 def top_blocks(body):
@@ -435,7 +437,12 @@ class TestTradePanel(unittest.TestCase):
         doc = JE_DOC.read_bytes().decode("utf-8")
         self.assertIn("`nd_crisis_tradeable_sgui`", doc)
         self.assertRegex(doc, r"\| \| 6 \| offer a trade \(either side\) \|")
-        self.assertIn("twenty-five display handlers", doc)
+        # The handler count the doc gives is the file's, less its two action
+        # handlers (nd_posture_sgui, nd_crisis_action_sgui).
+        sguis = (ROOT / "common/scripted_guis/nuclear_deterrence_sguis.txt").read_text(encoding="utf-8-sig")
+        display = len(re.findall(r"^nd_\w+_sgui = \{", sguis, re.M)) - 2
+        words = {25: "twenty-five", 26: "twenty-six", 27: "twenty-seven", 28: "twenty-eight"}
+        self.assertIn(f"{words[display]} display handlers", doc)
 
 
 class TestTradeDocs(unittest.TestCase):

@@ -13,6 +13,7 @@ import os
 import re
 import unittest
 
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 
 BUTTONS = os.path.join("common", "scripted_buttons", "civil_rights_buttons.txt")
@@ -158,8 +159,11 @@ class ThresholdTests(unittest.TestCase):
                 self.assertIn(f"#v {months}#!", self.loc[key])
 
     def test_ending_threshold(self):
-        hooks = _block(self.je, "on_complete", top_level=False) + _block(self.je, "on_fail", top_level=False)
-        thresholds = set(re.findall(r"var:cr_\w+_months\s*>\s*(\d+)", hooks))
+        # The endings are decided by cr_win_ending_now / cr_fail_ending_now, which
+        # the entry's outcomes require (#1431).
+        values = _read(VALUES)
+        hooks = _block(values, "cr_win_ending_now") + _block(values, "cr_fail_ending_now")
+        thresholds = set(re.findall(r"cr_months_disp_\w+\s*>\s*(\d+)", hooks))
         self.assertEqual(len(thresholds), 1, thresholds)
         months = thresholds.pop()
         for key in ("cr_btn_grassroots_ending_tt", "cr_btn_federal_ending_tt",

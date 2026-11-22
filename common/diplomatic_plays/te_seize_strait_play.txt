@@ -1,0 +1,35 @@
+﻿# ============================================================================
+# SEIZE STRAIT — the play that opens with te_seize_strait
+#
+# A copy of the base game's dp_take_treaty_port (00_diplomatic_plays.txt)
+# with the mod's goal: the same `possible` gates and AI acceptance cap. The
+# goal itself (common/war_goal_types/te_seize_strait.txt) decides which states
+# are offered.
+# ============================================================================
+
+dp_te_seize_strait = {
+	war_goal = te_seize_strait
+
+	texture = "gfx/interface/icons/war_goals/take_treaty_port.dds"
+
+	add_infamy_for_starting_target_wargoals = yes
+
+	possible = {
+		NOT = { is_country_type = decentralized }
+		aggressive_diplomatic_plays_permitted = yes
+		NOT = { is_subject_of = scope:target_country }
+		scope:target_country = {
+			NOT = { is_country_type = decentralized }
+			NOT = { is_subject_of = root }
+		}
+		diplomatic_play_has_no_relations_blockers = yes
+	}
+
+	ai_acceptance_max = 100
+
+	on_weekly_pulse = {}
+
+	on_war_begins = {}
+
+	on_war_end = {}
+}

@@ -65,7 +65,7 @@ un_propose_sanctions_select_target = {
 		random_country = {
 			limit = {
 				has_diplomatic_pact = { who = ROOT type = rivalry }
-				NOT = { has_modifier = un_sanctions_target_modifier }
+				NOT = { has_variable = un_sanctions_target_on }
 				un_case_supports = { TOPIC = sanctions }
 			}
 			save_temporary_scope_as = un_propose_sanctions_target
@@ -75,7 +75,7 @@ un_propose_sanctions_select_target = {
 		ordered_country = {
 			limit = {
 				has_diplomatic_pact = { who = ROOT type = rivalry }
-				NOT = { has_modifier = un_sanctions_target_modifier }
+				NOT = { has_variable = un_sanctions_target_on }
 				un_case_supports = { TOPIC = sanctions }
 			}
 			order_by = country_rank

@@ -44,6 +44,7 @@ generate_images.log
 .DS_Store
 .claude/*
 !.claude/skills/
+!.claude/rules/
 scratch
 
 # Player guide build intermediate (scripts/build_player_guide.py)

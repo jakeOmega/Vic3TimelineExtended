@@ -47,11 +47,27 @@ minority_protection = {
 		always = yes
 	}
 
+	# ROOT is the prospective source, which must guarantee the minority's
+	# rights, and scope:other_country the protecting power. Its bloc is tested
+	# here one way round as well as in can_ratify: a war goal enforcing the
+	# article checks possible and not can_ratify.
 	possible = {
 		has_diplomatic_relevance = scope:other_country
 		NOT = { is_country_type = decentralized }
 		scope:other_country = {
 			NOT = { is_country_type = decentralized }
+		}
+		custom_tooltip = {
+			text = minority_protection_protector_bloc_possible_tt
+			scope:other_country = {
+				is_in_power_bloc = yes
+				power_bloc ?= {
+					OR = {
+						has_identity = identity:identity_cultural
+						has_identity = identity:identity_religious
+					}
+				}
+			}
 		}
 	}
 
@@ -129,6 +145,12 @@ minority_protection = {
 				add = 0.1
 			}
 		}
+
+		# Per-partner gate (evaluation_chance has root only): the AI asks for
+		# protection in a treaty, or presses it as a war goal, only for a state
+		# where its own people or faith is discriminated.
+		proposal_weight = { value = minority_protection_ai_demand_weight }
+		wargoal_score_multiplier = { value = minority_protection_ai_demand_weight }
 
 		inherent_accept_score = {
 			value = 0

@@ -10,18 +10,25 @@
 # two tags and stacked a unification_prestige modifier on every formation.
 #
 # te_is_north_american_capable_union (formable_gating_triggers.txt) keeps the
-# entry off UNA and UNE: it is not shown to them, and `invalid` removes it
-# silently from a union that already holds it (an active entry otherwise stays
-# active through change_tag, buttons and all). Turtle Island may still form UNA.
+# entry off UNA and UNE: it is not shown to them, and a hidden invalid outcome
+# removes it silently from a union that already holds it (an active entry
+# otherwise stays active through change_tag, buttons and all). Turtle Island
+# may still form UNA.
 #
-# Everything else is vanilla 00_turtle_island.txt, copied from 1.14.5
-# (unchanged since 1.13.9) — re-diff on every Vic3 patch. The mod-only
-# lines are the three te_is_north_american_capable_union checks.
+# Everything else is vanilla 1.15.0's 00_turtle_island.txt, copied from the
+# installed game. The mod-only lines (marked MOD) are the two
+# te_is_north_american_capable_union checks and the invalid outcome. Re-diff
+# on every Vic3 patch: test_vanilla_je_replacements.py compares it, less the
+# MOD lines, with vanilla_parsed/ and fails when vanilla moves.
 
 REPLACE:je_unite_the_nations = {
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
 	group = je_group_foreign_affairs
+
+	activation_description = {
+		always = yes
+	}
 
 	scripted_button = je_unite_the_nations_proclaim_turtle_island_button
 	scripted_button = je_unite_the_nations_organize_the_tribes_button
@@ -42,7 +49,7 @@ REPLACE:je_unite_the_nations = {
 				c:TIS = this
 			}
 		}
-		NOT = { te_is_north_american_capable_union = yes }
+		NOT = { te_is_north_american_capable_union = yes } # MOD: no union re-forms Turtle Island
 	}
 
 	is_shown_when_inactive = {
@@ -60,53 +67,63 @@ REPLACE:je_unite_the_nations = {
 				c:TIS = this
 			}
 		}
-		NOT = { te_is_north_american_capable_union = yes }
+		NOT = { te_is_north_american_capable_union = yes } # MOD: no union re-forms Turtle Island
 	}
 
 	possible = {
 		is_subject = no
 	}
 
-	complete = {
-		custom_tooltip = {
-			text = je_unite_the_nations_complete_tt
-			NOT = {
-				any_decentralized_country = {
-					is_in_geographic_region = geographic_region_north_america
-					any_primary_culture = {
-						shares_heritage_trait_group_with_any_primary_culture = ROOT
+	outcome = {
+		header = je_standard_completion_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_standard_completion_conclusion_desc
+		trigger = {
+			custom_tooltip = {
+				text = je_unite_the_nations_complete_tt
+				NOT = {
+					any_decentralized_country = {
+						is_in_geographic_region = geographic_region_north_america
+						any_primary_culture = {
+							shares_heritage_trait_group_with_any_primary_culture = ROOT
+						}
 					}
 				}
 			}
+			any_scope_state = {
+				is_homeland_of_country_cultures = ROOT
+				count >= 5
+			}
 		}
-		any_scope_state = {
-			is_homeland_of_country_cultures = ROOT
-			count >= 5
+		effect = {
+			if = {
+				limit = { is_country_type = unrecognized }
+				set_country_type = recognized
+			}
+			add_modifier = {
+				name = turtle_island_state_of_nations
+				months = -1 # FOREVER
+			}
+			je_unite_the_nations_cleanup = yes
 		}
 	}
 
-	on_complete = {
-		if = {
-			limit = { is_country_type = unrecognized }
-			set_country_type = recognized
+	### MOD: a North American union that already holds the entry loses it silently
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_unite_the_nations_invalid_conclusion_desc
+		trigger = {
+			te_is_north_american_capable_union = yes
 		}
-		add_modifier = {
-			name = turtle_island_state_of_nations
-			months = -1 # FOREVER
+		effect = {
+			je_unite_the_nations_cleanup = yes
 		}
 	}
-
-	fail = {
-	}
-
-	on_fail = {
-	}
-
-	invalid = {
-		te_is_north_american_capable_union = yes
-	}
+	### END MOD ###
 
 	weight = 100
+
 
 	should_be_pinned_by_default_uninvolved_or_context = yes
 }

@@ -111,13 +111,17 @@ un_docket_war_victim = {
 }
 
 # A member that did not begin a play, with a state devastated past
-# un_docket_war_devastation: what makes a country at war with an aggressor a
-# victim the war item can name.
+# un_docket_war_devastation or its enemies holding un_docket_war_occupation of
+# it (vanilla 1.15: occupation no longer devastates): what makes a country at
+# war with an aggressor a victim the war item can name.
 # Scope: the prospective victim
 un_docket_war_victim_standing = {
 	is_diplomatic_play_initiator = no
 	je:je_united_nations ?= { has_modifier = un_member_modifier }
-	any_scope_state = { devastation > un_docket_war_devastation }
+	OR = {
+		any_scope_state = { devastation > un_docket_war_devastation }
+		enemy_occupation > un_docket_war_occupation
+	}
 }
 
 # A collapsing state the docket should take up. Scope: country

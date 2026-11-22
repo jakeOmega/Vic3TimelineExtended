@@ -134,7 +134,14 @@ te_homeland_removal_monthly_effect = {
 		every_in_list = {
 			variable = te_homeland_removal_projects
 			if = {
-				limit = { NOT = { te_homeland_removal_project_valid = yes } }
+				limit = {
+					OR = {
+						NOT = { te_homeland_removal_project_valid = yes }
+						# A culture merge's part that has switched since the project began, with its successor's
+						# homeland here: kept (te_cmg_switched_part_kept reads ROOT, this effect's state).
+						var:te_homeland_culture = { te_cmg_switched_part_kept = yes }
+					}
+				}
 				add_to_temporary_list = te_homeland_removal_finished
 			}
 			else_if = {
@@ -148,9 +155,16 @@ te_homeland_removal_monthly_effect = {
 				change_variable = { name = te_homeland_progress add = ROOT.var:te_homeland_removal_units }
 				if = {
 					limit = { var:te_homeland_progress >= 1200 }
-					var:te_homeland_culture = { save_scope_as = removal_culture }
+					var:te_homeland_culture = {
+						save_scope_as = removal_culture
+						save_scope_as = te_cm_removed_culture
+					}
 					ROOT = {
-						state_region = { remove_homeland = scope:removal_culture }
+						state_region = {
+							remove_homeland = scope:removal_culture
+							# A part that switched into the removed culture loses its homeland here too.
+							te_cmg_remove_switched_part_homelands = yes
+						}
 						post_notification = homeland_removed
 					}
 					add_to_temporary_list = te_homeland_removal_finished

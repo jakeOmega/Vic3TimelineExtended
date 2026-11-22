@@ -1,0 +1,265 @@
+﻿# The AI construction pass (common/scripted_effects/te_ai_build_pass_effects.txt):
+# when it queues, and where. Its numbers and their reasons are in
+# common/script_values/te_construction_market_ai_values.txt, THE PASS.
+
+# Country scope. An AI government the engine has left with nothing queued for a
+# month, that the rate lets build, with the surplus the engine's own budget AI
+# asks for before it adds spending, and no level of the pass's still followed.
+te_ai_build_pass_may_queue = {
+	is_country_alive = yes
+	is_ai = yes
+	NOT = { is_country_type = decentralized }
+	te_free_market_construction_on = yes
+	in_default = no
+	is_at_war = no
+	is_construction_paused = no
+	has_variable = te_ai_build_pass_idle
+	NOT = { has_variable = te_ai_build_pass_pending_kind }
+	NOT = { construction_queue_num_queued_government_levels > 0 }
+	has_variable = te_construction_market_price_stabilizer
+	net_fixed_income > 0
+	OR = {
+		net_fixed_income >= TE_AI_BUILD_PASS_SURPLUS_MIN
+		te_ai_build_pass_surplus_share >= TE_AI_BUILD_PASS_SURPLUS_SHARE
+	}
+	te_ai_build_pass_means >= 0
+}
+
+# What the pass queues: the first entry of THE ORDER (te_ai_build_pass_effect, the one place it is written) that
+# applies; if none does, nothing. Each entry only where the surplus pays for the level within MAX_WEEKS, and none of
+# a kind for a year after one the pass queued of that kind was lost. In order, with the reason for its place:
+#   1. A Government Administration, while net bureaucracy is under BUREAUCRACY_MARGIN of its usage (or below
+#      nothing). A shortage puts tax waste on every tax the country collects (up to all of it), so a level that
+#      ends or forestalls one pays for itself many times over, and at 100 points it is the cheapest entry; above
+#      the margin it would be bureaucracy over the requirement (owner, 2026-11-16).
+#   2. The country's first power plant, while nothing of the country's makes Electricity. The only entry that
+#      fires once in a game: behind an entry that repeats (a railway while any state is short, a university while
+#      innovation is under its cap) it would wait as long as that one keeps firing, and a country under its
+#      innovation cap would never get it. One level of 400 points opens every electric method in its state.
+#      Unsubsidized, and its first buyers few: the owner, 2026-11-17, "That's fine, it allows them to build
+#      buildings and select PMs that use electricity, and that will in turn spur electricity demand. We'll see if
+#      that's good enough in practice with playtesting".
+#   3. A railway, where a state's infrastructure is short of its usage. Market access falls in proportion to the
+#      shortfall across the state's whole output, and per point a railway is the cheapest infrastructure in every
+#      era (20 to 60 a level for 800 points, against 25 to 50 for 2,000 from a highway or an airport). No staffing
+#      test: the mod's railway methods give their infrastructure per level (level_scaled, extra_pms.txt, #1050), so
+#      a level nobody staffs still closes the shortfall it was queued for.
+#   4. A university, while innovation is under INNOVATION_SHARE of its cap: research, the owner's second priority
+#      after growth (ai.md); past the cap a level is wasted. Not while bureaucracy is short: the administration the
+#      country needs comes first. Not beside a university under 80% staffed: its innovation is per worker.
+#   5. A highway, in a major industrial state under its level cap, beside no highway under 80% staffed (the
+#      building's own should_auto_expand): 2,000 points, from Paved Roads (era 5). Before the airport: at base
+#      prices its method sells more than it buys (pm_civil_highway: 5,505 of transportation for 4,400 of inputs a
+#      week), and it comes an era sooner.
+#   6. An airport, in a major industrial state under its level cap, beside no airport under 80% staffed: 2,000
+#      points, from Commercial Aviation (era 6), 50 infrastructure. Last: at base prices its method buys more than
+#      it sells (pm_airport: 4,400 of aeroplanes and oil for 2,700 of merchant marine and transportation a week,
+#      before wages). Kept at a loss: the owner, 2026-11-17, "I think this is fine, it provides state-level modifiers
+#      that make it worth it". Its state modifiers are per worker (workforce_scaled), so they come only with its
+#      staff: Interventionism and Command Economy force a subsidy on airports and highways
+#      (construction_system_law_injections.txt), which keeps one hiring at the treasury's cost; under the other
+#      economic systems the AI keeps no subsidy on it, and one that loses money stops hiring.
+# What the order means for the last two: a highway or an airport is queued only where every entry above declines, so
+# where bureaucracy is above its margin, the country has power (or no site for a plant), no incorporated state is
+# short of infrastructure by more than INFRASTRUCTURE_MARGIN (or railways are backed off or too dear), and
+# innovation is at nine-tenths of its cap (or no university site is staffed). Their lines move up the order to come
+# sooner.
+
+# Country scope. Net bureaucracy close to nothing or below it.
+te_ai_build_pass_wants_administration = {
+	has_technology_researched = tech_bureaucracy
+	NOT = { has_variable = te_ai_build_pass_backoff_administration }
+	bureaucracy < te_ai_build_pass_bureaucracy_margin
+	te_ai_build_pass_administration_weeks <= TE_AI_BUILD_PASS_MAX_WEEKS
+	any_scope_state = { te_ai_build_pass_administration_site = yes }
+}
+
+# Country scope. Nothing of the country's makes Electricity, built or under construction
+# (te_state_has_a_power_plant: every building with a method that outputs it, test_ai_building_values.py derives the
+# list, a hydro, nuclear, renewable or fusion plant, a Solar Receiver, a Grid Transfer Station and the company power
+# stations among them), so the plant is never a fossil plant beside other power (owner, 2026-11-16). Nor where the
+# grid's own pass would bring a partner's power instead (te_ai_build_pass_grid_serves). The law is vanilla's
+# `possible` on building_power_plant, copied since whether start_building_construction honours it is unread.
+te_ai_build_pass_wants_power_plant = {
+	has_technology_researched = electrical_generation
+	NOT = { has_variable = te_ai_build_pass_backoff_power_plant }
+	NOT = { has_law_or_variant = law_type:law_industry_banned }
+	NOT = {
+		any_scope_state = { te_state_has_a_power_plant = yes }
+	}
+	te_ai_build_pass_power_plant_weeks <= TE_AI_BUILD_PASS_MAX_WEEKS
+	any_scope_state = { te_ai_build_pass_power_plant_site = yes }
+	NOT = { te_ai_build_pass_grid_serves = yes }
+}
+
+# Country scope. The grid's pass (te_grid_ai_build_effect) would queue this country a Grid Transfer Station: it has
+# Electrical Capacitors, a grid partner, and a state where the station may go (te_grid_ai_station_site, which for a
+# country with no power of its own is a state beside a partner's station, te_grid_ai_partner_near). A partner with
+# no station near (a bloc member across the world) leaves the plant to this pass. The grid's pass's other two tests
+# hold wherever this pass queues: not in default, and a government queue under a year long (this one is empty).
+te_ai_build_pass_grid_serves = {
+	has_technology_researched = electrical_capacitors
+	te_ai_build_pass_has_grid_partner = yes
+	any_scope_state = { te_grid_ai_station_site = yes }
+}
+
+# Country scope. The grid's list of the country's Grid Interconnection Agreement and bloc partners
+# (te_grid_refresh_partners_effect, monthly for an AI with Electrical Capacitors) holds one. The list is cleared and
+# refilled, so its existence alone may not mean a partner: the count is read too, as ch_board_has_rows reads its
+# list.
+te_ai_build_pass_has_grid_partner = {
+	has_variable_list = te_grid_partners
+	any_in_list = { variable = te_grid_partners count >= 1 }
+}
+
+# Country scope. Some state's infrastructure is short of its usage by more than the margin.
+te_ai_build_pass_wants_railway = {
+	has_technology_researched = railways
+	NOT = { has_variable = te_ai_build_pass_backoff_railway }
+	te_ai_build_pass_railway_weeks <= TE_AI_BUILD_PASS_MAX_WEEKS
+	any_scope_state = { te_ai_build_pass_railway_site = yes }
+}
+
+# Country scope. The variable is vanilla's (building_university's can_build_government). Not short of
+# bureaucracy: the administration the country needs comes first.
+te_ai_build_pass_wants_university = {
+	has_technology_researched = academia
+	NOT = { has_variable = poland_universities_closed_var }
+	NOT = { has_variable = te_ai_build_pass_backoff_university }
+	bureaucracy >= 0
+	te_ai_build_pass_innovation_share < TE_AI_BUILD_PASS_INNOVATION_SHARE
+	te_ai_build_pass_university_weeks <= TE_AI_BUILD_PASS_MAX_WEEKS
+	any_scope_state = { te_ai_build_pass_university_site = yes }
+}
+
+# Country scope. A major industrial state with room under the highway's cap. Reads the country's manufacturing
+# levels the pass wrote before the list (te_ai_build_pass_industry).
+te_ai_build_pass_wants_highway = {
+	has_technology_researched = paved_roads
+	NOT = { has_variable = te_ai_build_pass_backoff_highway }
+	te_ai_build_pass_highway_weeks <= TE_AI_BUILD_PASS_MAX_WEEKS
+	any_scope_state = { te_ai_build_pass_highway_site = yes }
+}
+
+# Country scope. The same for an airport.
+te_ai_build_pass_wants_airport = {
+	has_technology_researched = commercial_aviation
+	NOT = { has_variable = te_ai_build_pass_backoff_airport }
+	te_ai_build_pass_airport_weeks <= TE_AI_BUILD_PASS_MAX_WEEKS
+	any_scope_state = { te_ai_build_pass_airport_site = yes }
+}
+
+# State scope. The administration goes where taxes come closest to (or most outrun) tax capacity, which its level
+# also raises (vanilla's pm_simple_organization: state_tax_capacity_add); the university to the most populous whose
+# universities are staffed (a university's innovation is workforce_scaled, so a level its state cannot staff, for
+# want of academics in a state of low literacy, adds none).
+te_ai_build_pass_administration_site = {
+	is_incorporated = yes
+}
+te_ai_build_pass_university_site = {
+	is_incorporated = yes
+	te_ai_build_pass_staffed = { BUILDING = building_university }
+}
+
+# State scope. No $BUILDING$ of the state's stands under 80% staffed: the mod's highway and airport expand on their
+# own only at 80% (should_auto_expand = { occupancy >= 0.8 }, 11_zz_te_infrastructure.txt), as vanilla's railway
+# does, and a level beside one its state cannot staff, or that loses money and so stops hiring, would stand empty
+# too. A state with none of the building passes. A new level hires over some weeks after it is built, so the next
+# one waits until the last is staffed.
+te_ai_build_pass_staffed = {
+	NOT = {
+		any_scope_building = {
+			is_building_type = $BUILDING$
+			occupancy < 0.8
+		}
+	}
+}
+
+# State scope. A plant goes where its Electricity has buyers (te_ai_build_pass_power_users ranks the sites): a
+# state with an urban centre, whose street lights the plant's own technology lets run on Electricity. The
+# Resource Transition rule is the plant's can_build_government (extra_buildings.txt), copied for the same reason as
+# the law.
+te_ai_build_pass_power_plant_site = {
+	is_incorporated = yes
+	has_building = building_urban_center
+	rt_fossil_construction_allowed_here = yes
+}
+
+# State scope. Short of infrastructure by more than INFRASTRUCTURE_MARGIN of its usage. An unincorporated state is
+# left to investors: it pays no pop taxes, so the government's level earns it less there. A railway has no level
+# cap.
+te_ai_build_pass_railway_site = {
+	is_incorporated = yes
+	te_ai_build_pass_infrastructure_shortfall > te_ai_build_pass_infrastructure_margin
+}
+
+# State scope. Holds at least INDUSTRIAL_SHARE of its owner's manufacturing levels.
+te_ai_build_pass_major_industrial = {
+	te_ai_build_pass_manufacturing_levels >= te_ai_build_pass_industrial_floor
+}
+
+# State scope. A major industrial state, whose highways (airports) are staffed, that can take one more level: where
+# the building stands (or is queued), the engine's own test of the level cap and of what is queued
+# (can_queue_building_levels, which also counts a state region split between owners, as bg_infrastructure's
+# stateregion_max_level asks); where it does not, a cap of at least one level (te_ai_build_pass_highway_cap, the
+# modifier that sets it). Accepted: in a region split between owners where this country's part has none, the cap
+# can read room the region has used. Should the engine refuse that level, the follow reads it lost the next month
+# and the kind backs off for a year: a month a year, and a lost level in the self-check (the 2026-11-17 review).
+te_ai_build_pass_highway_site = {
+	is_incorporated = yes
+	te_ai_build_pass_major_industrial = yes
+	te_ai_build_pass_staffed = { BUILDING = building_highway }
+	OR = {
+		any_scope_building = {
+			is_building_type = building_highway
+			can_queue_building_levels = 1
+		}
+		AND = {
+			NOT = {
+				any_scope_building = { is_building_type = building_highway }
+			}
+			te_ai_build_pass_highway_cap >= 1
+		}
+	}
+}
+te_ai_build_pass_airport_site = {
+	is_incorporated = yes
+	te_ai_build_pass_major_industrial = yes
+	te_ai_build_pass_staffed = { BUILDING = building_airport }
+	OR = {
+		any_scope_building = {
+			is_building_type = building_airport
+			can_queue_building_levels = 1
+		}
+		AND = {
+			NOT = {
+				any_scope_building = { is_building_type = building_airport }
+			}
+			te_ai_build_pass_airport_cap >= 1
+		}
+	}
+}
+
+# Country scope: the state the pass built a $KIND$ level in (te_ai_build_pass_watch_set) holds fewer levels of
+# $BUILDING$ than when it was built, none at all included. A state gone from the map reads as no fall.
+te_ai_build_pass_watch_fell = {
+	save_temporary_scope_as = te_ai_build_pass_watcher
+	var:te_ai_build_pass_watch_state_$KIND$ ?= {
+		NOT = {
+			any_scope_building = {
+				is_building_type = $BUILDING$
+				level >= scope:te_ai_build_pass_watcher.var:te_ai_build_pass_watch_level_$KIND$
+			}
+		}
+	}
+}
+
+# Country scope: the self-check's sample, read when the pass queues. A government
+# the engine would not queue for: in debt, or under the mod's reserve gate (NAI
+# CONSTRUCTION_RESERVES_NEW_CONSTRUCTIONS, 0.02).
+te_ai_build_pass_in_sample = {
+	OR = {
+		scaled_debt > 0
+		scaled_gold_reserves < 0.02
+	}
+}

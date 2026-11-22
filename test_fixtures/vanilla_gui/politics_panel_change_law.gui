@@ -964,9 +964,45 @@ types politics_panel_change_law {
 			text = "[Law.GetLawType.GetAdditionalEffectDesc]"
 		}
 
+		### effects view toggle
+		hbox = {
+			visible = "[Or(Not(StringIsEmpty(Law.GetLawType.GetEffectDesc(GetPlayer.Self))), Not(StringIsEmpty(Law.GetLawType.GetDeltaEffectDesc(GetPlayer.Self))))]"
+			spacing = 5
+			margin = { 15 0 }
+			margin_top = 10
+
+			law_effects_view_button = {
+				blockoverride "onclick" {
+					onclick = "[GetVariableSystem.Clear( 'law_effects_view' )]"
+				}
+
+				blockoverride "selected" {
+					visible = "[Not(GetVariableSystem.Exists( 'law_effects_view' ))]"
+				}
+
+				blockoverride "text" {
+					text = "DATA_LAW_ALL_EFFECTS_BUTTON"
+				}
+			}
+
+			law_effects_view_button = {
+				blockoverride "onclick" {
+					onclick = "[GetVariableSystem.Set( 'law_effects_view', 'delta' )]"
+				}
+
+				blockoverride "selected" {
+					visible = "[GetVariableSystem.HasValue( 'law_effects_view', 'delta' )]"
+				}
+
+				blockoverride "text" {
+					text = "DATA_LAW_DELTA_EFFECTS_BUTTON"
+				}
+			}
+		}
+
 		### effects header
 		textbox = {
-			visible = "[Not(StringIsEmpty(Law.GetLawType.GetEffectDesc(GetPlayer.Self)))]"
+			visible = "[And(Not(GetVariableSystem.Exists( 'law_effects_view' )), Not(StringIsEmpty(Law.GetLawType.GetEffectDesc(GetPlayer.Self))))]"
 			default_format = "#title"
 			autoresize = yes
 			multiline = yes
@@ -979,13 +1015,37 @@ types politics_panel_change_law {
 
 		### effects
 		textbox = {
-			visible = "[Not(StringIsEmpty(Law.GetLawType.GetEffectDesc(GetPlayer.Self)))]"
+			visible = "[And(Not(GetVariableSystem.Exists( 'law_effects_view' )), Not(StringIsEmpty(Law.GetLawType.GetEffectDesc(GetPlayer.Self))))]"
 			autoresize = yes
 			multiline = yes
 			minimumsize = { @law_sides_width -1 }
 			maximumsize = { @law_sides_width -1 }
 			margin = { 35 0 }
 			text = "[Law.GetLawType.GetEffectDesc(GetPlayer.Self)]"
+		}
+
+		### delta effects header
+		textbox = {
+			visible = "[And(GetVariableSystem.HasValue( 'law_effects_view', 'delta' ), Not(StringIsEmpty(Law.GetLawType.GetDeltaEffectDesc(GetPlayer.Self))))]"
+			minimumsize = { @law_sides_width -1 }
+			maximumsize = { @law_sides_width -1 }
+			default_format = "#title"
+			autoresize = yes
+			multiline = yes
+			margin = { 25 0 }
+			margin_top = 10
+			text = "DATA_LAW_DELTA_EFFECTS_HEADER"
+		}
+
+		### delta effects
+		textbox = {
+			visible = "[And(GetVariableSystem.HasValue( 'law_effects_view', 'delta' ), Not(StringIsEmpty(Law.GetLawType.GetDeltaEffectDesc(GetPlayer.Self))))]"
+			minimumsize = { @law_sides_width -1 }
+			maximumsize = { @law_sides_width -1 }
+			autoresize = yes
+			multiline = yes
+			margin = { 35 0 }
+			text = "[Law.GetLawType.GetDeltaEffectDesc(GetPlayer.Self)]"
 		}
 
 		widget = {
@@ -1052,6 +1112,56 @@ types politics_panel_change_law {
 			maximumsize = { @law_sides_width -1 }
 			margin = { 35 10 }
 			text = "[Law.GetDesc]"
+		}
+	}
+
+	type law_effects_view_button = widget {
+		size = { 210 43 }
+
+		button = {
+			size = { 100% 100% }
+			using = default_button
+
+			block "onclick" {}
+		}
+
+		widget = {
+			size = { 100% 100% }
+			alwaystransparent = no
+
+			block "selected" {
+				visible = no
+			}
+
+			background = {
+				using = paper_bg
+			}
+
+			icon = {
+				size = { 100% 100% }
+				spriteType = Corneredtiled
+				spriteborder = { 22 22 }
+				texture_density = 2
+				alpha = 0.8
+				texture = "gfx/interface/selections/highlighted_square_selection.dds"
+
+				modify_texture = {
+					spriteType = Corneredstretched
+					spriteborder = { 0 0 }
+					blend_mode = overlay
+					alpha = 0.5
+					texture = "gfx/interface/backgrounds/gradient_overlay.dds"
+				}
+			}
+		}
+
+		textbox = {
+			size = { 90% 100% }
+			parentanchor = center
+			align = hcenter|nobaseline
+			using = elide_fontsize_min
+
+			block "text" {}
 		}
 	}
 }

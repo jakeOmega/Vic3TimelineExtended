@@ -1,13 +1,15 @@
 ﻿# ============================================================================
 # NUCLEAR PROGRAMME — scripted GUIs for gui/journal_entry_widgets/nuclear_program_widget.gui
 # ============================================================================
-# Five handlers, and that is deliberately all: the programme panel's rows are
+# Seven handlers, and that is deliberately all: the programme panel's rows are
 # ordinary localization reading display-only script values and
 # common/customizable_localization/nuclear_program_custom_loc.txt, which is
 # cheaper per frame than ExecuteTooltip and needs no handler at all. A scripted
 # GUI is used only where nothing else can do the job:
-#   nuclear_program_has_programme_sgui, nuclear_program_funding_sgui,
-#   nd_taboo_exists_sgui, nd_taboo_breakdown_sgui; and nd_powers_listed_sgui,
+#   nuclear_program_has_programme_sgui, nuclear_program_first_device_sgui,
+#   nuclear_program_funding_sgui, nuclear_program_focus_sgui,
+#   nd_taboo_exists_sgui, nd_taboo_breakdown_sgui;
+#   and nd_powers_listed_sgui,
 #   the Nuclear Powers section's second gate. The Nuclear Powers leaderboard is a datamodel over nd_powers, the list
 # update_nuclear_powers_ranking keeps (NUC-14 of the 2026-10-27 GUI audit), and
 # needs no handler.
@@ -18,12 +20,26 @@
 # the standing to build and for a non-nuclear party to a crisis, and neither
 # has anything to fund.
 #
+# ---- nuclear_program_first_device_sgui — display only ----------------------
+# Scope-free yes/no: is the first device built? The Focus rows' gate.
+#
 # ---- nuclear_program_funding_sgui — op table -------------------------------
 # Keep in step with the .gui header and docs/systems/journal_entry_systems.md.
 #   0   step programme funding DOWN   -> nuclear_program_effect_decrease_funding
 #   1   step programme funding UP     -> nuclear_program_effect_increase_funding
 #
-# Both ops delegate `is_valid` to the same scripted trigger and `effect` to the
+# ---- nuclear_program_focus_sgui — op table ---------------------------------
+# Keep in step with the .gui header and docs/systems/journal_entry_systems.md.
+# The ops are nd_prog_focus's codes (2026-11-20 delivery spec §4.1):
+#   1   focus Warheads             -> nd_focus_choose = { F = 1 }
+#   2   focus ICBMs                -> nd_focus_choose = { F = 2 }
+#   3   focus Missile Submarines   -> nd_focus_choose = { F = 3 }
+# Each is valid while its focus isn't in force, ops 2 and 3 while their
+# project is available (nd_proj_icbms_available, nd_proj_subs_available, one
+# line per requirement). The effect runs behind a click-only marker
+# (nd_focus_choose). The AI sets its focus in its posture review, never here.
+#
+# Both funding ops delegate `is_valid` to the same scripted trigger and `effect` to the
 # same scripted effect that the journal entry's scripted buttons call, so the
 # panel and the AI's grid cannot drift apart. Neither carries a custom_tooltip:
 # IsValidTooltip renders the trigger's own clauses with a tick or a cross each
@@ -91,6 +107,18 @@ nuclear_program_has_programme_sgui = {
 	effect = { }
 }
 
+# Is the first device built? The Focus rows show from then on (2026-11-20
+# delivery spec §4.1): before it, funding has nothing to choose between.
+nuclear_program_first_device_sgui = {
+	scope = country
+	is_shown = {
+		var:nuclear_weapons_program_first_nuke_done ?= 1
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = { }
+}
+
 # ---------------------------------------------------------------------------
 # THE FUNDING STEPPER
 # ---------------------------------------------------------------------------
@@ -145,6 +173,86 @@ nuclear_program_funding_sgui = {
 		else_if = {
 			limit = { scope:op = 1 }
 			nuclear_program_effect_increase_funding = yes
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# THE FOCUS: what the programme's funding builds
+# ---------------------------------------------------------------------------
+nuclear_program_focus_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	# Scope-free, as the funding stepper's (the header's "WHY `is_shown` DOES
+	# NOT DEPEND ON `scope:op`").
+	is_shown = {
+		has_journal_entry = je_nuclear_program
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = {
+				exists = scope:op
+				scope:op = 1
+			}
+			custom_tooltip = {
+				text = nd_tt_focus_in_force_1
+				NOT = { nd_focus_is_warheads = yes }
+			}
+		}
+		trigger_else_if = {
+			limit = {
+				exists = scope:op
+				scope:op = 2
+			}
+			custom_tooltip = {
+				text = nd_tt_focus_in_force_2
+				NOT = { nd_focus_is_icbms = yes }
+			}
+			nd_proj_icbms_available = yes
+		}
+		trigger_else_if = {
+			limit = {
+				exists = scope:op
+				scope:op = 3
+			}
+			custom_tooltip = {
+				text = nd_tt_focus_in_force_3
+				NOT = { nd_focus_is_submarines = yes }
+			}
+			nd_proj_subs_available = yes
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	effect = {
+		if = {
+			limit = {
+				exists = scope:op
+				scope:op = 1
+			}
+			nd_focus_choose = { F = 1 }
+		}
+		else_if = {
+			limit = {
+				exists = scope:op
+				scope:op = 2
+			}
+			nd_focus_choose = { F = 2 }
+		}
+		else_if = {
+			limit = {
+				exists = scope:op
+				scope:op = 3
+			}
+			nd_focus_choose = { F = 3 }
 		}
 	}
 }

@@ -64,6 +64,11 @@ industrial robotics, and launch capacity for the orbital units. Tanks, aircraft,
 and the new artillery, cavalry and marines after Combined Arms Marines can't be
 built under the Peasant Levies law.
 
+AI countries don't upgrade the conscript battalions they already have. Once a
+year an AI country at peace removes each conscription center holding a
+battalion three or more eras behind its own technology, and builds it again
+with its current units. Your own conscripts are never touched.
+
 ## Barracks training methods
 
 The Barracks' training methods go on past Mobile Warfare Tactics. Two raise the
@@ -192,7 +197,7 @@ apply, set by that level. Each tier replaces the one below it.
 | Fortified Position | Any base | +20% defense, −10% morale loss, −20% combat width |
 | Fortified Stronghold | 5 or more | +35% defense, −20% morale loss, +10% kill rate, −40% combat width |
 | Fortified Bastion | 10 or more | +50% defense, −30% morale loss, +15% kill rate, +5% recovery, −60% combat width |
-| Impregnable Fortress | 15 or more | +70% defense, −40% morale loss, +20% kill rate, +10% recovery, −80% combat width |
+| Impregnable Fortress | 15 or more | +70% defense, −40% morale loss, +20% kill rate, +5% recovery, −80% combat width |
 
 The base game's Naval Fortification also gains two late production methods,
 Coastal Missile Battery (Guided Missiles) and Integrated Coastal Defense
@@ -270,6 +275,14 @@ Combined Arms, present only when the World War game rule is enabled. It follows
 the hostility between great powers of opposed ideologies through a leadup, a
 world war and three post-war years, and it fails if you drop below great power.
 
+With the game rule set to *Early Unlock*, it opens with Trench Works (era 4)
+instead, and until Combined Arms a democratic great power and an authoritarian
+one also count as opposed, as the powers of 1914 did. A world war that breaks
+out while neither of the two powers that start it has Combined Arms is the
+first of two: once it is over, every great power gets the entry again when it
+has Combined Arms, for a second one. Switching the rule from early to late
+closes the entry of a great power without Combined Arms until it researches it.
+
 <!-- screenshot: The Gathering Storm journal entry at high tension, with the Begin Rearmament and Provide Lend-Lease buttons -->
 
 ### Ideological camps
@@ -277,7 +290,9 @@ world war and three post-war years, and it fails if you drop below great power.
 The entry sorts countries into camps by their laws, and its status shows your
 own camp on a second line (Non-Aligned when you are in none). Democratic opposes
 communist and fascist, and communist opposes fascist. Authoritarian countries,
-and those in no camp, oppose nobody, so their entry stays inactive.
+and those in no camp, oppose nobody, so their entry stays inactive, except under
+*Early Unlock*, where democratic and authoritarian oppose each other while
+neither has Combined Arms.
 
 | Camp | Laws |
 |---|---|
@@ -296,9 +311,9 @@ weapons. The entry doesn't show the number; its status text names the band.
 | Tension | Status text | What opens |
 |---|---|---|
 | 20 | The great powers watch each other warily | Pursue Appeasement |
-| 30 | Tensions are rising | Begin Rearmament, the Ideological Demands event, and Rising Global Tensions (+25 maneuvers in your plays, faster escalation as aggressor, +5% military goods cost, +10% prestige from army power projection) |
-| 40 | Tensions are rising | Provide Lend-Lease, the Border Incident event |
-| 50 | High tension | The Diplomatic Crisis event |
+| 30 | Tensions are rising | Begin Rearmament, the event The Strong Note, and Rising Global Tensions (+25 maneuvers in your plays, faster escalation as aggressor, +5% military goods cost, +10% prestige from army power projection) |
+| 40 | Tensions are rising | Provide Lend-Lease, the event Shots at the Frontier |
+| 50 | High tension | The event A Friend Under Pressure |
 | 70 | Crisis: war is imminent | The Brink of War event |
 
 ### Preparing for the world war
@@ -387,8 +402,8 @@ decides what the powers it beat receive.
 
 | Victor's choice | Victor gets | Each power it beat receives |
 |---|---|---|
-| Impose a harsh peace | Victor's Peace and Occupation Duties, 10 years | Regime Change: accept for Defeated Power and Imposed Regime Change, or resist for Defeated Power and heavy radicalism |
-| Seek a just and lasting peace | Victor's Peace for 5 years, Post-War Reconstruction for 10 | Reconstruction Aid: accept for Post-War Reconstruction and a shorter Defeated Power, or refuse for Defeated Power for 10 years |
+| Impose a harsh peace | Victor's Peace and Occupation Duties, 10 years | A Constitution Delivered: accept for Defeated Power and Imposed Regime Change, or resist for Defeated Power and heavy radicalism |
+| Seek a just and lasting peace | Victor's Peace for 5 years, Post-War Reconstruction for 10 | Help with Conditions: accept for Post-War Reconstruction and a shorter Defeated Power, or refuse for Defeated Power for 10 years |
 | Establish a new world order | Victor's Peace for 10 years, Liberation Hero for 5 | Nothing |
 
 Victor's Peace gives +30% prestige, +200 influence, +500 authority and +10%
@@ -400,8 +415,8 @@ home and keeping the army ready.
 ### The post-war years
 
 The entry stays open for 36 months after peace, and three events can reach great
-powers: a war crimes tribunal, a choice about the post-war order, and The New
-Rivalry, when a great power you fought beside now holds an opposed ideology.
-Either answer to The New Rivalry closes the entry at once. Otherwise it
+powers: a war crimes tribunal, a choice about the post-war order, and Yesterday's
+Ally, when a great power you fought beside now holds an opposed ideology.
+Either answer to Yesterday's Ally closes the entry at once. Otherwise it
 completes after the 36 months. The events are in [World War event
 list](19-appendix-events.md#world-war-event-list).

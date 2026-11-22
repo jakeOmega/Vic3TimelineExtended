@@ -11,7 +11,7 @@
 # subject keeps its own licences. Only the overlord starts or ends it.
 # Liberty desire rises at Raise Payments' rate, relations fall as they do.
 # ============================================================================
-te_seabed_administer_claims = {
+te_seabed_administer_claims = {  # REVIEWED 2026-11-12 (involvement): modelled on vanilla raise_payments, which builds none; the overlord already gains through the subject pact
 	groups = {
 		overlord
 	}

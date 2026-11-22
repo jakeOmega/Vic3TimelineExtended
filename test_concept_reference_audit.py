@@ -11,11 +11,11 @@ import tempfile
 import unittest
 from types import SimpleNamespace
 
+from audit_common import parse_reviewed as _parse_reviewed
 from concept_reference_audit import (
     AuditResult,
     ConceptFlag,
     _parse_loc_line,
-    _parse_reviewed,
     audit,
     render_report,
     strict_exit_code,
@@ -35,7 +35,7 @@ class ParseLocLineTests(unittest.TestCase):
         self.assertEqual(value, r'He said \"go\" [Concept(' + "'concept_x','x')]")
         self.assertEqual(
             _parse_reviewed(trailing),
-            {"date": "2026-05-09", "rationale": "rationale"},
+            {"date": "2026-05-09", "tag": "", "rationale": "rationale"},
         )
 
     def test_plain_line_without_comment_has_empty_trailing(self):
@@ -79,7 +79,60 @@ class ConceptFunctionArgumentTests(unittest.TestCase):
             " k:0 \"[Concept('some_modifier_name','x')]\" # REVIEWED 2026-09-27: why\n"
         )
         self.assertEqual(len(result.flags), 1)
-        self.assertEqual(result.flags[0].exemption, {"date": "2026-09-27", "rationale": "why"})
+        self.assertEqual(result.flags[0].exemption,
+                         {"date": "2026-09-27", "tag": "", "rationale": "why"})
+
+
+class GlossaryLinkTests(unittest.TestCase):
+    """1.15 glossary links: `[glossary_x]` and `Glossary('glossary_x', ...)`
+    resolve against `common/glossary/`, not the game concepts."""
+
+    def _audit(self, loc: str, glossary=("glossary_zaibatsu",)) -> AuditResult:
+        ms = SimpleNamespace(mod_parsers={
+            "Game Concepts": SimpleNamespace(data={"concept_x": {}}),
+            "Glossary": SimpleNamespace(data={g: {} for g in glossary}),
+        })
+        with tempfile.TemporaryDirectory() as td:
+            loc_dir = os.path.join(td, "localization", "english")
+            os.makedirs(loc_dir)
+            with open(os.path.join(loc_dir, "a_l_english.yml"), "w", encoding="utf-8-sig") as fh:
+                fh.write("l_english:\n" + loc)
+            return audit(ms, mod_path=td)
+
+    def test_registered_glossary_links_pass(self):
+        result = self._audit(
+            " k:0 \"The [glossary_zaibatsu] and [Glossary('glossary_zaibatsu','zaibatsu')]\"\n"
+        )
+        self.assertEqual(result.flags, [])
+        self.assertEqual(result.refs_checked, 2)
+
+    def test_unregistered_glossary_links_flag_as_glossary(self):
+        result = self._audit(
+            " k:0 \"[glossary_dirigisme] and [Glossary( 'glossary_realpolitik', 'Realpolitik' )]\"\n"
+        )
+        self.assertEqual(
+            sorted((f.concept, f.kind) for f in result.flags),
+            [("glossary_dirigisme", "glossary"), ("glossary_realpolitik", "glossary")],
+        )
+        report = render_report(result)
+        self.assertIn("### `glossary_dirigisme` (glossary, 1)", report)
+
+    def test_a_glossary_entry_is_no_concept(self):
+        # Vanilla never links a glossary entry through Concept(), which reads
+        # game concepts; and [glossary_x] doesn't satisfy a concept link.
+        result = self._audit(" k:0 \"[Concept('glossary_zaibatsu','zaibatsu')]\"\n")
+        self.assertEqual([(f.concept, f.kind) for f in result.flags],
+                         [("glossary_zaibatsu", "concept")])
+
+    def test_concept_link_is_not_read_as_a_glossary_one(self):
+        result = self._audit(" k:0 \"[concept_x] [GetGlossary('x')]\"\n", glossary=())
+        self.assertEqual(result.flags, [])
+
+    def test_committed_snapshot_resolves_vanillas_glossary(self):
+        # The snapshot carries 1.15's 20 entries (VANILLA_COMMON_DIRS).
+        import vanilla_parsed
+        data = vanilla_parsed.load().data
+        self.assertIn("glossary_zaibatsu", data["Glossary"])
 
 
 class RenderReportTests(unittest.TestCase):
@@ -155,9 +208,9 @@ class StrictExitCodeTests(unittest.TestCase):
 
 class RepoTests(unittest.TestCase):
     def test_ci_runs_it_strict(self):
-        root = os.path.dirname(os.path.abspath(__file__))
-        with open(os.path.join(root, ".github", "workflows", "ci.yml"), encoding="utf-8") as fh:
-            self.assertIn("python3 concept_reference_audit.py --strict", fh.read())
+        import audit_registry  # CI runs the registry's audits (scripts/run_audits.py)
+        self.assertEqual(audit_registry.get("concept_reference_audit").command,
+                         "python3 concept_reference_audit.py --strict")
 
 
 if __name__ == "__main__":

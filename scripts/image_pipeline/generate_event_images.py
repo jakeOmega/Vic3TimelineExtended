@@ -35,9 +35,12 @@ generate the pending images in batches; `python event_image_prompts.py
 
 Review every new picture before wiring it: run `--phase generate` and
 `--phase convert`, look at the results (`contact_sheet.py KEY1 KEY2 ...`
-renders a labelled grid), delete any bad ones (.dds and PNG) and regenerate
-them, then run `--phase update`. FLUX drifts toward real flags, landmarks and
-politicians' faces even when the prompt names none.
+renders a labelled grid; `--window` draws each as the event window shows it),
+delete any bad ones (.dds and PNG) and regenerate them, then run
+`--phase update`. FLUX drifts toward real flags, landmarks and politicians'
+faces even when the prompt names none, and it may center a subject the prompt
+put on the left: the window's text panel covers the right half of the picture.
+`reframe_event_image.py` mirrors or shifts a picture whose subject is hidden.
 """
 
 from __future__ import annotations

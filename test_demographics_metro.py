@@ -407,13 +407,17 @@ class TestModifiers(unittest.TestCase):
         vanilla's or the mod's modifier_type_definitions registers: building_financial_district_throughput_add was in
         the log and the game dropped it as unknown (#1096)."""
         import json
+        # modifiers_summary.txt lists the engine's types only (a mods-off dump); a type the mod declares itself,
+        # such as state_migration_crowding_density_mult, is known through its declaration.
         known = {line.split("|")[1] for line in _text(ENGINE_MODIFIERS).splitlines() if line.count("|") >= 2}
         registered = set(json.load(open(VANILLA_MODIFIER_TYPES, encoding="utf-8")))
+        mod_declared = set()
         for path in MOD_MODIFIER_TYPES.glob("*.txt"):
-            registered |= set(re.findall(r"^(?:INJECT:|REPLACE:)?(\w+)\s*=\s*\{", _text(path), re.M))
+            mod_declared |= set(re.findall(r"^(?:INJECT:|REPLACE:)?(\w+)\s*=\s*\{", _text(path), re.M))
+        registered |= mod_declared
         for name in ("te_demog_mt_metropolis", "te_demog_mt_crowding", "te_demog_mt_dispersed"):
             for field in _modifier(name):
-                self.assertIn(field, known, f"{name}: {field}")
+                self.assertIn(field, known | mod_declared, f"{name}: {field}")
                 self.assertIn(field, registered, f"{name}: {field} is not a registered modifier type")
 
     def test_every_field_has_a_name(self):

@@ -1,0 +1,36 @@
+﻿# Regional Climate Warming (#1681; docs/superpowers/specs/2026-11-13-regional-climate-warming-design.md § 5).
+# Effects: common/scripted_effects/global_warming_regional_effects.txt.
+#
+#   on_monthly_pulse_state    the one refresh site of global_warming_tropics and
+#                             global_warming_high_latitudes: on a state that has never had a
+#                             refresh with the right ROOT (gw_regional_rooted: a new game's
+#                             first month, an old save, a split-off state), and on a banded
+#                             state whose scale differs from the world's (gw_regional_target,
+#                             to 0.01). A mid-latitude state is never refreshed after its
+#                             first month.
+#
+# No rule gate: with the Global Warming rule off the anomaly is held at 0, so the
+# target is 0 and a band modifier comes off within a month, the teardown when the
+# rule is switched off mid-game. The pulse lists its own on-action, so the list
+# merges with vanilla's and the mod's other files'.
+on_monthly_pulse_state = {
+	on_actions = {
+		gw_regional_monthly_on_action
+	}
+}
+
+# ROOT = the state, so the multiplier reads the state's gw_regional_applied. The gap
+# is 0 on a mid-latitude state, which never applied a scale (gw_regional_gap), and the
+# anomaly moves in hundredths, so half of one is the threshold.
+gw_regional_monthly_on_action = {
+	trigger = {
+		OR = {
+			NOT = { has_variable = gw_regional_rooted }
+			gw_regional_gap > 0.005
+			gw_regional_gap < -0.005
+		}
+	}
+	effect = {
+		gw_regional_refresh_effect = yes
+	}
+}

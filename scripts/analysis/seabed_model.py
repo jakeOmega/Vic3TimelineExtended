@@ -77,6 +77,31 @@ share: an old save's first recording or a split's new state (no stamp), and a
 holder gone by the time its state changes hands (annexed whole). A holder that
 exists but can't pay leaves the level pending with the new owner.
 
+BUILD ONLY ON LOCAL CLAIMS (te_seabed_local_only; owner, 2026-11-14). A
+country setting, off by default, that only the player sets (the gate reads it
+for a country that isn't AI). On, a level also needs room in its state's own
+basin (local_room, te_seabed_local_room_<basin>): the basin's unused claims,
+less the levels in its states with no licence yet, less the licences from
+other basins its states' levels hold. Each of those distant licences swaps
+onto a freed local claim at the recording (state_swap_local), possibly before
+a new level in another state is reached, so a new level built on such a claim
+would leave the basin's long-haul count where it was. The local gate has the
+national gate's two branches. Its second (room >= 0 in a state with a level
+under construction) lets one level in at local room 0, and the recording
+gives that level a distant licence, because the recording's rules don't
+change with the setting. That licence is the distant term, which holds the
+room below 0 and shuts both branches until a local claim frees up and the
+swap takes it: the review's H1 at the scale of one basin, closed the same way
+(a plain count of unrecorded levels would let one more in every month; the
+model's builders then held about two fifths of the long-haul licences they
+hold with the setting off, and up to 34 in one basin). With the setting on
+from the start, a basin's states never held more than one distant licence
+at three levels a month (test_seabed_local_only.py, which keeps that pace).
+At build_pace() on the pools of 2026-11-15, fifteen a month, two turned up
+in 6 of 30 worlds: a country queues past its local room in two basins in
+one month and the first basin's extra level takes the second's last claim.
+The setting changes nothing already built or queued.
+
 SPONSOR CONTRACTORS' FLOORS (seabed claims spec § 2.2). At the year's first
 sharing (the one that finds te_seabed_pass_year below the current year:
 January, or the first mid-year sharing of a year with no January pass),
@@ -172,7 +197,7 @@ from dataclasses import dataclass, field
 
 BASINS = ("pacific", "atlantic", "indian", "arctic", "southern")   # 1..5, gen_seabed_basins.BASINS
 # te_seabed_pool_<basin> (te_global_commons_seabed_values.txt)
-POOLS = {"pacific": 300, "atlantic": 250, "indian": 200, "arctic": 100, "southern": 150}
+POOLS = {"pacific": 1500, "atlantic": 1250, "indian": 1000, "arctic": 500, "southern": 750}
 OPEN, REGULATED, SCRAMBLE = 1, 2, 3
 SURVEY, SPONSOR, UNILATERAL = 1, 2, 3
 
@@ -225,6 +250,7 @@ class Country:
     pass_built: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))      # as a subject: built on by its overlord
     pass_unused: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))     # as a subject: at its overlord, unused
     pass_to: int | None = None       # te_seabed_pass_to: the overlord its two counters are charged to
+    local_only: bool = False         # te_seabed_local_only: Build only on local claims (a player's setting)
 
 
 @dataclass
@@ -267,6 +293,10 @@ class World:
     # shortfall recorded against no share), which leaks through the gate's
     # second branch.
     shortfall_no_share: bool = False
+    # The local room's control: True drops its distant term (a plain count of
+    # unrecorded levels), which lets the local gate's second branch reopen
+    # every month (LocalOnlyTest).
+    local_room_plain: bool = False
     # te_seabed_cap_stamped_noshare: levels a monthly recording put against
     # no share in a state that carried a stamp. Legitimately always 0 (a
     # stamped owner's shortfall waits; another country's stamp means the
@@ -327,10 +357,28 @@ def gate_open(r: int, s: State) -> bool:
     return r > 0 or (s.queued > 0 and r >= 0)
 
 
+def local_room(world: World, cid, b: str) -> int:
+    """te_seabed_local_room_<basin>: room for a level in basin b's states under
+    Build only on local claims. The unused claims there, less the levels in
+    those states with no licence yet, less the licences from other basins
+    their levels hold (each swaps onto a freed local claim first)."""
+    c = world.countries[cid]
+    states = [s for s in world.owned(cid) if s.basin == b]
+    distant = 0 if world.local_room_plain else sum(s.distant() for s in states)
+    return c.unbuilt[b] - sum(unrecorded(s) for s in states) - distant
+
+
+def local_gate_open(world: World, cid, s: State) -> bool:
+    """te_seabed_local_open: the national gate's two branches over the state's
+    own basin's local room."""
+    return gate_open(local_room(world, cid, s.basin), s)
+
+
 def can_build(world: World, cid, s: State) -> bool:
     """building_ocean_mine possible, with the rule on (te_seabed_gate)."""
     c = world.countries[cid]
-    return s.coastal and c.tech and s.owner == cid and gate_open(room(world, cid), s)
+    return (s.coastal and c.tech and s.owner == cid and gate_open(room(world, cid), s)
+            and (not c.local_only or local_gate_open(world, cid, s)))
 
 
 # ---------------------------------------------------------------------------
@@ -1200,29 +1248,47 @@ def random_world(rng: random.Random, *, n_countries=8, n_states=48, regime=OPEN,
     return world
 
 
+def build_pace() -> int:
+    """The most levels a random world's builder queues in a month: three
+    thousandths of the five pools together (3 of 1,000, 15 of 5,000). The
+    pace is sized to the pools so that the builders fill them, and sit at room
+    0, within the tests' twenty years whatever the pools' size; at a fixed 3 a
+    month, pools five times the size never filled. Read from POOLS at each
+    call."""
+    return max(1, 3 * sum(POOLS.values()) // 1000)
+
+
 def step_month(world: World, rng: random.Random, *, conquest=0.08, demolish=0.05,
-               annex=0.004, split=0.01, complete=0.5, cancel=0.02) -> None:
+               annex=0.004, split=0.01, complete=0.5, cancel=0.02, build=None) -> None:
     """One month: building, which queues a level wherever the gate is open
     (both branches, so a builder queues one more in a state already under
-    construction at room 0, as the AI and private investment do), construction
+    construction at room 0, as the AI and private investment do; for a country
+    with Build only on local claims, wherever its local gate is open too), up
+    to `build` levels a country (build_pace() if None), construction
     finishing or being cancelled, demolition of finished levels, a conquest
     landing between building and recording (its construction cancelled before
     the hook, after it, or not at all), the odd annexation and split, then each
     country's monthly recording in random order."""
+    if build is None:
+        build = build_pace()
     alive = [cid for cid in world.countries if world.alive(cid)]
     for cid in alive:
-        if not world.countries[cid].tech:
+        c = world.countries[cid]
+        if not c.tech:
             continue
         coastal = [s for s in world.owned(cid) if s.coastal]
         free = room(world, cid)
-        for _ in range(rng.randrange(4)):
-            options = [s for s in coastal if gate_open(free, s)]
+        local = {b: local_room(world, cid, b) for b in BASINS}   # each queued level comes off its basin's
+        for _ in range(rng.randrange(build + 1)):
+            options = [s for s in coastal if gate_open(free, s)
+                       and (not c.local_only or gate_open(local[s.basin], s))]
             if not options:
                 break
             s = rng.choice(options)
             s.levels += 1
             s.queued += 1
             free -= 1
+            local[s.basin] -= 1
     for s in world.states.values():
         for _ in range(s.queued):
             if rng.random() < complete:

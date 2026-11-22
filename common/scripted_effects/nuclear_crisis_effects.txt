@@ -187,9 +187,10 @@ nd_crisis_preview = {
 		custom_tooltip = nd_tt_open_f_unarmed
 	}
 	else_if = {
+		# The target's survivors as we can count them (owner call 13).
 		limit = {
 			save_temporary_scope_as = nd_sv_enemy
-			$TARGET$ = { nd_survivors_vs_saved >= 3 }
+			$TARGET$ = { nd_seen_survivors_vs_saved >= 3 }
 		}
 		custom_tooltip = nd_tt_open_f_survivable
 	}
@@ -244,6 +245,30 @@ nd_crisis_preview = {
 		}
 		custom_tooltip = nd_tt_open_f_existence
 	}
+	# What conceding would cost them in a war with us (nd_yp_forfeit): their own
+	# goals against us. In a guarantee dispute the goals are against the
+	# protégé, which the preview doesn't name; the panel shows them once the
+	# crisis opens.
+	if = {
+		limit = {
+			save_temporary_scope_as = nd_pv_self
+			$TARGET$ = {
+				has_war_with = scope:nd_pv_self
+				nd_holds_any_goal_against = { TARGET = scope:nd_pv_self }
+			}
+		}
+		custom_tooltip = nd_tt_open_f_forfeit
+	}
+	# ---- the danger it opens at, from our side (2026-11-20 delivery spec D16) --
+	# The totals need the crisis's record and the target's readiness, which
+	# the world sees only once it opens; the panel shows them then.
+	if = {
+		limit = { always = $PUBLIC$ }
+		custom_tooltip = nd_tt_open_danger_public
+	}
+	else = {
+		custom_tooltip = nd_tt_open_danger_private
+	}
 	# ---- the stakes, and what happens next ------------------------------------
 	if = {
 		limit = { always = $PUBLIC$ }
@@ -273,82 +298,93 @@ nd_crisis_preview = {
 # it, and it evaluates the limits and resolves the scopes inside hidden_effect
 # too (scripting_best_practices.md § Per-Entity State rule 6). Every read of a
 # crisis variable below would then hit a variable that does not exist yet. So
-# the body is fenced by a scope saved on the first line: save_scope_as is not
-# run by the preview, so scope:nd_crisis_opening only exists in the real run.
+# the body sits behind a click-only marker (scripting_best_practices.md § "An
+# Option's Tooltip Walks Its Effects"): the walk writes no variable, so
+# has_variable is false there and true in the real run. Until 2026-11-06 the
+# fence was a scope saved on the first line, which the doc found lets an
+# option's walk through (nd_crisis_close logged 6,725 lines that way).
 # What the world sees — the infamy and relations — is nd_crisis_preview's,
 # outside the fence, so the confirmation box shows it as a real effect.
 nd_crisis_open = {
 	nd_crisis_preview = { TARGET = $TARGET$ PUBLIC = $PUBLIC$ }
 	hidden_effect = {
-		save_scope_as = nd_crisis_opening
+		set_variable = nd_crisis_open_click
 		if = {
-			limit = {
-				exists = scope:nd_crisis_opening
-				exists = $TARGET$
-				nd_crisis_parties_free = { TARGET = $TARGET$ }
-			}
-			save_scope_as = nd_issuer
-			$TARGET$ = { save_scope_as = nd_target }
+			limit = { has_variable = nd_crisis_open_click }
+			remove_variable = nd_crisis_open_click
 			if = {
-				limit = { NOT = { has_global_variable = nd_crisis_counter } }
-				set_global_variable = { name = nd_crisis_counter value = 0 }
+				limit = {
+					exists = $TARGET$
+					nd_crisis_parties_free = { TARGET = $TARGET$ }
+				}
+				save_scope_as = nd_issuer
+				$TARGET$ = { save_scope_as = nd_target }
+				if = {
+					limit = { NOT = { has_global_variable = nd_crisis_counter } }
+					set_global_variable = { name = nd_crisis_counter value = 0 }
+				}
+				change_global_variable = { name = nd_crisis_counter add = 1 }
+				# ---- the issuer's record ----------------------------------------
+				set_variable = { name = nd_crisis_id value = global_var:nd_crisis_counter }
+				set_variable = { name = nd_crisis_opponent value = scope:nd_target }
+				set_variable = { name = nd_crisis_role value = 1 }
+				nd_crisis_classify_dispute = yes
+				set_variable = { name = nd_crisis_weeks value = 0 }
+				set_variable = { name = nd_crisis_pressure_weeks value = 0 }
+				set_variable = { name = nd_crisis_counter value = 0 }
+				set_variable = { name = nd_crisis_talks value = 0 }
+				set_variable = { name = nd_crisis_backed value = 0 }
+				set_variable = { name = nd_crisis_abandoned value = 0 }
+				set_variable = { name = nd_crisis_deadline_fired value = 0 }
+				# The clock waits while the threat is in transit to the target.
+				set_variable = { name = nd_crisis_transit_weeks value = nd_crisis_transit_weeks_value }
+				if = {
+					limit = { always = $PUBLIC$ }
+					set_variable = { name = nd_crisis_public value = 1 }
+					set_variable = { name = nd_crisis_stage value = 2 }
+					set_variable = { name = nd_crisis_deadline value = nd_crisis_deadline_public_weeks }
+				}
+				else = {
+					set_variable = { name = nd_crisis_public value = 0 }
+					set_variable = { name = nd_crisis_stage value = 1 }
+					set_variable = { name = nd_crisis_deadline value = nd_crisis_deadline_private_weeks }
+				}
+				# ---- the target's mirror ----------------------------------------
+				scope:nd_target = {
+					set_variable = { name = nd_crisis_id value = scope:nd_issuer.var:nd_crisis_id }
+					set_variable = { name = nd_crisis_opponent value = scope:nd_issuer }
+					set_variable = { name = nd_crisis_role value = 2 }
+				}
+				# ---- each side's readiness before anything in the crisis moves it
+				# (the AIs' review below, a hold, a counter-threat), for the
+				# outcome notice's stand-down (nuclear_crisis.6) ------------------
+				nd_record_pre_crisis_readiness = yes
+				scope:nd_target = { nd_record_pre_crisis_readiness = yes }
+				# ---- a threat wears the nuclear taboo down, by our rank ---------
+				if = {
+					limit = { always = $PUBLIC$ }
+					nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_ultimatum }
+				}
+				else = {
+					nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_warning }
+				}
+				# ---- the crisis's figures, before anyone weighs them ------------
+				nd_crisis_refresh_figures = yes
+				nd_log_context = yes
+				debug_log = "TE_NUCLEAR: type=action; action=crisis_open; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+				debug_log = "TE_NUCLEAR: type=crisis_open; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; issuer=[SCOPE.sCountry('nd_issuer').GetNameNoFormatting]; target=[SCOPE.sCountry('nd_target').GetNameNoFormatting]"
+				# ---- both AIs reconsider their posture now ------------------------
+				scope:nd_issuer = { nd_crisis_ai_review = yes }
+				scope:nd_target = { nd_crisis_ai_review = yes }
+				# ---- the target's guarantors are asked whether they stand by it ----
+				nd_crisis_notify_guarantors = yes
+				# ---- every other nuclear power hears of it -------------------------
+				nd_crisis_notify_nuclear_powers = { PUBLIC = $PUBLIC$ }
+				# ---- the target answers, once the threat reaches it ---------------
+				nd_crisis_send_event_in_transit = { WHO = scope:nd_target EVENT = nuclear_crisis.1 }
+				# ---- the panel's list of the world's crises -----------------------
+				nd_world_crises_refresh = yes
 			}
-			change_global_variable = { name = nd_crisis_counter add = 1 }
-			# ---- the issuer's record ----------------------------------------
-			set_variable = { name = nd_crisis_id value = global_var:nd_crisis_counter }
-			set_variable = { name = nd_crisis_opponent value = scope:nd_target }
-			set_variable = { name = nd_crisis_role value = 1 }
-			nd_crisis_classify_dispute = yes
-			set_variable = { name = nd_crisis_weeks value = 0 }
-			set_variable = { name = nd_crisis_pressure_weeks value = 0 }
-			set_variable = { name = nd_crisis_counter value = 0 }
-			set_variable = { name = nd_crisis_talks value = 0 }
-			set_variable = { name = nd_crisis_backed value = 0 }
-			set_variable = { name = nd_crisis_abandoned value = 0 }
-			set_variable = { name = nd_crisis_deadline_fired value = 0 }
-			# The clock waits while the threat is in transit to the target.
-			set_variable = { name = nd_crisis_transit_weeks value = nd_crisis_transit_weeks_value }
-			if = {
-				limit = { always = $PUBLIC$ }
-				set_variable = { name = nd_crisis_public value = 1 }
-				set_variable = { name = nd_crisis_stage value = 2 }
-				set_variable = { name = nd_crisis_deadline value = nd_crisis_deadline_public_weeks }
-			}
-			else = {
-				set_variable = { name = nd_crisis_public value = 0 }
-				set_variable = { name = nd_crisis_stage value = 1 }
-				set_variable = { name = nd_crisis_deadline value = nd_crisis_deadline_private_weeks }
-			}
-			# ---- the target's mirror ----------------------------------------
-			scope:nd_target = {
-				set_variable = { name = nd_crisis_id value = scope:nd_issuer.var:nd_crisis_id }
-				set_variable = { name = nd_crisis_opponent value = scope:nd_issuer }
-				set_variable = { name = nd_crisis_role value = 2 }
-			}
-			# ---- a threat wears the nuclear taboo down, by our rank ---------
-			if = {
-				limit = { always = $PUBLIC$ }
-				nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_ultimatum }
-			}
-			else = {
-				nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_warning }
-			}
-			# ---- the crisis's figures, before anyone weighs them ------------
-			nd_crisis_refresh_figures = yes
-			nd_log_context = yes
-			debug_log = "TE_NUCLEAR: type=action; action=crisis_open; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
-			debug_log = "TE_NUCLEAR: type=crisis_open; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; issuer=[SCOPE.sCountry('nd_issuer').GetNameNoFormatting]; target=[SCOPE.sCountry('nd_target').GetNameNoFormatting]"
-			# ---- both AIs reconsider their posture now ------------------------
-			scope:nd_issuer = { nd_crisis_ai_review = yes }
-			scope:nd_target = { nd_crisis_ai_review = yes }
-			# ---- the target's guarantors are asked whether they stand by it ----
-			nd_crisis_notify_guarantors = yes
-			# ---- every other nuclear power hears of it -------------------------
-			nd_crisis_notify_nuclear_powers = { PUBLIC = $PUBLIC$ }
-			# ---- the target answers, once the threat reaches it ---------------
-			nd_crisis_send_event_in_transit = { WHO = scope:nd_target EVENT = nuclear_crisis.1 }
-			# ---- the panel's list of the world's crises -----------------------
-			nd_world_crises_refresh = yes
 		}
 	}
 }
@@ -567,7 +603,7 @@ nd_crisis_notify_guarantors = {
 					save_scope_as = nd_guarantor
 					set_variable = { name = nd_guarantee_context value = 1 }
 					set_variable = { name = nd_guarantee_basis value = 1 }
-					trigger_event = { id = nuclear_crisis.20 }
+					trigger_event = { id = nuclear_crisis.20 } # REVIEWED 2026-11-12 (trigger_event_cycle): nd_guarantee_context is set to 1 just above, and nd_guarantee_act_honour opens a crisis (nd_crisis_open, the only way back here) only when it reads 2
 				}
 			}
 		}
@@ -586,7 +622,7 @@ nd_crisis_notify_guarantors = {
 					save_scope_as = nd_guarantor
 					set_variable = { name = nd_guarantee_context value = 1 }
 					set_variable = { name = nd_guarantee_basis value = 2 }
-					trigger_event = { id = nuclear_crisis.20 }
+					trigger_event = { id = nuclear_crisis.20 } # REVIEWED 2026-11-12 (trigger_event_cycle): nd_guarantee_context is set to 1 just above, and nd_guarantee_act_honour opens a crisis (nd_crisis_open, the only way back here) only when it reads 2
 				}
 			}
 		}
@@ -606,7 +642,7 @@ nd_crisis_notify_guarantors = {
 				save_scope_as = nd_guarantor
 				set_variable = { name = nd_guarantee_context value = 1 }
 				set_variable = { name = nd_guarantee_basis value = 3 }
-				trigger_event = { id = nuclear_crisis.20 }
+				trigger_event = { id = nuclear_crisis.20 } # REVIEWED 2026-11-12 (trigger_event_cycle): nd_guarantee_context is set to 1 just above, and nd_guarantee_act_honour opens a crisis (nd_crisis_open, the only way back here) only when it reads 2
 			}
 		}
 	}
@@ -627,6 +663,39 @@ nd_crisis_refresh_figures = {
 	scope:nd_target = {
 		set_variable = { name = nd_survivors_crisis value = nd_survivors_vs_issuer }
 	}
+	# The survivors behind the two pressure parts that count them, printed
+	# beside them (2026-11-20 delivery spec §5.3), as each side may know them.
+	# The answer part counts the target's true survivors: the target sees its
+	# own, the issuer only the world's view of them. The exposure part counts
+	# the issuer's as the target can see them, which both are shown. With the
+	# precision weapons' factor on each side's silos (1 when none).
+	if = {
+		limit = { scope:nd_target = { nd_believed_armed = yes } }
+		set_variable = { name = nd_cs_answer_survivors value = nd_cs_answer_seen_value }
+		set_variable = { name = nd_cs_exposure_survivors value = nd_seen_survivors_vs_target }
+		set_variable = { name = nd_cs_exposure_accuracy value = nd_accuracy_mult_target }
+		scope:nd_target = {
+			# Its true survivors, and, while Central Authorization's discount
+			# applies, the share the answer part counts (nd_yp_answer_survivors_value).
+			set_variable = { name = nd_cs_answer_survivors value = nd_survivors_vs_issuer }
+			if = {
+				limit = { nd_yp_answer_discounted = yes }
+				set_variable = { name = nd_cs_answer_counted value = nd_yp_answer_survivors_value }
+			}
+			else_if = {
+				limit = { has_variable = nd_cs_answer_counted }
+				remove_variable = nd_cs_answer_counted
+			}
+			set_variable = { name = nd_cs_answer_accuracy value = nd_accuracy_mult_issuer }
+			set_variable = { name = nd_cs_exposure_survivors value = scope:nd_issuer.var:nd_cs_exposure_survivors }
+			set_variable = { name = nd_cs_exposure_accuracy value = scope:nd_issuer.var:nd_cs_exposure_accuracy }
+		}
+		set_variable = { name = nd_cs_answer_accuracy value = scope:nd_target.var:nd_cs_answer_accuracy }
+	}
+	else = {
+		nd_crisis_clear_survivors = yes
+		scope:nd_target = { nd_crisis_clear_survivors = yes }
+	}
 	# Whose demands the target would concede to (nd_yp_stakes_value): ours,
 	# or in a guarantee dispute the country we cover.
 	if = {
@@ -639,6 +708,46 @@ nd_crisis_refresh_figures = {
 	}
 	else = {
 		save_scope_as = nd_stakes_demander
+	}
+	# Once a game (TE_SELF_CHECK nd_play_subject_goal, #1895): in a play, does
+	# a goal to free or take a subject read as on the subject, as a war's does
+	# (in game, 2026-11-18)? The stakes read those two on the target's
+	# subjects. Only on a target that is no one's subject, where a goal found
+	# on the target itself can only be one on its subject, read as on its
+	# overlord; so OK needs the goal found on a subject and on nothing else.
+	# A tooltip walk of the opening writes no dispute, so it never gets here.
+	if = {
+		limit = {
+			var:nd_crisis_dispute ?= 1
+			NOT = { has_global_variable = nd_play_subject_goal_check_done }
+			scope:nd_target = { is_subject = no }
+			OR = {
+				nd_play_subject_goal_on_overlord = yes
+				nd_play_subject_goal_on_subject = yes
+			}
+		}
+		set_global_variable = nd_play_subject_goal_check_done
+		if = {
+			limit = { nd_play_subject_goal_on_overlord = yes }
+			debug_log = "TE_SELF_CHECK BROKEN nd_play_subject_goal: in the play between [THIS.GetCountry.GetNameNoFormatting] and [SCOPE.sCountry('nd_target').GetNameNoFormatting], who is no one's subject, a goal of [THIS.GetCountry.GetNameNoFormatting]'s side to free or take a subject reads as against [SCOPE.sCountry('nd_target').GetNameNoFormatting] itself, so in a play the goal reads on the overlord and the stakes miss it"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK OK nd_play_subject_goal: in the play between [THIS.GetCountry.GetNameNoFormatting] and [SCOPE.sCountry('nd_target').GetNameNoFormatting], a goal of [THIS.GetCountry.GetNameNoFormatting]'s side to free or take a subject reads as on one of [SCOPE.sCountry('nd_target').GetNameNoFormatting]'s subjects, not on [SCOPE.sCountry('nd_target').GetNameNoFormatting]"
+		}
+	}
+	# Whom the target would give its own war goals up to (nd_yp_forfeit_value):
+	# the country the yield names (nd_crisis_act_yield's nd_crisis_other_side),
+	# the protégé while one is recorded, else us. Saved under its own name, so
+	# the yield's own save is never pre-empted by a stale one.
+	if = {
+		limit = {
+			has_variable = nd_crisis_beneficiary
+			exists = var:nd_crisis_beneficiary
+		}
+		var:nd_crisis_beneficiary = { save_scope_as = nd_forfeit_to }
+	}
+	else = {
+		save_scope_as = nd_forfeit_to
 	}
 	nd_crisis_classify_follow_through = { TARGET = scope:nd_target }
 	scope:nd_target = {
@@ -679,6 +788,7 @@ nd_crisis_refresh_figures = {
 		nd_crisis_store_yp = { C = nd_yp_temperament V = nd_yp_temperament_value }
 		nd_crisis_store_yp = { C = nd_yp_war V = nd_yp_war_value }
 		nd_crisis_store_yp = { C = nd_yp_stakes V = nd_yp_stakes_value }
+		nd_crisis_store_yp = { C = nd_yp_forfeit V = nd_yp_forfeit_value }
 		nd_crisis_store_yp = { C = nd_yp_follow_through V = nd_yp_follow_through_value }
 		nd_crisis_store_yp = { C = nd_yp_taboo V = nd_yp_taboo_value }
 		set_variable = { name = nd_yield_pressure value = nd_yield_pressure_value }
@@ -701,8 +811,33 @@ nd_crisis_store_yp = {
 	}
 }
 
+# Either party: drop the survivors the pressure breakdown prints.
+nd_crisis_clear_survivors = {
+	if = {
+		limit = { has_variable = nd_cs_answer_survivors }
+		remove_variable = nd_cs_answer_survivors
+	}
+	if = {
+		limit = { has_variable = nd_cs_answer_counted }
+		remove_variable = nd_cs_answer_counted
+	}
+	if = {
+		limit = { has_variable = nd_cs_exposure_survivors }
+		remove_variable = nd_cs_exposure_survivors
+	}
+	if = {
+		limit = { has_variable = nd_cs_answer_accuracy }
+		remove_variable = nd_cs_answer_accuracy
+	}
+	if = {
+		limit = { has_variable = nd_cs_exposure_accuracy }
+		remove_variable = nd_cs_exposure_accuracy
+	}
+}
+
 # Either party: drop the stored figures (nd_crisis_clear_vars).
 nd_crisis_clear_figures = {
+	nd_crisis_clear_survivors = yes
 	if = {
 		limit = { has_variable = nd_ft_reason }
 		remove_variable = nd_ft_reason
@@ -808,6 +943,10 @@ nd_crisis_clear_figures = {
 		remove_variable = nd_yp_stakes
 	}
 	if = {
+		limit = { has_variable = nd_yp_forfeit }
+		remove_variable = nd_yp_forfeit
+	}
+	if = {
 		limit = { has_variable = nd_yp_follow_through }
 		remove_variable = nd_yp_follow_through
 	}
@@ -827,6 +966,43 @@ nd_crisis_breakdown_line = {
 			NOT = { var:$C$ = 0 }
 		}
 		custom_tooltip_no_bullet = $KEY$
+	}
+}
+
+# Country scope, display only: a pressure part with figures printed under it
+# (nd_crisis_survivors_line), shown while it is not 0 or while SUB, its first
+# figure, is set: then the part prints at +0, so the figure under it explains
+# why it is 0 and never sits under the line above (PR 1b review).
+nd_crisis_breakdown_part_line = {
+	if = {
+		limit = {
+			has_variable = $C$
+			OR = {
+				NOT = { var:$C$ = 0 }
+				has_variable = $SUB$
+			}
+		}
+		custom_tooltip_no_bullet = $KEY$
+	}
+}
+
+# Country scope, display only: a stored figure beside its part, when it is set
+# and above ABOVE, in the words of the side reading it: ISSUER for the
+# threatening side, TARGET for the threatened (nd_crisis_pressure_breakdown_sgui).
+# The keys are passed literally so organize_loc.py sees them.
+nd_crisis_survivors_line = {
+	if = {
+		limit = {
+			has_variable = $C$
+			var:$C$ > $ABOVE$
+		}
+		if = {
+			limit = { nd_is_crisis_owner = yes }
+			custom_tooltip_no_bullet = $ISSUER$
+		}
+		else = {
+			custom_tooltip_no_bullet = $TARGET$
+		}
 	}
 }
 
@@ -1206,70 +1382,83 @@ nd_crisis_target_watchdog = {
 }
 
 # ----------------------------------------------------------------------------
-# CLOSING — scope:nd_issuer and scope:nd_target saved, any scope
+# CLOSING — scope:nd_issuer and scope:nd_target saved, a party's scope
 # ----------------------------------------------------------------------------
 # Records the outcome once, for each side's outcome notice to apply
 # (nd_crisis_record_pending; nuclear_crisis.6), and cleans both records.
-# OUTCOME is a literal. Fenced like nd_crisis_open: an option tooltip walks
-# this without running it, and the record reads the nd_crisis_outcome_now
-# written a line earlier, which a preview would find missing.
+# OUTCOME is a literal.
+#
+# TOOLTIP PASSES. An event option's tooltip walks this without running it,
+# hidden_effect and all, every frame the event is open, and the record reads
+# the nd_crisis_outcome_now written a line earlier, which the walk never
+# writes. So the body sits behind a click-only marker (scripting_best_practices
+# § "An Option's Tooltip Walks Its Effects"): the walk writes no variable, so
+# has_variable is false there and true in the real run. A saved scope is no
+# fence: this effect was fenced by save_scope_as + exists from #452 until
+# 2026-11-06, and while nuclear_crisis.2 sat open the walk of its Let It Go
+# option logged 6,725 error.log lines in two seconds from inside the fence.
+# Every caller is a pulse or inside a hidden_effect, so the marker hides no
+# tooltip line.
 nd_crisis_close = {
-	save_scope_as = nd_crisis_closing
-	# A crisis that turns Acute and ends before its next weekly tick still
-	# counts as an Acute crisis for the observer report.
-	scope:nd_issuer ?= { nd_log_crisis_acute_once = yes }
+	set_variable = nd_crisis_close_click
 	if = {
-		limit = {
-			exists = scope:nd_crisis_closing
-			exists = scope:nd_issuer
-			exists = scope:nd_target
-			scope:nd_issuer = { nd_is_crisis_owner = yes }
-		}
-		# An outcome notice still unanswered from an earlier crisis settles
-		# now, before this crisis's record replaces it (2026-09-25 spec §2.3).
-		scope:nd_issuer = { nd_crisis_flush_pending = yes }
-		scope:nd_target = { nd_crisis_flush_pending = yes }
-		scope:nd_issuer = {
-			set_variable = { name = nd_crisis_outcome_now value = $OUTCOME$ }
-		}
-		nd_log_crisis_end = yes
-		# Both sides stepping back strengthens the nuclear taboo.
+		limit = { has_variable = nd_crisis_close_click }
+		remove_variable = nd_crisis_close_click
+		# A crisis that turns Acute and ends before its next weekly tick still
+		# counts as an Acute crisis for the observer report.
+		scope:nd_issuer ?= { nd_log_crisis_acute_once = yes }
 		if = {
-			limit = { scope:nd_issuer = { var:nd_crisis_outcome_now = 3 } }
-			nd_taboo_ledger_add = { POINTS = nd_taboo_ledger_standdown }
-		}
-		# Each side's consequences wait on its outcome notice's option
-		# (nd_crisis_apply_outcome_side), so the option's tooltip shows them.
-		if = {
-			limit = { scope:nd_issuer = { NOT = { var:nd_crisis_outcome_now = 9 } } }
-			nd_crisis_record_pending = yes
-		}
-		scope:nd_issuer = {
-			set_variable = { name = nd_crisis_last_outcome value = $OUTCOME$ }
-			set_variable = { name = nd_crisis_last_opponent value = scope:nd_target }
-			set_variable = { name = nd_crisis_last_role value = 1 }
-			set_variable = { name = nd_crisis_cooldown_target value = scope:nd_target }
-			set_variable = { name = nd_crisis_cooldown_months value = nd_crisis_cooldown_months_value }
-			nd_crisis_clear_vars = yes
-		}
-		scope:nd_target = {
+			limit = {
+				exists = scope:nd_issuer
+				exists = scope:nd_target
+				scope:nd_issuer = { nd_is_crisis_owner = yes }
+			}
+			# An outcome notice still unanswered from an earlier crisis settles
+			# now, before this crisis's record replaces it (2026-09-25 spec §2.3).
+			scope:nd_issuer = { nd_crisis_flush_pending = yes }
+			scope:nd_target = { nd_crisis_flush_pending = yes }
+			scope:nd_issuer = {
+				set_variable = { name = nd_crisis_outcome_now value = $OUTCOME$ }
+			}
+			nd_log_crisis_end = yes
+			# Both sides stepping back strengthens the nuclear taboo.
 			if = {
-				limit = {
-					nd_is_crisis_target = yes
-					var:nd_crisis_opponent ?= scope:nd_issuer
-				}
+				limit = { scope:nd_issuer = { var:nd_crisis_outcome_now = 3 } }
+				nd_taboo_ledger_add = { POINTS = nd_taboo_ledger_standdown }
+			}
+			# Each side's consequences wait on its outcome notice's option
+			# (nd_crisis_apply_outcome_side), so the option's tooltip shows them.
+			if = {
+				limit = { scope:nd_issuer = { NOT = { var:nd_crisis_outcome_now = 9 } } }
+				nd_crisis_record_pending = yes
+			}
+			scope:nd_issuer = {
+				set_variable = { name = nd_crisis_last_outcome value = $OUTCOME$ }
+				set_variable = { name = nd_crisis_last_opponent value = scope:nd_target }
+				set_variable = { name = nd_crisis_last_role value = 1 }
+				set_variable = { name = nd_crisis_cooldown_target value = scope:nd_target }
+				set_variable = { name = nd_crisis_cooldown_months value = nd_crisis_cooldown_months_value }
 				nd_crisis_clear_vars = yes
 			}
-			set_variable = { name = nd_crisis_last_outcome value = $OUTCOME$ }
-			set_variable = { name = nd_crisis_last_opponent value = scope:nd_issuer }
-			set_variable = { name = nd_crisis_last_role value = 2 }
+			scope:nd_target = {
+				if = {
+					limit = {
+						nd_is_crisis_target = yes
+						var:nd_crisis_opponent ?= scope:nd_issuer
+					}
+					nd_crisis_clear_vars = yes
+				}
+				set_variable = { name = nd_crisis_last_outcome value = $OUTCOME$ }
+				set_variable = { name = nd_crisis_last_opponent value = scope:nd_issuer }
+				set_variable = { name = nd_crisis_last_role value = 2 }
+			}
+			if = {
+				limit = { scope:nd_issuer = { NOT = { var:nd_crisis_last_outcome = 9 } } }
+				scope:nd_issuer = { trigger_event = { id = nuclear_crisis.6 popup = yes } }
+				scope:nd_target = { trigger_event = { id = nuclear_crisis.6 popup = yes } }
+			}
+			nd_world_crises_refresh = yes
 		}
-		if = {
-			limit = { scope:nd_issuer = { NOT = { var:nd_crisis_last_outcome = 9 } } }
-			scope:nd_issuer = { trigger_event = { id = nuclear_crisis.6 popup = yes } }
-			scope:nd_target = { trigger_event = { id = nuclear_crisis.6 popup = yes } }
-		}
-		nd_world_crises_refresh = yes
 	}
 }
 
@@ -1317,6 +1506,61 @@ nd_crisis_write_pending = {
 	}
 	else = {
 		set_variable = { name = nd_crisis_pending_bluff value = 0 }
+	}
+}
+
+# Country scope, scope:nd_outcome_other saved (nuclear_crisis.6's immediate).
+# The outcome notice's options: apply this notice's record when the pending
+# record is this pair's, or the other party no longer exists (annexed after
+# conceding a war), in which case no newer record about it can have replaced
+# this one.
+nd_crisis_notice_settle = {
+	if = {
+		limit = {
+			has_variable = nd_crisis_pending_outcome
+			OR = {
+				NOT = { exists = scope:nd_outcome_other }
+				NOT = { exists = var:nd_crisis_pending_opponent }
+				var:nd_crisis_pending_opponent ?= scope:nd_outcome_other
+			}
+		}
+		nd_crisis_apply_outcome_side = yes
+	}
+	else = {
+		custom_tooltip = nd_tt_outcome_already_settled
+	}
+}
+
+# Country scope (nd_crisis_open, each side). The readiness we had ordered when
+# the crisis opened: the level the outcome notice offers to stand back down to
+# (nd_pre_crisis_readiness_value). A side with no posture has no record, and
+# an older record is dropped so that it cannot stand in for this crisis.
+nd_record_pre_crisis_readiness = {
+	if = {
+		limit = { has_variable = nd_readiness_target }
+		set_variable = { name = nd_pre_crisis_readiness value = var:nd_readiness_target }
+	}
+	else_if = {
+		limit = { has_variable = nd_pre_crisis_readiness }
+		remove_variable = nd_pre_crisis_readiness
+	}
+}
+
+# Country scope (nuclear_crisis.6.b, behind nd_crisis_notice_offers_standdown,
+# so the level is below the present target and at most Heightened). Lowering
+# is never blocked (nd_can_set_readiness), and the panel's buttons call the
+# same setters.
+nd_stand_down_to_pre_crisis = {
+	if = {
+		limit = { nd_pre_crisis_readiness_value < 1 }
+		nd_set_readiness_target_0 = yes
+	}
+	else_if = {
+		limit = { nd_pre_crisis_readiness_value < 2 }
+		nd_set_readiness_target_1 = yes
+	}
+	else = {
+		nd_set_readiness_target_2 = yes
 	}
 }
 
@@ -1839,10 +2083,22 @@ nd_crisis_act_yield = {
 				}
 				else_if = {
 					limit = { var:nd_crisis_dispute = 4 }
+					# The freeze binds the nation, not the regime (#758): a
+					# revolution's winner inherits the countdown but not the
+					# modifier, and nd_crisis_freeze_monthly puts it back.
 					scope:nd_target = {
+						if = {
+							limit = { has_modifier = nd_crisis_programme_freeze }
+							remove_modifier = nd_crisis_programme_freeze
+						}
 						add_modifier = {
 							name = nd_crisis_programme_freeze
 							years = 10
+						}
+						set_variable = { name = nd_crisis_freeze_months value = nd_crisis_freeze_months_value }
+						if = {
+							limit = { has_variable = nd_crisis_freeze_untimed }
+							remove_variable = nd_crisis_freeze_untimed
 						}
 					}
 				}
@@ -2010,17 +2266,19 @@ nd_crisis_concede_play = {
 # side: the war then ends through the engine's own capitulation and peace.
 # Only wars the two fight on opposite sides: a country can be an ally of the
 # other side in one war and its enemy in another.
-# The Suez model (rework spec §8.1, owner call 9): when the target leads its
-# side, that side drops the war goals it holds against the other side (the
-# issuer, or the protégé it shields). A co-belligerent that yields loses only
-# war support, so threatening a coalition's weakest member does not strip its
-# leader's goals (phase 2 final review). remove_war_goal addresses a side and a
-# type, so a goal of the same type against another country in the war goes too
-# (the tooltip says so). It removes the AI's own goals and the opening goal but
-# not ones script added (probed 2026-10-28); a once-a-game self-check, a day
+# The Suez model (rework spec §8.1, owner call 9): the target drops the war
+# goals it holds itself against the other side (the issuer, or the protégé it
+# shields), and those to liberate or take its subjects (nd_crisis_drop_goals),
+# whether it leads its side or not. Its allies keep theirs: a country that
+# yields gives up only what it holds, so the leader's yield costs its allies
+# nothing and an ally's yield costs its leader nothing (owner, 2026-11-18;
+# before, only a leader's yield dropped goals, and it tried to drop its whole
+# side's). remove_war_goal takes one holder's first goal of a type, whatever
+# it targets, so a goal of ours of the same type against another country in
+# the war can go too (the tooltip says so). A once-a-game self-check, a day
 # later (nuclear_crisis.25), says whether anything was left. A target that
-# holds no goal against us is the defender of our attack: only its war support
-# falls.
+# holds no goal against us (the defender of our attack, or an ally that
+# brought none) loses only its war support.
 nd_crisis_concede_war = {
 	scope:nd_target = {
 		every_scope_war = {
@@ -2039,19 +2297,14 @@ nd_crisis_concede_war = {
 			}
 			if = {
 				limit = {
-					is_warleader = scope:nd_target
-					scope:nd_target = { nd_side_holds_any_goal_against = { TARGET = scope:nd_crisis_other_side } }
+					scope:nd_target = { nd_holds_any_goal_against = { TARGET = scope:nd_crisis_other_side } }
 				}
+				nd_crisis_drop_goals = yes
 				if = {
-					limit = { is_on_defending_side = scope:nd_target }
-					nd_crisis_drop_goals = { WHO = target }
-				}
-				else = {
-					nd_crisis_drop_goals = { WHO = initiator }
-				}
-				if = {
-					limit = { NOT = { has_global_variable = nd_suez_self_check_done } }
-					set_global_variable = nd_suez_self_check_done
+					# _v4 since 2026-11-18: re-armed for the removal that takes
+					# the yielder's own goals, leader or not, and repeats per type
+					limit = { NOT = { has_global_variable = nd_suez_self_check_v4_done } }
+					set_global_variable = nd_suez_self_check_v4_done
 					scope:nd_target = {
 						set_variable = { name = nd_suez_check_other value = scope:nd_crisis_other_side days = 10 }
 						trigger_event = { id = nuclear_crisis.25 days = 1 }
@@ -2076,15 +2329,14 @@ nd_crisis_concede_reparations = {
 	scope:nd_target = { save_scope_as = nd_loose_payer }
 	scope:nd_crisis_other_side = { save_scope_as = nd_loose_claimant }
 	scope:nd_target = {
-		# The sum read twice, not stored and read back: the yield's tooltip
-		# walks this and writes nothing. The payer's income does not move with
-		# its treasury, so both reads agree.
-		add_treasury = {
-			value = nd_loose_compensation_value
-			multiply = -1
-		}
-		scope:nd_crisis_other_side = {
-			add_treasury = nd_loose_compensation_value
+		# Under a reparations treaty (#1457), or directly where none can be
+		# made. The sum is read where the helper needs it, not stored and read
+		# back: the yield's tooltip walks this and writes nothing. The payer's
+		# income does not move with its treasury, so the reads agree.
+		te_pay_reparations_by_treaty = {
+			PAYER = scope:nd_target
+			PAYEE = scope:nd_crisis_other_side
+			AMOUNT = nd_loose_compensation_value
 		}
 		set_variable = { name = nd_loose_inspected value = 1 days = 7300 }
 		add_modifier = {
@@ -2232,181 +2484,147 @@ nd_crisis_concede_orbital = {
 	}
 }
 
-# War scope, in nd_crisis_concede_war: remove, through the war's play, every
-# goal type the target's side (WHO = target or initiator, the play's side it
-# is on) holds against scope:nd_crisis_other_side.
+# War scope, in nd_crisis_concede_war, when scope:nd_target holds a goal
+# against scope:nd_crisis_other_side: the target drops every goal it holds
+# itself against the other side, and every goal to liberate or take one of the
+# other side's direct subjects. Its allies' goals stay, whether it leads the
+# side or not (owner, 2026-11-18). remove_war_goal names one holder (who = a
+# country) and a type, and takes that holder's first goal of the type,
+# whatever it targets (in game on a 1962 save, 2026-11-18): one call per type
+# took France's opening goal against Brazil and left its goal against the
+# United States. So nd_crisis_strike_goals repeats the call while a goal
+# against the other side is left; a goal of the same type against a third
+# country that the engine reaches first goes too (the tooltip says so).
+# The yield's tooltip walks this, hidden_effect and all, every frame its
+# option or button shows, and a saved scope is no fence (scripting_best_practices
+# § "An Option's Tooltip Walks Its Effects"), so the walk would run every loop
+# below each frame: the body sits behind a click-only marker, as
+# nd_crisis_close's does. The walk writes no variable, so has_variable is false
+# there and true in the real run. Its lines are all hidden, so no tooltip line
+# goes.
 nd_crisis_drop_goals = {
+	scope:nd_target = { set_variable = nd_crisis_drop_click }
 	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = annex_country target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = annex_country } }
+		limit = { scope:nd_target = { has_variable = nd_crisis_drop_click } }
+		scope:nd_target = {
+			remove_variable = nd_crisis_drop_click
+			save_scope_as = nd_crisis_holder
+		}
+		diplomatic_play = {
+			save_scope_as = nd_crisis_war_play
+			nd_crisis_drop_holder_goals = yes
+		}
 	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = ban_slavery target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = ban_slavery } }
+}
+
+# Play scope; scope:nd_crisis_holder, scope:nd_crisis_other_side and
+# scope:nd_crisis_war_play saved: the holder's goals of every type against the
+# other side (the types nd_holds_any_goal_against tests), then its goals
+# to liberate or take one of the other side's direct subjects, which target
+# the subject, not its overlord (targets_enemy_subject: France's goal to
+# liberate Cuba reads as against Cuba, not the United States).
+nd_crisis_drop_holder_goals = {
+	nd_crisis_strike_goals = { TYPE = annex_country TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = ban_slavery TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = colonization_rights TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = conquer_state TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = contain_threat TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = enforce_treaty_article TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = force_nationalization TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = foreign_investment_rights TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = humiliation TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = increase_autonomy TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = independence TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = join_power_bloc TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = leave_power_bloc TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = liberate_country TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = liberate_subject TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = make_dominion TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = make_protectorate TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = make_tributary TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = open_market TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = reduce_autonomy TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = regime_change TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = return_state TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = revoke_all_claims TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = revoke_claim TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = secession TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = take_treaty_port TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = transfer_subject TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = unification TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = unification_leadership TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = restore_union TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = demand_strait_access TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = demand_toll_exemption TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = demand_no_tolls TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = demand_no_strait_closure TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = make_personal_union TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = make_chartered_company TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = make_crown_land TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = break_enforced_treaties TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = release_as_subject TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = te_reunify_country TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = te_colonial_independence TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = te_colonial_reconquest TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = te_un_mandate_restore_state TARGET = scope:nd_crisis_other_side }
+	nd_crisis_strike_goals = { TYPE = te_seize_strait TARGET = scope:nd_crisis_other_side }
+	scope:nd_crisis_other_side = {
+		every_direct_subject = {
+			save_scope_as = nd_crisis_goal_subject
+			scope:nd_crisis_war_play = {
+				nd_crisis_strike_goals = { TYPE = liberate_subject TARGET = scope:nd_crisis_goal_subject }
+				nd_crisis_strike_goals = { TYPE = transfer_subject TARGET = scope:nd_crisis_goal_subject }
+			}
+		}
 	}
+}
+
+# Play scope; scope:nd_crisis_holder and scope:nd_crisis_other_side saved:
+# remove the holder's goals of $TYPE$ until none against $TARGET$ is left.
+# Each call takes the holder's first goal of the type, whatever it targets, so
+# goals of $TYPE$ against other countries that come first go too. The trigger
+# reads the removal at once, inside this block (in game, 2026-11-18), so the
+# loop stops when the last goal against $TARGET$ goes, after at most 30 calls.
+# But war_participant_has_war_goal_of_type_against reads every war, and the
+# call acts in this one: a holder that fights the other side in another war
+# too could hold its goal against $TARGET$ there, and the loop would strip
+# every goal of $TYPE$ here without reaching it. Such a holder gets one call
+# per type in each war, as before 2026-11-18; a goal it keeps shows on the
+# self-check's line as wars= above 1.
+# Parameters: $TYPE$ = war goal type; $TARGET$ = the country the goals target
+nd_crisis_strike_goals = {
 	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = colonization_rights target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = colonization_rights } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = conquer_state target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = conquer_state } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = contain_threat target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = contain_threat } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = enforce_treaty_article target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = enforce_treaty_article } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = force_nationalization target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = force_nationalization } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = foreign_investment_rights target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = foreign_investment_rights } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = humiliation target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = humiliation } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = increase_autonomy target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = increase_autonomy } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = independence target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = independence } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = join_power_bloc target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = join_power_bloc } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = leave_power_bloc target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = leave_power_bloc } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = liberate_country target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = liberate_country } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = liberate_subject target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = liberate_subject } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = make_dominion target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = make_dominion } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = make_protectorate target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = make_protectorate } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = make_tributary target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = make_tributary } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = open_market target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = open_market } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = reduce_autonomy target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = reduce_autonomy } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = regime_change target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = regime_change } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = return_state target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = return_state } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = revoke_all_claims target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = revoke_all_claims } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = revoke_claim target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = revoke_claim } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = secession target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = secession } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = take_treaty_port target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = take_treaty_port } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = transfer_subject target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = transfer_subject } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = unification target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = unification } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = unification_leadership target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = unification_leadership } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = restore_union target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = restore_union } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = demand_strait_access target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = demand_strait_access } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = demand_toll_exemption target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = demand_toll_exemption } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = demand_no_tolls target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = demand_no_tolls } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = demand_no_strait_closure target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = demand_no_strait_closure } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = make_personal_union target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = make_personal_union } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = make_chartered_company target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = make_chartered_company } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = make_crown_land target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = make_crown_land } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = break_enforced_treaties target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = break_enforced_treaties } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = release_as_subject target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = release_as_subject } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = te_reunify_country target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = te_reunify_country } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = te_colonial_independence target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = te_colonial_independence } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = te_colonial_reconquest target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = te_colonial_reconquest } }
-	}
-	if = {
-		limit = { scope:nd_target = { war_side_has_war_goal_of_type_against = { type = te_un_mandate_restore_state target = scope:nd_crisis_other_side } } }
-		diplomatic_play = { remove_war_goal = { who = $WHO$ type = te_un_mandate_restore_state } }
+		limit = { scope:nd_crisis_holder = { war_participant_has_war_goal_of_type_against = { type = $TYPE$ target = $TARGET$ } } }
+		if = {
+			limit = {
+				scope:nd_crisis_holder = {
+					any_scope_war = {
+						count > 1
+						is_war_participant = scope:nd_crisis_other_side
+						OR = {
+							AND = {
+								is_on_defending_side = scope:nd_crisis_holder
+								NOT = { is_on_defending_side = scope:nd_crisis_other_side }
+							}
+							AND = {
+								is_on_defending_side = scope:nd_crisis_other_side
+								NOT = { is_on_defending_side = scope:nd_crisis_holder }
+							}
+						}
+					}
+				}
+			}
+			remove_war_goal = { who = scope:nd_crisis_holder type = $TYPE$ }
+		}
+		else = {
+			while = {
+				count = 30
+				if = {
+					limit = { scope:nd_crisis_holder = { war_participant_has_war_goal_of_type_against = { type = $TYPE$ target = $TARGET$ } } }
+					remove_war_goal = { who = scope:nd_crisis_holder type = $TYPE$ }
+				}
+			}
+		}
 	}
 }
 
@@ -2444,7 +2662,27 @@ nd_crisis_act_go_public = {
 		limit = { exists = var:nd_crisis_opponent }
 		change_relations = { country = var:nd_crisis_opponent value = -15 }
 	}
-	custom_tooltip = nd_tt_go_public_terms
+	# The stage it moves to, and what that adds to the danger (2026-11-20
+	# delivery spec §5.3): a crisis already past Confrontation stays where it is.
+	if = {
+		limit = {
+			has_variable = nd_crisis_stage
+			var:nd_crisis_stage < 2
+		}
+		custom_tooltip = nd_tt_go_public_terms
+	}
+	else = {
+		custom_tooltip = nd_tt_go_public_terms_stage
+	}
+	# Against a target with no arsenal and no armed protector, the danger is
+	# cut (nd_crisis_danger_value; the refresh stores whether it is).
+	if = {
+		limit = { var:nd_cd_dampened ?= 1 }
+		custom_tooltip = nd_tt_go_public_danger_dampened
+	}
+	else = {
+		custom_tooltip = nd_tt_go_public_danger
+	}
 	hidden_effect = {
 		nd_crisis_save_parties = yes
 		# A private warning made public: the rest of an ultimatum's toll on
@@ -2841,28 +3079,30 @@ nd_crisis_trade_check_schedule = {
 }
 
 # nuclear_crisis.27's immediate, in the traded crisis's issuer: one code's
-# line. The demanded half is the other side's concession to us; the matching
-# half is ours to it, the one run with the parties swapped.
+# line, which prints the code from nd_tc_code (no argument inside a debug_log
+# string: te_debug_log_arg_effects.txt). The demanded half is the other side's
+# concession to us; the matching half is ours to it, the one run with the
+# parties swapped.
 nd_crisis_trade_check_log = {
 	if = {
 		limit = { var:nd_tc_code = $CODE$ }
 		if = {
 			limit = { nd_dispute_$WHAT$_by = { TARGET = scope:nd_tc_other } }
-			debug_log = "TE_SELF_CHECK BROKEN nd_trade_$CODE$: the demanded half; [THIS.GetCountry.GetNameNoFormatting] still has a dispute $CODE$ grievance against [SCOPE.sCountry('nd_tc_other').GetNameNoFormatting] a day after their trade, so the target's own concession failed (read as nd_concession_$CODE$)"
+			debug_log = "TE_SELF_CHECK BROKEN nd_trade_[THIS.Var('nd_tc_code').GetValue|0]: the demanded half; [THIS.GetCountry.GetNameNoFormatting] still has a dispute [THIS.Var('nd_tc_code').GetValue|0] grievance against [SCOPE.sCountry('nd_tc_other').GetNameNoFormatting] a day after their trade, so the target's own concession failed (read as nd_concession_[THIS.Var('nd_tc_code').GetValue|0])"
 		}
 		else_if = {
 			limit = {
 				scope:nd_tc_other = { nd_dispute_$WHAT$_by = { TARGET = scope:nd_tc_self } }
 				var:nd_tc_swap ?= 0
 			}
-			debug_log = "TE_SELF_CHECK BROKEN nd_trade_$CODE$: the matching half, and the swap did not take; [SCOPE.sCountry('nd_tc_other').GetNameNoFormatting] still has a dispute $CODE$ grievance against [THIS.GetCountry.GetNameNoFormatting] a day after their trade, since save_scope_as did not replace a saved scope and the target's concession ran twice"
+			debug_log = "TE_SELF_CHECK BROKEN nd_trade_[THIS.Var('nd_tc_code').GetValue|0]: the matching half, and the swap did not take; [SCOPE.sCountry('nd_tc_other').GetNameNoFormatting] still has a dispute [THIS.Var('nd_tc_code').GetValue|0] grievance against [THIS.GetCountry.GetNameNoFormatting] a day after their trade, since save_scope_as did not replace a saved scope and the target's concession ran twice"
 		}
 		else_if = {
 			limit = { scope:nd_tc_other = { nd_dispute_$WHAT$_by = { TARGET = scope:nd_tc_self } } }
-			debug_log = "TE_SELF_CHECK BROKEN nd_trade_$CODE$: the matching half, though the swap took; [SCOPE.sCountry('nd_tc_other').GetNameNoFormatting] still has a dispute $CODE$ grievance against [THIS.GetCountry.GetNameNoFormatting] a day after their trade, so the issuer's own concession failed (read as nd_concession_$CODE$)"
+			debug_log = "TE_SELF_CHECK BROKEN nd_trade_[THIS.Var('nd_tc_code').GetValue|0]: the matching half, though the swap took; [SCOPE.sCountry('nd_tc_other').GetNameNoFormatting] still has a dispute [THIS.Var('nd_tc_code').GetValue|0] grievance against [THIS.GetCountry.GetNameNoFormatting] a day after their trade, so the issuer's own concession failed (read as nd_concession_[THIS.Var('nd_tc_code').GetValue|0])"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK OK nd_trade_$CODE$: neither [THIS.GetCountry.GetNameNoFormatting] nor [SCOPE.sCountry('nd_tc_other').GetNameNoFormatting] has a dispute $CODE$ grievance against the other a day after their trade (swap=[THIS.GetVariable('nd_tc_swap').GetValue|0])"
+			debug_log = "TE_SELF_CHECK OK nd_trade_[THIS.Var('nd_tc_code').GetValue|0]: neither [THIS.GetCountry.GetNameNoFormatting] nor [SCOPE.sCountry('nd_tc_other').GetNameNoFormatting] has a dispute [THIS.Var('nd_tc_code').GetValue|0] grievance against the other a day after their trade (swap=[THIS.GetVariable('nd_tc_swap').GetValue|0])"
 		}
 	}
 }

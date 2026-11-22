@@ -71,7 +71,7 @@ un_secure_commitment_action = {
 	# Asker-side only: evaluated once for us, not per target, so it is the
 	# right place for the structural gates. Any member may ask (spec §4).
 	selectable = {
-		has_game_rule = united_nations_enabled
+		te_united_nations_on = yes
 		has_global_variable = un_active_resolution
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		NOT = { un_representation_suspended = yes }
@@ -380,7 +380,7 @@ un_secure_commitment_against_action = {
 	can_use_obligations = no
 
 	selectable = {
-		has_game_rule = united_nations_enabled
+		te_united_nations_on = yes
 		has_global_variable = un_active_resolution
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		NOT = { un_representation_suspended = yes }
@@ -648,7 +648,7 @@ un_secure_commitment_against_action = {
 # started and ended in script each month (un_lobby_ai_monthly), which creates
 # the pact directly. evaluation_chance 0 keeps the engine from proposing it,
 # and will_break always-no keeps the engine from breaking one script started.
-un_lobby_for_action = {
+un_lobby_for_action = {  # REVIEWED 2026-11-12 (involvement): the campaign buys a UN vote, not a presence in the member's regions
 	texture = "gfx/interface/icons/diplomatic_action_icons/un_lobby_for_action.dds"
 	groups = {
 		general
@@ -765,7 +765,7 @@ un_lobby_for_action = {
 # started and ended in script each month (un_lobby_ai_monthly), which creates
 # the pact directly. evaluation_chance 0 keeps the engine from proposing it,
 # and will_break always-no keeps the engine from breaking one script started.
-un_lobby_against_action = {
+un_lobby_against_action = {  # REVIEWED 2026-11-12 (involvement): the campaign buys a UN vote, not a presence in the member's regions
 	texture = "gfx/interface/icons/diplomatic_action_icons/un_lobby_against_action.dds"
 	groups = {
 		general

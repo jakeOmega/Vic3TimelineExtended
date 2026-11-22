@@ -58,20 +58,37 @@ nd_peacetime_incident_dispatch = {
 }
 
 # The stand-down's AI weights (nuclear_incident.70): the conventional war a
-# refusal starts, judged by army size. $ENEMY$'s army is half again ours.
+# refusal starts, judged by army size and, since 1.15 (#1450), by whether the
+# larger army can get to the smaller: by land, or by shipping at once as much
+# army strength as the other side has (has_military_reach,
+# te_military_reach_values.txt). $ENEMY$'s army is half again ours and can
+# reach us.
 nd_conventionally_outmatched_by = {
-	$ENEMY$ = { army_size > 0 }
+	save_temporary_scope_as = nd_co_self
+	$ENEMY$ = {
+		army_size > 0
+		has_military_reach = {
+			target = scope:nd_co_self
+			min_reach = te_reach_realistic
+			min_shippable_strength = te_reach_ship_match
+		}
+	}
 	army_size < {
 		value = $ENEMY$.army_size
 		divide = 1.5
 	}
 }
 
-# Ours is half again $ENEMY$'s.
+# Ours is half again $ENEMY$'s, and can reach them.
 nd_conventionally_outmatches = {
 	army_size > 0
 	army_size >= {
 		value = $ENEMY$.army_size
 		multiply = 1.5
+	}
+	has_military_reach = {
+		target = $ENEMY$
+		min_reach = te_reach_realistic
+		min_shippable_strength = te_reach_ship_match
 	}
 }

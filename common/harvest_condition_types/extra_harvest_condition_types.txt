@@ -7,6 +7,10 @@
 # NEGATIVE FINANCIAL CONDITIONS
 
 financial_panic = {
+	# No animation state in vanilla's harvest_condition_sound_entity, so without this the
+	# engine logs "Couldn't find any animation state" each time one spawns (vanilla's sea
+	# conditions say the same; first 1.15 game, 2026-11-05).
+	has_animation = no
 	# A state is only vulnerable if it has a developed economy and stock market.
 	trigger = {
 		any_scope_state = {
@@ -15,7 +19,7 @@ financial_panic = {
 			OR = {
 				is_world_market_hub = yes
 				is_capital = yes
-				any_scope_building = { is_building_type = building_company_headquarter }
+				any_scope_building = { is_building_group = bg_company_headquarter }
 				pop_type_percent_state = { target = pop_type:capitalists value > 0.01 }
 			}
 		}
@@ -75,6 +79,7 @@ financial_panic = {
 }
 
 market_downturn = {
+	has_animation = no # as financial_panic
 	trigger = {
 		any_scope_state = {
 			is_incorporated = yes
@@ -82,7 +87,7 @@ market_downturn = {
 			OR = {
 				is_world_market_hub = yes
 				is_capital = yes
-				any_scope_building = { is_building_type = building_company_headquarter }
+				any_scope_building = { is_building_group = bg_company_headquarter }
 				pop_type_percent_state = { target = pop_type:capitalists value > 0.01 }
 			}
 		}
@@ -126,6 +131,7 @@ market_downturn = {
 # POSITIVE FINANCIAL CONDITIONS
 
 bull_market = {
+	has_animation = no # as financial_panic
 	trigger = {
 		any_scope_state = {
 			is_incorporated = yes
@@ -133,7 +139,7 @@ bull_market = {
 			OR = {
 				is_world_market_hub = yes
 				is_capital = yes
-				any_scope_building = { is_building_type = building_company_headquarter }
+				any_scope_building = { is_building_group = bg_company_headquarter }
 				pop_type_percent_state = { target = pop_type:capitalists value > 0.01 }
 			}
 		}

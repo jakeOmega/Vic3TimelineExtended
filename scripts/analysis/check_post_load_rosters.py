@@ -1,18 +1,21 @@
 """Verify the post-load generator/audit rosters are fully documented (issue #248).
 
-`mod_state_server.py` owns two canonical rosters — `POST_LOAD_REGENERATORS`
-(file-rewriting generators) and `POST_LOAD_AUDITS` (read-only audits). Three
+`server/post_load.py` owns two canonical rosters — `POST_LOAD_REGENERATORS`
+(file-rewriting generators) and `POST_LOAD_AUDITS` (read-only audits). Two
 docs restate them by hand:
 
-* `CLAUDE.md`               — the "auto-run on /reload" bullet
 * `docs/guides/python_tools.md` — the § "Auto-run on server reload" table
 * `docs/auto_generated_files.md` — the generator -> output ownership map
 
+(`CLAUDE.md` restated them too until the audits got a registry: it now points
+at `docs/guides/audits.md`, which `audit_registry.py` generates, and
+`test_audit_registry.py` holds the registry to `POST_LOAD_AUDITS`.)
+
 Hand-maintained copies drift the moment someone appends a roster entry, which
-is exactly what issue #248 found (11 modules missing across the three docs).
+is exactly what issue #248 found (11 modules missing across the docs).
 This checker closes the loop: it reads the rosters straight out of
-`mod_state_server.py` and fails if any module name is missing from any of the
-three docs.
+`server/post_load.py` (in `mod_state_server.py` until #1537 split the server)
+and fails if any module name is missing from either doc.
 
 The rosters are extracted with `ast`, not by importing `mod_state_server` —
 importing pulls in the whole server (and, transitively, a resolved Victoria 3
@@ -23,7 +26,7 @@ Run:
     python3 scripts/analysis/check_post_load_rosters.py           # exit 1 on drift
     python3 scripts/analysis/check_post_load_rosters.py --list    # print rosters
 
-Exit code 0 = every roster module is named in all three docs; 1 = drift (the
+Exit code 0 = every roster module is named in both docs; 1 = drift (the
 missing (module, doc) pairs are printed). Unit test: `test_post_load_rosters.py`.
 """
 import argparse
@@ -34,7 +37,7 @@ import sys
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-SERVER_FILE = "mod_state_server.py"
+ROSTER_FILE = os.path.join("server", "post_load.py")
 
 # Roster assignment name -> human label used in output.
 ROSTERS = {
@@ -44,18 +47,20 @@ ROSTERS = {
 
 # Docs that restate the rosters and must name every module.
 DOC_FILES = (
-    "CLAUDE.md",
     os.path.join("docs", "guides", "python_tools.md"),
     os.path.join("docs", "auto_generated_files.md"),
 )
 
 
-def extract_rosters(server_path):
-    """Return {roster_name: [module_label, ...]} parsed out of mod_state_server.py.
+def extract_rosters(server_path=None):
+    """Return {roster_name: [module_label, ...]} parsed out of the roster file
+    (`server/post_load.py` in this checkout when `server_path` is None).
 
     Each roster is a module-level list of `(label, import_path)` tuples; we
     key on the label, which is what the docs spell.
     """
+    if server_path is None:
+        server_path = os.path.join(REPO_ROOT, ROSTER_FILE)
     with open(server_path, encoding="utf-8") as fh:
         tree = ast.parse(fh.read(), filename=server_path)
 
@@ -68,7 +73,7 @@ def extract_rosters(server_path):
                 continue
             if not isinstance(node.value, (ast.List, ast.Tuple)):
                 raise SystemExit(
-                    f"{target.id} in {SERVER_FILE} is no longer a literal list/tuple; "
+                    f"{target.id} in {ROSTER_FILE} is no longer a literal list/tuple; "
                     "update scripts/analysis/check_post_load_rosters.py."
                 )
             labels = []
@@ -90,7 +95,7 @@ def extract_rosters(server_path):
     missing_rosters = sorted(set(ROSTERS) - set(found))
     if missing_rosters:
         raise SystemExit(
-            f"Could not find {', '.join(missing_rosters)} in {SERVER_FILE}."
+            f"Could not find {', '.join(missing_rosters)} in {ROSTER_FILE}."
         )
     return found
 
@@ -99,7 +104,7 @@ def check_docs(rosters, repo_root=REPO_ROOT, doc_files=DOC_FILES):
     """Return a sorted list of (module, doc_rel_path) pairs the docs don't mention.
 
     A module counts as documented when its bare name appears as a whole word
-    anywhere in the doc — the three docs spell it differently (`pm_costs`,
+    anywhere in the doc — the docs spell it differently (`pm_costs`,
     `pm_costs.py`, `scripts/generators/gen_company_building_cleanup.py`), and a
     word-boundary match accepts all of those without hard-coding a format.
     """
@@ -123,11 +128,11 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument(
         "--list", action="store_true",
-        help="Print the rosters as read from mod_state_server.py and exit 0.",
+        help="Print the rosters as read from server/post_load.py and exit 0.",
     )
     args = parser.parse_args(argv)
 
-    rosters = extract_rosters(os.path.join(REPO_ROOT, SERVER_FILE))
+    rosters = extract_rosters()
 
     if args.list:
         for name, label in ROSTERS.items():
@@ -147,7 +152,7 @@ def main(argv=None):
             print(f"  {rel}: does not mention `{module}`")
         print(
             "\nAdd a row/mention for each module, then re-run. The rosters live in "
-            f"{SERVER_FILE} (POST_LOAD_REGENERATORS / POST_LOAD_AUDITS)."
+            f"{ROSTER_FILE} (POST_LOAD_REGENERATORS / POST_LOAD_AUDITS)."
         )
         return 1
 

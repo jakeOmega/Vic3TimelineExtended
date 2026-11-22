@@ -46,16 +46,19 @@ heir_ed_country_allows_ideology_radical = {
 	}
 }
 
-heir_ed_country_allows_ideology_social_democrat = {
+heir_ed_country_allows_ideology_state_socialist = {
 	has_technology_researched = socialism
 }
 
-heir_ed_country_allows_ideology_communist = {
+heir_ed_country_allows_ideology_communist_leader = {
 	has_technology_researched = socialism
 }
 
 heir_ed_country_allows_ideology_vanguardist = {
-	has_technology_researched = political_agitation
+	OR = {
+		has_technology_researched = political_agitation
+		has_journal_entry = je_bolsheviks
+	}
 }
 
 heir_ed_country_allows_ideology_humanitarian = {

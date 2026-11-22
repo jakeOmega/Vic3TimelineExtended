@@ -1,0 +1,38 @@
+﻿# TE_SELF_CHECK ai_reserve_gate (common/on_actions/te_ai_reserve_gate_selfcheck_on_actions.txt): the two tests it
+# reads a country with. Delete with that file.
+
+# A month's watch: an AI government that wants a university and may build one, that the engine's budget AI would let
+# add a should-have building, and whose government queue is empty, so that nothing else holds the queue's allowance.
+# Each line drops a country that would queue no university under any reserve gate, so that BROKEN cannot come from
+# them. Reserves above 0 mean no debt, so no debt pause. Scope: country
+te_rgc_may_queue_a_university = {
+	is_ai = yes
+	NOT = { is_country_type = decentralized }
+	is_at_war = no
+	bureaucracy >= 0
+	has_technology_researched = academia
+	NOT = { construction_queue_num_queued_government_levels > 0 }
+	# Innovation under 90% of its cap: the engine's AI wants more under 100% (NAI
+	# MONEY_SPENDING_INNOVATION_DESIRED_THRESHOLD); a country at its cap may build none.
+	te_rgc_innovation_share < 0.9
+	# The budget AI's own test for adding a should-have: income at least 1.2 times expenses after it, or a surplus of
+	# 15,000 whatever the ratio (NAI MONEY_SPENDING_MIN_RATIO_TO_ADD_SHOULD_HAVE,
+	# MONEY_SPENDING_MIN_SURPLUS_TO_IGNORE_RATIO_FOR_SHOULD_HAVE). A sixth of fixed income is the 1.2.
+	OR = {
+		te_rgc_surplus >= 15000
+		te_rgc_surplus_share >= 0.17
+	}
+}
+
+# A university level in the construction queue: the two reads te_construction_market_ai_building_administration
+# takes for an administration (a queued building exists at once at level 0; is_under_construction while its first
+# level is built), which the AI probe's cm_admin has read since 2026-11-16. Scope: country
+te_rgc_university_queued = {
+	any_scope_building = {
+		is_building_type = building_university
+		OR = {
+			is_under_construction = yes
+			te_construction_market_building_queued_levels > 0
+		}
+	}
+}

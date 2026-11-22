@@ -8,8 +8,8 @@
 #
 #   1. `possible` requires a live mandate for exactly this holder, target and
 #      state region. Without one the goal is never listed.
-#   2. `infamy` is zero while that mandate is live, and the full vanilla
-#      return_state figure otherwise. The discount is attached to THIS GOAL,
+#   2. `infamy` is zero while that mandate is live, and vanilla
+#      return_state's figure (state_infamy_value) otherwise. The discount is attached to THIS GOAL,
 #      not to the country: any other goal the holder adds in the same play —
 #      including a plain `return_state` on the very same province — keeps its
 #      normal price, because nothing here touches a country-wide infamy
@@ -94,115 +94,53 @@ te_un_mandate_restore_state = {
 		value = 0
 
 		# Authorized: the Assembly carried the resolution, so the war goal is
-		# free. Unauthorized: vanilla return_state's figure, verbatim.
+		# free. Unauthorized: vanilla return_state's figure (1.14+): the target
+		# state's state_infamy_value and the two subject multipliers, as
+		# te_seize_strait copies from take_treaty_port. Keep it in step with
+		# 21_return_state.txt on a vanilla bump. The 1.13.9 shape (base 2 x a
+		# population multiplier, the homeland, unincorporated, unrecognized and
+		# interest-tier factors, floor 2) was retired in #387: state_infamy_value
+		# carries those terms itself.
 		if = {
 			limit = { NOT = { un_mandate_covers_goal = yes } }
 			add = {
 				value = 0
 
-				add = {
-					desc = "INFAMY_BASE_VALUE"
-					value = 2
+				scope:target_state = {
+					add = state_infamy_value
 				}
 
 				multiply = {
-					desc = "INFAMY_STATE_POPULATION_FACTOR"
-					value = scope:target_state.state_population
-					divide = define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_SCALING_FACTOR
-					multiply = define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_SCALING_MULTIPLIER
-					add = 1
-					max = define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_SCALING_MULTIPLIER_MAX_PER_STATE
-				}
-
-				multiply = {
-					desc = "country_infamy_generation_against_unrecognized_mult"
+					desc = "INFAMY_FROM_LOYAL_SUBJECT"
 					value = 1
+
 					if = {
 						limit = {
-							NOR = {
-								is_country_type = unrecognized
-								is_country_type = decentralized
-							}
 							scope:target_country = {
-								OR = {
-									is_country_type = unrecognized
-									is_country_type = decentralized
-								}
+								is_subject_of = root
+								liberty_desire < define:NDiplomacy|WAR_GOAL_INFAMY_LOW_LIBERTY_DESIRE_THRESHOLD
 							}
 						}
-						add = modifier:country_infamy_generation_against_unrecognized_mult
+						multiply = define:NDiplomacy|WAR_GOAL_INFAMY_LOW_LIBERTY_DESIRE_SUBJECT_MULT
 					}
 				}
 
 				multiply = {
-					desc = "IG_OTHER_FACTORS_HEADER"
+					desc = "INFAMY_FROM_REBELLIOUS_SUBJECT" # Rebellious as in they are the aggressor in the play
 					value = 1
 
 					if = {
 						limit = {
-							scope:target_state = {
-								is_homeland_of_country_cultures = root
-							}
-						}
-						add = define:NDiplomacy|WAR_GOAL_INFAMY_HOMELAND_FACTOR
-					}
-
-					if = {
-						limit = {
-							scope:target_state = {
-								is_incorporated = no
-							}
-						}
-						add = define:NDiplomacy|WAR_GOAL_INFAMY_UNINCORPORATED_FACTOR
-					}
-				}
-
-				multiply = {
-					desc = "concept_interest_tier"
-					value = 1
-
-					if = {
-						limit = {
-							NOT = {
-								has_strategic_region_interest_tier = {
-									strategic_region = scope:target_region
-									value >= 2
+							scope:target_country = {
+								is_subject_of = root
+								is_diplomatic_play_enemy_of = root
+								scope:diplomatic_play ?= {
+									initiator_is = scope:target_country
 								}
 							}
 						}
-						add = interest_tier_effect_infamy_cost_increase_high_value
+						multiply = define:NDiplomacy|WAR_GOAL_INFAMY_REBELLING_SUBJECT_MULT
 					}
-
-					if = {
-						limit = {
-							has_strategic_region_interest_tier = {
-								strategic_region = scope:target_region
-								value >= 2
-							}
-							NOT = {
-								has_strategic_region_interest_tier = {
-									strategic_region = scope:target_region
-									value >= 3
-								}
-							}
-						}
-						add = interest_tier_effect_infamy_cost_increase_medium_value
-					}
-
-					if = {
-						limit = {
-							has_strategic_region_interest_tier = {
-								strategic_region = scope:target_region
-								value >= 5
-							}
-						}
-						add = interest_tier_effect_infamy_cost_decrease_medium_value
-					}
-				}
-
-				min = {
-					desc = "INFAMY_MINIMUM_VALUE"
-					value = 2
 				}
 			}
 		}

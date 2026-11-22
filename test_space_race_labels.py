@@ -515,9 +515,13 @@ CELLS = {
         ("te_sr_ov_programme", 'text = "je_space_race_widget_programme_header"'),
         r"je_space_race_widget_programme_header"),
     # The fleets (slice 6, Full Colonies).
-    **{f"the fleets' {col} column head (te_sr_fleet_header_row)": (
-        ("te_sr_fleet_header_row", f'text = "je_space_race_widget_fl_col_{col}"'), f"je_space_race_widget_fl_col_{col}")
-       for col in ("where", "strength", "drive", "dv", "supply", "marines")},
+    # A fleet's card (owner, 2026-11-14): each bar's caption, each ship role's word.
+    **{f"a fleet card's {col} caption (te_sr_fl_gauge)": (
+        ("te_sr_fl_gauge", 'block "fg_label"'), f"je_space_race_widget_fl_col_{col}")
+       for col in ("strength", "dv", "supply", "marines")},
+    "a ship role's word on a fleet's card (te_sr_fl_role_cell)": (
+        ("te_sr_fl_role_cell", 'block "rc_label"'),
+        r"je_space_race_widget_fl_role_\w+"),
     "a fleet's orders (te_sr_fl_button)": (
         ("te_sr_fl_button", 'block "fl_btn_label"'),
         r"je_space_race_widget_fl_(go|land|embark)"),
@@ -577,12 +581,7 @@ CELLS = {
     "a destination's Choose and Chosen (te_sr_dest_row)": (
         ("te_sr_dest_row", 'text = "je_space_race_widget_dp_choose"'),
         r"je_space_race_widget_dp_(choose|chosen)"),
-    **{f"the locations' {col} column head (te_sr_location_header_row)": (
-        ("te_sr_location_header_row", f'text = "je_space_race_widget_loc_col_{col}"'), f"je_space_race_widget_loc_col_{col}")
-       for col in ("where", "ours", "others", "inbound", "status")},
-    "a location's status (te_sr_location_row)": (
-        ("te_sr_location_row", 'text = "je_space_race_widget_loc_status_blockading"'),
-        r"je_space_race_widget_loc_status_\w+"),
+    # Locations is a strip of icons and figures (owner, 2026-11-14): its captions and statuses are hovers.
     "a colony's defense status (te_sr_colony_row)": (
         ("te_sr_colony_row", 'text = "je_space_race_widget_def_status_calm"'),
         r"je_space_race_widget_def_status_(calm|blockaded|assault|interdicted)"),
@@ -628,9 +627,12 @@ CELLS = {
     "a destination's transit and its head (te_sr_window_row)": (
         ("te_sr_window_row", 'block "win_transit"'),
         r"je_space_race_widget_win_(col_transit|transit_\w+)"),
-    "the build mix, Launch, Auto and Pause (te_sr_sc_mix_button)": (
+    "Launch, Auto and Pause (te_sr_sc_mix_button)": (
         ("te_sr_sc_mix_button", 'block "mix_label"'),
-        r"je_space_race_widget_sc_(mix_(war|rapid|siege|carrier|tender)|launch|auto_on|auto_off|pause|resume|resuming)"),
+        r"je_space_race_widget_sc_(launch|auto_on|auto_off|pause|resume|resuming)"),
+    "the build mix, a role's word and weight under its icon (te_sr_sc_role_button)": (
+        ("te_sr_sc_role_button", 'block "mix_label"'),
+        r"je_space_race_widget_sc_mix_(war|rapid|siege|carrier|tender)"),
     # Dismantling (owner, 2026-10-31): a module level coming down, under its name.
     "a module coming down on a colony's page (te_sr_page_mod_row)": (
         ("te_sr_page_mod_row", 'text = "je_space_race_widget_mod_coming_down"'),
@@ -788,7 +790,12 @@ class FigureBudgetTest(unittest.TestCase):
     # a module cell (te_sr_mod_cell): a level (10 past a world's slots at most) and what is on its way
     CELL = {"cell_level": "8", "cell_pending": "+8"}
     FREE = {"free_people": "999.9K", "free_ties": "100"}
-    FLEET = {"fl_strength": "9999/9999", "fl_dv": "5000", "fl_supply": "36", "fl_marines": "99"}
+    # A fleet's card: its number and, rolled up, its strength in the head; a bar's
+    # figure, now of full (strength, and propellant at 5000 km/s the longest); a
+    # ship role's count.
+    FLEET = {"fl_number": "VIII", "fl_strength_brief": "9999/9999"}
+    GAUGE = {"fg_figure": "9999/9999"}
+    ROLE = {"rc_count": "9999"}
     # The Transfer popup's role rows: a role, the marines or the total, now, the amount, after
     TRANSFER = {"xf_now": "99999", "xf_amount": "99999", "xf_stay": "99999", "xf_there": "99999"}
     # The destination popup (UI pass design § 4): the fleet's figures, its
@@ -861,8 +868,10 @@ class FigureBudgetTest(unittest.TestCase):
 
     def test_fleet_and_location_rows(self):
         self._check("te_sr_fleet_row", self.FLEET)
+        self._check("te_sr_fl_gauge", self.GAUGE)
+        self._check("te_sr_fl_role_cell", self.ROLE)
         self._check("te_sr_xf_role_row", self.TRANSFER)
-        self._check("te_sr_location_row", self.LOCATION)
+        self._check("te_sr_location_cell", self.LOCATION)
 
     def test_the_destination_popup(self):
         self._check("te_sr_dest_slot", self.DEST_FLEET)

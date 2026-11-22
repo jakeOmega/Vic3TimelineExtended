@@ -97,7 +97,11 @@ class CumulativeTest(unittest.TestCase):
     def test_country_totals_do_not_import_old_market_totals(self):
         effects = _read(EFFECTS)
         snapshot = _body(effects, "gw_snapshot_country_emissions_effect")
-        self.assertIn("value = country_greenhouse_gas_emissions_script_value", snapshot)
+        # the country's own states' emissions: since 2026-11-06 each state's snapshot first (gw_state_emis, for the
+        # Emissions map), then their sum, which is country_greenhouse_gas_emissions_script_value without a second walk
+        self.assertIn("value = gw_state_greenhouse_gas_emissions", snapshot)
+        self.assertIn("value = gw_country_emis_from_states", snapshot)
+        self.assertIn("add = var:gw_state_emis", _body(_read(VALUES), "gw_country_emis_from_states"))
         cumulative = _body(effects, "gw_accumulate_country_emissions_effect")
         self.assertNotIn("gw_disp_market_emis", snapshot + cumulative)
         self.assertNotIn("gw_is_market_leader", snapshot + cumulative)
@@ -145,11 +149,11 @@ class RefreshTest(unittest.TestCase):
         self.assertRegex(self.refresh, r"else_if = \{\s*limit = \{ has_variable = gw_emitters_fifth_emis \}\s*"
                                        r"remove_variable = gw_emitters_fifth_emis")
 
-    def test_the_old_slots_are_dropped(self):
-        self.assertIn("gw_top_emitters_drop_slots = yes", self.refresh)
-        drop = _body(self.effects, "gw_top_emitters_drop_slots")
+    def test_the_old_slots_are_gone(self):
+        """The old-save strip of the slot variables went with 1.15, which loads no older save (#1407)."""
+        self.assertNotIn("gw_top_emitters_drop_slots", self.effects)
         for var in [f"gw_emitter_{n}" for n in range(1, 6)] + ["gw_emitters_shown", "gw_emitters_own_slot"]:
-            self.assertRegex(drop, rf"limit = \{{ has_variable = {var} \}}\s*remove_variable = {var}", var)
+            self.assertNotRegex(self.effects, rf"\b{var}\b", var)
 
     def test_the_count_and_our_place(self):
         self.assertIn("set_variable = { name = gw_emitters_total value = 0 }", self.refresh)

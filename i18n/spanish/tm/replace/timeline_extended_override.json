@@ -1,19 +1,23 @@
 {
- "BUILDING_MAP_LIST_PANEL_PROFIT_IMPACT_TOOLTIP": {
-  "en": "#header Predicted [SelectLocalization(ObjectsEqual(MapListBuildingPanel.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] after expansion#!\\n(Excluding [Concept('concept_building_wage','$concept_building_wages$')])\\n$TOOLTIP_DELIMITER$\\nA prediction of how much expanding this building would affect its weekly [SelectLocalization(ObjectsEqual(MapListBuildingPanel.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')].",
-  "es": "#header Previsión de [SelectLocalization(ObjectsEqual(MapListBuildingPanel.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] tras la ampliación#!\\n(Sin contar los [Concept('concept_building_wage','$concept_building_wages$')|l])\\n$TOOLTIP_DELIMITER$\\nUna previsión de cuánto afectaría ampliar este edificio al importe semanal de [SelectLocalization(ObjectsEqual(MapListBuildingPanel.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')]."
+ "ARTICLE_DRAFT_WAR_GOAL_SOURCE_MODIFIERS_TITLE": {
+  "en": "#title [WarGoal.GetTarget.GetAdjective] modifiers:#!",
+  "es": "#title Modificadores [WarGoal.GetTarget.GetAdjective]:#!"
+ },
+ "ARTICLE_DRAFT_WAR_GOAL_TARGET_MODIFIERS_TITLE": {
+  "en": "#title [WarGoal.GetHolder.GetAdjective] modifiers:#!",
+  "es": "#title Modificadores [WarGoal.GetHolder.GetAdjective]:#!"
  },
  "CAN_EXPAND_BUILDING_TOOLTIP": {
-  "en": "#header $BUILD_OR_EXPAND$ [BUILDING_TYPE.GetName] in [STATE.GetName]#! (Size: [BUILDING.GetExpansionLevelBreakdownDesc])\\n[AddLocalizationIf( Not(STATE.GetOwner.IsLocalPlayer), 'CAN_EXPAND_BUILDING_TOOLTIP_FOREIGN' )]#tooltippable #tooltip:[GetRawTextTooltipTag('$PROFIT_IMPACT_DESC$')] #v @money!$PROFIT_IMPACT|K+=$#!#!#! Predicted [SelectLocalization(Or(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), BUILDING.GetBuildingType.IsMilitaryBuilding), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / week\\n[ConcatIfNeitherEmpty('$PRODUCTIVITY$', '\\n')][ConcatIfNeitherEmpty('$QUALIFICATIONS$', '\\n')][SelectLocalization( LessThan_CFixedPoint(State.GetConstructionEfficiency, '(CFixedPoint)0'), 'CONSTRUCTION_QUEUE_STATE_CONSTRUCTION_EFFICIENCY_WARNING', '')]$TOOLTIP_DELIMITER$\\n@construction! $REQUIRED_CONSTRUCTION|v0$ [concept_construction] ($CONSTRUCTION_COST_CHANGE$)\\n$EXPAND_BUILDING_TT_NATIONAL_MAINTENANCE$\\n\\n$PRODUCTION_BREAKDOWN$\\n\\n[STATE.GetMarketAccessStatus]\\nAvailable Labor: [State.GetNumSubsistenceWorkingAdults|Dv] [GetPopType('peasants').GetName] [SelectLocalization( GreaterThan_int64(State.GetNumUnemployedWorkingAdults, '(int64)0'), 'AND_UNEMPLOYED', '' )][ConcatIfNeitherEmpty('$PORT_INFO$', '\\n')]\\n\\n$KEY_MODIFIER_INSTRUCTIONS$",
-  "es": "#header $BUILD_OR_EXPAND$ [BUILDING_TYPE.GetName] en [STATE.GetName]#! (Tamaño: [BUILDING.GetExpansionLevelBreakdownDesc])\\n[AddLocalizationIf( Not(STATE.GetOwner.IsLocalPlayer), 'CAN_EXPAND_BUILDING_TOOLTIP_FOREIGN' )]#tooltippable #tooltip:[GetRawTextTooltipTag('$PROFIT_IMPACT_DESC$')] #v @money!$PROFIT_IMPACT|K+=$#!#!#! Previsión de [SelectLocalization(Or(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), BUILDING.GetBuildingType.IsMilitaryBuilding), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / semana\\n[ConcatIfNeitherEmpty('$PRODUCTIVITY$', '\\n')][ConcatIfNeitherEmpty('$QUALIFICATIONS$', '\\n')][SelectLocalization( LessThan_CFixedPoint(State.GetConstructionEfficiency, '(CFixedPoint)0'), 'CONSTRUCTION_QUEUE_STATE_CONSTRUCTION_EFFICIENCY_WARNING', '')]$TOOLTIP_DELIMITER$\\n@construction! $REQUIRED_CONSTRUCTION|v0$ [concept_construction|l] ($CONSTRUCTION_COST_CHANGE$)\\n$EXPAND_BUILDING_TT_NATIONAL_MAINTENANCE$\\n\\n$PRODUCTION_BREAKDOWN$\\n\\n[STATE.GetMarketAccessStatus]\\nMano de obra disponible: [State.GetNumSubsistenceWorkingAdults|Dv] [GetPopType('peasants').GetName] [SelectLocalization( GreaterThan_int64(State.GetNumUnemployedWorkingAdults, '(int64)0'), 'AND_UNEMPLOYED', '' )][ConcatIfNeitherEmpty('$PORT_INFO$', '\\n')]\\n\\n$KEY_MODIFIER_INSTRUCTIONS$"
+  "en": "#header $BUILD_OR_EXPAND$ [BUILDING_TYPE.GetName] in [STATE.GetName]#! (Size: [BUILDING.GetExpansionLevelBreakdownDesc])\\n[AddLocalizationIf( Not(STATE.GetOwner.IsLocalPlayer), 'CAN_EXPAND_BUILDING_TOOLTIP_FOREIGN' )]#tooltippable #tooltip:[GetRawTextTooltipTag('$PROFIT_IMPACT_DESC|q$')] #v @money!$PROFIT_IMPACT|K+=$#!#!#! Predicted [SelectLocalization(Or(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), BUILDING.GetBuildingType.IsMilitaryBuilding), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / week\\n[ConcatIfNeitherEmpty('$PRODUCTIVITY|q$', '\\n')][ConcatIfNeitherEmpty('$QUALIFICATIONS|q$', '\\n')][SelectLocalization( LessThan_CFixedPoint(State.GetConstructionEfficiencyForBuildingType(BUILDING.GetBuildingType), '(CFixedPoint)0'), 'CONSTRUCTION_QUEUE_STATE_CONSTRUCTION_EFFICIENCY_WARNING', '')]$TOOLTIP_DELIMITER$\\n@construction! $REQUIRED_CONSTRUCTION|v0$ [concept_construction] ($CONSTRUCTION_COST_CHANGE$)\\n$EXPAND_BUILDING_TT_NATIONAL_MAINTENANCE$\\n\\n$PRODUCTION_BREAKDOWN$\\n\\n[STATE.GetMarketAccessStatus]\\nAvailable Labor: [State.GetNumSubsistenceWorkingAdults|Dv] [GetPopType('peasants').GetName] [SelectLocalization( GreaterThan_int64(State.GetNumUnemployedWorkingAdults, '(int64)0'), 'AND_UNEMPLOYED', '' )][ConcatIfNeitherEmpty('$PORT_INFO|q$', '\\n')]$DATA_BUILDING_TYPE_DESCRIPTION_TOOLTIP_LORE_SECTION$\\n\\n$KEY_MODIFIER_INSTRUCTIONS$",
+  "es": "#header $BUILD_OR_EXPAND$ [BUILDING_TYPE.GetName] en [STATE.GetName]#! (Tamaño: [BUILDING.GetExpansionLevelBreakdownDesc])\\n[AddLocalizationIf( Not(STATE.GetOwner.IsLocalPlayer), 'CAN_EXPAND_BUILDING_TOOLTIP_FOREIGN' )]#tooltippable #tooltip:[GetRawTextTooltipTag('$PROFIT_IMPACT_DESC|q$')] #v @money!$PROFIT_IMPACT|K+=$#!#!#! Previsión de [SelectLocalization(Or(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), BUILDING.GetBuildingType.IsMilitaryBuilding), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / semana\\n[ConcatIfNeitherEmpty('$PRODUCTIVITY|q$', '\\n')][ConcatIfNeitherEmpty('$QUALIFICATIONS|q$', '\\n')][SelectLocalization( LessThan_CFixedPoint(State.GetConstructionEfficiencyForBuildingType(BUILDING.GetBuildingType), '(CFixedPoint)0'), 'CONSTRUCTION_QUEUE_STATE_CONSTRUCTION_EFFICIENCY_WARNING', '')]$TOOLTIP_DELIMITER$\\n@construction! $REQUIRED_CONSTRUCTION|v0$ [concept_construction|l] ($CONSTRUCTION_COST_CHANGE$)\\n$EXPAND_BUILDING_TT_NATIONAL_MAINTENANCE$\\n\\n$PRODUCTION_BREAKDOWN$\\n\\n[STATE.GetMarketAccessStatus]\\nMano de obra disponible: [State.GetNumSubsistenceWorkingAdults|Dv] [GetPopType('peasants').GetName] [SelectLocalization( GreaterThan_int64(State.GetNumUnemployedWorkingAdults, '(int64)0'), 'AND_UNEMPLOYED', '' )][ConcatIfNeitherEmpty('$PORT_INFO|q$', '\\n')]$DATA_BUILDING_TYPE_DESCRIPTION_TOOLTIP_LORE_SECTION$\\n\\n$KEY_MODIFIER_INSTRUCTIONS$"
  },
  "CULTURAL_COMMUNITY_DECAYING_ACCEPTANCE_DELTA_DESC": {
   "en": "$VALUE|0+=$ from Cultural Integration (will increase by [CulturalCommunity.GetState.MakeScope.ScriptValue('total_state_yearly_cultural_acceptance_add')] per year)",
   "es": "$VALUE|0+=$ por Integración cultural (aumentará en [CulturalCommunity.GetState.MakeScope.ScriptValue('total_state_yearly_cultural_acceptance_add')] al año)"
  },
  "EXPANSION_PROFIT_IMPACT": {
-  "en": "#header Predicted [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] of new level#!\\n#v @money!$VAL|K+=$#! Predicted [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / week\\n(Excluding [Concept('concept_building_wage','$concept_building_wages$')])\\n$TOOLTIP_DELIMITER$\\n$IMPACT_DETAILS$\\n\\n$BUILDING_PREDICTION_DISCLAIMER$",
-  "es": "#header Previsión de [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] del nuevo nivel#!\\n#v @money!$VAL|K+=$#! Previsión de [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / semana\\n(Sin contar los [Concept('concept_building_wage','$concept_building_wages$')|l])\\n$TOOLTIP_DELIMITER$\\n$IMPACT_DETAILS$\\n\\n$BUILDING_PREDICTION_DISCLAIMER$"
+  "en": "#header Predicted [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] of new level#!\\n#v @money!$VAL|K+=$#! Predicted [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / week\\n(Excluding [Concept('concept_building_wage','$concept_building_wages|q$')])\\n$TOOLTIP_DELIMITER$\\n$IMPACT_DETAILS$\\n\\n$BUILDING_PREDICTION_DISCLAIMER$",
+  "es": "#header Previsión de [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] del nuevo nivel#!\\n#v @money!$VAL|K+=$#! Previsión de [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / semana\\n(Sin contar los [Concept('concept_building_wage','$concept_building_wages|q$')|l])\\n$TOOLTIP_DELIMITER$\\n$IMPACT_DETAILS$\\n\\n$BUILDING_PREDICTION_DISCLAIMER$"
  },
  "GOODS_PRICE_DESC_FIXED": {
   "en": "[GOODS.GetName] has a fixed price of @money![GOODS.GetBasePrice|1v] that will never change.",
@@ -24,16 +28,16 @@
   "es": "Perfil nacional [AddLocalizationIf(Not(Country.IsLocalPlayer), Concatenate(Country.GetAdjective, ' '))]"
  },
  "TOOLTIP_LOCKED_PRINCIPLE_SLOT_3_DURING_FORMATION": {
-  "en": "Available when your [concept_power_bloc] has #v 3#! [concept_power_bloc_principle] slots. It starts with #v 2#! and gains #v 1#! at [concept_power_bloc_rank] #v ##5#! or better with at least #v 5#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short$')] and #v 1#! more at rank #v ##3#! or better with at least #v 10#!.[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]",
-  "es": "Disponible cuando tu [concept_power_bloc|l] tenga #v 3#! espacios para [Concept('concept_power_bloc_principle','principios')]. Empieza con #v 2#! y gana #v 1#! con un [concept_power_bloc_rank|l] #v ##5#! o mejor y al menos #v 5#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short$')|l], y #v 1#! más con rango #v ##3#! o mejor y al menos #v 10#!.[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]"
+  "en": "Available when your [concept_power_bloc] has #v 3#! [concept_power_bloc_principle] slots. It starts with #v 2#! and gains #v 1#! at [concept_power_bloc_rank] #v ##5#! or better with at least #v 5#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short|q$')] and #v 1#! more at rank #v ##3#! or better with at least #v 10#!.[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]",
+  "es": "Disponible cuando tu [concept_power_bloc|l] tenga #v 3#! espacios para [Concept('concept_power_bloc_principle','principios')]. Empieza con #v 2#! y gana #v 1#! con un [concept_power_bloc_rank|l] #v ##5#! o mejor y al menos #v 5#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short|q$')|l], y #v 1#! más con rango #v ##3#! o mejor y al menos #v 10#!.[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]"
  },
  "TOOLTIP_LOCKED_PRINCIPLE_SLOT_4_DURING_FORMATION": {
-  "en": "Available when your [concept_power_bloc] has #v 4#! [concept_power_bloc_principle] slots. It starts with #v 2#! and gains #v 1#! at [concept_power_bloc_rank] #v ##5#! or better with at least #v 5#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short$')] and #v 1#! more at rank #v ##3#! or better with at least #v 10#!.[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]",
-  "es": "Disponible cuando tu [concept_power_bloc|l] tenga #v 4#! espacios para [Concept('concept_power_bloc_principle','principios')]. Empieza con #v 2#! y gana #v 1#! con un [concept_power_bloc_rank|l] #v ##5#! o mejor y al menos #v 5#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short$')|l], y #v 1#! más con rango #v ##3#! o mejor y al menos #v 10#!.[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]"
+  "en": "Available when your [concept_power_bloc] has #v 4#! [concept_power_bloc_principle] slots. It starts with #v 2#! and gains #v 1#! at [concept_power_bloc_rank] #v ##5#! or better with at least #v 5#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short|q$')] and #v 1#! more at rank #v ##3#! or better with at least #v 10#!.[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]",
+  "es": "Disponible cuando tu [concept_power_bloc|l] tenga #v 4#! espacios para [Concept('concept_power_bloc_principle','principios')]. Empieza con #v 2#! y gana #v 1#! con un [concept_power_bloc_rank|l] #v ##5#! o mejor y al menos #v 5#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short|q$')|l], y #v 1#! más con rango #v ##3#! o mejor y al menos #v 10#!.[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]"
  },
  "TOOLTIP_LOCKED_PRINCIPLE_SLOT_DURING_FORMATION": {
-  "en": "More [concept_power_bloc_principle] slots will become available as your [concept_power_bloc] achieves a higher [concept_power_bloc_rank] and acquires more [Concept('concept_power_bloc_member','$concept_power_bloc_members_short$')].[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]",
-  "es": "Habrá más espacios para [Concept('concept_power_bloc_principle','principios')] a medida que tu [concept_power_bloc|l] logre un [concept_power_bloc_rank|l] más alto y adquiera más [Concept('concept_power_bloc_member','$concept_power_bloc_members_short$')|l].[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]"
+  "en": "More [concept_power_bloc_principle] slots will become available as your [concept_power_bloc] achieves a higher [concept_power_bloc_rank] and acquires more [Concept('concept_power_bloc_member','$concept_power_bloc_members_short|q$')].[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]",
+  "es": "Habrá más espacios para [Concept('concept_power_bloc_principle','principios')] a medida que tu [concept_power_bloc|l] logre un [concept_power_bloc_rank|l] más alto y adquiera más [Concept('concept_power_bloc_member','$concept_power_bloc_members_short|q$')|l].[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]"
  },
  "academics_desc": {
   "en": "Researchers, doctors, lawyers and other educated professionals, especially those studying and teaching in academic institutions. Politically, they are at the forefront of the Intelligentsia.",
@@ -76,8 +80,8 @@
   "es": "Condición local"
  },
  "concept_harvest_condition_desc": {
-  "en": "A $concept_harvest_condition$ is an occurrence that affects a [Concept('concept_country','$concept_country_possessive$')] local economy with a variable [Concept('concept_harvest_condition_intensity','$concept_harvest_condition_intensity_short$')], duration, and range. It is generally a natural phenomenon and can have either #g positive#! or #r negative#! effects on the [Concept('concept_state','$concept_states$')] it affects. $concept_harvest_conditions$ will mostly affect the [concept_throughput] of agricultural [Concept('concept_building','$concept_buildings$')], but they can also have an effect on your [Concept('concept_pop','$concept_population$')] and $concept_states$ in other ways, such as reducing available [concept_infrastructure].\\n\\n$concept_harvest_conditions$ will often affect $concept_states$ surrounding their #b epicenter#!. In such cases, the [concept_harvest_condition_intensity] will generally decrease as the distance to the #b epicenter#! increases.\\n\\n#title Potential $concept_harvest_conditions$:#!#indent_newline:3 \\n[GetHarvestConditionTypesList]#!",
-  "es": "Una $concept_harvest_condition$ es un suceso que afecta a la economía local [Concept('concept_country','$concept_country_possessive$')] con una [Concept('concept_harvest_condition_intensity','$concept_harvest_condition_intensity_short$')|l] variable, una duración y un alcance. Suele ser un fenómeno natural y puede tener efectos #g positivos#! o #r negativos#! en los [Concept('concept_state','$concept_states$')|l] a los que afecta. Las $concept_harvest_conditions$ afectarán sobre todo al [concept_throughput|l] de los [Concept('concept_building','$concept_buildings$')|l] agrícolas, pero también pueden afectar de otras maneras a tu [Concept('concept_pop','$concept_population$')|l] y a los $concept_states$, por ejemplo reduciendo las [concept_infrastructure|l] disponibles.\\n\\nLas $concept_harvest_conditions$ afectarán a menudo a los $concept_states$ que rodean su #b epicentro#!. En esos casos, la [concept_harvest_condition_intensity|l] suele disminuir a medida que aumenta la distancia al #b epicentro#!.\\n\\n#title $concept_harvest_conditions$ posibles:#!#indent_newline:3 \\n[GetHarvestConditionTypesList]#!"
+  "en": "A $concept_harvest_condition$ is an occurrence that affects a [Concept('concept_country','$concept_country_possessive|q$')] local economy with a variable [Concept('concept_harvest_condition_intensity','$concept_harvest_condition_intensity_short|q$')], duration, and range. It is generally a natural phenomenon and can have either #g positive#! or #r negative#! effects on the [Concept('concept_state','$concept_states|q$')] it affects. $concept_harvest_conditions$ will mostly affect the [concept_throughput] of agricultural [Concept('concept_building','$concept_buildings|q$')], but they can also have an effect on your [Concept('concept_pop','$concept_population|q$')] and $concept_states$ in other ways, such as reducing available [concept_infrastructure].\\n\\n$concept_harvest_conditions$ will often affect $concept_states$ surrounding their #b epicenter#!. In such cases, the [concept_harvest_condition_intensity] will generally decrease as the distance to the #b epicenter#! increases.\\n\\n#title Potential $concept_harvest_conditions$:#!#indent_newline:3 \\n[GetHarvestConditionTypesList]#!",
+  "es": "Una $concept_harvest_condition$ es un suceso que afecta a la economía local [Concept('concept_country','$concept_country_possessive|q$')] con una [Concept('concept_harvest_condition_intensity','$concept_harvest_condition_intensity_short|q$')|l] variable, una duración y un alcance. Suele ser un fenómeno natural y puede tener efectos #g positivos#! o #r negativos#! en los [Concept('concept_state','$concept_states|q$')|l] a los que afecta. Las $concept_harvest_conditions$ afectarán sobre todo al [concept_throughput|l] de los [Concept('concept_building','$concept_buildings|q$')|l] agrícolas, pero también pueden afectar de otras maneras a tu [Concept('concept_pop','$concept_population|q$')|l] y a los $concept_states$, por ejemplo reduciendo las [concept_infrastructure|l] disponibles.\\n\\nLas $concept_harvest_conditions$ afectarán a menudo a los $concept_states$ que rodean su #b epicentro#!. En esos casos, la [concept_harvest_condition_intensity|l] suele disminuir a medida que aumenta la distancia al #b epicentro#!.\\n\\n#title $concept_harvest_conditions$ posibles:#!#indent_newline:3 \\n[GetHarvestConditionTypesList]#!"
  },
  "concept_harvest_condition_intensity": {
   "en": "Intensity",
@@ -87,9 +91,17 @@
   "en": "Local Conditions",
   "es": "Condiciones locales"
  },
+ "concept_migration_target_desc": {
+  "en": "A [concept_state] selected as a suitable target for a [concept_mass_migration]. Surrounding $concept_states$ may also see some degree of $concept_immigration$ from a $concept_mass_migration$.\\n\\nTo be $concept_mass_migration_eligible$ for $concept_mass_migrations$ a state needs to be [Concept('concept_incorporated_state', '$concept_incorporated|q$')] and have at least #b [GetDefine('NPops','MASS_MIGRATION_STATE_MIN_MARKET_ACCESS')|0%]#! [concept_market_access]. Additionally, the $concept_state$ cannot already be the target of a different $concept_mass_migration$ and the $concept_country$'s [GetLawGroup('lawgroup_migration').GetName] and [GetLawGroup('lawgroup_citizenship').GetName] [Concept('concept_law', '$concept_laws|q$')] need to allow $concept_migration$ to happen. A harsh [concept_local_climate] makes a state a less likely target.",
+  "es": "Un [concept_state|l] elegido como objetivo adecuado de una [concept_mass_migration|l]. Los $concept_states$ circundantes también pueden recibir cierto grado de $concept_immigration$ de una $concept_mass_migration$.\\n\\nPara ser $concept_mass_migration_eligible$ para las $concept_mass_migrations$, un Estado debe ser [Concept('concept_incorporated_state', '$concept_incorporated|q$')] y tener al menos #b [GetDefine('NPops','MASS_MIGRATION_STATE_MIN_MARKET_ACCESS')|0%]#! de [concept_market_access|l]. Además, el $concept_state$ no puede ser ya el objetivo de otra $concept_mass_migration$, y las [Concept('concept_law', '$concept_laws|q$')] de [GetLawGroup('lawgroup_migration').GetName] y [GetLawGroup('lawgroup_citizenship').GetName] del $concept_country$ deben permitir que se produzca la $concept_migration$. Un [concept_local_climate|l] hostil hace que un Estado sea un objetivo menos probable."
+ },
  "concept_power_bloc_principle_group_desc": {
-  "en": "Groups of five tiers of [Concept('concept_power_bloc_principle','$concept_power_bloc_principles$')] that support the same theme.",
-  "es": "Grupos de cinco niveles de [Concept('concept_power_bloc_principle','$concept_power_bloc_principles$')|l] que apoyan un mismo tema."
+  "en": "Groups of five tiers of [Concept('concept_power_bloc_principle','$concept_power_bloc_principles|q$')] that support the same theme.",
+  "es": "Grupos de cinco niveles de [Concept('concept_power_bloc_principle','$concept_power_bloc_principles|q$')|l] que apoyan un mismo tema."
+ },
+ "copper": {
+  "en": "Conductive Metals",
+  "es": "Metales conductores"
  },
  "country_institution_cost_institution_home_affairs_mult": {
   "en": "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_home_affairs').GetName]",
@@ -122,6 +134,14 @@
  "goods_input_coal_add_desc": {
   "en": "The amount of @coal! $coal$ consumed by buildings",
   "es": "La cantidad de @coal! $coal$ que consumen los edificios"
+ },
+ "goods_input_copper_add": {
+  "en": "@copper! $copper$ input",
+  "es": "Insumo de $copper$ @copper!"
+ },
+ "goods_input_copper_add_desc": {
+  "en": "The amount of @copper! $copper$ consumed by buildings",
+  "es": "La cantidad de @copper! $copper$ consumida por los edificios"
  },
  "goods_input_fertilizer_add": {
   "en": "@fertilizer! $fertilizer$ Input",
@@ -211,6 +231,14 @@
   "en": "The amount of @coal! $coal$ produced by buildings",
   "es": "La cantidad de @coal! $coal$ que producen los edificios"
  },
+ "goods_output_copper_add": {
+  "en": "@copper! $copper$ output",
+  "es": "Producción de $copper$ @copper!"
+ },
+ "goods_output_copper_add_desc": {
+  "en": "The amount of @copper! $copper$ produced by buildings",
+  "es": "La cantidad de @copper! $copper$ producida por los edificios"
+ },
  "goods_output_fertilizer_add": {
   "en": "@fertilizer! $fertilizer$ Output",
   "es": "Producción de $fertilizer$ @fertilizer!"
@@ -219,6 +247,14 @@
   "en": "The amount of @fertilizer! $fertilizer$ produced by buildings",
   "es": "La cantidad de @fertilizer! $fertilizer$ que producen los edificios"
  },
+ "goods_output_fertilizer_mult": {
+  "en": "Building @fertilizer! $fertilizer$ output",
+  "es": "Producción de $fertilizer$ @fertilizer! de edificios"
+ },
+ "goods_output_fertilizer_mult_desc": {
+  "en": "A bonus or penalty to the amount of @fertilizer! $fertilizer$ produced by buildings",
+  "es": "Una bonificación o penalización a la cantidad de @fertilizer! $fertilizer$ producidos por los edificios"
+ },
  "goods_output_fine_art_add": {
   "en": "@fine_art! $fine_art$ output",
   "es": "Producción de $fine_art$ @fine_art!"
@@ -226,6 +262,14 @@
  "goods_output_fine_art_add_desc": {
   "en": "The amount of @fine_art! $fine_art$ produced by buildings",
   "es": "La cantidad de @fine_art! $fine_art$ que producen los edificios"
+ },
+ "goods_output_fine_art_mult": {
+  "en": "Building @fine_art! $fine_art$ output",
+  "es": "Producción de $fine_art$ @fine_art! de los edificios"
+ },
+ "goods_output_fine_art_mult_desc": {
+  "en": "A bonus or penalty to the amount of @fine_art! $fine_art$ produced by buildings",
+  "es": "Bonificación o penalización a la cantidad de $fine_art$ @fine_art! que producen los edificios"
  },
  "goods_output_glass_add": {
   "en": "@glass! $glass$ output",
@@ -388,8 +432,8 @@
   "es": "Quién presta el servicio policial ordinario, quién lo paga y ante quién responde."
  },
  "lead": {
-  "en": "Conductive and Base Metals",
-  "es": "Metales conductores y básicos"
+  "en": "Base Metals",
+  "es": "Metales básicos"
  },
  "no_veterancy": {
   "en": "Recruit",
@@ -422,6 +466,10 @@
  "pm_photographic_art": {
   "en": "Photography",
   "es": "Fotografía"
+ },
+ "pmg_fencing": {
+  "en": "Herd Management",
+  "es": "Gestión del rebaño"
  },
  "pmg_fertilizer_production": {
   "en": "Chemicals Production",
@@ -466,6 +514,14 @@
  "second_rate_citizen": {
   "en": "Provisional Acceptance",
   "es": "Aceptación provisional"
+ },
+ "setting_free_construction_scaled_player_exemption": {
+  "en": "No Effect",
+  "es": "Sin efecto"
+ },
+ "setting_free_construction_scaled_player_exemption_desc": {
+  "en": "Does nothing in Timeline Extended, which removes the base [concept_construction] this rule scales. Base construction comes from the $rule_free_market_construction_rule$ rule instead: a flat 10 a week with it disabled. With it enabled, construction is bought on the market.",
+  "es": "No hace nada en Timeline Extended, que elimina la [concept_construction|l] base que esta regla escala. La construcción base procede en su lugar de la regla $rule_free_market_construction_rule$: 10 fijos a la semana si está desactivada. Si está activada, la construcción se compra en el mercado."
  },
  "state_building_construction_sector_max_level_add_desc": {
   "en": "Each point lets a [concept_state] house #v 1,000#! more people before [concept_migration_crowding] cuts its [concept_migration_pull], however little [concept_arable_land] it has. The state's $state_migration_crowding_density_mult$ multiplies these people as it does its land.",

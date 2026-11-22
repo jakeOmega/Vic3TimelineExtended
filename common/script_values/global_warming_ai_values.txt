@@ -71,6 +71,12 @@
 # 15 sit only on laws (a repeal on enacting laissez-faire is the point) or on
 # continuous signals (fossil), never on a yes/no that flips on its own.
 #
+# THE MOVEMENT'S PRESSURE sits outside the wills: on the seven policies the
+# Environmental Movement asks for, a pressing movement adds points to the one
+# the country is nearest to adopting, and holds each one it would press for
+# again without it (its section below the thresholds). Their margins are
+# gw_ai_base_margin_* (will less threshold) plus those points.
+#
 # Scope: country, throughout.
 # ============================================================================
 
@@ -320,44 +326,349 @@ gw_ai_max_weight = 30
 # available authority is negative.
 gw_ai_authority_deficit_repeal_weight = 15
 
-gw_ai_adopt_margin_climate_adaptation = {
+# ----------------------------------------------------------------------------
+# The Environmental Movement's pressure: the seven policies it asks for.
+# ----------------------------------------------------------------------------
+# movement_environmental adds 0.1 activism for each of seven policies the
+# country could adopt but hasn't (its POLICY_POSSIBLE_* lines read the same
+# gw_possible_* tests), and each of the seven in force calms it by 0.1 more
+# (country_environmental_movement_radicalism_add on its modifier). Adopting one
+# is a swing of 0.2. gw_ai_sig_movement above reads the movement's support
+# only, at most 10 points of will (5 for adaptation), so a government whose
+# movement was militant answered it no sooner than one whose movement was calm
+# (the owner, 2026-11-15: enact "when environmentalists want it and it wants to
+# keep them calm").
+#
+# So a pressing movement adds gw_ai_movement_pressure_weight points, scaled by
+# its pressure, to ONE policy: the one the country is nearest to adopting anyway
+# (the largest will less threshold among the seven it can carry now). The
+# thresholds and signals above already say what each policy costs whom, so the
+# nearest is the cheapest for this country, and a uniform bonus on every button
+# would sit at gw_ai_max_weight on all of them and lose that order. At most one
+# such answer a year (gw_ai_movement_answered, set by the seven adopt buttons):
+# activism drifts 0.01 a week, so the 0.2 an answer takes off has shown before
+# the next. Lapsing reads the pressure the movement would be under without
+# that one policy (gw_ai_movement_pressure_without_one), as the will reads the
+# warming beneath the haze: a policy the movement would press for again isn't
+# repealed for having worked. Each policy is held on its own: the movement's
+# activism plus one policy's swing, never the swing of all of them, so a
+# movement at 0 holds nothing however many policies are in force (the hold as
+# first built, PR #1841, added back every policy in force and kept four or more
+# for good whatever the movement's state). While a movement exists at most one
+# of the seven lapses a year (gw_ai_movement_lapsed, set by the seven repeal
+# buttons): activism moves 0.01 a week, so several policies falling below
+# their bands together would all go before the movement's reading caught up,
+# and two of them come back. Once the movement goes (the ministry fully
+# funded), each policy falls back to its own will and band, all at once as
+# before. Renewable Investment's hold also needs a treasury that can keep its
+# 0.5% of GDP (gw_ai_can_keep_renewable_investment, half the debt ceiling,
+# against a quarter to take it on): a country that can't falls back to its own
+# will and band, like a calm one.
+#
+# Aerosol Injection stirs the movement and isn't among the seven, and neither
+# are Green Building Codes, Fossil-Fuel Tariffs or Carbon Removal Support, which
+# the movement's lines don't count.
+
+# The movement's activism, 0 with no movement. A country has one
+# environmental movement at most.
+gw_ai_movement_activism = {
+	value = 0
+	every_political_movement = {
+		limit = { is_political_movement_type = movement_environmental }
+		add = this.political_movement_radicalism
+	}
+}
+
+# 0 below vanilla's protesting threshold (RADICALISM_PROTESTING_THRESHOLD 0.5),
+# 1 at its militant threshold (RADICALISM_MILITANT_THRESHOLD 0.75), where a civil
+# war starts organizing (MIN_RADICALISM_FOR_CIVIL_WAR_PROGRESSION).
+gw_ai_movement_pressure = {
+	value = gw_ai_movement_activism
+	subtract = 0.5
+	divide = 0.25
+	min = 0
+	max = 1
+}
+
+# What one of the seven in force holds back: its own -0.1 radicalism and the
+# +0.1 "could adopt" line it would show again once repealed.
+gw_ai_movement_policy_swing = 0.2
+
+# The pressure the movement would be under without one policy of the seven:
+# its activism plus that policy's swing, on the same ramp. Read in the hold,
+# so it is the same for each of the seven, and 0 with no movement or below
+# 0.3 activism.
+gw_ai_movement_pressure_without_one = {
+	value = gw_ai_movement_activism
+	add = gw_ai_movement_policy_swing
+	subtract = 0.5
+	divide = 0.25
+	min = 0
+	max = 1
+}
+
+# Points at full pressure: a militant movement is worth a degree and a half of
+# warming (20 a degree, gw_ai_will_urgency). It carries the nearest policy for
+# nearly every pressing movement in the 2026-11-15 saves (that one needs 1 to 5
+# points at the median), and the Carbon Tax (27 to 36 at the median) for about
+# a third of the countries that lack the authority for anything else.
+gw_ai_movement_pressure_weight = 30
+
+# What keeping a policy is worth while the movement would press without it,
+# and the lock on a second lapse in a year while a movement exists.
+gw_ai_movement_hold_points = {
+	value = gw_ai_movement_pressure_without_one
+	multiply = gw_ai_movement_pressure_weight
+	if = {
+		limit = {
+			has_variable = gw_ai_movement_lapsed
+			any_political_movement = { is_political_movement_type = movement_environmental }
+		}
+		add = gw_ai_movement_lapse_lock_points
+	}
+}
+
+# Larger than any repeal margin: no second of the seven lapses that year. A
+# repeal for an authority deficit is scored outside the margin, so it still
+# goes through (gw_ai_authority_deficit_repeal_weight).
+gw_ai_movement_lapse_lock_points = 1000
+
+# Renewable Investment's, only while the treasury can keep its running cost
+# (gw_ai_can_keep_renewable_investment): a country in default, or past half its
+# debt ceiling, falls back to its own will and band, lock or not.
+gw_ai_movement_hold_points_renewable_investment = {
+	value = 0
+	if = {
+		limit = { gw_ai_can_keep_renewable_investment = yes }
+		add = gw_ai_movement_hold_points
+	}
+}
+
+# Each policy's will less threshold when the country can take it up now as an
+# answer (gw_ai_can_answer_*: its own adoption test, the authority its adopt
+# button asks, and for Renewable Investment's running cost a solvent treasury),
+# else -1000.
+gw_ai_answer_margin_climate_adaptation = {
+	value = -1000
+	if = {
+		limit = { gw_ai_can_answer_climate_adaptation = yes }
+		add = 1000
+		add = gw_ai_base_margin_climate_adaptation
+	}
+}
+gw_ai_answer_margin_reforestation = {
+	value = -1000
+	if = {
+		limit = { gw_ai_can_answer_reforestation = yes }
+		add = 1000
+		add = gw_ai_base_margin_reforestation
+	}
+}
+gw_ai_answer_margin_renewable_investment = {
+	value = -1000
+	if = {
+		limit = { gw_ai_can_answer_renewable_investment = yes }
+		add = 1000
+		add = gw_ai_base_margin_renewable_investment
+	}
+}
+gw_ai_answer_margin_public_transit = {
+	value = -1000
+	if = {
+		limit = { gw_ai_can_answer_public_transit = yes }
+		add = 1000
+		add = gw_ai_base_margin_public_transit
+	}
+}
+gw_ai_answer_margin_emission_standards = {
+	value = -1000
+	if = {
+		limit = { gw_ai_can_answer_emission_standards = yes }
+		add = 1000
+		add = gw_ai_base_margin_emission_standards
+	}
+}
+gw_ai_answer_margin_carbon_tax = {
+	value = -1000
+	if = {
+		limit = { gw_ai_can_answer_carbon_tax = yes }
+		add = 1000
+		add = gw_ai_base_margin_carbon_tax
+	}
+}
+gw_ai_answer_margin_fossil_fuel_divestment = {
+	value = -1000
+	if = {
+		limit = { gw_ai_can_answer_fossil_fuel_divestment = yes }
+		add = 1000
+		add = gw_ai_base_margin_fossil_fuel_divestment
+	}
+}
+
+# The largest of the seven: the policy the country is nearest to adopting.
+gw_ai_movement_answer = {
+	value = -1000
+	min = gw_ai_answer_margin_climate_adaptation
+	min = gw_ai_answer_margin_reforestation
+	min = gw_ai_answer_margin_renewable_investment
+	min = gw_ai_answer_margin_public_transit
+	min = gw_ai_answer_margin_emission_standards
+	min = gw_ai_answer_margin_carbon_tax
+	min = gw_ai_answer_margin_fossil_fuel_divestment
+}
+
+# The pressure's points on one policy: only the nearest, only while the movement
+# presses, and only once a year.
+gw_ai_movement_answer_points_climate_adaptation = {
+	value = 0
+	if = {
+		limit = {
+			gw_ai_movement_pressure > 0
+			NOT = { has_variable = gw_ai_movement_answered }
+			gw_ai_can_answer_climate_adaptation = yes
+			gw_ai_answer_margin_climate_adaptation >= gw_ai_movement_answer
+		}
+		add = gw_ai_movement_pressure
+		multiply = gw_ai_movement_pressure_weight
+	}
+}
+gw_ai_movement_answer_points_reforestation = {
+	value = 0
+	if = {
+		limit = {
+			gw_ai_movement_pressure > 0
+			NOT = { has_variable = gw_ai_movement_answered }
+			gw_ai_can_answer_reforestation = yes
+			gw_ai_answer_margin_reforestation >= gw_ai_movement_answer
+		}
+		add = gw_ai_movement_pressure
+		multiply = gw_ai_movement_pressure_weight
+	}
+}
+gw_ai_movement_answer_points_renewable_investment = {
+	value = 0
+	if = {
+		limit = {
+			gw_ai_movement_pressure > 0
+			NOT = { has_variable = gw_ai_movement_answered }
+			gw_ai_can_answer_renewable_investment = yes
+			gw_ai_answer_margin_renewable_investment >= gw_ai_movement_answer
+		}
+		add = gw_ai_movement_pressure
+		multiply = gw_ai_movement_pressure_weight
+	}
+}
+gw_ai_movement_answer_points_public_transit = {
+	value = 0
+	if = {
+		limit = {
+			gw_ai_movement_pressure > 0
+			NOT = { has_variable = gw_ai_movement_answered }
+			gw_ai_can_answer_public_transit = yes
+			gw_ai_answer_margin_public_transit >= gw_ai_movement_answer
+		}
+		add = gw_ai_movement_pressure
+		multiply = gw_ai_movement_pressure_weight
+	}
+}
+gw_ai_movement_answer_points_emission_standards = {
+	value = 0
+	if = {
+		limit = {
+			gw_ai_movement_pressure > 0
+			NOT = { has_variable = gw_ai_movement_answered }
+			gw_ai_can_answer_emission_standards = yes
+			gw_ai_answer_margin_emission_standards >= gw_ai_movement_answer
+		}
+		add = gw_ai_movement_pressure
+		multiply = gw_ai_movement_pressure_weight
+	}
+}
+gw_ai_movement_answer_points_carbon_tax = {
+	value = 0
+	if = {
+		limit = {
+			gw_ai_movement_pressure > 0
+			NOT = { has_variable = gw_ai_movement_answered }
+			gw_ai_can_answer_carbon_tax = yes
+			gw_ai_answer_margin_carbon_tax >= gw_ai_movement_answer
+		}
+		add = gw_ai_movement_pressure
+		multiply = gw_ai_movement_pressure_weight
+	}
+}
+gw_ai_movement_answer_points_fossil_fuel_divestment = {
+	value = 0
+	if = {
+		limit = {
+			gw_ai_movement_pressure > 0
+			NOT = { has_variable = gw_ai_movement_answered }
+			gw_ai_can_answer_fossil_fuel_divestment = yes
+			gw_ai_answer_margin_fossil_fuel_divestment >= gw_ai_movement_answer
+		}
+		add = gw_ai_movement_pressure
+		multiply = gw_ai_movement_pressure_weight
+	}
+}
+
+gw_ai_base_margin_climate_adaptation = {
 	value = gw_ai_will_climate_adaptation
 	subtract = 25
 }
+gw_ai_adopt_margin_climate_adaptation = {
+	value = gw_ai_base_margin_climate_adaptation
+	add = gw_ai_movement_answer_points_climate_adaptation
+}
 gw_ai_repeal_margin_climate_adaptation = {
 	value = 0
-	subtract = gw_ai_adopt_margin_climate_adaptation
+	subtract = gw_ai_base_margin_climate_adaptation
 	subtract = gw_ai_repeal_band
+	subtract = gw_ai_movement_hold_points
 }
 
-gw_ai_adopt_margin_reforestation = {
+gw_ai_base_margin_reforestation = {
 	value = gw_ai_will_reforestation
 	subtract = 30
 }
+gw_ai_adopt_margin_reforestation = {
+	value = gw_ai_base_margin_reforestation
+	add = gw_ai_movement_answer_points_reforestation
+}
 gw_ai_repeal_margin_reforestation = {
 	value = 0
-	subtract = gw_ai_adopt_margin_reforestation
+	subtract = gw_ai_base_margin_reforestation
 	subtract = gw_ai_repeal_band
+	subtract = gw_ai_movement_hold_points
 }
 
-gw_ai_adopt_margin_renewable_investment = {
+gw_ai_base_margin_renewable_investment = {
 	value = gw_ai_will_renewable_investment
 	subtract = 35
 }
+gw_ai_adopt_margin_renewable_investment = {
+	value = gw_ai_base_margin_renewable_investment
+	add = gw_ai_movement_answer_points_renewable_investment
+}
 gw_ai_repeal_margin_renewable_investment = {
 	value = 0
-	subtract = gw_ai_adopt_margin_renewable_investment
+	subtract = gw_ai_base_margin_renewable_investment
 	subtract = gw_ai_repeal_band
+	subtract = gw_ai_movement_hold_points_renewable_investment
 }
 
-gw_ai_adopt_margin_public_transit = {
+gw_ai_base_margin_public_transit = {
 	value = gw_ai_will_public_transit
 	subtract = 40
 }
+gw_ai_adopt_margin_public_transit = {
+	value = gw_ai_base_margin_public_transit
+	add = gw_ai_movement_answer_points_public_transit
+}
 gw_ai_repeal_margin_public_transit = {
 	value = 0
-	subtract = gw_ai_adopt_margin_public_transit
+	subtract = gw_ai_base_margin_public_transit
 	subtract = gw_ai_repeal_band
+	subtract = gw_ai_movement_hold_points
 }
 
 gw_ai_adopt_margin_green_building_codes = {
@@ -370,34 +681,49 @@ gw_ai_repeal_margin_green_building_codes = {
 	subtract = gw_ai_repeal_band
 }
 
-gw_ai_adopt_margin_emission_standards = {
+gw_ai_base_margin_emission_standards = {
 	value = gw_ai_will_emission_standards
 	subtract = 45
 }
+gw_ai_adopt_margin_emission_standards = {
+	value = gw_ai_base_margin_emission_standards
+	add = gw_ai_movement_answer_points_emission_standards
+}
 gw_ai_repeal_margin_emission_standards = {
 	value = 0
-	subtract = gw_ai_adopt_margin_emission_standards
+	subtract = gw_ai_base_margin_emission_standards
 	subtract = gw_ai_repeal_band
+	subtract = gw_ai_movement_hold_points
 }
 
-gw_ai_adopt_margin_carbon_tax = {
+gw_ai_base_margin_carbon_tax = {
 	value = gw_ai_will_carbon_tax
 	subtract = 55
 }
+gw_ai_adopt_margin_carbon_tax = {
+	value = gw_ai_base_margin_carbon_tax
+	add = gw_ai_movement_answer_points_carbon_tax
+}
 gw_ai_repeal_margin_carbon_tax = {
 	value = 0
-	subtract = gw_ai_adopt_margin_carbon_tax
+	subtract = gw_ai_base_margin_carbon_tax
 	subtract = gw_ai_repeal_band
+	subtract = gw_ai_movement_hold_points
 }
 
-gw_ai_adopt_margin_fossil_fuel_divestment = {
+gw_ai_base_margin_fossil_fuel_divestment = {
 	value = gw_ai_will_fossil_fuel_divestment
 	subtract = 70
 }
+gw_ai_adopt_margin_fossil_fuel_divestment = {
+	value = gw_ai_base_margin_fossil_fuel_divestment
+	add = gw_ai_movement_answer_points_fossil_fuel_divestment
+}
 gw_ai_repeal_margin_fossil_fuel_divestment = {
 	value = 0
-	subtract = gw_ai_adopt_margin_fossil_fuel_divestment
+	subtract = gw_ai_base_margin_fossil_fuel_divestment
 	subtract = gw_ai_repeal_band
+	subtract = gw_ai_movement_hold_points
 }
 
 gw_ai_will_carbon_removal = {

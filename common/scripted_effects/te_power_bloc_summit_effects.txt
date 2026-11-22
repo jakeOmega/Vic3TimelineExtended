@@ -1,0 +1,138 @@
+﻿# Power bloc summits (#1442, te_pb_summit.1). docs/systems/mod_systems/power_blocs.md.
+
+# Country scope, the bloc leader: spend one of the bloc's mandates. 1.15's
+# add_power_bloc_mandate takes a negative value, and the count drops within the
+# same effect (te_debug_pb.1's mandate test, 2026-11-06). The tooltip line says
+# what the engine's own line might not. Callers gate on te_pb_summit_can_pay.
+# $KIND$ names the initiative in the log line, for play-test and observer reads.
+te_pb_summit_pay = {
+	custom_tooltip = {
+		text = te_pb_summit_cost_tt
+		power_bloc = {
+			add_power_bloc_mandate = -1
+		}
+	}
+	hidden_effect = {
+		if = {
+			limit = { is_ai = yes }
+			debug_log = "TE_PB_SUMMIT $KIND$ by=ai leader=[THIS.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_PB_SUMMIT $KIND$ by=player leader=[THIS.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+	}
+}
+
+# Country scope, the bloc leader: grant a bloc initiative for ten years. The
+# copy already running is removed first, unseen, because a same-name
+# add_modifier stacks. The option's tooltip line is $MODIFIER$_grant_tt, not
+# the engine's: vanilla's add_modifier line prints the scope's $SUBJECT_NAME$,
+# which is empty for a power bloc, so it read " gets Summit: ..." with no
+# subject. The key names the bloc and prints the modifier through
+# GetStaticModifier, so its lines follow the definition.
+te_pb_summit_grant_bloc_initiative = {
+	power_bloc = {
+		hidden_effect = {
+			if = {
+				limit = { has_modifier = $MODIFIER$ }
+				remove_modifier = $MODIFIER$
+			}
+		}
+		custom_tooltip = {
+			text = $MODIFIER$_grant_tt
+			add_modifier = {
+				name = $MODIFIER$
+				days = long_modifier_time
+			}
+		}
+	}
+}
+
+# Country scope, the bloc leader: grant an initiative to every member, the
+# leader included, for ten years. A country that joins later doesn't get it;
+# one that leaves keeps what it has until it runs out.
+# Every other member hears of it (#1558): only the leader sees te_pb_summit.1,
+# so te_pb_summit.2 names the leader and the initiative to each of them. The
+# member carries $MODIFIER$_told for a month, which picks the event's text and
+# the modifier its option lists; the event removes it.
+te_pb_summit_grant_member_initiative = {
+	save_scope_as = te_pb_summit_leader
+	power_bloc = {
+		every_power_bloc_member = {
+			hidden_effect = {
+				if = {
+					limit = { has_modifier = $MODIFIER$ }
+					remove_modifier = $MODIFIER$
+				}
+			}
+			add_modifier = {
+				name = $MODIFIER$
+				days = long_modifier_time
+			}
+			hidden_effect = {
+				if = {
+					limit = { NOT = { this = scope:te_pb_summit_leader } }
+					set_variable = { name = $MODIFIER$_told days = 30 }
+					trigger_event = { id = te_pb_summit.2 days = 1 }
+				}
+			}
+		}
+	}
+}
+
+# Country scope, the bloc leader: relations between every two members improve
+# by 20 at once. The walk meets each pair twice, once from either side, so
+# each step is 10.
+te_pb_summit_member_relations = {
+	custom_tooltip = {
+		text = te_pb_summit_relations_tt
+		power_bloc = {
+			every_power_bloc_member = {
+				save_scope_as = te_pb_summit_member
+				power_bloc = {
+					every_power_bloc_member = {
+						limit = {
+							NOT = { this = scope:te_pb_summit_member }
+						}
+						change_relations = {
+							country = scope:te_pb_summit_member
+							value = 10
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Country scope, the bloc leader: relations between the leader and every other
+# member improve by 20 at once.
+te_pb_summit_leader_relations = {
+	custom_tooltip = {
+		text = te_pb_summit_leader_relations_tt
+		power_bloc = {
+			every_power_bloc_member = {
+				limit = { is_power_bloc_leader = no }
+				change_relations = {
+					country = root
+					value = 20
+				}
+			}
+		}
+	}
+}
+
+# Country scope, the bloc leader: grant an initiative to the leader alone for
+# ten years, refreshing a running copy rather than stacking it.
+te_pb_summit_grant_leader_initiative = {
+	hidden_effect = {
+		if = {
+			limit = { has_modifier = $MODIFIER$ }
+			remove_modifier = $MODIFIER$
+		}
+	}
+	add_modifier = {
+		name = $MODIFIER$
+		days = long_modifier_time
+	}
+}

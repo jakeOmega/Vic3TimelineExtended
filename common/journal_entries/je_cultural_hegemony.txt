@@ -4,7 +4,9 @@
 # This JE is the player's window into the Cultural Hegemony system.
 # It shows cultural pull breakdown, global leaderboard, and tier status.
 # All computation runs in on_actions (cultural_hegemony_on_actions.txt) via
-# scripted effects (cultural_hegemony_effects.txt) from game start.
+# scripted effects (cultural_hegemony_effects.txt) from game start. The entry
+# declares the system's standing modifiers (scaling_modifiers_while_active,
+# below), each from a country variable those effects or its buttons write.
 # The JE activates once any country has researched Mass Media and this
 # country has Romanticism (`possible`), so scores are stable when first shown.
 # ============================================================================
@@ -12,10 +14,22 @@
 je_cultural_hegemony = {
 	icon = "gfx/interface/icons/event_icons/je_cultural_hegemony.dds"
 
-	group = je_group_soft_power
+	group = je_group_te_systems
 
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
+
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry ends through its
+	# invalid outcome on the rule.
+	disable_evaluation = {
+		NOT = { te_cultural_hegemony_on = yes }
+	}
 	is_shown_when_inactive = {
-		has_game_rule = cultural_hegemony_enabled
+		te_cultural_hegemony_on = yes
 	}
 
 	possible = {
@@ -70,10 +84,128 @@ je_cultural_hegemony = {
 		}
 	}
 
+	# ==== THE ENTRY'S MODIFIERS (vanilla 1.15) ================================
+	# Re-read on the entry's own update, about every four days, with the owning
+	# country as root, and on only while the entry is active (can_deactivate =
+	# no, and nothing invalidates it, so once active it stays). Nothing adds,
+	# removes or tests these by name: has_modifier cannot see a declared
+	# modifier, and an add_modifier beside a declaration would double it. Each
+	# value is 0 wherever the old add-and-remove code took the modifier off.
+	#
+	# The hegemon's bonus: the share of world cultural pull in percent, from 1%,
+	# at most 100, from the monthly cache (var:ch_total).
+	scaling_modifiers_while_active = {
+		modifier = cultural_hegemony_effect
+		value = {
+			value = cultural_hegemony_modifier_mult
+		}
+	}
+	# The Foreign Cultural Benchmark, the legitimacy a country trailing the
+	# hegemon loses: the strength the monthly pulse below writes. It sat on the
+	# country before; only this entry's pulse ever added it, so every country
+	# that carried it holds the entry active.
+	scaling_modifiers_while_active = {
+		modifier = cultural_hegemony_foreign_benchmark
+		value = {
+			value = 0
+			if = {
+				limit = { ch_trails_hegemon = yes }
+				add = var:ch_benchmark_applied
+			}
+		}
+	}
+	# Programme funding: its pull per step and its weekly cost, one step's cost
+	# per step, while ch_program_funding_in_force (the Ministry of Culture and
+	# at least one step).
+	scaling_modifiers_while_active = {
+		modifier = ch_cultural_program_funding
+		value = {
+			value = 0
+			if = {
+				limit = { ch_program_funding_in_force = yes }
+				add = ch_program_funding_level_value
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = ch_cultural_program_funding_cost
+		value = {
+			value = 0
+			if = {
+				limit = { ch_program_funding_in_force = yes }
+				add = ch_program_funding_total_cost_mult
+			}
+		}
+	}
+	# The four programmes, each on while its country variable is set
+	# (ch_active_<programme>, cultural_hegemony_triggers.txt), and International
+	# Cultural Outreach's cost, one funding step's (GDP-scaled) worth while it
+	# runs.
+	scaling_modifiers_while_active = {
+		modifier = ch_world_exposition
+		value = {
+			value = 0
+			if = {
+				limit = { ch_active_world_exposition = yes }
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = ch_world_exposition_cost
+		value = {
+			value = 0
+			if = {
+				limit = { ch_active_world_exposition = yes }
+				add = ch_program_funding_cost_mult
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = ch_cultural_institutes_program
+		value = {
+			value = 0
+			if = {
+				limit = { ch_active_cultural_institutes = yes }
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = ch_global_media_campaign
+		value = {
+			value = 0
+			if = {
+				limit = { ch_active_global_media_campaign = yes }
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = ch_cultural_protectionism_program
+		value = {
+			value = 0
+			if = {
+				limit = { ch_active_cultural_protectionism = yes }
+				add = 1
+			}
+		}
+	}
+
 	immediate = {
 		if = {
 			limit = { NOT = { has_variable = ch_program_funding_level } }
 			set_variable = { name = ch_program_funding_level value = 0 }
+		}
+		# Opened under the early unlock before the late gate: marked, so that a
+		# switch to the late unlock closes the entry until the late gate (the
+		# invalid outcome below). Cleared by the pulse once the gate is met.
+		if = {
+			limit = {
+				te_cultural_hegemony_early = yes
+				NOT = { ch_late_gate_met = yes }
+			}
+			set_variable = ch_opened_early
 		}
 
 		# Variables are already populated by on_actions before JE activates.
@@ -88,86 +220,92 @@ je_cultural_hegemony = {
 		}
 	}
 
-	complete = {
-		always = no
+	# The rule switched off mid-game, from the screen that changes country
+	# (2026-11-08). Nothing else ends this entry, so its nine declared modifiers
+	# and its pulse ran on; the on_actions already stop on the rule. It ends on
+	# its next update and takes the modifiers along. The programmes shut down as
+	# on losing the Ministry of Culture, and the hegemon's model pressure comes
+	# off our movements, since its yearly refresh has stopped.
+	# Also the early unlock switched to the late one while an entry opened
+	# early (ch_opened_early) is still short of the late gate: the same
+	# teardown.
+	# Either way ch_monthly_pulse_on_action's net adds the entry back once the
+	# rule is on and the gate of the setting in force is met. The trigger is
+	# ch_entry_would_end, which the net reads too, so the two can't drift apart;
+	# a loop from a rule read that differs between this outcome and the
+	# on_action is caught by the net's self-check and held.
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_cultural_hegemony_invalid_conclusion_desc
+		trigger = {
+			ch_entry_would_end = yes
+		}
+		effect = {
+			ch_shut_down_programmes = yes
+			ch_remove_hegemon_model_pressure = yes
+			# For the net's log line (ended_before=yes), removed at the add.
+			set_variable = ch_reopen_at_gate
+			if = {
+				limit = { has_variable = ch_opened_early }
+				remove_variable = ch_opened_early
+			}
+		}
 	}
 
 	on_monthly_pulse = {
 		effect = {
+			# An entry opened early has met the late gate: no longer one a switch
+			# to the late unlock would close.
+			if = {
+				limit = {
+					has_variable = ch_opened_early
+					ch_late_gate_met = yes
+				}
+				remove_variable = ch_opened_early
+			}
+
 			# Losing the Ministry of Culture shuts every cultural programme down.
-			# International Cultural Outreach (internally ch_world_exposition) was
-			# missing from this list, so it survived the repeal indefinitely — its
-			# `possible` requires the law, but nothing re-checked an already-running
-			# programme. Its GDP-scaled cost modifier goes with it.
 			if = {
 				limit = { NOT = { has_law = law_type:law_ministry_of_culture } }
-				set_variable = { name = ch_program_funding_level value = 0 }
-				je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_institutes_program }
-				je:je_cultural_hegemony ?= { remove_modifier = ch_global_media_campaign }
-				je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_protectionism_program }
-				je:je_cultural_hegemony ?= { remove_modifier = ch_world_exposition }
-				je:je_cultural_hegemony ?= { remove_modifier = ch_world_exposition_cost }
+				ch_shut_down_programmes = yes
 			}
 
-			# ch_refresh_funding_modifiers removes both funding modifiers and
-			# re-adds them when the level is >= 1. Wrapping it in the law check
-			# reproduces the old inline block exactly: with the law, remove then
-			# conditionally re-add; without it, remove only.
+			# The Foreign Cultural Benchmark's strength, which the entry declares
+			# the modifier at: this month's cultural_hegemony_benchmark_mult, or 0
+			# below 0.1, written every month so a stale value (an inherited one,
+			# say) never lasts. Cached here, as before, because the live value
+			# computes the world's cultural pull; the declaration and
+			# ch_trails_hegemon read the variable.
+			set_variable = { name = ch_benchmark_applied value = cultural_hegemony_benchmark_mult }
 			if = {
-				limit = { has_law = law_type:law_ministry_of_culture }
-				ch_refresh_funding_modifiers = yes
-			}
-			else = {
-				je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding }
-				je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_program_funding_cost }
-			}
-
-			# Apply/remove cultural hegemony modifier (hegemon bonus)
-			#
-			# Both multipliers below read a variable set here, as the UN
-			# contributor costs do (un_buttons.txt), not the script value. The
-			# engine keeps a modifier's multiplier expression and may evaluate
-			# it again after this pulse (modifier_multiplier_var_audit), and
-			# these two compute the world's cultural pull; a variable costs one
-			# evaluation per pulse either way. (Whether JE multipliers are
-			# re-evaluated every tick is unproven: the banking fiscal-policy
-			# multiplier, broken the same way until #679, logged its errors
-			# once a month, not daily.) The value is this pulse's, held for the
-			# month, which is what ch_benchmark_applied's display already
-			# assumes. Neither variable is ever removed. 2026-10-03.
-			je:je_cultural_hegemony ?= { remove_modifier = cultural_hegemony_effect }
-			if = {
-				limit = { var:ch_total >= 1 }
-				set_variable = {
-					name = ch_effect_mult_cached
-					value = {
-						value = cultural_pull_total
-						min = 0
-						max = 100
-					}
-				}
-				je:je_cultural_hegemony ?= { add_modifier = { name = cultural_hegemony_effect multiplier = root.var:ch_effect_mult_cached } }
-			}
-
-			# Apply/remove foreign benchmark (the legitimacy loss from trailing the hegemon)
-			# Only applies to countries with this JE active
-			if = {
-				limit = { cultural_hegemony_benchmark_mult >= 0.1 }
-				remove_modifier = cultural_hegemony_foreign_benchmark
-				set_variable = { name = ch_benchmark_applied value = cultural_hegemony_benchmark_mult }
-				add_modifier = { name = cultural_hegemony_foreign_benchmark multiplier = var:ch_benchmark_applied }
-			}
-			else_if = {
-				limit = { has_modifier = cultural_hegemony_foreign_benchmark }
-				remove_modifier = cultural_hegemony_foreign_benchmark
+				limit = { var:ch_benchmark_applied < 0.1 }
 				set_variable = { name = ch_benchmark_applied value = 0 }
 			}
 
-			# Milestone events — self-gated by ch_milestone_* variables, fire
-			# at most once per country when cultural_pull_total crosses 10 / 25
-			# (.9 at 25 also needs the world's #1 rank).
-			trigger_event = { id = cultural_hegemony.8 }
-			trigger_event = { id = cultural_hegemony.9 }
+			# Milestone events: fire_only_once, when cultural_pull_total
+			# crosses 10 / 25 (.9 at 25 also needs the world's #1 rank).
+			# Their triggers read the live share, a pass over every state's
+			# buildings and every country's GDP, so each is tried only where it
+			# could pass: .8 once this month's cached share (var:ch_total,
+			# ch_monthly_country_update) is half the threshold, and .9 only by
+			# the leaderboard's #1, the condition its trigger already holds.
+			# Tried by every holder, the two were the entry's whole monthly
+			# cost in a 1931 game (docs/audits/late_game_performance.md).
+			if = {
+				limit = {
+					has_variable = ch_total
+					var:ch_total >= 5
+				}
+				trigger_event = { id = cultural_hegemony.8 }
+			}
+			if = {
+				limit = {
+					has_global_variable = ch_rank_1
+					exists = global_var:ch_rank_1
+					THIS = global_var:ch_rank_1
+				}
+				trigger_event = { id = cultural_hegemony.9 }
+			}
 		}
 	}
 
@@ -175,4 +313,88 @@ je_cultural_hegemony = {
 	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = no
+
+	# The map (vanilla 1.15 journal entry map mode; docs/systems/mod_systems/journal_map_modes.md): each country's
+	# political model at the last census of models, in the model pie's colors. Root: the state being painted, every state
+	# in the world. The Map Room draws the same map as its selector 22, from the same triggers in the same order
+	# (common/scripted_triggers/te_journal_map_triggers.txt; the parity test in test_journal_map_modes.py).
+	map_color = {
+		if = {
+			limit = { te_jmap_ch_model = { MODEL = 1 } }
+			value = "te_jmap_ch_communist"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 2 } }
+			value = "te_jmap_ch_anarchist"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 3 } }
+			value = "te_jmap_ch_fascist"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 4 } }
+			value = "te_jmap_ch_corporatist"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 5 } }
+			value = "te_jmap_ch_socialist"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 6 } }
+			value = "te_jmap_ch_royalist_absolutist"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 7 } }
+			value = "te_jmap_ch_royalist_constitutional"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 8 } }
+			value = "te_jmap_ch_religious"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 9 } }
+			value = "te_jmap_ch_reactionary"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 10 } }
+			value = "te_jmap_ch_military_junta"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 11 } }
+			value = "te_jmap_ch_liberal"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 12 } }
+			value = "te_jmap_ch_other"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 13 } }
+			value = "te_jmap_ch_technocratic"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 14 } }
+			value = "te_jmap_ch_republican"
+		}
+		else_if = {
+			limit = { te_jmap_ch_model = { MODEL = 15 } }
+			value = "te_jmap_ch_developmentalist_junta"
+		}
+		else = {
+			value = "te_jmap_no_data"
+		}
+	}
+
+	map_tooltip = {
+		if = {
+			limit = { te_jmap_ch_no_data = yes }
+			custom_tooltip_no_bullet = te_jmap_tt_ch_no_data
+		}
+		else_if = {
+			limit = { te_jmap_ch_hegemon = yes }
+			custom_tooltip_no_bullet = te_jmap_tt_ch_hegemon
+		}
+		else = {
+			custom_tooltip_no_bullet = te_jmap_tt_ch_model
+		}
+	}
 }

@@ -60,13 +60,15 @@ Report: docs/engine/button_reason_report.md. Registered in POST_LOAD_AUDITS.
 """
 from __future__ import annotations
 
-import argparse
 import os
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
 import gui_tree
+from audit_common import AuditResult as _AuditResult
+from audit_common import StaleTag as _StaleTag
+from audit_common import cli_main, parse_reviewed, write_text
 from gui_reference_audit import LEX, defined_names, masks
 from long_tooltip_audit import loc_call_keys
 from mod_state import split_loc_line
@@ -82,9 +84,6 @@ _RENDERED_NAMED = re.compile(r"GetScriptedGui\(\s*'(\w+)'\s*\)\s*\.\s*IsValidToo
 _SPLICE = re.compile(r"\$([\w.\-]+)(?:\|[^$]*)?\$")
 _SCRIPT_TOKEN = re.compile(r'"(?:\\.|[^"\\])*"|[{}]|[!?<>=]=|[<>=]|[^\s{}=<>!?"]+')
 _OPS = frozenset({"=", "<", ">", "<=", ">=", "!=", "?=", "=="})
-_TAGGED_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*\((?P<checks>[\w ,]+)\)\s*:\s*(?P<rationale>.+?)\s*$"
-)
 
 COVER = frozenset({
     "custom_tooltip", "custom_tooltip_no_bullet", "custom_description",
@@ -122,41 +121,37 @@ class Flag:
 
 
 @dataclass
-class StaleTag:
-    check: str
-    file: str
-    line: int
+class StaleTag(_StaleTag):
+    """A tag that suppresses nothing; `tag` is the check it names."""
+
+    @property
+    def check(self) -> str:
+        return self.tag
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
+    """`failing`: flags without a tag, plus tags that suppress nothing (`stale`)."""
+
     flags: list[Flag] = field(default_factory=list)
-    stale_tags: list[StaleTag] = field(default_factory=list)
     buttons_checked: int = 0
     blocks_checked: int = 0
     ai_only_skipped: int = 0
 
-    @property
-    def failing(self) -> int:
-        return sum(1 for f in self.flags if not f.exemption) + len(self.stale_tags)
-
 
 def _tags_in(text: str) -> dict[int, dict[str, dict]]:
-    """line -> {check: tag} for every check-tagged REVIEWED comment."""
+    """line -> {check: tag} for every check-tagged REVIEWED comment. A
+    comment covers a flag of each check it names, and only those."""
     out: dict[int, dict[str, dict]] = {}
     if "REVIEWED" not in text:
         return out
     for tok in LEX.finditer(text):
         if not tok[0].startswith("#") or "REVIEWED" not in tok[0]:
             continue
-        m = _TAGGED_REVIEWED_RE.search(tok[0])
-        if not m:
-            continue
-        checks = set(re.split(r"[\s,]+", m.group("checks").strip())) & set(CHECKS)
-        if checks:
+        tags = {check: tag for check in CHECKS if (tag := parse_reviewed(tok[0], (check,)))}
+        if tags:
             line = text.count("\n", 0, tok.start()) + 1
-            tag = {"date": m.group("date"), "rationale": m.group("rationale").strip()}
-            out.setdefault(line, {}).update({c: tag for c in checks})
+            out.setdefault(line, {}).update(tags)
     return out
 
 
@@ -512,14 +507,14 @@ def audit(mod_path: str | Path | None = None) -> AuditResult:
         for line, checks in sorted(by_line.items()):
             for check in sorted(checks):
                 if (check, rel, line) not in flagged:
-                    result.stale_tags.append(StaleTag(check, rel, line))
+                    result.stale.append(StaleTag(rel, line, check))
     result.flags.sort(key=lambda f: (f.check, f.file, f.line))
     return result
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
     out = [
         "# Button reason audit report",
         "",
@@ -562,9 +557,9 @@ def render_report(result: AuditResult) -> str:
                     f"lines {', '.join(map(str, lines))}"
                 out.append(f"- {where}: `{owner}` — {detail}")
             out.append("")
-    if result.stale_tags:
+    if result.stale:
         out += ["## Stale tags", "", "Tags that suppress nothing; remove them.", ""]
-        out += [f"- `{t.file}:{t.line}` ({t.check})" for t in result.stale_tags]
+        out += [f"- `{t.file}:{t.line}` ({t.check})" for t in result.stale]
         out.append("")
     out += ["## Reviewed exemptions", ""]
     if not exemp:
@@ -580,7 +575,7 @@ def render_report(result: AuditResult) -> str:
         f"- total flags: {len(result.flags)}",
         f"- unreviewed: {len(unrev)}",
         f"- exempted: {len(exemp)}",
-        f"- stale tags: {len(result.stale_tags)}",
+        f"- stale tags: {len(result.stale)}",
         "",
     ]
     return "\n".join(out) + "\n"
@@ -592,16 +587,14 @@ def regenerate(mod_state=None) -> dict:
     from path_constants import mod_path
     result = audit(mod_path)
     out_path = os.path.join(mod_path, REPORT_PATH)
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(render_report(result))
+    write_text(out_path, render_report(result))
     return {
-        "unreviewed": result.failing,
+        "unreviewed": len(result.failing),
         "total_flags": len(result.flags),
         "missing_reason": sum(1 for f in result.flags if f.check == "missing_reason"),
         "raw_condition": sum(1 for f in result.flags if f.check == "raw_condition"),
-        "exempted": sum(1 for f in result.flags if f.exemption),
-        "stale_tags": len(result.stale_tags),
+        "exempted": len(result.exemptions),
+        "stale_tags": len(result.stale),
         "buttons_checked": result.buttons_checked,
         "blocks_checked": result.blocks_checked,
         "ai_only_skipped": result.ai_only_skipped,
@@ -610,14 +603,12 @@ def regenerate(mod_state=None) -> dict:
 
 
 def main(argv=None) -> int:
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--strict", action="store_true",
-                        help="exit 1 on any untagged flag or stale tag (CI mode)")
-    parser.add_argument("--mod-path", type=Path)
-    args = parser.parse_args(argv)
-    result = audit(args.mod_path)
-    print(render_report(result))
-    return int(args.strict and result.failing > 0)
+    def add_arguments(parser):
+        parser.add_argument("--mod-path", type=Path)
+
+    return cli_main(lambda args: audit(args.mod_path), lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0], add_arguments=add_arguments,
+                    strict_help="exit 1 on any untagged flag or stale tag (CI mode)")
 
 
 if __name__ == "__main__":

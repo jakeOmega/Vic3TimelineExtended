@@ -49,7 +49,11 @@
 # migration after the lobby, for a formed or released country and from the
 # monthly dispatch (te_tax_light.2), the monthly processor (te_tax_light.1) and
 # a sync after a taxation law is activated (te_tax_light.3). A released country
-# starts from its own law, so its marker is cleared first.
+# starts from its own law, so its marker is cleared first. Each country's own
+# monthly pulse also runs the entry's safety net (te_tax_light_entry_net, below):
+# the light code's relief and reactions are je_tax_code's scaling modifiers.
+# The full code has the same net (te_tax_full_entry_net): its tab opens only
+# while the entry is active.
 #
 # Decentralized countries are left out of the three fan-outs (final review
 # A-Minor 1; extra_on_actions.txt's global-warming pulse does the same): their
@@ -234,6 +238,11 @@ on_monthly_pulse = {
 on_monthly_pulse_country = {
 	on_actions = {
 		te_tax_watchdog_on_action
+		te_tax_light_entry_net
+		te_tax_full_entry_net
+		te_tax_light_entry_stuck
+		te_tax_full_entry_stuck
+		te_tax_rule_off_net
 	}
 }
 
@@ -310,6 +319,120 @@ te_tax_watchdog_on_action = {
 	}
 }
 
+# Country scope. The light code's relief and the interest groups' reactions are
+# je_tax_code's scaling modifiers (scaling_modifiers_while_active), which apply
+# only while the entry is active, so a country with the code in force must hold
+# it. The engine activates it from the inactive record every country holds
+# under the rule, within two weeks of the migration; Banking's entry showed the
+# engine can leave a country without a record (te_banking_entry_net,
+# te_banking_entry_on_actions.txt: BROKEN missing=3 in the owner's EU game), and
+# such a country would collect without its relief and lose its reactions. So
+# each month this adds the entry to a migrated country with no record of it,
+# active or inactive. Not while an inactive copy waits: add_journal_entry is
+# refused then, with an error ("already has a journal entry of type",
+# scripting_best_practices.md), and the engine activates that copy itself.
+# Decentralized countries are left out, as in the dispatch: none is migrated.
+te_tax_light_entry_net = {
+	effect = {
+		if = {
+			limit = {
+				te_tax_code_light_on = yes
+				te_tax_light_in_force = yes
+				NOT = { is_country_type = decentralized }
+				NOT = { has_journal_entry = je_tax_code }
+				NOT = { has_inactive_journal_entry = je_tax_code }
+			}
+			add_journal_entry = { type = je_tax_code }
+			debug_log = "TE_TAX light_entry_net the safety net added je_tax_code; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# Country scope. The same net under the full code (2026-11-13). The entry is
+# display only there, but the Budget panel's Tax Code tab and the Timeline
+# Extended window's open only while it is active (te_budget_tax_tab_sgui), and
+# the tab is where a tax is changed. A Workshop player with the full code had
+# the tab greyed for ten years, its tooltip saying the conditions were met and
+# the entry was not running: the code was in force and the entry was not
+# active. The tooltip cannot tell the two ways there apart. One is a country
+# with no record of the entry, active or inactive: disable_evaluation prunes
+# the inactive record while the rule is off, so a game whose rule was switched
+# on during play has none, and Banking's net found the engine leaving countries
+# without a record in an ordinary game too. Nothing added the entry back, since
+# only the light setting had a net; this net does, under the light net's
+# conditions. The other is an inactive copy the engine never activates, which
+# no net can add over: te_tax_entry_stuck_check (te_tax_migration_effects.txt)
+# reports that one, so the next report says which it was.
+te_tax_full_entry_net = {
+	effect = {
+		if = {
+			limit = {
+				te_tax_code_full = yes
+				te_tax_code_in_force = yes
+				NOT = { is_country_type = decentralized }
+				NOT = { has_journal_entry = je_tax_code }
+				NOT = { has_inactive_journal_entry = je_tax_code }
+			}
+			add_journal_entry = { type = je_tax_code }
+			debug_log = "TE_TAX full_entry_net the safety net added je_tax_code; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# Country scope. An inactive copy of the entry that the engine never activates,
+# which neither net can add over: te_tax_entry_stuck_check
+# (te_tax_migration_effects.txt) counts the months and reports the third. One
+# handler a setting, each gated on its own.
+te_tax_light_entry_stuck = {
+	effect = {
+		if = {
+			limit = { te_tax_code_light_on = yes }
+			te_tax_entry_stuck_check = { IN_FORCE = te_tax_light_in_force }
+		}
+	}
+}
+
+te_tax_full_entry_stuck = {
+	effect = {
+		if = {
+			limit = { te_tax_code_full = yes }
+			te_tax_entry_stuck_check = { IN_FORCE = te_tax_code_in_force }
+		}
+	}
+}
+
+# Country scope. The rule switched to Disabled mid-game, from the screen that
+# changes country (2026-11-08). je_tax_code ends through its invalid outcome and
+# takes the light code's relief and reactions along, but what the code put on
+# the country stays: the carrier law under the full code, the interest groups'
+# view bands, the relief modifiers and the light code's marker.
+# te_tax_leave_code_for_rule takes them off, once: it clears both markers.
+# This is the one negated rule check (te_tax_triggers.txt says why the others
+# are positive): a save from before the rule reads as Disabled here, and is
+# safe only because the check asks for a marker no such save has.
+te_tax_rule_off_net = {
+	effect = {
+		if = {
+			limit = {
+				NOT = { te_tax_code_on = yes }
+				OR = {
+					has_law = law_type:law_te_tax_code
+					AND = {
+						has_variable = te_tax_migrated
+						var:te_tax_migrated >= 1
+					}
+					AND = {
+						has_variable = te_tax_light_on
+						var:te_tax_light_on >= 1
+					}
+				}
+			}
+			te_tax_leave_code_for_rule = yes
+			debug_log = "TE_TAX rule_off left the code; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
 # ----------------------------------------------------------------------------
 # Re-assertion of the carrier
 # ----------------------------------------------------------------------------
@@ -360,13 +483,22 @@ te_tax_on_law_activated = {
 # Light code: a taxation law activated in a migrated country, enacted or set by
 # script. The sync is dispatched as te_tax_light.3, a country event, so it sees
 # the new law and runs with the country as ROOT; it clamps the code into the
-# new law's range (te_tax_light_sync, step 1).
+# new law's range (te_tax_light_sync, step 1). An economic system law too
+# (review of #1855): Traditionalism closes the low dividend tax and leaving it
+# reopens it, so the sync sets the tax level and Set By the same day rather
+# than on the 1st. The sync re-derives everything, so running it again changes
+# nothing else.
 te_tax_light_on_law_activated = {
 	effect = {
 		if = {
 			limit = {
 				te_tax_code_light_on = yes
-				law_type = { is_same_law_group_as = law_type:law_proportional_taxation }
+				law_type = {
+					OR = {
+						is_same_law_group_as = law_type:law_proportional_taxation
+						is_same_law_group_as = law_type:law_traditionalism
+					}
+				}
 				owner = { te_tax_light_in_force = yes }
 			}
 			owner = {

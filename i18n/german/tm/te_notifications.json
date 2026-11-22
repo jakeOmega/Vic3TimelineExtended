@@ -23,6 +23,14 @@
   "en": "Emergency Liquidity Wound Down",
   "de": "Notliquidität abgewickelt"
  },
+ "notification_banking_overdraft_lift_notice_desc": {
+  "en": "Our [concept_banking_intervention_budget] no longer covers the interventions in force, so #b [GetPlayer.GetCustom('banking_overdraft_lifted_tool')]#! has been lifted.[GetPlayer.GetCustom('banking_overdraft_lifted_refund')] While the budget stays overdrawn, one more is lifted each month: crash responses first, then the $banking_dash_cat_external$ tools, then the rest from the cheapest up. To keep a cheap tool, lift a costlier one first.",
+  "de": "Unser [concept_banking_intervention_budget] deckt die in Kraft befindlichen Interventionen nicht mehr, daher wurde #b [GetPlayer.GetCustom('banking_overdraft_lifted_tool')]#! aufgehoben.[GetPlayer.GetCustom('banking_overdraft_lifted_refund')] Solange das Budget überzogen bleibt, wird jeden Monat eine weitere aufgehoben: zuerst Crash-Reaktionen, dann die Instrumente aus $banking_dash_cat_external$, dann der Rest, vom billigsten an. Um ein billiges Instrument zu behalten, heben Sie zuerst ein teureres auf."
+ },
+ "notification_banking_overdraft_lift_notice_name": {
+  "en": "Intervention Budget Overdrawn",
+  "de": "Interventionsbudget überzogen"
+ },
  "notification_colonial_ceasefire_granted_notice_desc": {
   "en": "[SCOPE.sCountry('decol_colonial_power').GetName] has agreed a ceasefire with our independence movement and granted us independence. We are free.",
   "de": "[SCOPE.sCountry('decol_colonial_power').GetAltName('NOM')|U] hat mit unserer Unabhängigkeitsbewegung einen Waffenstillstand vereinbart und uns die Unabhängigkeit gewährt. Wir sind frei."
@@ -111,6 +119,54 @@
   "en": "Propaganda Countered",
   "de": "Propaganda gekontert"
  },
+ "notification_covert_backlash_public_notice_desc": {
+  "en": "The exposure of an operation by #b [SCOPE.sCountry('iw_exposed_by').GetName]#! has turned public anger on its friends at home. The interest groups in the lobby that favors it gain $covert_foreign_ties_discredited$ and lose [concept_political_strength] for a time.",
+  "de": "Die Aufdeckung einer Operation von #b [SCOPE.sCountry('iw_exposed_by').GetAltName('VON')]#! hat den Volkszorn auf ihre Freunde im Inland gelenkt. Die Interessengruppen in der Lobby, die sie begünstigt, erhalten $covert_foreign_ties_discredited$ und verlieren zeitweise [concept_political_strength]."
+ },
+ "notification_covert_backlash_public_notice_name": {
+  "en": "Anger at Foreign Friends",
+  "de": "Zorn auf Freunde im Ausland"
+ },
+ "notification_covert_catch_watched_notice_desc": {
+  "en": "Our counterintelligence has caught agents of #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! running [GetPlayer.GetCustom('covert_caught_type_name')] against us. Under our standing order it is letting the operation run and watching it. It is listed under Known Foreign Operations, where we can expose it at any time.",
+  "de": "Unsere Spionageabwehr hat Agenten #b [SCOPE.sCountry('iw_catcher_attacker').GetAltName('GEN')]#! dabei ertappt, wie sie [GetPlayer.GetCustom('covert_caught_type_name')] gegen uns durchführen. Gemäß unserer Dauerweisung lässt sie die Operation weiterlaufen und beobachtet sie. Sie ist unter „Bekannte ausländische Operationen“ aufgeführt, wo wir sie jederzeit enttarnen können."
+ },
+ "notification_covert_catch_watched_notice_name": {
+  "en": "Foreign Operation Watched",
+  "de": "Ausländische Operation beobachtet"
+ },
+ "notification_covert_exposure_expelled_notice_desc": {
+  "en": "We have made public the evidence against #b [SCOPE.sCountry('iw_exposed_by').GetName]#!. Its operation against us, $covert_exposed_op_link$, is over. Its officers under diplomatic cover have been sent home, and it has expelled ours in turn.",
+  "de": "Wir haben die Beweise gegen #b [SCOPE.sCountry('iw_exposed_by').GetAltName('AKK')]#! öffentlich gemacht. Deren Operation gegen uns, $covert_exposed_op_link$, ist beendet. Deren Offiziere unter diplomatischer Tarnung wurden nach Hause geschickt, und im Gegenzug wurden unsere ausgewiesen."
+ },
+ "notification_covert_exposure_expelled_notice_name": {
+  "en": "Operation Exposed, Diplomats Expelled",
+  "de": "Operation enttarnt, Diplomaten ausgewiesen"
+ },
+ "notification_covert_exposure_repeat_notice_desc": {
+  "en": "Our counterintelligence has exposed another operation run against us by #b [SCOPE.sCountry('iw_exposed_by').GetName]#!: $covert_exposed_op_link$. It is over.",
+  "de": "Unsere Spionageabwehr hat eine weitere gegen uns geführte Operation von #b [SCOPE.sCountry('iw_exposed_by').GetAltName('VON')]#! aufgedeckt: $covert_exposed_op_link$. Sie ist beendet."
+ },
+ "notification_covert_exposure_repeat_notice_name": {
+  "en": "Another Operation Exposed",
+  "de": "Weitere Operation aufgedeckt"
+ },
+ "notification_covert_exposure_shored_notice_desc": {
+  "en": "We have made public the evidence against #b [SCOPE.sCountry('iw_exposed_by').GetName]#!. Its operation against us, $covert_exposed_op_link$, is over, and our counterintelligence is on alert.",
+  "de": "Wir haben die Beweise gegen #b [SCOPE.sCountry('iw_exposed_by').GetAltName('AKK')]#! öffentlich gemacht. Deren Operation gegen uns, $covert_exposed_op_link$, ist beendet, und unsere Spionageabwehr ist in Alarmbereitschaft."
+ },
+ "notification_covert_exposure_shored_notice_name": {
+  "en": "Operation Exposed",
+  "de": "Operation enttarnt"
+ },
+ "notification_covert_exposure_turned_notice_desc": {
+  "en": "We have made public the evidence against #b [SCOPE.sCountry('iw_exposed_by').GetName]#!. Its operation against us, $covert_exposed_op_link$, is over, and what it gave us is now a foothold inside its service.",
+  "de": "Wir haben die Beweise gegen #b [SCOPE.sCountry('iw_exposed_by').GetAltName('AKK')]#! öffentlich gemacht. Deren Operation gegen uns, $covert_exposed_op_link$, ist beendet, und was sie uns eingebracht hat, ist nun ein Fuß in der Tür ihres Dienstes."
+ },
+ "notification_covert_exposure_turned_notice_name": {
+  "en": "Operation Exposed and Turned",
+  "de": "Operation enttarnt und umgedreht"
+ },
  "notification_covert_severe_exposure_notice_desc": {
   "en": "[SCOPE.sCountry('covert_exposure_operator').GetName] has been caught running a covert campaign to bring down the government of [SCOPE.sCountry('detected_by_country').GetName], which we stand behind. Our relations with [SCOPE.sCountry('covert_exposure_operator').GetName] have suffered for it.",
   "de": "[SCOPE.sCountry('covert_exposure_operator').GetAltName('NOM')|U] wurde dabei ertappt, eine verdeckte Kampagne zu führen, um die Regierung [SCOPE.sCountry('detected_by_country').GetAltName('GEN')] zu stürzen, hinter der wir stehen. Unsere Beziehungen zu [SCOPE.sCountry('covert_exposure_operator').GetAltName('DAT')] haben darunter gelitten."
@@ -126,6 +182,46 @@
  "notification_decentralized_claims_renounced_name": {
   "en": "Colonial Claims Renounced",
   "de": "Koloniale Ansprüche aufgegeben"
+ },
+ "notification_decol_border_claim_pressed_notice_desc": {
+  "en": "[SCOPE.sCountry('border_claimant').GetName] demands that the border between us be redrawn and now claims [SCOPE.sState('rival_border_state').GetName]. Our relations fall by 40.",
+  "de": "[SCOPE.sCountry('border_claimant').GetAltName('NOM')|U] verlangt, dass die Grenze zwischen uns neu gezogen wird, und erhebt nun Anspruch auf [SCOPE.sState('rival_border_state').GetName]. Unsere Beziehungen sinken um 40."
+ },
+ "notification_decol_border_claim_pressed_notice_name": {
+  "en": "A Claim on Our Border",
+  "de": "Anspruch auf unsere Grenze"
+ },
+ "notification_decol_border_mediation_lost_notice_desc": {
+  "en": "[SCOPE.sCountry('border_claimant').GetName] took our border dispute to international mediation, and the mediators found for it. It now claims [SCOPE.sState('rival_border_state').GetName], and our relations fall by 10.",
+  "de": "[SCOPE.sCountry('border_claimant').GetAltName('NOM')|U] hat unseren Grenzstreit vor die internationale Vermittlung gebracht, und die Vermittler gaben dem Land recht. Es erhebt nun Anspruch auf [SCOPE.sState('rival_border_state').GetName], und unsere Beziehungen sinken um 10."
+ },
+ "notification_decol_border_mediation_lost_notice_name": {
+  "en": "The Mediators Find Against Us",
+  "de": "Die Vermittler entscheiden gegen uns"
+ },
+ "notification_decol_border_mediation_split_notice_desc": {
+  "en": "[SCOPE.sCountry('border_claimant').GetName] took our border dispute to international mediation, and the mediators split the difference. Neither of us gains a claim, and our relations rise by 10.",
+  "de": "[SCOPE.sCountry('border_claimant').GetAltName('NOM')|U] hat unseren Grenzstreit vor die internationale Vermittlung gebracht, und die Vermittler einigten sich auf einen Kompromiss. Keiner von uns gewinnt einen Anspruch, und unsere Beziehungen steigen um 10."
+ },
+ "notification_decol_border_mediation_split_notice_name": {
+  "en": "The Border Is Mediated",
+  "de": "Die Grenze wird vermittelt"
+ },
+ "notification_decol_border_mediation_won_notice_desc": {
+  "en": "[SCOPE.sCountry('border_claimant').GetName] took our border dispute to international mediation, and the mediators found for us. We now claim [SCOPE.sState('disputed_state').GetName].",
+  "de": "[SCOPE.sCountry('border_claimant').GetAltName('NOM')|U] hat unseren Grenzstreit vor die internationale Vermittlung gebracht, und die Vermittler gaben uns recht. Wir erheben nun Anspruch auf [SCOPE.sState('disputed_state').GetName]."
+ },
+ "notification_decol_border_mediation_won_notice_name": {
+  "en": "The Mediators Find for Us",
+  "de": "Die Vermittler entscheiden für uns"
+ },
+ "notification_decol_collapse_aftershock_notice_desc": {
+  "en": "The colonial empire of [SCOPE.sCountry('decol_colonial_power').GetName], our [concept_overlord], has collapsed. We gain $colonial_collapse_subject_unrest_modifier$ for 20 years, and our relations with it fall by 50.",
+  "de": "Das Kolonialreich [SCOPE.sCountry('decol_colonial_power').GetAltName('GEN')], unseres [Concept('concept_overlord', 'Suzeräns')], ist zusammengebrochen. Wir erhalten 20 Jahre lang $colonial_collapse_subject_unrest_modifier$, und unsere Beziehungen zu diesem Land sinken um 50."
+ },
+ "notification_decol_collapse_aftershock_notice_name": {
+  "en": "Our Overlord's Empire Collapses",
+  "de": "Das Reich unseres Suzeräns bricht zusammen"
  },
  "notification_decol_iw_accords_notice_desc": {
   "en": "The talks with [SCOPE.sCountry('decol_iw_talks_rebels').GetName] have reached terms: our claim is dropped, and the war can end in a white peace. Offer one from the peace screen.",
@@ -206,6 +302,14 @@
  "notification_decol_iw_war_won_rebels_notice_name": {
   "en": "Independence Won",
   "de": "Unabhängigkeit errungen"
+ },
+ "notification_decol_liberation_contagion_notice_desc": {
+  "en": "[SCOPE.sCountry('decolonized_new_country').GetName] has broken free of [SCOPE.sCountry('decolonizing_parent').GetName], and our own colonies have taken note. We gain $colonial_stability_negative_event$ for a year: our colonial stability falls by 1 a month.",
+  "de": "[SCOPE.sCountry('decolonized_new_country').GetAltName('NOM')|U] hat sich [SCOPE.sCountry('decolonizing_parent').GetAltName('VON')] befreit, und unsere eigenen Kolonien haben es zur Kenntnis genommen. Wir erhalten ein Jahr lang $colonial_stability_negative_event$: Unsere Koloniale Stabilität sinkt um 1 pro Monat."
+ },
+ "notification_decol_liberation_contagion_notice_name": {
+  "en": "Independence Spreads",
+  "de": "Die Unabhängigkeit breitet sich aus"
  },
  "notification_decol_truce_proposal_accepted_notice_desc": {
   "en": "[SCOPE.sCountry('truce_responder').GetName] has accepted our offer: a five-year truce now binds both our nations.",
@@ -289,7 +393,7 @@
  },
  "notification_gm_tr_lost_notice_desc": {
   "en": "[SCOPE.sCountry('gm_tr_taker').GetName] has carried off one of our Grand Monuments, or part of it, from [SCOPE.sState('gm_tr_notice_state').GetName]. It is listed under Held Abroad on the Grand Monuments tab, with the ways to get it back. The outrage stiffens our war support.",
-  "de": "[SCOPE.sCountry('gm_tr_taker').GetAltName('NOM')|U] hat eines unserer Großen Monumente oder einen Teil davon aus [SCOPE.sState('gm_tr_notice_state').GetName] fortgeschafft. Es steht auf dem Reiter „Große Monumente“ unter „Im Ausland gehalten“, samt den Wegen, es zurückzuholen. Die Empörung stärkt unsere Kriegsunterstützung."
+  "de": "[SCOPE.sCountry('gm_tr_taker').GetAltName('NOM')|U] hat eines unserer Großen Monumente oder einen Teil davon aus [SCOPE.sState('gm_tr_notice_state').GetName] fortgeschafft. Es steht auf dem Reiter „Große Monumente“ unter „Im Ausland gehalten“, samt den Wegen, es zurückzuholen. Die Empörung stärkt unseren Kriegswillen."
  },
  "notification_gm_tr_lost_notice_name": {
   "en": "Our Monument Carried Off",
@@ -335,8 +439,24 @@
   "en": "Condemnation Rejected",
   "de": "Verurteilung zurückgewiesen"
  },
+ "notification_gp_intervention_condemned_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_condemning_power').GetName] has condemned our intervention in [SCOPE.sCountry('intervention_victim').GetName]. We gain $gp_intervention_condemned_modifier$ for five years, fading, and its relations with us fall by 40.",
+  "de": "[SCOPE.sCountry('decol_condemning_power').GetAltName('NOM')|U] hat unsere Intervention [SCOPE.sCountry('intervention_victim').GetAltName('IN')] verurteilt. Wir erhalten fünf Jahre lang $gp_intervention_condemned_modifier$, abklingend, und die Beziehungen dieses Landes zu uns sinken um 40."
+ },
+ "notification_gp_intervention_condemned_notice_name": {
+  "en": "Our Intervention Condemned",
+  "de": "Unsere Intervention wird verurteilt"
+ },
+ "notification_gp_intervention_target_notice_desc": {
+  "en": "[SCOPE.sCountry('intervening_power').GetName] has answered our nationalization with a military intervention. We gain $gp_intervention_target_modifier$ for ten years, fading, and its relations with us fall by 100.",
+  "de": "[SCOPE.sCountry('intervening_power').GetAltName('NOM')|U] hat auf unsere Verstaatlichung mit einer militärischen Intervention geantwortet. Wir erhalten zehn Jahre lang $gp_intervention_target_modifier$, abklingend, und die Beziehungen dieses Landes zu uns sinken um 100."
+ },
+ "notification_gp_intervention_target_notice_name": {
+  "en": "Foreign Troops Land",
+  "de": "Fremde Truppen landen"
+ },
  "notification_gp_support_accepted_notice_desc": {
-  "en": "[SCOPE.sCountry('backed_colonial_power').GetName] has openly embraced our stance in defence of the colonial powers.",
+  "en": "[SCOPE.sCountry('backed_colonial_power').GetName] has openly embraced our stance in defense of the colonial powers.",
   "de": "[SCOPE.sCountry('backed_colonial_power').GetAltName('NOM')|U] hat sich offen zu unserer Haltung zur Verteidigung der Kolonialmächte bekannt."
  },
  "notification_gp_support_accepted_notice_name": {
@@ -344,7 +464,7 @@
   "de": "Eine Kolonialmacht steht uns bei"
  },
  "notification_gp_support_declined_notice_desc": {
-  "en": "[SCOPE.sCountry('backed_colonial_power').GetName] has publicly kept its distance from our stance in defence of the colonial powers.",
+  "en": "[SCOPE.sCountry('backed_colonial_power').GetName] has publicly kept its distance from our stance in defense of the colonial powers.",
   "de": "[SCOPE.sCountry('backed_colonial_power').GetAltName('NOM')|U] hat öffentlich Abstand von unserer Haltung zur Verteidigung der Kolonialmächte gehalten."
  },
  "notification_gp_support_declined_notice_name": {
@@ -848,8 +968,8 @@
   "de": "#b EFFIZIENTE NEUE LAMPEN ERHELLEN DIE STÄDTE #!"
  },
  "notification_headlines_tech_fusion_batteries_desc": {
-  "en": "Imagine a battery that never needs to be recharged. [SCOPE.sCountry('headlines_fusion_batteries_researcher').GetName] is developing fusion batteries, which use compact fusion reactors to power devices and vehicles for years, revolutionizing energy as we know it... #!",
-  "de": "Man stelle sich eine Batterie vor, die nie aufgeladen werden muss. [SCOPE.sCountry('headlines_fusion_batteries_researcher').GetAltName('NOM')|U] entwickelt Fusionsbatterien, die mit kompakten Fusionsreaktoren Geräte und Fahrzeuge jahrelang mit Energie versorgen – eine Revolution unseres Energieverständnisses... #!"
+  "en": "Imagine a battery that never needs to be recharged. [SCOPE.sCountry('headlines_fusion_batteries_researcher').GetName] is developing microfusion cells: fusion reactors small and safe enough to replace batteries, powering devices and vehicles for years. Energy as we know it may never be the same... #!",
+  "de": "Man stelle sich eine Batterie vor, die nie aufgeladen werden muss. [SCOPE.sCountry('headlines_fusion_batteries_researcher').GetAltName('NOM')|U] entwickelt Mikrofusionszellen: Fusionsreaktoren, klein und sicher genug, um Batterien zu ersetzen und Geräte und Fahrzeuge jahrelang mit Energie zu versorgen. Die Energie, wie wir sie kennen, wird vielleicht nie mehr dieselbe sein... #!"
  },
  "notification_headlines_tech_fusion_batteries_name": {
   "en": "#b THE BATTERY THAT NEVER DIES? #!",
@@ -1711,22 +1831,6 @@
   "en": "Multicultural Ideology Added",
   "de": "Multikulturelle Ideologie hinzugefügt"
  },
- "notification_industrial_nuke_fails_attacker_desc": {
-  "en": "Our [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] has failed.",
-  "de": "Unser [concept_nuclear_strike] auf [SCOPE.sState('target_state').GetName] ist gescheitert."
- },
- "notification_industrial_nuke_fails_attacker_name": {
-  "en": "Attempted [concept_nuclear_strike] Failed",
-  "de": "Versuchter [concept_nuclear_strike] gescheitert"
- },
- "notification_industrial_nuke_fails_defender_desc": {
-  "en": "Our defenses stopped a [concept_nuclear_strike] by [SCOPE.sCountry('nd_current_strike_launcher').GetName] on [SCOPE.sState('target_state').GetName].",
-  "de": "Unsere Abwehr hat einen [concept_nuclear_strike] [SCOPE.sCountry('nd_current_strike_launcher').GetAltName('VON')] auf [SCOPE.sState('target_state').GetName] gestoppt."
- },
- "notification_industrial_nuke_fails_defender_name": {
-  "en": "Attempted [concept_nuclear_strike] Failed",
-  "de": "Versuchter [concept_nuclear_strike] gescheitert"
- },
  "notification_industrial_nuke_succeeds_attacker_desc": {
   "en": "Our [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] has been successful.",
   "de": "Unser [concept_nuclear_strike] auf [SCOPE.sState('target_state').GetName] war erfolgreich."
@@ -1743,6 +1847,14 @@
   "en": "[concept_nuclear_strike] Successful",
   "de": "[concept_nuclear_strike] erfolgreich"
  },
+ "notification_irr_cultural_ties_notice_desc": {
+  "en": "[SCOPE.sCountry('irr_ties_funder').GetName] is paying for schools, presses and libraries that tie our people to theirs. Our relations rise by 15, and we gain $irr_cultural_ties_modifier$ for 5 years, fading.",
+  "de": "[SCOPE.sCountry('irr_ties_funder').GetAltName('NOM')|U] bezahlt Schulen, Druckereien und Bibliotheken, die unser Volk mit dem ihren verbinden. Unsere Beziehungen steigen um 15, und wir erhalten 5 Jahre lang $irr_cultural_ties_modifier$, abklingend."
+ },
+ "notification_irr_cultural_ties_notice_name": {
+  "en": "Cultural Ties Funded",
+  "de": "Kulturelle Bindungen finanziert"
+ },
  "notification_iw_election_interference_confidence_desc": {
   "en": "Foreign intelligence services have undermined public confidence in our electoral process. [concept_electoral_confidence] has been reduced.",
   "de": "Ausländische Geheimdienste haben das öffentliche Vertrauen in unseren Wahlprozess untergraben. [concept_electoral_confidence] wurde verringert."
@@ -1756,7 +1868,7 @@
   "de": "Eine Cyberoperation wurde beendet."
  },
  "notification_iw_operation_cancelled_name": {
-  "en": "Cyber Operation Cancelled",
+  "en": "Cyber Operation Canceled",
   "de": "Cyberoperation abgebrochen"
  },
  "notification_iw_operation_launched_desc": {
@@ -1791,6 +1903,14 @@
   "en": "A Nuclear Warning, Reported",
   "de": "Nukleare Warnung gemeldet"
  },
+ "notification_nd_deploy_bar_enforced_desc": {
+  "en": "Our missile defense on the border of [SCOPE.sCountry('nd_dbe_issuer').GetName] has been switched off again. In a nuclear crisis we agreed to deploy none next to them for ten years; a war with them would end the promise.",
+  "de": "Unsere Raketenabwehr an der Grenze zu [SCOPE.sCountry('nd_dbe_issuer').GetAltName('DAT')] wurde wieder abgeschaltet. In einer nuklearen Krise haben wir zugesagt, zehn Jahre lang keine neben diesem Land zu stationieren; ein Krieg mit ihm würde das Versprechen beenden."
+ },
+ "notification_nd_deploy_bar_enforced_name": {
+  "en": "Missile Defense Switched Off",
+  "de": "Raketenabwehr abgeschaltet"
+ },
  "notification_nd_doctrine_bound_by_law_desc": {
   "en": "The #bold No-First-Strike Pledge#! [concept_amendment] is in force, and it binds our nuclear doctrine: we are now committed to #v No First Use#!. The law made this change, not our government, so the wait before we may next choose a doctrine runs on from our own last choice. Abandoning No First Use repudiates the pledge and strikes the amendment from our laws.",
   "de": "Der #bold Verzicht auf den Ersteinsatz#!-[concept_amendment] ist in Kraft und bindet unsere nukleare Doktrin: Wir sind nun auf #v Kein Erstschlag#! festgelegt. Diese Änderung ging vom Gesetz aus, nicht von unserer Regierung, daher läuft die Wartezeit, bevor wir erneut eine Doktrin wählen dürfen, seit unserer eigenen letzten Wahl. Die Aufgabe von Kein Erstschlag widerruft die Erklärung und streicht den Nachtrag aus unseren Gesetzen."
@@ -1807,8 +1927,24 @@
   "en": "No War After the Exchange",
   "de": "Kein Krieg nach dem Schlagabtausch"
  },
+ "notification_nd_high_alert_reminder_desc": {
+  "en": "Our nuclear forces have stood at #v High Alert#! for #v [GetPlayer.MakeScope.Var('nd_high_alert_quiet_months').GetValue|0]#! months with no crisis under way. In peacetime, incidents at High Alert are ten times as likely as at Routine, and crew strain, now #v [GetPlayer.MakeScope.ScriptValue('nd_display_strain')|0]#! of 100, raises the odds further. We can lower readiness under $nd_w_posture_header$, in the $te_military_tab_nuclear$ tab of the Military panel.",
+  "de": "Unsere Nuklearstreitkräfte stehen seit #v [GetPlayer.MakeScope.Var('nd_high_alert_quiet_months').GetValue|0]#! Monaten ohne laufende Krise auf #v Hoher Alarmbereitschaft#!. In Friedenszeiten sind Zwischenfälle bei Hoher Alarmbereitschaft zehnmal so wahrscheinlich wie bei Routine, und die Besatzungsbelastung, derzeit #v [GetPlayer.MakeScope.ScriptValue('nd_display_strain')|0]#! von 100, erhöht die Wahrscheinlichkeit weiter. Wir können die Bereitschaft unter $nd_w_posture_header$ senken, im Reiter $te_military_tab_nuclear$ des Militärfensters."
+ },
+ "notification_nd_high_alert_reminder_name": {
+  "en": "Forces Still on High Alert",
+  "de": "Streitkräfte weiter in Hoher Alarmbereitschaft"
+ },
+ "notification_nd_raze_foreign_assets_lost_desc": {
+  "en": "A nuclear weapon has destroyed buildings in [SCOPE.sCountry('nd_raze_owner').GetName] in which our investors held shares, and its government has taken every level still standing into state ownership. Our investors' shares in those buildings are gone.",
+  "de": "Eine Nuklearwaffe hat Gebäude [SCOPE.sCountry('nd_raze_owner').GetAltName('IN')] zerstört, in denen unsere Investoren Anteile hielten, und die dortige Regierung hat jede noch stehende Stufe in Staatsbesitz genommen. Die Anteile unserer Investoren an diesen Gebäuden sind verloren."
+ },
+ "notification_nd_raze_foreign_assets_lost_name": {
+  "en": "Holdings Abroad Nationalized",
+  "de": "Auslandsbeteiligungen verstaatlicht"
+ },
  "notification_rt_coal_retired_notice_desc": {
-  "en": "Our retirement programme has closed the $building_coal_mine$ in [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! levels, with @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! paid in compensation from the treasury.",
+  "en": "Our retirement program has closed the $building_coal_mine$ in [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! levels, with @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! paid in compensation from the treasury.",
   "de": "Unser Stilllegungsprogramm hat die $building_coal_mine$ in [SCOPE.sState('rt_retire_state').GetName] geschlossen: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! Stufen, wobei @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! als Entschädigung aus der Staatskasse gezahlt wurden."
  },
  "notification_rt_coal_retired_notice_name": {
@@ -1816,7 +1952,7 @@
   "de": "$building_coal_mine$ stillgelegt"
  },
  "notification_rt_oil_retired_notice_desc": {
-  "en": "Our retirement programme has closed the $building_oil_rig$ in [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! levels, with @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! paid in compensation from the treasury.",
+  "en": "Our retirement program has closed the $building_oil_rig$ in [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! levels, with @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! paid in compensation from the treasury.",
   "de": "Unser Stilllegungsprogramm hat die $building_oil_rig$ in [SCOPE.sState('rt_retire_state').GetName] geschlossen: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! Stufen, wobei @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! als Entschädigung aus der Staatskasse gezahlt wurden."
  },
  "notification_rt_oil_retired_notice_name": {
@@ -1824,28 +1960,28 @@
   "de": "$building_oil_rig$ stillgelegt"
  },
  "notification_rt_power_retired_notice_desc": {
-  "en": "Our retirement programme has closed the $building_power_plant$ in [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! levels, with @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! paid in compensation from the treasury.",
+  "en": "Our retirement program has closed the $building_power_plant$ in [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! levels, with @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! paid in compensation from the treasury.",
   "de": "Unser Stilllegungsprogramm hat die $building_power_plant$ in [SCOPE.sState('rt_retire_state').GetName] geschlossen: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! Stufen, wobei @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! als Entschädigung aus der Staatskasse gezahlt wurden."
  },
  "notification_rt_power_retired_notice_name": {
   "en": "$building_power_plant$ Retired",
   "de": "$building_power_plant$ stillgelegt"
  },
- "notification_tactical_nuke_fails_attacker_desc": {
-  "en": "Our tactical [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] was stopped by their defenses.",
-  "de": "Unser taktischer [concept_nuclear_strike] auf [SCOPE.sState('target_state').GetName] wurde von ihrer Abwehr gestoppt."
+ "notification_sr_earth_hostile_notice_desc": {
+  "en": "A fleet of [SCOPE.sCountry('sr_earth_alert_power').GetName], a power at war with us, is on its way to Earth. The overview's Hostile Fleet cell shows when the first lands, and what is bound for Earth against what we have there.",
+  "de": "Eine Flotte [SCOPE.sCountry('sr_earth_alert_power').GetAltName('GEN')], einer Macht, die mit uns im Krieg steht, ist auf dem Weg zur Erde. Das Feld „Feindliche Flotte“ der Übersicht zeigt, wann die erste landet und was zur Erde unterwegs ist, im Vergleich zu dem, was wir dort haben."
  },
- "notification_tactical_nuke_fails_attacker_name": {
-  "en": "Tactical [concept_nuclear_strike] Failed",
-  "de": "Taktischer [concept_nuclear_strike] gescheitert"
+ "notification_sr_earth_hostile_notice_name": {
+  "en": "A Hostile Fleet Is Bound for Earth",
+  "de": "Eine feindliche Flotte ist zur Erde unterwegs"
  },
- "notification_tactical_nuke_fails_defender_desc": {
-  "en": "Our defenses stopped a tactical [concept_nuclear_strike] by [SCOPE.sCountry('attacking_country').GetName] on [SCOPE.sState('target_state').GetName].",
-  "de": "Unsere Abwehr stoppte einen taktischen [concept_nuclear_strike] [SCOPE.sCountry('attacking_country').GetAltName('GEN')] auf [SCOPE.sState('target_state').GetName]."
+ "notification_sr_space_command_dismantled_notice_desc": {
+  "en": "The $building_space_command$ in [SCOPE.sState('sr_sc_dismantled').GetName] was dismantled: a nation runs one $building_space_command$, and ours stays in [SCOPE.sState('sr_sc_keeper').GetName], the larger (or the capital's, if they are the same size).",
+  "de": "Das $building_space_command$ in [SCOPE.sState('sr_sc_dismantled').GetName] wurde abgebaut: Eine Nation betreibt ein $building_space_command$, und unseres bleibt in [SCOPE.sState('sr_sc_keeper').GetName], dem größeren (oder dem der Hauptstadt, wenn beide gleich groß sind)."
  },
- "notification_tactical_nuke_fails_defender_name": {
-  "en": "Tactical [concept_nuclear_strike] Stopped",
-  "de": "Taktischer [concept_nuclear_strike] gestoppt"
+ "notification_sr_space_command_dismantled_notice_name": {
+  "en": "Space Command Dismantled",
+  "de": "Weltraumkommando abgebaut"
  },
  "notification_tactical_nuke_succeeds_attacker_desc": {
   "en": "Our tactical [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] has been successful.",
@@ -1855,21 +1991,37 @@
   "en": "Tactical [concept_nuclear_strike] Successful",
   "de": "Taktischer [concept_nuclear_strike] erfolgreich"
  },
- "notification_tactical_nuke_succeeds_defender_desc": {
-  "en": "[SCOPE.sCountry('attacking_country').GetName] has struck [SCOPE.sState('target_state').GetName] with a tactical [concept_nuclear_strike].",
-  "de": "[SCOPE.sCountry('attacking_country').GetAltName('NOM')|U] hat [SCOPE.sState('target_state').GetName] mit einem taktischen [concept_nuclear_strike] getroffen."
- },
- "notification_tactical_nuke_succeeds_defender_name": {
-  "en": "Tactical [concept_nuclear_strike] Suffered",
-  "de": "Taktischer [concept_nuclear_strike] erlitten"
- },
  "notification_te_antarctic_treaty_lapsed_notice_desc": {
-  "en": "Two great powers outside the Antarctic Treaty hold Southern seabed licences, and it can no longer hold. Its parties are released, and the Southern basin is open to every claimant.",
+  "en": "Two great powers outside the Antarctic Treaty hold Southern seabed licenses, and it can no longer hold. Its parties are released, and the Southern basin is open to every claimant.",
   "de": "Zwei Großmächte außerhalb des Antarktisvertrags halten Meeresbodenlizenzen im Südpolarmeer, und er kann nicht länger bestehen. Seine Vertragsparteien sind entbunden, und das Becken des Südpolarmeers steht jedem Anspruchsteller offen."
  },
  "notification_te_antarctic_treaty_lapsed_notice_name": {
   "en": "The Antarctic Treaty Lapses",
   "de": "Der Antarktisvertrag erlischt"
+ },
+ "notification_te_cm_merge_complete_notice_desc": {
+  "en": "The merge [SCOPE.sCountry('te_cm_ev_starter').GetName] began is complete: [SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_switched')] to [SCOPE.sCulture('te_cm_ev_result').GetName].",
+  "de": "Die Verschmelzung, die [SCOPE.sCountry('te_cm_ev_starter').GetAltName('NOM')] begonnen hat, ist abgeschlossen: [SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_switched')] zu [SCOPE.sCulture('te_cm_ev_result').GetName]."
+ },
+ "notification_te_cm_merge_complete_notice_name": {
+  "en": "A Culture Merge Completes",
+  "de": "Eine Kulturverschmelzung wird abgeschlossen"
+ },
+ "notification_te_cm_merge_started_notice_desc": {
+  "en": "[SCOPE.sCountry('te_cm_ev_starter').GetName] has begun to merge [SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_names')] into [SCOPE.sCulture('te_cm_ev_result').GetName]. None of these is one of our primary cultures or has a homeland in our country, but any of their pops living here will become [SCOPE.sCulture('te_cm_ev_result').GetName] when their culture switches.",
+  "de": "[SCOPE.sCountry('te_cm_ev_starter').GetAltName('NOM')|U] hat begonnen, [SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_names')] in [SCOPE.sCulture('te_cm_ev_result').GetName] zu verschmelzen. Keine davon ist eine unserer Primärkulturen oder hat eine Heimat in unserem Land, aber alle ihre hier lebenden Pops werden zu [SCOPE.sCulture('te_cm_ev_result').GetName], sobald ihre Kultur wechselt."
+ },
+ "notification_te_cm_merge_started_notice_name": {
+  "en": "A Culture Merge Begins",
+  "de": "Eine Kulturverschmelzung beginnt"
+ },
+ "notification_te_cm_merge_started_sphere_notice_desc": {
+  "en": "[SCOPE.sCountry('te_cm_ev_starter').GetName] has begun to merge [SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_names')] into [SCOPE.sCulture('te_cm_ev_result').GetName]. None of these is one of our primary cultures or has a homeland in our country, but we are its subject or a member of the power bloc it leads, so we are within its sphere: once a culture has joined the merge, a share of our pops of it may take up [SCOPE.sCulture('te_cm_ev_result').GetName] each year, and the rest will become [SCOPE.sCulture('te_cm_ev_result').GetName] when their culture switches.",
+  "de": "[SCOPE.sCountry('te_cm_ev_starter').GetAltName('NOM')|U] hat begonnen, [SCOPE.sCulture('te_cm_ev_result').GetCustom('te_cm_core_names')] in [SCOPE.sCulture('te_cm_ev_result').GetName] zu verschmelzen. Keine davon ist eine unserer Primärkulturen oder hat eine Heimat in unserem Land, aber wir sind ein Klientelstaat dieses Landes oder Mitglied des Machtblocks, den es anführt, und liegen daher in seinem Einflussbereich: Sobald eine Kultur an der Verschmelzung beteiligt ist, kann jedes Jahr ein Teil unserer Pops dieser Kultur zu [SCOPE.sCulture('te_cm_ev_result').GetName] übergehen, und der Rest wird zu [SCOPE.sCulture('te_cm_ev_result').GetName], sobald ihre Kultur wechselt."
+ },
+ "notification_te_cm_merge_started_sphere_notice_name": {
+  "en": "A Culture Merge Begins in Our Sphere",
+  "de": "Eine Kulturverschmelzung beginnt in unserem Einflussbereich"
  },
  "notification_te_demog_ms_crash_campaign_over_desc": {
   "en": "The Crash Campaign has run its five years and ended. It can't return for ten years.",
@@ -1920,11 +2072,11 @@
   "de": "Kostenlose Verhütung beendet"
  },
  "notification_te_demog_ms_ended_honours_desc": {
-  "en": "Our laws no longer allow Honours for Large Families: our $lawgroup_family_reproductive_policy$ law, or under $law_communal_child_rearing$ our government, changed. It has ended, and its running cost with it. Under laws that allow it, it can start again, for a new five-year term.",
+  "en": "Our laws no longer allow Honors for Large Families: our $lawgroup_family_reproductive_policy$ law, or under $law_communal_child_rearing$ our government, changed. It has ended, and its running cost with it. Under laws that allow it, it can start again, for a new five-year term.",
   "de": "Unsere Gesetze erlauben Ehrungen für kinderreiche Familien nicht mehr: Unser Gesetz zur $lawgroup_family_reproductive_policy$ oder, unter $law_communal_child_rearing$, unsere Regierung hat sich geändert. Sie sind beendet, und ihre laufenden Kosten mit ihnen. Unter Gesetzen, die sie erlauben, können sie für eine neue fünfjährige Laufzeit erneut beginnen."
  },
  "notification_te_demog_ms_ended_honours_name": {
-  "en": "Honours for Large Families Ended",
+  "en": "Honors for Large Families Ended",
   "de": "Ehrungen für kinderreiche Familien beendet"
  },
  "notification_te_demog_ms_ended_later_longer_fewer_desc": {
@@ -1967,8 +2119,32 @@
   "en": "Sex Education Ended",
   "de": "Sexualaufklärung beendet"
  },
+ "notification_te_law_replaced_notice_desc": {
+  "en": "One of our laws could no longer stand with our other laws or with what we have researched. [SCOPE.sLaw('te_law_sweep_new_law').GetName] has taken its place.",
+  "de": "Eines unserer Gesetze konnte neben unseren anderen Gesetzen oder dem, was wir erforscht haben, nicht mehr bestehen. [SCOPE.sLaw('te_law_sweep_new_law').GetName] ist an seine Stelle getreten."
+ },
+ "notification_te_law_replaced_notice_name": {
+  "en": "A Law Replaced",
+  "de": "Ein Gesetz ersetzt"
+ },
+ "notification_te_mon_swap_repaid_notice_desc": {
+  "en": "Our $swap_line$ to [SCOPE.sCountry('te_mon_swap_settle_recipient').GetName] has ended, and it has repaid the whole balance it had drawn in one payment: @money!#v [SCOPE.sCountry('te_mon_swap_settle_recipient').MakeScope.Var('te_mon_swap_settled_amount').GetValue|D]#!.",
+  "de": "Unsere $swap_line$ zu [SCOPE.sCountry('te_mon_swap_settle_recipient').GetAltName('DAT')] ist ausgelaufen, und das Land hat den gesamten abgerufenen Restbetrag in einer Zahlung zurückgezahlt: @money!#v [SCOPE.sCountry('te_mon_swap_settle_recipient').MakeScope.Var('te_mon_swap_settled_amount').GetValue|D]#!."
+ },
+ "notification_te_mon_swap_repaid_notice_name": {
+  "en": "Swap Line Repaid",
+  "de": "Swap-Linie zurückgezahlt"
+ },
+ "notification_te_mon_swap_settled_notice_desc": {
+  "en": "Our $swap_line$ from [SCOPE.sCountry('te_mon_swap_settle_provider').GetName] has ended, and the whole balance we had drawn fell due at once: @money!#v [SCOPE.sCountry('te_mon_swap_settle_recipient').MakeScope.Var('te_mon_swap_settled_amount').GetValue|D]#! has gone from our treasury to theirs.",
+  "de": "Unsere $swap_line$ [SCOPE.sCountry('te_mon_swap_settle_provider').GetAltName('VON')] ist ausgelaufen, und der gesamte abgerufene Restbetrag wurde auf einmal fällig: @money!#v [SCOPE.sCountry('te_mon_swap_settle_recipient').MakeScope.Var('te_mon_swap_settled_amount').GetValue|D]#! sind aus unserer Staatskasse in die des Partnerlandes geflossen."
+ },
+ "notification_te_mon_swap_settled_notice_name": {
+  "en": "Swap Line Called In",
+  "de": "Swap-Linie gekündigt"
+ },
  "notification_te_seabed_basin_full_notice_arctic_desc": {
-  "en": "Every [concept_seabed_licence] in the $te_seabed_basin_arctic$ Ocean is held by a $building_ocean_mine$ level, built or queued. No one has a [concept_seabed_claim] left there until a level is downsized or destroyed; a new $building_ocean_mine$ of ours on its coasts takes a licence from another basin where we have claims, at reduced throughput. See the Seabed tab of the $te_systems_window_title$ window.",
+  "en": "Every [concept_seabed_licence] in the $te_seabed_basin_arctic$ Ocean is held by a $building_ocean_mine$ level, built or queued. No one has a [concept_seabed_claim] left there until a level is downsized or destroyed; a new $building_ocean_mine$ of ours on its coasts takes a license from another basin where we have claims, at reduced throughput. See the Seabed tab of the $te_systems_window_title$ window.",
   "de": "Jede [concept_seabed_licence] in der $te_seabed_basin_arctic$ wird von einer Stufe einer $building_ocean_mine$ gehalten, gebaut oder in der Warteschlange. Niemand hat dort noch einen [concept_seabed_claim], bis eine Stufe verkleinert oder zerstört wird; eine neue $building_ocean_mine$ von uns an den Küsten des Beckens nimmt eine Lizenz aus einem anderen Becken, in dem wir Ansprüche haben, mit verringertem Durchsatz. Siehe den Reiter „Meeresboden“ des Fensters $te_systems_window_title$."
  },
  "notification_te_seabed_basin_full_notice_arctic_name": {
@@ -1976,7 +2152,7 @@
   "de": "Die $te_seabed_basin_arctic$ ist vollständig lizenziert"
  },
  "notification_te_seabed_basin_full_notice_atlantic_desc": {
-  "en": "Every [concept_seabed_licence] in the $te_seabed_basin_atlantic$ Ocean is held by a $building_ocean_mine$ level, built or queued. No one has a [concept_seabed_claim] left there until a level is downsized or destroyed; a new $building_ocean_mine$ of ours on its coasts takes a licence from another basin where we have claims, at reduced throughput. See the Seabed tab of the $te_systems_window_title$ window.",
+  "en": "Every [concept_seabed_licence] in the $te_seabed_basin_atlantic$ Ocean is held by a $building_ocean_mine$ level, built or queued. No one has a [concept_seabed_claim] left there until a level is downsized or destroyed; a new $building_ocean_mine$ of ours on its coasts takes a license from another basin where we have claims, at reduced throughput. See the Seabed tab of the $te_systems_window_title$ window.",
   "de": "Jede [concept_seabed_licence] im $te_seabed_basin_atlantic$ wird von einer Stufe einer $building_ocean_mine$ gehalten, gebaut oder in der Warteschlange. Niemand hat dort noch einen [concept_seabed_claim], bis eine Stufe verkleinert oder zerstört wird; eine neue $building_ocean_mine$ von uns an den Küsten des Beckens nimmt eine Lizenz aus einem anderen Becken, in dem wir Ansprüche haben, mit verringertem Durchsatz. Siehe den Reiter „Meeresboden“ des Fensters $te_systems_window_title$."
  },
  "notification_te_seabed_basin_full_notice_atlantic_name": {
@@ -1984,7 +2160,7 @@
   "de": "Der $te_seabed_basin_atlantic$ ist vollständig lizenziert"
  },
  "notification_te_seabed_basin_full_notice_indian_desc": {
-  "en": "Every [concept_seabed_licence] in the $te_seabed_basin_indian$ Ocean is held by a $building_ocean_mine$ level, built or queued. No one has a [concept_seabed_claim] left there until a level is downsized or destroyed; a new $building_ocean_mine$ of ours on its coasts takes a licence from another basin where we have claims, at reduced throughput. See the Seabed tab of the $te_systems_window_title$ window.",
+  "en": "Every [concept_seabed_licence] in the $te_seabed_basin_indian$ Ocean is held by a $building_ocean_mine$ level, built or queued. No one has a [concept_seabed_claim] left there until a level is downsized or destroyed; a new $building_ocean_mine$ of ours on its coasts takes a license from another basin where we have claims, at reduced throughput. See the Seabed tab of the $te_systems_window_title$ window.",
   "de": "Jede [concept_seabed_licence] im $te_seabed_basin_indian$ wird von einer Stufe einer $building_ocean_mine$ gehalten, gebaut oder in der Warteschlange. Niemand hat dort noch einen [concept_seabed_claim], bis eine Stufe verkleinert oder zerstört wird; eine neue $building_ocean_mine$ von uns an den Küsten des Beckens nimmt eine Lizenz aus einem anderen Becken, in dem wir Ansprüche haben, mit verringertem Durchsatz. Siehe den Reiter „Meeresboden“ des Fensters $te_systems_window_title$."
  },
  "notification_te_seabed_basin_full_notice_indian_name": {
@@ -1992,7 +2168,7 @@
   "de": "Der $te_seabed_basin_indian$ ist vollständig lizenziert"
  },
  "notification_te_seabed_basin_full_notice_pacific_desc": {
-  "en": "Every [concept_seabed_licence] in the $te_seabed_basin_pacific$ Ocean is held by a $building_ocean_mine$ level, built or queued. No one has a [concept_seabed_claim] left there until a level is downsized or destroyed; a new $building_ocean_mine$ of ours on its coasts takes a licence from another basin where we have claims, at reduced throughput. See the Seabed tab of the $te_systems_window_title$ window.",
+  "en": "Every [concept_seabed_licence] in the $te_seabed_basin_pacific$ Ocean is held by a $building_ocean_mine$ level, built or queued. No one has a [concept_seabed_claim] left there until a level is downsized or destroyed; a new $building_ocean_mine$ of ours on its coasts takes a license from another basin where we have claims, at reduced throughput. See the Seabed tab of the $te_systems_window_title$ window.",
   "de": "Jede [concept_seabed_licence] im $te_seabed_basin_pacific$ wird von einer Stufe einer $building_ocean_mine$ gehalten, gebaut oder in der Warteschlange. Niemand hat dort noch einen [concept_seabed_claim], bis eine Stufe verkleinert oder zerstört wird; eine neue $building_ocean_mine$ von uns an den Küsten des Beckens nimmt eine Lizenz aus einem anderen Becken, in dem wir Ansprüche haben, mit verringertem Durchsatz. Siehe den Reiter „Meeresboden“ des Fensters $te_systems_window_title$."
  },
  "notification_te_seabed_basin_full_notice_pacific_name": {
@@ -2000,7 +2176,7 @@
   "de": "Der $te_seabed_basin_pacific$ ist vollständig lizenziert"
  },
  "notification_te_seabed_basin_full_notice_southern_desc": {
-  "en": "Every [concept_seabed_licence] in the $te_seabed_basin_southern$ Ocean is held by a $building_ocean_mine$ level, built or queued. No one has a [concept_seabed_claim] left there until a level is downsized or destroyed; a new $building_ocean_mine$ of ours on its coasts takes a licence from another basin where we have claims, at reduced throughput. See the Seabed tab of the $te_systems_window_title$ window.",
+  "en": "Every [concept_seabed_licence] in the $te_seabed_basin_southern$ Ocean is held by a $building_ocean_mine$ level, built or queued. No one has a [concept_seabed_claim] left there until a level is downsized or destroyed; a new $building_ocean_mine$ of ours on its coasts takes a license from another basin where we have claims, at reduced throughput. See the Seabed tab of the $te_systems_window_title$ window.",
   "de": "Jede [concept_seabed_licence] im $te_seabed_basin_southern$ wird von einer Stufe einer $building_ocean_mine$ gehalten, gebaut oder in der Warteschlange. Niemand hat dort noch einen [concept_seabed_claim], bis eine Stufe verkleinert oder zerstört wird; eine neue $building_ocean_mine$ von uns an den Küsten des Beckens nimmt eine Lizenz aus einem anderen Becken, in dem wir Ansprüche haben, mit verringertem Durchsatz. Siehe den Reiter „Meeresboden“ des Fensters $te_systems_window_title$."
  },
  "notification_te_seabed_basin_full_notice_southern_name": {
@@ -2048,7 +2224,7 @@
   "de": "Neuer Anspruchsteller im $te_seabed_basin_southern$"
  },
  "notification_te_seabed_regime_open_notice_desc": {
-  "en": "The Law of the Sea no longer regulates the seabed. Each basin's licences are shared by weight among all claimants, and no royalties are owed.",
+  "en": "The Law of the Sea no longer regulates the seabed. Each basin's licenses are shared by weight among all claimants, and no royalties are owed.",
   "de": "Das Seerechtsübereinkommen reguliert den Meeresboden nicht mehr. Die Lizenzen jedes Beckens werden nach Gewicht unter allen Anspruchstellern aufgeteilt, und es sind keine Förderabgaben fällig."
  },
  "notification_te_seabed_regime_open_notice_name": {
@@ -2056,7 +2232,7 @@
   "de": "Der Meeresboden ist offen"
  },
  "notification_te_seabed_regime_regulated_notice_desc": {
-  "en": "Half of each ocean basin's licences are now reserved for the poorer parties to the Convention on the Law of the Sea, and parties pay royalties on their $building_ocean_mine$ levels.",
+  "en": "Half of each ocean basin's licenses are now reserved for the poorer parties to the Convention on the Law of the Sea, and parties pay royalties on their $building_ocean_mine$ levels.",
   "de": "Die Hälfte der Lizenzen jedes Meeresbeckens ist nun den ärmeren Vertragsparteien des Seerechtsübereinkommens vorbehalten, und die Vertragsparteien zahlen Förderabgaben auf ihre Stufen der $building_ocean_mine$."
  },
  "notification_te_seabed_regime_regulated_notice_name": {
@@ -2087,6 +2263,14 @@
   "en": "Article 19: Our Vote Is Lost",
   "de": "Artikel 19: Unser Stimmrecht ist verloren"
  },
+ "notification_un_bloc_vacuum_notice_desc": {
+  "en": "The United Nations is Moribund or gone, and the power blocs fill the space it leaves. Our bloc gains $un_bloc_vacuum_modifier$ until a working United Nations returns.",
+  "de": "Die Vereinten Nationen sind „Marode“ oder verschwunden, und die Machtblöcke füllen den Raum, den sie hinterlassen. Unser Block erhält $un_bloc_vacuum_modifier$, bis wieder funktionierende Vereinte Nationen entstehen."
+ },
+ "notification_un_bloc_vacuum_notice_name": {
+  "en": "Blocs Fill the Vacuum",
+  "de": "Blöcke füllen das Vakuum"
+ },
  "notification_un_charter_reform_ripe_notice_desc": {
   "en": "UN authority has held within five points of the Charter's ceiling for two years. The next charter reform can now be tabled in the General Assembly chamber.",
   "de": "Die UN-Autorität hat sich zwei Jahre lang innerhalb von fünf Punkten der Charta-Obergrenze gehalten. Die nächste Chartareform kann nun im Plenarsaal der Generalversammlung eingebracht werden."
@@ -2096,7 +2280,7 @@
   "de": "Die Charta ist überholt"
  },
  "notification_un_conference_opened_notice_desc": {
-  "en": "[SCOPE.sCountry('un_conference_convener').GetName] has convened a founding conference for a new United Nations. If the world's leading power does not wreck it, the new organisation will be founded in a year, and every country invited to sign its charter.",
+  "en": "[SCOPE.sCountry('un_conference_convener').GetName] has convened a founding conference for a new United Nations. If the world's leading power does not wreck it, the new organization will be founded in a year, and every country invited to sign its charter.",
   "de": "[SCOPE.sCountry('un_conference_convener').GetAltName('NOM')|U] hat eine Gründungskonferenz für eine neue Organisation der Vereinten Nationen einberufen. Sofern die führende Macht der Welt sie nicht vereitelt, wird die neue Organisation binnen eines Jahres gegründet, und jedes Land wird eingeladen, ihre Charta zu unterzeichnen."
  },
  "notification_un_conference_opened_notice_name": {
@@ -2120,7 +2304,7 @@
   "de": "Unsere Vollmachten sind wiederhergestellt"
  },
  "notification_un_credentials_suspended_notice_desc": {
-  "en": "The General Assembly has suspended our delegation's credentials. We remain a member and still pay our UN dues, but we cast no vote and table no resolution, any permanent seat and our UN programmes are given up, and we draw none of the benefits of membership. The suspension lasts five years, or until our record improves to a case strength below 30.",
+  "en": "The General Assembly has suspended our delegation's credentials. We remain a member and still pay our UN dues, but we cast no vote and table no resolution, any permanent seat and our UN programs are given up, and we draw none of the benefits of membership. The suspension lasts five years, or until our record improves to a case strength below 30.",
   "de": "Die Generalversammlung hat die Vollmachten unserer Delegation ausgesetzt. Wir bleiben Mitglied und zahlen weiterhin unsere UN-Beiträge, geben aber keine Stimme ab und bringen keine Resolution ein, jeder ständige Sitz und unsere UN-Programme werden aufgegeben, und wir beziehen keinen der Vorteile der Mitgliedschaft. Die Aussetzung dauert fünf Jahre oder bis sich unsere Bilanz auf eine Fallstärke unter 30 verbessert."
  },
  "notification_un_credentials_suspended_notice_name": {
@@ -2136,12 +2320,20 @@
   "de": "Die UN-Krise ist vorüber"
  },
  "notification_un_crisis_opened_notice_desc": {
-  "en": "UN authority has fallen below 10. The organisation is in crisis until it climbs back above 20 — and if the world gives up on it altogether, it will dissolve. The UN tab of the Diplomacy panel shows the clock and who could save it.",
+  "en": "UN authority has fallen below 10. The organization is in crisis until it climbs back above 20 — and if the world gives up on it altogether, it will dissolve. The UN tab of the Diplomacy panel shows the clock and who could save it.",
   "de": "Die UN-Autorität ist unter 10 gefallen. Die Organisation befindet sich in der Krise, bis sie wieder über 20 steigt – und sollte die Welt sie ganz aufgeben, wird sie sich auflösen. Der Reiter „UN“ der Diplomatietafel zeigt die Uhr und wer sie retten könnte."
  },
  "notification_un_crisis_opened_notice_name": {
   "en": "The United Nations in Crisis",
   "de": "Die Vereinten Nationen in der Krise"
+ },
+ "notification_un_decolonization_pressure_notice_desc": {
+  "en": "The [concept_un_general_assembly] has adopted a declaration against colonial rule. As a country that holds overseas colonies, we gain $un_decolonization_pressure_modifier$ for 5 years, fading.",
+  "de": "Die [concept_un_general_assembly] hat eine Erklärung gegen die Kolonialherrschaft angenommen. Als Land mit Überseekolonien erhalten wir 5 Jahre lang $un_decolonization_pressure_modifier$, abklingend."
+ },
+ "notification_un_decolonization_pressure_notice_name": {
+  "en": "The Decolonization Declaration",
+  "de": "Die Dekolonisierungserklärung"
  },
  "notification_un_dev_fund_contribution_lapsed_notice_desc": {
   "en": "Our contribution to UN development programs has ended: no [concept_un_development_fund] stands to pay its grants, so the money reached no one. We can contribute again once the [concept_un_general_assembly] founds the Fund.",
@@ -2150,6 +2342,14 @@
  "notification_un_dev_fund_contribution_lapsed_notice_name": {
   "en": "Development Programs Contribution Ended",
   "de": "Beitrag zu Entwicklungsprogrammen beendet"
+ },
+ "notification_un_dissolution_vacuum_notice_desc": {
+  "en": "The United Nations has dissolved. Our power bloc gains $un_dissolution_vacuum_modifier$ for 10 years, fading.",
+  "de": "Die Vereinten Nationen haben sich aufgelöst. Unser Machtblock erhält 10 Jahre lang $un_dissolution_vacuum_modifier$, abklingend."
+ },
+ "notification_un_dissolution_vacuum_notice_name": {
+  "en": "The Blocs After the United Nations",
+  "de": "Die Blöcke nach den Vereinten Nationen"
  },
  "notification_un_floor_open_notice_desc": {
   "en": "The General Assembly's recess is over. Every member may table business again.",
@@ -2184,12 +2384,20 @@
   "de": "Getreide aus der Welternährungsreserve"
  },
  "notification_un_force_war_goal_struck_notice_desc": {
-  "en": "We added a war goal against [SCOPE.sCountry('un_force_protected').GetName], which hosts a UN peacekeeping or stabilisation mission. With the [concept_un_standing_force] in being and the United Nations at the Supranational tier, a member may press no further war goals on a country under its protection: ours have been struck from the play. Only the goal the play opened with, and others of its kind, may stay, at twice the usual [concept_infamy].",
-  "de": "Wir haben ein Kriegsziel gegen [SCOPE.sCountry('un_force_protected').GetAltName('AKK')] hinzugefügt; dort ist eine UN-Friedens- oder Stabilisierungsmission stationiert. Da die [concept_un_standing_force] besteht und sich die Vereinten Nationen auf der Stufe „Supranational“ befinden, darf ein Mitglied einem Land unter ihrem Schutz keine weiteren Kriegsziele aufdrängen: Unsere wurden aus dem Spiel gestrichen. Nur das Ziel, mit dem das Spiel eröffnet wurde, und weitere seiner Art dürfen bleiben, bei doppelter [concept_infamy]."
+  "en": "We added a war goal against [SCOPE.sCountry('un_force_protected').GetName], which hosts a UN peacekeeping or stabilization mission. With the [concept_un_standing_force] in being and the United Nations at the Supranational tier, a member may press no further war goals on a country under its protection: ours have been struck from the play. A goal of ours of the same kind against another country in it may have gone with them, and if so the [concept_infamy] we paid for it has been returned. Only the goal the play opened with, and others of its kind, may stay, at twice the usual infamy.",
+  "de": "Wir haben ein Kriegsziel gegen [SCOPE.sCountry('un_force_protected').GetAltName('AKK')] hinzugefügt; dort ist eine UN-Friedens- oder Stabilisierungsmission stationiert. Da die [concept_un_standing_force] besteht und sich die Vereinten Nationen auf der Stufe „Supranational“ befinden, darf ein Mitglied einem Land unter ihrem Schutz keine weiteren Kriegsziele aufdrängen: Unsere wurden aus dem Spiel gestrichen. Ein gleichartiges Ziel von uns gegen ein anderes Land darin kann mit ihnen gefallen sein, und wenn ja, wurde die [concept_infamy], die wir dafür gezahlt haben, zurückerstattet. Nur das Ziel, mit dem das Spiel eröffnet wurde, und weitere seiner Art dürfen bleiben, bei doppelt so hoher Verrufenheit wie üblich."
  },
  "notification_un_force_war_goal_struck_notice_name": {
   "en": "A War Goal Struck",
   "de": "Ein Kriegsziel gestrichen"
+ },
+ "notification_un_headquarters_host_notice_desc": {
+  "en": "The United Nations has moved its headquarters to our country: its last host no longer holds it. We gain $un_headquarters_modifier$ for as long as we host it, and only we may build the $building_un_headquarters$.",
+  "de": "Die Vereinten Nationen haben ihren Hauptsitz in unser Land verlegt: Der bisherige Gastgeber hat ihn nicht mehr. Wir erhalten $un_headquarters_modifier$, solange wir ihn beherbergen, und nur wir dürfen das Gebäude $building_un_headquarters$ errichten."
+ },
+ "notification_un_headquarters_host_notice_name": {
+  "en": "The UN Headquarters Comes to Us",
+  "de": "Der UN-Hauptsitz kommt zu uns"
  },
  "notification_un_humanitarian_token_received_desc": {
   "en": "[SCOPE.sCountry('aid_donor').GetName] has provided modest humanitarian assistance to help address the ongoing crisis.",
@@ -2198,6 +2406,14 @@
  "notification_un_humanitarian_token_received_name": {
   "en": "Humanitarian Assistance Received",
   "de": "Humanitäre Hilfe erhalten"
+ },
+ "notification_un_league_becomes_un_notice_desc": {
+  "en": "A country has researched $intergovernmental_organizations$, and the League of Nations is now the United Nations. Its charter can be reformed from now on.",
+  "de": "Ein Land hat $intergovernmental_organizations$ erforscht, und aus dem Völkerbund sind nun die Vereinten Nationen geworden. Ihre Charta kann von jetzt an reformiert werden."
+ },
+ "notification_un_league_becomes_un_notice_name": {
+  "en": "The League Becomes the United Nations",
+  "de": "Der Völkerbund wird zu den Vereinten Nationen"
  },
  "notification_un_mission_aid_failed_notice_desc": {
   "en": "The UN [Concept('concept_un_mission_aid', 'aid mission')] in [SCOPE.sState('un_msn_state_done').GetName] has failed: its host was attacked. UN delivery falls.",
@@ -2208,7 +2424,7 @@
   "de": "Eine UN-Hilfsmission scheitert"
  },
  "notification_un_mission_aid_succeeded_notice_desc": {
-  "en": "The UN [Concept('concept_un_mission_aid', 'aid mission')] in [SCOPE.sState('un_msn_state_done').GetName] has accomplished its work. The Assembly's record of delivery grows, and the countries that served in it are honoured for it.",
+  "en": "The UN [Concept('concept_un_mission_aid', 'aid mission')] in [SCOPE.sState('un_msn_state_done').GetName] has accomplished its work. The Assembly's record of delivery grows, and the countries that served in it are honored for it.",
   "de": "Die [Concept('concept_un_mission_aid', 'UN-Hilfsmission')] in [SCOPE.sState('un_msn_state_done').GetName] hat ihre Aufgabe erfüllt. Die Leistungsbilanz der Versammlung wächst, und die Länder, die in ihr gedient haben, werden dafür geehrt."
  },
  "notification_un_mission_aid_succeeded_notice_name": {
@@ -2248,8 +2464,8 @@
   "de": "Eine UN-Mission endet"
  },
  "notification_un_mission_opened_notice_desc": {
-  "en": "The United Nations has sent a [Concept('concept_un_mission', 'mission')] to [SCOPE.sState('un_msn_state').GetName]. Its work is shown in the state, and in the chamber's register of missions.",
-  "de": "Die Vereinten Nationen haben eine [Concept('concept_un_mission', 'Mission')] in den Staat [SCOPE.sState('un_msn_state').GetName] entsandt. Ihre Arbeit wird im Staat angezeigt sowie im Missionsregister des Plenarsaals."
+  "en": "The United Nations has sent a [Concept('concept_un_mission', 'mission')] to [SCOPE.sState('un_msn_state').GetName]. Its work is shown in the state, and under Missions in the Field on the UN tab of the Diplomacy panel.",
+  "de": "Die Vereinten Nationen haben eine [Concept('concept_un_mission', 'Mission')] in den Staat [SCOPE.sState('un_msn_state').GetName] entsandt. Ihre Arbeit wird im Staat angezeigt sowie unter „Missionen im Einsatz“ im UN-Reiter der Diplomatietafel."
  },
  "notification_un_mission_opened_notice_name": {
   "en": "A UN Mission Arrives",
@@ -2264,7 +2480,7 @@
   "de": "Eine UN-Friedensmission scheitert"
  },
  "notification_un_mission_peacekeeping_succeeded_notice_desc": {
-  "en": "The UN [Concept('concept_un_mission_peacekeeping', 'peacekeeping mission')] in [SCOPE.sState('un_msn_state_done').GetName] has accomplished its work. The Assembly's record of delivery grows, and the countries that served in it are honoured for it.",
+  "en": "The UN [Concept('concept_un_mission_peacekeeping', 'peacekeeping mission')] in [SCOPE.sState('un_msn_state_done').GetName] has accomplished its work. The Assembly's record of delivery grows, and the countries that served in it are honored for it.",
   "de": "Die [Concept('concept_un_mission_peacekeeping', 'UN-Friedensmission')] in [SCOPE.sState('un_msn_state_done').GetName] hat ihre Aufgabe erfüllt. Die Leistungsbilanz der Versammlung wächst, und die Länder, die in ihr gedient haben, werden dafür geehrt."
  },
  "notification_un_mission_peacekeeping_succeeded_notice_name": {
@@ -2280,23 +2496,23 @@
   "de": "Eine UN-Mission verstärkt"
  },
  "notification_un_mission_stabilisation_failed_notice_desc": {
-  "en": "The UN [Concept('concept_un_mission_stabilisation', 'stabilisation mission')] in [SCOPE.sState('un_msn_state_done').GetName] has failed: its host was attacked, it was sent home, or everyone who served in it left. UN delivery falls.",
+  "en": "The UN [Concept('concept_un_mission_stabilisation', 'stabilization mission')] in [SCOPE.sState('un_msn_state_done').GetName] has failed: its host was attacked, it was sent home, or everyone who served in it left. UN delivery falls.",
   "de": "Die [Concept('concept_un_mission_stabilisation', 'UN-Stabilisierungsmission')] in [SCOPE.sState('un_msn_state_done').GetName] ist gescheitert: Ihr Gastgeber wurde angegriffen, sie wurde nach Hause geschickt, oder alle, die in ihr gedient haben, sind abgezogen. Die Umsetzung der UN sinkt."
  },
  "notification_un_mission_stabilisation_failed_notice_name": {
-  "en": "A UN Stabilisation Mission Fails",
+  "en": "A UN Stabilization Mission Fails",
   "de": "Eine UN-Stabilisierungsmission scheitert"
  },
  "notification_un_mission_stabilisation_succeeded_notice_desc": {
-  "en": "The UN [Concept('concept_un_mission_stabilisation', 'stabilisation mission')] in [SCOPE.sState('un_msn_state_done').GetName] has accomplished its work. The Assembly's record of delivery grows, and the countries that served in it are honoured for it.",
+  "en": "The UN [Concept('concept_un_mission_stabilisation', 'stabilization mission')] in [SCOPE.sState('un_msn_state_done').GetName] has accomplished its work. The Assembly's record of delivery grows, and the countries that served in it are honored for it.",
   "de": "Die [Concept('concept_un_mission_stabilisation', 'UN-Stabilisierungsmission')] in [SCOPE.sState('un_msn_state_done').GetName] hat ihre Aufgabe erfüllt. Die Leistungsbilanz der Versammlung wächst, und die Länder, die in ihr gedient haben, werden dafür geehrt."
  },
  "notification_un_mission_stabilisation_succeeded_notice_name": {
-  "en": "A UN Stabilisation Mission Accomplished",
+  "en": "A UN Stabilization Mission Accomplished",
   "de": "Eine UN-Stabilisierungsmission erfüllt ihren Auftrag"
  },
  "notification_un_mission_withdrawn_notice_desc": {
-  "en": "[SCOPE.sCountry('un_msn_notice_member').GetName] has brought its contingent home from the UN mission in [SCOPE.sState('un_msn_notice_state').GetName]. A peacekeeping or stabilisation mission with nobody left to serve in it fails.",
+  "en": "[SCOPE.sCountry('un_msn_notice_member').GetName] has brought its contingent home from the UN mission in [SCOPE.sState('un_msn_notice_state').GetName]. A peacekeeping or stabilization mission with nobody left to serve in it fails.",
   "de": "[SCOPE.sCountry('un_msn_notice_member').GetAltName('NOM')|U] hat das eigene Kontingent von der UN-Mission in [SCOPE.sState('un_msn_notice_state').GetName] nach Hause geholt. Eine Friedens- oder Stabilisierungsmission, in der niemand mehr dient, scheitert."
  },
  "notification_un_mission_withdrawn_notice_name": {
@@ -2320,7 +2536,7 @@
   "de": "Unsere UN-Vertretung ist wiederhergestellt"
  },
  "notification_un_representation_suspended_notice_desc": {
-  "en": "We no longer conduct our own foreign policy, so our seat in the United Nations is suspended. We remain a member, but we cast no vote and table no resolution; any permanent seat, the headquarters and our UN programmes are given up. While our overlord sits in the Assembly and pays its dues, it pays ours and we keep the benefits of membership.",
+  "en": "We no longer conduct our own foreign policy, so our seat in the United Nations is suspended. We remain a member, but we cast no vote and table no resolution; any permanent seat, the headquarters and our UN programs are given up. While our overlord sits in the Assembly and pays its dues, it pays ours and we keep the benefits of membership.",
   "de": "Wir betreiben nicht mehr unsere eigene Außenpolitik, daher ist unser Sitz bei den Vereinten Nationen ausgesetzt. Wir bleiben Mitglied, geben aber keine Stimme ab und bringen keine Resolution ein; ein etwaiger ständiger Sitz, der Hauptsitz und unsere UN-Programme werden aufgegeben. Solange unser Suzerän in der Versammlung sitzt und seine Beiträge zahlt, zahlt er auch unsere, und wir behalten die Vorteile der Mitgliedschaft."
  },
  "notification_un_representation_suspended_notice_name": {
@@ -2360,7 +2576,7 @@
   "de": "Handelszugeständnisse angeboten"
  },
  "notification_un_war_surcharge_notice_desc": {
-  "en": "We added a war goal without a military mandate from the United Nations. At its present strength, the Assembly makes every such goal cost extra infamy: 2 at the Established tier, 4 at Strong, 10 at Supranational, and twice that from Strong against a country hosting a UN peacekeeping or stabilisation mission.",
+  "en": "We added a war goal without a military mandate from the United Nations. At its present strength, the Assembly makes every such goal cost extra infamy: 2 at the Established tier, 4 at Strong, 10 at Supranational, and twice that from Strong against a country hosting a UN peacekeeping or stabilization mission.",
   "de": "Wir haben ein Kriegsziel ohne militärisches Mandat der Vereinten Nationen hinzugefügt. Bei ihrer derzeitigen Stärke lässt die Versammlung jedes solche Ziel zusätzliche Verrufenheit kosten: 2 auf der Stufe Etabliert, 4 auf Stark, 10 auf Supranational, und das Doppelte davon ab Stark gegen ein Land, das eine UN-Friedens- oder Stabilisierungsmission beherbergt."
  },
  "notification_un_war_surcharge_notice_name": {

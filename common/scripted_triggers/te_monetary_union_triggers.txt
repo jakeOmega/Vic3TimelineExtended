@@ -261,15 +261,118 @@ te_mon_union_backstop_is_effective = {
 			}
 		}
 	}
+	# A Creditors' Consortium member that refused its leader's terms has lost
+	# that leader's guarantee for ten years (te_cred_refuse_terms), the union's
+	# backstop from the same leader with it: no relief, no cost, no call.
+	NOT = {
+		AND = {
+			te_cred_guarantee_forfeit = yes
+			var:te_mon_anchor = { te_cred_leads_consortium = yes }
+		}
+	}
+}
+
+# --- What the tiers hand the LEADER (2026-11-14, §0.14) ----------------------
+
+# THE ISSUER: the leader of a bloc whose common currency somebody has actually
+# adopted. Tier 2 or above (te_mon_bloc_union_tier_2_plus, which lists every
+# higher tier), a currency it can lead with (a dial, fiat or digital money:
+# false for everybody under the simplified banking rule), and at least one
+# member whose money it now is (owner, 2026-11-14: the leader shares the
+# currency's benefits only once a member has adopted).
+#
+# A LIVE TEST OF THE MEMBERS, not the leader's stored count
+# (te_mon_union_adopters is its discovery's, for the seigniorage base and the
+# panel), so each of the leader's own conditions takes every issuer benefit away
+# on the leader's next pulse: it stops leading, the bloc loses the tier, it
+# loses its dial, the rule goes to Simplified. A member's kind is its own stored
+# state, so the last adopter's exit is seen on the leader's next pulse too, up
+# to a month after the exit.
+te_mon_union_is_issuer = {
+	is_power_bloc_leader = yes
+	te_mon_bloc_union_tier_2_plus = yes
+	te_mon_can_lead_union = yes
+	power_bloc ?= {
+		any_power_bloc_member = { te_mon_is_union_adopter = yes }
+	}
+}
+
+# Either side of the common currency: an adopter, or the leader that issues
+# it. What the adopters' three managed modifiers and the common capital market
+# (te_monetary_update_union) are applied on.
+te_mon_uses_common_currency = {
+	OR = {
+		te_mon_is_union_adopter = yes
+		te_mon_union_is_issuer = yes
+	}
+}
+
+# Has this country a regulator for the union to work through? Every banking law
+# but Unregulated Banking. That law's whole identity is its budget: with a
+# national bank it holds 2 points (a leader must have one; a member needs one
+# to adopt, te_mon_union_regime_fits, though not to stay), and its
+# unlocked tools cost 3 (Bail-in Regime, Infrastructure and Armaments credit,
+# Emergency Import Financing) and 4 (Open-Market Operations, the Deposit
+# Guarantee, Emergency Liquidity, Heavy Industry credit), so a single point
+# more hands it tools the law denies it. Every other law can already afford
+# each tool its locks leave open, so extra points there only let more of them
+# run at once. Asked of the leader's own extra interventions, and of a place in
+# the banking union for EITHER side of the currency (which carries a point of
+# its own, and the supervision a laissez-faire banking system has nobody to
+# submit to).
+#
+# THE ADOPTER'S SIDE TOO, since 2026-11-15 (#1812). As built on 2026-11-14 this
+# was asked of the issuer only (te_mon_union_issuer_has_regulator), and an
+# adopter under Unregulated Banking kept the banking union and its point: 3
+# with its national bank, the Bail-in Regime's cost. In the owner's 1958 save 9
+# of 57 adopters were under that law. The four whose banking entries were read
+# all carried the modifier, and each had a 3-point tool in force (a Bail-in
+# Regime on three, Infrastructure credit on the fourth).
+te_mon_union_has_regulator = {
+	NOT = { has_law_or_variant = law_type:law_unregulated_banking }
+}
+
+# In the banking union: on either side of a common currency at tier 4 or above,
+# under a banking law with a regulator. What te_mon_union_banking_union is
+# applied on (te_monetary_update_union). The adoption score asks the regulator
+# test by itself, since a holdout does not use the currency yet.
+te_mon_union_in_banking_union = {
+	te_mon_bloc_union_tier_4_plus = yes
+	te_mon_uses_common_currency = yes
+	te_mon_union_has_regulator = yes
+}
+
+# ...and the one country that is in the currency at that tier and NOT in the
+# banking union, for the Monetary Union row's tooltip, which says why
+# (te_mon_union_regulator_note): the player must be able to see what withholds
+# the point.
+te_mon_union_outside_banking_union = {
+	te_mon_bloc_union_tier_4_plus = yes
+	te_mon_uses_common_currency = yes
+	te_mon_union_has_regulator = no
+}
+
+# Can this country's private investors spend what the investment pool already
+# holds? Not while Excess Private Construction is in force
+# (too_much_private_construction, extra_on_actions.txt): its yearly value is the
+# overflow of a pool the private queue cannot spend, so more deposits there buy
+# no building and deepen the construction penalty that pays for the overflow.
+# The variable, not the modifier: a revolution's winner inherits it.
+te_mon_union_pool_is_saturated = {
+	has_variable = too_much_private_construction_cached
+	var:too_much_private_construction_cached > 0
 }
 
 # Either kind of lender of last resort, whichever is in force. One name for
 # "somebody stands behind this country's debts": the relief in
 # te_mon_arr_recipient_value, the panic dampener in banking_cycle_effects.txt
-# and the default hook all read it.
+# and the default hook all read it. The third kind is a Creditors' Consortium's
+# standing guarantee of its members (te_cred_guarantee_is_effective,
+# te_creditors_consortium_triggers.txt; 2026-11-16).
 te_mon_has_effective_backstop = {
 	OR = {
 		te_mon_lolr_is_effective = yes
 		te_mon_union_backstop_is_effective = yes
+		te_cred_guarantee_is_effective = yes
 	}
 }

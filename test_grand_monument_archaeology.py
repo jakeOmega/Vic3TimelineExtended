@@ -19,7 +19,7 @@ import unittest
 from collections import namedtuple
 
 from test_grand_monument_registry import (
-    BUILT, HISTORIC, LANDMARKS, ROOT, block, loc, raw_block_at, read, squash, strip_comments,
+    BUILT, HISTORIC, LANDMARKS, ROOT, block, declaration, loc, raw_block_at, read, squash, strip_comments,
 )
 
 EFFECTS = "common/scripted_effects/gm_archaeology_effects.txt"
@@ -232,8 +232,7 @@ class SeedTests(unittest.TestCase):
 
     def test_a_site_added_later_is_seeded_in_a_game_already_seeded(self):
         body = squash(block(self.e, "gm_arch_monthly"))
-        self.assertIn("if = { limit = { NOT = { has_global_variable = gm_arch_seed_round } } set_global_variable = { "
-                      "name = gm_arch_seed_round value = 1 } } if = { limit = { global_var:gm_arch_seed_round < "
+        self.assertIn("gm_arch_self_check = yes } if = { limit = { global_var:gm_arch_seed_round < "
                       "gm_arch_seed_rounds } set_global_variable = { name = gm_arch_seed_round value = "
                       "gm_arch_seed_rounds } gm_arch_seed_sites = yes }", body)
         self.assertLess(body.index("gm_arch_self_check = yes"), body.index("global_var:gm_arch_seed_round <"),
@@ -275,8 +274,12 @@ class SeedTests(unittest.TestCase):
         self.assertIn("gm_arch_monthly_on_action = { effect = { gm_arch_monthly = yes } }", on)
 
     def test_no_timed_variable_on_a_container(self):
-        # container_timed_variable_audit's rule, held here for the file as a whole.
-        self.assertNotRegex(strip_comments(self.e), r"set_variable = \{[^{}]*\bdays\s*=")
+        # container_timed_variable_audit's rule, held here for the file as a whole. The one timed
+        # variable is a country's: gm_arch_book_innovation runs in the sponsor's scope.
+        book = block(self.e, "gm_arch_book_innovation")
+        self.assertIsNotNone(book)
+        self.assertNotIn("gm_arch_innovation_pending", strip_comments(self.e).replace(book, ""))
+        self.assertNotRegex(strip_comments(self.e).replace(book, ""), r"set_variable = \{[^{}]*\bdays\s*=")
 
 
 class GateTests(unittest.TestCase):
@@ -481,6 +484,74 @@ class PlacingTests(unittest.TestCase):
             self.assertIn(lm.key, names, f"{lm.key}: gm_tr_landmark_name names the site's row")
 
 
+class OpportunityTests(unittest.TestCase):
+    """A find is dug, not built (owner, 2026-11-18): a dig that finishes while
+    its ground's owner has an opportunity offered or open never counts toward
+    it. Pompeii,
+    To the Nation in Two Sicilies' capital, could otherwise complete a
+    centenary's column with no level built."""
+
+    MARK, TR_MARK = "gm_unearthed_for_com", "gm_tr_unearthed_for_com"
+    COM_E = "common/scripted_effects/gm_commission_effects.txt"
+    COM_T = "common/scripted_triggers/gm_commission_triggers.txt"
+    MON_E = "common/scripted_effects/gm_monument_effects.txt"
+    MON_T = "common/scripted_triggers/gm_monument_triggers.txt"
+
+    def body(self, path, name):
+        return squash(strip_comments(block(read(path), name)))
+
+    def test_a_find_is_marked_before_it_stands(self):
+        place = self.body(EFFECTS, "gm_arch_place")
+        # On offer too: seized while the find's dedication is put back, the
+        # baseline would miss it.
+        mark = ("if = { limit = { exists = scope:gm_arch_host scope:gm_arch_host = { OR = { "
+                "has_variable = gm_com_open has_variable = gm_com_offered } } } "
+                f"set_variable = {self.TR_MARK} }}")
+        self.assertIn(mark, place)
+        self.assertLess(place.index("owner = { save_scope_as = gm_arch_host }"), place.index(mark))
+        # Before either way it stands: beside another, or as the state's own
+        # through the records a return copies.
+        self.assertLess(place.index(mark), place.index("gm_arch_stand_beside = yes"))
+        self.assertLess(place.index(mark), place.index("gm_state_tr_receive = yes"))
+
+    def test_a_marked_monument_does_not_count(self):
+        self.assertIn(f"NOT = {{ has_variable = {self.MARK} }}", self.body(self.COM_T, "gm_state_com_counts"))
+        self.assertIn(f"NOT = {{ has_variable = {self.TR_MARK} }}", self.body(self.MON_T, "gm_mon_com_counts"))
+
+    def test_the_mark_goes_with_the_records(self):
+        from test_grand_monument_registry import CONTAINER_RECORDS
+        self.assertIn((self.MARK, self.TR_MARK), CONTAINER_RECORDS)
+        self.assertIn(f"gm_tr_copy_to_state = {{ FROM = {self.TR_MARK} TO = {self.MARK} }}",
+                      self.body("common/scripted_effects/gm_trophy_effects.txt",
+                                "gm_state_tr_take_records_from_moving"))
+        self.assertIn(f"gm_remove_state_var = {{ VAR = {self.MARK} }}", self.body(GM_EFFECTS, "gm_clear_state"))
+
+    def test_the_mark_ends_with_the_opportunity(self):
+        clear = self.body(self.COM_E, "gm_com_clear")
+        self.assertIn(f"every_scope_state = {{ limit = {{ has_variable = {self.MARK} }} "
+                      f"remove_variable = {self.MARK} }}", clear)
+        self.assertIn("if = { limit = { has_variable_list = gm_monuments_held } every_in_list = { "
+                      f"variable = gm_monuments_held limit = {{ has_variable = {self.TR_MARK} }} "
+                      f"remove_variable = {self.TR_MARK} }} }}", clear)
+        self.assertIn("gm_com_clear = yes", self.body(self.COM_E, "gm_com_close"))
+
+    def test_the_mark_stays_with_its_owner(self):
+        self.assertIn(f"gm_remove_state_var = {{ VAR = {self.MARK} }}",
+                      self.body(GM_EFFECTS, "gm_state_changed_hands"))
+        for name in ("gm_mon_changed_hands", "gm_mon_forget_home"):
+            self.assertIn(f"gm_remove_state_var = {{ VAR = {self.TR_MARK} }}", self.body(self.MON_E, name), name)
+
+    def test_only_a_find_is_marked(self):
+        setters = set()
+        for path in sorted(ROOT.glob("common/**/*.txt")) + sorted(ROOT.glob("events/*.txt")):
+            text = strip_comments(read(path.relative_to(ROOT).as_posix()))
+            if re.search(rf"set_variable = (\{{ name = )?{self.TR_MARK}\b", text):
+                setters.add(path.relative_to(ROOT).as_posix())
+            self.assertNotRegex(text, rf"set_variable = (\{{ name = )?{self.MARK}\b",
+                                "the state's mark comes only from the records")
+        self.assertEqual(setters, {EFFECTS})
+
+
 class NamesTests(unittest.TestCase):
     """The events name their site, its place and state, the find and its history,
     through a saved scope of the site's own (rework spec § 2)."""
@@ -552,21 +623,14 @@ class BrakeTests(unittest.TestCase):
                       "country_weekly_innovation_add = -1 }", body)
         self.assertNotIn("innovation_max", body, "the cap is never touched (owner, 2026-10-14)")
 
-    def test_the_money_modifier_is_a_retired_stub(self):
-        # Digs cost no money (owner, 2026-10-16). The stub stays, with its Budget
-        # Breakdown category, so a save that carries it loads clean and sheds it.
-        body = squash(strip_comments(read(MODIFIERS)))
-        self.assertIn("gm_arch_expense = { icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds "
-                      "country_expenses_add = 1 country_te_budget_expense_archaeology_add = 1 }", body,
-                      "a recurring monetary modifier joins a Budget Breakdown category (test_budget_breakdown.py)")
-        self.assertIn("RETIRED 2026-10-16", read(MODIFIERS))
-        gen = read("scripts/generators/gen_budget_breakdown.py")
-        self.assertIn('"archaeology": ("Archaeological Digs", ("gm_arch_expense",)),', gen)
+    def test_the_money_modifier_is_gone(self):
+        # Digs cost no money (owner, 2026-10-16). The retired stub and its empty Budget Breakdown
+        # category went with the old-save code (#1429): no save that carried it loads in 1.15.
+        self.assertNotIn("gm_arch_expense", strip_comments(read(MODIFIERS)))
+        self.assertNotIn("gm_arch_expense", read("scripts/generators/gen_budget_breakdown.py"))
         for rel in (EFFECTS, EVENTS, SGUIS, "common/treaty_articles/120_archaeological_concession.txt",
                     "common/treaty_articles/121_excavation_permit.txt"):
-            code = strip_comments(read(rel))
-            self.assertNotIn("NAME = gm_arch_expense", code, rel)
-            self.assertNotRegex(code, r"add_modifier = \{ name = gm_arch_expense", rel)
+            self.assertNotIn("gm_arch_expense", strip_comments(read(rel)), rel)
 
     def test_the_methods_cost_what_the_spec_says(self):
         v = read(VALUES)
@@ -593,20 +657,18 @@ class BrakeTests(unittest.TestCase):
                           body)
 
     def test_the_modifiers_ride_the_journal_entry(self):
-        e = read(EFFECTS)
-        # gm_add_national reads ROOT's variable unguarded, and only a country the pass has
-        # listed has it: the guard, as the boons' gm_add_boon has.
-        self.assertEqual(squash(block(e, "gm_arch_add_national")),
-                         "if = { limit = { root = { has_variable = gm_arch_innovation_units } } "
-                         "gm_add_national = { NAME = gm_arch_diversion VAR = gm_arch_innovation_units } }")
-        # The retired money modifier is still removed, so an old save sheds it.
-        self.assertEqual(squash(block(e, "gm_arch_remove_national")),
-                         "remove_modifier = gm_arch_diversion remove_modifier = gm_arch_expense")
-        g = read(GM_EFFECTS)
-        self.assertIn("gm_arch_add_national = yes", squash(block(g, "gm_apply_national_modifiers")))
-        self.assertIn("gm_arch_remove_national = yes", squash(block(g, "gm_remove_national_modifiers")))
+        # The entry declares the drain from the units the pass summed; only a country the pass has
+        # listed has the variable, so the read is guarded.
+        self.assertEqual(declaration("gm_arch_diversion"),
+                         "modifier = gm_arch_diversion value = { value = 0 if = { limit = { has_variable = "
+                         "gm_arch_innovation_units var:gm_arch_innovation_units > 0.001 } "
+                         "add = var:gm_arch_innovation_units } }")
+        # The retired money modifier is gone (#1429), neither declared nor removed.
+        self.assertIsNone(declaration("gm_arch_expense"))
+        for rel in (EFFECTS, GM_EFFECTS):
+            self.assertNotIn("remove_modifier = gm_arch_expense", strip_comments(read(rel)), rel)
         L = loc()
-        for key in ("gm_arch_diversion", "gm_arch_diversion_desc", "gm_arch_expense", "gm_arch_expense_desc"):
+        for key in ("gm_arch_diversion", "gm_arch_diversion_desc"):
             self.assertIn(key, L)
 
 
@@ -622,11 +684,14 @@ class EntryTests(unittest.TestCase):
         self.assertIn("gm_arch_country_idle = yes", idle, "the entry does not close on a dig")
 
     def test_the_counts_the_pass_writes(self):
-        t = read(TRIGGERS)
-        self.assertEqual(squash(block(t, "gm_arch_country_idle")), "gm_arch_country_has_any = no")
-        has = squash(block(t, "gm_arch_country_has_any"))
-        self.assertIn("has_variable = gm_arch_dig_count var:gm_arch_dig_count > 0", has)
-        self.assertIn("has_variable = gm_arch_open_count var:gm_arch_open_count > 0", has)
+        t = strip_comments(read(TRIGGERS))
+        self.assertEqual(squash(block(t, "gm_arch_country_has_any")), "gm_arch_country_idle = no")
+        idle = squash(block(t, "gm_arch_country_idle"))
+        # Each read behind its guard in a trigger_if, never beside it in an AND,
+        # which a journal entry's possible reads child by child (#1418).
+        self.assertIn("trigger_if = { limit = { has_variable = gm_arch_dig_count } var:gm_arch_dig_count <= 0 }", idle)
+        self.assertIn("trigger_if = { limit = { has_variable = gm_arch_open_count } var:gm_arch_open_count <= 0 }", idle)
+        self.assertNotIn("AND", idle)
 
     def test_a_country_that_digs_keeps_its_pulse(self):
         body = squash(block(read(EFFECTS), "gm_arch_country_listed"))
@@ -705,19 +770,43 @@ class PlayerInnovationTests(unittest.TestCase):
     """A player may not launch a dig that diverts more weekly innovation than it makes (owner, 2026-10-16)."""
 
     def test_each_method_has_a_floor_of_its_own_figure(self):
+        """The method's own figure, plus what digs begun in the last week divert: the journal entry's
+        declaration of gm_arch_diversion reaches country_innovation a few days after a launch (#1404), so a
+        second launch would otherwise pass on innovation the first already diverts."""
         t = read(TRIGGERS)
+        v = read(VALUES)
         for method in METHODS:
             self.assertEqual(squash(block(t, f"gm_arch_spares_{method}")),
-                             f"country_innovation >= gm_arch_innovation_{method}", method)
+                             f"country_innovation >= gm_arch_innovation_gate_{method}", method)
+            self.assertEqual(squash(block(v, f"gm_arch_innovation_gate_{method}")),
+                             f"value = gm_arch_innovation_{method} if = {{ limit = {{ has_variable = "
+                             f"gm_arch_innovation_pending }} add = var:gm_arch_innovation_pending }}", method)
+
+    def test_a_dig_begun_is_booked_for_two_weeks(self):
+        """Every start (a player's launch through arch_events.10, the AI's, the debug event's, Pompeii's seed)
+        passes through gm_arch_begin_dig, with the method already set."""
+        begin = squash(block(read(EFFECTS), "gm_arch_begin_dig"))
+        for method in METHODS:
+            self.assertIn(f"limit = {{ var:gm_site_method = flag:{method} }} $WHO$ = {{ gm_arch_book_innovation = "
+                          f"{{ ADD = gm_arch_innovation_{method} }} }}", begin, method)
+        book = squash(block(read(EFFECTS), "gm_arch_book_innovation"))
+        self.assertEqual(book, "if = { limit = { has_variable = gm_arch_innovation_pending } set_variable = { "
+                               "name = gm_arch_innovation_pending value = { value = var:gm_arch_innovation_pending "
+                               "add = $ADD$ } days = 14 } } else = { set_variable = { name = "
+                               "gm_arch_innovation_pending value = $ADD$ days = 14 } }")
+        start = squash(block(read(EFFECTS), "gm_arch_start_dig"))
+        self.assertEqual(start.count("gm_arch_begin_dig = { WHO = $WHO$ }"), 3)
+        self.assertNotIn("gm_arch_innovation_pending", start, "booked once, in gm_arch_begin_dig")
 
     def test_the_buttons_are_greyed_below_the_floor(self):
         L = loc()
-        for method, units in INNOVATION.items():
+        for method in INNOVATION:
             valid = squash(block(block(read(SGUIS), f"gm_arch_launch_{method}_sgui"), "is_valid"))
             self.assertIn(f"custom_tooltip = {{ text = gm_arch_dig_innovation_{method}_tt "
                           f"gm_arch_spares_{method} = yes }}", valid, method)
-            self.assertIn(f"at least {units} weekly [concept_innovation]", L[f"gm_arch_dig_innovation_{method}_tt"],
-                          "the tooltip's figure is the value's")
+            self.assertIn(f"at least [GetPlayer.MakeScope.ScriptValue('gm_arch_innovation_gate_{method}')|0] weekly "
+                          "[concept_innovation]", L[f"gm_arch_dig_innovation_{method}_tt"],
+                          "the tooltip prints the figure the gate tests, booking included")
 
     def test_the_find_offers_only_a_dig_we_can_spare(self):
         body = squash(raw_block_at(strip_comments(read(EVENTS)), r"(?m)^arch_events\.1\s*=\s*\{"))

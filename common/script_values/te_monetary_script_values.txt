@@ -22,8 +22,7 @@
 # modifier_multiplier_var_audit exists to catch). No new monetary variable may
 # be introduced in je_banking.txt's `immediate` — that block runs again on the
 # copy of the entry a revolution's winner inherits, so anything set there must
-# be `has_variable`-guarded unless resetting it is the point (as with
-# te_mon_stance_band_applied).
+# be `has_variable`-guarded unless resetting it is the point.
 #
 #   te_policy_rate_target   regime range, integer   the dial's setting (§5)
 #   te_policy_rate          regime range, fractional  drifts toward the target by
@@ -36,6 +35,12 @@
 #   te_mon_mandate          1-3                     1 price stability, 2 growth, 3 peg defence
 #   te_premium_structural   floor to 30             what the country *is*; floored
 #                                                   at 0.5 (0.25 under CBI)
+#   te_premium_floor_swallowed >= 0                 [#1812] what the floor took back
+#                                                   this pulse: te_mon_standing_floor
+#                                                   less the structural sum, where the
+#                                                   sum was under it, else 0. Written
+#                                                   only by step 5; read by step 9b's
+#                                                   te_mon_reserve_floor_value
 #   te_premium_cyclical     -10 to 40               what is *happening*; added after the floor
 #   te_rate_paid_pts        0.5 to 60               the displayed rate paid, clamped (§4)
 #   te_rate_paid_applied    0.5 to 60               the value last written into
@@ -363,23 +368,28 @@
 #                                                   its desc and flavour say so
 #                                                   whenever the event is opened
 #
+# THE CLOCKS OF FIVE TIMED MODIFIERS (#470). The months left of a modifier that
+# has no clock of its own, for a revolution's winner, which inherits no
+# modifier: te_monetary_inherit_central_bank re-adds each from its counter. Set
+# by the effect that adds the modifier, ticked down by
+# te_mon_cw_tick_penalty_clocks (te_monetary_monthly_on_action, every country,
+# outside the update), never removed, absent until first set. Nothing else
+# reads them.
+#
+#   te_mon_peg_broken_months         0 to 60   te_mon_peg_broken_premium (te_peg.2)
+#   te_mon_peg_devaluation_months    0 to 24   te_mon_peg_devaluation_pressure (te_peg.1)
+#   te_mon_currency_reform_months    0 to 120  te_mon_currency_reform_premium
+#   te_mon_union_exit_months         0 to 120  te_mon_union_exit_premium
+#   te_mon_union_independence_months 0 to 120  te_mon_union_independence
+#
 #   global_var:te_world_rate            the world rate (§12.1), once a month
 #   global_var:te_world_rate_acc_num    its two accumulators, reset every call
 #   global_var:te_world_rate_acc_den
 #   global_var:te_world_rate_debug_offset   console-only; absent in play
 #
-# ONE COUNTRY VARIABLE IS OWNED ELSEWHERE. te_mon_stance_band_applied belongs to
-# banking_cycle_apply_stance_band (common/scripted_effects/banking_cycle_effects.txt),
-# not to the monthly update: it is bookkeeping for the banking journal entry's
-# stance modifier, so it only exists for countries that have that journal entry.
-# It is never removed, but it is not initialised only behind `has_variable`:
-# je_banking_cycle's `immediate` sets it to 0 on every activation, including the
-# copy a revolution's winner inherits, which carries no band (civil-war audit
-# F7, #465). On 0 the swap clears all five bands before adding.
-#
-#   te_mon_stance_band_applied  0 to 5              which banking_stance_band_* is
-#                                                   currently on je_banking_cycle;
-#                                                   0 = none recorded
+# te_mon_stance_band_applied, the stance-band swap's tracker, is gone (1.15,
+# #1404): je_banking_cycle declares banking_stance_band_1..5 straight from
+# te_mon_stance_band. Older saves keep it, read by nothing.
 #
 # WORKING VARIABLES (task 2, common/scripted_effects/te_monetary_effects.txt).
 # Not part of the displayed contract, but they follow the same two rules —
@@ -411,6 +421,9 @@
 # is displayed and is their sum, so publishing either recovers the other, and a
 # recoverable core plus the displayed expectations recovers the pressure sum
 # from two months of readings. Nothing displays cost-push today; nothing may.
+# te_mon_anchor_core, the copy of an anchor's core that a common-currency
+# adopter's regime pull reads (2026-11-15), is hidden on the same terms: it is
+# the leader's te_inflation_core (te_monetary_arrangement_script_values.txt).
 # What phase 2 shows exactly: headline inflation, expected inflation, the
 # target, the rate paid, the monetisation level, and the two pressure modifier
 # types, which are what the player chose. The console debug event is the one
@@ -900,6 +913,10 @@ te_mon_access_premium = {
 #
 # Also rendered in the dashboard's Credit Standing tooltip, so the figure the
 # player reads is the one the premium is actually floored at.
+#
+# [#1812] Step 5 records what it swallows (te_premium_floor_swallowed), and a
+# reserve currency's cut is paid from that record where the floor takes it: read
+# the record, never this value beside a sum of your own.
 te_mon_standing_floor = {
 	value = 0.5
 	add = {
@@ -1589,7 +1606,9 @@ te_mon_monetisation_bankruptcy_weeks = {
 }
 
 # Quantitative easing, in pp of pressure while open-market operations are
-# active (§11). Flat, not scaled: the tool is already gated to the rate floor.
+# active (§11): this much always, plus te_mon_qe_pressure_per_pp for every
+# point last month's headline sat under te_mon_inflation_anchor, the whole
+# capped at te_mon_qe_pressure_cap. te_mon_pressure_qe assembles it.
 #
 # RETUNING THIS ALSO MEANS EDITING THE DISPLAY MODIFIER banking_monthly_open_market_ops
 # (extra_modifiers.txt), whose field the tool's tooltips print as a modifier
@@ -1597,6 +1616,43 @@ te_mon_monetisation_bankruptcy_weeks = {
 # the two together.
 te_mon_qe_pressure = {
 	value = 1.0
+}
+
+# WHY THE PROGRAMME GROWS WITH THE SHORTFALL (2026-11-10). A flat point did
+# nothing for a deep deflation. A playtest's independent Fiat country in a
+# Panic sat on the -10% clamp for five years with the rate on 0%, this tool on
+# and the bank's own purchases at their cap: at the fiat floor -10% headline is
+# a real rate of +10%, so the stance alone took 2.8 points and the Panic 4,
+# against 1 + 5 of purchases, and expectations twelve points off target
+# followed headline down (c_eff is 0 past te_mon_deanchor_span). In the
+# simulator only 8 of 60 such countries left the Panic within ten years
+# (docs/audits/banking_cycle_simulation.md §28). Digital escaped where fiat did
+# not because its floor is three points lower, which is the whole of the
+# stance difference.
+#
+# Sized as real programmes were: QE1 to QE3, and the Bank of Japan's 2013
+# programme, were scaled to how far prices sat from target, and a central bank
+# that creates its own money can always create more. At 0.5 a point and a cap
+# of 5 the cap is reached at -6% under a 2% target; at 0% it is 2, and at
+# the target and above it is the flat point it always was, so the tool is
+# unchanged wherever inflation is on target. From the trap all 60 leave the
+# Panic, in a median 30 months, and inflation peaks no higher afterwards
+# (5.5% against 5.8%) because the scaling falls away as headline climbs.
+#
+# LAST MONTH'S HEADLINE, like te_mon_pressure_wage_spiral: step 6b sums the
+# pressure before it writes this month's. It is continuous in headline and has
+# no gate on the rate, so it never switches on or off in one step (the flaw
+# te_mon_pressure_bank_qe's first version had). Headline and the anchor are
+# both printed on the dashboard, so the term is printable (ruling P7).
+#
+# STATED IN WORDS by banking_nonmod_open_market_ops_tt ("0.5", "5%");
+# test_banking_external_tools.NonModifierTooltipTest holds them to these.
+te_mon_qe_pressure_per_pp = {
+	value = 0.5
+}
+
+te_mon_qe_pressure_cap = {
+	value = 5
 }
 
 # The bank's OWN asset purchases (§0.12), in pp of pressure per point that its
@@ -2465,15 +2521,30 @@ te_mon_pressure_monetisation = {
 	multiply = te_mon_monetisation_pressure
 }
 
-# Quantitative easing: a flat +1.0pp while open-market operations are running
-# (§9.1, §11). banking_tool_omo_active is the shipped read of the JE modifier
-# (common/scripted_triggers/market_triggers.txt) and is guarded with `?=`, so a
-# country without the journal entry answers no.
+# Quantitative easing while open-market operations are running (§9.1, §11):
+# te_mon_qe_pressure, plus te_mon_qe_pressure_per_pp for every point last
+# month's headline sat under the anchor, capped at te_mon_qe_pressure_cap
+# (see te_mon_qe_pressure_per_pp for why it scales). banking_tool_omo_active is
+# the shipped read of the JE modifier (common/scripted_triggers/market_triggers.txt)
+# and is guarded with `?=`, so a country without the journal entry answers no.
+# The cap is the `max` inside the branch, after the shortfall is added.
 te_mon_pressure_qe = {
 	value = 0
 	if = {
 		limit = { banking_tool_omo_active = yes }
 		add = te_mon_qe_pressure
+		if = {
+			limit = {
+				has_variable = te_inflation
+				var:te_inflation < te_mon_inflation_anchor
+			}
+			add = {
+				value = te_mon_inflation_anchor
+				subtract = var:te_inflation
+				multiply = te_mon_qe_pressure_per_pp
+			}
+		}
+		max = te_mon_qe_pressure_cap
 	}
 }
 
@@ -2671,6 +2742,8 @@ te_mon_pressure_noise = {
 #   a DOLLARISED country (ruling P9: it now uses somebody
 #   else's money)                                           -(pi_core - anchor)
 #   decentralized cryptocurrency                            -(pi_core + 1)
+#   a common-currency ADOPTER (§15A.3)                      -te_mon_union_price_pull
+#                                                            x (pi_core - leader's pi_core)
 #
 # THE DOLLARISED PULL IS TO THE ANCHOR, NOT TO ZERO (#1084, owner 2026-10-20).
 # Decision K pins a dollarised country's expectations at
@@ -2696,6 +2769,37 @@ te_mon_pressure_noise = {
 # job. What holds the price LEVEL is a quantity channel, and each convertible
 # regime has its own: te_mon_pressure_gold_flow for a gold standard,
 # te_mon_pressure_commodity_specie (immediately below) for commodity money.
+#
+# THE ADOPTER'S PULL IS TO THE LEADER'S CORE (owner, 2026-11-15). An adopter
+# keeps its own inflation (§15A.1, ruling G1), but goods that cross borders in
+# one money sell at one price, so only the non-traded half of its basket can
+# run apart from the leader's: euro members' gaps since 1999 are a point a year
+# or less among like economies, nearly all in services. Read off
+# te_mon_anchor_core, step 1c's copy, last pulse's or this one's by country
+# order like every other anchor copy. Core to core because the shared part of
+# the headline, a market's goods prices, already reaches both through the §9.3
+# basket when the two share a market. Two-sided: a colder adopter is pulled up.
+# Only an adopter: a treaty peg can be broken and a board's subject is a
+# colony, and both still have only the premium or peg confidence between them
+# and their own inflation.
+#
+# WHY 1, NOT 0.5. Without the pull an adopter has no fixed point. Its rate is
+# the leader's with no term for its own expectations (ruling G13), so each
+# point of its own inflation is a point off its real rate, and the stance term
+# hands back 0.4 of it: the manual dial's Taylor-principle failure, against an
+# imported credibility (max(own, 0.8 x the leader's)) of 0.56 behind an
+# independent bank and less behind any other. Iterating step 6 with that loop
+# (2026-11-15), a standing 1pp of domestic pressure carried an adopter 50
+# points above its leader in about a century, 2pp in about fifty years. With a
+# pull of 1 the gap settles at 0.9 to 1.2 x the pressure; at 0.5, 1.6 to 3 x.
+# And with half the basket traded, a pull of 1 halves the gap the domestic sum
+# alone would open, the same proportion the dollarised pull gives.
+# test_monetary_union_price_pull.py holds both: the fixed point, and the loop
+# with the stance term in it.
+te_mon_union_price_pull = {
+	value = 1
+}
+
 te_mon_pressure_regime_pull = {
 	value = 0
 	if = {
@@ -2711,6 +2815,18 @@ te_mon_pressure_regime_pull = {
 		limit = { has_law_or_variant = law_type:law_decentralized_cryptocurrency }
 		subtract = te_mon_inflation_core_read
 		subtract = 1
+	}
+	else_if = {
+		# Last: an adopter joins on fiat or digital money and not dollarised
+		# (te_mon_union_regime_fits). One dollarised since gets the dollarised
+		# pull above, which is right: that money is what circulates.
+		limit = {
+			te_mon_is_union_adopter = yes
+			has_variable = te_mon_anchor_core
+		}
+		add = var:te_mon_anchor_core
+		subtract = te_mon_inflation_core_read
+		multiply = te_mon_union_price_pull
 	}
 }
 

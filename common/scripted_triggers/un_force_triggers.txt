@@ -59,12 +59,13 @@ un_force_war_goal_barred = {
 # This play holds a goal the Force may strike: one of the barred types, held
 # by the actor against the play's target, and not of the type the play opened
 # with. on_wargoal_added fires for the goal a play opens with too and does not
-# say which goal was added, and remove_war_goal takes a side and a type, so a
-# second goal of the opening type cannot be struck without the first; whether
-# striking a play's own goal leaves a working play is unproven. A play opens
-# with the goal its type names (war_goal in common/diplomatic_plays/, vanilla's
-# and the mod's), so the play's type tells the opening goal, and each type is
-# struck only from a play of another type.
+# say which goal was added, and remove_war_goal takes the holder's first goal
+# of a type, whatever it targets, so a second goal of the opening type cannot
+# be struck without the opening goal, and the play is left without the goal it
+# was started over (review 2026-10-02: the opening goal is charged, never
+# struck). A play opens with the goal its type names (war_goal in
+# common/diplomatic_plays/, vanilla's and the mod's), so the play's type tells
+# the opening goal, and each type is struck only from a play of another type.
 #
 # The types are every type a play opens with in vanilla, the subjugation types
 # of 1.14, the mod's reunification, its colonial reconquest (whose play,
@@ -76,8 +77,10 @@ un_force_war_goal_barred = {
 # They fall in three groups:
 #   one opening play  struck unless this play is of that type
 #                     (un_force_goal_strikeable)
-#   several           annex_country and humiliation are struck unless this play
-#                     is of one of their types (un_force_play_opens_with_*);
+#   several           annex_country, humiliation and return_state (two plays
+#                     since vanilla 1.15, dp_return_state_to_subject) are struck
+#                     unless this play is of one of their types
+#                     (un_force_play_opens_with_*);
 #                     unification and unification_leadership are never struck,
 #                     since every formable adds a play that opens with one and
 #                     a play missing from such a list would lose its own goal
@@ -90,8 +93,8 @@ un_force_has_strikeable_goal = {
 	OR = {
 		# --- one opening play ---
 		un_force_goal_strikeable = { TYPE = conquer_state PLAY = dp_conquer_state }
-		un_force_goal_strikeable = { TYPE = return_state PLAY = dp_return_state }
 		un_force_goal_strikeable = { TYPE = take_treaty_port PLAY = dp_take_treaty_port }
+		un_force_goal_strikeable = { TYPE = te_seize_strait PLAY = dp_te_seize_strait }
 		un_force_goal_strikeable = { TYPE = liberate_country PLAY = dp_liberate_country }
 		un_force_goal_strikeable = { TYPE = liberate_subject PLAY = dp_liberate_subject }
 		un_force_goal_strikeable = { TYPE = secession PLAY = dp_secession }
@@ -126,6 +129,10 @@ un_force_has_strikeable_goal = {
 		AND = {
 			NOT = { un_force_play_opens_with_humiliation = yes }
 			un_force_goal_held = { TYPE = humiliation }
+		}
+		AND = {
+			NOT = { un_force_play_opens_with_return_state = yes }
+			un_force_goal_held = { TYPE = return_state }
 		}
 		# --- no opening play ---
 		un_force_goal_held = { TYPE = te_reunify_country }
@@ -174,6 +181,19 @@ un_force_play_opens_with_annexation = {
 		is_diplomatic_play_type = dp_hungarian_revolution
 		is_diplomatic_play_type = dp_unify_ethiopia
 		is_diplomatic_play_type = dp_unify_arabia
+		# vanilla 1.15
+		is_diplomatic_play_type = dp_unify_russia
+		is_diplomatic_play_type = dp_polish_uprising
+	}
+}
+
+# The play opened with return_state: vanilla's two play types with that war goal
+# (dp_return_state_to_subject since vanilla 1.15).
+# Scope: diplomatic play
+un_force_play_opens_with_return_state = {
+	OR = {
+		is_diplomatic_play_type = dp_return_state
+		is_diplomatic_play_type = dp_return_state_to_subject
 	}
 }
 

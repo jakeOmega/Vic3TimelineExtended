@@ -24,7 +24,12 @@ wiring that keeps it coherent:
 * the enacted named states are one country list, te_tax_en_relief_states,
   which a list cannot survive the merge with: the outbreak and a release copy
   it, and the copies and the repair rebuild the marks from the country's own
-  list (te_tax_rebuild_relief_marks; Task 11, test_tax_code_goods_relief.py).
+  list (te_tax_rebuild_relief_marks; Task 11, test_tax_code_goods_relief.py);
+* under the light code the outbreak copies every variable of the schema's light
+  table onto the rebels (te_tax_light_copy_code, the generator's light_tokens()),
+  sets their tax level to the code's, and their sync keeps the copy while the
+  war lasts (te_tax_light_ai_uniform), so a rebel winner holds the nation's rates
+  (#1469).
 
 Shape of test_decolonization_civil_war.py: source text, brace-matched blocks.
 
@@ -264,6 +269,141 @@ class AdoptTest(unittest.TestCase):
         immediate = self.parsed["te_tax.4"]["immediate"]
         self.assertEqual(immediate["te_tax_sync_collection"], "yes")
         self.assertTrue(immediate["debug_log"].strip('"').startswith("TE_TAX post-migration sync"))
+
+
+def light_schema_tokens():
+    """{token: default} from the "Light variables" table of the schema doc, <key> and <ig>
+    expanded; a default of "—" is None (written by the migration, never defaulted)."""
+    text = read(SCHEMA_DOC, strip_comments=False)
+    section = text.split("\n## Light code\n", 1)[1].split("\n## ", 1)[0]
+    table = section.split("\n### Light variables\n", 1)[1].split("\n### ", 1)[0]
+    placeholders = {"<key>": KEYS, "<ig>": gen.IGS}
+    tokens = {}
+    for line in table.splitlines():
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        if len(cells) != 3 or "`te_tax_" not in cells[0]:
+            continue
+        default = None if cells[2] in ("—", "-") else int(cells[2])
+        for name in re.findall(r"`(te_tax_[\w<>]+)`", cells[0]):
+            expanded = [name]
+            for placeholder, values in placeholders.items():
+                if placeholder in name:
+                    expanded = [token.replace(placeholder, value) for token in expanded for value in values]
+            for token in expanded:
+                tokens[token] = default
+    return tokens
+
+
+class LightOutbreakTest(unittest.TestCase):
+    """#1469: under the light code the rebels receive the original's code at the outbreak, as
+    under the legislated code, so a rebel winner continues the nation's rates. Before, they
+    migrated from their own law and tax level (te_tax_light.2), and the merge kept those."""
+
+    LIGHT_EFFECTS = "common/scripted_effects/te_tax_light_effects.txt"
+    LIGHT_GEN_EFFECTS = "common/scripted_effects/te_tax_light_generated_effects.txt"
+    LIGHT_EVENTS = "events/te_tax_light_events.txt"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.defined = effects()
+        text = read(CIVIL_WAR_EFFECTS)
+        uprising = block(text, "te_tax_on_uprising")
+        cls.branch = uprising[uprising.index("te_tax_code_light_on = yes"):]
+        cls.copy = block(text, "te_tax_light_copy_code")
+        cls.adopt = block(read(cls.LIGHT_EFFECTS), "te_tax_light_adopt_copied_code")
+
+    def test_an_original_in_force_is_copied_onto_the_rebels(self):
+        self.assertIn("exists = scope:target", self.branch[:self.branch.index("if = {")])
+        copy_branch = self.branch[:self.branch.index("else = {")]
+        self.assertRegex(copy_branch, r"if = \{\s*limit = \{ te_tax_light_in_force = yes \}\s*"
+                                      r"save_scope_as = te_tax_source\s*scope:target = \{")
+        target = copy_branch[copy_branch.index("scope:target = {"):]
+        # te_tax_light.4 needs the code in force, which the copy writes last; an event raised
+        # without days may run at once.
+        self.assertLess(target.index("te_tax_light_copy_code = yes"),
+                        target.index("trigger_event = { id = te_tax_light.4 }"))
+        self.assertNotIn("te_tax_light.2", copy_branch)
+
+    def test_an_original_without_a_code_lets_the_rebels_migrate(self):
+        fallback = self.branch[self.branch.index("else = {"):]
+        self.assertLess(fallback.index("set_variable = { name = te_tax_light_on value = 0 }"),
+                        fallback.index("trigger_event = { id = te_tax_light.2 }"))
+        self.assertNotIn("te_tax_light_copy_code", fallback)
+
+    def test_every_light_variable_of_the_schema_is_copied(self):
+        schema = light_schema_tokens()
+        self.assertIn("te_tax_light_on", schema)
+        written = copied({"te_tax_light_copy_code"}, self.defined)
+        # The marker is not copied: the copy writes it, last, as the migration does.
+        self.assertEqual(sorted(set(schema) - written - {"te_tax_light_on"}), [],
+                         "light variables of the schema the outbreak copy does not copy")
+        self.assertEqual(sorted(written - set(schema)), [], "copied tokens the schema's light table lacks")
+        self.assertNotIn("te_tax_light_on", written)
+
+    def test_the_copy_is_the_generators_token_list(self):
+        # A token added to light_tokens() is defaulted and copied alike, and the schema's
+        # defaults are the generator's.
+        tokens = gen.light_tokens()
+        names = [name for name, _ in tokens]
+        generated = read(self.LIGHT_GEN_EFFECTS)
+        self.assertEqual(COPY.findall(block(generated, "te_tax_light_gen_copy_code")),
+                         names + list(gen.LIGHT_CARRIED))
+        init = re.findall(r"set_variable = \{ name = (\w+) value = (-?\d+) \}",
+                          block(generated, "te_tax_light_gen_init"))
+        self.assertEqual(init, [(name, str(default)) for name, default in tokens])
+        schema = light_schema_tokens()
+        for name, default in tokens:
+            with self.subTest(name=name):
+                self.assertEqual(schema[name], default)
+        for name in (*gen.LIGHT_CARRIED, "te_tax_light_on"):
+            with self.subTest(name=name):
+                self.assertIsNone(schema[name])
+
+    def test_init_backfills_after_the_copy_and_the_marker_is_written_last(self):
+        self.assertLess(self.copy.index("te_tax_light_gen_copy_code = yes"),
+                        self.copy.index("te_tax_light_gen_init = yes"))
+        last = self.copy[self.copy.rfind("set_variable"):]
+        self.assertTrue(last.startswith("set_variable = { name = te_tax_light_on value = 1 }"))
+        self.assertEqual(SET.findall(self.copy), [("te_tax_light_on", "1")])
+
+    def test_the_copy_writes_no_modifier_and_no_native_state(self):
+        for name in closure({"te_tax_light_copy_code"}, self.defined):
+            with self.subTest(name=name):
+                for word in ("add_modifier", "remove_modifier", "set_tax_level", "activate_law",
+                             "trigger_event"):
+                    self.assertNotIn(word, self.defined[name])
+
+    def test_the_adoption_sets_the_codes_level_then_syncs_tomorrow(self):
+        self.assertRegex(self.adopt, r"^\s*if = \{\s*limit = \{ te_tax_light_in_force = yes \}")
+        level = self.adopt.index("te_tax_light_gen_set_level = yes")
+        self.assertIn("var:te_tax_light_law > 0", self.adopt[:level])
+        self.assertLess(level, self.adopt.index("trigger_event = { id = te_tax_light.3 days = 1 }"))
+        self.assertNotIn("te_tax_light_sync", self.adopt)
+        body = load(self.LIGHT_EVENTS)["te_tax_light.4"]
+        self.assertEqual(body["type"], "country_event")
+        self.assertEqual(body["hidden"], "yes")
+        self.assertEqual(body["trigger"], {"te_tax_code_light_on": "yes"})
+        self.assertEqual(body["immediate"], {"te_tax_light_adopt_copied_code": "yes"})
+        self.assertEqual(raisers("te_tax_light.4"), [(CIVIL_WAR_EFFECTS, "te_tax_light.4")])
+
+    def test_the_rebels_keep_the_copy_while_the_war_lasts(self):
+        # An AI's sync resets its code to the law's rates at its level; the rebels, an AI
+        # country, take the player's branches while they hold te_cw_origin.
+        self.assertEqual(load(TRIGGERS)["te_tax_light_ai_uniform"],
+                         {"is_ai": "yes", "NOT": {"has_variable": "te_cw_origin"}})
+        sync = block(read(self.LIGHT_EFFECTS), "te_tax_light_sync")
+        self.assertEqual(sync.count("limit = { te_tax_light_ai_uniform = yes }"), 2)
+        self.assertNotRegex(sync, r"\bis_ai\b")
+        shared = read("common/scripted_effects/te_civil_war_effects.txt")
+        self.assertIn("set_variable = { name = te_cw_origin value = ROOT }", block(shared, "te_civil_war_record_start"))
+        self.assertIn("remove_variable = te_cw_origin", block(shared, "te_civil_war_clear"))
+        self.assertIn("remove_variable = te_cw_origin", block(read(CIVIL_WAR_ON_ACTIONS), "te_civil_war_on_secession_end"))
+
+    def test_the_winner_is_synced_from_its_own_variables(self):
+        repair = block(read(CIVIL_WAR_EFFECTS), "te_tax_repair_after_civil_war")
+        light = repair[repair.index("te_tax_light_in_force = yes"):]
+        self.assertTrue(light.split("}", 1)[1].strip().startswith("trigger_event = { id = te_tax_light.3 }"))
+        self.assertNotIn("te_tax_light_copy_code", repair)
 
 
 class RepairTest(unittest.TestCase):

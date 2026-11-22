@@ -276,33 +276,32 @@ te_debug_colonial_empire.3 = { # REVIEWED 2026-10-09: console-only test event (`
 	# The description reads the figures behind Investment's weekly cost and
 	# the AI's review (PROGRAMME COSTS / AI PROGRAMME REVIEW in
 	# colonial_empire_values.txt). This option re-reads the colonies' GDP now
-	# rather than at the next monthly pulse, and re-applies the modifiers.
+	# rather than at the next monthly pulse; the expense line, a scaling
+	# modifier on the entry, follows it within a few days.
 	option = {
 		name = te_debug_colonial_empire.3.a
 		default_option = yes
 		colonial_programmes_refresh_cost_base = yes
-		colonial_programmes_refresh_modifiers = yes
 		colonial_empire_refresh_display = yes
 	}
 
 	# Run the AI's monthly programme review on us, as the entry's pulse does for
 	# an AI: it raises or lowers at most one level per programme, paying what a
-	# step pays, then the one refresh.
+	# step pays. The modifiers follow the levels within a few days.
 	option = {
 		name = te_debug_colonial_empire.3.b
 		colonial_programmes_refresh_cost_base = yes
 		colonial_ai_review_programmes = yes
-		colonial_programmes_refresh_modifiers = yes
 		colonial_empire_refresh_display = yes
 	}
 
-	# Stop all three programmes at once, with no refund.
+	# Stop all three programmes at once, with no refund. The modifiers leave the
+	# entry within a few days.
 	option = {
 		name = te_debug_colonial_empire.3.c
 		set_variable = { name = colonial_invest_level value = 0 }
 		set_variable = { name = colonial_garrison_level value = 0 }
 		set_variable = { name = colonial_assim_level value = 0 }
-		colonial_programmes_refresh_modifiers = yes
 		colonial_empire_refresh_display = yes
 	}
 }

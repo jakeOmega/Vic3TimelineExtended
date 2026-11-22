@@ -354,10 +354,11 @@ NUS = {
 			coa_def_monarchy_flag_trigger = yes
 			scope:actor ?= {
 				ruler ?= {
-					OR = {
+					OR = { # REVIEWED 2026-11-07 (culture_merge_ref): cm_pan_malay left out: the revival is Javanese, Malay and Sumatran, not Filipino
 						has_culture = cu:javan
 						has_culture = cu:malay
 						has_culture = cu:sumatran
+						has_culture = cu:cm_indonesian
 					}
 				}
 			}
@@ -828,7 +829,12 @@ DAR = {
 		trigger = {
 			coa_def_monarchy_flag_trigger = yes
 			scope:actor ?= {
-				ruler ?= { has_culture = cu:turkish }
+				ruler ?= {
+					OR = { # REVIEWED 2026-11-07 (culture_merge_ref): cm_pan_turkic left out: the Ottomans were Oghuz Turks, not Uzbeks, Kazakhs or Tatars
+						has_culture = cu:turkish
+						has_culture = cu:cm_oghuz_turkic
+					}
+				}
 			}
 		}
 	}
@@ -846,6 +852,7 @@ DAR = {
 						has_culture = cu:maghrebi
 						has_culture = cu:bedouin
 						has_culture = cu:misri
+						has_culture = cu:cm_arab
 					}
 				}
 			}

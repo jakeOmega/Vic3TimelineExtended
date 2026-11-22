@@ -34,7 +34,7 @@ The cause, and the two cures, are `gui_modding_guide.md` gotchas #43 and #44.
 | **Grand Monuments, a level's worth.** The Grand Monuments tab with no construction site, then the journal entry. | Under the Monument Policy line, one centred line: "A level built now adds 5.000 Grandeur (5 in 1836)" in 1836, a smaller figure later; its hover explains the rate. Once a site stands, Awaiting Dedication opens on its row. | Two lines, or cut short: the textbox under `gm_je_ov_policy` in `te_gm_overview_panel`. |
 | **Tax Code bill footer.** Budget > Tax Code with a bill under debate, while its support rises past the passage share. | Pass, Force Through and Withdraw centred; once support holds, Pass and Withdraw centred. | The two rows' `visible` (`te_tax_show_pass_support_sgui`). |
 | **Passed bills' goods.** A passed bill that taxes or exempts a whole row of goods. | 13 icons to a row beside the label, inside the column. | `LABELLED_GOODS_ICONS_PER_ROW` in `gen_tax_code.py`. |
-| **Global Warming row 2.** Join or leave an Enforce Emissions Reduction treaty, and switch the Market panel's Climate tab to another market. | The market cell under the tier cell, the treaty cell beside it when it shows. | |
+| **Global Warming row 2.** Join or leave an Emissions Reduction treaty, and switch the Market panel's Climate tab to another market. | The market cell under the tier cell, the treaty cell beside it when it shows. | |
 | **Cultural Hegemony row 2.** A new game, the panel open across the first monthly recount. | The leaders' label and three slots from the start, filled at the recount; the row doesn't move. | |
 
 ## Older panels (the sweep of 2026-10-28)
@@ -70,3 +70,16 @@ been moved into loc for those underlines outside the Space Race. `test_gui_under
 | **Colors without underlines.** Colonial Empire's red table cells, Banking's phase words (green Expansion, red Panic), the UN chamber's "Firmly for" and "firmly against" counts. | Each keeps its color. | A cream value: its color was the underline's; put it back inline in the loc. |
 | **Subheadings.** Grand Monuments' Interest Group Approval and Monument Policy; the Tax Code review's Taxed Goods, Agricultural Relief, Regional Relief and Revenue Estimate. | In the heading style, as before, with no underline. | |
 | **The Tax Code's estimate note.** Budget > Tax Code with a bill under debate, the line above Interest Groups' cards. | The note's own style (`te_tax_note`'s `#lore`), as the panel's other notes; "Estimate out of date:" still red. | It was plain cream, underlined; if the lore color drowns the red, give the line a `default_format` of its own. |
+
+## Game rule descriptions cut short (2026-11-13)
+
+The Game Rules screen prints a setting's description in a fixed box on the rule's card: the type shrinks for a longer
+text down to a floor, then four lines and an ellipsis. Sixteen of the mod's 52 descriptions ran past it, Free Market
+Construction Disabled losing the line that says Construction Sites must be built from the state view. They were cut,
+and `test_game_rule_desc_length.py` now fails a description past four lines at 78 characters, a model calibrated on
+the owner's screenshot only.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Every description whole.** A new game's Game Rules screen. Step each mod rule through every setting, the longest first: Free Market Construction, Space Race, Tax Code, Banking System, Global Commons, Social Movements. | Each description ends on its own full stop, with no ellipsis. Free Market Construction Disabled shows "Construction Sites must currently be built from the state view." in bold. | The model is too generous: lower `WRAP_WIDTH` in `test_game_rule_desc_length.py` until the text that was cut off fails, then cut what it flags. |
+| **Setting names fit the selector.** The same screen: Free Market Construction without AI Retooling Costs (51 characters), without Retooling Costs (48), Internal Resettlement: AI Voluntary Only (40). | The whole name between the arrows; smaller type is fine. | Shorten the name (`setting_<name>`), keep the player guide's rules table (`01-introduction.md`) to the same words, and give the names a check of their own in the test. |

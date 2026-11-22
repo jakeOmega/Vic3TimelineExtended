@@ -23,8 +23,8 @@
 #   scope:op = 4  ->  select the Standard approach (player only: no AI button)
 #
 # The milestone itself is NOT encoded in the op code: it arrives free through
-# the panel's datacontext, which names one of these eight handlers. Folding it
-# into the op would buy a 32-branch chain and save nothing, because variable
+# the panel's datacontext, which names one of these seven handlers. Folding it
+# into the op would buy a 28-branch chain and save nothing, because variable
 # names cannot be built from a scope.
 #
 # All of these are player-only (`ai_is_valid = { always = no }`). The AI still
@@ -266,64 +266,6 @@ sr_milestone_probe_sgui = {
 		}
 		else = {
 			sr_effect_standard = { MILESTONE = probe }
-		}
-	}
-}
-
-sr_milestone_moon_base_sgui = {
-	scope = country
-	saved_scopes = { op }
-
-	is_shown = {
-		has_journal_entry = je_space_race_moon_base
-		sr_controls_shown = { MILESTONE = moon_base }
-	}
-
-	ai_is_valid = {
-		always = no
-	}
-
-	is_valid = {
-		trigger_if = {
-			limit = { scope:op = 0 }
-			sr_possible_safe = { MILESTONE = moon_base }
-		}
-		trigger_else_if = {
-			limit = { scope:op = 1 }
-			sr_possible_ambitious = { MILESTONE = moon_base }
-		}
-		trigger_else_if = {
-			limit = { scope:op = 2 }
-			sr_possible_fund_down = { MILESTONE = moon_base }
-		}
-		trigger_else_if = {
-			limit = { scope:op = 3 }
-			sr_possible_fund_up = { MILESTONE = moon_base }
-		}
-		trigger_else = {
-			sr_possible_standard = { MILESTONE = moon_base }
-		}
-	}
-
-	effect = {
-		if = {
-			limit = { scope:op = 0 }
-			sr_effect_safe = { MILESTONE = moon_base }
-		}
-		else_if = {
-			limit = { scope:op = 1 }
-			sr_effect_ambitious = { MILESTONE = moon_base }
-		}
-		else_if = {
-			limit = { scope:op = 2 }
-			sr_effect_fund_down = { MILESTONE = moon_base }
-		}
-		else_if = {
-			limit = { scope:op = 3 }
-			sr_effect_fund_up = { MILESTONE = moon_base }
-		}
-		else = {
-			sr_effect_standard = { MILESTONE = moon_base }
 		}
 	}
 }

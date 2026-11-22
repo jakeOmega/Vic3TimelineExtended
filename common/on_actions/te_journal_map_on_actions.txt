@@ -1,0 +1,51 @@
+﻿# Journal entry map modes (docs/systems/mod_systems/journal_map_modes.md): each month, a player's country becomes the
+# maps' viewer (te_jmap_note_viewer, te_journal_map_effects.txt), so a map of "your" country drawn on a page opened from
+# the journal, with no map button clicked yet, has one. The picks and map buttons set it too, at once.
+
+# Each month, the world's range for the picked map and for the maps the systems' own entries draw (Emissions,
+# Grandeur), so a map fitted to the world follows it as the game runs (te_journal_map_ranges_generated.txt). The
+# global pulse, so an observer's game measures too; no ROOT is needed: ordered_state walks the world's states and the
+# selector is a global.
+on_monthly_pulse = {
+	on_actions = {
+		te_jmap_monthly_ranges
+	}
+}
+
+te_jmap_monthly_ranges = {
+	effect = {
+		# The Company Headquarters map's state figures, before the ranges that read them (te_journal_map_effects.txt).
+		te_jmap_store_hqs = yes
+		# The Investment map's, while it is the pick, and its once-a-game check.
+		te_jmap_monthly_invest = yes
+		# The Map Room's area, before the range that leaves out the states outside it: a state that changed hands,
+		# market or power bloc this month joins or leaves the area here. Nothing is walked under the world.
+		te_jmap_mark_area = yes
+		te_jmap_refresh_range = yes
+		te_jmap_refresh_entry_ranges = yes
+		# Once a game each: whether the store finds the headquarters, and whether their profit read is live.
+		te_jmap_hq_found_selfcheck = yes
+		te_jmap_hq_selfcheck = yes
+		# Once a game each: whether the area's test divides the world, whether a range measured through the
+		# count and the ladder of positions is the one position = 4 gave, and whether an ordered walk of the
+		# world's states visits them all in order, as a Ranked map's places need.
+		te_jmap_area_selfcheck = yes
+		te_jmap_range_selfcheck = yes
+		te_jmap_rank_selfcheck = yes
+	}
+}
+
+on_monthly_pulse_country = {
+	on_actions = {
+		te_jmap_monthly_viewer
+	}
+}
+
+te_jmap_monthly_viewer = {
+	effect = {
+		if = {
+			limit = { is_player = yes }
+			te_jmap_note_viewer = yes
+		}
+	}
+}

@@ -63,18 +63,14 @@ industrial_nuke_succeeds_defender = {
 	color = bad
 }
 
-industrial_nuke_fails_attacker = {
+# A city strike destroyed or nationalized buildings our investors held shares in
+# (nd_raze_tell_investors, nuclear_raze_effects.txt). The texture is vanilla's
+# nationalization notice's.
+nd_raze_foreign_assets_lost = {
 	type = country
-	texture = "gfx/interface/icons/notification_icons/military.dds"
+	texture = "gfx/interface/icons/notification_icons/capitulate.dds"
 	notification_type = feed
 	color = bad
-}
-
-industrial_nuke_fails_defender = {
-	type = country
-	texture = "gfx/interface/icons/notification_icons/military.dds"
-	notification_type = feed
-	color = good
 }
 
 tactical_nuke_succeeds_attacker = {
@@ -84,30 +80,20 @@ tactical_nuke_succeeds_attacker = {
 	color = good
 }
 
-tactical_nuke_succeeds_defender = {
-	type = country
-	texture = "gfx/interface/icons/notification_icons/military.dds"
-	notification_type = feed
-	color = bad
-}
-
-tactical_nuke_fails_attacker = {
-	type = country
-	texture = "gfx/interface/icons/notification_icons/military.dds"
-	notification_type = feed
-	color = bad
-}
-
-tactical_nuke_fails_defender = {
-	type = country
-	texture = "gfx/interface/icons/notification_icons/military.dds"
-	notification_type = feed
-	color = good
-}
-
 # The No-First-Strike Pledge amendment, in force, has moved our deterrence
 # doctrine to No First Use (nd_weekly_update, #430). Human players only.
 nd_doctrine_bound_by_law = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/laws.dds"
+	notification_type = feed
+	color = neutral
+}
+
+# Our launch authority fell back to Central Authorization: Launch on Warning or
+# Automatic Retaliation without the fielded ICBMs it launches, after
+# disarmament or a dismantling (nd_authority_bind_check, phase 2 plan D10).
+# Human players only.
+nd_authority_bound_by_delivery = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/laws.dds"
 	notification_type = feed
@@ -140,6 +126,16 @@ nd_deploy_bar_enforced = {
 	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
 	notification_type = feed
 	color = neutral
+}
+
+# Our forces have stood at High Alert for six months with no crisis under way
+# (nd_remind_high_alert). Human players only. A toast, since the panel is the
+# only other place that shows readiness.
+nd_high_alert_reminder = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/military.dds"
+	notification_type = toast
+	color = bad
 }
 
 nd_crisis_warning_reported = {
@@ -1506,6 +1502,27 @@ headlines_tech_nuclear_weapons = {
 	color = neutral
 }
 
+# The world's first fielded delivery legs (2026-11-20 delivery spec §4.1,
+# phase 2 plan D12): posted by nd_leg_notices_icbms / _subs
+# (nuclear_weapon_effects.txt), once each, to every human.
+headlines_nd_icbms_fielded = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/technology.dds"
+	group = "headlines_tech_group"
+	notification_type = feed
+	days = 28
+	color = neutral
+}
+
+headlines_nd_subs_fielded = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/technology.dds"
+	group = "headlines_tech_group"
+	notification_type = feed
+	days = 28
+	color = neutral
+}
+
 
 headlines_tech_orbital_manufacturing = {
 	type = country
@@ -2090,6 +2107,73 @@ colonial_territory_collapsed_notice = {
 	color = neutral
 }
 
+# A law script replaced because it could no longer stand with the country's
+# other laws or its technology (te_law_sweep_notice_from_law_scope,
+# extra_on_actions.txt). scope:te_law_sweep_new_law is the law now in force.
+te_law_replaced_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
+	notification_type = feed
+	color = neutral
+}
+
+# A party that had something done to it by another country's choice, and was
+# not told (2026-11-10): the subject of a collapsed empire, another empire when
+# a colony goes free, and the two sides of a military intervention (.19 / .20).
+decol_collapse_aftershock_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
+	notification_type = feed
+	color = neutral
+}
+
+decol_liberation_contagion_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
+gp_intervention_target_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
+gp_intervention_condemned_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
+# Monetary: a swap line's balance settled in one payment when the line ends
+# (te_mon_effect_swap_settle), to the recipient that paid and the provider
+# that was repaid (#1556).
+te_mon_swap_settled_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
+te_mon_swap_repaid_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+
+# Irredentism: the neighbor a country funded cultural ties with
+# (irredentism.1.b) hears who did it and what it gained (#1557).
+irr_cultural_ties_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+
 nationalization_notice = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
@@ -2138,6 +2222,25 @@ covert_exposure_shored_notice = {
 	notification_type = feed
 	group = "te_covert_notification_group"
 	color = good
+}
+
+# An exposure that covert_warfare.2 does not report (its 24-month cooldown),
+# and the public backlash at home where that event is not shown
+# (covert_exposure_tell_repeat, covert_exposure_tell_public).
+covert_exposure_repeat_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
+	notification_type = feed
+	group = "te_covert_notification_group"
+	color = good
+}
+
+covert_backlash_public_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	group = "te_covert_notification_group"
+	color = neutral
 }
 
 covert_exposure_expelled_notice = {
@@ -2208,6 +2311,16 @@ un_crisis_closed_notice = {
 	notification_type = feed
 	color = good
 }
+# The early unlock's League of Nations takes the name United Nations, and its
+# charter can be reformed: the month some country first has Intergovernmental
+# Organizations, to every member and every player
+# (un_global_authority_on_action, un_on_actions.txt).
+un_league_becomes_un_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = good
+}
 # A founding conference for a new UN is in session (to major and great powers).
 un_conference_opened_notice = {
 	type = country
@@ -2218,6 +2331,37 @@ un_conference_opened_notice = {
 # We have taken a permanent seat on the Security Council (to the new holder;
 # un_seat_grant, un_seat_effects.txt).
 un_permanent_seat_granted_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+# Effects of the UN on a country that did not choose them (#1555, #1558).
+# The Decolonization Declaration's pressure, to every colonial power it lands
+# on, member or not (un_vote.2).
+un_decolonization_pressure_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+# The headquarters has passed to us (un_hq_assign_host, un_hq_effects.txt).
+un_headquarters_host_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+# Our power bloc gains from a UN that is Moribund or gone
+# (un_ladder_bloc_vacuum_update), and from its dissolution (un_dissolve); to
+# the bloc's leader.
+un_bloc_vacuum_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+un_dissolution_vacuum_notice = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
 	notification_type = feed
@@ -2419,4 +2563,44 @@ banking_eliq_wound_down_notice = {
 	texture = "gfx/interface/icons/notification_icons/journal.dds"
 	notification_type = feed
 	color = good
+}
+
+# Banking: an overdrawn intervention budget lifted a tool (to the country, human
+# only; banking_overdraft_told, from every branch of
+# banking_crash_check_overdrawn_interventions). The text names the tool through
+# banking_overdraft_lifted_tool, and the cause, which can be another country's
+# doing: an adopter left the common currency, or the bloc dropped a tier.
+banking_overdraft_lift_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = bad
+}
+
+# Culture merges: another country has begun a merge (te_cm_tell_start), or a merge has
+# completed (te_cmg_<m>_tell), and the merge does not reach this human country: none of
+# its cultures is a primary culture here and no state here is one of their homelands.
+# A country the merge reaches gets te_culture_merge.2 or .4 instead. The text names the
+# starter and the result from scope:te_cm_ev_starter and scope:te_cm_ev_result.
+te_cm_merge_started_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/pops.dds"
+	notification_type = feed
+	color = neutral
+}
+
+# The same start, for a country in the starter's sphere (its subject, or a member of the bloc it leads) that the merge
+# does not reach: its pops of a joined culture convert each year, as the plain notice would not say.
+te_cm_merge_started_sphere_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/pops.dds"
+	notification_type = feed
+	color = neutral
+}
+
+te_cm_merge_complete_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/pops.dds"
+	notification_type = feed
+	color = neutral
 }

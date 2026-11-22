@@ -585,6 +585,7 @@ def validate(instruments=INSTRUMENTS):
                     f"for an index in 1..{instrument.max_idx}"
                 )
     migration_indices(instruments)
+    validate_light_extras()
     for good in consumption_catalog():
         goods_weight(good)
     customs_by_category()
@@ -929,7 +930,7 @@ def _overview_views():
         lines.append(
             f"\tif = {{ limit = {{ has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev "
             f"has_variable = {off}_kind has_variable = {off}_rev var:{off}_rev = var:te_tax_bl_rev var:{off}_kind > 0 "
-            f"NAND = {{ has_variable = {com} has_variable = {com}_rev var:{com} = 1 var:{com}_rev = var:te_tax_bl_rev }} }} "
+            f"{_not_committed(com)} }} "
             "add = 1 }")
     lines.append("}")
     lines += ["", "# Promises in their term with a failing check (te_tax_obl_st_failing_<n>), and the earliest",
@@ -1319,6 +1320,24 @@ def _ig_values():
 
 def _is_open(token):
     return f"has_variable = {token} var:{token} = 1"
+
+
+def _unset_or_not(variable, comparison):
+    """`variable` is unset, or set and not `comparison` ("> 0"). The guard is a trigger_if's limit,
+    never a sibling of the read in a NAND, NOR or NOT, where it would protect nothing
+    (scripting_best_practices.md, "Write NOR or NAND, Never a Multi-Child NOT";
+    variable_guard_audit). Not for an OR: a trigger_if whose limit fails passes."""
+    return f"trigger_if = {{ limit = {{ has_variable = {variable} }} NOT = {{ var:{variable} {comparison} }} }}"
+
+
+def _not_committed(com):
+    """The group whose commitment token is `com` has not committed to the bill's current revision:
+    either token is unset, or it is not 1 for this revision. Guards as in _unset_or_not, which
+    keeps every read of a view behind its own has_variable (test_tax_code_state); the two
+    variables are compared with a plain =, since ?= with a var: on the right is unverified.
+    te_tax_can_accept_offer (te_tax_triggers.txt) writes the same test."""
+    return (f"trigger_if = {{ limit = {{ has_variable = {com} has_variable = {com}_rev }} "
+            f"NAND = {{ var:{com} = 1 var:{com}_rev = var:te_tax_bl_rev }} }}")
 
 
 def _split_month(name, month, guard):
@@ -3132,7 +3151,9 @@ def offer_records():
 
 
 def _not_gained(ig, code):
-    return f"NAND = {{ has_variable = te_tax_bl_got_{ig}_{code} var:te_tax_bl_got_{ig}_{code} = 1 }}"
+    """Group `ig` has not gained clause `code` under this bill: its record is unset or not 1. The
+    read is `?=`, false when the record is unset, so no guard shares a block with it."""
+    return f"NOT = {{ var:te_tax_bl_got_{ig}_{code} ?= 1 }}"
 
 
 def _offer_writes(ig, kind, arg, target="0", indent="\t\t\t"):
@@ -3199,7 +3220,7 @@ def _promise_candidates(ig, indent):
             f"{t}if = {{",
             f"{t}\tlimit = {{",
             f"{t}\t\tvar:{off}_kind = 0",
-            f"{t}\t\tNAND = {{ has_variable = te_tax_bl_prom_{ig}_kind var:te_tax_bl_prom_{ig}_kind > 0 }}",
+            f"{t}\t\t{_unset_or_not(f'te_tax_bl_prom_{ig}_kind', '> 0')}",
             f"{t}\t\t{_feasible_call(kind, arg, target)}",
             f"{t}\t\tte_tax_can_obl_propose = {{ KIND = {kind} ARG = {arg} }}",
             f"{t}\t}}",
@@ -4702,6 +4723,10 @@ LIGHT_BAND_TOLERANCE = Decimal("0.0005")
 LIGHT_PAYER_EXPOSURE = Decimal("0.5")
 # Scratch values of one sync or step, persistent so a tooltip pass never reads them unset.
 LIGHT_SCRATCH = ("te_tax_light_tgt", "te_tax_light_d", "te_tax_light_was", "te_tax_light_s", "te_tax_light_rlv")
+# What the code was last carried into: the law (te_tax_light_law_id) and the native tax level.
+# The migration writes them (te_tax_light_migrate_country) and the sync keeps them; with
+# light_tokens() and the marker te_tax_light_on they are the whole of a country's light code.
+LIGHT_CARRIED = ("te_tax_light_law", "te_tax_light_level")
 # te_tax_light_step_<key>_sgui's op table: 0 one step down, 1 one step up, 2 to the floor
 # (LIGHT_FLOOR, no tax), 3 to the law's very-high rate (te_tax_light_cmd_step DIR).
 LIGHT_OPS = (0, 1, 2, 3)
@@ -4709,6 +4734,51 @@ LIGHT_OPS = (0, 1, 2, 3)
 # its law's very-low rate; changed 2026-10-20.) A rate below the very-low rate sits on the
 # very-low step and is collected through relief, like any rate below the tax level.
 LIGHT_FLOOR = 0
+
+
+class LightExtra(NamedTuple):
+    key: str            # the instrument
+    cap: int            # its highest index where the law levies none
+    anchor: str         # the law whose ladder, capped, gives the steps it sits on
+    barred_by: tuple    # laws under which it is closed
+    noun: str           # the tax in running text, lower case
+    base: str           # what it taxes, in running text
+
+
+# A tax the law does not levy (owner, 2026-11-15: "allow dividend taxes in the tax code on any law, at a low level,
+# in light mode"). Under a taxation law that levies no dividend tax (Consumption-Based, Land-Based, Per-Capita) the
+# light code may levy one from nothing up to LIGHT_EXTRA_CAP_DIV index steps; a law that levies one keeps its own
+# range. The law collects nothing of it, so the code adds it: te_tax_light_levy_<key> (one step's rate) x the index,
+# declared on je_tax_code like the relief. It sits on the step the same rate sits on under the anchor law, so
+# Proportional's own ladder capped at the cap (5% on Low, 2.5% on Very Low), and it carries no relief and gives no
+# view band: below it is only no tax, which the law already gives. It is closed under Traditionalism, which bans
+# every law that taxes wages or dividends, as the legislated code refuses a dividend tax there (te_tax_draft_ready).
+#
+# The cap's anchor, in index steps of 2.5% (vanilla 1.15 01_taxation.txt, dividends by tax level):
+#   Proportional  1  2  4  6  8    (2.5%, 5%, 10%, 15%, 20%)
+#   Graduated     4  6  8 10 12    (10%, 15%, 20%, 25%, 30%)
+# 2 is Proportional's Low rate: a quarter of its ceiling, half its Medium rate and a quarter of Graduated's, so
+# enacting a law that taxes dividends is still the way to tax profits properly. The alternative is 1 (2.5%,
+# Proportional's Very Low rate). validate() holds the cap below every levying law's Medium rate. Owner's number.
+LIGHT_EXTRA_CAP_DIV = 2
+LIGHT_EXTRAS = (
+    LightExtra("div", LIGHT_EXTRA_CAP_DIV, "law_proportional_taxation", ("law_traditionalism",), "dividend tax",
+               "dividends"),
+)
+
+
+def light_tokens():
+    """[(name, default)]: every country token te_tax_light_gen_init defaults, in its order: each
+    tax's rate index, relief steps and step; each group's running reaction, its rounded size and
+    its band; the scratch values. The outbreak copy (te_tax_light_gen_copy_code) copies these and
+    LIGHT_CARRIED, so a token added here is copied too."""
+    tokens = []
+    for instrument in INSTRUMENTS:
+        key = instrument.key
+        tokens += [(f"te_tax_en_{key}", 0), (f"te_tax_light_rl_{key}", 0), (f"te_tax_light_rg_{key}", -1)]
+    for ig in IGS:
+        tokens += [(f"te_tax_lr_{ig}", 0), (f"te_tax_lr_mag_{ig}", 0), (f"te_tax_light_band_{ig}", 0)]
+    return tokens + [(var, 0) for var in LIGHT_SCRATCH]
 
 
 def light_ladders():
@@ -4729,6 +4799,50 @@ def light_laws():
 
 def light_levies(law, key):
     return light_ladders()[law][key][-1] > 0
+
+
+def light_extra(key):
+    """The LightExtra for `key`, or None: a tax the code may levy where the law levies none."""
+    return next((extra for extra in LIGHT_EXTRAS if extra.key == key), None)
+
+
+def light_extra_ladder(key):
+    """[index at very_low .. very_high] of the extra tax: its anchor law's ladder capped at the cap, so each
+    rate sits on the step it sits on under the anchor."""
+    extra = light_extra(key)
+    return [min(idx, extra.cap) for idx in light_ladders()[extra.anchor][key]]
+
+
+def light_extra_laws(key):
+    """[(id, law)]: the vanilla taxation laws that levy none of `key`, under which its extra tax is open."""
+    return [(n, law) for n, law in light_laws() if not light_levies(law, key)] if light_extra(key) else []
+
+
+def light_rung_of(ladder, idx):
+    """The step a rate sits on: the lowest level whose rate on `ladder` is at least it."""
+    return next(n for n, value in enumerate(ladder) if idx <= value)
+
+
+def validate_light_extras():
+    """Raise ValueError unless each extra tax is an instrument whose anchor levies it, its cap is a whole index of
+    at least 1 and below every levying law's Medium rate (so enacting such a law always taxes it more from the
+    default level up), and no barring law is a taxation law."""
+    keys = {instrument.key for instrument in INSTRUMENTS}
+    medium = NATIVE_LEVELS.index("medium")
+    for extra in LIGHT_EXTRAS:
+        if extra.key not in keys:
+            raise ValueError(f"light extra {extra.key}: no such instrument")
+        if not light_levies(extra.anchor, extra.key):
+            raise ValueError(f"light extra {extra.key}: {extra.anchor} does not levy it")
+        if not light_extra_laws(extra.key):
+            raise ValueError(f"light extra {extra.key}: every law levies it")
+        levying = [law for _n, law in light_laws() if light_levies(law, extra.key)]
+        lowest_medium = min(light_ladders()[law][extra.key][medium] for law in levying)
+        if not 1 <= extra.cap < lowest_medium:
+            raise ValueError(f"light extra {extra.key}: cap {extra.cap} is not 1 .. {lowest_medium - 1} "
+                             f"(below every levying law's Medium rate)")
+        if set(extra.barred_by) & {law for _n, law in light_laws()}:
+            raise ValueError(f"light extra {extra.key}: a taxation law bars it")
 
 
 def light_lv(instrument):
@@ -4760,6 +4874,32 @@ def light_payers(instrument):
     """The groups a step's tooltip names, most exposed first."""
     ranked = sorted(IGS, key=lambda ig: (-exposure(ig)[instrument.key], IGS.index(ig)))
     return [ig for ig in ranked if exposure(ig)[instrument.key] >= LIGHT_PAYER_EXPOSURE]
+
+
+def light_scaling_values():
+    """[(modifier, value name, limit, variable read)] for each of je_tax_code's scaling modifiers:
+    every tax's relief, each extra tax's levy (LIGHT_EXTRAS), then each group's welcoming and
+    resentful reaction. The entry's hand-written declarations are held to this list by
+    test_tax_code_scaling_modifiers.py."""
+    out = []
+    for instrument in INSTRUMENTS:
+        key = instrument.key
+        rl = f"te_tax_light_rl_{key}"
+        out.append((f"te_tax_light_relief_{key}", f"te_tax_light_relief_{key}_value",
+                    f"te_tax_light_levies_{key} = yes has_variable = {rl} var:{rl} > 0", rl))
+    # The levy reads the rule and the marker too (te_tax_light_in_force), unlike the relief: a positive tax must
+    # stop the day the code does, even before the entry's invalid outcome ends it.
+    for extra in LIGHT_EXTRAS:
+        en = f"te_tax_en_{extra.key}"
+        out.append((f"te_tax_light_levy_{extra.key}", f"te_tax_light_levy_{extra.key}_value",
+                    f"te_tax_light_in_force = yes te_tax_light_extra_{extra.key} = yes has_variable = {en} "
+                    f"var:{en} > 0", en))
+    for ig in IGS:
+        lr, mag = f"te_tax_lr_{ig}", f"te_tax_lr_mag_{ig}"
+        for sign, comparison in (("pos", "> 0"), ("neg", "< 0")):
+            out.append((f"te_tax_light_react_{ig}_{sign}", f"te_tax_light_react_{ig}_{sign}_value",
+                        f"has_variable = {lr} var:{lr} {comparison} has_variable = {mag} var:{mag} >= 1", mag))
+    return out
 
 
 def _dec(value, places="0.00001"):
@@ -4804,8 +4944,14 @@ def _light_values():
             lines += _law_chain(f"te_tax_light_idx_{key}_{n}",
                                 [(law, f"value = {ladders[law][key][n]}") for _id, law in light_laws()
                                  if ladders[law][key][n]])
-        lines += [f"te_tax_light_min_{key} = {{ value = {LIGHT_FLOOR} }}",
-                  f"te_tax_light_max_{key} = {{ value = te_tax_light_idx_{key}_{len(NATIVE_LEVELS) - 1} }}"]
+        lines.append(f"te_tax_light_min_{key} = {{ value = {LIGHT_FLOOR} }}")
+        if light_extra(key):
+            # Where the law levies none and the extra tax is open, its cap (te_tax_light_extra_cap_<key>, below).
+            lines += [f"te_tax_light_max_{key} = {{", f"\tvalue = te_tax_light_idx_{key}_{len(NATIVE_LEVELS) - 1}",
+                      f"\tif = {{ limit = {{ te_tax_light_extra_{key} = yes }} value = te_tax_light_extra_cap_{key} }}",
+                      "}"]
+        else:
+            lines.append(f"te_tax_light_max_{key} = {{ value = te_tax_light_idx_{key}_{len(NATIVE_LEVELS) - 1} }}")
     lines += ["", "# te_tax_light_idx_<key>_native: the law's index at the country's native tax level.",
               "# te_tax_light_idx_<key>_at_level: at the level the code last set (te_tax_light_level),",
               "# medium before it has set one."]
@@ -4822,21 +4968,46 @@ def _light_values():
                 lines.append(f"\tif = {{ limit = {{ has_variable = te_tax_light_level var:te_tax_light_level = {n} }} "
                              f"value = te_tax_light_idx_{key}_{n} }}")
         lines.append("}")
+    for extra in LIGHT_EXTRAS:
+        key, ladder = extra.key, light_extra_ladder(extra.key)
+        names = ", ".join(law for _n, law in light_extra_laws(key))
+        lines += ["", f"# The extra {key} tax (LIGHT_EXTRAS): under a law that levies none ({names})",
+                  f"# and none of {', '.join(extra.barred_by)}, the code may levy it from nothing up to",
+                  f"# te_tax_light_extra_cap_{key} index steps; the law collects none of it, so je_tax_code declares",
+                  f"# te_tax_light_levy_{key} x the index. Its steps are {extra.anchor}'s, capped:",
+                  f"# te_tax_light_xidx_{key}_<n> is the extra ladder at native level n (0 where the extra is closed);",
+                  "# _native and _at_level as for the law's. te_tax_light_ai_idx_<key>: what an AI levies at its native",
+                  "# level, the extra's rate where it is open and the law's otherwise.",
+                  f"te_tax_light_extra_cap_{key} = {{ value = {extra.cap} }}"]
+        for n, value in enumerate(ladder):
+            lines += [f"te_tax_light_xidx_{key}_{n} = {{", "\tvalue = 0",
+                      f"\tif = {{ limit = {{ te_tax_light_extra_{key} = yes }} value = {value} }}", "}"]
+        lines += [f"te_tax_light_xidx_{key}_native = {{", f"\tvalue = te_tax_light_xidx_{key}_2"]
+        lines += [f"\tif = {{ limit = {{ tax_level = {level} }} value = te_tax_light_xidx_{key}_{n} }}"
+                  for n, level in enumerate(NATIVE_LEVELS) if level != "medium"]
+        lines += ["}", f"te_tax_light_xidx_{key}_at_level = {{", f"\tvalue = te_tax_light_xidx_{key}_2"]
+        lines += [f"\tif = {{ limit = {{ has_variable = te_tax_light_level var:te_tax_light_level = {n} }} "
+                  f"value = te_tax_light_xidx_{key}_{n} }}" for n in range(len(NATIVE_LEVELS)) if n != 2]
+        lines += ["}", f"te_tax_light_ai_idx_{key} = {{", f"\tvalue = te_tax_light_idx_{key}_native",
+                  f"\tif = {{ limit = {{ te_tax_light_extra_{key} = yes }} value = te_tax_light_xidx_{key}_native }}",
+                  "}"]
     lines += ["", "# te_tax_light_rung_<key>: the step the enacted rate sits on, the lowest native level whose",
               "# rate under the active law is at least the code's (0 very low .. 4 very high); -1 for a tax",
-              "# the law does not levy. Literal thresholds per law."]
+              "# the law does not levy. Literal thresholds per law. An extra tax (LIGHT_EXTRAS) sits on its",
+              "# extra ladder's step while it is open and above nothing, and on none (-1) at nothing: no tax."]
     for instrument in INSTRUMENTS:
         key = instrument.key
         lines += [f"te_tax_light_rung_{key} = {{", "\tvalue = -1"]
         first = True
-        for _id, law in light_laws():
-            ladder = ladders[law][key]
-            if not ladder[-1]:
-                continue
+        branches = [(f"has_law = law_type:{law} has_variable = te_tax_en_{key}", ladders[law][key])
+                    for _id, law in light_laws() if ladders[law][key][-1]]
+        if light_extra(key):
+            branches.append((f"te_tax_light_extra_{key} = yes has_variable = te_tax_en_{key} "
+                             f"var:te_tax_en_{key} > 0", light_extra_ladder(key)))
+        for limit, ladder in branches:
             lines.append(f"\t{'if' if first else 'else_if'} = {{")
             first = False
-            lines += [f"\t\tlimit = {{ has_law = law_type:{law} has_variable = te_tax_en_{key} }}",
-                      f"\t\tvalue = {len(ladder) - 1}"]
+            lines += [f"\t\tlimit = {{ {limit} }}", f"\t\tvalue = {len(ladder) - 1}"]
             for n in range(len(ladder) - 2, -1, -1):
                 lines.append(f"\t\tif = {{ limit = {{ var:te_tax_en_{key} <= {ladder[n]} }} value = {n} }}")
             lines.append("\t}")
@@ -4868,6 +5039,18 @@ def _light_values():
                              f"add = {{ value = var:te_tax_light_rl_{key} multiply = {_dec(weight)} }} }}")
             lines.append("\t}")
         lines.append("}")
+    lines += ["", "# je_tax_code's scaling modifiers (scaling_modifiers_while_active, one per modifier): the",
+              "# engine reads each from the owning country about every four days, so the sync only writes",
+              "# the variables. te_tax_light_relief_<key>_value: the tax's relief steps",
+              "# (te_tax_light_rl_<key>) while the law levies it. te_tax_light_levy_<key>_value: an extra",
+              "# tax's index (te_tax_en_<key>) while the code is in force and the extra is open (LIGHT_EXTRAS).",
+              "# te_tax_light_react_<ig>_<pos|neg>_value:",
+              "# the running reaction's rounded size (te_tax_lr_mag_<ig>, never negative) on the side of",
+              "# its sign (te_tax_lr_<ig>), once it is a whole point. 0 otherwise, which takes the",
+              "# modifier off the entry: the gates under which the sync used to remove it."]
+    for _modifier, name, limit, read in light_scaling_values():
+        lines += [f"{name} = {{", "\tvalue = 0",
+                  f"\tif = {{ limit = {{ {limit} }} value = var:{read} }}", "}"]
     lines += ["", "# Panel views (gui/journal_entry_widgets/te_tax_light_widget.gui): guarded reads, -1 or 0",
               "# when absent."]
     lines += ["te_tax_view_light_on = {", "\tvalue = 0",
@@ -4877,11 +5060,13 @@ def _light_values():
               "te_tax_view_light_law = { value = te_tax_light_law_id }",
               "te_tax_view_light_was = {", "\tvalue = -1",
               "\tif = { limit = { has_variable = te_tax_light_was } value = var:te_tax_light_was }", "}"]
+    # _levied_ shows a tax's row: the law levies it, or it is an open extra tax (te_tax_light_holds_<key>);
+    # _extra_ is 1 for the second, for the row's note and range.
     for instrument in INSTRUMENTS:
         key = instrument.key
         lines += [
             f"te_tax_view_light_levied_{key} = {{", "\tvalue = 0",
-            f"\tif = {{ limit = {{ has_variable = te_tax_light_on te_tax_light_levies_{key} = yes }} value = 1 }}", "}",
+            f"\tif = {{ limit = {{ has_variable = te_tax_light_on te_tax_light_holds_{key} = yes }} value = 1 }}", "}",
             f"te_tax_view_light_rung_{key} = {{", "\tvalue = -1",
             f"\tif = {{ limit = {{ has_variable = te_tax_light_rg_{key} }} value = var:te_tax_light_rg_{key} }}", "}",
             f"te_tax_view_light_sets_{key} = {{", "\tvalue = 0",
@@ -4893,6 +5078,13 @@ def _light_values():
             f"\tif = {{ limit = {{ has_variable = te_tax_light_rl_{key} }} value = var:te_tax_light_rl_{key} "
             f"multiply = te_tax_step_{key} }}", "}",
         ]
+        if light_extra(key):
+            lines += [
+                f"te_tax_view_light_extra_{key} = {{", "\tvalue = 0",
+                f"\tif = {{ limit = {{ has_variable = te_tax_light_on te_tax_light_extra_{key} = yes }} value = 1 }}", "}",
+                f"te_tax_view_light_extra_cap_{key}_rate = {{ value = te_tax_light_extra_cap_{key} "
+                f"multiply = te_tax_step_{key} }}",
+            ]
     for ig in IGS:
         lines += [f"te_tax_view_light_react_{ig} = {{", "\tvalue = 0",
                   f"\tif = {{ limit = {{ has_variable = te_tax_lr_{ig} }} value = var:te_tax_lr_{ig} }}", "}",
@@ -4934,14 +5126,41 @@ def light_triggers():
                   f"\tOR = {{ {' '.join(f'has_law = law_type:{law}' for law in laws)} }}", "}"]
     lines += [
         "",
+        "# An extra tax is open (LIGHT_EXTRAS): the active law levies none of it and no barring law is",
+        "# enacted. The code may then levy it up to its cap (te_tax_light_extra_cap_<key>).",
+    ]
+    for extra in LIGHT_EXTRAS:
+        laws = " ".join(f"has_law = law_type:{law}" for _n, law in light_extra_laws(extra.key))
+        lines += [f"te_tax_light_extra_{extra.key} = {{", f"\tOR = {{ {laws} }}"]
+        lines += [f"\tNOT = {{ has_law = law_type:{law} }}" for law in extra.barred_by]
+        lines.append("}")
+    lines += [
+        "",
+        "# The code holds the tax, so its row shows and its steps work: the law levies it, or it is an",
+        "# open extra tax.",
+    ]
+    for instrument in INSTRUMENTS:
+        key = instrument.key
+        if light_extra(key):
+            lines += [f"te_tax_light_holds_{key} = {{",
+                      f"\tOR = {{ te_tax_light_levies_{key} = yes te_tax_light_extra_{key} = yes }}", "}"]
+        else:
+            lines += [f"te_tax_light_holds_{key} = {{", f"\tte_tax_light_levies_{key} = yes", "}"]
+    lines += [
+        "",
         "# The law the code was last carried into (te_tax_light_law, the id te_tax_light_law_id gives",
         "# it) levied the tax. A levied tax may sit at 0, so a law change tells a tax the new law",
-        "# adds from a tax the player cut to nothing by this, not by the index.",
+        "# adds from a tax the player cut to nothing by this, not by the index. _old_extra_: that law",
+        "# levied none of an extra tax, so the code's own one carries over to a new law that levies none.",
     ]
     for instrument in INSTRUMENTS:
         key = instrument.key
         ids = [n for n, law in light_laws() if ladders[law][key][-1]]
         lines += [f"te_tax_light_old_levies_{key} = {{", "\thas_variable = te_tax_light_law",
+                  f"\tOR = {{ {' '.join(f'var:te_tax_light_law = {n}' for n in ids)} }}", "}"]
+    for extra in LIGHT_EXTRAS:
+        ids = [n for n, _law in light_extra_laws(extra.key)]
+        lines += [f"te_tax_light_old_extra_{extra.key} = {{", "\thas_variable = te_tax_light_law",
                   f"\tOR = {{ {' '.join(f'var:te_tax_light_law = {n}' for n in ids)} }}", "}"]
     lines += [
         "",
@@ -4954,27 +5173,38 @@ def light_triggers():
         "#   _down_lowers_<key>: the tax alone sets the tax level and one step down leaves its step",
         "#                       (index - 1 at or under the rate one level lower);",
         "#   _min_lowers_<key>:  the tax alone sets the tax level and the level is above very low.",
+        "# An open extra tax (LIGHT_EXTRAS) has the same branches on its extra ladder; its cap sits on the",
+        "# step its anchor law puts the same rate on, so _max_raises_ reads that step, not very high.",
     ]
     last = len(NATIVE_LEVELS) - 1
     for instrument in INSTRUMENTS:
         key = instrument.key
         en = f"te_tax_en_{key}"
         up, down = [], []
-        for _id, law in light_laws():
-            ladder = ladders[law][key]
-            if not ladder[-1]:
-                continue
+        branches = [(f"has_law = law_type:{law}", ladders[law][key]) for _id, law in light_laws()
+                    if ladders[law][key][-1]]
+        if light_extra(key):
+            branches.append((f"te_tax_light_extra_{key} = yes", light_extra_ladder(key)))
+        for condition, ladder in branches:
             for level in range(last):
-                up.append(f"\t\tAND = {{ has_law = law_type:{law} var:te_tax_light_level = {level} "
+                up.append(f"\t\tAND = {{ {condition} var:te_tax_light_level = {level} "
                           f"var:{en} >= {ladder[level]} }}")
             for level in range(1, last + 1):
-                down.append(f"\t\tAND = {{ has_law = law_type:{law} var:te_tax_light_level = {level} "
+                down.append(f"\t\tAND = {{ {condition} var:te_tax_light_level = {level} "
                             f"var:te_tax_light_rg_{key} = {level} {_others_below(key, level)} "
                             f"var:{en} <= {ladder[level - 1] + 1} }}")
         guards = f"has_variable = te_tax_light_level has_variable = {en} has_variable = te_tax_light_rg_{key}"
         lines += [f"te_tax_light_up_raises_{key} = {{", f"\t{guards}", "\tOR = {"] + up + ["\t}", "}"]
-        lines += [f"te_tax_light_max_raises_{key} = {{", f"\t{guards}",
-                  f"\tte_tax_light_levies_{key} = yes", f"\tvar:te_tax_light_level < {last}", "}"]
+        extra = light_extra(key)
+        cap_step = light_rung_of(light_extra_ladder(key), extra.cap) if extra else 0
+        if cap_step:
+            lines += [f"te_tax_light_max_raises_{key} = {{", f"\t{guards}", "\tOR = {",
+                      f"\t\tAND = {{ te_tax_light_levies_{key} = yes var:te_tax_light_level < {last} }}",
+                      f"\t\tAND = {{ te_tax_light_extra_{key} = yes var:te_tax_light_level < {cap_step} }}",
+                      "\t}", "}"]
+        else:
+            lines += [f"te_tax_light_max_raises_{key} = {{", f"\t{guards}",
+                      f"\tte_tax_light_levies_{key} = yes", f"\tvar:te_tax_light_level < {last}", "}"]
         lines += [f"te_tax_light_down_lowers_{key} = {{", f"\t{guards}", "\tOR = {"] + down + ["\t}", "}"]
         mins = [f"\t\tAND = {{ var:te_tax_light_level = {level} var:te_tax_light_rg_{key} = {level} "
                 f"{_others_below(key, level)} }}" for level in range(1, last + 1)]
@@ -5013,27 +5243,19 @@ def light_effects():
     lines = [
         HEADER,
         "# The light code's per-tax and per-group parts (docs/systems/tax_code_schema.md, \"Light",
-        "# code\"), called only by te_tax_light_effects.txt. Country scope, ROOT = the country (a",
-        "# country event or the player's scripted GUI): the modifiers' multipliers read ROOT.",
+        "# code\"), called only by te_tax_light_effects.txt. Country scope. They write variables and",
+        "# swap the flat view-band modifiers; the relief and reaction modifiers are je_tax_code's",
+        "# scaling modifiers, which read the variables written here.",
         "",
         "# Every light token, with its default where absent. Never overwrites one.",
         "te_tax_light_gen_init = {",
     ]
-    for instrument in INSTRUMENTS:
-        key = instrument.key
-        for var, default in ((f"te_tax_en_{key}", 0), (f"te_tax_light_rl_{key}", 0), (f"te_tax_light_rg_{key}", -1)):
-            lines.append(f"\tif = {{ limit = {{ NOT = {{ has_variable = {var} }} }} set_variable = {{ name = {var} "
-                         f"value = {default} }} }}")
-    for ig in IGS:
-        for var in (f"te_tax_lr_{ig}", f"te_tax_lr_mag_{ig}", f"te_tax_light_band_{ig}"):
-            lines.append(f"\tif = {{ limit = {{ NOT = {{ has_variable = {var} }} }} set_variable = {{ name = {var} "
-                         "value = 0 } }")
-    # The scratch values of one sync or step. A button's tooltip walks its hidden effect without
-    # running it, so a limit that reads one set earlier in the same effect reads it as unset
-    # (scripting_best_practices.md, "ExecuteTooltip"): these persist between runs instead.
-    for var in LIGHT_SCRATCH:
+    # The scratch values (LIGHT_SCRATCH) come last. A button's tooltip walks its hidden effect
+    # without running it, so a limit that reads one set earlier in the same effect reads it as
+    # unset (scripting_best_practices.md, "ExecuteTooltip"): these persist between runs instead.
+    for var, default in light_tokens():
         lines.append(f"\tif = {{ limit = {{ NOT = {{ has_variable = {var} }} }} set_variable = {{ name = {var} "
-                     "value = 0 } }")
+                     f"value = {default} }} }}")
     lines += [
         "}",
         "",
@@ -5050,43 +5272,72 @@ def light_effects():
     lines += [
         "}",
         "",
+        "# Outbreak copy (te_tax_light_copy_code, te_tax_civil_war_effects.txt): every light token",
+        "# from scope:te_tax_source, the country the uprising rose against, onto the uprising: each",
+        "# tax's rate index, relief steps and step, each group's running reaction, its size and its",
+        "# band, the scratch values, and the law and the tax level the code was last carried into.",
+        "# The marker te_tax_light_on is the caller's, written last.",
+        "te_tax_light_gen_copy_code = {",
+    ]
+    lines += [_copy(name) for name, _ in light_tokens()]
+    lines += [_copy(name) for name in LIGHT_CARRIED]
+    lines += [
+        "}",
+        "",
         "# Every tax at the active law's rate for the native tax level: the migration, and an AI",
-        "# country's code after a law change. No reaction.",
+        "# country's code after a law change. No reaction. An open extra tax (LIGHT_EXTRAS), which the",
+        "# law levies none of, starts at nothing for a player, who chooses it, and at its rate for the",
+        "# native level for an AI country (te_tax_light_ai_uniform), whose code follows its level.",
         "te_tax_light_gen_uniform = {",
     ]
     lines += [f"\tset_variable = {{ name = te_tax_en_{i.key} value = te_tax_light_idx_{i.key}_native }}"
               for i in INSTRUMENTS]
+    lines += [f"\tif = {{ limit = {{ te_tax_light_ai_uniform = yes te_tax_light_extra_{e.key} = yes }} "
+              f"set_variable = {{ name = te_tax_en_{e.key} value = te_tax_light_xidx_{e.key}_native }} }}"
+              for e in LIGHT_EXTRAS]
     lines += [
         "}",
         "",
         "# The same, scored: an AI country's code follows its native tax level, and each tax that",
-        "# moves draws its reaction (te_tax_light_gen_react).",
+        "# moves draws its reaction (te_tax_light_gen_react). An open extra tax goes to its rate for",
+        "# the level (te_tax_light_ai_idx_<key>), and a rise from nothing is scored as any dividend",
+        "# tax rise is: the first sync of a save begun before it existed raises it so.",
         "te_tax_light_gen_uniform_scored = {",
     ]
     for instrument in INSTRUMENTS:
         key = instrument.key
+        target = f"te_tax_light_ai_idx_{key}" if light_extra(key) else f"te_tax_light_idx_{key}_native"
         lines += [
-            f"\tset_variable = {{ name = te_tax_light_d value = te_tax_light_idx_{key}_native }}",
+            f"\tset_variable = {{ name = te_tax_light_d value = {target} }}",
             f"\tchange_variable = {{ name = te_tax_light_d subtract = var:te_tax_en_{key} }}",
             f"\tif = {{ limit = {{ NOT = {{ var:te_tax_light_d = 0 }} }} te_tax_light_gen_react = {{ KEY = {key} }} }}",
-            f"\tset_variable = {{ name = te_tax_en_{key} value = te_tax_light_idx_{key}_native }}",
+            f"\tset_variable = {{ name = te_tax_en_{key} value = {target} }}",
         ]
     lines += [
         "}",
         "",
-        "# The active law changed (a player's country): a tax it does not levy goes to 0; one it",
-        "# newly levies (the previous law, te_tax_light_law, did not) starts at its rate for the tax",
-        "# level the code last set, as enacting the law gives in the base game; every other tax is",
-        "# clamped between 0 (a tax cut to nothing stays at nothing) and its rate at that tax level,",
-        "# so a law change never raises the tax level (Proportional's 20% wage tax would sit on",
-        "# Graduated's very-high step). No reaction: the law change's own approval covers it.",
+        "# The active law changed (a player's country, or an uprising holding a copied code): a tax",
+        "# it does not levy goes to 0; one it newly levies (the previous law, te_tax_light_law, did",
+        "# not) starts at its rate for the tax level the code last set, as enacting the law gives in",
+        "# the base game; every other tax is clamped between 0 (a tax cut to nothing stays at",
+        "# nothing) and its rate at that tax level, so a law change never raises the tax level",
+        "# (Proportional's 20% wage tax would sit on Graduated's very-high step). No reaction: the",
+        "# law change's own approval covers it. An open extra tax (LIGHT_EXTRAS) carries over from a law",
+        "# that levied none of it, clamped to its rate at that tax level; from a law that levied it, it",
+        "# starts at nothing, as the base game gives that law, and the player chooses it again.",
         "te_tax_light_gen_clamp = {",
     ]
     for instrument in INSTRUMENTS:
         key = instrument.key
         en = f"te_tax_en_{key}"
+        first = "if"
+        if light_extra(key):
+            lines.append(f"\tif = {{ limit = {{ te_tax_light_extra_{key} = yes te_tax_light_old_extra_{key} = yes }} "
+                         f"clamp_variable = {{ name = {en} min = te_tax_light_min_{key} "
+                         f"max = te_tax_light_xidx_{key}_at_level }} }}")
+            first = "else_if"
         lines += [
-            f"\tif = {{ limit = {{ NOT = {{ te_tax_light_levies_{key} = yes }} }} set_variable = {{ name = {en} value = 0 }} }}",
+            f"\t{first} = {{ limit = {{ NOT = {{ te_tax_light_levies_{key} = yes }} }} set_variable = {{ name = {en} value = 0 }} }}",
             f"\telse_if = {{ limit = {{ NOT = {{ te_tax_light_old_levies_{key} = yes }} }} set_variable = {{ name = {en} value = te_tax_light_idx_{key}_at_level }} }}",
             f"\telse = {{ clamp_variable = {{ name = {en} min = te_tax_light_min_{key} "
             f"max = te_tax_light_idx_{key}_at_level }} }}",
@@ -5094,10 +5345,15 @@ def light_effects():
     lines += [
         "}",
         "",
-        "# The native tax level moved outside the code (a player's country; the buttons are greyed,",
-        "# so only script reaches this): each levied tax moves by its law's difference between the",
-        "# new level and the one the code last set, clamped into the range, which is what the",
-        "# country already collects. Each tax that moves draws its reaction.",
+        "# The native tax level moved outside the code (a player's country, where the buttons are",
+        "# greyed, so only script reaches this; or an uprising holding a copied code, whose AI sets",
+        "# its level): each levied tax moves by its law's difference between the new level and the",
+        "# one the code last set, clamped into the range, which is what the country already",
+        "# collects. Each tax that moves draws its reaction. An open extra tax (LIGHT_EXTRAS) is clamped to",
+        "# at most its rate at the new level (te_tax_light_xidx_<key>_native), also scored: the law collects",
+        "# none of it at any level, but left above that rate it would sit on a higher step than the new",
+        "# level, the sync would set the level back to its step, and the next outside move (an uprising's",
+        "# AI choosing a lower level each month) would shift every levied tax down again from there.",
         "te_tax_light_gen_shift = {",
     ]
     for instrument in INSTRUMENTS:
@@ -5115,6 +5371,30 @@ def light_effects():
             f"\t\tif = {{ limit = {{ NOT = {{ var:te_tax_light_d = 0 }} }} te_tax_light_gen_react = {{ KEY = {key} }} }}",
             "\t}",
         ]
+        if light_extra(key):
+            lines += [
+                "\telse_if = {",
+                f"\t\tlimit = {{ te_tax_light_extra_{key} = yes }}",
+                f"\t\tset_variable = {{ name = te_tax_light_was value = var:{en} }}",
+                f"\t\tclamp_variable = {{ name = {en} min = te_tax_light_min_{key} max = te_tax_light_xidx_{key}_native }}",
+                f"\t\tset_variable = {{ name = te_tax_light_d value = var:{en} }}",
+                "\t\tchange_variable = { name = te_tax_light_d subtract = var:te_tax_light_was }",
+                f"\t\tif = {{ limit = {{ NOT = {{ var:te_tax_light_d = 0 }} }} te_tax_light_gen_react = {{ KEY = {key} }} }}",
+                "\t}",
+            ]
+    lines += [
+        "}",
+        "",
+        "# An extra tax that closed without a change of taxation law (LIGHT_EXTRAS: a barring law such as",
+        "# Traditionalism was enacted) goes to nothing, for every country, with no reaction: the law",
+        "# change's own approval covers it, as for a taxation law. Its levy already reads 0 from the moment",
+        "# it closed (te_tax_light_levy_<key>_value).",
+        "te_tax_light_gen_close = {",
+    ]
+    for extra in LIGHT_EXTRAS:
+        en = f"te_tax_en_{extra.key}"
+        lines.append(f"\tif = {{ limit = {{ NOT = {{ te_tax_light_holds_{extra.key} = yes }} has_variable = {en} "
+                     f"var:{en} > 0 }} set_variable = {{ name = {en} value = 0 }} }}")
     lines += [
         "}",
         "",
@@ -5143,8 +5423,8 @@ def light_effects():
         "}",
         "",
         "# Relief: each levied tax's steps below the law's rate at the tax level (te_tax_light_rl_",
-        "# <key>), carried by te_tax_light_relief_<key> (one step's rate below zero) with that",
-        "# multiplier. Removed and re-added every call, so the modifier always matches the variable.",
+        "# <key>), 0 for a tax the law does not levy. je_tax_code declares te_tax_light_relief_<key>",
+        "# (one step's rate below zero) with this many steps (te_tax_light_relief_<key>_value).",
         "te_tax_light_gen_relief = {",
     ]
     for instrument in INSTRUMENTS:
@@ -5157,27 +5437,21 @@ def light_effects():
             f"\t\tif = {{ limit = {{ var:{rl} < 0 }} set_variable = {{ name = {rl} value = 0 }} }}",
             "\t}",
             f"\telse = {{ set_variable = {{ name = {rl} value = 0 }} }}",
-            f"\tif = {{ limit = {{ has_modifier = te_tax_light_relief_{key} }} remove_modifier = te_tax_light_relief_{key} }}",
-            f"\tif = {{ limit = {{ var:{rl} > 0 }} add_modifier = {{ name = te_tax_light_relief_{key} multiplier = var:{rl} }} }}",
         ]
     lines += [
         "}",
         "",
-        "# The running reactions as approval: te_tax_light_react_<ig>_pos or _neg with the rounded",
-        "# size (te_tax_lr_mag_<ig>, always positive) as multiplier, or neither when it rounds to 0.",
-        "te_tax_light_gen_apply_reactions = {",
+        "# The running reactions' rounded size (te_tax_lr_mag_<ig>, never negative), 0 when it rounds",
+        "# to 0. je_tax_code declares te_tax_light_react_<ig>_pos or _neg, by the sign of the running",
+        "# reaction te_tax_lr_<ig>, with this size (te_tax_light_react_<ig>_<pos|neg>_value).",
+        "te_tax_light_gen_reaction_sizes = {",
     ]
     for ig in IGS:
         lr, mag = f"te_tax_lr_{ig}", f"te_tax_lr_mag_{ig}"
-        pos, neg = f"te_tax_light_react_{ig}_pos", f"te_tax_light_react_{ig}_neg"
         lines += [
-            f"\tif = {{ limit = {{ has_modifier = {pos} }} remove_modifier = {pos} }}",
-            f"\tif = {{ limit = {{ has_modifier = {neg} }} remove_modifier = {neg} }}",
             f"\tset_variable = {{ name = {mag} value = {{ value = var:{lr} round = yes }} }}",
-            f"\tif = {{ limit = {{ var:{mag} >= 1 }} add_modifier = {{ name = {pos} multiplier = var:{mag} }} }}",
-            f"\telse_if = {{ limit = {{ var:{mag} <= -1 }} change_variable = {{ name = {mag} multiply = -1 }} "
-            f"add_modifier = {{ name = {neg} multiplier = var:{mag} }} }}",
-            f"\telse = {{ set_variable = {{ name = {mag} value = 0 }} }}",
+            f"\tif = {{ limit = {{ var:{mag} <= -1 }} change_variable = {{ name = {mag} multiply = -1 }} }}",
+            f"\telse_if = {{ limit = {{ var:{mag} < 1 }} set_variable = {{ name = {mag} value = 0 }} }}",
         ]
     lines += [
         "}",
@@ -5230,8 +5504,8 @@ def light_effects():
 def light_static_modifiers():
     lines = [
         HEADER,
-        "# The light code's modifiers (docs/systems/tax_code_schema.md, \"Light code\"), each applied",
-        "# with a multiplier by te_tax_light_gen_relief and te_tax_light_gen_apply_reactions.",
+        "# The light code's modifiers (docs/systems/tax_code_schema.md, \"Light code\"), each declared",
+        "# on je_tax_code (scaling_modifiers_while_active) with its value from te_tax_light_generated_values.txt.",
         "",
         "# Relief: one index step's rate below zero per tax, x te_tax_light_rl_<key> steps. The base",
         "# game's mon_ease_taxes (common/static_modifiers/montenegrin_modifiers.txt) is a country",
@@ -5241,6 +5515,14 @@ def light_static_modifiers():
         lines += ["", f"te_tax_light_relief_{instrument.key} = {{",
                   "\ticon = \"gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds\"",
                   f"\t{instrument.modifier} = -{fmt(instrument.step)}", "}"]
+    lines += ["", "# An extra tax's levy (LIGHT_EXTRAS): one index step's rate above zero, x te_tax_en_<key> steps,",
+              "# where the law levies none of it. The base game's modifier_jizya_tax (106_modifiers.txt) is a",
+              "# country modifier that levies a tax rate (tax_heathen_add) whatever the law."]
+    for extra in LIGHT_EXTRAS:
+        instrument = next(i for i in INSTRUMENTS if i.key == extra.key)
+        lines += ["", f"te_tax_light_levy_{extra.key} = {{",
+                  "\ticon = \"gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds\"",
+                  f"\t{instrument.modifier} = {fmt(instrument.step)}", "}"]
     lines += ["", "# Reactions to changes: one approval point per group, x te_tax_lr_mag_<ig>."]
     for ig in IGS:
         for sign, value, icon in (("pos", 1, "modifier_documents_positive"), ("neg", -1, "modifier_documents_negative")):
@@ -5306,10 +5588,13 @@ def light_custom_localization():
                                            for n, law in light_laws()], "te_tax_lt_law_other")
     ladders = light_ladders()
     for instrument in INSTRUMENTS:
-        lines += entry(f"te_tax_lt_range_{instrument.key}",
-                       [(f"te_tax_view_light_law = {n}", f"te_tax_lt_range_{instrument.key}_{n}")
-                        for n, law in light_laws() if ladders[law][instrument.key][-1]],
-                       "te_tax_lt_not_levied")
+        key = instrument.key
+        branches = [(f"te_tax_view_light_law = {n}", f"te_tax_lt_range_{key}_{n}")
+                    for n, law in light_laws() if ladders[law][key][-1]]
+        if light_extra(key):
+            # An open extra tax's range: nothing up to its cap (LIGHT_EXTRAS).
+            branches.append((f"te_tax_view_light_extra_{key} = 1", f"te_tax_lt_range_{key}_extra"))
+        lines += entry(f"te_tax_lt_range_{key}", branches, "te_tax_lt_not_levied")
     lines += entry("te_tax_lt_setter", [(f"te_tax_view_light_sets_{i.key} = 1", f"te_tax_inst_{i.key}")
                                         for i in INSTRUMENTS], "te_tax_none")
     return _txt("\n".join(lines) + "\n")
@@ -5346,6 +5631,30 @@ def light_localization():
             ladder = ladders[law][instrument.key]
             if ladder[-1]:
                 entries[f"te_tax_lt_range_{instrument.key}_{n}"] = f'0 "{light_range_text(instrument, ladder)}"'
+    # An extra tax (LIGHT_EXTRAS): its levy's name and description, and its range, nothing up to the cap.
+    for extra in LIGHT_EXTRAS:
+        instrument = next(i for i in INSTRUMENTS if i.key == extra.key)
+        key = f"te_tax_light_levy_{extra.key}"
+        entries[key] = f'0 "Low $te_tax_inst_{extra.key}$"'
+        entries[f"{key}_desc"] = (f'0 "The light tax code levies a low {extra.noun}, which the taxation law does not '
+                                  'levy itself."')
+        entries[f"te_tax_lt_range_{extra.key}_extra"] = (
+            f'0 "{light_range_text(instrument, light_extra_ladder(extra.key))}"')
+        cap = f"#v {fmt(rate(instrument, extra.cap) * 100)}%#!"
+        entries[f"te_tax_lt_extra_cap_{extra.key}"] = f'0 "{cap}"'
+        # The row's note while the extra is open (te_tax_lt_row_<key>_tt; organize_loc files te_tax_lt_extra_* here).
+        # Neutral: another country's panel shows it too (test_te_system_tab_bodies.py).: why the cap is low, and the
+        # laws that levy the tax in full, each to its very-high rate.
+        full = [f"${law}$, up to #v {fmt(rate(instrument, light_ladders()[law][extra.key][-1]) * 100)}%#!"
+                for _n, law in light_laws() if light_levies(law, extra.key)]
+        if len(full) == 1:
+            laws = f"The law that taxes {extra.base} in full is {full[0]}"
+        else:
+            joined = f"{full[0]}, and {full[1]}" if len(full) == 2 else "; ".join(full[:-1]) + "; and " + full[-1]
+            laws = f"The laws that tax {extra.base} in full are {joined}"
+        entries[f"te_tax_lt_extra_note_{extra.key}"] = (
+            f'0 "\\n\\nThe taxation law levies no {extra.noun}, so the tax code may levy only a low one, up to '
+            f'{cap}. {laws}."')
     for ig in IGS:
         for sign, text in (("pos", "Welcomes Recent Tax Changes"), ("neg", "Resents Recent Tax Changes")):
             key = f"te_tax_light_react_{ig}_{sign}"

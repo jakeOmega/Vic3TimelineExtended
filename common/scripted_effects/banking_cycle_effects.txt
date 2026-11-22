@@ -141,8 +141,10 @@ banking_cycle_random_event_effect = {
 			# ---- MID ERA (central_banking / investment_banks / mutual_funds) ----
 
 			# Event 7: Bank Consolidation Wave (boom/frenzy, central_banking)
+			# banking_has_private_banks here and on 21, 32, 47 and 59: banks that
+			# buy each other, report profits or fail are not the state's (#1612).
 			0 = {
-				trigger = { banking_is_market_economy = yes }
+				trigger = { banking_has_private_banks = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -169,8 +171,8 @@ banking_cycle_random_event_effect = {
 							}
 						}
 						add = 5
+						if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
 					}
-					if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
 				}
 				trigger_event = { id = banking_cycle_events.8 }
 				set_variable = { name = banking_event_cooldown value = 18 }
@@ -212,8 +214,8 @@ banking_cycle_random_event_effect = {
 							}
 						}
 						add = 4
+						if = { limit = { banking_cycle_is_panic = yes } add = 3 }
 					}
-					if = { limit = { banking_cycle_is_panic = yes } add = 3 }
 				}
 				if = {
 					limit = { has_law = law_type:law_command_economy }
@@ -261,8 +263,8 @@ banking_cycle_random_event_effect = {
 							OR = { banking_cycle_is_boom = yes banking_cycle_is_frenzy = yes }
 						}
 						add = 4
+						if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
 					}
-					if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
 				}
 				trigger_event = { id = banking_cycle_events.13 }
 				set_variable = { name = banking_event_cooldown value = 18 }
@@ -280,8 +282,8 @@ banking_cycle_random_event_effect = {
 							OR = { banking_cycle_is_boom = yes banking_cycle_is_frenzy = yes }
 						}
 						add = 4
+						if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
 					}
-					if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
 				}
 				trigger_event = { id = banking_cycle_events.14 }
 				set_variable = { name = banking_event_cooldown value = 18 }
@@ -307,8 +309,8 @@ banking_cycle_random_event_effect = {
 							}
 						}
 						add = 5
+						if = { limit = { banking_cycle_is_panic = yes } add = 3 }
 					}
-					if = { limit = { banking_cycle_is_panic = yes } add = 3 }
 				}
 				if = {
 					limit = { has_law = law_type:law_command_economy }
@@ -351,10 +353,12 @@ banking_cycle_random_event_effect = {
 							}
 						}
 						add = 4
-					}
-					if = {
-						limit = { has_law = law_type:law_central_bank_independence }
-						add = 2
+						# Inside the gate: outside it, the law alone drew the debate
+						# in a panic or before keynesian_economics (#1612).
+						if = {
+							limit = { has_law = law_type:law_central_bank_independence }
+							add = 2
+						}
 					}
 				}
 				if = {
@@ -415,7 +419,10 @@ banking_cycle_random_event_effect = {
 				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 19: Sovereign Wealth Fund Proposal (expansion+, keynesian_economics, NOT laissez_faire)
+			# Market economies only: it has no planned or cooperative variant, and
+			# option C leaves the money "with the taxpayers" (#1612).
 			0 = {
+				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -442,15 +449,17 @@ banking_cycle_random_event_effect = {
 							var:bubble_pressure >= 50
 						}
 						add = 2
-					}
-					if = {
-						limit = {
-							OR = {
-								has_law = law_type:law_unregulated_banking
-								has_law = law_type:law_universal_banking_light_prudence
+						# Inside the gate: outside it, a weak banking law alone drew
+						# the event in any phase and era (#1612).
+						if = {
+							limit = {
+								OR = {
+									has_law = law_type:law_unregulated_banking
+									has_law = law_type:law_universal_banking_light_prudence
+								}
 							}
+							add = 1
 						}
-						add = 1
 					}
 				}
 				if = {
@@ -471,7 +480,7 @@ banking_cycle_random_event_effect = {
 
 			# Event 21: Merchant Bank Prosperity (stable/expansion, no extra tech)
 			0 = {
-				trigger = { banking_is_market_economy = yes }
+				trigger = { banking_has_private_banks = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -604,8 +613,8 @@ banking_cycle_random_event_effect = {
 							}
 						}
 						add = 5
+						if = { limit = { banking_cycle_is_downturn = yes } add = 3 }
 					}
-					if = { limit = { banking_cycle_is_downturn = yes } add = 3 }
 				}
 				trigger_event = { id = banking_cycle_events.28 }
 				set_variable = { name = banking_event_cooldown value = 18 }
@@ -624,10 +633,10 @@ banking_cycle_random_event_effect = {
 							}
 						}
 						add = 4
-					}
-					if = {
-						limit = { has_law = law_type:law_free_mutual_banking }
-						add = 3
+						if = {
+							limit = { has_law = law_type:law_free_mutual_banking }
+							add = 3
+						}
 					}
 				}
 				trigger_event = { id = banking_cycle_events.29 }
@@ -647,8 +656,8 @@ banking_cycle_random_event_effect = {
 							}
 						}
 						add = 4
+						if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
 					}
-					if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
 				}
 				trigger_event = { id = banking_cycle_events.30 }
 				set_variable = { name = banking_event_cooldown value = 18 }
@@ -674,15 +683,15 @@ banking_cycle_random_event_effect = {
 							}
 						}
 						add = 4
+						if = { limit = { banking_cycle_is_panic = yes } add = 3 }
 					}
-					if = { limit = { banking_cycle_is_panic = yes } add = 3 }
 				}
 				trigger_event = { id = banking_cycle_events.31 }
 				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 32: Trust Company Failure (RARE, boom/frenzy, mutual_funds, bubble >= 30)
 			0 = {
-				trigger = { banking_is_market_economy = yes }
+				trigger = { banking_has_private_banks = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -761,13 +770,19 @@ banking_cycle_random_event_effect = {
 
 			# ---- LATE ERA NEW EVENTS ----
 
-			# Event 36: Fintech Disruption (expansion+, modern_financial_instruments)
+			# Event 36: Fintech Disruption (expansion+, modern_financial_instruments, computer_networks)
+			# computer_networks (era 8) is the first technology that means
+			# networked computers, and the one that brings Digital Trading to the
+			# financial districts. modern_financial_instruments alone is era 5,
+			# decades before the firms the event and Financial Technology Growth
+			# describe (#1612).
 			0 = {
 				trigger = { banking_is_market_economy = yes }
 				modifier = {
 					if = {
 						limit = {
 							has_technology_researched = modern_financial_instruments
+							has_technology_researched = computer_networks
 							OR = {
 								banking_cycle_is_expansion = yes
 								banking_cycle_is_boom = yes
@@ -790,16 +805,16 @@ banking_cycle_random_event_effect = {
 							OR = { banking_cycle_is_boom = yes banking_cycle_is_frenzy = yes }
 						}
 						add = 3
-					}
-					if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
-					if = {
-						limit = {
-							OR = {
-								has_law = law_type:law_unregulated_banking
-								has_law = law_type:law_universal_banking_light_prudence
+						if = { limit = { banking_cycle_is_frenzy = yes } add = 2 }
+						if = {
+							limit = {
+								OR = {
+									has_law = law_type:law_unregulated_banking
+									has_law = law_type:law_universal_banking_light_prudence
+								}
 							}
+							add = 2
 						}
-						add = 2
 					}
 				}
 				trigger_event = { id = banking_cycle_events.37 }
@@ -850,8 +865,8 @@ banking_cycle_random_event_effect = {
 							}
 						}
 						add = 5
+						if = { limit = { banking_cycle_is_panic = yes } add = 3 }
 					}
-					if = { limit = { banking_cycle_is_panic = yes } add = 3 }
 				}
 				trigger_event = { id = banking_cycle_events.39 }
 				set_variable = { name = banking_event_cooldown value = 18 }
@@ -939,15 +954,17 @@ banking_cycle_random_event_effect = {
 							OR = { banking_cycle_is_boom = yes banking_cycle_is_frenzy = yes }
 						}
 						add = 3
-					}
-					if = {
-						limit = {
-							OR = {
-								has_law = law_type:law_unregulated_banking
-								has_law = law_type:law_universal_banking_light_prudence
+						# Inside the gate: outside it, a weak banking law alone drew
+						# the scandal in any phase and era (#1612).
+						if = {
+							limit = {
+								OR = {
+									has_law = law_type:law_unregulated_banking
+									has_law = law_type:law_universal_banking_light_prudence
+								}
 							}
+							add = 2
 						}
-						add = 2
 					}
 				}
 				trigger_event = { id = banking_cycle_events.44 }
@@ -1215,7 +1232,7 @@ banking_cycle_random_event_effect = {
 			# Event 47: Trust Company Failure (downturn/panic, market econ, RARE)
 			0 = {
 				trigger = {
-					banking_is_market_economy = yes
+					banking_has_private_banks = yes
 					OR = {
 						banking_cycle_is_downturn = yes
 						banking_cycle_is_panic = yes
@@ -1273,7 +1290,7 @@ banking_cycle_random_event_effect = {
 			# Event 59: Rogue Trader (boom/frenzy, modern instruments, RARE)
 			0 = {
 				trigger = {
-					banking_is_market_economy = yes
+					banking_has_private_banks = yes
 					has_technology_researched = modern_financial_instruments
 					OR = {
 						banking_cycle_is_boom = yes
@@ -1289,39 +1306,6 @@ banking_cycle_random_event_effect = {
 			}
 		}
 	}
-}
-
-# Remove all financial cycle phase modifiers.
-# Called before applying the current phase modifier each month.
-remove_all_banking_phase_modifiers = {
-	# Market variants
-	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_panic }
-	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_downturn }
-	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_stagnation }
-	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_expansion }
-	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_boom }
-	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_frenzy }
-	# Command Economy variants
-	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_panic_cmd }
-	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_downturn_cmd }
-	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_stagnation_cmd }
-	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_expansion_cmd }
-	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_boom_cmd }
-	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_frenzy_cmd }
-	# Cooperative Ownership variants
-	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_panic_coop }
-	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_downturn_coop }
-	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_stagnation_coop }
-	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_expansion_coop }
-	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_boom_coop }
-	je:je_banking_cycle = { remove_modifier = financial_cycle_phase_frenzy_coop }
-	# Bubble inertia
-	je:je_banking_cycle = { remove_modifier = bubble_inertia_moderate }
-	je:je_banking_cycle = { remove_modifier = bubble_inertia_high }
-	je:je_banking_cycle = { remove_modifier = bubble_inertia_extreme }
-	je:je_banking_cycle = { remove_modifier = bubble_inertia_moderate_coop }
-	je:je_banking_cycle = { remove_modifier = bubble_inertia_high_coop }
-	je:je_banking_cycle = { remove_modifier = bubble_inertia_extreme_coop }
 }
 
 # A crash only ever lowers the cycle. The tier figures below are ceilings, not
@@ -1508,74 +1492,322 @@ apply_banking_crash_softening_option_effect = {
 # Only one removal per pulse: the engine doesn't refresh modifier:X reads inside the same
 # effect block (CLAUDE.md "modifier-after-effect read ordering"), so a tight loop would
 # fire on stale data. Spacing removals by month also gives the player visible feedback.
+#
+# THE STANDING TOOLS FOLLOW (2026-11-14), after everything above and in the same chain, so
+# the cases above shed exactly as they did. Until then the chain ended at the five External
+# & Currency tools, and a budget cut left every other tool running on points the country no
+# longer had: enact Prudential Banking, switch on a guarantee and the leaning tools, go back
+# to Unregulated Banking and keep them all. The points a common currency gives its issuer
+# (te_mon_union_issuer_bank) come and go with the bloc's tier, its leadership and its
+# adopters, so they would have run through the same hole. Now an overdrawn budget lifts one
+# tool a month until it balances, cheapest first, so the crisis programs are the last to
+# go: the market tools, then the planning tools, then the council tools (a country runs one
+# family at a time). A player who would rather keep a cheap tool lifts a dearer one first.
+#
+# Each is lifted as a law lifts it (banking_strip_tool, extra_effects.txt): the history
+# marker, and none of the manual Disable's radicals or loyalists. Emergency Liquidity goes
+# through its own Disable for the refund of what it lent. The Bank Holiday is left alone:
+# it ends on its own within ninety days, and its points come back then.
+# test_banking_overdraft_shed.py holds the chain to every tool that holds points.
+#
+# NOT IN A PULSE WHERE AN EARLIER STEP LIFTED A TOOL (review of PR #1810, finding B). The
+# chain is the last step of the entry's monthly pulse, and the budget it reads is the one
+# the pulse opened with: a remove_modifier reaches neither modifier:X nor has_modifier
+# until the whole effect ends. Three steps before it lift tools that hold points: the
+# Emergency Liquidity wind-down, the Outflow Controls cleanup and the directed-credit cap.
+# After a law change the cap or the cleanup can balance the budget by itself, and the
+# chain, still reading the old overdraft, lifted a second tool the country could afford
+# (Directed Credit with Agriculture credit, Infrastructure credit and Moral Suasion, then
+# Universal Banking: the cap lifts Agriculture, the budget is +1, and Moral Suasion went
+# too). In the month the wind-down closed the program the chain could reach its own
+# Emergency Liquidity branch on a has_modifier that was still true, and pay the refund a
+# second time. So each of those steps calls banking_overdraft_wait_a_pulse where it lifts,
+# a variable write being visible at once, and the chain then does nothing that month but
+# clear the mark, whatever the budget reads. It acts the month after, on a true sum.
+# A step added before the chain that lifts a tool must do the same;
+# test_banking_overdraft_shed.py walks the pulse's steps, the effects they call and the
+# events they fire, and fails on a lift with no mark beside it.
+#
+# THE MARK IS NEVER SET BY WHAT THE CHAIN ITSELF CALLS (banking_strip_tool, the Disable
+# effects): it would then hold its own next pulse and lift every second month.
+#
+# A PLAYER IS TOLD (finding C): each branch names its tool to banking_overdraft_told, which
+# posts a feed notice to a human. The budget can now be cut from outside (an adopter
+# leaves the common currency, the bloc drops a tier), and a tool that went with no word
+# looked like a bug.
+banking_overdraft_wait_a_pulse = {
+	set_variable = banking_overdraft_wait
+}
+
+# $TOOL$ = the modifier just lifted. Its own name is its loc key, and
+# banking_overdraft_lifted_tool (banking_dash_custom_loc.txt) prints it from the flag.
+# The variable stays set, for the notice to read after the pulse; only the notice reads it.
+banking_overdraft_told = {
+	if = {
+		limit = { is_ai = no }
+		set_variable = { name = banking_overdraft_lifted value = flag:$TOOL$ }
+		post_notification = banking_overdraft_lift_notice
+	}
+}
+
 banking_crash_check_overdrawn_interventions = {
 	if = {
+		limit = { has_variable = banking_overdraft_wait }
+		remove_variable = banking_overdraft_wait
+	}
+	else_if = {
 		limit = { modifier:country_banking_intervention_max_add < 0 }
 		# --- Family interventions (shed first) ---
 		if = {
 			limit = { has_modifier = banking_crash_intervention_capital_controls }
 			remove_modifier = banking_crash_intervention_capital_controls
+			banking_overdraft_told = { TOOL = banking_crash_intervention_capital_controls }
 		}
 		else_if = {
 			limit = { has_modifier = banking_crash_intervention_swap_lines }
 			remove_modifier = banking_crash_intervention_swap_lines
+			banking_overdraft_told = { TOOL = banking_crash_intervention_swap_lines }
 		}
 		else_if = {
 			limit = { has_modifier = banking_crash_intervention_discount_window }
 			remove_modifier = banking_crash_intervention_discount_window
+			banking_overdraft_told = { TOOL = banking_crash_intervention_discount_window }
 		}
 		else_if = {
 			limit = { has_modifier = banking_crash_intervention_keynesian_stimulus }
 			remove_modifier = banking_crash_intervention_keynesian_stimulus
+			banking_overdraft_told = { TOOL = banking_crash_intervention_keynesian_stimulus }
 		}
 		# --- Per-law base options (one of these may be active; cheapest IP cost first) ---
 		else_if = {
 			limit = { has_modifier = banking_crash_intervention_suspend_convertibility }
 			remove_modifier = banking_crash_intervention_suspend_convertibility
+			banking_overdraft_told = { TOOL = banking_crash_intervention_suspend_convertibility }
 		}
 		else_if = {
 			limit = { has_modifier = banking_crash_intervention_mutual_clearing }
 			remove_modifier = banking_crash_intervention_mutual_clearing
+			banking_overdraft_told = { TOOL = banking_crash_intervention_mutual_clearing }
 		}
 		else_if = {
 			limit = { has_modifier = banking_crash_intervention_correspondent_liquidity }
 			remove_modifier = banking_crash_intervention_correspondent_liquidity
+			banking_overdraft_told = { TOOL = banking_crash_intervention_correspondent_liquidity }
 		}
 		else_if = {
 			limit = { has_modifier = banking_crash_intervention_dev_bank_lending }
 			remove_modifier = banking_crash_intervention_dev_bank_lending
+			banking_overdraft_told = { TOOL = banking_crash_intervention_dev_bank_lending }
 		}
 		else_if = {
 			limit = { has_modifier = banking_crash_intervention_open_market }
 			remove_modifier = banking_crash_intervention_open_market
+			banking_overdraft_told = { TOOL = banking_crash_intervention_open_market }
 		}
 		else_if = {
 			limit = { has_modifier = banking_crash_intervention_deposit_guarantee }
 			remove_modifier = banking_crash_intervention_deposit_guarantee
+			banking_overdraft_told = { TOOL = banking_crash_intervention_deposit_guarantee }
 		}
 		else_if = {
 			limit = { has_modifier = banking_crash_intervention_nationalize }
 			remove_modifier = banking_crash_intervention_nationalize
+			banking_overdraft_told = { TOOL = banking_crash_intervention_nationalize }
 		}
 		else_if = {
 			limit = { banking_tool_emergency_import_financing_active = yes }
 			banking_effect_cb_disable_emergency_import_financing = yes
+			banking_overdraft_told = { TOOL = banking_emergency_import_financing }
 		}
 		else_if = {
 			limit = { banking_tool_sterilize_inflows_active = yes }
 			banking_effect_cb_disable_sterilize_inflows = yes
+			banking_overdraft_told = { TOOL = banking_sterilize_inflows }
 		}
 		else_if = {
 			limit = { banking_tool_fx_surrender_active = yes }
 			banking_effect_cb_disable_fx_surrender = yes
+			banking_overdraft_told = { TOOL = banking_fx_surrender }
 		}
 		else_if = {
 			limit = { banking_tool_restrict_inflows_active = yes }
 			banking_effect_cb_disable_restrict_inflows = yes
+			banking_overdraft_told = { TOOL = banking_restrict_inflows }
 		}
 		else_if = {
 			limit = { banking_tool_foreign_borrowing_limits_active = yes }
 			banking_effect_cb_disable_foreign_borrowing_limits = yes
+			banking_overdraft_told = { TOOL = banking_foreign_borrowing_limits }
+		}
+		# --- The standing market tools, cheapest first (2026-11-14) ---
+		# 1 point
+		else_if = {
+			limit = { banking_tool_moral_suasion_active = yes }
+			banking_strip_tool = { MODIFIER = banking_moral_suasion MARK = off_cb_moral_suasion }
+			banking_overdraft_told = { TOOL = banking_moral_suasion }
+		}
+		else_if = {
+			limit = { banking_tool_directed_credit_electrification_active = yes }
+			banking_strip_tool = { MODIFIER = banking_directed_credit_electrification MARK = off_cb_directed_credit_electrification }
+			banking_overdraft_told = { TOOL = banking_directed_credit_electrification }
+		}
+		# 2 points
+		else_if = {
+			limit = { banking_tool_export_credit_active = yes }
+			banking_strip_tool = { MODIFIER = banking_export_credit_facility MARK = off_cb_export_credit_facility }
+			banking_overdraft_told = { TOOL = banking_export_credit_facility }
+		}
+		else_if = {
+			limit = { banking_tool_directed_credit_agriculture_active = yes }
+			banking_strip_tool = { MODIFIER = banking_directed_credit_agriculture MARK = off_cb_directed_credit_agriculture }
+			banking_overdraft_told = { TOOL = banking_directed_credit_agriculture }
+		}
+		else_if = {
+			limit = { banking_tool_capital_controls_active = yes }
+			banking_strip_tool = { MODIFIER = banking_capital_controls_out MARK = off_cb_capital_controls_outflow }
+			banking_overdraft_told = { TOOL = banking_capital_controls_out }
+		}
+		else_if = {
+			limit = { banking_tool_reserve_requirements_active = yes }
+			banking_strip_tool = { MODIFIER = banking_reserve_requirements MARK = off_cb_reserve_requirements }
+			banking_overdraft_told = { TOOL = banking_reserve_requirements }
+		}
+		else_if = {
+			limit = { banking_tool_margin_req_active = yes }
+			banking_strip_tool = { MODIFIER = banking_raise_margin_requirements MARK = off_cb_raise_margin_requirements }
+			banking_overdraft_told = { TOOL = banking_raise_margin_requirements }
+		}
+		else_if = {
+			limit = { banking_tool_buffer_active = yes }
+			banking_strip_tool = { MODIFIER = banking_countercyclical_capital_buffer MARK = off_cb_countercyclical_buffer }
+			banking_overdraft_told = { TOOL = banking_countercyclical_capital_buffer }
+		}
+		# 3 points
+		else_if = {
+			limit = { banking_tool_directed_active = yes }
+			banking_strip_tool = { MODIFIER = banking_directed_credit_infrastructure MARK = off_cb_directed_credit_infrastructure }
+			banking_overdraft_told = { TOOL = banking_directed_credit_infrastructure }
+		}
+		else_if = {
+			limit = { banking_tool_directed_credit_armaments_active = yes }
+			banking_strip_tool = { MODIFIER = banking_directed_credit_armaments MARK = off_cb_directed_credit_armaments }
+			banking_overdraft_told = { TOOL = banking_directed_credit_armaments }
+		}
+		else_if = {
+			limit = { banking_tool_bail_in_regime_active = yes }
+			banking_strip_tool = { MODIFIER = banking_bail_in_regime MARK = off_cb_bail_in_regime }
+			banking_overdraft_told = { TOOL = banking_bail_in_regime }
+		}
+		# 4 points
+		else_if = {
+			limit = { banking_tool_directed_credit_heavy_industry_active = yes }
+			banking_strip_tool = { MODIFIER = banking_directed_credit_heavy_industry MARK = off_cb_directed_credit_heavy_industry }
+			banking_overdraft_told = { TOOL = banking_directed_credit_heavy_industry }
+		}
+		else_if = {
+			limit = { banking_tool_omo_active = yes }
+			banking_strip_tool = { MODIFIER = banking_open_market_ops MARK = off_cb_open_market_ops }
+			banking_overdraft_told = { TOOL = banking_open_market_ops }
+		}
+		else_if = {
+			limit = { banking_tool_deposit_active = yes }
+			banking_strip_tool = { MODIFIER = banking_expand_deposit_guarantee MARK = off_cb_expand_deposit_guarantee }
+			banking_overdraft_told = { TOOL = banking_expand_deposit_guarantee }
+		}
+		# The program is lent to the banks, and losing the points does not cancel
+		# the loans: its own Disable, for the refund.
+		else_if = {
+			limit = { banking_tool_eliq_active = yes }
+			banking_effect_cb_disable_emergency_liquidity_program = yes
+			banking_overdraft_told = { TOOL = banking_emergency_liquidity_program }
+		}
+		# 5 points
+		else_if = {
+			limit = { banking_tool_asset_relief_active = yes }
+			banking_strip_tool = { MODIFIER = banking_asset_relief_program MARK = off_cb_asset_relief_program }
+			banking_overdraft_told = { TOOL = banking_asset_relief_program }
+		}
+		# --- The planning tools (a command economy), cheapest first ---
+		else_if = {
+			limit = { banking_tool_ce_coordination_active = yes }
+			banking_strip_tool = { MODIFIER = planning_coordination_protocol MARK = off_ce_coordination_protocol }
+			banking_overdraft_told = { TOOL = planning_coordination_protocol }
+		}
+		else_if = {
+			limit = { banking_tool_ce_target_cut_active = yes }
+			banking_strip_tool = { MODIFIER = planning_target_reduction MARK = off_ce_target_reduction }
+			banking_overdraft_told = { TOOL = planning_target_reduction }
+		}
+		else_if = {
+			limit = { banking_tool_ce_stockpile_active = yes }
+			banking_strip_tool = { MODIFIER = planning_strategic_stockpile MARK = off_ce_strategic_stockpile }
+			banking_overdraft_told = { TOOL = planning_strategic_stockpile }
+		}
+		else_if = {
+			limit = { banking_tool_ce_consolidation_active = yes }
+			banking_strip_tool = { MODIFIER = planning_consolidation_order MARK = off_ce_consolidation_order }
+			banking_overdraft_told = { TOOL = planning_consolidation_order }
+		}
+		else_if = {
+			limit = { banking_tool_ce_plan_revision_active = yes }
+			banking_strip_tool = { MODIFIER = planning_plan_revision MARK = off_ce_plan_revision }
+			banking_overdraft_told = { TOOL = planning_plan_revision }
+		}
+		else_if = {
+			limit = { banking_tool_ce_allocation_active = yes }
+			banking_strip_tool = { MODIFIER = planning_emergency_allocation MARK = off_ce_emergency_allocation }
+			banking_overdraft_told = { TOOL = planning_emergency_allocation }
+		}
+		else_if = {
+			limit = { banking_tool_ce_admin_campaign_active = yes }
+			banking_strip_tool = { MODIFIER = planning_admin_campaign MARK = off_ce_admin_campaign }
+			banking_overdraft_told = { TOOL = planning_admin_campaign }
+		}
+		else_if = {
+			limit = { banking_tool_ce_distribution_active = yes }
+			banking_strip_tool = { MODIFIER = planning_distribution_upgrade MARK = off_ce_distribution_upgrade }
+			banking_overdraft_told = { TOOL = planning_distribution_upgrade }
+		}
+		# --- The council tools (cooperative ownership), cheapest first ---
+		else_if = {
+			limit = { banking_tool_cw_solidarity_active = yes }
+			banking_strip_tool = { MODIFIER = cooperative_solidarity_campaign MARK = off_cw_solidarity_campaign }
+			banking_overdraft_told = { TOOL = cooperative_solidarity_campaign }
+		}
+		else_if = {
+			limit = { banking_tool_cw_directive_active = yes }
+			banking_strip_tool = { MODIFIER = cooperative_council_directive MARK = off_cw_council_directive }
+			banking_overdraft_told = { TOOL = cooperative_council_directive }
+		}
+		else_if = {
+			limit = { banking_tool_cw_dividend_active = yes }
+			banking_strip_tool = { MODIFIER = cooperative_dividend_restraint MARK = off_cw_dividend_restraint }
+			banking_overdraft_told = { TOOL = cooperative_dividend_restraint }
+		}
+		else_if = {
+			limit = { banking_tool_cw_ceiling_active = yes }
+			banking_strip_tool = { MODIFIER = cooperative_consumption_ceiling MARK = off_cw_consumption_ceiling }
+			banking_overdraft_told = { TOOL = cooperative_consumption_ceiling }
+		}
+		else_if = {
+			limit = { banking_tool_cw_credit_active = yes }
+			banking_strip_tool = { MODIFIER = cooperative_credit_expansion MARK = off_cw_credit_expansion }
+			banking_overdraft_told = { TOOL = cooperative_credit_expansion }
+		}
+		else_if = {
+			limit = { banking_tool_cw_buyout_active = yes }
+			banking_strip_tool = { MODIFIER = cooperative_worker_buyout MARK = off_cw_worker_buyout }
+			banking_overdraft_told = { TOOL = cooperative_worker_buyout }
+		}
+		else_if = {
+			limit = { banking_tool_cw_mutual_aid_active = yes }
+			banking_strip_tool = { MODIFIER = cooperative_mutual_aid MARK = off_cw_mutual_aid_fund }
+			banking_overdraft_told = { TOOL = cooperative_mutual_aid }
+		}
+		else_if = {
+			limit = { banking_tool_cw_capital_plan_active = yes }
+			banking_strip_tool = { MODIFIER = cooperative_capital_plan MARK = off_cw_capital_plan }
+			banking_overdraft_told = { TOOL = cooperative_capital_plan }
 		}
 	}
 }
@@ -2237,9 +2469,45 @@ banking_cycle_start = {
 	banking_cycle_update_progress_bars = yes
 }
 
-# 0. Weekly effects
-banking_cycle_weekly_effects = {
+# The banking rule switched off mid-game (te_banking_cycle_running): take away
+# the three variables banking_cycle_start seeds. finance_cycle_value is the
+# latch, and the cycle's declared modifiers ask it, as do readers outside
+# banking that test the variables directly (harvest conditions, the
+# construction market's AI and sites, monuments), which would otherwise read a
+# stopped cycle for the rest of the game. Called by te_banking_entry_net. If
+# the rule is switched on again, the net adds the entry back and its
+# `immediate` starts a fresh cycle once te_banking_cycle_unlocked holds.
+te_banking_cycle_stop_for_rule = {
+	if = {
+		limit = { has_variable = finance_cycle_value }
+		remove_variable = finance_cycle_value
+	}
+	if = {
+		limit = { has_variable = finance_cycle_momentum }
+		remove_variable = finance_cycle_momentum
+	}
+	if = {
+		limit = { has_variable = bubble_pressure }
+		remove_variable = bubble_pressure
+	}
+}
+
+# 0. The investment pool's weekly add: a share of its weekly gross income
+#    (country_weekly_investment_pool_mult) plus a flat amount
+#    (country_weekly_investment_pool_add), investment_pool_banking_cycle_add in
+#    extra_script_values.txt. The two keys are the mod's own (script-only), so
+#    nothing but this effect moves them into the pool. Called from
+#    je_banking_cycle's weekly pulse for every holder of the entry, its cycle
+#    running or not (owner, 2026-11-07): Neocolonial Dependency and the UN
+#    Development Fund's grant carry them too, and a country without the entry
+#    gets neither (un_dev_fund_pays_into_pool sends that one's grant to the
+#    treasury). Until then it ran only once the cycle had started.
+banking_weekly_investment_pool_add = {
 	add_investment_pool = investment_pool_banking_cycle_add
+}
+
+# 0. The cycle's weekly effects, only while it runs (je_banking_cycle's weekly pulse)
+banking_cycle_weekly_effects = {
 	# A bank holiday's days left, for its Active Policies row (set by
 	# banking_effect_cb_bank_holiday). A week's resolution is enough for a
 	# ninety-day term. Gone once the modifier is: expired, disabled, removed
@@ -2255,15 +2523,6 @@ banking_cycle_weekly_effects = {
 			remove_variable = banking_bank_holiday_days_left
 		}
 	}
-}
-
-# 1. Fiscal policy modifier: re-apply every month to reflect current deficit/surplus.
-banking_cycle_update_fiscal_policy = {
-	je:je_banking_cycle = { remove_modifier = financial_cycle_government_fiscal_policy_effect }
-	je:je_banking_cycle = { add_modifier = {
-			name = financial_cycle_government_fiscal_policy_effect
-			multiplier = financial_cycle_government_fiscal_policy_effect_size_for_je
-		} }
 }
 
 # 2. Advance all cycle variables for the month.
@@ -2299,8 +2558,9 @@ banking_cycle_advance_variables = {
 	# -0.125 x (policy rate - r*) in its tooltip, and the hidden neutral rate
 	# could then be read off it to two decimals. The push therefore lands
 	# straight in the variables, and the player is told the stance BAND
-	# (banking_dash_momentum_tt, and the banded journal-entry modifier applied
-	# by banking_cycle_apply_stance_band) but never the number.
+	# (banking_dash_momentum_tt, and the banded journal-entry modifier,
+	# banking_stance_band_1..5, which je_banking_cycle declares from
+	# te_mon_stance_band) but never the number.
 	#
 	# Both script values are guarded and clamp the gap to -2..+4, so a country
 	# whose monetary update has not run yet — or which has no policy dial at
@@ -2390,48 +2650,58 @@ banking_cycle_bank_holiday_reopen = {
 #    trade-linked countries weighted by GDP.
 banking_cycle_check_and_execute_crash = {
 	set_variable = { name = crash value = 0 }
-	random_list = {
-		0 = {
-			modifier = {
-				add = var:bubble_pressure
-				if = {
-					limit = { var:finance_cycle_value >= 88 } # frenzy
-					subtract = 15
-					multiply = 0.35
-				}
-				else_if = {
-					limit = { var:finance_cycle_value >= 75 } # boom
-					subtract = 25
-					multiply = 0.15
-				}
-				else_if = {
-					limit = { var:finance_cycle_value >= 60 } # expansion
-					subtract = 50
-					multiply = 0.05
-				}
-				else_if = {
-					limit = { var:finance_cycle_value >= 40 } # stable
-					subtract = 75
-					multiply = 0.02
-				}
-				else = {
-					# stagnation and below. Without this branch the weight fell
-					# through as RAW bubble pressure, so a country dropping out of
-					# a boom through 40 with its bubble intact crashed at
-					# bubble / (bubble + 100) a month — a third at bubble 50 —
-					# while two points higher it was zero
-					# (docs/audits/banking_cycle_simulation.md F4).
-					subtract = 90
-					multiply = 0.01
-				}
-				multiply = banking_crash_chance_economy_mult
-				min = 0
-				# Scale crash probability by the crash chance modifier
-				multiply = banking_crash_chance_multiplier_value
-			}
-			set_variable = { name = crash value = 1 }
+	# No crash for a country with no state or no market (#1871): the crash
+	# spreads from scope:banking_crash_origin_country.market, and such a
+	# country has no economy to crash. It keeps its cycle; the roll resumes
+	# if it regains land.
+	if = {
+		limit = {
+			is_country_alive = yes
+			exists = market
 		}
-		100 = { }
+		random_list = {
+			0 = {
+				modifier = {
+					add = var:bubble_pressure
+					if = {
+						limit = { var:finance_cycle_value >= 88 } # frenzy
+						subtract = 15
+						multiply = 0.35
+					}
+					else_if = {
+						limit = { var:finance_cycle_value >= 75 } # boom
+						subtract = 25
+						multiply = 0.15
+					}
+					else_if = {
+						limit = { var:finance_cycle_value >= 60 } # expansion
+						subtract = 50
+						multiply = 0.05
+					}
+					else_if = {
+						limit = { var:finance_cycle_value >= 40 } # stable
+						subtract = 75
+						multiply = 0.02
+					}
+					else = {
+						# stagnation and below. Without this branch the weight fell
+						# through as RAW bubble pressure, so a country dropping out of
+						# a boom through 40 with its bubble intact crashed at
+						# bubble / (bubble + 100) a month — a third at bubble 50 —
+						# while two points higher it was zero
+						# (docs/audits/banking_cycle_simulation.md F4).
+						subtract = 90
+						multiply = 0.01
+					}
+					multiply = banking_crash_chance_economy_mult
+					min = 0
+					# Scale crash probability by the crash chance modifier
+					multiply = banking_crash_chance_multiplier_value
+				}
+				set_variable = { name = crash value = 1 }
+			}
+			100 = { }
+		}
 	}
 
 	if = {
@@ -2486,154 +2756,178 @@ banking_cycle_check_and_execute_crash = {
 #     Countries where the source is less than 5% of target GDP (a target more
 #     than 20 times its size) are immune.
 banking_cycle_spread_contagion = {
-	custom_tooltip = {
-		text = BANKING_CONTAGION_SPREAD_TT
-		every_country = {
-			limit = {
-				NOT = { THIS = scope:banking_crash_origin_country }
-				# Already hit by this crisis wave? Skip (prevents double-hits during cascades)
-				NOT = { banking_crisis_wave_reached = yes }
-				te_banking_cycle_running = yes
-				# Trade-reachable
-				OR = {
-					this.market = scope:banking_crash_origin_country.market
-					is_market_reachable_for_trade = scope:banking_crash_origin_country.market
-				}
-				# At least one trade channel
-				OR = {
-					this.market = scope:banking_crash_origin_country.market
-					is_in_customs_union_with = scope:banking_crash_origin_country
-					# [Monetary policy 5b, §15A.3] A shared currency is a channel too.
-					te_mon_shares_currency_with = { OTHER = scope:banking_crash_origin_country }
-					is_adjacent_to_country = scope:banking_crash_origin_country
-					economic_dependence = {
-						target = scope:banking_crash_origin_country
-						value > 0.05
-					}
-					market = {
-						market_trade_reliance = {
-							target = scope:banking_crash_origin_country.market
-							value > 0.01
-						}
-					}
-					market = {
-						market_production_share = {
-							target = scope:banking_crash_origin_country
-							value > 0.01
-						}
-					}
-					market = {
-						market_consumption_share = {
-							target = scope:banking_crash_origin_country
-							value > 0.01
-						}
-					}
-				}
-				# GDP filter: source must have at least 5% of target's GDP
-				# Tiny economies cannot destabilise giants
-				scope:banking_crash_origin_country.gdp >= banking_contagion_min_source_gdp
+	# The origin must hold land and a market: every target test below reads
+	# scope:banking_crash_origin_country.market (#1871). Both callers, the
+	# monthly crash check and the contagion event's cascade
+	# (minor_events_timelineextended.7's after), pass through here.
+	if = {
+		limit = {
+			scope:banking_crash_origin_country ?= {
+				is_country_alive = yes
+				exists = market
 			}
-
-			random = {
-				chance = 25
-				# GDP weight tiers: larger source -> higher contagion chance (approximates [0,50] range)
-				# origin GDP >= affected GDP (same size or bigger)
-				modifier = {
-					trigger = { scope:banking_crash_origin_country.gdp >= gdp }
-					add = 5
-				}
-				# origin GDP >= 2x affected
-				modifier = {
-					trigger = { scope:banking_crash_origin_country.gdp >= banking_contagion_gdp_threshold_2x }
-					add = 10
-				}
-				# origin GDP >= 5x affected
-				modifier = {
-					trigger = { scope:banking_crash_origin_country.gdp >= banking_contagion_gdp_threshold_5x }
-					add = 15
-				}
-				# origin GDP >= 10x affected
-				modifier = {
-					trigger = { scope:banking_crash_origin_country.gdp >= banking_contagion_gdp_threshold_10x }
-					add = 20
-				}
-				# Same market = strongest contagion channel
-				modifier = {
-					trigger = { this.market = scope:banking_crash_origin_country.market }
-					add = 10
-				}
-				# Hard crash spreads more easily
-				modifier = {
-					trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 60 } }
-					add = 10
-				}
-				modifier = {
-					trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 30 var:crash_severity < 60 } }
-					add = 5
-				}
-				modifier = {
-					trigger = { is_in_customs_union_with = scope:banking_crash_origin_country }
-					add = 10
-				}
-				# [Monetary policy 5b, §15A.3] One currency, one banking system's worth
-				# of exposure.
-				modifier = {
-					trigger = { te_mon_shares_currency_with = { OTHER = scope:banking_crash_origin_country } }
-					add = 10
-				}
-				# [Monetary policy 5b tier 4] ...unless the currency area has one
-				# supervisor and one deposit guarantee over all of it, which is most
-				# of what the shared currency was carrying. Not all of it: a common
-				# supervisor is not a wall, and 2008 and 2011 both crossed one.
-				# -6 of the channel's +10 leaves +4. A literal, as in every other
-				# `random` modifier in the mod: a script-value name here is a
-				# malformed token and the line is dropped (scripting_best_practices.md
-				# § Named Script Values in Weight/Random Modifier `add =`).
-				modifier = {
-					trigger = {
-						te_mon_shares_currency_with = { OTHER = scope:banking_crash_origin_country }
-						te_mon_bloc_union_tier_4_plus = yes
+		}
+		custom_tooltip = {
+			text = BANKING_CONTAGION_SPREAD_TT
+			every_country = {
+				limit = {
+					# First, before anything reads this.market or calls
+					# is_market_reachable_for_trade (#1871). A country that has lost its
+					# last state stays in the game with no capital and no market, and on
+					# it the trigger searches from a null capital and crashes the game
+					# (1.15.1). exists = capital alone is not enough: such a country's
+					# capital can still resolve to the state it lost
+					# (scripting_best_practices.md § "Guard Scope References in
+					# Triggers"); it is here for a country with states but no capital,
+					# a case nobody has seen. test_banking_contagion_alive_guard.py
+					# pins is_country_alive as the first line.
+					is_country_alive = yes
+					exists = capital
+					NOT = { THIS = scope:banking_crash_origin_country }
+					# Already hit by this crisis wave? Skip (prevents double-hits during cascades)
+					NOT = { banking_crisis_wave_reached = yes }
+					te_banking_cycle_running = yes
+					# Trade-reachable
+					OR = {
+						this.market = scope:banking_crash_origin_country.market
+						is_market_reachable_for_trade = scope:banking_crash_origin_country.market
 					}
-					add = -6
-				}
-				modifier = {
-					trigger = { is_adjacent_to_country = scope:banking_crash_origin_country }
-					add = 5
-				}
-				modifier = {
-					trigger = { economic_dependence = { target = scope:banking_crash_origin_country value > 0.10 } }
-					add = 5
-				}
-				modifier = {
-					trigger = { economic_dependence = { target = scope:banking_crash_origin_country value > 0.25 } }
-					add = 10
-				}
-				modifier = {
-					trigger = { market = { market_trade_reliance = { target = scope:banking_crash_origin_country.market value > 0.05 } } }
-					add = 5
-				}
-				modifier = {
-					trigger = { market = { market_trade_reliance = { target = scope:banking_crash_origin_country.market value > 0.1 } } }
-					add = 10
-				}
-				modifier = {
-					trigger = { scope:banking_crash_origin_country.relations:THIS >= relations_threshold:cordial }
-					add = 1.5
-				}
-				modifier = {
-					trigger = { has_law_or_variant = law_type:law_free_trade }
-					add = 1.5
+					# At least one trade channel
+					OR = {
+						this.market = scope:banking_crash_origin_country.market
+						is_in_customs_union_with = scope:banking_crash_origin_country
+						# [Monetary policy 5b, §15A.3] A shared currency is a channel too.
+						te_mon_shares_currency_with = { OTHER = scope:banking_crash_origin_country }
+						is_adjacent_to_country = scope:banking_crash_origin_country
+						economic_dependence = {
+							target = scope:banking_crash_origin_country
+							value > 0.05
+						}
+						market = {
+							market_trade_reliance = {
+								target = scope:banking_crash_origin_country.market
+								value > 0.01
+							}
+						}
+						market = {
+							market_production_share = {
+								target = scope:banking_crash_origin_country
+								value > 0.01
+							}
+						}
+						market = {
+							market_consumption_share = {
+								target = scope:banking_crash_origin_country
+								value > 0.01
+							}
+						}
+					}
+					# GDP filter: source must have at least 5% of target's GDP
+					# Tiny economies cannot destabilise giants
+					scope:banking_crash_origin_country.gdp >= banking_contagion_min_source_gdp
 				}
 
-				scope:banking_crash_origin_country = {
-					save_scope_as = banking_crash_origin_country
-				}
+				random = {
+					chance = 25
+					# GDP weight tiers: larger source -> higher contagion chance (approximates [0,50] range)
+					# origin GDP >= affected GDP (same size or bigger)
+					modifier = {
+						trigger = { scope:banking_crash_origin_country.gdp >= gdp }
+						add = 5
+					}
+					# origin GDP >= 2x affected
+					modifier = {
+						trigger = { scope:banking_crash_origin_country.gdp >= banking_contagion_gdp_threshold_2x }
+						add = 10
+					}
+					# origin GDP >= 5x affected
+					modifier = {
+						trigger = { scope:banking_crash_origin_country.gdp >= banking_contagion_gdp_threshold_5x }
+						add = 15
+					}
+					# origin GDP >= 10x affected
+					modifier = {
+						trigger = { scope:banking_crash_origin_country.gdp >= banking_contagion_gdp_threshold_10x }
+						add = 20
+					}
+					# Same market = strongest contagion channel
+					modifier = {
+						trigger = { this.market = scope:banking_crash_origin_country.market }
+						add = 10
+					}
+					# Hard crash spreads more easily
+					modifier = {
+						trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 60 } }
+						add = 10
+					}
+					modifier = {
+						trigger = { scope:banking_crash_origin_country = { var:crash_severity >= 30 var:crash_severity < 60 } }
+						add = 5
+					}
+					modifier = {
+						trigger = { is_in_customs_union_with = scope:banking_crash_origin_country }
+						add = 10
+					}
+					# [Monetary policy 5b, §15A.3] One currency, one banking system's worth
+					# of exposure.
+					modifier = {
+						trigger = { te_mon_shares_currency_with = { OTHER = scope:banking_crash_origin_country } }
+						add = 10
+					}
+					# [Monetary policy 5b tier 4] ...unless the currency area has one
+					# supervisor and one deposit guarantee over all of it, which is most
+					# of what the shared currency was carrying. Not all of it: a common
+					# supervisor is not a wall, and 2008 and 2011 both crossed one.
+					# -6 of the channel's +10 leaves +4. A literal, as in every other
+					# `random` modifier in the mod: a script-value name here is a
+					# malformed token and the line is dropped (scripting_best_practices.md
+					# § Named Script Values in Weight/Random Modifier `add =`).
+					modifier = {
+						trigger = {
+							te_mon_shares_currency_with = { OTHER = scope:banking_crash_origin_country }
+							te_mon_bloc_union_tier_4_plus = yes
+						}
+						add = -6
+					}
+					modifier = {
+						trigger = { is_adjacent_to_country = scope:banking_crash_origin_country }
+						add = 5
+					}
+					modifier = {
+						trigger = { economic_dependence = { target = scope:banking_crash_origin_country value > 0.10 } }
+						add = 5
+					}
+					modifier = {
+						trigger = { economic_dependence = { target = scope:banking_crash_origin_country value > 0.25 } }
+						add = 10
+					}
+					modifier = {
+						trigger = { market = { market_trade_reliance = { target = scope:banking_crash_origin_country.market value > 0.05 } } }
+						add = 5
+					}
+					modifier = {
+						trigger = { market = { market_trade_reliance = { target = scope:banking_crash_origin_country.market value > 0.1 } } }
+						add = 10
+					}
+					modifier = {
+						trigger = { scope:banking_crash_origin_country.relations:THIS >= relations_threshold:cordial }
+						add = 1.5
+					}
+					modifier = {
+						trigger = { has_law_or_variant = law_type:law_free_trade }
+						add = 1.5
+					}
 
-				# Mark the target reached at once, so cascading spreads from other
-				# countries in this wave cannot hit it twice, and send it the
-				# contagion event, unless it holds one already, on its way or
-				# open: one at a time, across waves too (banking_contagion_reach).
-				banking_contagion_reach = yes
+					scope:banking_crash_origin_country = {
+						save_scope_as = banking_crash_origin_country
+					}
+
+					# Mark the target reached at once, so cascading spreads from other
+					# countries in this wave cannot hit it twice, and send it the
+					# contagion event, unless it holds one already, on its way or
+					# open: one at a time, across waves too (banking_contagion_reach).
+					banking_contagion_reach = yes
+				}
 			}
 		}
 	}
@@ -2675,6 +2969,8 @@ banking_cycle_eliq_wind_down = {
 			if = {
 				limit = { banking_tool_eliq_active = yes }
 				banking_effect_cb_disable_emergency_liquidity_program = yes
+				# Four points back, which the overdraft chain cannot see this pulse.
+				banking_overdraft_wait_a_pulse = yes
 				if = {
 					limit = { is_ai = no }
 					post_notification = banking_eliq_wound_down_notice
@@ -2686,195 +2982,6 @@ banking_cycle_eliq_wind_down = {
 			}
 			remove_variable = banking_eliq_recovery_months
 		}
-	}
-}
-
-# 4. Apply phase modifiers based on current cycle values.
-#    Removes old phase & bubble-inertia modifiers, then applies current ones.
-banking_cycle_apply_phase_modifiers = {
-	remove_all_banking_phase_modifiers = yes
-
-	# Bubble inertia: high speculation sustains expansion (positive feedback)
-	if = {
-		limit = {
-			NOR = {
-				has_law = law_type:law_command_economy
-				has_law = law_type:law_cooperative_ownership
-			}
-		}
-		if = {
-			limit = { var:bubble_pressure >= 65 }
-			je:je_banking_cycle = { add_modifier = { name = bubble_inertia_extreme multiplier = bubble_inertia_multiplier_script_value } }
-		}
-		else_if = {
-			limit = { var:bubble_pressure >= 35 }
-			je:je_banking_cycle = { add_modifier = { name = bubble_inertia_high multiplier = bubble_inertia_multiplier_script_value } }
-		}
-		else_if = {
-			limit = { var:bubble_pressure > 0.5 }
-			je:je_banking_cycle = { add_modifier = { name = bubble_inertia_moderate multiplier = bubble_inertia_multiplier_script_value } }
-		}
-	}
-	# A cooperative economy feels a fifth of it (the _coop variants carry 0.2
-	# momentum, not 1.0): without any, it almost never left Stable
-	# (banking_cycle_simulation.md §21). A command economy feels none.
-	else_if = {
-		limit = { has_law = law_type:law_cooperative_ownership }
-		if = {
-			limit = { var:bubble_pressure >= 65 }
-			je:je_banking_cycle = { add_modifier = { name = bubble_inertia_extreme_coop multiplier = bubble_inertia_multiplier_script_value } }
-		}
-		else_if = {
-			limit = { var:bubble_pressure >= 35 }
-			je:je_banking_cycle = { add_modifier = { name = bubble_inertia_high_coop multiplier = bubble_inertia_multiplier_script_value } }
-		}
-		else_if = {
-			limit = { var:bubble_pressure > 0.5 }
-			je:je_banking_cycle = { add_modifier = { name = bubble_inertia_moderate_coop multiplier = bubble_inertia_multiplier_script_value } }
-		}
-	}
-
-	# Phase modifier by economic law type
-	if = {
-		limit = { has_law = law_type:law_command_economy }
-		if = { limit = { var:finance_cycle_value < 10 }  je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_panic_cmd } } }
-		else_if = { limit = { var:finance_cycle_value < 25 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_downturn_cmd } } }
-		else_if = { limit = { var:finance_cycle_value < 40 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_stagnation_cmd } } }
-		else_if = { limit = { var:finance_cycle_value < 60 } } # Stable = no modifier
-		else_if = { limit = { var:finance_cycle_value < 75 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_expansion_cmd } } }
-		else_if = { limit = { var:finance_cycle_value < 88 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_boom_cmd } } }
-		else = { je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_frenzy_cmd } } }
-	}
-	else_if = {
-		limit = { has_law = law_type:law_cooperative_ownership }
-		if = { limit = { var:finance_cycle_value < 10 }  je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_panic_coop } } }
-		else_if = { limit = { var:finance_cycle_value < 25 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_downturn_coop } } }
-		else_if = { limit = { var:finance_cycle_value < 40 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_stagnation_coop } } }
-		else_if = { limit = { var:finance_cycle_value < 60 } } # Stable = no modifier
-		else_if = { limit = { var:finance_cycle_value < 75 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_expansion_coop } } }
-		else_if = { limit = { var:finance_cycle_value < 88 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_boom_coop } } }
-		else = { je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_frenzy_coop } } }
-	}
-	else = {
-		if = { limit = { var:finance_cycle_value < 10 }  je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_panic } } }
-		else_if = { limit = { var:finance_cycle_value < 25 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_downturn } } }
-		else_if = { limit = { var:finance_cycle_value < 40 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_stagnation } } }
-		else_if = { limit = { var:finance_cycle_value < 60 } } # Stable = no modifier
-		else_if = { limit = { var:finance_cycle_value < 75 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_expansion } } }
-		else_if = { limit = { var:finance_cycle_value < 88 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_boom } } }
-		else = { je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_frenzy } } }
-	}
-}
-
-# 4b. Apply the displayed monetary-stance band as a journal-entry modifier.
-#     (monetary_policy_design.md §8, §16.3.)
-#
-#     Five static modifiers, banking_stance_band_1..5, carry the investment-pool
-#     side of the stance: +0.04 / +0.02 / nothing / -0.02 / -0.04 on
-#     state_capitalists_investment_pool_contribution_add. Cheap money feeds the
-#     pool, dear money starves it. Exactly one of them is on the journal entry at
-#     any time, so the modifier list always NAMES the stance — which is the whole
-#     point: the band is the only window onto the hidden gap (§8), and it leaks
-#     nothing the band does not already show.
-#
-#     BAND 3 IS APPLIED EVEN THOUGH IT IS EMPTY. Vanilla does the same for the
-#     neutral member of its own banded families — tax_modifier_medium,
-#     government_wages_medium and infamy_reputable are all zero-field static
-#     modifiers the engine applies so the neutral step still has a name in the
-#     tooltip. Applying it also keeps the invariant above exactly true, and means
-#     every country with the journal entry but no policy dial (bankless, command
-#     economy, commodity money, crypto) reads "Monetary Stance: Neutral" rather
-#     than showing nothing at all — which is what §8 says they are.
-#
-#     DECIDED FROM VARIABLES, NEVER FROM has_modifier. add_modifier and
-#     remove_modifier results are not visible inside the effect block that issues
-#     them (scripting_best_practices.md, "Modifier Values Are NOT Recalculated
-#     Within a Single Effect Block"), so asking `has_modifier` here would read the
-#     state this effect is in the middle of changing. te_mon_stance_band_applied
-#     remembers which band was last put on instead. It is never removed, and 0
-#     means "none recorded".
-#
-#     THE ENTRY'S `immediate` SETS IT TO 0, unguarded, because that is exactly
-#     when the entry carries no band: on a first activation, and on every copy of
-#     the entry a revolution's winner inherits. Saves (2026-09-25) showed that
-#     copy arriving with NO modifiers but with the loser's tracker, so before
-#     that reset the tracker claimed a band that was not there, matched the band,
-#     and no swap ran: the band stayed off until the band itself changed
-#     (docs/audits/civil_war_inheritance_audit.md F7; scripting_best_practices.md
-#     § "What a Civil War's Winner Inherits").
-#
-#     0 CLEARS THE WHOLE FAMILY BEFORE ADDING, rather than removing nothing. The
-#     copies seen so far arrive empty, so those five removals are no-ops, once
-#     per activation. But if `immediate` ever re-ran on a record that kept its
-#     modifiers (a loyalist win has not been observed), the band is replaced
-#     rather than put on a second time. Removing and re-adding the same modifier
-#     in one block is safe: banking_cycle_apply_phase_modifiers does exactly that
-#     to the phase modifier every month.
-#
-#     THE has_variable INITIALISATION STAYS for saves whose entry was activated
-#     before the tracker existed (monetary phase 1, 2026-09-19): that entry's
-#     `immediate` never set it and will not run again, and the swap below reads
-#     the variable unconditionally. It used to remove all five bands as well;
-#     the 0 branch of the swap does that now.
-#
-#     A country without the journal entry never gets here: this is called from
-#     je_banking_cycle's own monthly pulse.
-banking_cycle_apply_stance_band = {
-	if = {
-		limit = { NOT = { has_variable = te_mon_stance_band_applied } }
-		set_variable = { name = te_mon_stance_band_applied value = 0 }
-	}
-
-	# SAVE MIGRATION — added 2026-09-26, remove after one release.
-	# A save in which a revolution was already won with this entry active holds
-	# the winner's copy with a tracker naming a band that is not on it, and that
-	# copy's `immediate` ran before the reset there existed, so it never will
-	# now. Every country whose revolutionaries won while it held the entry is in
-	# that state (AI countries too, not just the player's), unless its band has
-	# changed since, which puts the right one on. Zero the tracker once per
-	# country; the swap below then clears the family and puts the current band
-	# on, this month. On a healthy entry that takes the band off and puts the same
-	# one straight back. banking_stance_band_healed stays in the save once this
-	# block is gone, read by nothing, which is harmless.
-	if = {
-		limit = { NOT = { has_variable = banking_stance_band_healed } }
-		set_variable = { name = banking_stance_band_healed value = 1 }
-		set_variable = { name = te_mon_stance_band_applied value = 0 }
-	}
-
-	if = {
-		limit = {
-			# te_mon_stance_band is written by te_monetary_update_stance
-			# (common/scripted_effects/te_monetary_effects.txt); a country whose
-			# monetary update has not run yet simply keeps whatever it has.
-			has_variable = te_mon_stance_band
-			NOT = { var:te_mon_stance_band_applied = var:te_mon_stance_band }
-		}
-
-		# Take off the band we put on last month. 0: none recorded, so take
-		# off all five (see the header).
-		if = {
-			limit = { var:te_mon_stance_band_applied = 0 }
-			je:je_banking_cycle = { remove_modifier = banking_stance_band_1 }
-			je:je_banking_cycle = { remove_modifier = banking_stance_band_2 }
-			je:je_banking_cycle = { remove_modifier = banking_stance_band_3 }
-			je:je_banking_cycle = { remove_modifier = banking_stance_band_4 }
-			je:je_banking_cycle = { remove_modifier = banking_stance_band_5 }
-		}
-		else_if = { limit = { var:te_mon_stance_band_applied = 1 } je:je_banking_cycle = { remove_modifier = banking_stance_band_1 } }
-		else_if = { limit = { var:te_mon_stance_band_applied = 2 } je:je_banking_cycle = { remove_modifier = banking_stance_band_2 } }
-		else_if = { limit = { var:te_mon_stance_band_applied = 3 } je:je_banking_cycle = { remove_modifier = banking_stance_band_3 } }
-		else_if = { limit = { var:te_mon_stance_band_applied = 4 } je:je_banking_cycle = { remove_modifier = banking_stance_band_4 } }
-		else_if = { limit = { var:te_mon_stance_band_applied = 5 } je:je_banking_cycle = { remove_modifier = banking_stance_band_5 } }
-
-		# Put on this month's.
-		if = { limit = { var:te_mon_stance_band = 1 } je:je_banking_cycle = { add_modifier = { name = banking_stance_band_1 } } }
-		else_if = { limit = { var:te_mon_stance_band = 2 } je:je_banking_cycle = { add_modifier = { name = banking_stance_band_2 } } }
-		else_if = { limit = { var:te_mon_stance_band = 3 } je:je_banking_cycle = { add_modifier = { name = banking_stance_band_3 } } }
-		else_if = { limit = { var:te_mon_stance_band = 4 } je:je_banking_cycle = { add_modifier = { name = banking_stance_band_4 } } }
-		else_if = { limit = { var:te_mon_stance_band = 5 } je:je_banking_cycle = { add_modifier = { name = banking_stance_band_5 } } }
-
-		set_variable = { name = te_mon_stance_band_applied value = var:te_mon_stance_band }
 	}
 }
 
@@ -2904,14 +3011,18 @@ banking_cycle_update_progress_bars = {
 	}
 }
 
-# 6. Refresh phase modifiers and progress bars after a banking event option.
+# 6. Clamp the cycle and redraw the progress bars after a banking event option.
 #    Called from banking event `after` blocks where scope:journal_entry
 #    is NOT available, so we scope via the je: accessor instead.
 #    The entry can be missing for a moment: a revolution's winner takes it
 #    over from the loser, but an event queued before the war ended can
 #    resolve first (Bunyoro, 2026-10-16: a contagion event two seconds after
-#    its revolution, every je: read unset). The clamps still run; the phase
-#    modifiers and bars live on the entry, and its monthly pulse redoes both.
+#    its revolution, every je: read unset). The clamps still run; the bars
+#    live on the entry, and its monthly pulse redraws them.
+#    Until 1.15 this also re-applied the phase and bubble-inertia modifiers.
+#    The entry declares them now (scaling_modifiers_while_active in
+#    je_banking.txt), from the variables these clamps settle, and they follow
+#    an option's change on the entry's next update, about four days on.
 banking_cycle_post_event_refresh = {
 	hidden_effect = {
 		# Clamp before bar update — events may push vars below 0 / above 100
@@ -2922,7 +3033,6 @@ banking_cycle_post_event_refresh = {
 		if = { limit = { ROOT.var:bubble_pressure > 100 }     ROOT = { set_variable = { name = bubble_pressure value = 100 } } }
 		if = {
 			limit = { ROOT = { te_banking_cycle_running = yes } }
-			banking_cycle_apply_phase_modifiers = yes
 			je:je_banking_cycle = {
 				set_bar_progress = { name = banking_cycle_value_bar value = ROOT.var:finance_cycle_value }
 				set_bar_progress = { name = banking_bubble_pressure_bar value = ROOT.var:bubble_pressure }
@@ -2960,6 +3070,8 @@ banking_cycle_cleanup_capital_controls = {
 			}
 		}
 		je:je_banking_cycle = { remove_modifier = banking_capital_controls_out }
+		# Two points back, which the overdraft chain cannot see this pulse.
+		banking_overdraft_wait_a_pulse = yes
 	}
 }
 
@@ -2973,6 +3085,9 @@ banking_cycle_cleanup_capital_controls = {
 #     banking_directed_credit_slots_free is read ONCE into a local: a
 #     remove_modifier is not visible to the modifier reads it is built from
 #     until the block ends, so each shed counts itself up by hand.
+#
+#     Each shed also gives its points back, which the overdraft chain at the
+#     end of the same pulse cannot see: banking_overdraft_wait_a_pulse.
 banking_directed_credit_enforce_cap = {
 	if = {
 		limit = { banking_directed_credit_slots_free < 0 }
@@ -2981,41 +3096,52 @@ banking_directed_credit_enforce_cap = {
 			limit = { local_var:dc_slots < 0 banking_tool_directed_credit_electrification_active = yes }
 			te_history_record_banking_marker = { MARK = off_cb_directed_credit_electrification }
 			je:je_banking_cycle = { remove_modifier = banking_directed_credit_electrification }
+			banking_overdraft_wait_a_pulse = yes
 			change_local_variable = { name = dc_slots add = 1 }
 		}
 		if = {
 			limit = { local_var:dc_slots < 0 banking_tool_directed_credit_armaments_active = yes }
 			te_history_record_banking_marker = { MARK = off_cb_directed_credit_armaments }
 			je:je_banking_cycle = { remove_modifier = banking_directed_credit_armaments }
+			banking_overdraft_wait_a_pulse = yes
 			change_local_variable = { name = dc_slots add = 1 }
 		}
 		if = {
 			limit = { local_var:dc_slots < 0 banking_tool_directed_credit_agriculture_active = yes }
 			te_history_record_banking_marker = { MARK = off_cb_directed_credit_agriculture }
 			je:je_banking_cycle = { remove_modifier = banking_directed_credit_agriculture }
+			banking_overdraft_wait_a_pulse = yes
 			change_local_variable = { name = dc_slots add = 1 }
 		}
 		if = {
 			limit = { local_var:dc_slots < 0 banking_tool_directed_credit_heavy_industry_active = yes }
 			te_history_record_banking_marker = { MARK = off_cb_directed_credit_heavy_industry }
 			je:je_banking_cycle = { remove_modifier = banking_directed_credit_heavy_industry }
+			banking_overdraft_wait_a_pulse = yes
 			change_local_variable = { name = dc_slots add = 1 }
 		}
 		if = {
 			limit = { local_var:dc_slots < 0 banking_tool_directed_active = yes }
 			te_history_record_banking_marker = { MARK = off_cb_directed_credit_infrastructure }
 			je:je_banking_cycle = { remove_modifier = banking_directed_credit_infrastructure }
+			banking_overdraft_wait_a_pulse = yes
 		}
 	}
 }
 
 # 8. Command economy: keep investment pool net income at zero.
 #    Under law_command_economy the state should be funding all planned investment
-#    directly from the treasury. This effect removes and re-applies the
-#    planning_treasury_pool_balance modifier on the JE with a multiplier chosen
-#    so that investment_pool_net_income + multiplier = 0 next tick.
+#    directly from the treasury. je_banking_cycle declares the
+#    planning_treasury_pool_balance modifier (scaling_modifiers_while_active) at
+#    ce_pool_balance_cached, which this effect sets to the value that makes
+#    investment_pool_net_income + value = 0 next tick, and to 0 under any other
+#    economic law once it exists (the declaration asks for the law too; a
+#    country that never ran a command economy gets no variable, and one that
+#    returns to it carries no stale balance before its first pulse). Until 1.15
+#    it removed and re-added the modifier with that multiplier; the cache keeps
+#    the monthly cadence the multiplier was read at.
 #
-#    Note: no prior-multiplier subtraction is needed because
+#    Note: no prior-value subtraction is needed because
 #    country_weekly_investment_pool_add is a mod-created modifier key that the
 #    engine does not include in investment_pool_net_income, so our contribution
 #    is never double-counted in the read.
@@ -3026,23 +3152,11 @@ banking_directed_credit_enforce_cap = {
 #        (refresh after one-shot treasury<->pool transfers)
 banking_cycle_update_ce_pool_balance = {
 	if = {
-		limit = { has_law = law_type:law_command_economy }
-		je:je_banking_cycle = {
-			if = {
-				limit = { has_modifier = planning_treasury_pool_balance }
-				remove_modifier = planning_treasury_pool_balance
-			}
-			add_modifier = {
-				name = planning_treasury_pool_balance
-				multiplier = ce_treasury_pool_balance_multiplier_for_je
-			}
-		}
+		limit = { banking_is_command_economy = yes }
+		set_variable = { name = ce_pool_balance_cached value = ce_treasury_pool_balance_multiplier }
 	}
-	else = {
-		# Law is no longer command economy — strip the balance modifier.
-		if = {
-			limit = { je:je_banking_cycle ?= { has_modifier = planning_treasury_pool_balance } }
-			je:je_banking_cycle = { remove_modifier = planning_treasury_pool_balance }
-		}
+	else_if = {
+		limit = { has_variable = ce_pool_balance_cached }
+		set_variable = { name = ce_pool_balance_cached value = 0 }
 	}
 }

@@ -235,8 +235,10 @@ class AmendmentReachabilityTests(unittest.TestCase):
         }
         text = _amendment("amendment_live", opener_comment="# REVIEWED 2026-10-04 (amendment_reachability): old")
         r = self._run(text, files)
-        self.assertEqual([f.kind for f in r.flags], ["stale_review"])
-        self.assertIsNone(r.flags[0].exemption)
+        self.assertEqual(r.flags, [])
+        self.assertEqual([t.tag for t in r.stale], ["amendment_reachability"])
+        self.assertTrue(r.failed)
+        self.assertIn("### stale_review", render_report(r))
 
 
 class LiveTreeTest(unittest.TestCase):
@@ -245,6 +247,7 @@ class LiveTreeTest(unittest.TestCase):
         r = audit(mod_path=repo)
         self.assertGreater(r.amendments_checked, 100)
         self.assertEqual([f"{f.kind}: {f.subject}" for f in r.flags if not f.exemption], [])
+        self.assertEqual(r.stale, [])
 
 
 if __name__ == "__main__":

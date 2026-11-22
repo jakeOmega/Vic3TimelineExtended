@@ -316,6 +316,10 @@ nd_posture_sgui = {
 		else_if = {
 			limit = { exists = scope:op  scope:op = 70 }
 			custom_tooltip = nd_tt_disavow_on
+			if = {
+				limit = { has_variable = nd_claim_belief_main }
+				custom_tooltip = nd_tt_disavow_chance
+			}
 			hidden_effect = { set_variable = nd_disavow_strikes }
 		}
 		else_if = {
@@ -354,6 +358,27 @@ nd_posture_sgui = {
 		else_if = {
 			limit = { exists = scope:op  scope:op = 79 }
 			nd_plan_order = yes
+		}
+		# After every posture op (doctrine, readiness, authority, safeguards,
+		# hardening, the ceiling), the Survivors row and the posture's strike
+		# figures follow the click the same day (2026-11-20 delivery spec D10),
+		# not at the next monthly refresh. Behind a click-only marker: a
+		# tooltip walk writes nothing, so the refresh would read what the op
+		# never set, every frame the button's hover shows.
+		if = {
+			limit = {
+				exists = scope:op
+				scope:op >= 11
+				scope:op <= 64
+			}
+			hidden_effect = {
+				set_variable = nd_posture_click
+				if = {
+					limit = { has_variable = nd_posture_click }
+					remove_variable = nd_posture_click
+					nd_refresh_main_rival = yes
+				}
+			}
 		}
 	}
 }
@@ -432,26 +457,25 @@ nd_crisis_action_sgui = {
 # Forces: survivors against the main rival, while we have one
 # (nd_refresh_main_rival).
 # The Forces section's Reach row (rework spec §7, §10): shown while armed
-# without ICBMs (nd_reach_limited); display only. Its hover lists the
-# countries in nd_reach through ExecuteTooltip (vanilla's
-# je_hispanoamerica_not_recognized_countries_sgui shape), each host of our
-# weapons marked on its own line: a heading over a script-built list prints
-# above all of it (gui_modding_guide.md gotcha #18).
-nd_reach_limited_sgui = {
-	scope = country
-	is_shown = { nd_reach_limited = yes }
-	is_valid = { always = no }
-	ai_is_valid = { always = no }
-	effect = { }
-}
-
+# (nd_armed_sgui; 2026-11-20 delivery plan D18), display only. Its hover says
+# every country is in reach with ICBMs; without, it lists the countries in
+# nd_reach through ExecuteTooltip (vanilla's
+# je_hispanoamerica_not_recognized_countries_sgui shape) under one heading,
+# each host of our weapons marked on its own line: a scope's own lines print
+# before its nested blocks', so one heading over one list is all it can hold
+# (gui_modding_guide.md gotcha #18).
 nd_reach_list_sgui = {
 	scope = country
 	is_valid = { always = no }
 	ai_is_valid = { always = no }
 	effect = {
 		if = {
+			limit = { nd_fields_icbms = yes }
+			custom_tooltip = nd_w_reach_every
+		}
+		else_if = {
 			limit = { has_variable_list = nd_reach }
+			custom_tooltip = nd_w_reach_list_head
 			every_in_list = {
 				variable = nd_reach
 				if = {
@@ -471,6 +495,9 @@ nd_has_main_rival_sgui = {
 	is_shown = {
 		nd_is_armed = yes
 		has_variable = nd_main_rival
+		# The hover names it and breaks its reach down from figures a save
+		# from before 2026-11-20 lacks until the week's refresh writes them.
+		has_variable = nd_main_rival_capital
 	}
 	is_valid = { always = no }
 	ai_is_valid = { always = no }
@@ -569,6 +596,19 @@ nd_plan_shown_sgui = {
 	is_shown = {
 		nd_is_armed = yes
 		has_variable = nd_plan_enemy
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = { }
+}
+
+# The Strike section's preview rows (2026-11-20 delivery spec §5.3, plan D14):
+# once nd_plan_preview has stored them, so a save from before them shows no
+# zeros until the next refresh.
+nd_plan_preview_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = nd_plan_pv_landed_1
 	}
 	is_valid = { always = no }
 	ai_is_valid = { always = no }
@@ -698,8 +738,13 @@ nd_crisis_pressure_breakdown_sgui = {
 	ai_is_valid = { always = no }
 	effect = {
 		nd_crisis_breakdown_line = { C = nd_yp_base KEY = nd_yp_base_line }
-		nd_crisis_breakdown_line = { C = nd_yp_answer KEY = nd_yp_answer_line }
-		nd_crisis_breakdown_line = { C = nd_yp_issuer_exposure KEY = nd_yp_issuer_exposure_line }
+		nd_crisis_breakdown_part_line = { C = nd_yp_answer KEY = nd_yp_answer_line SUB = nd_cs_answer_survivors }
+		nd_crisis_survivors_line = { C = nd_cs_answer_survivors ABOVE = -1 ISSUER = nd_cs_answer_line_issuer TARGET = nd_cs_answer_line_target }
+		nd_crisis_survivors_line = { C = nd_cs_answer_counted ABOVE = -1 ISSUER = nd_cs_answer_counted_line TARGET = nd_cs_answer_counted_line }
+		nd_crisis_survivors_line = { C = nd_cs_answer_accuracy ABOVE = 1 ISSUER = nd_cs_answer_accuracy_line_issuer TARGET = nd_cs_answer_accuracy_line_target }
+		nd_crisis_breakdown_part_line = { C = nd_yp_issuer_exposure KEY = nd_yp_issuer_exposure_line SUB = nd_cs_exposure_survivors }
+		nd_crisis_survivors_line = { C = nd_cs_exposure_survivors ABOVE = -1 ISSUER = nd_cs_exposure_line_issuer TARGET = nd_cs_exposure_line_target }
+		nd_crisis_survivors_line = { C = nd_cs_exposure_accuracy ABOVE = 1 ISSUER = nd_cs_exposure_accuracy_line_issuer TARGET = nd_cs_exposure_accuracy_line_target }
 		nd_crisis_breakdown_line = { C = nd_yp_protector KEY = nd_yp_protector_line }
 		nd_crisis_breakdown_line = { C = nd_yp_credibility KEY = nd_yp_credibility_line }
 		nd_crisis_breakdown_line = { C = nd_yp_alert KEY = nd_yp_alert_line }
@@ -709,6 +754,7 @@ nd_crisis_pressure_breakdown_sgui = {
 		nd_crisis_breakdown_line = { C = nd_yp_temperament KEY = nd_yp_temperament_line }
 		nd_crisis_breakdown_line = { C = nd_yp_war KEY = nd_yp_war_line }
 		nd_crisis_breakdown_line = { C = nd_yp_stakes KEY = nd_yp_stakes_line }
+		nd_crisis_breakdown_line = { C = nd_yp_forfeit KEY = nd_yp_forfeit_line }
 		nd_crisis_breakdown_line = { C = nd_yp_follow_through KEY = nd_yp_follow_through_line }
 		nd_crisis_breakdown_line = { C = nd_yp_taboo KEY = nd_yp_taboo_line }
 		custom_tooltip_no_bullet = nd_yp_total_line

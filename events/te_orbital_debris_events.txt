@@ -8,6 +8,8 @@
 #     te_orbital_debris_effects.txt, index x 0.02% a month). Ride it out at
 #     -50% throughput for six months, or pay for an emergency repair and lose
 #     two. Nothing halts: the elevator keeps working at half its rate.
+# .2  Our satellites destroyed: told to the target of an anti-satellite strike
+#     (te_asat_strike_effect). Names the striker and shows the disruption.
 # ============================================================================
 
 te_orbital_debris.1 = {
@@ -86,6 +88,69 @@ te_orbital_debris.1 = {
 			modifier = {
 				trigger = { scaled_debt > 0.5 }
 				factor = 0.2
+			}
+		}
+	}
+}
+
+# The target of an anti-satellite strike hears of it (#1559).
+# te_asat_strike_effect fires it on scope:te_asat_target the moment the
+# strike lands, with scope:te_asat_striker the country that struck. The option
+# changes nothing: it repeats the ladder te_asat_strike_effect chose the
+# disruption by, shown and not run again (six months under the Mars Mission or
+# a later program, half as bad with an Orbital Battlestation). Keep the two in
+# step. No trigger block: the caller has decided.
+te_orbital_debris.2 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/space_debris_collision.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = te_orbital_debris.2.t
+	desc = te_orbital_debris.2.d
+	flavor = te_orbital_debris.2.f
+
+	duration = 3
+	is_popup = yes
+
+	option = {
+		name = te_orbital_debris.2.a
+		default_option = yes
+		ai_chance = { base = 1 }
+		show_as_tooltip = {
+			if = {
+				limit = {
+					modifier:country_sr_mars_mission_program_bool = yes
+					any_scope_building = { is_building_type = building_orbital_battlestation }
+				}
+				add_modifier = {
+					name = te_orbital_network_disrupted
+					days = te_asat_disruption_days_short
+					multiplier = te_asat_battlestation_factor
+				}
+			}
+			else_if = {
+				limit = { modifier:country_sr_mars_mission_program_bool = yes }
+				add_modifier = {
+					name = te_orbital_network_disrupted
+					days = te_asat_disruption_days_short
+				}
+			}
+			else_if = {
+				limit = { any_scope_building = { is_building_type = building_orbital_battlestation } }
+				add_modifier = {
+					name = te_orbital_network_disrupted
+					days = te_asat_disruption_days
+					multiplier = te_asat_battlestation_factor
+				}
+			}
+			else = {
+				add_modifier = {
+					name = te_orbital_network_disrupted
+					days = te_asat_disruption_days
+				}
 			}
 		}
 	}

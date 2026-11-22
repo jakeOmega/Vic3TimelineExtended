@@ -59,6 +59,8 @@ class EntryLifecycleTests(unittest.TestCase):
     def test_entry_has_no_invalid(self):
         self.assertFalse(_has_block(JE, "invalid"))
         self.assertFalse(_has_block(JE, "on_invalid"))
+        # 1.15: an outcome is how an entry ends; this one never does
+        self.assertFalse(_has_block(JE, "outcome"))
 
     def test_rebels_of_a_revolution_start_no_entry(self):
         self.assertRegex(_block(JE, "is_shown_when_inactive", top_level=False), r"is_revolutionary\s*=\s*no")
@@ -111,13 +113,25 @@ class NothingTradesWithoutHubTests(unittest.TestCase):
         weekly = _block(EFFECTS, "st_res_weekly_update_effect")
         self.assertIn("st_res_apply_sell_profit_effect = yes", _block(weekly, "else", top_level=False))
 
+    def test_sales_income_is_declared_on_the_entry(self):
+        """1.15's scaling modifier (#1404): the entry declares the income from the booked week, guarded, and
+        nothing adds or removes it by hand (the week's sum still writes the variable)."""
+        entry = _block(_read("common", "journal_entries", "je_strategic_reserve.txt"), "je_strategic_reserve")
+        scaling = _block(entry, "scaling_modifiers_while_active", top_level=False)
+        self.assertRegex(scaling, r"modifier\s*=\s*st_res_sell_profit_modifier\b")
+        self.assertRegex(_block(scaling, "if", top_level=False),
+                         r"limit\s*=\s*\{\s*has_variable\s*=\s*st_res_sell_profit\s*\}\s*add\s*=\s*var:st_res_sell_profit")
+        apply = _block(EFFECTS, "st_res_apply_sell_profit_effect")
+        self.assertNotIn("st_res_sell_profit_modifier", apply)
+        self.assertIn("set_variable = { name = st_res_sell_profit value = 0 }", apply)
+
     def test_every_control_greys_without_a_hub(self):
         names = re.findall(r"(?m)^(st_res_\w+_sgui)\s*=\s*\{", SGUIS)
         # Read-only tooltip builders act on nothing (SR-9's Blocked list).
         read_only = [n for n in names if re.search(r"is_valid = \{ always = no \}", _block(SGUIS, n))]
         self.assertEqual(read_only, ["st_res_ov_held_sgui"])
         names = [n for n in names if n not in read_only]
-        self.assertEqual(len(names), 21)
+        self.assertEqual(len(names), 23)
         for name in names:
             with self.subTest(sgui=name):
                 valid = _block(_block(SGUIS, name), "is_valid", top_level=False)

@@ -149,8 +149,7 @@ class ScaledApplicationTests(unittest.TestCase):
     def test_destabilization_is_one_country_modifier(self):
         # Its movement pressure rides on covert_destabilization_resist, whose
         # movement fields reach every movement from the country. The retired
-        # per-movement and second country modifiers survive only for the
-        # legacy strip (legacy_modifier_cleanup.txt, PENDING REMOVAL).
+        # per-movement and second country modifiers are gone (#1429).
         effects = _text(EFFECTS)
         self.assertIn(
             "covert_op_apply_target_effect = { TYPE = destabilization MODIFIER = covert_destabilization_resist }",

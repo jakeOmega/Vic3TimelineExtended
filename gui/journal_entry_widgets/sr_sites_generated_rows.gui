@@ -26294,6 +26294,9 @@ types sr_sites_generated_rows_types
 			blockoverride "slot_name" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_cf_slot_1_name')]"
 			}
+			blockoverride "slot_frac" {
+				value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_1_frac') )]"
+			}
 			blockoverride "slot_eta" {
 				text = "je_space_race_widget_cf_slot_1_eta"
 			}
@@ -26305,6 +26308,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "slot_name" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_cf_slot_2_name')]"
+			}
+			blockoverride "slot_frac" {
+				value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_2_frac') )]"
 			}
 			blockoverride "slot_eta" {
 				text = "je_space_race_widget_cf_slot_2_eta"
@@ -26318,6 +26324,9 @@ types sr_sites_generated_rows_types
 			blockoverride "slot_name" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_cf_slot_3_name')]"
 			}
+			blockoverride "slot_frac" {
+				value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_3_frac') )]"
+			}
 			blockoverride "slot_eta" {
 				text = "je_space_race_widget_cf_slot_3_eta"
 			}
@@ -26329,6 +26338,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "slot_name" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_cf_slot_4_name')]"
+			}
+			blockoverride "slot_frac" {
+				value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_4_frac') )]"
 			}
 			blockoverride "slot_eta" {
 				text = "je_space_race_widget_cf_slot_4_eta"
@@ -26342,6 +26354,9 @@ types sr_sites_generated_rows_types
 			blockoverride "slot_name" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_cf_slot_5_name')]"
 			}
+			blockoverride "slot_frac" {
+				value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_5_frac') )]"
+			}
 			blockoverride "slot_eta" {
 				text = "je_space_race_widget_cf_slot_5_eta"
 			}
@@ -26353,6 +26368,9 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "slot_name" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_cf_slot_6_name')]"
+			}
+			blockoverride "slot_frac" {
+				value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_6_frac') )]"
 			}
 			blockoverride "slot_eta" {
 				text = "je_space_race_widget_cf_slot_6_eta"

@@ -45,7 +45,11 @@ UNLOCK_SOURCES: list[tuple[str, str]] = [
 # ---------------------------------------------------------------------------
 
 # Match `<id> = {` at the start of a line. The leading character class allows
-# letters, digits, and underscores — typical Paradox identifier syntax.
+# letters, digits, and underscores — typical Paradox identifier syntax — and
+# the rest may hold a hyphen: `pm_e-commerce`, `pm_coal-fired_plant` and
+# `law_post-scarcity` are ids, and without the hyphen their blocks fell out
+# of the walk, so `/tech-unlocks` left out seven of the mod's production
+# methods (#1697).
 #
 # Vic3 also uses Clausewitz merge-directive prefixes: `INJECT:foo = { … }`,
 # `REPLACE:foo = { … }`, `REPLACE_OR_CREATE:foo = { … }`. The engine resolves
@@ -53,7 +57,7 @@ UNLOCK_SOURCES: list[tuple[str, str]] = [
 # same — otherwise (e.g.) `REPLACE_OR_CREATE:building_space_program`
 # falls out of the walk and its `unlocking_technologies` is missed.
 _TOP_LEVEL_RE = re.compile(
-    r"^(?:(?P<directive>[A-Z_]+):)?(?P<id>[A-Za-z_][A-Za-z0-9_]*)\s*=\s*\{",
+    r"^(?:(?P<directive>[A-Z_]+):)?(?P<id>[A-Za-z_][A-Za-z0-9_-]*)\s*=\s*\{",
     re.MULTILINE,
 )
 

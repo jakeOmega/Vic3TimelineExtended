@@ -38,8 +38,12 @@ pool. Each week they spend a 24th of the pool. That settles at about the pool's
 weekly income, more when the pool has built up and less when it runs low, and
 they keep spending when the income stops.
 4. Construction Sites turn the purchased good into construction points. They
-appear on their own in every state where construction is under way, and in your
-capital when nothing is under way anywhere else. Nobody builds them.
+appear on their own in every state where construction is under way, and one
+always stands in your capital. Nobody builds them. A new site starts working
+about a month after it appears, once it has settled on its one laborer, and the
+sites that are already at work deliver your whole purchase meanwhile. The
+capital's site stands idle while other sites are at work and the capital builds
+nothing.
 
 Each purchase is capped at what its queue can use that week: at most one week's
 maximum progress for each level in the queue. The share of points that goes to
@@ -92,8 +96,8 @@ one:
 | 0.15 | Containerized cargo and later | Container ports and later | No method |
 
 The rate follows the method by itself, up or down. Farms, plantations and urban
-centers pay none. The other mines (coal, iron, lead, sulfur and gold, and the
-bauxite, copper, graphite and similar mines that use the same equipment) pay
+centers pay none. The other mines (coal, iron, lead, copper, sulfur and gold,
+and the bauxite, graphite and similar mines that use the same equipment) pay
 none while they run picks and shovels or the atmospheric engine pump, and start
 paying when their equipment changes to a condensing engine pump or anything
 later; going back to the old equipment stops the upkeep. A few company buildings
@@ -188,9 +192,13 @@ Construction Site takes the Construction Sector's place. The government builds,
 expands and downsizes Construction Sites like any government building, and each
 level provides 1 to 24 points a week by production method, the same tiers as the
 table above. The government pays their wages, and they buy materials for each
-point your queues spend. Construction Sites are built from the state view.
-Every country also gets Base Construction, 5 points a week, so a country without
-any sites can still build its first one. The construction panel
+point your queues spend. Construction Sites are built from the Development tab
+of the production lens or from the state view.
+Every country also gets Base Construction, 10 points a week (the base game's
+maximum), so a country without any sites can still build its first one. If you change the rule in a running
+game, your Construction Sectors become Construction Sites of the same level
+within a day, and the other way when you switch it back. Either way the levels
+end up owned by the government, whoever owned them before. The construction panel
 shows a Direct Construction section with your construction per week and the
 private share, which the economic-system law sets: 25% under Traditionalism, 50%
 under Interventionism, Agrarianism, Extraction Economy and Industry Banned, 75%
@@ -212,16 +220,16 @@ investors.
 - Watch the market line. A standing shortage keeps the price high, which means
 you need more Construction Sector levels or a better production method. Cheap wood, iron and steel make
 construction cheaper, because the sector buys them.
-- A high price makes Construction Sectors profitable, and investors then build
-them on their own.
+- Construction Sectors make a small profit at the base price and a large one
+when the price is high, and investors then build them on their own.
 - Spread production-method switches out. Every switch adds five years of
 retooling upkeep, heaviest in the first months, and switching a whole industry
 at once can take the construction your queues were counting on.
 - Don't downsize Construction Sites at all. They can be downsized only because
 the Disabled setting uses them as an ordinary government building. Under the
 market settings the game places and removes them as needed, and if you downsize
-the last one, construction stops for about two weeks until a new one appears in
-your capital.
+them all, construction stops for about a month, until a new one in your
+capital is at work.
 
 AI countries choose their own purchase each week, always as a fixed quantity.
 They spend roughly their net income, more when their gold reserves are full and
@@ -231,7 +239,7 @@ anything in it.
 
 ## Construction costs in rich countries
 
-Two mechanics make construction dearer as a country grows rich, and both work in
+Two mechanics make construction more expensive as a country grows rich, and both work in
 every setting of the Free Market Construction rule.
 
 ### Construction Cost Scaling
@@ -248,6 +256,10 @@ point requires in a rich country, by two parts multiplied together:
   new value each year, so the price follows your hiring over a few years rather
   than at once.
 
+The two multiply, and the result moves by at most a tenth of itself from one
+year to the next, up or down. A country whose share steps sees its construction
+price follow over several years.
+
 A rich country with workers to spare builds cheaply until it has put them to
 work. One at full employment pays the whole GDP part, which keeps it from
 building faster than its population can staff. The scaling applies to every use
@@ -258,11 +270,19 @@ modifiers, so another modifier that cuts construction costs by 20% still cuts
 raises the cost of the materials your construction uses instead.
 
 It is also a catch-up mechanic: a poor country, with many peasants and a low
-GDP per capita, builds cheaply. The
+GDP per capita, builds cheaply. With the Small-Economy Construction game rule
+on, a small economy also pays less for construction and for construction
+maintenance: half the price, a fifth or a tenth with almost no GDP, by the
+rule's setting, rising in a straight line to the full price at a GDP of 10
+million. The rule is off by default. For a government with £1,000 a week of
+income that spends a third of it on construction, a 100-point building takes
+about seven years at full price, three and a half at half, a year and a half
+at a fifth and nine months at a tenth. The
 [Nation tab](01-introduction.md#the-nation-tab) shows the current scaling, and
 below it any excess private construction in force. Its tooltip gives the cost of
-a point as factors: the GDP part, the share that applies, your peasants and
-unemployed, and your other construction-cost modifiers.
+a point as factors: the scaling in force and where it is heading, the GDP
+part, the share that applies, your peasants and unemployed, and your other
+construction-cost modifiers.
 
 ### Excess private construction
 
@@ -396,8 +416,9 @@ more inputs.
 - Railway, logistics and fulfillment company buildings.
 
 Pops buy it to travel, and industry buys it to move its own goods:
-Construction Sectors from Iron-Frame Buildings onward, the rail-transport and
-tanker-car methods of logging camps, mines, plantations and oil rigs, the cold
+Construction Sectors from Iron-Frame Buildings onward, the Partial Bulk
+Transport, rail-transport and tanker-car methods of logging camps, mines,
+plantations and oil rigs, the cold
 chain of fishing wharves, whaling stations and ranches, later mining and
 oil-well methods, and many late-game factory and retail methods.
 
@@ -407,7 +428,7 @@ spends it on port connections for overseas states and on convoys.
 
 Railways and ports add infrastructure for every level, whether or not the
 level is staffed. The AI doesn't subsidize either: a state that needs more of
-them has dear Transportation, and they pay their way there.
+them has expensive Transportation, and they pay their way there.
 
 Because Transportation can't be imported from another state, a state that buys
 a lot of it needs railways or highways of its own. The largest buyer is
@@ -422,7 +443,7 @@ game. A Grid Transfer Station, unlocked by Electrical Capacitors, joins its
 state to a power grid so that states can share it.
 
 A grid starts as your stations in one market area. Once a month it moves
-Electricity from states where it is cheap to states where it is dear, until it
+Electricity from states where it is cheap to states where it is expensive, until it
 sells at one price in the states that send it and at that price over their
 transmission efficiency (below) in the states that receive it. A sending
 state's station buys its spare power and sends it, and a receiving state's
@@ -477,12 +498,12 @@ subsidized: your government pays whatever a station's wages and upkeep cost
 beyond what it earns. That is about their whole cost, give or take a little
 while a grid is settling and prices are off the grid's.
 
-Two things join grids that don't touch:
+Three things join grids that don't touch:
 
 - With Clean Energy Technologies, you can build an HVDC Undersea
 Interconnector in a coastal state that has a station, built or queued: one
-per state, for 400 construction. Your government pays its engineers and
-Electronic Components. It lays an undersea cable with an
+per state, for 400 construction. Your government pays its engineers,
+Electronic Components and Conductive Metals. It lays an undersea cable with an
 Undersea Cable Range of 1 Sea Node. Smart Grids and Quantum Materials add 1
 each, but only to interconnectors: a station without one has no cable. Two
 cables join their grids when either one's range reaches the other: at 1,
@@ -498,6 +519,12 @@ Organizations) joins both countries' stations where they border, and their
 cables across the sea. It can be signed between two countries that share a
 border or a Sea Node, or whose cables already reach each other, which shows
 up to a month after both are laid. The two can be in one market or in two.
+- A power bloc that holds Market Unification IV or V, or Internal Trade IV or
+V, joins its members' grids the same way without the agreement, from the
+first monthly balancing after it takes the principle. The link ends at the
+next balancing after a member leaves or the bloc gives the principle up, so
+an agreement between two members is still worth signing if you mean to keep
+the link. Members at war with each other aren't joined.
 
 A grid that joins two markets sends power across the border from the market
 with more to spare to the one with less. Because Grid Power's price is fixed,
@@ -519,12 +546,39 @@ markets it also shows the Exports or Imports of the state's market across the
 border, and Pass-through on the station that takes the import in. Its hover
 has the grid's supply against its demand.
 
+The Power Grids tab of the Timeline Extended window opens once you research
+Electrical Capacitors. Its overview counts your stations and how many are on
+a grid, the grids they are on, the Electricity your stations send and receive
+a week, your transmission efficiency, and your Grid Interconnection Agreements,
+with the countries whose undersea cables reach yours but aren't joined to you.
+Under the boxes, Bloc partners counts the members of your bloc joined to you
+through its principle that you have no agreement with. National Generation,
+under your flag in the same frame, shows how much Electricity your power plants
+made a week in all your states, by kind of plant (coal, oil, hydro, nuclear,
+renewables, fusion and space solar), each with its share of the total; power
+your stations received from a grid isn't counted. A card for each grid, named
+for its hub, gives its stations, its supply against its demand, its price,
+what it sends and delivers a week, its own generation by kind of plant (every
+state on it, a partner's too), and the flags of the countries on it. The
+Stations table lists each of your stations with its mode, flow, grid and
+staffing, those on no grid last. Most figures are the
+last monthly balancing's, so a new station joins them on the 1st. A station's
+building panel shows its own grid in brief,
+with a button to the tab, and National Info shows another country's tab. The
+map button in the tab's header opens the Map Room on Power Grids, which colors
+every grid in the world in a color of its own, with its hub striped white.
+
 A station is worth building where power plants make more than the state uses,
-and where Electricity is dear. A state with no power uses none, because its
+and where Electricity is expensive. A state with no power uses none, because its
 buildings can't run the methods that need it; a station lets it receive power
 once a building there switches to one. The AI builds stations in every market
 area where it makes Electricity: it starts in a state with power plants and
 queues a station in one more bordering state each month, larger states first.
+An AI country that makes none builds one beside the station of a partner under
+a Grid Interconnection Agreement, or of a member of its bloc when the bloc's
+principle joins their grids, so build yours on the border if you mean to sell
+it power. The AI builds no station that would have nothing to join: a
+one-state country builds one only once it has an agreement with a neighbor.
 
 ## Tariffs for all goods at once
 
@@ -570,7 +624,7 @@ trades nor replaces what decays.
 
 ### Reserve goods and decay
 
-The reserve holds eight goods. Stock decays every week at a yearly rate that
+The reserve holds nine goods. Stock decays every week at a yearly rate that
 technology lowers.
 
 | Good | Available from | Decay per year at first | After all technologies |
@@ -581,14 +635,15 @@ technology lowers.
 | Ammunition | Percussion Cap | 2% | 0.5% |
 | Oil | Fractional Distillation | 0.5% | 0.05% |
 | Chemicals | Intensive Agriculture | 4% | 0.1% |
+| Conductive Metals | Electrical Generation | 0% | 0% |
 | Aeroplanes | Military Aviation | 4% | 2% |
 | Tanks | Mobile Armor | 2.5% | 1.4% |
 
 Aeroplane and tank decay rises for a time with jets, stealth aircraft and
-composite armor before later technologies bring it down. The hub buys each
-week's decay on top of whatever rate you set, so a rate of 0 holds a stockpile
-steady at a small ongoing cost. Hover a good's row for its decay rate broken
-down by source.
+composite armor before later technologies bring it down. Conductive metals
+don't decay at all. The hub buys each week's decay on top of whatever rate you
+set, so a rate of 0 holds a stockpile steady at a small ongoing cost. Hover a
+good's row for its decay rate broken down by source.
 
 ### The Strategic Reserve panel
 
@@ -737,7 +792,7 @@ unlocked:
 | Button | What it does | When to use it |
 |---|---|---|
 | All: Stabilize | Every good to Stabilize Prices with the Standard preset. | To lean against price swings in every market you stock. |
-| Military: Stockpile | Ammunition, oil, small arms, artillery, aeroplanes and tanks to Stockpile with its preset. Grain and chemicals keep their policy. | To build a war reserve at about base price. |
+| Military: Stockpile | Ammunition, oil, small arms, artillery, aeroplanes and tanks to Stockpile with its preset. Grain, chemicals and conductive metals keep their policy. | To build a war reserve at about base price. |
 | All: Manual | Every good to Manual. Each keeps its current rate and settings. | To take back control without stopping trade; Reset Rates also sets every rate to 0. |
 
 ### Moving or losing the reserve hub
@@ -784,10 +839,12 @@ Reserve and hunger](10-united-nations.md#the-world-food-reserve-and-hunger)).
 ### How the AI uses the reserve
 
 The AI founds its reserve through Establish a Strategic Reserve: great and major
-powers take it, more readily in peacetime, and so does any country with a GDP
-above 10 million. AI reserves add silos once any good passes 75% of capacity.
-An AI reserve runs grain and chemicals on Stabilize Prices with the
-Conservative preset: it buys below −20% and releases above +30%. Its
+powers take it, more readily in peacetime, and so does a country that leads its
+own market with a GDP above 10 million. A smaller country inside another
+country's market founds one only above 100 million. AI reserves add silos once
+any good passes 75% of capacity.
+An AI reserve runs grain, chemicals and conductive metals on Stabilize Prices
+with the Conservative preset: it buys below −20% and releases above +30%. Its
 ammunition, oil, small arms, artillery, aeroplanes and tanks go on Stockpile
 with the Stockpile preset while its treasury allows: it must not be borrowing
 or in default, and it needs a quarter of its gold reserve limit in hand to
@@ -817,11 +874,14 @@ price and sells into the spike), or both, before you go to war.
 
 ## New mineral deposits
 
-The mod adds fourteen mine types, from Copper and Bauxite Mines to Lithium, Rare
-Earth Metals and Platinum Group Metals Mines, and places their deposits in the
-regions that hold them in reality, such as copper in the Atacama and Katanga.
-They start undiscovered and turn up over time, as undiscovered resources do in
-the base game. Twenty-one state traits for famous mining regions, among them the
+The mod adds thirteen mine types, from Bauxite and Manganese Mines to Lithium,
+Rare Earth Metals and Platinum Group Metals Mines, and places their deposits in
+the regions that hold them in reality, such as lithium in the Atacama and cobalt
+in Katanga. The mod's deposits start undiscovered and turn up over time, as
+undiscovered resources do in the base game. Copper works the same way, though
+the Copper Mine is the base game's: a state keeps the copper the base game gives
+it from the start, and the rest of its deposit starts undiscovered.
+Twenty-one state traits for famous mining regions, among them the
 Bushveld Igneous Complex, the Central African Copperbelt, the Sudbury Basin and
 Bayan Obo, raise the throughput of the mines there. The goods these mines
 produce are covered in [The extended timeline](02-timeline.md).

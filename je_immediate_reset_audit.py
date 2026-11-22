@@ -121,8 +121,10 @@ import re
 from bisect import bisect_right
 from dataclasses import dataclass, field
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
 from iterator_limit_audit import blank_comments_and_strings
-from prev_scope_audit import _is_scope_change, _parse_reviewed, load_links
+from prev_scope_audit import _is_scope_change, load_links
 
 JE_DIR = os.path.join("common", "journal_entries")
 EFFECTS_DIR = os.path.join("common", "scripted_effects")
@@ -649,7 +651,7 @@ class Flag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[Flag] = field(default_factory=list)  # every category
     entries: list[JournalEntry] = field(default_factory=list)
     files_audited: int = 0
@@ -659,10 +661,12 @@ class AuditResult:
 
     @property
     def unreviewed(self) -> list[Flag]:
+        """Unguarded writes no REVIEWED covers: what `--strict` fails on. The
+        other categories are listed, not failed."""
         return [f for f in self.flags if f.category == UNGUARDED and not f.exemption]
 
     @property
-    def exempted(self) -> list[Flag]:
+    def exemptions(self) -> list[Flag]:
         """Unguarded writes and other-variable warnings a REVIEWED covers."""
         return [f for f in self.flags if f.category in (UNGUARDED, OTHER_GUARD) and f.exemption]
 
@@ -677,7 +681,7 @@ def _exemption(w: Write, comments: dict[str, dict[int, str]]) -> dict | None:
         lines.append(w.ctx.suppress_line)
     lines.extend((call.file, call.line) for call in reversed(w.ctx.chain))  # nearest first
     for f, ln in lines:
-        ex = _parse_reviewed(comments.get(f, {}).get(ln))
+        ex = parse_reviewed(comments.get(f, {}).get(ln))
         if ex:
             return ex
     return None
@@ -896,7 +900,7 @@ def _refresh_summary(flags: list[Flag], out: list[str]) -> None:
 
 def render_report(result: AuditResult) -> str:
     unrev = result.unreviewed
-    exemp = result.exempted
+    exemp = result.exemptions
     out = [
         "# Journal-entry immediate reset audit report",
         "",
@@ -985,26 +989,25 @@ def regenerate(mod_state=None) -> dict:
     """POST_LOAD_AUDITS hook: run the audit and write the report."""
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
-    out_path = os.path.join(mod_path, REPORT)
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(render_report(result))
+    write_text(os.path.join(mod_path, REPORT), render_report(result))
     return {
         "files_audited": result.files_audited,
         "unreviewed": len(result.unreviewed),
-        "exempted": len(result.exempted),
+        "exempted": len(result.exemptions),
         "progress_bar_inputs": len(result.of(BAR)),
         "pulse_refreshes": len(result.of(REFRESH)),
         "other_guard_warnings": len(result.warnings),
     }
 
 
-if __name__ == "__main__":
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 if any unguarded write lacks
+    a `# REVIEWED ...`."""
     from path_constants import mod_path
-    result = audit(mod_path=mod_path)
-    print(render_report(result))
-    # --strict: CI mode. Exit 1 if any unguarded write lacks a `# REVIEWED ...`.
-    if "--strict" in sys.argv:
-        raise SystemExit(1 if result.unreviewed else 0)
+    return cli_main(lambda args: audit(mod_path=mod_path), lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0],
+                    strict_help="CI mode: exit 1 on an unguarded write no `# REVIEWED` covers.")
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

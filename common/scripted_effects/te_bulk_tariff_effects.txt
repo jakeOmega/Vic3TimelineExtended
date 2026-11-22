@@ -66,6 +66,7 @@ te_bulk_tariff_all_goods = {
 	te_bulk_tariff_good_$KIND$ = { GOOD = coffee DIR = $DIR$ LEVEL = $LEVEL$ }
 	te_bulk_tariff_good_$KIND$ = { GOOD = construction DIR = $DIR$ LEVEL = $LEVEL$ }
 	te_bulk_tariff_good_$KIND$ = { GOOD = consumer_appliances DIR = $DIR$ LEVEL = $LEVEL$ }
+	te_bulk_tariff_good_$KIND$ = { GOOD = copper DIR = $DIR$ LEVEL = $LEVEL$ }
 	te_bulk_tariff_good_$KIND$ = { GOOD = digital_assets DIR = $DIR$ LEVEL = $LEVEL$ }
 	te_bulk_tariff_good_$KIND$ = { GOOD = dye DIR = $DIR$ LEVEL = $LEVEL$ }
 	te_bulk_tariff_good_$KIND$ = { GOOD = electronic_components DIR = $DIR$ LEVEL = $LEVEL$ }

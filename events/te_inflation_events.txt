@@ -257,3 +257,45 @@ te_inflation.1 = {
 		}
 	}
 }
+
+
+# ============================================================================
+# te_inflation.2 — a currency of our own again (#1556)
+# ============================================================================
+# Fired by te_banking_law_change_cleanup (common/on_actions/extra_on_actions.txt)
+# when a dollarized country passes a monetary-policy law: the flag is cleared
+# and te_mon_effect_new_currency has run, so lenders charge the ten-year
+# premium and inflation starts again at te_mon_currency_reform_reset.
+# te_inflation.1.b's tooltip warned of it, at a dollarization that may lie
+# decades back; this says it when it lands. The option changes nothing: it
+# lists what was done. No trigger block: the caller has decided, and the
+# premium added the same instant is not yet visible to has_modifier.
+te_inflation.2 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_inflation.2.t
+	desc = te_inflation.2.d
+	flavor = te_inflation.2.f
+
+	event_image = { texture = "gfx/event_pictures/state_bank_reserves.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+	is_popup = yes
+
+	option = {
+		name = te_inflation.2.a
+		default_option = yes
+		ai_chance = { base = 1 }
+		custom_tooltip = { text = te_inflation.2.a.tt }
+		# The line te_mon_effect_new_currency ran, shown and not run again.
+		show_as_tooltip = {
+			add_modifier = {
+				name = te_mon_currency_reform_premium
+				days = 3650
+			}
+		}
+	}
+}

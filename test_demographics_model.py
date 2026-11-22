@@ -1328,6 +1328,38 @@ class TestPhase2Step2(unittest.TestCase):
         self.assertAlmostEqual(M.workforce_term(5.0, 0.0), 5.0, msg="no cap")
         self.assertEqual(P.POP_BASE_RATIO_MIN, 0.2)
 
+    def test_the_pull_share_is_one_less_e_to_the_minus_births(self):
+        """W's lead (2026-11-07): the share of a gap the births close in a census step, 1 - e^-b to fourth order."""
+        for cbr in (1.0, 6.0, 12.0, 38.0, 55.0):
+            self.assertAlmostEqual(M.workforce_pull_share(cbr), 1 - math.exp(-cbr / 1000), places=6, msg=cbr)
+        self.assertEqual(M.workforce_pull_share(0.0), 0.0)
+        self.assertEqual(M.workforce_pull_share(-3.0), 0.0)
+        self.assertAlmostEqual(M.workforce_pull_share(2000.0), M.workforce_pull_share(1000 * P.WF_PULL_B_MAX))
+
+    def test_the_lead_closes_half_the_gap_and_is_capped(self):
+        share = M.workforce_pull_share(38.0)
+        lead = M.workforce_lead(0.04, 0.0, 0.25, 0.288, 38.0)   # the aim 0.29, the figure 0.002 below it
+        self.assertAlmostEqual(lead, 0.002 * (P.WF_LEAD_HALF / share - 1))
+        self.assertAlmostEqual(0.002 + lead, 0.002 * P.WF_LEAD_HALF / share, msg="set - figure = half the gap / share")
+        self.assertAlmostEqual(M.workforce_lead(0.04, 0.0, 0.25, 0.29, 38.0), 0.0, msg="at the aim, none")
+        self.assertAlmostEqual(M.workforce_lead(0.04, 0.0, 0.25, 0.20, 38.0), P.WF_LEAD_CAP)
+        self.assertAlmostEqual(M.workforce_lead(0.04, 0.0, 0.25, 0.40, 38.0), -P.WF_LEAD_CAP)
+        self.assertAlmostEqual(M.workforce_lead(0.04, 0.0, 0.25, 0.289, 0.0), P.WF_LEAD_CAP, msg="no births")
+        self.assertAlmostEqual(M.workforce_term(0.04, 0.0, P.WF_LEAD_CAP), 0.04 + P.WF_LEAD_CAP)
+
+    def test_the_ceiling_takes_only_the_lead(self):
+        """slaves' 0.5 + W + the lines on top at most WF_POP_RATIO_MAX through the lead; a target past it stands."""
+        ceiling = P.WF_POP_RATIO_MAX - P.POP_BASE_RATIO_MAX
+        self.assertEqual(P.POP_BASE_RATIO_MAX, 0.5)
+        self.assertAlmostEqual(M.workforce_lead(0.35, 0.0, 0.25, 0.3, 12.0), ceiling - 0.35)
+        self.assertAlmostEqual(M.workforce_lead(0.35, 0.05, 0.25, 0.3, 12.0), ceiling - 0.40, msg="a line on top")
+        self.assertEqual(M.workforce_lead(0.6, 0.0, 0.25, 0.3, 12.0), 0.0, msg="a target past it takes no lead")
+        self.assertLess(M.workforce_lead(0.6, 0.0, 0.25, 0.9, 12.0), 0.0, msg="a lead down is never cut")
+
+    def test_the_births_move(self):
+        self.assertAlmostEqual(M.workforce_pull_move(0.25, 0.237, 0.0, 0.257, 38.0),
+                               0.23 * M.workforce_pull_share(38.0))
+
     def test_the_term_nets_only_the_define(self):
         fig = {"wa_share": 0.7, "at_work": 0.35}
         self.assertAlmostEqual(M.workforce_term_target(fig), 0.245 - 0.25)

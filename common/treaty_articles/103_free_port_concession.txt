@@ -131,6 +131,12 @@ free_port_concession = {
 			}
 		}
 
+		# Per-partner gate (evaluation_chance has root only): a free port is
+		# asked for in a treaty, or pressed as a war goal, only between two
+		# markets and for a port with an economy to trade with.
+		proposal_weight = { value = free_port_concession_ai_demand_weight }
+		wargoal_score_multiplier = { value = free_port_concession_ai_demand_weight }
+
 		inherent_accept_score = {
 			value = 0
 

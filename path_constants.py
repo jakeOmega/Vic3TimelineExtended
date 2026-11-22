@@ -30,6 +30,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 from pathlib import Path
 from typing import TYPE_CHECKING, Callable, Optional
@@ -147,6 +148,8 @@ if TYPE_CHECKING:  # pragma: no cover — declarations for type checkers/IDEs on
     game_logs_path: str
     vic3_modding_digests_path: Optional[str]
     vanilla_snapshot_docs_path_default: Optional[str]
+    game_user_data_path: str
+    game_qa_backup_path: str
 
 
 def _lazy(name: str):
@@ -185,15 +188,27 @@ def refresh(name: str):
     return _lazy(name)
 
 
+# A Modding-Digests version folder: `1.13.11`, or a pre-release such as
+# `1.14-openbeta` / `1.14.5-openbeta` (dotted integers, then `-<tag>`).
+_DIGEST_VERSION_RE = re.compile(r"(\d+(?:\.\d+)*)(-[A-Za-z][A-Za-z0-9._-]*)?")
+
+
 def _semver_key(name: str) -> tuple:
-    """Sort key for digest version dirs (e.g. '1.13.4' → (1, 13, 4))."""
-    parts = []
-    for piece in name.split("."):
-        try:
-            parts.append(int(piece))
-        except ValueError:
-            return ()
-    return tuple(parts)
+    """Sort key for a digest version folder; `()` when the name is no version.
+
+    `((major, minor, patch, ...), is_release)`: the numbers, padded to three,
+    then 0 for a pre-release folder and 1 for a release, so an open beta sorts
+    after every earlier release and just before its own:
+    `1.13.11` < `1.14-openbeta` < `1.14.0` < `1.14.4` < `1.14.5-openbeta` <
+    `1.14.5`. The Modding-Digests repository publishes open betas under such
+    names, some versions only so (1.14.x); reading them as "not a version"
+    pinned the engine docs to the last numeric release (#332)."""
+    m = _DIGEST_VERSION_RE.fullmatch(name)
+    if not m:
+        return ()
+    numbers = [int(piece) for piece in m.group(1).split(".")]
+    numbers += [0] * (3 - len(numbers))
+    return (tuple(numbers), 0 if m.group(2) else 1)
 
 
 def _derive_digest_docs_path() -> Optional[str]:
@@ -221,8 +236,28 @@ def _derive_digest_docs_path() -> Optional[str]:
 
 # Derived: latest engine-doc snapshot from Modding-Digests. Consumers should
 # fall back to this when `vanilla_snapshot_docs_path` is unset or missing.
+def _derive_game_user_data_path() -> str:
+    """The game's user-data folder (`save games/`, `logs/`, `continue_game.json`,
+    `content_load.json`): `VIC3_USER_DATA` or the `game_user_data_path` key, else
+    the parent of `game_logs_path`. Read by the in-game QA harness (`game_qa/`)."""
+    configured = _resolve("game_user_data_path", "VIC3_USER_DATA", optional=True)
+    return configured or os.path.dirname(os.path.normpath(_lazy("game_logs_path")))
+
+
+_QA_BACKUPS_DEFAULT = "/mnt/d/vic3_qa_backups"
+
+
+def _derive_game_qa_backup_path() -> str:
+    """Where the in-game QA harness keeps its snapshots of the owner's saves,
+    settings and logs: `VIC3_QA_BACKUPS` or the `game_qa_backup_path` key, else
+    `D:` (the WSL disk shares `C:` with the game)."""
+    return _resolve("game_qa_backup_path", "VIC3_QA_BACKUPS", optional=True) or _QA_BACKUPS_DEFAULT
+
+
 _LAZY_DERIVED: dict[str, Callable[[], Optional[str]]] = {
     "vanilla_snapshot_docs_path_default": _derive_digest_docs_path,
+    "game_user_data_path": _derive_game_user_data_path,
+    "game_qa_backup_path": _derive_game_qa_backup_path,
 }
 
 

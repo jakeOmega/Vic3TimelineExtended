@@ -74,7 +74,8 @@ building_grid_transfer_station = {
 	}
 
 	# Evaluated in state scope. High in every state of a market area where the
-	# owner makes Electricity, highest where the state makes it
+	# owner makes Electricity, highest where the state makes it, and in a state
+	# beside an agreement partner's station
 	# (te_grid_station_ai_value). The construction AI doesn't reliably build
 	# what ai_value asks for, so an AI country also queues a station a month
 	# itself (te_grid_ai_build_effect).

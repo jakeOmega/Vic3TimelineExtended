@@ -4,7 +4,8 @@
 # and mortality lines on laws, technologies and institutions, carried as script-only types the engine sums but
 # doesn't apply. The mod re-applies both families while the census doesn't set a state's births and deaths
 # (te_demog_lines_refresh); under Full the census models the absorbed family and applies the on-top one at its rate
-# (te_demog_rates_refresh). Each copies its vanilla field's format and ai_value (0, so AI law choices don't move).
+# (te_demog_rates_refresh). Each copies its vanilla field's format and ai_value (0, so AI law choices don't move), bar
+# the absorbed mortality line's one decimal.
 # Not in demographics_modifier_types.txt: a release keeps these (scripts/release/comment_out_census_inputs.py).
 state_demog_absorbed_birth_rate_mult = {
 	decimals = 0
@@ -15,8 +16,10 @@ state_demog_absorbed_birth_rate_mult = {
 	}
 	script_only = yes
 }
+# One decimal where vanilla's field has none (owner, 2026-11-14): the Healthcare principles carry half a point a level
+# of the Health System (TestEngineLineTypes.MORE_DECIMALS).
 state_demog_absorbed_mortality_mult = {
-	decimals = 0
+	decimals = 1
 	color = bad
 	percent = yes
 	game_data = {

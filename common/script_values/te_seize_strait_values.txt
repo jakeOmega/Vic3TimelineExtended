@@ -1,0 +1,136 @@
+﻿# ============================================================================
+# SEIZE STRAIT — infamy share and self-check figures
+#
+# War goal: common/war_goal_types/te_seize_strait.txt
+# ============================================================================
+
+# State scope: how many provinces the state has. A script value's
+# every_province reads a state's provinces (the base game's occupation_values.txt
+# counts them so); the province iterators in a trigger or an effect don't run
+# from a state (scripting_best_practices.md, gm_trophy_values.txt).
+te_seize_strait_state_provinces = {
+	value = 0
+	every_province = {
+		add = 1
+	}
+}
+
+# State scope: how many of the state's provinces the goal takes. The 24 shore
+# provinces of base 1.15's 12 straits, from
+# common/strait_definitions/strait_definitions.txt (`first_land_endpoint`,
+# `second_land_endpoint`): strait scope has no link to its shore provinces, so
+# they are written out, as the base game's canal events write theirs. A
+# canal's two provinces count only once the canal is built. Each test is the
+# base game's "this state holds province X" form, `this = p:xHEX.state`
+# (goa_macao_decisions.txt). te_seize_strait_shores (te_seize_strait_effects.txt)
+# must name the same provinces; on a vanilla patch that adds or moves a strait,
+# update both (test_seize_strait_wargoal.py).
+te_seize_strait_shore_provinces = {
+	value = 0
+	if = { limit = { this = p:xBC6ED3.state } add = 1 }	# Gibraltar, north shore (STATE_UPPER_ANDALUSIA)
+	if = { limit = { this = p:xA0B0C0.state } add = 1 }	# Gibraltar, south shore (STATE_AL_RIF)
+	if = { limit = { this = p:xF0A020.state } add = 1 }	# Bosporus, west shore (STATE_EASTERN_THRACE)
+	if = { limit = { this = p:x30A060.state } add = 1 }	# Bosporus, east shore (STATE_HUDAVENDIGAR)
+	if = { limit = { this = p:x319060.state } add = 1 }	# Bab-el-Mandeb, east shore (STATE_YEMEN)
+	if = { limit = { this = p:x9E8FDD.state } add = 1 }	# Bab-el-Mandeb, west shore (STATE_ERITREA)
+	if = { limit = { this = p:xC04161.state } add = 1 }	# Oresund, east shore (STATE_SCANIA)
+	if = { limit = { this = p:x7F0BF0.state } add = 1 }	# Oresund, west shore (STATE_ZEALAND)
+	if = { limit = { this = p:xC00130.state } add = 1 }	# Malacca, Singapore (STATE_MALAYA)
+	if = { limit = { this = p:x48428B.state } add = 1 }	# Malacca, Sumatran shore (STATE_NORTH_SUMATRA)
+	if = { limit = { this = p:xE0D080.state } add = 1 }	# Tsugaru, Honshu shore (STATE_TOHOKU)
+	if = { limit = { this = p:xA090C0.state } add = 1 }	# Tsugaru, Hokkaido shore (STATE_HOKKAIDO)
+	if = { limit = { this = p:xDBE794.state } add = 1 }	# Sunda, Sumatran shore (STATE_SOUTH_SUMATRA)
+	if = { limit = { this = p:x6345B2.state } add = 1 }	# Sunda, Javan shore (STATE_WEST_JAVA)
+	if = { limit = { this = p:x5ABA94.state } add = 1 }	# Lombok, first shore (STATE_SUNDA_ISLANDS)
+	if = { limit = { this = p:x100090.state } add = 1 }	# Lombok, second shore (STATE_SUNDA_ISLANDS)
+	if = { limit = { this = p:x0170A0.state } add = 1 }	# Hormuz, north shore (STATE_LARISTAN)
+	if = { limit = { this = p:x0DC972.state } add = 1 }	# Hormuz, south shore (STATE_ABU_DHABI)
+	if = {
+		limit = { te_panama_canal_built = yes }	# Panama Canal (STATE_PANAMA)
+		if = { limit = { this = p:xD0EF40.state } add = 1 }
+		if = { limit = { this = p:x910E14.state } add = 1 }
+	}
+	if = {
+		limit = { te_suez_canal_built = yes }	# Suez Canal (STATE_SINAI)
+		if = { limit = { this = p:xC01060.state } add = 1 }
+		if = { limit = { this = p:x8ED45E.state } add = 1 }
+	}
+	if = {
+		limit = { te_kiel_canal_built = yes }	# Kiel Canal (STATE_SCHLESWIG_HOLSTEIN)
+		if = { limit = { this = p:x804160.state } add = 1 }
+		if = { limit = { this = p:xBFCC21.state } add = 1 }
+	}
+}
+
+# State scope: the multiplier on the state's infamy. The share of the state's
+# provinces the goal takes, never below a quarter: a strait is worth more than
+# its acreage, and every state region with a shore has five or more
+# provinces, where a whole state's share would be a fifth or less. A state
+# split down to the shore costs more (Britain's three-province Singapore a
+# third), and a state that is only the shore costs its full infamy, what
+# conquer_state charges for it.
+te_seize_strait_infamy_share = {
+	value = te_seize_strait_shore_provinces
+	divide = {
+		value = te_seize_strait_state_provinces
+		min = 1
+	}
+	min = 0.25
+	max = 1
+}
+
+# Country scope (the goal's holder, in on_enforced): what each side holds in
+# the strait's state region (scope:te_ss_region), its people and the shore
+# provinces the goal takes.
+te_ss_holder_region_pop = {
+	value = 0
+	scope:te_ss_region ?= {
+		every_scope_state = {
+			if = {
+				limit = { owner = root }
+				add = state_population
+			}
+		}
+	}
+}
+
+te_ss_target_region_pop = {
+	value = 0
+	scope:te_ss_region ?= {
+		every_scope_state = {
+			if = {
+				limit = { owner = scope:target_country }
+				add = state_population
+			}
+		}
+	}
+}
+
+te_ss_holder_region_shores = {
+	value = 0
+	scope:te_ss_region ?= {
+		every_scope_state = {
+			if = {
+				limit = { owner = root }
+				add = te_seize_strait_shore_provinces
+			}
+		}
+	}
+}
+
+# Read by the self-check's debug_log lines (te_seize_strait_selfcheck_after).
+te_ss_chk_holder_before_g = { value = global_var:te_ss_chk_holder_before }
+te_ss_chk_holder_after_g = { value = global_var:te_ss_chk_holder_after }
+te_ss_chk_target_before_g = { value = global_var:te_ss_chk_target_before }
+te_ss_chk_target_after_g = { value = global_var:te_ss_chk_target_after }
+te_ss_chk_shores_before_g = { value = global_var:te_ss_chk_shores_before }
+te_ss_chk_shores_after_g = { value = global_var:te_ss_chk_shores_after }
+
+# Country scope: 1 for an AI holder, so the log shows whether the AI uses the goal.
+te_ss_chk_holder_is_ai = {
+	value = 0
+	if = {
+		limit = { is_ai = yes }
+		value = 1
+	}
+}

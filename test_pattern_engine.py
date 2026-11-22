@@ -149,11 +149,23 @@ class BuildPatternIndexesTests(unittest.TestCase):
         self.assertEqual(discovered, [])
 
 
+class _DefinitionsOnly:
+    """The ModState surface `_classify_modifier_name` reads: the modifier type
+    definitions, vanilla's and the mod's."""
+
+    def __init__(self, modifier_types):
+        self._types = modifier_types
+
+    def get_data(self, entity_type):
+        return self._types if entity_type == "Modifier Types" else {}
+
+
 class ClassifyModifierNameTests(unittest.TestCase):
     def setUp(self):
-        # _classify_modifier_name reads from module globals via its arg list,
-        # but we need pattern_pairs in the right shape.
-        self.modifiers_set = {"country_authority_add"}
+        # A name is valid only when a definition registers it (#391). The
+        # definitions come from the loaded ModState; `modifiers_set` is every
+        # name the caller knows of, the engine-docs dump included.
+        self.modifiers_set = {"country_authority_add", "country_listed_only_add"}
         # pattern_pairs shape: (pattern_str, prefix, suffix, vocab_set, placeholder)
         self.pattern_pairs = [
             (
@@ -164,12 +176,15 @@ class ClassifyModifierNameTests(unittest.TestCase):
                 "good",
             )
         ]
+        self._saved_ms = srv.ms
+        srv.ms = _DefinitionsOnly({"country_authority_add": {}, "goods_output_iron_add": {}})
         # Reset modifier_to_pattern so leftover state from prior tests doesn't leak.
         self._saved_mtp = srv.modifier_to_pattern
         srv.modifier_to_pattern = {}
 
     def tearDown(self):
         srv.modifier_to_pattern = self._saved_mtp
+        srv.ms = self._saved_ms
 
     def test_engine_set_classification(self):
         status, info = srv._classify_modifier_name(
@@ -177,15 +192,33 @@ class ClassifyModifierNameTests(unittest.TestCase):
         )
         self.assertEqual(status, "engine")
 
-    def test_pattern_runtime_match(self):
-        # `goods_output_grain_add` matches the pattern AND `grain` is in the vocab,
-        # so the runtime classifier should return ("pattern", info).
+    def test_name_only_the_engine_docs_list_is_unknown(self):
+        # `modifiers.log` lists every name the engine could register; a dump
+        # older than the game also lists names a patch removed.
+        status, info = srv._classify_modifier_name(
+            "country_listed_only_add", self.modifiers_set, self.pattern_pairs
+        )
+        self.assertEqual(status, "unknown")
+        self.assertEqual(info, {"listed_in_engine_docs": True})
+
+    def test_registered_pattern_instance_is_engine(self):
+        status, info = srv._classify_modifier_name(
+            "goods_output_iron_add", self.modifiers_set, self.pattern_pairs
+        )
+        self.assertEqual((status, info), ("engine", {}))
+
+    def test_pattern_runtime_match_needs_a_definition(self):
+        # `goods_output_grain_add` matches the pattern AND `grain` is in the
+        # vocab, but no definition registers it: the engine ignores it, so the
+        # classifier reports it with the pattern it would belong to.
         status, info = srv._classify_modifier_name(
             "goods_output_grain_add", self.modifiers_set, self.pattern_pairs
         )
-        self.assertEqual(status, "pattern")
+        self.assertEqual(status, "unknown")
         self.assertEqual(info["pattern"], "goods_output_{good}_add")
         self.assertEqual(info["value"], "grain")
+        self.assertIs(info["unregistered_pattern_instance"], True)
+        self.assertNotIn("listed_in_engine_docs", info)
 
     def test_suspicious_classification(self):
         # `goods_output_grane_add` matches the pattern shape but `grane` is not
@@ -209,23 +242,32 @@ class ClassifyModifierNameTests(unittest.TestCase):
             "authority",
             "catalog",
         )
-        # name is in modifiers_set so engine wins (modifier_to_pattern is the
-        # second-priority lookup; engine match takes precedence).
+        # A definition registers the name, so engine wins (modifier_to_pattern
+        # is the second-priority lookup).
         status, _ = srv._classify_modifier_name(
             "country_authority_add", self.modifiers_set, self.pattern_pairs
         )
         self.assertEqual(status, "engine")
 
-        # If name is NOT in modifiers_set but IS in modifier_to_pattern,
-        # status should be "pattern" via the cached lookup.
+        # A name with no definition that the engine docs file under a pattern
+        # is still unregistered; the cached lookup supplies the pattern.
         srv.modifier_to_pattern["custom_modifier_add"] = (
             "custom_{x}_add", "modifier", "catalog",
         )
         status, info = srv._classify_modifier_name(
-            "custom_modifier_add", self.modifiers_set, self.pattern_pairs
+            "custom_modifier_add", self.modifiers_set | {"custom_modifier_add"}, self.pattern_pairs
         )
-        self.assertEqual(status, "pattern")
+        self.assertEqual(status, "unknown")
         self.assertEqual(info["pattern"], "custom_{x}_add")
+        self.assertIs(info["unregistered_pattern_instance"], True)
+        self.assertIs(info["listed_in_engine_docs"], True)
+
+    def test_nothing_is_registered_without_a_mod_state(self):
+        srv.ms = None
+        status, _ = srv._classify_modifier_name(
+            "country_authority_add", self.modifiers_set, self.pattern_pairs
+        )
+        self.assertEqual(status, "unknown")
 
 
 class DidYouMeanTests(unittest.TestCase):

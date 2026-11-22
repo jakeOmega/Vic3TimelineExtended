@@ -65,9 +65,9 @@
 # these techs' interest line.
 #
 # VANILLA DRIFT. The cancel values mirror vanilla
-# common/technology/technologies/30_society.txt (banking :209,
-# central_banking :599, mutual_funds :1226, international_exchange_standards
-# :1473, modern_financial_instruments :1647) as of the version in
+# common/technology/technologies/30_society.txt (vanilla 1.15: banking :209,
+# central_banking :636, mutual_funds :1286, international_exchange_standards
+# :1534, modern_financial_instruments :1709; all still -0.02) as of the version in
 # paths.local.json's base_game_path. docs/guides/vanilla_patch_runbook.md §6b
 # carries the re-check entry; a SIXTH finance tech needs a sixth block here.
 #

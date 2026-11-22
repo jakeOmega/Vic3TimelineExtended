@@ -1,4 +1,6 @@
+import contextlib
 import io
+import json
 import os
 import sys
 import tempfile
@@ -579,6 +581,81 @@ class ParserSemanticsTests(unittest.TestCase):
             "ai_will_do": ("=", {"value": ("=", "3")}),
         }))
 
+    # -- INJECT an outcome into a 1.15 journal entry -------------------------
+    JE_ONE = (
+        "je_x = {\n\tgroup = g\n"
+        "\toutcome = { header = a trigger = { x = yes } }\n}\n"
+    )
+    JE_TWO = (
+        "je_x = {\n\tgroup = g\n"
+        "\toutcome = { header = a }\n\toutcome = { header = b }\n}\n"
+    )
+
+    def _outcome_headers(self, *texts, mod_state_flow):
+        data = self._merged(*texts, mod_state_flow=mod_state_flow)
+        body = data["je_x"][1]
+        self.assertEqual(body["group"], ("=", "g"))  # the rest of the entry survives
+        entries = body["outcome"]
+        if not isinstance(entries, list):
+            entries = [entries]
+        return [e[1]["header"][1] for e in entries]
+
+    def test_injected_outcome_is_another_outcome(self):
+        """`outcome` is one entry per block (REPEATED_ENTRY_FIELDS): an
+        injected one joins the entry's, whether it had one outcome (which the
+        merge used to rewrite: header a became c and kept a's trigger) or
+        several (which the injected one used to replace)."""
+        one = "INJECT:je_x = { outcome = { header = c } }\n"
+        two = "INJECT:je_x = { outcome = { header = c } outcome = { header = d } }\n"
+        cases = [
+            (self.JE_ONE, one, ["a", "c"]),
+            (self.JE_ONE, two, ["a", "c", "d"]),
+            (self.JE_TWO, one, ["a", "b", "c"]),
+            (self.JE_TWO, two, ["a", "b", "c", "d"]),
+        ]
+        for base, inject, expected in cases:
+            for mod_state_flow in (False, True):
+                with self.subTest(base=base, inject=inject, mod_state_flow=mod_state_flow):
+                    self.assertEqual(
+                        self._outcome_headers(base, inject, mod_state_flow=mod_state_flow),
+                        expected,
+                    )
+        # The first outcome keeps its own fields.
+        data = self._merged(self.JE_ONE, one, mod_state_flow=True)
+        self.assertIn("trigger", data["je_x"][1]["outcome"][0][1])
+        self.assertNotIn("trigger", data["je_x"][1]["outcome"][1][1])
+
+    def test_injected_outcome_in_the_same_file(self):
+        self.assertEqual(
+            self._outcome_headers(
+                self.JE_ONE + "INJECT:je_x = { outcome = { header = c } }\n",
+                mod_state_flow=False,
+            ),
+            ["a", "c"],
+        )
+
+    def test_replace_of_outcome_still_replaces(self):
+        self.assertEqual(
+            self._outcome_headers(
+                self.JE_TWO, "INJECT:je_x = { REPLACE:outcome = { header = c } }\n",
+                mod_state_flow=True,
+            ),
+            ["c"],
+        )
+
+    def test_inject_block_with_a_repeated_key_keeps_the_entity(self):
+        """parse_file's own directive pass hands the INJECT's body over
+        un-normalized when a key repeats in it; that used to replace the
+        whole entity (`group` was lost)."""
+        data = self._merged(
+            self.JE_ONE,
+            "INJECT:je_x = { scripted_button = s1 scripted_button = s2 }\n",
+            mod_state_flow=False,
+        )
+        body = data["je_x"][1]
+        self.assertEqual(body["group"], ("=", "g"))
+        self.assertEqual(body["scripted_button"], [("=", "s1"), ("=", "s2")])
+
     # -- INJECT into a script value -------------------------------------------
     SV_VANILLA = (
         "sv_x = {\n"
@@ -784,6 +861,73 @@ class LinearParserTests(unittest.TestCase):
 
     def parser_value(self, tokens):
         return ParadoxFileParser().parse_value(tokens)
+
+    # A list that mixes names with keyed entries: vanilla's on-actions write
+    # `events = { a.1 delay = { days = 5 } a.2 }`. The object parse rejected
+    # it and the whole file was dropped from the store (#1697).
+
+    def test_on_action_list_with_a_delay_parses_in_source_order(self):
+        text = (
+            "on_x = {\n"
+            "\tevents = { a.1 delay = { days = 5 } a.2 }\n"
+            "\ton_actions = { on_y delay = { days = 1 } on_z }\n"
+            "\ttrigger = { always = yes }\n"
+            "}\n"
+            "on_after = { events = { b.1 } }\n"
+        )
+        data = self._parse(text)
+        delay5 = {"delay": ("=", {"days": ("=", "5")})}
+        delay1 = {"delay": ("=", {"days": ("=", "1")})}
+        self.assertEqual(data["on_x"][1]["events"], ("=", ["a.1", delay5, "a.2"]))
+        self.assertEqual(data["on_x"][1]["on_actions"], ("=", ["on_y", delay1, "on_z"]))
+        self.assertEqual(data["on_x"][1]["trigger"], ("=", {"always": ("=", "yes")}))
+        # The rest of the file is still read.
+        self.assertEqual(data["on_after"], ("=", {"events": ("=", ["b.1"])}))
+
+    def test_mixed_list_keeps_every_delay_and_nested_blocks_in_order(self):
+        delay = lambda n: {"delay": ("=", {"days": ("=", n)})}  # noqa: E731
+        self.assertEqual(
+            self._parse("x = { a delay = { days = 5 } { c d } b delay = { days = 7 } e }"),
+            {"x": ("=", ["a", delay("5"), ["c", "d"], "b", delay("7"), "e"])},
+        )
+        # A delay before the first item, and a list that ends on one.
+        self.assertEqual(self._parse("x = { delay = { days = 1 } b }"),
+                         {"x": ("=", [delay("1"), "b"])})
+        self.assertEqual(self._parse("x = { b delay = { days = 1 } }"),
+                         {"x": ("=", ["b", delay("1")])})
+
+    def test_list_of_lists_parses(self):
+        # `{ x y }` inside a list went through the object parse and raised.
+        self.assertEqual(self._parse("x = { { p q } { r s } }"),
+                         {"x": ("=", [["p", "q"], ["r", "s"]])})
+
+    def test_mixed_list_survives_the_snapshot_json_round_trip(self):
+        import vanilla_parsed
+        value = self._parse("x = { a.1 delay = { days = 5 } a.2 }")
+        self.assertTrue(vanilla_parsed._strict_equal(
+            vanilla_parsed.decode(json.loads(json.dumps(vanilla_parsed.encode(value)))), value))
+
+    def test_what_still_fails_still_fails(self):
+        # A bare word at a file's top level, or an operator where a list item
+        # should be, is still an error, raised as a ValueError. So is a bare
+        # word beside any key but `delay` (MIXED_LIST_KEYS): there it is most
+        # likely a missing `=`, and a typo must stay a parse failure.
+        for text in ("a b = 1", "x = { a = 1 = }",
+                     "x = { is_at_war = yes has_law law_x }", "x = { a = b c }",
+                     "x = { a {} b = 1 }", "x = { a b > 2 }", "x = { { p q = 1 } }",
+                     "x = { a.1 delay = { days = 5 } trigger = { always = yes } a.2 }"):
+            with self.subTest(text=text), self.assertRaises(ValueError) as ctx, \
+                    contextlib.redirect_stdout(io.StringIO()):
+                self._parse(text)
+            self.assertIs(type(ctx.exception), ValueError)
+
+    def test_blocks_that_parsed_before_parse_the_same(self):
+        # The object parse runs first, so input it accepted is untouched,
+        # quirks included: an empty anonymous block in a list is a dict.
+        self.assertEqual(self._parse("x = { a {} }"), {"x": ("=", ["a", {}])})
+        self.assertEqual(self._parse("x = { {} }"), {"x": ("=", [{}])})
+        self.assertEqual(self._parse("x = { a = 1 b = { c } }"),
+                         {"x": ("=", {"a": ("=", "1"), "b": ("=", ["c"])})})
 
     def test_inject_later_in_the_same_file_sees_the_raw_value(self):
         # merge_data normalizes only after every key of the file is written,

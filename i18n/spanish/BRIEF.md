@@ -27,6 +27,17 @@ Some lines were translated before, and the English has changed since. Two commen
 
 Compare the two English versions and change the translation only where the English changed, keeping its wording and terms everywhere else. Here the concept link is gone, so it goes from the Spanish too: «… por las obligaciones del tratado de puerto franco». Where the English has been rewritten, translate the new text afresh. Either way, write the line in full, like any other.
 
+## Template lines
+
+A generated file repeats some lines once for each copy of a system (each culture merge, say), with only their `$...$` references and `[...]` values changed. Your chunk holds one copy of such a line, under a comment naming what changes:
+
+```
+# TEMPLATE: the script copies this translation to 96 more lines, replacing $dixie$, [ROOT.GetCountry.MakeScope.Var('te_cm_held_american_dixie').GetValue|%0] with each line's own. …
+ je_te_cm_american_status_hold_dixie:0 "$dixie$ pops are out of reach: our sphere holds only [ROOT.GetCountry.MakeScope.Var('te_cm_held_american_dixie').GetValue|%0] of them in their homeland, …"
+```
+
+A script writes your translation into every other copy, swapping in each one's own references. Keep the ones the comment names exactly as written: one with a case flag added can't be swapped, and its copies stay English. Translate the line so it reads right whatever they insert. Here every merge's culture takes the place of `$dixie$`, so phrase around its gender: «Los colectivos de cultura $dixie$ están fuera de alcance…» (Country names, below, explains why a bare name can't take an agreeing word.)
+
 ## Keep the markup exactly
 
 Everything that isn't prose passes through unchanged. The checker compares them as counts per line.
@@ -53,11 +64,12 @@ ES  … tienen [concept_foreign_investment_rights|l] en [Concept('concept_power_
 EN  Every [concept_building] that is [concept_nationally_owned] can be put up for sale
 ES  Todo [concept_building|l] que sea de [concept_nationally_owned|l] se puede poner a la venta
 
-EN  Allow enacting [Concept('concept_decree', '$concept_decrees$')] on [concept_subject] [Concept('concept_state', '$concept_states$')]
-ES  Permite promulgar [Concept('concept_decree', '$concept_decrees$')|l] en [Concept('concept_state', '$concept_states$')|l] de [Concept('concept_subject', 'súbditos')]
+EN  Allow enacting [Concept('concept_decree', '$concept_decrees|q$')] on [concept_subject] [Concept('concept_state', '$concept_states|q$')]
+ES  Permite promulgar [Concept('concept_decree', '$concept_decrees|q$')|l] en [Concept('concept_state', '$concept_states|q$')|l] de [Concept('concept_subject', 'súbditos')]
 ```
 
 - Keep **every** concept link: the same concepts, the same number of times. You may switch between `[concept_x]` and `[Concept('concept_x', '…')]` freely, and move links within the sentence.
+- A `$reference$` inside a quoted argument carries `|q` (`[Concept('concept_state', '$concept_states|q$')]`). Keep it, and add it to any you write there yourself: the game logs an error for each one without it.
 - For a plain `[concept_x]` link, the display text you write must be the concept's own Spanish term, in the form the sentence needs; the glossary's REFERENCED KEYS section shows the singular. Don't substitute a synonym.
 - Where the English already gives its own display text (`[Concept('concept_x', 'construction capacity')]`), translate that text. The English author chose it on purpose, even when it differs from the concept's name.
 - Make articles and adjectives agree with the concept's gender and number: *la* [concept_legitimacy|l], *los* [Concept('concept_pop','colectivos')] (the official name for pops is «Colectivo»).
@@ -82,6 +94,8 @@ Write *de* and *a* before a name, never *del* or *al*: the name brings no articl
 
 `GetAdjective` gives the masculine singular, lowercase («francés», «británico»). The official Spanish places it after a masculine singular noun (*el estado [X.GetAdjective]*, *el gobierno [X.GetAdjective]*). Keep every `GetAdjective` call the English has (the checker counts them, and swapping one for `GetName` is rejected). Where the English attaches it to a feminine or plural noun, choose a masculine singular noun to carry it (*el sistema bancario [X.GetAdjective]*, *el mercado [X.GetAdjective]*) rather than letting it disagree.
 
+A `$key$` reference that inserts a name (a country tag such as `$CZH$`, a culture, a technology) gives the bare name, whose gender and number you can't know. Phrase so nothing has to agree with it: «Se ha investigado la tecnología $mass_media$» (not «$mass_media$ está investigado»: the name may be feminine or plural), «los colectivos de cultura $yankee$».
+
 ## Terminology
 
 The chunk header lists up to three glossaries. Follow them exactly:
@@ -91,6 +105,16 @@ The chunk header lists up to three glossaries. Follow them exactly:
 - **VANILLA TERMS** are the official Spanish game terms. Where the English refers to that game thing, use the official Spanish, not your own synonym: players know these words from the rest of the game. A matching phrase inside a different name is not a reference. The "Federation Emergency Relief Fund" is a fund, not the Emergency Relief law, so translate it on its own terms.
 
 For a term in none of the lists, choose Spanish that fits the official game's register, and list it in your report.
+
+Earlier passes settled these words too, which are too short or too common for the glossaries to catch:
+
+| English | Spanish |
+|---|---|
+| receivership (a creditor running a debtor's finances) / its receiver | intervención («bajo nuestra intervención») / administrador; the treaty article Debt Receivership is *Intervención de la deuda* |
+| a rescue of a defaulted member / its terms | rescate / condiciones |
+| a common currency's adopter / issuer | adoptante, país que la adopta / emisor |
+| tooltip | descripción emergente |
+| the Full Demographics rule | la regla de Demografía completa |
 
 Names and titles take a capital on the first word only, as the official Spanish writes them: «Libre comercio», «Bloque de poder», «Industrias de armamento», «Anotación en el diario». Don't copy English Title Case. Proper names of real organisations keep their capitals («Naciones Unidas», «Banco Mundial»).
 

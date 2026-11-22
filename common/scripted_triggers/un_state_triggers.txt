@@ -12,14 +12,6 @@ un_state_missing = {
 	NOT = { je:je_united_nations ?= { has_modifier = $MODIFIER$ } }
 }
 
-# The same for a state modifier kept on the country.
-# Parameters: $MODIFIER$
-# Scope: country
-un_state_country_missing = {
-	has_variable = $MODIFIER$_on
-	NOT = { has_modifier = $MODIFIER$ }
-}
-
 # The monthly pulse heals this month and does nothing else: the entry may have
 # been wiped (un_state_rebuild_pending), and a mirrored modifier is missing.
 # Scope: country
@@ -31,30 +23,6 @@ un_state_heal_needed = {
 		un_state_missing = { MODIFIER = un_headquarters_modifier }
 		un_state_missing = { MODIFIER = un_security_council_modifier }
 		un_state_missing = { MODIFIER = un_permanent_member_modifier }
-		un_state_missing = { MODIFIER = un_peacekeeping_contributor_modifier }
-		un_state_missing = { MODIFIER = un_peacekeeping_contributor_cost }
-		un_state_missing = { MODIFIER = un_development_contributor_modifier }
-		un_state_missing = { MODIFIER = un_development_contributor_cost }
-		un_state_missing = { MODIFIER = un_human_rights_champion_modifier }
-		un_state_missing = { MODIFIER = un_arms_control_participant_modifier }
-		un_state_missing = { MODIFIER = un_champion_order_cost }
-		un_state_missing = { MODIFIER = un_undermine_order_cost }
-		un_state_missing = { MODIFIER = un_human_rights_declaration_modifier }
-		un_state_missing = { MODIFIER = un_nonproliferation_modifier }
-		un_state_missing = { MODIFIER = un_climate_binding_modifier }
-		un_state_missing = { MODIFIER = un_heritage_program_modifier }
-		un_state_missing = { MODIFIER = un_pandemic_cooperation_modifier }
-		un_state_missing = { MODIFIER = un_refugee_program_modifier }
-		un_state_missing = { MODIFIER = un_space_partnership_modifier }
-		un_state_country_missing = { MODIFIER = un_law_of_sea_modifier }
-		un_state_country_missing = { MODIFIER = un_icc_member_modifier }
-		un_state_country_missing = { MODIFIER = un_physical_protection_modifier }
-		un_state_country_missing = { MODIFIER = un_narcotics_control_modifier }
-		un_state_country_missing = { MODIFIER = un_cultural_diversity_modifier }
-		un_state_country_missing = { MODIFIER = un_nuclear_ban_modifier }
-		un_state_country_missing = { MODIFIER = un_antarctic_treaty_modifier }
-		un_state_country_missing = { MODIFIER = un_asat_moratorium_modifier }
-		un_state_country_missing = { MODIFIER = un_colony_protection_modifier }
 	}
 }
 

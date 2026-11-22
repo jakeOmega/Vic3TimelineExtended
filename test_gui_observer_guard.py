@@ -49,6 +49,15 @@ ROOT_GATED = {
     "te_systems_window_generated.gui": ("te_systems_window.gui", "te_systems_window"),
 }
 
+# Tabs whose own button reads no GetPlayer but whose content, drawn from types
+# in another file, does: host -> {tab: (file, type the content mounts)}. Their
+# buttons too put the observer test first. The Budget panel's Breakdown tab
+# builds every figure from GetPlayer (te_budget_expense_section's datacontext),
+# and its button was shown to an observer until 2026-11-07.
+CONTENT_READS_PLAYER = {
+    "budget_panel.gui": {"te_breakdown": ("te_budget_generated_charts.gui", "te_budget_expense_section")},
+}
+
 OBSERVER = "Not( GetMetaPlayer.IsObserver )"
 VISIBILITY = re.compile(r"\w+_button_visibility(?:_checked)?$")
 TAB = re.compile(r"InformationPanel\.IsTabSelected\('(\w+)'\)$")
@@ -232,6 +241,26 @@ class SystemTabButtonsTestTheObserverFirst(unittest.TestCase):
                 for name in holders:
                     self.assertIsNone(re.search(rf"\b{name}\s*=\s*\{{", _read(other)),
                                       f"gui/{other} instances {name}, which gui/{root_file}'s root gates")
+
+
+class TabsWhoseContentReadsThePlayer(unittest.TestCase):
+    def test_their_buttons_test_the_observer_first(self):
+        for host, tabs in CONTENT_READS_PLAYER.items():
+            found = _visibles(_read(host))
+            for tab, (content_file, type_name) in tabs.items():
+                with self.subTest(host=host, tab=tab):
+                    # The entry is still true: the content reads GetPlayer.
+                    content = _read(content_file)
+                    m = re.search(rf"^\ttype\s+{type_name}\s*=", content, re.M)
+                    self.assertIsNotNone(m, f"gui/{content_file}: no type {type_name}")
+                    self.assertIn("GetPlayer", content[m.end():content.find("\n\ttype ", m.end())])
+                    buttons = [(line, value) for line, value, header, _ in found
+                               if header and VISIBILITY.match(header) and f"IsTabSelected('{tab}')" in value]
+                    self.assertEqual(len(buttons), 2, f"gui/{host}: the {tab} tab's two button halves")
+                    for line, value in buttons:
+                        self.assertTrue(value.startswith(f"[And( {OBSERVER}, "),
+                                        f"gui/{host}:{line}: the {tab} tab's content reads GetPlayer, so its "
+                                        f"button needs {OBSERVER} first in an And: {value[:120]}")
 
 
 class TheWalker(unittest.TestCase):

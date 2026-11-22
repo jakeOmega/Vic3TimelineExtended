@@ -11,7 +11,7 @@ te_set_region_areas_if_stale = {
 		te_set_region_areas = yes
 	}
 	else_if = {
-		limit = { NOT = { global_var:te_region_area_version = 1 } }
+		limit = { NOT = { global_var:te_region_area_version = 2 } }
 		te_set_region_areas = yes
 	}
 }
@@ -23,8 +23,8 @@ te_set_region_areas = {
 	s:STATE_ACRE = { set_variable = { name = te_region_area value = 95714 } }
 	s:STATE_ADANA = { set_variable = { name = te_region_area value = 51040 } }
 	s:STATE_AGRA = { set_variable = { name = te_region_area value = 124134 } }
-	s:STATE_AKMOLINSK = { set_variable = { name = te_region_area value = 549646 } }
-	s:STATE_AKTOBE = { set_variable = { name = te_region_area value = 291206 } }
+	s:STATE_AKMOLINSK = { set_variable = { name = te_region_area value = 549895 } }
+	s:STATE_AKTOBE = { set_variable = { name = te_region_area value = 291194 } }
 	s:STATE_ALABAMA = { set_variable = { name = te_region_area value = 106952 } }
 	s:STATE_ALAND = { set_variable = { name = te_region_area value = 3018 } }
 	s:STATE_ALASKA = { set_variable = { name = te_region_area value = 1582869 } }
@@ -130,7 +130,7 @@ te_set_region_areas = {
 	s:STATE_CHACO = { set_variable = { name = te_region_area value = 171361 } }
 	s:STATE_CHAD = { set_variable = { name = te_region_area value = 572068 } }
 	s:STATE_CHAMPAGNE = { set_variable = { name = te_region_area value = 27667 } }
-	s:STATE_CHELYABINSK = { set_variable = { name = te_region_area value = 125453 } }
+	s:STATE_CHELYABINSK = { set_variable = { name = te_region_area value = 128804 } }
 	s:STATE_CHERNIHIV = { set_variable = { name = te_region_area value = 56800 } }
 	s:STATE_CHERSON = { set_variable = { name = te_region_area value = 97731 } }
 	s:STATE_CHIANG_MAI = { set_variable = { name = te_region_area value = 80808 } }
@@ -138,8 +138,7 @@ te_set_region_areas = {
 	s:STATE_CHIHUAHUA = { set_variable = { name = te_region_area value = 202855 } }
 	s:STATE_CHONGQING = { set_variable = { name = te_region_area value = 134589 } }
 	s:STATE_CHUGOKU = { set_variable = { name = te_region_area value = 28623 } }
-	s:STATE_CHUKOTKA = { set_variable = { name = te_region_area value = 631683 } }
-	s:STATE_CHUVASHIA = { set_variable = { name = te_region_area value = 42961 } }
+	s:STATE_CHUVASHIA = { set_variable = { name = te_region_area value = 42308 } }
 	s:STATE_CIRCARS = { set_variable = { name = te_region_area value = 87942 } }
 	s:STATE_COLORADO = { set_variable = { name = te_region_area value = 250604 } }
 	s:STATE_CONGO = { set_variable = { name = te_region_area value = 215325 } }
@@ -217,9 +216,8 @@ te_set_region_areas = {
 	s:STATE_FRIESLAND = { set_variable = { name = te_region_area value = 15157 } }
 	s:STATE_FUJIAN = { set_variable = { name = te_region_area value = 99920 } }
 	s:STATE_GABON = { set_variable = { name = te_region_area value = 173058 } }
-	s:STATE_GALICH = { set_variable = { name = te_region_area value = 495217 } }
 	s:STATE_GALICIA = { set_variable = { name = te_region_area value = 29344 } }
-	s:STATE_GANSU = { set_variable = { name = te_region_area value = 243788 } }
+	s:STATE_GANSU = { set_variable = { name = te_region_area value = 246688 } }
 	s:STATE_GELRE = { set_variable = { name = te_region_area value = 11997 } }
 	s:STATE_GEORGIA = { set_variable = { name = te_region_area value = 120930 } }
 	s:STATE_GOIAS = { set_variable = { name = te_region_area value = 400418 } }
@@ -227,7 +225,7 @@ te_set_region_areas = {
 	s:STATE_GONDER = { set_variable = { name = te_region_area value = 178510 } }
 	s:STATE_GOTALAND = { set_variable = { name = te_region_area value = 59354 } }
 	s:STATE_GOTLAND = { set_variable = { name = te_region_area value = 3807 } }
-	s:STATE_GREATER_CAUCASUS = { set_variable = { name = te_region_area value = 62609 } }
+	s:STATE_GREATER_CAUCASUS = { set_variable = { name = te_region_area value = 63319 } }
 	s:STATE_GREATER_POLAND = { set_variable = { name = te_region_area value = 59333 } }
 	s:STATE_GREENLAND = { set_variable = { name = te_region_area value = 1177235 } }
 	s:STATE_GUANGDONG = { set_variable = { name = te_region_area value = 94714 } }
@@ -289,7 +287,7 @@ te_set_region_areas = {
 	s:STATE_KABUL = { set_variable = { name = te_region_area value = 82157 } }
 	s:STATE_KACHIN = { set_variable = { name = te_region_area value = 141940 } }
 	s:STATE_KALMYKIA = { set_variable = { name = te_region_area value = 77605 } }
-	s:STATE_KAMCHATKA = { set_variable = { name = te_region_area value = 522154 } }
+	s:STATE_KAMCHATKA = { set_variable = { name = te_region_area value = 1153838 } }
 	s:STATE_KANAK = { set_variable = { name = te_region_area value = 23968 } }
 	s:STATE_KANDAHAR = { set_variable = { name = te_region_area value = 60798 } }
 	s:STATE_KANSAI = { set_variable = { name = te_region_area value = 14920 } }
@@ -300,7 +298,6 @@ te_set_region_areas = {
 	s:STATE_KASHMIR = { set_variable = { name = te_region_area value = 152975 } }
 	s:STATE_KASTAMONU = { set_variable = { name = te_region_area value = 45269 } }
 	s:STATE_KATANGA = { set_variable = { name = te_region_area value = 280227 } }
-	s:STATE_KAUNAS = { set_variable = { name = te_region_area value = 56604 } }
 	s:STATE_KAZAN = { set_variable = { name = te_region_area value = 83209 } }
 	s:STATE_KAZEMBE = { set_variable = { name = te_region_area value = 206335 } }
 	s:STATE_KENTUCKY = { set_variable = { name = te_region_area value = 95976 } }
@@ -317,8 +314,9 @@ te_set_region_areas = {
 	s:STATE_KONYA = { set_variable = { name = te_region_area value = 138504 } }
 	s:STATE_KORDOFAN = { set_variable = { name = te_region_area value = 256766 } }
 	s:STATE_KOSOVO = { set_variable = { name = te_region_area value = 9236 } }
+	s:STATE_KOSTROMA = { set_variable = { name = te_region_area value = 91702 } }
 	s:STATE_KRASNOYARSK = { set_variable = { name = te_region_area value = 316149 } }
-	s:STATE_KUBAN = { set_variable = { name = te_region_area value = 89363 } }
+	s:STATE_KUBAN = { set_variable = { name = te_region_area value = 88184 } }
 	s:STATE_KUOPIO = { set_variable = { name = te_region_area value = 55675 } }
 	s:STATE_KURNOOL = { set_variable = { name = te_region_area value = 48169 } }
 	s:STATE_KURSK = { set_variable = { name = te_region_area value = 108533 } }
@@ -341,6 +339,7 @@ te_set_region_areas = {
 	s:STATE_LIBYAN_DESERT = { set_variable = { name = te_region_area value = 425836 } }
 	s:STATE_LIMA = { set_variable = { name = te_region_area value = 204494 } }
 	s:STATE_LINDI = { set_variable = { name = te_region_area value = 267032 } }
+	s:STATE_LITHUANIA = { set_variable = { name = te_region_area value = 56604 } }
 	s:STATE_LOMBARDY = { set_variable = { name = te_region_area value = 21958 } }
 	s:STATE_LORRAINE = { set_variable = { name = te_region_area value = 17830 } }
 	s:STATE_LOS_RIOS = { set_variable = { name = te_region_area value = 103336 } }
@@ -392,7 +391,7 @@ te_set_region_areas = {
 	s:STATE_MONTANA = { set_variable = { name = te_region_area value = 391379 } }
 	s:STATE_MONTENEGRO = { set_variable = { name = te_region_area value = 13513 } }
 	s:STATE_MORAVIA = { set_variable = { name = te_region_area value = 27930 } }
-	s:STATE_MOSCOW = { set_variable = { name = te_region_area value = 32238 } }
+	s:STATE_MOSCOW = { set_variable = { name = te_region_area value = 31777 } }
 	s:STATE_MOSUL = { set_variable = { name = te_region_area value = 57406 } }
 	s:STATE_MUNSTER = { set_variable = { name = te_region_area value = 26628 } }
 	s:STATE_MURCIA = { set_variable = { name = te_region_area value = 24896 } }
@@ -419,7 +418,7 @@ te_set_region_areas = {
 	s:STATE_NIGERIA = { set_variable = { name = te_region_area value = 128746 } }
 	s:STATE_NIGER_DELTA = { set_variable = { name = te_region_area value = 51011 } }
 	s:STATE_NINGXIA = { set_variable = { name = te_region_area value = 189848 } }
-	s:STATE_NIZHNY_NOVGOROD = { set_variable = { name = te_region_area value = 76693 } }
+	s:STATE_NIZHNY_NOVGOROD = { set_variable = { name = te_region_area value = 57002 } }
 	s:STATE_NORMANDY = { set_variable = { name = te_region_area value = 30699 } }
 	s:STATE_NORRLAND = { set_variable = { name = te_region_area value = 265329 } }
 	s:STATE_NORTHERN_ANHUI = { set_variable = { name = te_region_area value = 67556 } }
@@ -435,13 +434,13 @@ te_set_region_areas = {
 	s:STATE_NORTH_BORNEO = { set_variable = { name = te_region_area value = 142898 } }
 	s:STATE_NORTH_CAMEROON = { set_variable = { name = te_region_area value = 143666 } }
 	s:STATE_NORTH_CAROLINA = { set_variable = { name = te_region_area value = 105458 } }
-	s:STATE_NORTH_CAUCASUS = { set_variable = { name = te_region_area value = 53532 } }
+	s:STATE_NORTH_CAUCASUS = { set_variable = { name = te_region_area value = 52847 } }
 	s:STATE_NORTH_DAKOTA = { set_variable = { name = te_region_area value = 184764 } }
 	s:STATE_NORTH_ISLAND = { set_variable = { name = te_region_area value = 111144 } }
 	s:STATE_NORTH_MADAGASCAR = { set_variable = { name = te_region_area value = 200782 } }
 	s:STATE_NORTH_RHINE = { set_variable = { name = te_region_area value = 11774 } }
 	s:STATE_NORTH_SUMATRA = { set_variable = { name = te_region_area value = 127832 } }
-	s:STATE_NOVGOROD = { set_variable = { name = te_region_area value = 137630 } }
+	s:STATE_NOVGOROD = { set_variable = { name = te_region_area value = 132598 } }
 	s:STATE_NUNAVUT = { set_variable = { name = te_region_area value = 1331094 } }
 	s:STATE_OAXACA = { set_variable = { name = te_region_area value = 71528 } }
 	s:STATE_OB = { set_variable = { name = te_region_area value = 590594 } }
@@ -456,7 +455,7 @@ te_set_region_areas = {
 	s:STATE_ORISSA = { set_variable = { name = te_region_area value = 73008 } }
 	s:STATE_ORLEANS = { set_variable = { name = te_region_area value = 35482 } }
 	s:STATE_OROMIA = { set_variable = { name = te_region_area value = 299178 } }
-	s:STATE_ORYOL = { set_variable = { name = te_region_area value = 109829 } }
+	s:STATE_ORYOL = { set_variable = { name = te_region_area value = 52631 } }
 	s:STATE_OSTROBOTHNIA = { set_variable = { name = te_region_area value = 43993 } }
 	s:STATE_OULU = { set_variable = { name = te_region_area value = 161247 } }
 	s:STATE_OUTER_HAUSALAND = { set_variable = { name = te_region_area value = 232740 } }
@@ -472,7 +471,7 @@ te_set_region_areas = {
 	s:STATE_PEGU = { set_variable = { name = te_region_area value = 64916 } }
 	s:STATE_PELOPONNESE = { set_variable = { name = te_region_area value = 21373 } }
 	s:STATE_PENNSYLVANIA = { set_variable = { name = te_region_area value = 113550 } }
-	s:STATE_PERM = { set_variable = { name = te_region_area value = 184079 } }
+	s:STATE_PERM = { set_variable = { name = te_region_area value = 184442 } }
 	s:STATE_PERNAMBUCO = { set_variable = { name = te_region_area value = 93293 } }
 	s:STATE_PERSIAN_KURDISTAN = { set_variable = { name = te_region_area value = 42079 } }
 	s:STATE_PIAUI = { set_variable = { name = te_region_area value = 156803 } }
@@ -506,11 +505,11 @@ te_set_region_areas = {
 	s:STATE_ROSTOV = { set_variable = { name = te_region_area value = 158503 } }
 	s:STATE_RUHR = { set_variable = { name = te_region_area value = 11179 } }
 	s:STATE_RUTHENIA = { set_variable = { name = te_region_area value = 13089 } }
-	s:STATE_RYAZAN = { set_variable = { name = te_region_area value = 55438 } }
+	s:STATE_RYAZAN = { set_variable = { name = te_region_area value = 55504 } }
 	s:STATE_RYUKYU_ISLANDS = { set_variable = { name = te_region_area value = 4901 } }
 	s:STATE_SAHARA = { set_variable = { name = te_region_area value = 590396 } }
 	s:STATE_SAKHALIN = { set_variable = { name = te_region_area value = 98535 } }
-	s:STATE_SAMARA = { set_variable = { name = te_region_area value = 194706 } }
+	s:STATE_SAMARA = { set_variable = { name = te_region_area value = 197525 } }
 	s:STATE_SANTA_CATARINA = { set_variable = { name = te_region_area value = 68136 } }
 	s:STATE_SANTA_CRUZ = { set_variable = { name = te_region_area value = 306864 } }
 	s:STATE_SANTA_FE = { set_variable = { name = te_region_area value = 167591 } }
@@ -518,6 +517,7 @@ te_set_region_areas = {
 	s:STATE_SANTO_DOMINGO = { set_variable = { name = te_region_area value = 30566 } }
 	s:STATE_SAN_SALVADOR = { set_variable = { name = te_region_area value = 14268 } }
 	s:STATE_SAO_PAULO = { set_variable = { name = te_region_area value = 173043 } }
+	s:STATE_SARATOV = { set_variable = { name = te_region_area value = 121668 } }
 	s:STATE_SARDINIA = { set_variable = { name = te_region_area value = 23504 } }
 	s:STATE_SARIWON = { set_variable = { name = te_region_area value = 51417 } }
 	s:STATE_SASKATCHEWAN = { set_variable = { name = te_region_area value = 666107 } }
@@ -525,7 +525,7 @@ te_set_region_areas = {
 	s:STATE_SAXONY = { set_variable = { name = te_region_area value = 27589 } }
 	s:STATE_SCANIA = { set_variable = { name = te_region_area value = 20106 } }
 	s:STATE_SCHLESWIG_HOLSTEIN = { set_variable = { name = te_region_area value = 22824 } }
-	s:STATE_SEMIRECHE = { set_variable = { name = te_region_area value = 408465 } }
+	s:STATE_SEMIRECHE = { set_variable = { name = te_region_area value = 408476 } }
 	s:STATE_SEMNAN = { set_variable = { name = te_region_area value = 91408 } }
 	s:STATE_SENEGAL = { set_variable = { name = te_region_area value = 134415 } }
 	s:STATE_SEOUL = { set_variable = { name = te_region_area value = 37758 } }
@@ -563,7 +563,7 @@ te_set_region_areas = {
 	s:STATE_SOUTH_MADAGASCAR = { set_variable = { name = te_region_area value = 207944 } }
 	s:STATE_SOUTH_SUMATRA = { set_variable = { name = te_region_area value = 111418 } }
 	s:STATE_SOUTH_TYROL = { set_variable = { name = te_region_area value = 13984 } }
-	s:STATE_STAVROPOL = { set_variable = { name = te_region_area value = 75177 } }
+	s:STATE_STAVROPOL = { set_variable = { name = te_region_area value = 76330 } }
 	s:STATE_STYRIA = { set_variable = { name = te_region_area value = 26505 } }
 	s:STATE_SUNDA_ISLANDS = { set_variable = { name = te_region_area value = 65395 } }
 	s:STATE_SURGUT = { set_variable = { name = te_region_area value = 545085 } }
@@ -575,10 +575,9 @@ te_set_region_areas = {
 	s:STATE_TAHITI = { set_variable = { name = te_region_area value = 84129 } }
 	s:STATE_TAJIKISTAN = { set_variable = { name = te_region_area value = 115000 } }
 	s:STATE_TALINN = { set_variable = { name = te_region_area value = 25025 } }
-	s:STATE_TAMBOV = { set_variable = { name = te_region_area value = 115767 } }
+	s:STATE_TAMBOV = { set_variable = { name = te_region_area value = 115777 } }
 	s:STATE_TANGANYIKA = { set_variable = { name = te_region_area value = 272006 } }
 	s:STATE_TARAPACA = { set_variable = { name = te_region_area value = 41006 } }
-	s:STATE_TARTARIA = { set_variable = { name = te_region_area value = 121668 } }
 	s:STATE_TARTU = { set_variable = { name = te_region_area value = 22252 } }
 	s:STATE_TASMANIA = { set_variable = { name = te_region_area value = 65938 } }
 	s:STATE_TAURIDA = { set_variable = { name = te_region_area value = 85753 } }
@@ -588,7 +587,7 @@ te_set_region_areas = {
 	s:STATE_THESSALIA = { set_variable = { name = te_region_area value = 20445 } }
 	s:STATE_TIANSHAN = { set_variable = { name = te_region_area value = 778534 } }
 	s:STATE_TIMBUKTU = { set_variable = { name = te_region_area value = 546012 } }
-	s:STATE_TOBOLSK = { set_variable = { name = te_region_area value = 346590 } }
+	s:STATE_TOBOLSK = { set_variable = { name = te_region_area value = 346579 } }
 	s:STATE_TOGO = { set_variable = { name = te_region_area value = 55028 } }
 	s:STATE_TOHOKU = { set_variable = { name = te_region_area value = 63988 } }
 	s:STATE_TOKAI = { set_variable = { name = te_region_area value = 29188 } }
@@ -603,14 +602,15 @@ te_set_region_areas = {
 	s:STATE_TRAVANCORE = { set_variable = { name = te_region_area value = 21257 } }
 	s:STATE_TRIPOLI = { set_variable = { name = te_region_area value = 219748 } }
 	s:STATE_TUCUMAN = { set_variable = { name = te_region_area value = 227099 } }
+	s:STATE_TULA = { set_variable = { name = te_region_area value = 57198 } }
 	s:STATE_TUNISIA = { set_variable = { name = te_region_area value = 128630 } }
 	s:STATE_TURKMENIA = { set_variable = { name = te_region_area value = 280096 } }
 	s:STATE_TUSCANY = { set_variable = { name = te_region_area value = 19080 } }
 	s:STATE_TUVA = { set_variable = { name = te_region_area value = 178984 } }
-	s:STATE_TVER = { set_variable = { name = te_region_area value = 59791 } }
+	s:STATE_TVER = { set_variable = { name = te_region_area value = 54335 } }
 	s:STATE_TYROL = { set_variable = { name = te_region_area value = 23442 } }
 	s:STATE_UBANGI_SHARI = { set_variable = { name = te_region_area value = 378914 } }
-	s:STATE_UFA = { set_variable = { name = te_region_area value = 138351 } }
+	s:STATE_UFA = { set_variable = { name = te_region_area value = 132370 } }
 	s:STATE_UGANDA = { set_variable = { name = te_region_area value = 124816 } }
 	s:STATE_ULIASTAI = { set_variable = { name = te_region_area value = 817486 } }
 	s:STATE_ULSTER = { set_variable = { name = te_region_area value = 19662 } }
@@ -619,8 +619,8 @@ te_set_region_areas = {
 	s:STATE_UPPER_EGYPT = { set_variable = { name = te_region_area value = 101094 } }
 	s:STATE_UPPER_SILESIA = { set_variable = { name = te_region_area value = 12573 } }
 	s:STATE_UPPER_YENISEYSK = { set_variable = { name = te_region_area value = 2051746 } }
-	s:STATE_URAL = { set_variable = { name = te_region_area value = 257214 } }
-	s:STATE_URALSK = { set_variable = { name = te_region_area value = 447276 } }
+	s:STATE_URAL = { set_variable = { name = te_region_area value = 256450 } }
+	s:STATE_URALSK = { set_variable = { name = te_region_area value = 447253 } }
 	s:STATE_URGA = { set_variable = { name = te_region_area value = 808611 } }
 	s:STATE_URMIA = { set_variable = { name = te_region_area value = 27652 } }
 	s:STATE_URUGUAY = { set_variable = { name = te_region_area value = 144101 } }
@@ -638,9 +638,10 @@ te_set_region_areas = {
 	s:STATE_VISAYAS = { set_variable = { name = te_region_area value = 49735 } }
 	s:STATE_VITEBSK = { set_variable = { name = te_region_area value = 35592 } }
 	s:STATE_VOLHYNIA = { set_variable = { name = te_region_area value = 37927 } }
+	s:STATE_VOLOGDA = { set_variable = { name = te_region_area value = 448826 } }
 	s:STATE_VOLTA = { set_variable = { name = te_region_area value = 174841 } }
 	s:STATE_VRYSTAAT = { set_variable = { name = te_region_area value = 93830 } }
-	s:STATE_VYATKA = { set_variable = { name = te_region_area value = 125736 } }
+	s:STATE_VYATKA = { set_variable = { name = te_region_area value = 145809 } }
 	s:STATE_WADDAI = { set_variable = { name = te_region_area value = 269236 } }
 	s:STATE_WALES = { set_variable = { name = te_region_area value = 21635 } }
 	s:STATE_WALLACHIA = { set_variable = { name = te_region_area value = 76251 } }
@@ -675,7 +676,7 @@ te_set_region_areas = {
 	s:STATE_XIAN = { set_variable = { name = te_region_area value = 154396 } }
 	s:STATE_YAKUTSK = { set_variable = { name = te_region_area value = 1995829 } }
 	s:STATE_YANGHO = { set_variable = { name = te_region_area value = 39353 } }
-	s:STATE_YAROSLAVL = { set_variable = { name = te_region_area value = 113650 } }
+	s:STATE_YAROSLAVL = { set_variable = { name = te_region_area value = 83656 } }
 	s:STATE_YEMEN = { set_variable = { name = te_region_area value = 292552 } }
 	s:STATE_YORKSHIRE = { set_variable = { name = te_region_area value = 22645 } }
 	s:STATE_YORUBA_STATES = { set_variable = { name = te_region_area value = 33321 } }
@@ -692,5 +693,5 @@ te_set_region_areas = {
 	s:STATE_ZHILI = { set_variable = { name = te_region_area value = 86333 } }
 	s:STATE_ZULIA = { set_variable = { name = te_region_area value = 84564 } }
 	s:STATE_ZULULAND = { set_variable = { name = te_region_area value = 94178 } }
-	set_global_variable = { name = te_region_area_version value = 1 }
+	set_global_variable = { name = te_region_area_version value = 2 }
 }

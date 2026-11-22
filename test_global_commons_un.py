@@ -185,7 +185,7 @@ class HandTypedFiguresTest(unittest.TestCase):
         body = _block(values, "te_seabed_level_output_value")
         output = sum(float(a) * float(b) for a, b in
                      re.findall(r"add\s*=\s*\{\s*value\s*=\s*([\d.]+)\s+multiply\s*=\s*([\d.]+)\s*\}", body))
-        self.assertEqual(output, 44700)
+        self.assertEqual(output, 37100)
         rate = _value("te_seabed_royalty_rate")
         per_level = output * rate
         seabed = LOC["je_un_terms_law_of_sea_seabed"]
@@ -259,10 +259,24 @@ class HandTypedFiguresTest(unittest.TestCase):
 
 class DerivedStateTest(unittest.TestCase):
     """A revolution's winner keeps variables and the conventions' mirrors, not
-    modifiers: each modifier here is rebuilt from them, in one file."""
+    modifiers: each modifier here is rebuilt from them, in one file. The seabed
+    royalty is declared on je_united_nations (test_un_scaling_modifiers.py):
+    only its cache is written, here."""
 
-    DERIVED = ("te_seabed_royalty_modifier", "te_antarctic_station_modifier",
-               "te_antarctic_station_upkeep", "un_antarctic_policy_modifier")
+    DERIVED = ("te_antarctic_station_modifier", "te_antarctic_station_upkeep", "un_antarctic_policy_modifier")
+
+    def test_the_royalty_cache_has_one_writer(self):
+        writers = set()
+        for top in ("common", "events"):
+            for root, _dirs, files in os.walk(_path(top)):
+                for name in files:
+                    if name.endswith(".txt"):
+                        path = os.path.join(root, name)
+                        with open(path, encoding="utf-8-sig") as f:
+                            if re.search(r"set_variable\s*=\s*\{\s*name\s*=\s*te_seabed_royalty_cached\b",
+                                         _strip(f.read())):
+                                writers.add(os.path.relpath(path, REPO))
+        self.assertEqual(writers, {os.path.join("common", "scripted_effects", "te_global_commons_un_effects.txt")})
 
     def test_each_derived_modifier_has_one_writer_file(self):
         writers = {m: set() for m in self.DERIVED}
@@ -303,7 +317,7 @@ class DerivedStateTest(unittest.TestCase):
     def test_the_un_rule_keeps_the_seabed_open(self):
         triggers = _strip(_read("common", "scripted_triggers", "te_global_commons_un_triggers.txt"))
         governs = _block(triggers, "te_seabed_itlos_governs")
-        self.assertIn("has_game_rule = united_nations_enabled", governs)
+        self.assertIn("te_united_nations_on = yes", governs)
         self.assertIn("has_global_variable = un_agency_itlos", governs)
         hooks = _strip(_read("common", "scripted_effects", "te_seabed_un_hooks.txt"))
         update = _block(hooks, "te_seabed_un_update_regime")

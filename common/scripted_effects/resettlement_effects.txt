@@ -68,6 +68,15 @@ resettlement_country_monthly = {
 				resettlement_run_destination = yes
 			}
 		}
+		# the walk's counts (resettlement_run_destination)
+		every_scope_state = {
+			limit = { has_variable = rs_elig }
+			remove_variable = rs_elig
+		}
+		if = {
+			limit = { has_variable = rs_elig_code }
+			remove_variable = rs_elig_code
+		}
 	}
 	resettlement_refresh_politics = yes
 	resettlement_refresh_declaration = yes
@@ -143,7 +152,10 @@ resettlement_set_programme_code = {
 	}
 }
 
-# State scope: a source. scope:rs_country and scope:rs_destination saved.
+# State scope: a source. scope:rs_country and scope:rs_destination saved;
+# var:rs_elig holds this state's eligible population for the destination's
+# program (resettlement_run_destination counts it). A take removes it, so
+# the next destination counts this state again.
 # $CAP$: the script value naming the share of each eligible pop it may give.
 # Moving pops from inside every_scope_pop is vanilla's own pattern (the
 # Hokkaido settlement events do it); leave it. Penal Transportation's premise
@@ -163,7 +175,8 @@ resettlement_take_from_source = {
 	set_local_variable = {
 		name = rs_budget
 		value = {
-			value = resettlement_state_eligible_pop
+			# counted by resettlement_run_destination (see there)
+			value = var:rs_elig
 			multiply = $CAP$
 		}
 	}
@@ -246,6 +259,8 @@ resettlement_take_from_source = {
 		# evaluates against ROOT (the country here) and printed -1.
 		debug_log = "TE_RESETTLEMENT: source gave [THIS.ScriptValue('resettlement_debug_taken_now')|0] recruits"
 		debug_log_scopes = yes
+		# this state's pops have changed: the next destination counts again
+		remove_variable = rs_elig
 	}
 }
 
@@ -344,28 +359,67 @@ resettlement_run_destination = {
 
 	# Drive states first, then everyone else, each walked in order of eligible
 	# population until the capacity is used (§2).
+	#
+	# Performance (docs/audits/late_game_performance.md § "The USA of 1977"):
+	# a source's eligible population is counted once a month for a program,
+	# into the state's rs_elig, and recounted only after a take from it,
+	# which is the only step of this pulse that changes a source's pops
+	# (moves, transit deaths and unrest at the source; the land pressure
+	# touches the destination, which is never a source). The filter,
+	# the order and the take's budget read rs_elig, so they see what a count
+	# here would. A destination of another program clears every count
+	# (rs_elig_code on the country names the program they are for).
+	# resettlement_country_monthly removes them after the walk. A source is
+	# walked only while the destination has capacity left; past that
+	# resettlement_take_from_source moved nobody.
 	scope:rs_country = {
+		if = {
+			limit = { NOT = { has_variable = rs_elig_code } }
+			set_variable = { name = rs_elig_code value = -1 }
+		}
+		if = {
+			limit = { NOT = { var:rs_elig_code = scope:rs_destination.var:rs_programme } }
+			every_scope_state = {
+				limit = { has_variable = rs_elig }
+				remove_variable = rs_elig
+			}
+			set_variable = { name = rs_elig_code value = scope:rs_destination.var:rs_programme }
+		}
+		every_scope_state = {
+			limit = {
+				NOT = { this = scope:rs_destination }
+				NOT = { has_building = building_resettlement_colony }
+				NOT = { has_variable = rs_elig }
+			}
+			set_variable = { name = rs_elig value = resettlement_state_eligible_pop }
+		}
 		ordered_scope_state = {
 			limit = {
 				has_decree = decree_resettlement_recruitment_drive
-				resettlement_valid_source = yes
+				resettlement_valid_source_counted = yes
 			}
-			order_by = resettlement_state_eligible_pop
+			order_by = var:rs_elig
 			min = 0
 			max = 199
 			check_range_bounds = no
-			resettlement_take_from_source = { CAP = resettlement_drive_pop_cap }
+			if = {
+				limit = { scope:rs_destination.var:rs_remaining >= resettlement_min_take }
+				resettlement_take_from_source = { CAP = resettlement_drive_pop_cap }
+			}
 		}
 		ordered_scope_state = {
 			limit = {
 				NOT = { has_decree = decree_resettlement_recruitment_drive }
-				resettlement_valid_source = yes
+				resettlement_valid_source_counted = yes
 			}
-			order_by = resettlement_state_eligible_pop
+			order_by = var:rs_elig
 			min = 0
 			max = 199
 			check_range_bounds = no
-			resettlement_take_from_source = { CAP = resettlement_pop_cap }
+			if = {
+				limit = { scope:rs_destination.var:rs_remaining >= resettlement_min_take }
+				resettlement_take_from_source = { CAP = resettlement_pop_cap }
+			}
 		}
 	}
 

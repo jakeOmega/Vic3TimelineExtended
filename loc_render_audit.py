@@ -1,4 +1,4 @@
-"""Lints localization values for render-breaking bracket-style formatting tags.
+"""Lints localization values for markup that breaks or bleeds when rendered.
 
 **Bracket-style formatting tags** — `[b] [/b] [i] [/i] [u] [/u]` and any `[/x]`
 closing-tag form (Markdown / BBCode muscle memory). Vic3 has no such tags; the
@@ -32,6 +32,12 @@ argument is a plain string literal and substituted text is not escaped, so a
   "Women's Integration" ended the literal. Write `’` (U+2019), as vanilla does.
 
 Both fixed 2026-09-25 (20 instances); both are mod-clean regression guards.
+From 1.15 every `$key$` in a quoted argument must carry the `q` flag
+(`$key|q$`, check 9 of `scripts/analysis/check_localization_files.py`), which
+presumably escapes what it pastes. Whether that makes a `[` or `'` safe is not
+yet seen in game, so both checks stay. Vanilla 1.15's add-modifier tooltip
+also moved the name out of the quotes
+(`GetRawTextTooltipTag('$ADD_MODIFIER_BREAKDOWN|q$')] $MODIFIER_NAME$`).
 
 **Article-instance scope in a treaty article's type text**
 (`article_desc_scope`) — `[SOURCE_COUNTRY…]`, `[TARGET_COUNTRY…]`,
@@ -61,12 +67,91 @@ checks are vanilla- and mod-clean today (0 findings); they are regression guards
 re-introducing the known lag bug and the 2026-09-20 cultural-hegemony
 widget-status breakage.
 
-Note on scope: issue #134 also proposed flagging unbalanced `#…#!` formatting
-runs, but an empirical sweep found 2341 "violations" across vanilla loc
-(1.15M values) — Vic3 legitimately splits formatting across concatenated loc
-fragments (`#R` opened in one key, `#!` reset in another) and tolerates `#!#!`
-double-resets, so a balance check does not match engine behavior. That check
-was dropped as unshippable; see the issue thread.
+**Formatting tags left open** (`unclosed_format`, issue #266) — a `#bold`,
+`#v`, `#R` … opened and never closed with `#!` in the same value. The format
+runs on to the end of the text the value is part of, through whatever a
+`$key$` reference or a concatenation puts after it. The mod's `GDPPERCAPITA`
+line shipped that way, `…@money!#bold $GDP_per_capita$/…|2*]` with no `#!`,
+until #261.
+
+The grammar, read off the 12,705 of vanilla's 108,112 English values that
+hold a `#`:
+
+- `#!` closes one tag, the innermost. Two tags need two (`#r #b …#!#!`), and
+  `#tooltippable #tooltip:TAG,key #v x#!#!#!` needs three.
+- `##` is a literal `#` (vanilla's `BUILDING_RANK` writes
+  `##[Building.GetProfitabilityRankInType]` for "#3"). It opens nothing.
+- A `#` before a letter, `_`, `[` or `$` opens a tag. Its header runs to the
+  next space, newline escape, `#` or the end of the value, through any
+  `[...]` inside it, and is one tag whatever it combines: `#bold;red`,
+  `#indent_newline:3`, `#tooltippable;tooltip:[GetPlayer.GetTooltipTag],my_tt`.
+  `#[GetX]` and `#$COLOR$` are tags whose name is computed.
+- Everything inside a `[...]` data expression is skipped, so a `#v …#!` in a
+  quoted argument is the data function's business. Quotes are tracked there,
+  so a `]` in a quoted argument does not end the expression.
+- A `#!` with nothing open is ignored. Vanilla writes defensive `#!#!`, and a
+  closing fragment is the other half of an opening one.
+
+A value is flagged when a tag is still open at its end. That is stricter than
+counting openers against resets (`5#! then #b bold` counts as balanced) and
+never flags a surplus reset.
+
+Why this ships when #134's balance check did not. That check was measured on
+vanilla, counted both directions, and found 2341 "violations" across
+vanilla's eleven languages, because vanilla splits a run across keys: an
+`#indent_newline:3` left open so the effect lines the engine appends sit
+indented under it, a reset with nothing before it to close
+(`LAW_CATEGORIES_HEADER:0 "Legal Categories#!"`). Three things differ here.
+Vanilla is never judged: `audit()` reads the mod's own `localization/` only.
+A surplus `#!` is never flagged. And an opening fragment, the one split left,
+is rare enough in the mod to review key by key: seven values, all color
+prefixes that customizable localization returns
+(`gw_trend_prefix_warming:0 "#R +"`), each with a `# REVIEWED` naming who
+closes it.
+
+Vanilla's text is the evidence that the grammar reads tags as the game's
+writers do: 98.8% of its values with a `#` end with nothing open (1.15.1
+snapshot). Of the 157 that do not, 112 leave an `#indent_newline` open, 14
+end on the opener itself (event flavor ending `#italic`: the snapshot's loc
+reader stops a value at its first unescaped quote, so quoted flavor after
+the tag is cut off), and 31 are slips (`concept_recovery_rate_desc` never
+closes its `#b`) or more such cuts.
+That share is a coarse sanity bound, not the grammar's proof:
+`VanillaFormatTagCalibrationTests` fails if the scanner flags a large share
+of vanilla or stops reading `##` as literal, but a scanner that skipped no
+`[...]` or let one `#!` close every tag would stay inside it. The unit cases
+in `FormatTagTests` are what pin each rule.
+
+Known limits. A `$key$` or `[X.GetCustom('y')]` that pastes an opening
+fragment is not followed, so a caller that forgets the `#!` for a reviewed
+fragment is not caught. A `[` that never closes, or an odd apostrophe inside
+`[...]`, makes the scan skip the rest of the value.
+
+**A format vanilla's loc never uses** (`unknown_format`, #1698) — a tag
+whose format name no value of vanilla's English loc opens, in any case (the
+committed `vanilla_parsed/` snapshot; without it the check is off), so `#bolt
+x#!` no longer passes. The formats are defined in the install's
+`game/gui/textformatting.gui` and `jomini/gui/jomini/basetextformatting.gui`,
+which the repo does not hold, so vanilla's own use stands in for them. The
+engine matches a format name whatever its case: those files define only `V`,
+`R` and `O` (gold), and vanilla's loc writes `#v` 3,880 times, `#r` 183 and
+`#o` 3 (1.15.1). A name the files define that vanilla's loc never writes
+(`#purple`, `#cyan`) is flagged all the same; its `# REVIEWED` comment names
+the file that defines it.
+
+A tag left open may be a literal hash that was never doubled: `Rank #$RANK$`,
+`#[X.GetRank]`, `the #MeToo movement`. Adding the `#!` would pass the audit
+and leave the text wrong, so the flag says to write `##` instead when the
+tag's name is computed or is one no value in the mod closes.
+
+**A `#` that is not a tag** (`bare_hash`, #266) — a `#` before a digit, a
+space, punctuation or the end of the value, which is none of the three forms
+above. Vanilla writes every literal hash as `##`; its four bare ones are all
+slips (two settings tooltips ending `#` for `#!`, `#b not# have`, a stray
+`# ` bullet). What the engine draws for one has not been seen in game, so the
+fix is the form known to work: `##`. The mod had three (the cultural board's
+`#` column head, a debug panel's "Snapshot #", an issue number in a debug
+event), fixed with the check.
 
 Suppress an intentional flag with a trailing comment on the loc line — the
 engine ignores anything after the closing quote:
@@ -76,13 +161,22 @@ engine ignores anything after the closing quote:
 import json
 import os
 import re
+from collections.abc import Iterable
 from dataclasses import dataclass, field
+from typing import NamedTuple
+
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
+from mod_state import split_loc_line
 
 
 @dataclass
 class RenderFlag:
     loc_key: str
-    issue: str  # "bracket_tag" | "nested_brackets" | "quoted_arg_expansion" | "quoted_name_apostrophe" | "article_desc_scope"
+    # "bracket_tag" | "nested_brackets" | "quoted_arg_expansion" |
+    # "quoted_name_apostrophe" | "article_desc_scope" | "unclosed_format" | "bare_hash" |
+    # "unknown_format"
+    issue: str
     detail: str
     file: str
     line: int
@@ -90,15 +184,12 @@ class RenderFlag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[RenderFlag] = field(default_factory=list)
     loc_files_scanned: int = 0
     values_checked: int = 0
 
 
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
-)
 # `[b] [i] [u]` and their closing forms, plus any other `[/x]` closing tag.
 # Valid Vic3 loc never opens a bare single-letter bracket nor uses a `[/` slash;
 # accessor chains are `[Scope.Method]` and concept links are `[concept_x]`.
@@ -128,7 +219,219 @@ def _nested_bracket_offsets(value: str) -> list[int]:
     return offsets
 
 
-_LOC_REF_RE = re.compile(r"\$([A-Za-z0-9_.]+)\$")
+# What may follow the `#` that opens a formatting tag: a format name, or a
+# data expression / `$PARAM$` that computes one.
+_TAG_START = frozenset("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_[$")
+
+
+def _skip_data_expr(value: str, start: int) -> int:
+    """`value[start]` is a `[`: return the offset just past the `]` that
+    closes it, or `len(value)` if nothing does. Quotes are tracked, so a
+    bracket inside a quoted argument is text."""
+    depth = 0
+    in_quote = False
+    for i in range(start, len(value)):
+        ch = value[i]
+        if ch == "'":
+            in_quote = not in_quote
+        elif in_quote:
+            continue
+        elif ch == "[":
+            depth += 1
+        elif ch == "]":
+            depth -= 1
+            if depth == 0:
+                return i + 1
+    return len(value)
+
+
+def _tag_header_end(value: str, start: int) -> int:
+    """Offset where the tag header that starts at `value[start]` (the
+    character after its `#`) ends: the next whitespace, backslash escape
+    (`\\n`) or `#`, outside any `[...]`."""
+    i = start
+    n = len(value)
+    while i < n:
+        ch = value[i]
+        if ch == "[":
+            i = _skip_data_expr(value, i)
+        elif ch.isspace() or ch in "#\\":
+            break
+        else:
+            i += 1
+    return i
+
+
+class TagScan(NamedTuple):
+    open_tags: list[str]
+    """Headers of the tags still open at the end of the value, outermost first."""
+    bare: list[int]
+    """Offset of every `#` that is neither a tag, a `#!` nor a `##`."""
+    closed: list[str]
+    """Headers of the tags a `#!` closed, in the order they closed."""
+
+
+def scan_format_tags(value: str) -> TagScan:
+    """Walk one loc value's formatting tags. The grammar is in the module
+    docstring."""
+    open_tags: list[str] = []
+    bare: list[int] = []
+    closed: list[str] = []
+    i = 0
+    n = len(value)
+    while i < n:
+        ch = value[i]
+        if ch == "[":
+            i = _skip_data_expr(value, i)
+            continue
+        if ch != "#":
+            i += 1
+            continue
+        nxt = value[i + 1: i + 2]
+        if nxt == "#":
+            i += 2
+        elif nxt == "!":
+            if open_tags:
+                closed.append(open_tags.pop())
+            i += 2
+        elif nxt in _TAG_START:
+            end = _tag_header_end(value, i + 1)
+            open_tags.append(value[i:end])
+            i = end
+        else:
+            bare.append(i)
+            i += 1
+    return TagScan(open_tags, bare, closed)
+
+
+_FORMAT_NAME_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
+
+
+def _format_names(header: str, keep_case: bool = False) -> list[str]:
+    """The format names a tag header combines, lower-cased unless
+    `keep_case`: `#bold;red` is bold and red, `#tooltippable;tooltip:[X],key`
+    tooltippable and tooltip. A computed header (`#[GetX]`, `#$COLOR$`) has
+    none."""
+    names = []
+    for part in header[1:].split(";"):
+        m = _FORMAT_NAME_RE.match(part)
+        if m:
+            names.append(m.group(0) if keep_case else m.group(0).lower())
+    return names
+
+
+def used_format_names(values: Iterable[str]) -> set[str]:
+    """Every format name, lower-cased (the engine ignores the case), that a
+    tag in `values` opens, closed or not."""
+    names: set[str] = set()
+    for value in values:
+        if "#" in value:
+            scan = scan_format_tags(value)
+            for header in scan.closed + scan.open_tags:
+                names.update(_format_names(header))
+    return names
+
+
+_VANILLA_LOC_JSON = os.path.join("vanilla_parsed", "localization_english.json")
+
+
+def vanilla_format_names(mod_path: str) -> set[str] | None:
+    """used_format_names over vanilla's English loc, from the committed
+    `vanilla_parsed/` snapshot under `mod_path`; None without one (a temp-dir
+    test tree), which turns the `unknown_format` check off."""
+    try:
+        with open(os.path.join(mod_path, _VANILLA_LOC_JSON), encoding="utf-8") as fh:
+            loc = json.load(fh)
+    except (OSError, ValueError):
+        return None
+    return used_format_names(loc.values())
+
+
+def closed_tag_names(values: Iterable[str]) -> set[str]:
+    """Every format name that some value opens and closes. A name left open
+    that no value closes anywhere (`#MeToo`) is more likely a literal hash
+    than a format."""
+    names: set[str] = set()
+    for value in values:
+        if "#" in value:
+            for header in scan_format_tags(value).closed:
+                names.update(_format_names(header))
+    return names
+
+
+def _short_tag(header: str) -> str:
+    return header if len(header) <= 32 else header[:29] + "..."
+
+
+def _tag_list(headers: list[str]) -> str:
+    return ", ".join(f"`{_short_tag(h)}`" for h in headers)
+
+
+def check_format_tags(value: str, known_tags: set[str] | None = None,
+                      vanilla_names: set[str] | None = None) -> list[tuple[str, str]]:
+    """Flag a formatting tag left open at the end of the value, a `#` that
+    is neither a tag, a `#!` nor a `##`, and, given `vanilla_names`
+    (vanilla_format_names), a tag naming a format vanilla's loc never uses.
+    Pure; unit-testable.
+
+    `known_tags` is `closed_tag_names()` over the mod's loc. With it, a tag
+    left open whose name no value closes gets the literal-hash hint that a
+    computed name always gets: `Rank #$RANK$` and `the #MeToo movement` want
+    `##`, and adding the `#!` the plain hint asks for would pass the audit
+    and leave the text wrong."""
+    if "#" not in value:
+        return []
+    out: list[tuple[str, str]] = []
+    scan = scan_format_tags(value)
+    if scan.open_tags:
+        detail = (
+            f"{_tag_list(scan.open_tags)} opened and never closed: the format "
+            "runs on into whatever follows this value in the same text. Each "
+            "tag needs its own `#!`. If this value is an opening fragment "
+            "that its caller closes, say who closes it in a `# REVIEWED` "
+            "comment."
+        )
+        computed = [t for t in scan.open_tags if t[1] in "[$"]
+        unknown = [] if known_tags is None else [
+            t for t in scan.open_tags
+            if t[1] not in "[$" and not set(_format_names(t)[:1]) <= known_tags
+        ]
+        if computed:
+            detail += f" Computed tag name: {_tag_list(computed)}."
+        if unknown:
+            detail += f" No value in the mod closes a tag of this name: {_tag_list(unknown)}."
+        if computed or unknown:
+            detail += " If a literal `#` was meant, write `##`"
+        out.append(("unclosed_format", detail.rstrip(".")))
+    if scan.bare:
+        at = scan.bare[0]
+        snippet = value[max(0, at - 12): at + 12]
+        out.append((
+            "bare_hash",
+            f"a `#` that is not a tag, a `#!` or a `##` at offset {at} "
+            f"(`{snippet}`). Write a literal hash as `##`, as vanilla does",
+        ))
+    if vanilla_names is not None:
+        # Compared lower-cased, as the engine matches them (`#v` is `V`).
+        unknown: list[str] = []
+        for header in scan.closed + scan.open_tags:
+            unknown += [n for n in _format_names(header, keep_case=True)
+                        if n.lower() not in vanilla_names and n not in unknown]
+        if unknown:
+            out.append((
+                "unknown_format",
+                ", ".join(f"`#{n}`" for n in unknown)
+                + (" names a format" if len(unknown) == 1 else " name formats")
+                + " no value of vanilla's English loc opens, in any case, so whether the engine "
+                "defines " + ("it" if len(unknown) == 1 else "them") + " is unverified. Use a "
+                "format vanilla writes, or, for one the install's `gui/textformatting.gui` defines, "
+                "say so in a `# REVIEWED` comment",
+            ))
+    return out
+
+
+# `$key$`, or `$key|flags$` (`$key|q$` in a quoted argument from 1.15).
+_LOC_REF_RE = re.compile(r"\$([A-Za-z0-9_.]+)(?:\|[^$]*)?\$")
 _CONCEPT_DISPLAY_RE = re.compile(
     r"\[Concept\(\s*'[^']*'\s*,\s*'([^']*)'\s*\)\]"
 )
@@ -337,39 +640,26 @@ def check_article_scope(value: str, article: str, suffix: str) -> list[tuple[str
     )]
 
 
-def _parse_reviewed(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
-
-
 def _parse_loc_line(raw: str) -> tuple[str, str, str] | None:
     """Returns (key, value, trailing-after-closing-quote) or None.
 
-    Mirrors `concept_reference_audit._parse_loc_line`. The trailing segment is
-    where `# REVIEWED …` suppression comments live.
+    `mod_state.split_loc_line`, the rule `ModState.add_localization` and the
+    other loc audits read a line by: the value ends at its first quote that
+    is not escaped. The trailing segment is where `# REVIEWED …` suppression
+    comments live. Until #266 this took the value up to the last quote on the
+    line, so a comment that quoted something (`…writes "#!" after`) was read
+    as part of the value and the exemption was lost. The two rules agree on
+    every line of the mod's loc, where `check_localization_files.py` has
+    every inner quote escaped.
     """
-    line = raw.rstrip("\n")
-    stripped = line.lstrip()
-    if not stripped or stripped.startswith("#") or ":" not in stripped:
-        return None
-    key, rest = line.split(":", 1)
-    key = key.strip()
-    if not key:
-        return None
-    quote_locations = [i for i, c in enumerate(rest) if c == '"']
-    if len(quote_locations) < 2:
-        return None
-    value = rest[quote_locations[0] + 1: quote_locations[-1]]
-    trailing = rest[quote_locations[-1] + 1:]
-    return key, value, trailing
+    return split_loc_line(raw)
 
 
-def check_value(value: str) -> list[tuple[str, str]]:
-    """Return [(issue, detail)] for one loc value. Pure; unit-testable."""
+def check_value(value: str, known_tags: set[str] | None = None,
+                vanilla_names: set[str] | None = None) -> list[tuple[str, str]]:
+    """Return [(issue, detail)] for one loc value. Pure; unit-testable.
+    `known_tags` only sharpens the `unclosed_format` hint, and `vanilla_names`
+    turns on `unknown_format` (check_format_tags)."""
     out: list[tuple[str, str]] = []
     brackets = _BRACKET_FMT_RE.findall(value)
     if brackets:
@@ -389,6 +679,7 @@ def check_value(value: str) -> list[tuple[str, str]]:
             f"(`{snippet}`) — the loc parser does not nest; pass data-function "
             "arguments as bare expressions",
         ))
+    out += check_format_tags(value, known_tags, vanilla_names)
     return out
 
 
@@ -427,12 +718,14 @@ def audit(ms=None, mod_path: str | None = None) -> AuditResult:
                 pass
 
     loc_values = {key: value for key, value, _t, _f, _l in entries}
+    known_tags = closed_tag_names(value for _k, value, _t, _f, _l in entries)
+    vanilla_names = vanilla_format_names(mod_path)
     quoted_names = _quoted_name_keys(mod_path)
     articles = _treaty_article_keys(mod_path)
 
     flags: list[RenderFlag] = []
     for loc_key, value, trailing, rel_p, line in entries:
-        issues = check_value(value) + check_quoted_expansion(value, loc_values)
+        issues = check_value(value, known_tags, vanilla_names) + check_quoted_expansion(value, loc_values)
         if loc_key in quoted_names:
             issues += check_quoted_name(value, loc_values)
         article_text = article_type_text_key(loc_key, articles)
@@ -440,7 +733,7 @@ def audit(ms=None, mod_path: str | None = None) -> AuditResult:
             issues += check_article_scope(value, *article_text)
         if not issues:
             continue
-        exemption = _parse_reviewed(trailing)
+        exemption = parse_reviewed(trailing)
         for issue, detail in issues:
             flags.append(RenderFlag(
                 loc_key=loc_key,
@@ -464,12 +757,15 @@ _ISSUE_LABEL = {
     "quoted_arg_expansion": "`$key$` expanding [ or ' into a quoted argument",
     "quoted_name_apostrophe": "Straight apostrophe in a modifier name",
     "article_desc_scope": "Article-instance scope in a treaty article's `_desc` / `_effects_desc`",
+    "unclosed_format": "Formatting tags left open (`#bold` with no `#!`)",
+    "bare_hash": "A `#` that is not a tag (write `##`)",
+    "unknown_format": "A format vanilla's loc never uses (`#bolt` for `#bold`)",
 }
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
 
     out = [
         "# Localization render audit report",
@@ -500,6 +796,18 @@ def render_report(result: AuditResult) -> str:
         "or `_effects_desc`. That text renders with no article instance behind it,",
         "so the scope promotes to nullptr and shows blank. Fix: keep it scope-free",
         "and move scoped text into `<article>_article_short_desc`.",
+        "",
+        "Also flagged: a formatting tag (`#bold`, `#v`, `#R`, …) still open at",
+        "the end of its value, so the format runs on into whatever follows the",
+        "value in the same text. Each tag needs its own `#!`; a surplus `#!` is",
+        "not flagged. Fix: close it. An opening fragment that its caller closes",
+        "(a color prefix from customizable localization) takes a `# REVIEWED`",
+        "naming the caller. And a `#` that is neither a tag, a `#!` nor a `##`.",
+        "Fix: write a literal hash as `##`.",
+        "",
+        "Also flagged: a tag naming a format that no value of vanilla's",
+        "English loc opens, in any case, so it may not render (`#bolt`).",
+        "Fix: use a format vanilla writes.",
         "",
         "Suppress an intentional flag with a trailing comment on the loc line:",
         "`my_loc_key:0 \"…\" # REVIEWED YYYY-MM-DD: rationale`",
@@ -554,12 +862,9 @@ def regenerate(mod_state=None) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
     report = render_report(result)
-    out_path = os.path.join(mod_path, "docs", "engine", "loc_render_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(report)
-    unrev = sum(1 for f in result.flags if not f.exemption)
-    exemp = sum(1 for f in result.flags if f.exemption)
+    write_text(os.path.join(mod_path, "docs", "engine", "loc_render_report.md"), report)
+    unrev = len(result.unreviewed)
+    exemp = len(result.exemptions)
     return {
         "loc_files_scanned": result.loc_files_scanned,
         "values_checked": result.values_checked,
@@ -569,12 +874,13 @@ def regenerate(mod_state=None) -> dict:
     }
 
 
-if __name__ == "__main__":
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 if any flag lacks a
+    `# REVIEWED ...` exemption."""
     from path_constants import mod_path
-    result = audit(mod_path=mod_path)
-    print(render_report(result))
-    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ...` exemption.
-    if "--strict" in sys.argv:
-        raise SystemExit(1 if any(not f.exemption for f in result.flags) else 0)
+    return cli_main(lambda args: audit(mod_path=mod_path), lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

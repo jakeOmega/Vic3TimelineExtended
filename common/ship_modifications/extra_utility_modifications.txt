@@ -4,7 +4,9 @@
 # Each is the successor of a base-game utility on the same stat: unlocked later,
 # stronger on every stat the two share, and more goods (design:
 # docs/superpowers/specs/2026-11-03-ship-module-scaling-design.md;
-# test_ship_modules.py checks all three). A ship can't fit a successor beside its
+# test_ship_modules.py checks all three). Vanilla 1.15 raised its utilities' goods
+# 21-26x (Large Carronades 9x); each successor's goods rose by the largest factor any of
+# its predecessors took, so it keeps its margin. A ship can't fit a successor beside its
 # predecessor because every mod ship lists the two in the same utility slot, and
 # a slot holds one module (the test checks that too). Don't use incompatible_with
 # here: on a ship modification the engine reads the documented bare form
@@ -12,7 +14,15 @@
 # the next closing brace (the modifier block) and logs "Failed to read key
 # reference" in debug.log; the module keeps its goods and loses its effects. Effects are percentages wherever every
 # ship that mounts the module has a proportional base; screening and detection
-# stay flat, because capitals carry 10-30 screening and escorts 250-700.
+# stay flat, because capitals carry 5-15 screening and escorts 140-390. The two
+# flat screening values (DEW Point Defense, Aegis Air Defense: 111) and Unmanned
+# Aerial Vehicles' +28 follow the light cruiser's 1.14.5 screening rescale
+# (270 -> 150) from their old 200 and 50 (#1625; header of extra_ship_types.txt).
+# The two vulnerability reducers are sized as a ship's share of vanilla's Torpedo
+# Nets ship: a capital with the Close-In Weapon System keeps 80% of the
+# vulnerability one with Torpedo Nets keeps, with DEW Point Defense 60%. Vanilla
+# 1.15 halved Torpedo Nets (-0.5 -> -0.25), so CIWS went -0.60 -> -0.40 and DEW
+# -0.70 -> -0.55 (#1682); test_ship_modules.py pins the ratio to the snapshot.
 #
 # Roles decide the slot a module goes in on a mod ship (extra_ship_types.txt):
 #   protection      hull and crew damage taken (the base game's Extended Sick
@@ -51,8 +61,8 @@ utility_mod_damage_control_teams = {
 	}
 
 	construction_goods = {
-		goods_input_tools_add = 6
-		goods_input_steel_add = 6
+		goods_input_tools_add = 150
+		goods_input_steel_add = 150
 	}
 
 	ai_weight = {
@@ -76,8 +86,8 @@ utility_mod_composite_armor_plating = {
 	}
 
 	construction_goods = {
-		goods_input_steel_add = 12
-		goods_input_advanced_materials_add = 1
+		goods_input_steel_add = 300
+		goods_input_advanced_materials_add = 25
 	}
 
 	ai_weight = {
@@ -98,12 +108,12 @@ utility_mod_ciws = {
 
 	modifier = {
 		ship_suffered_accuracy_mult = -0.20
-		ship_vulnerability_mult = -0.60
+		ship_vulnerability_mult = -0.40
 	}
 
 	construction_goods = {
-		goods_input_electronic_components_add = 8
-		goods_input_ammunition_add = 8
+		goods_input_electronic_components_add = 210
+		goods_input_ammunition_add = 210
 	}
 
 	ai_weight = {
@@ -126,8 +136,8 @@ utility_mod_electronic_countermeasures = {
 	}
 
 	construction_goods = {
-		goods_input_electronic_components_add = 12
-		goods_input_radios_add = 4
+		goods_input_electronic_components_add = 250
+		goods_input_radios_add = 84
 	}
 
 	ai_weight = {
@@ -146,13 +156,13 @@ utility_mod_dew_point_defense = {
 
 	modifier = {
 		ship_suffered_accuracy_mult = -0.35
-		ship_vulnerability_mult = -0.70
-		ship_screening_add = 200
+		ship_vulnerability_mult = -0.55
+		ship_screening_add = 111
 	}
 
 	construction_goods = {
-		goods_input_electronic_components_add = 12
-		goods_input_steel_add = 8
+		goods_input_electronic_components_add = 310
+		goods_input_steel_add = 210
 	}
 
 	ai_weight = {
@@ -177,8 +187,8 @@ utility_mod_precision_warheads = {
 	}
 
 	construction_goods = {
-		goods_input_explosives_add = 8
-		goods_input_electronic_components_add = 6
+		goods_input_explosives_add = 175
+		goods_input_electronic_components_add = 130
 	}
 
 	ai_weight = {
@@ -201,8 +211,8 @@ utility_mod_ballistic_missile_bay = {
 	}
 
 	construction_goods = {
-		goods_input_ammunition_add = 12
-		goods_input_explosives_add = 6
+		goods_input_ammunition_add = 250
+		goods_input_explosives_add = 125
 	}
 
 	ai_weight = {
@@ -226,8 +236,8 @@ utility_mod_drone_complement = {
 	}
 
 	construction_goods = {
-		goods_input_electronic_components_add = 12
-		goods_input_radios_add = 6
+		goods_input_electronic_components_add = 290
+		goods_input_radios_add = 145
 	}
 
 	ai_weight = {
@@ -246,15 +256,15 @@ utility_mod_aegis_air_defense = {
 
 	modifier = {
 		ship_readiness_gain_mult = 0.20
-		ship_screening_add = 200
+		ship_screening_add = 111
 		ship_battle_against_ship_type_guided_missile_ship_accuracy_mult = 0.40
 		ship_battle_against_ship_type_arsenal_ship_accuracy_mult = 0.40
 		ship_battle_against_ship_type_hypersonic_missile_platform_accuracy_mult = 0.40
 	}
 
 	construction_goods = {
-		goods_input_electronic_components_add = 10
-		goods_input_radios_add = 5
+		goods_input_electronic_components_add = 260
+		goods_input_radios_add = 130
 	}
 
 	ai_weight = {
@@ -275,11 +285,11 @@ utility_mod_surface_search_radar = {
 
 	modifier = {
 		ship_battle_condition_accuracy_penalty_mult = -0.75
-		ship_detection_mult = 0.50
+		ship_detection_mult = 1.0
 	}
 
 	construction_goods = {
-		goods_input_radios_add = 10
+		goods_input_radios_add = 240
 	}
 
 	ai_weight = {
@@ -334,8 +344,8 @@ utility_mod_helicopter_pad = {
 	}
 
 	construction_goods = {
-		goods_input_steel_add = 6
-		goods_input_aeroplanes_add = 4
+		goods_input_steel_add = 155
+		goods_input_aeroplanes_add = 105
 	}
 
 	ai_weight = {

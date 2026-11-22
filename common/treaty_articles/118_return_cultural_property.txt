@@ -16,8 +16,9 @@ return_cultural_property = {  # REVIEWED 2026-11-03 (involvement): a one-off con
 	cost = 50
 
 	flags = {
+		show_in_lens
 		can_be_enforced
-		giftable
+		giftable		is_one_time
 	}
 
 	usage_limit = once_per_side
@@ -25,6 +26,13 @@ return_cultural_property = {  # REVIEWED 2026-11-03 (involvement): a one-off con
 	# The country receiving its property back (target) pays, as vanilla's
 	# demands and gifts do (owner, 2026-10-12; the source paid).
 	maintenance_paid_by = target_country
+
+	# Lens (1.15 show_in_lens flag): the world-wide half of `visible`, so the
+	# article leaves the lens when its system is off. The rest of `visible`
+	# reads the viewer as the source, which the lens viewer need not be.
+	show_in_lens = {
+		gm_system_enabled = yes
+	}
 
 	# Shown only where there is something to return (owner, 2026-10-23): the
 	# prospective source holds a trophy whose origin the other country owns, as
@@ -89,6 +97,8 @@ return_cultural_property = {  # REVIEWED 2026-11-03 (involvement): a one-off con
 				add = 0.02
 			}
 		}
+
+		# REVIEWED 2026-11-08 (ai_demand_weight): no proposal_weight or wargoal_score_multiplier. possible already holds the demand's worth: the holder (ROOT) must have a trophy from the claimant's lands, so the article can't be demanded where it would return nothing.
 
 		inherent_accept_score = {
 			value = 0

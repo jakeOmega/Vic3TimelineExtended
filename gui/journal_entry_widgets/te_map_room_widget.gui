@@ -1,0 +1,48 @@
+﻿### The Map Room's page (je_te_map_room, common/journal_entries/te_journal_maps.txt; journal_map_modes.md).
+###
+###   widget_je_te_map_room   custom_widget_container_1 (above the description)
+###     The options in force, while any is off its default (te_jmap_options_set): one line under the heading.
+###     The picks (te_jmap_pick_row, gui/te_map_widgets.gui): one button per map, the current one pressed.
+###     The options (te_jmap_options, the same file): Area and Outliers, one collapsed section below the picks.
+###
+### The Map Room is contextless and nobody is involved in it, so its own scripted buttons would be locked; these are
+### GUI buttons calling scripted GUIs with the player as root. A widget draws on such a page (play-test check 1,
+### 2026-11-05).
+
+flowcontainer = {
+	name = "widget_je_te_map_room"
+	visible = "[JournalEntry.IsActive]"
+	direction = vertical
+	parentanchor = hcenter
+	ignoreinvisible = yes
+	spacing = 4
+	margin_top = 6
+	margin_bottom = 6
+
+	textbox = {
+		parentanchor = hcenter
+		autoresize = yes
+		multiline = yes
+		max_width = 500
+		align = center|nobaseline
+		text = "te_jmap_room_pick_heading"
+	}
+
+	### A map limited to one continent looks broken to someone who forgot they set it, and the options' own section
+	### may be closed or below the open groups, so the page says it here, at the top, while an option is off its
+	### default. The tooltip says where to change it.
+	textbox = {
+		parentanchor = hcenter
+		autoresize = yes
+		multiline = yes
+		max_width = 500
+		align = center|nobaseline
+		visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_options_set'), '(CFixedPoint)1' )]"
+		text = "te_jmap_options_in_use"
+		tooltip = "te_jmap_options_in_use_tt"
+	}
+
+	te_jmap_pick_row = {}
+
+	te_jmap_options = {}
+}

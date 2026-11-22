@@ -52,7 +52,7 @@ te_demog_lx_market_diffusion = {
 	if = { limit = { has_technology_researched = telemedicine } add = 0.05 }
 	if = { limit = { has_technology_researched = world_wide_web } add = 0.05 }
 	if = {
-		limit = { je:je_united_nations ?= { has_modifier = un_pandemic_cooperation_modifier } }
+		limit = { has_variable = un_pandemic_cooperation_modifier_on }
 		add = {
 			value = 0.05
 			multiply = un_convention_multiplier

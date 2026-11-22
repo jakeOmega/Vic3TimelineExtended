@@ -1,0 +1,215 @@
+{
+ "recorded_on": "4713b73d3",
+ "responses": {
+  "400 origin without name": {
+   "body": "{\n  \"error\": \"Usage: /engine-docs/origin/<name>\"\n}",
+   "path": "/engine-docs/origin",
+   "status": 400
+  },
+  "400 two name segments": {
+   "body": "{\n  \"error\": \"Usage: /engine-docs/effects/<name> (one name segment).\"\n}",
+   "path": "/engine-docs/effects/a/b",
+   "status": 400
+  },
+  "400 usage invalid name": {
+   "body": "{\n  \"name\": \"Not-Valid\",\n  \"error\": \"Invalid target name (expected snake_case identifier).\",\n  \"uses\": []\n}",
+   "path": "/engine-docs/usage/Not-Valid",
+   "status": 400
+  },
+  "400 usage without name": {
+   "body": "{\n  \"error\": \"Usage: /engine-docs/usage/<name>?limit=N&include_defs=true\"\n}",
+   "path": "/engine-docs/usage",
+   "status": 400
+  },
+  "404 defined_in_types": {
+   "body": "{\n  \"error\": \"Not found: 'effects/has_modifier'\",\n  \"hint\": \"GET /engine-docs/origin/<name> searches every doc type; /engine-docs/usage/<name> finds vanilla call sites.\",\n  \"did_you_mean\": [\n    \"add_modifier\"\n  ],\n  \"defined_in_types\": [\n    \"triggers\"\n  ]\n}",
+   "path": "/engine-docs/effects/has_modifier",
+   "status": 404
+  },
+  "404 did_you_mean": {
+   "body": "{\n  \"error\": \"Not found: 'effects/add_modifer'\",\n  \"hint\": \"GET /engine-docs/origin/<name> searches every doc type; /engine-docs/usage/<name> finds vanilla call sites.\",\n  \"did_you_mean\": [\n    \"add_modifier\"\n  ],\n  \"defined_in_types\": []\n}",
+   "path": "/engine-docs/effects/add_modifer",
+   "status": 404
+  },
+  "404 unknown type": {
+   "body": "{\n  \"error\": \"Not found: \\\"Unknown engine doc type: bogus. Available: ['effects', 'triggers', 'modifiers', 'event-targets', 'on-actions', 'broken']\\\"\",\n  \"hint\": \"GET /help for the endpoint inventory.\"\n}",
+   "path": "/engine-docs/bogus",
+   "status": 404
+  },
+  "500 entry with null scopes": {
+   "body": "{\n  \"error\": \"TypeError: 'NoneType' object is not iterable\"\n}",
+   "path": "/engine-docs/broken?scope=x",
+   "status": 500
+  },
+  "500 listing bad limit": {
+   "body": "{\n  \"error\": \"ValueError: invalid literal for int() with base 10: 'abc'\"\n}",
+   "path": "/engine-docs/effects?limit=abc",
+   "status": 500
+  },
+  "500 loc-functions bad min_count": {
+   "body": "{\n  \"error\": \"ValueError: invalid literal for int() with base 10: 'lots'\"\n}",
+   "path": "/engine-docs/loc-functions?min_count=lots",
+   "status": 500
+  },
+  "500 usage bad limit": {
+   "body": "{\n  \"error\": \"ValueError: invalid literal for int() with base 10: 'x'\"\n}",
+   "path": "/engine-docs/usage/te_target?limit=x",
+   "status": 500
+  },
+  "503 usage no vanilla common": {
+   "body": "{\n  \"name\": \"te_target\",\n  \"error\": \"Vanilla common dir not found: /nonexistent/te_server_split/game/common\",\n  \"uses\": []\n}",
+   "path": "/engine-docs/usage/te_target",
+   "status": 503
+  },
+  "group": {
+   "body": "{\n  \"type\": \"modifiers\",\n  \"grouped_patterns\": [\n    {\n      \"pattern\": \"building_{building}_throughput_add\",\n      \"count\": 2,\n      \"members\": [\n        \"building_iron_mine_throughput_add\",\n        \"building_steel_mill_throughput_add\"\n      ],\n      \"description\": \"\",\n      \"scopes\": [],\n      \"mask\": \"building\"\n    }\n  ],\n  \"ungrouped_count\": 2,\n  \"ungrouped\": [\n    {\n      \"name\": \"country_prestige_mult\",\n      \"origin\": \"vanilla\",\n      \"mask\": \"country\",\n      \"display_name\": \"Prestige\",\n      \"description\": \"\",\n      \"decimals\": 0\n    },\n    {\n      \"name\": \"state_te_bonus_add\",\n      \"origin\": \"mod\",\n      \"mask\": \"state\",\n      \"mod_redeclares\": true,\n      \"mod_redeclared_in\": [\n        \"common/modifier_type_definitions/te.txt\"\n      ],\n      \"is_boolean\": false\n    }\n  ],\n  \"truncated\": false\n}",
+   "path": "/engine-docs/modifiers?group=true",
+   "status": 200
+  },
+  "group limit": {
+   "body": "{\n  \"type\": \"modifiers\",\n  \"grouped_patterns\": [\n    {\n      \"pattern\": \"building_{building}_throughput_add\",\n      \"count\": 2,\n      \"members\": [\n        \"building_iron_mine_throughput_add\",\n        \"building_steel_mill_throughput_add\"\n      ],\n      \"description\": \"\",\n      \"scopes\": [],\n      \"mask\": \"building\"\n    }\n  ],\n  \"ungrouped_count\": 2,\n  \"ungrouped\": [],\n  \"truncated\": true\n}",
+   "path": "/engine-docs/modifiers?group=yes&limit=0",
+   "status": 200
+  },
+  "group without patterns": {
+   "body": "{\n  \"type\": \"modifiers\",\n  \"grouped_patterns\": [],\n  \"ungrouped_count\": 4,\n  \"ungrouped\": [\n    {\n      \"name\": \"country_prestige_mult\",\n      \"origin\": \"vanilla\",\n      \"mask\": \"country\",\n      \"display_name\": \"Prestige\",\n      \"description\": \"\",\n      \"decimals\": 0\n    },\n    {\n      \"name\": \"building_steel_mill_throughput_add\",\n      \"origin\": \"vanilla\",\n      \"mask\": \"building\",\n      \"display_name\": \"Steel Mill Throughput\",\n      \"description\": \"Throughput\"\n    },\n    {\n      \"name\": \"building_iron_mine_throughput_add\",\n      \"origin\": \"vanilla\",\n      \"mask\": \"building\"\n    },\n    {\n      \"name\": \"state_te_bonus_add\",\n      \"origin\": \"mod\",\n      \"mask\": \"state\",\n      \"mod_redeclares\": true,\n      \"mod_redeclared_in\": [\n        \"common/modifier_type_definitions/te.txt\"\n      ],\n      \"is_boolean\": false\n    }\n  ],\n  \"truncated\": false\n}",
+   "path": "/engine-docs/modifiers?group=1",
+   "status": 200
+  },
+  "index": {
+   "body": "{\n  \"available_types\": [\n    \"effects\",\n    \"triggers\",\n    \"modifiers\",\n    \"event-targets\",\n    \"on-actions\",\n    \"broken\"\n  ],\n  \"counts\": {\n    \"effects\": 3,\n    \"triggers\": 2,\n    \"modifiers\": 4,\n    \"event-targets\": 2,\n    \"on-actions\": 0,\n    \"broken\": 1\n  },\n  \"source_label\": \"vanilla_snapshot\"\n}",
+   "path": "/engine-docs",
+   "status": 200
+  },
+  "listing": {
+   "body": "{\n  \"type\": \"effects\",\n  \"count\": 3,\n  \"returned\": 3,\n  \"truncated\": false,\n  \"entries\": [\n    {\n      \"name\": \"add_modifier\",\n      \"origin\": \"vanilla\",\n      \"description\": \"Adds a modifier\",\n      \"example\": \"add_modifier = { name = x }\",\n      \"traits\": \"\",\n      \"scopes\": [\n        \"country\",\n        \"state\"\n      ],\n      \"targets\": []\n    },\n    {\n      \"name\": \"te_effect\",\n      \"origin\": \"mod\",\n      \"description\": \"A mod effect\",\n      \"scopes\": [\n        \"state\"\n      ]\n    },\n    {\n      \"name\": \"set_variable\",\n      \"origin\": \"vanilla\",\n      \"description\": \"Sets a variable\",\n      \"scopes\": [\n        \"none\"\n      ],\n      \"reads\": \"Reads nothing.\"\n    }\n  ]\n}",
+   "path": "/engine-docs/effects",
+   "status": 200
+  },
+  "listing empty type": {
+   "body": "{\n  \"type\": \"on-actions\",\n  \"count\": 0,\n  \"returned\": 0,\n  \"truncated\": false,\n  \"entries\": []\n}",
+   "path": "/engine-docs/on-actions",
+   "status": 200
+  },
+  "listing mask": {
+   "body": "{\n  \"type\": \"modifiers\",\n  \"count\": 2,\n  \"returned\": 2,\n  \"truncated\": false,\n  \"entries\": [\n    {\n      \"name\": \"building_steel_mill_throughput_add\",\n      \"origin\": \"vanilla\",\n      \"mask\": \"building\",\n      \"display_name\": \"Steel Mill Throughput\",\n      \"description\": \"Throughput\"\n    },\n    {\n      \"name\": \"building_iron_mine_throughput_add\",\n      \"origin\": \"vanilla\",\n      \"mask\": \"building\"\n    }\n  ]\n}",
+   "path": "/engine-docs/modifiers?mask=building",
+   "status": 200
+  },
+  "listing origin": {
+   "body": "{\n  \"type\": \"effects\",\n  \"count\": 1,\n  \"returned\": 1,\n  \"truncated\": false,\n  \"entries\": [\n    {\n      \"name\": \"te_effect\",\n      \"origin\": \"mod\",\n      \"description\": \"A mod effect\",\n      \"scopes\": [\n        \"state\"\n      ]\n    }\n  ]\n}",
+   "path": "/engine-docs/effects?origin=MOD",
+   "status": 200
+  },
+  "listing origin unknown": {
+   "body": "{\n  \"type\": \"triggers\",\n  \"count\": 1,\n  \"returned\": 1,\n  \"truncated\": false,\n  \"entries\": [\n    {\n      \"name\": \"add_modifier\",\n      \"origin\": \"unknown\",\n      \"scopes\": [\n        \"state\"\n      ]\n    }\n  ]\n}",
+   "path": "/engine-docs/triggers?origin=unknown",
+   "status": 200
+  },
+  "listing q": {
+   "body": "{\n  \"type\": \"effects\",\n  \"count\": 1,\n  \"returned\": 1,\n  \"truncated\": false,\n  \"entries\": [\n    {\n      \"name\": \"add_modifier\",\n      \"origin\": \"vanilla\",\n      \"description\": \"Adds a modifier\",\n      \"example\": \"add_modifier = { name = x }\",\n      \"traits\": \"\",\n      \"scopes\": [\n        \"country\",\n        \"state\"\n      ],\n      \"targets\": []\n    }\n  ]\n}",
+   "path": "/engine-docs/effects?q=MODIFIER",
+   "status": 200
+  },
+  "listing q display_name": {
+   "body": "{\n  \"type\": \"modifiers\",\n  \"count\": 1,\n  \"returned\": 1,\n  \"truncated\": false,\n  \"entries\": [\n    {\n      \"name\": \"building_steel_mill_throughput_add\",\n      \"origin\": \"vanilla\",\n      \"mask\": \"building\",\n      \"display_name\": \"Steel Mill Throughput\",\n      \"description\": \"Throughput\"\n    }\n  ]\n}",
+   "path": "/engine-docs/modifiers?q=steel",
+   "status": 200
+  },
+  "listing scope": {
+   "body": "{\n  \"type\": \"effects\",\n  \"count\": 2,\n  \"returned\": 2,\n  \"truncated\": false,\n  \"entries\": [\n    {\n      \"name\": \"add_modifier\",\n      \"origin\": \"vanilla\",\n      \"description\": \"Adds a modifier\",\n      \"example\": \"add_modifier = { name = x }\",\n      \"traits\": \"\",\n      \"scopes\": [\n        \"country\",\n        \"state\"\n      ],\n      \"targets\": []\n    },\n    {\n      \"name\": \"te_effect\",\n      \"origin\": \"mod\",\n      \"description\": \"A mod effect\",\n      \"scopes\": [\n        \"state\"\n      ]\n    }\n  ]\n}",
+   "path": "/engine-docs/effects?scope=State",
+   "status": 200
+  },
+  "listing scope input/output": {
+   "body": "{\n  \"type\": \"event-targets\",\n  \"count\": 1,\n  \"returned\": 1,\n  \"truncated\": false,\n  \"entries\": [\n    {\n      \"name\": \"capital\",\n      \"input_scopes\": [\n        \"country\"\n      ],\n      \"output_scopes\": [\n        \"state\"\n      ]\n    }\n  ]\n}",
+   "path": "/engine-docs/event-targets?scope=country",
+   "status": 200
+  },
+  "listing truncated": {
+   "body": "{\n  \"type\": \"effects\",\n  \"count\": 3,\n  \"returned\": 1,\n  \"truncated\": true,\n  \"entries\": [\n    {\n      \"name\": \"add_modifier\",\n      \"origin\": \"vanilla\",\n      \"description\": \"Adds a modifier\",\n      \"example\": \"add_modifier = { name = x }\",\n      \"traits\": \"\",\n      \"scopes\": [\n        \"country\",\n        \"state\"\n      ],\n      \"targets\": []\n    }\n  ]\n}",
+   "path": "/engine-docs/effects?limit=1",
+   "status": 200
+  },
+  "loc-function": {
+   "body": "{\n  \"name\": \"GetStaticModifier\",\n  \"found\": true,\n  \"kind\": \"function\",\n  \"count\": 2,\n  \"first_seen\": \"game/localization/english/te_l_english.yml:2\",\n  \"examples\": [\n    {\n      \"file\": \"game/localization/english/te_l_english.yml\",\n      \"line\": 2,\n      \"expression\": \"[GetStaticModifier('te_x').GetDesc]\"\n    },\n    {\n      \"file\": \"game/localization/english/te_l_english.yml\",\n      \"line\": 4,\n      \"expression\": \"[GetStaticModifier('te_y').GetName]\"\n    }\n  ]\n}",
+   "path": "/engine-docs/loc-functions/GetStaticModifier",
+   "status": 200
+  },
+  "loc-function limit": {
+   "body": "{\n  \"name\": \"GetStaticModifier\",\n  \"found\": true,\n  \"kind\": \"function\",\n  \"count\": 2,\n  \"first_seen\": \"game/localization/english/te_l_english.yml:2\",\n  \"examples\": [\n    {\n      \"file\": \"game/localization/english/te_l_english.yml\",\n      \"line\": 2,\n      \"expression\": \"[GetStaticModifier('te_x').GetDesc]\"\n    }\n  ]\n}",
+   "path": "/engine-docs/loc-functions/GetStaticModifier?limit=1",
+   "status": 200
+  },
+  "loc-function not found": {
+   "body": "{\n  \"name\": \"NoSuchFunction\",\n  \"found\": false,\n  \"examples\": []\n}",
+   "path": "/engine-docs/loc-functions/NoSuchFunction",
+   "status": 200
+  },
+  "loc-functions": {
+   "body": "{\n  \"total_distinct_functions\": 14,\n  \"filtered\": 14,\n  \"returned\": 14,\n  \"entries\": [\n    {\n      \"name\": \"GetName\",\n      \"kind\": \"method\",\n      \"count\": 3\n    },\n    {\n      \"name\": \"GetStaticModifier\",\n      \"kind\": \"function\",\n      \"count\": 2\n    },\n    {\n      \"name\": \"AddTextIf\",\n      \"kind\": \"function\",\n      \"count\": 1\n    },\n    {\n      \"name\": \"Article\",\n      \"kind\": \"function\",\n      \"count\": 1\n    },\n    {\n      \"name\": \"Concept\",\n      \"kind\": \"function\",\n      \"count\": 1\n    },\n    {\n      \"name\": \"Country\",\n      \"kind\": \"function\",\n      \"count\": 1\n    },\n    {\n      \"name\": \"GetCountry\",\n      \"kind\": \"method\",\n      \"count\": 1\n    },\n    {\n      \"name\": \"GetDesc\",\n      \"kind\": \"method\",\n      \"count\": 1\n    },\n    {\n      \"name\": \"GetEffectsDesc\",\n      \"kind\": \"method\",\n      \"count\": 1\n    },\n    {\n      \"name\": \"GetFullName\",\n      \"kind\": \"method\",\n      \"count\": 1\n    },\n    {\n      \"name\": \"Not\",\n      \"kind\": \"function\",\n      \"count\": 1\n    },\n    {\n      \"name\": \"ROOT\",\n      \"kind\": \"scope\",\n      \"count\": 1\n    },\n    {\n      \"name\": \"StringIsEmpty\",\n      \"kind\": \"function\",\n      \"count\": 1\n    },\n    {\n      \"name\": \"sCharacter\",\n      \"kind\": \"accessor\",\n      \"count\": 1\n    }\n  ]\n}",
+   "path": "/engine-docs/loc-functions",
+   "status": 200
+  },
+  "loc-functions filtered": {
+   "body": "{\n  \"total_distinct_functions\": 14,\n  \"filtered\": 1,\n  \"returned\": 1,\n  \"entries\": [\n    {\n      \"name\": \"GetStaticModifier\",\n      \"kind\": \"function\",\n      \"count\": 2,\n      \"example\": \"[GetStaticModifier('te_x').GetDesc]\"\n    }\n  ]\n}",
+   "path": "/engine-docs/loc-functions?q=get&kind=Function&min_count=1&limit=2&include_examples=true",
+   "status": 200
+  },
+  "loc-functions kind scope": {
+   "body": "{\n  \"total_distinct_functions\": 14,\n  \"filtered\": 1,\n  \"returned\": 1,\n  \"entries\": [\n    {\n      \"name\": \"ROOT\",\n      \"kind\": \"scope\",\n      \"count\": 1,\n      \"example\": \"[ROOT.GetCountry.GetName]\"\n    }\n  ]\n}",
+   "path": "/engine-docs/loc-functions?kind=scope&include_examples=1",
+   "status": 200
+  },
+  "one entry": {
+   "body": "{\n  \"type\": \"effects\",\n  \"name\": \"add_modifier\",\n  \"found\": true,\n  \"matches\": [\n    {\n      \"name\": \"add_modifier\",\n      \"origin\": \"vanilla\",\n      \"description\": \"Adds a modifier\",\n      \"example\": \"add_modifier = { name = x }\",\n      \"traits\": \"\",\n      \"scopes\": [\n        \"country\",\n        \"state\"\n      ],\n      \"targets\": []\n    }\n  ]\n}",
+   "path": "/engine-docs/effects/add_modifier",
+   "status": 200
+  },
+  "one entry, repeated name": {
+   "body": "{\n  \"type\": \"event-targets\",\n  \"name\": \"capital\",\n  \"found\": true,\n  \"matches\": [\n    {\n      \"name\": \"capital\",\n      \"input_scopes\": [\n        \"country\"\n      ],\n      \"output_scopes\": [\n        \"state\"\n      ]\n    },\n    {\n      \"name\": \"capital\",\n      \"input_scopes\": [\n        \"state\"\n      ],\n      \"output_scopes\": [\n        \"state\"\n      ]\n    }\n  ]\n}",
+   "path": "/engine-docs/event-targets/capital",
+   "status": 200
+  },
+  "origin": {
+   "body": "{\n  \"name\": \"add_modifier\",\n  \"found\": true,\n  \"matches\": [\n    {\n      \"type\": \"effects\",\n      \"origin\": \"vanilla\",\n      \"description\": \"Adds a modifier\",\n      \"example\": \"add_modifier = { name = x }\",\n      \"scopes\": [\n        \"country\",\n        \"state\"\n      ]\n    },\n    {\n      \"type\": \"triggers\",\n      \"origin\": \"unknown\",\n      \"scopes\": [\n        \"state\"\n      ]\n    }\n  ]\n}",
+   "path": "/engine-docs/origin/add_modifier",
+   "status": 200
+  },
+  "origin modifier fields": {
+   "body": "{\n  \"name\": \"state_te_bonus_add\",\n  \"found\": true,\n  \"matches\": [\n    {\n      \"type\": \"modifiers\",\n      \"origin\": \"mod\",\n      \"is_boolean\": false,\n      \"mask\": \"state\",\n      \"mod_redeclares\": true,\n      \"mod_redeclared_in\": [\n        \"common/modifier_type_definitions/te.txt\"\n      ]\n    }\n  ]\n}",
+   "path": "/engine-docs/origin/state_te_bonus_add",
+   "status": 200
+  },
+  "origin not found": {
+   "body": "{\n  \"name\": \"no_such_name\",\n  \"found\": false,\n  \"matches\": []\n}",
+   "path": "/engine-docs/origin/no_such_name",
+   "status": 200
+  },
+  "usage": {
+   "body": "{\n  \"name\": \"te_target\",\n  \"total_call_sites_scanned\": 3,\n  \"returned\": 3,\n  \"backend\": \"grep\",\n  \"uses\": [\n    {\n      \"file\": \"scripted_effects/te_calls.txt\",\n      \"line\": 5,\n      \"snippet\": \"      4: te_caller = {\\n>     5: \\tte_target = { X = 1 }\\n      6: \\tif = {\\n      7: \\t\\tte_target = yes\\n      8: \\t}\"\n    },\n    {\n      \"file\": \"scripted_effects/te_calls.txt\",\n      \"line\": 7,\n      \"snippet\": \"      6: \\tif = {\\n>     7: \\t\\tte_target = yes\\n      8: \\t}\\n      9: \\tnot_te_target_suffix = yes\\n     10: \\tte_target >= 3\"\n    },\n    {\n      \"file\": \"scripted_effects/te_calls.txt\",\n      \"line\": 10,\n      \"snippet\": \"      9: \\tnot_te_target_suffix = yes\\n>    10: \\tte_target >= 3\\n     11: }\"\n    }\n  ]\n}",
+   "path": "/engine-docs/usage/te_target",
+   "status": 200
+  },
+  "usage include_defs": {
+   "body": "{\n  \"name\": \"te_target\",\n  \"total_call_sites_scanned\": 4,\n  \"returned\": 4,\n  \"backend\": \"grep\",\n  \"uses\": [\n    {\n      \"file\": \"scripted_effects/te_calls.txt\",\n      \"line\": 1,\n      \"snippet\": \">     1: te_target = {\\n      2: \\tlimit = { always = yes }\\n      3: }\\n      4: te_caller = {\"\n    },\n    {\n      \"file\": \"scripted_effects/te_calls.txt\",\n      \"line\": 5,\n      \"snippet\": \"      4: te_caller = {\\n>     5: \\tte_target = { X = 1 }\\n      6: \\tif = {\\n      7: \\t\\tte_target = yes\\n      8: \\t}\"\n    },\n    {\n      \"file\": \"scripted_effects/te_calls.txt\",\n      \"line\": 7,\n      \"snippet\": \"      6: \\tif = {\\n>     7: \\t\\tte_target = yes\\n      8: \\t}\\n      9: \\tnot_te_target_suffix = yes\\n     10: \\tte_target >= 3\"\n    },\n    {\n      \"file\": \"scripted_effects/te_calls.txt\",\n      \"line\": 10,\n      \"snippet\": \"      9: \\tnot_te_target_suffix = yes\\n>    10: \\tte_target >= 3\\n     11: }\"\n    }\n  ]\n}",
+   "path": "/engine-docs/usage/te_target?include_defs=true",
+   "status": 200
+  },
+  "usage limit and context": {
+   "body": "{\n  \"name\": \"te_target\",\n  \"total_call_sites_scanned\": 3,\n  \"returned\": 1,\n  \"backend\": \"grep\",\n  \"uses\": [\n    {\n      \"file\": \"scripted_effects/te_calls.txt\",\n      \"line\": 5,\n      \"snippet\": \">     5: \\tte_target = { X = 1 }\"\n    }\n  ]\n}",
+   "path": "/engine-docs/usage/te_target?limit=1&before=0&after=0",
+   "status": 200
+  },
+  "usage no hits": {
+   "body": "{\n  \"name\": \"te_absent\",\n  \"total_call_sites_scanned\": 0,\n  \"returned\": 0,\n  \"backend\": \"grep\",\n  \"uses\": []\n}",
+   "path": "/engine-docs/usage/te_absent",
+   "status": 200
+  },
+  "usage python walk": {
+   "body": "{\n  \"name\": \"te_target\",\n  \"total_call_sites_scanned\": 3,\n  \"returned\": 3,\n  \"backend\": \"python\",\n  \"uses\": [\n    {\n      \"file\": \"scripted_effects/te_calls.txt\",\n      \"line\": 5,\n      \"snippet\": \"      4: te_caller = {\\n>     5: \\tte_target = { X = 1 }\\n      6: \\tif = {\\n      7: \\t\\tte_target = yes\\n      8: \\t}\"\n    },\n    {\n      \"file\": \"scripted_effects/te_calls.txt\",\n      \"line\": 7,\n      \"snippet\": \"      6: \\tif = {\\n>     7: \\t\\tte_target = yes\\n      8: \\t}\\n      9: \\tnot_te_target_suffix = yes\\n     10: \\tte_target >= 3\"\n    },\n    {\n      \"file\": \"scripted_effects/te_calls.txt\",\n      \"line\": 10,\n      \"snippet\": \"      9: \\tnot_te_target_suffix = yes\\n>    10: \\tte_target >= 3\\n     11: }\"\n    }\n  ]\n}",
+   "path": "/engine-docs/usage/te_target",
+   "status": 200
+  }
+ }
+}

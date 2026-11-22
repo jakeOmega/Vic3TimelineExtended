@@ -292,7 +292,7 @@ class StateGatedTest(unittest.TestCase):
     def test_scope_free_gates_are_display_only(self):
         sguis = _read(SGUIS)
         for name, trigger in (("ch_ministry_missing_sgui", "has_law = law_type:law_ministry_of_culture"),
-                              ("ch_benchmark_sgui", "has_modifier = cultural_hegemony_foreign_benchmark")):
+                              ("ch_benchmark_sgui", "ch_trails_hegemon = yes")):
             with self.subTest(sgui=name):
                 body = _block(sguis, name)
                 self.assertNotIn("saved_scopes", body)
@@ -957,10 +957,23 @@ class BoardTest(unittest.TestCase):
         # The board printed a slot's change, so a new occupant was measured
         # against whoever held the rank before.
         census = _block(self.effects, "ch_yearly_global_update")
-        self.assertIn("set_variable = { name = ch_board_share_prev value = cultural_pull_display }", census)
+        self.assertIn("set_variable = { name = ch_board_share_prev value = var:ch_board_share_now }", census)
         self.assertLess(census.index("subtract = var:ch_board_share_prev"),
-                        census.index("set_variable = { name = ch_board_share_prev value = cultural_pull_display }"))
+                        census.index("set_variable = { name = ch_board_share_prev value = var:ch_board_share_now }"))
         self.assertNotIn("_delta", re.sub(r"ch_board_delta\w*", "", census))
+
+    def test_the_census_reads_each_share_once(self):
+        # Each read of cultural_pull_display runs the whole pull chain, so the
+        # ranked pass reads it once per country and the change, the stored
+        # share and the board slots take the saved copy.
+        census = _block(self.effects, "ch_yearly_global_update")
+        self.assertEqual(census.count("cultural_pull_display"), 1)
+        read = census.index("set_variable = { name = ch_board_share_now value = cultural_pull_display }")
+        self.assertLess(read, census.index("value = var:ch_board_share_now"))
+        self.assertEqual(
+            re.findall(r"ch_rank_(\d+)_score value = var:ch_board_share_now", census),
+            [str(n) for n in range(1, 11)])
+        self.assertLess(census.rindex("var:ch_board_share_now"), census.index("remove_variable = ch_board_share_now"))
 
     def test_how_describes_the_table(self):
         how = self.loc["je_ch_how_board"]
@@ -1087,13 +1100,14 @@ class HegemonyBonusTest(unittest.TestCase):
                 self.assertIn(f"multiply = ch_bonus_unit_{field}", body)
                 self.assertIn(f"${field}$: [Country.MakeScope.ScriptValue('ch_bonus_{field}_display')|+=1", listing)
 
-    def test_the_strength_is_what_the_pulse_applied_and_zero_without_the_modifier(self):
+    def test_the_strength_is_what_the_entry_declares_and_zero_while_it_is_inactive(self):
+        # The entry declares the modifier at cultural_hegemony_modifier_mult
+        # (test_cultural_hegemony_scaling_modifiers.py pins the value), and a
+        # declaration applies only while the entry is active.
         body = _block(self.values, "ch_bonus_strength_display")
-        self.assertIn("has_variable = ch_effect_mult_cached", body)
-        self.assertIn("je:je_cultural_hegemony ?= { has_modifier = cultural_hegemony_effect }", body)
-        self.assertIn("add = var:ch_effect_mult_cached", body)
-        self.assertIn("add_modifier = { name = cultural_hegemony_effect multiplier = root.var:ch_effect_mult_cached }",
-                      _read(JE))
+        self.assertRegex(body, r"limit = \{ has_journal_entry = je_cultural_hegemony \}\s*add = cultural_hegemony_modifier_mult")
+        self.assertRegex(_read(JE), r"modifier = cultural_hegemony_effect\s*value = \{\s*value = cultural_hegemony_modifier_mult\s*\}")
+        self.assertNotIn("ch_effect_mult_cached", _read(VALUES) + _read(JE))
 
     def test_the_cell_sits_beside_the_programs_in_a_row_that_fits(self):
         text = _read(WIDGET)
@@ -1157,7 +1171,7 @@ class WideTest(unittest.TestCase):
 # ---- Another country's panel (charts-help-national-info plan, PR F4) ------------
 WIDE = {"te_ch_wide_sections"}
 # A scripted GUI's printed text: the custom_tooltip keys its triggers and effects
-# print, which neither BindingTest nor te_rebind_country.py follows.
+# print (BindingTest and te_rebind_country.py follow them too, since #1361).
 # What gates a world read for an observer (who has no GetPlayer): the observer
 # test (or GetPlayer.IsValid) first in the widget's `visible`, alone or leading
 # an And; a wrapper widget gated on the test alone counts too.
@@ -1289,9 +1303,9 @@ class PrivateTest(unittest.TestCase):
                 self.assertTrue(gated, f"{f.text.strip()[:100]}: no observer gate over it")
 
     def test_the_programs_are_shown(self):
-        """Each program's Running or Idle, from the country's own entry's
-        modifiers (ch_active_<programme>: je:je_cultural_hegemony), and the
-        funding level against its cap."""
+        """Each program's Running or Idle, from the country's own programme
+        variables (ch_active_<programme>), and the funding level against its
+        cap."""
         progs = self._drawn("te_ch_sec_programmes")
         self.assertIn('text = "je_ch_widget_funding_value"', progs)
         self.assertIn('tooltip = "je_ch_widget_funding_value_tt"', progs)
@@ -1315,7 +1329,7 @@ class PrivateTest(unittest.TestCase):
             self.assertIn(key, self.keys, key)
         triggers = _read(os.path.join(REPO, "common", "scripted_triggers", "cultural_hegemony_triggers.txt"))
         for prog in ("world_exposition", "cultural_institutes", "global_media_campaign", "cultural_protectionism"):
-            self.assertIn("je:je_cultural_hegemony ?= { has_modifier", _block(triggers, f"ch_active_{prog}"), prog)
+            self.assertIn(f"has_variable = ch_{prog}_on", _block(triggers, f"ch_active_{prog}"), prog)
 
     def test_the_breakdown_is_shown(self):
         bd = self._drawn("te_ch_sec_breakdown")

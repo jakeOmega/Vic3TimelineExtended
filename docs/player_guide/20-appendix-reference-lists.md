@@ -64,11 +64,11 @@ the sections after it.
 | Directed Credit | Directed Credit to Armaments | 3 | – |
 | Directed Credit | Directed Credit to Electrification | 1 | Rural Electrification |
 | External & Currency | Export Credit Facility | 2 | Corporate Governance |
-| External & Currency | Capital Controls (Outflows) | 2 | a law that allows it, or war |
-| External & Currency | Restrict Speculative Inflows | 2 | full Banking System; your own policy rate; a law that allows capital controls, or war |
-| External & Currency | Sterilize Capital Inflows | 2 | full Banking System; convertible Gold Standard with your own policy rate; treasury cash |
-| External & Currency | Limit Foreign-Currency Borrowing | 2 | full Banking System; National Bank Established |
-| External & Currency | Foreign Exchange Surrender Requirement | 2 | full Banking System; convertible Gold Standard with your own policy rate; exports, cash and room in the vault; a law that allows capital controls, or war |
+| External & Currency | Capital Controls | 2 | a law that allows it, or war |
+| External & Currency | Restrict Speculative Inflows | 2 | full Banking System; your own policy rate on a convertible Gold Standard or a floating currency; a law that allows capital controls, or war |
+| External & Currency | Sterilization | 2 | full Banking System; your own policy rate on a convertible Gold Standard or a floating currency; treasury cash |
+| External & Currency | Limit Foreign-Currency Borrowing | 2 | full Banking System; National Bank Established; a currency that is not held at par on metal |
+| External & Currency | Foreign Exchange Surrender Requirement | 2 | full Banking System; your own policy rate on a convertible Gold Standard or a floating currency; exports (on gold also cash and room in the vault); a law that allows capital controls, or war |
 | External & Currency | Emergency Import Financing | 3 | full Banking System; National Bank Established; a financial crisis and treasury cash |
 | Crisis Response | Declare a Bank Holiday | 2 | Downturn or Panic; none in the last five years |
 | Crisis Response | Emergency Liquidity Program | 4 | Investment Banks; Downturn or Panic |
@@ -98,13 +98,13 @@ you qualify.
 | No-First-Strike Pledge (*Never the First*) | Nuclear Weapons researched and at peace, with a nuclear-armed rival or an anti-war movement at 5% support, and either no arsenal yet or a doctrine already at No First Use | 5% | Intelligentsia, or Trade Unions |
 | Military Necessity Clause (*Necessity Knows No Law*) | At war, with the Armed Forces powerful or in government | 25% | Armed Forces |
 | Small Donor Matching (*Pennies Against Millions*) | An election campaign, with the Industrialists or the Landowners powerful | 25% | Trade Unions, or Intelligentsia |
-| Religious Exemption Clause (*The Pulpit's Exception*) | The Devout are powerful or in government, and their approval is below zero | 5% | Devout |
+| Religious Exemption Clause (*An Exemption for Faith*) | The Devout are powerful or in government, and their approval is below zero | 5% | Devout |
 | Spoils System (*Rotation in Office*) | One group holds at least half of your government's political strength | 2.5% | That group |
 | Corporate Security Powers (*Company Men*) | A labor movement has 5% support, or unrest as for Order in the Courts; from Corporate Charters on | 5% | Industrialists |
 | Civilian Oversight (*Complaints Against the Force*) | A civil rights movement has 5% support, or unrest as for Order in the Courts; from the Civil Rights Movement technology on | 5% | Intelligentsia |
-| Estate Duties (*What the Dead Owe*) | At war, or a reformist or social democratic group in government; from Political Agitation on, on a law with private estates and no Birthright Endowment | 2.5%, and 25% more at war | Intelligentsia, or Trade Unions |
+| Estate Duties (*What the Dead Owe*) | At war, or a reformist or state socialist group in government; from Political Agitation on, on a law with private estates and no Birthright Endowment | 2.5%, and 25% more at war | Intelligentsia, or Trade Unions |
 | Perpetual Dynastic Trusts (*Dynasty Trusts*) | Freedom of Testation, with the Industrialists powerful or in government; from Globalization on | 2.5% | Industrialists |
-| Birthright Endowment (*The Duty and the Stake*) | A law carrying Estate Duties, which the Endowment replaces, with a reformist or social democratic group in government; from Universal Basic Income on | 2.5% | Trade Unions, or Intelligentsia |
+| Birthright Endowment (*The Duty and the Stake*) | A law carrying Estate Duties, which the Endowment replaces, with a reformist or state socialist group in government; from Universal Basic Income on | 2.5% | Trade Unions, or Intelligentsia |
 | Undivided Farm Succession (*The Farm Is Not to Be Cut*) | Forced Heirship or Customary Inheritance, with the Rural Folk powerful or in government | 2.5% | Rural Folk |
 | Suspension of Habeas Corpus (*The Writ Suspended*) | Statutory Courts or Constitutional Review, at war, with the Armed Forces powerful or in government | 25% | Armed Forces |
 | Judicial Elections (*Let the People Choose Their Judges*) | Statutory Courts or Constitutional Review under an elected government, with a group led by a Jacksonian Democrat or populist powerful or in government | 5% | That group |
@@ -116,7 +116,7 @@ you qualify.
 | First Past the Post (*Two Parties Are Enough*) | Two parties whose groups hold at least 60% of your clout, on a voting law without it | 2.5% | The strongest group in either party |
 
 Refusing Order in the Courts or Those Who Speak Up also costs up to 2 legitimacy
-for a few years, and refusing The Pulpit's Exception costs the Devout 5 approval
+for a few years, and refusing An Exemption for Faith costs the Devout 5 approval
 instead of 3. The No-First-Strike Pledge holds your nuclear doctrine at No First
 Use, so its petition comes only when that changes nothing today.
 
@@ -140,6 +140,54 @@ groups](06-politics.md#new-laws-in-base-game-law-groups).
 | Corporate Syndicalism | Neocameralism with Single-Party State | Director |
 | Corporate Autocracy | Neocameralism without a voting franchise | Director |
 | Algorithmic Directorate | Algorithmic Governance, except under Collective Governance or Neocameralism | Director |
+
+## Culture merge list
+
+The 32 merges from [Culture merges](08-states.md#culture-merges). Tier is the
+tier a merge starts on; a culture marked with another tier joins on that
+tier's conditions. A merge marked existing folds its constituent cultures into a
+culture the game already has. A culture in the last column doesn't join while
+any country has that
+journal entry open, except that Afro-American in American joins once the start
+has waited its 20 years. A core culture's wait also
+holds the merge's start, for at most 20 years. The last column also gives each
+merge's own condition: a nation formed counts for good once you have formed it;
+a law or independence must keep holding, or the merge pauses.
+
+| Merge | Core cultures | Optional cultures | Tier | Waits and requirements |
+|---|---|---|---|---|
+| German | North German, South German | Alemannic, Eastern German | 1 | Germany or Central Europe formed |
+| Italian | North Italian, South Italian | Corsican | 1 | Italy formed |
+| Scandinavian | Swedish, Danish, Norwegian | Icelandic | 1 | Scandinavia formed |
+| East Slavic | Russian, Ukrainian, Byelorussian | none | 1 | Ukrainian waits for the Ukrainian Renaissance, Byelorussian for the Byelorussian Renaissance |
+| Yugoslav | Serbian, Croatian, Bosniak | Slovene (tier 2), Bulgarian (tier 2) | 1 | Yugoslavia formed |
+| Czechoslovak | Czech, Slovak | Sorb | 1 | Czechoslovakia formed |
+| Hungarian (existing) | Hungarian, Szekler | none | 1 | none |
+| Dutch (existing) | Dutch, Flemish | none | 1 | none |
+| Finnish (existing) | Finnish, Karelian | none | 1 | none |
+| French (existing) | French, Occitan | Wallonian, Catalan (tier 2) | 1 | Public Schools |
+| English (existing) | English, Scottish | none | 1 | none |
+| American | Yankee, Dixie | Afro-American (tier 1b) | 1 | Slavery settled: Slavery Banned with The Slavery Debate over, or Slave Trade or Debt Slavery, and no civil war over it under way. Dixie waits for Readmit the Secessionist States, Afro-American for Equality for All and joins only under Slavery Banned |
+| Anglophone | English, Yankee (American once that merge is complete) | Anglo-Canadian (tier 1), Australian (tier 1), Scottish (tier 1), Dixie (tier 1), Afro-American | 1b | Slavery Banned. Dixie waits for Readmit the Secessionist States, Afro-American for Equality for All |
+| Brazilian (existing) | Brazilian, Nordestino, Paulista, Amazonic, Sulista | Afro-Brazilian (tier 1b) | 1 | Only without the Colossus of the South content. Sulista waits for the Ragamuffin War. Afro-Brazilian joins only under Slavery Banned |
+| Platine | Platinean, Argentine, Uruguayan, Paraguayan | none | 1 | Rio de la Plata formed |
+| Andean | North Andean, South Andean, Peruvian, Bolivian | none | 1 | Peru-Bolivia or the Federation of the Andes formed |
+| Gran Colombian | Colombian, Venezuelan, Ecuadorian | none | 1 | Gran Colombia formed |
+| Han (existing) | Han, Yue, Min, Hakka | none | 1 | Public Schools |
+| Japanese (existing) | Japanese, Ryukyuan | none | 1 | The Honorable Restoration concluded, or the Bakufu law gone |
+| Arab | Maghrebi, Misri, Mashriqi, Bedouin, Yemenite | Sudanese (tier 1b), Haratin (tier 1b), Bidan (tier 1b) | 1 | Not a subject of another country, and Public Schools |
+| Persian (existing) | Persian, Luri | Tajik, Hazara (tier 1b), Mazanderani, Baluchi (tier 2) | 1 | none |
+| Oghuz Turkic | Turkish, Azerbaijani | Turkmen (tier 1b) | 1 | none |
+| Hindustani (existing) | Hindustani, Avadhi, Bundeli, Chhattisgarhi, Bagheli | none | 1 | Not a subject of another country |
+| Dravidian | Tamil, Kannada, Malayalam | Telugu (tier 2) | 1 | Dravida Nadu formed |
+| Indonesian | Javan, Malay, Sumatran, Bornean | Balinese | 1 | Indonesia formed |
+| Pilipino (existing) | Pilipino, Visayan, Tagalog, Ilocano | none | 1 | Not a subject of another country |
+| Greater Nguni | Nguni, Zulu, Xhosa | none | 1 | none |
+| Latin | French, Italian, Spanish, Portuguese | Romanian, Platinean (tier 1b; Platine once that merge is complete), Argentine (tier 1b), Uruguayan (tier 1b), Chilean (tier 1b) | 2 | The French and Italian merges complete |
+| Pan-Slavic | East Slavic, Czechoslovak, Yugoslav | Polish (tier 1), Slovene, Bulgarian | 2 | The East Slavic, Czechoslovak and Yugoslav merges complete |
+| Pan-Turkic | Oghuz Turkic, Uzbek, Kazakh (tier 1), Tatar (tier 1b), Kyrgyz (tier 1) | Bashkir (tier 1), Crimean Tatar (tier 1), Caucasian Turk (tier 1b), Uighur (tier 1b) | 2 | The Oghuz Turkic merge complete |
+| Pan-Malay | Indonesian, Pilipino | none | 2 | The Indonesian and Pilipino merges complete |
+| East African | Swahili, Nyamwezi, Sukuma | Yao, Makua, Lacustrine Bantu, Kikuyu | 2 | Not a subject of another country, and Public Schools |
 
 ## City-state list
 
@@ -248,14 +296,14 @@ Escort and Swarm Coordination Vessel.
 |---|---|---|---|---|
 | Damage Control Teams | Naval Convoy Defense | −35% hull damage and −15% crew casualties taken | Fire Suppression | ASW Destroyer, the two carriers, the battle-line ships, Amphibious and Marine Assault Ships, Swarm Coordination Vessel, Orbital Support Mothership |
 | Composite Armor Plating | Modern Material Science | −45% hull damage and −40% critical hits taken, +20% armor | Damage Control Teams, Fire Suppression | The battle-line ships, Pulsed Laser Escort, Swarm Coordination Vessel |
-| Close-In Weapon System | Precision Guided Munitions | −20% accuracy of ships firing at it, −60% vulnerability | Torpedo Nets, Camouflage | Every new ship except the submarines |
+| Close-In Weapon System | Precision Guided Munitions | −20% accuracy of ships firing at it, −40% vulnerability | Torpedo Nets, Camouflage | Every new ship except the submarines |
 | Electronic Countermeasures | Electronic Warfare | −30% accuracy of ships firing at it, −40% visibility | Camouflage | The battle-line ships, Nuclear Supercarrier, Swarm Coordination Vessel, Orbital Support Mothership |
-| DEW Point Defense | Directed Energy Weapons | −35% accuracy of ships firing at it, −70% vulnerability, +200 screening | Close-In Weapon System, Torpedo Nets | The battle-line ships, Nuclear Supercarrier, Pulsed Laser Escort, Swarm Coordination Vessel, Orbital Support Mothership |
+| DEW Point Defense | Directed Energy Weapons | −35% accuracy of ships firing at it, −55% vulnerability, +111 screening | Close-In Weapon System, Torpedo Nets | The battle-line ships, Nuclear Supercarrier, Pulsed Laser Escort, Swarm Coordination Vessel, Orbital Support Mothership |
 | Precision Warheads | Guided Missiles | +75% critical hit chance, +40% crew damage | Advanced Explosives | The battle-line ships, the cruiser escorts, Guided Missile Ship, Autonomous Swarm Submarine, Orbital Support Mothership |
 | Ballistic Missile Bay | Precision Guided Munitions | +35% hull damage, +60% blockade strength | Large Carronades, Patrol Boats | Guided Missile Ship, Arsenal Ship, Hypersonic Missile Platform, Antimatter Battleship |
 | Drone Complement | Swarm Technology | +40% accuracy, +40% screening, +200 detection | Range Finder | The battle-line ships, the cruiser escorts, Guided Missile Ship, Nuclear Supercarrier, Expeditionary Sea Base, Orbital Support Mothership, the two later submarines |
-| Aegis Air Defense | Network Centric Warfare | +20% readiness, +200 screening, +40% accuracy against the Guided Missile Ship, Arsenal Ship and Hypersonic Missile Platform | Fire-Control System | The battle-line ships, the cruiser escorts, Guided Missile Ship |
-| Surface Search Radar | Radar | −75% of the accuracy bad weather costs, +50% detection | Searchlights | ASW Destroyer, Fleet Carrier, Expeditionary Fast Transport, the cruiser escorts |
+| Aegis Air Defense | Network Centric Warfare | +20% readiness, +111 screening, +40% accuracy against the Guided Missile Ship, Arsenal Ship and Hypersonic Missile Platform | Fire-Control System | The battle-line ships, the cruiser escorts, Guided Missile Ship |
+| Surface Search Radar | Radar | −75% of the accuracy bad weather costs, +100% detection | Searchlights | ASW Destroyer, Fleet Carrier, Expeditionary Fast Transport, the cruiser escorts |
 | Sonar Suite | Sonar | +50% accuracy against every submarine, +100 detection | | ASW Destroyer, the three new submarines |
 | Helicopter Pad | Rapid Deployment Forces | +40% naval invasion efficiency, +25% marine and carrying capacity | Landing Skiffs | The five transports |
 | Underway Replenishment | Containerization | +40% supply capacity, +25% supply efficiency, +30% distance from port | | Fleet Carrier, Nuclear Supercarrier, Arsenal Ship, Stealth Battlecruiser |
@@ -287,7 +335,7 @@ laws](06-politics.md#rights-and-society-laws).
 | Cyberwarfare Team | Cyber Warfare | +20% morale damage, −20% morale loss, +5% offense and defense |
 | Electronic Warfare Team | Electronic Warfare | +20% morale damage, +10% offense, +5% defense |
 | Exoskeleton Suits | Advanced Body Armor | +15% offense and defense |
-| Medevac Helicopters | Advanced Military Aircraft | +80% recovery rate |
+| Medevac Helicopters | Advanced Military Aircraft | +40% recovery rate |
 | Voluntary Bioenhancement | Regulated Augmentation Market or Unrestricted Augmentation law | +25% offense and defense |
 | Mandatory Bioenhancement | Mandatory Augmentation law | +50% offense and defense |
 | Jungle Combat Training | Military Training principle, tier III+ | +25% offense and defense in forest and hazardous terrain |

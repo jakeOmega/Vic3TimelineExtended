@@ -199,6 +199,8 @@ Only a target under Central Authorization, and only through warheads that land o
 
 Delegation, Launch on Warning and Automatic Retaliation are immune: that is part of their payoff.
 
+**Amended (owner, 2026-11-19).** A full salvo of 25 topped out at 72% against any power with both technologies, so the chance is now max(0, 1 − (R ÷ L)²): still nothing until L exceeds R (owner call 7), three in four at L = 2R. R gains survivability ÷ 20, +2 a staffed Nuclear Command Center level (at most +6) and (command reliability − 50) ÷ 10, never below 1; the believed R the AI reads leaves reliability out. The 30-warhead example above still needs 7; the 3-warhead state's 21% from two is now 58%. Built in `nd_redundancy`, `nd_redundancy_command` and `nd_decapitation_chance_value`; `nuclear_crisis_design.md` §0.14 has the detail.
+
 ### 6.4 The answer
 
 `nuclear_weapon_events.1` sizes its answer from what survived. Automatic Retaliation's three are counted after counterforce losses, since it answers detonations; Launch on Warning's fly before them.
@@ -243,11 +245,11 @@ Even with global reach, weapons based in a country next to us cut our warning ti
 
 ### 8.1 War: the Suez model (owner call 9)
 
-`nd_crisis_concede_war` drops the war goals the target's side holds against the issuer, or against its protégé, with `remove_war_goal = { who = <side> type = <type> }` for each type held (the UN Force's pattern, `common/scripted_effects/un_force_effects.txt:157`). War support falls by 15, down from 35. If the target holds no goals against us, so that we are the aggressor, only the war support falls. `remove_war_goal` addresses a side and a type, so a goal of the same type against another country in the same war goes too, as the UN code notes. Removing from a war and removing an opening goal are probed in §12.
+`nd_crisis_concede_war` drops the war goals the target's side holds against the issuer, or against its protégé, with `remove_war_goal = { who = <side> type = <type> }` for each type held (the UN Force's pattern, `common/scripted_effects/un_force_effects.txt:157`). War support falls by 15, down from 35. If the target holds no goals against us, so that we are the aggressor, only the war support falls. `remove_war_goal` addresses a side and a type, so a goal of the same type against another country in the same war goes too, as the UN code notes. (Built otherwise, 2026-11-18: `who` names one country and each call takes its first goal of the type, so the concession names the target and repeats each type; see §12. The target drops only its own goals, whether or not it leads its side, and its allies keep theirs: a country gives up only what it holds (owner, 2026-11-18).) Removing from a war and removing an opening goal are probed in §12.
 
 ### 8.2 Play: what is at stake
 
-A new pressure part, `nd_yp_stakes`: the issuer's side's primary demands on the target, weighted by type. Annexation or reunification −30; a subjugation type (protectorate, dominion, tributary, personal union, crown land, chartered company) −20; a state transfer −10 each; a treaty, market, strait or minor goal −4 each. Capped at −40 and counting every primary demand (owner call 10). Unreasonable demands are refused, and a refusal moves the crisis toward Acute. The AI doesn't threaten where the stakes would hold pressure below its own concession line.
+A new pressure part, `nd_yp_stakes`: the issuer's side's primary demands on the target, weighted by type. Annexation or reunification −30; a subjugation type (protectorate, dominion, tributary, personal union, crown land, chartered company) −20; a state transfer −10 each; a treaty, market, strait or minor goal −4 each. Capped at −40 and counting every primary demand (owner call 10). Unreasonable demands are refused, and a refusal moves the crisis toward Acute. The AI doesn't threaten where the stakes would hold pressure below its own concession line. (Added 2026-11-18, #1893: a mirror part, `nd_yp_forfeit`, for what a war concession takes from the target itself, its own goals against the other side, at half this scale and at most −20; it stays out of the stake gate's question. See `nuclear_crisis_design.md` §0.3, "Figures".)
 
 ### 8.3 Co-belligerent cover (owner call 11)
 
@@ -310,9 +312,9 @@ Probed 2026-10-28 (one observer game; details in `docs/guides/scripting_best_pra
 
 | Question | Used by | Fallback | Result (2026-10-28) |
 |---|---|---|---|
-| `remove_war_goal` on a play that is a war | §8.1 | war support only (−35, as now) | Removes the **opening** goal and the AI's own goals; the war goes on, and in a war the AI can't add them back. Did not remove goals added by script `add_war_goal` (second probe, 2026-10-28) |
+| `remove_war_goal` on a play that is a war | §8.1 | war support only (−35, as now) | Removes the **opening** goal and the AI's own goals; the war goes on, and in a war the AI can't add them back. Did not remove goals added by script `add_war_goal` (second probe, 2026-10-28). **Corrected in game, 2026-11-18:** each call removes one goal, the holder's first of the type, whatever it targets, which is why the opening goal went and the added one stayed; script-added goals come off too. The concession now names each holder and repeats each type (`nuclear_crisis_design.md`, the Suez concession) |
 | `remove_war_goal` on a play's opening goal (the owner expects both to work) | §8.1 | skip the opening goal | Works, in a play and in a war |
-| Does `who = <side>` take one country's goals or the whole side's? | §8.1 | accept the extra removals and say so in the tooltip | Still untested: no side held a goal its leader didn't. Fallback applies |
+| Does `who = <side>` take one country's goals or the whole side's? | §8.1 | accept the extra removals and say so in the tooltip | Neither (in game, 2026-11-18): `who` names one country, and any country scope works, a co-belligerent's included. The concession names the target alone, since it gives up only its own goals (owner, 2026-11-18) |
 | Does `resolve_play_for` enforce every goal or only primary demands? | §8.2 | stakes counts whichever it enforces | Every goal. Stakes count every goal (as built) |
 | What `has_strategic_adjacency`'s coastal adjacency covers | §7.2 | `is_adjacent_to_country` plus the region test | Land and sea-coast neighbors; not distant coasts. `is_adjacent_to_country` covers sea-coast neighbors too |
 | `any_neighbouring_state` at strategic-region scope | §7.2 | own regions only | Works |

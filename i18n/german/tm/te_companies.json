@@ -267,6 +267,10 @@
   "en": "Infrastructure",
   "de": "Infrastruktur"
  },
+ "company_ingen": {
+  "en": "InGen",
+  "de": "InGen"
+ },
  "company_intel": {
   "en": "Intel",
   "de": "Intel"
@@ -350,6 +354,10 @@
  "company_pirelli": {
   "en": "Pirelli",
   "de": "Pirelli"
+ },
+ "company_rejoovenesense": {
+  "en": "RejoovenEsense",
+  "de": "RejoovenEsense"
  },
  "company_rekal": {
   "en": "Rekal Incorporated",

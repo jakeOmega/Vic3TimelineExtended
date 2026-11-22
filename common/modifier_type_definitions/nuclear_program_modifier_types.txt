@@ -48,6 +48,25 @@ country_nuclear_weapon_attack_success_add = {
 	script_only = yes
 }
 
+# Precision weapons (2026-11-20 delivery spec §3.4, owner call 10). Both are
+# read by script: the counterforce ratio is nd_k_ratio = 1 + this sum (the
+# Precision-Guided Munitions technology, and fielded ICBMs through nd_icbm_force,
+# declared on je_nuclear_program); silo penetration is read off the enemy, so
+# a silo force facing it counts its silos' exposure factor as
+# nd_exposure_factor_icbms + the enemy's sum (nd_accuracy_mult_*).
+country_nd_k_ratio_add = {
+	color = good
+	decimals = 1
+	script_only = yes
+}
+
+country_nd_silo_penetration_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+
 # State-level: a strike's success chance subtracts the defence of the state it
 # lands on (nuclear_strike_success_chance). Techs, the NPT guarantee and the
 # orbital battlestation grant it nationally, so today every state of a country

@@ -49,6 +49,7 @@ site did not seed).
 | **Empiricism.** Research it. | Troy and Pergamon join (Mycenae and Olympia, in Greece's Peloponnese, for a Greek player); the Systematic button appears. | A site that stays unlisted: the gate (`gm_arch_has_gate_for`) or the ground. |
 | **Not our ground.** Play Britain. | No Nineveh: only a country with a part of the ground is offered a site. Foreign digs are deferred. | |
 | **Incidental.** Debug a. | The incidental sites in our states whose technology we have are listed with a Launch button; nothing is lost. | |
+| **No unset reads (#1418, 2026-11-06).** After a month of a new game, search `error.log`. | No `Failed to fetch variable for 'gm_arch_dig_count'` or `'gm_arch_open_count'` (the 2026-11-05 play-test logged 1,104 such lines in sixteen minutes, from the entry's `possible` and outcome). | Lines still there: the engine reads a `trigger_if`'s body with its `limit` false, in a tooltip at least. Have `gm_arch_pass` write both counts, 0 for none, for every country it visits, and seed them in the entry's `immediate`. |
 
 ## The dig
 
@@ -70,6 +71,7 @@ site did not seed).
 | **1836.** Play the Two Sicilies; wait a month. | Pompeii is a dig in Archaeological Expeditions: "an Antiquarian dig, 33% done" or so, diverting 5 weekly innovation, Suspend Dig. The Budget shows nothing for it. | Not there: the seeding's `excavating` branch (`gm_arch_seed_dig`). |
 | **An old save.** Load a save made before Pompeii was added. | A month later Pompeii is a dig of Campania's owner. | `gm_arch_seed_round`. |
 | **Restart.** With Empiricism, suspend and press Systematic. | The dig restarts at its progress, slower, and diverts 20 weekly innovation. | |
+| **An open opportunity (2026-11-18).** As the Two Sicilies, seize a To the Nation opportunity for the capital (`event te_debug_monuments.2` offers a moment: Among the Great Powers or the Centenary), then finish Pompeii (debug c). | Pompeii stands in Campania; the opportunity's bar does not move and Pompeii's row carries no Counts toward the opportunity mark. After Let It Pass, a To the Nation opportunity seized next starts at 0 with Pompeii counted in its baseline, and Pompeii's row carries the mark. | The bar jumps: the mark (`gm_tr_unearthed_for_com`) was not set in `gm_arch_place`, or did not reach the state through `gm_state_tr_take_records_from_moving` (`gm_unearthed_for_com`). No mark on the next opportunity: `gm_com_clear` left it. |
 | **Its pictures (2026-10-16).** Finish the dig (debug c), then carry off a piece. | The monument's row and the state card show the dug-out forum under Vesuvius, not the Latin forum stand-in; the trophy's row shows the battle mosaic in a museum room. | The stand-in: `gm_state_picture_landmark` for `pompeii` (code 1,000,087). The forum without the mosaic: `gm_tr_picture_trophy` (2,000,087). |
 
 ## Costs and time
@@ -78,8 +80,8 @@ site did not seed).
 |---|---|---|
 | **Cost.** Hover the three buttons of a 10-level site (Nineveh). | 5, 20 and 100 weekly innovation and no money; 25, 40 and 29 months. A 5-level site (the Winged Victory) shows the same innovation and 17, 27 and 20 months. | A money figure: an old tooltip. A blank month count: `gm_arch_site_months_*` on the container. |
 | **The row.** Launch a dig. | Its row says "Diverts 20 weekly innovation" for Systematic; the summary line's total is the sum of the rows. | A 0: `gm_arch_site_innovation` reads no method. |
-| **The gate.** As a country making about 30 weekly innovation with Empiricism, launch a Systematic dig, then hover Systematic on another site. | The first launches; the second button is greyed with "We make at least 20 weekly innovation…" failing, and Antiquarian (5) is still open. | A second launch passes: `country_innovation` is gross, or not refreshed before the next click. |
-| **An old save.** Load a save made with the MVP while a dig ran. | Within a month the Excavation Costs modifier is gone from the entry and the Budget's Archaeological Digs row is empty. | `gm_arch_remove_national` did not run, or the engine dropped the modifier on load (harmless). |
+| **The gate.** As a country making about 30 weekly innovation with Empiricism, launch a Systematic dig, then hover Systematic on another site at once, then daily until day 15. Note the day the weekly innovation figure drops by 20. | The first launches; the second button is greyed at once (the booking, `gm_arch_innovation_pending`, shows "We make at least 40 weekly innovation…") and stays greyed after day 14 (the declared `gm_arch_diversion` has landed: "at least 20"). Antiquarian is open at once; from the day the drain lands until day 14 it is greyed too ("at least 25", the landed drain and the booking both counting), then open again. The drop should come 2-5 days after the launch; if it comes later than day 12, lengthen the booking (`gm_arch_book_innovation`). | A second launch passes at once: the booking in `gm_arch_begin_dig` or the gate's `gm_arch_innovation_gate_<method>`. After day 14: `country_innovation` is gross, or the declaration doesn't land. |
+| ~~**An old save.** Load a save made with the MVP while a dig ran.~~ | ~~Within a month the Excavation Costs modifier is gone from the entry and the Budget's Archaeological Digs row is empty.~~ | Dropped with `gm_arch_remove_national` (#1404): vanilla 1.15 loads no save from before 2026-11-05 (#1407), and none since carries the modifier. |
 | **The AI.** Observe a small AI making under 20 weekly innovation for ten years. | It opens no dig. One making 80 to 400 digs by Systematic; above 400 with Computer Networks, by Forensic. | |
 
 ## The events
@@ -120,3 +122,9 @@ site did not seed).
 
 - A split state is dug by any of its owners, or anyone holding an article on a part of it; the first to launch holds it. An open site's row does not name its state (several countries may hold parts of it).
 - No console harness signs a treaty: test digging abroad through the treaty screen.
+
+## Harness run, 2026-11-11 (1.15.1)
+
+Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
+
+`archaeology_site_region` OK on the first monthly pass.

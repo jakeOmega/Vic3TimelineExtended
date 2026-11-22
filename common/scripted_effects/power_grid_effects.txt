@@ -9,9 +9,13 @@
 #     built beside the station, whose Undersea Cable Range,
 #     building_grid_undersea_cable_range_add, is 1 or more) and either end's
 #     range reaches the other, counted in Sea Nodes: within one country, or
-#     between two with a Grid Interconnection Agreement;
+#     between two grid partners;
 #   - a neighbouring group of another country across a land border, when the
-#     two have a Grid Interconnection Agreement.
+#     two are grid partners.
+# Two countries are grid partners when they have a Grid Interconnection
+# Agreement, or, since 2026-11-14, are members of a power bloc that holds
+# Market Unification IV or V or Internal Trade IV or V and aren't at war
+# (te_grid_bloc_links_grids; te_grid_refresh_partners_effect lists both).
 # Once a month each grid moves Electricity until it sells at one price in the
 # states that send it and at that price over their transmission efficiency in
 # the states that receive it (te_grid_surplus_value, power_grid_values.txt):
@@ -62,6 +66,12 @@
 #   te_grid_region_size / te_grid_region_ratio / te_grid_hub  the grid's
 #                    stations, its supply-to-demand ratio without them and its
 #                    hub (largest producer, a state), for the state panel tile
+#   te_grid_map_color  the grid's color on the Map Room's Power Grids map, 1-12
+#                    (te_grid_map_color_effect), kept from run to run while the
+#                    station is on a grid
+#   te_grid_region_demand  the grid's demand without its stations (the ratio's
+#                    denominator: 0, and the ratio 0, on a grid nothing uses
+#                    power on), for the building panel's Supply row
 #   te_grid_price_target  the Electricity price, over its base, the flow set
 #                    brings the state to (0 when it moves nothing)
 #   te_grid_ratio_in  briefly, the sell/buy ratio te_grid_price_at_ratio_value
@@ -82,6 +92,10 @@
 #                    linked to a member in another market)
 #   te_grid_sea_hops  during a walk across the sea, the Sea Nodes between
 #                    the state and the walk's start (te_grid_sea_reach_effect)
+#   te_grid_state_mix_<source>  the state's own Electricity by source at this
+#                    month's balancing (te_grid_mix_store_state_effect), for its
+#                    grid's record and its owner's National Generation; removed
+#                    when it leaves every grid (te_grid_mix_clear_state_effect)
 # Global lists during a run: te_grid_pending_states (online stations not yet
 # in a grid), te_grid_region (the grid being built and balanced) and
 # te_grid_frontier (members whose links are still to be followed), and
@@ -91,10 +105,42 @@
 # against its demand, whether it has demand, its sending price and the
 # sell/buy ratio senders end at, and te_grid_cable_range_max the
 # longest Undersea Cable Range of any station this run. Country variable
-# lists, refreshed each run: te_grid_partners, the countries each station
-# owner has a Grid Interconnection Agreement with; te_grid_cable_reach, the
+# lists, refreshed each run: te_grid_partners, each station owner's grid
+# partners (its agreement partners and its bloc partners, rebuilt from empty
+# at each refresh, so a partner that is one no longer drops out at the next
+# run); te_grid_cable_reach, the
 # countries whose undersea cables reach its own or are reached by them, which
 # lets the agreement be signed between them (123_grid_interconnection.txt).
+#
+# The grid's record, for the Power Grids tab, kept from one run to the next
+# (te_grid_record_effect). A grid lasts a run, so its hub (te_grid_hub, a
+# member) carries it: te_grid_rec_supply / _demand (the sums of
+# te_grid_local_production / _consumption; a grid with no demand is never
+# priced, so its te_grid_rec_price is the default 1), te_grid_rec_price
+# (te_grid_price), te_grid_rec_sent (what its sending stations are ordered to
+# send a week) and te_grid_rec_delivered (what its receiving stations are
+# ordered to deliver, after losses), te_grid_rec_countries and
+# te_grid_rec_markets (how many own a station on it, and how many markets it
+# crosses), te_grid_rec_mix_<source> and te_grid_rec_mix_total (its
+# generation by source, the sum of its members' te_grid_state_mix_<source>),
+# and the variable list te_grid_rec_capitals (the capitals of the
+# countries on it, for their flags: a country read straight off a GUI list is
+# unproven, gui_modding_guide.md gotcha #15; a country with no capital is
+# counted but has no flag). Its size and its supply against its demand are
+# the hub's te_grid_region_size and te_grid_region_ratio, as on every member.
+# Country variable lists: te_grid_hubs, the hubs of the grids its stations
+# are on; te_grid_stations, its built stations, those on a grid first, grid
+# by grid, then those that aren't online (the tile's Offline). Global lists
+# te_grid_record_hubs and te_grid_record_countries name what to clear at the
+# next run's start (te_grid_record_clear_effect), and the dispatch fires while
+# any state still holds a station's figures (power_grid_on_actions.txt): a
+# country that loses its last station, or a hub that stops being one, keeps
+# nothing from the run before.
+#
+# Country variables te_grid_chk_bloc_seen and te_grid_chk_bloc_seen_principle:
+# the month index at which the grid_bloc_link self-check saw the country in a
+# bloc that joins grids, and whether has_principle read it then
+# (te_grid_bloc_link_selfcheck_effect), judged in a later month.
 #
 # The flow modifiers are applied on the building with local-variable
 # multipliers: a `multiplier = var:` or script value there would resolve
@@ -109,6 +155,7 @@ te_grid_world_update_effect = {
 	te_grid_dispatch_info_effect = yes
 	te_grid_staffing_info_start_effect = yes
 	set_global_variable = { name = te_grid_cable_range_max value = 0 }
+	te_grid_record_clear_effect = yes
 
 	every_country = {
 		limit = {
@@ -119,6 +166,7 @@ te_grid_world_update_effect = {
 				}
 			}
 		}
+		add_to_global_variable_list = { name = te_grid_record_countries target = this }
 		# A state whose station is gone keeps no figures.
 		every_scope_state = {
 			limit = {
@@ -175,8 +223,112 @@ te_grid_world_update_effect = {
 		te_grid_close_region_effect = yes
 	}
 
+	# Each country's stations on no grid this month, those that aren't online
+	# (te_grid_idle_station_effect took their hub), after those on one.
+	every_in_global_list = {
+		variable = te_grid_record_countries
+		every_scope_state = {
+			limit = {
+				has_building = building_grid_transfer_station
+				NOT = { has_variable = te_grid_hub }
+			}
+			owner = {
+				add_to_variable_list = { name = te_grid_stations target = prev }
+			}
+		}
+	}
+
 	te_grid_staffing_info_end_effect = yes
 	te_grid_world_clear_effect = yes
+}
+
+# Any scope, at the start of a run. Clears last run's record: the figures on
+# every grid's hub and every country's lists (te_grid_record_effect).
+te_grid_record_clear_effect = {
+	# A state or country gone since (a split state merged back, an annexed
+	# country) has nothing left to clear.
+	every_in_global_list = {
+		variable = te_grid_record_hubs
+		limit = { exists = this }
+		te_grid_clear_record_effect = yes
+	}
+	clear_global_variable_list = te_grid_record_hubs
+	# Its cable reach too: the country pass clears it for a country still in
+	# it, but one that has left (its last station gone) has no cable to reach
+	# with, and the tab's In reach would keep counting what it had.
+	every_in_global_list = {
+		variable = te_grid_record_countries
+		limit = { exists = this }
+		clear_variable_list = te_grid_hubs
+		clear_variable_list = te_grid_stations
+		clear_variable_list = te_grid_cable_reach
+	}
+	clear_global_variable_list = te_grid_record_countries
+}
+
+# State scope, a hub of the last run.
+te_grid_clear_record_effect = {
+	if = {
+		limit = { has_variable = te_grid_rec_supply }
+		remove_variable = te_grid_rec_supply
+	}
+	if = {
+		limit = { has_variable = te_grid_rec_demand }
+		remove_variable = te_grid_rec_demand
+	}
+	if = {
+		limit = { has_variable = te_grid_rec_price }
+		remove_variable = te_grid_rec_price
+	}
+	if = {
+		limit = { has_variable = te_grid_rec_sent }
+		remove_variable = te_grid_rec_sent
+	}
+	if = {
+		limit = { has_variable = te_grid_rec_delivered }
+		remove_variable = te_grid_rec_delivered
+	}
+	if = {
+		limit = { has_variable = te_grid_rec_countries }
+		remove_variable = te_grid_rec_countries
+	}
+	if = {
+		limit = { has_variable = te_grid_rec_markets }
+		remove_variable = te_grid_rec_markets
+	}
+	if = {
+		limit = { has_variable = te_grid_rec_mix_coal }
+		remove_variable = te_grid_rec_mix_coal
+	}
+	if = {
+		limit = { has_variable = te_grid_rec_mix_oil }
+		remove_variable = te_grid_rec_mix_oil
+	}
+	if = {
+		limit = { has_variable = te_grid_rec_mix_hydro }
+		remove_variable = te_grid_rec_mix_hydro
+	}
+	if = {
+		limit = { has_variable = te_grid_rec_mix_nuclear }
+		remove_variable = te_grid_rec_mix_nuclear
+	}
+	if = {
+		limit = { has_variable = te_grid_rec_mix_renewable }
+		remove_variable = te_grid_rec_mix_renewable
+	}
+	if = {
+		limit = { has_variable = te_grid_rec_mix_fusion }
+		remove_variable = te_grid_rec_mix_fusion
+	}
+	if = {
+		limit = { has_variable = te_grid_rec_mix_space_solar }
+		remove_variable = te_grid_rec_mix_space_solar
+	}
+	if = {
+		limit = { has_variable = te_grid_rec_mix_total }
+		remove_variable = te_grid_rec_mix_total
+	}
+	clear_variable_list = te_grid_rec_capitals
 }
 
 # Any scope. Clears the run's lists, the marks on their members and the grid's
@@ -245,8 +397,21 @@ te_grid_clear_marks_effect = {
 	}
 }
 
-# Country scope. The country's Grid Interconnection Agreement partners, as a
-# variable list the link triggers read (te_grid_owners_interconnected).
+# Country scope. The country's grid partners, as a variable list the link
+# triggers read (te_grid_owners_interconnected): its Grid Interconnection
+# Agreement partners, and since 2026-11-14 the other members of its power bloc
+# while the bloc holds Market Unification IV or V or Internal Trade IV or V
+# (te_grid_bloc_links_grids), as if each held the agreement with it. A member at
+# war with it is left out, as the agreement can't be signed at war. A member it
+# also has an agreement with is listed once.
+#
+# The list is rebuilt from nothing at every call, before any grid is built
+# (te_grid_world_update_effect's country pass, for every country with a
+# station, treaty or none; te_grid_ai_build_effect, for an AI country that
+# could build one), so a country that has left the bloc, a bloc that has lost
+# the principle or dissolved, and a lapsed agreement all drop out at the next
+# run. The bloc is symmetric and its principle is the bloc's, so the lists stay
+# mutual, as the treaties' are.
 te_grid_refresh_partners_effect = {
 	clear_variable_list = te_grid_partners
 	save_scope_as = te_grid_partners_of
@@ -265,6 +430,27 @@ te_grid_refresh_partners_effect = {
 			add_to_variable_list = { name = te_grid_partners target = scope:te_grid_partner }
 		}
 	}
+	if = {
+		limit = { te_grid_bloc_links_grids = yes }
+		power_bloc ?= {
+			every_power_bloc_member = {
+				limit = {
+					NOT = { this = scope:te_grid_partners_of }
+					NOT = { has_war_with = scope:te_grid_partners_of }
+				}
+				save_scope_as = te_grid_partner
+				scope:te_grid_partners_of = {
+					if = {
+						limit = {
+							NOT = { is_target_in_variable_list = { name = te_grid_partners target = scope:te_grid_partner } }
+						}
+						add_to_variable_list = { name = te_grid_partners target = scope:te_grid_partner }
+					}
+				}
+			}
+		}
+	}
+	te_grid_bloc_link_selfcheck_effect = yes
 }
 
 # Country scope, an AI country. The construction AI won't build what earns
@@ -326,24 +512,38 @@ te_grid_ai_interconnectors_effect = {
 # build (the Strategic Reserve Hub at 10 000: 1 hub in 157 countries), so the
 # AI queues a station itself, one a month, as government construction: in the
 # state te_grid_station_ai_value ranks highest of those the building's
-# placement rule allows, in a market area where it makes Electricity. A
-# station costs 100 construction, so only a default or a government queue
-# already a year long holds it back.
+# placement rule allows, in a market area where it makes Electricity or
+# beside an agreement partner's station (te_grid_ai_station_site). A station
+# costs 100 construction, so only a default or a government queue already a
+# year long holds it back.
+#
+# The site rule reads the country's Grid Interconnection Agreement partners,
+# and the balancing keeps that list only for a country with a station. So the
+# pass refreshes it first, for every AI country that could build one: a
+# country with an agreement and no power would otherwise never be seen to
+# have a partner, and never build the station that lets it receive.
 te_grid_ai_build_effect = {
 	if = {
-		limit = {
-			has_technology_researched = electrical_capacitors
-			in_default = no
-			construction_queue_government_duration < 52
-			# Skips the per-state search for a country with no power at all.
-			any_scope_state = { te_grid_electricity_production > 0 }
-		}
-		ordered_scope_state = {
-			limit = { te_grid_ai_station_site = yes }
-			order_by = te_grid_station_ai_value
-			position = 0
-			check_range_bounds = no
-			start_building_construction = building_grid_transfer_station
+		limit = { has_technology_researched = electrical_capacitors }
+		te_grid_refresh_partners_effect = yes
+		if = {
+			limit = {
+				in_default = no
+				construction_queue_government_duration < 52
+				# Skips the per-state search for a country with no power at all
+				# and no partner to bring it any.
+				OR = {
+					any_scope_state = { te_grid_electricity_production > 0 }
+					has_variable_list = te_grid_partners
+				}
+			}
+			ordered_scope_state = {
+				limit = { te_grid_ai_station_site = yes }
+				order_by = te_grid_station_ai_value
+				position = 0
+				check_range_bounds = no
+				start_building_construction = building_grid_transfer_station
+			}
 		}
 	}
 }
@@ -639,6 +839,9 @@ te_grid_balance_region_effect = {
 		set_variable = { name = te_grid_local_production value = te_grid_local_production_value }
 		set_variable = { name = te_grid_local_consumption value = te_grid_local_consumption_value }
 		set_variable = { name = te_grid_efficiency value = te_grid_state_efficiency_value }
+		# Its generation by source, from the production just read, before its
+		# station's rate and delivery are overwritten (te_grid_mix_store_state_effect).
+		te_grid_mix_store_state_effect = yes
 		change_local_variable = { name = te_grid_sum_production add = var:te_grid_local_production }
 		change_local_variable = { name = te_grid_sum_consumption add = var:te_grid_local_consumption }
 		change_local_variable = { name = te_grid_members add = 1 }
@@ -741,6 +944,7 @@ te_grid_balance_region_effect = {
 		te_grid_set_price_target_effect = yes
 		set_variable = { name = te_grid_region_size value = local_var:te_grid_members }
 		set_variable = { name = te_grid_region_ratio value = global_var:te_grid_ratio }
+		set_variable = { name = te_grid_region_demand value = local_var:te_grid_sum_consumption }
 		set_variable = { name = te_grid_hub value = scope:te_grid_hub_state }
 	}
 
@@ -749,6 +953,155 @@ te_grid_balance_region_effect = {
 	every_in_global_list = {
 		variable = te_grid_region
 		te_grid_set_station_flow_effect = yes
+	}
+
+	# Once the orders are set, the grid's record for the Power Grids tab, and its
+	# color on the Map Room's Power Grids map.
+	te_grid_record_effect = yes
+	te_grid_map_color_effect = yes
+}
+
+# Country scope, from te_grid_balance_region_effect once the grid's record is
+# written: te_grid_region holds the grid, scope:te_grid_hub_state its hub. The
+# grid's color on the Map Room's Power Grids map (selector 31,
+# te_journal_maps.txt; 2026-11-07), 1 to 12 (te_jmap_grid_<n>), on every member
+# as te_grid_map_color. It outlives the run, so a grid keeps its color while its
+# hub does: the hub's color from last month, unless a neighbouring grid holds it
+# (te_grid_map_color_taken, which reads local te_grid_color), else the first of
+# the twelve none does. A neighbour already balanced this run holds this run's
+# color, one not yet last month's; a station off any grid holds none
+# (te_grid_idle_station_effect), so it neither counts nor is counted. Only
+# around a grid with twelve differently colored neighbours do the colors run
+# out, and it keeps its own, or 1.
+te_grid_map_color_effect = {
+	set_local_variable = { name = te_grid_color value = 0 }
+	scope:te_grid_hub_state = {
+		if = {
+			limit = { has_variable = te_grid_map_color }
+			set_local_variable = { name = te_grid_color value = var:te_grid_map_color }
+		}
+	}
+	if = {
+		limit = {
+			OR = {
+				local_var:te_grid_color < 1
+				te_grid_map_color_taken = yes
+			}
+		}
+		set_local_variable = { name = te_grid_color_kept value = local_var:te_grid_color }
+		set_local_variable = { name = te_grid_color value = 1 }
+		while = {
+			limit = {
+				local_var:te_grid_color <= 12
+				te_grid_map_color_taken = yes
+			}
+			change_local_variable = { name = te_grid_color add = 1 }
+		}
+		if = {
+			limit = { local_var:te_grid_color > 12 }
+			set_local_variable = { name = te_grid_color value = local_var:te_grid_color_kept }
+			if = {
+				limit = { local_var:te_grid_color < 1 }
+				set_local_variable = { name = te_grid_color value = 1 }
+			}
+		}
+	}
+	every_in_global_list = {
+		variable = te_grid_region
+		set_variable = { name = te_grid_map_color value = local_var:te_grid_color }
+	}
+}
+
+# Country scope, from te_grid_balance_region_effect once a grid's orders are
+# set (te_grid_command, te_grid_delivery): te_grid_region holds the grid,
+# scope:te_grid_hub_state its hub, and the balancing's locals its sums
+# (te_grid_sum_production, te_grid_sum_consumption) and the markets it crosses
+# (te_grid_rec_markets, te_grid_cross_market_effect). The figures go on the
+# hub, which every member names (te_grid_hub), with the grid's generation by
+# source (te_grid_rec_mix_<source>, te_grid_rec_mix_total): the sum of every
+# member's split (te_grid_state_mix_<source>, te_grid_mix_store_state_effect),
+# whoever owns it, each member once, since a member is on one grid a run. Each member's owner lists the
+# hub once (te_grid_hubs) and the member (te_grid_stations), and the first
+# member of each owner counts it and lists its capital on the hub. What a
+# station moves is the tile's Flow (te_grid_electricity_moved_disp): this
+# month's order, what it is to send or deliver after losses, and nothing for
+# an order under a unit a week; a station with no staff counts in full, as on
+# the tile, though it moves nothing until it hires.
+te_grid_record_effect = {
+	set_local_variable = { name = te_grid_rec_sent value = 0 }
+	set_local_variable = { name = te_grid_rec_delivered value = 0 }
+	set_local_variable = { name = te_grid_rec_countries value = 0 }
+	set_local_variable = { name = te_grid_rec_mix_coal value = 0 }
+	set_local_variable = { name = te_grid_rec_mix_oil value = 0 }
+	set_local_variable = { name = te_grid_rec_mix_hydro value = 0 }
+	set_local_variable = { name = te_grid_rec_mix_nuclear value = 0 }
+	set_local_variable = { name = te_grid_rec_mix_renewable value = 0 }
+	set_local_variable = { name = te_grid_rec_mix_fusion value = 0 }
+	set_local_variable = { name = te_grid_rec_mix_space_solar value = 0 }
+	scope:te_grid_hub_state = {
+		add_to_global_variable_list = { name = te_grid_record_hubs target = this }
+		clear_variable_list = te_grid_rec_capitals
+	}
+	every_in_global_list = {
+		variable = te_grid_region
+		te_grid_mix_add_member_effect = yes
+		if = {
+			limit = { var:te_grid_flow > 0 }
+			change_local_variable = { name = te_grid_rec_sent add = te_grid_electricity_moved_disp }
+		}
+		else_if = {
+			limit = { var:te_grid_flow < 0 }
+			change_local_variable = { name = te_grid_rec_delivered add = te_grid_electricity_moved_disp }
+		}
+		save_scope_as = te_grid_rec_member
+		owner = {
+			if = {
+				limit = {
+					NOT = { is_target_in_variable_list = { name = te_grid_hubs target = scope:te_grid_hub_state } }
+				}
+				add_to_variable_list = { name = te_grid_hubs target = scope:te_grid_hub_state }
+				change_local_variable = { name = te_grid_rec_countries add = 1 }
+				if = {
+					limit = { exists = capital }
+					capital = {
+						save_scope_as = te_grid_rec_capital
+					}
+					scope:te_grid_hub_state = {
+						add_to_variable_list = { name = te_grid_rec_capitals target = scope:te_grid_rec_capital }
+					}
+				}
+			}
+			add_to_variable_list = { name = te_grid_stations target = scope:te_grid_rec_member }
+		}
+	}
+	set_local_variable = {
+		name = te_grid_rec_mix_total
+		value = {
+			value = local_var:te_grid_rec_mix_coal
+			add = local_var:te_grid_rec_mix_oil
+			add = local_var:te_grid_rec_mix_hydro
+			add = local_var:te_grid_rec_mix_nuclear
+			add = local_var:te_grid_rec_mix_renewable
+			add = local_var:te_grid_rec_mix_fusion
+			add = local_var:te_grid_rec_mix_space_solar
+		}
+	}
+	scope:te_grid_hub_state = {
+		set_variable = { name = te_grid_rec_supply value = local_var:te_grid_sum_production }
+		set_variable = { name = te_grid_rec_demand value = local_var:te_grid_sum_consumption }
+		set_variable = { name = te_grid_rec_price value = global_var:te_grid_price }
+		set_variable = { name = te_grid_rec_sent value = local_var:te_grid_rec_sent }
+		set_variable = { name = te_grid_rec_delivered value = local_var:te_grid_rec_delivered }
+		set_variable = { name = te_grid_rec_countries value = local_var:te_grid_rec_countries }
+		set_variable = { name = te_grid_rec_markets value = local_var:te_grid_rec_markets }
+		set_variable = { name = te_grid_rec_mix_coal value = local_var:te_grid_rec_mix_coal }
+		set_variable = { name = te_grid_rec_mix_oil value = local_var:te_grid_rec_mix_oil }
+		set_variable = { name = te_grid_rec_mix_hydro value = local_var:te_grid_rec_mix_hydro }
+		set_variable = { name = te_grid_rec_mix_nuclear value = local_var:te_grid_rec_mix_nuclear }
+		set_variable = { name = te_grid_rec_mix_renewable value = local_var:te_grid_rec_mix_renewable }
+		set_variable = { name = te_grid_rec_mix_fusion value = local_var:te_grid_rec_mix_fusion }
+		set_variable = { name = te_grid_rec_mix_space_solar value = local_var:te_grid_rec_mix_space_solar }
+		set_variable = { name = te_grid_rec_mix_total value = local_var:te_grid_rec_mix_total }
 	}
 }
 
@@ -783,6 +1136,9 @@ te_grid_cross_market_effect = {
 		variable = te_grid_region
 		save_scope_as = te_grid_seed_state
 	}
+	# How many markets the grid crosses, for its record (te_grid_record_effect):
+	# one, or one per market settled below.
+	set_local_variable = { name = te_grid_rec_markets value = 1 }
 	if = {
 		limit = {
 			any_in_global_list = {
@@ -790,6 +1146,7 @@ te_grid_cross_market_effect = {
 				NOT = { market = scope:te_grid_seed_state.market }
 			}
 		}
+		set_local_variable = { name = te_grid_rec_markets value = 0 }
 		every_in_global_list = {
 			variable = te_grid_region
 			set_variable = te_grid_market_pending
@@ -827,6 +1184,7 @@ te_grid_cross_market_effect = {
 # member.
 te_grid_settle_market_effect = {
 	save_scope_as = te_grid_market_member
+	change_local_variable = { name = te_grid_rec_markets add = 1 }
 	set_local_variable = { name = te_grid_market_sum value = 0 }
 	every_in_global_list = {
 		variable = te_grid_region
@@ -1026,6 +1384,10 @@ te_grid_idle_station_effect = {
 		remove_variable = te_grid_region_ratio
 	}
 	if = {
+		limit = { has_variable = te_grid_region_demand }
+		remove_variable = te_grid_region_demand
+	}
+	if = {
 		limit = { has_variable = te_grid_price_target }
 		remove_variable = te_grid_price_target
 	}
@@ -1033,6 +1395,12 @@ te_grid_idle_station_effect = {
 		limit = { has_variable = te_grid_hub }
 		remove_variable = te_grid_hub
 	}
+	if = {
+		limit = { has_variable = te_grid_map_color }
+		remove_variable = te_grid_map_color
+	}
+	# Its split goes with its grid: the country's count walks it again.
+	te_grid_mix_clear_state_effect = yes
 	set_local_variable = { name = te_grid_upload_mult value = -1 }
 	set_local_variable = { name = te_grid_upload_power_mult value = -1 }
 	set_local_variable = { name = te_grid_download_mult value = -1 }
@@ -1204,12 +1572,20 @@ te_grid_clear_state_effect = {
 		remove_variable = te_grid_region_ratio
 	}
 	if = {
+		limit = { has_variable = te_grid_region_demand }
+		remove_variable = te_grid_region_demand
+	}
+	if = {
 		limit = { has_variable = te_grid_price_target }
 		remove_variable = te_grid_price_target
 	}
 	if = {
 		limit = { has_variable = te_grid_hub }
 		remove_variable = te_grid_hub
+	}
+	if = {
+		limit = { has_variable = te_grid_map_color }
+		remove_variable = te_grid_map_color
 	}
 	if = {
 		limit = { has_variable = te_grid_import_command }
@@ -1221,6 +1597,372 @@ te_grid_clear_state_effect = {
 	}
 	clear_variable_list = te_grid_cable_links
 	te_grid_clear_cross_market_effect = yes
+	te_grid_mix_clear_state_effect = yes
+}
+
+# ---- Generation by source --------------------------------------------------------
+
+# Country scope, monthly (te_grid_mix_on_action, power_grid_on_actions.txt),
+# once the Power Grids tab is open: the Electricity the country's power plants
+# made last week, by source, in all its states, on a grid or not, for the
+# tab's National Generation panel (te_grid_tab_mix_*_disp). Each state's own
+# generation is measured (what it made, less what its station delivered);
+# te_grid_mix_state_effect splits it among its plants. A state that was on a
+# grid at the last balancing was split there (te_grid_state_mix_<source>,
+# te_grid_mix_store_state_effect), and its split is taken as it stands, so no
+# state's buildings are walked twice a month. A state with no plant, whose
+# power is all its station's, adds nothing.
+te_grid_mix_record_effect = {
+	set_local_variable = { name = te_grid_mix_sum_coal value = 0 }
+	set_local_variable = { name = te_grid_mix_sum_oil value = 0 }
+	set_local_variable = { name = te_grid_mix_sum_hydro value = 0 }
+	set_local_variable = { name = te_grid_mix_sum_nuclear value = 0 }
+	set_local_variable = { name = te_grid_mix_sum_renewable value = 0 }
+	set_local_variable = { name = te_grid_mix_sum_fusion value = 0 }
+	set_local_variable = { name = te_grid_mix_sum_space_solar value = 0 }
+	every_scope_state = {
+		limit = { te_grid_electricity_production > 0 }
+		if = {
+			limit = { has_variable = te_grid_state_mix_coal }
+			te_grid_mix_add_stored_effect = yes
+		}
+		else = {
+			set_local_variable = { name = te_grid_mix_gen value = te_grid_local_production_value }
+			te_grid_mix_state_effect = yes
+			te_grid_mix_add_parts_effect = yes
+		}
+	}
+	set_variable = { name = te_grid_mix_coal value = local_var:te_grid_mix_sum_coal }
+	set_variable = { name = te_grid_mix_oil value = local_var:te_grid_mix_sum_oil }
+	set_variable = { name = te_grid_mix_hydro value = local_var:te_grid_mix_sum_hydro }
+	set_variable = { name = te_grid_mix_nuclear value = local_var:te_grid_mix_sum_nuclear }
+	set_variable = { name = te_grid_mix_renewable value = local_var:te_grid_mix_sum_renewable }
+	set_variable = { name = te_grid_mix_fusion value = local_var:te_grid_mix_sum_fusion }
+	set_variable = { name = te_grid_mix_space_solar value = local_var:te_grid_mix_sum_space_solar }
+	set_variable = {
+		name = te_grid_mix_total
+		value = {
+			value = local_var:te_grid_mix_sum_coal
+			add = local_var:te_grid_mix_sum_oil
+			add = local_var:te_grid_mix_sum_hydro
+			add = local_var:te_grid_mix_sum_nuclear
+			add = local_var:te_grid_mix_sum_renewable
+			add = local_var:te_grid_mix_sum_fusion
+			add = local_var:te_grid_mix_sum_space_solar
+		}
+	}
+}
+
+# State scope, a member of the grid being balanced (te_grid_balance_region_effect's
+# first member loop), its te_grid_local_production just set. Its generation by
+# source, stored on it (te_grid_state_mix_<source>) for its grid's record
+# (te_grid_mix_add_member_effect) and its owner's count
+# (te_grid_mix_record_effect). From the production the run has just read: once
+# the orders are set, te_grid_local_production_value would divide last week's
+# Grid Power by this month's rate and delivery. A state that made under a tenth
+# of a unit of its own a week stores zeros without a walk: a receiver with no
+# plant reads a rounding residual there (its production less its station's
+# delivery), and walking it would walk it twice (no staffed plant, so the
+# full-staff fallback). The least a real plant makes is far above it: no
+# method's figure is under 25 a level (te_grid_mix_output_per_level_value) and
+# no carbon capture method takes more than 13 off, so a level makes 12 or more
+# at full staff, and 0.1 is under 1% staffing of one level. The balancing visits each member once a
+# month, on the 1st, so each is split once and at the moment its grid's supply
+# is read; a country's count runs on its own 30-day timer, out of step with the
+# 1st and with every other country's, so it can't sum a grid that spans
+# countries.
+te_grid_mix_store_state_effect = {
+	set_local_variable = { name = te_grid_mix_gen value = var:te_grid_local_production }
+	if = {
+		limit = { var:te_grid_local_production >= 0.1 }
+		te_grid_mix_state_effect = yes
+	}
+	else = {
+		te_grid_mix_clear_parts_effect = yes
+	}
+	set_variable = { name = te_grid_state_mix_coal value = local_var:te_grid_mix_part_coal }
+	set_variable = { name = te_grid_state_mix_oil value = local_var:te_grid_mix_part_oil }
+	set_variable = { name = te_grid_state_mix_hydro value = local_var:te_grid_mix_part_hydro }
+	set_variable = { name = te_grid_state_mix_nuclear value = local_var:te_grid_mix_part_nuclear }
+	set_variable = { name = te_grid_state_mix_renewable value = local_var:te_grid_mix_part_renewable }
+	set_variable = { name = te_grid_state_mix_fusion value = local_var:te_grid_mix_part_fusion }
+	set_variable = { name = te_grid_state_mix_space_solar value = local_var:te_grid_mix_part_space_solar }
+}
+
+# State scope, a station leaving its grid, or a state whose station is gone.
+te_grid_mix_clear_state_effect = {
+	if = {
+		limit = { has_variable = te_grid_state_mix_coal }
+		remove_variable = te_grid_state_mix_coal
+	}
+	if = {
+		limit = { has_variable = te_grid_state_mix_oil }
+		remove_variable = te_grid_state_mix_oil
+	}
+	if = {
+		limit = { has_variable = te_grid_state_mix_hydro }
+		remove_variable = te_grid_state_mix_hydro
+	}
+	if = {
+		limit = { has_variable = te_grid_state_mix_nuclear }
+		remove_variable = te_grid_state_mix_nuclear
+	}
+	if = {
+		limit = { has_variable = te_grid_state_mix_renewable }
+		remove_variable = te_grid_state_mix_renewable
+	}
+	if = {
+		limit = { has_variable = te_grid_state_mix_fusion }
+		remove_variable = te_grid_state_mix_fusion
+	}
+	if = {
+		limit = { has_variable = te_grid_state_mix_space_solar }
+		remove_variable = te_grid_state_mix_space_solar
+	}
+}
+
+# State scope, in te_grid_record_effect's member loop: the member's split onto
+# its grid's sums.
+te_grid_mix_add_member_effect = {
+	change_local_variable = { name = te_grid_rec_mix_coal add = var:te_grid_state_mix_coal }
+	change_local_variable = { name = te_grid_rec_mix_oil add = var:te_grid_state_mix_oil }
+	change_local_variable = { name = te_grid_rec_mix_hydro add = var:te_grid_state_mix_hydro }
+	change_local_variable = { name = te_grid_rec_mix_nuclear add = var:te_grid_state_mix_nuclear }
+	change_local_variable = { name = te_grid_rec_mix_renewable add = var:te_grid_state_mix_renewable }
+	change_local_variable = { name = te_grid_rec_mix_fusion add = var:te_grid_state_mix_fusion }
+	change_local_variable = { name = te_grid_rec_mix_space_solar add = var:te_grid_state_mix_space_solar }
+}
+
+# State scope, in te_grid_mix_record_effect: a state split at the last balancing
+# (te_grid_mix_store_state_effect), its split onto the country's sums.
+te_grid_mix_add_stored_effect = {
+	change_local_variable = { name = te_grid_mix_sum_coal add = var:te_grid_state_mix_coal }
+	change_local_variable = { name = te_grid_mix_sum_oil add = var:te_grid_state_mix_oil }
+	change_local_variable = { name = te_grid_mix_sum_hydro add = var:te_grid_state_mix_hydro }
+	change_local_variable = { name = te_grid_mix_sum_nuclear add = var:te_grid_state_mix_nuclear }
+	change_local_variable = { name = te_grid_mix_sum_renewable add = var:te_grid_state_mix_renewable }
+	change_local_variable = { name = te_grid_mix_sum_fusion add = var:te_grid_state_mix_fusion }
+	change_local_variable = { name = te_grid_mix_sum_space_solar add = var:te_grid_state_mix_space_solar }
+}
+
+# Any scope, in te_grid_mix_record_effect: a state just split, its parts onto
+# the country's sums.
+te_grid_mix_add_parts_effect = {
+	change_local_variable = { name = te_grid_mix_sum_coal add = local_var:te_grid_mix_part_coal }
+	change_local_variable = { name = te_grid_mix_sum_oil add = local_var:te_grid_mix_part_oil }
+	change_local_variable = { name = te_grid_mix_sum_hydro add = local_var:te_grid_mix_part_hydro }
+	change_local_variable = { name = te_grid_mix_sum_nuclear add = local_var:te_grid_mix_part_nuclear }
+	change_local_variable = { name = te_grid_mix_sum_renewable add = local_var:te_grid_mix_part_renewable }
+	change_local_variable = { name = te_grid_mix_sum_fusion add = local_var:te_grid_mix_part_fusion }
+	change_local_variable = { name = te_grid_mix_sum_space_solar add = local_var:te_grid_mix_part_space_solar }
+}
+
+# Any scope, in te_grid_mix_state_effect and te_grid_mix_store_state_effect.
+te_grid_mix_clear_parts_effect = {
+	set_local_variable = { name = te_grid_mix_part_coal value = 0 }
+	set_local_variable = { name = te_grid_mix_part_oil value = 0 }
+	set_local_variable = { name = te_grid_mix_part_hydro value = 0 }
+	set_local_variable = { name = te_grid_mix_part_nuclear value = 0 }
+	set_local_variable = { name = te_grid_mix_part_renewable value = 0 }
+	set_local_variable = { name = te_grid_mix_part_fusion value = 0 }
+	set_local_variable = { name = te_grid_mix_part_space_solar value = 0 }
+}
+
+# State scope, with local_var:te_grid_mix_gen set by the caller (the state's own
+# generation: te_grid_mix_record_effect's measure, or the balancing's
+# te_grid_local_production). Splits it among its sources in proportion to what
+# their plants make at their methods, levels and staffing
+# (te_grid_mix_staffed_output_value), as local_var:te_grid_mix_part_<source>,
+# 0 for a source it has none of. Where every plant reads no staff although the
+# state made power last week (a strike, or staff gone this week), it splits by
+# what they make at full staff instead; with no plant at all, every part is 0.
+te_grid_mix_state_effect = {
+	te_grid_mix_clear_parts_effect = yes
+	te_grid_mix_clear_weights_effect = yes
+	every_scope_building = {
+		limit = { te_grid_mix_output_per_level_value > 0 }
+		te_grid_mix_add_building_effect = { WEIGHT = te_grid_mix_staffed_output_value }
+	}
+	te_grid_mix_sum_weights_effect = yes
+	te_grid_mix_selfcheck_effect = yes
+	if = {
+		limit = { local_var:te_grid_mix_w_all <= 0 }
+		te_grid_mix_clear_weights_effect = yes
+		every_scope_building = {
+			limit = { te_grid_mix_output_per_level_value > 0 }
+			te_grid_mix_add_building_effect = { WEIGHT = te_grid_mix_capacity_output_value }
+		}
+		te_grid_mix_sum_weights_effect = yes
+	}
+	if = {
+		limit = { local_var:te_grid_mix_w_all > 0 }
+		te_grid_mix_split_effect = { SOURCE = coal }
+		te_grid_mix_split_effect = { SOURCE = oil }
+		te_grid_mix_split_effect = { SOURCE = hydro }
+		te_grid_mix_split_effect = { SOURCE = nuclear }
+		te_grid_mix_split_effect = { SOURCE = renewable }
+		te_grid_mix_split_effect = { SOURCE = fusion }
+		te_grid_mix_split_effect = { SOURCE = space_solar }
+	}
+}
+
+# Any scope, in te_grid_mix_state_effect.
+te_grid_mix_clear_weights_effect = {
+	set_local_variable = { name = te_grid_mix_w_coal value = 0 }
+	set_local_variable = { name = te_grid_mix_w_oil value = 0 }
+	set_local_variable = { name = te_grid_mix_w_hydro value = 0 }
+	set_local_variable = { name = te_grid_mix_w_nuclear value = 0 }
+	set_local_variable = { name = te_grid_mix_w_renewable value = 0 }
+	set_local_variable = { name = te_grid_mix_w_fusion value = 0 }
+	set_local_variable = { name = te_grid_mix_w_space_solar value = 0 }
+}
+
+# Any scope, in te_grid_mix_state_effect: the state's plants' weights, all
+# sources (inline: a named script value isn't known to read a caller's local
+# variables).
+te_grid_mix_sum_weights_effect = {
+	set_local_variable = {
+		name = te_grid_mix_w_all
+		value = {
+			value = local_var:te_grid_mix_w_coal
+			add = local_var:te_grid_mix_w_oil
+			add = local_var:te_grid_mix_w_hydro
+			add = local_var:te_grid_mix_w_nuclear
+			add = local_var:te_grid_mix_w_renewable
+			add = local_var:te_grid_mix_w_fusion
+			add = local_var:te_grid_mix_w_space_solar
+		}
+	}
+}
+
+# Building scope, a plant (te_grid_mix_output_per_level_value above 0): adds
+# its weight ($WEIGHT$, a building-scope value) to its source's. A Power Plant
+# on an oil-fired method is Oil, on any other Coal; the companies' power
+# stations burn coal, but for Mayak's reactors. test_power_grid_tab.py's
+# GenerationTableTest holds every plant in the table to one branch here.
+te_grid_mix_add_building_effect = {
+	if = {
+		limit = {
+			is_building_type = building_power_plant
+			OR = {
+				has_active_production_method = pm_oil-fired_plant
+				has_active_production_method = pm_modern_oil-fired_plant
+			}
+		}
+		change_local_variable = { name = te_grid_mix_w_oil add = $WEIGHT$ }
+	}
+	else_if = {
+		limit = {
+			OR = {
+				is_building_type = building_power_plant
+				is_building_type = building_generic_power_hub
+				is_building_type = building_tokyo_electric_asakusa_station
+				is_building_type = building_siam_electric_wat_liab_station
+				is_building_type = building_calcutta_electric_victoria_house
+				is_building_type = building_eea_dock_sud_power_station
+				is_building_type = building_electricidad_caracas_power_house
+				is_building_type = building_hanseong_jeongi_gwanghwamun_station
+				is_building_type = building_ingolstadt_power_station
+			}
+		}
+		change_local_variable = { name = te_grid_mix_w_coal add = $WEIGHT$ }
+	}
+	else_if = {
+		limit = { is_building_type = building_hydro_plant }
+		change_local_variable = { name = te_grid_mix_w_hydro add = $WEIGHT$ }
+	}
+	else_if = {
+		limit = {
+			OR = {
+				is_building_type = building_nuclear_plant
+				is_building_type = building_rosatom_mayak_association
+			}
+		}
+		change_local_variable = { name = te_grid_mix_w_nuclear add = $WEIGHT$ }
+	}
+	else_if = {
+		limit = { is_building_type = building_renewable_energy_plant }
+		change_local_variable = { name = te_grid_mix_w_renewable add = $WEIGHT$ }
+	}
+	else_if = {
+		limit = { is_building_type = building_fusion_plant }
+		change_local_variable = { name = te_grid_mix_w_fusion add = $WEIGHT$ }
+	}
+	else_if = {
+		limit = { is_building_type = building_solar_receiver }
+		change_local_variable = { name = te_grid_mix_w_space_solar add = $WEIGHT$ }
+	}
+}
+
+# State scope, in te_grid_mix_state_effect: the state's generation times
+# $SOURCE$'s share of its weight, as its part. The share is taken first, so a
+# large state's product stays under the fixed-point ceiling; a grid's or a
+# country's sum of parts is at most the generation they split.
+te_grid_mix_split_effect = {
+	set_local_variable = {
+		name = te_grid_mix_part_$SOURCE$
+		value = {
+			value = local_var:te_grid_mix_w_$SOURCE$
+			divide = local_var:te_grid_mix_w_all
+			multiply = local_var:te_grid_mix_gen
+		}
+	}
+}
+
+# State scope, in te_grid_mix_state_effect with its staffed weights summed.
+# TE_SELF_CHECK grid_mix_staffing, once a game, at the first state that made
+# 100 or more Electricity on its own last week and has a plant: its plants'
+# staffed weight over their full-staff weight (staffed=, the weighted
+# occupancy), which must be above 0 (the bare occupancy read returns a value)
+# and at most 1 (it is a share), and its generation over the staffed weight
+# (measured_over_estimate=, the throughput and output bonuses the table leaves
+# out), 0.2 to 5 where the table's figures are a week's goods at full staff.
+te_grid_mix_selfcheck_effect = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_grid_mix_checked }
+			local_var:te_grid_mix_gen >= 100
+		}
+		set_local_variable = { name = te_grid_mix_chk_capacity value = 0 }
+		every_scope_building = {
+			limit = { te_grid_mix_output_per_level_value > 0 }
+			change_local_variable = { name = te_grid_mix_chk_capacity add = te_grid_mix_capacity_output_value }
+		}
+		if = {
+			limit = { local_var:te_grid_mix_chk_capacity > 0 }
+			set_global_variable = te_grid_mix_checked
+			set_global_variable = {
+				name = te_grid_chk_mix_staffed
+				value = {
+					value = local_var:te_grid_mix_w_all
+					divide = local_var:te_grid_mix_chk_capacity
+				}
+			}
+			set_global_variable = { name = te_grid_chk_mix_scale value = 0 }
+			if = {
+				limit = { local_var:te_grid_mix_w_all > 0 }
+				set_global_variable = {
+					name = te_grid_chk_mix_scale
+					value = {
+						value = local_var:te_grid_mix_gen
+						divide = local_var:te_grid_mix_w_all
+					}
+				}
+			}
+			if = {
+				limit = {
+					global_var:te_grid_chk_mix_staffed > 0
+					global_var:te_grid_chk_mix_staffed <= 1.001
+					global_var:te_grid_chk_mix_scale >= 0.2
+					global_var:te_grid_chk_mix_scale <= 5
+				}
+				debug_log = "TE_SELF_CHECK OK grid_mix_staffing (staffed=[SCOPE.ScriptValue('te_grid_chk_mix_staffed_g')|2] measured_over_estimate=[SCOPE.ScriptValue('te_grid_chk_mix_scale_g')|2]: a power plant's occupancy reads its staffed share, and the Generation panel's table is a week's Electricity at full staff)"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN grid_mix_staffing (staffed=[SCOPE.ScriptValue('te_grid_chk_mix_staffed_g')|2] measured_over_estimate=[SCOPE.ScriptValue('te_grid_chk_mix_scale_g')|2], against above 0 to 1 and 0.2 to 5: the Generation panel splits a state's power on a bad weight; see docs/testing/power-grid-playtest.md)"
+			}
+		}
+	}
 }
 
 # ---- Self-checks and info ------------------------------------------------------
@@ -1234,6 +1976,123 @@ te_grid_dispatch_info_effect = {
 		set_global_variable = te_grid_info_dispatch_logged
 		set_global_variable = { name = te_grid_chk_month value = te_history_month_index }
 		debug_log = "TE_GRID dispatch date=[TimeKeeper.GetCurrentDate.GetString] month=[SCOPE.ScriptValue('te_grid_chk_month_g')|0] (the first world-wide grid balancing)"
+	}
+}
+
+# Country scope, at the end of te_grid_refresh_partners_effect (the country
+# there saved as scope:te_grid_partners_of). TE_SELF_CHECK grid_bloc_link, once
+# a game, at a country in a power bloc with another member it isn't at war
+# with, where either read says the bloc joins its members' grids: the bloc's
+# principle through has_principle (te_grid_bloc_links_grids, which the partner
+# list rests on), or the principle's marker through modifier:
+# (power_bloc_grid_interconnection_bool, script-only: whether such a bool reads
+# from country scope is the Monetary Union's unverified check 16). Judged at a
+# call in a later month than the one that first saw it (te_grid_chk_bloc_seen,
+# a month index) and only while has_principle reads as it did then
+# (te_grid_chk_bloc_seen_principle, 0 or 1); a read that changed starts the
+# wait again. So a principle taken that day, whose marker may lag behind it,
+# can't read BROKEN, and nor can one dropped that day: principle=0 beside a
+# marker=1 that hasn't caught up yet is seen afresh, and by the next month's
+# call the marker reads 0 and nothing is judged. A has_principle that misses
+# the tiers reads principle=0 marker=1 month after month, and is judged.
+# The line prints both reads (principle=, marker=), the
+# other members it isn't at war with (members=) and how many of them its
+# partner list holds (listed=).
+#   OK      principle=1 and listed= equals members=: has_principle reads the
+#           mod's tiers IV and V, and every member is listed. marker=0 then
+#           means only that the marker can't be read from script, which
+#           nothing rests on.
+#   BROKEN  principle=0 (marker=1): has_principle misses the mod's tiers, and no
+#           bloc joins its members' grids; or listed= short of members=:
+#           every_power_bloc_member or the add failed.
+# A game in which a bloc holds one of the four principles but neither read
+# sees it prints nothing. Fallbacks: docs/testing/power-grid-playtest.md.
+te_grid_bloc_link_selfcheck_effect = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_grid_bloc_link_checked }
+			is_in_power_bloc = yes
+			power_bloc ?= {
+				any_power_bloc_member = {
+					NOT = { this = scope:te_grid_partners_of }
+					NOT = { has_war_with = scope:te_grid_partners_of }
+				}
+			}
+			OR = {
+				te_grid_bloc_links_grids = yes
+				power_bloc ?= { modifier:power_bloc_grid_interconnection_bool = yes }
+			}
+		}
+		if = {
+			limit = {
+				has_variable = te_grid_chk_bloc_seen
+				var:te_grid_chk_bloc_seen < te_history_month_index
+				OR = {
+					AND = {
+						var:te_grid_chk_bloc_seen_principle = 1
+						te_grid_bloc_links_grids = yes
+					}
+					AND = {
+						var:te_grid_chk_bloc_seen_principle = 0
+						te_grid_bloc_links_grids = no
+					}
+				}
+			}
+			set_global_variable = te_grid_bloc_link_checked
+			set_global_variable = { name = te_grid_chk_bloc_principle value = 0 }
+			set_global_variable = { name = te_grid_chk_bloc_marker value = 0 }
+			set_global_variable = { name = te_grid_chk_bloc_members value = 0 }
+			set_global_variable = { name = te_grid_chk_bloc_listed value = 0 }
+			if = {
+				limit = { te_grid_bloc_links_grids = yes }
+				set_global_variable = { name = te_grid_chk_bloc_principle value = 1 }
+			}
+			if = {
+				limit = {
+					power_bloc ?= { modifier:power_bloc_grid_interconnection_bool = yes }
+				}
+				set_global_variable = { name = te_grid_chk_bloc_marker value = 1 }
+			}
+			power_bloc ?= {
+				every_power_bloc_member = {
+					limit = {
+						NOT = { this = scope:te_grid_partners_of }
+						NOT = { has_war_with = scope:te_grid_partners_of }
+					}
+					save_scope_as = te_grid_chk_bloc_member
+					change_global_variable = { name = te_grid_chk_bloc_members add = 1 }
+					if = {
+						limit = {
+							scope:te_grid_partners_of = {
+								is_target_in_variable_list = { name = te_grid_partners target = scope:te_grid_chk_bloc_member }
+							}
+						}
+						change_global_variable = { name = te_grid_chk_bloc_listed add = 1 }
+					}
+				}
+			}
+			if = {
+				limit = {
+					global_var:te_grid_chk_bloc_principle = 1
+					global_var:te_grid_chk_bloc_members >= 1
+					global_var:te_grid_chk_bloc_listed >= global_var:te_grid_chk_bloc_members
+				}
+				debug_log = "TE_SELF_CHECK OK grid_bloc_link (principle=[SCOPE.ScriptValue('te_grid_chk_bloc_principle_g')|0] marker=[SCOPE.ScriptValue('te_grid_chk_bloc_marker_g')|0] members=[SCOPE.ScriptValue('te_grid_chk_bloc_members_g')|0] listed=[SCOPE.ScriptValue('te_grid_chk_bloc_listed_g')|0]: has_principle reads Market Unification or Internal Trade IV or V, and every other member is a grid partner)"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN grid_bloc_link (principle=[SCOPE.ScriptValue('te_grid_chk_bloc_principle_g')|0] marker=[SCOPE.ScriptValue('te_grid_chk_bloc_marker_g')|0] members=[SCOPE.ScriptValue('te_grid_chk_bloc_members_g')|0] listed=[SCOPE.ScriptValue('te_grid_chk_bloc_listed_g')|0], against principle=1 and listed=members: no power bloc joins its members' grids; see docs/testing/power-grid-playtest.md)"
+			}
+		}
+		# First seen, or has_principle reads otherwise than when it was: look
+		# again in a later month.
+		else = {
+			set_variable = { name = te_grid_chk_bloc_seen value = te_history_month_index }
+			set_variable = { name = te_grid_chk_bloc_seen_principle value = 0 }
+			if = {
+				limit = { te_grid_bloc_links_grids = yes }
+				set_variable = { name = te_grid_chk_bloc_seen_principle value = 1 }
+			}
+		}
 	}
 }
 

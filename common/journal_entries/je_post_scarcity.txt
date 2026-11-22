@@ -1,9 +1,22 @@
 ﻿je_post_scarcity = {
 	icon = "gfx/interface/icons/event_icons/je_post_scarcity.dds"
-	group = je_group_technology
+	group = je_group_te_rights_and_society
+
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
 
 	modifiers_while_active = {
 		post_scarcity_transition_active_modifier
+	}
+
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry ends through its
+	# invalid outcome on the rule.
+	disable_evaluation = {
+		NOT = { has_game_rule = social_movements_enabled }
 	}
 
 	# Opens at Post-Work Society (era 12), Post-Scarcity Economy's prerequisite; Universal Basic Income (era 10)
@@ -12,12 +25,17 @@
 		has_game_rule = social_movements_enabled
 		has_technology_researched = post_work_society
 		NOT = { is_country_type = decentralized }
+		# Set by the success and timeout outcomes. A revolution's winner gets a
+		# fresh record of an entry the loser had finished, and without this a
+		# timed-out transition would run its thirty years again (#471).
+		NOT = { has_variable = post_scarcity_resolved }
 		NOT = {
 			has_law = law_type:law_post-scarcity
 		}
 	}
 
 	possible = {
+		NOT = { has_variable = post_scarcity_resolved }
 		has_technology_researched = post_work_society
 		NOT = {
 			has_law = law_type:law_post-scarcity
@@ -62,39 +80,52 @@
 		}
 	}
 
-	complete = {
-		has_law = law_type:law_post-scarcity
+	outcome = {
+		header = je_standard_completion_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_post_scarcity_complete_conclusion_desc
+		trigger = {
+			has_law = law_type:law_post-scarcity
+		}
+		effect = {
+			set_variable = post_scarcity_resolved
+			trigger_event = { id = post_scarcity_events.200 }
+		}
 	}
 
-	on_complete = {
-		trigger_event = { id = post_scarcity_events.200 }
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_post_scarcity_invalid_conclusion_desc
+		trigger = {
+			OR = {
+				is_country_type = decentralized
+				# The rule switched off mid-game: the debate, its modifier and its events end.
+				NOT = { has_game_rule = social_movements_enabled }
+			}
+		}
 	}
 
-	invalid = {
-		is_country_type = decentralized
-	}
-
-	fail = {
-		# No clear fail state - just timeout
-		always = no
-	}
-
-	on_fail = {
+	outcome = {
+		header = JOURNAL_ENTRY_TIMEOUT
+		effect_header = JOURNAL_ENTRY_ON_TIMEOUT
+		flags = { timeout }
+		conclusion_desc = je_post_scarcity_timeout_conclusion_desc
+		effect = {
+			set_variable = post_scarcity_resolved
+			add_radicals = {
+				value = medium_radicals
+				strata = lower
+			}
+			add_modifier = {
+				name = post_scarcity_stagnation_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
+		}
 	}
 
 	timeout = 10950 # 30 years - long late-game JE
-
-	on_timeout = {
-		add_radicals = {
-			value = medium_radicals
-			strata = lower
-		}
-		add_modifier = {
-			name = post_scarcity_stagnation_modifier
-			days = long_modifier_time
-			is_decaying = yes
-		}
-	}
 
 	weight = 100
 	should_be_pinned_by_default_uninvolved_or_context = yes

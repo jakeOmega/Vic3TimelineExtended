@@ -24,16 +24,20 @@ SOURCES = {
     "expense": {
         "banking": ("Banking", (
             "banking_event_deposit_guarantee_emergency", "banking_event_import_and_subsidy_cost",
+            # The guarantee's charge under its planned and cooperative names.
+            "banking_event_stockpile_release", "banking_event_federation_relief_fund",
             "banking_event_fx_defense", "banking_event_quiet_rescue", "banking_event_selective_bailout_cost",
             "banking_event_rural_credit_cost", "banking_event_harvest_subsidy_cost",
             "banking_event_sovereign_wealth_fund_cost", "banking_crash_response_cost",
             "banking_event_interbank_guarantee", "banking_event_microfinance_cost",
             "banking_event_student_debt_relief_cost", "banking_event_bailout_cost",
-            "planning_treasury_pool_balance", "te_mon_gold_carry_expense",
+            "planning_treasury_pool_balance",
             # Two external tools' bills, weekly since 2026-10-27 (BNK-14).
             "banking_external_sterilization_charge", "banking_external_import_charge",
         )),
-        "covert": ("Covert Actions", ("covert_operation_funding_cost",)),
+        # The security state built after a terrorist attack
+        # (society_technology_events.11) is the intelligence ministry's work.
+        "covert": ("Covert Actions", ("covert_operation_funding_cost", "ste_terror_security_state_cost")),
         "culture": ("Cultural Hegemony", ("ch_cultural_program_funding_cost", "ch_world_exposition_cost")),
         "colonial": ("Colonial Development", ("colonial_development_investment_expense_modifier",)),
         "un": ("United Nations", (
@@ -46,20 +50,32 @@ SOURCES = {
             "te_seabed_holding_fee_modifier",
         )),
         "nuclear": ("Nuclear Program", ("nd_upkeep_cost", "nd_exercise_cost")),
-        "nuclear_taboo": ("Nuclear Civil Defense", ("nd_taboo_civil_defence",)),
+        # The two meltdown bills (society_technology_events.23) are civil
+        # defense against a reactor rather than a warhead.
+        "nuclear_taboo": ("Nuclear Civil Defense", (
+            "nd_taboo_civil_defence", "ste_meltdown_evacuate_cost", "ste_meltdown_institutional_response_cost",
+        )),
         # The Antarctic research station needs Space Exploration; its upkeep
         # is listed with the space programmes rather than in a category of
-        # its own (a new category needs a pie colour model and regenerates
-        # the charts).
-        "space": ("Space Race", ("we_se_debris_clearance", "te_antarctic_station_upkeep")),
+        # its own (a new category adds a row to every Breakdown and
+        # regenerates the charts).
+        "space": ("Space Race", ("we_se_debris_clearance", "te_antarctic_station_upkeep", "ste_space_colony_national_cost",
+                            "re_orbit_laser_sweep_cost")),
         "drugs": ("Drug Shortage Response", ("drugs_shortage_spending",)),
         "family": ("Family Policy", (
             "te_demog_ms_child_allowance_cost", "te_demog_ms_family_housing_cost", "te_demog_ms_parental_leave_cost",
             "te_demog_ms_free_contraception_cost",
         )),
         "pensions": ("Old-Age Pensions", ("te_demog_pension_bill",)),
-        "archaeology": ("Archaeological Digs", ("gm_arch_expense",)),
         "climate": ("Climate Policy", ("renewable_investment_cost_modifier", "aerosol_injection_cost_modifier")),
+        # Event programs that pay for power, for an industry's output, or for
+        # the labor standards conceded to anti-globalization protesters
+        # (society_technology_events.10).
+        "energy_industry": ("Energy and Industry Programs", (
+            "re_quantum_subsidy_cost", "re_sbsp_reserves_cost", "re_sbsp_imports_cost",
+            "we_sc_postscarcity_subsidize_cost",
+            "ste_antiglobal_concession_cost",
+        )),
     },
     "income": {
         "un": ("United Nations", ("un_dev_fund_treasury_grant_modifier",)),

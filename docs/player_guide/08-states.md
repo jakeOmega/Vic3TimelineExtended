@@ -2,13 +2,15 @@
 
 The mod changes how people spread across your country and how its states
 develop. Crowded states draw fewer migrants, homelands follow the cultures that
-actually live in a region, a state's tourism depends on what it offers visitors,
-a government can move settlers onto an empty frontier, and a yearly census counts
-your people by age and sex. The state panel gains tiles that show most of these.
-Everything in this chapter is always on except internal resettlement, which the
-Internal Resettlement game rule controls (see the
-[Introduction](01-introduction.md)), and the census, which is experimental and
-has a game rule of its own (see [Demographics](#demographics)).
+actually live in a region, related cultures can merge into one, a state's
+tourism depends on what it offers visitors, a government can move settlers onto
+an empty frontier, and a yearly census counts your people by age and sex. The
+state panel gains tiles that show most of these. Everything in this chapter is
+always on except internal resettlement, which the Internal Resettlement game
+rule controls (see the [Introduction](01-introduction.md)), culture merges,
+which the Culture Merges rule controls (on by default), and the census, which
+is experimental and has a game rule of its own (see
+[Demographics](#demographics)).
 
 ## State panel additions
 
@@ -19,12 +21,19 @@ tooltip breaks the numbers down.
 
 ![A state panel with the tourism card above the status grid and the Homeland Dynamics, Arable Land and Migration Crowding tiles at the bottom.](images/state_panel.png)
 
+From the 1930s technologies on, the picture at the top of the panel shows the
+state as it would look in the decade of its owner's technology: its city, by
+the size of its largest city and how well its people live, or the land it works.
+Hover the picture to see which one is showing and why, with the figure that
+chose it. Below a metropolis, a city shows only where the game gives the state
+urban terrain, so two states with similar cities can show a street and a farm.
+
 | Tile | Shown | What it tells you |
 |---|---|---|
 | Homeland Dynamics | Where a culture could gain or lose a homeland, even while changes are paused | Which cultures are gaining or losing homeland status here, with a progress bar for each, or why progress is paused. |
 | Arable Land | Always | Total arable land, how much technologies and other regional effects add to the geographic base, and the arable-land multiplier. |
 | Migration Crowding | While the state is over its crowding threshold | Population, crowding threshold, crowding ratio with a bar, and the migration pull penalty. |
-| Local Climate | Always | The climate where most of the region's people live: its hottest days, summer humidity, winter temperature, water and malaria, and Comfort, what the climate costs or adds to the state's migration pull. |
+| Local Climate | Always | The climate where most of the region's people live: its hottest days, summer humidity, winter temperature, winter sunshine, water and malaria, and Comfort, what the climate costs or adds to the state's migration pull. |
 | Dynastic Wealth | While the state carries a modifier from its Dynastic Wealth or the inheritance law | The state's score heading for its target, and the modifiers it carries from them (Concentrated or Dispersed Property, Land Hunger, and the inheritance law's farming effect), which the state's modifier icons leave out; see [Who inherits](06-politics.md#who-inherits). |
 | Solar Collector | In a state with a Solar Collector or a Solar Receiver | Your country's receiver slots available and generated (3 per staffed level); a receiver's build tooltip also gives the free slots. A megaproject; see [The extended timeline](02-timeline.md). |
 | Antimatter Facility | In a state with the Facility, an engine or a warhead plant | Your country's engine and warhead-plant slots available and generated (5 per staffed level). |
@@ -82,7 +91,10 @@ technologies give, that is between half and nearly all of the world's largest
 rich city of the time.
 
 Its upkeep comes out of your budget, so build it where crowding bites: in a
-state below its threshold it does nothing.
+state below its threshold it does nothing. When you pick Public Housing to
+build, the list of states shows each one's crowding penalty where other
+buildings show productivity, 0% where there is none; the column can't be
+sorted.
 
 The penalty starts gently and then climbs fast. Up to ten times the threshold it
 grows with the square of the excess; beyond that it adds 10 percentage points
@@ -113,7 +125,7 @@ and tolerance figures for their sources.
 | Modern Urban Planning, Advanced Structural Engineering | +20% each |
 | Urban Planning power bloc principle | +25% at tiers I to III, +50% at IV, +100% at V, plus +5% per Ministry of Urban Planning level (+10% at IV, +20% at V) |
 | National Park building on National Park, National Forest or National Wildlife Refuge | −5%, −7.5% or −10% per level, scaled by staffing |
-| Metropolitan Crowding, under the Demographics rule's Full setting (see [The urban pattern and a planned capital](#the-urban-pattern-and-a-planned-capital)) | Up to −10%: it starts when more than 40% of the state's urban people live in its largest city and is full at 60% |
+| Metropolitan Crowding, under the Demographics rule's Full setting (see [The urban pattern and a planned capital](#the-urban-pattern-and-a-planned-capital)) | Up to −10%: it starts when more than 40% of the state's urban people live in its largest city and reaches it at 60% |
 | Green Belt or Urban Sprawl, from the Overspill event (see [Demographic events](#demographic-events)) | −10% or +20%, for twenty years |
 
 Ministries are explained in [Ministries](06-politics.md#ministries). The same
@@ -124,18 +136,20 @@ tolerance multiplies the densities that open and close a resettlement frontier
 
 Every state region has a climate record, taken where most of its people live:
 the hottest day of a typical year and how hard such days are to bear, the
-warmest month's humidity, the coldest month's temperature, how much water
-there is, and how common malaria was in 1836. The
+warmest month's humidity, the coldest month's temperature, how many hours of
+sun a winter day gets, how much water there is, and how common malaria was in
+1836. The
 Local Climate tile shows it, and every part of a split region shares it.
 
 Migrants weigh the climate, so a harsh one cuts a state's migration pull, and
-through it the pull that draws mass migrations. Five things count:
+through it the pull that draws mass migrations. Six things count:
 
 | Part | When |
 |---|---|
 | Heat | The hottest days are hot and humid enough to strain the body; each degree costs more than the last |
 | Winter | Measured against a winter like London's: a harsher one costs, a milder one adds a little unless the summer is hot |
 | Frost | The coldest month averages below freezing, on top of Winter |
+| Sunshine | Measured against London's winter sun: a gloomier winter costs a little, a sunnier one adds a little unless the summer is hot |
 | Dry land | Water is limited (semi-arid country) or scarce (desert) |
 | Malaria | It was seasonal or endemic in 1836 |
 
@@ -148,10 +162,12 @@ The tile's Comfort row gives the total as a percentage of the state's
 migration pull, worked out again once a year, and hovering a reading shows what
 it costs before and after technology. In 1836 a hot, humid, malarial state
 such as Georgia loses about 27%, Bengal about 50% and Yakutsk about 64%;
-London loses nothing and Paris 4%. A mild winter with little else against it
-adds pull, at most about 7%: Madeira gains 7%, Hawaii 5% and Cape Town 5%. A
-hot summer cancels that, so Bengal's or Singapore's warm winter adds nothing.
-Climate never costs more than 80%.
+London loses nothing and Paris 4%. A mild, sunny winter with little else
+against it adds pull, at most about 11%: Madeira gains 10%, Hawaii 9% and Cape
+Town 8%. A hot summer cancels that, so Bengal's or Singapore's warm, bright
+winter adds nothing. Sunshine on its own counts for little: Denver's bright
+winters add 3%, Bergen's dark ones cost 1%, and London, Seattle and Vancouver
+sit near nothing. Climate never costs more than 80%.
 
 Technologies ease each cost, for the country that researches them:
 
@@ -161,8 +177,11 @@ Technologies ease each cost, for the country that researches them:
 - Malaria goes with Quinine and then Malaria Prevention.
 - Water follows mechanized farming, welding and chemistry.
 - Heat waits for the 20th century's appliances and air conditioning.
+- Sunshine's pull, gloomy against bright, lasts longest, since a warm, well-lit
+  house doesn't bring the sun out. Geoengineering's weather modification eases
+  it a little, and Terraforming ends it.
 
-By the last era none of the five costs or adds anything. On the way, air
+By the last era none of the six costs or adds anything. On the way, air
 conditioning eases the South's heat sooner than heating closes the gap between
 winters, so once central air arrives Georgia costs less than Massachusetts.
 
@@ -170,6 +189,8 @@ The record is today's climate. With [global warming](15-climate.md) at 0 the
 world runs about a degree colder than that, and winters more toward the
 poles. As it warms, every state's hot days and winters rise, winters most near
 the poles: hot states lose more to heat, and cold ones less to cold.
+The base game's own winter cold, which freezes seas and slows ships, is
+fixed for each region, so warming leaves it as it is.
 
 A mass migration's target needs no arable land, so a city-state or a small
 partial state can draw one. Deserts are kept back by their climate instead,
@@ -246,6 +267,11 @@ source. Under Ancestral Citizenship alone, a primary culture needs 40% of a
 state to start a homeland, a minority's homeland goes once it falls below 10%,
 and each change takes under seven years.
 
+The base game's Ukrainian and Byelorussian Cultural Renaissances involve the
+countries that hold the culture's homelands. Once a culture has lost every
+homeland, its renaissance closes within weeks of opening, with no awakening or
+independence event, and it doesn't open again.
+
 ## Cultural acceptance and minorities
 
 When a new cultural community appears in a state, the base game gives it a
@@ -273,6 +299,256 @@ severe outbreak kills 10% of that culture in the state, radicalizes the
 survivors, devastates the region and sets off a mass migration; a lesser one
 kills 2% and does the same on a smaller scale. Minority laws are in [Rights and
 society laws](06-politics.md#rights-and-society-laws).
+
+## Culture merges
+
+Closely related cultures can merge into one national culture over a few
+decades: North and South German pops become German, Yankee and Dixie pops
+American, and Occitan pops French. A merge starts in a country
+that holds most of its constituent cultures and treats them as equals. Each
+year a share of their pops converts, and once the merged culture holds 60% of a
+constituent culture's homeland, every remaining pop of that culture in the
+world switches at once. One culture where there were several clears homeland thresholds more
+easily, and leaves the game fewer pops to simulate.
+
+The Culture Merges game rule controls the system and is on by default. In a
+game saved before it was added, the merges that make a new culture never start.
+If you turn it off mid-game, every merge pauses where it stands: converted pops keep
+their new culture, and each merge carries on when the rule is turned back on.
+
+### Merges and their cultures
+
+The mod defines 32 merges. A merge's core cultures must all qualify before it
+can start; an optional culture joins once it qualifies too, while the merge runs
+or after it is complete. Most merges make a new culture, and eleven, marked
+existing, fold their constituent cultures into one that already exists, as
+French takes in Occitan. A culture can belong to several merges,
+but to only one running merge at a time. The tier, explained
+[below](#starting-a-culture-merge), is the one a merge starts on; a culture
+marked with another tier joins on that tier's conditions.
+
+| Merge | Core cultures | Optional cultures | Tier |
+|---|---|---|---|
+| German | North German, South German | Alemannic, Eastern German | 1 |
+| East Slavic | Russian, Ukrainian, Byelorussian | none | 1 |
+| French (existing) | French, Occitan | Wallonian, Catalan (tier 2) | 1 |
+| American | Yankee, Dixie | Afro-American (tier 1b) | 1 |
+| Anglophone | English, Yankee (American once that merge is complete) | Anglo-Canadian (tier 1), Australian (tier 1), Scottish (tier 1), Dixie (tier 1), Afro-American | 1b |
+| Latin | French, Italian, Spanish, Portuguese | Romanian, Platinean (tier 1b; Platine once that merge is complete), Argentine (tier 1b), Uruguayan (tier 1b), Chilean (tier 1b) | 2 |
+
+Every merge is in the [Culture merge list](20-appendix-reference-lists.md#culture-merge-list).
+
+### Starting a culture merge
+
+Each merge has a journal entry under Timeline Extended Systems, such as Cultural
+Merge: German. It appears once one of the merge's core cultures is a primary
+culture of yours and you have the technology for its tier. Until the merge can
+start, the entry lists its conditions and checks off each one that holds; then a
+button, Begin the German Merge, starts it, and its tooltip lists anything still
+missing. The AI starts a merge as soon as it qualifies. Only one country runs
+each merge, and once another country has started it, your entry ends. The
+entry's description ends with a line for each optional culture: whether it has
+joined or switched, or else the first of its conditions it still fails, with
+the figures from the last yearly census.
+
+The conditions are measured across your sphere: your country, your subjects and,
+if you lead a power bloc, its members. For every core culture:
+
+- your sphere holds at least 60% of the culture's pops that live in its homeland
+  states (pops elsewhere don't count);
+- every country of your sphere that holds a tenth or more of the sphere's share
+  of those pops, and the one that holds the most, accepts the culture fully: its
+  average acceptance is at least 80, Full Acceptance (Provisional Acceptance
+  isn't enough), or 90 for a tier 1b culture;
+- the core cultures' average standards of living across the sphere are less than
+  3 apart. Once a yearly census has measured them, the condition names the
+  best- and worst-off core cultures, their standards of living and the gap.
+  Only cultures already held and accepted are measured.
+
+An optional culture's standard of living only has to be less than 3 below the
+best-off core culture's (the merged culture's, once every core culture has
+switched). Living better than the core cultures never keeps it out.
+
+Each constituent culture has a tier, set by how close it is to the others:
+
+| Tier | The culture shares with the others | Technology | Also needed |
+|---|---|---|---|
+| 1 | A language and a heritage | Pan-nationalism | Nothing more |
+| 1b | A language, across heritages | Mass Media | Acceptance of 90, and 30 years held and accepted together |
+| 2 | A language family | Television | 50 years held and accepted together, and the merges it builds on complete (French and Italian for Latin) |
+
+A merge starts on its core cultures' tiers, and each optional culture joins on
+its own. The years count from when you have the technology for the merge's tier
+and one of its core cultures as a primary culture, and only while the culture is
+held and accepted; they keep what they have when it isn't. The culture's condition
+in the journal entry gives its years so far against the years it needs. The mod sets some tiers by
+hand where history differs from the game's traits: Occitan and Wallonian join
+French at tier 1, Catalan at tier 2.
+
+Most merges also have a condition of their own: what history says had to be
+settled before these peoples became one. Some need a nation formed, and count
+it for good once you have: German needs Germany or Central Europe, Italian
+Italy, Scandinavian Scandinavia, Yugoslav Yugoslavia, Czechoslovak
+Czechoslovakia, Platine Rio de la Plata, Gran Colombian Gran Colombia, Andean
+Peru-Bolivia or the Federation of the Andes, Dravidian Dravida Nadu and
+Indonesian Indonesia. Japanese needs the Honorable Restoration concluded, or
+the Bakufu law gone. The conditions below must keep holding instead, and while
+one fails the merge pauses: no culture joins or converts, even after the merge
+is complete.
+
+| Merge | Its own condition |
+|---|---|
+| American | Slavery settled one way or the other, and any civil war over it ended: Slavery Banned with The Slavery Debate over, or slavery legal in every state under Slave Trade or Debt Slavery. Legacy Slavery and Colonial Slavery keep it shut |
+| Anglophone | Slavery Banned |
+| French, Han | Public Schools |
+| Hindustani, Pilipino | You aren't a subject of another country |
+| Arab, East African | You aren't a subject of another country, and Public Schools |
+
+Afro-American pops (in American) and Afro-Brazilian pops join only under
+Slavery Banned. A merge's journal entry lists its condition with the others.
+
+A few cultures wait while any country has a base-game journal entry open that
+works on them. A merge doesn't start while a core culture waits: East Slavic for
+the Ukrainian and Byelorussian Renaissances, American for Readmit the
+Secessionist States, and Brazilian for the Ragamuffin War. It waits at most 20
+years, then goes ahead, and its condition gives the years waited so far. A waiting
+optional culture stays out until the entry closes, or in American until the start
+has waited its 20 years: Afro-American (Equality for All) in American and
+Anglophone, and Dixie (Readmit the Secessionist States) in Anglophone.
+
+A culture that has switched has no people left, but it keeps the fervor of the
+culture it became: each month its fervor is set to the merged culture's, and
+at the switch the merged culture takes the switching culture's fervor if its own is lower.
+So base-game content that reads it goes on working: German National Identity
+completes on German fervor once North and South German have switched, The
+Balkan League reads Yugoslav fervor where it read Serb, and the German, Italian
+and Yugoslav national movements can still form. Ukrainian and Byelorussian are
+the exception: their fervor fades once they switch, so their Cultural
+Renaissances don't open for a people who have become East Slavic.
+
+Once a culture has switched it also leaves your primary cultures, and those of
+every country that had it, as soon as nothing in the base game still depends on
+it. A base-game journal entry that reads the culture keeps it while any country
+has that entry running. Until 1936 it also stays while a country that needs it
+to form (Italy, Scandinavia) doesn't exist, and for the base game's historical
+characters and laws that ask for it. From 1936 only a running journal entry
+keeps it.
+Rulers and generals of the old culture take the merged one when it goes. A
+ruler's title that belonged to all of the merged people stays: a German empire
+keeps its Kaiser, and the United States its own forms of government. A title
+or a party name that belonged to one of several nations, such as the French
+republics after a Latin merge, falls back to the general one. Companies the
+mod adds for a culture stay open to the culture it merged into; the base
+game's own companies for it do not.
+
+You can still form the countries the old cultures could: the merged culture
+counts for every formable that listed one of them, so a Germany that is only
+German can form the European Union. A formable that asks for a share of its
+cultures' homelands counts the merged culture's homelands too, which after a
+wide merge such as Latin is far more land. The merged culture also takes the
+traditions of the core cultures that switched into it, so East Slavic keeps
+the acceptance Russian's Russosphere tradition gave.
+
+### How fast a merge converts
+
+When you start a merge, its culture becomes one of your primary cultures. Each
+year a share of every joined culture's pops in your sphere converts to it.
+Subjects and bloc members convert at half the pace their own literacy,
+urbanization and Culture Merge Speed give, and gain the merged culture as a
+primary culture where the culture they convert is one of theirs. Pops that
+have already converted still count toward a culture's hold.
+
+A culture switches in about 20 years in a country that holds all of its
+homeland and has 80% literacy, 40% urbanization, Public Schools, a level 3
+Ministry of Culture, Radio and Film, and in about 40 in one with 30% literacy,
+10% urbanization and none of those. Only your sphere's pops convert, so the
+less of a culture's homeland your sphere holds, the longer the switch takes:
+about 28 years at 80% and 40 at 70% in the first country. A sphere that holds
+just 60% converts its own pops but can't switch the culture until it holds more
+of the homeland, unless enough of the merged culture already lives there.
+Culture Merge Speed raises the pace; a running merge's status line gives yours,
+and hovering it shows where it comes from:
+
+| Source | Culture Merge Speed |
+|---|---|
+| Public Schools (Education System law) | +10% |
+| Ministry of Culture | +5% per level |
+| Radio | +10% |
+| Film | +5% |
+| Mass Propaganda | +10% |
+
+A pop's literacy and its state's urbanization matter about as much as these
+sources together. Pops living outside the culture's homeland states convert twice
+as fast, and a pop whose acceptance is below 60 converts at a tenth of the
+pace.
+
+If a core culture's hold falls below 50%, or the core cultures' standards of living
+drift more than 4 apart, the whole merge stalls until the hold is back at 60%
+and the gap under 3; so it does while a condition of its own that must keep
+holding fails. An optional culture also stalls on its own conditions, among
+them a standard of living more than 4 below the best-off core culture's. A
+country of your sphere whose acceptance of a culture falls below 75 (85 for a
+tier 1b culture) stops converting that culture until it is back at 80 (90), and
+the rest of the sphere carries on. Nothing converted is lost while a merge stalls.
+
+<!-- screenshot: a running Cultural Merge journal entry, its status line and Merge Progress bar in view -->
+
+### When a culture switches
+
+Each constituent culture switches on its own, at the yearly count, once the
+merged culture holds 60% of the two cultures' pops combined in that culture's
+homeland states. The Merge Progress bar shows how close the least converted
+culture is to switching; it is full when the merged culture holds 60%. The entry's
+status line gives the share itself. At the switch:
+
+- every pop of the culture in the world converts, whoever owns it;
+- every homeland state of the culture becomes a homeland of the merged culture too;
+- every country with the culture as a primary culture gains the merged culture as
+  one.
+
+If you run the merge, an event tells you each time a culture switches.
+
+When another country runs a merge, you hear of it if it reaches you: one of
+its cultures is a primary culture of yours, or you hold a homeland of one. An
+event tells you when it begins and when it completes, and a popup each time
+one of those cultures of yours switches. If it doesn't reach you, a notice in
+the feed tells you when it begins and when it completes. These events are for
+information only: their one option changes nothing.
+
+The old culture keeps its homelands and stays a primary culture of every country that
+had it, so formable countries and other content that look for it keep working.
+Its homeland in a state lasts as long as the merged culture's homeland there:
+when [dynamic homelands](#dynamic-homelands) remove the merged culture's, the
+old culture's goes too.
+
+The merge is complete once every core culture has switched, and its journal
+entry completes once every culture that joined has. A culture that qualifies
+later still
+joins and switches the same way. A merge that builds on another, such as Latin
+on French, takes the other's culture only once that merge is complete with
+every joined culture switched, or before any culture has joined it, and from
+then on the smaller merge takes no more cultures. A culture that never joined
+the smaller
+merge stays separate afterwards: Corsicans who never joined the Italian merge
+stay Corsican once Italian has become Latin.
+
+If a revolution topples the country running a merge, the winner carries it on.
+If the country is annexed, the merge goes idle with its progress kept, and any
+country that qualifies can start it again from where it stood. A complete merge
+whose country is annexed takes no more cultures, and lets go of the cultures still
+converting, which other merges can then take.
+
+### Merges and base-game content
+
+Some base-game content reads a switched culture's pops directly, and after a switch it
+finds none (fervor is kept; see [Starting a culture merge](#starting-a-culture-merge)).
+Historical characters keep their old culture;
+clothing and ship names tied to a switched culture don't carry over to the merged culture;
+and some texts show a merged culture's plural name as its singular. The Western
+Border (Russification) counts East Slavic pops as Russian, so the East Slavic
+merge doesn't hold it back; its panel lists the success condition twice. The
+Brazilian merge exists only without the Colossus of the South content, whose
+own nation building merges the same cultures.
 
 ## State tourism
 
@@ -372,26 +648,31 @@ law. This replaces the laws' and technologies' own flat workforce lines: in 1836
 a state works about as in the base game, but a rich modern country has a sixth
 to a quarter fewer workers than the flat lines would give it. Each yearly count
 sets a state's workforce to the census's figure, shown as Census: Workforce in
-its workforce tooltip, and the game's own count moves toward it over the years
-that follow. Under Full, the laws' and technologies' Workforce Ratio lines say
+its workforce tooltip. The game's own count takes up a new figure only as people
+are born, so while it trails, the census sets the line past its figure, by
+enough to close about half the gap in a year (at most 20% either way). A new
+pension age or women's rights law shows in the workforce within a few years,
+more slowly where few children are born. Under Full, the laws' and technologies' Workforce Ratio lines say
 what the census does with them: the ones it counts toward how many women work
 read Women's Work, and the rest read Workforce Ratio (replaced by the census).
 
 With Old Age Pension, you choose the pension age with five buttons on the
 Demographics tab. A setting holds for five years once chosen, and the AI picks
 its own with the same considerations: a heavy bill or debt toward Raised or
-Linked to Average, high unemployment toward Early.
+Linked to Average, high unemployment toward Early. The two linked settings follow
+Old Age From, the age at which your people have fifteen years of life left, which
+the tab shows above the buttons.
 
 | Setting | Pension age | What you gain and what you pay | Interest groups |
 |---|---|---|---|
 | Early Retirement | 60 | More of the old retire and jobs open for the young; the largest bill and the smallest workforce. | Trade Unions +2, Industrialists −1 |
 | Standard | 65 | The default. It grows more generous as lives lengthen, since more people live to draw it, and for longer. | None |
 | Raised Pension Age | 70 | A smaller bill and more old people at work. | Trade Unions −2, Rural Folk −1, Industrialists +1 |
-| Linked to Average Longevity | Five years below where old age begins for your people, at least 65 | Follows lengthening lives, so the bill stays in check, a year at a time. | Trade Unions −1, Rural Folk −1, Industrialists +1 |
-| Linked to Common Longevity | Five years below where old age begins for those who still age, at least 65 | The same until longevity treatment exists; after that it keeps the pension within reach of the untreated, at a larger bill. | Trade Unions +1, Rural Folk +1, Industrialists −1 |
+| Linked to Average Longevity | Five years below Old Age From for all your people, the treated included; at least 65 | Follows lengthening lives, so the bill stays in check. Once longevity treatment spreads, the treated pull it up, and those who still age may die before they reach it. | Trade Unions −1, Rural Folk −1, Industrialists +1 |
+| Linked to Common Longevity | Five years below Old Age From for the people outside longevity care, whose bodies still age; at least 65 | Grayed out until longevity care begins, since until then it gives the same age as Average. After that it stays within reach of those who still age, but the treated draw it for life, so the bill grows. | Trade Unions +1, Rural Folk +1, Industrialists −1 |
 
-The pension age changes at once, but a linked setting moves at most a year a
-year; the bill and the workforce follow at the next census. Under Full, Old Age
+The pension age changes at once, but a linked setting moves toward its target by
+at most one year each year; the bill and the workforce follow at the next census. Under Full, Old Age
 Pension costs money for its pensioners: each year's census sets a weekly expense
 worth 6% of your output per person for each pensioner, per level of Social
 Security: Census: Pension Bill, which the Budget panel's Breakdown tab lists
@@ -417,10 +698,10 @@ state's yearly census:
   the state's modifier list; the conscription tooltip names it and the Fighting-Age
   Men row on the Demographics tab shows the figure.
 - **Census: Youth Bulge** appears where young adults aged 20 to 29 are more than
-  18% of the people while work is short. At full strength (24% young adults and
-  a fifth of the workforce without work) radicals from movements rise by 25% and
-  the effects of turmoil by 15%. Past that each factor keeps adding at half the
-  pace, up to twice the full size.
+  18% of the people while work is short. With 24% young adults and a fifth of
+  the workforce without work, radicals from movements rise by 25% and the effects
+  of turmoil by 15%. Past that each factor keeps adding at half the pace, up to
+  twice those figures.
 - **Census: Fewer Men** appears below 90 men per 100 women, as after a war with
   many dead. Fewer women marry, so children per woman fall with the balance (by
   at most a fifth), more women work, and support for women's rights movements
@@ -579,7 +860,10 @@ count: a tenth of the gap at first, and up to just over a third once the
 Electric Telegraph, Modern Nursing, Radio, the World Wide Web and Telemedicine
 are researched. A party to the Global Pandemic Response, the convention that
 founds the World Health Organization, closes a further share, larger as the
-UN's enforcement rises. Under Full, the Medical Outreach decree closes a
+UN's enforcement rises. A power bloc's Healthcare principle closes a further
+twentieth from tier II and a tenth from tier IV, and adds a little health care
+access with each Ministry of Health level: half a point at tiers I and II, one
+point at III and IV, one and a half at V. Under Full, the Medical Outreach decree closes a
 further fifth of the gap at each count in one state. It can be issued only in a
 state whose next count would leave its medicine short of the targets, and it
 ends once the state has caught up. Turmoil raises deaths from accidents and
@@ -587,7 +871,9 @@ violence, by half at full turmoil. Where the map marks a state with malaria
 (most of tropical Africa, parts of Indonesia and the Pacific islands), deaths
 from infection run higher, more so with severe malaria, until Malaria
 Prevention; Quinine protected colonists, not the people who lived there, so it
-changes nothing here.
+changes nothing here. A power bloc's Healthcare principle brings a quarter of
+malaria's toll under control at tier III and half from tier IV, for members
+still without Malaria Prevention.
 
 The Causes of Death section, on the tab for your country and on the subtab for
 one state, splits last year's deaths in a pie: infection and hunger, chronic
@@ -629,10 +915,10 @@ Center and University throughput and migration attraction. Every other state get
 Provincial Neglect, with less migration attraction, higher penalties from turmoil
 and, where the state has a culture of its own, more support for its Cultural
 Minority Movement. Both grow with the largest city's share of urban people, from
-nothing at 25% to their full size at 50%: Urban Center throughput +20%,
+nothing at 25% to these figures at 50%: Urban Center throughput +20%,
 University throughput +10% and migration attraction +25% for the city, migration
 attraction −15%, turmoil penalties +15% and cultural minority support +15% for
-the rest. Past 50% they keep growing at half the pace, to twice their full size
+the rest. Past 50% they keep growing at half the pace, to twice these figures
 when one city holds all the urban people. A country of fewer than three states
 gets neither. Each state takes the new figure
 at its yearly count, and the Urban Pattern tooltip names your largest city and
@@ -650,10 +936,10 @@ planning (the Ministry of Urban Planning, Planned Towns and a Planned Capital)
 lower it, and a country's urbanization raises it most at half its people in towns
 and lowers it a little below a tenth or past nine tenths.
 Hover the row for each term as a bar. Under Full a share above 40% has effects,
-full at 60%: the state crowds 10% sooner, its people give 20% more infrastructure,
+which at 60% are: the state crowds 10% sooner, its people give 20% more infrastructure,
 its Urban Center works at 10% more throughput, turmoil penalties rise 10% and
-families are a little smaller. Past 60% all but the crowding keep growing at half
-the pace, to nearly twice their size at the highest shares. Below 20% its towns
+families are a little smaller. Past 60% all but the crowding and family size keep
+growing at half the pace, to nearly twice their size at the highest shares. Below 20% its towns
 give up to 20% less infrastructure. Where People Live counts your Metropolises.
 
 Its Largest Cities list names real towns and estimates the people in each. A
@@ -811,6 +1097,11 @@ Contraception, Birth Limit and the Crash Campaign move births further, at their
 political price. The Children per Woman tooltips list family policy beside the
 other terms. Parental Leave's women's work counts toward the workforce as the
 women's rights laws' does.
+
+A power bloc's Healthcare principle cuts the money upkeep of Child Allowance,
+Family Housing, Parental Leave and Free Contraception for its members: by 10%
+at tier III, 20% at IV and 30% at V. A running measure's upkeep follows at your
+next yearly count. The authority upkeeps stay as they are.
 
 The AI starts the measures that raise births when its population shrinks or
 many of its people are old, and the ones that lower births in a famine, when

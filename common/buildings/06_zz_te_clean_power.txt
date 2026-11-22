@@ -31,8 +31,24 @@ building_hydro_plant = {
 
 	has_max_level = yes
 
+	# On a river, or in a state whose great dam is built. Each dam wonder raises
+	# its state's Hydro Plant cap and throughput, and Nevada, where the Hoover
+	# Dam stands, is not on a river in the engine's map data, so with on_river
+	# alone that wonder did nothing (2026-11-18). has_building, not
+	# any_scope_building: a dam counts once a level is built, not while queued.
+	# test_hydro_plant_sites.py holds this list to the buildings whose methods
+	# grant state_building_hydro_plant_max_level_add.
 	possible = {
-		on_river = yes
+		custom_tooltip = {
+			text = building_hydro_plant_possible_tt
+			OR = {
+				on_river = yes
+				has_building = building_wonder_hoover_dam
+				has_building = building_wonder_aswan_high_dam
+				has_building = building_wonder_itaipu_dam
+				has_building = building_wonder_three_gorges_dam
+			}
+		}
 	}
 	ownership_type = self
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"

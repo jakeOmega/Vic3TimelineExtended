@@ -35,10 +35,7 @@ nd_taboo_has_ceiling = {
 # modifier in a block where it is not yet visible.
 nd_taboo_is_ban_party = {
 	has_global_variable = un_agency_tpnw
-	OR = {
-		has_modifier = un_nuclear_ban_modifier
-		has_variable = un_nuclear_ban_modifier_on
-	}
+	has_variable = un_nuclear_ban_modifier_on
 }
 
 # The Prohibition Treaty's ceiling (nd_tpnw_ceiling) is the lowest that binds
@@ -57,11 +54,15 @@ nd_taboo_ban_ceiling_binds = {
 
 # The programme builds nothing while dismantling, or at or above the ceiling
 # that binds us — our own, a treaty's or the UN ban's (nd_taboo_programme_held carries the
-# programme-pause flag).
+# programme-pause flag). A ceiling binds warheads, not delivery, so it holds
+# only a Warheads focus (2026-11-20 delivery spec §4.1): nd_focus_set and
+# nd_field_leg refresh the hold when the focus changes. A dismantling holds
+# every focus.
 nd_taboo_programme_should_be_held = {
 	OR = {
 		nd_taboo_is_dismantling = yes
 		AND = {
+			nd_focus_is_warheads = yes
 			nd_taboo_has_ceiling = yes
 			nd_stockpile >= nd_taboo_effective_ceiling_value
 		}

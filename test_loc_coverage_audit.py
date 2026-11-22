@@ -6,11 +6,11 @@ import os
 import tempfile
 import unittest
 
+from audit_common import parse_reviewed as _parse_reviewed
 from loc_coverage_audit import (
     audit,
     render_report,
     _event_loc_keys,
-    _parse_reviewed,
     _build_entity_locations,
     strict_exit_code,
 )
@@ -50,7 +50,8 @@ def _write(tmp: str, rel: str, content: str) -> str:
 class ParseReviewedTests(unittest.TestCase):
     def test_match(self):
         result = _parse_reviewed("# REVIEWED 2026-05-08: backwards-compat alias")
-        self.assertEqual(result, {"date": "2026-05-08", "rationale": "backwards-compat alias"})
+        self.assertEqual(result, {"date": "2026-05-08", "tag": "",
+                                  "rationale": "backwards-compat alias"})
 
     def test_no_match(self):
         self.assertIsNone(_parse_reviewed("# just a comment"))
@@ -325,6 +326,25 @@ class AuditTests(unittest.TestCase):
         )
         result = audit(ms, mod_path=tmp)
         self.assertEqual(result.flags, [])
+
+    def test_culture_modifier_types_need_no_loc(self):
+        # The three modifier types a culture's static modifiers use are named by the engine from the culture
+        # (vanilla's 322 cultures' carry no loc key), so a mod culture's own aren't flagged (2026-11-08). The same
+        # shape on a name that is no culture still is.
+        tmp = tempfile.mkdtemp()
+        names = [
+            "state_cm_german_standard_of_living_add",
+            "country_cm_german_cultural_acceptance_add",
+            "country_fervor_target_cm_german_add",
+            "state_lower_strata_standard_of_living_add",
+        ]
+        _write(tmp, "common/modifier_type_definitions/x.txt", "".join(f"{n} = {{\n}}\n" for n in names))
+        ms = FakeMS(
+            mod_data={"Modifier Types": {n: {} for n in names}, "Cultures": {"cm_german": {}}},
+            base_data={"Modifier Types": {}, "Cultures": {"scottish": {}}},
+        )
+        result = audit(ms, mod_path=tmp)
+        self.assertEqual([f.entity for f in result.flags], ["state_lower_strata_standard_of_living_add"])
 
     def test_government_type_missing_name_flagged(self):
         # Regression for gov_algorithmic_directorate: a mod-new government type
@@ -669,6 +689,229 @@ class DiplomaticActionTests(unittest.TestCase):
         self.assertEqual(_DIR_MAP["Diplomatic Actions"], "common/diplomatic_actions")
 
 
+def _je_parse(text: str) -> dict:
+    """Parse journal entry text the way ModState stores it (normalized)."""
+    from paradox_file_parser import ParadoxFileParser
+    with tempfile.TemporaryDirectory() as td:
+        path = os.path.join(td, "j.txt")
+        with open(path, "w", encoding="utf-8") as fh:
+            fh.write(text)
+        p = ParadoxFileParser()
+        p.parse_file(path, apply_directives=False)
+        return {k.split(":", 1)[-1]: v for k, v in p.data.items()}
+
+
+class JournalEntryOutcomeTests(unittest.TestCase):
+    """1.15: every outcome needs conclusion_desc, a non-hidden one header and
+    effect_header too, and each key named must resolve."""
+
+    JE = (
+        "je_x = {{{comment}\n"
+        "\toutcome = {{\n\t\theader = je_standard_completion_header\n"
+        "\t\teffect_header = je_standard_on_completion_header\n"
+        "\t\tconclusion_desc = je_x_complete_conclusion_desc\n"
+        "\t\ttrigger = {{ always = yes }}\n\t}}\n"
+        "\toutcome = {{\n\t\theader = je_standard_failure_header\n"
+        "\t\tconclusion_desc = je_x_fail_conclusion_desc\n\t}}\n"
+        "\toutcome = {{\n\t\tflags = {{ hidden invalid_outcome }}\n"
+        "\t\ttrigger = {{ always = no }}\n\t}}\n"
+        "}}\n"
+    )
+    LOC = {"je_x", "je_x_reason", "je_standard_completion_header",
+           "je_standard_on_completion_header", "je_standard_failure_header",
+           "je_x_complete_conclusion_desc"}
+
+    def _run(self, text, *, loc=None, base=None, opener="je_x"):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        _write(tmp.name, "common/journal_entries/x.txt", text.replace("je_x = {", opener + " = {", 1))
+        ms = FakeMS(
+            mod_data={"Journal Entries": _je_parse(text)},
+            base_data={"Journal Entries": base or {}},
+            loc_keys=self.LOC if loc is None else loc,
+        )
+        return audit(ms, mod_path=tmp.name)
+
+    def test_missing_fields_and_keys_flag(self):
+        result = self._run(self.JE.format(comment=""))
+        self.assertEqual(
+            [(f.category, f.entity, f.missing_keys, f.line) for f in result.flags],
+            [("Journal Entry Outcomes", "je_x",
+              ["outcome 2: no effect_header", "je_x_fail_conclusion_desc",
+               "outcome 3: no conclusion_desc"], 1)],
+        )
+        self.assertIn("### Journal Entry Outcomes (1)", render_report(result))
+
+    def test_complete_outcomes_pass(self):
+        text = self.JE.format(comment="").replace(
+            "\t\tconclusion_desc = je_x_fail_conclusion_desc\n",
+            "\t\teffect_header = je_standard_on_failure_header\n"
+            "\t\tconclusion_desc = je_x_fail_conclusion_desc\n",
+        ).replace("flags = { hidden invalid_outcome }",
+                  "flags = { hidden invalid_outcome }\n\t\tconclusion_desc = je_x_fail_conclusion_desc")
+        loc = self.LOC | {"je_x_fail_conclusion_desc", "je_standard_on_failure_header"}
+        self.assertEqual(self._run(text, loc=loc).flags, [])
+
+    def test_entry_with_no_outcome_passes(self):
+        self.assertEqual(self._run("je_x = {\n\tgroup = g\n}\n").flags, [])
+
+    def test_replace_of_a_vanilla_entry_is_checked_on_its_replace_line(self):
+        text = self.JE.format(comment=" # REVIEWED 2026-11-05: fixture")
+        result = self._run(text, base={"je_x": ("=", {"group": ("=", "g")})}, opener="REPLACE:je_x")
+        [flag] = result.flags
+        self.assertEqual((flag.category, flag.line), ("Journal Entry Outcomes", 1))
+        self.assertEqual(flag.exemption, {"date": "2026-11-05", "tag": "", "rationale": "fixture"})
+
+    def test_unchanged_vanilla_entry_is_not_checked(self):
+        data = _je_parse(self.JE.format(comment=""))
+        self.assertEqual(self._run(self.JE.format(comment=""), base=data).flags, [])
+
+    def test_every_vanilla_115_outcome_holds(self):
+        # The rule is read off the readme; vanilla's 927 outcomes obey it.
+        import vanilla_parsed
+        from loc_coverage_audit import _je_outcome_problems, je_outcomes
+        snap = vanilla_parsed.load()
+        entries = snap.data["Journal Entries"]
+        self.assertGreater(sum(len(je_outcomes(b)) for b in entries.values()), 900)
+        bad = {n: p for n, b in entries.items()
+               if (p := _je_outcome_problems(b, snap.localization.__contains__))}
+        self.assertEqual(bad, {})
+
+
+class GlossaryAndExilePoolTests(unittest.TestCase):
+    def test_glossary_entry_needs_name_and_desc(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        _write(tmp.name, "common/glossary/g.txt", "glossary_dirigisme = {\n}\n")
+        _write(tmp.name, "common/regional_exile_pools/p.txt", "te_pool = {\n}\n")
+        ms = FakeMS(
+            mod_data={"Glossary": {"glossary_dirigisme": {}},
+                      "Regional Exile Pools": {"te_pool": {}}},
+            base_data={"Glossary": {}, "Regional Exile Pools": {}},
+            loc_keys={"glossary_dirigisme"},
+        )
+        result = audit(ms, mod_path=tmp.name)
+        self.assertEqual(
+            sorted((f.category, f.entity, tuple(f.missing_keys)) for f in result.flags),
+            [("Glossary", "glossary_dirigisme", ("glossary_dirigisme_desc",)),
+             ("Regional Exile Pools", "te_pool", ("te_pool",))],
+        )
+
+    def test_rules_hold_for_vanilla(self):
+        import vanilla_parsed
+        from loc_coverage_audit import _REQUIREMENTS
+        snap = vanilla_parsed.load()
+        for etype in ("Glossary", "Regional Exile Pools"):
+            entities = snap.data[etype]
+            self.assertTrue(entities, etype)
+            missing = {n: [k for k, req, _ in _REQUIREMENTS[etype](n, b)
+                           if req and k not in snap.localization]
+                       for n, b in entities.items()}
+            self.assertEqual({n: m for n, m in missing.items() if m}, {}, etype)
+
+
+class GroupAndPrincipleDescTests(unittest.TestCase):
+    """#897: four types whose `<name>_desc` vanilla defines for every entity
+    and the audit did not check. 71 principles, a law group, two combat unit
+    groups and a mobilization option group had shipped without one."""
+
+    # category -> (source file, entity)
+    CASES = {
+        "Principles": ("common/power_bloc_principles/p.txt", "principle_my_group_4"),
+        "Law Groups": ("common/law_groups/g.txt", "lawgroup_my_rights"),
+        "Combat Unit Groups": ("common/combat_unit_groups/g.txt", "combat_unit_group_drones"),
+        "Mobilization Option Groups": ("common/mobilization_option_groups/g.txt", "drill"),
+    }
+    GROUPS = ("Law Groups", "Combat Unit Groups", "Mobilization Option Groups")
+
+    def _run(self, category, loc_keys, *, base=None, reviewed=False):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        rel, entity = self.CASES[category]
+        comment = " # REVIEWED 2026-11-12: the tooltip hides an empty description" if reviewed else ""
+        _write(tmp.name, rel, f"{entity} = {{{comment}\n}}\n")
+        ms = FakeMS(
+            mod_data={category: {entity: {}}},
+            base_data={category: base or {}},
+            loc_keys=loc_keys,
+        )
+        return audit(ms, mod_path=tmp.name)
+
+    def test_principle_without_desc_flags(self):
+        result = self._run("Principles", set())
+        self.assertEqual(
+            [(f.category, f.entity, f.missing_keys, f.file, f.line) for f in result.flags],
+            [("Principles", "principle_my_group_4", ["principle_my_group_4_desc"],
+              "common/power_bloc_principles/p.txt", 1)],
+        )
+        self.assertEqual(strict_exit_code(result), 1)
+
+    def test_principle_with_desc_passes(self):
+        self.assertEqual(self._run("Principles", {"principle_my_group_4_desc"}).flags, [])
+
+    def test_principle_needs_no_name_key(self):
+        """A principle is named from its group and its tier, so the bare key
+        is never looked up: vanilla defines it for none of its own."""
+        from loc_coverage_audit import _principle_keys
+        self.assertEqual(
+            _principle_keys("principle_my_group_4", {}),
+            [("principle_my_group_4_desc", True, "desc")],
+        )
+
+    def test_group_without_desc_flags(self):
+        for category in self.GROUPS:
+            entity = self.CASES[category][1]
+            with self.subTest(category):
+                flags = self._run(category, {entity}).flags
+                self.assertEqual(
+                    [(f.category, f.entity, f.missing_keys) for f in flags],
+                    [(category, entity, [f"{entity}_desc"])],
+                )
+
+    def test_group_without_name_flags(self):
+        for category in self.GROUPS:
+            entity = self.CASES[category][1]
+            with self.subTest(category):
+                flags = self._run(category, {f"{entity}_desc"}).flags
+                self.assertEqual([f.missing_keys for f in flags], [[entity]])
+
+    def test_group_with_name_and_desc_passes(self):
+        for category in self.GROUPS:
+            entity = self.CASES[category][1]
+            with self.subTest(category):
+                self.assertEqual(self._run(category, {entity, f"{entity}_desc"}).flags, [])
+
+    def test_vanilla_entity_the_mod_restates_is_skipped(self):
+        for category, (_rel, entity) in self.CASES.items():
+            with self.subTest(category):
+                self.assertEqual(self._run(category, set(), base={entity: {}}).flags, [])
+
+    def test_reviewed_comment_exempts(self):
+        result = self._run("Principles", set(), reviewed=True)
+        self.assertEqual(len(result.flags), 1)
+        self.assertEqual(result.flags[0].exemption["date"], "2026-11-12")
+        self.assertEqual(strict_exit_code(result), 0)
+
+    def test_rules_hold_for_vanilla(self):
+        import vanilla_parsed
+        from loc_coverage_audit import _REQUIREMENTS
+        snap = vanilla_parsed.load()
+        for etype, at_least in (("Principles", 60), ("Law Groups", 20),
+                                ("Combat Unit Groups", 4), ("Mobilization Option Groups", 6)):
+            entities = snap.data[etype]
+            self.assertGreaterEqual(len(entities), at_least, etype)
+            missing = {n: [k for k, req, _ in _REQUIREMENTS[etype](n, b)
+                           if req and k not in snap.localization]
+                       for n, b in entities.items()}
+            self.assertEqual({n: m for n, m in missing.items() if m}, {}, etype)
+
+    def test_registered_in_both_rosters(self):
+        from loc_coverage_audit import _REQUIREMENTS, _DIR_MAP
+        for category, (rel, _entity) in self.CASES.items():
+            self.assertIn(category, _REQUIREMENTS)
+            self.assertEqual(_DIR_MAP[category], os.path.dirname(rel))
+
+
 class GameConceptTests(unittest.TestCase):
     def _run(self, loc_keys, *, base=None, reviewed=False):
         tmp = tempfile.TemporaryDirectory()
@@ -709,7 +952,7 @@ class GameConceptTests(unittest.TestCase):
     def test_opening_line_suppression_is_reported(self):
         result = self._run(set(), reviewed=True)
         self.assertEqual(result.flags[0].exemption, {
-            "date": "2026-10-01", "rationale": "name inherited from vanilla"})
+            "date": "2026-10-01", "tag": "", "rationale": "name inherited from vanilla"})
         report = render_report(result)
         self.assertIn("- unreviewed: 0", report)
         self.assertIn("- exempted: 1", report)

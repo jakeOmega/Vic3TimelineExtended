@@ -53,6 +53,42 @@ template tooltip_properties
 	}
 }
 
+template glossary_properties
+{
+	alwaystransparent = no
+	using = clickthrough_blocker
+
+	# hidden button to close the tooltip
+	button = {
+		size = { 0 0 }
+		visible = "[PdxGuiWidget.IsTooltipLocked]"
+		onclick = "[CloseAllTooltips]"
+		shortcut = "close_window"
+	}
+
+	background = {
+		spriteType = CorneredTiled
+		spriteborder = { 48 48 }
+		texture = "gfx/interface/backgrounds/paper_card_bg.dds"
+		texture_density = 2
+		tintcolor = "[TooltipInfo.GetTintColor]"
+
+		modify_texture = {
+			texture = "gfx/interface/backgrounds/default_bg_shading.dds"
+			spriteType = Corneredstretched
+			spriteborder = { 0 0 }
+			blend_mode = overlay
+		}
+		modify_texture = {
+			texture = "gfx/interface/textures/velvet_texture.dds"
+			spriteType = Corneredtiled
+			texture_density = 2
+			spriteborder = { 0 0 }
+			blend_mode = overlay
+		}
+	}
+}
+
 types TooltipTypes
 {
 	type DefaultTooltipTextBox = textbox {
@@ -663,6 +699,285 @@ types TooltipTypes
 			}
 		}
 	}
+
+	type FancyTooltipGlossaryWidgetType = container {
+		using = glossary_properties
+
+		container = {
+			flowcontainer = {
+				direction = vertical
+				block "tooltip_margins" {
+					margin = { 24 30 }
+				}
+				margin_top = 75
+
+				block "tooltip_content_before_before" {}
+
+				block "tooltip_content_before" {}
+
+				block "tooltip_content" {
+					DefaultTooltipTextBox = {
+						name = "DebugText"
+						visible = "[InDebugMode]"
+						margin_bottom = 0
+						block "text_debug"
+						{
+						}
+						autoresize = yes
+						multiline = yes
+						maximumsize = { @tooltip_max_width -1 }
+						fonttintcolor = "[TooltipInfo.GetTintColor]"
+					}
+
+					DefaultTooltipTextBox = {
+						name = "BeforeBeforeTooltipText"
+						margin_bottom = 0
+						block "text_before_before"
+						{
+						}
+						autoresize = yes
+						multiline = yes
+						maximumsize = { @tooltip_max_width -1 }
+						fonttintcolor = "[TooltipInfo.GetTintColor]"
+					}
+
+					DefaultTooltipTextBox = {
+						name = "BeforeTooltipText"
+						margin_bottom = 0
+						block "text_before"
+						{
+						}
+						autoresize = yes
+						multiline = yes
+						maximumsize = { @tooltip_max_width -1 }
+						fonttintcolor = "[TooltipInfo.GetTintColor]"
+					}
+
+					DefaultTooltipTextBox = {
+						name = "TooltipText"
+						block "text"
+						{
+						}
+						margin_bottom = 0
+						autoresize = yes
+						multiline = yes
+						maximumsize = { @tooltip_max_width -1 }
+						fonttintcolor = "[TooltipInfo.GetTintColor]"
+					}
+
+					DefaultTooltipTextBox = {
+						name = "TooltipTextDelayed"
+						autoresize = yes
+						margin_top = 0
+						margin_bottom = 0
+						multiline = yes
+						maximumsize = { @tooltip_max_width -1 }
+						fonttintcolor = "[TooltipInfo.GetTintColor]"
+					}
+
+					DefaultTooltipTextBox = {
+						block "instruction_text"
+						{
+						}
+						autoresize = yes
+						margin_top = 0
+						margin_bottom = 0
+						multiline = yes
+						maximumsize = { @tooltip_max_width -1 }
+						fonttintcolor = "[TooltipInfo.GetTintColor]"
+					}
+
+					block "tooltip_content_after" {}
+
+					caligula_table = {
+						block "table_visibility" {
+							visible = no
+						}
+					}
+
+					DefaultTooltipTextBox = {
+						name = "TooltipTextShortcut"
+						autoresize = yes
+						fonttintcolor = "[TooltipInfo.GetTintColor]"
+					}
+
+					DefaultTooltipTextBox = {
+						name = "TooltipTextInputAction"
+						autoresize = yes
+						fonttintcolor = "[TooltipInfo.GetTintColor]"
+					}
+
+					DefaultTooltipTextBox = {
+						margin_top = 10
+						text = "RIGHT_CLICK_TO_OPEN_CONTEXT_MENU"
+						visible = "[CanOpenRightClickContextMenu]"
+					}
+
+					DefaultTooltipTextBox = {
+						name = "TooltipTextShortcutManuallyAdded"
+
+						block "additional_interaction_info" {
+							# text = ""
+							visible = no
+						}
+						autoresize = yes
+						fonttintcolor = "[TooltipInfo.GetTintColor]"
+					}
+
+					container = {
+						parentanchor = top|hcenter
+						widgetanchor = top|hcenter
+						visible = "[IsInGame]"
+						block "buttons" {}
+					}
+				}
+			}
+
+			margin_widget = {
+				size = { 100% 100% }
+				margin = { 1 1 }
+
+				icon = {
+					name = "tooltip_frame_locked"
+					texture = "gfx/interface/tooltip/tooltip_locked.dds"
+					spriteType = Corneredstretched
+					spriteborder = { 6 6 }
+					tintcolor = "[TooltipInfo.GetTintColor]"
+					size = { 100% 100% }
+					texture_density = 2
+
+					# Commented out due to looping sound effect (PRCAL-21403)
+					#state = {
+					#	name = _show
+					#	start_sound = {
+					# 		soundeffect = "event:/SFX/UI/Global/tooltip_lock"
+					#	}
+					#}
+				}
+			}
+
+			### HEADER SECTION
+			widget = {
+				size = { 100% 60 }
+				position = { 0 15 }
+
+				### HEADER BG
+				icon = {
+					size = { 325 60 }
+					position = { 8 -5 }
+					texture = "gfx/interface/tooltip/tooltip_title_bg.dds"
+
+					block "color" {
+						color = { 0 0 0.02 1 }
+					}
+
+					alpha = 0.4
+				}
+
+				hbox = {
+					spacing = 10
+					margin_right = 15
+
+					vbox = {
+						margin_left = 24
+						layoutpolicy_horizontal = expanding
+   						layoutpolicy_vertical = expanding
+
+						textbox = {
+							fontsize_min = 12
+							layoutpolicy_horizontal = expanding
+							block "name" {
+								raw_text = "Name"
+							}
+
+							align = nobaseline
+							using = fontsize_large
+							using = elide_fontsize_min
+							default_format = "#tooltip_header"
+						}
+
+						textbox = {
+							layoutpolicy_horizontal = expanding
+							block "type" {
+								raw_text = "Name"
+							}
+
+							align = nobaseline
+							using = elide_fontsize_min
+							default_format = "#title"
+							margin_bottom = 17
+						}
+					}
+
+					button_icon_round = {
+						visible = "[Not(StringIsEmpty(GlossaryType.GetWebLink))]"
+						size = { 40 40 }
+						tooltip = "GLOSSARY_OPEN_WEB_LINK_TOOLTIP"
+						onclick = "[GlossaryType.OpenWebLink]"
+
+						icon = {
+							size = { 70% 70% }
+							parentanchor = center
+							texture = "gfx/interface/icons/generic_icons/historical_character_icon.dds"
+						}
+					}
+				}
+
+				icon = {
+					size =  { 100% 2 }
+					parentanchor = hcenter|bottom
+					position = { 0 5 }
+					texture = "gfx/interface/dividers/divider_clean.dds"
+					texture_density = 2
+					color = { 0 0 0.02 1 }
+					spriteType = CorneredTiled
+					spriteborder = { 4 0 }
+					alpha = 0.1
+
+					modify_texture = {
+						texture = "gfx/interface/masks/fade_horizontal_center.dds"
+						spriteType = Corneredstretched
+						spriteborder = { 0 0 }
+						blend_mode = alphamultiply
+						alpha = 0.7
+					}
+				}
+			}
+		}
+
+		### timer lock icon
+		block "progress"
+		{
+			tooltip_lock_action_tab = {}
+
+			progresspie = {
+				name = "tooltip_progress"
+				visible = "[And(UsesTimerLocking, Not(PdxGuiWidget.IsTooltipLocked))]"
+				size = { 24 24 }
+				parentanchor = top|right
+				position = { 8 -8 }
+				texture = "gfx/interface/tooltip/tooltip_lock_timer.dds"
+				min = 0
+				max = 1
+				tintcolor = "[TooltipInfo.GetTintColor]"
+				value = "[PdxGuiWidget.GetTooltipLockProgress]"
+				framesize = { 48 48 }
+				frame = 2
+
+				state = {
+					name = _show
+					alpha = 1
+				}
+
+				state = {
+					name = _hide
+					bezier = { 0.25 0.1 0.25 1 }
+					duration = 0.05
+					alpha = 0
+				}
+			}
+		}
+	}
 }
 
 TooltipWidgetType = {
@@ -943,6 +1258,11 @@ template condensed_table {
 	margin_right = 0
 	minimumsize = { -1 23 }
 	maximumsize = { -1 23 }
+}
+
+template elide_fontsize_min {
+	elide = right
+	fontsize_min = 14
 }
 
 Types dividers {

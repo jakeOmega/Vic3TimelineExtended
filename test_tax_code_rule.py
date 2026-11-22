@@ -123,9 +123,14 @@ class OnActionGateSweepTest(unittest.TestCase):
     effect a shared hook calls, does nothing unless the setting it serves holds,
     written positively: te_tax_code_full for the legislated code's handlers,
     te_tax_code_light_on for the light code's (te_tax_light_*). Each task's tests pin
-    its own hooks; this pins the invariant for the next one."""
+    its own hooks; this pins the invariant for the next one.
+
+    One exception, the rule switched to Disabled mid-game (2026-11-08): te_tax_rule_off_net
+    serves no setting, so its gate is the rule off together with a migration marker,
+    which no save from before the rule has (te_tax_triggers.txt's header says why)."""
 
     ON_ACTIONS = "common/on_actions/te_tax_on_actions.txt"
+    RULE_OFF = "te_tax_rule_off_net"
 
     def test_every_handler_is_one_positively_gated_block(self):
         parsed = load(self.ON_ACTIONS)
@@ -136,6 +141,11 @@ class OnActionGateSweepTest(unittest.TestCase):
             with self.subTest(handler=name):
                 effect = body["effect"]
                 self.assertEqual(set(effect), {"if"}, "nothing outside the gate")
+                if name == self.RULE_OFF:
+                    limit = effect["if"]["limit"]
+                    self.assertEqual(limit.get("NOT"), {"te_tax_code_on": "yes"})
+                    self.assertIn("has_law", limit["OR"], "the marker: the carrier, or a migration")
+                    continue
                 gate = "te_tax_code_light_on" if name.startswith("te_tax_light_") else "te_tax_code_full"
                 self.assertEqual(effect["if"]["limit"].get(gate), "yes")
         # Every hook this file extends runs only handlers of its own.
@@ -162,9 +172,11 @@ class OnActionGateSweepTest(unittest.TestCase):
                     for block in blocks if isinstance(blocks, list) else [blocks]:
                         limit = block["limit"]
                         self.assertTrue(any(limit.get(gate) == "yes" for gate in GATES), (branch, limit))
-        # Both effects carry a light branch: the rebels migrate from their own law,
-        # and the winner syncs (te_tax_light.2, te_tax_light.3).
+        # Both effects carry a light branch: the rebels take the original's code and adopt
+        # it (te_tax_light.4), or migrate from their own law when it has none in force
+        # (te_tax_light.2), and the winner syncs (te_tax_light.3; #1469).
         text = (ROOT / "common/scripted_effects/te_tax_civil_war_effects.txt").read_text(encoding="utf-8-sig")
+        self.assertIn("trigger_event = { id = te_tax_light.4 }", text)
         self.assertIn("trigger_event = { id = te_tax_light.2 }", text)
         self.assertIn("trigger_event = { id = te_tax_light.3 }", text)
 
@@ -294,17 +306,28 @@ class VanillaLawGateTest(unittest.TestCase):
 
     def test_no_other_mod_file_injects_or_replaces_these_laws(self):
         # A second INJECT of can_enact would be the duplicate the check above
-        # guards against.
+        # guards against, and a REPLACE would drop the gates. Another file may
+        # INJECT fields this file leaves alone: the Creditors' Consortium adds
+        # can_impose and ai_impose_chance (te_creditors_consortium_law_injections.txt;
+        # an INJECT appends its keys, as law_anarchy's three mod INJECTs do).
         gate_file = ROOT / "common/laws/te_tax_vanilla_law_gates.txt"
         pattern = re.compile(
-            r"^\s*(?:INJECT|REPLACE|REPLACE_OR_CREATE|TRY_INJECT):(%s)\b" % "|".join(VANILLA_TAX_LAWS),
+            r"^\s*(INJECT|REPLACE|REPLACE_OR_CREATE|TRY_INJECT):(%s)\b" % "|".join(VANILLA_TAX_LAWS),
             re.M,
         )
+        owned = {"can_enact", "is_visible", "modifier"}
         offenders = []
         for path in sorted((ROOT / "common").rglob("*.txt")):
-            if path != gate_file:
-                text = path.read_text(encoding="utf-8-sig", errors="ignore")
-                offenders += [f"{path.name}: {m.group(0).strip()}" for m in pattern.finditer(text)]
+            if path == gate_file:
+                continue
+            matches = pattern.findall(path.read_text(encoding="utf-8-sig", errors="ignore"))
+            if not matches:
+                continue
+            bodies = load(path)
+            for directive, law in matches:
+                clash = owned & set(bodies.get(f"INJECT:{law}") or {}) if directive == "INJECT" else {directive}
+                if clash:
+                    offenders.append(f"{path.name}: {directive}:{law} {sorted(clash)}")
         self.assertEqual(offenders, [])
 
 

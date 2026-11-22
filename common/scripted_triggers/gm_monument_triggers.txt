@@ -318,7 +318,8 @@ gm_state_can_build_site = {
 			text = gm_expand_full_tt
 			gm_state_monument_count < 6
 		}
-		# An older save's monument here is migrated first (gm_state_migrate).
+		# Not over a building no record describes (gm_migrated): a revolt's
+		# copy or a merge's, which the refresh settles first.
 		custom_tooltip = {
 			text = gm_expand_migrating_tt
 			OR = {
@@ -368,9 +369,11 @@ gm_mon_has_dedication_flag = {
 # Container scope. This secondary counts toward its owner's open opportunity
 # (spec 2026-10-16 §5), as gm_state_com_counts does for a state's own: it fits,
 # it is of the opportunity's dedication, and it stands in the opportunity's
-# state if that names one.
+# state if that names one. Not a buried site dug up while the opportunity was
+# offered or open (gm_tr_unearthed_for_com, gm_arch_place).
 gm_mon_com_counts = {
 	var:gm_tr_origin ?= { owner = { has_variable = gm_com_dedication } }
+	NOT = { has_variable = gm_tr_unearthed_for_com }
 	gm_mon_status_fits = yes
 	gm_mon_has_dedication_flag = { VAR = gm_com_dedication }
 	var:gm_tr_origin ?= {
@@ -511,9 +514,13 @@ gm_mon_form_is_piece = {
 
 # State scope. A secondary monument here can be carried off at all: the
 # building is not being rebuilt, no ceremony is asking, nothing has been taken
-# from the state in the last ten years. It asks nothing of the primary's
-# dedication (gm_state_tr_takeable does): a returned artifact stands in a state
-# whose own monument may be undedicated.
+# from the state in the last ten years, and one of them has no piece of it
+# still abroad (gm_mon_tr_piece_abroad, gm_trophy_triggers.txt: a monument is
+# looted once until what was taken comes home). It asks nothing of the
+# primary's dedication (gm_state_tr_takeable does): a returned artifact stands
+# in a state whose own monument may be undedicated. The one a click or a roll
+# names asks gm_mon_tr_piece_abroad itself (gm_mon_tr_can_take,
+# monument_trophy_events.10, gm_state_tr_ai_choose_target).
 gm_state_tr_takeable_secondary = {
 	gm_system_enabled = yes
 	has_building = building_grand_monument
@@ -522,6 +529,11 @@ gm_state_tr_takeable_secondary = {
 	NOT = { has_variable = gm_gift }
 	NOT = { has_variable = gm_carried_off }
 	NOT = { has_variable = gm_tr_cooldown }
+	has_variable_list = gm_monuments_here
+	any_in_list = {
+		variable = gm_monuments_here
+		gm_mon_tr_piece_abroad = no
+	}
 }
 
 # State scope. Some monument here can be carried off: the primary
@@ -545,6 +557,7 @@ gm_mon_tr_can_take = {
 		gm_state_tr_takeable_secondary = yes
 		gm_state_tr_occupied_by = { WHO = $WHO$ }
 	}
+	gm_mon_tr_piece_abroad = no
 }
 
 # The scripted GUI's check: each part with its reason.
@@ -552,6 +565,7 @@ gm_mon_tr_can_take_tt = {
 	custom_tooltip = {
 		text = gm_mon_sgui_takeable_tt
 		var:gm_tr_origin ?= { gm_state_tr_takeable_secondary = yes }
+		gm_mon_tr_piece_abroad = no
 	}
 	custom_tooltip = {
 		text = gm_mon_sgui_route_tt
@@ -600,9 +614,7 @@ gm_sh_orphan_of = {
 # waiting to be adopted here (gm_state_adopt_orphans): an orphan in the region,
 # and here a finished building no record describes or one the merge made
 # taller than 1 (sites spec 2026-10-18 §3.7). Until it is settled nothing reads
-# this building as a new dedication. An older save's building stands at its
-# full height until monument_events.32 records it (gm_migrated), so its height
-# says nothing of a merge then. The cheap reads first: the refresh, which
+# this building as a new dedication. The cheap reads first: the refresh, which
 # tooltips walk, asks it of every monument.
 gm_state_merge_pending = {
 	has_building = building_grand_monument
@@ -648,6 +660,94 @@ gm_state_unrecorded = {
 	NOT = { has_variable = gm_ceremony_pending }
 	NOT = { has_variable = gm_restore_pm }
 	NOT = { has_variable = gm_newcomer }
+}
+
+# State scope, a recorded primary about to have its shadow written
+# (gm_state_write_shadow; issue #1409). Its records are a second copy of a
+# monument another standing state keeps: its link (gm_shadow) names a shadow
+# another state holds and is linked back from, or, with no live link of its
+# own, its landmark is kept by another standing state's shadow and recorded
+# there. No script gives two states one monument's records (a revolt's part of
+# a state is a new state with none, and the stray pass removes its building),
+# so only the engine copying a state's variables at a split or a merge could;
+# a shadow written from the copy would orphan when its part merges back. The
+# landmark comparison is gm_state_stands_for_moving's cross-scope flag
+# comparison, which monument_piece_rejoins reads.
+gm_state_records_a_copy = {
+	save_temporary_scope_as = gm_tmp_sh_copy_state
+	OR = {
+		AND = {
+			has_variable = gm_shadow
+			var:gm_shadow ?= {
+				save_temporary_scope_as = gm_tmp_sh_copy_link
+				var:gm_tr_origin ?= {
+					NOT = { this = scope:gm_tmp_sh_copy_state }
+					var:gm_shadow ?= scope:gm_tmp_sh_copy_link
+				}
+			}
+		}
+		AND = {
+			NOT = {
+				AND = {
+					has_variable = gm_shadow
+					exists = var:gm_shadow
+				}
+			}
+			has_variable = gm_landmark
+			has_global_variable_list = gm_shadows
+			any_in_global_list = {
+				variable = gm_shadows
+				has_variable = gm_tr_landmark
+				var:gm_tr_landmark = scope:gm_tmp_sh_copy_state.var:gm_landmark
+				var:gm_tr_origin ?= {
+					NOT = { this = scope:gm_tmp_sh_copy_state }
+					has_building = building_grand_monument
+					has_variable = gm_landmark
+					var:gm_landmark = scope:gm_tmp_sh_copy_state.var:gm_landmark
+				}
+			}
+		}
+	}
+}
+
+# Container scope, an orphaned shadow being settled (scope:gm_sh_pick, with
+# scope:gm_sh_region its region; issue #1409). Its landmark stands already: a
+# part of its region holds it as its own monument in a standing building, a
+# monument beside another records it, or another shadow keeps it for a state
+# that stands. The orphan is then a second copy of that monument's records,
+# not a monument lost. Trophies (a landmark's pieces abroad) and buried sites
+# share the key and are not read. A monument with no landmark has no key to
+# compare and settles as before. The comparison is gm_state_records_a_copy's.
+gm_sh_landmark_stands = {
+	has_variable = gm_tr_landmark
+	OR = {
+		scope:gm_sh_region = {
+			any_scope_state = {
+				has_building = building_grand_monument
+				has_variable = gm_landmark
+				var:gm_landmark = scope:gm_sh_pick.var:gm_tr_landmark
+			}
+		}
+		AND = {
+			has_global_variable_list = gm_monuments
+			any_in_global_list = {
+				variable = gm_monuments
+				exists = var:gm_tr_origin
+				has_variable = gm_tr_landmark
+				var:gm_tr_landmark = scope:gm_sh_pick.var:gm_tr_landmark
+			}
+		}
+		AND = {
+			has_global_variable_list = gm_shadows
+			any_in_global_list = {
+				variable = gm_shadows
+				NOT = { this = scope:gm_sh_pick }
+				exists = var:gm_tr_origin
+				has_variable = gm_tr_landmark
+				var:gm_tr_landmark = scope:gm_sh_pick.var:gm_tr_landmark
+			}
+		}
+	}
 }
 
 # ---- Clear Away (owner, 2026-10-31) -------------------------------------------------

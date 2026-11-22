@@ -1,0 +1,1978 @@
+{
+ "prestige_good_krupp_guns": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "artillery"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/krupp_guns_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_canton_porcelain": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "porcelain"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/canton_porcelain_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_ford_automobiles": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "automobiles"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/ford_automobiles_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_assam_tea": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "tea"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/assam_tea_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_champagne": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "wine"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/champagne_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_bohemian_crystal": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "glass"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/bohemian_crystal_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_ericsson_apparatus": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "telephones"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/ericsson_apparatus_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_armstrong_ships": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "ironclads"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/armstrong_ships_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_clyde_built_liners": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "steamers"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/clyde_built_liners_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_burmese_teak": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "hardwood"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/burmese_teak_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_turin_automobiles": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "automobiles"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/turin_automobiles_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_turkish_tobacco": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "tobacco"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/turkish_tobacco_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_river_plate_beef": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "meat"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/river_plate_beef_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_sheffield_steel": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "steel"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/sheffield_steel_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_bengal_opium": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "opium"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/bengal_opium_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_gros_michel_banana": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "fruit"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/gros_michel_banana_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_rosewood": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "hardwood"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/rosewood_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_radiola_radios": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "radios"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/radiola_radios_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_washi_paper": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "paper"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/washi_paper_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_suzhou_silk": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "silk"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/suzhou_silk_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_haute_couture": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "luxury_clothes"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/haute_couture_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_sea_island_cotton": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "fabric"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/sea_island_cotton_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_colt_revolvers": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "small_arms"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/colt_revolvers_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_mit_afifi": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "fabric"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/mit_afifi_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_bentwood_furniture": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "furniture"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/bentwood_furniture_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_english_upholstery": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "luxury_furniture"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/english_upholstery_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_meissen_porcelain": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "porcelain"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/meissen_porcelain_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_satsuma_ware": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "porcelain"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/satsuma_ware_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_china_tea": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "tea"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/china_tea_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_saint_etienne_rifles": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "small_arms"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/saint_etienne_rifles_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_tomioka_silk": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "silk"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/tomioka_silk_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_schneider_guns": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "artillery"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/schneider_guns_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_como_silk": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "silk"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/como_silk_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_swedish_bar_iron": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "iron"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/swedish_bar_iron_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_baku_oil": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "oil"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/baku_oil_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_sicilian_sulfur": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "sulfur"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/sicilian_sulfur_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_german_aniline": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "dye"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/german_aniline_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_schichau_engines": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "engines"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/schichau_engines_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_smirnoff_vodka": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "liquor"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/smirnoff_vodka_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_russia_iron": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "iron"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/russia_iron_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_philips_chapel_radio": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "radios"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/philips_chapel_radio_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_basma_tobacco": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "tobacco"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/basma_tobacco_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_acorn_fed_pork": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "meat"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/acorn_fed_pork_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_pannonian_patent_flour": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "grain"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/pannonian_patent_flour_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_brunn_type_engines": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "engines"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/brunn_type_engine_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_bacardi_rum": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "liquor"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/bacardi_rum_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_sherry": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "wine"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/sherry_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_cigars": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "tobacco"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/cigars_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_havana_sugar": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "sugar"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/generic_sugar_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_port_wine": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "wine"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/port_wine_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_grand_strategy_games": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "fine_art"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/grand_strategy_games_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_java_coffee": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "coffee"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/java_coffee_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_ferranti_radios": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "radios"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/ferranti_radios_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_oerlikon_engines": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "engines"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/oerlikon_engines_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_white_star_liners": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "merchant_marine"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/white_star_liners_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_kikkoman_soy_sauce": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "groceries"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/kikkoman_soy_sauce.dds\""
+   ]
+  }
+ ],
+ "prestige_good_sikorsky_aeroplanes": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "aeroplanes"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/sikorsky_aeroplanes.dds\""
+   ]
+  }
+ ],
+ "prestige_good_fiskars_tools": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "tools"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/fiskars_tools.dds\""
+   ]
+  }
+ ],
+ "prestige_good_maslosoyuz_butter": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "groceries"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/maslosoyuz_butter.dds\""
+   ]
+  }
+ ],
+ "prestige_good_sateen_clothes": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "luxury_clothes"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/sateen_clothes.dds\""
+   ]
+  }
+ ],
+ "prestige_good_generic_clothes": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "clothes"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/generic_clothes_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_generic_groceries": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "groceries"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/generic_groceries_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_generic_furniture": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "furniture"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/generic_furniture_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_generic_fertilizer": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "fertilizer"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/generic_fertilizer_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_generic_tools": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "tools"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/generic_tools_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_generic_fish": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "fish"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/generic_fish_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_generic_meat": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "meat"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/generic_meat_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_generic_coffee": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "coffee"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/generic_coffee_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_generic_steel": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "steel"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/generic_steel_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_generic_opium": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "opium"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/generic_opium_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_generic_small_arms": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "small_arms"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/generic_small_arms_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_generic_artillery": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "artillery"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/generic_artillery_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_generic_merchant_marine": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "merchant_marine"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/generic_merchant_marine_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_generic_grain": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "grain"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/generic_grain_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_generic_paper": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "paper"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/generic_paper_prestige.dds\""
+   ]
+  }
+ ],
+ "prestige_good_generic_explosives": [
+  "=",
+  {
+   "possible": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "mp1_content"
+     ]
+    }
+   ],
+   "base_good": [
+    "=",
+    "explosives"
+   ],
+   "prestige_bonus": [
+    "=",
+    "0.1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/goods_icons/prestige_goods/generic_explosives_prestige.dds\""
+   ]
+  }
+ ]
+}

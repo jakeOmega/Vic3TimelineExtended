@@ -56,6 +56,10 @@
 	# loses its chlorine, carboys break. Eight techs from improved_fertilizer
 	# (era 3) to molecular_assemblers (era 13) bring it down to 0.001.
 	country_st_res_fertilizer_decay_add = 0.04
+	# Copper (Conductive Metals): ingots and cathodes keep indefinitely, so the
+	# stock does not decay (owner, 2026-11-05, #1405). The line stays so the
+	# decay modifier has a base like every other good's.
+	country_st_res_copper_decay_add = 0
 
 	# ------------------------------------------------------------------------
 	# Monetary Policy — cancel vanilla's flat base interest rate (§16.1)
@@ -502,7 +506,7 @@ financial_cycle_phase_frenzy = {
 	# BUBBLE 20 -> 8 (2026-09-22). Nearly every frenzy starts with bubble
 	# already past 60 (it is filled in boom), so this line decides how fast a
 	# frenzy locks in, not whether crashes happen: crash frequency moved ~1%.
-	# With the flatter inertia curve (bubble_inertia_multiplier_script_value)
+	# With the flatter inertia curve (bubble_inertia_curve)
 	# it gives maxed tools a few percent chance to escape a frenzy instead of
 	# none (banking_cycle_simulation.md §10). _cmd / _coop scaled x0.4 alike.
 	country_bubble_pressure_monthly_add = 8
@@ -689,6 +693,21 @@ banking_event_deposit_guarantee_emergency = {
 	country_te_budget_expense_banking_add = 1
 }
 
+# The same charge under the names the planned (.104.b) and cooperative (.154.b)
+# variants of the event give it: neither economy has bank deposits to guarantee
+# (#1612). Keep all three at the same values.
+banking_event_stockpile_release = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_banking_add = 1
+}
+
+banking_event_federation_relief_fund = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_banking_add = 1
+}
+
 banking_event_selective_bailout = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	goods_output_services_mult = 0.03
@@ -842,6 +861,23 @@ banking_event_cb_independence = {
 	country_banking_crash_chance_mult = -0.1
 }
 
+# The same effects under the names the planned (.116.a, the bureau backed) and
+# cooperative (.166.a, the old slate backed) variants give them: neither is a
+# central bank's independence (#1612). Keep all three at the same values.
+banking_event_plan_figures_upheld = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_risk_premium_add = -0.01
+	country_banking_random_momentum_mult = -0.15
+	country_banking_crash_chance_mult = -0.1
+}
+
+banking_event_old_slate_upheld = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_risk_premium_add = -0.01
+	country_banking_random_momentum_mult = -0.15
+	country_banking_crash_chance_mult = -0.1
+}
+
 banking_event_dual_mandate = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_risk_premium_add = -0.006
@@ -904,18 +940,6 @@ banking_event_sovereign_wealth_fund_cost = {
 }
 
 # ----- Interventions (buttons spend points here via negative adds) -----
-# KEPT FOR SAVE MIGRATION ONLY (2026-09-19). The "Raise Policy Rate" tool that
-# applied this is deleted (monetary_policy_design.md §18); nothing adds it any
-# more, and je_banking_cycle's monthly pulse strips it from saves that still
-# carry it. Removal checklist: common/scripted_effects/legacy_modifier_cleanup.txt.
-banking_policy_rate_hike = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
-	country_banking_intervention_max_add = -2
-	interest_group_ig_industrialists_approval_add = -2
-	# monthly:
-	country_finance_momentum_monthly_add = -0.25
-	country_bubble_pressure_monthly_add  = -2.0
-}
 
 # THE TEN DASHBOARD TOOLS' MONTHLY LINES WERE RE-SIZED 2026-09-22
 # (docs/audits/banking_cycle_simulation.md F1, §3):
@@ -1044,36 +1068,10 @@ banking_moral_suasion = {
 banking_raise_margin_requirements = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	country_banking_intervention_max_add = -2
-	state_middle_strata_standard_of_living_add = -0.5
+	state_middle_strata_standard_of_living_add = -1
 	# monthly (bubble x3, 2026-09-22 — see banking_countercyclical_capital_buffer):
 	country_finance_momentum_monthly_add = -0.05
 	country_bubble_pressure_monthly_add  = -1.2
-}
-
-# LEGACY — monetary policy phase 4 (2026-09-21) deleted cb_fx_devaluation and
-# cb_fx_support: a weak or strong currency is now an OUTCOME (te_fx_index, §15),
-# not a button. Both definitions stay for one release so a save that holds them
-# loads clean; te_monetary_init_fx_variables converts them to an index of 80 /
-# 120 and strips them. Retire with legacy_modifier_cleanup.txt's dated checklist.
-banking_fx_devaluation = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_banking_intervention_max_add = -3
-	state_import_advantage_mult = -0.25
-	state_export_advantage_mult = 0.25		     # exporters advantaged
-	country_risk_premium_add = 0.004            # inflation pass-through
-	country_finance_momentum_monthly_add = 0.1
-	country_bubble_pressure_monthly_add  = 0.3
-}
-
-banking_fx_support = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_banking_intervention_max_add = -3
-	state_import_advantage_mult = 0.25
-	state_export_advantage_mult = -0.25		     # importers advantaged
-	country_risk_premium_add = -0.002
-	country_finance_momentum_monthly_add = 0.05
-	country_bubble_pressure_monthly_add  = -0.4
-	state_tax_collection_mult = -0.03             # ongoing cost of deploying foreign reserves
 }
 
 banking_capital_controls_out = {
@@ -1094,19 +1092,6 @@ banking_capital_controls_out = {
 	country_authority_add = 100
 	country_finance_momentum_monthly_add = 0.02
 	country_bubble_pressure_monthly_add  = -0.1
-}
-
-# LEGACY since monetary policy phase 5a (2026-09-21): the FX Swap Lines tool is
-# deleted and the swap_line treaty article replaces it, so nothing applies this
-# any more. The definition stays for one release so a save holding it loads
-# clean; legacy_modifier_cleanup.txt carries the dated removal checklist.
-banking_fx_swap_lines = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_banking_intervention_max_add = -4
-	state_import_advantage_mult = 0.05
-	country_influence_cost_add = 100
-	country_finance_momentum_monthly_add = 0.15
-	country_bubble_pressure_monthly_add  = -0.3
 }
 
 banking_export_credit_facility = {
@@ -1349,8 +1334,9 @@ banking_crash_intervention_capital_controls = {
 	country_influence_add = -100
 }
 
-# ----- Global Warming severity stage (applied to every country via JE monthly pulse, scaled by multiplier) -----
-# Note: The actual multiplier values are defined in the relevant journal entry (e.g. based on temperature anomaly or severity stage).
+# ----- Global Warming severity stage (a scaling modifier the World Climate entry declares for every country) -----
+# Per degree: the entry declares it at the felt temperature anomaly, floored at 0 (je_world_climate.txt).
+# A state in the tropics or the high latitudes also carries its band's modifier below (#1681).
 global_warming = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
 	state_mortality_mult = 0.05
@@ -1382,6 +1368,48 @@ global_warming = {
 
 }
 
+# ----- Regional Climate Warming (#1681) -----
+# docs/superpowers/specs/2026-11-13-regional-climate-warming-design.md § 4.
+# On top of global_warming, per degree of the felt anomaly, on a state between the
+# tropics or 55 degrees or more from the equator; a mid-latitude state carries
+# neither. State modifiers, refreshed from the monthly state pulse by
+# gw_regional_refresh_effect (global_warming_regional_effects.txt), their one
+# refresh site, at multiplier = var:gw_regional_applied, the anomaly Climate Warming
+# applies at. The self-check reads heatwave duration (global_warming 0.5 and a band's
+# 0.25 or -0.25; the termination shock the only other carrier). Each mortality line has its
+# Causes of Death tag beside it at the same value (demographics_params.DEATH_CAUSE_TAGS,
+# "chr", as global_warming's). test_gw_regional.py pins the lines.
+
+# The tropics: heat already near what people and crops can bear.
+global_warming_tropics = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
+	state_mortality_mult = 0.025
+	state_death_cause_chr_mult = 0.025
+	state_standard_of_living_add = -0.5
+	building_group_bg_agriculture_throughput_add = -0.05
+	building_group_bg_plantations_throughput_add = -0.05     # global_warming leaves plantations alone
+	state_harvest_condition_heatwave_impact_mult = 0.25
+	state_harvest_condition_heatwave_duration_mult = 0.25
+}
+
+# The high latitudes: milder winters and a longer growing season, and more forest fire.
+# Totals with global_warming: mortality +2%, SoL -0.5, farms +2% a degree (its -10% farm
+# line and -2.5% on every building against +14.5% here).
+global_warming_high_latitudes = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds
+	state_mortality_mult = -0.03
+	state_death_cause_chr_mult = -0.03
+	state_standard_of_living_add = 0.5
+	building_group_bg_agriculture_throughput_add = 0.145
+	state_harvest_condition_frost_impact_mult = -0.15
+	state_harvest_condition_frost_duration_mult = -0.15
+	state_harvest_condition_heatwave_impact_mult = -0.25
+	state_harvest_condition_heatwave_duration_mult = -0.25
+	state_harvest_condition_wildfire_impact_mult = 0.25
+	# No wildfire duration: that field stays Climate Warming's alone, which the World
+	# Climate self-check reads (gw_world_climate_selfcheck_effect).
+}
+
 # ----- Climate mitigation and adaptation policies -----
 # National industrial policies
 carbon_tax_modifier = {
@@ -1406,11 +1434,9 @@ renewable_investment_modifier = {
 
 # Renewable Investment's running cost, in place of the forced plant subsidies it
 # used to carry (country_building_renewable_energy_plant_require_subsidies_bool,
-# retired 2026-10-20). Held on the country, not the journal entry, because the
-# multiplier reads gdp. Applied with multiplier = gw_renewable_investment_cost_value
-# (0.5% of GDP a year, per week) by gw_renewable_investment_cost_apply and
-# re-applied monthly by gw_refresh_policy_costs_effect, the single refresh site.
-# Budget Breakdown: Climate Policy.
+# retired 2026-10-20). A scaling modifier on je_global_warming at
+# gw_renewable_investment_cost_value (0.5% of GDP a year, per week) while the
+# policy is in force. Budget Breakdown: Climate Policy.
 renewable_investment_cost_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
@@ -1421,7 +1447,7 @@ climate_adaptation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	state_mortality_mult = -0.025
 	state_death_cause_chr_mult = -0.025
-	state_standard_of_living_add = 0.5
+	state_standard_of_living_add = 1
 	country_authority_cost_add = 250
 	country_environmental_movement_radicalism_add = -0.10	# read by movement_environmental (GW-3)
 }
@@ -1436,6 +1462,8 @@ emission_standards_modifier = {
 }
 
 # Indirect-effect policies (available to all countries)
+# Carbon Removal Support: a scaling modifier on je_global_warming while the
+# country variable gw_carbon_removal_policy is set.
 carbon_removal_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_building_synthetics_plant_coal_require_subsidies_bool = yes
@@ -1445,8 +1473,9 @@ carbon_removal_modifier = {
 }
 
 # Stratospheric Aerosol Injection (Geoengineering, era 13 spec § 7.5), on the
-# journal entry like the other national policies. Its climate effect is not a
-# modifier: the countries running it set the world's aerosol mask
+# journal entry like the other national policies (a scaling modifier there,
+# while the country variable gw_aerosol_injection_policy is set). Its climate
+# effect is not a modifier: the countries running it set the world's aerosol mask
 # (global_warming_aerosol_values.txt), which every country's warming reads.
 # The Environmental Movement opposes it, so it stirs the movement where every
 # other policy calms it.
@@ -1456,18 +1485,18 @@ aerosol_injection_modifier = {
 }
 
 # Stratospheric Aerosol Injection's running cost: 1% of GDP a year, per week
-# (gw_aerosol_injection_cost_value). On the country, applied and re-applied as
-# Renewable Investment's is (gw_aerosol_injection_cost_apply, from
-# gw_refresh_policy_costs_effect). Budget Breakdown: Climate Policy.
+# (gw_aerosol_injection_cost_value). A scaling modifier on je_global_warming
+# while the policy is in force, as Renewable Investment's is. Budget
+# Breakdown: Climate Policy.
 aerosol_injection_cost_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
 	country_te_budget_expense_climate_add = 1
 }
 
-# The haze weakens the summer monsoons (Geoengineering). On the journal entry
-# of a country whose capital lies in a monsoon region (gw_country_in_monsoon_region),
-# re-applied monthly with multiplier = the aerosol mask in degrees: per degree
+# The haze weakens the summer monsoons (Geoengineering). A scaling modifier on
+# the journal entry of a country whose capital lies in a monsoon region
+# (gw_country_in_monsoon_region), at the aerosol mask in degrees: per degree
 # masked, half the farm relief the mask brings back and none of its drought
 # relief (the global_warming modifier is -10% farms, +25% droughts a degree).
 gw_aerosol_monsoon_modifier = {
@@ -1604,20 +1633,20 @@ crop_failure_relief_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	building_group_bg_agriculture_throughput_add = -0.05
 	country_bureaucracy_mult = -0.03
-	state_standard_of_living_add = 0.5
+	state_standard_of_living_add = 1
 }
 
 crop_failure_ministry_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	building_group_bg_agriculture_throughput_add = -0.03
-	state_standard_of_living_add = 0.3
+	state_standard_of_living_add = 1
 	country_legitimacy_base_add = 5
 }
 
 climate_refugee_welcome_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	state_migration_pull_mult = 0.25
-	state_standard_of_living_add = -0.5
+	state_standard_of_living_add = -1
 	country_prestige_mult = 0.05
 }
 
@@ -1638,6 +1667,15 @@ environmentalist_momentum_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_institution_size_change_speed_institution_ministry_of_the_environment_mult = 0.25
 	country_enactment_success_chance_law_ministry_of_the_environment_add = 0.05
+}
+
+# Interest-group-scoped: makes the group likelier to pick an Environmentalist
+# leader the next time it chooses one, in place of converting the sitting
+# leader (environmentalism events .3, .4, .8 and .15; #1446). Vanilla's one
+# use of the pattern is +50% (modifier_agent_of_the_sovereign_ig).
+environmentalist_leader_pull_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	interest_group_ideology_environmentalists_leader_chance_mult = 1
 }
 
 # Movement-scoped: applied to environmental movement via every_political_movement
@@ -1662,7 +1700,7 @@ coastal_flood_defense_modifier = {
 
 water_crisis_rationing_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
-	state_standard_of_living_add = -1.5
+	state_standard_of_living_add = -2
 	state_mortality_mult = 0.02
 	state_death_cause_inf_mult = 0.02
 	building_group_bg_agriculture_throughput_add = -0.10
@@ -1670,14 +1708,16 @@ water_crisis_rationing_modifier = {
 
 water_crisis_infrastructure_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	state_standard_of_living_add = -0.5
+	state_standard_of_living_add = -1
 	country_bureaucracy_mult = -0.05
 	state_infrastructure_add = 5
 }
 
 water_crisis_ministry_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	state_standard_of_living_add = -0.3
+	# No standard of living cost: the ministry's option costs less than
+	# rationing's -2 and infrastructure's -1, and a whole point is the least
+	# that counts (it was an inert -0.3, #338).
 	state_infrastructure_add = 3
 	country_legitimacy_base_add = 5
 }
@@ -1698,14 +1738,6 @@ fossil_lobby_concessions_modifier = {
 	state_pollution_generation_mult = 0.05
 }
 
-# Replacement when global warming rule is disabled
-fossil_lobby_concessions_no_gw_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	building_coal_mine_throughput_add = 0.10
-	building_group_bg_oil_extraction_throughput_add = 0.10
-	state_pollution_generation_mult = 0.15
-}
-
 climate_summit_leader_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_mult = 0.15
@@ -1713,25 +1745,10 @@ climate_summit_leader_modifier = {
 	country_enactment_success_chance_law_ministry_of_the_environment_add = 0.10
 }
 
-# Replacement when global warming rule is disabled: pollution reduction instead of GHG
-climate_summit_leader_no_gw_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_prestige_mult = 0.15
-	state_pollution_generation_mult = -0.10
-	country_enactment_success_chance_law_ministry_of_the_environment_add = 0.10
-}
-
 climate_summit_pledge_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_mult = 0.05
 	country_greenhouse_gas_emissions_mult = -0.03
-}
-
-# Replacement when global warming rule is disabled
-climate_summit_pledge_no_gw_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_prestige_mult = 0.05
-	state_pollution_generation_mult = -0.05
 }
 
 tropical_disease_spread_modifier = {
@@ -1755,7 +1772,8 @@ tropical_disease_public_health_modifier = {
 	state_mortality_mult = 0.01
 	state_death_cause_inf_mult = 0.01
 	country_legitimacy_base_add = 10
-	state_standard_of_living_add = -0.3
+	# No standard of living cost: the ministry's option costs less than the
+	# others, and a whole point is the least that counts (it was an inert -0.3, #338).
 }
 
 climate_political_turmoil_modifier = {
@@ -1800,13 +1818,6 @@ climate_dismissal_boost_modifier = {
 	country_greenhouse_gas_emissions_mult = 0.05
 }
 
-# Replacement when global warming rule is disabled
-climate_dismissal_boost_no_gw_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	building_throughput_add = 0.03
-	state_pollution_generation_mult = 0.10
-}
-
 # Not spending on climate crisis - saves government resources (event 3B)
 climate_inaction_savings_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
@@ -1828,27 +1839,11 @@ climate_accord_rejection_modifier = {
 	country_greenhouse_gas_emissions_mult = 0.05
 }
 
-# Replacement when global warming rule is disabled
-climate_accord_rejection_no_gw_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	building_coal_mine_throughput_add = 0.05
-	building_group_bg_oil_extraction_throughput_add = 0.05
-	state_pollution_generation_mult = 0.10
-}
-
 # Rolling back climate protections during cooling (events 17B, 18B, 19B, 23B)
 climate_deregulation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	building_throughput_add = 0.03
 	country_greenhouse_gas_emissions_mult = 0.05
-	country_bureaucracy_mult = 0.03
-}
-
-# Replacement when global warming rule is disabled
-climate_deregulation_no_gw_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	building_throughput_add = 0.03
-	state_pollution_generation_mult = 0.10
 	country_bureaucracy_mult = 0.03
 }
 
@@ -1859,27 +1854,12 @@ climate_measures_sunset_modifier = {
 	country_greenhouse_gas_emissions_mult = 0.10
 }
 
-# Replacement when global warming rule is disabled
-climate_measures_sunset_no_gw_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	building_throughput_add = 0.05
-	state_pollution_generation_mult = 0.15
-}
-
 # Declaring victory on climate and reducing policy intensity (event 21B)
 climate_victory_dividend_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_prestige_mult = 0.15
 	building_throughput_add = 0.05
 	country_greenhouse_gas_emissions_mult = 0.05
-}
-
-# Replacement when global warming rule is disabled
-climate_victory_dividend_no_gw_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	country_prestige_mult = 0.15
-	building_throughput_add = 0.05
-	state_pollution_generation_mult = 0.10
 }
 
 # ============================================================================
@@ -2294,9 +2274,9 @@ foreign_property_protected_modifier = {
 
 # The three programmes. Each runs at a level from 0 to 3 (colonial_empire_values.txt,
 # PROGRAMME LEVELS); the values below are the FULL programme, level 3, and
-# colonial_programmes_refresh_modifiers (decolonization.txt) applies each at a
-# third, two thirds or all of them. Each is the right pick in different
-# circumstances:
+# je_colonial_empire declares each as a scaling modifier at a third, two thirds
+# or all of them (colonial_*_modifier_scale). Each is the right pick in
+# different circumstances:
 #   - Invest: slow bar push, but pays for itself in economic terms. Right when
 #     stability is OK and you want to grow the empire long-term.
 #   - Garrison: fast bar push, but burns prestige and projection. Right when
@@ -2307,7 +2287,7 @@ foreign_property_protected_modifier = {
 colonial_development_investment_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	# The weekly upkeep is carried by colonial_development_investment_expense_modifier
-	# (re-applied each JE pulse at a share of the colonies' GDP per level) so it
+	# (declared on the entry at a share of the colonies' GDP per level) so it
 	# shows up in the budget line rather than being a silent treasury debit.
 	# Domestic-anger primary cost: pops expect SoL gains at home, not abroad.
 	state_lower_strata_expected_sol_add = 1
@@ -2322,10 +2302,10 @@ colonial_development_investment_modifier = {
 	# that mechanically erodes them.
 }
 
-# Per-pulse-refreshed expense modifier for the Development Investment program.
-# Held isolated (country_expenses_add only) so the refresh can re-apply it with
-# the weekly cost as its multiplier without rescaling the other policy effects:
-# country_expenses_add is a WEEKLY amount, so the multiplier is
+# Expense modifier for the Development Investment program, a scaling modifier
+# on je_colonial_empire. Held isolated (country_expenses_add only) so its value
+# can be the weekly cost without rescaling the other policy effects:
+# country_expenses_add is a WEEKLY amount, so the value is
 # colonial_invest_weekly_cost (a share of the colonies' yearly GDP per level,
 # over 52). Surfaces in the country's budget panel as a line item — players can
 # see what the program is actually costing them.
@@ -2489,7 +2469,7 @@ bloody_decolonization_legacy_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_authority_cost_add = 50
 	state_radicals_from_political_movements_mult = 0.10
-	country_prestige_add = 25
+	country_prestige_mult = 0.05
 	character_loyalty_add = -2
 }
 
@@ -2842,6 +2822,9 @@ cr_federal_protection_modifier = {
 	country_bureaucracy_mult = -0.05
 	country_acceptance_not_homeland_add = 5
 	country_authority_mult = -0.05
+	# The entry completes on Multicultural (with Minority Protection): federal
+	# backing speeds that enactment, segregation slows it (1.15, #1453).
+	country_enactment_speed_law_multicultural_mult = 0.25
 }
 
 cr_gradualist_modifier = {
@@ -2874,6 +2857,7 @@ cr_segregationist_modifier = {
 	country_authority_mult = 0.10
 	state_radicals_from_political_movements_mult = 0.30
 	country_acceptance_not_homeland_add = -10
+	country_enactment_speed_law_multicultural_mult = -0.25
 }
 
 # ----------------------------------------------------------------------------
@@ -3283,7 +3267,7 @@ police_accountability_modifier = {
 riot_curfew_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
 	country_authority_add = 50
-	state_standard_of_living_add = -0.5
+	state_standard_of_living_add = -1
 	country_sol_expectations_shift_max_add = -1
 	# Moved from riot_property_damage_modifier, which the same option adds to
 	# a state, where a country_* key reaches nothing. Halved from -0.02 because
@@ -3294,7 +3278,7 @@ riot_curfew_modifier = {
 
 riot_concessions_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	state_standard_of_living_add = 0.5
+	state_standard_of_living_add = 1
 	country_authority_cost_add = 50
 	country_sol_expectations_shift_add = 0.03
 	country_sol_expectations_lower_offset_add = 0.5
@@ -3394,7 +3378,7 @@ grassroots_campaign_modifier = {
 immigration_welcome_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	state_migration_pull_add = 100
-	state_standard_of_living_add = -0.5
+	state_standard_of_living_add = -1
 	country_sol_expectations_shift_add = 0.02
 }
 
@@ -3452,7 +3436,7 @@ revival_secular_modifier = {
 
 revival_channeled_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	state_standard_of_living_add = 0.5
+	state_standard_of_living_add = 1
 	interest_group_ig_devout_pol_str_mult = 0.05
 	country_sol_expectations_shift_min_add = 0.25
 }
@@ -3483,7 +3467,7 @@ faith_compromise_modifier = {
 globalization_embrace_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	building_throughput_add = 0.03
-	state_standard_of_living_add = -0.5
+	state_standard_of_living_add = -1
 	country_sol_expectations_shift_add = 0.03
 	country_sol_expectations_upper_offset_add = 0.5
 }
@@ -3491,14 +3475,14 @@ globalization_embrace_modifier = {
 globalization_protect_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	building_throughput_add = -0.02
-	state_standard_of_living_add = 0.5
+	state_standard_of_living_add = 1
 	country_sol_expectations_shift_min_add = 0.5
 	country_sol_expectations_shift_max_add = -0.5
 }
 
 globalization_retrain_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-	state_standard_of_living_add = 0.5
+	state_standard_of_living_add = 1
 	country_bureaucracy_mult = -0.02
 	country_sol_expectation_adaptation_rate_mult = 0.1
 	country_sol_expectations_middle_offset_add = 0.5
@@ -3627,6 +3611,9 @@ un_refused_aid_penalty_modifier = {
 	country_improve_relations_speed_mult = -0.10
 }
 
+# Two causes, and its name and description cover both: walking out of the UN
+# (un_leave_button, five years) and having a permanent seat voted away
+# (un_vote.2, ten years). It bars rejoining and being seated again.
 un_withdrawal_penalty_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_improve_relations_speed_mult = -0.25
@@ -3917,8 +3904,8 @@ un_development_contributor_modifier = {
 # What the World Development Fund's recipients remember of a contributor's
 # money: added with multiplier = root.var:un_dev_fund_patron, which moves a
 # twelfth of the way each month toward the contribution's benefit factor
-# (un_dev_fund_patron_pulse, un_economy_effects.txt), and is derived from that
-# variable every month rather than mirrored. Members the Fund pays are more
+# (un_dev_fund_patron_pulse, un_economy_effects.txt), at which
+# je_united_nations declares it. Members the Fund pays are more
 # receptive to the contributor's lobbying.
 un_development_patron_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
@@ -4071,10 +4058,11 @@ un_mandate_war_support_modifier = {
 }
 
 # ---- UN redesign phase 5: convention regimes (un_regime_effects.txt) ----
-# Each is a unit value applied with multiplier = un_enforcement (E) by
-# un_regime_refresh_country, the single refresh site, except the climate
-# adaptation aid (x temperature anomaly x E) and shared intelligence (x the
-# steps above Established: 1 at Strong, 2 at Supranational).
+# Each is a unit value, declared by je_united_nations at un_enforcement (E)
+# while the presence variable un_regime_refresh_country sets (the single
+# refresh site) is held, except the climate adaptation aid (x temperature
+# anomaly x E) and shared intelligence (x the steps above Established: 1 at
+# Strong, 2 at Supranational).
 # Climate, a high emitter: the binding cut, paid in heavy-industry output.
 un_regime_climate_emitter_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
@@ -4130,7 +4118,10 @@ un_regime_refugee_host_modifier = {
 # Refugees, a source: relief.
 un_regime_refugee_source_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	state_standard_of_living_add = 0.25
+	# Scaled by un_enforcement (0 to 2.5), and standard of living is whole
+	# points: 0.4 reaches +1 at the top step, Supranational. 0.25 never
+	# reached a point (#338).
+	state_standard_of_living_add = 0.4
 }
 # Outer space, the leader: it shares what it learns.
 un_regime_space_leader_modifier = {
@@ -4429,7 +4420,7 @@ un_humanitarian_aid_received_modifier = {
 
 un_humanitarian_token_received_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	state_standard_of_living_add = 0.5
+	state_standard_of_living_add = 1
 	state_food_security_add = 0.1
 }
 
@@ -4449,13 +4440,13 @@ un_peacekeeping_resented_modifier = {
 
 un_refugee_source_relief_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	state_standard_of_living_add = 0.5
+	state_standard_of_living_add = 1
 	state_migration_pull_mult = -0.25
 }
 
 un_refugee_source_brain_drain_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	state_standard_of_living_add = -0.25
+	state_standard_of_living_add = -1
 	state_migration_pull_mult = -0.1
 }
 
@@ -4533,9 +4524,9 @@ un_mission_service_cost = {
 }
 
 # Redesign phase 5 (§7.2): a member's assessed dues, a share of its GDP set by
-# the UN's tier. Applied with multiplier = var:un_dues_cached (the weekly
-# dues, un_dues_weekly_value) by un_dues_country_monthly_update, the single
-# refresh site; removed while the member withholds.
+# the UN's tier. Declared on je_united_nations at var:un_dues_cached (the
+# weekly dues, un_dues_weekly_value, cached by un_dues_country_monthly_update)
+# while the member pays (un_dues_in_force); 0 while it withholds.
 un_dues_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
@@ -4694,6 +4685,18 @@ ww_wartime_rationing_modifier = {
 
 # Home front strain - war drags on too long
 ww_home_front_strain_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_bureaucracy_mult = -0.1
+	country_aggressor_diplomatic_play_escalation_weekly_add = 2.0
+}
+
+# world_war_events.11.a, "Put the safety of our cities first": the home front
+# strain's values under a name of its own, decaying, on the journal entry.
+# Until #1617 the option added a decaying copy of ww_home_front_strain_modifier
+# itself. Before the war's second year that copy kept the pulse from adding the
+# standing one until it had run out (the pulse adds it only when the entry
+# holds none), and after it the two stacked. Keep the two at the same values.
+ww_air_raid_relief_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_bureaucracy_mult = -0.1
 	country_aggressor_diplomatic_play_escalation_weekly_add = 2.0
@@ -5238,14 +5241,6 @@ banking_event_cooperative_growth = {
 	building_group_bg_agriculture_throughput_add = 0.03
 }
 
-# PENDING REMOVAL (2026-09-25, #428): banking_cycle_events.31 now enacts the
-# dashboard's cb_bank_holiday instead. Kept for saves that carry it — see
-# common/scripted_effects/legacy_modifier_cleanup.txt.
-banking_event_bank_holiday = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	goods_output_services_mult = -0.05
-}
-
 banking_event_trust_collapse = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	goods_output_services_mult = -0.05
@@ -5407,6 +5402,7 @@ religious_mission_state_modifier = {
 demilitarized_zone_state_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	state_conscription_rate_mult = -1.0
+	state_disallow_barracks_construction_bool = yes # vanilla 1.15: says no new barracks in one line; the caps stay
 	state_building_barrack_max_level_add = -1000
 	state_building_naval_fortification_max_level_add = -1000
 	state_building_military_base_max_level_add = -1000
@@ -5495,10 +5491,10 @@ planning_consolidation_order = {
 }
 
 # 9. Treasury → Investment Pool auto-balance (command economy only)
-# Automatically applied and recalibrated each month (and on inject/withdraw button press)
-# by banking_cycle_update_ce_pool_balance. The multiplier is computed so that the
-# investment pool's net monthly income equals zero: the state treasury funds all
-# planned investment directly.
+# Declared on je_banking_cycle (scaling_modifiers_while_active) at the value
+# banking_cycle_update_ce_pool_balance caches each month (and on an inject or
+# withdraw), computed so that the investment pool's net monthly income equals
+# zero: the state treasury funds all planned investment directly.
 # Base values:
 #   country_weekly_investment_pool_add = 1  (per week, scaled by multiplier)
 #   country_expenses_add = 1
@@ -5573,8 +5569,10 @@ cooperative_credit_expansion = {
 cooperative_consumption_ceiling = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	country_banking_intervention_max_add = -2
-	state_middle_strata_standard_of_living_add = -0.50
-	state_lower_strata_standard_of_living_add  = -0.25
+	state_middle_strata_standard_of_living_add = -1
+	# Lower strata discontent: a gap between what they expect and what the ceiling lets
+	# them buy. Standard of living is whole points, so -0.25 of it did nothing (#338).
+	country_sol_expectations_lower_offset_add = 0.2
 	# monthly: strong extraction pressure reduction; unhappy workers slow things
 	country_bubble_pressure_monthly_add  = -2.5
 	country_finance_momentum_monthly_add = -0.20
@@ -5973,12 +5971,6 @@ augmentation_market_efficiency_modifier = {
 	country_weekly_innovation_mult = 0.03
 }
 
-augmentation_mandate_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_weekly_innovation_mult = 0.05
-	state_turmoil_effects_mult = 0.10
-}
-
 # Event 4: Religious condemnation
 augmentation_religious_anger_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
@@ -6257,7 +6249,7 @@ surveillance_massive_expansion_modifier = {
 	country_prestige_mult = -0.03
 }
 
-# Event 4: AI predictive policing
+# Event 4: predictive policing (era 9 software, not AI: the loc says "prediction software")
 predictive_policing_deployed_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_authority_add = 75
@@ -6599,7 +6591,7 @@ bubble_inertia_extreme = {
 
 # Cooperative Ownership variants (2026-10-05, banking_cycle_simulation.md §21):
 # a fifth of the market's pull, under the same bands and the same
-# bubble_inertia_multiplier_script_value. With none at all a cooperative economy
+# bubble_inertia_curve. With none at all a cooperative economy
 # almost never left Stable (0.6 crashes a century untooled, Boom or Frenzy 0.2%
 # of months); at a fifth it has about 2, the owner's target.
 bubble_inertia_moderate_coop = {
@@ -6675,7 +6667,7 @@ rre_liberation_theology_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	interest_group_ig_devout_pol_str_mult = 0.30
 	interest_group_ig_devout_pop_attraction_mult = 0.25
-	state_standard_of_living_add = 0.5
+	state_standard_of_living_add = 1
 }
 
 rre_progressive_faith_modifier = {
@@ -6733,21 +6725,21 @@ rre_faith_services_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	interest_group_ig_devout_pol_str_mult = 0.25
 	interest_group_ig_devout_pop_attraction_mult = 0.30
-	state_standard_of_living_add = 0.5
+	state_standard_of_living_add = 1
 }
 
 rre_faith_partnership_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	interest_group_ig_devout_pol_str_mult = 0.10
 	interest_group_ig_devout_pop_attraction_mult = 0.15
-	state_standard_of_living_add = 0.25
+	state_standard_of_living_add = 1
 }
 
 # Event 7 option C: Secular welfare expansion
 rre_secular_welfare_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_bureaucracy_mult = -0.03
-	state_standard_of_living_add = 0.5
+	state_standard_of_living_add = 1
 }
 
 # --- Modern Election Events ---
@@ -6878,7 +6870,8 @@ me_border_security_campaign_modifier = {
 
 # ============================================================================
 # CULTURAL HEGEMONY - Dynamic modifier scaled by cultural_pull script value
-# Applied in JE on_monthly_pulse with multiplier = cultural_hegemony_modifier_mult
+# Declared on je_cultural_hegemony (scaling_modifiers_while_active) at
+# cultural_hegemony_modifier_mult
 # ============================================================================
 
 cultural_hegemony_effect = {
@@ -6893,8 +6886,8 @@ cultural_hegemony_effect = {
 	state_assimilation_mult = 0.05
 }
 
-# Applied to foreign countries to reduce legitimacy
-# (ideology pressure from the cultural hegemon)
+# Declared on a trailing country's je_cultural_hegemony to reduce legitimacy
+# (ideology pressure from the cultural hegemon), at var:ch_benchmark_applied
 cultural_hegemony_foreign_benchmark = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_legitimacy_base_add = -5
@@ -6948,8 +6941,7 @@ intelligence_capacity_defense = {
 # resistances as intelligence_capacity_defense, which lives on
 # je_covert_warfare, plus a small intelligence capacity boost (owner decision,
 # PR #510: 2 per unit, so +6 when granted, decaying). That option used to add
-# intelligence_capacity_defense itself, at country scope, where
-# legacy_je_modifier_cleanup_effect strips it every month.
+# intelligence_capacity_defense itself, at country scope.
 covert_counterintelligence_alert = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_support_separatism_resistance_mult = 0.05
@@ -6975,38 +6967,13 @@ iw_domestic_defense = {
 	country_colonial_garrison_effectiveness_add = 0.05
 }
 
-# Agency experience (slice 5). Applied to je_covert_warfare by
-# covert_tradecraft_refresh_bonus with multiplier = the Tradecraft tier (0-4).
+# Agency experience (slice 5). Declared on je_covert_warfare
+# (scaling_modifiers_while_active) with value = the Tradecraft tier (0-4).
 # Network growth per tier is scripted (covert_tradecraft_net_gain_mult), not a
 # modifier field.
 iw_tradecraft_bonus = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_intelligence_capacity_mult = 0.05
-}
-
-# RETIRED 2026-10-07: industrial espionage's +5 innovation; the operation now
-# pays in stolen technology only. Kept defined so a save carrying it (a
-# three-month timed modifier) loads cleanly; legacy_modifier_cleanup.txt strips
-# it (PENDING REMOVAL).
-covert_espionage_base = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	country_weekly_innovation_add = 5
-}
-
-# RETIRED 2026-10-06 (covert tech theft): no longer applied; espionage steals
-# technology instead. Kept defined so a save carrying it (a three-month timed
-# modifier) loads cleanly; legacy_modifier_cleanup.txt strips it (PENDING REMOVAL).
-covert_industrial_espionage = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	country_production_tech_spread_mult = 0.15
-}
-
-# RETIRED 2026-10-06 (covert tech theft): no longer applied; espionage steals
-# technology instead. Kept defined so a save carrying it (a three-month timed
-# modifier) loads cleanly; legacy_modifier_cleanup.txt strips it (PENDING REMOVAL).
-covert_military_espionage = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	country_military_tech_spread_mult = 0.15
 }
 
 # Applied to TARGET when influence campaign operation is active
@@ -7023,36 +6990,10 @@ covert_ideological_subversion = {
 	political_movement_pop_attraction_mult = 0.1
 }
 
-# RETIRED 2026-09-25: destabilization's movement pressure now rides on
-# covert_destabilization_resist. These two survive one release so a save made
-# while one was running loads clean; see PENDING REMOVAL in
-# common/scripted_effects/legacy_modifier_cleanup.txt.
-covert_destabilization_separatist = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	political_movement_radicalism_add = 0.15
-	political_movement_pop_attraction_mult = 0.15
-}
-
-covert_destabilization_general = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	political_movement_radicalism_add = 0.05
-	political_movement_pop_attraction_mult = 0.05
-}
-
 # Applied to TARGET during wartime infrastructure sabotage (morale effect, country-scoped)
 covert_infra_sabotage_morale = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	unit_morale_loss_mult = 0.15
-}
-
-# RETIRED 2026-10-07: military espionage's unit bonus, which helped against
-# every enemy, not only the target; the operation now pays in stolen technology
-# only. Kept defined so a save carrying it (a three-month timed modifier) loads
-# cleanly; legacy_modifier_cleanup.txt strips it (PENDING REMOVAL).
-covert_military_espionage_unit = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	unit_offense_mult = 0.05
-	unit_defense_mult = 0.05
 }
 
 # Applied to TARGET during ideological subversion (separatism resistance, country-scoped)
@@ -7605,6 +7546,14 @@ nuclear_safety_review = {
 	country_tech_spread_add = 15
 }
 
+# The same review under the name the Close Call gives it
+# (nuclear_weapon_events.21.a): that country has no nuclear program to review,
+# only warning stations (#1619). Keep both at the same values.
+nuclear_warning_review = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_tech_spread_add = 15
+}
+
 # Nuclear events — prestige from nuclear achievements/diplomacy (base 1, use multiplier)
 nuclear_event_prestige = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
@@ -7789,9 +7738,19 @@ st_res_fertilizer_store_flow = {
 	goods_input_fertilizer_mult = 1
 }
 
+st_res_copper_store_flow = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	goods_input_copper_mult = 1
+}
+
 st_res_fertilizer_withdraw_flow = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	goods_output_fertilizer_mult = 1
+}
+
+st_res_copper_withdraw_flow = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	goods_output_copper_mult = 1
 }
 
 st_res_sell_profit_modifier = {
@@ -7976,19 +7935,6 @@ colonial_collapse_subject_unrest_modifier = {
 }
 
 # ============================================================================
-# MANDATE RESERVE - power bloc cohesion bonus scaled on unused mandates.
-# Unit value (1); the real per-tier number is carried by the multiplier in
-# te_unused_mandate_reserve_on_action, which inlines an if/else_if ladder
-# directly in power_bloc scope (num_mandates is a power_bloc-scoped trigger
-# comparator; resolving it via a script value passed as `multiplier` failed
-# because multipliers are evaluated in the caller's country scope).
-# ============================================================================
-sm_te_unused_mandate_reserve = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	power_bloc_cohesion_add = 1
-}
-
-# ============================================================================
 # AGRICULTURAL DIFFUSION - granted to every recognized country, the first
 # researcher of a transformative ag tech included, by the options of
 # agricultural_diffusion_events.1-5 (.a_first for the first researcher, which
@@ -8081,9 +8027,9 @@ te_monetary_rate_paid = {
 # ============================================================================
 # Monetary Policy — policy stance bands (monetary_policy_design.md §8)
 # ============================================================================
-# Journal-entry-scope modifiers on je_banking_cycle, swapped when
-# te_mon_stance_band changes. Cheap money feeds the investment pool; tight
-# money starves it.
+# Journal-entry-scope modifiers on je_banking_cycle, which declares the one
+# te_mon_stance_band names (scaling_modifiers_while_active, since 1.15). Cheap
+# money feeds the investment pool; tight money starves it.
 #
 # These exist *instead of* one modifier scaled by the true stance gap: a scaled
 # modifier would print -0.125 x (policy - inflation - r*) in its tooltip, from
@@ -8094,8 +8040,8 @@ te_monetary_rate_paid = {
 #
 # Band 3 (neutral) carries no field on purpose: a 0 value would render as "+0%"
 # and trip modifier_visibility_audit, and there is nothing to say. It stays
-# defined so the swap logic always has exactly one band modifier to apply and
-# the JE reads "Monetary Stance: Neutral" rather than falling silent. Vanilla
+# defined so the entry always declares exactly one band modifier and the JE
+# reads "Monetary Stance: Neutral" rather than falling silent. Vanilla
 # does the same for the neutral tier of its own banded sets — tax_modifier_medium,
 # government_wages_medium and infamy_reputable in
 # vanilla common/static_modifiers/00_code_static_modifiers.txt are all empty.
@@ -8111,8 +8057,8 @@ banking_stance_band_2 = {
 }
 
 banking_stance_band_3 = {
-	# An EMPTY modifier that is still applied, so the entry always names the
-	# stance. It needs an icon all the same: the journal entry lists it, and a
+	# An EMPTY modifier that is still declared at 1, so the entry always names
+	# the stance. It needs an icon all the same: the journal entry lists it, and a
 	# modifier with none logs "Could not find texture ... '' not found".
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 }
@@ -8331,18 +8277,6 @@ te_mon_mandate_loosened = {
 # te_mon_peg_suspension and te_mon_peg_credibility_lost for the time their
 # counter says is left.
 
-# RETIRED 2026-10-06 — the carry on borrowed gold (owner decision I, reversed:
-# under gold, private borrowers paid the interest on balances a high rate drew
-# in, never the treasury). Nothing applies it any more. It survives only so a
-# save made while it was applied loads clean; step 10 of
-# te_monetary_monthly_update strips it every pulse. Removal checklist:
-# common/scripted_effects/legacy_modifier_cleanup.txt.
-te_mon_gold_carry_expense = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	country_expenses_add = 1 # REVIEWED 2026-10-06: unit value of a retired stub; nothing applies it, step 10 strips it from old saves
-	country_te_budget_expense_banking_add = 1
-}
-
 # Suspend convertibility: +2pp of cyclical premium for the five years the
 # suspension runs (days = 1825).
 te_mon_peg_suspension = {
@@ -8356,17 +8290,6 @@ te_mon_peg_suspension = {
 te_mon_peg_credibility_lost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_credit_standing_add = 0.01
-}
-
-# LEGACY since phase 4 (2026-09-21): §12.3's Devalue now SETS te_fx_index to 88
-# and lets it walk back to par (te_mon_effect_fx_devalue_peg) — same peak, same
-# impulse — so nothing applies this any more. The definition stays for one
-# release because a save can hold up to five years of it, and for that save it
-# still IS the devaluation's export edge. Listed in legacy_modifier_cleanup.txt.
-te_mon_peg_devalued = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	state_export_advantage_mult = 0.15
-	state_import_advantage_mult = -0.15
 }
 
 # ...and §12.3's "expected inflation +3" (days = 730, decaying), delivered as
@@ -8406,7 +8329,8 @@ te_mon_peg_devaluation_pressure = {
 # country_sol_expectations_lower_offset_add is consumed CONTINUOUSLY, which is
 # why it works where the SoL key does not. It is summed into
 # sol_expectations_lower_shift_value (common/script_values/extra_script_values.txt),
-# which is then the `multiplier` on sol_expectations_lower_strata_shift — a
+# stored each month in sol_expectations_lower_shift_applied, which is then the
+# `multiplier` on sol_expectations_lower_strata_shift — a
 # unit modifier carrying state_lower_strata_expected_sol_add = 1
 # (common/scripted_effects/sol_expectations_effects.txt). Vanilla ships
 # fractional values on that same expected-SoL key from its tax modifiers
@@ -8596,6 +8520,18 @@ te_mon_arrangement_standing = {
 	country_credit_standing_add = -0.01
 }
 
+# [#1812, owner 2026-11-16] MANAGED, scaled; on an anchor whose credit standing
+# is on its floor. multiplier = pp (te_mon_reserve_floor_applied): the part of
+# the reserve currency's cut above that the floor swallows, less a union
+# leader's own te_mon_union_issuer_premium (te_mon_reserve_floor_value). Cyclical
+# for the reason the issuer's cut is: standing past the floor buys nothing, and
+# this is added after it. Applied only by te_monetary_apply_reserve_floor_premium
+# (step 9b, its one refresh site).
+te_mon_reserve_currency_premium = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_risk_premium_add = -0.01
+}
+
 # te_peg.2 "Break the peg": +2pp for five years (days = 1825). Timed, applied by
 # the event option and NOT managed — the te_mon_peg_suspension precedent.
 te_mon_peg_broken_premium = {
@@ -8606,8 +8542,10 @@ te_mon_peg_broken_premium = {
 # --- 5c: subject currency boards (§15A.4). All three MANAGED, applied only by
 # te_monetary_apply_board_modifiers (step 9b).
 
-# On a subject while its currency board is in force (kind 3). Half its minting
-# goes to the overlord; -0.5 is te_mon_board_seigniorage_share restated.
+# On a subject while its currency board is in force (kind 3). Half of what it
+# mints before its bonuses goes to the overlord: fifty points off its
+# multiplier here, and half its flat sum added on the overlord
+# (te_mon_board_seigniorage). -0.5 is te_mon_board_seigniorage_share restated.
 te_mon_board_subject = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_minting_mult = -0.5
@@ -8631,17 +8569,29 @@ te_mon_board_wrong_stance = {
 
 # --- 5b: the power-bloc common currency (§15A.3) ----------------------------
 
-# MANAGED, flat; on an ADOPTER while kind = 2 (te_monetary_update_union). One
-# money, no conversion: the design's "state_trade_advantage_mult +0.05" names a
-# modifier type that does not exist, so it is the export / import pair phase 4
-# already uses (§0.8 ruling G9).
+# THE ADOPTERS' THREE (te_mon_union_adopter, _banking_union, _reserve) ARE ALSO
+# ON THE ISSUER since 2026-11-14 (§0.14): the leader of a bloc whose currency a
+# member has adopted uses that currency too (te_mon_uses_common_currency), so
+# it carries the same modifiers at the same figures. The banking union reaches
+# neither side under Unregulated Banking (te_mon_union_in_banking_union; the
+# issuer since 2026-11-14, an adopter since 2026-11-15, #1812).
+
+# MANAGED, flat; on an ADOPTER while kind = 2, and on the issuer
+# (te_monetary_update_union). One money, no conversion. The design asked for
+# "state_trade_advantage_mult +0.05"; this is the export / import pair phase 4
+# already uses (§0.8 ruling G9). The ruling's reason, that the overall type
+# did not exist, was wrong (it did, and vanilla's External Trade principles
+# carry it: corrected 2026-11-15, #1812). The pair stays until one look in
+# game shows the overall figure counts the same both ways; the ruling says
+# what to read and what a switch touches.
 te_mon_union_adopter = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	state_export_advantage_mult = 0.05
 	state_import_advantage_mult = 0.05
 }
 
-# MANAGED, flat; on an ADOPTER while its bloc holds tier 4 (the banking union).
+# MANAGED, flat; on an ADOPTER, and on the issuer, while its bloc holds tier 4
+# (the banking union) and its own banking law is not Unregulated Banking.
 # One supervisor and one deposit guarantee across the whole currency area: the
 # cycle is steadier, crashes are rarer, and there is one more intervention in
 # reserve for when one comes anyway. The other half of the tier — contagion
@@ -8654,7 +8604,8 @@ te_mon_union_banking_union = {
 	country_banking_intervention_max_add = 1
 }
 
-# MANAGED, flat; on an ADOPTER while its bloc holds tier 5. A second helping of
+# MANAGED, flat; on an ADOPTER, and on the issuer, while its bloc holds tier 5.
+# A second helping of
 # te_mon_union_adopter's trade edge — the world quotes prices in this money, so
 # an adopter is not converting at either end of a trade. The tier's other gift
 # to an adopter, a cut of structural premium, goes through
@@ -8665,15 +8616,49 @@ te_mon_union_reserve = {
 	state_import_advantage_mult = 0.05
 }
 
-# MANAGED, scaled; on a tier-5 LEADER. multiplier = pounds a week
-# (te_mon_union_seigniorage_applied), from the share of world GDP anchored on
-# this country's money. The exorbitant privilege: everybody else holds balances
-# in it, and issuing them is free. A flat country_minting_add for the reason
-# te_mon_board_seigniorage gives — a _mult would scale the leader's own base
-# and transfer nothing from anybody.
+# MANAGED, scaled; on a LEADER from tier 2. multiplier = pounds a week
+# (te_mon_union_seigniorage_applied): a share of its own GDP, rising by tier,
+# times its currency's reach (te_mon_union_seigniorage_value). The exorbitant
+# privilege: everybody else holds balances in it, and issuing them is free. A
+# flat country_minting_add for the reason te_mon_board_seigniorage gives — a
+# _mult would scale the leader's own base and transfer nothing from anybody.
+# The engine multiplies it by 1 + the leader's country_minting_mult like every
+# flat minting add, so the multiplier here is the figure BEFORE minting bonuses
+# (te_monetary_union_script_values.txt, "Seigniorage, from tier 2").
 te_mon_union_seigniorage = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_minting_add = 1
+}
+
+# MANAGED, scaled; on a LEADER from tier 2, beside the seigniorage and on the
+# same reach. multiplier = pp (te_mon_union_issuer_cut_applied). Cyclical on
+# purpose: the reserve-currency
+# cut in te_mon_arrangement_standing is credit standing, which a mature leader's
+# floor swallows, and what the union costs the leader (te_mon_arrangement_provider)
+# is cyclical. Reaches the premium a month late, like every modifier-borne term.
+te_mon_union_issuer_premium = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_risk_premium_add = -0.01
+}
+
+# MANAGED, scaled; on the ISSUER under any banking law but Unregulated Banking.
+# multiplier = points (te_mon_union_issuer_bank_applied, 1 to 3 by tier): room in
+# the intervention budget, so more central-bank tools can be in force at once.
+# banking_display_points_total (extra_script_values.txt) adds the same variable.
+te_mon_union_issuer_bank = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_banking_intervention_max_add = 1
+}
+
+# MANAGED, scaled; on ADOPTERS and the issuer: the common capital market.
+# multiplier = hundredths (te_mon_union_credit_applied; 2 to 5 by tier, the same
+# in every phase of the cycle, 0 under Excess Private Construction). The key
+# the cycle's phases and the stance bands move: what credit is to private
+# investors. Never scaled up in a slump (owner, 2026-11-14): the pool's drop is
+# what a downturn is for.
+te_mon_union_credit = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_capitalists_investment_pool_contribution_add = 0.01
 }
 
 # MANAGED, scaled; on a LEADER while "Press for monetary convergence" is on.
@@ -8737,6 +8722,12 @@ banking_monthly_sterilize_inflows = {
 	country_te_mon_inflow_price_pressure_mult = -0.75
 }
 
+# Sterilization on a floating currency: banking_external_fx_sterilized_speed.
+banking_monthly_sterilize_float = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_te_mon_fx_adjust_speed_mult = -0.5
+}
+
 banking_monthly_foreign_borrowing_limits = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	country_te_mon_fx_debt_protection_add = 0.02084
@@ -8745,6 +8736,12 @@ banking_monthly_foreign_borrowing_limits = {
 banking_monthly_fx_surrender = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	country_te_mon_reserve_purchase_gdp_add = 0.0005
+}
+
+# Foreign Exchange Surrender on a floating currency: banking_external_surrender_fx_points.
+banking_monthly_fx_surrender_float = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_te_mon_fx_target_support_add = 4
 }
 
 # One step of Monetise Deficit, while it runs (te_mon_monetisation_gdp_share,
@@ -8764,10 +8761,10 @@ te_mon_mandate_loosen_step = {
 	country_risk_premium_add = 0.005
 }
 
-# The weekly bills of Sterilize Capital Inflows and Emergency Import Financing
-# (owner, 2026-10-27, GUI audit BNK-14): a month's cost ÷ 4 a week, as the
-# multiplier, refreshed monthly by banking_external_charge_* (its header has
-# the rules), on the entry beside the tool. The mirror field puts them under
+# The weekly bills of Sterilization and Emergency Import Financing
+# (owner, 2026-10-27, GUI audit BNK-14): a month's cost ÷ 4 a week, declared
+# on the entry beside the tool from the cache banking_external_charge_* writes
+# monthly (its header has the rules). The mirror field puts them under
 # Banking in the Budget Breakdown (gen_budget_breakdown.py's SOURCES).
 banking_external_sterilization_charge = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds

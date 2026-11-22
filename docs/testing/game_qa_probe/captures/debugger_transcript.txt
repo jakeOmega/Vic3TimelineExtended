@@ -1,0 +1,53 @@
+>> {"seq":1,"type":"request","command":"initialize","arguments":{"clientID":"te_qa","adapterID":"jomini","linesStartAt1":true,"columnsStartAt1":true}}
+<< {"type":"response","request_seq":1,"command":"initialize","success":true,"body":{"supportsConfigurationDoneRequest":true,"supportsEvaluateForHovers":true,"exceptionBreakpointFilters":[{"filter":"null-scope","label":"Break on null/missing scope","default":false}]},"seq":1}
+<< {"type":"event","event":"initialized","body":{},"seq":2}
+>> {"seq":2,"type":"request","command":"launch","arguments":{}}
+<< {"type":"response","request_seq":2,"command":"launch","success":true,"body":{},"seq":3}
+>> {"seq":3,"type":"request","command":"setBreakpoints","arguments":{"source":{"path":"C:\\Users\\<winuser>\\OneDrive\\Documents\\Paradox Interactive\\Victoria 3\\mod\\Vic3TimelineExtended\\events\\te_qa_probe_events.txt"},"breakpoints":[{"line":9}]}}
+<< {"type":"response","request_seq":3,"command":"setBreakpoints","success":true,"body":{"breakpoints":[{"verified":true,"line":9}]},"seq":4}
+>> {"seq":4,"type":"request","command":"configurationDone"}
+<< {"type":"response","request_seq":4,"command":"configurationDone","success":true,"body":{},"seq":5}
+-- waiting up to 45 s for a stop or output
+<< {"type":"event","event":"stopped","body":{"reason":"breakpoint","threadId":1,"allThreadsStopped":true},"seq":6}
+>> {"seq":5,"type":"request","command":"stackTrace","arguments":{"threadId":1}}
+<< {"type":"response","request_seq":5,"command":"stackTrace","success":true,"body":{"totalFrames":3,"stackFrames":[{"id":0,"name":"debug_log","line":9,"column":1,"source":{"name":"events/te_qa_probe_events.txt","path":"C:\\Users\\<winuser>\\OneDrive\\Documents\\Paradox Interactive\\Victoria 3\\mod\\Vic3TimelineExtended\\events\\te_qa_probe_events.txt"}},{"id":1,"name":"untyped","line":8,"column":1,"source":{"name":"events/te_qa_probe_events.txt","path":"C:\\Users\\<winuser>\\OneDrive\\Documents\\Paradox Interactive\\Victoria 3\\mod\\Vic3TimelineExtended\\events\\te_qa_probe_events.txt"}},{"id":2,"name":"event","line":4,"column":1,"source":{"name":"events/te_qa_probe_events.txt","path":"C:\\Users\\<winuser>\\OneDrive\\Documents\\Paradox Interactive\\Victoria 3\\mod\\Vic3TimelineExtended\\events\\te_qa_probe_events.txt"}}]},"seq":7}
+>> {"seq":6,"type":"request","command":"scopes","arguments":{"frameId":0}}
+<< {"type":"response","request_seq":6,"command":"scopes","success":true,"body":{"scopes":[{"name":"Scope","variablesReference":1,"expensive":false},{"name":"Saved Scopes","variablesReference":2,"expensive":false}]},"seq":8}
+>> {"seq":7,"type":"request","command":"variables","arguments":{"variablesReference":1}}
+<< {"type":"response","request_seq":7,"command":"variables","success":true,"body":{"variables":[{"name":"this","value":"Country Great Britain (1)","variablesReference":3},{"name":"root","value":"Country Great Britain (1)","variablesReference":4},{"name":"prev","value":"(none)","variablesReference":0},{"name":"top scope","value":"Root: Country Great Britain (1)\n\nSaved event targets:","variablesReference":0}]},"seq":9}
+>> {"seq":8,"type":"request","command":"variables","arguments":{"variablesReference":2}}
+<< {"type":"response","request_seq":8,"command":"variables","success":true,"body":{"variables":[]},"seq":10}
+>> {"seq":9,"type":"request","command":"evaluate","arguments":{"expression":"is_player = yes","frameId":0,"context":"watch"}}
+<< {"type":"response","request_seq":9,"command":"evaluate","success":true,"body":{"result":"yes - Yes: \nYes: is_player; Subject: Country Great Britain (1); ","variablesReference":0},"seq":955}
+>> {"seq":10,"type":"request","command":"evaluate","arguments":{"expression":"exists = c:GBR","frameId":0,"context":"watch"}}
+<< {"type":"response","request_seq":10,"command":"evaluate","success":true,"body":{"result":"yes - Yes: ","variablesReference":0},"seq":1900}
+>> {"seq":11,"type":"request","command":"evaluate","arguments":{"expression":"gdp","frameId":0,"context":"watch"}}
+<< {"type":"response","request_seq":11,"command":"evaluate","success":false,"message":"not a valid trigger or script value","body":{"result":"not a valid trigger or script value","variablesReference":0},"seq":1901}
+>> {"seq":12,"type":"request","command":"evaluate","arguments":{"expression":"literacy_rate","frameId":0,"context":"watch"}}
+<< {"type":"response","request_seq":12,"command":"evaluate","success":false,"message":"not a valid trigger or script value","body":{"result":"not a valid trigger or script value","variablesReference":0},"seq":1902}
+>> {"seq":13,"type":"request","command":"evaluate","arguments":{"expression":"country_rank","frameId":0,"context":"watch"}}
+<< {"type":"response","request_seq":13,"command":"evaluate","success":false,"message":"not a valid trigger or script value","body":{"result":"not a valid trigger or script value","variablesReference":0},"seq":1903}
+>> {"seq":14,"type":"request","command":"evaluate","arguments":{"expression":"c:FRA.gdp","frameId":0,"context":"watch"}}
+<< {"type":"response","request_seq":14,"command":"evaluate","success":true,"body":{"result":"21570770.55692","variablesReference":0},"seq":1904}
+>> {"seq":15,"type":"request","command":"evaluate","arguments":{"expression":"scope:root","frameId":0,"context":"watch"}}
+<< {"type":"response","request_seq":15,"command":"evaluate","success":false,"message":"not a valid trigger or script value","body":{"result":"not a valid trigger or script value","variablesReference":0},"seq":1905}
+>> {"seq":16,"type":"request","command":"evaluate","arguments":{"expression":"root","frameId":0,"context":"watch"}}
+<< {"type":"response","request_seq":16,"command":"evaluate","success":false,"message":"not a valid trigger or script value","body":{"result":"not a valid trigger or script value","variablesReference":0},"seq":1906}
+>> {"seq":17,"type":"request","command":"evaluate","arguments":{"expression":"this","frameId":0,"context":"watch"}}
+<< {"type":"response","request_seq":17,"command":"evaluate","success":false,"message":"not a valid trigger or script value","body":{"result":"not a valid trigger or script value","variablesReference":0},"seq":1907}
+>> {"seq":18,"type":"request","command":"evaluate","arguments":{"expression":"var:te_qa_nonexistent","frameId":0,"context":"watch"}}
+<< {"type":"response","request_seq":18,"command":"evaluate","success":false,"message":"not a valid trigger or script value","body":{"result":"not a valid trigger or script value","variablesReference":0},"seq":1908}
+>> {"seq":19,"type":"request","command":"evaluate","arguments":{"expression":"has_variable = te_qa_nonexistent","frameId":0,"context":"watch"}}
+<< {"type":"response","request_seq":19,"command":"evaluate","success":true,"body":{"result":"no - No: \nNo: has_variable; VARIABLE: te_qa_nonexistent; Subject: Country Great Britain (1); ","variablesReference":0},"seq":2854}
+>> {"seq":20,"type":"request","command":"evaluate","arguments":{"expression":"game_date","frameId":0,"context":"watch"}}
+<< {"type":"response","request_seq":20,"command":"evaluate","success":false,"message":"not a valid trigger or script value","body":{"result":"not a valid trigger or script value","variablesReference":0},"seq":2855}
+>> {"seq":21,"type":"request","command":"evaluate","arguments":{"expression":"any_scope_state = { is_capital = yes }","frameId":0,"context":"watch"}}
+<< {"type":"response","request_seq":21,"command":"evaluate","success":true,"body":{"result":"yes - Yes: \nYes: any_scope_state; any_scope_state; Subject: Country Great Britain (1); \nNo: is_capital; Subject: State Home Counties (x7543C8); ","variablesReference":0},"seq":3801}
+>> {"seq":22,"type":"request","command":"continue","arguments":{"threadId":1}}
+<< {"type":"response","request_seq":22,"command":"continue","success":true,"body":{"allThreadsContinued":true},"seq":3802}
+<< {"type":"event","event":"continued","body":{"threadId":1,"allThreadsContinued":true},"seq":3803}
+>> {"seq":23,"type":"request","command":"disconnect","arguments":{}}
+<< {"type":"response","request_seq":23,"command":"disconnect","success":true,"body":{},"seq":3805}
+<< {"type":"event","event":"output","body":{"category":"stderr","output":"Flag 'KAT' is set but is never used. Note that use in localization doesn't count due to technical limitations. Use in unused scripted triggers and effects also does not count\n"},"seq":11}
+<< {"type":"event","event":"output","body":{"category":"stderr","output":"Flag 'STATE_KHIVA' is set but is never used. Note that use in localization doesn't count due to technical limitations. Use in unused scripted triggers and effects also does not count\n"},"seq":12}
+<< {"type":"event","event":"output","body":{"category":"stderr","output":"Flag 'KAB' is set but is never used. Note that use in localization doesn't count due to technical limitations. Use in unused scripted triggers and effects also does not count\n"},"seq":13}

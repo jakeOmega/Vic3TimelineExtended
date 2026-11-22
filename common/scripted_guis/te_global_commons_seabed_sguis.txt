@@ -273,6 +273,35 @@ te_seabed_claim_again_southern_sgui = {
 	}
 }
 
+# The overview's checkbox, Build only on local claims (owner, 2026-11-14): on,
+# a Deep-Sea Mine level can be queued only where the state's own basin has a
+# local claim to spare (te_seabed_gate), so no new level takes another basin's
+# licence and its long-haul penalty. Off by default (the variable absent). A
+# variable, so a revolution's winner keeps it. The player's own: the AI never
+# sets it, and the gate reads it only while the country isn't AI
+# (te_seabed_local_only_on). It changes nothing already built or queued.
+te_seabed_local_only_sgui = {
+	scope = country
+	is_shown = { te_global_commons_enabled = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = yes }
+	effect = {
+		if = {
+			limit = { has_variable = te_seabed_local_only }
+			custom_tooltip = {
+				text = te_seabed_local_only_off_tt
+				remove_variable = te_seabed_local_only
+			}
+		}
+		else = {
+			custom_tooltip = {
+				text = te_seabed_local_only_on_tt
+				set_variable = te_seabed_local_only
+			}
+		}
+	}
+}
+
 # Read-only: the overview's ITLOS party line (the UN hook decides).
 te_seabed_itlos_party_sgui = {
 	scope = country
@@ -285,7 +314,7 @@ te_seabed_itlos_party_sgui = {
 # Read-only: the ITLOS party line shows while the UN can regulate the seabed.
 te_seabed_un_line_sgui = {
 	scope = country
-	is_shown = { has_game_rule = united_nations_enabled }
+	is_shown = { te_united_nations_on = yes }
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
 	effect = { }

@@ -66,8 +66,13 @@ slice, including descendants previously expanded.
 ## Journal systems and source amounts
 
 Banking, Covert Actions, Cultural Hegemony, Colonial Development, the United
-Nations, Nuclear Program, Nuclear Civil Defence, Space Race, Drug Shortage
-Response and Archaeological Digs each have a separate expense category. UN grants, Strategic Reserve
+Nations, Nuclear Program, Nuclear Civil Defense, Space Race, Drug Shortage
+Response, Family Policy, Old-Age Pensions, Archaeological Digs, Climate Policy and
+Energy and Industry Programs each have a separate expense category. Nuclear Civil
+Defense also carries the two reactor-meltdown bills, Covert Actions the security
+state built after a terrorist attack, Space Race the event laser sweeps and the
+national space colony, and Energy and Industry Programs the event subsidies,
+reserve-power costs and labor-standard concessions. UN grants, Strategic Reserve
 sales, war-profit taxes and spectrum auctions have separate income categories.
 Hover a row for the engine's applied modifier sources and amounts.
 
@@ -101,8 +106,9 @@ must join a category: list it in `SOURCES` in
 `scripts/generators/gen_budget_breakdown.py` and give it that category's
 accounting field (`test_budget_breakdown.py` fails on a monetary modifier left
 out). Adding a name to an existing category changes no generated file, so the
-generator need not be rerun; a new category needs a pie colour model and
-regenerates the values, the charts and the loc. The Global Commons put the
+generator need not be rerun; a new category regenerates the values, the charts
+and the loc. It needs no new pie color: slices take the fifteen textures in
+turn, by position. The Global Commons put the
 seabed royalties under United Nations and the Antarctic station's upkeep under
 Space Race for that reason.
 
@@ -127,7 +133,7 @@ they charge now.
 
 Only money in the weekly budget is included. One-time `add_treasury` payments
 and costs in innovation, influence or other resources are excluded. Two
-banking tools' bills, Sterilize Capital Inflows' and Emergency Import
+banking tools' bills, Sterilization's and Emergency Import
 Financing's, are weekly charges in the budget since 2026-10-27 (the owner;
 they were monthly `add_treasury` payments) and sit under Banking. FX
 Surrender's purchase of gold for the bank stays a monthly `add_treasury`, the
@@ -284,3 +290,19 @@ Engine rendering and accounting still require an in-game check:
    the Overview's graph tooltip (a vanilla template on a row's amount textbox,
    as the Overview has it). If one renders nothing, move the `using` onto the
    row flowcontainer, or back to a row tooltip of its own.
+11. Six event costs became weekly expenses on 2026-11-09 (PR #1562). Fire
+   `society_technology_events.23` (a level 3 nuclear plant, no fusion) and hover
+   Evacuate the region: the option lists Meltdown Evacuation Costs with a
+   Government Expenses line near 0.003% of GDP, and no government wage line.
+   Take it and check the bill sits under Nuclear Civil Defense and shrinks as
+   the modifier decays. Then take Subsidize priority output in
+   `repeatable_events.90`: Energy and Industry Programs appears with a swatch,
+   a slice and a hover that lists Quantum Subsidy Payments. If the option shows
+   an expense of 0 or 1, the `sv_money_flow_event_tiny` / `_modest` values did
+   not read (five decimals is the engine's limit).
+12. Three more followed on 2026-11-11. Hear their grievances in
+   `society_technology_events.10` lists Labor Concession Costs under Energy and
+   Industry Programs; Expand the security apparatus in
+   `society_technology_events.11` lists Security Apparatus Costs under Covert
+   Actions; Conduct a laser sweep in `repeatable_events.70` lists Laser Sweep
+   Costs under Space Race. None of the three options shows a wage line.

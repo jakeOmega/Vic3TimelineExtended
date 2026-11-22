@@ -1,0 +1,8 @@
+if = {
+	limit = { has_modifier = nation_building_investment_modifier }
+	remove_modifier = nation_building_investment_modifier
+}
+if = {
+	limit = { has_modifier = foreign_investment_dependency_modifier }
+	remove_modifier = foreign_investment_dependency_modifier
+}

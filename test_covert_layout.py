@@ -1188,7 +1188,10 @@ class MilitaryCovertTabTest(unittest.TestCase):
         mounted = re.findall(r'name = "(widget_je_covert_\w+)"', _read(JE))
         wrapped = [ROOTS[name][1] for name in mounted]
         self.assertEqual(wrapped, ["te_covert_overview_panel", "te_covert_status_sections"])
-        self.assertEqual(re.findall(r"^\t+(te_\w+) = \{\}", body, re.M), wrapped)
+        # the header's map button (te_jmap_covert_map_button, journal_map_modes.md) is not a journal root
+        # nor is the entry's modifier strip, the frame's (test_te_entry_modifier_strip.py)
+        self.assertEqual([n for n in re.findall(r"^\t+(te_\w+) = \{\}", body, re.M)
+                          if not n.startswith("te_jmap_") and n != "te_je_modifier_strip"], wrapped)
         # The link back to the entry is the frame's, after every section.
         self.assertNotIn('blockoverride "tab_open_journal" ', body)
 
@@ -1203,7 +1206,8 @@ class MilitaryCovertTabTest(unittest.TestCase):
         self.assertEqual(len(names), 2)
         for name in names:
             self.assertRegex(_braced(buttons, rf"^{name} = \{{"), r"visible = \{\s*is_ai = yes\s*\}", name)
-        self.assertNotIn("te_je_", self._content())
+        # the entry's modifier strip is the frame's, every tab's (test_te_entry_modifier_strip.py)
+        self.assertNotIn("te_je_", self._content().replace("te_je_modifier_strip = {}", ""))
 
     def test_the_gate_sits_above_the_journal_entry_datacontext(self):
         body = self._content()
@@ -1272,27 +1276,38 @@ class MilitaryCovertTabTest(unittest.TestCase):
             self.assertLessEqual(len(loc[key]) * 10 * 1.1, 84.8, key)
 
     def test_the_gates_read_the_rule_and_the_entry(self):
+        # The rule through its gate (te_rule_setting_triggers.txt): either unlock.
         sguis = _read(TAB_SGUIS)
         gate = _braced(sguis, r"^te_military_covert_tab_sgui = \{")
-        self.assertIn("has_game_rule = covert_warfare_enabled", gate)
+        self.assertIn("te_covert_warfare_on = yes", gate)
         self.assertIn("has_journal_entry = je_covert_warfare", gate)
         unlock = _braced(sguis, r"^te_military_covert_tab_unlock_sgui = \{")
-        self.assertIn("is_shown = { has_game_rule = covert_warfare_enabled }", unlock)
+        self.assertIn("is_shown = { te_covert_warfare_on = yes }", unlock)
         self.assertIn("is_valid = { covert_warfare_entry_unlocked = yes }", unlock)
         # The entry is shown on the same rule.
-        self.assertIn("has_game_rule = covert_warfare_enabled", _braced(_read(JE), r"is_shown_when_inactive = \{"))
+        self.assertIn("te_covert_warfare_on = yes", _braced(_read(JE), r"is_shown_when_inactive = \{"))
 
     def test_the_checklist_is_the_entrys_own_possible_in_one_line(self):
+        # The entry's `possible` is the checklist's trigger, so the two can't differ.
+        self.assertEqual(_words(_braced(_read(JE), r"^\tpossible = \{")), "covert_warfare_entry_unlocked = yes")
         trig = _braced(_read(TRIGGERS), r"^covert_warfare_entry_unlocked = \{")
-        tooltip = _braced(trig, r"custom_tooltip = \{")
-        self.assertEqual(_words(trig), f"custom_tooltip = {{ {_words(tooltip)} }}")
-        m = re.match(r"text = (\w+) (.*)", _words(tooltip))
-        self.assertEqual(m.group(1), "covert_warfare_unlock_tt")
-        # A verbatim copy of the entry's `possible`, which is left as it is.
-        self.assertEqual(m.group(2), _words(_braced(_read(JE), r"^\tpossible = \{")))
-        line = _loc()["covert_warfare_unlock_tt"]
-        for part in ("concept_operation_slots", "concept_great_power", "concept_major_power", "4", "3", "2"):
-            self.assertIn(part, line)
+        # One tooltip line per setting: the early unlock's, else the late one's.
+        early = _braced(trig, r"trigger_if = \{")
+        late = _braced(trig, r"trigger_else = \{")
+        self.assertEqual(_words(trig), f"trigger_if = {{ {_words(early)} }} trigger_else = {{ {_words(late)} }}")
+        self.assertEqual(_words(early), "limit = { te_covert_warfare_early = yes } custom_tooltip = { "
+                         "text = covert_warfare_unlock_early_tt OR = { has_technology_researched = central_archives "
+                         "covert_warfare_slot_source = yes } }")
+        self.assertEqual(_words(late), "custom_tooltip = { text = covert_warfare_unlock_tt "
+                                       "covert_warfare_slot_source = yes }")
+        # Each line names each source of the gate (test_covert_warfare_gate.py holds the gate to the sources).
+        loc = _loc()
+        for key in ("covert_warfare_unlock_tt", "covert_warfare_unlock_early_tt"):
+            for part in ("concept_operation_slots", "$mainframe_computers$", "$computer_networks$", "$cyber_warfare$",
+                         "$quantum_computing$", "$law_ministry_of_intelligence_and_security$"):
+                self.assertIn(part, loc[key], key)
+        self.assertIn("$central_archives$", loc["covert_warfare_unlock_early_tt"])
+        self.assertNotIn("central_archives", loc["covert_warfare_unlock_tt"])
 
     def test_one_visible_per_widget(self):
         for i, block in enumerate(self.blocks):

@@ -14,7 +14,8 @@ common/scripted_triggers/colonial_empire_triggers.txt) for a whole month.
 Pinned here:
 - ce_reentry_due restates the entry's is_shown_when_inactive and possible word
   for word (add_journal_entry skips both) and adds the decentralized,
-  revolutionary, running-entry, separation-cache and voluntary-hold guards;
+  revolutionary, running-entry, inactive-record (the add is refused over one,
+  #1416), separation-cache and voluntary-hold guards;
 - the pass runs for players and AI alike, monthly, straight after the
   separation cache's step; it waits a month, adds, and clears its mark when the
   country stops being due;
@@ -31,6 +32,8 @@ Pinned here:
 import os
 import re
 import unittest
+
+from je_test_helpers import outcome_part, outcome_texts
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 
@@ -91,7 +94,7 @@ GEO_ON_ACTIONS = _read("common", "on_actions", "colonial_geography_on_actions.tx
 EVENTS = _read("events", "decolonization_events.txt")
 PLAYTEST = _raw("docs", "testing", "colonial-holdings-playtest.md")
 
-# The entry's endings: on_complete's six events and on_fail's three.
+# The entry's endings: its six success outcomes' events and its three failure outcomes'.
 END_EVENTS = ["decolonization_events.%d" % n for n in (200, 201, 202, 203, 204, 205, 206, 300, 301)]
 
 
@@ -123,6 +126,7 @@ class DueTests(unittest.TestCase):
         due = _norm(DUE)
         for cond in ("NOT = { is_country_type = decentralized }", "is_revolutionary = no",
                      "NOT = { has_journal_entry = je_colonial_empire }",
+                     "NOT = { has_inactive_journal_entry = je_colonial_empire }",
                      "has_variable = ce_separation_cached",
                      "NOT = { has_variable = ce_reentry_voluntary_hold }"):
             self.assertIn(cond, due)
@@ -131,7 +135,8 @@ class DueTests(unittest.TestCase):
         due = _norm(DUE)
         walk = due.index("any_scope_state")
         for cond in ("has_game_rule = decolonization_enabled", "has_technology_researched = decolonization",
-                     "is_country_type = decentralized", "has_journal_entry = je_colonial_empire"):
+                     "is_country_type = decentralized", "has_journal_entry = je_colonial_empire",
+                     "has_inactive_journal_entry = je_colonial_empire"):
             self.assertLess(due.index(cond), walk, cond)
 
 
@@ -246,8 +251,10 @@ class SecondEndingTests(unittest.TestCase):
     """A second run means a second ending, and a same-name add_modifier stacks."""
 
     def _blocks(self):
-        yield "on_fail", _block(ENTRY, "on_fail")
-        yield "on_complete", _block(ENTRY, "on_complete")
+        for i, body in enumerate(outcome_texts(ENTRY)):
+            yield f"outcome {i}", body
+        for helper in ("colonial_empire_secured_end", "colonial_empire_collapse_end"):
+            yield helper, _block(EFFECTS, helper)
         for event in END_EVENTS:
             yield event, _block(EVENTS, event)
         yield "decol_grant_permanent_modifier", _block(EFFECTS, "decol_grant_permanent_modifier")
@@ -276,15 +283,18 @@ class SecondEndingTests(unittest.TestCase):
 
 class VoluntaryHoldTests(unittest.TestCase):
     def setUp(self):
-        self.on_fail = _block(ENTRY, "on_fail")
-        self.voluntary = _branch(self.on_fail, 'scope:journal_entry = { '
-                                               '"scripted_bar_progress(colonial_stability_bar)" > 0 }')
+        # The voluntary end is the first failure outcome (#1432): the bar
+        # above 0 and no colony left.
+        self.endings = "".join(outcome_texts(ENTRY)) + _block(EFFECTS, "colonial_empire_collapse_end")
+        self.assertIn('"scripted_bar_progress(colonial_stability_bar)" > 0',
+                      outcome_part(ENTRY, "fail", "trigger"))
+        self.voluntary = outcome_part(ENTRY, "fail", "effect")
 
     def test_a_voluntary_end_sets_a_years_hold(self):
         self.assertIn("decolonization_events.206", self.voluntary)
         self.assertIn("set_variable = { name = ce_reentry_voluntary_hold value = yes days = 365 }", self.voluntary)
         # Only there: a collapse has its own ten-year cooldown.
-        self.assertEqual(self.on_fail.count("ce_reentry_voluntary_hold"), 1)
+        self.assertEqual(self.endings.count("ce_reentry_voluntary_hold"), 1)
 
     def test_the_pass_waits_for_it_but_possible_does_not(self):
         self.assertIn("NOT = { has_variable = ce_reentry_voluntary_hold }", DUE)

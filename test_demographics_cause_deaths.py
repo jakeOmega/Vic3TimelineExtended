@@ -157,18 +157,24 @@ class TestModel(unittest.TestCase):
 class TestScript(unittest.TestCase):
     """The step's te_dg_dc_* against the model's, from the same ring (TestCohortScript.step_both)."""
 
+    COHORT = R.TestCohortScript   # the fixed-point twin takes TestCohortScript's twin (test_demographics_fixed_point.py)
+
     @classmethod
     def setUpClass(cls):
-        cls.cohort = R.TestCohortScript()
+        cls.cohort = cls.COHORT()
+
+    def close(self, got, want, rel=1e-6, what=""):
+        """The module's close, as a method so the fixed-point twin can give it the twin's tolerance."""
+        close(self, got, want, rel, what)
 
     def check(self, eng, figures, war=0.0, kills=0.0):
         want = figures["causes"]
         for s in SLICES:
-            close(self, eng.vars[f"te_dg_dc_{s}"], want[MODEL_KEY[s]], what=s)
-        close(self, eng.vars["te_dg_dc_total"], eng.vars["te_dg_deaths"] + war + kills, what="total")
-        close(self, eng.vars["te_dg_dc_fit"], want["fit"], what="fit")
+            self.close(eng.vars[f"te_dg_dc_{s}"], want[MODEL_KEY[s]], what=s)
+        self.close(eng.vars["te_dg_dc_total"], eng.vars["te_dg_deaths"] + war + kills, what="total")
+        self.close(eng.vars["te_dg_dc_fit"], want["fit"], what="fit")
         # the war dead as counted, and under Full devastation's civilians beside them (owner, 2026-10-22)
-        close(self, eng.vars["te_dg_dc_war"], war + max(0.0, eng.vars.get("te_dg_dc_war_top", 0.0)), what="war")
+        self.close(eng.vars["te_dg_dc_war"], war + max(0.0, eng.vars.get("te_dg_dc_war_top", 0.0)), what="war")
         self.assertEqual(eng.vars["te_dg_dc_kill"], kills)
 
     def test_a_step_without_flows(self):
@@ -209,7 +215,7 @@ class TestScript(unittest.TestCase):
                 self.check(eng, figures)
                 self.assertNotIn("te_dg_dc_ontop", eng.vars)
                 four = sum(eng.vars[f"te_dg_dc_{s}"] for s in ("inf", "ext", "chr", "work"))
-                close(self, four, eng.vars["te_dg_deaths"] - eng.vars["te_dg_dc_mat"], what="the four")
+                self.close(four, eng.vars["te_dg_deaths"] - eng.vars["te_dg_dc_mat"], what="the four")
 
     def test_deaths_on_top_count_under_their_causes(self):
         """Owner, 2026-10-22: the walk's split by cause (te_dg_ot_<c>) places each cause's deaths on top on its own
@@ -220,15 +226,15 @@ class TestScript(unittest.TestCase):
         nat = eng.vars["te_dg_deaths"] - eng.vars["te_dg_dc_mat"]
         k = nat / eng.vars["te_dg_ed"]
         for c, v in CAUSES_ON_TOP.items():
-            close(self, eng.vars[f"te_dg_dc_{c}_top"], v * k, rel=1e-4, what=f"{c} on top")
-            close(self, eng.vars[f"te_dg_dc_{c}_top"], figures["causes"]["on_top"][c], rel=1e-4, what=f"{c} model")
-        close(self, eng.vars["te_dg_dc_war"], 600.0 * k, rel=1e-4, what="devastation's civilians")
+            self.close(eng.vars[f"te_dg_dc_{c}_top"], v * k, rel=1e-4, what=f"{c} on top")
+            self.close(eng.vars[f"te_dg_dc_{c}_top"], figures["causes"]["on_top"][c], rel=1e-4, what=f"{c} model")
+        self.close(eng.vars["te_dg_dc_war"], 600.0 * k, rel=1e-4, what="devastation's civilians")
         # the deaths on top count in their causes' slices, not spread over all four
         flat, _r, flat_figures, _p = self.cohort.step_both(on_top=(0.05, 0.12), full=True)
         self.assertGreater(eng.vars["te_dg_dc_inf"] / eng.vars["te_dg_dc_ext"],
                            flat.vars["te_dg_dc_inf"] / flat.vars["te_dg_dc_ext"])
         # one scale or per cause, the ring adds about the same deaths (the four add E x (1 + dz) at linear order)
-        close(self, eng.vars["te_dg_deaths"], flat.vars["te_dg_deaths"], rel=0.02, what="the ring's deaths")
+        self.close(eng.vars["te_dg_deaths"], flat.vars["te_dg_deaths"], rel=0.02, what="the ring's deaths")
 
     def test_each_causes_multiplier_takes_its_own_scale(self):
         """te_demog_on_top_scales against demographics_model.cause_scales, from the estimate at the model's rates."""
@@ -239,7 +245,7 @@ class TestScript(unittest.TestCase):
         raw = M.cause_deaths_estimate(*M.band_sums(eng.ring_before), cm, wf, wm, M.infection_adult(inp))
         want = M.cause_scales(0.12, M.on_top_shares(CAUSES_ON_TOP, 30.0 * pop / 1000), raw)
         for c, s in CAUSE_SHORT.items():
-            close(self, eng.locals[f"te_dg_sg_{s}"], want[c], rel=1e-3, what=c)
+            self.close(eng.locals[f"te_dg_sg_{s}"], want[c], rel=1e-3, what=c)
         self.assertGreater(want["infection"], want["external"], "infection takes the famine, accidents the aid")
 
     def test_a_seed_has_none(self):

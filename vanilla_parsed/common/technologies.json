@@ -1311,33 +1311,143 @@
       "1"
      ],
      "if": [
-      "=",
-      {
-       "limit": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "has_strategy": [
-            [
-             "=",
-             "ai_strategy_industrial_expansion"
-            ],
-            [
-             "=",
-             "ai_strategy_resource_expansion"
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "has_strategy": [
+             [
+              "=",
+              "ai_strategy_industrial_expansion"
+             ],
+             [
+              "=",
+              "ai_strategy_resource_expansion"
+             ]
             ]
-           ]
-          }
-         ]
-        }
-       ],
-       "add": [
-        "=",
-        "2"
-       ]
-      }
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "country_rank": [
+           ">=",
+           "rank_value:unrecognized_major_power"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "battleship_tech"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "carrier_tech"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "destroyer"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "mobile_armor"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "submarine"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ]
      ]
     }
    ]
@@ -1570,36 +1680,56 @@
     {
      "value": [
       "=",
-      "1"
+      "2"
      ],
      "if": [
-      "=",
-      {
-       "limit": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "has_strategy": [
-            [
-             "=",
-             "ai_strategy_industrial_expansion"
-            ],
-            [
-             "=",
-             "ai_strategy_resource_expansion"
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "has_strategy": [
+             [
+              "=",
+              "ai_strategy_industrial_expansion"
+             ],
+             [
+              "=",
+              "ai_strategy_resource_expansion"
+             ]
             ]
-           ]
-          }
-         ]
-        }
-       ],
-       "add": [
-        "=",
-        "2"
-       ]
-      }
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "country_rank": [
+           ">=",
+           "rank_value:unrecognized_major_power"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2"
+        ]
+       }
+      ]
      ]
     }
    ]
@@ -1888,33 +2018,71 @@
       "1"
      ],
      "if": [
-      "=",
-      {
-       "limit": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "has_strategy": [
-            [
-             "=",
-             "ai_strategy_industrial_expansion"
-            ],
-            [
-             "=",
-             "ai_strategy_resource_expansion"
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "has_strategy": [
+             [
+              "=",
+              "ai_strategy_industrial_expansion"
+             ],
+             [
+              "=",
+              "ai_strategy_resource_expansion"
+             ]
             ]
-           ]
-          }
-         ]
-        }
-       ],
-       "add": [
-        "=",
-        "1"
-       ]
-      }
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "1"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "mobile_armor"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "carrier_tech"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ]
      ]
     }
    ]
@@ -2186,6 +2354,98 @@
      "value": [
       "=",
       "1"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "nco_training"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "mobile_armor"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "defense_in_depth"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "battleship_tech"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "carrier_tech"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ]
      ]
     }
    ]
@@ -2218,7 +2478,99 @@
     {
      "value": [
       "=",
-      "1"
+      "3"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "nco_training"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "mobile_armor"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "defense_in_depth"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "battleship_tech"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "carrier_tech"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ]
      ]
     }
    ]
@@ -2315,6 +2667,24 @@
      "value": [
       "=",
       "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "country_rank": [
+          ">=",
+          "rank_value:unrecognized_major_power"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "2"
+       ]
+      }
      ]
     }
    ]
@@ -2964,6 +3334,24 @@
         "limit": [
          "=",
          {
+          "has_variable": [
+           "=",
+           "save_nixa_var"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "100"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
           "has_strategy": [
            "=",
            "ai_strategy_unify_germany"
@@ -3028,22 +3416,42 @@
       "1"
      ],
      "if": [
-      "=",
-      {
-       "limit": [
-        "=",
-        {
-         "has_strategy": [
-          "=",
-          "ai_strategy_unify_germany"
-         ]
-        }
-       ],
-       "add": [
-        "=",
-        "8"
-       ]
-      }
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_variable": [
+           "=",
+           "save_nixa_var"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "100"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_strategy": [
+           "=",
+           "ai_strategy_unify_germany"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "8"
+        ]
+       }
+      ]
      ]
     }
    ]
@@ -3108,6 +3516,44 @@
      "value": [
       "=",
       "2"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "general_staff"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_technology_researched": [
+           "=",
+           "power_of_the_purse"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2"
+        ]
+       }
+      ]
      ]
     }
    ]
@@ -3142,22 +3588,51 @@
       "2"
      ],
      "if": [
-      "=",
-      {
-       "limit": [
-        "=",
-        {
-         "has_strategy": [
-          "=",
-          "ai_strategy_unify_germany"
-         ]
-        }
-       ],
-       "add": [
-        "=",
-        "8"
-       ]
-      }
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_strategy": [
+           "=",
+           "ai_strategy_unify_germany"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "8"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_journal_entry": [
+           "=",
+           "je_tp_tsar_great_reform"
+          ],
+          "NOT": [
+           "=",
+           {
+            "has_variable": [
+             "=",
+             "je_great_reforms_military_complete"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "5"
+        ]
+       }
+      ]
      ]
     }
    ]
@@ -3190,6 +3665,53 @@
      "value": [
       "=",
       "2"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_journal_entry": [
+           "=",
+           "je_tp_pool_build_army"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "5"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_journal_entry": [
+           "=",
+           "je_tp_tsar_great_reform"
+          ],
+          "NOT": [
+           "=",
+           {
+            "has_variable": [
+             "=",
+             "je_great_reforms_military_complete"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "5"
+        ]
+       }
+      ]
      ]
     }
    ]
@@ -3367,6 +3889,28 @@
      "value": [
       "=",
       "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "has_variable": [
+          "=",
+          "save_nixa_var"
+         ],
+         "game_date": [
+          ">=",
+          "1850.1.1"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "100"
+       ]
+      }
      ]
     }
    ]
@@ -4079,6 +4623,33 @@
      "value": [
       "=",
       "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "has_journal_entry": [
+          "=",
+          "je_tp_tsar_heir_of_alexander"
+         ],
+         "NOT": [
+          "=",
+          {
+           "has_variable": [
+            "=",
+            "je_tp_tsar_heir_of_alexander_button_3_complete"
+           ]
+          }
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "5"
+       ]
+      }
      ]
     }
    ]
@@ -5720,6 +6291,44 @@
      "value": [
       "=",
       "1.5"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "is_in_geographic_region": [
+           "=",
+           "geographic_region_italy_old"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "c:RUS": [
+           "?=",
+           "this"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "5"
+        ]
+       }
+      ]
      ]
     }
    ]
@@ -5850,6 +6459,10 @@
         }
        ]
       }
+     ],
+     "forest_of_bayonets_involve_country_effect": [
+      "=",
+      "yes"
      ]
     }
    ],
@@ -5861,6 +6474,24 @@
       "1"
      ],
      "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "is_in_geographic_region": [
+           "=",
+           "geographic_region_italy_old"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2"
+        ]
+       }
+      ],
       [
        "=",
        {
@@ -6328,6 +6959,71 @@
      "value": [
       "=",
       "1.5"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "OR": [
+          "=",
+          {
+           "has_journal_entry": [
+            "=",
+            "je_tp_pool_secret_police"
+           ],
+           "AND": [
+            [
+             "=",
+             {
+              "has_journal_entry": [
+               "=",
+               "je_tp_tsar_unshakable_autocracy"
+              ],
+              "NOT": [
+               "=",
+               {
+                "has_variable": [
+                 "=",
+                 "je_tp_tsar_unshakable_autocracy_button_1_complete"
+                ]
+               }
+              ]
+             }
+            ],
+            [
+             "=",
+             {
+              "has_journal_entry": [
+               "=",
+               "je_tp_tsar_great_reform"
+              ],
+              "NOT": [
+               "=",
+               {
+                "has_variable": [
+                 "=",
+                 "je_great_reforms_bureaucratic_complete"
+                ]
+               }
+              ],
+              "has_law": [
+               "=",
+               "law_type:law_third_section"
+              ]
+             }
+            ]
+           ]
+          }
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "5"
+       ]
+      }
      ]
     }
    ]
@@ -6610,6 +7306,24 @@
       "2"
      ],
      "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "c:RUS": [
+           "?=",
+           "this"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "10"
+        ]
+       }
+      ],
       [
        "=",
        {
@@ -7102,6 +7816,28 @@
              "ideology_egalitarian_modern"
             ]
            }
+          ],
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "has_ideology": [
+               "=",
+               "ideology:ideology_universalist"
+              ]
+             }
+            ],
+            "remove_ideology": [
+             "=",
+             "ideology_universalist"
+            ],
+            "add_ideology": [
+             "=",
+             "ideology_universalist_modern"
+            ]
+           }
           ]
          ]
         }
@@ -7470,15 +8206,6 @@
        "set_variable": [
         "=",
         "socialism_researched"
-       ],
-       "ig:ig_trade_unions": [
-        "?=",
-        {
-         "add_ideology": [
-          "=",
-          "ideology_socialist"
-         ]
-        }
        ]
       }
      ]
@@ -7803,7 +8530,7 @@
     "=",
     [
      "labor_movement",
-     "nationalism"
+     "pan-nationalism"
     ]
    ],
    "ai_weight": [
@@ -7916,57 +8643,86 @@
       "2"
      ],
      "if": [
-      "=",
-      {
-       "limit": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "country_has_primary_culture": [
-            [
-             "=",
-             "cu:north_german"
-            ],
-            [
-             "=",
-             "cu:south_german"
-            ],
-            [
-             "=",
-             "cu:north_italian"
-            ],
-            [
-             "=",
-             "cu:south_italian"
-            ],
-            [
-             "=",
-             "cu:croat"
-            ],
-            [
-             "=",
-             "cu:serb"
-            ],
-            [
-             "=",
-             "cu:slovene"
-            ],
-            [
-             "=",
-             "cu:bosniak"
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "country_has_primary_culture": [
+             [
+              "=",
+              "cu:north_german"
+             ],
+             [
+              "=",
+              "cu:south_german"
+             ],
+             [
+              "=",
+              "cu:north_italian"
+             ],
+             [
+              "=",
+              "cu:south_italian"
+             ],
+             [
+              "=",
+              "cu:croat"
+             ],
+             [
+              "=",
+              "cu:serb"
+             ],
+             [
+              "=",
+              "cu:slovene"
+             ],
+             [
+              "=",
+              "cu:bosniak"
+             ]
             ]
-           ]
-          }
-         ]
-        }
-       ],
-       "add": [
-        "=",
-        "5"
-       ]
-      }
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "5"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_journal_entry": [
+           "=",
+           "je_tp_tsar_unshakable_autocracy"
+          ],
+          "NOT": [
+           "=",
+           {
+            "has_variable": [
+             "=",
+             "je_tp_tsar_unshakable_autocracy_button_2_complete"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "5"
+        ]
+       }
+      ]
      ]
     }
    ]

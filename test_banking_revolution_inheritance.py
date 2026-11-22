@@ -9,9 +9,10 @@ nothing when either breaks:
 - an unguarded `set_variable` in `immediate` throws the inherited cycle away
   (a panic at 6.6 became a stable 50 the day the rebels won);
 - a stored "which band is applied" tracker inherited without its modifier
-  claims a band that is not there, so the swap never runs and the band stays
-  off. `immediate` resets the tracker to 0, and the swap treats 0 as "none
-  recorded" and clears the whole family before adding.
+  claimed a band that was not there, so the swap never ran and the band stayed
+  off (F7). Until 1.15 `immediate` reset the tracker to 0; since then
+  (#1404) the entry declares the five bands from te_mon_stance_band itself
+  (scaling_modifiers_while_active), so there is no tracker to go stale.
 """
 
 import os
@@ -91,12 +92,10 @@ class ImmediateTests(unittest.TestCase):
                 self.assertNotRegex(
                     body, r"change_variable\s*=\s*\{\s*name\s*=\s*%s\b" % name)
 
-    def test_stance_band_tracker_is_reset(self):
+    def test_immediate_keeps_no_stance_band_tracker(self):
         _, body = _immediate()
-        self.assertRegex(
-            body,
-            r"set_variable\s*=\s*\{\s*name\s*=\s*te_mon_stance_band_applied\s+value\s*=\s*0\s*\}")
-        self.assertNotRegex(body, r"has_variable\s*=\s*te_mon_stance_band_applied")
+        self.assertNotIn("te_mon_stance_band_applied", body)
+        self.assertNotIn("banking_stance_band", body)
 
     def test_bars_are_drawn_from_the_variables(self):
         _, body = _immediate()
@@ -105,21 +104,25 @@ class ImmediateTests(unittest.TestCase):
         self.assertNotIn("set_bar_progress", body)
 
 
-class StanceBandSwapTests(unittest.TestCase):
-    def test_zero_tracker_clears_the_whole_family(self):
-        body = _block(_read(EFFECTS), r"^banking_cycle_apply_stance_band")
-        m = re.search(
-            r"if\s*=\s*\{\s*limit\s*=\s*\{\s*var:te_mon_stance_band_applied\s*=\s*0\s*\}",
-            body)
-        self.assertIsNotNone(m, "the swap has no branch for a tracker of 0")
-        branch = _body_after(body, body.index("{", m.start()) + 1)
-        for band in BANDS:
-            with self.subTest(band=band):
-                self.assertRegex(branch, r"remove_modifier\s*=\s*%s\b" % band)
+class StanceBandDeclarationTests(unittest.TestCase):
+    """The inherited copy re-declares the band from the inherited variable; nothing tracks which band is on."""
 
-    def test_swap_never_reads_has_modifier(self):
-        body = _block(_read(EFFECTS), r"^banking_cycle_apply_stance_band")
-        self.assertNotIn("has_modifier", body)
+    def test_each_band_is_declared_from_the_displayed_band(self):
+        je, _ = _immediate()
+        for n, band in enumerate(BANDS, 1):
+            with self.subTest(band=band):
+                m = re.search(r"scaling_modifiers_while_active\s*=\s*\{\s*modifier\s*=\s*%s\s" % band, je)
+                self.assertIsNotNone(m, f"{band} is not declared")
+                body = _body_after(je, m.end())  # the rest of the declaration
+                self.assertRegex(body, r"has_variable\s*=\s*te_mon_stance_band\s+var:te_mon_stance_band\s*=\s*%d\s" % n)
+
+    def test_no_tracker_or_swap_is_left(self):
+        for path in (JE, EFFECTS):
+            with self.subTest(path=os.path.basename(path)):
+                text = _read(path)
+                self.assertNotIn("te_mon_stance_band_applied", text)
+                self.assertNotIn("banking_cycle_apply_stance_band", text)
+                self.assertNotIn("banking_stance_band_healed", text)
 
 
 if __name__ == "__main__":

@@ -4,7 +4,8 @@ Background: script names loc keys directly in a handful of fields — the
 `desc = "KEY"` that labels a line of a script-value breakdown (a political
 movement's radicalism factors, a party's attraction, a treaty's AI acceptance,
 a power bloc's cohesion), `custom_tooltip = KEY`, an event's `title`/`flavor`,
-a journal entry's `custom_completion_header`, and so on. The engine resolves
+a journal entry outcome's `header` / `effect_header` / `conclusion_desc`, and
+so on. The engine resolves
 the key at render time and, when it is missing, prints the raw key in the
 tooltip. Nothing is logged. The mod's movements shipped
 `desc = "INSTITUTION_FUNDING_LEVEL_ministry_of_foreign_affairs"` copied from
@@ -36,6 +37,9 @@ import re
 from dataclasses import dataclass, field
 from typing import Callable
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
+
 LOC_REFERENCE_FIELDS = frozenset({
     "desc",
     "title",
@@ -47,10 +51,12 @@ LOC_REFERENCE_FIELDS = frozenset({
     "custom_text",
     "header",
     "header_info",
-    "custom_completion_header",
-    "custom_on_completion_header",
-    "custom_failure_header",
-    "custom_on_failure_header",
+    # A 1.15 journal entry outcome's three keys: `header` (above), the
+    # "what happens" header, and the text shown once the entry concludes
+    # through it (journal_entries.md; required on every outcome). They
+    # replace 1.14's custom_*_header fields, which 1.15 no longer reads.
+    "effect_header",
+    "conclusion_desc",
     "qualifications_growth_desc",
 })
 
@@ -61,9 +67,6 @@ SCAN_DIRS = ("common", "events")
 
 _KEY_RE = re.compile(r"[A-Za-z_][\w.\-]*")
 _TOKEN_RE = re.compile(r'"[^"\n]*"?|[{}=]|[^\s{}="#]+')
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
-)
 
 
 @dataclass
@@ -76,7 +79,7 @@ class Flag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[Flag] = field(default_factory=list)
     files_audited: int = 0
     references_checked: int = 0
@@ -91,15 +94,6 @@ def _split_comment(line: str) -> tuple[str, str | None]:
         elif ch == "#" and not in_quote:
             return line[:i], line[i:]
     return line, None
-
-
-def _parse_reviewed(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
 
 
 def iter_references(text: str):
@@ -162,7 +156,7 @@ def scan_file(
             continue
         flags.append(Flag(
             file=rel_path, line=line_num, field=fld, key=key,
-            exemption=_parse_reviewed(comment),
+            exemption=parse_reviewed(comment),
         ))
     return flags, checked
 
@@ -211,8 +205,8 @@ def offline_localization(mod_path: str) -> set[str]:
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
 
     out = [
         "# Script loc reference audit report",
@@ -278,11 +272,9 @@ def regenerate(mod_state) -> dict:
     """POST_LOAD_GENERATORS hook: run the audit and write the report."""
     from path_constants import mod_path
     result = audit(mod_state.has_localization, mod_path=mod_path)
-    out_path = os.path.join(mod_path, "docs", "engine", "script_loc_reference_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(render_report(result))
-    unrev = sum(1 for f in result.flags if not f.exemption)
+    write_text(os.path.join(mod_path, "docs", "engine", "script_loc_reference_report.md"),
+               render_report(result))
+    unrev = len(result.unreviewed)
     return {
         "files_audited": result.files_audited,
         "references_checked": result.references_checked,
@@ -292,13 +284,18 @@ def regenerate(mod_state) -> dict:
     }
 
 
-if __name__ == "__main__":
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 if any flag lacks a
+    `# REVIEWED ...` exemption."""
     from path_constants import mod_path
-    keys = offline_localization(mod_path)
-    result = audit(keys.__contains__, mod_path=mod_path)
-    print(render_report(result))
-    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ...` exemption.
-    if "--strict" in sys.argv:
-        raise SystemExit(1 if any(not f.exemption for f in result.flags) else 0)
+
+    def run(args) -> AuditResult:
+        keys = offline_localization(mod_path)
+        return audit(keys.__contains__, mod_path=mod_path)
+
+    return cli_main(run, lambda result, args: render_report(result), argv=argv,
+                    description=__doc__.splitlines()[0])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

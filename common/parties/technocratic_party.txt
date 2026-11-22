@@ -16,13 +16,13 @@ technocratic_party = {
 			triggered_desc = {
 				desc = party_en_marche
 				trigger = {
-					country_has_primary_culture = cu:french
+					country_has_primary_culture = cu:french # REVIEWED 2026-11-07 (culture_merge_ref): cm_latin left out: this is a first_valid ladder, and a Latin Spain, Portugal or Italy would take the French name
 				}
 			}
 			triggered_desc = {
 				desc = party_ciudadanos
 				trigger = {
-					country_has_primary_culture = cu:spanish
+					country_has_primary_culture = cu:spanish # REVIEWED 2026-11-07 (culture_merge_ref): cm_latin left out: this is a first_valid ladder, and a Latin France, Portugal or Italy would take the Spanish name
 				}
 			}
 			triggered_desc = {
@@ -64,28 +64,36 @@ technocratic_party = {
 	}
 
 	available_for_interest_group = {
-		owner = {
-			country_has_voting_franchise = yes
-			OR = {
-				py:technocratic_party ?= {
-					any_member = {}
-				}
-				ig:ig_industrialists ?= {
-					ig_counts_as_marginal = no
-				}
-				ig:ig_intelligentsia ?= {
-					ig_counts_as_marginal = no
+		trigger_if = { # Single-Party State: open to the dominant party's groups, as vanilla's parties are
+			limit = {
+				ig_is_member_of_dominant_party = { PARTY = technocratic }
+			}
+			always = yes
+		}
+		trigger_else = {
+			owner = {
+				country_has_voting_franchise = yes
+				OR = {
+					py:technocratic_party ?= {
+						any_member = {}
+					}
+					ig:ig_industrialists ?= {
+						ig_counts_as_marginal = no
+					}
+					ig:ig_intelligentsia ?= {
+						ig_counts_as_marginal = no
+					}
 				}
 			}
-		}
-		leader ?= {
-			NOR = {
-				has_ideology = ideology:ideology_fascist
-				has_ideology = ideology:ideology_integralist
-				has_ideology = ideology:ideology_ethno_nationalist
-				has_ideology = ideology:ideology_communist
-				has_ideology = ideology:ideology_vanguardist
-				has_ideology = ideology:ideology_anarchist
+			leader ?= {
+				NOR = {
+					has_ideology = ideology:ideology_fascist
+					has_ideology = ideology:ideology_integralist
+					has_ideology = ideology:ideology_ethno_nationalist
+					has_ideology = ideology:ideology_communist_leader
+					has_ideology = ideology:ideology_vanguardist
+					has_ideology = ideology:ideology_anarchist
+				}
 			}
 		}
 	}
@@ -228,9 +236,9 @@ technocratic_party = {
 			limit = {
 				leader ?= {
 					OR = {
-						has_ideology = ideology:ideology_communist
+						has_ideology = ideology:ideology_communist_leader
 						has_ideology = ideology:ideology_vanguardist
-						has_ideology = ideology:ideology_social_democrat
+						has_ideology = ideology:ideology_state_socialist
 					}
 				}
 			}
@@ -260,6 +268,15 @@ technocratic_party = {
 			add = {
 				value = -3
 				desc = "from_militarist"
+			}
+		}
+		if = { # Single-Party State: the dominant party keeps its groups (vanilla 1.15.2's term)
+			limit = {
+				ig_is_member_of_dominant_party = { PARTY = technocratic }
+			}
+			add = {
+				value = 1000
+				desc = "amendment_technocratic_party_dominance"
 			}
 		}
 		# First Past the Post (amendment_first_past_the_post): one of the two

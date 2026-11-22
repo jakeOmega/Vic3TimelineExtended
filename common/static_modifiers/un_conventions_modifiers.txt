@@ -1,10 +1,10 @@
 ﻿# ============================================================================
 # THE PHASE 7 CONVENTIONS — STATIC MODIFIERS
 # ============================================================================
-# docs/systems/un_redesign_design.md §0.12 items 5 and 8. Both member modifiers
-# sit on the country (test_un_convention_registry.py's `scope` column), and are
-# re-applied at the UN's enforcement by the regime layer
-# (un_regime_reapply_conventions): the figures below are at x1.
+# docs/systems/un_redesign_design.md §0.12 items 5 and 8. je_united_nations
+# declares both member modifiers at the UN's enforcement
+# (un_convention_multiplier) while their mirrors are set: the figures below
+# are at x1.
 # ============================================================================
 
 # ---- Convention on Cultural Diversity (un_agency_ccd) ----
@@ -53,7 +53,7 @@ un_nuclear_ban_refusal_modifier = {
 	country_prestige_mult = -0.03
 }
 
-# Single Convention on Narcotic Drugs (INCB). Country-scoped at x E.
+# Single Convention on Narcotic Drugs (INCB). At x E.
 # The owner's approved terms have no additional exporter inspection penalty.
 un_narcotics_control_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
@@ -68,7 +68,7 @@ un_narcotics_refusal_modifier = {
 }
 
 # The Convention on the Settlement of Outer Space (COPUOS; solar colonization
-# fleets design § 13). Country-scoped at x E. Its other terms are not here: a
+# fleets design § 13). At x E. Its other terms are not here: a
 # party's destruction of a colony, or its assault on a free one, costs twice
 # the infamy and twice the case strength (sr_colony_convention_party, which the
 # fleets' prices of force read). It forbids nothing.

@@ -315,7 +315,7 @@
      "STATE_EAST_GALICIA",
      "STATE_GREATER_POLAND",
      "STATE_LESSER_POLAND",
-     "STATE_KAUNAS",
+     "STATE_LITHUANIA",
      "STATE_VILNIUS",
      "STATE_MAZOVIA",
      "STATE_POSEN",
@@ -327,6 +327,15 @@
    "required_states_fraction": [
     "=",
     "1"
+   ],
+   "possible": [
+    "=",
+    {
+     "is_subject": [
+      "=",
+      "no"
+     ]
+    }
    ],
    "ai_will_do": [
     "=",
@@ -1357,6 +1366,15 @@
      "always": [
       "=",
       "yes"
+     ]
+    }
+   ],
+   "potential": [
+    "=",
+    {
+     "country_has_primary_culture": [
+      "=",
+      "cu:yemenite"
      ]
     }
    ]
@@ -2472,6 +2490,39 @@
      "has_technology_researched": [
       "=",
       "pan-nationalism"
+     ]
+    }
+   ]
+  }
+ ],
+ "GEO": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_GREATER_CAUCASUS"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "1"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "nationalism"
      ]
     }
    ]

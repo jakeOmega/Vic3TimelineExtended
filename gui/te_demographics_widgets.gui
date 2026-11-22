@@ -1146,7 +1146,7 @@ types te_demographics_widgets
 					}
 					blockoverride "icon_layers" {
 						### The leading cause's own icon, by te_dg_dc_lead (the pie's codes; the reading's text falls
-						### through to War for any other, as the old code 6 of a save from before 2026-10-22 would).
+						### through to War for any other).
 						widget = {
 							size = { 44 44 }
 							parentanchor = center
@@ -4581,7 +4581,7 @@ types te_demographics_widgets
 					}
 					blockoverride "icon_layers" {
 						### The leading cause's own icon, by te_dg_dc_lead (the pie's codes; the reading's text falls
-						### through to War for any other, as the old code 6 of a save from before 2026-10-22 would).
+						### through to War for any other).
 						widget = {
 							size = { 44 44 }
 							parentanchor = center

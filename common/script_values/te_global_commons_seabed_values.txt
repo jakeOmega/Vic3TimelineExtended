@@ -12,12 +12,26 @@
 # variable te_seabed_basin, from gen_seabed_basins.py).
 # ============================================================================
 
-# ---- Pools (§ 2.2), in Deep-Sea Mine levels: first estimates ----
-te_seabed_pool_pacific = 300
-te_seabed_pool_atlantic = 250
-te_seabed_pool_indian = 200
-te_seabed_pool_arctic = 100
-te_seabed_pool_southern = 150
+# ---- Pools (§ 2.2), in Deep-Sea Mine levels ----
+# 5,000 in all (owner, 2026-11-15), five times the first estimates: the size of
+# the seabed's deposits against the mod's own land deposits of the same metals
+# (docs/systems/mod_systems/global_commons.md, Pools). What is counted in
+# licences moved with them: te_seabed_share_min and te_seabed_influence_per_claim
+# here, the AI's per-claim pull, lease margin and licence bar
+# (te_global_commons_seabed_ai_values.txt), and four figures in the lease
+# articles (122_seabed_lease.txt: the spare's pull, the claims asked above it,
+# maneuvers and infamy). test_seabed_script.py (CountedInLicencesTest) holds
+# each to the pools' total, so the next change of size moves them too.
+te_seabed_pool_pacific = 1500
+te_seabed_pool_atlantic = 1250
+te_seabed_pool_indian = 1000
+te_seabed_pool_arctic = 500
+te_seabed_pool_southern = 750
+# The smallest share of a basin that lists a country among its claimants
+# (te_seabed_rank_listed) and makes it a newcomer worth a notice
+# (te_seabed_claimant_notice): a thousandth of the five pools, one licence
+# while they were a fifth of this size.
+te_seabed_share_min = 5
 
 # The reserved half of each pool under the Regulated regime (§ 3.2), rounded
 # down; the open half is the rest.
@@ -95,7 +109,8 @@ te_seabed_latent_factor = 0.75
 # Sponsor's figure × the multiplier, and at least its own base. First
 # estimates, to tune in the play-test.
 te_seabed_influence_sponsor = 50
-te_seabed_influence_per_claim = 0.5
+# 0.5 while the pools were a fifth of this size.
+te_seabed_influence_per_claim = 0.1
 te_seabed_influence_unilateral = 150
 te_seabed_unilateral_cost_mult = 1.5
 # Any change of policy holds it this many months (the AI's too); the first
@@ -602,6 +617,135 @@ te_seabed_room_shown = {
 	min = 0
 }
 
+# ---- Build only on local claims (te_seabed_local_only) ----
+# Country scope. Model: local_room. Room for a level in a basin's states when
+# the setting is on (te_seabed_gate): the basin's unused claims, less the
+# levels in its coastal states with no licence yet (as te_seabed_room counts
+# them), less the licences from other basins those states' levels hold. Each
+# of those swaps onto a freed local claim at the recording
+# (te_seabed_state_swap_local), maybe before a new level elsewhere in the
+# basin is reached, so a level built on that claim would leave the basin's
+# long-haul count unchanged. The distant term also holds the room below 0
+# after the gate's under-construction branch lets one level in at room 0 and
+# the recording gives it another basin's licence (the model's header).
+te_seabed_local_room_pacific = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_pacific }
+		value = var:te_seabed_unbuilt_pacific
+	}
+	every_scope_state = {
+		limit = {
+			is_coastal = yes
+			var:te_seabed_basin ?= 1
+		}
+		subtract = te_seabed_state_unrecorded
+		subtract = te_seabed_state_distant_records
+	}
+}
+
+te_seabed_local_room_atlantic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_atlantic }
+		value = var:te_seabed_unbuilt_atlantic
+	}
+	every_scope_state = {
+		limit = {
+			is_coastal = yes
+			var:te_seabed_basin ?= 2
+		}
+		subtract = te_seabed_state_unrecorded
+		subtract = te_seabed_state_distant_records
+	}
+}
+
+te_seabed_local_room_indian = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_indian }
+		value = var:te_seabed_unbuilt_indian
+	}
+	every_scope_state = {
+		limit = {
+			is_coastal = yes
+			var:te_seabed_basin ?= 3
+		}
+		subtract = te_seabed_state_unrecorded
+		subtract = te_seabed_state_distant_records
+	}
+}
+
+te_seabed_local_room_arctic = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_arctic }
+		value = var:te_seabed_unbuilt_arctic
+	}
+	every_scope_state = {
+		limit = {
+			is_coastal = yes
+			var:te_seabed_basin ?= 4
+		}
+		subtract = te_seabed_state_unrecorded
+		subtract = te_seabed_state_distant_records
+	}
+}
+
+te_seabed_local_room_southern = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_unbuilt_southern }
+		value = var:te_seabed_unbuilt_southern
+	}
+	every_scope_state = {
+		limit = {
+			is_coastal = yes
+			var:te_seabed_basin ?= 5
+		}
+		subtract = te_seabed_state_unrecorded
+		subtract = te_seabed_state_distant_records
+	}
+}
+
+# State scope: its owner's local room in the state's own basin (0 for a state
+# with no basin yet, which te_seabed_local_open turns away first).
+te_seabed_state_local_room = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_basin }
+		if = {
+			limit = { var:te_seabed_basin = 1 }
+			owner = { add = te_seabed_local_room_pacific }
+		}
+		else_if = {
+			limit = { var:te_seabed_basin = 2 }
+			owner = { add = te_seabed_local_room_atlantic }
+		}
+		else_if = {
+			limit = { var:te_seabed_basin = 3 }
+			owner = { add = te_seabed_local_room_indian }
+		}
+		else_if = {
+			limit = { var:te_seabed_basin = 4 }
+			owner = { add = te_seabed_local_room_arctic }
+		}
+		else_if = {
+			limit = { var:te_seabed_basin = 5 }
+			owner = { add = te_seabed_local_room_southern }
+		}
+	}
+}
+
+# Country scope, display: 1 while the setting is on (the Seabed tab's checkbox).
+te_seabed_local_only_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_seabed_local_only }
+		value = 1
+	}
+}
+
 # Licences the country holds and is entitled to, all basins (the tile's
 # "34 / 40"), as of the last recording and sharing.
 te_seabed_held_total = {
@@ -1070,7 +1214,9 @@ te_seabed_home_disp_southern = {
 }
 
 # State scope: the State Panel's Seabed Licences tile shows (spec § 2.7): the
-# rule on, a coastal state, an owner that has taken part in a sharing.
+# rule on, a coastal state, an owner that has taken part in a sharing. The GUI
+# adds that the owner is the viewing player (State.GetOwner.IsLocalPlayer): the
+# tile's words are written for the player's own state (#1352).
 te_seabed_tile_shown = {
 	value = 0
 	if = {
@@ -1084,11 +1230,13 @@ te_seabed_tile_shown = {
 }
 
 # State scope, the state view's Ocean Basin tile (GUI audit VAN-8b, owner
-# 2026-10-27): a coastal state whose owner has no Seabed Licences tile (it
-# never took part in a sharing, or is another country) shows its basin, once
-# the viewing player has researched abyssal_plain_mining
+# 2026-10-27): a coastal state with a basin and no Seabed Licences tile shows
+# its basin, once the viewing player has researched abyssal_plain_mining
 # (te_seabed_basin_tile_sgui). The basin decides, say, which pool a port there
-# would weigh in.
+# would weigh in. Which of the two tiles shows depends on the viewer, which
+# script can't see, so the GUI decides: the Licences tile on the player's own
+# state once it has shared (te_seabed_tile_shown), this tile on every other
+# country's coastal state and on the player's own before it has shared (#1352).
 te_seabed_basin_tile_shown = {
 	value = 0
 	if = {
@@ -1096,7 +1244,6 @@ te_seabed_basin_tile_shown = {
 			te_global_commons_enabled = yes
 			is_coastal = yes
 			has_variable = te_seabed_basin
-			NOT = { owner = { has_variable = te_seabed_shared } }
 		}
 		value = 1
 	}

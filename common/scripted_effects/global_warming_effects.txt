@@ -7,174 +7,135 @@
 #
 # National policies modify only the acting country's journal entry. Tariffs
 # alone belong to the market leader and write native customs settings.
+#
+# Each policy is a country variable, gw_<policy>_policy, and je_global_warming
+# declares the policy's modifier at 1 while it is set (a scaling modifier,
+# #1404, #1466), so the effect reaches the entry a few days after the click.
+# A civil war's winner, which inherits variables but no modifiers, keeps the
+# country's policies. The gw_policy_*_active triggers read the variables:
+# has_modifier cannot see a scaling modifier. Each text prints the modifier
+# (GetStaticModifier in its _DESC), so the hidden variable is never silent.
 
 gw_effect_carbon_tax = {
 	custom_tooltip = {
 		text = "GW_CARBON_TAX_DESC"
-		je:je_global_warming = { add_modifier = { name = carbon_tax_modifier } }
+		hidden_effect = { set_variable = { name = gw_carbon_tax_policy value = yes } }
 	}
 }
 
 gw_effect_remove_carbon_tax = {
 	custom_tooltip = {
 		text = "GW_REMOVE_CARBON_TAX_DESC"
-		je:je_global_warming = { remove_modifier = carbon_tax_modifier }
+		hidden_effect = { remove_variable = gw_carbon_tax_policy }
 	}
 }
 
-# The running cost is applied outside the custom_tooltip, so the adopt
-# tooltip prints its scaled Expenses line (GW-4, 2026-10-27). Its opening
-# remove_modifier_if_exists_effect prints nothing for a country without one.
+# The running cost (renewable_investment_cost_modifier, 0.5% of GDP a year) is
+# a scaling modifier je_global_warming declares while the policy is in force,
+# so adopting and repealing the policy moves it, a few days later.
+# The adopt tooltip previews it outside the custom_tooltip, so its scaled
+# Expenses line prints (GW-4, 2026-10-27); the repeal text names it.
 gw_effect_renewable_investment = {
 	custom_tooltip = {
 		text = "GW_RENEWABLE_INVESTMENT_DESC"
-		je:je_global_warming = { add_modifier = { name = renewable_investment_modifier } }
+		hidden_effect = { set_variable = { name = gw_renewable_investment_policy value = yes } }
 	}
-	gw_renewable_investment_cost_apply = yes
+	show_as_tooltip = {
+		add_modifier = {
+			name = renewable_investment_cost_modifier
+			multiplier = gw_renewable_investment_cost_value
+		}
+	}
 }
 
 gw_effect_remove_renewable_investment = {
 	custom_tooltip = {
 		text = "GW_REMOVE_RENEWABLE_INVESTMENT_DESC"
-		je:je_global_warming = { remove_modifier = renewable_investment_modifier }
-		remove_modifier = renewable_investment_cost_modifier
-	}
-}
-
-# Renewable Investment's running cost (renewable_investment_cost_modifier,
-# 0.5% of GDP a year). The policy modifier sits on the journal entry; the cost
-# sits on the country because its multiplier reads gdp, so the two are kept in
-# step here and by the monthly sweep below. Every way the policy goes on (the
-# button, the widget, treaty 109) applies the cost through
-# gw_renewable_investment_cost_apply; the sweep corrects whatever else added
-# or removed the policy modifier (the debug console, a lost entry).
-# A same-name add_modifier stacks, so the apply removes the copy it already
-# holds first: the monthly sweep runs it for every adopter every month, and
-# without the removal each pass would add another full-size weekly cost.
-# Scope: country
-gw_renewable_investment_cost_apply = {
-	remove_modifier_if_exists_effect = { MODIFIER = renewable_investment_cost_modifier }
-	add_modifier = {
-		name = renewable_investment_cost_modifier
-		multiplier = gw_renewable_investment_cost_value
-	}
-}
-
-# Scope: country. Reads the policy's actual state, so it cannot be called from
-# the effect that has just added or removed the policy modifier: an
-# add_modifier is not visible in the same effect block.
-gw_renewable_investment_cost_sync = {
-	if = {
-		limit = { gw_policy_renewable_investment_active = yes }
-		gw_renewable_investment_cost_apply = yes
-	}
-	else_if = {
-		limit = { has_modifier = renewable_investment_cost_modifier }
-		remove_modifier = renewable_investment_cost_modifier
-	}
-}
-
-# Monthly, from global_warming_events_on_action's global scope: the single
-# refresh site for the policy running costs, so the weekly amount follows GDP.
-# Runs with the climate rule off too: a policy adopted earlier keeps its
-# bonuses, so it keeps its bill. The second limit clause reaches a country
-# that has lost its journal entry while still holding the cost.
-# Scope: any
-gw_refresh_policy_costs_effect = {
-	every_country = {
-		limit = {
-			OR = {
-				has_journal_entry = je_global_warming
-				has_modifier = renewable_investment_cost_modifier
-				has_modifier = aerosol_injection_cost_modifier
-			}
-		}
-		gw_renewable_investment_cost_sync = yes
-		gw_aerosol_injection_cost_sync = yes
+		hidden_effect = { remove_variable = gw_renewable_investment_policy }
 	}
 }
 
 gw_effect_climate_adaptation = {
 	custom_tooltip = {
 		text = "GW_CLIMATE_ADAPTATION_DESC"
-		je:je_global_warming = { add_modifier = { name = climate_adaptation_modifier } }
+		hidden_effect = { set_variable = { name = gw_climate_adaptation_policy value = yes } }
 	}
 }
 
 gw_effect_remove_climate_adaptation = {
 	custom_tooltip = {
 		text = "GW_REMOVE_CLIMATE_ADAPTATION_DESC"
-		je:je_global_warming = { remove_modifier = climate_adaptation_modifier }
+		hidden_effect = { remove_variable = gw_climate_adaptation_policy }
 	}
 }
 
 gw_effect_emission_standards = {
 	custom_tooltip = {
 		text = "GW_EMISSION_STANDARDS_DESC"
-		je:je_global_warming = { add_modifier = { name = emission_standards_modifier } }
+		hidden_effect = { set_variable = { name = gw_emission_standards_policy value = yes } }
 	}
 }
 
 gw_effect_remove_emission_standards = {
 	custom_tooltip = {
 		text = "GW_REMOVE_EMISSION_STANDARDS_DESC"
-		je:je_global_warming = { remove_modifier = emission_standards_modifier }
+		hidden_effect = { remove_variable = gw_emission_standards_policy }
 	}
 }
 
 gw_effect_reforestation = {
 	custom_tooltip = {
 		text = "GW_REFORESTATION_DESC"
-		je:je_global_warming = { add_modifier = { name = reforestation_subsidies_modifier } }
+		hidden_effect = { set_variable = { name = gw_reforestation_policy value = yes } }
 	}
 }
 
 gw_effect_remove_reforestation = {
 	custom_tooltip = {
 		text = "GW_REMOVE_REFORESTATION_DESC"
-		je:je_global_warming = { remove_modifier = reforestation_subsidies_modifier }
+		hidden_effect = { remove_variable = gw_reforestation_policy }
 	}
 }
 
 gw_effect_public_transit = {
 	custom_tooltip = {
 		text = "GW_PUBLIC_TRANSIT_DESC"
-		je:je_global_warming = { add_modifier = { name = public_transit_modifier } }
+		hidden_effect = { set_variable = { name = gw_public_transit_policy value = yes } }
 	}
 }
 
 gw_effect_remove_public_transit = {
 	custom_tooltip = {
 		text = "GW_REMOVE_PUBLIC_TRANSIT_DESC"
-		je:je_global_warming = { remove_modifier = public_transit_modifier }
+		hidden_effect = { remove_variable = gw_public_transit_policy }
 	}
 }
 
 gw_effect_fossil_fuel_divestment = {
 	custom_tooltip = {
 		text = "GW_FOSSIL_FUEL_DIVESTMENT_DESC"
-		je:je_global_warming = { add_modifier = { name = fossil_fuel_divestment_modifier } }
+		hidden_effect = { set_variable = { name = gw_fossil_fuel_divestment_policy value = yes } }
 	}
 }
 
 gw_effect_remove_fossil_fuel_divestment = {
 	custom_tooltip = {
 		text = "GW_REMOVE_FOSSIL_FUEL_DIVESTMENT_DESC"
-		je:je_global_warming = { remove_modifier = fossil_fuel_divestment_modifier }
+		hidden_effect = { remove_variable = gw_fossil_fuel_divestment_policy }
 	}
 }
 
 gw_effect_green_building_codes = {
 	custom_tooltip = {
 		text = "GW_GREEN_BUILDING_CODES_DESC"
-		je:je_global_warming = { add_modifier = { name = green_building_codes_modifier } }
+		hidden_effect = { set_variable = { name = gw_green_building_codes_policy value = yes } }
 	}
 }
 
 gw_effect_remove_green_building_codes = {
 	custom_tooltip = {
 		text = "GW_REMOVE_GREEN_BUILDING_CODES_DESC"
-		je:je_global_warming = { remove_modifier = green_building_codes_modifier }
+		hidden_effect = { remove_variable = gw_green_building_codes_policy }
 	}
 }
 
@@ -211,9 +172,19 @@ gw_snapshot_market_emissions_effect = {
 
 gw_snapshot_country_emissions_effect = {
 	hidden_effect = {
+		# Each state's figure first, kept for the emissions map (gw_state_emis; te_jmap_gw_share,
+		# te_journal_map_values.txt), which can't walk pops; then the country's as their sum
+		# (gw_country_emis_from_states, the same total as country_greenhouse_gas_emissions_script_value): one walk of
+		# the states' pops a year, as before.
+		every_scope_state = {
+			set_variable = {
+				name = gw_state_emis
+				value = gw_state_greenhouse_gas_emissions
+			}
+		}
 		set_variable = {
 			name = gw_disp_country_emis
-			value = country_greenhouse_gas_emissions_script_value
+			value = gw_country_emis_from_states
 		}
 	}
 }
@@ -300,7 +271,7 @@ gw_refresh_global_counts_effect = {
 		every_country = {
 			limit = { has_journal_entry = je_global_warming }
 			if = {
-				limit = { je:je_global_warming ?= { has_modifier = fossil_fuel_tariffs_modifier } }
+				limit = { gw_runs_fossil_fuel_tariffs = yes }
 				change_global_variable = { name = gw_g_n_fossil_fuel_tariffs add = 1 }
 			}
 			change_global_variable = { name = gw_g_sol_sum add = average_sol }
@@ -444,42 +415,7 @@ gw_top_emitters_refresh = {
 			}
 			remove_variable = gw_emitters_own_emis
 		}
-		# The five slot variables the rows read before the list (a save from
-		# before GW-11 still holds them).
-		gw_top_emitters_drop_slots = yes
 		gw_top_emitters_selfcheck = yes
-	}
-}
-
-# Scope: the viewer. The display variables the slot rows read before the list.
-gw_top_emitters_drop_slots = {
-	if = {
-		limit = { has_variable = gw_emitter_1 }
-		remove_variable = gw_emitter_1
-	}
-	if = {
-		limit = { has_variable = gw_emitter_2 }
-		remove_variable = gw_emitter_2
-	}
-	if = {
-		limit = { has_variable = gw_emitter_3 }
-		remove_variable = gw_emitter_3
-	}
-	if = {
-		limit = { has_variable = gw_emitter_4 }
-		remove_variable = gw_emitter_4
-	}
-	if = {
-		limit = { has_variable = gw_emitter_5 }
-		remove_variable = gw_emitter_5
-	}
-	if = {
-		limit = { has_variable = gw_emitters_shown }
-		remove_variable = gw_emitters_shown
-	}
-	if = {
-		limit = { has_variable = gw_emitters_own_slot }
-		remove_variable = gw_emitters_own_slot
 	}
 }
 
@@ -540,11 +476,14 @@ gw_top_emitters_selfcheck = {
 	}
 }
 
+# The policy is the country variable gw_carbon_removal_policy: je_global_warming
+# declares carbon_removal_modifier while it is set, so a civil war's winner,
+# which inherits variables but no modifiers, keeps the policy. The text prints
+# the modifier (GetStaticModifier in GW_CARBON_REMOVAL_DESC).
 gw_effect_carbon_removal = {
 	custom_tooltip = {
 		text = "GW_CARBON_REMOVAL_DESC"
 		hidden_effect = { set_variable = { name = gw_carbon_removal_policy value = yes } }
-		je:je_global_warming = { add_modifier = { name = carbon_removal_modifier } }
 	}
 }
 
@@ -552,18 +491,6 @@ gw_effect_remove_carbon_removal = {
 	custom_tooltip = {
 		text = "GW_REMOVE_CARBON_REMOVAL_DESC"
 		hidden_effect = { remove_variable = gw_carbon_removal_policy }
-		je:je_global_warming = { remove_modifier = carbon_removal_modifier }
-	}
-}
-
-# A revolution inherits the country flag; rebuild the journal-entry modifier.
-gw_restore_carbon_removal_policy_effect = {
-	if = {
-		limit = {
-			has_variable = gw_carbon_removal_policy
-			NOT = { gw_policy_carbon_removal_active = yes }
-		}
-		je:je_global_warming = { add_modifier = { name = carbon_removal_modifier } }
 	}
 }
 
@@ -574,21 +501,24 @@ gw_restore_carbon_removal_policy_effect = {
 gw_effect_fossil_fuel_tariffs = {
 	custom_tooltip = {
 		text = "GW_FOSSIL_FUEL_TARIFFS_DESC"
-		je:je_global_warming = { add_modifier = { name = fossil_fuel_tariffs_modifier } }
+		hidden_effect = { set_variable = { name = gw_fossil_fuel_tariffs_policy value = yes } }
 	}
 }
 
 gw_effect_remove_fossil_fuel_tariffs = {
 	custom_tooltip = {
 		text = "GW_REMOVE_FOSSIL_FUEL_TARIFFS_DESC"
-		je:je_global_warming = { remove_modifier = fossil_fuel_tariffs_modifier }
+		hidden_effect = { remove_variable = gw_fossil_fuel_tariffs_policy }
 	}
 }
 
 # Country scope. A former leader must not retain a tariff policy after its
 # customs authority moves. National mitigation choices remain its own.
 gw_drop_fossil_fuel_tariffs_effect = {
-	je:je_global_warming ?= { remove_modifier = fossil_fuel_tariffs_modifier }
+	if = {
+		limit = { has_variable = gw_fossil_fuel_tariffs_policy }
+		remove_variable = gw_fossil_fuel_tariffs_policy
+	}
 }
 
 # Ownership cleanup only; rate modifiers themselves need no reassertion.
@@ -596,7 +526,7 @@ gw_drop_fossil_fuel_tariffs_effect = {
 gw_refresh_fossil_fuel_tariffs_effect = {
 	if = {
 		limit = {
-			je:je_global_warming ?= { has_modifier = fossil_fuel_tariffs_modifier }
+			gw_runs_fossil_fuel_tariffs = yes
 			OR = {
 				NOT = { te_tax_owns_market = yes }
 				NOT = { has_game_rule = global_warming_enabled }
@@ -617,22 +547,27 @@ gw_refresh_tariff_policies_effect = {
 # ============================================================================
 # STRATOSPHERIC AEROSOL INJECTION (Geoengineering, era 13 spec § 7.5)
 # ============================================================================
-# A national policy on the journal entry, mirrored in a country variable so a
-# civil war's winner keeps it (as Carbon Removal Support does), with a running
-# cost on the country (as Renewable Investment's). What it buys is the world's
-# aerosol mask (global_warming_aerosol_values.txt), moved monthly by
+# A national policy, the country variable gw_aerosol_injection_policy, so a
+# civil war's winner keeps it (as Carbon Removal Support does): je_global_warming
+# declares the policy modifier and its running cost (aerosol_injection_cost_modifier,
+# 1% of GDP a year) while it is set. What it buys is the world's aerosol mask
+# (global_warming_aerosol_values.txt), moved monthly by
 # gw_aerosol_update_mask_effect below.
 
-# The running cost and the objectors' relations sit outside the first
+# The cost's preview and the objectors' relations sit outside the first
 # custom_tooltip: the cost prints its scaled Expenses line, and the relations
 # line says once what the hidden loop does.
 gw_effect_aerosol_injection = {
 	custom_tooltip = {
 		text = "GW_AEROSOL_INJECTION_DESC"
 		hidden_effect = { set_variable = { name = gw_aerosol_injection_policy value = yes } }
-		je:je_global_warming = { add_modifier = { name = aerosol_injection_modifier } }
 	}
-	gw_aerosol_injection_cost_apply = yes
+	show_as_tooltip = {
+		add_modifier = {
+			name = aerosol_injection_cost_modifier
+			multiplier = gw_aerosol_injection_cost_value
+		}
+	}
 	custom_tooltip = {
 		text = gw_aerosol_objection_tt
 		save_scope_as = gw_aerosol_deployer
@@ -650,43 +585,6 @@ gw_effect_remove_aerosol_injection = {
 	custom_tooltip = {
 		text = "GW_REMOVE_AEROSOL_INJECTION_DESC"
 		hidden_effect = { remove_variable = gw_aerosol_injection_policy }
-		je:je_global_warming = { remove_modifier = aerosol_injection_modifier }
-		remove_modifier = aerosol_injection_cost_modifier
-	}
-}
-
-# A revolution inherits the country variable; rebuild the journal-entry
-# modifier. The cost follows on the next monthly sweep. From the journal
-# entry's monthly pulse.
-gw_restore_aerosol_injection_policy_effect = {
-	if = {
-		limit = {
-			has_variable = gw_aerosol_injection_policy
-			NOT = { gw_policy_aerosol_injection_active = yes }
-		}
-		je:je_global_warming = { add_modifier = { name = aerosol_injection_modifier } }
-	}
-}
-
-# The running cost, 1% of GDP a year, as Renewable Investment's: the removal
-# first, since a same-name add_modifier stacks. Scope: country.
-gw_aerosol_injection_cost_apply = {
-	remove_modifier_if_exists_effect = { MODIFIER = aerosol_injection_cost_modifier }
-	add_modifier = {
-		name = aerosol_injection_cost_modifier
-		multiplier = gw_aerosol_injection_cost_value
-	}
-}
-
-# From gw_refresh_policy_costs_effect, monthly. Scope: country.
-gw_aerosol_injection_cost_sync = {
-	if = {
-		limit = { gw_policy_aerosol_injection_active = yes }
-		gw_aerosol_injection_cost_apply = yes
-	}
-	else_if = {
-		limit = { has_modifier = aerosol_injection_cost_modifier }
-		remove_modifier = aerosol_injection_cost_modifier
 	}
 }
 
@@ -758,5 +656,103 @@ gw_aerosol_clear_mask_effect = {
 	if = {
 		limit = { has_global_variable = gw_g_aerosol_target }
 		remove_global_variable = gw_g_aerosol_target
+	}
+}
+
+# ---- The World Climate entry (je_world_climate.txt, #1448) -----------------
+
+# The entry's monthly pulse (scope:journal_entry is the entry). Involves any
+# country should_be_involved missed: whether the engine re-checks it for a
+# country created after activation (a revolution's winner, a release, a
+# formable) is unprobed, and the entry is what carries Climate Warming to a
+# country. Vanilla je_global_test's fallback. Logs the first country it adds
+# once a game, the answer to that question (vanilla-1-15-playtest.md).
+gw_world_climate_involve_missing_effect = {
+	every_country = {
+		limit = {
+			NOT = { is_involved_in_journal_entry = je_world_climate }
+		}
+		save_temporary_scope_as = gw_wc_missing
+		scope:journal_entry = {
+			add_involved_country = scope:gw_wc_missing
+		}
+		if = {
+			limit = { NOT = { has_global_variable = gw_wc_fallback_logged } }
+			set_global_variable = gw_wc_fallback_logged
+			debug_log = "TE_GW_WORLD fallback_involved country=[THIS.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString] (should_be_involved had not involved it: the engine doesn't re-check it for a country created after activation, or is_involved_in_journal_entry misreads a contextless entry; see TE_SELF_CHECK gw_world_climate)"
+		}
+	}
+}
+
+# TEMPORARY self-check (#1448): does the World Climate entry's declaration
+# reach a country? Global scope, from global_warming_events_on_action, under
+# the Global Warming rule. Once the world has been at 0.1 C or more for two
+# monthly pulses (the entry activates at 0.1 C, at the engine's own check)
+# and is at 0.5 C or more, the largest economy's capital should read
+# state_harvest_condition_wildfire_duration_mult at 0.5 per degree, a field
+# only Climate Warming sets (vanilla and the mod; the floor allows a fifth
+# for the declaration's few days' lag), and the country should be involved
+# in the entry (is_involved_in_journal_entry, which gw_warming_felt reads).
+#   OK      both hold.
+#   BROKEN  reading below the floor (about 0: the declaration doesn't reach
+#           involved countries, or the entry never activated), or involved=0
+#           (the recurring climate events, gated on gw_warming_felt, have
+#           stopped). Fallback: the declaration back on je_global_warming and
+#           gw_warming_felt back on `has_journal_entry = je_global_warming`
+#           (the parent of #1448's commit).
+# Delete this effect, its call and gw_wc_chk_*_g once it reads OK in a game.
+gw_world_climate_selfcheck_effect = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = gw_wc_selfcheck_done }
+			temperature_anomaly_display >= 0.1
+		}
+		if = {
+			limit = { has_global_variable = gw_wc_chk_months }
+			change_global_variable = { name = gw_wc_chk_months add = 1 }
+		}
+		else = {
+			set_global_variable = { name = gw_wc_chk_months value = 1 }
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_global_variable = gw_wc_selfcheck_done }
+			has_global_variable = gw_wc_chk_months
+			global_var:gw_wc_chk_months >= 3
+			temperature_anomaly_display >= 0.5
+		}
+		ordered_country = {
+			limit = {
+				exists = capital
+				NOT = { is_country_type = decentralized }
+			}
+			order_by = gdp
+			max = 1
+			set_global_variable = gw_wc_selfcheck_done
+			set_global_variable = { name = gw_wc_chk_expected value = gw_wc_selfcheck_expected }
+			capital = {
+				set_global_variable = { name = gw_wc_chk_reading value = modifier:state_harvest_condition_wildfire_duration_mult }
+			}
+			if = {
+				limit = { is_involved_in_journal_entry = je_world_climate }
+				set_global_variable = { name = gw_wc_chk_involved value = 1 }
+			}
+			else = {
+				set_global_variable = { name = gw_wc_chk_involved value = 0 }
+			}
+			if = {
+				limit = {
+					is_involved_in_journal_entry = je_world_climate
+					capital = {
+						modifier:state_harvest_condition_wildfire_duration_mult >= gw_wc_selfcheck_floor
+					}
+				}
+				debug_log = "TE_SELF_CHECK OK gw_world_climate (the World Climate entry's Climate Warming reaches the largest economy, country=[THIS.GetCountry.GetNameNoFormatting]: its capital reads wildfire_duration=[SCOPE.ScriptValue('gw_wc_chk_reading_g')|2] against expected=[SCOPE.ScriptValue('gw_wc_chk_expected_g')|2], involved=[SCOPE.ScriptValue('gw_wc_chk_involved_g')|0]) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN gw_world_climate (country=[THIS.GetCountry.GetNameNoFormatting]: its capital reads wildfire_duration=[SCOPE.ScriptValue('gw_wc_chk_reading_g')|2] against expected=[SCOPE.ScriptValue('gw_wc_chk_expected_g')|2], involved=[SCOPE.ScriptValue('gw_wc_chk_involved_g')|0]. A reading near 0 means the contextless entry's declaration doesn't reach involved countries or the entry never activated; involved=0 means is_involved_in_journal_entry misreads it and the recurring climate events have stopped. Fallback: the declaration back on je_global_warming; see docs/testing/vanilla-1-15-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+		}
 	}
 }

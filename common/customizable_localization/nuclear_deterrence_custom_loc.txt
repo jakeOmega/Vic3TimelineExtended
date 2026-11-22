@@ -755,6 +755,77 @@ nd_authority_short = {
 	}
 }
 
+# Another country's delivery legs, for its National Info cell (2026-11-20
+# delivery spec D19): public, read only through the delivery triggers. The word
+# names the legs, the figure what they reach, and the two lines go in the cell's
+# hover. Bombers need no test: every armed country has them.
+nd_delivery_word = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			nd_fields_icbms = yes
+			nd_fields_missile_submarines = yes
+		}
+		localization_key = nd_delivery_word_triad
+	}
+	text = {
+		trigger = { nd_fields_icbms = yes }
+		localization_key = nd_delivery_word_icbms
+	}
+	text = {
+		trigger = { nd_fields_missile_submarines = yes }
+		localization_key = nd_delivery_word_subs
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_delivery_word_bombers
+	}
+}
+
+nd_delivery_reach = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_fields_icbms = yes }
+		localization_key = nd_delivery_reach_every
+	}
+	text = {
+		trigger = { nd_fields_missile_submarines = yes }
+		localization_key = nd_delivery_reach_coasts
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_delivery_reach_bombers
+	}
+}
+
+nd_delivery_icbm_line = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_fields_icbms = yes }
+		localization_key = nd_delivery_icbm_line_yes
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_empty
+	}
+}
+
+nd_delivery_subs_line = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_fields_missile_submarines = yes }
+		localization_key = nd_delivery_subs_line_yes
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_empty
+	}
+}
+
 # Credibility in a word, for the overview's cell: what our threats can lean on.
 # A crisis reads (credibility - 50) / 2 into the target's pressure
 # (nd_credibility_pressure_term), so the middle band adds or takes little.
@@ -1721,13 +1792,139 @@ nd_crisis_ft_label = {
 	}
 }
 
-# The Reach row's value (nd_w_reach_value): the countries our bombers reach,
-# and every coast once we have missile submarines.
+# The survivability target's chain (Forces, nd_w_survivability_target_tt;
+# 2026-11-20 delivery spec §5.4): each part with its factor while held, or
+# that it isn't. A part is held while its factor is below 1.
+nd_surv_part_radar = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_display_exposure_factor_radar < 1 }
+		localization_key = nd_w_surv_part_radar_held
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_surv_part_radar_missing
+	}
+}
+
+nd_surv_part_icbms = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_display_exposure_factor_icbms < 1 }
+		localization_key = nd_w_surv_part_icbms_held
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_surv_part_icbms_missing
+	}
+}
+
+nd_surv_part_submarines = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_display_exposure_factor_submarines < 1 }
+		localization_key = nd_w_surv_part_submarines_held
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_surv_part_submarines_missing
+	}
+}
+
+nd_surv_part_missile_defense = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_display_exposure_factor_missile_defense < 1 }
+		localization_key = nd_w_surv_part_missile_defense_held
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_surv_part_missile_defense_missing
+	}
+}
+
+# The Survivors hover's breakdown of the main rival's reach (spec §5.4), from
+# what nd_refresh_main_rival stores: the silo line while its precision weapons
+# find our silos, and each part of its counterforce ratio it holds.
+nd_survivors_silo_line = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_main_rival_accuracy_mult
+			var:nd_main_rival_accuracy_mult > 1
+		}
+		localization_key = nd_w_survivors_silo_line
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_empty
+	}
+}
+
+# The disavowal row's chance against the main rival, while there is one
+# (nd_refresh_main_rival stores it).
+nd_disavow_belief_line = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_variable = nd_claim_belief_main }
+		localization_key = nd_w_disavow_belief
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_empty
+	}
+}
+
+nd_main_rival_k_pgm_part = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_main_rival_pgm
+			var:nd_main_rival_pgm > 0
+		}
+		localization_key = nd_w_survivors_k_pgm
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_empty
+	}
+}
+
+nd_main_rival_k_force_part = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_main_rival_k_force
+			var:nd_main_rival_k_force > 0
+		}
+		localization_key = nd_w_survivors_k_force
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_empty
+	}
+}
+
+# The Reach row's value (nd_w_reach_value): every country with ICBMs
+# (2026-11-20 delivery plan D18), else the countries our bombers reach, and
+# every coast once we have missile submarines.
 nd_reach_value = {
 	type = country
 	random_valid = no
 	text = {
-		trigger = { has_technology_researched = advanced_submarine_technology }
+		trigger = { nd_fields_icbms = yes }
+		localization_key = nd_w_reach_value_every
+	}
+	text = {
+		trigger = { nd_fields_missile_submarines = yes }
 		localization_key = nd_w_reach_value_subs
 	}
 	text = {
@@ -1944,5 +2141,344 @@ nd_public_guarantee_figure = {
 	text = {
 		trigger = { always = yes }
 		localization_key = nd_public_guarantee_figure_none
+	}
+}
+
+# The posture's strike figures (2026-11-20 delivery spec D10): what a full
+# strike by the main rival would destroy of ours under each launch authority,
+# at each readiness, and with one safeguards level more. Each line shows while
+# nd_refresh_main_rival has stored its figure, so only with a main rival; the
+# safeguards line only while a level more would change it (a fast authority,
+# below the highest level).
+nd_authority_strike_1 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_variable = nd_lost_main_auth_1 }
+		localization_key = nd_w_authority_strike_1
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+nd_authority_strike_2 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_variable = nd_lost_main_auth_2 }
+		localization_key = nd_w_authority_strike_2
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+nd_authority_strike_3 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_variable = nd_lost_main_auth_3 }
+		localization_key = nd_w_authority_strike_3
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+nd_authority_strike_4 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_variable = nd_lost_main_auth_4 }
+		localization_key = nd_w_authority_strike_4
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+nd_readiness_strike_0 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_variable = nd_lost_main_ready_0 }
+		localization_key = nd_w_readiness_strike_0
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+nd_readiness_strike_1 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_variable = nd_lost_main_ready_1 }
+		localization_key = nd_w_readiness_strike_1
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+nd_readiness_strike_2 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_variable = nd_lost_main_ready_2 }
+		localization_key = nd_w_readiness_strike_2
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+nd_readiness_strike_3 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { has_variable = nd_lost_main_ready_3 }
+		localization_key = nd_w_readiness_strike_3
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+nd_safeguards_strike_up = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_lost_main_safeguards_up
+			has_variable = nd_lost_main
+			nd_authority_delegated_or_warning = yes
+			nd_display_safeguards < 3
+		}
+		localization_key = nd_w_safeguards_strike_up
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
+# ---- The Strike section's previews (2026-11-20 delivery spec §5.3, plan D14)
+# What nd_plan_preview stores (nd_plan_pv_*). A range prints both ends while
+# they differ, else the one figure; a figure about the target from the world's
+# view opens nd_tt_worlds_view (owner call 14).
+
+nd_pv_raze_range = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_plan_pv_raze_hi
+			var:nd_plan_pv_raze_hi > var:nd_plan_pv_raze_lo
+		}
+		localization_key = nd_w_strike_pv_raze_range
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_strike_pv_raze_one
+	}
+}
+
+nd_pv_destroyed_range = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_plan_pv_destroyed_hi
+			var:nd_plan_pv_destroyed_hi > var:nd_plan_pv_destroyed_lo
+		}
+		localization_key = nd_w_strike_pv_destroyed_range
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_strike_pv_destroyed_one
+	}
+}
+
+nd_pv_kept_range = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_plan_pv_kept_hi
+			var:nd_plan_pv_kept_hi > var:nd_plan_pv_kept_lo
+		}
+		localization_key = nd_w_strike_pv_kept_range
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_strike_pv_kept_one
+	}
+}
+
+nd_pv_flown_range = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_plan_pv_flown_hi
+			var:nd_plan_pv_flown_hi > var:nd_plan_pv_flown_lo
+		}
+		localization_key = nd_w_strike_pv_flown_range
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_strike_pv_flown_one
+	}
+}
+
+nd_pv_redundancy_range = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_plan_pv_redundancy_hi
+			var:nd_plan_pv_redundancy_hi > var:nd_plan_pv_redundancy_lo
+		}
+		localization_key = nd_w_strike_pv_redundancy_range
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_strike_pv_redundancy_one
+	}
+}
+
+nd_pv_decap_range = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_plan_pv_decap_hi
+			var:nd_plan_pv_decap_hi > var:nd_plan_pv_decap_lo
+		}
+		localization_key = nd_w_strike_pv_decap_range
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_strike_pv_decap_one
+	}
+}
+
+# Forces: the line for those that fly first, under Launch on Warning only.
+nd_pv_flown_line = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { var:nd_plan_pv_fires_first ?= 1 }
+		localization_key = nd_w_strike_pv_flown_line
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_empty
+	}
+}
+
+# Forces: a part of our counterforce ratio we hold.
+nd_pv_k_force_part = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_k_ratio_force_part > 0 }
+		localization_key = nd_w_strike_pv_k_force
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_empty
+	}
+}
+
+# Forces: a part of our counterforce ratio we hold.
+nd_pv_k_tech_part = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_k_ratio_tech_part > 0 }
+		localization_key = nd_w_strike_pv_k_tech
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_empty
+	}
+}
+
+# Forces: our precision weapons against their silos (§3.4).
+nd_pv_silo_line = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_plan_pv_accuracy
+			var:nd_plan_pv_accuracy > 1
+		}
+		localization_key = nd_w_strike_pv_silo_line
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_empty
+	}
+}
+
+# Leadership: can a salvo cut them off (nd_pv_leadership_case)?
+nd_pv_leadership_line = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { var:nd_plan_pv_case ?= 1 }
+		localization_key = nd_w_strike_pv_3_line_cut
+	}
+	text = {
+		trigger = { var:nd_plan_pv_case ?= 2 }
+		localization_key = nd_w_strike_pv_3_line_other
+	}
+	text = {
+		trigger = { var:nd_plan_pv_case ?= 3 }
+		localization_key = nd_w_strike_pv_3_line_unarmed
+	}
+}
+
+# Leadership: can a salvo cut them off (nd_pv_leadership_case)?
+nd_pv_leadership_value = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { var:nd_plan_pv_case ?= 1 }
+		localization_key = nd_w_strike_pv_3_value_cut
+	}
+	text = {
+		trigger = { var:nd_plan_pv_case ?= 2 }
+		localization_key = nd_w_strike_pv_3_value_other
+	}
+	text = {
+		trigger = { var:nd_plan_pv_case ?= 3 }
+		localization_key = nd_w_strike_pv_3_value_unarmed
+	}
+}
+
+# The Upkeep row's hover: the missile submarines' share, while fielded
+# (2026-11-20 delivery spec §4.3; phase 2 plan D9).
+nd_upkeep_subs_line = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_fields_missile_submarines = yes }
+		localization_key = nd_w_upkeep_subs_line
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_empty
 	}
 }

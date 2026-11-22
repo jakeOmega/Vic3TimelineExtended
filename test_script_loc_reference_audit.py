@@ -41,6 +41,26 @@ class ReferenceTests(unittest.TestCase):
             [(4, "desc", "INSTITUTION_FUNDING_LEVEL_ministry_of_foreign_affairs")],
         )
 
+    def test_journal_entry_outcome_keys_are_references(self):
+        # 1.15: an outcome's three keys; flags is a token list, not a key.
+        text = (
+            "je_x = {\n"
+            "\toutcome = {\n"
+            "\t\theader = je_standard_completion_header\n"
+            "\t\teffect_header = je_x_on_done_header\n"
+            "\t\tconclusion_desc = je_x_done_conclusion_desc\n"
+            "\t\tflags = { historical }\n"
+            "\t}\n"
+            "}\n"
+        )
+        self.assertEqual(_refs(text), [
+            (3, "header", "je_standard_completion_header"),
+            (4, "effect_header", "je_x_on_done_header"),
+            (5, "conclusion_desc", "je_x_done_conclusion_desc"),
+        ])
+        # 1.14's header fields are gone from 1.15, and from the catalog.
+        self.assertNotIn("custom_completion_header", LOC_REFERENCE_FIELDS)
+
     def test_unquoted_and_dotted_keys(self):
         self.assertEqual(
             _refs("e = { title = te_x.1.t flavor = te_x.1.f }\n"),
@@ -114,7 +134,7 @@ class AuditTests(unittest.TestCase):
         self.assertEqual(by_key["MISSING_KEY"].file, os.path.join("common", "political_movements", "m.txt"))
         self.assertEqual(by_key["MISSING_KEY"].line, 3)
         self.assertIsNone(by_key["MISSING_KEY"].exemption)
-        self.assertEqual(by_key["WAIVED_KEY"].exemption, {"date": "2026-09-25", "rationale": "test"})
+        self.assertEqual(by_key["WAIVED_KEY"].exemption, {"date": "2026-09-25", "tag": "", "rationale": "test"})
         self.assertEqual(result.files_audited, 2)
         self.assertEqual(result.references_checked, 4)
 
@@ -150,7 +170,7 @@ class RegistrationTests(unittest.TestCase):
         # Read the roster from source: importing mod_state_server needs the
         # per-machine paths, and this test must run in CI without them.
         here = os.path.dirname(os.path.abspath(__file__))
-        with open(os.path.join(here, "mod_state_server.py"), encoding="utf-8") as fh:
+        with open(os.path.join(here, "server", "post_load.py"), encoding="utf-8") as fh:
             src = fh.read()
         roster = src[src.index("POST_LOAD_AUDITS = ["):]
         roster = roster[:roster.index("]")]

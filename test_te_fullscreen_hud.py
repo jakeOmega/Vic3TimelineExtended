@@ -7,7 +7,7 @@ the outliner (half_and_fullscreen_hide), the "Paused" frame, the
 construction box and the backgrounds of the time controls and the top bar
 (fullscreen_hide), and it swaps in the compact notifications
 (half_and_fullscreen_show). The three templates are in vanilla's
-gui/block_windows.gui:984-1000, each an Or chain of
+gui/block_windows.gui:990-1002 (1.15.0), each an Or chain of
 InformationPanelBar.IsPanelOpen, which a scripted widget never trips. The mod
 redefines them in a 00_ file, which sorts before block_windows.gui: the
 engine keeps the first registration of a template's name and logs the later

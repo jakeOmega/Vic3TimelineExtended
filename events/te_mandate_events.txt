@@ -39,7 +39,7 @@ te_mandate.1 = {
 	desc = te_mandate.1.d
 	flavor = te_mandate.1.f
 
-	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 

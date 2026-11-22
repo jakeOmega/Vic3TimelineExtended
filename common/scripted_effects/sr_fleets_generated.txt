@@ -776,7 +776,7 @@ sr_fl_xfer_step_role = {
 		}
 	}
 	if = {
-		limit = { NOT = { has_global_variable = sr_xf_step_checked } }
+		limit = { NOT = { has_global_variable = sr_xf_step_checked } has_variable = sr_det_amt_$ROLE$ }
 		set_global_variable = { name = sr_xf_step_checked value = yes }
 		set_variable = { name = sr_xf_chk_slot value = $N$ }
 		set_variable = { name = sr_xf_chk_role value = $CODE$ }

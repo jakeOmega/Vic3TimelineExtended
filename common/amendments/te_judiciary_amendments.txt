@@ -87,7 +87,7 @@ amendment_judicial_elections = {
 	}
 
 	possible = {
-		te_jud_elected_government = yes
+		te_holds_elections = yes
 	}
 
 	would_sponsor = {

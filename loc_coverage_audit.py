@@ -25,7 +25,14 @@ goods, government types, game concepts,
 company types, combat unit types, ship types, ideologies, interest groups,
 institutions, subject types, mobilization options, diplomatic actions (name
 plus the notification family their flags select), pop needs, decisions,
-amendments, messages, treaty articles, events. Skips scripted_effects/triggers, on_actions, modifier
+amendments, messages, treaty articles, events, glossary entries and regional
+exile pools (1.15), power bloc principles (the `_desc` alone), law groups,
+combat unit groups and mobilization option groups. Journal entry outcomes (1.15) get a structural check of
+their own, on every journal entry the mod defines or overrides (a `REPLACE:` of
+a vanilla one included): each outcome names a `conclusion_desc`, and each one
+not flagged `hidden` a `header` and an `effect_header` (journal_entries.md:
+"required"), and every key it names resolves. An entry with no outcome passes.
+Skips scripted_effects/triggers, on_actions, modifier
 type definitions, script values (most are arithmetic helpers — only those
 referenced in `custom_tooltip` need loc, deferred until reports show gaps).
 """
@@ -33,6 +40,9 @@ import os
 import re
 from dataclasses import dataclass, field
 from typing import Callable
+
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
 
 
 @dataclass
@@ -46,23 +56,9 @@ class LocFlag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[LocFlag] = field(default_factory=list)
     coverage: dict = field(default_factory=dict)
-
-
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
-)
-
-
-def _parse_reviewed(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
 
 
 # The Paradox parser wraps every assignment as `('=', value)`. Strip that
@@ -108,6 +104,60 @@ def _je_keys(name: str, body) -> list[tuple[str, bool, str]]:
         (name, True, "title"),
         (f"{name}_reason", reason_required, "reason"),
     ]
+
+
+def _entries(value) -> list:
+    """A field's entries, unwrapped: one per appearance (a repeated key parses
+    as a list of `(op, value)` tuples, a single one as one tuple)."""
+    if value is None:
+        return []
+    items = value if isinstance(value, list) else [value]
+    return [_unwrap(v) for v in items]
+
+
+def je_outcomes(body) -> list[dict]:
+    """A 1.15 journal entry's outcomes, in order: for each, `hidden` (its
+    `flags` hold `hidden`) and the keys it names, `header`, `effect_header`
+    and `conclusion_desc` (None when the field is absent). Shared with the
+    server's /loc-keys."""
+    body = _unwrap(body)
+    if not isinstance(body, dict):
+        return []
+    out = []
+    for outcome in _entries(body.get("outcome")):
+        if not isinstance(outcome, dict):
+            continue
+        flags = _unwrap(outcome.get("flags"))
+        if isinstance(flags, str):
+            flags = [flags]
+        entry = {"hidden": isinstance(flags, list) and "hidden" in flags}
+        for fld in ("header", "effect_header", "conclusion_desc"):
+            value = _strip_quotes(_unwrap(outcome.get(fld))) if fld in outcome else None
+            entry[fld] = value if isinstance(value, str) and value else None
+        out.append(entry)
+    return out
+
+
+def _je_outcome_problems(body, has_loc: Callable[[str], bool]) -> list[str]:
+    """What a journal entry's outcomes lack: a missing field as `outcome N: no
+    <field>`, a named key no loc defines as the key itself."""
+    problems: list[str] = []
+    for i, outcome in enumerate(je_outcomes(body), 1):
+        fields = ["conclusion_desc"]
+        if not outcome["hidden"]:
+            fields = ["header", "effect_header", "conclusion_desc"]
+        for fld in fields:
+            key = outcome[fld]
+            if key is None:
+                problems.append(f"outcome {i}: no {fld}")
+            elif not has_loc(key) and key not in problems:
+                problems.append(key)
+        # A hidden outcome may still name a header; it must resolve too.
+        for fld in ("header", "effect_header"):
+            key = outcome[fld]
+            if outcome["hidden"] and key and not has_loc(key) and key not in problems:
+                problems.append(key)
+    return problems
 
 
 def _message_keys(name: str, body) -> list[tuple[str, bool, str]]:
@@ -210,6 +260,42 @@ def _institution_keys(name: str, body) -> list[tuple[str, bool, str]]:
     return [(name, True, "name"), (f"{name}_desc", True, "desc")]
 
 
+def _glossary_keys(name: str, body) -> list[tuple[str, bool, str]]:
+    """1.15 glossary entries need both `<key>` and `<key>_desc`
+    (common/glossary/glossary.md): the tooltip and the encyclopedia show
+    both."""
+    return [(name, True, "name"), (f"{name}_desc", True, "desc")]
+
+
+def _principle_keys(name: str, body) -> list[tuple[str, bool, str]]:
+    """A power bloc principle has `<name>_desc` and no name key: the game
+    names a tier from its group (`principle_group_x`) and its level, and
+    vanilla defines the bare key for none of its 69 principles. It defines
+    `<name>_desc` for every one, as `$principle_group_<group>_desc$`.
+
+    71 of the mod's 124 principles shipped without it (#897). Vanilla's
+    principle tooltip hides an empty description, and whether a missing key
+    reaches it empty or as the raw key has not been checked in game, so the
+    rule follows vanilla: a tier with nothing of its own to say points at its
+    group's description.
+    """
+    return [(f"{name}_desc", True, "desc")]
+
+
+def _group_keys(name: str, body) -> list[tuple[str, bool, str]]:
+    """Law groups, combat unit groups and mobilization option groups need
+    `<name>` and `<name>_desc`; vanilla defines both for every one. The law
+    group tooltip opens with `[LawGroup.GetDesc]` (vanilla
+    `DATA_LAW_GROUP_NAME_TOOLTIP`) and the mobilization option group's is
+    `[MobilizationOptionGroup.GetDesc]` alone
+    (`MOBILIZATION_OPTION_GROUP_TOOLTIP`), so a missing one prints the raw
+    key. A mobilization option group's keys carry no prefix (`transport`,
+    `transport_desc`). `lawgroup_minority_rights`, the mod's two combat unit
+    groups and `training` shipped without a description (#897).
+    """
+    return [(name, True, "name"), (f"{name}_desc", True, "desc")]
+
+
 def _explicit_name_field(name: str, body) -> list[tuple[str, bool, str]]:
     """For entities that declare loc via `name = "KEY"` and `desc = "KEY"`
     fields (scripted_buttons), not via the entity name itself."""
@@ -252,6 +338,7 @@ _REQUIREMENTS: dict[str, Callable[[str, object], list[tuple[str, bool, str]]]] =
     "Character Traits":       _name_and_desc,
     "Journal Entries":        _je_keys,
     "Laws":                   _name_and_desc,
+    "Law Groups":             _group_keys,
     "Decrees":                _name_and_desc,
     "Scripted Buttons":       _explicit_name_field,
     "Scripted Progress Bars": _progress_bar_keys,
@@ -263,6 +350,7 @@ _REQUIREMENTS: dict[str, Callable[[str, object], list[tuple[str, bool, str]]]] =
     "Government Types":       _name_and_desc,
     "Company Types":          _name_and_desc,
     "Combat Unit Types":      _simple_name,
+    "Combat Unit Groups":     _group_keys,
     "Ship Types":             _simple_name,
     "Ideologies":             _simple_name,
     "Interest Groups":        _simple_name,
@@ -270,11 +358,16 @@ _REQUIREMENTS: dict[str, Callable[[str, object], list[tuple[str, bool, str]]]] =
     "Subject Types":          _simple_name,
     "Messages":               _message_keys,
     "Mobilization Options":   _name_and_desc,
+    "Mobilization Option Groups": _group_keys,
+    "Principles":             _principle_keys,
     "Diplomatic Actions":     _diplomatic_action_keys,
     "Pop Needs":              _simple_name,
     "Decisions":              _name_and_desc,
     "Amendments":             _name_and_desc,
     "Treaty Articles":        _treaty_article_keys,
+    # 1.15. An exile pool's name is its tab in the Invite Exile screen.
+    "Glossary":               _glossary_keys,
+    "Regional Exile Pools":   _simple_name,
 }
 
 
@@ -287,6 +380,7 @@ _DIR_MAP: dict[str, str] = {
     "Character Traits":       "common/character_traits",
     "Journal Entries":        "common/journal_entries",
     "Laws":                   "common/laws",
+    "Law Groups":             "common/law_groups",
     "Decrees":                "common/decrees",
     "Scripted Buttons":       "common/scripted_buttons",
     "Scripted Progress Bars": "common/scripted_progress_bars",
@@ -298,6 +392,7 @@ _DIR_MAP: dict[str, str] = {
     "Government Types":       "common/government_types",
     "Company Types":          "common/company_types",
     "Combat Unit Types":      "common/combat_unit_types",
+    "Combat Unit Groups":     "common/combat_unit_groups",
     "Ship Types":             "common/ship_types",
     "Ideologies":             "common/ideologies",
     "Interest Groups":        "common/interest_groups",
@@ -305,13 +400,20 @@ _DIR_MAP: dict[str, str] = {
     "Subject Types":          "common/subject_types",
     "Messages":               "common/messages",
     "Mobilization Options":   "common/mobilization_options",
+    "Mobilization Option Groups": "common/mobilization_option_groups",
+    "Principles":             "common/power_bloc_principles",
     "Diplomatic Actions":     "common/diplomatic_actions",
     "Pop Needs":              "common/pop_needs",
     "Decisions":              "common/decisions",
     "Amendments":             "common/amendments",
     "Treaty Articles":        "common/treaty_articles",
+    "Glossary":               "common/glossary",
+    "Regional Exile Pools":   "common/regional_exile_pools",
     "Events":                 "events",
 }
+
+# The structural check's category (_scan_je_outcomes).
+JE_OUTCOMES = "Journal Entry Outcomes"
 
 
 def _event_loc_keys(event_id: str, event_body) -> list[tuple[str, bool, str]]:
@@ -356,16 +458,23 @@ def _event_loc_keys(event_id: str, event_body) -> list[tuple[str, bool, str]]:
 _OPENING_LINE_RE = re.compile(
     r"^[ \t]*(?P<name>[A-Za-z_][A-Za-z0-9_.]*)\s*=\s*\{(?P<comment>\s*#.*)?\s*$"
 )
+# The same, for an entity the mod overrides: `REPLACE:je_x = {` and kin.
+_OVERRIDE_OPENING_LINE_RE = re.compile(
+    r"^[ \t]*(?:(?:TRY_)?(?:REPLACE|INJECT)(?:_OR_CREATE)?:)?"
+    r"(?P<name>[A-Za-z_][A-Za-z0-9_.]*)\s*=\s*\{(?P<comment>\s*#.*)?\s*$"
+)
 
 
 def _build_entity_locations(
-    mod_path: str, dir_rel: str, entity_names: set[str]
+    mod_path: str, dir_rel: str, entity_names: set[str], overrides: bool = False,
 ) -> dict[str, tuple[str, int, str | None]]:
     """For each entity name, find (rel_path, line, opening_line_comment).
 
     Walks `<mod_path>/<dir_rel>` recursively. Comment carries the trailing
-    `# ...` on the entity-opening line, used for REVIEWED suppression.
+    `# ...` on the entity-opening line, used for REVIEWED suppression. With
+    `overrides`, a `REPLACE:` / `INJECT:` opening line counts as well.
     """
+    opening_re = _OVERRIDE_OPENING_LINE_RE if overrides else _OPENING_LINE_RE
     abs_dir = os.path.join(mod_path, dir_rel)
     locations: dict[str, tuple[str, int, str | None]] = {}
     if not os.path.isdir(abs_dir):
@@ -379,7 +488,7 @@ def _build_entity_locations(
             try:
                 with open(abs_p, encoding="utf-8-sig", errors="replace") as fh:
                     for i, line in enumerate(fh, start=1):
-                        m = _OPENING_LINE_RE.match(line.rstrip("\n"))
+                        m = opening_re.match(line.rstrip("\n"))
                         if not m:
                             continue
                         name = m.group("name")
@@ -388,6 +497,35 @@ def _build_entity_locations(
             except OSError:
                 pass
     return locations
+
+
+# The modifier types vanilla registers for every culture (in 99_todo_sort_into_other_files.txt and the 10_/11_
+# culture files) and gives no loc key: the engine names them from the culture, through STATE_CULTURE_SOL_MODIFIER,
+# COUNTRY_CULTURE_CULTURAL_ACCEPTANCE_MODIFIER and COUNTRY_FERVOR_TARGET_CULTURE_MODIFIER. A mod culture's own
+# (gen_culture_merges' te_merged_culture_modifier_types.txt) are named the same way, so they need no key either.
+_CULTURE_TYPE_RES = (
+    re.compile(r"state_(?P<c>\w+)_standard_of_living_add"),
+    re.compile(r"country_(?P<c>\w+)_cultural_acceptance_add"),
+    re.compile(r"country_fervor_target_(?P<c>\w+)_add"),
+)
+
+
+def _culture_names(ms) -> set[str]:
+    names: set[str] = set()
+    for parsers in (ms.base_parsers, ms.mod_parsers):
+        parser = parsers.get("Cultures")
+        if parser is not None and parser.data:
+            names |= set(parser.data)
+    return names
+
+
+def engine_named_culture_type(name: str, cultures: set[str]) -> bool:
+    """True when ``name`` is one of a culture's three modifier types, which the engine names from the culture."""
+    for pattern in _CULTURE_TYPE_RES:
+        m = pattern.fullmatch(name)
+        if m and m.group("c") in cultures:
+            return True
+    return False
 
 
 def _scan_category(
@@ -404,6 +542,9 @@ def _scan_category(
     base_keys = set(base.data.keys()) if base else set()
     mod_keys = set(mod.data.keys())
     new_keys = mod_keys - base_keys
+    if category == "Modifier Types":
+        cultures = _culture_names(ms)
+        new_keys = {k for k in new_keys if not engine_named_culture_type(k, cultures)}
     if not new_keys:
         return [], set()
     dir_rel = _DIR_MAP.get(category)
@@ -437,10 +578,42 @@ def _scan_category(
             missing_keys=missing,
             file=rel_p,
             line=line,
-            exemption=_parse_reviewed(comment),
+            exemption=parse_reviewed(comment),
         ))
     files_seen = {loc[0] for loc in locations.values()}
     return flags, files_seen
+
+
+def _scan_je_outcomes(ms, mod_path: str) -> tuple[list[LocFlag], set[str]]:
+    """The outcome check, over every journal entry the mod defines or
+    overrides: new ones, and vanilla ones whose loaded body differs from
+    vanilla's (a `REPLACE:` restates a vanilla entry with the mod's
+    outcomes, which the engine reads like any other)."""
+    category = "Journal Entries"
+    base = ms.base_parsers.get(category)
+    mod = ms.mod_parsers.get(category)
+    if mod is None:
+        return [], set()
+    base_data = base.data if base else {}
+    names = {
+        k for k, v in mod.data.items()
+        if k not in base_data or base_data[k] != v
+    }
+    problems = {}
+    for name in sorted(names):
+        found = _je_outcome_problems(mod.data.get(name), ms.has_localization)
+        if found:
+            problems[name] = found
+    if not problems:
+        return [], set()
+    locations = _build_entity_locations(mod_path, _DIR_MAP[category], set(problems), overrides=True)
+    flags = []
+    for name, found in problems.items():
+        if name not in locations:
+            continue
+        rel_p, line, comment = locations[name]
+        flags.append(LocFlag(JE_OUTCOMES, name, found, rel_p, line, parse_reviewed(comment)))
+    return flags, {loc[0] for loc in locations.values()}
 
 
 def audit(ms, mod_path: str | None = None) -> AuditResult:
@@ -465,6 +638,12 @@ def audit(ms, mod_path: str | None = None) -> AuditResult:
     all_flags.extend(flags)
     all_files |= files_seen
 
+    flags, files_seen = _scan_je_outcomes(ms, mod_path)
+    if flags:
+        by_category[JE_OUTCOMES] = len(flags)
+    all_flags.extend(flags)
+    all_files |= files_seen
+
     return AuditResult(
         flags=all_flags,
         coverage={
@@ -477,12 +656,12 @@ def audit(ms, mod_path: str | None = None) -> AuditResult:
 def strict_exit_code(result: AuditResult) -> int:
     """Exit status for `--strict` (CI mode): 1 if any flag lacks a
     `# REVIEWED` exemption."""
-    return 1 if any(not f.exemption for f in result.flags) else 0
+    return 1 if result.failed else 0
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
 
     out = [
         "# Localization coverage audit report",
@@ -499,14 +678,22 @@ def render_report(result: AuditResult) -> str:
         "file. For static modifiers and most simple entities the key is the",
         "entity name itself (including game concept names, whose `_desc`",
         "does not substitute for the name); for journal entries and institutions also",
-        "`<name>_desc`; for",
+        "`<name>_desc`, as for law groups, combat unit groups and mobilization",
+        "option groups; for a power bloc principle `<name>_desc` alone, which",
+        "points at its group's (`$principle_group_x_desc$`) unless the tier has",
+        "text of its own; for",
         "events the keys are whatever `title`/`desc`/`flavor`/option `name`",
         "fields point at; for messages (`common/messages`) the keys are",
         "`notification_<name>_name` / `_desc` / `_tooltip`, never the bare",
         "message name; for diplomatic actions the `_action_notification_*`",
         "keys (the `_third_party_*` pair when `should_notify_third_parties =",
         "yes`, the `_break_*` pairs with a `pact`) or, for",
-        "`requires_approval = yes`, the `_proposal_*` keys.",
+        "`requires_approval = yes`, the `_proposal_*` keys; for a glossary",
+        "entry `glossary_x` and `glossary_x_desc`. A **Journal Entry",
+        "Outcomes** flag is a 1.15 outcome with no `conclusion_desc` (or, not",
+        "`hidden`, no `header` / `effect_header`), listed as `outcome N: no",
+        "<field>`, or naming a key no loc defines; it covers the mod's",
+        "`REPLACE:`s of vanilla entries too.",
         "",
         "Suppress an intentional missing key with a same-line comment on the",
         "entity's opening line:",
@@ -590,12 +777,9 @@ def regenerate(mod_state) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
     report = render_report(result)
-    out_path = os.path.join(mod_path, "docs", "engine", "loc_coverage_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(report)
-    unrev = sum(1 for f in result.flags if not f.exemption)
-    exemp = sum(1 for f in result.flags if f.exemption)
+    write_text(os.path.join(mod_path, "docs", "engine", "loc_coverage_report.md"), report)
+    unrev = len(result.unreviewed)
+    exemp = len(result.exemptions)
     return {
         "files_audited": result.coverage.get("files_audited", 0),
         "by_category": result.coverage.get("by_category", {}),
@@ -605,18 +789,21 @@ def regenerate(mod_state) -> dict:
     }
 
 
-if __name__ == "__main__":
-    # CLI entry: run against the live mod state.
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 if any flag lacks a
+    `# REVIEWED ...` exemption."""
     from path_constants import mod_path
-    import mod_state_server
-    # Vanilla from where a server load takes it (the vanilla_parsed/ snapshot
-    # without a game install), and the English loc loaded, as the server loads
-    # it: a bare ModState has none, so every entity false-flags.
-    ms = mod_state_server.cli_mod_state()
-    result = audit(ms, mod_path=mod_path)
-    print(render_report(result))
-    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ...` exemption.
-    if "--strict" in sys.argv:
-        raise SystemExit(strict_exit_code(result))
+
+    def run(args) -> AuditResult:
+        import mod_state_server
+        # Vanilla from where a server load takes it (the vanilla_parsed/ snapshot
+        # without a game install), and the English loc loaded, as the server loads
+        # it: a bare ModState has none, so every entity false-flags.
+        return audit(mod_state_server.cli_mod_state(), mod_path=mod_path)
+
+    return cli_main(run, lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

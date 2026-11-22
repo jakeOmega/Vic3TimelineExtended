@@ -602,9 +602,9 @@ un_mandates_monthly_update = {
 # "violated", with the condemnation and the ten-year standing suspension that
 # go with it. Rather than exempt the AI from the rule, strike the prohibited
 # demand the moment the AI adds it: same rule, enforced on its behalf. Only
-# where the holder is the play's initiator (`remove_war_goal` addresses a goal
-# by side and type); if nothing is struck, un_mandate_check_prohibited still
-# runs afterwards and the ordinary violation applies.
+# where the holder is the play's initiator; if nothing is struck,
+# un_mandate_check_prohibited still runs afterwards and the ordinary violation
+# applies.
 #
 # Only in the mandate's own play: a dp_te_un_mandate_restore_state play
 # against the mandate's target. on_wargoal_added fires for every goal the
@@ -620,10 +620,16 @@ un_mandates_monthly_update = {
 #
 # A type is struck only when the holder holds a goal of it against the
 # mandate's target, the case un_mandate_has_prohibited_goal counts: a
-# conquer_state against the target's ally is allowed and is left alone. If
-# the holder holds both, remove_war_goal takes the allowed one too, since it
-# cannot tell them apart. test_un_mandate_play_scope.py pins the gate and the
-# list.
+# conquer_state against the target's ally is allowed, and is left alone when
+# it is the only goal of its type. remove_war_goal takes the holder's first
+# goal of the type, whatever it targets (scripting_best_practices.md
+# § "`remove_war_goal` Takes One Holder's First Goal of a Type, Whatever It
+# Targets"), so un_mandate_strike_goal_type repeats it while a goal against
+# the target is left. An allowed goal of the same type that comes first goes
+# with it, since nothing can spare it. Before #1892 there was one call per
+# type, which took the older, allowed goal and left the prohibited one, so
+# the mandate still ended violated. test_un_mandate_play_scope.py pins the
+# gate, the list and the loop.
 # Scope: diplomatic play; expects scope:actor (from on_wargoal_added)
 un_mandate_ai_strike_prohibited = {
 	if = {
@@ -647,6 +653,7 @@ un_mandate_ai_strike_prohibited = {
 		un_mandate_strike_goal_type = { TYPE = conquer_state }
 		un_mandate_strike_goal_type = { TYPE = return_state }
 		un_mandate_strike_goal_type = { TYPE = take_treaty_port }
+		un_mandate_strike_goal_type = { TYPE = te_seize_strait }
 		un_mandate_strike_goal_type = { TYPE = liberate_country }
 		un_mandate_strike_goal_type = { TYPE = secession }
 		un_mandate_strike_goal_type = { TYPE = unification }
@@ -664,10 +671,18 @@ un_mandate_ai_strike_prohibited = {
 	}
 }
 
-# Strike $TYPE$ from this play if the holder holds one against the mandate's
-# target here. has_play_goal reads this play only, the holder's test every
-# play it takes part in, so both are asked (as un_mandate_prohibited_goal_held
-# does).
+# Strike the holder's goals of $TYPE$ from this play until none against the
+# mandate's target is left. has_play_goal reads this play only, the holder's
+# test every play it takes part in, so both are asked (as
+# un_mandate_prohibited_goal_held does). Each call takes the holder's first
+# goal of $TYPE$, whatever it targets, so the call repeats while the holder's
+# test still finds one against the target, at most 30 times. That the play
+# test sees each removal at once is measured only for its war twin
+# (war_participant_has_war_goal_of_type_against, 2026-11-18). If it does not,
+# the loop runs to its cap and takes every goal of $TYPE$ the holder has here.
+# That is usually the same goals, since the goal just added against the target
+# is the holder's newest, and the rest of the calls find nothing to remove.
+# un_strike_goals_self_check reports which.
 # Parameters: $TYPE$ = war goal type
 # Scope: diplomatic play; expects scope:actor and scope:un_mandate_strike_target
 un_mandate_strike_goal_type = {
@@ -681,6 +696,54 @@ un_mandate_strike_goal_type = {
 				}
 			}
 		}
-		remove_war_goal = { who = initiator type = $TYPE$ }
+		scope:actor = { set_variable = { name = un_strike_chk_calls value = 0 } }
+		while = {
+			count = 30
+			if = {
+				limit = {
+					scope:actor = {
+						play_participant_has_war_goal_of_type_against = {
+							type = $TYPE$
+							target = scope:un_mandate_strike_target
+						}
+					}
+				}
+				remove_war_goal = { who = scope:actor type = $TYPE$ }
+				scope:actor = { change_variable = { name = un_strike_chk_calls add = 1 } }
+			}
+		}
+		un_strike_goals_self_check = { STRIKE = mandate TYPE = $TYPE$ TARGET = scope:un_mandate_strike_target }
+	}
+}
+
+# After a strike loop (un_mandate_strike_goal_type, un_force_strike_goal):
+# once a game for each kind of strike, read the holder's
+# play_participant_has_war_goal_of_type_against against $TARGET$ again, in the
+# same block. OK when it finds no goal and the loop stopped before its cap of
+# 30 calls (un_strike_goals_loop_clean): the play test saw each remove_war_goal
+# at once. The verdict reads
+# the play test itself, not only the count, because the Force's loop also
+# stops when has_play_goal goes false, which would read OK whether or not the
+# play test saw the removals. A marker for each kind, so a Force strike's
+# reading does not use up the mandate's. Then drop the count. The count is
+# never 0 here: each caller enters the loop only when the holder holds a goal
+# to strike.
+# Parameters: $STRIKE$ = mandate or force; $TYPE$ = the war goal type struck;
+# $TARGET$ = the protected country
+# Scope: diplomatic play; expects scope:actor, holding un_strike_chk_calls
+un_strike_goals_self_check = {
+	scope:actor = {
+		if = {
+			limit = { NOT = { has_global_variable = un_strike_goals_self_check_done_$STRIKE$ } }
+			set_global_variable = un_strike_goals_self_check_done_$STRIKE$
+			if = {
+				limit = { un_strike_goals_loop_clean = { TYPE = $TYPE$ TARGET = $TARGET$ } }
+				debug_log = "TE_SELF_CHECK OK un_strike_goals: strike=$STRIKE$ type=$TYPE$ calls=[THIS.Var('un_strike_chk_calls').GetValue|0] holder=[THIS.GetCountry.GetTagName] (the holder's play test, read again after the loop, finds no goal of the type against the protected country, and the loop stopped before its cap) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN un_strike_goals: strike=$STRIKE$ type=$TYPE$ calls=[THIS.Var('un_strike_chk_calls').GetValue|0] holder=[THIS.GetCountry.GetTagName] (after the loop the holder's play test still finds a goal of the type against the protected country, or the loop ran to its cap: the play test did not see the removals inside the block; or the holder holds such a goal in a second play) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+		}
+		remove_variable = un_strike_chk_calls
 	}
 }

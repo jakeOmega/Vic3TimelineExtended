@@ -19,6 +19,8 @@ Layout (all JSON, pretty-printed so a vanilla bump diffs line by line):
         manifest.json                 version, parser fingerprint, per-type
                                       counts, every source file's size+sha256
         common/<entity_type>.json     one file per entity type
+        history/states.json           who owns each state at game start
+                                      (state_history.parse_dir, #901)
         localization_english.json     vanilla English loc {key: value}
 
 Value encoding: the parser produces str, dict (str keys), list, and 2-tuples
@@ -30,7 +32,8 @@ top-level operator as a dict — and `build` asserts an exact round trip
 
 Freshness (`check`) compares, in order: snapshot format version, the parser
 fingerprint (source of the code that turns vanilla files into ModState data),
-the set of entity types and their directories, the game files' version
+the set of entity types and their directories (and that the state history is
+there), the game files' version
 (launcher-settings.json `rawVersion`, or a vanilla clone's HEAD subject), and
 the source-file inventory — path +
 size in the fast mode the server uses at startup, path + sha256 with
@@ -65,6 +68,7 @@ from typing import Optional
 
 import mod_state
 import paradox_file_parser
+import state_history
 from mod_state import VANILLA_COMMON_DIRS, ModState, iter_loc_files, iter_script_files
 
 FORMAT_VERSION = 1
@@ -75,6 +79,11 @@ MANIFEST = "manifest.json"
 LOC_FILE = "localization_english.json"
 LOC_REL_DIR = "game/localization/english"
 COMMON_REL_DIR = "game/common"
+# The start map (#901). Its files are effect scripts that ModState's top-level
+# merge cannot hold, so state_history reads them and the snapshot keeps its
+# result beside the entity types.
+STATE_HISTORY_REL_DIR = "game/" + state_history.REL_DIR
+STATE_HISTORY_FILE = "history/states.json"
 
 _OPERATORS = frozenset(paradox_file_parser.conditional_tokens)
 
@@ -128,7 +137,8 @@ def _dumps(obj) -> str:
 def parser_fingerprint() -> str:
     """sha256 over the code that turns vanilla files into ModState data: all of
     paradox_file_parser.py plus the ModState file-walking / loc-reading
-    functions. Any edit there (comments included) marks the snapshot stale —
+    functions and state_history's reader (not its lookups, which run on the
+    stored data). Any edit there (comments included) marks the snapshot stale —
     a false positive costs one rebuild, a false negative serves a parse the
     current parser would not produce."""
     h = hashlib.sha256()
@@ -142,6 +152,16 @@ def parser_fingerprint() -> str:
             mod_state.iter_loc_files,
             ModState.add_localization,
             ModState.load_files_from_directory,
+            state_history._unquote,
+            state_history._entries,
+            state_history._raw_parse,
+            state_history._strip_scope,
+            state_history.province_id,
+            state_history._new_record,
+            state_history._add_state,
+            state_history.parse_text,
+            state_history.source_files,
+            state_history.parse_dir,
         )
     ]
     for part in parts:
@@ -158,6 +178,10 @@ def _entity_dirs(game_root: str) -> dict[str, str]:
     }
 
 
+def _state_history_dir(game_root: str) -> str:
+    return os.path.join(game_root, *STATE_HISTORY_REL_DIR.split("/"))
+
+
 def _rel(path: str, game_root: str) -> str:
     return os.path.relpath(path, game_root).replace(os.sep, "/")
 
@@ -169,6 +193,7 @@ def _source_files(game_root: str) -> list[str]:
     for d in _entity_dirs(game_root).values():
         if os.path.isdir(d):
             files.extend(iter_script_files(d))
+    files.extend(state_history.source_files(_state_history_dir(game_root)))
     loc_dir = os.path.join(game_root, *LOC_REL_DIR.split("/"))
     if os.path.isdir(loc_dir):
         files.extend(iter_loc_files(loc_dir))
@@ -286,6 +311,9 @@ def build(game_root: str, out_dir: str = DEFAULT_DIR, *,
             "entities": len(data),
         }
     files[LOC_FILE] = _dumps(ms.localization)
+    # Plain strings, lists and dicts: nothing for the tuple encoding to do.
+    history = state_history.parse_dir(_state_history_dir(game_root))
+    files[STATE_HISTORY_FILE] = _dumps(history)
 
     manifest = {
         "format_version": FORMAT_VERSION,
@@ -298,6 +326,12 @@ def build(game_root: str, out_dir: str = DEFAULT_DIR, *,
             "dir": LOC_REL_DIR,
             "file": LOC_FILE,
             "keys": len(ms.localization),
+        },
+        "state_history": {
+            "dir": STATE_HISTORY_REL_DIR,
+            "file": STATE_HISTORY_FILE,
+            "files": len(history),
+            **state_history.summary(state_history.merge(history)),
         },
         "parse_failures": [
             {"file": _rel(f["file"], game_root), "error": f["error"]}
@@ -312,7 +346,8 @@ def build(game_root: str, out_dir: str = DEFAULT_DIR, *,
     ):
         return old
 
-    os.makedirs(os.path.join(out_dir, "common"), exist_ok=True)
+    for rel in files:
+        os.makedirs(os.path.dirname(os.path.join(out_dir, rel)), exist_ok=True)
     for rel, text in files.items():
         _write_atomic(os.path.join(out_dir, rel), text)
     keep = set(files)
@@ -358,6 +393,9 @@ class Snapshot:
     manifest: dict
     data: dict            # {entity_type: parsed data}, ready for ModState(vanilla_data=)
     localization: dict    # vanilla English loc {key: value}
+    # state_history.parse_dir's table for vanilla, {file name: {state: record}};
+    # None for a snapshot built before the start map was added.
+    state_history: Optional[dict] = None
 
     @property
     def parse_failures(self) -> list[dict]:
@@ -400,7 +438,22 @@ def load(snapshot_dir: str = DEFAULT_DIR) -> Snapshot:
     with open(os.path.join(snapshot_dir, manifest["localization"]["file"]),
               "r", encoding="utf-8") as f:
         localization = json.load(f)
-    return Snapshot(manifest=manifest, data=data, localization=localization)
+    return Snapshot(manifest=manifest, data=data, localization=localization,
+                    state_history=load_state_history(snapshot_dir, manifest=manifest))
+
+
+def load_state_history(snapshot_dir: str = DEFAULT_DIR, *,
+                       manifest: Optional[dict] = None) -> Optional[dict]:
+    """The snapshot's vanilla start map, {file name: {state: record}} as
+    state_history.parse_dir returns it, without loading the entity types.
+    None when there is no snapshot or it was built before #901."""
+    if manifest is None:
+        manifest = read_manifest(snapshot_dir)
+    info = (manifest or {}).get("state_history")
+    if not info:
+        return None
+    text = _read_text(os.path.join(snapshot_dir, info["file"]))
+    return json.loads(text) if text is not None else None
 
 
 def parsed_entities(entity_types, mod_state=None) -> dict:
@@ -480,6 +533,8 @@ def check(snapshot_dir: str = DEFAULT_DIR, game_root: Optional[str] = None, *,
         code.append(f"entity types no longer loaded: {', '.join(extra)}")
     if moved:
         code.append(f"entity type directory changed: {', '.join(moved)}")
+    if (manifest.get("state_history") or {}).get("dir") != STATE_HISTORY_REL_DIR:
+        code.append(f"the state history ({STATE_HISTORY_REL_DIR}) is not in the snapshot")
 
     game: list[str] = []
     game_checked = False
@@ -523,6 +578,7 @@ def _summary(manifest: dict) -> str:
     return (
         f"vanilla {manifest['game_version']} "
         f"({len(manifest['entity_types'])} entity types, {n_entities} entities, "
+        f"{(manifest.get('state_history') or {}).get('states', 0)} states at start, "
         f"{manifest['localization']['keys']} loc keys, "
         f"{len(manifest['sources'])} source files, "
         f"{len(manifest['parse_failures'])} parse failures), "

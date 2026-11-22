@@ -119,7 +119,7 @@ assassinate_success_chance_domestic = {
 		}
 		if = {
 			limit = {
-				has_law = law_type:law_secret_police
+				has_law_or_variant = law_type:law_secret_police
 			}
 			institution:institution_home_affairs = {
 				add = investment
@@ -177,10 +177,11 @@ starting_investment_pool = {
 	multiply = 2
 }
 
-# What banking_cycle_weekly_effects adds to the pool each week: a share of the
-# pool's weekly gross income (country_weekly_investment_pool_mult) plus a flat
-# amount (country_weekly_investment_pool_add: the command economy's treasury
-# balance and the UN World Development Fund's grant).
+# What banking_weekly_investment_pool_add adds to the pool each week, for every
+# holder of je_banking_cycle whether or not its cycle has started: a share of
+# the pool's weekly gross income (country_weekly_investment_pool_mult) plus a
+# flat amount (country_weekly_investment_pool_add: the command economy's
+# treasury balance and the UN World Development Fund's grant).
 #
 # The share is of INCOME, not of the balance (2026-10-05,
 # banking_cycle_simulation.md §21). Until then it multiplied investment_pool
@@ -418,15 +419,29 @@ institution_ministry_of_the_environment_pollution_generation = {
 }
 
 nuclear_weapon_program_additional_nuke_progress_multiplier = 10
+# A project in focus (ICBMs, missile submarines) runs at the first device's
+# rate: 20 months to its goal at 5 funding steps, ten warheads' worth of
+# effort (2026-11-20 delivery spec §4.1). Only warheads after the first get the
+# series rate.
 nuclear_weapon_program_monthly_progress = {
 	value = var:nuclear_weapons_program_funding
 	if = {
-		limit = { var:nuclear_weapons_program_first_nuke_done > 0 }
+		limit = {
+			var:nuclear_weapons_program_first_nuke_done > 0
+			nd_focus_is_warheads = yes
+		}
 		multiply = nuclear_weapon_program_additional_nuke_progress_multiplier
 	}
 }
 nuclear_weapon_program_funding_step = 100
 nuclear_weapon_program_goal_value = 100
+# The most warheads a programme finishes in one week (2026-11-07). The weekly
+# step finishes one for every goal its progress holds, in a while loop the
+# engine stops only at 1,000 passes, so a progress figure gone wrong could arm
+# a country in a week. Well above what funding buys: a warhead a week needs
+# funding times (1 + its progress modifiers) of 40. Progress past the cap is
+# dropped to one warhead's worth, and the week logs TE_NUCLEAR type=build_cap.
+nuclear_weapon_program_max_per_week = 3
 
 nuclear_weapons_program_current_cost = {
 	value = var:nuclear_weapons_program_funding
@@ -546,6 +561,19 @@ nuclear_ai_desired_stockpile = {
 	min = 1
 	max = 25
 	round = yes
+}
+
+# The most an AI arsenal is built to (2026-11-07): twice what it wants, so at
+# most 50. The funding buttons' race terms (a rival believed to hold more than
+# us, a war) can carry an AI past its wish, which is their purpose, but nothing
+# stopped them: at war with a rival believed bigger, the increase outweighs
+# the decrease however large the arsenal, and France built some 1,200 warheads
+# in an observer game. At the cap the AI's programme stops building and its
+# funding goes to 0 (nuclear_program_weekly_progress), and the increase button
+# is worth nothing to it. A player has no cap. Country scope.
+nuclear_ai_stockpile_cap = {
+	value = nuclear_ai_desired_stockpile
+	multiply = 2
 }
 
 # How keen the AI is to demand a Nuclear Program Freeze from
@@ -671,13 +699,27 @@ nuclear_program_display_monthly_progress = {
 			value = 1
 			add = modifier:country_nuclear_program_progress_mult
 		}
+		multiply = nuclear_program_pulse_month_factor
 	}
 }
 
-# Divisor for the months estimate below, floored so the estimate can never ask
-# the engine to divide by zero. Never displayed.
+# A calendar month's progress against the nominal monthly rate. The weekly
+# step (nuclear_program_weekly_progress) adds a quarter of the nominal rate,
+# and a year has 52 weekly pulses, not 48, so a month of 52 ÷ 12 weeks gains
+# 52 ÷ 48 of it. Every month the panel prints (the rate, the time to the next
+# warhead, the Focus rows' months) is a calendar month; the rate of play is
+# the weekly step's (phase 2a review). test_nuclear_projects.py holds the 48
+# to the weekly step's divide = 4.
+nuclear_program_pulse_month_factor = {
+	value = 52
+	divide = 48
+}
+
+# The weekly step's progress, floored so the estimate below can never ask the
+# engine to divide by zero. Never displayed.
 nuclear_program_display_weekly_progress_floor = {
 	value = nuclear_program_display_monthly_progress
+	divide = nuclear_program_pulse_month_factor
 	divide = 4
 	min = 0.01
 }
@@ -694,9 +736,11 @@ nuclear_program_display_months_to_next = {
 			NOT = { modifier:country_nuclear_program_pause_bool = yes }
 			NOT = { modifier:country_nuclear_disarmament_bool = yes }
 		}
+		# Weeks to go, then calendar months (52 weeks to 12 months).
 		add = nuclear_program_display_progress_remaining
 		divide = nuclear_program_display_weekly_progress_floor
 		divide = 4
+		divide = nuclear_program_pulse_month_factor
 	}
 	min = 0
 }
@@ -726,7 +770,48 @@ nuclear_program_display_aid_bonus = {
 # unverified; these thin wrappers are the documented way to show the number.
 nuclear_program_display_attack_rating = {
 	value = modifier:country_nuclear_weapon_attack_success_add
+	# The ICBM force's fallback (nd_icbm_force_declared_reads), as below.
+	if = {
+		limit = {
+			NOT = { nd_icbm_force_declared_reads = yes }
+			nd_fields_icbms = yes
+		}
+		add = nd_icbm_force_attack_success
+	}
+	# The +1 nuclear_strike_attack_rating adds for an arsenal held without
+	# the technology, shown only to a country that holds one (the panel is
+	# also a non-nuclear country's). te_nuke_attack_held_arsenal is its line
+	# in the tooltip.
+	if = {
+		limit = { nd_holds_arsenal_without_technology = yes }
+		add = 1
+	}
 	multiply = 100
+}
+
+# Country scope, the striker's: what its delivery adds to a strike's odds. The
+# one read of country_nuclear_weapon_attack_success_add the strike formulas
+# share (nuclear_strike_success_chance, nuclear_strike_success_fraction_here,
+# nd_ai_capital_hit_share). It is the modifier, plus the nuclear_weapons
+# technology's own +1 for a country that launches without that technology
+# (nd_lacks_weapon_technology, which says why the stockpile is not tested).
+# For a country that has the technology it is the modifier unchanged.
+nuclear_strike_attack_rating = {
+	value = modifier:country_nuclear_weapon_attack_success_add
+	if = {
+		limit = { nd_lacks_weapon_technology = yes }
+		add = 1
+	}
+	# Fielded ICBMs' +0.5 comes through the modifier, from nd_icbm_force
+	# declared on je_nuclear_program; while that doesn't read
+	# (nd_icbm_force_declared_reads, self-check nd_icbm_force_sum), from here.
+	if = {
+		limit = {
+			NOT = { nd_icbm_force_declared_reads = yes }
+			nd_fields_icbms = yes
+		}
+		add = nd_icbm_force_attack_success
+	}
 }
 
 # Country scope. The defence is state-level; the capital's value is the
@@ -747,7 +832,9 @@ nuclear_program_display_defense_rating = {
 #   0 unfunded   1 first device under development   2 series production
 #   3 frozen by a pause treaty   4 held at the arsenal ceiling   5 dismantling
 #   6 no programme (no science, or not the standing)   7 renounced   8 disarmed
-# 0-5 are nuclear_program_last_status, whose only writer is
+#   9 building the ICBM force   10 building missile submarines (a project in
+#   focus, 2026-11-20 delivery spec §4.1; the developing icon)
+# 0-5, 9 and 10 are nuclear_program_last_status, whose only writer is
 # nuclear_program_refresh_state_effect; 1 stands in for a save or a first week
 # that has not written it yet (the status line's generic branch). Later `if`s
 # win, as the status line's earlier branches do.
@@ -771,8 +858,232 @@ nuclear_program_display_state = {
 	}
 }
 
+# ----------------------------------------------------------------------------
+# The Focus rows (2026-11-20 delivery spec §5.4; phase 2 plan D11): each
+# focus's progress and its months to finish at current funding, whether or not
+# it is the focus in force, so a player can weigh one against another. Display
+# only, guarded like the values above. N = 1 Warheads (toward the next
+# warhead), 2 the ICBM project, 3 the missile submarine project. A focus not in
+# force waits in its slot (nd_focus_set); the one in force reads the live
+# figure, plus its own slot in the week between an activation and the weekly
+# load-back, when the live figure is 0 (nd_focus_restore).
+# ----------------------------------------------------------------------------
+
+# The focus in force as a code, 1 for Warheads (nd_prog_focus unset): the row
+# it tints.
+nd_display_prog_focus = {
+	value = 1
+	if = {
+		limit = { has_variable = nd_prog_focus }
+		value = var:nd_prog_focus
+	}
+}
+
+nd_display_proj_progress_1 = {
+	value = 0
+	if = {
+		limit = {
+			nd_focus_is_warheads = yes
+			has_variable = nuclear_weapon_program_progress
+		}
+		add = var:nuclear_weapon_program_progress
+	}
+	if = {
+		limit = { has_variable = nd_proj_warhead_progress }
+		add = var:nd_proj_warhead_progress
+	}
+	min = 0
+	max = nuclear_weapon_program_goal_value
+}
+
+nd_display_proj_progress_2 = {
+	value = 0
+	if = {
+		limit = {
+			nd_focus_is_icbms = yes
+			has_variable = nuclear_weapon_program_progress
+		}
+		add = var:nuclear_weapon_program_progress
+	}
+	if = {
+		limit = { has_variable = nd_proj_icbm_progress }
+		add = var:nd_proj_icbm_progress
+	}
+	min = 0
+	max = nuclear_weapon_program_goal_value
+}
+
+nd_display_proj_progress_3 = {
+	value = 0
+	if = {
+		limit = {
+			nd_focus_is_submarines = yes
+			has_variable = nuclear_weapon_program_progress
+		}
+		add = var:nuclear_weapon_program_progress
+	}
+	if = {
+		limit = { has_variable = nd_proj_sub_progress }
+		add = var:nd_proj_sub_progress
+	}
+	min = 0
+	max = nuclear_weapon_program_goal_value
+}
+
+# The same as a share of the goal, for the rows' percentages.
+nd_display_proj_share_1 = {
+	value = nd_display_proj_progress_1
+	divide = nuclear_weapon_program_goal_value
+}
+
+nd_display_proj_share_2 = {
+	value = nd_display_proj_progress_2
+	divide = nuclear_weapon_program_goal_value
+}
+
+nd_display_proj_share_3 = {
+	value = nd_display_proj_progress_3
+	divide = nuclear_weapon_program_goal_value
+}
+
+# Progress a calendar month at current funding on a Warheads focus: the weekly
+# step's rate (nuclear_weapon_program_monthly_progress and the pulse's
+# multiplier) over 52 ÷ 12 weeks (nuclear_program_pulse_month_factor),
+# whatever the focus in force.
+nd_display_proj_monthly_1 = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = nuclear_weapons_program_funding
+			has_variable = nuclear_weapons_program_first_nuke_done
+		}
+		add = var:nuclear_weapons_program_funding
+		if = {
+			limit = { var:nuclear_weapons_program_first_nuke_done > 0 }
+			multiply = nuclear_weapon_program_additional_nuke_progress_multiplier
+		}
+		multiply = {
+			value = 1
+			add = modifier:country_nuclear_program_progress_mult
+		}
+		multiply = nuclear_program_pulse_month_factor
+	}
+	min = 0
+}
+
+# The same on a project: the first device's rate, with no series multiplier.
+nd_display_proj_monthly_project = {
+	value = 0
+	if = {
+		limit = { has_variable = nuclear_weapons_program_funding }
+		add = var:nuclear_weapons_program_funding
+		multiply = {
+			value = 1
+			add = modifier:country_nuclear_program_progress_mult
+		}
+		multiply = nuclear_program_pulse_month_factor
+	}
+	min = 0
+}
+
+# Months to finish at current funding: to the next warhead (1) or to the leg
+# fielded (2, 3). 0, which the rows print as not progressing, whenever the
+# programme gains nothing at all (nuclear_program_display_progressing).
+nd_display_proj_months_1 = {
+	value = 0
+	if = {
+		limit = {
+			nuclear_program_display_progressing = yes
+			nd_display_proj_monthly_1 > 0
+		}
+		value = nuclear_weapon_program_goal_value
+		subtract = nd_display_proj_progress_1
+		divide = nd_display_proj_monthly_1
+	}
+	min = 0
+}
+
+nd_display_proj_months_2 = {
+	value = 0
+	if = {
+		limit = {
+			nuclear_program_display_progressing = yes
+			nd_display_proj_monthly_project > 0
+		}
+		value = nuclear_weapon_program_goal_value
+		subtract = nd_display_proj_progress_2
+		divide = nd_display_proj_monthly_project
+	}
+	min = 0
+}
+
+nd_display_proj_months_3 = {
+	value = 0
+	if = {
+		limit = {
+			nuclear_program_display_progressing = yes
+			nd_display_proj_monthly_project > 0
+		}
+		value = nuclear_weapon_program_goal_value
+		subtract = nd_display_proj_progress_3
+		divide = nd_display_proj_monthly_project
+	}
+	min = 0
+}
+
+# Warheads a calendar month at current funding on a Warheads focus, at most the
+# weekly cap's (nuclear_weapon_program_max_per_week, 52 ÷ 12 weeks a month).
+nd_display_warheads_monthly_cap = {
+	value = nuclear_weapon_program_max_per_week
+	multiply = 52
+	divide = 12
+}
+
+nd_display_warheads_monthly = {
+	value = nd_display_proj_monthly_1
+	divide = nuclear_weapon_program_goal_value
+	max = nd_display_warheads_monthly_cap
+}
+
+# The room an arsenal ceiling leaves (nd_taboo_effective_ceiling_value less the
+# stockpile, at least 0); with no ceiling, more than any project's months
+# could build.
+nd_display_ceiling_room = {
+	value = 1000000
+	if = {
+		limit = { nd_taboo_has_ceiling = yes }
+		value = nd_taboo_effective_ceiling_value
+		subtract = nd_stockpile
+		min = 0
+	}
+}
+
+# The warheads a project's months to finish won't build (phase 2 plan D16):
+# those months at the Warheads focus's rate, and no more than a ceiling would
+# let us build anyway, since it holds warheads only. N = 2 ICBMs, 3 missile
+# submarines; 0 while the project isn't progressing.
+nd_proj_forgone_warheads_2 = {
+	value = nd_display_proj_months_2
+	multiply = nd_display_warheads_monthly
+	max = nd_display_ceiling_room
+	min = 0
+}
+
+nd_proj_forgone_warheads_3 = {
+	value = nd_display_proj_months_3
+	multiply = nd_display_warheads_monthly
+	max = nd_display_ceiling_room
+	min = 0
+}
+
 nuclear_industrial_strike_killed_population = {
 	value = state_population
+	# What the day's earlier strikes left (nd_strike_people_before).
+	if = {
+		limit = { has_variable = nd_strike_people_left }
+		value = var:nd_strike_people_left
+		max = state_population
+	}
 	multiply = 0.1
 	round = yes
 }
@@ -780,6 +1091,12 @@ nuclear_industrial_strike_killed_population = {
 # A counterforce warhead (nd_counterforce_strike_damage): a quarter of a city's.
 nd_counterforce_strike_killed_population = {
 	value = state_population
+	# What the day's earlier strikes left (nd_strike_people_before).
+	if = {
+		limit = { has_variable = nd_strike_people_left }
+		value = var:nd_strike_people_left
+		max = state_population
+	}
 	multiply = 0.025
 	round = yes
 }
@@ -795,7 +1112,7 @@ nuclear_tactical_strike_civilian_killed_population = {
 # swapped and scope:target_country is the striker, so a country-side read
 # there subtracted the retaliator's own defence.
 nuclear_strike_success_chance = {
-	value = modifier:country_nuclear_weapon_attack_success_add
+	value = nuclear_strike_attack_rating
 	scope:target_state = {
 		subtract = modifier:state_nuclear_weapon_defense_chance_add
 	}
@@ -924,7 +1241,11 @@ market_carbon_capture_script_value_display = {
 }
 
 greenhouse_gas_emissions_display = {
-	value = global_var:greenhouse_gas_emissions
+	value = 0
+	if = {
+		limit = { has_global_variable = greenhouse_gas_emissions }
+		add = global_var:greenhouse_gas_emissions
+	}
 	round = yes
 }
 
@@ -974,10 +1295,18 @@ gw_unmasked_temperature = {
 	# above), and `round = yes` sits between them so the displayed anomaly is
 	# quantised to 0.01 C. Collapsing them to one divide would report 100x the
 	# real warming.
-	value = global_var:greenhouse_gas_emissions
-	divide = 100
-	round = yes
-	divide = 100
+	# The global is set on game start (te_init_global_state), but vanilla 1.15
+	# evaluates je_global_warming's `possible` for every country before that
+	# (582 "Value of wrong type ... none" lines at its first load): read 0 until
+	# the variable exists.
+	value = 0
+	if = {
+		limit = { has_global_variable = greenhouse_gas_emissions }
+		add = global_var:greenhouse_gas_emissions
+		divide = 100
+		round = yes
+		divide = 100
+	}
 }
 
 # The temperature anomaly the world feels: the warming above, less the aerosol
@@ -1524,11 +1853,18 @@ tmp_tst = {
 	value = var:arable_land_added
 }
 
+# State scope. The land this system has added to the state's region, summed over
+# the region's states with the state's owner. It names the state it was asked
+# about, not ROOT: building ai_values and other callers evaluate it with a ROOT
+# that has no owner, and `owner = ROOT.owner` logged about 5,700 errors at each
+# month start and read 0 for them (#1703). Vanilla's state_infamy_base saves its
+# scope the same way.
 same_owner_state_region_arable_land_added = {
 	value = 0
+	save_temporary_scope_as = te_arable_land_state
 	state_region = {
 		every_scope_state = {
-			limit = { owner = ROOT.owner }
+			limit = { owner = scope:te_arable_land_state.owner }
 			if = {
 				limit = { has_variable = arable_land_added }
 				add = var:arable_land_added
@@ -1617,18 +1953,14 @@ war_propaganda_support_script_value = {
 	}
 }
 
-# country_gdp_per_capita is defined later in this file with the simpler
-# country-scope `gdp / total_population` form (the duplicate state-iteration
-# version that lived here previously was silently dropped by the engine's
-# "Duplicated key" rule -- caught by mod_structure_audit).
+# country_gdp_per_capita is vanilla's (1.15, ip5_je_values.txt): the mod's own
+# copy computed the same gdp / total_population and was deleted (#1460). A bare
+# duplicate script value is never an error: the copy read last wins, and
+# vanilla's ip5_ file sorts after this one, so the mod's copy was dead anyway.
 
-global_gdp_per_capita = {
-	value = global_gdp_script_value
-	divide = {
-		value = global_population
-		min = 1
-	}
-}
+# global_gdp_per_capita (world GDP over world population) was deleted in
+# 1.15: nothing read it, and vanilla's global_average_gdp_per_capita event
+# target (the average over playable countries) now covers it (#1445).
 
 curr_year = {
 	value = year
@@ -1836,14 +2168,14 @@ nuclear_strike_success_fraction_here = {
 			exists = scope:target_country
 			owner ?= scope:attacking_country
 		}
-		add = scope:target_country.modifier:country_nuclear_weapon_attack_success_add
+		add = scope:target_country.nuclear_strike_attack_rating
 	}
 	else_if = {
 		limit = { exists = scope:attacking_country }
-		add = scope:attacking_country.modifier:country_nuclear_weapon_attack_success_add
+		add = scope:attacking_country.nuclear_strike_attack_rating
 	}
 	else = {
-		add = root.modifier:country_nuclear_weapon_attack_success_add
+		add = root.nuclear_strike_attack_rating
 	}
 	subtract = modifier:state_nuclear_weapon_defense_chance_add
 	min = 0.05
@@ -2126,9 +2458,11 @@ sol_expectations_lower_shift_value = {
 
 # ========== End SoL Expectations ==========
 
-# Fiscal policy effect based on spending relative to GDP: the multiplier on
-# financial_cycle_government_fiscal_policy_effect (country_finance_value_monthly_add = 1),
-# so this IS the monthly push on finance_cycle_value.
+# Fiscal policy effect based on spending relative to GDP: the value
+# je_banking_cycle declares financial_cycle_government_fiscal_policy_effect at
+# (country_finance_value_monthly_add = 1) while the cycle runs, so this IS the
+# monthly push on finance_cycle_value. Read live from the owning country on the
+# entry's update (about every 4 days); until 1.15 a monthly add_modifier.
 #
 # `income` and `total_expenses` are WEEKLY and `gdp` is ANNUAL
 # (docs/engine/event_targets_summary.txt), so the flows are annualised through
@@ -2159,58 +2493,55 @@ financial_cycle_government_fiscal_policy_effect_size = {
 	max = 1
 }
 
-# JE multipliers re-evaluate in JE scope; retain the country formula for other callers.
-financial_cycle_government_fiscal_policy_effect_size_for_je = {
-	value = 0
-	owner = { add = financial_cycle_government_fiscal_policy_effect_size }
-}
-
-# linear up to +0.25 at 50 bubble pressure, then a gentle curve to +0.45 at
-# max pressure. Until 2026-09-22 the upper half was quadratic to +1.25: at
-# bubble 80+ that was a standing +7-12 cycle points a month, which no tool
-# set could turn, so a frenzy was never escapable. Flattened with frenzy's
+# The momentum the six bubble_inertia_* declarations on je_banking_cycle carry
+# (each in its band and economy there), read from the owning country: none up
+# to 15 bubble pressure, linear to +0.25 at 50, then a gentle curve to +0.45 at
+# max pressure. Its callers guard var:bubble_pressure. Until 1.15 it was the
+# multiplier of a monthly add_modifier on the entry, as
+# bubble_inertia_multiplier_script_value (below). Until 2026-09-22 the upper
+# half was quadratic to +1.25: at bubble 80+ that was a standing +7-12 cycle
+# points a month, which no tool set could turn, so a frenzy was never
+# escapable. Flattened with frenzy's
 # bubble 20 -> 8 (banking_cycle_simulation.md §10); crash frequency moved
 # ~1%, and maxed tools now escape a few percent of frenzies.
-bubble_inertia_multiplier_script_value = {
+bubble_inertia_curve = {
 	value = 0
-	owner = {
-		if = {
-			limit = {
-				var:bubble_pressure <= 15
-			}
-			add = 0
+	if = {
+		limit = {
+			var:bubble_pressure <= 15
 		}
-		else_if = {
-			limit = {
-				var:bubble_pressure < 50
+		add = 0
+	}
+	else_if = {
+		limit = {
+			var:bubble_pressure < 50
+		}
+		add = {
+			value = var:bubble_pressure
+			subtract = 15
+			multiply = 0.25
+			divide = 35 # rises by 0.25 over 35 points of pressure
+		}
+	}
+	else = {
+		add = {
+			# f(x) = 0.25 + 0.005 (x - 50) - 0.00002 (x - 50)^2
+			# f(50) = 0.25, f'(50) = 1/200 (continuous with the branch above),
+			# f(100) = 0.45
+			value = 0.25
+			add = {
+				value = var:bubble_pressure
+				subtract = 50
+				multiply = 0.005
 			}
 			add = {
 				value = var:bubble_pressure
-				subtract = 15
-				multiply = 0.25
-				divide = 35 # rises by 0.25 over 35 points of pressure
-			}
-		}
-		else = {
-			add = {
-				# f(x) = 0.25 + 0.005 (x - 50) - 0.00002 (x - 50)^2
-				# f(50) = 0.25, f'(50) = 1/200 (continuous with the branch above),
-				# f(100) = 0.45
-				value = 0.25
-				add = {
+				subtract = 50
+				multiply = {
 					value = var:bubble_pressure
 					subtract = 50
-					multiply = 0.005
 				}
-				add = {
-					value = var:bubble_pressure
-					subtract = 50
-					multiply = {
-						value = var:bubble_pressure
-						subtract = 50
-					}
-					multiply = -0.00002
-				}
+				multiply = -0.00002
 			}
 		}
 	}
@@ -2266,24 +2597,6 @@ banking_eliq_wind_down_months = {
 	value = 12
 }
 
-export_credit_activation_cost = {
-	value = root.gdp
-	multiply = -0.002 # costs 0.2% of GDP to establish facility
-	round = yes
-}
-
-banking_omo_activation_cost = {
-	value = root.gdp
-	multiply = -0.005 # 0.5% of GDP — balance-sheet operational cost / signaling commitment
-	round = yes
-}
-
-banking_directed_credit_activation_cost = {
-	value = root.gdp
-	multiply = -0.008 # 0.8% of GDP — state co-financing commitment
-	round = yes
-}
-
 # Directed-credit sectors the country may still start: one at a time, plus
 # country_directed_credit_sectors_add (the Directed Credit & Development Banks
 # law's +1), minus those running. Every sector's `possible` asks for > 0;
@@ -2336,13 +2649,38 @@ banking_asset_relief_activation_cost = {
 	round = yes
 }
 
-# Banking-cycle radicals magnitudes: the toggle-cost friction shared by most of the tools in
-# banking_policy_effects.txt (market, command and cooperative alike). Defined separately so
-# banking-button friction can be tuned independently of global event balance. Against vanilla's
-# event_values.txt (very_small 0.01, small 0.02, medium 0.05, large 0.1): small matches vanilla
-# small_radicals; medium sits between vanilla small and medium.
+# Banking-cycle radicals magnitudes, defined separately so banking-button costs can be tuned
+# independently of global event balance. Against vanilla's event_values.txt (very_small 0.01,
+# small 0.02, medium 0.05, large 0.1): small matches vanilla small_radicals; medium sits between
+# vanilla small and medium. Small is the loyalist grant of the paired tools below; medium is
+# the crisis programs' price (Asset Relief, Bail-in).
 banking_small_radicals_value = 0.02
 banking_medium_radicals_value = 0.03
+
+# Toggle friction (owner, 2026-11-14). Switching an intervention on and off again always costs
+# something, so no tool can be clicked back and forth for free, and every routine tool costs the
+# same small amount: a round trip nets 0.5% of pops radicalized, or 0.2% of GDP for the lending
+# tools (Open-Market Operations, the five directed-credit sectors, Export Credit). It is paid on
+# switching on, where the Enable button's tooltip shows it, so a lift forced by a law, a rule or
+# the tool's own end costs nothing. A tool that grants loyalists on one switch (2%,
+# banking_small_radicals_value) radicalizes the same pops by
+# banking_toggle_paired_radicals_value on the other, so its round trip nets the same 0.5%.
+# Exempt, since switching them is free by design: Moral Suasion and the other economies' 1-point
+# tools (Coordination Protocol, Solidarity Campaign, Council Directive). The crisis programs
+# keep a price of their own (Asset Relief, Bail-in, the Bank Holiday, Emergency Liquidity), and
+# Capital Controls pays in infamy and relations. test_banking_toggle_costs.py holds
+# every tool to this.
+banking_toggle_radicals_value = 0.005
+banking_toggle_paired_radicals_value = {
+	value = banking_small_radicals_value
+	add = banking_toggle_radicals_value
+}
+# The country in scope (every banking_effect_* runs there), not root.
+banking_toggle_treasury_cost = {
+	value = gdp
+	multiply = -0.002 # 0.2% of GDP
+	round = yes
+}
 
 # Bank Holiday radicals (banking_effect_cb_bank_holiday), one per stratum, middle hardest: a
 # major, unpopular emergency measure that freezes every depositor's money. Its own constants so
@@ -2397,21 +2735,19 @@ ce_pool_withdraw_pool_cost = {
 	multiply = -1
 }
 
-# Command economy auto-balance multiplier for planning_treasury_pool_balance.
+# Command economy auto-balance for planning_treasury_pool_balance.
 # Equals -investment_pool_net_income, which makes the pool's net income zero
-# on the next tick. No prior-multiplier subtraction is needed here because
+# on the next tick. banking_cycle_update_ce_pool_balance caches it monthly (and
+# after an inject or withdraw) in ce_pool_balance_cached, the variable
+# je_banking_cycle declares the modifier at, so the balance keeps its monthly
+# cadence rather than chasing the pool's income every four days. No
+# prior-multiplier subtraction is needed here because
 # country_weekly_investment_pool_add (our modifier's key) is a mod-created
 # value and is NOT included in the engine's investment_pool_net_income read,
 # so there is no double-counting problem.
 ce_treasury_pool_balance_multiplier = {
 	value = 0
 	subtract = investment_pool_net_income
-}
-
-# Keep the live pool-income read on the JE's owning country.
-ce_treasury_pool_balance_multiplier_for_je = {
-	value = 0
-	owner = { add = ce_treasury_pool_balance_multiplier }
 }
 
 # ====================================================================================
@@ -2438,6 +2774,13 @@ ce_treasury_pool_balance_multiplier_for_je = {
 # 4. slack_full and slack_none set the applying share: all of the GDP part at slack_full or less,
 #    none at slack_none or more, a straight line between. slack_ease is how far the share moves toward
 #    that each year (1 = at once), so the cost doesn't swing with a year's hiring.
+# 5. max_yearly_move caps how far the scaling's own factor (one plus the GDP part times the applying
+#    share) moves at a yearly pulse, up or down: a rich country whose share steps moves every
+#    building's use of the construction good on one day, and the price with it.
+# 6. small_economy_mild_factor, _standard_factor, _strong_factor and small_economy_full_gdp are the optional
+#    rule's (te_small_economy_construction_rule): construction as cheap as the setting's factor for a country
+#    with almost no GDP, at full cost from full_gdp, a straight line between. Not capped by 5.
+#    small_economy_min_factor is the floor of the price and goods per point: keep it the lowest of the three.
 # The scripts/analysis tools read every constant here (econ_sim_data.read_numbers): re-run
 # econ_construction_counterfactual.py after a change.
 #
@@ -2466,6 +2809,25 @@ construction_cost_slack_none = 0.15
 # How far the applying share moves toward its target each year (a third)
 construction_cost_slack_ease = 0.33333
 
+# The most the scaling's own factor (te_cc_scale) moves at one yearly pulse, either way (a tenth)
+construction_cost_max_yearly_move = 0.1
+
+# Small-economy rule (te_small_economy_construction_rule, off by default): the cost factor of a country
+# with almost no GDP under each strength (0.1 = ten times cheaper), and the GDP from which construction costs
+# its full price under all three. Sized against the base game's free construction (docs/systems/mod_systems/
+# construction.md, "The small-economy factor"): with a third of its income, a country under strong buys about as
+# many points as the base game's 10 free points a week and that third at full price would give it, and no more;
+# standard is about what the base game's GDP-scaled free points give an AI; mild halves the price.
+construction_cost_small_economy_mild_factor = 0.5
+construction_cost_small_economy_standard_factor = 0.2
+construction_cost_small_economy_strong_factor = 0.1
+construction_cost_small_economy_full_gdp = 10000000
+
+# The floor of one plus X wherever it is read (the construction market's price and goods per point, the Nation
+# tab's quotient): the lowest factor any setting gives. Not the setting in force's: after a switch to a milder
+# setting, a country keeps the factor it had until its next pulse, and the price must follow it there.
+construction_cost_small_economy_min_factor = 0.1
+
 # Derived thresholds (do not edit - change the ratios above instead)
 construction_cost_gdppc_floor = {
 	value = construction_cost_gdppc_reference
@@ -2476,14 +2838,7 @@ construction_cost_gdppc_ceiling = {
 	multiply = construction_cost_ceiling_ratio
 }
 
-# Country-scope GDP per capita
-country_gdp_per_capita = {
-	value = gdp
-	divide = {
-		value = total_population
-		min = 1
-	}
-}
+# Country-scope GDP per capita is vanilla's country_gdp_per_capita (1.15, ip5_je_values.txt), see #1460.
 
 # The GDP part: 0 at floor, max_mult at ceiling, linear interpolation.
 # Formula: clamp(0, max_mult, (gdppc - floor) / (ceiling - floor) * max_mult)
@@ -2579,11 +2934,131 @@ te_cc_slack_factor_eased = {
 	min = 0
 }
 
-# The construction cost penalty X: the GDP part times the share of it that applies.
+# ---- The scaling's own factor, capped a year (te_cc_scale) ----
+
+# Where the factor is heading: one plus the GDP part times the applying share, both as the pulse last stored
+# them. Read before te_cc_yearly_update moves the share, it is the scaling in force for a country with no
+# stored factor yet (1 in a new game; the carried figure on a save from before the cap).
+te_cc_scale_target = {
+	value = te_cc_gdp_part_now
+	multiply = te_cc_slack_factor_now
+	add = 1
+}
+
+# The factor in force: as the pulse last stored it (var:te_cc_scale), or where it is heading before one has.
+te_cc_scale_now = {
+	value = te_cc_scale_target
+	if = {
+		limit = { has_variable = te_cc_scale }
+		value = var:te_cc_scale
+	}
+}
+
+# The factor after this year's move: its target, but at most max_yearly_move above or below the factor in
+# force. The share goes on easing toward its own target whatever the cap does, so the factor arrives where it
+# would have, later.
+te_cc_scale_next = {
+	value = te_cc_scale_target
+	max = {
+		value = 1
+		add = construction_cost_max_yearly_move
+		multiply = te_cc_scale_now
+	}
+	min = {
+		value = 1
+		subtract = construction_cost_max_yearly_move
+		multiply = te_cc_scale_now
+	}
+	min = 1
+}
+
+# ---- The small-economy factor (te_small_economy_construction_rule) ----
+
+# The factor at no GDP of the setting chosen now: 1 with the rule off. Reads only the game rule.
+te_cc_small_economy_min_factor = {
+	value = 1
+	if = {
+		limit = { te_small_economy_construction_strong_on = yes }
+		value = construction_cost_small_economy_strong_factor
+	}
+	else_if = {
+		limit = { te_small_economy_construction_standard_on = yes }
+		value = construction_cost_small_economy_standard_factor
+	}
+	else_if = {
+		limit = { te_small_economy_construction_mild_on = yes }
+		value = construction_cost_small_economy_mild_factor
+	}
+}
+
+# Today's: 1 with the rule off; with it on, the setting's factor at no GDP rising in a straight line to 1 at
+# full_gdp. Only the pulse and the game-start pass read it (te_cc_yearly_update); everything else reads the stored
+# one.
+te_cc_small_economy_factor = {
+	value = 1
+	if = {
+		limit = { te_small_economy_construction_on = yes }
+		value = gdp
+		divide = construction_cost_small_economy_full_gdp
+		multiply = {
+			value = 1
+			subtract = te_cc_small_economy_min_factor
+		}
+		add = te_cc_small_economy_min_factor
+		max = 1
+		min = te_cc_small_economy_min_factor
+	}
+}
+
+# The factor in force: as last stored (var:te_cc_small_factor), 1 before that. A rule switched in a running
+# game (on, off, or to another strength) therefore reaches a country at its next yearly pulse, with the modifier.
+te_cc_small_factor_now = {
+	value = 1
+	if = {
+		limit = { has_variable = te_cc_small_factor }
+		value = var:te_cc_small_factor
+	}
+}
+
+# The factor at no GDP that the factor in force was worked out from (var:te_cc_small_min, stored beside it), for
+# the Nation tab: the setting chosen now before a pulse has stored one.
+te_cc_small_min_now = {
+	value = te_cc_small_economy_min_factor
+	if = {
+		limit = { has_variable = te_cc_small_min }
+		value = var:te_cc_small_min
+	}
+}
+
+# 1 when the rule's setting has been changed since the country's last pulse (the stored minimum is not the one
+# chosen now), for the tooltip's note that the new setting arrives at the next one.
+te_cc_small_setting_changed = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_cc_small_min
+			NOT = { var:te_cc_small_min = te_cc_small_economy_min_factor }
+		}
+		value = 1
+	}
+}
+
+# 1 while the small-economy factor in force is below 1, for the tooltip's choice of sentence.
+te_cc_small_factor_applies = {
+	value = 0
+	if = {
+		limit = { te_cc_small_factor_now < 1 }
+		value = 1
+	}
+}
+
+# The construction cost change X: the scaling's factor in force times the small-economy factor in force, less
+# one. Positive where the scaling outweighs, negative (down to min_factor - 1) for a small economy under the rule.
 # Every reader takes this (the construction market's goods per point and price, the adjusted multipliers below).
 construction_cost_scaling_mult = {
-	value = construction_cost_scaling_gdp_mult
-	multiply = te_cc_slack_factor_now
+	value = te_cc_scale_now
+	multiply = te_cc_small_factor_now
+	subtract = 1
 }
 
 # ---- The Nation tab's breakdown (te_nation_construction_row_tt). GUI-read: stored figures only. ----
@@ -2631,8 +3106,8 @@ te_cc_gdp_part_now = {
 }
 
 # A point's cost as a multiple of its base, in force now (one plus every construction-cost modifier), and its two
-# factors: the scaling (1 + the GDP part x the applying share, as the pulse set it; before the country's first
-# reading under this rule, today's GDP part x the carried share, the X in force), and the rest, their quotient. The pulse sets the scaling to multiply with
+# factors: the scaling (its own factor in force, te_cc_scale_now, which follows 1 + the GDP part x the applying
+# share at no more than a tenth a year, times the small-economy factor in force), and the rest, their quotient. The pulse sets the scaling to multiply with
 # the other sources as they stood then, so after one of them changes the quotient is not exactly one plus them,
 # but the product is always the cost in force, and the engine's breakdown adds up to it less one.
 te_cc_total_factor = {
@@ -2641,13 +3116,12 @@ te_cc_total_factor = {
 	min = 0
 }
 te_cc_scaling_factor = {
-	value = te_cc_gdp_part_now
-	multiply = te_cc_slack_factor_now
+	value = construction_cost_scaling_mult
 	add = 1
 }
 te_cc_others_factor = {
 	value = te_cc_total_factor
-	divide = { value = te_cc_scaling_factor min = 1 }
+	divide = { value = te_cc_scaling_factor min = construction_cost_small_economy_min_factor }
 }
 
 # 1 once the country's slack has been read at a pulse under this rule, for the tooltip's choice of sentence.
@@ -2679,6 +3153,8 @@ te_cc_direct_rule = {
 # own prior contribution (stored in var:prior_construction_scaling).
 # Result: total = adjusted + other_mults = (1 + base_scaling) * (1 + other_mults) - 1
 # which is the correct multiplicative combination.
+# base_scaling can be negative (the small-economy rule), so there is no floor at 0: the total stays above -1
+# because both factors of the product are positive.
 construction_cost_scaling_adjusted_mult = {
 	value = construction_cost_scaling_mult
 	multiply = {
@@ -2688,8 +3164,8 @@ construction_cost_scaling_adjusted_mult = {
 			limit = { has_variable = prior_construction_scaling }
 			subtract = var:prior_construction_scaling
 		}
+		min = 0
 	}
-	min = 0
 }
 
 # The same adjustment for games with free_market_construction_rule disabled,
@@ -2709,7 +3185,6 @@ construction_cost_scaling_direct_adjusted_mult = {
 		}
 		min = 0
 	}
-	min = 0
 }
 
 # ====================================================================================
@@ -2936,6 +3411,358 @@ population_transfer_number = {
 				add = total_size
 			}
 		}
+	}
+}
+
+# Building levels a country's government owns outside its government-funded
+# buildings (administration, barracks and the like): the state-owned enterprises
+# the enforce_privatization article would put up for sale. Country scope.
+enforce_privatization_state_owned_levels = {
+	value = 0
+	# A building still under its first construction (level 0) has no ownership to read: country_ownership_fraction
+	# logs "ownership_fraction requires the building to be built" (164 lines in two hours, 2026-11-08). Vanilla's
+	# Portugal entry guards the same read with level > 0.
+	every_scope_building = {
+		limit = {
+			is_government_funded = no
+			level > 0
+		}
+		if = {
+			limit = { country_ownership_fraction > 0 }
+			add = {
+				value = level
+				multiply = country_ownership_fraction
+			}
+		}
+	}
+}
+
+# The fewest state-owned levels (enforce_privatization_state_owned_levels) a
+# country must have before the AI demands that it privatize them. Players are
+# not bound by it.
+enforce_privatization_ai_min_levels = 10
+
+# What an AI demand of scope:source_country is worth by the size of its
+# economy, as its place in the world's GDP ranking (era-independent, unlike a
+# GDP figure): 1 for the ten largest, 0.4 for the next ten, 0.1 for the rest,
+# since prying open, disarming or cleaning up a small economy is worth little
+# to a great power (owner, 2026-11-08). Read by the AI demand weights of
+# Privatization, Forced Disarmament, Free Port Concession and Emissions
+# Reduction once their gates pass.
+treaty_ai_demand_economy_factor = {
+	value = 0.1
+	# gdp_ranking > 0 guards a country left out of the ranking, should it read 0.
+	if = {
+		limit = {
+			scope:source_country = {
+				gdp_ranking > 0
+				gdp_ranking <= 10
+			}
+		}
+		value = 1
+	}
+	else_if = {
+		limit = {
+			scope:source_country = {
+				gdp_ranking > 0
+				gdp_ranking <= 20
+			}
+		}
+		value = 0.4
+	}
+}
+
+# How keen the AI is to demand enforce_privatization of scope:source_country,
+# the country that would privatize: the article's proposal_weight (asking for it
+# in a treaty) and wargoal_score_multiplier (pressing it as an enforce war goal).
+# Root is the demander. 0 unless root runs a market economy and the source has
+# enough state-owned enterprise to sell. Then it scales with the source's
+# economy (treaty_ai_demand_economy_factor).
+enforce_privatization_ai_demand_weight = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_laissez_faire
+				has_law = law_type:law_interventionism
+			}
+			scope:source_country = {
+				enforce_privatization_state_owned_levels >= enforce_privatization_ai_min_levels
+			}
+		}
+		value = treaty_ai_demand_economy_factor
+	}
+}
+
+# ============================================================================
+# AI DEMAND WEIGHTS FOR ENFORCEABLE TREATY ARTICLES
+# ============================================================================
+# How keen the AI is to demand an article of scope:source_country, the country
+# that concedes. Each weight is read by its article's proposal_weight (asking
+# for it in a treaty) and wargoal_score_multiplier (pressing it as an enforce
+# war goal in a play), and is 0 where the demand would buy nothing. Otherwise
+# it is 1, or for a demand whose prize is the conceder's economy as a whole
+# (disarmament, a free port, emission cuts) treaty_ai_demand_economy_factor
+# above, as Privatization's is. Both fields bind scope:source_country, scope:target_country (the
+# side that gains: the war goal's holder) and scope:article; vanilla's
+# treaty_port and law_commitment read the chosen input there as
+# scope:article.input_<kind>. evaluation_chance has root only, so these checks
+# can't sit there. An article that names an input asks it of that input when
+# one is bound, and otherwise of every input the source could name (the input
+# halves are in te_treaty_ai_demand_triggers.txt). Players are not bound by
+# them. Enforceable articles without a weight carry a reviewed exemption in
+# their ai block, and test_treaty_ai_demand_weights.py fails on any with
+# neither. Play-test: docs/testing/treaty-war-goal-playtest.md.
+
+# The fewest building levels a company must own before the AI demands that it
+# be seized or disbanded (te_treaty_ai_company_worth_demanding).
+company_article_ai_min_levels = 5
+
+seize_company_ai_demand_weight = {
+	value = 0
+	if = {
+		limit = { scope:article ?= { exists = input_company } }
+		# can_ratify's SEIZE_COMPANY_ALREADY_HAS: a receiver that already has the
+		# type gains nothing (add_company does nothing), so the seizure would
+		# only disband it.
+		if = {
+			limit = {
+				scope:article.input_company = { te_treaty_ai_company_worth_demanding = yes }
+				scope:target_country = {
+					NOT = { has_company = scope:article.input_company.type }
+				}
+			}
+			value = 1
+		}
+	}
+	else_if = {
+		limit = {
+			scope:source_country = {
+				any_company = { te_treaty_ai_company_worth_demanding = yes }
+			}
+		}
+		value = 1
+	}
+}
+
+disband_company_ai_demand_weight = {
+	value = 0
+	if = {
+		limit = { scope:article ?= { exists = input_company } }
+		if = {
+			limit = {
+				scope:article.input_company = { te_treaty_ai_company_worth_demanding = yes }
+			}
+			value = 1
+		}
+	}
+	else_if = {
+		limit = {
+			scope:source_country = {
+				any_company = { te_treaty_ai_company_worth_demanding = yes }
+			}
+		}
+		value = 1
+	}
+}
+
+# Only for a state where a people or faith of the protector is discriminated
+# (te_minority_protection_state_worth).
+minority_protection_ai_demand_weight = {
+	value = 0
+	if = {
+		limit = { scope:article ?= { exists = input_state } }
+		if = {
+			limit = {
+				scope:article.input_state = { te_minority_protection_state_worth = yes }
+			}
+			value = 1
+		}
+	}
+	else_if = {
+		limit = {
+			scope:source_country = {
+				any_scope_state = { te_minority_protection_state_worth = yes }
+			}
+		}
+		value = 1
+	}
+}
+
+# The smallest yearly GDP a state must have before the AI demands that it be
+# opened as a free port (te_free_port_state_worth). Vanilla's
+# foreign_investment_rights stops pressing its war goal on a whole country
+# below this figure.
+free_port_concession_ai_min_state_gdp = 500000
+
+# Only between two markets, since tariffs don't apply inside one, and for a
+# port with an economy (te_free_port_state_worth); then by the size of the
+# source's economy (treaty_ai_demand_economy_factor).
+free_port_concession_ai_demand_weight = {
+	value = 0
+	if = {
+		limit = {
+			scope:source_country ?= { exists = market }
+			scope:target_country ?= { exists = market }
+			scope:source_country = {
+				NOT = { market = scope:target_country.market }
+			}
+		}
+		if = {
+			limit = { scope:article ?= { exists = input_state } }
+			if = {
+				limit = {
+					scope:article.input_state = { te_free_port_state_worth = yes }
+				}
+				value = treaty_ai_demand_economy_factor
+			}
+		}
+		else_if = {
+			limit = {
+				scope:source_country = {
+					any_scope_state = { te_free_port_state_worth = yes }
+				}
+			}
+			value = treaty_ai_demand_economy_factor
+		}
+	}
+}
+
+# Only for a state with people of another faith to convert
+# (te_religious_mission_state_worth).
+religious_mission_rights_ai_demand_weight = {
+	value = 0
+	if = {
+		limit = { scope:article ?= { exists = input_state } }
+		if = {
+			limit = {
+				scope:article.input_state = { te_religious_mission_state_worth = yes }
+			}
+			value = 1
+		}
+	}
+	else_if = {
+		limit = {
+			scope:source_country = {
+				any_scope_state = { te_religious_mission_state_worth = yes }
+			}
+		}
+		value = 1
+	}
+}
+
+# Only for a state that holds a military building or borders the demander
+# (te_demilitarized_zone_state_worth). The capital can't be named
+# (state_valid_trigger), so the walk skips it too.
+demilitarized_zone_ai_demand_weight = {
+	value = 0
+	if = {
+		limit = { scope:article ?= { exists = input_state } }
+		if = {
+			limit = {
+				scope:article.input_state = { te_demilitarized_zone_state_worth = yes }
+			}
+			value = 1
+		}
+	}
+	else_if = {
+		limit = {
+			scope:source_country = {
+				any_scope_state = {
+					is_capital = no
+					te_demilitarized_zone_state_worth = yes
+				}
+			}
+		}
+		value = 1
+	}
+}
+
+# The fewest battalions (army_size) or flotillas (navy_size) a country must
+# have before the AI demands its disarmament, unless it has military industry.
+forced_disarmament_ai_min_units = 10
+
+# Only of a country with an army, a navy or military industry to lose; then by
+# the size of its economy (treaty_ai_demand_economy_factor).
+forced_disarmament_ai_demand_weight = {
+	value = 0
+	if = {
+		limit = {
+			scope:source_country = {
+				OR = {
+					army_size >= forced_disarmament_ai_min_units
+					navy_size >= forced_disarmament_ai_min_units
+					any_scope_state = {
+						OR = {
+							has_building = building_arms_industry
+							has_building = building_artillery_foundry
+							has_building = building_munition_plant
+						}
+					}
+				}
+			}
+		}
+		value = treaty_ai_demand_economy_factor
+	}
+}
+
+# The smallest share of the world's yearly emissions, in percent
+# (gw_disp_own_share_pct), a country must emit before the AI demands that it
+# cut them.
+enforce_emissions_reduction_ai_min_share_pct = 1
+
+# Only of a country that emits enough to matter and doesn't already run all
+# seven policies the article forces (on_entry_into_force); then by the size of
+# its economy (treaty_ai_demand_economy_factor). Without a yearly figure yet,
+# the share reads 0.
+enforce_emissions_reduction_ai_demand_weight = {
+	value = 0
+	if = {
+		limit = {
+			scope:source_country = {
+				gw_disp_own_share_pct >= enforce_emissions_reduction_ai_min_share_pct
+				OR = {
+					gw_policy_carbon_tax_active = no
+					gw_policy_renewable_investment_active = no
+					gw_policy_emission_standards_active = no
+					gw_policy_reforestation_active = no
+					gw_policy_public_transit_active = no
+					gw_policy_fossil_fuel_divestment_active = no
+					gw_policy_green_building_codes_active = no
+				}
+			}
+		}
+		value = treaty_ai_demand_economy_factor
+	}
+}
+
+# Only of a country not already pegged. possible holds the pretext (default);
+# the one-peg-at-a-time rule is in can_ratify, which a war goal doesn't check,
+# and can't move to possible, which can't tell the treaty being renegotiated
+# from another.
+imposed_currency_peg_ai_demand_weight = {
+	value = 0
+	if = {
+		limit = {
+			scope:source_country = { te_mon_is_anchored = no }
+		}
+		value = 1
+	}
+}
+
+# Only of a debtor not already under a receivership or a lender-of-last-resort
+# guarantee: can_ratify's te_lolr_already_guaranteed_tt, for the same reason as
+# the peg above.
+debt_receivership_ai_demand_weight = {
+	value = 0
+	if = {
+		limit = {
+			scope:source_country = {
+				te_mon_is_under_receivership = no
+				te_mon_is_lolr_ward = no
+			}
+		}
+		value = 1
 	}
 }
 
@@ -3170,6 +3997,43 @@ arable_land_mult_pct = {
 	multiply = 100
 }
 
+#==================================================
+# GUI Display Script Values — Construction List
+#==================================================
+# The construction list's Electricity column for Carbon Conversion Works
+# (gui/00_te_build_list_columns.gui): each staffed level buys 1,200
+# Electricity a week on both its methods, nearly all of its running cost, and
+# Electricity is a local good, priced state by state.
+
+# Electricity's base price, vanilla's goods cost (test_build_list_columns.py
+# holds it to common/goods).
+te_electricity_base_price = 30
+
+# State scope. The state's Electricity price over its base (1 = base), read as
+# 1 + pricier - cheaper with each floored at 0, as the power grid's
+# te_grid_chk_price_now_value reads it (its grid_price self-check matched the
+# engine's price in game, 2026-10-30). 1 where the state has no Electricity
+# market at all.
+te_build_list_electricity_price_ratio = {
+	value = 1
+	sg:electricity ?= {
+		add = {
+			value = state_goods_pricier
+			min = 0
+		}
+		subtract = {
+			value = state_goods_cheaper
+			min = 0
+		}
+	}
+}
+
+# State scope. The state's Electricity price.
+te_build_list_electricity_price = {
+	value = te_build_list_electricity_price_ratio
+	multiply = te_electricity_base_price
+}
+
 # Country scope. Subjugation strength: read by force_become_subject's possible
 # clause. Score >= 1.0 lets the actor subjugate scope:target_country (which
 # must be a fellow bloc member; the action's potential clause guarantees that).
@@ -3221,7 +4085,7 @@ te_subjugation_strength_other = {
 # Country scope. Display only: which identity line the Subjugate tooltip shows.
 #   0 none (Diplomatic Framework, or an identity with no subjugation bonus)
 #   1 Sovereign Empire, 2 Religious, 3 Ideological Union, 4 Cultural,
-#   5 Trade League, 6 Military Treaty Organization
+#   5 Trade League, 6 Military Treaty Organization, 7 Creditors' Consortium
 te_subjugation_identity_index = {
 	value = 0
 	if = {
@@ -3247,6 +4111,10 @@ te_subjugation_identity_index = {
 	else_if = {
 		limit = { power_bloc ?= { has_identity = identity:identity_military_treaty_organization } }
 		value = 6
+	}
+	else_if = {
+		limit = { power_bloc ?= { has_identity = identity:identity_creditors_consortium } }
+		value = 7
 	}
 }
 
@@ -3277,6 +4145,10 @@ te_subjugation_identity_bonus = {
 	else_if = {
 		limit = { power_bloc ?= { has_identity = identity:identity_military_treaty_organization } }
 		add = modifier:country_subjugation_military_strength_add
+	}
+	else_if = {
+		limit = { power_bloc ?= { has_identity = identity:identity_creditors_consortium } }
+		add = modifier:country_subjugation_creditor_strength_add
 	}
 }
 
@@ -3338,6 +4210,18 @@ te_subjugation_strength_identity = {
 		}
 		add = modifier:country_subjugation_military_strength_add
 	}
+
+	# Creditors' Consortium — the target is in the actor's receivership
+	if = {
+		limit = {
+			power_bloc ?= { has_identity = identity:identity_creditors_consortium }
+			scope:target_country ?= {
+				te_mon_is_under_receivership = yes
+				var:te_mon_receiver ?= root
+			}
+		}
+		add = modifier:country_subjugation_creditor_strength_add
+	}
 }
 
 # === Tiered scaler script values for events ============================
@@ -3375,6 +4259,12 @@ sv_treasury_event_huge   = { value = yearly_gross_income  multiply = 0.30  }
 # Same shape as banking_event_expense_<tier> (which stays for banking
 # events; sv_money_flow_event_<tier> is the generic name to prefer for
 # new content). Tiers are weekly fractions of GDP.
+# The two below small are sized to the government- and military-wage lines
+# they replaced in nine event modifiers, +2-3% and +5%, so the options cost
+# about what they did: 0.1% and 0.16% of GDP a year. That rests on an
+# estimate, not a measurement: a wage bill of 2-3% of GDP a year.
+sv_money_flow_event_tiny   = { value = gdp  multiply = 0.00002 }  # 0.002% GDP / week
+sv_money_flow_event_modest = { value = gdp  multiply = 0.00003 }  # 0.003% GDP / week
 sv_money_flow_event_small  = { value = gdp  multiply = 0.0001 }   # 0.01% GDP / week
 sv_money_flow_event_medium = { value = gdp  multiply = 0.0002 }   # 0.02% GDP / week
 sv_money_flow_event_large  = { value = gdp  multiply = 0.0004 }   # 0.04% GDP / week
@@ -3395,12 +4285,6 @@ te_pop_transfer_disruption_strength = {
 	min = 0.25
 	max = 2
 }
-
-# sv_te_unused_mandate_cohesion_tier removed 2026-05-10: when used as
-# `multiplier = sv_...` inside `add_modifier` from country scope, the engine
-# resolved num_mandates in the calling country scope (where it's invalid) rather
-# than the enclosing power_bloc block. The tier ladder now lives inline in
-# te_unused_mandate_reserve_on_action so num_mandates evaluates in power_bloc scope.
 
 # ---------------------------------------------------------------------------
 # Banking policy dashboard — display-only reads.
@@ -3434,8 +4318,8 @@ banking_display_points_free = {
 }
 
 # The intervention budget before any tool holds a point: every grant of
-# country_banking_intervention_max_add, the banking laws' and the banking
-# union's. Every negative one is a tool's cost (the policy, planning,
+# country_banking_intervention_max_add: the banking laws', the banking
+# union's and a common currency's issuer's. Every negative one is a tool's cost (the policy, planning,
 # cooperative and crash-intervention modifiers), so what the tools hold is
 # this less what is free; while the budget is overdrawn, free is negative and
 # used is more than the total. The overview's budget cell shows both.
@@ -3451,6 +4335,9 @@ banking_display_points_total = {
 	if = { limit = { has_law = law_type:law_central_bank_independence } add = 7 }
 	if = { limit = { has_law = law_type:law_national_bank } add = 1 }
 	if = { limit = { te_mon_mod_has = { NAME = te_mon_union_banking_union } } add = 1 }
+	# A common currency's issuer: a scaled grant, 1 a point, so the points are its
+	# multiplier (te_mon_union_issuer_bank_applied; te_monetary_update_union).
+	if = { limit = { te_mon_mod_has = { NAME = te_mon_union_issuer_bank } } add = var:te_mon_union_issuer_bank_applied }
 }
 
 banking_display_points_used = {

@@ -37,14 +37,6 @@ sr_emig_batches_now = {
 	max = sr_emig_level_batches
 }
 
-# The programme's upkeep, sr_emigration_programme's multiplier: its level.
-# Journal entry scope (the modifier sits on the entry), so it reads the
-# country through owner.
-sr_emig_upkeep_units = {
-	value = 0
-	owner = { add = sr_emig_level_value }
-}
-
 # The off-world population's bonus (design § 10.5): one unit per
 # sr_offworld_bonus_people of the nation's people off Earth, at most
 # sr_offworld_bonus_cap; nothing below sr_offworld_bonus_minimum.
@@ -62,12 +54,6 @@ sr_offworld_units = {
 	divide = sr_offworld_bonus_people
 	max = sr_offworld_bonus_cap
 }
-# Journal entry scope: sr_offworld_population's multiplier.
-sr_offworld_bonus_units = {
-	value = 0
-	owner = { add = sr_offworld_units }
-}
-
 # The emigration_batch self-check's reading: how much the Space Program's state
 # fell, and 90% of what was sent. Any scope; the globals are set just before
 # (sr_emig_month).

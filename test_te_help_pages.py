@@ -38,7 +38,7 @@ LIBRARY = os.path.join(GUI_DIR, "te_widget_library.gui")
 TAB_WIDGETS = os.path.join(GUI_DIR, "te_system_tab_widgets.gui")
 POPUPS = os.path.join(GUI_DIR, "te_popups.gui")
 LOC_DIR = os.path.join(REPO, "localization", "english")
-# The translation memories: deploy ships their German and Spanish lines into the
+# The translation memories: deploy ships their translated lines into the
 # same popups (scripts/generators/gen_non_english_loc.py, i18n/README.md).
 I18N_DIR = os.path.join(REPO, "i18n")
 
@@ -62,7 +62,7 @@ Page = collections.namedtuple("Page", "key title flags tabs entries rows popup_t
                               defaults=((), (), None))
 
 SR_ENTRIES = ("je_space_race_suborbital", "je_space_race_orbital", "je_space_race_moon_landing",
-              "je_space_race_probe", "je_space_race_moon_base", "je_space_race_mars_landing",
+              "je_space_race_probe", "je_space_race_mars_landing",
               "je_space_race_interstellar_probe", "je_space_race_interstellar_results",
               "je_space_race_solar_colonization")
 
@@ -99,7 +99,7 @@ PAGES = [
          ("je_tax_code",),
          popup_title="text = \"[SelectLocalization( GetScriptedGui('te_tax_show_light_sgui').IsShown( "
                      "GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_lt_how_header', 'te_tax_how_header' )]\""),
-    # the nine entries share it; in the window the "?" is in the milestones'
+    # the eight entries share it; in the window the "?" is in the milestones'
     # generated headers (SpaceRaceHeaderTest)
     Page("space_race", "je_space_race_widget_how_header", ("sr_panel_how_open", "sr_panel_how_colonies_open"), (),
          SR_ENTRIES),
@@ -107,6 +107,9 @@ PAGES = [
     Page("global_warming", "gw_how_header", ("gw_how_open", "rt_how_open"), ("te_gw_tab_body",),
          ("je_global_warming",),
          popup_title="text = \"[SelectLocalization( GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'gw_how_header', 'rt_how_header' )]\""),
+    # no journal entry: the window's tab and National Info; the station's
+    # building panel links to the tab
+    Page("power_grids", "te_grid_how_header", (), ("te_grid_tab_body",)),
 ]
 
 # The vanilla panels' tabs that show a system, each the type it mounts: a tab body
@@ -236,7 +239,7 @@ TOPICS = {
     ],
     "global_warming": [
         "gw_how_sub_warming", "gw_how_warming_1", "gw_how_warming_2", "gw_how_sub_penalty", "gw_how_penalty",
-        "gw_how_sub_emissions", "gw_how_emissions_1", "gw_how_emissions_2", "gw_how_sub_policies",
+        "gw_how_penalty_2", "gw_how_sub_emissions", "gw_how_emissions_1", "gw_how_emissions_2", "gw_how_sub_policies",
         "gw_how_policies_1", "gw_how_policies_2", "gw_how_policies_3", "gw_how_sub_aerosols",
         "gw_how_aerosols_1", "gw_how_aerosols_2", "rt_how_header", "rt_how_laws_head", "rt_how_laws",
         "rt_how_programmes_head", "rt_how_programmes", "rt_how_emissions_head", "rt_how_emissions",
@@ -611,8 +614,10 @@ class PageTest(unittest.TestCase):
         overview = _entry_overviews()
         roots = _gui_roots()
         listed = {entry for page in PAGES for entry in page.entries}
-        # every entry with an overview root is a page's
-        self.assertEqual(set(overview), listed)
+        # every entry with an overview root is a page's, but the Map Room: its widget is a row of map picks on a
+        # contextless page the map buttons open, not a system's overview (journal_map_modes.md)
+        self.assertEqual(set(overview) - {"je_te_map_room"}, listed)
+        self.assertIn("je_te_map_room", overview, "the Map Room's exemption is still needed")
         for page in PAGES:
             for entry in page.entries:
                 with self.subTest(entry=entry):

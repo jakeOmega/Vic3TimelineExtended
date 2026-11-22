@@ -74,6 +74,37 @@ class RegistryRetagDiffTests(unittest.TestCase):
         self.assertIsNone(lost["new"])
         self.assertEqual(dict(result["gained"]), {})
 
+    def test_registering_a_line_the_mod_gui_pass_shows_reads_as_a_gain(self):
+        """#1269: a generic source-only entry gives up a GUI data-context
+        failure the mod's own GUI reaches, so /logs shows the line. An edit
+        that adds an entry naming it hides it; tagging without that pass would
+        call the line tagged before and after, and report no change."""
+        generic = ("## Engine noise (source-anchored)\n\n"
+                   "### `pdx_data_callstack.cpp:16` — data context not supplied\n"
+                   "- source: `pdx_data_callstack.cpp:16`\n\n"
+                   "```\nNo context supplied (Use SetDataContext), wanted context of type\n```\n")
+        naming = ("\n### `pdx_data_callstack.cpp:16` — vanilla's lens reads Country.GetFoo\n"
+                  "- source: `pdx_data_callstack.cpp:16`\n\n"
+                  "```\nwanted context of type 'Country' for 'Country.GetFoo\n```\n")
+        old = _registry(os.path.join(self.tmp, "gui_old"), generic)
+        new = _registry(os.path.join(self.tmp, "gui_new"), generic + naming)
+        install = os.path.join(self.tmp, "install")
+        os.makedirs(os.path.join(install, "game", "gui"))
+        os.makedirs(os.path.join(self.mod_root, "gui"))
+        with open(os.path.join(self.mod_root, "gui", "te_own.gui"), "w", encoding="utf-8") as fh:
+            fh.write('textbox = { text = "[Country.GetName]" }\n')
+        wanted = "No context supplied (Use SetDataContext), wanted context of type '{0}' for '{0}.GetFoo '"
+        rows = [{"source": "pdx_data_callstack.cpp:16", "message": wanted.format(name), "count": 5, "runs": ["a"]}
+                for name in ("Country", "Building")]
+        before = rrd.tag(rows, old, self.mod_root, install)
+        after = rrd.tag(rows, new, self.mod_root, install)
+        self.assertEqual([ref and ref["title"] for ref in before], [None, "data context not supplied"])
+        result = rrd.diff(rows, before, after, self.mod_root)
+        self.assertEqual(result["tagged"], {"old": 5, "new": 10})
+        (gained,) = result["gained"]["vanilla's lens reads Country.GetFoo"]
+        self.assertIsNone(gained["old"])
+        self.assertEqual(dict(result["lost"]), {})
+
 
 if __name__ == "__main__":
     unittest.main()

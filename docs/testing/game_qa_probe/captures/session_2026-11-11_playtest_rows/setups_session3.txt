@@ -1,0 +1,4 @@
+# jud_tribunals
+activate_law = law_type:law_executive_tribunals
+# ov_direct
+trigger_event = { id = te_judiciary_events.1 days = 3 }

@@ -109,7 +109,7 @@ post_scarcity_events.1 = {
 			modifier = {
 				trigger = {
 					OR = {
-						has_law = law_type:law_secret_police
+						has_law_or_variant = law_type:law_secret_police
 						has_law = law_type:law_autocracy
 						has_law = law_type:law_oligarchy
 						has_law = law_type:law_single_party_state
@@ -238,18 +238,15 @@ post_scarcity_events.3 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = universal_basic_income
 		NOT = { has_law = law_type:law_post-scarcity }
 		has_technology_researched = artificial_intelligence
-		NOT = { has_variable = ai_bureaucracy_debate_happened }
 		# Automated Bureaucracy (or Algorithmic Governance, which installs it)
 		# has already settled the question.
 		NOT = { has_law = law_type:law_automated_bureaucracy }
-	}
-
-	immediate = {
-		set_variable = ai_bureaucracy_debate_happened
 	}
 
 	# Automate government - efficient but unsettling
@@ -331,7 +328,7 @@ post_scarcity_events.4 = {
 	type = country_event
 	placement = root
 
-	event_image = { video = "unspecific_fire" }
+	event_image = { texture = "gfx/event_pictures/neo_luddite_protest.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
@@ -409,7 +406,7 @@ post_scarcity_events.4 = {
 			modifier = {
 				trigger = {
 					OR = {
-						has_law = law_type:law_secret_police
+						has_law_or_variant = law_type:law_secret_police
 						has_law = law_type:law_autocracy
 						has_law = law_type:law_oligarchy
 						has_law = law_type:law_single_party_state

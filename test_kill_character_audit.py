@@ -4,7 +4,7 @@ Run: python3 test_kill_character_audit.py
 """
 import unittest
 
-from kill_character_audit import AuditFlag, render_report
+from kill_character_audit import AuditFlag, AuditResult, render_report
 
 
 class RenderReportTests(unittest.TestCase):
@@ -28,6 +28,20 @@ class RenderReportTests(unittest.TestCase):
         self.assertNotIn("Files audited", report)
         self.assertNotIn("52", report)
         self.assertIn("Reviewed exemptions: **1**.", report)
+
+
+class StrictTests(unittest.TestCase):
+    def test_strict_fails_on_a_kill_with_neither_guard_only(self):
+        """`--strict` (and its older spelling `--check`) fails on a hard fail;
+        a kill with one guard is a reported gap, not a failure."""
+        def flag(void6, guard, exemption=None):
+            return AuditFlag(file="events/a.txt", line=1, event_id="a.1", target_scope="x",
+                             has_void6=void6, has_exists_guard=guard, reason="r",
+                             exemption=exemption)
+        self.assertFalse(AuditResult(flags=[flag(True, False), flag(False, True)]).failed)
+        self.assertTrue(AuditResult(flags=[flag(False, False)]).failed)
+        reviewed = {"date": "2026-05-01", "tag": "", "rationale": "kept"}
+        self.assertFalse(AuditResult(flags=[flag(False, False, reviewed)]).failed)
 
 
 if __name__ == "__main__":

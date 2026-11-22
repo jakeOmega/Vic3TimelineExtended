@@ -126,6 +126,86 @@ generic_wonder_construction_base = {
 
 space_elevator_construction            = { generic_wonder_construction_base = { WONDER = space_elevator            MAX_LEVEL = 20 REBUILD = yes } }
 
+# The halt wonder_events.2.a orders (#1621): while the owner holds the timed
+# variable space_elevator_halt (180 days), each of its sites stands on Space
+# Elevator Construction (Paused), the method a player would otherwise switch
+# to by hand to stop paying for a site that is not building. The option runs
+# space_elevator_halt_site at once and space_elevator_on_action runs it again
+# every month of the halt, so a method picked in the building panel meanwhile
+# is remembered as the speed to return to and the site is paused again (it
+# would pay full inputs for no progress: the pulse skips the tick). Once the
+# variable has run out, the same pulse runs space_elevator_resume_site, which
+# puts the remembered speed back, so the halt ends with no action from the
+# player. A site that was already paused when the halt came has nothing
+# remembered and stays paused.
+#
+# State scope: a state with building_space_elevator_construction_site. The
+# speed is remembered on the state (a flag, as gm_restore_pm) for 240 days,
+# the halt plus the month the pulse can take to see it over, with margin; it
+# runs out by itself where the site has gone meanwhile, so a later site in the
+# same state is not switched on by an old halt. Should the state lose the
+# variable (a state split by a revolution), the site stays paused until it is
+# switched back in the building panel.
+space_elevator_halt_site = {
+	space_elevator_halt_remember = { SPEED = slow }
+	space_elevator_halt_remember = { SPEED = medium }
+	space_elevator_halt_remember = { SPEED = fast }
+	if = {
+		limit = {
+			any_scope_building = {
+				is_building_type = building_space_elevator_construction_site
+				NOT = { has_active_production_method = pm_space_elevator_construction_paused }
+			}
+		}
+		activate_production_method = {
+			building_type = building_space_elevator_construction_site
+			production_method = pm_space_elevator_construction_paused
+		}
+	}
+}
+
+space_elevator_halt_remember = {
+	if = {
+		limit = {
+			any_scope_building = {
+				is_building_type = building_space_elevator_construction_site
+				has_active_production_method = pm_space_elevator_construction_$SPEED$
+			}
+		}
+		set_variable = { name = space_elevator_halt_resume value = flag:$SPEED$ days = 240 }
+	}
+}
+
+# Only a site still on the paused method is switched: a speed picked after the
+# pulse last paused it is the player's own and stands.
+space_elevator_resume_site = {
+	if = {
+		limit = { has_variable = space_elevator_halt_resume }
+		if = {
+			limit = {
+				any_scope_building = {
+					is_building_type = building_space_elevator_construction_site
+					has_active_production_method = pm_space_elevator_construction_paused
+				}
+			}
+			space_elevator_halt_restore = { SPEED = slow }
+			space_elevator_halt_restore = { SPEED = medium }
+			space_elevator_halt_restore = { SPEED = fast }
+		}
+		remove_variable = space_elevator_halt_resume
+	}
+}
+
+space_elevator_halt_restore = {
+	if = {
+		limit = { var:space_elevator_halt_resume = flag:$SPEED$ }
+		activate_production_method = {
+			building_type = building_space_elevator_construction_site
+			production_method = pm_space_elevator_construction_$SPEED$
+		}
+	}
+}
+
 solar_collector_construction           = { generic_wonder_construction_base = { WONDER = solar_collector           MAX_LEVEL = 10 REBUILD = no } }
 
 orbital_battlestation_construction     = { generic_wonder_construction_base = { WONDER = orbital_battlestation     MAX_LEVEL =  5 REBUILD = no } }
@@ -434,9 +514,6 @@ remove_banking_cooperative_modifiers_effect = {
 	banking_strip_tool = { MODIFIER = cooperative_worker_buyout        MARK = off_cw_worker_buyout }
 }
 
-# banking_policy_rate_hike is no longer a market tool (monetary_policy_design.md
-# §18). A save that still holds it is cleaned up by the one-shot in
-# je_banking.txt's monthly pulse, which does not depend on a law change.
 remove_banking_market_modifiers_effect = {
 	banking_strip_tool = { MODIFIER = banking_open_market_ops                  MARK = off_cb_open_market_ops }
 	banking_strip_tool = { MODIFIER = banking_countercyclical_capital_buffer   MARK = off_cb_countercyclical_buffer }
@@ -490,18 +567,99 @@ remove_banking_market_modifiers_effect = {
 	banking_strip_tool = { MODIFIER = banking_bail_in_regime                   MARK = off_cb_bail_in_regime }
 }
 
+# The command-economy cascade (banking_law_cascade_on_law_activated,
+# extra_on_actions.txt), run again on an uprising once its laws are built.
+# ROOT = the country it rose against, scope:target = the uprising; called from
+# te_civil_war_on_start (on_revolution_start and on_secession_start), where the
+# uprising's law list is whole: vanilla's own on_revolution_start reads it.
+#
+# The engine builds an uprising's laws group by group, each firing
+# on_law_activated, and copies the origin's law into a group it has not reached
+# yet after the cascade has already written there. Kalat's socialist uprising
+# (1978.10.4, save read 2026-11-19): Economic System went Agrarianism (copied)
+# to Command Economy (the movement's), the cascade then enacted State-Owned
+# Banking, and Financial Regulation's later copy put Kalat's Narrow Banking back
+# over it. So a Command Economy the uprising has and its origin lacks is new,
+# and the cascade's law is owed it here. An origin's own Command Economy, copied
+# with whatever banking law it has since enacted, is left as it is.
+banking_law_cascade_on_uprising = {
+	if = {
+		limit = {
+			NOT = { has_law = law_type:law_command_economy }
+			scope:target = {
+				has_law = law_type:law_command_economy
+				NOT = { has_law = law_type:law_state_owned_banking }
+			}
+		}
+		scope:target = {
+			debug_log = "TE_BANKING: the uprising [THIS.GetCountry.GetNameNoFormatting] came out of its build with Command Economy and no State-Owned Banking; enacting it date=[TimeKeeper.GetCurrentDate.GetString]"
+			set_variable = te_law_sweep_replacing	# te_law_replaced_notice
+			activate_law = law_type:law_state_owned_banking
+			remove_variable = te_law_sweep_replacing
+			# Self-check, once a game: is the law still there a week on? That
+			# this hook runs after the build's last copy is read from vanilla's
+			# on_revolution_start, not measured (te_debug_banking.2).
+			if = {
+				limit = { NOT = { has_global_variable = te_sc_cw_sob_logged } }
+				trigger_event = { id = te_debug_banking.2 days = 7 }
+			}
+		}
+	}
+}
+
+# State scope, around a strike's kill: the state's people as the day's
+# strikes have left them (var:nd_strike_people_left, read by the strikes'
+# killed-population values). state_population doesn't fall until the next
+# tick, and a salvo's warheads all land in one effect, a Leadership salvo's all
+# on the capital. So each warhead read the same figure and booked a tenth of
+# it as dead while it killed a tenth of what the last had left: 25 on
+# Sankt-Peterburg booked about 10 million dead of 4 million people, and the
+# census took the 6 million it could not find for arrivals (2026-11-19). Kept
+# for a day, so the next tick reads the engine's figure again. A tooltip pass
+# writes nothing, so the after step reads the figure only once it is set.
+nd_strike_people_before = {
+	if = {
+		limit = { NOT = { has_variable = nd_strike_people_left } }
+		set_variable = { name = nd_strike_people_left value = state_population days = 1 }
+	}
+}
+
+nd_strike_people_after = {
+	if = {
+		limit = {
+			has_variable = nd_strike_people_left
+			has_variable = nuclear_strike_killed_population
+		}
+		set_variable = {
+			name = nd_strike_people_left
+			value = {
+				value = var:nd_strike_people_left
+				subtract = var:nuclear_strike_killed_population
+				min = 0
+			}
+			days = 1
+		}
+	}
+}
+
 nuclear_industrial_strike = {
 	state_region = {
 		add_devastation = 100
 	}
+	nd_strike_people_before = yes
 	set_variable = {
 		name = nuclear_strike_killed_population
 		value = nuclear_industrial_strike_killed_population
 	}
+	nd_strike_people_after = yes
 	te_demog_note_kills = { VALUE = var:nuclear_strike_killed_population }
 	kill_population_percent_in_state = {
 		percent = 0.1
 	}
+	# The city's buildings: a share destroyed, the rest taken into government
+	# ownership (nuclear_raze_effects.txt). After the deaths, as the tactical
+	# strike's damage is: a rebuilt building lays its staff off.
+	nuclear_strike_raze_city = yes
 	add_modifier = {
 		name = nuclear_strike_aftermath
 		days = short_modifier_time
@@ -557,10 +715,12 @@ nd_counterforce_strike_damage = {
 	state_region = {
 		add_devastation = 25
 	}
+	nd_strike_people_before = yes
 	set_variable = {
 		name = nuclear_strike_killed_population
 		value = nd_counterforce_strike_killed_population
 	}
+	nd_strike_people_after = yes
 	te_demog_note_kills = { VALUE = var:nuclear_strike_killed_population }
 	kill_population_percent_in_state = {
 		percent = 0.025
@@ -733,7 +893,7 @@ nuclear_response_strike = {  # Scope is target state, target/attacking_country r
 					nd_taboo_note_use = { KIND = strategic RETALIATION = yes }
 					scope:target_state = {
 						nuclear_industrial_strike = yes
-						owner = { trigger_event = { id = nuclear_weapon_events.11 popup = yes } }
+						owner = { trigger_event = { id = nuclear_weapon_events.11 popup = yes } } # REVIEWED 2026-11-12 (trigger_event_cycle): this effect spends a warhead first (nuclear_weapon_stockpile - 1, above), and the retaliation that answers this event (nuclear_weapon_events.11.b) needs its launcher's stockpile above 0, so the exchange is bounded by the two stockpiles: an AI arsenal is built to nuclear_ai_stockpile_cap at most (twice nuclear_ai_desired_stockpile, max 25, so 50), so two AIs nest at most 100 strikes, though the cap stops building and trims nothing, so an older save's arsenal can exceed it; each answer is an event option (play-test: nuclear-playtest.md, A long exchange)
 					}
 					trigger_event = { id = nuclear_weapon_events.12 popup = yes }
 					every_country = {
@@ -796,7 +956,7 @@ nuclear_response_response_strike = {  # Scope is target state
 								limit = { has_variable = nd_salvo_seen_by }
 								remove_variable = nd_salvo_seen_by
 							}
-							trigger_event = { id = nuclear_weapon_events.1 popup = yes }
+							trigger_event = { id = nuclear_weapon_events.1 popup = yes } # REVIEWED 2026-11-12 (trigger_event_cycle): this effect spends a warhead first (nuclear_weapon_stockpile - 1, above), and the retaliation that answers this event (nuclear_weapon_events.1.b) needs its launcher's stockpile above 0, so the exchange is bounded by the two stockpiles: an AI arsenal is built to nuclear_ai_stockpile_cap at most (twice nuclear_ai_desired_stockpile, max 25, so 50), so two AIs nest at most 100 strikes, though the cap stops building and trims nothing, so an older save's arsenal can exceed it; each answer is an event option (play-test: nuclear-playtest.md, A long exchange)
 						}
 					}
 					trigger_event = { id = nuclear_weapon_events.2 popup = yes }
@@ -1116,6 +1276,10 @@ add_arable_land_effect = {
 	}
 }
 
+# Every interest-group ideology, vanilla's and the mod's: not the character
+# ideologies (an interest group never holds one) or the movements' own
+# (*_movement). test_remove_all_ideologies.py fails when one is missing or
+# when an entry names anything else.
 remove_all_ideologies = {
 	remove_ideology = ideology_paternalistic
 	remove_ideology = ideology_laissez_faire
@@ -1136,7 +1300,7 @@ remove_all_ideologies = {
 	remove_ideology = ideology_proletarian
 	remove_ideology = ideology_egalitarian
 	remove_ideology = ideology_populist
-	remove_ideology = ideology_socialist
+	remove_ideology = ideology_communist
 	remove_ideology = ideology_reactionary
 	remove_ideology = ideology_plutocratic
 	remove_ideology = ideology_patriarchal
@@ -1167,9 +1331,79 @@ remove_all_ideologies = {
 	remove_ideology = ideology_heavenly_kingdom_theocratic
 	remove_ideology = ideology_agrarian_jeffersonian
 	remove_ideology = ideology_constitutionalist
-	remove_ideology = ideology_orleanist
-	remove_ideology = ideology_legitimist
-	remove_ideology = ideology_bonapartist
+	# Interest-group ideologies vanilla 1.15 added
+	remove_ideology = ideology_autocratic
+	remove_ideology = ideology_defensist
+	remove_ideology = ideology_disciplinarian
+	remove_ideology = ideology_internationalist
+	remove_ideology = ideology_managerial
+	remove_ideology = ideology_materialist
+	remove_ideology = ideology_militant
+	remove_ideology = ideology_militarist
+	remove_ideology = ideology_russian_patriarchal
+	remove_ideology = ideology_spiritual
+	remove_ideology = ideology_tsarist
+	remove_ideology = ideology_universalist
+	remove_ideology = ideology_universalist_modern
+	# Vanilla interest-group ideologies the list missed until #1406
+	remove_ideology = ideology_interventionist
+	remove_ideology = ideology_hierarchic
+	remove_ideology = ideology_montenegrin_moralist
+	remove_ideology = ideology_pro_slavery_colonial
+	remove_ideology = ideology_hindu_moralist_british_india
+	remove_ideology = ideology_sikh_militancy
+	remove_ideology = ideology_colonialist
+	remove_ideology = ideology_utilitarian_millian
+	remove_ideology = ideology_sovereignist
+	remove_ideology = ideology_enclavist
+	remove_ideology = ideology_malthusian
+	remove_ideology = ideology_technocratic
+	remove_ideology = ideology_magnatial
+	remove_ideology = ideology_moderantist
+	remove_ideology = ideology_carlist_ig
+	remove_ideology = ideology_carlist_ig_2
+	remove_ideology = ideology_ibadi_shura
+	remove_ideology = ideology_ibadi_imamate
+	remove_ideology = ideology_military_absolutist
+	remove_ideology = ideology_cartist
+	remove_ideology = ideology_regenerator
+	remove_ideology = ideology_ilustrado
+	remove_ideology = ideology_liberal_praetorian
+	remove_ideology = ideology_conservative_praetorian
+	remove_ideology = ideology_rangaku
+	remove_ideology = ideology_mercantile
+	remove_ideology = ideology_japan_paternalistic
+	remove_ideology = ideology_japan_hierarchic
+	remove_ideology = ideology_japan_hierarchic_2
+	# The mod's own (common/ideologies/extra_ideologies.txt), the custom
+	# religion's among them, so a second pick replaces the first
+	remove_ideology = ideology_multicultural_ig
+	remove_ideology = ideology_anti_colonialist
+	remove_ideology = ideology_islamic_inheritance
+	remove_ideology = ideology_custom_religion_traditionalist_economy
+	remove_ideology = ideology_custom_religion_free_market_economy
+	remove_ideology = ideology_custom_religion_socialist_economy
+	remove_ideology = ideology_custom_religion_social_democratic_economy
+	remove_ideology = ideology_custom_religion_imperial_cult_economy
+	remove_ideology = ideology_custom_religion_theocratic_economy
+	remove_ideology = ideology_custom_religion_traditionalist_society
+	remove_ideology = ideology_custom_religion_inclusive_society
+	remove_ideology = ideology_custom_religion_totalitarian_society
+	remove_ideology = ideology_custom_religion_meritocratic_society
+	remove_ideology = ideology_custom_religion_imperial_cult_society
+	remove_ideology = ideology_custom_religion_theocratic_society
+	remove_ideology = ideology_custom_religion_aristocratic_governance
+	remove_ideology = ideology_custom_religion_technocratic_governance
+	remove_ideology = ideology_custom_religion_republican_governance
+	remove_ideology = ideology_custom_religion_corporate_governance
+	remove_ideology = ideology_custom_religion_imperial_cult_governance
+	remove_ideology = ideology_custom_religion_theocratic_governance
+	remove_ideology = ideology_custom_religion_pacifist_outlook
+	remove_ideology = ideology_custom_religion_militarist_outlook
+	remove_ideology = ideology_custom_religion_isolationist_outlook
+	remove_ideology = ideology_custom_religion_exploitative_outlook
+	remove_ideology = ideology_custom_religion_imperialist_outlook
+	remove_ideology = ideology_custom_religion_theocratic_outlook
 }
 
 fix_incompatible_laws = {
@@ -1181,17 +1415,22 @@ fix_incompatible_laws = {
 				has_law = law_type:law_census_voting
 				has_law = law_type:law_universal_suffrage
 				has_law = law_type:law_liquid_democracy
+				has_law = law_type:law_labour_suffrage
 			}
 			has_law = law_type:law_no_campaign_finance_laws
 		}
+		set_variable = te_law_sweep_replacing	# te_law_replaced_notice
 		activate_law = law_type:law_unregulated_donations
+		remove_variable = te_law_sweep_replacing
 	}
 	if = {
 		limit = {
 			has_law = law_type:law_no_internet_policy
 			has_technology_researched = world_wide_web
 		}
+		set_variable = te_law_sweep_replacing	# te_law_replaced_notice
 		activate_law = law_type:law_unregulated_internet
+		remove_variable = te_law_sweep_replacing
 	}
 	# Frontier AI Control opens with AI Agents, and International Oversight
 	# needs UN membership while held (te_frontier_ai_effects.txt).
@@ -1205,7 +1444,9 @@ fix_incompatible_laws = {
 			}
 
 		}
+		set_variable = te_law_sweep_replacing	# te_law_replaced_notice
 		activate_law = law_type:law_universal_basic_income
+		remove_variable = te_law_sweep_replacing
 	}
 	if = {
 		limit = {
@@ -1219,7 +1460,9 @@ fix_incompatible_laws = {
 				}
 			}
 		}
+		set_variable = te_law_sweep_replacing	# te_law_replaced_notice
 		activate_law = law_type:law_wage_subsidies
+		remove_variable = te_law_sweep_replacing
 	}
 }
 
@@ -1257,13 +1500,21 @@ te_update_pollution_modifier = {
 	}
 }
 
-# Refreshes the tourism_output and tourism_throughput modifiers.
+# Refreshes the tourism_output and tourism_throughput modifiers. It also stores the state's
+# Base Appeal (te_tourism_base_appeal, 0-1, the state panel's row) for the Map Room's Tourism
+# Appeal map (common/journal_entries/te_journal_maps.txt): the score is a state_region chain
+# of some 700 branches, too dear for a map that evaluates every state as it paints. The
+# appeal is stored first and the output multiplier reads it back
+# (tourism_output_from_stored_appeal), so the chain runs once a refresh, not twice.
+# State scope; the multiplier resolves against ROOT, the state (its one caller is
+# tourism_on_action, on the state's monthly pulse).
 te_update_tourism_modifier = {
+	set_variable = { name = te_tourism_base_appeal value = tourism_bonus_from_base_appeal }
 	remove_modifier = tourism_output
 	remove_modifier = tourism_throughput
 	add_modifier = {
 		name = tourism_output
-		multiplier = total_tourism_output_bonus_percent
+		multiplier = tourism_output_from_stored_appeal
 	}
 	add_modifier = {
 		name = tourism_throughput
@@ -1274,9 +1525,7 @@ te_update_tourism_modifier = {
 # Refreshes the migration_crowding modifier. The census reads the multiplier it applied
 # (migration_crowding_mult_applied): infection deaths rise by the same share migration
 # attraction falls (te_demog_mult_infection). Stored, so the census reads the year's figure,
-# the one the save holds, at fast mode's steps between refreshes too, and whatever ROOT is:
-# migration_crowding_mult reads ROOT.owner, and the console's benchmark (te_debug_demog.1 d)
-# steps every state with ROOT the player's country.
+# the one the save holds, at fast mode's steps between refreshes too.
 te_update_migration_crowding_modifier = {
 	remove_modifier = migration_crowding
 	if = {
@@ -1334,6 +1583,9 @@ state_collapse_remove_infrastructure = {
 
 # Reset all institutions and ministries to their "none" law (country scope).
 # Used during state collapse / total failure events.
+# Not marked with te_law_sweep_replacing, on purpose: that would post one
+# A Law Replaced notice per law. The caller reports the whole step once
+# (je_state_collapse sends minor_events_timelineextended.10).
 reset_all_institutions_and_ministries = {
 	activate_law = law_type:law_no_schools
 	activate_law = law_type:law_no_health_system
@@ -1704,7 +1956,6 @@ te_ai_decentralized_absorption_effect = {
 		random_country = {
 			limit = {
 				is_country_type = decentralized
-				irr_target_reachable = yes
 				NOT = { has_truce_with = scope:irr_dc_annexer }
 				# Era-6 floor: same-culture only; globalization (era 9) lifts it.
 				# Mirrors voluntary_union_decentralized_culture_tt in the action.
@@ -1712,6 +1963,8 @@ te_ai_decentralized_absorption_effect = {
 					scope:irr_dc_annexer = { has_technology_researched = globalization }
 					irr_target_same_nation = yes
 				}
+				# Last: the reach read is the dearest test here (#1450).
+				irr_target_reachable = yes
 			}
 			save_scope_as = irr_dc_target
 		}

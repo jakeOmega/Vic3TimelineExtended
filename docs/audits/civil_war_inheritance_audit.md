@@ -157,7 +157,7 @@ E6. **References to the dead loser persist two weeks after the win** (`h3_raw.py
   `un_hq_country` to ROOT when it names a dead same-tag object.
 
 ### F3. The central bank's gold and the whole monetary state are replaced by the rebel's (H2). HIGH (#462)
-- **FIXED (#462); the loser read is verified (2026-09-26), and the copied inflation at 15 rebel wins (2026-10-05). The vault and the band modifier are not yet checked in game.** The audit's preferred option, built on the shared civil-war layer (#467): `te_civil_war_on_won` calls `te_monetary_repair_after_civil_war`, which on a rebel win (`te_cw_rebels_won = 1`) whose `scope:te_cw_loser` resolves dead and reads (a rate-paid canary) — and only once per loser (`te_mon_cw_bank_taken`) — runs `te_monetary_inherit_central_bank`. It adds the two vaults and their hot money, and copies the loser's inflation, peg and FX state and the player's mandate, delegation and rate target. The monetary regime is a law, so it follows the winner's laws. It copies no tracker, and re-adds the peg's timed modifiers from their month counters. Its `TE_CW_PROBE monetary` lines (`1/2`: the read passed and the copy ran; `2/2`: the winner's inflation now equals the loser's) fired on all 15 rebel wins of one game and were removed on 2026-10-05. Concurrent revolutions now follow the continuing government through the shared layer (#476); overlapping hook timing remains unverified in game (`monetary_policy_design.md` §0.4 item 32).
+- **FIXED (#462); the loser read is verified (2026-09-26), and the copied inflation at 15 rebel wins (2026-10-05). The vault and the band modifier are not yet checked in game.** The audit's preferred option, built on the shared civil-war layer (#467): `te_civil_war_on_won` calls `te_monetary_repair_after_civil_war`, which on a rebel win (`te_cw_rebels_won = 1`) whose `scope:te_cw_loser` resolves dead and reads (a rate-paid canary) — and only once per loser (`te_mon_cw_bank_taken`) — runs `te_monetary_inherit_central_bank`. It adds the two vaults and their hot money, and copies the loser's inflation, peg and FX state and the player's mandate, delegation and rate target. The monetary regime is a law, so it follows the winner's laws. It copies no tracker, and re-adds the peg's timed modifiers from their month counters; since #470 also the peg break's and devaluation's, the currency reform's and the bloc currency's exit and independence modifiers, each from a counter of its own. Its `TE_CW_PROBE monetary` lines (`1/2`: the read passed and the copy ran; `2/2`: the winner's inflation now equals the loser's) fired on all 15 rebel wins of one game and were removed on 2026-10-05. Concurrent revolutions now follow the continuing government through the shared layer (#476); overlapping hook timing remains unverified in game (`monetary_policy_design.md` §0.4 item 32).
 - `common/on_actions/te_monetary_on_actions.txt:222-262` initialises the rebel at `on_revolution_start`
   (dispatching `te_monetary_internal.1`, `events/te_monetary_events.txt:56-63`). Under winner precedence,
   the rebel's value then beats the nation's on every `te_*` variable. The vault `te_bank_gold` is seeded
@@ -276,6 +276,7 @@ E6. **References to the dead loser persist two weeks after the win** (`h3_raw.py
   (`ch_refresh_funding_modifiers`, `:128-136`).
 
 ### F9. History charts are wiped: the sample list isn't inherited and the containers die with the loser (E4). MEDIUM
+- **FIXED (#1477), unverified in game.** `te_history_repair_after_civil_war` (`te_history_civil_war_effects.txt`, from `te_civil_war_on_won`) moves each of the dead loser's `te_hist` and `te_dg_hist` samples older than the winner's own oldest to the winner with `set_parent`, adds it to the winner's list, cuts each store to its cap and sorts it. Moved rather than copied: a sample holds one variable per metric and marker recorded. Self-checks `history_after_civil_war` and `history_after_civil_war_kept` (`docs/testing/charts-help-national-info-playtest.md`).
 - `common/scripted_effects/te_history_effects.txt:1-110`: samples are containers parented to the recording
   country ("the engine culls the containers when the country stops existing"), indexed by the country list
   `te_hist`.
@@ -401,9 +402,10 @@ E6. **References to the dead loser persist two weeks after the win** (`h3_raw.py
 - **je_colonial_empire, je_space_race_\***: re-entry is blocked by inherited completion
   variables (`colonial_empire_completed`, `sr_completed_<m>`). **Correction (#463's sweep):**
   `je_world_war` removes `ww_fully_resolved` in `on_complete` / `on_fail`, so it does *not* block
-  re-entry on a winner, and a failed `je_digital_rights` re-arms and fails again at once. Both are open. je_heir_education is
-  blocked by the heir's own variable. je_digital_rights and je_post_scarcity are blocked by their target
-  law.
+  re-entry on a winner, and a failed `je_digital_rights` re-arms and fails again at once. je_heir_education is
+  blocked by the heir's own variable. **Fixed:** `je_digital_rights` sets `digital_rights_resolved` (#1393),
+  `je_world_war` `ww_entry_resolved` and `je_post_scarcity` `post_scarcity_resolved` (#471), at every outcome
+  that grants something.
 - **Nuclear** (beyond the brief's four known items): `je_nuclear_program.txt:106-160` correctly zeroes the
   posture trackers on a fresh entry, and the doctrine/upkeep modifiers came back by +2w. The readiness reset
   (2 -> 1, `nd_readiness_months` 17 -> 0) comes from `nd_init_posture` on the fresh entry, so it's the known

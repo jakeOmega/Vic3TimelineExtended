@@ -3557,7 +3557,7 @@ INJECT:company_sumitomo = {
 		building_sumitomo_besshi_mine
 	}
 	prosperity_modifier = {
-		building_lead_mine_throughput_add = 0.10
+		building_copper_mine_throughput_add = 0.10
 		state_building_sumitomo_besshi_mine_max_level_add = 1
 	}
 }

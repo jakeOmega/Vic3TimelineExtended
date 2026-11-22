@@ -1,0 +1,54 @@
+﻿# ============================================================================
+# SEIZE STRAIT — which provinces the war goal can take
+#
+# The 24 shore provinces of base 1.15's 12 straits are listed in
+# te_seize_strait_shore_provinces (te_seize_strait_values.txt), which this
+# file reads, and again in te_seize_strait_shores (te_seize_strait_effects.txt),
+# which hands them over. test_seize_strait_wargoal.py pins both against each
+# other and against the base game's strait definitions.
+#
+# War goal: common/war_goal_types/te_seize_strait.txt
+# ============================================================================
+
+# State scope. The state holds at least one shore province the goal may take:
+# any natural strait's shore, and a canal's two provinces once the canal is
+# built. The count, and the province list, is te_seize_strait_shore_provinces
+# (te_seize_strait_values.txt).
+te_state_has_seizable_strait_shore = {
+	te_seize_strait_shore_provinces > 0
+}
+
+# Any scope. A canal is built when some state in its region has the canal
+# building at level 1 or more (one under construction doesn't count).
+te_panama_canal_built = {
+	s:STATE_PANAMA = {
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_panama_canal
+				level >= 1
+			}
+		}
+	}
+}
+
+te_suez_canal_built = {
+	s:STATE_SINAI = {
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_suez_canal
+				level >= 1
+			}
+		}
+	}
+}
+
+te_kiel_canal_built = {
+	s:STATE_SCHLESWIG_HOLSTEIN = {
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_kiel_canal
+				level >= 1
+			}
+		}
+	}
+}

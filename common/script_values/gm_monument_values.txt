@@ -346,6 +346,17 @@ gm_sh_log_buildings = {
 	}
 }
 
+# Whether its last owner, while it stands, holds a part of the region (issue
+# #1409; a country holds one part of a region at most): 0 for a loss with no
+# part to take it, 1 where its part could not (a ceremony asking there).
+gm_sh_log_owner_parts = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gm_sh_log_owner_parts_now }
+		value = global_var:gm_sh_log_owner_parts_now
+	}
+}
+
 
 # ---- Clear Away (owner, 2026-10-31) -------------------------------------------------
 # Once six monuments stand in a state (gm_state_monument_count, the gate on a new

@@ -7,7 +7,6 @@
 # Event 1: Domestic Terror Attack
 # A bombing or mass-casualty attack by radical elements. Tied to terrorism_and_anti_terrorism tech era.
 social_tensions_events.1 = {
-	# REVIEWED 2026-09-25 (system_ungated): a domestic terror attack, not a state covert operation
 	type = country_event
 	placement = ROOT
 
@@ -44,11 +43,17 @@ social_tensions_events.1 = {
 		NOT = {
 			has_intelligence_ministry_5 = yes
 		}
-		# More likely in countries with political turmoil
+		# More likely in countries with political turmoil. Activism runs 0 to 1;
+		# 0.5 is vanilla's protesting threshold, where a movement starts to
+		# radicalize its supporters (MOVEMENT_MONTHLY_RADICALS_THRESHOLD). The
+		# owner chose it on 2026-11-15 (#1831). In five saves from before #1824,
+		# a movement at 0.25 or more was in about 90% of major powers (41 of 46),
+		# at 0.5 in about two thirds (29), at 0.75 in about a quarter (11).
+		# nd_loose_plot_possible repeats this gate: change both together.
 		OR = {
 			radical_fraction = { value >= 0.1 }
 			is_at_war = yes
-			any_political_movement = { political_movement_radicalism >= 25 }
+			any_political_movement = { political_movement_radicalism >= 0.5 }
 		}
 	}
 
@@ -136,7 +141,7 @@ social_tensions_events.2 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): the covert rule, and scope:terror_linked_country saved by .17; a filter
 		# The dedicated system owns this outcome when enabled.
 		has_game_rule = covert_warfare_disabled
 		exists = scope:terror_linked_country
@@ -1109,14 +1114,15 @@ social_tensions_events.13 = {
 	title = social_tensions_events.13.t
 	desc = {
 		first_valid = {
-			triggered_desc = { desc = social_tensions_events.13.d_tv trigger = { has_technology_researched = television_broadcasting } }
+			# The later technology first: social media nearly always follows television.
 			triggered_desc = { desc = social_tensions_events.13.d_social trigger = { has_technology_researched = social_media } }
+			triggered_desc = { desc = social_tensions_events.13.d_tv trigger = { has_technology_researched = television_broadcasting } }
 			desc = social_tensions_events.13.d_base
 		}
 	}
 	flavor = social_tensions_events.13.f
 
-	event_image = { texture = "gfx/event_pictures/religious_extremism_clash.dds" }
+	event_image = { texture = "gfx/event_pictures/anti_globalization_riot.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -1153,7 +1159,7 @@ social_tensions_events.13 = {
 		add_radicals = { value = very_small_radicals pop_type = academics }
 		ai_chance = {
 			base = 3
-			modifier = { trigger = { has_law = law_type:law_state_religion } add = 5 }
+			modifier = { trigger = { has_law_or_variant = law_type:law_state_religion } add = 5 }
 		}
 	}
 
@@ -1191,7 +1197,7 @@ social_tensions_events.14 = {
 	desc = social_tensions_events.14.d
 	flavor = social_tensions_events.14.f
 
-	event_image = { texture = "gfx/event_pictures/religious_extremism_clash.dds" }
+	event_image = { texture = "gfx/event_pictures/anti_globalization_riot.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -1226,7 +1232,7 @@ social_tensions_events.14 = {
 		add_radicals = { value = small_radicals pop_type = academics }
 		ai_chance = {
 			base = 3
-			modifier = { trigger = { has_law = law_type:law_state_religion } add = 5 }
+			modifier = { trigger = { has_law_or_variant = law_type:law_state_religion } add = 5 }
 		}
 	}
 
@@ -1275,7 +1281,7 @@ social_tensions_events.15 = {
 	}
 	flavor = social_tensions_events.15.f
 
-	event_image = { video = "unspecific_factory_closed" }
+	event_image = { texture = "gfx/event_pictures/globalization_protest_march.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -1358,7 +1364,7 @@ social_tensions_events.16 = {
 	}
 	flavor = social_tensions_events.16.f
 
-	event_image = { texture = "gfx/event_pictures/cultural_festival_revival.dds" }
+	event_image = { texture = "gfx/event_pictures/globalization_protest_march.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -1372,10 +1378,11 @@ social_tensions_events.16 = {
 		}
 		# With cultural hegemony on, "foreign culture swamping ours" needs a real
 		# foreign hegemon ahead of us: the benchmark modifier je_cultural_hegemony
-		# puts on every country that trails the leader (never on the hegemon).
+		# declares for every country that trails the leader (never the hegemon),
+		# which ch_trails_hegemon tests.
 		OR = {
 			has_game_rule = cultural_hegemony_disabled
-			has_modifier = cultural_hegemony_foreign_benchmark
+			ch_trails_hegemon = yes
 		}
 		NOR = {
 			has_modifier = cultural_openness_modifier
@@ -1564,7 +1571,7 @@ social_tensions_events.18 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): scope:terror_cell_target rides along from .2, which saved it; a filter
 		exists = scope:terror_cell_target
 	}
 

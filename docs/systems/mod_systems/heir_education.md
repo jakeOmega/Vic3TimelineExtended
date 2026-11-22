@@ -77,6 +77,8 @@ At JE start, heirs older than newborn receive pre-initialized investments:
 
 Only the both-off state also clears the `ruler_*_tier` vars; in the Heir-Education-only state they are the memory that restoration reads. The traits' `possible` blocks carry the same trigger but can't enforce it — `possible` only filters random trait generation and `add_trait` ignores it, which is how rule-off games leaked traits to every ruler after #183 un-wrapped the effect.
 
+**Switched off mid-game** (2026-11-08). A game rule can be changed mid-game, from the screen that changes country, and `disable_evaluation` touches only inactive records, so an active entry ran on after the Heir Education rule was switched off. The rule is now in the invalid outcome, folded into the monarchy test with `OR`, so the entry ends on its next update and `heir_education_cleanup_effect` takes the counters, focus flags and the three focus modifiers off the country. Traits an heir already has stay; the monthly `aptitude_traits_cleanup_effect` brings them in line with the two rules as before. Play-test: `docs/testing/rules-off-midgame-playtest.md`.
+
 ### Simulation
 `sim_heir_education.py` — Monte Carlo simulation (20,000 runs per scenario) that validates the probability distributions. Key scenarios: newborn with 1-3 focuses, adult heirs, neglected education, intelligence impact analysis. Run this to tune parameters before changing thresholds.
 

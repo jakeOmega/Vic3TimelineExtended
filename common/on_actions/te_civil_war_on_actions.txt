@@ -49,6 +49,10 @@ te_civil_war_on_start = {
 			# (te_tax_civil_war_effects.txt). After te_civil_war_record_start,
 			# so the rebels already carry te_cw_origin.
 			te_tax_on_uprising = yes
+			# A Command Economy new to the rebels gets State-Owned Banking, which
+			# the engine's copy of the origin's laws can overwrite in the build
+			# (extra_effects.txt).
+			banking_law_cascade_on_uprising = yes
 		}
 	}
 }
@@ -120,7 +124,8 @@ on_civil_war_won = {
 # repair restores what the loser held (#460-#465). Each is a no-op for a
 # loyalist winner except the tax code's, which runs for either winner of a
 # merge (the winner's own code applies; it closes the bill and the draft and
-# resyncs collection), and none depends on the order of the others.
+# resyncs collection), and the climate AI's, which clears its yearly locks on
+# either winner. None depends on the order of the others.
 te_civil_war_on_won = {
 	effect = {
 		te_civil_war_resolve_sides = yes
@@ -139,6 +144,9 @@ te_civil_war_on_won = {
 		te_demog_pension_repair_after_civil_war = yes	# Demographics: the pension setting and the bills
 		te_demog_um_repair_after_civil_war = yes	# Demographics: the nation's uploaded minds and their two modifiers
 		te_fptp_repair_after_civil_war = yes		# First Past the Post: ask whether to keep it
+		te_history_repair_after_civil_war = yes	# #1477: the charts' history stores
+		gw_ai_repair_after_civil_war = yes		# Climate AI: the movement's yearly locks start afresh
+		te_scaling_inherited_selfcheck_mark = yes	# TEMPORARY (#1404): te_scaling_selfcheck_effects.txt
 		te_civil_war_repoint_uprisings = yes
 		te_civil_war_clear = yes
 	}

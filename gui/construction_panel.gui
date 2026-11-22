@@ -228,22 +228,24 @@ types construction_panel
 
 				textbox = {
 					parentanchor = vcenter
+					max_width = 260
 					autoresize = yes
 					align = nobaseline
 					margin_left = 10
+					using = elide_fontsize_min
 					tooltip = "SUPPLY_SHIPS_TOPBAR_TOOLTIP"
 					text = "DECOMMISSION_SUPPLY_SHIPS_AVAILABLE"
 				}
 
 				button = {
+					size = { 250 36 }
 					parentanchor = right|vcenter
 					position = { -10 0 }
-					size = { 250 36 }
-					using = default_button
 					enabled = "[GreaterThan_int32(GetPlayer.GetNumAvailableSupplyShips, '(int32)0')]"
-					tooltip = "DECOMMISSION_SUPPLY_SHIPS_BUTTON_TOOLTIP"
-					text = "DECOMMISSION_SUPPLY_SHIPS_BUTTON"
 					onclick = "[PopupManager.ShowDecommissionSupplyShipsWindow]"
+					using = default_button
+					tooltip = "DECOMMISSION_SUPPLY_SHIPS_BUTTON_TOOLTIP"
+					text = "DECOMMISSION_SUPPLY_SHIPS_CONFIRM_BUTTON"
 				}
 			}
 
@@ -368,10 +370,10 @@ types construction_panel
 			}
 
 			blockoverride "can_retrofit_properties" {
-				tooltip = "RETROFIT_SHIPS_IN_COUNTRY_BUTTON_TOOLTIP"
-				using = tooltip_above
 				enabled = "[IsValid(RetrofitShips)]"
 				onclick = "[RightClickMenuManager.ToggleCountryRetrofitActions(Country.AccessSelf, PdxGuiWidget.AccessSelf)]"
+				using = tooltip_ne
+				tooltip = "RETROFIT_SHIPS_IN_COUNTRY_BUTTON_TOOLTIP"
 			}
 
 			blockoverride "can_retrofit_button_text" {
@@ -1687,7 +1689,7 @@ types construction_panel
 							mirror = horizontal
 							parentanchor = vcenter
 							using = decrease_button_sound
-							using = tooltip_above
+							using = tooltip_ne
 
 							block "tooltip_left_arrow" {
 								tooltip = "PREVIOUS_PAGE"
@@ -1709,7 +1711,7 @@ types construction_panel
 							size = { 25 25 }
 							parentanchor = vcenter
 							using = increase_button_sound
-							using = tooltip_above
+							using = tooltip_ne
 
 							block "tooltip_right_arrow" {
 								tooltip = "NEXT_PAGE"
@@ -1731,7 +1733,7 @@ types construction_panel
 							mirror = horizontal
 							parentanchor = vcenter
 							using = decrease_button_sound
-							using = tooltip_above
+							using = tooltip_ne
 
 							block "tooltip_left_arrow" {
 								tooltip = "PREVIOUS_PAGE"
@@ -1753,7 +1755,7 @@ types construction_panel
 							size = { 25 25 }
 							parentanchor = vcenter
 							using = increase_button_sound
-							using = tooltip_above
+							using = tooltip_ne
 
 							block "tooltip_right_arrow" {
 								tooltip = "NEXT_PAGE"
@@ -1791,7 +1793,7 @@ types construction_panel
 							mirror = horizontal
 							parentanchor = vcenter
 							using = decrease_button_sound
-							using = tooltip_above
+							using = tooltip_ne
 							tooltip = "PREVIOUS_PAGE"
 							onclick = "[ConstructionPanel.PrevMilitaryShipConstructionQueuePage]"
 						}
@@ -1806,7 +1808,7 @@ types construction_panel
 							size = { 25 25 }
 							parentanchor = vcenter
 							using = increase_button_sound
-							using = tooltip_above
+							using = tooltip_ne
 							tooltip = "NEXT_PAGE"
 							onclick = "[ConstructionPanel.NextMilitaryShipConstructionQueuePage]"
 						}
@@ -1821,7 +1823,7 @@ types construction_panel
 							mirror = horizontal
 							parentanchor = vcenter
 							using = decrease_button_sound
-							using = tooltip_above
+							using = tooltip_ne
 							tooltip = "PREVIOUS_PAGE"
 							onclick = "[ConstructionPanel.PrevSupplyShipConstructionQueuePage]"
 						}
@@ -1836,7 +1838,7 @@ types construction_panel
 							size = { 25 25 }
 							parentanchor = vcenter
 							using = increase_button_sound
-							using = tooltip_above
+							using = tooltip_ne
 							tooltip = "NEXT_PAGE"
 							onclick = "[ConstructionPanel.NextSupplyShipConstructionQueuePage]"
 						}

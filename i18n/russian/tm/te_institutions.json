@@ -1,0 +1,246 @@
+{
+ "INSTITUTION_FUNDING_LEVEL_ministry_of_foreign_affairs": {
+  "en": "Investment level for [GetInstitutionType('institution_ministry_of_foreign_affairs').GetName]",
+  "ru": "Уровень инвестиций: [GetInstitutionType('institution_ministry_of_foreign_affairs').GetName]"
+ },
+ "INSTITUTION_FUNDING_LEVEL_ministry_of_international_aid": {
+  "en": "Investment level for [GetInstitutionType('institution_ministry_of_international_aid').GetName]",
+  "ru": "Уровень инвестиций: [GetInstitutionType('institution_ministry_of_international_aid').GetName]"
+ },
+ "INSTITUTION_FUNDING_LEVEL_ministry_of_refugee_affairs": {
+  "en": "Investment level for [GetInstitutionType('institution_ministry_of_refugee_affairs').GetName]",
+  "ru": "Уровень инвестиций: [GetInstitutionType('institution_ministry_of_refugee_affairs').GetName]"
+ },
+ "INSTITUTION_FUNDING_LEVEL_ministry_of_the_environment": {
+  "en": "Investment level for [GetInstitutionType('institution_ministry_of_the_environment').GetName]",
+  "ru": "Уровень инвестиций: [GetInstitutionType('institution_ministry_of_the_environment').GetName]"
+ },
+ "NO_INSTITUTION_ministry_of_foreign_affairs": {
+  "en": "No [GetInstitutionType('institution_ministry_of_foreign_affairs').GetName]",
+  "ru": "Отсутствует: [GetInstitutionType('institution_ministry_of_foreign_affairs').GetName]"
+ },
+ "NO_INSTITUTION_ministry_of_international_aid": {
+  "en": "No [GetInstitutionType('institution_ministry_of_international_aid').GetName]",
+  "ru": "Отсутствует: [GetInstitutionType('institution_ministry_of_international_aid').GetName]"
+ },
+ "NO_INSTITUTION_ministry_of_refugee_affairs": {
+  "en": "No [GetInstitutionType('institution_ministry_of_refugee_affairs').GetName]",
+  "ru": "Отсутствует: [GetInstitutionType('institution_ministry_of_refugee_affairs').GetName]"
+ },
+ "NO_INSTITUTION_ministry_of_the_environment": {
+  "en": "No [GetInstitutionType('institution_ministry_of_the_environment').GetName]",
+  "ru": "Отсутствует: [GetInstitutionType('institution_ministry_of_the_environment').GetName]"
+ },
+ "institution_migration_controls": {
+  "en": "Migration Controls",
+  "ru": "Миграционный контроль"
+ },
+ "institution_migration_controls_desc": {
+  "en": "The border and immigration authorities deciding who may settle in the nation.",
+  "ru": "Пограничные и иммиграционные органы, решающие, кому разрешено селиться в стране."
+ },
+ "institution_ministry_of_commerce": {
+  "en": "Ministry of Commerce",
+  "ru": "Министерство торговли"
+ },
+ "institution_ministry_of_commerce_desc": {
+  "en": "The ministry promoting the nation's trade and commercial interests at home and abroad.",
+  "ru": "Министерство, продвигающее торговые и коммерческие интересы страны дома и за рубежом."
+ },
+ "institution_ministry_of_consumer_protection": {
+  "en": "Ministry of Consumer Protection",
+  "ru": "Министерство защиты прав потребителей"
+ },
+ "institution_ministry_of_consumer_protection_desc": {
+  "en": "Safeguarding the public from unsafe goods and unscrupulous sellers.",
+  "ru": "Защита населения от небезопасных товаров и недобросовестных продавцов."
+ },
+ "institution_ministry_of_culture": {
+  "en": "Ministry of Culture",
+  "ru": "Министерство культуры"
+ },
+ "institution_ministry_of_culture_desc": {
+  "en": "Fostering the national culture and spreading it at home and abroad.",
+  "ru": "Развитие национальной культуры и её распространение в стране и за рубежом."
+ },
+ "institution_ministry_of_foreign_affairs": {
+  "en": "Ministry of Foreign Affairs",
+  "ru": "Министерство иностранных дел"
+ },
+ "institution_ministry_of_foreign_affairs_desc": {
+  "en": "The diplomatic corps representing the nation's interests abroad.",
+  "ru": "Дипломатический корпус, представляющий интересы страны за рубежом."
+ },
+ "institution_ministry_of_intelligence_and_security": {
+  "en": "Ministry of Intelligence and Security",
+  "ru": "Министерство разведки и безопасности"
+ },
+ "institution_ministry_of_intelligence_and_security_agency": {
+  "en": "National Intelligence Agency",
+  "ru": "Национальное разведывательное управление"
+ },
+ "institution_ministry_of_intelligence_and_security_committee": {
+  "en": "Committee for State Security",
+  "ru": "Комитет государственной безопасности"
+ },
+ "institution_ministry_of_intelligence_and_security_desc": {
+  "en": "The nation's intelligence services, gathering secrets and running covert operations.",
+  "ru": "Разведывательные службы страны, добывающие секреты и проводящие тайные операции."
+ },
+ "institution_ministry_of_intelligence_and_security_directorate": {
+  "en": "Directorate of State Security",
+  "ru": "Управление государственной безопасности"
+ },
+ "institution_ministry_of_international_aid": {
+  "en": "Ministry of International Aid",
+  "ru": "Министерство международной помощи"
+ },
+ "institution_ministry_of_international_aid_desc": {
+  "en": "Channeling the nation's aid and development funds to other countries.",
+  "ru": "Направление помощи и средств на развитие страны другим странам."
+ },
+ "institution_ministry_of_labor": {
+  "en": "Ministry of Labor",
+  "ru": "Министерство труда"
+ },
+ "institution_ministry_of_labor_commissariat": {
+  "en": "People's Commissariat of Labor",
+  "ru": "Народный комиссариат труда"
+ },
+ "institution_ministry_of_labor_corporations": {
+  "en": "Ministry of Corporations",
+  "ru": "Министерство корпораций"
+ },
+ "institution_ministry_of_labor_department": {
+  "en": "Department of Labor",
+  "ru": "Департамент труда"
+ },
+ "institution_ministry_of_labor_desc": {
+  "en": "The ministry mediating between workers and employers.",
+  "ru": "Министерство, посредничающее между работниками и работодателями."
+ },
+ "institution_ministry_of_propaganda": {
+  "en": "Ministry of Propaganda",
+  "ru": "Министерство пропаганды"
+ },
+ "institution_ministry_of_propaganda_agitprop": {
+  "en": "Department of Agitation and Propaganda",
+  "ru": "Отдел агитации и пропаганды"
+ },
+ "institution_ministry_of_propaganda_desc": {
+  "en": "Shaping public opinion in favor of the state and its policies.",
+  "ru": "Формирование общественного мнения в пользу государства и его политики."
+ },
+ "institution_ministry_of_propaganda_guidance": {
+  "en": "Ministry of Guidance",
+  "ru": "Министерство руководства"
+ },
+ "institution_ministry_of_propaganda_information": {
+  "en": "Ministry of Information",
+  "ru": "Министерство информации"
+ },
+ "institution_ministry_of_propaganda_popular_culture": {
+  "en": "Ministry of Popular Culture",
+  "ru": "Министерство народной культуры"
+ },
+ "institution_ministry_of_refugee_affairs": {
+  "en": "Ministry of Refugee Affairs",
+  "ru": "Министерство по делам беженцев"
+ },
+ "institution_ministry_of_refugee_affairs_desc": {
+  "en": "Receiving and settling those who flee to the nation for safety.",
+  "ru": "Приём и расселение тех, кто бежит в страну в поисках безопасности."
+ },
+ "institution_ministry_of_religion": {
+  "en": "Ministry of Religion",
+  "ru": "Министерство по делам религий"
+ },
+ "institution_ministry_of_religion_desc": {
+  "en": "Overseeing the nation's religious life and upholding the state faith.",
+  "ru": "Надзор за религиозной жизнью страны и защита государственной веры."
+ },
+ "institution_ministry_of_science": {
+  "en": "Ministry of Science",
+  "ru": "Министерство науки"
+ },
+ "institution_ministry_of_science_desc": {
+  "en": "Funding and coordinating the nation's scientific research.",
+  "ru": "Финансирование и координация научных исследований страны."
+ },
+ "institution_ministry_of_the_environment": {
+  "en": "Ministry of the Environment",
+  "ru": "Министерство окружающей среды"
+ },
+ "institution_ministry_of_the_environment_desc": {
+  "en": "Protecting the nation's land, air and water from the costs of industry.",
+  "ru": "Защита земли, воздуха и воды страны от издержек промышленности."
+ },
+ "institution_ministry_of_thought_control": {
+  "en": "Ministry of Thought Control",
+  "ru": "Министерство контроля над мыслью"
+ },
+ "institution_ministry_of_thought_control_desc": {
+  "en": "Tasked with ensuring that no citizen thinks otherwise than the state.",
+  "ru": "Обязано следить, чтобы ни один гражданин не думал иначе, чем государство."
+ },
+ "institution_ministry_of_urban_planning": {
+  "en": "Ministry of Urban Planning",
+  "ru": "Министерство градостроительства"
+ },
+ "institution_ministry_of_urban_planning_desc": {
+  "en": "Directing the growth and rebuilding of the nation's cities.",
+  "ru": "Руководство ростом и перестройкой городов страны."
+ },
+ "institution_ministry_of_war": {
+  "en": "Ministry of War",
+  "ru": "Военное министерство"
+ },
+ "institution_ministry_of_war_defense": {
+  "en": "Ministry of Defense",
+  "ru": "Министерство обороны"
+ },
+ "institution_ministry_of_war_department": {
+  "en": "Department of War",
+  "ru": "Военное ведомство"
+ },
+ "institution_ministry_of_war_department_of_defense": {
+  "en": "Department of Defense",
+  "ru": "Департамент обороны"
+ },
+ "institution_ministry_of_war_desc": {
+  "en": "The ministry commanding the nation's armed forces and overseeing their supply.",
+  "ru": "Министерство, командующее вооружёнными силами страны и следящее за их снабжением."
+ },
+ "institution_national_bank": {
+  "en": "National Bank",
+  "ru": "Национальный банк"
+ },
+ "institution_national_bank_bank_of_england": {
+  "en": "Bank of England",
+  "ru": "Банк Англии"
+ },
+ "institution_national_bank_bank_of_france": {
+  "en": "Bank of France",
+  "ru": "Банк Франции"
+ },
+ "institution_national_bank_bank_of_japan": {
+  "en": "Bank of Japan",
+  "ru": "Банк Японии"
+ },
+ "institution_national_bank_bank_of_the_united_states": {
+  "en": "Bank of the United States",
+  "ru": "Банк Соединённых Штатов"
+ },
+ "institution_national_bank_desc": {
+  "en": "The central bank issuing the nation's currency and managing its reserves.",
+  "ru": "Центральный банк, выпускающий национальную валюту и управляющий её резервами."
+ },
+ "institution_national_bank_federal_reserve": {
+  "en": "Federal Reserve",
+  "ru": "Федеральная резервная система"
+ },
+ "institution_national_bank_state_bank": {
+  "en": "State Bank",
+  "ru": "Государственный банк"
+ }
+}

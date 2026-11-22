@@ -17,14 +17,18 @@ te_frontier_ai_fix_law = {
 			has_law = law_type:law_no_frontier_ai_policy
 			has_technology_researched = ai_agents
 		}
+		set_variable = te_law_sweep_replacing	# te_law_replaced_notice
 		activate_law = law_type:law_private_ai_labs
+		remove_variable = te_law_sweep_replacing
 	}
 	if = {
 		limit = {
 			has_law = law_type:law_international_ai_oversight
 			NOT = { te_frontier_ai_un_member = yes }
 		}
+		set_variable = te_law_sweep_replacing	# te_law_replaced_notice
 		activate_law = law_type:law_national_ai_licensing
+		remove_variable = te_law_sweep_replacing
 	}
 }
 
@@ -37,7 +41,9 @@ te_frontier_ai_fix_law = {
 te_frontier_ai_on_un_membership_end = {
 	if = {
 		limit = { has_law = law_type:law_international_ai_oversight }
+		set_variable = te_law_sweep_replacing	# te_law_replaced_notice
 		activate_law = law_type:law_national_ai_licensing
+		remove_variable = te_law_sweep_replacing
 	}
 }
 

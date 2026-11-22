@@ -1,0 +1,653 @@
+﻿# Journal entry map modes (vanilla 1.15; docs/systems/mod_systems/journal_map_modes.md). The Map Room's selector. Each
+# map's color scale, its factor 0-1, is generated: te_journal_map_scales_generated.txt, from the table in
+# scripts/generators/gen_journal_map_scales.py (one shape per family, so a change to a shape changes every map using it).
+
+# ---------------------------------------------------------------------------
+# The selector: which of the Map Room's maps the player picked
+# ---------------------------------------------------------------------------
+# 1 turmoil, 3 life expectancy, 4 fertility, 5 median age, 6 devastation, 7 natural change, 8 death rate, 9 birth
+# rate, 10 infant mortality, 11 leading cause of death, 12 sex balance, 13 net migration, 14 aged 65 and over, 15 urban
+# share, 16 Gini coefficient, 17 Dynastic Wealth; the systems' (each also on its own entry): 18 emissions, 19 nuclear
+# weapons, 20 covert networks, 21 the United Nations, 22 political models, 23 ocean basins, 24 grandeur, 25 colonies;
+# the Map Room's own again: 26 tourism's Base Appeal, 27 Base Comfort (Local Climate before any technology), 28 Current
+# Comfort (after the owner's), 29 GDP per capita, 30 Migration Crowding; 31 power grids (the Power Grids tab's map,
+# 2026-11-07); 32 city rank (tourism's), 33 armed forces (Soldiers and Officers, the yearly walk's), 34 company
+# headquarters (their weekly profit), 35 war dead (the census's, last year; 2026-11-08); 36 ownership (the walk's), 37
+# population growth (the walk's), 38 family planning, 39 health care, 40 fighting-age men (the census's; 2026-11-08,
+# second round); 41 capitalists, 42 aristocrats, 43 clergy, 44 academics (each class's share of the people, the
+# walk's), 45 trade capacity (the state's own, its Trade Center's; 2026-11-11), 46 investment (what the state's owners
+# pay into the Investment Pool, estimated; 2026-11-11), 47 population density (people per km² of land; 2026-11-16); 0
+# none. 2 was literacy, retired because
+# vanilla's own literacy map mode shows it (a save holding 2 shows the unpainted map and "Pick a map" until the next
+# pick); 6 was the scope probe until the fourth session. A global variable (te_jmap_set_selector), since a state's map_color reaches neither the
+# entry nor a country (the scope probe painted blue, 2026-11-05): one player's pick is every player's in multiplayer.
+# Root-free, so the Map Room's state roots and the pick buttons' country roots read the same number.
+te_jmap_selector = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_sel }
+		value = global_var:te_jmap_sel
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The Map Room's options (2026-11-14): where the maps are drawn, what their ranges leave out, and their scale
+# ---------------------------------------------------------------------------
+# Global variables, as the pick is and for the same reason, so every player in a multiplayer game shares them; unset
+# is the default, what the Map Room showed before it had options. Set by the option buttons' scripted GUIs
+# (te_jmap_set_area, te_jmap_set_continent, te_jmap_set_trim, te_jmap_set_scale: te_journal_map_effects.txt). Root-free. The script
+# values a range's measure reads them through (te_jmap_trim_count, te_jmap_pick_fitted ...) are generated:
+# te_journal_map_scales_generated.txt.
+
+# The area: 0 the world, 1 a continent (te_jmap_continent), 2 the viewer's market, 3 its power bloc, 4 its country
+# (the viewer: global_var:te_jmap_viewer, the player who last clicked). A state outside it carries te_jmap_out
+# (te_jmap_mark_area), is painted te_jmap_outside, and is left out of the range.
+te_jmap_area = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_opt_area }
+		value = global_var:te_jmap_opt_area
+	}
+}
+
+# The continent of area 1: 1 Europe, 2 Asia, 3 Africa, 4 North America, 5 South America, 6 Oceania (the strategic
+# regions of each: te_jmap_in_continent_*, te_journal_map_triggers.txt). 0 until Continent is first picked, which
+# takes the player's capital's.
+te_jmap_continent = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_opt_cont }
+		value = global_var:te_jmap_opt_cont
+	}
+}
+
+# The outliers a fitted map's range leaves out: 0 four states at each end (fewer in a small area), 1 none, 2 a
+# twentieth of the states with a figure at each end (te_jmap_trim_count works out the number).
+te_jmap_trim = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_opt_trim }
+		value = global_var:te_jmap_opt_trim
+	}
+}
+
+# The scale a fitted map's colors run on (2026-11-14, the thirteenth pass): 0 the map's own curve, 1 linear, 2
+# logarithmic, 3 ranked (each state's place in line, which te_jmap_rank_<map> stores on it as te_jmap_rank). Every
+# factor the Map Room reads branches on this (te_journal_map_scales_generated.txt); the paint may run it once per
+# state per frame, so it is one guarded global read, as the selector is.
+te_jmap_scale = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_opt_scale }
+		value = global_var:te_jmap_opt_scale
+	}
+}
+
+# The colors a fitted map is painted in (2026-11-14, the fourteenth pass): 0 the map's own, 1 the colorblind-safe
+# ramps, 2 greyscale. The Map Room's paint opens with branches on this (te_journal_maps.txt), each taken only while it
+# is off 0 and asks for it first, so a default paint pays one comparison a branch (if a limit stops at its first
+# false line, which nothing has measured) and the maps' own branches are untouched.
+te_jmap_color = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_opt_color }
+		value = global_var:te_jmap_opt_color
+	}
+}
+
+# 1 while an option is off its default, so the page can say so above the picks.
+te_jmap_options_set = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				te_jmap_area > 0
+				te_jmap_trim > 0
+				te_jmap_scale > 0
+				te_jmap_color > 0
+			}
+		}
+		value = 1
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The census's figures (state scope: the state being painted or hovered)
+# ---------------------------------------------------------------------------
+# The runner-up cause of death's deaths over the leader's, 0-1 (te_demog_dc_second_share over te_demog_dc_lead_share):
+# the Leading Cause map stripes the runner-up's color over the leader's from 0.5, half the leader's deaths (owner,
+# 2026-11-06). 0 for a state with no deaths, or whose last count came before te_dg_dc_second was stored.
+te_jmap_cause_second_ratio = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_dc_total
+			has_variable = te_dg_dc_lead
+			has_variable = te_dg_dc_second
+		}
+		value = te_demog_dc_second_share
+		divide = {
+			value = te_demog_dc_lead_share
+			min = 0.001
+		}
+	}
+	min = 0
+	max = 1
+}
+
+# ---------------------------------------------------------------------------
+# The systems' figures (state scope: the state being painted or hovered)
+# ---------------------------------------------------------------------------
+# The state's share of the world's greenhouse gas emissions last year, 0-1 (negative for a state that takes more out of
+# the air than it puts in): its yearly snapshot (gw_state_emis, gw_snapshot_country_emissions_effect) over the world's
+# annual total (gw_g_global_emis, re-based each January), both in internal units. A share, not an amount (owner,
+# 2026-11-06), so a color means the same thing in 1850 and 2000, whatever the world emits.
+te_jmap_gw_share = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gw_state_emis
+			te_jmap_gw_world > 0
+		}
+		value = var:gw_state_emis
+		divide = te_jmap_gw_world
+	}
+	min = -1
+	max = 1
+}
+
+# The world's emissions last year (gw_g_global_emis), 0 before the first January; any scope.
+te_jmap_gw_world = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gw_g_global_emis }
+		value = global_var:gw_g_global_emis
+	}
+}
+
+# The state's emissions last year in internal units (gw_state_emis), 0 before its first snapshot.
+te_jmap_gw_state_emis = {
+	value = 0
+	if = {
+		limit = { has_variable = gw_state_emis }
+		value = var:gw_state_emis
+	}
+}
+
+# The state's emissions last year in display units (the panel's K/M figures: internal x 1000, gw_disp_own_emis).
+te_jmap_gw_disp_emis = {
+	value = 0
+	if = {
+		limit = { has_variable = gw_state_emis }
+		value = var:gw_state_emis
+		multiply = 1000
+	}
+}
+
+# The viewer's network in the state's owner, 0-100 (covert warfare's iw_nets: one container per target, on the
+# operator, iw_net_strength; nd_loose_network_tier reads it the same way). 0 with no network, no viewer, or the viewer
+# itself. root is the state: the map's, or the hover's (MakeScope).
+te_jmap_net_strength = {
+	value = 0
+	if = {
+		limit = {
+			exists = owner
+			global_var:te_jmap_viewer ?= { has_variable_list = iw_nets }
+		}
+		global_var:te_jmap_viewer = {
+			every_in_list = {
+				variable = iw_nets
+				limit = {
+					var:iw_target ?= root.owner
+					has_variable = iw_net_strength
+				}
+				add = var:iw_net_strength
+			}
+		}
+	}
+	min = 0
+	max = 100
+}
+
+# ---------------------------------------------------------------------------
+# The Map Room's own figures (state scope: the state being painted or hovered)
+# ---------------------------------------------------------------------------
+# Company Headquarters (34): the weekly profit of the state's company headquarters, summed. Script can't read a
+# company's profit (te_company_effects.txt), but each company has one headquarters building (its production method
+# follows the company's category), and an ownership building's profit is what the levels it owns pay it, less its own
+# wages: the company's earnings coming home. Whether it books them so is TE_SELF_CHECK hq_profit (te_jmap_hq_selfcheck).
+#
+# A headquarters is found by its building group, never its type. The engine makes a building type for each company type,
+# building_<company type> (building_company_basic_fabrics, building_regional_company_hbc ...), from the two
+# headquarters templates, so has_building = building_company_headquarter and is_building_type = building_company_
+# headquarter match no state: a 1890 save held 61 headquarters and no building of either template type, and this map
+# painted every state grey (2026-11-08). Vanilla counts them by group too (08_tsarpoints_buttons.txt).
+#
+# The map reads state variables the global monthly pulse writes (te_jmap_store_hqs, te_journal_map_effects.txt), as
+# Armed Forces reads the yearly walk's: the paint walks no buildings, and a game's first month after a load is grey.
+
+# The walk itself, state scope: the store's input only.
+te_jmap_hq_walk_count = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_group = bg_company_headquarter }
+		add = 1
+	}
+}
+
+te_jmap_hq_walk_profit = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_group = bg_company_headquarter }
+		add = weekly_profit
+	}
+}
+
+te_jmap_rhq_walk_count = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_group = bg_company_regional_headquarter }
+		add = 1
+	}
+}
+
+# The stored figures, state scope, 0 where unset: the headquarters' weekly profit summed (the map's input), their count
+# and the regional headquarters' count (the hover's).
+te_jmap_hq_profit = {
+	value = 0
+	if = {
+		limit = { has_variable = te_jmap_hq_wp }
+		value = var:te_jmap_hq_wp
+	}
+}
+
+te_jmap_hq_count = {
+	value = 0
+	if = {
+		limit = { has_variable = te_jmap_hq_n }
+		value = var:te_jmap_hq_n
+	}
+}
+
+te_jmap_rhq_count = {
+	value = 0
+	if = {
+		limit = { has_variable = te_jmap_rhq_n }
+		value = var:te_jmap_rhq_n
+	}
+}
+
+# Ownership (36): who holds the state's capital, the yearly walk's building levels (te_demog_effects.txt: privately,
+# by their own workers, by the state; ownership buildings, subsistence farms and government buildings left out). The
+# leader's code (1 private, 2 their workers, 3 the state; a tie to the first of them), 0 for a state without a walk or
+# with under one level of capital (te_demog_wc_capital_levels, Dynastic Wealth's own test).
+te_jmap_own_lead = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_lv_priv
+			has_variable = te_dg_lv_self
+			has_variable = te_dg_lv_ctry
+		}
+		if = {
+			limit = { te_demog_wc_capital_levels >= 1 }
+			if = {
+				limit = {
+					var:te_dg_lv_priv >= var:te_dg_lv_self
+					var:te_dg_lv_priv >= var:te_dg_lv_ctry
+				}
+				value = 1
+			}
+			else_if = {
+				limit = { var:te_dg_lv_self >= var:te_dg_lv_ctry }
+				value = 2
+			}
+			else = {
+				value = 3
+			}
+		}
+	}
+}
+
+# The leader's share of the state's capital levels, 1/3-1 (0 with no leader): the map fades the leader's color by it.
+te_jmap_own_lead_share = {
+	value = 0
+	if = {
+		limit = { te_jmap_own_lead = 1 }
+		value = var:te_dg_lv_priv
+		divide = { value = te_demog_wc_capital_levels min = 1 }
+	}
+	else_if = {
+		limit = { te_jmap_own_lead = 2 }
+		value = var:te_dg_lv_self
+		divide = { value = te_demog_wc_capital_levels min = 1 }
+	}
+	else_if = {
+		limit = { te_jmap_own_lead = 3 }
+		value = var:te_dg_lv_ctry
+		divide = { value = te_demog_wc_capital_levels min = 1 }
+	}
+}
+
+# Each holder's share, for the hover (read only where te_jmap_own_lead is above 0, so every variable is there).
+te_jmap_own_priv_share = {
+	value = 0
+	if = {
+		limit = { te_jmap_own_lead > 0 }
+		value = var:te_dg_lv_priv
+		divide = { value = te_demog_wc_capital_levels min = 1 }
+	}
+}
+te_jmap_own_self_share = {
+	value = 0
+	if = {
+		limit = { te_jmap_own_lead > 0 }
+		value = var:te_dg_lv_self
+		divide = { value = te_demog_wc_capital_levels min = 1 }
+	}
+}
+te_jmap_own_ctry_share = {
+	value = 0
+	if = {
+		limit = { te_jmap_own_lead > 0 }
+		value = var:te_dg_lv_ctry
+		divide = { value = te_demog_wc_capital_levels min = 1 }
+	}
+}
+
+# Population Growth (37): the change in the state's people from one yearly walk to the next, per 1,000 of last year's
+# (te_dg_walk_pop against te_dg_walk_pop_prev, which te_demog_walk_keep_prev keeps every game, whatever the rule). It
+# takes in births, deaths and migration, and also land gained or lost: a state that took or gave up provinces since
+# its last walk jumps. 0 for a state without two walks.
+te_jmap_pop_growth = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_walk_pop
+			has_variable = te_dg_walk_pop_prev
+		}
+		if = {
+			limit = { var:te_dg_walk_pop_prev > 0 }
+			# the ratio first, then per 1,000: a state of tens of millions times 1,000 needn't fit the fixed point
+			value = var:te_dg_walk_pop
+			divide = var:te_dg_walk_pop_prev
+			subtract = 1
+			multiply = 1000
+		}
+	}
+}
+
+# Armed Forces (33): Soldiers and Officers over the state's people, 0-1, both the yearly walk's (te_dg_soldiers,
+# te_dg_walk_pop), for the hover.
+te_jmap_soldiers_share = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_soldiers
+			has_variable = te_dg_walk_pop
+		}
+		value = var:te_dg_soldiers
+		divide = {
+			value = var:te_dg_walk_pop
+			min = 1
+		}
+	}
+	min = 0
+	max = 1
+}
+
+# The classes (41-44, 2026-11-11): a class's people over the state's, 0-1, both the yearly walk's (te_dg_capitalists,
+# te_dg_aristocrats, te_dg_clergy, te_dg_academics from te_demog_work_walk_pop; te_dg_walk_pop), whatever the
+# Demographics rule. Each map's input and its hover's figure.
+te_jmap_capitalists_share = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_capitalists
+			has_variable = te_dg_walk_pop
+		}
+		value = var:te_dg_capitalists
+		divide = {
+			value = var:te_dg_walk_pop
+			min = 1
+		}
+	}
+	min = 0
+	max = 1
+}
+
+te_jmap_aristocrats_share = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_aristocrats
+			has_variable = te_dg_walk_pop
+		}
+		value = var:te_dg_aristocrats
+		divide = {
+			value = var:te_dg_walk_pop
+			min = 1
+		}
+	}
+	min = 0
+	max = 1
+}
+
+te_jmap_clergy_share = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_clergy
+			has_variable = te_dg_walk_pop
+		}
+		value = var:te_dg_clergy
+		divide = {
+			value = var:te_dg_walk_pop
+			min = 1
+		}
+	}
+	min = 0
+	max = 1
+}
+
+te_jmap_academics_share = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_academics
+			has_variable = te_dg_walk_pop
+		}
+		value = var:te_dg_academics
+		divide = {
+			value = var:te_dg_walk_pop
+			min = 1
+		}
+	}
+	min = 0
+	max = 1
+}
+
+# Trade Capacity (45; Trade Volume until 2026-11-11, when it painted the owner's trade and every state of a country
+# alike): the state's own Trade Capacity, what its Trade Center gives it (pm_trade_center's workforce-scaled
+# state_trade_capacity_add, 10 a level fully staffed, with a company flagship's or a treaty port's on top) times its
+# multipliers (state_trade_capacity_mult: the trade laws, principles and companies; a country's lines flow down to its
+# states). Read live: two modifier reads, no walk. Whether the read carries what the building's throughput adds is
+# unverified (docs/testing/journal-map-modes-playtest.md, check 28).
+te_jmap_trade_capacity = {
+	value = modifier:state_trade_capacity_add
+	multiply = {
+		value = 1
+		add = modifier:state_trade_capacity_mult
+		min = 0
+	}
+	min = 0
+}
+
+# The owner's trade with the world market, the total value of what it buys and sells there (total_trade_value, the
+# figure vanilla's Free Trade entry je_liberalism_2 counts): the hover's second line, for scale. Script has no state's
+# own share of it. 0 for a state with no owner.
+te_jmap_trade_value = {
+	value = 0
+	if = {
+		limit = { exists = owner }
+		owner = {
+			add = total_trade_value
+		}
+	}
+	min = 0
+}
+
+# The state's Trade Center levels (the hover's); 0 with none.
+te_jmap_trade_center_levels = {
+	value = 0
+	if = {
+		limit = { has_building = building_trade_center }
+		value = b:building_trade_center.level
+	}
+}
+
+# Investment (46, 2026-11-11): what the state's owners pay into their country's Investment Pool each week, estimated.
+# The engine takes a share of the dividends a state's owners are paid (state_<pop type>_investment_pool_contribution_
+# add, raised by _efficiency_mult), and script reads neither a pop's dividends nor a building's shares, so the estimate
+# is the weekly profit of the buildings the owners sit in, which is what the levels they own pay them less the
+# building's own wages (the Company Headquarters map's read, te_jmap_hq_selfcheck), times the share their leading
+# owners reinvest: capitalists' for Financial Districts and company headquarters, aristocrats' for Manor Houses. Left
+# out: levels their own workers own and the government's reinvested dividends, whose shares script can't split, the
+# clergy's and bureaucrats' Manor Houses (counted at the aristocrats' share) and a regional headquarters, which pays
+# its company's home. A building at a loss pays nothing.
+#
+# The map reads state variables a store writes (te_jmap_store_invest, te_journal_map_effects.txt) at a pick of the map
+# and each month while it is the pick, as Company Headquarters reads its store's: the paint walks no buildings.
+
+# The walks, state scope: the store's input only.
+te_jmap_invest_walk_cap_profit = {
+	value = 0
+	every_scope_building = {
+		limit = {
+			OR = {
+				is_building_group = bg_financial_districts
+				is_building_group = bg_company_headquarter
+			}
+			weekly_profit > 0
+		}
+		add = weekly_profit
+	}
+}
+
+te_jmap_invest_walk_ari_profit = {
+	value = 0
+	every_scope_building = {
+		limit = {
+			is_building_group = bg_manor_houses
+			weekly_profit > 0
+		}
+		add = weekly_profit
+	}
+}
+
+# The share of their dividends the state's capitalists and aristocrats pay in, with what efficiency adds: 0-1 times
+# 1 + efficiency. The base (0.30, 0.20) is the country's, flowing down; whether the state's read carries it is
+# TE_SELF_CHECK invest_rate (te_jmap_invest_selfcheck).
+te_jmap_invest_rate_cap = {
+	value = modifier:state_capitalists_investment_pool_contribution_add
+	min = 0
+	max = 1
+	multiply = {
+		value = 1
+		add = modifier:state_capitalists_investment_pool_efficiency_mult
+		min = 0
+	}
+}
+
+te_jmap_invest_rate_ari = {
+	value = modifier:state_aristocrats_investment_pool_contribution_add
+	min = 0
+	max = 1
+	multiply = {
+		value = 1
+		add = modifier:state_aristocrats_investment_pool_efficiency_mult
+		min = 0
+	}
+}
+
+te_jmap_invest_walk_cap = {
+	value = te_jmap_invest_walk_cap_profit
+	multiply = te_jmap_invest_rate_cap
+}
+
+te_jmap_invest_walk_ari = {
+	value = te_jmap_invest_walk_ari_profit
+	multiply = te_jmap_invest_rate_ari
+}
+
+# The stored figures, state scope, 0 where unset: the two sides (the hover's) and their sum (the map's input).
+te_jmap_invest_cap = {
+	value = 0
+	if = {
+		limit = { has_variable = te_jmap_inv_cap }
+		value = var:te_jmap_inv_cap
+	}
+}
+
+te_jmap_invest_ari = {
+	value = 0
+	if = {
+		limit = { has_variable = te_jmap_inv_ari }
+		value = var:te_jmap_inv_ari
+	}
+}
+
+te_jmap_invest_value = {
+	value = te_jmap_invest_cap
+	add = te_jmap_invest_ari
+}
+
+# Population Density (47, 2026-11-16): the state's people per km² of land. Read live, as GDP per capita is: the
+# engine's people and province counts and one variable on the state region, no walk.
+#
+# The state's land in km²: its region's area (te_region_area, te_region_area_generated.txt, the row-weighted pixels of
+# the game's provinces.png, stored on the region at game start; read through te_region_area_km2,
+# resettlement_values.txt) times the state's share of the region's provinces, so a region split between owners shares
+# its land by province (script can't reach a province's own size; a region's provinces run near one size). 0 until
+# the area table is written (the game's first day, or the first month of a save from before it).
+te_jmap_density_area = {
+	value = 0
+	if = {
+		limit = { state_region = { has_variable = te_region_area } }
+		value = te_region_area_km2
+		divide = {
+			value = state_region.num_provinces
+			min = 1
+		}
+		multiply = num_provinces
+	}
+}
+
+# People per km²: 0 with no area yet, which paints the state pale ("none") until the table is written.
+# state_population as the bareword head of the value, the form that reads it (scripting_best_practices.md,
+# "state_population / total_population Are Triggers, Not Script Values").
+te_jmap_density = {
+	value = state_population
+	divide = {
+		value = te_jmap_density_area
+		min = 1
+	}
+	if = {
+		limit = { te_jmap_density_area < 1 }
+		value = 0
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Hover figures (map_tooltip's loc, state scope)
+# ---------------------------------------------------------------------------
+# Base Comfort's figure as what it does to migration attraction, signed as te_climate_effect_now is (negative a cost,
+# positive a mild winter's draw): the penalty before relief that te_update_local_climate_modifier stored.
+te_jmap_comfort_base_effect = {
+	value = 0
+	if = {
+		limit = { has_variable = te_climate_base_penalty }
+		value = var:te_climate_base_penalty
+		multiply = -1
+	}
+}

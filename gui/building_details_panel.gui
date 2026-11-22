@@ -418,6 +418,27 @@ types building_panels
 			}
 		}
 
+		### MOD: Power Grids. A Grid Transfer Station's grid in brief, with a
+		### link to the Power Grids tab for the player's own (te_grid_building_section,
+		### gui/te_grid_widgets.gui), its datacontext the building's state.
+		flowcontainer = {
+			visible = "[Building.IsBuildingType('building_grid_transfer_station')]"
+			using = default_list_position
+			direction = vertical
+			minimumsize = { @panel_width -1 }
+
+			default_header_2texts = {
+				blockoverride "text1" {
+					text = "te_grid_bld_header"
+				}
+			}
+
+			te_grid_building_section = {
+				datacontext = "[Building.GetState]"
+			}
+		}
+		### END MOD: Power Grids
+
 		### BUILDING ASSETS
 		flowcontainer = {
 			visible = "[Not(IsDataModelEmpty(Building.GetBuildingAssets))]"
@@ -519,12 +540,13 @@ types building_panels
 									autoresize = yes
 									parentanchor = vcenter
 								}
+
 								button_icon_goto = {
-									size = { 25 25 }
-									onclick = "[InformationPanelBar.OpenBuildingDetailsPanel(BuildingOwnership.GetOwnedBuilding.AccessSelf)]"
 									visible = "[Building.IsValid]"
-									tooltip = "GO_TO_BUTTON_BUILDING"
+									size = { 25 25 }
 									parentanchor = vcenter
+									onclick = "[InformationPanelBar.OpenBuildingDetailsPanel(BuildingOwnership.GetOwnedBuilding.AccessSelf)]"
+									tooltip = "GO_TO_BUTTON_BUILDING"
 								}
 							}
 
@@ -595,11 +617,21 @@ types building_panels
 
 				blockoverride "right" {
 					button_icon_goto = {
-						position = { -10 0 }
 						size = { 28 28 }
 						parentanchor = vcenter|right
+						position = { -10 0 }
 						onclick = "[InformationPanelBar.OpenPanel('world_market')]"
 						tooltip = "GOTO_WORLD_MARKET"
+					}
+
+					button_icon_goto = {
+						visible = "[State.IsWorldMarketHub]"
+						size = { 28 28 }
+						parentanchor = vcenter|right
+						position = { -42 0 }
+						enabled = "[State.HasWorldMarketHubTrade]"
+						onclick = "[InformationPanelBar.OpenMarketPanelForWorldMarketHub(State.Self)]"
+						tooltip = "[SelectLocalization(State.HasWorldMarketHubTrade, 'GOTO_WORLD_MARKET_HUB', 'GOTO_WORLD_MARKET_HUB_NO_TRADE')]"
 					}
 				}
 			}
@@ -2040,15 +2072,15 @@ types building_panels
 			autoresize = yes
 			parentanchor = vcenter
 		}
+
 		button_icon_goto = {
 			size = { 25 25 }
+			parentanchor = vcenter
+			tooltip = "GO_TO_BUTTON_BUILDING"
 
 			block "oln_button" {
 
 			}
-
-			tooltip = "GO_TO_BUTTON_BUILDING"
-			parentanchor = vcenter
 		}
 	}
 
@@ -2399,7 +2431,13 @@ types building_panels
 			texture = "[CombatUnitType.GetTextureForCulture(Culture.Self)]"
 
 			tooltipwidget = {
-				FancyTooltip_CombatUnitTypeWithCulture = {}
+				FancyTooltip_CombatUnitTypeWithCulture = {
+					blockoverride "tooltip_content_before" {
+						custom_tooltip_textbox = {
+							text = "BUILDING_COMBAT_UNIT_TYPE_COUNT"
+						}
+					}
+				}
 			}
 
 			modify_texture = {
@@ -2411,7 +2449,9 @@ types building_panels
 				size = { 100% 100% }
 			}
 
-			offense_defense_info_small = {}
+			block "combat_stats" {
+				offense_defense_info_small = {}
+			}
 
 			block "icon_size" {
 				size = { 75 75 }
@@ -2420,6 +2460,7 @@ types building_panels
 			textbox = {
 				parentanchor = left|bottom
 				autoresize = yes
+				align = nobaseline
 				raw_text = "#v [Building.GetNumUnitsOfCombatUnitType(CombatUnitType.Self)]#!"
 				using = fontsize_small
 
@@ -2427,6 +2468,8 @@ types building_panels
 					margin = { 10 5 }
 				}
 				background = {
+					alpha = 0.8
+					margin = { 2 2 }
 					using = blurry_dark_background
 				}
 			}
@@ -2659,6 +2702,9 @@ types building_panels
 							blockoverride "controller_size" {
 								size = { 130 35 }
 							}
+							blockoverride "expand_button_widgetid" {
+								widgetid = "[Concatenate('building_details_expand', Building.GetIDString)]"
+							}
 						}
 
 						### BUILD PROGRESS
@@ -2718,6 +2764,10 @@ types building_panels
 						}
 					}
 				}
+			}
+
+			widget = {
+				size = { 300 80 }
 
 				block "extra_items_in_production_methods_list" {}
 			}
@@ -3364,7 +3414,7 @@ types building_panels
 					block "pms_item_size" {
 						size = { 50 50 }
 					}
-					visible = "[And(And4(Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_light')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_heavy')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_intensive'))), And(Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_mine')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_graded'))))]"
+					visible = "[And(And(And4(Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_light')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_heavy')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_intensive'))), And(Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_mine')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_graded')))), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_space_program_mission_ceiling')))]"
 					datacontext = "[Building.AccessProductionMethod(ProductionMethodGroup.Self)]"
 					datacontext = "[ProductionMethod]"
 					datacontext = "[Building]"
@@ -3568,7 +3618,7 @@ types building_panels
 		### EXPAND
 		block "expand_button" {
 			expand_building_button = {
-				widgetid = "[Concatenate('building_details_expand', Building.GetIDString)]"
+				block "expand_button_widgetid" {}
 				position = { 0 0 }
 				parentanchor = right|vcenter
 			}
@@ -3578,7 +3628,7 @@ types building_panels
 	type building_level_controls_with_military = building_level_controls {
 		blockoverride "expand_button" {
 			expand_building_button_with_military  = {
-				widgetid = "[Concatenate('building_details_expand', Building.GetIDString)]"
+				block "expand_button_widgetid" {}
 				position = { 0 0 }
 				parentanchor = right|vcenter
 			}
@@ -4008,9 +4058,10 @@ types building_panels
 		}
 
 		default_progressbar_horizontal = {
-			tooltip = "TOOLTIP_BUILDING_EMPLOYMENT"
 			size = { 100% 100% }
 			parentanchor = vcenter
+			tooltip = "TOOLTIP_BUILDING_EMPLOYMENT"
+			using = tooltip_se
 
 			blockoverride "values" {
 				value = "[FixedPointToFloat(Building.GetEmploymentPercentage)]"
@@ -4021,6 +4072,7 @@ types building_panels
 
 		flowcontainer = {
 			parentanchor = vcenter
+
 			textbox = {
 				text = "[Building.GetNoOfEmployed|1*v]"
 				margin_left = 10
@@ -4033,6 +4085,13 @@ types building_panels
 			}
 
 			textbox = {
+				visible = "[LessThan_int64(Building.GetNoOfEmployed, Building.GetEmployeeCap)]"
+				raw_text = "/ #maximum [Building.GetEmployeeCap|1*]#!"
+				margin_left = 7
+				align = hcenter|nobaseline
+				autoresize = yes
+				parentanchor = vcenter
+				widgetanchor = vcenter
 				alpha = 0
 				name = employment_max
 
@@ -4043,29 +4102,27 @@ types building_panels
 					duration = 0.15
 					using = Animation_Curve_Default
 				}
+
 				state = {
 					name = hide_employment_max
 					alpha = 0
 					duration = 0
 					using = Animation_Curve_Default
 				}
+			}
 
-				visible = "[LessThan_int64(Building.GetNoOfEmployed, Building.GetEmployeeCap)]"
-				raw_text = "/ #maximum [Building.GetEmployeeCap|1*]#!"
-				margin_left = 7
-				align = hcenter|nobaseline
-				autoresize = yes
-				parentanchor = vcenter
-				widgetanchor = vcenter
+			widget = {
+				size = { 10 10 }
 			}
 		}
 
 		employment_indicator_icon = {
+			parentanchor = right|vcenter
+			position = { -2 0 }
+
 			blockoverride "indicator_icon_size" {
 				size = { 25 25 }
 			}
-			parentanchor = right|vcenter
-			position = { -2 0 }
 		}
 	}
 

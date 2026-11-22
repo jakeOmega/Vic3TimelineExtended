@@ -1,0 +1,22 @@
+# fptp_suffrage
+activate_law = law_type:law_universal_suffrage
+# fptp_wealth
+activate_law = law_type:law_wealth_voting
+# inh_heir
+activate_law = law_type:law_state_universal_heir
+# jud_rationalism
+add_technology_researched = rationalism
+# jud_tribunals
+activate_law = law_type:law_executive_tribunals
+# qa_mark
+set_variable = { name = te_qa_mark value = 7 }
+# row_headroom
+change_infamy = 60
+# row_human
+activate_law = law_type:law_humanitarian_regulations
+# row_limited
+activate_law = law_type:law_limited_war
+# row_total
+activate_law = law_type:law_total_war
+# row_trad
+activate_law = law_type:law_traditional_rules_of_war

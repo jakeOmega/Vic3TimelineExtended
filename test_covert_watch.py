@@ -124,7 +124,7 @@ class Triggers(unittest.TestCase):
 
     def test_can_watch_needs_the_service(self):
         body = scripted_trigger("covert_can_watch")
-        self.assertIn("has_game_rule = covert_warfare_enabled", body)
+        self.assertIn("te_covert_warfare_on = yes", body)
         self.assertIn("has_journal_entry = je_covert_warfare", body)
 
     def test_hostile_excludes_counterintelligence_support(self):

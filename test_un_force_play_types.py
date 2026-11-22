@@ -23,6 +23,8 @@ import unittest
 REPO = os.path.dirname(os.path.abspath(__file__))
 TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "un_force_triggers.txt")
 EFFECTS = os.path.join(REPO, "common", "scripted_effects", "un_force_effects.txt")
+VALUES = os.path.join(REPO, "common", "script_values", "un_force_values.txt")
+NOTICES = os.path.join(REPO, "localization", "english", "te_notifications_l_english.yml")
 
 # Goals no play is listed for on purpose: a play that opens with one is never
 # struck (every formable adds such a play), and the mandate's own goal.
@@ -30,6 +32,8 @@ NEVER_STRUCK = {"unification", "unification_leadership", "te_un_mandate_restore_
 # Goals only a subject can hold against its overlord; the struck actor is never
 # a subject (un_teeth_war_goal_surcharge leaves subjects alone).
 SUBJECT_ONLY = {"independence", "increase_autonomy"}
+# Goals several plays open with, each struck unless the play is one of its own (un_force_play_opens_with_*).
+SEVERAL = {"annex_country", "humiliation", "return_state"}
 
 
 def _strip(text):
@@ -54,6 +58,10 @@ def _block(text, name):
             if depth == 0:
                 return text[i:j + 1]
     raise AssertionError(f"{name} unbalanced")
+
+
+def _squash(text):
+    return re.sub(r"\s+", " ", text)
 
 
 def _opening_goals():
@@ -90,6 +98,9 @@ class PlayTypeTests(unittest.TestCase):
                                         _block(triggers, "un_force_play_opens_with_annexation")))
         cls.humiliation = set(re.findall(r"is_diplomatic_play_type = (\w+)",
                                          _block(triggers, "un_force_play_opens_with_humiliation")))
+        # vanilla 1.15's dp_return_state_to_subject made return_state a goal of several plays
+        cls.return_state = set(re.findall(r"is_diplomatic_play_type = (\w+)",
+                                          _block(triggers, "un_force_play_opens_with_return_state")))
 
     def test_the_plays_were_read(self):
         self.assertIn("dp_conquer_state", self.plays)
@@ -103,10 +114,11 @@ class PlayTypeTests(unittest.TestCase):
     def test_the_annexation_and_humiliation_lists_are_every_play_that_opens_with_them(self):
         self.assertEqual(self.annexation, self.by_goal["annex_country"])
         self.assertEqual(self.humiliation, self.by_goal["humiliation"])
-        self.assertTrue({"annex_country", "humiliation"} <= self.held)
+        self.assertEqual(self.return_state, self.by_goal["return_state"])
+        self.assertTrue(SEVERAL <= self.held)
 
     def test_the_always_struck_goals_open_no_play(self):
-        for goal in self.held - {"annex_country", "humiliation"}:
+        for goal in self.held - SEVERAL:
             with self.subTest(goal=goal):
                 self.assertEqual(self.by_goal.get(goal, set()), set())
 
@@ -122,6 +134,72 @@ class PlayTypeTests(unittest.TestCase):
         self.assertEqual(one, set(self.one))
         held = set(re.findall(r"un_force_strike_goal = \{ TYPE = (\w+) \}", effects))
         self.assertEqual(held, self.held)
+
+
+
+class StrikeLoopTests(unittest.TestCase):
+    """remove_war_goal takes the initiator's first goal of a type, whatever it
+    targets, so one call per type left a second goal of the type against the
+    host, and every goal against it when one against the host's ally came first
+    (#1892). The strike repeats the call while one against the host is left."""
+
+    @classmethod
+    def setUpClass(cls):
+        effects = _read(EFFECTS)
+        cls.effects = _squash(effects)
+        cls.typed = _squash(_block(effects, "un_force_strike_goal_type"))
+        cls.goal = _squash(_block(effects, "un_force_strike_goal"))
+
+    def test_a_typed_strike_skips_the_play_it_opens_and_loops_like_the_rest(self):
+        self.assertIn("if = { limit = { NOT = { is_diplomatic_play_type = $PLAY$ } } "
+                      "un_force_strike_goal = { TYPE = $TYPE$ } }", self.typed)
+        self.assertNotIn("remove_war_goal", self.typed)
+
+    def test_the_strike_repeats_while_a_goal_against_the_host_is_left(self):
+        self.assertIn("if = { limit = { un_force_goal_held = { TYPE = $TYPE$ } }", self.goal)
+        self.assertIn("while = { count = 30 if = { limit = { un_force_goal_held = { TYPE = $TYPE$ } } "
+                      "remove_war_goal = { who = scope:actor type = $TYPE$ }", self.goal)
+
+    def test_the_protected_country_is_saved_before_any_strike(self):
+        # un_strike_goals_self_check reads the play test against it after the loop.
+        strikes = self.effects[self.effects.index("un_force_strike_war_goals = {"):]
+        self.assertLess(strikes.index("target ?= { save_scope_as = un_force_protected }"),
+                        strikes.index("un_force_strike_goal_type = {"))
+
+    def test_the_collateral_gets_its_surcharge_back_after_a_clean_loop(self):
+        # #1896: a goal against another country that the loop took had paid the
+        # doubled surcharge; without the refund an AI re-adding it paid each time.
+        loop_end = self.goal.index("un_strike_chk_calls add = 1 } } } }")
+        refund = self.goal.index("change_infamy = { value = un_force_collateral_refund_value multiply = -1 }")
+        check = self.goal.index("un_strike_goals_self_check")
+        self.assertLess(loop_end, refund)
+        self.assertLess(refund, check, "the self-check drops the count the refund reads")
+        self.assertIn("scope:actor = { if = { limit = { var:un_strike_chk_calls > 1 "
+                      "un_strike_goals_loop_clean = { TYPE = $TYPE$ TARGET = scope:un_force_protected } } "
+                      "change_infamy", self.goal)
+        self.assertEqual(self.effects.count("change_infamy"), 1)
+
+    def test_the_refund_is_the_doubled_surcharge_for_each_call_but_one(self):
+        value = _squash(_block(_read(VALUES), "un_force_collateral_refund_value"))
+        self.assertEqual(value, "{ value = var:un_strike_chk_calls subtract = 1 "
+                                "multiply = un_war_surcharge_value multiply = 2 min = 0 }")
+
+    def test_the_notice_says_the_infamy_comes_back(self):
+        with open(NOTICES, encoding="utf-8-sig") as f:
+            line = next(x for x in f if x.lstrip().startswith("notification_un_force_war_goal_struck_notice_desc:"))
+        self.assertIn("may have gone with them, and if so the [concept_infamy] we paid for it has been returned", line)
+
+    def test_no_call_outside_the_loop(self):
+        self.assertEqual(self.effects.count("remove_war_goal"), 1)
+
+    def test_the_loop_is_counted_for_the_self_check(self):
+        order = [self.goal.index(x) for x in (
+            "scope:actor = { set_variable = { name = un_strike_chk_calls value = 0 } }",
+            "while = {",
+            "remove_war_goal",
+            "scope:actor = { change_variable = { name = un_strike_chk_calls add = 1 } }",
+            "un_strike_goals_self_check = { STRIKE = force TYPE = $TYPE$ TARGET = scope:un_force_protected }")]
+        self.assertEqual(order, sorted(order))
 
 
 if __name__ == "__main__":

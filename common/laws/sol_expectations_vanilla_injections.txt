@@ -33,6 +33,19 @@ INJECT:law_autocracy = {
 	}
 }
 
+# Autocracy's variants: a variant takes its parent's stances, not its modifiers.
+INJECT:law_bakufu = {
+	modifier = {
+		country_sol_expectations_upper_offset_add = 2.5
+	}
+}
+
+INJECT:law_neo_absolutism = {
+	modifier = {
+		country_sol_expectations_upper_offset_add = 2.5
+	}
+}
+
 INJECT:law_landed_voting = {
 	modifier = {
 		country_sol_expectations_upper_offset_add = 3
@@ -53,6 +66,13 @@ INJECT:law_census_voting = {
 }
 
 INJECT:law_universal_suffrage = {
+	modifier = {
+		country_sol_expectations_lower_offset_add = 1
+	}
+}
+
+# Labour Suffrage (1.15) enfranchises the lower strata, as Universal Suffrage does.
+INJECT:law_labour_suffrage = {
 	modifier = {
 		country_sol_expectations_lower_offset_add = 1
 	}

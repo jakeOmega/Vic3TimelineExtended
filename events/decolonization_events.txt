@@ -32,9 +32,11 @@ decolonization_events.1 = {
 			has_modifier = peaceful_decolonization_modifier
 		}
 		has_technology_researched = decolonization
+		# Not a subject a war goal is already freeing (1.15): the war decides it.
 		any_subject_or_below = {
 			is_qualifying_colonial_subject = yes
 			liberty_desire >= 50
+			is_subject_of_and_not_being_freed = overlord
 		}
 	}
 
@@ -45,6 +47,7 @@ decolonization_events.1 = {
 			limit = {
 				is_qualifying_colonial_subject = yes
 				liberty_desire >= 50
+				is_subject_of_and_not_being_freed = overlord
 			}
 			save_scope_as = restless_subject
 		}
@@ -129,6 +132,11 @@ decolonization_events.1 = {
 				trigger = { colonial_gp_condemners_count >= 3 }
 				add = 5
 			}
+			# Not through our own civil war while the empire holds (#1735)
+			modifier = {
+				trigger = { colonial_ai_holds_colonies_in_civil_war = yes }
+				factor = 0
+			}
 		}
 		scope:restless_subject = {
 			post_notification = colonial_independence_granted_notice
@@ -167,6 +175,11 @@ decolonization_events.1 = {
 		highlighted_option = yes
 		ai_chance = {
 			base = 4
+			# Not through our own civil war while the empire holds (#1735)
+			modifier = {
+				trigger = { colonial_ai_holds_colonies_in_civil_war = yes }
+				factor = 0
+			}
 		}
 		scope:restless_subject = {
 			post_notification = colonial_neocolonial_terms_notice
@@ -412,9 +425,11 @@ decolonization_events.3 = {
 			has_modifier = colonial_crackdown_modifier
 		}
 		has_technology_researched = civil_rights_movement
+		# Not a subject a war goal is already freeing (1.15): the war decides it.
 		any_subject_or_below = {
 			is_qualifying_colonial_subject = yes
 			liberty_desire >= 75
+			is_subject_of_and_not_being_freed = overlord
 		}
 	}
 
@@ -425,6 +440,7 @@ decolonization_events.3 = {
 			limit = {
 				is_qualifying_colonial_subject = yes
 				liberty_desire >= 75
+				is_subject_of_and_not_being_freed = overlord
 			}
 			save_scope_as = rebellious_subject
 		}
@@ -443,6 +459,11 @@ decolonization_events.3 = {
 			modifier = {
 				trigger = { NOT = { country_rank >= rank_value:great_power } }
 				add = 5
+			}
+			# Not through our own civil war while the empire holds (#1735)
+			modifier = {
+				trigger = { colonial_ai_holds_colonies_in_civil_war = yes }
+				factor = 0
 			}
 		}
 		scope:rebellious_subject = {
@@ -489,6 +510,54 @@ decolonization_events.3 = {
 			add_liberty_desire = 25
 			post_notification = colonial_crackdown_begun_notice
 		}
+		# The colony takes up arms: a direct subject the engine lets open a play
+		# against us (can_start_play_against_overlord, even while we are at war
+		# elsewhere) opens one for its independence, at the escalation of the
+		# mod's own wars of independence (dp_te_colonial_uprising). The war
+		# that follows takes a record in the monthly settle.
+		# Neither side may be committed to another play: create_diplomatic_play
+		# would then open nothing while the tooltip promised a war (irredentism.2).
+		if = {
+			limit = {
+				is_diplomatic_play_committed_participant = no
+				scope:rebellious_subject = {
+					is_direct_subject_of = root
+					NOT = { has_war_with = root }
+					can_start_play_against_overlord = yes
+					is_diplomatic_play_committed_participant = no
+				}
+			}
+			custom_tooltip = {
+				text = decolonization_events.3.b_uprising_tt
+				scope:rebellious_subject = {
+					create_diplomatic_play = {
+						name = decol_iw_war_name
+						type = dp_te_colonial_uprising
+						target_country = root
+						escalation = 80
+					}
+				}
+			}
+			# Self-check (docs/testing/colonial-wars-playtest.md): the play
+			# exists once it has been created. Once a game.
+			hidden_effect = {
+				if = {
+					limit = { NOT = { has_global_variable = te_selfcheck_decol_uprising_play } }
+					set_global_variable = te_selfcheck_decol_uprising_play
+					if = {
+						limit = {
+							scope:rebellious_subject = {
+								any_diplomatic_play = { is_diplomatic_play_type = dp_te_colonial_uprising }
+							}
+						}
+						debug_log = "TE_SELF_CHECK OK decol_uprising_play overlord=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString]"
+					}
+					else = {
+						debug_log = "TE_SELF_CHECK BROKEN decol_uprising_play overlord=[THIS.GetCountry.GetTagName] (the colony's independence play against us does not exist once created: open it from the overlord's scope with the subject's independence as an added goal, as vanilla's Polish uprising does; docs/testing/colonial-wars-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+					}
+				}
+			}
+		}
 		# Armed forces approve, everyone else uneasy
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_very_negative_modifier DAYS = short_modifier_time }
@@ -504,6 +573,11 @@ decolonization_events.3 = {
 		highlighted_option = yes
 		ai_chance = {
 			base = 3
+			# Not through our own civil war while the empire holds (#1735)
+			modifier = {
+				trigger = { colonial_ai_holds_colonies_in_civil_war = yes }
+				factor = 0
+			}
 		}
 		scope:rebellious_subject = {
 			post_notification = colonial_neocolonial_terms_notice
@@ -548,7 +622,7 @@ decolonization_events.4 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/partition_border_drawing.dds" }
+	event_image = { texture = "gfx/event_pictures/diplomatic_meeting.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -576,6 +650,8 @@ decolonization_events.4 = {
 		# cultures" alone also reached long-established countries (owner ruling,
 		# 2026-09-26).
 		has_variable = recently_decolonized
+		# Once per independence (owner, 2026-11-10): see decol_young_state_seen.
+		NOT = { has_variable = decol_young_state_seen_4 }
 		NOT = {
 			any_scope_state = {
 				is_homeland_of_country_cultures = ROOT
@@ -590,6 +666,7 @@ decolonization_events.4 = {
 	}
 
 	immediate = {
+		decol_young_state_seen = { EVENT = 4 }
 	}
 
 	# Option A: Embrace indigenous culture
@@ -660,7 +737,7 @@ decolonization_events.5 = {
 
 	# The overture must still stand three days on: a colony annexed or
 	# collapsed in the meantime has proposed nothing we could answer.
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: scope:former_colony is saved and alive when .60 answers; cancels if it is annexed in the three days
 		exists = scope:former_colony
 		scope:former_colony = { is_country_alive = yes }
 	}
@@ -731,7 +808,7 @@ decolonization_events.6 = {
 	# The claim must still stand three days on: a claimant annexed or
 	# collapsed in the meantime is owed nothing, and option A reads the sum
 	# it named (var:decol_reparations_claim, set by .61).
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: .61 saves scope:reparations_claimant and sets decol_reparations_claim before its options run; cancels if the claimant dies in the three days
 		exists = scope:reparations_claimant
 		scope:reparations_claimant = {
 			is_country_alive = yes
@@ -747,16 +824,16 @@ decolonization_events.6 = {
 		name = decolonization_events.6.a
 		default_option = yes
 		ai_chance = { base = 1 }
-		# The sum the claimant named in decolonization_events.61 changes hands:
-		# out of our treasury, into theirs (the swap-settle shape of
-		# te_mon_effect_swap_settle). decol_reparations_value sized it; .6.d
-		# names it, and the two add_treasury tooltips show it moving.
-		add_treasury = {
-			value = scope:reparations_claimant.var:decol_reparations_claim
-			multiply = -1
+		# The sum the claimant named in decolonization_events.61 changes hands,
+		# out of our treasury into theirs, under a reparations treaty (#1457),
+		# or directly where none can be made. decol_reparations_value sized it;
+		# .6.d names it, and the two add_treasury tooltips show it moving.
+		te_pay_reparations_by_treaty = {
+			PAYER = ROOT
+			PAYEE = scope:reparations_claimant
+			AMOUNT = scope:reparations_claimant.var:decol_reparations_claim
 		}
 		scope:reparations_claimant = {
-			add_treasury = var:decol_reparations_claim
 			remove_variable = decol_reparations_claim
 		}
 		add_modifier = {
@@ -831,9 +908,12 @@ decolonization_events.7 = {
 		decol_era_begun = yes
 		country_rank <= rank_value:minor_power
 		has_variable = recently_decolonized
+		# Once per independence (owner, 2026-11-10): see decol_young_state_seen.
+		NOT = { has_variable = decol_young_state_seen_7 }
 	}
 
 	immediate = {
+		decol_young_state_seen = { EVENT = 7 }
 		# Read the variable directly, and only while that country lives: a
 		# random_country limit comparing every country with a former overlord
 		# that has since died logged "Event target link 'var' returned an
@@ -1105,6 +1185,11 @@ decolonization_events.9 = {
 				trigger = { colonial_low_acceptance_count >= 3 }
 				add = 5
 			}
+			# Not through our own civil war while the empire holds (#1735)
+			modifier = {
+				trigger = { colonial_ai_holds_colonies_in_civil_war = yes }
+				factor = 0
+			}
 		}
 		scope:unrest_colony = {
 			set_variable = decolonization_marker
@@ -1131,6 +1216,11 @@ decolonization_events.9 = {
 		highlighted_option = yes
 		ai_chance = {
 			base = 3
+			# Not through our own civil war while the empire holds (#1735)
+			modifier = {
+				trigger = { colonial_ai_holds_colonies_in_civil_war = yes }
+				factor = 0
+			}
 		}
 		scope:unrest_colony = {
 			set_variable = decolonization_marker
@@ -1378,6 +1468,9 @@ decolonization_events.12 = {
 		has_journal_entry = je_colonial_empire
 		NOT = { has_modifier = gp_supports_colonialism_modifier }
 		has_technology_researched = decolonization
+		# The text offers a patron. The world's first power has none to look
+		# up to (owner report, 2026-11-10).
+		global_country_ranking > 1
 		any_scope_state = {
 			is_overseas_colonial_state = yes
 		}
@@ -1509,6 +1602,11 @@ decolonization_events.13 = {
 				trigger = { NOT = { country_rank >= rank_value:great_power } }
 				add = 5
 			}
+			# Not through our own civil war while the empire holds (#1735)
+			modifier = {
+				trigger = { colonial_ai_holds_colonies_in_civil_war = yes }
+				factor = 0
+			}
 		}
 		scope:uprising_colony = {
 			set_variable = decolonization_marker
@@ -1600,6 +1698,11 @@ decolonization_events.13 = {
 		highlighted_option = yes
 		ai_chance = {
 			base = 3
+			# Not through our own civil war while the empire holds (#1735)
+			modifier = {
+				trigger = { colonial_ai_holds_colonies_in_civil_war = yes }
+				factor = 0
+			}
 		}
 		scope:uprising_colony = {
 			set_variable = decolonization_marker
@@ -1929,20 +2032,9 @@ decolonization_events.15 = {
 			name = nationalization_cooldown_var
 			years = 20
 		}
-		# Save the biggest foreign owner for description/effects
-		random_country = {
-			limit = {
-				NOT = { this = root }
-				country_rank >= rank_value:minor_power
-				root = {
-					gdp_ownership_ratio = {
-						target = prev
-						value > 0.05
-					}
-				}
-			}
-			save_scope_as = biggest_foreign_owner
-		}
+		# The largest foreign owner, for the description (the options act on
+		# every owner above 5%).
+		decol_save_biggest_foreign_owner = yes
 	}
 
 	# Option A: Full nationalization: seize all foreign assets
@@ -2113,7 +2205,7 @@ decolonization_events.16 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/partition_border_drawing.dds" }
+	event_image = { texture = "gfx/event_pictures/diplomatic_meeting.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -2135,6 +2227,8 @@ decolonization_events.16 = {
 		# rarely has the technology itself (owner ruling, 2026-09-26).
 		decol_era_begun = yes
 		has_variable = recently_decolonized
+		# Once per independence (owner, 2026-11-10): see decol_young_state_seen.
+		NOT = { has_variable = decol_young_state_seen_16 }
 		is_subject = no
 		NOT = { has_modifier = partition_territorial_claims_modifier }
 		NOT = { has_modifier = partition_accepted_borders_modifier }
@@ -2169,6 +2263,7 @@ decolonization_events.16 = {
 	}
 
 	immediate = {
+		decol_young_state_seen = { EVENT = 16 }
 		# Find a neighboring country with shared heritage
 		random_scope_state = {
 			limit = {
@@ -2196,12 +2291,31 @@ decolonization_events.16 = {
 					}
 				}
 			}
+			# The same owner test as the outer limit and the trigger, so the
+			# neighbor saved is the one of shared heritage that qualified the
+			# state, not any other country on its border (#1617).
 			random_neighbouring_state = {
 				limit = {
 					owner = {
 						NOT = { this = root }
 						is_country_alive = yes
 						NOT = { is_country_type = decentralized }
+						OR = {
+							AND = {
+								has_variable = recently_decolonized
+								any_primary_culture = {
+									shares_heritage_trait_group_with_any_primary_culture = root
+								}
+							}
+							AND = {
+								any_scope_state = {
+									is_overseas_colonial_state = yes
+									any_scope_culture = {
+										shares_heritage_trait_group_with_any_primary_culture = root
+									}
+								}
+							}
+						}
 					}
 				}
 				owner = {
@@ -2327,6 +2441,8 @@ decolonization_events.17 = {
 		# rarely has the technology itself (owner ruling, 2026-09-26).
 		decol_era_begun = yes
 		has_variable = recently_decolonized
+		# Once per independence (owner, 2026-11-10): see decol_young_state_seen.
+		NOT = { has_variable = decol_young_state_seen_17 }
 		is_subject = no
 		NOT = { has_modifier = border_dispute_active_modifier }
 		NOT = { has_modifier = border_dispute_resolved_modifier }
@@ -2344,6 +2460,9 @@ decolonization_events.17 = {
 	}
 
 	immediate = {
+		decol_young_state_seen = { EVENT = 17 }
+		# Named for the notices the neighbour gets.
+		save_scope_as = border_claimant
 		random_scope_state = {
 			limit = {
 				any_neighbouring_state = {
@@ -2351,6 +2470,7 @@ decolonization_events.17 = {
 						NOT = { this = root }
 						has_variable = recently_decolonized
 						is_subject = no
+						NOT = { is_country_type = decentralized }
 					}
 				}
 			}
@@ -2361,8 +2481,11 @@ decolonization_events.17 = {
 						NOT = { this = root }
 						has_variable = recently_decolonized
 						is_subject = no
+						NOT = { is_country_type = decentralized }
 					}
 				}
+				# The land option A lays claim to.
+				save_scope_as = rival_border_state
 				owner = {
 					save_scope_as = border_rival
 				}
@@ -2370,7 +2493,8 @@ decolonization_events.17 = {
 		}
 	}
 
-	# Option A: Press our claims: the borders must be redrawn
+	# Option A: Press our claims: the borders must be redrawn. Takes a claim on
+	# the neighbour's border state, at the price of the dispute.
 	option = {
 		name = decolonization_events.17.a
 		default_option = yes
@@ -2397,43 +2521,123 @@ decolonization_events.17 = {
 				value = -40
 			}
 		}
+		# What pressing the claim buys: without it this option was every cost
+		# and no gain, and nobody's best choice.
+		if = {
+			limit = { exists = scope:rival_border_state }
+			scope:rival_border_state = {
+				state_region = { add_claim = root }
+			}
+		}
+		if = {
+			limit = { exists = scope:border_rival }
+			scope:border_rival = {
+				post_notification = decol_border_claim_pressed_notice
+			}
+		}
 		change_infamy = 3
 		add_radicals = { value = small_radicals }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 
-	# Option B: Seek international mediation
+	# Option B: Seek international mediation. The mediators may find for either
+	# side, and the stronger country more often gets its way.
 	option = {
 		name = decolonization_events.17.b
 		ai_chance = {
 			base = 3
 		}
-		add_modifier = {
-			name = border_dispute_resolved_modifier
-			days = normal_modifier_time
-			is_decaying = yes
-		}
-		if = {
-			limit = { exists = scope:border_rival }
-			change_relations = {
-				country = scope:border_rival
-				value = 10
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		random_list = {
+			# They find for us: the claim, without the infamy of pressing it.
+			30 = {
+				modifier = {
+					if = {
+						limit = {
+							exists = scope:border_rival
+							country_rank > scope:border_rival.country_rank
+						}
+						add = 15
+					}
+				}
+				custom_tooltip = decolonization_events.17.b_favor_tt
+				add_modifier = {
+					name = border_dispute_resolved_modifier
+					days = normal_modifier_time
+					is_decaying = yes
+				}
+				if = {
+					limit = { exists = scope:rival_border_state }
+					scope:rival_border_state = {
+						state_region = { add_claim = root }
+					}
+				}
+				if = {
+					limit = { exists = scope:border_rival }
+					change_relations = {
+						country = scope:border_rival
+						value = -10
+					}
+					scope:border_rival = {
+						post_notification = decol_border_mediation_lost_notice
+					}
+				}
+				add_loyalists = { value = small_radicals }
+			}
+			# They split the difference.
+			40 = {
+				custom_tooltip = decolonization_events.17.b_split_tt
+				add_modifier = {
+					name = border_dispute_resolved_modifier
+					days = normal_modifier_time
+					is_decaying = yes
+				}
+				if = {
+					limit = { exists = scope:border_rival }
+					change_relations = {
+						country = scope:border_rival
+						value = 10
+					}
+					scope:border_rival = {
+						post_notification = decol_border_mediation_split_notice
+					}
+				}
+				add_loyalists = { value = small_radicals }
+			}
+			# They find for the neighbour, who now holds a claim on our land.
+			30 = {
+				modifier = {
+					if = {
+						limit = {
+							exists = scope:border_rival
+							country_rank < scope:border_rival.country_rank
+						}
+						add = 15
+					}
+				}
+				custom_tooltip = decolonization_events.17.b_against_tt
+				if = {
+					limit = { exists = scope:border_rival }
+					scope:disputed_state = {
+						state_region = { add_claim = scope:border_rival }
+					}
+					scope:border_rival = {
+						post_notification = decol_border_mediation_won_notice
+					}
+				}
+				add_radicals = { value = small_radicals }
+				ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 			}
 		}
-		add_loyalists = { value = small_radicals }
-		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
 
-	# Option C: Accept the borders and build from within
+	# Option C: Accept the borders and build from within. The price is paid now;
+	# the settlement's rewards come only if the neighbour takes the truce
+	# (decolonization_events.63).
 	option = {
 		name = decolonization_events.17.c
 		ai_chance = { base = 3 }
-		add_modifier = {
-			name = border_dispute_resolved_modifier
-			days = long_modifier_time
-			is_decaying = yes
-		}
 		if = {
 			limit = { exists = scope:border_rival }
 			change_relations = {
@@ -2448,10 +2652,8 @@ decolonization_events.17 = {
 				trigger_event = { id = decolonization_events.63 days = 3 }
 			}
 		}
-		add_loyalists = { value = medium_radicals }
 		# Nationalists see this as capitulation
 		add_radicals = { value = small_radicals strata = lower }
-		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 }
@@ -2485,6 +2687,8 @@ decolonization_events.18 = {
 		# rarely has the technology itself (owner ruling, 2026-09-26).
 		decol_era_begun = yes
 		has_variable = recently_decolonized
+		# Once per independence (owner, 2026-11-10): see decol_young_state_seen.
+		NOT = { has_variable = decol_young_state_seen_18 }
 		is_subject = no
 		NOR = {
 			has_modifier = military_strongman_modifier
@@ -2511,6 +2715,7 @@ decolonization_events.18 = {
 	}
 
 	immediate = {
+		decol_young_state_seen = { EVENT = 18 }
 	}
 
 	# Option A: Military takeover: the general promises order
@@ -2622,11 +2827,13 @@ decolonization_events.19 = {
 			has_modifier = gp_economic_sanctions_modifier
 			has_variable = gp_accepted_nationalization
 		}
-		# A former colony has nationalized assets
+		# A former colony has nationalized assets. `?=`: a former overlord can
+		# be gone while its former colonies still name it, and a plain `=`
+		# logs every great power's check (62 lines in six minutes, 2026-11-07).
 		any_country = {
 			NOT = { this = root }
 			has_variable = former_overlord
-			var:former_overlord = root
+			var:former_overlord ?= root
 			is_subject = no
 			has_modifier = independence_nationalization_modifier
 		}
@@ -2637,7 +2844,7 @@ decolonization_events.19 = {
 			limit = {
 				NOT = { this = root }
 				has_variable = former_overlord
-				var:former_overlord = root
+				var:former_overlord ?= root
 				is_subject = no
 				has_modifier = independence_nationalization_modifier
 			}
@@ -2692,7 +2899,11 @@ decolonization_events.19 = {
 		# scopes travel with the trigger_event, so .20 names the real
 		# intervener and its real target instead of re-picking them.
 		save_scope_as = intervening_power
-		scope:nationalizing_country = { save_scope_as = intervention_victim }
+		scope:nationalizing_country = {
+			save_scope_as = intervention_victim
+			# The target hears who did this to it.
+			post_notification = gp_intervention_target_notice
+		}
 		custom_tooltip = {
 			text = GP_MILITARY_INTERVENTION_NOTIFY_TT
 			every_country = {
@@ -2828,8 +3039,11 @@ decolonization_events.20 = {
 				country = scope:intervening_power
 				value = -40
 			}
-			# The condemning power's moral authority
+			# The condemning power's moral authority; the intervener hears who
+			# condemned it.
+			save_scope_as = decol_condemning_power
 			scope:intervening_power = {
+				post_notification = gp_intervention_condemned_notice
 				add_modifier = {
 					name = gp_intervention_condemned_modifier
 					days = normal_modifier_time
@@ -2931,7 +3145,14 @@ decolonization_events.21 = {
 		# rarely has the technology itself (owner ruling, 2026-09-26).
 		decol_era_begun = yes
 		has_variable = recently_decolonized
+		# Once per independence (owner, 2026-11-10): see decol_young_state_seen.
+		NOT = { has_variable = decol_young_state_seen_21 }
 		is_subject = no
+		# The event is about great powers courting a young nation. A former
+		# colony that is a great power itself is one of the powers doing the
+		# courting, and answers The Colonial Question (.14) with a stance of
+		# its own (owner report, 2026-11-10).
+		country_rank < rank_value:great_power
 		NOR = {
 			has_modifier = non_aligned_movement_modifier
 			has_modifier = superpower_aligned_modifier
@@ -2950,6 +3171,7 @@ decolonization_events.21 = {
 	}
 
 	immediate = {
+		decol_young_state_seen = { EVENT = 21 }
 		random_country = {
 			limit = {
 				NOT = { this = root }
@@ -3043,6 +3265,143 @@ decolonization_events.21 = {
 		add_radicals = { value = small_radicals strata = lower }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	}
+}
+
+# Event 22: What the Empire Left. Tells a new country which legacy it starts
+# with: the modifier and the laws decol_path_legacy (decolonization.txt) or
+# decol_iw_aftermath_bloody (decolonization_war_effects.txt) gave it. Both set
+# them directly on a country the player did not hold a moment before, so
+# without this nothing said why the laws had changed (owner report,
+# 2026-11-10). Fired a day later by those two effects only, through the
+# hidden .82 (#1596), so the modifier its text is chosen by is in place. The option changes nothing: it lists what
+# is already in force.
+# Scope: the new country; scope:decolonizing_parent is the former ruler.
+decolonization_events.22 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/colonial_departure.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	title = decolonization_events.22.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = decolonization_events.22.d_bloody
+				trigger = { has_modifier = bloody_decolonization_legacy_modifier }
+			}
+			triggered_desc = {
+				desc = decolonization_events.22.d_commonwealth
+				trigger = { has_modifier = commonwealth_legacy_modifier }
+			}
+			triggered_desc = {
+				desc = decolonization_events.22.d_assimilation
+				trigger = { always = yes }
+			}
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				desc = decolonization_events.22.f_bloody
+				trigger = { has_modifier = bloody_decolonization_legacy_modifier }
+			}
+			triggered_desc = {
+				desc = decolonization_events.22.f_commonwealth
+				trigger = { has_modifier = commonwealth_legacy_modifier }
+			}
+			triggered_desc = {
+				desc = decolonization_events.22.f_assimilation
+				trigger = { always = yes }
+			}
+		}
+	}
+
+	duration = 3
+
+	trigger = {
+		exists = scope:decolonizing_parent
+		OR = {
+			has_modifier = bloody_decolonization_legacy_modifier
+			has_modifier = commonwealth_legacy_modifier
+			has_modifier = assimilation_legacy_modifier
+		}
+	}
+
+	option = {
+		name = decolonization_events.22.a
+		default_option = yes
+		ai_chance = { base = 1 }
+		custom_tooltip = { text = decolonization_events.22.a_tt }
+		# The same lines the two effects ran, shown and not run again.
+		show_as_tooltip = {
+			if = {
+				limit = { has_modifier = bloody_decolonization_legacy_modifier }
+				add_modifier = {
+					name = bloody_decolonization_legacy_modifier
+					days = long_modifier_time
+					is_decaying = yes
+				}
+				activate_law = law_type:law_autocracy
+				activate_law = law_type:law_outlawed_dissent
+				activate_law = law_type:law_minority_rights_discrimination
+			}
+			else_if = {
+				limit = { has_modifier = commonwealth_legacy_modifier }
+				add_modifier = {
+					name = commonwealth_legacy_modifier
+					days = long_modifier_time
+					is_decaying = yes
+				}
+				activate_law = law_type:law_parliamentary_republic
+				activate_law = law_type:law_protected_speech
+				activate_law = law_type:law_minority_rights_indifference
+			}
+			else = {
+				add_modifier = {
+					name = assimilation_legacy_modifier
+					days = long_modifier_time
+					is_decaying = yes
+				}
+				activate_law = law_type:law_cultural_exclusion
+				activate_law = law_type:law_minority_rights_indifference
+			}
+		}
+	}
+}
+
+# ============================================================================
+# DELAYED RELAYS (#1596)
+# A delayed trigger_event seems to drop its event when the event's trigger is
+# false on the day it is queued (scripting_best_practices.md § "A Delayed
+# `trigger_event` Re-Checks Its Trigger When It Fires"). Two popups are queued
+# on such a day, so each waits in a hidden event with no trigger that opens it
+# when due; the popup's own trigger decides then. Saved scopes ride along.
+# ============================================================================
+
+# The Nationalization Question's week (.15): a new country's GDP and foreign
+# ownership, which .15's trigger reads, are not in place the day it is formed.
+decolonization_events.81 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		trigger_event = { id = decolonization_events.15 }
+	}
+}
+
+# What the Empire Left's day (.22): its trigger reads the legacy modifier the
+# sender adds in the same block.
+decolonization_events.82 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		trigger_event = { id = decolonization_events.22 }
 	}
 }
 
@@ -3548,7 +3907,7 @@ decolonization_events.52 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/institutional_abuse_exposed.dds" }
+	event_image = { texture = "gfx/event_pictures/political_scandal_expose.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -3609,7 +3968,7 @@ decolonization_events.53 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/civil_rights_peaceful_march.dds" }
+	event_image = { texture = "gfx/event_pictures/student_protest_campus.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
@@ -3933,7 +4292,7 @@ decolonization_events.62 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: truce_proposer is saved just before the call and is not at war with the recipient; cancels if a war starts in the three days
 		exists = scope:truce_proposer
 		scope:truce_proposer = { is_country_alive = yes }
 		NOT = { has_war_with = scope:truce_proposer }
@@ -3995,7 +4354,7 @@ decolonization_events.63 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/partition_border_drawing.dds" }
+	event_image = { texture = "gfx/event_pictures/diplomatic_meeting.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -4007,7 +4366,7 @@ decolonization_events.63 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: truce_proposer is saved just before the call and is not at war with the recipient; cancels if a war starts in the three days
 		exists = scope:truce_proposer
 		scope:truce_proposer = { is_country_alive = yes }
 		NOT = { has_war_with = scope:truce_proposer }
@@ -4022,7 +4381,7 @@ decolonization_events.63 = {
 		name = decolonization_events.63.a
 		default_option = yes
 		ai_chance = {
-			base = 4
+			base = 3
 			modifier = {
 				trigger = {
 					scope:truce_proposer = { relations:root >= relations_threshold:cordial }
@@ -4034,8 +4393,16 @@ decolonization_events.63 = {
 			country = scope:truce_proposer
 			months = 60
 		}
+		# The proposer's settlement pays off only here.
 		scope:truce_proposer = {
 			post_notification = decol_truce_proposal_accepted_notice
+			add_modifier = {
+				name = border_dispute_resolved_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
+			add_loyalists = { value = medium_radicals }
+			ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		}
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
@@ -4049,13 +4416,21 @@ decolonization_events.63 = {
 				trigger = { has_modifier = border_dispute_active_modifier }
 				add = 4
 			}
+			modifier = {
+				trigger = {
+					scope:truce_proposer = { relations:root <= relations_threshold:poor }
+				}
+				add = 1
+			}
 		}
 		change_relations = {
 			country = scope:truce_proposer
 			value = -10
 		}
+		# The proposer gave ground and has nothing to show for it.
 		scope:truce_proposer = {
 			post_notification = decol_truce_proposal_declined_notice
+			add_radicals = { value = small_radicals }
 		}
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
@@ -5008,6 +5383,20 @@ decolonization_events.70 = {
 				trigger = { colonial_garrison_level_value >= 2 }
 				add = 2
 			}
+			# 1.15 (#1450): a colony our army can't realistically get to is a
+			# war fought by its garrison alone.
+			modifier = {
+				trigger = {
+					exists = scope:decol_iw_territory
+					NOT = {
+						has_military_reach = {
+							target = scope:decol_iw_territory
+							min_reach = te_reach_realistic
+						}
+					}
+				}
+				factor = 0.5
+			}
 			modifier = {
 				trigger = {
 					has_variable = decol_iw_running
@@ -5100,6 +5489,26 @@ decolonization_events.72 = {
 				}
 			}
 		}
+		# The lands that rose with it (decol_iw_mark_rose_with, at the Fight),
+		# ours again with it: quiet as long.
+		hidden_effect = { decol_iw_check_rose_with = yes }
+		if = {
+			limit = {
+				exists = scope:decol_iw_end_state
+				any_scope_state = { var:decol_iw_rose_with ?= scope:decol_iw_end_state }
+			}
+			custom_tooltip = {
+				text = decolonization_events.72.declared_neighbors_tt
+				every_scope_state = {
+					limit = { var:decol_iw_rose_with ?= scope:decol_iw_end_state }
+					set_variable = { name = decol_declared days = 3650 }
+					remove_variable = decol_iw_rose_with
+				}
+			}
+		}
+		hidden_effect = {
+			scope:decol_iw_end_state ?= { remove_variable = decol_iw_rose_count }
+		}
 	}
 }
 
@@ -5142,7 +5551,7 @@ decolonization_events.73 = {
 			if = {
 				limit = { is_country_alive = yes }
 				decol_iw_aftermath_bloody = yes
-				trigger_event = { id = decolonization_events.15 days = 7 }
+				trigger_event = { id = decolonization_events.81 days = 7 }
 			}
 		}
 	}
@@ -5167,7 +5576,7 @@ decolonization_events.74 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: decol_iw_war_begins runs only once the rebels are at war with the metropole (decol_iw_slot_at_war); cancels if the war ends in the three days
 		scope:decol_iw_gp_rebels ?= {
 			is_country_alive = yes
 			has_war_with = scope:decol_iw_gp_metropole
@@ -5331,7 +5740,14 @@ decolonization_events.75 = {
 		name = decolonization_events.75.a
 		trigger = { decol_iw_has_voting_law = no }
 		default_option = yes
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			# Not through our own civil war while the empire holds (#1735)
+			modifier = {
+				trigger = { colonial_ai_holds_colonies_in_civil_war = yes }
+				factor = 0
+			}
+		}
 		decol_iw_open_all_talks = yes
 		custom_tooltip = {
 			text = decolonization_events.75.a_tt
@@ -5459,7 +5875,7 @@ decolonization_events.76 = {
 				limit = { is_country_alive = yes }
 				save_scope_as = decolonized_new_country
 				decol_path_legacy = yes
-				trigger_event = { id = decolonization_events.15 days = 7 }
+				trigger_event = { id = decolonization_events.81 days = 7 }
 			}
 		}
 		remove_variable = decolonization_path_round_table
@@ -5509,7 +5925,7 @@ decolonization_events.79 = {
 	duration = 3
 
 	# A great power arms one colonial power at a time.
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: decol_iw_war_begins runs only once the rebels are at war with the metropole, and a pro-colonial power is not at war with it; cancels if that changes in the three days
 		scope:decol_iw_gp_rebels ?= {
 			is_country_alive = yes
 			has_war_with = scope:decol_iw_gp_metropole

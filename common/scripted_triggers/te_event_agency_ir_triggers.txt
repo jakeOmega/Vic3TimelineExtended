@@ -104,6 +104,7 @@ te_ea_ir_election_target = {
 		has_law = law_type:law_census_voting
 		has_law = law_type:law_wealth_voting
 		has_law = law_type:law_landed_voting
+		has_law = law_type:law_labour_suffrage
 	}
 	NOR = {
 		has_modifier = ste_election_interference_counter

@@ -454,7 +454,8 @@ class RuleTests(unittest.TestCase):
         self.assertEqual(emo.rule_for("script_values").bare_duplicate, LAST_WINS)
         self.assertEqual(emo.rule_for("scripted_triggers").bare_duplicate, FIRST_WINS)
         self.assertEqual(emo.rule_for("scripted_rules").bare_duplicate, FIRST_WINS)
-        self.assertEqual(emo.rule_for("game_rules").bare_duplicate, UNKNOWN)
+        self.assertEqual(emo.rule_for("game_rules").bare_duplicate, FIRST_WINS)  # read 2026-11-13 (#1768)
+        self.assertEqual(emo.rule_for("messages").bare_duplicate, UNKNOWN)
         self.assertEqual(emo.rule_for("history/countries").kind, "additive")
         self.assertEqual(emo.rule_for("defines").kind, "defines")
         self.assertEqual(emo.rule_for("on_actions").kind, "on_actions")
@@ -500,6 +501,12 @@ class ScannerTests(unittest.TestCase):
         self.assertEqual([c[0] for c in entries[0].children], ["group", "modifier"])
         self.assertEqual(entries[0].children[1][2], "{ a_add = 1 }")
         self.assertEqual(entries[2].value, "4")
+        # Where each entry ends: its closing brace, or a scalar's own line.
+        self.assertEqual([e.end_line for e in entries], [7, 8, 8, 9])
+
+    def test_a_block_that_never_closes_has_no_end_line(self):
+        entries, _w = emo.scan_script("a = {\n\tb = 1\n}\nc = {\n\td = 2\n")
+        self.assertEqual([(e.key, e.end_line) for e in entries], [("a", 3), ("c", None)])
 
     def test_escaped_quote_does_not_hide_a_comment_or_eat_the_file(self):
         text = 'a = { desc = "say \\"hi # there\\"" }  # a comment { \nb = { }\n'

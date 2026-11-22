@@ -1,0 +1,2609 @@
+﻿# ============================================================================
+# Journal entry map modes: the Map Room (vanilla 1.15; fifth pass, 2026-11-05)
+# ============================================================================
+# docs/systems/mod_systems/journal_map_modes.md; the in-game checks in docs/testing/journal-map-modes-playtest.md.
+#
+# Vanilla 1.15 lets an entry paint the map: map_color (and map_color_second, drawn as stripes) returns a color for each
+# state, with the state as root, and map_tooltip prints the hover text. The engine shows that map while the entry's
+# page is open (the hidden mm_journal_entry_map_data mode); no .gui calls it. One map per entry, so the Map Room
+# carries several on a selector.
+#
+#   je_te_map_room             the Map Room: a contextless entry nobody is involved in, so it sits in no country's
+#                              journal and exists, active, from the game's start. A button opens its page at the first
+#                              click (the first pass's hidden world entry proved both, 2026-11-05). Its picks are GUI
+#                              buttons calling scripted GUIs (gui/journal_entry_widgets/te_map_room_widget.gui), not
+#                              scripted buttons: the engine locks a scripted button for a country not involved in the
+#                              entry ("Countries that are not involved in the Journal Entry may not take this action").
+#
+# The first pass's je_te_map_host (a country entry added by a button) is gone: add_journal_entry was refused every
+# time, because every country already holds an inactive copy of an entry with its own activation triggers, and the
+# engine activated it on its own check up to two weeks later (scripting_best_practices.md, "Journal Entry Map Modes").
+#
+# The entry is the player's tool only: no AI country sets anything here, and it has no effect.
+
+je_te_map_room = {
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	group = je_group_internal_affairs
+	context = none
+
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
+
+	transferable = no
+	can_revolution_inherit = no
+
+	# Active from the start (possible defaults to yes), involving nobody and shown to nobody: the shape of the first
+	# pass's hidden world entry, which the 1837 save held active with no country.
+	is_shown_when_inactive = {
+		always = yes
+	}
+	should_be_involved = {
+		always = no
+	}
+	should_show_when_not_involved = {
+		always = no
+	}
+
+	# The picks, above the description (te_map_room_widget.gui).
+	widget = {
+		gui = "gui/journal_entry_widgets/te_map_room_widget.gui"
+		name = "widget_je_te_map_room"
+		container = "custom_widget_container_1"
+	}
+
+	# Root: the state being painted. A branch that matches nothing leaves the state unpainted, which is how a map with
+	# no pick (selector 0) should look. Each map's color comes from its factor, 0-1 (te_journal_map_scales_generated.txt, from
+	# gen_journal_map_scales.py's table); a three-color map splits at factor 0.5, its midpoint (replacement, none, 100 men). The census's per-state figures (common/scripted_effects/te_demog_effects.txt's
+	# header): the life table's from a state's first seed, a year's births, deaths and migrants only once it has stepped
+	# (te_dg_stepped above 0; a seed writes their rates as 0), as the Demographics panel gates them.
+	map_color = {
+		# A state outside the Map Room's area (its options, 2026-11-14): slate, whatever the map. The mark is put on
+		# the state by te_jmap_mark_area (te_journal_map_effects.txt) at each option click, pick and month, so the
+		# paint asks for one variable and nothing about continents, markets or blocs; under the world no state has it.
+		if = {
+			limit = { has_variable = te_jmap_out }
+			value = "te_jmap_outside"
+		}
+		# The Color option (2026-11-14, the fourteenth pass; te_jmap_color). A lerp's colors are literal names, so
+		# another palette can't be swapped into a map's own branch. These eleven branches come first instead, each
+		# taken only while the option is off its default, and paint whatever map is picked from one shared ramp:
+		# te_jmap_pick_ramp says whether the pick's own lerp branch would paint this state (1 on a map that runs
+		# one way, 2 on one that runs both ways from a midpoint, 0 otherwise) and te_jmap_pick_factor is its factor
+		# (te_journal_map_scales_generated.txt). The engine mixes two colors at a time, so a ramp of five stops is
+		# four lerps, the factor read a quarter at a time (te_jmap_pick_q1 to _q4). A state the ramp doesn't take
+		# falls through to its map's own branches: no data, none, a category.
+		# Colorblind-safe, a map that runs one way: ColorBrewer's YlOrBr, pale yellow to brown.
+		else_if = {
+			limit = { te_jmap_color = 1 te_jmap_pick_ramp = 1 te_jmap_pick_factor < 0.25 }
+			lerp = {
+				min_color = "te_jmap_cb_seq_0"
+				max_color = "te_jmap_cb_seq_1"
+				factor = te_jmap_pick_q1
+			}
+		}
+		else_if = {
+			limit = { te_jmap_color = 1 te_jmap_pick_ramp = 1 te_jmap_pick_factor < 0.5 }
+			lerp = {
+				min_color = "te_jmap_cb_seq_1"
+				max_color = "te_jmap_cb_seq_2"
+				factor = te_jmap_pick_q2
+			}
+		}
+		else_if = {
+			limit = { te_jmap_color = 1 te_jmap_pick_ramp = 1 te_jmap_pick_factor < 0.75 }
+			lerp = {
+				min_color = "te_jmap_cb_seq_2"
+				max_color = "te_jmap_cb_seq_3"
+				factor = te_jmap_pick_q3
+			}
+		}
+		else_if = {
+			limit = { te_jmap_color = 1 te_jmap_pick_ramp = 1 }
+			lerp = {
+				min_color = "te_jmap_cb_seq_3"
+				max_color = "te_jmap_cb_seq_4"
+				factor = te_jmap_pick_q4
+			}
+		}
+		# Colorblind-safe, a map with a meaningful midpoint: ColorBrewer's PuOr, orange below it, near white at it, purple above.
+		else_if = {
+			limit = { te_jmap_color = 1 te_jmap_pick_ramp = 2 te_jmap_pick_factor < 0.25 }
+			lerp = {
+				min_color = "te_jmap_cb_div_0"
+				max_color = "te_jmap_cb_div_1"
+				factor = te_jmap_pick_q1
+			}
+		}
+		else_if = {
+			limit = { te_jmap_color = 1 te_jmap_pick_ramp = 2 te_jmap_pick_factor < 0.5 }
+			lerp = {
+				min_color = "te_jmap_cb_div_1"
+				max_color = "te_jmap_cb_div_mid_low"
+				factor = te_jmap_pick_q2
+			}
+		}
+		else_if = {
+			limit = { te_jmap_color = 1 te_jmap_pick_ramp = 2 te_jmap_pick_factor < 0.75 }
+			lerp = {
+				min_color = "te_jmap_cb_div_mid_high"
+				max_color = "te_jmap_cb_div_3"
+				factor = te_jmap_pick_q3
+			}
+		}
+		else_if = {
+			limit = { te_jmap_color = 1 te_jmap_pick_ramp = 2 }
+			lerp = {
+				min_color = "te_jmap_cb_div_3"
+				max_color = "te_jmap_cb_div_4"
+				factor = te_jmap_pick_q4
+			}
+		}
+		# Colorblind-safe: a headquarters at a loss, a state that removes more than it emits (the maps' own red and green).
+		else_if = {
+			limit = { te_jmap_color = 1 te_jmap_pick_below = yes }
+			value = "te_jmap_cb_below"
+		}
+		# Greyscale: light to dark, one lerp, on every fitted map (a midpoint sits at the middle grey). Any other state of
+		# a fitted map (no figure, none, off the scale) is the "no data" grey, striped by map_color_second below.
+		else_if = {
+			limit = { te_jmap_color = 2 te_jmap_pick_ramp > 0 }
+			lerp = {
+				min_color = "te_jmap_grey_low"
+				max_color = "te_jmap_grey_high"
+				factor = te_jmap_pick_factor
+			}
+		}
+		else_if = {
+			limit = { te_jmap_color = 2 te_jmap_pick_fitted = 1 }
+			value = "te_jmap_no_data"
+		}
+		# 1. Turmoil.
+		else_if = {
+			limit = { te_jmap_selector = 1 }
+			lerp = {
+				min_color = "te_jmap_turmoil_low"
+				max_color = "te_jmap_turmoil_high"
+				factor = te_jmap_turmoil_factor
+			}
+		}
+		# 6. Devastation.
+		else_if = {
+			limit = { te_jmap_selector = 6 }
+			lerp = {
+				min_color = "te_jmap_devastation_low"
+				max_color = "te_jmap_devastation_high"
+				factor = te_jmap_devastation_factor
+			}
+		}
+		# 15. The urban share (the yearly walk's, whatever the Demographics rule).
+		else_if = {
+			limit = {
+				te_jmap_selector = 15
+				has_variable = te_dg_urban_share
+			}
+			lerp = {
+				min_color = "te_jmap_urban_low"
+				max_color = "te_jmap_urban_high"
+				factor = te_jmap_urban_factor
+			}
+		}
+		# 16. The Gini coefficient (the yearly walk's).
+		else_if = {
+			limit = {
+				te_jmap_selector = 16
+				has_variable = te_dg_gini
+			}
+			lerp = {
+				min_color = "te_jmap_gini_low"
+				max_color = "te_jmap_gini_high"
+				factor = te_jmap_gini_factor
+			}
+		}
+		# 17. Dynastic Wealth (the yearly walk's), diverging at 50.
+		else_if = {
+			limit = {
+				te_jmap_selector = 17
+				has_variable = te_dg_wc
+				te_jmap_wc_factor < 0.5
+			}
+			lerp = {
+				min_color = "te_jmap_wc_low"
+				max_color = "te_jmap_wc_mid"
+				factor = te_jmap_wc_factor_lower
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 17
+				has_variable = te_dg_wc
+			}
+			lerp = {
+				min_color = "te_jmap_wc_mid"
+				max_color = "te_jmap_wc_high"
+				factor = te_jmap_wc_factor_upper
+			}
+		}
+		# 26. Tourism's Base Appeal, the state panel's row (stored monthly by te_update_tourism_modifier, since the score
+		# is a state_region chain of some 700 branches).
+		else_if = {
+			limit = {
+				te_jmap_selector = 26
+				has_variable = te_tourism_base_appeal
+			}
+			lerp = {
+				min_color = "te_jmap_tourism_low"
+				max_color = "te_jmap_tourism_high"
+				factor = te_jmap_tourism_factor
+			}
+		}
+		# 27. Base Comfort: Local Climate's penalty before any technology's relief (stored by its yearly refresh), diverging
+		# at none: green a mild winter's draw, red a cost.
+		else_if = {
+			limit = {
+				te_jmap_selector = 27
+				has_variable = te_climate_base_penalty
+				te_jmap_comfort_base_factor < 0.5
+			}
+			lerp = {
+				min_color = "te_jmap_comfort_low"
+				max_color = "te_jmap_comfort_mid"
+				factor = te_jmap_comfort_base_factor_lower
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 27
+				has_variable = te_climate_base_penalty
+			}
+			lerp = {
+				min_color = "te_jmap_comfort_mid"
+				max_color = "te_jmap_comfort_high"
+				factor = te_jmap_comfort_base_factor_upper
+			}
+		}
+		# 28. Current Comfort: the penalty in force, after the relief its owner's technologies give (the same refresh), on
+		# Base Comfort's curve and colors.
+		else_if = {
+			limit = {
+				te_jmap_selector = 28
+				has_variable = te_climate_penalty_applied
+				te_jmap_comfort_factor < 0.5
+			}
+			lerp = {
+				min_color = "te_jmap_comfort_low"
+				max_color = "te_jmap_comfort_mid"
+				factor = te_jmap_comfort_factor_lower
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 28
+				has_variable = te_climate_penalty_applied
+			}
+			lerp = {
+				min_color = "te_jmap_comfort_mid"
+				max_color = "te_jmap_comfort_high"
+				factor = te_jmap_comfort_factor_upper
+			}
+		}
+		# 29. GDP per capita: the state's GDP over its people (gdp_per_capita, two engine figures), a doubling at a time.
+		else_if = {
+			limit = { te_jmap_selector = 29 }
+			lerp = {
+				min_color = "te_jmap_gdppc_low"
+				max_color = "te_jmap_gdppc_high"
+				factor = te_jmap_gdppc_factor
+			}
+		}
+		# 30. Migration Crowding's cut to migration attraction, as the state panel's tile shows it (engine figures: people,
+		# arable land, Urban Engineering, tolerance).
+		else_if = {
+			limit = { te_jmap_selector = 30 }
+			lerp = {
+				min_color = "te_jmap_crowding_low"
+				max_color = "te_jmap_crowding_high"
+				factor = te_jmap_crowding_factor
+			}
+		}
+		# 32. City Rank: tourism's ranking of the world's cities (var:state_city_size_rank, city_rank_on_action, monthly).
+		# The first 20 by the Cities bonus tourism gives them, 20th amber to 1st crimson; below 20th a doubling of the
+		# rank at a time, steel blue fading; a state the ranking doesn't reach (past 501st) pale.
+		else_if = {
+			limit = {
+				te_jmap_selector = 32
+				tourism_bonus_from_urban_centers > 0
+			}
+			lerp = {
+				min_color = "te_jmap_city_top_low"
+				max_color = "te_jmap_city_top_high"
+				factor = te_jmap_city_top_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 32
+				city_size_rank > 0
+			}
+			lerp = {
+				min_color = "te_jmap_city_rest_low"
+				max_color = "te_jmap_city_rest_high"
+				factor = te_jmap_city_rest_factor
+			}
+		}
+		else_if = {
+			limit = { te_jmap_selector = 32 }
+			value = "te_jmap_none"
+		}
+		# 33. Armed Forces: the state's Soldiers and Officers (the yearly walk's, whatever the Demographics rule), a
+		# doubling at a time; a state with none pale.
+		else_if = {
+			limit = {
+				te_jmap_selector = 33
+				has_variable = te_dg_soldiers
+				var:te_dg_soldiers > 0
+			}
+			lerp = {
+				min_color = "te_jmap_soldiers_low"
+				max_color = "te_jmap_soldiers_high"
+				factor = te_jmap_soldiers_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 33
+				has_variable = te_dg_soldiers
+			}
+			value = "te_jmap_none"
+		}
+		# 34. Company Headquarters: a state with one or more by their weekly profit summed (te_jmap_hq_profit), a doubling
+		# at a time, red at a loss; a state with none grey (the owner's ask, 2026-11-08). The figures are the monthly
+		# store's state variables (te_jmap_store_hqs): the engine's per-company headquarters types match no has_building.
+		else_if = {
+			limit = {
+				te_jmap_selector = 34
+				has_variable = te_jmap_hq_n
+				te_jmap_hq_profit > 0
+			}
+			lerp = {
+				min_color = "te_jmap_hq_low"
+				max_color = "te_jmap_hq_high"
+				factor = te_jmap_hq_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 34
+				has_variable = te_jmap_hq_n
+			}
+			value = "te_jmap_hq_loss"
+		}
+		else_if = {
+			limit = { te_jmap_selector = 34 }
+			value = "te_jmap_no_data"
+		}
+		# 36. Ownership: the leading holder of the state's capital levels (the yearly walk's, whatever the Demographics rule),
+		# private owners gold, their own workers green, the state red, each from pale at 40% of the levels to full at all
+		# of them (te_jmap_own_factor); a state with under one level of capital pale.
+		else_if = {
+			limit = {
+				te_jmap_selector = 36
+				has_variable = te_dg_lv_priv
+				te_jmap_own_lead = 1
+			}
+			lerp = {
+				min_color = "te_jmap_own_priv_pale"
+				max_color = "te_jmap_own_priv"
+				factor = te_jmap_own_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 36
+				has_variable = te_dg_lv_priv
+				te_jmap_own_lead = 2
+			}
+			lerp = {
+				min_color = "te_jmap_own_self_pale"
+				max_color = "te_jmap_own_self"
+				factor = te_jmap_own_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 36
+				has_variable = te_dg_lv_priv
+				te_jmap_own_lead = 3
+			}
+			lerp = {
+				min_color = "te_jmap_own_ctry_pale"
+				max_color = "te_jmap_own_ctry"
+				factor = te_jmap_own_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 36
+				has_variable = te_dg_lv_priv
+			}
+			value = "te_jmap_none"
+		}
+		# 37. Population Growth: the change in people from one yearly walk to the next, per 1,000 (te_jmap_pop_growth, the
+		# walk's, whatever the Demographics rule), diverging at none.
+		else_if = {
+			limit = {
+				te_jmap_selector = 37
+				has_variable = te_dg_walk_pop
+				has_variable = te_dg_walk_pop_prev
+				var:te_dg_walk_pop_prev > 0
+				te_jmap_growth_factor < 0.5
+			}
+			lerp = {
+				min_color = "te_jmap_growth_low"
+				max_color = "te_jmap_growth_mid"
+				factor = te_jmap_growth_factor_lower
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 37
+				has_variable = te_dg_walk_pop
+				has_variable = te_dg_walk_pop_prev
+				var:te_dg_walk_pop_prev > 0
+			}
+			lerp = {
+				min_color = "te_jmap_growth_mid"
+				max_color = "te_jmap_growth_high"
+				factor = te_jmap_growth_factor_upper
+			}
+		}
+		# 3. Life expectancy (Demographics), in two halves at 52.5 years.
+		else_if = {
+			limit = {
+				te_jmap_selector = 3
+				has_variable = te_dg_e0
+				var:te_dg_e0 > 0
+				te_jmap_e0_factor < 0.5
+			}
+			lerp = {
+				min_color = "te_jmap_e0_low"
+				max_color = "te_jmap_e0_mid"
+				factor = te_jmap_e0_factor_lower
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 3
+				has_variable = te_dg_e0
+				var:te_dg_e0 > 0
+			}
+			lerp = {
+				min_color = "te_jmap_e0_mid"
+				max_color = "te_jmap_e0_high"
+				factor = te_jmap_e0_factor_upper
+			}
+		}
+		# 10. Infant mortality (Demographics, the life table's), in two halves at 50 per 1,000 births.
+		else_if = {
+			limit = {
+				te_jmap_selector = 10
+				has_variable = te_dg_imr
+				has_variable = te_dg_e0
+				var:te_dg_e0 > 0
+				te_jmap_imr_factor < 0.5
+			}
+			lerp = {
+				min_color = "te_jmap_imr_low"
+				max_color = "te_jmap_imr_mid"
+				factor = te_jmap_imr_factor_lower
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 10
+				has_variable = te_dg_imr
+				has_variable = te_dg_e0
+				var:te_dg_e0 > 0
+			}
+			lerp = {
+				min_color = "te_jmap_imr_mid"
+				max_color = "te_jmap_imr_high"
+				factor = te_jmap_imr_factor_upper
+			}
+		}
+		# 11. The leading cause of death (Demographics), in the Causes of Death pie's colors: te_dg_dc_lead's codes, 1
+		# infection and hunger, 2 chronic illness and old age, 3 accidents and violence, 4 work, 5 childbirth, 7 killed by
+		# events, 8 war and devastation (6, the deaths added on top until 2026-10-22, as war, as the panel's icon does).
+		# Each fades from its pale end to the pie's color by the cause's share of the deaths (te_jmap_cause_factor, 30% to
+		# 90%), so a state where it barely leads reads apart from one where it takes nearly all.
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				var:te_dg_dc_lead = 1
+			}
+			lerp = {
+				min_color = "te_jmap_cause_inf_pale"
+				max_color = "te_jmap_cause_inf"
+				factor = te_jmap_cause_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				var:te_dg_dc_lead = 2
+			}
+			lerp = {
+				min_color = "te_jmap_cause_chr_pale"
+				max_color = "te_jmap_cause_chr"
+				factor = te_jmap_cause_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				var:te_dg_dc_lead = 3
+			}
+			lerp = {
+				min_color = "te_jmap_cause_ext_pale"
+				max_color = "te_jmap_cause_ext"
+				factor = te_jmap_cause_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				var:te_dg_dc_lead = 4
+			}
+			lerp = {
+				min_color = "te_jmap_cause_work_pale"
+				max_color = "te_jmap_cause_work"
+				factor = te_jmap_cause_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				var:te_dg_dc_lead = 5
+			}
+			lerp = {
+				min_color = "te_jmap_cause_mat_pale"
+				max_color = "te_jmap_cause_mat"
+				factor = te_jmap_cause_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				var:te_dg_dc_lead = 7
+			}
+			lerp = {
+				min_color = "te_jmap_cause_kill_pale"
+				max_color = "te_jmap_cause_kill"
+				factor = te_jmap_cause_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				OR = {
+					var:te_dg_dc_lead = 8
+					var:te_dg_dc_lead = 6
+				}
+			}
+			lerp = {
+				min_color = "te_jmap_cause_war_pale"
+				max_color = "te_jmap_cause_war"
+				factor = te_jmap_cause_factor
+			}
+		}
+		# 9. Births per 1,000 (Demographics, once stepped).
+		else_if = {
+			limit = {
+				te_jmap_selector = 9
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_cbr
+			}
+			lerp = {
+				min_color = "te_jmap_cbr_low"
+				max_color = "te_jmap_cbr_high"
+				factor = te_jmap_cbr_factor
+			}
+		}
+		# 8. Deaths per 1,000 (Demographics, once stepped).
+		else_if = {
+			limit = {
+				te_jmap_selector = 8
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_cdr
+			}
+			lerp = {
+				min_color = "te_jmap_cdr_low"
+				max_color = "te_jmap_cdr_high"
+				factor = te_jmap_cdr_factor
+			}
+		}
+		# 7. Natural change (Demographics, once stepped), diverging at none.
+		else_if = {
+			limit = {
+				te_jmap_selector = 7
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_cbr
+				has_variable = te_dg_cdr
+				te_jmap_natural_factor < 0.5
+			}
+			lerp = {
+				min_color = "te_jmap_natural_low"
+				max_color = "te_jmap_natural_mid"
+				factor = te_jmap_natural_factor_lower
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 7
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_cbr
+				has_variable = te_dg_cdr
+			}
+			lerp = {
+				min_color = "te_jmap_natural_mid"
+				max_color = "te_jmap_natural_high"
+				factor = te_jmap_natural_factor_upper
+			}
+		}
+		# 4. Fertility (Demographics), diverging at replacement.
+		else_if = {
+			limit = {
+				te_jmap_selector = 4
+				has_variable = te_dg_tfr
+				var:te_dg_tfr > 0
+				te_jmap_tfr_factor < 0.5
+			}
+			lerp = {
+				min_color = "te_jmap_tfr_low"
+				max_color = "te_jmap_tfr_mid"
+				factor = te_jmap_tfr_factor_lower
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 4
+				has_variable = te_dg_tfr
+				var:te_dg_tfr > 0
+			}
+			lerp = {
+				min_color = "te_jmap_tfr_mid"
+				max_color = "te_jmap_tfr_high"
+				factor = te_jmap_tfr_factor_upper
+			}
+		}
+		# 5. Median age (Demographics), in two halves at 30 years.
+		else_if = {
+			limit = {
+				te_jmap_selector = 5
+				has_variable = te_dg_median
+				var:te_dg_median > 0
+				te_jmap_median_factor < 0.5
+			}
+			lerp = {
+				min_color = "te_jmap_median_low"
+				max_color = "te_jmap_median_mid"
+				factor = te_jmap_median_factor_lower
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 5
+				has_variable = te_dg_median
+				var:te_dg_median > 0
+			}
+			lerp = {
+				min_color = "te_jmap_median_mid"
+				max_color = "te_jmap_median_high"
+				factor = te_jmap_median_factor_upper
+			}
+		}
+		# 14. Aged 65 and over (Demographics).
+		else_if = {
+			limit = {
+				te_jmap_selector = 14
+				has_variable = te_dg_old_share
+				has_variable = te_dg_median
+				var:te_dg_median > 0
+			}
+			lerp = {
+				min_color = "te_jmap_old_low"
+				max_color = "te_jmap_old_high"
+				factor = te_jmap_old_factor
+			}
+		}
+		# 12. Sex balance (Demographics), diverging at 100 men per 100 women.
+		else_if = {
+			limit = {
+				te_jmap_selector = 12
+				has_variable = te_dg_sex_balance
+				var:te_dg_sex_balance > 0
+				te_jmap_sex_factor < 0.5
+			}
+			lerp = {
+				min_color = "te_jmap_sex_low"
+				max_color = "te_jmap_sex_mid"
+				factor = te_jmap_sex_factor_lower
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 12
+				has_variable = te_dg_sex_balance
+				var:te_dg_sex_balance > 0
+			}
+			lerp = {
+				min_color = "te_jmap_sex_mid"
+				max_color = "te_jmap_sex_high"
+				factor = te_jmap_sex_factor_upper
+			}
+		}
+		# 13. Net migration (Demographics, once stepped), diverging at none.
+		else_if = {
+			limit = {
+				te_jmap_selector = 13
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_mig_rate
+				te_jmap_mig_factor < 0.5
+			}
+			lerp = {
+				min_color = "te_jmap_mig_low"
+				max_color = "te_jmap_mig_mid"
+				factor = te_jmap_mig_factor_lower
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 13
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_mig_rate
+			}
+			lerp = {
+				min_color = "te_jmap_mig_mid"
+				max_color = "te_jmap_mig_high"
+				factor = te_jmap_mig_factor_upper
+			}
+		}
+		# 35. War Dead (Demographics, once stepped): last year's deaths to war and devastation (te_dg_dc_war, the state's
+		# share of its owner's war dead by its soldiers, and under Full the civilians), a doubling at a time; a state
+		# that lost none pale.
+		else_if = {
+			limit = {
+				te_jmap_selector = 35
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_war
+				var:te_dg_dc_war > 0
+			}
+			lerp = {
+				min_color = "te_jmap_war_dead_low"
+				max_color = "te_jmap_war_dead_high"
+				factor = te_jmap_war_dead_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 35
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_war
+			}
+			value = "te_jmap_none"
+		}
+		# 38. Family Planning (Demographics): the census's means to plan a family (te_dg_means).
+		else_if = {
+			limit = {
+				te_jmap_selector = 38
+				has_variable = te_dg_means
+			}
+			lerp = {
+				min_color = "te_jmap_means_low"
+				max_color = "te_jmap_means_high"
+				factor = te_jmap_means_factor
+			}
+		}
+		# 39. Health Care (Demographics): the census's health-care access (te_dg_acc), the share medicine reaches.
+		else_if = {
+			limit = {
+				te_jmap_selector = 39
+				has_variable = te_dg_acc
+			}
+			lerp = {
+				min_color = "te_jmap_health_low"
+				max_color = "te_jmap_health_high"
+				factor = te_jmap_health_factor
+			}
+		}
+		# 40. Fighting-Age Men (Demographics): men aged 20 to 39, the conscription pool (te_dg_fam), over the people.
+		else_if = {
+			limit = {
+				te_jmap_selector = 40
+				has_variable = te_dg_fam
+				has_variable = te_dg_people
+			}
+			lerp = {
+				min_color = "te_jmap_fam_low"
+				max_color = "te_jmap_fam_high"
+				factor = te_jmap_fam_factor
+			}
+		}
+		# 41-44. The classes (2026-11-11): Capitalists, Aristocrats, Clergymen and Academics, each class's share of the
+		# state's people (the yearly walk's, whatever the Demographics rule; te_jmap_<class>_share).
+		else_if = {
+			limit = {
+				te_jmap_selector = 41
+				has_variable = te_dg_capitalists
+				has_variable = te_dg_walk_pop
+				var:te_dg_walk_pop > 0
+			}
+			lerp = {
+				min_color = "te_jmap_capitalists_low"
+				max_color = "te_jmap_capitalists_high"
+				factor = te_jmap_capitalists_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 42
+				has_variable = te_dg_aristocrats
+				has_variable = te_dg_walk_pop
+				var:te_dg_walk_pop > 0
+			}
+			lerp = {
+				min_color = "te_jmap_aristocrats_low"
+				max_color = "te_jmap_aristocrats_high"
+				factor = te_jmap_aristocrats_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 43
+				has_variable = te_dg_clergy
+				has_variable = te_dg_walk_pop
+				var:te_dg_walk_pop > 0
+			}
+			lerp = {
+				min_color = "te_jmap_clergy_low"
+				max_color = "te_jmap_clergy_high"
+				factor = te_jmap_clergy_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 44
+				has_variable = te_dg_academics
+				has_variable = te_dg_walk_pop
+				var:te_dg_walk_pop > 0
+			}
+			lerp = {
+				min_color = "te_jmap_academics_low"
+				max_color = "te_jmap_academics_high"
+				factor = te_jmap_academics_factor
+			}
+		}
+		# 45. Trade Capacity (2026-11-11): the state's own Trade Capacity, its Trade Center's (te_jmap_trade_capacity), a
+		# doubling at a time; a state with none pale. Until the same day it painted the owner's trade, every state of a
+		# country alike, and striped the Trade Centers.
+		else_if = {
+			limit = {
+				te_jmap_selector = 45
+				te_jmap_trade_capacity > 0
+			}
+			lerp = {
+				min_color = "te_jmap_trade_low"
+				max_color = "te_jmap_trade_high"
+				factor = te_jmap_trade_factor
+			}
+		}
+		else_if = {
+			limit = { te_jmap_selector = 45 }
+			value = "te_jmap_none"
+		}
+		# 46. Investment (2026-11-11): what the state's owners pay into the Investment Pool each week, estimated from its
+		# Financial Districts', Manor Houses' and company headquarters' profit (te_jmap_invest_value, the store's state
+		# variables: te_jmap_store_invest), a doubling at a time; a state that pays nothing pale.
+		else_if = {
+			limit = {
+				te_jmap_selector = 46
+				has_variable = te_jmap_inv_cap
+				te_jmap_invest_value > 0
+			}
+			lerp = {
+				min_color = "te_jmap_invest_low"
+				max_color = "te_jmap_invest_high"
+				factor = te_jmap_invest_factor
+			}
+		}
+		else_if = {
+			limit = { te_jmap_selector = 46 }
+			value = "te_jmap_none"
+		}
+		# 47. Population Density (2026-11-16): the state's people per km² of land (te_jmap_density: the engine's people
+		# over its region's area from the area table, shared by province), a doubling at a time; a state with no people
+		# pale.
+		else_if = {
+			limit = {
+				te_jmap_selector = 47
+				te_jmap_density > 0
+			}
+			lerp = {
+				min_color = "te_jmap_density_low"
+				max_color = "te_jmap_density_high"
+				factor = te_jmap_density_factor
+			}
+		}
+		else_if = {
+			limit = { te_jmap_selector = 47 }
+			value = "te_jmap_none"
+		}
+		# 18. The systems' maps: each state's share of the world's greenhouse gas emissions last year (je_global_warming draws
+		# it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 18
+				te_jmap_gw_no_data = yes
+			}
+			value = "te_jmap_no_data"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 18
+				te_jmap_gw_removal = yes
+			}
+			value = "te_jmap_gw_removal"
+		}
+		# The Map Room's own factor (te_jmap_gw_room_factor): its range follows the Map Room's options, while the
+		# entry's (te_jmap_gw_factor) stays the whole world's.
+		else_if = {
+			limit = {
+				te_jmap_selector = 18
+			}
+			lerp = {
+				min_color = "te_jmap_gw_low"
+				max_color = "te_jmap_gw_high"
+				factor = te_jmap_gw_room_factor
+			}
+		}
+		# 19. The systems' maps: the world's nuclear powers, as the world sees them, and the viewer's deterrent
+		# (je_nuclear_program draws it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 19
+				te_jmap_owner_is_viewer = yes
+			}
+			value = "te_jmap_nuke_you"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 19
+				te_jmap_nuke_hosts_yours = yes
+			}
+			value = "te_jmap_nuke_hosts"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 19
+				te_jmap_nuke_umbrella = yes
+			}
+			value = "te_jmap_nuke_umbrella"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 19
+				te_jmap_nuke_guaranteed = yes
+			}
+			value = "te_jmap_nuke_guaranteed"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 19
+				te_jmap_nuke_armed = yes
+			}
+			value = "te_jmap_nuke_armed"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 19
+			}
+			value = "te_jmap_none"
+		}
+		# 20. The systems' maps: the viewer's covert network in each country (je_covert_warfare draws it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 20
+				te_jmap_owner_is_viewer = yes
+			}
+			value = "te_jmap_net_you"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 20
+				te_jmap_net_some = yes
+			}
+			lerp = {
+				min_color = "te_jmap_net_low"
+				max_color = "te_jmap_net_high"
+				factor = te_jmap_net_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 20
+			}
+			value = "te_jmap_none"
+		}
+		# 21. The systems' maps: members, the Security Council's permanent members, the headquarters and the missions at work
+		# (je_united_nations draws it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_unfounded = yes
+			}
+			value = "te_jmap_no_data"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_mission = { TYPE = 1 }
+			}
+			value = "te_jmap_un_peacekeeping"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_mission = { TYPE = 2 }
+			}
+			value = "te_jmap_un_aid"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_mission = { TYPE = 3 }
+			}
+			value = "te_jmap_un_stabilization"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_mission = { TYPE = 4 }
+			}
+			value = "te_jmap_un_electoral"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_hq = yes
+			}
+			value = "te_jmap_un_hq"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_permanent = yes
+			}
+			value = "te_jmap_un_permanent"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_member = yes
+			}
+			value = "te_jmap_un_member"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+			}
+			value = "te_jmap_none"
+		}
+		# 22. The systems' maps: each country's political model at the last census of models, in the model pie's colors
+		# (je_cultural_hegemony draws it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 1 }
+			}
+			value = "te_jmap_ch_communist"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 2 }
+			}
+			value = "te_jmap_ch_anarchist"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 3 }
+			}
+			value = "te_jmap_ch_fascist"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 4 }
+			}
+			value = "te_jmap_ch_corporatist"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 5 }
+			}
+			value = "te_jmap_ch_socialist"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 6 }
+			}
+			value = "te_jmap_ch_royalist_absolutist"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 7 }
+			}
+			value = "te_jmap_ch_royalist_constitutional"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 8 }
+			}
+			value = "te_jmap_ch_religious"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 9 }
+			}
+			value = "te_jmap_ch_reactionary"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 10 }
+			}
+			value = "te_jmap_ch_military_junta"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 11 }
+			}
+			value = "te_jmap_ch_liberal"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 12 }
+			}
+			value = "te_jmap_ch_other"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 13 }
+			}
+			value = "te_jmap_ch_technocratic"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 14 }
+			}
+			value = "te_jmap_ch_republican"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_model = { MODEL = 15 }
+			}
+			value = "te_jmap_ch_developmentalist_junta"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+			}
+			value = "te_jmap_no_data"
+		}
+		# 23. The systems' maps: each coastal state's ocean basin.
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+				te_jmap_seabed_basin = { BASIN = 1 }
+			}
+			value = "te_jmap_seabed_pacific"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+				te_jmap_seabed_basin = { BASIN = 2 }
+			}
+			value = "te_jmap_seabed_atlantic"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+				te_jmap_seabed_basin = { BASIN = 3 }
+			}
+			value = "te_jmap_seabed_indian"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+				te_jmap_seabed_basin = { BASIN = 4 }
+			}
+			value = "te_jmap_seabed_arctic"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+				te_jmap_seabed_basin = { BASIN = 5 }
+			}
+			value = "te_jmap_seabed_southern"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+			}
+			value = "te_jmap_none"
+		}
+		# 24. The systems' maps: each state's grandeur (je_grand_monuments draws it too, on its own factor,
+		# te_jmap_gm_factor: the Map Room's, te_jmap_gm_room_factor, follows the Map Room's options, as Emissions').
+		else_if = {
+			limit = {
+				te_jmap_selector = 24
+				te_jmap_gm_monument = yes
+			}
+			lerp = {
+				min_color = "te_jmap_gm_low"
+				max_color = "te_jmap_gm_high"
+				factor = te_jmap_gm_room_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 24
+			}
+			value = "te_jmap_none"
+		}
+		# 25. The systems' maps: the colonies and colonial subjects, by their empire's colonial stability, and the empires'
+		# home states (je_colonial_empire draws it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_colony_band = { TIER = 1 }
+			}
+			value = "te_jmap_ce_collapsing"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_colony_band = { TIER = 2 }
+			}
+			value = "te_jmap_ce_crumbling"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_colony_band = { TIER = 3 }
+			}
+			value = "te_jmap_ce_strained"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_colony_band = { TIER = 4 }
+			}
+			value = "te_jmap_ce_stable"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_colony_band = { TIER = 5 }
+			}
+			value = "te_jmap_ce_solidified"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_subject_band = { TIER = 1 }
+			}
+			value = "te_jmap_ce_collapsing"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_subject_band = { TIER = 2 }
+			}
+			value = "te_jmap_ce_crumbling"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_subject_band = { TIER = 3 }
+			}
+			value = "te_jmap_ce_strained"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_subject_band = { TIER = 4 }
+			}
+			value = "te_jmap_ce_stable"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_subject_band = { TIER = 5 }
+			}
+			value = "te_jmap_ce_solidified"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_metropole = yes
+			}
+			value = "te_jmap_ce_metropole"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+			}
+			value = "te_jmap_none"
+		}
+		# 31. Power Grids: each state on a grid in its grid's color (te_grid_map_color, power_grid_effects.txt: bordering
+		# grids differ), a station on no grid this month grey; the hub stripes white (map_color_second).
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_color = { COLOR = 1 }
+			}
+			value = "te_jmap_grid_1"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_color = { COLOR = 2 }
+			}
+			value = "te_jmap_grid_2"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_color = { COLOR = 3 }
+			}
+			value = "te_jmap_grid_3"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_color = { COLOR = 4 }
+			}
+			value = "te_jmap_grid_4"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_color = { COLOR = 5 }
+			}
+			value = "te_jmap_grid_5"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_color = { COLOR = 6 }
+			}
+			value = "te_jmap_grid_6"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_color = { COLOR = 7 }
+			}
+			value = "te_jmap_grid_7"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_color = { COLOR = 8 }
+			}
+			value = "te_jmap_grid_8"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_color = { COLOR = 9 }
+			}
+			value = "te_jmap_grid_9"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_color = { COLOR = 10 }
+			}
+			value = "te_jmap_grid_10"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_color = { COLOR = 11 }
+			}
+			value = "te_jmap_grid_11"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_color = { COLOR = 12 }
+			}
+			value = "te_jmap_grid_12"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_on = yes
+			}
+			value = "te_jmap_grid_1"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_off = yes
+			}
+			value = "te_jmap_grid_offline"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+			}
+			value = "te_jmap_none"
+		}
+		# Every map that reads a stored figure, for a state with none yet (no census, no full year, no people to count,
+		# no yearly walk yet, the rule off, or the tourism and climate refreshes not yet run): grey. Every such selector is listed here
+		# (test_journal_map_modes.py).
+		else_if = {
+			limit = {
+				OR = {
+					te_jmap_selector = 3
+					te_jmap_selector = 4
+					te_jmap_selector = 5
+					te_jmap_selector = 7
+					te_jmap_selector = 8
+					te_jmap_selector = 9
+					te_jmap_selector = 10
+					te_jmap_selector = 11
+					te_jmap_selector = 12
+					te_jmap_selector = 13
+					te_jmap_selector = 14
+					te_jmap_selector = 15
+					te_jmap_selector = 16
+					te_jmap_selector = 17
+					te_jmap_selector = 26
+					te_jmap_selector = 27
+					te_jmap_selector = 28
+					te_jmap_selector = 33
+					te_jmap_selector = 35
+					te_jmap_selector = 36
+					te_jmap_selector = 37
+					te_jmap_selector = 38
+					te_jmap_selector = 39
+					te_jmap_selector = 40
+					te_jmap_selector = 41
+					te_jmap_selector = 42
+					te_jmap_selector = 43
+					te_jmap_selector = 44
+				}
+			}
+			value = "te_jmap_no_data"
+		}
+	}
+
+	# Stripes. 11, the leading cause of death: the runner-up's color (te_dg_dc_second, the pie's) where it took at least
+	# half the leader's deaths (te_jmap_cause_second_ratio; owner, 2026-11-06). 31, Power Grids: white on each grid's
+	# hub. 34, Company Headquarters: gold where a company keeps a regional headquarters (owner, 2026-11-08), over the
+	# grey of a state with no headquarters of its own too. No other map stripes, and a state no branch takes has none
+	# (Trade Capacity striped its Trade Centers while it painted the owner's trade, until 2026-11-11). A state outside
+	# the Map Room's area has none either (te_jmap_in_area, in every branch: a first branch of its own would have to
+	# name a color to stripe with). Under the Color option's Greyscale (2026-11-14) a fitted map stripes every state
+	# its ramp doesn't take, first: a grey for "no data" would be a grey on the ramp, so the pattern says it instead.
+	map_color_second = {
+		if = {
+			limit = {
+				te_jmap_color = 2
+				te_jmap_pick_fitted = 1
+				te_jmap_in_area = yes
+				te_jmap_pick_ramp = 0
+			}
+			value = "te_jmap_grey_stripe"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_in_area = yes
+				te_jmap_grid_hub = yes
+			}
+			value = "te_jmap_grid_hub"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 34
+				te_jmap_in_area = yes
+				has_variable = te_jmap_rhq_n
+				te_jmap_color < 2	# under Greyscale a stripe says one thing: not on the scale
+			}
+			value = "te_jmap_hq_regional"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				te_jmap_in_area = yes
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 1
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			value = "te_jmap_cause_inf"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				te_jmap_in_area = yes
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 2
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			value = "te_jmap_cause_chr"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				te_jmap_in_area = yes
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 3
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			value = "te_jmap_cause_ext"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				te_jmap_in_area = yes
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 4
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			value = "te_jmap_cause_work"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				te_jmap_in_area = yes
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 5
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			value = "te_jmap_cause_mat"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				te_jmap_in_area = yes
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 7
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			value = "te_jmap_cause_kill"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				te_jmap_in_area = yes
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 8
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			value = "te_jmap_cause_war"
+		}
+	}
+
+	# Root: the state under the cursor. Never runs as an effect; it only prints. Each figure that needs a choice of words
+	# is a branch of its own, not a SelectLocalization in the loc: a key named there loses THIS, and every hover logged
+	# "Promote 'THIS' returned nullptr" and printed nothing (2026-11-05).
+	map_tooltip = {
+		# A state outside the Map Room's area: its name and the area, no figure (the paint's first branch).
+		if = {
+			limit = { has_variable = te_jmap_out }
+			custom_tooltip_no_bullet = te_jmap_tt_outside
+		}
+		else_if = {
+			limit = { te_jmap_selector = 1 }
+			custom_tooltip_no_bullet = te_jmap_tt_turmoil
+		}
+		else_if = {
+			limit = { te_jmap_selector = 6 }
+			custom_tooltip_no_bullet = te_jmap_tt_devastation
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 15
+				has_variable = te_dg_urban_share
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_urban_share
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 16
+				has_variable = te_dg_gini
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_gini
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 17
+				has_variable = te_dg_wc
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_dynastic_wealth
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 26
+				has_variable = te_tourism_base_appeal
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_tourism_appeal
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 27
+				has_variable = te_climate_base_penalty
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_base_comfort
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 28
+				has_variable = te_climate_penalty_applied
+				has_variable = te_climate_base_penalty
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_current_comfort
+		}
+		# A save from before Base Comfort, until the state's first application (within a month): the cost in force only.
+		else_if = {
+			limit = {
+				te_jmap_selector = 28
+				has_variable = te_climate_penalty_applied
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_current_comfort_only
+		}
+		else_if = {
+			limit = { te_jmap_selector = 29 }
+			custom_tooltip_no_bullet = te_jmap_tt_gdp_per_capita
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 30
+				migration_crowding_mult > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_crowding
+		}
+		else_if = {
+			limit = { te_jmap_selector = 30 }
+			custom_tooltip_no_bullet = te_jmap_tt_crowding_none
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 32
+				tourism_bonus_from_urban_centers > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_city_top
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 32
+				city_size_rank > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_city_ranked
+		}
+		else_if = {
+			limit = { te_jmap_selector = 32 }
+			custom_tooltip_no_bullet = te_jmap_tt_city_unranked
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 33
+				has_variable = te_dg_soldiers
+				var:te_dg_soldiers > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_soldiers
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 33
+				has_variable = te_dg_soldiers
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_soldiers_none
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 34
+				has_variable = te_jmap_hq_n
+				te_jmap_hq_profit > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_hq
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 34
+				has_variable = te_jmap_hq_n
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_hq_loss
+		}
+		else_if = {
+			limit = { te_jmap_selector = 34 }
+			custom_tooltip_no_bullet = te_jmap_tt_hq_none
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 36
+				has_variable = te_dg_lv_priv
+				te_jmap_own_lead > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_own
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 36
+				has_variable = te_dg_lv_priv
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_own_none
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 37
+				has_variable = te_dg_walk_pop
+				has_variable = te_dg_walk_pop_prev
+				var:te_dg_walk_pop_prev > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_growth
+		}
+		# Over 10,000 years: the late game's immortals.
+		else_if = {
+			limit = {
+				te_jmap_selector = 3
+				has_variable = te_dg_e0
+				var:te_dg_e0 > 10000
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_life_expectancy_over
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 3
+				has_variable = te_dg_e0
+				var:te_dg_e0 > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_life_expectancy
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 10
+				has_variable = te_dg_imr
+				has_variable = te_dg_e0
+				var:te_dg_e0 > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_infant_mortality
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				var:te_dg_dc_lead = 1
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_inf
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				var:te_dg_dc_lead = 2
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_chr
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				var:te_dg_dc_lead = 3
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_ext
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				var:te_dg_dc_lead = 4
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_work
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				var:te_dg_dc_lead = 5
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_mat
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+				var:te_dg_dc_lead = 7
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_kill
+		}
+		# 8 war and devastation, and 6 from an old save
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_lead
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_war
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 9
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_cbr
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_birth_rate
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 8
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_cdr
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_death_rate
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 7
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_cbr
+				has_variable = te_dg_cdr
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_natural_change
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 4
+				has_variable = te_dg_tfr
+				var:te_dg_tfr > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_fertility
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 5
+				has_variable = te_dg_median
+				var:te_dg_median > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_median_age
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 14
+				has_variable = te_dg_old_share
+				has_variable = te_dg_median
+				var:te_dg_median > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_old_share
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 12
+				has_variable = te_dg_sex_balance
+				var:te_dg_sex_balance > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_sex_balance
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 13
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_mig_rate
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_net_migration
+		}
+		# 35. War Dead (Demographics, once stepped).
+		else_if = {
+			limit = {
+				te_jmap_selector = 35
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_war
+				var:te_dg_dc_war > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_war_dead
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 35
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_war
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_war_dead_none
+		}
+		# 38-40. Family Planning, Health Care and Fighting-Age Men (Demographics).
+		else_if = {
+			limit = {
+				te_jmap_selector = 38
+				has_variable = te_dg_means
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_means
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 39
+				has_variable = te_dg_acc
+				has_variable = te_dg_m_mat
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_health
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 39
+				has_variable = te_dg_acc
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_health_only
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 40
+				has_variable = te_dg_fam
+				has_variable = te_dg_people
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_fam
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 41
+				has_variable = te_dg_capitalists
+				has_variable = te_dg_walk_pop
+				var:te_dg_walk_pop > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_capitalists
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 42
+				has_variable = te_dg_aristocrats
+				has_variable = te_dg_walk_pop
+				var:te_dg_walk_pop > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_aristocrats
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 43
+				has_variable = te_dg_clergy
+				has_variable = te_dg_walk_pop
+				var:te_dg_walk_pop > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_clergy
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 44
+				has_variable = te_dg_academics
+				has_variable = te_dg_walk_pop
+				var:te_dg_walk_pop > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_academics
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 45
+				te_jmap_trade_capacity > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_trade
+		}
+		else_if = {
+			limit = { te_jmap_selector = 45 }
+			custom_tooltip_no_bullet = te_jmap_tt_trade_none
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 46
+				has_variable = te_jmap_inv_cap
+				te_jmap_invest_value > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_invest
+		}
+		else_if = {
+			limit = { te_jmap_selector = 46 }
+			custom_tooltip_no_bullet = te_jmap_tt_invest_none
+		}
+		# Population Density in whole people per km² from 10, in hundredths below it, where whole numbers would read 0.
+		else_if = {
+			limit = {
+				te_jmap_selector = 47
+				te_jmap_density >= 10
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_density
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 47
+				te_jmap_density > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_density_sparse
+		}
+		else_if = {
+			limit = { te_jmap_selector = 47 }
+			custom_tooltip_no_bullet = te_jmap_tt_density_none
+		}
+		# 18. The systems' maps: each state's share of the world's greenhouse gas emissions last year (je_global_warming draws
+		# it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 18
+				te_jmap_gw_no_data = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_gw_no_data
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 18
+				te_jmap_gw_removal = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_gw_removal
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 18
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_gw
+		}
+		# 19. The systems' maps: the world's nuclear powers, as the world sees them, and the viewer's deterrent
+		# (je_nuclear_program draws it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 19
+				te_jmap_owner_is_viewer = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_nuke_you
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 19
+				te_jmap_nuke_hosts_yours = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_nuke_hosts
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 19
+				te_jmap_nuke_umbrella = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_nuke_umbrella
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 19
+				te_jmap_nuke_guaranteed = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_nuke_guaranteed
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 19
+				te_jmap_nuke_armed = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_nuke_armed
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 19
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_nuke_none
+		}
+		# 20. The systems' maps: the viewer's covert network in each country (je_covert_warfare draws it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 20
+				te_jmap_owner_is_viewer = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_net_you
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 20
+				te_jmap_net_some = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_net
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 20
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_net_none
+		}
+		# 21. The systems' maps: members, the Security Council's permanent members, the headquarters and the missions at work
+		# (je_united_nations draws it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_unfounded = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_un_unfounded
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_mission = { TYPE = 1 }
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_un_peacekeeping
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_mission = { TYPE = 2 }
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_un_aid
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_mission = { TYPE = 3 }
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_un_stabilization
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_mission = { TYPE = 4 }
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_un_electoral
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_hq = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_un_hq
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_permanent = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_un_permanent
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+				te_jmap_un_member = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_un_member
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 21
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_un_nonmember
+		}
+		# 22. The systems' maps: each country's political model at the last census of models, in the model pie's colors
+		# (je_cultural_hegemony draws it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_no_data = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_ch_no_data
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+				te_jmap_ch_hegemon = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_ch_hegemon
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 22
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_ch_model
+		}
+		# 23. The systems' maps: each coastal state's ocean basin.
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+				te_jmap_seabed_basin = { BASIN = 1 }
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_seabed_pacific
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+				te_jmap_seabed_basin = { BASIN = 2 }
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_seabed_atlantic
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+				te_jmap_seabed_basin = { BASIN = 3 }
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_seabed_indian
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+				te_jmap_seabed_basin = { BASIN = 4 }
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_seabed_arctic
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+				te_jmap_seabed_basin = { BASIN = 5 }
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_seabed_southern
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+				te_jmap_seabed_unrecorded = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_seabed_unrecorded
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 23
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_seabed_none
+		}
+		# 24. The systems' maps: each state's grandeur (je_grand_monuments draws it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 24
+				te_jmap_gm_monument = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_gm
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 24
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_gm_none
+		}
+		# 25. The systems' maps: the colonies and colonial subjects, by their empire's colonial stability, and the empires'
+		# home states (je_colonial_empire draws it too).
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_colony = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_ce_colony
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_subject = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_ce_subject
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+				te_jmap_ce_metropole = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_ce_metropole
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 25
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_ce_none
+		}
+		# 31. Power Grids: the grid's hub and size, the hub itself, a station off any grid, or none.
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_hub = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_grid_hub
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_on = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_grid
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+				te_jmap_grid_off = yes
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_grid_off
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 31
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_grid_none
+		}
+		# The tourism and climate maps before their refresh first runs (a new game's first month, an older save's).
+		else_if = {
+			limit = {
+				OR = {
+					te_jmap_selector = 26
+					te_jmap_selector = 27
+					te_jmap_selector = 28
+				}
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_no_figure
+		}
+		else_if = {
+			limit = {
+				OR = {
+					te_jmap_selector = 3
+					te_jmap_selector = 4
+					te_jmap_selector = 5
+					te_jmap_selector = 7
+					te_jmap_selector = 8
+					te_jmap_selector = 9
+					te_jmap_selector = 10
+					te_jmap_selector = 11
+					te_jmap_selector = 12
+					te_jmap_selector = 13
+					te_jmap_selector = 14
+					te_jmap_selector = 15
+					te_jmap_selector = 16
+					te_jmap_selector = 17
+					te_jmap_selector = 33
+					te_jmap_selector = 35
+					te_jmap_selector = 36
+					te_jmap_selector = 37
+					te_jmap_selector = 38
+					te_jmap_selector = 39
+					te_jmap_selector = 40
+					te_jmap_selector = 41
+					te_jmap_selector = 42
+					te_jmap_selector = 43
+					te_jmap_selector = 44
+				}
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_no_census
+		}
+		else = {
+			custom_tooltip_no_bullet = te_jmap_tt_no_pick
+		}
+		# A line under the map's own: the stripes' (11's runner-up, where the map stripes it, and 34's regional
+		# headquarters) and 45's Trade Center, which has no stripes. None for a state outside the Map Room's area.
+		if = {
+			limit = {
+				te_jmap_selector = 34
+				te_jmap_in_area = yes
+				has_variable = te_jmap_rhq_n
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_hq_regional
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 45
+				te_jmap_in_area = yes
+				has_building = building_trade_center
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_trade_center
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				te_jmap_in_area = yes
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 1
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_second_inf
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				te_jmap_in_area = yes
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 2
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_second_chr
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				te_jmap_in_area = yes
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 3
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_second_ext
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				te_jmap_in_area = yes
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 4
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_second_work
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				te_jmap_in_area = yes
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 5
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_second_mat
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				te_jmap_in_area = yes
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 7
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_second_kill
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 11
+				te_jmap_in_area = yes
+				has_variable = te_dg_stepped
+				var:te_dg_stepped > 0
+				has_variable = te_dg_dc_total
+				var:te_dg_dc_total > 0
+				has_variable = te_dg_dc_second
+				var:te_dg_dc_second = 8
+				te_jmap_cause_second_ratio >= 0.5
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_cause_second_war
+		}
+	}
+}

@@ -3,6 +3,12 @@
 
 	group = je_group_internal_affairs
 
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
+
 	# A country with no states (one that lost them all in a war) has no pops
 	# and no living standard to measure, yet the entry stayed active on one and
 	# went on collapsing it: Dharampur, landless in the 2026-10-06 observer
@@ -20,25 +26,31 @@
 	}
 
 	immediate = {
-		set_variable = {
+		set_variable = { # REVIEWED 2026-11-12: a re-activation restarts the year (owner, #472), a revolution's winner's too; the bar wraps at 52, so a guard would leave a re-activated record a non-zero baseline
 			name = state_collapse_progress
 			value = 0
 		}
 	}
 
-	# Never true, by design since the entry was written (a87e88ab): the weekly
-	# pulse below resets the counter in the same effect that raises it to 52,
-	# so the entry never completes. It is a cycle: each year that average SoL
-	# stays below 4 ends in a collapse, and can_deactivate = yes returns the
-	# entry to inactive once SoL recovers. Kept rather than deleted: no vanilla
-	# entry has a native progressbar without a complete trigger, so dropping
-	# it would be untested.
-	# The goal line says what the bar counts toward, not the raw variable
-	# (GUI audit JE-1).
-	complete = {
-		custom_tooltip = {
-			text = je_state_collapse_complete_tt
-			ROOT.var:state_collapse_progress >= 52
+	outcome = {
+		header = je_standard_completion_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_state_collapse_complete_conclusion_desc
+		# Never true, by design since the entry was written (a87e88ab): the weekly
+		# pulse below resets the counter in the same effect that raises it to 52,
+		# so the entry never completes. It is a cycle: each year that average SoL
+		# stays below 4 ends in a collapse, and can_deactivate = yes returns the
+		# entry to inactive once SoL recovers. Kept rather than deleted: no vanilla
+		# entry has a native progressbar without an outcome, so dropping
+		# it would be untested.
+		# The goal line says what the bar counts toward, not the raw variable
+		# (GUI audit JE-1).
+		trigger = {
+			custom_tooltip = {
+				text = je_state_collapse_complete_tt
+				ROOT.var:state_collapse_progress >= 52
+			}
 		}
 	}
 
@@ -84,6 +96,9 @@
 					state_collapse_remove_infrastructure = yes
 				}
 				reset_all_institutions_and_ministries = yes
+				# The country hears what the step took: the entry's outcome
+				# never fires, and neither effect above posts anything (#1554).
+				trigger_event = { id = minor_events_timelineextended.10 popup = yes }
 			}
 		}
 	}
@@ -100,6 +115,18 @@ je_create_new_religion = {
 
 	group = je_group_internal_affairs
 
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
+
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry ends through its
+	# invalid outcome on the rule.
+	disable_evaluation = {
+		NOT = { has_game_rule = custom_religions_allowed }
+	}
 	is_shown_when_inactive = {
 		NOT = { country_has_any_custom_religion = yes }
 		has_game_rule = custom_religions_allowed
@@ -282,8 +309,25 @@ je_create_new_religion = {
 		}
 	}
 
-	complete = {
-		country_has_any_custom_religion = yes
+	outcome = {
+		header = je_standard_completion_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_create_new_religion_complete_conclusion_desc
+		trigger = {
+			country_has_any_custom_religion = yes
+		}
+	}
+
+	# The rule switched off mid-game, from the screen that changes country: the
+	# builder's buttons don't read the rule, so it would still found a religion
+	# the rule now forbids. Its counters are read by nothing else, so they stay.
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_create_new_religion_invalid_conclusion_desc
+		trigger = {
+			NOT = { has_game_rule = custom_religions_allowed }
+		}
 	}
 
 	# Where the builder is: which of the four steps, and how many picks it has

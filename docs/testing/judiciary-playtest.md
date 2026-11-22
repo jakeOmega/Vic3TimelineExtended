@@ -23,6 +23,22 @@ Each later phase adds its own section, newest last, and a fixed item is struck t
 | `TE_SELF_CHECK … judiciary_enacting_law_scope` | once a game, the first time a country whose court law carries an enactment-success line (Constitutional Review or Judicial Supremacy), and not a paper court, starts enacting any law (in 1836, the United States' first enactment) | `currently_enacting_law` resolves at `on_law_enactment_started`, so entrenchment can see which law is under way | the link is missing at that hook: entrenchment never adds its enactment modifier | move `te_jud_enactment_started`'s work into a hidden country event fired from `on_law_enactment_started`, the route Forceful Legislation (`minor_events_timelineextended.2`) takes |
 
 | `TE_SELF_CHECK … judiciary_law_type_variable` | once a game, the first time a Forceful Legislation option is taken under Constitutional Review or Judicial Supremacy (and not a paper court) | a country variable set to a law type reads back as one, so a forced law's case can be filed and compliance can restore the law it replaced | no case is ever filed: the courts never rule on forced laws | file the case from the forced law's own `on_law_activated` (match its type there, as `te_jud_law_activated` does, and fire the ruling on `owner`), and let compliance cost the forced law's legitimacy (`te_jud_ruling_unreversed`, already the fallback branch) instead of restoring the old law |
+| `TE_SELF_CHECK … delayed_trigger_queue_check` | once a game, a week after the first ceiling-law change whose gap still reads under 20 on the day of the change and 20 or more six days later (item 6's Executive Tribunals for the United States does it: −40 on the day, 50 within four days) | a delayed event whose trigger was false when queued was dropped though its trigger held when due (the probe `.9` never ran, its witness `.10` read the gap at 20 or more), so the rule in `scripting_best_practices.md` § "A Delayed `trigger_event` Re-Checks Its Trigger When It Fires" stands, and the events `docs/engine/delayed_event_trigger_report.md` lists as false when queued need the same fix | the probe ran: a delayed event's trigger is read only when it fires, and Court Overhaul's failure had another cause | none for the court events, whose change is right either way: correct the best-practices section and the report's header, and look again at why item 6 failed (#1596) |
+| `TE_SELF_CHECK … delayed_trigger_queue_probe` | once a game, three days after the first country's first monthly pulse (any new game, January 1836): a hidden event is queued with its trigger false, the trigger turns true the next day, and the event is due the day after, beside a control event whose trigger always holds | the probe did not run though its trigger held when due: a delayed event whose trigger is false when queued is dropped, the rule the relays of #1596 and `delayed_event_trigger_audit` rest on | the probe ran: the trigger is read only when the event is due. The relays are harmless; correct `scripting_best_practices.md` § "A Delayed `trigger_event` Re-Checks Its Trigger When It Fires", `.claude/rules/script.md` and the audit's header, and look again at why item 6 failed | none needed for the fixes; the audit can then go back to a report |
+| `TE_SELF_CHECK … delayed_trigger_fire_probe` | the same run: a second hidden event queued with its trigger true, turned false the next day, due the day after | the probe did not run: the trigger is read again when the event is due, so the triggers `docs/engine/delayed_event_trigger_report.md` lists as "cancels" stop an event whose premise went away during the delay | the probe ran: a delayed event's trigger is read only when queued, and those "cancels" triggers cancel nothing | give each "cancels" event its condition again in `immediate` (a hidden one) or a hidden relay with no trigger that opens it when due (a visible one), as `un_vote.6` and `decolonization_events.81` do. The UN vote's results already wait in such a relay (`un_vote.9` for `un_vote.2`), because deciding a lapsed resolution a second time is the costliest of them |
+
+| `TE_SELF_CHECK BROKEN delayed_trigger_control` | once a game, at the fourth start of the two probes above: three runs, a month apart, gave no verdict | (it has no OK: a run that gives its verdicts never reaches it) | the control, a delayed event whose trigger held throughout, did not run, or the verdict event did not. A country lost three times over does not explain three runs. The two probes are unsettled, and delayed events may not be firing at all | read `debug.log` for `te_judiciary_events.11`–`.15` and run the issue's closing test by hand (below); until then treat no "cancels" trigger and no relay as proven |
+
+**First verdicts, 2026-11-13 (log triage of a 1945 game on 1.15.1): both OK.** `delayed_trigger_queue_probe` and
+`delayed_trigger_fire_probe` wrote OK for country D18 on 1 February 1945, four days after the save was loaded (the
+probe starts in the first country to pulse, in a loaded game as in a new one). Both halves of the delayed-event rule
+hold: an event whose trigger is false when it is queued is dropped, and the trigger is read again when the event is
+due. Nothing to change: the relays of #1596 are needed, and the "cancels" triggers cancel.
+
+No line from the two probes after a run means its flip or its control did not run (the country was gone); the probe
+starts again in another country a month later, three times at most, and then logs the line above and stops. The issue's own closing test, by hand with the QA harness, is the same
+pair: as any country, `set_variable` a flag the event's trigger reads after queueing the event with the trigger
+false, read it true the next day and look after the delay; then the reverse order (#1596).
 
 No line at all after such a country starts an enactment means the hook's ROOT isn't the country; take the same
 fallback.
@@ -52,10 +68,12 @@ fallback.
    Overhaul, decaying over 5 years, sized by the gap (60 − 10 = 50: about +1pp risk premium and −5 legitimacy),
    with middle-strata radicals (a gap of 40 or more). Then move to Religious Courts while it runs: still exactly
    one Court Overhaul (a smaller gap adds nothing).
+   Since 2026-11-12 (#1596) the event has no trigger and decides on the day; the self-check above says whether
+   that was the cause.
 7. **Secularizing.** As the Ottoman Empire with Rationalism, enact Total Separation: the courts become Statutory
    Courts. Without Rationalism, Executive Tribunals.
-8. **Old save.** Load a save from before the group. Within a month each country holds its rule-based court, and
-   within two a score at half its ceiling. No country gets Court Overhaul.
+8. **Old save.** A repair ran from 2026-10-17 to vanilla 1.15 (#1022); it is gone. A save from before the group now gives every
+   country Executive Tribunals and no score. Nothing to test.
 9. **Algorithmic capture.** With Algorithmic Governance and Algorithmic Jurisprudence, the country's modifiers show
    Captured Court (+2 override capacity) and the ceiling reads 30.
 10. **Revolution.** Let a revolution win in a country with a built-up score (Britain at 70): the winner's concept
@@ -80,13 +98,14 @@ Spec § 14. Built before phase 1's play-test, so read phase 1's items first: the
     least 90". The self-check above logs once.
 15. **Filing and ruling.** Let the forced law pass. Within a month `save_country_probe.py --var te_jud_case` shows
     `te_jud_case_law` and `te_jud_case_filed`; about six months after that the ruling comes. At score 55 after Expedite
-    (below 90) it is The Court Upholds the Act; with Force it through (threshold 30) it is The Court Strikes Down the
-    Act, and its description names the law. A forced law that fails leaves no case behind.
+    (below 90) it is Within Its Powers; with Force it through (threshold 30) it is Struck Down, and its description names the law. A forced law that fails leaves no case behind.
 16. **Comply.** The law in force before the forced one comes back (its tooltip names it), the score rises 5 at the next
     monthly refresh, and Ruling Obeyed shows. **Defy:** the score falls 20 and Ruling Defied raises the risk premium
     by about 1pp. **Pack:** the score falls 15, Packed Court and Packing the Court show, entrenchment stops (start a
     Distribution of Power law: no Constitutional Challenge), and a forced law now opens no case. A year later The
     Enlarged Bench offers Statutory Courts; taking it switches the law at once and ends the packing.
+    Since 2026-11-12 the year is waited out in the hidden `.7` (#1596): before, `.5`'s trigger read the packing
+    modifier added in the same block, and the popup may never have come.
 17. **Lawyers in the Streets.** Repeat phase 1's item 6 (Constitutional Review at 60 to Executive Tribunals, a gap of
     50): a week after the change the event appears instead of bare radicals. Its third option raises the score by 10.
 
@@ -120,10 +139,17 @@ Spec § 14. Built before phase 1's play-test, so read phase 1's items first: the
 28. **The Voided Election** comes right after an election (`on_election_campaign_end`). Declaring the emergency shows
     State of Emergency for three years, and entrenchment and the review of forced laws stop for those three years.
 29. **The Doctrine of Necessity.** As Britain (Statutory Courts, 70), enact Autocracy: a fortnight after it passes the
-    event appears, after the overhaul check.
+    event appears, after the overhaul check. Since 2026-11-12 it is queued through the hidden `.8` (#1596), which
+    reads the paper court on the day: queued directly, its trigger was false while the new law's modifiers lagged.
 30. **Reform paths (`start_enactment`).** As Persia or the Ottoman Empire with Rationalism: A House of Justice
     (unrest) and Courts for a New Code (strong Intelligentsia or modernizers). Their reform answer starts the
     enactment of Statutory Courts on the spot. If nothing is being enacted afterwards, `start_enactment` doesn't work
     from an event option: fall back to an enactment success bonus for Statutory Courts
     (`country_enactment_success_chance_law_statutory_courts_add`, which needs registering in
     `mod_entity_modifier_types.txt`) and say so in the option's tooltip.
+
+## Harness run, 2026-11-11 (1.15.1)
+
+Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
+
+Item 2 (February scores: Britain 70, Prussia 35, Persia and the Ottoman Empire 10 of 20) OK. Item 30 OK: `start_enactment` works from an event option. Self-check `judiciary_enacting_law_scope` OK. Item 6 is BROKEN: Court Overhaul never arrives, most likely because its delayed event's trigger is false when queued (#1596, one test outstanding); fired by hand, the event and Lawyers in the Streets (third answer, +10) work.

@@ -1,0 +1,57 @@
+﻿# Self-check renaissance_homeless_outcome (docs/testing/homelands-playtest.md),
+# TEMPORARY: delete this file after the 1.3.x play-test has read a verdict.
+#
+# te_vanilla_cultural_renaissances.txt ends vanilla's Ukrainian and Byelorussian
+# Cultural Renaissances, through an INJECTed invalid outcome, once their culture
+# has no homeland left. Whether the engine takes that outcome is unverified.
+# Global scope, once a month, until a verdict:
+#   OK      te_renaissance_homeless_fired is set: an entry concluded through it.
+#   BROKEN  an entry has stayed active, its culture without a homeland, through
+#           two monthly checks: the outcome does not conclude it.
+# No line: neither culture lost its last homeland while its entry was open.
+on_monthly_pulse = {
+	on_actions = {
+		te_renaissance_homeless_selfcheck
+	}
+}
+
+te_renaissance_homeless_selfcheck = {
+	effect = {
+		if = {
+			limit = { NOT = { has_global_variable = te_chk_renaissance_homeless_done } }
+			if = {
+				limit = { has_global_variable = te_renaissance_homeless_fired }
+				set_global_variable = te_chk_renaissance_homeless_done
+				debug_log = "TE_SELF_CHECK OK renaissance_homeless_outcome date=[TimeKeeper.GetCurrentDate.GetString] (a Cultural Renaissance whose culture had no homeland left concluded through the INJECTed invalid outcome)"
+			}
+			else_if = {
+				limit = {
+					OR = {
+						AND = {
+							any_country = { has_journal_entry = je_ukraine_cultural_renaissance }
+							te_homeland_none_left = { CULTURE = ukrainian }
+						}
+						AND = {
+							any_country = { has_journal_entry = je_belarus_cultural_renaissance }
+							te_homeland_none_left = { CULTURE = byelorussian }
+						}
+					}
+				}
+				if = {
+					limit = { NOT = { has_global_variable = te_chk_renaissance_homeless_n } }
+					set_global_variable = { name = te_chk_renaissance_homeless_n value = 0 }
+				}
+				change_global_variable = { name = te_chk_renaissance_homeless_n add = 1 }
+				if = {
+					limit = { global_var:te_chk_renaissance_homeless_n >= 2 }
+					set_global_variable = te_chk_renaissance_homeless_done
+					debug_log = "TE_SELF_CHECK BROKEN renaissance_homeless_outcome date=[TimeKeeper.GetCurrentDate.GetString] (a Cultural Renaissance stayed active through two monthly checks with its culture holding no homeland: the INJECTed invalid outcome does not conclude it; see docs/testing/homelands-playtest.md)"
+				}
+			}
+			else_if = {
+				limit = { has_global_variable = te_chk_renaissance_homeless_n }
+				set_global_variable = { name = te_chk_renaissance_homeless_n value = 0 }
+			}
+		}
+	}
+}

@@ -53,6 +53,16 @@ colonial_state_count = {
 	}
 }
 
+# The colonies colonial_empire_refresh_display has just marked (te_jmap_ce_colony): colonial_state_count, read from the
+# marks, so the colony test runs once per state for both the count and the colonial map. Country scope.
+te_jmap_ce_colony_count = {
+	value = 0
+	every_scope_state = {
+		limit = { has_variable = te_jmap_ce_colony }
+		add = 1
+	}
+}
+
 # Count of overseas colonial states with very low acceptance pops (< acceptance_status_2, i.e. 20)
 colonial_low_acceptance_count = {
 	value = 0
@@ -279,29 +289,25 @@ colonial_overreach_ratio = {
 # colonial_programme_max_level, held in a country variable: colonial_invest_level,
 # colonial_garrison_level, colonial_assim_level. The top level is the full
 # programme and each level is an equal share of it, linearly: the bar term
-# (colonial_stability_term_*), the programme's static modifier (applied by
-# colonial_programmes_refresh_modifiers at a third, two thirds or all of its
-# values) and its costs all scale with the level.
+# (colonial_stability_term_*), the programme's static modifier (declared on
+# je_colonial_empire at a third, two thirds or all of its values:
+# colonial_*_modifier_scale below) and its costs all scale with the level.
 #
-# The level variables are also the record a revolution's winner inherits:
-# variables merge, modifiers do not, so the refresh rebuilds the modifiers from
-# the levels (decol_sync_programmes, decolonization.txt).
+# The level variables are the programmes' only state. A revolution's winner
+# inherits them (variables merge) and the inherited entry's declarations read
+# them, so nothing rebuilds a modifier.
 #
 # Read the levels through the *_level_value wrappers: before a country first
-# steps a programme the variable does not exist, and the widget and the bar
-# read these every frame. A save from before the levels holds a running
-# programme's modifier and no level until the entry's next monthly pulse
-# migrates it (decol_migrate_programmes); until then the wrapper reads the
-# modifier as the top level, so a step, the refresh and the bar all see the
-# programme it was running, not 0.
+# steps a programme the variable does not exist, and the widget, the bar and
+# the declarations read these every frame or every few days.
 #
 # SCOPE: country.
 # ============================================================================
 
 # The top level. Literal 3s that mean this value: the `< 3` gates in
-# colonial_empire_possible_*_up (colonial_empire_triggers.txt), the multiplier
-# ladder in colonial_programme_apply_modifier and the "/ 3" in the widget's
-# level labels (decolonization.txt, te_journal_entries_l_english.yml).
+# colonial_empire_possible_*_up (colonial_empire_triggers.txt), the ladders in
+# colonial_*_modifier_scale below and the "/ 3" in the widget's level labels
+# (decolonization.txt, te_journal_entries_l_english.yml).
 colonial_programme_max_level = 3
 
 colonial_invest_level_value = {
@@ -309,10 +315,6 @@ colonial_invest_level_value = {
 	if = {
 		limit = { has_variable = colonial_invest_level }
 		value = var:colonial_invest_level
-	}
-	else_if = {
-		limit = { has_modifier = colonial_development_investment_modifier }
-		value = colonial_programme_max_level
 	}
 }
 
@@ -322,10 +324,6 @@ colonial_garrison_level_value = {
 		limit = { has_variable = colonial_garrison_level }
 		value = var:colonial_garrison_level
 	}
-	else_if = {
-		limit = { has_modifier = colonial_military_garrison_modifier }
-		value = colonial_programme_max_level
-	}
 }
 
 colonial_assim_level_value = {
@@ -334,9 +332,59 @@ colonial_assim_level_value = {
 		limit = { has_variable = colonial_assim_level }
 		value = var:colonial_assim_level
 	}
+}
+
+# The share of each programme's static modifier its entry declares
+# (scaling_modifiers_while_active, je_colonial_empire.txt): 0.333, 0.667 and 1
+# at levels 1, 2 and 3, the literal multipliers the monthly refresh added
+# before 1.15, and 0 at level 0, so the modifier is off the entry. A ladder,
+# not colonial_*_strength: the exact thirds that scale the bar term differ in
+# the fourth decimal (0.33333, 0.66666), and the modifiers keep their numbers.
+colonial_invest_modifier_scale = {
+	value = 0
+	if = {
+		limit = { colonial_invest_level_value >= 3 }
+		value = 1
+	}
 	else_if = {
-		limit = { has_modifier = colonial_cultural_assimilation_modifier }
-		value = colonial_programme_max_level
+		limit = { colonial_invest_level_value >= 2 }
+		value = 0.667
+	}
+	else_if = {
+		limit = { colonial_invest_level_value >= 1 }
+		value = 0.333
+	}
+}
+
+colonial_garrison_modifier_scale = {
+	value = 0
+	if = {
+		limit = { colonial_garrison_level_value >= 3 }
+		value = 1
+	}
+	else_if = {
+		limit = { colonial_garrison_level_value >= 2 }
+		value = 0.667
+	}
+	else_if = {
+		limit = { colonial_garrison_level_value >= 1 }
+		value = 0.333
+	}
+}
+
+colonial_assim_modifier_scale = {
+	value = 0
+	if = {
+		limit = { colonial_assim_level_value >= 3 }
+		value = 1
+	}
+	else_if = {
+		limit = { colonial_assim_level_value >= 2 }
+		value = 0.667
+	}
+	else_if = {
+		limit = { colonial_assim_level_value >= 1 }
+		value = 0.333
 	}
 }
 
@@ -427,6 +475,19 @@ colonial_assim_startup_weeks = 13
 # country_authority_cost_add (300) over the three levels. The raise gate
 # (colonial_empire_possible_garrison_up) and the widget's cost line read it.
 colonial_garrison_authority_per_level = 100
+# What the raise gate asks for: one level's upkeep, plus the upkeep of levels
+# raised in the last week, which the entry's declaration may not carry yet
+# (colonial_empire_effect_garrison_up).
+colonial_garrison_raise_authority_gate = {
+	value = colonial_garrison_authority_per_level
+	if = {
+		limit = { has_variable = colonial_garrison_pending_levels }
+		add = {
+			value = var:colonial_garrison_pending_levels
+			multiply = colonial_garrison_authority_per_level
+		}
+	}
+}
 # Infamy on starting the garrison (colonial_programme_garrison_up's step from
 # level 0 to 1); its row's hover prints it.
 colonial_garrison_start_infamy = 5
@@ -468,9 +529,10 @@ colonial_invest_level_cost = {
 	divide = colonial_weeks_per_year
 }
 
-# The weekly running cost at the current level. colonial_programmes_refresh_modifiers
-# copies it into var:colonial_invest_cost_week, which is the expense modifier's
-# multiplier (a flat variable, so the stored multiplier never re-runs the sum).
+# The weekly running cost at the current level, 0 at level 0: the value of
+# colonial_development_investment_expense_modifier, declared on
+# je_colonial_empire. O(1) (the cached colonial GDP, never the state walk), so
+# the entry can re-read it every few days.
 colonial_invest_weekly_cost = {
 	value = colonial_invest_level_cost
 	multiply = colonial_invest_level_value
@@ -639,9 +701,8 @@ colonial_state_sol_qualifying_floor = {
 # with a matching `desc` key. The full old-term -> leaf mapping is tabulated
 # in docs/systems/mod_systems/decolonization.md § Stability Bar Formula.
 #
-# The bar's 23rd and last line, colonial_stability_term_cap, is not one of
-# these leaves: it caps the sum of all 22 and lives in the MONTHLY CAP
-# section after the group sums.
+# The bar's 23rd and last line, the monthly cap, is not one of these leaves: it
+# clamps the sum of all 22 (see the MONTHLY CAP section after the group sums).
 #
 # Every leaf returns 0 when its gate is false (the gate moved from the bar's
 # enclosing `if` into the leaf), so the bar's `add` lines are unconditional.
@@ -960,31 +1021,30 @@ colonial_stability_drift_uncapped = {
 # change the inputs (win the great power over, integrate the colony, release
 # it) to turn the trend around.
 #
-# The bar applies it as one last leaf, colonial_stability_term_cap: the
-# difference between the capped and the uncapped sum, 0 while the sum is
-# inside the cap. Its hover line therefore shows how much the cap absorbed.
+# The bar saves the sum of its 22 lines and adds clamp(sum) - sum as its last
+# line (colonial_drift_cap_tt), 0 inside the cap, so its hover shows how much the
+# cap absorbed; a block-level max / min with the same two values follows as a
+# safety net. colonial_stability_drift_total clamps with them too. Until
+# 2026-11-12 that line was a leaf, colonial_stability_drift_total minus
+# colonial_stability_drift_uncapped, which evaluated every leaf twice more a
+# month.
 # ============================================================================
 
 colonial_stability_drift_cap = 1.5
 
+colonial_stability_drift_floor = {
+	value = colonial_stability_drift_cap
+	multiply = -1
+}
+
 # Projected monthly change after the cap, identical by construction to what
-# the bar applies (its 22 leaves plus colonial_stability_term_cap). Snapshotted
+# the bar applies (its 22 leaves, then the same clamp). Snapshotted
 # into colonial_empire_d_total for the signed history series, which is sampled
 # from the monthly pulse and can afford the iteration.
 colonial_stability_drift_total = {
 	value = colonial_stability_drift_uncapped
 	max = colonial_stability_drift_cap
-	min = {
-		value = colonial_stability_drift_cap
-		multiply = -1
-	}
-}
-
-# The bar's last line. Capped minus uncapped, so the clamp above finishes
-# inside its own script value before the subtraction runs.
-colonial_stability_term_cap = {
-	value = colonial_stability_drift_total
-	subtract = colonial_stability_drift_uncapped
+	min = colonial_stability_drift_floor
 }
 
 # The uncapped total, but safe to read from the widget every frame: the six O(1)
@@ -1019,10 +1079,7 @@ colonial_stability_drift_uncapped_display = {
 colonial_stability_drift_total_display = {
 	value = colonial_stability_drift_uncapped_display
 	max = colonial_stability_drift_cap
-	min = {
-		value = colonial_stability_drift_cap
-		multiply = -1
-	}
+	min = colonial_stability_drift_floor
 }
 
 # How much the cap is absorbing this month (0 inside the cap), shown as the
@@ -1063,10 +1120,11 @@ colonial_assim_effectiveness_display = {
 # STABILITY BANDS — THE ONE LADDER
 #
 # The five bands, read LIVE from the bar: collapsing 0-20, crumbling 20-40,
-# strained 40-65, stable 65-90, solidified 90+ (the edges of
-# je_colonial_empire's phase-modifier ladder). Every display of the band reads
+# strained 40-65, stable 65-90, solidified 90+. Every display of the band reads
 # these: the overview, the customizable loc (status line, band names, phase
-# modifier) and "Next band". colonial_empire_refresh_display snapshots both
+# modifier) and "Next band"; and je_colonial_empire's five band modifiers are
+# declared from colonial_empire_live_tier (#1466), so a declared value reads
+# the bar through je: from the owning country. colonial_empire_refresh_display snapshots both
 # into var:colonial_empire_tier / var:colonial_empire_next_boundary for any
 # other reader.
 #

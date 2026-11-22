@@ -5,9 +5,11 @@
 # initiative, each with the two gates its journal-entry scripted button used to
 # carry inline:
 #
-#   un_propose_<key>_available   the button's `visible` — whether the topic is
-#                                on the table at all for us right now (there is
-#                                a case, we are not already enforcing it, ...)
+#   un_propose_<key>_available   whether the topic is on the table at all for
+#                                us right now (there is a case, we are not
+#                                already enforcing it, ...); the button's
+#                                `visible` asks it last, after possible's cheap
+#                                gates (un_propose_ai_floor_open below)
 #   un_propose_<key>_possible    the button's `possible` — every cost, cooldown,
 #                                lock and standing gate, with the custom_tooltip
 #                                lines that explain a refusal
@@ -113,7 +115,7 @@ un_propose_sanctions_available = {
 	# Grounds (redesign phase 3): some rival's record must support sanctions.
 	any_country = {
 		has_diplomatic_pact = { who = ROOT type = rivalry }
-		NOT = { has_modifier = un_sanctions_target_modifier }
+		NOT = { has_variable = un_sanctions_target_on }
 		un_case_supports = { TOPIC = sanctions }
 	}
 }
@@ -148,7 +150,7 @@ un_propose_sanctions_possible = {
 		text = un_grounds_sanctions_tt
 		any_country = {
 			has_diplomatic_pact = { who = ROOT type = rivalry }
-			NOT = { has_modifier = un_sanctions_target_modifier }
+			NOT = { has_variable = un_sanctions_target_on }
 			un_case_supports = { TOPIC = sanctions }
 		}
 	}
@@ -201,7 +203,14 @@ un_propose_expulsion_possible = {
 		text = un_representation_table_tt
 		NOT = { un_representation_suspended = yes }
 	}
-	any_country = { un_expulsion_candidate = yes }
+	# In a custom_tooltip, as the other topics' grounds are: drawn bare, the
+	# candidate test's ROOT reads (un_justice_not_proposer_bloc) log a
+	# "Scope dependent values in localization inside an any trigger" line per
+	# country each time the tooltip is drawn (132 in one second, 2026-11-12).
+	custom_tooltip = {
+		text = un_grounds_expulsion_tt
+		any_country = { un_expulsion_candidate = yes }
+	}
 	un_propose_can_afford_sponsor_punitive = yes
 }
 
@@ -403,7 +412,16 @@ un_propose_reform_possible = {
 	}
 	custom_tooltip = {
 		text = un_charter_reform_ripe_tt
-		un_charter_reform_ripe = yes
+		un_charter_pressure_met = yes
+	}
+	# The early unlock's league stage: shown only under that setting, so the
+	# late unlock's tooltip is as it was (un_league_stage is never true there).
+	trigger_if = {
+		limit = { te_united_nations_early = yes }
+		custom_tooltip = {
+			text = un_charter_league_tt
+			NOT = { un_league_stage = yes }
+		}
 	}
 	NOT = { has_modifier = un_ga_resolution_modifier }
 	NOT = { has_modifier = un_request_cooldown }
@@ -682,6 +700,30 @@ un_propose_own_motion_gates = {
 	}
 }
 
+# The gates every AI tabling button's `possible` asks that cost next to nothing,
+# for the button's `visible` to ask before its case scan (un_buttons.txt).
+# The 2026-11-12 profile of a 1931 game (docs/audits/late_game_performance.md):
+# the AI asked each button's `visible` over 1,100 times in 33 days, the case
+# scans in the _available triggers cost up to 3 ms a call (credentials,
+# mandate, arms embargo, court referral), 136 ms of script CPU a game day in
+# all (summed over threads; 4 ms after this, and wall time per day did not
+# measurably change), and these gates refused nearly every tabling that got as
+# far as `possible`: a vote holds the floor for a year and a recess closes it
+# to the AI for three months after. Each
+# is a gate of every one of the seventeen buttons' `possible`, so asking it
+# early refuses only what `possible` would have refused. No tooltips: a human
+# never sees these buttons. test_un_propose_ai_gates.py fails when a button's
+# `visible` asks a gate its `possible` does not.
+# Scope: the proposing country, an AI
+un_propose_ai_floor_open = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { has_global_variable = un_vote_active }
+	un_may_table_now = yes
+	NOT = { has_modifier = un_request_cooldown }
+	NOT = { un_dues_vote_suspended = yes }
+	NOT = { un_representation_suspended = yes }
+}
+
 # The influence tabling on our own motion uses (un_propose_sponsor_cost and
 # un_propose_sponsor_punitive_cost, un_propose_effects.txt).
 # Scope: the proposing country
@@ -711,7 +753,7 @@ un_propose_human_rights_qualifies = {
 	has_technology_researched = human_rights
 	custom_tooltip = {
 		text = un_propose_not_party_tt
-		NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier } }
+		NOT = { has_variable = un_human_rights_declaration_modifier_on }
 	}
 	custom_tooltip = {
 		text = un_propose_not_refused_tt
@@ -747,7 +789,7 @@ un_propose_icc_qualifies = {
 	has_technology_researched = human_rights
 	custom_tooltip = {
 		text = un_propose_not_party_tt
-		NOT = { has_modifier = un_icc_member_modifier }
+		NOT = { has_variable = un_icc_member_modifier_on }
 	}
 	custom_tooltip = {
 		text = un_propose_not_refused_tt
@@ -783,7 +825,7 @@ un_propose_npt_qualifies = {
 	has_technology_researched = nuclear_weapons
 	custom_tooltip = {
 		text = un_propose_not_party_tt
-		NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
+		NOT = { has_variable = un_nonproliferation_modifier_on }
 	}
 	custom_tooltip = {
 		text = un_propose_not_refused_tt
@@ -817,7 +859,7 @@ un_propose_climate_qualifies = {
 	has_technology_researched = environmental_movement
 	custom_tooltip = {
 		text = un_propose_not_party_tt
-		NOT = { je:je_united_nations ?= { has_modifier = un_climate_binding_modifier } }
+		NOT = { has_variable = un_climate_binding_modifier_on }
 	}
 	custom_tooltip = {
 		text = un_propose_not_refused_tt
@@ -851,7 +893,7 @@ un_propose_pandemic_qualifies = {
 	has_technology_researched = antibiotics
 	custom_tooltip = {
 		text = un_propose_not_party_tt
-		NOT = { je:je_united_nations ?= { has_modifier = un_pandemic_cooperation_modifier } }
+		NOT = { has_variable = un_pandemic_cooperation_modifier_on }
 	}
 	custom_tooltip = {
 		text = un_propose_not_refused_tt
@@ -890,7 +932,9 @@ un_propose_refugee_source = {
 }
 
 # The graver case, preferred when there is one: famine, or a war that has
-# devastated a state. Same calling rule as un_propose_refugee_source.
+# devastated a state or taken a quarter of the country (un_docket_war_victim_standing's
+# two measures; vanilla 1.15: occupation no longer devastates). Same calling
+# rule as un_propose_refugee_source.
 # Scope: the candidate source
 un_propose_refugee_grave_source = {
 	NOT = { this = PREV }
@@ -899,7 +943,10 @@ un_propose_refugee_grave_source = {
 		any_scope_state = { has_famine = yes }
 		AND = {
 			is_at_war = yes
-			any_scope_state = { devastation > un_docket_war_devastation }
+			OR = {
+				any_scope_state = { devastation > un_docket_war_devastation }
+				enemy_occupation > un_docket_war_occupation
+			}
 		}
 	}
 }
@@ -913,7 +960,7 @@ un_propose_refugee_in_force = {
 un_propose_refugee_qualifies = {
 	custom_tooltip = {
 		text = un_propose_not_party_tt
-		NOT = { je:je_united_nations ?= { has_modifier = un_refugee_program_modifier } }
+		NOT = { has_variable = un_refugee_program_modifier_on }
 	}
 	custom_tooltip = {
 		text = un_propose_not_refused_tt
@@ -949,7 +996,7 @@ un_propose_heritage_in_force = {
 un_propose_heritage_qualifies = {
 	custom_tooltip = {
 		text = un_propose_not_party_tt
-		NOT = { je:je_united_nations ?= { has_modifier = un_heritage_program_modifier } }
+		NOT = { has_variable = un_heritage_program_modifier_on }
 	}
 	custom_tooltip = {
 		text = un_propose_not_refused_tt
@@ -1021,7 +1068,7 @@ un_propose_space_qualifies = {
 	has_technology_researched = space_exploration
 	custom_tooltip = {
 		text = un_propose_not_party_tt
-		NOT = { je:je_united_nations ?= { has_modifier = un_space_partnership_modifier } }
+		NOT = { has_variable = un_space_partnership_modifier_on }
 	}
 	custom_tooltip = {
 		text = un_propose_not_refused_tt
@@ -1053,7 +1100,7 @@ un_propose_law_of_sea_qualifies = {
 	has_technology_researched = international_trade
 	custom_tooltip = {
 		text = un_propose_not_party_tt
-		NOT = { has_modifier = un_law_of_sea_modifier }
+		NOT = { has_variable = un_law_of_sea_modifier_on }
 	}
 	custom_tooltip = {
 		text = un_propose_not_refused_tt
@@ -1088,7 +1135,7 @@ un_propose_physical_protection_qualifies = {
 	has_technology_researched = nuclear_weapons
 	custom_tooltip = {
 		text = un_propose_not_party_tt
-		NOT = { has_modifier = un_physical_protection_modifier }
+		NOT = { has_variable = un_physical_protection_modifier_on }
 	}
 	custom_tooltip = {
 		text = un_propose_not_refused_tt
@@ -1127,7 +1174,7 @@ un_propose_cultural_diversity_qualifies = {
 	has_technology_researched = mass_media
 	custom_tooltip = {
 		text = un_propose_not_party_tt
-		NOT = { has_modifier = un_cultural_diversity_modifier }
+		NOT = { has_variable = un_cultural_diversity_modifier_on }
 	}
 	custom_tooltip = {
 		text = un_propose_not_refused_tt
@@ -1173,7 +1220,7 @@ un_propose_nuclear_ban_qualifies = {
 	}
 	custom_tooltip = {
 		text = un_propose_not_party_tt
-		NOT = { has_modifier = un_nuclear_ban_modifier }
+		NOT = { has_variable = un_nuclear_ban_modifier_on }
 	}
 	custom_tooltip = {
 		text = un_propose_not_refused_tt
@@ -1206,7 +1253,7 @@ un_propose_narcotics_qualifies = {
 	has_technology_researched = pharmaceuticals
 	custom_tooltip = {
 		text = un_propose_not_party_tt
-		NOT = { has_modifier = un_narcotics_control_modifier }
+		NOT = { has_variable = un_narcotics_control_modifier_on }
 	}
 	custom_tooltip = {
 		text = un_propose_not_refused_tt
@@ -1243,7 +1290,7 @@ un_propose_antarctic_qualifies = {
 	has_technology_researched = space_exploration
 	custom_tooltip = {
 		text = un_propose_not_party_tt
-		NOT = { has_modifier = un_antarctic_treaty_modifier }
+		NOT = { has_variable = un_antarctic_treaty_modifier_on }
 	}
 	custom_tooltip = {
 		text = un_propose_not_refused_tt
@@ -1286,7 +1333,7 @@ un_propose_asat_qualifies = {
 	}
 	custom_tooltip = {
 		text = un_propose_not_party_tt
-		NOT = { has_modifier = un_asat_moratorium_modifier }
+		NOT = { has_variable = un_asat_moratorium_modifier_on }
 	}
 	custom_tooltip = {
 		text = un_propose_not_refused_tt
@@ -1335,7 +1382,7 @@ un_propose_colony_protection_qualifies = {
 	}
 	custom_tooltip = {
 		text = un_propose_not_party_tt
-		NOT = { has_modifier = un_colony_protection_modifier }
+		NOT = { has_variable = un_colony_protection_modifier_on }
 	}
 	custom_tooltip = {
 		text = un_propose_not_refused_tt
@@ -1373,7 +1420,7 @@ un_condemn_relation = {
 
 un_sanctions_relation = {
 	has_diplomatic_pact = { who = ROOT type = rivalry }
-	NOT = { has_modifier = un_sanctions_target_modifier }
+	NOT = { has_variable = un_sanctions_target_on }
 }
 
 un_arms_embargo_relation = {

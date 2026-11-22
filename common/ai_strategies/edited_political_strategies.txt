@@ -1,0 +1,314 @@
+﻿# AI law cadence: each political agenda's own change_law_chance (2026-11-16) and revolution_aversion (2026-11-15).
+# The arithmetic and the readings it rests on: docs/systems/mod_systems/ai.md § Law-Change Cadence.
+#
+# change_law_chance is the chance (1 = 1%) that an AI country starts changing a law at its law update, which the
+# engine runs every 50 days. Every political agenda adds 39 to vanilla's own (vanilla 1.15.1's eleven; the mod adds
+# none), so the seven common agendas roll 41.5-59% (vanilla 2.5-20) and an AI with a law it would start seldom waits
+# more than three months after an enactment (owner, 2026-11-15: frequent AI law changes are fine). From 2026-11-15
+# the 39 sat in the default strategy's field, on vanilla's comment that the default's value adds to an agenda's own.
+# An unattended AI-only run to 1925 read no rise for any agenda (TE_SELF_CHECK BROKEN ai_law_cadence in 1890; law
+# starts per idle month at or below vanilla's own rates, in vanilla's proportions between agendas), so it is now in
+# the field each agenda declares itself. edited_default_strategy.txt keeps vanilla's 1 there: the chance is vanilla's
+# agenda value + 39 if the default's field doesn't add to it, + 40 if it does. The Tanzimat and the Great Reforms are
+# at 100 (certain) already; their 39 changes nothing and keeps the rule one rule.
+#
+# How aversion works (vanilla 00_ai.txt CHANGE_LAW_*): at the start of a law change a movement that would defend the
+# current law at 0.70 radicalism or more makes it a possible civil war; the AI then goes ahead with chance
+# 100 - aversion (it remembers a refusal for 24 months), and during the enactment it cancels once its aversion beats
+# a boldness drawn from 0-100 for that law (kept 24 months). A faster AI meets each such law more often within those
+# 24 months, so its chance to go ahead must fall: the factor is the rise in enactment starts per 24 months (1.2 to
+# 2.8, by agenda), and with both gates counted the new aversion is 100 - (100 - vanilla) / sqrt(factor). Sized on
+# 2026-11-15 for vanilla's chance + 40; at + 39 every value rounds the same (ai.md).
+#
+# Each field restates vanilla 1.15.1's whole block (game/common/ai_strategies/03_political_strategies.txt) and adds
+# the change as its own `add` line, so it reads vanilla's plus the change whether the engine replaces vanilla's field
+# with this one (as an interest group's script-value field is replaced) or merges in only the keys vanilla's lacks
+# (as an AI strategy's subsidies block does: `add` is the one key at this level that vanilla's fields lack). If the
+# engine summed the two, as it sums modifier blocks, a chance would read twice vanilla's plus 39 (44 conservative,
+# 79 confrontation) and an aversion twice vanilla's plus its rise (160 conservative); if it ignored the INJECT, the
+# agenda plays as vanilla's. test_ai_law_cadence.py holds the restated lines to the game's file.
+# Not touched: min_law_chance_to_pass (the floor rarely binds: ai.md), and the aversion of Mandate of Heaven (100
+# already), the Meiji Restoration (its starts rise 6%), the Tanzimat and the Great Reforms (already certain).
+#
+# The file name sorts before another mod's kai_political_strategies.txt on purpose: two INJECTs of one field apply
+# in file order and the later one wins (an interest group's field, read 2026-10-10), so with that mod on, its own
+# values stand wherever it sets the same field. By the 2026-11-15 study of it, it sets change_law_chance and
+# revolution_aversion in the five common agendas, the Tanzimat and the Great Reforms, and REPLACEs the Meiji
+# Restoration (which drops this file's INJECT there): those agendas then roll that mod's own rates against its own
+# aversions, and this file's 39 reaches Mandate of Heaven, consolidation and confrontation alone.
+
+INJECT:ai_strategy_conservative_agenda = {
+	revolution_aversion = {
+		value = 75
+		add = 10	# AI law cadence: 85
+		if = {
+			limit = { has_journal_entry = je_tp_pool_suppress_revolts }
+			add = 50
+		}
+		if = {
+			limit = { divided_monarchists_ai_monarchist = yes }
+			add = 50
+		}
+		if = {
+			limit = { divided_monarchists_ai_republican = yes }
+			subtract = 50
+		}
+		min = 10
+	}
+	change_law_chance = {
+		value = 2.5
+		add = 39	# AI law cadence: 41.5
+
+		if = {
+			limit = { any_interest_group = { is_insurrectionary = yes } }
+			add = 7.5
+		}
+
+		if = {
+			limit = {
+				has_revolutionary_socialist_laws = yes
+			}
+			add = 25
+		}
+
+		if = {
+			limit = {
+				has_enactment_je_or_law_commitment = yes
+			}
+			add = 25
+		}
+	}
+}
+
+INJECT:ai_strategy_reactionary_agenda = {
+	revolution_aversion = {
+		value = 50
+		add = 20	# AI law cadence: 70
+		if = {
+			limit = { has_journal_entry = je_tp_pool_suppress_revolts }
+			add = 50
+		}
+	}
+	change_law_chance = {
+		value = 3.5
+		add = 39	# AI law cadence: 42.5
+
+		if = {
+			limit = { any_interest_group = { is_insurrectionary = yes } }
+			add = 1.5
+		}
+
+		if = {
+			limit = {
+				has_revolutionary_socialist_laws = yes
+			}
+			add = 25
+		}
+
+		if = {
+			limit = {
+				has_enactment_je_or_law_commitment = yes
+			}
+			add = 10
+		}
+	}
+}
+
+INJECT:ai_strategy_progressive_agenda = {
+	revolution_aversion = {
+		value = 50
+		add = 10	# AI law cadence: 60
+	}
+	change_law_chance = {
+		value = 10
+		add = 39	# AI law cadence: 49
+
+		if = {
+			limit = { any_interest_group = { is_insurrectionary = yes } }
+			add = 10
+		}
+
+		if = {
+			limit = {
+				has_revolutionary_socialist_laws = yes
+			}
+			add = 25
+		}
+
+		if = {
+			limit = {
+				has_enactment_je_or_law_commitment = yes
+			}
+			add = 25
+		}
+	}
+}
+
+INJECT:ai_strategy_egalitarian_agenda = {
+	revolution_aversion = {
+		value = 25
+		add = 10	# AI law cadence: 35
+	}
+	change_law_chance = {
+		value = 15
+		add = 39	# AI law cadence: 54
+
+		if = {
+			limit = { any_interest_group = { is_insurrectionary = yes } }
+			add = 5
+		}
+
+		if = {
+			limit = {
+				has_revolutionary_socialist_laws = yes
+			}
+			add = 25
+		}
+
+		if = {
+			limit = {
+				has_enactment_je_or_law_commitment = yes
+			}
+			add = 25
+		}
+	}
+}
+
+INJECT:ai_strategy_nationalist_agenda = {
+	revolution_aversion = {
+		value = 35
+		add = 10	# AI law cadence: 45
+	}
+	change_law_chance = {
+		value = 10
+		add = 39	# AI law cadence: 49
+
+		if = {
+			limit = { any_interest_group = { is_insurrectionary = yes } }
+			add = 10
+		}
+
+		if = {
+			limit = {
+				has_revolutionary_socialist_laws = yes
+			}
+			add = 25
+		}
+
+		if = {
+			limit = {
+				has_enactment_je_or_law_commitment = yes
+			}
+			add = 25
+		}
+	}
+}
+
+INJECT:ai_strategy_maintain_mandate_of_heaven = {
+	change_law_chance = {
+		value = 1
+		add = 39	# AI law cadence: 40
+
+		if = {
+			limit = {
+				has_enactment_je_or_law_commitment = yes
+			}
+			add = 10
+		}
+
+		if = {
+			limit = {
+				has_revolutionary_socialist_laws = yes
+			}
+			add = 25
+		}
+	}
+}
+
+INJECT:ai_strategy_tanzimat_reforms = {
+	change_law_chance = {
+		value = 100	# Tanzimat AI needs to enact a lot of laws in rapid succession
+		add = 39	# AI law cadence: 139, certain as at 100
+	}
+}
+
+INJECT:ai_strategy_meiji_restoration = {
+	change_law_chance = {
+		value = 50
+		add = 39	# AI law cadence: 89
+
+		if = {
+			limit = {
+				has_revolutionary_socialist_laws = yes
+			}
+			add = 25
+		}
+	}
+}
+
+INJECT:ai_strategy_great_reforms = {
+	change_law_chance = {
+		value = 100
+		add = 39	# AI law cadence: 139, certain as at 100
+
+		if = {
+			limit = {
+				has_revolutionary_socialist_laws = yes
+			}
+			add = 25
+		}
+	}
+}
+
+INJECT:ai_strategy_consolidation_agenda = {
+	revolution_aversion = {
+		value = 75
+		add = 5	# AI law cadence: 80
+	}
+	change_law_chance = {
+		value = 10
+		add = 39	# AI law cadence: 49
+
+		if = {
+			limit = { any_interest_group = { is_insurrectionary = yes } }
+			add = 5
+		}
+
+		if = {
+			limit = {
+				has_enactment_je_or_law_commitment = yes
+			}
+			add = 25
+		}
+	}
+}
+
+INJECT:ai_strategy_confrontation_agenda = {
+	revolution_aversion = {
+		value = 25
+		add = 5	# AI law cadence: 30
+	}
+	change_law_chance = {
+		value = 20
+		add = 39	# AI law cadence: 59
+
+		if = {
+			limit = { any_interest_group = { is_insurrectionary = yes } }
+			add = 5
+		}
+
+		if = {
+			limit = {
+				has_enactment_je_or_law_commitment = yes
+			}
+			add = 25
+		}
+
+		if = {
+			limit = {
+				has_journal_entry = je_social_revolution
+			}
+			add = 10
+		}
+	}
+}

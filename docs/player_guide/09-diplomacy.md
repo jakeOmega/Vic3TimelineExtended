@@ -1,9 +1,9 @@
 # Diplomacy
 
-The mod adds 41 treaty articles, extra escalation in diplomatic plays, events
-between rival powers, a reunification system for divided nations, two more tiers
-of power bloc principles, ten late-game formable countries, and 22 city-states
-you can release. None of this has a game rule or journal entry of its own: it
+The mod adds 41 treaty articles, extra escalation in diplomatic plays, a war
+goal that takes a strait's shore, events between rival powers, a reunification
+system for divided nations, two more tiers of power bloc principles, ten
+late-game formable countries, and 22 city-states you can release. None of this has a game rule or journal entry of its own: it
 works through the base game's treaty screen, diplomatic plays, power bloc panel,
 formation panel and releasable countries list, though some
 pieces depend on other systems' rules. Much of it opens up in era 6, with
@@ -83,7 +83,7 @@ economy.
 |---|---|---|---|
 | Seize Company | Always available | Yes | The conceding country hands one of its companies to the other, unless the receiver already has a company of that type. |
 | Disband Company | Always available | Yes | The conceding country dissolves one of its companies. |
-| Enforce Privatization | Stock Exchange | Yes | The conceding country must privatize its government-owned buildings while the treaty stands. The demanding country needs Laissez-Faire or Interventionism, and the conceding country Cooperative Ownership, Agrarianism or Traditionalism. |
+| Privatization | Stock Exchange | Yes | The conceding country must privatize its government-owned buildings while the treaty stands. The demanding country needs Laissez-Faire or Interventionism, in a war goal too, and the conceding country Cooperative Ownership, Agrarianism or Traditionalism. The AI demands it only where the government owns at least 10 levels of enterprise, not counting the buildings it funds, and seldom of a country outside the world's 20 largest economies. |
 | Free Port Concession | International Trade | Yes | The chosen state drops its tariffs (within a year) and gets +50% trade capacity, +25% trade advantage and more migration pull, but collects half the tax and assimilates more slowly. Blocked by Isolationism on either side. |
 
 The humanitarian and cultural articles move people, faiths and cultures.
@@ -105,9 +105,9 @@ armed forces.
 | Article | Unlocked by | Enforceable | What it does |
 |---|---|---|---|
 | Demilitarized Zone | International Relations | Yes | No conscription, Barracks, Naval Fortifications or Military Bases in the chosen state; an existing Military Base is dismantled. While it stands the conceding country uses 25 authority and loses 5 prestige. |
-| Forced Disarmament | Intergovernmental Organizations | Yes | Military wages −25%, conscription halved, military industry throughput −25% and −10 prestige. Every Arms Industry, Artillery Foundry, Munition Plant, Naval Administration, Naval Fortification, Naval Logistics Center and Military Base in the conceding country is dismantled; Shipyards and Military Shipyards are spared. |
-| Intelligence Sharing Pact | Intergovernmental Organizations | No | Mutual, between two major powers or greater that have both established a Ministry of Intelligence and Security: +3 intelligence capacity, a stronger but dearer intelligence ministry, and a [defense shield](#the-intelligence-sharing-pacts-defense-shield). Costs each side 1 infamy. |
-| Joint Military Exercises | Combined Arms | No | Mutual: +25% army experience gain and admiral rank impact, military goods 5% dearer for each treaty that carries it. Needs an alliance or defensive pact, already in force or in the same treaty, a subject relation between the two, or a shared Military Treaty bloc. Each country can hold it in at most three treaties. |
+| Forced Disarmament | Intergovernmental Organizations | Yes | Military wages −25%, conscription halved, military industry throughput −25% and −10 prestige. Every Arms Industry, Artillery Foundry, Munition Plant, Naval Administration, Naval Fortification, Naval Logistics Center and Military Base in the conceding country is dismantled. Shipyards and Military Shipyards are spared, but while the article stands the country can build no warships, only supply ships. |
+| Intelligence Sharing Pact | Intergovernmental Organizations | No | Mutual, between two major powers or greater that have both established a Ministry of Intelligence and Security: +3 intelligence capacity, a stronger but costlier intelligence ministry, and a [defense shield](#the-intelligence-sharing-pacts-defense-shield). Costs each side 1 infamy. |
+| Joint Military Exercises | Combined Arms | No | Mutual: +25% army experience gain and admiral rank impact, military goods 5% costlier for each treaty that carries it. Needs an alliance or defensive pact, already in force or in the same treaty, a subject relation between the two, or a shared Military Treaty bloc. Each country can hold it in at most three treaties. |
 
 The requirements on Minority Protection, Religious Mission Rights and Joint
 Military Exercises apply when a treaty is signed or renegotiated. An article
@@ -131,7 +131,7 @@ gains leverage over it, and relations improve.
 | Extend Influence | Bloc leader | The leader gains leverage over the other country. |
 | Crisis Resolution | Bloc leader | The recipient gets +40 minimum legitimacy, lower liberty desire and half the radicalism from enacting unpopular laws. |
 | Education Aid | A more literate member | +10% education access for a recipient with a weak Ministry of Education or none. |
-| Healthcare Aid | A member with a Ministry of Health at level 3+ | −5% mortality and +1 standard of living for a recipient with a weak health system. |
+| Healthcare Aid | A member with a Ministry of Health at level 3+ | For a recipient with a weak health system: +1 standard of living and, under Demographics' Full setting, 10 points of health care access, faster spread of medicine and some treatment of infection even without the technologies; without it, −5% mortality. |
 | Security Aid | A member with a Ministry of Public Safety at level 3+ | −20% turmoil effects and lower liberty desire for a recipient with weak policing. |
 | Development Assistance | A member | +2 standard of living for the lower strata of a recipient whose primary cultures average below 15. |
 | Modernization Aid | A member with more technologies and a Ministry of Science at level 2+ | The recipient gains technology spread; the donor loses weekly innovation. |
@@ -145,7 +145,7 @@ The remaining articles belong to systems with chapters of their own.
 | Currency Peg, Imposed Currency Peg, Swap Line, Lender of Last Resort, Debt Receivership | Banking System set to Enabled | [Banking and monetary policy](04-banking.md) |
 | Nuclear Disarmament, Nuclear Program Freeze, Nuclear Program Aid, Nuclear Guarantee, Nuclear Security Assistance, Nuclear Arms Limitation | Nuclear Weapons | [Nuclear weapons](14-nuclear.md) |
 | Require UN Membership | United Nations | [The United Nations](10-united-nations.md) |
-| Enforce Emissions Reduction | Global Warming | [Climate and pollution](15-climate.md) |
+| Emissions Reduction | Global Warming | [Climate and pollution](15-climate.md) |
 | Lease Pacific, Atlantic, Indian, Arctic and Southern Seabed Claims | Global Commons | [The extended timeline](02-timeline.md#leasing-seabed-claims) |
 | Cede Colony | Space Race set to Simple Colonies or Full Colonies | [The space race](16-space.md#ceding-a-colony) |
 | Grid Interconnection Agreement | None | [Economy and construction](03-economy.md#power-grids) |
@@ -204,7 +204,9 @@ escalation about once a week from the countries in the play, each for its own
 role as initiator, target or committed participant. No country adds more than 10
 a week, each country's weekly figure is rounded to a whole point, and nothing
 slows a play below the base rate: laws and seats that slow plays only cancel
-extra escalation.
+extra escalation. The extra stops while the play's escalation is paused: a week
+paused after demands or sways adds none of it, and a week paused for three days
+adds four-sevenths.
 
 | Source | Effect |
 |---|---|
@@ -221,6 +223,29 @@ escalate about two and a half times as fast as in the base game, leaving the
 defender little time to gather support. The mod adds no escalation events of its
 own; Nuclear Brinkmanship, below, fires during plays between nuclear-armed
 countries.
+
+## Seizing a strait
+
+The Seize Strait war goal takes only the shore of a strait from an enemy state
+and leaves the rest of the state with its owner. Holding a shore makes you a
+controller of that strait, so you can charge tolls or close it. You can open a
+play with it or add it to one, against any state that holds a shore of one of
+the twelve straits: the Panama, Suez and Kiel canals, Gibraltar, the Bosporus,
+Bab-el-Mandeb, the Øresund, Malacca, Tsugaru, Sunda, Lombok and Hormuz.
+
+Each goal takes the shore of one state. Most straits have one shore in each of
+two states, often owned by different countries: Singapore lies in Malaya and the
+far side of the Strait of Malacca in North Sumatra, so taking both is two war
+goals. The canals and Lombok have both shores in one state, and one goal takes
+both. A canal can be seized only once it is built, since a canal zone cut off
+from the rest of its state could never build one. At Gibraltar one shore is not
+enough to close the strait, bar warships or charge tolls; you need both.
+
+The goal costs a quarter of the infamy of conquering the whole state, or the
+share of the state's provinces it takes if that is more. A state that is only
+the shore, such as Britain's Gibraltar at the start, costs as much as conquering
+it. It can't be held mid-war to enforce itself; it is settled when the enemy
+capitulates or agrees to peace.
 
 ## International relations events
 
@@ -253,8 +278,9 @@ strategy.
 
 A country is a candidate for you when it shares one of your primary cultures,
 holds no homeland of a culture you lack, owns a homeland state of yours that you
-claim and where your people still live, and either borders you or has a coast
-while you have one too. You can't both be subjects of the same overlord.
+claim and where your people still live, and either borders you or is within
+your reach: an army of yours could get there by land or by a sea route to its
+coast. You can't both be subjects of the same overlord.
 
 Your government must also give the cause a voice: Ancestral Citizenship,
 Cultural Citizenship, Universal Citizenship or Council Republic, a governing
@@ -301,14 +327,14 @@ from a strong no and wants friendly relations, cultural ties or a powerful
 kinsman's protection before it accepts.
 
 Integrate Decentralized Power, also from Decolonization, absorbs a decentralized
-nation without consent, if it borders you or you both have a coast. Until
+nation without consent, if it borders you or is within your reach. Until
 Globalization it works only on your own peoples; after it, on any. The AI
 absorbs at most one such nation a year.
 
 ## Power bloc principles and identities
 
-The mod adds one identity, fifteen principle groups, and tiers IV and V to every
-base-game group. A bloc can hold five mandates instead of three.
+The mod adds three identities, eighteen principle groups, and tiers IV and V to
+every base-game group. A bloc can hold five mandates instead of three.
 
 Each tier's effects are the complete list for that tier: tier V replaces tier IV
 rather than adding to it. Compare tiers by their tooltips, not by summing them.
@@ -322,6 +348,8 @@ the leader has researched adds a slot: Intergovernmental Organizations (era 6),
 Containerization (era 8), Globalization (era 9) and Universal Digital Identity
 (era 11). The slots are counted, not tied to positions, so a small bloc whose
 leader has two of the technologies fills its third and fourth slots with them.
+A country founding a bloc can spend one more mandate on principles at
+formation for each of the four it has researched.
 The panel shows all eight slots from the start and locks the ones above the
 bloc's count. Hover a locked slot to see the count it needs, the count the bloc
 has, and a tick or a cross for each rank condition and each slot technology.
@@ -344,14 +372,77 @@ Members get +10% influence; the leader gets +50% pact leverage generation and
 Cohesion rests on the leader's legitimacy, the worst relations inside the bloc,
 and the infamy of the leader and the worst member. The leader can use Diplomatic
 Alignment, a pact that slowly aligns a country's relations with third parties to
-its own, and a Diplomatic Framework never blocks a member's voluntary union.
+its own and builds the leader up to 1,000 Involvement where that country is
+local, and a Diplomatic Framework never blocks a member's voluntary union.
+
+### The Creditors' Consortium identity
+
+A Creditors' Consortium binds its members by credit. It appears only with the
+Banking System game rule set to Enabled, and its founder needs a National Bank,
+no Command Economy and no default. Its leader can't then enact Command Economy
+or abolish the bank.
+
+The leader stands behind every other member's debts, as a Lender of Last Resort
+treaty would: each member's risk premium from debt load falls, and the leader
+pays part of that in premium of its own. A member with Command Economy, or one
+already guaranteed by a treaty, gets nothing from it. A member its currency
+union backs takes the premium relief from the union, and the consortium still
+answers its default.
+
+When a member defaults, its leader chooses: pay the member's creditors on
+terms, or refuse. A rescue puts the member in a debt receivership (once the
+leader has International Exchange Standards) and carries one further term of
+the leader's choosing, or more with the Conditionality principle: its own
+economic, trade and tax laws imposed on the member while the receivership lasts,
+investment rights, or privatization. With Conditionality the investment rights
+come with monopolies for the leader's companies in the member's largest
+industries, and the leader can spend more than one term on them for more
+monopolies. A
+refusal costs a fifth of the bloc's cohesion at once and ends the guarantee of
+every member for five years. The member may refuse the terms in turn: it stays
+in default, loses the guarantee for ten years, and may leave the bloc at once.
+A member in the leader's receivership can't leave. Cohesion rests on the
+leader's share of the bloc's GDP, falls with the leader's debt, members in
+receivership and members with Command Economy, and drops by 50 while the leader
+is in default.
+
+### The Research Commons identity
+
+A Research Commons pools its members' science in the leader. It opens with
+Intergovernmental Organizations, and founding one needs the Ministry of Science
+law. Members other than the leader research nothing themselves (−1000% research
+speed). Each sends the leader 75% of its weekly innovation, counted after what
+its own programs spend and before its multipliers. The leader's innovation rises
+by what the members send and its innovation cap by a tenth of it. Every member
+is given each technology another member knows, at the leader's monthly review
+and on the day one of them acquires a new one. A newcomer gets them all at the
+first review after it joins, and the bloc gets what the newcomer alone knew.
+The Research Commons journal entry shows a member what it sends and what it has
+received, and the leader the pool, the cap rise and its own share.
+
+Cohesion rests on the innovation the leader produces itself, before what the
+members send and what its programs spend, as a share of what the whole bloc
+produces, so a leader that closes its universities and lives on the pool loses
+its bloc, while one that spends the pool on its own space or nuclear program
+doesn't. The worst relations between the leader and a member lower it, and so
+does each member. The leader can't abolish its Ministry of Science. A member
+can leave only when the bloc's leverage advantage over it is 10 or less (30 for
+the base game's identities), and a country that leaves keeps what it learned
+but carries Institutes Left Behind: −50% research speed, falling to nothing
+over ten years, and ending at the next monthly review if it joins a Research
+Commons again. The penalty falls only on a country that left a Commons that
+still stands: a bloc that dissolves, changes identity or loses its leader puts
+none on its former members.
 
 ### New principle groups
 
 Foreign Service and Multilateral Institutions are open only to a Diplomatic
-Framework, and Artistic Expression only to a Cultural Commonwealth.
-Vassalization, Colonial Offices and Sacred Civics are closed to a Diplomatic
-Framework. Urban Planning and Rural Development exclude each other.
+Framework, Artistic Expression only to a Cultural Commonwealth, Conditionality
+and Development Lending only to a Creditors' Consortium, and Technology Controls
+only to a Research Commons. Vassalization, Colonial Offices and Sacred Civics
+are closed to a Diplomatic Framework and a Research Commons, and Sacred Civics
+to a Creditors' Consortium. Urban Planning and Rural Development exclude each
+other.
 
 | Group | First tiers need | What it does |
 |---|---|---|
@@ -359,7 +450,7 @@ Framework. Urban Planning and Rural Development exclude each other.
 | Multilateral Institutions | Intergovernmental Organizations | Diplomatic reputation and UN alignment; at tiers IV and V members can't fight each other. |
 | Global Security | Nuclear Weapons | Less radicalism and turmoil in members, more maneuvers for the leader. |
 | Education | Nothing | Cheaper schools, education access, technology spread. |
-| Healthcare | Pharmaceuticals | Cheaper health ministries, recovery and birth rate. |
+| Healthcare | Pharmaceuticals | Cheaper health ministries and unit recovery. With each Ministry of Health level, more health care access under Demographics' Full setting and lower mortality without it. Higher tiers add faster spread of medicine, malaria control, cheaper family policy measures and, at tier V, a faster fall in the price of longevity care. |
 | Welfare | Nothing | Welfare payments, lower living-standard expectations. |
 | Cultural Unity | Nothing | Faster assimilation and homeland change. |
 | Cultural Plurality | Nothing | Cultural acceptance, migration, technology spread. |
@@ -369,7 +460,10 @@ Framework. Urban Planning and Rural Development exclude each other.
 | Environmental Sustainability | Environmental Movement | Less coal and oil use, fewer emissions. |
 | Urban Planning | Urbanization | More room in crowded cities, better urban services. |
 | Rural Development | Nothing | Arable land, farm throughput. |
-| Monetary Union | Central Banking | A shared currency; see [Banking and monetary policy](04-banking.md). |
+| Monetary Union | Central Banking | A shared currency. Once members adopt it the leader earns seigniorage, borrows more cheaply and can run more banking interventions at once; see [Banking and monetary policy](04-banking.md). |
+| Conditionality | Central Banking | A Creditors' Consortium's rescue terms: more terms per rescue (two to four, where a bloc without it sets one), a larger monthly remittance from a member in receivership (0.1% to 0.25% of its GDP), one to three monopolies for each term spent on concessions, and a longer receivership (12 to 36 months out of default). |
+| Development Lending | Central Banking | Each month members above the bloc's GDP per head pay 5% to 15% of their investment pool's income to the members below it, by population; from tier II the poorer members also build 5% to 20% faster. In return the bloc gains 5 to 40 cohesion, the leader 10% to 30% more influence, and countries poorer than its average accept its invitations more readily. |
+| Technology Controls | Nuclear Weapons | No Modernization Aid to countries outside the bloc, and members' research better guarded against espionage. From tier III the leader can place a Technology Embargo. |
 
 ### Principle tiers IV and V
 
@@ -384,7 +478,8 @@ technology.
 
 ### Principles that unlock articles and actions
 
-Several principles give your bloc an article, action or decree.
+Several principles give your bloc an article, action or decree, or do what an
+article would.
 
 | Principle | Unlocks |
 |---|---|
@@ -396,17 +491,67 @@ Several principles give your bloc an article, action or decree.
 | Healthcare IV and V | Healthcare Aid |
 | Police Coordination IV and V | Security Aid |
 | Advanced Research IV and V | Modernization Aid; V adds Extensive Modernization Aid |
-| Welfare IV and V | Humanitarian Aid, a pact that sends part of your income to another country's poor in return for leverage and better relations |
+| Welfare IV and V | Humanitarian Aid, a pact that sends part of your income to another country's poor in return for leverage, better relations and up to 1,000 Involvement where the recipient is local |
 | Vassalization IV and V | Peaceful Integration: annex a puppet or colony with under 25 liberty desire, cordial relations and under a tenth of your GDP, without a play |
 | Cultural Unity II+ | Enforce Cultural Acceptance: a member of five years or more adds your primary cultures to its own, if the bloc has 50% cohesion and you have three times its prestige |
 | Cultural Unity V | Enforce Cultural Adoption: a subject replaces its primary cultures with yours |
 | Cultural Unity, any tier | Cultural Emigration Initiative decree |
 | Freedom of Movement IV and V | Greenest Grass Campaign decree |
+| Market Unification IV and V, Internal Trade IV and V | Members' power grids join as under a Grid Interconnection Agreement; see [Power grids](03-economy.md#power-grids) |
+| Technology Controls III+ | Technology Embargo: a hostile pact on one country outside the bloc at a time that cuts its technology spread by the bloc's share of the world's innovation times 50% (III), 75% (IV) or 100% (V), to at most 50% |
+
+### Bloc summits
+
+A bloc leader can spend a mandate on something other than a principle. The
+Convene a Summit button sits beside your mandate count on the power bloc panel,
+grayed while the bloc holds none. It opens a summit where each initiative costs
+one mandate and lasts ten years; adjourning costs nothing.
+
+| Initiative | What it gives |
+|---|---|
+| Common Purpose | Cohesion rises at once by a fifth of its maximum, and its target is 10 higher. Cohesion moves toward its target by at most 1 a week |
+| Recruitment Drive | +25 to the chance a country accepts the bloc's invitation |
+| Leverage Campaign | +25% leverage generation on every country |
+| Open Borders Accord | Port access and migration between members, as Navy III and Freedom of Movement III give |
+| Mandate at Home | +10 legitimacy and +200 authority for the leader |
+
+Each bloc identity adds one initiative of its own. Those marked "members" go to
+every country in the bloc at the time of the summit, you included; a country
+that joins later doesn't get them. When another country leads your bloc, an
+event, The Summit's Communiqué, tells you which of these its summit gave you.
+
+| Identity | Initiative | What it gives |
+|---|---|---|
+| Military Treaty | Joint Exercises | Members: +25% army experience gain. Relations between every two members +20 |
+| Religious Convocation | A council of your faith | Members: +25% conversion, +5 acceptance for the state religion, Devout approval +2 |
+| Trade League | Customs Harmonization | The bloc: +100 trade advantage. Members: +10% trade advantage |
+| Sovereign Empire | Imperial Conference | You: −0.1 weekly liberty desire for all your subjects. Your relations with every other member +20 |
+| Ideological Union | Congress of the Movement | Members: +25% chance for laws you impose on them to pass, +5% for their own enactments, −25% radicals from political movements |
+| Cultural Commonwealth | Cultural Congress | Members: +5 acceptance for cultures sharing a heritage or language trait with theirs, +5% prestige, +15% cultural pull. Relations between every two members +20 |
+| Diplomatic Framework | Conference of Ambassadors | Members: +10% influence, +25% infamy decay. Relations between every two members +20 |
+| Creditors' Consortium | Debt Conference | Members: −0.5 percentage points of risk premium. Relations between every two members +20 |
+| Research Commons | Scientific Congress | Members, you included: +10% weekly innovation, which also lifts what the pool brings you |
+
+The religious council takes its name from your state religion: an ecumenical
+council, a synod, the ulama in council, a rabbinical council, a Sangiti, a
+Dharma Sansad, a Sarbat Khalsa, or a plain council of the faith for any other.
+Cultural pull counts only under [Cultural Hegemony](11-influence.md#the-cultural-hegemony-journal-entry).
+
+An initiative already running isn't offered again until it ends, except Common
+Purpose, whose immediate cohesion can be worth a second mandate. The Open
+Borders Accord isn't offered when the bloc's principles already give both of
+its abilities. A summit is for the mandates left once your slots are full and
+upgraded: a principle tier is permanent, an initiative lasts ten years.
+
+An AI bloc leader holding two or more mandates may convene a summit in any
+month, and more often the more it holds: about one year in three with two, and
+almost every year at the cap of five. It prefers its identity's initiative, and
+favors Common Purpose when cohesion is low and the Recruitment Drive while the
+bloc has fewer than five members.
 
 ### Other power bloc changes
 
-A bloc holding unspent mandates gains cohesion from a Mandate Reserve, set once
-a year: +3 per unspent mandate, up to +12. Example new bloc names include the
+Example new bloc names include the
 Global Accord for a Diplomatic Framework, the Anglosphere for a cultural bloc
 and the Concert of Arms for a Military Treaty. Any bloc can take the name of a
 historical league or standing body, such as the Congress System or the Central
@@ -437,9 +582,10 @@ to every identity. It needs a Subjugation Strength of at least 1.0, which means
 roughly that your prestige is twenty times the target's: ten times if your bloc
 is a Sovereign Empire, and about twelve times when your identity's bond applies
 (shared religion, governance principle or culture, economic dependence, or an
-army five times the target's). Its infamy grows with the target's population, up
-to 25; a Sovereign Empire pays half as much, so it reaches that cap only against
-far more populous targets.
+army five times the target's that can get to it). Its infamy is a fifth of what
+annexing the target would cost, up to 25, so the cap decides for all but small
+targets. A Sovereign Empire's figure is halved before the cap, so it reaches 25
+only against larger targets.
 
 ## Formable countries
 
@@ -482,17 +628,21 @@ fascism, the African Empire as a monarchy, and a theocracy or technate
 otherwise. Some names follow the ruler's culture or the country that formed it:
 the Empire of the Great Qing for a China with a Manchu monarch, the Ottoman or
 Safavid Caliphate, or Pax Americana for a United Earth formed by the United
-States.
+States. For the base game's Country Names on Map rule, which labels countries
+by their formal names, India is the Union of India, Indonesia the State of
+Indonesia, China the State of China, Intermarium the Intermarium Federation and
+Dar-Al-Islam the Union of Dar-Al-Islam; the other unions keep their names.
 
 ### India, Indonesia and Operation Polo <!-- style: allow title-case-heading -->
 
 Forming India claims the Pakistani, Bangladeshi, Himalayan and Ceylonese
 periphery; forming Indonesia claims Malaya, northern Borneo and eastern New
 Guinea. A Muslim-ruled state inside India's core isn't swept up in unification.
-While an independent, Muslim-ruled insignificant power borders India, "An Island
-of Resistance" can fire and lets India annex it by police action (20 infamy),
-pressure it into accession as a major power or greater (8 infamy), or leave it
-be.
+While such a holdout stays independent and an insignificant power, with its
+capital in one of India's core states, "The Holdout" can fire and lets India
+annex it by police action (20 infamy), pressure it into accession as a major
+power or greater (8 infamy), or leave it be. Muslim neighbors outside the core,
+such as Persia or Afghanistan, never get it.
 
 <!-- screenshot: the formation panel showing the European Union with its requirements tooltip -->
 

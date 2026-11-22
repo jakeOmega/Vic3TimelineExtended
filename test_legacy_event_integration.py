@@ -65,9 +65,11 @@ class LegacyIntegrationTests(unittest.TestCase):
         for key, op, value in entries(block):
             if key in ('AND', 'OR', 'NOT', 'NOR'):
                 answer = self.evaluate(value, current, donor, key)
-            elif key in self.triggers or key.startswith('banking_cycle_is_') or key == 'te_banking_cycle_running':
+            elif (key in self.triggers or key.startswith('banking_cycle_is_')
+                  or key in ('te_banking_cycle_running', 'te_banking_system_on')):
                 source = (self.triggers if key in self.triggers else
-                          self.policy if key == 'te_banking_cycle_running' else self.market)
+                          self.policy if key in ('te_banking_cycle_running', 'te_banking_system_on')
+                          else self.market)
                 answer = self.evaluate(body(source, key), current, donor)
                 if value == 'no':
                     answer = not answer
@@ -88,6 +90,12 @@ class LegacyIntegrationTests(unittest.TestCase):
                 # `gdp < root.gdp`: the candidate recipient against the donor.
                 self.assertEqual(value, 'root.gdp')
                 answer = {'<': operator.lt, '>': operator.gt}[op](current['gdp'], donor['gdp'])
+            elif key == 'this.market':
+                # `this.market = root.market`: one market, a customs union or
+                # an overlord and its subject. Each country has its own unless
+                # a scenario gives two the same market_id.
+                self.assertEqual(value, 'root.market')
+                answer = current.get('market_id', id(current)) == donor.get('market_id', id(donor))
             elif key in ('market', 'root.market'):
                 # A dotted chain is one scope change: `prev` inside is the
                 # country it was entered from (vanilla trade_route_events.txt).
@@ -117,6 +125,7 @@ class LegacyIntegrationTests(unittest.TestCase):
 
     def country(self, cycle=50, **fields):
         result = dict(journals={'je_banking_cycle'}, techs={'keynesian_economics'},
+                      rules={'banking_system_enabled'},
                       vars={'finance_cycle_value': cycle}, trade=100, gdp=100,
                       name='country', reliance=0.1)
         result.update(fields)
@@ -161,6 +170,28 @@ class LegacyIntegrationTests(unittest.TestCase):
                 donor = self.country(gdp=1000, name='donor', reliance={'recipient': donor_on_recipient})
                 candidate = self.country(5, name='recipient', reliance={'donor': recipient_on_donor})
                 self.assertEqual(self.evaluate(body(self.triggers, 'banking_is_bailout_recipient'), candidate, donor), expected)
+
+    def test_same_market_pair_skips_both_trade_checks(self):
+        # No trade route runs inside a market, so a customs union or an
+        # overlord and its subject read 0 on both the trade value and the
+        # reliance; the contagion weights that pair highest, so it may rescue
+        # (#895). A pair in two markets still needs both.
+        for same_market, trade, reliance, expected in [
+            (True, 0, 0.0, True), (True, 100, 0.0, True),
+            (False, 0, 0.0, False), (False, 0, 0.1, False), (False, 100, 0.0, False),
+            (False, 100, 0.1, True),
+        ]:
+            with self.subTest(same_market=same_market, trade=trade, reliance=reliance):
+                donor = self.country(gdp=1000, name='donor', market_id='union', reliance={'recipient': reliance})
+                candidate = self.country(5, name='recipient', trade=trade, reliance={'donor': reliance},
+                                         market_id='union' if same_market else 'own')
+                self.assertEqual(self.evaluate(body(self.triggers, 'banking_is_bailout_recipient'), candidate, donor), expected)
+        # The other gates still hold for a same-market pair.
+        donor = self.country(gdp=1000, name='donor', market_id='union')
+        for fields in [dict(gdp=2000), dict(has_war_with=True), dict(modifiers={'finreg_banking_stability'})]:
+            with self.subTest(**{k: str(v) for k, v in fields.items()}):
+                candidate = self.country(5, name='recipient', trade=0, reliance=0.0, market_id='union', **fields)
+                self.assertFalse(self.evaluate(body(self.triggers, 'banking_is_bailout_recipient'), candidate, donor))
 
     def test_protected_recipient_cannot_collect_repeat_bailouts(self):
         candidate = self.country(5, modifiers={'finreg_banking_stability'})
@@ -219,11 +250,15 @@ class LegacyIntegrationTests(unittest.TestCase):
                 country = self.country(rules={'space_race_enabled'}, techs=set(),
                                        vars={'sr_colony_count': count, **({'ste_event_18_fired': 1} if number == 19 and charter else {})})
                 self.assertEqual(self.evaluate(gate, country, country), expected)
-            # Buildings alone are sufficient only with the system off.
+            # Buildings alone are sufficient only with the system off, and
+            # then .19 still waits for .18 to have fired (#1616).
             for enabled in (True, False):
-                country = self.country(rules={'space_race_enabled' if enabled else 'space_race_disabled'},
-                                       techs={'space_colonization'}, building=True)
-                self.assertEqual(self.evaluate(gate, country, country), not enabled)
+                for founded in (True, False):
+                    country = self.country(rules={'space_race_enabled' if enabled else 'space_race_disabled'},
+                                           techs={'space_colonization'}, building=True,
+                                           vars={'ste_event_18_fired': 1} if founded else {})
+                    expected = not enabled and founded == (number == 19)
+                    self.assertEqual(self.evaluate(gate, country, country), expected)
 
     def test_colony_dispatch_backfills_saves_without_racing_establishment(self):
         actions = parse('common/on_actions/extra_on_actions.txt')
@@ -242,6 +277,45 @@ class LegacyIntegrationTests(unittest.TestCase):
             })
             self.assertEqual(self.evaluate(first, country, country), expected_first)
             self.assertEqual(self.evaluate(governance, country, country), expected_governance)
+        # With the system off the pool offers the petition only once .18 has
+        # fired, as the event's own trigger does (#1616).
+        for founded in (True, False):
+            country = self.country(rules={'space_race_disabled'}, techs={'space_colonization'},
+                                   building=True, vars={'ste_event_18_fired': 1} if founded else {})
+            self.assertEqual(self.evaluate(first, country, country), not founded)
+            self.assertEqual(self.evaluate(governance, country, country), founded)
+
+    def test_womens_work_events_reach_every_law_women_work_under(self):
+        # The law tests are by name, so a law left out never sees the event:
+        # until #1616 neither fired under Women's Suffrage. Protected Class
+        # stays out (a refusal "for no reason but their sex" is unlawful there),
+        # and .2's wage gap needs women in paid work, so not Women Own Property.
+        def laws(block):
+            found = set()
+            for key, _, value in entries(block):
+                if key == 'has_law':
+                    found.add(value.removeprefix('law_type:'))
+                elif key in ('AND', 'OR') and isinstance(value, dict):
+                    found |= laws(value)
+            return found
+
+        actions = parse('common/on_actions/extra_on_actions.txt')
+        expected = {
+            1: {'law_women_own_property', 'law_women_in_the_workplace', 'law_womens_suffrage'},
+            2: {'law_women_in_the_workplace', 'law_womens_suffrage'},
+        }
+        for number, want in expected.items():
+            event = f'society_technology_events.{number}'
+            with self.subTest(event=event):
+                self.assertEqual(laws(body(body(self.society, event), 'trigger')), want)
+                # The pool asks the same laws, or it rolls an event that can't fire.
+                self.assertEqual(laws(find_dispatch(actions, event)), want)
+        # "Progress waits for no one" is the AI's lean under the two laws that
+        # already admit women to work.
+        option = next(value for key, _, value in entries(body(self.society, 'society_technology_events.1'))
+                      if key == 'option' and body(value, 'name') == 'society_technology_events.1.a')
+        lean = body(body(body(option, 'ai_chance'), 'modifier'), 'trigger')
+        self.assertEqual(laws(lean), {'law_women_in_the_workplace', 'law_womens_suffrage'})
 
     def test_bank_runs_never_initialize_a_disabled_banking_system(self):
         effect = body(self.effects, 'banking_enactment_run_shock')
@@ -250,6 +324,9 @@ class LegacyIntegrationTests(unittest.TestCase):
         for active in (True, False):
             country = self.country(journals={'je_banking_cycle'} if active else set())
             self.assertEqual(self.evaluate(gate, country, country), active)
+        # The rule switched off mid-game, the entry not yet ended (te_banking_cycle_running reads the rule).
+        country = self.country(rules={'banking_system_disabled'})
+        self.assertFalse(self.evaluate(gate, country, country))
         for number in (2, 38):
             immediate = body(body(self.laws, f'extra_law_events.{number}'), 'immediate')
             self.assertEqual(body(immediate, 'banking_enactment_run_shock'), 'yes')

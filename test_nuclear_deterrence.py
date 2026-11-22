@@ -49,9 +49,13 @@ LOOSE_TRIGGERS = ROOT / "common/scripted_triggers/nuclear_loose_triggers.txt"
 LOOSE_VALUES = ROOT / "common/script_values/nuclear_loose_values.txt"
 LOOSE_EVENTS = ROOT / "events/nuclear_loose_events.txt"
 SOCIAL_TENSIONS_ON_ACTIONS = ROOT / "common/on_actions/social_tensions_on_actions.txt"
+SOCIAL_TENSIONS_EVENTS = ROOT / "events/social_tensions_events.txt"
 EXTRA_EFFECTS = ROOT / "common/scripted_effects/extra_effects.txt"
 TABOO_EFFECTS = ROOT / "common/scripted_effects/nuclear_taboo_effects.txt"
 EXTRA_VALUES = ROOT / "common/script_values/extra_script_values.txt"
+WEAPON_EFFECTS = ROOT / "common/scripted_effects/nuclear_weapon_effects.txt"
+TREATY_ARTICLES = ROOT / "common/treaty_articles/extra_treaty_articles.txt"
+NUCLEAR_DEBUG_EVENTS = ROOT / "events/te_debug_nuclear_events.txt"
 MILITARY_BASE_FILE = ROOT / "common/buildings/05_zz_te_military_base.txt"
 EXTRA_PM_GROUPS = ROOT / "common/production_method_groups/extra_pm_groups.txt"
 NUKE_TRIGGERS = ROOT / "common/scripted_triggers/nuke_triggers.txt"
@@ -113,6 +117,24 @@ def block(text, name):
         depth -= c == "}"
         i += 1
     return text[m.end():i - 1]
+
+
+def scaling_declarations(text):
+    """modifier -> [value body] for every `scaling_modifiers_while_active`
+    block in `text` (comments stripped by the caller)."""
+    out = {}
+    for m in re.finditer(r"scaling_modifiers_while_active\s*=\s*\{", text):
+        depth, i = 1, m.end()
+        while depth:
+            c = text[i]
+            depth += c == "{"
+            depth -= c == "}"
+            i += 1
+        body = text[m.end():i - 1]
+        name = re.search(r"\bmodifier\s*=\s*(\w+)", body).group(1)
+        value = re.search(r"(?m)^\s*value\s*=", body)
+        out.setdefault(name, []).append(body[value.start():].strip())
+    return out
 
 
 def gui_ops(gui_text, sgui):
@@ -437,7 +459,7 @@ DANGER_PARTS = ["nd_cd_stage", "nd_cd_issuer_readiness", "nd_cd_target_readiness
                 "nd_cd_exercise", "nd_cd_vulnerability"]
 PRESSURE_PARTS = ["nd_yp_base", "nd_yp_answer", "nd_yp_issuer_exposure", "nd_yp_protector", "nd_yp_credibility", "nd_yp_alert",
                   "nd_yp_recessed", "nd_yp_danger", "nd_yp_exercise", "nd_yp_temperament", "nd_yp_war",
-                  "nd_yp_stakes", "nd_yp_follow_through", "nd_yp_taboo"]
+                  "nd_yp_stakes", "nd_yp_forfeit", "nd_yp_follow_through", "nd_yp_taboo"]
 
 
 class TestCrisisFigures(unittest.TestCase):
@@ -511,8 +533,10 @@ class TestSurvivorsInCrisis(unittest.TestCase):
     def test_answer_three_quarters_rule(self):
         body = block(self.values, "nd_yp_answer_survivors_value")
         self.assertIn("nd_survivors_vs_issuer", body)
-        self.assertIn("nd_authority_central = yes", body)
-        self.assertIn("nd_decapitation_margin_value > 0", body)
+        self.assertIn("limit = { nd_yp_answer_discounted = yes }", body)
+        discounted = block(strip_comments(read(TRIGGERS)), "nd_yp_answer_discounted")
+        self.assertIn("nd_authority_central = yes", discounted)
+        self.assertIn("nd_decapitation_margin_value > 0", discounted)
         self.assertIn("multiply = 0.75", body)
         margin = block(self.values, "nd_decapitation_margin_value")
         self.assertIn("nd_believed_stockpile", margin)
@@ -521,7 +545,9 @@ class TestSurvivorsInCrisis(unittest.TestCase):
     def test_issuer_exposure_falls_to_minus_15(self):
         body = block(self.values, "nd_yp_issuer_exposure_value")
         self.assertIn("nd_believed_armed = yes", body)
-        self.assertIn("nd_survivors_vs_target", body)
+        # The issuer's survivors as the target can count them (2026-11-20
+        # delivery spec owner call 13): test_nuclear_survivors.TestWorldsView.
+        self.assertIn("nd_seen_survivors_vs_target", body)
         self.assertIn("max = 3", body)
         self.assertIn("multiply = 5", body)
 
@@ -599,10 +625,14 @@ class TestCrisisSubjects(unittest.TestCase):
                       block(strip_comments(read(SGUIS)), "nd_crisis_pressure_breakdown_sgui"))
         self.assertIsNotNone(loc_value("nd_yp_stakes_line"))
 
+    # The forfeit stays in the unstaked total (#1893): the gate holds back an
+    # issuer's demands, and a target's own goals are no reason to hold back a
+    # threat against it.
     def test_unstaked_total_is_every_other_part(self):
         body = block(self.values, "nd_yield_pressure_unstaked_value")
         parts = re.findall(r"(?:value|add) = (nd_yp_\w+)_value\b", body)
         self.assertEqual(parts, [p for p in PRESSURE_PARTS if p != "nd_yp_stakes"])
+        self.assertIn("nd_yp_forfeit", parts)
 
     def test_ai_stake_gate(self):
         self.assertIn("nd_ai_stakes_block = { TARGET = $TARGET$ }", block(self.triggers, "nd_ai_would_warn"))
@@ -767,8 +797,9 @@ class TestFinalReviewFixesPhase1(unittest.TestCase):
 
 
 class TestSuezConcession(unittest.TestCase):
-    """Yielding in a war drops the target's side's goals against the other
-    side and costs 15 war support (2026-10-28 rework spec §8.1)."""
+    """Yielding in a war drops the target's own goals against the other side,
+    leader or not, and costs 15 war support (2026-10-28 rework spec §8.1;
+    owner, 2026-11-18: its allies keep theirs)."""
 
     def setUp(self):
         self.crisis = strip_comments(read(CRISIS_EFFECTS))
@@ -778,12 +809,82 @@ class TestSuezConcession(unittest.TestCase):
         body = block(self.crisis, "nd_crisis_concede_war")
         self.assertIn("value = -15", body)
         self.assertNotIn("value = -35", body)
-        self.assertIn("nd_crisis_drop_goals = { WHO = target }", body)
-        self.assertIn("nd_crisis_drop_goals = { WHO = initiator }", body)
+        self.assertIn("nd_crisis_drop_goals = yes", body)
+        self.assertNotIn("WHO =", body)
+
+    # remove_war_goal takes one holder's first goal of a type, whatever it
+    # targets (in game, 2026-11-18): one call per type, naming only the
+    # leader, took France's opening goal against Brazil and left its goal
+    # against the United States.
+    # The yield's tooltip walks hidden_effect every frame and a saved scope is
+    # no fence, so the loops sit behind a click-only marker.
+    def test_goal_drop_is_click_only(self):
+        gate = squash(block(self.crisis, "nd_crisis_drop_goals"))
+        self.assertEqual(gate, "scope:nd_target = { set_variable = nd_crisis_drop_click } if = { limit = {"
+                               " scope:nd_target = { has_variable = nd_crisis_drop_click } } scope:nd_target ="
+                               " { remove_variable = nd_crisis_drop_click save_scope_as = nd_crisis_holder }"
+                               " diplomatic_play = { save_scope_as = nd_crisis_war_play"
+                               " nd_crisis_drop_holder_goals = yes } }")
+
+    # A country that yields gives up only what it holds: naming its allies
+    # would let one country's yield strip goals another chose (owner,
+    # 2026-11-18).
+    def test_only_the_yielder_is_named(self):
         drop = block(self.crisis, "nd_crisis_drop_goals")
-        for typ in ("conquer_state", "annex_country", "humiliation", "make_protectorate", "te_reunify_country"):
-            self.assertIn(f"remove_war_goal = {{ who = $WHO$ type = {typ} }}", drop, typ)
-        self.assertIn("diplomatic_play = {", drop)
+        self.assertNotIn("every_war_participant", drop)
+        self.assertNotIn("nd_crisis_drop_side_goals", self.crisis)
+        self.assertNotIn("remove_war_goal = { who = $WHO$", self.crisis)
+
+    def test_each_type_repeats_until_none_against_the_target_is_left(self):
+        strike = squash(block(self.crisis, "nd_crisis_strike_goals"))
+        held = ("scope:nd_crisis_holder = { war_participant_has_war_goal_of_type_against ="
+                " { type = $TYPE$ target = $TARGET$ } }")
+        self.assertIn(f"while = {{ count = 30 if = {{ limit = {{ {held} }}"
+                      " remove_war_goal = { who = scope:nd_crisis_holder type = $TYPE$ } } }", strike)
+        self.assertTrue(strike.startswith(f"if = {{ limit = {{ {held} }}"), strike[:120])
+
+    # The trigger reads every war and the call acts in one: a holder that
+    # fights the other side in another war too gets one call per type.
+    def test_one_call_per_type_when_the_holder_fights_them_in_another_war(self):
+        strike = squash(block(self.crisis, "nd_crisis_strike_goals"))
+        self.assertIn("if = { limit = { scope:nd_crisis_holder = { any_scope_war = { count > 1"
+                      " is_war_participant = scope:nd_crisis_other_side", strike)
+        multi = strike.index("count > 1")
+        single_call = strike.index("remove_war_goal = { who = scope:nd_crisis_holder type = $TYPE$ }", multi)
+        self.assertLess(single_call, strike.index("else = { while = { count = 30", multi))
+
+    def test_holder_ladder_covers_every_type_the_trigger_tests(self):
+        trig = block(self.triggers, "nd_holds_any_goal_against")
+        tested = re.findall(r"type = ([a-z_]+) target = \$TARGET\$", trig)
+        self.assertEqual(len(tested), 44)
+        holder = block(self.crisis, "nd_crisis_drop_holder_goals")
+        struck = re.findall(r"nd_crisis_strike_goals = \{ TYPE = ([a-z_]+) TARGET = scope:nd_crisis_other_side \}", holder)
+        self.assertEqual(struck, tested)
+
+    # A goal to liberate or take a subject targets the subject, not its
+    # overlord (targets_enemy_subject; in game, 2026-11-18).
+    def test_goals_against_the_other_sides_subjects(self):
+        holder = squash(block(self.crisis, "nd_crisis_drop_holder_goals"))
+        self.assertIn("scope:nd_crisis_other_side = { every_direct_subject = {"
+                      " save_scope_as = nd_crisis_goal_subject scope:nd_crisis_war_play = {"
+                      " nd_crisis_strike_goals = { TYPE = liberate_subject TARGET = scope:nd_crisis_goal_subject }"
+                      " nd_crisis_strike_goals = { TYPE = transfer_subject TARGET = scope:nd_crisis_goal_subject } } } }",
+                      holder)
+        trig = squash(block(self.triggers, "nd_holds_any_goal_against"))
+        self.assertIn("$TARGET$ = { any_direct_subject = { save_temporary_scope_as = nd_goal_subject_t"
+                      " scope:nd_goal_holder_t = { OR = {"
+                      " war_participant_has_war_goal_of_type_against = { type = liberate_subject target = scope:nd_goal_subject_t }"
+                      " war_participant_has_war_goal_of_type_against = { type = transfer_subject target = scope:nd_goal_subject_t }"
+                      " } } } }", trig)
+
+    # The test reads the yielder's own goals, as the removal takes them: a
+    # side-wide read would hold the concession (and the self-check) to goals
+    # its allies keep.
+    def test_trigger_reads_the_countrys_own_goals(self):
+        trig = block(self.triggers, "nd_holds_any_goal_against")
+        self.assertNotIn("war_side_has_war_goal_of_type_against", trig)
+        self.assertEqual(trig.count("war_participant_has_war_goal_of_type_against"), 46)
+        self.assertNotIn("nd_side_holds_any_goal_against", self.triggers + self.crisis)
 
     def wars_loop(self):
         return block(block(self.crisis, "nd_crisis_concede_war"), "every_scope_war")
@@ -795,19 +896,153 @@ class TestSuezConcession(unittest.TestCase):
         support = loop.index("add_war_war_support")
         self.assertEqual(loop[:support].count("{") - loop[:support].count("}"), 0)
 
-    def test_concession_side_from_defending_side(self):
-        goals = " ".join(block(self.wars_loop(), "if").split())
-        self.assertIn("if = { limit = { is_on_defending_side = scope:nd_target } nd_crisis_drop_goals = { WHO = target } }"
-                      " else = { nd_crisis_drop_goals = { WHO = initiator } }", goals)
-
     def test_suez_self_check_line(self):
         ev = block(strip_comments(read(CRISIS_EVENTS)), "nuclear_crisis.25")
         self.assertIn("TE_SELF_CHECK OK nd_suez_goals", ev)
         self.assertIn("TE_SELF_CHECK BROKEN nd_suez_goals", ev)
-        self.assertIn("war_side_has_war_goal_of_type_against = { type = conquer_state target = $TARGET$ }",
-                      block(self.triggers, "nd_side_holds_any_goal_against"))
+        self.assertIn("war_participant_has_war_goal_of_type_against = { type = conquer_state target = $TARGET$ }",
+                      block(self.triggers, "nd_holds_any_goal_against"))
         self.assertNotIn("35", loc_value("nd_tt_yield_war"))
         self.assertIn("15", loc_value("nd_tt_yield_war"))
+
+
+FORFEIT_VALUES = ("nd_yp_forfeit_value", "nd_yp_forfeit_territory_value", "nd_yp_forfeit_minor_value")
+
+
+class TestYieldForfeit(unittest.TestCase):
+    """What yielding in a war costs the target itself weighs on the pressure:
+    the goals the war concession drops, by type, at half the stakes' scale
+    (#1893)."""
+
+    def setUp(self):
+        self.values = strip_comments(read(VALUES))
+        self.triggers = strip_comments(read(TRIGGERS))
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+
+    def forfeit(self):
+        return "\n".join(block(self.values, name) for name in FORFEIT_VALUES)
+
+    def test_part_is_stored_shown_and_cleared(self):
+        self.assertIn("C = nd_yp_forfeit V = nd_yp_forfeit_value", block(self.crisis, "nd_crisis_refresh_figures"))
+        self.assertIn("remove_variable = nd_yp_forfeit", block(self.crisis, "nd_crisis_clear_figures"))
+        self.assertIn("C = nd_yp_forfeit KEY = nd_yp_forfeit_line",
+                      block(strip_comments(read(SGUIS)), "nd_crisis_pressure_breakdown_sgui"))
+        self.assertIn("Var('nd_yp_forfeit')", loc_value("nd_yp_forfeit_line"))
+
+    # Every goal the concession can drop is weighed, and nothing else: a type
+    # added to the removal (nd_holds_any_goal_against and the holder ladder,
+    # which TestSuezConcession holds equal) needs its weight here too.
+    def test_weighs_exactly_the_types_the_concession_drops(self):
+        dropped = set(re.findall(r"type = ([a-z_]+) target = \$TARGET\$",
+                                 block(self.triggers, "nd_holds_any_goal_against")))
+        body = self.forfeit()
+        direct = re.findall(r"type = ([a-z_]+) target = scope:nd_forfeit_to", body)
+        via_subject = re.findall(r"nd_holds_goal_against_or_subject = \{ TYPE = ([a-z_]+) TARGET = scope:nd_forfeit_to \}", body)
+        weighed = direct + via_subject
+        self.assertEqual(len(weighed), len(set(weighed)), "a type weighed twice")
+        self.assertEqual(set(weighed), dropped)
+        # A goal to free or take a subject targets the subject: those two are
+        # read on the other side's subjects too.
+        self.assertEqual(sorted(via_subject), ["liberate_subject", "transfer_subject"])
+
+    def test_subject_read_walks_the_other_sides_direct_subjects(self):
+        trig = squash(block(self.triggers, "nd_holds_goal_against_or_subject"))
+        self.assertIn("war_participant_has_war_goal_of_type_against = { type = $TYPE$ target = $TARGET$ }", trig)
+        self.assertIn("$TARGET$ = { any_direct_subject = { save_temporary_scope_as = nd_goal_subject_t"
+                      " scope:nd_goal_holder_t = { war_participant_has_war_goal_of_type_against ="
+                      " { type = $TYPE$ target = scope:nd_goal_subject_t } } } }", trig)
+
+    # The concession drops the yielder's own goals, not its allies': a
+    # side-wide read would weigh goals it keeps.
+    def test_reads_the_targets_own_war_goals(self):
+        body = self.forfeit() + block(self.triggers, "nd_holds_goal_against_or_subject")
+        self.assertNotIn("war_side_has_war_goal_of_type_against", body)
+        self.assertNotIn("play_side_has_war_goal_of_type_against", body)
+        self.assertNotIn("nd_side_holds_goal_against", body)
+
+    def test_scale_is_half_the_stakes(self):
+        main = block(self.values, "nd_yp_forfeit_value")
+        self.assertIn("add = -15", main)
+        self.assertIn("add = -10", main)
+        self.assertEqual(set(re.findall(r"add = (-\d+)", block(self.values, "nd_yp_forfeit_territory_value"))), {"-5"})
+        self.assertEqual(set(re.findall(r"add = (-\d+)", block(self.values, "nd_yp_forfeit_minor_value"))), {"-2"})
+        # Capped at −20, then halved while losing the war: the cap first.
+        cap = main.index("min = -20")
+        self.assertLess(cap, main.index("nd_is_losing_war_to = { ENEMY = scope:nd_forfeit_to }"))
+        self.assertLess(cap, main.index("multiply = 0.5"))
+
+    # Only the war concession drops goals: dispute 2, or 3 against a protégé
+    # it fights. The gate asks before any dispute is stored.
+    def test_only_where_the_yield_is_the_war_concession(self):
+        main = squash(block(self.values, "nd_yp_forfeit_value"))
+        self.assertIn("scope:nd_issuer = { OR = { NOT = { has_variable = nd_crisis_dispute }"
+                      " var:nd_crisis_dispute ?= 2 var:nd_crisis_dispute ?= 3 } }", main)
+
+    # The same country the yield names (nd_crisis_act_yield's
+    # nd_crisis_other_side): the protégé while one is recorded, else the
+    # issuer. A dispute 3 that turned into a war keeps its protégé.
+    def test_figures_save_the_country_the_yield_names(self):
+        refresh = squash(block(self.crisis, "nd_crisis_refresh_figures"))
+        self.assertIn("if = { limit = { has_variable = nd_crisis_beneficiary exists = var:nd_crisis_beneficiary }"
+                      " var:nd_crisis_beneficiary = { save_scope_as = nd_forfeit_to } }"
+                      " else = { save_scope_as = nd_forfeit_to }", refresh)
+        self.assertLess(refresh.index("save_scope_as = nd_forfeit_to"), refresh.index("C = nd_yp_forfeit"))
+        yield_ = squash(block(self.crisis, "nd_crisis_act_yield"))
+        self.assertIn("if = { limit = { has_variable = nd_crisis_beneficiary }"
+                      " var:nd_crisis_beneficiary ?= { save_scope_as = nd_crisis_other_side } }"
+                      " else = { save_scope_as = nd_crisis_other_side }", yield_)
+
+    def test_gate_saves_the_issuer_as_the_other_side(self):
+        self.assertIn("save_temporary_scope_as = nd_forfeit_to", block(self.triggers, "nd_ai_stakes_block"))
+
+    def test_opening_preview_names_it_in_a_war(self):
+        preview = squash(block(self.crisis, "nd_crisis_preview"))
+        self.assertIn("$TARGET$ = { has_war_with = scope:nd_pv_self"
+                      " nd_holds_any_goal_against = { TARGET = scope:nd_pv_self } } } custom_tooltip = nd_tt_open_f_forfeit",
+                      preview)
+
+
+class TestStakesSubjectGoals(unittest.TestCase):
+    """A goal to free or take a subject targets the subject, not its overlord
+    (targets_enemy_subject; a war's in game, 2026-11-18), so the stakes read
+    those two types on the target's direct subjects (#1895)."""
+
+    def setUp(self):
+        self.values = strip_comments(read(VALUES))
+        self.triggers = strip_comments(read(TRIGGERS))
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+
+    def test_read_on_the_targets_subjects_not_on_the_target(self):
+        territory = block(self.values, "nd_yp_stakes_territory_value")
+        for t in ("liberate_subject", "transfer_subject"):
+            self.assertNotIn(f"nd_side_holds_goal_against = {{ TYPE = {t} TARGET = scope:nd_target }}", territory)
+            self.assertIn(f"scope:nd_stakes_demander = {{ nd_side_holds_goal_on_subject_of ="
+                          f" {{ TYPE = {t} TARGET = scope:nd_target }} }}", territory)
+
+    # Side-wide, in a play or a war, as every other stakes read.
+    def test_helper_walks_direct_subjects_side_wide(self):
+        helper = squash(block(self.triggers, "nd_side_holds_goal_on_subject_of"))
+        self.assertEqual(helper, "save_temporary_scope_as = nd_sgs_side_t $TARGET$ = { any_direct_subject = {"
+                                 " save_temporary_scope_as = nd_sgs_subject_t scope:nd_sgs_side_t ="
+                                 " { nd_side_holds_goal_against = { TYPE = $TYPE$ TARGET = scope:nd_sgs_subject_t } } } }")
+
+    # The play's reading is unverified: a once-a-game line says which.
+    def test_play_self_check(self):
+        refresh = squash(block(self.crisis, "nd_crisis_refresh_figures"))
+        start = refresh.index("var:nd_crisis_dispute ?= 1 NOT = { has_global_variable = nd_play_subject_goal_check_done }")
+        check = refresh[start:refresh.index("save_scope_as = nd_forfeit_to")]
+        self.assertIn("scope:nd_target = { is_subject = no }", check)
+        marker = check.index("set_global_variable = nd_play_subject_goal_check_done")
+        self.assertLess(marker, check.index("TE_SELF_CHECK BROKEN nd_play_subject_goal"))
+        self.assertLess(marker, check.index("TE_SELF_CHECK OK nd_play_subject_goal"))
+        # BROKEN on any reading against the target; OK only otherwise.
+        self.assertLess(check.index("limit = { nd_play_subject_goal_on_overlord = yes }"),
+                        check.index("TE_SELF_CHECK BROKEN"))
+        for name in ("nd_play_subject_goal_on_overlord", "nd_play_subject_goal_on_subject"):
+            body = block(self.triggers, name)
+            self.assertNotIn("war_side_has_war_goal_of_type_against", body)
+            self.assertNotIn("nd_side_holds_goal_against", body)
+            self.assertEqual(body.count("play_side_has_war_goal_of_type_against"), 2, name)
 
 
 class TestPeacetimeStrikeDispute(unittest.TestCase):
@@ -864,7 +1099,9 @@ class TestPeacetimeStrikeDispute(unittest.TestCase):
 
     def test_reparations_concession(self):
         body = block(self.crisis, "nd_crisis_concede_reparations")
-        for needle in ("nd_loose_compensation_value", "add_treasury", "name = nd_loose_inspected value = 1 days = 7300",
+        # The sum goes under a Reparations treaty (#1457), paid directly if not.
+        for needle in ("nd_loose_compensation_value", "te_pay_reparations_by_treaty",
+                       "name = nd_loose_inspected value = 1 days = 7300",
                        "name = nd_loose_inspections", "remove_variable = nd_peacetime_struck_by"):
             self.assertIn(needle, body)
         self.assertNotIn("nd_loose_answer", body)
@@ -954,8 +1191,12 @@ class TestVictimWeighsTheClaim(unittest.TestCase):
 
     def test_belief_value_terms(self):
         body = block(self.values, "nd_claim_belief_value")
-        for needle in ("value = 40", "divide = 4", "add = 20", "subtract = 20", "multiply = 30", "min = 5", "max = 90"):
+        for needle in ("value = nd_claim_belief_base", "divide = 4", "add = nd_claim_belief_single_warhead",
+                       "subtract = nd_claim_belief_acute", "multiply = nd_claim_belief_per_lie", "min = 5", "max = 90"):
             self.assertIn(needle, body)
+        for name, figure in (("nd_claim_belief_base", 40), ("nd_claim_belief_single_warhead", 20),
+                             ("nd_claim_belief_acute", 20), ("nd_claim_belief_per_lie", 30)):
+            self.assertRegex(self.values, rf"(?m)^{name} = {figure}$", name)
 
     def test_accept_option_gated_on_a_claim(self):
         accept = option_body(self.events, "nuclear_weapon_events.1.k")
@@ -1082,7 +1323,16 @@ class TestFinalReviewFixesPhase2(unittest.TestCase):
         concede = block(self.crisis, "nd_crisis_concede_reparations")
         for body in (pay, concede):
             self.assertNotIn("nd_reparations_due", body)
-            self.assertEqual(body.count("nd_loose_compensation_value"), 2)
+        # One read, passed to the treaty helper (#1457), which reads it where
+        # it pays and stores it only in its hidden_effect.
+        self.assertEqual(concede.count("nd_loose_compensation_value"), 1)
+        self.assertIn("AMOUNT = nd_loose_compensation_value", concede)
+        # The two payments, and the sum kept on the claimant for the answer
+        # it is sent (nuclear_weapon_events.33): stored in a hidden_effect and
+        # read in that event, never read back in this walked block.
+        self.assertEqual(pay.count("nd_loose_compensation_value"), 3)
+        self.assertIn("name = nd_claim_paid value = nd_loose_compensation_value", pay)
+        self.assertEqual(pay.count("nd_claim_paid"), 1)
         imm = block(block(self.events, "nuclear_weapon_events.27"), "immediate")
         self.assertIn("save_scope_as = nd_loose_payer", imm)
         self.assertIn("save_scope_as = nd_loose_claimant", imm)
@@ -1105,8 +1355,8 @@ class TestFinalReviewFixesPhase2(unittest.TestCase):
         trig = squash(block(block(self.events, "nuclear_weapon_events.27"), "trigger"))
         self.assertIn("scope:nd_claim_victim = { is_country_alive = yes }", trig)
 
-    # The war concession: only wars the two fight against each other, and
-    # only a war leader's concession drops its side's goals.
+    # The war concession: only wars the two fight against each other, and the
+    # yielder drops its own goals there, whether or not it leads its side.
     def test_only_wars_fought_against_each_other(self):
         lim = squash(block(block(block(self.crisis, "nd_crisis_concede_war"), "every_scope_war"), "limit"))
         self.assertIn("AND = { is_on_defending_side = scope:nd_target"
@@ -1114,11 +1364,16 @@ class TestFinalReviewFixesPhase2(unittest.TestCase):
         self.assertIn("AND = { is_on_defending_side = scope:nd_crisis_other_side"
                       " NOT = { is_on_defending_side = scope:nd_target } }", lim)
 
-    def test_only_the_war_leader_drops_its_sides_goals(self):
-        loop = block(block(self.crisis, "nd_crisis_concede_war"), "every_scope_war")
+    # Before 2026-11-18 only a war leader's yield dropped goals, meant for its
+    # whole side; the owner ruled that a country gives up only its own, leader
+    # or not, so an ally's yield can't strip its leader's goals, nor a
+    # leader's its allies'.
+    def test_the_yielder_drops_its_own_goals_leader_or_not(self):
+        concede = block(self.crisis, "nd_crisis_concede_war")
+        loop = block(concede, "every_scope_war")
         lim = squash(block(block(loop, "if"), "limit"))
-        self.assertIn("is_warleader = scope:nd_target", lim)
-        self.assertIn("nd_side_holds_any_goal_against = { TARGET = scope:nd_crisis_other_side }", lim)
+        self.assertEqual(lim, "scope:nd_target = { nd_holds_any_goal_against = { TARGET = scope:nd_crisis_other_side } }")
+        self.assertNotIn("is_warleader", concede)
         self.assertNotIn("nd_suez_had_goals", self.crisis)
 
     def test_suez_self_check_a_day_later_naming_the_parties(self):
@@ -1132,6 +1387,22 @@ class TestFinalReviewFixesPhase2(unittest.TestCase):
         self.assertIn("[THIS.GetCountry.GetNameNoFormatting]", broken)
         self.assertIn("[SCOPE.sCountry('nd_suez_check_other').GetNameNoFormatting]", broken)
         self.assertIn("remove_variable = nd_suez_check_other", ev)
+        # What tells a BROKEN's cases apart (2026-11-17): the wars the two
+        # fight on opposite sides, and the other country named from its own
+        # scope, since the saved scope's name printed blank in the verdict
+        # line. Who leads no longer matters (2026-11-18), so no led= count.
+        self.assertIn("a day after remove_war_goal; wars=[THIS.Var('nd_suez_chk_wars').GetValue|0]\"", broken)
+        self.assertNotIn("nd_suez_chk_led", ev)
+        self.assertNotIn("is_warleader", ev)
+        self.assertIn("limit = { nd_holds_any_goal_against = { TARGET = scope:nd_suez_check_other } }", ev)
+        other = squash(block(ev, "scope:nd_suez_check_other"))
+        self.assertIn("type=suez_check_other", other)
+        self.assertIn("[THIS.GetCountry.GetNameNoFormatting]", other)
+        # Re-armed under a new marker: the old one is set in saves that read it.
+        self.assertIn("set_global_variable = nd_suez_self_check_v4_done", concede)
+        self.assertIn("remove_global_variable = nd_suez_self_check_v4_done", ev)
+        for old in ("nd_suez_self_check_done", "nd_suez_self_check_v2_done", "nd_suez_self_check_v3_done"):
+            self.assertNotIn(old, self.crisis + self.crisis_events)
 
     # A crisis their strike ended (outcome 7) leaves a cooldown that must not
     # outlast the grievance it ended over.
@@ -1158,11 +1429,21 @@ class TestFinalReviewFixesPhase2(unittest.TestCase):
         for key in ("nd_tt_yield_reparations", "nd_concession_long_6", "nd_tt_open_over_peacetime_strike"):
             self.assertIn("Custody Inspections", loc_value(key), key)
 
-    def test_war_concession_texts_say_only_a_leader_drops_goals(self):
+    # The yielder drops its own goals, leader or not, and its allies keep
+    # theirs (owner, 2026-11-18): no text may still say only a leader drops
+    # them, or that a leader drops its side's.
+    def test_war_concession_texts_say_the_yielder_drops_its_own_goals(self):
         for key in ("nd_tt_yield_war", "nd_tt_yield_guarantee", "nd_concession_long_2", "nd_concession_long_3",
                     "nd_tt_open_over_war", "nd_tt_open_over_guarantee", "nd_concession_past_they_2",
                     "nd_concession_past_they_3", "nd_concession_past_we_2", "nd_concession_past_we_3"):
-            self.assertRegex(loc_value(key), r"\b(leads?|led)\b", key)
+            text = loc_value(key)
+            self.assertRegex(text, r"\bown\b", key)
+            self.assertNotRegex(text, r"\bif (it|we|they) (leads?|led)\b", key)
+            self.assertNotIn("every country on", text, key)
+        for key in ("nd_tt_yield_war", "nd_tt_yield_guarantee", "nd_concession_long_2", "nd_concession_long_3",
+                    "nd_tt_open_over_war", "nd_tt_open_over_guarantee"):
+            self.assertIn("keep theirs", loc_value(key), key)
+        self.assertNotIn("if it leads its side", loc_value("nd_w_crisis_actions_legend"))
 
     def test_claim_texts_match_the_rules(self):
         self.assertNotIn("a year or two", loc_value("nuclear_weapon_events.1.k.tt"))
@@ -1223,6 +1504,37 @@ class TestSalvo(unittest.TestCase):
         self.assertNotRegex(pick, r"position = [^0]")
         aim = squash(block(self.effects, "nd_salvo_aim_here"))
         self.assertIn("save_scope_as = target_state set_variable = nd_salvo_target", aim)
+
+    def test_leadership_takes_the_capital_and_the_command_sites_by_turns(self):
+        # Owner, 2026-11-19: the capital takes the first warhead and every
+        # second one after it; the others go one each to the command's other
+        # sites, military targets first, and to the capital once none is left.
+        pick = squash(block(self.effects, "nd_salvo_pick_target"))
+        lead = pick[pick.index("var:nd_salvo_mission = 3"):pick.index("var:nd_salvo_mission = 2")]
+        self.assertIn("limit = { scope:nd_salvo_attacker = { has_variable = nd_salvo_lead_alt } }"
+                      " scope:nd_salvo_attacker = { remove_variable = nd_salvo_lead_alt }"
+                      " nd_salvo_pick_command_site = yes }"
+                      " else = { scope:nd_salvo_attacker = { set_variable = nd_salvo_lead_alt }"
+                      " capital = { nd_salvo_aim_here = yes } }", lead)
+        site = block(self.effects, "nd_salvo_pick_command_site")
+        branches = [squash(b) for b in re.split(r"\n\t(?:else_if|else) = \{", site)]
+        self.assertEqual(len(branches), 4)
+        for branch in branches[:3]:
+            self.assertEqual(branch.count("is_capital = no"), 2, branch)
+            self.assertEqual(branch.count("NOT = { has_variable = nd_salvo_target }"), 2, branch)
+            self.assertEqual(branch.count("nd_state_in_reach_of = { COUNTRY = scope:nd_salvo_attacker }"), 2, branch)
+            self.assertIn("order_by = nuclear_strike_target_score position = 0 nd_salvo_aim_here = yes", branch)
+        self.assertIn("nd_state_has_military_target = yes", branches[0])
+        self.assertIn("region ?= scope:nd_salvo_cap_region", branches[1])
+        self.assertIn("capital = { nd_salvo_aim_here = yes }", branches[3])
+
+    def test_every_leadership_hit_counts_toward_the_decapitation(self):
+        hit = squash(block(self.effects, "nd_salvo_hit"))
+        self.assertIn("OR = { scope:target_state = { is_capital = yes } var:nd_salvo_mission = 3 } }"
+                      " change_variable = { name = nd_salvo_command_landed add = 1 }", hit)
+        chance = squash(block(read(VALUES), "nd_decapitation_chance_value"))
+        self.assertIn("var:nd_salvo_command_landed > 0", chance)
+        self.assertNotIn("capital_landed", read(EFFECTS) + read(VALUES))
 
     def test_targets_fall_back_once_all_are_marked(self):
         # Last, once every state in reach is marked: the best state in reach
@@ -1320,9 +1632,9 @@ class TestSalvo(unittest.TestCase):
 
     def test_salvo_working_variables_cleared(self):
         clear = block(self.effects, "nd_salvo_clear")
-        for name in ("nd_salvo_landed", "nd_salvo_forces_landed", "nd_salvo_capital_landed", "nd_salvo_fired",
+        for name in ("nd_salvo_landed", "nd_salvo_forces_landed", "nd_salvo_command_landed", "nd_salvo_fired",
                      "nd_salvo_victim_r", "nd_salvo_sqrt", "nd_salvo_world_rel", "nd_salvo_destroyed",
-                     "nd_salvo_count"):
+                     "nd_salvo_count", "nd_salvo_lead_alt"):
             self.assertIn(f"remove_variable = {name}", clear, name)
         # The panel's settings stay for the next salvo.
         for name in ("nd_salvo_mission", "nd_salvo_size"):
@@ -1399,14 +1711,14 @@ class TestSalvo(unittest.TestCase):
         # at; it is put back on one a warhead hit, the capital first.
         hit = squash(block(self.effects, "nd_salvo_hit"))
         self.assertIn("scope:target_state = { save_scope_as = nd_salvo_hit_state }", hit)
-        self.assertIn("is_capital = yes } } change_variable = { name = nd_salvo_capital_landed add = 1 }"
-                      " scope:target_state = { save_scope_as = nd_salvo_hit_capital }", hit)
+        self.assertIn("is_capital = yes } } scope:target_state = { save_scope_as = nd_salvo_hit_capital }", hit)
         restore = self.after.index("save_scope_as = target_state")
         self.assertLess(self.after.index("scope:nd_salvo_hit_capital"), restore)
         self.assertLess(restore, self.after.index("nd_salvo_record_use = yes"))
 
     def test_each_salvo_effect_defined_once(self):
-        for name in ("nd_order_salvo", "nd_salvo_warhead", "nd_salvo_pick_target", "nd_salvo_hit", "nd_salvo_aftermath",
+        for name in ("nd_order_salvo", "nd_salvo_warhead", "nd_salvo_pick_target", "nd_salvo_pick_command_site",
+                     "nd_salvo_hit", "nd_salvo_aftermath",
                      "nd_salvo_record_use", "nd_salvo_counterforce", "nd_salvo_fire_first", "nd_salvo_decapitation",
                      "nd_salvo_clear", "nd_salvo_targets_self_check"):
             self.assertEqual(len(re.findall(rf"(?m)^{name} = \{{", read(EFFECTS))), 1, name)
@@ -1676,7 +1988,10 @@ class TestOutcomeNotice(unittest.TestCase):
         self.assertRegex(body, r"NOT = \{ var:nd_crisis_outcome_now = 9 \}(\s*\})+\s*nd_crisis_record_pending = yes")
 
     def test_outcome_option_guards_pending(self):
-        body = option_body(self.events, "nuclear_crisis.6.a")
+        # Both options settle through one effect (the stand-down, 2026-11-19).
+        notice = block(self.events, "nuclear_crisis.6")
+        self.assertEqual(notice.count("nd_crisis_notice_settle = yes"), 2)
+        body = block(self.effects, "nd_crisis_notice_settle")
         self.assertIn("has_variable = nd_crisis_pending_outcome", body)
         self.assertIn("var:nd_crisis_pending_opponent ?= scope:nd_outcome_other", body)
         self.assertIn("nd_crisis_apply_outcome_side = yes", body)
@@ -1699,6 +2014,46 @@ def revalidate_branch(effects, dispute):
         if re.search(r"var:nd_crisis_dispute = " + str(dispute) + r"\b", block(branch, "limit")):
             return branch
     raise AssertionError(f"no revalidation branch for dispute {dispute}")
+
+
+class TestCrisisFreezeSurvivesRevolution(unittest.TestCase):
+    """#758: a revolution's winner inherits variables but no modifiers, so the
+    conceded programme freeze carries a countdown the winner inherits, and a
+    monthly pass re-adds the modifier from it."""
+
+    def setUp(self):
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+        self.effects = strip_comments(read(EFFECTS))
+        self.monthly = block(self.effects, "nd_crisis_freeze_monthly")
+
+    def test_yield_removes_the_old_copy_then_adds_and_sets_the_countdown(self):
+        concession = self.crisis[self.crisis.index("var:nd_crisis_dispute = 4 }"):]
+        concession = block(concession, "scope:nd_target")
+        remove = concession.index("remove_modifier = nd_crisis_programme_freeze")
+        add = concession.index("name = nd_crisis_programme_freeze")
+        self.assertLess(remove, add)
+        self.assertIn("years = 10", concession)
+        self.assertIn("name = nd_crisis_freeze_months value = nd_crisis_freeze_months_value", concession)
+        self.assertIn("remove_variable = nd_crisis_freeze_untimed", concession)
+        # 30-day country pulses: 122 outlasts the ten-year modifier by under one.
+        self.assertRegex(read(VALUES), r"(?m)^nd_crisis_freeze_months_value = 122\b")
+
+    def test_monthly_readd_only_where_the_modifier_is_missing(self):
+        running = block(self.monthly, "if")
+        readd = running[running.index("NOT = { has_modifier = nd_crisis_programme_freeze }"):]
+        self.assertIn("add_modifier = { name = nd_crisis_programme_freeze }", readd)
+        self.assertIn("set_variable = nd_crisis_freeze_untimed", readd)
+
+    def test_only_the_untimed_copy_is_removed_at_the_end(self):
+        end = block(self.monthly[self.monthly.index("else = {"):], "else")
+        self.assertIn("remove_variable = nd_crisis_freeze_months", end)
+        untimed = block(end, "if")
+        self.assertIn("has_variable = nd_crisis_freeze_untimed", untimed)
+        self.assertIn("remove_modifier = nd_crisis_programme_freeze", untimed)
+        self.assertEqual(self.monthly.count("remove_modifier = nd_crisis_programme_freeze"), 1)
+
+    def test_runs_for_every_country_monthly(self):
+        self.assertIn("nd_crisis_freeze_monthly = yes", block(self.effects, "nd_country_monthly_cleanup"))
 
 
 class TestNativeCloses(unittest.TestCase):
@@ -1745,6 +2100,7 @@ PREVIEW_PINS = {
     "nd_tt_open_f_cautious": ("nd_yp_temperament_value", "add", 10),
     "nd_tt_open_f_losing": ("nd_yp_war_value", "add", 15),
     "nd_tt_open_f_existence": ("nd_yp_war_value", "subtract", 15),
+    "nd_tt_open_f_forfeit": ("nd_yp_forfeit_value", "min", -20),
     "nd_tt_open_f_alert": ("nd_yp_alert_value", "add", 10),
     "nd_tt_open_backed": ("nd_yp_follow_through_value", "add", 10),
     "nd_tt_open_bluff_existential": ("nd_yp_follow_through_value", "subtract", 25),
@@ -1860,13 +2216,8 @@ class TestEffectiveSurvivability(unittest.TestCase):
 
 
 class TestSurvivorsAgainstRival(unittest.TestCase):
-    """Survivability tops out at 80; survivors are measured against the main
-    rival (2026-10-28 rework spec §3.1, §3.2)."""
-
-    def test_survivability_cap_is_80(self):
-        body = block(strip_comments(read(VALUES)), "nd_survivability_cap")
-        self.assertIn("max = 80", body)
-        self.assertNotIn("max = 95", body)
+    """Survivors are measured against the main rival (2026-10-28 rework spec
+    §3.2). Survivability's target: test_nuclear_survivors.TestSurvivabilityTarget."""
 
     def test_main_rival_cleared_without_attacker(self):
         body = block(strip_comments(read(EFFECTS)), "nd_refresh_main_rival")
@@ -1880,6 +2231,23 @@ class TestSurvivorsAgainstRival(unittest.TestCase):
         self.assertIn("nd_refresh_main_rival = yes", block(effects, "nd_monthly_update"))
         review = block(effects, "nd_ai_review_posture")
         self.assertLess(review.index("nd_refresh_main_rival = yes"), review.index("nd_set_readiness_target_3"))
+
+    def test_main_rival_refreshed_when_its_figures_go_stale(self):
+        # PR 1b review: a readiness step moves the stored strike figures (the
+        # op only set the target), and a save without the capital, or a
+        # capital that changed hands, refreshes within the week.
+        weekly = squash(block(strip_comments(read(EFFECTS)), "nd_weekly_update"))
+        step = weekly[weekly.index("change_variable = { name = nd_readiness_transition add = 1 }"):]
+        step = step[:step.index("nd_refresh_main_rival = yes") + len("nd_refresh_main_rival = yes")]
+        self.assertIn("nd_apply_posture_modifiers = yes nd_refresh_main_rival = yes", step)
+        self.assertIn("if = { limit = { has_variable = nd_main_rival NOT = { has_variable = nd_main_rival_capital } } "
+                      "nd_refresh_main_rival = yes } else_if = { limit = { has_variable = nd_main_rival "
+                      "has_variable = nd_main_rival_capital var:nd_main_rival = { save_temporary_scope_as = nd_mr_stored } "
+                      "var:nd_main_rival_capital = { NOT = { owner = scope:nd_mr_stored } } } nd_refresh_main_rival = yes }",
+                      weekly)
+        # The Survivors row waits for the figures its hover reads.
+        gate = squash(block(strip_comments(read(SGUIS)), "nd_has_main_rival_sgui"))
+        self.assertIn("has_variable = nd_main_rival has_variable = nd_main_rival_capital", gate)
 
     def test_plausible_attacker_shared(self):
         triggers = strip_comments(read(TRIGGERS))
@@ -2014,8 +2382,14 @@ class TestCrisisPanel(unittest.TestCase):
     def test_breakdowns_print_every_stored_part(self):
         pressure = block(self.sguis, "nd_crisis_pressure_breakdown_sgui")
         danger = block(self.sguis, "nd_crisis_danger_breakdown_sgui")
+        # The two parts with figures under them print at +0 while those are set.
+        beside = {"nd_yp_answer": "nd_cs_answer_survivors", "nd_yp_issuer_exposure": "nd_cs_exposure_survivors"}
         for part in PRESSURE_PARTS:
-            self.assertIn(f"nd_crisis_breakdown_line = {{ C = {part} KEY = {BREAKDOWN_KEYS[part]} }}", pressure)
+            if part in beside:
+                self.assertIn(f"nd_crisis_breakdown_part_line = {{ C = {part} KEY = {BREAKDOWN_KEYS[part]} "
+                              f"SUB = {beside[part]} }}", pressure)
+            else:
+                self.assertIn(f"nd_crisis_breakdown_line = {{ C = {part} KEY = {BREAKDOWN_KEYS[part]} }}", pressure)
         for part in DANGER_PARTS:
             self.assertIn(f"nd_crisis_breakdown_line = {{ C = {part} KEY = {BREAKDOWN_KEYS[part]} }}", danger)
 
@@ -2297,7 +2671,7 @@ class TestReviewFixes(unittest.TestCase):
         self.values = strip_comments(read(VALUES))
 
     def test_outcome_option_applies_when_the_opponent_is_gone(self):
-        body = option_body(self.events, "nuclear_crisis.6.a")
+        body = block(self.effects, "nd_crisis_notice_settle")
         self.assertIn("NOT = { exists = scope:nd_outcome_other }", body)
         self.assertIn("NOT = { exists = var:nd_crisis_pending_opponent }", body)
 
@@ -2452,14 +2826,57 @@ class TestManagedFamilies(unittest.TestCase):
             self.assertIn(f"nd_readiness_mod_{r}", mods)
         self.assertIn("nd_upkeep_cost", mods)
 
-    def test_every_family_member_is_removed_by_the_tracker_helpers(self):
-        effects = read(EFFECTS)
-        remove_doc = block(effects, "nd_remove_doctrine_modifier")
-        for d in range(1, 6):
-            self.assertIn(f"remove_modifier = nd_doctrine_mod_{d}", remove_doc)
-        remove_rd = block(effects, "nd_remove_readiness_modifier")
-        for r in (2, 3):
-            self.assertIn(f"remove_modifier = nd_readiness_mod_{r}", remove_rd)
+    def test_every_family_member_is_declared_on_the_entry(self):
+        """Since vanilla 1.15 the entry declares the posture's modifiers
+        (scaling_modifiers_while_active): each member is 1 while a posture is in
+        force and its variable is its number, 0 otherwise."""
+        declared = scaling_declarations(strip_comments(read(JE)))
+        members = [(f"nd_doctrine_mod_{d}", f"var:nd_doctrine = {d}") for d in range(1, 6)]
+        members += [(f"nd_readiness_mod_{r}", f"var:nd_readiness = {r}") for r in (2, 3)]
+        for name, test in members:
+            with self.subTest(modifier=name):
+                self.assertEqual(len(declared.get(name, [])), 1)
+                value = declared[name][0]
+                self.assertRegex(value, r"^value = \{\s*value = 0\s*if = \{")
+                self.assertIn("nd_posture_in_force = yes", value)
+                self.assertIn(test, value)
+                self.assertIn("add = 1", value)
+        # The guard comes first, so neither variable is read before it exists.
+        gate = block(strip_comments(read(TRIGGERS)), "nd_posture_in_force")
+        self.assertIn("nd_is_armed = yes", gate)
+        self.assertIn("nd_is_initialized = yes", gate)
+
+    def test_upkeep_is_declared_from_the_cache(self):
+        value = scaling_declarations(strip_comments(read(JE)))["nd_upkeep_cost"]
+        self.assertEqual(len(value), 1)
+        for needle in ("value = 0", "nd_posture_in_force = yes", "has_variable = nd_upkeep_weekly_cached",
+                       "add = var:nd_upkeep_weekly_cached"):
+            self.assertIn(needle, value[0])
+        # The cache is the panel's figure too, so it stays, rewritten in both
+        # branches; nothing removes it.
+        apply = block(strip_comments(read(EFFECTS)), "nd_apply_posture_modifiers")
+        self.assertIn("nd_posture_in_force = yes", apply)
+        self.assertIn("set_variable = { name = nd_upkeep_weekly_cached value = nd_upkeep_weekly }", apply)
+        self.assertIn("set_variable = { name = nd_upkeep_weekly_cached value = 0 }", apply)
+        self.assertNotIn("je:je_nuclear_program", apply)
+        for path in SCRIPT_FILES + EVENT_FILES:
+            self.assertNotIn("remove_variable = nd_upkeep_weekly_cached", strip_comments(read(path)), path.name)
+
+    def test_an_armed_activation_refreshes_the_cache(self):
+        # The upkeep reads the cache from the entry's first update, so the
+        # immediate refreshes it for an armed country (a custody arrival, an
+        # old save's first activation), after the posture exists.
+        immediate = block(strip_comments(read(JE)), "immediate")
+        self.assertRegex(immediate, r"limit = \{ nd_is_armed = yes \}\s*nd_init_posture = yes\s*"
+                                    r"nd_apply_posture_modifiers = yes")
+
+    def test_the_trackers_and_the_rebuild_are_gone(self):
+        for path in SCRIPT_FILES + EVENT_FILES + (TABOO_EFFECTS, CUSTODY_EFFECTS):
+            text = strip_comments(read(path))
+            for name in ("nd_doctrine_mod_on", "nd_readiness_mod_on", "nd_upkeep_mod_on",
+                         "nd_posture_on_merged_entry", "nd_rebuild_posture_modifiers",
+                         "nd_remove_doctrine_modifier", "nd_remove_readiness_modifier"):
+                self.assertNotIn(name, text, path.name)
 
     def test_posture_wrappers_exist_for_every_value(self):
         effects = read(EFFECTS)
@@ -2477,6 +2894,34 @@ class TestManagedFamilies(unittest.TestCase):
             text = strip_comments(read(path))
             for m in re.finditer(r"nd_set_(doctrine|readiness_target|authority) = \{ [DRA] = \d \}", text):
                 self.fail(f"{path.name}: {m.group(0)} bypasses the wrapper")
+
+
+class TestProgrammeFunding(unittest.TestCase):
+    """The programme's weekly innovation is the entry's declared
+    nuclear_weapon_program_funding (vanilla 1.15), read from the funding
+    variable: the buttons, the pause treaty and lost standing only move it."""
+
+    def test_funding_is_declared_from_the_guarded_cost(self):
+        value = scaling_declarations(strip_comments(read(JE)))["nuclear_weapon_program_funding"]
+        self.assertEqual(value, ["value = { value = nuclear_program_display_weekly_cost }"])
+        values = strip_comments(read(EXTRA_VALUES))
+        self.assertIn("value = nuclear_program_display_funding", block(values, "nuclear_program_display_weekly_cost"))
+        self.assertIn("has_variable = nuclear_weapons_program_funding", block(values, "nuclear_program_display_funding"))
+
+    def test_buttons_move_the_variable_and_keep_their_preview(self):
+        effects = strip_comments(read(WEAPON_EFFECTS))
+        for verb, op in (("increase", "add"), ("decrease", "subtract")):
+            body = block(effects, f"nuclear_program_effect_{verb}_funding")
+            tooltip = block(body, "custom_tooltip")
+            self.assertIn(f'text = "{verb.upper()}_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC"', tooltip)
+            self.assertRegex(tooltip, rf"name = nuclear_weapons_program_funding\s*{op} = 1")
+            self.assertNotIn("je:je_nuclear_program", body)
+            self.assertIn("nuclear_program_refresh_state_effect = yes", body)
+        self.assertNotIn("je:je_nuclear_program", block(effects, "nuclear_program_refresh_state_effect"))
+
+    def test_the_cost_cache_is_gone(self):
+        for path in (WEAPON_EFFECTS, JE, TREATY_ARTICLES, NUCLEAR_DEBUG_EVENTS):
+            self.assertNotIn("nuclear_weapons_program_cost_cached", strip_comments(read(path)), path.name)
 
 
 class TestRecessed(unittest.TestCase):
@@ -2506,7 +2951,8 @@ class TestRecessed(unittest.TestCase):
         self.assertNotRegex(self.crisis, r"var:nd_readiness_target = 1\b")
 
     def test_recessed_has_no_readiness_modifier(self):
-        # nd_readiness_mod_on uses 0 for "none": a level-0 member could never be tracked.
+        # Recessed, like Routine, carries no readiness modifier: only levels 2
+        # and 3 are declared on the entry.
         self.assertNotIn("nd_readiness_mod_0", read(MODIFIERS))
         self.assertNotIn("nd_readiness_mod_0", self.effects)
 
@@ -2587,8 +3033,9 @@ class TestPostureTerms(unittest.TestCase):
         self.assertEqual(self.field("nd_readiness_terms_3", "country_nd_threat_pressure_add"), 10.0)
 
     def test_authority_figures_match_the_script(self):
-        hold = block(self.values, "nd_hold_chance")
-        self.assertRegex(hold, r"nd_authority_launch_on_warning = yes \}\s*subtract = 10")
+        hold = block(self.values, "nd_hold_chance_unclamped")
+        self.assertRegex(hold, r"nd_authority_launch_on_warning = yes \}\s*subtract = nd_hold_launch_on_warning_cut")
+        self.assertRegex(self.values, r"(?m)^nd_hold_launch_on_warning_cut = 10$")
         self.assertEqual(self.field("nd_authority_terms_3", "country_nd_halt_chance_add"), -0.1)
         custody = block(strip_comments(read(CUSTODY_VALUES)), "nd_custody_loss_rate")
         self.assertRegex(custody, r"nd_authority_delegated_or_warning = yes \}\s*add = 0.03")
@@ -2611,6 +3058,252 @@ class TestPostureTerms(unittest.TestCase):
                     + [f"nd_w_authority_choice_{a}_tt" for a in range(1, 5)]):
             for word in ("groups approve", "groups disapprove", "popular with", "officers do not"):
                 self.assertNotIn(word, loc_value(key), key)
+
+
+
+TABOO_VALUES = ROOT / "common/script_values/nuclear_taboo_values.txt"
+LOST_FIGURES = ([("nd_lost_main", "nd_lost_vs_saved")]
+                + [(f"nd_lost_main_auth_{a}", f"nd_lost_vs_saved_at_authority_{a}") for a in range(1, 5)]
+                + [(f"nd_lost_main_ready_{r}", f"nd_lost_vs_saved_at_readiness_{r}") for r in range(4)]
+                + [("nd_lost_main_safeguards_up", "nd_lost_vs_saved_at_safeguards_up")])
+
+
+def custom_loc_body(name):
+    return " ".join(block(strip_comments(read(CUSTOM_LOC)), name).split())
+
+
+class TestPostureFigures(unittest.TestCase):
+    """Posture, hardening, safeguards and the arsenal ceiling show what each
+    choice saves, costs and changes, in figures (2026-11-20 delivery spec
+    §5.3, plan Task 6, D10–D13)."""
+
+    @classmethod
+    def setUpClass(cls):
+        from scripts.analysis.nuclear_incident_rates import Posture, RiskModel
+        cls.Posture = Posture
+        cls.model = RiskModel()
+        cls.values = strip_comments(read(VALUES))
+        cls.mods = strip_comments(read(MODIFIERS))
+
+    def number(self, name, posture):
+        return self.model.number(name, posture)
+
+    def rival_postures(self):
+        P = self.Posture
+        enemy = P(believed_stockpile=30, icbms=True, pgm=True)
+        for readiness in range(4):
+            for authority in range(1, 5):
+                for safeguards in range(4):
+                    yield P(readiness=readiness, authority=authority, safeguards=safeguards, survivability=55,
+                            stockpile=12, enemy=enemy)
+        # A rival that can't reach them all, and one next door.
+        yield P(readiness=2, authority=3, safeguards=1, survivability=30, stockpile=40, enemy=P(believed_stockpile=4))
+        yield P(readiness=1, authority=2, safeguards=0, survivability=70, stockpile=8, based_near=True, enemy=enemy)
+
+    # ---- D10: the strike figures -----------------------------------------------
+
+    def test_the_refresh_stores_each_strike_figure(self):
+        body = block(strip_comments(read(EFFECTS)), "nd_refresh_main_rival")
+        keep, clear = body.rsplit("\n\telse = {", 1)
+        for name, source in LOST_FIGURES:
+            self.assertIn(f"set_variable = {{ name = {name} value = {source} }}", keep, name)
+            self.assertIn(f"remove_variable = {name}", clear, name)
+
+    def test_each_figure_is_the_strike_as_that_choice_would_set_it(self):
+        """The figure under the choice in force is what a full strike destroys
+        now (the stockpile less nd_survivors_vs_saved), and each other choice's
+        is the same figure at that choice."""
+        from dataclasses import replace
+        for p in self.rival_postures():
+            now = self.number("nd_lost_vs_saved", p)
+            self.assertAlmostEqual(now, p.stockpile - self.number("nd_survivors_vs_saved", p), places=6, msg=p)
+            for a in range(1, 5):
+                self.assertAlmostEqual(self.number(f"nd_lost_vs_saved_at_authority_{a}", p),
+                                       self.number("nd_lost_vs_saved", replace(p, authority=a)), places=6, msg=(a, p))
+            for r in range(4):
+                self.assertAlmostEqual(self.number(f"nd_lost_vs_saved_at_readiness_{r}", p),
+                                       self.number("nd_lost_vs_saved", replace(p, readiness=r)), places=6, msg=(r, p))
+            up = replace(p, safeguards=min(p.safeguards + 1, 3))
+            self.assertAlmostEqual(self.number("nd_lost_vs_saved_at_safeguards_up", p),
+                                   self.number("nd_lost_vs_saved", up), places=6, msg=p)
+            for a in (2, 3):
+                self.assertAlmostEqual(self.number(f"nd_launch_credit_at_authority_{a}", p),
+                                       self.number("nd_launch_credit", replace(p, authority=a)), places=6)
+
+    def test_the_authority_choices_print_their_figures(self):
+        for a in range(1, 5):
+            tip = loc_value(f"nd_w_authority_choice_{a}_tt")
+            self.assertLess(tip.index(f"GetCustom('nd_authority_strike_{a}')"),
+                            tip.index(f"GetStaticModifier('nd_authority_terms_{a}')"), a)
+            self.assertEqual(custom_loc_body(f"nd_authority_strike_{a}"),
+                             f"type = country random_valid = no text = {{ trigger = {{ has_variable = nd_lost_main_auth_{a} }} "
+                             f"localization_key = nd_w_authority_strike_{a} }} text = {{ trigger = {{ always = yes }} "
+                             f"localization_key = nuke_line_empty }}")
+            self.assertIn(f"Var('nd_lost_main_auth_{a}')", loc_value(f"nd_w_authority_strike_{a}"))
+        # The halt chance under the two authorities a halt can stop; Central's
+        # our command redundancy (D11).
+        for a in (2, 3):
+            self.assertIn(f"ScriptValue('nd_hold_chance_at_authority_{a}')", loc_value(f"nd_w_authority_choice_{a}_tt"))
+        self.assertIn("ScriptValue('nd_display_redundancy')", loc_value("nd_w_authority_choice_1_tt"))
+        self.assertEqual(" ".join(block(self.values, "nd_display_redundancy").split()), "value = nd_redundancy")
+
+    def test_the_halt_chance_per_authority(self):
+        from dataclasses import replace
+        P = self.Posture
+        for p in (P(authority=1), P(authority=2, safeguards=0, reliability=20), P(authority=3, stage=3, danger=80),
+                  P(authority=4, safeguards=3, reliability=98), P(authority=3, reliability=0, safeguards=0, stage=3)):
+            for a in (2, 3):
+                self.assertEqual(self.number(f"nd_hold_chance_at_authority_{a}", p),
+                                 self.number("nd_hold_chance", replace(p, authority=a)), (a, p))
+
+    def test_the_readiness_rows_print_their_figure(self):
+        for r in range(4):
+            tip = loc_value(f"nd_w_readiness_choice_{r}_tt")
+            self.assertLess(tip.index(f"GetCustom('nd_readiness_strike_{r}')"), tip.index("GetStaticModifier("), r)
+            self.assertIn(f"has_variable = nd_lost_main_ready_{r}", custom_loc_body(f"nd_readiness_strike_{r}"))
+            self.assertIn(f"Var('nd_lost_main_ready_{r}')", loc_value(f"nd_w_readiness_strike_{r}"))
+
+    def test_every_strike_line_says_it_is_the_worlds_view(self):
+        """Each counts our own forces as they are against the rival's estimated
+        arsenal (owner call 14, D8): "about", and the estimate's own hover, not
+        the world's-view one, whose assumptions about the other side's forces
+        these figures don't use (PR 1b review)."""
+        keys = ([f"nd_w_authority_strike_{a}" for a in range(1, 5)] + [f"nd_w_readiness_strike_{r}" for r in range(4)]
+                + ["nd_w_safeguards_strike_up"])
+        estimate = loc_value("nd_tt_worlds_estimate")
+        for word in ("our own forces", "estimate", "counterforce ratio", "more warheads"):
+            self.assertIn(word, estimate, word)
+        self.assertNotIn("[", estimate, "plain text: the nested hover reads no data")
+        for key in keys:
+            text = loc_value(key)
+            self.assertIn("#tooltippable;tooltip:nd_tt_worlds_estimate about#!", text, key)
+            self.assertNotIn("nd_tt_worlds_view", text, key)
+            self.assertIn("Var('nd_main_rival_capital').GetState.GetCountry", text, key)
+            self.assertIn("ScriptValue('nd_display_stockpile')", text, key)
+
+    def test_the_refresh_runs_after_every_posture_op_behind_a_marker(self):
+        effect = block(strip_comments(read(SGUIS)), "nd_posture_sgui")
+        effect = effect[effect.index("effect = {"):]
+        tail = effect[effect.index("scope:op = 79"):]
+        squashed = " ".join(tail.split())
+        self.assertIn("if = { limit = { exists = scope:op scope:op >= 11 scope:op <= 64 } hidden_effect = { "
+                      "set_variable = nd_posture_click if = { limit = { has_variable = nd_posture_click } "
+                      "remove_variable = nd_posture_click nd_refresh_main_rival = yes } } }", squashed)
+        posture_ops = [op for op in gui_ops(read(GUI), "nd_posture_sgui") if op < 70]
+        self.assertTrue(posture_ops)
+        self.assertTrue(all(11 <= op <= 64 for op in posture_ops), posture_ops)
+
+    # ---- D12: hardening ----------------------------------------------------------
+
+    def test_the_half_gap_constants_equal_the_formula(self):
+        import math
+        rate = float(re.search(r"^nd_hardening_rate_per_level = ([\d.]+)", self.values, re.M).group(1))
+        self.assertIn("multiply = nd_hardening_rate_per_level", block(self.values, "nd_survivability_step"))
+        for level, months in ((1, 34), (2, 17), (3, 11)):
+            self.assertEqual(round(math.log(0.5) / math.log(1 - rate * level)), months)
+            self.assertRegex(self.values, rf"(?m)^nd_hardening_half_gap_months_{level} = {months}$")
+
+    def test_the_hardening_step_at_the_next_level(self):
+        from dataclasses import replace
+        P = self.Posture
+        for hardening in range(4):
+            for survivability in (10, 40, 70, 90):
+                p = P(hardening=hardening, survivability=survivability)
+                if hardening < 3:
+                    self.assertAlmostEqual(self.number("nd_survivability_step_at_hardening_up", p),
+                                           self.number("nd_survivability_step", replace(p, hardening=hardening + 1)), places=6)
+                if hardening > 0:
+                    self.assertAlmostEqual(self.number("nd_survivability_step_at_hardening_down", p),
+                                           self.number("nd_survivability_step", replace(p, hardening=hardening - 1)), places=6)
+
+    def test_the_hardening_hovers_print_figures(self):
+        tip = loc_value("nd_w_hardening_tt")
+        self.assertIn("ScriptValue('nd_display_survivability_step')", tip)
+        for level in (1, 2, 3):
+            self.assertIn(f"ScriptValue('nd_hardening_half_gap_months_{level}')", tip)
+        self.assertIn("ScriptValue('nd_survivability_step_at_hardening_up')", loc_value("nd_tt_nd_hardening_add"))
+        self.assertIn("ScriptValue('nd_survivability_step_at_hardening_down')", loc_value("nd_tt_nd_hardening_subtract"))
+
+    # ---- D13: safeguards -----------------------------------------------------------
+
+    def test_the_safeguards_terms_match_the_script(self):
+        terms = block(self.mods, "nd_safeguards_level_terms")
+        reliability = re.search(r"^nd_safeguards_reliability_per_level = (\d+)", self.values, re.M).group(1)
+        halt = re.search(r"^nd_safeguards_halt_per_level = (\d+)", self.values, re.M).group(1)
+        self.assertIn(f"country_nd_reliability_target_add = {reliability}", terms)
+        self.assertIn(f"country_nd_halt_chance_add = {int(halt) / 100:g}", terms)
+        self.assertIn("multiply = nd_safeguards_reliability_per_level", block(self.values, "nd_reliability_target_unclamped"))
+        self.assertIn("multiply = nd_safeguards_halt_per_level", block(self.values, "nd_hold_chance_unclamped"))
+        tip = loc_value("nd_w_safeguards_tt")
+        self.assertIn("GetStaticModifier('nd_safeguards_level_terms').GetDesc", tip)
+        self.assertIn("GetStaticModifier('nd_safeguards_slow_launch').GetDesc", tip)
+        self.assertIn("GetCustom('nd_safeguards_strike_up')", tip)
+        for needle in ("has_variable = nd_lost_main_safeguards_up", "nd_authority_delegated_or_warning = yes",
+                       "nd_display_safeguards < 3"):
+            self.assertIn(needle, custom_loc_body("nd_safeguards_strike_up"))
+        line = loc_value("nd_w_safeguards_strike_up")
+        self.assertIn("Var('nd_lost_main_safeguards_up')", line)
+        self.assertIn("Var('nd_lost_main')", line)
+
+    def test_the_reliability_target_one_level_either_way(self):
+        from dataclasses import replace
+        P = self.Posture
+        for p in (P(safeguards=0), P(safeguards=2, strain=100, punished_skeptic=True, concealed_incident=True), P(safeguards=3)):
+            if p.safeguards < 3:
+                self.assertEqual(self.number("nd_reliability_target_at_safeguards_up", p),
+                                 self.number("nd_reliability_target", replace(p, safeguards=p.safeguards + 1)))
+            if p.safeguards > 0:
+                self.assertEqual(self.number("nd_reliability_target_at_safeguards_down", p),
+                                 self.number("nd_reliability_target", replace(p, safeguards=p.safeguards - 1)))
+        self.assertIn("ScriptValue('nd_reliability_target_at_safeguards_up')", loc_value("nd_tt_nd_safeguards_add"))
+        self.assertIn("ScriptValue('nd_reliability_target_at_safeguards_down')", loc_value("nd_tt_nd_safeguards_subtract"))
+
+    # ---- the arsenal ceiling ----------------------------------------------------
+
+    def test_the_ceiling_next_size_figures(self):
+        """At a size equal to the stockpile, the next-size burden and upkeep are
+        the burden and upkeep in force."""
+        from scripts.analysis.nuclear_incident_rates import RiskModel, parse_script
+        P = self.Posture
+        model = RiskModel()
+        model.values.update({k: v for k, _, v in parse_script(TABOO_VALUES)})
+        model.values["nd_taboo_value"] = "70"     # a global variable the model can't read
+        model.values["gdp"] = "2000000"
+        for stockpile in (1, 7, 30, 50, 80):
+            for readiness in range(4):
+                for direction in ("lowered", "raised"):
+                    model.values[f"nd_taboo_ceiling_{direction}_value"] = str(stockpile)
+                    p = P(stockpile=stockpile, readiness=readiness, safeguards=2, hardening=1, authority=4)
+                    self.assertAlmostEqual(model.number(f"nd_upkeep_weekly_at_ceiling_{direction}", p),
+                                           model.number("nd_upkeep_weekly", p), places=6, msg=(stockpile, readiness))
+                    self.assertEqual(model.number(f"nd_disp_taboo_burden_pct_at_ceiling_{direction}", p),
+                                     model.number("nd_disp_taboo_burden_pct", p), (stockpile, readiness))
+        # A step down that stays above the arsenal takes nothing apart: the
+        # figures are those in force (PR 1b review).
+        for stockpile in (1, 7, 30):
+            for readiness in range(4):
+                model.values["nd_taboo_ceiling_lowered_value"] = str(stockpile + 10)
+                p = P(stockpile=stockpile, readiness=readiness, safeguards=2, hardening=1, authority=4)
+                self.assertAlmostEqual(model.number("nd_upkeep_weekly_at_ceiling_lowered", p),
+                                       model.number("nd_upkeep_weekly", p), places=6, msg=(stockpile, readiness))
+                self.assertEqual(model.number("nd_disp_taboo_burden_pct_at_ceiling_lowered", p),
+                                 model.number("nd_disp_taboo_burden_pct", p), (stockpile, readiness))
+        self.assertIn("ScriptValue('nd_taboo_arsenal_at_ceiling_lowered')", loc_value("nd_taboo_tt_ceiling_lower"))
+        for direction, key in (("lowered", "nd_taboo_tt_ceiling_lower"), ("raised", "nd_taboo_tt_ceiling_raise")):
+            text = loc_value(key)
+            for name in (f"nd_disp_taboo_burden_pct_at_ceiling_{direction}", "nd_disp_taboo_burden_pct",
+                         f"nd_upkeep_weekly_at_ceiling_{direction}", "nd_display_upkeep_weekly"):
+                self.assertIn(f"ScriptValue('{name}')", text, (key, name))
+
+    # ---- in figures, not words ----------------------------------------------------
+
+    def test_each_hover_says_it_in_figures(self):
+        for key in ("nd_w_hardening_tt", "nd_w_safeguards_tt", "nd_tt_nd_hardening_add", "nd_tt_nd_hardening_subtract",
+                    "nd_tt_nd_safeguards_add", "nd_tt_nd_safeguards_subtract"):
+            text = loc_value(key)
+            for vague in ("climb faster", "climbs faster", "over the coming months", "grows more slowly",
+                          "improves", "declines"):
+                self.assertNotIn(vague, text, (key, vague))
 
 
 class TestLaunchGate(unittest.TestCase):
@@ -3233,6 +3926,34 @@ class TestCustody(unittest.TestCase):
         self.assertIn("default_option = yes", option_body(self.ev, "nuclear_custody.1.a"))
         self.assertIn("nd_cw_roll_split = yes", block(self.ev, "nuclear_custody.1"))
 
+    def test_a_second_outbreak_rolls_its_own_split(self):
+        # Two uprisings in one tick open two of these events, which roll into
+        # the same variables, and the first answer clears them: the second
+        # "pull back" read nothing (Russian Republic, 2026-11-07). The roll
+        # names its rebels, and an answer whose roll is another's rolls again.
+        roll = block(self.ce, "nd_cw_roll_split")
+        self.assertIn("set_variable = { name = nd_cw_roll_rebel value = scope:nd_cw_rebel }", " ".join(roll.split()))
+        apply = " ".join(block(self.ce, "nd_cw_apply_split").split())
+        reroll = "if = { limit = { NOT = { var:nd_cw_roll_rebel ?= scope:nd_cw_rebel } } nd_cw_roll_split = yes }"
+        # Behind a click-only marker, in a hidden_effect: the option's tooltip
+        # walk tests every limit and writes nothing, so unfenced it would read
+        # the roll it never set.
+        fenced = ("hidden_effect = { set_variable = nd_cw_roll_click if = { limit = { has_variable = nd_cw_roll_click }"
+                  " remove_variable = nd_cw_roll_click " + reroll + " } }")
+        self.assertIn(fenced, apply)
+        self.assertLess(apply.index(fenced), apply.index("var:nd_cw_$MODE$_seized >"))
+        # And the split's own reads test the variable first, for that walk.
+        for read in ("var:nd_cw_$MODE$_seized > nd_stockpile", "var:nd_cw_$MODE$_seized > 0"):
+            self.assertIn("has_variable = nd_cw_$MODE$_seized " + read, apply, read)
+        self.assertIn("remove_variable = nd_cw_roll_rebel", block(self.ce, "nd_cw_clear_roll"))
+        # The AI's weights read the roll only where it is set.
+        for option in ("nuclear_custody.1.a", "nuclear_custody.1.b"):
+            weights = block(option_body(self.ev, option), "ai_chance")
+            reads = re.findall(r"trigger = \{[^{}]*var:nd_cw_hold_taken[^{}]*\}", weights)
+            self.assertTrue(reads, option)
+            for read in reads:
+                self.assertIn("has_variable = nd_cw_hold_taken", read, option)
+
 
 class TestCustodyLosingAndWatching(unittest.TestCase):
     """Step 3's rest (spec docs/superpowers/archive/specs/2026-09-26-nuclear-loose-
@@ -3281,7 +4002,7 @@ class TestCustodyLosingAndWatching(unittest.TestCase):
         self.assertIn("nd_cw_notify_world = yes", start)
         notify = block(self.ce, "nd_cw_notify_world")
         self.assertIn("nd_cw_would_watch = {", notify)
-        self.assertIn("id = nuclear_custody.6 days = 7", notify)
+        self.assertIn("id = nuclear_custody.13 days = 7", notify)  # the relay that opens .6 (#1596)
         # Stored on the observer for the delayed event, not passed as scopes.
         self.assertIn("name = nd_cwr_origin", notify)
         self.assertIn("name = nd_cwr_rebel", notify)
@@ -3326,7 +4047,7 @@ class TestBudapestPath(unittest.TestCase):
 
     def test_the_first_to_press_schedules_one_offer(self):
         press = block(self.ce, "nd_bp_press")
-        self.assertIn("id = nuclear_custody.11 days = 30", press)
+        self.assertIn("id = nuclear_custody.14 days = 30", press)  # the relay that opens .11 (#1596)
         self.assertIn("add_to_variable_list = { name = nd_bp_guarantors target = ROOT }", press)
         self.assertIn("nd_bp_press = yes", option_body(self.ev, "nuclear_custody.10.a"))
 
@@ -3457,6 +4178,14 @@ class TestLooseWarheads(unittest.TestCase):
                      "NOT = { has_global_variable = nd_loose_plot_cooldown }"):
             self.assertIn(gate, possible)
 
+    def test_the_plot_shares_the_terror_attacks_movement_gate(self):
+        # Activism runs 0 to 1; the owner set both gates at 0.5, vanilla's
+        # protesting threshold, on 2026-11-15 (#1829). They move together.
+        gate = r"any_political_movement = \{ political_movement_radicalism >= ([\d.]+) \}"
+        attack = block(strip_comments(read(SOCIAL_TENSIONS_EVENTS)), "social_tensions_events.1")
+        self.assertEqual(re.findall(gate, attack), ["0.5"])
+        self.assertEqual(re.findall(gate, block(self.lt, "nd_loose_plot_possible")), ["0.5"])
+
     def test_cooldown_only_once_a_device_exists(self):
         self.assertNotIn("nd_loose_plot_cooldown", block(self.le, "nd_loose_plot"))
         self.assertIn("name = nd_loose_plot_cooldown", block(self.le, "nd_loose_surface"))
@@ -3567,7 +4296,8 @@ class TestLooseRecovery(unittest.TestCase):
         self.assertIn("nd_loose_monthly = yes", block(strip_comments(read(EFFECTS)), "nd_country_monthly_cleanup"))
 
     def test_un_convention_secures_custody_and_searches(self):
-        self.assertIn("has_modifier = un_physical_protection_modifier", block(self.ct, "nd_custody_is_secured"))
+        # The ratification is the mirror the entry declares the modifier from (#1404).
+        self.assertIn("has_variable = un_physical_protection_modifier_on", block(self.ct, "nd_custody_is_secured"))
         monthly = block(self.le, "nd_loose_monthly")
         self.assertIn("chance = nd_loose_convention_chance", monthly)
         self.assertIn("nd_loose_recover_from_line = { HOW = 4 }", monthly)
@@ -3693,6 +4423,16 @@ class TestProliferationAlertAnswers(unittest.TestCase):
         self.t = strip_comments(read(TRIGGERS))
         self.nt = strip_comments(read(NUKE_TRIGGERS))
 
+    def test_one_untriggered_default(self):
+        # #806: C (a programme country's "stay the course") and D both held
+        # default_option, and nothing says which of two valid defaults the
+        # engine takes. D, open to everyone, is now the only one.
+        event = block(self.ev, "nuclear_weapon_events.18")
+        self.assertEqual(event.count("default_option = yes"), 1)
+        d = option_body(self.ev, "nuclear_weapon_events.18.opt_d")
+        self.assertIn("default_option = yes", d)
+        self.assertNotRegex(d, r"(?m)^\t\ttrigger = \{")
+
     def test_accommodation_pays_with_the_opponents(self):
         e = option_body(self.ev, "nuclear_weapon_events.18.opt_e")
         self.assertIn("value = 25", e)
@@ -3760,7 +4500,7 @@ class TestProliferationAlertAnswers(unittest.TestCase):
         for line in ("un_tier_is_supranational = yes",
                      "has_modifier = un_member_modifier",
                      "un_propose_npt_in_force = yes",
-                     "NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }",
+                     "NOT = { has_variable = un_nonproliferation_modifier_on }",
                      "un_regime_npt_threshold = yes",
                      "has_variable = un_npt_built_outside"):
             self.assertIn(line, body)
@@ -3772,6 +4512,268 @@ class TestProliferationAlertAnswers(unittest.TestCase):
         first = first[first.index("name = nuclear_weapons_program_first_nuke_done"):]
         first = first[:first.index("world_first_nuclear_weapon")]
         self.assertIn("set_variable = un_npt_built_outside", first)
+
+
+class TestCrisisWalkFences(unittest.TestCase):
+    """An option's tooltip walks nd_crisis_open and nd_crisis_close without running them. A scope saved on the
+    effect's first line is no fence: nd_crisis_close's let the walk of nuclear_crisis.2's Let It Go option log
+    6,725 error.log lines in two seconds (2026-11-06). A click-only variable marker holds."""
+
+    def setUp(self):
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+
+    def test_open_and_close_fenced_by_a_click_marker(self):
+        for name, marker in (("nd_crisis_open", "nd_crisis_open_click"), ("nd_crisis_close", "nd_crisis_close_click")):
+            body = block(self.crisis, name)
+            with self.subTest(effect=name):
+                self.assertRegex(body, rf"set_variable = {marker}\s*if = \{{\s*limit = \{{ has_variable = {marker} \}}"
+                                       rf"\s*remove_variable = {marker}\s")
+                self.assertEqual(body.count(f"set_variable = {marker}"), 1)
+                self.assertEqual(body.count(f"remove_variable = {marker}"), 1)
+
+    def test_close_marker_wraps_the_whole_body(self):
+        body = block(self.crisis, "nd_crisis_close")
+        start = body.index("remove_variable = nd_crisis_close_click")
+        for line in ("nd_log_crisis_acute_once = yes", "nd_crisis_flush_pending = yes",
+                     "set_variable = { name = nd_crisis_outcome_now value = $OUTCOME$ }", "nd_world_crises_refresh = yes"):
+            self.assertGreater(body.index(line), start, line)
+
+    def test_no_saved_scope_fence_is_left(self):
+        for old in ("nd_crisis_opening", "nd_crisis_closing"):
+            self.assertNotIn(old, self.crisis)
+
+
+class TestCrisisDecisionFigures(unittest.TestCase):
+    """The figures a crisis decision rests on (2026-11-20 delivery spec §5.3,
+    plan D16): the survivors behind the two pressure parts that count them,
+    Go public's danger and stage, and the opening preview's danger."""
+
+    def setUp(self):
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+        self.values = strip_comments(read(VALUES))
+        self.sguis = strip_comments(read(SGUIS))
+
+    def test_the_survivors_are_stored_as_each_side_may_know_them(self):
+        refresh = squash(block(self.crisis, "nd_crisis_refresh_figures"))
+        limit = "limit = { scope:nd_target = { nd_believed_armed = yes } }"
+        i = refresh.index(limit) + len(limit)
+        stored = refresh[i:refresh.index("nd_crisis_classify_follow_through")]
+        t0 = stored.index("scope:nd_target = {")
+        depth, t1 = 0, t0
+        while True:
+            depth += {"{": 1, "}": -1}.get(stored[t1], 0)
+            t1 += 1
+            if depth == 0 and stored[t1 - 1] == "}":
+                break
+        target, issuer = stored[t0:t1], stored[:t0] + stored[t1:]
+        # The target: its own true count, and the issuer's as the world sees it.
+        self.assertIn("set_variable = { name = nd_cs_answer_survivors value = nd_survivors_vs_issuer }", target)
+        # The share the answer part counts, while Central's discount applies.
+        self.assertIn("if = { limit = { nd_yp_answer_discounted = yes } "
+                      "set_variable = { name = nd_cs_answer_counted value = nd_yp_answer_survivors_value } }", target)
+        self.assertIn("limit = { nd_yp_answer_discounted = yes } multiply = 0.75",
+                      squash(block(self.values, "nd_yp_answer_survivors_value")))
+        self.assertIn("set_variable = { name = nd_cs_answer_accuracy value = nd_accuracy_mult_issuer }", target)
+        for var in ("nd_cs_exposure_survivors", "nd_cs_exposure_accuracy"):
+            self.assertIn(f"set_variable = {{ name = {var} value = scope:nd_issuer.var:{var} }}", target)
+        # The issuer: the target's as the world sees them, its own as the
+        # target counts them (what the part reads).
+        self.assertIn("set_variable = { name = nd_cs_answer_survivors value = nd_cs_answer_seen_value }", issuer)
+        self.assertIn("set_variable = { name = nd_cs_exposure_survivors value = nd_seen_survivors_vs_target }", issuer)
+        self.assertIn("set_variable = { name = nd_cs_exposure_accuracy value = nd_accuracy_mult_target }", issuer)
+        self.assertIn("set_variable = { name = nd_cs_answer_accuracy value = scope:nd_target.var:nd_cs_answer_accuracy }",
+                      issuer)
+        self.assertEqual(squash(block(self.values, "nd_cs_answer_seen_value")),
+                         "value = 0 scope:nd_target = { add = nd_seen_survivors_vs_issuer }")
+        # The part reads the same figure the issuer's row prints.
+        self.assertIn("scope:nd_issuer = { add = nd_seen_survivors_vs_target }",
+                      squash(block(self.values, "nd_yp_issuer_exposure_value")))
+        # Dropped once the target is unarmed, and with the crisis's figures.
+        self.assertIn("else = { nd_crisis_clear_survivors = yes scope:nd_target = { nd_crisis_clear_survivors = yes } }",
+                      stored)
+        self.assertIn("nd_crisis_clear_survivors = yes", squash(block(self.crisis, "nd_crisis_clear_figures")))
+        clear = squash(block(self.crisis, "nd_crisis_clear_survivors"))
+        for var in ("nd_cs_answer_survivors", "nd_cs_answer_counted", "nd_cs_exposure_survivors",
+                    "nd_cs_answer_accuracy", "nd_cs_exposure_accuracy"):
+            self.assertIn(f"limit = {{ has_variable = {var} }} remove_variable = {var}", clear, var)
+
+    def test_the_seen_survivors_against_the_issuer(self):
+        seen = squash(block(self.values, "nd_seen_survivors_vs_issuer"))
+        self.assertEqual(seen, squash(block(self.values, "nd_seen_survivors_vs_target")).replace("_target", "_issuer"))
+        exposed = squash(block(self.values, "nd_seen_exposed_warheads_vs_issuer"))
+        self.assertEqual(exposed,
+                         squash(block(self.values, "nd_seen_exposed_warheads_vs_target")).replace("_target", "_issuer"))
+
+    def test_the_breakdown_prints_them_beside_their_parts(self):
+        effect = squash(block(block(self.sguis, "nd_crisis_pressure_breakdown_sgui"), "effect"))
+        # A part with figures under it prints, at +0 if need be, while its
+        # first figure is set, so no figure sits under the line above.
+        answer = ("nd_crisis_breakdown_part_line = { C = nd_yp_answer KEY = nd_yp_answer_line "
+                  "SUB = nd_cs_answer_survivors }")
+        exposure = ("nd_crisis_breakdown_part_line = { C = nd_yp_issuer_exposure KEY = nd_yp_issuer_exposure_line "
+                    "SUB = nd_cs_exposure_survivors }")
+        self.assertEqual(squash(block(self.crisis, "nd_crisis_breakdown_part_line")),
+                         "if = { limit = { has_variable = $C$ OR = { NOT = { var:$C$ = 0 } has_variable = $SUB$ } } "
+                         "custom_tooltip_no_bullet = $KEY$ }")
+        # The survivors whenever stored; the accuracy factor only above 1.
+        self.assertIn(answer + " nd_crisis_survivors_line = { C = nd_cs_answer_survivors ABOVE = -1 "
+                      "ISSUER = nd_cs_answer_line_issuer TARGET = nd_cs_answer_line_target } "
+                      "nd_crisis_survivors_line = { C = nd_cs_answer_counted ABOVE = -1 "
+                      "ISSUER = nd_cs_answer_counted_line TARGET = nd_cs_answer_counted_line } "
+                      "nd_crisis_survivors_line = { C = nd_cs_answer_accuracy ABOVE = 1 "
+                      "ISSUER = nd_cs_answer_accuracy_line_issuer TARGET = nd_cs_answer_accuracy_line_target } "
+                      + exposure, effect)
+        self.assertIn(exposure + " nd_crisis_survivors_line = { C = nd_cs_exposure_survivors ABOVE = -1 "
+                      "ISSUER = nd_cs_exposure_line_issuer TARGET = nd_cs_exposure_line_target } "
+                      "nd_crisis_survivors_line = { C = nd_cs_exposure_accuracy ABOVE = 1 "
+                      "ISSUER = nd_cs_exposure_accuracy_line_issuer TARGET = nd_cs_exposure_accuracy_line_target }",
+                      effect)
+        line = squash(block(self.crisis, "nd_crisis_survivors_line"))
+        self.assertEqual(line, "if = { limit = { has_variable = $C$ var:$C$ > $ABOVE$ } "
+                               "if = { limit = { nd_is_crisis_owner = yes } custom_tooltip_no_bullet = $ISSUER$ } "
+                               "else = { custom_tooltip_no_bullet = $TARGET$ } }")
+
+    def test_a_figure_about_the_other_side_says_so(self):
+        # Owner call 14: the world's view carries its qualifier and hover.
+        for key in ("nd_cs_answer_line_issuer", "nd_cs_exposure_line_issuer", "nd_cs_exposure_line_target"):
+            self.assertIn("#tooltippable;tooltip:nd_tt_worlds_view up to#!", loc_value(key), key)
+        # The target's own survivors are its own to know.
+        self.assertNotIn("nd_tt_worlds_view", loc_value("nd_cs_answer_line_target"))
+        for key, var in (("nd_cs_answer_line_issuer", "nd_cs_answer_survivors"),
+                         ("nd_cs_answer_line_target", "nd_cs_answer_survivors"),
+                         ("nd_cs_exposure_line_issuer", "nd_cs_exposure_survivors"),
+                         ("nd_cs_exposure_line_target", "nd_cs_exposure_survivors"),
+                         ("nd_cs_answer_accuracy_line_issuer", "nd_cs_answer_accuracy"),
+                         ("nd_cs_answer_accuracy_line_target", "nd_cs_answer_accuracy"),
+                         ("nd_cs_exposure_accuracy_line_issuer", "nd_cs_exposure_accuracy"),
+                         ("nd_cs_exposure_accuracy_line_target", "nd_cs_exposure_accuracy")):
+            self.assertIn(f"THIS.Var('{var}').GetValue", loc_value(key), key)
+
+    def test_go_public_names_its_danger_and_stage(self):
+        act = squash(block(self.crisis, "nd_crisis_act_go_public"))
+        self.assertIn("if = { limit = { var:nd_cd_dampened ?= 1 } custom_tooltip = nd_tt_go_public_danger_dampened } "
+                      "else = { custom_tooltip = nd_tt_go_public_danger }", act)
+        self.assertIn("multiply = nd_cd_dampened_factor", squash(block(self.values, "nd_crisis_danger_value")))
+        self.assertEqual(squash(block(self.values, "nd_cd_go_public_rise_dampened_value")),
+                         "value = nd_cd_go_public_rise_value multiply = nd_cd_dampened_factor")
+        self.assertIn("ScriptValue('nd_cd_go_public_rise_dampened_value')", loc_value("nd_tt_go_public_danger_dampened"))
+        self.assertIn("ScriptValue('nd_cd_dampened_factor')", loc_value("nd_tt_go_public_danger_dampened"))
+        self.assertIn("if = { limit = { has_variable = nd_crisis_stage var:nd_crisis_stage < 2 } "
+                      "custom_tooltip = nd_tt_go_public_terms } else = { custom_tooltip = nd_tt_go_public_terms_stage }",
+                      act)
+        # The figures are the danger parts' own.
+        self.assertIn("add = nd_cd_public_points", squash(block(self.values, "nd_cd_public_value")))
+        self.assertIn("multiply = nd_cd_stage_points", squash(block(self.values, "nd_cd_stage_value")))
+        self.assertEqual(squash(block(self.values, "nd_cd_go_public_rise_value")),
+                         "value = nd_cd_public_points add = nd_cd_go_public_stage_rise_value")
+        self.assertEqual(squash(block(self.values, "nd_cd_go_public_stage_rise_value")),
+                         "value = 0 if = { limit = { has_variable = nd_crisis_stage var:nd_crisis_stage < 2 } "
+                         "add = { value = 2 subtract = var:nd_crisis_stage multiply = nd_cd_stage_points } }")
+        danger = loc_value("nd_tt_go_public_danger")
+        for value in ("nd_cd_go_public_rise_value", "nd_cd_public_points", "nd_cd_go_public_stage_rise_value"):
+            self.assertIn(f"ScriptValue('{value}')", danger, value)
+        self.assertIn("Confrontation", loc_value("nd_tt_go_public_terms"))
+        self.assertNotIn("Confrontation", loc_value("nd_tt_go_public_terms_stage"))
+
+    def test_the_opening_preview_gives_our_sides_danger(self):
+        """D16's fallback: what reads only our side and the opening's
+        literals, and where the totals appear."""
+        preview = squash(block(self.crisis, "nd_crisis_preview"))
+        self.assertIn("if = { limit = { always = $PUBLIC$ } custom_tooltip = nd_tt_open_danger_public } "
+                      "else = { custom_tooltip = nd_tt_open_danger_private }", preview)
+        common = squash(block(self.values, "nd_cd_ours_at_open_value"))
+        self.assertEqual(common, "value = nd_cd_issuer_readiness_value add = nd_cd_reliability_value "
+                                 "add = nd_own_vulnerability_value")
+        self.assertEqual(squash(block(self.values, "nd_cd_ours_at_open_private_value")),
+                         "value = nd_cd_stage_points add = nd_cd_ours_at_open_value")
+        self.assertEqual(squash(block(self.values, "nd_cd_ours_at_open_public_value")),
+                         "value = nd_cd_stage_points multiply = 2 add = nd_cd_public_points "
+                         "add = nd_cd_ours_at_open_value")
+        # None of them reads the target or a crisis variable.
+        for name in ("nd_cd_ours_at_open_value", "nd_cd_ours_at_open_private_value", "nd_cd_ours_at_open_public_value",
+                     "nd_cd_issuer_readiness_value", "nd_cd_reliability_value", "nd_own_vulnerability_value"):
+            body = squash(block(self.values, name))
+            self.assertNotIn("scope:nd_target", body, name)
+            self.assertNotIn("nd_crisis_", body, name)
+        for key, value in (("nd_tt_open_danger_private", "nd_cd_ours_at_open_private_value"),
+                           ("nd_tt_open_danger_public", "nd_cd_ours_at_open_public_value")):
+            text = loc_value(key)
+            self.assertIn(f"THIS.ScriptValue('{value}')", text, key)
+            self.assertIn("as soon as it opens", text, f"{key}: says when the totals appear")
+
+
+class TestDecisionHovers(unittest.TestCase):
+    """Launch under attack and the disavowal print what they rest on
+    (2026-11-20 delivery spec §5.3), through custom_tooltip lines."""
+
+    def setUp(self):
+        self.option = squash(option_body(strip_comments(read(INCIDENT_EVENTS)), "nuclear_incident.1.c"))
+
+    def test_launch_under_attack(self):
+        effects = self.option[self.option.index("show_as_unavailable"):]
+        # A launch at a country that has already struck us is an answer, at
+        # neither price (nuclear_first_strike's and nd_record_nuclear_use's
+        # own nd_was_struck_by gates).
+        self.assertIn("custom_tooltip = nd_tt_incident_wait_survivors "
+                      "if = { limit = { nd_was_struck_by = { ENEMY = scope:nd_warning_suspect } } "
+                      "custom_tooltip = nd_tt_incident_false_answer } "
+                      "else = { custom_tooltip = nd_tt_incident_false_price "
+                      "if = { limit = { nd_doctrine_nfu = yes } custom_tooltip = nd_tt_incident_false_pledge } }", effects)
+        self.assertIn("limit = { nd_was_struck_by = { ENEMY = scope:target_country } }",
+                      squash(block(strip_comments(read(EXTRA_EFFECTS)), "nuclear_first_strike")))
+        self.assertLess(effects.index("nd_tt_incident_false_price"), effects.index("nd_launch_or_intercept"))
+        wait = loc_value("nd_tt_incident_wait_survivors")
+        self.assertIn("ROOT.GetCountry.MakeScope.Var('nd_survivors_vs_suspect').GetValue", wait)
+        price = loc_value("nd_tt_incident_false_price")
+        for value in ("nd_taboo_infamy_strategic", "nd_taboo_world_relations_strategic"):
+            self.assertIn(f"ScriptValue('{value}')", price, value)
+        # What a first use books (nuclear_first_strike, nd_record_nuclear_use).
+        strike = squash(block(strip_comments(read(EXTRA_EFFECTS)), "nuclear_first_strike"))
+        self.assertIn("change_infamy = nd_taboo_infamy_strategic", strike)
+        self.assertIn("value = nd_taboo_world_relations_strategic", strike)
+        record = squash(block(strip_comments(read(EFFECTS)), "nd_record_nuclear_use"))
+        self.assertIn("nd_doctrine_nfu = yes NOT = { nd_was_struck_by = { ENEMY = $VICTIM$ } } } "
+                      "nd_break_pledge_effects = { CREDIBILITY = 30 INFAMY = 10 }", record)
+        pledge = loc_value("nd_tt_incident_false_pledge")
+        self.assertIn("#R 30#! credibility", pledge)
+        self.assertIn("#R 10#! infamy", pledge)
+        # The figure is stored before the event, where the AI's chance reads it.
+        self.assertIn("set_variable = { name = nd_survivors_vs_suspect value = nd_survivors_vs_saved }",
+                      squash(strip_comments(read(EFFECTS))))
+
+    def test_disavowal(self):
+        values = strip_comments(read(VALUES))
+        belief = squash(block(values, "nd_claim_belief_value"))
+        mine = squash(block(values, "nd_claim_belief_vs_saved"))
+        # One set of terms for the victim's chance and the panel's.
+        for term in ("nd_claim_belief_base", "nd_claim_belief_single_warhead", "nd_claim_belief_acute",
+                     "nd_claim_belief_per_lie"):
+            self.assertIn(term, belief, term)
+            self.assertIn(term, mine, term)
+        self.assertIn("scope:nd_sv_enemy.relations:this", mine)
+        self.assertTrue(belief.endswith("min = 5 max = 90") and mine.endswith("min = 5 max = 90"))
+        refresh = squash(block(strip_comments(read(EFFECTS)), "nd_refresh_main_rival"))
+        self.assertIn("set_variable = { name = nd_claim_belief_main value = nd_claim_belief_vs_saved }", refresh)
+        self.assertIn("remove_variable = nd_claim_belief_main", refresh)
+        hover = loc_value("nd_w_disavow_tt")
+        self.assertIn("[Country.GetCustom('nd_disavow_belief_line')]", hover)
+        for value in ("nd_taboo_infamy_threat", "nd_claim_belief_per_lie"):
+            self.assertIn(f"ScriptValue('{value}')", hover, value)
+        # The price of a lie found out (nuclear_weapon_events.30).
+        exposed = squash(block(strip_comments(read(WEAPON_EVENTS)), "nuclear_weapon_events.30"))
+        self.assertIn("nd_change_credibility = { AMOUNT = -20 }", exposed)
+        self.assertIn("change_infamy = nd_taboo_infamy_threat", exposed)
+        self.assertIn("change_relations = { country = scope:nd_truth_victim value = -50 }", exposed)
+        self.assertIn("#R 20#! credibility", hover)
+        self.assertIn("#R 50#!", hover)
+        line = loc_value("nd_w_disavow_belief")
+        self.assertIn("Country.MakeScope.Var('nd_claim_belief_main').GetValue", line)
+        self.assertIn("Var('nd_main_rival_capital').GetState.GetCountry", line)
+        # The button says it too.
+        sgui = squash(strip_comments(read(SGUIS)))
+        self.assertIn("custom_tooltip = nd_tt_disavow_on if = { limit = { has_variable = nd_claim_belief_main } "
+                      "custom_tooltip = nd_tt_disavow_chance }", sgui)
+        self.assertIn("GetPlayer.MakeScope.Var('nd_claim_belief_main')", loc_value("nd_tt_disavow_chance"))
 
 
 if __name__ == "__main__":

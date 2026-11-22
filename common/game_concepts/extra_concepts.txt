@@ -30,6 +30,8 @@ concept_banking_exchange_rate = {}
 concept_banking_monetary_anchor = {}
 concept_banking_backstops = {}
 concept_banking_monetary_union = {}
+concept_banking_common_currency = {}
+concept_banking_currency_reach = {}
 concept_banking_rate_paid = {}
 concept_banking_credit_standing = {}
 concept_banking_risk_premium = {}
@@ -65,6 +67,8 @@ concept_nuclear_taboo = {}
 concept_nuclear_doctrine = {}
 concept_nuclear_readiness = {}
 concept_launch_authority = {}
+# The warheads a Leadership salvo needs on a capital (nd_redundancy, 2026-11-19).
+concept_command_redundancy = {}
 # How far a country's nuclear word holds (NUC-13, 2026-10-27).
 concept_nuclear_credibility = {}
 # The four ways an interest group can judge the posture (the class word under
@@ -339,3 +343,8 @@ concept_inheritance_concentration = {}
 
 # the census's health-care access (docs/systems/mod_systems/demographics.md § Demographics, Causes of Death)
 concept_health_care_access = {}
+
+# Creditors' Consortium (2026-11-16): the leader's standing guarantee of its
+# members' debts and the rescue on terms a member's default calls
+# (docs/systems/mod_systems/power_blocs.md § "Creditors' Consortium")
+concept_consortium_guarantee = {}

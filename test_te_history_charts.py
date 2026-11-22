@@ -117,7 +117,6 @@ class ChartTypeTest(unittest.TestCase):
 
 
 TRACKED = "GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )"
-REPAIRS = os.path.join(REPO, "common", "on_actions", "te_old_save_repairs.txt")
 
 
 def _txt_block(text, name):
@@ -168,25 +167,6 @@ class HistoryForAnotherCountryTest(unittest.TestCase):
                     self.assertEqual(m, ['text = "ch_model_hist_empty"'])
                 else:
                     self.assertEqual(m, [], "the type's default")
-
-    def test_the_old_save_repair_sorts_each_store_once(self):
-        text = _strip_comments(_read(REPAIRS))
-        pulse = _txt_block(text, "on_monthly_pulse")
-        self.assertIn("te_repair_history_order", pulse)
-        body = _txt_block(text, "te_repair_history_order")
-        self.assertRegex(body, r"if = \{\s*limit = \{ NOT = \{ has_global_variable = te_history_order_repaired \} \}"
-                               r"\s*set_global_variable = te_history_order_repaired\s*every_country = \{\s*"
-                               r"limit = \{ has_variable_list = te_hist \}\s*te_history_sort_samples = yes\s*\}\s*\}")
-        raw = _read(REPAIRS)
-        marker = raw[:raw.index("te_repair_history_order = {")].rsplit("# OLD-SAVE REPAIR", 1)[1].split("\n", 1)[0]
-        self.assertRegex(marker, r"^ \(#\d+\): remove after \d{4}-\d{2}-\d{2} or at vanilla \d+\.\d+, "
-                                 r"whichever comes first\.$")
-        # the sort it calls never clears a short list: its rebuild waits for a full copy (the cap, 240)
-        effects = _strip_comments(_read(os.path.join(REPO, "common", "scripted_effects", "te_history_effects.txt")))
-        sort = _txt_block(effects, "te_history_sort_samples")
-        clear = sort.index("clear_variable_list = te_hist\n")
-        gate = sort.rindex("count >= 240", 0, clear)
-        self.assertLess(sort.rindex("if = {", 0, clear), gate)
 
 
 class OpenButtonTest(unittest.TestCase):
@@ -280,10 +260,10 @@ def _all_fragments():
 class RegistryTest(unittest.TestCase):
     """One registry entry per chart, its fragment drawn at two sizes (spec § 4.3)."""
 
-    def test_the_33_charts(self):
-        self.assertEqual(len(gen.CHARTS), 33)
+    def test_the_34_charts(self):
+        self.assertEqual(len(gen.CHARTS), 34)
         counts = {s: sum(c.system == s for c in gen.CHARTS) for s in gen.SYSTEMS}
-        self.assertEqual(counts, {"banking": 8, "strategic_reserve": 8, "demographics": 8, "cultural_hegemony": 1,
+        self.assertEqual(counts, {"banking": 8, "strategic_reserve": 9, "demographics": 8, "cultural_hegemony": 1,
                                   "nuclear_weapons": 2, "united_nations": 2, "global_warming": 2,
                                   "colonial_empire": 2})
         self.assertEqual(sorted(gen.SYSTEMS), sorted(SECTIONS))

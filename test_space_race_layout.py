@@ -20,7 +20,7 @@ REPO = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(REPO, "scripts", "generators"))
 import gen_solar_sites as gss  # noqa: E402
 import gui_tree  # noqa: E402
-from gui_test_helpers import (READ, _children, assert_wide_matches_narrow, gui_keys, guard_spans,  # noqa: E402
+from gui_test_helpers import (READ, _children, assert_wide_matches_narrow, block_defaults, gui_keys, guard_spans,  # noqa: E402
                               in_spans, load_loc, loc_closure, mod_types, panel_loc_keys, panel_view,
                               type_closure, unguarded)
 from scripts.generators import gen_te_systems_window as window_gen  # noqa: E402
@@ -41,11 +41,16 @@ CUSTOM_LOC = os.path.join(REPO, "common", "customizable_localization", "space_ra
 CONCEPTS = os.path.join(REPO, "common", "game_concepts", "extra_concepts.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
-RACING = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
+RACING = ["suborbital", "orbital", "moon_landing", "probe", "mars_landing",
           "interstellar_probe"]
-CONTROLLED = RACING + ["solar_colonization"]  # the eight with controls, in je_space_race.txt's order
-ALL = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
+CONTROLLED = RACING + ["solar_colonization"]  # the seven with controls, in je_space_race.txt's order
+ALL = ["suborbital", "orbital", "moon_landing", "probe", "mars_landing",
        "interstellar_probe", "interstellar_results", "solar_colonization"]  # journal order
+# The retired Moon Base has no entry since vanilla 1.15 (#1407): the first lunar
+# colony keeps its record, so the programme rows keep its icon and its first.
+RETIRED = ["moon_base"]
+FIRSTS = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
+          "interstellar_probe"]  # the races with a first
 # The programme row: one icon per entry, except that the Interstellar Probe and
 # the wait for its data share one four-state icon (owner's play-test, round 3).
 ROW = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
@@ -181,7 +186,7 @@ def _milestones_named(text):
     """The milestone tokens a stretch of text mentions, longest names first so
     'interstellar_probe' is not also read as 'probe'."""
     found = set()
-    for m in sorted(ALL, key=len, reverse=True):
+    for m in sorted(ALL + RETIRED, key=len, reverse=True):
         pat = rf"(?<=[_'/]){m}(?![a-z])"
         if re.search(pat, text):
             found.add(m)
@@ -416,7 +421,7 @@ def _colony_sites():
     """[(event number, [the two specializations it grants])] in event order."""
     text = _read(COLONY_EVENTS)
     parts = re.split(r"\n(space_race_colony_events\.(\d+)) = \{", text)
-    return [(int(parts[i + 1]), re.findall(r"sr_grant_colony_modifier = \{ MODIFIER = (\w+) \}", parts[i + 2]))
+    return [(int(parts[i + 1]), re.findall(r"sr_site_choose_(\w+) = yes", parts[i + 2]))
             for i in range(1, len(parts), 3)]
 
 
@@ -607,6 +612,13 @@ class ColoniesTest(unittest.TestCase):
                              f"sr_disp_site_aut_status_{k}"):
                     self.assertIn(f"ScriptValue('{term}')", drift)
                 self.assertIn("[concept_sr_colony_autonomy]", drift)
+                # Owner, 2026-11-12 (#1620): under sr_free_colony_minimum people the
+                # hover says first that the colony makes no demands, from the figure.
+                unpeopled = (f"EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
+                             f"'sr_disp_aut_unpeopled_{k}'), '(CFixedPoint)1' )")
+                self.assertIn(f"[AddLocalizationIf( {unpeopled}, 'te_tt_newline' )]"
+                              f"[AddLocalizationIf( {unpeopled}, 'sr_aut_line_unpeopled' )]", drift)
+                self.assertLess(drift.index("sr_aut_line_unpeopled"), drift.index("• the pull of home"))
 
     def test_the_slots_hover_reads_the_slots_modifier(self):
         """Colony management design § 5: a world's Slots hover gives its size's
@@ -626,10 +638,12 @@ class ColoniesTest(unittest.TestCase):
         signed with positive red (|=-2), never |+=2's positive green."""
         lines = sorted(k for k in self.loc if k.startswith("sr_aut_line_"))
         self.assertEqual(lines, ["sr_aut_line_charter", "sr_aut_line_destroyed", "sr_aut_line_garrison",
-                                 "sr_aut_line_nocontact", "sr_aut_line_war"])
+                                 "sr_aut_line_nocontact", "sr_aut_line_unpeopled", "sr_aut_line_war"])
         for key in lines:
             with self.subTest(line=key):
-                self.assertEqual(re.findall(r"\|([^\]]*)\]", self.loc[key]), ["=-2"])
+                # the note on a colony too small for politics gives a count, not a term
+                want = ["D"] if key == "sr_aut_line_unpeopled" else ["=-2"]
+                self.assertEqual(re.findall(r"\|([^\]]*)\]", self.loc[key]), want)
         for site in gss.SITES:
             k = site.key
             drift = self.loc[f"je_space_race_widget_autonomy_drift_tt_{k}"]
@@ -766,7 +780,7 @@ class ProgrammeRowTest(unittest.TestCase):
                 self.assertIn(f'texture = "gfx/interface/icons/event_icons/je_space_race_{m}.dds"', cell)
                 self.assertEqual(_milestones_named(cell), {m})
                 self.assertIn(f"ScriptValue('sr_disp_prog_{m}')", cell)
-                self.assertEqual('blockoverride "first"' in cell, m in RACING)
+                self.assertEqual('blockoverride "first"' in cell, m in FIRSTS)
 
     def test_the_row_fits_the_column(self):
         cell = re.search(r"size = \{ (\d+) \d+ \}", _type_body(_read(GUI), "te_sr_ov_prog_cell")).group(1)
@@ -777,7 +791,7 @@ class ProgrammeRowTest(unittest.TestCase):
     def test_the_textures_exist(self):
         tracked = subprocess.run(["git", "-C", REPO, "ls-files", "gfx/interface/icons/event_icons/"],
                                  capture_output=True, text=True, check=True).stdout.split()
-        for m in ALL:
+        for m in ALL + RETIRED:
             self.assertIn(f"gfx/interface/icons/event_icons/je_space_race_{m}.dds", tracked)
 
     def test_every_entry_has_an_overview_that_draws_the_row(self):
@@ -845,9 +859,10 @@ class InterstellarCellTest(unittest.TestCase):
 
 
 
-# The furthest milestone a Space Powers row estimates, by code (sr_power_lead_code).
-LEAD = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
-        "interstellar_probe", "solar_colonization"]
+# The furthest milestone a Space Powers row estimates, by code (sr_power_lead_code):
+# je_space_race.txt's order, 5 (the retired Moon Base, #1407) unused.
+LEAD = {1: "suborbital", 2: "orbital", 3: "moon_landing", 4: "probe", 6: "mars_landing",
+        7: "interstellar_probe", 8: "solar_colonization"}
 EFFECTS = os.path.join(REPO, "common", "scripted_effects", "space_race_effects.txt")
 VALUES = os.path.join(REPO, "common", "script_values", "space_race_values.txt")
 TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "space_race_triggers.txt")
@@ -883,7 +898,7 @@ class SpacePowersTest(unittest.TestCase):
     def test_the_refresh_fills_the_list(self):
         effects = _read(EFFECTS)
         refresh = _block(effects, "sr_powers_refresh")
-        for m in LEAD:
+        for m in LEAD.values():
             self.assertIn(f"sr_power_fuzz_base = {{ MILESTONE = {m}", refresh)
         self.assertLess(refresh.index("sr_powers_clear = yes"), refresh.index("ordered_country"))
         walk = refresh[refresh.index("ordered_country"):]
@@ -895,8 +910,10 @@ class SpacePowersTest(unittest.TestCase):
         self.assertIn("sr_powers_list_selfcheck = yes", refresh)
         clear = _block(effects, "sr_powers_clear")
         self.assertIn("clear_variable_list = sr_powers_list", clear)
-        for name in ["sr_power_total"] + [f"sr_power_{n}" for n in range(1, 9)]:
-            self.assertIn(f"remove_variable = {name} }}", clear)
+        self.assertIn("remove_variable = sr_power_total }", clear)
+        # the eight slots from before SPC-9 went with vanilla 1.15 (#1407)
+        for n in range(1, 9):
+            self.assertNotRegex(effects, rf"\bsr_power_{n}\b")
         # players in the race, monthly
         pulse = _read(ON_ACTIONS)
         self.assertRegex(pulse, r"is_player = yes\s+sr_space_race_on = yes\s+sr_in_space_race = yes\s+\}\s+"
@@ -924,9 +941,9 @@ class SpacePowersTest(unittest.TestCase):
                 found = re.findall(r"ScriptValue\('sr_disp_power_lead'\), '\(CFixedPoint\)(\d)' \)\]\"\s+"
                                    r"text = \"(\w+)\"", body)
                 self.assertEqual(found, [("0", "je_space_race_widget_power_lead_none")]
-                                 + [(str(c), prefix + m) for c, m in enumerate(LEAD, start=1)])
+                                 + [(str(c), prefix + m) for c, m in LEAD.items()])
         own = _type_body(self.gui, "te_sr_power_lead_own")
-        for m in LEAD:
+        for m in LEAD.values():
             self.assertIn(f"ScriptValue('sr_disp_progress_frac_{m}')", _loc(f"je_space_race_widget_power_own_{m}"))
             band = _loc(f"je_space_race_widget_power_lead_{m}")
             for end in ("lo", "hi"):
@@ -937,7 +954,7 @@ class SpacePowersTest(unittest.TestCase):
         body = _strip_comments(_block(_read(VALUES), "sr_power_lead_code"))
         found = re.findall(r"limit = \{ (?:has_variable = sr_active_(\w+)|sr_(solar_colonization)_running = yes) \} value = (\d)", body)
         self.assertEqual([(a or b, int(c)) for a, b, c in found],
-                         list(reversed([(m, c) for c, m in enumerate(LEAD, start=1)])))
+                         list(reversed([(m, c) for c, m in LEAD.items()])))
 
     def test_eight_icons_in_journal_order(self):
         row = _type_body(self.gui, "te_sr_power_row")
@@ -957,7 +974,7 @@ class SpacePowersTest(unittest.TestCase):
                 self.assertIn(f'texture = "gfx/interface/icons/event_icons/je_space_race_{m}.dds"', cell)
                 self.assertEqual(_milestones_named(cell), {m})
                 self.assertIn(f"State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_{m}')", cell)
-                self.assertEqual('blockoverride "first"' in cell, m in RACING)
+                self.assertEqual('blockoverride "first"' in cell, m in FIRSTS)
         # 8 cells and their spacing, then the estimate column, inside the 480 row
         cell = int(re.search(r"size = \{ (\d+) \d+ \}", _type_body(self.gui, "te_sr_power_cell")).group(1))
         column = int(re.search(r"size = \{ (\d+) \d+ \}", _type_body(self.gui, "te_sr_power_lead_band")).group(1))
@@ -1053,7 +1070,31 @@ VANILLA_KEPT = {"gfx/interface/backgrounds/round_frame_dec.dds",
                 "gfx/interface/icons/generic_icons/transparent.dds",
                 # the module queue's move-up button, the base game's ship construction queue's (#1159)
                 "gfx/interface/icons/generic_icons/up_up.dds",
+                # a fleet card's roll-down button, beside up_up as its roll-up (the fleet cards)
+                "gfx/interface/icons/generic_icons/down_down.dds",
                 "gfx/interface/progressbar/progressbar_marker.dds"}
+# Space Fleets' banner (space_race_gui_icons.md, "Space Fleets: the banner"): the
+# picture for each drive level, painted for the slot (icon_prompts.py, category
+# `space_banner`); event pictures stood in for them at first.
+SR_BANNERS = "gfx/interface/illustrations/space_race/"
+FLEET_BANNERS = {0: f"{SR_BANNERS}fleet_banner_chemical.dds",
+                 1: f"{SR_BANNERS}fleet_banner_fusion.dds",
+                 2: f"{SR_BANNERS}fleet_banner_torch.dds",
+                 3: f"{SR_BANNERS}fleet_banner_antimatter.dds"}
+# The event pictures that stood in for the banners, and the Earth-orbit
+# production method's icon that stood in for Earth Orbit's world: gone from the widget.
+FLEET_PLACEHOLDERS_GONE = ("gfx/event_pictures/", "production_method_icons/pm_earth_orbit.dds")
+# The fleet cards' pictograms (space_race_gui_icons.md, "Space Fleets: the fleet
+# cards"): the block or loc key that sits in the same cell or button, and its file.
+FLEET_CARD_ICONS = (
+    *((f'text = "je_space_race_widget_fl_role_{r}"', f"role_{r}.dds") for r in ("war", "rapid", "siege", "carrier", "tender")),
+    ('text = "je_space_race_widget_fl_go"', "order_go.dds"),
+    ('text = "je_space_race_widget_fl_transfer"', "order_transfer.dds"),
+    ('text = "je_space_race_widget_fl_land"', "order_land.dds"),
+    ('text = "je_space_race_widget_fl_embark"', "order_embark.dds"),
+    *((f'text = "je_space_race_widget_fl_posture_{n}"', f"posture_{p}.dds")
+      for n, p in enumerate(("station", "standoff", "closein", "interdict"), 1)),
+)
 # A colony's page (space_race_gui_icons.md, "A colony's page"): art that already
 # shows the thing, vanilla's or the mod's, and the page's own icons (icon batch 8).
 PAGE_KEPT = {f"gfx/interface/icons/{p}" for p in (
@@ -1126,9 +1167,10 @@ class SpaceRaceIconsTest(unittest.TestCase):
         """Audit SPC-16: Solar System's inbound colony fleets keep the
         colonization rocket; Locations' inbound warships wear the warship."""
         site = _type_body(self.gui, "te_sr_site_row")
-        loc = _type_body(self.gui, "te_sr_location_row")
+        captions = _type_body(self.gui, "te_sr_location_captions")   # the strip's captions, an icon a line
         self.assertIn('texture = "gfx/interface/icons/event_icons/je_space_race_solar_colonization.dds"', site)
-        self.assertEqual(re.findall(r'texture = "([^"]+)"', loc), [f"{SR_ICONS}warship.dds"])
+        self.assertEqual(re.findall(r'texture = "([^"]+)"', captions),
+                         [f"{SR_ICONS}fleet.dds", f"{SR_ICONS}fleet_other.dds", f"{SR_ICONS}warship.dds"])
 
     def test_the_pies(self):
         pie = _type_body(self.gui, "te_sr_ov_pie")
@@ -1137,12 +1179,17 @@ class SpaceRaceIconsTest(unittest.TestCase):
         self.assertEqual(pie.count("framesize = { 128 128 }\n\t\t\t\tframe = 2"), 3)
 
     def test_no_placeholder_left(self):
-        journal = {f"gfx/interface/icons/event_icons/je_space_race_{m}.dds" for m in ALL}
+        journal = {f"gfx/interface/icons/event_icons/je_space_race_{m}.dds" for m in ALL + RETIRED}
         for path in re.findall(r'texture = "(gfx/interface/[^"]+)"', self.gui):
             with self.subTest(path=path):
                 self.assertTrue(path.startswith(SR_ICONS) or path in journal or path in VANILLA_KEPT
-                                or path in PAGE_KEPT,
+                                or path in PAGE_KEPT or path in FLEET_BANNERS.values(),
                                 f"placeholder left: {path}")
+        # Nothing outside gfx/interface: the banner's event pictures were the only such textures.
+        self.assertEqual(set(re.findall(r'texture = "(gfx/[^"]+)"', self.gui)) - set(re.findall(r'texture = "(gfx/interface/[^"]+)"', self.gui)),
+                         set())
+        for gone in FLEET_PLACEHOLDERS_GONE:
+            self.assertNotIn(gone, self.gui)
 
     def test_a_colony_page_s_own_icons(self):
         """Icon batch 8: each tile and module row on a colony's page draws its own
@@ -1178,6 +1225,308 @@ class SpaceRaceIconsTest(unittest.TestCase):
         for path in sorted(set(re.findall(rf'texture = "{re.escape(SR_ICONS)}([^"]+)"', self.gui))):
             with self.subTest(file=path):
                 self.assertRegex(doc, rf"(?m)^\|.*\| `{re.escape(path)}` \|$")
+
+
+class FleetBannerTest(unittest.TestCase):
+    """Space Fleets opens on a picture of a fleet of the day (owner,
+    2026-11-14): one slot, a picture per drive level, the one shown chosen by
+    sr_drive_level."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(GUI)
+        cls.banner = _type_body(cls.gui, "te_sr_fleet_banner")
+
+    def test_one_picture_per_drive_level(self):
+        shown = re.findall(r"visible = \"\[(EqualTo|GreaterThanOrEqualTo)_CFixedPoint\( JournalEntry\.GetCountry\.MakeScope\."
+                           r"ScriptValue\('sr_drive_level'\), '\(CFixedPoint\)(\d)' \)\]\"\s*background = \{\s*"
+                           r"texture = \"([^\"]+)\"\s*fittype = centercrop", self.banner)
+        self.assertEqual({int(level): path for _, level, path in shown}, FLEET_BANNERS)
+        # the last drive's picture also covers any level a later drive adds
+        self.assertEqual([test for test, _, _ in shown], ["EqualTo"] * 3 + ["GreaterThanOrEqualTo"])
+        values = _read(os.path.join(REPO, "common", "script_values", "sr_launch_window_values.txt"))
+        level = values[values.index("\nsr_drive_level = {"):]
+        self.assertEqual(sorted(set(re.findall(r"value = (\d)", level[:level.index("\n}")]))), ["0", "1", "2", "3"])
+
+    def test_the_banner_heads_the_section_and_cannot_widen_it(self):
+        self.assertIn("size = { 480 110 }", self.banner)
+        sec = _type_body(self.gui, "te_sr_sec_space_fleets")
+        self.assertLess(sec.index("te_sr_fleet_banner = {}"), sec.index("te_sr_fleet_rows = {}"))
+        self.assertNotIn("te_sr_fleet_header_row", self.gui)   # the cards carry their own captions
+
+    def test_each_picture_is_listed_and_tracked(self):
+        doc = _read(ICONS_DOC)
+        for level, path in FLEET_BANNERS.items():
+            with self.subTest(level=level):
+                self.assertRegex(doc, rf"(?m)^\| .*\({level}\) \| .* \| `{re.escape(os.path.basename(path))}` \|$")
+                tracked = subprocess.run(["git", "-C", REPO, "ls-files", "--error-unmatch", path], capture_output=True)
+                self.assertEqual(tracked.returncode, 0, f"{path} is not in the repository")
+
+    def test_each_picture_is_the_slot_s_shape(self):
+        """Painted at twice the slot, so the game crops nothing, and both sides
+        multiples of 4, which block compression needs."""
+        from scripts.image_pipeline import icon_prompts
+        spec = icon_prompts.CATEGORIES["space_banner"]
+        width, height = map(int, re.search(r"size = \{ (\d+) (\d+) \}", self.banner).groups())
+        self.assertEqual(spec["size"], (2 * width, 2 * height))
+        self.assertEqual((spec["size"][0] % 4, spec["size"][1] % 4), (0, 0))
+        # a subject still under review (seed None) ships nothing
+        picked = {icon_prompts.icon_path("space_banner", key) for key, entry in icon_prompts.ICONS["space_banner"].items()
+                  if isinstance(entry.get("seed"), int)}
+        self.assertEqual(picked, set(FLEET_BANNERS.values()))
+
+
+class FleetCardTest(unittest.TestCase):
+    """A fleet in Space Fleets is a card (owner, 2026-11-14): a head that is
+    always shown, a track in transit, and a body the card's own flag rolls up."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(GUI)
+        cls.row = _type_body(cls.gui, "te_sr_fleet_row")
+        rows = _read(os.path.join(REPO, "gui", "journal_entry_widgets", "sr_fleets_generated_rows.gui"))
+        cls.rows = re.findall(r"te_sr_fleet_row = \{.*?\n\t\t\}\n", rows, re.S)
+
+    def test_the_card_is_framed_and_as_wide_as_the_column(self):
+        self.assertIn("minimumsize = { 480 -1 }", self.row)
+        self.assertIn("using = entry_bg_simple", self.row)
+        # each line of cells fits the card's 468 (480 less the margin of 6 either side)
+        for type_name, count in (("te_sr_fl_role_cell", 5), ("te_sr_fl_gauge", 4), ("te_sr_posture_choice", 4)):
+            with self.subTest(cell=type_name):
+                width = int(re.search(r"size = \{ (\d+) \d+ \}", _type_body(self.gui, type_name)).group(1))
+                self.assertEqual(self.row.count(f"{type_name} = {{"), count)
+                self.assertLessEqual(count * width + (count - 1) * 4, 468)
+
+    def test_each_card_rolls_up_on_its_own_flag(self):
+        self.assertEqual(len(self.rows), 9)
+        body = self.row[self.row.index('block "fl_body_visible"'):]
+        for inside in ("te_sr_fl_role_cell", "te_sr_fl_gauge", 'block "fl_orders_visible"', 'block "fl_combat_visible"'):
+            self.assertIn(inside, body)
+        head = self.row[:self.row.index('block "fl_transit_visible"')]
+        for block in ("fl_number", "fl_where", "fl_strength_brief", "fl_drive", "fl_roll_up", "fl_roll_down"):
+            self.assertIn(f'block "{block}"', head)
+        rolled = head[head.index('block "fl_rolled_visible"'):]
+        self.assertLess(rolled.index('block "fl_strength_brief"'), rolled.index('block "fl_roll_down"'))
+        for n, row in enumerate(self.rows, 1):
+            flag = f"sr_panel_fleet_{n}_closed"   # open until closed, as the sections' flags say
+            exists = f"GetVariableSystem.Exists('{flag}')"
+            with self.subTest(slot=n):
+                self.assertEqual(set(re.findall(r"GetVariableSystem\.\w+\('(\w+)'\)", row)) - {"te_popup"}, {flag})
+                self.assertEqual(row.count(f"onclick = \"[GetVariableSystem.Toggle('{flag}')]\""), 2)
+                # one bare test, on the slot that holds the rolled-up strength and the roll-down button
+                self.assertEqual(row.count(exists) - row.count(f"Not( {exists} )"), 1)
+                for block, shown in (("fl_body_visible", f"Not( {exists} )"), ("fl_roll_up", f"Not( {exists} )"),
+                                     ("fl_rolled_visible", exists)):
+                    override = row[row.index(f'blockoverride "{block}" {{'):]
+                    self.assertIn(f'visible = "[{shown}]"', override[:override.index("}")], block)
+
+    def test_each_reading_is_a_bar_of_a_share(self):
+        display = _read(os.path.join(REPO, "common", "script_values", "sr_fleets_display_generated.txt"))
+        for n, row in enumerate(self.rows, 1):
+            for name in ("strength", "dv", "supply", "marines", "transit"):
+                value = f"sr_disp_fl_{n}_{name}_frac"
+                with self.subTest(value=value):
+                    self.assertIn(f"value = \"[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('{value}') )]\"", row)
+                    body = display[display.index(f"\n{value} = {{"):]
+                    body = body[:body.index("\n}\n")]
+                    self.assertIn("\tmin = 0\n\tmax = 1", body)
+                    self.assertRegex(body, r"limit = \{ [^{}]*> 0 \}")   # never a division by nothing
+
+    def test_a_role_is_lit_with_ships_and_dimmed_without(self):
+        cell = _type_body(self.gui, "te_sr_fl_role_cell")
+        icons = re.findall(r"\ticon = \{(.*?)\n\t\t\}", cell, re.S)
+        self.assertEqual(len(icons), 2)
+        lit, dim = icons
+        for icon in icons:
+            self.assertIn('block "rc_icon" {}', icon)
+        self.assertIn('block "rc_lit" {}', lit)
+        self.assertNotIn("alpha", lit)
+        self.assertIn('block "rc_dim" {}', dim)
+        self.assertIn("alpha = 0.3", dim)
+        for n, row in enumerate(self.rows, 1):
+            for role in ("war", "rapid", "siege", "carrier", "tender"):
+                has = (f"GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_{n}_{role}_value'), "
+                       "'(CFixedPoint)1' )")
+                with self.subTest(slot=n, role=role):
+                    self.assertIn(f'blockoverride "fl_role_{role}_lit" {{\n\t\t\t\tvisible = "[{has}]"', row)
+                    self.assertIn(f'blockoverride "fl_role_{role}_dim" {{\n\t\t\t\tvisible = "[Not( {has} )]"', row)
+            self.assertEqual(row.count(f'tooltip = "je_space_race_widget_fl_{n}_roles_tt"'), 2)   # the cells, and the head's figure
+
+    def test_each_cell_and_button_wears_its_own_icon(self):
+        pairs, icon = [], None
+        for line in self.row.splitlines():
+            m = re.search(rf'texture = "{re.escape(SR_ICONS)}((?:role|posture|order)_\w+\.dds)"', line)
+            if m:
+                icon = m.group(1)
+                continue
+            m = re.search(r'(text = "je_space_race_widget_fl_\w+")', line)
+            if m and icon:
+                pairs.append((m.group(1), icon))
+                icon = None
+        self.assertEqual(pairs[:len(FLEET_CARD_ICONS)], list(FLEET_CARD_ICONS))
+        # Seize and Destroy share a button: each icon and word on the order's own block
+        seize = self.row[self.row.index("order_seize.dds"):]
+        self.assertLess(seize.index('block "fl_destroy_off_visible"'), seize.index("order_destroy.dds"))
+        self.assertEqual(self.row.count('block "fl_destroy_off_visible"'), 2)
+        self.assertEqual(self.row.count('block "fl_destroy_on_visible"'), 2)
+        self.assertIn(f'texture = "{SR_ICONS}fleet.dds"', self.row)
+        self.assertIn(f'texture = "{SR_ICONS}track_ship.dds"', self.row)
+
+    def test_the_head_wears_its_location_s_world(self):
+        """One slot, the nine locations' icons taking turns on the code of where
+        the fleet is, or is bound; the textures are Locations' own."""
+        from scripts.generators import gen_space_fleets as gsf
+        head = self.row[:self.row.index('block "fl_where"')]
+        self.assertEqual(re.findall(r'texture = "([^"]+)"\s*block "fl_place_(\w+)" \{\}', head),
+                         [(path, key) for key, path in gsf.LOCATION_ICONS.items()])
+        self.assertEqual(list(gsf.LOCATION_ICONS), [lc.key for lc in gsf.LOCATIONS])
+        self.assertEqual(gsf.LOCATION_ICONS["earth"], f"{SR_ICONS}location_earth.dds")
+        display = _read(os.path.join(REPO, "common", "script_values", "sr_fleets_display_generated.txt"))
+        for n, row in enumerate(self.rows, 1):
+            place = display[display.index(f"\nsr_disp_fl_{n}_place = {{"):]
+            self.assertRegex(place[:place.index("\n}\n")],
+                             rf"if = \{{ limit = \{{ has_variable = sr_fl_{n}_loc \}} value = var:sr_fl_{n}_loc \}}\s*"
+                             rf"else_if = \{{ limit = \{{ has_variable = sr_fl_{n}_dest \}} value = var:sr_fl_{n}_dest \}}")
+            for lc in gsf.LOCATIONS:
+                with self.subTest(slot=n, location=lc.key):
+                    self.assertIn(f'blockoverride "fl_place_{lc.key}" {{\n\t\t\t\tvisible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.'
+                                  f"MakeScope.ScriptValue('sr_disp_fl_{n}_place'), '(CFixedPoint){lc.code}' )]\"", row)
+
+    def test_the_pictograms_are_as_the_script_draws_them(self):
+        """The drawn set is committed as gen_space_fleet_pictograms.py writes it."""
+        tracked = subprocess.run(["git", "-C", REPO, "ls-files", f"{SR_ICONS}fleet.dds"],
+                                 capture_output=True, text=True, check=True).stdout.split()
+        if not tracked or not os.path.exists(os.path.join(REPO, SR_ICONS, "fleet.dds")):
+            self.skipTest("this checkout has no gfx/ (CI's main job)")
+        check = subprocess.run([sys.executable, os.path.join(REPO, "scripts", "image_pipeline", "gen_space_fleet_pictograms.py"),
+                                "--check"], capture_output=True, text=True)
+        self.assertEqual(check.returncode, 0, check.stdout)
+
+    def test_each_icon_is_drawn_or_painted_never_both(self):
+        """The orders and the transit marker are signs, drawn by the script; the
+        emblems, the roles, the postures and Locations' statuses are painted
+        (icon_prompts.py). A file with both sources would be written twice."""
+        from scripts.image_pipeline import icon_prompts
+        # Read, not imported: the script needs Pillow, which CI's main job does not install.
+        script = _read(os.path.join(REPO, "scripts", "image_pipeline", "gen_space_fleet_pictograms.py"))
+        table = script[script.index("\nICONS = {"):script.index("\n}\n", script.index("\nICONS = {"))]
+        drawn = set(re.findall(r'"(\w+)": \(', table))
+        painted = {key for cat in ("space", "space_state") for key in icon_prompts.ICONS[cat]}
+        self.assertEqual(drawn, {"order_go", "order_transfer", "order_land", "order_embark", "order_seize",
+                                 "order_destroy", "track_ship"})
+        self.assertEqual(drawn & painted, set())
+        for stem in ("fleet", "fleet_other", "status_battle", "status_blockaded", "status_interdicted", "location_earth",
+                     *(f[:-4] for _, f in FLEET_CARD_ICONS if not f.startswith("order_"))):
+            with self.subTest(icon=stem):
+                self.assertIn(stem, painted)
+
+
+class LocationsStripTest(unittest.TestCase):
+    """Locations is a strip (owner, 2026-11-14): a captions' column, then a
+    column per location from Earth outward, each under its world's icon."""
+
+    @classmethod
+    def setUpClass(cls):
+        from scripts.generators import gen_space_fleets as gsf
+        cls.gsf = gsf
+        cls.gui = _read(GUI)
+        cls.cell = _type_body(cls.gui, "te_sr_location_cell")
+        cls.captions = _type_body(cls.gui, "te_sr_location_captions")
+        rows = _read(os.path.join(REPO, "gui", "journal_entry_widgets", "sr_fleets_generated_rows.gui"))
+        strip = rows[rows.index("type te_sr_location_cells = flowcontainer"):rows.index("type te_sr_xfer_popup_body")]
+        cls.strip = strip
+        cls.cells = re.findall(r"te_sr_location_cell = \{.*?\n\t\t\}\n", strip, re.S)
+
+    def test_the_strip_fits_the_column_and_its_lines_line_up(self):
+        self.assertIn("direction = horizontal", self.strip)
+        self.assertLess(self.strip.index("te_sr_location_captions = {}"), self.strip.index("te_sr_location_cell = {"))
+        heights = lambda body, width: [int(h) for h in re.findall(rf"(?m)^\t\t\tsize = \{{ {width} (\d+) \}}", body)]  # noqa: E731
+        self.assertEqual(heights(self.cell, 50), heights(self.captions, 26))
+        self.assertEqual(len(heights(self.cell, 50)), 6)
+        self.assertLessEqual(26 + 9 * 50, 480)
+        self.assertNotIn("te_sr_location_row", self.gui)
+        self.assertNotIn("te_sr_location_header_row", self.gui)
+
+    def test_each_location_wears_its_world_and_names_it_on_hover(self):
+        self.assertEqual(len(self.cells), 9)
+        for lc, cell in zip(self.gsf.LOCATIONS, self.cells):
+            with self.subTest(location=lc.key):
+                self.assertIn(f'blockoverride "loc_name" {{\n\t\t\t\ttooltip = "sr_loc_name_{lc.key}"', cell)
+                self.assertIn(f'blockoverride "loc_icon" {{\n\t\t\t\ttexture = "{self.gsf.LOCATION_ICONS[lc.key]}"', cell)
+
+    def test_a_caption_is_an_icon_with_its_word_on_hover(self):
+        self.assertEqual(re.findall(r'tooltip = "je_space_race_widget_loc_(\w+)"', self.captions),
+                         ["col_ours", "others_tt", "inbound_tt"])   # the hovers the column heads had
+
+    def test_each_status_is_an_icon_with_its_hover(self):
+        """Red where it is bad for us; ours wear the posture's own sign (rule 2:
+        the word is the hover's header)."""
+        shown = re.findall(r'texture = "' + re.escape(SR_ICONS) + r'(\w+)\.dds"\s*tooltip = "je_space_race_widget_loc_(\w+)_tt"\s*'
+                           r'block "loc_(\w+)_visible" \{\}', self.cell)
+        self.assertEqual(shown, [("status_battle", "battle", "battle"), ("status_blockaded", "blockaded", "blockaded"),
+                                 ("posture_standoff", "blockading", "blockading"),
+                                 ("status_interdicted", "interdicted", "interdicted"),
+                                 ("posture_interdict", "interdicting", "interdicting"),
+                                 ("status_blockaded", "earth_blockaded", "earth_blockaded"),
+                                 ("posture_standoff", "earth_blockading", "earth_blockading")])
+        loc = _read(os.path.join(REPO, "localization", "english", "te_journal_entries_l_english.yml"))
+        for _, key, _ in shown:
+            with self.subTest(status=key):
+                self.assertRegex(loc, rf'(?m)^ je_space_race_widget_loc_{key}_tt:0 "#header [^#]+#!\\n')
+
+
+class SpaceCommandCellsTest(unittest.TestCase):
+    """Space Command's four readings are overview cells, two to a row, and the
+    build mix wears the fleet cards' role icons (owner, 2026-11-14)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(GUI)
+        cls.sec = _type_body(cls.gui, "te_sr_sec_space_command")
+
+    def test_four_readings_two_to_a_row(self):
+        caps = re.findall(r'text = "je_space_race_widget_ovc_sc_(\w+)_cap"', self.sec)
+        self.assertEqual(caps, ["rate", "rate", "strength", "upkeep", "reserve"])   # Built a month, and it paused, share a slot
+        self.assertEqual(self.sec.count("te_banking_ov_cell = {"), 5)
+        self.assertNotIn("te_sr_value_row", self.sec)
+        for hover in ("rate_tt", "rate_paused_tt", "strength_tt", "upkeep_tt", "reserve_tt"):
+            self.assertEqual(self.sec.count(f'tooltip = "je_space_race_widget_sc_{hover}"'), 1, hover)
+        cell = _type_body(_read(os.path.join(REPO, "gui", "journal_entry_widgets", "banking_dashboard_widget.gui")), "te_banking_ov_cell")
+        self.assertIn("size = { 238 70 }", cell)
+        self.assertIn("widget = {\n\t\t\t\t\tsize = { 238 70 }", self.sec)   # the slot the two rate cells share
+
+    def test_the_build_mix_wears_the_roles_icons(self):
+        button = _type_body(self.gui, "te_sr_sc_role_button")
+        width = int(re.search(r"size = \{ (\d+) \d+ \}", button).group(1))
+        self.assertLessEqual(5 * width + 4 * 4, 480)
+        pairs = re.findall(r'blockoverride "mix_icon" \{\s*texture = "' + re.escape(SR_ICONS) + r'role_(\w+)\.dds"\s*\}\s*'
+                           r'blockoverride "mix_label" \{\s*text = "je_space_race_widget_sc_mix_(\w+)"', self.sec)
+        self.assertEqual(pairs, [(r, r) for r in ("war", "rapid", "siege", "carrier", "tender")])
+        self.assertEqual(self.sec.count("te_sr_sc_role_button = {"), 5)
+
+
+class ColonyFleetTrackTest(unittest.TestCase):
+    """A colony fleet in flight shows the share of its flight behind it, as a
+    space fleet's track does (owner, 2026-11-14)."""
+
+    def test_each_slot_s_bar_reads_its_share(self):
+        gui = _read(GUI)
+        row = _type_body(gui, "te_sr_cf_slot_row")
+        self.assertEqual(row.count('block "slot_frac" {}'), 2)   # the bar, and the marker riding it
+        self.assertIn(f'texture = "{SR_ICONS}track_ship.dds"', row)
+        cells = [int(w) for w in re.findall(r"(?m)^\t\t\tsize = \{ (\d+) \d+ \}", row)]
+        self.assertLessEqual(sum(cells) + 4 * (len(cells) - 1) + 2 * 4, 480)
+        rows = _read(os.path.join(REPO, "gui", "journal_entry_widgets", "sr_sites_generated_rows.gui"))
+        display = _read(os.path.join(REPO, "common", "script_values", "sr_sites_display_generated.txt"))
+        for n in range(1, gss.FLEET_SLOTS + 1):
+            with self.subTest(slot=n):
+                self.assertIn(f"value = \"[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_{n}_frac') )]\"",
+                              rows)
+                body = display[display.index(f"\nsr_disp_cf_slot_{n}_frac = {{"):]
+                body = body[:body.index("\n}\n")]
+                self.assertIn(f"limit = {{ has_variable = sr_cf_{n}_arrive has_variable = sr_cf_{n}_depart }}", body)
+                self.assertIn("min = 1 }", body)          # a lunar fleet lands the month it leaves
+                self.assertIn("\tmin = 0\n\tmax = 1", body)
 
 
 class DisplayValuesTest(unittest.TestCase):
@@ -1344,10 +1693,16 @@ class QueueNextModuleTest(unittest.TestCase):
                                   state.index("sr_mod_fab_stock_value >= sr_mq_head_cost"),
                                   state.index("NOT = { sr_mod_fab_rate > 0 }"))
         # The launch site first, then a covered head (built, or waiting for a
-        # slot), and only then no rate: stopped.
+        # slot), and only then no rate: stopped. A price past the stock's cap
+        # doesn't stop it: the stock fills to the head's price (review of #1847).
         self.assertLess(lost, covered)
         self.assertLess(covered, no_rate)
         self.assertEqual(re.findall(r"value = (\d)", state), ["0", "1", "3", "2", "3"])
+        self.assertNotIn("sr_mod_fab_stock_cap", state)
+        # A lunar head waits for no slot (the owner, 2026-11-15).
+        self.assertIn("NOT = { sr_mq_head_needs_no_slot = yes }", state)
+        reason = _block(_read(DISPLAY), "sr_disp_mq_stop_reason")
+        self.assertEqual(re.findall(r"value = (\d)", reason), ["3", "1"])
 
 class TabTest(unittest.TestCase):
     """The colonization status's tabs (UI pass design § 11): a row of four
@@ -1553,7 +1908,15 @@ class PrivateTest(unittest.TestCase):
     def test_the_entrys_sections_and_link_are_the_players(self):
         body = self.types["te_sr_window_milestones"].body
         spans = self.view.skip["te_sr_window_milestones"]
-        self.assertEqual(spans, guard_spans(body))
+        # the guards, and the live sections full screen moves to a column of
+        # their own (the frame's emptied block), which sit inside a guard
+        guards = guard_spans(body)
+        moved = [(a, b) for a, b, x in block_defaults(body)
+                 if x in {f"sr_window_{m}_live" for m in window_gen.SR_OWN_COLUMN}]
+        self.assertEqual(len(moved), len(window_gen.SR_OWN_COLUMN))
+        self.assertEqual(sorted(spans), sorted(guards + moved))
+        for a, _ in moved:
+            self.assertTrue(in_spans(a, guards), "a moved block outside the player's own part")
         frames = [m.start() for m in re.finditer(r"\bte_system_tab_frame = \{", body)] + [len(body)]
         self.assertEqual(len(frames) - 1, len(ALL))
         for m, start, end in zip(ALL, frames, frames[1:]):
@@ -1650,6 +2013,11 @@ class PrivateTest(unittest.TestCase):
         mine += [f"je_space_race_widget_reward_{m}" for m in RACING]
         mine += [k[:-len("_ni")] for k in shown if k.endswith("_ni")]
         mine += ["je_space_race_widget_orbit_satellites_label"]
+        # what an overview passes to the guarded cells and bar row through a
+        # blockoverride (the exact progress, the risk, the approach's cost):
+        # the walk follows the override to its block (#1368)
+        mine += [f"je_space_race_widget_{part}_{m}" for m in CONTROLLED
+                 for part in ("progress", "risk", "ov_safe", "ov_ambitious")]
         for key in mine:
             with self.subTest(key=key):
                 self.assertNotIn(key, self.keys)
@@ -1827,8 +2195,9 @@ class ScriptTooltipTest(unittest.TestCase):
     country's panel reads the shown country, not the player (spec
     2026-11-02-charts-help-national-info § 6.4). Orbit's Strikes hover is
     te_asat_record_sgui's ExecuteTooltip: its lines come from the effect's
-    custom_tooltip keys, which no panel's loc closure reaches, so BindingTest
-    can't see them. They read the scripted GUI's root (SCOPE.GetRootScope, the
+    custom_tooltip keys, which no panel's loc closure reached when this was
+    written (BindingTest follows them since #1361; this holds the lines by
+    name). They read the scripted GUI's root (SCOPE.GetRootScope, the
     form covert_last_exposed_sgui ships), or nothing at all."""
 
     TOOLTIP = re.compile(r"GetScriptedGui\('(\w+)'\)\.(?:ExecuteTooltip|IsValidTooltip|IsShownTooltip)")
@@ -1866,17 +2235,81 @@ class ScriptTooltipTest(unittest.TestCase):
 
 class WideLayoutTest(unittest.TestCase):
     """te_sr_wide_sections, the window's full-screen Space Race (spec
-    2026-11-02-te-window-wide-mode § 7): the milestones under way, then Space
-    Powers and Orbit, each column under the gate its narrow run carries, in
-    two columns (te_ui_columns_two): How the Space Race Works, once the
-    third, is the Help page."""
+    2026-11-02-te-window-wide-mode § 7), in three columns
+    (te_ui_columns_three), each under the gate its narrow run carries: the
+    milestones under way; solar colonization's four tabs (Mission Control,
+    Fleets, Colonies, Solar System) in a column of their own (owner,
+    2026-11-05), split out of its frame, which keeps its overview and Open
+    Journal Entry in the first; then Space Powers and Orbit. How the Space
+    Race Works is the Help page."""
+
+    LIVE = {f"te_sr_window_{m}_live": m for m in window_gen.SR_OWN_COLUMN}
+
+    def setUp(self):
+        self.wide = _strip_comments(_type_body(_read(GUI), "te_sr_wide_sections"))
+        self.generated = _strip_comments(_read(window_gen.GUI_OUT))
 
     def test_the_columns(self):
-        columns = assert_wide_matches_narrow(self, "te_sr_wide_sections", layout=("te_sr_tab_body", "te_sr_tab_layout"))
+        columns = assert_wide_matches_narrow(self, "te_sr_wide_sections", layout=("te_sr_tab_body", "te_sr_tab_layout"),
+                                             split={name: "te_sr_window_milestones" for name in self.LIVE})
         self.assertEqual(columns, [
             ["te_sr_window_milestones"],
+            ["te_sr_window_solar_colonization_live"],
             ["te_sr_sec_powers", "te_sr_sec_orbit"]])
-        self.assertIn("type te_sr_wide_sections = te_ui_columns_two", _read(GUI))
+        self.assertIn("type te_sr_wide_sections = te_ui_columns_three", _read(GUI))
+
+    def test_the_tabs_leave_the_first_column(self):
+        """The first column's milestones empty each split-out frame block, and
+        only those: the frame keeps its header, overview and Open Journal
+        Entry. The side panel's te_sr_tab_body leaves the blocks alone."""
+        milestones = _instances(self.wide, "te_sr_window_milestones")
+        self.assertEqual(len(milestones), 1)
+        self.assertEqual(re.findall(r'blockoverride "(\w+)" \{\s*\}', milestones[0]),
+                         [f"sr_window_{m}_live" for m in self.LIVE.values()])
+        self.assertEqual(re.sub(r'blockoverride "\w+" \{\s*\}', "", milestones[0][:-1]).strip(), "")
+        frames = _type_body(self.generated, "te_sr_window_milestones")
+        for m in self.LIVE.values():
+            with self.subTest(milestone=m):
+                opener = f'block "sr_window_{m}_live" {{'
+                self.assertEqual(frames.count(opener), 1)
+                start = frames.index(opener) + len(opener) - 1
+                block = frames[start:_close(frames, start) + 1]
+                self.assertEqual(re.findall(r"\b(te_\w+) = \{", block), [f"te_sr_{m}_status"])
+                self.assertNotIn("OpenJournalEntryPanel", block)
+        narrow = _type_body(_read(GUI), "te_sr_tab_body")
+        self.assertIn("te_sr_window_milestones = {}", narrow)
+        self.assertNotIn('blockoverride "sr_window_', narrow)
+
+    def test_the_tabs_column_is_the_frames_live_part(self):
+        """te_sr_window_<m>_live draws what the frame's block held, under the
+        frame's gates: the entry shown for the Country on its root, then the
+        player's own, with the entry's datacontext on the guard's child."""
+        for name, m in self.LIVE.items():
+            with self.subTest(type=name):
+                body = _type_body(self.generated, name)
+                gate = (f"GetScriptedGui('te_window_space_race_{m}_sgui')"
+                        ".IsShown( GuiScope.SetRoot( Country.MakeScope ).End )")
+                # its one visible, on the root: the inner levels gate by template
+                self.assertEqual(re.findall(r'^\s*visible = "(.*)"$', body, re.M), [f"[{gate}]"])
+                self.assertIn("minimumsize = { 520 -1 }", body)
+                self.assertRegex(body, re.compile(
+                    r"flowcontainer = \{\s*using = te_own_country_only\s*parentanchor = hcenter\s*direction = vertical"
+                    r"\s*ignoreinvisible = yes\s*flowcontainer = \{\s*"
+                    rf"datacontext = \"\[GetPlayerJournalEntry\('je_space_race_{m}'\)\]\"", re.S))
+                self.assertEqual(re.findall(r"\b(te_\w+) = \{", body), [f"te_sr_{m}_status"])
+                self.assertRegex(body, rf'te_sr_{m}_status = \{{\s*blockoverride "sr_debris" \{{\}}\s*\}}')
+
+    def test_the_tabs_column_closes_up_without_them(self):
+        """Column 2 shows only while its type would draw: the entry shown for
+        the Country, and the Country the player's own (te_own_country_only), so
+        another milestone, or another country's in National Info, leaves two
+        columns, not an empty 520 between them."""
+        (name, _), = self.LIVE.items()
+        own = re.search(r'^\s*visible = "\[(.*)\]"$', _type_body(self.generated, name), re.M).group(1)
+        shown = re.findall(r'blockoverride "column_2_visible" \{\s*visible = "(.*)"\s*\}', self.wide)
+        self.assertEqual(shown, [f"[And( {own}, Country.IsLocalPlayer )]"])
+        self.assertNotIn("column_1_visible", self.wide)
+        self.assertNotIn("column_3_visible", self.wide)
 
     def test_the_window_mounts_it_full_screen(self):
         tab = next(t for t in window_gen.TABS if t.key == "space_race")

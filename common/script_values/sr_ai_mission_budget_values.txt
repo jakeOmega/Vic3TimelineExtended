@@ -1,0 +1,626 @@
+﻿# ============================================================================
+# THE AI'S SPACE PROGRAM BUDGET (docs/systems/mod_systems/ai.md § Space Program Mission Budget)
+# ============================================================================
+# Country scope. What an AI country's Space Program costs it a week, and the
+# dearest mission its government's income covers. Read by the monthly pass
+# (sr_ai_mission_budget_review, sr_ai_mission_budget_effects.txt), the
+# funding buttons' AI weights (space_race_buttons.txt) and the mission
+# decisions' (extra_decisions.txt). test_ai_space_mission_budget.py runs the
+# pass on these values.
+#
+# The tiers, cheapest first, as the missions' Launch Capacity a week at full
+# staff (sr_mission_units_*, space_race_values.txt, held to the methods by
+# test_space_program_decisions.py):
+#   1 Earth Orbit 500   2 Moon 1,500   3 Mars 5,000   4 Solar 10,000
+#   5 Deep Space 50,000   6 Interstellar 100,000
+# ============================================================================
+
+# ---- The rule's numbers ------------------------------------------------------
+
+# The program may climb to a mission whose bill is at most this share of the
+# government's weekly fixed income, and is stepped down once its mission's
+# bill has been over the second share for sr_ai_mission_over_months_limit
+# monthly reviews in a row. The gap is the hysteresis: a mission chosen at
+# 10% must double its bill (the price can at most double from base) or halve
+# the income to be stepped down.
+# Anchor (the owner's 1958 save, AI countries; the 2026-11-15 save study): the
+# 76 governments in surplus, none of them with a program, ran a surplus of 16%
+# of their own revenue (1.8% of GDP on revenue of 11.2%). A program at 10%
+# leaves such a budget in surplus; at 20% it puts it in deficit. A player's
+# grown economy pays 1% to 5% (Singapore 1958 2.2%, 1947 5.2%, Byzantium 2020
+# 1.0%, New York 1940 2.8%; Singapore 1932 paid 69%); the solvent AI programs
+# read paid 2% to 6% (Scandinavia 1940 2%, USA 1940 3%, Russia 1940 6%,
+# Britain 1958 6%). ai.md § Space Program Mission Budget has the rest.
+sr_ai_mission_share_up = 0.1
+sr_ai_mission_share_down = 0.2
+sr_ai_mission_over_months_limit = 6
+
+# A program even Earth Orbit is too dear for: an AI country whose Earth Orbit
+# bill has been over the step-down share at this many monthly reviews in a row
+# pulls its Space Program down (owner, 2026-11-16), and founds or builds none
+# for sr_ai_program_demolished's five years, nor while Earth Orbit's bill is
+# over the climbing share (sr_ai_may_found_space_program).
+sr_ai_program_unaffordable_months_limit = 12
+
+# The milestone guard (owner, 2026-11-16): a running milestone past this share
+# of its goal, whose progress moves this month, holds the six-month step down at
+# the cheapest mission that still carries it. Default and bankruptcy still drop
+# the program at once.
+sr_ai_mission_guard_share = 0.75
+
+# The guard's backstop, for a milestone that stops moving where no gate shows
+# it: the guard holds a step down for at most this many monthly reviews past
+# the six-month count. Three years: longer than the 26 months between Mars
+# launch windows, so a real wait for a window is never cut. Set it very high
+# to remove the cap. Kept at three years by the owner, 2026-11-16 (ai.md §
+# Space Program Mission Budget).
+sr_ai_mission_guard_months_limit = 36
+
+# sr_funding_throughput's building_space_program_throughput_add
+# (space_race_modifiers.txt), which each funding level of a billed milestone
+# adds; test_ai_space_mission_budget.py holds the two equal.
+sr_ai_funding_throughput_per_level = 0.25
+
+# ---- Income ------------------------------------------------------------------
+
+# The government's own weekly revenue: fixed_income, which leaves out the
+# investment pool's transfer (vanilla's AI construction target reads the two
+# separately, 00_default_strategy.txt: fixed_income and investment_pool_income).
+# The transfer only repays private construction and is not the government's
+# to spend.
+sr_ai_mission_budget_up = {
+	value = fixed_income
+	multiply = sr_ai_mission_share_up
+}
+
+sr_ai_mission_budget_down = {
+	value = fixed_income
+	multiply = sr_ai_mission_share_down
+}
+
+# ---- Throughput ----------------------------------------------------------------
+
+# The funding levels the program's throughput carries now: each billed
+# milestone's level (the entries declare sr_funding_throughput at
+# sr_funding_<m>_level while sr_milestone_billed_<m>, je_space_race.txt).
+sr_ai_program_funding_levels = {
+	value = 0
+	if = {
+		limit = { sr_milestone_billed_suborbital = yes }
+		add = sr_funding_suborbital_level
+	}
+	if = {
+		limit = { sr_milestone_billed_orbital = yes }
+		add = sr_funding_orbital_level
+	}
+	if = {
+		limit = { sr_milestone_billed_moon_landing = yes }
+		add = sr_funding_moon_landing_level
+	}
+	if = {
+		limit = { sr_milestone_billed_probe = yes }
+		add = sr_funding_probe_level
+	}
+	if = {
+		limit = { sr_milestone_billed_mars_landing = yes }
+		add = sr_funding_mars_landing_level
+	}
+	if = {
+		limit = { sr_milestone_billed_interstellar_probe = yes }
+		add = sr_funding_interstellar_probe_level
+	}
+	if = {
+		limit = { sr_milestone_billed_solar_colonization = yes }
+		add = sr_funding_solar_colonization_level
+	}
+}
+
+sr_ai_program_funding_throughput = {
+	value = sr_ai_program_funding_levels
+	multiply = sr_ai_funding_throughput_per_level
+}
+
+# The program's throughput without its funding: 1, the milestone rewards'
+# throughput (sr_mars_orbital_first and kin) and the country's other sources,
+# never below 1. Funding is left out because the AI sheds it first, by its
+# funding buttons, before a mission is stepped down. The floor keeps the
+# estimate sound if the modifier read leaves the funding out: the bill then
+# reads at 1 plus the funding, the funding being nearly all of it in the
+# saves read (Germany 1958: 7 levels, 2.56 in all).
+sr_ai_program_throughput_unfunded = {
+	value = 1
+	add = modifier:building_space_program_throughput_add
+	subtract = sr_ai_program_funding_throughput
+	min = 1
+}
+
+sr_ai_program_throughput_funded = {
+	value = sr_ai_program_throughput_unfunded
+	add = sr_ai_program_funding_throughput
+}
+
+# ---- The missions' bills -------------------------------------------------------
+
+# Each mission's weekly bill without funding, at full staff, at our market's
+# Launch Capacity price, never below base (sr_launch_capacity_unit_price,
+# space_race_values.txt: a glut should not tempt the AI up a mission).
+sr_ai_mission_bill_earth_orbit = {
+	value = sr_mission_units_earth_orbit
+	multiply = sr_ai_program_throughput_unfunded
+	multiply = sr_launch_capacity_unit_price
+}
+sr_ai_mission_bill_moon = {
+	value = sr_mission_units_moon
+	multiply = sr_ai_program_throughput_unfunded
+	multiply = sr_launch_capacity_unit_price
+}
+sr_ai_mission_bill_mars = {
+	value = sr_mission_units_mars
+	multiply = sr_ai_program_throughput_unfunded
+	multiply = sr_launch_capacity_unit_price
+}
+sr_ai_mission_bill_solar = {
+	value = sr_mission_units_solar
+	multiply = sr_ai_program_throughput_unfunded
+	multiply = sr_launch_capacity_unit_price
+}
+sr_ai_mission_bill_deep_space = {
+	value = sr_mission_units_deep_space
+	multiply = sr_ai_program_throughput_unfunded
+	multiply = sr_launch_capacity_unit_price
+}
+sr_ai_mission_bill_interstellar = {
+	value = sr_mission_units_interstellar
+	multiply = sr_ai_program_throughput_unfunded
+	multiply = sr_launch_capacity_unit_price
+}
+
+# What is left of the climbing budget after each mission's bill: 0 or more,
+# the mission is within it.
+sr_ai_mission_room_earth_orbit = {
+	value = sr_ai_mission_budget_up
+	subtract = sr_ai_mission_bill_earth_orbit
+}
+sr_ai_mission_room_moon = {
+	value = sr_ai_mission_budget_up
+	subtract = sr_ai_mission_bill_moon
+}
+sr_ai_mission_room_mars = {
+	value = sr_ai_mission_budget_up
+	subtract = sr_ai_mission_bill_mars
+}
+sr_ai_mission_room_solar = {
+	value = sr_ai_mission_budget_up
+	subtract = sr_ai_mission_bill_solar
+}
+sr_ai_mission_room_deep_space = {
+	value = sr_ai_mission_budget_up
+	subtract = sr_ai_mission_bill_deep_space
+}
+sr_ai_mission_room_interstellar = {
+	value = sr_ai_mission_budget_up
+	subtract = sr_ai_mission_bill_interstellar
+}
+
+# ---- Tiers -------------------------------------------------------------------
+
+# The mission the program runs now, as its tier (0 without a program).
+sr_ai_mission_tier_current = {
+	value = 0
+	if = {
+		limit = { sr_space_program_runs = { PM = pm_earth_orbit } }
+		value = 1
+	}
+	else_if = {
+		limit = { sr_space_program_runs = { PM = pm_moon_mission } }
+		value = 2
+	}
+	else_if = {
+		limit = { sr_space_program_runs = { PM = pm_mars_mission } }
+		value = 3
+	}
+	else_if = {
+		limit = { sr_space_program_runs = { PM = pm_solar_colonization } }
+		value = 4
+	}
+	else_if = {
+		limit = { sr_space_program_runs = { PM = pm_deep_space_exploration } }
+		value = 5
+	}
+	else_if = {
+		limit = { sr_space_program_runs = { PM = pm_interstellar_mission } }
+		value = 6
+	}
+}
+
+# The ceiling the program carries now, as its tier (0 on Any Mission).
+sr_ai_mission_ceiling_tier_active = {
+	value = 0
+	if = {
+		limit = { sr_space_program_runs = { PM = pm_sr_mission_ceiling_earth_orbit } }
+		value = 1
+	}
+	else_if = {
+		limit = { sr_space_program_runs = { PM = pm_sr_mission_ceiling_moon } }
+		value = 2
+	}
+	else_if = {
+		limit = { sr_space_program_runs = { PM = pm_sr_mission_ceiling_mars } }
+		value = 3
+	}
+	else_if = {
+		limit = { sr_space_program_runs = { PM = pm_sr_mission_ceiling_solar } }
+		value = 4
+	}
+	else_if = {
+		limit = { sr_space_program_runs = { PM = pm_sr_mission_ceiling_deep_space } }
+		value = 5
+	}
+	else_if = {
+		limit = { sr_space_program_runs = { PM = pm_sr_mission_ceiling_interstellar } }
+		value = 6
+	}
+}
+
+# The current mission's units a week at full staff.
+sr_ai_mission_units_current = {
+	value = 0
+	if = {
+		limit = { sr_ai_mission_tier_current = 1 }
+		value = sr_mission_units_earth_orbit
+	}
+	else_if = {
+		limit = { sr_ai_mission_tier_current = 2 }
+		value = sr_mission_units_moon
+	}
+	else_if = {
+		limit = { sr_ai_mission_tier_current = 3 }
+		value = sr_mission_units_mars
+	}
+	else_if = {
+		limit = { sr_ai_mission_tier_current = 4 }
+		value = sr_mission_units_solar
+	}
+	else_if = {
+		limit = { sr_ai_mission_tier_current = 5 }
+		value = sr_mission_units_deep_space
+	}
+	else_if = {
+		limit = { sr_ai_mission_tier_current = 6 }
+		value = sr_mission_units_interstellar
+	}
+}
+
+# The dearest mission the climbing budget covers (at least Earth Orbit, the
+# floor: no program runs without a mission). The bills rise with the tier, so
+# the last mission within it is the dearest.
+sr_ai_mission_affordable_tier = {
+	value = 1
+	if = {
+		limit = { sr_ai_mission_room_moon >= 0 }
+		value = 2
+	}
+	if = {
+		limit = { sr_ai_mission_room_mars >= 0 }
+		value = 3
+	}
+	if = {
+		limit = { sr_ai_mission_room_solar >= 0 }
+		value = 4
+	}
+	if = {
+		limit = { sr_ai_mission_room_deep_space >= 0 }
+		value = 5
+	}
+	if = {
+		limit = { sr_ai_mission_room_interstellar >= 0 }
+		value = 6
+	}
+}
+
+# The mission the pass may hold the program at: the one it runs, but never past
+# the ceiling the pass set at its last review. A mission past that ceiling (the
+# engine's AI ignoring the gate, the case the self-check reads BROKEN) is
+# stepped back to the ceiling at this review, not ratified; a climb within the
+# ceiling, after a new technology, is held. Read before the review sets this
+# month's ceiling.
+sr_ai_mission_held_tier = {
+	value = sr_ai_mission_tier_current
+	if = {
+		limit = { has_variable = sr_ai_mission_ceiling }
+		max = var:sr_ai_mission_ceiling
+	}
+}
+
+# Hold the mission, or climb to the dearest one within the budget.
+sr_ai_mission_hold_or_climb_tier = {
+	value = sr_ai_mission_affordable_tier
+	min = sr_ai_mission_held_tier
+}
+
+# ---- The milestone guard ------------------------------------------------------
+
+# Each guarded milestone's line, in its progress points: sr_ai_mission_guard_share
+# of its goal (sr_<m>_goal, space_race_values.txt, the goal its entry pins), set
+# against var:sr_progress_<m> by sr_ai_milestone_guarded. Suborbital and Orbital
+# Flight need none: Earth Orbit, the floor, carries them.
+sr_ai_guard_progress_moon_landing = {
+	value = sr_moon_landing_goal
+	multiply = sr_ai_mission_guard_share
+}
+sr_ai_guard_progress_probe = {
+	value = sr_probe_goal
+	multiply = sr_ai_mission_guard_share
+}
+sr_ai_guard_progress_mars_landing = {
+	value = sr_mars_landing_goal
+	multiply = sr_ai_mission_guard_share
+}
+# Solar System Colonization's goal is its next colony's (stage or target), read
+# live, as its bar's percent is (sr_progress_solar_colonization_percent).
+sr_ai_guard_progress_solar_colonization = {
+	value = sr_solar_colonization_goal
+	multiply = sr_ai_mission_guard_share
+}
+sr_ai_guard_progress_interstellar_probe = {
+	value = sr_interstellar_probe_goal
+	multiply = sr_ai_mission_guard_share
+}
+
+# The cheapest mission that still carries every guarded milestone
+# (sr_ai_milestone_guarded, sr_ai_colonization_guarded: past its line, and its
+# progress moving this month): the floor of the six-month step down (1: none).
+# - The Moon Mission carries the Moon Landing and the Deep-Space Probe; the
+#   Mars Mission the Mars Landing; the Interstellar Mission the Interstellar
+#   Probe (each entry's country_sr_<mission>_program_bool).
+# - Solar Colonization carries Solar System Colonization while a lunar world is
+#   free or an inner world open. Where only outer worlds are left, only Deep
+#   Space Exploration founds one (sr_sites_generated.txt: stage 3 and later
+#   need country_sr_deep_space_exploration_program_bool), so the guard holds
+#   it only for a program already on Deep Space Exploration or above; one on
+#   Solar Colonization could never found the colony it would be held for.
+sr_ai_mission_guard_tier = {
+	value = 1
+	if = {
+		limit = {
+			OR = {
+				sr_ai_milestone_guarded = { MILESTONE = moon_landing }
+				sr_ai_milestone_guarded = { MILESTONE = probe }
+			}
+		}
+		value = 2
+	}
+	if = {
+		limit = { sr_ai_milestone_guarded = { MILESTONE = mars_landing } }
+		value = 3
+	}
+	if = {
+		limit = { sr_ai_colonization_guarded = yes }
+		if = {
+			limit = {
+				OR = {
+					sr_sites_lunar_open = yes
+					sr_colonization_inner_open = yes
+				}
+			}
+			value = 4
+		}
+		else_if = {
+			limit = { sr_ai_mission_held_tier >= 5 }
+			value = 5
+		}
+	}
+	if = {
+		limit = { sr_ai_milestone_guarded = { MILESTONE = interstellar_probe } }
+		value = 6
+	}
+}
+
+# The over-budget count at which the guard lets go: the six-month count plus
+# the backstop (sr_ai_mission_guard_months_limit). The count goes on rising by
+# one at each review the guard holds the step, so it is the clock.
+sr_ai_mission_guard_until = {
+	value = sr_ai_mission_over_months_limit
+	add = sr_ai_mission_guard_months_limit
+}
+
+# The six-month step down: to the dearest mission within the climbing share,
+# but not below the guard's floor while the backstop allows it
+# (sr_ai_mission_guard_in_time), and never above the mission held.
+sr_ai_mission_step_down_tier = {
+	value = sr_ai_mission_affordable_tier
+	if = {
+		limit = { sr_ai_mission_guard_in_time = yes }
+		min = sr_ai_mission_guard_tier
+	}
+	max = sr_ai_mission_held_tier
+}
+
+# How far the rule's step-down lowers the program from the mission it holds:
+# over 0, a step down, and the five years' wait starts.
+sr_ai_mission_step_down_size = {
+	value = sr_ai_mission_held_tier
+	subtract = sr_ai_mission_step_down_tier
+}
+
+# Over 0: the guard holds the step down above the affordable mission, so the
+# six-month count is kept and goes on rising. The rest of the step comes at the
+# first review after the milestone ends or stops moving, or once the count
+# reaches sr_ai_mission_guard_until, if the bill is still over.
+sr_ai_mission_guard_gap = {
+	value = sr_ai_mission_step_down_tier
+	subtract = sr_ai_mission_affordable_tier
+}
+
+# The dearest mission the country's technology allows.
+sr_ai_mission_tech_tier = {
+	value = 1
+	if = {
+		limit = { has_technology_researched = space_exploration }
+		value = 2
+	}
+	if = {
+		limit = { has_technology_researched = knowledge_economy }
+		value = 3
+	}
+	if = {
+		limit = { has_technology_researched = cislunar_infrastructure }
+		value = 4
+	}
+	if = {
+		limit = { has_technology_researched = space_colonization }
+		value = 5
+	}
+	if = {
+		limit = { has_technology_researched = aneutronic_fusion }
+		value = 6
+	}
+}
+
+# The dearest mission under the ceiling the pass has just set
+# (var:sr_ai_mission_ceiling) whose technology the country has: the mission
+# the pass puts the program on.
+sr_ai_mission_target_tier = {
+	value = 1
+	if = {
+		limit = {
+			var:sr_ai_mission_ceiling >= 2
+			has_technology_researched = space_exploration
+		}
+		value = 2
+	}
+	if = {
+		limit = {
+			var:sr_ai_mission_ceiling >= 3
+			has_technology_researched = knowledge_economy
+		}
+		value = 3
+	}
+	if = {
+		limit = {
+			var:sr_ai_mission_ceiling >= 4
+			has_technology_researched = cislunar_infrastructure
+		}
+		value = 4
+	}
+	if = {
+		limit = {
+			var:sr_ai_mission_ceiling >= 5
+			has_technology_researched = space_colonization
+		}
+		value = 5
+	}
+	if = {
+		limit = {
+			var:sr_ai_mission_ceiling >= 6
+			has_technology_researched = aneutronic_fusion
+		}
+		value = 6
+	}
+}
+
+# ---- The current mission against the budget -----------------------------------
+
+# The current mission's bill without funding, and with it (what the program
+# pays now, at full staff).
+sr_ai_mission_bill_current = {
+	value = sr_ai_mission_units_current
+	multiply = sr_ai_program_throughput_unfunded
+	multiply = sr_launch_capacity_unit_price
+}
+
+sr_ai_mission_bill_now = {
+	value = sr_ai_mission_units_current
+	multiply = sr_ai_program_throughput_funded
+	multiply = sr_launch_capacity_unit_price
+}
+
+# Earth Orbit's bill over the step-down share (over 0: even the cheapest mission
+# costs more than the program may keep; sr_ai_program_affordability_count).
+sr_ai_mission_overrun_earth_orbit = {
+	value = sr_ai_mission_bill_earth_orbit
+	subtract = sr_ai_mission_budget_down
+}
+
+# Over the step-down share by this much (over 0: the mission itself, unfunded,
+# costs more than the program may keep).
+sr_ai_mission_overrun = {
+	value = sr_ai_mission_bill_current
+	subtract = sr_ai_mission_budget_down
+}
+
+# The same with the funding: over 0, the AI's decrease-funding buttons get
+# +100 (sr_ai_space_fund_down_due).
+sr_ai_mission_funded_overrun = {
+	value = sr_ai_mission_bill_now
+	subtract = sr_ai_mission_budget_down
+}
+
+# What one more funding level leaves of the climbing budget: under 0, the AI's
+# increase-funding buttons weigh 0 (sr_ai_space_fund_up_blocked).
+sr_ai_mission_fund_up_room = {
+	value = sr_ai_mission_budget_up
+	subtract = sr_ai_mission_bill_now
+	subtract = {
+		value = sr_ai_mission_units_current
+		multiply = sr_ai_funding_throughput_per_level
+		multiply = sr_launch_capacity_unit_price
+	}
+}
+
+# ---- The self-check's line ------------------------------------------------------
+
+# The program's bill now as a percentage of fixed income (fixed income floored
+# at 1).
+sr_ai_mission_share_now_pct = {
+	value = sr_ai_mission_bill_now
+	multiply = 100
+	divide = {
+		value = fixed_income
+		min = 1
+	}
+}
+
+# The bill the program's mission would have without funding, as a percentage.
+sr_ai_mission_share_current_pct = {
+	value = sr_ai_mission_bill_current
+	multiply = 100
+	divide = {
+		value = fixed_income
+		min = 1
+	}
+}
+
+# The self-check's reads, as gaps (0: they agree): the ceiling active against
+# the one the pass set; the mission running against the one it set (the review
+# reads it too, after setting the new one: over 0 is a step down); and the
+# mission running against the ceiling the pass set (over 0: past it).
+sr_ai_mission_ceiling_gap = {
+	value = sr_ai_mission_ceiling_tier_active
+	subtract = var:sr_ai_mission_ceiling
+}
+
+sr_ai_mission_target_gap = {
+	value = sr_ai_mission_tier_current
+	subtract = var:sr_ai_mission_target
+}
+
+sr_ai_mission_past_ceiling = {
+	value = sr_ai_mission_tier_current
+	subtract = var:sr_ai_mission_ceiling
+}
+
+# Over 0: the country's technology allows a dearer mission than its ceiling.
+sr_ai_mission_tech_headroom = {
+	value = sr_ai_mission_tech_tier
+	subtract = var:sr_ai_mission_ceiling
+}
+
+# The read of the throughput modifier, for the line.
+sr_ai_mission_throughput_read = {
+	value = modifier:building_space_program_throughput_add
+}
+
+sr_ai_mission_fixed_income_read = {
+	value = fixed_income
+}

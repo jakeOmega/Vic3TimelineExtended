@@ -666,16 +666,18 @@ ministry_law_events.9 = {
 		add_enactment_modifier = {
 			name = ministry_labor_struggle_advance
 		}
+		# The option's trigger tests only the favored group, so the other
+		# side's scope may never have been saved: `?=` on both (#1614).
 		if = {
 			limit = { is_enacting_law = law_type:law_pro_labor_ministry_of_labor }
-			scope:trade_unions_ig = {
+			scope:trade_unions_ig ?= {
 				add_modifier = {
 					name = ig_approval_positive_modifier
 					days = normal_modifier_time
 					is_decaying = yes
 				}
 			}
-			scope:industrialists_ig = {
+			scope:industrialists_ig ?= {
 				add_modifier = {
 					name = ig_approval_negative_modifier
 					days = normal_modifier_time
@@ -685,14 +687,14 @@ ministry_law_events.9 = {
 		}
 		if = {
 			limit = { is_enacting_law = law_type:law_pro_capital_ministry_of_labor }
-			scope:industrialists_ig = {
+			scope:industrialists_ig ?= {
 				add_modifier = {
 					name = ig_approval_positive_modifier
 					days = normal_modifier_time
 					is_decaying = yes
 				}
 			}
-			scope:trade_unions_ig = {
+			scope:trade_unions_ig ?= {
 				add_modifier = {
 					name = ig_approval_negative_modifier
 					days = normal_modifier_time
@@ -2232,8 +2234,10 @@ ministry_law_events.29 = {
 		add_enactment_modifier = {
 			name = ministry_env_smokestacks_stall
 		}
-		# Domain side-effect
-		add_modifier = { name = ministry_env_pollution_reduction days = normal_modifier_time }
+		# Domain side-effect: a stall option carries a cost. Industry's
+		# campaign says the rules will drive plants abroad, so owners
+		# hold back their money (it paid .10.a's benefit until #1614).
+		add_modifier = { name = welfare_investment_chill days = normal_modifier_time }
 	}
 }
 
@@ -3196,16 +3200,17 @@ ministry_law_events.42 = {
 		name = ministry_law_events.42.a
 		default_option = yes
 		add_enactment_modifier = { name = ministry_dissolution_swift }
-		# Domain side-effect
-		add_modifier = { name = te_authority_boost days = normal_modifier_time }
+		# Domain side-effect: dissolution — swift cuts free up treasury
+		add_treasury = sv_treasury_event_small
 		ai_chance = { base = 3 }
 	}
 
 	option = {
 		name = ministry_law_events.42.b
 		add_enactment_modifier = { name = ministry_dissolution_phased }
-		# Domain side-effect: dissolution — swift cuts free up treasury
-		add_treasury = sv_treasury_event_small
+		# Domain side-effect: an orderly handover, with every open case
+		# finished, is the concession's benefit
+		add_modifier = { name = te_legitimacy_boost days = normal_modifier_time }
 		ai_chance = { base = 1 }
 	}
 }
@@ -3312,8 +3317,10 @@ ministry_law_events.44 = {
 	option = {
 		name = ministry_law_events.44.b
 		add_enactment_modifier = { name = ministry_fa_dovish }
-		# Domain side-effect
-		add_modifier = { name = te_diplomatic_relations_drain days = normal_modifier_time }
+		# Domain side-effect: the option that pushes the law pays a cost.
+		# The officers who wanted firm envoys are kept out of the talks
+		# (it slowed relations, the opposite of its name, until #1614).
+		add_modifier = { name = te_military_morale_drain days = normal_modifier_time }
 		ai_chance = { base = 3 }
 	}
 }
@@ -3639,8 +3646,10 @@ ministry_law_events.50 = {
 	option = {
 		name = ministry_law_events.50.b
 		add_enactment_modifier = { name = ministry_refugee_restrictive }
-		# Domain side-effect
-		add_modifier = { name = te_diplomatic_relations_boost days = normal_modifier_time }
+		# Domain side-effect: the concession's benefit. The government
+		# keeps control of who settles where (it warmed other countries
+		# to us, which turning refugees away does not, until #1614).
+		add_modifier = { name = te_authority_boost days = normal_modifier_time }
 		ai_chance = { base = 1 }
 	}
 }

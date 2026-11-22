@@ -246,8 +246,10 @@ class TestStepWithMeasures(unittest.TestCase):
     check_step): desired fertility's policy term, Family Housing, the means (the model's, a fixture here),
     Restricted Contraception's maternal deaths and Birth Limit's sex ratio at birth with prenatal sexing."""
 
+    COHORT = R.TestCohortScript   # the fixed-point twin takes TestCohortScript's twin (test_demographics_fixed_point.py)
+
     def setUp(self):
-        self.cohort = R.TestCohortScript("test_seed_rates_match_the_model")   # its helpers, not its tests
+        self.cohort = self.COHORT("test_seed_rates_match_the_model")   # its helpers, not its tests
         self.YEAR, self.POP = self.cohort.YEAR, self.cohort.POP
 
     def _inp(self, **mods):
@@ -333,9 +335,10 @@ class TestFamilyLawsUnderFull(unittest.TestCase):
             self.assertFalse(any(k.startswith("te_demog_line_births_") for k in eng.modifiers), law)
 
     def test_the_on_top_list_keeps_communal_child_rearing_only(self):
-        self.assertNotIn(PN, P.ENGINE_LINES_ON_TOP)
-        self.assertNotIn(PC, P.ENGINE_LINES_ON_TOP)
-        self.assertIn("law_communal_child_rearing", P.ENGINE_LINES_ON_TOP)
+        on_top = DM.engine_lines_on_top()
+        self.assertNotIn(PN, on_top)
+        self.assertNotIn(PC, on_top)
+        self.assertIn("law_communal_child_rearing", on_top)
         sums = DM.totals(self.lines, laws={"law_communal_child_rearing"}, types=tuple(P.ENGINE_LINE_TYPES.values()))
         self.assertAlmostEqual(sums["state_demog_ontop_birth_rate_mult"], -0.2)
 

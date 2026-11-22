@@ -366,7 +366,9 @@ ICBMs = {
 
 	modifier = {
 		country_diplomatic_play_maneuvers_add = 10
-		country_nuclear_weapon_attack_success_add = 0.5
+		# The +0.5 nuclear attack success is the missiles', not the
+		# knowledge's: nd_icbm_force carries it while nd_fields_icbms holds
+		# (2026-11-20 delivery spec §4.2, owner call 1).
 		country_icbm_pb_principles_bool = yes
 		country_aggressor_diplomatic_play_escalation_weekly_add = 1.0
 	}
@@ -406,7 +408,7 @@ tactical_nuclear_weapons = {
 }
 
 recon_satellites = {
-	# Modern Logisitcal Support and Space Recon mobilization options
+	# Modern Logistical Support and Space Recon mobilization options
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/recon_satellites.dds"
 	category = military

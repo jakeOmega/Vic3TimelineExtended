@@ -198,16 +198,25 @@ class SpaceMissionDecisionsTest(unittest.TestCase):
                 sv_units = re.search(r"^" + value + r"\s*=\s*(\d+)", self.values, re.M).group(1)
                 self.assertEqual(pm_units, sv_units)
 
-    def test_ai_weighs_the_increase_and_races_only_when_it_counts(self):
+    def test_ai_follows_its_budget_and_races_only_when_it_counts(self):
+        # The AI's monthly budget pass sets each AI program's Mission Limit ceiling and climbs it
+        # itself (test_ai_space_mission_budget.py); a mission decision only follows the ceiling.
         for name in [*MISSIONS, "te_decision_found_space_program"]:
             with self.subTest(decision=name):
                 ai = block(block(self.decisions, name), "ai_chance")
                 self.assertIn("sr_ai_should_participate = yes", ai)
-                self.assertIn("in_default = no", ai)
-                self.assertRegex(ai, r"net_fixed_income > sr_mission_bill_\w+")
         for name in MISSIONS:
-            body = block(self.values, "sr_mission_bill_increase_" + name.rsplit("space_mission_", 1)[1])
-            self.assertIn("subtract = sr_mission_units_current", body)
+            with self.subTest(decision=name):
+                self.assertIn("sr_ai_space_budget_in_trouble = no", block(block(self.decisions, name), "ai_chance"))
+        # Founding asks the means test the budget pass reverses to pull a program down (trouble
+        # included; test_ai_space_mission_budget.py runs it).
+        found = block(block(self.decisions, "te_decision_found_space_program"), "ai_chance")
+        self.assertRegex(found, r"net_fixed_income > sr_mission_bill_earth_orbit")
+        self.assertIn("sr_ai_may_found_space_program = yes", found)
+        for name in MISSIONS:
+            with self.subTest(decision=name):
+                ai = block(block(self.decisions, name), "ai_chance")
+                self.assertIn(f"sr_ai_mission_ceiling_allows_{name.rsplit('space_mission_', 1)[1]} = yes", ai)
 
     def test_pm_group_is_most_productive(self):
         pmg = block(strip_comments(read(PMGS)), "REPLACE_OR_CREATE:pmg_base_building_space_program")
@@ -268,10 +277,55 @@ class StrategicReserveDecisionTest(unittest.TestCase):
         self.assertIn("owner = { has_variable = st_res_hub_relocating }", hub_possible)
 
     def test_ai_mirrors_the_hubs_ai_value(self):
-        ai = block(block(strip_comments(read(DECISIONS)), "te_decision_establish_strategic_reserve"), "ai_chance")
-        self.assertIn("is_great_or_major_power = yes", ai)
-        self.assertIn("is_at_war = no", ai)
-        self.assertIn("gdp > st_res_ai_hub_min_gdp", ai)
+        """Rank first, then the founding tier, in both the decision and the hub (strategic_reserve_system.md §7)."""
+        def flat(text):
+            return " ".join(text.split())
+        ai = flat(block(block(strip_comments(read(DECISIONS)), "te_decision_establish_strategic_reserve"),
+                        "ai_chance"))
+        self.assertEqual(ai, "value = 0 "
+                             "if = { limit = { is_great_or_major_power = yes } add = 50 "
+                             "if = { limit = { is_at_war = no } add = 50 } } "
+                             "if = { limit = { st_res_ai_hub_gdp_tier = yes } add = 100 }")
+        hub = flat(block(block(strip_comments(read(HUB)), "building_strategic_reserve_hub"), "ai_value"))
+        self.assertEqual(hub, "value = 0 "
+                              "if = { limit = { owner = { is_great_or_major_power = yes } } add = 1000 "
+                              "if = { limit = { owner = { is_at_war = no } } add = 1000 } } "
+                              "if = { limit = { owner = { st_res_ai_hub_gdp_tier = yes } } add = 10000 }")
+
+    def test_a_minor_in_another_market_needs_the_higher_bar(self):
+        """The tier is the old GDP test and more, so no country scores higher than before (2026-11-12, for speed)."""
+        triggers = strip_comments(read(ROOT / "common/scripted_triggers/st_res_triggers.txt"))
+        tier = " ".join(block(triggers, "st_res_ai_hub_gdp_tier").split())
+        self.assertEqual(tier, "gdp > st_res_ai_hub_min_gdp "
+                               "OR = { is_great_or_major_power = yes gw_is_market_leader = yes "
+                               "gdp > st_res_ai_minor_hub_min_gdp }")
+        values = strip_comments(read(ROOT / "common/script_values/st_res_script_values.txt"))
+        bars = {name: int(n) for name, n in re.findall(r"^(st_res_ai_(?:minor_)?hub_min_gdp) = (\d+)$", values, re.M)}
+        self.assertEqual(bars, {"st_res_ai_hub_min_gdp": 10_000_000, "st_res_ai_minor_hub_min_gdp": 100_000_000})
+        # The market-leader test the tier leans on (global_warming_triggers.txt).
+        leader = " ".join(block(strip_comments(read(ROOT / "common/scripted_triggers/global_warming_triggers.txt")),
+                                "gw_is_market_leader").split())
+        self.assertEqual(leader, "exists = market_capital.owner market_capital.owner = THIS")
+        # Players are untouched: only the AI's weights read the tier.
+        body = strip_comments(read(DECISIONS))
+        decision = block(body, "te_decision_establish_strategic_reserve")
+        for gate in ("is_shown", "possible"):
+            with self.subTest(gate=gate):
+                self.assertNotIn("st_res_ai_hub_gdp_tier", block(decision, gate))
+                self.assertNotIn("is_ai", block(decision, gate))
+        # Each founding logs the class it held, which the play-test counts. The order and limits matter:
+        # zero_weight must be exactly an AI whose ai_chance reads 0 (not a major, not in the tier).
+        log = " ".join(block(block(decision, "when_taken"), "hidden_effect").split())
+        line = 'debug_log = "TE_ST_RES: founded class={} country=[THIS.GetCountry.GetTagName] ' \
+               'date=[TimeKeeper.GetCurrentDate.GetString]"'
+        self.assertEqual(log, " ".join([
+            "if = { limit = { is_great_or_major_power = yes }", line.format("major"), "}",
+            "else_if = { limit = { st_res_ai_hub_gdp_tier = yes gw_is_market_leader = yes }",
+            line.format("leader"), "}",
+            "else_if = { limit = { st_res_ai_hub_gdp_tier = yes }", line.format("minor"), "}",
+            "else_if = { limit = { is_ai = no }", line.format("player"), "}",
+            "else = {", line.format("zero_weight"), "}",
+        ]))
 
 
 class LocalizationTest(unittest.TestCase):

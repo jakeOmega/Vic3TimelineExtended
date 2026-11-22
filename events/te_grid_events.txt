@@ -2,7 +2,8 @@
 # POWER GRID — internal country events
 # ============================================================================
 # Hidden, no loc. te_grid.1 is raised by common/on_actions/power_grid_on_actions.txt
-# on one country with a Grid Transfer Station, on the 1st of each month. ROOT is
+# on one country with a Grid Transfer Station (or a state one left its figures
+# on), on the 1st of each month. ROOT is
 # that country; the effect balances every grid in the world
 # (common/scripted_effects/power_grid_effects.txt).
 #

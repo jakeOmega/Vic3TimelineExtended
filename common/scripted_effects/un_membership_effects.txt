@@ -61,17 +61,9 @@ un_representation_monthly_update = {
 		}
 		# UN programmes and stances end, as their stop buttons end them: a
 		# suspended member runs none (ruling 3), and the start buttons refuse
-		# it. Every month while suspended, so an old save's are ended too.
-		# un_state_off forgets each mirror as well (§0.9), so a journal entry
-		# rebuilt after a revolution does not bring any of these back.
-		un_state_off = { MODIFIER = un_peacekeeping_contributor_modifier }
-		un_state_off = { MODIFIER = un_peacekeeping_contributor_cost }
-		un_state_off = { MODIFIER = un_development_contributor_modifier }
-		un_state_off = { MODIFIER = un_development_contributor_cost }
-		un_state_off = { MODIFIER = un_human_rights_champion_modifier }
-		un_state_off = { MODIFIER = un_arms_control_participant_modifier }
-		un_state_off = { MODIFIER = un_champion_order_cost }
-		un_state_off = { MODIFIER = un_undermine_order_cost }
+		# it. Every month while suspended. Their mirrors are what the entry
+		# declares them from (§0.9, #1404), so this is all it takes.
+		un_programmes_end = yes
 	}
 	else_if = {
 		limit = { has_variable = un_rep_suspended }

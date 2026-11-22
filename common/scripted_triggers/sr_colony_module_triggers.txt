@@ -16,6 +16,15 @@ sr_mod_departs = {
 	}
 }
 
+# Country scope. The queue's first module takes no shipment slot (the owner,
+# 2026-11-15): a lunar world's, neither blockaded nor occupied
+# (sr_mq_head_lunar_open, generated), installed the month it is built, while
+# launches aren't barred (sr_mod_fab_build_lunar).
+sr_mq_head_needs_no_slot = {
+	sr_mq_head_lunar_open = yes
+	NOT = { sr_launches_barred = yes }
+}
+
 # Country scope. A shipment slot is free.
 sr_ms_has_free_slot = {
 	OR = {
@@ -35,6 +44,19 @@ sr_mod_fabrication_runs = {
 	any_scope_building = {
 		is_building_type = building_space_program
 		has_active_production_method = $PM$
+	}
+}
+
+# Country scope. The module_storage self-check's subject: a Space Program running
+# a Module Storage method (sr_colony_module_pms.txt) at half staff or more.
+sr_mod_storage_runs = {
+	any_scope_building = {
+		is_building_type = building_space_program
+		OR = {
+			has_active_production_method = pm_sr_storage_component_depot
+			has_active_production_method = pm_sr_storage_orbital_depot
+		}
+		occupancy >= 0.5
 	}
 }
 

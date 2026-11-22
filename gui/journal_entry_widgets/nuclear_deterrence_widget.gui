@@ -25,7 +25,9 @@
 ###                             choices beneath it (readiness as a table), then
 ###                             the umbrella, loose warheads, upkeep and
 ###                             incident exposure (open, only while armed).
-### te_nuclear_sec_forces       Survivability, reliability, strain, the chance
+### te_nuclear_sec_forces       Survivability with its target and floor,
+###                             survivors against the main rival, launch
+###                             credit, reach, reliability, strain, the chance
 ###                             a sequence is halted, the investment steppers
 ###                             and the arsenal's size, its count with it
 ###                             (open, only while armed).
@@ -1239,9 +1241,11 @@ types nuclear_deterrence_widget_types
 	### planner's counted pass, nd_plan_refresh, runs in script). The target,
 	### stepped through with the panel's stepper icons (ops 72/73) and named by a
 	### display handler (nd_plan_enemy_sgui, gotcha #11); the mission as three
-	### choice rows, the one in force tinted (74..76); the warheads as a stepper
-	### (77/78); and the order (79), which asks for confirmation
-	### (nuclear_weapon_events.31). A single city stays the diplomatic action.
+	### choice rows, the one in force tinted (74..76), each with its preview
+	### under it (what it would do at the size set, nd_plan_preview); the
+	### warheads as a stepper (77/78); and the order (79), which asks for
+	### confirmation (nuclear_weapon_events.31). A single city stays the
+	### diplomatic action.
 	type te_nuclear_sec_strike = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -1337,6 +1341,21 @@ types nuclear_deterrence_widget_types
 						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)74' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)74' ) ).End ) ) )]"
 					}
 				}
+				### What this mission would do at the salvo size set (nd_plan_preview;
+				### 2026-11-20 delivery spec §5.3, plan D14): an estimate, its figures
+				### on hover.
+				nd_row = {
+					visible = "[GetScriptedGui('nd_plan_preview_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+					blockoverride "row_label" {
+						text = "nd_w_strike_pv_label"
+					}
+					blockoverride "row_value" {
+						text = "nd_w_strike_pv_1_value"
+					}
+					blockoverride "row_tooltip" {
+						tooltip = "nd_w_strike_pv_1_tt"
+					}
+				}
 				nd_choice_row = {
 					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
 					blockoverride "row_current" {
@@ -1355,6 +1374,21 @@ types nuclear_deterrence_widget_types
 						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)75' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)75' ) ).End ) ) )]"
 					}
 				}
+				### What this mission would do at the salvo size set (nd_plan_preview;
+				### 2026-11-20 delivery spec §5.3, plan D14): an estimate, its figures
+				### on hover.
+				nd_row = {
+					visible = "[GetScriptedGui('nd_plan_preview_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+					blockoverride "row_label" {
+						text = "nd_w_strike_pv_label"
+					}
+					blockoverride "row_value" {
+						text = "nd_w_strike_pv_2_value"
+					}
+					blockoverride "row_tooltip" {
+						tooltip = "nd_w_strike_pv_2_tt"
+					}
+				}
 				nd_choice_row = {
 					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
 					blockoverride "row_current" {
@@ -1371,6 +1405,21 @@ types nuclear_deterrence_widget_types
 						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)76' ) ).End )]"
 						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)76' ) ).End )]"
 						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)76' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)76' ) ).End ) ) )]"
+					}
+				}
+				### What this mission would do at the salvo size set (nd_plan_preview;
+				### 2026-11-20 delivery spec §5.3, plan D14): an estimate, its figures
+				### on hover.
+				nd_row = {
+					visible = "[GetScriptedGui('nd_plan_preview_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+					blockoverride "row_label" {
+						text = "nd_w_strike_pv_label"
+					}
+					blockoverride "row_value" {
+						text = "nd_w_strike_pv_3_value"
+					}
+					blockoverride "row_tooltip" {
+						tooltip = "nd_w_strike_pv_3_tt"
 					}
 				}
 
@@ -1984,7 +2033,7 @@ types nuclear_deterrence_widget_types
 			nd_panel = {
 				visible = "[Not(GetVariableSystem.Exists('nd_capabilities_closed'))]"
 
-				### Survivability, heading for the ceiling our technology sets while we
+				### Survivability, heading for the target our forces set while we
 				### pay for hardening and back toward the floor without it
 				### (nd_display_survivability_heading). Play-test round 3: the
 				### projection bar shared with Global Warming, in one fixed 200 x 14
@@ -1992,7 +2041,7 @@ types nuclear_deterrence_widget_types
 				### to the higher of today's value and where it is heading, green while
 				### rising and red while falling (a wrapper, alpha 0.5; more
 				### survivability is always good for us, owner 2026-09-30: red bad,
-				### green good); the solid fill to the lower of the two; and the ceiling
+				### green good); the solid fill to the lower of the two; and the target
 				### as a 3 px cream line with its own hover. The row is an nd_row's width
 				### (170 + 200 + 94 and two 8 px gaps, in 6 px margins). Rising and
 				### falling compare the two values rather than a code: a (CFixedPoint)
@@ -2076,14 +2125,14 @@ types nuclear_deterrence_widget_types
 								max = 100
 							}
 						}
-						# 5. The ceiling our technology sets: a thin line with its own hover.
+						# 5. The survivability target: a thin line with its own hover.
 						progressbar = {
 							noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
 							progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
 							size = { 100% 100% }
 							skip_initial_animation = yes
 							direction = horizontal
-							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('nd_display_survivability_cap') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('nd_display_survivability_target') )]"
 							min = 0
 							max = 100
 							marker = {
@@ -2093,7 +2142,7 @@ types nuclear_deterrence_widget_types
 									widgetanchor = center
 									texture = "gfx/interface/backgrounds/white.dds"
 									color = { 0.96 0.90 0.72 0.95 }
-									tooltip = "nd_w_survivability_cap_tt"
+									tooltip = "nd_w_survivability_target_tt"
 								}
 							}
 						}
@@ -2106,6 +2155,20 @@ types nuclear_deterrence_widget_types
 						elide = right
 						alwaystransparent = yes
 						text = "nd_w_survivability_value"
+					}
+				}
+				### The target and the floor under the bar (2026-11-20 delivery spec
+				### §5.4): the hover is the target line's, the chain of parts that
+				### sets the target, and the floor without hardening.
+				nd_row = {
+					blockoverride "row_label" {
+						text = "nd_w_survivability_target_label"
+					}
+					blockoverride "row_value" {
+						text = "nd_w_survivability_target_value"
+					}
+					blockoverride "row_tooltip" {
+						tooltip = "nd_w_survivability_target_tt"
 					}
 				}
 				### Survivors against the main rival (rework spec §3.2, §10): how many
@@ -2123,11 +2186,26 @@ types nuclear_deterrence_widget_types
 						tooltip = "nd_w_survivors_tt"
 					}
 				}
-				### Reach (rework spec §7, §10): without ICBMs, the countries our
-				### delivery reaches. Display only; the hover lists them, the hosts
-				### of our weapons marked.
+				### Launch credit (2026-11-20 delivery spec §5.4): the share of the
+				### warheads a first strike would destroy that our launch authority
+				### gets away first, every survivors figure's (nd_launch_credit).
 				nd_row = {
-					visible = "[GetScriptedGui('nd_reach_limited_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+					blockoverride "row_label" {
+						text = "nd_w_launch_credit_label"
+					}
+					blockoverride "row_value" {
+						text = "nd_w_launch_credit_value"
+					}
+					blockoverride "row_tooltip" {
+						tooltip = "nd_w_launch_credit_tt"
+					}
+				}
+				### Reach (rework spec §7, §10; delivery plan D18): while armed, every
+				### country with ICBMs, else the countries our delivery reaches.
+				### Display only; the hover lists them, the hosts of our weapons
+				### marked.
+				nd_row = {
+					visible = "[GetScriptedGui('nd_armed_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					blockoverride "row_label" {
 						text = "nd_w_reach_label"
 					}

@@ -6,7 +6,7 @@ checks don't gate the merge (CLAUDE.md, "In-game checks"); this list collects
 what only the game can show. Phases 1 (the split) and 2 (the AI wave) are in.
 Phase 3's items add their own checks here as they land.
 
-Grep `debug.log` for `TE_ERA13_TECH_REPAIR` after loading an old save.
+The old-save repair (`TE_ERA13_TECH_REPAIR`) was retired in the vanilla 1.15 migration: saves from 1.14.5 don't carry over.
 
 ## Phase 1: the split
 
@@ -105,10 +105,10 @@ ahead, raised if they fall short.
 
 1. **The group.** In a new game the Economy laws list Automation Policy with
    Unrestricted Automation in force for every country, and its three other
-   laws greyed out until Humanoid Robotics. The group's tooltip shows the
+   laws greyed out until Industrial Robotics (era 8). The group's tooltip shows the
    automated share (0% before the first count). A country released or formed
    later holds Unrestricted Automation, or its creator's law; record which.
-2. **The share.** With Humanoid Robotics, a country whose Tooling Workshops or
+2. **The share.** With Industrial Robotics, a country whose Tooling Workshops or
    Urban Centers run Robotic Assembly Lines or Robotic Service Providers shows
    a share above 0% after the next month, and it rises as more buildings take
    robotic or AI-managed methods. Check it against the buildings' levels for
@@ -147,7 +147,7 @@ ahead, raised if they fall short.
 8. **Human Labor Quotas' own lines** (owner, 2026-11-04). The law's tooltip
    lists Trade Unions +10% political strength and −10% radicals from
    political movements, and the country's modifiers show both while it
-   holds. Neo-Luddite Terrorism (`post_scarcity_events.4`) never fires under
+   holds. The New Luddites (`post_scarcity_events.4`) never fires under
    the quotas.
 9. **Displaced Workers** (owner, 2026-11-04). Under Unrestricted Automation,
    move a few buildings onto robotic methods. Nothing shows until the twelfth
@@ -160,6 +160,31 @@ ahead, raised if they fall short.
    it shows no displacement for the first year. Record the AI's rises: if
    great powers routinely rise 20 points or more a year, the full size may
    want a larger rise.
+10. **The marker** (owner, 2026-11-05). The share reads each method's own
+    Robotic or AI-Managed line (`building_robotic_or_ai_managed_bool`), not a
+    list of methods. Hover a robotic or AI-managed method (Robotic Assembly
+    Lines in a Tooling Workshop, AI Managed Fab, Autonomous Logistics): its
+    tooltip lists **Robotic or AI-Managed**, and the hover explains the share
+    and the quotas. A method that isn't one (Industrial Robotics, AI Assisted
+    Research) has no such line. Grep `debug.log` for
+    `TE_SELF_CHECK OK|BROKEN automation_marker` (below).
+11. **Autonomous Logistics** (owner, 2026-11-05). A Trade Center of level 5 or
+    more on Autonomous Logistics (Smart Grids) employs about 1,000 clerks
+    and no shopkeepers, at any level; on Just-in-Time Logistics it
+    employs 800 clerks and 200 shopkeepers a level, as before. Its Merchant
+    Marine input and weekly trades still grow with its level once the crew is
+    hired. Its levels count toward the automated share. Under Human Labor
+    Quotas it can't be picked, and a Trade Center on it moves to a method
+    still allowed; record which (item 3).
+
+### Self-checks
+
+| Line in `debug.log` | When | OK means | BROKEN means | Fallback |
+|---|---|---|---|---|
+| `TE_SELF_CHECK … automation_marker` | once a game: the first monthly count of a country with a building on one of three sample methods (Robotic Assembly Lines in a Tooling Workshop, Robotic Service Providers in an Urban Center, Autonomous Logistics in a Trade Center), once every one of those levels or none reads the marker; a count in between waits a month | `marked` equals `sample`: a method's `unscaled` script-only building line reaches its building's `modifier:` read, so `te_ap_runs_automated_method` counts the buildings that run one | `marked=0`: no building reads the line, so the automated share is 0 everywhere and Robot Tax, the Dividend and Displaced Workers do nothing | First check `debug.log` for `Unknown modifier type: building_robotic_or_ai_managed_bool` (the type didn't load). Otherwise restore the method list in `te_ap_runs_automated_method` (the trigger as it was before this change, one `is_building_type` and `has_active_production_method` block per group, with Autonomous Logistics on `building_trade_center` added), keep the marker for its tooltip line, and have `test_automation_policy.py` hold the list to the marked methods |
+
+No `automation_marker` line after a few years of Industrial Robotics means no
+country runs a sample method; put a Tooling Workshop on Robotic Assembly Lines.
 
 ## Phase 3: Morphological Freedom and Bodily Autonomy
 
@@ -202,9 +227,9 @@ ahead, raised if they fall short.
    - After a revolution, a finished debate does not start again on the winner.
 6. **Events.** Over a twenty-year debate, count the events: no two within two
    years, The First Clinics, Fair Play, Old Enough to Choose and Everyone Has
-   Ears Now once each, at most eight in all. Old Enough to Choose and Everyone
-   Has Ears Now never come under Natural Form, and The Pulpits Speak only with
-   a powerful Devout group, whose name it shows.
+   Ears Now once each, at most eight in all. Old Enough to Choose, The Faithful
+   Object and Everyone Has Ears Now never come under Natural Form, and The
+   Faithful Object only with a powerful Devout group, whose name it shows.
 
 ## Phase 3: Frontier AI Control
 
@@ -307,9 +332,9 @@ shock.
    policy's line (Environmental Movement radicalism +10), the weekly expense at
    1% of GDP a year and the objection line. Around the World counts it.
 3. **The cost.** The Budget panel's Breakdown lists it under Climate Policy at
-   about 1% of GDP a year, and the figure follows GDP month to month without
-   stacking (one copy of Aerosol Injection: Running Cost in the country's
-   modifiers).
+   about 1% of GDP a year, and the figure follows GDP without stacking (one
+   copy of Aerosol Injection: Running Cost, held by the Global Warming entry
+   since #1404 and none left on the country).
 4. **The mask.** After adopting, the overview's table gains an Aerosol Mask row
    that grows a little each month (for a country with a fifth of world GDP,
    about −0.6 °C after a year, heading to −1.00 °C). The temperature headline,

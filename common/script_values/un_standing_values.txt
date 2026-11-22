@@ -94,6 +94,13 @@ un_standing_mandate_complied_gain = 6
 # for the aid or the peacekeepers. One-off, at the same single site.
 un_standing_delivery_relations = 5
 
+# Relations a member gains with the country a carried decision accuses when
+# it denounces the decision (un_vote.3 option C,
+# un_vote_3_can_stand_with_target). More than the 15 its ballot against
+# earned (un_vote_cast_no): this is the half of the refusal that pays, set
+# against 20 with the proposer, 3 infamy and, when binding, 5 standing.
+un_vote_3_stand_with_target_relations = 25
+
 # ---- Resolution lobbying (the "secure a commitment" deal) ----
 # Settled once per commitment, at un_lobby_settle_commitment, the moment the
 # recipient's vote is recorded. Deliberately smaller than every other figure

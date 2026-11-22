@@ -12,14 +12,22 @@ Fix: add the missing key(s) to a `localization/english/*_l_english.yml`
 file. For static modifiers and most simple entities the key is the
 entity name itself (including game concept names, whose `_desc`
 does not substitute for the name); for journal entries and institutions also
-`<name>_desc`; for
+`<name>_desc`, as for law groups, combat unit groups and mobilization
+option groups; for a power bloc principle `<name>_desc` alone, which
+points at its group's (`$principle_group_x_desc$`) unless the tier has
+text of its own; for
 events the keys are whatever `title`/`desc`/`flavor`/option `name`
 fields point at; for messages (`common/messages`) the keys are
 `notification_<name>_name` / `_desc` / `_tooltip`, never the bare
 message name; for diplomatic actions the `_action_notification_*`
 keys (the `_third_party_*` pair when `should_notify_third_parties =
 yes`, the `_break_*` pairs with a `pact`) or, for
-`requires_approval = yes`, the `_proposal_*` keys.
+`requires_approval = yes`, the `_proposal_*` keys; for a glossary
+entry `glossary_x` and `glossary_x_desc`. A **Journal Entry
+Outcomes** flag is a 1.15 outcome with no `conclusion_desc` (or, not
+`hidden`, no `header` / `effect_header`), listed as `outcome N: no
+<field>`, or naming a key no loc defines; it covers the mod's
+`REPLACE:`s of vanilla entries too.
 
 Suppress an intentional missing key with a same-line comment on the
 entity's opening line:

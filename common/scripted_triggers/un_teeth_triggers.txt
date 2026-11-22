@@ -51,7 +51,7 @@ un_case_npt_standing_applies = {
 	un_tier_is_supranational = yes
 	je:je_united_nations ?= { has_modifier = un_member_modifier }
 	un_propose_npt_in_force = yes
-	NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
+	NOT = { has_variable = un_nonproliferation_modifier_on }
 	OR = {
 		un_regime_npt_threshold = yes
 		AND = {

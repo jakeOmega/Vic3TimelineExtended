@@ -32,7 +32,7 @@ _None._
 
 ## Coverage
 
-- vanilla-only tier pairs not judged: 34
+- vanilla-only tier pairs not judged: 33
 - total flags: 0
 - unreviewed: 0
 - exempted: 0

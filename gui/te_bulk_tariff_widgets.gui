@@ -18,7 +18,8 @@
 
 types te_bulk_tariffs
 {
-	### Imports, then exports, on the goods rows' background.
+	### Imports, then exports, on the goods rows' background (1.15.1's:
+	### market_world_market_goods_list_item moved from entry_bg_simple to this).
 	type te_bulk_tariff_panel = flowcontainer {
 		direction = vertical
 		minimumsize = { @panel_width -1 }
@@ -27,7 +28,8 @@ types te_bulk_tariffs
 		margin_bottom = 7
 
 		background = {
-			using = entry_bg_simple
+			alpha = 0.6
+			using = entry_bg_fancy_dark
 		}
 
 		te_bulk_tariff_row = {}

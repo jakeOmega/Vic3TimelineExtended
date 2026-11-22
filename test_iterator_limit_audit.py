@@ -81,6 +81,18 @@ class DetectionTests(unittest.TestCase):
         )
         self.assertEqual(flags, [])
 
+    def test_no_flag_for_115_tooltip_properties_before_limit(self):
+        # list_scopes / show_trigger_per_scope shape the tooltip only.
+        flags = _scan(
+            "any_scope_state = {\n"
+            "\tlist_scopes = yes\n"
+            "\tshow_trigger_per_scope = yes\n"
+            "\tlimit = { is_incorporated = yes }\n"
+            "\tpercent >= 0.8\n"
+            "}\n"
+        )
+        self.assertEqual(flags, [])
+
     def test_no_flag_for_list_and_container_selectors_before_limit(self):
         # `variable`/`list` name the list a list iterator walks and
         # `tag`/`tags`/`parent = scope:x` filter a container iterator; none of

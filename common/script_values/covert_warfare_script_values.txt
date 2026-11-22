@@ -122,6 +122,18 @@ covert_exposure_infamy_max = 25
 # Maximum funding level (0 = dormant, max = deep state)
 iw_funding_level_max = 5
 
+# The early unlock's budget cap (covert_warfare_rule's early setting): an agency
+# opened before the late gate funds up to Professional (2) until it reaches it
+# (covert_agency_limited, covert_warfare_triggers.txt). Covert Network, Black
+# Budget and Deep State wait for the late gate.
+covert_agency_funding_cap = 2
+
+# An AI borrowing with bankruptcy closer than this many weeks steps its
+# funding down to the floor before it defaults (je_covert_warfare's AI funding;
+# weeks_until_bankruptcy read behind taking_loans, as vanilla's own
+# war_support_from_looming_bankruptcy does).
+iw_ai_funding_bankruptcy_weeks = 26
+
 # ---- Per-operation priority (slice 3) ----
 # An operation's priority (iw_priority on its container, 1 when missing)
 # multiplies what it does, what it costs and how exposed it is, and it fills
@@ -376,7 +388,9 @@ intelligence_capacity_total = {
 }
 
 # Relative IC: your IC as a percentage of the global best
-# global_max_ic is set each month by the JE monthly pulse (ordered_country)
+# global_max_ic is set about once a month, by the first JE monthly pulse after
+# iw_max_ic_lock lapses (ordered_country). A country that outgrows it before the
+# next census reads 100.
 intelligence_capacity_relative = {
 	value = intelligence_capacity_total
 	divide = {
@@ -393,14 +407,19 @@ intelligence_capacity_relative = {
 	max = 100
 }
 
-# Multiplier for the intelligence_capacity_defense static modifier
-# Scales with absolute IC, capped at 5x
-# owner = {} makes this safe from JE scope (JE→Country) while being a no-op from country scope
+# Strength of the intelligence_capacity_defense static modifier, declared on
+# je_covert_warfare (scaling_modifiers_while_active, whose root is the owning
+# country). Scales with absolute IC, capped at 5x; 0 below 1 total capacity,
+# where the old monthly pulse removed the modifier. owner = { } is a no-op from
+# country scope, kept in the shape of the other covert values.
 intelligence_capacity_modifier_mult = {
 	value = 0
 	owner = {
-		add = intelligence_capacity_total
-		divide = 25
+		if = {
+			limit = { intelligence_capacity_total >= 1 }
+			add = intelligence_capacity_total
+			divide = 25
+		}
 	}
 	min = 0
 	max = 5
@@ -472,7 +491,9 @@ covert_operation_slots_used = {
 }
 
 # Free slots: what launching an operation (one slot, at priority 1) and each
-# step up in priority (covert_possible_priority_up) need.
+# step up in priority (covert_possible_priority_up) need. Also the strength of
+# iw_domestic_defense, declared on je_covert_warfare: whole slots, so 0 exactly
+# where the old monthly pulse's `>= 1` gate removed the modifier.
 covert_operations_available_slots = {
 	value = 0
 	owner = {
@@ -502,7 +523,8 @@ covert_operations_cost_scale = {
 	multiply = 0.00005 # small, but multiplied by funding level and number of ops, so it adds up for big economies
 }
 
-# Funding cost: multiplier for the covert_operation_funding_cost modifier
+# Funding cost: strength of the covert_operation_funding_cost modifier, declared
+# on je_covert_warfare (0 at funding 0, where the old pulse removed it).
 # Scales with the priority-weighted operation count + 1 (base maintenance) and funding level
 covert_operation_cost_mult = {
 	value = 0
@@ -786,7 +808,8 @@ covert_detection_efficiency_reduction = {
 }
 
 # ---- Funding defense multiplier ----
-# For iw_funding_defense static modifier: scales with funding level above 1
+# Strength of the iw_funding_defense static modifier, declared on
+# je_covert_warfare: scales with funding level above 1
 # Level 0-1: 0, Level 2: 1, Level 3: 2, Level 4: 3, Level 5: 4
 covert_ops_funding_ci_mult = {
 	value = 0
@@ -1586,9 +1609,10 @@ covert_tradecraft_tier = {
 	}
 }
 
-# Multiplier for the iw_tradecraft_bonus static modifier on the journal entry.
-# owner = { } makes it safe from JE scope, where the engine re-evaluates it
-# (a no-op from country scope) — same shape as intelligence_capacity_modifier_mult.
+# Strength of the iw_tradecraft_bonus static modifier, declared on
+# je_covert_warfare (scaling_modifiers_while_active, whose root is the owning
+# country): the tier, 0 at Untested. owner = { } is a no-op from country
+# scope — same shape as intelligence_capacity_modifier_mult.
 covert_tradecraft_bonus_mult = {
 	value = 0
 	owner = {
@@ -1646,4 +1670,61 @@ covert_tradecraft_display = {
 		add = var:iw_tradecraft
 	}
 	floor = yes
+}
+
+# ---- debug.log reads (covert_log_entry_end, covert_warfare_monthly_country) ----
+# 1 where the read holds, 0 where it doesn't, printed as [THIS.ScriptValue('x')|0].
+# The three settings are read one by one (late, early, off), so a line tells
+# a setting the save holds from none at all (all three 0) and from a setting
+# name no rule file defines, which has_game_rule reads as true (two at 1;
+# scripting_best_practices.md § "`has_game_rule` on a Setting No File Defines
+# Is True"). on is te_covert_warfare_on, what every gate reads.
+iw_log_rule_late = {
+	value = 0
+	if = {
+		limit = { te_covert_warfare_late_read_for_log = yes }
+		value = 1
+	}
+}
+iw_log_rule_on = {
+	value = 0
+	if = {
+		limit = { te_covert_warfare_on = yes }
+		value = 1
+	}
+}
+iw_log_rule_early = {
+	value = 0
+	if = {
+		limit = { te_covert_warfare_early = yes }
+		value = 1
+	}
+}
+iw_log_rule_off = {
+	value = 0
+	if = {
+		limit = { has_game_rule = covert_warfare_disabled }
+		value = 1
+	}
+}
+iw_log_late_source = {
+	value = 0
+	if = {
+		limit = { covert_warfare_slot_source = yes }
+		value = 1
+	}
+}
+iw_log_opened_early = {
+	value = 0
+	if = {
+		limit = { has_variable = iw_opened_early }
+		value = 1
+	}
+}
+iw_log_net_added = {
+	value = 0
+	if = {
+		limit = { has_variable = iw_entry_net_added }
+		value = 1
+	}
 }

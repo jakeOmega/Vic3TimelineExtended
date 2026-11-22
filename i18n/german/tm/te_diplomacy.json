@@ -51,17 +51,37 @@
   "en": "Imperial Collapse Aftershock",
   "de": "Nachbeben des imperialen Zusammenbruchs"
  },
+ "colonial_collapse_subject_unrest_modifier_desc": {
+  "en": "The colonial empire this country belonged to has collapsed: its [concept_colonial_stability] ran out.",
+  "de": "Das Kolonialreich, dem dieses Land angehörte, ist zusammengebrochen: Seine [concept_colonial_stability] ist erschöpft."
+ },
  "colonial_overlord_collapsing_subject_ld_modifier": {
   "en": "Subject on the Brink",
   "de": "Klientelland am Abgrund"
+ },
+ "colonial_overlord_collapsing_subject_ld_modifier_desc": {
+  "en": "The colonial empire this country belongs to is Collapsing: its [concept_colonial_stability] is below 20. This lasts while it stays there.",
+  "de": "Das Kolonialreich, dem dieses Land angehört, befindet sich im Zustand „Kollabierend“: Seine [concept_colonial_stability] liegt unter 20. Das gilt, solange sie dort bleibt."
  },
  "colonial_overlord_crumbling_subject_ld_modifier": {
   "en": "Defiant Colonial Subject",
   "de": "Trotziges koloniales Klientelland"
  },
+ "colonial_overlord_crumbling_subject_ld_modifier_desc": {
+  "en": "The colonial empire this country belongs to is Crumbling: its [concept_colonial_stability] is below 40. This lasts while it stays there.",
+  "de": "Das Kolonialreich, dem dieses Land angehört, befindet sich im Zustand „Zerfallend“: Seine [concept_colonial_stability] liegt unter 40. Das gilt, solange sie dort bleibt."
+ },
  "colonial_overlord_strained_subject_ld_modifier": {
   "en": "Restless Colonial Subject",
   "de": "Unruhiges koloniales Klientelland"
+ },
+ "colonial_overlord_strained_subject_ld_modifier_desc": {
+  "en": "The colonial empire this country belongs to is Strained: its [concept_colonial_stability] is below 65. This lasts while it stays there.",
+  "de": "Das Kolonialreich, dem dieses Land angehört, befindet sich im Zustand „Angespannt“: Seine [concept_colonial_stability] liegt unter 65. Das gilt, solange sie dort bleibt."
+ },
+ "concept_colonial_subject_desc": {
+  "en": "A [concept_subject] of ours, or of one of our subjects, that counts as colonial: every colony and chartered company, and a protectorate separated from its overlord's capital by sea whose people share no [concept_heritage_trait] with ours. Each one keeps the Colonial Empire [concept_journal_entry] running. A colony raised to a dominion no longer counts.",
+  "de": "Ein [concept_subject] von uns oder von einem unserer Klientelländer, das als kolonial gilt: jede Kolonie und jede Handelsgesellschaft sowie ein Protektorat, das durch das Meer von der Hauptstadt seines Suzeräns getrennt ist und dessen Bevölkerung keine [concept_heritage_trait] mit unserer teilt. Jedes davon hält den [concept_journal_entry] „Kolonialreich“ in Gang. Eine zum Dominion erhobene Kolonie zählt nicht mehr."
  },
  "covert_comms_disruption_action_pact_desc": {
   "en": "We are disrupting military communications of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], degrading their combat effectiveness.",
@@ -91,6 +111,10 @@
   "en": "We are covertly promoting our ideology within [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], supporting sympathetic [Concept('concept_political_movement', 'political movements')].",
   "de": "Wir fördern verdeckt unsere Ideologie in [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] und unterstützen dabei sympathisierende [Concept('concept_political_movement', 'Protestbewegungen')]."
  },
+ "covert_incite_autonomy_action_pact_desc": {
+  "en": "We are inciting autonomy in the colonies of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "de": "Wir schüren in den Kolonien [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetAltName('GEN')] das Streben nach Autonomie."
+ },
  "covert_industrial_espionage_action_pact_desc": {
   "en": "We are conducting industrial espionage against [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], stealing their production secrets.",
   "de": "Wir betreiben Industriespionage gegen [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] und stehlen deren Produktionsgeheimnisse."
@@ -108,20 +132,28 @@
   "de": "Wir betreiben Militärspionage gegen [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] und sammeln Erkenntnisse über deren Streitkräfte."
  },
  "covert_nuclear_sabotage_action_pact_desc": {
-  "en": "We are sabotaging the nuclear weapons programme of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "en": "We are sabotaging the nuclear weapons program of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
   "de": "Wir sabotieren das Nuklearwaffenprogramm von [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
  },
  "covert_regime_change_action_pact_desc": {
   "en": "We are bankrolling a change of government in [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
   "de": "Wir finanzieren einen Regierungswechsel in [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
  },
+ "covert_sabotage_colony_action_pact_desc": {
+  "en": "We are sabotaging the most populous colony of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "de": "Wir sabotieren die bevölkerungsreichste Kolonie [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetAltName('GEN')]."
+ },
  "covert_secure_material_action_pact_desc": {
   "en": "We are searching for loose nuclear material in [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
   "de": "Wir suchen nach frei verfügbarem Nuklearmaterial in [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
  },
  "covert_space_espionage_action_pact_desc": {
-  "en": "We are stealing space programme designs from [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "en": "We are stealing space program designs from [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
   "de": "Wir stehlen Raumfahrtprogramm-Entwürfe von [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
+ },
+ "covert_survey_defences_action_pact_desc": {
+  "en": "We are surveying the colony defenses of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "de": "Wir erkunden die Kolonieverteidigung [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetAltName('GEN')]."
  },
  "decolonize_diplo_action": {
   "en": "Decolonize",
@@ -296,8 +328,8 @@
   "de": "Anführer kann die [concept_diplomatic_action] Diplomatische Angleichung nutzen"
  },
  "power_bloc_can_use_diplomatic_alignment_bool_desc": {
-  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] can use the Diplomatic Alignment [concept_diplomatic_action] to align the foreign policy of a [concept_country] with the [concept_power_bloc].",
-  "de": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] kann die [concept_diplomatic_action] Diplomatische Angleichung nutzen, um die Außenpolitik eines [concept_country] an den [concept_power_bloc] anzugleichen."
+  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] can use the Diplomatic Alignment [concept_diplomatic_action] to align the foreign policy of a [concept_country] with the [concept_power_bloc].",
+  "de": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] kann die [concept_diplomatic_action] Diplomatische Angleichung nutzen, um die Außenpolitik eines [concept_country] an den [concept_power_bloc] anzugleichen."
  },
  "principle_diplomacy_1_desc": {
   "en": "The [concept_power_bloc] encourages diplomacy and peaceful resolution of conflicts.",
@@ -412,20 +444,16 @@
   "de": "UN"
  },
  "te_diplomacy_tab_un_locked_tt": {
-  "en": "#b $je_united_nations$#!\\nNot open yet. It opens once:\\n",
-  "de": "#b $je_united_nations$#!\\nNoch nicht freigeschaltet. Der Reiter wird freigeschaltet, sobald:\\n"
+  "en": "#b $te_diplomacy_tab_un$#!\\nNot open yet. It opens once:\\n",
+  "de": "#b $te_diplomacy_tab_un$#!\\nNoch nicht geöffnet. Er öffnet sich, sobald:\\n"
  },
  "te_diplomacy_tab_un_tt": {
-  "en": "The General Assembly, your standing and the UN's authority, with every action the journal entry offers. These are the journal entry's own panels: a change made here shows there too.",
-  "de": "Die Generalversammlung, Ihr Ansehen und die Autorität der UN, mit allen Aktionen, die der Journaleintrag bietet. Dies sind die eigenen Bereiche des Journaleintrags: Eine hier vorgenommene Änderung erscheint auch dort."
+  "en": "The General Assembly, your standing and the UN's authority, with every action the journal entry offers.",
+  "de": "Die Generalversammlung, Ihr Ansehen und die Autorität der UN, mit allen Aktionen, die der Journaleintrag bietet."
  },
  "te_diplomacy_un_open_journal_tt": {
-  "en": "Opens $je_united_nations$ in the journal.",
-  "de": "Öffnet $je_united_nations$ im Journal."
- },
- "te_diplomacy_un_tab_actions_header": {
-  "en": "Actions",
-  "de": "Aktionen"
+  "en": "Opens $je_united_nations$ in the journal, which shows these same panels.",
+  "de": "Öffnet $je_united_nations$ im Journal, das dieselben Bereiche zeigt."
  },
  "te_diplomacy_un_tab_status_header": {
   "en": "Status",
@@ -438,6 +466,10 @@
  "te_diplomatic_relations_drain": {
   "en": "Diplomatic Friction",
   "de": "Diplomatische Reibung"
+ },
+ "te_rc_technology_embargo_pact_desc": {
+  "en": "[SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName] has placed [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] under a technology embargo.",
+  "de": "[SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName] hat [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] mit einem Technologieembargo belegt."
  },
  "te_seabed_administer_claims_pact_desc": {
   "en": "[SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName] administers the seabed claims of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]",
@@ -468,7 +500,7 @@
   "de": "Unsere Delegation drängt [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], #R gegen#! die Resolution vor der [concept_un_general_assembly] zu stimmen."
  },
  "un_lobby_for_action_pact_desc": {
-  "en": "Our delegation is pressing [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] to vote #G in favour#! of the resolution before the [concept_un_general_assembly].",
+  "en": "Our delegation is pressing [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] to vote #G in favor#! of the resolution before the [concept_un_general_assembly].",
   "de": "Unsere Delegation drängt [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], #G für#! die Resolution vor der [concept_un_general_assembly] zu stimmen."
  },
  "un_refuse_aid_diplomatic_penalty_tt": {
@@ -476,7 +508,7 @@
   "de": "Als #bold [concept_major_power]#!, die Hilfe verweigert, während die [concept_un_authority] über 40 liegt, erleiden wir #R diplomatische Nachteile#! ([concept_prestige] und Beziehungen)."
  },
  "un_secure_commitment_action_proposal_accepted_desc": {
-  "en": "[TARGET_COUNTRY.GetName] has undertaken to vote in favour of the resolution before the [concept_un_general_assembly]. We owe them an [concept_obligation] for it.",
+  "en": "[TARGET_COUNTRY.GetName] has undertaken to vote in favor of the resolution before the [concept_un_general_assembly]. We owe them an [concept_obligation] for it.",
   "de": "[TARGET_COUNTRY.GetAltName('NOM')|U] hat sich verpflichtet, für die Resolution vor der [concept_un_general_assembly] zu stimmen. Wir schulden dafür eine [concept_obligation]."
  },
  "un_secure_commitment_action_proposal_accepted_name": {
@@ -484,7 +516,7 @@
   "de": "Eine uns zugesagte Stimme"
  },
  "un_secure_commitment_action_proposal_declined_desc": {
-  "en": "[TARGET_COUNTRY.GetName] will not pledge their vote in favour of the resolution.",
+  "en": "[TARGET_COUNTRY.GetName] will not pledge their vote in favor of the resolution.",
   "de": "[TARGET_COUNTRY.GetAltName('NOM')|U] wird seine Stimme nicht für die Resolution zusagen."
  },
  "un_secure_commitment_action_proposal_declined_name": {
@@ -492,7 +524,7 @@
   "de": "Unser Vorstoß wurde abgelehnt"
  },
  "un_secure_commitment_action_proposal_notification_desc": {
-  "en": "[INITIATOR_COUNTRY.GetName] asks us to vote in favour of the resolution before the [concept_un_general_assembly].",
+  "en": "[INITIATOR_COUNTRY.GetName] asks us to vote in favor of the resolution before the [concept_un_general_assembly].",
   "de": "[INITIATOR_COUNTRY.GetAltName('NOM')|U] bittet uns, für die Resolution vor der [concept_un_general_assembly] zu stimmen."
  },
  "un_secure_commitment_action_proposal_notification_name": {

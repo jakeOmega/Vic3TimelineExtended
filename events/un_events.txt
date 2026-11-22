@@ -12,7 +12,8 @@
 #             3, 6, 9, 12, 14, 16, 17, 18, 19, 21, 22, 23, 37, 38, 39, 40, 41
 #             (topics to table),
 #             4 (a collapsing state), 7 (a famine), 15 (an embargo)
-#   hooks     5 (sanctions adopted), 8 (a court case from event 2),
+#   hooks     5 (sanctions adopted, through the hidden relay 43),
+#             8 (a court case from event 2),
 #             10 (the crisis opens), 11 (a veto), 20 (a great power leaves),
 #             30-32 (dissolution and refounding), 101-103 (notifications),
 #             36 (our representation restored, with conventions passed meanwhile)
@@ -72,6 +73,7 @@ un_events.1 = {
 		# A revolution's winner awaiting its rebuild is a member (§0.9).
 		NOT = { has_variable = un_member_modifier_on }
 		un_membership_eligible = yes
+		is_revolutionary = no	# as the Join button
 	}
 
 	immediate = {
@@ -243,7 +245,7 @@ un_events.2 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		exists = scope:condemned_country
 		NOT = { this = scope:condemned_country }
@@ -307,7 +309,7 @@ un_events.2 = {
 			NOT = { un_resolution_topic_on_cooldown = { TOPIC = sanctions } }
 			scope:condemned_country = {
 				un_case_supports = { TOPIC = sanctions }
-				NOT = { has_modifier = un_sanctions_target_modifier }
+				NOT = { has_variable = un_sanctions_target_on }
 			}
 		}
 		ai_chance = {
@@ -469,9 +471,9 @@ un_events.3 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier } }
+		NOT = { has_variable = un_human_rights_declaration_modifier_on }
 		NOT = { has_modifier = un_human_rights_refusal_modifier }
 		has_technology_researched = human_rights
 		global_var:un_authority >= 40
@@ -578,7 +580,7 @@ un_events.4 = {
 	# when a state collapses: scope:peacekeeping_target is the host. The host
 	# carries un_peacekeeping_welcomed/resented_modifier (un_events.102) once
 	# peacekeepers are there.
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: un_docket_take_up_collapse picks members that pass these conditions (un_docket_peacekeeping_power, not at war with the target); cancels if that changes in the day
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:major_power
 		exists = scope:peacekeeping_target
@@ -777,10 +779,12 @@ un_events.5 = {
 
 	duration = 3
 
-	# Redesign phase 4: no longer rolled. un_vote.2 fires it to the proposer of
+	# Redesign phase 4: no longer rolled. un_vote.2 sends it to the proposer of
 	# adopted sanctions (the enforcer) three months on, with
-	# scope:sanctioned_country the target. A queued event from an older save
-	# has no saved target and picks one, as the rolled event used to.
+	# scope:sanctioned_country the target, through the hidden un_events.43,
+	# which waits out the three months and opens this on the day if this
+	# trigger holds (#1596). A queued event from an older save has no saved
+	# target and picks one, as the rolled event used to.
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		has_modifier = un_sanctions_enforcer_modifier
@@ -789,10 +793,10 @@ un_events.5 = {
 		# target that accepted its censure (no target modifier is applied) or
 		# that no longer exists, and every option below acts on the target.
 		OR = {
-			scope:sanctioned_country ?= { has_modifier = un_sanctions_target_modifier }
+			scope:sanctioned_country ?= { has_variable = un_sanctions_target_on }
 			AND = {
 				NOT = { exists = scope:sanctioned_country }
-				any_country = { has_modifier = un_sanctions_target_modifier }
+				any_country = { has_variable = un_sanctions_target_on }
 			}
 		}
 	}
@@ -802,7 +806,7 @@ un_events.5 = {
 			limit = { NOT = { exists = scope:sanctioned_country } }
 			random_country = {
 				limit = {
-					has_modifier = un_sanctions_target_modifier
+					has_variable = un_sanctions_target_on
 				}
 				save_scope_as = sanctioned_country
 			}
@@ -830,8 +834,8 @@ un_events.5 = {
 		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = 1.5 REASON = 1051 SUBJECT = scope:sanctioned_country }
 		# International standing: enforcing a sanctions regime at cost to
 		# yourself is compliance with a binding decision, not mere agreement.
-		# One payout per firing of this event, which is gated by the
-		# un_sanctions_enforcer_modifier trigger and a five-year event cooldown.
+		# One payout per firing of this event, which un_vote.2 sends once per
+		# adopted regime (through un_events.43), to its enforcer only.
 		custom_tooltip = {
 			text = un_standing_complied_tt
 			un_standing_gain = { AMOUNT = un_standing_compliance_gain REASON = 5 }
@@ -890,6 +894,38 @@ un_events.5 = {
 	}
 }
 
+# Event 43: the sanctions' three months (un_vote.2), for un_events.5 (#1596).
+# un_vote.2 adds the enforcer modifier and sets the target's regime in the
+# same block as it queues the enforcement choice, so un_events.5's trigger is
+# false on the day it is queued, and a delayed event whose trigger is false
+# then seems to be dropped (scripting_best_practices.md § "A Delayed
+# `trigger_event` Re-Checks Its Trigger When It Fires"). This waits with no
+# trigger and opens un_events.5 when due if its trigger holds, restated here
+# (test_un_lift_sanctions.py pins the two together). scope:sanctioned_country
+# rides along to the popup.
+un_events.43 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = {
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+				has_modifier = un_sanctions_enforcer_modifier
+				NOT = { has_modifier = un_sanctions_enforcement_modifier }
+				OR = {
+					scope:sanctioned_country ?= { has_variable = un_sanctions_target_on }
+					AND = {
+						NOT = { exists = scope:sanctioned_country }
+						any_country = { has_variable = un_sanctions_target_on }
+					}
+				}
+			}
+			trigger_event = { id = un_events.5 }
+		}
+	}
+}
+
 # Event 6: UN Reform Debate - Security Council expansion or restructuring
 un_events.6 = {
 	type = country_event
@@ -922,7 +958,7 @@ un_events.6 = {
 	# 100), and it can be tabled only once the organisation has outgrown its
 	# charter — the same gate as the chamber and the button
 	# (un_charter_reform_ripe, un_ladder_triggers.txt).
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:great_power
 		un_charter_reform_ripe = yes
@@ -998,7 +1034,7 @@ un_events.6 = {
 				add = 3
 			}
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+				trigger = { un_undermines_the_order = yes }
 				add = 4
 			}
 		}
@@ -1061,7 +1097,7 @@ un_events.7 = {
 	# 8" (always true). The docket (un_docket_take_up_famine, item 5) sends it
 	# to up to three major-power members when a famine strikes:
 	# scope:crisis_country, and scope:crisis_state the worst-hit state.
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: un_docket_take_up_famine picks members that pass these conditions (un_docket_aid_power, not at war with the target); cancels if that changes in the day
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:major_power
 		exists = scope:crisis_country
@@ -1291,7 +1327,7 @@ un_events.8 = {
 			triggered_desc = {
 				desc = un_events.8.d_covert
 				trigger = {
-					has_game_rule = covert_warfare_enabled
+					te_covert_warfare_on = yes
 					has_variable = un_court_case_covert
 				}
 			}
@@ -1309,7 +1345,7 @@ un_events.8 = {
 	# Redesign phase 4: no longer rolled against anyone at war. A member that
 	# brings its appeal to the World Court (un_events.2 option D) sues the
 	# accused: scope:court_plaintiff.
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: un_events.2 saves scope:court_plaintiff and files against a member that has answered no case; cancels if it leaves the UN or answers in the 30 days
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		exists = scope:court_plaintiff
 		NOT = { this = scope:court_plaintiff }
@@ -1417,10 +1453,10 @@ un_events.9 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 40
-		NOT = { je:je_united_nations ?= { has_modifier = un_heritage_program_modifier } }
+		NOT = { has_variable = un_heritage_program_modifier_on }
 		NOT = { has_modifier = un_heritage_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -1549,7 +1585,7 @@ un_events.10 = {
 		ai_chance = {
 			base = 5
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+				trigger = { has_variable = un_champion_order_cost_on }
 				add = 5
 			}
 			modifier = {
@@ -1557,7 +1593,7 @@ un_events.10 = {
 				add = 3
 			}
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+				trigger = { un_undermines_the_order = yes }
 				add = -5
 			}
 		}
@@ -1582,6 +1618,7 @@ un_events.10 = {
 			NOT = { has_variable = un_member_modifier_on }
 			has_global_variable = un_founded
 			un_membership_eligible = yes
+			is_revolutionary = no	# as the Join button
 			NOT = { has_modifier = un_expelled_cooldown }
 			NOT = { has_modifier = un_withdrawal_penalty_modifier }
 		}
@@ -1623,7 +1660,7 @@ un_events.10 = {
 				add = 4
 			}
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+				trigger = { un_undermines_the_order = yes }
 				add = 4
 			}
 		}
@@ -1704,7 +1741,7 @@ un_events.11 = {
 	# to the proposer of a resolution a permanent member has just vetoed
 	# (un_docket_veto_consequence, from un_resolution_record_veto), with
 	# scope:veto_power the vetoer. Not at Moribund, where a veto costs nothing.
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: un_docket_veto_consequence's limit restates the trigger; cancels if the proposer leaves the UN or answers in the week
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		exists = scope:veto_power
 		NOT = { this = scope:veto_power }
@@ -1771,7 +1808,6 @@ un_events.11 = {
 # Event 12: Decolonization Resolution
 # The Assembly debates colonial liberation. Framing depends on the player's ideology.
 un_events.12 = {
-	# REVIEWED 2026-09-25 (system_ungated): a UN topic raised by a real colonial collapse (docket item 8); UN history, independent of the decolonization JE
 	type = country_event
 	placement = root
 
@@ -1806,7 +1842,7 @@ un_events.12 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		has_technology_researched = decolonization
 		global_var:un_authority >= 30
@@ -1928,11 +1964,11 @@ un_events.14 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 40
 		has_technology_researched = nuclear_weapons
-		NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
+		NOT = { has_variable = un_nonproliferation_modifier_on }
 		NOT = { has_modifier = un_nonproliferation_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -2056,7 +2092,7 @@ un_events.15 = {
 	# Redesign phase 4: no longer rolled against any rival. The docket
 	# (un_docket_take_up_embargo, item 12) sends it to the weaker of two
 	# members trading under an embargo, with scope:trade_rival the other.
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: un_docket_take_up_embargo saves scope:trade_rival before the call, for a member the docket found; cancels if it leaves the UN in the day
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		exists = scope:trade_rival
 		NOT = { this = scope:trade_rival }
@@ -2181,12 +2217,12 @@ un_events.16 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:major_power
 		global_var:un_authority >= 20
 		has_technology_researched = antibiotics
-		NOT = { je:je_united_nations ?= { has_modifier = un_pandemic_cooperation_modifier } }
+		NOT = { has_variable = un_pandemic_cooperation_modifier_on }
 		NOT = { has_modifier = un_pandemic_isolationist_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -2290,14 +2326,14 @@ un_events.17 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		# Raised only by a warming threshold (docket item 7), which the
 		# disabled global warming rule never crosses.
 		has_game_rule = global_warming_enabled
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 30
 		has_technology_researched = environmental_movement
-		NOT = { je:je_united_nations ?= { has_modifier = un_climate_binding_modifier } }
+		NOT = { has_variable = un_climate_binding_modifier_on }
 		NOT = { has_modifier = un_climate_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -2406,10 +2442,10 @@ un_events.18 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 20
-		NOT = { je:je_united_nations ?= { has_modifier = un_refugee_program_modifier } }
+		NOT = { has_variable = un_refugee_program_modifier_on }
 		NOT = { has_modifier = un_refugee_closed_modifier }
 		NOT = { has_global_variable = un_vote_active }
 		any_country = {
@@ -2529,12 +2565,12 @@ un_events.19 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 40
 		has_technology_researched = space_exploration
 		country_rank >= rank_value:major_power
-		NOT = { je:je_united_nations ?= { has_modifier = un_space_partnership_modifier } }
+		NOT = { has_variable = un_space_partnership_modifier_on }
 		NOT = { has_modifier = un_space_independent_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -2635,7 +2671,7 @@ un_events.20 = {
 	# every other great-power member when a great power leaves the UN
 	# (un_docket_walkout_consequence, from un_leave_button), with
 	# scope:walkout_leader the leaver.
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: un_docket_walkout_consequence's limit restates the trigger; cancels if a great power leaves the UN or answers in the week
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:great_power
 		exists = scope:walkout_leader
@@ -2903,7 +2939,7 @@ un_events.103 = {
 	duration = 3
 
 	# A queued 103 from before this change carries no host and does not fire.
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): scope:resettlement_host is saved just before the call, and the caller excludes it; a filter
 		exists = scope:resettlement_host
 		NOT = { this = scope:resettlement_host }
 	}
@@ -2972,7 +3008,7 @@ un_events.21 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 30
 		has_technology_researched = international_trade
@@ -2980,7 +3016,7 @@ un_events.21 = {
 		# cover new UN joiners or Option B/C takers (decaying modifiers), who
 		# would otherwise be able to re-trigger the full vote cascade.
 		NOT = { has_global_variable = un_agency_itlos }
-		NOT = { has_modifier = un_law_of_sea_modifier }
+		NOT = { has_variable = un_law_of_sea_modifier_on }
 		NOT = { has_modifier = un_law_of_sea_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -3076,7 +3112,7 @@ un_events.22 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 40
 		has_technology_researched = human_rights
@@ -3087,7 +3123,7 @@ un_events.22 = {
 		# un_agency_icc is only set on non-vetoed pass — vetoed/graduated
 		# passes are symbolic censure only and remain re-proposable.
 		NOT = { has_global_variable = un_agency_icc }
-		NOT = { has_modifier = un_icc_member_modifier }
+		NOT = { has_variable = un_icc_member_modifier_on }
 		NOT = { has_modifier = un_icc_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -3188,14 +3224,14 @@ un_events.23 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		has_game_rule = nuclear_weapons_enabled
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 30
 		has_technology_researched = nuclear_weapons
 		# Global ratification gate, as for the law of the sea (un_events.21).
 		NOT = { has_global_variable = un_agency_cppnm }
-		NOT = { has_modifier = un_physical_protection_modifier }
+		NOT = { has_variable = un_physical_protection_modifier_on }
 		NOT = { has_modifier = un_physical_protection_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -3289,7 +3325,7 @@ un_events.37 = {
 		first_valid = {
 			triggered_desc = {
 				desc = un_events.37.d_benchmark
-				trigger = { has_modifier = cultural_hegemony_foreign_benchmark }
+				trigger = { ch_trails_hegemon = yes }
 			}
 			desc = un_events.37.d
 		}
@@ -3298,7 +3334,7 @@ un_events.37 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 40
 		un_charter_has_reform = { LEVEL = 1 }
@@ -3306,7 +3342,7 @@ un_events.37 = {
 		has_technology_researched = mass_media
 		# Global ratification gate, as for the law of the sea (un_events.21).
 		NOT = { has_global_variable = un_agency_ccd }
-		NOT = { has_modifier = un_cultural_diversity_modifier }
+		NOT = { has_variable = un_cultural_diversity_modifier_on }
 		NOT = { has_modifier = un_cultural_diversity_refusal_modifier }
 		NOT = { un_regime_cultural_hegemon = yes }
 		NOT = { has_global_variable = un_vote_active }
@@ -3323,7 +3359,7 @@ un_events.37 = {
 		ai_chance = {
 			base = 5
 			modifier = {
-				trigger = { has_modifier = cultural_hegemony_foreign_benchmark }
+				trigger = { ch_trails_hegemon = yes }
 				add = 3
 			}
 			modifier = {
@@ -3405,7 +3441,7 @@ un_events.38 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		has_game_rule = nuclear_weapons_enabled
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 40
@@ -3415,7 +3451,7 @@ un_events.38 = {
 		nd_is_armed = no
 		# Global ratification gate, as for the law of the sea (un_events.21).
 		NOT = { has_global_variable = un_agency_tpnw }
-		NOT = { has_modifier = un_nuclear_ban_modifier }
+		NOT = { has_variable = un_nuclear_ban_modifier_on }
 		NOT = { has_modifier = un_nuclear_ban_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -3723,7 +3759,7 @@ un_events.33 = {
 		first_valid = {
 			triggered_desc = {
 				desc = un_events.33.d_ratified
-				trigger = { has_modifier = un_icc_member_modifier }
+				trigger = { has_variable = un_icc_member_modifier_on }
 			}
 			desc = un_events.33.d_jurisdiction
 		}
@@ -3732,7 +3768,7 @@ un_events.33 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: un_regime_icc_note_crime's limit restates the trigger but for an immortal ruler, which never changes; cancels if the UN or the court is gone in the 30 days
 		has_global_variable = un_founded
 		has_global_variable = un_agency_icc
 		exists = ruler
@@ -3760,7 +3796,7 @@ un_events.33 = {
 				add = 3
 			}
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+				trigger = { has_variable = un_champion_order_cost_on }
 				add = 3
 			}
 			modifier = {
@@ -3861,7 +3897,7 @@ un_events.34 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: un_regime_sovereignty_leave_check's limit restates the trigger (un_regime_sovereignty_demand); cancels if that lapses in the 30 days
 		has_global_variable = un_founded
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		un_tier_at_least_strong = yes
@@ -3891,11 +3927,11 @@ un_events.34 = {
 				add = 4
 			}
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+				trigger = { un_undermines_the_order = yes }
 				add = 4
 			}
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+				trigger = { has_variable = un_champion_order_cost_on }
 				add = -1
 			}
 			# Leaving ends the World Development Fund's grant, which at these
@@ -3946,7 +3982,7 @@ un_events.34 = {
 		ai_chance = {
 			base = 2
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+				trigger = { has_variable = un_champion_order_cost_on }
 				add = 5
 			}
 			modifier = {
@@ -3987,7 +4023,7 @@ un_events.35 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers the loan to a member that passes un_docket_loan_candidate; cancels if a loan starts in the day
 		has_global_variable = un_founded
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		NOT = { has_modifier = un_loan_repayment_modifier }
@@ -4049,7 +4085,7 @@ un_events.35 = {
 				add = 4
 			}
 			modifier = {
-				trigger = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+				trigger = { un_undermines_the_order = yes }
 				add = 3
 			}
 		}
@@ -4110,81 +4146,81 @@ un_events.36 = {
 			}
 		}
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = unhrc MODIFIER = un_human_rights_declaration_modifier } }
-			un_convention_on = { MODIFIER = un_human_rights_declaration_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = unhrc CONVENTION = human_rights_declaration } }
+			un_convention_on = { CONVENTION = human_rights_declaration }
 		}
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = iaea MODIFIER = un_nonproliferation_modifier } }
-			un_convention_on = { MODIFIER = un_nonproliferation_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = iaea CONVENTION = nonproliferation } }
+			un_convention_on = { CONVENTION = nonproliferation }
 		}
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = unep MODIFIER = un_climate_binding_modifier } }
-			un_convention_on = { MODIFIER = un_climate_binding_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = unep CONVENTION = climate_binding } }
+			un_convention_on = { CONVENTION = climate_binding }
 		}
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = unesco MODIFIER = un_heritage_program_modifier } }
-			un_convention_on = { MODIFIER = un_heritage_program_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = unesco CONVENTION = heritage_program } }
+			un_convention_on = { CONVENTION = heritage_program }
 		}
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = who MODIFIER = un_pandemic_cooperation_modifier } }
-			un_convention_on = { MODIFIER = un_pandemic_cooperation_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = who CONVENTION = pandemic_cooperation } }
+			un_convention_on = { CONVENTION = pandemic_cooperation }
 		}
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = unhcr MODIFIER = un_refugee_program_modifier } }
-			un_convention_on = { MODIFIER = un_refugee_program_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = unhcr CONVENTION = refugee_program } }
+			un_convention_on = { CONVENTION = refugee_program }
 		}
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = unoosa MODIFIER = un_space_partnership_modifier } }
-			un_convention_on = { MODIFIER = un_space_partnership_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = unoosa CONVENTION = space_partnership } }
+			un_convention_on = { CONVENTION = space_partnership }
 		}
-		# The nine country-scoped conventions, as un_apply_ratified_conventions has them.
+		# The nine Assembly conventions after them, as un_apply_ratified_conventions has them.
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = itlos MODIFIER = un_law_of_sea_modifier } }
-			un_convention_country_on = { MODIFIER = un_law_of_sea_modifier }
-		}
-		if = {
-			limit = { un_rep_convention_missed = { AGENCY = cppnm MODIFIER = un_physical_protection_modifier } }
-			un_convention_country_on = { MODIFIER = un_physical_protection_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = itlos CONVENTION = law_of_sea } }
+			un_convention_on = { CONVENTION = law_of_sea }
 		}
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = incb MODIFIER = un_narcotics_control_modifier } }
-			un_convention_country_on = { MODIFIER = un_narcotics_control_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = cppnm CONVENTION = physical_protection } }
+			un_convention_on = { CONVENTION = physical_protection }
 		}
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = icc MODIFIER = un_icc_member_modifier } }
-			un_convention_country_on = { MODIFIER = un_icc_member_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = incb CONVENTION = narcotics_control } }
+			un_convention_on = { CONVENTION = narcotics_control }
 		}
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = ccd MODIFIER = un_cultural_diversity_modifier } }
-			un_convention_country_on = { MODIFIER = un_cultural_diversity_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = icc CONVENTION = icc_member } }
+			un_convention_on = { CONVENTION = icc_member }
+		}
+		if = {
+			limit = { un_rep_convention_missed = { AGENCY = ccd CONVENTION = cultural_diversity } }
+			un_convention_on = { CONVENTION = cultural_diversity }
 		}
 		# Not for an armed member: it never voted on the ban, as an armed
 		# joiner never did (un_apply_ratified_conventions), and ratifying the
 		# rest is no promise to disarm. un_rep_any_convention_missed agrees.
 		if = {
 			limit = {
-				un_rep_convention_missed = { AGENCY = tpnw MODIFIER = un_nuclear_ban_modifier }
+				un_rep_convention_missed = { AGENCY = tpnw CONVENTION = nuclear_ban }
 				nd_is_armed = no
 			}
-			un_convention_country_on = { MODIFIER = un_nuclear_ban_modifier }
+			un_convention_on = { CONVENTION = nuclear_ban }
 			un_nuclear_ban_terms_tt = yes
 		}
 		# Not for a member that denounced the Antarctic Treaty, as for a
 		# joiner (un_apply_ratified_conventions).
 		if = {
 			limit = {
-				un_rep_convention_missed = { AGENCY = ats MODIFIER = un_antarctic_treaty_modifier }
+				un_rep_convention_missed = { AGENCY = ats CONVENTION = antarctic_treaty }
 				NOT = { has_variable = te_antarctic_denounced }
 			}
-			un_convention_country_on = { MODIFIER = un_antarctic_treaty_modifier }
+			un_convention_on = { CONVENTION = antarctic_treaty }
 		}
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = unoda MODIFIER = un_asat_moratorium_modifier } }
-			un_convention_country_on = { MODIFIER = un_asat_moratorium_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = unoda CONVENTION = asat_moratorium } }
+			un_convention_on = { CONVENTION = asat_moratorium }
 		}
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = copuos MODIFIER = un_colony_protection_modifier } }
-			un_convention_country_on = { MODIFIER = un_colony_protection_modifier }
+			limit = { un_rep_convention_missed = { AGENCY = copuos CONVENTION = colony_protection } }
+			un_convention_on = { CONVENTION = colony_protection }
 		}
 		# Our terms under the regimes now in force, as a joiner's.
 		un_regime_refresh_country = yes
@@ -4222,12 +4258,12 @@ un_events.39 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		un_docket_topic_open_narcotics = yes
 		country_rank >= rank_value:major_power
 		has_technology_researched = pharmaceuticals
-		NOT = { has_modifier = un_narcotics_control_modifier }
+		NOT = { has_variable = un_narcotics_control_modifier_on }
 		NOT = { has_modifier = un_narcotics_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -4323,12 +4359,12 @@ un_events.40 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		has_game_rule = global_commons_enabled
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		un_docket_topic_open_antarctic = yes
 		has_technology_researched = space_exploration
-		NOT = { has_modifier = un_antarctic_treaty_modifier }
+		NOT = { has_variable = un_antarctic_treaty_modifier_on }
 		NOT = { has_modifier = un_antarctic_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -4432,13 +4468,13 @@ un_events.41 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		sr_space_race_on = yes
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		un_docket_topic_open_asat = yes
 		has_technology_researched = space_exploration
 		NOT = { has_variable = un_dkt_asat_struck }
-		NOT = { has_modifier = un_asat_moratorium_modifier }
+		NOT = { has_variable = un_asat_moratorium_modifier_on }
 		NOT = { has_modifier = un_asat_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
@@ -4538,13 +4574,13 @@ un_events.42 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the docket offers it only to a member that passes un_docket_may_propose_<topic>, these conditions, and the vote lock is free (a re-offer releases it first); a vote opened or membership lost in the day cancels the offer
 		sr_colonies_full_enabled = yes
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		un_docket_topic_open_colony_protection = yes
 		sr_has_space_colony = yes
 		NOT = { has_variable = un_dkt_colony_actor }
-		NOT = { has_modifier = un_colony_protection_modifier }
+		NOT = { has_variable = un_colony_protection_modifier_on }
 		NOT = { has_modifier = un_colony_protection_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}

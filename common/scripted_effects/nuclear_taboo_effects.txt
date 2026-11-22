@@ -12,8 +12,9 @@
 # TWO HALVES. nd_taboo_monthly_update is the world's step, from the global
 # monthly pulse (nuclear_taboo_on_actions.txt): ROOT is none there, so it never
 # applies a modifier. nd_taboo_country_monthly is each country's half, from
-# je_nuclear_program's monthly pulse with ROOT = the country — the possession
-# cost, the exits and the history samples live there.
+# je_nuclear_program's monthly pulse with ROOT = the country — the exits and
+# the history samples live there. The possession cost is the entry's declared
+# nd_taboo_possession_cost (value nd_taboo_burden_value), which needs no pulse.
 # ============================================================================
 
 # ----------------------------------------------------------------------------
@@ -156,13 +157,19 @@ nd_taboo_ledger_add_weighted = {
 # Adds the staged amount to the ledger, held inside -30 .. +10. Only writers
 # in this file call it.
 nd_taboo_ledger_commit = {
-	set_global_variable = {
-		name = nd_taboo_ledger
-		value = {
-			value = global_var:nd_taboo_ledger
-			add = global_var:nd_tb_stage
-			min = nd_taboo_ledger_min
-			max = nd_taboo_ledger_max
+	# Only once the caller's stage has run: an option's or a button's tooltip
+	# walks this writing nothing, so the stage is unset there
+	# (tooltip_walk_variable_audit).
+	if = {
+		limit = { has_global_variable = nd_tb_stage }
+		set_global_variable = {
+			name = nd_taboo_ledger
+			value = {
+				value = global_var:nd_taboo_ledger
+				add = global_var:nd_tb_stage
+				min = nd_taboo_ledger_min
+				max = nd_taboo_ledger_max
+			}
 		}
 	}
 	remove_global_variable = nd_tb_stage
@@ -216,8 +223,16 @@ nd_taboo_note_use_scaled = {
 		else = {
 			change_global_variable = { name = nd_taboo_quiet_years multiply = nd_taboo_clock_keep_first_use }
 		}
-		nd_taboo_shock = { POINTS = global_var:nd_tb_use_shock }
-		nd_taboo_ledger_add = { POINTS = global_var:nd_tb_use_ledger }
+		# Only once the sets above have run: a strike option's tooltip walks
+		# this writing nothing (tooltip_walk_variable_audit).
+		if = {
+			limit = { has_global_variable = nd_tb_use_shock }
+			nd_taboo_shock = { POINTS = global_var:nd_tb_use_shock }
+		}
+		if = {
+			limit = { has_global_variable = nd_tb_use_ledger }
+			nd_taboo_ledger_add = { POINTS = global_var:nd_tb_use_ledger }
+		}
 		set_global_variable = { name = nd_taboo_last_use_year value = year }
 		remove_global_variable = nd_tb_use_shock
 		remove_global_variable = nd_tb_use_ledger
@@ -659,6 +674,9 @@ nd_taboo_dismantle_complete = {
 		remove_variable = nd_ai_ceiling_from_review
 	}
 	nd_snap_public_estimate = yes
+	# The launchers go with the warheads (2026-11-20 delivery spec owner call
+	# 9): a country that resumes rebuilds its delivery.
+	nd_delivery_remove_legs = yes
 	nd_apply_posture_modifiers = yes
 	nd_ledger_refresh = yes
 	trigger_event = { id = nuclear_taboo.20 }
@@ -827,39 +845,7 @@ nd_taboo_country_monthly = {
 			nd_taboo_retire_step = yes
 		}
 		nd_taboo_refresh_held = yes
-		nd_taboo_refresh_possession = yes
 		nd_taboo_record_history = yes
-	}
-}
-
-# The possession cost on the entry (je_nuclear_program, the upkeep's scope).
-# The engine re-reads a modifier's multiplier on later ticks, so the modifier
-# is put on once and the cache updated each month — nd_apply_posture_modifiers'
-# upkeep pattern. The cache is never removed (modifier_multiplier_var_audit);
-# ROOT must be this country, which is why this runs only from the entry's
-# pulse. It comes off when the burden is 0 — below a taboo of 40, or unarmed:
-# the entry no longer closes on disarmament.
-nd_taboo_refresh_possession = {
-	set_variable = { name = nd_taboo_burden_cached value = nd_taboo_burden_value }
-	if = {
-		limit = { var:nd_taboo_burden_cached > 0 }
-		je:je_nuclear_program ?= {
-			if = {
-				limit = { NOT = { has_modifier = nd_taboo_possession_cost } }
-				add_modifier = {
-					name = nd_taboo_possession_cost
-					multiplier = root.var:nd_taboo_burden_cached
-				}
-			}
-		}
-	}
-	else = {
-		je:je_nuclear_program ?= {
-			if = {
-				limit = { has_modifier = nd_taboo_possession_cost }
-				remove_modifier = nd_taboo_possession_cost
-			}
-		}
 	}
 }
 

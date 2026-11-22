@@ -33,11 +33,13 @@ _None._
 
 ## Reviewed exemptions
 
-_None._
+- `common/journal_entries/sr_sites_generated.txt` — `INJECT:je_space_race_solar_colonization` targets a mod-only entity defined at `common/journal_entries/je_space_race.txt`. Edit the definition directly. — **2026-11-06**: generated declarations kept out of the hand-written entry; a cross-file INJECT onto a mod-only entry applies (scripting_best_practices.md § Load Order, facts 4 and 8)
 
 ## Coverage
 
-- total flags: 0
+- flags by kind:
+  - inject: 1
+- total flags: 1
 - unreviewed: 0
-- exempted: 0
+- exempted: 1
 

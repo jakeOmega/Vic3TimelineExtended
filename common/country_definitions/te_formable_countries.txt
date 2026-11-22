@@ -68,6 +68,11 @@ AFU = {
 		herero
 		sotho
 		tswana
+		# Merged cultures (culture merges): what the cultures above become, so that a country whose parts have
+		# left its primary cultures can still form this tag. test_culture_merge_primary_reads.py lists what is missing.
+		cm_arab
+		cm_east_african
+		cm_nguni
 	}
 	capital = STATE_OROMIA
 }
@@ -92,6 +97,13 @@ INM = {
 		romanian
 		slovene
 		croat
+		# Merged cultures (culture merges): what the cultures above become, so that a country whose parts have
+		# left its primary cultures can still form this tag. test_culture_merge_primary_reads.py lists what is missing.
+		cm_pan_slavic
+		cm_east_slavic
+		cm_czechoslovak
+		cm_latin
+		cm_yugoslav
 	}
 	capital = STATE_MAZOVIA
 }
@@ -121,6 +133,9 @@ EAF = {
 		nyamwezi
 		sukuma
 		malagasy
+		# Merged cultures (culture merges): what the cultures above become, so that a country whose parts have
+		# left its primary cultures can still form this tag. test_culture_merge_primary_reads.py lists what is missing.
+		cm_east_african
 	}
 	capital = STATE_KENYA
 }
@@ -167,6 +182,17 @@ EUN = {
 		latvian
 		estonian
 		icelandic
+		# Merged cultures (culture merges): what the cultures above become, so that a country whose parts have
+		# left its primary cultures can still form this tag. test_culture_merge_primary_reads.py lists what is missing.
+		cm_latin
+		cm_german
+		cm_italian
+		cm_pan_slavic
+		cm_czechoslovak
+		cm_scandinavian
+		cm_anglophone
+		cm_yugoslav
+		cm_east_slavic
 	}
 	capital = STATE_FLANDERS
 }
@@ -189,6 +215,10 @@ UNA = {
 		franco_canadian
 		mexican
 		central_american
+		# Merged cultures (culture merges): what the cultures above become, so that a country whose parts have
+		# left its primary cultures can still form this tag. test_culture_merge_primary_reads.py lists what is missing.
+		cm_american
+		cm_anglophone
 	}
 	capital = STATE_DISTRICT_OF_COLUMBIA
 }
@@ -208,6 +238,9 @@ ZHO = {
 		mongol
 		tibetan
 		uighur
+		# Merged cultures (culture merges): what the cultures above become, so that a country whose parts have
+		# left its primary cultures can still form this tag. test_culture_merge_primary_reads.py lists what is missing.
+		cm_pan_turkic
 	}
 	capital = STATE_BEIJING
 }
@@ -243,6 +276,9 @@ BHA = {
 		bageli
 		chhattisgarhi
 		deccani
+		# Merged cultures (culture merges): what the cultures above become, so that a country whose parts have
+		# left its primary cultures can still form this tag. test_culture_merge_primary_reads.py lists what is missing.
+		cm_dravidian
 	}
 	capital = STATE_DELHI
 }
@@ -263,6 +299,10 @@ NUS = {
 		malay
 		moluccan
 		sumatran
+		# Merged cultures (culture merges): what the cultures above become, so that a country whose parts have
+		# left its primary cultures can still form this tag. test_culture_merge_primary_reads.py lists what is missing.
+		cm_indonesian
+		cm_pan_malay
 	}
 	capital = STATE_WEST_JAVA
 }
@@ -387,6 +427,29 @@ UNE = {
 		maori
 		polynesian
 		melanesian
+		# Merged cultures (culture merges): what the cultures above become, so that a country whose parts have
+		# left its primary cultures can still form this tag. test_culture_merge_primary_reads.py lists what is missing.
+		cm_latin
+		cm_german
+		cm_italian
+		cm_anglophone
+		cm_scandinavian
+		cm_pan_slavic
+		cm_czechoslovak
+		cm_yugoslav
+		cm_east_slavic
+		cm_american
+		cm_platine
+		cm_gran_colombian
+		cm_andean
+		cm_arab
+		cm_oghuz_turkic
+		cm_pan_turkic
+		cm_east_african
+		cm_nguni
+		cm_dravidian
+		cm_indonesian
+		cm_pan_malay
 	}
 	capital = STATE_WEST_SWITZERLAND
 }
@@ -430,6 +493,14 @@ DAR = {
 		swahili
 		# Maritime SE Asia (Muslim Malay world)
 		malay
+		# Merged cultures (culture merges): what the cultures above become, so that a country whose parts have
+		# left its primary cultures can still form this tag. test_culture_merge_primary_reads.py lists what is missing.
+		cm_arab
+		cm_oghuz_turkic
+		cm_pan_turkic
+		cm_east_african
+		cm_indonesian
+		cm_pan_malay
 	}
 	capital = STATE_HEDJAZ
 }

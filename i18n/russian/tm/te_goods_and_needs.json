@@ -1,0 +1,14 @@
+{
+ "popneed_convenience": {
+  "en": "Convenience",
+  "ru": "Удобство"
+ },
+ "popneed_healthcare": {
+  "en": "Healthcare",
+  "ru": "Здравоохранение"
+ },
+ "popneed_tourism": {
+  "en": "Tourism",
+  "ru": "Туризм"
+ }
+}

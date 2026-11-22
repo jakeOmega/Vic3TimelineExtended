@@ -34,10 +34,26 @@ te_debris_global_monthly_on_action = {
 }
 
 te_debris_country_monthly_on_action = {
-	trigger = {
-		sr_space_race_on = yes
-	}
 	effect = {
-		te_debris_country_monthly = yes
+		if = {
+			limit = { sr_space_race_on = yes }
+			te_debris_country_monthly = yes
+		}
+		# The rule switched off mid-game, from the screen that changes country
+		# (2026-11-08): the refresh above is the one site of the three modifiers,
+		# which would otherwise stay at their last size for good, on countries
+		# with no space race entry too.
+		else_if = {
+			limit = {
+				OR = {
+					has_modifier = te_orbital_debris
+					has_modifier = te_debris_cleaner_prestige
+					has_modifier = te_debris_removal_method_prestige
+				}
+			}
+			remove_modifier_if_exists_effect = { MODIFIER = te_orbital_debris }
+			remove_modifier_if_exists_effect = { MODIFIER = te_debris_cleaner_prestige }
+			remove_modifier_if_exists_effect = { MODIFIER = te_debris_removal_method_prestige }
+		}
 	}
 }

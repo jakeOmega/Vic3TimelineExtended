@@ -93,7 +93,7 @@ INJECT:law_private_health_insurance = {
 }
 
 # Family Limitation's literacy term (phase 3; parent spec section 13; on the laws since 2026-10-17): a secular, literate
-# society limits births, a church-run one less. x (1 + it): State Religion and its two variants -50%, Total Separation and
+# society limits births, a church-run one less. x (1 + it): State Religion and its three variants -50%, Total Separation and
 # State Atheism +50%, Freedom of Conscience none. A variant carries its parent's.
 INJECT:law_state_religion = {
 	modifier = {
@@ -108,6 +108,12 @@ INJECT:law_millet_system = {
 }
 
 INJECT:law_people_of_the_book = {
+	modifier = {
+		country_family_limitation_literacy_mult = -0.5
+	}
+}
+
+INJECT:law_caesaropapism = {
 	modifier = {
 		country_family_limitation_literacy_mult = -0.5
 	}

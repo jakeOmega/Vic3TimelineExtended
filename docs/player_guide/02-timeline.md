@@ -72,7 +72,9 @@ Urban Planning, Pollution Control and the Civil Rights Movement round out the
 era.
 
 Era 8 brings computers and automation. Computer Networks unlocks the Software
-Industry and Network Infrastructure, Industrial Robotics the Robotics Industry,
+Industry and Network Infrastructure, Industrial Robotics the Robotics Industry
+and the Automation Policy laws ([Automation
+policy](06-politics.md#automation-policy)),
 and Modern Pharmaceuticals the Rational Drug Design method for Pharmaceutical
 Industries ([Pharmaceutical Industries and
 Drugs](#pharmaceutical-industries-and-drugs)). Gene Splicing opens the Ban on
@@ -91,17 +93,20 @@ Manufacturing, Electric Vehicles, Internet of Things, Reusable Rocketry,
 Hypersonic Weapons, Cyber Warfare, Universal Basic Income and Mental Health
 Awareness. Cislunar Infrastructure opens the Space Program's Solar Colonization
 method, and with it colonies on the Moon after a Moon Landing, and In-Situ
-Resource Utilization the Extraplanetary Base.
+Resource Utilization the Extraplanetary Base. Carbon Capture and Storage
+unlocks the Carbon Conversion Works, whose Direct Air Capture takes CO₂ out of
+the atmosphere.
 
 Era 11 is the near future. Modern Material Science unlocks the Advanced Material
 Fabricator, Abyssal Plain Mining the Deep-Sea Mine, Asteroid Mining the
 Extraplanetary Base's Asteroid Mine method, Fusion Power the Fusion Plant, and
 Advanced Fission a second, more productive base method for the Nuclear Plant.
-Genetic Engineering unlocks the Carbon Conversion Works and Integrated Biorefinery, Lab-Grown Food
-the Cultured Meat Plant and Cultured Produce Facility, and Synthetic Biology
-adds bioengineered production methods such as Designed Crops. Brain-Computer
-Interfaces and Human Augmentation bring augmentation laws. Era 11 also brings
-the AI that works on its own: AI Agents (the Automated Bureaucracy law and
+Genetic Engineering unlocks the Integrated Biorefinery and the Carbon
+Conversion Works' Synthetic Coal method, Lab-Grown Food the Cultured Meat Plant
+and Cultured Produce Facility (which can culture tobacco leaf too), and
+Synthetic Biology adds bioengineered production methods such as Designed Crops.
+Brain-Computer Interfaces and Human Augmentation bring augmentation laws.
+Era 11 also brings the AI that works on its own: AI Agents (the Automated Bureaucracy law and
 Fully Automated Content Creation), Self-Driving Laboratories (the University's
 AI Assisted Research), Humanoid Robotics (Robotic Service Providers and
 Neuromorphic Computing) and Autonomous Weapons (Robotic Soldiers). Artificial
@@ -236,7 +241,7 @@ movements](07-social-movements.md).
 ## New goods
 
 The new industries trade in thirteen goods the base game doesn't have, and the mod
-renames twelve base-game goods to fit a longer timeline.
+renames eleven base-game goods to fit a longer timeline.
 
 ### Goods the mod adds
 
@@ -251,7 +256,7 @@ renames twelve base-game goods to fit a longer timeline.
 | Advanced Materials | Industrial | Advanced Material Fabricator, Nanofabrication Center | Late-game production methods and megaproject construction; base price 4,000, the most expensive good in the game |
 | Construction Services | Industrial | Construction Sector | The construction market ([Economy and construction](03-economy.md)) |
 | Tourism | Luxury | Tourism Industry, National Park and others | The pops' Tourism need |
-| Tech-Critical Metals | Industrial | Nickel and Cobalt, Lithium, Rare Earth Metals and Platinum Group Metals Mines; also the Deep-Sea Mine and Extraplanetary Base | Electronics, robotics, modern power plants and other high-tech production methods |
+| Tech-Critical Metals | Industrial | Lithium, Rare Earth Metals, Platinum Group Metals and Nickel and Cobalt Mines, and some from Graphite, Specialty Alloy Metal and Manganese Mines ([New mines and extraction](#new-mines-and-extraction)); also the Deep-Sea Mine and Extraplanetary Base | Electronics, robotics, modern power plants and other high-tech production methods |
 | Motor Ships | Industrial | Shipyards, from Advanced Submarine Technology | Later production methods for ports, fishing wharves and whaling stations, and the Deep-Sea Mine's tenders; the pops' Leisure need, as Steamers |
 | Magnetic Drive Ships | Industrial | Shipyards, from Modern Material Science | The last tier of the same production methods; the Leisure need too |
 | Grid Power | Industrial | Grid Transfer Stations, from a state's spare Electricity | Grid Transfer Stations, which turn it back into Electricity in short states of the same power grid ([Economy and construction](03-economy.md#power-grids)) |
@@ -269,7 +274,8 @@ the same goods underneath, so base-game buildings still make and use them.
 |---|---|
 | Coal | Energy and Carbon Minerals |
 | Iron | Structural Metals |
-| Lead | Conductive and Base Metals |
+| Lead | Base Metals |
+| Copper | Conductive Metals |
 | Sulfur | Chemical and Industrial Minerals |
 | Fertilizer | Chemicals |
 | Glass | Glass and Plastics |
@@ -291,20 +297,31 @@ most base-game buildings with production methods for the new eras.
 
 ### New mines and extraction
 
-Fourteen new mines work deposits of specific minerals. Ten of them produce one
-of the renamed resource goods, adding supply to existing chains; the other four
-produce the new Tech-Critical Metals. Resource deposits are covered in [New
-mineral deposits](03-economy.md#new-mineral-deposits).
+Thirteen new mines work deposits of specific minerals. Most produce several
+goods, split the way their mineral is used in reality: aluminum goes into wiring
+as well as frames, so a Bauxite Mine makes some Conductive Metals beside its
+Structural Metals. The table gives each good's share of a mine's output value at
+base prices; every production method keeps the same split, and its tooltip shows
+the amounts. The mines run the base game's mining equipment, explosives and
+automation, except that the Nickel and Cobalt, Lithium, Rare Earth Metals and
+Platinum Group Metals Mines start at the Condensing Engine Pump. Resource
+deposits are covered in [New mineral deposits](03-economy.md#new-mineral-deposits).
 
 | Mine | Produces |
 |---|---|
-| Manganese, Chromium, Bauxite, Specialty Alloy Metal | Structural Metals |
-| Copper, Precious and Minor Base Metal | Conductive and Base Metals |
-| Nickel and Cobalt, Lithium, Rare Earth Metals, Platinum Group Metals | Tech-Critical Metals |
-| Graphite | Energy and Carbon Minerals |
+| Bauxite | Structural Metals 85%, Conductive Metals 15% |
+| Manganese | Structural Metals 90%, Tech-Critical Metals 5%, Chemicals 5% |
+| Chromium | Structural Metals 90%, Chemical and Industrial Minerals 10% |
+| Specialty Alloy Metal | Structural Metals 75%, Tech-Critical Metals 15%, Chemicals 10% |
+| Precious and Minor Base Metal | Base Metals 55%, Conductive Metals 30%, Structural Metals 15% |
+| Nickel and Cobalt | Structural Metals 60%, Tech-Critical Metals 40% |
+| Lithium | Tech-Critical Metals 90%, Glass and Plastics 5%, Chemicals 5% |
+| Rare Earth Metals | Tech-Critical Metals 80%, Chemicals 10%, Glass and Plastics 10% |
+| Platinum Group Metals | Tech-Critical Metals 90%, Chemicals 10% |
+| Graphite | Energy and Carbon Minerals 70%, Tech-Critical Metals 30% |
 | Phosphate, Potash, Industrial Mineral and Salt | Chemical and Industrial Minerals |
 
-Two late buildings mine several goods at once. The Deep-Sea Mine (Abyssal Plain
+Two late buildings mine the seabed and space. The Deep-Sea Mine (Abyssal Plain
 Mining) can be built in any coastal state, and each level needs a seabed license
 ([Seabed licenses](#seabed-licenses)). Like a fishing wharf, it loses up to
 three quarters of its throughput while its state is blockaded. Its ships come
@@ -320,8 +337,10 @@ level. Its staff is the same at any size: a large base needs no more workers
 than a small one. It starts on Regolith Processing, which makes Structural Metals,
 Tech-Critical Metals and Glass and Plastics at a thin margin: about £1,600 a
 level a week at base prices. Asteroid Mining brings the Asteroid Mine method,
-and Space Colonization the larger Mining Colony, or the Resort Colony production
-method, which produces art and tourism instead. Von Neumann Machines (era 13)
+which mines mostly Structural and Tech-Critical Metals, with some gold and
+Conductive Metals and a little Base Metals and Chemical and Industrial Minerals.
+Space Colonization brings the larger Mining Colony, with the same mix, or the
+Resort Colony production method, which produces art and tourism instead. Von Neumann Machines (era 13)
 brings Self-Replicating Miners, which build their copies from the ore they dig:
 against a Mining Colony, a level uses a third less Launch Capacity and mines a
 quarter more of each good. With
@@ -329,16 +348,18 @@ the Space Race rule on Simple Colonies or Full Colonies its levels need room,
 from the near-Earth asteroids (with Asteroid Mining) and your colonies, and work at −75% past it (see
 [Extraplanetary Base room](16-space.md#extraplanetary-base-room)).
 
-The Deep-Sea Mine costs 5,000 construction per level, a quarter of the
-Extraplanetary Base's, and at base prices earns more per level: about three
-times as much in era 11, and still more than a Mining Colony after Advanced
-Nanofabrication. Most of an Extraplanetary Base's running cost is Launch
+The Deep-Sea Mine mines mostly Structural and Conductive Metals, as the seabed's
+nodules are mostly manganese, nickel and copper, with a little of the
+Tech-Critical Metals an Extraplanetary Base makes far more of. It costs 5,000
+construction per level, a quarter of the Extraplanetary Base's, and at base
+prices earns more per level: about twice as much in era 11, and still more than
+a Mining Colony after Advanced Nanofabrication. Most of an Extraplanetary Base's running cost is Launch
 Capacity, and two late production method groups each cut that bill by 30%:
 Transport in Space, whose Fusion Tugs need Compact Fusion Reactors (era 12), and
 Launch to Orbit, whose Tethered Launch needs the Space Elevator technology (era
-13; not an elevator of your own). A Mining Colony with Fusion Tugs already earns
-about as much per level as an Advanced Deep-Sea Mine, and with both upgrades half
-as much again. Self-Replicating Miners with neither upgrade earn more than a
+13; not an elevator of your own). A Mining Colony with Fusion Tugs earns about a
+third more per level than an Advanced Deep-Sea Mine, and with both upgrades about
+twice as much. Self-Replicating Miners with neither upgrade earn more than a
 Mining Colony with both, and the upgrades add less to them, since they launch
 less. With the Global Commons rule off, the Deep-Sea Mine has no
 licenses and keeps its older, smaller output.
@@ -351,11 +372,11 @@ pool of licenses. A coastal state belongs to the basin its sea lane opens onto.
 
 | Basin | Licenses | Includes |
 |---|---|---|
-| Pacific | 300 | the Sea of Japan and the East and South China Seas |
-| Atlantic | 250 | the Mediterranean, Black Sea, Baltic, North Sea, Caribbean and Gulf of Mexico |
-| Indian | 200 | the Red Sea, Persian Gulf and Arabian Sea |
-| Southern | 150 | Patagonia, the Cape of Good Hope, southern Australia and the Tasman Sea |
-| Arctic | 100 | the Barents Sea, Greenland and Hudson Bay |
+| Pacific | 1,500 | the Sea of Japan, the East and South China Seas and New Zealand |
+| Atlantic | 1,250 | the Mediterranean, Black Sea, Baltic, North Sea, Caribbean and Gulf of Mexico |
+| Indian | 1,000 | the Red Sea, Persian Gulf and Arabian Sea |
+| Southern | 750 | Patagonia, the Cape of Good Hope, southern Australia and the Tasman Sea |
+| Arctic | 500 | the Barents Sea, Greenland and Hudson Bay |
 
 Every January the pools are shared out by claim weight among every coastal
 country. A country without Abyssal Plain Mining counts at three quarters of
@@ -374,7 +395,8 @@ outweighs a larger obsolete one.
 
 An event announces the seabed rush when the first coastal country researches
 Abyssal Plain Mining. After that, a notification tells you when a country wins
-its first share in a basin on your coast where you have one, and when a basin
+its first share of five licenses or more in a basin on your coast where you
+have as much, and when a basin
 you have coast or a share in has all its licenses held. Both can be muted in
 the message settings, under Seabed Licenses.
 
@@ -389,7 +411,10 @@ takes one from another basin and works at -25% throughput (Long-Haul Seabed
 Operations, shown on the mine), until a local claim frees up and replaces it on
 its own. The
 building's requirements list how many licenses you have to spare and which
-kind the next level would take.
+kind the next level would take. Tick Build only on local claims in the Seabed
+tab and a level can be queued only in a state whose own basin has a claim to
+spare, so neither you nor private investment builds one by accident; long-haul
+levels already in that basin take its freed claims first.
 
 #### Claims, protection and the holding fee
 
@@ -407,7 +432,7 @@ a quarter a year like any other, so the reserved half refills.
 Queuing a level turns a claim into a license at once, so you can hold a
 basin's claims by queuing far ahead. That costs a holding fee: a license on a
 level still unbuilt a year after it was queued pays 2% of a level's base output
-value a week (about 900), half the royalty, until the level is built. Building
+value a week (about 740), half the royalty, until the level is built. Building
 at a normal pace never pays it, whoever queued the level. Under the Regulated
 regime a party's fee goes to the same place as its royalties; anyone else's is
 simply an expense. The Budget Breakdown lists it under United Nations.
@@ -434,8 +459,8 @@ Transfer the other way. The article can be enforced, so a war's winner can take
 a rival's claims as a lease. No country barred by the Antarctic Treaty can lease
 Southern claims or receive them, and Sponsor Contractors protects no leased
 claims. AI countries offer claims they are unlikely to use soon, and ask for
-them when they are short of claims and Tech-Critical Metals sell above base
-price.
+them when they are short of claims and the Deep-Sea Mine's metals sell above
+base price.
 
 An overlord can take its subject's unused claims with Administer Seabed Claims,
 an action like Raise Subject Payments: no approval, and not on a protectorate
@@ -454,29 +479,31 @@ The Seabed tab of the Timeline Extended window answers four questions. Its
 overview says how many more Deep-Sea Mines you can queue (and how many at home,
 without the long-haul penalty), your licenses and any holding fee, your
 long-haul levels, your unused claims and what next January can take of them,
-your policy and when it can next change, and the regime. The Ocean Basins table
+your policy and when it can next change, and the regime, with the Build only on
+local claims checkbox under the first four. The Ocean Basins table
 has a row for each basin: Free is your claims there, green where you have coast
 to build on at full throughput; Pool is a bar of the whole pool, from your
 mines and claims to rivals' mines and the rivals' claims a buildup could win;
 Weight is your share of the basin's claim weight; +1 license is about how much
 more naval power projection would win you one more license at the next sharing,
-a figure that is enough and often more than needed. Click a basin to see its claimants, largest
+a figure that is enough and often more than needed. Click a basin to see its claimants
+with a share of five licenses or more, largest
 share first, each with its mines, claims and share of the weight in columns,
 and your own row with its Relinquish button. A Seabed Licenses
-tile on every coastal state's panel shows that state's basin, the licenses its
+tile on each of your coastal states' panels shows that state's basin, the licenses its
 mines hold and how many are long-haul, your unused claims in its basin (what a
 new level there would take at full throughput) and what the state adds to your
 claim weight there. The tile's tooltip has the national figures. Once you have
 researched Abyssal Plain Mining, every other coastal state, whoever owns it,
 shows its basin in an Ocean Basin tile, so you can see which pool a port there
 would weigh in. Another country's National Info has a Seabed tab with that
-country's overview and Ocean Basins table; the policy buttons and the claimant
-lists, with Relinquish and Claim Again, are only on your own.
+country's overview and Ocean Basins table; the checkbox, the policy buttons and
+the claimant lists, with Relinquish and Claim Again, are only on your own.
 
 | Policy | Influence held | Claim weight | When to use it |
 |---|---|---|---|
 | Scientific Survey (default) | none | ×0.75 | You aren't building Deep-Sea Mines yet, or you build your claims as fast as you get them and need no protection. |
-| Sponsor Contractors | 50, plus 0.5 for each unused claim | ×1, claims protected | You want licenses, and want to keep the claims you can't build on yet: the lawful route under the Law of the Sea. |
+| Sponsor Contractors | 50, plus 0.1 for each unused claim | ×1, claims protected | You want licenses, and want to keep the claims you can't build on yet: the lawful route under the Law of the Sea. |
 | Unilateral Licensing | 1.5 times Sponsor Contractors' figure, at least 150 | ×1, naval power projection counted twice | A large navy and little coast. Relations fall by 10 a year with each other unilateral claimant in a basin where you both have coast, and while the Law of the Sea regulates the seabed, a party that licenses unilaterally defects from it ([The United Nations](10-united-nations.md)). |
 
 A new policy holds its influence from the day you choose it; its weight counts
@@ -486,8 +513,8 @@ in one of your home basins has switched to it since your last change, and
 Scientific Survey, while your influence is in deficit. Sponsor Contractors'
 cost has no cap, so claiming a whole basin is expensive; to cut it, build on
 the claims, relinquish a basin, or drop to Scientific Survey when you can. AI
-countries take up Sponsor Contractors when it would bring them a license and
-Tech-Critical Metals sell above base price, and more readily the more unused
+countries take up Sponsor Contractors when it would bring them licenses and
+the Deep-Sea Mine's metals sell above base price, and more readily the more unused
 claims they hold. A few great powers, mostly those with poor UN standing or a
 rival claimant, choose Unilateral Licensing. The AI keeps to the five-year lock
 too.
@@ -513,10 +540,12 @@ cheaper source of Drugs until Antibiotics brings the factory level with them;
 its later methods pull ahead. Pops buy Drugs for Intoxicants and, from wealth
 16, for the mod's Healthcare need ([Pop consumption at high
 wealth](03-economy.md#pop-consumption-at-high-wealth)), so in a rich country
-most Drugs are bought as medicine. The Ministry of Health and the Ministry of
-Consumer Protection cut the throughput of your own opium plantations, and a
-rich country whose market runs short of Drugs can get a Medicine Shortage
-event. The base game's journal entry The Opium Trade is not offered after
+most Drugs are bought as medicine. Livestock ranches on their late methods buy
+some too (Antibiotic Growth Promoters, Recombinant Growth Hormones and
+Gene-Edited Livestock). The Ministry of Health and the Ministry of Consumer
+Protection cut the throughput of your own opium plantations, and a
+rich country whose market runs short of Drugs can get a medicine shortage, the
+event Half a Course. The base game's journal entry The Opium Trade is not offered after
 January 1912, and one still open then fails.
 
 ### Later production methods for existing buildings
@@ -525,8 +554,14 @@ Most base-game buildings gain production methods through the new eras, so a
 building you built in 1850 keeps upgrading. Mines move on to Continuous Miners,
 Smart Miners and Laser Excavation Technology; grain farms to Modern Farming,
 Automated Harvesters and Planters and Designed Crops; plantations to Mechanized
-Farm and GMO Plantation; and automation groups end in AI-managed methods such as
-AI Managed Fab. A few polluting buildings get pollution-control groups
+Farm and GMO Plantation, with Mechanical and then Autonomous Harvesters, which
+need fewer farmers; livestock ranches to Industrial Feedlots, Recombinant Growth
+Hormones (which buy Drugs) and Gene-Edited Livestock, with Mechanized Feeding
+Lines and Robotic Barns in Herd Management, the base game's Fencing, and
+Antibiotic Growth Promoters (which also buy Drugs) in a Feed Additives group of
+their own, on top of any wool method; and
+automation groups end in AI-managed methods such as AI Managed Fab. A few
+polluting buildings get pollution-control groups
 ([Pollution-control methods](15-climate.md#pollution-control-methods)), and many get a hidden maintenance
 group used by the construction market ([Construction maintenance and
 retooling](03-economy.md#construction-maintenance-and-retooling)).
@@ -553,7 +588,7 @@ company owns gets the company's throughput bonus, which is often worth having
 on a flagship.
 
 The mod also adds extension buildings and prosperity bonuses to many base-game
-companies, and eighteen new prestige goods, from Luxury Automobiles to Heavy-Lift
+companies, and nineteen new prestige goods, from Luxury Automobiles to Heavy-Lift
 Launch Systems.
 
 ### Companies added by the mod
@@ -600,7 +635,9 @@ Each wonder employs 10,000 workers, and its effects scale with how fully it is
 staffed. The effects are modest and themed: the dams add 10 to 20 Hydro Plant
 levels to their state and 25% Hydro Plant throughput, towers and trade landmarks
 raise trade advantage or Urban Center, Trade Center or service throughput,
-religious landmarks please the Devout, and several give flat prestige.
+religious landmarks please the Devout, and several give flat prestige. Once a
+dam is built, its state can build Hydro Plants even with no river, which is how
+Nevada gets them.
 
 Eight science and diplomacy wonders can be built in any state, so the first
 country to meet their conditions and finish one claims it:
@@ -663,7 +700,7 @@ specialists per level, and their effects scale with how fully they are staffed.
 | Antimatter Containment Facility | Antimatter Production | 10 | Each level opens five slots, shared between Antimatter Engines (Launch Capacity, faster army and fleet movement, space race progress) and Antimatter Warhead Plants (nuclear strike success, unit offense). Each level of either uses one slot. |
 | Mind Upload Nexus | Mind Backups | 5 | Produces software, services, tourism and art, and raises research speed by 5% per level. Under the Demographics rule's Full setting it hosts uploaded minds and produces only as far as they fill it ([Life extension](08-states.md#life-extension)). |
 | Nanofabrication Center | Molecular Assemblers | 10 | Produces Advanced Materials and lowers space race risk. |
-| Consciousness Network | Telepathic Communities | 10 | Adds bureaucracy, innovation, infrastructure, tax capacity and education access. Its Network Mode is Open Network (research, innovation, influence, prestige, standard of living) or Social Control Network (authority, government approval, lower turmoil and radicalism). Social Control Network needs Secret Police, Single-Party State, Autocracy, Mandatory Augmentation or Intrusive Surveillance System, and those laws rule out Open Network. |
+| Consciousness Network | Telepathic Communities | 10 | Adds bureaucracy, innovation, infrastructure, tax capacity and education access. Its Network Mode is Open Network (research, innovation, influence, prestige, standard of living) or Social Control Network (authority, government approval, lower turmoil and radicalism). Social Control Network needs Secret Police or Autocracy (or a variant of either), Single-Party State, Mandatory Augmentation or Intrusive Surveillance System, and those laws rule out Open Network. |
 
 Each type of megaproject you complete adds 3 cultural pull ([Where cultural pull
 comes from](11-influence.md#where-cultural-pull-comes-from)). The Space
@@ -799,9 +836,9 @@ These sections follow:
 | Awaiting Dedication | Open | Only while one of your Grand Monuments is a construction site: a row for each site, with its levels built, the grandeur they come to and whether levels are still being built, and a Dedicate button under it. |
 | Archaeological Expeditions | Open | Only while you dig a buried site or one is open to you: the digs under way and the innovation they divert each week, each with its state, its weekly innovation and, abroad, its terms; then the sites you can dig, with the levels each will raise, the terms if you would dig it abroad, and a button for each method you can use. |
 | National Effects | Open | The four monument policy buttons first. Then a row for each national effect in force: Prestige and Prestige (%), Legitimacy, Cultural Pull, Education Access under Public Education, each dedication's own effect, such as Authority or Max Innovation, and each [unique dedication](#unique-dedications)'s. Each row's bar shows how far the step now being filled has come. Hover the row for the full effect, the grandeur behind it and where its next step completes. Below them, Interest Group Approval lists each group with a total; hover a group for the monuments it approves of, those it objects to, the contested ones it resents and its fading record. Fading Legitimacy shows what remains from pulling monuments down (The Old Order Torn Down) and from levels finished in hard times (Palaces amid Hardship). Opportunities Seized lists each boon in force with its months left, and each unique dedication you hold for a monument still to come. |
-| Our Monuments | Open | A row for each finished monument that is not contested: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename and Name It under it, and Clear Name once you have typed a name. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A monument you can carry off as a trophy has Carry It Off, and the least grand of six in one state has Clear It Away. A monument that stands beside a state's own has a row after the states' rows, with where it stands. |
-| Trophies | Open | Only while you hold a trophy or The Homecoming runs: what your trophies count for, The Homecoming's months left, and a row for each trophy with its monument's picture, what it was, where it came from and when, its worth here, who claims it, and Return It or Bring It Home. |
-| Held Abroad | Open | Only while a trophy taken from your lands stands abroad: a row for each, with its holder and where it stands. |
+| Our Monuments | Open | A row for each finished monument that is not contested: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename and Name It under it, and Clear Name once you have typed a name. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A monument you can carry off as a trophy has Carry It Off, and the least grand of six in one state has Clear It Away. A monument that stands beside a state's own has a row after the states' rows, with where it stands. Buttons at the top switch between three views, as on the Trophies on Display card: Full is these rows; Short is one line for each monument, with its status and grandeur, the rest on hover and only Carry It Off and Clear It Away kept; Collapsed shows only how many monuments are listed and their grandeur together. The section opens in Full, and your choice lasts until you leave the game. |
+| Trophies | Open | Only while you hold a trophy or The Homecoming runs: what your trophies count for, The Homecoming's months left, and a row for each trophy with its monument's picture, what it was, where it came from and when, its worth here, who claims it, and Return It or Bring It Home. Full, Short and Collapsed buttons at the top work as in Our Monuments: Short is one line for each trophy, with what it counts for and Return It or Bring It Home, the rest on hover; Collapsed shows only what your trophies count for and The Homecoming. |
+| Held Abroad | Open | Only while a trophy taken from your lands stands abroad: a row for each, with its holder and where it stands. It has the same three views: Short is one line for each trophy, with its holder; Collapsed shows only how many are abroad. |
 
 The "?" at the right of the tab's header, and at the top of the journal entry, opens the Help page, How Grand Monuments Work. It explains grandeur and
 steps, what counts where, contested monuments, hard times, opportunities,
@@ -886,7 +923,9 @@ output counts every monument's grandeur together.
 The first monument is the grandest: once a new monument raised beside it has
 its dedication and name, the grander of the two stands first. Each of the others
 has its own row in the state's monument card, under the first one's details, and
-under Our Monuments, with its status and grandeur. A contested one's row, under
+under Our Monuments, with its status and grandeur. The card's Also Standing Here
+section has the Full, Short and Collapsed buttons of the Trophies on Display
+card, for these rows only. A contested one's row, under
 Awaiting a Decision, has Pull Down, Rededicate and Keep as Heritage; rededicating it
 makes it the state's first monument, at half its levels. An army that
 holds the state carries monuments off one at a time, with the Carry It Off on
@@ -1047,7 +1086,9 @@ one or one raised beside a finished one; years of age do not. Late in the game
 that takes many more levels than 5, and Raise It queues what it takes at
 today's rate, at most 100 levels a press. An opportunity for the capital counts only the capital's monuments. One for the
 capital can be met anywhere when the capital already holds a monument of
-another dedication. A monument that becomes contested stops counting. Its
+another dedication. A monument that becomes contested stops counting. A
+[buried site](#buried-sites) dug up while the opportunity is on offer or open
+never counts toward it, even one of its dedication. Its
 levels count once it is dedicated, so press its Dedicate button before the
 deadline. When a new monument's dedication ceremony could answer the open
 opportunity, its first choice is "As the opportunity asks", with its
@@ -1164,8 +1205,8 @@ years, but your first choice starts no wait.
 No policy changes maintenance, which Grand Monuments don't need, or aging,
 anniversaries or what a dedication does in its own state.
 
-The national effects change at once, and each monument's tourism at the start
-of the next month. The AI picks each January: State Ceremonial with legitimacy
+The national effects change within a few days, and each monument's tourism at
+the start of the next month. The AI picks each January: State Ceremonial with legitimacy
 under 40 when its regime grandeur and the quarter together reach legitimacy's
 first step, Open to the Public
 with a monument in a state with a Tourism Industry, Public Education with
@@ -1220,8 +1261,10 @@ three ways:
 - By treaty, with the Surrender a Monument article, which a war can enforce (see
   [treaty articles by purpose](09-diplomacy.md#treaty-articles-by-purpose)).
 
-What goes depends on the monument's form. A Grand Shrine is never taken, and a
-monument that loses a piece is spared for ten years.
+What goes depends on the monument's form. A Grand Shrine is never taken. A
+monument that loses a piece can't be looted again while that piece is abroad,
+nor within ten years of the taking, so one tomb's grave goods are never in two
+capitals at once.
 
 | Form | What is carried off |
 |---|---|
@@ -1333,7 +1376,8 @@ by Systematic Stratigraphy diverts 20 innovation a week for 40 months, a 5-level
 one for 27. The button's tooltip gives this site's months, and a dig's row
 gives the innovation it diverts. Nothing caps how many digs you run, but a
 method's button is grayed while you make less weekly innovation than it would
-divert, so a new dig never takes your innovation below zero. Suspend Dig stops
+divert, counting the digs you began in the past two weeks as already diverting, so a
+new dig never takes your innovation below zero. Suspend Dig stops
 a dig and keeps its progress. A dig also stops if you lose the state,
 or the treaty that let you dig there ends, and whoever may dig it next can take
 it up from where it stopped.

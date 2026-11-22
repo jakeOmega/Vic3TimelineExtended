@@ -726,16 +726,22 @@ te_seabed_global_monthly = {
 		}
 		te_seabed_yearly_pass = yes
 	}
-	# Every coastal state's basin, once any country has the technology: the
-	# state view shows each coastal state's basin to a player who has it
-	# (te_seabed_basin_tile_shown; GUI audit VAN-8b, owner 2026-10-27), and
-	# the yearly pass, which sets them too, waits for a coastal claimant. Once
-	# a game; the pass and a change of owner cover state scopes made later.
+	# Every coastal state's basin, from the first month and again each
+	# January for coastal states made since (a colony founded mid-game, say):
+	# the Map Room's basin map shows them all game (te_jmap_seabed_basin;
+	# until 2026-11-06 this ran once, when the first country had
+	# abyssal_plain_mining). te_seabed_ensure_state_basin skips a state that
+	# has one. The state view still shows a basin only to a player with the
+	# technology (te_seabed_basin_tile_sgui; GUI audit VAN-8b, owner
+	# 2026-10-27), and the yearly pass, which sets them too, still waits for
+	# a coastal claimant. A change of owner covers the months between.
 	if = {
 		limit = {
 			te_global_commons_enabled = yes
-			NOT = { has_global_variable = te_seabed_basins_set }
-			any_country = { has_technology_researched = abyssal_plain_mining }
+			OR = {
+				NOT = { has_global_variable = te_seabed_basins_set }
+				month = 0
+			}
 		}
 		set_global_variable = te_seabed_basins_set
 		every_country = {
@@ -1295,38 +1301,13 @@ te_seabed_build_in_slot = {
 # 2026-10-27; the Space Race's Rivals and Space Powers pattern, SPC-9). The
 # viewer's own row is drawn apart. A sharing runs the month after a civil war
 # is won, so a revolution's winner, which inherits no list, has its own then.
-# It replaced six global seats (te_seabed_rk_$B$_1..6, te_seabed_rk_more_$B$,
-# each country's te_seabed_rank_$B$ and the players' te_seabed_rkcap_*), which
-# an older save drops here.
 te_seabed_rank_basin = {
-	te_seabed_rank_clear = { B = $B$ N = 1 }
-	te_seabed_rank_clear = { B = $B$ N = 2 }
-	te_seabed_rank_clear = { B = $B$ N = 3 }
-	te_seabed_rank_clear = { B = $B$ N = 4 }
-	te_seabed_rank_clear = { B = $B$ N = 5 }
-	te_seabed_rank_clear = { B = $B$ N = 6 }
-	if = {
-		limit = { has_global_variable = te_seabed_rk_more_$B$ }
-		remove_global_variable = te_seabed_rk_more_$B$
-	}
-	every_country = {
-		limit = { has_variable = te_seabed_rank_$B$ }
-		remove_variable = te_seabed_rank_$B$
-	}
 	every_country = {
 		limit = {
 			is_player = yes
 			has_variable = te_seabed_shared
 		}
 		te_seabed_rank_list = { B = $B$ }
-	}
-}
-
-# An older save's seat. No scope.
-te_seabed_rank_clear = {
-	if = {
-		limit = { has_global_variable = te_seabed_rk_$B$_$N$ }
-		remove_global_variable = te_seabed_rk_$B$_$N$
 	}
 }
 
@@ -1337,16 +1318,6 @@ te_seabed_rank_clear = {
 # Order").
 te_seabed_rank_list = {
 	save_scope_as = te_seabed_rank_viewer
-	te_seabed_rank_seat_clear = { B = $B$ N = 1 }
-	te_seabed_rank_seat_clear = { B = $B$ N = 2 }
-	te_seabed_rank_seat_clear = { B = $B$ N = 3 }
-	te_seabed_rank_seat_clear = { B = $B$ N = 4 }
-	te_seabed_rank_seat_clear = { B = $B$ N = 5 }
-	te_seabed_rank_seat_clear = { B = $B$ N = 6 }
-	if = {
-		limit = { has_variable = te_seabed_rkcap_count_$B$ }
-		remove_variable = te_seabed_rkcap_count_$B$
-	}
 	if = {
 		limit = { has_variable_list = te_seabed_rk_list_$B$ }
 		clear_variable_list = te_seabed_rk_list_$B$
@@ -1368,14 +1339,6 @@ te_seabed_rank_list = {
 		}
 	}
 	te_seabed_rank_list_selfcheck = { B = $B$ }
-}
-
-# An older save's flag seat on a player (te_seabed_rkcap_<b>_<n>). Country scope.
-te_seabed_rank_seat_clear = {
-	if = {
-		limit = { has_variable = te_seabed_rkcap_$B$_$N$ }
-		remove_variable = te_seabed_rkcap_$B$_$N$
-	}
 }
 
 # TE_SELF_CHECK seabed_claimant_list (audit SEA-3, 2026-10-27), once a game:
@@ -3129,8 +3092,9 @@ te_seabed_world_totals = {
 }
 
 # No scope, after the sharing's leases and pacts (seabed claims spec § 7): in
-# each basin, a country this sharing first gives a share (te_seabed_ent above
-# 0 and no te_seabed_claimed mark yet) is told to every other player with a
+# each basin, a country this sharing first gives a share (te_seabed_ent at
+# te_seabed_share_min or more and no te_seabed_claimed mark yet; one licence
+# while the pools were a fifth of this size) is told to every other player with a
 # share there since an earlier sharing and coast on the basin (review I2: a
 # distant share in every basin had a great power hear of each newcomer about
 # four times; the message group lets a player mute the rest); then every
@@ -3162,7 +3126,7 @@ te_seabed_claimant_notice = {
 	every_country = {
 		limit = {
 			has_variable = te_seabed_ent_$B$
-			var:te_seabed_ent_$B$ > 0
+			var:te_seabed_ent_$B$ >= te_seabed_share_min
 			NOT = { has_variable = te_seabed_claimed_$B$ }
 		}
 		save_scope_as = te_seabed_newcomer
@@ -3172,7 +3136,7 @@ te_seabed_claimant_notice = {
 				is_ai = no
 				has_variable = te_seabed_claimed_$B$
 				has_variable = te_seabed_ent_$B$
-				var:te_seabed_ent_$B$ > 0
+				var:te_seabed_ent_$B$ >= te_seabed_share_min
 				has_variable = te_seabed_coast_$B$
 				var:te_seabed_coast_$B$ > 0
 			}
@@ -3186,7 +3150,7 @@ te_seabed_mark_claimed = {
 	every_country = {
 		limit = {
 			has_variable = te_seabed_ent_$B$
-			var:te_seabed_ent_$B$ > 0
+			var:te_seabed_ent_$B$ >= te_seabed_share_min
 			NOT = { has_variable = te_seabed_claimed_$B$ }
 		}
 		set_variable = te_seabed_claimed_$B$

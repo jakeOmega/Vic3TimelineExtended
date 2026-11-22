@@ -1,0 +1,330 @@
+{
+ "power_bloc_banking_union_bool": {
+  "en": "[concept_banking_common_currency] Banking Union",
+  "ru": "Банковский союз ([concept_banking_common_currency|l])"
+ },
+ "power_bloc_banking_union_bool_desc": {
+  "en": "One supervisor and one deposit guarantee for the banks of every country using the currency, under any banking law but $law_unregulated_banking$. A [concept_banking_crash] spreads down the shared currency far less readily, and the leader pays a supervision cost for each adopter.",
+  "ru": "Единый надзорный орган и единая гарантия вкладов для банков каждой страны, использующей валюту, при любом банковском законе, кроме «$law_unregulated_banking$». [concept_banking_crash] гораздо реже распространяется по общей валюте, а лидер платит за надзор за каждого участника, принявшего валюту."
+ },
+ "power_bloc_can_enact_decree_cultural_emigration_initiative_bool": {
+  "en": "Can Enact Cultural Emigration Initiative [Concept('concept_decree', 'Decree')]",
+  "ru": "Может принять [Concept('concept_decree', 'указ')] «Инициатива культурной эмиграции»"
+ },
+ "power_bloc_can_enact_decree_cultural_emigration_initiative_bool_desc": {
+  "en": "Can enact the Cultural Emigration Initiative [concept_decree], which encourages emigration of non-[concept_primary_cultures] to other countries.",
+  "ru": "Может принять [concept_decree|l] «Инициатива культурной эмиграции», поощряющий эмиграцию представителей культур, не входящих в [Concept('concept_primary_cultures','основные культуры')], в другие страны."
+ },
+ "power_bloc_can_enact_greenest_grass_campaign_bool": {
+  "en": "Can Enact Greenest Grass Campaign",
+  "ru": "Может принять кампанию «Трава зеленее»"
+ },
+ "power_bloc_can_enact_greenest_grass_campaign_bool_desc": {
+  "en": "Can enact the Greenest Grass Campaign [concept_decree], an upgraded version of the Greener Grass Campaign decree.",
+  "ru": "Может принять [concept_decree|l] «Кампания „Трава зеленее“» — улучшенную версию указа «Кампания „Трава позеленее“»."
+ },
+ "power_bloc_can_give_development_aid_bool": {
+  "en": "Members Can Give Development Assistance",
+  "ru": "Члены могут оказывать помощь в развитии"
+ },
+ "power_bloc_can_give_development_aid_bool_desc": {
+  "en": "Can give development assistance to another country, at the cost of [concept_authority], raising the [concept_sol] of its poorest and increasing its dependence on the donor.",
+  "ru": "Может оказать помощь в развитии другой стране ценой [Concept('concept_authority','авторитета')], повышая [concept_sol|l] её беднейших слоёв и усиливая её зависимость от донора."
+ },
+ "power_bloc_can_give_education_aid_bool": {
+  "en": "Members Can Give Education Aid",
+  "ru": "Члены могут оказывать помощь в образовании"
+ },
+ "power_bloc_can_give_education_aid_bool_desc": {
+  "en": "Can give educational assistance to another country, at the cost of [concept_bureaucracy], increasing [concept_education_access] in the target country.",
+  "ru": "Может оказать помощь в образовании другой стране ценой [Concept('concept_bureaucracy','бюрократии')], повышая [Concept('concept_education_access','доступ к образованию')] в стране-получателе."
+ },
+ "power_bloc_can_give_healthcare_aid_bool": {
+  "en": "Members Can Give Healthcare Aid",
+  "ru": "Члены могут оказывать помощь в здравоохранении"
+ },
+ "power_bloc_can_give_healthcare_aid_bool_desc": {
+  "en": "Can give healthcare aid to another country, at the cost of [concept_bureaucracy], widening [concept_health_care_access], decreasing mortality and increasing [concept_sol] in the target country.",
+  "ru": "Может оказать помощь в здравоохранении другой стране ценой [Concept('concept_bureaucracy','бюрократии')], расширяя [Concept('concept_health_care_access','доступ к здравоохранению')], снижая смертность и повышая [concept_sol|l] в стране-получателе."
+ },
+ "power_bloc_can_give_humanitarian_aid_bool": {
+  "en": "Members Can Give Humanitarian Aid",
+  "ru": "Члены могут оказывать гуманитарную помощь"
+ },
+ "power_bloc_can_give_humanitarian_aid_bool_desc": {
+  "en": "Can give humanitarian aid to assist the poor in another country, increasing [concept_influence] and improving relations.",
+  "ru": "Может оказать гуманитарную помощь бедным в другой стране, повышая [concept_influence|l] и улучшая отношения."
+ },
+ "power_bloc_can_give_science_aid_2_bool": {
+  "en": "Members Can Give Large Science Aid",
+  "ru": "Члены могут оказывать крупную научную помощь"
+ },
+ "power_bloc_can_give_science_aid_2_bool_desc": {
+  "en": "Can give science aid to another country, spending [concept_innovation], increasing [concept_technology_spread] in the target country.",
+  "ru": "Может оказать научную помощь другой стране, затрачивая [Concept('concept_innovation','инновации')] и повышая [Concept('concept_technology_spread','распространение технологий')] в стране-получателе."
+ },
+ "power_bloc_can_give_science_aid_bool": {
+  "en": "Members Can Give Science Aid",
+  "ru": "Члены могут оказывать научную помощь"
+ },
+ "power_bloc_can_give_science_aid_bool_desc": {
+  "en": "Can give science aid to another country, spending [concept_innovation], increasing [concept_technology_spread] in the target country.",
+  "ru": "Может оказать научную помощь другой стране, затрачивая [Concept('concept_innovation','инновации')] и повышая [Concept('concept_technology_spread','распространение технологий')] в стране-получателе."
+ },
+ "power_bloc_can_give_security_aid_bool": {
+  "en": "Members Can Give Security Aid",
+  "ru": "Члены могут оказывать помощь в обеспечении безопасности"
+ },
+ "power_bloc_can_give_security_aid_bool_desc": {
+  "en": "Can give security aid to another country, at the cost of [concept_bureaucracy], decreasing [concept_turmoil] in the target country.",
+  "ru": "Может оказать помощь в обеспечении безопасности другой стране ценой [Concept('concept_bureaucracy','бюрократии')], снижая [Concept('concept_turmoil','беспорядки')] в стране-получателе."
+ },
+ "power_bloc_can_use_crisis_resolution_bool": {
+  "en": "Leader Can Use Crisis Resolution [concept_diplomatic_action]",
+  "ru": "Лидер может использовать [Concept('concept_diplomatic_action','дипломатическое действие')] «Урегулирование кризиса»"
+ },
+ "power_bloc_can_use_crisis_resolution_bool_desc": {
+  "en": "Leader can use the Crisis Resolution [concept_diplomatic_action] to resolve crises and stabilize [Concept('concept_power_bloc_member', '$concept_power_bloc_members|q$')], at the cost of [concept_authority].",
+  "ru": "Лидер может использовать [concept_diplomatic_action|l] «Урегулирование кризиса», чтобы разрешать кризисы и стабилизировать положение, ценой [Concept('concept_authority','авторитета')]; цель: [Concept('concept_power_bloc_member', '$concept_power_bloc_members|q$')|l]."
+ },
+ "power_bloc_can_use_extend_influence_bool": {
+  "en": "Can Use Extend Influence [concept_diplomatic_action]",
+  "ru": "Может использовать [Concept('concept_diplomatic_action','дипломатическое действие')] «Расширение влияния»"
+ },
+ "power_bloc_can_use_extend_influence_bool_desc": {
+  "en": "Can use the Extend Influence [concept_diplomatic_action] to increase the leverage of the [concept_power_bloc] in a [concept_country].",
+  "ru": "Может использовать [concept_diplomatic_action|l] «Расширение влияния», чтобы усилить рычаги влияния [Concept('concept_power_bloc','силового блока')] в [Concept('concept_country','стране')]."
+ },
+ "power_bloc_can_use_join_united_nations_bool": {
+  "en": "Leader Can Require UN Membership",
+  "ru": "Лидер может требовать членства в ООН"
+ },
+ "power_bloc_can_use_join_united_nations_bool_desc": {
+  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] can add the Require UN Membership article to treaties, binding another country into the United Nations.",
+  "ru": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] может добавлять в договоры статью «Требование членства в ООН», вовлекая другую страну в Организацию Объединённых Наций."
+ },
+ "power_bloc_can_use_technology_embargo_bool": {
+  "en": "Leader Can Use Technology Embargo [concept_diplomatic_action]",
+  "ru": "Лидер может применять технологическое эмбарго как [Concept('concept_diplomatic_action','дипломатическое действие')]"
+ },
+ "power_bloc_can_use_technology_embargo_bool_desc": {
+  "en": "The [concept_power_bloc_leader] can place one [concept_country] outside the [concept_power_bloc] at a time under a $te_rc_technology_embargo$, cutting its [concept_technology_spread].",
+  "ru": "[concept_power_bloc_leader] может подвергнуть действию «$te_rc_technology_embargo$» одну [Concept('concept_country','страну')] вне [Concept('concept_power_bloc','силового блока')] за раз, сократив её [Concept('concept_technology_spread','распространение технологий')]."
+ },
+ "power_bloc_debt_administration_bool": {
+  "en": "Leader Guarantees Member Debts",
+  "ru": "Лидер гарантирует долги членов"
+ },
+ "power_bloc_debt_administration_bool_desc": {
+  "en": "Under the [concept_consortium_guarantee], the leader takes part of each member's debt-load [concept_banking_risk_premium] off it, and is called on when a member defaults.",
+  "ru": "По [Concept('concept_consortium_guarantee','гарантии консорциума')] лидер снимает с каждого члена часть [Concept('concept_banking_risk_premium','премии за риск')] от долговой нагрузки и привлекается, когда член объявляет дефолт."
+ },
+ "power_bloc_fiscal_backstop_bool": {
+  "en": "Leader Is Lender of Last Resort to Adopters",
+  "ru": "Лидер — кредитор последней инстанции для участников"
+ },
+ "power_bloc_fiscal_backstop_bool_desc": {
+  "en": "The leader backs every adopter's debts: it takes part of each one's debt-load [concept_banking_risk_premium] off it, and pays for that in premium of its own, scaled by the adopter's GDP beside its own. A default calls the guarantee.",
+  "ru": "Лидер поддерживает долги каждого участника, принявшего валюту: он снимает с него часть долговой нагрузки по [Concept('concept_banking_risk_premium','премии за риск')] и платит за это собственной премией, масштабируемой по ВВП участника относительно своего. Дефолт приводит к востребованию гарантии."
+ },
+ "power_bloc_grid_interconnection_bool": {
+  "en": "Members’ Power Grids Interconnect",
+  "ru": "Энергосети членов объединяются"
+ },
+ "power_bloc_grid_interconnection_bool_desc": {
+  "en": "Members' $building_grid_transfer_station$s join where they border, and their undersea cables where either one's range reaches the other, as under a $grid_interconnection_agreement$.",
+  "ru": "Здания $building_grid_transfer_station$ членов объединяются там, где те граничат, а их подводные кабели — там, где дальность любого из них достаёт до другого, как при заключении соглашения ($grid_interconnection_agreement$)."
+ },
+ "power_bloc_leader_can_force_cultural_acceptance_bool": {
+  "en": "Leader Can Force Cultural Acceptance",
+  "ru": "Лидер может принудить к принятию культуры"
+ },
+ "power_bloc_leader_can_force_cultural_acceptance_bool_desc": {
+  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] can force [Concept('concept_power_bloc_member', '$concept_power_bloc_members|q$')] to add the leader's [concept_primary_cultures] to their primary cultures.",
+  "ru": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] может принудить, чтобы [Concept('concept_power_bloc_member', '$concept_power_bloc_members|q$')|l] добавили [Concept('concept_primary_cultures','основные культуры')] лидера к своим основным культурам."
+ },
+ "power_bloc_leader_can_force_cultural_adoption_bool": {
+  "en": "Leader Can Force Cultural Adoption",
+  "ru": "Лидер может принудить к усвоению культуры"
+ },
+ "power_bloc_leader_can_force_cultural_adoption_bool_desc": {
+  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] can force [Concept('concept_power_bloc_member', '$concept_power_bloc_members|q$')] to replace their [concept_primary_cultures] with the leader's primary cultures.",
+  "ru": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] может принудить, чтобы [Concept('concept_power_bloc_member', '$concept_power_bloc_members|q$')|l] заменили свои [Concept('concept_primary_cultures','основные культуры')] основными культурами лидера."
+ },
+ "power_bloc_leader_can_peacefully_annex_bool": {
+  "en": "Leader Can Peacefully Annex Subjects",
+  "ru": "Лидер может мирно аннексировать зависимые государства"
+ },
+ "power_bloc_leader_can_peacefully_annex_bool_desc": {
+  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] can peacefully annex [Concept('concept_subject', '$concept_subjects|q$')] without a [concept_diplomatic_play], if the subject has low [concept_liberty_desire] and a sufficiently low [Concept('concept_gdp', 'GDP')].",
+  "ru": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] может мирно аннексировать [Concept('concept_subject', '$concept_subjects|q$')|l] без [Concept('concept_diplomatic_play','дипломатической игры')], если [concept_liberty_desire|l] и [Concept('concept_gdp', 'ВВП')] зависимого государства достаточно низки."
+ },
+ "power_bloc_research_pool_bool": {
+  "en": "Members’ Research Goes to the Leader",
+  "ru": "Исследования членов идут лидеру"
+ },
+ "power_bloc_research_pool_bool_desc": {
+  "en": "Members other than the [concept_power_bloc_leader] research nothing themselves. Each sends the leader 75% of its weekly [concept_innovation], counted before its multipliers and after what its own programs spend, and the leader's innovation cap rises by a tenth of what they send. Every member is given each [concept_technology] another member knows, once a month and whenever one acquires a new one.",
+  "ru": "Члены, кроме [Concept('concept_power_bloc_leader','лидера')], сами ничего не исследуют. Каждый отправляет лидеру 75% своих еженедельных [Concept('concept_innovation','инноваций')], считая до своих множителей и после расходов своих собственных программ, а предел инноваций лидера растёт на десятую часть отправленного. Каждый член получает каждую [Concept('concept_technology','технологию')], известную другому члену, раз в месяц и всякий раз, когда кто-то приобретает новую."
+ },
+ "power_bloc_reserve_currency_bool": {
+  "en": "[concept_banking_common_currency] Is a Reserve Currency",
+  "ru": "[concept_banking_common_currency] — резервная валюта"
+ },
+ "power_bloc_reserve_currency_bool_desc": {
+  "en": "Once a member has adopted, every country anchored on the leader's money counts toward its [concept_banking_currency_reach], treaty peggers included, and the most the world's holdings can take off the leader's [concept_banking_credit_standing] is doubled.",
+  "ru": "Как только член принял валюту, каждая страна, привязанная к деньгам лидера, учитывается в его [Concept('concept_banking_currency_reach','охвате валюты')], включая привязавшихся по договору, а максимум, который мировые запасы могут снять с [Concept('concept_banking_credit_standing','кредитоспособности')] лидера, удваивается."
+ },
+ "power_bloc_shared_currency_bool": {
+  "en": "Members May Adopt the [concept_banking_common_currency]",
+  "ru": "Члены могут принять [Concept('concept_banking_common_currency','общую валюту')]"
+ },
+ "power_bloc_shared_currency_bool_desc": {
+  "en": "Any member may give up its own money for the leader's. How Banking Works, in the Banking tab, lists what adopting requires and what leaving costs.",
+  "ru": "Любой член может отказаться от своих денег в пользу денег лидера. В разделе «Как работает банкинг» на вкладке «Банкинг» перечислено, что требуется для перехода и чего стоит выход."
+ },
+ "power_bloc_technology_controls_bool": {
+  "en": "No $science_aid$ Outside the Bloc",
+  "ru": "Нет «$science_aid$» вне блока"
+ },
+ "power_bloc_technology_controls_bool_desc": {
+  "en": "Members can't propose $science_aid$ or $science_aid_2$ to a [concept_country] outside the [concept_power_bloc]. Treaties already signed are not affected.",
+  "ru": "Члены не могут предлагать «$science_aid$» или «$science_aid_2$» [Concept('concept_country','стране')] вне [Concept('concept_power_bloc','силового блока')]. Уже подписанные договоры не затрагиваются."
+ },
+ "principle_group_artistic_expression": {
+  "en": "Artistic Expression",
+  "ru": "Художественное самовыражение"
+ },
+ "principle_group_artistic_expression_desc": {
+  "en": "The [concept_power_bloc] encourages artistic expression and the development of culture.",
+  "ru": "[concept_power_bloc] поощряет художественное самовыражение и развитие культуры."
+ },
+ "principle_group_conditionality": {
+  "en": "Conditionality",
+  "ru": "Обусловленность"
+ },
+ "principle_group_conditionality_desc": {
+  "en": "The terms on which the [concept_power_bloc] rescues a member that defaults: how much of its government the leader takes over, and for how long.",
+  "ru": "Условия, на которых [Concept('concept_power_bloc','силовой блок')] спасает объявившего дефолт члена: какую часть его управления берёт на себя лидер и на какой срок."
+ },
+ "principle_group_cultural_plurality": {
+  "en": "Cultural Plurality",
+  "ru": "Культурный плюрализм"
+ },
+ "principle_group_cultural_plurality_desc": {
+  "en": "The [concept_power_bloc] encourages cultural plurality and understanding throughout its territories.",
+  "ru": "[concept_power_bloc] поощряет культурный плюрализм и взаимопонимание на всех своих территориях."
+ },
+ "principle_group_cultural_unity": {
+  "en": "Cultural Unity",
+  "ru": "Культурное единство"
+ },
+ "principle_group_cultural_unity_desc": {
+  "en": "The [concept_power_bloc] enforces cultural unity among its members in the public sphere.",
+  "ru": "[concept_power_bloc] обеспечивает культурное единство своих членов в публичной сфере."
+ },
+ "principle_group_development_lending": {
+  "en": "Development Lending",
+  "ru": "Кредитование развития"
+ },
+ "principle_group_development_lending_desc": {
+  "en": "The [concept_power_bloc]'s richer members lend to its poorer ones: part of their private investment goes to build up the rest of the bloc.",
+  "ru": "Более богатые члены [Concept('concept_power_bloc','силового блока')] кредитуют более бедных: часть их частных инвестиций идёт на развитие остальной части блока."
+ },
+ "principle_group_education": {
+  "en": "Education",
+  "ru": "Образование"
+ },
+ "principle_group_education_desc": {
+  "en": "The [concept_power_bloc] encourages education and intellectual development.",
+  "ru": "[concept_power_bloc] поощряет образование и интеллектуальное развитие."
+ },
+ "principle_group_engineering_and_logistics": {
+  "en": "Engineering and Logistics",
+  "ru": "Инженерия и логистика"
+ },
+ "principle_group_engineering_and_logistics_desc": {
+  "en": "The [concept_power_bloc] encourages military engineering and logistics development.",
+  "ru": "[concept_power_bloc] поощряет развитие военной инженерии и логистики."
+ },
+ "principle_group_environmental_sustainability": {
+  "en": "Environmental Sustainability",
+  "ru": "Экологическая устойчивость"
+ },
+ "principle_group_environmental_sustainability_desc": {
+  "en": "The [concept_power_bloc] encourages environmental sustainability and the protection of the environment.",
+  "ru": "[concept_power_bloc] поощряет экологическую устойчивость и защиту окружающей среды."
+ },
+ "principle_group_global_security": {
+  "en": "Global Security",
+  "ru": "Глобальная безопасность"
+ },
+ "principle_group_global_security_desc": {
+  "en": "The [concept_power_bloc] encourages global security and views its mandate as a protector of international peace.",
+  "ru": "[concept_power_bloc] поощряет глобальную безопасность и видит свою миссию в защите международного мира."
+ },
+ "principle_group_healthcare": {
+  "en": "Healthcare",
+  "ru": "Здравоохранение"
+ },
+ "principle_group_healthcare_desc": {
+  "en": "The [concept_power_bloc] encourages healthcare and the well-being of its citizens.",
+  "ru": "[concept_power_bloc] поощряет здравоохранение и благополучие своих граждан."
+ },
+ "principle_group_military_training": {
+  "en": "Military Training",
+  "ru": "Военная подготовка"
+ },
+ "principle_group_military_training_desc": {
+  "en": "The [concept_power_bloc] encourages military training and the development of military technology.",
+  "ru": "[concept_power_bloc] поощряет военную подготовку и развитие военных технологий."
+ },
+ "principle_group_monetary_union": {
+  "en": "Monetary Union",
+  "ru": "Валютный союз"
+ },
+ "principle_group_monetary_union_desc": {
+  "en": "The [concept_power_bloc] binds its members' money together — first their central banks, then their currency, and at last their debts.",
+  "ru": "[concept_power_bloc] связывает деньги своих членов: сначала их центральные банки, затем валюту и, наконец, долги."
+ },
+ "principle_group_multilateral_institutions": {
+  "en": "Multilateral Institutions",
+  "ru": "Многосторонние институты"
+ },
+ "principle_group_multilateral_institutions_desc": {
+  "en": "The [concept_power_bloc] anchors itself in the international order, building up the United Nations and binding its members through a web of treaties and institutions.",
+  "ru": "[concept_power_bloc] закрепляется в международном порядке, укрепляя Организацию Объединённых Наций и связывая своих членов сетью договоров и институтов."
+ },
+ "principle_group_rural": {
+  "en": "Rural Development",
+  "ru": "Развитие сельских районов"
+ },
+ "principle_group_rural_desc": {
+  "en": "The [concept_power_bloc] encourages rural development and the improvement of rural [concept_infrastructure].",
+  "ru": "[concept_power_bloc] поощряет развитие сельских районов и улучшение сельской [Concept('concept_infrastructure','инфраструктуры')]."
+ },
+ "principle_group_technology_controls": {
+  "en": "Technology Controls",
+  "ru": "Технологический контроль"
+ },
+ "principle_group_technology_controls_desc": {
+  "en": "The [concept_power_bloc] keeps what its members know among its members: no $science_aid$ leaves the bloc, members guard their research against foreign spies, and from tier III the leader can cut a rival's [concept_technology_spread].",
+  "ru": "[concept_power_bloc] оставляет знания своих членов внутри себя: «$science_aid$» не покидает блок, члены защищают свои исследования от иностранных шпионов, а с уровня III лидер может сократить [Concept('concept_technology_spread','распространение технологий')] соперника."
+ },
+ "principle_group_urban_planning": {
+  "en": "Urban Planning",
+  "ru": "Градостроительство"
+ },
+ "principle_group_urban_planning_desc": {
+  "en": "The [concept_power_bloc] encourages urban planning and the development of cities.",
+  "ru": "[concept_power_bloc] поощряет градостроительство и развитие городов."
+ },
+ "principle_group_welfare": {
+  "en": "Welfare",
+  "ru": "Социальное обеспечение"
+ },
+ "principle_group_welfare_desc": {
+  "en": "The [concept_power_bloc] encourages welfare and the well-being of its citizens.",
+  "ru": "[concept_power_bloc] поощряет социальное обеспечение и благополучие своих граждан."
+ }
+}

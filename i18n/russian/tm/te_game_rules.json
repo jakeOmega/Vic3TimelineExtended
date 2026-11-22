@@ -1,0 +1,534 @@
+{
+ "rule_banking_system_rule": {
+  "en": "Banking System",
+  "ru": "Банковская система"
+ },
+ "rule_covert_warfare_rule": {
+  "en": "Covert Warfare",
+  "ru": "Тайная война"
+ },
+ "rule_cultural_hegemony_rule": {
+  "en": "Cultural Hegemony",
+  "ru": "Культурная гегемония"
+ },
+ "rule_culture_merges_rule": {
+  "en": "Culture Merges",
+  "ru": "Слияния культур"
+ },
+ "rule_custom_religions_allowed_rule": {
+  "en": "Custom Religion Allowed",
+  "ru": "Собственная религия разрешена"
+ },
+ "rule_decolonization_rule": {
+  "en": "Decolonization",
+  "ru": "Деколонизация"
+ },
+ "rule_demographics_rule": {
+  "en": "Demographics",
+  "ru": "Демография"
+ },
+ "rule_free_market_construction_rule": {
+  "en": "Free Market Construction",
+  "ru": "Рыночное строительство"
+ },
+ "rule_global_commons_rule": {
+  "en": "Global Commons",
+  "ru": "Глобальное общее достояние"
+ },
+ "rule_global_warming_rule": {
+  "en": "Global Warming",
+  "ru": "Глобальное потепление"
+ },
+ "rule_grand_monuments_rule": {
+  "en": "Grand Monuments",
+  "ru": "Великие монументы"
+ },
+ "rule_heir_education_rule": {
+  "en": "Heir Education",
+  "ru": "Образование наследника"
+ },
+ "rule_internal_resettlement_rule": {
+  "en": "Internal Resettlement",
+  "ru": "Внутреннее переселение"
+ },
+ "rule_nuclear_weapons_rule": {
+  "en": "Nuclear Weapons",
+  "ru": "Ядерное оружие"
+ },
+ "rule_social_movements_rule": {
+  "en": "Social Movements",
+  "ru": "Социальные движения"
+ },
+ "rule_space_race_rule": {
+  "en": "Space Race",
+  "ru": "Космическая гонка"
+ },
+ "rule_te_principle_slots_rule": {
+  "en": "Power Bloc Principle Slots",
+  "ru": "Ячейки принципов силового блока"
+ },
+ "rule_te_small_economy_construction_rule": {
+  "en": "Small-Economy Construction",
+  "ru": "Строительство в малых экономиках"
+ },
+ "rule_united_nations_rule": {
+  "en": "United Nations",
+  "ru": "Организация Объединённых Наций"
+ },
+ "rule_universal_aptitude_traits_rule": {
+  "en": "Universal Aptitude Traits",
+  "ru": "Универсальные черты способностей"
+ },
+ "rule_world_war_rule": {
+  "en": "World War",
+  "ru": "Мировая война"
+ },
+ "setting_banking_system_disabled": {
+  "en": "Banking System Disabled",
+  "ru": "Банковская система отключена"
+ },
+ "setting_banking_system_disabled_desc": {
+  "en": "The [concept_banking_cycle] [concept_journal_entry] is disabled. [concept_financial_regulation] laws keep their general economic effects, such as Urban Center [concept_throughput], [concept_investment_pool] contributions, innovation, and government [concept_dividends], but banking-specific modifiers are inactive.",
+  "ru": "[concept_journal_entry] о [Concept('concept_banking_cycle','банковском цикле')] отключена. Законы о [Concept('concept_financial_regulation','финансовом регулировании')] сохраняют общие экономические эффекты, такие как [concept_throughput|l] городских центров, взносы в [Concept('concept_investment_pool','инвестиционный фонд')], инновации и [concept_dividends|l] правительства, но банковские модификаторы неактивны."
+ },
+ "setting_banking_system_enabled": {
+  "en": "Banking System Enabled",
+  "ru": "Банковская система включена"
+ },
+ "setting_banking_system_enabled_desc": {
+  "en": "The [concept_banking_cycle] [concept_journal_entry] is active. [concept_financial_regulation] laws provide banking intervention tools, momentum effects, and crash chance modifiers that interact with the banking cycle system.",
+  "ru": "[concept_journal_entry] о [Concept('concept_banking_cycle','банковском цикле')] активна. Законы о [Concept('concept_financial_regulation','финансовом регулировании')] дают инструменты банковского вмешательства, эффекты импульса и модификаторы шанса краха, взаимодействующие с системой банковского цикла."
+ },
+ "setting_banking_system_simplified": {
+  "en": "Banking System Simplified",
+  "ru": "Банковская система упрощена"
+ },
+ "setting_banking_system_simplified_desc": {
+  "en": "The [concept_banking_cycle] [concept_journal_entry] is active, without monetary policy: no policy rate to set, no inflation, no exchange rate, and no currency pegs, swap lines or shared currency. Your government still borrows at the world reference rate plus its own risk premium.",
+  "ru": "[concept_journal_entry] о [Concept('concept_banking_cycle','банковском цикле')] активна, но без денежной политики: нет ключевой ставки, инфляции, обменного курса, привязок валют, линий валютного свопа и общей валюты. Ваше правительство по-прежнему занимает по мировой референсной ставке плюс собственная премия за риск."
+ },
+ "setting_covert_warfare_disabled": {
+  "en": "Covert Warfare Disabled",
+  "ru": "Тайная война отключена"
+ },
+ "setting_covert_warfare_disabled_desc": {
+  "en": "The covert warfare [concept_journal_entry] is disabled. [concept_intelligence_capacity] modifiers from technologies still appear but [concept_covert_operations] are unavailable.",
+  "ru": "[concept_journal_entry] о тайной войне отключена. Модификаторы [Concept('concept_intelligence_capacity','разведывательного потенциала')] от технологий по-прежнему отображаются, но [Concept('concept_covert_operations','тайные операции')] недоступны."
+ },
+ "setting_covert_warfare_early_unlock": {
+  "en": "Covert Warfare: Early Unlock",
+  "ru": "Тайная война: раннее открытие"
+ },
+ "setting_covert_warfare_early_unlock_desc": {
+  "en": "The [concept_covert_warfare_system] [concept_journal_entry] opens with $central_archives$. Funding above Professional needs what opens it under Late Unlock, and only operations whose technology you have can be launched: espionage and wartime sabotage at first.",
+  "ru": "[concept_journal_entry] о [Concept('concept_covert_warfare_system','тайной войне')] открывается с технологией $central_archives$. Финансирование выше уровня «Профессиональная» требует того, что открывает её при позднем открытии, а запускать можно только операции, технологии для которых у вас есть: поначалу это шпионаж и диверсии военного времени."
+ },
+ "setting_covert_warfare_enabled": {
+  "en": "Covert Warfare: Late Unlock",
+  "ru": "Тайная война: позднее открытие"
+ },
+ "setting_covert_warfare_enabled_desc": {
+  "en": "The [concept_covert_warfare_system] [concept_journal_entry] opens with $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ or $law_ministry_of_intelligence_and_security$. Nations build [concept_intelligence_capacity] through technology and [concept_literacy], and launch [concept_covert_operations] against rivals.",
+  "ru": "[concept_journal_entry] о [Concept('concept_covert_warfare_system','тайной войне')] открывается с «$mainframe_computers$», «$computer_networks$», «$cyber_warfare$», «$quantum_computing$» или «$law_ministry_of_intelligence_and_security$». Страны наращивают [Concept('concept_intelligence_capacity','разведывательный потенциал')] за счёт технологий и [Concept('concept_literacy','грамотности')] и проводят [Concept('concept_covert_operations','тайные операции')] против соперников."
+ },
+ "setting_cultural_hegemony_disabled": {
+  "en": "Cultural Hegemony Disabled",
+  "ru": "Культурная гегемония отключена"
+ },
+ "setting_cultural_hegemony_disabled_desc": {
+  "en": "The cultural hegemony [concept_journal_entry] is disabled. [concept_cultural_pull] modifiers from technologies and events still apply to tooltips but have no gameplay effect.",
+  "ru": "[concept_journal_entry] о культурной гегемонии отключена. Модификаторы [Concept('concept_cultural_pull','культурного притяжения')] от технологий и событий по-прежнему отображаются в подсказках, но не влияют на игровой процесс."
+ },
+ "setting_cultural_hegemony_early_unlock": {
+  "en": "Cultural Hegemony: Early Unlock",
+  "ru": "Культурная гегемония: раннее открытие"
+ },
+ "setting_cultural_hegemony_early_unlock_desc": {
+  "en": "As Late Unlock, but the [concept_journal_entry] opens once any country has the $electric_telegraph$, and International Cultural Outreach needs the telegraph rather than $mass_media$. The Global Media Campaign and the events about broadcast media still wait for $mass_media$.",
+  "ru": "Как при позднем открытии, но [concept_journal_entry|l] открывается, как только у любой страны появляется технология $electric_telegraph$, а Международная культурная работа требует телеграфа, а не технологии $mass_media$. Глобальная медиакампания и события о вещательных СМИ по-прежнему ждут технологии $mass_media$."
+ },
+ "setting_cultural_hegemony_enabled": {
+  "en": "Cultural Hegemony: Late Unlock",
+  "ru": "Культурная гегемония: позднее открытие"
+ },
+ "setting_cultural_hegemony_enabled_desc": {
+  "en": "The [concept_cultural_hegemony_system] [concept_journal_entry] opens once any country has $mass_media$. Nations compete for global cultural influence through art, [concept_prestige], living standards, and technology, and the dominant cultural power attracts migrants.",
+  "ru": "[concept_journal_entry] о [Concept('concept_cultural_hegemony_system','культурной гегемонии')] открывается, как только у любой страны появляется технология $mass_media$. Страны соперничают за глобальное культурное влияние через искусство, [concept_prestige|l], уровень жизни и технологии, а доминирующая культурная держава привлекает мигрантов."
+ },
+ "setting_culture_merges_disabled": {
+  "en": "Culture Merges Disabled",
+  "ru": "Слияния культур отключены"
+ },
+ "setting_culture_merges_disabled_desc": {
+  "en": "Related cultures stay separate and no merge starts. Turned off mid-game, a running merge pauses where it stands: pops that have converted keep their new culture, and the merge resumes if the rule is turned back on. The laws, technologies and institutions that speed merges keep their other effects.",
+  "ru": "Родственные культуры остаются раздельными, и ни одно слияние не начинается. Если отключить правило в середине игры, идущее слияние приостанавливается на достигнутом: группы населения, уже сменившие культуру, сохраняют новую, а слияние возобновляется, если правило снова включить. Законы, технологии и институты, ускоряющие слияния, сохраняют остальные эффекты."
+ },
+ "setting_culture_merges_enabled": {
+  "en": "Culture Merges Enabled",
+  "ru": "Слияния культур включены"
+ },
+ "setting_culture_merges_enabled_desc": {
+  "en": "Related cultures can merge into one national culture. A country that holds most of a set of closely related cultures, such as $north_german$ and $south_german$, treats them as equals and has the right technology can start a merge, which takes a few decades.",
+  "ru": "Родственные культуры могут слиться в одну национальную культуру. Страна, у которой находится большая часть набора близкородственных культур (например, $north_german$ и $south_german$), которая относится к ним как к равным и обладает нужной технологией, может начать слияние, занимающее несколько десятилетий."
+ },
+ "setting_custom_religions_allowed": {
+  "en": "Custom Religions Allowed",
+  "ru": "Собственные религии разрешены"
+ },
+ "setting_custom_religions_allowed_desc": {
+  "en": "Custom religions are allowed in this game. You will receive a [concept_journal_entry] allowing you to select the ideology and name of your religion.",
+  "ru": "В этой игре разрешены собственные религии. Вы получите [concept_journal_entry|l], позволяющую выбрать идеологию и название вашей религии."
+ },
+ "setting_custom_religions_not_allowed": {
+  "en": "Custom Religions Not Allowed",
+  "ru": "Собственные религии запрещены"
+ },
+ "setting_custom_religions_not_allowed_desc": {
+  "en": "Custom religions are not allowed in this game.",
+  "ru": "В этой игре собственные религии не разрешены."
+ },
+ "setting_decolonization_disabled": {
+  "en": "Decolonization Disabled",
+  "ru": "Деколонизация отключена"
+ },
+ "setting_decolonization_disabled_desc": {
+  "en": "The colonial empire [concept_journal_entry] is disabled. [concept_decolonization_system] technology effects still apply but the decolonization event chain and [concept_colonial_stability] tracking are inactive.",
+  "ru": "[concept_journal_entry] о колониальной империи отключена. Эффекты технологий [Concept('concept_decolonization_system','деколонизации')] по-прежнему действуют, но цепочка событий деколонизации и отслеживание [Concept('concept_colonial_stability','колониальной стабильности')] неактивны."
+ },
+ "setting_decolonization_enabled": {
+  "en": "Decolonization Enabled",
+  "ru": "Деколонизация включена"
+ },
+ "setting_decolonization_enabled_desc": {
+  "en": "The colonial empire [concept_journal_entry] is active. Nations with overseas colonies face [concept_decolonization_system] pressures, [concept_colonial_stability] tracking, and related events after researching decolonization technology.",
+  "ru": "[concept_journal_entry] о колониальной империи активна. После изучения технологии деколонизации страны с заморскими колониями сталкиваются с давлением [Concept('concept_decolonization_system','деколонизации')], отслеживанием [Concept('concept_colonial_stability','колониальной стабильности')] и связанными событиями."
+ },
+ "setting_demographics_disabled": {
+  "en": "Disabled",
+  "ru": "Отключено"
+ },
+ "setting_demographics_disabled_desc": {
+  "en": "No census and no Demographics panel. [concept_inheritance_concentration] still works.",
+  "ru": "Ни переписи населения, ни панели «Демография». [concept_inheritance_concentration] по-прежнему работает."
+ },
+ "setting_demographics_display_only": {
+  "en": "Display only",
+  "ru": "Только отображение"
+ },
+ "setting_demographics_display_only_desc": {
+  "en": "Experimental. The census and its panel only: births and deaths follow the game's own rules.",
+  "ru": "Экспериментально. Только перепись населения и её панель: рождаемость и смертность следуют правилам самой игры."
+ },
+ "setting_demographics_full": {
+  "en": "Full",
+  "ru": "Полное"
+ },
+ "setting_demographics_full_desc": {
+  "en": "Experimental. Every state keeps a census of its people by age and sex, shown on the Demographics panel. The census sets births, deaths and workforce in place of most law and technology effects on them; severe starvation, war and other shocks still apply.",
+  "ru": "Экспериментально. Каждая область ведёт перепись населения по возрасту и полу, которая отображается на панели «Демография». Перепись определяет рождаемость, смертность и рабочую силу вместо большинства эффектов законов и технологий на них; сильный голод, война и другие потрясения по-прежнему действуют."
+ },
+ "setting_free_market_construction_disabled": {
+  "en": "Free Market Construction Disabled",
+  "ru": "Рыночное строительство отключено"
+ },
+ "setting_free_market_construction_disabled_desc": {
+  "en": "Construction works as in the base game, with the $te_construction_market_site$ as the construction sector. There is no construction good and no construction maintenance, and your economic-system law sets the private share. If the rule is changed in a running game, sectors and sites are converted within a day.",
+  "ru": "Строительство работает, как в базовой игре, а роль строительного сектора играет $te_construction_market_site$. Нет ни строительного товара, ни расходов на содержание строительства, а долю частного сектора определяет закон вашей экономической системы. Если правило изменить в идущей игре, секторы и площадки преобразуются в течение дня."
+ },
+ "setting_free_market_construction_enabled": {
+  "en": "Free Market Construction Enabled",
+  "ru": "Рыночное строительство включено"
+ },
+ "setting_free_market_construction_enabled_desc": {
+  "en": "[concept_construction] is a traded good. $building_construction_sector$ buildings sell it, the government buys what you set in the construction panel, and investors buy from the [concept_investment_pool]. Industry and infrastructure use some as maintenance, and more after changing production methods. See [concept_te_construction_market].",
+  "ru": "[concept_construction] — торгуемый товар. Здания типа «$building_construction_sector$» продают его, правительство закупает столько, сколько вы задаёте на панели строительства, а инвесторы покупают его из [Concept('concept_investment_pool','инвестиционного фонда')]. Промышленность и инфраструктура расходуют его на содержание, а после смены методов производства — больше. См. [concept_te_construction_market]."
+ },
+ "setting_free_market_construction_no_ai_retooling": {
+  "en": "Free Market Construction without AI Retooling Costs",
+  "ru": "Рыночное строительство без затрат на перенастройку для ИИ"
+ },
+ "setting_free_market_construction_no_ai_retooling_desc": {
+  "en": "As Free Market Construction Enabled, but AI countries pay no retooling costs: switching production methods does not raise the construction their buildings use as maintenance. Players still pay them. See [concept_te_construction_market].",
+  "ru": "Как при включённом рыночном строительстве, но страны под управлением ИИ не платят за перенастройку: смена методов производства не повышает расход строительства на содержание их зданий. Игроки по-прежнему платят. См. [concept_te_construction_market]."
+ },
+ "setting_free_market_construction_no_maintenance": {
+  "en": "Free Market Construction without Maintenance",
+  "ru": "Рыночное строительство без содержания"
+ },
+ "setting_free_market_construction_no_maintenance_desc": {
+  "en": "As Free Market Construction Enabled, but buildings use no construction as maintenance, so switching production methods costs none either. [concept_construction] is still traded, and a few company buildings use it in production. See [concept_te_construction_market].",
+  "ru": "Как при включённом рыночном строительстве, но здания не расходуют строительство на содержание, поэтому смена методов производства тоже ничего не стоит. [concept_construction] по-прежнему торгуется, и несколько зданий компаний используют его в производстве. См. [concept_te_construction_market]."
+ },
+ "setting_free_market_construction_no_retooling": {
+  "en": "Free Market Construction without Retooling Costs",
+  "ru": "Рыночное строительство без затрат на перенастройку"
+ },
+ "setting_free_market_construction_no_retooling_desc": {
+  "en": "As Free Market Construction Enabled, but buildings do not retool: switching production methods does not raise the construction a building uses as maintenance. See [concept_te_construction_market].",
+  "ru": "Как при включённом рыночном строительстве, но здания не перенастраиваются: смена методов производства не повышает расход строительства, который здание тратит на содержание. См. [concept_te_construction_market]."
+ },
+ "setting_global_commons_disabled": {
+  "en": "Global Commons Disabled",
+  "ru": "Глобальное общее достояние отключено"
+ },
+ "setting_global_commons_disabled_desc": {
+  "en": "The $building_ocean_mine$ is uncapped: any coastal state can build it without limit. The Law of the Sea has no seabed terms, and there are no Antarctic research stations and no Antarctic Treaty. Launch windows and orbital debris follow the Space Race rule.",
+  "ru": "Для здания «$building_ocean_mine$» нет предела: любая прибрежная область может строить его без ограничений. В Морском праве нет положений о морском дне, нет антарктических исследовательских станций и нет Договора об Антарктике. Стартовые окна и орбитальный мусор подчиняются правилу «Космическая гонка»."
+ },
+ "setting_global_commons_enabled": {
+  "en": "Global Commons Enabled",
+  "ru": "Глобальное общее достояние включено"
+ },
+ "setting_global_commons_enabled_desc": {
+  "en": "The seabed is a commons. Each of five ocean basins holds a fixed pool of seabed licenses, shared out yearly among coastal countries by claim weight, and every $building_ocean_mine$ level needs one. The UN can regulate the seabed, and an Antarctic Treaty can close the Southern basin.",
+  "ru": "Морское дно — общее достояние. Каждый из пяти океанских бассейнов располагает фиксированным пулом лицензий на морское дно, которые ежегодно распределяются между прибрежными странами по весу притязания, и каждый уровень здания «$building_ocean_mine$» требует одной. ООН может регулировать морское дно, а Договор об Антарктике может закрыть Южный бассейн."
+ },
+ "setting_global_warming_disabled": {
+  "en": "Global Warming Disabled",
+  "ru": "Глобальное потепление отключено"
+ },
+ "setting_global_warming_disabled_desc": {
+  "en": "The global warming [concept_journal_entry] is disabled. There is no climate change: greenhouse gas emissions are not tracked, the world does not warm, and no climate events occur. Policies and technologies that reduce [concept_pollution_system] still do so.",
+  "ru": "[concept_journal_entry] о глобальном потеплении отключена. Изменения климата нет: выбросы парниковых газов не отслеживаются, мир не нагревается, климатических событий не бывает. Политики и технологии, снижающие [concept_pollution_system|l], по-прежнему это делают."
+ },
+ "setting_global_warming_enabled": {
+  "en": "Global Warming Enabled",
+  "ru": "Глобальное потепление включено"
+ },
+ "setting_global_warming_enabled_desc": {
+  "en": "The global warming [concept_journal_entry] is active. Greenhouse gas emissions are tracked and climate policies affect global temperature rise. Environmental modifiers provide both emissions reduction and [concept_pollution_system] reduction effects.",
+  "ru": "[concept_journal_entry] о глобальном потеплении активна. Выбросы парниковых газов отслеживаются, а климатические политики влияют на рост глобальной температуры. Экологические модификаторы дают и сокращение выбросов, и снижение [Concept('concept_pollution_system','загрязнения')]."
+ },
+ "setting_grand_monuments_disabled": {
+  "en": "Grand Monuments Disabled",
+  "ru": "Великие монументы отключены"
+ },
+ "setting_grand_monuments_disabled_desc": {
+  "en": "The Grand Monument cannot be built, and no monument ceremony, contest, trophy or journal entry runs.",
+  "ru": "Великий монумент построить нельзя, а церемонии, конкурсы, трофеи и запись журнала, связанные с монументами, не работают."
+ },
+ "setting_grand_monuments_enabled": {
+  "en": "Grand Monuments Enabled",
+  "ru": "Великие монументы включены"
+ },
+ "setting_grand_monuments_enabled_desc": {
+  "en": "Countries may raise Grand Monuments to their crown, republic, revolution, leader, faith or nation. What a monument honors can fall with the regime that raised it, and the next government decides whether to pull it down, rededicate it or keep it as heritage. An occupying army can carry one off as a trophy.",
+  "ru": "Страны могут возводить Великие монументы в честь своей короны, республики, революции, лидера, веры или нации. То, что чтит монумент, может пасть вместе с режимом, который его воздвиг, а следующее правительство решает, снести ли его, посвятить заново или сохранить как наследие. Оккупационная армия может увезти его как трофей."
+ },
+ "setting_heir_education_disabled": {
+  "en": "Heir Education Disabled",
+  "ru": "Образование наследника отключено"
+ },
+ "setting_heir_education_disabled_desc": {
+  "en": "The [concept_heir] education [concept_journal_entry] is disabled. Heirs do not receive education investments and their future capabilities are unaffected by this system. Characters only have administrative, diplomatic, and military aptitude traits if Universal Aptitude Traits is enabled.",
+  "ru": "[concept_journal_entry] об образовании [Concept('concept_heir','наследника')] отключена. Наследники не получают инвестиций в образование, и эта система не влияет на их будущие способности. Административные, дипломатические и военные черты способностей есть у персонажей, только если включены «Универсальные черты способностей»."
+ },
+ "setting_heir_education_enabled": {
+  "en": "Heir Education Enabled",
+  "ru": "Образование наследника включено"
+ },
+ "setting_heir_education_enabled_desc": {
+  "en": "The [concept_heir] education [concept_journal_entry] is active. Nations can invest in the education of their heirs, affecting their future capabilities and governance.",
+  "ru": "[concept_journal_entry] об образовании [Concept('concept_heir','наследника')] активна. Страны могут вкладываться в образование своих наследников, влияя на их будущие способности и качество правления."
+ },
+ "setting_internal_resettlement_ai_voluntary": {
+  "en": "Internal Resettlement: AI Voluntary Only",
+  "ru": "Внутреннее переселение: только добровольное для ИИ"
+ },
+ "setting_internal_resettlement_ai_voluntary_desc": {
+  "en": "As enabled, but AI countries run only voluntary programs. Penal Transportation, Special Settlements and Rustication remain open to players.",
+  "ru": "Как при включённом правиле, но страны под управлением ИИ ведут только добровольные программы. Каторжная ссылка, Спецпоселения и Ссылка в деревню остаются доступны игрокам."
+ },
+ "setting_internal_resettlement_disabled": {
+  "en": "Internal Resettlement Disabled",
+  "ru": "Внутреннее переселение отключено"
+ },
+ "setting_internal_resettlement_disabled_desc": {
+  "en": "The Settlement Authority cannot be built and no resettlement programs run.",
+  "ru": "Управление по заселению построить нельзя, и никакие программы переселения не проводятся."
+ },
+ "setting_internal_resettlement_enabled": {
+  "en": "Internal Resettlement Enabled",
+  "ru": "Внутреннее переселение включено"
+ },
+ "setting_internal_resettlement_enabled_desc": {
+  "en": "Countries may build a Settlement Authority on a thinly populated frontier and run government resettlement programs into it, from land grants to penal transportation, as their laws allow.",
+  "ru": "Страны могут строить Управление по заселению на малонаселённом фронтире и проводить туда правительственные программы переселения, от земельных наделов до каторжной ссылки, если это позволяют их законы."
+ },
+ "setting_nuclear_weapons_disabled": {
+  "en": "Nuclear Weapons Disabled",
+  "ru": "Ядерное оружие отключено"
+ },
+ "setting_nuclear_weapons_disabled_desc": {
+  "en": "The nuclear weapons [concept_journal_entry] is disabled. Nuclear weapons technology can still be researched but the [concept_nuclear_program] progression, stockpile tracking, and related events are inactive.",
+  "ru": "[concept_journal_entry] о ядерном оружии отключена. Технологию ядерного оружия по-прежнему можно изучить, но продвижение по [Concept('concept_nuclear_program','ядерной программе')], учёт арсенала и связанные события неактивны."
+ },
+ "setting_nuclear_weapons_enabled": {
+  "en": "Nuclear Weapons Enabled",
+  "ru": "Ядерное оружие включено"
+ },
+ "setting_nuclear_weapons_enabled_desc": {
+  "en": "The nuclear weapons [concept_journal_entry] is active. [Concept('concept_great_power', 'Great powers')] and eligible [Concept('concept_major_power', 'major powers')] can pursue nuclear weapons programs with funding levels, stockpile tracking, and related diplomatic consequences.",
+  "ru": "[concept_journal_entry] о ядерном оружии активна. [Concept('concept_great_power', 'Великие державы')] и подходящие [Concept('concept_major_power', 'крупные державы')] могут вести программы создания ядерного оружия с уровнями финансирования, учётом арсенала и связанными дипломатическими последствиями."
+ },
+ "setting_social_movements_disabled": {
+  "en": "Social Movements Disabled",
+  "ru": "Социальные движения отключены"
+ },
+ "setting_social_movements_disabled_desc": {
+  "en": "The social movement journal entries are disabled: civil rights, human augmentation, morphological freedom, digital rights and surveillance, the post-scarcity transition, and mental health, with the events they fire. Related technologies and laws still exist.",
+  "ru": "Записи журнала о социальных движениях отключены: гражданские права, аугментация человека, морфологическая свобода, цифровые права и слежка, переход к постдефициту и психическое здоровье, вместе с событиями, которые они запускают. Связанные технологии и законы по-прежнему существуют."
+ },
+ "setting_social_movements_enabled": {
+  "en": "Social Movements Enabled",
+  "ru": "Социальные движения включены"
+ },
+ "setting_social_movements_enabled_desc": {
+  "en": "The social movement journal entries are active. As nations research the relevant technologies, they work through civil rights, the human augmentation and morphological freedom debates, digital rights and surveillance, the post-scarcity transition, and mental health awareness.",
+  "ru": "Записи журнала о социальных движениях активны. По мере изучения нужных технологий страны проходят через гражданские права, споры об аугментации человека и морфологической свободе, цифровые права и слежку, переход к постдефициту и осведомлённость о психическом здоровье."
+ },
+ "setting_space_race_colonies_full": {
+  "en": "[concept_space_race]: Full Colonies",
+  "ru": "[concept_space_race]: полноценные колонии"
+ },
+ "setting_space_race_colonies_full_desc": {
+  "en": "As Simple Colonies, and wars reach space. Space Command builds warships that fight between the planets and blockade, seize or destroy colonies, and marines garrison them. An enemy fleet in Earth orbit can stop your launches, and holding Earth orbit supports your troops on the ground.",
+  "ru": "Как при простых колониях, и войны выходят в космос. Космическое командование строит военные корабли, сражающиеся между планетами, блокирующие, захватывающие или разрушающие колонии, а морская пехота несёт в них гарнизонную службу. Вражеский флот на орбите Земли может остановить ваши запуски, а удержание орбиты Земли поддерживает ваши войска на земле."
+ },
+ "setting_space_race_colonies_simple": {
+  "en": "[concept_space_race]: Simple Colonies",
+  "ru": "[concept_space_race]: простые колонии"
+ },
+ "setting_space_race_colonies_simple_desc": {
+  "en": "As Races Only, and colonies are built up, held and lost. A colony fleet claims the site you choose when it lands, and settlers and modules fill the colony. A colony can be ceded by treaty or taken in war, and as it grows it can break away and live on as a free colony.",
+  "ru": "Как при режиме «только гонки», и колонии строятся, удерживаются и теряются. Колониальный флот занимает выбранный вами участок при посадке, а поселенцы и модули наполняют колонию. Колонию можно уступить по договору или захватить на войне, а по мере роста она может отколоться и жить дальше как свободная колония."
+ },
+ "setting_space_race_disabled": {
+  "en": "[concept_space_race] Disabled",
+  "ru": "[concept_space_race] отключена"
+ },
+ "setting_space_race_disabled_desc": {
+  "en": "The [concept_space_race] journal entries are disabled. Space-related technologies can still be researched but the milestone competition system, funding programs, and space race events are inactive.",
+  "ru": "Записи журнала о [Concept('concept_space_race','космической гонке')] отключены. Космические технологии по-прежнему можно изучать, но система соревнования за этапы, программы финансирования и события космической гонки неактивны."
+ },
+ "setting_space_race_enabled": {
+  "en": "[concept_space_race]: Races Only",
+  "ru": "[concept_space_race]: только гонки"
+ },
+ "setting_space_race_enabled_desc": {
+  "en": "The [concept_space_race] journal entries are active. [Concept('concept_great_power', 'Great powers')] and [Concept('concept_major_power', 'major powers')] race through milestones from suborbital flight to interstellar probes, at a pace their funding sets. A colony stays with the power that founded it.",
+  "ru": "Записи журнала о [Concept('concept_space_race','космической гонке')] активны. [Concept('concept_great_power','Великие державы')] и [Concept('concept_major_power','крупные державы')] соревнуются, проходя этапы от суборбитального полёта до межзвёздных зондов, в темпе, который задаёт их финансирование. Колония остаётся за державой, которая её основала."
+ },
+ "setting_te_principle_slots_eight": {
+  "en": "Up to Eight",
+  "ru": "До восьми"
+ },
+ "setting_te_principle_slots_eight_desc": {
+  "en": "A [concept_power_bloc] can hold up to #v 8#! [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')]. On top of the base game's slots from [concept_power_bloc_rank] and members, each of $intergovernmental_organizations$, $containerization$, $globalization$ and $universal_digital_identity$ the leader has researched adds a slot.",
+  "ru": "[Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')]: не более #v 8#! в одном [Concept('concept_power_bloc','силовом блоке')]. Сверх слотов базовой игры, которые дают [concept_power_bloc_rank|l] и члены блока, каждая изученная лидером технология — $intergovernmental_organizations$, $containerization$, $globalization$ и $universal_digital_identity$ — добавляет один слот."
+ },
+ "setting_te_principle_slots_four": {
+  "en": "Four (Base Game)",
+  "ru": "Четыре (базовая игра)"
+ },
+ "setting_te_principle_slots_four_desc": {
+  "en": "A [concept_power_bloc] holds up to #v 4#! [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')], opened by [concept_power_bloc_rank] and members as in the base game. Technologies add no slots.",
+  "ru": "[Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')]: не более #v 4#! в одном [Concept('concept_power_bloc','силовом блоке')]; слоты открывают [concept_power_bloc_rank|l] и члены блока, как в базовой игре. Технологии слотов не добавляют."
+ },
+ "setting_te_small_economy_construction_disabled": {
+  "en": "Full Cost for Every Country",
+  "ru": "Полная стоимость для каждой страны"
+ },
+ "setting_te_small_economy_construction_disabled_desc": {
+  "en": "Every country pays the same price for construction, raised only by $construction_cost_scaling$ for rich countries with few idle workers.",
+  "ru": "Каждая страна платит за строительство одну и ту же цену, которую повышает только эффект «$construction_cost_scaling$» для богатых стран с малым числом незанятых работников."
+ },
+ "setting_te_small_economy_construction_enabled": {
+  "en": "A Tenth of the Cost for Small Economies",
+  "ru": "Десятая часть стоимости для малых экономик"
+ },
+ "setting_te_small_economy_construction_enabled_desc": {
+  "en": "Experimental. Construction and construction maintenance cost a country with almost no [concept_gdp] a tenth of the price, rising in a straight line to the full price at a GDP of 10 million. AI countries get the same. Changed in a running game, it reaches each country at its next yearly update.",
+  "ru": "Экспериментально. Строительство и его содержание обходятся стране почти без [Concept('concept_gdp','ВВП')] в десятую часть цены, с линейным ростом до полной цены при ВВП в 10 млн. ИИ получает то же самое. При изменении в идущей игре действует на каждую страну с её следующим годовым обновлением."
+ },
+ "setting_te_small_economy_construction_mild": {
+  "en": "Half the Cost for Small Economies",
+  "ru": "Половина стоимости для малых экономик"
+ },
+ "setting_te_small_economy_construction_mild_desc": {
+  "en": "Experimental. Construction and construction maintenance cost a country with almost no [concept_gdp] half the price, rising in a straight line to the full price at a GDP of 10 million. AI countries get the same. Changed in a running game, it reaches each country at its next yearly update.",
+  "ru": "Экспериментально. Строительство и его содержание обходятся стране почти без [Concept('concept_gdp','ВВП')] в половину цены, с линейным ростом до полной цены при ВВП в 10 млн. ИИ получает то же самое. При изменении в идущей игре действует на каждую страну с её следующим годовым обновлением."
+ },
+ "setting_te_small_economy_construction_standard": {
+  "en": "A Fifth of the Cost for Small Economies",
+  "ru": "Пятая часть стоимости для малых экономик"
+ },
+ "setting_te_small_economy_construction_standard_desc": {
+  "en": "Experimental. Construction and construction maintenance cost a country with almost no [concept_gdp] a fifth of the price, rising in a straight line to the full price at a GDP of 10 million. AI countries get the same. Changed in a running game, it reaches each country at its next yearly update.",
+  "ru": "Экспериментально. Строительство и его содержание обходятся стране почти без [Concept('concept_gdp','ВВП')] в пятую часть цены, с линейным ростом до полной цены при ВВП в 10 млн. ИИ получает то же самое. При изменении в идущей игре действует на каждую страну с её следующим годовым обновлением."
+ },
+ "setting_united_nations_disabled": {
+  "en": "United Nations Disabled",
+  "ru": "Организация Объединённых Наций отключена"
+ },
+ "setting_united_nations_disabled_desc": {
+  "en": "The United Nations [concept_journal_entry] is disabled. Intergovernmental organization technology can still be researched but the UN founding, membership, voting, and related diplomatic events are inactive.",
+  "ru": "[concept_journal_entry] об Организации Объединённых Наций отключена. Технологию межправительственных организаций по-прежнему можно изучить, но основание ООН, членство, голосования и связанные дипломатические события неактивны."
+ },
+ "setting_united_nations_early_unlock": {
+  "en": "United Nations: Early Unlock",
+  "ru": "ООН: раннее открытие"
+ },
+ "setting_united_nations_early_unlock_desc": {
+  "en": "As Late Unlock, but a great power can found the organization with $multilateral_alliances$, as the League of Nations. Until some country has $intergovernmental_organizations$, it keeps that name and its charter can't be reformed, which holds it at Established or below.",
+  "ru": "Как при позднем открытии, но великая держава может основать организацию с технологией $multilateral_alliances$ в виде Лиги Наций. Пока ни у одной страны нет технологии $intergovernmental_organizations$, она сохраняет это название, а её устав нельзя реформировать, поэтому она остаётся не выше уровня «Устоявшийся»."
+ },
+ "setting_united_nations_enabled": {
+  "en": "United Nations: Late Unlock",
+  "ru": "ООН: позднее открытие"
+ },
+ "setting_united_nations_enabled_desc": {
+  "en": "The United Nations [concept_journal_entry] opens with $intergovernmental_organizations$. Nations can found and join the UN, vote in the General Assembly, contribute to peacekeeping, and engage with UN-related diplomatic events.",
+  "ru": "[concept_journal_entry] об Организации Объединённых Наций открывается с технологией $intergovernmental_organizations$. Страны могут основывать ООН и вступать в неё, голосовать в Генеральной Ассамблее, вносить вклад в миротворческие операции и участвовать в связанных дипломатических событиях."
+ },
+ "setting_universal_aptitude_traits_disabled": {
+  "en": "Universal Aptitude Traits Disabled",
+  "ru": "Универсальные черты способностей отключены"
+ },
+ "setting_universal_aptitude_traits_disabled_desc": {
+  "en": "Administrative, diplomatic and military aptitude traits exist only with Heir Education enabled, and only rulers and heirs have them. A ruler who leaves the throne loses them, and regains the same ones on returning to power.",
+  "ru": "Административные, дипломатические и военные черты способностей существуют только при включённом образовании наследника, и только у правителей и наследников. Правитель, покинувший трон, теряет их и получает те же самые, вернувшись к власти."
+ },
+ "setting_universal_aptitude_traits_enabled": {
+  "en": "Universal Aptitude Traits Enabled",
+  "ru": "Универсальные черты способностей включены"
+ },
+ "setting_universal_aptitude_traits_enabled_desc": {
+  "en": "Every adult character is assigned administrative, diplomatic, and military aptitude traits, even with Heir Education disabled (the traits simply cannot be shaped through education). Useful for total conversions where any character might gain a political role.",
+  "ru": "Каждому взрослому персонажу присваиваются административные, дипломатические и военные черты способностей, даже при отключённом образовании наследника (просто эти черты нельзя развить образованием). Полезно для тотальных модификаций, где любой персонаж может получить политическую роль."
+ },
+ "setting_world_war_disabled": {
+  "en": "World War Disabled",
+  "ru": "Мировая война отключена"
+ },
+ "setting_world_war_disabled_desc": {
+  "en": "The world war [concept_journal_entry] is disabled. Ideological tensions and world war events will not occur.",
+  "ru": "[concept_journal_entry] о мировой войне отключена. Идеологической напряжённости и событий мировой войны не будет."
+ },
+ "setting_world_war_early_unlock": {
+  "en": "World War: Early Unlock",
+  "ru": "Мировая война: раннее открытие"
+ },
+ "setting_world_war_early_unlock_desc": {
+  "en": "As Late Unlock, but the [concept_journal_entry] opens with $trench_works$, and until $combined_arms$ a liberal great power and an autocratic one count as opposed, as in 1914. A world war begun before $combined_arms$ leaves room for another once a great power has it.",
+  "ru": "Как при позднем открытии, но [concept_journal_entry|l] открывается с технологией $trench_works$, а до появления технологии $combined_arms$ либеральная великая держава и автократическая считаются противниками, как в 1914 году. Мировая война, начавшаяся до технологии $combined_arms$, оставляет место для новой, когда эта технология появится у великой державы."
+ },
+ "setting_world_war_enabled": {
+  "en": "World War: Late Unlock",
+  "ru": "Мировая война: позднее открытие"
+ },
+ "setting_world_war_enabled_desc": {
+  "en": "The world war [concept_journal_entry] opens for [Concept('concept_great_power', 'great powers')] with $combined_arms$. Ideological tensions between great powers can escalate into a global conflict with leadup, active war, and post-war phases.",
+  "ru": "[concept_journal_entry] о мировой войне открывается для [Concept('concept_great_power', 'великих держав')] с технологией $combined_arms$. Идеологическая напряжённость между великими державами может перерасти в глобальный конфликт с фазами подготовки, активной войны и послевоенного устройства."
+ }
+}

@@ -37,13 +37,14 @@ Process fuel and automation both contribute. The figure grows with staffing and
 throughput and feeds the climate calculation. The state owner's industrial
 policy cut applies afterward.
 
-Coal Mines and Graphite Mines burn some of their own coal. Their Atmospheric
-Engine Pump, Condensing Engine Pump and Steam Donkey methods take that coal off
-the mine's output instead of listing it as an input, so the methods show no coal
-cost but still show the emissions: 2.00 and 3.00 a level for the two pumps and
-0.60 for the Steam Donkey, at full staffing and base throughput. An Iron Mine
-shows the same 2.00 and 3.00 for these pumps; its Steam Donkey, which lists 4
-coal as an input, shows 0.80. Oil-fired methods in every
+Coal Mines burn some of their own coal. Their Atmospheric Engine Pump,
+Condensing Engine Pump and Steam Donkey methods take that coal off the mine's
+output instead of listing it as an input, so the methods show no coal cost but
+still show the emissions: 2.00 and 3.00 a level for the two pumps and 0.60 for
+the Steam Donkey, at full staffing and base throughput. A Graphite Mine buys the
+same coal for these methods, so it lists it as an input and shows the same
+emissions. An Iron Mine shows the same 2.00 and 3.00 for these pumps; its Steam
+Donkey, which lists 4 coal as an input, shows 0.80. Oil-fired methods in every
 mine list their oil as an input and show it as usual.
 
 Household heating demand follows the buy packages at each state's average
@@ -88,7 +89,11 @@ throughput, each level removes 42 a year in the dashboard's units and uses
 Removal and synthetic-fuel credits follow staffing and throughput. Subsidize the works to keep them
 staffed; a fossil-powered grid adds emissions from the electricity they use.
 Genetic Engineering in era 11 unlocks their Synthetic Coal alternative, which
-produces fuel while capturing carbon.
+produces fuel while capturing carbon. Both methods use the same electricity,
+nearly all of what a level costs to run, and electricity is priced state by
+state, so when you pick the works to build, the list of states shows each
+one's electricity price where other buildings show productivity; the column
+can't be sorted.
 
 ## Capturing carbon at the source
 
@@ -144,13 +149,13 @@ it for what is still missing. The tab ends with an Open Journal Entry button.
 The tab is on the Market panel for every market. On your own market, whether
 you lead it or joined it, it is the journal entry. On another market, a line
 names the market's leader, and the parts about the market show that market: in
-the overview, the leader's role and any Enforce Emissions Reduction treaty that
+the overview, the leader's role and any Emissions Reduction treaty that
 binds it, the market's emissions and carbon captured, and its share and
 emissions-cut pies; below, the leader's Mitigation Policies, with every Adopt and
 Repeal grayed, since only that leader can change them. The temperature, Top
 Emitters, the history charts and the Help page stay your own view.
-Use it to check what a market you want to bind with Enforce Emissions Reduction
-emits and which policies it already runs.
+Use it to check what a market you want to bind with an Emissions Reduction
+treaty emits and which policies it already runs.
 
 The anomaly sets the warming tier, which the entry shows as a thermometer icon
 with the tier's name beneath it:
@@ -167,9 +172,12 @@ with the tier's name beneath it:
 
 ### The Climate Warming modifier
 
-Each month the entry gives every country the Climate Warming modifier, with
-every value multiplied by the current anomaly, after any aerosol mask
-([Aerosol Injection](#aerosol-injection)). At 1 °C it is:
+Every country carries the Climate Warming modifier, with every value
+multiplied by the current anomaly (read again every few days), after any aerosol mask
+([Aerosol Injection](#aerosol-injection)). It comes from a second journal entry,
+World Climate, which opens at 0.1 °C as Global Warming does and holds nothing to
+choose: it is the world's climate, shared by every country, and lists them all.
+At 1 °C the modifier is:
 
 - +5% mortality and −1 standard of living in every state;
 - −10% farm throughput and −2.5% throughput for every building;
@@ -184,6 +192,30 @@ harvest conditions that help.
 At 2 °C every line doubles, and at 3 °C it triples. The Warming Penalty box at
 the top of the entry shows today's standard of living and mortality lines; hover
 it for every line and the multiplier.
+
+Warming does not fall on every state alike. On top of Climate Warming, and at
+the same multiplier, a state between the tropics carries Tropical Warming and a
+state 55° or more from the equator carries High-Latitude Warming; a state
+between the two carries neither. The high latitudes are in practice the far
+north: Scandinavia, Finland, the Baltic, Scotland and Ulster, Iceland,
+Greenland, Russia from Moscow and Kazan northward, Siberia, Alaska and northern
+Canada. With Climate Warming, each degree comes to the figures below; the
+throughput rows count the −2.5% every building takes:
+
+| Per 1 °C | Tropics | Mid-latitudes | High latitudes |
+|---|---|---|---|
+| Mortality | +7.5% | +5% | +2% |
+| Standard of living | −1.5 | −1 | −0.5 |
+| Farm throughput | −17.5% | −12.5% | +2% |
+| Plantation throughput | −7.5% | −2.5% | −2.5% |
+| Heatwaves | 75% worse | 50% worse | 25% worse |
+| Frost | 15% milder | 15% milder | 30% milder |
+| Wildfire impact | 50% worse | 50% worse | 75% worse |
+
+Each state lists its band's modifier among its own. The Warming Penalty hover
+gives both bands' lines and how many of your states carry each. A country whose
+people live mostly between the tropics feels warming first and hardest, and has
+the most reason to adopt Climate Adaptation early.
 
 Warming also moves every state's [local climate](08-states.md#local-climate):
 hot days and winters rise, winters most near the poles, so hot states lose
@@ -203,8 +235,8 @@ The overview opens with boxes, two to a row: Warming, the tier and where the
 next one begins (hover it for what the tier means); Warming Penalty, today's
 standard of living and mortality lines of the Climate Warming modifier; and
 Market, Leader or Member, which says whether you set fossil-fuel tariffs. A
-Treaty box, Bound with repeals locked, joins them while an Enforce Emissions
-Reduction treaty binds you.
+Treaty box, Bound with repeals locked, joins them while an Emissions Reduction
+treaty binds you.
 
 Below them is the Temperature bar, from 0 to 4 °C, with a headline such as
 "1.61 → 1.81 °C (+0.02/yr)": the anomaly now, the anomaly in ten years if every
@@ -290,7 +322,7 @@ fuels.
 | Carbon Tax | National | none | Industrial emissions −20%; coal and oil output −10%; taxes on oil extraction doubled, manufacturing taxes +10%. |
 | Renewable Investment | National | none | Industrial emissions −15%; household emissions −25%; Renewable Energy Plants +20% throughput; conventional power plants −10% throughput; hydro, nuclear, fusion and renewable plants built 25% faster. Costs 0.5% of GDP a year, listed under Climate Policy in the Budget panel's Breakdown tab. |
 | Emission Standards | National | 200 | Industrial emissions −10%; generated pollution −25%; −5% throughput for every building. |
-| Climate Adaptation | National | 250 | Mortality −2.5% and standard of living +0.5 in every state. |
+| Climate Adaptation | National | 250 | Mortality −2.5% and standard of living +1 in every state. |
 | Reforestation Subsidies | National | 100 | Farm throughput +5%; droughts and floods 25% weaker and shorter. |
 | Carbon Removal Support | National | 100 | Carbon Conversion Works require subsidies and gain +5% throughput; Environmental Movement radicalism −5 percentage points. |
 | Public Transit | National | 150 | Transportation output +10%; oil input −5%; infrastructure built 10% faster; pops' automobiles add less infrastructure. |
@@ -380,6 +412,16 @@ Injection in default or once the haze is as thick as it can get, and stops it in
 default. Between the two it leaves the policy alone, so an election doesn't flip
 policies back and forth.
 
+A restless Environmental Movement moves the AI too. Once the movement's activism
+passes 50%, the AI adds up to 30 points, the full 30 at 75%, to one of the seven
+policies the movement asks for ([The Environmental
+Movement](#the-environmental-movement)): the one it is nearest to adopting anyway
+and can afford now. It does this at most once a year, so each answer has time to calm
+the movement before the next. It keeps each of those policies while the
+movement would be that restless again without it, and Renewable Investment only
+while it can still afford the running cost. While the movement lasts, it lets
+at most one of the seven lapse a year, unless it is short of authority.
+
 | Policy | Threshold |
 |---|---|
 | Climate Adaptation | 25 |
@@ -444,7 +486,7 @@ stays closed. Leaving Managed Fossil Phaseout stops every program.
 
 ### Readiness and emissions
 
-Closing mines and rigs cuts supply. Coal and oil get dearer, buildings that burn
+Closing mines and rigs cuts supply. Coal and oil get more expensive, buildings that burn
 them earn less and switch to cleaner methods where they can, and anything still
 short is imported or goes without. Under Replacement Readiness the section shows
 what could take their place:
@@ -474,17 +516,17 @@ is not deep in debt, stops one when the fuel or electricity runs short, and
 returns to Unrestricted Extraction when its market is short of coal, oil or
 electricity.
 
-## Enforce Emissions Reduction
+## The Emissions Reduction treaty article
 
-Enforce Emissions Reduction forces its source country to maintain seven
+Emissions Reduction forces its source country to maintain seven
 national policies: Carbon Tax, Renewable Investment, Emission Standards,
 Reforestation, Public Transit, Fossil-Fuel Divestment and Green Building Codes.
 It appears past 0.1 °C and can be signed from 0.5 °C with Intergovernmental
 Organizations, including against a market member. The source must have
 researched the technologies those policies need: Clean Energy Technologies,
 Pollution Control and Modern Urban Planning. Below 1.0 °C it still forces
-Fossil-Fuel Divestment. It can be a war goal or a requested or offered treaty
-article. Climate Adaptation, Carbon Removal Support
+Fossil-Fuel Divestment. It can be a war goal, Enforce Emissions Reduction, or a
+requested or offered treaty article. Climate Adaptation, Carbon Removal Support
 and Fossil-Fuel Tariffs are not forced; the first and last remain freely
 revocable, while the existing treaty lock also bars repealing removal support
 if the bound country chooses to adopt it.
@@ -551,7 +593,9 @@ pollution-control methods below and National Parks do it per level at full
 staffing (500 on the National Park and National Wildlife Refuge methods, 250 on
 National Forest), and a monument dedicated as Botanical Gardens takes 5,000 a
 step (see [Monument dedications](02-timeline.md#monument-dedications)). A
-polluting production method adds between 3 and 100 a level.
+polluting production method adds between 3 and 100 a level. When you pick a
+National Park to build, the list of states shows each one's pollution impact
+where other buildings show productivity; the column can't be sorted.
 
 ### Pollution-control methods
 
@@ -614,6 +658,9 @@ Public Transit and Fossil-Fuel Divestment. Each one in force lowers it, and each
 one you could adopt but haven't raises it. Carbon Removal Support only lowers
 it, by 5 points, Aerosol Injection in force raises it by 10, and Green Building
 Codes and Fossil-Fuel Tariffs don't count.
-Each unfunded level of the ministry raises it by 5 points. It disbands once the
+Each unfunded level of the ministry raises it by 5 points. Without the ministry,
+the levels your technologies would add count as unfunded, so a missing ministry
+costs nothing until the Environmental Movement technology. It disbands once the
 Ministry of the Environment is established and funded to its maximum. Its
-support also pushes AI countries toward climate policies.
+support, and its activism once it passes 50%, push AI countries toward climate
+policies ([How the AI adopts climate policy](#how-the-ai-adopts-climate-policy)).

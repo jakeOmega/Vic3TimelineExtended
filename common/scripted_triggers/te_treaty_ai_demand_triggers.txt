@@ -1,0 +1,84 @@
+﻿# ============================================================================
+# ENFORCEABLE TREATY ARTICLES: IS THIS INPUT WORTH DEMANDING?
+# ============================================================================
+# The company and state halves of the AI demand weights in
+# common/script_values/extra_script_values.txt ("AI demand weights for
+# enforceable treaty articles"). Each weight asks one of these of the input
+# the article names (scope:article.input_company or .input_state) when one is
+# bound, and of every input the conceding country could name when none is.
+# They read the article's scopes: scope:source_country concedes, and
+# scope:target_country gains (the war goal's holder when the article is
+# enforced). Players are not bound by them. Play-test:
+# docs/testing/treaty-war-goal-playtest.md.
+
+# Company scope: big enough that taking it (seize_company) or dissolving it
+# (disband_company) matters. A company with a handful of levels is no loss to
+# its owner and no gain to anyone else.
+te_treaty_ai_company_worth_demanding = {
+	company_owned_levels >= company_article_ai_min_levels
+}
+
+# State scope: a people or a faith of the protector (scope:target_country)
+# lives in the state, discriminated, in the numbers minority_protection's own
+# acceptance first rewards (its AI_CULTURE_DISCRIMINATED and
+# AI_RELIGION_DISCRIMINATED terms). Without one, protection buys the protector
+# nothing.
+te_minority_protection_state_worth = {
+	OR = {
+		any_scope_culture = {
+			is_primary_culture_of = scope:target_country
+			PREV = {
+				state_average_culture_pop_acceptance = { culture = prev value < acceptance_status_5 }
+				culture_percent_state = { target = prev value >= 0.05 }
+			}
+		}
+		AND = {
+			exists = scope:target_country.religion
+			state_average_religion_pop_acceptance = {
+				religion = scope:target_country.religion
+				value < religious_acceptance_medium
+			}
+			religion_percent_state = {
+				target = scope:target_country.religion
+				value >= 0.1
+			}
+		}
+	}
+}
+
+# State scope: a port worth opening. free_port_concession drops the state's
+# tariffs and raises its trade capacity, which counts only where goods come in
+# by sea and there is an economy to trade with. The floor is
+# free_port_concession_ai_min_state_gdp.
+te_free_port_state_worth = {
+	is_coastal = yes
+	has_port_state = yes
+	gdp >= free_port_concession_ai_min_state_gdp
+}
+
+# State scope: at least a tenth of the people are of another faith than the
+# missionary power's (scope:target_country), so religious_mission_rights has
+# someone to convert.
+te_religious_mission_state_worth = {
+	exists = scope:target_country.religion
+	state_population > 0
+	religion_percent_state = {
+		target = scope:target_country.religion
+		value < 0.9
+	}
+}
+
+# State scope: a demilitarized zone here takes something away. Either the state
+# holds a military building (the five demilitarized_zone's own acceptance counts
+# as militarized, AI_WANTS_THIS_MORE_IF_MILITARIZED), or it borders the demander
+# (scope:target_country), where a garrison would face it.
+te_demilitarized_zone_state_worth = {
+	OR = {
+		has_building = building_barrack
+		has_building = building_naval_administration
+		has_building = building_naval_fortification
+		has_building = building_naval_logistics_center
+		has_building = building_military_base
+		any_neighbouring_state = { owner = scope:target_country }
+	}
+}

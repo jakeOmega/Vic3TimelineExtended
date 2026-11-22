@@ -1,0 +1,786 @@
+{
+ "AFU": {
+  "en": "African Union",
+  "ru": "Африканский союз"
+ },
+ "AFU_ADJ": {
+  "en": "African",
+  "ru": "африканский"
+ },
+ "AFU_DEF": {
+  "en": "African Union",
+  "ru": "Африканский союз"
+ },
+ "BHA": {
+  "en": "India",
+  "ru": "Индия"
+ },
+ "BHA_ADJ": {
+  "en": "Indian",
+  "ru": "индийский"
+ },
+ "BHA_DEF": {
+  "en": "Union of India",
+  "ru": "Союз Индии"
+ },
+ "DAR": {
+  "en": "Dar-Al-Islam",
+  "ru": "Дар-аль-Ислам"
+ },
+ "DAR_ADJ": {
+  "en": "Islamic",
+  "ru": "исламский"
+ },
+ "DAR_DEF": {
+  "en": "Union of Dar-Al-Islam",
+  "ru": "Союз Дар-аль-Ислам"
+ },
+ "EAF": {
+  "en": "East African Federation",
+  "ru": "Восточноафриканская федерация"
+ },
+ "EAF_ADJ": {
+  "en": "East African",
+  "ru": "восточноафриканский"
+ },
+ "EAF_DEF": {
+  "en": "East African Federation",
+  "ru": "Восточноафриканская федерация"
+ },
+ "EUN": {
+  "en": "European Union",
+  "ru": "Европейский союз"
+ },
+ "EUN_ADJ": {
+  "en": "European",
+  "ru": "европейский"
+ },
+ "EUN_DEF": {
+  "en": "European Union",
+  "ru": "Европейский союз"
+ },
+ "INM": {
+  "en": "Intermarium",
+  "ru": "Междуморье"
+ },
+ "INM_ADJ": {
+  "en": "Intermarian",
+  "ru": "междуморский"
+ },
+ "INM_DEF": {
+  "en": "Intermarium Federation",
+  "ru": "Федерация Междуморья"
+ },
+ "NUS": {
+  "en": "Indonesia",
+  "ru": "Индонезия"
+ },
+ "NUS_ADJ": {
+  "en": "Indonesian",
+  "ru": "индонезийский"
+ },
+ "NUS_DEF": {
+  "en": "State of Indonesia",
+  "ru": "Государство Индонезия"
+ },
+ "UNA": {
+  "en": "North American Union",
+  "ru": "Североамериканский союз"
+ },
+ "UNA_ADJ": {
+  "en": "North American",
+  "ru": "североамериканский"
+ },
+ "UNA_DEF": {
+  "en": "North American Union",
+  "ru": "Североамериканский союз"
+ },
+ "UNE": {
+  "en": "United Earth",
+  "ru": "Объединённая Земля"
+ },
+ "UNE_ADJ": {
+  "en": "Terran",
+  "ru": "земной"
+ },
+ "UNE_DEF": {
+  "en": "United Earth",
+  "ru": "Объединённая Земля"
+ },
+ "ZHO": {
+  "en": "China",
+  "ru": "Китай"
+ },
+ "ZHO_ADJ": {
+  "en": "Chinese",
+  "ru": "китайский"
+ },
+ "ZHO_DEF": {
+  "en": "State of China",
+  "ru": "Государство Китай"
+ },
+ "dp_leadership_african_union": {
+  "en": "African Leadership",
+  "ru": "Африканское лидерство"
+ },
+ "dp_leadership_african_union_desc": {
+  "en": "Start a $dp_leadership_african_union$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_african_union_tooltip_desc$",
+  "ru": "Начать [Concept('concept_diplomatic_play','дипломатическую игру')]: $dp_leadership_african_union$\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_african_union_tooltip_desc$"
+ },
+ "dp_leadership_african_union_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the African [Concept('concept_unification', '$concept_major_unification|q$')].",
+  "ru": "Задаёт [Concept('concept_war_goal','цель войны')] инициатора: исключить целевую [Concept('concept_country','страну')] из числа [Concept('concept_unification_candidate','кандидатов')] африканского [Concept('concept_unification','крупного объединения')]."
+ },
+ "dp_leadership_china": {
+  "en": "Contest Leadership of China",
+  "ru": "Борьба за лидерство в Китае"
+ },
+ "dp_leadership_china_desc": {
+  "en": "Start a $dp_leadership_china$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_china_tooltip_desc$",
+  "ru": "Начать [Concept('concept_diplomatic_play','дипломатическую игру')]: $dp_leadership_china$\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_china_tooltip_desc$"
+ },
+ "dp_leadership_china_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Chinese [Concept('concept_unification', '$concept_major_unification|q$')].",
+  "ru": "Задаёт [Concept('concept_war_goal','цель войны')] инициатора: исключить целевую [Concept('concept_country','страну')] из числа [Concept('concept_unification_candidate','кандидатов')] китайского [Concept('concept_unification','крупного объединения')]."
+ },
+ "dp_leadership_dar_al_islam": {
+  "en": "Caliphal Leadership",
+  "ru": "Халифатское лидерство"
+ },
+ "dp_leadership_dar_al_islam_desc": {
+  "en": "Start a $dp_leadership_dar_al_islam$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_dar_al_islam_tooltip_desc$",
+  "ru": "Начать [Concept('concept_diplomatic_play','дипломатическую игру')]: $dp_leadership_dar_al_islam$\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_dar_al_islam_tooltip_desc$"
+ },
+ "dp_leadership_dar_al_islam_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Islamic [Concept('concept_unification', '$concept_major_unification|q$')].",
+  "ru": "Задаёт [Concept('concept_war_goal','цель войны')] инициатора: исключить целевую [Concept('concept_country','страну')] из числа [Concept('concept_unification_candidate','кандидатов')] исламского [Concept('concept_unification','крупного объединения')]."
+ },
+ "dp_leadership_east_african_federation": {
+  "en": "East African Leadership",
+  "ru": "Восточноафриканское лидерство"
+ },
+ "dp_leadership_east_african_federation_desc": {
+  "en": "Start a $dp_leadership_east_african_federation$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_east_african_federation_tooltip_desc$",
+  "ru": "Начать [Concept('concept_diplomatic_play','дипломатическую игру')]: $dp_leadership_east_african_federation$\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_east_african_federation_tooltip_desc$"
+ },
+ "dp_leadership_east_african_federation_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the East African [Concept('concept_unification', '$concept_major_unification|q$')].",
+  "ru": "Задаёт [Concept('concept_war_goal','цель войны')] инициатора: исключить целевую [Concept('concept_country','страну')] из числа [Concept('concept_unification_candidate','кандидатов')] восточноафриканского [Concept('concept_unification','крупного объединения')]."
+ },
+ "dp_leadership_european_union": {
+  "en": "European Leadership",
+  "ru": "Европейское лидерство"
+ },
+ "dp_leadership_european_union_desc": {
+  "en": "Start a $dp_leadership_european_union$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_european_union_tooltip_desc$",
+  "ru": "Начать [Concept('concept_diplomatic_play','дипломатическую игру')]: $dp_leadership_european_union$\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_european_union_tooltip_desc$"
+ },
+ "dp_leadership_european_union_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the European [Concept('concept_unification', '$concept_major_unification|q$')].",
+  "ru": "Задаёт [Concept('concept_war_goal','цель войны')] инициатора: исключить целевую [Concept('concept_country','страну')] из числа [Concept('concept_unification_candidate','кандидатов')] европейского [Concept('concept_unification','крупного объединения')]."
+ },
+ "dp_leadership_india": {
+  "en": "Indian Leadership",
+  "ru": "Индийское лидерство"
+ },
+ "dp_leadership_india_desc": {
+  "en": "Start a $dp_leadership_india$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_india_tooltip_desc$",
+  "ru": "Начать [Concept('concept_diplomatic_play','дипломатическую игру')]: $dp_leadership_india$\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_india_tooltip_desc$"
+ },
+ "dp_leadership_india_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Indian [Concept('concept_unification', '$concept_major_unification|q$')].",
+  "ru": "Задаёт [Concept('concept_war_goal','цель войны')] инициатора: исключить целевую [Concept('concept_country','страну')] из числа [Concept('concept_unification_candidate','кандидатов')] индийского [Concept('concept_unification','крупного объединения')]."
+ },
+ "dp_leadership_indonesia": {
+  "en": "Indonesian Leadership",
+  "ru": "Индонезийское лидерство"
+ },
+ "dp_leadership_indonesia_desc": {
+  "en": "Start a $dp_leadership_indonesia$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_indonesia_tooltip_desc$",
+  "ru": "Начать [Concept('concept_diplomatic_play','дипломатическую игру')]: $dp_leadership_indonesia$\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_indonesia_tooltip_desc$"
+ },
+ "dp_leadership_indonesia_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Indonesian [Concept('concept_unification', '$concept_major_unification|q$')].",
+  "ru": "Задаёт [Concept('concept_war_goal','цель войны')] инициатора: исключить целевую [Concept('concept_country','страну')] из числа [Concept('concept_unification_candidate','кандидатов')] индонезийского [Concept('concept_unification','крупного объединения')]."
+ },
+ "dp_leadership_intermarium": {
+  "en": "Intermarium Leadership",
+  "ru": "Лидерство в Междуморье"
+ },
+ "dp_leadership_intermarium_desc": {
+  "en": "Start a $dp_leadership_intermarium$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_intermarium_tooltip_desc$",
+  "ru": "Начать [Concept('concept_diplomatic_play','дипломатическую игру')]: $dp_leadership_intermarium$\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_intermarium_tooltip_desc$"
+ },
+ "dp_leadership_intermarium_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Intermarium [Concept('concept_unification', '$concept_major_unification|q$')].",
+  "ru": "Задаёт [Concept('concept_war_goal','цель войны')] инициатора: исключить целевую [Concept('concept_country','страну')] из числа [Concept('concept_unification_candidate','кандидатов')] [Concept('concept_unification','крупного объединения')] «Интермариум»."
+ },
+ "dp_leadership_united_earth": {
+  "en": "Terran Leadership",
+  "ru": "Земное лидерство"
+ },
+ "dp_leadership_united_earth_desc": {
+  "en": "Start a $dp_leadership_united_earth$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_united_earth_tooltip_desc$",
+  "ru": "Начать [Concept('concept_diplomatic_play','дипломатическую игру')]: $dp_leadership_united_earth$\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_united_earth_tooltip_desc$"
+ },
+ "dp_leadership_united_earth_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Terran [Concept('concept_unification', '$concept_major_unification|q$')].",
+  "ru": "Задаёт [Concept('concept_war_goal','цель войны')] инициатора: исключить целевую [Concept('concept_country','страну')] из числа [Concept('concept_unification_candidate','кандидатов')] земного [Concept('concept_unification','крупного объединения')]."
+ },
+ "dp_leadership_united_north_america": {
+  "en": "North American Leadership",
+  "ru": "Североамериканское лидерство"
+ },
+ "dp_leadership_united_north_america_desc": {
+  "en": "Start a $dp_leadership_united_north_america$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_united_north_america_tooltip_desc$",
+  "ru": "Начать [Concept('concept_diplomatic_play','дипломатическую игру')]: $dp_leadership_united_north_america$\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_united_north_america_tooltip_desc$"
+ },
+ "dp_leadership_united_north_america_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the North American [Concept('concept_unification', '$concept_major_unification|q$')].",
+  "ru": "Задаёт [Concept('concept_war_goal','цель войны')] инициатора: исключить целевую [Concept('concept_country','страну')] из числа [Concept('concept_unification_candidate','кандидатов')] североамериканского [Concept('concept_unification','крупного объединения')]."
+ },
+ "dp_unify_african_union": {
+  "en": "Unify the African Union",
+  "ru": "Объединить Африканский союз"
+ },
+ "dp_unify_african_union_desc": {
+  "en": "Sets the initiating [concept_war_goal] to annex all African [concept_homeland] states held by other nations.",
+  "ru": "Задаёт [Concept('concept_war_goal','цель войны')] инициатора: аннексировать все находящиеся у других государств области африканской [Concept('concept_homeland','исторической родины')]."
+ },
+ "dp_unify_dar_al_islam": {
+  "en": "Unify the Dar-Al-Islam",
+  "ru": "Объединить Дар-аль-Ислам"
+ },
+ "dp_unify_dar_al_islam_desc": {
+  "en": "Sets the initiating [concept_war_goal] to annex all Islamic [concept_homeland] states held by other nations.",
+  "ru": "Задаёт [Concept('concept_war_goal','цель войны')] инициатора: аннексировать все находящиеся у других государств области исламской [Concept('concept_homeland','исторической родины')]."
+ },
+ "dp_unify_east_african_federation": {
+  "en": "Unify East Africa",
+  "ru": "Объединить Восточную Африку"
+ },
+ "dp_unify_east_african_federation_desc": {
+  "en": "Sets the initiating [concept_war_goal] to annex all East African [concept_homeland] states held by other nations.",
+  "ru": "Задаёт [Concept('concept_war_goal','цель войны')] инициатора: аннексировать все находящиеся у других государств области восточноафриканской [Concept('concept_homeland','исторической родины')]."
+ },
+ "dp_unify_european_union": {
+  "en": "Unify the European Union",
+  "ru": "Объединить Европейский союз"
+ },
+ "dp_unify_european_union_desc": {
+  "en": "Sets the initiating [concept_war_goal] to annex all European [concept_homeland] states held by other nations.",
+  "ru": "Задаёт [Concept('concept_war_goal','цель войны')] инициатора: аннексировать все находящиеся у других государств области европейской [Concept('concept_homeland','исторической родины')]."
+ },
+ "dp_unify_intermarium": {
+  "en": "Unify the Intermarium",
+  "ru": "Объединить Междуморье"
+ },
+ "dp_unify_intermarium_desc": {
+  "en": "Sets the initiating [concept_war_goal] to annex all Intermarium [concept_homeland] states held by other nations.",
+  "ru": "Задаёт [Concept('concept_war_goal','цель войны')] инициатора: аннексировать все находящиеся у других государств области [Concept('concept_homeland','исторической родины')] «Интермариума»."
+ },
+ "dp_unify_united_earth": {
+  "en": "Unify Earth",
+  "ru": "Объединить Землю"
+ },
+ "dp_unify_united_earth_desc": {
+  "en": "Sets the initiating [concept_war_goal] to annex every land [concept_state] held by other nations on Earth.",
+  "ru": "Задаёт [Concept('concept_war_goal','цель войны')] инициатора: аннексировать все сухопутные [Concept('concept_state','области')] на Земле, находящиеся у других государств."
+ },
+ "dp_unify_united_north_america": {
+  "en": "Unify North America",
+  "ru": "Объединить Северную Америку"
+ },
+ "dp_unify_united_north_america_desc": {
+  "en": "Sets the initiating [concept_war_goal] to annex all North American [concept_homeland] states held by other nations.",
+  "ru": "Задаёт [Concept('concept_war_goal','цель войны')] инициатора: аннексировать все находящиеся у других государств области североамериканской [Concept('concept_homeland','исторической родины')]."
+ },
+ "dyn_c_african_empire": {
+  "en": "African Empire",
+  "ru": "Африканская империя"
+ },
+ "dyn_c_african_imperium": {
+  "en": "African Imperium",
+  "ru": "Африканский империум"
+ },
+ "dyn_c_african_technate": {
+  "en": "United African Technate",
+  "ru": "Объединённый Африканский технат"
+ },
+ "dyn_c_african_union": {
+  "en": "African Union",
+  "ru": "Африканский союз"
+ },
+ "dyn_c_akhand_bharat": {
+  "en": "Akhand Bharat",
+  "ru": "Акханд Бхарат"
+ },
+ "dyn_c_akhand_bharati_adj": {
+  "en": "Akhand Bharati",
+  "ru": "акханд-бхаратский"
+ },
+ "dyn_c_american_imperial_adj": {
+  "en": "American Imperial",
+  "ru": "американский имперский"
+ },
+ "dyn_c_american_imperial_union": {
+  "en": "American Imperial Union",
+  "ru": "Американский имперский союз"
+ },
+ "dyn_c_american_technate": {
+  "en": "American Technate",
+  "ru": "Американский технат"
+ },
+ "dyn_c_associated_trusts_of_america": {
+  "en": "Associated Trusts of America",
+  "ru": "Объединённые тресты Америки"
+ },
+ "dyn_c_bharati_adj": {
+  "en": "Bharati",
+  "ru": "бхаратский"
+ },
+ "dyn_c_bharatiya_adj": {
+  "en": "Bharatiya",
+  "ru": "бхаратийский"
+ },
+ "dyn_c_bharatiya_samrajya": {
+  "en": "Bharatiya Samrajya",
+  "ru": "Бхаратия Самраджья"
+ },
+ "dyn_c_bharatiya_vigyan_sangha": {
+  "en": "Bharatiya Vigyan Sangha",
+  "ru": "Бхаратия Виджнан Сангх"
+ },
+ "dyn_c_caliphate_adj": {
+  "en": "Caliphal",
+  "ru": "халифатский"
+ },
+ "dyn_c_catholic_federation_of_three_seas": {
+  "en": "Catholic Federation of the Three Seas",
+  "ru": "Католическая федерация Трёх морей"
+ },
+ "dyn_c_celestial_adj": {
+  "en": "Celestial",
+  "ru": "небесный"
+ },
+ "dyn_c_celestial_empire": {
+  "en": "Celestial Empire",
+  "ru": "Поднебесная империя"
+ },
+ "dyn_c_celestial_peoples_adj": {
+  "en": "Celestial People's",
+  "ru": "небесный народный"
+ },
+ "dyn_c_celestial_peoples_federation": {
+  "en": "Celestial People's Federation",
+  "ru": "Народная федерация Поднебесной"
+ },
+ "dyn_c_chinese_imperial_adj": {
+  "en": "Chinese Imperial",
+  "ru": "китайский имперский"
+ },
+ "dyn_c_continental_adj": {
+  "en": "Continental",
+  "ru": "континентальный"
+ },
+ "dyn_c_continental_technate": {
+  "en": "Continental Technate",
+  "ru": "Континентальный технат"
+ },
+ "dyn_c_cosmic_soviet_adj": {
+  "en": "Cosmic Soviet",
+  "ru": "космический советский"
+ },
+ "dyn_c_cosmic_soviet_union": {
+  "en": "Cosmic Soviet Union",
+  "ru": "Космический Советский Союз"
+ },
+ "dyn_c_crown_of_saint_stephen": {
+  "en": "Crown of Saint Stephen",
+  "ru": "Корона Святого Стефана"
+ },
+ "dyn_c_crown_of_saint_stephen_adj": {
+  "en": "Hungarian",
+  "ru": "венгерский"
+ },
+ "dyn_c_east_african_confederation": {
+  "en": "East African Confederation",
+  "ru": "Восточноафриканская конфедерация"
+ },
+ "dyn_c_east_african_federation": {
+  "en": "East African Federation",
+  "ru": "Восточноафриканская федерация"
+ },
+ "dyn_c_east_african_imperium": {
+  "en": "East African Imperium",
+  "ru": "Восточноафриканский империум"
+ },
+ "dyn_c_east_african_technate": {
+  "en": "East African Technate",
+  "ru": "Восточноафриканский технат"
+ },
+ "dyn_c_empire_of_earth": {
+  "en": "Empire of Earth",
+  "ru": "Империя Земли"
+ },
+ "dyn_c_empire_of_greater_ethiopia": {
+  "en": "Empire of Greater Ethiopia",
+  "ru": "Империя Большой Эфиопии"
+ },
+ "dyn_c_empire_of_the_americas": {
+  "en": "Empire of the Americas",
+  "ru": "Империя Америк"
+ },
+ "dyn_c_european_imperial_adj": {
+  "en": "European Imperial",
+  "ru": "европейский имперский"
+ },
+ "dyn_c_european_imperial_federation": {
+  "en": "European Imperial Federation",
+  "ru": "Европейская имперская федерация"
+ },
+ "dyn_c_european_imperium": {
+  "en": "European Imperium",
+  "ru": "Европейский империум"
+ },
+ "dyn_c_european_soviet_adj": {
+  "en": "European Soviet",
+  "ru": "европейский советский"
+ },
+ "dyn_c_european_technate": {
+  "en": "European Technate",
+  "ru": "Европейский технат"
+ },
+ "dyn_c_european_union": {
+  "en": "European Union",
+  "ru": "Европейский союз"
+ },
+ "dyn_c_federal_district_of_columbia": {
+  "en": "Federal District of Columbia",
+  "ru": "Федеральный округ Колумбия"
+ },
+ "dyn_c_great_qing_empire": {
+  "en": "Empire of the Great Qing",
+  "ru": "Империя Великая Цин"
+ },
+ "dyn_c_great_yuan_empire": {
+  "en": "Empire of the Great Yuan",
+  "ru": "Империя Великая Юань"
+ },
+ "dyn_c_greater_chinese_adj": {
+  "en": "Greater Chinese",
+  "ru": "великокитайский"
+ },
+ "dyn_c_greater_chinese_empire": {
+  "en": "Greater Chinese Empire",
+  "ru": "Великокитайская империя"
+ },
+ "dyn_c_greater_ethiopian_adj": {
+  "en": "Ethiopian",
+  "ru": "эфиопский"
+ },
+ "dyn_c_hindu_rashtra": {
+  "en": "Hindu Rashtra",
+  "ru": "Хинду Раштра"
+ },
+ "dyn_c_hindu_rashtra_adj": {
+  "en": "Hindu Rashtra",
+  "ru": "хинду-раштровский"
+ },
+ "dyn_c_holy_terran_adj": {
+  "en": "Holy Terran",
+  "ru": "священный земной"
+ },
+ "dyn_c_holy_terran_dominion": {
+  "en": "Holy Terran Dominion",
+  "ru": "Священный земной доминион"
+ },
+ "dyn_c_house_of_wisdom": {
+  "en": "House of Wisdom",
+  "ru": "Дом мудрости"
+ },
+ "dyn_c_house_of_wisdom_adj": {
+  "en": "Bayt al-Hikma",
+  "ru": "байт-аль-хикма"
+ },
+ "dyn_c_imamate_of_east_africa": {
+  "en": "Imamate of East Africa",
+  "ru": "Имамат Восточной Африки"
+ },
+ "dyn_c_imperial_federation_adj": {
+  "en": "Imperial Federal",
+  "ru": "имперско-федеральный"
+ },
+ "dyn_c_imperial_federation_of_earth": {
+  "en": "Imperial Federation of Earth",
+  "ru": "Имперская федерация Земли"
+ },
+ "dyn_c_imperial_mexican_adj": {
+  "en": "Imperial Mexican",
+  "ru": "имперский мексиканский"
+ },
+ "dyn_c_imperial_union_of_america": {
+  "en": "Imperial Union of America",
+  "ru": "Имперский союз Америки"
+ },
+ "dyn_c_indonesia_raya": {
+  "en": "Indonesia Raya",
+  "ru": "Индонезия Райя"
+ },
+ "dyn_c_indonesia_raya_adj": {
+  "en": "Indonesia Raya",
+  "ru": "великоиндонезийский"
+ },
+ "dyn_c_indonesian_technical_union": {
+  "en": "Indonesian Technical Union",
+  "ru": "Индонезийский технический союз"
+ },
+ "dyn_c_intermarium": {
+  "en": "Intermarium",
+  "ru": "Междуморье"
+ },
+ "dyn_c_islamic_federation": {
+  "en": "Islamic Federation",
+  "ru": "Исламская федерация"
+ },
+ "dyn_c_islamic_socialist_republic": {
+  "en": "Islamic Socialist Republic",
+  "ru": "Исламская социалистическая республика"
+ },
+ "dyn_c_islamic_sultanate": {
+  "en": "Islamic Sultanate",
+  "ru": "Исламский султанат"
+ },
+ "dyn_c_majapahit_revival": {
+  "en": "Majapahit Revival",
+  "ru": "Возрождение Маджапахита"
+ },
+ "dyn_c_national_estates_of_america": {
+  "en": "National Estates of America",
+  "ru": "Национальные сословия Америки"
+ },
+ "dyn_c_negara_islam_adj": {
+  "en": "Indonesian Islamic",
+  "ru": "индонезийско-исламский"
+ },
+ "dyn_c_negara_islam_indonesia": {
+  "en": "Negara Islam Indonesia",
+  "ru": "Негара Ислам Индонезия"
+ },
+ "dyn_c_new_canaan": {
+  "en": "New Canaan",
+  "ru": "Новый Ханаан"
+ },
+ "dyn_c_north_american_royal_adj": {
+  "en": "North American Royal",
+  "ru": "североамериканский королевский"
+ },
+ "dyn_c_north_american_soviet_adj": {
+  "en": "North American Soviet",
+  "ru": "североамериканский советский"
+ },
+ "dyn_c_north_american_union": {
+  "en": "North American Union",
+  "ru": "Североамериканский союз"
+ },
+ "dyn_c_nusantara_empire": {
+  "en": "Nusantara Empire",
+  "ru": "Империя Нусантара"
+ },
+ "dyn_c_nusantara_empire_adj": {
+  "en": "Nusantaran",
+  "ru": "нусантарский"
+ },
+ "dyn_c_ottoman_caliphate": {
+  "en": "Ottoman Caliphate",
+  "ru": "Османский халифат"
+ },
+ "dyn_c_ottoman_caliphate_adj": {
+  "en": "Ottoman",
+  "ru": "османский"
+ },
+ "dyn_c_pan_african_socialist_federation": {
+  "en": "Pan-African Socialist Federation",
+  "ru": "Панафриканская социалистическая федерация"
+ },
+ "dyn_c_pan_african_theocracy": {
+  "en": "Pan-African Theocracy",
+  "ru": "Панафриканская теократия"
+ },
+ "dyn_c_pan_islamic_league": {
+  "en": "Pan-Islamic League",
+  "ru": "Панисламская лига"
+ },
+ "dyn_c_pax_americana": {
+  "en": "Pax Americana",
+  "ru": "Пакс Американа"
+ },
+ "dyn_c_pax_americana_adj": {
+  "en": "Pax Americana",
+  "ru": "пакс-американа"
+ },
+ "dyn_c_peoples_republic_of_bharat": {
+  "en": "People's Republic of Bharat",
+  "ru": "Народная Республика Бхарат"
+ },
+ "dyn_c_peoples_republic_of_indonesia": {
+  "en": "People's Republic of Indonesia",
+  "ru": "Народная Республика Индонезия"
+ },
+ "dyn_c_polish_lithuanian_commonwealth": {
+  "en": "Polish-Lithuanian Commonwealth",
+  "ru": "Речь Посполитая"
+ },
+ "dyn_c_promethean_adj": {
+  "en": "Promethean",
+  "ru": "прометеевский"
+ },
+ "dyn_c_promethean_empire": {
+  "en": "Promethean Empire",
+  "ru": "Прометеева империя"
+ },
+ "dyn_c_qing_imperial_adj": {
+  "en": "Qing Imperial",
+  "ru": "цинский имперский"
+ },
+ "dyn_c_rashidun_adj": {
+  "en": "Rashidun",
+  "ru": "рашидунский"
+ },
+ "dyn_c_rashidun_caliphate": {
+  "en": "Rashidun Caliphate",
+  "ru": "Праведный халифат"
+ },
+ "dyn_c_republic_of_china": {
+  "en": "Republic of China",
+  "ru": "Китайская Республика"
+ },
+ "dyn_c_republic_of_india": {
+  "en": "Republic of India",
+  "ru": "Республика Индия"
+ },
+ "dyn_c_republic_of_indonesia": {
+  "en": "Republic of Indonesia",
+  "ru": "Республика Индонезия"
+ },
+ "dyn_c_republique_mondiale": {
+  "en": "République Mondiale",
+  "ru": "Всемирная Республика"
+ },
+ "dyn_c_republique_mondiale_adj": {
+  "en": "Mondiale",
+  "ru": "всемирный"
+ },
+ "dyn_c_safavid_adj": {
+  "en": "Safavid",
+  "ru": "сефевидский"
+ },
+ "dyn_c_safavid_caliphate": {
+  "en": "Safavid Caliphate",
+  "ru": "Сефевидский халифат"
+ },
+ "dyn_c_sinocybernetic_adj": {
+  "en": "Sinocybernetic",
+  "ru": "синокибернетический"
+ },
+ "dyn_c_solomonic_african_empire": {
+  "en": "Solomonic African Empire",
+  "ru": "Соломонова Африканская империя"
+ },
+ "dyn_c_soviet_federation_of_north_america": {
+  "en": "Soviet Federation of North America",
+  "ru": "Советская федерация Северной Америки"
+ },
+ "dyn_c_state_and_district_of_america": {
+  "en": "State and District of America",
+  "ru": "Штат и округ Америки"
+ },
+ "dyn_c_technocratic_republic_of_china": {
+  "en": "Technocratic Republic of China",
+  "ru": "Китайская технократическая республика"
+ },
+ "dyn_c_terran_imperial_adj": {
+  "en": "Terran Imperial",
+  "ru": "земной имперский"
+ },
+ "dyn_c_terran_imperium": {
+  "en": "Terran Imperium",
+  "ru": "Земной империум"
+ },
+ "dyn_c_terran_socialist_adj": {
+  "en": "Terran Socialist",
+  "ru": "земной социалистический"
+ },
+ "dyn_c_terran_socialist_federation": {
+  "en": "Terran Socialist Federation",
+  "ru": "Земная социалистическая федерация"
+ },
+ "dyn_c_terran_technate": {
+  "en": "Terran Technate",
+  "ru": "Земной технат"
+ },
+ "dyn_c_terran_technate_adj": {
+  "en": "Terran Technate",
+  "ru": "земной технатный"
+ },
+ "dyn_c_the_caliphate": {
+  "en": "The Caliphate",
+  "ru": "Халифат"
+ },
+ "dyn_c_three_seas_adj": {
+  "en": "Three Seas",
+  "ru": "трёхморский"
+ },
+ "dyn_c_three_seas_socialist_federation": {
+  "en": "Federation of Three Seas Soviets",
+  "ru": "Федерация Советов Трёх морей"
+ },
+ "dyn_c_three_seas_technical_union": {
+  "en": "Three Seas Technical Union",
+  "ru": "Технический союз Трёх морей"
+ },
+ "dyn_c_ujamaa_adj": {
+  "en": "Ujamaa",
+  "ru": "уджамаа"
+ },
+ "dyn_c_ujamaa_federation": {
+  "en": "Ujamaa Federation",
+  "ru": "Федерация Уджамаа"
+ },
+ "dyn_c_union_of_european_socialist_republics": {
+  "en": "Union of European Socialist Republics",
+  "ru": "Союз европейских социалистических республик"
+ },
+ "dyn_c_united_crowns_of_north_america": {
+  "en": "United Crowns of North America",
+  "ru": "Объединённые короны Северной Америки"
+ },
+ "dyn_c_united_earth": {
+  "en": "United Earth",
+  "ru": "Объединённая Земля"
+ },
+ "dyn_c_vasudhaiva_kutumbakam": {
+  "en": "Vasudhaiva Kutumbakam",
+  "ru": "Васудхайва Кутумбакам"
+ },
+ "dyn_c_vasudhaiva_kutumbakam_adj": {
+  "en": "Vasudhaiva",
+  "ru": "васудхайва"
+ },
+ "dyn_c_weltbund": {
+  "en": "Weltbund",
+  "ru": "Вельтбунд"
+ },
+ "dyn_c_weltbund_adj": {
+  "en": "Weltbund",
+  "ru": "вельтбундовский"
+ },
+ "dyn_c_workers_commonwealth_of_america": {
+  "en": "Workers' Commonwealth of America",
+  "ru": "Рабочее содружество Америки"
+ },
+ "dyn_c_yuan_imperial_adj": {
+  "en": "Yuan Imperial",
+  "ru": "юаньский имперский"
+ }
+}

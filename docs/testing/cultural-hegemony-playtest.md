@@ -27,7 +27,7 @@ game can show. Strike a fixed item through with the commit that fixed it.
 
 | Check | Expect | If it fails |
 |---|---|---|
-| **The table.** Open the Hegemony tab of the Society panel and the journal entry. | A head (#, Country, Share, Change, Model), then one line per country: rank, a small flag, the name, its share, an arrow and a signed change, and a colored swatch. The columns line up under the head. | A blank flag or name: `ScriptContainer.MakeScope.Var('ch_board_capital').GetState.GetCountry` does not resolve inside this datamodel; compare the covert network rows, which read the same chain. |
+| **The table.** Open the Hegemony tab of the Society panel and the journal entry. | A head (#, Country, Share, Change, Model), then one line per country: rank, a small flag, the name, its share, an arrow and a signed change, and a colored swatch. The columns line up under the head. | A blank flag or name: `ScriptContainer.MakeScope.Var('ch_board_capital').GetState.GetCountry` does not resolve inside this datamodel; compare the covert network rows, which read the same chain. The first head blank or drawn `##`: `je_ch_board_head_rank` is written `##` since #266 (a literal hash, as vanilla's `BUILDING_RANK` writes it); put the single `#` back with a `# REVIEWED` on the line. |
 | **Hovers.** Hover a flag, a swatch, a row and the Change and Model heads. | The flag names the country and opens it on click. The swatch names the model and its laws. The row lists that country's pull components at the recount, only the ones that are not zero, and they add up to its Raw Score with the Pull Multiplier. The heads explain the column. | An empty row hover: a `ch_board_tt_*` fragment did not render through `SelectLocalization` in a datamodel tooltip (gotcha #24); show every line instead. |
 | **Us.** With `te_debug_ch.1` put us at rank 1, then outside the top ten. | The arrow marks our row at rank 1. Outside the top ten no row is marked and "Our Rank: 14 of 168" follows the table. | No arrow: the marker's comparison of `ch_board_rank` with `ch_rank_self_display` failed. |
 | **A gone country.** Empty slot 5 with the harness, or annex a ranked country between recounts. | Row 5 is gone and the others keep their places; an annexed country's row reads "A country that no longer exists" within a month, with no flag. | |
@@ -44,3 +44,18 @@ game can show. Strike a fixed item through with the commit that fixed it.
 | **The breakdown (CH-1, CH-3).** With Prestige and a Pull Multiplier, as a major power below the world average standard of living. | The Pull Multiplier closes the components ("+25%", green), then the rule, then Raw Score alone. The Standard of Living row shows a red negative value, and its hover says "Counted at ×0.50 for our rank". | |
 | **The funding level (CH-4).** Hover "2 / 5" beside Program Funding. | Funding Level, the maximum, the Ministry of Culture institution and the two technologies that raise it, and the breakdown of where the cap comes from now. | A blank breakdown: `GetValueWithBreakdownFor` failed here; the sentence above it still says how to raise it. |
 | **The history legend (CH-12).** Look under the History chart. | Two columns of short names ("Mixed", "Theocratic"), each with its full name and laws on hover, as in the models legend above. | |
+
+## Harness run, 2026-11-11 (1.15.1)
+
+Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
+
+`ch_board_rows` OK (`ranked=70`).
+
+## Milestones tried only where they could pass (#1724)
+
+The entry's monthly pulse tries `cultural_hegemony.8` once the cached share (`var:ch_total`) reaches 5, and `.9` only for the leaderboard's #1. Both events still check the live share.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The 10% milestone.** A game where a country's share passes 10% (or read `has_variable = ch_total` and `var:ch_total` on a country above 10). | `cultural_hegemony.8` within two months of the share passing 10%. | No event while `var:ch_total` reads 10 or more: the gate's `var:ch_total >= 5` isn't evaluated as written; read it with `read "var:ch_total"` on that country. |
+| **The 25% milestone.** The leaderboard's #1 at 25% or more. | `cultural_hegemony.9` within a month. | No event: read `THIS = global_var:ch_rank_1` on that country; the gate in the pulse holds the same three conditions as the event's trigger. |

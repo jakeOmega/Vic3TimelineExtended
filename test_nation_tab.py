@@ -29,6 +29,7 @@ import json
 import os
 import re
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -36,6 +37,7 @@ ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
 from gui_test_helpers import _type_body, assert_column_closes_with_its_sections, assert_wide_matches_narrow  # noqa: E402
+from paradox_file_parser import directive_prefixes  # noqa: E402
 from scripts.generators import gen_nation_tab as gen  # noqa: E402
 from scripts.generators import gen_te_systems_window as window_gen  # noqa: E402
 
@@ -279,6 +281,126 @@ class RegistryTest(unittest.TestCase):
                     self.assertNotIn(twin, shown)
 
 
+class FinderTest(unittest.TestCase):
+    """The finder on small trees of its own (#1023): three ways of writing a
+    permanent grant it used to miss. A grant the finder misses skips the
+    registry without a word: the modifier is in All Modifiers, in no section,
+    and every other test here passes."""
+
+    STATICS = "".join(f"te_{kind}_reward = {{ country_prestige_add = 1 }}\n"
+                      for kind in ("bare", "gold", "silver", "iron", "tin", "deep", "loop"))
+
+    def _candidates(self, files):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "events").mkdir()
+            for rel, text in {"common/static_modifiers/statics.txt": self.STATICS, **files}.items():
+                path = root / rel
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(text, encoding="utf-8-sig")
+            return gen.candidates(root)
+
+    def test_the_bare_form_is_a_permanent_grant(self):
+        # `add_modifier = <name>` has no duration field, so it is always permanent.
+        found = self._candidates({
+            "common/scripted_effects/effects.txt": (
+                "te_reward_country = {\n\tadd_modifier = te_bare_reward\n}\n"
+                "te_reward_kind = {\n\tadd_modifier = te_$KIND$_reward\n}\n"
+                # a timed grant in the brace form is still no candidate
+                "te_reward_timed = {\n\tadd_modifier = { name = te_tin_reward months = 12 }\n}\n"
+            ),
+            "events/events.txt": "te_finder.1 = {\n\timmediate = { te_reward_kind = { KIND = gold } }\n}\n",
+        })
+        self.assertEqual(found, {"te_bare_reward": ["common/scripted_effects/effects.txt"],
+                                 "te_gold_reward": ["common/scripted_effects/effects.txt"]})
+
+    def test_a_replaced_or_injected_effect_expands_from_its_callers(self):
+        # Callers write `te_reward_kind = { ... }`, never `INJECT:te_reward_kind`.
+        for directive in directive_prefixes:
+            with self.subTest(directive=directive):
+                found = self._candidates({
+                    "common/scripted_effects/effects.txt": (
+                        f"{directive}te_reward_kind = {{\n\tadd_modifier = {{ name = te_$KIND$_reward }}\n}}\n"
+                        # a call that passes its parameter on from inside a directive block
+                        "te_reward_inner = {\n\tadd_modifier = { name = te_$KIND$_reward }\n}\n"
+                        f"{directive}te_reward_outer = {{\n\tte_reward_inner = {{ KIND = $METAL$ }}\n}}\n"
+                    ),
+                    "events/events.txt": (
+                        "te_finder.1 = {\n\timmediate = {\n"
+                        "\t\tte_reward_kind = { KIND = gold }\n"
+                        "\t\tte_reward_outer = { METAL = silver }\n"
+                        "\t}\n}\n"
+                    ),
+                })
+                self.assertEqual(sorted(found), ["te_gold_reward", "te_silver_reward"])
+
+    def test_a_long_call_chain_expands(self):
+        # te_chain_0 holds the grant; te_chain_<n> passes KIND down to
+        # te_chain_<n-1>; an event calls the top one with the name. The finder
+        # stopped at four calls and returned nothing for the rest.
+        for calls in (1, 4, 5, 12, gen.MAX_CALL_CHAIN):
+            chain = "te_chain_0 = {\n\tadd_modifier = { name = te_$KIND$_reward }\n}\n" + "".join(
+                f"te_chain_{n} = {{\n\tte_chain_{n - 1} = {{ KIND = $KIND$ }}\n}}\n" for n in range(1, calls))
+            with self.subTest(calls=calls):
+                found = self._candidates({
+                    "common/scripted_effects/effects.txt": chain,
+                    "events/events.txt": f"te_finder.1 = {{\n\timmediate = {{ te_chain_{calls - 1} = "
+                                         "{ KIND = deep } }\n}\n",
+                })
+                self.assertEqual(sorted(found), ["te_deep_reward"])
+
+    def test_a_call_cycle_ends(self):
+        # An effect that calls itself, and two that call each other, passing
+        # the parameter round: the names are the ones callers outside give.
+        found = self._candidates({
+            "common/scripted_effects/effects.txt": (
+                "te_reward_again = {\n\tadd_modifier = { name = te_$KIND$_reward }\n"
+                "\tte_reward_again = { KIND = $KIND$ }\n\tte_reward_back = { KIND = $KIND$ }\n}\n"
+                "te_reward_back = {\n\tte_reward_again = { KIND = $KIND$ }\n}\n"
+            ),
+            "events/events.txt": (
+                "te_finder.1 = {\n\timmediate = {\n"
+                "\t\tte_reward_again = { KIND = loop }\n"
+                "\t\tte_reward_back = { KIND = iron }\n"
+                "\t}\n}\n"
+            ),
+        })
+        self.assertEqual(sorted(found), ["te_iron_reward", "te_loop_reward"])
+
+    def test_a_forwarded_parameter_is_substituted_once(self):
+        # The call passes A = $B$ and B = gold: A takes the caller's B
+        # (silver), not this call's. Substituting one parameter after another
+        # gave te_gold_gold (#1697).
+        found = self._candidates({
+            "common/static_modifiers/pairs.txt": "".join(
+                f"te_{a}_{b}_reward = {{ country_prestige_add = 1 }}\n"
+                for a in ("gold", "silver") for b in ("gold", "silver")),
+            "common/scripted_effects/effects.txt": (
+                "te_leaf = {\n\tadd_modifier = { name = te_$A$_$B$_reward }\n}\n"
+                "te_middle = {\n\tte_leaf = { A = $B$ B = gold }\n}\n"
+            ),
+            "events/events.txt": "te_finder.1 = {\n\timmediate = { te_middle = { B = silver } }\n}\n",
+        })
+        self.assertEqual(sorted(found), ["te_silver_gold_reward"])
+
+    def test_a_chain_past_the_cap_raises(self):
+        # Never an empty answer: one call more than the cap, and a name that
+        # grows each time its effect calls itself.
+        calls = gen.MAX_CALL_CHAIN + 1
+        chain = "te_chain_0 = {\n\tadd_modifier = { name = te_$KIND$_reward }\n}\n" + "".join(
+            f"te_chain_{n} = {{\n\tte_chain_{n - 1} = {{ KIND = $KIND$ }}\n}}\n" for n in range(1, calls))
+        growing = ("te_reward_more = {\n\tadd_modifier = { name = te_$KIND$_reward }\n"
+                   "\tte_reward_more = { KIND = more_$KIND$ }\n}\n")
+        for name, effects, call in (("long", chain, f"te_chain_{calls - 1} = {{ KIND = deep }}"),
+                                    ("growing", growing, "te_reward_more = { KIND = gold }")):
+            with self.subTest(chain=name):
+                with self.assertRaisesRegex(ValueError, "MAX_CALL_CHAIN"):
+                    self._candidates({
+                        "common/scripted_effects/effects.txt": effects,
+                        "events/events.txt": f"te_finder.1 = {{\n\timmediate = {{ {call} }}\n}}\n",
+                    })
+
+
 class GeneratedTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -494,9 +616,19 @@ class TypeRowsTest(unittest.TestCase):
     def test_the_inventory(self):
         # The issue's count (2026-10-18): 149 types, 114 rows, 35 not rows; one
         # row fewer since Long-Haul Seabed Operations moved onto the Deep-Sea
-        # Mine (2026-10-27), the only modifier that carried its type
-        self.assertGreaterEqual(len(self.carried), 148)
-        self.assertGreaterEqual(len(self._rows()), 113)
+        # Mine (2026-10-27), the only modifier that carried its type; two
+        # fewer since Colonial Empire's programmes moved onto their entry as
+        # scaling modifiers (#1404), which the tab doesn't list; three types
+        # and five rows (the five taxes' types, which only the light relief
+        # fed) fewer since the light tax code's relief did the same (#1404);
+        # 29 types and 21 rows fewer since the UN's conventions, regime terms,
+        # embargoes and programmes moved onto its entry as scaling modifiers
+        # (#1404), the only modifiers that carried them; two types and two rows
+        # (trade advantage, improve-relations speed) fewer since the UN's
+        # non-member pariah and NPT disarmament modifiers were found on its
+        # entry, not the country (#1474), the only ones the tab had carrying them
+        self.assertGreaterEqual(len(self.carried), 114)
+        self.assertGreaterEqual(len(self._rows()), 83)
         self.assertIn("state_arable_land_mult", self.carried)
         self.assertTrue({"agdiff_nitrogen_fixation", "agdiff_green_revolution"}
                         <= set(self.carried["state_arable_land_mult"]))
@@ -559,7 +691,10 @@ class TypeRowsTest(unittest.TestCase):
                 self.assertTrue(generated[key].startswith(f"${kind}$: "))
                 self.assertIn(f"${kind}_desc$", generated[key + "_tt"])
                 if row == "row":
-                    self.assertIn(f"GetValueWithBreakdownFor('{kind}')", generated[key])
+                    # #1760: the figure in the text, the breakdown on hover only
+                    self.assertIn(f"GetFormattedValueFor('{kind}')", generated[key])
+                    self.assertNotIn("GetValueWithBreakdownFor", generated[key])
+                    self.assertIn(f"GetTooltipFor('{kind}')", generated[key + "_tt"])
                 else:
                     self.assertIn(f"GetFullEntryDescFor('{kind}')", generated[key + "_tt"])
                 note = kind.startswith(("state_", "building_", "interest_group_", "character_"))
@@ -601,37 +736,72 @@ class CountryPanelTest(unittest.TestCase):
     """gui/00_te_country_panel_information.gui: vanilla's Information tab type,
     its modifier list replaced by a line leading to the Nation tab's All
     Modifiers (owner, 2026-11-03), the change in one `### MOD: Nation tab`
-    block that keeps every vanilla line it replaces."""
+    block that keeps every vanilla line it replaces; and vanilla's panel type,
+    with another country's National Info in its footer (owner, 2026-11-21), in
+    one `### MOD: National Info` block."""
 
     @staticmethod
-    def _type_lines(text):
-        lines = text.splitlines()
-        start = next(i for i, line in enumerate(lines) if line.strip().startswith(f"type {gen.PANEL_TYPE} = "))
+    def _block(lines, opens):
+        """The lines of the first block whose opening line `opens` accepts."""
+        start = next(i for i, line in enumerate(lines) if opens(line.strip()))
         depth = 0
         for i in range(start, len(lines)):
             depth += lines[i].count("{") - lines[i].count("}")
             if depth == 0:
                 return lines[start:i + 1]
-        raise AssertionError("the type never closes")
+        raise AssertionError("the block never closes")
+
+    @classmethod
+    def _type_lines(cls, text, name=gen.PANEL_TYPE):
+        return cls._block(text.splitlines(), lambda line: line.startswith(f"type {name} = "))
 
     def test_only_marked_blocks_differ_from_vanilla(self):
         """Undo each marked block (drop what it adds, put back the vanilla
-        lines it records) and the type is vanilla's, line for line."""
-        restored, blocks, inside = [], 0, False
-        for line in self._type_lines(_read(gen.PANEL_OUT)):
-            text = line.strip()
-            if text.startswith(gen.MOD_OPEN):
-                blocks, inside = blocks + 1, True
-            elif text == gen.MOD_CLOSE:
-                inside = False
-            elif not inside:
-                restored.append(text)
-            elif text.startswith(gen.VANILLA_LINE):
-                restored.append(text[len(gen.VANILLA_LINE):].strip())
-        self.assertEqual(blocks, 1)
-        self.assertFalse(inside)
-        vanilla = [line.strip() for line in self._type_lines(_read(gen.VANILLA_PANEL))]
-        self.assertEqual([line for line in restored if line], [line for line in vanilla if line])
+        lines it records) and each type is vanilla's, line for line."""
+        for name, marker in ((gen.PANEL_TYPE, gen.MOD_OPEN), (gen.FOOTER_TYPE, gen.FOOTER_OPEN)):
+            with self.subTest(type=name):
+                restored, blocks, inside = [], 0, False
+                for line in self._type_lines(_read(gen.PANEL_OUT), name):
+                    text = line.strip()
+                    if text.startswith("### MOD"):
+                        self.assertTrue(text.startswith(f"{marker}: "), text)
+                        blocks, inside = blocks + 1, True
+                    elif text == gen.MOD_CLOSE:
+                        inside = False
+                    elif not inside:
+                        restored.append(text)
+                    elif text.startswith(gen.VANILLA_LINE):
+                        restored.append(text[len(gen.VANILLA_LINE):].strip())
+                self.assertEqual(blocks, 1)
+                self.assertFalse(inside)
+                vanilla = [line.strip() for line in self._type_lines(_read(gen.VANILLA_PANEL), name)]
+                self.assertEqual([line for line in restored if line], [line for line in vanilla if line])
+
+    def test_national_info_sits_above_draft_a_treaty(self):
+        """Another country's National Info is in the panel's fixed footer, so
+        it shows on every tab whatever the scroll, right above vanilla's Draft
+        a Treaty and on the same test (spec 2026-11-02-charts-help-national-info
+        § 6.2, way in 1, moved out of the Politics tab's scroll). It opens the
+        window as vanilla's Politics-tab button does, under the window's own
+        title (POP_BROWSER, "French National Info")."""
+        panel = self._type_lines(_read(gen.PANEL_OUT), gen.FOOTER_TYPE)
+        footer = self._block(panel, lambda line: line == 'blockoverride "fixed_bottom" {')
+        stripped = [line.strip() for line in footer]
+        at = stripped.index(next(line for line in stripped if line.startswith(f"{gen.FOOTER_OPEN}: ")))
+        end = stripped.index(gen.MOD_CLOSE, at)
+        block = stripped[at + 1:end]
+        self.assertEqual(block[0], "button = {")
+        self.assertEqual(block[-1], "}")
+        self.assertIn('onclick = "[InformationPanelBar.OpenPopBrowserPanel( Country.Self )]"', block)
+        self.assertIn('text = "POP_BROWSER"', block)
+        treaty = stripped[end + 1:]
+        self.assertEqual(treaty[0], "button = {")
+        click = treaty.index(gen._TREATY_CLICK)
+        self.assertNotIn("}", treaty[:click])  # the treaty's own button, not a later one
+        test = [line for line in block if line.startswith("visible = ")]
+        self.assertEqual(test, [gen._TREATY_TEST])
+        self.assertIn(gen._TREATY_TEST, treaty[:click])
+        self.assertIn("National Info", _loc()["POP_BROWSER"])
 
     def test_the_list_is_gone(self):
         """No list, so nothing on the tab compares names or reads a script
@@ -724,7 +894,14 @@ class PanelDriftTest(unittest.TestCase):
 
     def test_a_missing_anchor_raises_value_error(self):
         for old, new, anchor in (("### TIMED MODIFIERS", "### MODIFIERS", "TIMED MODIFIERS"),
-                                 (f"type {gen.PANEL_TYPE} = ", "type something_else = ", gen.PANEL_TYPE)):
+                                 (f"type {gen.PANEL_TYPE} = ", "type something_else = ", gen.PANEL_TYPE),
+                                 (f"type {gen.FOOTER_TYPE} = ", "type something_else = ", gen.FOOTER_TYPE),
+                                 ('blockoverride "fixed_bottom" {', 'blockoverride "fixed_top_2" {', "footer"),
+                                 (gen._TREATY_CLICK, 'onclick = "[InformationPanelBar.OpenTreatyPanel]"',
+                                  "Draft a Treaty"),
+                                 ('visible = "[Not(GetMetaPlayer.IsPlayedOrObservedCountry(Country.Self))]"\n'
+                                  '\t\t\t\t\tsize = { 540 50 }',
+                                  'visible = yes\n\t\t\t\t\tsize = { 540 50 }', "test")):
             with self.subTest(anchor=anchor):
                 with self.assertRaisesRegex(ValueError, anchor):
                     gen.generated_panel(self._mutated(old, new))
@@ -1032,7 +1209,7 @@ class TabLayoutTest(unittest.TestCase):
         def shown(key, depth=0):
             v = loc[key]
             self.assertLess(depth, 6, key)
-            v = re.sub(r"\$(\w[\w.]*)\$", lambda m: shown(m.group(1), depth + 1), v)
+            v = re.sub(r"\$(\w[\w.]*)(?:\|q)?\$", lambda m: shown(m.group(1), depth + 1), v)   # 1.15: |q in a quoted argument
             v = re.sub(r"\[Concept\('\w+',\s*'([^']*)'\)\]", r"\1", v)
             v = re.sub(r"\[(concept_\w+)\]", lambda m: shown(m.group(1), depth + 1), v)
             v = re.sub(r"\[[^\[\]]*\]", "9999", v)
@@ -1116,7 +1293,7 @@ class TabLayoutTest(unittest.TestCase):
         # D: money, as the UN overview's Dues figure prints what is owed
         # (je_un_ov_dues_fig_4), which the UN lines' arrears hover repeats.
         for key, value in self._nation_loc().items():
-            for fmt in re.findall(r"\|([^\]]*)\]", value):
+            for fmt in re.findall(r"\|([^\]$']*)\]", value):   # a data function's format, not a splice's |q
                 with self.subTest(key=key, fmt=fmt):
                     self.assertIn(fmt, ("0", "1", "2", "+0", "+1", "+2", "%0", "+%0", "D"))
 

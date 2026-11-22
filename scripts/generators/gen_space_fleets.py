@@ -1025,8 +1025,10 @@ def render_transfer_effects() -> list[str]:
               *[f"\t{line}" for line in removed],
               "}"]
     out += _chain(cases, else_body=broken)
+    # has_variable: the Transfer step buttons' tooltips walk this writing nothing, so
+    # the amount set above is unset there (tooltip_walk_variable_audit).
     out += ["\tif = {",
-            "\t\tlimit = { NOT = { has_global_variable = sr_xf_step_checked } }",
+            "\t\tlimit = { NOT = { has_global_variable = sr_xf_step_checked } has_variable = sr_det_amt_$ROLE$ }",
             "\t\tset_global_variable = { name = sr_xf_step_checked value = yes }",
             *[f"\t\t{line}" for line in numbers],
             "\t\tset_variable = { name = sr_xf_chk_amount value = var:sr_det_amt_$ROLE$ }",
@@ -1911,6 +1913,10 @@ def render_display() -> str:
            "#   sr_disp_fl_<n>_months_left  months until it lands",
            "#   sr_disp_fl_<n>_refit_left   months of its refit left",
            "#   sr_disp_fl_<n>_leg_months, _leg_dv  the leg to its picked destination",
+           "#   sr_disp_fl_<n>_place        the code of the location it is at, or is bound for (the card's world icon)",
+           "#   sr_disp_fl_<n>_strength_frac, _dv_frac, _supply_frac, _marines_frac  the card's bars:",
+           "#                               each reading as a share of its full, 0 to 1",
+           "#   sr_disp_fl_<n>_transit_frac the share of its leg flown so far (the transit track)",
            "#   sr_disp_fl_<n>_combat, _posture, _destroy  the 6b orders",
            "#   sr_disp_fl_<n>_tgt_*        its target world's figures (the target hover)",
            "#   sr_disp_fl_<n>_why          why it can't leave this month, whatever the leg (the",
@@ -1957,6 +1963,35 @@ def render_display() -> str:
                 f"sr_disp_fl_{n}_target = {{",
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ has_variable = {var(n, 'target')} }} value = var:{var(n, 'target')} }}",
+                "}"]
+        # The card's world icon: the location it is at, else the one it is bound for.
+        out += [f"sr_disp_fl_{n}_place = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ has_variable = {var(n, 'loc')} }} value = var:{var(n, 'loc')} }}",
+                f"\telse_if = {{ limit = {{ has_variable = {var(n, 'dest')} }} value = var:{var(n, 'dest')} }}",
+                "}"]
+        # The card's bars (owner, 2026-11-14): each reading as a share of its
+        # full, 0 to 1, and the leg flown so far.
+        for name, now, full in (("strength", var(n, "strength"), var(n, "strength_full")),
+                                ("dv", var(n, "dv_value"), var(n, "dv_capacity")),
+                                ("supply", var(n, "supply_value"), var(n, "endurance")),
+                                ("marines", var(n, "marines_value"), var(n, "marine_capacity"))):
+            out += [f"sr_disp_fl_{n}_{name}_frac = {{",
+                    "\tvalue = 0",
+                    f"\tif = {{ limit = {{ {full} > 0 }} value = {now} divide = {full} }}",
+                    "\tmin = 0",
+                    "\tmax = 1",
+                    "}"]
+        out += [f"sr_disp_fl_{n}_transit_frac = {{",
+                "\tvalue = 0",
+                "\tif = {",
+                f"\t\tlimit = {{ has_variable = {var(n, 'leg_months')} var:{var(n, 'leg_months')} > 0 }}",
+                f"\t\tvalue = var:{var(n, 'leg_months')}",
+                f"\t\tsubtract = sr_disp_fl_{n}_months_left",
+                f"\t\tdivide = var:{var(n, 'leg_months')}",
+                "\t}",
+                "\tmin = 0",
+                "\tmax = 1",
                 "}"]
         out += [f"sr_disp_fl_{n}_combat = {{",
                 "\tvalue = 0",
@@ -2268,21 +2303,72 @@ def _button(name: str, sgui: str, n: int) -> list[str]:
                      f'tooltip = "{_reasoned(sgui, n)}"')
 
 
+NUMERALS = ("I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX")
+# A location's world, in Locations and at the head of a fleet's card: the
+# colonies' kind-of-world icons, by the worlds found there, and for Earth
+# Orbit, where there is no colony, the Earth in its orbit ring
+# (space_race_gui_icons.md, "Locations"). te_sr_fleet_row's nine literal
+# textures are these (test_space_race_layout.py holds the two equal).
+_SR_ICONS = "gfx/interface/icons/space_race_icons"
+LOCATION_ICONS = {
+    "earth": f"{_SR_ICONS}/location_earth.dds",
+    "inner": f"{_SR_ICONS}/colony_venus.dds", "mars": f"{_SR_ICONS}/colony_mars.dds",
+    "asteroids": f"{_SR_ICONS}/colony_asteroid.dds", "jupiter": f"{_SR_ICONS}/colony_jovian.dds",
+    "saturn": f"{_SR_ICONS}/colony_saturnian.dds", "uranus": f"{_SR_ICONS}/colony_uranian.dds",
+    "neptune": f"{_SR_ICONS}/colony_neptunian.dds", "kuiper": f"{_SR_ICONS}/colony_dwarf.dds",
+}
+
+
+def _frac(name: str) -> str:
+    """A bar's value: a display value of 0 to 1."""
+    return f'value = "[FixedPointToFloat( {_sv(name)} )]"'
+
+
+def fleet_flag(n: int) -> str:
+    """The client-side flag that rolls slot n's card up. It says its default,
+    as the sections' flags do: the card is open until closed."""
+    return f"sr_panel_fleet_{n}_closed"
+
+
 def _fleet_row(n: int) -> list[str]:
+    closed = f"GetVariableSystem.Exists('{fleet_flag(n)}')"
+    toggle = f"onclick = \"[GetVariableSystem.Toggle('{fleet_flag(n)}')]\""
+    strength = f'raw_text = "#v [{_sv(var(n, "strength"))}|0]/[{_sv(var(n, "strength_full"))}|0]#!"'
+    roles_tt = f'tooltip = "je_space_race_widget_fl_{n}_roles_tt"'
     out = ["\t\tte_sr_fleet_row = {"]
     out += _override("fl_visible", f'visible = "[{_ge(f"sr_disp_fl_{n}", 1)}]"')
+    # The head: the slot's number, where it is, its strength while the card is
+    # rolled up (its ships on hover, as each role cell), and the two buttons
+    # that roll the card up and down, one shown.
+    out += _override("fl_number", f'raw_text = "{NUMERALS[n - 1]}"')
+    for lc in LOCATIONS:
+        out += _override(f"fl_place_{lc.key}", f'visible = "[{_eq(f"sr_disp_fl_{n}_place", lc.code)}]"')
     out += _override("fl_where", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_fl_{n}_where_name')]\"")
+    out += _override("fl_roll_up", f'visible = "[Not( {closed} )]"', toggle)
+    out += _override("fl_rolled_visible", f'visible = "[{closed}]"')
+    out += _override("fl_strength_brief", strength, roles_tt)
+    out += _override("fl_roll_down", toggle)
     out += _override("fl_transit_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}", 2)}]"')
     out += _override("fl_transit", f'text = "je_space_race_widget_fl_{n}_transit"')
-    # The type underlines the strength for its hover; #v keeps its value color.
-    out += _override("fl_strength", f'raw_text = "#v [{_sv(var(n, "strength"))}|0]/[{_sv(var(n, "strength_full"))}|0]#!"',
-                     f'tooltip = "je_space_race_widget_fl_{n}_roles_tt"')
+    out += _override("fl_transit_frac", _frac(f"sr_disp_fl_{n}_transit_frac"))
+    out += _override("fl_body_visible", f'visible = "[Not( {closed} )]"')
+    # Its ships by role: the icon lit with any, dimmed with none.
+    out += _override("fl_roles_tooltip", roles_tt)
+    for role in ROLES:
+        count = var(n, f"{role.key}_value")
+        out += _override(f"fl_role_{role.key}_lit", f'visible = "[{_ge(count, 1)}]"')
+        out += _override(f"fl_role_{role.key}_dim", f'visible = "[Not( {_ge(count, 1)} )]"')
+        out += _override(f"fl_role_{role.key}", f'raw_text = "[{_sv(count)}|0]"')
+    # The bars: now of full, the figure under each.
+    out += _override("fl_strength", strength)
+    out += _override("fl_strength_frac", _frac(f"sr_disp_fl_{n}_strength_frac"))
     out += _override("fl_drive", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_fl_{n}_drive_name')]\"")
     out += _override("fl_refit_visible", f'visible = "[{_ge(f"sr_disp_fl_{n}_refit_left", 1)}]"')
     out += _override("fl_refit", f'raw_text = "[{_sv(f"sr_disp_fl_{n}_refit_left")}|0]"')
-    out += _override("fl_dv", f'raw_text = "[{_sv(var(n, "dv_value"))}|0]"')
-    out += _override("fl_supply", f'raw_text = "[{_sv(var(n, "supply_value"))}|0]"')
-    out += _override("fl_marines", f'raw_text = "[{_sv(var(n, "marines_value"))}|0]"')
+    for name, now, full in (("dv", "dv_value", "dv_capacity"), ("supply", "supply_value", "endurance"),
+                            ("marines", "marines_value", "marine_capacity")):
+        out += _override(f"fl_{name}", f'raw_text = "[{_sv(var(n, now))}|0]/[{_sv(var(n, full))}|0]"')
+        out += _override(f"fl_{name}_frac", _frac(f"sr_disp_fl_{n}_{name}_frac"))
     out += _override("fl_orders_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}", 1)}]"')
     # The destination button opens the slot's destination popup (UI pass
     # design § 4; te_popup sr_dest_<n>). It greys on sr_fleet_pick_sgui's
@@ -2333,8 +2419,9 @@ def _fleet_row(n: int) -> list[str]:
 
 def _location_row(lc: glw.Location) -> list[str]:
     k = lc.key
-    out = ["\t\tte_sr_location_row = {"]
-    out += _override("loc_name", f'text = "sr_loc_name_{k}"')
+    out = ["\t\tte_sr_location_cell = {"]
+    out += _override("loc_name", f'tooltip = "sr_loc_name_{k}"')
+    out += _override("loc_icon", f'texture = "{LOCATION_ICONS[k]}"')
     out += _override("loc_ours", f'raw_text = "[{_sv(f"sr_disp_loc_ours_{k}")}|0]"')
     out += _override("loc_flag_visible", f'visible = "[{_eq(f"sr_disp_loc_flag_{k}", 1)}]"')
     out += _override("loc_context", f"datacontext = \"[JournalEntry.GetCountry.MakeScope.Var('sr_ls_cap_{k}').GetState]\"")
@@ -2491,8 +2578,9 @@ def _xfer_body(n: int) -> list[str]:
 def _dest_row(n: int, b: glw.Location) -> list[str]:
     """Slot n's row for the location b in its destination popup (UI pass
     design § 4): hidden for where the fleet is; the leg's months and delta-v
-    (red when the fleet carries less), from Earth the window toward b's body,
-    our worlds there, the enemy's strength there and on its way, and Choose."""
+    (red when the fleet carries less), from Earth the window toward b's body
+    (blank at a torch or antimatter pace, which leaves in any month), our
+    worlds there, the enemy's strength there and on its way, and Choose."""
     k = b.key
     loc, dv, leg_dv = var(n, "loc_value"), var(n, "dv_value"), var(n, f"leg_dv_{k}")
     covered = f"GreaterThanOrEqualTo_CFixedPoint( {_sv(dv)}, {_sv(leg_dv)} )"
@@ -2509,8 +2597,12 @@ def _dest_row(n: int, b: glw.Location) -> list[str]:
         rows += _override("dr_win_open_visible", "visible = no")
         rows += _override("dr_win_wait", "visible = no")
     else:
-        rows += _override("dr_win_open_visible", f'visible = "[And( {at_earth}, {_eq(wait, 0)} )]"')
-        rows += _override("dr_win_wait", f'visible = "[And( {at_earth}, {_ge(wait, 1)} )]"',
+        # Blank for a torch or antimatter pace (2 and up, rapid response hulls' one
+        # step ahead included): those drives leave in any month, so "Open now" and
+        # "In N months" would read as a wait the fleet doesn't have.
+        gated = f"Not( {_ge(var(n, 'pace'), 2)} )"
+        rows += _override("dr_win_open_visible", f'visible = "[And3( {at_earth}, {gated}, {_eq(wait, 0)} )]"')
+        rows += _override("dr_win_wait", f'visible = "[And3( {at_earth}, {gated}, {_ge(wait, 1)} )]"',
                           f'text = "je_space_race_widget_win_wait_{b.body}"')
     rows += _override("dr_worlds", f'raw_text = "[{_sv(f"sr_disp_loc_worlds_{k}")}|0]"')
     rows += _override("dr_enemy", f'raw_text = "[{_sv(f"sr_loc_ai_enemy_fleets_{k}")}|0]"')
@@ -2590,8 +2682,9 @@ def render_gui() -> str:
     out = [HEADER.rstrip("\n"),
            "### Solar System Colonization's Fleets and Locations rows, from",
            "### gen_space_fleets (slice 6 design § 16). The row types are in",
-           "### space_race_widget.gui: te_sr_fleet_row (Fleets, one per slot) and",
-           "### te_sr_location_row (Locations, one per location). Each value is a display",
+           "### space_race_widget.gui: te_sr_fleet_row (Space Fleets, a card per slot,",
+           "### rolled up and down on its own client-side flag, sr_panel_fleet_<n>_closed) and",
+           "### te_sr_location_cell (Locations, a column per location). Each value is a display",
            "### value of sr_fleets_display_generated.txt; the scripted GUIs are in",
            "### sr_fleet_sguis.txt and take the slot as scope:op. Then the popups'",
            "### bodies: Transfer's (te_sr_xfer_popup_body), the destination's",
@@ -2604,14 +2697,16 @@ def render_gui() -> str:
            "\ttype te_sr_fleet_rows = flowcontainer {",
            "\t\tdirection = vertical",
            "\t\tignoreinvisible = yes",
-           "\t\tspacing = 4"]
+           "\t\tspacing = 6"]
     for n in range(1, SLOTS + 1):
         out += [""] + _fleet_row(n)
     out += ["\t}", "",
-            "\ttype te_sr_location_rows = flowcontainer {",
-            "\t\tdirection = vertical",
-            "\t\tignoreinvisible = yes",
-            "\t\tspacing = 2"]
+            "\t### Locations, a strip: the captions' column, then a column per location,",
+            "\t### from Earth outward.",
+            "\ttype te_sr_location_cells = flowcontainer {",
+            "\t\tdirection = horizontal",
+            "",
+            "\t\tte_sr_location_captions = {}"]
     for lc in LOCATIONS:
         out += [""] + _location_row(lc)
     out += ["\t}", "",

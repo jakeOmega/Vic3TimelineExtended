@@ -1539,7 +1539,7 @@
           "game_date": [
            [
             ">",
-            "1840.1.1"
+            "1843.1.1"
            ],
            [
             "<",
@@ -3074,6 +3074,10 @@
    "map_texture": [
     "=",
     "\"gfx/map/map_painting/sea_conditions_map_patterns/sea_conditions_good.dds\""
+   ],
+   "naval_battle_condition": [
+    "=",
+    "naval_condition_calm_waters"
    ]
   }
  ],
@@ -3192,6 +3196,10 @@
    "map_texture": [
     "=",
     "\"gfx/map/map_painting/sea_conditions_map_patterns/sea_conditions_bad.dds\""
+   ],
+   "naval_battle_condition": [
+    "=",
+    "naval_condition_fog"
    ]
   }
  ],
@@ -3647,6 +3655,10 @@
    "map_texture": [
     "=",
     "\"gfx/map/map_painting/sea_conditions_map_patterns/sea_conditions_bad.dds\""
+   ],
+   "naval_battle_condition": [
+    "=",
+    "naval_condition_cyclone"
    ]
   }
  ],
@@ -3910,6 +3922,10 @@
    "map_texture": [
     "=",
     "\"gfx/map/map_painting/sea_conditions_map_patterns/sea_conditions_bad.dds\""
+   ],
+   "naval_battle_condition": [
+    "=",
+    "naval_condition_ice"
    ]
   }
  ],
@@ -4028,6 +4044,10 @@
    "map_texture": [
     "=",
     "\"gfx/map/map_painting/sea_conditions_map_patterns/sea_conditions_bad.dds\""
+   ],
+   "naval_battle_condition": [
+    "=",
+    "naval_condition_rough_waters"
    ]
   }
  ],
@@ -4148,6 +4168,10 @@
    "map_texture": [
     "=",
     "\"gfx/map/map_painting/sea_conditions_map_patterns/sea_conditions_bad.dds\""
+   ],
+   "naval_battle_condition": [
+    "=",
+    "naval_condition_strong_winds"
    ]
   }
  ],
@@ -4603,6 +4627,10 @@
    "map_texture": [
     "=",
     "\"gfx/map/map_painting/sea_conditions_map_patterns/sea_conditions_bad.dds\""
+   ],
+   "naval_battle_condition": [
+    "=",
+    "naval_condition_tropical_storm"
    ]
   }
  ]

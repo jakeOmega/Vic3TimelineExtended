@@ -1,0 +1,68 @@
+﻿# ============================================================================
+# OPERATION POLO — which country formed India (BHA) may be offered
+#
+# Read by operation_polo_on_action (common/on_actions/extra_on_actions.txt),
+# in both its existence test and its random pick, so the two cannot drift
+# apart. The event it opens is formation_te.10 (events/
+# te_formable_formation_events.txt), whose first two options annex the
+# target outright.
+#
+# The event is for the holdout India's formation leaves behind: a Muslim-ruled
+# state inside the core, which can_be_unification_target keeps out of the
+# unification play (Hyderabad under the Nizam). Until 2026-11-20 the only
+# place test was a shared border, and the rank test let an Unrecognized
+# Regional Power through, so every small Muslim neighbor of a formed India
+# qualified, Persia, Afghanistan and Oman among them. An AI India that is a
+# Major Power picks an annexing option three times in four, so Persia was
+# annexed whole, without a war, in game after game.
+# ============================================================================
+
+# State scope. One of India's core states: the states list of BHA in
+# common/country_formation/te_formable_countries.txt, in its order.
+# test_operation_polo_target.py fails if the two lists differ.
+te_is_india_core_state = {
+	OR = {
+		state_region = s:STATE_ASSAM
+		state_region = s:STATE_AWADH
+		state_region = s:STATE_BIHAR
+		state_region = s:STATE_BOMBAY
+		state_region = s:STATE_MALWA
+		state_region = s:STATE_CIRCARS
+		state_region = s:STATE_DELHI
+		state_region = s:STATE_GUJARAT
+		state_region = s:STATE_HYDERABAD
+		state_region = s:STATE_MADRAS
+		state_region = s:STATE_MYSORE
+		state_region = s:STATE_CENTRAL_PROVINCES
+		state_region = s:STATE_WEST_BENGAL
+		state_region = s:STATE_ORISSA
+		state_region = s:STATE_RAJPUTANA
+		state_region = s:STATE_TRAVANCORE
+		state_region = s:STATE_KURNOOL
+		state_region = s:STATE_BUNDELKHAND
+		state_region = s:STATE_AGRA
+	}
+}
+
+# Country scope; THIS = the candidate holdout. Cheap tests first, the
+# neighbor walk last.
+te_operation_polo_target = {
+	NOT = { this = c:BHA }
+	NOT = { is_country_type = decentralized }
+	is_subject = no
+	# Below Minor Power: Insignificant Power (2) or Unrecognized Power (1). Not
+	# `NOT = { country_rank >= rank_value:minor_power }`, which also passed an
+	# Unrecognized Regional Power (3), the unrecognized rank with a Minor
+	# Power's prestige thresholds.
+	country_rank <= rank_value:insignificant_power
+	OR = {
+		country_has_state_religion = rel:sunni
+		country_has_state_religion = rel:shiite
+		country_has_state_religion = rel:ibadi
+	}
+	# Inside the core: a holdout governed from one of India's core states.
+	capital = { te_is_india_core_state = yes }
+	any_scope_state = {
+		any_neighbouring_state = { owner = c:BHA }
+	}
+}

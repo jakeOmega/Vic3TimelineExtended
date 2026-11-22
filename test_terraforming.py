@@ -102,7 +102,9 @@ class TechnologyTest(unittest.TestCase):
         self.assertIn("category = society", tech)
         self.assertEqual(re.findall(r"^\t\t(\w+)$", _block(tech, "unlocking_technologies"), re.M),
                          ["space_colonization", "geoengineering"])
-        self.assertEqual(_squash(_block(tech, "modifier")), f"{gss.TERRA_MARKER} = yes")
+        # The colonies' marker, and Local Climate's Winter Sun Relief at home (test_local_climate_comfort.py).
+        self.assertEqual(_squash(_block(tech, "modifier")),
+                         f"{gss.TERRA_MARKER} = yes state_climate_sun_relief_add = 0.7")
         self.assertIn("ai_weight = { value = 1 }", _squash(tech))
         # Both prerequisites are society technologies (same-category rule).
         era_12 = _strip(_read("common/technology/technologies/era_12.txt"))
@@ -378,7 +380,7 @@ class ConsoleTest(unittest.TestCase):
     def test_ten_years_from_the_console(self):
         event = _squash(_block(_strip(_read("events/te_debug_space_race_events.txt")), "te_debug_space_race.4"))
         self.assertIn("name = te_debug_space_race.4.i trigger = { sr_colonies_contested_enabled = yes } "
-                      "sr_terra_debug_advance = yes sr_emig_refresh_modifiers = yes", event)
+                      "sr_terra_debug_advance = yes }", event)
         self.assertTrue(LOC["te_debug_space_race.4.i"])
         advance = _squash(_block(EFFECTS, "sr_terra_debug_advance"))
         for site in TERRA:

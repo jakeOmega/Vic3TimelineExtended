@@ -604,7 +604,8 @@ un_docket_take_up_grievance = {
 }
 
 # A war of aggression against a member (item 2): the attacked member with the
-# most power may appeal, naming its most devastated state.
+# most power may appeal, naming its most devastated state (none, when it
+# qualified by occupation alone: the event's place line needs the scope).
 # Scope: any, with the temporary scope un_dkt_found_war
 un_docket_take_up_war = {
 	scope:un_dkt_found_war = {

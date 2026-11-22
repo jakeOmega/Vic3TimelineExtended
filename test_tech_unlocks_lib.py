@@ -89,6 +89,25 @@ class IterTopLevelBlocksTests(unittest.TestCase):
             "plain_id",
         ])
 
+    def test_an_id_may_hold_a_hyphen(self) -> None:
+        # Regression (#1697): `pm_e-commerce` and `REPLACE:pm_coal-fired_plant`
+        # did not match, so their blocks fell out of the walk and
+        # /tech-unlocks left them out.
+        text = (
+            "pm_e-commerce = {\n"
+            "\tunlocking_technologies = { e-commerce }\n"
+            "}\n"
+            "REPLACE:pm_coal-fired_plant = {\n"
+            "\tunlocking_technologies = { steam_turbine }\n"
+            "}\n"
+        )
+        out = [(tid, lib.parse_unlocking_techs(body))
+               for tid, body in lib.iter_top_level_blocks(text)]
+        self.assertEqual(out, [
+            ("pm_e-commerce", ["e-commerce"]),
+            ("pm_coal-fired_plant", ["steam_turbine"]),
+        ])
+
 
 class ParseUnlockingTechsTests(unittest.TestCase):
     def test_single_tech(self) -> None:
@@ -252,6 +271,40 @@ class BuildTechUnlockIndexTests(unittest.TestCase):
         )
         self.assertEqual(idx["tech_m"]["by_type"]["Buildings"][0]["source"], "mod")
         self.assertEqual(idx["tech_v"]["by_type"]["Buildings"][0]["source"], "vanilla")
+
+
+class ModIndexTests(unittest.TestCase):
+    """The index over the mod's own files names every production method and
+    law the parser sees with an `unlocking_technologies`, whatever its id's
+    shape. The walker is a regex, so an id it cannot spell drops out
+    without a word (#1697: seven hyphenated production methods)."""
+
+    def test_every_gated_pm_and_law_is_indexed(self) -> None:
+        from paradox_file_parser import ParadoxFileParser
+
+        repo = Path(__file__).resolve().parent
+        idx = lib.build_tech_unlock_index(repo)
+        for entity_type, subdir in (("PMs", "production_methods"), ("Laws", "laws")):
+            with self.subTest(entity_type=entity_type):
+                indexed = {(e["id"], tid) for tid, rec in idx.items()
+                           for e in rec["by_type"].get(entity_type, [])}
+                parser = ParadoxFileParser()
+                for path in sorted((repo / "common" / subdir).glob("*.txt")):
+                    parser.parse_file(str(path))
+                expected = set()
+                for eid, raw in parser.data.items():
+                    body = raw[1] if isinstance(raw, tuple) else raw
+                    if not isinstance(body, dict):
+                        continue
+                    techs = body.get("unlocking_technologies")
+                    if isinstance(techs, tuple):
+                        techs = techs[1]
+                    for tid in techs or ():
+                        expected.add((eid, tid))
+                self.assertTrue(expected)
+                self.assertEqual(sorted(expected - indexed), [])
+        self.assertIn("pm_e-commerce",
+                      [e["id"] for e in idx["e-commerce"]["by_type"]["PMs"]])
 
 
 if __name__ == "__main__":

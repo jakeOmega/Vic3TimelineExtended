@@ -57,6 +57,9 @@ import os
 import re
 from dataclasses import dataclass, field
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
+
 
 @dataclass
 class Contribution:
@@ -81,14 +84,20 @@ class EmploymentFlag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[EmploymentFlag] = field(default_factory=list)
     coverage: dict = field(default_factory=dict)
 
-
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
-)
+    @property
+    def failing(self) -> list:
+        """What `--strict` fails on: a mod-relevant flag with no `# REVIEWED`
+        exemption (a vanilla-only flag never counts), and any building skipped
+        as too large to enumerate, since it then went unaudited (#681)."""
+        out: list = [f for f in self.unreviewed if f.mod_relevant]
+        skipped = self.coverage.get("buildings_skipped_large", 0)
+        if skipped:
+            out.append(f"buildings skipped (combo count > {_COMBO_CAP}): {skipped}")
+        return out
 
 # Guard against pathological Cartesian products after removing independent
 # employment-neutral groups. Record any remaining oversized building as skipped.
@@ -100,15 +109,6 @@ _EMP_SUFFIX = "_add"
 # building_modifiers) adds share the "unscaled" bucket.
 _SCALING_BLOCKS = ("workforce_scaled", "level_scaled", "unscaled")
 _BARE_BUCKET = "unscaled"
-
-
-def _parse_reviewed(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
 
 
 def _unwrap(value):
@@ -356,7 +356,7 @@ def _audit_building(
         # any, else the most-negative contributing mod PM's.
         bld_loc = building_locations.get(building)
         pm_loc = pm_locations.get(worst_pm)
-        exemption = _parse_reviewed(bld_loc[2] if bld_loc else None) or _parse_reviewed(
+        exemption = parse_reviewed(bld_loc[2] if bld_loc else None) or parse_reviewed(
             pm_loc[2] if pm_loc else None
         )
         anchor = bld_loc or pm_loc
@@ -706,10 +706,8 @@ def render_report(result: AuditResult) -> str:
 def strict_exit_code(result: AuditResult) -> int:
     """Exit status for `--strict` (CI mode): 1 if a mod-relevant flag lacks a
     `# REVIEWED` exemption, or if any building was skipped as too large to
-    enumerate (it then went unaudited)."""
-    if result.coverage.get("buildings_skipped_large", 0) > 0:
-        return 1
-    return 1 if any(f.mod_relevant and not f.exemption for f in result.flags) else 0
+    enumerate (it then went unaudited): `AuditResult.failing`."""
+    return 1 if result.failed else 0
 
 
 def regenerate(mod_state) -> dict:
@@ -717,10 +715,7 @@ def regenerate(mod_state) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
     report = render_report(result)
-    out_path = os.path.join(mod_path, "docs", "engine", "pm_employment_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(report)
+    write_text(os.path.join(mod_path, "docs", "engine", "pm_employment_report.md"), report)
     mod_unrev = sum(1 for f in result.flags if f.mod_relevant and not f.exemption)
     mod_exemp = sum(1 for f in result.flags if f.mod_relevant and f.exemption)
     vanilla = sum(1 for f in result.flags if not f.mod_relevant)
@@ -734,14 +729,19 @@ def regenerate(mod_state) -> dict:
     }
 
 
-if __name__ == "__main__":
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 as `strict_exit_code` says."""
     from path_constants import mod_path
-    import mod_state_server
-    ms = mod_state_server.cli_mod_state()
-    result = audit(ms, mod_path=mod_path)
-    print(render_report(result))
-    # --strict: CI mode. See strict_exit_code.
-    if "--strict" in sys.argv:
-        raise SystemExit(strict_exit_code(result))
+
+    def run(args) -> AuditResult:
+        import mod_state_server
+        return audit(mod_state_server.cli_mod_state(), mod_path=mod_path)
+
+    return cli_main(run, lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0],
+                    strict_help="CI mode: exit 1 on an unreviewed mod-relevant flag or a "
+                                "building skipped as too large to enumerate.")
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

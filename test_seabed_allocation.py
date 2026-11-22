@@ -115,24 +115,41 @@ class PoolsHoldTest(unittest.TestCase):
     def test_full_pools(self):
         """Little demolition: the pools fill and builders sit at room 0 with
         construction under way, the review's H1 case, in every regime."""
+        full = waiting = 0
+
+        def check(world, when):
+            nonlocal full, waiting
+            self._check(world, when)
+            if when == "month":
+                full += sum(1 for b in m.BASINS if world.basin_records(b) == m.POOLS[b])
+                waiting += sum(1 for c in world.countries.values() if c.alive and m.pending(world, c.cid) > 0)
         for i in range(WORLDS // 2):
             rng = random.Random(6300 + i)
             world = m.random_world(rng, regime=(m.OPEN, m.REGULATED, m.SCRAMBLE)[i % 3])
-            run(world, rng, YEARS, check=self._check, annex=0, split=0, demolish=0.002, conquest=0.01)
+            run(world, rng, YEARS, check=check, annex=0, split=0, demolish=0.002, conquest=0.01)
             self.assertGreater(sum(world.basin_records(b) for b in m.BASINS), 0)
+        # the case itself: the builders' pace (seabed_model.build_pace) fills pools
+        # within the run, and levels wait at room 0
+        self.assertGreater(full, 0, "no pool was ever full")
+        self.assertGreater(waiting, 0, "no level ever waited for a licence")
 
     def test_one_unlicensed_level_at_most(self):
         """Without conquest moving one between owners, a country never has more
         than the one level the gate's second branch let in at room 0."""
+        waiting = 0
+
         def check(world, when):
+            nonlocal waiting
             self._check(world, when)
             for c in world.countries.values():
                 if c.alive:
                     self.assertLessEqual(m.pending(world, c.cid), 1, c.cid)
+                    waiting += m.pending(world, c.cid)
         for i in range(WORLDS // 2):
             rng = random.Random(6100 + i)
             world = m.random_world(rng)
             run(world, rng, YEARS, check=check, annex=0, split=0, conquest=0)
+        self.assertGreater(waiting, 0, "the gate's second branch never let a level in")
 
     def test_leases(self):
         """Treaty leases start and end at random between claimants, in every
@@ -197,9 +214,13 @@ class GrandfatheredTest(unittest.TestCase):
             since = dict(world.no_share)
 
     def test_old_save(self):
+        # up to two fifths of the smallest pool in a state, in half the coastal
+        # states: a basin's old levels come to a third to a half of its pool on
+        # average, and now and then to more than the pool
+        most = 2 * min(m.POOLS.values()) // 5
         for i in range(WORLDS // 2):
             rng = random.Random(7000 + i)
-            world = m.random_world(rng, old_save_levels=40)
+            world = m.random_world(rng, old_save_levels=most)
             levels = {b: sum(s.levels for s in world.states.values() if s.basin == b) for b in m.BASINS}
             for cid in world.countries:
                 m.record_country(world, cid)          # the first recording: no shares exist yet
@@ -215,11 +236,13 @@ class GrandfatheredTest(unittest.TestCase):
             self._never_grows_over_pool(world, rng, YEARS, annex=0.02, split=0.03)
 
     def test_an_over_pool_basin_gives_no_room(self):
+        over = m.POOLS["arctic"] * 3 // 2                            # half as much again as the Arctic's pool
+        self.assertGreater(over, m.POOLS["arctic"])
         world = m.World({0: m.Country(0, policy=m.SPONSOR, navy=50), 1: m.Country(1, policy=m.SPONSOR, navy=50)},
-                        {0: m.State(0, "arctic", 0, levels=150), 1: m.State(1, "arctic", 1)})
+                        {0: m.State(0, "arctic", 0, levels=over), 1: m.State(1, "arctic", 1)})
         m.yearly_pass(world)
-        self.assertEqual(world.basin_records("arctic"), 150)
-        self.assertEqual(world.countries[0].ent["arctic"], 150)      # grandfathered
+        self.assertEqual(world.basin_records("arctic"), over)
+        self.assertEqual(world.countries[0].ent["arctic"], over)     # grandfathered
         self.assertEqual(world.countries[0].unbuilt["arctic"], 0)
         self.assertEqual(world.countries[1].unbuilt["arctic"], 0)    # no room in an over-pool basin
         self.assertGreater(world.countries[1].unbuilt["pacific"], 0)  # but its distant claims stand
@@ -288,6 +311,8 @@ class UnderConstructionBranchTest(unittest.TestCase):
     at 50/50 fill their shares; A keeps a construction going and queues
     another level every month."""
 
+    MONTHS = 24
+
     def _arctic(self, control):
         world = m.World({0: m.Country(0, policy=m.SPONSOR), 1: m.Country(1, policy=m.SPONSOR)},
                         {0: m.State(0, "arctic", 0), 1: m.State(1, "arctic", 1)},
@@ -297,7 +322,7 @@ class UnderConstructionBranchTest(unittest.TestCase):
             world.states[cid].levels = world.countries[cid].unbuilt["arctic"]
             m.record_country(world, cid)
         world.states[0].queued = 1          # one level of A's still under construction
-        for month in range(24):
+        for month in range(self.MONTHS):
             if month and month % 12 == 0:
                 m.yearly_pass(world)
             s = world.states[0]
@@ -309,11 +334,12 @@ class UnderConstructionBranchTest(unittest.TestCase):
         return world
 
     def test_the_reviews_leak_before_the_fix(self):
+        # a level a month over the pool (the review counted 124 on the pool of 100 it had then)
         world = self._arctic(control=True)
-        self.assertEqual(world.basin_records("arctic"), 124)
-        self.assertEqual(world.no_share["arctic"], 24)
-        # what seabed_cap now reads as BROKEN, though the ceiling absorbs the 24
-        self.assertEqual(world.stamped_no_share, 24)
+        self.assertEqual(world.basin_records("arctic"), m.POOLS["arctic"] + self.MONTHS)
+        self.assertEqual(world.no_share["arctic"], self.MONTHS)
+        # what seabed_cap now reads as BROKEN, though the ceiling absorbs them
+        self.assertEqual(world.stamped_no_share, self.MONTHS)
 
     def test_the_fix_keeps_the_pool(self):
         world = self._arctic(control=False)
@@ -329,7 +355,8 @@ class UnderConstructionBranchTest(unittest.TestCase):
         m.yearly_pass(world)                           # and the sharing gives it distant shares
         m.record_country(world, 0)
         self.assertEqual(m.pending(world, 0), 0)       # the waiting level takes one of them
-        self.assertEqual(world.basin_records("arctic") - world.states[1].records(), 100 - 50)
+        pool = m.POOLS["arctic"]                       # A's Arctic licences are still its half of the pool
+        self.assertEqual(world.basin_records("arctic") - world.states[1].records(), pool - pool // 2)
         self.assertEqual(world.basin_records("arctic"), m.POOLS["arctic"])
         self.assertEqual(sum(s.distant() for s in world.states.values()), 1)
 
@@ -507,11 +534,16 @@ class RegulatedTest(unittest.TestCase):
         countries = {cid: m.Country(cid, policy=m.SPONSOR, navy=10, eligible=True) for cid in range(3)}
         countries[3] = m.Country(3, policy=m.SPONSOR, navy=10)
         states = {cid: m.State(cid, "pacific", cid) for cid in range(4)}
-        states[0].levels = 120
+        # two fifths of the pool: more than its third of the reserved half and
+        # its quarter of the open half together
+        pool = m.POOLS["pacific"]
+        held = 2 * pool // 5
+        self.assertGreater(held, (pool // 2) / 3 + (pool - pool // 2) / 4)
+        states[0].levels = held
         world = m.World(countries, states, regime=m.REGULATED)
         m.yearly_pass(world)
         ent = {cid: world.countries[cid].ent["pacific"] for cid in range(4)}
-        self.assertEqual(ent[0], 120)
+        self.assertEqual(ent[0], held)
         self.assertEqual(sum(ent.values()), m.POOLS["pacific"])
         # the other two parties still share what is left of the reserved half
         self.assertGreater(ent[1], ent[3])
@@ -680,14 +712,18 @@ class WaterFillingTest(unittest.TestCase):
         self.assertGreater(most, 1)
 
     def test_freezing_matches_the_spec(self):
-        """Three equal claimants on a pool of 300; one holds 150. It is frozen
-        at 150 and the others share the rest."""
+        """Three equal claimants on the Pacific; one holds half the pool, more
+        than its third. It is frozen at its holdings and the other two share
+        the rest equally, the odd licence going to the first of them."""
+        pool = m.POOLS["pacific"]
+        half = pool // 2
+        rest = pool - half
         countries = {cid: m.Country(cid, policy=m.SPONSOR, navy=10) for cid in range(3)}
         states = {cid: m.State(cid, "pacific", cid) for cid in range(3)}
-        states[0].levels = 150
+        states[0].levels = half
         world = m.World(countries, states)
         m.yearly_pass(world)
-        self.assertEqual([world.countries[c].ent["pacific"] for c in range(3)], [150, 75, 75])
+        self.assertEqual([world.countries[c].ent["pacific"] for c in range(3)], [half, rest - rest // 2, rest // 2])
         self.assertEqual(world.countries[0].unbuilt["pacific"], 0)
 
 
@@ -705,9 +741,19 @@ class FloorTest(unittest.TestCase):
         m.yearly_pass(w)
         return w
 
+    def _assert_re_divided(self, w):
+        """Country 0 has no floor against the rival's buildup: its Pacific
+        claims are what its weight wins (about a hundredth of the pool; a
+        licence more at most from the rounding), under a thirtieth of the pool
+        where a floor would have kept three quarters of its half."""
+        c0, c1 = w.countries[0], w.countries[1]
+        by_weight = m.POOLS["pacific"] * c0.weight["pacific"] / (c0.weight["pacific"] + c1.weight["pacific"])
+        self.assertLessEqual(c0.unbuilt["pacific"], by_weight + 1)
+        self.assertLess(c0.unbuilt["pacific"], m.POOLS["pacific"] // 30)
+
     def test_sponsor_claims_fade_by_a_quarter_at_most(self):
         w = self._one_basin_world()
-        before = w.countries[0].unbuilt["pacific"]            # 150
+        before = w.countries[0].unbuilt["pacific"]            # half the pool
         w.countries[1].navy = 1000                            # a rival's buildup
         m.yearly_pass(w)
         self.assertGreaterEqual(w.countries[0].unbuilt["pacific"], math.floor(0.75 * before))
@@ -716,12 +762,12 @@ class FloorTest(unittest.TestCase):
         w = self._one_basin_world(policy=m.SURVEY)
         w.countries[1].navy = 1000
         m.yearly_pass(w)
-        self.assertLess(w.countries[0].unbuilt["pacific"], 10)
+        self._assert_re_divided(w)
 
     def test_mid_year_sharing_honours_the_stored_floor(self):
         w = self._one_basin_world()
         w.countries[1].navy = 1000
-        m.yearly_pass(w)                                      # floor fixed: 112
+        m.yearly_pass(w)                                      # the floor is fixed: three quarters of its claims
         kept = w.countries[0].unbuilt["pacific"]
         m.yearly_pass(w, first_of_year=False)
         self.assertEqual(w.countries[0].unbuilt["pacific"], kept)   # no 0.75 x 0.75
@@ -732,14 +778,14 @@ class FloorTest(unittest.TestCase):
         m.yearly_pass(w)
         w.countries[0].policy = m.SURVEY
         m.yearly_pass(w, first_of_year=False)
-        self.assertLess(w.countries[0].unbuilt["pacific"], 10)
+        self._assert_re_divided(w)
 
     def test_scramble_voids_floors(self):
         w = self._one_basin_world()
         w.regime = m.SCRAMBLE
         w.countries[1].navy = 1000
         m.yearly_pass(w)
-        self.assertLess(w.countries[0].unbuilt["pacific"], 10)
+        self._assert_re_divided(w)
 
     def test_barred_southern_floor_is_holdings(self):
         # country 0 has a Southern coast, claims and five levels there; then the bar
@@ -756,29 +802,34 @@ class FloorTest(unittest.TestCase):
         self.assertEqual(w.countries[0].unbuilt["southern"], 0)
 
     def test_floors_scale_down_to_fit(self):
-        # country 1 holds 280 grandfathered Pacific licences; country 0's floor (112) can't fit beside them
+        # country 1 holds all of the Pacific but a fifteenth, grandfathered; country 0's
+        # floor (three quarters of its half of the pool) can't fit beside them
+        pool = m.POOLS["pacific"]
+        left = pool // 15
         w = self._one_basin_world()
-        w.states[1].levels = 280
-        w.states[1].lic["pacific"] = 280
+        w.states[1].levels = pool - left
+        w.states[1].lic["pacific"] = pool - left
         w.countries[1].unbuilt["pacific"] = 0                  # grandfathered: no claims of its own left
         m.yearly_pass(w)
+        self.assertGreater(w.countries[0].floor_prot["pacific"], left)   # the claims its floor protects don't fit
         ent = {cid: w.countries[cid].ent["pacific"] for cid in (0, 1)}
         held = sum(w.countries[cid].held["pacific"] for cid in (0, 1))
-        self.assertLessEqual(sum(ent.values()), max(m.POOLS["pacific"], held))
-        self.assertGreaterEqual(ent[1], 280)
-        self.assertEqual(ent[0], m.POOLS["pacific"] - 280)
+        self.assertLessEqual(sum(ent.values()), max(pool, held))
+        self.assertGreaterEqual(ent[1], pool - left)
+        self.assertEqual(ent[0], left)
 
     def test_fit_floors_leaves_holdings_alone(self):
+        over = m.POOLS["pacific"] + m.POOLS["pacific"] // 15   # over the pool on its own
         w = self._one_basin_world()
-        w.states[1].levels = 320                               # over the pool on its own
-        w.states[1].lic["pacific"] = 320
+        w.states[1].levels = over
+        w.states[1].lic["pacific"] = over
         m.yearly_pass(w)
-        self.assertEqual(w.countries[1].ent["pacific"], 320)
+        self.assertEqual(w.countries[1].ent["pacific"], over)
         self.assertEqual(w.countries[0].ent["pacific"], 0)
 
     def test_a_non_participant_keeps_no_floor(self):
         w = self._one_basin_world()
-        m.yearly_pass(w)                                       # a floor is stored from 150 claims
+        m.yearly_pass(w)                                       # a floor is stored from its half of the pool
         self.assertGreater(w.countries[0].floor["pacific"], 0)
         w.countries[0].tech = False
         m.yearly_pass(w)
@@ -802,18 +853,21 @@ class FloorTest(unittest.TestCase):
         w.countries[0].floor = dict.fromkeys(m.BASINS, 0)      # an old save
         w.countries[1].navy = 1000
         m.yearly_pass(w, first_of_year=False)
-        self.assertLess(w.countries[0].unbuilt["pacific"], 10)
+        self._assert_re_divided(w)
 
     def test_a_lost_state_adds_no_protection(self):
-        """Review I3: country 0 holds 100 Pacific licences and claims; its January
-        floor protects the claims, not the licences, so losing the mined state
-        before a mid-year sharing leaves it at most January's protected part."""
+        """Review I3: country 0 holds a third of the Pacific in licences, and
+        claims; its January floor protects the claims, not the licences, so
+        losing the mined state before a mid-year sharing leaves it at most
+        January's protected part."""
+        mined = m.POOLS["pacific"] // 3                       # most of its share, with claims left over
         w = m.World({0: m.Country(0, policy=m.SPONSOR, navy=10), 1: m.Country(1, policy=m.SPONSOR, navy=10)},
                     {0: m.State(0, "pacific", 0), 1: m.State(1, "pacific", 1), 2: m.State(2, "pacific", 0)})
         m.yearly_pass(w)
-        w.states[2].levels = 100
+        w.states[2].levels = mined
         m.record_country(w, 0)
-        m.yearly_pass(w)                                      # January: held 100, claims protected
+        m.yearly_pass(w)                                      # January: the licences held, the claims protected
+        self.assertEqual(w.countries[0].held["pacific"], mined)
         protected = w.countries[0].floor["pacific"] - w.countries[0].held["pacific"]
         self.assertGreater(protected, 0)
         m.on_state_owner_change(w, w.states[2], 1)
@@ -824,9 +878,10 @@ class FloorTest(unittest.TestCase):
 
     def test_building_on_claims_mid_year_keeps_the_floor(self):
         w = self._one_basin_world()
-        m.yearly_pass(w)                                      # floor 112 from 150 claims
+        m.yearly_pass(w)                                      # a floor of three quarters of its claims (half the pool)
         floor = w.countries[0].floor["pacific"]
-        w.states[0].levels = 30
+        w.states[0].levels = m.POOLS["pacific"] // 10         # a fifth of those claims, well under the floor
+        self.assertLess(w.states[0].levels, floor)
         m.record_country(w, 0)
         w.countries[1].navy = 1000
         m.yearly_pass(w, first_of_year=False)
@@ -1024,16 +1079,17 @@ class LeaseTest(unittest.TestCase):
                 m.yearly_pass(w)
 
     def test_partial_top_up(self):
-        # a weak lessor (about 33 Pacific claims a sharing on Survey's ×0.75,
-        # under 43 at any factor) and a lease larger than that
+        # a weak lessor (about a ninth of the Pacific a sharing on Survey's ×0.75,
+        # under a seventh at any factor) and a lease of a third of the pool
+        lease = m.POOLS["pacific"] // 3
         w = self._world(lessor_policy=m.SURVEY, lessor_navy=0)
         w.countries[0].unbuilt["pacific"] = 3
-        m.start_lease(w, 0, 1, "pacific", 100)
+        m.start_lease(w, 0, 1, "pacific", lease)
         self.assertEqual(w.countries[1].lease_unused["pacific"], 3)
         self.assertEqual(w.countries[0].unbuilt["pacific"], 0)
         m.yearly_pass(w)
         share = w.countries[0].ent["pacific"] - w.countries[0].sh["pacific"]
-        self.assertLess(share, 100)
+        self.assertLess(share, lease)
         self.assertEqual(w.countries[1].lease_unused["pacific"], share)
         self.assertEqual(w.countries[0].unbuilt["pacific"], 0)
         self._assert_pool(w)
@@ -1283,24 +1339,38 @@ class RatchetTest(unittest.TestCase):
                 self.assertLessEqual(p, q, mode)
 
     def _lease(self, toggle):
+        """The third party's Pacific entitlement, year by year, and the claims
+        each signing moved. The lease is two fifths of the lessor's third of
+        the pool, so re-signed every year it runs through the lessor's claims
+        in the third year of the six."""
         cs = {i: m.Country(i, policy=m.SPONSOR, navy=10) for i in range(3)}
         w = m.World(cs, {i: m.State(i, "pacific", i) for i in range(3)})
         m.yearly_pass(w)
-        third = []
+        lease = 2 * (m.POOLS["pacific"] // 3) // 5
+        third, signed = [], []
         for _ in range(self.YEARS):
             if w.countries[1].lease_n["pacific"] == 0 and m.can_lease(w, 0, 1, "pacific"):
-                m.start_lease(w, 0, 1, "pacific", 40)
+                m.start_lease(w, 0, 1, "pacific", lease)
+                signed.append(w.countries[1].lease_unused["pacific"])
             w.states[1].levels += w.countries[1].unbuilt["pacific"]
             m.record_country(w, 1)
             if toggle:
                 m.end_lease(w, 1, "pacific")           # the treaty ends just before the sharing
             m.yearly_pass(w)
             third.append(w.countries[2].ent["pacific"])
-        return third
+        return third, signed
 
     def test_a_re_signed_lease_takes_nothing_from_a_third_party(self):
-        self.assertEqual(self._lease(True), self._lease(False))
-        self.assertEqual(self._lease(True), [100] * self.YEARS)
+        toggled, signed = self._lease(True)
+        steady, once = self._lease(False)
+        self.assertEqual(toggled, steady)
+        self.assertEqual(toggled, [m.POOLS["pacific"] // 3] * self.YEARS)
+        # the steady lease is signed once; the toggled one until the lessor's
+        # claims are gone, the last signing a partial one
+        self.assertEqual(len(once), 1)
+        self.assertGreater(len(signed), 1)
+        self.assertLess(len(signed), self.YEARS)
+        self.assertLess(signed[-1], signed[0])
 
     def test_an_ended_lease_goes_on_counting_against_the_lessor(self):
         cs = {i: m.Country(i, policy=m.SPONSOR, navy=10) for i in range(3)}
@@ -1533,17 +1603,19 @@ class ReadoutTest(unittest.TestCase):
     def test_full_basin_reads_none(self):
         # the whole Arctic held by country 0: nothing is left to share
         w = m.World({0: m.Country(0, policy=m.SPONSOR, navy=10), 1: m.Country(1, policy=m.SPONSOR, navy=10)},
-                    {0: m.State(0, "arctic", 0, levels=100), 1: m.State(1, "arctic", 1)})
+                    {0: m.State(0, "arctic", 0, levels=m.POOLS["arctic"]), 1: m.State(1, "arctic", 1)})
         m.yearly_pass(w)
+        self.assertEqual(w.countries[0].ent["arctic"], m.POOLS["arctic"])
         self.assertIsNone(m.need_weight(w, "arctic", 1))
         self.assertIsNone(m.exact_need_weight(w, "arctic", 1))
         self.assertIsNone(m.need_navy(w, 1, "arctic"))
 
     def test_frozen_country_needs_its_holdings_plus_one(self):
+        held = 2 * m.POOLS["pacific"] // 3                                # two thirds of the pool, against an equal rival
         w = m.World({0: m.Country(0, policy=m.SPONSOR, navy=10), 1: m.Country(1, policy=m.SPONSOR, navy=10)},
-                    {0: m.State(0, "pacific", 0, levels=200), 1: m.State(1, "pacific", 1)})
+                    {0: m.State(0, "pacific", 0, levels=held), 1: m.State(1, "pacific", 1)})
         m.yearly_pass(w)
-        self.assertEqual(w.countries[0].ent["pacific"], 200)              # frozen at its holdings
+        self.assertEqual(w.countries[0].ent["pacific"], held)             # frozen at its holdings
         closed, exact = m.need_weight(w, "pacific", 0), m.exact_need_weight(w, "pacific", 0)
         self.assertIsNotNone(exact)
         self.assertGreaterEqual(closed - exact, -0.01)

@@ -103,7 +103,7 @@ def _generate_technologies(mod_state, tech_unlock_index):
         era_int = int(era.split("_")[-1])
         tech_dict[era_int].append(tech_id)
 
-    for era in range(1, 13):
+    for era in range(1, max([12, *tech_dict]) + 1):  # the mod adds era 13
         tech_output += f"{era}: {len(tech_dict[era])} technologies\n"
         for tech_id in tech_dict[era]:
             tech_output += f"\t{mod_state.localize(tech_id)}"

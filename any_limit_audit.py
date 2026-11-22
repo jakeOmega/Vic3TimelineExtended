@@ -40,10 +40,24 @@ false for every scope, and the `limit` or `trigger` holding it can never pass
 one-line `any_X = { always = no }` is caught too. Suppress with the same
 trailing `# REVIEWED` comment, on the `any_*` opener line or on the
 `always = no` line.
+
+Third check, `filter_count`: a `filter = { }` child of an `any_*` block with
+neither `percent` nor `count = all` beside it. The engine takes `filter` only
+with one of those, and anything else fails at load ("Filter should only be
+used if a percent or count = all is specified", then "PostValidate of
+trigger 'any_X' returned false"): `filter` names the set a share or "all" is
+measured against, and a plain count has no such set. Write the condition into
+the body for a count, or turn the count into a share. The United Nations of
+Earth's supermajority shipped `filter` with `count >= <value>` (2026-11-12).
+Suppress with the same trailing `# REVIEWED` comment, on the `any_*` opener
+line or on the `filter = {` line.
 """
 import os
 import re
 from dataclasses import dataclass, field
+
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
 
 
 @dataclass
@@ -57,19 +71,20 @@ class Flag:
 
 
 # What each flag kind is called in the report.
-_KIND_LABEL = {"limit": "`limit`", "always_false": "`always = no`"}
+_KIND_LABEL = {
+    "limit": "`limit`",
+    "always_false": "`always = no`",
+    "filter_count": "`filter` without `percent` or `count = all`",
+}
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[Flag] = field(default_factory=list)
     files_audited: int = 0
 
 
 _OPENER_RE = re.compile(r"^\s*([A-Za-z_][\w]*)\s*=\s*\{")
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
-)
 
 
 def _split_comment(line: str) -> tuple[str, str | None]:
@@ -77,15 +92,6 @@ def _split_comment(line: str) -> tuple[str, str | None]:
     if idx < 0:
         return line, None
     return line[:idx], line[idx:]
-
-
-def _parse_reviewed(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
 
 
 _TOKEN_RE = re.compile(r"[{}]|\?=|[<>!=]=?|[^\s{}<>!=?]+")
@@ -122,7 +128,7 @@ def _scan_always_false(lines: list[str], rel_path: str) -> list[Flag]:
         ):
             parent = stack[-1] if stack else None
             if parent and parent["name"] and parent["name"].startswith("any_"):
-                exemption = _parse_reviewed(parent["comment"]) or _parse_reviewed(comment)
+                exemption = parse_reviewed(parent["comment"]) or parse_reviewed(comment)
                 flags.append(Flag(
                     file=rel_path,
                     line=line_num,
@@ -131,6 +137,57 @@ def _scan_always_false(lines: list[str], rel_path: str) -> list[Flag]:
                     exemption=exemption,
                     kind="always_false",
                 ))
+    return flags
+
+
+_COMPARE_OPS = {"=", "?=", ">", ">=", "<", "<=", "!="}
+
+
+def _scan_filter_count(lines: list[str], rel_path: str) -> list[Flag]:
+    """Token scan: flag a `filter = {` whose immediate enclosing block is an
+    `any_*` trigger that has neither a `percent` comparison nor `count = all`
+    as a direct child (anywhere in the block, before or after the filter)."""
+    toks: list[tuple[str, int, str | None]] = []  # (token, line, line comment)
+    for line_num, raw in enumerate(lines, 1):
+        content, comment = _split_comment(raw.rstrip("\n"))
+        for tok in _TOKEN_RE.findall(content):
+            toks.append((tok, line_num, comment))
+
+    flags: list[Flag] = []
+    stack: list[dict] = []
+    for i, (tok, line_num, comment) in enumerate(toks):
+        parent = stack[-1] if stack else None
+        in_any = bool(parent and parent["name"] and parent["name"].startswith("any_"))
+        if tok == "{":
+            name = None
+            opener_line, opener_comment = line_num, comment
+            if i >= 2 and toks[i - 1][0] in ("=", "?="):
+                name, opener_line, opener_comment = toks[i - 2]
+            if in_any and name == "filter" and parent["filter"] is None:
+                parent["filter"] = (opener_line, opener_comment)
+            stack.append({"name": name, "line": opener_line, "comment": opener_comment,
+                          "filter": None, "share": False})
+        elif tok == "}":
+            if not stack:
+                continue
+            frame = stack.pop()
+            if frame["filter"] is not None and not frame["share"]:
+                f_line, f_comment = frame["filter"]
+                flags.append(Flag(
+                    file=rel_path,
+                    line=f_line,
+                    any_name=frame["name"],
+                    any_line=frame["line"],
+                    exemption=parse_reviewed(frame["comment"]) or parse_reviewed(f_comment),
+                    kind="filter_count",
+                ))
+        elif in_any and i + 1 < len(toks):
+            op = toks[i + 1][0]
+            if tok == "percent" and op in _COMPARE_OPS:
+                parent["share"] = True
+            elif (tok == "count" and op == "=" and i + 2 < len(toks)
+                    and toks[i + 2][0].strip('"') == "all"):
+                parent["share"] = True
     return flags
 
 
@@ -166,7 +223,7 @@ def scan_file(filepath: str, rel_path: str) -> list[Flag]:
                     line=line_num,
                     any_name=parent["name"],
                     any_line=parent["line"],
-                    exemption=_parse_reviewed(parent["comment"]),
+                    exemption=parse_reviewed(parent["comment"]),
                 ))
 
         if net >= 1 and m:
@@ -187,6 +244,7 @@ def scan_file(filepath: str, rel_path: str) -> list[Flag]:
                     stack.pop()
 
     flags.extend(_scan_always_false(lines, rel_path))
+    flags.extend(_scan_filter_count(lines, rel_path))
     flags.sort(key=lambda f: f.line)
     return flags
 
@@ -217,8 +275,8 @@ def audit(mod_state=None, mod_path: str | None = None) -> AuditResult:
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
 
     out = [
         "# `any_*` limit audit report",
@@ -241,9 +299,16 @@ def render_report(result: AuditResult) -> str:
         "\"there is no X\" write `NOT = { any_X = { } }`. A bare `always = no`",
         "outside an `any_*` (a retired `potential`) is not flagged.",
         "",
+        "Also flagged: a `filter = { }` child of an `any_*` trigger with",
+        "neither `percent` nor `count = all` beside it. The engine takes",
+        "`filter` only with one of those and refuses the trigger at load",
+        "(\"Filter should only be used if a percent or count = all is",
+        "specified\"). For a count, write the condition into the body; for",
+        "\"all but N\", use a `percent` share.",
+        "",
         "Suppress a rare legitimate case with a trailing comment on the",
         "`any_*` opener line: `any_scope_state = { # REVIEWED YYYY-MM-DD: why`",
-        "(for `always = no`, the comment may also sit on that line).",
+        "(for `always = no` or `filter`, the comment may also sit on that line).",
         "",
         "## Unreviewed Flags",
         "",
@@ -286,6 +351,7 @@ def render_report(result: AuditResult) -> str:
     out.append("")
     out.append(f"- total flags: {len(result.flags)}")
     out.append(f"- `always = no` flags: {sum(1 for f in result.flags if f.kind == 'always_false')}")
+    out.append(f"- `filter` flags: {sum(1 for f in result.flags if f.kind == 'filter_count')}")
     out.append(f"- unreviewed: {len(unrev)}")
     out.append(f"- exempted: {len(exemp)}")
     out.append("")
@@ -298,27 +364,26 @@ def regenerate(mod_state=None) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
     report = render_report(result)
-    out_path = os.path.join(mod_path, "docs", "engine", "any_limit_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(report)
-    unrev = sum(1 for f in result.flags if not f.exemption)
-    exemp = sum(1 for f in result.flags if f.exemption)
+    write_text(os.path.join(mod_path, "docs", "engine", "any_limit_report.md"), report)
+    unrev = len(result.unreviewed)
+    exemp = len(result.exemptions)
     return {
         "files_audited": result.files_audited,
         "total_flags": len(result.flags),
         "always_false_flags": sum(1 for f in result.flags if f.kind == "always_false"),
+        "filter_count_flags": sum(1 for f in result.flags if f.kind == "filter_count"),
         "unreviewed": unrev,
         "exempted": exemp,
     }
 
 
-if __name__ == "__main__":
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 if any flag lacks a
+    `# REVIEWED ...` exemption."""
     from path_constants import mod_path
-    result = audit(mod_path=mod_path)
-    print(render_report(result))
-    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ...` exemption.
-    if "--strict" in sys.argv:
-        raise SystemExit(1 if any(not f.exemption for f in result.flags) else 0)
+    return cli_main(lambda args: audit(mod_path=mod_path), lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

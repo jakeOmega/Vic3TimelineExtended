@@ -11,6 +11,7 @@ and institution investment levels:
     an institution's own `modifier`         per level, incorporated states
 """
 
+import functools
 import json
 import os
 import re
@@ -99,13 +100,68 @@ def load_carriers(root=ROOT, types=P.DEMOG_TYPES):
     return out
 
 
+_COUNTRY_IMPACT = re.compile(r"^country_institution_impact_(\w+)_mult$")
+
+
+@functools.lru_cache(maxsize=None)
+def _impact_lines(root=ROOT):
+    """{(kind, key, field): value} for every law's or technology's Impact of Institutions line, vanilla's and the
+    mod's, as engine_rate_lines sums them: state_institution_impact_add (Local Vernacular and Devolution -0.05,
+    Ubiquitous Translation +0.10) and each institution's own country_institution_impact_<institution>_mult (Total War's
+    +0.25 on the Ministry of War, where Mandatory Augmentation's mortality line sits)."""
+    keep = lambda f: f == "state_institution_impact_add" or bool(_COUNTRY_IMPACT.match(f))  # noqa: E731
+    return {(kind, key, field): value for (kind, key, block, field), value in engine_rate_lines(root, keep=keep).items()
+            if kind in ("law", "technology") and block == "modifier" and abs(value) > 1e-12}
+
+
+def _held(kind, key, techs, laws):
+    return (kind == "law" and key in laws) or (kind == "technology" and key in techs)
+
+
+def state_institution_impact(techs=(), laws=(), root=ROOT):
+    """A state's Impact of Institutions from its owner's laws and technologies: 1 + their state_institution_impact_add,
+    at least 0 (te_demog_institution_impact in script; #1046). The owner's laws reach every state it owns. What a save
+    alone can't give is left out: obstinance's -1.0 x its share and a building's method (the Consciousness Network's
+    +0.10), so a state with either reads high here."""
+    techs, laws = set(techs), set(laws)
+    add = sum(v for (kind, key, field), v in _impact_lines(root).items()
+              if field == "state_institution_impact_add" and _held(kind, key, techs, laws))
+    return max(0.0, 1.0 + add)
+
+
+def country_institution_impacts(techs=(), laws=(), root=ROOT):
+    """{institution: 1 + its country_institution_impact_<institution>_mult} from the owner's laws and technologies
+    (#1046: Total War's +0.25 on the Ministry of War). An institution with none is left out (1). Left out as well: a
+    building's method (the Pentagon's +0.10 on the Ministry of War) and an institution's own line (International Aid's
+    on Foreign Affairs), which a save's laws don't give. That the engine multiplies it with the state's Impact of
+    Institutions, rather than adding the two, is assumed: no demographic line has been read under both."""
+    techs, laws = set(techs), set(laws)
+    out = {}
+    for (kind, key, field), v in _impact_lines(root).items():
+        m = _COUNTRY_IMPACT.match(field)
+        if m and _held(kind, key, techs, laws):
+            out[m.group(1)] = out.get(m.group(1), 1.0) + v
+    return {inst: max(0.0, f) for inst, f in out.items()}
+
+
 def totals(carriers, techs=(), laws=(), institutions=None, incorporated=True, types=P.DEMOG_TYPES,
-           institution_impact=1.0, amendments=()):
+           institution_impact=None, amendments=(), institution_impacts=None):
     """{type: total} that one state reads: its owner's techs, laws and amendments and, in an incorporated
     state, each institution line times the owner's investment level in that institution, times the
     state's Impact of Institutions (1 + state_institution_impact_add, at least 0: Local Vernacular's -0.05,
-    obstinance's -1.0 x its share; the probe session, 2026-10-11)."""
+    obstinance's -1.0 x its share; the probe session, 2026-10-11) and that institution's own impact (1 + the owner's
+    country_institution_impact_<institution>_mult). institution_impact and institution_impacts None: the ones the
+    owner's laws and technologies give (state_institution_impact(), country_institution_impacts(); #1046 found every
+    caller had read full impact)."""
+    if institution_impact is None:
+        institution_impact = state_institution_impact(techs, laws)
+    if institution_impacts is None:
+        institution_impacts = country_institution_impacts(techs, laws)
     techs, laws, levels, amendments = set(techs), set(laws), institutions or {}, set(amendments)
+
+    def scale(inst):
+        return levels.get(inst, 0) * institution_impact * institution_impacts.get(inst, 1.0)
+
     out = {t: 0.0 for t in types}
     for c in carriers:
         if c.type not in out:
@@ -115,9 +171,9 @@ def totals(carriers, techs=(), laws=(), institutions=None, incorporated=True, ty
         elif (c.kind == "law" and c.key in laws) or (c.kind == "amendment" and c.key in amendments):
             out[c.type] += c.value
         elif c.kind == "law_institution" and c.key in laws and incorporated:
-            out[c.type] += c.value * levels.get(c.institution, 0) * institution_impact
+            out[c.type] += c.value * scale(c.institution)
         elif c.kind == "institution" and incorporated:
-            out[c.type] += c.value * levels.get(c.key, 0) * institution_impact
+            out[c.type] += c.value * scale(c.key)
     return out
 
 
@@ -250,21 +306,31 @@ def workforce_line_carriers(root=ROOT):
     return out
 
 
+def engine_lines_on_top(root=ROOT, moved=None):
+    """The carriers whose moved birth or mortality lines stay on top of the census's term: each that has an on-top
+    line on a field the census can also absorb (P.ENGINE_FIELDS_ON_TOP's fields are on top wherever they sit, so a
+    carrier there isn't listed). Read from the carriers' own types (engine_lines()), not kept by hand (#1046)."""
+    moved = engine_lines(root) if moved is None else moved
+    return frozenset(key for (_kind, key, _block, field), (family, _v) in moved.items()
+                     if family == "ontop" and field not in P.ENGINE_FIELDS_ON_TOP)
+
+
 def absorbed_carriers(root=ROOT, lines=None):
     """Phase 2 step 4 (owner amendment, 2026-10-10): any engine birth or mortality line still live on a law,
     technology or institution that the census would absorb, as Carriers (`type` is the engine field). Since the
     engine-lines plan (2026-10-11) every such line sits on a script-only type, so this returns [] (the walk nets
-    nothing for them; TestEngineLinesMoved fails CI on a new one). Every live line not on top (P.ENGINE_LINES_ON_TOP's carriers,
+    nothing for them; TestEngineLinesMoved fails CI on a new one). Every live line not on top (engine_lines_on_top()'s carriers,
     P.ENGINE_FIELDS_ON_TOP's fields) is absorbed. Kinds follow the engine's scaling: a law's
     institution_modifier line is law_institution (per level of the law's institution, incorporated states), an
     institution's own line is institution (per its level, incorporated states), the rest are flat."""
     lines = engine_rate_lines(root) if lines is None else lines
     institution = {key: _u(_u(entry).get("institution")) for key, entry in _state(root).get_data("Laws").items()}
+    on_top = engine_lines_on_top(root)
     out = []
     for (kind, key, block, field), value in sorted(lines.items()):
         if abs(value) < 1e-12 or not is_engine_rate_field(field):
             continue
-        if key in P.ENGINE_LINES_ON_TOP or field in P.ENGINE_FIELDS_ON_TOP:
+        if key in on_top or field in P.ENGINE_FIELDS_ON_TOP:
             continue
         if kind == "law" and block == "institution_modifier":
             out.append(Carrier("law_institution", key, field, value, institution.get(key)))

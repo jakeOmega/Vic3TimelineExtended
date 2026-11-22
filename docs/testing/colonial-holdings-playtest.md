@@ -145,7 +145,8 @@ active or inactive, for Britain, France, Spain, the Netherlands or the USA, agai
 countries. A monthly pass now adds the entry back (`ce_reentry_monthly`, `common/scripted_effects/decolonization.txt`,
 run from `colonial_geography_on_action` straight after the separation cache's step) once a country has been due it for a
 whole month (`ce_reentry_due`, `colonial_empire_triggers.txt`: the entry's research and `possible`, not decentralized,
-not a revolution's rebels, no entry running, and a year since a voluntary end). So a collapse waits ten years and a
+not a revolution's rebels, no record of the entry, active or inactive, and a year since a voluntary end; over an
+inactive record the add is refused, #1416). So a collapse waits ten years and a
 secured empire never returns, as the rules always said. A voluntary end sets no cooldown, but the pass waits a year after
 one (`ce_reentry_voluntary_hold`), a guard against a colony test that flickers. Every modifier an ending adds is now
 refreshed, not stacked, since a second ending is reachable. Search `debug.log` for `TE_CE_REENTRY` (one line per add)
@@ -164,6 +165,17 @@ state passes the rest of the colony test needs its pops, which the probe does no
 | Name | What it checks | Where | If BROKEN |
 |---|---|---|---|
 | `ce_reentry` | `add_journal_entry` brings back an entry type the country has finished (no vanilla precedent re-adds a finished type of its own). The pass marks each country it adds the entry to, naming the country, and notes whether its entry had run and ended (`colonial_empire_has_ended`, set at every ending since this change). The next monthly pass reads the mark before it can add again. One line per add: OK when the entry is running, BROKEN when it is not though the country is still due it, each with `ended_before=yes` or `ended_before=unknown`. Only `yes` answers the question: `unknown` is a country that may never have held a record (the engine leaves some out), or one whose entry ended before the variable existed (Britain in the 1910 save). A country no longer due it gives no verdict, nor does a revolution's winner holding the loser's mark. | `ce_reentry_monthly`, step 1 | BROKEN with `ended_before=yes`: the entry stays active through a failure, as a dormant phase in place of `fail`. A collapse or the last colony's loss runs its outcome and sets its cooldown as now, then leaves the entry dormant until the country is due it again. Until then every add is wasted: one `TE_CE_REENTRY` line per due country every two months. BROKEN with `ended_before=unknown` only: `add_journal_entry` gave a country no entry at all; read the `debug.log` lines around it. |
+
+
+**2026-11-12: OK, `ended_before=yes`, three times.** A 1.15.1 game, launch of 21:13, `debug.log`: the United
+Netherlands (added 1933.1.28, OK 1933.2.27), Spain (1933.9.15, OK 1933.10.15) and the Commonwealth of Britain
+(1935.10.10, OK 1935.11.9). Each had run the entry and ended it before. So `add_journal_entry` does bring back a type
+the country has finished, and the fallback is not needed. The same session's other two adds gave no verdict, as
+the pass intends for a country no longer due: Bornu (1933.8.6, during its civil war) and Egypt (1934.8.29) each
+ended the new entry within its first month with a voluntary end, so the 1937.10.1 autosave shows both with no
+record of the entry, `colonial_empire_has_ended` and Negotiated Withdrawal (a small bonus, +5 diplomatic reputation among others, for
+ten years, decaying). The colony test did not flicker: each time the AI pressed Planned Full Decolonization seconds after
+the add (`DECOL_DEBUG`), Bornu during the civil war that had made its states look like colonies (#1735, fixed in #1746).
 
 ### Checks
 
@@ -202,14 +214,86 @@ reforms.
 
 | Name | What it checks | Where | If BROKEN |
 |---|---|---|---|
-| `ai_condemn_factor_order` | `ai_chance` applies its modifiers in order, so the `factor = 0` placed after Condemn's adds holds an empire's weight at 0 (at least 11 before it). No vanilla script shows that order matters. Once a game each: BROKEN when an AI that holds a colony, a colonial subject or the entry takes Condemn in `.14`; OK when such an AI takes Neutral or Support while it had the influence for Condemn. One OK is weak evidence, because a wrong order still leaves Support a share; read the verdict as no BROKEN line over a full observer run. Lines carry `country=` and `date=`. | `decol_selfcheck_empire_condemned` / `_declined`, `decolonization_stance_effects.txt`, called first in each of `.14`'s options | Make Condemn's weight one script value that order can't change: `decol_ai_condemn_weight` in `decolonization_stance_values.txt`, a `value` with `if` blocks that adds the terms, multiplies by the two halves and sets 0 for an empire or without the influence; then `.14`'s option a reads `ai_chance = { base = 0 modifier = { add = decol_ai_condemn_weight } }`, or the engine's equivalent. |
+| `ai_condemn_factor_order` | `ai_chance` applies its modifiers in order, so the `factor = 0` placed after Condemn's adds holds an empire's weight at 0 (at least 11 before it). No vanilla script shows that order matters. Once a game each: BROKEN when an AI that holds a colony, a colonial subject or the entry takes Condemn in `.14`; OK when such an AI takes Neutral or Support while it had the influence for Condemn. One OK is weak evidence, because a wrong order still leaves Support a share; read the verdict as no BROKEN line over a full observer run. Lines carry `country=` and `date=`. **First OK, 2026-11-17**, in the owner's 1.15.1 game (a 1929 save, launch of 14:46): Great Britain, 19 July 1952, and no BROKEN line in the logs that survived (1946 to 1954.6; the run's first 17 years had rotated out): weak evidence, as above | `decol_selfcheck_empire_condemned` / `_declined`, `decolonization_stance_effects.txt`, called first in each of `.14`'s options | Make Condemn's weight one script value that order can't change: `decol_ai_condemn_weight` in `decolonization_stance_values.txt`, a `value` with `if` blocks that adds the terms, multiplies by the two halves and sets 0 for an empire or without the influence; then `.14`'s option a reads `ai_chance = { base = 0 modifier = { add = decol_ai_condemn_weight } }`, or the engine's equivalent. |
 
 ### Checks
 
 | Check | Expect | If it fails |
 |---|---|---|
 | **Old condemnations go.** Load the 1910 save and play a month. | Every AI that holds a colony or a colonial subject, or runs the entry (Britain, France and Spain, if their collapses left them colonies), drops Condemn at the first monthly pulse, or when its 24-month cooldown from its last change runs out. A power whose collapse left it no colonies keeps Condemn, by design (owner, 2026-09-26). The influence breakdown loses the 150 cost. | Still condemning after the cooldown: `decol_holds_colonial_empire` was false for it (check its Colonial Holdings counts), or `decol_stance_monthly` did not run. |
-| **No empire takes Condemn again.** Play on to each empire's next Colonial Question (every three years for the AI). | It picks Support or Neutral, never Condemn; `TE_SELF_CHECK OK ai_condemn_factor_order` once. | A Condemn, with `TE_SELF_CHECK BROKEN ai_condemn_factor_order`: the factor 0 did not hold (take the self-check's fallback). A Condemn with no BROKEN line came from a UN Decolonization Resolution (issue #1373; it goes after 24 months). |
+| **No empire takes Condemn again.** Play on to each empire's next Colonial Question (every three years for the AI). | It picks Support or Neutral, never Condemn; `TE_SELF_CHECK OK ai_condemn_factor_order` once. | A Condemn, with `TE_SELF_CHECK BROKEN ai_condemn_factor_order`: the factor 0 did not hold (take the self-check's fallback). A Condemn with no BROKEN line came from a UN Decolonization Resolution the empire voted for (since issue #1373 an empire leans against one, and a great power that voted against one takes no stance; the stance goes after 24 months). A Condemn on an empire that voted no is a bug. |
 | **The bars leave the drift cap.** Watch the colonial great powers' stability through a few years (the Colonial Powers list, or the entry's history chart). | No longer at the cap (−1.5 a month since the second 2026-11-03 pass, −1.667 before) from the first month: the great-power pressure row is smaller and the bars fall more slowly, if at all. | Still at the cap: the condemners left are enough on their own; look at the International Pressure table for who condemns. |
 | **The balance target.** An observer run into the 1950s-60s. | The top two or three colonial great powers keep most of their colonies; the smaller colonial powers lose most of theirs. Great powers without colonies, with an elected government and without a regressive or colonizing law (a reformed USA, a democratic France or Britain after their empires) still mostly condemn; the regressive ones (the USA and Brazil while on Racialized Citizenship; TUR and India, holding slaves, least of all), the illiberal ones (an autocratic Russia or China, a single-party state that is not a Council Republic) and allies of an empire more often stay neutral or support. | Every empire holds on: the empires now back one another and too few powers condemn. Lower Support's +10 for an empire or the +8s for a partner, a colonizing law and an illiberal government, or raise Condemn's factor for a regressive or slaveholding power or a partner (`decolonization_events.14`). Still collapsing within 34 months (30 at the old 1.667 cap): look for condemners that hold an empire (the review should have cleared them). |
 | **The debug harness keeps its condemners.** `event te_debug_colonial_empire.2`, option a, then a month. | The International Pressure table keeps every condemner, the colonial great powers included: the harness sets the stance on every other great power, those already condemning too, and starts each one's 24-month cooldown. | A colonial great power's condemnation vanishes a month later: either the harness did not start its cooldown (`decol_stance_start_cooldown`; before this fix it skipped a power already condemning, such as Britain or Spain in the 1910 save, which the review then dropped), or the AI's influence went negative, a drop that ignores the cooldown (`decol_stance_monthly`'s first branch). Check the power's influence before blaming the review. |
+
+## The religion a release forms with (2026-11-12, issue #1499)
+
+`form_decolonized_country` now passes `religion =` to `create_dynamic_country`: the metropole's own (`.religion`, which
+changes nothing), or the released culture's when the metropole's state religion is atheist. Before, a release from an
+atheist metropole kept State Religion with no religion, and vanilla's `law_state_religion` `on_activate` logged
+`set_state_religion effect [ ... doesn't exist ]` at `common/laws/00_church_and_state.txt:37` once per country formed.
+
+### Self-checks
+
+| Name | What it checks | Where | If BROKEN |
+|---|---|---|---|
+| `decol_new_country_religion` | The released country's state religion is the one passed in. Once a game for a non-atheist metropole (every observer run that releases anyone: shows `.religion` on a country is its state religion, so the pass changes nothing) and once for an atheist one under a church law other than State Atheism (rare: shows `religion =` is honoured; a State Atheism metropole is left out, since the inherited law's `on_activate` sets atheism again whatever `religion =` says). Lines carry `country=`, `parent=` (a tag, which can print blank) and `date=`. Since 2026-11-17 the atheist case has its own name, `decol_new_country_religion_atheist`. **First verdict: OK, 2026-11-17**, in the owner's 1.15.1 game (a 1929 save, launch of 14:46), 26 March 1952, for D32 (the parties created in that second were Northern Cape's), released by a planned decolonization; the line, one name for both kinds then, didn't say which kind its parent was, and `parent=` printed a null country | after the `random_list` in `form_decolonized_country`, `common/scripted_effects/decolonization.txt` | For the common case: pass the religion only for an atheist metropole, which means two `create_dynamic_country` blocks per colour branch. For the atheist case: set the religion in the legacy block after the call (`set_state_religion = scope:new_country_religion` on the capital's owner) |
+
+### Checks
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **An atheist metropole releases a colony.** With an atheist state religion under State Religion, Freedom of Conscience or Total Separation (the #1499 case; not State Atheism, which resets the new country to atheism) and a colony, release it from Colonial Holdings (or wait for a planned decolonization, `decolonization_events.401`). | The new country's state religion is the released culture's; `error.log` has no `set_state_religion effect` line framed in `events/decolonization_events.txt`. `TE_SELF_CHECK OK decol_new_country_religion` with the atheist parent. | The country is atheist: see the self-check's fallback. |
+
+## The nine endings and the two-pole bar (2026-11-12, #1432, #1434)
+
+The entry's endings are nine outcomes, one each, so the journal panel lists them all with their conditions; the stability bar is a bar between two poles. `test_colonial_empire_outcomes.py` holds the triggers to the old dispatch offline. What only the game shows:
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The panel lists nine endings.** Open a running entry's journal page. | The two federations, The Iron Fist Holds, The Commonwealth Path, Quiet Assimilation, The Empire Endures, The Last Flag Lowered, Negotiated Withdrawal and The Empire Crumbles, each named by its event's title (the headers splice `$decolonization_events.<n>.t$`), with plain-text conditions and the three programs' months as figures. At most one success and one failure ending shows its conditions met. | A raw `$decolonization_events…$` in a header: type the titles into the header keys. A condition printed as script: a test outside its `custom_tooltip`. |
+| **A path ending fires its event.** `event te_debug_colonial_empire.1` to Solidified, run Garrison past 24 months and hold at 100 for 60 months (or the harness's shortcut). | The Iron Fist Holds concludes the entry, `.203` fires, and the concluded page shows "concluded with our colonies held by the garrisons". | Nothing concludes with the bar held: a trigger never passes; compare the counters in the tooltip with `colonial_*_months`. |
+| **A collapse picks its ending.** Drain the bar to 0, once with Investment the longest program past 24 months and once with Garrison the longest. | Negotiated Withdrawal (`.204`) the first time, The Empire Crumbles (`.201`) the second; both set the ten-year cooldown and the subjects' aftershock. | |
+| **The two-pole bar.** Look wherever the stock bar block draws `colonial_stability_bar` (the entry's page while it is not active, the concluded page if it shows bars). | Green fill over red, the sliding marker at the value, "Colonial Stability: collapse at 0" on the left and "integrated at 100" on the right. While the entry runs the overview's own five-layer row is unchanged. | A blank or magenta bar: a texture path is wrong; copy vanilla's `great_game_core_progress_bar` fields. |
+
+## The bar's monthly cap from its saved sum (2026-11-12)
+
+`colonial_stability_bar`'s `monthly_progress` now saves the sum of its 22 lines (`save_temporary_value_as = colonial_drift_sum`) and adds clamp(sum) − sum as its "Monthly limit" line, then clamps at block level with the same two values. The line used to be a leaf that re-summed every term twice. Vanilla uses `save_temporary_value_as` in script values (`command_values.txt`) and the block-level clamp in its progress bars (`00_rlit_progress_bars.txt`); the two together in a progress bar have not been read in this mod's game.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The hover in a capped month.** A country whose drift is past the cap (the overview's "Why Stability Is Moving" shows a Monthly limit row): hover the stability bar on the overview. | The 22 terms, then "Monthly limit" taking off the excess, and a total equal to the "(±1.50/mo)" beside the bar. | "Monthly limit" reads 0 while the terms sum past the cap: the saved sum isn't read in a progress bar (look for `colonial_drift_sum` in `error.log`). The bar still moves by the cap, through the block-level clamp; to get the hover back, restore the old leaf (`git log -S colonial_stability_term_cap`). |
+| **A capped month moves the bar by the cap.** A country whose uncapped drift is 3 or more either way. The overview prints whole percents, so read the value on a 1st and two months later. | It moved by 3 points, the cap twice. | It moved by more: neither the cap line nor the clamp applied. |
+| **An uncapped month is untouched.** A country whose drift is inside the cap. | The hover's Monthly limit reads 0 and the bar moves by the headline figure, as before. | Any other figure: compare with the overview's breakdown. |
+
+## A civil war of its own, and the minor's Planned Decolonization (2026-11-13, #1735)
+
+In the 2026-11-12 game (1.15.1, 1929–1939) the re-entry pass gave Bornu the entry during its civil war (1933.8.6): the
+uprising had cut Timbuktu and Inner Mauritania off from the capital, so both read as colonies. Twelve seconds of play
+later the AI pressed Planned Full Decolonization and released both, at a bar of 50. Egypt released Palestine the same
+way (1934.8.29) with no civil war: the button gave every minor +30 whatever its state (whether either was under
+pressure as well, for another 30, no save shows). Now the pass waits out a
+civil war of the country's own (`colonial_in_own_civil_war`, last in `ce_reentry_due`; a colony's secession, recorded
+as a war of independence, doesn't count), no AI lets a colony go during one while its entry runs with its bar at 40 or
+more (the three release buttons and the release options of `.1`, `.3`, `.9`, `.13` and
+`.75`; `colonial_ai_holds_colonies_in_civil_war`), and the minor's +30 needs three condemners, three badly unaccepted
+colonies or a bar below 40. `test_colonial_civil_war_hold.py` holds the script offline. Search `debug.log` for
+`DECOL_DEBUG` and `TE_CE_REENTRY`.
+
+`colonial_in_own_civil_war` reads a civil war from the rebel country (`civil_war_origin_country` and
+`is_revolutionary` / `is_secessionist`, as `nd_in_civil_war` does); no launch has shown that reading. Two once-a-game
+self-checks compare it with the civil-war layer's own pointer, `te_cw_origin` (`colonial_civil_war_selfcheck`,
+`decolonization.txt`, on every country's monthly pass).
+
+### Self-checks
+
+| Name | What it checks | Where | If BROKEN |
+|---|---|---|---|
+| `ce_civil_war_read` | On a live rebel (the layer's `te_cw_origin` names a live country other than itself): the country it rose against reads a civil war of its own. OK when `colonial_in_own_civil_war` is true there. | `colonial_civil_war_selfcheck`, first branch | The hold and the re-entry wait never apply. First check the `TE_CIVIL_WAR` lines: a rebel whose pointer the layer moved to a revolution's winner (`te_civil_war_repoint_uprisings`) can read BROKEN with nothing wrong. Otherwise read the war from the layer: `var:te_cw_origin ?= scope:ce_cw_self` in place of `civil_war_origin_country` in `colonial_in_own_civil_war`. |
+| `ce_civil_war_over` | On a secession that won (a secessionist the month before, which the country it left then read as its civil war; alive; its `te_cw_origin` removed by the layer at the war's end): the country it left, with no other uprising against it, no longer reads a civil war. OK when `colonial_in_own_civil_war` is false there. | `colonial_civil_war_selfcheck`, second branch | The winner keeps `civil_war_origin_country` and a rebel flag, so the hold never lifts for the country it left. Same fallback: read the layer's pointer, which the layer removes at the war's end. |
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **No entry during a civil war.** An observer game to the 1930s, or a country whose revolution or secession cuts off a state while it holds no entry (`TE_CE_REENTRY` lines). Since 2026-11-13 the entry's `possible` has the same line, so a country that has never run the entry doesn't get it mid-war either (no `TE_CE_REENTRY` line: the engine starts it). | No `TE_CE_REENTRY: added` for a country while its rebels are in the field, and no first entry; within two months of the war's end, if it still holds a colony. The tab's checklist hover shows "Is not fighting a civil war of its own" unmet during the war. | An add during the war: `colonial_in_own_civil_war` read false. Check in the save that the rebel country's `civil_war_origin_country` is the country (`nd_in_civil_war`, which reads it the same way, would be wrong too). |
+| **No release during a civil war.** An AI empire with its bar at 40 or more whose own civil war breaks out (console `start_civil_war` on a revolution's movement, or wait for one). | No `DECOL_DEBUG` button press and no release option taken while the war runs; the AI takes the events' other options. Below 40 it may still release. | A release: the hold reads false; check `decol_iw_bar_below_40` and the rebel country as above. |
+| **A minor keeps its colony without pressure.** An AI minor holding one colony with no condemners and a bar of 50 (Egypt with Palestine). | It keeps the colony for years, unless three great powers condemn it, three colonies are badly unaccepted or its bar falls below 40. | It still releases within months: another term or event carries it; read the `DECOL_DEBUG` lines for which. |

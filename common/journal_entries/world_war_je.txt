@@ -4,7 +4,8 @@
 # Tracks ideological polarization building toward a global conflict
 # Phases: Leadup (rising tensions) > Active War > Peace Conference > Post-War
 #
-# This JE is the SOLE driver of all world war events. The on_action is empty.
+# This JE is the SOLE driver of all world war events. The on_action only
+# clears up after the rule is switched off mid-game.
 # The JE activates for any great power when opposing ideology GPs exist,
 # and remains active through war and post-war phases.
 # ============================================================================
@@ -13,15 +14,40 @@ je_world_war = {
 	icon = "gfx/interface/icons/event_icons/je_world_war.dds"
 	group = je_group_foreign_affairs
 
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
+
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry ends through its
+	# invalid outcome on the rule.
+	disable_evaluation = {
+		NOT = { te_world_war_on = yes }
+	}
 	is_shown_when_inactive = {
-		has_game_rule = world_war_enabled
-		has_technology_researched = combined_arms
+		te_world_war_on = yes
+		# Combined Arms; also Trench Works under the early unlock
+		ww_era_reached = yes
 		country_rank >= rank_value:great_power
+		# A world war fought under the early unlock is over; the entry waits
+		# for Combined Arms (world_war_events_on_action adds it back).
+		NOT = { ww_resting_after_early_war = yes }
 		NOT = { has_variable = ww_fully_resolved }
+		# Set by the completion and failure outcomes, never removed. A
+		# revolution's winner gets a fresh record of an entry the loser had
+		# finished, and would start the world war over without this (#471).
+		# ww_fully_resolved can't serve: it is a phase flag, which both
+		# outcomes clear. In normal play it changes nothing, since a finished
+		# record is never activated again.
+		NOT = { has_variable = ww_entry_resolved }
 	}
 
 	possible = {
-		has_technology_researched = combined_arms
+		NOT = { has_variable = ww_entry_resolved }
+		NOT = { ww_resting_after_early_war = yes }
+		ww_era_reached = yes
 		country_rank >= rank_value:great_power
 		OR = {
 			# Leadup: opposing ideology great powers exist anywhere
@@ -158,47 +184,89 @@ je_world_war = {
 
 	immediate = { }
 
-	complete = {
-		has_variable = ww_fully_resolved
+	outcome = {
+		header = je_standard_completion_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_world_war_complete_conclusion_desc
+		trigger = {
+			has_variable = ww_fully_resolved
+		}
+		effect = {
+			ww_mark_entry_resolved = yes
+			# Clean up all world war variables
+			remove_variable = ww_active_phase
+			remove_variable = ww_aggressor_side
+			remove_variable = ww_defender_side
+			remove_variable = ww_years_elapsed
+			remove_variable = ww_months_counter
+			remove_variable = ww_peace_concluded
+			remove_variable = ww_peace_months
+			remove_variable = ww_fully_resolved
+			ww_clear_outcome_latches = yes
+			# Clean up any lingering modifiers
+			if = { limit = { je:je_world_war = { has_modifier = ww_rising_tensions_modifier } } je:je_world_war = { remove_modifier = ww_rising_tensions_modifier } }
+			if = { limit = { je:je_world_war = { has_modifier = ww_home_front_strain_modifier } } je:je_world_war = { remove_modifier = ww_home_front_strain_modifier } }
+			if = { limit = { je:je_world_war = { has_modifier = ww_air_raid_relief_modifier } } je:je_world_war = { remove_modifier = ww_air_raid_relief_modifier } }
+			if = { limit = { je:je_world_war = { has_modifier = ww_prolonged_war_exhaustion_modifier } } je:je_world_war = { remove_modifier = ww_prolonged_war_exhaustion_modifier } }
+		}
 	}
 
-	on_complete = {
-		# Clean up all world war variables
-		remove_variable = ww_active_phase
-		remove_variable = ww_aggressor_side
-		remove_variable = ww_defender_side
-		remove_variable = ww_years_elapsed
-		remove_variable = ww_months_counter
-		remove_variable = ww_peace_concluded
-		remove_variable = ww_peace_months
-		remove_variable = ww_fully_resolved
-		ww_clear_outcome_latches = yes
-		# Clean up any lingering modifiers
-		if = { limit = { je:je_world_war = { has_modifier = ww_rising_tensions_modifier } } je:je_world_war = { remove_modifier = ww_rising_tensions_modifier } }
-		if = { limit = { je:je_world_war = { has_modifier = ww_home_front_strain_modifier } } je:je_world_war = { remove_modifier = ww_home_front_strain_modifier } }
-		if = { limit = { je:je_world_war = { has_modifier = ww_prolonged_war_exhaustion_modifier } } je:je_world_war = { remove_modifier = ww_prolonged_war_exhaustion_modifier } }
+	outcome = {
+		header = je_standard_failure_header
+		effect_header = je_standard_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_world_war_fail_conclusion_desc
+		trigger = {
+			# Failed if no longer a great power
+			country_rank < rank_value:great_power
+		}
+		effect = {
+			ww_mark_entry_resolved = yes
+			remove_variable = ww_active_phase
+			remove_variable = ww_aggressor_side
+			remove_variable = ww_defender_side
+			remove_variable = ww_years_elapsed
+			remove_variable = ww_months_counter
+			remove_variable = ww_peace_concluded
+			remove_variable = ww_peace_months
+			remove_variable = ww_fully_resolved
+			remove_variable = ww_war_began
+			# The outcome latches (ww_fought_as_*, ww_conceded, ww_enforced_war_goal,
+			# ww_peace_terms_received) are kept on purpose: a defeated power often drops
+			# below great power before the victors' peace conference fires, and the
+			# victors find the powers they beat by these latches. The next outbreak
+			# clears them (ww_clear_stale_outcome_latches in world_war_events.5).
+		}
 	}
 
-	fail = {
-		# Failed if no longer a great power
-		country_rank < rank_value:great_power
-	}
-
-	on_fail = {
-		remove_variable = ww_active_phase
-		remove_variable = ww_aggressor_side
-		remove_variable = ww_defender_side
-		remove_variable = ww_years_elapsed
-		remove_variable = ww_months_counter
-		remove_variable = ww_peace_concluded
-		remove_variable = ww_peace_months
-		remove_variable = ww_fully_resolved
-		remove_variable = ww_war_began
-		# The outcome latches (ww_fought_as_*, ww_conceded, ww_enforced_war_goal,
-		# ww_peace_terms_received) are kept on purpose: a defeated power often drops
-		# below great power before the victors' peace conference fires, and the
-		# victors find the powers they beat by these latches. The next outbreak
-		# clears them (ww_clear_stale_outcome_latches in world_war_events.5).
+	# The rule switched off mid-game, from the screen that changes country
+	# (2026-11-08). Nothing else ends the entry, so its modifiers and its pulse,
+	# the sole driver of the world war's events, ran on. It ends on its next
+	# update, taking the modifiers along, and ww_stop_for_rule clears the
+	# variables and latches; world_war_events_on_action does the same for a
+	# belligerent that holds no entry, so a stale ww_active_phase can't block a
+	# later world war (world_war_conditions_met) once the rule is back on. A war
+	# already under way goes on as an ordinary war.
+	# Also the early unlock switched to the late one while this country lacks
+	# Combined Arms: the same teardown, and world_war_events_on_action adds the
+	# entry back at Combined Arms (ww_reopen_at_gate).
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_world_war_invalid_conclusion_desc
+		trigger = {
+			OR = {
+				NOT = { te_world_war_on = yes }
+				NOT = { ww_era_reached = yes }
+			}
+		}
+		effect = {
+			ww_stop_for_rule = yes
+			if = {
+				limit = { te_world_war_on = yes }
+				set_variable = ww_reopen_at_gate
+			}
+		}
 	}
 
 	on_monthly_pulse = {
@@ -325,6 +393,7 @@ je_world_war = {
 				if = { limit = { je:je_world_war = { has_modifier = ww_war_propaganda_modifier } } je:je_world_war = { remove_modifier = ww_war_propaganda_modifier } }
 				if = { limit = { je:je_world_war = { has_modifier = ww_wartime_rationing_modifier } } je:je_world_war = { remove_modifier = ww_wartime_rationing_modifier } }
 				if = { limit = { je:je_world_war = { has_modifier = ww_home_front_strain_modifier } } je:je_world_war = { remove_modifier = ww_home_front_strain_modifier } }
+				if = { limit = { je:je_world_war = { has_modifier = ww_air_raid_relief_modifier } } je:je_world_war = { remove_modifier = ww_air_raid_relief_modifier } }
 				if = { limit = { je:je_world_war = { has_modifier = ww_prolonged_war_exhaustion_modifier } } je:je_world_war = { remove_modifier = ww_prolonged_war_exhaustion_modifier } }
 				if = { limit = { has_modifier = ww_fresh_forces_modifier } remove_modifier = ww_fresh_forces_modifier }
 				if = { limit = { has_modifier = ww_arsenal_of_democracy_modifier } remove_modifier = ww_arsenal_of_democracy_modifier }

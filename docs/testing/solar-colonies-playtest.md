@@ -15,7 +15,7 @@ still reaches the milestones.
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
 | `TE_SELF_CHECK OK site_dead_holder <world>: …` | once a game, the first month a world's holder is no longer alive | which guard caught the dead holder: `exists` on the stored country, or `is_country_alive = no` on a stored country that still exists. Either is fine; record which | `TE_SELF_CHECK BROKEN site_dead_holder <world>: the heir did not take it`: the transfer to the capital region's owner left the dead holder on the record | if neither guard catches it (the world stays on a dead holder, no line), store the holder's tag as well and compare tags (`c:<TAG>` and `exists`) |
-| `TE_SELF_CHECK OK/BROKEN site_receiver_entry: …` | once a game, 70 days after a country without the Moon Base and Mars Landing received a colony | it holds Solar System Colonization and the colony | it has no entry (`add_journal_entry` or the widened `possible` failed) or lost the colony | put a received colony's modifiers on the country instead of the entry for a country that cannot hold the entry (`sr_site_show_modifier` would need a country branch) |
+| `TE_SELF_CHECK OK/BROKEN site_receiver_entry: …` | once a game, 70 days after a country without the Moon Base and Mars Landing received a colony | it holds Solar System Colonization and the colony | it has no entry (the engine did not activate its inactive copy, or `add_journal_entry` failed for one with no record; the add skips a copy since #1416) or lost the colony | put a received colony's modifiers on the country instead of the entry for a country that cannot hold the entry (the entry's declarations would need a country copy) |
 
 ## The record
 
@@ -125,7 +125,6 @@ module at our first colony and fabricate now; land our shipments now; recompute 
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
 | `TE_SELF_CHECK OK/BROKEN module_fabrication country=… points=…` | once a game, a month after a Space Program first runs a fabrication method at half staff or more | the method's `country_sr_module_fabrication_add` reaches its country | the country has no points: the secondary group's workforce-scaled country modifier does not reach it | give the points from script instead: `sr_mod_fab_rate` reads which method the Space Program runs (`sr_mod_fabrication_runs`) and its occupancy |
-| `TE_SELF_CHECK OK/BROKEN modifier_seen_same_effect <modifier>` | once a game, the first time a world's sync re-adds a specialization at its multiplier (the first month after loading a save with colonies, or the first module landing) | `has_modifier` sees a modifier an `add_modifier` placed earlier in the same effect | it doesn't yet: every refresh must stay once per effect (the mod's code already assumes so) | none needed for this slice: `sr_site_show_modifier_at` tests its `_mult` record, not `has_modifier`; record the answer in `scripting_best_practices.md` |
 
 1. **The method group.** Under Simple Colonies, the Space Program's panel shows a third group, Module Fabrication,
    starting on No Module Fabrication. Orbital Assembly (Cislunar Infrastructure) shows +5 Colony Module Fabrication per
@@ -190,8 +189,8 @@ for `TE_SR_SITES <world> is a free colony`.
    Asks to Join Us": welcome it and it is ours again at autonomy 20, with its people and modules.
 6. **A dead holder.** `annex <TAG>` an AI holder whose capital region nobody can take a colony for: a world with 1,000
    people or more reads Free, not Unclaimed.
-7. **Colony life.** Our first colony to reach 2,000 people gets "The First Child of <World>", and no later colony
-   does. Strikes and dome breaches come rarely, at colonies of 10,000 and 5,000 people, and never within ten years of
+7. **Colony life.** Our first colony to reach 5,000 people gets "The First Child of <World>", three years after our
+   first colony reached 1,000 at the soonest, and no later colony does. Strikes and dome breaches come rarely, at colonies of 10,000 and 5,000 people, and never within ten years of
    the last one (`sr_life_cooldown`). A dome breach names the people lost, and Settlers shows the colony smaller.
 8. **The AI.** In an observer run, AI space powers answer the demand with charters, supply up to two free colonies,
    and welcome a colony that asks to join.
@@ -434,18 +433,17 @@ reaches a milestone.
 4. **The throughput.** The Space Program's throughput breakdown shows Funding Throughput Bonus at the full +25% a level,
    past the cap too (+225% at 9), and the Launch Capacity bill rises with it.
 5. **A cap that moves.** Fund a milestone to the cap with Advanced Research tier V, then lose the principle (leave the
-   bloc, or change the principle): the level stays and the figure reads "N / N−1 (+0.5)" at once. The pace follows at
-   the next monthly pulse, which sees the cap differ from the one the costs were computed with (`sr_cost_funding_cap`)
-   and recalculates: that entry's Funding Progress Bonus drops by 0.25 (the top level now counts as half a level). The
-   other way, research a cap technology while funded at 9 with a cap of 7: "9 / 7 (+0.8)" reads "9 / 8 (+0.5)" at
-   once, and within a month the bonus rises from +3.92 to +4.25. Until that pulse the pace hover's
-   Funding line (live values) and its "Added each month" breakdown (the modifier) can disagree by that much; after it
-   they agree. If they still disagree a month later, `sr_cost_funding_cap` isn't being compared or set.
+   bloc, or change the principle): the level stays and the figure reads "N / N−1 (+0.5)" at once. The pace follows
+   within a few days, since the entry declares the bonus from the live cap (#1404, which retired the monthly
+   recalculation through `sr_cost_funding_cap`): that entry's Funding Progress Bonus drops by 0.25 (the top level now
+   counts as half a level). The other way, research a cap technology while funded at 9 with a cap of 7: "9 / 7 (+0.8)"
+   reads "9 / 8 (+0.5)" at once, and within a week the bonus rises from +3.92 to +4.25. For those days the pace
+   hover's Funding line (live values) and its "Added each month" breakdown (the modifier) can disagree by that much;
+   after them they agree. If they still disagree a week later, the declaration isn't reading the cap.
 6. **The AI.** In an observer run, no AI's stepper shows "(+…)": the AI stops at the cap. One left past it by a falling
    cap funds down to the cap within a few weeks.
-7. **An old save.** Load a save from before the split with a running milestone: within a month its entry carries both
-   Funding Progress Bonus and Funding Throughput Bonus, and the Space Program's throughput is what it was before the
-   update.
+7. **An old save.** Retired with #1404: vanilla 1.15 loads no save from before the split (#1407), and each entry
+   declares both modifiers. The old-save strip went too (#1429); nothing to check.
 
 ## Lunar colonization, build 1: technologies and the era-10 base (2026-10-29)
 
@@ -456,7 +454,7 @@ The first build of `docs/superpowers/specs/2026-10-29-lunar-colonization-design.
 3. **Switching early by hand.** Before the Moon Base and the Mars Landing, switch the method in the building panel: the bill rises from 5,000 to 10,000, the Moon Base and the Mars Landing keep running (the method carries the Mars Mission's), and Solar System Colonization does not start. This is the intended intermediate state (a method has no `possible`), not a bug. Watch an AI too: the method group picks the most productive method, so an AI with Cislunar Infrastructure and no Moon Base may switch on its own and pay 10,000 a week for nothing. The second build ends this, since the method then opens colonization itself.
 4. **The cost factor.** Solar System Colonization's Space Program Cost reads ×8 for a country with the Mars Landing (15 innovation × 8 a funding level); a country holding a colony by treaty without the Mars Landing pays ×5, and its cost re-posts when its Mars Landing completes.
 5. **The era-10 base.** With In-Situ Resource Utilization, an Extraplanetary Base can be built and starts on Regolith Processing (15 Electronic Components, 15 Wireless Telecommunication Gear, 5 Digital Access and 60 Launch Capacity for 175 Structural Metals, 95 Tech-Critical Metals and 50 Glass and Plastics a level); the Asteroid Mine method waits for Asteroid Mining. Under Simple or Full Colonies, the Modules view reads room 0 until Asteroid Mining or a colony, and a level built then works at −75%; Asteroid Mining adds the near-Earth 10. AI governments and private investors don't build a base with no room.
-6. **An old save (`te_repair_lunar_technologies`).** Load a save from before this build in which a country runs Solar Colonization or Orbital Assembly on Directed Energy Weapons, and one holds Asteroid Mining. In the first month, `debug.log` has a `TE_LUNAR_TECH_REPAIR` line for each, and they hold Cislunar Infrastructure and In-Situ Resource Utilization. Before that month ends, watch the colonizing country's Space Program: if the engine moved it off Solar Colonization at the load (its technology unresearched for a moment), its colonization entry fails (the program lost), and a colonizer with no colony yet loses its progress toward its first colony with the entry's `on_fail`. Fallback for that: switch back by hand after the first month (the AI through Begin Solar Colonization); nothing in script runs before the first monthly pulse.
+6. **Retired at vanilla 1.15** (the repair went with the migration; saves from 1.14.5 don't carry over). ~~**An old save (`te_repair_lunar_technologies`).** Load a save from before this build in which a country runs Solar Colonization or Orbital Assembly on Directed Energy Weapons, and one holds Asteroid Mining. In the first month, `debug.log` has a `TE_LUNAR_TECH_REPAIR` line for each, and they hold Cislunar Infrastructure and In-Situ Resource Utilization. Before that month ends, watch the colonizing country's Space Program: if the engine moved it off Solar Colonization at the load (its technology unresearched for a moment), its colonization entry fails (the program lost), and a colonizer with no colony yet loses its progress toward its first colony with the entry's `on_fail`. Fallback for that: switch back by hand after the first month (the AI through Begin Solar Colonization); nothing in script runs before the first monthly pulse.~~
 7. **Orbital Foundries.** Space Colonization's fabrication method reads Orbital Foundries in the method group, the Colony Modules section's fabrication tooltip and the method's own description.
 8. **Art (icon batch 7).** The three technologies show their own icons in the tree: Cislunar Infrastructure an orbital station with a lander docked, In-Situ Resource Utilization a tracked regolith processor, Nuclear Thermal Propulsion a reactor engine. None repeats Reusable Rocketry's, Asteroid Mining's or Fusion Power's.
 
@@ -467,7 +465,7 @@ The second build of `docs/superpowers/specs/2026-10-29-lunar-colonization-design
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
 | `TE_SELF_CHECK OK lunar_stage0_draw world=<key> …` | once a game, the first lunar world the Races Only draw founds | the stage-0 draw found the Moon in play and founded a lunar world the month the bar filled | `TE_SELF_CHECK BROKEN lunar_stage0_draw held=… best_cost=…` (once a game): under Races Only with no target, a full bar was held three months at stage 0 with a lunar world free, so the Moon is missing from `sr_launch_best_cost` or `sr_launch_ungated_departs` read false, and Mars stays locked for everyone | read `best_cost`: above 0, `sr_window_moon_in_play` is false (check its `sr_colonization_stage >= 0` arm); at 0, give the lunar draw branches no departs test at all |
-| `TE_SELF_CHECK OK/BROKEN propellant_depots_bool …` | OK once a game, once a Shackleton holder read the boolean yes and a country that lost the world (ceded, released or taken by an heir) read no; BROKEN once, on a mismatch two launch months running | Shackleton's Propellant Depot on the colonization entry reaches the country as `modifier:country_sr_propellant_depots_bool`, and leaves it with the world. Its ×0-under-blockade case comes with build 3b's lunar blockade (its section below) | `record=yes boolean=no`: the entry's boolean doesn't reach the country; `record=no boolean=yes`: the boolean outlived the world | use `sr_depots_by_record = yes` in place of the modifier in `sr_launch_has_depots` (`sr_launch_window_triggers.txt`) |
+| `TE_SELF_CHECK OK/BROKEN propellant_depots_bool …` | OK once a game, once a Shackleton holder read the boolean yes and a country that lost the world (ceded, released or taken by an heir) read no; BROKEN once, on a mismatch two months running (read every month for every country, so a holder whose programme has finished counts) | Shackleton's Propellant Depot on the colonization entry reaches the country as `modifier:country_sr_propellant_depots_bool`, and leaves it with the world. Its ×0-under-blockade case comes with build 3b's lunar blockade (its section below) | `record=yes boolean=no`: the INJECT of the entry's generated declarations (`common/journal_entries/sr_sites_generated.txt`, 1.15 scaling modifiers) didn't merge, or the entry's boolean doesn't reach the country; `record=no boolean=yes`: the boolean outlived the world | use `sr_depots_by_record = yes` in place of the modifier in `sr_launch_has_depots` (`sr_launch_window_triggers.txt`) |
 | `TE_SELF_CHECK BROKEN lunar_double_claim <key> …` | never, if all is well: a lunar world founded while it already had a holder | (no OK line) | two countries founded the same lunar world in one month: the dispatch's same-month founding doesn't see the first claim | test `sr_cf_targetable_<key>` again inside `sr_cf_found_now_<key>` and send the second fleet's progress back |
 
 1. **The Moon first.** Start Solar System Colonization in a new game: the overview reads "Stage: the Moon", Next Window reads Open now over "the Moon" (build 2b; the Moon needs no window), and the Solar System list shows the six lunar worlds under The Moon at the top. Hover one: Stage 0: The Moon, its two specializations, and that a fleet bound there founds its colony the month it leaves. The Worlds pie and Colonies Held count 40.
@@ -485,20 +483,15 @@ The second build of `docs/superpowers/specs/2026-10-29-lunar-colonization-design
 
 ## Lunar colonization, build 2b: the Moon Base retired (2026-10-29)
 
-Build 2b of `docs/superpowers/specs/2026-10-29-lunar-colonization-design.md` (§§ 4, 7): Solar System Colonization opens on the Moon Landing with Cislunar Infrastructure, and each world beyond the Moon needs the Mars Landing; a country's first lunar colony takes the Moon Base's place in the race; the Moon Base milestone is retired, and an old save's Moon Base becomes a lunar colony. Lunar blockades are build 3b's (its section below). The console is `event te_debug_space_race.8`: option a runs the migration's check again, b pretends we finished a scientific Moon Base and holds no lunar world (the migration runs again next month), c pretends an old Moon Base is open with 120 progress (next month's pulse carries it).
-
-| Line in `debug.log` | When | OK means | BROKEN means | Fallback |
-|---|---|---|---|---|
-| `TE_SELF_CHECK OK lunar_migration migrated=<n>` | once a game, the first monthly step of an old save (`sr_lunar_migrate`, behind `sr_lunar_initialized`) | every country that finished the old Moon Base holds a lunar world, or none was free; `n` > 0, so a new game, which migrates no one, logs nothing | `TE_SELF_CHECK BROKEN lunar_migration country=… migrated=…`: a country that finished the Moon Base holds no lunar world while one is free, so `sr_lunar_migrate_country`'s chain gave it none | empty `LUNAR_MIGRATION` and `LUNAR_MIGRATION_NO_PURPOSE` in `gen_solar_sites.py`, so every country takes the first free lunar world in table order with its first specialization |
-| `TE_SELF_CHECK OK lunar_migration carried=<p> banked=<b>` | once a game, the first open Moon Base the monthly country pulse carries (`sr_lunar_carry_moon_base`) | the open entry's progress (at most 300) is banked for Solar System Colonization before the inactive cleanup clears it; `banked` is what the next launch month adds | `TE_SELF_CHECK BROKEN lunar_migration still open: …` (once a game, from the retired entry's own pulse, `sr_lunar_carry_lingering_check`): two months after the carry the retired entry is still active, so its `possible = { always = no }` didn't deactivate it. It moves nothing (its pulse runs only while `sr_active_moon_base`, which the carry removes), but it shows in the journal | make the retired entry fail at once (`fail = { always = yes }`, its `on_fail` emptied so no programme-loss report plays); the carry runs before the cleanup either way |
+Build 2b of `docs/superpowers/specs/2026-10-29-lunar-colonization-design.md` (§§ 4, 7): Solar System Colonization opens on the Moon Landing with Cislunar Infrastructure, and each world beyond the Moon needs the Mars Landing; a country's first lunar colony takes the Moon Base's place in the race; the Moon Base milestone is retired. Lunar blockades are build 3b's (its section below). Its old-save half (the migration, the carry, `.109` and the console's `event te_debug_space_race.8`) and the `lunar_migration` self-check went with vanilla 1.15, which loads no save from 1.14.x (#1407).
 
 1. **The Moon on the Moon Landing.** In a new game, with the Moon Landing and Cislunar Infrastructure but not the Mars Landing: Begin Solar Colonization appears from the Moon Mission and is possible; the journal never shows a Moon Base. Colonization founds only lunar worlds, under Races Only too (the draw has no world beyond the Moon). Under Simple or Full, hover Target on a world of Mars: it is grayed with "The site is on the Moon, or we have completed the Mars Landing". Once the Moon is full, the bar fills and holds, and Next Window's third line reads "no Mars Landing" (design § 4: the panel says why). After the Mars Landing the button works, the line reads the stage again, and under Races Only stage 1 draws.
 2. **The first lunar colony.** Found a lunar world: its colony event (`space_race_colony_events.35` to `.40`) fires, then Foothold on Another World (`space_race_events.6`) a day later, with one option and the Lunar Colony reward (First Lunar Colony for the race's first); other countries get the notice that we founded a colony on the Moon (`.20`), and the Program row's Lunar Colony icon lights, with the first mark for the race's first (no half-lit state before). Its reward shows on the colonization entry's reward hover, the first's and the later one's. A second lunar colony fires no `.6`. Check the innovation cost hover: the founding reposts no cost.
 3. **Begin Deep Space for a lunar-only holder.** Under Races Only, a country with the Mars Landing and Space Colonization researched that holds only lunar worlds at stage 3 is offered Begin Deep Space Exploration; one holding a colony beyond the Moon is not, and colonizes on Solar Colonization. Under Simple or Full, with every world of stages 1 and 2 claimed and a lunar world still free, the same country is offered it too (a free lunar world needs no Deep Space). And under Races Only past stage 2 with a lunar world free, a country without Deep Space that takes Begin Solar Colonization sees its entry open and found on the Moon (review I1).
-4. **An old save's Moon Bases.** Load a save from before this build in which one country finished the Moon Base first as a scientific outpost, a second later as an industrial facility, a third with no purpose chosen, and a fourth has it open with progress. After the first month: the first holds Daedalus Crater (Daedalus Radio Telescope), the second Mare Imbrium (Imbrium Mass Driver), the third Tranquility Base (Tranquility Heritage Site); a military installation would hold Marius Hills (Marius Hills Hardened Installation). A world already taken gives way to the first free lunar world in table order. Each player among them gets The Moon Base Becomes a Colony (`.109`) naming its world, once even when item 5's notice applies too (one `.109` with both texts); no colony event (`.35` to `.40`) and no `.6` plays, and each keeps its Moon Base reward. `debug.log`: `TE_SELF_CHECK OK lunar_migration migrated=3`. The fourth's Moon Base leaves the journal and the carry line logs its progress; once its colonization runs, its next month's launch step adds that much to the bar (at most 300), and its cost hover shows one colonization cost, not two.
-5. **An all-claimed old save keeps everything; the Moon by choice.** Load a save from before build 2a (34 worlds, all claimed) with a player holding Interplanetary Trade Networks and drawing Commercial Space Industry, and an AI that never colonized but runs the Interstellar Mission. After the first month: nothing is removed (the player keeps both, and its colonization reads finished), and it gets The Moon Is Open (`.109`), naming the decision. No program starts on its own: the AI's entry stays closed and its dividend stays (the entry's `possible` names the choice). Resume Solar System Colonization shows in the decisions panel; take it: the colonization bar, funding stepper, approach buttons and Target work again, the innovation cost hover bills the program, and Commercial Space Industry is gone the next month while it runs. Under Simple or Full the stage reads the Moon (build 2a's item 9); under Races Only it stays at 5 and the draw takes the lunar worlds as released ones (build 2a's item 3). Once all six lunar worlds are claimed the program stops within a month: Interplanetary Trade Networks is still there once, not twice, and Commercial Space Industry returns. An AI that takes Resume (it weighs it 100 while it takes part in the race, out of default and with a positive fixed income) loses its dividend while it runs: note how many do. Then switch a finished player to the Moon Mission: Begin Solar Colonization shows in place of Resume, and taking it runs the bar the same month (review R1). In a game whose race isn't over, the entry's `possible` hover shows no choice line: it sits in a `trigger_if` on `sr_race_over_moon_free`, and the hiding is unseen in game so far.
-6. **The Purpose of the Base left open.** In an old save with that event (`.82`) waiting, it shows one option, Settle the Moon instead., and changes nothing. The country's Moon Base was running, so its progress is carried as item 4's fourth country's is.
-7. **The console.** `event te_debug_space_race.8`: option b on a country with no lunar world gives it Daedalus Crater (or the next free world) next month, with `.109`; option c on a country running colonization logs `OK lunar_migration carried=120` next month, again on a rerun (it clears the carry's records), and its next launch month adds 120.
+4. **Retired at vanilla 1.15** (the old-save half went with the migration; saves from 1.14.5 don't carry over). ~~**An old save's Moon Bases.** Load a save from before this build in which one country finished the Moon Base first as a scientific outpost, a second later as an industrial facility, a third with no purpose chosen, and a fourth has it open with progress. After the first month: the first holds Daedalus Crater (Daedalus Radio Telescope), the second Mare Imbrium (Imbrium Mass Driver), the third Tranquility Base (Tranquility Heritage Site); a military installation would hold Marius Hills (Marius Hills Hardened Installation). A world already taken gives way to the first free lunar world in table order. Each player among them gets The Moon Base Becomes a Colony (`.109`) naming its world, once even when item 5's notice applies too (one `.109` with both texts); no colony event (`.35` to `.40`) and no `.6` plays, and each keeps its Moon Base reward. `debug.log`: `TE_SELF_CHECK OK lunar_migration migrated=3`. The fourth's Moon Base leaves the journal and the carry line logs its progress; once its colonization runs, its next month's launch step adds that much to the bar (at most 300), and its cost hover shows one colonization cost, not two.~~
+5. **A race over with the Moon free keeps everything; the Moon by choice.** In a game where every site has been claimed, with a player holding Interplanetary Trade Networks and drawing Commercial Space Industry and an AI that never colonized but runs the Interstellar Mission, free a lunar world again (a holder dead without an heir, or `event te_debug_space_race.2`'s release option on a country whose first colony is lunar). The next month: nothing is removed (the player keeps both, and its colonization reads finished). No program starts on its own: the AI's entry stays closed and its dividend stays (the entry's `possible` names the choice). Resume Solar System Colonization shows in the decisions panel; take it: the colonization bar, funding stepper, approach buttons and Target work again, the innovation cost hover bills the program, and Commercial Space Industry is gone the next month while it runs. Once the lunar world is claimed again the program stops within a month: Interplanetary Trade Networks is still there once, not twice, and Commercial Space Industry returns. An AI that takes Resume (it weighs it 100 while it takes part in the race, out of default and with a positive fixed income) loses its dividend while it runs: note how many do. Then switch a finished player to the Moon Mission: Begin Solar Colonization shows in place of Resume, and taking it runs the bar the same month (review R1). In a game whose race isn't over, the entry's `possible` hover shows no choice line: it sits in a `trigger_if` on `sr_race_over_moon_free`, and the hiding is unseen in game so far.
+6. **Retired at vanilla 1.15** (the old-save half went with the migration; saves from 1.14.5 don't carry over). ~~**The Purpose of the Base left open.** In an old save with that event (`.82`) waiting, it shows one option, Settle the Moon instead., and changes nothing. The country's Moon Base was running, so its progress is carried as item 4's fourth country's is.~~
+7. **Retired at vanilla 1.15** (the old-save half went with the migration; saves from 1.14.5 don't carry over). ~~**The console.** `event te_debug_space_race.8`: option b on a country with no lunar world gives it Daedalus Crater (or the next free world) next month, with `.109`; option c on a country running colonization logs `OK lunar_migration carried=120` next month, again on a rerun (it clears the carry's records), and its next launch month adds 120.~~
 
 ## Lunar colonization, build 3b: the Moon under fire at Earth (2026-10-29)
 
@@ -538,7 +531,7 @@ Design: `docs/superpowers/specs/2026-10-30-colony-management-design.md` (the own
 3. **Next Windows.** On chemical rockets, with stage-4 and stage-5 worlds unclaimed and targetable: the Uranus, Neptune and Kuiper Belt rows are absent, and the line under the table counts them. Each row's transit matches `docs/engine/launch_windows_report.md` for the month; with a fusion drive the Window column reads Any month, and with Asteroid Mining a closed window reads the premium and the months. The Staged in Orbit hover lists the same destinations.
 4. **Slots and the price past them.** Queue modules at a 2-slot colony until its Slots reads 3/2 (red): the hover's next price reads 300; the module past the slots leaves fabrication's stock 200 lower when it is built, the next 300 lower. Five past the slots, the + buttons grey out with the room line crossed. With Advanced Nanofabrication the colony reads one more slot.
 5. **Facilities.** Build one of each at a fully crewed colony: the entry shows Off-World Research Stations, Cultural Centers, Resorts, Black Sites, Training Grounds and Materials Foundries at multiplier 1; the colony's Bases rises by 50 with a Mining Complex; Module Fabrication's rate rises by 4 with an Orbital Yard (and Space Command's month by 0.5 under Full Colonies); the nuclear Command Reliability target rises by 4 with a Nuclear Command Center; the colony's drift hover shows −0.15 for its Administration. Blockade the colony: the Mining Complex, Yard, Resort and Foundry stop, the rest keep running.
-6. **The Training Ground reaches the army.** With Off-World Training Grounds on the entry, a battalion's experience gain in the military panel's breakdown includes it. If it doesn't, move `sr_module_train` from the entry to the country, refreshed and removed by `sr_mod_refresh_facilities`.
+6. **The Training Ground reaches the army.** With Off-World Training Grounds on the entry, a battalion's experience gain in the military panel's breakdown includes it. If it doesn't, stop declaring `sr_module_train` on the entry and add it to the country instead, at `multiplier = sr_mod_units_train` on the colony month (`sr_mod_month`), removing the old copy first.
 7. **A colony's own modules.** A colony at autonomy 50 with 30,000 people shows Building climbing by 1.5 a month; at 100% it gains a module (`TE_SR_MODULES <key> built a module of its own`), Building restarts at 0, and a specialization level shows in its modifiers at once. A colony with no slot or specialization level left holds at 100%.
 8. **A colony's page.** Click a colony's name, or the arrow beside it (which shows on the list, not the page): only that colony shows, with People, Modules, Autonomy and (Full) Defenses one under another, each heading with its control on the right (Settlers and the priority button, Clear, Abandon), the figures in tiles two to a row with an icon each, and the fifteen modules one to a line with their full names (a site's specializations by name) and nothing cut short. Hover a tile: its breakdown, as the list's figure gave. Back returns to the list, and so does any view button. Every button on the page works as it does in the list. Nothing on the panel is underlined but a word inside a tooltip.
 9. **The AI.** In an observer run, an AI outside the top three that holds a colony sets Emigration to Steady with a positive income, queues a module a year, and answers a self-government demand with a charter; it lets a colony go only after losing its Space Program. Cede Colony: asking an AI for its empty lunar outpost shows about −60 for the colony in the acceptance breakdown, and for a large built-up colony −200.
@@ -600,9 +593,10 @@ No post-setback cooldown, self-government at 50, the grade beside Bases, the que
 1. **No Shielded state.** Force an Ambitious failure (`event te_debug_space_race.1`, option j, on a milestone set to
    Ambitious) and answer it: the overview keeps reading Ambitious with its risk, never "Shielded", and the next month
    rolls as usual. The console's "Clear the setback cooldown" option is gone.
-2. **An old save from inside a cooldown.** Load a save taken while a milestone read Shielded: within a month the
-   overview reads its approach again (until then a Safe or Standard one may read Ambitious), and
-   `sr_failure_cooldown` is gone from the country.
+2. **Retired at vanilla 1.15** (the strip went with the migration; saves from 1.14.5 don't carry over). ~~**An old
+   save from inside a cooldown.** Load a save taken while a milestone read Shielded: within a month the overview reads
+   its approach again (until then a Safe or Standard one may read Ambitious), and `sr_failure_cooldown` is gone from
+   the country.~~
 3. **Self-government at 50.** A colony whose autonomy reaches 50 fires `space_race_events.94` (Demands
    Self-Government), and the overview's Colonies cell names it in red from 50.
 4. **The grade beside Bases.** The Colonies section's Modules view: each colony's Bases reads its room and grade,
@@ -628,7 +622,7 @@ Solar System Colonization's four tabs (UI pass design § 11; `docs/systems/mod_s
 3. **Remembered.** Pick Colonies, close the journal and reopen it: still on Colonies. The same in the Timeline Extended
    window's Space Race tab, which shares the choice.
 4. **Both hosts.** The tab row and every tab draw in the journal entry and in the Timeline Extended window.
-5. **Other milestones.** The Moon Base, Mars Landing and the rest keep their one panel, with no tab row.
+5. **Other milestones.** The Mars Landing and the rest keep their one panel, with no tab row.
 6. **The window's Mission Control.** In the Timeline Extended window's Space Race tab, Mission Control shows no Orbital
    Debris row (the window's empty `sr_debris` override reaches it one container deeper now); the journal's does.
 7. **The guide's screenshot.** Retake `docs/player_guide/images/solar_system_colonization_tab.png` on the Mission
@@ -847,8 +841,11 @@ gotcha).
    in turn: the popup names that fleet's location, strength, propellant and supply, and lists every location but its
    own. The same from the Timeline Extended window's Space Race tab (Fleets tab): identical rows and figures.
 2. **The rows read.** Each row has the trip's months and propellant to a tenth, red where the fleet carries less (the
-   hover says so); from Earth a window reading "Open now" or "In N months", blank from anywhere else; our colonies
-   there, and the enemy's strength there and on its way (0 at peace). No raw keys, nothing cut off with an ellipsis.
+   hover says so); from Earth a window reading "Open now" or "In N months", blank from anywhere else and blank for a
+   fleet at a torch or antimatter pace (Compact Fusion Reactors, Antimatter Production; a fleet of rapid response hulls
+   alone runs one drive ahead, so on the fusion drive it reads blank too, and a chemical or fusion fleet still shows
+   the window); our colonies there, and the enemy's strength there and on its way (0 at peace). No raw keys, nothing
+   cut off with an ellipsis.
 3. **Choosing, then Go.** Choose on a row closes the popup, and the fleet's destination button names the location;
    reopened, that row reads Chosen. Go then works as before, and stays greyed where the propellant is short. Both of
    Choose's clicks run once (the choice, then the close).
@@ -888,3 +885,132 @@ gotcha).
     raw key means `IsValidTooltip` renders nothing for a scripted GUI with no `effect`. Fallback: give each gate
     `effect = { custom_tooltip = sr_fl_not_at_location_tt }` (the target gate: `sr_fl_no_target_tt`), a text-only
     effect that changes nothing.
+
+## Colony politics need 1,000 people (2026-11-12)
+
+Owner's decision, issue #1620: autonomy builds, and a colony demands self-government or breaks away, only with
+`sr_free_colony_minimum` (1,000) people (`sr_site_peopled_<key>`, `docs/systems/mod_systems/space_race.md`).
+
+1. **An empty outpost through a war.** Found an outpost far out (Kuiper Belt or Saturn) and send no settlers, then go to
+   war for a few years. Its autonomy stays at 0, its drift reads 0 and its hover opens with "With fewer than 1,000
+   people it makes no demands" and ends "settles near 0%". No "<World> Demands Self-Government", no break-away, and
+   the overview's Colonies cell reads Loyal. Incite Colonial Autonomy can't be launched against a country holding only
+   such outposts (greyed: "Target must hold a colony of at least 1,000 people").
+2. **The thousandth settler.** With the outpost our first colony, set its autonomy to 80 (`event te_debug_space_race.5`) while it has fewer than
+   1,000 people: the next months it falls (1% a month), with no demand. Send settlers until it passes 1,000: from that
+   month its drift takes its terms again, the hover's note goes, and at 50 or more the demand comes the next month.
+3. **A dip under the minimum.** A colony just over 1,000 that Sabotage Colony takes under it keeps its autonomy,
+   falling 1% a month; nothing resets it, and Sabotage adds no autonomy while it is under.
+
+## Space Fleets as cards, and the banner (2026-11-14)
+
+Owner's review of 2026-11-14: each fleet in Space Fleets is a card (`te_sr_fleet_row`), with a picture at the head of
+the section (`te_sr_fleet_banner`). Nothing here was seen in game before it merged; `docs/systems/space_race_gui_icons.md`
+lists the art. Needs Full Colonies and at least two fleets (`event te_debug_space_race.6`).
+
+1. **The card.** Each fleet sits in its own framed box, 480 wide, with a gap between cards. The head reads, left to
+   right: the gold emblem in its inset, the fleet's number (I to IX), where it is, its drive (or Refit and its
+   months), and the roll-up arrow at the right edge. Nothing overlaps and no label ends in "...".
+2. **Ships by role.** Five cells: Warships, Rapid, Siege, Carriers, Tenders, each with its icon, its count beside it
+   and its word beneath. A role the fleet has none of shows its icon faint and a 0. Hovering any cell gives the
+   fleet's ships, each role of its full number. The icons are painted (the silver warship, a steel-blue dart, a bronze
+   gunship behind one big gun, a grey carrier with three orange bays, an orange tank): can the five be told apart at
+   24 px, lit and faint?
+3. **The bars.** Strength, km/s, Supply and Marines, each a caption, a bar and "now/full" under it. A fleet fresh from
+   Earth has four full bars; one back from a battle or a long leg shows the bars part empty, and the figures agree
+   with the hover on a role cell (propellant of capacity, supply of months). A fleet with no carriers shows Marines
+   0/0 and an empty bar.
+4. **Rolling up.** The arrow rolls the card up to its head, which then also shows the strength figure (ships on
+   hover) left of a roll-down arrow; the roll-down arrow brings the body back. Each card rolls on its own; the other
+   cards don't move sideways. The state resets when the game is restarted (it is client-side).
+5. **In transit.** Send a fleet: its head reads "→ <location>", and under it a bar fills as the months pass, a small
+   ship riding the bar's end, with "Lands in N months." beside it. The ship marker is not clipped at either end of
+   the bar. The orders and posture lines are gone until it lands; the ships and bars still show unless rolled up.
+6. **Orders and posture.** Go, Transfer, Land and Embark each carry their sign left of the word, in one line that
+   fits the card. The four posture buttons show their icon over their word, a teal world each time: inside a blue
+   shield (Station), inside a white ring (Stand off), under four closing arrows (Close in), behind a red-and-white
+   barrier (Interdict); the one in force is lit, icon included. Seize shows the flag; with the order set to destroy,
+   the burst and Destroy. The orders' signs are still cream line drawings: do they sit acceptably beside the
+   painted icons at 16 px?
+7. **The banner.** A picture 480 × 110 sits under the Space Fleets header, above the cards. Each is painted at the
+   slot's own shape (960 × 220), so it should fill the slot with nothing squashed, tiled or cut off. It is the
+   chemical-drive picture at first (dark rocket warships on orange flames over the night-side Earth), and changes once
+   Fusion Power (three dark ships on blue-white ring engines), Compact Fusion Reactors (silver ships on white exhaust,
+   Jupiter small at the right) and antimatter drives (dark ships on violet beams, a ringed planet ahead) are ours, the
+   same step as Colony Fleets' Drive line. The exhaust's color says the drive: orange, blue, white, violet. Is each
+   still sharp at that size, with its ships clear of the slot's edges?
+8. **A card's world.** Left of where a fleet is, the head shows that location's world at 24 px: Earth Orbit the
+   Earth in its gold ring, Mars the red planet, and so on out to the Kuiper Belt's dwarf planet. A fleet in
+   transit shows the world it is bound for. Exactly one shows at a time.
+
+## Space Command's cells, the Locations strip and the colony fleets' track (2026-11-14)
+
+The same review. Space Command's four readings are overview cells, Locations is a strip, and each colony fleet in
+flight has a track.
+
+1. **Space Command.** Four boxes, two to a row, each with its icon in an inset: Built a month (Space Command's
+   building), Fleet strength (the warship), Upkeep (the colonist with a wrench) and Reserve (the lander on its pad).
+   Each keeps the hover its row had. Pause: Built a month reads Paused in the same box, with the paused hover, and
+   nothing moves. Under them Launch, Auto and Pause as before; then the build mix, five buttons with a role's sign
+   over "Warship 1" and so on, in one line that fits. A click still steps the weight 0 to 3.
+2. **Locations.** One strip, 476 wide: a narrow column of three small icons (the gold shield, the steel shield, the
+   warship; hover each for Ours, Others, Inbound), then nine columns, Earth Orbit to the Kuiper Belt, each under
+   its world's icon (the name on hover). Down a column: our strength, the strongest other power's flag, every other
+   power's strength, the inbound "count·months", and a status icon. The three caption icons sit level with their
+   lines. The flag sits centred in its column; a column with no other power there shows no flag and a 0.
+3. **Statuses.** With a fleet standing off an enemy's colonies, that column's foot shows the Stand off icon, the
+   world in its ring (hover: Blockading); as the one blockaded, the same icon on a red disc (Blockaded). A battle
+   month shows a burst on the red disc; interdiction the world behind its barrier, plain for ours and on the red
+   disc against us. Earth's column shows the Earth hovers.
+4. **Colony fleets.** Each fleet in flight in Colony Fleets shows, between its world and its landing, a short bar
+   with the ship on it, filling from launch to landing. A lunar fleet lands the month it leaves and never shows. A
+   fleet launched before this build has its departure month stored already, so its bar is right from the first
+   month. The world's name and "in N months (year)" both still fit.
+
+## Module storage, Moon modules and the Next Module hover (2026-11-15)
+
+From a game where eight Hellas Planitia modules held every shipment slot for a Mars window and stopped the Moon's
+queue behind them. The console is `event te_debug_space_race.4` as above.
+
+| Line in `debug.log` | When | OK means | BROKEN means | Fallback |
+|---|---|---|---|---|
+| `TE_SELF_CHECK OK/BROKEN module_storage country=… storage=… cap=…` | once a game, a month after a Space Program first runs a Module Storage method at half staff or more | the method's workforce-scaled `country_sr_module_storage_add` reaches its country (`storage` up to 1000 or 3000 by staffing, `cap` 500 + a year of fabrication + that) | `storage=0`: the group's country modifier doesn't reach the country (`module_fabrication`'s check covers the same route for fabrication) | read the method and the program's occupancy in script (`sr_mod_storage_runs`) and add the storage in `sr_mod_fab_storage` |
+
+1. **Module Storage.** The Space Program shows a fourth group, Module Storage, on No Module Storage. Component Depot
+   (Cislunar Infrastructure) and Orbital Depot (Space Colonization) list +1,000 and +3,000 Colony Module Storage and
+   their goods. The Fabrication row's hover lists the stock: Base 500, a year's fabrication at this month's rate,
+   and Module Storage, adding up to the cap it names. With the stock full, the month's points don't raise it.
+2. **A cap that falls.** With a full stock above 500, switch Module Storage back to None: the stock keeps its points
+   (it is not cut), and fabrication adds nothing until the stock is below the new cap.
+3. **Past the slots.** At a colony four past its slots, with only the base stock, the + button greys out with "Our
+   module stock can hold its price" crossed; with an Orbital Depot it allows up to eight past, the Slots hover giving
+   the price (up to 900) and the stock's cap. Queue one, then switch storage off: when it reaches the top the stock
+   still fills to its price (the Next Module hover counts down) and it is built.
+4. **The Moon needs no slot.** With all eight shipment slots taken by modules for Mars, queue a Mining Complex at a
+   lunar colony behind a Mars module. Next month the lunar module jumps to the top of the queue and is installed
+   that month (the level rises, Shipments stays 8 / 0); the Mars module waits behind it. With the stock below the
+   lunar module's price it stays where it is. A blockaded or occupied lunar colony's module takes a slot instead.
+5. **The hover by state.** The Next Module line reads "shipping full" with every slot taken, and its hover gives
+   the waiting and in-flight counts, the months until the first can leave (Mars: the months to its window) and
+   the first lands, and, with a Moon module behind the head, the Moon note (with Earth blockaded, "Earth is
+   blockaded" instead). In a window's last month a module still waiting reads about a cycle less 2 months. While
+   fabricating, the hover gives the price, stock, rate and months; when stopped, the reason: launch site lost, or no
+   fabrication. "1 month" reads singular.
+
+## Module goods and the AI's fabrication budget (2026-11-20)
+
+The owner's resizing of Module Fabrication and Module Storage: no Advanced Materials on the era 10 methods, new
+inputs on all of them, and each later method dearer a week but about 10% cheaper a point. No self-check: the AI's
+budget reads `fixed_income` and the programme's throughput as the mission budget does.
+
+1. **The goods.** With Cislunar Infrastructure and no Advanced Material Fabricator in the market, Orbital Assembly
+   lists 1,300 Launch Capacity, 400 Electronic Components, 300 Industrial Robotics and 300 Wireless Telecommunication
+   Gear, and Component Depot 1,000 Electricity, 250 Electronic Components and 125 Industrial Robotics; neither shows
+   an Advanced Materials shortage. Orbital Foundries, Fusion Shipyards and Orbital Depot list Advanced Materials
+   (15, 20 and 3) with the rest. The building's expenses rise by about 340,000, 732,000 and 1,368,000 a week at
+   full staff on the three fabrication methods.
+2. **The AI's method.** In a save with AI colony holders that have queued modules, read their Space Programs
+   (`scripts/analysis/save_world_report.py buildings --type building_space_program`) a year after the review: one
+   with Compact Fusion Reactors and weekly fixed income well over 27M runs Fusion Shipyards; one with it and
+   income under about 15M runs Orbital Assembly (or its cheapest method), not Fusion Shipyards. Funding raises the
+   line with the throughput.

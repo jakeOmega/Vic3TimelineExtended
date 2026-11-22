@@ -34,3 +34,10 @@ state_climate_disease_relief_add = {
 	decimals = 0
 	script_only = yes
 }
+# Winter sunshine (§ 13): narrows the gap between a gloomy winter and a sunny one, both ways.
+state_climate_sun_relief_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+}

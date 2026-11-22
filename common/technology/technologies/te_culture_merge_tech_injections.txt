@@ -1,0 +1,23 @@
+﻿# Culture Merges (docs/superpowers/specs/2026-11-07-culture-merges-design.md): the
+# media that reach every household speed the merge of the cultures a country
+# holds (the reference mod's radio, film and propaganda terms). Injected modifier
+# blocks sum with vanilla's and with the other mod files' injections of the same
+# technologies (modified.txt, sol_expectations_vanilla_injections.txt).
+
+INJECT:radio = {
+	modifier = {
+		country_culture_merge_speed_mult = 0.10
+	}
+}
+
+INJECT:film = {
+	modifier = {
+		country_culture_merge_speed_mult = 0.05
+	}
+}
+
+INJECT:mass_propaganda = {
+	modifier = {
+		country_culture_merge_speed_mult = 0.10
+	}
+}

@@ -6,7 +6,8 @@
 # adoption, peaceful_annexation, greenest_grass_campaign, extend_influence,
 # diplomatic_alignment, joining the UN and development aid. Read by the
 # corresponding scripted_buttons / decrees / treaty articles, except the five
-# monetary-union markers at the end, which only label the principle's tooltip.
+# monetary-union markers and the power grid marker near the end, which only
+# label the principle's tooltip.
 
 power_bloc_leader_can_force_cultural_acceptance_bool = {
 	color = neutral
@@ -156,19 +157,37 @@ power_bloc_can_give_development_aid_bool = {
 }
 
 
-# Monetary policy phase 5b — principle_group_monetary_union's five markers
-# (docs/systems/monetary_policy_design.md §15A.3). Script-only bools; vanilla's
-# power_bloc_allow_foreign_investment_lower_rank_bool is the precedent. They are
-# what the principle's tooltip prints — script reads the tier via has_principle.
-power_bloc_monetary_cooperation_bool = {
-	color = good
-	boolean = yes
-	game_data = {
-		ai_value = 100
-	}
-	script_only = yes
-}
+# Monetary policy phase 5b — principle_group_monetary_union's DISPLAY FIELDS
+# (docs/systems/monetary_policy_design.md §15A.3, §0.14). Nothing reads them:
+# what the union does depends on who has ADOPTED, which no principle block can
+# test, so script pays it (te_monetary_update_union and its neighbours) and
+# reads the tier through has_principle. These only print the tier's terms
+# under the principle's "Power Bloc" heading. test_monetary_union_leader.py
+# holds every figure to the script value or static modifier that pays it.
+#
+# The rule (2026-11-15, owner): a figure is a numeric field the engine formats,
+# never a number written into a name; a name is a short label; the conditions
+# go in its _desc, and the rule a player plans around in a concept
+# (concept_banking_common_currency, concept_banking_currency_reach). A bool is
+# kept only for a rule with no quantity. modifier_name_audit enforces the names.
+#
+# The types are named for what they describe, not for a tier, so every tier
+# restates and raises the same ones (principle_tier_audit). Each goes in the
+# block whose heading names who gets it, so its name need not:
+#   power_bloc_te_mon_currency_*  here, under "Power Bloc": every country USING
+#                                 the common currency, each adopter and the
+#                                 leader once one has
+#   country_te_mon_swap_*,        banking_cycle_modifier_types.txt, in
+#   country_te_mon_adopter_*      non_leader_modifier: what only members get
+#   country_te_mon_issuer_*       the same file, in leader_modifier
+# Each mirrors a modifier type the script applies, at the same scale, so its
+# value is the applied figure.
 
+# --- The four rules with no quantity -----------------------------------------
+# ai_value 100 as before 2026-11-15: unchanged, so the AI weighs the tiers as
+# it did.
+
+# Tier 2: members may adopt the leader's money.
 power_bloc_shared_currency_bool = {
 	color = good
 	boolean = yes
@@ -178,6 +197,7 @@ power_bloc_shared_currency_bool = {
 	script_only = yes
 }
 
+# Tier 3: the leader is lender of last resort to every adopter.
 power_bloc_fiscal_backstop_bool = {
 	color = good
 	boolean = yes
@@ -187,6 +207,7 @@ power_bloc_fiscal_backstop_bool = {
 	script_only = yes
 }
 
+# Tier 4: one supervisor and one deposit guarantee; contagion damped.
 power_bloc_banking_union_bool = {
 	color = good
 	boolean = yes
@@ -196,7 +217,70 @@ power_bloc_banking_union_bool = {
 	script_only = yes
 }
 
+# Tier 5: the world's holders count toward reach; the leader's standing cut
+# may grow.
 power_bloc_reserve_currency_bool = {
+	color = good
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+# --- The figures ---------------------------------------------------------------
+
+# te_mon_union_adopter's state_export_advantage_mult (and the same import one),
+# plus te_mon_union_reserve's at tier 5.
+power_bloc_te_mon_currency_trade_advantage_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# te_mon_union_credit_points_N / 100: te_mon_union_credit's
+# state_capitalists_investment_pool_contribution_add.
+power_bloc_te_mon_currency_investment_pool_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# te_mon_union_banking_union's three, from tier 4.
+power_bloc_te_mon_currency_crash_chance_mult = {
+	color = bad
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+power_bloc_te_mon_currency_volatility_mult = {
+	color = bad
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+power_bloc_te_mon_currency_interventions_add = {
+	color = good
+	percent = no
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# Power grids (2026-11-14): Market Unification IV and V and Internal Trade IV
+# and V join the members' power grids as a Grid Interconnection Agreement would.
+# The marker only labels the principle's tooltip; script reads the tier through
+# has_principle (te_grid_bloc_links_grids, power_grid_triggers.txt), and
+# TE_SELF_CHECK grid_bloc_link compares the two reads.
+power_bloc_grid_interconnection_bool = {
 	color = good
 	boolean = yes
 	game_data = {
@@ -215,4 +299,141 @@ country_te_pb_principle_slots_add = {
 	game_data = {
 		ai_value = 0
 	}
+}
+
+# Creditors' Consortium (2026-11-16, docs/superpowers/specs/2026-11-16-power-bloc-identities-design.md § 5).
+# The identity's marker: its power_bloc_modifier carries it for the tooltip
+# alone; script reads has_identity (te_cred_in_consortium,
+# te_creditors_consortium_triggers.txt), as the Monetary Union reads has_principle.
+power_bloc_debt_administration_bool = {
+	color = good
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+# Conditionality's display fields: script pays each (te_cred_terms_allowed,
+# te_cred_receivership_take_extra, te_cred_monopolies_allowed,
+# te_cred_receivership_exit_extra), reading the tier through has_principle.
+power_bloc_te_cred_rescue_terms_add = {
+	color = neutral
+	percent = no
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+power_bloc_te_cred_remittance_add = {
+	color = neutral
+	percent = yes
+	decimals = 2
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+power_bloc_te_cred_monopolies_add = {
+	color = neutral
+	percent = no
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+power_bloc_te_cred_receivership_months_add = {
+	color = neutral
+	percent = no
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# Development Lending's display fields: te_cred_dl_share pays the first,
+# te_cred_dl_receiver_2..5 (static modifiers) the second.
+power_bloc_te_cred_dl_share_add = {
+	color = neutral
+	percent = yes
+	decimals = 1
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+power_bloc_te_cred_dl_construction_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# Research Commons (identity_research_commons, power_blocs.md § Research
+# Commons). The identity's marker only labels its tooltip; script reads
+# has_identity (te_rc_in_commons). The two Technology Controls booleans sit on
+# its principles' power_bloc_modifier: the first at every tier, read by Science
+# Aid's possible (te_rc_tech_controls_bars_aid), the second from tier III, read
+# by the Technology Embargo's selectable (te_rc_can_embargo). The strength
+# field shows the tier's embargo factor (50, 75, 100) for the tooltip; script
+# reads the tier with has_principle (te_rc_embargo_points), and
+# test_research_commons.py holds the two to each other.
+power_bloc_research_pool_bool = {
+	color = good
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+power_bloc_technology_controls_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+power_bloc_can_use_technology_embargo_bool = {
+	color = good
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+power_bloc_technology_embargo_strength_add = {
+	color = good
+	percent = no
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# Development Lending's third display field (2026-11-16 review): the acceptance
+# a country below the bloc's GDP per head gives the bloc's invitation and its
+# join treaty, 5 a tier. Script pays it in both AI scores (modified.txt,
+# te_cred_dl_invite_per_tier); test_creditors_consortium.py holds the field
+# to the value.
+power_bloc_te_cred_dl_invite_add = {
+	color = good
+	percent = no
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# The Joint Research Institute's figure (pm_hq_research_commons, 2026-11-16
+# review): the share of the pool added to the leader's innovation cap beside
+# the identity's own tenth (te_rc_pool_cap_share). Workforce-scaled on the
+# headquarters, read by te_rc_pool_cap_value, so a half-staffed institute
+# adds half. A share of the pool, not a flat cap, so it grows with the
+# members' innovation from era to era.
+country_te_rc_pool_cap_share_add = {
+	color = good
+	percent = yes
+	decimals = 1
+	script_only = yes
+	game_data = { ai_value = 0 }
 }

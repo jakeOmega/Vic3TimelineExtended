@@ -1,0 +1,478 @@
+﻿# ============================================================================
+# RESEARCH COMMONS (identity_research_commons): script values
+# ============================================================================
+# docs/systems/mod_systems/power_blocs.md § Research Commons; design:
+# docs/superpowers/specs/2026-11-16-power-bloc-identities-design.md § 6.
+#
+# THE FIXED POINT. A member sends the leader te_rc_contribution_share (75%) of
+# its weekly innovation after its own programs. The contribution is itself an
+# innovation drain (te_rc_contribution, declared on je_research_commons), so a
+# share of the member's present innovation would shrink month by month. The
+# leader's monthly pulse (te_rc_leader_pulse) therefore reads the member's add
+# lines, modifier:country_weekly_innovation_add, in which the contribution that
+# landed sits as -C beside the base, the universities' output and the program
+# drains (-D), and adds back C, the amount it set last month
+# (var:te_rc_contributed):
+#
+#     gross = modifier:country_weekly_innovation_add + C_old = A - D - C_landed + C_old
+#     C_new = 0.75 x max(0, gross)
+#
+# The declaration lands 2 to 5 days after the variable changes (scripting_best_
+# practices.md § "1.15 journal entries, scaling modifiers ...") and the pulse is
+# monthly, so C_landed = C_old at every pulse and C_new = 0.75 x (A - D) exactly,
+# whatever C was: the fixed point is reached in one step and does not drift. The
+# read is in add units, the units the declaration uses, so the member's
+# innovation multiplier scales both sides alike and the member keeps a quarter
+# of its innovation whatever its multiplier. The design's form, country_innovation
+# plus the variable, is exact only with no multiplier: with one of m, the added
+# back C is in add units but country_innovation is not, and it settles at
+# C = 0.75(1+m)/(1+0.75m) x (A - D), off by the multiplier (§ 11 fact 4 is
+# about what country_innovation reads; this form doesn't depend on it).
+# TE_SELF_CHECK rc_contribution_lands reads the fixed point in game.
+# ============================================================================
+
+# The share of a member's innovation the Commons takes (owner, 2026-11-16).
+te_rc_contribution_share = 0.75
+
+# The leader's innovation cap rises by this share of the pool (owner).
+te_rc_pool_cap_share = 0.1
+
+# Country scope: what the country's innovation multiplier does to an add line.
+# The engine applies country_weekly_innovation_mult to the add lines' sum; used
+# to compare countries' innovation for the leader's share, never for the
+# transfer itself, which stays in add units.
+te_rc_innovation_mult_factor = {
+	value = 1
+	add = modifier:country_weekly_innovation_mult
+	min = 0
+}
+
+# Country scope, a member at the leader's pulse: its weekly innovation in add
+# units before the Commons took its share, net of its own programs (the fixed
+# point above). The contribution is added back only where it landed: the entry
+# is active and carries it.
+te_rc_member_gross_adds = {
+	value = modifier:country_weekly_innovation_add
+	if = {
+		limit = {
+			has_journal_entry = je_research_commons
+			has_variable = te_rc_contributed
+		}
+		add = var:te_rc_contributed
+	}
+	min = 0
+}
+
+# Country scope (the entry's owner): what its te_rc_contribution declaration
+# carries. Zero for the leader and for a country that has left, the day the
+# entry next updates, before its invalid outcome ends it.
+te_rc_contribution_value = {
+	value = 0
+	if = {
+		limit = {
+			te_rc_is_contributor = yes
+			has_variable = te_rc_contributed
+		}
+		add = var:te_rc_contributed
+	}
+}
+
+# Power bloc scope: the members' contributions as they stand. A member whose
+# entry is not active yet pays nothing, so it adds nothing.
+te_rc_bloc_pool_sum = {
+	value = 0
+	every_power_bloc_member = {
+		limit = {
+			is_power_bloc_leader = no
+			has_journal_entry = je_research_commons
+			has_variable = te_rc_contributed
+		}
+		add = var:te_rc_contributed
+	}
+}
+
+# Country scope (the entry's owner): the pool its te_rc_pool declaration
+# carries. Read live, so a member that leaves drops out of it at the leader's
+# next entry update, not a month later.
+te_rc_pool_value = {
+	value = 0
+	if = {
+		limit = { te_rc_leads_commons = yes }
+		add = power_bloc.te_rc_bloc_pool_sum
+	}
+}
+
+# Country scope: the leader's cap rise, te_rc_pool_cap's declaration: the
+# identity's tenth of the pool, and a fortieth more with a fully staffed Joint
+# Research Institute (pm_hq_research_commons's country_te_rc_pool_cap_share_add,
+# workforce-scaled, so its staffing scales it).
+te_rc_pool_cap_value = {
+	value = te_rc_pool_value
+	multiply = {
+		value = te_rc_pool_cap_share
+		add = modifier:country_te_rc_pool_cap_share_add
+	}
+}
+
+# Country scope: the weekly innovation the country's own programs take, in add
+# units, a positive figure: the Space Race's milestones (sr_space_program_cost,
+# 15 a cost level, one declaration per milestone's entry), the nuclear program
+# (nuclear_weapon_program_funding) and archaeology (gm_arch_diversion). Each
+# term is its entry's declared value, read only while the entry is active.
+# test_research_commons.py holds the terms to the declarations. The cohesion
+# share adds it back on both sides, so it compares what each country produces,
+# not what it has left after its programs (coordinator's ruling, 2026-11-16:
+# spending the pool on the leader's programs fits the identity, § 6.2).
+te_rc_program_drains = {
+	value = 0
+	if = {
+		limit = {
+			has_journal_entry = je_space_race_suborbital
+			sr_milestone_billed_suborbital = yes
+		}
+		add = { value = sr_suborbital_cost multiply = sr_innovation_per_cost_level }
+	}
+	if = {
+		limit = {
+			has_journal_entry = je_space_race_orbital
+			sr_milestone_billed_orbital = yes
+		}
+		add = { value = sr_orbital_cost multiply = sr_innovation_per_cost_level }
+	}
+	if = {
+		limit = {
+			has_journal_entry = je_space_race_moon_landing
+			sr_milestone_billed_moon_landing = yes
+		}
+		add = { value = sr_moon_landing_cost multiply = sr_innovation_per_cost_level }
+	}
+	if = {
+		limit = {
+			has_journal_entry = je_space_race_probe
+			sr_milestone_billed_probe = yes
+		}
+		add = { value = sr_probe_cost multiply = sr_innovation_per_cost_level }
+	}
+	if = {
+		limit = {
+			has_journal_entry = je_space_race_mars_landing
+			sr_milestone_billed_mars_landing = yes
+		}
+		add = { value = sr_mars_landing_cost multiply = sr_innovation_per_cost_level }
+	}
+	if = {
+		limit = {
+			has_journal_entry = je_space_race_interstellar_probe
+			sr_milestone_billed_interstellar_probe = yes
+		}
+		add = { value = sr_interstellar_probe_cost multiply = sr_innovation_per_cost_level }
+	}
+	if = {
+		limit = {
+			has_journal_entry = je_space_race_solar_colonization
+			sr_milestone_billed_solar_colonization = yes
+		}
+		add = { value = sr_solar_colonization_cost multiply = sr_innovation_per_cost_level }
+	}
+	if = {
+		limit = { has_journal_entry = je_nuclear_program }
+		add = nuclear_program_display_weekly_cost
+	}
+	if = {
+		limit = {
+			has_journal_entry = je_grand_monuments
+			has_variable = gm_arch_innovation_units
+			var:gm_arch_innovation_units > 0.001
+		}
+		add = var:gm_arch_innovation_units
+	}
+	min = 0
+}
+
+# Country scope, the leader at its pulse, before the members' contributions
+# change: what it produces, in add units, before the pool and its own
+# programs. The pool read live here is the one that landed (the members'
+# contributions of last month).
+te_rc_leader_own_adds = {
+	value = modifier:country_weekly_innovation_add
+	subtract = te_rc_pool_value
+	add = te_rc_program_drains
+	min = 0
+}
+
+# Country scope, a member at the leader's pulse, before its contribution is
+# set again: what it produces, in add units, before its contribution and its
+# own programs (the cohesion share's members' side; the contribution itself
+# is taken after the programs, te_rc_member_gross_adds).
+te_rc_member_production_adds = {
+	value = modifier:country_weekly_innovation_add
+	if = {
+		limit = {
+			has_journal_entry = je_research_commons
+			has_variable = te_rc_contributed
+		}
+		add = var:te_rc_contributed
+	}
+	add = te_rc_program_drains
+	min = 0
+}
+
+# Country scope, the leader: its share of the bloc's innovation (0 to 1), the
+# identity's main cohesion term. Set by te_rc_leader_pulse; the cohesion block
+# reads var:te_rc_leader_share. Each country's production is compared as the
+# engine shows it (add lines x the multiplier), before the pool, the
+# contribution and the country's own programs, so a leader that spends the
+# pool on its programs keeps its share.
+te_rc_leader_share_value = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_rc_leader_own_eff
+			has_variable = te_rc_members_eff
+		}
+		if = {
+			limit = {
+				var:te_rc_leader_own_eff > 0
+			}
+			value = var:te_rc_leader_own_eff
+			divide = {
+				value = var:te_rc_leader_own_eff
+				add = var:te_rc_members_eff
+			}
+		}
+	}
+}
+
+# Country scope: Institutes Left Behind's strength, 1 the month a member
+# leaves and falling evenly to 0 over 120 months (te_rc_ilb_refresh).
+te_rc_ilb_fraction = {
+	value = 0
+	if = {
+		limit = { has_variable = te_rc_ilb_months }
+		add = var:te_rc_ilb_months
+		divide = 120
+		min = 0
+		max = 1
+	}
+}
+
+# ---- Technology Embargo ----------------------------------------------------
+
+# Power bloc scope: the members' innovation add lines, none below 0. The pool
+# and the contributions cancel inside the bloc, so this is its own research.
+te_rc_bloc_innovation_adds = {
+	value = 0
+	every_power_bloc_member = {
+		add = {
+			value = modifier:country_weekly_innovation_add
+			min = 0
+		}
+	}
+}
+
+# Any scope: the world's innovation add lines, none below 0.
+te_rc_world_innovation_adds = {
+	value = 0
+	every_country = {
+		add = {
+			value = modifier:country_weekly_innovation_add
+			min = 0
+		}
+	}
+}
+
+# Country scope, the embargoing leader: the cut to the target's technology
+# spread, in points of te_rc_technology_embargoed (1 point = -1%). The bloc's
+# share of the world's innovation times 50 at Technology Controls III, 75 at
+# IV and 100 at V, never above 50: a bloc with a third of the world's
+# innovation cuts 17%, 25% or 33%. For scale, vanilla's Knowledge Sharing pact
+# gives +25% spread. 0 when the bloc no longer has tier III.
+te_rc_embargo_points = {
+	value = 0
+	if = {
+		limit = {
+			te_rc_can_embargo = yes
+			te_rc_world_innovation_adds > 0
+		}
+		add = power_bloc.te_rc_bloc_innovation_adds
+		divide = te_rc_world_innovation_adds
+		if = {
+			limit = { power_bloc = { has_principle = principle:principle_technology_controls_5 } }
+			multiply = 100
+		}
+		else_if = {
+			limit = { power_bloc = { has_principle = principle:principle_technology_controls_4 } }
+			multiply = 75
+		}
+		else = {
+			multiply = 50
+		}
+		max = 50
+		min = 0
+	}
+}
+
+# ---- The leader's share: the two sides --------------------------------------
+
+# Country scope, the leader at its pulse: what it produces before the pool and
+# its programs, as the engine shows it.
+te_rc_leader_own_eff_value = {
+	value = te_rc_leader_own_adds
+	multiply = te_rc_innovation_mult_factor
+}
+
+# Power bloc scope: what the members produce before their contributions and
+# their programs, as the engine shows it. te_rc_production is set on every
+# member by the same pulse, a newcomer that pays nothing yet included.
+te_rc_bloc_members_eff = {
+	value = 0
+	every_power_bloc_member = {
+		limit = {
+			is_power_bloc_leader = no
+			has_variable = te_rc_production
+		}
+		add = {
+			value = var:te_rc_production
+			multiply = te_rc_innovation_mult_factor
+		}
+	}
+}
+
+# Country scope, a member at the leader's pulse, after te_rc_gross is set: the
+# contribution it pays from next month.
+te_rc_contribution_from_gross = {
+	value = 0
+	if = {
+		limit = { has_variable = te_rc_gross }
+		add = var:te_rc_gross
+		multiply = te_rc_contribution_share
+	}
+}
+
+# ---- Self-check readings (te_research_commons_effects.txt) ------------------
+
+te_rc_sc_adds = {
+	value = modifier:country_weekly_innovation_add
+}
+
+te_rc_sc_contributed = {
+	value = 0
+	if = {
+		limit = { has_variable = te_rc_contributed }
+		add = var:te_rc_contributed
+	}
+}
+
+# The member's add lines over the contribution it paid: 1/3 at the fixed point.
+te_rc_sc_ratio = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_rc_contributed
+			var:te_rc_contributed > 0
+		}
+		value = modifier:country_weekly_innovation_add
+		divide = var:te_rc_contributed
+	}
+}
+
+te_rc_sc_prev_grants = {
+	value = 0
+	if = {
+		limit = { has_variable = te_rc_grants_prev }
+		add = var:te_rc_grants_prev
+	}
+}
+
+te_rc_sc_pass_grants = {
+	value = 0
+	if = {
+		limit = { has_variable = te_rc_grants_pass }
+		add = var:te_rc_grants_pass
+	}
+}
+
+te_rc_sc_half_prev_grants = {
+	value = te_rc_sc_prev_grants
+	multiply = 0.5
+}
+
+te_rc_sc_grants_n = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_rc_sc_grants }
+		add = global_var:te_rc_sc_grants
+	}
+}
+
+te_rc_sc_hook_inside_n = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_rc_sc_hook_inside }
+		add = global_var:te_rc_sc_hook_inside
+	}
+}
+
+te_rc_sc_hook_after_n = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_rc_sc_hook_after }
+		add = global_var:te_rc_sc_hook_after
+	}
+}
+
+te_rc_sc_hook_inside_share = {
+	value = 0
+	if = {
+		limit = { te_rc_sc_grants_n > 0 }
+		add = te_rc_sc_hook_inside_n
+		divide = te_rc_sc_grants_n
+	}
+}
+
+te_rc_sc_hook_after_share = {
+	value = 0
+	if = {
+		limit = { te_rc_sc_grants_n > 0 }
+		add = te_rc_sc_hook_after_n
+		divide = te_rc_sc_grants_n
+	}
+}
+
+# ---- The entry's figures -----------------------------------------------------
+
+# Country scope: what the entry's lines print.
+te_rc_disp_gross = {
+	value = 0
+	if = {
+		limit = { has_variable = te_rc_gross }
+		add = var:te_rc_gross
+	}
+}
+
+te_rc_disp_leader_share = {
+	value = 0
+	if = {
+		limit = {
+			power_bloc ?= { power_bloc_leader ?= { has_variable = te_rc_leader_share } }
+		}
+		add = power_bloc.power_bloc_leader.var:te_rc_leader_share
+		multiply = 100
+	}
+}
+
+te_rc_disp_grants_last = {
+	value = 0
+	if = {
+		limit = { has_variable = te_rc_grants_last }
+		add = var:te_rc_grants_last
+	}
+}
+
+te_rc_disp_grants_total = {
+	value = 0
+	if = {
+		limit = { has_variable = te_rc_grants_total }
+		add = var:te_rc_grants_total
+	}
+}

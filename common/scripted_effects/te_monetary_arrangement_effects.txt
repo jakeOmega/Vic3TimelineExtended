@@ -15,7 +15,10 @@
 #                                                    the anchor's figures copied,
 #                                                    the clocks
 #   te_monetary_apply_arrangement_modifiers step 9b  the three scaled modifiers
-#                                                    and the swap line's draw
+#                                                    and the swap line's draw,
+#                                                    then (after the union's)
+#                                                    te_monetary_apply_reserve_
+#                                                    floor_premium (#1812)
 #   te_monetary_update_anchor_peg           step 10  a kind-1 pegger's confidence
 #   te_monetary_discover_arrangements       te_monetary_internal.2 (the hooks),
 #                                           the yearly pulse, and step 1c
@@ -107,6 +110,10 @@ te_monetary_init_arrangement_variables = {
 		set_variable = { name = te_mon_anchor_target value = 2 }
 	}
 	if = {
+		limit = { NOT = { has_variable = te_mon_anchor_core } }
+		set_variable = { name = te_mon_anchor_core value = 2 }
+	}
+	if = {
 		limit = { NOT = { has_variable = te_mon_peg_parity_offset } }
 		set_variable = { name = te_mon_peg_parity_offset value = 0 }
 	}
@@ -181,6 +188,15 @@ te_monetary_init_arrangement_variables = {
 		limit = { NOT = { has_variable = te_mon_anchored_gdp_m } }
 		set_variable = { name = te_mon_anchored_gdp_m value = 0 }
 	}
+	# [#1812] The reserve currency's cut where the floor swallows it.
+	if = {
+		limit = { NOT = { has_variable = te_mon_reserve_floor_pts } }
+		set_variable = { name = te_mon_reserve_floor_pts value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_reserve_floor_applied } }
+		set_variable = { name = te_mon_reserve_floor_applied value = 0 }
+	}
 	if = {
 		limit = { NOT = { has_variable = te_mon_emergency_controls_months } }
 		set_variable = { name = te_mon_emergency_controls_months value = 0 }
@@ -207,21 +223,6 @@ te_monetary_init_arrangement_variables = {
 	if = {
 		limit = { NOT = { has_variable = te_mon_board_seigniorage_applied } }
 		set_variable = { name = te_mon_board_seigniorage_applied value = 0 }
-	}
-
-	# SAVE MIGRATION (§18.2). The deleted FX Swap Lines tool's modifier, stripped
-	# wherever a save still carries it, every pulse, until
-	# legacy_modifier_cleanup.txt's dated checklist retires the definition. No
-	# state to migrate: the tool was a flat +momentum / -contagion modifier, and
-	# its replacement is a treaty the country has to go and sign.
-	if = {
-		limit = { has_journal_entry = je_banking_cycle }
-		je:je_banking_cycle = {
-			if = {
-				limit = { has_modifier = banking_fx_swap_lines }
-				remove_modifier = banking_fx_swap_lines
-			}
-		}
 	}
 }
 
@@ -272,6 +273,13 @@ te_monetary_update_anchor = {
 		}
 		set_variable = { name = te_mon_anchor_c value = scope:te_mon_anchor_now.te_mon_credibility_c_own }
 		set_variable = { name = te_mon_anchor_target value = scope:te_mon_anchor_now.te_mon_inflation_anchor_own }
+		# HIDDEN: the anchor's core inflation, which the adopter's regime pull
+		# (te_mon_pressure_regime_pull, step 6) closes on. Copied for every kind,
+		# read for kind 2 only.
+		if = {
+			limit = { scope:te_mon_anchor_now = { has_variable = te_inflation_core } }
+			set_variable = { name = te_mon_anchor_core value = scope:te_mon_anchor_now.var:te_inflation_core }
+		}
 	}
 
 	# --- the clocks ---------------------------------------------------------
@@ -390,7 +398,20 @@ te_monetary_discover_arrangements = {
 			var:te_mon_anchor_kind_new = 0
 			te_mon_bloc_has_common_currency = no
 		}
+		# THE MEMBER IS TOLD (#1556). This exit was not its choice, and it runs
+		# from a hidden event or the yearly pulse, so te_union.2 reports it: the
+		# premium, the pool, the radicals and the lock. te_union_exit_from names
+		# the currency's leader while te_mon_anchor still does (the change logic
+		# below un-anchors); the event reads it and removes it.
+		if = {
+			limit = {
+				has_variable = te_mon_anchor
+				exists = var:te_mon_anchor
+			}
+			set_variable = { name = te_union_exit_from value = var:te_mon_anchor days = 30 }
+		}
 		te_mon_effect_union_exit_costs = yes
+		trigger_event = { id = te_union.2 popup = yes }
 	}
 	if = {
 		limit = {
@@ -572,6 +593,10 @@ te_monetary_discover_arrangements = {
 		}
 		set_variable = { name = te_mon_receiver value = scope:te_mon_new_receiver }
 	}
+	# ...or a Creditors' Consortium's treaty-less one, set where its rescue could
+	# not make the treaty (te_cred_discover_direct_receivership,
+	# te_creditors_consortium_effects.txt). The article wins where both exist.
+	te_cred_discover_direct_receivership = yes
 
 	# --- what ROOT pays for the lines and guarantees it extends -------------
 	# provider cost = recipient benefit x clamp( recipient gdp / provider gdp ).
@@ -639,6 +664,9 @@ te_monetary_discover_arrangements = {
 	}
 	# [5b] A bloc leader's cooperation and backstop costs, and its holdout count.
 	te_monetary_discover_union = yes
+	# A Creditors' Consortium's leader: what its standing guarantee of the
+	# members and its treaty-less receiverships cost it.
+	te_cred_discover_leader_costs = yes
 
 	set_variable = { name = te_mon_arr_recipient_pts value = te_mon_arr_recipient_value }
 	set_variable = { name = te_mon_arr_standing_pts value = te_mon_arr_standing_value }
@@ -663,6 +691,10 @@ te_monetary_discover_arrangements = {
 				# [5b] Anybody in a bloc with the monetary-union group has a role.
 				te_mon_bloc_union_tier_1_plus = yes
 				te_mon_is_union_member = yes
+				# Every member and the leader of a Creditors' Consortium: the
+				# standing guarantee and its price (te_cred_discover_leader_costs).
+				te_cred_in_consortium = yes
+				has_variable = te_cred_direct_receivership
 				AND = {
 					has_variable = te_mon_debug_anchor_on
 					var:te_mon_debug_anchor_on = 1
@@ -738,6 +770,27 @@ te_mon_record_backstop_backer = {
 		root = { add_to_variable_list = { name = te_mon_bs_$KIND$_from target = scope:te_mon_bs_it } }
 	}
 }
+
+# ----------------------------------------------------------------------------
+# Step 9b — the reserve currency's cut where the credit floor swallows it
+# ----------------------------------------------------------------------------
+# Scope: country, ROOT = this. Called once, from te_monetary_apply_arrangement_
+# modifiers after te_monetary_update_union (owner, 2026-11-16, #1812; design
+# §0.16, ruling L17). THE one refresh site of te_mon_reserve_currency_premium,
+# a MANAGED scaled modifier stepped like te_mon_union_issuer_premium: re-applied
+# when its figure moves 0.05pp or it has gone missing, removed under 0.01. The
+# figure is te_mon_reserve_floor_value: the part of te_mon_reserve_currency_cut
+# that step 5's floor swallowed this month, less the union issuer's own cut.
+# Step 5 reads it through modifier:country_risk_premium_add a month later, like
+# every modifier-borne term.
+te_monetary_apply_reserve_floor_premium = {
+	set_variable = { name = te_mon_reserve_floor_pts value = te_mon_reserve_floor_value }
+	if = {
+		limit = { root ?= this }
+		te_monetary_apply_fx_one = { NAME = te_mon_reserve_currency_premium VALUE = var:te_mon_reserve_floor_pts APPLIED = te_mon_reserve_floor_applied STEP = 0.05 STEP_NEG = -0.05 }
+	}
+}
+
 
 # ----------------------------------------------------------------------------
 # A change of (kind, anchor)
@@ -823,6 +876,10 @@ te_monetary_apply_arrangement_modifiers = {
 	# --- [5b] the common currency (§15A.3) -----------------------------------
 	te_monetary_update_union = yes
 
+	# --- [#1812] a reserve currency's cut where the credit floor swallows it --
+	# AFTER the union's update, which writes the issuer's own cut this pulse.
+	te_monetary_apply_reserve_floor_premium = yes
+
 	# --- the swap line is DRAWN in a crisis, and REPAID out of one (§15A.2) --
 	# 0.1% of the recipient's GDP a month, provider's treasury to recipient's:
 	# under gold a swap line IS reserve lending, so the money arrives somewhere
@@ -901,6 +958,10 @@ te_monetary_apply_arrangement_modifiers = {
 # Scope: the RECIPIENT. Called from the discovery the moment the recipient role
 # ends with a balance outstanding, and from nowhere else. te_mon_swap_provider
 # still names the lender at that point; the discovery re-derives it afterwards.
+#
+# BOTH SIDES ARE TOLD (#1556): the whole balance moves in one payment, from a
+# hidden pulse. te_mon_swap_settled_amount keeps the sum on the recipient for
+# the two notices to print (te_mon_work is scratch and is rewritten at once).
 te_mon_effect_swap_settle = {
 	set_variable = { name = te_mon_work value = var:te_mon_swap_drawn }
 	add_treasury = {
@@ -908,7 +969,14 @@ te_mon_effect_swap_settle = {
 		multiply = -1
 	}
 	var:te_mon_swap_provider = { add_treasury = prev.var:te_mon_work }
+	set_variable = { name = te_mon_swap_settled_amount value = var:te_mon_swap_drawn }
 	set_variable = { name = te_mon_swap_drawn value = 0 }
+	save_scope_as = te_mon_swap_settle_recipient
+	var:te_mon_swap_provider = {
+		save_scope_as = te_mon_swap_settle_provider
+		post_notification = te_mon_swap_repaid_notice
+	}
+	post_notification = te_mon_swap_settled_notice
 }
 
 

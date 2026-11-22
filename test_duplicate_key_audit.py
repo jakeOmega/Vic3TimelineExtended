@@ -169,5 +169,20 @@ class RenderReportTests(unittest.TestCase):
             self.assertNotIn(gone, report)
 
 
+class StrictTests(unittest.TestCase):
+    def test_strict_fails_on_an_unreviewed_error_only(self):
+        """An identical repeat (warn) is reported and counted as unreviewed,
+        but only a differing one (error) fails `--strict` (#247)."""
+        def flag(severity, exemption=None):
+            return dk.DuplicateKeyFlag("common/x.txt", 3, "k", "2", 2, "1", "modifier", severity,
+                                       exemption=exemption)
+        warn_only = dk.AuditResult(flags=[flag("warn")])
+        self.assertEqual(len(warn_only.unreviewed), 1)
+        self.assertFalse(warn_only.failed)
+        self.assertTrue(dk.AuditResult(flags=[flag("warn"), flag("error")]).failed)
+        reviewed = {"date": "2026-06-04", "tag": "", "rationale": "kept"}
+        self.assertFalse(dk.AuditResult(flags=[flag("error", reviewed)]).failed)
+
+
 if __name__ == "__main__":
     unittest.main()

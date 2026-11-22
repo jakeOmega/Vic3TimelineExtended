@@ -52,14 +52,14 @@ te_inh_enacting_private_estates_law = {
 	}
 }
 
-# A reformist or social-democratic group is in government (the Estate
+# A reformist or state-socialist group is in government (the Estate
 # Duties and Birthright Endowment petitions).
 te_inh_reformers_in_government = {
 	any_interest_group = {
 		is_in_government = yes
 		OR = {
 			has_ideology = ideology:ideology_reformer
-			has_ideology = ideology:ideology_social_democrat
+			has_ideology = ideology:ideology_state_socialist
 		}
 	}
 }

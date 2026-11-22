@@ -26,6 +26,16 @@ docs/audits/banking_cycle_simulation.md §15 quote both tables this prints:
   (2.5 before the playtest, 5 after) and the confidence term (two-sided before,
   one-sided for a float after).
 
+* with --fiat-runs N: the playtest that made Open-Market Operations grow with
+  the shortfall (banking_cycle_simulation.md §28): an independent Fiat country
+  in a Panic at cycle 2, the rate on the 0% floor, headline on the -10% clamp,
+  expectations -9.5, Open-Market Operations and the expanded deposit guarantee
+  on, the bank's own purchases at their cap, and the currency loop importing a
+  point of deflation. The cycle runs. Rows: each mandate under the old flat
+  point (`--tune pre_omo_scale`) and as shipped;
+* every "before" row also runs Open-Market Operations as the flat point it was
+  then (`--tune pre_omo_scale`): it has grown with the shortfall under target
+  since banking_cycle_simulation.md §28, which the "after" rows include;
 * with --ordinary-runs N: ordinary centuries of floating (fiat, digital)
   countries with the same currency loop switched on (cyclical premium 0, world
   inflation 2), the confidence term two-sided against one-sided. The century
@@ -34,7 +44,7 @@ docs/audits/banking_cycle_simulation.md §15 quote both tables this prints:
 
 Usage:
     python3 scripts/analysis/banking_deflation_trap.py [--runs 200] [--playtest-runs 60] [--playtest-only]
-                                                       [--ordinary-runs 30]
+                                                       [--ordinary-runs 30] [--fiat-runs 60] [--fiat-only]
 """
 import argparse
 import random
@@ -48,6 +58,8 @@ from scripts.analysis import banking_cycle_sim as sim  # noqa: E402
 CBI = "law_central_bank_independence"
 DELEGATED = "law_universal_banking_light_prudence"
 PREVIOUS_CAP = 2.5  # te_mon_bank_qe_cap before the playtest
+# Before §0.12: no purchases of the bank's own, and OMO's flat point (§28).
+BEFORE = {"bank_qe": 0.0, **sim.PRE_OMO_SCALE}
 # Before the same playtest the confidence term also rewarded a floating currency
 # for deflating: `two_sided=True` reproduces that.
 
@@ -86,7 +98,7 @@ class CurrencyLoop:
 
 
 def playtest(seed, *, mode=sim.MODE_GROWTH, cap=None, tools=("omo", "dc_elec", "bail_in"),
-             currency_loop=True, two_sided=False, months=120):
+             currency_loop=True, two_sided=False, months=120, tune=None):
     """The playtest's country from its screenshot, cycle running; `cap` overrides te_mon_bank_qe_cap."""
     sv, imported = sim.K.sv, sim.fx_imported
     if cap is not None:
@@ -94,6 +106,7 @@ def playtest(seed, *, mode=sim.MODE_GROWTH, cap=None, tools=("omo", "dc_elec", "
     if currency_loop:
         sim.fx_imported = CurrencyLoop(125.3, -2.6, two_sided=two_sided)
     sim.TUNE.clear()
+    sim.TUNE.update(tune or {})
     try:
         cfg = sim.Config(currency="digital", mode=mode, points=8, ai_tools=False, fin_law=CBI,
                          wage_pressure=0.9, bank_level=9)
@@ -121,8 +134,68 @@ def playtest(seed, *, mode=sim.MODE_GROWTH, cap=None, tools=("omo", "dc_elec", "
                 late.append(st.inflation)
     finally:
         sim.K.sv, sim.fx_imported = sv, imported
+        sim.TUNE.clear()
     return dict(off_clamp=off_clamp, at_zero=at_zero, peak=peak if at_zero else None,
                 late=statistics.mean(late))
+
+
+def fiat_trap(seed, *, mode=sim.MODE_PRICE, tune=None, currency_loop=True, months=120):
+    """The fiat playtest of §28, cycle running: months to leave the Panic (cycle 10),
+    to leave the -10% clamp and to reach 0%, and the highest headline in the three
+    years after reaching 0%. None where it never happened."""
+    imported = sim.fx_imported
+    if currency_loop:
+        sim.fx_imported = CurrencyLoop(115.0, -1.0)
+    sim.TUNE.clear()
+    sim.TUNE.update(tune or {})
+    try:
+        cfg = sim.Config(currency="fiat", mode=mode, points=8, ai_tools=False, fin_law=CBI,
+                         wage_pressure=0.5, bank_level=5)
+        st = sim.State(policy_rate=0.0, policy_rate_target=0.0, inflation=-10.0, inflation_core=-9.5,
+                       inflation_expected=-9.5, neutral_rate=3.0, finance_cycle_value=2.0,
+                       finance_cycle_momentum=-2.0, bubble_pressure=2.0)
+        floor = sim.target_bounds(cfg, st, 3.0)[0]
+        st.virtual_rate = st.virtual_target = floor - sim.virtual_depth_max()  # buying at the cap
+        st.tools = {"omo", "deposit"}
+        st.basket_seeded = True
+        st.active_phase = "panic"
+        rng = random.Random(seed)
+        out = dict(leave_panic=None, off_clamp=None, at_zero=None, peak=None)
+        for month in range(1, months + 1):
+            sim.advance_exogenous(cfg, st, rng, month)
+            st.deficit_pct = 0.0
+            sim.cycle_pulse(cfg, st, rng, month)
+            sim.monetary_update(cfg, st, rng, month // 12)
+            if out["leave_panic"] is None and st.finance_cycle_value >= 10:
+                out["leave_panic"] = month
+            if out["off_clamp"] is None and st.inflation > -9.95:
+                out["off_clamp"] = month
+            if out["at_zero"] is None and st.inflation >= 0:
+                out["at_zero"] = month
+            if out["at_zero"] is not None and month <= out["at_zero"] + 36:
+                out["peak"] = st.inflation if out["peak"] is None else max(out["peak"], st.inflation)
+    finally:
+        sim.fx_imported = imported
+        sim.TUNE.clear()
+    return out
+
+
+def fiat_table(args) -> None:
+    n = args.fiat_runs
+    print(f"\nThe fiat playtest (independent, Panic, 0% floor, headline on -10%), cycle running, {n} seeds, medians:")
+    print(f"  {'':40s}{'leaves Panic':>16s}{'leaves -10%':>16s}{'reaches 0%':>16s}{'peak after':>12s}")
+
+    def med(values):
+        return f"{statistics.median(values):>6.0f} ({len(values):>2d}/{n})" if values else f"{'never':>6s} ( 0/{n})"
+    for label, mode in (("Dual Mandate", sim.MODE_PRICE), ("Inflation Targeting", sim.MODE_INFLATION),
+                        ("Growth", sim.MODE_GROWTH)):
+        for when, tune in (("flat point", sim.PRE_OMO_SCALE), ("shipped", {})):
+            rs = [fiat_trap(seed, mode=mode, tune=tune) for seed in range(n)]
+            peaks = [r["peak"] for r in rs if r["peak"] is not None]
+            print(f"  {label + ', ' + when:40s}"
+                  + "".join(f"{med([r[k] for r in rs if r[k] is not None]):>16s}"
+                            for k in ("leave_panic", "off_clamp", "at_zero"))
+                  + f"{(statistics.median(peaks) if peaks else float('nan')):>12.1f}")
 
 
 def run(seed, currency, fin_law, mode, *, noise=True, omo=False, months=120, tune=None, monetise=0):
@@ -174,12 +247,19 @@ def main() -> int:
     ap.add_argument("--runs", type=int, default=200, help="seeds per row of the noise table")
     ap.add_argument("--playtest-runs", type=int, default=60, help="seeds per row of the playtest table")
     ap.add_argument("--playtest-only", action="store_true", help="print only the playtest table")
+    ap.add_argument("--fiat-runs", type=int, default=60, help="seeds per row of the fiat playtest table")
+    ap.add_argument("--fiat-only", action="store_true", help="print only the fiat playtest table")
     ap.add_argument("--ordinary-runs", type=int, default=0,
                     help="centuries per cell for the ordinary-play table (0 skips it)")
     args = ap.parse_args()
+    if args.fiat_only:
+        fiat_table(args)
+        return 0
     if not args.playtest_only:
         first_trap(args)
     playtest_table(args)
+    if not args.playtest_only:
+        fiat_table(args)
     if args.ordinary_runs:
         ordinary_table(args)
     return 0
@@ -224,11 +304,11 @@ def first_trap(args) -> None:
     print("Headline inflation at the end of each year, no noise, cycle held at 50:")
     print(f"  {'':40s}" + "".join(f"{y:>7d}" for y in range(1, 7)))
     rows = [
-        ("independent + OMO, before", CBI, sim.MODE_PRICE, True, {"bank_qe": 0.0}),
+        ("independent + OMO, before", CBI, sim.MODE_PRICE, True, BEFORE),
         ("independent + OMO, after", CBI, sim.MODE_PRICE, True, {}),
-        ("independent, no OMO, before", CBI, sim.MODE_PRICE, False, {"bank_qe": 0.0}),
+        ("independent, no OMO, before", CBI, sim.MODE_PRICE, False, BEFORE),
         ("independent, no OMO, after", CBI, sim.MODE_PRICE, False, {}),
-        ("manual dial + OMO, before", DELEGATED, sim.MODE_NOTHING, True, {"bank_qe": 0.0}),
+        ("manual dial + OMO, before", DELEGATED, sim.MODE_NOTHING, True, BEFORE),
         ("manual dial + OMO, after", DELEGATED, sim.MODE_NOTHING, True, {}),
     ]
     for label, law, mode, omo, tune in rows:
@@ -253,7 +333,7 @@ def first_trap(args) -> None:
     print("\nDelegated, no independence, Digital, Price Stability, monetising, noise held at zero:")
     print(f"  {'':22s}{'month at 0%: without / with purchases':>40s}{'peak inflation':>18s}{'months buying':>15s}")
     for level in (0, 1, 3):
-        off = run(0, "digital", DELEGATED, sim.MODE_PRICE, noise=False, monetise=level, tune={"bank_qe": 0.0})
+        off = run(0, "digital", DELEGATED, sim.MODE_PRICE, noise=False, monetise=level, tune=BEFORE)
         on = run(0, "digital", DELEGATED, sim.MODE_PRICE, noise=False, monetise=level)
         print(f"  Monetise Deficit {level}    {off['at_zero']!s:>20s} / {on['at_zero']!s:<17s}"
               f"{off['peak']:>8.1f} / {on['peak']:<7.1f}{on['months_buying']:>13d}")
@@ -263,7 +343,7 @@ def playtest_table(args) -> None:
     n = args.playtest_runs
     print(f"\nThe playtest (Panic, strong currency, headline on -10%), cycle running, {n} seeds, medians:")
     print(f"  {'':52s}{'leaves -10%':>14s}{'reaches 0%':>16s}{'peak after':>12s}{'yrs 8-10':>10s}")
-    before = dict(cap=PREVIOUS_CAP, two_sided=True)
+    before = dict(cap=PREVIOUS_CAP, two_sided=True, tune=sim.PRE_OMO_SCALE)
     cases = [
         ("Growth, before (cap 2.5, two-sided)", before),
         ("Growth, cap 5 alone (two-sided)", dict(two_sided=True)),

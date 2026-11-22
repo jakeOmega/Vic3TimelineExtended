@@ -2364,7 +2364,7 @@ un_chamber_council_in_line = {
 un_chamber_obligations_outside_block = {
 	custom_tooltip_no_bullet = je_un_chamber_obligations_nonmember
 	if = {
-		limit = { has_modifier = un_regime_colony_liberty_modifier }
+		limit = { has_variable = un_regime_colony_liberty_modifier_on }
 		custom_tooltip_no_bullet = je_un_chamber_regime_colony
 	}
 	if = {
@@ -2428,16 +2428,16 @@ un_chamber_dues_lines = {
 # are no convention's, so they are their own group (un_chamber_reach_lines).
 # Scope: country (a member)
 un_chamber_regime_lines = {
-	un_chamber_convention_line_je = { MODIFIER = un_human_rights_declaration_modifier LINE = je_un_chamber_conv_human_rights }
-	un_chamber_regime_line = { MODIFIER = un_regime_rights_violator_modifier LINE = je_un_chamber_regime_rights_violator }
-	un_chamber_convention_line_country = { MODIFIER = un_icc_member_modifier LINE = je_un_chamber_conv_icc }
+	un_chamber_convention_line = { CONVENTION = human_rights_declaration LINE = je_un_chamber_conv_human_rights }
+	un_chamber_regime_line = { TERM = rights_violator LINE = je_un_chamber_regime_rights_violator }
+	un_chamber_convention_line = { CONVENTION = icc_member LINE = je_un_chamber_conv_icc }
 	# The court's reach over our ruler: a party's from the Established tier
 	# (under the Court's line), everyone's at Supranational (its own line).
 	if = {
 		limit = {
 			has_global_variable = un_agency_icc
 			un_tier_at_least_established = yes
-			has_modifier = un_icc_member_modifier
+			has_variable = un_icc_member_modifier_on
 		}
 		custom_tooltip_no_bullet = je_un_chamber_regime_icc
 	}
@@ -2448,42 +2448,42 @@ un_chamber_regime_lines = {
 		}
 		custom_tooltip_no_bullet = je_un_chamber_regime_icc_outside
 	}
-	un_chamber_convention_line_je = { MODIFIER = un_nonproliferation_modifier LINE = je_un_chamber_conv_npt }
-	un_chamber_regime_line = { MODIFIER = un_regime_npt_inspection_modifier LINE = je_un_chamber_regime_npt_inspection }
-	un_chamber_regime_line = { MODIFIER = un_regime_npt_guarantee_modifier LINE = je_un_chamber_regime_npt_guarantee }
-	un_chamber_convention_line_je = { MODIFIER = un_climate_binding_modifier LINE = je_un_chamber_conv_climate }
-	un_chamber_regime_line = { MODIFIER = un_regime_climate_emitter_modifier LINE = je_un_chamber_regime_climate_emitter }
-	un_chamber_regime_line = { MODIFIER = un_regime_climate_adaptation_modifier LINE = je_un_chamber_regime_climate_adaptation }
-	un_chamber_convention_line_je = { MODIFIER = un_pandemic_cooperation_modifier LINE = je_un_chamber_conv_pandemic }
-	un_chamber_convention_line_je = { MODIFIER = un_refugee_program_modifier LINE = je_un_chamber_conv_refugee }
-	un_chamber_regime_line = { MODIFIER = un_regime_refugee_host_modifier LINE = je_un_chamber_regime_refugee_host }
-	un_chamber_regime_line = { MODIFIER = un_regime_refugee_source_modifier LINE = je_un_chamber_regime_refugee_source }
-	un_chamber_convention_line_je = { MODIFIER = un_heritage_program_modifier LINE = je_un_chamber_conv_heritage }
-	un_chamber_regime_line = { MODIFIER = un_regime_heritage_site_modifier LINE = je_un_chamber_regime_heritage_site }
-	un_chamber_convention_line_je = { MODIFIER = un_space_partnership_modifier LINE = je_un_chamber_conv_space }
-	un_chamber_regime_line = { MODIFIER = un_regime_space_leader_modifier LINE = je_un_chamber_regime_space_leader }
-	un_chamber_regime_line = { MODIFIER = un_regime_space_laggard_modifier LINE = je_un_chamber_regime_space_laggard }
-	un_chamber_regime_line = { MODIFIER = un_regime_space_weapon_modifier LINE = je_un_chamber_regime_space_weapon }
-	un_chamber_convention_line_country = { MODIFIER = un_law_of_sea_modifier LINE = je_un_chamber_conv_law_of_sea }
-	un_chamber_regime_line = { MODIFIER = un_regime_naval_curb_modifier LINE = je_un_chamber_regime_naval_curb }
+	un_chamber_convention_line = { CONVENTION = nonproliferation LINE = je_un_chamber_conv_npt }
+	un_chamber_regime_line = { TERM = npt_inspection LINE = je_un_chamber_regime_npt_inspection }
+	un_chamber_regime_line = { TERM = npt_guarantee LINE = je_un_chamber_regime_npt_guarantee }
+	un_chamber_convention_line = { CONVENTION = climate_binding LINE = je_un_chamber_conv_climate }
+	un_chamber_regime_line = { TERM = climate_emitter LINE = je_un_chamber_regime_climate_emitter }
+	un_chamber_regime_line = { TERM = climate_adaptation LINE = je_un_chamber_regime_climate_adaptation }
+	un_chamber_convention_line = { CONVENTION = pandemic_cooperation LINE = je_un_chamber_conv_pandemic }
+	un_chamber_convention_line = { CONVENTION = refugee_program LINE = je_un_chamber_conv_refugee }
+	un_chamber_regime_line = { TERM = refugee_host LINE = je_un_chamber_regime_refugee_host }
+	un_chamber_regime_line = { TERM = refugee_source LINE = je_un_chamber_regime_refugee_source }
+	un_chamber_convention_line = { CONVENTION = heritage_program LINE = je_un_chamber_conv_heritage }
+	un_chamber_regime_line = { TERM = heritage_site LINE = je_un_chamber_regime_heritage_site }
+	un_chamber_convention_line = { CONVENTION = space_partnership LINE = je_un_chamber_conv_space }
+	un_chamber_regime_line = { TERM = space_leader LINE = je_un_chamber_regime_space_leader }
+	un_chamber_regime_line = { TERM = space_laggard LINE = je_un_chamber_regime_space_laggard }
+	un_chamber_regime_line = { TERM = space_weapon LINE = je_un_chamber_regime_space_weapon }
+	un_chamber_convention_line = { CONVENTION = law_of_sea LINE = je_un_chamber_conv_law_of_sea }
+	un_chamber_regime_line = { TERM = naval_curb LINE = je_un_chamber_regime_naval_curb }
 	# The seabed under the Law of the Sea (the Global Commons, §3): our standing
 	# under the regime, read from variables and the hooks, so it is a line of
 	# its own under the convention's.
 	un_chamber_seabed_lines = yes
-	un_chamber_convention_line_country = { MODIFIER = un_physical_protection_modifier LINE = je_un_chamber_conv_physical_protection }
-	un_chamber_convention_line_country = { MODIFIER = un_narcotics_control_modifier LINE = je_un_chamber_conv_narcotics }
-	un_chamber_convention_line_country = { MODIFIER = un_cultural_diversity_modifier LINE = je_un_chamber_conv_cultural_diversity }
-	un_chamber_regime_line = { MODIFIER = un_regime_cultural_hegemon_modifier LINE = je_un_chamber_regime_cultural_hegemon }
-	un_chamber_convention_line_country = { MODIFIER = un_antarctic_treaty_modifier LINE = je_un_chamber_conv_antarctic }
-	un_chamber_regime_line = { MODIFIER = un_regime_antarctic_station_modifier LINE = je_un_chamber_regime_antarctic_station }
-	un_chamber_convention_line_country = { MODIFIER = un_asat_moratorium_modifier LINE = je_un_chamber_conv_asat }
-	un_chamber_convention_line_country = { MODIFIER = un_colony_protection_modifier LINE = je_un_chamber_conv_colony_protection }
-	un_chamber_convention_line_country = { MODIFIER = un_nuclear_ban_modifier LINE = je_un_chamber_conv_nuclear_ban }
+	un_chamber_convention_line = { CONVENTION = physical_protection LINE = je_un_chamber_conv_physical_protection }
+	un_chamber_convention_line = { CONVENTION = narcotics_control LINE = je_un_chamber_conv_narcotics }
+	un_chamber_convention_line = { CONVENTION = cultural_diversity LINE = je_un_chamber_conv_cultural_diversity }
+	un_chamber_regime_line = { TERM = cultural_hegemon LINE = je_un_chamber_regime_cultural_hegemon }
+	un_chamber_convention_line = { CONVENTION = antarctic_treaty LINE = je_un_chamber_conv_antarctic }
+	un_chamber_regime_line = { TERM = antarctic_station LINE = je_un_chamber_regime_antarctic_station }
+	un_chamber_convention_line = { CONVENTION = asat_moratorium LINE = je_un_chamber_conv_asat }
+	un_chamber_convention_line = { CONVENTION = colony_protection LINE = je_un_chamber_conv_colony_protection }
+	un_chamber_convention_line = { CONVENTION = nuclear_ban LINE = je_un_chamber_conv_nuclear_ban }
 	# The ban's ceiling on our arsenal (nd_taboo_refresh_ban_ceiling): its
 	# terms are a variable, not a regime modifier, so the line is its own.
 	if = {
 		limit = {
-			has_modifier = un_nuclear_ban_modifier
+			has_variable = un_nuclear_ban_modifier_on
 			has_variable = nd_tpnw_ceiling
 		}
 		if = {
@@ -2494,8 +2494,8 @@ un_chamber_regime_lines = {
 			custom_tooltip_no_bullet = je_un_chamber_regime_nuclear_ban_none
 		}
 	}
-	un_chamber_regime_line = { MODIFIER = un_regime_colonial_pressure_modifier LINE = je_un_chamber_regime_colonial_pressure }
-	un_chamber_regime_line = { MODIFIER = un_regime_colony_liberty_modifier LINE = je_un_chamber_regime_colony }
+	un_chamber_regime_line = { TERM = colonial_pressure LINE = je_un_chamber_regime_colonial_pressure }
+	un_chamber_regime_line = { TERM = colony_liberty LINE = je_un_chamber_regime_colony }
 	if = {
 		limit = { un_chamber_party_to_a_convention = yes }
 		custom_tooltip_no_bullet = je_un_chamber_regimes_scale
@@ -2515,7 +2515,7 @@ un_chamber_regime_lines = {
 # Under their own heading in Our Obligations (un_chamber_reach_sgui).
 # Scope: country (a member)
 un_chamber_reach_lines = {
-	un_chamber_regime_line = { MODIFIER = un_regime_shared_intelligence_modifier LINE = je_un_chamber_regime_shared_intelligence }
+	un_chamber_regime_line = { TERM = shared_intelligence LINE = je_un_chamber_regime_shared_intelligence }
 	if = {
 		limit = {
 			un_tier_at_least_strong = yes
@@ -2532,30 +2532,25 @@ un_chamber_reach_lines = {
 	}
 }
 
-# A convention we are party to, whose member modifier sits on the journal
-# entry (_je) or on the country (_country) — test_un_convention_registry's
-# `scope` column.
-# Parameters: $MODIFIER$ = its member modifier, $LINE$ = its line
+# A convention we are party to: its mirror, which the entry's declaration of
+# the member modifier reads (#1404).
+# Parameters: $CONVENTION$ = the stem (un_<stem>_modifier), $LINE$ = its line
 # Scope: country
-un_chamber_convention_line_je = {
+un_chamber_convention_line = {
 	if = {
-		limit = { je:je_united_nations ?= { has_modifier = $MODIFIER$ } }
-		custom_tooltip_no_bullet = $LINE$
-	}
-}
-un_chamber_convention_line_country = {
-	if = {
-		limit = { has_modifier = $MODIFIER$ }
+		limit = { has_variable = un_$CONVENTION$_modifier_on }
 		custom_tooltip_no_bullet = $LINE$
 	}
 }
 
-# Parameters: $MODIFIER$ = a regime modifier, $LINE$ = its line (passed whole,
-# so organize_loc.py sees the key in use)
+# One of our regime terms: its presence variable, which the entry's
+# declaration of the modifier reads (#1404).
+# Parameters: $TERM$ = the term (un_regime_<term>_modifier), $LINE$ = its line
+# (passed whole, so organize_loc.py sees the key in use)
 # Scope: country
 un_chamber_regime_line = {
 	if = {
-		limit = { has_modifier = $MODIFIER$ }
+		limit = { has_variable = un_regime_$TERM$_modifier_on }
 		custom_tooltip_no_bullet = $LINE$
 	}
 }

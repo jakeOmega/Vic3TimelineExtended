@@ -170,6 +170,12 @@ class MigrationWorkerTests(unittest.TestCase):
         _write(os.path.join(g, "localization/english/vanilla_l_english.yml"),
                'l_english:\n key_drift:0 "old string"\n'
                ' key_stable:0 "same string"\n key_only_old:0 "gone"\n')
+        # Defines: NDiplomacy loses four keys in "new"; NPolitics keeps a key
+        # of the same name as one of them.
+        _write(os.path.join(g, "common/defines/00_defines.txt"),
+               "NDiplomacy = {\n\tREMOVED_READ = 1\n\tREMOVED_GUI = 2\n"
+               "\tREMOVED_NOTED = 3\n\tREMOVED_ELSEWHERE = 4\n\tKEPT = 5\n}\n"
+               "NPolitics = {\n\tREMOVED_ELSEWHERE = 6\n}\n", bom=True)
         _git(cls.clone, "add", "-A")
         _git(cls.clone, "commit", "-q", "-m", "old")
         cls.old_ref = _git(cls.clone, "rev-parse", "HEAD")
@@ -188,6 +194,9 @@ class MigrationWorkerTests(unittest.TestCase):
         _write(os.path.join(g, "localization/english/vanilla_l_english.yml"),
                'l_english:\n key_drift:0 "new string"\n'
                ' key_stable:0 "same string"\n')
+        _write(os.path.join(g, "common/defines/00_defines.txt"),
+               "NDiplomacy = {\n\tKEPT = 5\n}\n"
+               "NPolitics = {\n\tREMOVED_ELSEWHERE = 6\n}\n", bom=True)
         _git(cls.clone, "add", "-A")
         _git(cls.clone, "commit", "-q", "-m", "new")
 
@@ -215,6 +224,19 @@ class MigrationWorkerTests(unittest.TestCase):
                "mod-only gui\n")                      # no vanilla path -> safe
         _write(os.path.join(cls.mod, "common/interest_groups/00_ig.txt"),
                "mod override of ig\n")                # same path -> at-risk
+        # A define is never written `Namespace.KEY` in the mod (#391): script
+        # reads `define:Namespace|KEY`, a GUI or loc string `GetDefine(...)`.
+        _write(os.path.join(cls.mod, "common/script_values/mod_values.txt"),
+               "mod_value = {\n"
+               "\tvalue = define:NDiplomacy|REMOVED_READ\n"
+               "\t# define:NDiplomacy|REMOVED_NOTED went in the patch\n"
+               "\tadd = define:NPolitics|REMOVED_ELSEWHERE\n"
+               "\tadd = define:NDiplomacy|REMOVED_READ_MORE\n"
+               "}\n")
+        _write(os.path.join(cls.mod, "gui/te_defines.gui"),
+               "text = \"[GetDefine('NDiplomacy', 'REMOVED_GUI')]\"\n")
+        _write(os.path.join(cls.mod, "localization/english/mod_defines_l_english.yml"),
+               'l_english:\n mod_cap:0 "Up to [GetDefine(\'NDiplomacy\',\'REMOVED_GUI\')|0]"\n')
         _write(os.path.join(cls.mod,
                "localization/english/replace/override_l_english.yml"),
                'l_english:\n key_drift:0 "mod override"\n'
@@ -282,6 +304,45 @@ class MigrationWorkerTests(unittest.TestCase):
         self.assertEqual(comment_only, ["common/static_modifiers/mod_sm.txt"])
         self.assertEqual(mss._mod_grep_mentions("never_mentioned"), ([], []))
 
+    def test_mod_grep_mentions_define_reads(self):
+        """#391: the mod reads `NDiplomacy.KEY` as `define:NDiplomacy|KEY` or
+        `GetDefine('NDiplomacy', 'KEY')`, never by its dotted name."""
+        self.assertEqual(
+            mss._mod_grep_mentions("NDiplomacy.REMOVED_READ"),
+            (["common/script_values/mod_values.txt"], []))
+        self.assertEqual(
+            mss._mod_grep_mentions("NDiplomacy.REMOVED_GUI"),
+            (["gui/te_defines.gui",
+              "localization/english/mod_defines_l_english.yml"], []))
+        # only in a comment
+        self.assertEqual(
+            mss._mod_grep_mentions("NDiplomacy.REMOVED_NOTED"),
+            ([], ["common/script_values/mod_values.txt"]))
+        # the mod reads this key under another namespace only
+        self.assertEqual(
+            mss._mod_grep_mentions("NDiplomacy.REMOVED_ELSEWHERE"), ([], []))
+        self.assertEqual(
+            mss._mod_grep_mentions("NPolitics.REMOVED_ELSEWHERE"),
+            (["common/script_values/mod_values.txt"], []))
+        # a longer key that starts with the removed one is another define
+        self.assertEqual(mss._mod_grep_mentions("NDiplomacy.REMOVED"), ([], []))
+
+    def test_surface_diff_joins_removed_defines(self):
+        d = mss._migration_surface_diff(self.old_ref)
+        self.assertEqual(
+            d["removed"]["defines"],
+            ["NDiplomacy.REMOVED_ELSEWHERE", "NDiplomacy.REMOVED_GUI",
+             "NDiplomacy.REMOVED_NOTED", "NDiplomacy.REMOVED_READ"])
+        joined = {j["name"]: j for j in d["removed_and_used_by_mod"]
+                  if j["category"] == "defines"}
+        self.assertEqual(
+            set(joined), {"NDiplomacy.REMOVED_READ", "NDiplomacy.REMOVED_GUI"})
+        self.assertEqual(joined["NDiplomacy.REMOVED_READ"]["mod_files"],
+                         ["common/script_values/mod_values.txt"])
+        commented = {j["name"] for j in d["removed_and_only_commented_in_mod"]}
+        self.assertIn("NDiplomacy.REMOVED_NOTED", commented)
+        self.assertNotIn("NDiplomacy.REMOVED_ELSEWHERE", commented)
+
     # ---- endpoint workers -------------------------------------------------
     def test_surface_diff(self):
         d = mss._migration_surface_diff(self.old_ref)
@@ -307,10 +368,10 @@ class MigrationWorkerTests(unittest.TestCase):
         self.assertNotIn("removed_unused_mod", joined)
         # ...but its comment-only mentions are listed apart from the uses
         commented = {j["name"]: j for j in d["removed_and_only_commented_in_mod"]}
-        self.assertEqual(set(commented), {"removed_unused_mod"})
+        self.assertEqual(set(commented), {"removed_unused_mod", "NDiplomacy.REMOVED_NOTED"})
         self.assertEqual(commented["removed_unused_mod"]["mod_files"],
                          ["common/static_modifiers/mod_sm.txt"])
-        self.assertEqual(d["summary"]["removed_and_only_commented_in_mod"], 1)
+        self.assertEqual(d["summary"]["removed_and_only_commented_in_mod"], 2)
         # law removals never carry the modifier-only re_registered flag
         law_join = {j["name"]: j for j in d["removed_and_used_by_mod"]
                     if j["category"] == "laws"}

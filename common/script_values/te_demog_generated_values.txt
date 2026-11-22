@@ -130,12 +130,16 @@ te_demog_pop_absorbed_deaths = {
 }
 
 # Pop scope: the engine's birth multiplier for this pop: 1 + its state's state_birth_rate_mult
-# + -0.1 x its literacy (literacy_penalty) + the starvation penalties (each x the pop's
-# starvation value, in 0.05 steps of food security), floored at 0.
+# + its stratum's birth line (vanilla 1.15's state_<stratum>_strata_birth_rate_mult, on top of the census like
+# a class's mortality line; #1407) + -0.1 x its literacy (literacy_penalty) + the starvation
+# penalties (each x the pop's starvation value, in 0.05 steps of food security), floored at 0.
 # x te_demog_pop_engine_births is its expected births (the growth probe: -0.101 fitted, 1949).
 te_demog_pop_birth_mult = {
 	value = 1
 	add = state.modifier:state_birth_rate_mult
+	if = { limit = { strata = lower } add = state.modifier:state_lower_strata_birth_rate_mult }
+	else_if = { limit = { strata = middle } add = state.modifier:state_middle_strata_birth_rate_mult }
+	else_if = { limit = { strata = upper } add = state.modifier:state_upper_strata_birth_rate_mult }
 	add = { value = literacy_rate multiply = -0.1 }
 	if = {
 		limit = { is_in_severe_starvation = yes }
@@ -220,7 +224,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -290,7 +294,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -359,7 +363,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -428,7 +432,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -497,7 +501,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -566,7 +570,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -644,7 +648,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -716,7 +720,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_farmers_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 				add = workplace.modifier:building_group_bg_ranching_farmers_mortality_mult
 			}
@@ -806,7 +810,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_laborers_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 				add = workplace.modifier:building_group_bg_ranching_laborers_mortality_mult
 			}
@@ -838,6 +842,10 @@ te_demog_pop_death_mult = {
 			if = {
 				limit = { workplace = { OR = { is_building_group = bg_agriculture is_building_group = bg_staple_crops is_building_group = bg_subsistence_agriculture } } }
 				add = workplace.modifier:building_group_bg_agriculture_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_construction } }
+				add = workplace.modifier:building_group_bg_construction_machinists_mortality_mult
 			}
 			if = {
 				limit = { workplace = { is_building_group = bg_fishing } }
@@ -892,7 +900,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -962,7 +970,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -1032,7 +1040,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -1101,7 +1109,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -1175,7 +1183,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_slaves_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -1247,7 +1255,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -1466,7 +1474,7 @@ te_demog_f_infection_literacy = {
 }
 # State scope: infection's crowding factor (demographics_model.cause_factors), on the step's stored inputs.
 te_demog_f_infection_crowding = {
-	value = var:te_dg_in_crowd multiply = 1 add = 1
+	value = var:te_dg_in_crowd max = 5 multiply = 1 add = 1
 }
 # State scope: infection's malaria factor (demographics_model.cause_factors), on the step's stored inputs.
 te_demog_f_infection_malaria = {
@@ -1631,8 +1639,8 @@ te_demog_pr_start_lm = {
 		limit = {
 			OR = {
 				state_region = s:STATE_CROATIA
-				state_region = s:STATE_KAUNAS
 				state_region = s:STATE_LESSER_POLAND
+				state_region = s:STATE_LITHUANIA
 				state_region = s:STATE_MAZOVIA
 				state_region = s:STATE_SLOVAKIA
 				state_region = s:STATE_TRANSDANUBIA
@@ -1893,6 +1901,11 @@ te_demog_k_cause_scale_min_deaths = { value = 1 }
 te_demog_k_cause_scale_min = { value = 0.0001 }
 te_demog_k_rate_total_floor = { value = -1 }
 te_demog_k_rate_bare_min = { value = 80 }
+te_demog_k_rate_guard_people = { value = 500000000 }
+te_demog_k_rate_guard_e0 = { value = 5 }
+te_demog_k_rate_guard_kills_share = { value = 0.33333 }
+te_demog_k_rate_births_ceiling = { value = 10 }
+te_demog_k_crowding_pull_max = { value = 5 }
 te_demog_k_natural_fertility_floor = { value = 0.2 }
 te_demog_k_wealth_line_floor = { value = -0.005 }
 te_demog_k_medicine_snap = { value = 0.005 }
@@ -1993,6 +2006,12 @@ te_demog_k_srb_base = { value = 105 }
 # workforce term, the pension setting and the bills (demographics_params.py, its step 2 section).
 te_demog_k_working_adult_base = { value = 0.25 }
 te_demog_k_wf_pop_floor = { value = -0.15 }
+te_demog_k_wf_lead_half = { value = 0.5 }
+te_demog_k_wf_lead_cap = { value = 0.2 }
+te_demog_k_wf_lead_cap_neg = { value = -0.2 }
+te_demog_k_wf_pop_ceiling = { value = 0.45 }
+te_demog_k_wf_pull_b_max = { value = 0.5 }
+te_demog_k_wf_pull_share_min = { value = 0.0001 }
 te_demog_k_pension_age_early = { value = 60 }
 te_demog_k_pension_age_raised = { value = 70 }
 te_demog_k_pension_link_offset = { value = 5 }
@@ -2765,7 +2784,8 @@ te_demog_dbg_pool_m = { value = 0 if = { limit = { has_variable = te_dg_pm } val
 
 # The life tables' death rate past 150 is at least this, per 100,000 (te_demog_lt_tail; demographics_model.tail_years).
 te_demog_k_lt_tail_rate_min = { value = 1 }
-# The Life Expectancy chart's axis: the largest figure its samples hold, at least the first, at most the second, where
-# the panel's figures read over (te_demog_history_e0_axis; the GUI's comparisons hold the same 10,000).
-te_demog_k_e0_axis_min = { value = 100 }
+# The Life Expectancy chart's axis: the largest figure its samples hold, at least the first (a small minimum, so an
+# empty chart has an axis), at most the second, where
+# the panel's figures read over (te_demog_history_axes; the GUI's comparisons hold the same 10,000).
+te_demog_k_e0_axis_min = { value = 10 }
 te_demog_k_e0_shown_max = { value = 10000 }

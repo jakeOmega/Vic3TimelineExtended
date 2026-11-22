@@ -18,18 +18,23 @@ ERROR (exit 1):
     SelectLocalization, AddLocalizationIf, AddTextIf) in neither the mod's
     English loc nor vanilla's (vanilla_parsed/localization_english.json)
   - GetScriptedGui('x') with no scripted GUI x; GetPlayerJournalEntry('x') with
-    no journal entry x; Concept('x', ..) or [concept_x] with no concept x
+    no journal entry x; Concept('x', ..) or [concept_x] with no concept x;
+    Glossary('x', ..) or [glossary_x] with no 1.15 glossary entry x
   - margin / margin_<side> directly on a plain widget or icon, which the engine
     does not handle (a WARN when the same line is already on --base)
+  - an hbox or vbox directly inside a flowcontainer, which crashed the game
+    (stack overflow) when the law panel built one; test_check_gui_lint.py
+    also checks every .gui in the repository for it, so CI gates it
 WARN:
   - "unproven": a widget type, property, blockoverride name, data function,
     .Method or texture path that no .gui on --base uses and no .gui here
     defines. Not necessarily wrong, but nothing in the mod has shown it works
     in game; prefer a proven equivalent, or check it in game.
   - ScriptValue('x') with no script value x in the mod or vanilla
-  - a collapse flag (GetVariableSystem.Toggle) whose name does not say its
-    default (_open: collapsed until opened; _closed: open until closed), or
-    whose Exists() tests disagree with that default (gui_style_guide.md rule 7)
+  - a collapse flag (GetVariableSystem.Toggle, unless only non-visible
+    properties such as alpha read it) whose name does not say its default
+    (_open: collapsed until opened; _closed: open until closed), or whose
+    Exists() tests disagree with that default (gui_style_guide.md rule 7)
   - an added loc value that starts or ends with a literal \\n (rule 8), outside
     te_unused_l_english.yml
 """
@@ -56,6 +61,34 @@ LOC_LINE = re.compile(r'^\s*([\w.\-]+):\d*\s*"(.*)"\s*$')
 LOC_CALL = re.compile(r"\b(Localize|SelectLocalization|AddLocalizationIf|AddTextIf)\(")
 BARE_KEY = re.compile(r'\b(?:text|tooltip|raw_text|raw_tooltip)\s*=\s*"([A-Za-z][\w.\-]*)"')
 ALWAYS_KNOWN = {"types", "template", "blockoverride", "block", "state", "on_start", "on_finish"}
+# The global names the 1.15 data-types dump lists only as a "Global promote" (no
+# "Global function" form) that take arguments. As a function's argument the
+# engine looks for a function of that name, logs "Could not find data system
+# function", and drops the whole callback or binding. Ending the chain with
+# .AccessSelf doesn't help for the const Get* ones: "Invalid promote
+# 'GetPlayerJournalEntry'(0) for '...AccessSelf', requires non const promote",
+# and the callback is dropped too (the map test strip, 2026-11-05). Set the
+# promote as the widget's datacontext and pass JournalEntry.AccessSelf, as
+# vanilla does. Names with both forms, GetPlayer and GetBuildingType among them,
+# can be passed bare.
+PROMOTE_ONLY_CALLS = ("GetPlayerJournalEntry", "AccessPlayerJournalEntry", "GetStrategicObjectiveFormationInState",
+                      "GetScriptedGui", "GC")
+PROMOTE_ARG = re.compile(r"[(,]\s*(" + "|".join(PROMOTE_ONLY_CALLS) + r")\((?:[^()]|\([^()]*\))*\)\s*[),]")
+
+
+# A const Get* promote-only call whose chain goes on to an Access* step.
+CONST_PROMOTE_ACCESS = re.compile(r"\b(" + "|".join(n for n in PROMOTE_ONLY_CALLS if n.startswith("Get"))
+                                  + r")\((?:[^()]|\([^()]*\))*\)(?:\.\w+(?:\((?:[^()]|\([^()]*\))*\))?)*?\.(Access\w*)")
+
+
+def const_promote_access(text):
+    """Const Get* promote-only calls chained to an Access* step, as (line, name, step)."""
+    return [(text.count("\n", 0, m.start(1)) + 1, m.group(1), m.group(2)) for m in CONST_PROMOTE_ACCESS.finditer(text)]
+
+
+def promote_as_argument(text):
+    """The promote-only calls passed bare as a function's argument, as (line, name)."""
+    return [(text.count("\n", 0, m.start(1)) + 1, m.group(1)) for m in PROMOTE_ARG.finditer(text)]
 
 
 def strip_comments(text):
@@ -103,12 +136,25 @@ MARGIN_PROPS = {"margin", "margin_left", "margin_right", "margin_top", "margin_b
 GUI_TOKEN = re.compile(r"\b([A-Za-z_]\w*)\s*=\s*(?:([A-Za-z_]\w*)\s*)?(\{)?|(\{)|(\})")
 
 
+# 1.15's Glossary('glossary_x', 'text') global function (not .GetGlossary).
+GLOSSARY_FN = r"(?<![\w.])Glossary\(\s*'(\w+)'"
+
+
+def collapse_strings(text):
+    """`text` with every quoted string emptied to `""`, for the scans that
+    must not read inside strings. A string's newlines stay, so a line of the
+    result is the same line of `text`. An offset into the result is not an
+    offset into `text` (each emptied string moves every later one), so a match
+    in it counts newlines in the result, never in `text`."""
+    return re.sub(r'"[^"]*"', lambda m: '""' + "\n" * m.group().count("\n"), text)
+
+
 def margin_on_plain_widget(text):
     """(line, opener, property, source line) for each margin property whose
     innermost block is a plain `widget = {` or `icon = {` (or a type declared
     `= widget {`). Takes comment-stripped text. A margin inside a block or
     blockoverride body is not judged: its widget is not known here."""
-    nostr = re.sub(r'"[^"]*"', '""', text)
+    nostr = collapse_strings(text)
     lines = text.split("\n")
     stack, hits = [], []
     for m in GUI_TOKEN.finditer(nostr):
@@ -124,6 +170,50 @@ def margin_on_plain_widget(text):
                 hits.append((ln, stack[-1], name, lines[ln - 1].strip()))
             if brace:
                 stack.append(base or name)
+    return hits
+
+
+def gui_type_bases(text):
+    """{type name: the widget or type it is declared on}, for every
+    `type X = Y {` in comment-stripped text."""
+    return dict(re.findall(r"\btype\s+(\w+)\s*=\s*(\w+)\s*\{", collapse_strings(text)))
+
+
+def box_in_flowcontainer(text, type_bases=None):
+    """(line, child, kind) for each hbox or vbox whose parent block is a
+    flowcontainer. Takes comment-stripped text. The engine logs "A
+    (flow)container can't have an hbox/vbox as a direct child" when it builds
+    one, and building one in the law panel overflowed the stack and crashed
+    the game on its first launch (#1402's tax-law wrapper, 2026-11-05).
+
+    A type declared in `type_bases` (gui_type_bases of the mod's .gui files)
+    is followed to its widget, so a mod type on a flowcontainer or hbox
+    counts. A vanilla type isn't: its declaration isn't in the repository. A
+    child inside a block or blockoverride body is not judged, since its
+    parent isn't known here."""
+    type_bases = type_bases or {}
+
+    def kind(name):
+        seen = set()
+        while name in type_bases and name not in seen:
+            seen.add(name)
+            name = type_bases[name]
+        return name
+
+    nostr = collapse_strings(text)
+    stack, hits = [], []
+    for m in GUI_TOKEN.finditer(nostr):
+        name, base, brace, bare_open, close = m.groups()
+        if close:
+            if stack:
+                stack.pop()
+        elif bare_open:
+            stack.append("")
+        elif name and brace:
+            k = kind(base or name)
+            if k in ("hbox", "vbox") and stack and stack[-1] == "flowcontainer":
+                hits.append((nostr.count("\n", 0, m.start()) + 1, base or name, k))
+            stack.append(k)
     return hits
 
 
@@ -191,6 +281,7 @@ class Linter:
         self.tracked = set(self.git("ls-files").split("\n")) | set(
             self.git("ls-tree", "-r", "--name-only", self.base).split("\n"))
 
+        self.type_bases = gui_type_bases(self.cur_gui_text)
         self.known_brace = (set(IDENT_BRACE.findall(base_gui_text)) | set(TYPEDEF.findall(self.cur_gui_text))
                             | ALWAYS_KNOWN)
         self.known_prop = set(IDENT_PROP.findall(base_gui_text))
@@ -214,6 +305,9 @@ class Linter:
                     | set(self._vanilla("vanilla_parsed/common/journal_entries.json")))
         self.concepts = (self._top_level_keys("common/game_concepts/**/*.txt")
                          | set(self._vanilla("vanilla_parsed/common/game_concepts.json")))
+        # 1.15 glossary entries, linked [glossary_x] or Glossary('glossary_x', 'text').
+        self.glossary = (self._top_level_keys("common/glossary/**/*.txt")
+                         | set(self._vanilla("vanilla_parsed/common/glossary.json")))
 
     def report(self, sev, path, line, msg):
         self.findings.append((sev, path, line, msg))
@@ -251,9 +345,20 @@ class Linter:
                         "const Get* promote it fails at load and crashed the panel, and through Access* promotes it "
                         "loads but silently keeps the parent's entry. Read that country's data through a Country datacontext instead, e.g. "
                         "datacontext = \"[MarketPanel.GetMarket.GetOwner]\"; GetPlayerJournalEntry is fine (gotcha #35)")
+        for _, name in promote_as_argument(expr):
+            self.report("ERROR", path, ln, f"{name}(...) is a promote only, so as an argument it fails at load and the "
+                        f"engine drops the callback: set it as the widget's datacontext and pass the type's .AccessSelf "
+                        f"(e.g. JournalEntry.AccessSelf; gotcha #29)")
+        for _, name, step in const_promote_access(expr):
+            self.report("ERROR", path, ln, f"{name}(...) is a const promote, so {name}(...).{step} fails at load "
+                        f"(\"requires non const promote\") and the engine drops the callback: set it as the widget's "
+                        f"datacontext and pass the type's .AccessSelf (gotcha #29)")
         for k in re.findall(r"Concept\(\s*'(\w+)'", expr):
             if k not in self.concepts:
                 self.report("ERROR", path, ln, f"concept {k} is not defined")
+        for k in re.findall(GLOSSARY_FN, expr):
+            if k not in self.glossary:
+                self.report("ERROR", path, ln, f"glossary entry {k} is not defined")
         for k in loc_args(expr):
             if not self.loc_exists(k) and f"'{k}'" not in self.base_gui_text:
                 self.report("ERROR", path, ln, f"loc key '{k}' is in neither mod nor vanilla loc")
@@ -288,15 +393,21 @@ class Linter:
         if depth:
             self.report("ERROR", path, lineno(len(text)), f"{depth} unclosed brace(s) at the end of the file")
 
-        nostr = re.sub(r'"[^"]*"', '""', text)
+        # Offsets into `nostr` are not offsets into `text` (a widget at :520
+        # was reported at :356), so its matches count lines in `nostr`.
+        nostr = collapse_strings(text)
+
+        def nostr_lineno(i):
+            return nostr.count("\n", 0, i) + 1
+
         for m in IDENT_BRACE.finditer(nostr):
             if m.group(1) not in self.known_brace:
-                self.report("WARN", path, lineno(m.start()),
+                self.report("WARN", path, nostr_lineno(m.start()),
                             f"unproven widget or type '{m.group(1)}': no .gui on {self.base} uses it "
                             "and no type here defines it")
         for m in IDENT_PROP.finditer(nostr):
             if m.group(1) not in self.known_prop and m.group(1) not in self.known_brace:
-                self.report("WARN", path, lineno(m.start()), f"unproven property '{m.group(1)}'")
+                self.report("WARN", path, nostr_lineno(m.start()), f"unproven property '{m.group(1)}'")
         base_margins = {(o, p, s) for _, o, p, s in margin_on_plain_widget(strip_comments(
             self.git("show", f"{self.base}:{path}")))}
         for ln, opener, prop, src in margin_on_plain_widget(text):
@@ -308,6 +419,11 @@ class Linter:
                                        "setting properties\" for the widget (#633's history chart shipped one). Inset "
                                        "with position (parentanchor = right + position = { -8 0 }), or put the "
                                        "margin on a flowcontainer, hbox or vbox")
+        for ln, child, kind in box_in_flowcontainer(text, self.type_bases):
+            self.report("ERROR", path, ln, f"'{child}' ({kind}) directly inside a flowcontainer: the engine logs "
+                                           "\"A (flow)container can't have an hbox/vbox as a direct child\", and "
+                                           "building one in the law panel overflowed the stack and crashed the game "
+                                           "(2026-11-05). Make the parent a vbox or hbox, or the child a flowcontainer")
         for ln, prop in bare_vector_expressions(text):
             self.report("ERROR", path, ln, f"unquoted data expression inside '{prop}' brace vector; "
                         "the engine reads its tokens as extra numeric components. Use literal "
@@ -331,6 +447,10 @@ class Linter:
                             f"loc key '{m.group(1)}' is in neither mod nor vanilla loc")
 
         for flag in sorted(set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", text))):
+            # A flag read only by other properties (the see-through journal page's alpha) collapses nothing.
+            reads = self.variable_readers().get(flag)
+            if reads and "visible" not in reads:
+                continue
             if not re.search(r"_(open|closed)$", flag):
                 self.report("WARN", path, 1, f"collapse flag {flag} should end _open (collapsed until "
                                              "opened) or _closed (open until closed): style rule 7")
@@ -343,6 +463,17 @@ class Linter:
             if flag.endswith("_open") and neg != 1:
                 self.report("WARN", path, 1, f"{flag} says collapsed by default, but {neg} Not(Exists()) "
                                              "test it (expected one: the show-more arrow)")
+
+    def variable_readers(self):
+        """{GetVariableSystem flag: the properties whose bindings test it with Exists()}, over every mod .gui, built
+        once: one pass over the text rather than one per flag (11.5 MB each)."""
+        if getattr(self, "_variable_readers", None) is None:
+            readers = {}
+            for m in re.finditer(r'(\w+)\s*=\s*"([^"]*GetVariableSystem\.Exists[^"]*)"', self.cur_gui_text):
+                for flag in re.findall(r"GetVariableSystem\.Exists\('(\w+)'\)", m.group(2)):
+                    readers.setdefault(flag, set()).add(m.group(1))
+            self._variable_readers = readers
+        return self._variable_readers
 
     def lint_added_loc(self):
         # te_unused holds keys nothing renders; organize_loc moving a key there
@@ -363,6 +494,9 @@ class Linter:
             for c in re.findall(r"\[(concept_\w+)\]", value):
                 if c not in self.concepts:
                     self.report("ERROR", "loc", 0, f"{key}: concept {c} is not defined")
+            for c in re.findall(r"\[(glossary_\w+)\]", value):
+                if c not in self.glossary:
+                    self.report("ERROR", "loc", 0, f"{key}: glossary entry {c} is not defined")
             for e in bracket_exprs(value):
                 if e.count("(") != e.count(")"):
                     self.report("ERROR", "loc", 0, f"{key}: unbalanced ( ) in [{e[:80]}]")
@@ -372,6 +506,9 @@ class Linter:
                 for k in re.findall(r"Concept\(\s*'(\w+)'", e):
                     if k not in self.concepts:
                         self.report("ERROR", "loc", 0, f"{key}: concept {k} is not defined")
+                for k in re.findall(GLOSSARY_FN, e):
+                    if k not in self.glossary:
+                        self.report("ERROR", "loc", 0, f"{key}: glossary entry {k} is not defined")
                 for k in re.findall(r"ScriptValue\(\s*'(\w+)'", e):
                     if k not in self.svals:
                         self.report("WARN", "loc", 0, f"{key}: script value {k} not found (mod or vanilla)")

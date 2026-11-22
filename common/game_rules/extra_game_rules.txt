@@ -53,8 +53,16 @@ global_warming_rule = {
 	}
 }
 
+# Three settings: early unlock, late unlock and off, as covert_warfare_rule
+# (below): late unlock keeps the name world_war_enabled, and script reads the
+# rule through te_world_war_on / te_world_war_early
+# (te_rule_setting_triggers.txt).
 world_war_rule = {
 	default = world_war_disabled
+
+	world_war_early_unlock = {
+		flag = world_war_early_unlock
+	}
 
 	world_war_enabled = {
 		flag = world_war_enabled
@@ -65,8 +73,16 @@ world_war_rule = {
 	}
 }
 
+# Three settings: early unlock, late unlock and off, as covert_warfare_rule
+# (below): late unlock keeps the name cultural_hegemony_enabled, and script
+# reads the rule through te_cultural_hegemony_on / te_cultural_hegemony_early
+# (te_rule_setting_triggers.txt).
 cultural_hegemony_rule = {
 	default = cultural_hegemony_enabled
+
+	cultural_hegemony_early_unlock = {
+		flag = cultural_hegemony_early_unlock
+	}
 
 	cultural_hegemony_enabled = {
 		flag = cultural_hegemony_enabled
@@ -77,8 +93,18 @@ cultural_hegemony_rule = {
 	}
 }
 
+# Three settings: early unlock, late unlock and off. Late unlock is the
+# original system and keeps the name covert_warfare_enabled, so a save from
+# before the early setting keeps it. Each setting has one flag named after it;
+# script reads the rule through te_covert_warfare_on / te_covert_warfare_early
+# (common/scripted_triggers/te_rule_setting_triggers.txt), never a bare
+# has_game_rule = covert_warfare_enabled, which is the late setting alone.
 covert_warfare_rule = {
 	default = covert_warfare_enabled
+
+	covert_warfare_early_unlock = {
+		flag = covert_warfare_early_unlock
+	}
 
 	covert_warfare_enabled = {
 		flag = covert_warfare_enabled
@@ -101,8 +127,16 @@ heir_education_rule = {
 	}
 }
 
+# Three settings: early unlock, late unlock and off, as covert_warfare_rule
+# (above): late unlock keeps the name united_nations_enabled, and script reads
+# the rule through te_united_nations_on / te_united_nations_early
+# (te_rule_setting_triggers.txt).
 united_nations_rule = {
 	default = united_nations_enabled
+
+	united_nations_early_unlock = {
+		flag = united_nations_early_unlock
+	}
 
 	united_nations_enabled = {
 		flag = united_nations_enabled
@@ -231,10 +265,18 @@ universal_aptitude_traits_rule = {
 # Each setting disables the other mode's methods; groups with a single method
 # per mode force it. Method families: te_construction_market_pms.txt.
 #
-# The disabled setting also applies te_direct_construction_base_modifier to
-# every country (apply_modifier = <player|ai|all>:<static modifier>, vanilla
-# game_rules.md): a flat base of construction, so a country without
-# Construction Sites can still build them.
+# Under the disabled setting script also gives every country Base Construction
+# (te_direct_construction_base_modifier, te_direct_construction_ensure_base): a
+# flat base of construction, so a country without Construction Sites can still
+# build them. It is not an apply_modifier line here: the engine does not apply
+# such a line by the rules of the save being played (read live, 2026-11-13); it
+# seems to follow the rules the player last applied in a lobby (inferred,
+# #1767), so the base came and went with the player's setups
+# (docs/guides/scripting_best_practices.md, "Gating a Mechanic on a Game Rule").
+#
+# The rule can be changed in a running game (the screen that changes country);
+# script then turns the Construction Sectors into Construction Sites or back
+# (te_construction_market_follow_rule).
 #
 # Script reads the rule through te_free_market_construction_on / _off and
 # te_building_retooling_waived (common/scripted_triggers/
@@ -355,9 +397,6 @@ free_market_construction_rule = {
 
 	free_market_construction_disabled = {
 		flag = free_market_construction_disabled
-
-		# Base construction for every country, player and AI
-		apply_modifier = all:te_direct_construction_base_modifier
 
 		# Construction Site: direct tiers only (whichever are researched)
 		flag = disable_pm_te_construction_market_base
@@ -529,5 +568,70 @@ global_commons_rule = {
 		flag = disable_pm_ocean_mine
 		flag = disable_pm_advanced_ocean_mine
 		flag = disable_pm_automated_ocean_mine
+	}
+}
+
+# Culture Merges (docs/superpowers/specs/2026-11-07-culture-merges-design.md):
+# related cultures (North and South German) merge into one national culture
+# over a few decades, and once it dominates, every remaining pop of the parts
+# switches. Disabled, no merge starts or runs. On by default from 1.3.5
+# (owner, 2026-11-20); off by default from 2026-11-08 to 1.3.4, because a game
+# begun before the system's 21 new cultures existed has no object for them, and
+# a merge into one added an empty primary culture (#1518). Checked positively,
+# as has_game_rule = culture_merges_enabled (te_cm_system_enabled). What it
+# reads in a save begun before the rule existed, which lists no setting for it,
+# is unread (docs/systems/mod_systems/game_rules.md § Old saves); if the default,
+# the candidate check's exists = cu:<r> guard still keeps every merge into one
+# of the new cultures from starting there. A game begun under 1.3.1 to 1.3.4
+# stored the setting it was begun with (a save lists every rule's setting,
+# defaults included), off unless the player turned it on.
+culture_merges_rule = {
+	default = culture_merges_enabled
+
+	culture_merges_enabled = {
+		flag = culture_merges_enabled
+	}
+
+	culture_merges_disabled = {
+		flag = culture_merges_disabled
+	}
+}
+
+# Cheaper construction for small economies (owner, 2026-11-13, after Workshop
+# reports that a minor country could hardly build): the mod has no free base of
+# construction in a market game, so a country with a small budget pays the full
+# price of every point. Switched on, Construction Cost Scaling is multiplied by a
+# factor that is the setting's minimum for a country with almost no GDP and rises
+# in a straight line to 1 at a GDP of 10 million (extra_script_values.txt,
+# CONSTRUCTION COST SCALING: construction_cost_small_economy_*_factor / _full_gdp).
+# Three strengths (owner, 2026-11-16, "a magnitude option"), each with its
+# minimum: mild 0.5, standard 0.2, and enabled 0.1, the rule's one "on" setting
+# from 2026-11-13, kept under its name so a preset or a save made with it on
+# still means a tenth. The full price returns at 10 million under all three.
+# It rides the scaling's modifier, so it also cuts what a small economy's
+# buildings pay in construction maintenance, and it applies under every setting
+# of free_market_construction_rule. Off by default: it is new and has not been
+# play-tested. Checked positively, through te_small_economy_construction_on and
+# one trigger per strength (te_construction_cost_triggers.txt), so a save from
+# before the rule stays off. Switched in a running game, on, off or from one
+# strength to another, it reaches each country at its next yearly pulse.
+te_small_economy_construction_rule = {
+	default = te_small_economy_construction_disabled
+
+	te_small_economy_construction_disabled = {
+		flag = te_small_economy_construction_disabled
+	}
+
+	te_small_economy_construction_mild = {
+		flag = te_small_economy_construction_mild
+	}
+
+	te_small_economy_construction_standard = {
+		flag = te_small_economy_construction_standard
+	}
+
+	# The strongest: a tenth of the price with almost no GDP.
+	te_small_economy_construction_enabled = {
+		flag = te_small_economy_construction_enabled
 	}
 }

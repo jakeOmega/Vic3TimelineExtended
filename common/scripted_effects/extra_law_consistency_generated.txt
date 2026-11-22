@@ -17,7 +17,9 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_anarchy
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_colonial_administration
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -27,13 +29,17 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 				}
 				has_technology_researched = marketing_research
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_neocameralism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = corporatism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_social_monarchy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -41,13 +47,17 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_total_separation
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_theocracy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = corporatism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_corporate_state
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -66,11 +76,15 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 				}
 				has_technology_researched = political_agitation
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_direct_democracy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_chiefdom
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -90,7 +104,9 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 				}
 				has_technology_researched = marketing_research
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_neocameralism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -98,13 +114,17 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_anarchy
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_monarchy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = corporatism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_social_monarchy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -112,13 +132,17 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_total_separation
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_theocracy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = corporatism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_corporate_state
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -137,11 +161,15 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 				}
 				has_technology_researched = political_agitation
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_direct_democracy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_chiefdom
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -157,13 +185,17 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 			limit = {
 				has_technology_researched = democracy
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_presidential_republic
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = corporatism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_corporate_state
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -182,13 +214,25 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 				}
 				has_technology_researched = political_agitation
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_direct_democracy
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				has_technology_researched = socialism
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_council_republic
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = corporatism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_social_monarchy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -197,7 +241,9 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_anarchy
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_colonial_administration
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -207,13 +253,9 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 				}
 				has_technology_researched = marketing_research
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_neocameralism
-		}
-		else_if = {
-			limit = {
-				has_technology_researched = socialism
-			}
-			activate_law = law_type:law_council_republic
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -221,7 +263,9 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_anarchy
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_monarchy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -229,11 +273,15 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_total_separation
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_theocracy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_chiefdom
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -253,7 +301,9 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 				}
 				has_technology_researched = marketing_research
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_neocameralism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -262,7 +312,9 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_anarchy
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_colonial_administration
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -270,23 +322,31 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_anarchy
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_monarchy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = corporatism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_social_monarchy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = corporatism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_corporate_state
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_chiefdom
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -308,7 +368,9 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_anarchy
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_colonial_administration
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -316,7 +378,9 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_anarchy
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_monarchy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -324,19 +388,25 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_total_separation
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_theocracy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = corporatism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_social_monarchy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = corporatism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_corporate_state
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -355,7 +425,9 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 				}
 				has_technology_researched = political_agitation
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_direct_democracy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -364,17 +436,23 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 				}
 				has_technology_researched = democracy
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_parliamentary_republic
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = democracy
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_presidential_republic
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_chiefdom
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -402,13 +480,17 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 			limit = {
 				has_technology_researched = corporatism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_corporate_state
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = corporatism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_social_monarchy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -417,13 +499,9 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 				}
 				has_technology_researched = democracy
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_parliamentary_republic
-		}
-		else_if = {
-			limit = {
-				has_technology_researched = democracy
-			}
-			activate_law = law_type:law_presidential_republic
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -433,7 +511,17 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 				}
 				has_technology_researched = marketing_research
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_neocameralism
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				has_technology_researched = democracy
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_presidential_republic
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -442,7 +530,9 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_anarchy
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_colonial_administration
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -450,7 +540,9 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_anarchy
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_monarchy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -458,17 +550,23 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_total_separation
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_theocracy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = socialism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_council_republic
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_chiefdom
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -491,7 +589,9 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 					has_law = law_type:law_social_monarchy
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_bakufu
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -501,11 +601,15 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 					has_law = law_type:law_monarchy
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_neo_absolutism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_oligarchy
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -528,7 +632,9 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 					has_law = law_type:law_monarchy
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_neo_absolutism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -536,18 +642,24 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 					has_law = law_type:law_parliamentary_republic
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_autocracy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				country_has_primary_culture = cu:romanian
 				is_subject = yes
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_organic_regulation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_oligarchy
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -569,7 +681,9 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 					has_law = law_type:law_social_monarchy
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_bakufu
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -577,18 +691,24 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 					has_law = law_type:law_parliamentary_republic
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_autocracy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				country_has_primary_culture = cu:romanian
 				is_subject = yes
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_organic_regulation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_oligarchy
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -610,14 +730,18 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				}
 				has_technology_researched = democracy
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_landed_voting
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				country_has_primary_culture = cu:romanian
 				is_subject = yes
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_organic_regulation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -627,11 +751,23 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				}
 				has_technology_researched = democracy
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_wealth_voting
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				has_technology_researched = artificial_intelligence
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_algorithmic_governance
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_oligarchy
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -650,7 +786,9 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 					has_law = law_type:law_chiefdom
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_elder_council
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -660,18 +798,24 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				}
 				has_technology_researched = democracy
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_wealth_voting
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				country_has_primary_culture = cu:romanian
 				is_subject = yes
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_organic_regulation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_oligarchy
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -688,7 +832,9 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 			limit = {
 				has_technology_researched = artificial_intelligence
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_algorithmic_governance
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -698,7 +844,9 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				}
 				has_technology_researched = democracy
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_landed_voting
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -706,7 +854,9 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 					has_law = law_type:law_chiefdom
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_elder_council
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -716,30 +866,40 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				}
 				has_technology_researched = democracy
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_census_voting
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				country_has_primary_culture = cu:romanian
 				is_subject = yes
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_organic_regulation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = political_agitation
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_single_party_state
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = central_archives
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_technocracy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_oligarchy
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -756,7 +916,9 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 			limit = {
 				has_technology_researched = political_agitation
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_single_party_state
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -766,7 +928,9 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				}
 				has_technology_researched = democracy
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_wealth_voting
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -776,13 +940,28 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				}
 				has_technology_researched = egalitarianism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_universal_suffrage
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = artificial_intelligence
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_algorithmic_governance
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_council_republic
+				}
+				has_technology_researched = socialism
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_labour_suffrage
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -790,7 +969,9 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 					has_law = law_type:law_chiefdom
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_elder_council
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -800,7 +981,9 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				}
 				has_technology_researched = democracy
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_landed_voting
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -810,24 +993,32 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				}
 				has_technology_researched = liquid_democracy
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_liquid_democracy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				country_has_primary_culture = cu:romanian
 				is_subject = yes
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_organic_regulation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = central_archives
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_technocracy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_oligarchy
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -842,13 +1033,26 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 		}
 		if = {
 			limit = {
+				OR = {
+					has_law = law_type:law_council_republic
+				}
+				has_technology_researched = socialism
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_labour_suffrage
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
 				NOR = {
 					has_law = law_type:law_chiefdom
 					has_law = law_type:law_command_economy
 				}
 				has_technology_researched = liquid_democracy
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_liquid_democracy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -858,13 +1062,17 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				}
 				has_technology_researched = democracy
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_census_voting
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = political_agitation
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_single_party_state
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -873,13 +1081,17 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				}
 				has_technology_researched = anarchism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_anarchy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = artificial_intelligence
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_algorithmic_governance
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -889,7 +1101,9 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				}
 				has_technology_researched = democracy
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_wealth_voting
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -897,7 +1111,9 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 					has_law = law_type:law_chiefdom
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_elder_council
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -907,24 +1123,32 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				}
 				has_technology_researched = democracy
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_landed_voting
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = central_archives
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_technocracy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				country_has_primary_culture = cu:romanian
 				is_subject = yes
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_organic_regulation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_oligarchy
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -946,7 +1170,20 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				}
 				has_technology_researched = liquid_democracy
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_liquid_democracy
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_council_republic
+				}
+				has_technology_researched = socialism
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_labour_suffrage
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -956,7 +1193,9 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				}
 				has_technology_researched = egalitarianism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_universal_suffrage
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -966,19 +1205,25 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				}
 				has_technology_researched = democracy
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_census_voting
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = political_agitation
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_single_party_state
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = artificial_intelligence
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_algorithmic_governance
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -988,7 +1233,9 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				}
 				has_technology_researched = democracy
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_wealth_voting
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -996,7 +1243,9 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 					has_law = law_type:law_chiefdom
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_elder_council
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1006,24 +1255,164 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				}
 				has_technology_researched = democracy
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_landed_voting
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = central_archives
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_technocracy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				country_has_primary_culture = cu:romanian
 				is_subject = yes
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_organic_regulation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_oligarchy
+			remove_variable = te_law_sweep_replacing
+		}
+	}
+
+	# Active: law_labour_suffrage  ->  detect violation, cascade replacements
+	if = {
+		limit = {
+			has_law = law_type:law_labour_suffrage
+			OR = {
+				NOR = {
+					has_law = law_type:law_council_republic
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_chiefdom
+					has_law = law_type:law_command_economy
+				}
+				has_technology_researched = egalitarianism
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_universal_suffrage
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_chiefdom
+					has_law = law_type:law_command_economy
+				}
+				has_technology_researched = liquid_democracy
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_liquid_democracy
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_chiefdom
+					has_law = law_type:law_command_economy
+				}
+				has_technology_researched = democracy
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_census_voting
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				has_technology_researched = political_agitation
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_single_party_state
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_cooperative_ownership
+				}
+				has_technology_researched = anarchism
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_anarchy
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				has_technology_researched = artificial_intelligence
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_algorithmic_governance
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_chiefdom
+					has_law = law_type:law_command_economy
+				}
+				has_technology_researched = democracy
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_wealth_voting
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_chiefdom
+				}
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_elder_council
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_chiefdom
+					has_law = law_type:law_command_economy
+				}
+				has_technology_researched = democracy
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_landed_voting
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				has_technology_researched = central_archives
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_technocracy
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				country_has_primary_culture = cu:romanian
+				is_subject = yes
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_organic_regulation
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_oligarchy
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -1044,7 +1433,9 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				}
 				has_technology_researched = egalitarianism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_universal_suffrage
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1053,7 +1444,20 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				}
 				has_technology_researched = anarchism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_anarchy
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_council_republic
+				}
+				has_technology_researched = socialism
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_labour_suffrage
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1063,19 +1467,25 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				}
 				has_technology_researched = democracy
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_census_voting
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = political_agitation
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_single_party_state
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = artificial_intelligence
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_algorithmic_governance
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1085,7 +1495,9 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				}
 				has_technology_researched = democracy
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_wealth_voting
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1093,7 +1505,9 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 					has_law = law_type:law_chiefdom
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_elder_council
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1103,24 +1517,32 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				}
 				has_technology_researched = democracy
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_landed_voting
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = central_archives
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_technocracy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				country_has_primary_culture = cu:romanian
 				is_subject = yes
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_organic_regulation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_oligarchy
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -1147,13 +1569,17 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = romanticism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_industry_banned
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = colonization
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_extraction_economy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1164,7 +1590,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = romanticism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_agrarianism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1178,7 +1606,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = international_trade
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_laissez_faire
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1190,7 +1620,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = manufacturies
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_interventionism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1201,6 +1633,7 @@ te_fix_inconsistent_lawgroup_economic_system = {
 					has_law = law_type:law_organic_regulation
 					has_law = law_type:law_single_party_state
 					has_law = law_type:law_technocracy
+					has_law = law_type:law_council_republic
 				}
 				NOR = {
 					has_law = law_type:law_serfdom
@@ -1209,7 +1642,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = central_planning
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_command_economy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1223,7 +1658,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 					has_law = law_type:law_women_in_the_fields
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_cooperative_ownership
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -1250,7 +1687,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = international_trade
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_laissez_faire
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1261,7 +1700,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = romanticism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_agrarianism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1272,6 +1713,7 @@ te_fix_inconsistent_lawgroup_economic_system = {
 					has_law = law_type:law_organic_regulation
 					has_law = law_type:law_single_party_state
 					has_law = law_type:law_technocracy
+					has_law = law_type:law_council_republic
 				}
 				NOR = {
 					has_law = law_type:law_serfdom
@@ -1280,7 +1722,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = central_planning
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_command_economy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1292,7 +1736,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 					has_law = law_type:law_factory_councils
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_traditionalism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1302,13 +1748,17 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = romanticism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_industry_banned
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = colonization
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_extraction_economy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1322,7 +1772,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 					has_law = law_type:law_women_in_the_fields
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_cooperative_ownership
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -1346,7 +1798,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = manufacturies
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_interventionism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1360,7 +1814,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = international_trade
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_laissez_faire
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1372,7 +1828,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 					has_law = law_type:law_factory_councils
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_traditionalism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1382,13 +1840,17 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = romanticism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_industry_banned
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = colonization
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_extraction_economy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1399,6 +1861,7 @@ te_fix_inconsistent_lawgroup_economic_system = {
 					has_law = law_type:law_organic_regulation
 					has_law = law_type:law_single_party_state
 					has_law = law_type:law_technocracy
+					has_law = law_type:law_council_republic
 				}
 				NOR = {
 					has_law = law_type:law_serfdom
@@ -1407,7 +1870,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = central_planning
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_command_economy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1421,7 +1886,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 					has_law = law_type:law_women_in_the_fields
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_cooperative_ownership
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -1438,7 +1905,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 			limit = {
 				has_technology_researched = colonization
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_extraction_economy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1450,7 +1919,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 					has_law = law_type:law_factory_councils
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_traditionalism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1461,7 +1932,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = romanticism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_agrarianism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1475,7 +1948,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = international_trade
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_laissez_faire
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1487,7 +1962,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = manufacturies
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_interventionism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1498,6 +1975,7 @@ te_fix_inconsistent_lawgroup_economic_system = {
 					has_law = law_type:law_organic_regulation
 					has_law = law_type:law_single_party_state
 					has_law = law_type:law_technocracy
+					has_law = law_type:law_council_republic
 				}
 				NOR = {
 					has_law = law_type:law_serfdom
@@ -1506,7 +1984,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = central_planning
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_command_economy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1520,7 +2000,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 					has_law = law_type:law_women_in_the_fields
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_cooperative_ownership
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -1547,7 +2029,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = manufacturies
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_interventionism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1558,6 +2042,7 @@ te_fix_inconsistent_lawgroup_economic_system = {
 					has_law = law_type:law_organic_regulation
 					has_law = law_type:law_single_party_state
 					has_law = law_type:law_technocracy
+					has_law = law_type:law_council_republic
 				}
 				NOR = {
 					has_law = law_type:law_serfdom
@@ -1566,7 +2051,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = central_planning
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_command_economy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1577,13 +2064,17 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = romanticism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_agrarianism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = colonization
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_extraction_economy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1593,7 +2084,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = romanticism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_industry_banned
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1605,7 +2098,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 					has_law = law_type:law_factory_councils
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_traditionalism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1619,7 +2114,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 					has_law = law_type:law_women_in_the_fields
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_cooperative_ownership
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -1646,6 +2143,7 @@ te_fix_inconsistent_lawgroup_economic_system = {
 					has_law = law_type:law_organic_regulation
 					has_law = law_type:law_single_party_state
 					has_law = law_type:law_technocracy
+					has_law = law_type:law_council_republic
 				}
 				NOR = {
 					has_law = law_type:law_serfdom
@@ -1654,19 +2152,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = central_planning
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_command_economy
-		}
-		else_if = {
-			limit = {
-				NOR = {
-					has_law = law_type:law_serfdom
-					has_law = law_type:law_anarchy
-					has_law = law_type:law_factory_councils
-					has_law = law_type:law_women_in_the_fields
-				}
-				has_technology_researched = manufacturies
-			}
-			activate_law = law_type:law_interventionism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1680,7 +2168,23 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = international_trade
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_laissez_faire
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_serfdom
+					has_law = law_type:law_anarchy
+					has_law = law_type:law_factory_councils
+					has_law = law_type:law_women_in_the_fields
+				}
+				has_technology_researched = manufacturies
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_interventionism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1691,7 +2195,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = romanticism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_agrarianism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1701,13 +2207,17 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = romanticism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_industry_banned
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = colonization
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_extraction_economy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1719,7 +2229,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 					has_law = law_type:law_factory_councils
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_traditionalism
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -1735,6 +2247,7 @@ te_fix_inconsistent_lawgroup_economic_system = {
 					has_law = law_type:law_organic_regulation
 					has_law = law_type:law_single_party_state
 					has_law = law_type:law_technocracy
+					has_law = law_type:law_council_republic
 				}
 				has_law = law_type:law_serfdom
 				has_law = law_type:law_anarchy
@@ -1742,18 +2255,6 @@ te_fix_inconsistent_lawgroup_economic_system = {
 			}
 		}
 		if = {
-			limit = {
-				NOR = {
-					has_law = law_type:law_serfdom
-					has_law = law_type:law_anarchy
-					has_law = law_type:law_factory_councils
-					has_law = law_type:law_women_in_the_fields
-				}
-				has_technology_researched = manufacturies
-			}
-			activate_law = law_type:law_interventionism
-		}
-		else_if = {
 			limit = {
 				NOR = {
 					has_law = law_type:law_serfdom
@@ -1765,7 +2266,23 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = international_trade
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_laissez_faire
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_serfdom
+					has_law = law_type:law_anarchy
+					has_law = law_type:law_factory_councils
+					has_law = law_type:law_women_in_the_fields
+				}
+				has_technology_researched = manufacturies
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_interventionism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1779,7 +2296,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 					has_law = law_type:law_women_in_the_fields
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_cooperative_ownership
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1790,7 +2309,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = romanticism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_agrarianism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1800,13 +2321,17 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				}
 				has_technology_researched = romanticism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_industry_banned
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = colonization
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_extraction_economy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1818,7 +2343,9 @@ te_fix_inconsistent_lawgroup_economic_system = {
 					has_law = law_type:law_factory_councils
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_traditionalism
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -1834,12 +2361,48 @@ te_fix_inconsistent_lawgroup_citizenship = {
 					has_law = law_type:law_monarchy
 					has_law = law_type:law_theocracy
 					has_law = law_type:law_chiefdom
+					has_law = law_type:law_colonial_administration
+				}
+			}
+		}
+		if = {
+			limit = {
+				c:RUS ?= this
+				OR = {
+					has_law = law_type:law_monarchy
+					has_law = law_type:law_theocracy
+					has_law = law_type:law_chiefdom
+				}
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_official_nationality
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_national_supremacy
+			remove_variable = te_law_sweep_replacing
+		}
+	}
+
+	# Active: law_official_nationality  ->  detect violation, cascade replacements
+	if = {
+		limit = {
+			has_law = law_type:law_official_nationality
+			OR = {
+				NOR = {
+					has_law = law_type:law_monarchy
+					has_law = law_type:law_theocracy
+					has_law = law_type:law_chiefdom
 				}
 			}
 		}
 		if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_national_supremacy
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -1856,7 +2419,9 @@ te_fix_inconsistent_lawgroup_citizenship = {
 		}
 		if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_cultural_exclusion
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -1877,6 +2442,22 @@ te_fix_inconsistent_lawgroup_church_and_state = {
 		}
 		if = {
 			limit = {
+				OR = {
+					c:RUS ?= this
+					AND = {
+						exists = c:RUS
+						is_subject_of = c:RUS
+						country_is_subject_type_valid_for_caesaropapism = yes
+					}
+				}
+				NOT = { has_law_or_variant = law_type:law_theocracy }
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_caesaropapism
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
 				country_is_islamic = yes
 				NOT = { c:TUR ?= this }
 				OR = {
@@ -1885,11 +2466,15 @@ te_fix_inconsistent_lawgroup_church_and_state = {
 					has_law = law_type:law_chiefdom
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_people_of_the_book
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_state_religion
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -1907,6 +2492,22 @@ te_fix_inconsistent_lawgroup_church_and_state = {
 		}
 		if = {
 			limit = {
+				OR = {
+					c:RUS ?= this
+					AND = {
+						exists = c:RUS
+						is_subject_of = c:RUS
+						country_is_subject_type_valid_for_caesaropapism = yes
+					}
+				}
+				NOT = { has_law_or_variant = law_type:law_theocracy }
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_caesaropapism
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
 				c:TUR ?= this
 				OR = {
 					has_law = law_type:law_theocracy
@@ -1914,11 +2515,15 @@ te_fix_inconsistent_lawgroup_church_and_state = {
 					has_law = law_type:law_chiefdom
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_millet_system
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_state_religion
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -1932,6 +2537,22 @@ te_fix_inconsistent_lawgroup_church_and_state = {
 		}
 		if = {
 			limit = {
+				OR = {
+					c:RUS ?= this
+					AND = {
+						exists = c:RUS
+						is_subject_of = c:RUS
+						country_is_subject_type_valid_for_caesaropapism = yes
+					}
+				}
+				NOT = { has_law_or_variant = law_type:law_theocracy }
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_caesaropapism
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
 				c:TUR ?= this
 				OR = {
 					has_law = law_type:law_theocracy
@@ -1939,7 +2560,9 @@ te_fix_inconsistent_lawgroup_church_and_state = {
 					has_law = law_type:law_chiefdom
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_millet_system
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1951,7 +2574,9 @@ te_fix_inconsistent_lawgroup_church_and_state = {
 					has_law = law_type:law_chiefdom
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_people_of_the_book
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1960,11 +2585,15 @@ te_fix_inconsistent_lawgroup_church_and_state = {
 				}
 				has_technology_researched = empiricism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_total_separation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_state_religion
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -1983,7 +2612,9 @@ te_fix_inconsistent_lawgroup_church_and_state = {
 				}
 				has_technology_researched = empiricism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_state_atheism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -1992,7 +2623,25 @@ te_fix_inconsistent_lawgroup_church_and_state = {
 				}
 				has_technology_researched = rationalism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_freedom_of_conscience
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				OR = {
+					c:RUS ?= this
+					AND = {
+						exists = c:RUS
+						is_subject_of = c:RUS
+						country_is_subject_type_valid_for_caesaropapism = yes
+					}
+				}
+				NOT = { has_law_or_variant = law_type:law_theocracy }
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_caesaropapism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2003,7 +2652,9 @@ te_fix_inconsistent_lawgroup_church_and_state = {
 					has_law = law_type:law_chiefdom
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_millet_system
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2015,11 +2666,15 @@ te_fix_inconsistent_lawgroup_church_and_state = {
 					has_law = law_type:law_chiefdom
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_people_of_the_book
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_state_religion
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -2038,7 +2693,9 @@ te_fix_inconsistent_lawgroup_church_and_state = {
 				}
 				has_technology_researched = empiricism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_total_separation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2047,7 +2704,25 @@ te_fix_inconsistent_lawgroup_church_and_state = {
 				}
 				has_technology_researched = rationalism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_freedom_of_conscience
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				OR = {
+					c:RUS ?= this
+					AND = {
+						exists = c:RUS
+						is_subject_of = c:RUS
+						country_is_subject_type_valid_for_caesaropapism = yes
+					}
+				}
+				NOT = { has_law_or_variant = law_type:law_theocracy }
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_caesaropapism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2058,7 +2733,9 @@ te_fix_inconsistent_lawgroup_church_and_state = {
 					has_law = law_type:law_chiefdom
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_millet_system
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2070,11 +2747,15 @@ te_fix_inconsistent_lawgroup_church_and_state = {
 					has_law = law_type:law_chiefdom
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_people_of_the_book
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_state_religion
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -2104,13 +2785,27 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_algorithmic_governance
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_crownland_diets
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_algorithmic_governance
+				}
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_military_bureaucrats
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = ai_agents
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_automated_bureaucracy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2124,7 +2819,9 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 				}
 				has_technology_researched = supply_chain_management
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_contracted_administration
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2132,7 +2829,9 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_algorithmic_governance
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_appointed_bureaucrats
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2143,18 +2842,22 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_labour_suffrage
 				}
 				NOR = {
 					has_law = law_type:law_technocracy
 					has_law = law_type:law_elder_council
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_elected_bureaucrats
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				OR = {
 					has_law = law_type:law_council_republic
+					has_law = law_type:law_factory_councils
 					has_law = law_type:law_anarchy
 					has_law = law_type:law_direct_democracy
 				}
@@ -2163,8 +2866,11 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_elder_council
 					has_law = law_type:law_algorithmic_governance
 				}
+				has_technology_researched = socialism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_communal_administration
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -2184,13 +2890,27 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_algorithmic_governance
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_hereditary_bureaucrats
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_algorithmic_governance
+				}
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_military_bureaucrats
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = ai_agents
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_automated_bureaucracy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2204,7 +2924,9 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 				}
 				has_technology_researched = supply_chain_management
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_contracted_administration
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2212,7 +2934,9 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_algorithmic_governance
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_appointed_bureaucrats
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2223,18 +2947,22 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_labour_suffrage
 				}
 				NOR = {
 					has_law = law_type:law_technocracy
 					has_law = law_type:law_elder_council
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_elected_bureaucrats
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				OR = {
 					has_law = law_type:law_council_republic
+					has_law = law_type:law_factory_councils
 					has_law = law_type:law_anarchy
 					has_law = law_type:law_direct_democracy
 				}
@@ -2243,8 +2971,123 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_elder_council
 					has_law = law_type:law_algorithmic_governance
 				}
+				has_technology_researched = socialism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_communal_administration
+			remove_variable = te_law_sweep_replacing
+		}
+	}
+
+	# Active: law_military_bureaucrats  ->  detect violation, cascade replacements
+	if = {
+		limit = {
+			has_law = law_type:law_military_bureaucrats
+			OR = {
+				has_law = law_type:law_algorithmic_governance
+			}
+		}
+		if = {
+			limit = {
+				has_technology_researched = ai_agents
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_automated_bureaucracy
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_laissez_faire
+					has_law = law_type:law_interventionism
+				}
+				NOR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_algorithmic_governance
+				}
+				has_technology_researched = supply_chain_management
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_contracted_administration
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_algorithmic_governance
+				}
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_hereditary_bureaucrats
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				OR = {
+					c:AUS ?= this
+					AND = {
+						exists = c:AUS
+						is_subject_of = c:AUS
+					}
+				}
+				NOR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_algorithmic_governance
+				}
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_crownland_diets
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_algorithmic_governance
+				}
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_appointed_bureaucrats
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_landed_voting
+					has_law = law_type:law_wealth_voting
+					has_law = law_type:law_census_voting
+					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_liquid_democracy
+					has_law = law_type:law_anarchy
+					has_law = law_type:law_labour_suffrage
+				}
+				NOR = {
+					has_law = law_type:law_technocracy
+					has_law = law_type:law_elder_council
+				}
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_elected_bureaucrats
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_factory_councils
+					has_law = law_type:law_anarchy
+					has_law = law_type:law_direct_democracy
+				}
+				NOR = {
+					has_law = law_type:law_technocracy
+					has_law = law_type:law_elder_council
+					has_law = law_type:law_algorithmic_governance
+				}
+				has_technology_researched = socialism
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_communal_administration
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -2268,13 +3111,27 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 				}
 				has_technology_researched = supply_chain_management
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_contracted_administration
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = ai_agents
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_automated_bureaucracy
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_algorithmic_governance
+				}
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_military_bureaucrats
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2290,7 +3147,9 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_algorithmic_governance
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_crownland_diets
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2301,13 +3160,16 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_labour_suffrage
 				}
 				NOR = {
 					has_law = law_type:law_technocracy
 					has_law = law_type:law_elder_council
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_elected_bureaucrats
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2316,12 +3178,15 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_algorithmic_governance
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_hereditary_bureaucrats
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				OR = {
 					has_law = law_type:law_council_republic
+					has_law = law_type:law_factory_councils
 					has_law = law_type:law_anarchy
 					has_law = law_type:law_direct_democracy
 				}
@@ -2330,8 +3195,11 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_elder_council
 					has_law = law_type:law_algorithmic_governance
 				}
+				has_technology_researched = socialism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_communal_administration
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -2347,6 +3215,7 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_labour_suffrage
 				}
 				has_law = law_type:law_technocracy
 				has_law = law_type:law_elder_council
@@ -2356,6 +3225,7 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 			limit = {
 				OR = {
 					has_law = law_type:law_council_republic
+					has_law = law_type:law_factory_councils
 					has_law = law_type:law_anarchy
 					has_law = law_type:law_direct_democracy
 				}
@@ -2364,8 +3234,11 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_elder_council
 					has_law = law_type:law_algorithmic_governance
 				}
+				has_technology_researched = socialism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_communal_administration
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2373,7 +3246,9 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_algorithmic_governance
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_appointed_bureaucrats
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2387,13 +3262,27 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 				}
 				has_technology_researched = supply_chain_management
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_contracted_administration
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = ai_agents
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_automated_bureaucracy
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_algorithmic_governance
+				}
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_military_bureaucrats
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2409,7 +3298,9 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_algorithmic_governance
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_crownland_diets
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2418,7 +3309,120 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_algorithmic_governance
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_hereditary_bureaucrats
+			remove_variable = te_law_sweep_replacing
+		}
+	}
+
+	# Active: law_communal_administration  ->  detect violation, cascade replacements
+	if = {
+		limit = {
+			has_law = law_type:law_communal_administration
+			OR = {
+				NOR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_factory_councils
+					has_law = law_type:law_anarchy
+					has_law = law_type:law_direct_democracy
+				}
+				has_law = law_type:law_technocracy
+				has_law = law_type:law_elder_council
+				has_law = law_type:law_algorithmic_governance
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_landed_voting
+					has_law = law_type:law_wealth_voting
+					has_law = law_type:law_census_voting
+					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_liquid_democracy
+					has_law = law_type:law_anarchy
+					has_law = law_type:law_labour_suffrage
+				}
+				NOR = {
+					has_law = law_type:law_technocracy
+					has_law = law_type:law_elder_council
+				}
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_elected_bureaucrats
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_algorithmic_governance
+				}
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_appointed_bureaucrats
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_laissez_faire
+					has_law = law_type:law_interventionism
+				}
+				NOR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_algorithmic_governance
+				}
+				has_technology_researched = supply_chain_management
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_contracted_administration
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				has_technology_researched = ai_agents
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_automated_bureaucracy
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_algorithmic_governance
+				}
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_military_bureaucrats
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				OR = {
+					c:AUS ?= this
+					AND = {
+						exists = c:AUS
+						is_subject_of = c:AUS
+					}
+				}
+				NOR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_algorithmic_governance
+				}
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_crownland_diets
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_algorithmic_governance
+				}
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_hereditary_bureaucrats
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -2441,13 +3445,27 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_algorithmic_governance
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_appointed_bureaucrats
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = ai_agents
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_automated_bureaucracy
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_algorithmic_governance
+				}
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_military_bureaucrats
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2463,7 +3481,9 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_algorithmic_governance
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_crownland_diets
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2472,7 +3492,9 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_algorithmic_governance
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_hereditary_bureaucrats
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2483,18 +3505,22 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_labour_suffrage
 				}
 				NOR = {
 					has_law = law_type:law_technocracy
 					has_law = law_type:law_elder_council
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_elected_bureaucrats
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				OR = {
 					has_law = law_type:law_council_republic
+					has_law = law_type:law_factory_councils
 					has_law = law_type:law_anarchy
 					has_law = law_type:law_direct_democracy
 				}
@@ -2503,95 +3529,11 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_elder_council
 					has_law = law_type:law_algorithmic_governance
 				}
+				has_technology_researched = socialism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_communal_administration
-		}
-	}
-
-	# Active: law_communal_administration  ->  detect violation, cascade replacements
-	if = {
-		limit = {
-			has_law = law_type:law_communal_administration
-			OR = {
-				NOR = {
-					has_law = law_type:law_council_republic
-					has_law = law_type:law_anarchy
-					has_law = law_type:law_direct_democracy
-				}
-				has_law = law_type:law_technocracy
-				has_law = law_type:law_elder_council
-				has_law = law_type:law_algorithmic_governance
-			}
-		}
-		if = {
-			limit = {
-				OR = {
-					has_law = law_type:law_landed_voting
-					has_law = law_type:law_wealth_voting
-					has_law = law_type:law_census_voting
-					has_law = law_type:law_universal_suffrage
-					has_law = law_type:law_liquid_democracy
-					has_law = law_type:law_anarchy
-				}
-				NOR = {
-					has_law = law_type:law_technocracy
-					has_law = law_type:law_elder_council
-				}
-			}
-			activate_law = law_type:law_elected_bureaucrats
-		}
-		else_if = {
-			limit = {
-				NOR = {
-					has_law = law_type:law_algorithmic_governance
-				}
-			}
-			activate_law = law_type:law_appointed_bureaucrats
-		}
-		else_if = {
-			limit = {
-				OR = {
-					has_law = law_type:law_laissez_faire
-					has_law = law_type:law_interventionism
-				}
-				NOR = {
-					has_law = law_type:law_council_republic
-					has_law = law_type:law_algorithmic_governance
-				}
-				has_technology_researched = supply_chain_management
-			}
-			activate_law = law_type:law_contracted_administration
-		}
-		else_if = {
-			limit = {
-				has_technology_researched = ai_agents
-			}
-			activate_law = law_type:law_automated_bureaucracy
-		}
-		else_if = {
-			limit = {
-				OR = {
-					c:AUS ?= this
-					AND = {
-						exists = c:AUS
-						is_subject_of = c:AUS
-					}
-				}
-				NOR = {
-					has_law = law_type:law_council_republic
-					has_law = law_type:law_algorithmic_governance
-				}
-			}
-			activate_law = law_type:law_crownland_diets
-		}
-		else_if = {
-			limit = {
-				NOR = {
-					has_law = law_type:law_council_republic
-					has_law = law_type:law_algorithmic_governance
-				}
-			}
-			activate_law = law_type:law_hereditary_bureaucrats
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -2615,19 +3557,25 @@ te_fix_inconsistent_lawgroup_army_model = {
 				}
 				has_technology_researched = mandatory_service
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_national_militia
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = guided_missiles
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_private_military_contractors
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				country_has_primary_culture = cu:japanese
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_warrior_caste
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2637,11 +3585,15 @@ te_fix_inconsistent_lawgroup_army_model = {
 				}
 				has_technology_researched = enlistment_offices
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_mass_conscription
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_peasant_levies
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -2662,23 +3614,31 @@ te_fix_inconsistent_lawgroup_army_model = {
 				}
 				has_technology_researched = military_drill
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_professional_army
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = guided_missiles
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_private_military_contractors
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				country_has_primary_culture = cu:japanese
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_warrior_caste
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_peasant_levies
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -2695,7 +3655,9 @@ te_fix_inconsistent_lawgroup_army_model = {
 			limit = {
 				has_technology_researched = guided_missiles
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_private_military_contractors
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2705,7 +3667,9 @@ te_fix_inconsistent_lawgroup_army_model = {
 				}
 				has_technology_researched = military_drill
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_professional_army
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2715,17 +3679,98 @@ te_fix_inconsistent_lawgroup_army_model = {
 				}
 				has_technology_researched = mandatory_service
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_national_militia
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_factory_councils
+				}
+				has_technology_researched = enlistment_offices
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_revolutionary_guard
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				country_has_primary_culture = cu:japanese
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_warrior_caste
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_peasant_levies
+			remove_variable = te_law_sweep_replacing
+		}
+	}
+
+	# Active: law_revolutionary_guard  ->  detect violation, cascade replacements
+	if = {
+		limit = {
+			has_law = law_type:law_revolutionary_guard
+			OR = {
+				NOR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_factory_councils
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_strict_edo_system
+					has_law = law_type:law_intermediate_edo_system
+				}
+				has_technology_researched = enlistment_offices
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_mass_conscription
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				has_technology_researched = guided_missiles
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_private_military_contractors
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_strict_edo_system
+					has_law = law_type:law_intermediate_edo_system
+				}
+				has_technology_researched = mandatory_service
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_national_militia
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_strict_edo_system
+					has_law = law_type:law_intermediate_edo_system
+				}
+				has_technology_researched = military_drill
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_professional_army
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_peasant_levies
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -2746,11 +3791,36 @@ te_fix_inconsistent_lawgroup_internal_security = {
 			limit = {
 				has_technology_researched = central_archives
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_secret_police
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				c:RUS ?= this
+				country_has_monarchy_law = yes
+				NOT = { has_technology_researched = central_archives }
+				has_technology_researched = law_enforcement
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_third_section
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				c:RUS ?= this
+				country_has_monarchy_law = yes
+				has_technology_researched = central_archives
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_okhrana
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_no_home_affairs
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -2767,15 +3837,27 @@ te_fix_inconsistent_lawgroup_internal_security = {
 		}
 		if = {
 			limit = {
+				has_technology_researched = political_agitation
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_extraordinary_commission
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
 				has_technology_researched = law_enforcement
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_national_guard
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = central_archives
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_secret_police
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2785,11 +3867,15 @@ te_fix_inconsistent_lawgroup_internal_security = {
 				}
 				has_technology_researched = law_enforcement
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_shinsengumi
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_no_home_affairs
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -2812,11 +3898,15 @@ te_fix_inconsistent_lawgroup_policing = {
 			limit = {
 				has_technology_researched = law_enforcement
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_dedicated_police
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_no_police
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -2836,11 +3926,15 @@ te_fix_inconsistent_lawgroup_judiciary = {
 			limit = {
 				has_technology_researched = rationalism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_statutory_courts
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_executive_tribunals
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -2859,13 +3953,17 @@ te_fix_inconsistent_lawgroup_trade_policy = {
 			limit = {
 				has_technology_researched = stock_exchange
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_protectionism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = international_trade
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_mercantilism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2875,7 +3973,9 @@ te_fix_inconsistent_lawgroup_trade_policy = {
 					has_law = law_type:law_traditionalism
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_canton_system
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2885,7 +3985,9 @@ te_fix_inconsistent_lawgroup_trade_policy = {
 					has_law = law_type:law_traditionalism
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_sakoku
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2893,7 +3995,9 @@ te_fix_inconsistent_lawgroup_trade_policy = {
 					has_law = law_type:law_laissez_faire
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_isolationism
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -2913,7 +4017,9 @@ te_fix_inconsistent_lawgroup_trade_policy = {
 					has_law = law_type:law_traditionalism
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_canton_system
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2923,19 +4029,25 @@ te_fix_inconsistent_lawgroup_trade_policy = {
 					has_law = law_type:law_traditionalism
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_sakoku
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = international_trade
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_mercantilism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = stock_exchange
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_protectionism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2944,7 +4056,9 @@ te_fix_inconsistent_lawgroup_trade_policy = {
 				}
 				has_technology_researched = international_trade
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_free_trade
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -2966,7 +4080,9 @@ te_fix_inconsistent_lawgroup_trade_policy = {
 					has_law = law_type:law_traditionalism
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_sakoku
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2974,19 +4090,25 @@ te_fix_inconsistent_lawgroup_trade_policy = {
 					has_law = law_type:law_laissez_faire
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_isolationism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = international_trade
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_mercantilism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = stock_exchange
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_protectionism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -2995,7 +4117,9 @@ te_fix_inconsistent_lawgroup_trade_policy = {
 				}
 				has_technology_researched = international_trade
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_free_trade
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3017,7 +4141,9 @@ te_fix_inconsistent_lawgroup_trade_policy = {
 					has_law = law_type:law_traditionalism
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_canton_system
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -3025,19 +4151,25 @@ te_fix_inconsistent_lawgroup_trade_policy = {
 					has_law = law_type:law_laissez_faire
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_isolationism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = international_trade
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_mercantilism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = stock_exchange
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_protectionism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -3046,7 +4178,9 @@ te_fix_inconsistent_lawgroup_trade_policy = {
 				}
 				has_technology_researched = international_trade
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_free_trade
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3068,11 +4202,15 @@ te_fix_inconsistent_lawgroup_taxation = {
 				}
 				has_technology_researched = egalitarianism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_proportional_taxation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_land_based_taxation
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3091,7 +4229,9 @@ te_fix_inconsistent_lawgroup_taxation = {
 				}
 				has_technology_researched = socialism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_graduated_taxation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -3100,11 +4240,15 @@ te_fix_inconsistent_lawgroup_taxation = {
 				}
 				has_technology_researched = currency_standards
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_per_capita_based_taxation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_land_based_taxation
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3123,7 +4267,9 @@ te_fix_inconsistent_lawgroup_taxation = {
 				}
 				has_technology_researched = egalitarianism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_proportional_taxation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -3132,11 +4278,15 @@ te_fix_inconsistent_lawgroup_taxation = {
 				}
 				has_technology_researched = currency_standards
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_per_capita_based_taxation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_land_based_taxation
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3169,7 +4319,9 @@ te_fix_inconsistent_lawgroup_land_reform = {
 					country_has_primary_culture = cu:romanian
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_manorialism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -3183,7 +4335,9 @@ te_fix_inconsistent_lawgroup_land_reform = {
 					has_law = law_type:law_council_republic
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_latifundias
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -3197,11 +4351,15 @@ te_fix_inconsistent_lawgroup_land_reform = {
 					has_law = law_type:law_council_republic
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_expanded_latifundias
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_tenant_farmers
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3225,7 +4383,9 @@ te_fix_inconsistent_lawgroup_land_reform = {
 					has_law = law_type:law_council_republic
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_expanded_latifundias
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -3243,11 +4403,15 @@ te_fix_inconsistent_lawgroup_land_reform = {
 					country_has_primary_culture = cu:romanian
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_manorialism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_tenant_farmers
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3271,7 +4435,9 @@ te_fix_inconsistent_lawgroup_land_reform = {
 					has_law = law_type:law_council_republic
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_latifundias
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -3289,11 +4455,15 @@ te_fix_inconsistent_lawgroup_land_reform = {
 					country_has_primary_culture = cu:romanian
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_manorialism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_tenant_farmers
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3312,11 +4482,15 @@ te_fix_inconsistent_lawgroup_land_reform = {
 					capital ?= { is_in_geographic_region = geographic_region_new_world }
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_homesteading
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_peasant_proprietorship
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3333,7 +4507,9 @@ te_fix_inconsistent_lawgroup_land_reform = {
 		}
 		if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_peasant_proprietorship
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3355,11 +4531,15 @@ te_fix_inconsistent_lawgroup_colonization = {
 				}
 				has_technology_researched = colonization
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_colonial_resettlement
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_no_colonial_affairs
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3378,11 +4558,15 @@ te_fix_inconsistent_lawgroup_colonization = {
 				}
 				has_technology_researched = colonization
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_frontier_colonization
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_no_colonial_affairs
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3398,7 +4582,9 @@ te_fix_inconsistent_lawgroup_colonization = {
 			limit = {
 				has_technology_researched = decolonization
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_neocolonialism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -3407,7 +4593,9 @@ te_fix_inconsistent_lawgroup_colonization = {
 				}
 				has_technology_researched = colonization
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_colonial_resettlement
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -3416,11 +4604,15 @@ te_fix_inconsistent_lawgroup_colonization = {
 				}
 				has_technology_researched = colonization
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_frontier_colonization
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_no_colonial_affairs
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3444,23 +4636,30 @@ te_fix_inconsistent_lawgroup_education_system = {
 				}
 				has_technology_researched = rationalism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_religious_schools
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				c:JAP ?= this
 				has_technology_researched = academia
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_terakoya
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				NOR = {
 					has_law = law_type:law_state_religion
+					has_law = law_type:law_caesaropapism
 				}
 				has_technology_researched = academia
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_private_schools
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -3470,7 +4669,9 @@ te_fix_inconsistent_lawgroup_education_system = {
 				}
 				has_technology_researched = empiricism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_public_schools
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3489,7 +4690,9 @@ te_fix_inconsistent_lawgroup_education_system = {
 				c:JAP ?= this
 				has_technology_researched = academia
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_terakoya
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -3497,16 +4700,21 @@ te_fix_inconsistent_lawgroup_education_system = {
 					has_law = law_type:law_compulsory_primary_school
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_no_schools
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				NOR = {
 					has_law = law_type:law_state_religion
+					has_law = law_type:law_caesaropapism
 				}
 				has_technology_researched = academia
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_private_schools
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -3516,7 +4724,9 @@ te_fix_inconsistent_lawgroup_education_system = {
 				}
 				has_technology_researched = empiricism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_public_schools
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3526,6 +4736,7 @@ te_fix_inconsistent_lawgroup_education_system = {
 			has_law = law_type:law_private_schools
 			OR = {
 				has_law = law_type:law_state_religion
+				has_law = law_type:law_caesaropapism
 			}
 		}
 		if = {
@@ -3533,7 +4744,9 @@ te_fix_inconsistent_lawgroup_education_system = {
 				c:JAP ?= this
 				has_technology_researched = academia
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_terakoya
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -3543,7 +4756,9 @@ te_fix_inconsistent_lawgroup_education_system = {
 				}
 				has_technology_researched = empiricism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_public_schools
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -3554,7 +4769,9 @@ te_fix_inconsistent_lawgroup_education_system = {
 				}
 				has_technology_researched = rationalism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_religious_schools
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -3562,7 +4779,9 @@ te_fix_inconsistent_lawgroup_education_system = {
 					has_law = law_type:law_compulsory_primary_school
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_no_schools
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3577,19 +4796,24 @@ te_fix_inconsistent_lawgroup_education_system = {
 		}
 		if = {
 			limit = {
-				NOR = {
-					has_law = law_type:law_state_religion
-				}
-				has_technology_researched = academia
-			}
-			activate_law = law_type:law_private_schools
-		}
-		else_if = {
-			limit = {
 				c:JAP ?= this
 				has_technology_researched = academia
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_terakoya
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_state_religion
+					has_law = law_type:law_caesaropapism
+				}
+				has_technology_researched = academia
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_private_schools
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -3600,7 +4824,9 @@ te_fix_inconsistent_lawgroup_education_system = {
 				}
 				has_technology_researched = rationalism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_religious_schools
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -3608,7 +4834,9 @@ te_fix_inconsistent_lawgroup_education_system = {
 					has_law = law_type:law_compulsory_primary_school
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_no_schools
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3629,11 +4857,15 @@ te_fix_inconsistent_lawgroup_migration = {
 					has_law = law_type:law_sakoku
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_migration_controls
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_closed_borders
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3647,7 +4879,9 @@ te_fix_inconsistent_lawgroup_migration = {
 		}
 		if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_closed_borders
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3663,14 +4897,10 @@ te_fix_inconsistent_lawgroup_labour_associations = {
 			}
 		}
 		if = {
-			limit = {
-				has_technology_researched = corporatism
-			}
-			activate_law = law_type:law_corporatized_unions
-		}
-		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_combination_acts
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3690,11 +4920,15 @@ te_fix_inconsistent_lawgroup_childrens_rights = {
 			limit = {
 				has_technology_researched = labor_movement
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_restricted_child_labor
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_child_labor_allowed
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3713,6 +4947,7 @@ te_fix_inconsistent_lawgroup_rights_of_women = {
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_single_party_state
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_labour_suffrage
 					has_law = law_type:law_liquid_democracy
 				}
 			}
@@ -3721,17 +4956,23 @@ te_fix_inconsistent_lawgroup_rights_of_women = {
 			limit = {
 				has_technology_researched = sexual_revolution
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_protected_class
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = feminism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_women_in_the_workplace
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_women_own_property
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3755,7 +4996,9 @@ te_fix_inconsistent_lawgroup_slavery = {
 					has_law = law_type:law_affirmative_action
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_slave_trade
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -3763,11 +5006,15 @@ te_fix_inconsistent_lawgroup_slavery = {
 					has_law = law_type:law_slave_trade
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_legacy_slavery
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_colonial_slavery
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3788,7 +5035,9 @@ te_fix_inconsistent_lawgroup_slavery = {
 					has_law = law_type:law_affirmative_action
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_debt_slavery
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -3796,11 +5045,15 @@ te_fix_inconsistent_lawgroup_slavery = {
 					has_law = law_type:law_slave_trade
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_legacy_slavery
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_colonial_slavery
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3819,7 +5072,9 @@ te_fix_inconsistent_lawgroup_caste_hegemony = {
 		}
 		if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_hindu_caste_not_enforced
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3842,25 +5097,31 @@ te_fix_inconsistent_lawgroup_minority_rights = {
 			limit = {
 				OR = {
 					has_law = law_type:law_subjecthood
+					has_law = law_type:law_official_nationality
 					has_law = law_type:law_ethnostate
 					has_law = law_type:law_national_supremacy
 					has_law = law_type:law_racial_segregation
 				}
 				has_technology_researched = urbanization
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_minority_rights_ghettoization
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				OR = {
 					has_law = law_type:law_subjecthood
+					has_law = law_type:law_official_nationality
 					has_law = law_type:law_ethnostate
 					has_law = law_type:law_national_supremacy
 					has_law = law_type:law_racial_segregation
 					has_law = law_type:law_cultural_exclusion
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_minority_rights_discrimination
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -3872,11 +5133,15 @@ te_fix_inconsistent_lawgroup_minority_rights = {
 				}
 				has_technology_researched = urbanization
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_minority_rights_cultural_assimilation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_minority_rights_indifference
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3887,6 +5152,7 @@ te_fix_inconsistent_lawgroup_minority_rights = {
 			OR = {
 				NOR = {
 					has_law = law_type:law_subjecthood
+					has_law = law_type:law_official_nationality
 					has_law = law_type:law_ethnostate
 					has_law = law_type:law_national_supremacy
 					has_law = law_type:law_racial_segregation
@@ -3901,19 +5167,24 @@ te_fix_inconsistent_lawgroup_minority_rights = {
 					has_law = law_type:law_racial_segregation
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_minority_rights_violent_hostility
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				OR = {
 					has_law = law_type:law_subjecthood
+					has_law = law_type:law_official_nationality
 					has_law = law_type:law_ethnostate
 					has_law = law_type:law_national_supremacy
 					has_law = law_type:law_racial_segregation
 					has_law = law_type:law_cultural_exclusion
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_minority_rights_discrimination
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -3925,11 +5196,15 @@ te_fix_inconsistent_lawgroup_minority_rights = {
 				}
 				has_technology_researched = urbanization
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_minority_rights_cultural_assimilation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_minority_rights_indifference
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3950,17 +5225,22 @@ te_fix_inconsistent_lawgroup_minority_rights = {
 			limit = {
 				OR = {
 					has_law = law_type:law_subjecthood
+					has_law = law_type:law_official_nationality
 					has_law = law_type:law_ethnostate
 					has_law = law_type:law_national_supremacy
 					has_law = law_type:law_racial_segregation
 					has_law = law_type:law_cultural_exclusion
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_minority_rights_discrimination
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_minority_rights_indifference
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -3971,6 +5251,7 @@ te_fix_inconsistent_lawgroup_minority_rights = {
 			OR = {
 				NOR = {
 					has_law = law_type:law_subjecthood
+					has_law = law_type:law_official_nationality
 					has_law = law_type:law_ethnostate
 					has_law = law_type:law_national_supremacy
 					has_law = law_type:law_racial_segregation
@@ -3988,11 +5269,15 @@ te_fix_inconsistent_lawgroup_minority_rights = {
 				}
 				has_technology_researched = urbanization
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_minority_rights_cultural_assimilation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_minority_rights_indifference
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -4011,7 +5296,9 @@ te_fix_inconsistent_lawgroup_minority_rights = {
 		}
 		if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_minority_rights_indifference
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -4036,11 +5323,15 @@ te_fix_inconsistent_lawgroup_minority_rights = {
 				}
 				has_technology_researched = human_rights
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_minority_rights_protection
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_minority_rights_indifference
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -4063,7 +5354,9 @@ te_fix_inconsistent_lawgroup_criminal_justice = {
 		}
 		if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_punishment_focused_criminal_justice
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -4085,11 +5378,15 @@ te_fix_inconsistent_lawgroup_intellectual_property = {
 			limit = {
 				has_technology_researched = mutual_funds
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_traditional_ip_protection
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_no_ip_protection
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -4110,13 +5407,17 @@ te_fix_inconsistent_lawgroup_monetary_policy = {
 			limit = {
 				has_technology_researched = cybersecurity
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_decentralized_cryptocurrency
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = central_banking
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_gold_standard
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4125,11 +5426,15 @@ te_fix_inconsistent_lawgroup_monetary_policy = {
 				}
 				has_technology_researched = universal_digital_identity
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_digital_currency
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_commodity_money
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -4147,7 +5452,9 @@ te_fix_inconsistent_lawgroup_monetary_policy = {
 			limit = {
 				has_technology_researched = cybersecurity
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_decentralized_cryptocurrency
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4156,17 +5463,23 @@ te_fix_inconsistent_lawgroup_monetary_policy = {
 				}
 				has_technology_researched = keynesian_economics
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_fiat_currency
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = central_banking
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_gold_standard
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_commodity_money
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -4189,17 +5502,23 @@ te_fix_inconsistent_lawgroup_inheritance = {
 					has_law = law_type:law_command_economy
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_state_universal_heir
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = egalitarianism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_equal_inheritance
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_partible
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -4219,17 +5538,23 @@ te_fix_inconsistent_lawgroup_inheritance = {
 					has_law = law_type:law_cooperative_ownership
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_non_inheritable_usage_rights
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = egalitarianism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_equal_inheritance
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_partible
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -4257,19 +5582,25 @@ te_fix_inconsistent_lawgroup_human_augmentation = {
 				}
 				has_technology_researched = brain_computer_interfaces
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_medical_augmentation_only
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = brain_computer_interfaces
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_unrestricted_augmentation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = brain_computer_interfaces
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_human_purity
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4278,7 +5609,9 @@ te_fix_inconsistent_lawgroup_human_augmentation = {
 				}
 				has_technology_researched = bioenhanced_soldiers
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_mandatory_augmentation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4287,7 +5620,9 @@ te_fix_inconsistent_lawgroup_human_augmentation = {
 				}
 				has_technology_researched = biohacking_and_human_augmentation
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_regulated_augmentation_market
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -4307,7 +5642,9 @@ te_fix_inconsistent_lawgroup_human_augmentation = {
 			limit = {
 				has_technology_researched = brain_computer_interfaces
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_unrestricted_augmentation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4319,7 +5656,9 @@ te_fix_inconsistent_lawgroup_human_augmentation = {
 					has_law = law_type:law_mandatory_augmentation
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_no_augmentation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4328,13 +5667,17 @@ te_fix_inconsistent_lawgroup_human_augmentation = {
 				}
 				has_technology_researched = biohacking_and_human_augmentation
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_regulated_augmentation_market
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = brain_computer_interfaces
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_human_purity
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4343,7 +5686,9 @@ te_fix_inconsistent_lawgroup_human_augmentation = {
 				}
 				has_technology_researched = bioenhanced_soldiers
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_mandatory_augmentation
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -4366,13 +5711,17 @@ te_fix_inconsistent_lawgroup_human_augmentation = {
 				}
 				has_technology_researched = brain_computer_interfaces
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_medical_augmentation_only
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = brain_computer_interfaces
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_unrestricted_augmentation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4384,13 +5733,17 @@ te_fix_inconsistent_lawgroup_human_augmentation = {
 					has_law = law_type:law_mandatory_augmentation
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_no_augmentation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = brain_computer_interfaces
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_human_purity
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4399,7 +5752,9 @@ te_fix_inconsistent_lawgroup_human_augmentation = {
 				}
 				has_technology_researched = bioenhanced_soldiers
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_mandatory_augmentation
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -4417,7 +5772,9 @@ te_fix_inconsistent_lawgroup_human_augmentation = {
 			limit = {
 				has_technology_researched = brain_computer_interfaces
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_human_purity
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4429,13 +5786,17 @@ te_fix_inconsistent_lawgroup_human_augmentation = {
 					has_law = law_type:law_mandatory_augmentation
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_no_augmentation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = brain_computer_interfaces
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_unrestricted_augmentation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4446,7 +5807,9 @@ te_fix_inconsistent_lawgroup_human_augmentation = {
 				}
 				has_technology_researched = brain_computer_interfaces
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_medical_augmentation_only
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4455,7 +5818,9 @@ te_fix_inconsistent_lawgroup_human_augmentation = {
 				}
 				has_technology_researched = biohacking_and_human_augmentation
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_regulated_augmentation_market
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -4476,25 +5841,33 @@ te_fix_inconsistent_lawgroup_genetic_rights = {
 			limit = {
 				has_technology_researched = behaviorism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_state_eugenics_program
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = gene_splicing
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_corporate_genetic_licensing
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = gene_splicing
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_ban_on_genetic_modification
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = gene_splicing
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_open_source_genetics
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -4519,11 +5892,15 @@ te_fix_inconsistent_lawgroup_language_policy = {
 				}
 				has_technology_researched = human_rights
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_multilingual_federalism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_local_vernacular
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -4545,13 +5922,17 @@ te_fix_inconsistent_lawgroup_language_policy = {
 				}
 				has_technology_researched = nationalism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_civic_monolingualism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = machine_learning
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_ubiquitous_translation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4560,11 +5941,15 @@ te_fix_inconsistent_lawgroup_language_policy = {
 				}
 				has_technology_researched = mass_media
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_state_led_language_reform
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_local_vernacular
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -4580,7 +5965,9 @@ te_fix_inconsistent_lawgroup_language_policy = {
 			limit = {
 				has_technology_researched = machine_learning
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_ubiquitous_translation
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4592,7 +5979,9 @@ te_fix_inconsistent_lawgroup_language_policy = {
 				}
 				has_technology_researched = human_rights
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_multilingual_federalism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4601,11 +5990,15 @@ te_fix_inconsistent_lawgroup_language_policy = {
 				}
 				has_technology_researched = nationalism
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_civic_monolingualism
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_local_vernacular
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -4636,7 +6029,9 @@ te_fix_inconsistent_lawgroup_antitrust = {
 				}
 				has_technology_researched = international_trade
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_freedom_of_contract
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4646,7 +6041,9 @@ te_fix_inconsistent_lawgroup_antitrust = {
 				}
 				has_technology_researched = mass_propaganda
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_dirigisme
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4656,13 +6053,17 @@ te_fix_inconsistent_lawgroup_antitrust = {
 				}
 				has_technology_researched = corporate_management
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_trust_busting
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = central_planning
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_regulated_utilities
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4671,7 +6072,9 @@ te_fix_inconsistent_lawgroup_antitrust = {
 					has_law = law_type:law_cooperative_ownership
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_command_cooperative_economy
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -4697,7 +6100,9 @@ te_fix_inconsistent_lawgroup_antitrust = {
 				}
 				has_technology_researched = mass_propaganda
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_dirigisme
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4708,7 +6113,9 @@ te_fix_inconsistent_lawgroup_antitrust = {
 					has_law = law_type:law_guild_system
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_guilds_chartered_monopolies
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4718,13 +6125,17 @@ te_fix_inconsistent_lawgroup_antitrust = {
 				}
 				has_technology_researched = corporate_management
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_trust_busting
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = central_planning
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_regulated_utilities
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4733,7 +6144,9 @@ te_fix_inconsistent_lawgroup_antitrust = {
 					has_law = law_type:law_cooperative_ownership
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_command_cooperative_economy
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -4754,13 +6167,17 @@ te_fix_inconsistent_lawgroup_antitrust = {
 				}
 				has_technology_researched = mass_propaganda
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_dirigisme
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = central_planning
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_regulated_utilities
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4773,7 +6190,9 @@ te_fix_inconsistent_lawgroup_antitrust = {
 				}
 				has_technology_researched = international_trade
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_freedom_of_contract
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4784,7 +6203,9 @@ te_fix_inconsistent_lawgroup_antitrust = {
 					has_law = law_type:law_guild_system
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_guilds_chartered_monopolies
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4793,7 +6214,9 @@ te_fix_inconsistent_lawgroup_antitrust = {
 					has_law = law_type:law_cooperative_ownership
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_command_cooperative_economy
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -4817,7 +6240,9 @@ te_fix_inconsistent_lawgroup_antitrust = {
 				}
 				has_technology_researched = international_trade
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_freedom_of_contract
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4827,7 +6252,9 @@ te_fix_inconsistent_lawgroup_antitrust = {
 				}
 				has_technology_researched = corporate_management
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_trust_busting
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4838,13 +6265,17 @@ te_fix_inconsistent_lawgroup_antitrust = {
 					has_law = law_type:law_guild_system
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_guilds_chartered_monopolies
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = central_planning
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_regulated_utilities
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4853,7 +6284,9 @@ te_fix_inconsistent_lawgroup_antitrust = {
 					has_law = law_type:law_cooperative_ownership
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_command_cooperative_economy
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -4872,7 +6305,9 @@ te_fix_inconsistent_lawgroup_antitrust = {
 			limit = {
 				has_technology_researched = central_planning
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_regulated_utilities
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4882,7 +6317,9 @@ te_fix_inconsistent_lawgroup_antitrust = {
 				}
 				has_technology_researched = corporate_management
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_trust_busting
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4892,7 +6329,9 @@ te_fix_inconsistent_lawgroup_antitrust = {
 				}
 				has_technology_researched = mass_propaganda
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_dirigisme
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4905,7 +6344,9 @@ te_fix_inconsistent_lawgroup_antitrust = {
 				}
 				has_technology_researched = international_trade
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_freedom_of_contract
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4916,7 +6357,9 @@ te_fix_inconsistent_lawgroup_antitrust = {
 					has_law = law_type:law_guild_system
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_guilds_chartered_monopolies
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -4935,19 +6378,25 @@ te_fix_inconsistent_lawgroup_financial_regulation = {
 			limit = {
 				has_technology_researched = postal_savings
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_free_mutual_banking
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = central_banking
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_universal_banking_light_prudence
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = modern_financial_instruments
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_prudential_narrow_banking
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4957,7 +6406,9 @@ te_fix_inconsistent_lawgroup_financial_regulation = {
 				}
 				has_technology_researched = central_planning
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_directed_credit_development_banks
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4969,7 +6420,9 @@ te_fix_inconsistent_lawgroup_financial_regulation = {
 					has_law = law_type:law_interventionism
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_state_owned_banking
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -4978,7 +6431,9 @@ te_fix_inconsistent_lawgroup_financial_regulation = {
 				}
 				has_technology_researched = keynesian_economics
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_central_bank_independence
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -5001,13 +6456,17 @@ te_fix_inconsistent_lawgroup_financial_regulation = {
 					has_law = law_type:law_interventionism
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_state_owned_banking
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = modern_financial_instruments
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_prudential_narrow_banking
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -5016,19 +6475,25 @@ te_fix_inconsistent_lawgroup_financial_regulation = {
 				}
 				has_technology_researched = keynesian_economics
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_central_bank_independence
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = central_banking
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_universal_banking_light_prudence
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = postal_savings
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_free_mutual_banking
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -5036,7 +6501,9 @@ te_fix_inconsistent_lawgroup_financial_regulation = {
 					has_law = law_type:law_command_economy
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_unregulated_banking
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -5060,7 +6527,9 @@ te_fix_inconsistent_lawgroup_financial_regulation = {
 				}
 				has_technology_researched = central_planning
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_directed_credit_development_banks
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -5069,25 +6538,33 @@ te_fix_inconsistent_lawgroup_financial_regulation = {
 				}
 				has_technology_researched = keynesian_economics
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_central_bank_independence
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = modern_financial_instruments
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_prudential_narrow_banking
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = central_banking
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_universal_banking_light_prudence
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = postal_savings
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_free_mutual_banking
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -5095,7 +6572,9 @@ te_fix_inconsistent_lawgroup_financial_regulation = {
 					has_law = law_type:law_command_economy
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_unregulated_banking
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -5119,7 +6598,9 @@ te_fix_inconsistent_lawgroup_financial_regulation = {
 					has_law = law_type:law_interventionism
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_state_owned_banking
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -5129,25 +6610,33 @@ te_fix_inconsistent_lawgroup_financial_regulation = {
 				}
 				has_technology_researched = central_planning
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_directed_credit_development_banks
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = modern_financial_instruments
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_prudential_narrow_banking
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = central_banking
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_universal_banking_light_prudence
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = postal_savings
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_free_mutual_banking
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -5155,7 +6644,9 @@ te_fix_inconsistent_lawgroup_financial_regulation = {
 					has_law = law_type:law_command_economy
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_unregulated_banking
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -5176,19 +6667,25 @@ te_fix_inconsistent_lawgroup_internet_governance = {
 			limit = {
 				has_technology_researched = world_wide_web
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_state_controlled_internet
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = world_wide_web
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_unregulated_internet
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
 				has_technology_researched = world_wide_web
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_net_neutrality
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -5209,11 +6706,15 @@ te_fix_inconsistent_lawgroup_privacy_rights = {
 			limit = {
 				has_technology_researched = knowledge_economy
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_moderate_data_privacy
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_minimal_privacy_protection
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -5231,6 +6732,7 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 				has_law = law_type:law_universal_suffrage
 				has_law = law_type:law_liquid_democracy
 				has_law = law_type:law_anarchy
+				has_law = law_type:law_labour_suffrage
 			}
 		}
 		if = {
@@ -5242,9 +6744,12 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_labour_suffrage
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_unregulated_donations
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -5255,10 +6760,13 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_labour_suffrage
 				}
 				has_technology_researched = mass_media
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_donation_limits
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -5269,10 +6777,13 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_labour_suffrage
 				}
 				has_technology_researched = keynesian_economics
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_publicly_funded_elections
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -5288,6 +6799,7 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_labour_suffrage
 				}
 			}
 		}
@@ -5300,9 +6812,12 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_labour_suffrage
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_no_campaign_finance_laws
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -5313,10 +6828,13 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_labour_suffrage
 				}
 				has_technology_researched = mass_media
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_donation_limits
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -5327,10 +6845,13 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_labour_suffrage
 				}
 				has_technology_researched = keynesian_economics
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_publicly_funded_elections
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -5346,6 +6867,7 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_labour_suffrage
 				}
 			}
 		}
@@ -5358,9 +6880,12 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_labour_suffrage
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_no_campaign_finance_laws
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -5371,9 +6896,12 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_labour_suffrage
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_unregulated_donations
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -5384,10 +6912,13 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_labour_suffrage
 				}
 				has_technology_researched = keynesian_economics
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_publicly_funded_elections
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -5403,6 +6934,7 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_labour_suffrage
 				}
 			}
 		}
@@ -5415,10 +6947,13 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_labour_suffrage
 				}
 				has_technology_researched = mass_media
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_donation_limits
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -5429,9 +6964,12 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_labour_suffrage
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_no_campaign_finance_laws
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = {
@@ -5442,9 +6980,12 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_labour_suffrage
 				}
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_unregulated_donations
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -5461,7 +7002,9 @@ te_fix_inconsistent_lawgroup_national_bank = {
 		}
 		if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_no_national_bank
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -5485,11 +7028,15 @@ te_fix_inconsistent_lawgroup_resource_transition = {
 				}
 				has_technology_researched = carbon_capture_and_storage
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_managed_fossil_phaseout
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_unrestricted_extraction
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -5511,11 +7058,15 @@ te_fix_inconsistent_lawgroup_resource_transition = {
 				}
 				has_technology_researched = environmental_movement
 			}
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_fossil_expansion_moratorium
+			remove_variable = te_law_sweep_replacing
 		}
 		else_if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_unrestricted_extraction
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -5532,7 +7083,9 @@ te_fix_inconsistent_lawgroup_ministry_of_refugee_affairs = {
 		}
 		if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_no_ministry_of_refugee_affairs
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -5547,13 +7100,18 @@ te_fix_inconsistent_lawgroup_ministry_of_propaganda = {
 				NOR = {
 					has_law = law_type:law_single_party_state
 					has_law = law_type:law_secret_police
+					has_law = law_type:law_shinsengumi
+					has_law = law_type:law_okhrana
+					has_law = law_type:law_third_section
 					has_law = law_type:law_outlawed_dissent
 				}
 			}
 		}
 		if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_no_ministry_of_propaganda
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -5568,13 +7126,18 @@ te_fix_inconsistent_lawgroup_ministry_of_thought_control = {
 				NOR = {
 					has_law = law_type:law_single_party_state
 					has_law = law_type:law_secret_police
+					has_law = law_type:law_shinsengumi
+					has_law = law_type:law_okhrana
+					has_law = law_type:law_third_section
 					has_law = law_type:law_outlawed_dissent
 				}
 			}
 		}
 		if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_no_ministry_of_thought_control
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -5594,7 +7157,9 @@ te_fix_inconsistent_lawgroup_ministry_of_consumer_protection = {
 		}
 		if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_no_ministry_of_consumer_protection
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 
@@ -5608,13 +7173,18 @@ te_fix_inconsistent_lawgroup_ministry_of_religion = {
 			OR = {
 				NOR = {
 					has_law = law_type:law_state_religion
+					has_law = law_type:law_caesaropapism
+					has_law = law_type:law_millet_system
+					has_law = law_type:law_people_of_the_book
 					has_law = law_type:law_freedom_of_conscience
 				}
 			}
 		}
 		if = {
 			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_no_ministry_of_religion
+			remove_variable = te_law_sweep_replacing
 		}
 	}
 

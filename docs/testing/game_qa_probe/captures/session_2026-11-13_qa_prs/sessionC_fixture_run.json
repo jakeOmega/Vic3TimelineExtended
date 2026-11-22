@@ -1,0 +1,118 @@
+{
+ "date": "1836.3.29",
+ "key": "c6498ca4f4c4_d18360329",
+ "base_key": "c6498ca4f4c4",
+ "save": "te_qa_fixture_c6498ca4f4c4_d18360329",
+ "found": false,
+ "playset": "mod_only",
+ "run_until": "1836.3.31",
+ "long_run": false,
+ "game_end": "2136.1.1",
+ "estimate_s": 132,
+ "estimate_h": 0.04,
+ "limit_s": 1021,
+ "limit_h": 0.28,
+ "max_hours": null,
+ "estimate_from": "archived AI-only observer runs on the owner's machine (game 1.14, October 2026): 0.47 s a game day to 1876, 0.53 to 1904, 0.98 about 1950; past 1953 a guess (fixture.RATE_ANCHORS)",
+ "autosaves": "none",
+ "rules": {
+  "settings": [
+   "achievements_allowed",
+   "standard_ai_behavior",
+   "standard_ai_aggression",
+   "free_construction_scaled_player_exemption",
+   "all_formable_nations",
+   "all_releasable_nations",
+   "loyalties_grace_period_none",
+   "infamy_generation_standard",
+   "moderate_consolidation",
+   "allow_monument_effects",
+   "allow_subject_flags",
+   "allow_subject_map_color",
+   "no_fantastical_content",
+   "no_custom_rng_seed",
+   "allow_dynamic_naming",
+   "no_ruler_selector",
+   "custom_religions_not_allowed",
+   "banking_system_enabled",
+   "global_warming_enabled",
+   "world_war_disabled",
+   "cultural_hegemony_enabled",
+   "covert_warfare_enabled",
+   "heir_education_disabled",
+   "united_nations_enabled",
+   "nuclear_weapons_enabled",
+   "decolonization_enabled",
+   "space_race_colonies_full",
+   "social_movements_enabled",
+   "universal_aptitude_traits_disabled",
+   "free_market_construction_enabled",
+   "internal_resettlement_enabled",
+   "grand_monuments_enabled",
+   "demographics_full",
+   "te_tax_code_light",
+   "te_principle_slots_eight",
+   "global_commons_enabled",
+   "culture_merges_enabled"
+  ]
+ },
+ "made": true,
+ "save_facts": {
+  "save_found": "TEST_FAIL_te_qa_fixture_29 March, 1836.v3",
+  "save_expected": "TEST_FAIL_te_qa_fixture_29 March, 1836.v3",
+  "name_date": "1836.3.29",
+  "game_date": "1836.3.29",
+  "date_matches": true,
+  "kept_by": "rename",
+  "rename_tries": 1
+ },
+ "logs": {
+  "files": {
+   "debug.log": "/mnt/d/vic3_qa_backups/runs/20261113T083721Z/fixture_debug.log",
+   "error.log": "/mnt/d/vic3_qa_backups/runs/20261113T083721Z/fixture_error.log"
+  },
+  "lines": {
+   "debug.log": 4632,
+   "error.log": 1509
+  },
+  "gaps": 0,
+  "polls": 20,
+  "prefix_skipped": {
+   "debug.log": 151349,
+   "error.log": 152914
+  }
+ },
+ "lines": {
+  "key": "c6498ca4f4c4_d18360329",
+  "save": "te_qa_fixture_c6498ca4f4c4_d18360329",
+  "kept": true,
+  "snapshot": "20261113T083721Z",
+  "at": "2026-11-13T08:40:47Z",
+  "source": "followed",
+  "file": "/mnt/d/vic3_qa_backups/runs/20261113T083721Z/fixture_debug.log",
+  "gaps": 0,
+  "lines": 140,
+  "self_checks": 35
+ },
+ "run": "20261113T083721Z",
+ "timing": {
+  "wall_s": 187.0,
+  "gametimer": "/mnt/d/vic3_qa_backups/runs/20261113T083721Z/gametimer_20261113_013909.tsv",
+  "days": 90,
+  "seconds": 59.8,
+  "seconds_per_day": 0.664,
+  "years": {
+   "1836": 0.67,
+   "6_01": 0.117
+  },
+  "wall_s_per_day": 2.078
+ },
+ "stop": {
+  "outcome": null,
+  "snapshot": null,
+  "overlay_removed": true,
+  "overlay_kept": false,
+  "stop_again": false,
+  "report": null
+ }
+}

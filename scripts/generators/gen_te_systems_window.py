@@ -25,6 +25,9 @@ launcher and the root, and instances what this writes:
     te_sr_window_milestones          the Space Race body's entries: a note
                                      while none runs, then one
                                      te_system_tab_frame per milestone
+    te_sr_window_<m>_live            an SR_OWN_COLUMN milestone's live
+                                     sections, for the full-screen column
+                                     te_sr_wide_sections gives them
 
 WHICH TAB IS SHOWN. U = the tab is open (its `open_` gate: for a system tab,
 te_window_<system>_tab_sgui, or a mirrored tab's host gate (te_<host>_<system>_
@@ -64,6 +67,10 @@ VANILLA_FRAMES = ROOT / "test_fixtures" / "vanilla_gui" / "block_windows.gui"
 STORED = "te_systems_window_tab"
 BOM = b"\xef\xbb\xbf"   # exactly one, as every .gui carries
 SLOTS = ["first", "second", "third", "fourth", "fifth"]
+# A strip of six (the window's own systems, since Power Grids: owner,
+# 2026-11-05) is te_tab_buttons_six (gui/te_system_tab_widgets.gui), vanilla's
+# tab_buttons with a sixth slot, as the Budget, Diplomacy and Market panels use.
+SLOTS_SIX = SLOTS + ["sixth"]
 
 
 # --- expressions: the exact GUI text the templates and the strip use ---------
@@ -154,10 +161,10 @@ class Tab:
     unlock        the scripted GUI whose IsValid and IsValidTooltip make the
                   grayed tab's checklist
     body          the type the tab's mount instances
+    wide          the wide composer the full-screen mount places (spec § 7:
+                  every tab has one, so the registry takes no tab without)
     layout        the layout block the body declares, which a wide mount
                   overrides (None: the body is the layout)
-    wide          the wide composer the full-screen mount places (every tab has
-                  one; test_te_systems_window.py fails on a tab without)
     tooltip_expr  a tooltip expression replacing the three-branch one
     public        another country's panel may show it (National Info, spec
                   2026-11-02-charts-help-national-info § 6.4): its sections
@@ -165,7 +172,7 @@ class Tab:
                   (test_te_system_tab_bodies.py's BindingTest and GuardTest,
                   which run over every public tab). Each system's binding PR
                   sets it, on its own line below, and takes the system off
-                  that test's UNBOUND.
+                  national_info_binding.UNBOUND.
     readout       a Readout: what the tab shows without its entry. National
                   Info's mount for another country draws no frame, so it
                   draws the readout and gates the composer itself, as the
@@ -187,13 +194,13 @@ class Tab:
     label: str
     tooltip: str
     body: str
+    wide: str
     locked: str | None = None
     met: str = "te_system_tab_met_tt"
     open_: str | None = None
     strip: str | None = None
     unlock: str | None = None
     layout: str | None = None
-    wide: str | None = None
     tooltip_expr: str | None = None
     public: bool = False
     readout: Readout | None = None
@@ -269,6 +276,13 @@ TABS: list[Tab] = [
     _system("seabed", "te_seabed_tab_body", "te_seabed_tab_layout", met="te_window_tab_seabed_met_tt",
             wide="te_seabed_wide_sections",
             public=True),
+    # No journal entry and no game rule: open once the country has a Grid
+    # Transfer Station, built or queued; always on the strip (no rule), its
+    # checklist te_window_power_grids_tab_unlock_sgui's. The strip's sixth
+    # (owner, 2026-11-05).
+    replace(_system("power_grids", "te_grid_tab_body", "te_grid_tab_layout", wide="te_grid_wide_sections"),
+            strip=None,
+            public=True),
 
     # The Budget and Market panels' tabs (strip 2). Banking opens with its
     # entry or, for a country with a monetary stance and no entry, its #805
@@ -317,10 +331,10 @@ TABS: list[Tab] = [
             "te_military_covert_tab_sgui", "te_military_covert_tab_unlock_sgui", wide="te_covert_wide_sections"),
 ]
 
-# The Space Race's nine entries, in je_space_race.txt's order. Each has its
+# The Space Race's eight entries, in je_space_race.txt's order. Each has its
 # overview and its live sections (te_sr_<m>_overview, te_sr_<m>_status), but
 # the waiting entry, which has the transit overview only.
-SR_MILESTONES = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
+SR_MILESTONES = ["suborbital", "orbital", "moon_landing", "probe", "mars_landing",
                  "interstellar_probe", "interstellar_results", "solar_colonization"]
 SR_TRANSIT = {"interstellar_results"}
 # What a milestone's frame shows another country in place of its live sections
@@ -328,6 +342,13 @@ SR_TRANSIT = {"interstellar_results"}
 # overview: solar colonization's colonies, to read (te_sr_sec_colonies_brief,
 # which shows only for another country).
 SR_FOREIGN = {"solar_colonization": "te_sr_sec_colonies_brief"}
+# The milestones whose live sections take a column of their own full screen
+# (owner, 2026-11-05): solar colonization's, its four tabs (Mission Control,
+# Fleets, Colonies, Solar System), which run far longer than its overview. The
+# frame draws them in a block, sr_window_<m>_live, that te_sr_wide_sections
+# empties in its first column, and te_sr_window_<m>_live draws them for its
+# second, under the frame's gates. The side panel keeps them in the frame.
+SR_OWN_COLUMN = ["solar_colonization"]
 
 TAX_PROBES = and_(stored("tax_probes"), shown("te_tp_tab_sgui"))
 
@@ -409,9 +430,10 @@ WIDE_STRIP = ["minimumsize = { 540 -1 }", "maximumsize = { 540 -1 }"]
 
 
 def _strip(tabs: list[Tab], wide: bool = False, root: str = PLAYER_ROOT) -> list[str]:
-    assert len(tabs) <= len(SLOTS), "vanilla's tab_buttons has five slots"
-    out = ["tab_buttons = {"] + ([f"\t{ln}" for ln in WIDE_STRIP] + [""] if wide else [])
-    for i, (slot, tab) in enumerate(zip(SLOTS, tabs)):
+    assert len(tabs) <= len(SLOTS_SIX), "te_tab_buttons_six has six slots"
+    six = len(tabs) > len(SLOTS)
+    out = [("te_tab_buttons_six" if six else "tab_buttons") + " = {"] + ([f"\t{ln}" for ln in WIDE_STRIP] + [""] if wide else [])
+    for i, (slot, tab) in enumerate(zip(SLOTS_SIX, tabs)):
         if i:
             out.append("")
         out.append(f"\t### {tab.key}")
@@ -443,7 +465,8 @@ def _tax_probes_strip(wide: bool = False) -> list[str]:
 
 def strips_narrow() -> list[str]:
     out = ["### The strips, in fixed_top: vanilla's five-slot strip (as the Military",
-           "### and Diplomacy panels use it) per row of the registry. tab_buttons",
+           "### and Diplomacy panels use it) per row of the registry, or for a row of",
+           "### six te_tab_buttons_six (the window's own systems'). tab_buttons",
            "### derives from hbox, and a flowcontainer cannot own box layouts, so this",
            "### is a vbox.",
            "type te_systems_window_strips_narrow = vbox {",
@@ -460,8 +483,8 @@ def strips_narrow() -> list[str]:
 
 def strips_wide() -> list[str]:
     out = ["### The full-screen frame's strips: the narrow strips side by side in one",
-           "### centered row, each at its narrow width, so one strip of up to fifteen",
-           "### tabs at the narrow slot width; then the developer strip.",
+           "### centered row, each at its narrow width, so one strip of up to sixteen",
+           "### tabs at their narrow slot widths; then the developer strip.",
            "type te_systems_window_strips_wide = vbox {",
            "\tlayoutpolicy_horizontal = expanding",
            "\tlayoutpolicy_vertical = fixed",
@@ -485,7 +508,7 @@ def _content(tab: Tab, wide: bool = False) -> list[str]:
     """What a mount holds: the tab's body, or full screen its wide layout
     (in the body's layout block, so with its gate, its entry and its
     controls, or alone where the body declares none)."""
-    if not wide or tab.wide is None:
+    if not wide:
         return [f"{tab.body} = {{}}"]
     if tab.layout is None:
         return [f"{tab.wide} = {{}}"]
@@ -532,7 +555,7 @@ def tabs_wide() -> list[str]:
     out = ["### The full-screen frame's column: three 520 columns and their 30 px",
            "### gaps wide (spec § 4.3), centered, so the frame scrolls sideways",
            "### below that width. Each tab's mount as narrow, holding its wide",
-           "### layout once the registry names one (its `wide`), else its body.",
+           "### layout (the registry's `wide`).",
            "type te_systems_window_tabs_wide = flowcontainer {",
            '\tname = "te_systems_window_content_wide"',
            "\tparentanchor = hcenter",
@@ -575,6 +598,32 @@ SR_OPEN_JOURNAL = ["button = {",
                    "}"]
 
 
+def _sr_status(m: str) -> list[str]:
+    """A milestone's live sections, the debris row overridden out (Orbit
+    shows it once)."""
+    return [f"te_sr_{m}_status = {{", '\tblockoverride "sr_debris" {}', "}"]
+
+
+def _sr_own(m: str, inner: list[str], spacing: bool = True) -> list[str]:
+    """The player's own part of a milestone: te_own_country_only, then the
+    entry's datacontext on a child of the guard (gotcha #29), holding inner."""
+    return (["flowcontainer = {",
+             "\tusing = te_own_country_only",
+             "\tparentanchor = hcenter",
+             "\tdirection = vertical",
+             "\tignoreinvisible = yes",
+             "",
+             "\tflowcontainer = {",
+             f"\t\tdatacontext = \"[GetPlayerJournalEntry('je_space_race_{m}')]\"",
+             "\t\tparentanchor = hcenter",
+             "\t\tdirection = vertical",
+             "\t\tignoreinvisible = yes"]
+            + (["\t\tspacing = 10"] if spacing else [])
+            + [""]
+            + [f"\t\t{ln}" for ln in inner]
+            + ["\t}", "}"])
+
+
 def _milestone(m: str) -> list[str]:
     """One entry's frame (spec 2026-11-02-charts-help-national-info § 6.4).
     It reads the Country its mount supplies (tab_country overridden empty, so
@@ -591,22 +640,12 @@ def _milestone(m: str) -> list[str]:
         overview, status = "te_sr_overview_transit = {}", []
     else:
         overview = f"te_sr_{m}_overview = {{}}"
-        status = [f"te_sr_{m}_status = {{", '\tblockoverride "sr_debris" {}', "}"]
-    own = (["flowcontainer = {",
-            "\tusing = te_own_country_only",
-            "\tparentanchor = hcenter",
-            "\tdirection = vertical",
-            "\tignoreinvisible = yes",
-            "",
-            "\tflowcontainer = {",
-            f"\t\tdatacontext = \"[GetPlayerJournalEntry('{entry}')]\"",
-            "\t\tparentanchor = hcenter",
-            "\t\tdirection = vertical",
-            "\t\tignoreinvisible = yes",
-            "\t\tspacing = 10",
-            ""]
-           + [f"\t\t{ln}" for ln in status + SR_OPEN_JOURNAL]
-           + ["\t}", "}"])
+        status = _sr_status(m)
+    if m in SR_OWN_COLUMN:
+        status = ([f"### Full screen, in a column of their own (te_sr_window_{m}_live).",
+                   f'block "sr_window_{m}_live" {{']
+                  + [f"\t{ln}" for ln in status] + ["}"])
+    own = _sr_own(m, status + ["te_je_modifier_strip = {}"] + SR_OPEN_JOURNAL)
     return ([f"### {m}",
              "te_system_tab_frame = {",
              '\tblockoverride "tab_country" {}',
@@ -676,7 +715,29 @@ def sr_milestones() -> list[str]:
     for m in SR_MILESTONES:
         out.append("")
         out += [f"\t{ln}" if ln else "" for ln in _milestone(m)]
-    return out + ["}"]
+    out.append("}")
+    for m in SR_OWN_COLUMN:
+        out += [""] + _sr_live(m)
+    return out
+
+
+def _sr_live(m: str) -> list[str]:
+    """A milestone's live sections for a full-screen column of their own
+    (SR_OWN_COLUMN): what its frame's sr_window_<m>_live block draws, under the
+    frame's gates (the entry shown for the Country, then the player's own). No
+    header and no Open Journal Entry: both stay in the frame, in column 1."""
+    return ([f"### {m}'s live sections in a full-screen column of their own",
+             f"### (te_sr_wide_sections), which empties the frame's sr_window_{m}_live",
+             "### block in column 1: under the frame's gates, the player's own.",
+             f"type te_sr_window_{m}_live = flowcontainer {{",
+             f'\tvisible = "[{shown(f"te_window_space_race_{m}_sgui", COUNTRY_ROOT)}]"',
+             "\tparentanchor = hcenter",
+             "\tdirection = vertical",
+             "\tignoreinvisible = yes",
+             "\tminimumsize = { 520 -1 }",
+             ""]
+            + [f"\t{ln}" if ln else "" for ln in _sr_own(m, _sr_status(m), spacing=False)]
+            + ["}"])
 
 
 # --- the full-screen frame ----------------------------------------------------
@@ -689,27 +750,56 @@ FRAME_CHANGES = [
 ]
 
 
+def _block_end(text: str, open_brace: int, what: str) -> int:
+    """The index of the brace that closes the one at open_brace. A brace in a
+    comment (# to the line's end) or in a quoted string (which ends with its
+    line, as gui_test_helpers._strip_comments reads one) is not counted. A
+    block that never closes raises ValueError, naming `what`."""
+    depth, quoted, i = 0, False, open_brace
+    while i < len(text):
+        ch = text[i]
+        if ch == "\n":
+            quoted = False
+        elif quoted:
+            if ch == "\\":
+                i += 1                      # an escaped character, a quote too
+            elif ch == '"':
+                quoted = False
+        elif ch == '"':
+            quoted = True
+        elif ch == "#":
+            i = text.find("\n", i)         # the comment, up to its line's end
+            if i < 0:
+                break
+            continue
+        elif ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+            if depth == 0:
+                return i
+        i += 1
+    raise ValueError(f"{what} is never closed")
+
+
 def fullscreen_frame() -> list[str]:
     """Vanilla's fullscreen_block_window under the mod's name, Back and Close
     clearing the window's open state: vanilla's call the information panel
     bar, which a scripted widget isn't in (spec § 4.1). Each change must match
-    exactly once, so a patch that moves them fails here."""
+    exactly once, so a patch that moves them fails here. A line of vanilla's
+    that holds only tabs is written empty, as scripts/format_paradox_tabs.py
+    wants it (test_te_fullscreen_frame.py's diff allows for that)."""
     text = VANILLA_FRAMES.read_text(encoding="utf-8-sig")
     m = re.search(r"^\ttype fullscreen_block_window = widget \{$", text, re.M)
     if not m:
         raise ValueError(f"{VANILLA_FRAMES.name}: no fullscreen_block_window")
-    depth, end = 0, None
-    for i in range(m.end() - 1, len(text)):
-        depth += {"{": 1, "}": -1}.get(text[i], 0)
-        if depth == 0:
-            end = i
-            break
+    end = _block_end(text, m.end() - 1, f"{VANILLA_FRAMES.name}: fullscreen_block_window")
     frame = text[m.start():end + 1]
     for old, new in FRAME_CHANGES:
         if frame.count(old) != 1:
             raise ValueError(f"vanilla's fullscreen_block_window changed: {old!r} is there {frame.count(old)} times")
         frame = frame.replace(old, new)
-    body = [ln[1:] if ln.startswith("\t") else ln for ln in frame.split("\n")]
+    body = [(ln[1:] if ln.startswith("\t") else ln) if ln.strip() else "" for ln in frame.split("\n")]
     return ["### The full-screen frame: vanilla's fullscreen_block_window (copied from",
             "### test_fixtures/vanilla_gui/block_windows.gui), its type name, Back and Close",
             "### changed. It fills the screen from its origin, as vanilla's full-screen",
@@ -744,7 +834,7 @@ NI_PREFIX = "te_ni"
 # a strip. A public tab not listed here fails _validate_ni.
 NI_ORDER = ["pops", "demographics", "nation", "banking", "tax_code",
             "grand_monuments", "colonial_empire", "seabed", "cultural_hegemony", "space_race",
-            "nuclear_weapons"]
+            "nuclear_weapons", "power_grids"]
 NI_PER_STRIP = len(SLOTS)
 # The Pops tab: vanilla's window, always open.
 NI_POPS_LABEL = "te_pop_browser_tab_pops"
@@ -1023,8 +1113,6 @@ def _validate_ni() -> None:
     for t in TABS:
         if t.public and t.key not in NI_ORDER:
             raise ValueError(f"{t.key} is public: give it a place in NI_ORDER")
-        if t.public and t.wide is None:
-            raise ValueError(f"{t.key} is public: National Info draws its wide layout")
 
 
 def render_ni() -> str:

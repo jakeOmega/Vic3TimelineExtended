@@ -44,6 +44,11 @@ THE ONE-MONTH LAGS, WHICH ARE LOAD-BEARING
 issues them, so within one pulse:
   * `banking_cycle_advance_variables` reads the phase / inertia / fiscal modifiers
     that `banking_cycle_apply_phase_modifiers` put on at the END of LAST month;
+    since vanilla 1.15 the journal entry declares them instead
+    (`scaling_modifiers_while_active`, #1404), so the declarations read at most
+    4 days late (the entry's update) instead of a pulse. The variables they
+    follow move at the pulse, so they still carry last month's end state into
+    this one and the model keeps the one-pulse lag;
   * the stance gap it reads is up to a month old by design (§16.3), because the
     order of `on_monthly_pulse_country` and the JE pulse is not guaranteed.
 The simulation reproduces both. `--pulse-order` flips the second for sensitivity.
@@ -91,7 +96,8 @@ DELIBERATELY OUT OF SCOPE (pass 1)
     and always resolved as Defend. Elsewhere confidence can sit at 0 unanswered.
   * the FX index, monetisation, and phase-5 arrangements: held at par / zero.
     Foreign-borrowing limits, FX surrender and import financing therefore have
-    no AI selection here; actual-script scenarios test their accounting. The
+    no AI selection here, nor Sterilization on a floating currency (which slows
+    the index); actual-script scenarios test their accounting. The
     two flow tools assume funding, since liquid treasury is not modeled.
     The currency's share of cost-push goes through the `fx_imported` hook, 0
     here; banking_deflation_trap.py plugs the script's loop into it. A deep
@@ -689,6 +695,12 @@ PRE_RATE_REACH = {
     "stance_pressure_tight": 4.0,
 }
 PRE_1084 = {**PRE_DEFICIT_CAP, **PRE_RATE_REACH}
+# Open-Market Operations before §28 (2026-11-10): a flat te_mon_qe_pressure,
+# whatever inflation was doing. `--tune pre_omo_scale`; `--tune omo_per_pp=X`
+# and `omo_cap=X` measure other sizes of the shortfall term.
+PRE_OMO_SCALE = {
+    "omo_per_pp": 0.0,
+}
 PRESETS = {
     "pre_retune": PRE_RETUNE,
     "pre_boom_rescue": PRE_BOOM_RESCUE,
@@ -702,6 +714,7 @@ PRESETS = {
     "pre_deficit_cap": PRE_DEFICIT_CAP,
     "pre_rate_reach": PRE_RATE_REACH,
     "pre_1084": PRE_1084,
+    "pre_omo_scale": PRE_OMO_SCALE,
 }
 # Measured but NOT shipped (§3): `crash_mult`, `stance_bubble`, `hyper_edge`,
 # `fiat_pull` (the last two contradict the documented fiat design), and
@@ -924,6 +937,9 @@ class State:
     eliq_announced: bool = False
     eliq_recovery_months: int = 0
     eliq_wind_downs: int = 0
+    # banking_overdraft_wait: an earlier step of this month's pulse lifted a tool,
+    # so prune_overdrawn_tools sits the month out (banking_overdraft_wait_a_pulse)
+    overdraft_wait: bool = False
 
     # exogenous
     gdp: float = 1.0e7
@@ -998,7 +1014,7 @@ def era_base(year_index: int) -> float:
 
 
 def bubble_inertia_multiplier(bubble: float) -> float:
-    """bubble_inertia_multiplier_script_value (extra_script_values.txt).
+    """bubble_inertia_curve (extra_script_values.txt).
 
     Hand-ported (the script value is an if-chain). Above 50 it is
     0.25 + 0.005 (x-50) + a (x-50)^2 with `a` set so f(100) = top: 0.45 since
@@ -1216,7 +1232,7 @@ def monetary_update(cfg: Config, state: State, rng: random.Random, year_index: i
         state.inflation_band = state.inflation_band_applied = 2
         state.stance_gap, state.stance_band = 0.0, 3
         return
-    if not has_dial(cfg, state):
+    if not (has_gold_flows(cfg, state) or (has_dial(cfg, state) and not is_metallic(cfg))):
         state.tools.discard("restrict_inflows")
     if not has_gold_flows(cfg, state):
         state.tools.discard("sterilize_inflows")
@@ -1623,6 +1639,24 @@ def bank_qe_pressure(cfg: Config, state: State, world_rate: float) -> float:
     return pressure * tuned("bank_qe", 1.0)
 
 
+def omo_pressure(cfg: Config, state: State) -> float:
+    """te_mon_pressure_qe — Open-Market Operations' pressure while the tool runs (§28).
+
+    te_mon_qe_pressure, plus te_mon_qe_pressure_per_pp for every point last
+    month's headline (`state.inflation`, not yet overwritten when step 6 sums the
+    pressure) sits under the anchor, capped at te_mon_qe_pressure_cap. The tool
+    needs unbacked money, so the anchor is never metal's 0 here. `--tune
+    pre_omo_scale` is the flat point it was before.
+    """
+    if "omo" not in state.tools:
+        return 0.0
+    base = K.sv("te_mon_qe_pressure")
+    anchor = 0.0 if is_metallic(cfg) else INFLATION_ANCHOR
+    shortfall = max(0.0, anchor - state.inflation)
+    pressure = base + tuned("omo_per_pp", K.sv("te_mon_qe_pressure_per_pp")) * shortfall
+    return min(tuned("omo_cap", K.sv("te_mon_qe_pressure_cap")), pressure)
+
+
 def deficit_pressure(state: State) -> float:
     """te_mon_pressure_deficit — min(cap, 0.3 x max(0, deficit - 1)), x2 at war.
 
@@ -1673,8 +1707,7 @@ def pressure_total(cfg: Config, state: State, world_rate: float) -> float:
     total += deficit_pressure(state)
 
     # QE, while open market operations are running
-    if "omo" in state.tools:
-        total += K.sv("te_mon_qe_pressure")
+    total += omo_pressure(cfg, state)
 
     # the bank's own purchases at the floor (te_mon_pressure_bank_qe, §0.12)
     total += bank_qe_pressure(cfg, state, world_rate)
@@ -2668,8 +2701,13 @@ def tool_possible(cfg: Config, state: State, tool: str) -> bool:
     if tool in {"foreign_borrowing_limits", "fx_surrender", "emergency_import_financing"}:
         # The FX index, export reliance and spendable treasury are outside this model.
         return False
-    if tool == "restrict_inflows" and not has_dial(cfg, state):
+    # banking_external_rate_moves_money: gold flows, or a floating currency with
+    # a dial. Commodity money has a dial and nothing for the tool to act on.
+    if tool == "restrict_inflows" and not (
+            has_gold_flows(cfg, state) or (has_dial(cfg, state) and not is_metallic(cfg))):
         return False
+    # The script's floating Sterilization slows the FX index, which this model
+    # holds at par, so only the gold version is selected here (2026-11-14).
     if tool == "sterilize_inflows" and not has_gold_flows(cfg, state):
         return False
     if tool == "omo":
@@ -2740,6 +2778,7 @@ def eliq_wind_down(cfg: Config, state: State) -> None:
         if "eliq" in state.tools and "eliq" not in cfg.hold_tools:
             state.tools.discard("eliq")
             state.eliq_wind_downs += 1
+            state.overdraft_wait = True  # banking_overdraft_wait_a_pulse
         state.eliq_announced = False
         state.eliq_recovery_months = 0
 
@@ -3017,31 +3056,51 @@ def consider_tools(cfg: Config, state: State, rng: random.Random, month: int = 0
             return
 
 
-def prune_overdrawn_tools(cfg: Config, state: State) -> None:
-    """banking_crash_check_overdrawn_interventions, for the dashboard tools."""
-    order = [
+# banking_crash_check_overdrawn_interventions' chain after the crash interventions, by
+# economy: the tool lifted first comes first. The five External & Currency tools, then
+# (since 2026-11-14, when the script's chain was extended to them) the standing tools,
+# cheapest first. Until then the script stopped at the external tools and this port shed
+# the rest in an order of its own. The Bank Holiday is not in the chain: it runs out its
+# ninety days. test_banking_overdraft_shed.py holds each list to the script's order.
+OVERDRAFT_SHED_ORDER = {
+    "market": (
         "emergency_import_financing", "sterilize_inflows", "fx_surrender",
         "restrict_inflows", "foreign_borrowing_limits",
-        "capital_controls",
-        "eliq",
-        "bank_holiday",
+        "moral_suasion", "dc_elec",
+        "export_credit", "dc_agri", "capital_controls", "reserve_requirements", "margin", "buffer",
+        "directed", "dc_arms", "bail_in",
+        "dc_heavy", "omo", "deposit", "eliq",
         "asset_relief",
-        "bail_in",
-        "deposit",
-        "omo",
-        "directed",
-        "dc_heavy",
-        "dc_agri",
-        "dc_arms",
-        "dc_elec",
-        "export_credit",
-        "buffer",
-        "reserve_requirements",
-        "margin",
-        "moral_suasion",
-    ]
-    if cfg.economy != "market":
-        order = []  # actual overdraw effect has no ce/cw disable branch
+    ),
+    "command": (
+        "ce_coordination",
+        "ce_target_cut", "ce_stockpile", "ce_consolidation",
+        "ce_plan_revision", "ce_allocation", "ce_admin_campaign",
+        "ce_distribution",
+    ),
+    "coop": (
+        "cw_solidarity", "cw_directive",
+        "cw_dividend", "cw_ceiling",
+        "cw_credit", "cw_buyout",
+        "cw_mutual_aid", "cw_capital_plan",
+    ),
+}
+
+
+def prune_overdrawn_tools(cfg: Config, state: State) -> None:
+    """banking_crash_check_overdrawn_interventions, for the dashboard tools.
+
+    Not in a month where an earlier step of the pulse lifted a tool: in the game the
+    chain still reads the budget the pulse opened with, so the script has it clear the
+    mark and wait for the next month's true sum (review of PR #1810, finding B). The
+    only such step modelled here is the Emergency Liquidity wind-down; the script's
+    other two, the Outflow Controls cleanup and the directed-credit cap, follow a law
+    change, and a run's laws are fixed. The AI's own switches and a timer running out
+    are separate effects in the game and mark nothing.
+    """
+    if state.overdraft_wait:
+        state.overdraft_wait = False
+        return
     if intervention_points(cfg, state) < 0:
         # Family interventions are shed first (the timed crash modifiers), then
         # the per-law base options — banking_crash_check_overdrawn_interventions.
@@ -3055,11 +3114,9 @@ def prune_overdrawn_tools(cfg: Config, state: State) -> None:
         for name in list(state.timed):
             del state.timed[name]
             return
-        for tool in order:
+        for tool in OVERDRAFT_SHED_ORDER[cfg.economy]:
             if tool in state.tools and tool not in cfg.hold_tools:
                 state.tools.discard(tool)
-                if tool == "bank_holiday":
-                    state.holiday_reopening = False
                 break
 
 
@@ -3922,7 +3979,8 @@ def main() -> int:
                          "--tune pre_eliq_bounds for the Emergency Liquidity Program before §25, or "
                          "--tune pre_deficit_cap for the uncapped deficit term before #1084, or "
                          "--tune pre_rate_reach for the 25 ceiling, flat drift and shared stance clamp "
-                         "before #1084, or --tune pre_1084 for both.")
+                         "before #1084, or --tune pre_1084 for both, or --tune pre_omo_scale "
+                         "for Open-Market Operations' flat point before §28.")
     ap.add_argument("--self-test", action="store_true",
                     help="check the monetary port against the expected numbers in "
                          "events/te_debug_monetary_events.txt")

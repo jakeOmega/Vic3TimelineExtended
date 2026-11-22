@@ -26,7 +26,11 @@ Pinned here:
 * the Asset Purchases row: its figure is OMO plus the bank's term, neither goes
   through the modifier channel that Inflation Anchoring nets against (so the
   Price Pressure row cannot print them), and the row is wired in under the
-  anchoring row.
+  anchoring row;
+* Open-Market Operations' own term, which grows with how far last month's
+  headline sat under the anchor (banking_cycle_simulation.md §28): the script
+  value, the simulator's port, the tooltip's figures, and the fiat trap it was
+  sized on (a Panic on the -10% clamp at the 0% floor), which it now leaves.
 """
 import re
 import unittest
@@ -456,8 +460,8 @@ class SimulatorPort(unittest.TestCase):
         """§0.12 "The cap": Panic, a strong currency, headline on -10%. The old cap and currency held it there."""
         from scripts.analysis import banking_deflation_trap as trap
         shipped = [trap.playtest(seed, months=24)['off_clamp'] for seed in range(6)]
-        previous = [trap.playtest(seed, months=24, cap=trap.PREVIOUS_CAP, two_sided=True)['off_clamp']
-                    for seed in range(6)]
+        previous = [trap.playtest(seed, months=24, cap=trap.PREVIOUS_CAP, two_sided=True,
+                                  tune=trap.sim.PRE_OMO_SCALE)['off_clamp'] for seed in range(6)]
         self.assertTrue(all(month is not None and month <= 12 for month in shipped), shipped)
         self.assertGreaterEqual(sum(month is None for month in previous), 4, previous)
 
@@ -585,6 +589,87 @@ class DelegationHint(unittest.TestCase):
         self.assertIn('whenever its rule asked for a lower rate than the floor allows', hint)
         self.assertNotIn('\\n', hint)
         self.assertEqual(TooltipNumbers.loc(self, 'banking_dash_mon_delegation_purchase_hint_none'), '')
+
+
+def omo_constants():
+    values = definitions(VALUES)
+    return tuple(float(dict((k, v) for k, _, v in values[name])['value'])
+                 for name in ('te_mon_qe_pressure', 'te_mon_qe_pressure_per_pp', 'te_mon_qe_pressure_cap'))
+
+
+def omo_term(headline=None, running=True, anchor=2.0):
+    """`te_mon_pressure_qe` on the real script; `headline` is last month's te_inflation (None: unset)."""
+    s = Script(te_mon_inflation_anchor=anchor)
+    if running:
+        s.tools.add('omo')
+    if headline is not None:
+        s.vars['te_inflation'] = headline
+    return s.number('te_mon_pressure_qe')
+
+
+class OpenMarketShortfall(unittest.TestCase):
+    """Open-Market Operations grows with the shortfall under target (§28, 2026-11-10)."""
+
+    def test_nothing_while_the_tool_is_off(self):
+        self.assertEqual(omo_term(-10.0, running=False), 0)
+
+    def test_the_flat_point_at_or_above_target_and_before_the_first_pulse(self):
+        base, _, _ = omo_constants()
+        for headline in (None, 2.0, 2.5, 9.0, 60.0):
+            self.assertEqual(omo_term(headline), base, headline)
+
+    def test_grows_by_the_rate_per_point_under_target_until_the_cap(self):
+        base, per_pp, cap = omo_constants()
+        for headline in (1.5, 0.0, -1.0, -2.0, -6.0, -6.5, -10.0):
+            want = min(cap, base + per_pp * (2.0 - headline))
+            self.assertAlmostEqual(omo_term(headline), want, msg=headline)
+        self.assertEqual(omo_term(-10.0), cap)
+
+    def test_reads_the_anchor(self):
+        base, per_pp, _ = omo_constants()
+        self.assertAlmostEqual(omo_term(-1.0, anchor=0.0), base + per_pp)
+        self.assertEqual(omo_term(0.0, anchor=0.0), base)
+
+    def test_the_display_value_is_the_term(self):
+        s = Script(te_mon_inflation_anchor=2.0)
+        s.tools.add('omo')
+        s.vars['te_inflation'] = -1.0
+        self.assertEqual(s.number('te_mon_omo_pressure_display'), omo_term(-1.0))
+
+    def test_the_simulator_matches_the_script(self):
+        from scripts.analysis import banking_cycle_sim as sim
+        sim.TUNE.clear()
+        cfg = sim.Config(currency='fiat', fin_law='law_central_bank_independence', mode=sim.MODE_PRICE)
+        for headline in (-10.0, -6.0, -2.5, 0.0, 1.9, 2.0, 7.0):
+            st = sim.State(inflation=headline)
+            self.assertEqual(sim.omo_pressure(cfg, st), 0.0)
+            st.tools.add('omo')
+            self.assertAlmostEqual(sim.omo_pressure(cfg, st), omo_term(headline), msg=headline)
+        sim.TUNE.update(sim.PRE_OMO_SCALE)
+        try:
+            self.assertEqual(sim.omo_pressure(cfg, st), omo_constants()[0])
+            st.inflation = -10.0
+            self.assertEqual(sim.omo_pressure(cfg, st), omo_constants()[0])
+        finally:
+            sim.TUNE.clear()
+
+    def test_the_tooltip_states_the_rate_the_cap_and_a_worked_case(self):
+        _, per_pp, cap = omo_constants()
+        text = TooltipNumbers.loc(self, 'banking_nonmod_open_market_ops_tt')
+        self.assertIn("[GetStaticModifier('banking_monthly_open_market_ops').GetDesc]", text)
+        self.assertIn('Plus #v %g%%#! for each point [concept_banking_inflation] runs below its target' % per_pp, text)
+        self.assertIn('up to #v %g%%#! in all: #v %g%%#! with prices 4 points under target'
+                      % (cap, omo_term(2.0 - 4)), text)
+
+    def test_the_fiat_trap_now_ends(self):
+        """The playtest of §28: independent Fiat, Panic, 0% floor, headline on -10%,
+        OMO, the deposit guarantee and the bank's purchases at their cap."""
+        from scripts.analysis import banking_deflation_trap as trap
+        after = [trap.fiat_trap(seed, months=60)['leave_panic'] for seed in range(8)]
+        before = [trap.fiat_trap(seed, tune=trap.sim.PRE_OMO_SCALE, months=60)['leave_panic']
+                  for seed in range(8)]
+        self.assertTrue(all(month is not None for month in after), after)
+        self.assertGreaterEqual(sum(month is None for month in before), 6, before)
 
 
 class TooltipNumbers(unittest.TestCase):

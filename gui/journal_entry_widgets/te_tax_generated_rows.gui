@@ -2114,6 +2114,38 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_customs_row = {
+			datacontext = "[GetScriptedGui('te_tax_customs_copper_sgui')]"
+			blockoverride "good_name" {
+				text = "copper"
+				tooltip = "copper"
+			}
+			blockoverride "imp_level" {
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_imp_copper'), '(CFixedPoint)-3' )]" texture = "gfx/interface/icons/trade_icons/max_subvention.dds" tooltip = "te_tax_cu_lv_m3" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_imp_copper'), '(CFixedPoint)-2' )]" texture = "gfx/interface/icons/trade_icons/high_subvention.dds" tooltip = "te_tax_cu_lv_m2" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_imp_copper'), '(CFixedPoint)-1' )]" texture = "gfx/interface/icons/trade_icons/low_subvention.dds" tooltip = "te_tax_cu_lv_m1" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_imp_copper'), '(CFixedPoint)0' )]" texture = "gfx/interface/icons/trade_icons/no_tariffs_no_subvention.dds" tooltip = "te_tax_cu_lv_0" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_imp_copper'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/trade_icons/low_tariffs.dds" tooltip = "te_tax_cu_lv_p1" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_imp_copper'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/trade_icons/high_tariffs.dds" tooltip = "te_tax_cu_lv_p2" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_imp_copper'), '(CFixedPoint)3' )]" texture = "gfx/interface/icons/trade_icons/max_tariffs.dds" tooltip = "te_tax_cu_lv_p3" }
+			}
+			blockoverride "imp_changed" {
+				visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_imp_copper_on'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "exp_level" {
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_exp_copper'), '(CFixedPoint)-3' )]" texture = "gfx/interface/icons/trade_icons/max_subvention.dds" tooltip = "te_tax_cu_lv_m3" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_exp_copper'), '(CFixedPoint)-2' )]" texture = "gfx/interface/icons/trade_icons/high_subvention.dds" tooltip = "te_tax_cu_lv_m2" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_exp_copper'), '(CFixedPoint)-1' )]" texture = "gfx/interface/icons/trade_icons/low_subvention.dds" tooltip = "te_tax_cu_lv_m1" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_exp_copper'), '(CFixedPoint)0' )]" texture = "gfx/interface/icons/trade_icons/no_tariffs_no_subvention.dds" tooltip = "te_tax_cu_lv_0" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_exp_copper'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/trade_icons/low_tariffs.dds" tooltip = "te_tax_cu_lv_p1" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_exp_copper'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/trade_icons/high_tariffs.dds" tooltip = "te_tax_cu_lv_p2" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_exp_copper'), '(CFixedPoint)3' )]" texture = "gfx/interface/icons/trade_icons/max_tariffs.dds" tooltip = "te_tax_cu_lv_p3" }
+			}
+			blockoverride "exp_changed" {
+				visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_exp_copper_on'), '(CFixedPoint)0' )]"
+			}
+		}
+
+		te_tax_customs_row = {
 			datacontext = "[GetScriptedGui('te_tax_customs_dye_sgui')]"
 			blockoverride "good_name" {
 				text = "dye"
@@ -4515,6 +4547,86 @@ types te_tax_generated_rows_types
 			blockoverride "line_label" {
 				text = "consumer_appliances"
 				tooltip = "consumer_appliances"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_exp"
+			}
+		}
+
+		te_tax_review_customs_line = {
+			visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_imp_copper_on'), '(CFixedPoint)0' )]"
+			blockoverride "good_name" {
+				text = "copper"
+				tooltip = "copper"
+			}
+			blockoverride "direction" {
+				text = "te_tax_rv_cu_imp"
+			}
+			blockoverride "law_level" {
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_imp_copper_base'), '(CFixedPoint)-3' )]" texture = "gfx/interface/icons/trade_icons/max_subvention.dds" tooltip = "te_tax_cu_lv_m3" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_imp_copper_base'), '(CFixedPoint)-2' )]" texture = "gfx/interface/icons/trade_icons/high_subvention.dds" tooltip = "te_tax_cu_lv_m2" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_imp_copper_base'), '(CFixedPoint)-1' )]" texture = "gfx/interface/icons/trade_icons/low_subvention.dds" tooltip = "te_tax_cu_lv_m1" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_imp_copper_base'), '(CFixedPoint)0' )]" texture = "gfx/interface/icons/trade_icons/no_tariffs_no_subvention.dds" tooltip = "te_tax_cu_lv_0" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_imp_copper_base'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/trade_icons/low_tariffs.dds" tooltip = "te_tax_cu_lv_p1" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_imp_copper_base'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/trade_icons/high_tariffs.dds" tooltip = "te_tax_cu_lv_p2" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_imp_copper_base'), '(CFixedPoint)3' )]" texture = "gfx/interface/icons/trade_icons/max_tariffs.dds" tooltip = "te_tax_cu_lv_p3" }
+			}
+			blockoverride "bill_level" {
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_imp_copper'), '(CFixedPoint)-3' )]" texture = "gfx/interface/icons/trade_icons/max_subvention.dds" tooltip = "te_tax_cu_lv_m3" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_imp_copper'), '(CFixedPoint)-2' )]" texture = "gfx/interface/icons/trade_icons/high_subvention.dds" tooltip = "te_tax_cu_lv_m2" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_imp_copper'), '(CFixedPoint)-1' )]" texture = "gfx/interface/icons/trade_icons/low_subvention.dds" tooltip = "te_tax_cu_lv_m1" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_imp_copper'), '(CFixedPoint)0' )]" texture = "gfx/interface/icons/trade_icons/no_tariffs_no_subvention.dds" tooltip = "te_tax_cu_lv_0" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_imp_copper'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/trade_icons/low_tariffs.dds" tooltip = "te_tax_cu_lv_p1" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_imp_copper'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/trade_icons/high_tariffs.dds" tooltip = "te_tax_cu_lv_p2" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_imp_copper'), '(CFixedPoint)3' )]" texture = "gfx/interface/icons/trade_icons/max_tariffs.dds" tooltip = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_imp_copper_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_imp_copper_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "copper"
+				tooltip = "copper"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
+			}
+		}
+
+		te_tax_review_customs_line = {
+			visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_exp_copper_on'), '(CFixedPoint)0' )]"
+			blockoverride "good_name" {
+				text = "copper"
+				tooltip = "copper"
+			}
+			blockoverride "direction" {
+				text = "te_tax_rv_cu_exp"
+			}
+			blockoverride "law_level" {
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_exp_copper_base'), '(CFixedPoint)-3' )]" texture = "gfx/interface/icons/trade_icons/max_subvention.dds" tooltip = "te_tax_cu_lv_m3" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_exp_copper_base'), '(CFixedPoint)-2' )]" texture = "gfx/interface/icons/trade_icons/high_subvention.dds" tooltip = "te_tax_cu_lv_m2" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_exp_copper_base'), '(CFixedPoint)-1' )]" texture = "gfx/interface/icons/trade_icons/low_subvention.dds" tooltip = "te_tax_cu_lv_m1" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_exp_copper_base'), '(CFixedPoint)0' )]" texture = "gfx/interface/icons/trade_icons/no_tariffs_no_subvention.dds" tooltip = "te_tax_cu_lv_0" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_exp_copper_base'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/trade_icons/low_tariffs.dds" tooltip = "te_tax_cu_lv_p1" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_exp_copper_base'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/trade_icons/high_tariffs.dds" tooltip = "te_tax_cu_lv_p2" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_exp_copper_base'), '(CFixedPoint)3' )]" texture = "gfx/interface/icons/trade_icons/max_tariffs.dds" tooltip = "te_tax_cu_lv_p3" }
+			}
+			blockoverride "bill_level" {
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_exp_copper'), '(CFixedPoint)-3' )]" texture = "gfx/interface/icons/trade_icons/max_subvention.dds" tooltip = "te_tax_cu_lv_m3" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_exp_copper'), '(CFixedPoint)-2' )]" texture = "gfx/interface/icons/trade_icons/high_subvention.dds" tooltip = "te_tax_cu_lv_m2" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_exp_copper'), '(CFixedPoint)-1' )]" texture = "gfx/interface/icons/trade_icons/low_subvention.dds" tooltip = "te_tax_cu_lv_m1" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_exp_copper'), '(CFixedPoint)0' )]" texture = "gfx/interface/icons/trade_icons/no_tariffs_no_subvention.dds" tooltip = "te_tax_cu_lv_0" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_exp_copper'), '(CFixedPoint)1' )]" texture = "gfx/interface/icons/trade_icons/low_tariffs.dds" tooltip = "te_tax_cu_lv_p1" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_exp_copper'), '(CFixedPoint)2' )]" texture = "gfx/interface/icons/trade_icons/high_tariffs.dds" tooltip = "te_tax_cu_lv_p2" }
+				te_tax_cu_level_icon = { visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_exp_copper'), '(CFixedPoint)3' )]" texture = "gfx/interface/icons/trade_icons/max_tariffs.dds" tooltip = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_exp_copper_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_cu_exp_copper_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "copper"
+				tooltip = "copper"
 			}
 			blockoverride "line_value" {
 				text = "te_tax_rv_cu_blocked_exp"

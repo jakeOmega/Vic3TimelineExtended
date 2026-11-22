@@ -253,18 +253,31 @@ WORDS.update({
     "leafletted": "leafleted", "queueing": "queuing",
 })
 
+# British usage rather than spelling: "dear" for expensive, which American
+# players misread (Workshop report, 2026-11-08: "instead of using word
+# 'Expensive' there is used 'Dear'"). "Dearly" stays ("cost it dearly" is
+# American too), and the affectionate "my dear" is in ALLOWLIST; any other
+# affectionate use needs an entry there before a sweep.
+WORDS.update({"dear": "expensive", "dearer": "costlier", "dearest": "costliest"})
+
 # ── Phrases that keep their spelling ────────────────────────────────────────
 # Official names, matched case-sensitively as whole phrases (and in capitals)
 # before the word rules. Only a name whose own official English spelling is
 # British belongs here: "Kenyatta International Convention Centre" is, but a
 # landmark the text translates ("Roman Theater of Mérida", "Amphitheater of El
 # Djem") or a name the mod made up ("Civil Defense", "National Exhibition
-# Center") goes American. Check each entry against the text it protects.
+# Center") goes American. Check each entry against the text it protects. The
+# phrases that are not names ("my dear", and the salutations "Dear Mother" and
+# "Dear colleague") keep the affectionate or formal "dear", which the list
+# otherwise reads as "expensive".
 ALLOWLIST: list[str] = [
     "Kenyatta International Convention Centre",  # the wonder (Nairobi's KICC)
     "UN Environment Programme",                  # UNEP's own name
     "United Nations Environment Programme",
     "Tyre",                                      # the Lebanese city; the product is lower case
+    "my dear",                                   # affectionate, not "expensive" (UN flavor text)
+    "Dear Mother",                               # a letter's salutation (flavor in the document form)
+    "Dear colleague",
 ]
 
 # Keys whose whole value keeps its spelling, such as a historical text quoted

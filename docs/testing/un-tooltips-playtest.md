@@ -10,7 +10,9 @@ show here. Each PR adds its own section, newest last, and a fixed item is struck
 - **Where to look.** The United Nations journal entry, or the UN tab of the Diplomacy panel: the overview's agency
   icons, the General Assembly's Table a Resolution rows, the resolution in session, and Our Obligations.
 - **Quick setup.** `event te_debug_un.1` founds the UN and seats the great and major powers, and can have another member
-  table a condemnation (`events/te_debug_un_events.txt`).
+  table a condemnation (`events/te_debug_un_events.txt`). Founding activates each country's entry at the engine's next
+  check, within two weeks, and a seat needs an active entry, so run it again two weeks on if the chamber still says
+  "non-member".
 - **Logs.** Read `debug.log`, not `error.log`. Search it for `Failed parsing localized text`, `je_un_terms_` and
   `je_un_ov_agency_`.
 
@@ -37,7 +39,9 @@ The same PR fixed seven things the terms audit found the script doing against it
 
 | Check | Expect | If it fails |
 |---|---|---|
-| **A held veto.** Vote against a sanctions resolution, have a permanent member veto it, and let it carry in its voluntary form. | `un_vote.3` says the veto left nothing binding; Accept shows no standing gain, and Denounce shows relations and infamy but no standing loss or defiance record. | A standing line means `un_res_vetoed` was gone by `un_vote.3`: check where `un_vote_effects.txt` removes it. |
+| **A held veto.** Vote against a sanctions resolution, have a permanent member veto it, and let it carry in its voluntary form. | `un_vote.3` says the veto left nothing binding; Accept shows no standing gain, and Denounce and stand with the target shows +25 relations with the target, −20 with the proposer and infamy, but no standing loss or defiance record. | A standing line means `un_res_vetoed` was gone by `un_vote.3`: check where `un_vote_effects.txt` removes it. |
+| **Standing with the accused.** Vote against a condemnation of another country and let it carry. | `un_vote.3` offers Accept and "Denounce it and stand with X", naming the condemned country; the tooltip shows +25 relations with it beside the costs. | The name is blank: `scope:un_vote_target` wasn't saved by the event's `immediate` when the option name rendered. |
+| **Nothing to refuse.** Vote against a charter reform, or as a minor power against an aid request, or against a condemnation of ourselves, and let it carry. | One option, "Very well.", and the description says there is nothing to accept or refuse. | Accept and Denounce both show: `un_vote_3_can_refuse` held where it should not. |
 | **Peacekeeping pledges.** As a major power in the Peacekeeping programme, refuse a carried full deployment; as another, pledge to one. | The refuser's End Peacekeeping button stays as it was; the pledger gains Peacekeeping Commitment Active (one copy) and cannot end the programme for ten years. | Two copies of the commitment mean the remove before the add in `un_vote_apply_resolution_compliance` did not take. |
 | **Bloc leverage.** As a bloc leader, vote for a peacekeeping request that a veto cuts to observers. | No +50 leverage over the requester. | Leverage means the limit in `un_vote_apply_resolution_compliance` lost `un_resolution_peacekeeping_full`. |
 | **Sanctions against us.** Be the target of sanctions and vote for them. | When they carry, the proposer gets no Sanctions Enforcer modifier and can table sanctions again. | An enforcer modifier means `un_res_target_accepted` was not set on the resolution: check `un_vote_cast_yes`. |
@@ -132,3 +136,54 @@ The four #1213 audits went into CI with their backlog fixed. Three UN changes re
 | **When it arrives.** Let an AI member propose a resolution and don't vote. | No vote event in the first eight months; it arrives in the ninth, with the chamber's lean figures current. Voting in the chamber before then means it never arrives. | It never arrives: `scope:un_resolution` didn't reach the event from the monthly update (the saved scope is set just above the send, as the old month 9 and 11 re-send had it). |
 | **Letting it time out.** With auto-pause on events off, let it expire. | The chamber still shows us as not having voted; no vote in favor was cast. | A yes vote on the record: the engine ignored `default_option` on a triggered option (`trigger = { is_ai = no }`); drop the option's trigger, since `ai_chance = { base = 0 }` already keeps the AI off it. |
 | **Once a resolution.** Decide later, then let the session run to month 12 without voting. | The event does not come back; the chamber's buttons still take a vote until the results. | |
+
+## The sanctions enforcer's choice (2026-11-12)
+
+When sanctions carry, `un_vote.2` makes the proposer the enforcer and, three months on, asks it how strictly to
+enforce them (`un_events.5`, Cargo Under Seal). Its trigger reads the enforcer modifier and the target's regime, both
+written in the block that queued it, so on the day it was queued the trigger was false, and a delayed event whose
+trigger is false when queued seems to be dropped (#1596). It now waits in the hidden `un_events.43`, which has no
+trigger and opens `un_events.5` on the day if the regime still stands. Found the UN with `event te_debug_un.1`, then as
+a major power table International Sanctions against a rival and let them carry.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The choice arrives.** Wait 90 days after the results. | Cargo Under Seal, naming the sanctioned country, with Enforce, Partial compliance and Quietly profit. Choosing Enforce gives Strict Sanctions Enforcement. | Nothing: check in the console that `un_events.43` ran (it opens nothing if the enforcer modifier or the target's `un_sanctions_target_on` is gone). A blank country name: `scope:sanctioned_country` did not ride from `un_vote.2` through the relay. |
+| **Once a regime.** Answer it, then wait out the regime. | No second Cargo Under Seal for the same regime. | A second copy: something other than `un_vote.2` queues `un_events.43` or `un_events.5` (`test_un_lift_sanctions.py` pins one site each). |
+| **A lifted regime.** Carry sanctions, then press Lift Ours (Programmes and Conventions) within 90 days. | No Cargo Under Seal. | It arrives: the relay's limit no longer restates `un_events.5`'s trigger. |
+
+## The ceasefire order's debit (2026-11-15)
+
+A Binding Ceasefire's order is meant to cost the UN's peace and order 0.25 for each month the aggressor fights on,
+booked every six months and when the order ends (docs/systems/un_redesign_design.md §0.12 item 6). It never did: the
+month added to a counter nothing had set, and `change_variable` on an unset variable does nothing (#1818, found in the
+logs of a 1952 to 1954 order). `un_ceasefire_order_impose` now starts the counter. `test_un_ceasefire_order.py` and
+`change_variable_init_audit` hold the script; only a game shows the entry. Found the UN with `event te_debug_un.1`,
+raise it with the console event's "Raise the UN one tier" until Charter Reform II is in force, then have a member that
+started a war against another member named in a Binding Ceasefire and let it carry without a veto.
+
+**This debit is live for the first time.** The figure is the design's and has never run in a game: an order defied
+to the end, 24 months of fighting on, now costs the UN's peace and order up to 6 points (24 × 0.25), in four entries
+of −1.5, on a pillar that runs from −20 to 0. Until now it cost nothing. Watch what one or two such orders do to UN
+authority in a long game before judging the 0.25; `un_cf_order_debit` in `common/script_values/un_order_values.txt` is
+the one number to change.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The first booking.** Let the aggressor fight on for six months under the order. | In the sixth month the authority ledger gains one Peace and Order entry of −1.5, "a war fought on under the Assembly's ceasefire order by" the aggressor. `game.log` has no `change_variable effect [ Variable not of the 'value' scope type. Type: empty ]` line from `un_order_effects.txt`. | The log line is back and no entry: `un_ceasefire_order_impose` no longer sets `un_cf_debit_months`. No line and no entry: `un_cf_order_debit_accrued` read 0 where `un_ledger_entry_on` takes its `POINTS` (a script value that reads the aggressor's variable from the ledger's scope); store the figure in a variable on the aggressor first and pass that. |
+| **The last booking.** End the war in the eighth month of fighting, or let the order run out. | One more entry for the months since the last booking (−0.5 for two), then the ending's own entry (delivery for an order kept, credibility for one defied). At most five debit entries over a 24-month order. | A second entry of −1.5 or more means the booking did not put the counter back to 0 (`un_ceasefire_book_accrued_debit`). |
+| **An order from before the fix.** Load a save with an order already standing. | No debit for that order, and the log line continues until it ends: its counter was never started. Not a regression. | |
+
+## War goals struck one call at a time (2026-11-18, #1892)
+
+The Standing UN Force's strike (`un_force_strike_goal`) and the AI mandate holder's (`un_mandate_strike_goal_type`) made one `remove_war_goal` call per goal type. A call takes the holder's first goal of the type, whatever it targets (`scripting_best_practices.md` § "`remove_war_goal` Takes One Holder's First Goal of a Type, Whatever It Targets"). So a goal of the type against the host's (or the mandate target's) ally, added earlier, was struck and the goal against the protected country stayed. Each strike now repeats the call, at most 30 times, while a goal of the type against the protected country is left. The loop stops only if `play_participant_has_war_goal_of_type_against` sees each removal inside the block, which was measured only for its war twin. The self-check below reads that test again after the loop.
+
+Setup for the Force: found the UN with `event te_debug_un.1`, raise it with option o until it is Supranational, and as a major power table the Standing UN Force and let it carry. Pick a country to be the host, H, that has an ally. `tag H`, take option u for a peacekeeping mission in one of its states, and `tag` back. The self-check reads once a game for each kind of strike, so use a game whose `debug.log` has no `un_strike_goals: strike=force` line yet.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The ally's goal first.** Open a play against H of any type but `dp_conquer_state` (Humiliate, or Return State with a claim). Once H's ally has joined, add a `conquer_state` goal against the ally, then one against H. | Both `conquer_state` goals are gone at once, and A War Goal Struck arrives, saying a goal of the same kind against another country may have gone with them and its infamy has been returned. The play's opening goal stays. `debug.log` has `TE_SELF_CHECK OK un_strike_goals: strike=force type=conquer_state calls=2`. Note our infamy before adding the ally's goal, after it and after the goal on H: the last is 20 below the second (the surcharge given back, #1896). If it is also back to the first, the engine returns a goal's own infamy when the goal is removed. If not, an AI that re-adds a struck goal on H every day pays that goal's infamy every day; file it. | The goal against H stays and the ally's is gone: the deployed `un_force_strike_goal` is the one-call version. Both gone with a BROKEN line: see the self-check row; no infamy comes back then, by design. No infamy back with an OK line: `un_force_collateral_refund_value` read 0, so check `un_strike_chk_calls` is still set when it runs. |
+
+| Line | What it tests | If BROKEN |
+|---|---|---|
+| `TE_SELF_CHECK OK\|BROKEN un_strike_goals` (once a game for each kind, `strike=mandate` and `strike=force`, after its first strike) | Read again after the loop, in the same block, the holder's `play_participant_has_war_goal_of_type_against` finds no goal of the type against the protected country, and the loop stopped before its cap of 30 calls: the test saw each removal at once. The line gives `strike=`, `type=`, `calls=` and the holder's tag. `calls=` above 1 is the case #1892 fixed. | The goals are gone in the game but the line is BROKEN: the play test did not see the removals inside the block. The strike still works, since the goal against the protected country is usually the holder's newest, but the mandate's loop then makes all 30 calls on every strike. Lower the cap if `error.log` shows a line for each empty `remove_war_goal`. A goal of the type against the protected country still there: the holder holds it in a second play, which the test also reads. Look at the holder's plays |

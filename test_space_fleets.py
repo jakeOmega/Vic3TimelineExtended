@@ -381,12 +381,11 @@ class UpkeepTest(unittest.TestCase):
         self.assertNotIn("sr_fleet_upkeep_per_building_value", values)
         refresh = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_upkeep_refresh")
         self.assertRegex(refresh, r"set_variable = \{ name = sr_fleet_upkeep_units value = sr_fleet_upkeep_units_value \}\s*"
-                                  r"if = \{\s*limit = \{ has_variable = sr_fleet_upkeep_per_building \}\s*"
-                                  r"remove_variable = sr_fleet_upkeep_per_building\s*\}\s*sr_fl_upkeep_apply = yes")
-        # Nothing reads the old split's variable any more.
+                                  r"sr_fl_upkeep_apply = yes")
+        # Nothing names the old split's variable any more: its old-save strip
+        # went with vanilla 1.15, which loads no older save (#1407).
         everything = "\n".join(_strip(_raw(p)) for d in ("common", "events") for p in (ROOT / d).rglob("*.txt"))
-        self.assertNotIn("var:sr_fleet_upkeep_per_building", everything)
-        self.assertNotIn("name = sr_fleet_upkeep_per_building", everything)
+        self.assertNotIn("sr_fleet_upkeep_per_building", everything)
         # The count the sweep reads: every state's buildings (an occupied one's
         # included), of a level or more, as the apply walks them.
         count = _block(values, "sr_sc_buildings")
@@ -608,21 +607,24 @@ class PauseTest(unittest.TestCase):
                          "te_sr_sec_space_command")
         def state(cmp, n):
             return f"[{cmp}_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_paused'), '(CFixedPoint){n}' )]\""
-        for key, shown_on in (("je_space_race_widget_sc_rate_figure", state("EqualTo", 0)),
-                              ("je_space_race_widget_sc_rate_paused", state("GreaterThanOrEqualTo", 1)),
-                              ("je_space_race_widget_sc_pause", state("EqualTo", 0)),
-                              ("je_space_race_widget_sc_resume", state("EqualTo", 1)),
-                              ("je_space_race_widget_sc_resuming", state("EqualTo", 2))):
+        # Built a month is an overview cell (owner, 2026-11-14): its word sits in
+        # the cell's "word" override, so the cell is three blocks out.
+        for key, shown_on, depth in (("je_space_race_widget_ovc_sc_rate_word", state("EqualTo", 0), 3),
+                                     ("je_space_race_widget_ovc_sc_rate_word_paused", state("GreaterThanOrEqualTo", 1), 3),
+                                     ("je_space_race_widget_sc_pause", state("EqualTo", 0), 2),
+                                     ("je_space_race_widget_sc_resume", state("EqualTo", 1), 2),
+                                     ("je_space_race_widget_sc_resuming", state("EqualTo", 2), 2)):
             with self.subTest(key=key):
                 i = section.index(f'text = "{key}"')
-                self.assertIn(shown_on, _block_around(section, i, 2))
+                self.assertIn(shown_on, _block_around(section, i, depth))
         self.assertEqual(section.count("GetScriptedGui('sr_sc_pause_sgui').Execute("), 3)
-        # Each row's hover is its own (review of #1287, M6).
-        for figure, hover in (("je_space_race_widget_sc_rate_figure", "je_space_race_widget_sc_rate_tt"),
-                              ("je_space_race_widget_sc_rate_paused", "je_space_race_widget_sc_rate_paused_tt")):
+        # Each cell's hover is its own (review of #1287, M6).
+        for figure, hover in (("je_space_race_widget_ovc_sc_rate_word", "je_space_race_widget_sc_rate_tt"),
+                              ("je_space_race_widget_ovc_sc_rate_word_paused", "je_space_race_widget_sc_rate_paused_tt")):
             with self.subTest(row=figure):
-                row = _block_around(section, section.index(f'text = "{figure}"'), 2)
+                row = _block_around(section, section.index(f'text = "{figure}"'), 3)
                 self.assertIn(f'tooltip = "{hover}"', row)
+                self.assertIn('text = "je_space_race_widget_ovc_sc_rate_cap"', row)   # the cell, caption and all
 
     def test_the_modifier_cuts_the_yards_inputs(self):
         body = _block(_strip(_raw(STATIC)), "sr_space_command_paused")
@@ -2957,12 +2959,13 @@ class DestinationPopupTest(unittest.TestCase):
         rows = _raw(gsf.ROOT / gsf.GUI_OUT)
         body = rows[rows.index("type te_sr_dest_popup_body = flowcontainer"):]
         cls.slots = _gui_blocks(body, "te_sr_dest_slot")
-        cls.fleet_rows = _gui_blocks(rows[rows.index("type te_sr_fleet_rows"):rows.index("type te_sr_location_rows")],
+        cls.fleet_rows = _gui_blocks(rows[rows.index("type te_sr_fleet_rows"):rows.index("type te_sr_location_cells")],
                                      "te_sr_fleet_row")
         cls.display = _strip(_raw(gsf.ROOT / gsf.DISPLAY_OUT))
         cls.sguis = _strip(_raw(SGUIS))
         cls.generated = _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT))
         cls.gen_triggers = _strip(_raw(gsf.ROOT / gsf.TRIGGERS_OUT))
+        cls.gen_values = _strip(_raw(gsf.ROOT / gsf.VALUES_OUT))
 
     def test_one_body_per_slot_and_one_row_per_location(self):
         self.assertEqual(len(self.slots), gsf.SLOTS)
@@ -3083,11 +3086,31 @@ class DestinationPopupTest(unittest.TestCase):
                         self.assertEqual((opened.strip(), wait.strip()), ("visible = no", "visible = no"))
                         continue
                     at_earth = f"EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_{n}_loc_value'), '(CFixedPoint)1' )"
-                    self.assertIn(f"And( {at_earth}, EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
+                    gated = (f"Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
+                             f"'sr_fl_{n}_pace'), '(CFixedPoint)2' ) )")
+                    self.assertIn(f"And3( {at_earth}, {gated}, EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
                                   f"'sr_window_wait_months_{lc.body}'), '(CFixedPoint)0' ) )", opened)
-                    self.assertIn(f"And( {at_earth}, GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
+                    self.assertIn(f"And3( {at_earth}, {gated}, GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
                                   f"'sr_window_wait_months_{lc.body}'), '(CFixedPoint)1' ) )", wait)
                     self.assertIn(f'text = "je_space_race_widget_win_wait_{lc.body}"', wait)
+
+    def test_the_window_is_blank_at_a_torch_or_antimatter_pace(self):
+        """A torch or antimatter fleet (pace 2 and up, rapid response hulls' one
+        step ahead included) leaves in any month, so both window cells read its
+        pace and hide at 2; chemical and fusion keep the window."""
+        for n in range(1, gsf.SLOTS + 1):
+            pace = _block(self.gen_values, f"sr_fl_{n}_pace")
+            with self.subTest(slot=n):
+                self.assertIn(f"value = sr_fl_{n}_drive_value", pace)
+                self.assertRegex(pace, rf"limit = \{{ sr_fl_{n}_all_rapid = yes \}} add = 1")
+        for n, slot in enumerate(self.slots, 1):
+            for lc, row in zip(gsf.LOCATIONS, _gui_blocks(slot, "te_sr_dest_row")):
+                if lc.code == gsf.EARTH:
+                    continue
+                with self.subTest(slot=n, location=lc.key):
+                    for cell in ("dr_win_open_visible", "dr_win_wait"):
+                        self.assertIn(f"ScriptValue('sr_fl_{n}_pace'), '(CFixedPoint)2' ) )",
+                                      _override_body(row, cell))
 
     def test_the_chosen_destination_is_marked(self):
         for n, slot in enumerate(self.slots, 1):
@@ -3115,7 +3138,7 @@ class PostureRowTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         rows = _raw(gsf.ROOT / gsf.GUI_OUT)
-        cls.fleet_rows = _gui_blocks(rows[rows.index("type te_sr_fleet_rows"):rows.index("type te_sr_location_rows")],
+        cls.fleet_rows = _gui_blocks(rows[rows.index("type te_sr_fleet_rows"):rows.index("type te_sr_location_cells")],
                                      "te_sr_fleet_row")
         cls.combat = _strip(_raw(COMBAT_EFFECTS))
         cls.sgui = _block(_strip(_raw(SGUIS)), "sr_fleet_set_posture_sgui")
@@ -3141,9 +3164,10 @@ class PostureRowTest(unittest.TestCase):
         # The button and the lit look share one slot, each with the label.
         choice = self.gui[self.gui.index("type te_sr_posture_choice = widget"):]
         choice = choice[:choice.index("\n\t}\n") + 3]
-        self.assertIn("size = { 104 22 }", choice)
+        self.assertIn("size = { 114 46 }", choice)   # its icon over its word (the fleet cards)
         self.assertIn("using = selected_tabs", choice)
         self.assertEqual(choice.count('block "pc_label"'), 2)
+        self.assertEqual(choice.count('block "pc_icon"'), 2)
         # The posture line keeps the combat line's gate (at Earth, only while a
         # lunar world may be closed in on).
         combat = row_type[row_type.index('block "fl_combat_visible"'):]
@@ -3565,7 +3589,7 @@ class TargetPopupTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         rows = _raw(gsf.ROOT / gsf.GUI_OUT)
-        cls.fleet_rows = _gui_blocks(rows[rows.index("type te_sr_fleet_rows"):rows.index("type te_sr_location_rows")],
+        cls.fleet_rows = _gui_blocks(rows[rows.index("type te_sr_fleet_rows"):rows.index("type te_sr_location_cells")],
                                      "te_sr_fleet_row")
         cls.slots = _gui_blocks(rows[rows.index("type te_sr_ftarget_popup_body"):], "te_sr_ftarget_slot")
         cls.generated = _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT))
@@ -3671,7 +3695,7 @@ class ButtonGateTest(unittest.TestCase):
     def setUpClass(cls):
         cls.sguis = _strip(_raw(SGUIS))
         rows = _raw(gsf.ROOT / gsf.GUI_OUT)
-        cls.fleet_rows = _gui_blocks(rows[rows.index("type te_sr_fleet_rows"):rows.index("type te_sr_location_rows")],
+        cls.fleet_rows = _gui_blocks(rows[rows.index("type te_sr_fleet_rows"):rows.index("type te_sr_location_cells")],
                                      "te_sr_fleet_row")
         cls.loc = _raw(ROOT / "localization/english/te_journal_entries_l_english.yml")
 

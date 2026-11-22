@@ -263,6 +263,12 @@ gm_status_code = {
 		limit = { gm_state_is_contested = yes }
 		value = 4
 	}
+	# The rule switched off mid-game: no card in the state panel, and no
+	# controls on it.
+	if = {
+		limit = { gm_system_enabled = no }
+		value = 0
+	}
 }
 
 # ---- Names (v2 §3), for the name patterns' years -----------------------------
@@ -600,7 +606,7 @@ gm_policy_factor_culture = {
 	if = {
 		limit = {
 			gm_policy_is = { P = culture STANDARD = yes }
-			has_game_rule = cultural_hegemony_enabled
+			te_cultural_hegemony_on = yes
 		}
 		value = 1.5
 	}
@@ -637,7 +643,7 @@ gm_policy_factor_prestige = {
 	if = {
 		limit = {
 			gm_policy_is = { P = culture STANDARD = yes }
-			NOT = { has_game_rule = cultural_hegemony_enabled }
+			NOT = { te_cultural_hegemony_on = yes }
 		}
 		value = 1.5
 	}
@@ -1931,6 +1937,28 @@ gm_disp_count_listed_rest = {
 	min = 0
 }
 
+# The grandeur of those rows, for Our Monuments' summary line (its Short and
+# Collapsed views): each finished monument's, a state's own and any beside
+# another, but the contested, as gm_disp_count_listed_rest counts them.
+gm_disp_listed_grandeur = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			has_building = building_grand_monument
+			gm_state_is_contested = no
+		}
+		add = gm_state_primary_grandeur
+	}
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		every_in_list = {
+			variable = gm_monuments_held
+			limit = { gm_mon_is_contested = no }
+			add = gm_mon_grandeur
+		}
+	}
+}
+
 # State scope. 1 while a finished monument stands here: its row is in Our
 # Monuments (a construction site's is in Awaiting Dedication).
 gm_state_disp_listed = {
@@ -1946,8 +1974,12 @@ gm_state_disp_listed = {
 # it still being built (Dedicate waits for them).
 gm_state_disp_site = {
 	value = 0
+	# Not with the rule switched off mid-game: the card carries Dedicate.
 	if = {
-		limit = { gm_state_has_site = yes }
+		limit = {
+			gm_system_enabled = yes
+			gm_state_has_site = yes
+		}
 		value = 1
 	}
 }
@@ -2449,27 +2481,6 @@ gm_disp_frac_industrial = {
 	max = 1
 }
 
-# ---- Older saves' migration self-check (sites spec 2026-10-18 §3.5) --------------
-# State scope: the grandeur recorded before the migration, and the band the
-# grandeur after must fall in (a hundredth below, a twentieth above).
-gm_state_mig_was = {
-	value = 0
-	if = {
-		limit = { has_variable = gm_mig_before }
-		value = var:gm_mig_before
-	}
-}
-
-gm_state_mig_low = {
-	value = gm_state_mig_was
-	multiply = 0.99
-}
-
-gm_state_mig_high = {
-	value = gm_state_mig_was
-	multiply = 1.05
-}
-
 # ---- Upkeep (sites spec 2026-10-18 §3.4; policy spec 2026-10-23 § 5) -----------------
 # State scope. The multiplier on gm_upkeep: Grand Monuments cost nothing to
 # maintain (owner, 2026-10-23). At -1, gm_upkeep cancels pm_maintenance's
@@ -2496,11 +2507,12 @@ gm_state_merge_check_was = {
 # over world GDP when it is counted (gm_state_count_site_levels), so the same
 # share of the world's wealth buys the same grandeur in any era. The 1836 figure
 # is one constant for every save (spec §5), read as the rate reads it
-# (global_gdp_script_value): 402,505,869 at a new game's first pass, February
-# 1836 (TE_SELF_CHECK gm_world_base, 2026-10-25). The first figure, 334,000,000,
-# summed every country's latest GDP from a save of 1836.1.20 and read a sixth low.
+# (global_gdp_script_value): 404,148,929 at a 1.15 new game's first pass,
+# February 1836 (TE_SELF_CHECK gm_world_base, 2026-11-05; 1.14.5 read 402,505,869
+# on 2026-10-25). The first figure, 334,000,000, summed every country's latest GDP
+# from a save of 1836.1.20 and read a sixth low.
 gm_world_gdp_1836 = {
-	value = 402500000
+	value = 404100000
 }
 
 # The grandeur a level adds in 1836 (owner, 2026-10-19: five, up from one): the

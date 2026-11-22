@@ -290,11 +290,11 @@ un_ai_membership_will = {
 	add = un_ai_convention_terms
 	# A member's stance on the order, and an outsider's rejection of it.
 	if = {
-		limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+		limit = { has_variable = un_champion_order_cost_on }
 		add = 20
 	}
 	if = {
-		limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+		limit = { un_undermines_the_order = yes }
 		add = -30
 	}
 	if = {
@@ -453,11 +453,11 @@ un_ai_dues_will = {
 	# The levy, and the grant we keep only while we pay (un_dev_fund_good_standing).
 	add = un_ai_money_points
 	if = {
-		limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+		limit = { has_variable = un_champion_order_cost_on }
 		add = 40
 	}
 	if = {
-		limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+		limit = { un_undermines_the_order = yes }
 		add = -60
 	}
 	if = {
@@ -554,7 +554,7 @@ un_ai_development_will = {
 		add = 20
 	}
 	if = {
-		limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+		limit = { has_variable = un_champion_order_cost_on }
 		add = 20
 	}
 	# un_economy_triggers.txt
@@ -603,7 +603,7 @@ un_ai_development_will = {
 		add = -30
 	}
 	if = {
-		limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+		limit = { un_undermines_the_order = yes }
 		add = -40
 	}
 	# Paying into a fund that pays us is half a circle.
@@ -650,7 +650,7 @@ un_ai_development_generosity = {
 		add = 20
 	}
 	if = {
-		limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+		limit = { has_variable = un_champion_order_cost_on }
 		add = 20
 	}
 	# Half a size, since a great power almost always has a recipient among its
@@ -800,7 +800,7 @@ un_ai_peacekeeping_will = {
 		add = 15
 	}
 	if = {
-		limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+		limit = { has_variable = un_champion_order_cost_on }
 		add = 15
 	}
 	if = {
@@ -835,7 +835,7 @@ un_ai_peacekeeping_will = {
 		add = -30
 	}
 	if = {
-		limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+		limit = { un_undermines_the_order = yes }
 		add = -40
 	}
 	add = un_ai_treasury_penalty
@@ -925,7 +925,7 @@ un_ai_order_will = {
 	}
 	# The Assembly against us: its sanctions, or a record it could act on.
 	if = {
-		limit = { has_modifier = un_sanctions_target_modifier }
+		limit = { has_variable = un_sanctions_target_on }
 		add = -20
 	}
 	if = {

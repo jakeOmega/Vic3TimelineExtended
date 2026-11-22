@@ -677,10 +677,6 @@ nuclear_weapon_events.3 = {
 		# triggered by nuclear strike
 	}
 
-	immediate = {
-		post_notification = industrial_nuke_fails_defender
-	}
-
 	option = {
 		name = nuclear_weapon_events.3.a
 		default_option = yes
@@ -705,10 +701,6 @@ nuclear_weapon_events.4 = {
 
 	trigger = {
 		# triggered by nuclear strike
-	}
-
-	immediate = {
-		post_notification = industrial_nuke_fails_attacker
 	}
 
 	option = {
@@ -752,10 +744,6 @@ nuclear_weapon_events.5 = {
 
 	trigger = {
 		# triggered by nuclear strike
-	}
-
-	immediate = {
-		post_notification = tactical_nuke_succeeds_defender
 	}
 
 	option = {
@@ -848,10 +836,6 @@ nuclear_weapon_events.7 = {
 		# triggered by nuclear strike
 	}
 
-	immediate = {
-		post_notification = tactical_nuke_fails_defender
-	}
-
 	option = {
 		name = nuclear_weapon_events.7.a
 		default_option = yes
@@ -876,10 +860,6 @@ nuclear_weapon_events.8 = {
 
 	trigger = {
 		# triggered by nuclear strike
-	}
-
-	immediate = {
-		post_notification = tactical_nuke_fails_attacker
 	}
 
 	option = {
@@ -1257,10 +1237,6 @@ nuclear_weapon_events.12 = {
 		# triggered by nuclear strike
 	}
 
-	immediate = {
-		post_notification = industrial_nuke_succeeds_attacker
-	}
-
 	option = {
 		name = nuclear_weapon_events.12.a
 		default_option = yes
@@ -1287,10 +1263,6 @@ nuclear_weapon_events.13 = {
 		# triggered by nuclear strike
 	}
 
-	immediate = {
-		post_notification = industrial_nuke_fails_defender
-	}
-
 	option = {
 		name = nuclear_weapon_events.13.a
 		default_option = yes
@@ -1315,10 +1287,6 @@ nuclear_weapon_events.14 = {
 
 	trigger = {
 		# triggered by nuclear strike
-	}
-
-	immediate = {
-		post_notification = industrial_nuke_fails_attacker
 	}
 
 	option = {
@@ -1696,7 +1664,9 @@ nuclear_weapon_events.18 = {
 		}
 	}
 
-	# Option C — Has nuclear program: "Stay the course."
+	# Option C — Has nuclear program: "Stay the course." Not the default (#806):
+	# D, open to everyone, is the event's one default, so a country with a
+	# programme that lets the alert lapse lobbies too.
 	option = {
 		name = nuclear_weapon_events.18.opt_c
 		trigger = {
@@ -1705,7 +1675,6 @@ nuclear_weapon_events.18 = {
 			has_variable = nuclear_weapon_program_progress
 			has_variable = nuclear_weapons_program_funding
 		}
-		default_option = yes
 		custom_tooltip = {
 			text = NW_PROGRESS_ADD_5_TT
 			change_variable = { name = nuclear_weapon_program_progress add = 5 }
@@ -1746,6 +1715,9 @@ nuclear_weapon_events.18 = {
 	# queueing an offer the reserved floor would silently drop.
 	# nuclear_npt_lobbied tells un_events.14 that we asked for it: an AI that
 	# did then tables the treaty rather than passing or refusing it.
+	#
+	# The event's only default, and untriggered, so it is valid for every
+	# recipient (#806): which of two valid defaults the engine takes is unread.
 	option = {
 		name = nuclear_weapon_events.18.opt_d
 		default_option = yes
@@ -1768,7 +1740,7 @@ nuclear_weapon_events.18 = {
 			else_if = {
 				limit = {
 					scope:proliferating_country = {
-						je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier }
+						has_variable = un_nonproliferation_modifier_on
 					}
 				}
 				custom_tooltip = {
@@ -2247,9 +2219,11 @@ nuclear_weapon_events.20 = {
 # ============================================================================
 # EVENT 21: A Moment of Terror — Nuclear Close Call
 # ============================================================================
-# Rare random event for nuclear powers. A false alarm, training exercise
-# malfunction, or near-accidental launch. Based on real Cold War incidents
-# (Petrov, Able Archer, Norwegian rocket incident, etc.).
+# Rare random event for a country with no arsenal in service whose warning
+# radar watches a rival believed armed: a false alarm of an incoming strike,
+# traced to its own equipment (the Norwegian rocket incident seen from the
+# other side). It has nothing to launch, so no line may speak of a launch, an
+# arsenal or a retaliation (#1619).
 # ============================================================================
 
 nuclear_weapon_events.21 = {
@@ -2273,21 +2247,30 @@ nuclear_weapon_events.21 = {
 	# (the Unconfirmed Warning family, nuclear_incident.1-.5) are rolled by
 	# nd_roll_incident from its posture and readiness; this one reads neither.
 	# The deterrence half of je_nuclear_program is gated on nd_is_armed.
+	# Until #1619 this also asked for the nuclear_power modifier, which only
+	# a country that has held a warhead carries: with "not armed" that left a
+	# country that had used or lost its last one, so the event almost never
+	# fired. It now needs no arsenal, past or present: warning stations
+	# (radar) and a rival the world believes armed (nd_believed_armed, which
+	# also tests the game rule). The same tests as the pool entry in
+	# common/on_actions/extra_on_actions.txt.
 	trigger = {
-		has_modifier = nuclear_power
-		any_rival_country = { has_modifier = nuclear_power }
+		has_technology_researched = radar
 		NOT = { nd_is_armed = yes }
+		any_rival_country = { nd_believed_armed = yes }
 	}
 
 	immediate = {
 	}
 
-	# "Review our safety procedures." — small prestige loss, stability
+	# "Review our warning procedures." — small prestige loss, and the review
+	# (nuclear_warning_review: nuclear_safety_review's values under a name
+	# that needs no nuclear program)
 	option = {
 		name = nuclear_weapon_events.21.a
 		default_option = yes
 		add_modifier = { name = prestige_loss_small days = normal_modifier_time is_decaying = yes }
-		add_modifier = { name = nuclear_safety_review days = normal_modifier_time is_decaying = yes }
+		add_modifier = { name = nuclear_warning_review days = normal_modifier_time is_decaying = yes }
 		ai_chance = {
 			base = 5
 			modifier = { trigger = { ruler_is_cautious = yes } add = 4 }
@@ -2310,14 +2293,19 @@ nuclear_weapon_events.21 = {
 			base = 3
 			modifier = { trigger = { ruler_is_aggressive = yes } add = 3 }
 			modifier = {
+				# A rival whose arsenal, as the world estimates it (not its
+				# secret, docs/systems/nuclear_crisis_design.md §0.6), is
+				# larger than anything we hold. We hold none in service, and
+				# usually no stockpile variable at all; a disarmed country
+				# keeps one.
 				trigger = {
-					has_variable = nuclear_weapon_stockpile
 					any_rival_country = {
-						has_modifier = nuclear_power
-						# The rival's arsenal as the world estimates it, not its secret
-						# (docs/systems/nuclear_crisis_design.md §0.6).
+						nd_believed_armed = yes
 						has_variable = nd_public_estimate
-						var:nd_public_estimate > ROOT.var:nuclear_weapon_stockpile
+						OR = {
+							NOT = { ROOT = { has_variable = nuclear_weapon_stockpile } }
+							var:nd_public_estimate > ROOT.var:nuclear_weapon_stockpile
+						}
 					}
 				}
 				add = 5
@@ -2720,7 +2708,7 @@ nuclear_weapon_events.25 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): the scopes it reads are saved by the calling event before the call; a filter
 		exists = scope:nuclear_pg_guarantor
 		exists = scope:proliferating_country
 	}
@@ -2849,7 +2837,7 @@ nuclear_weapon_events.26 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): scope:nuclear_pg_beneficiary is the answering country, saved by .25 before its options; a filter
 		exists = scope:nuclear_pg_beneficiary
 	}
 
@@ -2883,7 +2871,7 @@ nuclear_weapon_events.27 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the scopes it reads are saved by the calling event before the call; cancels if the victim dies before it fires
 		exists = scope:nd_claim_victim
 		scope:nd_claim_victim = { is_country_alive = yes }
 	}
@@ -2914,6 +2902,10 @@ nuclear_weapon_events.27 = {
 					limit = { var:nd_peacetime_struck_by ?= ROOT }
 					remove_variable = nd_peacetime_struck_by
 				}
+				# The claimant hears the answer (#1559), with the sum as paid.
+				set_variable = { name = nd_claim_answer value = 1 days = 60 }
+				set_variable = { name = nd_claim_paid value = nd_loose_compensation_value days = 60 }
+				trigger_event = { id = nuclear_weapon_events.33 popup = yes }
 			}
 		}
 		ai_chance = {
@@ -2935,6 +2927,10 @@ nuclear_weapon_events.27 = {
 		name = nuclear_weapon_events.27.b
 		scope:nd_claim_victim = {
 			change_relations = { country = ROOT value = -30 }
+			hidden_effect = {
+				set_variable = { name = nd_claim_answer value = 2 days = 60 }
+				trigger_event = { id = nuclear_weapon_events.33 popup = yes }
+			}
 		}
 		ai_chance = {
 			base = 2
@@ -2943,6 +2939,78 @@ nuclear_weapon_events.27 = {
 				add = 3
 			}
 		}
+	}
+}
+
+# The answer to a demand for reparations, told to the country that made it
+# (#1559): nuclear_weapon_events.27's two options fire it on
+# scope:nd_claim_victim, which until now heard neither the payment nor the
+# refusal. nd_claim_answer is 1 paid, 2 refused; nd_claim_paid is the sum.
+# scope:nd_loose_payer, saved by .27, is the country that answered. The option
+# changes nothing: it shows what the answer already did. nuclear_loose.8 is the
+# same pattern for a loose warhead.
+nuclear_weapon_events.33 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_diplomacy_talks.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = nuclear_weapon_events.33.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = nuclear_weapon_events.33.d_paid
+				trigger = { var:nd_claim_answer = 1 }
+			}
+			triggered_desc = {
+				desc = nuclear_weapon_events.33.d_refused
+				trigger = { always = yes }
+			}
+		}
+	}
+	flavor = nuclear_weapon_events.33.f
+
+	duration = 3
+
+	trigger = {
+		has_variable = nd_claim_answer
+		exists = scope:nd_loose_payer
+	}
+
+	option = {
+		name = {
+			trigger = { var:nd_claim_answer = 1 }
+			text = nuclear_weapon_events.33.a_paid
+		}
+		name = {
+			trigger = { NOT = { var:nd_claim_answer = 1 } }
+			text = nuclear_weapon_events.33.a_refused
+		}
+		default_option = yes
+		ai_chance = { base = 1 }
+		show_as_tooltip = {
+			if = {
+				limit = {
+					var:nd_claim_answer = 1
+					has_variable = nd_claim_paid
+				}
+				add_treasury = var:nd_claim_paid
+				change_relations = { country = scope:nd_loose_payer value = 20 }
+				custom_tooltip = nuclear_weapon_events.33.settled_tt
+			}
+			else = {
+				change_relations = { country = scope:nd_loose_payer value = -30 }
+			}
+		}
+	}
+
+	after = {
+		remove_variable = nd_claim_answer
+		remove_variable = nd_claim_paid
 	}
 }
 
@@ -2966,7 +3034,7 @@ nuclear_weapon_events.28 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: nd_claim_schedule_truth saves both scopes before the call; cancels if either country dies before the truth comes out
 		exists = scope:nd_truth_launcher
 		exists = scope:nd_truth_victim
 		scope:nd_truth_launcher = { is_country_alive = yes }
@@ -3027,7 +3095,7 @@ nuclear_weapon_events.29 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: nd_claim_schedule_truth saves both scopes before the call; cancels if either country dies before the truth comes out
 		exists = scope:nd_truth_launcher
 		exists = scope:nd_truth_victim
 		scope:nd_truth_launcher = { is_country_alive = yes }
@@ -3183,5 +3251,149 @@ nuclear_weapon_events.32 = {
 
 	immediate = {
 		nd_reach_refresh = yes
+	}
+}
+
+# The nuclear_raze_rebuild self-check's read (nd_raze_selfcheck_arm, nuclear_raze_effects.txt),
+# three days after a city strike rebuilt a building: on the country the check was armed for, which
+# holds the state in nd_raze_sc_state. No trigger: a delayed event whose trigger is false when it
+# is queued is dropped (scripting_best_practices.md), so its conditions are in immediate.
+nuclear_weapon_events.34 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = { has_variable = nd_raze_sc_state }
+			save_scope_as = nd_raze_sc_country
+			var:nd_raze_sc_state = {
+				save_scope_as = nd_raze_sc_site
+				nd_raze_selfcheck_read = yes
+			}
+			remove_variable = nd_raze_sc_state
+		}
+	}
+}
+
+# ---- .35 / .36 A delivery leg fielded ----------------------------------------
+# 2026-11-20 delivery spec §4.1, phase 2 plan D12. nd_leg_notices_icbms (.35)
+# and nd_leg_notices_subs (.36), from nd_field_leg (nuclear_weapon_effects.txt),
+# send each to the fielder at once and, a week later, to its rivals either way,
+# every country believed armed and its neighbors. scope:nd_leg_fielder is the
+# fielder: its own text and option, or the world's. Fielding is public and
+# isn't use, so neither writes the taboo's ledger. No trigger: the sender's
+# test is the recipient list, and a delayed event whose trigger is false when
+# it is queued is dropped. The fielder's text says when an arsenal ceiling
+# holds the warheads its focus returns to (d_own_held; the 2a review), and
+# .35's flavor splits as its text does: the crews for the fielder, remarks
+# about another country's missiles for the rest.
+nuclear_weapon_events.35 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/missile_parade.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = nuclear_weapon_events.35.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					THIS = scope:nd_leg_fielder
+					nd_taboo_has_ceiling = yes
+					nd_stockpile >= nd_taboo_effective_ceiling_value
+				}
+				desc = nuclear_weapon_events.35.d_own_held
+			}
+			triggered_desc = {
+				trigger = { THIS = scope:nd_leg_fielder }
+				desc = nuclear_weapon_events.35.d_own
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_weapon_events.35.d_world
+			}
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { THIS = scope:nd_leg_fielder }
+				desc = nuclear_weapon_events.35.f_own
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_weapon_events.35.f_world
+			}
+		}
+	}
+
+	duration = 3
+
+	option = {
+		name = nuclear_weapon_events.35.a
+		trigger = { THIS = scope:nd_leg_fielder }
+		default_option = yes
+		ai_chance = { base = 1 }
+	}
+
+	option = {
+		name = nuclear_weapon_events.35.b
+		trigger = { NOT = { THIS = scope:nd_leg_fielder } }
+		default_option = yes
+		ai_chance = { base = 1 }
+	}
+}
+
+nuclear_weapon_events.36 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/missile_launch_crew.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = nuclear_weapon_events.36.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					THIS = scope:nd_leg_fielder
+					nd_taboo_has_ceiling = yes
+					nd_stockpile >= nd_taboo_effective_ceiling_value
+				}
+				desc = nuclear_weapon_events.36.d_own_held
+			}
+			triggered_desc = {
+				trigger = { THIS = scope:nd_leg_fielder }
+				desc = nuclear_weapon_events.36.d_own
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_weapon_events.36.d_world
+			}
+		}
+	}
+	flavor = nuclear_weapon_events.36.f
+
+	duration = 3
+
+	option = {
+		name = nuclear_weapon_events.36.a
+		trigger = { THIS = scope:nd_leg_fielder }
+		default_option = yes
+		ai_chance = { base = 1 }
+	}
+
+	option = {
+		name = nuclear_weapon_events.36.b
+		trigger = { NOT = { THIS = scope:nd_leg_fielder } }
+		default_option = yes
+		ai_chance = { base = 1 }
 	}
 }

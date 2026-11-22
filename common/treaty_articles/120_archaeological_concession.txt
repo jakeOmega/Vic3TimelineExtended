@@ -50,7 +50,8 @@ archaeological_concession = {
 	# ROOT is the prospective source (the host), scope:other_country the
 	# prospective target (the sponsor). A war goal enforcing the article checks
 	# this and not can_ratify: the host must own a state with a site open to
-	# the sponsor.
+	# the sponsor, and the sponsor must know a way to dig (can_ratify's test
+	# too, until 2026-11-08 only there).
 	possible = {
 		gm_system_enabled = yes
 		NOT = { is_country_type = decentralized }
@@ -58,6 +59,10 @@ archaeological_concession = {
 			NOT = { is_country_type = decentralized }
 		}
 		gm_arch_country_offers_site = { WHO = scope:other_country }
+		custom_tooltip = {
+			text = gm_arch_article_sponsor_tech_concession_tt
+			scope:other_country = { gm_arch_method_antiquarian_ok = yes }
+		}
 	}
 
 	can_ratify = {
@@ -130,6 +135,8 @@ archaeological_concession = {
 				add = 0.01
 			}
 		}
+
+		# REVIEWED 2026-11-08 (ai_demand_weight): no proposal_weight or wargoal_score_multiplier. possible already holds the demand's worth: the host must own a site open to the sponsor, and the sponsor must be able to dig it (Romanticism).
 
 		inherent_accept_score = {
 			value = 0

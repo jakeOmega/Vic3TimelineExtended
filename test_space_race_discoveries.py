@@ -232,10 +232,15 @@ class DiscoveryTests(unittest.TestCase):
                     self.assertNotIn('random_list', between)
                     self.assertLess(found.start(), text.index('trigger_event', start))
 
-    def test_twenty_deliveries_have_complete_choices_art_and_reward_repairs(self):
-        sync = self.effects['sr_sync_colony_discovery_modifiers'][1]
-        repaired = {value(arg, 'MODIFIER') for key, arg in occurrences(sync)
-                    if key == 'sr_sync_colony_modifier_base'}
+    def test_twenty_deliveries_have_complete_choices_art_and_declarations(self):
+        # The entry declares each outcome while its holder's <modifier>_held is
+        # set (1.15 scaling modifiers, #1404): a revolution's winner inherits the
+        # variable, so no repair puts the modifier back.
+        declared = set(re.findall(
+            r'modifier = (sr_discovery_\w+)\s*value = \{\s*value = 0\s*if = \{\s*limit = \{ has_variable = \1_held \}'
+            r'\s*add = 1\s*\}',
+            (ROOT / 'common/journal_entries/sr_sites_generated.txt').read_text('utf-8-sig')))
+        self.assertEqual(len(declared), 40)
         all_loc = ''.join(p.read_text('utf-8-sig') for p in
                           (ROOT / 'localization/english').glob('*.yml'))
         loc_keys = set(re.findall(r'^ ([\w.]+):', all_loc, re.M))
@@ -262,9 +267,12 @@ class DiscoveryTests(unittest.TestCase):
             self.assertEqual(value(options[0][1], 'default_option'), 'yes')
             for _, option in options:
                 self.assertIn(value(option, 'name'), loc_keys)
-                mod = value(value(option, 'sr_grant_colony_modifier'), 'MODIFIER')
+                chosen = [key for key in option if key.startswith('sr_site_choose_')]
+                self.assertEqual(len(chosen), 1)
+                self.assertEqual(value(option, chosen[0]), 'yes')
+                mod = chosen[0][len('sr_site_choose_'):]
                 self.assertIn(mod, self.modifiers)
-                self.assertIn(mod, repaired)
+                self.assertIn(mod, declared)
                 self.assertIn(mod, loc_keys)
             trigger = value(event, 'trigger')
             state = self.state()
@@ -277,7 +285,8 @@ class DiscoveryTests(unittest.TestCase):
         actions = (ROOT / 'common/on_actions/space_race_on_actions.txt').read_text('utf-8-sig')
         effects = (ROOT / 'common/scripted_effects/space_race_effects.txt').read_text('utf-8-sig')
         self.assertEqual(actions.count('sr_monthly_colony_discoveries = yes'), 1)
-        self.assertIn('sr_sync_colony_discovery_modifiers = yes', effects)
+        self.assertNotIn('sr_sync_colony_discovery_modifiers', effects)
+        self.assertNotIn('sr_sync_colony_discovery_modifiers', (ROOT / 'common/scripted_effects/space_race_discovery_effects.txt').read_text('utf-8-sig'))
         monthly = repr(self.effects['sr_monthly_colony_discoveries'])
         self.assertNotIn('sr_solar_colonization_running', monthly)
         self.assertNotIn('sr_ai_should_participate', monthly)

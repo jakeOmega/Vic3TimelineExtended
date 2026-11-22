@@ -7,26 +7,163 @@ a set of systems that run alongside the base game: a banking cycle with monetary
 policy, a construction market, climate change, decolonization, nuclear weapons,
 a United Nations, a space race, cultural and covert competition between powers,
 and social movements. Most of these systems have their own journal entry, and
-most can be switched off with a game rule.
+most can be switched off with a game rule. The journal lists the systems'
+entries together in a section of their own, Timeline Extended Systems, and the
+social movements in another, Rights and Society.
 
 The mod adds one button to the sidebar, under Map List, in every game. It opens
 the Timeline Extended window: first the [Nation tab](#the-nation-tab), then a
 tab each for the space race, your Grand Monuments and your colonial empire, the
-same panels as their journal entries, and one for the seabed. Two more rows of
+same panels as their journal entries, one for the seabed and one for your
+[power grids](03-economy.md#power-grids). Two more rows of
 tabs hold the mod's tabs in the Budget, Market, Population, Society, Diplomacy
 and Military panels, the same as there, so every system is in one place. Full Screen, at
 the window's top right, spreads it across the screen, each tab in columns; Side Panel, at its top
 left there, brings it back to the width of the other panels. The tab you chose
-stays chosen when you switch.
+stays chosen when you switch. Map Room, beside it, opens the Map Room (below).
 
 Each system has a Help page that explains how it works, with a heading for
 each topic. The "?" opens it: at the right of the tab's header, and at the top
 right of the system's journal entry and of a state's Demographics subtab. Press
 Escape or click outside the page to close it.
 
+A tab with a journal entry ends on the entry's modifier icons, the ones its
+journal page shows at the top right, above the Open Journal Entry button. Hover
+an icon for its effects.
+
+The Map Room is a page of world maps with a button for each, in seven
+groups. Click a group's header to open it or close it; every group starts
+closed, and one you open stays open as you switch maps.
+
+| Group | Maps |
+|---|---|
+| Society | Turmoil, Devastation, Urban People |
+| Classes | Aristocrats, Clergymen, Capitalists, Academics: each class's share of the state's people |
+| Economy | GDP per Capita, Gini Coefficient, Dynastic Wealth, Ownership, Company HQs, Investment, Trade Capacity |
+| Migration and Cities | Base Comfort, Current Comfort, Crowding Penalty, Tourism Appeal, City Rank, Population Density |
+| Military | Armed Forces, Fighting-Age Men, War Dead |
+| Systems | A map for each of nine systems: Emissions, Nuclear Weapons, Agent Networks, United Nations, Political Models, Ocean Basins, Grandeur, Colonies, Power Grids |
+| Census | Life Expectancy, Infant Mortality, Leading Cause, Birth Rate, Death Rate, Natural Change, Fertility, Median Age, Aged 65 and Over, Sex Balance, Net Migration, Population Growth, Health Care, Family Planning |
+
+Hover a state for its figure. Trade Capacity colors each state by its own
+Trade Capacity, what its Trade Center can carry. Investment colors it by what
+its owners pay into the Investment Pool each week, an estimate from the
+profit of its financial districts, manor houses and company headquarters.
+Population Density colors it by its people per km² of land; where countries
+split a state region, each part takes the region's land in proportion to its
+provinces.
+
+A map of figures shows how states differ now, not how the world has moved: its
+colors run from the fifth lowest state in the world to the fifth highest, the
+few beyond each end at its colors' limits, unless Map Options (below) sets
+another area or trim. The button's tooltip gives the range and what it was
+measured over. The range is measured when you pick a map and again each month. A map
+with a meaningful middle keeps it: Fertility's is replacement, Natural
+Change's, Net Migration's and Population Growth's none, Sex Balance's even and the
+comfort maps' no penalty, cream in each map's own colors, and each side's colors
+run to the world's extreme on that side.
+Where every state is on one side, the colors run over the states there, the
+middle's color at the one nearest it. Agent Networks keeps its fixed scale, 0 to 100, and City Rank its ranks.
+The two comfort maps show what a
+state's Local Climate does to its migration attraction: Base Comfort before any
+technology eases it, Current Comfort after its owner's, in the same colors so
+you can compare them. Crowding Penalty is the cut Migration Crowding makes, and
+Tourism Appeal the state's Base Appeal; it and the comfort maps are gray for a
+game's first month. City Rank shows the world's city ranking that tourism's
+Cities bonus reads: the 20 largest cities amber to crimson, the rest in blue
+that pales as the rank falls. Company HQs colors each state that holds a
+company's headquarters by their weekly profit, sets a loss apart (red in the
+map's own colors), and leaves every other state gray; gold stripes mark a
+company's regional headquarters.
+Ownership colors a state by who holds most of its buildings, private owners
+gold, their own workers green and the state red, paler where the lead is
+narrow. Population Growth counts land changing hands as well as births, deaths
+and migration. Armed Forces counts each state's Soldiers and Officers,
+Fighting-Age Men its men aged 20 to 39, the pool conscription draws on, and
+War Dead its deaths to war and devastation in the last census year. The census
+shares a country's war dead out by where its soldiers are, so War Dead shows
+where the dead came from, not where they fell. Emissions colors a state by its
+share of the world's emissions last year. Nuclear Weapons shows the world's
+nuclear powers as the world sees them, the countries that host your weapons or
+shelter under your umbrella, and, while the world believes you armed, those
+whose independence you guarantee; Agent Networks shades each country by your
+network there. Power Grids colors each grid, bordering grids apart, with its
+hub striped white and a station on no grid gray.
+Colonies colors each colony by its empire's colonial stability. Leading Cause
+colors a state by what killed most of its people, in the colors of the Causes
+of Death chart, full where that cause took 90% of the deaths and paler as its
+share falls toward 30%. Stripes in a second cause's color mark a state where
+that cause took at least half as many deaths as the leader. Leading Cause,
+Birth Rate, Death Rate, Natural Change, Net Migration and War Dead need a
+state's first full census year, and Population Growth its second yearly count,
+so they start gray.
+
+Map Options, below the groups, changes where the Map Room draws its maps,
+how a map of figures measures its range, the scale its colors run on and the
+colors themselves. Its header names whatever is off its default, and the page
+says so at the top.
+
+| Option | Settings | What it does |
+|---|---|---|
+| Area | World, Continent, Market, Power Bloc, Country | Limits every map to one continent, your market, your power bloc or your own country. States outside turn slate and show no figure, and a map of figures runs its colors over the states inside. |
+| Outliers | Trim 4 Each End, Keep All, Trim 5% | Sets how many states each end of a range leaves out: four, none, or 5% of the states with a figure. |
+| Scale | Map Default, Linear, Logarithmic, Ranked | Sets how the colors run between the range's ends: on the curve drawn for the map, straight, by doublings, or by each state's place in line. |
+| Color | Map Default, Colorblind-Safe, Grayscale | Sets the colors a map of figures is painted in: the map's own, a ramp that stays readable with color blindness, or grays. |
+
+Limit GDP per Capita to Europe and its colors run over Europe's states alone,
+so you see how they differ where the world map shows them all as rich.
+Continent starts on the one your capital stands in,
+and each continent's tooltip lists its strategic regions: the Middle East and
+Siberia count as Asia, Mexico and the Caribbean as North America. Market,
+Power Bloc and Country follow your country, a month behind at most; if you
+leave your bloc, the area goes back to the world. In an area smaller than the
+world, Trim 4 Each End leaves out at most a tenth of the area's states at each
+end. Outliers, Scale and Color do nothing to a map of categories or on a fixed
+scale, such as Leading Cause or City Rank, and their buttons are grayed there.
+The options apply to the Map Room only: a system's own journal entry draws its
+map over the whole world, on its own curve and in its own colors, whatever you
+set here.
+
+Map Default leaves each map on the curve drawn for its figure: straight for
+some, most of the color for the common figures on others, a doubling at a time
+for money and head counts. Linear runs the colors straight instead.
+Logarithmic gives each
+doubling the same share of the color, so low figures spread apart; on a map
+with a meaningful middle it doubles by the distance from the middle on each
+side, and the middle keeps its color. Ranked colors each state by its place in
+line, lowest to highest, with states that share a figure sharing a place, so
+no outlier matters and the Outliers buttons are grayed. A map with a
+meaningful middle ranks each side outward from it. A Ranked map takes its
+places when it is measured, so it can be a month old: Turmoil under Ranked
+moves at the turn of the month, not from week to week.
+
+Colorblind-Safe paints every map of figures from one ramp, pale yellow at the
+low end to brown at the high, which stays readable with red-green or
+blue-yellow color blindness. A map with a meaningful middle runs orange below
+it and purple above, near white at it. A state its map sets apart below its
+scale, such as a company headquarters at a loss, is blue. Grayscale runs light
+gray at the low end to dark gray at the high, with a meaningful middle at the
+middle gray; a state with no figure, with none, or off the scale is striped
+where the other colors leave it gray or pale, since a gray of its own would
+read as a figure, and Company HQs' gold stripes are not drawn.
+
+A map's tooltip follows the options: it says what the map shows, its range
+now, the scale in force and the colors in force, so it tells you which color
+is the low end whatever you have set.
+
+Those nine systems' tabs, and Demographics', have a map button left of the
+"?" that opens the Map Room on their map. Seven of the nine (all but Ocean
+Basins and Power Grids) also draw the same map in their own journal entry while its page is
+open. Banking's button opens its journal entry,
+which colors every country by the phase of its banking cycle. A journal
+entry's map shows only while its page is open, so the crossed-out eye at the
+top left of every journal page fades the page until you click it again or close
+the page, and the map shows through. The faded page still takes your clicks.
+
 National Info, the base game's Census Data window under a new name, shows
-another country's panels. Open it from the foot of that country's Politics tab,
-or for your own country from the Population panel. A row of tabs over the
+another country's panels. Open it from the button above Draft a Treaty at the
+foot of that country's panel, on any of its tabs, or for your own country from
+the Population panel. A row of tabs over the
 window holds Pops, the base game's list, then a tab for each of the mod's
 systems a country shows the world, Demographics and the Seabed among them. For another
 country a tab shows its figures and none of its buttons; for your own it is the
@@ -84,7 +221,7 @@ the mod.
 
 ### Game rules
 
-The mod adds nineteen game rules to the game setup screen. Each one turns a
+The mod adds twenty-two game rules to the game setup screen. Each one turns a
 system on or off, and a few offer a reduced version of the system. You choose
 them when you start a campaign, and outside Ironman you can change them later.
 
@@ -93,6 +230,19 @@ technologies, laws and buildings connected to it stay in the game and keep their
 ordinary effects. With the Banking System off, for example, the financial
 regulation laws still change Urban Center output, investment, innovation and
 government dividends; only their effects on the banking cycle go.
+
+Switched off in a campaign already under way, a system's journal entry closes
+within a few days, with no reward and no penalty, and what the system was doing
+goes with it: its bonuses and costs, covert operations, nuclear status, the
+United Nations itself. A legislated tax code gives way to the base-game taxation
+law closest to it. What you finished stays: completed space milestones,
+monuments already built, a religion already founded. Culture merges and a probe
+already on its way to another star pause instead, and carry on when the rule is
+turned back on. Turned back on, the Banking Cycle, Monuments, Colonial Empire,
+Covert Warfare, Cultural Hegemony and space race entries come back within a
+month or two wherever their conditions are met (Covert Warfare with no
+operations or agent networks). The other systems' entries, World War's
+included, don't return in that campaign.
 
 The mod is balanced with its default systems on, and switching one off removes
 its costs along with its benefits. A choice whose drawback lives in a disabled
@@ -106,23 +256,32 @@ turn a default system off.
 | Rule | Default | Settings and what they control | Chapter |
 |---|---|---|---|
 | Banking System | Enabled | *Enabled*: the banking cycle with the full monetary-policy layer (policy rate, inflation, exchange rate, currency pegs and shared currencies). *Simplified*: the banking cycle only; you still borrow at your own interest rate but can't set it. *Disabled*: no banking cycle. | [Banking and monetary policy](04-banking.md) |
-| Free Market Construction | Enabled | *Enabled*: construction is a good bought on the market, and buildings use some as maintenance. *Without Retooling Costs*: as Enabled, but switching production methods doesn't raise that maintenance. *Without Maintenance*: construction is still a market good, but buildings don't consume it. *Disabled*: base-game construction sectors. | [Economy and construction](03-economy.md) |
+| Free Market Construction | Enabled | *Enabled*: construction is a good bought on the market, and buildings use some as maintenance. *Without AI Retooling Costs*: as Enabled, but AI countries' buildings don't retool; players' still do. *Without Retooling Costs*: as Enabled, but switching production methods doesn't raise that maintenance. *Without Maintenance*: construction is still a market good, but buildings don't consume it. *Disabled*: base-game construction sectors. | [Economy and construction](03-economy.md) |
 | Global Warming | Enabled | Greenhouse emissions, rising temperatures, climate events and climate policies. | [Climate and pollution](15-climate.md) |
-| United Nations | Enabled | Founding and joining the UN, its votes, resolutions and agencies. | [The United Nations](10-united-nations.md) |
+| United Nations | Late Unlock | Founding and joining the UN, its votes, resolutions and agencies. *Late Unlock*: a great power founds it with Intergovernmental Organizations. *Early Unlock*: with Multilateral Alliances, and it can't reform its charter until some country has Intergovernmental Organizations. *Disabled*: no UN. | [The United Nations](10-united-nations.md) |
 | Nuclear Weapons | Enabled | Nuclear programs, arsenals, doctrine, crises, strikes and the nuclear taboo. | [Nuclear weapons](14-nuclear.md) |
 | Space Race | Full Colonies | *Races Only*: the space race milestones and their events, with colonies founded the month their fleet leaves and staying with their holder. *Simple Colonies*: as Races Only, and colony fleets travel for months or years and claim their site on arrival, colonies hold settlers sent from Earth and are built up with modules, Extraplanetary Bases work the room the near-Earth asteroids and colonies give, a colony can change hands by the Cede Colony treaty article, sold, given or demanded in a war, and colonies grow restless, can be abandoned or break away, and live on as free colonies. *Full Colonies*: as Simple Colonies, and Space Command builds warships that move between the planets, fight, blockade colonies and seize or destroy them; an enemy fleet in Earth orbit stops your launches until you put up your reserve, and ground-to-orbit batteries fire on it. *Disabled*: no space race. | [The space race](16-space.md) |
 | Decolonization | Enabled | Colonial stability, the decolonization journal entry and its events. | [Colonial empires and decolonization](12-decolonization.md) |
-| Cultural Hegemony | Enabled | The competition for global cultural influence. | [Cultural hegemony and covert warfare](11-influence.md) |
-| Covert Warfare | Enabled | Intelligence agencies and covert operations against other countries. | [Cultural hegemony and covert warfare](11-influence.md) |
+| Cultural Hegemony | Late Unlock | The competition for global cultural influence. *Late Unlock*: the journal entry opens once any country has Mass Media. *Early Unlock*: once any country has the Electric Telegraph; broadcast programs and events still wait for Mass Media. *Disabled*: no hegemony. | [Cultural hegemony and covert warfare](11-influence.md) |
+| Covert Warfare | Late Unlock | Intelligence agencies and covert operations against other countries. *Late Unlock*: the agency opens with Mainframe Computers, a later technology that adds an operation slot, or the Ministry of Intelligence and Security. *Early Unlock*: it opens with Central Archives, with funding and operations limited until then. *Disabled*: no covert operations. | [Cultural hegemony and covert warfare](11-influence.md) |
 | Social Movements | Enabled | The six social-movement journal entries (civil rights, human augmentation, morphological freedom, digital rights, mental health and post-scarcity) and their events. Feminism, LGBTQ+, religious, anti-war, transhumanist and environmental events fire either way. | [Social movements](07-social-movements.md) |
 | Internal Resettlement | Enabled | *Enabled*: the Settlement Authority and government resettlement programs. *AI Voluntary Only*: AI countries run only voluntary programs. *Disabled*: no resettlement. | [States and population](08-states.md) |
 | Grand Monuments | Enabled | Grand Monuments, their dedications, the Monuments journal entry and contested monuments. | [The extended timeline](02-timeline.md#grand-monuments) |
 | Demographics | Full | *Full*: every state keeps a census of its people by age and sex, shown in a Demographics tab in the Population panel and National Info and a subtab on the state panel, and the census sets each state's births and deaths. *Display only*: the same census and panels, with births and deaths left to the base game. *Disabled*: no census and no tabs. Dynastic Wealth keeps working. The census is experimental; a game saved before it was added keeps it off. | [States and population](08-states.md#demographics) |
-| World War | Disabled | A journal entry for great powers that tracks ideological tension into a world war and its aftermath. | [Military and war](13-military.md) |
+| Culture Merges | Enabled | Closely related cultures merging into one national culture. In a game saved before it was added, the merges that make a new culture never start. Turned off mid-game, every merge pauses where it stands and carries on when the rule is turned back on. | [States and population](08-states.md#culture-merges) |
+| Small-Economy Construction | Full Cost for Every Country | Experimental. Construction and construction maintenance cost a small economy less, rising to the full price at a GDP of 10 million. *Half the Cost*, *A Fifth of the Cost* and *A Tenth of the Cost for Small Economies* set the price with almost no GDP. Switched in a running game, on, off or to another strength, it reaches each country within a year. | [Economy and construction](03-economy.md) |
+| Global Commons | Enabled | *Enabled*: seabed licenses that cap the Deep-Sea Mine, the Law of the Sea's seabed terms at the UN, Antarctic research stations and the Antarctic Treaty. *Disabled*: the Deep-Sea Mine has no cap. | [The extended timeline](02-timeline.md#seabed-licenses) |
+| Power Bloc Principle Slots | Up to Eight | *Up to Eight*: four technologies the bloc leader researches each add a principle slot, up to eight. *Four (Base Game)*: the base game's slots only. | [Diplomacy](09-diplomacy.md#principle-slots) |
+| World War | Disabled | A journal entry for great powers that tracks ideological tension into a world war and its aftermath. *Late Unlock*: it opens with Combined Arms. *Early Unlock*: it opens with Trench Works, democratic and authoritarian powers also count as opposed until Combined Arms, and a world war begun before Combined Arms can be followed by a second. | [Military and war](13-military.md) |
 | Heir Education | Disabled | Educating your heir, and administrative, diplomatic and military aptitude traits for rulers and heirs. | [Government, laws and characters](06-politics.md) |
 | Universal Aptitude Traits | Disabled | Gives aptitude traits to every adult character, with or without Heir Education. | [Government, laws and characters](06-politics.md) |
-| Legislated Tax Code | Tax Code Disabled | Experimental. *Tax Code Enabled*: the five taxation laws can't be enacted; every country holds the Legislated Tax Code instead, and each tax rate changes only through a bill that enough interest groups commit to, taking effect on the 1st of its month. AI countries legislate their taxes the same way. *Tax Code and Customs Enabled*: as Enabled, and a country that owns its market sets its tariffs and subsidies by bill too. *Light Tax Code*: the taxation laws stay and set each tax's range; within it you set each tax at once from the Tax Code tab, your heaviest tax sets the tax level, and interest groups react to each change. AI countries keep choosing their tax level. *Tax Code Disabled*: base-game taxes. | [Taxation (experimental)](05-tax-code.md) |
+| Legislated Tax Code | Tax Code Disabled | Experimental. *Tax Code Enabled*: the five taxation laws can't be enacted; every country holds the Legislated Tax Code instead, and each tax rate changes only through a bill that enough interest groups commit to, taking effect on the 1st of its month. AI countries legislate their taxes the same way. *Tax Code and Customs Enabled*: as Enabled, and a country that owns its market sets its tariffs and subsidies by bill too. *Light Tax Code*: the taxation laws stay and set each tax's range; within it you set each tax directly from the Tax Code tab, your heaviest tax sets the tax level, and interest groups react to each change. AI countries keep choosing their tax level. *Tax Code Disabled*: base-game taxes. | [Taxation (experimental)](05-tax-code.md) |
 | Custom Religion Allowed | Not allowed | A journal entry that lets you design a religion of your own. | [Government, laws and characters](06-politics.md) |
+
+The base game's Base Construction Capacity rule shows one setting, No Effect.
+The mod removes the base construction that rule scales to GDP, and the Free
+Market Construction rule decides what replaces it ([Economy and
+construction](03-economy.md)).
 
 ## Reading the Budget breakdown
 
@@ -190,10 +349,10 @@ Under the scores, each section has a row for each kind of effect the mod's
 permanent effects give your country, grouped under small headings: "Arable
 Land: +45%" under Production, Prestige under Standing Abroad, each interest
 group's approval under Interest Groups. The figure is your country's whole
-total, and hovering it lists every source: the technologies, laws, institutions
-and principles that add to it as well as the mod's effects, such as
-agricultural diffusion, space race milestones, demographic policies and the UN
-conventions you are bound by. Hover the name for what the effect does. A row
+total. Hover the row for what the effect does and then every source: the
+technologies, laws, institutions and principles that add to it as well as the
+mod's effects, such as agricultural diffusion, space race milestones,
+demographic policies and the UN conventions you are bound by. A row
 appears once one of those permanent effects adds to it. A state, building or
 interest group row is what your country gives each of them; their own panels add
 their local sources.
@@ -228,7 +387,7 @@ The chapters follow the game's own areas rather than the order systems appear.
 | [Taxation (experimental)](05-tax-code.md) | The Legislated Tax Code rule: the Light Tax Code's rates within your taxation law; drafting tax bills, winning interest groups over, promises, passed bills and legislated customs. |
 | [Government, laws and characters](06-politics.md) | New laws and law groups, ministries, political movements and parties, elections, heir education, custom religions and state collapse. |
 | [Social movements](07-social-movements.md) | The movement journal entries, from civil rights to post-scarcity, and the movements carried by events. |
-| [States and population](08-states.md) | Migration crowding, dynamic homelands, cultural acceptance, tourism, world city rankings and internal resettlement. |
+| [States and population](08-states.md) | Migration crowding, dynamic homelands, cultural acceptance, culture merges, tourism, world city rankings and internal resettlement. |
 | [Diplomacy](09-diplomacy.md) | New treaty articles, diplomatic play escalation, irredentism and reunification, power blocs and formable countries. |
 | [The United Nations](10-united-nations.md) | Founding the UN, its authority, the Security Council, votes, resolutions, conventions and missions. |
 | [Cultural hegemony and covert warfare](11-influence.md) | Soft power and intelligence operations. |
@@ -240,7 +399,7 @@ The chapters follow the game's own areas rather than the order systems appear.
 | [Quick reference](17-reference.md) | When each system appears, the journal entries at a glance, and a glossary. |
 | [Appendix: social movement details](18-appendix-social-movements.md) | The numbers and event lists behind the social movements chapter. |
 | [Appendix: events](19-appendix-events.md) | The event lists behind the chapters, from resettlement to the space race, with when each event fires and what its options do. |
-| [Appendix: reference lists](20-appendix-reference-lists.md) | The longer lists the chapters summarize: wonders, banking tools, government types, combat units, ships, ship modifications, mobilization options and military base production methods. |
+| [Appendix: reference lists](20-appendix-reference-lists.md) | The longer lists the chapters summarize: wonders, banking tools, government types, culture merges, combat units, ships, ship modifications, mobilization options and military base production methods. |
 
 ## Reporting problems
 

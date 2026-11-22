@@ -5,6 +5,11 @@ Each image definition includes:
 - prompt: AI image generation description
 - style: Style modifier for the generator (appended to prompt)
 - events: the event IDs that show this image
+- reframed (optional): "mirror", "shift F" or "mirror, shift F" when the
+  texture is the render edited by reframe_event_image.py to bring its subject
+  out from under the event window's text panel (#1608). Rendering the entry
+  again from its prompt undoes the edit: make it again, or rewrite the prompt
+  to place the subject at the left, and check with `contact_sheet.py --window`
 
 The event files are the source of truth, and `events` must agree with them:
 for an image whose .dds exists, every listed event shows exactly that texture
@@ -15,7 +20,8 @@ if the new picture has no entry here. An image with no .dds yet is *pending*:
 its events keep interim art until it is generated, and phase 3 then wires them.
 
 A prompt records what was asked for, not what was drawn. Look at a picture
-before reusing it (`contact_sheet.py NAME ...`).
+before reusing it (`contact_sheet.py NAME ...`; add `--window` to see it as
+the event window shows it, with the text panel over the right half).
 
 Usage:
     python event_image_prompts.py              # Print summary stats
@@ -31,6 +37,28 @@ DO:
   - Use period-specific physical props (ledgers, inkwells, gas lamps, microscopes)
   - Specify clear lighting (chiaroscuro, warm lamplight, overcast sky, golden hour)
   - Use simple compositions: 1-3 focal subjects, or a crowd at distance
+  - Put the subject at the left of the frame and say what fills the right
+    ("at the left, a lander descends on its engine flame; the right of the
+    frame is open dust and sky"). The event window lays its text panel over
+    the right half of the picture, so a centered subject is half hidden and
+    one on the right is not seen at all (docs/guides/event_creation_guide.md;
+    owner, 2026-11-11). Open the prompt with "At the left of the frame, ..."
+    and close it with "The right of the frame is ...": FLUX followed that in
+    12 of 12 test renders, against about 2 of 12 for the unplaced prompts
+    (#1608, 2026-11-13), and in #1658's batch (2026-11-13) the named subject
+    stood in the left half in nearly all of 64 renders. It obeys for the
+    subject only, though: a second thing the event turns on ("looking across
+    at a factory on the neighbouring land") landed on the right, under the
+    panel, in four of four. Put both in the left half, or the second just
+    behind the first. The subject lands near 40% of the width, close to
+    the panel, and a "politician at a lectern" placed this way came out large
+    and face-on, which the rule below on political figures asks to avoid. So
+    review every render with `contact_sheet.py --window`, and if the subject
+    sits in the middle or on the right, move it with `reframe_event_image.py`
+    (`--mirror` for a subject on the right, `--shift 0.2` for a centered one)
+    or render again.
+    A picture that will be mirrored must hold nothing that reads wrong
+    reversed, which the rules below about lettering and flags already ask
   - Describe posture and body language instead of facial expressions
   - Use "oil painting" styles — they produce the most consistent results
   - Anchor scenes with concrete architectural details (marble columns, brick walls)
@@ -47,7 +75,9 @@ DO NOT:
     architecture yourself (columned stone building, no dome) and leave flags out
   - Show political figures' faces up close. "Two candidates at podiums on a
     debate stage" drew two likenesses of a real politician. Keep them small,
-    distant, or seen from behind
+    distant, or seen from behind. A screen counts: "officials examining a
+    viral deepfake video" put a real president, before his flag, on the
+    screen. Turn the screen away so only its back and its light are seen
   - Use abstract/symbolic compositions ("split screen", "portraits facing each
     other", "clock ticking to midnight") — FLUX renders these as surreal collages
   - Describe animals in close-up with humans in protective gear — they merge into
@@ -61,6 +91,26 @@ DO NOT:
     limbs). Prefer seated, standing, or crowd poses
   - Request holographic displays, data overlays, or floating UI — they render as
     random blobs or infinity symbols
+  - Name a building by its use ("a clinic", "a conference centre") — FLUX writes
+    the name on it. Describe its materials instead. Riot police come back with
+    POLICE on their vests, and a protest crowd seen up close carries lettered
+    placards; a crowd seen from a high rooftop keeps them to specks
+  - Leave an official chamber's back wall bare — it grows a seal, a portrait or
+    a flag. Fill it (curtained windows). And keep a figure off the furniture:
+    a signer bending over a table merged into it in three of four renders;
+    a standing figure at the table's corner held up (batch 10, 2026-11-06).
+    The same goes for any object at a figure's waist: "a meteorologist
+    beside a white instrument box on legs" grew out of the box like a man
+    in a crate (#1658). Leave such props off, or set them well apart
+  - Count on two figures acting together: "two diplomats shake hands"
+    drew one man reaching out to nobody in seven of eight renders over two
+    wordings, and in the eighth the two stood apart across the table
+    (#1658). Give the scene one standing actor and a seated group
+  - Ask for "an orbital mirror array" (flying saucers) or tether "climbers"
+    (people climbing the cable); say "a field of ground antennas" and "cargo
+    capsules". "Colonies linked by ship traffic" drew no colony: put the
+    camera on the surface, among the domes
+  - Zoom every pick at full size: FLUX signs paintings in a corner
 """
 
 IMAGES = {
@@ -78,7 +128,7 @@ IMAGES = {
         "events": ["augmentation_events.2", "extra_law_events.76", "morphological_freedom_events.100"],
     },
     "anti_augmentation_protest": {
-        "prompt": "Night street protest outside a neon-lit clinic, raised hands and a police line in rain.",
+        "prompt": "Night, heavy rain: a crowd of protesters in dark hooded raincoats, seen from behind, stands with raised open hands in a wet street before a modern white building with tall brightly lit glass doors, facing a distant line of riot police in plain black armor and helmets. Street lamps reflect in long streaks on the wet asphalt.",
         "style": "oil painting, social realism, dramatic evening light",
         "events": ["augmentation_events.3"],
     },
@@ -110,15 +160,19 @@ IMAGES = {
             "banking_cycle_events.17", "banking_cycle_events.22",
             "banking_cycle_events.33", "banking_cycle_events.35",
             "banking_cycle_events.43", "banking_cycle_events.46",
-            "decolonization_events.50",
+            "decolonization_events.50", "minor_events_timelineextended.7",
         ],
     },
+    # Pending: the render had prominent garbled lettering (lettered plaques beside the doors), so the
+    # .dds was deleted and its events show financial_distress_street until regenerated.
     "bank_run_crowd": {
-        "prompt": "A panicked crowd at a Victorian bank.",
-        "style": "oil painting, chiaroscuro, 19th-century realism",
+        "prompt": "At the left of the frame, a single guard in a dark greatcoat stands with clasped hands before a closed pair of heavy bronze doors at the top of granite steps. A crowd of men and women in overcoats and hats packs the steps below him, several holding up small passbooks. The right of the frame is a wet city street in grey morning light, with more people gathered at the foot of the steps.",
+        "style": "oil painting, chiaroscuro, early twentieth-century realism",
         "events": [
-            "banking_cycle_events.4", "banking_cycle_events.31",
-            "banking_cycle_events.47", "extra_law_events.38",
+            "banking_cycle_events.31",
+            "banking_cycle_events.4",
+            "banking_cycle_events.47",
+            "extra_law_events.38",
         ],
     },
     "banking_boardroom": {
@@ -130,19 +184,33 @@ IMAGES = {
             "banking_cycle_events.36", "banking_cycle_events.40",
             "banking_cycle_events.48", "banking_cycle_events.68", "te_lolr.1",
             "te_lolr.2", "te_union.1", "un_events.35",
+            "te_union.2",
         ],
     },
+    # Pending: the render had prominent garbled lettering (a lettered chart board, an eagle crest and US flags), so the
+    # .dds was deleted and its events show banking_boardroom until regenerated.
     "central_bank_policy": {
-        "prompt": "Officials debating policy in a neoclassical chamber.",
+        "prompt": "At the left of the frame, a grey-haired official in a dark suit stands at the end of a long mahogany table in a high neoclassical chamber, one hand resting on a closed folder, speaking to a row of seated officials in dark suits. The right of the frame is tall curtained windows between marble pilasters under a coffered ceiling.",
         "style": "oil painting, academic art, institutional grandeur",
         "events": [
-            "banking_cycle_events.8", "banking_cycle_events.10",
-            "banking_cycle_events.15", "banking_cycle_events.16",
-            "banking_cycle_events.19", "banking_cycle_events.25",
-            "banking_cycle_events.30", "banking_cycle_events.34",
-            "banking_cycle_events.39", "banking_cycle_events.45",
-            "banking_cycle_events.58", "banking_cycle_events.69", "te_peg.1",
+            "banking_cycle_events.10",
+            "banking_cycle_events.15",
+            "banking_cycle_events.16",
+            "banking_cycle_events.19",
+            "banking_cycle_events.25",
+            "banking_cycle_events.30",
+            "banking_cycle_events.34",
+            "banking_cycle_events.39",
+            "banking_cycle_events.45",
+            "banking_cycle_events.58",
+            "banking_cycle_events.69",
+            "banking_cycle_events.8",
+            "banking_debt_events.2",
+            "banking_debt_events.4",
+            "te_mandate.1",
+            "te_peg.1",
             "te_peg.2",
+            "te_peg.3",
         ],
     },
     "financial_distress_street": {
@@ -152,7 +220,9 @@ IMAGES = {
             "banking_cycle_events.3", "banking_cycle_events.6",
             "banking_cycle_events.11", "banking_cycle_events.28",
             "banking_cycle_events.37", "banking_cycle_events.41",
+            "minor_events_timelineextended.8",
         ],
+        "reframed": "shift 0.2",
     },
     "trade_commerce_port": {
         "prompt": "A busy commercial harbor at dawn.",
@@ -170,7 +240,9 @@ IMAGES = {
             "banking_cycle_events.13", "banking_cycle_events.18",
             "banking_cycle_events.20", "banking_cycle_events.24",
             "banking_cycle_events.32", "banking_cycle_events.44",
+            "banking_cycle_events.59",
         ],
+        "reframed": "shift 0.2",
     },
 
     # =========================================================================
@@ -205,6 +277,7 @@ IMAGES = {
         "events": [
             "banking_cycle_events.55", "banking_cycle_events.110",
             "banking_cycle_events.115", "banking_cycle_events.117",
+            "te_inflation.2",
         ],
     },
 
@@ -231,12 +304,16 @@ IMAGES = {
             "banking_cycle_events.165",
         ],
     },
+    # Pending: the render had prominent garbled lettering (lettered stall signs), so the
+    # .dds was deleted and its events show cooperative_assembly_hall until regenerated.
     "cooperative_market_success": {
-        "prompt": "A busy cooperative marketplace with stalls.",
+        "prompt": "At the left of the frame, a woman in a canvas apron stands at a long trestle table in a whitewashed warehouse, packing jars of preserves into straw-filled wooden crates, other workers packing crates further along the same table. The right of the frame is the warehouse's open double doors and a sunlit yard beyond.",
         "style": "oil painting, warm light, community realism",
         "events": [
-            "banking_cycle_events.64", "banking_cycle_events.151",
-            "banking_cycle_events.167", "banking_cycle_events.170",
+            "banking_cycle_events.151",
+            "banking_cycle_events.167",
+            "banking_cycle_events.170",
+            "banking_cycle_events.64",
         ],
     },
 
@@ -267,7 +344,7 @@ IMAGES = {
         "style": "oil painting, impressionist, warm light",
         "events": [
             "cultural_hegemony.3", "cultural_hegemony.10",
-            "international_relations_events.202",
+            "international_relations_events.202", "repeatable_events.60",
         ],
     },
     "cultural_classroom_influence": {
@@ -300,7 +377,15 @@ IMAGES = {
     # DECOLONIZATION EVENTS
     # =========================================================================
     "independence_celebration": {
-        "prompt": "A flag-raising at a newly independent nation's palace.",
+        # Redrawn 2026-11-06 (#898): "a flag-raising at a newly independent
+        # nation's palace" drew India's flag. The square is pinned and no flag named.
+        "prompt": (
+            "Evening in a wide square before a long colonnaded sandstone government house "
+            "with a flat roof and no dome. A vast crowd in light cotton clothes fills the "
+            "square, arms raised and children on shoulders, as fireworks burst in the dusky "
+            "sky above the roofline. On the broad front steps a row of small distant figures "
+            "in dark suits and white uniforms stands looking out over the crowd."
+        ),
         "style": "oil painting, social realism, warm golden light",
         "events": ["decolonization_events.1", "decolonization_events.5", "decolonization_events.200"],
     },
@@ -314,13 +399,12 @@ IMAGES = {
         "style": "oil painting, social realism, warm golden light",
         "events": ["decolonization_events.3", "decolonization_events.19"],
     },
+    # Pending: the render had prominent garbled lettering (a map covered in invented place names), so the
+    # .dds was deleted and its events show diplomatic_meeting until regenerated.
     "partition_border_drawing": {
-        "prompt": "Officials drawing borders on a large map.",
+        "prompt": "At the left of the frame, a white-painted stone boundary marker stands on a dry hillside, and a surveyor in a sun hat stands a few paces behind it, looking down the slope along a line of identical markers that runs away into the valley. The right of the frame is a wide valley of terraced fields and distant hills under a hazy sky.",
         "style": "oil painting, social realism, warm golden light",
-        "events": [
-            "decolonization_events.4", "decolonization_events.16",
-            "decolonization_events.63",
-        ],
+        "events": ["decolonization_events.16", "decolonization_events.4", "decolonization_events.63"],
     },
     "post_colonial_strongman": {
         "prompt": "A military leader addressing a crowd from a balcony.",
@@ -356,11 +440,12 @@ IMAGES = {
             "decolonization_events.17", "decolonization_events.20",
             "decolonization_events.21", "decolonization_events.203",
         ],
+        "reframed": "mirror",
     },
     "failed_state_aftermath": {
         "prompt": "A struggling post-colonial nation's empty market stalls.",
         "style": "oil painting, social realism, warm golden light",
-        "events": ["decolonization_events.201"],
+        "events": ["decolonization_events.201", "minor_events_timelineextended.10"],
     },
 
     # =========================================================================
@@ -385,6 +470,7 @@ IMAGES = {
         "prompt": "Climate refugees walking along a dusty road.",
         "style": "oil painting, landscape, dramatic sky",
         "events": ["environmentalism_events.6", "environmentalism_events.16"],
+        "reframed": "mirror",
     },
     "ecological_collapse_panorama": {
         "prompt": "A panoramic view of ecological collapse.",
@@ -514,13 +600,14 @@ IMAGES = {
         "events": [
             "decolonization_events.205", "extra_law_events.13", "extra_law_events.49",
             "extra_law_events.73", "extra_law_events.88",
-            "amendment_petition_events.1",
+            "amendment_petition_events.1", "te_culture_merge.1", "te_culture_merge.3",
         ],
     },
     "digital_privacy_screen": {
         "prompt": "A person at a desk surrounded by screens showing encrypted data.",
         "style": "oil painting, contemporary realism, cool screen light",
         "events": ["extra_law_events.16"],
+        "reframed": "shift 0.2",
     },
     "immigration_checkpoint": {
         "prompt": "Families waiting at an immigration checkpoint.",
@@ -587,7 +674,7 @@ IMAGES = {
     "military_formation_update": {
         "prompt": "A military command room with officers around a tactical map.",
         "style": "oil painting, dramatic shadows, military interior",
-        "events": [],
+        "events": ["international_relations_events.201"],
     },
 
     # =========================================================================
@@ -605,6 +692,7 @@ IMAGES = {
         "prompt": "A young ruler taking the throne for the first time.",
         "style": "oil painting, academic art, warm golden light",
         "events": ["heir_education_events.200"],
+        "reframed": "shift 0.2",
     },
 
     # =========================================================================
@@ -647,6 +735,9 @@ IMAGES = {
         "prompt": "A 1960s living room where a family watches a rival nation's rocket launch on a black-and-white television set. The father stands with arms crossed, jaw set. The mother watches with concern. Children sit on the floor, mesmerized. Through the window, a suburban neighborhood at dusk. The sting of being second.",
         "style": "oil painting, social realism, mid-century light",
         "events": ["international_relations_events.7"],
+        # The mirror brought FLUX's signature from the bottom right (under the
+        # panel) to the bottom left; it was painted out with the fabric beside it.
+        "reframed": "mirror",
     },
     "trade_war_sanctions": {
         "prompt": "A port with cargo ships being turned away: customs officials stamp DENIED on shipping manifests, crates sit impounded on the docks. Flag-draped containers from the sanctioned nation stack up. The economic warfare of trade embargoes.",
@@ -662,9 +753,11 @@ IMAGES = {
     # =========================================================================
     # LGBTQ EVENTS
     # =========================================================================
+    # Pending: the render had prominent garbled lettering (a large lettered shop sign and placards), so the
+    # .dds was deleted and its events show civil_rights_peaceful_march until regenerated.
     "pride_march_colorful": {
-        "prompt": "A vibrant pride march through city streets.",
-        "style": "oil painting, impressionist, vibrant rainbow light",
+        "prompt": "At the left of the frame, seen from a high rooftop, a joyful march fills a broad city avenue between tall stone buildings, the marchers carrying rainbow-striped pennants and streamers, confetti in the air. The right of the frame is the avenue's far side, more rooftops and a bright summer sky.",
+        "style": "oil painting, impressionist, vibrant summer light",
         "events": ["society_technology_events.7", "society_technology_events.8"],
     },
     "lgbtq_religious_backlash": {
@@ -705,11 +798,13 @@ IMAGES = {
         "prompt": "An office worker slumped at a desk late at night.",
         "style": "oil painting, intimate realism, empathetic light",
         "events": ["mental_health_events.1"],
+        "reframed": "mirror",
     },
     "youth_mental_health_crisis": {
         "prompt": "A teenager sitting alone on a school corridor bench.",
         "style": "oil painting, intimate realism, empathetic light",
         "events": ["mental_health_events.2", "morphological_freedom_events.4"],
+        "reframed": "shift 0.2",
     },
     "addiction_struggle": {
         "prompt": "A support group meeting in a community center.",
@@ -721,15 +816,18 @@ IMAGES = {
         "style": "oil painting, intimate realism, empathetic light",
         "events": ["mental_health_events.4"],
     },
+    # Pending: the render had prominent garbled lettering (newspapers with invented headlines), so the
+    # .dds was deleted and its events show political_scandal_expose until regenerated.
     "institutional_abuse_exposed": {
-        "prompt": "A journalist spreading documents exposing institutional abuse.",
+        "prompt": "At the left of the frame, a journalist in a rumpled jacket sits at a kitchen table at night, laying out a row of black-and-white photographs face up under a lamp, holding one close to her eyes. The right of the frame is a dim kitchen with a dark window and a kettle on the stove.",
         "style": "oil painting, intimate realism, empathetic light",
-        "events": ["decolonization_events.52", "mental_health_events.5", "amendment_petition_events.9"],
+        "events": ["amendment_petition_events.9", "decolonization_events.52", "mental_health_events.5"],
     },
     "mental_health_stigma": {
         "prompt": "A person hesitating at the entrance of a mental health clinic.",
         "style": "oil painting, intimate realism, empathetic light",
         "events": ["mental_health_events.100"],
+        "reframed": "shift 0.2",
     },
     "mental_health_supported": {
         "prompt": "A modern mental health center with open doors.",
@@ -801,6 +899,7 @@ IMAGES = {
         "prompt": "Two Victorian gentlemen dueling at dawn.",
         "style": "oil painting, academic art, warm golden light",
         "events": ["minor_events_timelineextended.2"],
+        "reframed": "shift 0.2",
     },
     "expedition_explorer": {
         "prompt": "An explorer studying a map in a tent at the wilderness edge.",
@@ -810,17 +909,17 @@ IMAGES = {
     "world_exhibition_fair": {
         "prompt": "A grand World's Fair exhibition hall: soaring cast-iron and glass architecture, elaborate national pavilions, crowds marveling at technological wonders — steam engines, electrical displays, exotic goods. Victorian spectacle at its most ambitious.",
         "style": "oil painting, academic art, warm golden light",
-        "events": ["minor_events_timelineextended.7", "monument_events.9"],
+        "events": ["monument_events.9"],
     },
     "foreign_investment_opportunity": {
         "prompt": "A foreign investor and a local businessman shaking hands in a colonial-era trading house. Maps, contracts, and commodity samples spread on the desk between them. Ceiling fan turning slowly. The mechanics of international capital.",
         "style": "oil painting, academic art, warm golden light",
-        "events": ["minor_events_timelineextended.8"],
+        "events": [],
     },
     "minor_event_generic": {
         "prompt": "A 19th-century newspaper office: editors reviewing galley proofs, compositors setting type, a boy running in with a telegram. The smell of ink and the urgency of breaking news in the age before radio.",
         "style": "oil painting, academic art, warm golden light",
-        "events": ["minor_events_timelineextended.6"],
+        "events": ["minor_events_timelineextended.6", "te_culture_merge.2"],
     },
 
     # =========================================================================
@@ -836,20 +935,27 @@ IMAGES = {
             "modern_election_events.13", "modern_election_events.14",
             "modern_election_events.15",
         ],
+        "reframed": "mirror",
     },
+    # Pending: the render had prominent garbled lettering (a whiteboard of scrawled headings and a US map), so the
+    # .dds was deleted and its events show election_campaign_rally until regenerated.
     "social_media_campaign": {
-        "prompt": "A campaign war room with staff and social media screens.",
-        "style": "oil painting, social realism, dramatic light",
+        "prompt": "At the left of the frame, a campaign manager in rolled shirtsleeves stands with arms folded at the head of a long table, watching a row of young staff seated at laptops whose screens face away from the viewer. Takeaway boxes, coffee cups and tangled phone chargers crowd the table. The right of the frame is a dim open office with bare brick walls and a row of tall dark windows.",
+        "style": "oil painting, social realism, late-night office light",
         "events": [
-            "modern_election_events.6", "modern_election_events.7",
-            "modern_election_events.8", "modern_election_events.9",
-            "modern_election_events.10", "society_technology_events.32",
+            "modern_election_events.10",
+            "modern_election_events.6",
+            "modern_election_events.7",
+            "modern_election_events.8",
+            "modern_election_events.9",
+            "society_technology_events.32",
         ],
     },
     "election_debate_stage": {
         "prompt": "A television debate stage seen from the back of a darkened studio audience, two small distant figures at wooden podiums under bright stage lights, cameras on tripods in the foreground.",
         "style": "oil painting, social realism, dramatic light",
         "events": ["repeatable_events.10"],
+        "reframed": "shift 0.2",
     },
     "voter_registration_queue": {
         "prompt": "Citizens queuing outside a polling station.",
@@ -876,6 +982,7 @@ IMAGES = {
             "nuclear_incident.60", "nuclear_loose.7",
             "international_relations_events.4",
         ],
+        "reframed": "shift 0.2",
     },
     "grassroots_canvassing": {
         "prompt": "Volunteers canvassing door-to-door in a neighborhood.",
@@ -914,20 +1021,33 @@ IMAGES = {
             "decolonization_events.54", "movement_events_te.9", "movement_events_te.10",
             "movement_events_te.11", "movement_events_te.12", "te_demog_wave.5",
         ],
+        "reframed": "shift 0.2",
     },
+    # Pending: the render had prominent garbled lettering (a wall of screens full of posts and captions), so the
+    # .dds was deleted and its events show grassroots_canvassing until regenerated.
     "digital_activism_screens": {
-        "prompt": "Activists coordinating a campaign across multiple screens.",
-        "style": "oil painting, contemporary realism, cool screen light",
-        "events": ["movement_events_te.13", "movement_events_te.14", "inheritance_events.7"],
+        "prompt": "At the left of the frame, a young man in a hooded jacket stands at the end of a kitchen table in a crowded apartment at night, one hand flat on the table, speaking to five people seated around it with phones and an open laptop, every screen turned away from the viewer. Mugs and a teapot crowd the table. The right of the frame is a dark curtained window and a bare plaster wall lit by a single hanging bulb.",
+        "style": "oil painting, contemporary realism, warm bulb light",
+        "events": ["inheritance_events.7", "movement_events_te.13", "movement_events_te.14"],
     },
     "transhumanist_demonstration": {
         "prompt": "People with visible cybernetic enhancements marching together.",
         "style": "digital painting, atmospheric, near-future protest",
         "events": ["movement_events_te.15", "movement_events_te.16"],
     },
-    "movement_triumph_celebration": {
-        "prompt": "A massive public celebration after a movement's victory.",
-        "style": "oil painting, social realism, dramatic light",
+    # Replaces movement_triumph_celebration (2026-11-06, #898), which drew the
+    # US Capitol and flag, and a cheering crowd for two events about a quiet
+    # signing that nobody celebrates.
+    "movement_signing_ceremony": {
+        "prompt": (
+            "A formal signing ceremony in a high oak-panelled chamber with tall windows hung "
+            "with heavy red curtains. At a long table "
+            "draped in dark green cloth, an official in a dark suit, seen from behind, bends "
+            "to sign with a fountain pen, while a row of men and women in sober suits stands "
+            "behind the table with hands clasped. At both sides of the room, press photographers "
+            "stand behind large cameras on tripods, their flashes lighting the room in cold white bursts."
+        ),
+        "style": "oil painting, social realism, cool muted light",
         "events": ["movement_events_te.222", "movement_events_te.223"],
     },
     "movement_crushed_aftermath": {
@@ -946,7 +1066,8 @@ IMAGES = {
     "nuclear_city_destruction": {
         "prompt": "A mushroom cloud rising over a city skyline.",
         "style": "oil painting, dramatic light, apocalyptic tone",
-        "events": ["nuclear_loose.2", "nuclear_weapon_events.1"],
+        "events": ["nuclear_loose.2", "nuclear_weapon_events.1", "nuclear_loose.5"],
+        "reframed": "shift 0.2",
     },
     "tactical_nuclear_strike": {
         "prompt": "A tactical nuclear blast on a battlefield.",
@@ -960,6 +1081,7 @@ IMAGES = {
             "nuclear_weapon_events.3", "nuclear_weapon_events.14",
             "nuclear_weapon_events.15",
         ],
+        "reframed": "shift 0.2",
     },
     "nuclear_bunker_life": {
         "prompt": "Families sheltering in a nuclear bunker.",
@@ -970,6 +1092,7 @@ IMAGES = {
         "prompt": "A nuclear test mushroom cloud over a desert.",
         "style": "oil painting, dramatic light, apocalyptic tone",
         "events": ["nuclear_weapon_events.5", "nuclear_weapon_events.9", "nuclear_taboo.6"],
+        "reframed": "mirror",
     },
     "nuclear_proliferation_threat": {
         "prompt": "Analysts reviewing satellite photos of suspected nuclear sites.",
@@ -988,6 +1111,7 @@ IMAGES = {
             "nuclear_incident.1", "nuclear_incident.2", "nuclear_weapon_events.8",
             "nuclear_weapon_events.17", "nuclear_weapon_events.20",
         ],
+        "reframed": "mirror",
     },
     "anti_nuclear_movement": {
         "prompt": "A massive anti-nuclear demonstration in a city park.",
@@ -1005,6 +1129,7 @@ IMAGES = {
             "nuclear_loose.8", "nuclear_weapon_events.11", "nuclear_weapon_events.12",
             "nuclear_weapon_events.19", "nuclear_weapon_events.21",
             "amendment_petition_events.10",
+            "nuclear_weapon_events.33",
         ],
     },
     "nuclear_defense_shield": {
@@ -1066,11 +1191,13 @@ IMAGES = {
         "prompt": "A priest organizing community aid in a poor neighborhood.",
         "style": "oil painting, academic art, warm interior light",
         "events": ["religious_revival_events.3"],
+        "reframed": "shift 0.2",
     },
     "religious_culture_war": {
         "prompt": "A polarized town hall meeting over religious and cultural issues.",
         "style": "oil painting, academic art, warm interior light",
         "events": ["religious_revival_events.4", "religious_revival_events.5"],
+        "reframed": "shift 0.2",
     },
     "digital_pulpit_streaming": {
         "prompt": "A religious leader preaching via live stream to viewers on phones.",
@@ -1089,52 +1216,53 @@ IMAGES = {
     "supply_chain_disruption": {
         "prompt": "A chaotic port with backed-up container ships and empty warehouses.",
         "style": "oil painting, contemporary realism, industrial crisis",
-        "events": [],
+        "events": ["repeatable_events.20"],
     },
     "automation_displacement": {
         "prompt": "A factory floor where robots replace human workers.",
         "style": "oil painting, social realism, industrial contrast",
-        "events": ["repeatable_events.20"],
+        "events": ["repeatable_events.30", "modern_election_events.35"],
     },
     "media_moral_panic": {
         "prompt": "Television studio with an agitated anchor and anxious viewers gathered in a dim living room.",
         "style": "oil painting, contemporary realism, cool screen light",
-        "events": ["repeatable_events.30", "morphological_freedom_events.2"],
+        "events": ["repeatable_events.40", "morphological_freedom_events.2"],
     },
     "cyber_attack_infrastructure": {
         "prompt": "City infrastructure failing under a cyberattack in a dark control room.",
         "style": "oil painting, contemporary realism, emergency light",
-        "events": ["repeatable_events.40"],
+        "events": ["repeatable_events.50"],
     },
     "space_debris_collision": {
         "prompt": "A satellite colliding with space debris, fragmenting in orbit.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["repeatable_events.50"],
+        "events": ["te_orbital_debris.2"],
+        "reframed": "mirror",
     },
     "quantum_materials_lab": {
         "prompt": "Researchers examining a levitating quantum sample in a lab.",
         "style": "oil painting, cool clinical light, scientific",
-        "events": ["repeatable_events.60"],
+        "events": ["repeatable_events.90"],
     },
     "ai_ethics_debate": {
         "prompt": "An auditorium debate on AI ethics with a robot panelist.",
         "style": "oil painting, contemporary realism, conference light",
-        "events": ["repeatable_events.70"],
+        "events": [],
     },
     "gig_economy_protest": {
         "prompt": "Gig economy workers protesting outside a tech company campus.",
         "style": "oil painting, social realism, dramatic light",
-        "events": ["repeatable_events.80"],
+        "events": [],
     },
     "cultural_festival_revival": {
         "prompt": "A colorful cultural festival reviving traditional arts.",
         "style": "oil painting, impressionist, warm festival light",
-        "events": ["repeatable_events.90"],
+        "events": [],
     },
     "international_development_project": {
         "prompt": "Engineers from multiple countries collaborating on infrastructure.",
         "style": "oil painting, social realism, warm light",
-        "events": ["decolonization_events.202", "repeatable_events.100"],
+        "events": ["decolonization_events.202"],
     },
 
     # =========================================================================
@@ -1190,6 +1318,7 @@ IMAGES = {
         "prompt": "A dominant corporate tower casting a shadow over the city.",
         "style": "oil painting, dramatic shadows, corporate power",
         "events": ["social_tensions_events.4"],
+        "reframed": "shift 0.2",
     },
     "police_brutality_protest": {
         "prompt": "Riot police confronting civilian protesters amid tear gas.",
@@ -1206,15 +1335,17 @@ IMAGES = {
         "style": "oil painting, social realism, empathetic light",
         "events": ["social_tensions_events.11", "social_tensions_events.12"],
     },
+    # Pending: the render had prominent garbled lettering (rows of lettered placards and printed jackets), so the
+    # .dds was deleted and its events show anti_globalization_riot until regenerated.
     "religious_extremism_clash": {
-        "prompt": "Religious extremists clashing with secular counter-protesters.",
-        "style": "oil painting, social realism, dramatic light",
+        "prompt": "At the left of the frame, seen from a high rooftop, a robed elder stands on the steps of a columned stone building with both arms raised, addressing a dense crowd that fills the square below him. The right of the frame is the far side of the square, old stone facades and a pale overcast sky.",
+        "style": "oil painting, social realism, overcast daylight",
         "events": ["social_tensions_events.13", "social_tensions_events.14"],
     },
     # Pending (#982): the first render's placards came out as gibberish
     # lettering, so the .dds was deleted and both events show interim art.
     "globalization_protest_march": {
-        "prompt": "A dense crowd of marchers fills a wide boulevard before a glass-fronted conference centre, seen from a raised vantage point. A line of riot police in dark uniforms stands across the road ahead of them under an overcast sky.",
+        "prompt": "Seen from a high rooftop far above, a vast crowd of marchers fills a wide boulevard between rows of grey stone buildings, flowing toward a curved tower of mirrored glass that reflects the overcast sky. Far ahead, a thin dark line of riot police blocks the road.",
         "style": "oil painting, social realism, dramatic light",
         "events": ["social_tensions_events.15", "social_tensions_events.16"],
     },
@@ -1222,9 +1353,11 @@ IMAGES = {
     # =========================================================================
     # SOCIETY TECHNOLOGY EVENTS
     # =========================================================================
+    # Pending: the render had prominent garbled lettering (lettered wartime posters and a US flag), so the
+    # .dds was deleted and its events show home_front_factory until regenerated.
     "women_workforce_revolution": {
-        "prompt": "Women entering a factory workforce.",
-        "style": "oil painting, social realism, warm light",
+        "prompt": "At the left of the frame, a woman in a plain grey suit sits at a steel desk in a large open-plan office of the nineteen-sixties, writing in a ledger, the only woman among the men at the rows of identical desks behind her. The right of the frame is the long office receding into the distance under rows of fluorescent lights and tall windows.",
+        "style": "oil painting, social realism, cool office light",
         "events": ["society_technology_events.1", "society_technology_events.2"],
     },
     "contraception_revolution": {
@@ -1233,7 +1366,9 @@ IMAGES = {
         "events": ["society_technology_events.3"],
     },
     "social_revolution_sixties": {
-        "prompt": "1960s social movement collage: protests and youth culture.",
+        # Redrawn 2026-11-13 (seed 0): the first render's protest placards were
+        # nonsense lettering (#1530).
+        "prompt": "A city park on a warm 1960s summer afternoon: young couples in bright patterned clothes lounge together on the grass, one pair sitting close in an embrace. In the foreground an elderly woman in a dark coat and hat sits stiffly on a wooden bench, handbag on her knees, turned away from them. Plane trees and a low stone wall behind.",
         "style": "oil painting, social realism, warm light",
         "events": ["society_technology_events.4"],
     },
@@ -1242,13 +1377,17 @@ IMAGES = {
         "style": "oil painting, social realism, warm light",
         "events": ["society_technology_events.5"],
     },
+    # Pending: the render had prominent garbled lettering (lettered cabinet signs and a famous game's name), so the
+    # .dds was deleted and its events show meaning_crisis_abundance until regenerated.
     "gaming_industry_arcade": {
-        "prompt": "A 1980s video game arcade with rows of cabinets.",
-        "style": "oil painting, neon glow, pop culture",
+        "prompt": "At the left of the frame, a boy and a girl sit cross-legged on a living-room carpet at evening, seen from behind, each holding a corded game controller, leaning toward a boxy television whose screen is a bright blur of color that lights the room blue and pink. The right of the frame is a dim living room with a sofa, a standing lamp and a closed curtain.",
+        "style": "oil painting, warm domestic realism, television glow",
         "events": ["society_technology_events.6"],
     },
+    # Pending: the render had prominent garbled lettering (large painted letters on the factory wall), so the
+    # .dds was deleted and its events show labor_strike_picket until regenerated.
     "factory_outsourced_closed": {
-        "prompt": "A shuttered factory with workers outside.",
+        "prompt": "At the left of the frame, an older worker in a work jacket stands at a closed chain-link gate, one hand on the wire, looking through at an empty factory yard where weeds grow between the paving stones. The right of the frame is the long, clean brick wall of the factory, its windows dark, under a grey sky.",
         "style": "oil painting, social realism, desolate light",
         "events": ["society_technology_events.9"],
     },
@@ -1257,15 +1396,24 @@ IMAGES = {
         "style": "oil painting, social realism, dramatic firelight",
         "events": ["society_technology_events.10"],
     },
+    # Pending: the first render filled the frame with a phone screen of
+    # gibberish lettering ("Viral Fabricted Inst News"), so the .dds was deleted
+    # and the event shows interim art (media_moral_panic) until regenerated. The
+    # new prompt keeps the screen turned away and ties to the event's flavor (a
+    # parent who believed a post that the water had been poisoned).
     "misinformation_spreading": {
-        "prompt": "A phone screen showing a viral fabricated news article.",
-        "style": "oil painting, contemporary realism, cool screen light",
+        "prompt": "At the left of the frame, a woman in a grey cardigan stands at a kitchen counter at evening, seen from the side, reading a phone held close in both hands, its screen turned away from the viewer and lighting her face pale blue. On the counter beside her stand four large clear plastic jugs of water. The right of the frame is a dim plain kitchen wall with a curtained window and a single warm lamp.",
+        "style": "oil painting, contemporary realism, cool phone light against warm lamplight",
         "events": ["society_technology_events.13"],
     },
     "election_interference_cyber": {
         "prompt": "Hackers in a dark room targeting election systems.",
         "style": "oil painting, contemporary realism, dark screen light",
-        "events": ["modern_election_events.30", "society_technology_events.14"],
+        "events": [
+            "modern_election_events.30",
+            "society_technology_events.14",
+            "society_technology_events.33",
+        ],
     },
     # Pending (#982): the first render's banners came out as gibberish lettering,
     # so the .dds was deleted and both events show interim art until regenerated.
@@ -1283,6 +1431,7 @@ IMAGES = {
         "prompt": "An augmented athlete sprinting in a futuristic arena.",
         "style": "digital painting, cinematic light, near-future",
         "events": ["society_technology_events.17", "morphological_freedom_events.3"],
+        "reframed": "shift 0.2",
     },
     "space_habitat_future": {
         "prompt": "Interior of a rotating space habitat with parks and farms.",
@@ -1309,18 +1458,25 @@ IMAGES = {
         "style": "oil painting, social realism, dusk light",
         "events": ["society_technology_events.24"],
     },
+    # Pending (2026-11-21): the first render put a real politician's likeness,
+    # before a US flag, on the screen at the center of the frame, so the .dds
+    # was deleted. Until this is generated, modern_election_events.2 shows
+    # un_assembly and society_technology_events.25 shows diplomatic_meeting.
     "deepfake_crisis_screen": {
-        "prompt": "Officials in a crisis room examining a viral deepfake video.",
+        "prompt": "At the left of the frame, seen from across a dim room at night, three officials in dark suits sit at the near end of a long dark wooden table, leaning forward on their elbows, all turned toward a large television on a wheeled metal stand. The television faces them and away from us, so only its plain black back is seen, and its cold blue glow falls across their shoulders and hands. A fourth official, grey-haired, stands at the corner of the table with his arms folded. A few closed folders and coffee cups lie on the table. The right of the frame is the empty far end of the table and a wall of tall windows hung with heavy grey curtains, in shadow.",
         "style": "oil painting, contemporary realism, cool screen light",
         "events": ["modern_election_events.2", "society_technology_events.25"],
     },
     "ai_alignment_failure": {
         "prompt": "Engineers scrambling in a server room during an AI failure.",
         "style": "oil painting, contemporary realism, red warning light",
-        "events": ["society_technology_events.26"],
+        "events": ["society_technology_events.26", "repeatable_events.100"],
+        "reframed": "shift 0.2",
     },
+    # Pending: the render had prominent garbled lettering (wall screens full of lettered notices), so the
+    # .dds was deleted and its events show ministry_reform until regenerated.
     "algorithmic_governance_office": {
-        "prompt": "A government office where algorithms render routine decisions.",
+        "prompt": "At the left of the frame, a middle-aged clerk in a cardigan sits at a desk in a quiet government office with his hands folded, watching a printer feed out a long sheet of paper, a monitor beside him turned away from the viewer. Behind him a few citizens wait on a row of plastic chairs. The right of the frame is a pale, empty corridor of plain frosted glass doors under fluorescent light.",
         "style": "oil painting, contemporary realism, sterile light",
         "events": ["extra_law_events.59", "extra_law_events.83", "society_technology_events.27"],
     },
@@ -1338,6 +1494,7 @@ IMAGES = {
         "prompt": "A city street dominated by autonomous vehicles.",
         "style": "oil painting, contemporary realism, urban daylight",
         "events": ["society_technology_events.30", "society_technology_events.31"],
+        "reframed": "shift 0.2",
     },
 
     # =========================================================================
@@ -1367,6 +1524,7 @@ IMAGES = {
         "prompt": "An agricultural colony exploiting subsurface ice on Arcadia Planitia.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_colony_events.5", "space_race_discovery_events.8"],
+        "reframed": "mirror",
     },
 
     # =========================================================================
@@ -1391,6 +1549,7 @@ IMAGES = {
         "prompt": "A research station on 2 Pallas, a dark, carbon-rich asteroid. Scientists study ancient organic compounds in pressurized labs built into craters. The surface is dark as charcoal. Solar panels strain to catch weak sunlight.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_colony_events.9", "space_race_discovery_events.12"],
+        "reframed": "shift 0.2",
     },
     "colony_hygiea": {
         "prompt": "Remote icy outpost on Hygiea with fuel tanks, drilling rigs, and docked cargo shuttles.",
@@ -1453,6 +1612,7 @@ IMAGES = {
         "prompt": "A colony on Titan, Saturn's largest moon. Through the thick orange haze, domed habitats sit beside a methane lake. Rain falls — not water, but liquid methane.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_colony_events.19", "space_race_discovery_events.4"],
+        "reframed": "mirror",
     },
     "colony_enceladus": {
         "prompt": "A research colony near Enceladus's south pole, where geysers of water ice erupt from tiger-stripe fissures into space. Scientists study the plumes for signs of life from the subsurface ocean. Saturn's rings arc across the sky.",
@@ -1467,6 +1627,7 @@ IMAGES = {
             "space_race_colony_events.22",
             "space_race_colony_events.23",
         ],
+        "reframed": "mirror",
     },
 
     # =========================================================================
@@ -1482,6 +1643,7 @@ IMAGES = {
             "space_race_colony_events.27",
             "space_race_discovery_events.18",
         ],
+        "reframed": "mirror",
     },
 
     # =========================================================================
@@ -1496,13 +1658,14 @@ IMAGES = {
         "prompt": "A tiny automated monitoring station on Proteus, an irregularly shaped moon of Neptune. Solar panels are useless this far out — nuclear reactors power everything. Neptune's blue disc hangs in the sky.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_colony_events.29"],
+        "reframed": "mirror",
     },
 
     # =========================================================================
     # SPACE RACE COLONY EVENTS — Kuiper Belt & Beyond (30-34)
     # =========================================================================
     "colony_pluto_charon": {
-        "prompt": "Twin colonies on Pluto and Charon linked by ship traffic across deep darkness and distant starlight.",
+        "prompt": "On the icy reddish-tan plains of Pluto, a cluster of small domed habitat modules glows warm yellow in the darkness, while the large grey disc of Charon hangs low over the jagged horizon. A small shuttle's engine trail arcs up toward Charon through the black star-filled sky.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_colony_events.30"],
     },
@@ -1529,26 +1692,35 @@ IMAGES = {
         "prompt": "A rocket ascending through a blue sky on a pillar of flame, trailing a brilliant white exhaust plume. Spectators on the ground shield their eyes against the light. Countdown clocks at zero. The moment humanity reaches for space.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.1", "space_race_events.30"],
+        "reframed": "shift 0.2",
     },
     "orbital_earth_view": {
         "prompt": "An astronaut looking out a spacecraft window at Earth below — the thin blue atmosphere line, swirling white clouds, the curvature of the planet. The profound loneliness and beauty of orbit. Earth as a fragile island in blackness.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["modern_election_events.32", "space_race_events.2", "te_map_modes.1"],
+        "reframed": "mirror",
     },
     "moon_landing_footprint": {
         "prompt": "An astronaut's boot pressing into lunar regolith for the first time. The bootprint is sharp and clear in the grey dust. The lunar module sits nearby, Earth hangs in the black sky.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.3"],
+        "reframed": "mirror",
     },
     "deep_space_probe_encounter": {
         "prompt": "A space probe approaching a distant planet or gas giant, its antenna dish pointed back toward a tiny dot of Earth. The planet fills the frame with swirling storms and moons.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["space_race_events.4", "space_race_events.37", "space_race_events.45"],
+        "events": [
+            "space_race_events.4",
+            "space_race_events.37",
+            "space_race_events.45",
+            "space_race_events.81",
+        ],
     },
     "moon_site_selection": {
         "prompt": "Scientists and engineers gathered around a lunar globe, debating landing site options. Orbital photographs and geological surveys cover the walls. Red pins mark candidate sites. The critical decision of where to plant humanity's flag.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.5", "space_race_events.34"],
+        "reframed": "shift 0.2",
     },
     "lunar_base_dome": {
         "prompt": "A permanent lunar base taking shape: inflatable habitat modules connected by pressurized tunnels, a small greenhouse dome, solar panels and communications arrays. Astronauts in suits work outside. Earth visible on the horizon.",
@@ -1559,11 +1731,13 @@ IMAGES = {
         "prompt": "The first crewed Mars landing: a spacecraft touching down in a cloud of red Martian dust, retro-rockets firing. Through the settling dust, the rust-colored landscape of another world emerges. History being made 225 million kilometers from home.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.7", "space_race_events.33"],
+        "reframed": "shift 0.2",
     },
     "interstellar_probe_departure": {
         "prompt": "An interstellar probe being released from a space station, its solar sail unfurling like a silver flower. It begins its years-long journey to another star system.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.8"],
+        "reframed": "shift 0.2",
     },
     # =========================================================================
     # INTERSTELLAR PROBE RESULTS — 30 unique outcomes (events 601-630)
@@ -1590,7 +1764,7 @@ IMAGES = {
         "events": ["space_race_events.604"],
     },
     "probe_asteroid_belts": {
-        "prompt": "Dense asteroid field of tumbling rocks lit by distant starlight, stretching endlessly in all directions.",
+        "prompt": "Many irregular grey rocks of different sizes float scattered through black space with wide gaps between them, lit hard from one side by a distant small sun, a few large cratered asteroids close in the foreground.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.605"],
     },
@@ -1603,11 +1777,13 @@ IMAGES = {
         "prompt": "The glowing white-hot remnant of a dead star — a white dwarf surrounded by rings of pulverized planetary debris and cooling dust. The shattered remains of worlds that once orbited a living sun.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.607"],
+        "reframed": "shift 0.2",
     },
     "probe_superflare": {
         "prompt": "A colossal stellar superflare erupting from a red dwarf star, its plasma arc engulfing the magnetosphere of a nearby planet. The most violent stellar weather event ever recorded at close range — captured by an interstellar probe's instruments.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.608"],
+        "reframed": "mirror",
     },
 
     # Cat II: Astrophysical Wonders (609-615)
@@ -1615,16 +1791,19 @@ IMAGES = {
         "prompt": "A rocky terrestrial planet adorned with a spectacular ring system — the debris of a recently destroyed moon. Backlit by its parent star, the rings shimmer with prismatic beauty.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.609"],
+        "reframed": "shift 0.2",
     },
     "probe_volcanic_world": {
         "prompt": "Super-Earth seen from orbit with erupting volcanoes and glowing lava rivers crossing continents.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.610"],
+        "reframed": "shift 0.2",
     },
     "probe_magnetic_shield": {
         "prompt": "A small rocky planet orbiting a tempestuous red dwarf, surrounded by brilliant aurora — evidence of an extraordinarily powerful magnetic field deflecting stellar radiation. The magnetosphere glows blue and purple, shielding a thin but precious atmosphere from destruction.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.611"],
+        "reframed": "shift 0.2",
     },
     "probe_ocean_world": {
         "prompt": "A planet-wide ocean world seen from orbit — no land, no continents, just a single world-spanning deep blue sea stretching to every horizon under a sky of water vapor clouds.",
@@ -1652,6 +1831,7 @@ IMAGES = {
         "prompt": "A blue-green exoplanet viewed through spectroscopic analysis overlays showing oxygen-methane atmospheric disequilibrium — the unmistakable signature of biological activity. Life confirmed at another star.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.616"],
+        "reframed": "shift 0.2",
     },
     "probe_alien_vegetation": {
         "prompt": "False-color imagery from a probe showing an alien continent covered in photosynthetic vegetation — but instead of green, the 'red edge' spectral signature reveals vast plains of dark red and crimson plant-analog organisms harvesting starlight from a red.",
@@ -1699,6 +1879,7 @@ IMAGES = {
         "prompt": "A rocky exoplanet surrounded by an unnaturally dense cloud of orbital debris — thousands of artificial objects in decaying orbits. A dead civilization's Kessler syndrome captured by a probe's camera. Satellites, wreckage, and shrapnel choking the sky.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.625"],
+        "reframed": "shift 0.2",
     },
     "probe_industrial_atmosphere": {
         "prompt": "Hazy planet wrapped in yellow-gray smog plumes rising from geometric surface industrial complexes.",
@@ -1755,6 +1936,7 @@ IMAGES = {
         "prompt": "An emergency inside a space habitat: red warning lights flash, crew members rush to seal a hull breach with emergency patches. Air visibly venting. The thin membrane between life and vacuum torn open.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.14"],
+        "reframed": "shift 0.2",
     },
     "computer_error_cockpit": {
         "prompt": "A spacecraft cockpit flooded with error messages on every screen. The pilot's hands hover over manual controls, training taking over as automated systems fail. Through the viewport, the wrong trajectory is visible. Minutes to decide.",
@@ -1766,9 +1948,11 @@ IMAGES = {
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.17"],
     },
+    # Pending: the render had prominent garbled lettering (headlines on the newsroom wall), so the
+    # .dds was deleted and its events show budget_hearing_congress until regenerated.
     "program_scandal_newsroom": {
-        "prompt": "A newsroom breaking a space program scandal: journalists reviewing leaked documents showing cost overruns, safety shortcuts, or corruption. Headlines being typeset. The moment when the dream of space meets the reality of human institutions.",
-        "style": "digital painting, cinematic light, hard sci-fi",
+        "prompt": "At the left of the frame, a journalist in shirtsleeves sits at a cluttered wooden desk late at night under a green-shaded lamp, leaning over a thick stack of loose papers with a pencil in one hand and a telephone receiver held to his ear with the other. Two colleagues stand just behind his chair, bending to look at the papers. The right of the frame is a dark open office of empty desks and tall windows onto a city at night.",
+        "style": "oil painting, contemporary realism, warm lamplight in a dark room",
         "events": ["space_race_events.18", "space_race_events.73"],
     },
     "sabotage_investigation": {
@@ -1780,6 +1964,7 @@ IMAGES = {
         "prompt": "A nation's leaders watching a rival country's space achievement broadcast on television screens. Mixed emotions — admiration, envy, urgency, and the sting of being second. The space race as national pride and existential competition.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.20"],
+        "reframed": "shift 0.2",
     },
     "budget_hearing_congress": {
         "prompt": "A congressional budget hearing for the space program. An administrator defends the program with models and photographs while skeptical legislators wave cost reports. The perennial battle between the dream of space and the reality of budgets.",
@@ -1793,19 +1978,24 @@ IMAGES = {
     "kessler_debris_field": {
         "prompt": "Earth orbit visualized as a deadly debris field: thousands of fragments from destroyed satellites orbiting at lethal velocity. A functioning satellite narrowly dodges debris. The Kessler Syndrome threatening to lock humanity out of orbit.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["space_race_events.31", "space_race_events.47"],
+        "events": ["space_race_events.31", "space_race_events.47", "repeatable_events.70"],
     },
     "astronaut_candidate_training": {
         "prompt": "Astronaut trainees enduring centrifuge and neutral-buoyancy drills in a bright training complex.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["space_race_events.32"],
+        "events": ["space_race_events.32", "space_race_events.80"],
     },
+    # Pending: the render had prominent garbled lettering (wall charts with lettered titles), so the
+    # .dds was deleted and its events show mission_delay_hangar until regenerated.
     "supply_logistics_planning": {
-        "prompt": "Logistics planners surrounded by manifests, launch schedules, and supply chain diagrams for sustaining operations in space. Every kilogram costs thousands to launch. Every overlooked item could end a mission. Spreadsheets as a matter of life and death.",
+        "prompt": "At the left of the frame, a logistics officer in a blue work shirt stands in a vast warehouse among towering steel racks of plain white cargo containers, holding a clipboard, while a forklift carries a container toward a loading bay. The right of the frame is the warehouse's far end, an open bay door and a launch tower on a flat plain under a pale sky.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": [
-            "space_race_events.35", "space_race_events.41",
-            "space_race_events.49", "space_race_events.55",
+            "space_race_events.105",
+            "space_race_events.35",
+            "space_race_events.41",
+            "space_race_events.49",
+            "space_race_events.55",
         ],
     },
     "radiation_hazard_space": {
@@ -1830,7 +2020,7 @@ IMAGES = {
     },
 
     # =========================================================================
-    # SPACE RACE EVENTS — Industry & Progress (50-55, 60, 72-76)
+    # SPACE RACE EVENTS — Industry & Progress (50-55, 60, 72-76, 83)
     # =========================================================================
     "private_rocket_landing": {
         "prompt": "A private space company's reusable rocket landing on its tail on a drone ship at sea. The company logo prominently displayed. Contrails of steam, perfectly balanced on engine thrust. The commercialization of orbit.",
@@ -1856,6 +2046,7 @@ IMAGES = {
         "prompt": "Fire engulfing a rocket assembly building: flames consuming the massive structure, fire trucks surrounding it, personnel evacuating. Months or years of work destroyed in hours. The terrestrial disaster that grounds a space program.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.72"],
+        "reframed": "shift 0.2",
     },
     "capsule_seal_failure": {
         "prompt": "A spacecraft capsule on the ground failing pressure testing: engineers in hardhats examining a hairline crack in the hull with instruments.",
@@ -1871,6 +2062,14 @@ IMAGES = {
         "prompt": "An empty space program facility: lights off, equipment covered in dust sheets, a partially built rocket standing alone in a cavernous assembly hall. The dream abandoned, the budget redirected, the engineers scattered.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["space_race_events.76"],
+        "reframed": "shift 0.2",
+    },
+    "mars_orbit_station": {
+        # Replaces space_station.dds, a watermarked Creative Commons photograph of
+        # the ISS, not a render (#1610). Drawn 2026-11-13 (seed 0).
+        "prompt": "At the left of the frame, a crewed station in orbit high above Mars: a few white cylindrical habitat modules joined end to end, two broad dark solar wings, and a small landing craft docked at one end. Below it the rust-red curve of the planet with a thin pale haze along its rim. The right of the frame is open black space with a few faint stars.",
+        "style": "digital painting, cinematic light, hard sci-fi",
+        "events": ["space_race_events.83"],
     },
 
     # =========================================================================
@@ -1900,9 +2099,12 @@ IMAGES = {
         "prompt": "A sterile city street where citizens walk in orderly lines through facial recognition scanning gates. A single large surveillance camera dominates the foreground, its red light glowing. A drone hovers above. Buildings are grey and uniform. Everyone walks with eyes down. Total order, zero privacy.",
         "style": "oil painting, contemporary realism, dystopian",
         "events": ["surveillance_events.100"],
+        "reframed": "shift 0.2",
     },
+    # Pending: the render had prominent garbled lettering (a held-up sign of near-English words), so the
+    # .dds was deleted and its events show civil_rights_victory until regenerated.
     "digital_freedom_secured": {
-        "prompt": "Citizens celebrating the passage of digital rights legislation: computer screens showing encrypted communications protected by law, privacy advocates embracing outside a parliament. Digital freedom encoded in law. Bright and hopeful.",
+        "prompt": "At the left of the frame, a young woman stands on the stone steps of a columned building at dusk with both arms raised in celebration, a phone in one hand. Behind her a crowd of young people on the steps embrace and cheer. The right of the frame is the building's pale columns and a warm evening sky.",
         "style": "oil painting, impressionist, bright hopeful light",
         "events": ["surveillance_events.200"],
     },
@@ -1926,7 +2128,11 @@ IMAGES = {
     "cultural_renaissance_shared": {
         "prompt": "A cultural exchange program in full bloom: an art exhibition featuring works from two allied nations side by side. Visitors from both countries mingling, musicians performing fusion compositions. Culture as the bridge between peoples.",
         "style": "oil painting, impressionist, warm gallery light",
-        "events": ["treaty_article_events.3", "treaty_article_events.11"],
+        "events": [
+            "treaty_article_events.3",
+            "treaty_article_events.11",
+            "movement_events_te.3",
+        ],
     },
     "nationalist_backlash_flags": {
         "prompt": "A nationalist protest against foreign cultural influence: demonstrators waving national flags and burning foreign goods. Traditional symbols held up against foreign products. The backlash against cultural integration and perceived loss of identity.",
@@ -1976,7 +2182,7 @@ IMAGES = {
         "events": [
             "un_events.2", "un_events.6", "un_events.11", "un_events.12",
             "un_events.20", "un_mandate.1", "un_mandate.2", "un_vote.1", "un_vote.2",
-            "un_vote.3", "nuclear_taboo.2",
+            "un_vote.3", "nuclear_taboo.2", "un_vote.8", "un_ceasefire.2",
         ],
     },
     "human_rights_declaration": {
@@ -1986,6 +2192,7 @@ IMAGES = {
             "movement_events_te.4", "movement_events_te.17", "un_events.3",
             "un_events.22", "nuclear_taboo.4",
         ],
+        "reframed": "mirror",
     },
     "peacekeeping_deployment": {
         "prompt": "UN peacekeepers in distinctive blue helmets and berets deploying in a conflict zone: armored vehicles painted white, soldiers establishing checkpoints, civilians cautiously emerging. Peace kept at gunpoint by neutral third parties.",
@@ -2050,6 +2257,7 @@ IMAGES = {
         "prompt": "A space elevator tether descending from the sky: a impossibly thin carbon nanotube cable stretching from ground to geosynchronous orbit, with a climber ascending. The base station is a massive facility.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["wonder_events.1"],
+        "reframed": "shift 0.25",
     },
     "space_elevator_structural_alarm": {
         "prompt": "Engineers in the space elevator control room staring at structural stress readings spiking red on their monitors. The tether sways visibly outside the observation deck. Micro-fractures detected. The tallest structure ever built threatening to fail.",
@@ -2057,9 +2265,10 @@ IMAGES = {
         "events": ["wonder_events.2", "te_orbital_debris.1"],
     },
     "space_elevator_complete": {
-        "prompt": "Fully operational space elevator with multiple climbers moving along a tether above a vast coastal spaceport.",
+        "prompt": "A thin silver ribbon tether rises from a broad offshore platform beside a vast coastal spaceport, climbing straight up into a deep blue sky; several boxy metal cargo capsules are spaced along it, the highest a glinting speck. Seen from above the sea at golden hour.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["wonder_events.3", "wonder_events.4"],
+        "reframed": "mirror",
     },
     "kessler_syndrome_threat": {
         "prompt": "The space elevator threatened by Kessler Syndrome: a visualization of orbital debris threatening to sever the tether. Tracking screens show incoming debris clusters. Emergency deflection systems activating. The elevator's greatest vulnerability.",
@@ -2081,14 +2290,16 @@ IMAGES = {
     # WONDER EVENTS — Orbital Solar Collector (10-15)
     # =========================================================================
     "orbital_solar_first_light": {
-        "prompt": "Orbital mirror array casting a bright energy beam onto a desert receiving station.",
+        "prompt": "Night over a flat desert: a vast field of dark rectangular receiving antennas spreads across the sand toward a low concrete control building, and a narrow column of pale golden light falls into the center of the field from a single bright star-like point high in the starry sky. A few small figures watch from beside parked trucks.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["wonder_events.10"],
+        "reframed": "shift 0.2",
     },
     "solar_beam_misalignment": {
         "prompt": "An orbital solar beam misaligned: the concentrated sunlight striking off-target, scorching a strip of landscape. Fire and smoke where there should be a receiving station. Engineers frantically adjusting orbital mirrors. A weapon disguised as infrastructure.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["wonder_events.11"],
+        "reframed": "shift 0.2",
     },
     "solar_power_surplus": {
         "prompt": "Sunlit industrial region powered by giant rectennas, clean factories, and active desalination basins.",
@@ -2098,7 +2309,7 @@ IMAGES = {
     "solar_storm_orbital_threat": {
         "prompt": "A coronal mass ejection heading toward the orbital solar collector: the sun erupting, a wall of charged particles racing toward the fragile orbital infrastructure. Operators initiating emergency shutdown procedures. Nature vs. engineering.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["wonder_events.14"],
+        "events": ["wonder_events.14", "repeatable_events.80"],
     },
     "solar_monopoly_debate": {
         "prompt": "A heated debate about who controls orbital solar power: corporations, governments, and international bodies arguing over the most valuable energy asset ever created. Screens showing power distribution maps. Control of the sun's energy as ultimate power.",
@@ -2123,14 +2334,16 @@ IMAGES = {
         "prompt": "World leaders in a summit room with a live feed from the orbital battlestation on a large screen. The station's weapons aimed at nothing in particular — the implicit threat sufficient. Peace through the omnipresence of overwhelming force.",
         "style": "oil painting, academic art, diplomatic interior",
         "events": ["wonder_events.22", "wonder_events.25"],
+        "reframed": "shift 0.2",
     },
     "orbital_misfire_impact": {
         "prompt": "Fresh impact crater in an urban district with smoke columns and shattered streets.",
         "style": "digital painting, dramatic light, destructive impact",
         "events": ["wonder_events.23"],
+        "reframed": "shift 0.2",
     },
     "orbital_arms_race": {
-        "prompt": "Earth orbit crowded with competing armed platforms and launch trails rising from multiple continents.",
+        "prompt": "Seen from high orbit above the curve of the blue Earth, several large boxy armed satellites with long gun barrels and wide solar panels hang far apart from one another, while bright rocket exhaust trails climb up out of the clouds far below.",
         "style": "digital painting, cinematic light, military sci-fi",
         "events": ["wonder_events.24"],
     },
@@ -2147,16 +2360,19 @@ IMAGES = {
         "prompt": "An antimatter containment facility: a gleaming, impossibly clean chamber with a tiny glowing speck of antimatter suspended in magnetic fields at the center. The most expensive and dangerous substance ever created. Scientists watch through reinforced windows.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["wonder_events.30"],
+        "reframed": "shift 0.2",
     },
     "antimatter_containment_breach": {
         "prompt": "An antimatter containment breach: alarms blaring, magnetic field indicators failing, evacuation in progress. The facility glows ominously. If the containment fails completely, the annihilation will leave a crater. Seconds to prevent catastrophe.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["wonder_events.31", "wonder_events.34"],
+        "reframed": "mirror",
     },
     "antimatter_weapons_prototype": {
         "prompt": "Secure lab where officials inspect a tiny containment device inside heavy shielding.",
         "style": "digital painting, cinematic light, hard sci-fi",
         "events": ["wonder_events.32"],
+        "reframed": "shift 0.2",
     },
     "antimatter_diplomacy_power": {
         "prompt": "A diplomatic summit dominated by the nation that controls antimatter: other nations' delegates deferential, the antimatter nation's representatives confident. A single milligram of antimatter has more energy than a nuclear bomb. Ultimate leverage.",
@@ -2176,6 +2392,7 @@ IMAGES = {
         "prompt": "A powerful leader delivering a fiery ideological speech to a massive rally. Searchlights cross the sky, banners and flags fill the stadium. The crowd roars. The rhetoric that turns disagreement into existential conflict.",
         "style": "oil painting, dramatic shadows, military painting",
         "events": ["cultural_hegemony.18", "world_war_events.1", "world_war_events.4"],
+        "reframed": "shift 0.2",
     },
     "border_skirmish_troops": {
         "prompt": "Infantry trading fire across trenches and barbed wire in cold dawn haze.",
@@ -2260,6 +2477,7 @@ IMAGES = {
         "prompt": "Soldiers and technicians in white coats standing beside a missile warhead resting on a wheeled steel cradle inside a concrete storage bunker, rows of sealed crates, fluorescent ceiling lights, a heavy vault door.",
         "style": "oil painting, cold war realism, cold fluorescent light",
         "events": ["nuclear_custody.5", "nuclear_taboo.20"],
+        "reframed": "shift 0.2",
     },
     "public_observatory_night": {
         "prompt": "Townspeople in coats gathered inside a domed observatory at night, a large brass telescope aimed through the open slit of the dome at a starry sky, an astronomer adjusting the eyepiece.",
@@ -2304,6 +2522,98 @@ IMAGES = {
             "decolonization_events.400", "decolonization_events.401",
         ],
     },
+
+    # =========================================================================
+    # NOVEMBER 2026: REPLACING THE UNSOURCED PHOTOGRAPHS (#1658)
+    # Eighteen pictures added in March 2026 had no entry here and no recorded
+    # source; most were stock or press photographs (app logos, the real UN
+    # chambers, a real parade, a maker's name on a robot). Events that an
+    # existing picture fits were moved to it; these were drawn for the rest.
+    # The first eleven keep the old file names, so the events that stay with
+    # them need no change.
+    # =========================================================================
+    "climate_awareness": {
+        "prompt": "At the left of the frame, a meteorologist in a cardigan with rolled sleeves stands alone at the low parapet of a weather office's flat roof at dawn, holding a glass thermometer up to the light; a tall wind vane on a thin mast rises behind him. Below the roof a dry brown plain with dead trees stretches away; the right of the frame is the plain fading into an orange heat haze under a pale sky.",
+        "style": "oil painting, social realism, hazy dawn light",
+        "events": ["environmentalism_events.23"],
+    },
+    "diplomatic_meeting": {
+        "prompt": "At the left of the frame, a trade adviser in a dark suit stands at the end of a long polished mahogany council table, holding up a document bound in plain dark leather as he speaks; ministers in dark suits sit along both sides of the table listening, small down its length. The room has a parquet floor and tall windows hung with heavy cream curtains; the right of the frame is the far end of the table and the curtained windows.",
+        "style": "oil painting, academic art, soft afternoon light",
+        "events": ["decolonization_events.60"],
+    },
+    "genetic_engineering": {
+        "prompt": "At the left of the frame, a plant scientist in a white coat and rubber gloves kneels in a long glass greenhouse, lifting a young cotton plant from a tray of seedlings to look at its roots. Rows of potted maize and soybean plants on steel benches run into the distance; the right of the frame is the sunlit glass roof and the green rows.",
+        "style": "oil painting, realism, bright diffused daylight",
+        "events": ["agricultural_diffusion_events.4"],
+    },
+    "heatwave": {
+        "prompt": "At the left of the frame, an old woman farmer in a headscarf and apron stands at the gate of her farmyard, shading her eyes with one hand as she looks up at a sky turning from milky white haze to hard blue, a fierce sun breaking through. The right of the frame is a wide wheat field, its ears pale and drooping in the glare, running to a flat horizon.",
+        "style": "oil painting, social realism, harsh white midday light",
+        "events": ["environmentalism_events.24"],
+    },
+    # humanitarian_crisis is retouched (2026-11-18): FLUX drew a second woman
+    # cut off at the waist, hanging in the air behind the standpipe. She was
+    # painted out (roof, wall and sky rebuilt behind her, a stem put back on the
+    # pump), so the picture shows one woman. A render from this prompt undoes it.
+    "humanitarian_crisis": {
+        "prompt": "At the left of the frame, women in headscarves fill metal pails at a single standpipe on a muddy lane between self-built shacks of brick, timber and corrugated iron, a small child waiting beside them. The right of the frame is the shanty district spreading over low hills toward the distant towers and chimneys of a great city under haze.",
+        "style": "oil painting, social realism, hazy afternoon light",
+        "events": ["te_demog_wave.9"],
+    },
+    "industrial_monopoly": {
+        "prompt": "At the left of the frame, a heavy-set industrialist in a dark three-piece suit, seen from behind, stands at the tall window of a wood-panelled boardroom with his hands clasped behind his back, looking down on a vast steelworks of blast furnaces, chimneys and rail sidings that stretches to the horizon. The right of the frame is the long boardroom table with empty leather chairs under a brass chandelier.",
+        "style": "oil painting, academic art, warm lamplight against a smoky dusk",
+        "events": ["amendment_petition_events.4", "extra_law_events.85"],
+    },
+    "industrial_pollution": {
+        "prompt": "At the left of the frame, a chemist in a long dark coat crouches on the stony bank below an old stone bridge, filling a glass jar with dark, oily river water. Behind him rise a mining town of soot-blackened brick terraces with grey washing hung between the houses, and colliery headframes and chimneys pouring black smoke. The right of the frame is the black river winding away under a brown sky.",
+        "style": "oil painting, industrial realism, smoky overcast light",
+        "events": ["environmentalism_events.7"],
+    },
+    "neural_interface": {
+        "prompt": "At the left of the frame, a middle-aged woman sits in an armchair in a quiet apartment at evening, eyes closed and hands resting in her lap, wearing a slim plain white headband with a small soft blue light at the temple. The right of the frame is a tall window onto the lights of the city at dusk and a reading lamp.",
+        "style": "digital painting, atmospheric, soft evening light",
+        "events": ["modern_election_events.33"],
+    },
+    "synthetic_crops": {
+        "prompt": "At the left of the frame, an old farmer in a flat cap and worn work jacket stands at his wooden fence, seen from the side, looking up at the long, low, windowless white wall of a factory with steel tanks and pipework that stands just across the fence, close behind him. The right of the frame is his ploughed field running away to a pale overcast sky.",
+        "style": "oil painting, social realism, cool overcast light",
+        "events": ["modern_election_events.34"],
+    },
+    "trade_embargo": {
+        "prompt": "At the left of the frame, a rust-streaked cargo steamer lies idle at anchor outside a harbour, low in the water with its holds closed, gulls on its rail. Inside the breakwater the cranes stand still above empty quays and stacks of unclaimed crates. The right of the frame is grey sea and a low overcast sky.",
+        "style": "oil painting, realism, grey overcast light",
+        "events": ["international_relations_events.5"],
+    },
+    "un_assembly": {
+        "prompt": "At the left of the frame, a lone delegate in a dark suit, seen from behind, stands at a plain pale-wood lectern on a low stage, speaking to a vast modern assembly hall that is nearly empty: curved rows of wooden desks sweep away to the right with only a handful of delegates scattered among them. The back wall is tall windows with drawn curtains; soft ceiling lights.",
+        "style": "oil painting, academic art, dim institutional light",
+        "events": ["un_events.10", "un_events.30", "un_events.32"],
+    },
+    "enhanced_candidate_rally": {
+        "prompt": "At the left of the frame, a tall young woman in a pale grey suit stands at a plain wooden lectern on an outdoor platform, seen from behind and slightly to one side, one hand raised as she speaks. A large crowd fills the town square below her, small with distance; the right of the frame is the crowd and plain stone buildings under a bright spring sky.",
+        "style": "oil painting, social realism, bright spring light",
+        "events": ["modern_election_events.31"],
+    },
+    "missile_parade": {
+        "prompt": "At the left of the frame, a long olive-green missile lies on a heavy eight-wheeled transporter rolling along a wide grey boulevard, soldiers in plain olive uniforms and steel helmets standing at attention along its sides; more missile transporters follow in a column behind it. The right of the frame is the column receding between plain grey stone buildings under an overcast sky, crowds watching from the pavements.",
+        "style": "oil painting, cold war realism, flat grey light",
+        "events": ["nuclear_taboo.7", "nuclear_weapon_events.35"],
+    },
+    "referendum_ballot_count": {
+        "prompt": "At the left of the frame, officials in shirtsleeves sort paper ballots into piles on a long trestle table in a school hall, watched closely by two observers in plain blue armbands standing at the table's end; open wooden ballot boxes sit on the floor beside them. The right of the frame is the hall's tall windows and evening light.",
+        "style": "oil painting, social realism, warm evening lamplight",
+        "events": ["un_referendum.3", "te_culture_merge.4"],
+    },
+    # Pending (phase 2a review, 2026-11-21): the missile submarine leg's
+    # notice shows missile_launch_crew, a silo's control room, until this is
+    # generated.
+    "missile_submarine_departure": {
+        "prompt": "At the left of the frame, the long black hull of a submarine moves out of a grey harbor before dawn, its tall fin and a few sailors on the deck dark against the water, a small pilot launch pulling away beside it. The right of the frame is the open harbor mouth, a breakwater and a lighthouse under a dim blue sky.",
+        "style": "oil painting, cold war realism, cold blue dawn light",
+        "events": ["nuclear_weapon_events.36"],
+    },
 }
 
 
@@ -2342,9 +2652,17 @@ def check(arts=None, on_disk=None) -> dict:
                   phase 3 would silently change the event to the listed image. Fix
                   by moving the ID if the event was re-pointed by hand, or by
                   running phase 3 if the image was just generated
+      unregistered["unregistered_picture"]
+                  a visible event showing a mod picture that has no entry here, so
+                  nothing records where the picture came from. Most of the
+                  eighteen found in #1658 looked like stock or press photographs:
+                  draw the picture through the pipeline, or point the event at
+                  one that has an entry. A plain texture outside
+                  gfx/event_pictures/ lands here too, listed by its path
     Information:
       pending       images with no .dds yet, and the events waiting for them
-      unregistered  visible events the registry does not list, by what they show
+      unregistered  the other visible events the registry does not list, by what
+                    they show (a registered picture, a vanilla video, conditional art)
     """
     import os
     import event_image_inventory as inv
@@ -2382,7 +2700,8 @@ def check(arts=None, on_disk=None) -> dict:
         elif art.picture in IMAGES:
             report["unregistered"]["registered_picture"].append((eid, art.picture))
         else:
-            report["unregistered"]["unregistered_picture"].append((eid, art.picture))
+            report["unregistered"]["unregistered_picture"].append(
+                (eid, art.picture or art.blocks[0]["texture"]))
     return report
 
 
@@ -2408,10 +2727,14 @@ def validate() -> bool:
     print(f"  showing a registered image (add them to its list): {len(un['registered_picture'])}")
     for eid, pic in un["registered_picture"]:
         print(f"    {eid} -> {pic}")
-    print(f"  showing a picture with no prompt entry: {len(un['unregistered_picture'])}")
+    print(f"  showing a picture with no prompt entry (an error, #1658): "
+          f"{len(un['unregistered_picture'])}")
+    for eid, pic in un["unregistered_picture"]:
+        print(f"    {eid} -> {pic}")
     print(f"  showing a vanilla video: {len(un['video'])}")
     print(f"  with conditional art (phase 3 never touches these): {len(un['conditional'])}")
-    errors = len(r["duplicates"]) + len(r["dead"]) + len(r["drift"])
+    errors = (len(r["duplicates"]) + len(r["dead"]) + len(r["drift"])
+              + len(un["unregistered_picture"]))
     print(f"\nImages: {len(IMAGES)}  Listed events: {len(get_all_mapped_events())}  Errors: {errors}")
     return errors == 0
 

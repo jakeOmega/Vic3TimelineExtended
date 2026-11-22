@@ -93,11 +93,9 @@ class ListTest(unittest.TestCase):
                                r"target = scope:tp_iter_mkt \}")
         self.assertNotIn("store_trade_partner_data", effects)
         self.assertNotRegex(effects, r"set_variable = \{ name = tp_")
-        # Older saves' rank variables are dropped, each only if it is there.
-        drop = _block_from(effects, effects.index("te_tp_drop_rank_variables = {"))
-        for n in range(1, 6):
-            for f in ("tc", "total", "gdp_pct"):
-                self.assertRegex(drop, rf"limit = \{{ has_variable = tp_{n}_{f} \}}\s*remove_variable = tp_{n}_{f}")
+        # The old-save strip of the per-rank variables went with 1.15, which loads no older save (#1407).
+        self.assertNotIn("te_tp_drop_rank_variables", effects)
+        self.assertNotRegex(effects, r"\btp_\d_(?:tc|total|gdp_pct|imp_rel|exp_rel)\b")
 
 
 class LocTest(unittest.TestCase):

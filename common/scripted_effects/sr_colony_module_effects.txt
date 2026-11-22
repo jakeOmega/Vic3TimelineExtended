@@ -24,11 +24,16 @@
 # ---- The month's fabrication (the entry's pulse) ----------------------------------
 # Country scope. The queue's counts rebuilt; the month's points into the stock,
 # kept up to its cap so a stall (nothing queued, every slot taken) loses nothing
-# short of it; then up to two modules from the head of the queue, each into a
-# free shipment slot. Under Full Colonies an occupied launch site fabricates
-# nothing (slice 6 fleets design § 5.1: the Space Program's method still gives
-# its country points from a state it doesn't control); a blockade in orbit
-# doesn't stop fabrication, and the modules wait at Earth.
+# short of it, or up to the queue's first module's price where that is more, so a
+# module queued while the cap was higher is still built (sr_mod_fab_stock_fill_cap;
+# review of #1847); a stock already above them is kept, not cut. Then up
+# to two modules from the head of the queue, each into a free shipment slot, or
+# for a lunar world into none (sr_mq_head_needs_no_slot; the owner, 2026-11-15).
+# While every slot is taken, a lunar world's module further down goes ahead of
+# the head (sr_mq_promote_lunar). Under Full Colonies an occupied launch site
+# fabricates nothing (slice 6 fleets design § 5.1: the Space Program's method
+# still gives its country points from a state it doesn't control); a blockade in
+# orbit doesn't stop fabrication, and the modules wait at Earth.
 sr_mod_month = {
 	if = {
 		limit = { sr_colonies_contested_enabled = yes }
@@ -36,33 +41,40 @@ sr_mod_month = {
 		# A level being dismantled at each world, a month on (owner, 2026-10-31).
 		sr_md_month = yes
 		sr_mod_fabrication_self_check = yes
+		sr_mod_storage_self_check = yes
 		sr_marker_self_check = yes
 		if = {
 			limit = {
 				sr_mod_fab_rate > 0
 				NOT = { sr_launch_site_lost = yes }
+				sr_mod_fab_stock_value < sr_mod_fab_stock_fill_cap
 			}
 			set_variable = {
 				name = sr_fab_stock
 				value = {
 					value = sr_mod_fab_stock_value
 					add = sr_mod_fab_rate
-					max = sr_mod_fab_stock_cap
+					max = sr_mod_fab_stock_fill_cap
 				}
 			}
 		}
 		set_local_variable = { name = sr_fab_built value = 0 }
+		sr_mq_promote_lunar = yes
 		while = {
 			limit = {
 				local_var:sr_fab_built < sr_mod_fab_per_month
 				NOT = { sr_launch_site_lost = yes }
 				sr_mod_fab_stock_value >= sr_mq_head_cost
-				sr_ms_has_free_slot = yes
+				OR = {
+					sr_ms_has_free_slot = yes
+					sr_mq_head_needs_no_slot = yes
+				}
 				has_variable = sr_mq_1_site
 				has_variable = sr_mq_1_type
 			}
 			change_local_variable = { name = sr_fab_built add = 1 }
 			sr_mod_fab_head = yes
+			sr_mq_promote_lunar = yes
 		}
 	}
 }
@@ -79,6 +91,39 @@ sr_mod_fab_build = {
 	set_local_variable = { name = sr_ms_new_site value = $INDEX$ }
 	set_local_variable = { name = sr_ms_new_type value = $CODE$ }
 	sr_ms_store_new = yes
+}
+
+# Country scope, from sr_mod_fab_head for a lunar world (the owner, 2026-11-15):
+# its module takes no shipment slot. Earth's own Moon is reached the month a
+# module is built (the transit is 0), so while launches aren't barred and the
+# world is neither blockaded nor occupied it is installed at once, through the
+# landing's own install (sr_mod_install_<key>; a full cap loses it, as a landing
+# does). Otherwise it waits in a shipment slot like any other (sr_mod_month built
+# it only with one free: sr_mq_head_needs_no_slot reads the same three tests)
+# and lands when it would have before, lost if the world is still blockaded or
+# occupied then (review of #1847: paying for a module lost the same month).
+sr_mod_fab_build_lunar = {
+	if = {
+		limit = {
+			NOT = { sr_launches_barred = yes }
+			NOT = { has_global_variable = sr_site_blockaded_$KEY$ }
+			NOT = { has_global_variable = sr_site_occupier_$KEY$ }
+		}
+		change_variable = { name = sr_fab_stock subtract = local_var:sr_mq_head_cost_now }
+		set_local_variable = { name = sr_ms_type_now value = $CODE$ }
+		set_local_variable = { name = sr_ms_installed value = 0 }
+		sr_mod_install_$KEY$ = yes
+		# Lost on a full cap: the console's record, and the log.
+		if = {
+			limit = { local_var:sr_ms_installed = 0 }
+			set_variable = { name = sr_ms_last_lost_site value = $INDEX$ }
+			set_variable = { name = sr_ms_last_lost_type value = $CODE$ }
+			debug_log = "TE_SR_MODULES a module of type $CODE$ for world $INDEX$ was lost on installing (the world's cap full) country=[THIS.GetCountry.GetTagName]"
+		}
+	}
+	else = {
+		sr_mod_fab_build = { KEY = $KEY$ TYPE = $TYPE$ CODE = $CODE$ INDEX = $INDEX$ }
+	}
 }
 
 # ---- The queue -----------------------------------------------------------------------
@@ -275,52 +320,62 @@ sr_ms_count_slot = {
 }
 
 # ---- Fabrication methods ---------------------------------------------------------------
-# Country scope. The best Module Fabrication method the country has, for the
-# AI's review (design § 10): Fusion Shipyards with Compact Fusion
-# Reactors, else Orbital Foundries (pm_sr_fabrication_lunar_foundries) with
-# Space Colonization, else Orbital Assembly with Cislunar Infrastructure; with
-# none of them, nothing (a holder that was given its colony may have none).
-sr_mod_activate_best_fabrication = {
+# Country scope. Puts the Space Program on the method PM, unless it runs it.
+sr_mod_run_method = {
 	if = {
-		limit = { has_technology_researched = compact_fusion_reactors }
-		if = {
-			limit = { NOT = { sr_mod_fabrication_runs = { PM = pm_sr_fabrication_fusion_shipyards } } }
-			activate_production_method = {
-				building_type = building_space_program
-				production_method = pm_sr_fabrication_fusion_shipyards
-			}
-		}
-	}
-	else_if = {
-		limit = { has_technology_researched = space_colonization }
-		if = {
-			limit = { NOT = { sr_mod_fabrication_runs = { PM = pm_sr_fabrication_lunar_foundries } } }
-			activate_production_method = {
-				building_type = building_space_program
-				production_method = pm_sr_fabrication_lunar_foundries
-			}
-		}
-	}
-	else_if = {
-		limit = {
-			has_technology_researched = cislunar_infrastructure
-			NOT = { sr_mod_fabrication_runs = { PM = pm_sr_fabrication_orbital_assembly } }
-		}
+		limit = { NOT = { sr_mod_fabrication_runs = { PM = $PM$ } } }
 		activate_production_method = {
 			building_type = building_space_program
-			production_method = pm_sr_fabrication_orbital_assembly
+			production_method = $PM$
 		}
 	}
 }
 
-sr_mod_stop_fabrication = {
+# Country scope. The AI's Module Fabrication method, for its review (design
+# § 10): the dearest one its technology allows whose bill is within its
+# fabrication budget (the owner, 2026-11-20; sr_mod_ai_fab_room_<method>,
+# sr_colony_module_values.txt): Fusion Shipyards with Compact Fusion Reactors,
+# Orbital Foundries (pm_sr_fabrication_lunar_foundries) with Space
+# Colonization. Otherwise the cheapest method it has, whatever the budget, as
+# before the budget: Orbital Assembly with Cislunar Infrastructure, else
+# Orbital Foundries, else Fusion Shipyards (neither later technology needs
+# Cislunar Infrastructure, and a holder given its colony may have any of the
+# three). With none of them, nothing.
+sr_mod_activate_best_fabrication = {
 	if = {
-		limit = { NOT = { sr_mod_fabrication_runs = { PM = pm_sr_fabrication_none } } }
-		activate_production_method = {
-			building_type = building_space_program
-			production_method = pm_sr_fabrication_none
+		limit = {
+			has_technology_researched = compact_fusion_reactors
+			sr_mod_ai_fab_room_fusion_shipyards >= 0
 		}
+		sr_mod_run_method = { PM = pm_sr_fabrication_fusion_shipyards }
 	}
+	else_if = {
+		limit = {
+			has_technology_researched = space_colonization
+			sr_mod_ai_fab_room_lunar_foundries >= 0
+		}
+		sr_mod_run_method = { PM = pm_sr_fabrication_lunar_foundries }
+	}
+	else_if = {
+		limit = { has_technology_researched = cislunar_infrastructure }
+		sr_mod_run_method = { PM = pm_sr_fabrication_orbital_assembly }
+	}
+	else_if = {
+		limit = { has_technology_researched = space_colonization }
+		sr_mod_run_method = { PM = pm_sr_fabrication_lunar_foundries }
+	}
+	else_if = {
+		limit = { has_technology_researched = compact_fusion_reactors }
+		sr_mod_run_method = { PM = pm_sr_fabrication_fusion_shipyards }
+	}
+}
+
+sr_mod_stop_fabrication = {
+	sr_mod_run_method = { PM = pm_sr_fabrication_none }
+}
+
+sr_mod_stop_storage = {
+	sr_mod_run_method = { PM = pm_sr_storage_none }
 }
 
 # ---- AI (design § 10) -----------------------------------------------------------------------
@@ -329,8 +384,9 @@ sr_mod_stop_fabrication = {
 # each colony with nothing on the way
 # (sr_mod_ai_plan_<key>: a Habitat when its people fill three quarters of its
 # room, else its next specialization level its crews can run; never the
-# placeholder Defences or Spaceport), and runs the best fabrication method
-# while anything is queued; otherwise fabrication goes off.
+# placeholder Defences or Spaceport), and runs the dearest fabrication method
+# within its budget while anything is queued (sr_mod_activate_best_fabrication);
+# otherwise fabrication goes off. Storage stays off.
 sr_mod_ai_review = {
 	if = {
 		limit = {
@@ -359,6 +415,9 @@ sr_mod_ai_review = {
 		else = {
 			sr_mod_stop_fabrication = yes
 		}
+		# No storage (the owner, 2026-11-15): the AI queues only within its
+		# colonies' slots, where the base stock is always enough.
+		sr_mod_stop_storage = yes
 	}
 }
 
@@ -444,13 +503,14 @@ sr_ebase_hook_fire = {
 # (a modifier sum can lag a day after a method changes); re-armed if it no
 # longer qualifies by then. Once a game. A holder of Mare Imbrium's Mass Driver
 # is skipped: its +3 points need no method, so its OK would prove nothing
-# (sr_colony_imbrium_massdriver_mult is set on the country while it shows).
+# (sr_colony_imbrium_massdriver_held is set on the country while the entry
+# declares it, sr_sites_generated.txt; #1404).
 sr_mod_fabrication_self_check = {
 	if = {
 		limit = {
 			NOT = { has_global_variable = sr_mod_fab_checked }
 			sr_mod_fab_qualifies = yes
-			NOT = { has_variable = sr_colony_imbrium_massdriver_mult }
+			NOT = { has_variable = sr_colony_imbrium_massdriver_held }
 		}
 		if = {
 			limit = {
@@ -475,6 +535,45 @@ sr_mod_fabrication_self_check = {
 	else_if = {
 		limit = { has_variable = sr_mod_fab_check_armed }
 		remove_variable = sr_mod_fab_check_armed
+	}
+}
+
+# Country scope, from sr_mod_month. TE_SELF_CHECK module_storage (the owner,
+# 2026-11-15): a Space Program running a Module Storage method at half staff or
+# more must give its country storage (country_sr_module_storage_add,
+# workforce-scaled as fabrication's points are). Armed on the first such
+# country, the verdict a month later (a modifier sum can lag a day after a
+# method changes); re-armed if it no longer qualifies by then. Once a game. The
+# method is the only source, so OK can't be a false pass. Fallback if BROKEN:
+# read the method and occupancy in script (docs/testing/solar-colonies-playtest.md).
+sr_mod_storage_self_check = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = sr_mod_storage_checked }
+			sr_mod_storage_runs = yes
+		}
+		if = {
+			limit = {
+				has_variable = sr_mod_storage_check_armed
+				te_history_month_index > var:sr_mod_storage_check_armed
+			}
+			set_global_variable = { name = sr_mod_storage_checked value = yes }
+			if = {
+				limit = { sr_mod_fab_storage > 0 }
+				debug_log = "TE_SELF_CHECK OK module_storage country=[THIS.GetCountry.GetTagName] storage=[THIS.ScriptValue('sr_mod_fab_storage')|0] cap=[THIS.ScriptValue('sr_mod_fab_stock_cap')|0] (a Space Program's Module Storage method gives its country storage) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN module_storage country=[THIS.GetCountry.GetTagName] storage=[THIS.ScriptValue('sr_mod_fab_storage')|0] cap=[THIS.ScriptValue('sr_mod_fab_stock_cap')|0] (a Space Program has run a Module Storage method at half staff or more for a month and its country has no storage: the method's country modifier does not reach the country; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+		}
+		else_if = {
+			limit = { NOT = { has_variable = sr_mod_storage_check_armed } }
+			set_variable = { name = sr_mod_storage_check_armed value = te_history_month_index }
+		}
+	}
+	else_if = {
+		limit = { has_variable = sr_mod_storage_check_armed }
+		remove_variable = sr_mod_storage_check_armed
 	}
 }
 
@@ -545,24 +644,6 @@ sr_marker_self_check = {
 		else_if = {
 			limit = { NOT = { has_variable = sr_slot_marker_armed } }
 			set_variable = { name = sr_slot_marker_armed value = te_history_month_index }
-		}
-	}
-}
-
-# Journal entry scope, right after sr_site_show_modifier_at's add_modifier.
-# TE_SELF_CHECK modifier_seen_same_effect: whether has_modifier sees a
-# modifier added earlier in the same effect, which the mod's code has so far
-# avoided relying on (slices 2-3 design § 15). Once a game, at the first add.
-sr_mod_seen_self_check = {
-	if = {
-		limit = { NOT = { has_global_variable = sr_mod_seen_checked } }
-		set_global_variable = { name = sr_mod_seen_checked value = yes }
-		if = {
-			limit = { has_modifier = $MODIFIER$ }
-			debug_log = "TE_SELF_CHECK OK modifier_seen_same_effect $MODIFIER$ (has_modifier sees an add_modifier made earlier in the same effect) date=[TimeKeeper.GetCurrentDate.GetString]"
-		}
-		else = {
-			debug_log = "TE_SELF_CHECK BROKEN modifier_seen_same_effect $MODIFIER$ (has_modifier does not yet see an add_modifier made earlier in the same effect: keep every refresh to once per effect; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 	}
 }

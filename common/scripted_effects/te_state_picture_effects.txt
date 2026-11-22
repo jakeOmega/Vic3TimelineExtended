@@ -1,0 +1,542 @@
+﻿# ============================================================================
+# STATE PICTURES - the yearly pass (design: docs/superpowers/specs/2026-11-10-state-pictures-design.md;
+# system doc: docs/systems/mod_systems/state_pictures.md).
+#
+# The banner at the top of the state panel is picked by the weights in
+# common/terrain/te_state_pictures_generated.txt, which the engine may evaluate every frame. So a
+# weight reads the owner's technology and this pass's stored tags, and nothing dearer:
+#   te_sp_size   1 town, 2 city, 3 metropolis, 4 megacity; absent before the state's first walk
+#   te_sp_oil    present while oil is a major part of the state's economy (the oil-field pictures)
+#   te_sp_coal   present while coal is the larger part of the state's mines (the colliery pictures)
+#   te_sp_industry, te_sp_resort   present while heavy industry, or tourism, is a large part of
+#                the state's building levels (the heavy-industry city, the resort)
+#   te_sp_boom, te_sp_decline   present while the state's people have grown fast, or fallen, for
+#                several years (te_sp_growth, a smoothed yearly rate; te_sp_prov, the province
+#                count it was last taken at)
+#   te_sp_divided   present while a metropolis is very unequal
+#   te_sp_means  1 poor, 3 affluent, absent ordinary: the state's standard of living against
+#                the world's average (global te_sp_world_sol, measured once a calendar year)
+#   te_sp_rundown   present while the standard of living sits well under what its people expect
+# A picture can therefore lag a change by up to a year. The banner's hover (te_sp_tt_* loc) gives
+# the figures each tag was judged on, so the pass stores them beside the tags: te_sp_people (the
+# largest city's people), te_sp_sol and te_sp_esol (the standard of living and what its people
+# expect), te_sp_world (the world's average it was judged against), and while a land or city tag
+# stands, the share it was judged on (te_sp_oil_share, te_sp_coal_share, te_sp_industry_share,
+# te_sp_resort_share).
+# ============================================================================
+
+# State scope, from on_yearly_pulse_state (te_state_picture_on_actions.txt).
+te_state_picture_refresh = {
+	if = {
+		limit = { te_state_picture_city_people < 0 }
+		remove_variable = te_sp_size
+	}
+	# no size yet, or grown past the next floor: the size its people make it
+	else_if = {
+		limit = {
+			OR = {
+				NOT = { has_variable = te_sp_size }
+				var:te_sp_size < te_state_picture_size_up
+			}
+		}
+		set_variable = { name = te_sp_size value = te_state_picture_size_up }
+	}
+	# shrunk below the share of its floor that keeps it
+	else_if = {
+		limit = { var:te_sp_size > te_state_picture_size_down }
+		set_variable = { name = te_sp_size value = te_state_picture_size_down }
+	}
+	# the figure the size was judged on, for the banner's hover
+	if = {
+		limit = { te_state_picture_city_people >= 0 }
+		set_variable = { name = te_sp_people value = te_state_picture_city_people }
+	}
+	else = {
+		remove_variable = te_sp_people
+	}
+	te_state_picture_refresh_land = yes
+	te_state_picture_refresh_city = yes
+	te_state_picture_refresh_prosperity = yes
+	te_state_picture_selfcheck = yes
+}
+
+# What the state's worked land is known for (owner, 2026-11-10: an oil state is one where oil is a
+# major part of the economy, not one with many rigs beside a great city). Script can't read one
+# building's share of the state's GDP, so the measure is its share of the state's building levels,
+# subsistence buildings left out. One walk fills the four sums. A tag is kept until the figure
+# falls a tenth under its floor (te_state_picture_k_keep), so a state at a floor doesn't change
+# picture each year.
+te_state_picture_refresh_land = {
+	te_state_picture_land_sums = yes
+	te_state_picture_land_tags = yes
+}
+
+# The walk: the state's levels, its Oil Rig levels, its mine levels and its Coal Mine levels, as
+# locals for te_state_picture_land_tags; and each tag's floor in levels and the figure that keeps it.
+te_state_picture_land_sums = {
+	set_local_variable = { name = te_sp_all value = 0 }
+	set_local_variable = { name = te_sp_oil_lv value = 0 }
+	set_local_variable = { name = te_sp_mine value = 0 }
+	set_local_variable = { name = te_sp_coal_lv value = 0 }
+	set_local_variable = { name = te_sp_heavy_lv value = 0 }
+	set_local_variable = { name = te_sp_tour_lv value = 0 }
+	every_scope_building = {
+		limit = { is_subsistence_building = no }
+		change_local_variable = { name = te_sp_all add = level }
+		if = {
+			limit = { is_building_type = building_oil_rig }
+			change_local_variable = { name = te_sp_oil_lv add = level }
+		}
+		if = {
+			limit = { is_building_group = bg_mining }
+			change_local_variable = { name = te_sp_mine add = level }
+		}
+		if = {
+			limit = { is_building_type = building_coal_mine }
+			change_local_variable = { name = te_sp_coal_lv add = level }
+		}
+		if = {
+			limit = { is_building_group = bg_heavy_industry }
+			change_local_variable = { name = te_sp_heavy_lv add = level }
+		}
+		if = {
+			limit = { is_building_type = building_tourism_industry }
+			change_local_variable = { name = te_sp_tour_lv add = level }
+		}
+	}
+}
+
+te_state_picture_land_tags = {
+	# oil: a share of the state's levels, and a least number of levels
+	set_local_variable = { name = te_sp_floor value = { value = local_var:te_sp_all multiply = te_state_picture_k_oil_share } }
+	set_local_variable = { name = te_sp_keep value = { value = local_var:te_sp_floor multiply = te_state_picture_k_keep } }
+	if = {
+		limit = {
+			local_var:te_sp_oil_lv >= te_state_picture_k_oil_levels
+			local_var:te_sp_oil_lv >= local_var:te_sp_floor
+		}
+		set_variable = { name = te_sp_oil value = 1 }
+		te_state_picture_land_selfcheck = yes
+	}
+	else_if = {
+		limit = {
+			has_variable = te_sp_oil
+			OR = {
+				local_var:te_sp_oil_lv < te_state_picture_k_oil_levels_keep
+				local_var:te_sp_oil_lv < local_var:te_sp_keep
+			}
+		}
+		remove_variable = te_sp_oil
+	}
+	# coal: a share of the state's mine levels, and a least number of levels
+	set_local_variable = { name = te_sp_floor value = { value = local_var:te_sp_mine multiply = te_state_picture_k_coal_share } }
+	set_local_variable = { name = te_sp_keep value = { value = local_var:te_sp_floor multiply = te_state_picture_k_keep } }
+	if = {
+		limit = {
+			local_var:te_sp_coal_lv >= te_state_picture_k_coal_levels
+			local_var:te_sp_coal_lv >= local_var:te_sp_floor
+		}
+		set_variable = { name = te_sp_coal value = 1 }
+	}
+	else_if = {
+		limit = {
+			has_variable = te_sp_coal
+			OR = {
+				local_var:te_sp_coal_lv < te_state_picture_k_coal_levels_keep
+				local_var:te_sp_coal_lv < local_var:te_sp_keep
+			}
+		}
+		remove_variable = te_sp_coal
+	}
+	# the shares the two tags stand on, for the banner's hover
+	if = {
+		limit = { has_variable = te_sp_oil }
+		set_variable = { name = te_sp_oil_share value = { value = local_var:te_sp_oil_lv divide = local_var:te_sp_all } }
+	}
+	else = {
+		remove_variable = te_sp_oil_share
+	}
+	if = {
+		limit = { has_variable = te_sp_coal }
+		set_variable = { name = te_sp_coal_share value = { value = local_var:te_sp_coal_lv divide = local_var:te_sp_mine } }
+	}
+	else = {
+		remove_variable = te_sp_coal_share
+	}
+}
+
+# What a city is known for, beyond its region and size (design section 7). Called after
+# te_state_picture_refresh_land, with its walk's locals still set.
+te_state_picture_refresh_city = {
+	# heavy industry and tourism: a share of the state's levels and a least number, as oil is
+	set_local_variable = { name = te_sp_floor value = { value = local_var:te_sp_all multiply = te_state_picture_k_industry_share } }
+	set_local_variable = { name = te_sp_keep value = { value = local_var:te_sp_floor multiply = te_state_picture_k_keep } }
+	if = {
+		limit = {
+			local_var:te_sp_heavy_lv >= te_state_picture_k_industry_levels
+			local_var:te_sp_heavy_lv >= local_var:te_sp_floor
+		}
+		set_variable = { name = te_sp_industry value = 1 }
+	}
+	else_if = {
+		limit = {
+			has_variable = te_sp_industry
+			OR = {
+				local_var:te_sp_heavy_lv < te_state_picture_k_industry_levels_keep
+				local_var:te_sp_heavy_lv < local_var:te_sp_keep
+			}
+		}
+		remove_variable = te_sp_industry
+	}
+	set_local_variable = { name = te_sp_floor value = { value = local_var:te_sp_all multiply = te_state_picture_k_resort_share } }
+	set_local_variable = { name = te_sp_keep value = { value = local_var:te_sp_floor multiply = te_state_picture_k_keep } }
+	if = {
+		limit = {
+			local_var:te_sp_tour_lv >= te_state_picture_k_resort_levels
+			local_var:te_sp_tour_lv >= local_var:te_sp_floor
+		}
+		set_variable = { name = te_sp_resort value = 1 }
+	}
+	else_if = {
+		limit = {
+			has_variable = te_sp_resort
+			OR = {
+				local_var:te_sp_tour_lv < te_state_picture_k_resort_levels_keep
+				local_var:te_sp_tour_lv < local_var:te_sp_keep
+			}
+		}
+		remove_variable = te_sp_resort
+	}
+	# the shares the two tags stand on, for the banner's hover
+	if = {
+		limit = { has_variable = te_sp_industry }
+		set_variable = { name = te_sp_industry_share value = { value = local_var:te_sp_heavy_lv divide = local_var:te_sp_all } }
+	}
+	else = {
+		remove_variable = te_sp_industry_share
+	}
+	if = {
+		limit = { has_variable = te_sp_resort }
+		set_variable = { name = te_sp_resort_share value = { value = local_var:te_sp_tour_lv divide = local_var:te_sp_all } }
+	}
+	else = {
+		remove_variable = te_sp_resort_share
+	}
+
+	# growth: the Demographics walk's people against the walk before's, smoothed over several
+	# years. A year in which the state gained or lost provinces is left out, as is a ratio the
+	# walk can't give.
+	if = {
+		limit = { te_state_picture_growth_known = yes }
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_variable = te_sp_prov }
+					var:te_sp_prov = var:te_dg_provinces
+				}
+			}
+			if = {
+				limit = { NOT = { has_variable = te_sp_growth } }
+				set_variable = { name = te_sp_growth value = 0 }
+			}
+			set_variable = { name = te_sp_growth value = te_state_picture_growth_smoothed }
+		}
+		set_variable = { name = te_sp_prov value = var:te_dg_provinces }
+	}
+	if = {
+		limit = {
+			has_variable = te_sp_growth
+			has_variable = te_sp_size
+			var:te_sp_size >= 2
+			var:te_sp_growth >= te_state_picture_k_boom
+		}
+		set_variable = { name = te_sp_boom value = 1 }
+	}
+	else_if = {
+		limit = {
+			has_variable = te_sp_boom
+			OR = {
+				NOT = { has_variable = te_sp_growth }
+				NOT = { has_variable = te_sp_size }
+				var:te_sp_size < 2
+				var:te_sp_growth < te_state_picture_k_boom_keep
+			}
+		}
+		remove_variable = te_sp_boom
+	}
+	if = {
+		limit = {
+			has_variable = te_sp_growth
+			has_variable = te_sp_size
+			var:te_sp_size >= 2
+			var:te_sp_growth <= te_state_picture_k_decline
+		}
+		set_variable = { name = te_sp_decline value = 1 }
+	}
+	else_if = {
+		limit = {
+			has_variable = te_sp_decline
+			OR = {
+				NOT = { has_variable = te_sp_growth }
+				NOT = { has_variable = te_sp_size }
+				var:te_sp_size < 2
+				var:te_sp_growth > te_state_picture_k_decline_keep
+			}
+		}
+		remove_variable = te_sp_decline
+	}
+
+	# divided: a metropolis whose Gini (the Demographics walk's te_dg_gini) is very high
+	if = {
+		limit = {
+			has_variable = te_sp_size
+			var:te_sp_size >= 3
+			has_variable = te_dg_gini
+			var:te_dg_gini >= te_state_picture_k_divided
+		}
+		set_variable = { name = te_sp_divided value = 1 }
+	}
+	else_if = {
+		limit = {
+			has_variable = te_sp_divided
+			OR = {
+				NOT = { has_variable = te_sp_size }
+				var:te_sp_size < 3
+				NOT = { has_variable = te_dg_gini }
+				var:te_dg_gini < te_state_picture_k_divided_keep
+			}
+		}
+		remove_variable = te_sp_divided
+	}
+}
+
+# Prosperity (design section 6): means, the standard of living against the world's average, and
+# upkeep, the standard of living against what the state's people expect. Before the owner's first
+# city technology there are no tags.
+te_state_picture_refresh_prosperity = {
+	if = {
+		limit = { te_state_picture_city_rung < 1 }
+		remove_variable = te_sp_means
+		remove_variable = te_sp_rundown
+		remove_variable = te_sp_sol
+		remove_variable = te_sp_esol
+		remove_variable = te_sp_world
+	}
+	else = {
+		# the world's average for this calendar year: the first state judged in it measures it
+		te_state_picture_world_measure = yes
+		# the figures both tags are judged on, for the banner's hover
+		set_variable = { name = te_sp_sol value = te_state_picture_sol }
+		set_variable = { name = te_sp_esol value = average_expected_sol }
+		# means: poor under a share of the world's average, affluent from a multiple of it, each kept a
+		# little past its floor. The state keeps the average it was judged against (te_sp_world), which
+		# the floors read, so its hover agrees with its picture after the world's figure moves on.
+		if = {
+			limit = { te_state_picture_world_known = yes }
+			set_variable = { name = te_sp_world value = te_state_picture_world_sol }
+			if = {
+				limit = { te_state_picture_sol < te_state_picture_poor_floor }
+				set_variable = { name = te_sp_means value = 1 }
+			}
+			else_if = {
+				limit = { te_state_picture_sol >= te_state_picture_affluent_floor }
+				set_variable = { name = te_sp_means value = 3 }
+			}
+			else_if = {
+				limit = {
+					has_variable = te_sp_means
+					OR = {
+						AND = {
+							var:te_sp_means = 1
+							te_state_picture_sol >= te_state_picture_poor_floor_keep
+						}
+						AND = {
+							var:te_sp_means = 3
+							te_state_picture_sol < te_state_picture_affluent_floor_keep
+						}
+					}
+				}
+				remove_variable = te_sp_means
+			}
+		}
+		# no world's figure to judge by (no state counted, or an average of 0): no means
+		else = {
+			remove_variable = te_sp_world
+			remove_variable = te_sp_means
+		}
+		# upkeep
+		if = {
+			limit = { te_state_picture_sol_shortfall >= te_state_picture_k_rundown }
+			set_variable = { name = te_sp_rundown value = 1 }
+		}
+		else_if = {
+			limit = {
+				has_variable = te_sp_rundown
+				te_state_picture_sol_shortfall < te_state_picture_k_rundown_keep
+			}
+			remove_variable = te_sp_rundown
+		}
+	}
+}
+
+# The world's average standard of living for this calendar year (state scope, from the prosperity
+# pass, before the state is judged). A state's yearly pulse falls on a day of its own and no yearly
+# pulse runs for the world, so the year of the last measure is stored beside the figure
+# (te_sp_world_year), and the first state judged in a later year measures again: every state of a
+# year is judged against the same figure, taken that year. The first measure of a game always runs,
+# so a broken year read reaches the self-check rather than leaving the world unmeasured.
+# te_debug_state_picture.1 removes the year, so the console's pass measures afresh.
+te_state_picture_world_measure = {
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_global_variable = te_sp_world_year }
+				te_state_picture_world_year < te_state_picture_year
+			}
+		}
+		te_state_picture_world_year_selfcheck = yes
+		set_global_variable = { name = te_sp_world_year value = te_state_picture_year }
+		te_state_picture_world_walk = yes
+	}
+}
+
+# The walk: the plain average of every state's standard of living, each state counted once (the
+# owner, 2026-11-14: one rich, populous country shouldn't move every state's floors, as a figure
+# weighted by people let it). A state with an owner and people counts; an empty one doesn't. Its
+# least and greatest standard of living are for the self-check.
+te_state_picture_world_walk = {
+	set_local_variable = { name = te_sp_w_states value = 0 }
+	set_local_variable = { name = te_sp_w_sum value = 0 }
+	set_local_variable = { name = te_sp_w_min value = 1000 }
+	set_local_variable = { name = te_sp_w_max value = -1 }
+	every_state = {
+		limit = {
+			exists = owner
+			te_state_picture_state_people > 0
+		}
+		change_local_variable = { name = te_sp_w_states add = 1 }
+		change_local_variable = { name = te_sp_w_sum add = te_state_picture_sol }
+		if = {
+			limit = { te_state_picture_sol < local_var:te_sp_w_min }
+			set_local_variable = { name = te_sp_w_min value = te_state_picture_sol }
+		}
+		if = {
+			limit = { te_state_picture_sol > local_var:te_sp_w_max }
+			set_local_variable = { name = te_sp_w_max value = te_state_picture_sol }
+		}
+	}
+	if = {
+		limit = { local_var:te_sp_w_states > 0 }
+		set_global_variable = { name = te_sp_world_sol value = { value = local_var:te_sp_w_sum divide = local_var:te_sp_w_states } }
+	}
+	else = {
+		remove_global_variable = te_sp_world_sol
+	}
+	te_state_picture_world_selfcheck = yes
+}
+
+# Once a game, at the first measure: whether the walk's figures hold together. It rests on
+# every_state reaching every state with the locals carrying through it, on state_population and
+# average_sol reading the state it is at, and on the year read. OK when some state was counted, the
+# year is a game year, its states' standards of living differ (if every read were the measuring
+# state's, the least and the greatest would be one figure and the average would sit between them),
+# and the average lies between the least and the greatest. Called with the walk's locals still set.
+te_state_picture_world_selfcheck = {
+	if = {
+		limit = { NOT = { has_global_variable = te_sp_world_check_done } }
+		set_global_variable = { name = te_sp_world_check_done value = yes }
+		set_global_variable = { name = te_sp_chk_w_year value = te_state_picture_year }
+		set_global_variable = { name = te_sp_chk_w_avg value = te_state_picture_world_sol }
+		set_global_variable = { name = te_sp_chk_w_states value = local_var:te_sp_w_states }
+		set_global_variable = { name = te_sp_chk_w_min value = local_var:te_sp_w_min }
+		set_global_variable = { name = te_sp_chk_w_max value = local_var:te_sp_w_max }
+		if = {
+			limit = {
+				te_state_picture_year >= 1836
+				local_var:te_sp_w_states > 0
+				local_var:te_sp_w_min < local_var:te_sp_w_max
+				te_state_picture_world_sol >= local_var:te_sp_w_min
+				te_state_picture_world_sol <= local_var:te_sp_w_max
+			}
+			debug_log = "TE_SELF_CHECK OK state_picture_world year=[GetGlobalVariable('te_sp_chk_w_year').GetValue|0] world_sol=[GetGlobalVariable('te_sp_chk_w_avg').GetValue|2] states=[GetGlobalVariable('te_sp_chk_w_states').GetValue|0] least=[GetGlobalVariable('te_sp_chk_w_min').GetValue|2] greatest=[GetGlobalVariable('te_sp_chk_w_max').GetValue|2]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN state_picture_world year=[GetGlobalVariable('te_sp_chk_w_year').GetValue|0] world_sol=[GetGlobalVariable('te_sp_chk_w_avg').GetValue|2] states=[GetGlobalVariable('te_sp_chk_w_states').GetValue|0] least=[GetGlobalVariable('te_sp_chk_w_min').GetValue|2] greatest=[GetGlobalVariable('te_sp_chk_w_max').GetValue|2] (year under 1836: the year read; no states: the walk's limit or its locals; least equal to greatest: the reads in every_state are one state's; an average outside them: the sums)"
+		}
+	}
+}
+
+# Once a game, at the second measure: the year guard let it through one calendar year after the
+# first. A gap of 0 means the guard measures at every state's pulse (dear, not wrong); a gap of 2 or
+# more that a year went unmeasured, so the floors stood on an old figure. Called before the year
+# is stored again.
+te_state_picture_world_year_selfcheck = {
+	if = {
+		limit = {
+			has_global_variable = te_sp_world_year
+			NOT = { has_global_variable = te_sp_world_year_check_done }
+		}
+		set_global_variable = { name = te_sp_world_year_check_done value = yes }
+		set_global_variable = { name = te_sp_chk_w_gap value = { value = te_state_picture_year subtract = te_state_picture_world_year } }
+		if = {
+			limit = { global_var:te_sp_chk_w_gap = 1 }
+			debug_log = "TE_SELF_CHECK OK state_picture_world_year last=[GetGlobalVariable('te_sp_world_year').GetValue|0] gap=[GetGlobalVariable('te_sp_chk_w_gap').GetValue|0]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN state_picture_world_year last=[GetGlobalVariable('te_sp_world_year').GetValue|0] gap=[GetGlobalVariable('te_sp_chk_w_gap').GetValue|0] (gap 0: the guard measures again within a year; 2 or more: a year was skipped, or no state was judged in one)"
+		}
+	}
+}
+
+# Once a game: the first state tagged as oil country prints the sums the tag came from. The walk
+# rests on `level` reading a building's levels inside every_scope_building and on the locals
+# carrying out of it; OK when the oil levels are at least the floor of levels and no more than
+# the state's whole. Only a tagged state prints, so an empty walk can't pass. Called with the
+# walk's locals still set. The line also prints the state's mine and Coal Mine levels, which the
+# colliery tag rests on: mine_levels counts every building under bg_mining (the mod's mines sit
+# in bg_discoverable_mining, a child group), so in a state with coal it should be at least
+# coal_levels; a mine_levels of 0 beside coal means the group test doesn't reach child groups.
+te_state_picture_land_selfcheck = {
+	if = {
+		limit = { NOT = { has_global_variable = te_sp_land_selfcheck_done } }
+		set_global_variable = { name = te_sp_land_selfcheck_done value = yes }
+		set_global_variable = { name = te_sp_chk_oil value = local_var:te_sp_oil_lv }
+		set_global_variable = { name = te_sp_chk_all value = local_var:te_sp_all }
+		set_global_variable = { name = te_sp_chk_mine value = local_var:te_sp_mine }
+		set_global_variable = { name = te_sp_chk_coal value = local_var:te_sp_coal_lv }
+		if = {
+			limit = {
+				local_var:te_sp_oil_lv >= te_state_picture_k_oil_levels
+				local_var:te_sp_oil_lv <= local_var:te_sp_all
+			}
+			debug_log = "TE_SELF_CHECK OK state_picture_oil state=[THIS.GetState.GetNameNoFormatting] owner=[THIS.GetState.GetOwner.GetTagName] oil_levels=[GetGlobalVariable('te_sp_chk_oil').GetValue|0] all_levels=[GetGlobalVariable('te_sp_chk_all').GetValue|0] mine_levels=[GetGlobalVariable('te_sp_chk_mine').GetValue|0] coal_levels=[GetGlobalVariable('te_sp_chk_coal').GetValue|0]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN state_picture_oil state=[THIS.GetState.GetNameNoFormatting] owner=[THIS.GetState.GetOwner.GetTagName] oil_levels=[GetGlobalVariable('te_sp_chk_oil').GetValue|0] all_levels=[GetGlobalVariable('te_sp_chk_all').GetValue|0] mine_levels=[GetGlobalVariable('te_sp_chk_mine').GetValue|0] coal_levels=[GetGlobalVariable('te_sp_chk_coal').GetValue|0] (the walk's sums don't hold together: `level` or the locals don't read as the pass takes them)"
+		}
+	}
+}
+
+# Once a game: the first state stored at metropolis or larger says whether its figures hold together.
+# The pass rests on te_dg_urban being a head count on the scale of state_population, so its largest
+# city can't hold more people than the state does; BROKEN means it isn't, and the floors in
+# te_state_picture_values.txt are in the wrong unit. The picture itself can't be logged
+# ([THIS.GetState.GetBestTexture] prints empty), so the play-test list
+# (docs/testing/state-pictures-playtest.md) covers the banner.
+te_state_picture_selfcheck = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_sp_selfcheck_done }
+			has_variable = te_sp_size
+			var:te_sp_size >= 3
+		}
+		set_global_variable = { name = te_sp_selfcheck_done value = yes }
+		if = {
+			limit = { te_state_picture_city_people <= te_state_picture_state_people }
+			debug_log = "TE_SELF_CHECK OK state_picture_size state=[THIS.GetState.GetNameNoFormatting] owner=[THIS.GetState.GetOwner.GetTagName] size=[THIS.ScriptValue('te_state_picture_size_shown')|0] city_people=[THIS.ScriptValue('te_state_picture_city_people')|0] state_people=[THIS.ScriptValue('te_state_picture_state_people')|0]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN state_picture_size state=[THIS.GetState.GetNameNoFormatting] owner=[THIS.GetState.GetOwner.GetTagName] size=[THIS.ScriptValue('te_state_picture_size_shown')|0] city_people=[THIS.ScriptValue('te_state_picture_city_people')|0] state_people=[THIS.ScriptValue('te_state_picture_state_people')|0] (the largest city holds more people than its state: te_dg_urban is not a head count on state_population's scale)"
+		}
+	}
+}

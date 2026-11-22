@@ -656,7 +656,8 @@ te_debug_demog_um_selfcheck_start = {
 		set_variable = { name = te_dg_um_chk_util value = var:te_dg_um_util }
 		debug_log = "TE_SELF_CHECK START um_nexus_scaling util=[THIS.Var('te_dg_um_chk_util').GetValue|3] expected_digital_assets=[THIS.Var('te_dg_um_chk_da').GetValue|3] expected_advanced_materials=[THIS.Var('te_dg_um_chk_am').GetValue|3] (the verdict follows in a week) date=[TimeKeeper.GetCurrentDate.GetString]"
 		debug_log_scopes = yes
-		trigger_event = { id = te_debug_demog.130 days = 7 }
+		# the week waits on the owner: a delayed state event never runs (te_debug_demog_um_events.txt, .330)
+		owner = { trigger_event = { id = te_debug_demog.330 days = 7 } }
 	}
 	# um_nexus_cascade (review R1 of #1070): once a game, whether a building's read of a goods axis carries what its
 	# state and country add (the airports' and tourism_output's tourism, the financial cycle's services), which the
@@ -672,6 +673,7 @@ te_debug_demog_um_selfcheck_start = {
 		set_variable = { name = te_dg_um_chk_bd_tour value = local_var:te_dg_um_oth_out_tourism }
 		debug_log = "TE_SELF_CHECK START um_nexus_cascade state_tourism=[THIS.Var('te_dg_um_chk_st_tour').GetValue|3] building_other_tourism=[THIS.Var('te_dg_um_chk_bd_tour').GetValue|3] (the verdict follows in a week) date=[TimeKeeper.GetCurrentDate.GetString]"
 		debug_log_scopes = yes
-		trigger_event = { id = te_debug_demog.131 days = 7 }
+		# the week waits on the owner: a delayed state event never runs (te_debug_demog_um_events.txt, .331)
+		owner = { trigger_event = { id = te_debug_demog.331 days = 7 } }
 	}
 }

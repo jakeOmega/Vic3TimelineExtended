@@ -994,8 +994,7 @@ def gini_bands(o, pieces):
     o("")
     o("# THIS = a state, after its walk: keep the bands that have people, for the country's sum, and")
     o(f"# remove the rest (save size), with the layout they follow (te_dg_gini_layout = {P.GINI_LAYOUT}, the")
-    o("# country adds no other). Overwrites or removes every band an older layout stored, and an old")
-    o("# save's strata sums (before the wealth bands, 2026-10-10).")
+    o("# country adds no other). Overwrites or removes every band an older layout stored.")
     o("te_demog_gini_band_store = {")
     o(f"set_variable = {{ name = te_dg_gini_layout value = {P.GINI_LAYOUT} }}")
     for k in range(1, n + 1):
@@ -1009,11 +1008,6 @@ def gini_bands(o, pieces):
         o(f"remove_variable = te_dg_gn{k}")
         o(f"remove_variable = te_dg_gy{k}")
         o("}")
-    o("if = {")
-    o("limit = { has_variable = te_dg_n_lo }")
-    for name in ("n_lo", "n_mi", "n_up", "y_lo", "y_mi", "y_up"):
-        o(f"remove_variable = te_dg_{name}")
-    o("}")
     o("}")
     o("")
     o("# THIS = a state, after its store: its bands into the formula's locals (0 where none is stored).")
@@ -1035,8 +1029,8 @@ def gini_bands(o, pieces):
     o("}")
     o("")
     o("# THIS = a state in its country's loop: add its bands if they follow this layout, and count it in")
-    o("# local_var:te_dg_g_states (the caller sets it to 0). A state from an older save (14 bands to 61+,")
-    o("# capped income in other units, or strata sums) adds nothing until its own walk stores new ones.")
+    o("# local_var:te_dg_g_states (the caller sets it to 0). A state with no bands in this layout adds nothing")
+    o("# until its own walk stores them.")
     o("te_demog_gini_band_add_state = {")
     o("if = {")
     o("limit = { has_variable = te_dg_gini_layout }")
@@ -1484,10 +1478,15 @@ def absorbed_walk(o, root):
     # Causes of Death (owner, 2026-10-22): the pops' other own lines by the cause their deaths count under
     for name in ("te_dg_w_odh", "te_dg_w_odx", "te_dg_w_odq", "te_dg_w_odw"):
         o(f"set_local_variable = {{ name = {name} value = 0 }}")
+    # the moved lines' class pairs at the walk's bare deaths (#1046): the census's refresh clears them when it first
+    # sets M, and fast mode and the window's start rate take what they were adding off the walk's sums
+    o("set_local_variable = { name = te_dg_w_edl value = 0 }")
     o("set_local_variable = { name = te_dg_w_rep value = 0 }")
     o("if = {")
     o("limit = { te_demog_effects_run = yes }")
     o("set_local_variable = { name = te_dg_w_rep value = 1 }")
+    for t, short in _line_classes():
+        o(f"set_local_variable = {{ name = te_dg_w_lq_{t} value = te_demog_line_{short}_applied }}")
     o("}")
     o("}")
     o("")
@@ -1555,6 +1554,11 @@ def absorbed_walk(o, root):
     for i, t in enumerate(classes):
         o(f"{'if' if i == 0 else 'else_if'} = {{ limit = {{ is_pop_type = {t} }} "
           f"set_local_variable = {{ name = te_dg_p_oc value = state.modifier:state_{t}_mortality_mult }} }}")
+    # its class's moved-line pair, at its bare deaths (te_dg_w_edl, #1046)
+    for i, (t, _short) in enumerate(_line_classes()):
+        o(f"{'if' if i == 0 else 'else_if'} = {{ limit = {{ is_pop_type = {t} }} "
+          f"change_local_variable = {{ name = te_dg_w_edl add = {{ value = local_var:te_dg_p_ed "
+          f"multiply = local_var:te_dg_w_lq_{t} }} }} }}")
     o("if = {")
     o("limit = { OR = { " + " ".join(f"is_pop_type = {t}" for t in P.DEATH_CAUSE_WAR_CLASSES) + " } }")
     o("change_local_variable = { name = te_dg_w_odq add = { value = local_var:te_dg_p_ed multiply = local_var:te_dg_p_oc } }")
@@ -1609,13 +1613,18 @@ def engine_rate_terms(o, root):
     unread = sorted(k for k in conditions if k not in reg)
     assert not unread, f"working_conditions rows the walk can't read: {unread}"
 
+    strata = [s for s in P.BIRTH_STRATA if f"state_{s}_strata_birth_rate_mult" in reg]
     o("# Pop scope: the engine's birth multiplier for this pop: 1 + its state's state_birth_rate_mult")
-    o(f"# + {lit(literacy)} x its literacy (literacy_penalty) + the starvation penalties (each x the pop's")
-    o("# starvation value, in 0.05 steps of food security), floored at 0.")
+    o("# + its stratum's birth line (vanilla 1.15's state_<stratum>_strata_birth_rate_mult, on top of the census like")
+    o(f"# a class's mortality line; #1407) + {lit(literacy)} x its literacy (literacy_penalty) + the starvation")
+    o("# penalties (each x the pop's starvation value, in 0.05 steps of food security), floored at 0.")
     o("# x te_demog_pop_engine_births is its expected births (the growth probe: -0.101 fitted, 1949).")
     o("te_demog_pop_birth_mult = {")
     o("value = 1")
     o("add = state.modifier:state_birth_rate_mult")
+    for i, s in enumerate(strata):
+        o(f"{'if' if i == 0 else 'else_if'} = {{ limit = {{ strata = {s} }} "
+          f"add = state.modifier:state_{s}_strata_birth_rate_mult }}")
     o(f"add = {{ value = literacy_rate multiply = {lit(literacy)} }}")
     _starvation(o, "state_birth_rate_mult", mild, severe)
     o("min = 0")
@@ -1714,7 +1723,9 @@ def _factor_body(o, cause, factor):
     elif factor == "literacy":
         o(f"value = var:te_dg_in_lit multiply = {lit(-P.LITERACY_INFECTION_WEIGHT)} add = 1")
     elif factor == "crowding":
-        o(f"value = var:te_dg_in_crowd multiply = {lit(P.CROWDING_INFECTION_PER_PULL)} add = 1")
+        # at most P.CROWDING_INFECTION_PULL_MAX (#1476): the input stays as read, for the runaway tripwire's sign 6
+        o(f"value = var:te_dg_in_crowd max = {lit(P.CROWDING_INFECTION_PULL_MAX)} "
+          f"multiply = {lit(P.CROWDING_INFECTION_PER_PULL)} add = 1")
     elif factor == "laws":
         o(f"value = 1 add = var:te_dg_in_{s} min = {lit(P.MORTALITY_MULT_FLOOR)}")
     elif factor == "turmoil":
@@ -1900,6 +1911,10 @@ def constants(o):
         "cause_scale_min_deaths": P.CAUSE_SCALE_MIN_DEATHS, "cause_scale_min": P.CAUSE_SCALE_MIN,
         "rate_total_floor": P.RATE_TOTAL_FLOOR,
         "rate_bare_min": P.RATE_BARE_MIN,
+        # the census's guards (#1476)
+        "rate_guard_people": P.RATE_GUARD_PEOPLE_MAX, "rate_guard_e0": P.RATE_GUARD_E0_MIN,
+        "rate_guard_kills_share": P.RATE_GUARD_KILLS_SHARE,
+        "rate_births_ceiling": P.RATE_BIRTHS_CEILING, "crowding_pull_max": P.CROWDING_INFECTION_PULL_MAX,
         "natural_fertility_floor": P.NATURAL_FERTILITY_FLOOR,
         "wealth_line_floor": P.WEALTH_LINE_FLOOR,
         "medicine_snap": P.MEDICINE_SNAP, "medicine_snap_neg": -P.MEDICINE_SNAP,
@@ -2035,6 +2050,12 @@ def work_step2_values(o):
         # the guard: the lowest pop base + W + the lines on top at least WF_POP_RATIO_MIN, so W + the lines on top at
         # least this
         "wf_pop_floor": P.WF_POP_RATIO_MIN - P.POP_BASE_RATIO_MIN,
+        # W's lead (te_demog_workforce_lead): the share of the gap to close in a census year, the cap either way, and
+        # the ceiling: the highest pop base + W + the lines on top at most WF_POP_RATIO_MAX, so W + the lines on top at
+        # most this; the pull's clamp on births per head and its least divisor
+        "wf_lead_half": P.WF_LEAD_HALF, "wf_lead_cap": P.WF_LEAD_CAP, "wf_lead_cap_neg": -P.WF_LEAD_CAP,
+        "wf_pop_ceiling": P.WF_POP_RATIO_MAX - P.POP_BASE_RATIO_MAX,
+        "wf_pull_b_max": P.WF_PULL_B_MAX, "wf_pull_share_min": P.WF_PULL_SHARE_MIN,
         "pension_age_early": P.PENSION_AGE["early"], "pension_age_raised": P.PENSION_AGE["raised"],
         "pension_link_offset": P.PENSION_LINK_OFFSET, "pension_link_floor": P.PENSION_LINK_FLOOR,
         "pension_link_step": P.PENSION_LINK_STEP, "pension_link_step_neg": -P.PENSION_LINK_STEP,
@@ -2310,8 +2331,9 @@ def tail_values(o):
     """The life table's open last interval (2026-10-20; demographics_params.LT_TAIL_RATE_MIN)."""
     o("# The life tables' death rate past 150 is at least this, per 100,000 (te_demog_lt_tail; demographics_model.tail_years).")
     o(f"te_demog_k_lt_tail_rate_min = {{ value = {lit(P.LT_TAIL_RATE_MIN)} }}")
-    o("# The Life Expectancy chart's axis: the largest figure its samples hold, at least the first, at most the second, where")
-    o("# the panel's figures read over (te_demog_history_e0_axis; the GUI's comparisons hold the same 10,000).")
+    o("# The Life Expectancy chart's axis: the largest figure its samples hold, at least the first (a small minimum, so an")
+    o("# empty chart has an axis), at most the second, where")
+    o("# the panel's figures read over (te_demog_history_axes; the GUI's comparisons hold the same 10,000).")
     o(f"te_demog_k_e0_axis_min = {{ value = {lit(P.E0_AXIS_MIN)} }}")
     o(f"te_demog_k_e0_shown_max = {{ value = {lit(P.E0_SHOWN_MAX)} }}")
 
@@ -2320,6 +2342,17 @@ LINE_HEADER = ("# The engine's birth and mortality lines on laws, technologies a
                "# (owner, 2026-10-11; docs/superpowers/archive/plans/2026-10-11-demographics-engine-lines-script-only.md): a fixed-sign\n"
                "# pair per field (P.ENGINE_LINE_FIELDS), re-applied at the two families' sum while te_demog_lines_apply holds.\n"
                "# A release keeps these files (scripts/release/comment_out_census_inputs.py doesn't read them).")
+
+
+def _line_classes():
+    """[(pop type, short)] for the moved lines' class fields (state_<type>_mortality_mult), in P.ENGINE_LINE_FIELDS'
+    order: the pairs that reach one class's pops only."""
+    out = []
+    for field in P.ENGINE_LINE_FIELDS:
+        m = re.fullmatch(r"state_(\w+)_mortality_mult", field)
+        if m:
+            out.append((m.group(1), P.ENGINE_LINE_SHORT[field]))
+    return out
 
 
 def _line_fields():
@@ -2419,10 +2452,7 @@ def _render_line_effects(fields, header, intro, refresh, gate, clear, clear_note
         o("if = {")
         o("limit = {")
         o("has_variable = te_dg_mb")
-        o("OR = {")
         o("NOT = { te_demog_effects_run = yes }")
-        o("NOT = { has_variable = te_dg_q_b }")
-        o("}")
         o("}")
         o("te_demog_rates_clear = yes")
         o("}")
@@ -2472,8 +2502,7 @@ def render_line_effects():
          "# game, a law's activation and a technology): each field's pair at the families' sum while te_demog_lines_apply",
          "# holds, touched only when the sum changed; otherwise (the census sets the state's births and deaths) every pair off.",
          "# First, a census term that is no longer the census's comes off now, not at the state's next yearly step, so it and",
-         "# the pairs are never both in force: one a rule switched off Full left, or one from a save made before the moved",
-         "# lines (no te_dg_q_b, which this build's step always sets with it)."],
+         "# the pairs are never both in force: one a rule switched off Full left."],
         "te_demog_lines_refresh", "te_demog_lines_apply", "te_demog_lines_clear",
         "# THIS = a state: every pair off, with its stored sum (the census's refresh calls it when it first sets M).",
         stale_m=True)

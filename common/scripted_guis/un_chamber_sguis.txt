@@ -233,6 +233,22 @@ un_ov_refounding_sgui = {
 	effect = { }
 }
 
+# The early unlock's league (un_league_stage): the organisation's name. Read
+# by un_org_name_ingame, which je_united_nations names behind a
+# GetPlayer.IsValid guard (so the entry's title, the Timeline Extended tab and
+# the UN tab's header read "League of Nations"), and by the Found button's
+# label ("Found the League": the full name doesn't fit the button). Globals
+# only (gotcha #22).
+un_ov_league_sgui = {
+	scope = country
+	is_shown = {
+		un_league_stage = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 # Scope-free gate: a resolution is in session. The General Assembly shows its
 # tally, delegations and ballot, or, when this is false, the proposals.
 un_session_open_sgui = {
@@ -795,7 +811,7 @@ un_chamber_reach_sgui = {
 	is_shown = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		OR = {
-			has_modifier = un_regime_shared_intelligence_modifier
+			has_variable = un_regime_shared_intelligence_modifier_on
 			AND = {
 				un_tier_at_least_strong = yes
 				any_interest_group = {
@@ -2132,7 +2148,7 @@ un_chamber_propose_sgui = {
 			# audit, UN-23), then the whole test, which they make up.
 			custom_tooltip = {
 				text = je_un_chamber_propose_need_observer_request
-				un_mission_holds_elections = yes
+				te_holds_elections = yes
 			}
 			custom_tooltip = {
 				text = je_un_chamber_propose_need_observer_request_seated

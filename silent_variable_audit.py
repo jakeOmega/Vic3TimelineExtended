@@ -53,6 +53,9 @@ import os
 import re
 from dataclasses import dataclass, field
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import StaleTag as _StaleTag
+from audit_common import cli_main, parse_reviewed, write_text
 from paradox_file_parser import ParadoxFileParser
 
 CHECK = "silent_variable"
@@ -60,10 +63,6 @@ CHECK = "silent_variable"
 _DEF_RE = re.compile(r"^[ \t]*([a-z_][a-z0-9_]*\.\d+)[ \t]*=[ \t]*\{", re.M)
 _HIDDEN_RE = re.compile(r"^[ \t]*hidden[ \t]*=[ \t]*yes\b", re.M)
 _OPTION_RE = re.compile(r"(?<![\w.:])option[ \t]*=[ \t]*\{")
-_TAGGED_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*\((?P<checks>[\w ,]+)\)\s*:\s*(?P<rationale>.+?)\s*$",
-    re.M,
-)
 _CONSOLE_FILE_RE = re.compile(r"^te_debug_")
 
 # What the UI reads.
@@ -134,22 +133,20 @@ class OptionFlag:
 
 
 @dataclass
-class StaleTag:
-    event_id: str
-    option: str
-    file: str
-    line: int
+class StaleTag(_StaleTag):
+    """A `(silent_variable)` tag in an option that is no longer flagged; `line`
+    is the option's."""
+
+    event_id: str = ""
+    option: str = ""
 
 
 @dataclass
-class AuditResult:
-    flags: list[OptionFlag] = field(default_factory=list)
-    stale_tags: list[StaleTag] = field(default_factory=list)
-    coverage: dict = field(default_factory=dict)
+class AuditResult(_AuditResult):
+    """`stale` holds the tags that suppress nothing."""
 
-    @property
-    def failing(self) -> int:
-        return sum(1 for f in self.flags if not f.exemption) + len(self.stale_tags)
+    flags: list[OptionFlag] = field(default_factory=list)
+    coverage: dict = field(default_factory=dict)
 
 
 # ---------------------------------------------------------------------------
@@ -393,11 +390,11 @@ def audit(mod_path: str) -> AuditResult:
                     continue
                 name = _option_name(parsed)
                 line = text.count("\n", 0, opt_start) + 1
+                # The first comment in the option that names the check.
                 tag = None
-                for rm in _TAGGED_REVIEWED_RE.finditer(text, opt_brace, opt_end):
-                    checks = {c.strip() for c in rm.group("checks").split(",")}
-                    if CHECK in checks:
-                        tag = {"date": rm.group("date"), "rationale": rm.group("rationale")}
+                for raw in text[opt_brace:opt_end].split("\n"):
+                    tag = parse_reviewed(raw, (CHECK,))
+                    if tag:
                         break
                 writes = [
                     w for w in walker.silent_writes(parsed)
@@ -412,13 +409,13 @@ def audit(mod_path: str) -> AuditResult:
                             uniq.append(w)
                     flags.append(OptionFlag(eid, name, path, line, uniq, tag))
                 elif tag:
-                    stale.append(StaleTag(eid, name, path, line))
+                    stale.append(StaleTag(path, line, CHECK, event_id=eid, option=name))
 
     flags.sort(key=lambda f: (f.file, f.line))
     stale.sort(key=lambda s: (s.file, s.line))
     return AuditResult(
         flags=flags,
-        stale_tags=stale,
+        stale=stale,
         coverage={
             "events_scanned": events_seen,
             "options_scanned": options_seen,
@@ -430,8 +427,8 @@ def audit(mod_path: str) -> AuditResult:
 
 
 def render_report(result: AuditResult, mod_path: str = "") -> str:
-    unreviewed = [f for f in result.flags if not f.exemption]
-    exempted = [f for f in result.flags if f.exemption]
+    unreviewed = result.unreviewed
+    exempted = result.exemptions
     cov = result.coverage
 
     def _rel(file: str) -> str:
@@ -462,7 +459,7 @@ def render_report(result: AuditResult, mod_path: str = "") -> str:
     # in `coverage` but move with unrelated events and UI.
     out.append(f"- Silent writes (unreviewed): **{len(unreviewed)}**")
     out.append(f"- Silent writes (REVIEWED-suppressed): **{len(exempted)}**")
-    out.append(f"- Stale `({CHECK})` tags: **{len(result.stale_tags)}**")
+    out.append(f"- Stale `({CHECK})` tags: **{len(result.stale)}**")
     if cov.get("unparsed"):
         out.append(f"- Skipped (parser rejected): **{len(cov['unparsed'])}**")
     out.append("")
@@ -483,10 +480,10 @@ def render_report(result: AuditResult, mod_path: str = "") -> str:
         out.append("No unreviewed silent writes. ✅")
         out.append("")
 
-    if result.stale_tags:
+    if result.stale:
         out.append("## Stale tags")
         out.append("")
-        for s in result.stale_tags:
+        for s in result.stale:
             out.append(f"- `{s.event_id}` option `{s.option}` — {_loc(s.file, s.line)}")
         out.append("")
 
@@ -523,28 +520,25 @@ def regenerate(mod_state=None) -> dict:
 
     result = audit(mod_path)
     out_path = os.path.join(mod_path, "docs", "engine", "silent_variable_report.md")
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(render_report(result, mod_path))
+    write_text(out_path, render_report(result, mod_path))
     return {
         # Flags without a tag, plus tags that suppress nothing.
-        "unreviewed": result.failing,
-        "stale_tags": len(result.stale_tags),
-        "exempted": sum(1 for f in result.flags if f.exemption),
+        "unreviewed": len(result.failing),
+        "stale_tags": len(result.stale),
+        "exempted": len(result.exemptions),
         # Coverage, which the committed report no longer prints.
         **result.coverage,
         "path": out_path,
     }
 
 
-if __name__ == "__main__":
-    import sys
-
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 if any flag lacks a
+    `(silent_variable)` tag or any such tag suppresses nothing."""
     from path_constants import mod_path as _mp
+    return cli_main(lambda args: audit(_mp), lambda res, args: render_report(res, _mp), argv=argv,
+                    description=__doc__.splitlines()[0])
 
-    res = audit(_mp)
-    print(render_report(res, _mp))
-    # --strict: CI mode. Exit 1 if any flag lacks a `(silent_variable)` tag or
-    # any such tag suppresses nothing.
-    if "--strict" in sys.argv:
-        raise SystemExit(1 if res.failing else 0)
+
+if __name__ == "__main__":
+    raise SystemExit(main())

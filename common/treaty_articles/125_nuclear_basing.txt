@@ -30,13 +30,20 @@ nuclear_basing = {
 	max_target_involvement = 2000
 	target_involvement_applies_to = target_country
 
-	flags = { can_be_renegotiated giftable friendly }
+	flags = { show_in_lens can_be_renegotiated giftable friendly }
 
 	usage_limit = once_per_side
 
 	# The host is the one leaned on (see header).
 	target_modifier = {
 		country_treaty_leverage_generation_add = 200
+	}
+
+	# Lens (1.15 show_in_lens flag): the world-wide half of `visible`, so the
+	# article leaves the lens when its system is off. The rest of `visible`
+	# reads the viewer as the source, which the lens viewer need not be.
+	show_in_lens = {
+		has_game_rule = nuclear_weapons_enabled
 	}
 
 	# ROOT is the source (the guest) in visible and possible.

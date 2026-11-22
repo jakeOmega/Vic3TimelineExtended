@@ -1,4 +1,29 @@
 {
+ "interface_message": [
+  "=",
+  {
+   "group": [
+    "=",
+    "\"special_interface_message_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "feed_grouping": [
+    "=",
+    "no"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
  "peace_agreement_signed_war_leader": [
   "=",
   {
@@ -1001,6 +1026,56 @@
    ]
   }
  ],
+ "electoral_confidence_rose_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"electoral_confidence_changed_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/elections.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "electoral_confidence_fell_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"electoral_confidence_changed_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/elections.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
  "enactment_failed": [
   "=",
   {
@@ -1105,6 +1180,31 @@
    ]
   }
  ],
+ "character_returned_from_exile": [
+  "=",
+  {
+   "type": [
+    "=",
+    "character"
+   ],
+   "group": [
+    "=",
+    "\"character_returned_from_exile_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
  "native_uprising_notification": [
   "=",
   {
@@ -1134,7 +1234,7 @@
    ]
   }
  ],
- "journal_entry_completed": [
+ "journal_entry_concluded": [
   "=",
   {
    "type": [
@@ -1143,7 +1243,32 @@
    ],
    "group": [
     "=",
-    "\"journal_entry_completed_notification_group\""
+    "\"journal_entry_concluded_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/journal.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "scripted_button_autocompleted": [
+  "=",
+  {
+   "type": [
+    "=",
+    "journal_entry"
+   ],
+   "group": [
+    "=",
+    "\"scripted_button_autocompleted_notification_group\""
    ],
    "texture": [
     "=",
@@ -1159,7 +1284,7 @@
    ],
    "on_created_soundeffect": [
     "=",
-    "\"event:/SFX/UI/Alerts/Toasts/journal_entry_completed\""
+    "\"event:/SFX/UI/Alerts/Toasts/journal_entry_completed_tsar\""
    ]
   }
  ],
@@ -1372,7 +1497,7 @@
    ],
    "group": [
     "=",
-    "\"fleet_notification_group\""
+    "\"fleet_repaired_notification_group\""
    ],
    "texture": [
     "=",
@@ -1385,6 +1510,31 @@
    "color": [
     "=",
     "good"
+   ]
+  }
+ ],
+ "fleet_for_constructed_ship_changed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "military_formation"
+   ],
+   "group": [
+    "=",
+    "\"fleet_for_constructed_ship_changed_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/order.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
    ]
   }
  ],
@@ -1464,7 +1614,7 @@
    ],
    "group": [
     "=",
-    "\"power_bloc_formation\""
+    "\"power_bloc_disbanded_notification_group\""
    ],
    "texture": [
     "=",
@@ -1485,7 +1635,7 @@
    ],
    "group": [
     "=",
-    "\"power_bloc_formation\""
+    "\"power_bloc_disbanded_notification_group\""
    ],
    "texture": [
     "=",
@@ -1573,7 +1723,7 @@
    ],
    "group": [
     "=",
-    "\"power_bloc_membership\""
+    "\"power_bloc_expelled_notification_group\""
    ],
    "texture": [
     "=",
@@ -1598,7 +1748,7 @@
    ],
    "group": [
     "=",
-    "\"power_bloc_principles_notification_group\""
+    "\"power_bloc_mandate_notification_group\""
    ],
    "texture": [
     "=",
@@ -2359,6 +2509,10 @@
     "=",
     "feed"
    ],
+   "feed_grouping": [
+    "=",
+    "no"
+   ],
    "color": [
     "=",
     "neutral"
@@ -2979,56 +3133,6 @@
    "group": [
     "=",
     "\"diplo_play_war_start_third_party_notification_group\""
-   ],
-   "texture": [
-    "=",
-    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
-   ],
-   "notification_type": [
-    "=",
-    "feed"
-   ],
-   "color": [
-    "=",
-    "neutral"
-   ]
-  }
- ],
- "diplo_play_subject_released_notification": [
-  "=",
-  {
-   "type": [
-    "=",
-    "diplomatic_play"
-   ],
-   "group": [
-    "=",
-    "\"diplo_play_subject_notification_group\""
-   ],
-   "texture": [
-    "=",
-    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
-   ],
-   "notification_type": [
-    "=",
-    "feed"
-   ],
-   "color": [
-    "=",
-    "neutral"
-   ]
-  }
- ],
- "diplo_play_subject_released_overlord_notification": [
-  "=",
-  {
-   "type": [
-    "=",
-    "diplomatic_play"
-   ],
-   "group": [
-    "=",
-    "\"diplo_play_subject_notification_group\""
    ],
    "texture": [
     "=",
@@ -3757,7 +3861,7 @@
    ],
    "group": [
     "=",
-    "\"wargoal_notification_group\""
+    "\"wargoal_enforced_notification_group\""
    ],
    "texture": [
     "=",
@@ -4382,7 +4486,7 @@
    ],
    "group": [
     "=",
-    "\"formation_travel_notification_group\""
+    "\"formation_exiled_notification_group\""
    ],
    "texture": [
     "=",
@@ -4407,7 +4511,7 @@
    ],
    "group": [
     "=",
-    "\"formation_travel_notification_group\""
+    "\"formation_returned_from_exile_notification_group\""
    ],
    "texture": [
     "=",
@@ -4835,6 +4939,64 @@
    ]
   }
  ],
+ "country_partially_withdrawn_from_treaty": [
+  "=",
+  {
+   "type": [
+    "=",
+    "treaty"
+   ],
+   "group": [
+    "=",
+    "\"country_withdrawn_from_treaty_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/diplomatic_treaties_revoke_negative\""
+   ]
+  }
+ ],
+ "country_partially_broke_treaty": [
+  "=",
+  {
+   "type": [
+    "=",
+    "treaty"
+   ],
+   "group": [
+    "=",
+    "\"country_withdrawn_from_treaty_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/diplomatic_treaties_revoke_negative\""
+   ]
+  }
+ ],
  "treaty_proposal_declined": [
   "=",
   {
@@ -5218,6 +5380,10 @@
     "=",
     "country"
    ],
+   "group": [
+    "=",
+    "\"assassination_attempt_notification_group\""
+   ],
    "texture": [
     "=",
     "\"gfx/interface/icons/notification_icons/death.dds\""
@@ -5251,6 +5417,10 @@
    "type": [
     "=",
     "country"
+   ],
+   "group": [
+    "=",
+    "\"assassination_attempt_notification_group\""
    ],
    "texture": [
     "=",
@@ -5434,6 +5604,10 @@
     "=",
     "country"
    ],
+   "group": [
+    "=",
+    "\"colonial_conflict_demands_notification_group\""
+   ],
    "texture": [
     "=",
     "\"gfx/interface/icons/notification_icons/colonial.dds\""
@@ -5450,6 +5624,10 @@
    "type": [
     "=",
     "country"
+   ],
+   "group": [
+    "=",
+    "\"colonial_conflict_demands_notification_group\""
    ],
    "texture": [
     "=",
@@ -5468,6 +5646,10 @@
     "=",
     "country"
    ],
+   "group": [
+    "=",
+    "\"colonial_conflict_demands_notification_group\""
+   ],
    "texture": [
     "=",
     "\"gfx/interface/icons/notification_icons/colonial.dds\""
@@ -5484,6 +5666,10 @@
    "type": [
     "=",
     "country"
+   ],
+   "group": [
+    "=",
+    "\"colonial_conflict_demands_notification_group\""
    ],
    "texture": [
     "=",
@@ -5990,6 +6176,10 @@
     "=",
     "country"
    ],
+   "group": [
+    "=",
+    "\"unification_sought_notification_group\""
+   ],
    "texture": [
     "=",
     "\"gfx/interface/icons/notification_icons/military.dds\""
@@ -6011,6 +6201,10 @@
     "=",
     "country"
    ],
+   "group": [
+    "=",
+    "\"unification_sought_notification_group\""
+   ],
    "texture": [
     "=",
     "\"gfx/interface/icons/notification_icons/military.dds\""
@@ -6031,6 +6225,10 @@
    "type": [
     "=",
     "country"
+   ],
+   "group": [
+    "=",
+    "\"unification_sought_notification_group\""
    ],
    "texture": [
     "=",
@@ -6324,6 +6522,10 @@
     "=",
     "country"
    ],
+   "group": [
+    "=",
+    "\"country_unified_notification_group\""
+   ],
    "texture": [
     "=",
     "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
@@ -6341,6 +6543,10 @@
     "=",
     "country"
    ],
+   "group": [
+    "=",
+    "\"country_unified_notification_group\""
+   ],
    "texture": [
     "=",
     "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
@@ -6357,6 +6563,10 @@
    "type": [
     "=",
     "country"
+   ],
+   "group": [
+    "=",
+    "\"country_unified_notification_group\""
    ],
    "texture": [
     "=",
@@ -6391,6 +6601,10 @@
    "type": [
     "=",
     "country"
+   ],
+   "group": [
+    "=",
+    "\"culture_genesis_notification_group\""
    ],
    "texture": [
     "=",
@@ -6596,6 +6810,10 @@
     "=",
     "country"
    ],
+   "group": [
+    "=",
+    "\"assassination_attempt_notification_group\""
+   ],
    "texture": [
     "=",
     "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
@@ -6664,6 +6882,10 @@
     "=",
     "country"
    ],
+   "group": [
+    "=",
+    "\"assassination_attempt_notification_group\""
+   ],
    "texture": [
     "=",
     "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
@@ -6680,6 +6902,10 @@
    "type": [
     "=",
     "country"
+   ],
+   "group": [
+    "=",
+    "\"assistance_request_notification_group\""
    ],
    "texture": [
     "=",
@@ -6698,9 +6924,13 @@
     "=",
     "country"
    ],
+   "group": [
+    "=",
+    "\"assistance_request_notification_group\""
+   ],
    "texture": [
     "=",
-    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
    ],
    "notification_type": [
     "=",
@@ -6714,6 +6944,10 @@
    "type": [
     "=",
     "country"
+   ],
+   "group": [
+    "=",
+    "\"assistance_request_notification_group\""
    ],
    "texture": [
     "=",
@@ -6731,6 +6965,10 @@
    "type": [
     "=",
     "country"
+   ],
+   "group": [
+    "=",
+    "\"assistance_request_notification_group\""
    ],
    "texture": [
     "=",
@@ -7518,6 +7756,10 @@
     "=",
     "country"
    ],
+   "group": [
+    "=",
+    "\"unification_sought_notification_group\""
+   ],
    "texture": [
     "=",
     "\"gfx/interface/icons/notification_icons/military.dds\""
@@ -7538,6 +7780,10 @@
    "type": [
     "=",
     "country"
+   ],
+   "group": [
+    "=",
+    "\"country_unified_notification_group\""
    ],
    "texture": [
     "=",
@@ -7798,6 +8044,10 @@
     "=",
     "country"
    ],
+   "group": [
+    "=",
+    "\"culture_genesis_notification_group\""
+   ],
    "texture": [
     "=",
     "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
@@ -7814,6 +8064,10 @@
    "type": [
     "=",
     "country"
+   ],
+   "group": [
+    "=",
+    "\"culture_genesis_notification_group\""
    ],
    "texture": [
     "=",
@@ -7996,6 +8250,210 @@
    "texture": [
     "=",
     "\"gfx/interface/icons/notification_icons/trade_route.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "beardless_no_general": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/death.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "beardless_reluctant_general": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "beardless_happy_general": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "hromada_appears_permitted": [
+  "=",
+  {
+   "type": [
+    "=",
+    "state"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "hromada_appears_surveilled": [
+  "=",
+  {
+   "type": [
+    "=",
+    "state"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "hromada_appears_suppressed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "state"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "prosvita_appears_state_funded": [
+  "=",
+  {
+   "type": [
+    "=",
+    "state"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "prosvita_appears_self_funded": [
+  "=",
+  {
+   "type": [
+    "=",
+    "state"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "prosvita_appears_suppressed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "state"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "russia_world_fair_participant_message": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "russia_world_fair_showcase_message": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "russia_non_russian_nationality_independence": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
    ],
    "notification_type": [
     "=",
@@ -9609,20 +10067,401 @@
    ]
   }
  ],
- "enemy_world_market_hub_moved": [
+ "poland_repressive_viceroy_notification": [
   "=",
   {
    "type": [
     "=",
-    "state"
-   ],
-   "group": [
-    "=",
-    "\"naval_blockade_change_notification_group\""
+    "country"
    ],
    "texture": [
     "=",
-    "\"gfx/interface/icons/notification_icons/trade_route.dds\""
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "poland_conciliatory_viceroy_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "poland_expansion_refused": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "poland_expansion_accepted": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "poland_uni": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "poland_army_toast": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "poland_sejm_toast": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "je_tp_mission_failed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "je_tp_mission_failed_favorite_died": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "je_tp_mission_failed_favorite_dismissed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "je_tp_mission_failed_new_ruler": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "je_tp_rasputin_mission_failed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "je_tp_mission_partial_completed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/journal.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "je_tp_mission_completed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "journal_entry"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/journal.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/journal_entry_completed_tsar\""
+   ]
+  }
+ ],
+ "je_tp_war_mission_completed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "journal_entry"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/journal.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/journal_entry_completed_tsar\""
+   ]
+  }
+ ],
+ "je_tp_greek_joined": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "je_tp_greek_refused": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "je_tp_counter_revolution_ukaz": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "nemo_appears_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "nemo_nautilus_captured_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "nemo_nautilus_sunk_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/death.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "nemo_nautilus_escaped_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
    ],
    "notification_type": [
     "=",
@@ -9641,6 +10480,10 @@
     "=",
     "country"
    ],
+   "group": [
+    "=",
+    "\"country_unified_notification_group\""
+   ],
    "texture": [
     "=",
     "\"gfx/interface/icons/notification_icons/interest.dds\""
@@ -9657,6 +10500,10 @@
    "type": [
     "=",
     "country"
+   ],
+   "group": [
+    "=",
+    "\"country_unified_notification_group\""
    ],
    "texture": [
     "=",
@@ -9675,6 +10522,10 @@
     "=",
     "country"
    ],
+   "group": [
+    "=",
+    "\"country_unified_notification_group\""
+   ],
    "texture": [
     "=",
     "\"gfx/interface/icons/notification_icons/interest.dds\""
@@ -9691,6 +10542,10 @@
    "type": [
     "=",
     "country"
+   ],
+   "group": [
+    "=",
+    "\"country_unified_notification_group\""
    ],
    "texture": [
     "=",
@@ -9709,6 +10564,10 @@
     "=",
     "country"
    ],
+   "group": [
+    "=",
+    "\"country_unified_notification_group\""
+   ],
    "texture": [
     "=",
     "\"gfx/interface/icons/notification_icons/interest.dds\""
@@ -9725,6 +10584,10 @@
    "type": [
     "=",
     "country"
+   ],
+   "group": [
+    "=",
+    "\"country_unified_notification_group\""
    ],
    "texture": [
     "=",
@@ -9743,6 +10606,10 @@
     "=",
     "country"
    ],
+   "group": [
+    "=",
+    "\"country_unified_notification_group\""
+   ],
    "texture": [
     "=",
     "\"gfx/interface/icons/notification_icons/interest.dds\""
@@ -9759,6 +10626,10 @@
    "type": [
     "=",
     "country"
+   ],
+   "group": [
+    "=",
+    "\"country_unified_notification_group\""
    ],
    "texture": [
     "=",
@@ -9777,6 +10648,10 @@
     "=",
     "country"
    ],
+   "group": [
+    "=",
+    "\"country_unified_notification_group\""
+   ],
    "texture": [
     "=",
     "\"gfx/interface/icons/notification_icons/interest.dds\""
@@ -9793,6 +10668,10 @@
    "type": [
     "=",
     "country"
+   ],
+   "group": [
+    "=",
+    "\"country_unified_notification_group\""
    ],
    "texture": [
     "=",
@@ -9811,6 +10690,10 @@
     "=",
     "country"
    ],
+   "group": [
+    "=",
+    "\"country_unified_notification_group\""
+   ],
    "texture": [
     "=",
     "\"gfx/interface/icons/notification_icons/interest.dds\""
@@ -9827,6 +10710,10 @@
    "type": [
     "=",
     "country"
+   ],
+   "group": [
+    "=",
+    "\"country_unified_notification_group\""
    ],
    "texture": [
     "=",

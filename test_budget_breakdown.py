@@ -80,6 +80,9 @@ class BudgetHarness:
         for key, op, value in entries(node):
             if key == "has_institution":
                 results.append(value in self.levels)
+            elif key == "exists":
+                assert value.startswith("scope:"), value
+                results.append(value[6:] in self.scopes)
             elif key == "is_building_type":
                 results.append(context[0] == value)
             elif key == "is_building_group":
@@ -91,6 +94,8 @@ class BudgetHarness:
             else:
                 left, right = self.operand(key, context), self.operand(value, context)
                 results.append({">": left > right, ">=": left >= right, "=": left == right}[op])
+            if not results[-1]:
+                return False  # a limit stops at its first false line, so an `exists` guard holds
         return all(results)
 
     def block(self, node, acc=Decimal(0), context=None):
@@ -130,6 +135,16 @@ class BudgetHarness:
 
 
 class BudgetAllocationTests(unittest.TestCase):
+    def test_values_read_zero_without_the_panels_scopes(self):
+        # #1310: the institution-pool child was evaluated once with none of the
+        # parent's AddScope values set. Every value that reads a passed scope
+        # must guard it with `exists` and read 0, not an unset scope.
+        h = BudgetHarness()
+        h.scopes = {}
+        for name in ("administration_cost", "space_program_cost", "institution_pool"):
+            with self.subTest(name=name):
+                self.assertEqual(h(name), 0)
+
     def test_requested_example(self):
         h = BudgetHarness()
         self.assertEqual(h("administration_actual"), 39000)
@@ -465,6 +480,19 @@ class BudgetWiringTests(unittest.TestCase):
         # must deliberately join a source category rather than silently lumping.
         monetary = {key for key, block in modifiers.items() if "country_expenses_add" in block or "country_tax_income_add" in block}
         self.assertEqual(monetary - assigned, {"cheaty"})
+
+    def test_an_event_cost_twin_is_charged_beside_its_program(self):
+        # A `<program>_cost` modifier holds only the unit expense, so it charges
+        # nothing unless script adds it with a multiplier, for as long as the
+        # program runs. "Buy power from abroad" (repeatable_events.80.c) added
+        # its program alone until #1616: free, and better than the blackouts
+        # on every line but authority.
+        events = (ROOT / "events/repeatable_events.txt").read_text(encoding="utf-8-sig")
+        for program, days in (("re_sbsp_reserves", "short_modifier_time"), ("re_sbsp_imports", "normal_modifier_time")):
+            with self.subTest(program=program):
+                self.assertIn(f"add_modifier = {{ name = {program} days = {days} }}\n"
+                              f"\t\tadd_modifier = {{ name = {program}_cost days = {days} multiplier = sv_money_flow_event_modest }}\n",
+                              events)
 
     def test_mirror_lines_read_as_breakdown_labels(self):
         # A source modifier's tooltip lists the mirror beside its native field,

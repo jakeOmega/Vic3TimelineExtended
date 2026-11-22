@@ -20,6 +20,8 @@
 # Event 10 "[Leader] Blesses Our Claim"   (member, follow-up to Event 7 option A)
 # Event 8  "[Member] Considers Voluntary Union" (bloc leader, about the country
 #          that actually proposed, var:irr_union_proposer from Event 4 option A)
+# Event 12 "[Leader] Blesses the Union"   (both countries, follow-up to Event 8 option A)
+# Event 13 "[Leader] Forbids the Union"   (both countries, follow-up to Event 8 option B)
 #
 # See /home/jakef/.claude/plans/can-we-make-a-sparkling-pine.md.
 # ============================================================================
@@ -184,12 +186,15 @@ irredentism.1 = {
 			days = 1825   # 5 years
 			is_decaying = yes
 		}
+		# The neighbor hears who funded the ties and what it gained (#1557).
+		save_scope_as = irr_ties_funder
 		scope:target_country = {
 			add_modifier = {
 				name = irr_cultural_ties_modifier
 				days = 1825
 				is_decaying = yes
 			}
+			post_notification = irr_cultural_ties_notice
 		}
 	}
 
@@ -270,6 +275,22 @@ irredentism.2 = {
 
 	duration = 3
 
+	# Event 1 option C's tests, asked again on arrival five days later
+	# (#1617): the state is still ours to cede, and neither country has joined
+	# a play in the meantime, since a refusal's create_diplomatic_play would
+	# then open nothing while its tooltip promised a play. A demand that fails
+	# here lapses without a word to either side.
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: .1's option has the state and neither side in a play when it sends this; cancels if the state changes hands or a play starts in the five days
+		exists = scope:irr_unifier
+		exists = scope:irr_demanded_state
+		scope:irr_demanded_state = { owner = { this = root } }
+		is_diplomatic_play_committed_participant = no
+		scope:irr_unifier = {
+			NOT = { is_country_type = decentralized }
+			is_diplomatic_play_committed_participant = no
+		}
+	}
+
 	immediate = {
 		save_scope_as = irr_target
 	}
@@ -347,9 +368,12 @@ irredentism.2 = {
 				add = -3
 			}
 		}
-		# Peaceful transfer of the demanded state to the demander -- no war.
-		scope:irr_demanded_state = {
-			set_state_owner = scope:irr_unifier
+		# Peaceful transfer of the demanded state to the demander -- no war --
+		# as a state transfer treaty (#1457), or directly where none can be made.
+		te_cede_state_by_treaty = {
+			STATE = scope:irr_demanded_state
+			GIVER = ROOT
+			TAKER = scope:irr_unifier
 		}
 		# De-escalation goodwill toward the power we accommodated.
 		change_relations = {
@@ -486,7 +510,7 @@ irredentism.4 = {
 	duration = 3
 
 	# The text names the proposer (scope:irr_unifier, carried from Event 3).
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): scope:irr_unifier rides along from .3; a filter
 		exists = scope:irr_unifier
 	}
 
@@ -599,7 +623,7 @@ irredentism.7 = {
 	# have left our bloc. Suppress the event in that case -- vanilla
 	# event-target accessor errors otherwise cascade through every option's
 	# ai_chance evaluation.
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: irr_send_war_blessing_request runs for a bloc member and goes to its leader; cancels if the requester leaves the bloc or the leader loses the lead in the three days
 		exists = scope:irr_requester
 		exists = scope:target_country
 		scope:irr_requester = {
@@ -627,11 +651,11 @@ irredentism.7 = {
 						any_interest_group = {
 							is_in_government = yes
 							OR = {
-								leader = { has_ideology = ideology:ideology_jingoist_leader }
-								leader = { has_ideology = ideology:ideology_fascist }
-								leader = { has_ideology = ideology:ideology_communist }
-								leader = { has_ideology = ideology:ideology_vanguardist }
-								leader = { has_ideology = ideology:ideology_ethno_nationalist }
+								leader ?= { has_ideology = ideology:ideology_jingoist_leader }
+								leader ?= { has_ideology = ideology:ideology_fascist }
+								leader ?= { has_ideology = ideology:ideology_communist_leader }
+								leader ?= { has_ideology = ideology:ideology_vanguardist }
+								leader ?= { has_ideology = ideology:ideology_ethno_nationalist }
 							}
 						}
 					}
@@ -639,11 +663,11 @@ irredentism.7 = {
 						any_interest_group = {
 							is_in_government = yes
 							OR = {
-								leader = { has_ideology = ideology:ideology_jingoist_leader }
-								leader = { has_ideology = ideology:ideology_fascist }
-								leader = { has_ideology = ideology:ideology_communist }
-								leader = { has_ideology = ideology:ideology_vanguardist }
-								leader = { has_ideology = ideology:ideology_ethno_nationalist }
+								leader ?= { has_ideology = ideology:ideology_jingoist_leader }
+								leader ?= { has_ideology = ideology:ideology_fascist }
+								leader ?= { has_ideology = ideology:ideology_communist_leader }
+								leader ?= { has_ideology = ideology:ideology_vanguardist }
+								leader ?= { has_ideology = ideology:ideology_ethno_nationalist }
 							}
 						}
 					}
@@ -787,7 +811,7 @@ irredentism.10 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): scopes ride along from .7, which saved them; a filter
 		exists = scope:irr_bloc_leader
 		exists = scope:target_country
 	}
@@ -817,7 +841,7 @@ irredentism.11 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): scopes ride along from .7, which saved them; a filter
 		exists = scope:irr_bloc_leader
 		exists = scope:target_country
 	}
@@ -855,11 +879,16 @@ irredentism.8 = {
 
 	# Inherited scopes (irr_proposed_target, irr_unifier) saved by the on-action
 	# 3 days before fire. Either may have invalidated -- suppress event then.
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: the on-action dispatch sends it to a leader other than the proposer; cancels if the proposer takes the lead in the three days (#1617)
 		exists = scope:irr_proposed_target
 		exists = scope:irr_unifier
 		scope:irr_proposed_target = { NOT = { is_country_type = decentralized } }
 		scope:irr_unifier = { NOT = { is_country_type = decentralized } }
+		# A leader is not asked to rule on its own proposal (#1617). The
+		# dispatch excludes it; this covers a proposer that took the bloc's
+		# lead in the three days since. Its union needs no blessing
+		# (irredentist_bloc_check_peace, target side).
+		NOT = { scope:irr_unifier = { this = root } }
 	}
 
 	immediate = {
@@ -879,9 +908,9 @@ irredentism.8 = {
 						any_interest_group = {
 							is_in_government = yes
 							OR = {
-								leader = { has_ideology = ideology:ideology_market_liberal }
-								leader = { has_ideology = ideology:ideology_humanitarian }
-								leader = { has_ideology = ideology:ideology_pacifist }
+								leader ?= { has_ideology = ideology:ideology_market_liberal }
+								leader ?= { has_ideology = ideology:ideology_humanitarian }
+								leader ?= { has_ideology = ideology:ideology_pacifist }
 							}
 						}
 					}
@@ -928,6 +957,13 @@ irredentism.8 = {
 				}
 			}
 		}
+		# Both countries hear the ruling (#1557): neither was sent anything.
+		# Not a proposer that is this leader itself: it has just ruled.
+		scope:irr_proposed_target = { trigger_event = { id = irredentism.12 days = 1 } }
+		if = {
+			limit = { NOT = { scope:irr_unifier = ROOT } }
+			scope:irr_unifier = { trigger_event = { id = irredentism.12 days = 1 } }
+		}
 	}
 
 	# --- Forbid the union ---
@@ -953,6 +989,120 @@ irredentism.8 = {
 				name = irr_union_forbidden_modifier
 				days = 1825
 				is_decaying = yes
+			}
+		}
+		# Both countries hear the ruling (#1557).
+		scope:irr_proposed_target = { trigger_event = { id = irredentism.13 days = 1 } }
+		if = {
+			limit = { NOT = { scope:irr_unifier = ROOT } }
+			scope:irr_unifier = { trigger_event = { id = irredentism.13 days = 1 } }
+		}
+	}
+}
+
+# ============================================================================
+# Event 12: "[Leader] Blesses the Union"
+# Fires on both countries of a proposed voluntary union after the target's
+# bloc leader blesses it (Event 8 option A): the target, which may now accept,
+# and the country that proposed. Triggered only, no cooldown. Scopes
+# irr_bloc_leader, irr_proposed_target and irr_unifier carry over from Event 8.
+# The text is chosen by which of the two ROOT is.
+# ============================================================================
+irredentism.12 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "africa_diplomats_negotiating" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = irredentism.12.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { scope:irr_proposed_target ?= { this = root } }
+				desc = irredentism.12.d_target
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = irredentism.12.d_unifier
+			}
+		}
+	}
+	flavor = irredentism.12.f
+
+	duration = 3
+
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): scopes ride along from .8, which saved them; a filter
+		exists = scope:irr_bloc_leader
+		exists = scope:irr_proposed_target
+		exists = scope:irr_unifier
+	}
+
+	option = {
+		name = irredentism.12.a
+		default_option = yes
+		ai_chance = { base = 1 }
+		custom_tooltip = { text = irredentism.12.a.tt }
+	}
+}
+
+# ============================================================================
+# Event 13: "[Leader] Forbids the Union"
+# Fires on both countries after the target's bloc leader forbids the union
+# (Event 8 option B): the target, which carries irr_union_forbidden_modifier
+# for five years and cannot accept, and the country that proposed. Same scopes
+# as Event 12. The option changes nothing: it shows the target the modifier it
+# already has.
+# ============================================================================
+irredentism.13 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "africa_diplomats_negotiating" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = irredentism.13.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { scope:irr_proposed_target ?= { this = root } }
+				desc = irredentism.13.d_target
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = irredentism.13.d_unifier
+			}
+		}
+	}
+	flavor = irredentism.13.f
+
+	duration = 3
+
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): scopes ride along from .8, which saved them; a filter
+		exists = scope:irr_bloc_leader
+		exists = scope:irr_proposed_target
+		exists = scope:irr_unifier
+	}
+
+	option = {
+		name = irredentism.13.a
+		default_option = yes
+		ai_chance = { base = 1 }
+		custom_tooltip = { text = irredentism.13.a.tt }
+		if = {
+			limit = { scope:irr_proposed_target ?= { this = root } }
+			show_as_tooltip = {
+				add_modifier = {
+					name = irr_union_forbidden_modifier
+					days = 1825
+					is_decaying = yes
+				}
 			}
 		}
 	}
@@ -995,7 +1145,7 @@ irredentism.6 = {
 	# Per-target cooldown handles dedup if multiple regions overlap.
 	cooldown = { years = 1 }
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): the scopes are saved by te_irredentism_notify_third_parties_effect's caller before the call; a filter
 		exists = scope:irr_annexed_country
 		exists = scope:irr_unifier
 	}

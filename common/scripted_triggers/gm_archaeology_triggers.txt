@@ -170,19 +170,21 @@ gm_arch_method_forensic_ok = {
 }
 
 # Country scope. It makes at least the weekly innovation a dig by the method
-# diverts (country_innovation is net of the digs it already runs), so a launch
-# never takes its weekly innovation below zero (owner, 2026-10-16). The AI's
-# own floor is four times this (gm_arch_ai_affords_<method>).
+# diverts (country_innovation is net of the digs it already runs, and the gate
+# adds those begun in the last two weeks, which may not be in it yet:
+# gm_arch_innovation_gate_<method>), so a launch never takes its weekly
+# innovation below zero (owner, 2026-10-16). The AI's own floor is four times
+# what the method diverts (gm_arch_ai_affords_<method>).
 gm_arch_spares_antiquarian = {
-	country_innovation >= gm_arch_innovation_antiquarian
+	country_innovation >= gm_arch_innovation_gate_antiquarian
 }
 
 gm_arch_spares_systematic = {
-	country_innovation >= gm_arch_innovation_systematic
+	country_innovation >= gm_arch_innovation_gate_systematic
 }
 
 gm_arch_spares_forensic = {
-	country_innovation >= gm_arch_innovation_forensic
+	country_innovation >= gm_arch_innovation_gate_forensic
 }
 
 # Container scope, with gm_site_order_method set: $WHO$ makes the weekly
@@ -205,25 +207,28 @@ gm_arch_order_spared = {
 }
 
 # ---- A country's side -------------------------------------------------------------------------
-# Country scope. It digs, or a site waits for it (gm_arch_pass writes the
-# counts): the journal entry stays for either.
-gm_arch_country_has_any = {
-	OR = {
-		AND = {
-			has_variable = gm_arch_dig_count
-			var:gm_arch_dig_count > 0
-		}
-		AND = {
-			has_variable = gm_arch_open_count
-			var:gm_arch_open_count > 0
-		}
+# Country scope. Nothing dug, nothing waiting, no cost or drain still on
+# (gm_arch_pass writes the counts; a country it hasn't visited has neither).
+# Part of gm_ledgers_idle.
+# Each read sits in a trigger_if behind its has_variable, never beside it in an
+# AND: a journal entry's possible and outcome read every child of an AND, so
+# the guard protected nothing and an unset count logged three errors per read
+# (#1418; scripting_best_practices.md, "A multi-child NOT reads every child").
+gm_arch_country_idle = {
+	trigger_if = {
+		limit = { has_variable = gm_arch_dig_count }
+		var:gm_arch_dig_count <= 0
+	}
+	trigger_if = {
+		limit = { has_variable = gm_arch_open_count }
+		var:gm_arch_open_count <= 0
 	}
 }
 
-# Country scope. Nothing dug, nothing waiting, no cost or drain still on.
-# Part of gm_ledgers_idle.
-gm_arch_country_idle = {
-	gm_arch_country_has_any = no
+# Country scope. It digs, or a site waits for it: the journal entry stays for
+# either.
+gm_arch_country_has_any = {
+	gm_arch_country_idle = no
 }
 
 # Country scope, the host. A site on its ground is open to $WHO$: the

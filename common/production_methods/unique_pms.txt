@@ -1585,7 +1585,7 @@ pm_bhp_mount_whaleback_mine = {
 	state_modifiers = {
 		workforce_scaled = {
 			building_group_bg_mining_throughput_add = 0.5
-			goods_output_lead_mult = 0.05
+			goods_output_copper_mult = 0.05
 		}
 	}
 	building_modifiers = {
@@ -2516,6 +2516,69 @@ pm_hq_diplomatic_framework = {
 		level_scaled = {
 			building_employment_bureaucrats_add = 7000
 			building_employment_clerks_add = 3000
+		}
+	}
+}
+
+# Research Commons (power_blocs.md § Research Commons): the leader's joint
+# laboratory. The cap is what the pool fills, so the headquarters raises it:
+# by a fortieth of the pool beside the identity's tenth (te_rc_pool_cap_value
+# reads the field), a quarter more of a cap rise that grows with the members'
+# innovation. A flat +25 was a tenth of era 6's technology cap gains and under
+# a hundredth of era 13's. Placeholder art: the national laboratories' icon.
+pm_hq_research_commons = {
+	texture = "gfx/interface/icons/production_method_icons/pm_national_labs.dds"
+
+	unlocking_identity = identity_research_commons
+	is_hidden_when_unavailable = yes
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_te_rc_pool_cap_share_add = 0.025
+			country_prestige_mult = 0.05
+		}
+	}
+	state_modifiers = {
+		workforce_scaled = {
+			building_university_throughput_add = 0.25
+			state_migration_pull_mult = 0.1
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_academics_add = 5000
+			building_employment_engineers_add = 2000
+			building_employment_clerks_add = 3000
+		}
+	}
+}
+
+# Creditors' Consortium (2026-11-16): the bloc's clearing house. Half a point
+# off the leader's risk premium (the Debt Conference's figure, permanent here),
+# more leverage over the countries it lends to, and capitalists who put more
+# of their income into the pool, which Development Lending moves.
+pm_hq_creditors_consortium = {
+	texture = "gfx/interface/icons/production_method_icons/pm_hq_trade_league.dds"
+
+	unlocking_identity = identity_creditors_consortium
+	is_hidden_when_unavailable = yes
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_risk_premium_add = -0.005
+			country_leverage_generation_mult = 0.1
+		}
+	}
+	state_modifiers = {
+		workforce_scaled = {
+			state_capitalists_investment_pool_efficiency_mult = 0.1
+			building_urban_center_throughput_add = 0.1
+		}
+	}
+	building_modifiers = {
+		level_scaled = {
+			building_employment_clerks_add = 8000
+			building_employment_capitalists_add = 2000
 		}
 	}
 }
@@ -7352,7 +7415,7 @@ pm_kirgizian_copper_smelter = {
 	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_iron_mine_throughput_add = 0.1
+			building_copper_mine_throughput_add = 0.1
 		}
 	}
 	building_modifiers = {
@@ -7360,7 +7423,7 @@ pm_kirgizian_copper_smelter = {
 			# Input goods
 			goods_input_tools_add = 15                           # Price:   40, Total cost:   600.0 (100.00%)
 			# Output goods
-			goods_output_iron_add = 30                           # Price:   40, Total cost:  1200.0 (80.00%)
+			goods_output_copper_add = 30                         # Price:   40, Total cost:  1200.0 (80.00%)
 			goods_output_coal_add = 10                           # Price:   30, Total cost:   300.0 (20.00%)
 			# Total input cost: 600.0
 			# Total output cost: 1500.0
@@ -11110,7 +11173,7 @@ pm_sumitomo_besshi_mine = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 2.00 # AUTO-GENERATED: industrial emissions
-			building_lead_mine_throughput_add = 0.15
+			building_copper_mine_throughput_add = 0.15
 			building_steel_mill_throughput_add = 0.05
 		}
 	}
@@ -11120,7 +11183,7 @@ pm_sumitomo_besshi_mine = {
 			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (57.14%)
 			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (42.86%)
 			# Output goods
-			goods_output_lead_add = 25                           # Price:   40, Total cost:  1000.0 (57.14%)
+			goods_output_copper_add = 25                         # Price:   40, Total cost:  1000.0 (57.14%)
 			goods_output_steel_add = 15                          # Price:   50, Total cost:   750.0 (42.86%)
 			# Total input cost: 700.0
 			# Total output cost: 1750.0

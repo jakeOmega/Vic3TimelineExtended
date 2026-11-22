@@ -13,8 +13,9 @@ Hegemony and Covert Warfare, and both are on by default.
 The game scores every country's cultural pull from the first day of the
 campaign, but the Cultural Hegemony journal entry and everything it does wait
 until some country in the world has researched Mass Media (an era 6 society
-technology) and you have Romanticism. Until then the scores run in the
-background and have no effect. The entry never completes. Before it opens, the
+technology) and you have Romanticism. With the game rule set to *Early
+Unlock*, the Electric Telegraph (era 3) takes Mass Media's place. Until then
+the scores run in the background and have no effect. The entry never completes. Before it opens, the
 entry shows only your tier and cultural share; after that, its panels show the
 rest (see [The Cultural Hegemony panels](#the-cultural-hegemony-panels)).
 
@@ -185,7 +186,7 @@ at the next monthly update.
 | Program | Controls | Effect | Cost |
 |---|---|---|---|
 | Program Funding | − and + | Each step adds +1 cultural pull and +5% pull. | A weekly expense per step that grows with your GDP, so the bill rises with every step. The tooltip shows the cost of one step and of your current level. |
-| International Cultural Outreach | Begin / End | +10% pull, +5% prestige, +10% mass migration attraction. Needs Mass Media. | The weekly cost of one funding step. |
+| International Cultural Outreach | Begin / End | +10% pull, +5% prestige, +10% mass migration attraction. Needs Mass Media (the Electric Telegraph under *Early Unlock*). | The weekly cost of one funding step. |
 | Cultural Institutes | Fund / Defund | +10% pull. | 150 influence. |
 | Global Media Campaign | Launch / End | +15% pull, +5% prestige. Needs Mass Media. | 200 influence. |
 | Cultural Protectionism | Enact / End | +10% pull, +100 authority. | −5% society research speed, −10% mass migration attraction. |
@@ -205,7 +206,7 @@ once, at 10% and at 25% while ranked first. Trailing countries under the
 benchmark get events of their own. Most let you embrace the foreign influence
 (research, relations, often a push toward the hegemon's model) or resist it
 (authority and interest group approval, often at a cost in relations,
-legitimacy or pull). The harshest, Hegemonic Convergence, can press you to adopt
+legitimacy or pull). The harshest, Pressure to Conform, can press you to adopt
 one of the hegemon's laws once it holds 25% and your share is a tenth of its
 share or less. Four more events follow the political models. All of them are in
 [Cultural hegemony event list](19-appendix-events.md#cultural-hegemony-event-list).
@@ -223,13 +224,25 @@ campaigns, and drop protectionism once their share passes 10%.
 
 ## The Covert Warfare journal entry
 
-The Covert Warfare journal entry is where you run your intelligence agency. It
-becomes active when you hold one more covert operation slot than your rank
-grants for free (every country gets one, major powers two, great powers three).
-The first extra slots come from the Ministry of Intelligence and Security
-Established law (unlocked by Mass Surveillance), whose institution adds a slot
-per level, and from the era 7 technology Mainframe Computers. Once active, the
-entry stays open even if you later lose that extra slot. It never completes.
+The Covert Warfare journal entry is where you run your intelligence agency.
+Every country holds covert operation slots from the start (one, major powers
+two, great powers three), but the entry becomes active only once you gain a
+slot beyond those: from the era 7 technology Mainframe Computers, or from the
+Ministry of Intelligence and Security Established law (unlocked by Mass
+Surveillance), whose institution adds a slot per level. Computer Networks,
+Cyber Warfare and Quantum Computing add a slot each and open it too. Once
+active, the entry stays open. It never completes.
+
+With the game rule set to *Early Unlock*, the entry opens with the era 2
+technology Central Archives instead, a nineteenth-century police and
+intelligence service. While you have none of the sources above, funding stops
+at Professional, and you can launch only the operations that need no later
+technology: industrial and military espionage, cultivating assets,
+counterintelligence support and, at war, infrastructure sabotage. With one, the
+agency works as it does under *Late Unlock*; if you lose your only one, by
+repealing the law, funding falls back to Professional. Switching the rule
+from early to late closes an entry opened early, which comes back when you
+reach a source.
 
 You launch operations from another country's diplomatic actions, listed as
 "Covert: ..." with the operation's name, which is also its name on your rows.
@@ -356,7 +369,7 @@ have agencies of their own.
 
 | Operation | What it does at base strength | Also needs | Influence |
 |---|---|---|---|
-| Election Interference | Target −5 legitimacy; its electoral confidence falls at the end of each election campaign | Television Broadcasting; target has an elected legislature | 50 |
+| Election Interference | Target −5 legitimacy; its electoral confidence falls at the end of each election campaign | Television Broadcasting; target holds elections (a voting law, or Anarchy) | 50 |
 | Financial Subversion | Target +2 bubble pressure a month | Computer Networks | 50 |
 | Infrastructure Sabotage | Target units lose morale 15% faster; each month a random target state gets −15% infrastructure and −10% throughput for three months | War or a diplomatic play against the target | None |
 | Communications Disruption | Target −10% unit offense and defense | Cryptography; war or a diplomatic play against the target | None |
@@ -370,7 +383,7 @@ have agencies of their own.
 | Space Program Espionage | You: space race milestones 10% faster and 10% less risky. Target: −3 authority | Target has completed a milestone you have not | 25 |
 | Cultivate Assets | Nothing to either country; your network there grows half again as fast | Target not your subject | 25 |
 | Secure Loose Material | Once established, a 3% monthly chance (6% fully operational) of finding and destroying one of the target's missing warheads | Target has warheads unaccounted for; Nuclear Weapons rule on | 25 |
-| Incite Colonial Autonomy | Every colony the target holds gains 0.5 autonomy a month; a colony that reaches 100 breaks away | Target holds a colony; Simple or Full Colonies setting of the Space Race rule | 50 |
+| Incite Colonial Autonomy | Every colony of 1,000 people or more the target holds gains 0.5 autonomy a month; a colony that reaches 100 breaks away | Target holds a colony of 1,000 people or more; Simple or Full Colonies setting of the Space Race rule | 50 |
 | Sabotage Colony | The target's most populous colony loses 1% of its people a month and gains 0.25 autonomy | Target holds a colony; Simple or Full Colonies; Seasoned Tradecraft | 100 |
 | Survey Colony Defenses | Your fleets fire 20% harder on the defenses of the target's colonies, and your Fleets panel shows their Defenses, integrity and marines | Target holds a colony; Full Colonies setting | 50 |
 | Counterintelligence Support | Target: +8 economic, military and ideological covert defense. You: nothing | Target is a friend and has no other protector | 25 |
@@ -379,14 +392,15 @@ An operation uses its influence for as long as it runs, more the worse the
 world would take its exposure (see [Detection and
 exposure](#detection-and-exposure)). As with any pact, a great power pays double
 and a major power half again as much, and you need the influence available to
-launch it.
+launch it. Like the base game's Fund Lobbies, every operation builds you up to
+1,000 Involvement in each strategic region where the target is local.
 
 Counterintelligence Support is open: it is never rolled for detection and never
 exposed, needs no technology, and an Intelligence Sharing Pact with the target
 doesn't block it. A country has one protector at a time, and the support ends
 if the friendship does. It uses a slot and upkeep like any operation but gives
-you nothing back. Its defense adds to the target's own (see [Covert
-defense](#covert-defense)).
+you nothing back beyond that Involvement. Its defense adds to the target's own
+(see [Covert defense](#covert-defense)).
 
 If you run several Space Program Espionage operations, their bonuses come
 from the strongest and don't add up. Stolen technology does add up: each
@@ -446,8 +460,8 @@ their priorities, but none can rise until a slot is free again.
 Priority 3 needs an Established agency; a fully operational operation at
 priority 3 works at four times base strength. A click changes detection risk at
 once, in either direction, but the effects only at the start of the next month.
-Raising priority raises upkeep at once; lowering it cuts upkeep only when the
-effects fall. Cultivate Assets stays at priority 1. Election Interference's cut
+Raising priority raises upkeep within a few days; lowering it cuts upkeep only
+when the effects fall. Cultivate Assets stays at priority 1. Election Interference's cut
 to electoral confidence and Regime Change's push on a coup are fixed and don't
 scale with priority.
 
@@ -653,8 +667,8 @@ The Shadow War and The Spy Who Was Caught stand in for the operations; see
 ### How the AI runs covert operations
 
 AI countries set their funding each month: none while idle, level 1 to keep
-operations alive when bankrupt or without rivals (and for a major power with a
-rival), level 3 for a great power with a rival or a major power at war, and
+operations alive when bankrupt, borrowing with bankruptcy under half a year
+away, or without rivals (and for a major power with a rival), level 3 for a great power with a rival or a major power at war, and
 level 5 for a great power at war. They launch rarely. Peacetime operations come
 mostly from major and great powers, aimed at rivals or countries they feel
 antagonistic or domineering toward; espionage goes to countries with technology

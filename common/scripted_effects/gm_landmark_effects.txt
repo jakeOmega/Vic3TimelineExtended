@@ -150,7 +150,8 @@ gm_seed_landmark = {
 				level = 1
 				activate_production_methods = { pm_monument_$DEDICATION$ } # REVIEWED 2026-10-11: a create_building parameter (effects.log 1.14.5 § create_building), not an effect
 			}
-			debug_log = "TE_MONUMENTS: landmark $KEY$ placed in $STATE$ for $TAG$: $LEVEL$ levels recorded, pm_monument_$DEDICATION$, form $FORM$"
+			# no $X$ inside the string: the records just set, and the dedication's name (te_debug_log_arg_effects.txt)
+			debug_log = "TE_MONUMENTS: landmark [THIS.Var('gm_landmark').GetFlagName] placed in [THIS.GetState.GetNameNoFormatting] for [THIS.GetState.GetOwner.GetTagName]: [THIS.Var('gm_levels').GetValue|0] levels recorded, dedication [THIS.GetState.GetCustom('gm_dedication_name')], form [THIS.Var('gm_form').GetFlagName]"
 			# The refresh records it (gm_state_first_sight), opens the
 			# journal entry and sets its picture.
 			owner = { trigger_event = { id = monument_events.20 } }
@@ -173,7 +174,9 @@ gm_seed_landmark = {
 		}
 	}
 	else = {
-		debug_log = "TE_MONUMENTS: landmark $KEY$ not placed: no part of $STATE$ held by $TAG$, or it already stands there"
+		te_log_args_set = { A = $KEY$ B = $STATE$ C = $TAG$ D = none E = none }
+		debug_log = "TE_MONUMENTS: landmark [GetGlobalVariable('te_log_arg_1').GetFlagName] not placed: no part of [GetGlobalVariable('te_log_arg_2').GetFlagName] held by [GetGlobalVariable('te_log_arg_3').GetFlagName], or it already stands there"
+		te_log_args_clear = yes
 	}
 }
 
@@ -356,7 +359,7 @@ gm_debug_log_landmark = {
 				has_variable = gm_landmark
 				var:gm_landmark = flag:$KEY$
 			}
-			debug_log = "TE_MONUMENTS: landmark $KEY$: level [SCOPE.ScriptValue('gm_state_grandeur')|0], status [SCOPE.ScriptValue('gm_status_code')|0], picture [SCOPE.ScriptValue('gm_disp_picture_code')|0]"
+			debug_log = "TE_MONUMENTS: landmark [THIS.Var('gm_landmark').GetFlagName]: level [SCOPE.ScriptValue('gm_state_grandeur')|0], status [SCOPE.ScriptValue('gm_status_code')|0], picture [SCOPE.ScriptValue('gm_disp_picture_code')|0]"
 			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = undedicated }
 			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = crown }
 			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = republic }
@@ -374,13 +377,65 @@ gm_debug_log_landmark = {
 		}
 	}
 	else = {
-		debug_log = "TE_MONUMENTS: landmark $KEY$: none standing"
+		te_log_args_set = { A = $KEY$ B = none C = none D = none E = none }
+		debug_log = "TE_MONUMENTS: landmark [GetGlobalVariable('te_log_arg_1').GetFlagName]: none standing"
+		te_log_args_clear = yes
 	}
 }
 
+# State scope, a landmark's state: a line when it holds dedication $PM$. The
+# line names the dedication as a literal, one helper each, and the landmark from
+# its record (no $X$ inside a debug_log string: te_debug_log_arg_effects.txt).
 gm_debug_log_landmark_pm = {
 	if = {
-		limit = { gm_state_has_pm = { PM = pm_monument_$PM$ } }
-		debug_log = "TE_MONUMENTS: landmark $KEY$: dedication $PM$"
+		limit = {
+			has_variable = gm_landmark
+			var:gm_landmark = flag:$KEY$
+			gm_state_has_pm = { PM = pm_monument_$PM$ }
+		}
+		gm_debug_log_landmark_dedication_$PM$ = yes
 	}
+}
+
+gm_debug_log_landmark_dedication_undedicated = {
+	debug_log = "TE_MONUMENTS: landmark [THIS.Var('gm_landmark').GetFlagName]: dedication undedicated"
+}
+gm_debug_log_landmark_dedication_crown = {
+	debug_log = "TE_MONUMENTS: landmark [THIS.Var('gm_landmark').GetFlagName]: dedication crown"
+}
+gm_debug_log_landmark_dedication_republic = {
+	debug_log = "TE_MONUMENTS: landmark [THIS.Var('gm_landmark').GetFlagName]: dedication republic"
+}
+gm_debug_log_landmark_dedication_revolution = {
+	debug_log = "TE_MONUMENTS: landmark [THIS.Var('gm_landmark').GetFlagName]: dedication revolution"
+}
+gm_debug_log_landmark_dedication_leader = {
+	debug_log = "TE_MONUMENTS: landmark [THIS.Var('gm_landmark').GetFlagName]: dedication leader"
+}
+gm_debug_log_landmark_dedication_religious = {
+	debug_log = "TE_MONUMENTS: landmark [THIS.Var('gm_landmark').GetFlagName]: dedication religious"
+}
+gm_debug_log_landmark_dedication_civic = {
+	debug_log = "TE_MONUMENTS: landmark [THIS.Var('gm_landmark').GetFlagName]: dedication civic"
+}
+gm_debug_log_landmark_dedication_war_memorial = {
+	debug_log = "TE_MONUMENTS: landmark [THIS.Var('gm_landmark').GetFlagName]: dedication war_memorial"
+}
+gm_debug_log_landmark_dedication_artistic = {
+	debug_log = "TE_MONUMENTS: landmark [THIS.Var('gm_landmark').GetFlagName]: dedication artistic"
+}
+gm_debug_log_landmark_dedication_naturalist = {
+	debug_log = "TE_MONUMENTS: landmark [THIS.Var('gm_landmark').GetFlagName]: dedication naturalist"
+}
+gm_debug_log_landmark_dedication_scientific = {
+	debug_log = "TE_MONUMENTS: landmark [THIS.Var('gm_landmark').GetFlagName]: dedication scientific"
+}
+gm_debug_log_landmark_dedication_industrial = {
+	debug_log = "TE_MONUMENTS: landmark [THIS.Var('gm_landmark').GetFlagName]: dedication industrial"
+}
+gm_debug_log_landmark_dedication_athletic = {
+	debug_log = "TE_MONUMENTS: landmark [THIS.Var('gm_landmark').GetFlagName]: dedication athletic"
+}
+gm_debug_log_landmark_dedication_historic = {
+	debug_log = "TE_MONUMENTS: landmark [THIS.Var('gm_landmark').GetFlagName]: dedication historic"
 }

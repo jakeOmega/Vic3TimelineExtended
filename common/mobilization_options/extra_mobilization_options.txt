@@ -1176,7 +1176,7 @@ REPLACE:mobilization_option_first_aid = {
 		# Total cost: 80.0
 	}
 	unit_modifier = {
-		unit_recovery_rate_add = 0.20
+		unit_recovery_rate_add = 0.10
 	}
 	ai_weight = {
 		value = 1
@@ -1243,7 +1243,7 @@ REPLACE:mobilization_option_field_hospitals = {
 		# Total cost: 160.0
 	}
 	unit_modifier = {
-		unit_recovery_rate_add = 0.40
+		unit_recovery_rate_add = 0.20
 	}
 	ai_weight = {
 		value = 1
@@ -1313,7 +1313,9 @@ mobilization_option_medevac_helicopters = {
 		# Total cost: 820.0
 	}
 	unit_modifier = {
-		unit_recovery_rate_add = 0.80
+		# Double Field Hospitals' (First Aid 0.10, Field Hospitals 0.20): 0.80 until
+		# 1.15.2 halved vanilla's two and made recovery also save soldiers as Demoralized.
+		unit_recovery_rate_add = 0.40
 	}
 	ai_weight = {
 		value = 1

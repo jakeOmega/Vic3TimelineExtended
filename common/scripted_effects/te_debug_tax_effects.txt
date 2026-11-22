@@ -288,7 +288,7 @@ te_tp_monthly = {
 	}
 }
 
-# Scope country; KIND = ordinary | emergency, used only in a literal log tag.
+# Scope country; KIND = ordinary | emergency, used only to pick its log line.
 # Sticky action record survives a same-month repeal, unlike the sampled active flag.
 # This observes attempts through the two known activation paths, not arbitrary engine writes.
 te_tp_observe_controls = {
@@ -297,6 +297,15 @@ te_tp_observe_controls = {
 		if = { limit = { NOT = { has_variable = te_tp_controls_actions } } set_variable = { name = te_tp_controls_actions value = 0 } }
 		change_variable = { name = te_tp_controls_actions add = 1 }
 		set_variable = { name = te_tp_controls_action_month value = te_history_month_index }
-		debug_log = "TE_TAX_PROBE controls action KIND=$KIND$; inspect active state after native action"
+		te_tp_observe_controls_log_$KIND$ = yes
 	}
+}
+
+# The line for each KIND, as a literal (no $X$ inside a debug_log string:
+# te_debug_log_arg_effects.txt).
+te_tp_observe_controls_log_ordinary = {
+	debug_log = "TE_TAX_PROBE controls action KIND=ordinary; inspect active state after native action"
+}
+te_tp_observe_controls_log_emergency = {
+	debug_log = "TE_TAX_PROBE controls action KIND=emergency; inspect active state after native action"
 }

@@ -35,9 +35,9 @@ _None._
 
 ## Coverage
 
-- mod-defined or mod-touched ideologies checked: 184
-- lawgroup blocks checked (all ideologies): 1575
-- vanilla laws vanilla blocks leave out, not judged: 151
+- mod-defined or mod-touched ideologies checked: 208
+- lawgroup blocks checked (all ideologies): 2005
+- vanilla laws vanilla blocks leave out, not judged: 178
 - total flags: 0
 - unreviewed: 0
 - exempted: 0

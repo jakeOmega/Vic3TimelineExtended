@@ -162,6 +162,14 @@ update_intel_sharing_defense = {
 # on the yearly state pulse. One apply and one clear effect per article (state
 # scope) serve the article's own hooks and the two checks below.
 #
+# Each apply removes its modifier before adding it. From vanilla 1.15 a
+# renegotiated treaty re-runs a can_be_renegotiated article's
+# on_entry_into_force (with scope:is_renegotiation set), and a same-name
+# add_modifier stacks: a renegotiated Demilitarized Zone would carry -200%
+# conscription. Removing first also puts the effects on a state the
+# renegotiation newly names; te_sync_state_treaty_articles clears the one it
+# no longer names within a month.
+#
 # A treaty can end without on_break or on_withdrawal undoing them. A player
 # who annexed Belgium kept a free port in Flanders whose treaty was gone, and
 # te_update_free_port_tariff renewed it every year off the stale has_free_port.
@@ -178,6 +186,7 @@ update_intel_sharing_defense = {
 # ============================================================================
 
 te_free_port_state_apply = {
+	remove_modifier_if_exists_effect = { MODIFIER = free_port_state_modifier }
 	add_modifier = {
 		name = free_port_state_modifier
 	}
@@ -194,6 +203,7 @@ te_free_port_state_clear = {
 }
 
 te_minority_protection_state_apply = {
+	remove_modifier_if_exists_effect = { MODIFIER = minority_protection_state_modifier }
 	add_modifier = {
 		name = minority_protection_state_modifier
 	}
@@ -207,6 +217,7 @@ te_minority_protection_state_clear = {
 
 # $MISSION_COUNTRY$ = the article's target, whose religion the missions spread.
 te_religious_mission_state_apply = {
+	remove_modifier_if_exists_effect = { MODIFIER = religious_mission_state_modifier }
 	add_modifier = {
 		name = religious_mission_state_modifier
 	}
@@ -222,6 +233,7 @@ te_religious_mission_state_clear = {
 }
 
 te_demilitarized_zone_state_apply = {
+	remove_modifier_if_exists_effect = { MODIFIER = demilitarized_zone_state_modifier }
 	add_modifier = {
 		name = demilitarized_zone_state_modifier
 	}

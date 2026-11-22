@@ -561,7 +561,8 @@ types te_seabed_widget_types
 	### The overview: always open (rule 1). Six boxes, the four questions first:
 	### room to build (and at home), our licences (and the holding fee), long-haul
 	### mines, unused claims (and what next January can take), the policy (and
-	### its lock) and the regime.
+	### its lock) and the regime. Between the second row and the third, the
+	### player's checkbox Build only on local claims.
 	### ----------------------------------------------------------------------
 	type te_seabed_overview_panel = flowcontainer {
 		direction = vertical
@@ -574,6 +575,7 @@ types te_seabed_widget_types
 				spacing = 4
 				margin_top = 4
 				margin_bottom = 4
+				ignoreinvisible = yes
 
 				flowcontainer = {
 					direction = horizontal
@@ -678,6 +680,35 @@ types te_seabed_widget_types
 								visible = "[Not( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_protected_disp'), '(CFixedPoint)0' ) )]"
 								text = "te_seabed_ov_claims_fig_all"
 							}
+						}
+					}
+				}
+				### Build only on local claims (te_seabed_local_only_sgui; owner,
+				### 2026-11-14), under the Room to build and Long-haul boxes it
+				### governs (rule 6). The player's own (te_own_country_only, on the
+				### slot: an own visible would replace it). The mod's own panels had
+				### no checkbox, so this is vanilla's (button_checkbox_label, as
+				### military_formation_panel.gui's Automatically replace lost ships),
+				### centred in a fixed 480 slot. Its hover is the click's effect: what
+				### ticking or unticking does.
+				widget = {
+					using = te_own_country_only
+					size = { 480 34 }
+
+					button_checkbox_label = {
+						parentanchor = center
+						datacontext = "[GetScriptedGui('te_seabed_local_only_sgui')]"
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+						tooltip = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]"
+
+						blockoverride "checkbox" {
+							checked = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_local_only_disp'), '(CFixedPoint)0' )]"
+						}
+						blockoverride "text" {
+							text = "te_seabed_local_only"
+							max_width = 440
+							using = te_seabed_fontsize_row
 						}
 					}
 				}
@@ -1652,6 +1683,8 @@ types te_seabed_widget_types
 				blockoverride "text" {
 					text = "te_seabed_tab_header"
 				}
+				### Show the ocean basins on the map (gui/te_map_widgets.gui; journal_map_modes.md).
+				te_jmap_seabed_map_button = {}
 				te_help_button = {
 					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_seabed')]"

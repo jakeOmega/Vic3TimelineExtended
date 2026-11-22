@@ -35,6 +35,17 @@ def _flagged(result):
     return {(f.keyword, f.kind) for f in result.flags if not f.exemption}
 
 
+def _install_dir(name: str) -> str | None:
+    """`<base_game_path>/game/common/<name>`, or None with no install (CI)."""
+    try:
+        import path_constants
+        base = path_constants.base_game_path
+    except Exception:  # an unconfigured machine: path_constants raises
+        return None
+    path = os.path.join(str(base or ""), "game", "common", name)
+    return path if os.path.isdir(path) else None
+
+
 class DetectionTests(unittest.TestCase):
     def test_unknown_effect_flagged(self):
         m = _Mod({"events/e.txt": "my.1 = {\n\tadd_authority = -200\n}\n"})
@@ -234,6 +245,144 @@ class ScanRootTests(unittest.TestCase):
         self.assertEqual(_flagged(m.audit()), set())
 
 
+class JournalEntry115SchemaTests(unittest.TestCase):
+    """1.15 replaced the completion blocks with `outcome = { }`: the old
+    fields left the root's extras (and the 1.15 catalog), so a leftover one
+    flags."""
+
+    def _audit(self, text):
+        here = os.path.dirname(os.path.abspath(__file__))
+        mod = _Mod({"common/journal_entries/j.txt": text})
+        return eva.audit(
+            mod.root, valid_keys=eva.load_catalog(here),
+            context_keys=eva.load_context_catalog(here),
+        )
+
+    def test_pre_115_completion_blocks_flag(self):
+        result = self._audit(
+            "je_x = {\n"
+            "\tcomplete = { always = yes }\n"
+            "\ton_complete = { add_treasury = 1 }\n"
+            "\tfail = { always = no }\n"
+            "\ton_fail = { add_treasury = 1 }\n"
+            "\tinvalid = { always = no }\n"
+            "\ton_invalid = { add_treasury = 1 }\n"
+            "\ton_timeout = { add_treasury = 1 }\n"
+            "\tcustom_completion_header = x\n"
+            "\tcustom_on_failure_header = x\n"
+            "\tevent_outcome_completed_effect_desc = { add_treasury = 1 }\n"
+            "}\n"
+        )
+        self.assertEqual(
+            {(f.keyword, f.kind) for f in result.flags},
+            {("complete", "unresolved-helper-call"),
+             ("on_complete", "unresolved-helper-call"),
+             ("fail", "unresolved-helper-call"),
+             ("on_fail", "unresolved-helper-call"),
+             ("invalid", "unresolved-helper-call"),
+             ("on_invalid", "unresolved-helper-call"),
+             ("on_timeout", "unresolved-helper-call"),
+             ("custom_completion_header", "unknown-name"),
+             ("custom_on_failure_header", "unknown-name"),
+             ("event_outcome_completed_effect_desc", "unresolved-helper-call")},
+        )
+
+    def test_115_entry_is_clean(self):
+        result = self._audit(
+            "je_x = {\n"
+            "\tgroup = je_group_x\n"
+            "\tdisable_evaluation = { always = no }\n"
+            "\tactivation_description = { always = yes }\n"
+            "\tscaling_modifiers_while_active = {\n"
+            "\t\tmodifier = m\n\t\tvalue = { value = 1 min = 0 }\n\t}\n"
+            "\tmap_color = { lerp = { min_color = \"grey\" max_color = \"red\" factor = 0.5 } }\n"
+            "\tmap_tooltip = { custom_tooltip_no_bullet = x }\n"
+            "\ttimeout = 720\n"
+            "\toutcome = {\n"
+            "\t\theader = je_standard_completion_header\n"
+            "\t\teffect_header = je_standard_on_completion_header\n"
+            "\t\tconclusion_desc = je_standard_completion_conclusion_desc\n"
+            "\t\tcolor = \"gold_positive\"\n"
+            "\t\ttrigger = { scope:journal_entry = { is_goal_complete = yes } }\n"
+            "\t\teffect = { add_treasury = 1 }\n"
+            "\t\tevent_outcome_effect_desc = { header = h effect = { add_treasury = 1 } }\n"
+            "\t}\n"
+            "\toutcome = {\n"
+            "\t\theader = JOURNAL_ENTRY_TIMEOUT\n"
+            "\t\teffect_header = JOURNAL_ENTRY_ON_TIMEOUT\n"
+            "\t\tconclusion_desc = x\n"
+            "\t\tflags = { timeout }\n"
+            "\t}\n"
+            "\toutcome = {\n"
+            "\t\tconclusion_desc = x\n"
+            "\t\tflags = { hidden invalid_outcome }\n"
+            "\t\ttrigger = { always = no }\n"
+            "\t}\n"
+            "}\n"
+        )
+        self.assertEqual(_flagged(result), set())
+
+    def test_pre_115_bar_preset_flags(self):
+        here = os.path.dirname(os.path.abspath(__file__))
+        mod = _Mod({"common/scripted_progress_bars/b.txt": (
+            "bar_x = {\n\tdouble_sided_gold = yes\n\tdefault_green = yes\n"
+            "\tprogress_texture = \"gfx/interface/progressbar/progressbar_bad.dds\"\n"
+            "\tmarker = yes\n}\n"
+        )})
+        result = eva.audit(mod.root, valid_keys=eva.load_catalog(here),
+                           context_keys=eva.load_context_catalog(here))
+        self.assertEqual({(f.keyword, f.kind) for f in result.flags},
+                         {("double_sided_gold", "unresolved-helper-call")})
+
+    def test_115_one_time_event_fields_pass(self):
+        # 1.15's `fire_only_once_globally` (and `fire_only_once`): no vanilla
+        # event sets them, so they live in the events root's extras.
+        here = os.path.dirname(os.path.abspath(__file__))
+        mod = _Mod({"events/e.txt": (
+            "namespace = e\n"
+            "e.1 = {\n\ttype = country_event\n\thidden = yes\n"
+            "\tfire_only_once_globally = yes\n\timmediate = { add_treasury = 1 }\n}\n"
+            "e.2 = {\n\ttype = country_event\n\thidden = yes\n"
+            "\tfire_only_once = yes\n\tfire_only_once_forever = yes\n}\n"
+        )})
+        result = eva.audit(mod.root, valid_keys=eva.load_catalog(here),
+                           context_keys=eva.load_context_catalog(here))
+        self.assertEqual({(f.keyword, f.kind) for f in result.flags},
+                         {("fire_only_once_forever", "unresolved-helper-call")})
+
+    def test_115_scaling_modifier_block_passes(self):
+        # 1.15's scaling_modifiers_while_active (a block or named value) and
+        # disable_evaluation, before the mod's first use (#1404).
+        here = os.path.dirname(os.path.abspath(__file__))
+        mod = _Mod({"common/journal_entries/j.txt": (
+            "je_x = {\n\tgroup = je_group_internal_affairs\n"
+            "\tactivation_description = { always = yes }\n"
+            "\tdisable_evaluation = { NOT = { has_game_rule = r } }\n"
+            "\tscaling_modifiers_while_active = {\n\t\tmodifier = m\n\t\tvalue = {\n"
+            "\t\t\tvalue = 0\n"
+            "\t\t\tif = { limit = { has_variable = v } add = var:v multiply = 2 max = 5 }\n"
+            "\t\t\tmin = 0\n\t\t}\n\t}\n"
+            "\tscaling_modifiers_while_active = { modifier = m2 value = named_sv }\n}\n"
+        )})
+        result = eva.audit(mod.root, valid_keys=eva.load_catalog(here),
+                           context_keys=eva.load_context_catalog(here))
+        self.assertEqual(_flagged(result), set())
+
+    @unittest.skipUnless(_install_dir("journal_entries"), "needs the game install")
+    def test_vanilla_115_entries_and_bars_are_clean(self):
+        # The audit's 1.15 reading against vanilla's own 1.15 files.
+        here = os.path.dirname(os.path.abspath(__file__))
+        root = tempfile.mkdtemp()
+        os.makedirs(os.path.join(root, "common"))
+        for d in ("journal_entries", "scripted_progress_bars"):
+            os.symlink(_install_dir(d), os.path.join(root, "common", d))
+        result = eva.audit(root, valid_keys=eva.load_catalog(here),
+                           context_keys=eva.load_context_catalog(here))
+        self.assertGreater(result.coverage["files_scanned"], 150)
+        self.assertEqual([(f.kind, f.keyword, os.path.basename(f.file), f.line)
+                          for f in result.flags], [])
+
+
 class UnresolvedHelperCallTests(unittest.TestCase):
     def test_returns_call_sites_with_missing_callee(self):
         m = _Mod(
@@ -278,6 +427,348 @@ class BootstrapCatalogTests(unittest.TestCase):
         catalog = eva.load_catalog(mod)
         self.assertIn("has_treaty_alliance_with", catalog)
         self.assertIn("some_vanilla_value", catalog)
+
+
+def _tree(root: str) -> dict[str, tuple[bytes, int]]:
+    """Every file under `root` with its bytes and mtime, and every directory."""
+    seen: dict[str, tuple[bytes, int]] = {}
+    for dirpath, dirnames, filenames in os.walk(root):
+        for name in dirnames:
+            seen[os.path.join(dirpath, name) + os.sep] = (b"", 0)
+        for name in filenames:
+            path = os.path.join(dirpath, name)
+            with open(path, "rb") as fh:
+                seen[path] = (fh.read(), os.stat(path).st_mtime_ns)
+    return seen
+
+
+def _write_files(root: str, files: dict[str, str], encoding: str = "utf-8") -> None:
+    for rel, text in files.items():
+        p = os.path.join(root, rel)
+        os.makedirs(os.path.dirname(p), exist_ok=True)
+        with open(p, "w", encoding=encoding) as f:
+            f.write(text)
+
+
+class BootstrapDryRunTests(unittest.TestCase):
+    """#1403: `bootstrap --dry-run` says what the rewrite would change and
+    writes nothing."""
+
+    CATALOG = "docs/engine/effect_trigger_valid_keys.txt"
+    CONTEXT = "docs/engine/effect_trigger_context_keys.txt"
+
+    def _game(self) -> str:
+        game = tempfile.mkdtemp()
+        _write_files(game, {
+            "game/events/e.txt":
+                "v.1 = {\n\timmediate = {\n\t\tnew_effect = yes\n\t}\n}\n",
+            "game/common/scripted_effects/x.txt":
+                "v_fx = {\n\tset_variable = a\n}\n",
+        }, encoding="utf-8-sig")
+        return game
+
+    def _mod(self, catalog: str | None) -> str:
+        mod = tempfile.mkdtemp()
+        _write_files(mod, {
+            "docs/engine/effects_summary.txt": "country|set_variable|sets it\n",
+            "docs/engine/triggers_summary.txt": "country|has_variable|reads it\n",
+        })
+        if catalog is not None:
+            _write_files(mod, {self.CATALOG: catalog})
+        return mod
+
+    def test_dry_run_reports_the_change_and_writes_nothing(self):
+        game = self._game()
+        mod = self._mod("# old header\nset_variable\ngone_in_this_patch\n")
+        before = _tree(mod)
+        info = eva.bootstrap_catalog(game, mod, dry_run=True)
+        self.assertEqual(_tree(mod), before)
+        self.assertIs(info["written"], False)
+        self.assertEqual(info["current"], 2)
+        self.assertEqual(info["removed"], ["gone_in_this_patch"])
+        self.assertEqual(
+            info["added"],
+            ["has_variable", "immediate", "new_effect", "v_fx"],
+        )
+        self.assertEqual(info["keys"], 5)
+        self.assertFalse(info["identical"])
+        # The real run then writes exactly what the dry run announced.
+        eva.bootstrap_catalog(game, mod)
+        self.assertEqual(
+            eva.load_catalog(mod),
+            {"set_variable", "has_variable", "immediate", "new_effect", "v_fx"},
+        )
+
+    def test_dry_run_does_not_create_the_directory(self):
+        game = self._game()
+        mod = tempfile.mkdtemp()
+        info = eva.bootstrap_catalog(game, mod, dry_run=True)
+        self.assertEqual(os.listdir(mod), [])
+        self.assertIs(info["exists"], False)
+        self.assertEqual(info["current"], 0)
+        self.assertEqual(info["removed"], [])
+
+    def test_dry_run_after_a_real_run_finds_nothing_to_change(self):
+        game = self._game()
+        mod = self._mod(None)
+        real = eva.bootstrap_catalog(game, mod)
+        self.assertNotIn("written", real)
+        before = _tree(mod)
+        info = eva.bootstrap_catalog(game, mod, dry_run=True)
+        self.assertEqual(_tree(mod), before)
+        self.assertTrue(info["identical"])
+        self.assertEqual((info["added"], info["removed"]), ([], []))
+        self.assertIn("would not change", eva.render_dry_run(info, mod, game))
+
+    def test_header_only_change_is_named(self):
+        game = self._game()
+        mod = self._mod(None)
+        eva.bootstrap_catalog(game, mod)
+        path = os.path.join(mod, self.CATALOG)
+        with open(path, encoding="utf-8") as fh:
+            names = [ln for ln in fh.read().splitlines() if not ln.startswith("#")]
+        with open(path, "w", encoding="utf-8") as fh:
+            fh.write("# another header\n" + "\n".join(names) + "\n")
+        info = eva.bootstrap_catalog(game, mod, dry_run=True)
+        self.assertFalse(info["identical"])
+        self.assertIn("Only its header", eva.render_dry_run(info, mod, game))
+
+    def test_cli_dry_run_without_an_install_warns_of_the_shrink(self):
+        # The container case: no game, so the harvest finds nothing and the
+        # catalog would drop to the two summary names.
+        import path_constants
+        from unittest import mock
+
+        mod = self._mod("set_variable\nhas_variable\nlimit\nevery_scope_state\n")
+        before = _tree(mod)
+        nowhere = os.path.join(tempfile.mkdtemp(), "no_install")
+        out = io.StringIO()
+        with mock.patch.object(path_constants, "base_game_path", nowhere,
+                               create=True), contextlib.redirect_stdout(out):
+            self.assertEqual(eva.main(["bootstrap", "--dry-run"], mod_path=mod), 0)
+        self.assertEqual(_tree(mod), before)
+        text = out.getvalue().splitlines()
+        self.assertEqual(
+            text[0], f"DRY RUN: {os.path.normpath(self.CATALOG)} not written.")
+        self.assertEqual(
+            text[1], "  4 entries now, 2 after: 0 added, 2 removed.")
+        self.assertIn("  - every_scope_state", text)
+        self.assertIn("  - limit", text)
+        self.assertFalse([ln for ln in text if ln.startswith("  + ")])
+        # Before the list and after it.
+        self.assertTrue(text[2].startswith("WARNING: no vanilla script found"))
+        self.assertEqual(text[-1], text[2])
+
+    def test_cli_real_run_still_writes(self):
+        import path_constants
+        from unittest import mock
+
+        game = self._game()
+        mod = self._mod("set_variable\n")
+        with mock.patch.object(path_constants, "base_game_path", game,
+                               create=True), contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(eva.main(["bootstrap"], mod_path=mod), 0)
+        self.assertIn("new_effect", eva.load_catalog(mod))
+
+    # --- a real run with no install, and misspelt flags (review of #1649) ----
+
+    def _cli(self, argv, mod, game, docs="unset"):
+        """Run the CLI with the machine's paths patched; (rc, stdout, stderr)."""
+        import path_constants
+        from unittest import mock
+
+        out, err = io.StringIO(), io.StringIO()
+        patches = [mock.patch.object(path_constants, "base_game_path", game,
+                                     create=True)]
+        if docs != "unset":
+            patches.append(mock.patch.object(
+                path_constants, "vanilla_snapshot_docs_path", docs, create=True))
+        with contextlib.ExitStack() as stack:
+            for p in patches:
+                stack.enter_context(p)
+            stack.enter_context(contextlib.redirect_stdout(out))
+            stack.enter_context(contextlib.redirect_stderr(err))
+            rc = eva.main(argv, mod_path=mod)
+        return rc, out.getvalue(), err.getvalue()
+
+    def _no_install(self) -> str:
+        return os.path.join(tempfile.mkdtemp(), "no_install")
+
+    def _docs(self) -> str:
+        docs = tempfile.mkdtemp()
+        _write_files(docs, {
+            "effects.log": "## set_variable\n## new_effect\n",
+            "triggers.log": "## has_variable\n",
+        })
+        return docs
+
+    FOUR = "set_variable\nhas_variable\nlimit\nevery_scope_state\n"
+    OLD_CONTEXT = "# header\n[effect_only]\nset_variable\n[trigger_only]\n"
+
+    def test_real_run_without_an_install_is_refused(self):
+        mod = self._mod(self.FOUR)
+        before = _tree(mod)
+        with self.assertRaises(eva.BootstrapRefused):
+            eva.bootstrap_catalog(self._no_install(), mod)
+        self.assertEqual(_tree(mod), before)
+
+    def test_cli_real_run_without_an_install_is_refused(self):
+        mod = self._mod(self.FOUR)
+        before = _tree(mod)
+        rc, out, err = self._cli(["bootstrap"], mod, self._no_install())
+        self.assertEqual(rc, 1)
+        self.assertEqual(_tree(mod), before)
+        self.assertEqual(out, "")
+        self.assertIn("ERROR: bootstrap:", err)
+        self.assertIn("not written", err)
+        self.assertIn("4 entries now, 2 after", err)
+        self.assertIn("--allow-no-install", err)
+        self.assertNotIn("Traceback", err)
+
+    def test_refused_run_does_not_create_the_directory(self):
+        mod = tempfile.mkdtemp()
+        rc, _out, _err = self._cli(["bootstrap"], mod, self._no_install())
+        self.assertEqual(rc, 1)
+        self.assertEqual(os.listdir(mod), [])
+
+    def test_allow_no_install_writes_and_says_so(self):
+        mod = self._mod(self.FOUR)
+        rc, out, err = self._cli(
+            ["bootstrap", "--allow-no-install"], mod, self._no_install())
+        self.assertEqual(rc, 0)
+        self.assertEqual(eva.load_catalog(mod), {"set_variable", "has_variable"})
+        self.assertIn("'vanilla_files': 0", out)
+        self.assertIn("WARNING: bootstrap: written from no vanilla script", err)
+
+    def test_allow_no_install_changes_nothing_with_an_install(self):
+        mod = self._mod("set_variable\n")
+        rc, _out, err = self._cli(
+            ["bootstrap", "--allow-no-install"], mod, self._game())
+        self.assertEqual(rc, 0)
+        self.assertIn("new_effect", eva.load_catalog(mod))
+        self.assertEqual(err, "")
+
+    def test_dry_run_with_allow_no_install_still_writes_nothing(self):
+        mod = self._mod(self.FOUR)
+        before = _tree(mod)
+        rc, out, _err = self._cli(
+            ["bootstrap", "--allow-no-install", "--dry-run"], mod,
+            self._no_install())
+        self.assertEqual(rc, 0)
+        self.assertEqual(_tree(mod), before)
+        self.assertIn("DRY RUN", out)
+
+    MISSPELT = (
+        "--dryrun", "--dry_run", "-n", "--dry", "dry-run", "--dry-run=1",
+        "--Dry-Run", "--allow-no-instal",
+    )
+
+    def test_a_misspelt_flag_is_rejected_and_nothing_is_written(self):
+        # With an install and engine docs present, so that each of these would
+        # otherwise have rewritten the catalog: they used to.
+        game, docs = self._game(), self._docs()
+        for command, rel in (("bootstrap", self.CATALOG),
+                             ("bootstrap-context", self.CONTEXT)):
+            for flag in self.MISSPELT:
+                for argv in ([command, flag], [command, "--dry-run", flag]):
+                    with self.subTest(argv=argv):
+                        mod = self._mod(self.FOUR)
+                        _write_files(mod, {self.CONTEXT: self.OLD_CONTEXT})
+                        before = _tree(mod)
+                        rc, out, err = self._cli(argv, mod, game, docs)
+                        self.assertEqual(rc, 2)
+                        self.assertEqual(_tree(mod), before, rel)
+                        self.assertEqual(out, "")
+                        self.assertIn(f"unknown argument(s) {flag}", err)
+                        self.assertIn("Nothing was written", err)
+
+    def test_context_real_run_without_an_install_is_refused(self):
+        mod = self._mod(None)
+        _write_files(mod, {self.CONTEXT: self.OLD_CONTEXT})
+        before = _tree(mod)
+        docs = self._docs()
+        with self.assertRaises(eva.BootstrapRefused):
+            eva.bootstrap_context_catalog(self._no_install(), mod, docs)
+        rc, out, err = self._cli(
+            ["bootstrap-context"], mod, self._no_install(), docs)
+        self.assertEqual((rc, out), (1, ""))
+        self.assertEqual(_tree(mod), before)
+        self.assertIn("ERROR: bootstrap-context:", err)
+        self.assertIn("1 entries now, 3 after", err)
+
+    def test_context_allow_no_install_writes(self):
+        mod = self._mod(None)
+        rc, out, err = self._cli(
+            ["bootstrap-context", "--allow-no-install"], mod,
+            self._no_install(), self._docs())
+        self.assertEqual(rc, 0)
+        self.assertEqual(
+            eva.load_context_catalog(mod),
+            {"effect_only": {"set_variable", "new_effect"},
+             "trigger_only": {"has_variable"}},
+        )
+        self.assertIn("'vanilla_files': 0", out)
+        self.assertIn("WARNING: bootstrap-context: written from no vanilla", err)
+
+    def test_context_dry_run_without_an_install_warns(self):
+        mod = self._mod(None)
+        _write_files(mod, {self.CONTEXT: self.OLD_CONTEXT})
+        before = _tree(mod)
+        rc, out, _err = self._cli(
+            ["bootstrap-context", "--dry-run"], mod, self._no_install(),
+            self._docs())
+        self.assertEqual(rc, 0)
+        self.assertEqual(_tree(mod), before)
+        lines = out.splitlines()
+        self.assertTrue(lines[0].startswith("DRY RUN:"))
+        self.assertTrue(lines[2].startswith("WARNING: no vanilla script found"))
+        self.assertIn("  + [effect_only] new_effect", lines)
+
+    def test_context_without_the_engine_docs_says_so_and_writes_nothing(self):
+        # A container: `vanilla_snapshot_docs_path` resolves to None. It was a
+        # TypeError traceback from os.path.join.
+        game = self._game()
+        for docs in (None, tempfile.mkdtemp()):       # unset; set but empty
+            for flags in ([], ["--dry-run"], ["--allow-no-install"]):
+                with self.subTest(docs=docs, flags=flags):
+                    mod = self._mod(None)
+                    _write_files(mod, {self.CONTEXT: self.OLD_CONTEXT})
+                    before = _tree(mod)
+                    rc, out, err = self._cli(
+                        ["bootstrap-context", *flags], mod, game, docs)
+                    self.assertEqual((rc, out), (1, ""))
+                    self.assertEqual(_tree(mod), before)
+                    self.assertIn("ERROR: bootstrap-context: nothing written", err)
+                    self.assertIn(
+                        "VIC3_VANILLA_DOCS_SNAPSHOT" if docs is None
+                        else "effects.log / triggers.log not found", err)
+                    self.assertNotIn("Traceback", err)
+
+    def test_context_dry_run_writes_nothing_and_names_the_section(self):
+        game = self._game()
+        docs = tempfile.mkdtemp()
+        _write_files(docs, {
+            "effects.log": "## set_variable\n## new_effect\n",
+            "triggers.log": "## has_variable\n",
+        })
+        mod = self._mod(None)
+        _write_files(mod, {self.CONTEXT: (
+            "# header\n[effect_only]\nset_variable\nhas_variable\n"
+            "[trigger_only]\n"
+        )})
+        before = _tree(mod)
+        info = eva.bootstrap_context_catalog(game, mod, docs, dry_run=True)
+        self.assertEqual(_tree(mod), before)
+        self.assertIs(info["written"], False)
+        # `has_variable` changes section: out of one, into the other.
+        self.assertEqual(info["removed"], ["[effect_only] has_variable"])
+        self.assertEqual(info["added"], [
+            "[effect_only] new_effect", "[effect_only] v_fx",
+            "[trigger_only] has_variable",
+        ])
+        rendered = eva.render_dry_run(info, mod, game)
+        self.assertIn("2 entries now, 4 after: 3 added, 1 removed.", rendered)
+        self.assertNotIn("WARNING", rendered)
 
 
 # --- #1142: effects in trigger context and the reverse ----------------------
@@ -457,13 +948,73 @@ class EffectInTriggerTests(unittest.TestCase):
         })
         self.assertEqual(_flagged(result), set())
 
-    def test_journal_entry_complete_is_trigger_context(self):
+    def test_journal_entry_outcome_trigger_and_effect_contexts(self):
+        # 1.15: an outcome's `trigger` holds triggers, its `effect` effects.
         result = _ctx_audit({"common/journal_entries/j.txt": (
-            "je_x = {\n\tcomplete = { set_variable = x }\n"
-            "\ton_complete = { set_variable = y }\n}\n"
+            "je_x = {\n\toutcome = {\n"
+            "\t\theader = je_standard_completion_header\n"
+            "\t\ttrigger = { set_variable = x }\n"
+            "\t\teffect = { has_variable = y }\n"
+            "\t}\n}\n"
         )})
         self.assertEqual(
-            [(f.keyword, f.line) for f in result.flags], [("set_variable", 2)]
+            sorted((f.keyword, f.kind, f.line) for f in result.flags),
+            [("has_variable", "trigger-in-effect", 5),
+             ("set_variable", "effect-in-trigger", 4)],
+        )
+
+    def test_journal_entry_effect_blocks_without_an_effect_name(self):
+        # effect_all_involved, immediate_all_involved, map_tooltip and
+        # event_outcome_effect_desc match no `on_` / `_effect` pattern, so
+        # they read as effects only through the root's effect_blocks.
+        result = _ctx_audit({"common/journal_entries/j.txt": (
+            "je_x = {\n"
+            "\timmediate_all_involved = { has_variable = a }\n"
+            "\tmap_tooltip = { has_variable = b }\n"
+            "\toutcome = {\n"
+            "\t\teffect_all_involved = { has_variable = c }\n"
+            "\t\tevent_outcome_effect_desc = { has_variable = d }\n"
+            "\t\tevent_outcome_effect_desc = { header = h effect = { has_variable = e } }\n"
+            "\t}\n"
+            "\tactivation_description = { set_variable = f }\n"
+            "\tdisable_evaluation = { set_variable = g }\n"
+            "\tmap_color = { if = { limit = { set_variable = h } } }\n"
+            "}\n"
+        )})
+        self.assertEqual(
+            sorted((f.keyword, f.kind, f.line) for f in result.flags),
+            [("has_variable", "trigger-in-effect", 2),
+             ("has_variable", "trigger-in-effect", 3),
+             ("has_variable", "trigger-in-effect", 5),
+             ("has_variable", "trigger-in-effect", 6),
+             ("has_variable", "trigger-in-effect", 7),
+             ("set_variable", "effect-in-trigger", 9),
+             ("set_variable", "effect-in-trigger", 10),
+             ("set_variable", "effect-in-trigger", 11)],
+        )
+
+    def test_map_color_is_neutral(self):
+        # A script value returning a color: neither reader.
+        result = _ctx_audit({"common/journal_entries/j.txt": (
+            "je_x = {\n\tmap_color = { value = \"golden\" has_variable = x }\n"
+            "\tmap_color_second = { lerp = { set_variable = y } }\n}\n"
+        )})
+        self.assertEqual(_flagged(result), set())
+
+    def test_progress_condition_limit_is_trigger_context(self):
+        # 1.15 bars: progress_condition works like an `if`, its `limit` a
+        # trigger, an `else` inside it taking over; the rest stays neutral.
+        result = _ctx_audit({"common/scripted_progress_bars/b.txt": (
+            "bar_x = {\n\tweekly_progress = {\n\t\tprogress_condition = {\n"
+            "\t\t\tlimit = { save_scope_as = x }\n"
+            "\t\t\tadd = { desc = D value = 1 }\n"
+            "\t\t\telse = {\n\t\t\t\tlimit = { has_variable = y }\n"
+            "\t\t\t\tadd = { desc = D value = 2 }\n\t\t\t}\n"
+            "\t\t}\n\t}\n}\n"
+        )})
+        self.assertEqual(
+            [(f.keyword, f.kind, f.line) for f in result.flags],
+            [("save_scope_as", "effect-in-trigger", 4)],
         )
 
     def test_multiline_string_keys_are_not_read(self):

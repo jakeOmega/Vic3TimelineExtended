@@ -151,13 +151,15 @@ gw_policies_active_count_display = {
 	if = { limit = { gw_policy_green_building_codes_active = yes } add = 1 }
 }
 
-# The multiplier the JE's monthly pulse feeds to the `global_warming` modifier.
-# Shown beside [GetStaticModifier('global_warming').GetDesc] so the player can
-# read the per-unit penalty list and the scale it is multiplied by, without any
-# number being retyped here.
+# The scale je_global_warming declares the `global_warming` modifier at: the
+# felt anomaly, floored at 0 (scaling_modifiers_while_active). Shown beside
+# [GetStaticModifier('global_warming').GetDesc] so the player can read the
+# per-unit penalty list and the scale it is multiplied by, without any number
+# being retyped here.
 # Scope: any
 gw_warming_penalty_scale_display = {
 	value = temperature_anomaly_display
+	min = 0
 }
 
 # ----------------------------------------------------------------------------
@@ -564,3 +566,32 @@ gw_disp_penalty_mortality_pct = {
 	value = gw_warming_penalty_scale_display
 	multiply = 5
 }
+
+# Country scope: the country's emissions this year as the sum of its states' snapshots, just taken
+# (gw_snapshot_country_emissions_effect sets each state's gw_state_emis first). Equal to
+# country_greenhouse_gas_emissions_script_value at that moment, without walking the pops a second time.
+gw_country_emis_from_states = {
+	value = 0
+	every_scope_state = {
+		limit = { has_variable = gw_state_emis }
+		add = var:gw_state_emis
+	}
+}
+
+# ---- TEMPORARY: the World Climate self-check (#1448) -----------------------
+# gw_world_climate_selfcheck_effect (global_warming_effects.txt). Climate
+# Warming sets state_harvest_condition_wildfire_duration_mult at 0.5 a degree
+# of the felt anomaly (extra_modifiers.txt), and nothing else sets the field.
+# The floor takes a fifth off for the declaration's lag. Delete with the check.
+gw_wc_selfcheck_expected = {
+	value = temperature_anomaly_display
+	multiply = 0.5
+}
+gw_wc_selfcheck_floor = {
+	value = gw_wc_selfcheck_expected
+	multiply = 0.8
+}
+# debug_log can't see the effect's scopes: it reads the copies in globals.
+gw_wc_chk_reading_g = { value = global_var:gw_wc_chk_reading }
+gw_wc_chk_expected_g = { value = global_var:gw_wc_chk_expected }
+gw_wc_chk_involved_g = { value = global_var:gw_wc_chk_involved }

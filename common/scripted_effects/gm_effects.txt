@@ -86,7 +86,12 @@ gm_state_record_honoree = {
 				}
 			}
 		}
-		set_variable = { name = gm_honoree_ig value = owner.var:gm_tmp_ig_flag }
+		# Guarded: the policy buttons' tooltips walk the refresh writing
+		# nothing, so the flag set above is unset there (tooltip_walk_variable_audit).
+		if = {
+			limit = { owner = { has_variable = gm_tmp_ig_flag } }
+			set_variable = { name = gm_honoree_ig value = owner.var:gm_tmp_ig_flag }
+		}
 		owner = { remove_variable = gm_tmp_ig_flag }
 	}
 }
@@ -264,8 +269,20 @@ gm_state_try_heritage_as_faith_skin = {
 }
 
 # ---- Forgetting a monument ---------------------------------------------------
-# State scope. Every local modifier, whichever dedication added it.
+# State scope. Every local modifier, whichever dedication added it, and the
+# building's upkeep exemption.
 gm_remove_local_modifiers = {
+	gm_remove_local_effect_modifiers = yes
+	b:building_grand_monument ?= {
+		remove_modifier = gm_upkeep
+	}
+}
+
+# State scope. The local modifiers alone, without gm_upkeep: what the rule
+# switched off mid-game takes away (gm_state_rule_off_on_action). The building
+# keeps its upkeep exemption, since a monument can't be downsized and
+# shouldn't start charging maintenance.
+gm_remove_local_effect_modifiers = {
 	remove_modifier = gm_local_tourism
 	remove_modifier = gm_local_crown
 	remove_modifier = gm_local_republic
@@ -283,11 +300,6 @@ gm_remove_local_modifiers = {
 	remove_modifier = gm_local_sig_antiquity
 	remove_modifier = gm_local_sig_archive
 	remove_modifier = gm_local_sig_first_emperor
-	b:building_grand_monument ?= {
-		remove_modifier = gm_upkeep
-		remove_modifier = gm_policy_upkeep_open
-		remove_modifier = gm_policy_upkeep_mothballed
-	}
 }
 
 # State scope. Add $AGE$ to the primary's age grandeur (gm_age), creating it.
@@ -396,6 +408,7 @@ gm_clear_state = {
 	gm_state_clear_namesake = yes
 	gm_remove_state_var = { VAR = gm_name }
 	gm_remove_state_var = { VAR = gm_unveiled_for_com }
+	gm_remove_state_var = { VAR = gm_unearthed_for_com }
 	gm_remove_state_var = { VAR = gm_unveil_pending }
 	gm_remove_state_var = { VAR = gm_name_choice_open }
 	gm_remove_state_var = { VAR = gm_being_named }
@@ -440,7 +453,6 @@ gm_state_monthly = {
 		# Its dedication, read if the building disappears (sites spec
 		# 2026-10-18 §3.7: it is put back on it).
 		gm_state_record_dedication = yes
-		gm_monument_migration_self_check = yes
 		gm_monument_merge_level_self_check = yes
 		# Tourism counts everything standing here; Open to the Public scales
 		# it (policy spec 2026-10-23 § 4.1), To History's share at half (§ 4.5).
@@ -519,6 +531,8 @@ gm_state_monthly = {
 					gm_state_record_teardown = yes
 				}
 				gm_clear_state = { KEEP_LANDMARK = no }
+				# The building is gone, so is script's mark on it (#1409).
+				gm_remove_state_var = { VAR = gm_migrated }
 			}
 		}
 		if = {
@@ -705,7 +719,6 @@ gm_decay_ledgers = {
 # a scripted GUI effect or a country event option. Never call it where ROOT is
 # a state, building, law or character: the multipliers resolve against ROOT.
 gm_country_refresh = {
-	gm_policy_migrate = yes
 	gm_init_ledgers = yes
 	if = {
 		limit = {
@@ -722,14 +735,24 @@ gm_country_refresh = {
 	# is_shown_when_inactive auto-activates it for new saves, but a new
 	# auto-activating JE does not reach a save started before it existed
 	# (same doc, following paragraph). Add it explicitly here so saves that
-	# predate this entry, and any save where it lapsed, pick it back up. Not for
+	# predate this entry, and a country whose entry concluded (its invalid
+	# outcome, once it owned nothing: the record is gone, and the engine never
+	# activates the type again), pick it back up. Not for
 	# a decentralized country (has_events = no), which can hold a landmark (Great
 	# Zimbabwe, under the Rozvi) but takes no journal entry: the add logs an error.
+	# Nor over an inactive copy, which every country holds until its entry
+	# first concludes: has_journal_entry reads active entries only, the engine
+	# activates that copy at its next check of `possible`, and adding over it
+	# logged "already has a journal entry of type je_grand_monuments"
+	# (journal_entry_manager.cpp: 116 lines, 55 countries, as the first 1.15
+	# game began; the same line on 1.14.5). So the add reaches only a country
+	# with no record (#1416).
 	if = {
 		limit = {
 			gm_system_enabled = yes
 			NOT = { is_country_type = decentralized }
 			NOT = { has_journal_entry = je_grand_monuments }
+			NOT = { has_inactive_journal_entry = je_grand_monuments }
 			OR = {
 				any_scope_state = { has_building = building_grand_monument }
 				any_scope_state = { has_building = building_grand_monument_site }
@@ -744,12 +767,6 @@ gm_country_refresh = {
 	clear_variable_list = gm_states
 	every_scope_state = {
 		limit = { has_building = building_grand_monument }
-		# An older save's monument, once (sites spec 2026-10-18 §3.5): the
-		# hidden event, never here.
-		if = {
-			limit = { gm_state_needs_migration = yes }
-			trigger_event = { id = monument_events.32 }
-		}
 		# A gifted monument's dedication back first (opportunities spec §3.1).
 		gm_state_restore_dedication = yes
 		# A landmark's unique dedication (signatures spec §4.4).
@@ -759,17 +776,38 @@ gm_country_refresh = {
 		# monument that stood there wait to be adopted here (issue #936): the
 		# hidden event adopts them first, and nothing reads this building as a
 		# copy, a first sight or new levels until it has.
+		# A merge's wait (gm_state_stray_waits, below) is over once its orphan
+		# reads as one or adopted it: a later merge here waits afresh.
+		if = {
+			limit = {
+				has_variable = gm_stray_seen
+				gm_state_unclaimed_building = no
+			}
+			remove_variable = gm_stray_seen
+		}
 		if = {
 			limit = { gm_state_merge_pending = yes }
-			trigger_event = { id = monument_events.29 }
+			trigger_event = { id = monument_events.29 } # REVIEWED 2026-11-12 (trigger_event_cycle): gm_state_adopt_orphans settles an orphan before each monument_events.20 (gm_sh_adopt_beside sets its gm_tr_origin; gm_state_promote_secondary destroys the container it raised), so each pass leaves one fewer for gm_state_merge_pending to find, or it waits a day (gm_state_tomorrow) while gm_rebuilding stands in the region
 		}
 		# A revolt's part of a monument's state: the engine's copy of its
-		# building, which nothing records and no orphan claims. The monument
-		# stays whole with the part that keeps its records (owner, 2026-10-18;
-		# sites spec §3.7): the hidden event removes it.
+		# building, which nothing records and no orphan claims, beside the part
+		# it copies. The monument stays whole with the part that keeps its
+		# records (owner, 2026-10-18; sites spec §3.7): the hidden event removes
+		# it.
 		else_if = {
 			limit = { gm_state_stray_building = yes }
-			trigger_event = { id = monument_events.29 }
+			trigger_event = { id = monument_events.29 } # REVIEWED 2026-11-12 (trigger_event_cycle): on this branch monument_events.29 removes the building and fires nothing (its own chain reads gm_state_merge_pending first, false here); gm_state_stray_building needs the building
+		}
+		# A merge's building before its orphan reads as one (2026-11-06,
+		# Jantar Mantar): not a copy and not a first sight. It waits up to a
+		# month for gm_state_merge_pending, then counts as a copy.
+		else_if = {
+			limit = { gm_state_stray_waits = yes }
+			if = {
+				limit = { NOT = { has_variable = gm_stray_seen } }
+				set_variable = gm_stray_seen
+				set_variable = { name = gm_stray_wait days = 30 }
+			}
 		}
 		else = {
 			gm_state_first_sight = yes
@@ -795,7 +833,7 @@ gm_country_refresh = {
 			# back once settled (gm_state_settle_newcomer), from the hidden event.
 			if = {
 				limit = { gm_state_newcomer_settled = yes }
-				trigger_event = { id = monument_events.29 }
+				trigger_event = { id = monument_events.29 } # REVIEWED 2026-11-12 (trigger_event_cycle): gm_state_settle_newcomer removes gm_newcomer on its first line, before gm_state_swap_primary's monument_events.20, and gm_state_newcomer_settled reads it
 			}
 		}
 		owner = {
@@ -822,8 +860,9 @@ gm_country_refresh = {
 	gm_com_check_progress = yes
 	# Where Raise It would build, for the panel (usability §1).
 	gm_com_update_build_where = yes
+	# The national modifiers follow these totals on their own: the journal
+	# entry declares each from its variable (je_grand_monuments.txt, #1404).
 	gm_compute_totals = yes
-	gm_apply_national_modifiers = yes
 	# What each contested monument's three choices would do now (GM-4).
 	gm_preview_choices = yes
 	gm_notify_new_contests = yes
@@ -1127,118 +1166,6 @@ gm_compute_ig = {
 	}
 }
 
-# Country scope, ROOT = the country. Every national modifier lives on the
-# journal entry (§2.4); the `?=` skips the months before it is active.
-gm_apply_national_modifiers = {
-	je:je_grand_monuments ?= {
-		gm_remove_national_modifiers = yes
-		gm_add_national = { NAME = gm_national_prestige VAR = gm_s_standing }
-		gm_add_national = { NAME = gm_national_prestige_pct VAR = gm_s_standing }
-		gm_add_national = { NAME = gm_national_education VAR = gm_s_education }
-		gm_add_national = { NAME = gm_national_legitimacy VAR = gm_s_regime }
-		gm_add_national = { NAME = gm_national_leader VAR = gm_s_leader }
-		gm_add_national = { NAME = gm_national_religious VAR = gm_s_religious }
-		gm_add_national = { NAME = gm_national_war_memorial VAR = gm_s_war_memorial }
-		gm_add_national = { NAME = gm_national_artistic VAR = gm_s_artistic }
-		gm_add_national = { NAME = gm_national_scientific VAR = gm_s_scientific }
-		gm_add_national = { NAME = gm_national_industrial VAR = gm_s_industrial }
-		gm_add_national = { NAME = gm_national_teardown VAR = gm_s_teardown }
-		gm_add_national = { NAME = gm_national_vanity VAR = gm_vanity_ledger }
-		# The unique dedications (signatures spec §2.1); Ancestral Antiquity's is
-		# cultural pull, a script value (cultural_pull_from_antiquity).
-		gm_add_national = { NAME = gm_national_sig_archive VAR = gm_s_sig_archive }
-		gm_add_national = { NAME = gm_national_sig_archive_spread VAR = gm_s_sig_archive }
-		gm_add_national = { NAME = gm_national_sig_throne VAR = gm_s_sig_throne }
-		gm_add_national = { NAME = gm_national_sig_royal_pantheon VAR = gm_s_sig_royal_pantheon }
-		gm_add_national = { NAME = gm_national_sig_martial_glory VAR = gm_s_sig_martial_glory }
-		gm_add_national = { NAME = gm_national_sig_liberty VAR = gm_s_sig_liberty }
-		gm_add_national = { NAME = gm_national_sig_grande_armee VAR = gm_s_sig_grande_armee }
-		gm_add_national = { NAME = gm_national_sig_mandate_of_heaven VAR = gm_s_sig_mandate_of_heaven }
-		gm_add_national = { NAME = gm_national_sig_glory_of_athens VAR = gm_s_sig_glory_of_athens }
-		gm_add_national = { NAME = gm_national_sig_to_victory VAR = gm_s_sig_to_victory }
-		gm_add_national = { NAME = gm_national_sig_unknown_soldier VAR = gm_s_sig_unknown_soldier }
-		gm_add_national = { NAME = gm_national_sig_concert_of_nations VAR = gm_s_sig_concert_of_nations }
-		gm_add_national = { NAME = gm_national_sig_conquerors_of_space VAR = gm_s_sig_conquerors_of_space }
-		gm_add_national = { NAME = gm_national_sig_olympic VAR = gm_s_sig_olympic }
-		gm_add_national = { NAME = gm_national_sig_heroes VAR = gm_s_sig_heroes }
-		gm_add_boons = yes
-		gm_tr_add_national = yes
-		gm_arch_add_national = yes
-		gm_add_national_signed = { NAME = gm_ig_approval_armed_forces VAR = gm_s_ig_armed_forces }
-		gm_add_national_signed = { NAME = gm_ig_approval_devout VAR = gm_s_ig_devout }
-		gm_add_national_signed = { NAME = gm_ig_approval_industrialists VAR = gm_s_ig_industrialists }
-		gm_add_national_signed = { NAME = gm_ig_approval_intelligentsia VAR = gm_s_ig_intelligentsia }
-		gm_add_national_signed = { NAME = gm_ig_approval_landowners VAR = gm_s_ig_landowners }
-		gm_add_national_signed = { NAME = gm_ig_approval_petty_bourgeoisie VAR = gm_s_ig_petty_bourgeoisie }
-		gm_add_national_signed = { NAME = gm_ig_approval_rural_folk VAR = gm_s_ig_rural_folk }
-		gm_add_national_signed = { NAME = gm_ig_approval_trade_unions VAR = gm_s_ig_trade_unions }
-	}
-}
-
-# Journal-entry scope.
-gm_remove_national_modifiers = {
-	remove_modifier = gm_national_prestige
-	remove_modifier = gm_national_prestige_pct
-	remove_modifier = gm_national_education
-	remove_modifier = gm_national_legitimacy
-	remove_modifier = gm_national_leader
-	remove_modifier = gm_national_religious
-	remove_modifier = gm_national_war_memorial
-	remove_modifier = gm_national_artistic
-	remove_modifier = gm_national_scientific
-	remove_modifier = gm_national_industrial
-	remove_modifier = gm_national_teardown
-	remove_modifier = gm_national_vanity
-	# v2's commission reward: nothing adds it now, but a save may carry it.
-	remove_modifier = gm_national_promise
-	remove_modifier = gm_national_sig_archive
-	remove_modifier = gm_national_sig_archive_spread
-	remove_modifier = gm_national_sig_throne
-	remove_modifier = gm_national_sig_royal_pantheon
-	remove_modifier = gm_national_sig_martial_glory
-	remove_modifier = gm_national_sig_liberty
-	remove_modifier = gm_national_sig_grande_armee
-	remove_modifier = gm_national_sig_mandate_of_heaven
-	remove_modifier = gm_national_sig_glory_of_athens
-	remove_modifier = gm_national_sig_to_victory
-	remove_modifier = gm_national_sig_unknown_soldier
-	remove_modifier = gm_national_sig_concert_of_nations
-	remove_modifier = gm_national_sig_conquerors_of_space
-	remove_modifier = gm_national_sig_olympic
-	remove_modifier = gm_national_sig_heroes
-	gm_remove_boons = yes
-	gm_tr_remove_national = yes
-	gm_arch_remove_national = yes
-	remove_modifier = gm_ig_approval_armed_forces
-	remove_modifier = gm_ig_approval_devout
-	remove_modifier = gm_ig_approval_industrialists
-	remove_modifier = gm_ig_approval_intelligentsia
-	remove_modifier = gm_ig_approval_landowners
-	remove_modifier = gm_ig_approval_petty_bourgeoisie
-	remove_modifier = gm_ig_approval_rural_folk
-	remove_modifier = gm_ig_approval_trade_unions
-}
-
-# Journal-entry scope; the variable is ROOT's (the country's).
-gm_add_national = {
-	if = {
-		limit = { root.var:$VAR$ > 0.001 }
-		add_modifier = { name = $NAME$ multiplier = root.var:$VAR$ }
-	}
-}
-
-gm_add_national_signed = {
-	if = {
-		limit = {
-			OR = {
-				root.var:$VAR$ > 0.001
-				root.var:$VAR$ < -0.001
-			}
-		}
-		add_modifier = { name = $NAME$ multiplier = root.var:$VAR$ }
-	}
-}
-
 # ---- Contests (§4) -------------------------------------------------------------
 # Country scope. From gm_country_refresh: a bound monument whose message no
 # longer fits becomes contested; a contested or heritage one whose message
@@ -1386,9 +1313,11 @@ gm_state_changed_hands = {
 		limit = { gm_state_merge_pending = yes }
 		gm_state_adopt_orphans = yes
 	}
-	# A commission's mark and a naming in progress belong to the old owner
-	# (v2 §3.3, §3.5); its naming is closed by its own sweep.
+	# A commission's marks and a naming in progress belong to the old owner
+	# (v2 §3.3, §3.5); its naming is closed by its own sweep. A find's mark
+	# (gm_unearthed_for_com) was for the old owner's opportunity.
 	gm_remove_state_var = { VAR = gm_unveiled_for_com }
+	gm_remove_state_var = { VAR = gm_unearthed_for_com }
 	gm_remove_state_var = { VAR = gm_being_named }
 	# The country it came from, for a trophy taken from it (gm_trophy_effects.txt).
 	gm_state_tr_changed_hands = yes
@@ -1416,6 +1345,7 @@ gm_state_changed_hands = {
 			# copy, which the refresh this sends removes.
 			gm_state_merge_pending = no
 			gm_state_stray_building = no
+			gm_state_stray_waits = no
 		}
 		set_variable = gm_seen
 		if = {
@@ -1577,13 +1507,28 @@ gm_state_record_teardown = {
 
 gm_state_tear_down = {
 	set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
+	# Logged (log triage 2026-11-06): a teardown was the one way a monument
+	# went with no line, so an observer run couldn't tell the AI's choice
+	# from a monument lost to a bug.
+	if = {
+		limit = { has_variable = gm_landmark }
+		debug_log = "TE_MONUMENTS: torn down: landmark [THIS.Var('gm_landmark').GetFlagName] in [THIS.GetState.GetOwner.GetTagName]'s part of [THIS.GetState.GetNameNoFormatting], [SCOPE.ScriptValue('gm_state_primary_levels')|0] levels recorded"
+	}
+	else = {
+		debug_log = "TE_MONUMENTS: torn down: a monument in [THIS.GetState.GetOwner.GetTagName]'s part of [THIS.GetState.GetNameNoFormatting], [SCOPE.ScriptValue('gm_state_primary_levels')|0] levels recorded"
+	}
 	gm_state_record_teardown = yes
 	owner = {
 		remove_list_variable = { name = gm_states target = prev }
 	}
 	gm_clear_state = { KEEP_LANDMARK = no }
 	# Another monument stood beside it: the building is the largest's now
-	# (gm_state_promote_secondary, gm_monument_effects.txt). Otherwise it goes.
+	# (gm_state_promote_secondary, gm_monument_effects.txt). Otherwise it goes,
+	# and with it the mark that script made this state's building (#1409): a
+	# building a merge brings in later is one no record describes, which waits
+	# for its orphan (gm_state_stray_waits) rather than being first-sighted.
+	# Not in gm_clear_state: Rededicate keeps its building, and every raise
+	# after a clear sets the mark again.
 	if = {
 		limit = { gm_state_has_secondary = yes }
 		gm_state_promote_secondary = yes
@@ -1591,6 +1536,7 @@ gm_state_tear_down = {
 	else = {
 		set_variable = { name = gm_rebuilding days = 1 }
 		remove_building = building_grand_monument
+		gm_remove_state_var = { VAR = gm_migrated }
 	}
 }
 
@@ -1602,7 +1548,7 @@ gm_state_tear_down = {
 # nothing, so the reads of gm_rebuild_cost and gm_rebuild_level found them
 # unset (~600 error lines a frame through the level switch's 200 cases while
 # the Rededicate button was hovered, 2026-10-12). Every caller already shows
-# gm_rededicate_tt in place of these effects (gm_state_choose_rededicate) or
+# a gm_rededicate_*tt in place of these effects (gm_state_choose_rededicate) or
 # needs no tooltip (the AI), so the guard hides nothing
 # (scripting_best_practices.md § "An Option's Tooltip Walks Its Effects").
 gm_state_rededicate = {
@@ -1689,18 +1635,44 @@ gm_state_preserve = {
 # State scope. Each choice with the tooltip that says what it does. One
 # wrapper per choice, so the notice, the per-monument event and the journal
 # entry's buttons show the same words. The loc reads the state as THIS.
+#
+# Pull Down and Rededicate add a line for each group whose approval the
+# choice moves, only while it moves (gm_preview_choices' figures). The case is
+# picked here, one key each splicing the shared text, not in the loc: a key
+# named in SelectLocalization loses THIS (#1413; gui_modding_guide.md's
+# SelectLocalization note). One custom_tooltip whatever the case, since two
+# lines in the state's scope list under its name in monument_events.17.
 gm_state_choose_tear_down = {
-	custom_tooltip = {
-		text = gm_tear_down_tt
-		gm_state_tear_down = yes
+	if = {
+		limit = {
+			gm_state_disp_prev_td_base != 0
+			gm_state_disp_prev_td_sup != 0
+		}
+		custom_tooltip = gm_tear_down_base_sup_tt
 	}
+	else_if = {
+		limit = { gm_state_disp_prev_td_base != 0 }
+		custom_tooltip = gm_tear_down_base_tt
+	}
+	else_if = {
+		limit = { gm_state_disp_prev_td_sup != 0 }
+		custom_tooltip = gm_tear_down_sup_tt
+	}
+	else = {
+		custom_tooltip = gm_tear_down_tt
+	}
+	hidden_effect = { gm_state_tear_down = yes }
 }
 
 gm_state_choose_rededicate = {
-	custom_tooltip = {
-		text = gm_rededicate_tt
-		gm_state_rededicate = yes
+	if = {
+		limit = { gm_state_disp_prev_rd_sup != 0 }
+		custom_tooltip = gm_rededicate_sup_tt
 	}
+	else = {
+		custom_tooltip = gm_rededicate_tt
+	}
+	hidden_effect = { gm_state_rededicate = yes }
 }
 
 gm_state_choose_preserve = {
@@ -1927,7 +1899,7 @@ gm_state_start_ceremony = {
 			set_variable = { name = gm_ceremony_level value = gm_state_primary_levels }
 		}
 		set_variable = { name = gm_ceremony_pending days = 30 }
-		trigger_event = { id = monument_events.2 popup = yes }
+		trigger_event = { id = monument_events.2 popup = yes } # REVIEWED 2026-11-12 (trigger_event_cycle): gm_ceremony_pending, set on the line above, stops this effect and gm_state_offer_missed_ceremony until the answer; the answer that removes it (gm_state_dedicate) first sets gm_rebuilding for a day (gm_state_finish_site, on both of its branches), which gm_state_offer_missed_ceremony refuses, before gm_state_offer_skins fires the refresh
 	}
 	gm_remove_state_var = { VAR = gm_rededicate_asking }
 }
@@ -1938,10 +1910,16 @@ gm_state_start_ceremony = {
 # for its Dedicate button (owner, 2026-10-18). monument_events.1 is the
 # immediate path, but on_building_built did not fire when five queued levels
 # of a new monument finished on the same day (owner's game, 2026-10-07).
+# Not the day script remade a building here (gm_rebuilding, one day), as in
+# monument_events.1: a ceremony's answer sets it (gm_state_finish_site) before
+# its refresh comes back here, and whether the site it removed still reads as
+# standing in the same effect is not established (#1012). A later refresh
+# asks, normally within a month.
 gm_state_offer_missed_ceremony = {
 	if = {
 		limit = {
 			gm_system_enabled = yes
+			NOT = { has_variable = gm_rebuilding }
 			gm_state_ai_dedicates_now = yes
 			NOT = { has_variable = gm_ceremony_pending }
 		}
@@ -2105,7 +2083,7 @@ gm_notify_new_contests = {
 		}
 		if = {
 			limit = { is_ai = no }
-			trigger_event = { id = monument_events.16 }
+			trigger_event = { id = monument_events.16 } # REVIEWED 2026-11-12 (trigger_event_cycle): monument_events.16's immediate removes every gm_new_contest and gm_tr_new_contest, which this effect's limit reads, before any option; and it goes to a player only (is_ai = no above), so its options' refresh waits on a click
 		}
 		else = {
 			every_scope_state = {
@@ -2247,119 +2225,6 @@ gm_state_put_back_building = {
 	set_variable = { name = gm_restore_pm value = var:gm_dedication }
 }
 
-# ---- Older saves (sites spec 2026-10-18 §3.5) -------------------------------------
-# State scope, from monument_events.32 once nothing is under construction here.
-# A dedicated monument keeps its size in its records (gm_levels, from the old
-# building arithmetic if it had none; its starting grandeur reads as its levels,
-# the 1836 rate) and its building goes back to level 1 on its method. An
-# undedicated one (left undedicated, or a ceremony that was open) becomes a
-# construction site at its level, counted at the 1836 rate; the largest
-# monument beside it, if any, takes the finished building.
-gm_state_migrate = {
-	set_variable = gm_migrated
-	if = {
-		limit = {
-			gm_state_is_dedicated = yes
-			has_variable = gm_seen
-		}
-		set_variable = { name = gm_mig_before value = gm_state_grandeur }
-		if = {
-			limit = { NOT = { has_variable = gm_levels } }
-			set_variable = { name = gm_levels value = gm_state_built_levels }
-		}
-		# Levels finished above its record (queued before construction sites,
-		# when they founded a monument beside it; the AI queued an
-		# opportunity's on its tallest): a construction site of that many,
-		# counted at the 1836 rate as an undedicated monument's are. Read
-		# before the building goes back to level 1.
-		set_variable = { name = gm_mig_excess value = gm_state_built_levels }
-		change_variable = { name = gm_mig_excess subtract = var:gm_levels }
-		gm_state_record_dedication = yes
-		if = {
-			limit = { gm_state_level > 1 }
-			gm_state_mark_restore_pm = yes
-			set_variable = { name = gm_rebuilding days = 1 }
-			remove_building = building_grand_monument
-			create_building = {
-				building = building_grand_monument
-				level = 1
-			}
-		}
-		if = {
-			limit = { var:gm_mig_excess > 0 }
-			te_construction_market_build_specified_level = {
-				SPEC_TYPE = building_grand_monument_site
-				SPEC_LEVEL = var:gm_mig_excess
-			}
-			set_variable = { name = gm_site_counted value = var:gm_mig_excess }
-			set_variable = { name = gm_site_grandeur value = var:gm_mig_excess }
-			owner = { trigger_event = { id = monument_events.20 } }
-		}
-		remove_variable = gm_mig_excess
-	}
-	else = {
-		set_variable = { name = gm_migrate_levels value = gm_state_built_levels }
-		gm_remove_state_var = { VAR = gm_ceremony_pending }
-		gm_remove_state_var = { VAR = gm_ceremony_level }
-		gm_remove_state_var = { VAR = gm_ceremony_mode }
-		set_variable = { name = gm_rebuilding days = 1 }
-		if = {
-			limit = { gm_state_has_secondary = yes }
-			gm_state_promote_secondary = yes
-		}
-		else = {
-			gm_clear_state = { KEEP_LANDMARK = no }
-		}
-		remove_building = building_grand_monument
-		# The monument beside it that rose (its records: gm_seen) keeps the
-		# finished building, at level 1 on its method (gm_restore_pm).
-		if = {
-			limit = { has_variable = gm_seen }
-			create_building = {
-				building = building_grand_monument
-				level = 1
-			}
-		}
-		te_construction_market_build_specified_level = {
-			SPEC_TYPE = building_grand_monument_site
-			SPEC_LEVEL = var:gm_migrate_levels
-		}
-		set_variable = { name = gm_site_counted value = var:gm_migrate_levels }
-		set_variable = { name = gm_site_grandeur value = var:gm_migrate_levels }
-		remove_variable = gm_migrate_levels
-		owner = { trigger_event = { id = monument_events.20 } }
-	}
-}
-
-# State scope, from gm_state_monthly while the building stands: once a game, a
-# month or more after a dedicated monument's migration, whether it kept its
-# grandeur (Review Focus 1 of the plan): within a hundredth below and a
-# twentieth above (a month's ageing). Not the day script remade its building.
-gm_monument_migration_self_check = {
-	if = {
-		limit = {
-			has_variable = gm_mig_before
-			NOT = { has_variable = gm_rebuilding }
-			NOT = { has_variable = gm_restore_pm }
-		}
-		if = {
-			limit = { NOT = { has_global_variable = gm_migration_self_checked } }
-			set_global_variable = gm_migration_self_checked
-			if = {
-				limit = {
-					gm_state_grandeur >= gm_state_mig_low
-					gm_state_grandeur <= gm_state_mig_high
-				}
-				debug_log = "TE_SELF_CHECK OK monument_migrated (an older save's Grand Monument kept its grandeur through its migration: [SCOPE.ScriptValue('gm_state_grandeur')|1], was [SCOPE.ScriptValue('gm_state_mig_was')|1])"
-			}
-			else = {
-				debug_log = "TE_SELF_CHECK BROKEN monument_migrated (an older save's Grand Monument changed grandeur through its migration: [SCOPE.ScriptValue('gm_state_grandeur')|1], was [SCOPE.ScriptValue('gm_state_mig_was')|1]; see docs/testing/grand-monuments-ageing-playtest.md)"
-			}
-		}
-		remove_variable = gm_mig_before
-	}
-}
-
 # ---- A construction site's dedication (sites spec 2026-10-18 §3.1) ----------------
 # State scope, from gm_state_dedicate in the ceremony's answer (mode site; the
 # Dedicate button and the AI ask only with nothing under construction). The
@@ -2467,7 +2332,7 @@ gm_state_offer_skins = {
 			set_variable = gm_unveil_pending
 		}
 	}
-	owner = { trigger_event = { id = monument_events.20 } }
+	owner = { trigger_event = { id = monument_events.20 } } # REVIEWED 2026-11-12 (trigger_event_cycle): the refresh starts a ceremony only from gm_state_offer_missed_ceremony, which refuses while gm_rebuilding stands; a site's answer sets it for a day (gm_state_finish_site, from gm_state_dedicate) before it reaches this line, and Rededicate's question needs a ceremony to ask it
 }
 
 gm_state_offer_skins_none = {

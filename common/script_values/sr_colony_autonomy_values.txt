@@ -77,22 +77,6 @@ sr_free_trade_max_units = { value = 5 }
 # The AI supplies at most this many free colonies (sr_free_ai_review).
 sr_free_ai_max = { value = 2 }
 
-# The entry's three modifiers' multipliers (sr_emig_refresh_modifiers). They
-# resolve in the entry's scope, so they read the country through owner
-# (je_multiplier_scope_audit).
-sr_free_supply_units = {
-	value = 0
-	owner = { add = sr_free_supply_count }
-}
-sr_free_trade_units_entry = {
-	value = 0
-	owner = { add = sr_free_trade_units }
-}
-sr_garrison_units = {
-	value = 0
-	owner = { add = sr_garrison_count }
-}
-
 # ---- Covert operations (design § 6) -------------------------------------------------
 # A month, times the operation's phase x priority multiplier (1 to 4):
 # Incite Colonial Autonomy's autonomy at every colony of the target; Sabotage
@@ -109,13 +93,30 @@ sr_cov_sabotage_autonomy = { value = 0.25 }
 # cooldown a strike comes about once in eight years and a breach once in
 # sixteen; with ten quiet years after each, a nation sees one about every
 # fifteen years, four or so in a late game. The first child fires once per
-# nation.
-sr_life_first_child_people = { value = 2000 }
+# nation, at a colony of sr_life_first_child_people, and no sooner than
+# sr_life_first_child_wait_months after the nation first held a colony of
+# sr_free_colony_minimum people, so about three years after the settlers at any
+# emigration level (owner, 2026-11-20: at 2,000 people alone it came one to four
+# months after them).
+sr_life_first_child_people = { value = 5000 }
+sr_life_first_child_wait_months = { value = 36 }
 sr_life_strike_people = { value = 10000 }
 sr_life_breach_people = { value = 5000 }
 sr_life_strike_chance = { value = 1 }
 sr_life_breach_chance = { value = 1 }
 sr_life_breach_share = { value = 0.1 }
+
+# Country scope: the months since the nation first held a colony of
+# sr_free_colony_minimum people (sr_life_first_child_from, set by sr_life_month);
+# 0 until then.
+sr_life_first_child_months_settled = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_life_first_child_from }
+		value = te_history_month_index
+		subtract = var:sr_life_first_child_from
+	}
+}
 
 # ---- Evacuation (design § 4) --------------------------------------------------------
 # create_pop takes a constant size, so evacuees come home in batches of this

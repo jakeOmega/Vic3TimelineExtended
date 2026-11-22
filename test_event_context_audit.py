@@ -293,8 +293,8 @@ class EventContextAuditTests(unittest.TestCase):
                          "mentions", "…text…", ["no mod dispatch site"]),
             ],
             coverage={"events_defined": 784, "visible": 770, "dispatch_sites": 1020},
-            stale_tags=[eca.Tag("old.1", "system_ungated", "events/old.txt", 44,
-                                "2026-09-01", "gone")],
+            stale=[eca.Tag("old.1", "system_ungated", "events/old.txt", 44,
+                           "2026-09-01", "gone")],
         )
         report = eca.render_report(result)
         self.assertIn("- `un_events.2` — events/un_events.txt (REVIEWED 2026-09-25: a real use)",
@@ -305,6 +305,16 @@ class EventContextAuditTests(unittest.TestCase):
         self.assertIn("- `unchosen_self_action`: **0** unreviewed, 1 REVIEWED", report)
         for gone in ("Events defined", "dispatch sites traced", "784", "1020"):
             self.assertNotIn(gone, report)
+
+    def test_the_servers_text_result_fails_on_stale_and_unknown_tags(self):
+        """`/event-context-audit?format=text` rebuilds a result from the
+        filtered flags with `stale=` and `unknown_tags=`."""
+        tag = eca.Tag("old.1", "system_ungated", "events/old.txt", 44, "2026-09-01", "gone")
+        typo = eca.Tag("old.1", "sytem_ungated", "events/old.txt", 45, "2026-09-01", "typo")
+        result = eca.AuditResult(flags=[], coverage={}, stale=[tag], unknown_tags=[typo])
+        self.assertEqual(result.failing, [tag, typo])
+        self.assertEqual(eca.AuditResult().stale, [])
+        self.assertEqual(tag.tag, "system_ungated")
 
     # -- review follow-ups ------------------------------------------------
 
@@ -350,6 +360,74 @@ class EventContextAuditTests(unittest.TestCase):
                          "common/scripted_effects/h.txt": inner + outer}, self.CAMPAIGN_LOC)
         sites = eca.build_graph(mod).sites_by_event.get("flav.1", [])
         self.assertEqual([(s.entity, s.switches) for s in sites], [("flav.2", ["scope:rival"])])
+
+    # -- what script_call_graph reads (#1012) ------------------------------
+
+    def test_a_delay_is_recorded_and_a_literal_zero_is_none(self):
+        body = ("\timmediate = {\n"
+                "\t\ttrigger_event = { id = flav.1 }\n"
+                "\t\ttrigger_event = { id = flav.1 days = 1 }\n"
+                "\t\ttrigger_event = { id = flav.1 months = { 1 3 } popup = yes }\n"
+                "\t\ttrigger_event = { id = flav.1 days = 0 }\n"
+                "\t\ttrigger_event = flav.1\n"
+                "\t\ttrigger_event = {\n\t\t\tid = flav.1\n\t\t\tyears = 2\n\t\t}\n"
+                "\t}\n")
+        mod = self._mod({"events/flav.txt": _event("flav.1") + _event("flav.2", body, hidden=True)})
+        sites = eca.build_graph(mod).sites_by_event["flav.1"]
+        self.assertEqual([s.delayed for s in sites], [False, True, True, False, False, True])
+
+    def test_a_site_moved_to_its_caller_keeps_where_it_was_written(self):
+        eff = ("send_it = {\n\ttrigger_event = { id = $EVENT$ }\n}\n"
+               "tell_it = {\n\t$WHO$ = {\n\t\ttrigger_event = { id = flav.1 days = 3 }\n\t}\n}\n")
+        pre = _event("flav.2", "\toption = {\n\t\tsend_it = { EVENT = flav.1 }\n"
+                               "\t\ttell_it = { WHO = scope:rival }\n\t}\n")
+        mod = self._mod({"events/flav.txt": _event("flav.1") + pre,
+                         "common/scripted_effects/h.txt": eff})
+        sites = eca.build_graph(mod).sites_by_event["flav.1"]
+        self.assertEqual(
+            [(s.entity, s.param_event, s.delayed, s.origin) for s in sites],
+            [("flav.2", True, False, ("common/scripted_effects/h.txt", 2, "send_it")),
+             ("flav.2", False, True, ("common/scripted_effects/h.txt", 6, "tell_it"))])
+
+    def test_of_two_sites_differing_only_in_delay_the_undelayed_reads(self):
+        eff = ("send_it = {\n\ttrigger_event = { id = $EVENT$ days = 1 }\n"
+               "\ttrigger_event = { id = $EVENT$ }\n}\n")
+        pre = _event("flav.2", "\toption = { send_it = { EVENT = flav.1 } }\n")
+        mod = self._mod({"events/flav.txt": _event("flav.1") + pre,
+                         "common/scripted_effects/h.txt": eff})
+        [site] = eca.build_graph(mod).sites_by_event["flav.1"]
+        self.assertFalse(site.delayed)
+        self.assertEqual(site.origin, ("common/scripted_effects/h.txt", 3, "send_it"))
+
+    def test_console_harnesses_are_read_only_on_request(self):
+        dbg = _event("te_debug_x.1", "\toption = { trigger_event = { id = flav.1 } }\n")
+        mod = self._mod({"events/flav.txt": _event("flav.1"),
+                         "events/te_debug_x_events.txt": dbg})
+        self.assertNotIn("flav.1", eca.build_graph(mod).sites_by_event)
+        [site] = eca.build_graph(mod, include_console=True).sites_by_event["flav.1"]
+        self.assertEqual(site.entity, "te_debug_x.1")
+
+    def test_a_dispatcher_call_is_kept_under_its_written_name(self):
+        eff = ("act_go = {\n\tadd = 1\n}\n"
+               "pick = {\n\tact_$ACT$ = yes\n\t$WHO$ = { add = 1 }\n\tscope:x_$ACT$ = { add = 1 }\n}\n")
+        mod = self._mod({"events/flav.txt": _event("flav.1", "\toption = { pick = { ACT = go WHO = root } }\n"),
+                         "common/scripted_effects/h.txt": eff})
+        g = eca.build_graph(mod)
+        # `$WHO$ = { }` is main's bare key (#1652), next to the dispatcher's.
+        self.assertEqual(sorted(g.effect_calls), ["$WHO$", "act_$ACT$", "pick"])
+        [call] = g.effect_calls["act_$ACT$"]
+        self.assertEqual((call[0], call[1], call[5]), ("common/scripted_effects/h.txt", 5, "pick"))
+
+    def test_a_merge_directive_is_stripped_only_on_request(self):
+        # This audit's own report names the entity as written; the call graph
+        # (script_call_graph) asks for `x`.
+        eff = "REPLACE:send_it = {\n\ttrigger_event = { id = flav.1 days = { 0 2 } }\n}\n"
+        mod = self._mod({"events/flav.txt": _event("flav.1"),
+                         "common/scripted_effects/h.txt": eff})
+        [site] = eca.build_graph(mod).sites_by_event["flav.1"]
+        self.assertEqual((site.entity, site.delays, site.delayed), ("REPLACE:send_it", ("0",), False))
+        [site] = eca.build_graph(mod, strip_directives=True).sites_by_event["flav.1"]
+        self.assertEqual(site.entity, "send_it")
 
     def test_on_action_cycle_does_not_crash(self):
         oa = ("on_yearly_pulse_country = {\n\ton_actions = { oa_a }\n}\n"
@@ -417,6 +495,50 @@ class EventContextAuditTests(unittest.TestCase):
         self.assertEqual(self._flags(mod, "unchosen_self_action"),
                          {("unchosen_self_action", "flav.1")})
 
+    def test_journal_entry_outcome_blocks_are_not_scope_switches(self):
+        # 1.15: a dispatch in an outcome's effect / effect_all_involved sits in
+        # the entry's own scope, guarded by the outcome's trigger.
+        je = ("je_x = {\n\toutcome = {\n"
+              "\t\ttrigger = { has_variable = x_done }\n"
+              "\t\teffect = { trigger_event = { id = flav.1 } }\n"
+              "\t\teffect_all_involved = { trigger_event = { id = flav.2 } }\n"
+              "\t}\n}\n")
+        mod = self._mod({"events/flav.txt": _event("flav.1") + _event("flav.2"),
+                         "common/journal_entries/je_x.txt": je})
+        g = eca.build_graph(mod)
+        for eid in ("flav.1", "flav.2"):
+            [site] = g.sites_by_event[eid]
+            self.assertEqual(site.switches, [], eid)
+            self.assertEqual(site.path[0], "outcome")
+            self.assertIn("has_variable", site.conds)
+
+    def test_send_interface_message_keeps_the_options_choice(self):
+        pre = _event("flav.2", "\toption = {\n\t\tsend_interface_message = {\n"
+                     "\t\t\ttitle = flav.2.msg\n\t\t\ttrigger_event = { id = flav.1 }\n\t\t}\n\t}\n")
+        mod = self._mod({"events/flav.txt": _event("flav.1") + pre}, self.CAMPAIGN_LOC)
+        [site] = eca.build_graph(mod).sites_by_event["flav.1"]
+        self.assertEqual(site.switches, [])
+        self.assertEqual(self._flags(mod, "unchosen_self_action"), set())
+
+    def test_display_only_blocks_dispatch_nothing(self):
+        # map_tooltip and the effect descriptions are never run, so a
+        # trigger_event or a helper call inside one is no dispatch site.
+        eff = "fire_it = {\n\ttrigger_event = { id = flav.3 }\n}\n"
+        je = ("je_x = {\n"
+              "\tmap_tooltip = { trigger_event = { id = flav.1 } }\n"
+              "\tevent_outcome_activated_effect_desc = { header = h effect = { fire_it = yes } }\n"
+              "\toutcome = {\n"
+              "\t\tevent_outcome_effect_desc = { header = h effect = { trigger_event = { id = flav.2 } } }\n"
+              "\t\teffect = { trigger_event = { id = flav.2 } }\n"
+              "\t}\n}\n")
+        mod = self._mod({"events/flav.txt": _event("flav.1") + _event("flav.2") + _event("flav.3"),
+                         "common/scripted_effects/h.txt": eff,
+                         "common/journal_entries/je_x.txt": je})
+        g = eca.build_graph(mod)
+        self.assertEqual(g.sites_by_event.get("flav.1", []), [])
+        self.assertEqual([s.path for s in g.sites_by_event["flav.2"]], [["outcome", "effect"]])
+        self.assertNotIn("fire_it", {k for k, v in g.effect_calls.items() if v})
+
     def test_pre_attribution_names_the_picked_country_as_source(self):
         mod = self._imputing("The evidence points to [SCOPE.sCountry('rival').GetName].",
                              "\toption = { scope:rival = { trigger_event = { id = flav.1 } } }\n")
@@ -441,9 +563,9 @@ class EventContextAuditTests(unittest.TestCase):
         loc = {"flav.1.t": "Quiet", "flav.1.d": "Nothing happens."}
         mod = self._mod({"events/flav.txt": _event("flav.1", body)}, loc)
         res = eca.audit(mod)
-        self.assertEqual([(t.event_id, t.check) for t in res.stale_tags], [("flav.1", "system_ungated")])
+        self.assertEqual([(t.event_id, t.check) for t in res.stale], [("flav.1", "system_ungated")])
         self.assertEqual([(t.event_id, t.check) for t in res.unknown_tags], [("flav.1", "sytem_ungated")])
-        self.assertEqual(res.failing, 2)
+        self.assertEqual(len(res.failing), 2)
 
     def test_another_audits_check_tag_is_ignored(self):
         # silent_variable_audit uses the same tagged shape inside an option;
@@ -452,14 +574,14 @@ class EventContextAuditTests(unittest.TestCase):
         loc = {"flav.1.t": "Quiet", "flav.1.d": "Nothing happens."}
         res = eca.audit(self._mod({"events/flav.txt": _event("flav.1", body)}, loc))
         self.assertEqual(res.unknown_tags, [])
-        self.assertEqual(res.failing, 0)
+        self.assertEqual(res.failing, [])
 
     def test_all_tag_on_a_clean_event_is_stale(self):
         body = "\t# REVIEWED 2026-09-25 (all): nothing to hide\n"
         loc = {"flav.1.t": "Quiet", "flav.1.d": "Nothing happens."}
         res = eca.audit(self._mod({"events/flav.txt": _event("flav.1", body)}, loc))
-        self.assertEqual([(t.event_id, t.check) for t in res.stale_tags], [("flav.1", "all")])
-        self.assertEqual(res.failing, 1)
+        self.assertEqual([(t.event_id, t.check) for t in res.stale], [("flav.1", "all")])
+        self.assertEqual(len(res.failing), 1)
 
 
 if __name__ == "__main__":

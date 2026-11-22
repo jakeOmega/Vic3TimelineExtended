@@ -9,16 +9,12 @@
 # game, a law's activation and a technology): each field's pair at the families' sum while te_demog_lines_apply
 # holds, touched only when the sum changed; otherwise (the census sets the state's births and deaths) every pair off.
 # First, a census term that is no longer the census's comes off now, not at the state's next yearly step, so it and
-# the pairs are never both in force: one a rule switched off Full left, or one from a save made before the moved
-# lines (no te_dg_q_b, which this build's step always sets with it).
+# the pairs are never both in force: one a rule switched off Full left.
 te_demog_lines_refresh = {
 	if = {
 		limit = {
 			has_variable = te_dg_mb
-			OR = {
-				NOT = { te_demog_effects_run = yes }
-				NOT = { has_variable = te_dg_q_b }
-			}
+			NOT = { te_demog_effects_run = yes }
 		}
 		te_demog_rates_clear = yes
 	}

@@ -23,7 +23,7 @@ GUI = os.path.join(REPO, "gui", "te_seabed_widgets.gui")
 SGUIS = os.path.join(REPO, "common", "scripted_guis", "te_global_commons_seabed_sguis.txt")
 BASINS = ("pacific", "atlantic", "indian", "arctic", "southern")
 # The longest a number printed in a cell can be: counts reach four digits (the
-# pools sum to 1,000), the readout five ("+99999" navy), a year four.
+# pools sum to 5,000), the readout five ("+99999" navy), a year four.
 NUMBER = "9999"
 YEAR = "1972"
 READOUT = "99999"
@@ -302,7 +302,8 @@ class ScriptTooltipTest(unittest.TestCase):
     country's panel reads the shown country, not the player. The Free
     figure's hover is te_seabed_build_in_sgui's ExecuteTooltip: its lines
     come from the effect's custom_tooltip keys, which no panel's loc closure
-    reaches, so BindingTest can't see them. They read the scripted GUI's root
+    reached when this was written (BindingTest follows them since #1361; this
+    holds the lines by name). They read the scripted GUI's root
     (SCOPE.GetRootScope, covert_last_exposed_sgui's form)."""
 
     TOOLTIP = re.compile(r"GetScriptedGui\('(\w+)'\)\.(?:ExecuteTooltip|IsValidTooltip)")

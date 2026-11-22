@@ -361,6 +361,15 @@ te_demog_ms_barred_until_crash_campaign = {
 # Each is a _cost modifier's multiplier on country_expenses_add = 1, so it is the weekly cost: gdp is a year's, so a
 # share of GDP a year is divided by 52. Refreshed when the measure goes on and by the country's yearly census
 # (te_demog_ms_yearly). The census's figures exist under Full; without them the factor is the reference.
+# Each ends x te_demog_ms_upkeep_factor: 1 + the country's Family Policy Upkeep (country_family_policy_upkeep_mult, on
+# the Healthcare principles III to V: -10%, -20%, -30%; owner, 2026-11-14), at least 0. The authority upkeeps and
+# Sex Education's schools' cost don't read it. A bloc joined or a tier changed reaches a running measure at its
+# owner's next yearly pulse, when the costs are refreshed.
+te_demog_ms_upkeep_factor = {
+	value = 1
+	add = modifier:country_family_policy_upkeep_mult
+	min = 0
+}
 # Child Allowance: 0.5% of GDP a year x (the 0-14 share / 0.3).
 te_demog_ms_cost_child_allowance = {
 	value = gdp
@@ -371,6 +380,7 @@ te_demog_ms_cost_child_allowance = {
 		divide = 0.3
 	}
 	divide = 52
+	multiply = te_demog_ms_upkeep_factor
 	min = 0
 }
 # Family Housing: 0.25% of GDP a year x the urban share (0.5 without the census). Step 3b's fit (§3.4: 0.4%): the full
@@ -386,6 +396,7 @@ te_demog_ms_cost_family_housing = {
 		multiply = 0.5
 	}
 	divide = 52
+	multiply = te_demog_ms_upkeep_factor
 	min = 0
 }
 # Parental Leave: 0.3% of GDP a year x the share of women at work.
@@ -394,6 +405,7 @@ te_demog_ms_cost_parental_leave = {
 	multiply = 0.003
 	multiply = te_demog_ms_women_at_work
 	divide = 52
+	multiply = te_demog_ms_upkeep_factor
 	min = 0
 }
 # Free Contraception: 0.1% of GDP a year.
@@ -401,6 +413,7 @@ te_demog_ms_cost_free_contraception = {
 	value = gdp
 	multiply = 0.001
 	divide = 52
+	multiply = te_demog_ms_upkeep_factor
 	min = 0
 }
 

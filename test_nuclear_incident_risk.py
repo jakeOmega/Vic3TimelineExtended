@@ -179,13 +179,17 @@ class TestObserverRecords(unittest.TestCase):
                 for record in re.findall(r'debug_log = "(TE_NUCLEAR: [^"]*)"', line):
                     yield name, record
 
-    def test_no_parameter_inside_a_record(self):
-        # A $PARAM$ inside a debug_log string logs garbled
-        # (scripting_best_practices.md, "Runtime Debugging with debug_log").
+    def test_no_parameter_inside_a_record_accessor(self):
+        # 1.15 substitutes a scripted-effect argument inside a quoted string
+        # (the C19 probe, 2026-11-05: scripting_best_practices.md, "1.15
+        # substitutes a scripted-effect argument inside a quoted string"), so a
+        # plain `reason=$REASON$` field logs its word. A $X$ inside a [...]
+        # accessor (`Var('x_$MODE$')`) wasn't probed: keep those out.
         records = list(self.records())
         self.assertGreater(len(records), 100)
         for name, record in records:
-            self.assertNotIn("$", record, f"{name}: {record[:80]}")
+            for accessor in re.findall(r"\[[^\]]*\]", record):
+                self.assertNotIn("$", accessor, f"{name}: {record[:80]}")
 
     def test_every_record_parses_with_a_name(self):
         for name, record in self.records():
@@ -480,7 +484,10 @@ class TestHoldAndExposure(unittest.TestCase):
 
     def test_hold_chance_suspect_optional(self):
         values = strip_comments(read(ROOT / "common/script_values/nuclear_deterrence_values.txt"))
-        body = block(values, "nd_hold_chance")
+        # nd_hold_chance clamps nd_hold_chance_unclamped, which holds the terms
+        # (the per-authority figures read it too, 2026-11-20 delivery spec D11).
+        self.assertIn("value = nd_hold_chance_unclamped", block(values, "nd_hold_chance"))
+        body = block(values, "nd_hold_chance_unclamped")
         self.assertIn("exists = scope:nd_hold_suspect", body)
         self.assertEqual(body.count("scope:nd_hold_suspect = {"), 1)
         effects = strip_comments(read(ROOT / "common/scripted_effects/nuclear_deterrence_effects.txt"))

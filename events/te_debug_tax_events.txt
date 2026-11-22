@@ -386,7 +386,7 @@ te_debug_tax.34 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; h
 	}
 	immediate = {
 		remove_modifier = te_tp_bureaucracy
-		add_modifier = { name = te_tp_bureaucracy }
+		add_modifier = { name = te_tp_bureaucracy } # REVIEWED 2026-11-05: tax-code probe (console only); the -10000 bureaucracy is the deficit it tests
 	}
 }
 

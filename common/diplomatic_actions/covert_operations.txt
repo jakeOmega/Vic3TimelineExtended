@@ -118,7 +118,7 @@ covert_election_interference_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -141,15 +141,7 @@ covert_election_interference_action = {
 		}
 		custom_tooltip = {
 			text = iw_target_has_elections_tt
-			scope:target_country = {
-				OR = {
-					has_law = law_type:law_landed_voting
-					has_law = law_type:law_wealth_voting
-					has_law = law_type:law_census_voting
-					has_law = law_type:law_universal_suffrage
-					has_law = law_type:law_liquid_democracy
-				}
-			}
+			scope:target_country = { te_holds_elections = yes }
 		}
 		custom_tooltip = {
 			text = iw_no_duplicate_target_tt
@@ -184,6 +176,8 @@ covert_election_interference_action = {
 	pact = {
 		cost = 50 # influence, moderate tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -196,15 +190,7 @@ covert_election_interference_action = {
 				# Target must still have elections
 				custom_tooltip = {
 					text = iw_target_has_elections_tt
-					scope:target_country = {
-						OR = {
-							has_law = law_type:law_landed_voting
-							has_law = law_type:law_wealth_voting
-							has_law = law_type:law_census_voting
-							has_law = law_type:law_universal_suffrage
-							has_law = law_type:law_liquid_democracy
-						}
-					}
+					scope:target_country = { te_holds_elections = yes }
 				}
 			}
 		}
@@ -322,7 +308,7 @@ covert_financial_subversion_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -376,6 +362,8 @@ covert_financial_subversion_action = {
 	pact = {
 		cost = 50 # influence, moderate tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -504,7 +492,7 @@ covert_infrastructure_sabotage_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -560,6 +548,8 @@ covert_infrastructure_sabotage_action = {
 	pact = {
 		cost = 0 # war tier: no influence (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -674,7 +664,7 @@ covert_comms_disruption_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -734,6 +724,8 @@ covert_comms_disruption_action = {
 	pact = {
 		cost = 0 # war tier: no influence (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -859,7 +851,7 @@ covert_industrial_espionage_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -913,6 +905,8 @@ covert_industrial_espionage_action = {
 	pact = {
 		cost = 25 # influence, mild tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -1034,7 +1028,7 @@ covert_military_espionage_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -1088,6 +1082,8 @@ covert_military_espionage_action = {
 	pact = {
 		cost = 25 # influence, mild tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -1198,7 +1194,7 @@ covert_influence_campaign_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 		is_power_bloc_leader = yes
 	}
 
@@ -1257,6 +1253,8 @@ covert_influence_campaign_action = {
 	pact = {
 		cost = 50 # influence, moderate tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -1386,7 +1384,7 @@ covert_ideological_subversion_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -1446,6 +1444,8 @@ covert_ideological_subversion_action = {
 	pact = {
 		cost = 100 # influence, severe tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -1581,7 +1581,7 @@ covert_destabilization_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -1641,6 +1641,8 @@ covert_destabilization_action = {
 	pact = {
 		cost = 100 # influence, severe tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -1777,7 +1779,7 @@ covert_regime_change_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -1843,6 +1845,8 @@ covert_regime_change_action = {
 	pact = {
 		cost = 100 # influence, severe tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -1972,7 +1976,7 @@ covert_nuclear_sabotage_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -2030,6 +2034,8 @@ covert_nuclear_sabotage_action = {
 	pact = {
 		cost = 100 # influence, severe tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -2045,12 +2051,14 @@ covert_nuclear_sabotage_action = {
 		# The Tradecraft gate is launch-only: a running operation survives the
 		# agency's score falling below Seasoned. Maintained on the programme
 		# existing, not on it being funded: a target that steps funding to 0
-		# for a week must not end the operation for free.
+		# for a week must not end the operation for free. Nor must an arsenal
+		# ceiling the target sets itself and lifts with a click (#758): the
+		# nuclear crisis's test, which does not count that hold as a stop.
 		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
 					text = iw_target_nuclear_programme_standing_tt
-					scope:target_country = { nuclear_program_is_standing = yes }
+					scope:target_country = { nuclear_program_has_stopped = no }
 				}
 			}
 		}
@@ -2172,7 +2180,7 @@ covert_space_espionage_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -2226,6 +2234,8 @@ covert_space_espionage_action = {
 	pact = {
 		cost = 25 # influence, mild tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -2339,7 +2349,7 @@ covert_cultivate_assets_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -2393,6 +2403,8 @@ covert_cultivate_assets_action = {
 	pact = {
 		cost = 25 # influence, mild tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -2520,7 +2532,7 @@ covert_secure_material_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 		has_game_rule = nuclear_weapons_enabled
 	}
 
@@ -2575,6 +2587,8 @@ covert_secure_material_action = {
 	pact = {
 		cost = 25 # influence, mild tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -2704,7 +2718,7 @@ covert_counterintel_support_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 	}
 
 	possible = {
@@ -2749,6 +2763,8 @@ covert_counterintel_support_action = {
 	pact = {
 		cost = 25 # influence, mild tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -2830,9 +2846,11 @@ covert_counterintel_support_action = {
 # colonies in the solar system. No modifier: once established, every colony
 # the target holds gains autonomy each month, sr_cov_incite_autonomy_base
 # (0.5) x the operation's phase x priority (1 to 4), through the space
-# race's sr_cov_incite_autonomy (covert_ops_apply_all_phase_effects). A colony
-# at 100 breaks away and becomes a free colony. Moderate tier: meddling in how
-# the target governs its own. Only under the Space Race rule's simple and
+# race's sr_cov_incite_autonomy (covert_ops_apply_all_phase_effects); one of
+# fewer than sr_free_colony_minimum people gains nothing, and the operation
+# starts only against a target holding a larger one. A colony at 100 breaks
+# away and becomes a free colony. Moderate tier: meddling in how the target
+# governs its own. Only under the Space Race rule's simple and
 # full colony settings (sr_colonies_contested_enabled), where colonies have
 # autonomy; lapses when the target holds no colony.
 covert_incite_autonomy_action = {
@@ -2861,7 +2879,7 @@ covert_incite_autonomy_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 		sr_colonies_contested_enabled = yes
 	}
 
@@ -2907,15 +2925,19 @@ covert_incite_autonomy_action = {
 				}
 			}
 		}
+		# A colony needs sr_free_colony_minimum people for autonomy to build
+		# (sr_site_aut_add_at), so outposts alone are nothing to incite.
 		custom_tooltip = {
-			text = iw_target_holds_space_colony_tt
-			scope:target_country = { sr_has_space_colony = yes }
+			text = iw_target_holds_peopled_colony_tt
+			scope:target_country = { sr_life_has_colony = { MIN = sr_free_colony_minimum } }
 		}
 	}
 
 	pact = {
 		cost = 50 # influence, moderate tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -3047,7 +3069,7 @@ covert_sabotage_colony_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 		sr_colonies_contested_enabled = yes
 	}
 
@@ -3106,6 +3128,8 @@ covert_sabotage_colony_action = {
 	pact = {
 		cost = 100 # influence, severe tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {
@@ -3246,7 +3270,7 @@ covert_survey_defences_action = {
 	}
 
 	potential = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 		sr_colonies_full_enabled = yes
 	}
 
@@ -3301,6 +3325,8 @@ covert_survey_defences_action = {
 	pact = {
 		cost = 50 # influence, moderate tier (INFLUENCE, file header)
 		is_two_sided_pact = no
+		max_target_involvement = 1000
+		target_involvement_applies_to = source_country
 		show_in_outliner = yes
 
 		requirement_to_maintain = {

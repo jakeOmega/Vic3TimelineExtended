@@ -304,6 +304,9 @@ types te_tax_layout_widget_types
 		blockoverride "tab_entry" {
 			datacontext = "[GetPlayerJournalEntry('je_tax_code')]"
 		}
+		blockoverride "tab_entry_modifiers" {
+			te_je_modifier_strip = {}
+		}
 
 		blockoverride "tab_content" {
 			block "te_tax_tab_layout" {

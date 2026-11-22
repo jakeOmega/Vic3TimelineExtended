@@ -25,7 +25,7 @@ international_relations_events.1 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): scope:arms_race_rival is saved by .201's sender and rides along; a filter
 		exists = scope:arms_race_rival
 	}
 
@@ -421,7 +421,7 @@ international_relations_events.4 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): the covert rule, and scope:propaganda_rival saved by .202's sender; a filter
 		# The dedicated system owns this outcome when enabled.
 		has_game_rule = covert_warfare_disabled
 		exists = scope:propaganda_rival
@@ -597,7 +597,7 @@ international_relations_events.6 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): the covert rule, and scope:espionage_rival saved by .203's sender; a filter
 		# The dedicated system owns this outcome when enabled.
 		has_game_rule = covert_warfare_disabled
 		exists = scope:espionage_rival
@@ -934,7 +934,6 @@ international_relations_events.102 = {
 
 # Notification 103: Rival's spy caught abroad
 international_relations_events.103 = {
-	# REVIEWED 2026-09-25 (unchosen_self_action): "our intelligence operatives" is true: .103 reaches us only through .6.a/.c, and .6 only when the agent we chose to plant in .203.a is caught
 	type = country_event
 	placement = root
 
@@ -1144,7 +1143,6 @@ international_relations_events.105 = {
 
 # Notification 106: Counter-propaganda backlash
 international_relations_events.106 = {
-	# REVIEWED 2026-09-25 (unchosen_self_action): "our information campaign" is true: .106 reaches us only through .4.a, and .4 only through our own .202.a (the offensive we chose)
 	type = country_event
 	placement = root
 
@@ -1174,7 +1172,6 @@ international_relations_events.106 = {
 
 # Notification 107: Agent quietly exchanged
 international_relations_events.107 = {
-	# REVIEWED 2026-09-25 (unchosen_self_action): "our intelligence operatives" is true: .107 reaches us only through .6.b, and .6 only when the agent we chose to plant in .203.a is caught
 	type = country_event
 	placement = root
 
@@ -1222,7 +1219,7 @@ international_relations_events.201 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/military_parade.dds" }
+	event_image = { texture = "gfx/event_pictures/military_formation_update.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

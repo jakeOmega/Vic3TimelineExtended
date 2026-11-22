@@ -772,6 +772,7 @@ company_huawei = {
 	}
 	possible_prestige_goods = {
 		prestige_good_advanced_telecom
+		prestige_good_generic_consumer_appliances
 	}
 	ai_will_do = {
 		has_technology_researched = computer_networks
@@ -2907,7 +2908,7 @@ company_vale = {
 		OR = {
 			leading_producer_of = g:iron
 			leading_producer_of = g:tech_metals
-			leading_producer_of = g:lead
+			leading_producer_of = g:copper
 		}
 	}
 	prosperity_modifier = {
@@ -2918,6 +2919,7 @@ company_vale = {
 	possible_prestige_goods = {
 		prestige_good_generic_steel
 		prestige_good_generic_tech_metals
+		prestige_good_generic_copper
 	}
 	ai_will_do = {
 		has_technology_researched = modern_tools
@@ -3659,7 +3661,7 @@ company_bhp_group = {
 		OR = {
 			"goods_production_rank(g:iron)" <= 5
 			"goods_production_rank(g:coal)" <= 5
-			"goods_production_rank(g:lead)" <= 5
+			"goods_production_rank(g:copper)" <= 5
 			"goods_production_rank(g:sulfur)" <= 5
 			"goods_production_rank(g:tech_metals)" <= 5
 		}
@@ -3680,7 +3682,7 @@ company_bhp_group = {
 		OR = {
 			leading_producer_of = g:iron
 			leading_producer_of = g:coal
-			leading_producer_of = g:lead
+			leading_producer_of = g:copper
 			leading_producer_of = g:sulfur
 			leading_producer_of = g:tech_metals
 		}
@@ -3692,6 +3694,7 @@ company_bhp_group = {
 	possible_prestige_goods = {
 		prestige_good_generic_lead
 		prestige_good_generic_tech_metals
+		prestige_good_generic_copper
 	}
 	ai_will_do = {
 		has_technology_researched = modern_tools
@@ -4630,7 +4633,10 @@ company_ig_farben = {
 				level >= 5
 			}
 		}
-		country_has_primary_culture = cu:north_german
+		OR = {
+			country_has_primary_culture = cu:north_german
+			country_has_primary_culture = cu:cm_german
+		}
 	}
 	prosperity_modifier = {
 		country_weekly_innovation_mult = 0.05
@@ -4702,6 +4708,7 @@ company_shell = {
 		OR = {
 			country_has_primary_culture = cu:dutch
 			country_has_primary_culture = cu:british
+			country_has_primary_culture = cu:cm_anglophone # owner, 2026-11-09: a company the mod keys on a culture is open to the culture it merges into
 		}
 	}
 	prosperity_modifier = {
@@ -4837,7 +4844,11 @@ company_sibur = {
 				level >= 5
 			}
 		}
-		country_has_primary_culture = cu:russian
+		OR = { # owner, 2026-11-09: a company the mod keys on a culture is open to the cultures it merges into
+			country_has_primary_culture = cu:russian
+			country_has_primary_culture = cu:cm_east_slavic
+			country_has_primary_culture = cu:cm_pan_slavic
+		}
 	}
 	prosperity_modifier = {
 		country_production_tech_research_speed_mult = 0.10

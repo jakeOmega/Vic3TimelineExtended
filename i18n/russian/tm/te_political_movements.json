@@ -1,0 +1,62 @@
+{
+ "movement_anti_war": {
+  "en": "Anti-War Movement",
+  "ru": "Антивоенное движение"
+ },
+ "movement_civil_rights": {
+  "en": "Civil Rights Movement",
+  "ru": "Движение за гражданские права"
+ },
+ "movement_crushed_assimilation_drive_modifier": {
+  "en": "Assimilation Drive",
+  "ru": "Кампания ассимиляции"
+ },
+ "movement_crushed_assimilation_drive_modifier_desc": {
+  "en": "With the civil rights movement defeated, the state has accelerated its cultural [concept_assimilation] program.",
+  "ru": "После разгрома движения за гражданские права государство ускорило свою программу культурной [concept_assimilation|l]."
+ },
+ "movement_crushed_expulsion_modifier": {
+  "en": "Minority Expulsion Program",
+  "ru": "Программа изгнания меньшинств"
+ },
+ "movement_crushed_expulsion_modifier_desc": {
+  "en": "The state is actively driving out unwanted minorities, encouraging or forcing their emigration.",
+  "ru": "Государство активно изгоняет нежелательные меньшинства, поощряя или принуждая их к эмиграции."
+ },
+ "movement_crushed_order_restored_modifier": {
+  "en": "Order Restored",
+  "ru": "Порядок восстановлен"
+ },
+ "movement_crushed_order_restored_modifier_desc": {
+  "en": "The civil rights movement has been crushed. Social order is restored, though at the cost of international standing.",
+  "ru": "Движение за гражданские права разгромлено. Общественный порядок восстановлен, хотя и ценой международного авторитета."
+ },
+ "movement_crushed_political_suppression_modifier": {
+  "en": "Political Suppression of Minorities",
+  "ru": "Политическое подавление меньшинств"
+ },
+ "movement_crushed_political_suppression_modifier_desc": {
+  "en": "Discriminated communities have been stripped of what little political voice they had.",
+  "ru": "Дискриминируемые общины лишены того немногого политического голоса, что у них был."
+ },
+ "movement_crushed_segregation_enforced_modifier": {
+  "en": "Segregation Enforced",
+  "ru": "Принудительная сегрегация"
+ },
+ "movement_crushed_segregation_enforced_modifier_desc": {
+  "en": "With dissent silenced, the regime has tightened racial and cultural segregation under the full force of law.",
+  "ru": "Инакомыслие подавлено, и режим ужесточил расовую и культурную сегрегацию всей силой закона."
+ },
+ "movement_environmental": {
+  "en": "Environmental Movement",
+  "ru": "Экологическое движение"
+ },
+ "movement_environmental_name": {
+  "en": "Environmental Movement",
+  "ru": "Экологическое движение"
+ },
+ "movement_transhumanist": {
+  "en": "Transhumanist Movement",
+  "ru": "Трансгуманистическое движение"
+ }
+}

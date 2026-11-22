@@ -35,6 +35,7 @@ _None._
 - `ch_apply_primary_or_fallback_movement_pressure`: `$MONTHS$` (`months`)
 - `ch_apply_single_movement_pressure`: `$MONTHS$` (`months`)
 - `covert_op_add_scaled_modifier`: `$MONTHS$` (`months`)
+- `decol_chosen_release_rewards`: `$DAYS$` (`days`), `$MONTHS$` (`months`)
 - `ig_approval_effect`: `$DAYS$` (`days`)
 - `social_progressive_reaction_effect`: `$DAYS$` (`days`)
 - `social_progressive_reform_major_reaction_effect`: `$DAYS$` (`days`)

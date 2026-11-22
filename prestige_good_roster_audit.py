@@ -25,16 +25,25 @@ Per prestige good the mod defines in `common/prestige_goods/`:
   services, transportation, the mod's digital access). A prestige version of
   a local good does nothing, so no company can make use of it.
 
+Per base good with a prestige good the mod defines:
+
+- `base_good_cap`: more than three prestige goods, vanilla's and the mod's
+  together, share the base good. The engine keeps three per good; a fourth
+  only asserts in `debug.log` (`Exceeding maximum amount of Prestige Goods
+  per Goods for <good> (3)`). Every loaded definition counts, a DLC-gated one
+  included.
+
 A building produces a good when any production method of any of its PM groups
 carries `goods_output_<good>_add`.
 
 Base goods
 ----------
-A mod prestige good's `base_good` comes from `common/prestige_goods/`. A
-vanilla `prestige_good_generic_<good>` is taken to have base good `<good>` when
-`<good>` is a known good. Vanilla's named prestige goods (Tailored Suits and
-the like) are not in the `vanilla_parsed/` snapshot, so their base good is
-unknown and they are counted in the report's coverage, never flagged.
+Every prestige good's `base_good` comes from the merged vanilla + mod
+`common/prestige_goods/` data (#749), so vanilla's named goods (Radiola
+Radios, Tailored Suits) are judged like the rest. A name the data does not
+define falls back to `prestige_good_generic_<good>` meaning `<good>` when that
+is a known good; anything still unresolved is counted in the report's
+coverage, never flagged.
 
 Companies the mod leaves untouched are not judged: vanilla's choices are
 vanilla's design, and the mod has no line to carry a suppression on.
@@ -49,8 +58,8 @@ comment on the prestige good's opening line in `common/prestige_goods/`.
 
 Data source
 -----------
-Companies, buildings, PM groups, PMs and goods are judged on merged vanilla +
-mod data. On a post-load run that is the server's ModState. Run from the
+Companies, buildings, PM groups, PMs, goods and prestige goods are judged on
+merged vanilla + mod data. On a post-load run that is the server's ModState. Run from the
 command line, the audit builds a small ModState of its own with vanilla from
 the committed `vanilla_parsed/` snapshot, so it needs no game install and runs
 in CI. Suppression comments and line numbers come from a raw-text scan of the
@@ -61,6 +70,8 @@ import re
 from bisect import bisect_right
 from dataclasses import dataclass, field
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
 # Offset-preserving comment/string blanking, shared with the iterator audit so
 # the audits agree on what "a commented-out line" means.
 from iterator_limit_audit import blank_comments_and_strings
@@ -72,22 +83,22 @@ ENTITY_TYPES = {
     "PM Groups": "production_method_groups",
     "PMs": "production_methods",
     "Goods": "goods",
+    "Prestige Goods": "prestige_goods",
 }
+
+# The engine's cap on prestige goods that share one base good.
+PRESTIGE_GOODS_PER_BASE_GOOD = 3
 
 COMPANIES_DIR = os.path.join("common", "company_types")
 PRESTIGE_GOODS_DIR = os.path.join("common", "prestige_goods")
 REPORT_PATH = os.path.join("docs", "engine", "prestige_good_roster_report.md")
 
-KIND_ORDER = ("local_base_good", "not_produced", "extension_only")
+KIND_ORDER = ("base_good_cap", "local_base_good", "not_produced", "extension_only")
 
 GENERIC_PREFIX = "prestige_good_generic_"
 
 _OPERATORS = ("=", "?=", "<", ">", "<=", ">=", "!=", "==")
 _OUTPUT_RE = re.compile(r"goods_output_(\w+)_add")
-
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+)$"
-)
 
 _TOKEN_RE = re.compile(
     r"(?P<close>\})"
@@ -295,6 +306,62 @@ def load_prestige_bases(mod_path: str) -> dict:
     return bases
 
 
+def prestige_bases(prestige_goods: dict | None) -> dict:
+    """{prestige good: base good} from parsed `Prestige Goods` data (merged
+    vanilla + mod, or either side alone)."""
+    bases: dict = {}
+    for name, raw in (prestige_goods or {}).items():
+        body = _unwrap(raw)
+        if isinstance(body, dict):
+            base = _names(body.get("base_good"))
+            if base:
+                bases[_entity_name(name)] = base[-1]
+    return bases
+
+
+def prestige_slots(prestige_goods: dict, vanilla_prestige_goods: dict | None,
+                   companies: dict | None) -> list[dict]:
+    """One row per base good, most crowded first: the prestige goods that
+    share it (`origin` vanilla, mod, or `both` when the mod changed a vanilla
+    one), each with its `prestige_bonus` and the companies that list it, and
+    the count against the engine's cap (GET /prestige-goods)."""
+    vanilla = vanilla_prestige_goods or {}
+    listed: dict = {}
+    for company, raw in (companies or {}).items():
+        body = _unwrap(raw)
+        if isinstance(body, dict):
+            for pg in dict.fromkeys(_names(body.get("possible_prestige_goods"))):
+                listed.setdefault(pg, []).append(company)
+    by_base: dict = {}
+    for name, raw in (prestige_goods or {}).items():
+        body = _unwrap(raw)
+        if not isinstance(body, dict):
+            continue
+        base = _names(body.get("base_good"))
+        if not base:
+            continue
+        bonus = _names(body.get("prestige_bonus"))
+        try:
+            bonus_value = float(bonus[-1]) if bonus else None
+        except ValueError:
+            bonus_value = bonus[-1]
+        origin = "mod" if name not in vanilla else "vanilla" if vanilla[name] == raw else "both"
+        by_base.setdefault(base[-1], []).append({
+            "name": name, "origin": origin, "prestige_bonus": bonus_value,
+            "companies": sorted(listed.get(name, [])),
+        })
+    rows = [
+        {
+            "base_good": good, "count": len(pgs), "cap": PRESTIGE_GOODS_PER_BASE_GOOD,
+            "free": max(0, PRESTIGE_GOODS_PER_BASE_GOOD - len(pgs)),
+            "prestige_goods": pgs,
+        }
+        for good, pgs in by_base.items()
+    ]
+    rows.sort(key=lambda r: (-r["count"], r["base_good"]))
+    return rows
+
+
 def base_good(prestige_good: str, bases: dict, goods: dict) -> str | None:
     if prestige_good in bases:
         return bases[prestige_good]
@@ -323,22 +390,13 @@ class Flag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[Flag] = field(default_factory=list)
     companies_checked: int = 0
     companies_vanilla_only: int = 0
     prestige_goods_checked: int = 0
     # Prestige goods whose base good could not be resolved: {name: [company]}.
     unresolved: dict = field(default_factory=dict)
-
-
-def _parse_reviewed(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
 
 
 def _is_local(goods: dict, good: str) -> bool:
@@ -349,10 +407,37 @@ def _is_local(goods: dict, good: str) -> bool:
 def check(companies: dict, outputs: dict, bases: dict, goods: dict, sources: dict,
           definitions: dict | None = None) -> AuditResult:
     """Judge merged `companies` against building `outputs` for every company
-    the mod's `sources` touch, and each mod prestige good in `bases` (sited
-    by `definitions`) against its base good."""
+    the mod's `sources` touch. `bases` holds every prestige good's base good,
+    vanilla's included; `definitions` sites the ones the mod defines, and
+    only those are judged for a local base good and count toward a
+    `base_good_cap` flag (given no `definitions`, every good in `bases` is
+    taken as the mod's)."""
     result = AuditResult()
-    for pg in sorted(bases):
+    mod_defined = set(bases) if definitions is None else set(definitions) & set(bases)
+    by_base: dict = {}
+    for pg, good in bases.items():
+        by_base.setdefault(good, []).append(pg)
+    for good in sorted(by_base):
+        sharing = sorted(by_base[good])
+        ours = [pg for pg in sharing if pg in mod_defined]
+        if len(sharing) <= PRESTIGE_GOODS_PER_BASE_GOOD or not ours:
+            continue
+        flag = Flag(
+            "base_good_cap", "", ", ".join(ours), good,
+            f"`{good}` has {len(sharing)} prestige goods "
+            f"({', '.join(f'`{pg}`' for pg in sharing)}); the engine keeps "
+            f"{PRESTIGE_GOODS_PER_BASE_GOOD} per base good and asserts on the rest",
+        )
+        sites = [(definitions or {}).get(pg) for pg in ours]
+        for site in filter(None, sites):
+            if flag.file is None:
+                flag.file, flag.line = site[0], site[1]
+            reviewed = parse_reviewed(site[2])
+            if reviewed:
+                flag.exemption = reviewed
+                break
+        result.flags.append(flag)
+    for pg in sorted(mod_defined):
         good = bases[pg]
         if not _is_local(goods, good):
             continue
@@ -361,7 +446,7 @@ def check(companies: dict, outputs: dict, bases: dict, goods: dict, sources: dic
         site = (definitions or {}).get(pg)
         if site:
             flag.file, flag.line = site[0], site[1]
-            flag.exemption = _parse_reviewed(site[2])
+            flag.exemption = parse_reviewed(site[2])
         result.flags.append(flag)
     for name in sorted(companies):
         src = sources.get(name)
@@ -396,7 +481,7 @@ def check(companies: dict, outputs: dict, bases: dict, goods: dict, sources: dic
                 flag.file, flag.line = site[0], site[1]
                 break
             for site in src.openers + lines:
-                reviewed = _parse_reviewed(site[2])
+                reviewed = parse_reviewed(site[2])
                 if reviewed:
                     flag.exemption = reviewed
                     break
@@ -440,10 +525,14 @@ def audit(mod_state=None, mod_path: str | None = None) -> AuditResult:
         mod_state.get_data("PM Groups") or {},
         mod_state.get_data("PMs") or {},
     )
+    # The merged table; the mod's own files as a fallback for a state built
+    # without the type (an older caller's hand-made ModState).
+    bases = load_prestige_bases(mod_path)
+    bases.update(prestige_bases(mod_state.get_data("Prestige Goods")))
     return check(
         mod_state.get_data("Company Types") or {},
         outputs,
-        load_prestige_bases(mod_path),
+        bases,
         mod_state.get_data("Goods") or {},
         scan_sources(mod_path),
         scan_prestige_definitions(mod_path),
@@ -462,8 +551,8 @@ def _describe(f: Flag) -> str:
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
 
     out = [
         "# Prestige good roster audit report",
@@ -482,13 +571,17 @@ def render_report(result: AuditResult) -> str:
         "does, which needs an industry charter; a company holds one at a time).",
         "Flagged per prestige good the mod defines: `local_base_good` (its base",
         "good is `local = yes`, and a prestige version of a local good does",
-        "nothing).",
+        "nothing). Flagged per base good that carries one of the mod's prestige",
+        "goods: `base_good_cap` (more than three prestige goods, vanilla's and",
+        "the mod's together, share it; the engine keeps three and asserts in",
+        "`debug.log` on the rest).",
         "",
         "Suppress a deliberate case with a trailing",
         "`# REVIEWED YYYY-MM-DD: rationale` comment on the prestige good's line",
         "in `possible_prestige_goods` or on the company's opening `<name> = {`",
         "line (covers every flag on that company); for `local_base_good`, on",
-        "the prestige good's opening line in `common/prestige_goods/`.",
+        "the prestige good's opening line in `common/prestige_goods/` (for",
+        "`base_good_cap`, on any of the mod's prestige goods of that base good).",
         "",
         "## Unreviewed Flags",
         "",
@@ -525,8 +618,8 @@ def render_report(result: AuditResult) -> str:
         f"- mod-touched companies checked: {result.companies_checked}",
         f"- vanilla-only companies not judged: {result.companies_vanilla_only}",
         f"- prestige goods checked: {result.prestige_goods_checked}",
-        f"- prestige goods with an unknown base good (vanilla named goods, not in"
-        f" the snapshot), not judged: {len(result.unresolved)}",
+        f"- prestige goods with an unknown base good (defined by neither vanilla"
+        f" nor the mod), not judged: {len(result.unresolved)}",
         f"- total flags: {len(result.flags)}",
         f"- unreviewed: {len(unrev)}",
         f"- exempted: {len(exemp)}",
@@ -544,11 +637,8 @@ def regenerate(mod_state=None) -> dict:
     """POST_LOAD_AUDITS hook: run the audit and write the report."""
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
-    out_path = os.path.join(mod_path, REPORT_PATH)
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(render_report(result))
-    unrev = sum(1 for f in result.flags if not f.exemption)
+    write_text(os.path.join(mod_path, REPORT_PATH), render_report(result))
+    unrev = len(result.unreviewed)
     return {
         "companies_checked": result.companies_checked,
         "prestige_goods_checked": result.prestige_goods_checked,
@@ -559,12 +649,13 @@ def regenerate(mod_state=None) -> dict:
     }
 
 
-if __name__ == "__main__":
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 if any flag lacks a
+    `# REVIEWED ...` exemption."""
     from path_constants import mod_path
-    result = audit(mod_path=mod_path)
-    print(render_report(result))
-    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ...` exemption.
-    if "--strict" in sys.argv:
-        raise SystemExit(1 if any(not f.exemption for f in result.flags) else 0)
+    return cli_main(lambda args: audit(mod_path=mod_path), lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

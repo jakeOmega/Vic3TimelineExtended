@@ -461,7 +461,7 @@ un_dev_fund_size_stored = {
 un_dev_fund_size_value = {
 	value = 0
 	if = {
-		limit = { je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } }
+		limit = { has_variable = un_development_contributor_modifier_on }
 		add = un_dev_fund_size_stored
 	}
 }
@@ -526,7 +526,7 @@ un_dev_fund_expense_value = {
 }
 
 # ---- The voluntary part: what the recipients remember ----------------------------
-# var:un_dev_fund_patron, the multiplier of un_development_patron_modifier,
+# var:un_dev_fund_patron, the value of un_development_patron_modifier,
 # moves this fraction of the way each month toward what we give now: our
 # benefit factor while our money reaches the Fund (un_dev_fund_contributor),
 # 0 otherwise. A year at a size brings it about two thirds of the way there,
@@ -864,7 +864,7 @@ un_development_fund_ai_chance = {
 		}
 	}
 	if = {
-		limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+		limit = { has_variable = un_champion_order_cost_on }
 		add = 10
 	}
 	if = {

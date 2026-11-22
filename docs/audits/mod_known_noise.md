@@ -31,7 +31,7 @@ Couldn't find any animation state for harvest condition type
 
 Mod adds `bull_market` / `bear_market` / `market_downturn` / `financial_panic` as harvest condition types in `common/harvest_condition_types/extra_harvest_condition_types.txt` for banking-cycle visualization. Vanilla `harvest_condition_sound_entity` has no matching states. Functional impact: silent — engine just doesn't play a sound. Fix recipe in `docs/audits/open_issues.md#l7-mod-harvest-condition-sound-entity-states-missing`.
 
-### `pdx_gui_factory.cpp:628` — `gui/tooltip.gui:293 - Could not find template 'vertical_scrollbar'`
+### `pdx_gui_factory.cpp:628` — `gui/tooltip.gui:328 - Could not find template 'vertical_scrollbar'`
 - source: `pdx_gui_factory.cpp:628`
 - tracked: `docs/audits/open_issues.md#l8-mod-tooltipgui-vertical-scrollbar-template-warning`
 
@@ -56,6 +56,7 @@ Block-compressed (BC1/BC3) DDS textures need multiple-of-4 width and height; the
 
 ### `jomini_effect.cpp:1135` — variables set for localization tooltip read flagged unused
 - source: `jomini_effect.cpp:1135`
+- source: `jomini_effect.cpp:1140`
 - tracked: `docs/audits/open_issues.md#l10-mod-loc-only-variables-flagged-unused`
 
 ```
@@ -96,6 +97,7 @@ Duplicated event ID 'formation.17' found
 
 ### `jomini_effect.cpp:1139` — GUI-injected scopes flagged never-set
 - source: `jomini_effect.cpp:1139`
+- source: `jomini_effect.cpp:1144`
 - tracked: `docs/audits/open_issues.md#l14-gui-injected-event-targets-flagged-never-set`
 
 ```
@@ -106,6 +108,7 @@ A `.gui` (or a loc string) that sets a scope with `AddScope('<name>', …)` for 
 
 ### `power_bloc_principle.cpp:139` — vanilla principles orphaned by REPLACE:principle_group
 - source: `power_bloc_principle.cpp:139`
+- source: `power_bloc_principle.cpp:138`
 - tracked: `docs/audits/open_issues.md#l15-vanilla-principles-orphaned-by-replaceprinciple_group-overrides`
 
 ```
@@ -115,7 +118,9 @@ Principle principle_sacred_civics_
 `REPLACE:principle_group_sacred_civics` swaps the vanilla group's members for the mod's `principle_sacred_civics_N_mod` variants; the vanilla `principle_sacred_civics_N` entries stay in the database groupless and log once each per launch. Group-less principles are unpickable → harmless. Tracked at `docs/audits/open_issues.md#l15-vanilla-principles-orphaned-by-replaceprinciple_group-overrides`.
 
 ### `country_law_manager.cpp:464` — deliberate historical law seeds lacking unlock tech (1.13.9 validation)
+- source: `country_law_manager.cpp:474`
 - source: `country_law_manager.cpp:464`
+- source: `country_law_manager.cpp:462`
 - tracked: `docs/audits/open_issues.md#l16-historical-law-seeding-vs-unlocking_technologies-retention-warnings-1139`
 
 ```
@@ -129,14 +134,13 @@ retain law Multilingual Federalism
 retain law Traditional IP Protection
 retain law Colonial Slavery
 retain law Legal Limbo
-retain law Intrusive Surveillance System
-retain law Total War
-retain law State Secrets
-retain law Penal Labor Camps
 retain law Constitutional Review
+retain law State-Led Language Reform
+retain law Freedom of Contract
+retain law Elected Bureaucrats
 ```
 
-Vanilla 1.13.9 added load-time validation of active laws against `unlocking_technologies`. Two by-design mod cases (details at `docs/audits/open_issues.md#l16-historical-law-seeding-vs-unlocking_technologies-retention-warnings-1139`): deliberate historical seeds in `common/history/extra_history.txt` (Gold Standard, Kriegsministerium, the USA's Constitutional Review, …), and init-order transients for the four lawgroups whose menu-ordered first law is tech-gated (Intrusive Surveillance / Total War / State Secrets / Penal Labor Camps, first in `lawgroup_criminal_justice` since #520; 146 countries at the 2026-10-10 start) — the engine assigns first-in-group before `extra_history.txt` GLOBAL replaces them with the tech-free baselines, so final state is correct. Signatures enumerate these known laws ONLY, so a new law name appearing in this warning class still surfaces in triage. Tracked at `docs/audits/open_issues.md#l16-historical-law-seeding-vs-unlocking_technologies-retention-warnings-1139`.
+Vanilla 1.13.9 added load-time validation of active laws against `unlocking_technologies`. Two by-design mod cases (details at `docs/audits/open_issues.md#l16-historical-law-seeding-vs-unlocking_technologies-retention-warnings-1139`): deliberate historical seeds in `common/history/extra_history.txt` (Gold Standard, Kriegsministerium, the USA's Constitutional Review, Greece's and Serbia's State-Led Language Reform, …), and, since #1408 stopped the law sweep running mid-history, seeds the first monthly sweep replaces (Freedom of Contract, vanilla's Elected Bureaucrats). The lines for Intrusive Surveillance, Total War, State Secrets, Penal Labor Camps and Violent Hostility are not here: they were decentralized nations holding each group's first law for the whole game, not a transient, and are fixed (2026-11-05), so they should be gone and show if they return. Signatures enumerate these known laws ONLY, so a new law name appearing in this warning class still surfaces in triage. Tracked at `docs/audits/open_issues.md#l16-historical-law-seeding-vs-unlocking_technologies-retention-warnings-1139`.
 
 ### `jomini_eventmanager.cpp:376` — console-only debug test events reported orphaned
 - source: `jomini_eventmanager.cpp:376`
@@ -149,237 +153,20 @@ Event te_tax_debug.
 
 The `te_debug_<system>.1` test consoles in `events/te_debug_*_events.txt` are fired by hand with `event te_debug_<x>.1`. Nothing in script fires them, so each is logged as orphaned at load (ch, colonial_empire, covert, gw, nuclear, space_race, un as of 2026-09-19). The tax code's console (`te_tax_debug.1`–`.8`, `events/te_tax_debug_events.txt`) takes the other word order, so it has a signature of its own. By design. The signature is the `te_debug_` prefix only, not `is orphaned`, because signatures match if ANY line matches: an `is orphaned` line would also hide a real mod event that lost its trigger. A new console needs no change here. Tracked at `docs/audits/open_issues.md#l23-console-only-debug-test-events-logged-as-orphaned-by-design`.
 
-### `jomini_effect.cpp:1139` — old-save migration cleanup reads variables nothing sets
-- source: `jomini_effect.cpp:1139`
-- tracked: `docs/audits/open_issues.md#l24-old-save-migration-cleanup-reads-variables-nothing-sets`
-
-```
-Variable 'sr_notify_achiever_capital' is used but is never set
-Variable 'sr_notify_is_first' is used but is never set
-Variable 'sr_notify_suborbital' is used but is never set
-Variable 'sr_notify_orbital' is used but is never set
-Variable 'sr_notify_moon_landing' is used but is never set
-Variable 'sr_notify_probe' is used but is never set
-Variable 'sr_notify_moon_base' is used but is never set
-Variable 'sr_notify_mars_landing' is used but is never set
-Variable 'sr_notify_interstellar_probe' is used but is never set
-Variable 'nd_stance_warfighting' is used but is never set
-Variable 'nd_stance_professional' is used but is never set
-Variable 'nd_stance_dove' is used but is never set
-Variable 'nd_stance_business' is used but is never set
-Variable 'un_founding_window_active' is used but is never set
-Variable 'sr_active_milestone' is used but is never set
-Variable 'tp_1_imp_rel' is used but is never set
-Variable 'tp_1_exp_rel' is used but is never set
-Variable 'tp_2_imp_rel' is used but is never set
-Variable 'tp_2_exp_rel' is used but is never set
-Variable 'tp_3_imp_rel' is used but is never set
-Variable 'tp_3_exp_rel' is used but is never set
-Variable 'tp_4_imp_rel' is used but is never set
-Variable 'tp_4_exp_rel' is used but is never set
-Variable 'tp_5_imp_rel' is used but is never set
-Variable 'tp_5_exp_rel' is used but is never set
-Variable 'tp_1_tc' is used but is never set
-Variable 'tp_1_total' is used but is never set
-Variable 'tp_1_gdp_pct' is used but is never set
-Variable 'tp_2_tc' is used but is never set
-Variable 'tp_2_total' is used but is never set
-Variable 'tp_2_gdp_pct' is used but is never set
-Variable 'tp_3_tc' is used but is never set
-Variable 'tp_3_total' is used but is never set
-Variable 'tp_3_gdp_pct' is used but is never set
-Variable 'tp_4_tc' is used but is never set
-Variable 'tp_4_total' is used but is never set
-Variable 'tp_4_gdp_pct' is used but is never set
-Variable 'tp_5_tc' is used but is never set
-Variable 'tp_5_total' is used but is never set
-Variable 'tp_5_gdp_pct' is used but is never set
-Variable 'sr_fleet_upkeep_per_building' is used but is never set
-Variable 'tp_count' is used but is never set
-Variable 'gw_emitter_1' is used but is never set
-Variable 'gw_emitter_2' is used but is never set
-Variable 'gw_emitter_3' is used but is never set
-Variable 'gw_emitter_4' is used but is never set
-Variable 'gw_emitter_5' is used but is never set
-Variable 'gw_emitters_shown' is used but is never set
-Variable 'gw_emitters_own_slot' is used but is never set
-Variable 'te_dg_n_lo' is used but is never set
-Variable 'te_dg_n_mi' is used but is never set
-Variable 'te_dg_n_up' is used but is never set
-Variable 'te_dg_y_lo' is used but is never set
-Variable 'te_dg_y_mi' is used but is never set
-Variable 'te_dg_y_up' is used but is never set
-Variable 'gm_com_extended' is used but is never set
-Variable 'gm_com_gap_half' is used but is never set
-Variable 'gm_promise_ledger' is used but is never set
-Variable 'gm_com_cooldown' is used but is never set
-Variable 'te_dg_m1840' is used but is never set
-Variable 'te_dg_f1840' is used but is never set
-Variable 'gm_tr_return_queued' is used but is never set
-Variable 'gm_tr_return_relations' is used but is never set
-Variable 'te_dg_dc_ontop' is used but is never set
-Variable 'sr_rival_interstellar_probe_1' is used but is never set
-Variable 'sr_rival_interstellar_probe_2' is used but is never set
-Variable 'sr_rival_interstellar_probe_3' is used but is never set
-Variable 'sr_rival_interstellar_probe_4' is used but is never set
-Variable 'sr_rival_interstellar_probe_5' is used but is never set
-Variable 'sr_rival_mars_landing_1' is used but is never set
-Variable 'sr_rival_mars_landing_2' is used but is never set
-Variable 'sr_rival_mars_landing_3' is used but is never set
-Variable 'sr_rival_mars_landing_4' is used but is never set
-Variable 'sr_rival_mars_landing_5' is used but is never set
-Variable 'sr_rival_moon_base_1' is used but is never set
-Variable 'sr_rival_moon_base_2' is used but is never set
-Variable 'sr_rival_moon_base_3' is used but is never set
-Variable 'sr_rival_moon_base_4' is used but is never set
-Variable 'sr_rival_moon_base_5' is used but is never set
-Variable 'sr_rival_moon_landing_1' is used but is never set
-Variable 'sr_rival_moon_landing_2' is used but is never set
-Variable 'sr_rival_moon_landing_3' is used but is never set
-Variable 'sr_rival_moon_landing_4' is used but is never set
-Variable 'sr_rival_moon_landing_5' is used but is never set
-Variable 'sr_rival_orbital_1' is used but is never set
-Variable 'sr_rival_orbital_2' is used but is never set
-Variable 'sr_rival_orbital_3' is used but is never set
-Variable 'sr_rival_orbital_4' is used but is never set
-Variable 'sr_rival_orbital_5' is used but is never set
-Variable 'sr_rival_probe_1' is used but is never set
-Variable 'sr_rival_probe_2' is used but is never set
-Variable 'sr_rival_probe_3' is used but is never set
-Variable 'sr_rival_probe_4' is used but is never set
-Variable 'sr_rival_probe_5' is used but is never set
-Variable 'sr_rival_solar_colonization_1' is used but is never set
-Variable 'sr_rival_solar_colonization_2' is used but is never set
-Variable 'sr_rival_solar_colonization_3' is used but is never set
-Variable 'sr_rival_solar_colonization_4' is used but is never set
-Variable 'sr_rival_solar_colonization_5' is used but is never set
-Variable 'sr_rival_suborbital_1' is used but is never set
-Variable 'sr_rival_suborbital_2' is used but is never set
-Variable 'sr_rival_suborbital_3' is used but is never set
-Variable 'sr_rival_suborbital_4' is used but is never set
-Variable 'sr_rival_suborbital_5' is used but is never set
-Variable 'sr_rival_total_interstellar_probe' is used but is never set
-Variable 'sr_rival_total_mars_landing' is used but is never set
-Variable 'sr_rival_total_moon_base' is used but is never set
-Variable 'sr_rival_total_moon_landing' is used but is never set
-Variable 'sr_rival_total_orbital' is used but is never set
-Variable 'sr_rival_total_probe' is used but is never set
-Variable 'sr_rival_total_solar_colonization' is used but is never set
-Variable 'sr_rival_total_suborbital' is used but is never set
-Variable 'sr_power_1' is used but is never set
-Variable 'sr_power_2' is used but is never set
-Variable 'sr_power_3' is used but is never set
-Variable 'sr_power_4' is used but is never set
-Variable 'sr_power_5' is used but is never set
-Variable 'sr_power_6' is used but is never set
-Variable 'sr_power_7' is used but is never set
-Variable 'sr_power_8' is used but is never set
-Variable 'te_seabed_rank_arctic' is used but is never set
-Variable 'te_seabed_rank_atlantic' is used but is never set
-Variable 'te_seabed_rank_indian' is used but is never set
-Variable 'te_seabed_rank_pacific' is used but is never set
-Variable 'te_seabed_rank_southern' is used but is never set
-Variable 'te_seabed_rk_arctic_1' is used but is never set
-Variable 'te_seabed_rk_arctic_2' is used but is never set
-Variable 'te_seabed_rk_arctic_3' is used but is never set
-Variable 'te_seabed_rk_arctic_4' is used but is never set
-Variable 'te_seabed_rk_arctic_5' is used but is never set
-Variable 'te_seabed_rk_arctic_6' is used but is never set
-Variable 'te_seabed_rk_atlantic_1' is used but is never set
-Variable 'te_seabed_rk_atlantic_2' is used but is never set
-Variable 'te_seabed_rk_atlantic_3' is used but is never set
-Variable 'te_seabed_rk_atlantic_4' is used but is never set
-Variable 'te_seabed_rk_atlantic_5' is used but is never set
-Variable 'te_seabed_rk_atlantic_6' is used but is never set
-Variable 'te_seabed_rk_indian_1' is used but is never set
-Variable 'te_seabed_rk_indian_2' is used but is never set
-Variable 'te_seabed_rk_indian_3' is used but is never set
-Variable 'te_seabed_rk_indian_4' is used but is never set
-Variable 'te_seabed_rk_indian_5' is used but is never set
-Variable 'te_seabed_rk_indian_6' is used but is never set
-Variable 'te_seabed_rk_more_arctic' is used but is never set
-Variable 'te_seabed_rk_more_atlantic' is used but is never set
-Variable 'te_seabed_rk_more_indian' is used but is never set
-Variable 'te_seabed_rk_more_pacific' is used but is never set
-Variable 'te_seabed_rk_more_southern' is used but is never set
-Variable 'te_seabed_rk_pacific_1' is used but is never set
-Variable 'te_seabed_rk_pacific_2' is used but is never set
-Variable 'te_seabed_rk_pacific_3' is used but is never set
-Variable 'te_seabed_rk_pacific_4' is used but is never set
-Variable 'te_seabed_rk_pacific_5' is used but is never set
-Variable 'te_seabed_rk_pacific_6' is used but is never set
-Variable 'te_seabed_rk_southern_1' is used but is never set
-Variable 'te_seabed_rk_southern_2' is used but is never set
-Variable 'te_seabed_rk_southern_3' is used but is never set
-Variable 'te_seabed_rk_southern_4' is used but is never set
-Variable 'te_seabed_rk_southern_5' is used but is never set
-Variable 'te_seabed_rk_southern_6' is used but is never set
-Variable 'te_seabed_rkcap_arctic_1' is used but is never set
-Variable 'te_seabed_rkcap_arctic_2' is used but is never set
-Variable 'te_seabed_rkcap_arctic_3' is used but is never set
-Variable 'te_seabed_rkcap_arctic_4' is used but is never set
-Variable 'te_seabed_rkcap_arctic_5' is used but is never set
-Variable 'te_seabed_rkcap_arctic_6' is used but is never set
-Variable 'te_seabed_rkcap_atlantic_1' is used but is never set
-Variable 'te_seabed_rkcap_atlantic_2' is used but is never set
-Variable 'te_seabed_rkcap_atlantic_3' is used but is never set
-Variable 'te_seabed_rkcap_atlantic_4' is used but is never set
-Variable 'te_seabed_rkcap_atlantic_5' is used but is never set
-Variable 'te_seabed_rkcap_atlantic_6' is used but is never set
-Variable 'te_seabed_rkcap_count_arctic' is used but is never set
-Variable 'te_seabed_rkcap_count_atlantic' is used but is never set
-Variable 'te_seabed_rkcap_count_indian' is used but is never set
-Variable 'te_seabed_rkcap_count_pacific' is used but is never set
-Variable 'te_seabed_rkcap_count_southern' is used but is never set
-Variable 'te_seabed_rkcap_indian_1' is used but is never set
-Variable 'te_seabed_rkcap_indian_2' is used but is never set
-Variable 'te_seabed_rkcap_indian_3' is used but is never set
-Variable 'te_seabed_rkcap_indian_4' is used but is never set
-Variable 'te_seabed_rkcap_indian_5' is used but is never set
-Variable 'te_seabed_rkcap_indian_6' is used but is never set
-Variable 'te_seabed_rkcap_pacific_1' is used but is never set
-Variable 'te_seabed_rkcap_pacific_2' is used but is never set
-Variable 'te_seabed_rkcap_pacific_3' is used but is never set
-Variable 'te_seabed_rkcap_pacific_4' is used but is never set
-Variable 'te_seabed_rkcap_pacific_5' is used but is never set
-Variable 'te_seabed_rkcap_pacific_6' is used but is never set
-Variable 'te_seabed_rkcap_southern_1' is used but is never set
-Variable 'te_seabed_rkcap_southern_2' is used but is never set
-Variable 'te_seabed_rkcap_southern_3' is used but is never set
-Variable 'te_seabed_rkcap_southern_4' is used but is never set
-Variable 'te_seabed_rkcap_southern_5' is used but is never set
-Variable 'te_seabed_rkcap_southern_6' is used but is never set
-Variable 'sr_moon_base_industrial' is used but is never set
-Variable 'sr_moon_base_military' is used but is never set
-Variable 'sr_failure_cooldown' is used but is never set
-Flag 'mothballed' is used but is never set
-Flag 'standard' is used but is never set
-```
-
-`sr_clear_legacy_milestone_notice` and `sr_cleanup_inactive_space_race_milestones` (`space_race_effects.txt`), `nd_refresh_domestic_stance` (`nuclear_deterrence_effects.txt`), the UN dissolution sweep (`un_ladder_effects.txt`) and the trading-partners refresh (`trade_partner_effects.txt`, the Imp%/Exp% columns' old `tp_<n>_imp_rel` / `tp_<n>_exp_rel`) and the demographics Gini store (`te_demog_gini_band_store` in `te_demog_generated_effects.txt`, written by gen_demographics.py: the six strata sums `te_dg_<n|y>_<lo|mi|up>` from before the wealth bands, #854), the Grand Monument opportunity's record (`gm_com_clear` and the first-sight sweep in `gm_commission_effects.txt`: v2's `gm_com_extended` and `gm_com_gap_half`, and `gm_promise_ledger` and `gm_com_cooldown`, retired by #915) and the demographics census (`te_demog_effects.txt`: the 18-40 sums `te_dg_m1840` / `te_dg_f1840`, which a census from before phase 2 step 4, #942, kept instead of the fighting-age pool), the trophy pass (`gm_trophy_effects.txt`: the queued returns `gm_tr_return_queued` / `gm_tr_return_relations`, which #1058 stopped setting), the census's cause-of-death store (`te_demog_cause_deaths_old_clear` in `te_demog_effects.txt`: the deaths-on-top slice `te_dg_dc_ontop`, retired by #1099) and the monument policy (`gm_policy_migrate` and `gm_policy_is` in `gm_policy_effects.txt` / `gm_policy_triggers.txt`: the Mothballed and Standard policies' `flag:mothballed` and `flag:standard`, retired by #1121) remove variables an older save may still hold and nothing sets any more; the census also reads the old sums once, for the war dead's window, and the policy reads the two old flags as the default. #1215's list rewrites (audits SPC-9 and SEA-3, 2026-10-27) added two more: the Space Race's Rivals and Space Powers snapshots (sr_clear_rival_slots and sr_powers_clear in space_race_effects.txt: the slots `sr_rival_<milestone>_<1-5>`, the counts `sr_rival_total_<milestone>` and the eight `sr_power_<n>`) and the seabed claimants' ranking (te_seabed_rank_clear, te_seabed_rank_list and te_seabed_rank_seat_clear in te_global_commons_seabed_effects.txt: the global seats `te_seabed_rk_<basin>_<1-6>` and `te_seabed_rk_more_<basin>`, each country's `te_seabed_rank_<basin>`, and the players' `te_seabed_rkcap_<basin>_<1-6>` and `te_seabed_rkcap_count_<basin>`), 131 names in all, registered 2026-10-29. The retired Moon Base (#1238) added two on 2026-10-30 (#1243): its purpose choices `sr_moon_base_industrial` and `sr_moon_base_military`, which the old-save migration (`sr_lunar_migrate_country` in sr_sites_generated.txt, written by gen_solar_sites.py) reads to give a country that finished the Moon Base the lunar site its purpose names, as do the retired entry's panel, purpose trigger and modifier sync for a copy that lingers in an old save. The third purpose, `sr_moon_base_scientific`, is not logged, because the Space Race's debug console sets it. The retired post-setback cooldown (#1274, 2026-10-31) added one: `sr_failure_cooldown`, which the Space Race's monthly pulse (`space_race_on_action` in `space_race_on_actions.txt`) removes from an older save, until the strip goes after 2026-12-31. The validator reports each read once per launch. The signatures name all 197 variables and both flags, so a new never-set variable or flag is not hidden. Tracked at `docs/audits/open_issues.md#l24-old-save-migration-cleanup-reads-variables-nothing-sets`.
-
-### `jomini_eventmanager.cpp:376` — `un_vote.5` kept for events queued in older saves
-- source: `jomini_eventmanager.cpp:376`
-- tracked: `docs/audits/open_issues.md#l25-un_vote5-kept-for-events-queued-in-older-saves`
-
-```
-Event un_vote.5 is orphaned
-```
-
-`un_vote.5` (`events/un_vote_events.txt`) used to dispatch the AI ballots. Since the late ballots (#531) nothing queues it, but an older save can still hold one queued, so the event stays and now only refreshes the leans. The engine logs it as orphaned at load, once per launch. The signature names this one event, so a real mod event that loses its trigger still shows up. Tracked at `docs/audits/open_issues.md#l25-un_vote5-kept-for-events-queued-in-older-saves`.
-
 ### `event.cpp:358` — Grand Monuments v2 load-time notices
 - source: `event.cpp:358`
+- source: `event.cpp:410`
+- source: `event.cpp:425`
 - source: `jomini_effect.cpp:1139`
+- source: `jomini_effect.cpp:1144`
 - tracked: `docs/audits/open_issues.md#l26-grand-monuments-v2-load-time-notices`
 
 ```
 No default option in event monument_events.11.
 Flag 'leader' is used but is never set
-Flag 'memorial' is used but is never set
 ```
 
-Three lines once per launch. The skin choice has no `default_option` by design, `flag:leader` is set as `flag:$DEDICATION$`, which the validator cannot see, and `flag:memorial` is read only to name a Memorial-form monument or commission from a save older than #909, which retired that form. Each signature names its own event or flag, so another event without a default or another never-set flag still shows up.
+Two lines once per launch. The skin choice has no `default_option` by design, and `flag:leader` is set as `flag:$DEDICATION$`, which the validator cannot see. Each signature names its own event or flag, so another event without a default or another never-set flag still shows up.
 
 ### `common/treaty_articles/31_ship_transfer.txt:58` — vanilla ship transfer's reciprocal check reads the mod's mutual articles
 - tracked: `docs/audits/open_issues.md#l27-ship-transfer-reciprocal-check-reads-mod-mutual-articles`
@@ -396,13 +183,16 @@ Vanilla's reciprocal-article check skips its own two mutual articles but not the
 ### `country.cpp:9608` — a construction queue with no construction to spend on it (unattributed)
 - source: `country.cpp:9608`
 - source: `country.cpp:9594`
+- source: `country.cpp:9794`
+- source: `country.cpp:9780`
+- source: `country.cpp:9781`
 - tracked: `docs/audits/open_issues.md#l28-zero-construction-speed-with-a-queued-project-unattributed`
 
 ```
 The total construction speed is zero
 ```
 
-The engine's estimate of a country's queue length divides by its construction speed, and logs this when that speed is zero. It names no country and no script, so the cause isn't known. 2026-10-24: 3,208 lines over three and a half hours of play, steady at 20 to 40 a minute from about half an hour after the launch, a third of every `error.log`; the 2026-10-11 observer runs logged it at `:9594` ("queues"), so it predates that day's builds. Tracked at `docs/audits/open_issues.md#l28-zero-construction-speed-with-a-queued-project-unattributed`.
+The engine's estimate of a country's queue length divides by its construction speed, and logs this when that speed is zero. It names no country and no script, so the cause isn't known. 2026-10-24: 3,208 lines over three and a half hours of play, steady at 20 to 40 a minute from about half an hour after the launch, a third of every `error.log`; the 2026-10-11 observer runs logged it at `:9594` ("queues"), so it predates that day's builds. Vanilla 1.15 moved both lines, to `:9794` ("queue") and `:9780` ("queues"): 720 lines in the 2026-11-05/06 sessions, untagged until the two anchors were added. 2026-11-12 (1.15.1, a 1932–1939 game): about 1,000 an hour, all at `:9780`, so not grown. 2026-11-13 (a 1945–1946 game): about 650 an hour, and a first candidate for the cause: in an autosave of that game two countries (Canada and `E64`) had buildings queued and Construction Sites with no laborer at all, so no construction to spend, and a site hires only one laborer a week (`docs/testing/ai-economy-playtest.md`, "First verdict"). Not shown to be the line's only source. Vanilla 1.15.2 moved the "queues" line again, to `:9781` (2026-11-19, the first 1.15.2 session). Tracked at `docs/audits/open_issues.md#l28-zero-construction-speed-with-a-queued-project-unattributed`.
 
 ### `common/decrees/extra_decrees.txt` — the engine checks a decree's country_trigger with no country
 - tracked: `docs/audits/open_issues.md#l29-a-decrees-country_trigger-checked-with-no-country`
@@ -412,3 +202,61 @@ untyped trigger [ Scoped object of type 'country' is not valid (Country  (429496
 ```
 
 The engine re-checks each decree's `country_trigger` weekly (vanilla's decree file header: it "should invalidate the Decree on a weekly basis if found invalid"), and now and then it does so with the null country. Vanilla's own decrees log the same message in the same second, and the `<unknown>:0` untyped-trigger entry in the vanilla registry tags those; its `- stack: vanilla only` leaves this file's lines visible. Medical Outreach's trigger logged once on 2026-10-25. Script can't guard a root that is invalid before the block runs. Tracked at `docs/audits/open_issues.md#l29-a-decrees-country_trigger-checked-with-no-country`.
+
+### `jomini_effect.cpp:1144` — culture merges: absorb results' generic gate reads flagged never-set
+- source: `jomini_effect.cpp:1144`
+- tracked: `docs/audits/open_issues.md#l30-culture-merges-absorb-results-generic-gate-reads-flagged-never-set`
+
+```
+Variable 'te_cm_home_r_brazilian' is used but is never set
+Variable 'te_cm_home_r_dutch' is used but is never set
+Variable 'te_cm_home_r_finnish' is used but is never set
+Variable 'te_cm_home_r_han' is used but is never set
+Variable 'te_cm_home_r_hindustani' is used but is never set
+Variable 'te_cm_home_r_hungarian' is used but is never set
+Variable 'te_cm_home_r_japanese' is used but is never set
+Variable 'te_cm_home_r_persian' is used but is never set
+Variable 'te_cm_joined_brazilian_brazilian' is used but is never set
+Variable 'te_cm_joined_british_british' is used but is never set
+Variable 'te_cm_joined_chinese_han' is used but is never set
+Variable 'te_cm_joined_dutch_dutch' is used but is never set
+Variable 'te_cm_joined_filipino_filipino' is used but is never set
+Variable 'te_cm_joined_finnish_finnish' is used but is never set
+Variable 'te_cm_joined_french_french' is used but is never set
+Variable 'te_cm_joined_hindustani_hindustani' is used but is never set
+Variable 'te_cm_joined_hungarian_hungarian' is used but is never set
+Variable 'te_cm_joined_japanese_japanese' is used but is never set
+Variable 'te_cm_joined_persian_persian' is used but is never set
+Variable 'te_cm_switched_brazilian' is used but is never set
+Variable 'te_cm_switched_dutch' is used but is never set
+Variable 'te_cm_switched_finnish' is used but is never set
+Variable 'te_cm_switched_han' is used but is never set
+Variable 'te_cm_switched_hindustani' is used but is never set
+Variable 'te_cm_switched_hungarian' is used but is never set
+Variable 'te_cm_switched_japanese' is used but is never set
+Variable 'te_cm_switched_persian' is used but is never set
+Variable 'te_cm_wait_years_anglophone' is used but is never set
+```
+
+Twenty-eight lines once per launch, from the culture merges (#1509). Eleven merges absorb their parts into an existing culture (Hungarian, Han, Japanese ...), and that culture is the merge's first core slot, held and acceptance-tested but never joined, converted or switched (see the culture merges system file). The generator writes its slot's triggers and the census helper's call like any other part's, so its joined, switched and result-pop reads name variables nothing sets; Anglophone's wait counter is read by its optional parts' waits and only a core wait adds to it, as documented. The reads sit behind `has_global_variable` or `?=` and read false, as they should. Each signature names its own variable, so a new never-set culture-merge name still shows. The 2026-11-08 triage removed the other 129 such names (results no wider merge takes, and the console dump). Tracked at `docs/audits/open_issues.md#l30-culture-merges-absorb-results-generic-gate-reads-flagged-never-set`.
+
+### `gamedatabase.h:378` — culture merges: the restated vanilla trigger drops vanilla's copy
+- source: `gamedatabase.h:378`
+- source: `gamedatabase.h:394`
+- tracked: `docs/audits/open_issues.md#l31-culture-merges-the-restated-vanilla-trigger-logs-a-duplicated-key`
+
+```
+Duplicated key has_indian_primary_culture will not be created from file: common/scripted_triggers/00_scripted_triggers.txt
+```
+
+One line per launch, and it is the override working: `00_a_te_culture_merge_vanilla_triggers.txt` sorts before vanilla's file, the first bare definition of a scripted trigger wins, and the engine names the copy it dropped, vanilla's. The signature names vanilla's file on purpose: a line naming the mod's file means the mod's copy lost, and that one must not be filtered.
+
+### `gamedatabase.h:394` — Base Construction Capacity: the one-setting copy drops vanilla's rule
+- source: `gamedatabase.h:394`
+- tracked: `docs/audits/open_issues.md#l32-base-construction-capacity-the-one-setting-copy-logs-a-duplicated-key`
+
+```
+Duplicated key free_construction will not be created from file: common/game_rules/00_game_rules.txt
+```
+
+One line per launch, and it is the copy working: `00_a_te_free_construction.txt` sorts before vanilla's file and `game_rules` keeps the first bare definition (read 2026-11-13, #1768). The signature names vanilla's file on purpose: a line naming the mod's file means the mod's copy lost, and that one must not be filtered.

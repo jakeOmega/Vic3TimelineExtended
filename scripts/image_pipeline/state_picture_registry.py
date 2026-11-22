@@ -1,0 +1,2331 @@
+"""The state pictures: one entry per banner picture, its conditions and its prompt.
+
+The banner at the top of the state panel is the highest-weight entry of the
+`textures` list of the state's prevailing terrain (common/terrain). Each entry
+here is one picture, `gfx/state_pictures/te_<key>.dds` (1020 x 500), and says
+when it applies. `scripts/generators/gen_state_pictures.py` writes
+`common/terrain/te_state_pictures_generated.txt` from the entries whose `seed`
+is set (a picked, committed picture); an entry with `seed: None` is planned art
+and wires nothing. DRAFTS holds the prompts of the waves whose conditions aren't
+designed yet. The design, the axes and the full planned set:
+docs/superpowers/specs/2026-11-10-state-pictures-design.md.
+
+Fields:
+  terrain  the vanilla terrain keys whose list the picture joins
+  tech     the owner's technology that unlocks it (a live check in the weight)
+  rung     its place on its family's technology ladder, 1-9: among the pictures
+           that apply, a higher rung beats everything but a condition
+  region   a family of REGION_GROUPS (city, farm or forest), or None for any region; a
+           group's fallback family also shows in the states of no family, as vanilla's
+           European city picture and its generic farmland do
+  scale    optional key of SCALES: a major port, a colliery (a building's level)
+  over     optional True: the picture takes over another family's terrain (an oil
+           field on farmland) and outranks every rung of that terrain's own pictures
+  size     a key of SIZES, or None for any size (the family's middle picture,
+           which stays the fallback for the sizes not painted yet)
+  where    optional extra state triggers, one a line
+  effect   the animated overlay, required by the engine; a vanilla entity
+  seed     the picked render, or None
+  crop     optional (left, top, right, bottom) on the 1536 x 752 render, to drop a
+           signature or a stray object at an edge; close to 2.04 : 1
+  smudge   optional list of (left, top, right, bottom) boxes on the render, blurred
+           before the crop: a lettered sign where a crop can't reach
+  prompt   the subject; STYLE is appended
+
+Writing a prompt: a picture stands for every state of its region, so it must not
+read as one city. A generic building draws the most famous one of its kind ("a
+domed civic building" drew the United States Capitol in a European street four
+times out of four). Describe a landmark by features that belong to the region and
+to no one building, or leave it out; shop fronts draw lettered signs, so ask for
+plain awnings. PROMPT_AVOID lists those two and the words likely to do the same,
+and test_state_pictures.py fails on a prompt that uses one. The design's section
+10 has the review checks.
+
+The renders are made outside the repo (FLUX.1-schnell at 1536 x 752, seeds
+1000 + seed as the icon pipeline's are); a pick is converted with
+scripts/image_pipeline/convert_state_picture.py, which crops it, gives it a
+painted look and compresses it.
+"""
+
+# The look goes first: CLIP reads only the first 77 tokens of a prompt, and its pooled embedding
+# carries the look. With the style after the subject the renders came out flat and poster-like.
+STYLE = (
+    "A digital matte painting for a grand strategy game, loosely hand-painted with textured brush "
+    "strokes, rich light and deep shadows, a dramatic cloudy sky, soft atmospheric haze in the "
+    "distance, cinematic wide composition"
+)
+TAIL = ", no text, no writing, no lettering on signs, no watermark, no signature"
+
+# Words a prompt must not use. Two are from the pilot's renders: shop fronts came out with
+# lettered signs, and "a domed civic building" drew the United States Capitol. The rest are
+# precautions of the same kind, not yet seen: signs, banners and posters invite lettering, a flag
+# a real country's, a skyline a known one.
+PROMPT_AVOID = (
+    "shop", "shops", "shopfront", "shopfronts", "sign", "signs", "signboard", "signboards", "neon",
+    "billboard", "billboards", "banner", "banners", "flag", "flags", "poster", "posters", "skyline",
+    "shopping", "filling station", "motel", "diner",
+    "civic", "capitol",
+)
+
+# Region families of the city pictures: (state triggers, any one of which puts a state in the
+# family; the family's digit in the weight). Vanilla's seven city families by vanilla's own
+# triggers, with three changes (design section 5): Latin American is the whole
+# geographic_region_latin_america, which adds Mexico and the Caribbean to the five regions of
+# vanilla's is_subtropic_farmland; North American is new and takes Australia and New Zealand; and
+# the digits rank the families where two overlap (in 1.15: Japan lies inside East Asia, and
+# Baluchistan, Pashtunistan and Quetta are in both India and the Middle East).
+REGIONS = {
+    "european": (["is_in_geographic_region = geographic_region_europe"], 1),
+    "north_american": ([
+        "is_in_geographic_region = geographic_region_north_america",
+        "is_in_geographic_region = geographic_region_australasia",
+    ], 2),
+    "latin_american": (["is_in_geographic_region = geographic_region_latin_america"], 3),
+    "african": (["is_in_geographic_region = geographic_region_africa"], 4),
+    "south_asian": (["is_in_geographic_region = geographic_region_india"], 5),
+    "middle_eastern": ([
+        "is_in_geographic_region = geographic_region_middle_east",
+        "is_in_geographic_region = geographic_region_central_asia_old",
+    ], 6),
+    "east_asian": ([
+        "is_in_geographic_region = geographic_region_east_asia",
+        "is_in_geographic_region = geographic_region_south_east_asia",
+    ], 7),
+    "japanese": (["is_in_geographic_region = geographic_region_japan"], 8),
+}
+# The family whose pictures also show in the states of no family (in 1.15: Tibet and the
+# Himalayas, and the Pacific islands), as vanilla's European city picture does.
+FALLBACK_REGION = "european"
+# (the family that wins, the family it overlaps). A rung outranks a family's digit, so the winner
+# needs its own picture wherever the other has one: an East Asian picture of rung 2 wired without
+# the Japanese one would show in Tokyo over Japan's rung 1. The test holds a wave to that.
+REGION_OVERLAPS = (("japanese", "east_asian"), ("middle_eastern", "south_asian"))
+
+# Farmland families: vanilla's four, by vanilla's own scripted triggers. They don't overlap (1.15:
+# 157 Arabic states, which is the Middle East and most of Africa; 68 Asian; 61 subtropic, which is
+# Latin America; 390 generic, India and Oceania among them). The generic family is the states of
+# no other, as in vanilla.
+FARM_REGIONS = {
+    "farm_generic": ([], 1),
+    "farm_arabic": (["is_arabic_farmland = yes"], 2),
+    "farm_asian": (["is_asian_farmland = yes"], 3),
+    "farm_subtropic": (["is_subtropic_farmland = yes"], 4),
+}
+# Forestry: the tropical picture, where the forest is rainforest. No fallback: the conifer picture
+# has no region and stands everywhere else.
+FOREST_REGIONS = {
+    "forest_tropical": ([
+        "is_in_geographic_region = geographic_region_south_east_asia",
+        "is_in_geographic_region = geographic_region_equatorial_africa",
+        "is_in_geographic_region = geographic_region_west_africa",
+        "is_in_geographic_region = geographic_region_central_america",
+        "is_in_geographic_region = geographic_region_gran_colombia",
+        "is_in_geographic_region = geographic_region_brazil",
+        "is_jungle_hills = yes",
+    ], 1),
+}
+# Natural terrain: vanilla's own families, by the triggers its entries use. Plains and mountains
+# have an American and an arid picture (vanilla's "northamerica" pictures show in all the
+# Americas; its arid regions are Africa, the Middle East and Oceania), the desert an American
+# one, the hills a jungle and a subtropic one. None of them overlap in 1.15's region files.
+_AMERICAS = "is_in_geographic_region = geographic_region_americas"
+LAND_REGIONS = {
+    "land_generic": ([], 1),
+    "land_arid": (["is_arid_region = yes"], 2),
+    "land_americas": ([_AMERICAS], 3),
+}
+DESERT_REGIONS = {
+    "desert_generic": ([], 1),
+    "desert_americas": ([_AMERICAS], 2),
+}
+HILL_REGIONS = {
+    "hills_generic": ([], 1),
+    "hills_subtropic": (["is_subtropic_farmland = yes"], 2),
+    "hills_jungle": (["is_jungle_hills = yes"], 3),
+}
+# Every region family by its group; a group's fallback family also takes the states of no family.
+REGION_GROUPS = {"city": REGIONS, "farm": FARM_REGIONS, "forest": FOREST_REGIONS,
+                 "land": LAND_REGIONS, "desert": DESERT_REGIONS, "hills": HILL_REGIONS}
+GROUP_FALLBACK = {"city": FALLBACK_REGION, "farm": "farm_generic",
+                  "land": "land_generic", "desert": "desert_generic", "hills": "hills_generic"}
+
+
+def region_group(region: str) -> str:
+    return next(group for group, families in REGION_GROUPS.items() if region in families)
+
+
+def region_digit(region: str) -> int:
+    return REGION_GROUPS[region_group(region)][region][1]
+
+
+# Scales: the larger or the special kind of a worked-land picture, in the size place of the weight
+# (a picture has a size or a scale, never both). A major port is a Port's level, read live:
+# provisional, from a 1940 save, where 44 of 405 port states have a Port of 20 or more (in 1836
+# the largest is Guangdong's, 15). A colliery is the yearly pass's tag (te_sp_coal: coal is the
+# larger part of the state's mines; common/scripted_effects/te_state_picture_effects.txt).
+PORT_MAJOR_LEVEL = 20
+SCALES = {
+    "major_port": ([f"any_scope_building = {{ is_building_type = building_port level >= {PORT_MAJOR_LEVEL} }}"], 2),
+    "colliery": (["has_variable = te_sp_coal"], 1),
+}
+
+# City sizes, from the yearly pass's state variable te_sp_size (1 town, 2 city,
+# 3 metropolis, 4 megacity; common/scripted_effects/te_state_picture_effects.txt).
+# (trigger lines, the size's digit in the weight)
+SIZES = {
+    "town": (["has_variable = te_sp_size", "var:te_sp_size <= 1"], 1),
+    "metropolis": (["has_variable = te_sp_size", "var:te_sp_size >= 3"], 3),
+    "megacity": (["has_variable = te_sp_size", "var:te_sp_size >= 4"], 4),
+}
+
+# The weight is a number in place value, so the most specific picture that
+# applies wins and nothing ties: rung, then size, then a named region (a megacity's size
+# outranks prosperity, below). The
+# design reserves the places between and above for prosperity, character and
+# conditions. Vanilla's own weights are 1 and 2, so any picture here that
+# applies outranks vanilla's.
+W_RUNG = 100000
+W_SIZE = 10
+W_REGION = 1  # times the family's digit, 1 to 8
+# A picture that takes over another family's terrain (an oil field on farmland) outranks every
+# rung of that terrain's own pictures: "over" in its entry.
+W_OVER = 10000000
+# A city's character (housing blocks, smog) sits between the rung and the size: the right
+# technology still comes first, but a smog-bound metropolis shows the smog.
+W_CHAR = 10000  # times the character's digit
+# Prosperity (design section 6) sits between a city's character and its size: a run-down street
+# over a poor or an affluent one over a town or a metropolis.
+W_UPKEEP = 1000
+W_MEANS = 100  # times the level's digit
+# A megacity has a place of its own between a character and prosperity (the owner, 2026-11-16: a
+# megacity is so large that it should show whatever its people's standard of living, where it had
+# lost to the poor, affluent and run-down streets). A town and a metropolis stay in the size place,
+# under prosperity. Even all of the places under a character added together (1,000 run-down, 300
+# affluent, 30 metropolis, 9 of a region: 1,339) stay under this, and a character's lowest weight
+# (10,000) stays over it.
+W_MEGACITY = 2000
+MEGACITY = "megacity"
+# The yearly pass's tags: te_sp_means is 1 poor, 3 affluent, absent ordinary; te_sp_rundown is
+# present while the standard of living sits well under what the state's people expect.
+MEANS = {
+    "poor": (["has_variable = te_sp_means", "var:te_sp_means <= 1"], 1),
+    "affluent": (["has_variable = te_sp_means", "var:te_sp_means >= 3"], 3),
+}
+UPKEEP = {
+    "rundown": (["has_variable = te_sp_rundown"], 1),
+}
+# A condition (ruins, a nuclear strike) outranks every rung, like a takeover, and the conditions
+# rank among themselves by their digit. Conditions are city pictures and takeovers stand on open
+# land, so they share the place above the rung without meeting. The largest weight stays under
+# 16,777,216, the last whole number a 32-bit float holds exactly, in case the engine keeps a
+# weight in one.
+W_COND = 1000000  # times the condition's digit, on top of W_OVER
+
+# A great city shows as a city whatever terrain the engine holds its state to be (the owner,
+# 2026-11-11). Which terrain prevails is the engine's choice, and it isn't the building levels
+# alone: Singapore, one province with an Urban Center of 405 and no farm, showed rice farmland
+# (scripting_best_practices.md § "State pictures"). So every city picture also joins the list of
+# every other land terrain, there asking for a metropolis or larger, at a weight above that
+# terrain's own rungs and above the oil field. A condition's own weight already stands above
+# that, so the ruins and the strike keep their place among the city pictures.
+CITY_TERRAIN = "urban"
+CITY_TAKEOVER_SIZE = "metropolis"  # from this size up; a town's or a city's state keeps its land
+CITY_TAKEOVER_TERRAINS = [
+    "plains", "forest", "hills", "mountain", "jungle", "wetland", "desert", "tundra", "savanna", "snow", "river",
+    "farmland_rye", "farmland_rice", "farmland_millet", "farmland_wheat", "farmland_maize",
+    "pasture", "plantation", "cleared_land", "mining", "forestry", "docks",
+]  # vanilla's terrains but the city's own and the two of open water (ocean, lakes)
+W_CITY_OVER = 11000000
+
+# Characters and conditions a weight can read live, off the state or its owner.
+# (state trigger lines, the digit in the weight)
+# of POLLUTION_MAX (255): the game shows the player Pollution Impact, this over 255, as a percentage, so the
+# floor is a round 60% (owner, 2026-11-18), also where vanilla's pollution map mode reaches full color
+SMOG_POLLUTION = 153
+RUINS_DEVASTATION = 0.5  # the trigger reads 0 to 1
+CHARACTERS = {
+    "housing_blocks": ([
+        "owner = { has_law = law_type:law_command_economy has_technology_researched = prefabricated_construction }",
+    ], 7),
+    "smog": ([f"state_region = {{ pollution_amount >= {SMOG_POLLUTION} }}"], 3),  # a state region's figure
+    # the yearly pass's tags (common/scripted_effects/te_state_picture_effects.txt), in the design's
+    # order of precedence (section 7): a boomtown over a declining city over a divided one over smog
+    # over heavy industry over a resort
+    "boomtown": (["has_variable = te_sp_boom"], 6),
+    "declining": (["has_variable = te_sp_decline"], 5),
+    "divided": (["has_variable = te_sp_divided"], 4),
+    "industry": (["has_variable = te_sp_industry"], 2),
+    "resort": (["has_variable = te_sp_resort"], 1),
+}
+CONDITIONS = {
+    "nuclear": ([
+        "OR = {",
+        "\thas_modifier = nuclear_strike_aftermath",
+        "\thas_modifier = tactical_nuke_aftermath",
+        "}",
+    ], 3),
+    "devastated": ([f"devastation >= {RUINS_DEVASTATION}"], 2),
+}
+
+PICTURES = {
+    "urban_european_1": {
+        "terrain": ["urban"],
+        "tech": "art_deco_architecture",
+        "rung": 1,
+        "region": "european",
+        "size": None,
+        "effect": "vfx_entity_ui_state_docks",  # NEUTRAL_OVERLAY: birds and mist
+        "seed": 3,
+        "crop": (0, 60, 1410, 751),
+        "prompt": (
+            "A European city street in the early 1930s: five-storey stone apartment buildings "
+            "with plain striped awnings framing both sides, an electric tram on rails in the "
+            "middle distance under overhead wires, a few rounded 1930s automobiles, pedestrians "
+            "in coats and hats on the pavements, iron street lamps, a baroque church with a green "
+            "copper dome and twin bell towers hazy at the end of the street"
+        ),
+    },
+    "urban_european_1_metropolis": {
+        "terrain": ["urban"],
+        "tech": "art_deco_architecture",
+        "rung": 1,
+        "region": "european",
+        "size": "metropolis",
+        "effect": "vfx_entity_ui_state_docks",  # NEUTRAL_OVERLAY: birds and mist
+        "seed": 3,
+        "crop": (146, 60, 1390, 670),
+        "prompt": (
+            "The center of a great European metropolis in the 1930s seen along a wide "
+            "boulevard: tall stone and art deco office buildings and department stores of ten "
+            "to fifteen storeys stepping back into haze, dense traffic of 1930s automobiles "
+            "and double-deck buses, trams, crowds on broad pavements, an iron railway viaduct "
+            "crossing the street in the distance, chimney smoke drifting over the roofs"
+        ),
+    },
+    "docks_1": {
+        "terrain": ["docks"],
+        "tech": "modern_tools",
+        "rung": 1,
+        "region": None,
+        "size": None,
+        # vanilla's docks weight is a flat 1 in a one-province state, port or not, and its picture
+        # there is the dry plain: the port picture asks for a port, as vanilla's does
+        "where": ["has_building = building_port"],
+        "effect": "vfx_entity_ui_state_docks",
+        "seed": 3,
+        "crop": (0, 0, 1510, 740),
+        "smudge": [(1066, 526, 1102, 562)],
+        "prompt": (
+            "A large seaport in the 1930s: a black-hulled ocean liner with two funnels moored "
+            "at a concrete quay, a row of tall steel dockside cranes on rails, brick "
+            "warehouses, railway wagons, stacked crates and barrels in the foreground, a "
+            "tugboat on grey-green water, steam and smoke drifting"
+        ),
+    },
+    "mining_1": {
+        "terrain": ["mining"],
+        "tech": "modern_tools",
+        "rung": 1,
+        "region": None,
+        "size": None,
+        "effect": "vfx_entity_ui_state_mining",
+        "seed": 3,
+        "prompt": (
+            "A large open-pit mine in the 1930s in a dry hilly landscape: terraced benches cut "
+            "into the earth, a huge dragline excavator with a long lattice boom at work, a "
+            "steam shovel loading ore wagons behind a small locomotive, heavy dump trucks on "
+            "a dirt haul road, dark spoil heaps, dust in the air, hazy hills behind"
+        ),
+    },
+}
+
+# --- The city tier of the core grid (design section 9, wave 2): the middle picture of each
+# region family on each rung of the city ladder. Planned art until an entry has a seed.
+
+CITY_LADDER = {
+    1: ("art_deco_architecture", "in the early 1930s"),
+    2: ("modern_urban_planning", "around 1960"),
+    3: ("computer_aided_design", "around 1990"),
+    4: ("advanced_structural_engineering", "in the 2030s"),
+    5: ("vactrains", "in the late twenty-first century"),
+}
+
+# The animated overlay of each family's city pictures. Two of vanilla's city overlays carry
+# effects placed for vanilla's own painting: the European one two smoke plumes over its chimneys,
+# the Asian one two lines of surf on its shore. On another painting they sit in mid-air (the
+# owner, in game, 2026-11-10: "the smoke effect is in the wrong place"), so those families take
+# the port's overlay, which is birds and drifting mist and fits any picture. The Latin American,
+# African and Arabic overlays are leaves, mist, dust and heat shimmer, and stay.
+NEUTRAL_OVERLAY = "vfx_entity_ui_state_docks"
+PLACED_OVERLAYS = ("vfx_entity_ui_state_urban_european", "vfx_entity_ui_state_urban_asian")
+CITY_EFFECT = {
+    "european": NEUTRAL_OVERLAY,
+    "north_american": NEUTRAL_OVERLAY,
+    "latin_american": "vfx_entity_ui_state_urban_latin_american",
+    "african": "vfx_entity_ui_state_urban_african",
+    "south_asian": "vfx_entity_ui_state_urban_arabic",
+    "middle_eastern": "vfx_entity_ui_state_urban_arabic",
+    "east_asian": NEUTRAL_OVERLAY,
+    "japanese": NEUTRAL_OVERLAY,
+}
+
+# One landmark a family, at the end of the street on every rung, so a state's banner reads as the
+# same place later while the street around it changes. Each is a kind of building many cities of
+# the region have, described by features that fit no one of them (see "Writing a prompt").
+CITY_LANDMARK = {
+    "european": "a baroque church with a green copper dome and twin bell towers",
+    "north_american": "a red sandstone courthouse with a square clock tower",
+    "latin_american": "a white colonial church with two bell towers on a small plaza",
+    "african": "a whitewashed market hall with a long arcade and a small clock turret",
+    "south_asian": "a red sandstone clock tower with small domed kiosks at its corners",
+    "middle_eastern": "a sand-colored stone mosque with a single dome and one slender minaret",
+    "east_asian": "a many-tiered octagonal brick pagoda",
+    "japanese": "a white-walled castle keep with grey tiled roofs on a stone base",
+}
+
+# The last rung is era 12 (general AI, nanofabrication, orbital industry, the vactrain), and the
+# owner asked that it look it (2026-11-10: "the far future could look more futuristic, given the
+# technologies in the last couple eras"). Its streets lead with the megastructures, flying craft and
+# robots, keep the family's old quarter and landmark small beneath them, and end with this.
+CITY_FAR_FUTURE_SKY = ", a spacecraft climbing on a thin white trail in the far sky"
+
+# Vehicles: a date in the sentence ("around 1960") doesn't date the cars, which come out as the
+# 2000s' unless the vehicles themselves carry a decade ("rounded 1950s cars"). The 1960 streets
+# whose cars had one rendered in period; the two that didn't (European, Japanese) had modern
+# cars in all four candidates and were reworded.
+# {(region, rung): the street, without its date and landmark}. "{when}" is the rung's date.
+CITY_STREETS = {
+    ("european", 2): (
+        "A European city avenue {when}: plain concrete and glass slab office blocks of eight to "
+        "twelve storeys rising beside older five-storey stone apartment buildings, a wide asphalt "
+        "road of small rounded 1950s cars, a rounded 1950s single-deck bus and a streamlined tram "
+        "under overhead wires, pedestrians in raincoats and hats, tall lamp posts"
+    ),
+    ("european", 3): (
+        "A European city avenue {when}: mirrored curtain-wall office towers of twenty storeys "
+        "behind a row of restored stone apartment buildings, a paved pedestrian zone with young "
+        "trees and plain parasols, boxy 1980s cars and an articulated bus on a multi-lane road, a "
+        "concrete flyover crossing in the middle distance"
+    ),
+    ("european", 4): (
+        "A European city avenue {when}: slender glass and timber towers with planted terraces "
+        "behind restored stone apartment buildings, a sleek low-floor tram on a grassed track, "
+        "smooth electric cars, many cyclists on a wide cycle lane, mature street trees, solar "
+        "panels on the roofs"
+    ),
+    ("european", 5): (
+        "A far-future European city {when}: colossal smooth white arcology towers a kilometre "
+        "high, joined by sky bridges and wrapped in hanging gardens, rising behind preserved "
+        "old stone apartment buildings, flying passenger craft crossing between the towers, a "
+        "transparent vacuum-train tube on slender pylons, humanoid robots and people strolling "
+        "a car-free street of trees, small pod vehicles"
+    ),
+    ("north_american", 1): (
+        "A North American city main street {when}: brick and limestone commercial buildings of "
+        "four to ten storeys with iron fire escapes and plain striped awnings, wooden water tanks "
+        "on the rooftops, a streetcar on rails under overhead wires, boxy 1930s automobiles parked "
+        "at the kerb, wooden utility poles, pedestrians in hats and overcoats"
+    ),
+    ("north_american", 2): (
+        "A North American city main street {when}: flat-roofed glass and steel office slabs of "
+        "fifteen storeys beside older brick blocks with fire escapes, a very wide street of long "
+        "finned automobiles and a silver bus, open parking lots, traffic lights hung over the "
+        "road, an elevated concrete freeway crossing in the middle distance"
+    ),
+    ("north_american", 3): (
+        "A North American downtown street {when}: a cluster of dark glass curtain-wall office "
+        "towers of thirty storeys above a multi-storey concrete parking garage and a few old brick "
+        "blocks, a wide one-way street of boxy sedans, pickup trucks and a city bus, a freeway "
+        "interchange on concrete stilts in the middle distance"
+    ),
+    ("north_american", 4): (
+        "A North American downtown street {when}: tapering glass towers with sky gardens above "
+        "converted old brick blocks, a light-rail train running down the planted median, electric "
+        "pickup trucks and small driverless shuttles, a row of street trees and a cycle lane where "
+        "a traffic lane was, solar arrays on the rooftops"
+    ),
+    ("north_american", 5): (
+        "A far-future North American city {when}: a wall of kilometre-high stepped arcology "
+        "towers with forested setbacks and landing decks, swarms of small flying craft between "
+        "them, a transparent vacuum-train tube on tall pylons along the line of a former "
+        "freeway, old brick blocks kept as a historic district, humanoid robots and people on a "
+        "car-free street of trees, small pod vehicles"
+    ),
+    ("latin_american", 1): (
+        "A Latin American city street {when}: two- and three-storey colonial houses in ochre, "
+        "pink and white with wrought-iron balconies and red tile roofs, a few new art deco "
+        "fronts, a small electric tram, 1930s automobiles and a mule cart, palm trees, people in "
+        "white suits and straw hats, green hills behind"
+    ),
+    ("latin_american", 2): (
+        "A Latin American city avenue {when}: white modernist concrete apartment blocks raised on "
+        "columns with sun-screen grilles beside old colonial houses with red tile roofs, a wide "
+        "avenue with a median of palm trees, rounded 1950s cars and brightly painted buses, "
+        "people in light summer clothes, green hills behind"
+    ),
+    ("latin_american", 3): (
+        "A Latin American city avenue {when}: concrete and glass towers of twenty storeys above "
+        "old colonial fronts, dense traffic of small hatchbacks, minibuses and motorcycles, a "
+        "tangle of overhead cables, street vendors under plain parasols, a hillside covered in "
+        "small brick houses in the distance"
+    ),
+    ("latin_american", 4): (
+        "A Latin American city avenue {when}: glass towers with green terraces above colonial "
+        "fronts restored in bright colors, cable-car gondolas crossing high above the street "
+        "toward a hillside of houses, long electric articulated buses in their own lane, palm "
+        "trees, cyclists and walkers"
+    ),
+    ("latin_american", 5): (
+        "A far-future Latin American city {when}: gigantic terraced arcology towers overgrown "
+        "with tropical gardens and waterfalls rising a kilometre from the valley, flying "
+        "passenger craft between them, a transparent vacuum-train tube crossing on white "
+        "pylons, preserved colonial houses with red tile roofs, humanoid robots and people on a "
+        "car-free street of palms, small pod vehicles, green hills behind"
+    ),
+    ("african", 1): (
+        "A city street in colonial-era Africa {when}: whitewashed two-storey arcaded buildings "
+        "with verandas and corrugated iron roofs, a busy open-air market under plain cloth "
+        "awnings, bicycles, a few 1930s trucks and motor cars, people in flowing robes and in "
+        "light suits, palm and acacia trees, red earth at the roadside"
+    ),
+    ("african", 2): (
+        "An African city avenue {when}: new white concrete modernist office blocks of six to ten "
+        "storeys with sun-screen facades beside older arcaded buildings, a wide paved avenue "
+        "lined with red-blossomed flame trees, rounded 1950s cars, minibuses and many bicycles, "
+        "crowds in bright printed cloth"
+    ),
+    ("african", 3): (
+        "An African city avenue {when}: weathered concrete office towers of fifteen to twenty "
+        "storeys, a crowded street of minibus taxis, motorcycles and hand carts, market stalls "
+        "under plain parasols along the pavement, a tangle of power lines, crowds in bright "
+        "printed cloth, red dust in the air"
+    ),
+    ("african", 4): (
+        "An African city avenue {when}: new glass towers and construction cranes above older "
+        "concrete blocks, a sleek light-rail train on an elevated viaduct, electric motorcycle "
+        "taxis and buses, market stalls shaded by solar-panel canopies, flame trees, crowds in "
+        "bright printed cloth"
+    ),
+    ("african", 5): (
+        "A far-future African city {when}: soaring kilometre-high arcology towers of pale "
+        "concrete and glass patterned like woven cloth and hung with gardens, flying passenger "
+        "craft between them, a transparent vacuum-train tube on slender pylons, a car-free "
+        "market street of acacia trees and bright stalls, humanoid robots carrying goods among "
+        "the crowd, small pod vehicles"
+    ),
+    ("south_asian", 1): (
+        "A South Asian city bazaar street {when}: three-storey buildings with carved wooden "
+        "balconies over arcades and plain cloth awnings, an electric tram, bullock carts, hand-"
+        "pulled rickshaws and a few 1930s motor cars, a dense crowd in white cotton, turbans and "
+        "bright saris, a spreading banyan tree"
+    ),
+    ("south_asian", 2): (
+        "A South Asian city street {when}: plain concrete blocks of four to six storeys and one "
+        "modernist office building beside older houses with carved balconies, rounded 1950s cars, "
+        "crowded buses, cycle rickshaws and a great many bicycles, overhead wires, a dense crowd "
+        "in white cotton and bright saris"
+    ),
+    ("south_asian", 3): (
+        "A South Asian city street {when}: concrete apartment and office blocks of ten storeys "
+        "streaked by monsoon rain, three-wheeled auto rickshaws, motor scooters and crowded buses "
+        "filling the road, a tangle of overhead cables, stalls under plain parasols, a dense "
+        "crowd in bright clothes"
+    ),
+    ("south_asian", 4): (
+        "A South Asian city street {when}: a sleek metro train on a concrete viaduct running "
+        "above the middle of the street, glass office towers behind older concrete blocks, "
+        "electric auto rickshaws and scooters, shade trees, stalls under plain parasols, a dense "
+        "crowd in bright clothes"
+    ),
+    ("south_asian", 5): (
+        "A far-future South Asian city {when}: immense kilometre-high arcology towers faced "
+        "with carved stone lattice and hanging gardens rising above a preserved old bazaar "
+        "quarter, swarms of small flying craft, a transparent vacuum-train tube on tall pylons, "
+        "a car-free street of banyan trees and bright stalls, humanoid robots among a dense "
+        "crowd, small pod vehicles"
+    ),
+    ("middle_eastern", 1): (
+        "A Middle Eastern city street {when}: flat-roofed stone and plaster buildings of two and "
+        "three storeys with wooden lattice bay windows, the arched entrance of a covered bazaar "
+        "under plain cloth awnings, donkey carts, a few 1930s motor cars and a small bus, men in "
+        "robes and in suits, date palms, dry hills behind"
+    ),
+    ("middle_eastern", 2): (
+        "A Middle Eastern city boulevard {when}: new concrete apartment blocks of six storeys "
+        "with deep balconies and plain awnings, a wide boulevard with a median of date palms, "
+        "rounded 1950s cars and buses, the flat roofs of the old quarter behind, construction "
+        "cranes, dry hills in the haze"
+    ),
+    ("middle_eastern", 3): (
+        "A Middle Eastern city boulevard {when}: concrete and glass towers of twenty storeys "
+        "above sand-colored apartment blocks with satellite dishes on their flat roofs, a multi-"
+        "lane boulevard lined with date palms, boxy sedans, pickup trucks and buses, heat haze "
+        "over dry hills"
+    ),
+    ("middle_eastern", 4): (
+        "A Middle Eastern city boulevard {when}: tall glass towers wrapped in geometric lattice "
+        "sun screens, a pedestrian street shaded by white fabric canopies, a driverless tram, "
+        "smooth electric cars, rows of date palms, fields of solar panels on the dry hills "
+        "behind"
+    ),
+    ("middle_eastern", 5): (
+        "A far-future Middle Eastern city {when}: vast sand-colored arcology towers a kilometre "
+        "high with shaded courtyards, wind towers and hanging gardens, flying passenger craft "
+        "between them, a transparent vacuum-train tube on slender pylons, a car-free street of "
+        "date palms and water channels, humanoid robots and people in robes, small pod vehicles"
+    ),
+    ("east_asian", 1): (
+        "An East Asian city street {when}: two- and three-storey arcaded row houses with grey "
+        "tiled roofs and plain cloth awnings, a few stone-fronted Western-style bank buildings, "
+        "hand-pulled rickshaws, bicycles, an electric tram and a few 1930s motor cars, people in "
+        "long gowns and in Western suits"
+    ),
+    ("east_asian", 2): (
+        "An East Asian city avenue {when}: plain brick and concrete blocks of four to six storeys "
+        "along a wide avenue with rows of plane trees, a great many bicycles, a few trucks and "
+        "buses and a trolleybus under overhead wires, people in plain work clothes, factory "
+        "chimneys in the distance"
+    ),
+    ("east_asian", 3): (
+        "An East Asian city avenue {when}: white-tiled concrete towers of twenty storeys and "
+        "construction cranes above the last rows of old tiled-roof houses, an elevated expressway "
+        "crossing the street, streams of bicycles and motor scooters among buses and boxy taxis"
+    ),
+    ("east_asian", 4): (
+        "An East Asian city avenue {when}: a dense forest of glass towers, elevated expressways "
+        "and footbridges stacked above the street, a sleek high-speed train on a viaduct in the "
+        "middle distance, electric scooters and cars, rows of ginkgo trees"
+    ),
+    ("east_asian", 5): (
+        "A far-future East Asian city {when}: colossal kilometre-high arcology towers with "
+        "sweeping tiled eaves and hanging gardens rising in ranks into the haze, streams of "
+        "small flying craft between them, a transparent vacuum-train tube on tall pylons, a "
+        "car-free street of ginkgo trees, humanoid robots and people, small pod vehicles"
+    ),
+    ("japanese", 1): (
+        "A Japanese city street {when}: two-storey wooden town houses with grey tiled roofs and "
+        "plain indigo door curtains, a few modern brick and concrete buildings of five storeys, "
+        "an electric tram, bicycles, a rickshaw and a few 1930s motor cars, people in kimono and "
+        "in Western suits and hats, wooden utility poles strung with many wires"
+    ),
+    ("japanese", 2): (
+        "A Japanese city street {when}: plain concrete office buildings of six to nine storeys "
+        "among the last tiled wooden houses, a street of small three-wheeled 1950s trucks, tiny "
+        "rounded 1950s cars, a tram and rounded 1950s buses, utility poles strung with dense "
+        "wires, a blunt-nosed express train on an elevated concrete viaduct in the middle distance"
+    ),
+    ("japanese", 3): (
+        "A Japanese city street {when}: tile-clad and glass office towers of twenty to thirty "
+        "storeys, two elevated expressways stacked above the street, compact boxy cars and taxis, "
+        "office workers with umbrellas on narrow pavements, utility poles and wires, a monorail "
+        "on a single concrete beam in the middle distance"
+    ),
+    ("japanese", 4): (
+        "A Japanese city street {when}: slender glass towers with timber lattice facades and "
+        "rooftop gardens, a long-nosed magnetic levitation train on a high viaduct in the middle "
+        "distance, small electric cars and delivery robots, a narrow lane of low tiled houses "
+        "kept between the towers, maple trees"
+    ),
+    ("japanese", 5): (
+        "A far-future Japanese city {when}: immense kilometre-high timber-latticed arcology "
+        "towers with tiled eaves and terraced gardens of pine and maple, small flying craft "
+        "between them, a transparent vacuum-train tube on slender pylons, a car-free street of "
+        "low tiled houses kept at the towers' feet, humanoid robots and people, small pod "
+        "vehicles"
+    ),
+}
+
+# The picked render of each city picture, with the boxes that drop or blur its lettering. Seed 2
+# often leaves a dark strip of 9 to 25 pixels along the bottom of a render; its picks crop it off
+# (the converter refuses a picture with one).
+CITY_PICKS = {
+    "urban_european_2": {"seed": 3, "smudge": [(8, 534, 62, 580), (1340, 630, 1408, 676)]},
+    "urban_european_3": {"seed": 3},
+    "urban_european_4": {"seed": 3},
+    "urban_north_american_1": {"seed": 0, "crop": (30, 0, 1480, 711),
+                               "smudge": [(1290, 480, 1335, 530), (760, 238, 786, 262)]},
+    "urban_north_american_2": {"seed": 1},
+    "urban_north_american_3": {"seed": 1, "crop": (160, 0, 1536, 675), "smudge": [(430, 558, 530, 582)]},
+    "urban_north_american_4": {"seed": 0},
+    "urban_latin_american_1": {"seed": 2, "crop": (30, 0, 1507, 724)},
+    "urban_latin_american_2": {"seed": 0},
+    "urban_latin_american_3": {"seed": 0, "crop": (0, 15, 1490, 745), "smudge": [(1285, 440, 1356, 536)]},
+    "urban_latin_american_4": {"seed": 2},
+    "urban_african_1": {"seed": 0},
+    "urban_african_2": {"seed": 0, "smudge": [(308, 158, 356, 184), (52, 488, 108, 506)]},
+    "urban_african_3": {"seed": 2, "crop": (30, 0, 1507, 724)},
+    "urban_african_4": {"seed": 2, "crop": (30, 0, 1507, 724)},
+    "urban_south_asian_1": {"seed": 2, "crop": (30, 0, 1507, 724)},
+    "urban_south_asian_2": {"seed": 3},
+    "urban_south_asian_3": {"seed": 3},
+    "urban_south_asian_4": {"seed": 3, "crop": (0, 15, 1476, 739)},
+    "urban_middle_eastern_1": {"seed": 1},
+    "urban_middle_eastern_2": {"seed": 1},
+    "urban_middle_eastern_3": {"seed": 3},
+    "urban_middle_eastern_4": {"seed": 0, "crop": (50, 14, 1536, 742)},
+    "urban_east_asian_1": {"seed": 1, "smudge": [(1250, 480, 1312, 528), (1432, 458, 1522, 490),
+                                                 (1128, 472, 1178, 520), (1445, 625, 1502, 697)]},
+    "urban_east_asian_2": {"seed": 2, "crop": (30, 0, 1507, 724)},
+    "urban_east_asian_3": {"seed": 0},
+    "urban_east_asian_4": {"seed": 0, "crop": (30, 0, 1458, 700)},
+    "urban_japanese_1": {"seed": 3, "smudge": [(1212, 470, 1258, 605), (652, 500, 672, 560), (955, 490, 982, 560)]},
+    "urban_japanese_2": {"seed": 2, "crop": (30, 0, 1507, 724)},
+    "urban_japanese_3": {"seed": 2, "crop": (30, 0, 1507, 724)},
+    "urban_japanese_4": {"seed": 0},
+    # the last rung, from the second set of renders (the bolder prompts)
+    "urban_european_5": {"seed": 0},
+    "urban_north_american_5": {"seed": 0, "smudge": [(40, 446, 150, 468)]},
+    "urban_latin_american_5": {"seed": 0},
+    "urban_african_5": {"seed": 3, "crop": (110, 0, 1536, 698)},  # drops a big wheel's arc at the left edge
+    "urban_south_asian_5": {"seed": 0},
+    "urban_middle_eastern_5": {"seed": 3},
+    "urban_east_asian_5": {"seed": 0},
+    "urban_japanese_5": {"seed": 3},
+}
+
+for (_region, _rung), _street in CITY_STREETS.items():
+    _tech, _when = CITY_LADDER[_rung]
+    PICTURES[f"urban_{_region}_{_rung}"] = {
+        "terrain": ["urban"],
+        "tech": _tech,
+        "rung": _rung,
+        "region": _region,
+        "size": None,
+        "effect": CITY_EFFECT[_region],
+        "seed": None,
+        **CITY_PICKS.get(f"urban_{_region}_{_rung}", {}),
+        "prompt": (f"{_street.format(when=_when)}, {CITY_LANDMARK[_region]} hazy at the end of the street"
+                   + (CITY_FAR_FUTURE_SKY if _rung == 5 else "")),
+    }
+
+# --- Drafts for the later waves (design section 9). A draft is a prompt with the technology
+# and rung it belongs to and, in plain words, when it should show. It is not in PICTURES, so it
+# wires nothing and takes no place in the weights; its conditions and its place in the weight are
+# settled when its wave is built, and the entry moves to PICTURES then. full_prompt() reads both,
+# so a draft can be rendered and reviewed before that.
+#   family   the group it is reviewed with
+#   terrain  the vanilla terrains whose lists it is meant to join
+#   like     vanilla's picture of the same subject, for the review sheet
+#   shows    when it should show, beyond its technology (plain words, not script)
+
+WHEN = {  # a technology's date in a prompt, by its era
+    "modern_tools": "in the 1930s", "modern_chemical_processes": "in the 1930s",
+    "rural_electrification": "in the 1930s",
+    "integrated_circuits": "around 1960", "green_revolution": "around 1960",
+    "containerization": "around 1980", "robotics": "around 1980", "microprocessor": "around 1980",
+    "supply_chain_management": "around 2000", "hydraulic_fracturing": "around 2000",
+    "internet_of_things": "in the 2020s",
+    "autonomous_vehicles": "in the 2040s", "synthetic_biology": "in the 2040s",
+    **{tech: when for tech, when in CITY_LADDER.values()},
+}
+
+FARMLAND = ["farmland_rye", "farmland_rice", "farmland_millet", "farmland_wheat", "farmland_maize"]
+# Oil fields have no terrain of their own: the engine picks a state's terrain before any picture
+# is weighed, so their pictures join the lists of the land they stand on.
+OPEN_LAND = ["plains", "desert", "savanna", "tundra", "hills", *FARMLAND, "pasture"]
+
+
+def _draft(family, terrain, like, tech, rung, shows, prompt):
+    return {"family": family, "terrain": terrain, "like": like, "tech": tech, "rung": rung,
+            "shows": shows, "prompt": prompt.format(when=WHEN[tech])}
+
+
+DRAFTS = {
+    # ---- Wave 3: worked land ------------------------------------------------------------------
+    # Ports. docks_1 (the pilot) is the major port of rung 1.
+    "docks_harbor_1": _draft(
+        "port", ["docks"], "docks", "modern_tools", 1, "a Port below the major port's level",
+        "A small fishing and coasting harbor {when}: a stone breakwater and a short quay, steam "
+        "trawlers and wooden fishing boats, a small coastal steamer unloading under a single hand "
+        "crane, nets drying on poles, stacked fish crates, low stone warehouses and cottages "
+        "behind, gulls, a small white lighthouse at the end of the breakwater"),
+    "docks_harbor_2": _draft(
+        "port", ["docks"], "docks", "containerization", 2, "a Port below the major port's level",
+        "A small harbor {when}: steel trawlers and a small coastal freighter at a concrete quay, "
+        "a mobile crane on tyres, a few plain steel shipping containers stacked two high, a cold-"
+        "store shed, round fuel tanks, trucks, a breakwater with a small white lighthouse, gulls"),
+    "docks_harbor_3": _draft(
+        "port", ["docks"], "docks", "supply_chain_management", 3, "a Port below the major port's level",
+        "A small harbor {when}: a roll-on roll-off ferry with its bow ramp down and trucks "
+        "driving off, a marina of white yachts, a few steel trawlers, one harbor crane, a low "
+        "glass terminal building, plain steel containers in a small stack, a breakwater with a "
+        "small white lighthouse"),
+    "docks_harbor_4": _draft(
+        "port", ["docks"], "docks", "autonomous_vehicles", 4, "a Port below the major port's level",
+        "A futuristic small harbor {when}: sleek white autonomous cargo vessels with smooth "
+        "windowless hulls, no masts and no wheelhouse, gliding to a quay, a hydrofoil passenger "
+        "ferry riding above the water, a slender white robotic crane arm, curved harbor sheds "
+        "roofed in dark solar glass, small cargo drones overhead, rows of seaweed-farm buoys in "
+        "the bay, white offshore wind turbines on the horizon, a breakwater with a small white "
+        "lighthouse"),
+    "docks_2": _draft(
+        "port", ["docks"], "docks", "containerization", 2, "a major Port",
+        "A large container port {when}: a container ship stacked with plain unmarked steel boxes "
+        "in rust red, blue and green at a long concrete quay, tall gantry cranes lifting boxes, "
+        "straddle carriers, long rows of stacked containers, railway tracks and trucks, an oil "
+        "tanker waiting offshore, haze over the water"),
+    "docks_3": _draft(
+        "port", ["docks"], "docks", "supply_chain_management", 3, "a major Port",
+        "A vast container terminal {when}: two enormous container ships under a long row of giant "
+        "gantry cranes, unmanned stacking cranes straddling endless blocks of plain colored steel "
+        "boxes, driverless carriers on marked lanes, double-stacked container trains, warehouses "
+        "reaching to the horizon"),
+    "docks_4": _draft(
+        "port", ["docks"], "docks", "autonomous_vehicles", 4, "a major Port",
+        "A futuristic automated container port {when}: a huge low cargo ship stacked high with "
+        "plain colored steel boxes, with no bridge and no funnel and four tall rigid white wing "
+        "sails standing along its deck, rows of slender white robotic gantry cranes with no cabs "
+        "lifting boxes, flat driverless electric carriers in convoy, cargo drones overhead, long "
+        "blocks of stacked steel boxes, no people anywhere, offshore wind turbines on the horizon"),
+
+    # Mines. mining_1 (the pilot) is the open pit of rung 1.
+    "mining_2": _draft(
+        "mine", ["mining"], "mining", "robotics", 2, "",
+        "A huge open-pit mine {when}: terraced benches spiralling down into the earth, giant "
+        "yellow haul trucks with wheels taller than a man, electric rope shovels, a concrete "
+        "crushing and sorting plant fed by long covered conveyors, grey spoil heaps, dust in the "
+        "air, hazy hills behind"),
+    "mining_3": _draft(
+        "mine", ["mining"], "mining", "internet_of_things", 3, "",
+        "A remote-run open-pit mine {when}: a convoy of huge driverless haul trucks with no cabs "
+        "on the haul road, autonomous drill rigs on the benches, sensor masts and antenna towers "
+        "on the rim, a low white control building beside a field of solar panels, covered "
+        "conveyors, no people in sight"),
+    "mining_deep_1": _draft(
+        "mine", ["mining"], "mining", "modern_tools", 1, "coal mines are the larger part of the state's mines",
+        "A coal mining town {when}: steel headframes with spoked winding wheels over the shafts, "
+        "brick engine houses, tall chimneys pouring smoke, conical black slag heaps, long rows of "
+        "loaded coal wagons, terraces of miners' houses under a sooty sky"),
+    "mining_deep_2": _draft(
+        "mine", ["mining"], "mining", "robotics", 2, "coal mines are the larger part of the state's mines",
+        "A modern colliery {when}: square concrete winding towers, a coal washing plant with "
+        "covered conveyors running between its buildings, a long coal train loading under a "
+        "bunker, half-grassed slag heaps, the cooling towers of a power station in the haze"),
+    "mining_deep_3": _draft(
+        "mine", ["mining"], "mining", "internet_of_things", 3, "coal mines are the larger part of the state's mines",
+        "A deep mine {when}: one sleek enclosed shaft tower, an electric freight train loading "
+        "automatically under a silo, old spoil heaps reclaimed with young trees and fields of "
+        "solar panels, sensor masts, a few workers in bright jackets"),
+
+    # Oil fields. No terrain of their own.
+    "oil_1": _draft(
+        "oil", OPEN_LAND, "plains_arid", "modern_chemical_processes", 1, "Oil Rigs dominate the state",
+        "An oil field {when}: a forest of wooden and steel lattice derricks crowded across a "
+        "dusty plain, nodding pumpjacks, riveted storage tanks, pipelines on trestles, a gas "
+        "flare, tank wagons on a rail siding, pools of black mud, workers' shacks, dark smoke"),
+    "oil_2": _draft(
+        "oil", OPEN_LAND, "plains_arid", "integrated_circuits", 2, "Oil Rigs dominate the state",
+        "An oil field {when}: tall steel drilling rigs spaced across a dry plain, rows of "
+        "pumpjacks, silver spherical and cylindrical tanks, a small refinery with distillation "
+        "columns and a burning flare stack, pipelines running to the horizon, tanker trucks"),
+    "oil_3": _draft(
+        "oil", OPEN_LAND, "plains_arid", "hydraulic_fracturing", 3, "Oil Rigs dominate the state",
+        "A shale oil field {when}: square gravel well pads dotted across a rolling plain, each "
+        "with a slim drilling rig, ranks of pump trucks and water tanks, pumpjacks, small gas "
+        "flares, a grid of dirt roads and a buried pipeline's scar running to the horizon"),
+
+    # Farmland: vanilla's four families.
+    "farmland_generic_1": _draft(
+        "farm", FARMLAND, "farmland_generic", "rural_electrification", 1, "vanilla's generic farmland family",
+        "Temperate farmland {when}: a patchwork of wheat fields and hedgerows, a small grey "
+        "tractor pulling a reaper-binder while a team of horses works the next field, a "
+        "farmstead with a barn, a new line of wooden electricity poles along the lane, "
+        "haystacks, a wind pump, a village steeple far off"),
+    "farmland_generic_2": _draft(
+        "farm", FARMLAND, "farmland_generic", "green_revolution", 2, "vanilla's generic farmland family",
+        "Temperate farmland {when}: broad hedgeless fields of golden wheat, a row of red combine "
+        "harvesters unloading into trucks, tall cylindrical grain silos beside the farmstead, "
+        "irrigation sprinklers on a green field, a small biplane spraying low over the crop"),
+    "farmland_generic_3": _draft(
+        "farm", FARMLAND, "farmland_generic", "microprocessor", 3, "vanilla's generic farmland family",
+        "Temperate farmland {when}: enormous fields to the horizon, huge articulated tractors "
+        "drawing wide implements, a long center-pivot irrigation arm on wheels, clusters of big "
+        "steel grain bins, long low livestock sheds, a line of pylons crossing the land"),
+    "farmland_generic_4": _draft(
+        "farm", FARMLAND, "farmland_generic", "autonomous_vehicles", 4, "vanilla's generic farmland family",
+        "Temperate farmland {when}: cabless autonomous harvesters and swarms of small field "
+        "robots working strips of different crops, drones overhead, tall wind turbines, solar "
+        "panels raised over a field of vegetables, a small barn with a mast of antennas"),
+    "farmland_arabic_1": _draft(
+        "farm", FARMLAND, "farmland_arabic", "rural_electrification", 1, "vanilla's Arabic farmland family (the Middle East and most of Africa)",
+        "Irrigated farmland in a hot dry country {when}: small plots of wheat and cotton between "
+        "mud-walled water channels, date palms, a diesel pump house beside an old wooden water "
+        "wheel, an early tractor and a pair of oxen ploughing, a flat-roofed mud-brick village, "
+        "donkeys, bare hills behind"),
+    "farmland_arabic_2": _draft(
+        "farm", FARMLAND, "farmland_arabic", "green_revolution", 2, "vanilla's Arabic farmland family (the Middle East and most of Africa)",
+        "Irrigated farmland in a hot dry country {when}: long straight concrete canals with "
+        "sluice gates, large green fields of cotton and wheat against tawny desert, tractors, "
+        "sprinklers, a village with a concrete water tower and grain silos, groves of date palms"),
+    "farmland_arabic_3": _draft(
+        "farm", FARMLAND, "farmland_arabic", "microprocessor", 3, "vanilla's Arabic farmland family (the Middle East and most of Africa)",
+        "Desert farmland {when} seen from a rise: great green circles of center-pivot fields on "
+        "tawny sand, long rows of plastic greenhouses, date palms planted in grids, pump "
+        "stations and pipelines, trucks on a straight road, bare hills in the heat haze"),
+    "farmland_arabic_4": _draft(
+        "farm", FARMLAND, "farmland_arabic", "autonomous_vehicles", 4, "vanilla's Arabic farmland family (the Middle East and most of Africa)",
+        "Desert farmland {when}: canals roofed with solar panels, drip-irrigated fields tended "
+        "by cabless autonomous tractors, white shade-net houses, a desalination plant with "
+        "pipelines, groves of date palms, drones overhead, bare hills in the heat haze"),
+    "farmland_asian_1": _draft(
+        "farm", FARMLAND, "farmland_asian", "rural_electrification", 1, "vanilla's Asian farmland family",
+        "Rice paddies {when}: flooded fields between narrow earth dikes, farmers in conical hats "
+        "transplanting seedlings by hand, water buffalo, a small diesel pump, a new line of "
+        "electricity poles along a dike, a village of tiled and thatched roofs in a bamboo grove, "
+        "misty hills"),
+    "farmland_asian_2": _draft(
+        "farm", FARMLAND, "farmland_asian", "green_revolution", 2, "vanilla's Asian farmland family",
+        "Rice paddies {when}: wide regular fields of bright green rice, farmers in conical hats "
+        "behind two-wheeled walking tractors, concrete irrigation canals with sluice gates, "
+        "threshing machines on a drying yard, a village of tin and tile roofs, misty hills"),
+    "farmland_asian_3": _draft(
+        "farm", FARMLAND, "farmland_asian", "microprocessor", 3, "vanilla's Asian farmland family",
+        "Rice paddies {when}: small rice combine harvesters and mechanical transplanters at work "
+        "in regular fields, concrete-lined canals, rows of plastic greenhouses, fish ponds, a "
+        "village of concrete houses, a line of pylons, misty hills"),
+    "farmland_asian_4": _draft(
+        "farm", FARMLAND, "farmland_asian", "autonomous_vehicles", 4, "vanilla's Asian farmland family",
+        "Rice paddies {when}: drones flying in formation low over bright green fields, small "
+        "autonomous transplanters with no drivers, solar panels floating on a pond, a glass "
+        "vertical-farm building beside a neat village, misty hills"),
+    "farmland_subtropic_1": _draft(
+        "farm", FARMLAND, "farmland_subtropic", "rural_electrification", 1, "vanilla's subtropic farmland family (Latin America)",
+        "Farmland in the Latin American tropics {when}: fields of maize and sugar cane on red "
+        "earth, a whitewashed estate house with red tile roofs, ox carts and one early tractor, "
+        "workers in straw hats, palm trees, a new line of electricity poles, green mountains"),
+    "farmland_subtropic_2": _draft(
+        "farm", FARMLAND, "farmland_subtropic", "green_revolution", 2, "vanilla's subtropic farmland family (Latin America)",
+        "Farmland in the Latin American tropics {when}: wide fields of maize and soybeans newly "
+        "cut from the forest, tractors, a small plane spraying, round grain silos, trucks on a "
+        "red dirt road, a whitewashed estate house, green mountains"),
+    "farmland_subtropic_3": _draft(
+        "farm", FARMLAND, "farmland_subtropic", "microprocessor", 3, "vanilla's subtropic farmland family (Latin America)",
+        "Farmland in the Latin American tropics {when}: immense soybean fields to the horizon, a "
+        "line of green combine harvesters working abreast in a cloud of dust, grain trucks "
+        "alongside, tall silos, strips of remaining forest, a red dirt road"),
+    "farmland_subtropic_4": _draft(
+        "farm", FARMLAND, "farmland_subtropic", "autonomous_vehicles", 4, "vanilla's subtropic farmland family (Latin America)",
+        "Farmland in the Latin American tropics {when}: cabless autonomous harvesters working "
+        "abreast, drones overhead, belts of replanted trees between the fields, solar panels "
+        "beside tall silos, a red dirt road, green mountains"),
+    "farmland_5": _draft(
+        "farm", FARMLAND, "farmland_generic", "synthetic_biology", 5, "any farmland",
+        "Farmland {when}: tall glass vertical-farm towers glowing violet among fields of "
+        "engineered crops in blue-green and deep purple, rows of steel bioreactor tanks, a few "
+        "autonomous machines, broad belts of restored woodland and meadow"),
+
+    # Plantations and ranches, on the farm ladder.
+    "plantation_1": _draft(
+        "farm", ["plantation"], "plantation", "rural_electrification", 1, "",
+        "A tropical plantation {when}: long rows of banana plants and coffee bushes on red "
+        "earth, a planter's bungalow with a wide veranda, a processing shed with a chimney, a "
+        "narrow-gauge railway with loaded wagons, workers carrying baskets, palm trees"),
+    "plantation_2": _draft(
+        "farm", ["plantation"], "plantation", "green_revolution", 2, "",
+        "A tropical plantation {when}: straight rows of banana plants to the horizon, a small "
+        "plane spraying low, tractors with trailers of green fruit, a packing plant under "
+        "corrugated roofs, trucks, rows of workers' houses, palm trees"),
+    "plantation_3": _draft(
+        "farm", ["plantation"], "plantation", "microprocessor", 3, "",
+        "A tropical plantation {when}: endless regular rows of oil palms over low hills, a "
+        "palm-oil mill with a smoking stack and round tanks, trucks heaped with red fruit "
+        "bunches, straight red dirt roads, a wall of rainforest at the edge"),
+    "plantation_4": _draft(
+        "farm", ["plantation"], "plantation", "autonomous_vehicles", 4, "",
+        "A tropical plantation {when}: robotic harvesters with long arms working among rows of "
+        "oil palms grown under taller shade trees, drones overhead, a clean white mill with "
+        "solar roofs, electric trucks, a broad belt of rainforest kept at the edge"),
+    "pasture_1": _draft(
+        "farm", ["pasture"], "pasture", "rural_electrification", 1, "",
+        "Ranch land {when}: wide fenced pasture with a herd of cattle, riders on horseback, a "
+        "wind pump and a round water tank, wooden corrals, a ranch house and barn with a new "
+        "electricity line, one pickup truck, dust, distant hills"),
+    "pasture_2": _draft(
+        "farm", ["pasture"], "pasture", "green_revolution", 2, "",
+        "Ranch land {when}: cattle in fenced paddocks and long feeding pens, cattle trucks at a "
+        "loading ramp, tractors stacking hay bales, feed silos, an irrigated green field of "
+        "fodder beside dry pasture, a wind pump, distant hills"),
+    "pasture_3": _draft(
+        "farm", ["pasture"], "pasture", "microprocessor", 3, "",
+        "Ranch land {when}: a vast feedlot of thousands of cattle in square pens, a feed mill "
+        "with tall towers, feed trucks, a helicopter mustering a herd on the open range "
+        "beyond, a center-pivot field of green fodder, distant hills"),
+    "pasture_4": _draft(
+        "farm", ["pasture"], "pasture", "autonomous_vehicles", 4, "",
+        "Ranch land {when}: cattle wearing small solar collars grazing open pasture with no "
+        "fences, drones herding them, a driverless feed wagon, tall wind turbines and fields of "
+        "solar panels on the range, a low ranch house, distant hills"),
+
+    # Forestry and cleared land.
+    "forestry_1": _draft(
+        "forest", ["forestry"], "forestry", "modern_tools", 1, "",
+        "A logging camp in a conifer forest {when}: lumberjacks with early chainsaws and axes "
+        "among huge felled trunks, a crawler tractor dragging logs, a loaded log truck, a river "
+        "full of floating logs, a sawmill with a tall smoking burner, stumps, misty mountains"),
+    "forestry_2": _draft(
+        "forest", ["forestry"], "forestry", "robotics", 2, "",
+        "A managed forest {when}: a wheeled harvesting machine with a felling arm stripping a "
+        "trunk, a forwarder stacked with logs, even blocks of planted spruce, a cleared strip "
+        "replanted with seedlings, log trucks on a gravel road, the steam plume of a pulp mill "
+        "far off"),
+    "forestry_tropical_1": _draft(
+        "forest", ["forestry"], "forestry", "modern_tools", 1, "a jungle state",
+        "Tropical logging {when}: giant buttressed hardwood trunks felled in rainforest, a "
+        "crawler tractor and teams of men hauling logs to a muddy river, rafts of logs afloat, "
+        "a sawmill on stilts with a tin roof, smoke, a wall of jungle behind"),
+    "forestry_tropical_2": _draft(
+        "forest", ["forestry"], "forestry", "robotics", 2, "a jungle state",
+        "Tropical logging {when}: a red earth road cut through rainforest, yellow bulldozers and "
+        "skidders, trucks each carrying three huge logs, a log yard, a cleared hillside with "
+        "smoke rising, a wall of jungle behind"),
+    "cleared_land_1": _draft(
+        "forest", ["cleared_land"], "cleared_land", "modern_tools", 1, "",
+        "Newly cleared land {when}: a field of tree stumps, piles of brush burning, settlers' "
+        "wooden cabins, a tractor pulling out a stump with a chain, the first fenced fields, "
+        "stacks of sawn timber, the dark edge of the forest behind"),
+    "cleared_land_2": _draft(
+        "forest", ["cleared_land"], "cleared_land", "robotics", 2, "",
+        "Newly cleared land {when}: forest pushed down by bulldozers into long burning windrows, "
+        "a new straight gravel road, cattle grazing among charred stumps, a prefabricated "
+        "farmhouse, the standing wall of forest behind"),
+
+    # ---- Wave 6: character, function and condition pictures of cities (design section 7) --------
+    # For any region, so none names a region's buildings. Each is on a rung of the city ladder.
+    # A picture stands for a whole region (design section 1), so the pictures of one site or one
+    # district were cut: naval bases, offshore platforms, spaceports, financial districts and
+    # government quarters.
+    "housing_blocks_2": _draft(
+        "character", ["urban"], "urban_european", "modern_urban_planning", 2, "Command Economy and Prefabricated Construction",
+        "A planned city district {when}: long identical five-storey prefabricated concrete "
+        "apartment blocks in parallel rows, a wide empty avenue with a few small rounded 1950s cars, trams and "
+        "a queue at a tram stop, a bare square with one large bronze statue of a worker, tower "
+        "cranes raising more blocks, a factory's chimneys behind"),
+    "housing_blocks_3": _draft(
+        "character", ["urban"], "urban_european", "computer_aided_design", 3, "Command Economy and Prefabricated Construction",
+        "A planned city district {when}: ranks of identical sixteen-storey grey concrete panel "
+        "tower blocks to the horizon, weathered and stained, a broad avenue with trolleybuses and boxy 1980s cars, heating pipes on trestles crossing a muddy yard, playgrounds between the "
+        "blocks, washing on the balconies"),
+    "housing_blocks_4": _draft(
+        "character", ["urban"], "urban_european", "advanced_structural_engineering", 4, "Command Economy and Prefabricated Construction",
+        "A planned city district {when}: endless identical thirty-storey modular apartment "
+        "towers in a strict grid, each with the same balconies, a broad avenue of identical "
+        "electric buses, an elevated railway, a vast paved square with a single monumental "
+        "sculpture, few trees, cameras on tall poles"),
+    "boomtown_1": _draft(
+        "character", ["urban"], "urban_european", "art_deco_architecture", 1, "the state's people have grown fast for several years",
+        "A fast-growing city {when}: steel frames of new buildings rising everywhere behind "
+        "wooden scaffolding, derrick cranes, a street half paved and half mud, 1920s trucks of bricks and timber, crowds of newly arrived workers with suitcases, raw new brick blocks beside "
+        "tents and shacks, smoke and dust"),
+    "boomtown_2": _draft(
+        "character", ["urban"], "urban_european", "modern_urban_planning", 2, "the state's people have grown fast for several years",
+        "A fast-growing city {when}: a dozen tower cranes over half-built concrete apartment "
+        "blocks, a new road being laid by bulldozers and steamrollers, 1950s cement trucks, prefabricated "
+        "panels stacked on site, families moving in with furniture on handcarts, fields at the "
+        "edge already staked out"),
+    "boomtown_3": _draft(
+        "character", ["urban"], "urban_european", "computer_aided_design", 3, "the state's people have grown fast for several years",
+        "A fast-growing city {when}: a forest of tower cranes over unfinished glass and concrete "
+        "towers wrapped in green netting, a new flyover on bare columns, excavators in deep pits, "
+        "streams of workers in hard hats, the last old low houses being pulled down, dust haze"),
+    "boomtown_4": _draft(
+        "character", ["urban"], "urban_european", "advanced_structural_engineering", 4, "the state's people have grown fast for several years",
+        "A fast-growing city {when}: slender towers rising under robotic climbing cranes, whole "
+        "prefabricated floors lifted into place, a new elevated railway on fresh concrete piers, "
+        "driverless construction machines, raw earth and young trees, a row of finished towers "
+        "gleaming behind"),
+    "declining_1": _draft(
+        "character", ["urban"], "urban_european", "art_deco_architecture", 1, "the state's people are falling",
+        "A declining industrial city {when}: a silent factory with cold chimneys and broken "
+        "windows, a long queue of men in caps and worn coats outside a soup kitchen, shuttered "
+        "fronts, an empty tram, weeds between the cobbles, a few thin children, a grey sky"),
+    "declining_2": _draft(
+        "character", ["urban"], "urban_european", "modern_urban_planning", 2, "the state's people are falling",
+        "A declining industrial city {when}: closed mills with boarded windows along a canal, "
+        "rows of emptied brick houses, some half demolished, a rusting gasholder, a few old rounded 1950s cars, "
+        "an empty bus, a lone figure on the pavement, washing in one yard, a grey sky"),
+    "declining_3": _draft(
+        "character", ["urban"], "urban_european", "computer_aided_design", 3, "the state's people are falling",
+        "A declining industrial city {when}: a vast abandoned steelworks rusting behind a chain-"
+        "link fence, empty lots where houses stood, boarded-up brick buildings, a cracked road "
+        "with one old boxy 1980s car, leaning utility poles, saplings growing from a roof, a grey sky"),
+    "declining_4": _draft(
+        "character", ["urban"], "urban_european", "advanced_structural_engineering", 4, "the state's people are falling",
+        "A shrinking city {when}: empty glass office towers with dark windows and missing panels, "
+        "a deserted street of blank shuttered fronts, grass growing through a wide "
+        "road, a single driverless bus, an abandoned elevated railway, young woodland taking a "
+        "whole district back"),
+    "divided_2": _draft(
+        "character", ["urban"], "urban_latin_american", "modern_urban_planning", 2, "a large city with high inequality",
+        "A divided city {when}: white modern apartment blocks and villas with gardens and "
+        "swimming pools behind high walls on a hill, and below them a dense hillside of shacks "
+        "of scrap wood and tin, mud lanes, washing lines, children, a few big finned 1950s cars on the "
+        "boulevard between"),
+    "divided_3": _draft(
+        "character", ["urban"], "urban_latin_american", "computer_aided_design", 3, "a large city with high inequality",
+        "A divided city {when}: gleaming glass towers and a walled compound of luxury flats with "
+        "a tennis court, pressed against a sea of bare brick and corrugated-iron shanties "
+        "crowding up to the wall, tangled wires, water tanks on roofs, a helicopter above the "
+        "towers"),
+    "divided_4": _draft(
+        "character", ["urban"], "urban_latin_american", "advanced_structural_engineering", 4, "a large city with high inequality",
+        "A divided city {when}: slender luxury towers with sky gardens and private landing pads "
+        "behind a high security wall, and outside it dense self-built brick housing stacked five "
+        "storeys high over narrow lanes, solar panels and water tanks on every roof, drones over "
+        "the wall"),
+    "smog_1": _draft(
+        "character", ["urban"], "urban_european", "art_deco_architecture", 1, "heavy pollution",
+        "A city under coal smoke {when}: a street of soot-blackened brick buildings dim at "
+        "midday, a thousand chimneys pouring smoke into a yellow-brown fog, a tram with its lamps "
+        "lit, hunched pedestrians with scarves over their mouths, gas lamps glowing, factory "
+        "stacks fading into the murk"),
+    "smog_2": _draft(
+        "character", ["urban"], "urban_european", "modern_urban_planning", 2, "heavy pollution",
+        "A city under smog {when}: a wide avenue of rounded 1950s cars and buses with headlamps lit in a brown haze "
+        "at midday, concrete blocks fading to silhouettes within a few streets, a power station's "
+        "stacks pouring smoke, soot-streaked walls, pedestrians holding handkerchiefs to their "
+        "faces, a dull orange sun"),
+    "smog_3": _draft(
+        "character", ["urban"], "urban_european", "computer_aided_design", 3, "heavy pollution",
+        "A city under smog {when}: glass towers reduced to grey ghosts in thick yellow haze, a "
+        "jammed multi-lane expressway of boxy 1980s cars and trucks trailing exhaust, pedestrians and "
+        "cyclists in white face masks, a dull red sun, chimneys and cooling towers faint at the "
+        "edge of sight"),
+    "smog_4": _draft(
+        "character", ["urban"], "urban_european", "advanced_structural_engineering", 4, "heavy pollution",
+        "A city under smog {when}: supertall towers vanishing into a brown haze a few floors up, "
+        "electric traffic crawling below, every pedestrian in a filter mask, tall air-cleaning "
+        "towers in a square, the windows of the blocks sealed, a dull red sun"),
+    "industry_1": _draft(
+        "function", ["urban"], "urban_european", "art_deco_architecture", 1, "most building levels are heavy industry",
+        "A heavy-industry city {when}: blast furnaces and a great steelworks glowing orange "
+        "beside rows of workers' brick houses, dozens of smoking chimneys, gasholders, cranes "
+        "over a canal of coal barges, a goods train crossing an iron bridge, a red-lit smoky sky"),
+    "industry_2": _draft(
+        "function", ["urban"], "urban_european", "modern_urban_planning", 2, "most building levels are heavy industry",
+        "A heavy-industry city {when}: a vast integrated steelworks and chemical plant of "
+        "towers, pipes and spherical tanks along a river, cooling towers steaming, long concrete "
+        "factory halls with saw-tooth roofs, workers streaming out at a gate on bicycles, blocks "
+        "of flats behind"),
+    "industry_3": _draft(
+        "function", ["urban"], "urban_european", "computer_aided_design", 3, "most building levels are heavy industry",
+        "A heavy-industry city {when}: an enormous refinery and petrochemical complex of silver "
+        "columns, flare stacks and pipe racks beside a car plant's long white halls, a yard of thousands of new boxy 1980s cars, freight trains, a motorway of trucks, tower blocks in the haze"),
+    "resort_1": _draft(
+        "function", ["urban"], "urban_european", "art_deco_architecture", 1, "tourism dominates",
+        "A seaside resort {when}: a curving promenade with white art deco hotels and a domed "
+        "pavilion on an iron pier, striped bathing tents and deck chairs on the beach, holiday "
+        "crowds in summer whites, open 1920s motor cars, palm trees in tubs, sailing boats on a bright "
+        "sea"),
+    "resort_2": _draft(
+        "function", ["urban"], "urban_european", "modern_urban_planning", 2, "tourism dominates",
+        "A beach resort {when}: a row of white concrete hotel slabs of twelve storeys with "
+        "balconies along a sandy bay, plain striped parasols in ranks, swimming pools, a coast "
+        "road of small rounded 1950s cars and coaches, a jet airliner low overhead, palm trees, a bright sea"),
+    "resort_3": _draft(
+        "function", ["urban"], "urban_european", "computer_aided_design", 3, "tourism dominates",
+        "A beach resort {when}: a long curve of glass and concrete hotel towers of twenty-five "
+        "storeys behind a crowded sandy beach, ranks of plain parasols and sun loungers, water "
+        "slides and blue pools, a marina of white yachts, a coast road of boxy 1980s cars and "
+        "coaches, a wide-body jet airliner low overhead, palm trees, a bright sea"),
+    "resort_4": _draft(
+        "function", ["urban"], "urban_european", "advanced_structural_engineering", 4, "tourism dominates",
+        "A beach resort {when}: terraced hotel towers stepped like hillsides and covered in "
+        "gardens, lagoon pools, an artificial island with villas, sleek electric ferries and a "
+        "white cruise ship, crowds on a palm-lined boardwalk, a bright sea"),
+    "devastated_early": _draft(
+        "condition", ["urban"], "urban_european", "art_deco_architecture", 1, "heavy devastation, on the first two rungs",
+        "A city bombed flat {when}: a sea of rubble where the streets were, two thirds of the "
+        "brick and stone buildings collapsed into heaps, the rest roofless burnt shells with "
+        "empty window holes and no floors, lone chimney stacks and jagged fragments of wall "
+        "standing, a burnt-out tram on twisted rails, bomb craters, black smoke rising from many "
+        "fires, a few people pulling a handcart through the ruins"),
+    "devastated_late": _draft(
+        "condition", ["urban"], "urban_european", "computer_aided_design", 3, "heavy devastation, from the third rung",
+        "A modern city destroyed by war {when}: most of the concrete tower blocks collapsed into "
+        "mountains of broken slabs, the few still standing burnt-out skeletons with whole faces "
+        "sheared away and floors hanging, a fallen flyover lying across a cratered road, wrecked "
+        "and burnt boxy 1980s cars and buses, nothing moving, columns of black smoke from many "
+        "fires, a few people picking through the rubble"),
+    "nuclear_strike_early": _draft(
+        "condition", ["urban"], "urban_european", "modern_urban_planning", 2, "a nuclear strike on the state, on the first three rungs",
+        "A city erased by an atomic bomb {when}: a flat scorched plain of grey ash and rubble "
+        "from edge to edge, nothing standing but a few twisted steel frames and one scorched "
+        "concrete shell, charred leafless tree trunks, a melted tram, small fires, a towering "
+        "mushroom cloud rising on the horizon under a dark orange sky, no intact building "
+        "anywhere, no living thing in sight"),
+    "nuclear_strike_late": _draft(
+        "condition", ["urban"], "urban_european", "advanced_structural_engineering", 4, "a nuclear strike on the state, from the fourth rung",
+        "A city erased by a nuclear strike {when}: a flat scorched plain of ash, fused glass and "
+        "rubble from edge to edge, only the blackened snapped-off stumps of a few supertall "
+        "towers standing a few floors high, a collapsed elevated railway lying in pieces, "
+        "burnt-out vehicles, small fires, a towering mushroom cloud rising on the horizon under "
+        "a dark orange sky, no intact building anywhere, no living thing in sight"),
+    "flooded_coast_4": _draft(
+        "condition", ["urban"], "urban_european", "advanced_structural_engineering", 4, "the warming system's sea-level stage, in a coastal state",
+        "A coastal city flooded by the risen sea {when}: streets turned to canals of brown water "
+        "between office blocks, small boats and rafts, sandbag walls, a half-drowned bus, people "
+        "on rooftops and footbridges of planks, a new concrete sea wall being built by cranes"),
+    "flooded_coast_5": _draft(
+        "condition", ["urban"], "urban_european", "vactrains", 5, "the warming system's sea-level stage, in a coastal state",
+        "A far-future coastal city drowned by the risen sea {when}: the lower floors of old towers standing "
+        "abandoned in open water, green with weed, and behind a great curved sea wall a new city of kilometre-high garden towers on raised ground, flying craft between them, boats crossing between, sea birds"),
+
+    # ---- Wave 7: natural terrain in the motor age (optional) ------------------------------------
+    "mountains_road": _draft(
+        "nature", ["mountain"], "mountains", "modern_urban_planning", 1, "vanilla's generic mountains",
+        "High mountains {when}: a motorway carried on tall concrete viaducts along a valley side "
+        "and into a tunnel mouth, small rounded 1950s cars and trucks, a cable car climbing to a station on a "
+        "ridge, a line of pylons over a pass, dark pine forest, snowy peaks"),
+    "mountains_northamerica_road": _draft(
+        "nature", ["mountain"], "mountains_northamerica", "modern_urban_planning", 1, "the Americas",
+        "Rocky mountains {when}: a two-lane highway winding beside a rushing river, a very long "
+        "freight train on the far bank, a steel truss bridge, big 1950s trucks and finned cars, pylons striding up a "
+        "valley, pine forest, bare grey peaks with snow"),
+    "mountains_arid_road": _draft(
+        "nature", ["mountain"], "mountains_arid", "modern_urban_planning", 1, "an arid region",
+        "Bare arid mountains {when}: a paved road climbing in switchbacks across a dry rocky "
+        "slope, a convoy of 1950s trucks, a line of pylons crossing a ridge, a small roadside "
+        "settlement of flat roofs by a green patch of trees, sharp brown peaks in the haze"),
+    "hills_road": _draft(
+        "nature", ["hills"], "hills", "modern_urban_planning", 1, "vanilla's generic hills",
+        "Rolling green hills {when}: a new motorway curving through a deep cutting and over a "
+        "long bridge, small rounded 1950s cars and trucks, a line of pylons, a tall lattice radio mast on the "
+        "highest summit, hedged pastures with sheep, a village in a fold of the land"),
+    "hills_jungle_road": _draft(
+        "nature", ["hills"], "hills_jungle", "modern_urban_planning", 1, "jungle hills",
+        "Jungle-covered hills {when}: a paved road cut into a steep green hillside, a concrete "
+        "bridge over a river gorge, loaded 1950s trucks and a bus, a landslide scar of red earth, a "
+        "line of pylons, low cloud caught in the trees"),
+    "hills_subtropic_road": _draft(
+        "nature", ["hills"], "hills_subtropic", "modern_urban_planning", 1, "Latin America",
+        "Green subtropical hills {when}: a winding paved highway with brightly painted 1950s buses and trucks, terraced coffee bushes on the slopes, a small white town with red tile roofs on "
+        "a ridge, a line of pylons, banana plants, mist in the valleys"),
+    "plains_road": _draft(
+        "nature", ["plains"], "plains", "modern_urban_planning", 1, "vanilla's generic plains",
+        "A wide green plain {when}: a new motorway running straight to the horizon with a "
+        "cloverleaf junction, small rounded 1950s cars and trucks, an electric railway alongside, rows of "
+        "pylons, large fields, a river with poplars, a distant town with a water tower"),
+    "plains_northamerica_road": _draft(
+        "nature", ["plains"], "plains_northamerica", "modern_urban_planning", 1, "the Americas",
+        "Open prairie {when}: an arrow-straight four-lane highway to the horizon, big 1950s trucks and finned cars, a "
+        "freight train a mile long on a parallel track, a tall white grain elevator beside the "
+        "rails, a row of pylons, wind in the grass, an enormous sky"),
+    "plains_arid_road": _draft(
+        "nature", ["plains"], "plains_arid", "modern_urban_planning", 1, "an arid region",
+        "A dry plain of thorn scrub {when}: a straight tarred road with a convoy of 1950s trucks "
+        "trailing dust, a line of pylons, a railway with a diesel train, a roadside settlement "
+        "of tin roofs under a few trees, flat-topped hills on the horizon"),
+    "desert_road": _draft(
+        "nature", ["desert"], "desert", "modern_urban_planning", 1, "outside the Americas",
+        "A sand desert {when}: a black asphalt highway running between dunes, a convoy of 1950s trucks, a steel pipeline beside the road, a line of pylons, a small pumping station "
+        "with silver tanks, a few camels, heat haze"),
+    "desert_northamerica_road": _draft(
+        "nature", ["desert"], "desert_northamerica", "modern_urban_planning", 1, "the Americas",
+        "A red rock desert {when}: a two-lane highway running straight across sagebrush flats "
+        "toward red sandstone cliffs, a few long finned 1950s cars and a big truck, a line of wooden utility "
+        "poles, a lone wind pump and water tank beside a cattle grid, tall cactus, heat haze"),
+    "tundra_pipeline": _draft(
+        "nature", ["tundra"], "tundra", "integrated_circuits", 1, "",
+        "Open tundra {when}: a silver pipeline on steel stilts zigzagging to the horizon, a "
+        "gravel service road with a 1950s truck, a small pumping station of metal sheds, a herd of "
+        "reindeer crossing under the pipe, patches of snow, low bare hills"),
+    "forest_road": _draft(
+        "nature", ["forest"], "forest", "modern_urban_planning", 1, "",
+        "A great conifer forest {when}: a two-lane asphalt road running through tall dark "
+        "trees, a 1950s log truck, a line of pylons in a cleared strip, a wooden fire-watch tower on "
+        "a rise, a lake between the trees, misty ridges"),
+    "jungle_road": _draft(
+        "nature", ["jungle"], "jungle", "modern_urban_planning", 1, "",
+        "Dense rainforest {when}: a long steel and concrete bridge carrying a highway across a "
+        "wide brown river, 1950s trucks and a bus, a tall lattice mast above the canopy, a river boat, "
+        "a small landing of tin roofs, low cloud over the trees"),
+    "wetland_road": _draft(
+        "nature", ["wetland"], "wetland", "modern_urban_planning", 1, "",
+        "A broad marsh {when}: a road on a low concrete causeway crossing reed beds and open "
+        "water, a few rounded 1950s cars and a truck, a line of pylons on concrete footings, a pumping station "
+        "on a dike, white egrets, a flat-bottomed boat"),
+}
+
+
+# --- Waves 4 and 5, a pilot (2026-11-11): the size and the prosperity variants of two regional
+# streets on one rung, to settle how such a prompt is written before the other 212 are. Each
+# leads with its verdict ("a small provincial town", "a poor, shabby quarter"), as the ruins
+# had to, and keeps the family's landmark so the variant reads as the same place.
+def _variant(region, rung, variant, shows, prompt):
+    tech, _when = CITY_LADDER[rung]
+    return {**_draft("variant", ["urban"], "urban_european", tech, rung, shows,
+                     prompt.replace("{landmark}", CITY_LANDMARK[region])),
+            "region": region, "variant": variant}
+
+
+DRAFTS.update({
+    "urban_european_3_town": _variant(
+        "european", 3, "town", "the largest city under 100,000 people",
+        "A small European provincial town {when}: a quiet main street of two- and three-storey "
+        "plastered houses with steep tiled roofs, a few boxy 1980s cars parked at the kerb, a "
+        "country bus, a small paved square with a fountain and young trees, a few people, "
+        "{landmark} at the end of the street, wooded hills beyond the roofs"),
+    "urban_european_3_metropolis": _variant(
+        "european", 3, "metropolis", "the largest city over 1,000,000 people",
+        "The center of a great European metropolis {when}, seen from above a wide boulevard: a "
+        "dense cluster of mirrored glass skyscrapers of forty to sixty storeys rising over older "
+        "stone blocks with mansard roofs, a multi-lane avenue packed with boxy 1980s cars and "
+        "articulated buses, an elevated expressway, crowds, {landmark} small among the towers"),
+    "urban_european_3_megacity": _variant(
+        "european", 3, "megacity", "the largest city over 10,000,000 people",
+        "An endless European megacity {when}, seen from a high rooftop: glass skyscrapers and "
+        "dense city blocks stretching to the horizon in every direction under a haze, stacked "
+        "expressway interchanges full of boxy 1980s cars, elevated railway lines, older stone "
+        "blocks with mansard roofs below, {landmark} tiny in the foreground"),
+    "urban_european_3_poor": _variant(
+        "european", 3, "poor", "a low standard of living",
+        "A poor, shabby quarter of a European city {when}: grimy stone apartment buildings with "
+        "cracked plaster and patched windows, washing hung on balconies, a potholed street with "
+        "a few rusty boxy 1980s cars and an old bus, tangled overhead wires, handcarts, street "
+        "vendors with crates, people in worn coats, mirrored office towers far in the "
+        "background, {landmark} hazy at the end of the street"),
+    "urban_european_3_affluent": _variant(
+        "european", 3, "affluent", "a high standard of living",
+        "A wealthy, immaculate quarter of a European city {when}: restored stone apartment "
+        "buildings with gilded balconies and flower boxes below gleaming mirrored towers, a "
+        "spotless tree-lined boulevard, a fountain, expensive polished boxy 1980s limousines and "
+        "sports cars, terraces under plain parasols, elegantly dressed people, {landmark} hazy "
+        "at the end of the street"),
+    "urban_european_3_rundown": _variant(
+        "european", 3, "rundown", "a standard of living well under what its people expect",
+        "A neglected, decaying quarter of a European city in hard times {when}: stone apartment "
+        "buildings with peeling paint, broken and boarded-up windows and shuttered ground "
+        "floors, litter and overflowing bins along the kerb, a burnt-out boxy 1980s car, weeds "
+        "in the cracked pavement, a queue of idle people in drab coats, dull mirrored towers "
+        "behind, {landmark} hazy at the end of the street"),
+    "urban_south_asian_3_town": _variant(
+        "south_asian", 3, "town", "the largest city under 100,000 people",
+        "A small South Asian provincial town {when}: a dusty main street of two-storey "
+        "whitewashed brick houses with flat roofs and wooden balconies, a few auto rickshaws and "
+        "motor scooters, an old country bus, stalls under plain parasols, cattle wandering, a "
+        "banyan tree, {landmark} at the end of the street, palm groves and fields beyond the "
+        "roofs"),
+    "urban_south_asian_3_metropolis": _variant(
+        "south_asian", 3, "metropolis", "the largest city over 1,000,000 people",
+        "The center of a great South Asian metropolis {when}, seen from above a wide avenue: a "
+        "dense cluster of concrete and glass towers of thirty to fifty storeys rising over old "
+        "red sandstone arcades, a multi-lane road packed with boxy 1980s cars, auto rickshaws "
+        "and crowded buses, a concrete flyover, dense crowds in bright clothes, {landmark} small "
+        "among the towers"),
+    "urban_south_asian_3_megacity": _variant(
+        "south_asian", 3, "megacity", "the largest city over 10,000,000 people",
+        "An endless South Asian megacity {when}, seen from a high rooftop: concrete towers and "
+        "dense low blocks stretching to the horizon in every direction under a haze, flyovers "
+        "jammed with boxy 1980s cars, buses and auto rickshaws, elevated railway lines, water "
+        "tanks and washing on a sea of flat roofs, {landmark} tiny in the foreground"),
+    "urban_south_asian_3_poor": _variant(
+        "south_asian", 3, "poor", "a low standard of living",
+        "A poor, makeshift quarter of a South Asian city {when}: crumbling brick tenements "
+        "patched with corrugated iron and tarpaulin, an unpaved lane with open drains, "
+        "handcarts, bicycles and one battered auto rickshaw, washing strung across the street, a "
+        "tangle of overhead cables, barefoot children, a dense crowd in faded clothes, concrete "
+        "towers far in the background, {landmark} hazy at the end of the street"),
+    "urban_south_asian_3_affluent": _variant(
+        "south_asian", 3, "affluent", "a high standard of living",
+        "A wealthy, immaculate quarter of a South Asian city {when}: white villas and "
+        "marble-fronted apartment blocks with deep verandas behind garden walls, a spotless "
+        "avenue of flowering trees, a fountain, polished boxy 1980s limousines with drivers, "
+        "well-dressed people in silk, new glass office towers behind, {landmark} hazy at the end "
+        "of the street"),
+    "urban_south_asian_3_rundown": _variant(
+        "south_asian", 3, "rundown", "a standard of living well under what its people expect",
+        "A neglected, decaying quarter of a South Asian city in hard times {when}: concrete "
+        "blocks streaked black with damp, broken windows and shuttered ground floors, heaps of "
+        "rubbish in the street, a stripped abandoned bus, stray dogs, a long queue of idle men, "
+        "a tangle of dead overhead cables, {landmark} hazy at the end of the street"),
+})
+
+
+# --- Waves 4 and 5 in full: the size and prosperity variants of every regional street, written
+# from tables the way the pilot's twelve were by hand (which stay as they are). A variant leads
+# with its verdict, takes its houses from the region and its vehicles and towers from the rung,
+# and keeps the family's landmark. Megacities exist from rung 3; the European metropolis of
+# rung 1 is the pilot's own picture.
+VARIANT_ADJ = {
+    "european": "European", "north_american": "North American", "latin_american": "Latin American",
+    "african": "African", "south_asian": "South Asian", "middle_eastern": "Middle Eastern",
+    "east_asian": "East Asian", "japanese": "Japanese",
+}
+# (the low houses of a small town; what lies beyond it; the old quarter seen from above; a street
+#  detail of the region; the houses of the poor; of the rich; the ordinary street's buildings)
+VARIANT_REGION = {
+    "european": (
+        "two- and three-storey plastered houses with steep tiled roofs",
+        "wooded hills beyond the roofs",
+        "older stone blocks with mansard roofs",
+        "iron street lamps",
+        "grimy stone apartment buildings with cracked plaster and patched windows",
+        "restored stone apartment buildings with gilded balconies and flower boxes",
+        "stone apartment buildings"),
+    "north_american": (
+        "two-storey brick and clapboard buildings with flat roofs and wooden porches",
+        "a grain elevator and open prairie beyond the roofs",
+        "old brick blocks with water tanks on their roofs",
+        "wooden utility poles",
+        "run-down brick tenements with rusty fire escapes beside weedy empty lots",
+        "elegant limestone and brick apartment houses with plain striped awnings and doormen",
+        "brick commercial blocks with iron fire escapes"),
+    "latin_american": (
+        "one- and two-storey colonial houses in ochre, pink and white with red tile roofs",
+        "green hills behind",
+        "old colonial fronts with red tile roofs",
+        "palm trees",
+        "unplastered brick houses with tin roofs stacked up a steep hillside",
+        "white villas and balconied mansions behind garden walls hung with bougainvillea",
+        "colonial fronts and plain concrete apartment blocks"),
+    "african": (
+        "single-storey whitewashed houses with verandas and corrugated iron roofs",
+        "acacia trees and red earth beyond",
+        "older whitewashed arcaded buildings with iron roofs",
+        "flame trees",
+        "tin-roofed shacks and half-built concrete-block houses",
+        "white villas with deep verandas in walled gardens of flame trees",
+        "arcaded buildings and weathered concrete blocks"),
+    "south_asian": (
+        "two-storey whitewashed brick houses with flat roofs and wooden balconies",
+        "palm groves and fields beyond the roofs",
+        "old red sandstone arcades and carved balconies",
+        "a spreading banyan tree",
+        "crumbling brick tenements patched with corrugated iron and tarpaulin",
+        "white villas and marble-fronted apartment blocks with deep verandas behind garden walls",
+        "concrete blocks and old houses with carved balconies"),
+    "middle_eastern": (
+        "flat-roofed two-storey stone and plaster houses with wooden lattice windows",
+        "date palms and dry hills behind",
+        "the flat roofs and courtyards of the old quarter",
+        "date palms",
+        "crumbling mud-brick and bare concrete-block houses with flat roofs",
+        "pale stone villas with arched loggias in walled gardens of date palms",
+        "sand-colored apartment blocks with deep balconies"),
+    "east_asian": (
+        "two-storey arcaded row houses with grey tiled roofs",
+        "rice fields and misty hills beyond the roofs",
+        "old tiled-roof row houses and courtyards",
+        "streams of bicycles",
+        "crowded old tiled-roof row houses with makeshift brick lean-tos",
+        "courtyard mansions with glazed tile roofs and round moon gates behind high walls",
+        "plain brick and concrete blocks and old tiled row houses"),
+    "japanese": (
+        "two-storey wooden town houses with grey tiled roofs",
+        "wooded mountains beyond the roofs",
+        "low tiled wooden houses in narrow lanes",
+        "utility poles strung with many wires",
+        "cramped weathered wooden row houses with patched tiled roofs",
+        "large walled wooden villas with tiled gates and pine gardens",
+        "plain concrete buildings and wooden town houses"),
+}
+# By rung: (what the time puts in a small town; ordinary vehicles; the poor's; the rich's; the
+#  towers of a great city; what carries its traffic; the same for a megacity; towers seen far
+#  off from a poor street; behind a rich one; a wreck at the kerb of a neglected one)
+VARIANT_RUNG = {
+    1: ("an old 1920s bus, a horse cart",
+        "a few rounded 1930s automobiles",
+        "handcarts, bicycles and one old 1920s truck",
+        "polished 1930s limousines with chauffeurs",
+        "a dense cluster of stepped stone and art deco towers of twenty to thirty storeys",
+        "trams, double-deck buses and rounded 1930s automobiles on a wide boulevard, an iron "
+        "railway viaduct",
+        "",
+        "factory chimneys far in the background",
+        "an art deco apartment tower behind",
+        "a broken-down 1920s truck"),
+    2: ("a rounded 1950s country bus, telephone poles, one new plain concrete building",
+        "a few small rounded 1950s cars",
+        "handcarts, bicycles and a battered rounded 1950s bus",
+        "gleaming finned 1950s limousines and convertibles",
+        "a dense cluster of flat-topped glass and steel slab towers of twenty to thirty storeys",
+        "a wide avenue packed with rounded 1950s cars and buses, an elevated concrete expressway",
+        "",
+        "new concrete slab towers far in the background",
+        "new glass slab towers behind",
+        "a rounded 1950s car without wheels"),
+    3: ("a country bus, one concrete block of four storeys, young trees",
+        "a few boxy 1980s cars",
+        "a few rusty boxy 1980s cars and an old bus",
+        "polished boxy 1980s limousines and sports cars",
+        "a dense cluster of flat-topped mirrored glass towers of forty to sixty storeys",
+        "a multi-lane avenue packed with boxy 1980s cars and articulated buses, an elevated "
+        "expressway",
+        "stacked expressway interchanges full of boxy 1980s cars, elevated railway lines",
+        "mirrored towers far in the background",
+        "gleaming mirrored towers behind",
+        "a burnt-out boxy 1980s car"),
+    4: ("solar panels on every roof, a small electric bus, wind turbines on the heights",
+        "a few smooth electric cars",
+        "worn electric scooters, cargo bicycles and a patched old electric bus",
+        "sleek silent electric limousines and driverless shuttles",
+        "a dense cluster of slender supertall glass towers with planted terraces, some over a "
+        "hundred storeys",
+        "sleek trains on elevated viaducts, avenues of smooth electric cars, green roofs",
+        "elevated train viaducts crossing in layers, roads of smooth electric cars, green roofs",
+        "slender supertall towers far in the background",
+        "slender supertall towers with sky gardens behind",
+        "a stripped electric car on blocks"),
+    5: ("a small transparent vacuum-train stop on slender pylons, two garden towers of twenty "
+        "storeys, a flying craft overhead",
+        "small pod vehicles and humanoid robots",
+        "battered old pod vehicles and patched-up robots",
+        "gleaming private flying craft and attendant humanoid robots",
+        "colossal kilometre-high arcology towers joined by sky bridges and hung with gardens",
+        "streams of flying craft between the towers, transparent vacuum-train tubes on tall pylons",
+        "swarms of flying craft, transparent vacuum-train tubes crossing on tall pylons",
+        "colossal kilometre-high arcology towers far above in the background",
+        "kilometre-high garden towers behind",
+        "a dead humanoid robot slumped beside a grounded pod vehicle"),
+}
+# On the last two rungs the time leads the picture, straight after the verdict: what stands over
+# the street, then what stands in it. With the time left to the end of the prompt, as on rungs 1
+# to 3, the first renders of the 2030s and of the far future were the 1950s street again (a poor
+# lane, a fountain square, a wreck at the kerb) with a different car. (what looms; what is in the
+# street), by variant; the small town is only rewritten on rung 5. "A wall of ... towers that rise
+# close behind the roofs" is the wording that draws them; "in the shadow of kilometre-high
+# arcology towers that fill the sky" drew none.
+VARIANT_LEAD = {
+    4: {
+        "poor": ("under a wall of slender supertall glass towers that rise close behind the roofs",
+                 "worn electric scooters and a patched old electric bus, old solar panels and "
+                 "satellite dishes on the roofs"),
+        "affluent": ("below slender supertall glass towers with sky gardens that rise close behind the roofs",
+                     "sleek silent electric limousines and driverless shuttles"),
+        "rundown": ("under dull, stained supertall glass towers that rise close behind the roofs",
+                    "a stripped electric car on blocks, dead solar panels hanging from the roofs"),
+    },
+    5: {
+        "town": ("a transparent vacuum-train tube on slender pylons passing over the roofs, two garden "
+                 "towers of twenty storeys rising behind, a flying craft overhead",
+                 "small pod vehicles and humanoid robots"),
+        "poor": ("under a wall of colossal white futuristic towers joined by sky bridges that rise close "
+                 "behind the roofs, flying craft between them",
+                 "battered pod vehicles and patched-up humanoid robots"),
+        "affluent": ("below a wall of colossal white futuristic garden towers joined by sky bridges that "
+                     "rise close behind the roofs",
+                     "gleaming private flying craft landing, attendant humanoid robots"),
+        "rundown": ("under a wall of colossal stained white futuristic towers that rise close behind the "
+                    "roofs",
+                    "a dead humanoid robot slumped beside a grounded pod vehicle"),
+    },
+}
+# The second round: a key whose first four candidates all failed the same way takes its own words
+# for a field of the two tables above; every other key keeps the table's, so its picked render
+# stays the render of its prompt. A reword that a second round of candidates did not bear out is
+# taken out again, and the key goes back to its first candidates.
+#   The small town of 1960: "a few small rounded 1950s cars" drew the small rounded cars of the
+# 2000s in every region but the African one, and "one new plain concrete building" a present-day
+# one. Two-tone paint, chrome and whitewall tires are the 1950s' own.
+#   The North American great city: "stepped stone and art deco towers" over "old brick blocks with
+# water tanks on their roofs" is New York, and three candidates in four drew its towers (or
+# Chicago's, or Toronto's) on every rung. The rewording says what the towers are (plain, flat
+# roofed, of one height) and leaves out what they must not be: naming a thing draws it.
+#   The European great city of 1960: mansard roofs are Paris, and the candidates drew its tower.
+#   The affluent Middle Eastern street of about 1990: "limousines and sports cars" drew the
+# luxury cars of the 2010s in all four candidates.
+_REGION_FIELDS = ("low", "beyond", "old", "detail", "poor", "rich", "plain")
+_RUNG_FIELDS = ("town", "cars", "poor_cars", "rich_cars", "towers", "traffic", "mega_traffic", "far",
+                "behind", "wreck")
+_NA_OLD = "older low brick warehouses and rail yards"
+_NA_TOWERS = {
+    1: "a dense cluster of plain flat-roofed brick and limestone office blocks of fifteen to twenty "
+       "storeys, all of about the same height",
+    2: "a dense cluster of plain flat-roofed glass and steel office slabs of twenty to thirty "
+       "storeys, all of about the same height",
+    3: "a dense cluster of plain flat-roofed mirrored glass office towers of forty to fifty storeys, "
+       "all of about the same height",
+    4: "a dense cluster of slender supertall glass towers with planted terraces and flat garden "
+       "roofs, all of about the same height",
+    5: "colossal kilometre-high white arcology towers with flat garden roofs, joined by sky bridges "
+       "and hung with gardens",
+}
+VARIANT_REWORD = {
+    **{(_region, 2, "town"): {
+        "town": "a rounded 1950s country bus with a split windscreen, telephone poles, one plain "
+                "concrete building of two storeys",
+        "cars": "two heavy two-tone 1950s sedans with chrome grilles and whitewall tires at the "
+                "kerb, the street otherwise empty"}
+       for _region in VARIANT_ADJ if _region != "african"},
+    **{("north_american", _rung, _size): {"towers": _words, "old": _NA_OLD}
+       for _rung, _words in _NA_TOWERS.items() for _size in ("metropolis", "megacity")
+       if _size == "metropolis" or _rung >= 3},
+    ("european", 2, "metropolis"): {
+        "towers": "a dense cluster of plain flat-roofed glass and concrete office slabs of fifteen to "
+                  "twenty storeys, all of about the same height",
+        "old": "older stone blocks with steep tiled roofs"},
+    ("south_asian", 1, "town"): {
+        "town": "a boxy 1920s country bus with a rounded roof, a horse cart",
+        "cars": "two tall black 1930s saloons with running boards and spoked wheels at the kerb, "
+                "the street otherwise empty"},
+    ("japanese", 3, "town"): {
+        "town": "a boxy square-edged 1980s country bus, one concrete block of four storeys, young trees",
+        "cars": "two small boxy square-edged 1980s saloons with flat bonnets and rectangular "
+                "headlamps at the kerb, the street otherwise empty"},
+    **{(_region, 3, "affluent"): {
+        "rich_cars": "polished boxy 1980s saloons with square headlamps, one long square-edged 1980s "
+                     "limousine"} for _region in ("middle_eastern", "east_asian", "japanese")},
+}
+VARIANT_SHOWS = {
+    "town": "the largest city under 100,000 people",
+    "metropolis": "the largest city over 1,000,000 people",
+    "megacity": "the largest city over 10,000,000 people",
+    "poor": "a low standard of living",
+    "affluent": "a high standard of living",
+    "rundown": "a standard of living well under what its people expect",
+}
+
+
+def variant_prompt(region: str, rung: int, variant: str) -> str:
+    adj = VARIANT_ADJ[region]
+    words = {**dict(zip(_REGION_FIELDS, VARIANT_REGION[region])),
+             **dict(zip(_RUNG_FIELDS, VARIANT_RUNG[rung])),
+             **VARIANT_REWORD.get((region, rung, variant), {})}
+    low, beyond, old, detail, poor, rich, plain = (words[f] for f in _REGION_FIELDS)
+    town, cars, poor_cars, rich_cars, towers, traffic, mega_traffic, far, behind, wreck = (
+        words[f] for f in _RUNG_FIELDS)
+    future = "far-future " if rung == 5 else ""
+    a = "an" if (future or adj)[0] in "AEIOU" else "a"      # "an African city", "a far-future African city"
+    end = "{landmark} hazy at the end of the street"
+    if variant in VARIANT_LEAD.get(rung, {}):
+        looms, street = VARIANT_LEAD[rung][variant]
+        if variant == "town":
+            return (f"A small {future}{adj} provincial town {{when}}, {looms}: a quiet main street of "
+                    f"{low}, {street}, {detail}, a few people, {{landmark}} at the end of the street, "
+                    f"{beyond}")
+        if variant == "poor":
+            return (f"A poor, shabby quarter of {a} {future}{adj} city {{when}}, {looms}: {street}, "
+                    f"{poor}, washing hung across a potholed unpaved lane, tangled overhead wires, "
+                    f"{detail}, street vendors with crates, people in worn clothes, {end}")
+        if variant == "affluent":
+            return (f"A wealthy, immaculate quarter of {a} {future}{adj} city {{when}}, {looms}: "
+                    f"{street}, {rich}, a spotless tree-lined boulevard, a fountain, terraces under "
+                    f"plain parasols, elegantly dressed people, {end}")
+        return (f"A neglected, decaying quarter of {a} {future}{adj} city in hard times {{when}}, "
+                f"{looms}: {street}, {plain} with peeling paint, boarded-up windows and shuttered "
+                f"ground floors, litter and overflowing bins, weeds in the cracked pavement, a queue "
+                f"of idle people, {end}")
+    if variant == "town":
+        return (f"A small {future}{adj} provincial town {{when}}: a quiet main street of {low}, {town}, "
+                f"{cars}, {detail}, a few people, {{landmark}} at the end of the street, {beyond}")
+    if variant == "metropolis":
+        return (f"The center of a great {future}{adj} metropolis {{when}}, seen from above a wide avenue: "
+                f"{towers}, rising over {old}, {traffic}, crowds, {{landmark}} small among the towers")
+    if variant == "megacity":
+        return (f"An endless {future}{adj} megacity {{when}}, seen from a high rooftop: {towers} and dense "
+                f"city blocks stretching to the horizon in every direction under a haze, {mega_traffic}, "
+                f"{old} below, {{landmark}} small in the foreground")
+    if variant == "poor":
+        return (f"A poor, shabby quarter of {a} {future}{adj} city {{when}}: {poor}, washing hung across a "
+                f"potholed unpaved lane, {poor_cars}, tangled overhead wires, {detail}, street vendors with "
+                f"crates, people in worn clothes, {far}, {end}")
+    if variant == "affluent":
+        return (f"A wealthy, immaculate quarter of {a} {future}{adj} city {{when}}: {rich}, a spotless "
+                f"tree-lined boulevard, a fountain, {rich_cars}, terraces under plain parasols, elegantly "
+                f"dressed people, {behind}, {end}")
+    assert variant == "rundown", variant
+    return (f"A neglected, decaying quarter of {a} {future}{adj} city in hard times {{when}}: {plain} with "
+            f"peeling paint, broken and boarded-up windows and shuttered ground floors, litter and "
+            f"overflowing bins, {wreck}, weeds in the cracked pavement, a queue of idle people in drab "
+            f"clothes, {far}, {end}")
+
+
+for _region in REGIONS:
+    for _rung in CITY_LADDER:
+        for _name in VARIANT_SHOWS:
+            _key = f"urban_{_region}_{_rung}_{_name}"
+            if _key in DRAFTS or _key in PICTURES or (_name == "megacity" and _rung < 3):
+                continue
+            DRAFTS[_key] = _variant(_region, _rung, _name, VARIANT_SHOWS[_name],
+                                    variant_prompt(_region, _rung, _name))
+
+
+# --- Wave 3: worked land. A draft becomes a picture here once it has a picked render: its
+# prompt, technology, rung and terrains come from its draft, its overlay is vanilla's for the
+# picture it is like, and this table adds what decides between it and its neighbors.
+_HAS_PORT = ["has_building = building_port"]
+_OIL_FIELD = ["has_variable = te_sp_oil"]  # the yearly pass's tag: oil is a major part of the state's economy
+WAVE3_WIRING = {
+    # a harbor is any Port; the major port asks for the level (the pilot's docks_1 is rung 1's)
+    **{f"docks_harbor_{n}": {"where": _HAS_PORT} for n in (1, 2, 3, 4)},
+    **{f"docks_{n}": {"where": _HAS_PORT, "scale": "major_port"} for n in (2, 3, 4)},
+    # the open pit is any mining state; the colliery asks for the coal mines' level
+    **{f"mining_{n}": {} for n in (2, 3)},
+    **{f"mining_deep_{n}": {"scale": "colliery"} for n in (1, 2, 3)},
+    # an oil field takes over the land it stands on
+    **{f"oil_{n}": {"where": _OIL_FIELD, "over": True} for n in (1, 2, 3)},
+    **{f"farmland_{family}_{n}": {"region": f"farm_{family}"}
+       for family in ("generic", "arabic", "asian", "subtropic") for n in (1, 2, 3, 4)},
+    "farmland_5": {},
+    **{f"plantation_{n}": {} for n in (1, 2, 3, 4)},
+    **{f"pasture_{n}": {} for n in (1, 2, 3, 4)},
+    **{f"forestry_{n}": {} for n in (1, 2)},
+    **{f"forestry_tropical_{n}": {"region": "forest_tropical"} for n in (1, 2)},
+    **{f"cleared_land_{n}": {} for n in (1, 2)},
+}
+# A rung outranks a scale or a region, so the plain and the special picture of a rung are wired
+# together: a harbor of rung 2 wired without the major port of rung 2 would show in a great port
+# over the major port of rung 1. The test holds each tuple to all or none.
+WIRED_TOGETHER = (
+    *((f"docks_harbor_{n}", f"docks_{n}") for n in (1, 2, 3, 4)),
+    *((f"mining_{n}", f"mining_deep_{n}") for n in (1, 2, 3)),
+    *((f"forestry_{n}", f"forestry_tropical_{n}") for n in (1, 2)),
+)
+
+# The picked render of each wave 3 picture, with its crop and smudge boxes.
+WAVE3_PICKS = {
+    "docks_harbor_1": {"seed": 1, "smudge": [(880, 548, 1010, 568)]},
+    "docks_harbor_2": {"seed": 0, "smudge": [(1300, 448, 1536, 472), (880, 560, 915, 590)]},
+    "docks_harbor_3": {"seed": 0, "smudge": [(440, 462, 500, 488), (298, 388, 326, 412), (1150, 428, 1450, 450),
+                                             (1380, 512, 1435, 534), (0, 626, 40, 650)]},
+    "docks_harbor_4": {"seed": 1},
+    "docks_2": {"seed": 0, "smudge": [(1110, 640, 1165, 672), (355, 398, 410, 418)]},
+    "docks_3": {"seed": 3},
+    "docks_4": {"seed": 3, "smudge": [(140, 458, 200, 480)]},
+    "mining_2": {"seed": 1},
+    "mining_3": {"seed": 3},
+    "mining_deep_1": {"seed": 1},
+    "mining_deep_2": {"seed": 3},
+    "mining_deep_3": {"seed": 0, "smudge": [(672, 432, 694, 450)]},
+    "oil_1": {"seed": 0},
+    "oil_2": {"seed": 0},
+    "oil_3": {"seed": 1},
+    "farmland_generic_1": {"seed": 3},
+    "farmland_generic_2": {"seed": 1, "smudge": [(1455, 718, 1536, 752)]},
+    "farmland_generic_3": {"seed": 0, "smudge": [(375, 460, 480, 482)]},
+    "farmland_generic_4": {"seed": 0},
+    "farmland_arabic_1": {"seed": 0},
+    "farmland_arabic_2": {"seed": 0},
+    "farmland_arabic_3": {"seed": 1, "smudge": [(495, 526, 520, 546)]},
+    "farmland_arabic_4": {"seed": 1},
+    "farmland_asian_1": {"seed": 3},
+    "farmland_asian_2": {"seed": 0},
+    "farmland_asian_3": {"seed": 0},
+    "farmland_asian_4": {"seed": 1},
+    "farmland_subtropic_1": {"seed": 3},
+    "farmland_subtropic_2": {"seed": 1},
+    "farmland_subtropic_3": {"seed": 1},
+    "farmland_subtropic_4": {"seed": 3, "smudge": [(742, 608, 782, 648)]},
+    "farmland_5": {"seed": 1},
+    "plantation_1": {"seed": 1},
+    "plantation_2": {"seed": 0},
+    "plantation_3": {"seed": 0},
+    "plantation_4": {"seed": 3},
+    "pasture_1": {"seed": 0},
+    "pasture_2": {"seed": 1},
+    "pasture_3": {"seed": 3},
+    "pasture_4": {"seed": 0},
+    "forestry_1": {"seed": 0},
+    "forestry_2": {"seed": 1},
+    "forestry_tropical_1": {"seed": 0, "smudge": [(1200, 448, 1450, 482)]},
+    "forestry_tropical_2": {"seed": 0, "smudge": [(700, 486, 800, 504)]},
+    "cleared_land_1": {"seed": 0},
+    "cleared_land_2": {"seed": 3},
+}
+
+
+# --- Wave 7: natural terrain with the motor age in it. One rung, on vanilla's own families.
+# `any_region` lists terrains the picture also joins without its region: vanilla shows the arid
+# plain in every savanna state, whatever its region.
+WAVE7_WIRING = {
+    "mountains_road": {"region": "land_generic"},
+    "mountains_arid_road": {"region": "land_arid"},
+    "mountains_northamerica_road": {"region": "land_americas"},
+    "plains_road": {"region": "land_generic"},
+    "plains_arid_road": {"region": "land_arid", "any_region": ["savanna"]},
+    "plains_northamerica_road": {"region": "land_americas"},
+    "desert_road": {"region": "desert_generic"},
+    "desert_northamerica_road": {"region": "desert_americas"},
+    "hills_road": {"region": "hills_generic"},
+    "hills_subtropic_road": {"region": "hills_subtropic"},
+    "hills_jungle_road": {"region": "hills_jungle"},
+    "tundra_pipeline": {},
+    "forest_road": {},
+    "jungle_road": {},
+    "wetland_road": {},
+}
+# The picked render of each wave 7 picture.
+WAVE7_PICKS = {
+    "mountains_road": {"seed": 0},
+    "mountains_northamerica_road": {"seed": 1},
+    "mountains_arid_road": {"seed": 0},
+    "hills_road": {"seed": 0},
+    "hills_jungle_road": {"seed": 0},
+    "hills_subtropic_road": {"seed": 0},
+    "plains_road": {"seed": 0},
+    "plains_northamerica_road": {"seed": 1, "smudge": [(765, 383, 805, 400)]},
+    "plains_arid_road": {"seed": 2},
+    "desert_road": {"seed": 0},
+    "desert_northamerica_road": {"seed": 2, "smudge": [(545, 513, 600, 530), (1028, 538, 1060, 562)]},
+    "tundra_pipeline": {"seed": 0},
+    "forest_road": {"seed": 3},
+    "jungle_road": {"seed": 0},
+    "wetland_road": {"seed": 0},
+}
+
+
+# --- Wave 6: the special city pictures. Housing blocks, smog, ruins and the nuclear strike are
+# read live; boomtown, declining, divided, heavy industry and resort off the yearly pass's tags.
+# The flooded coast waits for a marker on the state (the warming system's coastal flooding is a
+# country modifier, which would flood every port a country has).
+WAVE6_WIRING = {
+    **{f"housing_blocks_{n}": {"character": "housing_blocks"} for n in (2, 3, 4)},
+    **{f"smog_{n}": {"character": "smog"} for n in (1, 2, 3, 4)},
+    **{f"devastated_{span}": {"condition": "devastated"} for span in ("early", "late")},
+    **{f"nuclear_strike_{span}": {"condition": "nuclear"} for span in ("early", "late")},
+    **{f"boomtown_{n}": {"character": "boomtown"} for n in (1, 2, 3, 4)},
+    **{f"declining_{n}": {"character": "declining"} for n in (1, 2, 3, 4)},
+    **{f"divided_{n}": {"character": "divided"} for n in (2, 3, 4)},
+    **{f"industry_{n}": {"character": "industry"} for n in (1, 2, 3)},
+    **{f"resort_{n}": {"character": "resort"} for n in (1, 2, 3, 4)},
+}
+WAVE6_NEEDS_THE_PASS = ()
+WAVE6_NEEDS_A_MARKER = ("flooded_coast",)
+# The picked render of each of these.
+WAVE6_PICKS = {
+    "housing_blocks_2": {"seed": 2},
+    "housing_blocks_3": {"seed": 0},
+    "housing_blocks_4": {"seed": 1},
+    "smog_1": {"seed": 0, "smudge": [(0, 440, 150, 505), (412, 508, 474, 536), (95, 574, 195, 596),
+                                     (1480, 503, 1536, 540), (764, 566, 806, 584), (1225, 378, 1335, 422)]},
+    "smog_2": {"seed": 2, "smudge": [(1320, 556, 1415, 584), (420, 694, 465, 714), (1145, 506, 1180, 528)]},
+    "smog_3": {"seed": 0, "smudge": [(405, 508, 494, 547)]},
+    "smog_4": {"seed": 1, "smudge": [(920, 645, 965, 695), (806, 552, 834, 642)]},
+    # the second set: the first showed a damaged city where a destroyed one was wanted (the owner)
+    "devastated_early": {"seed": 3, "crop": (62, 60, 1474, 752)},
+    "devastated_late": {"seed": 5, "crop": (0, 0, 1432, 702)},
+    "nuclear_strike_early": {"seed": 3, "crop": (62, 60, 1474, 752)},
+    "nuclear_strike_late": {"seed": 4},
+    # the pictures that read the yearly pass's tags
+    "boomtown_1": {"seed": 1, "smudge": [(1135, 676, 1192, 692)]},
+    "boomtown_2": {"seed": 1},
+    "boomtown_3": {"seed": 3},
+    "boomtown_4": {"seed": 1},
+    "declining_1": {"seed": 2, "crop": (22, 0, 1515, 732)},
+    "declining_2": {"seed": 1},
+    "declining_3": {"seed": 3, "smudge": [(884, 610, 912, 634), (1046, 420, 1092, 434)]},
+    "declining_4": {"seed": 1, "smudge": [(1236, 530, 1270, 572)]},
+    "divided_2": {"seed": 1, "smudge": [(664, 366, 698, 388)]},
+    "divided_3": {"seed": 1},
+    "divided_4": {"seed": 3},
+    "industry_1": {"seed": 1, "smudge": [(468, 520, 498, 534)]},
+    "industry_2": {"seed": 1, "smudge": [(376, 570, 402, 586), (1294, 660, 1314, 696)]},
+    "industry_3": {"seed": 0, "smudge": [(165, 722, 250, 752), (678, 694, 712, 714)]},
+    "resort_1": {"seed": 3},
+    "resort_2": {"seed": 0, "smudge": [(986, 118, 1018, 152)]},
+    "resort_3": {"seed": 0, "smudge": [(1100, 112, 1146, 150)]},
+    "resort_4": {"seed": 0},
+}
+
+# --- Waves 4 and 5: a variant's wiring is its own name. A town, metropolis or megacity is a
+# size; poor and affluent are means; run-down is upkeep. Each keeps its family's region and
+# overlay. The picked render of each goes in VARIANT_PICKS.
+VARIANT_AXIS = {"town": "size", "metropolis": "size", "megacity": "size",
+                "poor": "means", "affluent": "means", "rundown": "upkeep"}
+VARIANT_PICKS = {
+    "urban_european_1_town": {"seed": 1, "smudge": [(1118, 692, 1158, 706)]},
+    "urban_european_1_poor": {"seed": 1,
+                             "smudge": [(1352, 348, 1408, 404), (1220, 652, 1273, 670), (0, 385, 47, 448), (851, 507, 890, 524)]},
+    "urban_european_1_affluent": {"seed": 3},
+    "urban_european_1_rundown": {"seed": 3},
+    "urban_european_2_town": {"seed": 3, "smudge": [(236, 538, 300, 560), (1018, 650, 1064, 670)]},
+    "urban_european_2_metropolis": {"seed": 1},
+    "urban_european_2_poor": {"seed": 3,
+                             "smudge": [(918, 474, 978, 496), (988, 474, 1050, 496), (948, 447, 1003, 465), (1190, 466, 1228, 550)]},
+    "urban_european_2_affluent": {"seed": 1, "smudge": [(124, 694, 182, 716), (1142, 674, 1197, 694)]},
+    "urban_european_2_rundown": {"seed": 1, "smudge": [(1252, 531, 1308, 546), (1262, 546, 1310, 568)]},
+    "urban_european_3_town": {"seed": 2, "smudge": [(60, 580, 130, 630), (1371, 696, 1424, 716)]},
+    "urban_european_3_metropolis": {"seed": 0, "smudge": [(1432, 352, 1490, 390), (483, 174, 538, 186)]},
+    "urban_european_3_megacity": {"seed": 1, "smudge": [(460, 30, 500, 78)]},
+    "urban_european_3_poor": {"seed": 3, "smudge": [(224, 536, 272, 584)]},
+    "urban_european_3_affluent": {"seed": 3},
+    "urban_european_3_rundown": {"seed": 2, "smudge": [(722, 522, 760, 538), (1388, 586, 1428, 604)]},
+    "urban_european_4_town": {"seed": 3, "smudge": [(1030, 714, 1070, 752), (462, 678, 506, 732)]},
+    "urban_european_4_metropolis": {"seed": 0, "smudge": [(229, 216, 268, 230)]},
+    "urban_european_4_megacity": {"seed": 0, "smudge": [(499, 176, 529, 212), (246, 227, 281, 240)]},
+    "urban_european_4_poor": {"seed": 1,
+                             "smudge": [(1436, 622, 1488, 738), (1424, 722, 1450, 746), (106, 684, 140, 697)]},
+    "urban_european_4_affluent": {"seed": 3, "smudge": [(302, 654, 366, 670), (416, 680, 438, 716)]},
+    "urban_european_4_rundown": {"seed": 0,
+                                "smudge": [(1299, 449, 1393, 474), (1271, 445, 1298, 477), (1506, 466, 1532, 537), (71, 595, 104, 613)]},
+    "urban_european_5_town": {"seed": 0},
+    "urban_european_5_metropolis": {"seed": 2},
+    "urban_european_5_megacity": {"seed": 0},
+    "urban_european_5_poor": {"seed": 1, "crop": (30, 0, 1507, 724), "smudge": [(930, 651, 957, 692)]},
+    "urban_european_5_affluent": {"seed": 1},
+    "urban_european_5_rundown": {"seed": 3, "smudge": [(1284, 535, 1332, 556), (471, 538, 516, 558)]},
+    "urban_north_american_1_town": {"seed": 3, "smudge": [(10, 605, 52, 684)]},
+    "urban_north_american_1_metropolis": {"seed": 1},
+    "urban_north_american_1_poor": {"seed": 0,
+                                   "smudge": [(1130, 236, 1178, 274), (1126, 384, 1184, 430), (1326, 450, 1420, 476), (1213, 452, 1236, 490)]},
+    "urban_north_american_1_affluent": {"seed": 1,
+                                       "smudge": [(1085, 28, 1121, 62), (517, 462, 560, 515), (314, 508, 386, 546), (95, 697, 133, 718), (1162, 673, 1198, 692)]},
+    "urban_north_american_1_rundown": {"seed": 2, "crop": (30, 0, 1507, 724),
+                                      "smudge": [(172, 0, 292, 66), (1360, 428, 1440, 478), (1447, 406, 1518, 445), (1328, 455, 1358, 496)]},
+    "urban_north_american_2_town": {"seed": 3,
+                                   "smudge": [(285, 522, 365, 545), (295, 652, 335, 668), (1055, 632, 1092, 652), (1205, 586, 1232, 604)]},
+    "urban_north_american_2_metropolis": {"seed": 1, "smudge": [(312, 195, 345, 212)]},
+    "urban_north_american_2_poor": {"seed": 1,
+                                   "smudge": [(1174, 454, 1286, 484), (1222, 647, 1264, 673), (1100, 34, 1124, 68), (8, 382, 42, 438), (538, 427, 636, 444)]},
+    "urban_north_american_2_affluent": {"seed": 3, "smudge": [(265, 669, 295, 688), (516, 488, 543, 550)]},
+    "urban_north_american_2_rundown": {"seed": 0, "crop": (0, 0, 1470, 720),
+                                      "smudge": [(1074, 420, 1154, 502), (1405, 370, 1475, 396), (1335, 384, 1402, 404), (159, 397, 194, 421), (412, 508, 490, 542), (1213, 452, 1238, 492), (1280, 394, 1330, 414)]},
+    "urban_north_american_3_town": {"seed": 3, "smudge": [(198, 576, 257, 600), (546, 595, 592, 609)]},
+    "urban_north_american_3_metropolis": {"seed": 2, "smudge": [(845, 85, 893, 168)]},
+    "urban_north_american_3_megacity": {"seed": 0, "smudge": [(494, 152, 530, 205)]},
+    "urban_north_american_3_poor": {"seed": 3, "smudge": [(60, 496, 98, 514)]},
+    "urban_north_american_3_affluent": {"seed": 2, "smudge": [(401, 681, 434, 700), (1143, 645, 1181, 667)]},
+    "urban_north_american_3_rundown": {"seed": 1,
+                                      "smudge": [(93, 346, 163, 417), (273, 448, 314, 480), (1393, 72, 1472, 122), (1458, 38, 1536, 97), (796, 500, 890, 537)]},
+    "urban_north_american_4_town": {"seed": 0, "smudge": [(736, 562, 798, 580)]},
+    "urban_north_american_4_metropolis": {"seed": 1, "smudge": [(436, 0, 484, 36), (976, 48, 1010, 120)]},
+    "urban_north_american_4_megacity": {"seed": 0, "smudge": [(504, 130, 527, 178)]},
+    "urban_north_american_4_poor": {"seed": 1,
+                                   "smudge": [(574, 553, 636, 571), (755, 544, 812, 562), (576, 588, 634, 606)]},
+    "urban_north_american_4_affluent": {"seed": 0, "smudge": [(763, 240, 792, 264), (704, 336, 758, 428)]},
+    "urban_north_american_4_rundown": {"seed": 1,
+                                      "smudge": [(0, 403, 64, 464), (408, 462, 450, 514), (285, 497, 342, 545), (804, 516, 890, 544)]},
+    "urban_north_american_5_town": {"seed": 3, "smudge": [(58, 686, 172, 708), (1036, 166, 1066, 190)]},
+    "urban_north_american_5_metropolis": {"seed": 0},
+    "urban_north_american_5_megacity": {"seed": 0,
+                                       "smudge": [(266, 168, 290, 202), (0, 165, 14, 206), (506, 184, 524, 212)]},
+    "urban_north_american_5_poor": {"seed": 0,
+                                   "smudge": [(762, 236, 794, 266), (726, 360, 746, 400), (1288, 482, 1328, 532), (1430, 490, 1536, 548)]},
+    "urban_north_american_5_affluent": {"seed": 3},
+    "urban_north_american_5_rundown": {"seed": 0,
+                                      "smudge": [(1318, 362, 1405, 414), (1400, 362, 1492, 414), (1464, 446, 1536, 552), (1218, 412, 1272, 432), (1152, 428, 1192, 446), (940, 436, 1015, 458), (758, 236, 790, 266)]},
+    "urban_latin_american_1_town": {"seed": 1,
+                                   "smudge": [(20, 676, 56, 696), (228, 655, 256, 675), (6, 590, 88, 608), (348, 524, 400, 546), (1315, 478, 1390, 515), (1020, 637, 1044, 650)]},
+    "urban_latin_american_1_metropolis": {"seed": 0, "smudge": [(1296, 452, 1428, 472)]},
+    "urban_latin_american_1_poor": {"seed": 0,
+                                   "smudge": [(115, 522, 198, 585), (118, 585, 155, 665), (222, 556, 255, 640), (788, 606, 812, 618)]},
+    "urban_latin_american_1_affluent": {"seed": 1, "smudge": [(116, 688, 148, 706), (1132, 672, 1166, 688)]},
+    "urban_latin_american_1_rundown": {"seed": 0, "smudge": [(1335, 590, 1370, 604), (1514, 72, 1536, 152)]},
+    "urban_latin_american_2_town": {"seed": 3,
+                                   "smudge": [(325, 530, 380, 552), (322, 660, 358, 678), (1015, 642, 1052, 660), (882, 560, 935, 596)]},
+    "urban_latin_american_2_metropolis": {"seed": 0},
+    "urban_latin_american_2_poor": {"seed": 2, "crop": (36, 0, 1500, 718),
+                                   "smudge": [(200, 366, 268, 428), (168, 562, 204, 655), (1338, 589, 1384, 630), (1448, 670, 1512, 740), (1092, 674, 1118, 688)]},
+    "urban_latin_american_2_affluent": {"seed": 3, "smudge": [(284, 668, 314, 684), (1474, 680, 1506, 694)]},
+    "urban_latin_american_2_rundown": {"seed": 2},
+    "urban_latin_american_3_town": {"seed": 0, "smudge": [(1110, 638, 1136, 654), (506, 584, 538, 598)]},
+    "urban_latin_american_3_metropolis": {"seed": 3, "smudge": [(556, 240, 604, 258), (1176, 700, 1254, 716)]},
+    "urban_latin_american_3_megacity": {"seed": 1},
+    "urban_latin_american_3_poor": {"seed": 3,
+                                   "smudge": [(944, 529, 1011, 550), (970, 633, 997, 648), (319, 675, 349, 694), (722, 658, 754, 675)]},
+    "urban_latin_american_3_affluent": {"seed": 0, "smudge": [(496, 180, 548, 262), (1480, 180, 1536, 204)]},
+    "urban_latin_american_3_rundown": {"seed": 3, "crop": (170, 50, 1536, 720), "smudge": [(1506, 536, 1536, 566)]},
+    "urban_latin_american_4_town": {"seed": 3, "smudge": [(144, 714, 164, 752)]},
+    "urban_latin_american_4_metropolis": {"seed": 0, "smudge": [(606, 254, 652, 272)]},
+    "urban_latin_american_4_megacity": {"seed": 0, "smudge": [(644, 406, 690, 428), (1430, 416, 1472, 442)]},
+    "urban_latin_american_4_poor": {"seed": 3,
+                                   "smudge": [(722, 108, 750, 142), (692, 72, 714, 104), (742, 660, 765, 674)]},
+    "urban_latin_american_4_affluent": {"seed": 0},
+    "urban_latin_american_4_rundown": {"seed": 0,
+                                      "smudge": [(1318, 448, 1380, 474), (1378, 478, 1394, 518), (1504, 476, 1536, 522), (38, 598, 96, 620), (182, 484, 206, 512)]},
+    "urban_latin_american_5_town": {"seed": 0,
+                                   "smudge": [(64, 214, 106, 249), (192, 260, 222, 276), (333, 306, 354, 320)]},
+    "urban_latin_american_5_metropolis": {"seed": 2},
+    "urban_latin_american_5_megacity": {"seed": 0,
+                                       "smudge": [(1448, 194, 1518, 302), (1418, 360, 1494, 390), (500, 188, 524, 212), (246, 222, 290, 240)]},
+    "urban_latin_american_5_poor": {"seed": 1},
+    "urban_latin_american_5_affluent": {"seed": 3},
+    "urban_latin_american_5_rundown": {"seed": 0, "crop": (10, 0, 1490, 725),
+                                      "smudge": [(136, 190, 180, 238), (576, 571, 630, 591), (1138, 441, 1197, 461), (1222, 431, 1283, 453), (1052, 448, 1082, 466), (1374, 474, 1392, 500)]},
+    "urban_african_1_town": {"seed": 3,
+                            "smudge": [(1390, 472, 1446, 538), (1140, 484, 1162, 516), (286, 628, 318, 652)]},
+    "urban_african_1_metropolis": {"seed": 1},
+    "urban_african_1_poor": {"seed": 3, "smudge": [(952, 594, 1003, 614)]},
+    "urban_african_1_affluent": {"seed": 0},
+    "urban_african_1_rundown": {"seed": 2, "crop": (30, 0, 1507, 724),
+                               "smudge": [(356, 428, 398, 448), (1458, 374, 1494, 412)]},
+    "urban_african_2_town": {"seed": 0,
+                            "smudge": [(203, 592, 238, 632), (1008, 468, 1092, 512), (210, 636, 236, 651)]},
+    "urban_african_2_metropolis": {"seed": 2, "crop": (236, 54, 1536, 691), "smudge": [(1056, 450, 1120, 466)]},
+    "urban_african_2_poor": {"seed": 0, "smudge": [(733, 460, 812, 484), (751, 570, 790, 585), (646, 460, 692, 482)]},
+    "urban_african_2_affluent": {"seed": 2, "crop": (30, 0, 1507, 724),
+                                "smudge": [(612, 284, 650, 302), (1372, 76, 1398, 104), (1166, 648, 1198, 668)]},
+    "urban_african_2_rundown": {"seed": 1,
+                               "smudge": [(594, 384, 644, 404), (1244, 372, 1318, 406), (1328, 357, 1407, 417), (1248, 567, 1303, 588)]},
+    "urban_african_3_town": {"seed": 3, "smudge": [(292, 628, 340, 642), (954, 592, 992, 608)]},
+    "urban_african_3_metropolis": {"seed": 0, "smudge": [(1386, 485, 1475, 506)]},
+    "urban_african_3_megacity": {"seed": 0},
+    "urban_african_3_poor": {"seed": 1,
+                            "smudge": [(468, 520, 502, 572), (583, 588, 620, 604), (740, 497, 810, 512), (1229, 650, 1300, 675)]},
+    "urban_african_3_affluent": {"seed": 0},
+    "urban_african_3_rundown": {"seed": 1, "smudge": [(40, 436, 74, 484), (614, 587, 648, 603)]},
+    "urban_african_4_town": {"seed": 2, "smudge": [(583, 673, 607, 688)]},
+    "urban_african_4_metropolis": {"seed": 0},
+    "urban_african_4_megacity": {"seed": 1, "smudge": [(445, 10, 485, 72)]},
+    "urban_african_4_poor": {"seed": 0,
+                            "smudge": [(760, 580, 780, 600), (1138, 634, 1170, 676), (1498, 448, 1536, 510)]},
+    "urban_african_4_affluent": {"seed": 1},
+    "urban_african_4_rundown": {"seed": 1, "smudge": [(0, 392, 52, 454), (1386, 544, 1406, 586)]},
+    "urban_african_5_town": {"seed": 2, "smudge": [(1096, 392, 1113, 418), (146, 636, 198, 672)]},
+    "urban_african_5_metropolis": {"seed": 0},
+    "urban_african_5_megacity": {"seed": 0},
+    "urban_african_5_poor": {"seed": 2},
+    "urban_african_5_affluent": {"seed": 3},
+    "urban_african_5_rundown": {"seed": 2, "crop": (0, 0, 1490, 730),
+                               "smudge": [(1038, 540, 1098, 552), (1174, 516, 1198, 530)]},
+    "urban_middle_eastern_1_town": {"seed": 1,
+                                   "smudge": [(440, 528, 504, 572), (104, 682, 146, 714), (196, 676, 238, 708)]},
+    "urban_middle_eastern_1_metropolis": {"seed": 1, "smudge": [(312, 192, 336, 214)]},
+    "urban_middle_eastern_1_poor": {"seed": 1, "smudge": [(756, 556, 794, 572), (890, 602, 926, 618)]},
+    "urban_middle_eastern_1_affluent": {"seed": 0, "smudge": [(1150, 338, 1226, 358)]},
+    "urban_middle_eastern_1_rundown": {"seed": 1, "crop": (0, 0, 1469, 720),
+                                      "smudge": [(80, 442, 146, 468), (596, 592, 644, 608)]},
+    "urban_middle_eastern_2_town": {"seed": 3,
+                                   "smudge": [(285, 528, 368, 550), (272, 652, 324, 672), (1014, 643, 1052, 662), (1203, 594, 1232, 610), (945, 500, 986, 527), (643, 496, 678, 556)]},
+    "urban_middle_eastern_2_metropolis": {"seed": 0},
+    "urban_middle_eastern_2_poor": {"seed": 0, "crop": (0, 0, 1477, 724),
+                                   "smudge": [(728, 462, 816, 486), (420, 512, 476, 548), (570, 516, 628, 544), (890, 460, 930, 482)]},
+    "urban_middle_eastern_2_affluent": {"seed": 3,
+                                       "smudge": [(274, 672, 304, 692), (1204, 612, 1238, 630), (1468, 676, 1502, 696)]},
+    "urban_middle_eastern_2_rundown": {"seed": 1,
+                                      "smudge": [(1268, 604, 1328, 628), (604, 592, 646, 610), (416, 492, 448, 514)]},
+    "urban_middle_eastern_3_town": {"seed": 3,
+                                   "smudge": [(280, 682, 320, 704), (306, 712, 350, 728), (408, 684, 426, 700)]},
+    "urban_middle_eastern_3_metropolis": {"seed": 1, "smudge": [(518, 456, 558, 496)]},
+    "urban_middle_eastern_3_megacity": {"seed": 0},
+    "urban_middle_eastern_3_poor": {"seed": 1,
+                                   "smudge": [(598, 593, 632, 607), (754, 516, 797, 529), (766, 574, 786, 584), (1229, 652, 1301, 674)]},
+    "urban_middle_eastern_3_affluent": {"seed": 1, "smudge": [(1164, 672, 1216, 690)]},
+    "urban_middle_eastern_3_rundown": {"seed": 2,
+                                      "smudge": [(682, 536, 724, 556), (752, 531, 794, 552), (1456, 416, 1506, 440)]},
+    "urban_middle_eastern_4_town": {"seed": 3,
+                                   "smudge": [(54, 282, 104, 338), (258, 334, 304, 376), (306, 711, 354, 729), (578, 711, 612, 727)]},
+    "urban_middle_eastern_4_metropolis": {"seed": 1},
+    "urban_middle_eastern_4_megacity": {"seed": 2, "crop": (30, 0, 1507, 724)},
+    "urban_middle_eastern_4_poor": {"seed": 0, "smudge": [(742, 514, 812, 534), (764, 599, 794, 620)]},
+    "urban_middle_eastern_4_affluent": {"seed": 1, "smudge": [(130, 314, 154, 348), (440, 644, 474, 666)]},
+    "urban_middle_eastern_4_rundown": {"seed": 0, "crop": (0, 0, 1477, 724),
+                                      "smudge": [(136, 206, 180, 230), (1296, 484, 1338, 527), (982, 494, 1008, 518), (1372, 464, 1392, 497)]},
+    "urban_middle_eastern_5_town": {"seed": 3,
+                                   "smudge": [(146, 304, 236, 334), (1282, 660, 1304, 724), (594, 728, 624, 742)]},
+    "urban_middle_eastern_5_metropolis": {"seed": 2, "crop": (30, 0, 1507, 724)},
+    "urban_middle_eastern_5_megacity": {"seed": 0},
+    "urban_middle_eastern_5_poor": {"seed": 2},
+    "urban_middle_eastern_5_affluent": {"seed": 3},
+    "urban_middle_eastern_5_rundown": {"seed": 2,
+                                      "smudge": [(272, 318, 304, 392), (556, 634, 606, 662), (1342, 604, 1374, 627), (1308, 594, 1328, 627)]},
+    "urban_south_asian_1_town": {"seed": 3,
+                                "smudge": [(100, 518, 175, 545), (230, 540, 295, 560), (238, 612, 280, 660), (464, 622, 504, 640), (1000, 647, 1042, 666)]},
+    "urban_south_asian_1_metropolis": {"seed": 0,
+                                      "smudge": [(24, 118, 68, 164), (134, 196, 170, 232), (276, 198, 292, 212), (326, 218, 354, 240), (1228, 190, 1246, 212), (1458, 190, 1480, 216), (1364, 656, 1420, 690)]},
+    "urban_south_asian_1_poor": {"seed": 1, "smudge": [(514, 455, 566, 504), (602, 597, 632, 612)]},
+    "urban_south_asian_1_affluent": {"seed": 1, "smudge": [(1126, 673, 1176, 691), (920, 596, 948, 610)]},
+    "urban_south_asian_1_rundown": {"seed": 1,
+                                   "smudge": [(28, 86, 82, 210), (372, 388, 430, 415), (750, 528, 800, 575)]},
+    "urban_south_asian_2_town": {"seed": 0,
+                                "smudge": [(160, 584, 268, 636), (46, 645, 80, 664), (613, 633, 644, 649), (712, 575, 745, 624), (1045, 38, 1065, 60), (1184, 637, 1226, 657), (1350, 448, 1390, 505), (864, 618, 902, 636)]},
+    "urban_south_asian_2_metropolis": {"seed": 1, "smudge": [(204, 18, 256, 66)]},
+    "urban_south_asian_2_poor": {"seed": 0,
+                                "smudge": [(1008, 132, 1106, 148), (1068, 410, 1162, 458), (1052, 474, 1162, 498), (756, 492, 822, 511), (774, 608, 822, 624)]},
+    "urban_south_asian_2_affluent": {"seed": 2, "smudge": [(1144, 678, 1178, 694), (352, 647, 394, 660)]},
+    "urban_south_asian_2_rundown": {"seed": 1,
+                                   "smudge": [(28, 88, 72, 210), (468, 510, 502, 590), (424, 490, 446, 556), (1274, 604, 1322, 627), (1274, 480, 1312, 536), (598, 586, 634, 602)]},
+    "urban_south_asian_3_town": {"seed": 1,
+                                "smudge": [(0, 396, 52, 452), (1062, 82, 1088, 112), (748, 518, 806, 534), (1124, 556, 1176, 574), (1138, 672, 1182, 690)]},
+    "urban_south_asian_3_metropolis": {"seed": 0},
+    "urban_south_asian_3_megacity": {"seed": 1, "smudge": [(528, 650, 582, 672)]},
+    "urban_south_asian_3_poor": {"seed": 1, "smudge": [(1104, 178, 1154, 194)]},
+    "urban_south_asian_3_affluent": {"seed": 1,
+                                    "smudge": [(1054, 232, 1106, 246), (86, 672, 144, 690), (1184, 670, 1242, 690)]},
+    "urban_south_asian_3_rundown": {"seed": 1,
+                                   "smudge": [(0, 390, 62, 452), (1244, 652, 1290, 672), (780, 604, 808, 618), (604, 584, 636, 600)]},
+    "urban_south_asian_4_town": {"seed": 0, "smudge": [(404, 714, 444, 738), (760, 624, 792, 640)]},
+    "urban_south_asian_4_metropolis": {"seed": 2, "crop": (30, 0, 1507, 724), "smudge": [(836, 30, 884, 62)]},
+    "urban_south_asian_4_megacity": {"seed": 0, "smudge": [(496, 184, 524, 216)]},
+    "urban_south_asian_4_poor": {"seed": 1,
+                                "smudge": [(570, 558, 656, 580), (590, 640, 630, 660), (1080, 28, 1122, 84)]},
+    "urban_south_asian_4_affluent": {"seed": 0},
+    "urban_south_asian_4_rundown": {"seed": 0, "crop": (0, 0, 1478, 724),
+                                   "smudge": [(766, 248, 794, 284), (1204, 464, 1246, 504)]},
+    "urban_south_asian_5_town": {"seed": 0, "smudge": [(44, 236, 90, 254)]},
+    "urban_south_asian_5_metropolis": {"seed": 3,
+                                      "smudge": [(1030, 36, 1090, 94), (748, 614, 778, 636), (748, 646, 778, 684)]},
+    "urban_south_asian_5_megacity": {"seed": 0, "smudge": [(1452, 184, 1508, 302)]},
+    "urban_south_asian_5_poor": {"seed": 0, "smudge": [(1464, 476, 1536, 566)]},
+    "urban_south_asian_5_affluent": {"seed": 3},
+    "urban_south_asian_5_rundown": {"seed": 2, "smudge": [(1448, 408, 1512, 466)]},
+    "urban_east_asian_1_town": {"seed": 1,
+                               "smudge": [(1204, 584, 1274, 636), (252, 652, 362, 706), (105, 702, 152, 722)]},
+    "urban_east_asian_1_metropolis": {"seed": 2, "crop": (30, 0, 1507, 724)},
+    "urban_east_asian_1_poor": {"seed": 1,
+                               "smudge": [(604, 594, 632, 609), (772, 571, 792, 585), (584, 429, 618, 444)]},
+    "urban_east_asian_1_affluent": {"seed": 3, "smudge": [(284, 682, 326, 698), (1026, 644, 1060, 661)]},
+    "urban_east_asian_1_rundown": {"seed": 0, "smudge": [(1368, 444, 1392, 484)]},
+    "urban_east_asian_2_town": {"seed": 3,
+                               "smudge": [(268, 616, 292, 638), (258, 661, 294, 680), (1013, 644, 1046, 663), (956, 499, 984, 557), (653, 498, 676, 556), (1440, 436, 1480, 474)]},
+    "urban_east_asian_2_metropolis": {"seed": 1, "smudge": [(498, 464, 568, 492), (512, 158, 530, 204)]},
+    "urban_east_asian_2_poor": {"seed": 2, "crop": (0, 0, 1477, 724),
+                               "smudge": [(130, 550, 206, 612), (126, 628, 210, 664), (1093, 662, 1134, 678)]},
+    "urban_east_asian_2_affluent": {"seed": 2, "crop": (30, 0, 1507, 724),
+                                   "smudge": [(406, 661, 444, 685), (498, 638, 537, 653), (1126, 668, 1170, 692), (1237, 641, 1259, 659)]},
+    "urban_east_asian_2_rundown": {"seed": 3, "smudge": [(1280, 534, 1336, 574)]},
+    "urban_east_asian_3_town": {"seed": 1,
+                               "smudge": [(270, 536, 318, 584), (134, 698, 218, 750), (426, 572, 464, 594), (928, 648, 958, 678), (612, 648, 642, 662), (420, 713, 446, 729), (1144, 676, 1176, 690)]},
+    "urban_east_asian_3_metropolis": {"seed": 0},
+    "urban_east_asian_3_megacity": {"seed": 0, "smudge": [(496, 170, 532, 214)]},
+    "urban_east_asian_3_poor": {"seed": 3, "crop": (136, 0, 1536, 686),
+                               "smudge": [(192, 520, 274, 584), (948, 498, 982, 542), (804, 530, 866, 546), (316, 681, 347, 698), (720, 659, 752, 676), (825, 590, 847, 601), (939, 633, 963, 646)]},
+    "urban_east_asian_3_affluent": {"seed": 0},
+    "urban_east_asian_3_rundown": {"seed": 1,
+                                  "smudge": [(530, 428, 562, 504), (592, 474, 610, 526), (468, 516, 504, 600), (616, 592, 640, 610), (624, 352, 664, 424)]},
+    "urban_east_asian_4_town": {"seed": 3,
+                               "smudge": [(16, 636, 46, 670), (1030, 716, 1072, 752), (748, 650, 772, 664)]},
+    "urban_east_asian_4_metropolis": {"seed": 0, "smudge": [(996, 28, 1036, 90), (496, 140, 526, 188)]},
+    "urban_east_asian_4_megacity": {"seed": 3,
+                                   "smudge": [(306, 150, 338, 212), (1208, 508, 1228, 556), (1482, 550, 1500, 572), (482, 192, 512, 248)]},
+    "urban_east_asian_4_poor": {"seed": 1,
+                               "smudge": [(592, 644, 616, 658), (762, 528, 804, 542), (772, 577, 790, 588), (785, 689, 801, 701), (928, 670, 954, 688)]},
+    "urban_east_asian_4_affluent": {"seed": 0,
+                                   "smudge": [(264, 530, 328, 550), (720, 360, 746, 420), (1390, 689, 1416, 703)]},
+    "urban_east_asian_4_rundown": {"seed": 0,
+                                  "smudge": [(406, 513, 482, 540), (494, 548, 530, 594), (1494, 440, 1534, 556), (1366, 446, 1394, 506), (906, 494, 926, 530), (886, 528, 910, 544)]},
+    "urban_east_asian_5_town": {"seed": 0,
+                               "smudge": [(474, 218, 524, 240), (58, 238, 80, 254), (474, 720, 520, 752), (914, 724, 944, 744)]},
+    "urban_east_asian_5_metropolis": {"seed": 0, "smudge": [(658, 688, 690, 724)]},
+    "urban_east_asian_5_megacity": {"seed": 0, "crop": (0, 20, 1456, 734), "smudge": [(256, 162, 296, 206)]},
+    "urban_east_asian_5_poor": {"seed": 2,
+                               "smudge": [(254, 76, 270, 138), (724, 620, 752, 644), (1128, 626, 1178, 650)]},
+    "urban_east_asian_5_affluent": {"seed": 2, "smudge": [(322, 654, 354, 682)]},
+    "urban_east_asian_5_rundown": {"seed": 0, "crop": (0, 0, 1490, 730),
+                                  "smudge": [(580, 570, 648, 588), (308, 116, 410, 182), (484, 186, 528, 242), (626, 206, 664, 296), (162, 572, 200, 602), (1334, 478, 1360, 596), (1370, 442, 1392, 488), (32, 92, 54, 136), (30, 156, 92, 214), (106, 204, 126, 224)]},
+    "urban_japanese_1_town": {"seed": 1,
+                             "smudge": [(94, 604, 158, 622), (100, 734, 132, 750), (778, 662, 808, 680), (1116, 690, 1144, 706), (1484, 704, 1510, 752)]},
+    "urban_japanese_1_metropolis": {"seed": 2, "crop": (30, 0, 1507, 724),
+                                   "smudge": [(110, 128, 166, 160), (290, 118, 352, 180)]},
+    "urban_japanese_1_poor": {"seed": 3, "crop": (0, 20, 1404, 708)},
+    "urban_japanese_1_affluent": {"seed": 2, "crop": (86, 56, 1450, 724)},
+    "urban_japanese_1_rundown": {"seed": 3, "smudge": [(998, 228, 1026, 296), (944, 596, 980, 614)]},
+    "urban_japanese_2_town": {"seed": 1,
+                             "smudge": [(362, 522, 436, 541), (380, 620, 412, 640), (598, 578, 646, 620), (1190, 645, 1236, 670), (1489, 488, 1517, 556)]},
+    "urban_japanese_2_metropolis": {"seed": 0, "smudge": [(905, 180, 950, 285), (500, 195, 524, 222)]},
+    "urban_japanese_2_poor": {"seed": 1,
+                             "smudge": [(518, 462, 560, 504), (634, 485, 694, 505), (652, 580, 680, 598), (1140, 648, 1200, 672)]},
+    "urban_japanese_2_affluent": {"seed": 2, "crop": (30, 0, 1507, 724),
+                                 "smudge": [(396, 662, 436, 690), (1138, 648, 1178, 690)]},
+    "urban_japanese_2_rundown": {"seed": 0, "smudge": [(918, 578, 946, 600)]},
+    "urban_japanese_3_town": {"seed": 3,
+                             "smudge": [(150, 550, 185, 585), (310, 662, 345, 683), (735, 656, 770, 672), (1008, 648, 1038, 665), (1134, 494, 1172, 537), (1424, 534, 1467, 572), (963, 488, 988, 552), (540, 550, 570, 575), (650, 515, 675, 545), (1124, 578, 1152, 618)]},
+    "urban_japanese_3_metropolis": {"seed": 1, "smudge": [(444, 8, 506, 98)]},
+    "urban_japanese_3_megacity": {"seed": 0, "smudge": [(500, 190, 532, 216), (1216, 176, 1250, 252)]},
+    "urban_japanese_3_poor": {"seed": 3, "smudge": [(1010, 476, 1064, 506), (946, 626, 974, 644)]},
+    "urban_japanese_3_affluent": {"seed": 3, "smudge": [(300, 666, 330, 686)]},
+    "urban_japanese_3_rundown": {"seed": 2,
+                                "smudge": [(172, 564, 196, 608), (458, 502, 484, 538), (546, 500, 580, 524), (536, 582, 560, 604)]},
+    "urban_japanese_4_town": {"seed": 3, "smudge": [(546, 640, 604, 660), (754, 666, 782, 680)]},
+    "urban_japanese_4_metropolis": {"seed": 1},
+    "urban_japanese_4_megacity": {"seed": 0, "smudge": [(488, 118, 538, 206), (1460, 200, 1484, 262)]},
+    "urban_japanese_4_poor": {"seed": 0,
+                             "smudge": [(44, 68, 90, 106), (648, 234, 702, 304), (756, 544, 808, 562), (616, 628, 642, 644), (772, 602, 798, 642), (1136, 536, 1154, 594), (158, 558, 182, 588)]},
+    "urban_japanese_4_affluent": {"seed": 0, "smudge": [(200, 620, 218, 654)]},
+    "urban_japanese_4_rundown": {"seed": 0,
+                                "smudge": [(34, 450, 112, 532), (58, 572, 82, 594), (650, 556, 676, 586), (1510, 496, 1530, 560)]},
+    "urban_japanese_5_town": {"seed": 2, "smudge": [(208, 684, 272, 712)]},
+    "urban_japanese_5_metropolis": {"seed": 2},
+    "urban_japanese_5_megacity": {"seed": 0,
+                                 "smudge": [(488, 132, 534, 206), (264, 172, 290, 214), (1174, 280, 1226, 300), (1464, 204, 1492, 270)]},
+    "urban_japanese_5_poor": {"seed": 0, "smudge": [(160, 44, 222, 66)]},
+    "urban_japanese_5_affluent": {"seed": 3, "smudge": [(958, 490, 982, 546)]},
+    "urban_japanese_5_rundown": {"seed": 2, "crop": (30, 0, 1507, 724),
+                                "smudge": [(700, 538, 724, 558), (1108, 510, 1150, 536)]},
+}
+for _key, _pick in VARIANT_PICKS.items():
+    _draft_entry = DRAFTS.pop(_key)
+    PICTURES[_key] = {
+        "terrain": ["urban"],
+        "tech": _draft_entry["tech"],
+        "rung": _draft_entry["rung"],
+        "region": _draft_entry["region"],
+        "size": None,
+        VARIANT_AXIS[_draft_entry["variant"]]: _draft_entry["variant"],
+        "effect": CITY_EFFECT[_draft_entry["region"]],
+        "prompt": _draft_entry["prompt"],
+        **_pick,
+    }
+
+for _table, _picks in ((WAVE3_WIRING, WAVE3_PICKS), (WAVE6_WIRING, WAVE6_PICKS), (WAVE7_WIRING, WAVE7_PICKS)):
+    for _key, _pick in _picks.items():
+        _draft_entry = DRAFTS.pop(_key)
+        _wiring = _table[_key]
+        PICTURES[_key] = {
+            "terrain": [*_draft_entry["terrain"], *_wiring.get("any_region", [])],
+            "tech": _draft_entry["tech"],
+            "rung": _draft_entry["rung"],
+            "region": _wiring.get("region"),
+            "size": None,
+            **{k: v for k, v in _wiring.items() if k != "region"},
+            "effect": f"vfx_entity_ui_state_{_draft_entry['like']}",
+            "prompt": _draft_entry["prompt"],
+            **_pick,
+        }
+        if PICTURES[_key]["effect"] in PLACED_OVERLAYS:  # a city picture like vanilla's European one
+            PICTURES[_key]["effect"] = NEUTRAL_OVERLAY
+if "docks_harbor_1" in PICTURES:
+    PICTURES["docks_1"]["scale"] = "major_port"  # the pilot's port is rung 1's major port
+
+
+def full_prompt(key: str) -> str:
+    entry = PICTURES[key] if key in PICTURES else DRAFTS[key]
+    return f"{STYLE}. {entry['prompt']}{TAIL}"
+
+
+def terrains(key: str) -> list:
+    """The terrains whose lists a picture joins: its own, and for a city picture that a
+    metropolis can show, every terrain a great city takes over."""
+    p = PICTURES[key]
+    if CITY_TERRAIN not in p["terrain"] or p["size"] == "town":
+        return list(p["terrain"])
+    return [*p["terrain"], *(t for t in CITY_TAKEOVER_TERRAINS if t not in p["terrain"])]
+
+
+def takes_over(key: str, terrain: str) -> bool:
+    """Whether the picture is in this terrain's list as a great city's takeover."""
+    return terrain not in PICTURES[key]["terrain"] and terrain in terrains(key)
+
+
+def size_weight(size: str) -> int:
+    """A size's share of the weight: its digit in the size place, a megacity's place of its own."""
+    return W_MEGACITY if size == MEGACITY else W_SIZE * SIZES[size][1]
+
+
+def weight(key: str, terrain: str = None) -> int:
+    """A picture's weight, in its own terrains or, with `terrain`, in that terrain's list."""
+    p = PICTURES[key]
+    w = W_RUNG * p["rung"]
+    if terrain and takes_over(key, terrain) and not p.get("condition"):
+        w += W_CITY_OVER
+    if p["size"]:
+        w += size_weight(p["size"])
+    if p.get("scale"):
+        w += W_SIZE * SCALES[p["scale"]][1]
+    if p["region"]:
+        w += W_REGION * region_digit(p["region"])
+    if p.get("over"):
+        w += W_OVER
+    if p.get("character"):
+        w += W_CHAR * CHARACTERS[p["character"]][1]
+    if p.get("upkeep"):
+        w += W_UPKEEP * UPKEEP[p["upkeep"]][1]
+    if p.get("means"):
+        w += W_MEANS * MEANS[p["means"]][1]
+    if p.get("condition"):
+        w += W_OVER + W_COND * CONDITIONS[p["condition"]][1]
+    return w
+
+
+def _negated(line: str) -> str:
+    if line.startswith("is_in_geographic_region"):
+        return line.replace("is_in_geographic_region", "is_not_in_geographic_region", 1)
+    assert line.endswith(" = yes"), line
+    return line[:-len("yes")] + "no"
+
+
+def region_conditions(region: str) -> list:
+    """The state triggers of a region family, one a line, nested lines tab-indented."""
+    group = region_group(region)
+    lines = REGION_GROUPS[group][region][0]
+    if region != GROUP_FALLBACK.get(group):
+        return list(lines) if len(lines) == 1 else ["OR = {", *("\t" + line for line in lines), "}"]
+    # the states of no family, in the form vanilla's own fallback entry uses
+    others = [_negated(line) for key, (other, _digit) in REGION_GROUPS[group].items() if key != region
+              for line in other]
+    if not lines:
+        return others
+    return ["OR = {", *("\t" + line for line in lines),
+            "\tAND = {", *("\t\t" + line for line in others), "\t}", "}"]
+
+
+def wired() -> dict:
+    """The pictures with a picked render: the ones the terrain file lists."""
+    return {k: p for k, p in PICTURES.items() if p["seed"] is not None}
+
+
+# The banner's hover (the owner, 2026-11-12: "make it transparent to the player" why one state
+# shows a run-down street and its neighbor an ordinary one). The engine can't say which picture
+# file a banner shows, but `State.GetBestTextureEffect` gives the name of its overlay. So every
+# kind of picture of every technology plays its own copy of the vanilla overlay it would use
+# (the same particle under another name, gfx/models/particles/te_state_picture_overlays_generated.asset),
+# and the banner's tooltip looks up the text of that name (te_sp_tt_<overlay name>,
+# localization/english/te_picture_hover_generated_l_english.yml): what the picture is, why it
+# shows, the technology it follows and, where it decided, the terrain. Seen in game 2026-11-13
+# (scripting_best_practices.md § "State pictures"). A region family has no word in the hover
+# (the owner: leave the geographical variants out), so the families of one kind share a name.
+
+OVERLAY_PREFIX = "te_sp_fx_"
+VANILLA_OVERLAY_PREFIX = "vfx_entity_ui_state_"
+# Each vanilla overlay a picture uses, and the particle its entity plays (game/gfx/models/particles/
+# vfx_entities_ui.asset, 1.15; every one is the same one-event entity, so a copy is that entity
+# under another name). Two particles aren't named after their entity: the forest's and the jungle's.
+OVERLAY_PARTICLES = {
+    f"{VANILLA_OVERLAY_PREFIX}{name}": f"ui/state/{particle}" for name, particle in {
+        "cleared_land": "cleared_land", "desert": "desert", "desert_northamerica": "desert_northamerica",
+        "docks": "docks", "farmland_arabic": "farmland_arabic", "farmland_asian": "farmland_asian",
+        "farmland_generic": "farmland_generic", "farmland_subtropic": "farmland_subtropic",
+        "forest": "biome_forest", "forestry": "forestry", "hills": "hills", "hills_jungle": "hills_jungle",
+        "hills_subtropic": "hills_subtropic", "jungle": "biome_jungle", "mining": "mining",
+        "mountains": "mountains", "mountains_arid": "mountains_arid",
+        "mountains_northamerica": "mountains_northamerica", "pasture": "pasture", "plains": "plains",
+        "plains_arid": "plains_arid", "plains_northamerica": "plains_northamerica",
+        "plantation": "plantation", "tundra": "tundra", "urban_african": "urban_african",
+        "urban_arabic": "urban_arabic", "urban_latin_american": "urban_latin_american",
+        "wetland": "wetland",
+    }.items()
+}
+
+# The kind of a worked-land picture, by the terrain whose list holds it; a natural terrain's own
+# pictures (wave 7: the land with a road, pylons or a pipeline) are land_<terrain>.
+LAND_KINDS = {
+    "docks": "harbor", "mining": "open_pit", "pasture": "ranch", "plantation": "plantation",
+    "forestry": "forestry", "cleared_land": "cleared_land", **{t: "farmland" for t in FARMLAND},
+}
+# The kinds whose picture is a city's: below a metropolis one shows only where the game holds the
+# state's terrain to be urban, so their hover says so then.
+CITY_KINDS = ("city", *SIZES, *MEANS, *UPKEEP, *CHARACTERS, *CONDITIONS)
+# The worked land a special picture needs as its terrain: the hover names it.
+SCALE_TERRAIN = {"major_port": "docks", "colliery": "mining"}
+# The decade a hover gives each technology's pictures (WHEN, the time the prompt painted).
+DECADES = {
+    "in the 1930s": "1930s", "in the early 1930s": "1930s", "around 1960": "1960s",
+    "around 1980": "1980s", "around 1990": "1990s", "around 2000": "2000s", "in the 2020s": "2020s",
+    "in the 2030s": "2030s", "in the 2040s": "2040s", "in the late twenty-first century": "2080s",
+}
+
+
+def hover_kind(key: str, terrain: str = None) -> str:
+    """What the picture is, for the hover: a size, a means or upkeep, a character or a condition
+    of a city, the plain city, or the kind of land of the entry's terrain."""
+    p = PICTURES[key]
+    for field in ("condition", "character", "upkeep", "means", "size", "scale"):
+        if p.get(field):
+            return p[field]
+    if p.get("over"):
+        return "oil"
+    if CITY_TERRAIN in p["terrain"]:
+        return "city"
+    terrain = terrain or p["terrain"][0]
+    return LAND_KINDS.get(terrain, f"land_{terrain}")
+
+
+def decade(tech: str) -> str:
+    return DECADES[WHEN[tech]]
+
+
+def overlay_name(key: str, terrain: str = None) -> str:
+    """The overlay a picture's entry plays: its own copy of the vanilla one, named for the kind and
+    the technology, so the hover can tell them apart (the family is left out)."""
+    p = PICTURES[key]
+    vanilla = p["effect"]
+    return f"{OVERLAY_PREFIX}{hover_kind(key, terrain)}_{p['tech']}_{vanilla[len(VANILLA_OVERLAY_PREFIX):]}"
+
+
+def overlays() -> dict:
+    """{overlay name: (kind, tech, vanilla overlay)} for every entry the terrain file writes."""
+    out = {}
+    for key, p in wired().items():
+        for terrain in terrains(key):
+            out[overlay_name(key, terrain)] = (hover_kind(key, terrain), p["tech"], p["effect"])
+    return dict(sorted(out.items()))

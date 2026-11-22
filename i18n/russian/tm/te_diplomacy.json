@@ -1,0 +1,602 @@
+{
+ "annex_subject_peaceful": {
+  "en": "Peaceful Integration",
+  "ru": "Мирная интеграция"
+ },
+ "annex_subject_peaceful_action_name": {
+  "en": "Peaceful Integration",
+  "ru": "Мирная интеграция"
+ },
+ "annex_subject_peaceful_action_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has peacefully integrated [TARGET_COUNTRY.GetName].",
+  "ru": "Страна [INITIATOR_COUNTRY.GetName] мирно интегрировала страну [TARGET_COUNTRY.GetName]."
+ },
+ "annex_subject_peaceful_action_notification_name": {
+  "en": "Peaceful Integration",
+  "ru": "Мирная интеграция"
+ },
+ "annex_subject_peaceful_action_propose_name": {
+  "en": "Propose Peaceful Integration",
+  "ru": "Предложить мирную интеграцию"
+ },
+ "annex_subject_peaceful_desc": {
+  "en": "Peaceful Integration is a [concept_diplomatic_action] that allows a country to peacefully annex a subject country.",
+  "ru": "Мирная интеграция — это [concept_diplomatic_action|l], позволяющее стране мирно аннексировать зависимое государство."
+ },
+ "annex_subject_peaceful_proposal_accepted_desc": {
+  "en": "[TARGET_COUNTRY.GetName] accepted our proposal for Peaceful Integration.",
+  "ru": "Страна [TARGET_COUNTRY.GetName] приняла наше предложение о мирной интеграции."
+ },
+ "annex_subject_peaceful_proposal_accepted_name": {
+  "en": "Peaceful Integration Accepted",
+  "ru": "Мирная интеграция принята"
+ },
+ "annex_subject_peaceful_proposal_declined_desc": {
+  "en": "[TARGET_COUNTRY.GetName] declined our proposal for Peaceful Integration.",
+  "ru": "Страна [TARGET_COUNTRY.GetName] отклонила наше предложение о мирной интеграции."
+ },
+ "annex_subject_peaceful_proposal_declined_name": {
+  "en": "Peaceful Integration Declined",
+  "ru": "Мирная интеграция отклонена"
+ },
+ "annex_subject_peaceful_proposal_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] wishes to peacefully integrate with us.",
+  "ru": "Страна [INITIATOR_COUNTRY.GetName] хочет мирно интегрироваться с нами."
+ },
+ "annex_subject_peaceful_proposal_notification_name": {
+  "en": "Proposal for Peaceful Integration",
+  "ru": "Предложение о мирной интеграции"
+ },
+ "colonial_collapse_subject_unrest_modifier": {
+  "en": "Imperial Collapse Aftershock",
+  "ru": "Отголоски имперского краха"
+ },
+ "colonial_collapse_subject_unrest_modifier_desc": {
+  "en": "The colonial empire this country belonged to has collapsed: its [concept_colonial_stability] ran out.",
+  "ru": "Колониальная империя, к которой принадлежала эта страна, рухнула: её [concept_colonial_stability|l] иссякла."
+ },
+ "colonial_overlord_collapsing_subject_ld_modifier": {
+  "en": "Subject on the Brink",
+  "ru": "Зависимое государство на грани"
+ },
+ "colonial_overlord_collapsing_subject_ld_modifier_desc": {
+  "en": "The colonial empire this country belongs to is Collapsing: its [concept_colonial_stability] is below 20. This lasts while it stays there.",
+  "ru": "Колониальная империя, к которой принадлежит эта страна, разваливается: её [concept_colonial_stability|l] ниже 20. Действует, пока так остаётся."
+ },
+ "colonial_overlord_crumbling_subject_ld_modifier": {
+  "en": "Defiant Colonial Subject",
+  "ru": "Непокорное колониальное зависимое государство"
+ },
+ "colonial_overlord_crumbling_subject_ld_modifier_desc": {
+  "en": "The colonial empire this country belongs to is Crumbling: its [concept_colonial_stability] is below 40. This lasts while it stays there.",
+  "ru": "Колониальная империя, к которой принадлежит эта страна, рушится: её [concept_colonial_stability|l] ниже 40. Действует, пока так остаётся."
+ },
+ "colonial_overlord_strained_subject_ld_modifier": {
+  "en": "Restless Colonial Subject",
+  "ru": "Беспокойное колониальное зависимое государство"
+ },
+ "colonial_overlord_strained_subject_ld_modifier_desc": {
+  "en": "The colonial empire this country belongs to is Strained: its [concept_colonial_stability] is below 65. This lasts while it stays there.",
+  "ru": "Колониальная империя, к которой принадлежит эта страна, напряжена: её [concept_colonial_stability|l] ниже 65. Действует, пока так остаётся."
+ },
+ "concept_colonial_subject_desc": {
+  "en": "A [concept_subject] of ours, or of one of our subjects, that counts as colonial: every colony and chartered company, and a protectorate separated from its overlord's capital by sea whose people share no [concept_heritage_trait] with ours. Each one keeps the Colonial Empire [concept_journal_entry] running. A colony raised to a dominion no longer counts.",
+  "ru": "[concept_subject|U] нашей страны или одной из наших зависимых стран, считающийся колониальным: каждая колония и привилегированная компания, а также протекторат, отделённый от столицы сюзерена морем, чей народ не имеет общих с нашим [Concept('concept_heritage_trait','черт наследия')]. Каждый такой подданный поддерживает работу [Concept('concept_journal_entry','записи журнала')] «Колониальная империя». Колония, поднятая до доминиона, больше не считается."
+ },
+ "covert_comms_disruption_action_pact_desc": {
+  "en": "We are disrupting military communications of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], degrading their combat effectiveness.",
+  "ru": "Мы нарушаем военную связь страны [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], снижая её боевую эффективность."
+ },
+ "covert_counterintel_support_action_pact_desc": {
+  "en": "We are supporting the counterintelligence services of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "ru": "Мы поддерживаем службы контрразведки страны [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
+ },
+ "covert_cultivate_assets_action_pact_desc": {
+  "en": "We are cultivating intelligence assets in [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "ru": "Мы взращиваем разведывательную агентуру в стране [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
+ },
+ "covert_destabilization_action_pact_desc": {
+  "en": "We are conducting a destabilization campaign against [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], fueling political unrest and separatism.",
+  "ru": "Мы ведём кампанию дестабилизации против страны [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], разжигая политическое недовольство и сепаратизм."
+ },
+ "covert_election_interference_action_pact_desc": {
+  "en": "We are running a covert election interference campaign against [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], undermining their political [concept_legitimacy].",
+  "ru": "Мы ведём тайную кампанию вмешательства в выборы против страны [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], подрывая её политическую [concept_legitimacy|l]."
+ },
+ "covert_financial_subversion_action_pact_desc": {
+  "en": "We are conducting covert financial subversion against [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], destabilizing their financial markets.",
+  "ru": "Мы ведём скрытую финансовую диверсию против страны [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], дестабилизируя её финансовые рынки."
+ },
+ "covert_ideological_subversion_action_pact_desc": {
+  "en": "We are covertly promoting our ideology within [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], supporting sympathetic [Concept('concept_political_movement', 'political movements')].",
+  "ru": "Мы тайно продвигаем нашу идеологию в стране [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], поддерживая сочувствующие [Concept('concept_political_movement', 'политические движения')]."
+ },
+ "covert_incite_autonomy_action_pact_desc": {
+  "en": "We are inciting autonomy in the colonies of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "ru": "Мы подстрекаем к автономии колонии страны [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
+ },
+ "covert_industrial_espionage_action_pact_desc": {
+  "en": "We are conducting industrial espionage against [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], stealing their production secrets.",
+  "ru": "Мы ведём промышленный шпионаж против страны [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], похищая её производственные секреты."
+ },
+ "covert_influence_campaign_action_pact_desc": {
+  "en": "We are conducting an influence campaign against [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], weakening their resistance to our [concept_power_bloc] pressure.",
+  "ru": "Мы ведём кампанию влияния против страны [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], ослабляя её сопротивление давлению нашего [Concept('concept_power_bloc', 'силового блока')]."
+ },
+ "covert_infrastructure_sabotage_action_pact_desc": {
+  "en": "We are conducting covert sabotage operations against [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], disrupting their [concept_infrastructure].",
+  "ru": "Мы проводим тайные операции по саботажу против страны [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], нарушая её [Concept('concept_infrastructure', 'инфраструктуру')]."
+ },
+ "covert_military_espionage_action_pact_desc": {
+  "en": "We are conducting military espionage against [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], gathering intelligence on their armed forces.",
+  "ru": "Мы ведём военный шпионаж против страны [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], собирая сведения о её вооружённых силах."
+ },
+ "covert_nuclear_sabotage_action_pact_desc": {
+  "en": "We are sabotaging the nuclear weapons program of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "ru": "Мы саботируем программу ядерного оружия страны [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
+ },
+ "covert_regime_change_action_pact_desc": {
+  "en": "We are bankrolling a change of government in [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "ru": "Мы финансируем смену правительства в стране [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
+ },
+ "covert_sabotage_colony_action_pact_desc": {
+  "en": "We are sabotaging the most populous colony of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "ru": "Мы саботируем самую многолюдную колонию страны [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
+ },
+ "covert_secure_material_action_pact_desc": {
+  "en": "We are searching for loose nuclear material in [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "ru": "Мы ищем бесхозные ядерные материалы в стране [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
+ },
+ "covert_space_espionage_action_pact_desc": {
+  "en": "We are stealing space program designs from [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "ru": "Мы похищаем проекты космической программы страны [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
+ },
+ "covert_survey_defences_action_pact_desc": {
+  "en": "We are surveying the colony defenses of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "ru": "Мы изучаем оборону колоний страны [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
+ },
+ "decolonize_diplo_action": {
+  "en": "Decolonize",
+  "ru": "Деколонизировать"
+ },
+ "decolonize_diplo_action_action_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has initiated [concept_decolonization_system] of [TARGET_COUNTRY.GetName].",
+  "ru": "Страна [INITIATOR_COUNTRY.GetName] начала [Concept('concept_decolonization_system','деколонизацию')] страны [TARGET_COUNTRY.GetName]."
+ },
+ "decolonize_diplo_action_action_notification_name": {
+  "en": "Decolonization",
+  "ru": "Деколонизация"
+ },
+ "decolonize_diplo_action_desc": {
+  "en": "Release a colonial territory as an independent nation.",
+  "ru": "Освободить колониальную территорию как независимое государство."
+ },
+ "diplomatic_alignment": {
+  "en": "Diplomatic Alignment",
+  "ru": "Дипломатическое согласование"
+ },
+ "diplomatic_alignment_action_break_name": {
+  "en": "End Diplomatic Alignment",
+  "ru": "Прекратить дипломатическое согласование"
+ },
+ "diplomatic_alignment_action_name": {
+  "en": "Diplomatic Alignment",
+  "ru": "Дипломатическое согласование"
+ },
+ "diplomatic_alignment_action_notification_break_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has ended their alignment of [TARGET_COUNTRY.GetName]'s foreign policy with their own.",
+  "ru": "Страна [INITIATOR_COUNTRY.GetName] прекратила согласование внешней политики страны [TARGET_COUNTRY.GetName] со своей собственной."
+ },
+ "diplomatic_alignment_action_notification_break_name": {
+  "en": "Diplomatic Alignment Ended",
+  "ru": "Дипломатическое согласование прекращено"
+ },
+ "diplomatic_alignment_action_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has aligned [TARGET_COUNTRY.GetName]'s foreign policy with their own.",
+  "ru": "Страна [INITIATOR_COUNTRY.GetName] согласовала внешнюю политику страны [TARGET_COUNTRY.GetName] со своей собственной."
+ },
+ "diplomatic_alignment_action_notification_name": {
+  "en": "Diplomatic Alignment",
+  "ru": "Дипломатическое согласование"
+ },
+ "diplomatic_alignment_action_propose_name": {
+  "en": "Diplomatic Alignment",
+  "ru": "Дипломатическое согласование"
+ },
+ "diplomatic_alignment_desc": {
+  "en": "Diplomatic Alignment is a [concept_diplomatic_action] that allows a country to influence the foreign policy of another country.",
+  "ru": "Дипломатическое согласование — это [concept_diplomatic_action|l], позволяющее стране влиять на внешнюю политику другой страны."
+ },
+ "diplomatic_alignment_pact_desc": {
+  "en": "[SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] is aligning its foreign policy with [SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName].",
+  "ru": "Страна [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] согласует свою внешнюю политику со страной [SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName]."
+ },
+ "diplomatic_overture_modifier": {
+  "en": "Diplomatic Overture",
+  "ru": "Дипломатический зондаж"
+ },
+ "diplomatic_overture_modifier_desc": {
+  "en": "Our diplomats are pursuing negotiations and diplomatic engagement to resolve international tensions.",
+  "ru": "Наши дипломаты ведут переговоры и дипломатические контакты, чтобы разрядить международную напряжённость."
+ },
+ "diplomatic_overture_rebuffed_modifier": {
+  "en": "Diplomatic Overture Rebuffed",
+  "ru": "Дипломатический зондаж отвергнут"
+ },
+ "diplomatic_overture_rebuffed_modifier_desc": {
+  "en": "Our diplomatic overture was rejected, resulting in a humiliating loss of face on the international stage.",
+  "ru": "Наш дипломатический зондаж был отвергнут, что обернулось унизительной потерей лица на международной арене."
+ },
+ "foreign_terror_diplomacy_modifier": {
+  "en": "Intelligence Cooperation",
+  "ru": "Разведывательное сотрудничество"
+ },
+ "foreign_terror_diplomacy_modifier_desc": {
+  "en": "Quiet intelligence-sharing agreements help prevent future attacks while maintaining diplomatic channels.",
+  "ru": "Негласный обмен разведданными помогает предотвращать будущие атаки, сохраняя при этом дипломатические каналы."
+ },
+ "humanitarian_aid_pact_desc": {
+  "en": "Gives money to the poor in another country, increasing influence and relations.",
+  "ru": "Передаёт деньги бедным в другой стране, повышая влияние и отношения."
+ },
+ "identity_diplomatic": {
+  "en": "Diplomatic Framework",
+  "ru": "Дипломатические рамки"
+ },
+ "identity_diplomatic_desc": {
+  "en": "This Identity is founded on [Concept('concept_power_bloc_principle', 'principles')] of collective security, shared prosperity, and respect for international law.",
+  "ru": "Эта идентичность основана на [Concept('concept_power_bloc_principle', 'принципах')] коллективной безопасности, общего процветания и уважения к международному праву."
+ },
+ "intelligence_sharing_pact": {
+  "en": "Intelligence Sharing Pact",
+  "ru": "Пакт об обмене разведданными"
+ },
+ "intelligence_sharing_pact_article_short_desc": {
+  "en": "Both countries will share intelligence",
+  "ru": "Обе страны будут обмениваться разведданными"
+ },
+ "intelligence_sharing_pact_desc": {
+  "en": "An agreement between two countries to share intelligence information.",
+  "ru": "Соглашение между двумя странами об обмене разведывательной информацией."
+ },
+ "intelligence_sharing_pact_effects_desc": {
+  "en": "• +5% intelligence [concept_institution] effectiveness for both countries.\\n• +3 [concept_intelligence_capacity] for both.\\n• Once a year, the partner with the weaker covert defense is shielded by the stronger partner's intelligence, raising its Economic, Military and Ideological covert defense according to the gap between them.\\n• +10% intelligence institution costs for both.\\n• +300 [concept_treaty] leverage generation for both.\\n• Both countries gain 1 [concept_infamy] upon signing.\\n• Improves relations over time (max +60).",
+  "ru": "• +5% к эффективности разведывательного [Concept('concept_institution','института')] для обеих стран.\\n• +3 к [Concept('concept_intelligence_capacity','разведывательному потенциалу')] для обеих.\\n• Раз в год партнёр с более слабой скрытой защитой получает прикрытие от разведки более сильного партнёра, что повышает его экономическую, военную и идеологическую скрытую защиту в зависимости от разрыва между ними.\\n• +10% к стоимости разведывательных институтов для обеих.\\n• +300 к генерации рычагов влияния по [Concept('concept_treaty','договору')] для обеих.\\n• Обе страны получают 1 ед. [Concept('concept_infamy','дурной славы')] при подписании.\\n• Отношения улучшаются со временем (максимум +60)."
+ },
+ "iw_target_not_our_subject_tt": {
+  "en": "Cannot target our own subjects",
+  "ru": "Нельзя выбрать целью наши собственные зависимые государства"
+ },
+ "ministry_fa_diplomacy_advance": {
+  "en": "Foreign Affairs Ministry: Diplomacy Advance",
+  "ru": "Министерство иностранных дел: продвижение дипломатии"
+ },
+ "ministry_fa_diplomacy_advance_desc": {
+  "en": "A strong positive boost to ministry law enactment progress from a recent event.",
+  "ru": "Сильный положительный прирост прогресса принятия закона о министерстве от недавнего события."
+ },
+ "ministry_fa_diplomacy_cautious": {
+  "en": "Foreign Affairs Ministry: Diplomacy Cautious Advance",
+  "ru": "Министерство иностранных дел: осторожное продвижение дипломатии"
+ },
+ "ministry_fa_diplomacy_cautious_desc": {
+  "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
+  "ru": "Меньший положительный прирост прогресса принятия закона о министерстве от недавнего события."
+ },
+ "ministry_fa_diplomacy_stall": {
+  "en": "Foreign Affairs Ministry: Diplomacy Stall",
+  "ru": "Министерство иностранных дел: застой дипломатии"
+ },
+ "mutual_assistance_pact": {
+  "en": "Mutual Assistance Pact",
+  "ru": "Пакт о взаимной помощи"
+ },
+ "nd_withdraw_umbrella_action_pact_desc": {
+  "en": "[SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName] has withdrawn its nuclear umbrella from [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "ru": "Страна [SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName] отозвала своё ядерное прикрытие у страны [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
+ },
+ "nuke_diplo_action": {
+  "en": "Nuclear Weapon Industrial Strike",
+  "ru": "Ядерный удар по промышленности"
+ },
+ "nuke_diplo_action_action_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has launched a Nuclear Weapon Industrial Strike.",
+  "ru": "Страна [INITIATOR_COUNTRY.GetName] нанесла ядерный удар по промышленности."
+ },
+ "nuke_diplo_action_action_notification_name": {
+  "en": "Nuclear Weapon Industrial Strike Launched",
+  "ru": "Ядерный удар по промышленности нанесён"
+ },
+ "nuke_diplo_action_desc": {
+  "en": "Launch a [concept_nuclear_strike] on an industrial center.",
+  "ru": "Нанести [Concept('concept_nuclear_strike','ядерный удар')] по промышленному центру."
+ },
+ "pacific_rim_pact": {
+  "en": "Pacific Rim Pact",
+  "ru": "Пакт стран Тихоокеанского кольца"
+ },
+ "peace_rally_diplomatic_leverage_modifier": {
+  "en": "Peace Rally Diplomatic Leverage",
+  "ru": "Дипломатический рычаг: митинг мира"
+ },
+ "peace_rally_diplomatic_leverage_modifier_desc": {
+  "en": "The massive peace rally has been leveraged as evidence of popular mandate for diplomacy, boosting our international influence.",
+  "ru": "Массовый митинг мира использован как свидетельство народного мандата на дипломатию, что повышает наше международное влияние."
+ },
+ "power_bloc_can_use_diplomatic_alignment_bool": {
+  "en": "Leader Can Use Diplomatic Alignment [concept_diplomatic_action]",
+  "ru": "Лидер может использовать [concept_diplomatic_action|l] «Дипломатическое согласование»"
+ },
+ "power_bloc_can_use_diplomatic_alignment_bool_desc": {
+  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] can use the Diplomatic Alignment [concept_diplomatic_action] to align the foreign policy of a [concept_country] with the [concept_power_bloc].",
+  "ru": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] может использовать [concept_diplomatic_action|l] «Дипломатическое согласование», чтобы согласовать внешнюю политику [Concept('concept_country','страны')] с политикой [Concept('concept_power_bloc','силового блока')]."
+ },
+ "principle_diplomacy_1_desc": {
+  "en": "The [concept_power_bloc] encourages diplomacy and peaceful resolution of conflicts.",
+  "ru": "[concept_power_bloc] поощряет дипломатию и мирное разрешение конфликтов."
+ },
+ "principle_diplomacy_2_desc": {
+  "en": "The [concept_power_bloc] encourages diplomacy and peaceful resolution of conflicts.",
+  "ru": "[concept_power_bloc] поощряет дипломатию и мирное разрешение конфликтов."
+ },
+ "principle_diplomacy_3_desc": {
+  "en": "The [concept_power_bloc] encourages diplomacy and peaceful resolution of conflicts.",
+  "ru": "[concept_power_bloc] поощряет дипломатию и мирное разрешение конфликтов."
+ },
+ "principle_group_diplomacy": {
+  "en": "Foreign Service",
+  "ru": "Дипломатическая служба"
+ },
+ "principle_group_diplomacy_desc": {
+  "en": "The [concept_power_bloc] maintains a professional foreign service, projecting influence through bilateral diplomacy and peaceful resolution of conflicts.",
+  "ru": "[concept_power_bloc] содержит профессиональную дипломатическую службу, проецируя влияние через двусторонние отношения и мирное разрешение конфликтов."
+ },
+ "ruler_average_diplomat": {
+  "en": "Average Diplomat",
+  "ru": "Средний дипломат"
+ },
+ "ruler_average_diplomat_desc": {
+  "en": "A ruler of unremarkable diplomatic skill. They manage foreign affairs competently but without particular distinction.",
+  "ru": "Правитель с заурядными дипломатическими способностями. Он ведёт внешние дела компетентно, но ничем не выделяясь."
+ },
+ "ruler_exceptional_diplomat": {
+  "en": "Master Diplomat",
+  "ru": "Мастер-дипломат"
+ },
+ "ruler_exceptional_diplomat_desc": {
+  "en": "A diplomat of legendary skill whose charm and cunning elevate the nation's standing on the world stage. Foreign courts hang upon their every word.",
+  "ru": "Дипломат легендарного мастерства: его обаяние и хитрость поднимают положение страны на мировой арене. Иностранные дворы ловят каждое его слово."
+ },
+ "ruler_poor_diplomat": {
+  "en": "Inept Diplomat",
+  "ru": "Неумелый дипломат"
+ },
+ "ruler_poor_diplomat_desc": {
+  "en": "A ruler whose social graces and diplomatic instincts leave much to be desired. Foreign envoys are unimpressed, and the nation's voice carries little weight abroad.",
+  "ru": "Правитель, чьи светские манеры и дипломатические инстинкты оставляют желать лучшего. Иностранные посланники не впечатлены, и голос страны за рубежом почти ничего не весит."
+ },
+ "ruler_skilled_diplomat": {
+  "en": "Skilled Diplomat",
+  "ru": "Опытный дипломат"
+ },
+ "ruler_skilled_diplomat_desc": {
+  "en": "A ruler with natural charm and a talent for negotiation. The nation enjoys enhanced [concept_prestige] and a more favorable reputation in foreign courts.",
+  "ru": "Правитель с природным обаянием и талантом к переговорам. Страна пользуется повышенным [Concept('concept_prestige','престижем')] и более благоприятной репутацией при иностранных дворах."
+ },
+ "ruler_terrible_diplomat": {
+  "en": "Terrible Diplomat",
+  "ru": "Ужасный дипломат"
+ },
+ "ruler_terrible_diplomat_desc": {
+  "en": "A ruler spectacularly unsuited for diplomacy. Foreign envoys leave insulted, alliances crumble, and the nation's reputation suffers at every turn.",
+  "ru": "Правитель, чудовищно непригодный к дипломатии. Иностранные посланники уходят оскорблёнными, союзы рушатся, а репутация страны страдает на каждом шагу."
+ },
+ "ste_telepathic_diplomacy": {
+  "en": "Telepathic Diplomacy",
+  "ru": "Телепатическая дипломатия"
+ },
+ "ste_telepathic_diplomacy_desc": {
+  "en": "A direct mind-to-mind diplomatic channel has opened new possibilities for cooperation.",
+  "ru": "Прямой канал дипломатии от разума к разуму открыл новые возможности для сотрудничества."
+ },
+ "ste_telepathic_diplomacy_rejected": {
+  "en": "Telepathic Diplomacy Rejected",
+  "ru": "Телепатическая дипломатия отвергнута"
+ },
+ "ste_telepathic_diplomacy_rejected_desc": {
+  "en": "Telepathic diplomacy was deemed too risky to pursue.",
+  "ru": "Телепатическую дипломатию сочли слишком рискованной."
+ },
+ "suppress_subject_liberty": {
+  "en": "Reduce Subject Liberty",
+  "ru": "Урезать свободу зависимого государства"
+ },
+ "suppress_subject_liberty_article_short_desc": {
+  "en": "[SOURCE_COUNTRY.GetNameNoFormatting] will accept tighter control from [TARGET_COUNTRY.GetNameNoFormatting]",
+  "ru": "Страна [SOURCE_COUNTRY.GetNameNoFormatting] примет более жёсткий контроль со стороны страны [TARGET_COUNTRY.GetNameNoFormatting]"
+ },
+ "suppress_subject_liberty_desc": {
+  "en": "Reduce Subject Liberty that allows a country to decrease the autonomy of a subject nation.",
+  "ru": "Урезание свободы зависимого государства позволяет стране уменьшить автономию зависимой страны."
+ },
+ "suppress_subject_liberty_effects_desc": {
+  "en": "• Reduces [concept_liberty_desire] in the source (subject) country.",
+  "ru": "• Снижает [concept_liberty_desire|l] в исходной стране (зависимом государстве)."
+ },
+ "tactical_nuke_diplo_action": {
+  "en": "Tactical [concept_nuclear_strike]",
+  "ru": "Тактический [concept_nuclear_strike|l]"
+ },
+ "tactical_nuke_diplo_action_action_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has launched a Tactical [concept_nuclear_strike].",
+  "ru": "Страна [INITIATOR_COUNTRY.GetName] нанесла тактический [concept_nuclear_strike|l]."
+ },
+ "tactical_nuke_diplo_action_action_notification_name": {
+  "en": "Tactical [concept_nuclear_strike] Launched",
+  "ru": "Тактический [concept_nuclear_strike|l] нанесён"
+ },
+ "tactical_nuke_diplo_action_desc": {
+  "en": "Launch a tactical [concept_nuclear_strike] on a military target.",
+  "ru": "Нанести тактический [concept_nuclear_strike|l] по военной цели."
+ },
+ "te_diplomacy_tab_un": {
+  "en": "UN",
+  "ru": "ООН"
+ },
+ "te_diplomacy_tab_un_locked_tt": {
+  "en": "#b $te_diplomacy_tab_un$#!\\nNot open yet. It opens once:\\n",
+  "ru": "#b $te_diplomacy_tab_un$#!\\nПока закрыто. Откроется, когда:\\n"
+ },
+ "te_diplomacy_tab_un_tt": {
+  "en": "The General Assembly, your standing and the UN's authority, with every action the journal entry offers.",
+  "ru": "Генеральная Ассамблея, ваш статус и авторитет ООН со всеми действиями, которые предлагает запись журнала."
+ },
+ "te_diplomacy_un_open_journal_tt": {
+  "en": "Opens $je_united_nations$ in the journal, which shows these same panels.",
+  "ru": "Открывает «$je_united_nations$» в журнале, где показаны те же панели."
+ },
+ "te_diplomacy_un_tab_status_header": {
+  "en": "Status",
+  "ru": "Статус"
+ },
+ "te_diplomatic_relations_boost": {
+  "en": "Diplomatic Goodwill",
+  "ru": "Дипломатическая добрая воля"
+ },
+ "te_diplomatic_relations_drain": {
+  "en": "Diplomatic Friction",
+  "ru": "Дипломатическое трение"
+ },
+ "te_rc_technology_embargo_pact_desc": {
+  "en": "[SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName] has placed [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] under a technology embargo.",
+  "ru": "Страна [SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName] наложила на страну [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] технологическое эмбарго."
+ },
+ "te_seabed_administer_claims_pact_desc": {
+  "en": "[SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName] administers the seabed claims of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]",
+  "ru": "Страна [SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName] управляет притязаниями на морское дно страны [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]"
+ },
+ "te_seabed_administer_subject_claimant_tt": {
+  "en": "The subject has researched $abyssal_plain_mining$ and has a coastal state",
+  "ru": "Зависимое государство изучило технологию $abyssal_plain_mining$ и имеет прибрежную область"
+ },
+ "te_seabed_administer_subject_tt": {
+  "en": "The country is still our direct subject",
+  "ru": "Страна всё ещё является нашим прямым зависимым государством"
+ },
+ "trade_diplomacy_modifier": {
+  "en": "Trade Diplomacy",
+  "ru": "Торговая дипломатия"
+ },
+ "trade_diplomacy_modifier_desc": {
+  "en": "We chose diplomacy over sanctions, maintaining trade flows but appearing unwilling to confront our rival.",
+  "ru": "Мы выбрали дипломатию вместо санкций, сохранив торговые потоки, но показав нежелание противостоять сопернику."
+ },
+ "treaty_name_education_and_training_pact": {
+  "en": "Education and Training Pact",
+  "ru": "Пакт об образовании и подготовке"
+ },
+ "un_lobby_against_action_pact_desc": {
+  "en": "Our delegation is pressing [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] to vote #R against#! the resolution before the [concept_un_general_assembly].",
+  "ru": "Наша делегация убеждает страну [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] голосовать #R против#! резолюции в [Concept('concept_un_general_assembly','Генеральной Ассамблее')]."
+ },
+ "un_lobby_for_action_pact_desc": {
+  "en": "Our delegation is pressing [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] to vote #G in favor#! of the resolution before the [concept_un_general_assembly].",
+  "ru": "Наша делегация убеждает страну [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] голосовать #G за#! резолюцию в [Concept('concept_un_general_assembly','Генеральной Ассамблее')]."
+ },
+ "un_refuse_aid_diplomatic_penalty_tt": {
+  "en": "As a #bold [concept_major_power]#! refusing aid with [concept_un_authority] above 40, we will suffer #R diplomatic penalties#! ([concept_prestige] and relations).",
+  "ru": "Отказываясь от помощи как #bold [concept_major_power|l]#! при [Concept('concept_un_authority','авторитете ООН')] выше 40, мы понесём #R дипломатические штрафы#! ([Concept('concept_prestige','престиж')] и отношения)."
+ },
+ "un_secure_commitment_action_proposal_accepted_desc": {
+  "en": "[TARGET_COUNTRY.GetName] has undertaken to vote in favor of the resolution before the [concept_un_general_assembly]. We owe them an [concept_obligation] for it.",
+  "ru": "Страна [TARGET_COUNTRY.GetName] обязалась голосовать за резолюцию в [Concept('concept_un_general_assembly','Генеральной Ассамблее')]. У нас перед ней теперь [Concept('concept_obligation','обязательство')]."
+ },
+ "un_secure_commitment_action_proposal_accepted_name": {
+  "en": "A vote pledged to us",
+  "ru": "Голос обещан нам"
+ },
+ "un_secure_commitment_action_proposal_declined_desc": {
+  "en": "[TARGET_COUNTRY.GetName] will not pledge their vote in favor of the resolution.",
+  "ru": "Страна [TARGET_COUNTRY.GetName] не обещает свой голос за резолюцию."
+ },
+ "un_secure_commitment_action_proposal_declined_name": {
+  "en": "Our approach was refused",
+  "ru": "Нам отказали"
+ },
+ "un_secure_commitment_action_proposal_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] asks us to vote in favor of the resolution before the [concept_un_general_assembly].",
+  "ru": "Страна [INITIATOR_COUNTRY.GetName] просит нас проголосовать за резолюцию в [Concept('concept_un_general_assembly','Генеральной Ассамблее')]."
+ },
+ "un_secure_commitment_action_proposal_notification_name": {
+  "en": "A request for our vote at the United Nations",
+  "ru": "Просьба о нашем голосе в Организации Объединённых Наций"
+ },
+ "un_secure_commitment_against_action_proposal_accepted_desc": {
+  "en": "[TARGET_COUNTRY.GetName] has undertaken to vote against the resolution before the [concept_un_general_assembly]. We owe them an [concept_obligation] for it.",
+  "ru": "Страна [TARGET_COUNTRY.GetName] обязалась голосовать против резолюции в [Concept('concept_un_general_assembly','Генеральной Ассамблее')]. У нас перед ней теперь [Concept('concept_obligation','обязательство')]."
+ },
+ "un_secure_commitment_against_action_proposal_accepted_name": {
+  "en": "A vote pledged against",
+  "ru": "Голос обещан против"
+ },
+ "un_secure_commitment_against_action_proposal_declined_desc": {
+  "en": "[TARGET_COUNTRY.GetName] will not pledge their vote against the resolution.",
+  "ru": "Страна [TARGET_COUNTRY.GetName] не обещает свой голос против резолюции."
+ },
+ "un_secure_commitment_against_action_proposal_declined_name": {
+  "en": "Our approach was refused",
+  "ru": "Нам отказали"
+ },
+ "un_secure_commitment_against_action_proposal_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] asks us to vote against the resolution before the [concept_un_general_assembly].",
+  "ru": "Страна [INITIATOR_COUNTRY.GetName] просит нас проголосовать против резолюции в [Concept('concept_un_general_assembly','Генеральной Ассамблее')]."
+ },
+ "un_secure_commitment_against_action_proposal_notification_name": {
+  "en": "A request for our vote at the United Nations",
+  "ru": "Просьба о нашем голосе в Организации Объединённых Наций"
+ },
+ "voluntary_union_proposal_accepted_desc": {
+  "en": "[TARGET_COUNTRY.GetName] has accepted our proposal of voluntary union.",
+  "ru": "Страна [TARGET_COUNTRY.GetName] приняла наше предложение о добровольном союзе."
+ },
+ "voluntary_union_proposal_accepted_name": {
+  "en": "Voluntary Union Accepted",
+  "ru": "Добровольный союз принят"
+ },
+ "voluntary_union_proposal_declined_desc": {
+  "en": "[TARGET_COUNTRY.GetName] has declined our proposal of voluntary union.",
+  "ru": "Страна [TARGET_COUNTRY.GetName] отклонила наше предложение о добровольном союзе."
+ },
+ "voluntary_union_proposal_declined_name": {
+  "en": "Voluntary Union Declined",
+  "ru": "Добровольный союз отклонён"
+ },
+ "voluntary_union_proposal_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] is offering [TARGET_COUNTRY.GetName] a voluntary union.",
+  "ru": "Страна [INITIATOR_COUNTRY.GetName] предлагает стране [TARGET_COUNTRY.GetName] добровольный союз."
+ },
+ "voluntary_union_proposal_notification_effects_desc": {
+  "en": "On acceptance, [TARGET_COUNTRY.GetName] will be peacefully annexed by [INITIATOR_COUNTRY.GetName].",
+  "ru": "В случае согласия страна [TARGET_COUNTRY.GetName] будет мирно аннексирована страной [INITIATOR_COUNTRY.GetName]."
+ },
+ "voluntary_union_proposal_notification_name": {
+  "en": "Voluntary Union Proposed",
+  "ru": "Предложен добровольный союз"
+ },
+ "we_am_diplomacy_arsenal": {
+  "en": "Antimatter Arsenal Prestige",
+  "ru": "Престиж арсенала антиматерии"
+ },
+ "we_am_diplomacy_arsenal_desc": {
+  "en": "The antimatter arsenal commands deference from rival nations and strengthens sovereign authority.",
+  "ru": "Арсенал антиматерии вызывает почтение у соперничающих наций и укрепляет суверенную власть."
+ },
+ "we_am_diplomacy_olive": {
+  "en": "Antimatter Diplomacy",
+  "ru": "Дипломатия антиматерии"
+ },
+ "we_am_diplomacy_olive_desc": {
+  "en": "Diplomatic outreach balances antimatter capability with international cooperation.",
+  "ru": "Дипломатические усилия уравновешивают возможности антиматерии международным сотрудничеством."
+ }
+}

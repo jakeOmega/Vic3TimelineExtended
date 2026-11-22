@@ -18,7 +18,7 @@
 # comparison (the documented way to use one as a trigger), the ladder
 # descending; it is O(1), so these are safe to evaluate per frame.
 #
-# Tier mapping (1..5), matching the phase modifier the JE pulse applies:
+# Tier mapping (1..5), matching the band modifier the entry declares from it:
 #   1 collapsing  (bar  0-20)  -> colonial_empire_crumbling_modifier
 #   2 crumbling   (bar 20-40)  -> colonial_empire_under_pressure_modifier
 #   3 strained    (bar 40-65)  -> colonial_empire_strained_modifier

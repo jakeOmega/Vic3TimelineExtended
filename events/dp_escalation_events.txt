@@ -6,8 +6,9 @@
 # Fired three times per month (days 7/14/21) by st_dp_escalation_weekly_schedule
 # in extra_on_actions.txt; the day-0 tick runs inline from the same on-action.
 # Each firing calls st_dp_country_apply_weekly_escalation in the country scope,
-# which short-circuits via three is_diplomatic_play_* guards if the country is
-# not in any play.
+# which does nothing unless the country initiated a play: each play takes its
+# every role's extra at its initiator's tick, for the days it escalated since
+# the last one (none while vanilla has its escalation paused).
 # ============================================================================
 
 dp_escalation_events.1 = {

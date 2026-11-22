@@ -3,13 +3,17 @@
 # Linear milestone competition system
 #
 # `immediate` runs again: when an entry re-activates (every milestone has
-# can_deactivate = yes), and on every entry a revolution's winner inherits,
+# can_deactivate = yes), on every entry a revolution's winner inherits,
 # after the loser's variables have merged in
 # (docs/guides/scripting_best_practices.md § "What a Civil War's Winner
-# Inherits"). So it creates only what is missing (progress, funding), puts
-# back the modifiers the new record lacks (sr_sync_<m>_entry in
-# space_race_effects.txt), and asks each choice event once per milestone
-# (sr_<m>_choice_made).
+# Inherits"), and when the re-entry pass adds back a milestone its failure
+# outcome closed (a programme loss: the engine never re-activates a concluded
+# entry; sr_reentry_monthly, space_race_effects.txt, from zero, since the
+# failure cleanup wiped it). So it creates only what is missing (progress, funding) and asks
+# each choice event once per milestone (sr_<m>_choice_made). Each milestone's
+# cost, funding, approach and choice modifiers are declared on its entry
+# (scaling_modifiers_while_active, #1404), from variables the winner inherits,
+# so nothing puts them back, and so are solar colonization's colony modifiers.
 #
 # Carrying progress into a new record keeps the progress bar right:
 # - Inherited: the new record keeps the loser's bar. Its start date, baseline
@@ -33,7 +37,13 @@
 # ===========================================
 je_space_race_suborbital = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_suborbital.dds"
-	group = je_group_foreign_affairs
+	group = je_group_te_systems
+
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
 
 	# The player-facing surface (gui/journal_entry_widgets/space_race_widget.gui):
 	# the overview above the status line, the live sections below it, How the
@@ -60,6 +70,12 @@ je_space_race_suborbital = {
 		container = "custom_widget_container_7"
 	}
 
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry ends through its
+	# invalid outcome on the rule.
+	disable_evaluation = {
+		NOT = { sr_space_race_on = yes }
+	}
 	is_shown_when_inactive = {
 		sr_space_race_on = yes
 		has_technology_researched = rocketry
@@ -83,14 +99,72 @@ je_space_race_suborbital = {
 		NOT = { has_variable = sr_completed_suborbital }
 	}
 
+	# The milestone's cost and funding (#1404; space_race_values.txt), each
+	# while it is billed (sr_milestone_billed_suborbital: while it runs):
+	# its cost level (funding plus the approach's overhead, times the era
+	# factor), its pace at the effective funding level (soft cap) and its
+	# throughput at the level itself. Every running milestone's entry carries
+	# its own, so they add up across entries.
+	scaling_modifiers_while_active = {
+		modifier = sr_space_program_cost
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_suborbital = yes }
+				add = sr_suborbital_cost
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_progress
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_suborbital = yes }
+				add = sr_funding_suborbital_effective
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_throughput
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_suborbital = yes }
+				add = sr_funding_suborbital_level
+			}
+		}
+	}
+	# The approach, while its variable is set (sr_effect_safe / sr_effect_ambitious;
+	# Standard is neither).
+	scaling_modifiers_while_active = {
+		modifier = sr_safe_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_safe_suborbital }
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_ambitious_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_ambitious_suborbital }
+				add = 1
+			}
+		}
+	}
+
 	immediate = {
 		set_variable = { name = sr_active_suborbital value = yes }
 		# Its band's offset from the start, so another country's estimate (National Info) never sits on the exact figure
 		sr_power_fuzz_first = { MILESTONE = suborbital }
 		if = { limit = { NOT = { has_variable = sr_progress_suborbital } } set_variable = { name = sr_progress_suborbital value = 0 } }
 		if = { limit = { NOT = { has_variable = sr_funding_suborbital } } set_variable = { name = sr_funding_suborbital value = 1 } }
-		sr_sync_suborbital_entry = yes
-		sr_recalculate_cost = yes
+		sr_refresh_milestone_statuses = yes
 	}
 
 	scripted_button = sr_btn_safe_suborbital
@@ -123,62 +197,116 @@ je_space_race_suborbital = {
 		}
 	}
 
-	complete = {
-		has_variable = sr_progress_suborbital
-		var:sr_progress_suborbital >= sr_suborbital_goal
-	}
-
-	on_complete = {
-		sr_complete_suborbital_effect = yes
-		remove_variable = sr_active_suborbital
-		trigger_event = { id = space_race_events.1 }
-	}
-
-	fail = {
-		custom_tooltip = {
-			text = sr_space_program_incompatible_tt
-			NOT = { modifier:country_sr_earth_orbit_program_bool = yes }
+	# Two completion outcomes, first and later (#1433), so the panel shows both
+	# rewards and the trigger of each before either happens. Every milestone
+	# below has the same pair. Both run the same effect, and
+	# sr_complete_milestone_effect_base's own check of sr_global_first_<m> stays
+	# what decides the reward: two countries that reach the goal on the same
+	# update may both read the global variable unset and conclude through
+	# "first", while only the one whose effect runs first is paid the first
+	# reward. Completion concludes the entry either way, as it did before the
+	# split (a concluded record is deleted and never re-activated; nothing adds
+	# a completed milestone back). The previews show the reward only; the
+	# effect pays it through the completion event's sr_apply_<m>_reward.
+	outcome = {
+		header = je_space_race_suborbital_first_outcome_header
+		effect_header = je_space_race_suborbital_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_space_race_suborbital_first_conclusion_desc
+		trigger = {
+			has_variable = sr_progress_suborbital
+			var:sr_progress_suborbital >= sr_suborbital_goal
+			custom_tooltip = {
+				text = sr_milestone_first_open_tt
+				NOT = { has_global_variable = sr_global_first_suborbital }
+			}
+		}
+		effect = {
+			sr_complete_suborbital_effect = yes
+			remove_variable = sr_active_suborbital
+			trigger_event = { id = space_race_events.1 }
+		}
+		# Outcome previews — engine auto-tooltips the effect block; effects do not run.
+		event_outcome_effect_desc = {
+			effect = {
+				custom_tooltip = je_space_race_suborbital_first_outcome_tt
+				add_modifier = { name = sr_first_suborbital }
+			}
 		}
 	}
 
-	on_fail = {
-		sr_report_program_loss = { MILESTONE = suborbital }
-		custom_tooltip = {
-			text = sr_milestone_fail_cleanup_tt
-			sr_cleanup_milestone_variables_effect = { MILESTONE = suborbital }
+	outcome = {
+		header = je_space_race_suborbital_completion_header
+		effect_header = je_space_race_suborbital_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_space_race_suborbital_complete_conclusion_desc
+		trigger = {
+			has_variable = sr_progress_suborbital
+			var:sr_progress_suborbital >= sr_suborbital_goal
+			custom_tooltip = {
+				text = sr_milestone_first_claimed_tt
+				has_global_variable = sr_global_first_suborbital
+			}
+		}
+		effect = {
+			sr_complete_suborbital_effect = yes
+			remove_variable = sr_active_suborbital
+			trigger_event = { id = space_race_events.1 }
+		}
+		event_outcome_effect_desc = {
+			effect = {
+				custom_tooltip = je_space_race_suborbital_subsequent_outcome_tt
+				add_modifier = { name = sr_suborbital }
+			}
+		}
+	}
+
+	outcome = {
+		header = je_space_race_suborbital_failure_header
+		effect_header = je_space_race_suborbital_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_space_race_suborbital_fail_conclusion_desc
+		trigger = {
+			custom_tooltip = {
+				text = sr_space_program_incompatible_tt
+				NOT = { modifier:country_sr_earth_orbit_program_bool = yes }
+			}
+		}
+		effect = {
+			sr_report_program_loss = { MILESTONE = suborbital }
+			custom_tooltip = {
+				text = sr_milestone_fail_cleanup_tt
+				sr_cleanup_milestone_variables_effect = { MILESTONE = suborbital }
+			}
+		}
+		event_outcome_effect_desc = {
+			header = je_space_race_suborbital_setback_header
+			effect = {
+				custom_tooltip = je_space_race_suborbital_setback_tt
+			}
+		}
+	}
+
+	# The rule switched off mid-game, from the screen that changes country
+	# (2026-11-08): the entry ends on its next update, its declared modifiers
+	# with it. Not the failure outcome, which reports a programme lost and marks
+	# the loss; sr_stop_for_rule_base clears the running variables without
+	# either, and the re-entry pass adds the milestone back once the rule is
+	# switched on again.
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_space_race_invalid_conclusion_desc
+		trigger = {
+			NOT = { sr_space_race_on = yes }
+		}
+		effect = {
+			sr_stop_for_rule_base = { MILESTONE = suborbital }
 		}
 	}
 
 	on_monthly_pulse = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = suborbital } }
 	}
-
-	# Outcome previews — engine auto-tooltips the effect block; effects do not run.
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_suborbital_first_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_suborbital_first_outcome_tt
-			add_modifier = { name = sr_first_suborbital }
-		}
-	}
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_suborbital_subsequent_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_suborbital_subsequent_outcome_tt
-			add_modifier = { name = sr_suborbital }
-		}
-	}
-	event_outcome_failed_effect_desc = {
-		header = je_space_race_suborbital_setback_header
-		effect = {
-			custom_tooltip = je_space_race_suborbital_setback_tt
-		}
-	}
-
-	custom_completion_header    = je_space_race_suborbital_completion_header
-	custom_failure_header       = je_space_race_suborbital_failure_header
-	custom_on_completion_header = je_space_race_suborbital_on_completion_header
-	custom_on_failure_header    = je_space_race_suborbital_on_failure_header
 
 	weight = 100
 	should_be_pinned_by_default_uninvolved_or_context = yes
@@ -193,7 +321,13 @@ je_space_race_suborbital = {
 # ===========================================
 je_space_race_orbital = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_orbital.dds"
-	group = je_group_foreign_affairs
+	group = je_group_te_systems
+
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
 
 	# The player-facing surface (gui/journal_entry_widgets/space_race_widget.gui):
 	# the overview above the status line, the live sections below it, How the
@@ -220,6 +354,12 @@ je_space_race_orbital = {
 		container = "custom_widget_container_7"
 	}
 
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry ends through its
+	# invalid outcome on the rule.
+	disable_evaluation = {
+		NOT = { sr_space_race_on = yes }
+	}
 	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = suborbital TECH = guided_missiles } }
 
 	possible = {
@@ -230,14 +370,112 @@ je_space_race_orbital = {
 		is_great_or_major_power = yes
 	}
 
+	# The milestone's cost and funding (#1404; space_race_values.txt), each
+	# while it is billed (sr_milestone_billed_orbital: while it runs):
+	# its cost level (funding plus the approach's overhead, times the era
+	# factor), its pace at the effective funding level (soft cap) and its
+	# throughput at the level itself. Every running milestone's entry carries
+	# its own, so they add up across entries.
+	scaling_modifiers_while_active = {
+		modifier = sr_space_program_cost
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_orbital = yes }
+				add = sr_orbital_cost
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_progress
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_orbital = yes }
+				add = sr_funding_orbital_effective
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_throughput
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_orbital = yes }
+				add = sr_funding_orbital_level
+			}
+		}
+	}
+	# The approach, while its variable is set (sr_effect_safe / sr_effect_ambitious;
+	# Standard is neither).
+	scaling_modifiers_while_active = {
+		modifier = sr_safe_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_safe_orbital }
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_ambitious_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_ambitious_orbital }
+				add = 1
+			}
+		}
+	}
+	# The answer to its choice event (space_race_events.80), while the milestone runs.
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_orbital_civilian
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_orbital
+					has_variable = sr_orbital_civilian
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_orbital_military
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_orbital
+					has_variable = sr_orbital_military
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_orbital_scientist
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_orbital
+					has_variable = sr_orbital_scientist
+				}
+				add = 1
+			}
+		}
+	}
+
 	immediate = {
 		set_variable = { name = sr_active_orbital value = yes }
 		# Its band's offset from the start, so another country's estimate (National Info) never sits on the exact figure
 		sr_power_fuzz_first = { MILESTONE = orbital }
 		if = { limit = { NOT = { has_variable = sr_progress_orbital } } set_variable = { name = sr_progress_orbital value = 0 } }
 		if = { limit = { NOT = { has_variable = sr_funding_orbital } } set_variable = { name = sr_funding_orbital value = 1 } }
-		sr_sync_orbital_entry = yes
-		sr_recalculate_cost = yes
+		sr_refresh_milestone_statuses = yes
 		# The astronaut type choice, asked once per milestone
 		# (sr_orbital_choice_made, space_race_triggers.txt).
 		if = {
@@ -276,61 +514,104 @@ je_space_race_orbital = {
 		}
 	}
 
-	complete = {
-		has_variable = sr_progress_orbital
-		var:sr_progress_orbital >= sr_orbital_goal
-	}
-
-	on_complete = {
-		sr_complete_orbital_effect = yes
-		remove_variable = sr_active_orbital
-		trigger_event = { id = space_race_events.2 }
-	}
-
-	fail = {
-		custom_tooltip = {
-			text = sr_space_program_incompatible_tt
-			NOT = { modifier:country_sr_earth_orbit_program_bool = yes }
+	outcome = {
+		header = je_space_race_orbital_first_outcome_header
+		effect_header = je_space_race_orbital_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_space_race_orbital_first_conclusion_desc
+		trigger = {
+			has_variable = sr_progress_orbital
+			var:sr_progress_orbital >= sr_orbital_goal
+			custom_tooltip = {
+				text = sr_milestone_first_open_tt
+				NOT = { has_global_variable = sr_global_first_orbital }
+			}
+		}
+		effect = {
+			sr_complete_orbital_effect = yes
+			remove_variable = sr_active_orbital
+			trigger_event = { id = space_race_events.2 }
+		}
+		event_outcome_effect_desc = {
+			effect = {
+				custom_tooltip = je_space_race_orbital_first_outcome_tt
+				add_modifier = { name = sr_first_orbital }
+			}
 		}
 	}
 
-	on_fail = {
-		sr_report_program_loss = { MILESTONE = orbital }
-		custom_tooltip = {
-			text = sr_milestone_fail_cleanup_tt
-			sr_cleanup_milestone_variables_effect = { MILESTONE = orbital }
+	outcome = {
+		header = je_space_race_orbital_completion_header
+		effect_header = je_space_race_orbital_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_space_race_orbital_complete_conclusion_desc
+		trigger = {
+			has_variable = sr_progress_orbital
+			var:sr_progress_orbital >= sr_orbital_goal
+			custom_tooltip = {
+				text = sr_milestone_first_claimed_tt
+				has_global_variable = sr_global_first_orbital
+			}
+		}
+		effect = {
+			sr_complete_orbital_effect = yes
+			remove_variable = sr_active_orbital
+			trigger_event = { id = space_race_events.2 }
+		}
+		event_outcome_effect_desc = {
+			effect = {
+				custom_tooltip = je_space_race_orbital_subsequent_outcome_tt
+				add_modifier = { name = sr_orbital }
+			}
+		}
+	}
+
+	outcome = {
+		header = je_space_race_orbital_failure_header
+		effect_header = je_space_race_orbital_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_space_race_orbital_fail_conclusion_desc
+		trigger = {
+			custom_tooltip = {
+				text = sr_space_program_incompatible_tt
+				NOT = { modifier:country_sr_earth_orbit_program_bool = yes }
+			}
+		}
+		effect = {
+			sr_report_program_loss = { MILESTONE = orbital }
+			custom_tooltip = {
+				text = sr_milestone_fail_cleanup_tt
+				sr_cleanup_milestone_variables_effect = { MILESTONE = orbital }
+			}
+		}
+		event_outcome_effect_desc = {
+			header = je_space_race_orbital_setback_header
+			effect = {
+				custom_tooltip = je_space_race_orbital_setback_tt
+			}
+		}
+	}
+
+	# The rule switched off mid-game, from the screen that changes country
+	# (2026-11-08): the entry ends on its next update, its declared modifiers
+	# with it. Not the failure outcome, which reports a programme lost and marks
+	# the loss; sr_stop_for_rule_base clears the running variables without
+	# either, and the re-entry pass adds the milestone back once the rule is
+	# switched on again.
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_space_race_invalid_conclusion_desc
+		trigger = {
+			NOT = { sr_space_race_on = yes }
+		}
+		effect = {
+			sr_stop_for_rule_base = { MILESTONE = orbital }
 		}
 	}
 
 	on_monthly_pulse = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = orbital } }
 	}
-
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_orbital_first_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_orbital_first_outcome_tt
-			add_modifier = { name = sr_first_orbital }
-		}
-	}
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_orbital_subsequent_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_orbital_subsequent_outcome_tt
-			add_modifier = { name = sr_orbital }
-		}
-	}
-	event_outcome_failed_effect_desc = {
-		header = je_space_race_orbital_setback_header
-		effect = {
-			custom_tooltip = je_space_race_orbital_setback_tt
-		}
-	}
-
-	custom_completion_header    = je_space_race_orbital_completion_header
-	custom_failure_header       = je_space_race_orbital_failure_header
-	custom_on_completion_header = je_space_race_orbital_on_completion_header
-	custom_on_failure_header    = je_space_race_orbital_on_failure_header
 
 	weight = 100
 	should_be_pinned_by_default_uninvolved_or_context = yes
@@ -346,7 +627,13 @@ je_space_race_orbital = {
 # ===========================================
 je_space_race_moon_landing = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_moon_landing.dds"
-	group = je_group_foreign_affairs
+	group = je_group_te_systems
+
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
 
 	# The player-facing surface (gui/journal_entry_widgets/space_race_widget.gui):
 	# the overview above the status line, the live sections below it, How the
@@ -373,6 +660,12 @@ je_space_race_moon_landing = {
 		container = "custom_widget_container_7"
 	}
 
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry ends through its
+	# invalid outcome on the rule.
+	disable_evaluation = {
+		NOT = { sr_space_race_on = yes }
+	}
 	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = orbital TECH = space_exploration } }
 
 	possible = {
@@ -383,14 +676,125 @@ je_space_race_moon_landing = {
 		is_great_or_major_power = yes
 	}
 
+	# The milestone's cost and funding (#1404; space_race_values.txt), each
+	# while it is billed (sr_milestone_billed_moon_landing: while it runs):
+	# its cost level (funding plus the approach's overhead, times the era
+	# factor), its pace at the effective funding level (soft cap) and its
+	# throughput at the level itself. Every running milestone's entry carries
+	# its own, so they add up across entries.
+	scaling_modifiers_while_active = {
+		modifier = sr_space_program_cost
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_moon_landing = yes }
+				add = sr_moon_landing_cost
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_progress
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_moon_landing = yes }
+				add = sr_funding_moon_landing_effective
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_throughput
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_moon_landing = yes }
+				add = sr_funding_moon_landing_level
+			}
+		}
+	}
+	# The approach, while its variable is set (sr_effect_safe / sr_effect_ambitious;
+	# Standard is neither).
+	scaling_modifiers_while_active = {
+		modifier = sr_safe_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_safe_moon_landing }
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_ambitious_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_ambitious_moon_landing }
+				add = 1
+			}
+		}
+	}
+	# The answer to its choice event (space_race_events.5), while the milestone runs.
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_site_shackleton
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_moon_landing
+					has_variable = sr_moon_site_shackleton
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_site_equatorial
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_moon_landing
+					has_variable = sr_moon_site_equatorial
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_site_tranquility
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_moon_landing
+					has_variable = sr_moon_site_tranquility
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_site_far_side
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_moon_landing
+					has_variable = sr_moon_site_far_side
+				}
+				add = 1
+			}
+		}
+	}
+
 	immediate = {
 		set_variable = { name = sr_active_moon_landing value = yes }
 		# Its band's offset from the start, so another country's estimate (National Info) never sits on the exact figure
 		sr_power_fuzz_first = { MILESTONE = moon_landing }
 		if = { limit = { NOT = { has_variable = sr_progress_moon_landing } } set_variable = { name = sr_progress_moon_landing value = 0 } }
 		if = { limit = { NOT = { has_variable = sr_funding_moon_landing } } set_variable = { name = sr_funding_moon_landing value = 1 } }
-		sr_sync_moon_landing_entry = yes
-		sr_recalculate_cost = yes
+		sr_refresh_milestone_statuses = yes
 		# The landing site choice, asked once per milestone
 		# (sr_moon_landing_choice_made, space_race_triggers.txt).
 		if = {
@@ -429,61 +833,104 @@ je_space_race_moon_landing = {
 		}
 	}
 
-	complete = {
-		has_variable = sr_progress_moon_landing
-		var:sr_progress_moon_landing >= sr_moon_landing_goal
-	}
-
-	on_complete = {
-		sr_complete_moon_landing_effect = yes
-		remove_variable = sr_active_moon_landing
-		trigger_event = { id = space_race_events.3 }
-	}
-
-	fail = {
-		custom_tooltip = {
-			text = sr_space_program_incompatible_tt
-			NOT = { modifier:country_sr_moon_mission_program_bool = yes }
+	outcome = {
+		header = je_space_race_moon_landing_first_outcome_header
+		effect_header = je_space_race_moon_landing_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_space_race_moon_landing_first_conclusion_desc
+		trigger = {
+			has_variable = sr_progress_moon_landing
+			var:sr_progress_moon_landing >= sr_moon_landing_goal
+			custom_tooltip = {
+				text = sr_milestone_first_open_tt
+				NOT = { has_global_variable = sr_global_first_moon_landing }
+			}
+		}
+		effect = {
+			sr_complete_moon_landing_effect = yes
+			remove_variable = sr_active_moon_landing
+			trigger_event = { id = space_race_events.3 }
+		}
+		event_outcome_effect_desc = {
+			effect = {
+				custom_tooltip = je_space_race_moon_landing_first_outcome_tt
+				add_modifier = { name = sr_first_moon_landing }
+			}
 		}
 	}
 
-	on_fail = {
-		sr_report_program_loss = { MILESTONE = moon_landing }
-		custom_tooltip = {
-			text = sr_milestone_fail_cleanup_tt
-			sr_cleanup_milestone_variables_effect = { MILESTONE = moon_landing }
+	outcome = {
+		header = je_space_race_moon_landing_completion_header
+		effect_header = je_space_race_moon_landing_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_space_race_moon_landing_complete_conclusion_desc
+		trigger = {
+			has_variable = sr_progress_moon_landing
+			var:sr_progress_moon_landing >= sr_moon_landing_goal
+			custom_tooltip = {
+				text = sr_milestone_first_claimed_tt
+				has_global_variable = sr_global_first_moon_landing
+			}
+		}
+		effect = {
+			sr_complete_moon_landing_effect = yes
+			remove_variable = sr_active_moon_landing
+			trigger_event = { id = space_race_events.3 }
+		}
+		event_outcome_effect_desc = {
+			effect = {
+				custom_tooltip = je_space_race_moon_landing_subsequent_outcome_tt
+				add_modifier = { name = sr_moon_landing }
+			}
+		}
+	}
+
+	outcome = {
+		header = je_space_race_moon_landing_failure_header
+		effect_header = je_space_race_moon_landing_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_space_race_moon_landing_fail_conclusion_desc
+		trigger = {
+			custom_tooltip = {
+				text = sr_space_program_incompatible_tt
+				NOT = { modifier:country_sr_moon_mission_program_bool = yes }
+			}
+		}
+		effect = {
+			sr_report_program_loss = { MILESTONE = moon_landing }
+			custom_tooltip = {
+				text = sr_milestone_fail_cleanup_tt
+				sr_cleanup_milestone_variables_effect = { MILESTONE = moon_landing }
+			}
+		}
+		event_outcome_effect_desc = {
+			header = je_space_race_moon_landing_setback_header
+			effect = {
+				custom_tooltip = je_space_race_moon_landing_setback_tt
+			}
+		}
+	}
+
+	# The rule switched off mid-game, from the screen that changes country
+	# (2026-11-08): the entry ends on its next update, its declared modifiers
+	# with it. Not the failure outcome, which reports a programme lost and marks
+	# the loss; sr_stop_for_rule_base clears the running variables without
+	# either, and the re-entry pass adds the milestone back once the rule is
+	# switched on again.
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_space_race_invalid_conclusion_desc
+		trigger = {
+			NOT = { sr_space_race_on = yes }
+		}
+		effect = {
+			sr_stop_for_rule_base = { MILESTONE = moon_landing }
 		}
 	}
 
 	on_monthly_pulse = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = moon_landing } }
 	}
-
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_moon_landing_first_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_moon_landing_first_outcome_tt
-			add_modifier = { name = sr_first_moon_landing }
-		}
-	}
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_moon_landing_subsequent_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_moon_landing_subsequent_outcome_tt
-			add_modifier = { name = sr_moon_landing }
-		}
-	}
-	event_outcome_failed_effect_desc = {
-		header = je_space_race_moon_landing_setback_header
-		effect = {
-			custom_tooltip = je_space_race_moon_landing_setback_tt
-		}
-	}
-
-	custom_completion_header    = je_space_race_moon_landing_completion_header
-	custom_failure_header       = je_space_race_moon_landing_failure_header
-	custom_on_completion_header = je_space_race_moon_landing_on_completion_header
-	custom_on_failure_header    = je_space_race_moon_landing_on_failure_header
 
 	weight = 100
 	should_be_pinned_by_default_uninvolved_or_context = yes
@@ -499,7 +946,13 @@ je_space_race_moon_landing = {
 # ===========================================
 je_space_race_probe = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_probe.dds"
-	group = je_group_foreign_affairs
+	group = je_group_te_systems
+
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
 
 	# The player-facing surface (gui/journal_entry_widgets/space_race_widget.gui):
 	# the overview above the status line, the live sections below it, How the
@@ -526,6 +979,12 @@ je_space_race_probe = {
 		container = "custom_widget_container_7"
 	}
 
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry ends through its
+	# invalid outcome on the rule.
+	disable_evaluation = {
+		NOT = { sr_space_race_on = yes }
+	}
 	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = orbital TECH = space_exploration } }
 
 	possible = {
@@ -537,14 +996,125 @@ je_space_race_probe = {
 		is_great_or_major_power = yes
 	}
 
+	# The milestone's cost and funding (#1404; space_race_values.txt), each
+	# while it is billed (sr_milestone_billed_probe: while it runs):
+	# its cost level (funding plus the approach's overhead, times the era
+	# factor), its pace at the effective funding level (soft cap) and its
+	# throughput at the level itself. Every running milestone's entry carries
+	# its own, so they add up across entries.
+	scaling_modifiers_while_active = {
+		modifier = sr_space_program_cost
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_probe = yes }
+				add = sr_probe_cost
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_progress
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_probe = yes }
+				add = sr_funding_probe_effective
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_throughput
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_probe = yes }
+				add = sr_funding_probe_level
+			}
+		}
+	}
+	# The approach, while its variable is set (sr_effect_safe / sr_effect_ambitious;
+	# Standard is neither).
+	scaling_modifiers_while_active = {
+		modifier = sr_safe_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_safe_probe }
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_ambitious_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_ambitious_probe }
+				add = 1
+			}
+		}
+	}
+	# The answer to its choice event (space_race_events.81), while the milestone runs.
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_probe_venus
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_probe
+					has_variable = sr_probe_target_venus
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_probe_mars
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_probe
+					has_variable = sr_probe_target_mars
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_probe_asteroid
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_probe
+					has_variable = sr_probe_target_asteroid
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_probe_tour
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_probe
+					has_variable = sr_probe_target_tour
+				}
+				add = 1
+			}
+		}
+	}
+
 	immediate = {
 		set_variable = { name = sr_active_probe value = yes }
 		# Its band's offset from the start, so another country's estimate (National Info) never sits on the exact figure
 		sr_power_fuzz_first = { MILESTONE = probe }
 		if = { limit = { NOT = { has_variable = sr_progress_probe } } set_variable = { name = sr_progress_probe value = 0 } }
 		if = { limit = { NOT = { has_variable = sr_funding_probe } } set_variable = { name = sr_funding_probe value = 1 } }
-		sr_sync_probe_entry = yes
-		sr_recalculate_cost = yes
+		sr_refresh_milestone_statuses = yes
 		# The probe target choice, asked once per milestone
 		# (sr_probe_choice_made, space_race_triggers.txt).
 		if = {
@@ -583,29 +1153,98 @@ je_space_race_probe = {
 		}
 	}
 
-	complete = {
-		has_variable = sr_progress_probe
-		var:sr_progress_probe >= sr_probe_goal
-	}
-
-	on_complete = {
-		sr_complete_probe_effect = yes
-		remove_variable = sr_active_probe
-		trigger_event = { id = space_race_events.4 }
-	}
-
-	fail = {
-		custom_tooltip = {
-			text = sr_space_program_incompatible_tt
-			NOT = { modifier:country_sr_moon_mission_program_bool = yes }
+	outcome = {
+		header = je_space_race_probe_first_outcome_header
+		effect_header = je_space_race_probe_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_space_race_probe_first_conclusion_desc
+		trigger = {
+			has_variable = sr_progress_probe
+			var:sr_progress_probe >= sr_probe_goal
+			custom_tooltip = {
+				text = sr_milestone_first_open_tt
+				NOT = { has_global_variable = sr_global_first_probe }
+			}
+		}
+		effect = {
+			sr_complete_probe_effect = yes
+			remove_variable = sr_active_probe
+			trigger_event = { id = space_race_events.4 }
+		}
+		event_outcome_effect_desc = {
+			effect = {
+				custom_tooltip = je_space_race_probe_first_outcome_tt
+				add_modifier = { name = sr_first_probe }
+			}
 		}
 	}
 
-	on_fail = {
-		sr_report_program_loss = { MILESTONE = probe }
-		custom_tooltip = {
-			text = sr_milestone_fail_cleanup_tt
-			sr_cleanup_milestone_variables_effect = { MILESTONE = probe }
+	outcome = {
+		header = je_space_race_probe_completion_header
+		effect_header = je_space_race_probe_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_space_race_probe_complete_conclusion_desc
+		trigger = {
+			has_variable = sr_progress_probe
+			var:sr_progress_probe >= sr_probe_goal
+			custom_tooltip = {
+				text = sr_milestone_first_claimed_tt
+				has_global_variable = sr_global_first_probe
+			}
+		}
+		effect = {
+			sr_complete_probe_effect = yes
+			remove_variable = sr_active_probe
+			trigger_event = { id = space_race_events.4 }
+		}
+		event_outcome_effect_desc = {
+			effect = {
+				custom_tooltip = je_space_race_probe_subsequent_outcome_tt
+				add_modifier = { name = sr_probe }
+			}
+		}
+	}
+
+	outcome = {
+		header = je_space_race_probe_failure_header
+		effect_header = je_space_race_probe_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_space_race_probe_fail_conclusion_desc
+		trigger = {
+			custom_tooltip = {
+				text = sr_space_program_incompatible_tt
+				NOT = { modifier:country_sr_moon_mission_program_bool = yes }
+			}
+		}
+		effect = {
+			sr_report_program_loss = { MILESTONE = probe }
+			custom_tooltip = {
+				text = sr_milestone_fail_cleanup_tt
+				sr_cleanup_milestone_variables_effect = { MILESTONE = probe }
+			}
+		}
+		event_outcome_effect_desc = {
+			header = je_space_race_probe_setback_header
+			effect = {
+				custom_tooltip = je_space_race_probe_setback_tt
+			}
+		}
+	}
+
+	# The rule switched off mid-game, from the screen that changes country
+	# (2026-11-08): the entry ends on its next update, its declared modifiers
+	# with it. Not the failure outcome, which reports a programme lost and marks
+	# the loss; sr_stop_for_rule_base clears the running variables without
+	# either, and the re-entry pass adds the milestone back once the rule is
+	# switched on again.
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_space_race_invalid_conclusion_desc
+		trigger = {
+			NOT = { sr_space_race_on = yes }
+		}
+		effect = {
+			sr_stop_for_rule_base = { MILESTONE = probe }
 		}
 	}
 
@@ -613,193 +1252,7 @@ je_space_race_probe = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = probe } }
 	}
 
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_probe_first_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_probe_first_outcome_tt
-			add_modifier = { name = sr_first_probe }
-		}
-	}
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_probe_subsequent_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_probe_subsequent_outcome_tt
-			add_modifier = { name = sr_probe }
-		}
-	}
-	event_outcome_failed_effect_desc = {
-		header = je_space_race_probe_setback_header
-		effect = {
-			custom_tooltip = je_space_race_probe_setback_tt
-		}
-	}
-
-	custom_completion_header    = je_space_race_probe_completion_header
-	custom_failure_header       = je_space_race_probe_failure_header
-	custom_on_completion_header = je_space_race_probe_on_completion_header
-	custom_on_failure_header    = je_space_race_probe_on_failure_header
-
 	weight = 90
-	should_be_pinned_by_default_uninvolved_or_context = yes
-	can_revolution_inherit = yes
-	can_deactivate = yes
-	should_update_on_player_command = yes
-}
-
-# ===========================================
-# 5. MOON BASE: retired 2026-10-29 (lunar colonization design § 7)
-# The Moon is Solar System Colonization's stage 0 now, six worlds, and the
-# first lunar world a country founds takes the Moon Base's place in the race
-# (sr_lunar_colony_founded, space_race_effects.txt), keeping its record's
-# names. The entry stays defined, as the mod retires entities: never shown,
-# never possible, never completed or failed. An old save's open copy
-# deactivates (can_deactivate), and the monthly country pulse carries its
-# progress onto Solar System Colonization before the inactive-milestone
-# cleanup clears the rest (sr_lunar_carry_moon_base, space_race_on_actions.txt);
-# a completed one's country is given a lunar world once
-# (sr_lunar_migrate_country, sr_site_effects.txt).
-# ===========================================
-je_space_race_moon_base = {
-	icon = "gfx/interface/icons/event_icons/je_space_race_moon_base.dds"
-	group = je_group_foreign_affairs
-
-	# The player-facing surface (gui/journal_entry_widgets/space_race_widget.gui):
-	# the overview above the status line, the live sections below it, How the
-	# Space Race Works last. The vanilla button grid below is hidden from humans
-	# (every space race button carries `is_ai = yes`), so every action it offered
-	# is offered in the live sections, through
-	# common/scripted_guis/space_race_sguis.txt.
-	widget = {
-		gui = "gui/journal_entry_widgets/space_race_widget.gui"
-		name = "widget_je_space_race_moon_base_overview"
-		container = "custom_widget_container_1"
-	}
-	widget = {
-		gui = "gui/journal_entry_widgets/space_race_widget.gui"
-		name = "widget_je_space_race_moon_base"
-		container = "custom_widget_container_2"
-	}
-	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
-	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
-	# of the panel, because the overview above draws the same progress.
-	widget = {
-		gui = "gui/journal_entry_widgets/te_je_bars_on_top_marker.gui"
-		name = "widget_te_je_bars_on_top_marker"
-		container = "custom_widget_container_7"
-	}
-
-	# Retired 2026-10-29: see the header.
-	is_shown_when_inactive = { always = no }
-
-	possible = { always = no }
-
-	immediate = {
-		set_variable = { name = sr_active_moon_base value = yes }
-		# Its band's offset from the start, so another country's estimate (National Info) never sits on the exact figure
-		sr_power_fuzz_first = { MILESTONE = moon_base }
-		if = { limit = { NOT = { has_variable = sr_progress_moon_base } } set_variable = { name = sr_progress_moon_base value = 0 } }
-		if = { limit = { NOT = { has_variable = sr_funding_moon_base } } set_variable = { name = sr_funding_moon_base value = 1 } }
-		sr_sync_moon_base_entry = yes
-		sr_recalculate_cost = yes
-		# The moon base purpose choice, asked once per milestone
-		# (sr_moon_base_choice_made, space_race_triggers.txt).
-		if = {
-			limit = { NOT = { sr_moon_base_choice_made = yes } }
-			trigger_event = { id = space_race_events.82 days = 30 }
-		}
-	}
-
-	scripted_button = sr_btn_safe_moon_base
-	scripted_button = sr_btn_ambitious_moon_base
-	scripted_button = sr_btn_fund_up_moon_base
-	scripted_button = sr_btn_fund_down_moon_base
-
-	current_value = {
-		value = sr_progress_moon_base_value
-	}
-
-	# Pins the goal at sr_moon_base_goal: see the file header.
-	goal_add_value = {
-		value = sr_moon_base_goal
-		subtract = sr_progress_moon_base_value
-	}
-
-	# Kept for the journal list (the entry's own goal bar is hidden in the panel
-	# by the bars-on-top marker above; the overview draws the progress).
-	progressbar = yes
-
-	# Only while the entry is inactive. An active entry's overview shows its
-	# state, and the reason text below repeats the rest.
-	status_desc = {
-		first_valid = {
-			triggered_desc = {
-				desc = je_space_race_moon_base_status
-				trigger = { NOT = { has_journal_entry = je_space_race_moon_base } }
-			}
-		}
-	}
-
-	# Retired: an old save's copy that lingers active neither completes nor fails.
-	complete = { always = no }
-
-	on_complete = {
-		sr_complete_moon_base_effect = yes
-		remove_variable = sr_active_moon_base
-		trigger_event = { id = space_race_events.6 }
-	}
-
-	fail = { always = no }
-
-	on_fail = {
-		sr_report_program_loss = { MILESTONE = moon_base }
-		custom_tooltip = {
-			text = sr_milestone_fail_cleanup_tt
-			sr_cleanup_milestone_variables_effect = { MILESTONE = moon_base }
-		}
-	}
-
-	# Retired: only while an old save's copy still carries its active flag,
-	# which the carry removes (sr_lunar_carry_moon_base), so a copy that lingers
-	# active after it adds no progress, rolls no risk and recreates nothing.
-	on_monthly_pulse = {
-		effect = {
-			if = {
-				limit = { has_variable = sr_active_moon_base }
-				sr_monthly_progress_update_effect = { MILESTONE = moon_base }
-			}
-			else = {
-				sr_lunar_carry_lingering_check = yes
-			}
-		}
-	}
-
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_moon_base_first_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_moon_base_first_outcome_tt
-			add_modifier = { name = sr_first_moon_base }
-		}
-	}
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_moon_base_subsequent_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_moon_base_subsequent_outcome_tt
-			add_modifier = { name = sr_moon_base }
-		}
-	}
-	event_outcome_failed_effect_desc = {
-		header = je_space_race_moon_base_setback_header
-		effect = {
-			custom_tooltip = je_space_race_moon_base_setback_tt
-		}
-	}
-
-	custom_completion_header    = je_space_race_moon_base_completion_header
-	custom_failure_header       = je_space_race_moon_base_failure_header
-	custom_on_completion_header = je_space_race_moon_base_on_completion_header
-	custom_on_failure_header    = je_space_race_moon_base_on_failure_header
-
-	weight = 95
 	should_be_pinned_by_default_uninvolved_or_context = yes
 	can_revolution_inherit = yes
 	can_deactivate = yes
@@ -813,7 +1266,13 @@ je_space_race_moon_base = {
 # ===========================================
 je_space_race_mars_landing = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_mars_landing.dds"
-	group = je_group_foreign_affairs
+	group = je_group_te_systems
+
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
 
 	# The player-facing surface (gui/journal_entry_widgets/space_race_widget.gui):
 	# the overview above the status line, the live sections below it, How the
@@ -840,6 +1299,12 @@ je_space_race_mars_landing = {
 		container = "custom_widget_container_7"
 	}
 
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry ends through its
+	# invalid outcome on the rule.
+	disable_evaluation = {
+		NOT = { sr_space_race_on = yes }
+	}
 	is_shown_when_inactive = { sr_milestone_followup_is_shown = { PREREQ = orbital TECH = knowledge_economy } }
 
 	possible = {
@@ -851,14 +1316,112 @@ je_space_race_mars_landing = {
 		is_great_or_major_power = yes
 	}
 
+	# The milestone's cost and funding (#1404; space_race_values.txt), each
+	# while it is billed (sr_milestone_billed_mars_landing: while it runs):
+	# its cost level (funding plus the approach's overhead, times the era
+	# factor), its pace at the effective funding level (soft cap) and its
+	# throughput at the level itself. Every running milestone's entry carries
+	# its own, so they add up across entries.
+	scaling_modifiers_while_active = {
+		modifier = sr_space_program_cost
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_mars_landing = yes }
+				add = sr_mars_landing_cost
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_progress
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_mars_landing = yes }
+				add = sr_funding_mars_landing_effective
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_throughput
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_mars_landing = yes }
+				add = sr_funding_mars_landing_level
+			}
+		}
+	}
+	# The approach, while its variable is set (sr_effect_safe / sr_effect_ambitious;
+	# Standard is neither).
+	scaling_modifiers_while_active = {
+		modifier = sr_safe_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_safe_mars_landing }
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_ambitious_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_ambitious_mars_landing }
+				add = 1
+			}
+		}
+	}
+	# The answer to its choice event (space_race_events.83), while the milestone runs.
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_mars_direct
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_mars_landing
+					has_variable = sr_mars_direct
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_mars_orbital
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_mars_landing
+					has_variable = sr_mars_orbital_first
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_choice_mars_robotic
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_active_mars_landing
+					has_variable = sr_mars_robotic
+				}
+				add = 1
+			}
+		}
+	}
+
 	immediate = {
 		set_variable = { name = sr_active_mars_landing value = yes }
 		# Its band's offset from the start, so another country's estimate (National Info) never sits on the exact figure
 		sr_power_fuzz_first = { MILESTONE = mars_landing }
 		if = { limit = { NOT = { has_variable = sr_progress_mars_landing } } set_variable = { name = sr_progress_mars_landing value = 0 } }
 		if = { limit = { NOT = { has_variable = sr_funding_mars_landing } } set_variable = { name = sr_funding_mars_landing value = 1 } }
-		sr_sync_mars_landing_entry = yes
-		sr_recalculate_cost = yes
+		sr_refresh_milestone_statuses = yes
 		# The Mars strategy choice, asked once per milestone
 		# (sr_mars_landing_choice_made, space_race_triggers.txt).
 		if = {
@@ -897,61 +1460,104 @@ je_space_race_mars_landing = {
 		}
 	}
 
-	complete = {
-		has_variable = sr_progress_mars_landing
-		var:sr_progress_mars_landing >= sr_mars_landing_goal
-	}
-
-	on_complete = {
-		sr_complete_mars_landing_effect = yes
-		remove_variable = sr_active_mars_landing
-		trigger_event = { id = space_race_events.7 }
-	}
-
-	fail = {
-		custom_tooltip = {
-			text = sr_space_program_incompatible_tt
-			NOT = { modifier:country_sr_mars_mission_program_bool = yes }
+	outcome = {
+		header = je_space_race_mars_landing_first_outcome_header
+		effect_header = je_space_race_mars_landing_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_space_race_mars_landing_first_conclusion_desc
+		trigger = {
+			has_variable = sr_progress_mars_landing
+			var:sr_progress_mars_landing >= sr_mars_landing_goal
+			custom_tooltip = {
+				text = sr_milestone_first_open_tt
+				NOT = { has_global_variable = sr_global_first_mars_landing }
+			}
+		}
+		effect = {
+			sr_complete_mars_landing_effect = yes
+			remove_variable = sr_active_mars_landing
+			trigger_event = { id = space_race_events.7 }
+		}
+		event_outcome_effect_desc = {
+			effect = {
+				custom_tooltip = je_space_race_mars_landing_first_outcome_tt
+				add_modifier = { name = sr_first_mars_landing }
+			}
 		}
 	}
 
-	on_fail = {
-		sr_report_program_loss = { MILESTONE = mars_landing }
-		custom_tooltip = {
-			text = sr_milestone_fail_cleanup_tt
-			sr_cleanup_milestone_variables_effect = { MILESTONE = mars_landing }
+	outcome = {
+		header = je_space_race_mars_landing_completion_header
+		effect_header = je_space_race_mars_landing_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_space_race_mars_landing_complete_conclusion_desc
+		trigger = {
+			has_variable = sr_progress_mars_landing
+			var:sr_progress_mars_landing >= sr_mars_landing_goal
+			custom_tooltip = {
+				text = sr_milestone_first_claimed_tt
+				has_global_variable = sr_global_first_mars_landing
+			}
+		}
+		effect = {
+			sr_complete_mars_landing_effect = yes
+			remove_variable = sr_active_mars_landing
+			trigger_event = { id = space_race_events.7 }
+		}
+		event_outcome_effect_desc = {
+			effect = {
+				custom_tooltip = je_space_race_mars_landing_subsequent_outcome_tt
+				add_modifier = { name = sr_mars_landing }
+			}
+		}
+	}
+
+	outcome = {
+		header = je_space_race_mars_landing_failure_header
+		effect_header = je_space_race_mars_landing_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_space_race_mars_landing_fail_conclusion_desc
+		trigger = {
+			custom_tooltip = {
+				text = sr_space_program_incompatible_tt
+				NOT = { modifier:country_sr_mars_mission_program_bool = yes }
+			}
+		}
+		effect = {
+			sr_report_program_loss = { MILESTONE = mars_landing }
+			custom_tooltip = {
+				text = sr_milestone_fail_cleanup_tt
+				sr_cleanup_milestone_variables_effect = { MILESTONE = mars_landing }
+			}
+		}
+		event_outcome_effect_desc = {
+			header = je_space_race_mars_landing_setback_header
+			effect = {
+				custom_tooltip = je_space_race_mars_landing_setback_tt
+			}
+		}
+	}
+
+	# The rule switched off mid-game, from the screen that changes country
+	# (2026-11-08): the entry ends on its next update, its declared modifiers
+	# with it. Not the failure outcome, which reports a programme lost and marks
+	# the loss; sr_stop_for_rule_base clears the running variables without
+	# either, and the re-entry pass adds the milestone back once the rule is
+	# switched on again.
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_space_race_invalid_conclusion_desc
+		trigger = {
+			NOT = { sr_space_race_on = yes }
+		}
+		effect = {
+			sr_stop_for_rule_base = { MILESTONE = mars_landing }
 		}
 	}
 
 	on_monthly_pulse = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = mars_landing } }
 	}
-
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_mars_landing_first_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_mars_landing_first_outcome_tt
-			add_modifier = { name = sr_first_mars_landing }
-		}
-	}
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_mars_landing_subsequent_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_mars_landing_subsequent_outcome_tt
-			add_modifier = { name = sr_mars_landing }
-		}
-	}
-	event_outcome_failed_effect_desc = {
-		header = je_space_race_mars_landing_setback_header
-		effect = {
-			custom_tooltip = je_space_race_mars_landing_setback_tt
-		}
-	}
-
-	custom_completion_header    = je_space_race_mars_landing_completion_header
-	custom_failure_header       = je_space_race_mars_landing_failure_header
-	custom_on_completion_header = je_space_race_mars_landing_on_completion_header
-	custom_on_failure_header    = je_space_race_mars_landing_on_failure_header
 
 	weight = 95
 	should_be_pinned_by_default_uninvolved_or_context = yes
@@ -963,12 +1569,18 @@ je_space_race_mars_landing = {
 # ===========================================
 # 7. INTERSTELLAR PROBE
 # Prereq: Outer System Probe + Mars Landing + aneutronic_fusion tech + Interstellar Mission PM
-# (compact_fusion_reactors until era 13 spec phase 3, 2026-10-31; old saves: te_repair_era_13_technologies)
+# (compact_fusion_reactors until era 13 spec phase 3, 2026-10-31)
 # The culminating probe mission, requires the most advanced space program tier
 # ===========================================
 je_space_race_interstellar_probe = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_interstellar_probe.dds"
-	group = je_group_foreign_affairs
+	group = je_group_te_systems
+
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
 
 	# The player-facing surface (gui/journal_entry_widgets/space_race_widget.gui):
 	# the overview above the status line, the live sections below it, How the
@@ -995,6 +1607,12 @@ je_space_race_interstellar_probe = {
 		container = "custom_widget_container_7"
 	}
 
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry ends through its
+	# invalid outcome on the rule.
+	disable_evaluation = {
+		NOT = { sr_space_race_on = yes }
+	}
 	is_shown_when_inactive = {
 		sr_space_race_on = yes
 		has_variable = sr_completed_probe
@@ -1011,14 +1629,72 @@ je_space_race_interstellar_probe = {
 		is_great_or_major_power = yes
 	}
 
+	# The milestone's cost and funding (#1404; space_race_values.txt), each
+	# while it is billed (sr_milestone_billed_interstellar_probe: while it runs):
+	# its cost level (funding plus the approach's overhead, times the era
+	# factor), its pace at the effective funding level (soft cap) and its
+	# throughput at the level itself. Every running milestone's entry carries
+	# its own, so they add up across entries.
+	scaling_modifiers_while_active = {
+		modifier = sr_space_program_cost
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_interstellar_probe = yes }
+				add = sr_interstellar_probe_cost
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_progress
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_interstellar_probe = yes }
+				add = sr_funding_interstellar_probe_effective
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_throughput
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_interstellar_probe = yes }
+				add = sr_funding_interstellar_probe_level
+			}
+		}
+	}
+	# The approach, while its variable is set (sr_effect_safe / sr_effect_ambitious;
+	# Standard is neither).
+	scaling_modifiers_while_active = {
+		modifier = sr_safe_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_safe_interstellar_probe }
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_ambitious_approach
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_ambitious_interstellar_probe }
+				add = 1
+			}
+		}
+	}
+
 	immediate = {
 		set_variable = { name = sr_active_interstellar_probe value = yes }
 		# Its band's offset from the start, so another country's estimate (National Info) never sits on the exact figure
 		sr_power_fuzz_first = { MILESTONE = interstellar_probe }
 		if = { limit = { NOT = { has_variable = sr_progress_interstellar_probe } } set_variable = { name = sr_progress_interstellar_probe value = 0 } }
 		if = { limit = { NOT = { has_variable = sr_funding_interstellar_probe } } set_variable = { name = sr_funding_interstellar_probe value = 1 } }
-		sr_sync_interstellar_probe_entry = yes
-		sr_recalculate_cost = yes
+		sr_refresh_milestone_statuses = yes
 	}
 
 	scripted_button = sr_btn_safe_interstellar_probe
@@ -1051,61 +1727,104 @@ je_space_race_interstellar_probe = {
 		}
 	}
 
-	complete = {
-		has_variable = sr_progress_interstellar_probe
-		var:sr_progress_interstellar_probe >= sr_interstellar_probe_goal
-	}
-
-	on_complete = {
-		sr_complete_interstellar_probe_effect = yes
-		remove_variable = sr_active_interstellar_probe
-		trigger_event = { id = space_race_events.8 }
-	}
-
-	fail = {
-		custom_tooltip = {
-			text = sr_space_program_incompatible_tt
-			NOT = { modifier:country_sr_interstellar_mission_program_bool = yes }
+	outcome = {
+		header = je_space_race_interstellar_probe_first_outcome_header
+		effect_header = je_space_race_interstellar_probe_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_space_race_interstellar_probe_first_conclusion_desc
+		trigger = {
+			has_variable = sr_progress_interstellar_probe
+			var:sr_progress_interstellar_probe >= sr_interstellar_probe_goal
+			custom_tooltip = {
+				text = sr_milestone_first_open_tt
+				NOT = { has_global_variable = sr_global_first_interstellar_probe }
+			}
+		}
+		effect = {
+			sr_complete_interstellar_probe_effect = yes
+			remove_variable = sr_active_interstellar_probe
+			trigger_event = { id = space_race_events.8 }
+		}
+		event_outcome_effect_desc = {
+			effect = {
+				custom_tooltip = je_space_race_interstellar_probe_first_outcome_tt
+				add_modifier = { name = sr_first_interstellar_probe }
+			}
 		}
 	}
 
-	on_fail = {
-		sr_report_program_loss = { MILESTONE = interstellar_probe }
-		custom_tooltip = {
-			text = sr_milestone_fail_cleanup_tt
-			sr_cleanup_milestone_variables_effect = { MILESTONE = interstellar_probe }
+	outcome = {
+		header = je_space_race_interstellar_probe_completion_header
+		effect_header = je_space_race_interstellar_probe_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_space_race_interstellar_probe_complete_conclusion_desc
+		trigger = {
+			has_variable = sr_progress_interstellar_probe
+			var:sr_progress_interstellar_probe >= sr_interstellar_probe_goal
+			custom_tooltip = {
+				text = sr_milestone_first_claimed_tt
+				has_global_variable = sr_global_first_interstellar_probe
+			}
+		}
+		effect = {
+			sr_complete_interstellar_probe_effect = yes
+			remove_variable = sr_active_interstellar_probe
+			trigger_event = { id = space_race_events.8 }
+		}
+		event_outcome_effect_desc = {
+			effect = {
+				custom_tooltip = je_space_race_interstellar_probe_subsequent_outcome_tt
+				add_modifier = { name = sr_interstellar_probe }
+			}
+		}
+	}
+
+	outcome = {
+		header = je_space_race_interstellar_probe_failure_header
+		effect_header = je_space_race_interstellar_probe_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_space_race_interstellar_probe_fail_conclusion_desc
+		trigger = {
+			custom_tooltip = {
+				text = sr_space_program_incompatible_tt
+				NOT = { modifier:country_sr_interstellar_mission_program_bool = yes }
+			}
+		}
+		effect = {
+			sr_report_program_loss = { MILESTONE = interstellar_probe }
+			custom_tooltip = {
+				text = sr_milestone_fail_cleanup_tt
+				sr_cleanup_milestone_variables_effect = { MILESTONE = interstellar_probe }
+			}
+		}
+		event_outcome_effect_desc = {
+			header = je_space_race_interstellar_probe_setback_header
+			effect = {
+				custom_tooltip = je_space_race_interstellar_probe_setback_tt
+			}
+		}
+	}
+
+	# The rule switched off mid-game, from the screen that changes country
+	# (2026-11-08): the entry ends on its next update, its declared modifiers
+	# with it. Not the failure outcome, which reports a programme lost and marks
+	# the loss; sr_stop_for_rule_base clears the running variables without
+	# either, and the re-entry pass adds the milestone back once the rule is
+	# switched on again.
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_space_race_invalid_conclusion_desc
+		trigger = {
+			NOT = { sr_space_race_on = yes }
+		}
+		effect = {
+			sr_stop_for_rule_base = { MILESTONE = interstellar_probe }
 		}
 	}
 
 	on_monthly_pulse = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = interstellar_probe } }
 	}
-
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_interstellar_probe_first_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_interstellar_probe_first_outcome_tt
-			add_modifier = { name = sr_first_interstellar_probe }
-		}
-	}
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_interstellar_probe_subsequent_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_interstellar_probe_subsequent_outcome_tt
-			add_modifier = { name = sr_interstellar_probe }
-		}
-	}
-	event_outcome_failed_effect_desc = {
-		header = je_space_race_interstellar_probe_setback_header
-		effect = {
-			custom_tooltip = je_space_race_interstellar_probe_setback_tt
-		}
-	}
-
-	custom_completion_header    = je_space_race_interstellar_probe_completion_header
-	custom_failure_header       = je_space_race_interstellar_probe_failure_header
-	custom_on_completion_header = je_space_race_interstellar_probe_on_completion_header
-	custom_on_failure_header    = je_space_race_interstellar_probe_on_failure_header
 
 	weight = 90
 	should_be_pinned_by_default_uninvolved_or_context = yes
@@ -1121,7 +1840,13 @@ je_space_race_interstellar_probe = {
 # ===========================================
 je_space_race_interstellar_results = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_interstellar_results.dds"
-	group = je_group_foreign_affairs
+	group = je_group_te_systems
+
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
 
 	# The panel (gui/journal_entry_widgets/space_race_widget.gui): the transit
 	# and the programme above the status line, under the "?" to the Help page.
@@ -1140,6 +1865,14 @@ je_space_race_interstellar_results = {
 		container = "custom_widget_container_7"
 	}
 
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country. An active entry outlives it: it
+	# carries no modifier, nothing adds it back, and ending it would lose a launched
+	# probe's results for good, so its transit pauses (on_monthly_pulse) and resumes
+	# when the rule is switched back on.
+	disable_evaluation = { # REVIEWED 2026-11-08 (rule_outlives): a paused transit resumes where it stood; nothing re-adds the entry
+		NOT = { sr_space_race_on = yes }
+	}
 	is_shown_when_inactive = {
 		sr_space_race_on = yes
 		has_variable = sr_probe_launched
@@ -1180,36 +1913,41 @@ je_space_race_interstellar_results = {
 		}
 	}
 
-	complete = {
-		has_variable = sr_interstellar_transit_progress
-		var:sr_interstellar_transit_progress >= 132
+	outcome = {
+		header = je_space_race_interstellar_results_completion_header
+		effect_header = je_space_race_interstellar_results_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_space_race_interstellar_results_complete_conclusion_desc
+		trigger = {
+			has_variable = sr_interstellar_transit_progress
+			var:sr_interstellar_transit_progress >= 132
+		}
+		effect = {
+			set_variable = { name = sr_interstellar_results_received value = yes }
+			remove_variable = sr_active_interstellar_results
+			trigger_event = { id = space_race_events.60 }
+		}
+		# When the probe finishes its 132-month transit, what it sends back is
+		# random across 30+ flavor sub-events (space_race_events.601–630) covering
+		# dead worlds, astrophysical wonders, exotic phenomena, and rare contact
+		# scenarios. No single reward modifier — preview narrates the uncertainty.
+		event_outcome_effect_desc = {
+			header = je_space_race_interstellar_results_outcome_header
+			effect = {
+				custom_tooltip = je_space_race_interstellar_results_outcome_tt
+			}
+		}
 	}
 
-	on_complete = {
-		set_variable = { name = sr_interstellar_results_received value = yes }
-		remove_variable = sr_active_interstellar_results
-		trigger_event = { id = space_race_events.60 }
-	}
-
+	# Paused while the rule is switched off (the disable_evaluation note above).
 	on_monthly_pulse = {
 		effect = {
-			change_variable = { name = sr_interstellar_transit_progress add = 1 }
+			if = {
+				limit = { sr_space_race_on = yes }
+				change_variable = { name = sr_interstellar_transit_progress add = 1 }
+			}
 		}
 	}
-
-	# When the probe finishes its 132-month transit, what it sends back is
-	# random across 30+ flavor sub-events (space_race_events.601–630) covering
-	# dead worlds, astrophysical wonders, exotic phenomena, and rare contact
-	# scenarios. No single reward modifier — preview narrates the uncertainty.
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_interstellar_results_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_interstellar_results_outcome_tt
-		}
-	}
-
-	custom_completion_header    = je_space_race_interstellar_results_completion_header
-	custom_on_completion_header = je_space_race_interstellar_results_on_completion_header
 
 	weight = 100
 	should_be_pinned_by_default_uninvolved_or_context = yes
@@ -1236,7 +1974,13 @@ je_space_race_interstellar_results = {
 # ===========================================
 je_space_race_solar_colonization = {
 	icon = "gfx/interface/icons/event_icons/je_space_race_solar_colonization.dds"
-	group = je_group_foreign_affairs
+	group = je_group_te_systems
+
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
 
 	# The player-facing surface (gui/journal_entry_widgets/space_race_widget.gui):
 	# the overview above the status line, the live sections below it, How the
@@ -1261,6 +2005,13 @@ je_space_race_solar_colonization = {
 		gui = "gui/journal_entry_widgets/te_je_bars_on_top_marker.gui"
 		name = "widget_te_je_bars_on_top_marker"
 		container = "custom_widget_container_7"
+	}
+
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry ends through its
+	# invalid outcome on the rule.
+	disable_evaluation = {
+		NOT = { sr_space_race_on = yes }
 	}
 
 	# Shown to a country that can colonize, and to any country holding a
@@ -1332,6 +2083,75 @@ je_space_race_solar_colonization = {
 		}
 	}
 
+	# The milestone's cost and funding (#1404; space_race_values.txt), each
+	# while it is billed (sr_milestone_billed_solar_colonization: its programme
+	# running, not merely its entry open for the colonies):
+	# its cost level (funding plus the approach's overhead, times the era
+	# factor), its pace at the effective funding level (soft cap) and its
+	# throughput at the level itself. Every running milestone's entry carries
+	# its own, so they add up across entries.
+	scaling_modifiers_while_active = {
+		modifier = sr_space_program_cost
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_solar_colonization = yes }
+				add = sr_solar_colonization_cost
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_progress
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_solar_colonization = yes }
+				add = sr_funding_solar_colonization_effective
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_funding_throughput
+		value = {
+			value = 0
+			if = {
+				limit = { sr_milestone_billed_solar_colonization = yes }
+				add = sr_funding_solar_colonization_level
+			}
+		}
+	}
+	# The approach, while its variable is set (sr_effect_safe / sr_effect_ambitious;
+	# Standard is neither) and the programme is billed: this entry stays open for
+	# the colonies after its method goes off, and an idle programme's approach
+	# would otherwise go on acting on every running milestone with nothing billed
+	# for it (#1472). The other milestones' entries close when they stop running.
+	scaling_modifiers_while_active = {
+		modifier = sr_safe_approach
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_safe_solar_colonization
+					sr_milestone_billed_solar_colonization = yes
+				}
+				add = 1
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_ambitious_approach
+		value = {
+			value = 0
+			if = {
+				limit = {
+					has_variable = sr_ambitious_solar_colonization
+					sr_milestone_billed_solar_colonization = yes
+				}
+				add = 1
+			}
+		}
+	}
+
 	immediate = {
 		# A finished programme stays open to hold the colony modifiers, and a
 		# revolution's winner inherits it that way. Running this block again
@@ -1372,7 +2192,6 @@ je_space_race_solar_colonization = {
 			}
 			if = { limit = { NOT = { has_variable = sr_funding_solar_colonization } } set_variable = { name = sr_funding_solar_colonization value = 1 } }
 		}
-		sr_sync_solar_colonization_entry = yes
 		# The Moon is stage 0 (lunar colonization design § 3.2).
 		if = {
 			limit = { NOT = { has_global_variable = sr_colonization_stage } }
@@ -1382,7 +2201,7 @@ je_space_race_solar_colonization = {
 			limit = { NOT = { has_variable = sr_colony_count } }
 			set_variable = { name = sr_colony_count value = 0 }
 		}
-		sr_recalculate_cost = yes
+		sr_refresh_milestone_statuses = yes
 	}
 
 	scripted_button = sr_btn_safe_solar_colonization
@@ -1413,46 +2232,57 @@ je_space_race_solar_colonization = {
 		}
 	}
 
-	complete = {
-		# Never completes through the bar - completion is handled in on_monthly_pulse
-		# This allows the JE to stay open for repeating colony establishment
-		always = no
-	}
-
-	on_complete = {
-		# Display-only: never fires because complete = always = no
-		custom_tooltip = {
-			text = sr_solar_colony_established_tt
+	# No success outcome: each colony is established in on_monthly_pulse, so the
+	# entry stays open for the next one.
+	outcome = {
+		header = je_standard_failure_header
+		effect_header = je_standard_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_space_race_solar_colonization_fail_conclusion_desc
+		trigger = {
+			custom_tooltip = {
+				text = sr_space_program_incompatible_tt
+				NOT = { modifier:country_sr_solar_colonization_program_bool = yes }
+			}
+			# Only close if no colonies were established (otherwise JE stays to hold modifiers)
+			custom_tooltip = {
+				text = sr_no_colonies_to_maintain_tt
+				OR = {
+					NOT = { has_variable = sr_colony_count }
+					var:sr_colony_count < 1
+				}
+			}
 		}
-	}
-
-	fail = {
-		custom_tooltip = {
-			text = sr_space_program_incompatible_tt
-			NOT = { modifier:country_sr_solar_colonization_program_bool = yes }
-		}
-		# Only close if no colonies were established (otherwise JE stays to hold modifiers)
-		custom_tooltip = {
-			text = sr_no_colonies_to_maintain_tt
-			OR = {
-				NOT = { has_variable = sr_colony_count }
-				var:sr_colony_count < 1
+		effect = {
+			# Only a programme the country could run: a country that held only a
+			# colony it was given (no Moon Landing) has none to lose.
+			if = {
+				limit = { sr_solar_colonization_qualified = yes }
+				sr_report_program_loss = { MILESTONE = solar_colonization }
+			}
+			custom_tooltip = {
+				text = sr_milestone_fail_cleanup_tt
+				# Fleets staged in orbit wait for the programme to restart.
+				sr_launch_bank_staged_fleets = yes
+				sr_cleanup_milestone_variables_effect = { MILESTONE = solar_colonization }
 			}
 		}
 	}
 
-	on_fail = {
-		# Only a programme the country could run: a country that held only a
-		# colony it was given (no Moon Landing) has none to lose.
-		if = {
-			limit = { sr_solar_colonization_qualified = yes }
-			sr_report_program_loss = { MILESTONE = solar_colonization }
+	# The rule switched off mid-game, from the screen that changes country
+	# (2026-11-08): the entry ends on its next update, its declared modifiers
+	# with it. Not the failure outcome, which reports a programme lost and marks
+	# the loss; sr_stop_for_rule_base clears the running variables without
+	# either, and the re-entry pass adds the milestone back once the rule is
+	# switched on again.
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_space_race_invalid_conclusion_desc
+		trigger = {
+			NOT = { sr_space_race_on = yes }
 		}
-		custom_tooltip = {
-			text = sr_milestone_fail_cleanup_tt
-			# Fleets staged in orbit wait for the programme to restart.
-			sr_launch_bank_staged_fleets = yes
-			sr_cleanup_milestone_variables_effect = { MILESTONE = solar_colonization }
+		effect = {
+			sr_stop_for_rule_base = { MILESTONE = solar_colonization }
 		}
 	}
 
@@ -1506,9 +2336,9 @@ je_space_race_solar_colonization = {
 			# A programme resumed for the Moon (sr_colonization_resumed; lunar
 			# colonization 2b, owner 2026-10-29) goes on while a lunar world is
 			# free, and stops here once the Moon is full; one that didn't choose
-			# it finishes as before. A resumed one may already hold its record
-			# and Interplanetary Trade Networks, so the modifier is added only
-			# when missing, and the marker goes.
+			# it finishes as before. A resumed one may already hold its record,
+			# and the marker goes. The record is what the entry declares
+			# Interplanetary Trade Networks from (sr_solar_system_trade, below).
 			if = {
 				limit = {
 					has_variable = sr_active_solar_colonization
@@ -1520,10 +2350,6 @@ je_space_race_solar_colonization = {
 					}
 				}
 				set_variable = { name = sr_completed_solar_colonization value = yes }
-				if = {
-					limit = { je:je_space_race_solar_colonization ?= { NOT = { has_modifier = sr_solar_system_trade } } }
-					je:je_space_race_solar_colonization = { add_modifier = { name = sr_solar_system_trade } }
-				}
 				if = { limit = { has_variable = sr_colonization_resumed } remove_variable = sr_colonization_resumed }
 				remove_variable = sr_active_solar_colonization
 				if = { limit = { has_variable = sr_funding_solar_colonization } remove_variable = sr_funding_solar_colonization }
@@ -1538,9 +2364,9 @@ je_space_race_solar_colonization = {
 			# modules design §§ 5, 10): the AI's yearly review, the month's
 			# fabrication; autonomy and free colonies (slice 5 design §§ 3, 7):
 			# event worlds left stale cleared, the AI's yearly supply review, the
-			# month's colony life; then the entry's six modifiers. A colony
-			# holder's entry is always open, so this runs for every holder,
-			# programme or not.
+			# month's colony life. A colony holder's entry is always open, so
+			# this runs for every holder, programme or not. The entry's modifiers
+			# follow what these change by themselves (declared below).
 			sr_emig_ai_review = yes
 			sr_emig_month = yes
 			sr_mod_ai_review = yes
@@ -1548,7 +2374,113 @@ je_space_race_solar_colonization = {
 			sr_site_events_clear_stale = yes
 			sr_free_ai_review = yes
 			sr_life_month = yes
-			sr_emig_refresh_modifiers = yes
+		}
+	}
+
+	# The entry's own modifiers (1.15 scaling_modifiers_while_active, #1404;
+	# docs/superpowers/specs/2026-11-06-scaling-modifiers-design.md § 4.10). Each
+	# value's root is the owning country; each is 0 outside the gate the monthly
+	# re-add used to sit behind. They apply only while the entry is active, which
+	# a colony holder's always is (`possible`). has_modifier cannot see them: test
+	# the inputs. Each world's specializations and discovery outcomes, and the
+	# facilities, are declared in common/journal_entries/sr_sites_generated.txt
+	# (generated, scripts/generators/gen_solar_sites.py).
+	# Interplanetary Trade Networks, once every world is claimed (the monthly
+	# pulse above records it).
+	scaling_modifiers_while_active = {
+		modifier = sr_solar_system_trade
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = sr_completed_solar_colonization }
+				add = 1
+			}
+		}
+	}
+	# Colony population (simple and full colonies; slices 2-3 design § 10): the
+	# emigration programme's upkeep, a unit a level of it.
+	scaling_modifiers_while_active = {
+		modifier = sr_emigration_programme
+		value = {
+			value = 0
+			if = {
+				limit = {
+					sr_colonies_contested_enabled = yes
+					sr_emig_level_value >= 1
+				}
+				add = sr_emig_level_value
+			}
+		}
+	}
+	# The nation's people off Earth, a unit per 100,000 (capped), nothing below
+	# the minimum (design § 10.5).
+	scaling_modifiers_while_active = {
+		modifier = sr_offworld_population
+		value = {
+			value = 0
+			if = {
+				limit = {
+					sr_colonies_contested_enabled = yes
+					sr_offworld_pop_total >= sr_offworld_bonus_minimum
+				}
+				add = sr_offworld_units
+			}
+		}
+	}
+	# The module levels past the first at the colonies held (colony modules
+	# design § 8).
+	scaling_modifiers_while_active = {
+		modifier = sr_module_upkeep
+		value = {
+			value = 0
+			if = {
+				limit = {
+					sr_colonies_contested_enabled = yes
+					sr_mod_upkeep_levels >= 1
+				}
+				add = sr_mod_upkeep_levels
+			}
+		}
+	}
+	# Autonomy and free colonies (slice 5 design §§ 2-3): a unit a free colony
+	# supplied, the trade from them, a unit a garrisoned colony.
+	scaling_modifiers_while_active = {
+		modifier = sr_free_colony_supply
+		value = {
+			value = 0
+			if = {
+				limit = {
+					sr_colonies_contested_enabled = yes
+					sr_free_supply_count >= 1
+				}
+				add = sr_free_supply_count
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_free_colony_trade
+		value = {
+			value = 0
+			if = {
+				limit = {
+					sr_colonies_contested_enabled = yes
+					sr_free_trade_units > 0
+				}
+				add = sr_free_trade_units
+			}
+		}
+	}
+	scaling_modifiers_while_active = {
+		modifier = sr_colonial_garrisons
+		value = {
+			value = 0
+			if = {
+				limit = {
+					sr_colonies_contested_enabled = yes
+					sr_garrison_count >= 1
+				}
+				add = sr_garrison_count
+			}
 		}
 	}
 

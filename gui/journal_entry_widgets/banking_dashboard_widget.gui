@@ -467,6 +467,32 @@ types banking_dashboard_widget_types
 		}
 	}
 
+	### A collapsible group inside the Monetary Policy block, where a ruled
+	### banking_dash_subheader would otherwise sit: lower than a section header
+	### and the block's 460 wide, so it reads as one of the block's groups that
+	### folds rather than as the next section (gui_modding_guide.md gotcha #26,
+	### un_chamber_subsection_header's shape). In the subheadings' type, as its
+	### ruled neighbours are. International Arrangements is the one: in a
+	### Monetary Union it lists every partner and member (owner, 2026-11-18).
+	### Its flag follows the section rule, banking_dash_<group>_closed.
+	type banking_dash_subsection_header = section_header_button {
+		blockoverride "layout" {
+			size = { 460 30 }
+		}
+		blockoverride "fontsize" {
+			using = banking_dash_fontsize_heading
+		}
+		blockoverride "left_text_alignment" {
+			align = left|nobaseline
+		}
+		blockoverride "arrow_size" {
+			size = { 20 20 }
+		}
+		blockoverride "left_textbox_margin_left" {
+			margin_left = 32
+		}
+	}
+
 	### ==========================================================================
 	### OVERVIEW: THE BARS AND THE READINGS AS ICONS
 	### ==========================================================================
@@ -715,8 +741,10 @@ types banking_dashboard_widget_types
 	### (banking_cycle_update_progress_bars). The player's own panel draws the
 	### entry's bars themselves (te_banking_overview_panel). The markup is
 	### te_je_scripted_bars' (gui/te_system_tab_widgets.gui), one bar each in the
-	### entry's order and variant: the cycle value (default_green), momentum and
-	### the policy stance (double_sided_gold), bubble pressure (default_bad).
+	### entry's order and look: the cycle value, momentum and the policy stance
+	### (blue on gold with the sliding marker, the bar's own textures, in
+	### vanilla 1.15's scripted_progressbar_dynamic markup; the cycle value
+	### since #1434, default_green before), bubble pressure (default_bad).
 	### Each value is a banking_disp_bar_* script value, 0 to 1 along the bar
 	### (banking_overview_display_values.txt). No tooltip: the entry's bar
 	### carried only the engine's periodic-progress breakdown, which a bar set
@@ -728,19 +756,66 @@ types banking_dashboard_widget_types
 		margin_bottom = 8
 
 		container = {
-			green_progressbar_horizontal = {
-				size = { 480 30 }
-				blockoverride "values" {
-					value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('banking_disp_bar_value') )]"
-					min = 0
-					max = 1
-				}
-				textbox = {
-					text = "banking_cycle_value_bar_name"
-					autoresize = yes
-					align = nobaseline
-					margin_left = 10
-					parentanchor = vcenter
+			widget = {
+				size = { 480 34 }
+
+				default_progressbar_horizontal = {
+					parentanchor = center
+					size = { 480 30 }
+
+					blockoverride "noprogresstexture" {
+						noprogresstexture = "gfx/interface/progressbar/progressbar_gold.dds"
+					}
+
+					blockoverride "values" {
+						value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('banking_disp_bar_value') )]"
+						min = 0
+						max = 1
+					}
+					textbox = {
+						text = "banking_cycle_value_bar_desc"
+						autoresize = yes
+						align = nobaseline
+						margin_left = 10
+						parentanchor = vcenter
+					}
+					textbox = {
+						text = "banking_cycle_value_bar_second"
+						autoresize = yes
+						align = right|nobaseline
+						margin_right = 10
+						parentanchor = right|vcenter
+					}
+
+					blockoverride "on_top_of_the_progressbar" {
+						progressbar = {
+							noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+							progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+							size = { 100% 100% }
+							spriteType = Corneredtiled
+							spriteborder = { 4 4 }
+							texture_density = 2
+							skip_initial_animation = yes
+
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('banking_disp_bar_value') )]"
+							min = 0
+							max = 1
+
+							direction = horizontal
+							using = progressbar_changed_animation
+							animate_negative_changes = yes
+
+							marker = {
+								icon = {
+									size = { 65 33 }
+									parentanchor = vcenter
+									widgetanchor = center
+									texture = "gfx/interface/progressbar/progressbar_marker.dds"
+									using = shimmer
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -780,16 +855,14 @@ types banking_dashboard_widget_types
 							texture_density = 2
 							skip_initial_animation = yes
 
-							block "values" {}
-							block "direction" {
-								direction = horizontal
-							}
-							block "progress_changed_animation" {
-								using = progressbar_changed_animation
-							}
-							block "animate_negative_change" {
-								animate_negative_changes = yes
-							}
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('banking_disp_bar_momentum') )]"
+							min = 0
+							max = 1
+
+							direction = horizontal
+							using = progressbar_changed_animation
+							animate_negative_changes = yes
+
 							marker = {
 								icon = {
 									size = { 65 33 }
@@ -847,16 +920,14 @@ types banking_dashboard_widget_types
 							texture_density = 2
 							skip_initial_animation = yes
 
-							block "values" {}
-							block "direction" {
-								direction = horizontal
-							}
-							block "progress_changed_animation" {
-								using = progressbar_changed_animation
-							}
-							block "animate_negative_change" {
-								animate_negative_changes = yes
-							}
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('banking_disp_bar_stance') )]"
+							min = 0
+							max = 1
+
+							direction = horizontal
+							using = progressbar_changed_animation
+							animate_negative_changes = yes
+
 							marker = {
 								icon = {
 									size = { 65 33 }
@@ -2920,366 +2991,396 @@ types banking_dashboard_widget_types
 					### country holds some role in one. Every branch that reads the
 					### anchor sits behind te_mon_is_anchored in customizable
 					### localization, so no absent scope variable is ever fetched.
-					banking_dash_subheader = {
-						visible = "[GetScriptedGui('banking_mon_shows_arrangements').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-						blockoverride "subheader_text" {
-							text = "banking_dash_mon_sub_arrangements"
-						}
-					}
-
-					banking_dash_condition_row = {
-						visible = "[GetScriptedGui('banking_mon_shows_arrangements').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-						tooltip = "banking_dash_mon_anchor_tt"
-						blockoverride "condition_label" {
-							text = "banking_dash_mon_anchor_label"
-						}
-						blockoverride "condition_value" {
-							banking_dash_condition_value = {
-								multiline = yes
-								text = "banking_dash_mon_anchor_value"
-							}
-						}
-					}
-
-					### A treaty pegger's confidence — §12.3's gauge, read against
-					### overvaluation rather than a vault.
-					banking_dash_condition_row = {
-						visible = "[GetScriptedGui('banking_mon_shows_anchor_peg').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-						tooltip = "banking_dash_mon_anchorpeg_tt"
-						blockoverride "condition_label" {
-							text = "banking_dash_mon_pegconf_label"
-						}
-						blockoverride "condition_value" {
-							banking_dash_condition_value = {
-								text = "banking_dash_mon_anchorpeg_value"
-							}
-						}
-					}
-
-					banking_dash_mon_meter = {
-						visible = "[GetScriptedGui('banking_mon_shows_anchor_peg').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-						tooltip = "banking_dash_mon_anchorpeg_tt"
-						blockoverride "meter_value" {
-							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_mon_peg_confidence_scaled') )]"
-						}
-					}
-
-					banking_dash_condition_row = {
-						visible = "[GetScriptedGui('banking_mon_shows_arrangements').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-						tooltip = "banking_dash_mon_backstops_tt"
-						blockoverride "condition_label" {
-							text = "banking_dash_mon_backstops_label"
-						}
-						blockoverride "condition_value" {
-							banking_dash_condition_value = {
-								multiline = yes
-								text = "banking_dash_mon_backstops_value"
-							}
-						}
-					}
-
-					### The partners behind the two sums (GUI audit BNK-13): who backs us
-					### and whom we back, a row each, from the lists the arrangement
-					### discovery keeps (te_mon_record_backstop_* in
-					### te_monetary_arrangement_effects.txt): a partner's capital, since
-					### a GUI reaches a country through its state.
+					###
+					### The one group of the block that folds (banking_dash_subsection_header):
+					### in a Monetary Union its partner and member rows run long, so it
+					### closes apart from the rest of the block, its header left in place.
+					### Open by default:
+					### it is live content (style guide rule 1). Every row in it falls under
+					### the wrapper's gate: an anchor peg is an anchor, and a bloc with the
+					### monetary-union group gives every member a role
+					### (te_monetary_discover_arrangements sets te_mon_arr_scan), so the rows'
+					### own gates narrow it and none of them repeats it.
 					flowcontainer = {
 						visible = "[GetScriptedGui('banking_mon_shows_arrangements').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						direction = vertical
 						ignoreinvisible = yes
 						spacing = 2
+						margin_top = 6
+
+						banking_dash_subsection_header = {
+							blockoverride "left_text" {
+								text = "banking_dash_mon_sub_arrangements"
+							}
+							blockoverride "onclick" {
+								onclick = "[GetVariableSystem.Toggle('banking_dash_arrangements_closed')]"
+							}
+							blockoverride "onclick_showmore" {
+								visible = "[GetVariableSystem.Exists('banking_dash_arrangements_closed')]"
+							}
+							blockoverride "onclick_showless" {
+								visible = "[Not(GetVariableSystem.Exists('banking_dash_arrangements_closed'))]"
+							}
+						}
 
 						flowcontainer = {
+							visible = "[Not(GetVariableSystem.Exists('banking_dash_arrangements_closed'))]"
 							direction = vertical
 							ignoreinvisible = yes
 							spacing = 2
-							datamodel = "[Country.MakeScope.GetList('te_mon_bs_swap_from')]"
 
-							item = {
+							banking_dash_condition_row = {
+								tooltip = "banking_dash_mon_anchor_tt"
+								blockoverride "condition_label" {
+									text = "banking_dash_mon_anchor_label"
+								}
+								blockoverride "condition_value" {
+									banking_dash_condition_value = {
+										multiline = yes
+										text = "banking_dash_mon_anchor_value"
+									}
+								}
+							}
+
+							### A treaty pegger's confidence — §12.3's gauge, read against
+							### overvaluation rather than a vault.
+							banking_dash_condition_row = {
+								visible = "[GetScriptedGui('banking_mon_shows_anchor_peg').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+								tooltip = "banking_dash_mon_anchorpeg_tt"
+								blockoverride "condition_label" {
+									text = "banking_dash_mon_pegconf_label"
+								}
+								blockoverride "condition_value" {
+									banking_dash_condition_value = {
+										text = "banking_dash_mon_anchorpeg_value"
+									}
+								}
+							}
+
+							banking_dash_mon_meter = {
+								visible = "[GetScriptedGui('banking_mon_shows_anchor_peg').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+								tooltip = "banking_dash_mon_anchorpeg_tt"
+								blockoverride "meter_value" {
+									value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_mon_peg_confidence_scaled') )]"
+								}
+							}
+
+							banking_dash_condition_row = {
+								tooltip = "banking_dash_mon_backstops_tt"
+								blockoverride "condition_label" {
+									text = "banking_dash_mon_backstops_label"
+								}
+								blockoverride "condition_value" {
+									banking_dash_condition_value = {
+										multiline = yes
+										text = "banking_dash_mon_backstops_value"
+									}
+								}
+							}
+
+							### The partners behind the two sums (GUI audit BNK-13): who backs us
+							### and whom we back, a row each, from the lists the arrangement
+							### discovery keeps (te_mon_record_backstop_* in
+							### te_monetary_arrangement_effects.txt): a partner's capital, since
+							### a GUI reaches a country through its state.
+							flowcontainer = {
+								direction = vertical
+								ignoreinvisible = yes
+								spacing = 2
+
+								flowcontainer = {
+									direction = vertical
+									ignoreinvisible = yes
+									spacing = 2
+									datamodel = "[Country.MakeScope.GetList('te_mon_bs_swap_from')]"
+
+									item = {
+										banking_dash_partner_row = {
+											datacontext = "[Scope.GetState]"
+											blockoverride "flag" {
+												tiny_flag = {
+													parentanchor = center
+													datacontext = "[State.GetCountry]"
+												}
+											}
+											blockoverride "name" {
+												text = "banking_dash_mon_bs_state_name"
+											}
+											blockoverride "value" {
+												text = "banking_dash_mon_bs_swap_from"
+											}
+										}
+									}
+								}
+
+								flowcontainer = {
+									direction = vertical
+									ignoreinvisible = yes
+									spacing = 2
+									datamodel = "[Country.MakeScope.GetList('te_mon_bs_lolr_from')]"
+
+									item = {
+										banking_dash_partner_row = {
+											datacontext = "[Scope.GetState]"
+											blockoverride "flag" {
+												tiny_flag = {
+													parentanchor = center
+													datacontext = "[State.GetCountry]"
+												}
+											}
+											blockoverride "name" {
+												text = "banking_dash_mon_bs_state_name"
+											}
+											blockoverride "value" {
+												text = "banking_dash_mon_bs_lolr_from"
+											}
+										}
+									}
+								}
+
+								flowcontainer = {
+									direction = vertical
+									ignoreinvisible = yes
+									spacing = 2
+									datamodel = "[Country.MakeScope.GetList('te_mon_bs_receiver_from')]"
+
+									item = {
+										banking_dash_partner_row = {
+											datacontext = "[Scope.GetState]"
+											blockoverride "flag" {
+												tiny_flag = {
+													parentanchor = center
+													datacontext = "[State.GetCountry]"
+												}
+											}
+											blockoverride "name" {
+												text = "banking_dash_mon_bs_state_name"
+											}
+											blockoverride "value" {
+												text = "banking_dash_mon_bs_receiver_from"
+											}
+										}
+									}
+								}
+
+								### A member's share of its bloc's cooperation and backstop, from the
+								### leader. The row reads the shown country (its visible and its
+								### figure), so the leader is the datacontext of the flag and the
+								### name alone, never of the row: on the row it would be the
+								### Country the visible and the value read (charts-help-national-info
+								### spec § 6.3, the one row whose country shadows the panel's).
 								banking_dash_partner_row = {
-									datacontext = "[Scope.GetState]"
+									visible = "[And( Country.IsInPowerBloc, GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_mon_bs_union_received_display'), '(CFixedPoint)0' ) )]"
 									blockoverride "flag" {
 										tiny_flag = {
 											parentanchor = center
-											datacontext = "[State.GetCountry]"
+											datacontext = "[Country.GetPowerBloc.GetLeader]"
 										}
 									}
 									blockoverride "name" {
-										text = "banking_dash_mon_bs_state_name"
+										datacontext = "[Country.GetPowerBloc.GetLeader]"
+										text = "banking_dash_mon_bs_country_name"
 									}
 									blockoverride "value" {
-										text = "banking_dash_mon_bs_swap_from"
+										text = "banking_dash_mon_bs_union_from"
 									}
 								}
-							}
-						}
 
-						flowcontainer = {
-							direction = vertical
-							ignoreinvisible = yes
-							spacing = 2
-							datamodel = "[Country.MakeScope.GetList('te_mon_bs_lolr_from')]"
+								flowcontainer = {
+									direction = vertical
+									ignoreinvisible = yes
+									spacing = 2
+									datamodel = "[Country.MakeScope.GetList('te_mon_bs_swap_to')]"
 
-							item = {
+									item = {
+										banking_dash_partner_row = {
+											datacontext = "[Scope.GetState]"
+											blockoverride "flag" {
+												tiny_flag = {
+													parentanchor = center
+													datacontext = "[State.GetCountry]"
+												}
+											}
+											blockoverride "name" {
+												text = "banking_dash_mon_bs_state_name"
+											}
+											blockoverride "value" {
+												text = "banking_dash_mon_bs_swap_to"
+											}
+										}
+									}
+								}
+
+								flowcontainer = {
+									direction = vertical
+									ignoreinvisible = yes
+									spacing = 2
+									datamodel = "[Country.MakeScope.GetList('te_mon_bs_lolr_to')]"
+
+									item = {
+										banking_dash_partner_row = {
+											datacontext = "[Scope.GetState]"
+											blockoverride "flag" {
+												tiny_flag = {
+													parentanchor = center
+													datacontext = "[State.GetCountry]"
+												}
+											}
+											blockoverride "name" {
+												text = "banking_dash_mon_bs_state_name"
+											}
+											blockoverride "value" {
+												text = "banking_dash_mon_bs_lolr_to"
+											}
+										}
+									}
+								}
+
+								flowcontainer = {
+									direction = vertical
+									ignoreinvisible = yes
+									spacing = 2
+									datamodel = "[Country.MakeScope.GetList('te_mon_bs_receivership_to')]"
+
+									item = {
+										banking_dash_partner_row = {
+											datacontext = "[Scope.GetState]"
+											blockoverride "flag" {
+												tiny_flag = {
+													parentanchor = center
+													datacontext = "[State.GetCountry]"
+												}
+											}
+											blockoverride "name" {
+												text = "banking_dash_mon_bs_state_name"
+											}
+											blockoverride "value" {
+												text = "banking_dash_mon_bs_receivership_to"
+											}
+										}
+									}
+								}
+
+								### A leader's whole bloc, one row: its members are listed under
+								### Monetary Union, each with its share.
 								banking_dash_partner_row = {
-									datacontext = "[Scope.GetState]"
-									blockoverride "flag" {
-										tiny_flag = {
-											parentanchor = center
-											datacontext = "[State.GetCountry]"
-										}
-									}
+									visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_mon_bs_union_pts_display'), '(CFixedPoint)0' )]"
 									blockoverride "name" {
-										text = "banking_dash_mon_bs_state_name"
+										text = "banking_dash_mon_bs_bloc_name"
 									}
 									blockoverride "value" {
-										text = "banking_dash_mon_bs_lolr_from"
+										text = "banking_dash_mon_bs_union_to"
 									}
 								}
 							}
-						}
 
-						flowcontainer = {
-							direction = vertical
-							ignoreinvisible = yes
-							spacing = 2
-							datamodel = "[Country.MakeScope.GetList('te_mon_bs_receiver_from')]"
+							### [P5b] The bloc's common currency (§15A.3): one state row and the
+							### four actions, each its own scripted GUI.
+							banking_dash_condition_row = {
+								visible = "[GetScriptedGui('banking_mon_shows_union').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+								tooltip = "banking_dash_mon_union_tt"
+								blockoverride "condition_label" {
+									text = "banking_dash_mon_union_label"
+								}
+								blockoverride "condition_value" {
+									banking_dash_condition_value = {
+										multiline = yes
+										text = "banking_dash_mon_union_value"
+									}
+								}
+							}
 
-							item = {
-								banking_dash_partner_row = {
-									datacontext = "[Scope.GetState]"
-									blockoverride "flag" {
-										tiny_flag = {
-											parentanchor = center
-											datacontext = "[State.GetCountry]"
+							### A leader's members, a row each (GUI audit BNK-13): whether each
+							### has adopted, holds out or would refuse if pressed, and what
+							### backing it costs us. The leader is left out, as vanilla's own
+							### member list leaves it out (power_bloc_panel.gui).
+							flowcontainer = {
+								### In a bloc first, as vanilla gates a GetPowerBloc datacontext
+								### (00_te_country_panel_information.gui's power bloc entry).
+								visible = "[And( Country.IsInPowerBloc, GetScriptedGui('banking_mon_shows_union_members').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
+								datacontext = "[Country.GetPowerBloc]"
+								datamodel = "[PowerBloc.GetMembers]"
+								direction = vertical
+								ignoreinvisible = yes
+								spacing = 2
+
+								item = {
+									banking_dash_partner_row = {
+										visible = "[Not( PowerBloc.IsLeader( Country.Self ) )]"
+										tooltip = "banking_dash_mon_union_member_tt"
+										blockoverride "flag" {
+											tiny_flag = {
+												parentanchor = center
+											}
+										}
+										blockoverride "name" {
+											text = "banking_dash_mon_bs_country_name"
+										}
+										blockoverride "value" {
+											text = "banking_dash_mon_union_member_value"
 										}
 									}
-									blockoverride "name" {
-										text = "banking_dash_mon_bs_state_name"
-									}
-									blockoverride "value" {
-										text = "banking_dash_mon_bs_receiver_from"
-									}
 								}
 							}
-						}
 
-						### A member's share of its bloc's cooperation and backstop, from the
-						### leader. The row reads the shown country (its visible and its
-						### figure), so the leader is the datacontext of the flag and the
-						### name alone, never of the row: on the row it would be the
-						### Country the visible and the value read (charts-help-national-info
-						### spec § 6.3, the one row whose country shadows the panel's).
-						banking_dash_partner_row = {
-							visible = "[And( Country.IsInPowerBloc, GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_mon_bs_union_received_display'), '(CFixedPoint)0' ) )]"
-							blockoverride "flag" {
-								tiny_flag = {
-									parentanchor = center
-									datacontext = "[Country.GetPowerBloc.GetLeader]"
-								}
-							}
-							blockoverride "name" {
-								datacontext = "[Country.GetPowerBloc.GetLeader]"
-								text = "banking_dash_mon_bs_country_name"
-							}
-							blockoverride "value" {
-								text = "banking_dash_mon_bs_union_from"
-							}
-						}
+							### Stacked, not side by side: two can show at once (Leave and Press for
+							### Convergence), and at 231 each the large type does not fit both in 460.
+							flowcontainer = {
+								direction = vertical
+								ignoreinvisible = yes
+								spacing = 2
+								parentanchor = hcenter
+								visible = "[And( Country.IsLocalPlayer, GetScriptedGui('banking_mon_shows_union').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 
-						flowcontainer = {
-							direction = vertical
-							ignoreinvisible = yes
-							spacing = 2
-							datamodel = "[Country.MakeScope.GetList('te_mon_bs_swap_to')]"
+								### The player's own country only: another country sees the Monetary
+								### Union row above, not the buttons that change it.
+								flowcontainer = {
+									using = te_own_country_only
+									direction = vertical
+									ignoreinvisible = yes
+									spacing = 2
+									parentanchor = hcenter
 
-							item = {
-								banking_dash_partner_row = {
-									datacontext = "[Scope.GetState]"
-									blockoverride "flag" {
-										tiny_flag = {
-											parentanchor = center
-											datacontext = "[State.GetCountry]"
-										}
+									banking_dash_mon_button = {
+										datacontext = "[GetScriptedGui('banking_mon_union_adopt')]"
+										visible = "[GetScriptedGui('banking_mon_union_adopt').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+										enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
+										onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+										tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+										size = { 240 28 }
+										text = "banking_dash_mon_btn_union_adopt"
 									}
-									blockoverride "name" {
-										text = "banking_dash_mon_bs_state_name"
-									}
-									blockoverride "value" {
-										text = "banking_dash_mon_bs_swap_to"
-									}
-								}
-							}
-						}
 
-						flowcontainer = {
-							direction = vertical
-							ignoreinvisible = yes
-							spacing = 2
-							datamodel = "[Country.MakeScope.GetList('te_mon_bs_lolr_to')]"
+									banking_dash_mon_button = {
+										datacontext = "[GetScriptedGui('banking_mon_union_leave')]"
+										visible = "[GetScriptedGui('banking_mon_union_leave').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+										enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
+										onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+										tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+										size = { 240 28 }
+										text = "banking_dash_mon_btn_union_leave"
+									}
 
-							item = {
-								banking_dash_partner_row = {
-									datacontext = "[Scope.GetState]"
-									blockoverride "flag" {
-										tiny_flag = {
-											parentanchor = center
-											datacontext = "[State.GetCountry]"
-										}
+									banking_dash_mon_button = {
+										datacontext = "[GetScriptedGui('banking_mon_union_press_on')]"
+										visible = "[GetScriptedGui('banking_mon_union_press_on').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+										enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
+										onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+										tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+										size = { 240 28 }
+										text = "banking_dash_mon_btn_union_press"
 									}
-									blockoverride "name" {
-										text = "banking_dash_mon_bs_state_name"
-									}
-									blockoverride "value" {
-										text = "banking_dash_mon_bs_lolr_to"
+
+									banking_dash_mon_button = {
+										datacontext = "[GetScriptedGui('banking_mon_union_press_off')]"
+										visible = "[GetScriptedGui('banking_mon_union_press_off').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+										enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
+										onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+										tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+										size = { 240 28 }
+										text = "banking_dash_mon_btn_union_press_off"
 									}
 								}
-							}
-						}
-
-						flowcontainer = {
-							direction = vertical
-							ignoreinvisible = yes
-							spacing = 2
-							datamodel = "[Country.MakeScope.GetList('te_mon_bs_receivership_to')]"
-
-							item = {
-								banking_dash_partner_row = {
-									datacontext = "[Scope.GetState]"
-									blockoverride "flag" {
-										tiny_flag = {
-											parentanchor = center
-											datacontext = "[State.GetCountry]"
-										}
-									}
-									blockoverride "name" {
-										text = "banking_dash_mon_bs_state_name"
-									}
-									blockoverride "value" {
-										text = "banking_dash_mon_bs_receivership_to"
-									}
-								}
-							}
-						}
-
-						### A leader's whole bloc, one row: its members are listed under
-						### Monetary Union, each with its share.
-						banking_dash_partner_row = {
-							visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_mon_bs_union_pts_display'), '(CFixedPoint)0' )]"
-							blockoverride "name" {
-								text = "banking_dash_mon_bs_bloc_name"
-							}
-							blockoverride "value" {
-								text = "banking_dash_mon_bs_union_to"
-							}
-						}
-					}
-
-					### [P5b] The bloc's common currency (§15A.3): one state row and the
-					### four actions, each its own scripted GUI.
-					banking_dash_condition_row = {
-						visible = "[GetScriptedGui('banking_mon_shows_union').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-						tooltip = "banking_dash_mon_union_tt"
-						blockoverride "condition_label" {
-							text = "banking_dash_mon_union_label"
-						}
-						blockoverride "condition_value" {
-							banking_dash_condition_value = {
-								multiline = yes
-								text = "banking_dash_mon_union_value"
-							}
-						}
-					}
-
-					### A leader's members, a row each (GUI audit BNK-13): whether each
-					### has adopted, holds out or would refuse if pressed, and what
-					### backing it costs us. The leader is left out, as vanilla's own
-					### member list leaves it out (power_bloc_panel.gui).
-					flowcontainer = {
-						### In a bloc first, as vanilla gates a GetPowerBloc datacontext
-						### (00_te_country_panel_information.gui's power bloc entry).
-						visible = "[And( Country.IsInPowerBloc, GetScriptedGui('banking_mon_shows_union_members').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
-						datacontext = "[Country.GetPowerBloc]"
-						datamodel = "[PowerBloc.GetMembers]"
-						direction = vertical
-						ignoreinvisible = yes
-						spacing = 2
-
-						item = {
-							banking_dash_partner_row = {
-								visible = "[Not( PowerBloc.IsLeader( Country.Self ) )]"
-								tooltip = "banking_dash_mon_union_member_tt"
-								blockoverride "flag" {
-									tiny_flag = {
-										parentanchor = center
-									}
-								}
-								blockoverride "name" {
-									text = "banking_dash_mon_bs_country_name"
-								}
-								blockoverride "value" {
-									text = "banking_dash_mon_union_member_value"
-								}
-							}
-						}
-					}
-
-					### Stacked, not side by side: two can show at once (Leave and Press for
-					### Convergence), and at 231 each the large type does not fit both in 460.
-					flowcontainer = {
-						direction = vertical
-						ignoreinvisible = yes
-						spacing = 2
-						parentanchor = hcenter
-						visible = "[And( Country.IsLocalPlayer, GetScriptedGui('banking_mon_shows_union').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
-
-						### The player's own country only: another country sees the Monetary
-						### Union row above, not the buttons that change it.
-						flowcontainer = {
-							using = te_own_country_only
-							direction = vertical
-							ignoreinvisible = yes
-							spacing = 2
-							parentanchor = hcenter
-
-							banking_dash_mon_button = {
-								datacontext = "[GetScriptedGui('banking_mon_union_adopt')]"
-								visible = "[GetScriptedGui('banking_mon_union_adopt').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-								enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
-								onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
-								tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
-								size = { 240 28 }
-								text = "banking_dash_mon_btn_union_adopt"
-							}
-
-							banking_dash_mon_button = {
-								datacontext = "[GetScriptedGui('banking_mon_union_leave')]"
-								visible = "[GetScriptedGui('banking_mon_union_leave').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-								enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
-								onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
-								tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
-								size = { 240 28 }
-								text = "banking_dash_mon_btn_union_leave"
-							}
-
-							banking_dash_mon_button = {
-								datacontext = "[GetScriptedGui('banking_mon_union_press_on')]"
-								visible = "[GetScriptedGui('banking_mon_union_press_on').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-								enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
-								onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
-								tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
-								size = { 240 28 }
-								text = "banking_dash_mon_btn_union_press"
-							}
-
-							banking_dash_mon_button = {
-								datacontext = "[GetScriptedGui('banking_mon_union_press_off')]"
-								visible = "[GetScriptedGui('banking_mon_union_press_off').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-								enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
-								onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
-								tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
-								size = { 240 28 }
-								text = "banking_dash_mon_btn_union_press_off"
 							}
 						}
 					}

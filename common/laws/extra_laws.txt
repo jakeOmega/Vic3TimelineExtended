@@ -44,14 +44,18 @@ INJECT:law_isolationism = {
 		country_un_authority_target_add = -1.5
 	}
 }
+# Isolationism's variants carry its UN authority line: a variant takes its
+# parent's stances, not its modifiers.
 INJECT:law_canton_system = {
 	modifier = {
 		country_cultural_pull_mult = -0.10
+		country_un_authority_target_add = -1.5
 	}
 }
 INJECT:law_sakoku = {
 	modifier = {
 		country_cultural_pull_mult = -0.10
+		country_un_authority_target_add = -1.5
 	}
 }
 
@@ -127,6 +131,21 @@ INJECT:law_secret_police = {
 	}
 }
 INJECT:law_shinsengumi = {
+	modifier = {
+		country_cultural_pull_mult = -0.08
+	}
+}
+INJECT:law_okhrana = {
+	modifier = {
+		country_cultural_pull_mult = -0.08
+	}
+}
+INJECT:law_third_section = {
+	modifier = {
+		country_cultural_pull_mult = -0.08
+	}
+}
+INJECT:law_extraordinary_commission = {
 	modifier = {
 		country_cultural_pull_mult = -0.08
 	}
@@ -277,6 +296,11 @@ INJECT:law_people_of_the_book = {
 		country_cultural_hegemony_art_mult = -0.03
 	}
 }
+INJECT:law_caesaropapism = {
+	modifier = {
+		country_cultural_hegemony_art_mult = -0.03
+	}
+}
 
 # ============================================================================
 # END Cultural Hegemony law modifier hooks
@@ -303,6 +327,10 @@ law_universal_basic_income = {
 		# common/laws/te_monetary_wage_pressure_injections.txt with the other
 		# ten, because this law is the mod's own.
 		country_wage_pressure_add = 0.005
+		# Vanilla's Reform or Revolution entry already counts the Social
+		# Security institution toward reform (up to 1 a country, by incorporated
+		# population); an income for everyone adds half as much again (#1453).
+		country_reform_or_revolution_reform_bonus_add = 0.5
 	}
 
 	institution = institution_social_security
@@ -342,6 +370,16 @@ law_universal_basic_income = {
 
 	on_deactivate = {
 		recalculate_pop_ig_support = yes
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_social_security } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -400,6 +438,16 @@ law_post-scarcity = {
 
 	on_deactivate = {
 		recalculate_pop_ig_support = yes
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_social_security } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -928,7 +976,7 @@ law_humanitarian_regulations = {
 	# tendency to do both).
 	modifier = {
 		country_diplomatic_reputation_add = 6
-		unit_recovery_rate_add = 0.1
+		unit_recovery_rate_add = 0.05 # 0.1 until 1.15.2 halved vanilla's recovery sources
 		unit_devastation_mult = -0.5
 		unit_kill_rate_add = -0.05
 		country_strategic_nuclear_strikes_forbidden_bool = yes
@@ -1659,7 +1707,7 @@ law_legal_limbo = {
 	progressiveness = 10
 
 	modifier = {
-		state_standard_of_living_add = 0.5
+		state_standard_of_living_add = 0.5	# REVIEWED 2026-11-12: owner call (#338). Standard of living is whole points, so this plays as 0; rounding to 1 would equal Basic Protections, the next law up (1, 2, 3).
 		country_cultural_hegemony_art_mult = -0.02
 	}
 }
@@ -2002,6 +2050,7 @@ law_minority_rights_ghettoization = {
 
 	unlocking_laws = {
 		law_subjecthood
+		law_official_nationality # 1.15: Subjecthood's Russian variant
 		law_ethnostate
 		law_national_supremacy
 		law_racial_segregation
@@ -2220,6 +2269,7 @@ law_minority_rights_discrimination = {
 
 	unlocking_laws = {
 		law_subjecthood
+		law_official_nationality # 1.15: Subjecthood's Russian variant
 		law_ethnostate
 		law_national_supremacy
 		law_racial_segregation
@@ -2675,6 +2725,7 @@ law_no_campaign_finance_laws = {
 		law_universal_suffrage
 		law_liquid_democracy
 		law_anarchy
+		law_labour_suffrage
 	}
 }
 
@@ -2690,6 +2741,7 @@ law_unregulated_donations = {
 		law_universal_suffrage
 		law_liquid_democracy
 		law_anarchy
+		law_labour_suffrage
 	}
 
 	modifier = {
@@ -2712,6 +2764,7 @@ law_donation_limits = {
 		law_universal_suffrage
 		law_liquid_democracy
 		law_anarchy
+		law_labour_suffrage
 	}
 
 	modifier = {
@@ -2739,6 +2792,7 @@ law_publicly_funded_elections = {
 		law_universal_suffrage
 		law_liquid_democracy
 		law_anarchy
+		law_labour_suffrage
 	}
 
 	modifier = {
@@ -3278,6 +3332,16 @@ law_civic_monolingualism = {
 		state_homeland_removal_threshold_add = 0.05
 		state_homeland_change_speed_mult = 0.25
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_schools } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
+	}
 }
 
 # Multilingual Federalism
@@ -3546,6 +3610,12 @@ law_ministry_of_foreign_affairs = {
 
 	ai_enact_weight_modifier = {
 		value = 100
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_foreign_affairs } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -3596,6 +3666,12 @@ law_ministry_of_war = {
 			}
 			add = 750
 		}
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_war } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -3641,6 +3717,12 @@ law_ministry_of_commerce = {
 			}
 			add = 750
 		}
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_commerce } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -3651,6 +3733,16 @@ law_no_national_bank = {
 
 	progressiveness = 0
 
+	# A Creditors' Consortium's leader cannot abolish its National Bank: the
+	# bloc's guarantee rests on it (te_mon_backstop_provider_valid; spec
+	# 2026-11-16-power-bloc-identities-design.md § 8.1,
+	# te_creditors_consortium_law_injections.txt).
+	can_enact = {
+		custom_tooltip = {
+			text = te_cred_leader_cannot_enact_tt
+			te_cred_leads_consortium = no
+		}
+	}
 }
 
 law_national_bank = {
@@ -3734,6 +3826,12 @@ law_national_bank = {
 			limit = { scaled_debt > 0.25 }
 			add = 400
 		}
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_national_bank } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -3779,6 +3877,12 @@ law_ministry_of_culture = {
 			}
 			add = 750
 		}
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_culture } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -3813,6 +3917,16 @@ law_pro_labor_ministry_of_labor = {
 	modifier = {
 		country_institution_ministry_of_labor_max_investment_add = 3
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_labor } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
+	}
 }
 
 law_pro_capital_ministry_of_labor = {
@@ -3837,6 +3951,16 @@ law_pro_capital_ministry_of_labor = {
 
 	modifier = {
 		country_institution_ministry_of_labor_max_investment_add = 3
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_labor } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -3882,6 +4006,12 @@ law_ministry_of_the_environment = {
 			}
 			add = 750
 		}
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_the_environment } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -3910,6 +4040,16 @@ law_ministry_of_intelligence_and_security = {
 	modifier = {
 		country_institution_ministry_of_intelligence_and_security_max_investment_add = 2
 		country_legislative_override_capacity_add = 1
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_intelligence_and_security } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -3946,6 +4086,16 @@ law_ministry_of_refugee_affairs = {
 	modifier = {
 		country_institution_ministry_of_refugee_affairs_max_investment_add = 2
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_refugee_affairs } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
+	}
 }
 
 law_no_ministry_of_propaganda = {
@@ -3971,6 +4121,10 @@ law_ministry_of_propaganda = {
 	unlocking_laws = {
 		law_single_party_state
 		law_secret_police
+		# Secret Police's variants, named one by one
+		law_shinsengumi
+		law_okhrana
+		law_third_section
 		law_outlawed_dissent
 	}
 
@@ -3998,6 +4152,12 @@ law_ministry_of_propaganda = {
 			}
 			add = 750
 		}
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_propaganda } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -4008,6 +4168,21 @@ law_no_ministry_of_science = {
 
 	progressiveness = 0
 
+	# A Research Commons' leader can't close its Ministry of Science (owner,
+	# 2026-11-16): the identity needs one to found, and the lock is the law's
+	# own, as vanilla's National Militia locks a Military Treaty Organization's
+	# leader (power_blocs.md § Research Commons).
+	can_enact = {
+		custom_tooltip = {
+			text = te_rc_ministry_law_lock_tt
+			OR = {
+				is_power_bloc_leader = no
+				power_bloc ?= {
+					NOT = { has_identity = identity:identity_research_commons }
+				}
+			}
+		}
+	}
 }
 
 law_ministry_of_science = {
@@ -4054,6 +4229,12 @@ law_ministry_of_science = {
 			}
 			add = 750
 		}
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_science } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -4082,6 +4263,10 @@ law_ministry_of_thought_control = {
 	unlocking_laws = {
 		law_single_party_state
 		law_secret_police
+		# Secret Police's variants, named one by one
+		law_shinsengumi
+		law_okhrana
+		law_third_section
 		law_outlawed_dissent
 	}
 
@@ -4090,6 +4275,16 @@ law_ministry_of_thought_control = {
 	modifier = {
 		country_institution_ministry_of_thought_control_max_investment_add = 3
 		country_legislative_override_capacity_add = 2
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_thought_control } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -4137,6 +4332,12 @@ law_ministry_of_consumer_protection = {
 			}
 			add = 750
 		}
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_consumer_protection } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -4183,6 +4384,12 @@ law_ministry_of_urban_planning = {
 			}
 			add = 750
 		}
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_urban_planning } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -4208,6 +4415,10 @@ law_ministry_of_religion = {
 
 	unlocking_laws = {
 		law_state_religion
+		# State Religion's variants, named one by one
+		law_caesaropapism
+		law_millet_system
+		law_people_of_the_book
 		law_freedom_of_conscience
 	}
 
@@ -4230,6 +4441,12 @@ law_ministry_of_religion = {
 				}
 			}
 			add = 750
+		}
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_religion } }
+			add = te_ai_unstaffed_institution_law_weight
 		}
 	}
 }
@@ -4258,6 +4475,16 @@ law_ministry_of_international_aid = {
 
 	modifier = {
 		country_institution_ministry_of_international_aid_max_investment_add = 2
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_international_aid } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 }
 
@@ -4531,6 +4758,12 @@ law_neocolonialism = {
 			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_colonial_affairs } }
+			add = te_ai_unstaffed_institution_law_weight
+		}
 	}
 
 	ai_impose_chance = {
@@ -4616,77 +4849,6 @@ law_contracted_administration = {
 			limit = { ig:ig_industrialists ?= { is_in_government = yes } }
 			add = 15
 		}
-
-		if = {
-			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
-			add = 750
-		}
-	}
-}
-
-# Local assemblies and recallable delegates administer services and local
-# affairs. Communities take part directly instead of electing officials to act
-# for them (Elected Bureaucrats).
-law_communal_administration = {
-	group = lawgroup_bureaucracy
-	icon = "gfx/interface/icons/law_icons/law_communal_administration.dds"
-
-	# Above Elected Bureaucrats (50): a Council Republic or Collective
-	# Governance that loses Elected (its Distribution of Power leaves the voting
-	# laws) falls back here, not to Appointed (0). A country losing this law
-	# falls back to Elected where it can hold it, otherwise to Appointed.
-	progressiveness = 75
-
-	# No technology: Council Republic (Socialism), Anarchy (Anarchism) and
-	# Collective Governance (Political Agitation) already set the era.
-	unlocking_laws = {
-		law_council_republic
-		law_anarchy
-		law_direct_democracy # displayed as Collective Governance
-	}
-
-	# Elected Bureaucrats' vanilla exclusions: rotating delegates are the
-	# opposite of rule by experts or by elders.
-	disallowing_laws = {
-		law_technocracy
-		law_elder_council
-		law_algorithmic_governance
-	}
-
-	# Vanilla's Appointed Bureaucrats tooltips: pop IG weights key on Elected
-	# and Hereditary Bureaucrats, so leaving either for this law shifts the same
-	# pops.
-	on_enact = {
-		if = {
-			limit = { has_law_or_variant = law_type:law_elected_bureaucrats }
-			custom_tooltip = bureaucrats_pb_ig_shift_effect_negative_tt
-		}
-		if = {
-			limit = { has_law_or_variant = law_type:law_hereditary_bureaucrats }
-			custom_tooltip = urban_aristocrats_int_ig_shift_effect_negative_tt
-		}
-	}
-
-	# Government Administrations staff pm_recallable_delegates instead of
-	# Professional Bureaucrats while this law holds (extra_pms.txt).
-	modifier = {
-		# Workers' councils in the towns and village assemblies in the
-		# countryside take over from the career service.
-		country_bureaucrats_pol_str_mult = -0.25
-		interest_group_ig_trade_unions_pol_str_mult = 0.1
-		interest_group_ig_rural_folk_pol_str_mult = 0.1
-		# Grievances are heard in the local assembly before they become a
-		# movement (vanilla's internal security laws: -0.03 to -0.05).
-		political_movement_radicalism_add = -0.05
-		# Weaker central coordination: assemblies meet local needs first.
-		state_tax_capacity_mult = -0.1
-		# A delegate answers to the assembly that can recall them, not to
-		# the centre (Elected -1, Devolution -2).
-		country_legislative_override_capacity_add = -2
-	}
-
-	ai_enact_weight_modifier = {
-		value = 10
 
 		if = {
 			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
@@ -5319,7 +5481,10 @@ law_private_policing = {
 		# Wealthy neighbourhoods are policed, in every state. Private Health
 		# Insurance pays upper strata +0.5 a level the same way.
 		state_upper_strata_standard_of_living_add = 0.25
-		state_middle_strata_standard_of_living_add = 0.1
+		# Standard of living is whole points, so the middle strata's share must
+		# reach one at the levels a force gets to: +1 from level 7 (it was 0.1,
+		# which never did, #338); upper strata +1 from level 4, +2 from 8.
+		state_middle_strata_standard_of_living_add = 0.15
 		# Unrest happens where nobody pays for cover: cancels half of the
 		# institution's own -10% turmoil effects a level.
 		state_turmoil_effects_mult = 0.05
@@ -5348,6 +5513,12 @@ law_private_policing = {
 		if = {
 			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
+		}
+
+		# No new institution the bureaucracy can't carry (#1822, te_ai_coverage_triggers.txt).
+		if = {
+			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_police } }
+			add = te_ai_unstaffed_institution_law_weight
 		}
 	}
 }

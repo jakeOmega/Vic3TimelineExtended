@@ -92,7 +92,13 @@ class MonumentsAreOutput(unittest.TestCase):
 
     def test_totals(self):
         t = read(TOURISM)
-        self.assertIn("add = tourism_bonus_from_monuments", block(t, "total_tourism_output_bonus_percent"))
+        # the monuments are an output term, in the part both output totals share
+        self.assertIn("add = tourism_bonus_from_monuments", block(t, "tourism_output_bonus_besides_appeal"))
+        self.assertIn("add = tourism_output_bonus_besides_appeal", block(t, "total_tourism_output_bonus_percent"))
+        self.assertIn("value = tourism_bonus_from_base_appeal", block(t, "total_tourism_output_bonus_percent"))
+        stored = block(t, "tourism_output_from_stored_appeal")
+        self.assertIn("value = var:te_tourism_base_appeal", stored)
+        self.assertIn("add = tourism_output_bonus_besides_appeal", stored)
         thr = block(t, "total_tourism_throughput_bonus_percent")
         self.assertIn("add = tourism_throughput_from_skyscraper", thr)
         self.assertNotIn("monuments", thr)
@@ -103,6 +109,13 @@ class MonumentsAreOutput(unittest.TestCase):
         named = {b: float(v) for b, v in re.findall(r"is_building_type = (building_\w+) \} add = ([\d.]+)", body)}
         moved = {f"building_{m.monument}": m.points / 100 for m in gen.load_moves() if m.kind == "vanilla_wonder"}
         self.assertEqual(named, moved)
+
+    def test_the_refresh_stores_the_appeal_before_the_output_reads_it(self):
+        # tourism_output_from_stored_appeal reads var:te_tourism_base_appeal, so the refresh writes it first
+        body = squash(block(read(ROOT / "common/scripted_effects/extra_effects.txt"), "te_update_tourism_modifier"))
+        store = body.index("set_variable = { name = te_tourism_base_appeal value = tourism_bonus_from_base_appeal }")
+        self.assertLess(store, body.index("multiplier = tourism_output_from_stored_appeal"))
+        self.assertNotIn("total_tourism_output_bonus_percent", body)
 
     def test_old_value_is_gone(self):
         for path in list((ROOT / "common").rglob("*.txt")) + list((ROOT / "gui").rglob("*.gui")):

@@ -27,6 +27,17 @@ Some lines were translated before, and the English has changed since. Two commen
 
 Compare the two English versions and change the translation only where the English changed, keeping its wording and terms everywhere else. Here the concept link is gone, so it goes from the German too: „… vertraglicher Freihafen-Verpflichtungen …“. Where the English has been rewritten, translate the new text afresh. Either way, write the line in full, like any other.
 
+## Template lines
+
+A generated file repeats some lines once for each copy of a system (each culture merge, say), with only their `$...$` references and `[...]` values changed. Your chunk holds one copy of such a line, under a comment naming what changes:
+
+```
+# TEMPLATE: the script copies this translation to 96 more lines, replacing $dixie$, [ROOT.GetCountry.MakeScope.Var('te_cm_held_american_dixie').GetValue|%0] with each line's own. …
+ je_te_cm_american_status_hold_dixie:0 "$dixie$ pops are out of reach: our sphere holds only [ROOT.GetCountry.MakeScope.Var('te_cm_held_american_dixie').GetValue|%0] of them in their homeland, …"
+```
+
+A script writes your translation into every other copy, swapping in each one's own references. Keep the ones the comment names exactly as written: one with a case flag or `GetAltName` added can't be swapped, and its copies stay English. Translate the line so it reads right whatever they insert. Here every merge's culture takes the place of `$dixie$`, so phrase around its case: „Pops der Kultur $dixie$ sind außer Reichweite …“ (Country names, below, explains why a bare name can't be declined.)
+
 ## Keep the markup exactly
 
 Everything that isn't prose passes through unchanged. The checker compares them as counts per line.
@@ -50,14 +61,15 @@ A value that contains nothing to translate (only markup, or a bare `$reference$`
 EN  … have [concept_foreign_investment_rights] in [concept_power_bloc_member] with lower [concept_rank]
 DE  … haben [concept_foreign_investment_rights] bei [Concept('concept_power_bloc_member','Blockmitgliedern')] mit niedrigerem [concept_rank]
 
-EN  The efficiency of [Concept('concept_ship_group', '$ship_group_cruisers$')] @ship_construction! [concept_ship_construction]
-DE  Die Effizienz des @ship_construction! [Concept('concept_ship_construction', 'Schiffbaus')] für [Concept('concept_ship_group', '$ship_group_cruisers$')]
+EN  The efficiency of [Concept('concept_ship_group', '$ship_group_cruisers|q$')] @ship_construction! [concept_ship_construction]
+DE  Die Effizienz des @ship_construction! [Concept('concept_ship_construction', 'Schiffbaus')] für [Concept('concept_ship_group', '$ship_group_cruisers|q$')]
 
-EN  Allow enacting [Concept('concept_decree', '$concept_decrees$')] on [concept_subject] [Concept('concept_state', '$concept_states$')]
-DE  Erlaubt es, [Concept('concept_decree', '$concept_decrees$')] in [Concept('concept_state', '$concept_states$')] von [Concept('concept_subject', 'Klientelländern')] zu beschließen
+EN  Allow enacting [Concept('concept_decree', '$concept_decrees|q$')] on [concept_subject] [Concept('concept_state', '$concept_states|q$')]
+DE  Erlaubt es, [Concept('concept_decree', '$concept_decrees|q$')] in [Concept('concept_state', '$concept_states|q$')] von [Concept('concept_subject', 'Klientelländern')] zu beschließen
 ```
 
 - Keep **every** concept link: the same concepts, the same number of times. You may switch between `[concept_x]` and `[Concept('concept_x', '…')]` freely, and move links within the sentence.
+- A `$reference$` inside a quoted argument carries `|q` (`[Concept('concept_state', '$concept_states|q$')]`). Keep it, and add it to any you write there yourself: the game logs an error for each one without it.
 - For a plain `[concept_x]` link, the display text you write must be the concept's own German term, inflected; the glossary's REFERENCED KEYS section shows the nominative. Don't substitute a synonym.
 - Where the English already gives its own display text (`[Concept('concept_x', 'construction capacity')]`), translate that text, inflected. The English author chose it on purpose, even when it differs from the concept's name.
 - `|l` lowercases a link's rendered name (`[concept_foreign_investment_rights|l]`), `|U` capitalises it. Use them where German capitalisation needs it.
@@ -90,6 +102,8 @@ Use `GetAltName` only on scopes that are certainly countries: names like `COUNTR
 
 `GetAdjective` gives an uninflected stem. The official German writes `[X.GetAdjective|l]en` or `…e` to decline it. Do the same.
 
+A `$key$` reference that inserts a name (a country tag such as `$CZH$`, a culture, a technology) gives its bare nominative, with no article, and nothing can decline it. Phrase around it so the bare name fits: „sobald wir das Land $CZH$ gebildet haben“ (not „… $CZH$ gebildet haben“, which reads „Tschechoslowakei“ without its article), „Die Technologie $mass_media$ ist erforscht“, „Pops der Kultur $yankee$“.
+
 ### Country name forms (glossary chunk only)
 
 The glossary chunk ends with a `=== COUNTRY NAME FORMS ===` section listing the mod's formable countries and dynamic country names. For each one, translate the name as a normal line (` AFU:0 "Afrikanische Union"`), then write its seven declined forms as extra keys, `<KEY>_NOM`, `_GEN`, `_DAT`, `_AKK`, `_VON`, `_IN`, `_NACH`, each including its article or preposition:
@@ -115,6 +129,19 @@ The chunk header lists up to three glossaries. Follow them exactly:
 - **VANILLA TERMS** are the official German game terms. Where the English refers to that game thing, use the official German, not your own synonym: players know these words from the rest of the game. A matching phrase inside a different name is not a reference. The "Federation Emergency Relief Fund" is a fund, not the Emergency Relief law, so translate it on its own terms.
 
 For a term in none of the lists, choose German that fits the official game's register, and list it in your report.
+
+Earlier passes settled these words too, which are too short or too common for the glossaries to catch:
+
+| English | German |
+|---|---|
+| subject (plain text, not a concept link) | Klientelland, Klientelstaat |
+| command economy (the law) | Planwirtschaft |
+| receivership (a creditor running a debtor's finances) / its receiver | Zwangsverwaltung / Verwalter; the treaty article Debt Receivership is *Schuldenverwaltung* |
+| a rescue of a defaulted member / its terms | Rettung / Bedingungen |
+| a common currency's adopter / issuer | Teilnehmerland / Emittent |
+| infamy (plain text, and the gender around `[concept_infamy]`) | Verrufenheit, feminine: „die [concept_infamy], die wir gezahlt haben“ |
+| the Full Demographics rule | die Demografieregel „Voll“ (the setting's label), not „Volle Demografie“ |
+| a nuclear salvo / the Leadership mission | Salve / Führung |
 
 Proper names stay as they are: companies, people, places, historical buildings, products, real political parties ("Bharatiya Janata Party", "En Marche!"). A generic descriptive name is not a proper name and is translated, as the official German does ("Communist Party" → „Kommunistische Partei", "Technocratic Party" → „Technokratische Partei"). Use an established German name where one exists ("Eiffelturm", "Vereinte Nationen"), and translate the descriptive part of a compound name ("Getzner Bludenz Textile Works" → „Textilwerke Getzner Bludenz“).
 

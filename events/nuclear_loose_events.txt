@@ -136,7 +136,7 @@ nuclear_loose.4 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): nd_loose_surface sets nd_loose_attribution before the call; a filter
 		has_variable = nd_loose_attribution
 	}
 
@@ -230,7 +230,7 @@ nuclear_loose.5 = {
 	type = country_event
 	placement = scope:nd_loose_state
 
-	event_image = { texture = "gfx/event_pictures/mushroom_cloud_distant.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_city_destruction.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

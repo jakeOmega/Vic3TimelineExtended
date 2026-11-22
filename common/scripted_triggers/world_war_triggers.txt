@@ -65,7 +65,40 @@ country_is_authoritarian = {
 }
 
 # --- True if this country's ideology is opposed to SCOPE country ---
+# The opposition the world war is fought over: one of the three ideological
+# pairs, or, under the early unlock, the liberal-against-autocratic quarrel of
+# 1914 while neither power has reached Combined Arms.
 country_has_opposed_ideology = {
+	OR = {
+		country_has_ideological_opposition = { TARGET = $TARGET$ }
+		# The early unlock's opposition (world_war_rule's early setting): a
+		# liberal power against an autocratic one, while neither has reached
+		# Combined Arms. Symmetric, as the ideological pairs.
+		AND = {
+			te_world_war_early = yes
+			ww_before_ideological_age = { TARGET = $TARGET$ }
+			OR = {
+				AND = {
+					country_is_democratic = yes
+					$TARGET$ = { country_is_authoritarian = yes }
+				}
+				AND = {
+					country_is_authoritarian = yes
+					$TARGET$ = { country_is_democratic = yes }
+				}
+			}
+		}
+	}
+}
+
+# The three ideological pairs alone, which is all country_has_opposed_ideology
+# was before the early unlock and all it is under the late one. Yesterday's
+# Ally (world_war_events.105) asks this: a liberal and an autocratic power that
+# fought the war side by side were "opposed" by the early pairing from its first
+# day, so the event, which is about an ally turning into the next rival, would
+# fire between them and close the war early.
+# Scope: country. Parameters: $TARGET$ = country
+country_has_ideological_opposition = {
 	OR = {
 		# Democratic vs communist
 		AND = {
@@ -97,12 +130,67 @@ country_has_opposed_ideology = {
 	}
 }
 
+# Neither this country nor $TARGET$ has reached Combined Arms, the late
+# unlock's technology: the early unlock's liberal-against-autocratic quarrel
+# counts only then.
+# Scope: country. Parameters: $TARGET$ = country
+ww_before_ideological_age = {
+	NOT = { has_technology_researched = combined_arms }
+	$TARGET$ = { NOT = { has_technology_researched = combined_arms } }
+}
+
+# The technology that opens the world war to this country under the setting
+# in force: Combined Arms (era 6) under the late unlock, also Trench Works
+# (era 4, the armies of 1914: a general staff, the telegraph, entrenched
+# fronts) under the early one. Read by the entry's is_shown_when_inactive and
+# possible and by world_war_conditions_met.
+# Scope: country
+ww_era_reached = {
+	OR = {
+		has_technology_researched = combined_arms
+		AND = {
+			te_world_war_early = yes
+			has_technology_researched = trench_works
+		}
+	}
+}
+
+# ww_era_reached as one tooltip line, for the buttons that ask for it: the
+# late unlock's line is the one they always showed.
+# Scope: country
+ww_era_reached_tt = {
+	trigger_if = {
+		limit = { te_world_war_early = yes }
+		custom_tooltip = {
+			text = WW_REQ_TRENCH_WORKS_TT
+			ww_era_reached = yes
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = WW_REQ_COMBINED_ARMS_TT
+			has_technology_researched = combined_arms
+		}
+	}
+}
+
+# A world war fought under the early unlock before Combined Arms is over for
+# this country (the entry's outcomes set ww_early_war_resolved in place of
+# ww_entry_resolved, ww_mark_entry_resolved). The entry waits for Combined
+# Arms, when world_war_events_on_action adds it back for the next one; a
+# country that already has the technology gets it back at once.
+# Scope: country
+ww_resting_after_early_war = {
+	has_variable = ww_early_war_resolved
+	NOT = { has_technology_researched = combined_arms }
+}
+
 # --- True if global conditions are ripe for a world war ---
 world_war_conditions_met = {
 	# Must be at least a great power
 	country_rank >= rank_value:great_power
-	# Must have era 6 military technology
-	has_technology_researched = combined_arms
+	# Must have era 6 military technology (era 4 under the early unlock)
+	ww_era_reached = yes
 	# Not already in a world war
 	NOT = { has_variable = ww_active_phase }
 	NOT = { has_variable = ww_peace_concluded }

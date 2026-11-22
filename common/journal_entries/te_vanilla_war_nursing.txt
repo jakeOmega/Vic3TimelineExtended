@@ -1,0 +1,134 @@
+﻿# ======================================================================
+#  War Wounded (je_war_nursing) — every medical option counts
+# ======================================================================
+#
+# Vanilla starts this entry for a general whose formation has neither First
+# Aid nor Field Hospitals, and completes it when 20% of the army's battalions
+# have Field Hospitals and a general at a front has them. The mod adds Medevac
+# Helicopters to the same exclusive medic-support group, better than Field
+# Hospitals, so with vanilla's tests an army entirely on Medevac started the
+# entry and could never complete it (a Workshop report, 2026-11-14).
+#
+# The lines marked MOD read the three triggers in
+# common/scripted_triggers/te_war_nursing_triggers.txt instead of naming
+# options: a formation with any medic option has medics, and Field Hospitals
+# or better, counted together, completes the entry. The hidden_effect in the
+# success outcome saves the two scopes nursing_events.4 names (the war and a
+# state for its placement): the event's own immediate saves them only from a
+# war with a Field Hospitals general, so after a Medevac completion they were
+# unset. An event reads the scopes its caller saved (vanilla's German
+# unification entry saves german_unifier_candidate for german_unification.5
+# the same way), and the event's own save, when it finds such a war, wins.
+#
+# nursing_events.2 and .3, the entry's monthly events, still test First Aid or
+# Field Hospitals (and Field Hospitals alone) in vanilla's
+# events/tech_events/nursing_events.txt, which the mod leaves alone: a Medevac
+# army doesn't get them.
+#
+# A REPLACE because an INJECT can't change a trigger block vanilla declares
+# (scripting_best_practices.md, "A second trigger block is rejected at load").
+# Everything else is vanilla 1.15.1's je_war_nursing, copied from the
+# installed game (common/journal_entries/00_nursing.txt). Re-diff on every
+# Vic3 patch: test_vanilla_je_replacements.py puts vanilla's lines back in
+# place of the MOD ones, compares the entry with vanilla_parsed/, and fails
+# when vanilla moves.
+
+REPLACE:je_war_nursing = {
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+
+	group = je_group_technology
+
+	activation_description = {
+		always = yes
+	}
+
+	is_shown_when_inactive = {
+		has_technology_researched = triage
+	}
+
+	possible = {
+		has_technology_researched = modern_nursing
+		is_at_war = yes
+		army_size >= 30
+		any_scope_war = { #Required for nursing_events.1
+			any_scope_front = {
+				any_scope_general = {
+					owner = ROOT
+					this.commander_military_formation ?= {
+						te_formation_has_medic_support = no # MOD: vanilla's NOR names First Aid and Field Hospitals
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		trigger_event = { id = nursing_events.1 }
+		random_scope_war = {
+			save_scope_as = ongoing_journal_war
+		}
+	}
+
+	outcome = {
+		header = je_standard_completion_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_standard_completion_conclusion_desc
+		trigger = {
+			te_army_has_field_hospitals_or_better_share = yes # MOD: vanilla counts Field Hospitals alone
+			# for these JE's we would want this to be true for X months, but excluding that for the sake of readability
+			any_scope_war = {
+				any_scope_front = {
+					any_scope_general = {
+						owner = ROOT
+						this.commander_military_formation ?= {
+							te_formation_has_field_hospitals_or_better = yes # MOD: vanilla names Field Hospitals
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			remove_war_disease_modifier = yes
+			hidden_effect = { # MOD: the scopes nursing_events.4 names, from a war its own search may miss
+				random_scope_war = {
+					limit = {
+						any_scope_front = {
+							any_scope_general = {
+								owner = ROOT
+								this.commander_military_formation ?= {
+									te_formation_has_field_hospitals_or_better = yes
+								}
+							}
+						}
+					}
+					save_scope_as = complete_nursing_war
+					random_scope_front = {
+						random_scope_state = { save_scope_as = ongoing_war_state }
+					}
+				}
+			}
+			trigger_event = { id = nursing_events.4 }
+		}
+	}
+
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_standard_failure_conclusion_desc
+		trigger = {
+			is_at_war = no
+		}
+		effect = {
+			remove_war_disease_modifier = yes
+			je_war_nursing_cleanup = yes
+		}
+	}
+
+	on_monthly_pulse = { #Only lasts duration of war
+		random_events = {
+			50 = 0
+			10 = nursing_events.2
+			10 = nursing_events.3
+		}
+	}
+}

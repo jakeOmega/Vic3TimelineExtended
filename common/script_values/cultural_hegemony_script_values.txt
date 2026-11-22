@@ -47,12 +47,13 @@ cultural_pull_turmoil_factor = -10
 # Flat penalty for active civil war (revolution or secession)
 cultural_pull_civil_war_penalty = -20
 
-# Hegemony effect scaling (multiplier = cultural_pull_total directly, 0-100)
+# Hegemony effect scaling (its strength is the share itself, 0-100:
+# cultural_hegemony_modifier_mult)
 cultural_hegemony_modifier_max_mult = 100
 cultural_hegemony_foreign_benchmark_max = 3
-# Legitimacy lost at multiplier 1: keep equal to country_legitimacy_base_add in
+# Legitimacy lost at strength 1: keep equal to country_legitimacy_base_add in
 # the cultural_hegemony_foreign_benchmark static modifier (the overview tooltip
-# scales it by the multiplier the pulse actually applied)
+# scales it by the strength the entry declares, var:ch_benchmark_applied)
 cultural_hegemony_foreign_benchmark_legitimacy = 5
 # Per year decay multiplier for tech leadership bonus (1 = no decay, 0.5 = 50% decay per year)
 cultural_hegemony_tech_firsts_decay_mult = 0.9 # ~6.5 year half-life
@@ -70,6 +71,24 @@ cultural_pull_art_dr_steepness = 0.04390
 # test_international_influence_costs.py pins them together.
 ch_cultural_institutes_influence_cost = 150
 ch_global_media_influence_cost = 200
+# What each gate asks for: the programme's cost, plus the cost of a programme
+# started in the last week, which the entry's declaration may not carry yet
+# (ch_influence_pending, set by ch_effect_cultural_institutes and
+# ch_effect_global_media_campaign).
+ch_cultural_institutes_influence_gate = {
+	value = ch_cultural_institutes_influence_cost
+	if = {
+		limit = { has_variable = ch_influence_pending }
+		add = var:ch_influence_pending
+	}
+}
+ch_global_media_influence_gate = {
+	value = ch_global_media_influence_cost
+	if = {
+		limit = { has_variable = ch_influence_pending }
+		add = var:ch_influence_pending
+	}
+}
 # The AI takes one up only with 200 to spare after its cost, so dropping it in
 # deficit (te_ai_influence_deficit_repeal_weight) never leaves enough to take
 # it straight back up.
@@ -92,10 +111,10 @@ ch_program_funding_level_value = {
 	min = 0
 }
 
-# The cost of one funding level: GDP x 0.00005, the multiplier on a
-# country_expenses_add = 1 modifier, so that much a week. The World
-# Exposition (ch_effect_world_exposition) costs one level's worth: x1, not
-# x level, re-evaluated like every multiplier.
+# The cost of one funding level: GDP x 0.00005, the value of a
+# country_expenses_add = 1 modifier, so that much a week. International
+# Cultural Outreach (internally ch_world_exposition) costs one level's worth:
+# je_cultural_hegemony declares ch_world_exposition_cost at this while it runs.
 ch_program_funding_cost_mult = {
 	value = 0
 	add = gdp
@@ -105,8 +124,9 @@ ch_program_funding_cost_mult = {
 
 # The funding programme's weekly cost at its current level: one
 # ch_program_funding_cost_mult per level (owner decision, PR #510; it was flat
-# across levels from 8d81d261). The cost modifier's multiplier
-# (ch_refresh_funding_modifiers, through the _for_je wrapper below) and the
+# across levels from 8d81d261). The cost modifier's value (je_cultural_hegemony
+# declares ch_cultural_program_funding_cost at it, and ch_cultural_program_funding
+# at ch_program_funding_level_value, while ch_program_funding_in_force) and the
 # funding tooltip (ch_policy_funding_step_tt, through the displays below) read
 # this one value, so what is shown is what is paid. The AI's funding buttons
 # weigh cultural pull only; no affordability check reads a cost.
@@ -114,29 +134,6 @@ ch_program_funding_total_cost_mult = {
 	value = ch_program_funding_cost_mult
 	multiply = ch_program_funding_level_value
 	min = 0
-}
-
-# JE-multiplier wrappers. `add_modifier = { ... multiplier = X }` on a JE
-# re-evaluates X each tick at JE scope, where the country's vars and
-# accessors (gdp, var:ch_program_funding_level, modifier:...) are unreachable
-# directly. Walk JE→owner→country via `owner = { ... }` (same pattern as
-# `cultural_hegemony_modifier_mult` below). Country-scope callers (display
-# strings, button-effect `value = ch_program_funding_*` reads) keep using
-# the underlying SVs directly; the wrappers exist solely for JE multiplier
-# slots.
-ch_program_funding_level_value_for_je = {
-	value = 0
-	owner = { add = ch_program_funding_level_value }
-}
-
-ch_program_funding_cost_mult_for_je = {
-	value = 0
-	owner = { add = ch_program_funding_cost_mult }
-}
-
-ch_program_funding_total_cost_mult_for_je = {
-	value = 0
-	owner = { add = ch_program_funding_total_cost_mult }
 }
 
 # The funding tooltip's two figures, in money a week: one level's cost and the
@@ -296,9 +293,43 @@ country_art_share_pct_diminished = {
 # Early game: absolute limits (high share but tiny global market)
 # Late game: share limits (massive production but fractional global share)
 # Above 33% global share the share cap follows the diminishing-returns curve.
+#
+# The production is a walk over every country's GDP and the world's production
+# one over every market, so each is read once and saved
+# (save_temporary_value_as, vanilla's form in command_values.txt and
+# 00_diplomacy_values.txt). The block computes the share, then the cap,
+# country_art_share_pct_diminished written without a branch:
+#   min(x, 33) + d / (1 + 0.04390 * d),  d = max(x - 33, 0)
+# which is x up to the threshold and the curve above it, the same operations
+# in the same order; then min(cap, production), which is min(production, cap).
+# It used to read the production four times and the world's three per call,
+# and cultural_pull_raw reads it (docs/audits/late_game_performance.md,
+# item 12). test_cultural_hegemony_share.py checks it against the named values.
 cultural_pull_from_art = {
 	value = country_fine_art_production
-	max = country_art_share_pct_diminished
+	save_temporary_value_as = ch_art_production
+	# the share of the world's production, 0-100 (country_art_share_pct)
+	divide = global_fine_art_production
+	multiply = 100
+	save_temporary_value_as = ch_art_share
+	# the cap (country_art_share_pct_diminished)
+	max = cultural_pull_art_dr_threshold
+	add = {
+		value = scope:ch_art_share
+		subtract = cultural_pull_art_dr_threshold
+		min = 0
+		divide = {
+			value = 1
+			add = {
+				value = scope:ch_art_share
+				subtract = cultural_pull_art_dr_threshold
+				min = 0
+				multiply = cultural_pull_art_dr_steepness
+			}
+		}
+	}
+	# min(production, cap)
+	max = scope:ch_art_production
 	# Apply modifier hook for art contribution
 	multiply = {
 		value = 1
@@ -420,10 +451,15 @@ cultural_pull_from_monuments = {
 # gm_s_culture is set by gm_country_refresh (gm_effects.txt); absent until a
 # country's first refresh. Spec
 # docs/superpowers/archive/specs/2026-09-27-grand-monument-rework-design.md §2.4.
+# The rule first: switched off mid-game, the refresh stops and the variable
+# would credit its last figure for good.
 cultural_pull_from_grand_monuments = {
 	value = 0
 	if = {
-		limit = { has_variable = gm_s_culture }
+		limit = {
+			gm_system_enabled = yes
+			has_variable = gm_s_culture
+		}
 		value = var:gm_s_culture
 		multiply = gm_step_culture
 	}
@@ -435,11 +471,14 @@ cultural_pull_from_grand_monuments = {
 # 1/n curve with a first step of 5, +1 each, with no ceiling (owner,
 # 2026-10-19: its monuments are a fixed list, so it cannot be farmed; the +3
 # cap went). gm_s_sig_antiquity is set by gm_country_refresh
-# (gm_signature_effects.txt).
+# (gm_signature_effects.txt). The rule first, as above.
 cultural_pull_from_antiquity = {
 	value = 0
 	if = {
-		limit = { has_variable = gm_s_sig_antiquity }
+		limit = {
+			gm_system_enabled = yes
+			has_variable = gm_s_sig_antiquity
+		}
 		value = var:gm_s_sig_antiquity
 		multiply = gm_step_sig_antiquity
 	}
@@ -573,25 +612,56 @@ ch_world_raw_live = {
 # Range: 0–100 (percentage of global cultural influence)
 # Returns 0 before the first census populates the global cache (avoids 'none'
 # during the first monthly pulse, which can fire before any yearly pulse).
+# The raw pull is read once and saved: the divisor is ch_world_raw_live written
+# out with the saved raw in place of a second cultural_pull_raw (its else_if is
+# an else here, since the census total exists in this branch). It read the raw
+# pull twice, and that is most of the monthly Cultural Hegemony refresh
+# (docs/audits/late_game_performance.md, item 12).
 cultural_pull_total = {
 	value = 0
 	if = {
 		limit = { has_global_variable = ch_cached_global_raw }
 		add = cultural_pull_raw
-		divide = ch_world_raw_live
+	}
+	save_temporary_value_as = ch_pull_raw_now
+	if = {
+		limit = { has_global_variable = ch_cached_global_raw }
+		divide = {
+			value = 0
+			if = {
+				limit = { has_global_variable = ch_census_own_raw }
+				add = ch_world_raw_others
+				add = scope:ch_pull_raw_now
+			}
+			else = {
+				add = global_var:ch_cached_global_raw
+			}
+			min = 1
+		}
 		multiply = 100
 	}
 	min = 0
 	max = 100
 }
 
-# Multiplier for the cultural_hegemony_effect static modifier
-# Equals cultural_pull_total directly (0-100 share percentage)
+# The strength of the cultural_hegemony_effect static modifier, which
+# je_cultural_hegemony declares at this (scaling_modifiers_while_active): the
+# country's share of world cultural pull in percent, from 1%, at most
+# cultural_hegemony_modifier_max_mult. It reads the monthly cache
+# (var:ch_total, ch_monthly_country_update), never cultural_pull_total itself:
+# the entry re-reads its declarations about every four days, and the live share
+# is a pass over every state's buildings.
 cultural_hegemony_modifier_mult = {
 	value = 0
-	owner = { add = cultural_pull_total }
+	if = {
+		limit = {
+			has_variable = ch_total
+			var:ch_total >= 1
+		}
+		add = var:ch_total
+	}
 	min = 0
-	max = 100
+	max = cultural_hegemony_modifier_max_mult
 }
 
 # Foreign benchmark multiplier: how much legitimacy this country loses to the
@@ -626,9 +696,11 @@ cultural_hegemony_benchmark_mult = {
 	}
 }
 
-# The multiplier the last monthly pulse actually applied (0 when none), for the
-# overview tooltip. cultural_hegemony_benchmark_mult is live, so the two differ
-# for up to a month after the gap moves.
+# The benchmark's strength as declared (0 when none), for the overview
+# tooltip: je_cultural_hegemony declares cultural_hegemony_foreign_benchmark at
+# var:ch_benchmark_applied, which its monthly pulse writes from
+# cultural_hegemony_benchmark_mult (0 below 0.1). The live value differs for up
+# to a month after the gap moves.
 ch_benchmark_applied_display = {
 	value = 0
 	if = {
@@ -649,17 +721,14 @@ ch_benchmark_legitimacy_display = {
 # (the Society tab, the Timeline Extended window, another country's National
 # Info) print it through Country.
 #
-# The strength is the multiplier the pulse applied, and 0 while the entry
-# carries no modifier: the pulse removes it below 1% share but keeps
-# ch_effect_mult_cached, so the variable alone would show a stale strength.
+# The strength is the value the entry declares the modifier at
+# (cultural_hegemony_modifier_mult: 0 below 1% share), and 0 while the entry is
+# not active, since a declaration applies only then.
 ch_bonus_strength_display = {
 	value = 0
 	if = {
-		limit = {
-			has_variable = ch_effect_mult_cached
-			je:je_cultural_hegemony ?= { has_modifier = cultural_hegemony_effect }
-		}
-		add = var:ch_effect_mult_cached
+		limit = { has_journal_entry = je_cultural_hegemony }
+		add = cultural_hegemony_modifier_mult
 	}
 }
 
@@ -1491,5 +1560,47 @@ ch_total_weight = {
 	if = {
 		limit = { has_variable = ch_total }
 		add = var:ch_total
+	}
+}
+
+# ---- debug.log reads (ch_monthly_pulse_on_action's net) ----
+# 1 where the read holds, 0 where it doesn't, printed as [THIS.ScriptValue('x')|0],
+# as Covert Warfare's iw_log_* (covert_warfare_script_values.txt): the three
+# settings read one by one tell a setting the save holds from none at all (all
+# three 0) and from a setting name no rule file defines (two at 1). on is
+# te_cultural_hegemony_on, what every gate reads; late_gate is ch_late_gate_met.
+ch_log_rule_late = {
+	value = 0
+	if = {
+		limit = { te_cultural_hegemony_late_read_for_log = yes }
+		value = 1
+	}
+}
+ch_log_rule_on = {
+	value = 0
+	if = {
+		limit = { te_cultural_hegemony_on = yes }
+		value = 1
+	}
+}
+ch_log_rule_early = {
+	value = 0
+	if = {
+		limit = { te_cultural_hegemony_early = yes }
+		value = 1
+	}
+}
+ch_log_rule_off = {
+	value = 0
+	if = {
+		limit = { has_game_rule = cultural_hegemony_disabled }
+		value = 1
+	}
+}
+ch_log_late_gate = {
+	value = 0
+	if = {
+		limit = { ch_late_gate_met = yes }
+		value = 1
 	}
 }

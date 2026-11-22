@@ -853,6 +853,35 @@ te_mon_fx_effect = {
 	}
 }
 
+# The index tooltip's line for Foreign Exchange Surrender's term while it adds one
+# (a floating currency, 2026-11-14), and its note on Sterilization's slower
+# step. Both are empty otherwise; each branch's text opens with its own newline.
+te_mon_fx_surrender_note = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { banking_external_surrender_fx_term > 0 }
+		localization_key = banking_dash_mon_fx_surrender_on
+	}
+	text = {
+		localization_key = banking_dash_empty
+	}
+}
+
+te_mon_fx_sterilized_note = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { banking_external_fx_adjust_factor < 1 }
+		localization_key = banking_dash_mon_fx_sterilized_on
+	}
+	text = {
+		localization_key = banking_dash_empty
+	}
+}
+
 # One sentence in the index tooltip on what capital controls are doing to it.
 te_mon_fx_controls_note = {
 	type = country
@@ -864,6 +893,168 @@ te_mon_fx_controls_note = {
 	}
 	text = {
 		localization_key = banking_dash_mon_fx_controls_off
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# External & Currency: "On this currency" (2026-11-14)
+# ----------------------------------------------------------------------------
+# The line under each exchange tool's description in its dashboard tooltip
+# (banking_dash_tt_cb_*): what the tool does to this country's currency now,
+# with the figure it changes, from the banking_ext_disp_* values in
+# banking_external_values.txt. The same tool acts on gold on the gold standard
+# and on the exchange rate on a floating currency, so the branch is the
+# currency's. Design: docs/superpowers/archive/specs/2026-11-14-external-currency-tools-design.md.
+
+banking_ext_now_capital_controls = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_mon_full_system = no }
+		localization_key = banking_ext_now_capital_controls_simplified
+	}
+	text = {
+		trigger = { te_mon_has_gold_flows = yes }
+		localization_key = banking_ext_now_capital_controls_gold
+	}
+	text = {
+		trigger = { te_mon_has_anchor_peg = yes }
+		localization_key = banking_ext_now_capital_controls_treaty_peg
+	}
+	text = {
+		trigger = {
+			te_mon_has_dial = yes
+			te_mon_fx_floats = yes
+		}
+		localization_key = banking_ext_now_capital_controls_float
+	}
+	text = {
+		localization_key = banking_ext_now_capital_controls_none
+	}
+}
+
+# Restrict Speculative Inflows needs a dial, so an anchored country never sees
+# it; the fall-through is commodity money.
+banking_ext_now_restrict_inflows = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_mon_has_gold_flows = yes }
+		localization_key = banking_ext_now_restrict_inflows_gold
+	}
+	text = {
+		trigger = {
+			te_mon_has_dial = yes
+			te_mon_fx_floats = yes
+		}
+		localization_key = banking_ext_now_restrict_inflows_float
+	}
+	text = {
+		localization_key = banking_ext_now_restrict_inflows_none
+	}
+}
+
+banking_ext_now_sterilize_inflows = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			te_mon_has_gold_flows = yes
+			te_mon_gold_flow_signed > 0
+		}
+		localization_key = banking_ext_now_sterilize_inflows_gold_in
+	}
+	text = {
+		trigger = { te_mon_has_gold_flows = yes }
+		localization_key = banking_ext_now_sterilize_inflows_gold_quiet
+	}
+	text = {
+		trigger = {
+			te_mon_has_dial = yes
+			te_mon_fx_floats = yes
+		}
+		localization_key = banking_ext_now_sterilize_inflows_float
+	}
+	text = {
+		localization_key = banking_ext_now_sterilize_inflows_none
+	}
+}
+
+banking_ext_now_fx_surrender = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_mon_has_gold_flows = yes }
+		localization_key = banking_ext_now_fx_surrender_gold
+	}
+	text = {
+		trigger = {
+			te_mon_has_dial = yes
+			te_mon_fx_floats = yes
+		}
+		localization_key = banking_ext_now_fx_surrender_float
+	}
+	text = {
+		localization_key = banking_ext_now_fx_surrender_none
+	}
+}
+
+# Each tool's line under its modifier, for the dashboard row: what the monthly
+# pulse does, as display-only modifier lines, on the country's currency. A
+# floating currency with a dial gets the floating line; everything else the gold
+# one, which is what the tool does wherever it can be used besides
+# (banking_effect_cb_* draws the same two keys, gold first).
+banking_ext_monthly_sterilize_inflows = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			te_mon_has_dial = yes
+			te_mon_fx_floats = yes
+		}
+		localization_key = banking_nonmod_sterilize_float_tt
+	}
+	text = {
+		localization_key = banking_nonmod_sterilize_inflows_tt
+	}
+}
+
+banking_ext_monthly_fx_surrender = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			te_mon_has_dial = yes
+			te_mon_fx_floats = yes
+		}
+		localization_key = banking_nonmod_fx_surrender_float_tt
+	}
+	text = {
+		localization_key = banking_nonmod_fx_surrender_tt
+	}
+}
+
+banking_ext_now_foreign_borrowing_limits = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_mon_fx_pinned_at_par = yes }
+		localization_key = banking_ext_now_foreign_borrowing_limits_metal
+	}
+	text = {
+		trigger = { banking_ext_disp_fx_weak_points > 0 }
+		localization_key = banking_ext_now_foreign_borrowing_limits_weak
+	}
+	text = {
+		localization_key = banking_ext_now_foreign_borrowing_limits_par
 	}
 }
 
@@ -914,6 +1105,46 @@ te_mon_anchor_state = {
 	}
 	text = {
 		localization_key = banking_dash_mon_anchor_state_none
+	}
+}
+
+
+# What the Monetary Anchor row's tooltip adds for an anchor whose credit
+# standing is on its floor (2026-11-16, #1812): the part of its reserve-currency
+# cut the floor swallows comes off its risk premium instead
+# (te_mon_reserve_currency_premium), and the line above it, "Credit standing
+# from arrangements now", would otherwise read as a gain the country does not
+# get. The issuer of a common currency reads that its own cut answers part of it,
+# and, where that cut covers all the floor cancels and the modifier is off, that
+# it covers it (Singapore in the owner's 1958 save: a reserve cut of 0.08 points
+# under an issuer cut of 0.39; review of #1857). Nothing for anybody else: the
+# last key is empty.
+te_mon_reserve_floor_note = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			te_mon_reserve_floor_display > 0
+			te_mon_union_is_issuer = yes
+		}
+		localization_key = banking_dash_mon_anchor_floor_note_issuer
+	}
+	text = {
+		trigger = { te_mon_reserve_floor_display > 0 }
+		localization_key = banking_dash_mon_anchor_floor_note
+	}
+	text = {
+		trigger = {
+			te_mon_union_is_issuer = yes
+			has_variable = te_premium_floor_swallowed
+			var:te_premium_floor_swallowed > 0
+			te_mon_reserve_currency_cut > 0
+		}
+		localization_key = banking_dash_mon_anchor_floor_note_issuer_covered
+	}
+	text = {
+		localization_key = banking_dash_mon_anchor_floor_note_none
 	}
 }
 
@@ -999,6 +1230,57 @@ te_mon_union_state = {
 	}
 	text = {
 		localization_key = banking_dash_mon_union_state_coop
+	}
+}
+
+
+# What the Monetary Union row's tooltip adds for the leader of a common
+# currency (2026-11-14): how many members have adopted and its currency's
+# reach, the share of its tier's seigniorage and premium cut it is paid.
+# An issuer that is being paid also reads the seigniorage in pounds: before
+# its minting bonuses, and with them (the first text, which repeats the
+# second and adds the two figures). Nothing for anybody else: the last key
+# is empty.
+te_mon_union_issuer_note = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			te_mon_union_is_issuer = yes
+			te_mon_union_seigniorage_base_display > 0
+		}
+		localization_key = banking_dash_mon_union_issuer_note_paid
+	}
+	text = {
+		trigger = {
+			is_power_bloc_leader = yes
+			te_mon_bloc_union_tier_2_plus = yes
+		}
+		localization_key = banking_dash_mon_union_issuer_note
+	}
+	text = {
+		localization_key = banking_dash_mon_union_issuer_note_none
+	}
+}
+
+
+# What the Monetary Union row's tooltip adds for a country that uses a common
+# currency at tier 4 or above and is NOT in its banking union (2026-11-15,
+# #1812): an adopter, or the issuer, under Unregulated Banking. It carries no
+# te_mon_union_banking_union, so its budget lacks the principle's point and its
+# cycle the principle's steadiness, and nothing else on its screen says why.
+# Nothing for anybody else: the last key is empty.
+te_mon_union_regulator_note = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_mon_union_outside_banking_union = yes }
+		localization_key = banking_dash_mon_union_regulator_note
+	}
+	text = {
+		localization_key = banking_dash_mon_union_regulator_note_none
 	}
 }
 
@@ -1207,7 +1489,8 @@ te_mon_ro_fx_state = {
 
 # The cycle phase: the phase's modifier, in the economy's own variant (the
 # market, command and cooperative economies each have six), as
-# banking_cycle_apply_phase_modifiers chooses it, with the phase's crash risk.
+# je_banking_cycle declares it (by the same banking_cycle_is_* triggers and
+# economic law), with the phase's crash risk.
 # Stable carries no modifier in any economy. The effect list is
 # [GetStaticModifier(...).GetDesc], so no figure is retyped here.
 banking_dash_phase_effects = {
@@ -1374,7 +1657,7 @@ banking_dash_momentum_effect = {
 # Bubble pressure: what the band does to the crash roll and, in a market
 # economy, to momentum (the crash thresholds are in
 # banking_cycle_check_and_execute_crash; the momentum push is
-# bubble_inertia_multiplier_script_value).
+# bubble_inertia_curve).
 banking_dash_bubble_effect = {
 	type = country
 	random_valid = no
@@ -1405,7 +1688,8 @@ banking_dash_bubble_effect = {
 }
 
 # Policy stance: the investment-pool modifier the band puts on the journal
-# entry (banking_stance_band_1..5, applied by banking_cycle_apply_stance_band).
+# entry (banking_stance_band_1..5, which je_banking_cycle declares from
+# te_mon_stance_band).
 # The momentum and bubble pushes come from te_mon_stance_momentum_effect and
 # te_mon_stance_bubble_effect, which the stance cell's own tooltip uses too.
 banking_dash_stance_pool_effect = {
@@ -1478,5 +1762,228 @@ banking_dash_price_band_effects = {
 	}
 	text = {
 		localization_key = banking_dash_price_band_fx_hyper
+	}
+}
+
+
+# The tool an overdrawn intervention budget lifted, for the feed notice
+# (banking_overdraft_lift_notice). banking_overdraft_told leaves the tool's
+# modifier as a flag in banking_overdraft_lifted; a modifier's key is its own
+# name's loc key, so each text is the name the tool carries everywhere else.
+# One text per branch of banking_crash_check_overdrawn_interventions, in its
+# order (test_banking_overdraft_shed.py holds the two together).
+banking_overdraft_lifted_tool = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_crash_intervention_capital_controls }
+		localization_key = banking_crash_intervention_capital_controls
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_crash_intervention_swap_lines }
+		localization_key = banking_crash_intervention_swap_lines
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_crash_intervention_discount_window }
+		localization_key = banking_crash_intervention_discount_window
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_crash_intervention_keynesian_stimulus }
+		localization_key = banking_crash_intervention_keynesian_stimulus
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_crash_intervention_suspend_convertibility }
+		localization_key = banking_crash_intervention_suspend_convertibility
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_crash_intervention_mutual_clearing }
+		localization_key = banking_crash_intervention_mutual_clearing
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_crash_intervention_correspondent_liquidity }
+		localization_key = banking_crash_intervention_correspondent_liquidity
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_crash_intervention_dev_bank_lending }
+		localization_key = banking_crash_intervention_dev_bank_lending
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_crash_intervention_open_market }
+		localization_key = banking_crash_intervention_open_market
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_crash_intervention_deposit_guarantee }
+		localization_key = banking_crash_intervention_deposit_guarantee
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_crash_intervention_nationalize }
+		localization_key = banking_crash_intervention_nationalize
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_emergency_import_financing }
+		localization_key = banking_emergency_import_financing
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_sterilize_inflows }
+		localization_key = banking_sterilize_inflows
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_fx_surrender }
+		localization_key = banking_fx_surrender
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_restrict_inflows }
+		localization_key = banking_restrict_inflows
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_foreign_borrowing_limits }
+		localization_key = banking_foreign_borrowing_limits
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_moral_suasion }
+		localization_key = banking_moral_suasion
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_directed_credit_electrification }
+		localization_key = banking_directed_credit_electrification
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_export_credit_facility }
+		localization_key = banking_export_credit_facility
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_directed_credit_agriculture }
+		localization_key = banking_directed_credit_agriculture
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_capital_controls_out }
+		localization_key = banking_capital_controls_out
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_reserve_requirements }
+		localization_key = banking_reserve_requirements
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_raise_margin_requirements }
+		localization_key = banking_raise_margin_requirements
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_countercyclical_capital_buffer }
+		localization_key = banking_countercyclical_capital_buffer
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_directed_credit_infrastructure }
+		localization_key = banking_directed_credit_infrastructure
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_directed_credit_armaments }
+		localization_key = banking_directed_credit_armaments
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_bail_in_regime }
+		localization_key = banking_bail_in_regime
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_directed_credit_heavy_industry }
+		localization_key = banking_directed_credit_heavy_industry
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_open_market_ops }
+		localization_key = banking_open_market_ops
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_expand_deposit_guarantee }
+		localization_key = banking_expand_deposit_guarantee
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_emergency_liquidity_program }
+		localization_key = banking_emergency_liquidity_program
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_asset_relief_program }
+		localization_key = banking_asset_relief_program
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:planning_coordination_protocol }
+		localization_key = planning_coordination_protocol
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:planning_target_reduction }
+		localization_key = planning_target_reduction
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:planning_strategic_stockpile }
+		localization_key = planning_strategic_stockpile
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:planning_consolidation_order }
+		localization_key = planning_consolidation_order
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:planning_plan_revision }
+		localization_key = planning_plan_revision
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:planning_emergency_allocation }
+		localization_key = planning_emergency_allocation
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:planning_admin_campaign }
+		localization_key = planning_admin_campaign
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:planning_distribution_upgrade }
+		localization_key = planning_distribution_upgrade
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:cooperative_solidarity_campaign }
+		localization_key = cooperative_solidarity_campaign
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:cooperative_council_directive }
+		localization_key = cooperative_council_directive
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:cooperative_dividend_restraint }
+		localization_key = cooperative_dividend_restraint
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:cooperative_consumption_ceiling }
+		localization_key = cooperative_consumption_ceiling
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:cooperative_credit_expansion }
+		localization_key = cooperative_credit_expansion
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:cooperative_worker_buyout }
+		localization_key = cooperative_worker_buyout
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:cooperative_mutual_aid }
+		localization_key = cooperative_mutual_aid
+	}
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:cooperative_capital_plan }
+		localization_key = cooperative_capital_plan
+	}
+	text = {
+		localization_key = banking_overdraft_lifted_tool_unnamed
+	}
+}
+
+# The same notice's line on what came back: Emergency Liquidity is lent to the
+# banks, and its lift repays 1% of GDP (its own Disable). Empty for the rest.
+banking_overdraft_lifted_refund = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = banking_overdraft_lifted var:banking_overdraft_lifted = flag:banking_emergency_liquidity_program }
+		localization_key = banking_overdraft_lifted_refund_eliq
+	}
+	text = {
+		localization_key = banking_overdraft_lifted_refund_none
 	}
 }

@@ -466,13 +466,13 @@ ch_ministry_missing_sgui = {
 }
 
 # The overview's Foreign Cultural Benchmark cell: shown while the country
-# carries the modifier je_cultural_hegemony's monthly pulse applies to
-# countries trailing the leading cultural power.
+# carries the modifier je_cultural_hegemony declares for countries trailing the
+# leading cultural power (ch_trails_hegemon; has_modifier cannot see it).
 ch_benchmark_sgui = {
 	scope = country
 
 	is_shown = {
-		has_modifier = cultural_hegemony_foreign_benchmark
+		ch_trails_hegemon = yes
 	}
 
 	is_valid = {

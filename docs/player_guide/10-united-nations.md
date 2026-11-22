@@ -10,6 +10,18 @@ pay. It also holds the General Assembly, where you vote and table resolutions.
 The same panels appear as a UN tab in the Diplomacy panel (see [The UN
 panels](#the-un-panels)). The United Nations game rule turns the system off.
 
+With the game rule set to *Early Unlock*, a great power can found it with
+Multilateral Alliances (era 4) instead, as the League of Nations was founded,
+and the entry appears with that technology. Until some country has researched
+Intergovernmental Organizations, its charter can't be reformed (see [UN charter
+reforms](#un-charter-reforms)), so it stays at Established or below; the months
+toward a reform still count. Until then the journal entry, its Timeline
+Extended tab, the UN panels' header and the founding control call it the League
+of Nations; the month the technology arrives it takes the name United Nations,
+and its members are told.
+Everything else is unchanged. Switching the rule from early to late leaves a
+founded organization standing.
+
 ## Founding the United Nations
 
 A great power that has researched Intergovernmental Organizations and is not a
@@ -43,7 +55,8 @@ building is demolished.
 Any country that conducts its own foreign policy may press Join the United
 Nations, under the overview's Membership cell: an independent country, or a dominion, protectorate or tributary.
 Puppets, vassals, colonies, personal unions, crown lands, chartered companies
-and decentralized nations cannot. No technology is needed.
+and decentralized nations cannot, nor can an uprising while it fights (it can't
+found one either). No technology is needed.
 
 Members get UN Membership Privileges at once: +10% relations improvement speed,
 +5 leverage generation, +3% prestige, +3% influence and slower escalation when
@@ -55,16 +68,17 @@ dues](#un-dues-and-article-19).
 
 Leave the UN, which asks you to confirm, ends your membership, seat, programs
 and conventions.
-It costs 5 [standing](#international-standing) and gives UN Withdrawal
-Consequences for five years (−25% relations improvement speed, −5% prestige),
+It costs 5 [standing](#international-standing) and gives Estranged from the
+United Nations for five years (−25% relations improvement speed, −5% prestige),
 during which you cannot rejoin. Sanctions against you stay in force, and so do
 unpaid dues. Sanctions you enforce lapse the month after you leave. A permanent
 member walking out knocks authority down at once (4 points for a typical great
 power, up to 8).
 
 When a revolution wins, the mod carries the nation's membership, seat,
-conventions and any UN sanctions on it over to the winner and rebuilds them in
-the following months (see [After a revolution](06-politics.md#after-a-revolution)).
+conventions and any UN sanctions on it over to the winner. The conventions and
+sanctions apply again within days, and the membership and seat in the following
+months (see [After a revolution](06-politics.md#after-a-revolution)).
 
 ### Subjects and suspended representation
 
@@ -136,7 +150,7 @@ weight, so for a typical great power each point is one point of target.
 | Source | UN Authority Target |
 |---|---|
 | Rules of War law | Total War −2, Traditional Rules of War 0, War Crimes Forbidden +0.5, Humanitarian Regulations +1, Limited War +1.5 |
-| Isolationism (trade policy) | −1.5 |
+| Isolationism, or its Canton System and Sakoku variants (trade policy) | −1.5 |
 | International Oversight (Frontier AI Control law, members only; see [Laws on state power and information](06-politics.md#laws-on-state-power-and-information)) | +0.5 |
 | Ministry of International Aid | +0.15 for each level of investment (+1.35 at the cap of 9) |
 | Nuclear doctrine | No First Use +0.5, Existential Deterrence 0, Flexible First Use −0.5, Nuclear Compellence −1, Nuclear Warfighting −1.5 |
@@ -186,6 +200,9 @@ than a charter reform that two thirds of the members with a vote carry is no
 longer stopped by a veto. Each reform also opens new business before the
 Assembly and strengthens the World Development Fund (see [Business the reformed charter opens](#business-the-reformed-charter-opens)).
 
+Under the *Early Unlock* rule, no reform can be tabled until some country has
+researched Intergovernmental Organizations.
+
 A reform is ripe once authority has held within 5 points of the ceiling for 24
 months running; Why UN Authority Is Moving counts the months. A member of major-power
 rank may then table it, and the docket may offer it to a great power (The
@@ -208,7 +225,7 @@ Dissolution ends every membership, seat, program, convention, agency, sanctions
 regime, mandate and mission, demolishes the headquarters and writes off unpaid
 dues. Every power bloc gains The UN Has Fallen (+20 cohesion, +20% leverage
 generation, fading over ten years). Twenty years later any great power with
-Intergovernmental Organizations can convene a founding conference with Convene
+Intergovernmental Organizations (or Multilateral Alliances, under *Early Unlock*) can convene a founding conference with Convene
 a Conference, in the same place, at the founder's influence cost. The great power with the most prestige, if it is not the
 convener, receives A Founding Conference and may join, stay out or oppose;
 opposing wrecks it and blocks another for ten years. Otherwise the UN is
@@ -259,8 +276,8 @@ infamy when it blocks a condemnation, the ICC or a peacekeeping request. At
 Moribund it costs only the relations. While you carry the isolation, any member
 may table a Motion to Expel a Permanent Member against you: it needs two thirds
 of the members with a vote and cannot be vetoed. If it carries you lose the seat
-and 5 standing, stay a member, carry UN Withdrawal Consequences for ten years,
-and lose your standing benefits for five.
+and 5 standing, stay a member, carry Estranged from the United Nations for ten
+years, and lose your standing benefits for five.
 
 Each veto outside Moribund also adds 5 to your **veto record**, which fades by 5% a year. A
 motion to expel is weighed on its own case, not the case that decides
@@ -277,15 +294,16 @@ vetoed, Our Record shows your veto record and the case for expelling you.
 
 The floor takes one resolution at a time, and each is open for a year. The
 proposer's own vote counts in favor. Human members can vote in the chamber at
-any time. Those that haven't voted yet receive the UN General Assembly Vote event
-once, in the ninth month of the session. Its default option, "We will decide
+any time. Those that haven't voted yet receive a vote event named for the
+resolution (Climate Accord Vote, for example) once, in the ninth month of the session. Its default option, "We will decide
 later.", closes the event without voting, so an event left to time out casts no
 vote. After that, the chamber's buttons are the only way to vote, and a member
 that never uses them abstains. AI members vote late too: each votes in the ninth,
 tenth or eleventh month, drawn at random, by its lean at that time. An AI member
 that still has not voted (one that joined late, for example) votes in the last
-month of the session. After a year, General Assembly Vote Results applies the
-outcome.
+month of the session. After a year, The Count Is In applies the outcome for the
+proposer, and the other members learn it in The Assembly Has Voted (a country a
+verdict names hears its own news instead).
 
 Most topics pass by **Majority**: the votes in favor outnumber those against.
 Charter reforms, motions to expel and a suspension of credentials need **Two-Thirds**: two thirds of all
@@ -420,20 +438,25 @@ carry the random −20 to +20, so a close vote can turn on the day it is cast.
 
 ### Complying with a UN resolution
 
-When a resolution carries, every member that voted against it may accept it or
-refuse. Refusing a convention (Refuse to ratify it) keeps you outside it, with
-neither its party terms nor its benefits, though any term that reaches every
-country still reaches you. Refusing an aid or peacekeeping
-request (Refuse to take part) means you contribute nothing. Refusing anything
-else (Denounce the decision) is a statement on the record that changes nothing.
+When a resolution carries, a member that voted against it may accept it or
+refuse, wherever refusing would change something. Refusing a convention (Refuse
+to ratify it) keeps you outside it, with neither its party terms nor its
+benefits, though any term that reaches every country still reaches you.
+Refusing an aid request or a full peacekeeping deployment (Refuse to take part)
+means you contribute nothing; only major powers and above are asked. Refusing a
+decision that accuses another country, such as a condemnation, sanctions or a
+military mandate (Denounce it and stand with the accused), doesn't stop the
+decision but earns you 25 relations with that country. Anything else you only
+acknowledge: a charter reform, a request that asks nothing of your rank, or a
+verdict on yourself, which your ballot already answered.
 Refusing costs 20 relations with the proposer and 3 infamy, and for a binding
 resolution also 5 standing and 10 case strength. Accepting a binding resolution
-you opposed earns 2 standing, except a peacekeeping request, whose contribution
-is its own reward. A resolution that a veto blocked or softened binds no one, so
-accepting or refusing it moves no standing or case strength. A referral to the World Court and a supervised referendum
-bind only the country they name, which answers in its own event, and a petition
-to lift sanctions asks nothing of the members, so accepting or refusing these
-moves no standing or case strength. A member that voted in favor,
+you could have refused earns 2 standing, except a peacekeeping request, whose
+contribution is its own reward. A resolution that a veto blocked or softened
+binds no one, so accepting or refusing it moves no standing or case strength. A
+referral to the World Court and a supervised referendum bind only the country
+they name, which answers in its own event, so accepting or refusing these moves
+no standing or case strength either. A member that voted in favor,
 or did not vote, ratifies a carried convention without being asked, except that
 a member holding warheads that did not vote stays outside the nuclear ban.
 
@@ -488,21 +511,21 @@ situation and offers it to the countries it concerns. Roughly from gravest down:
 | Situation | Offered to | Event |
 |---|---|---|
 | A nuclear strike | The struck country first | An Appeal to the Assembly |
-| The end of a year-long war between great powers | A proposer | Declaration of Universal Human Rights, or International Criminal Court |
-| A war of aggression on a member, six months or more, with heavy devastation | The attacked member first | An Appeal to the Assembly |
-| A warming threshold (0.5, 1, 2 and 3 °C) | A proposer | Climate Change Resolution |
+| The end of a year-long war between great powers | A proposer | Free and Equal, or International Criminal Court |
+| A war of aggression on a member, six months or more, with heavy devastation or a quarter of the member occupied | The attacked member first | An Appeal to the Assembly |
+| A warming threshold (0.5, 1, 2 and 3 °C) | A proposer | Binding Targets |
 | A country's first nuclear bomb | A proposer | Nuclear Non-Proliferation Treaty |
 | A severe covert operation exposed | The target first | An Appeal to the Assembly |
 | A destructive anti-satellite strike | A proposer, never the striker | A Moratorium on Anti-Satellite Tests |
 | A colony in space seized or destroyed | A proposer that holds a colony, never the country that did it | A Convention on the Settlement of Outer Space |
 | A state collapse | Up to three peacekeeping powers | A State Has Collapsed |
 | The charter outgrown | A great power | The Charter Has Been Outgrown |
-| A famine | Up to three donor powers | Humanitarian Crisis Demands Response |
+| A famine | Up to three donor powers | An Appeal for Relief |
 | A banking panic or default in a contagion wave | The member in trouble | An Emergency Lending Facility |
-| A colonial empire's collapse | A proposer | Decolonization Resolution |
-| The first Moon landing or colony | A proposer | International Space Cooperation |
+| A colonial empire's collapse | A proposer | An End to Empire |
+| The first Moon landing or colony | A proposer | Together in Orbit |
 | A country's first Antarctic research station | A proposer | The Antarctic Treaty |
-| A trade embargo between members | The weaker party | International Trade Dispute |
+| A trade embargo between members | The weaker party | A Quarrel Over Trade |
 | Nothing graver, at most once in 24 months (12 while a great power member is Respected or better) | A proposer | A convention no situation raises |
 
 An appeal lets the wronged party table a condemnation or sanctions, ask for
@@ -632,6 +655,9 @@ finds for you, the holder chooses in The World Court Rules Against Us:
 | We abide by the ruling. | The state is yours. The holder gains 2 standing and the UN gains credibility. |
 | The court has no say over our soil. | The holder keeps the state, loses 5 standing, takes a defiance record of 6 and International Court Defied, and the UN loses credibility. For ten years you may table a military mandate over that region against it without the case of 60. |
 
+A holder that voted for the referral accepted the verdict in advance: it may
+only abide by the ruling.
+
 If the court finds for the holder, your claim on the region is withdrawn, and
 for twenty years each diplomatic play in which you take a war goal there costs
 you 10 × enforcement extra infamy, once per play. The case is struck off as
@@ -648,7 +674,7 @@ whose case strength is 40 or more and that is not your ally, overlord or
 subject. If it carries, the target has a UN Arms
 Embargo for ten years: −30% trade advantage in small arms, ammunition,
 artillery, tanks, aeroplanes, man-o'-wars and ironclads, for imports and
-exports alike, and military goods 5% dearer, all × enforcement. It loses 6
+exports alike, and military goods 5% costlier, all × enforcement. It loses 6
 standing. A vetoed embargo, or one the target voted for itself, or both, is a Voluntary
 UN Arms Embargo at half strength for five years and costs 3 standing. A country
 under an embargo cannot propose one.
@@ -696,7 +722,7 @@ support. Our Obligations shows an order against you, or against your enemy.
 
 With the Decolonization Resolution in force, a member can ask the Assembly to
 order a referendum in another member's direct subject whose liberty desire is
-50 or more; a subject can ask for its own. A veto blocks it. If it carries, the
+50 or more and that no war goal is already freeing; a subject can ask for its own. A veto blocks it. If it carries, the
 overlord receives A Referendum Ordered:
 
 | Choice | Result |
@@ -713,15 +739,18 @@ serves in every peacekeeping and Stabilization mission as one more contributor,
 and those missions no longer lapse unstaffed or fail when the last contingent
 goes home. It costs a tenth of the UN's budget. At Supranational, a war goal a
 member adds against a country hosting such a mission, in a play it started, is
-struck as soon as it is added. Three kinds of goal are not struck but pay the
-doubled infamy surcharge instead: the goal the play opens with, another goal of
-that same kind, and a unification goal. Countries outside the UN, and members
-whose credentials are suspended, pay that surcharge on every such goal. Nothing
-is struck or charged in the play a mandate is used in.
+struck as soon as it is added. A goal of the same kind that the member holds
+against another country in that play may be struck with it, and the infamy
+surcharge paid for that goal is given back. Three kinds of goal are not struck
+but pay the doubled surcharge instead: the goal the play opens with, another
+goal of that same kind, and a unification goal. Countries outside the UN, and
+members whose credentials are suspended, pay that surcharge on every such goal.
+Nothing is struck or charged in the play a mandate is used in.
 
 ### Electoral observers
 
-A member that holds elections and is at peace can Request Electoral Observers.
+A member that holds elections (a voting law, or Anarchy) and is at peace can
+Request Electoral Observers.
 It is a request: no veto, and it shares the request cooldown. If it carries
 while you are still at peace and holding elections, an Electoral Observer
 Mission goes to your capital, paid from the UN's budget, so
@@ -758,7 +787,7 @@ The donations are the [Development Programs](#development-programs-sizes)
 contributions, which open only once the Fund stands, to any member that holds its
 seat, pays its dues and draws no grant. A contributor's money pays the grants, as long as it holds its seat and pays its dues. You receive a grant only with a seat in the
 Assembly and your own dues paid. It goes into your investment pool, or into your treasury if your
-laws allow no investment pool or your banking system has not started. The line
+laws allow no investment pool or the Banking System game rule is Disabled. The line
 and the grants are worked out each month. Our Obligations shows your grant, and
 the budget line shows what the Fund and the Standing UN Force take. The World
 Development Fund section of the UN panel lists every member the Fund pays this
@@ -786,15 +815,16 @@ below half a percent.
 
 A convention is a standing regime. When it carries it founds its agency (the
 decolonization declaration founds none), and every member that ratifies it
-carries its member modifier. Its effects are multiplied by the UN's enforcement,
-never below ×0.01, so a Moribund UN leaves conventions dormant rather than
-lapsed. Most also name winners and losers among the parties. Our Obligations
+carries its member modifier. Its effects are multiplied by the UN's enforcement
+and follow it within a few days. A Moribund UN enforces nothing, so its
+conventions do nothing, but your ratifications stand and the effects return when
+the UN recovers. Most also name winners and losers among the parties. Our Obligations
 lists each convention you are party to, with your terms under it; hover a
 convention for all its terms, or a term for its modifier. An agency's hover in
 the overview says whether it is founded, with its convention's terms one hover
-further, on Its terms. Your terms start the day
-you ratify a convention or join, and are re-read when the tier changes and once
-a year.
+further, on Its terms. Your terms start within a few
+days of ratifying a convention or joining. They are re-read when the tier
+changes and once a year, and their strength follows enforcement as it moves.
 
 | Convention (agency) | Can come to the floor with | Parties gain | Winners and losers |
 |---|---|---|---|
@@ -873,7 +903,7 @@ the seabed policies).
 | Scramble | Two or more great powers on Unilateral Licensing while Regulated | The whole basin among all coastal countries, every navy counting double, and Sponsor Contractors protects no one's claims. It is Regulated again two years after fewer than two great powers remain on Unilateral Licensing. |
 
 While the seabed is Regulated, a party pays royalties each week: 4% of its
-Deep-Sea Mines' base output value, about 1,800 a level. The money goes to the
+Deep-Sea Mines' base output value, about 1,500 a level. The money goes to the
 World Development Fund while it stands, otherwise to the UN budget. A party
 that switches to Unilateral Licensing while the convention governs the seabed
 defects: 10 infamy once, 5 standing and 10 case strength. It loses its place in
@@ -892,7 +922,7 @@ a weekly upkeep of a tenth of a percent of GDP a year, never less than 1,000 a
 week. It also adds to your claim weight in the Southern basin, coastline or
 not. The decision Close the Antarctic Research Station ends both. The AI opens a station when
 its weekly surplus covers ten times the upkeep: great and major powers, and
-smaller powers with a Southern coastline or a place in the Antarctic Treaty.
+smaller powers with a coast south of the tropics or a place in the Antarctic Treaty.
 
 A country's first station puts the Antarctic Treaty on the docket. Its parties
 hold no new Southern seabed licenses; levels built before they ratified keep
@@ -985,7 +1015,8 @@ or if its host or state is gone. A mission has no time
 limit: one that is not done goes on for as long as it keeps contributors, so a
 member that keeps paying for its contingent can keep it in the field. Time
 works on the AI instead, which grows less willing to send a contingent to a
-mission the longer it has run. Success adds delivery and gives each
+mission the longer it has run, and is much less willing to send one to a
+peacekeeping or Stabilization mission its army can't reach. Success adds delivery and gives each
 contributor 3 standing and 15 relations with the host; failure takes
 delivery away. The state panel shows a UN Mission tile, and contributors build
 covert networks in the host faster.

@@ -1,0 +1,38 @@
+﻿# The AI conscript refresh: each AI country looks monthly and runs it at most once a year
+# (common/scripted_effects/te_ai_conscript_refresh_effects.txt).
+on_monthly_pulse_country = {
+	on_actions = {
+		te_ai_conscript_refresh_on_action
+	}
+}
+
+te_ai_conscript_refresh_on_action = {
+	trigger = {
+		is_ai = yes
+	}
+	effect = {
+		te_ai_conscript_refresh_effect = yes
+	}
+}
+
+# TEMPORARY: TE_SELF_CHECK ai_conscript_refresh's verdict, three months after the first clear
+# (te_ai_conscript_refresh_effects.txt says what each line means).
+on_monthly_pulse = {
+	on_actions = {
+		te_ai_conscript_refresh_selfcheck
+	}
+}
+
+te_ai_conscript_refresh_selfcheck = {
+	trigger = {
+		has_global_variable = te_ai_conscript_sc_state
+		NOT = { has_global_variable = te_ai_conscript_sc_done }
+	}
+	effect = {
+		change_global_variable = { name = te_ai_conscript_sc_months add = 1 }
+		if = {
+			limit = { global_var:te_ai_conscript_sc_months >= 3 }
+			te_ai_conscript_refresh_verdict = yes
+		}
+	}
+}

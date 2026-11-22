@@ -239,6 +239,11 @@ te_monetary_refresh_world_rate = {
 # gap left to close and that hook is gone. Do not reintroduce a second entry
 # point without a reason of the same kind.
 te_monetary_monthly_update = {
+	# --- the banking rule switched from Full mid-game -----------------------
+	# Before step 0, which seeds again what it forgets, and step 0b, which
+	# strips the managed modifiers (te_monetary_rule_switch_effects.txt).
+	te_monetary_settle_rule_switch = yes
+
 	# --- 0. initialise ------------------------------------------------------
 	te_monetary_init_variables = yes
 
@@ -403,9 +408,8 @@ te_monetary_monthly_update = {
 # the event put them — a journal entry that vanishes mid-clock would take the
 # remaining years with it. A revolution's winner receives none of the loser's
 # country modifiers either; te_monetary_inherit_central_bank
-# (te_monetary_civil_war_effects.txt) re-adds the ones whose remaining time a
-# month counter records (te_mon_peg_suspension, te_mon_peg_credibility_lost,
-# te_mon_lolr_reneged), and the rest are lost with the loser.
+# (te_monetary_civil_war_effects.txt) re-adds each from the month counter
+# set beside it (#462, #470).
 #
 # THE HOME CAN CHANGE — the entry activates when a country gets a stock
 # exchange, and is lost with it. te_monetary_settle_modifier_home runs first in
@@ -487,6 +491,24 @@ te_monetary_settle_modifier_home = {
 		te_mon_mod_strip = { NAME = te_mon_board_wrong_stance }
 		te_mon_mod_strip = { NAME = te_mon_union_adopter }
 		te_mon_mod_strip = { NAME = te_mon_union_pressure }
+		# No _applied zeroing for these three either (#1427): step 9b re-adds the
+		# banking union and the reserve whenever te_mon_mod_has misses them (their
+		# _applied flags are rewritten every pulse, never read as a gate), and the
+		# seigniorage through te_monetary_apply_fx_one, which re-adds a missing one.
+		te_mon_mod_strip = { NAME = te_mon_union_banking_union }
+		te_mon_mod_strip = { NAME = te_mon_union_reserve }
+		te_mon_mod_strip = { NAME = te_mon_union_seigniorage }
+		# [2026-11-14] The issuer's premium cut and extra interventions, and the
+		# common capital market: te_monetary_apply_fx_one re-adds a missing one,
+		# as it does the seigniorage, so no _applied zeroing here either. This is
+		# also what takes all three off when the banking rule leaves Full
+		# (te_monetary_leave_full_system sends every managed modifier this way).
+		te_mon_mod_strip = { NAME = te_mon_union_issuer_premium }
+		te_mon_mod_strip = { NAME = te_mon_union_issuer_bank }
+		te_mon_mod_strip = { NAME = te_mon_union_credit }
+		# [#1812, 2026-11-16] A reserve currency's cut where the floor swallows
+		# it: the same, re-added by te_monetary_apply_fx_one on a missing one.
+		te_mon_mod_strip = { NAME = te_mon_reserve_currency_premium }
 		set_variable = { name = te_inflation_band_applied value = 0 }
 		set_variable = { name = te_mon_stance_politics_applied value = 0 }
 		set_variable = { name = te_mon_wage_dividend_applied value = 0 }
@@ -735,6 +757,10 @@ te_monetary_init_variables = {
 	if = {
 		limit = { NOT = { has_variable = te_premium_structural } }
 		set_variable = { name = te_premium_structural value = 0.5 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_premium_floor_swallowed } }
+		set_variable = { name = te_premium_floor_swallowed value = 0 }
 	}
 	if = {
 		limit = { NOT = { has_variable = te_premium_cyclical } }
@@ -2110,8 +2136,17 @@ te_monetary_update_premium = {
 	# country_credit_standing_floor_add, which law_central_bank_independence
 	# carries at -0.0025. That replaces the te_mon_is_cbi branch that used to
 	# hard-code 0.25 here.
+	#
+	# [#1812, 2026-11-16] WHAT THE FLOOR SWALLOWED, recorded where it is applied:
+	# the points of standing this month's sum earned past the floor, which buy
+	# nothing. Step 9b reads it (te_mon_reserve_floor_value) to pay a reserve
+	# currency's swallowed cut as risk premium instead, so it is this floor and
+	# this sum, never a second copy of the law and the technologies that move it.
+	set_variable = { name = te_premium_floor_swallowed value = 0 }
 	if = {
 		limit = { var:te_premium_structural < te_mon_standing_floor }
+		set_variable = { name = te_premium_floor_swallowed value = te_mon_standing_floor }
+		change_variable = { name = te_premium_floor_swallowed subtract = var:te_premium_structural }
 		set_variable = { name = te_premium_structural value = te_mon_standing_floor }
 	}
 	if = {
@@ -2545,8 +2580,8 @@ te_monetary_update_inflation = {
 # DECIDED FROM VARIABLES, NEVER FROM has_modifier — add_modifier and
 # remove_modifier results are not visible inside the effect block that issues
 # them (scripting_best_practices.md), so a has_modifier read here would be
-# asking about state this effect is in the middle of changing. Same rule, and
-# the same reason, as banking_cycle_apply_stance_band.
+# asking about state this effect is in the middle of changing. (The stance
+# bands followed the same rule until 1.15; je_banking_cycle declares them now.)
 #
 # COMFORT IS APPLIED THOUGH IT IS EMPTY, on the banking_stance_band_3 precedent
 # and vanilla's own tax_modifier_medium / infamy_reputable: the swap then always
@@ -2554,9 +2589,9 @@ te_monetary_update_inflation = {
 # the country is in. Its loc is written for that job — it says the band costs
 # nothing and that it is the one band in which the real-wage dividend pays.
 #
-# NO FIRST-RUN SWEEP. banking_cycle_apply_stance_band removes all five of its
-# bands once, because its modifiers live on a can_revolution_inherit journal
-# entry that can reach a successor whose tracker does not describe it. These are
+# NO FIRST-RUN SWEEP. The stance bands' old swap removed all five once,
+# because its modifiers lived on a can_revolution_inherit journal entry that
+# can reach a successor whose tracker does not describe it. These are
 # COUNTRY modifiers on the country itself, and a country that has never run this
 # step carries the 0 from step 0 and no band modifier — the two agree. A
 # revolution's winner is the exception to watch: it receives the loser's
@@ -3310,11 +3345,6 @@ te_monetary_apply_interest_modifiers = {
 # confidence resets, and with the LAW gone the suspension's lost-credibility
 # modifier goes too; a SUSPENSION freezes vault, balance and confidence alike,
 # because suspending convertibility is refusing to pay gold out.
-#
-# THE RETIRED CARRY. Until 2026-10-06 the hot-money balance paid the policy
-# rate as the scaled budget expense te_mon_gold_carry_expense. A save from
-# before then can still carry it, so the foot of this effect strips it every
-# pulse until legacy_modifier_cleanup.txt's dated checklist says otherwise.
 te_monetary_update_gold = {
 	if = {
 		limit = { te_mon_has_gold_flows = yes }
@@ -3532,15 +3562,6 @@ te_monetary_update_gold = {
 			}
 		}
 	}
-
-	# --- SAVE MIGRATION: the retired carry ---------------------------------
-	# The carry on borrowed gold was dropped on 2026-10-06 (design §0.5,
-	# decision I, reversed). A save made before then can still hold
-	# te_mon_gold_carry_expense, on the entry or on the country; it goes on
-	# this country's first pulse, until legacy_modifier_cleanup.txt's dated
-	# checklist retires the definition. te_gold_carry and te_gold_carry_applied
-	# stay in such a save, inert: nothing reads them.
-	te_mon_mod_strip = { NAME = te_mon_gold_carry_expense }
 
 	# --- the three clocks ---------------------------------------------------
 	if = {
@@ -3915,5 +3936,9 @@ te_mon_effect_new_currency = {
 	add_modifier = {
 		name = te_mon_currency_reform_premium
 		days = 3650
+	}
+	# Its months left, for a revolution's winner (#470).
+	hidden_effect = {
+		set_variable = { name = te_mon_currency_reform_months value = 120 }
 	}
 }

@@ -86,6 +86,32 @@ _None._
 
 _None._
 
+## Pact Involvement
+
+Flagged: a diplomatic action whose `pact = { }` has no
+`max_target_involvement` (it builds none, silently), no explicit
+`target_involvement_applies_to`, the side `target_country` (no vanilla
+pact names it), a figure outside 1 to 8,000, and a stale tag.
+
+Vanilla's directed pacts all name `source_country` and `embargo`
+`mutual`. Pacts seem to read the side the other way round from
+articles, so a mod pact copies its nearest vanilla analogue's pair
+(`fund_lobbies`, `increase_relations`: 1000 `source_country`).
+
+Suppress with the same `(involvement)` tag on the action's opening line,
+the `pact = {` line or either field's line.
+
+### Unreviewed Pact Flags
+
+_None._
+
+### Reviewed Pacts
+
+- `common/diplomatic_actions/nuclear_umbrella_actions.txt` — `nd_withdraw_umbrella_action` (missing_involvement) — **2026-11-12**: a withdrawal on vanilla raise_payments' pattern, which builds none; the overlord already gains through the subject pact
+- `common/diplomatic_actions/te_seabed_administer_claims.txt` — `te_seabed_administer_claims` (missing_involvement) — **2026-11-12**: modelled on vanilla raise_payments, which builds none; the overlord already gains through the subject pact
+- `common/diplomatic_actions/un_lobbying.txt` — `un_lobby_for_action` (missing_involvement) — **2026-11-12**: the campaign buys a UN vote, not a presence in the member's regions
+- `common/diplomatic_actions/un_lobbying.txt` — `un_lobby_against_action` (missing_involvement) — **2026-11-12**: the campaign buys a UN vote, not a presence in the member's regions
+
 ## Coverage
 
 - articles with a leverage line but no `maintenance_paid_by`: 0
@@ -95,4 +121,7 @@ _None._
 - involvement flags: 21
 - involvement unreviewed: 0
 - involvement exempted: 21
+- pact involvement flags: 4
+- pact involvement unreviewed: 0
+- pact involvement exempted: 4
 

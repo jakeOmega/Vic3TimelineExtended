@@ -48,3 +48,9 @@ carries a hover (not underlined since 2026-10-30, `gui_style_guide.md` rule 3). 
 | **Days left.** Set Imports, wait past the week's grace, then hover an import level on three dates a month apart. | "Imports can be set for all goods again in about N days": about 84 a week after the set, then 30 fewer each month, and the levels free up when it would reach 0. | A figure that doesn't fall: `game_date` stored as a value does not count days; fall back to the fixed "3 months" line. A figure off by a few days from when the levels free up: the timed variable's three months are not 91 days; adjust the 91. |
 | **A save from before.** Load a save with a bulk set inside its cooldown from before this change. | The line from before, "…within a week, then not for 3 months" (the day was never recorded), until the next set. | "About 0 days": the `else_if` in `te_bulk_tariff_apply` no longer asks for `te_bulk_tariff_cd_day_<direction>`. |
 | **Label.** Hover the Imports and Exports labels. | Plain text (no underline, 2026-10-30), with their tooltips as before. | No tooltip: the label textbox's `tooltip` in `te_bulk_tariff_widgets.gui`. |
+
+## Harness run, 2026-11-11 (1.15.1)
+
+Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
+
+"Days left" and the two timed variables OK: 91 on the day of the set, 81 ten days on with the grace gone, 57, 41, and the cooldown gone on day 91. Whether each good's level took was not read.

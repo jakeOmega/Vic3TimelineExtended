@@ -1,0 +1,158 @@
+﻿# ============================================================================
+# CULTURE MERGES: notifications to the country running a merge, and to the other human countries
+# ============================================================================
+# te_culture_merge.1: a constituent culture has switched. Fired by te_cm_switch_part
+# (common/scripted_effects/te_culture_merge_effects.txt) on the merge's starter, a human only,
+# once per culture that switches, with the culture saved as scope:te_cm_ev_part and the culture
+# it became as scope:te_cm_ev_result. Each popup carries its own copy of the two scopes, so two
+# cultures switching in one census each get their own. The switch has already happened when it
+# opens; the event only says so (2026-11-09: until then nothing told the player).
+
+namespace = te_culture_merge
+
+te_culture_merge.1 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_culture_merge.1.t
+	desc = te_culture_merge.1.d
+	flavor = te_culture_merge.1.f
+
+	event_image = { texture = "gfx/event_pictures/language_reform_classroom.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	duration = 3
+
+	trigger = {
+		exists = scope:te_cm_ev_part
+		exists = scope:te_cm_ev_result
+	}
+
+	option = {
+		name = te_culture_merge.1.a
+		default_option = yes
+	}
+}
+
+# The other human countries (2026-11-14; te_culture_merge_effects.txt, THE NOTICES): an event where the merge reaches
+# the country (a culture of the merge is one of its primary cultures, or it holds a homeland of one), a feed notice
+# (te_cm_merge_started_notice, te_cm_merge_complete_notice) where it does not. Each is informational: the merge has
+# already done what the event reports, and the one option changes nothing. Every name comes from a saved scope:
+# scope:te_cm_ev_starter (the country running the merge), scope:te_cm_ev_result (its result culture, on which the custom
+# loc te_cm_core_names gives the core cultures it folds in) and scope:te_cm_ev_own_part (this country's culture that
+# switched). The text's branches are saved scopes the sender set (te_cm_ev_sphere, te_cm_ev_primary), never live tests:
+# a card can sit unopened while the monthly upkeep changes the primary cultures.
+
+# te_culture_merge.2: the merge has begun, and it reaches us. Sent by te_cm_tell_start. A card, not a popup: nothing
+# changes at once.
+te_culture_merge.2 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_culture_merge.2.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { exists = scope:te_cm_ev_sphere }
+				desc = te_culture_merge.2.d_sphere
+			}
+			desc = te_culture_merge.2.d
+		}
+	}
+	flavor = te_culture_merge.2.f
+
+	event_image = { texture = "gfx/event_pictures/minor_event_generic.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	duration = 3
+
+	trigger = {
+		exists = scope:te_cm_ev_starter
+		exists = scope:te_cm_ev_result
+	}
+
+	option = {
+		name = te_culture_merge.2.a
+		default_option = yes
+	}
+}
+
+# te_culture_merge.3: a culture of ours (a primary culture, or the people of a homeland we hold) has switched into the
+# merge's result, and the merge is not complete yet. Sent by te_cm_tell_switch, a popup, one per culture that switches.
+te_culture_merge.3 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_culture_merge.3.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { exists = scope:te_cm_ev_primary }
+				desc = te_culture_merge.3.d_primary
+			}
+			desc = te_culture_merge.3.d
+		}
+	}
+	flavor = te_culture_merge.3.f
+
+	event_image = { texture = "gfx/event_pictures/language_reform_classroom.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	duration = 3
+
+	trigger = {
+		exists = scope:te_cm_ev_starter
+		exists = scope:te_cm_ev_result
+		exists = scope:te_cm_ev_own_part
+	}
+
+	option = {
+		name = te_culture_merge.3.a
+		default_option = yes
+	}
+}
+
+# te_culture_merge.4: the merge is complete, and it reaches us. Sent by te_cm_tell_complete: a popup when a culture of
+# ours switched in the same census (it takes te_culture_merge.3's place, so that census sends one event), a card otherwise.
+te_culture_merge.4 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_culture_merge.4.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					exists = scope:te_cm_ev_own_part
+					exists = scope:te_cm_ev_primary
+				}
+				desc = te_culture_merge.4.d_primary
+			}
+			triggered_desc = {
+				trigger = { exists = scope:te_cm_ev_own_part }
+				desc = te_culture_merge.4.d_homeland
+			}
+			desc = te_culture_merge.4.d
+		}
+	}
+	flavor = te_culture_merge.4.f
+
+	event_image = { texture = "gfx/event_pictures/referendum_ballot_count.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	duration = 3
+
+	trigger = {
+		exists = scope:te_cm_ev_starter
+		exists = scope:te_cm_ev_result
+	}
+
+	option = {
+		name = te_culture_merge.4.a
+		default_option = yes
+	}
+}

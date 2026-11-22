@@ -1,0 +1,511 @@
+﻿# ============================================================================
+# POWER BLOC SUMMITS (#1442)
+# ============================================================================
+# A bloc leader spends a spare mandate on one initiative the whole bloc carries
+# for ten years: a use for mandates once the principle slots are full.
+# te_pb_summit.1 opens from the panel's Convene a Summit button
+# (te_pb_summit_sgui, gui/power_bloc_panel.gui) for a player, and from
+# te_pb_summit_ai_on_action for an AI leader holding two or more mandates.
+# Each option but Adjourn spends one mandate (te_pb_summit_pay) and is offered
+# only while the bloc holds one (te_pb_summit_can_pay), since the event can
+# wait while the mandate goes on a principle. A timed initiative already
+# running is not offered again; Rally the Bloc is, for its immediate cohesion.
+# Beside the five general initiatives, each bloc identity has one of its own
+# (options i to q), offered only to a leader of that identity.
+# Modifiers: common/static_modifiers/te_power_bloc_summit_modifiers.txt.
+# Design: docs/systems/mod_systems/power_blocs.md.
+# ============================================================================
+namespace = te_pb_summit
+
+te_pb_summit.1 = {
+	type = country_event
+	placement = ROOT
+
+	event_image = { video = "unspecific_signed_contract" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	title = te_pb_summit.1.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { te_pb_summit_can_pay = no }
+				desc = te_pb_summit.1.d_none
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = te_pb_summit.1.d
+			}
+		}
+	}
+	flavor = te_pb_summit.1.f
+
+	duration = 3
+
+	trigger = {
+		is_power_bloc_leader = yes
+	}
+
+	# Rally the Bloc: cohesion now and for ten years. Offered while running too.
+	option = {
+		name = te_pb_summit.1.a
+		trigger = {
+			te_pb_summit_can_pay = yes
+		}
+		te_pb_summit_pay = { KIND = rally }
+		power_bloc = {
+			add_cohesion_percent = 0.2
+		}
+		te_pb_summit_grant_bloc_initiative = { MODIFIER = te_pb_summit_rally }
+		ai_chance = {
+			base = 10
+			modifier = {
+				trigger = { power_bloc ?= { current_cohesion_percentage < 0.5 } }
+				add = 30
+			}
+			modifier = {
+				trigger = { power_bloc ?= { current_cohesion_percentage < 0.25 } }
+				add = 30
+			}
+		}
+	}
+
+	# Recruitment Drive: invitations accepted more readily.
+	option = {
+		name = te_pb_summit.1.b
+		trigger = {
+			te_pb_summit_can_pay = yes
+			power_bloc ?= {
+				NOT = { has_modifier = te_pb_summit_recruitment }
+			}
+		}
+		te_pb_summit_pay = { KIND = recruitment }
+		te_pb_summit_grant_bloc_initiative = { MODIFIER = te_pb_summit_recruitment }
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { power_bloc ?= { num_power_bloc_members < 5 } }
+				add = 10
+			}
+		}
+	}
+
+	# Leverage Campaign: leverage generated faster on every country.
+	option = {
+		name = te_pb_summit.1.c
+		trigger = {
+			te_pb_summit_can_pay = yes
+			power_bloc ?= {
+				NOT = { has_modifier = te_pb_summit_leverage }
+			}
+		}
+		te_pb_summit_pay = { KIND = leverage }
+		te_pb_summit_grant_bloc_initiative = { MODIFIER = te_pb_summit_leverage }
+		ai_chance = {
+			base = 10
+		}
+	}
+
+	# Open Borders Accord: port access and wider migration, on loan. Hidden when
+	# the bloc's principles give both.
+	option = {
+		name = te_pb_summit.1.e
+		trigger = {
+			te_pb_summit_can_pay = yes
+			power_bloc ?= {
+				NOT = { has_modifier = te_pb_summit_open_borders }
+				te_pb_summit_has_open_borders = no
+			}
+		}
+		te_pb_summit_pay = { KIND = open_borders }
+		te_pb_summit_grant_bloc_initiative = { MODIFIER = te_pb_summit_open_borders }
+		ai_chance = {
+			base = 5
+		}
+	}
+
+	# A Mandate at Home: legitimacy and authority for the leader.
+	option = {
+		name = te_pb_summit.1.g
+		trigger = {
+			te_pb_summit_can_pay = yes
+			NOT = { has_modifier = te_pb_summit_home }
+		}
+		te_pb_summit_pay = { KIND = home }
+		te_pb_summit_grant_leader_initiative = { MODIFIER = te_pb_summit_home }
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { legitimacy < 50 }
+				add = 15
+			}
+		}
+	}
+
+	# ------------------------------------------------------------------------
+	# Identity initiatives: each offered only to a bloc of its identity, so a
+	# leader sees one of them beside the five above. Weighted above the general
+	# five for the AI, since each is made for its bloc.
+	# ------------------------------------------------------------------------
+
+	# Military Treaty Organization: Joint Exercises.
+	option = {
+		name = te_pb_summit.1.i
+		trigger = {
+			te_pb_summit_can_pay = yes
+			te_pb_summit_bloc_identity = { IDENTITY = identity_military_treaty_organization }
+			NOT = { has_modifier = te_pb_summit_drills }
+		}
+		te_pb_summit_pay = { KIND = drills }
+		te_pb_summit_grant_member_initiative = { MODIFIER = te_pb_summit_drills }
+		te_pb_summit_member_relations = yes
+		ai_chance = {
+			base = 15
+			modifier = {
+				trigger = { is_at_war = yes }
+				add = 10
+			}
+		}
+	}
+
+	# Religious: a council of the leader's faith, named for it.
+	option = {
+		name = {
+			trigger = { country_has_state_religion = rel:catholic }
+			text = te_pb_summit.1.j_catholic
+		}
+		name = {
+			trigger = { country_has_state_religion = rel:protestant }
+			text = te_pb_summit.1.j_protestant
+		}
+		name = {
+			trigger = {
+				OR = {
+					country_has_state_religion = rel:orthodox
+					country_has_state_religion = rel:oriental_orthodox
+				}
+			}
+			text = te_pb_summit.1.j_orthodox
+		}
+		name = {
+			trigger = {
+				OR = {
+					country_has_state_religion = rel:sunni
+					country_has_state_religion = rel:shiite
+					country_has_state_religion = rel:ibadi
+				}
+			}
+			text = te_pb_summit.1.j_islamic
+		}
+		name = {
+			trigger = { country_has_state_religion = rel:jewish }
+			text = te_pb_summit.1.j_jewish
+		}
+		name = {
+			trigger = {
+				OR = {
+					country_has_state_religion = rel:mahayana
+					country_has_state_religion = rel:gelugpa
+					country_has_state_religion = rel:theravada
+				}
+			}
+			text = te_pb_summit.1.j_buddhist
+		}
+		name = {
+			trigger = { country_has_state_religion = rel:hindu }
+			text = te_pb_summit.1.j_hindu
+		}
+		name = {
+			trigger = { country_has_state_religion = rel:sikh }
+			text = te_pb_summit.1.j_sikh
+		}
+		name = {
+			trigger = { te_pb_summit_named_council = no }
+			text = te_pb_summit.1.j
+		}
+		trigger = {
+			te_pb_summit_can_pay = yes
+			te_pb_summit_bloc_identity = { IDENTITY = identity_religious }
+			NOT = { has_modifier = te_pb_summit_council }
+		}
+		te_pb_summit_pay = { KIND = council }
+		te_pb_summit_grant_member_initiative = { MODIFIER = te_pb_summit_council }
+		ai_chance = {
+			base = 15
+		}
+	}
+
+	# Trade League: Customs Harmonization.
+	option = {
+		name = te_pb_summit.1.k
+		trigger = {
+			te_pb_summit_can_pay = yes
+			te_pb_summit_bloc_identity = { IDENTITY = identity_trade_league }
+			power_bloc ?= {
+				NOT = { has_modifier = te_pb_summit_customs }
+			}
+		}
+		te_pb_summit_pay = { KIND = customs }
+		te_pb_summit_grant_bloc_initiative = { MODIFIER = te_pb_summit_customs }
+		te_pb_summit_grant_member_initiative = { MODIFIER = te_pb_summit_customs_members }
+		ai_chance = {
+			base = 15
+		}
+	}
+
+	# Sovereign Empire: Imperial Conference.
+	option = {
+		name = te_pb_summit.1.l
+		trigger = {
+			te_pb_summit_can_pay = yes
+			te_pb_summit_bloc_identity = { IDENTITY = identity_sovereign_empire }
+			NOT = { has_modifier = te_pb_summit_imperial }
+		}
+		te_pb_summit_pay = { KIND = imperial }
+		te_pb_summit_grant_leader_initiative = { MODIFIER = te_pb_summit_imperial }
+		te_pb_summit_leader_relations = yes
+		ai_chance = {
+			base = 15
+		}
+	}
+
+	# Ideological Union: Congress of the Movement.
+	option = {
+		name = te_pb_summit.1.m
+		trigger = {
+			te_pb_summit_can_pay = yes
+			te_pb_summit_bloc_identity = { IDENTITY = identity_ideological_union }
+			NOT = { has_modifier = te_pb_summit_congress }
+		}
+		te_pb_summit_pay = { KIND = congress }
+		te_pb_summit_grant_member_initiative = { MODIFIER = te_pb_summit_congress }
+		ai_chance = {
+			base = 15
+		}
+	}
+
+	# Cultural Commonwealth: Cultural Congress.
+	option = {
+		name = te_pb_summit.1.n
+		trigger = {
+			te_pb_summit_can_pay = yes
+			te_pb_summit_bloc_identity = { IDENTITY = identity_cultural }
+			NOT = { has_modifier = te_pb_summit_culture }
+		}
+		te_pb_summit_pay = { KIND = culture }
+		te_pb_summit_grant_member_initiative = { MODIFIER = te_pb_summit_culture }
+		te_pb_summit_member_relations = yes
+		ai_chance = {
+			base = 15
+		}
+	}
+
+	# Diplomatic Framework: Conference of Ambassadors.
+	option = {
+		name = te_pb_summit.1.o
+		trigger = {
+			te_pb_summit_can_pay = yes
+			te_pb_summit_bloc_identity = { IDENTITY = identity_diplomatic }
+			NOT = { has_modifier = te_pb_summit_ambassadors }
+		}
+		te_pb_summit_pay = { KIND = ambassadors }
+		te_pb_summit_grant_member_initiative = { MODIFIER = te_pb_summit_ambassadors }
+		te_pb_summit_member_relations = yes
+		ai_chance = {
+			base = 15
+		}
+	}
+
+	# Creditors' Consortium: Debt Conference.
+	option = {
+		name = te_pb_summit.1.p
+		trigger = {
+			te_pb_summit_can_pay = yes
+			te_pb_summit_bloc_identity = { IDENTITY = identity_creditors_consortium }
+			NOT = { has_modifier = te_pb_summit_debt_conference }
+		}
+		te_pb_summit_pay = { KIND = debt_conference }
+		te_pb_summit_grant_member_initiative = { MODIFIER = te_pb_summit_debt_conference }
+		te_pb_summit_member_relations = yes
+		ai_chance = {
+			base = 15
+		}
+	}
+
+	# Research Commons: Scientific Congress. Every member's innovation, the
+	# leader's included, rises by a tenth. The members' contributions are in add
+	# units, which a multiplier doesn't touch, so the pool takes no share of the
+	# members' rise; the leader's own +10% lifts the pool it receives.
+	option = {
+		name = te_pb_summit.1.q
+		trigger = {
+			te_pb_summit_can_pay = yes
+			te_pb_summit_bloc_identity = { IDENTITY = identity_research_commons }
+			NOT = { has_modifier = te_pb_summit_science }
+		}
+		te_pb_summit_pay = { KIND = science }
+		te_pb_summit_grant_member_initiative = { MODIFIER = te_pb_summit_science }
+		ai_chance = {
+			base = 15
+		}
+	}
+
+	# Adjourn: nothing spent. The AI never takes it while it can pay.
+	option = {
+		name = te_pb_summit.1.h
+		default_option = yes
+		custom_tooltip = te_pb_summit_adjourn_tt # REVIEWED 2026-11-06 (no_effect_option): adjourning is the choice; the tooltip says no mandate is spent
+		ai_chance = {
+			base = 0
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# te_pb_summit.2: the communiqué, told to the other members (#1558)
+# ----------------------------------------------------------------------------
+# te_pb_summit_grant_member_initiative sends it, a day on, to every member but
+# the leader when the leader's summit gives each member a ten-year initiative
+# (options i, j, k, m, n, o, p and q of te_pb_summit.1). Only the leader saw that
+# event. The member carries <modifier>_told for a month: it picks the text and
+# the modifier the option lists, and is removed here. The option changes
+# nothing. scope:te_pb_summit_leader is the leader that convened the summit.
+te_pb_summit.2 = {
+	type = country_event
+	placement = ROOT
+
+	event_image = { video = "unspecific_signed_contract" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	title = te_pb_summit.2.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_variable = te_pb_summit_drills_told }
+				desc = te_pb_summit.2.d_drills
+			}
+			triggered_desc = {
+				trigger = { has_variable = te_pb_summit_council_told }
+				desc = te_pb_summit.2.d_council
+			}
+			triggered_desc = {
+				trigger = { has_variable = te_pb_summit_customs_members_told }
+				desc = te_pb_summit.2.d_customs_members
+			}
+			triggered_desc = {
+				trigger = { has_variable = te_pb_summit_congress_told }
+				desc = te_pb_summit.2.d_congress
+			}
+			triggered_desc = {
+				trigger = { has_variable = te_pb_summit_culture_told }
+				desc = te_pb_summit.2.d_culture
+			}
+			triggered_desc = {
+				trigger = { has_variable = te_pb_summit_debt_conference_told }
+				desc = te_pb_summit.2.d_debt_conference
+			}
+			triggered_desc = {
+				trigger = { has_variable = te_pb_summit_science_told }
+				desc = te_pb_summit.2.d_science
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = te_pb_summit.2.d_ambassadors
+			}
+		}
+	}
+	flavor = te_pb_summit.2.f
+
+	duration = 3
+
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): the leader scope is saved and the _told variable set just before the call; a filter
+		exists = scope:te_pb_summit_leader
+		OR = {
+			has_variable = te_pb_summit_drills_told
+			has_variable = te_pb_summit_council_told
+			has_variable = te_pb_summit_customs_members_told
+			has_variable = te_pb_summit_congress_told
+			has_variable = te_pb_summit_culture_told
+			has_variable = te_pb_summit_ambassadors_told
+			has_variable = te_pb_summit_debt_conference_told
+			has_variable = te_pb_summit_science_told
+		}
+	}
+
+	option = {
+		name = te_pb_summit.2.a
+		default_option = yes
+		ai_chance = { base = 1 }
+		# The line the leader's option ran on us, shown and not run again.
+		show_as_tooltip = {
+			if = {
+				limit = { has_variable = te_pb_summit_drills_told }
+				add_modifier = {
+					name = te_pb_summit_drills
+					days = long_modifier_time
+				}
+			}
+			else_if = {
+				limit = { has_variable = te_pb_summit_council_told }
+				add_modifier = {
+					name = te_pb_summit_council
+					days = long_modifier_time
+				}
+			}
+			else_if = {
+				limit = { has_variable = te_pb_summit_customs_members_told }
+				add_modifier = {
+					name = te_pb_summit_customs_members
+					days = long_modifier_time
+				}
+			}
+			else_if = {
+				limit = { has_variable = te_pb_summit_congress_told }
+				add_modifier = {
+					name = te_pb_summit_congress
+					days = long_modifier_time
+				}
+			}
+			else_if = {
+				limit = { has_variable = te_pb_summit_culture_told }
+				add_modifier = {
+					name = te_pb_summit_culture
+					days = long_modifier_time
+				}
+			}
+			else_if = {
+				limit = { has_variable = te_pb_summit_ambassadors_told }
+				add_modifier = {
+					name = te_pb_summit_ambassadors
+					days = long_modifier_time
+				}
+			}
+			else_if = {
+				limit = { has_variable = te_pb_summit_debt_conference_told }
+				add_modifier = {
+					name = te_pb_summit_debt_conference
+					days = long_modifier_time
+				}
+			}
+			else_if = {
+				limit = { has_variable = te_pb_summit_science_told }
+				add_modifier = {
+					name = te_pb_summit_science
+					days = long_modifier_time
+				}
+			}
+		}
+	}
+
+	after = {
+		remove_variable = te_pb_summit_drills_told
+		remove_variable = te_pb_summit_council_told
+		remove_variable = te_pb_summit_customs_members_told
+		remove_variable = te_pb_summit_congress_told
+		remove_variable = te_pb_summit_culture_told
+		remove_variable = te_pb_summit_ambassadors_told
+		remove_variable = te_pb_summit_debt_conference_told
+		remove_variable = te_pb_summit_science_told
+	}
+}

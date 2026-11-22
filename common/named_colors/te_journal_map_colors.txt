@@ -1,0 +1,315 @@
+﻿# Journal entry map modes (vanilla 1.15; docs/systems/mod_systems/journal_map_modes.md). The named colors the mod's
+# map_color / map_color_second blocks name, kept apart from vanilla's 01_journal_entry_map_colors.txt. One family per
+# map; a gradient's stops are named _low, _mid and _high, in the order its lerps run.
+colors = {
+	# Every map: a state the metric has no figure for (no census yet, no banking cycle).
+	te_jmap_no_data = hsv360 { 0 0 38 }
+
+	# je_te_map_room, every map: a state outside the Map Room's area (its Area option, 2026-11-14). A dark slate, so
+	# the area stands out of it: darker and bluer than the "no data" grey above (38) and Power Grids' offline grey
+	# (52), and nothing like the pale te_jmap_none, each of which can sit inside the area beside it.
+	te_jmap_outside = hsv360 { 218 16 23 }
+
+	# je_te_map_room, every map fitted to a range: the Color option's shared ramps (2026-11-14, the fourteenth pass).
+	# Published schemes, not the mod's own, each stop rounded to whole hsv360 (within 1 in 255 of the hex beside it).
+	# The engine mixes two colors at a time, so a ramp of five stops is four lerps, and a diverging one two a side.
+	#
+	# Colorblind-safe, one way: ColorBrewer 2.0's five-class sequential YlOrBr (Cynthia Brewer, Mark Harrower and the
+	# Pennsylvania State University, colorbrewer2.org, which marks it colorblind safe), pale yellow at the low end to
+	# brown at the high. Its lightness falls at every step, so it keeps its order in grey.
+	te_jmap_cb_seq_0 = hsv360 { 60 17 100 }	# #FFFFD4
+	te_jmap_cb_seq_1 = hsv360 { 40 44 100 }	# #FED98E
+	te_jmap_cb_seq_2 = hsv360 { 32 84 100 }	# #FE9929
+	te_jmap_cb_seq_3 = hsv360 { 24 94 85 }	# #D95F0E
+	te_jmap_cb_seq_4 = hsv360 { 19 97 60 }	# #993404
+	# Colorblind-safe, both ways from a midpoint: ColorBrewer 2.0's five-class diverging PuOr (the same source, marked
+	# colorblind safe), orange below the midpoint, near white at it, purple above; each side darkens away from it.
+	# The published middle (#F7F7F7) is written twice, as the same near white with each side's hue, so that a mix in
+	# hue, saturation and value would not sweep the hues between (nothing records how the engine's lerp mixes).
+	te_jmap_cb_div_0 = hsv360 { 25 100 90 }	# #E66101
+	te_jmap_cb_div_1 = hsv360 { 33 61 99 }	# #FDB863
+	te_jmap_cb_div_mid_low = hsv360 { 33 1 97 }	# #F7F7F7, toward orange
+	te_jmap_cb_div_mid_high = hsv360 { 251 1 97 }	# #F7F7F7, toward purple
+	te_jmap_cb_div_3 = hsv360 { 251 19 82 }	# #B2ABD2
+	te_jmap_cb_div_4 = hsv360 { 262 61 60 }	# #5E3C99
+	# Colorblind-safe: a state its map paints below its scale (a company headquarters at a loss, a state that takes
+	# more out of the air than it emits; te_jmap_pick_below). The first color of Tableau's Color Blind 10, as
+	# matplotlib ships it (the "tableau-colorblind10" style): far from every color of the sequential ramp under each
+	# color vision deficiency, where the maps' own red and green are not.
+	te_jmap_cb_below = hsv360 { 201 100 64 }	# #006BA4
+	# Greyscale: ColorBrewer 2.0's nine-class sequential Greys, its second to its sixth class, light at the low end to
+	# dark at the high. Two stops, one lerp: a grey ramp has no hue to bend. It stops well short of te_jmap_outside's
+	# slate (value 23), and a state with no figure is striped, since a grey for "no data" would be a grey on the ramp.
+	te_jmap_grey_low = hsv360 { 0 0 94 }	# #F0F0F0
+	te_jmap_grey_high = hsv360 { 0 0 45 }	# #737373
+	te_jmap_grey_stripe = hsv360 { 0 0 94 }	# the stripes over te_jmap_no_data: no figure, none, or off the scale
+
+	# je_te_map_room: turmoil, calm to unrest.
+	te_jmap_turmoil_low = hsv360 { 150 18 62 }
+	te_jmap_turmoil_high = hsv360 { 356 82 72 }
+
+	# je_te_map_room: devastation, untouched to half ruined.
+	te_jmap_devastation_low = hsv360 { 80 14 66 }
+	te_jmap_devastation_high = hsv360 { 18 90 34 }
+
+	# je_te_map_room: the urban share, rural green to city brick.
+	te_jmap_urban_low = hsv360 { 95 40 55 }
+	te_jmap_urban_high = hsv360 { 15 75 78 }
+
+	# je_te_map_room: the Gini coefficient, 0.30 to 0.80 (pale blue to burnt orange).
+	te_jmap_gini_low = hsv360 { 200 20 90 }
+	te_jmap_gini_high = hsv360 { 25 85 55 }
+
+	# je_te_map_room: Dynastic Wealth, diverging at 50: dispersed teal, cream at 50, concentrated plum.
+	te_jmap_wc_low = hsv360 { 165 55 50 }
+	te_jmap_wc_mid = hsv360 { 50 6 92 }
+	te_jmap_wc_high = hsv360 { 315 60 45 }
+
+	# je_te_map_room, Demographics: life expectancy at birth, 25 to 80 years (oxblood, amber, teal).
+	te_jmap_e0_low = hsv360 { 355 75 42 }
+	te_jmap_e0_mid = hsv360 { 38 72 88 }
+	te_jmap_e0_high = hsv360 { 172 62 55 }
+
+	# je_te_map_room, Demographics: fertility, diverging at replacement (2.1 children): shrinking blue, cream at
+	# replacement, growing rust.
+	te_jmap_tfr_low = hsv360 { 212 62 62 }
+	te_jmap_tfr_mid = hsv360 { 45 12 93 }
+	te_jmap_tfr_high = hsv360 { 18 78 62 }
+
+	# je_te_map_room, Demographics: median age, 15 to 45 years (young straw, rose, old aubergine).
+	te_jmap_median_low = hsv360 { 52 55 92 }
+	te_jmap_median_mid = hsv360 { 335 42 72 }
+	te_jmap_median_high = hsv360 { 268 58 36 }
+
+	# je_te_map_room, Demographics: natural change, diverging at none: shrinking violet, cream at none, growing green.
+	te_jmap_natural_low = hsv360 { 268 48 58 }
+	te_jmap_natural_mid = hsv360 { 55 8 92 }
+	te_jmap_natural_high = hsv360 { 145 70 46 }
+
+	# je_te_map_room, Demographics: deaths per 1,000, 5 to 45 (pale to deep red).
+	te_jmap_cdr_low = hsv360 { 30 12 95 }
+	te_jmap_cdr_high = hsv360 { 352 85 42 }
+
+	# je_te_map_room, Demographics: births per 1,000, 8 to 50 (pale to deep blue).
+	te_jmap_cbr_low = hsv360 { 200 12 95 }
+	te_jmap_cbr_high = hsv360 { 215 82 48 }
+
+	# je_te_map_room, Demographics: infant mortality, 0 to 300 per 1,000 births (life expectancy's teal, amber and
+	# oxblood, the other way round).
+	te_jmap_imr_low = hsv360 { 172 62 55 }
+	te_jmap_imr_mid = hsv360 { 38 72 88 }
+	te_jmap_imr_high = hsv360 { 355 75 42 }
+
+	# je_te_map_room, Demographics: the leading cause of death, the Causes of Death pie's colors
+	# (scripts/image_pipeline/gen_ch_model_pie_textures.py), one per te_dg_dc_lead code.
+	te_jmap_cause_inf = hsv360 { 213 75 90 }
+	te_jmap_cause_chr = hsv360 { 17 82 85 }
+	te_jmap_cause_ext = hsv360 { 159 84 62 }
+	te_jmap_cause_work = hsv360 { 40 100 79 }
+	te_jmap_cause_mat = hsv360 { 338 62 84 }
+	te_jmap_cause_kill = hsv360 { 247 43 91 }
+	te_jmap_cause_war = hsv360 { 0 55 90 }
+	# Each cause's pale end, for a state where it leads with a small share (te_jmap_cause_factor, 30% to 90%): the same
+	# hue, a third of the saturation, near white.
+	te_jmap_cause_inf_pale = hsv360 { 213 25 95 }
+	te_jmap_cause_chr_pale = hsv360 { 17 27 95 }
+	te_jmap_cause_ext_pale = hsv360 { 159 28 92 }
+	te_jmap_cause_work_pale = hsv360 { 40 33 95 }
+	te_jmap_cause_mat_pale = hsv360 { 338 21 95 }
+	te_jmap_cause_kill_pale = hsv360 { 247 14 96 }
+	te_jmap_cause_war_pale = hsv360 { 0 18 96 }
+
+	# je_te_map_room, Demographics: sex balance, men per 100 women aged 20-59, diverging at 100: fewer men rose, even
+	# cream, more men blue.
+	te_jmap_sex_low = hsv360 { 335 55 72 }
+	te_jmap_sex_mid = hsv360 { 50 6 92 }
+	te_jmap_sex_high = hsv360 { 205 72 58 }
+
+	# je_te_map_room, Demographics: net migration per 1,000, diverging at none: leaving orange, cream, arriving blue.
+	te_jmap_mig_low = hsv360 { 28 78 72 }
+	te_jmap_mig_mid = hsv360 { 50 6 92 }
+	te_jmap_mig_high = hsv360 { 190 75 52 }
+
+	# je_te_map_room, Demographics: aged 65 and over, 2% to 30% (pale straw to plum).
+	te_jmap_old_low = hsv360 { 60 35 92 }
+	te_jmap_old_high = hsv360 { 280 55 38 }
+
+	# je_te_map_room: tourism's Base Appeal, 20% to 100% (dull sand to sea blue).
+	te_jmap_tourism_low = hsv360 { 42 20 74 }
+	te_jmap_tourism_high = hsv360 { 192 82 58 }
+
+	# je_te_map_room: Local Climate's comfort, both maps, diverging at none: a mild winter's draw green, cream at none,
+	# the cost red as the state panel's Comfort row draws it.
+	te_jmap_comfort_low = hsv360 { 135 58 52 }
+	te_jmap_comfort_mid = hsv360 { 50 6 92 }
+	te_jmap_comfort_high = hsv360 { 356 80 46 }
+
+	# je_te_map_room: GDP per capita, £0.25 to £256 a doubling at a time (pale straw to deep green).
+	te_jmap_gdppc_low = hsv360 { 52 22 94 }
+	te_jmap_gdppc_high = hsv360 { 155 85 34 }
+
+	# je_te_map_room: Migration Crowding's cut to migration attraction, none to 145% (cream to deep purple).
+	te_jmap_crowding_low = hsv360 { 45 8 92 }
+	te_jmap_crowding_high = hsv360 { 285 68 40 }
+	# je_te_map_room: City Rank. The world's 20 largest cities by tourism's Cities bonus, 20th amber to 1st crimson;
+	# 21st and below a doubling of the rank at a time, steel blue fading toward pale (_low is the larger city: the
+	# lerp's own order). A state the ranking doesn't reach is te_jmap_none.
+	te_jmap_city_top_low = hsv360 { 40 62 94 }
+	te_jmap_city_top_high = hsv360 { 350 88 60 }
+	te_jmap_city_rest_low = hsv360 { 212 62 62 }
+	te_jmap_city_rest_high = hsv360 { 205 14 88 }
+	# je_te_map_room: Armed Forces, Soldiers and Officers, a doubling at a time (pale khaki to deep olive); a state
+	# with none is te_jmap_none.
+	te_jmap_soldiers_low = hsv360 { 70 22 90 }
+	te_jmap_soldiers_high = hsv360 { 95 72 30 }
+	# je_te_map_room: Company Headquarters, their weekly profit a doubling at a time (ice to navy), and a loss; a state
+	# with no headquarters is te_jmap_no_data.
+	te_jmap_hq_low = hsv360 { 200 16 95 }
+	te_jmap_hq_high = hsv360 { 228 86 42 }
+	te_jmap_hq_loss = hsv360 { 4 72 74 }
+	# Company Headquarters' stripes: a foreign company's regional headquarters.
+	te_jmap_hq_regional = hsv360 { 45 90 96 }
+	# je_te_map_room: Ownership, the leading holder of a state's capital, each faded to a pale end of its own hue by its
+	# share (te_jmap_own_factor, 40% to 100%): private gold, their own workers green, the state red.
+	te_jmap_own_priv = hsv360 { 42 82 86 }
+	te_jmap_own_priv_pale = hsv360 { 42 24 96 }
+	te_jmap_own_self = hsv360 { 138 62 50 }
+	te_jmap_own_self_pale = hsv360 { 138 20 92 }
+	te_jmap_own_ctry = hsv360 { 355 72 66 }
+	te_jmap_own_ctry_pale = hsv360 { 355 18 95 }
+	# je_te_map_room: the classes (2026-11-11), each one's share of the people, few to many: Capitalists gold, Aristocrats
+	# violet, Clergymen slate blue, Academics teal.
+	te_jmap_capitalists_low = hsv360 { 48 12 94 }
+	te_jmap_capitalists_high = hsv360 { 38 92 62 }
+	te_jmap_aristocrats_low = hsv360 { 290 10 94 }
+	te_jmap_aristocrats_high = hsv360 { 278 72 46 }
+	te_jmap_clergy_low = hsv360 { 220 10 94 }
+	te_jmap_clergy_high = hsv360 { 226 64 40 }
+	te_jmap_academics_low = hsv360 { 172 12 94 }
+	te_jmap_academics_high = hsv360 { 182 82 42 }
+	# je_te_map_room: Trade Capacity, the state's own, a doubling at a time (pale sand to deep sea green); a state with
+	# none is te_jmap_none.
+	te_jmap_trade_low = hsv360 { 52 16 92 }
+	te_jmap_trade_high = hsv360 { 168 84 38 }
+	# je_te_map_room: Investment, what the state's owners pay into the Investment Pool a week, a doubling at a time
+	# (pale straw to deep bronze); a state that pays nothing is te_jmap_none.
+	te_jmap_invest_low = hsv360 { 48 20 95 }
+	te_jmap_invest_high = hsv360 { 24 88 46 }
+	# je_te_map_room: Population Density, people per km² of land, a doubling at a time (pale lemon to deep wine, the
+	# classic density ramp); a state with no people is te_jmap_none.
+	te_jmap_density_low = hsv360 { 56 22 96 }
+	te_jmap_density_high = hsv360 { 338 86 40 }
+	# je_te_map_room: Population Growth per 1,000, diverging at none: shrinking magenta, cream at none, growing teal.
+	te_jmap_growth_low = hsv360 { 305 45 52 }
+	te_jmap_growth_mid = hsv360 { 50 6 92 }
+	te_jmap_growth_high = hsv360 { 172 72 44 }
+	# je_te_map_room, Demographics: War Dead last year, a doubling at a time (pale rose to dried blood); a state with
+	# none is te_jmap_none.
+	te_jmap_war_dead_low = hsv360 { 8 28 94 }
+	te_jmap_war_dead_high = hsv360 { 352 90 34 }
+	# je_te_map_room, Demographics: Family Planning, the means to plan a family (pale sand to violet).
+	te_jmap_means_low = hsv360 { 32 16 94 }
+	te_jmap_means_high = hsv360 { 268 62 42 }
+	# je_te_map_room, Demographics: Health Care, the share medicine reaches (pale sand to deep green).
+	te_jmap_health_low = hsv360 { 36 20 92 }
+	te_jmap_health_high = hsv360 { 158 78 38 }
+	# je_te_map_room, Demographics: Fighting-Age Men, men aged 20 to 39 over the people (pale straw to slate blue).
+	te_jmap_fam_low = hsv360 { 58 20 93 }
+	te_jmap_fam_high = hsv360 { 218 62 44 }
+
+	# je_banking_cycle: the seven phases of the financial cycle, panic to frenzy, and the crash-risk stripes.
+	te_jmap_bank_panic = hsv360 { 355 80 52 }
+	te_jmap_bank_downturn = hsv360 { 14 72 78 }
+	te_jmap_bank_stagnation = hsv360 { 38 42 72 }
+	te_jmap_bank_stable = hsv360 { 205 14 78 }
+	te_jmap_bank_expansion = hsv360 { 128 38 72 }
+	te_jmap_bank_boom = hsv360 { 142 72 50 }
+	te_jmap_bank_frenzy = hsv360 { 292 62 68 }
+	te_jmap_bank_risk_stripe = hsv360 { 50 92 100 }
+
+	# Every system map: a state with nothing on the map (no network, no monument, not a member, no nuclear weapons).
+	te_jmap_none = hsv360 { 45 6 82 }
+
+	# Global Warming: the state's share of the world's emissions, none to a twentieth (pale to soot), and net removal.
+	te_jmap_gw_low = hsv360 { 50 10 90 }
+	te_jmap_gw_high = hsv360 { 15 85 32 }
+	te_jmap_gw_removal = hsv360 { 140 55 55 }
+
+	# Nuclear Weapons: the viewer, its hosts, its umbrella, the countries whose independence it guarantees, and the
+	# world's other nuclear powers.
+	te_jmap_nuke_you = hsv360 { 212 72 72 }
+	te_jmap_nuke_hosts = hsv360 { 275 52 68 }
+	te_jmap_nuke_umbrella = hsv360 { 190 58 82 }
+	te_jmap_nuke_guaranteed = hsv360 { 160 38 72 }
+	te_jmap_nuke_armed = hsv360 { 2 82 70 }
+
+	# Covert Warfare: the viewer, and its network's strength, faint to full (pale lilac to deep violet).
+	te_jmap_net_you = hsv360 { 212 72 72 }
+	te_jmap_net_low = hsv360 { 290 18 88 }
+	te_jmap_net_high = hsv360 { 275 82 38 }
+
+	# United Nations: members in the UN pie's blue (gen_ch_model_pie_textures.py), permanent members deeper, the
+	# headquarters gold, and each kind of mission its own color over all of them.
+	te_jmap_un_member = hsv360 { 216 60 90 }
+	te_jmap_un_permanent = hsv360 { 224 82 55 }
+	te_jmap_un_hq = hsv360 { 45 85 95 }
+	te_jmap_un_peacekeeping = hsv360 { 185 90 80 }
+	te_jmap_un_aid = hsv360 { 28 85 92 }
+	te_jmap_un_stabilization = hsv360 { 350 72 80 }
+	te_jmap_un_electoral = hsv360 { 115 60 68 }
+
+	# Cultural Hegemony: the political models, in the model pie's colors (gen_ch_model_pie_textures.py), one per
+	# ch_model_census code.
+	te_jmap_ch_communist = hsv360 { 3 71 77 }
+	te_jmap_ch_anarchist = hsv360 { 322 64 61 }
+	te_jmap_ch_fascist = hsv360 { 20 69 56 }
+	te_jmap_ch_corporatist = hsv360 { 27 83 77 }
+	te_jmap_ch_socialist = hsv360 { 349 48 83 }
+	te_jmap_ch_royalist_absolutist = hsv360 { 259 57 67 }
+	te_jmap_ch_royalist_constitutional = hsv360 { 256 40 80 }
+	te_jmap_ch_religious = hsv360 { 49 88 54 }
+	te_jmap_ch_reactionary = hsv360 { 213 79 66 }
+	te_jmap_ch_military_junta = hsv360 { 78 75 43 }
+	te_jmap_ch_liberal = hsv360 { 44 88 71 }
+	te_jmap_ch_other = hsv360 { 45 6 49 }
+	te_jmap_ch_technocratic = hsv360 { 178 100 61 }
+	te_jmap_ch_republican = hsv360 { 204 64 81 }
+	te_jmap_ch_developmentalist_junta = hsv360 { 124 52 64 }
+
+	# The Seabed: the five ocean basins.
+	te_jmap_seabed_pacific = hsv360 { 196 62 78 }
+	te_jmap_seabed_atlantic = hsv360 { 226 62 60 }
+	te_jmap_seabed_indian = hsv360 { 168 58 62 }
+	te_jmap_seabed_arctic = hsv360 { 195 14 96 }
+	te_jmap_seabed_southern = hsv360 { 252 36 76 }
+
+	# Grand Monuments: the state's grandeur, a first monument to the oldest wonders (cream to bronze).
+	te_jmap_gm_low = hsv360 { 48 28 92 }
+	te_jmap_gm_high = hsv360 { 32 92 58 }
+
+	# Colonial Empire: the colonies (and colonial subjects) by their empire's stability, the panel's five bands from
+	# collapsing to solidified, and the empires' home states.
+	te_jmap_ce_collapsing = hsv360 { 356 82 62 }
+	te_jmap_ce_crumbling = hsv360 { 18 82 80 }
+	te_jmap_ce_strained = hsv360 { 44 80 88 }
+	te_jmap_ce_stable = hsv360 { 95 50 66 }
+	te_jmap_ce_solidified = hsv360 { 135 62 48 }
+	te_jmap_ce_metropole = hsv360 { 30 22 66 }
+
+	# Power Grids: a grid's color (te_grid_map_color, 1-12, chosen so that bordering grids differ), a station off any
+	# grid grey, and the hub's stripes.
+	te_jmap_grid_1 = hsv360 { 4 70 82 }
+	te_jmap_grid_2 = hsv360 { 212 70 80 }
+	te_jmap_grid_3 = hsv360 { 122 55 60 }
+	te_jmap_grid_4 = hsv360 { 44 85 92 }
+	te_jmap_grid_5 = hsv360 { 282 48 72 }
+	te_jmap_grid_6 = hsv360 { 182 70 68 }
+	te_jmap_grid_7 = hsv360 { 24 78 66 }
+	te_jmap_grid_8 = hsv360 { 330 52 86 }
+	te_jmap_grid_9 = hsv360 { 78 62 68 }
+	te_jmap_grid_10 = hsv360 { 238 38 58 }
+	te_jmap_grid_11 = hsv360 { 158 42 86 }
+	te_jmap_grid_12 = hsv360 { 56 42 98 }
+	te_jmap_grid_offline = hsv360 { 0 0 52 }
+	te_jmap_grid_hub = hsv360 { 0 0 98 }
+}

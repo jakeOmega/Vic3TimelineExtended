@@ -156,18 +156,21 @@ class NuclearSabotageTests(unittest.TestCase):
     def test_severe_gate_is_launch_only(self):
         reqs = _requirements(self.block)
         self.assertNotIn("covert_tradecraft", reqs)
-        self.assertIn("nuclear_program_is_standing = yes", reqs)
+        self.assertIn("nuclear_program_has_stopped = no", reqs)
 
     def test_pausing_funding_does_not_end_the_operation(self):
-        # Funding 0 for one tick costs the target nothing; a maintain condition
-        # that read funding would let it end a year-old operation for free.
+        # Funding 0 for one tick costs the target nothing, and so does an
+        # arsenal ceiling it sets itself and lifts with a click (#758): a
+        # maintain condition that read either would let it end a year-old
+        # operation for free.
         reqs = _requirements(self.block)
-        self.assertIn("scope:target_country = { nuclear_program_is_standing = yes }", reqs)
+        self.assertIn("scope:target_country = { nuclear_program_has_stopped = no }", reqs)
         self.assertNotIn("nuclear_program_is_proliferating", reqs)
-        standing = _top_level_block(_text(NUKE_TRIGGERS), "nuclear_program_is_standing = {")
-        self.assertIn("has_variable = nuclear_weapon_program_progress", standing)
-        self.assertIn("modifier:country_nuclear_disarmament_bool = yes", standing)
-        self.assertNotIn("funding", standing)
+        stopped = _top_level_block(_text(NUKE_TRIGGERS), "nuclear_program_has_stopped = {")
+        self.assertIn("has_variable = nuclear_weapon_program_progress", stopped)
+        self.assertIn("modifier:country_nuclear_disarmament_bool = yes", stopped)
+        self.assertIn("nd_taboo_held_by_own_ceiling_only = no", stopped)
+        self.assertNotIn("funding", stopped)
 
     def test_monthly_progress_comment_names_both_sources(self):
         body = _text(ROOT / "common/script_values/extra_script_values.txt")

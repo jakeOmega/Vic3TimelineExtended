@@ -186,7 +186,7 @@ class DeferralTests(unittest.TestCase):
         self.assertIn("decol_path_contagion = yes", path)
         # .15 only for a country that is not fighting us.
         self.assertRegex(path, r"NOT = \{ scope:decolonizing_parent \?= \{ has_variable = decol_iw_forming \} \}\s*\}"
-                               r"\s*trigger_event = \{ id = decolonization_events\.15 days = 7 \}")
+                               r"\s*trigger_event = \{ id = decolonization_events\.81 days = 7 \}")
         self.assertIn("decol_mark_former_colony", _def(DECOL, "decol_path_legacy"))
 
     def test_the_fight_sets_and_clears_the_flag_around_the_release(self):
@@ -205,7 +205,7 @@ class DeferralTests(unittest.TestCase):
                 self.assertIn(line, bloody)
         lost = _def(EVENTS, "decolonization_events.73")
         self.assertIn("decol_iw_aftermath_bloody = yes", lost)
-        self.assertIn("trigger_event = { id = decolonization_events.15 days = 7 }", lost)
+        self.assertIn("trigger_event = { id = decolonization_events.81 days = 7 }", lost)  # opens .15 (#1596)
 
 
 class RecordTests(unittest.TestCase):
@@ -408,6 +408,66 @@ class EventTests(unittest.TestCase):
         step = _def(EFFECTS, "decol_wave_step")
         self.assertIn("trigger_event = { id = decolonization_events.77 days = 60 }", step)
         self.assertIn("order_by = decol_iw_rise_order", step)
+
+    def test_a_reconquered_territory_waits_ten_years_in_the_wave_too(self):
+        """Order Restored (.72) promises no declaration from the territory for ten years (decol_declared).
+        The wave's step read only is_decolonization_eligible_state, so a territory won back during a
+        collapse declared again at the next step: .72's large radicals made it the likeliest to rise
+        (a 1932 Singapore game, 2026-11-12: Suzhou won back on May 18, declared again in June)."""
+        cooldown = "NOT = { has_variable = decol_declared }"
+        for trigger in ("decol_iw_can_declare", "decol_wave_candidate"):
+            with self.subTest(trigger=trigger):
+                self.assertIn(cooldown, _def(TRIGGERS, trigger))
+        step = _def(EFFECTS, "decol_wave_step")
+        self.assertEqual(step.count("decol_wave_candidate = yes"), 2)
+        self.assertNotIn("is_decolonization_eligible_state", step)
+        won = _def(EVENTS, "decolonization_events.72")
+        self.assertIn("set_variable = { name = decol_declared days = 3650 }", won)
+
+    def test_the_lands_that_rose_with_a_reconquered_territory_wait_ten_years_too(self):
+        """A Fight's rebels form with the territory and the neighboring states where their people are at
+        home, and .72 marked only the capital (owner, 2026-11-13: every state that comes back gets the ten
+        years). The other states are marked at the Fight with the record's capital, and .72 quiets the ones
+        that are ours again."""
+        fight = _def(EFFECTS, "decol_iw_fight")
+        self.assertLess(fight.index("decol_iw_open_record = { KIND = 1 }"),
+                        fight.index("decol_iw_mark_rose_with = yes"))
+        mark = _def(EFFECTS, "decol_iw_mark_rose_with")
+        self.assertIn("scope:decol_iw_slot_rebels = {", mark)
+        self.assertIn("NOT = { this = scope:decol_iw_slot_capital }", _block(mark, "every_scope_state"))
+        self.assertIn("set_variable = { name = decol_iw_rose_with value = scope:decol_iw_slot_capital }", mark)
+        # The capital is what the record stores and .72 reads back as scope:decol_iw_end_state.
+        self.assertIn("set_variable = { name = decol_iw_state_$N$ value = scope:decol_iw_slot_capital }",
+                      _def(EFFECTS, "decol_iw_open_slot"))
+        # Fights only: a secession's or a colonial subject's record sets no mark.
+        for effect in ("decol_iw_open_record", "decol_iw_open_slot", "decol_iw_on_secession_start",
+                       "decol_iw_track_subject_wars"):
+            with self.subTest(effect=effect):
+                self.assertNotIn("decol_iw_rose_with", _def(EFFECTS, effect))
+                self.assertNotIn("decol_iw_mark_rose_with", _def(EFFECTS, effect))
+
+        won = _def(EVENTS, "decolonization_events.72")
+        quiet = _block(won, "custom_tooltip", won.index("text = decolonization_events.72.declared_neighbors_tt") - 40)
+        self.assertIn("limit = { var:decol_iw_rose_with ?= scope:decol_iw_end_state }", quiet)
+        self.assertIn("set_variable = { name = decol_declared days = 3650 }", quiet)
+        self.assertIn("remove_variable = decol_iw_rose_with", quiet)
+        self.assertIn("decolonization_events.72.declared_neighbors_tt", _loc_keys())
+        # The self-check counts the marks before the tooltip's block removes them.
+        self.assertLess(won.index("decol_iw_check_rose_with = yes"),
+                        won.index("text = decolonization_events.72.declared_neighbors_tt"))
+
+        # The record's end sweeps only the rebels' own states. Its capital block runs before .72's option,
+        # while the capital is ours again, so it must leave the capital's count for .72's self-check.
+        clear = _def(EFFECTS, "decol_iw_clear_slot")
+        rebels = _block(clear, "var:decol_iw_rebels_$N$ ?")
+        self.assertIn("remove_variable = decol_iw_rose_with", rebels)
+        self.assertNotIn("decol_iw_rose_count", _block(clear, "var:decol_iw_state_$N$ ?"))
+
+        check = _def(EFFECTS, "decol_iw_check_rose_with")
+        self.assertIn("NOT = { has_global_variable = te_selfcheck_decol_iw_rose_with }", check)
+        self.assertIn("var:decol_iw_rose_count > 0", check)
+        self.assertIn("TE_SELF_CHECK OK decol_iw_rose_with_kept", check)
+        self.assertIn("TE_SELF_CHECK BROKEN decol_iw_rose_with_kept", check)
 
 
 if __name__ == "__main__":

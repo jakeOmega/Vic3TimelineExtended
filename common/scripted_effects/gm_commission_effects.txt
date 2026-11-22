@@ -35,8 +35,7 @@
 # asking IG's ledger rises (gm_ig_ledger_<ig>) and a boon runs for ten years.
 
 # ---- The record ------------------------------------------------------------------
-# Country scope. Forget the opportunity (offered or open). gm_com_extended and
-# gm_com_gap_half are v2's, cleared for a save that still carries them.
+# Country scope. Forget the opportunity (offered or open).
 gm_com_clear = {
 	gm_remove_state_var = { VAR = gm_com_offered }
 	gm_remove_state_var = { VAR = gm_com_open }
@@ -47,14 +46,12 @@ gm_com_clear = {
 	gm_remove_state_var = { VAR = gm_com_target }
 	gm_remove_state_var = { VAR = gm_com_baseline }
 	gm_remove_state_var = { VAR = gm_com_months_left }
-	gm_remove_state_var = { VAR = gm_com_extended }
 	gm_remove_state_var = { VAR = gm_com_namesake }
 	gm_remove_state_var = { VAR = gm_com_form }
 	gm_remove_state_var = { VAR = gm_com_occasion }
 	gm_remove_state_var = { VAR = gm_com_name_year }
 	gm_remove_state_var = { VAR = gm_com_name_char }
 	gm_remove_state_var = { VAR = gm_com_name_enemy_cap }
-	gm_remove_state_var = { VAR = gm_com_gap_half }
 	gm_remove_state_var = { VAR = gm_com_offer_watch }
 	gm_remove_state_var = { VAR = gm_com_build_where }
 	gm_remove_state_var = { VAR = gm_com_raise_pending }
@@ -64,6 +61,21 @@ gm_com_clear = {
 	every_scope_state = {
 		limit = { has_variable = gm_unveiled_for_com }
 		remove_variable = gm_unveiled_for_com
+	}
+	# A find dug up while this one was offered or open (gm_arch_place) is
+	# marked for this one only: the next counts it in its baseline, so it adds
+	# nothing there either.
+	every_scope_state = {
+		limit = { has_variable = gm_unearthed_for_com }
+		remove_variable = gm_unearthed_for_com
+	}
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		every_in_list = {
+			variable = gm_monuments_held
+			limit = { has_variable = gm_tr_unearthed_for_com }
+			remove_variable = gm_tr_unearthed_for_com
+		}
 	}
 }
 
@@ -166,9 +178,15 @@ gm_com_send_offer = {
 		# never fired, or never closed) is forgotten by the world pass, so it
 		# cannot block every later opportunity.
 		set_variable = { name = gm_com_offer_watch value = yes months = 6 }
+		# Not over an inactive copy (gm_country_refresh says why): the add is for
+		# a country with no record, an old save's or one whose entry concluded.
+		# The rule too: with it off the entry's inactive record is pruned
+		# (disable_evaluation), so nothing would refuse the add.
 		if = {
 			limit = {
+				gm_system_enabled = yes
 				NOT = { has_journal_entry = je_grand_monuments }
+				NOT = { has_inactive_journal_entry = je_grand_monuments }
 			}
 			add_journal_entry = { type = je_grand_monuments }
 		}
@@ -702,7 +720,7 @@ gm_com_fulfil = {
 		trigger_event = { id = monument_events.28 popup = yes }
 	}
 	gm_com_close = yes
-	scope:gm_com_named_state ?= { trigger_event = { id = monument_events.26 } }
+	scope:gm_com_named_state ?= { trigger_event = { id = monument_events.26 } } # REVIEWED 2026-11-12 (trigger_event_cycle): gm_com_close on the line above removes gm_com_open (gm_com_clear), which gm_com_check_progress reads, so the gift's refresh finds no opportunity to fulfil again
 }
 
 # Country scope. Time ran out: the moment passes, at no cost.
@@ -726,8 +744,8 @@ gm_com_lapse = {
 
 # ---- The boons (spec §3.2) ----------------------------------------------------------
 # Country scope. The open opportunity's boon: gm_boon_<source> counts its months
-# down (gm_tick_boons); gm_apply_national_modifiers puts the modifier of the
-# same name on the journal entry while it runs. A second of the same kind
+# down (gm_tick_boons); the journal entry declares the modifier of the same
+# name while it runs (je_grand_monuments.txt). A second of the same kind
 # restarts the clock. A save's petition, from before the rework, has none.
 # test_grand_monument_registry.py pins the list to COMMISSION_SOURCES.
 gm_com_grant_boon = {
@@ -786,51 +804,6 @@ gm_tick_boon = {
 	}
 }
 
-# Journal-entry scope, from gm_apply_national_modifiers (ROOT = the country).
-gm_add_boons = {
-	gm_add_boon = { SRC = reign }
-	gm_add_boon = { SRC = regime }
-	gm_add_boon = { SRC = great_power }
-	gm_add_boon = { SRC = victory }
-	gm_add_boon = { SRC = defeat }
-	gm_add_boon = { SRC = centenary }
-	gm_add_boon = { SRC = ruler_death }
-	gm_add_boon = { SRC = space }
-	gm_add_boon = { SRC = faith }
-	gm_add_boon = { SRC = tech_artistic }
-	gm_add_boon = { SRC = tech_scientific }
-	gm_add_boon = { SRC = tech_industrial }
-	gm_add_boon = { SRC = tech_athletic }
-	gm_add_boon = { SRC = tech_naturalist }
-}
-
-gm_add_boon = {
-	if = {
-		limit = {
-			root = { has_variable = gm_boon_$SRC$ }
-		}
-		add_modifier = { name = gm_boon_$SRC$ }
-	}
-}
-
-# Journal-entry scope, from gm_remove_national_modifiers.
-gm_remove_boons = {
-	remove_modifier = gm_boon_reign
-	remove_modifier = gm_boon_regime
-	remove_modifier = gm_boon_great_power
-	remove_modifier = gm_boon_victory
-	remove_modifier = gm_boon_defeat
-	remove_modifier = gm_boon_centenary
-	remove_modifier = gm_boon_ruler_death
-	remove_modifier = gm_boon_space
-	remove_modifier = gm_boon_faith
-	remove_modifier = gm_boon_tech_artistic
-	remove_modifier = gm_boon_tech_scientific
-	remove_modifier = gm_boon_tech_industrial
-	remove_modifier = gm_boon_tech_athletic
-	remove_modifier = gm_boon_tech_naturalist
-}
-
 # ---- The monument's gift (spec §3.1; ageing spec 2026-10-16 §5) ----------------------
 # State scope, from monument_events.26 (the monument gm_com_fulfil marked with
 # gm_gift). gm_com_gift grandeur added to its age: no rebuild, no cap (owner,
@@ -844,7 +817,7 @@ gm_state_gift_grandeur = {
 			gm_state_is_dedicated = yes
 		}
 		gm_state_add_age = { AGE = gm_com_gift }
-		owner = { trigger_event = { id = monument_events.20 } }
+		owner = { trigger_event = { id = monument_events.20 } } # REVIEWED 2026-11-12 (trigger_event_cycle): the way back is the refresh's gm_com_check_progress -> gm_com_fulfil -> monument_events.26, and gm_com_fulfil closed the opportunity (gm_com_close removes gm_com_open) before it fired .26; gm_gift, .26's trigger, is removed at the top of this effect
 	}
 }
 
@@ -937,7 +910,7 @@ gm_state_restore_dedication_one = {
 				if = {
 					limit = { NOT = { has_global_variable = gm_created_self_checked } }
 					set_global_variable = gm_created_self_checked
-					debug_log = "TE_SELF_CHECK OK monument_created_on_dedication (create_building put a site's dedication, pm_monument_$KEY$, on the finished Grand Monument it made)"
+					debug_log = "TE_SELF_CHECK OK monument_created_on_dedication (create_building put a site's dedication, pm_monument_[THIS.Var('gm_restore_pm').GetFlagName], on the finished Grand Monument it made)"
 				}
 				remove_variable = gm_created_check
 			}
@@ -952,7 +925,7 @@ gm_state_restore_dedication_one = {
 				if = {
 					limit = { NOT = { has_global_variable = gm_created_self_checked } }
 					set_global_variable = gm_created_self_checked
-					debug_log = "TE_SELF_CHECK BROKEN monument_created_on_dedication (the finished Grand Monument a site's dedication made stood on another method; gm_restore_pm switches it to pm_monument_$KEY$; see docs/testing/grand-monuments-ageing-playtest.md)"
+					debug_log = "TE_SELF_CHECK BROKEN monument_created_on_dedication (the finished Grand Monument a site's dedication made stood on another method; gm_restore_pm switches it to pm_monument_[THIS.Var('gm_restore_pm').GetFlagName]; see docs/testing/grand-monuments-ageing-playtest.md)"
 				}
 				remove_variable = gm_created_check
 			}
@@ -1002,11 +975,9 @@ gm_com_world_monthly = {
 	gm_com_track_historical = yes
 }
 
-# Country scope. The first time the world pass sees a country (a new game, a
-# save from before opportunities, a released country): what it already has is
-# seen (great power status, the technologies, the space firsts won), so it
-# brings no opportunity. A save's v2 promise ledger and petition
-# cooldown go.
+# Country scope. The first time the world pass sees a country (a new game or a
+# released country): what it already has is seen (great power status, the
+# technologies, the space firsts won), so it brings no opportunity.
 gm_com_first_sight = {
 	set_variable = gm_com_opp_tracked
 	if = {
@@ -1023,8 +994,6 @@ gm_com_first_sight = {
 	gm_com_see_space_if_won = { M = moon_base }
 	gm_com_see_space_if_won = { M = mars_landing }
 	gm_com_see_space_if_won = { M = interstellar_probe }
-	gm_remove_state_var = { VAR = gm_promise_ledger }
-	gm_remove_state_var = { VAR = gm_com_cooldown }
 }
 
 gm_com_see_tech_if_known = {
@@ -1566,7 +1535,7 @@ gm_state_become_landmark = {
 		limit = { NOT = { has_variable = gm_restore_pm } }
 		gm_state_update_picture = yes
 	}
-	debug_log = "TE_MONUMENTS: a historical opportunity completed: the monument is now the landmark $KEY$"
+	debug_log = "TE_MONUMENTS: a historical opportunity completed: the monument is now the landmark [THIS.Var('gm_landmark').GetFlagName]"
 }
 
 # Container scope, a monument beside another that completed a historical
@@ -1611,5 +1580,5 @@ gm_mon_become_landmark = {
 	gm_remove_state_var = { VAR = gm_tr_name_enemy_cap }
 	gm_tr_sig_backfill = yes
 	gm_tr_update_picture = yes
-	debug_log = "TE_MONUMENTS: a historical opportunity completed beside another monument: it is now the landmark $KEY$"
+	debug_log = "TE_MONUMENTS: a historical opportunity completed beside another monument: it is now the landmark [THIS.Var('gm_tr_landmark').GetFlagName]"
 }

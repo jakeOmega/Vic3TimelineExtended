@@ -15,7 +15,7 @@ disband_company = {  # REVIEWED 2026-11-03 (involvement): a one-off concession, 
 
 	flags = {
 		can_be_enforced
-		can_be_renegotiated
+		is_one_time
 	}
 
 	usage_limit = once_per_side_with_same_inputs
@@ -56,9 +56,16 @@ disband_company = {  # REVIEWED 2026-11-03 (involvement): a one-off concession, 
 
 	# The source country's company is disbanded.
 	on_entry_into_force = {
+		# A one-off (is_one_time), so not renegotiable: a renegotiated treaty keeps
+		# the article locked and skips this hook for the carried-over copy (vanilla
+		# 1.15, treaty_articles.md). One a renegotiation adds still runs it, with
+		# scope:is_renegotiation set, and must. The guard skips a company already
+		# gone, so nothing runs on a stale input.
 		scope:article_options = {
 			if = {
-				limit = { exists = input_company }
+				limit = {
+					exists = input_company
+				}
 				input_company = {
 					save_scope_as = target_company
 				}
@@ -97,6 +104,12 @@ disband_company = {  # REVIEWED 2026-11-03 (involvement): a one-off concession, 
 				add = 0.09
 			}
 		}
+
+		# Per-partner gate (evaluation_chance has root only): the AI asks for
+		# the disbandment in a treaty, or presses it as a war goal, only of a
+		# company that owns enough to matter.
+		proposal_weight = { value = disband_company_ai_demand_weight }
+		wargoal_score_multiplier = { value = disband_company_ai_demand_weight }
 
 		# AI decision-making on whether to ACCEPT the article.
 		# When evaluated, "this" is the country deciding. The article forces

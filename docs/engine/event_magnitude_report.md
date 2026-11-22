@@ -12,12 +12,13 @@ _None._
 
 ## Reviewed Exemptions
 
+- `events/te_debug_tax_events.txt` — `te_debug_tax.34` — `country_bureaucracy_add = country_bureaucracy_add=-10000 (in te_tp_bureaucracy)` — 2026-11-05: tax-code probe (console only); the -10000 bureaucracy is the deficit it tests
 - `events/te_formable_formation_events.txt` — `formation_te.1` — `country_prestige_add = country_prestige_add=25 (in unification_prestige)` — 2026-05-22: vanilla static modifier, reused exactly as vanilla formation.17 — one-shot formation prestige, vanilla's own fast-scaling design
 - `events/te_formable_formation_events.txt` — `formation_te.2` — `country_prestige_add = country_prestige_add=25 (in unification_prestige)` — 2026-05-22: vanilla static modifier, reused exactly as vanilla formation.17 — one-shot formation prestige, vanilla's own fast-scaling design
 - `events/te_formation_overrides.txt` — `formation.17` — `country_prestige_add = country_prestige_add=25 (in unification_prestige)` — 2026-05-22: verbatim vanilla formation.17 body — unchanged from vanilla's own usage
 
 ## Coverage
 
-- total flags: 3
+- total flags: 4
 - unreviewed: 0
-- exempted: 3
+- exempted: 4

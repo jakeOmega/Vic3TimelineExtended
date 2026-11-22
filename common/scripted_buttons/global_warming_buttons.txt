@@ -29,6 +29,13 @@
 # below it. Keep adopt and repeal on the same policy's margins
 # (test_gw_ai_policy_table.py), and never give an adopt button a weight with no
 # repeal counterweight -- that is what made every AI hold every policy.
+#
+# The seven adopt buttons of the policies the Environmental Movement asks for
+# set gw_ai_movement_answered for a year: the movement's pressure carries at
+# most one of them a year. Their seven repeal buttons set gw_ai_movement_lapsed
+# for a year: while a movement exists at most one of them lapses a year
+# (global_warming_ai_values.txt). Keep that bookkeeping here, not in the
+# gw_effect_* helpers the player's widget shares.
 # ----------------------------------------------------------------------------
 gw_carbon_tax_button = {
 	name = "GW_CARBON_TAX"
@@ -36,7 +43,7 @@ gw_carbon_tax_button = {
 
 	visible = {
 		is_ai = yes
-		NOT = { je:je_global_warming = { has_modifier = carbon_tax_modifier } }
+		NOT = { gw_policy_carbon_tax_active = yes }
 	}
 
 	# Adopt only at or above this policy's threshold on the country's climate
@@ -55,7 +62,11 @@ gw_carbon_tax_button = {
 
 	possible = { gw_possible_carbon_tax = yes }
 
-	effect = { gw_effect_carbon_tax = yes }
+	effect = {
+		gw_effect_carbon_tax = yes
+		# One answer to the Environmental Movement a year (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_answered value = yes days = 365 }
+	}
 }
 
 gw_remove_carbon_tax_button = {
@@ -64,7 +75,7 @@ gw_remove_carbon_tax_button = {
 
 	visible = {
 		is_ai = yes
-		je:je_global_warming = { has_modifier = carbon_tax_modifier }
+		gw_policy_carbon_tax_active = yes
 		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 
@@ -82,7 +93,11 @@ gw_remove_carbon_tax_button = {
 
 	possible = { gw_possible_remove_carbon_tax = yes }
 
-	effect = { gw_effect_remove_carbon_tax = yes }
+	effect = {
+		gw_effect_remove_carbon_tax = yes
+		# One lapse of the seven a year while the movement exists (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_lapsed value = yes days = 365 }
+	}
 }
 
 gw_renewable_investment_button = {
@@ -91,7 +106,7 @@ gw_renewable_investment_button = {
 
 	visible = {
 		is_ai = yes
-		NOT = { je:je_global_warming = { has_modifier = renewable_investment_modifier } }
+		NOT = { gw_policy_renewable_investment_active = yes }
 	}
 
 	# Adopt only at or above this policy's threshold on the country's climate
@@ -110,7 +125,11 @@ gw_renewable_investment_button = {
 
 	possible = { gw_possible_renewable_investment = yes }
 
-	effect = { gw_effect_renewable_investment = yes }
+	effect = {
+		gw_effect_renewable_investment = yes
+		# One answer to the Environmental Movement a year (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_answered value = yes days = 365 }
+	}
 }
 
 gw_remove_renewable_investment_button = {
@@ -119,7 +138,7 @@ gw_remove_renewable_investment_button = {
 
 	visible = {
 		is_ai = yes
-		je:je_global_warming = { has_modifier = renewable_investment_modifier }
+		gw_policy_renewable_investment_active = yes
 		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 
@@ -137,7 +156,11 @@ gw_remove_renewable_investment_button = {
 
 	possible = { gw_possible_remove_renewable_investment = yes }
 
-	effect = { gw_effect_remove_renewable_investment = yes }
+	effect = {
+		gw_effect_remove_renewable_investment = yes
+		# One lapse of the seven a year while the movement exists (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_lapsed value = yes days = 365 }
+	}
 }
 
 gw_climate_adaptation_button = {
@@ -146,7 +169,7 @@ gw_climate_adaptation_button = {
 
 	visible = {
 		is_ai = yes
-		NOT = { je:je_global_warming = { has_modifier = climate_adaptation_modifier } }
+		NOT = { gw_policy_climate_adaptation_active = yes }
 	}
 
 	# Adopt only at or above this policy's threshold on the country's climate
@@ -167,7 +190,11 @@ gw_climate_adaptation_button = {
 
 	possible = { gw_possible_climate_adaptation = yes }
 
-	effect = { gw_effect_climate_adaptation = yes }
+	effect = {
+		gw_effect_climate_adaptation = yes
+		# One answer to the Environmental Movement a year (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_answered value = yes days = 365 }
+	}
 }
 
 gw_remove_climate_adaptation_button = {
@@ -176,7 +203,7 @@ gw_remove_climate_adaptation_button = {
 
 	visible = {
 		is_ai = yes
-		je:je_global_warming = { has_modifier = climate_adaptation_modifier }
+		gw_policy_climate_adaptation_active = yes
 	}
 
 	# Repeal only once the climate will has fallen gw_ai_repeal_band below the
@@ -197,7 +224,11 @@ gw_remove_climate_adaptation_button = {
 
 	possible = { gw_possible_remove_climate_adaptation = yes }
 
-	effect = { gw_effect_remove_climate_adaptation = yes }
+	effect = {
+		gw_effect_remove_climate_adaptation = yes
+		# One lapse of the seven a year while the movement exists (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_lapsed value = yes days = 365 }
+	}
 }
 
 gw_emission_standards_button = {
@@ -206,7 +237,7 @@ gw_emission_standards_button = {
 
 	visible = {
 		is_ai = yes
-		NOT = { je:je_global_warming = { has_modifier = emission_standards_modifier } }
+		NOT = { gw_policy_emission_standards_active = yes }
 		temperature_anomaly_display >= 0.5
 	}
 
@@ -228,7 +259,11 @@ gw_emission_standards_button = {
 
 	possible = { gw_possible_emission_standards = yes }
 
-	effect = { gw_effect_emission_standards = yes }
+	effect = {
+		gw_effect_emission_standards = yes
+		# One answer to the Environmental Movement a year (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_answered value = yes days = 365 }
+	}
 }
 
 gw_remove_emission_standards_button = {
@@ -237,7 +272,7 @@ gw_remove_emission_standards_button = {
 
 	visible = {
 		is_ai = yes
-		je:je_global_warming = { has_modifier = emission_standards_modifier }
+		gw_policy_emission_standards_active = yes
 		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 
@@ -259,7 +294,11 @@ gw_remove_emission_standards_button = {
 
 	possible = { gw_possible_remove_emission_standards = yes }
 
-	effect = { gw_effect_remove_emission_standards = yes }
+	effect = {
+		gw_effect_remove_emission_standards = yes
+		# One lapse of the seven a year while the movement exists (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_lapsed value = yes days = 365 }
+	}
 }
 
 gw_reforestation_button = {
@@ -268,7 +307,7 @@ gw_reforestation_button = {
 
 	visible = {
 		is_ai = yes
-		NOT = { je:je_global_warming = { has_modifier = reforestation_subsidies_modifier } }
+		NOT = { gw_policy_reforestation_active = yes }
 		temperature_anomaly_display >= 0.5
 	}
 
@@ -290,7 +329,11 @@ gw_reforestation_button = {
 
 	possible = { gw_possible_reforestation = yes }
 
-	effect = { gw_effect_reforestation = yes }
+	effect = {
+		gw_effect_reforestation = yes
+		# One answer to the Environmental Movement a year (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_answered value = yes days = 365 }
+	}
 }
 
 gw_remove_reforestation_button = {
@@ -299,7 +342,7 @@ gw_remove_reforestation_button = {
 
 	visible = {
 		is_ai = yes
-		je:je_global_warming = { has_modifier = reforestation_subsidies_modifier }
+		gw_policy_reforestation_active = yes
 		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 
@@ -321,7 +364,11 @@ gw_remove_reforestation_button = {
 
 	possible = { gw_possible_remove_reforestation = yes }
 
-	effect = { gw_effect_remove_reforestation = yes }
+	effect = {
+		gw_effect_remove_reforestation = yes
+		# One lapse of the seven a year while the movement exists (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_lapsed value = yes days = 365 }
+	}
 }
 
 gw_public_transit_button = {
@@ -330,7 +377,7 @@ gw_public_transit_button = {
 
 	visible = {
 		is_ai = yes
-		NOT = { je:je_global_warming = { has_modifier = public_transit_modifier } }
+		NOT = { gw_policy_public_transit_active = yes }
 	}
 
 	# Adopt only at or above this policy's threshold on the country's climate
@@ -351,7 +398,11 @@ gw_public_transit_button = {
 
 	possible = { gw_possible_public_transit = yes }
 
-	effect = { gw_effect_public_transit = yes }
+	effect = {
+		gw_effect_public_transit = yes
+		# One answer to the Environmental Movement a year (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_answered value = yes days = 365 }
+	}
 }
 
 gw_remove_public_transit_button = {
@@ -360,7 +411,7 @@ gw_remove_public_transit_button = {
 
 	visible = {
 		is_ai = yes
-		je:je_global_warming = { has_modifier = public_transit_modifier }
+		gw_policy_public_transit_active = yes
 		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 
@@ -382,7 +433,11 @@ gw_remove_public_transit_button = {
 
 	possible = { gw_possible_remove_public_transit = yes }
 
-	effect = { gw_effect_remove_public_transit = yes }
+	effect = {
+		gw_effect_remove_public_transit = yes
+		# One lapse of the seven a year while the movement exists (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_lapsed value = yes days = 365 }
+	}
 }
 
 gw_fossil_fuel_divestment_button = {
@@ -391,7 +446,7 @@ gw_fossil_fuel_divestment_button = {
 
 	visible = {
 		is_ai = yes
-		NOT = { je:je_global_warming = { has_modifier = fossil_fuel_divestment_modifier } }
+		NOT = { gw_policy_fossil_fuel_divestment_active = yes }
 	}
 
 	# Adopt only at or above this policy's threshold on the country's climate
@@ -412,7 +467,11 @@ gw_fossil_fuel_divestment_button = {
 
 	possible = { gw_possible_fossil_fuel_divestment = yes }
 
-	effect = { gw_effect_fossil_fuel_divestment = yes }
+	effect = {
+		gw_effect_fossil_fuel_divestment = yes
+		# One answer to the Environmental Movement a year (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_answered value = yes days = 365 }
+	}
 }
 
 gw_remove_fossil_fuel_divestment_button = {
@@ -421,7 +480,7 @@ gw_remove_fossil_fuel_divestment_button = {
 
 	visible = {
 		is_ai = yes
-		je:je_global_warming = { has_modifier = fossil_fuel_divestment_modifier }
+		gw_policy_fossil_fuel_divestment_active = yes
 		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 
@@ -443,7 +502,11 @@ gw_remove_fossil_fuel_divestment_button = {
 
 	possible = { gw_possible_remove_fossil_fuel_divestment = yes }
 
-	effect = { gw_effect_remove_fossil_fuel_divestment = yes }
+	effect = {
+		gw_effect_remove_fossil_fuel_divestment = yes
+		# One lapse of the seven a year while the movement exists (global_warming_ai_values.txt).
+		set_variable = { name = gw_ai_movement_lapsed value = yes days = 365 }
+	}
 }
 
 gw_green_building_codes_button = {
@@ -452,7 +515,7 @@ gw_green_building_codes_button = {
 
 	visible = {
 		is_ai = yes
-		NOT = { je:je_global_warming = { has_modifier = green_building_codes_modifier } }
+		NOT = { gw_policy_green_building_codes_active = yes }
 	}
 
 	# Adopt only at or above this policy's threshold on the country's climate
@@ -482,7 +545,7 @@ gw_remove_green_building_codes_button = {
 
 	visible = {
 		is_ai = yes
-		je:je_global_warming = { has_modifier = green_building_codes_modifier }
+		gw_policy_green_building_codes_active = yes
 		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 
@@ -514,7 +577,7 @@ gw_carbon_removal_button = {
 
 	visible = {
 		is_ai = yes
-		NOT = { je:je_global_warming = { has_modifier = carbon_removal_modifier } }
+		NOT = { gw_policy_carbon_removal_active = yes }
 		temperature_anomaly_display >= 0.5
 	}
 
@@ -546,7 +609,7 @@ gw_remove_carbon_removal_button = {
 
 	visible = {
 		is_ai = yes
-		je:je_global_warming = { has_modifier = carbon_removal_modifier }
+		gw_policy_carbon_removal_active = yes
 		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 
@@ -582,7 +645,7 @@ gw_fossil_fuel_tariffs_button = {
 	visible = {
 		is_ai = yes
 		te_tax_owns_market = yes
-		NOT = { je:je_global_warming = { has_modifier = fossil_fuel_tariffs_modifier } }
+		NOT = { gw_runs_fossil_fuel_tariffs = yes }
 	}
 
 	# Adopt only at or above this policy's threshold on the country's climate
@@ -613,7 +676,7 @@ gw_remove_fossil_fuel_tariffs_button = {
 	visible = {
 		is_ai = yes
 		te_tax_owns_market = yes
-		je:je_global_warming = { has_modifier = fossil_fuel_tariffs_modifier }
+		gw_runs_fossil_fuel_tariffs = yes
 	}
 
 	# Repeal only once the climate will has fallen gw_ai_repeal_band below the
@@ -647,7 +710,7 @@ gw_aerosol_injection_button = {
 
 	visible = {
 		is_ai = yes
-		NOT = { je:je_global_warming = { has_modifier = aerosol_injection_modifier } }
+		NOT = { gw_policy_aerosol_injection_active = yes }
 	}
 
 	# Adopt only at or above this policy's threshold on the country's climate
@@ -677,7 +740,7 @@ gw_remove_aerosol_injection_button = {
 
 	visible = {
 		is_ai = yes
-		je:je_global_warming = { has_modifier = aerosol_injection_modifier }
+		gw_policy_aerosol_injection_active = yes
 	}
 
 	# Repeal only once the climate will has fallen gw_ai_repeal_band below the

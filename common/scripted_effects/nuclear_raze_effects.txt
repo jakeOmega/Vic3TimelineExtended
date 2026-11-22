@@ -1,0 +1,349 @@
+﻿# ============================================================================
+# NUCLEAR STRIKES — the city's buildings (docs/systems/mod_systems/nuclear.md,
+# "What a city strike destroys")
+# ============================================================================
+# A strategic strike that lands on a city (nuclear_industrial_strike: the
+# strike action, a retaliation, a Cities or Leadership salvo's warhead, a
+# loose warhead's detonation) destroys a share of the state's urban buildings
+# and leaves the rest government-owned: the government takes what still
+# stands into its hands in the crisis.
+#
+# The share destroyed (nd_raze_share_destroyed, nuclear_raze_values.txt) is
+# half the state's metropolitan share, the share of its urban people living in
+# its largest city (te_dg_mt, Demographics), so from 5% to 40%; a quarter where
+# Demographics is not on Full or the state keeps no share. A loose warhead's
+# device is cruder: its share is multiplied by a factor from 0.1 to 1
+# (nd_raze_roll_terror_factor).
+#
+# The engine has no effect that removes levels, so each building that loses
+# any is removed and rebuilt smaller (scripting_best_practices.md § "Building
+# Lifecycle Effect Gotchas"): its production methods recorded first and put
+# back after, every level of the rebuilt building owned by the state's owner.
+# Its staff are laid off and rehired. Which buildings: the dispatcher,
+# nd_raze_all_buildings in nuclear_raze_generated.txt (the generator's
+# URBAN_GROUPS and EXCLUDED_GROUPS say why each is in or out).
+#
+# Variables (state):
+#   nd_razed_today   1 for a day after a razing: a second strike on the state
+#                    that day razes nothing more, since whether a rebuilt
+#                    building is visible later in the same effect is unread
+#                    (the same lesson); its deaths still apply
+#   nd_raze_lost     levels destroyed by the state's last razing
+#   nd_raze_nat      levels still standing in the buildings it rebuilt, every
+#                    one now government-owned (the events' figures)
+#   nd_raze_count    razings of the state so far (the self-check's guard)
+#   nd_raze_factor   a loose warhead's factor, set just before its strike and
+#                    removed by it
+# Country (the victim of a salvo, from nd_order_salvo to nd_salvo_clear):
+#   nd_raze_tally_lost, nd_raze_tally_nat   the salvo's sums, which
+#                    nd_salvo_aftermath copies to nd_salvo_seen_razed and
+#                    nd_salvo_seen_razed_nat for the events
+# ============================================================================
+
+# State scope, after the strike's deaths. A tooltip walk writes nothing, so the
+# razing runs only when the strike does (the click-only marker:
+# scripting_best_practices.md § "An Option's Tooltip Walks Its Effects").
+nuclear_strike_raze_city = {
+	custom_tooltip = {
+		text = nd_raze_city_tt
+		set_variable = nd_raze_click
+		if = {
+			limit = { has_variable = nd_raze_click }
+			remove_variable = nd_raze_click
+			nd_raze_city_run = yes
+		}
+	}
+}
+
+nd_raze_city_run = {
+	if = {
+		limit = { NOT = { has_variable = nd_razed_today } }
+		set_variable = { name = nd_razed_today value = 1 days = 1 }
+		save_scope_as = nd_raze_state
+		owner = { save_scope_as = nd_raze_owner }
+		if = {
+			limit = { has_variable = nd_raze_count }
+			change_variable = { name = nd_raze_count add = 1 }
+		}
+		else = {
+			set_variable = { name = nd_raze_count value = 1 }
+		}
+		set_variable = { name = nd_raze_share value = nd_raze_share_destroyed }
+		set_variable = { name = nd_raze_lost value = 0 }
+		set_variable = { name = nd_raze_nat value = 0 }
+		nd_raze_all_buildings = yes
+		# A salvo's sums, on its victim while it lasts (nd_order_salvo).
+		owner = {
+			if = {
+				limit = { has_variable = nd_raze_tally_lost }
+				change_variable = { name = nd_raze_tally_lost add = scope:nd_raze_state.var:nd_raze_lost }
+				change_variable = { name = nd_raze_tally_nat add = scope:nd_raze_state.var:nd_raze_nat }
+			}
+		}
+		debug_log = "TE_NUCLEAR: type=raze; state=[THIS.GetState.GetNameNoFormatting]; share=[THIS.Var('nd_raze_share').GetValue|2]; lost=[THIS.Var('nd_raze_lost').GetValue|0]; nationalized=[THIS.Var('nd_raze_nat').GetValue|0]; date=[TimeKeeper.GetCurrentDate.GetString]; country=[SCOPE.sCountry('nd_raze_owner').GetNameNoFormatting]"
+		remove_variable = nd_raze_share
+		nd_raze_clear_working = yes
+	}
+	if = {
+		limit = { has_variable = nd_raze_factor }
+		remove_variable = nd_raze_factor
+	}
+}
+
+# State scope, with $BUILDING$ present and var:nd_raze_share set: the levels
+# left are the level times one less the share, the fraction rounded up with its
+# chance (as the tactical strike's halving rounds an odd level). A building that
+# loses no level is left as it is, its ownership too. One that keeps none is
+# removed; one that keeps some is rebuilt at that size through $BUILD$
+# (nd_raze_build_owned for a privately ownable building, nd_raze_build_plain
+# for a government building), its production methods put back ($PMS$).
+nd_raze_building = {
+	set_variable = { name = nd_raze_level value = b:$BUILDING$.level }
+	set_variable = { name = nd_raze_left_raw value = nd_raze_left_raw_value }
+	set_variable = {
+		name = nd_raze_left
+		value = {
+			value = var:nd_raze_left_raw
+			floor = yes
+		}
+	}
+	random = {
+		chance = nd_raze_round_up_chance
+		change_variable = { name = nd_raze_left add = 1 }
+	}
+	if = {
+		limit = { var:nd_raze_left < var:nd_raze_level }
+		nd_raze_tell_investors = { BUILDING = $BUILDING$ }
+		set_variable = { name = nd_raze_built value = 0 }
+		if = {
+			limit = { var:nd_raze_left >= 1 }
+			$PMS$ = { MODE = record }
+			nd_raze_selfcheck_before = { BUILDING = $BUILDING$ }
+			remove_building = $BUILDING$
+			$BUILD$ = { BUILDING = $BUILDING$ }
+			nd_raze_selfcheck_arm = { BUILDING = $BUILDING$ PMS = $PMS$ INDEX = $INDEX$ }
+			$PMS$ = { MODE = restore }
+		}
+		else = {
+			remove_building = $BUILDING$
+		}
+		change_variable = {
+			name = nd_raze_lost
+			add = {
+				value = var:nd_raze_level
+				subtract = var:nd_raze_built
+			}
+		}
+	}
+}
+
+# State scope: the per-building working figures go.
+nd_raze_clear_working = {
+	if = {
+		limit = { has_variable = nd_raze_level }
+		remove_variable = nd_raze_level
+	}
+	if = {
+		limit = { has_variable = nd_raze_left_raw }
+		remove_variable = nd_raze_left_raw
+	}
+	if = {
+		limit = { has_variable = nd_raze_left }
+		remove_variable = nd_raze_left
+	}
+	if = {
+		limit = { has_variable = nd_raze_built }
+		remove_variable = nd_raze_built
+	}
+}
+
+# The production methods of a rebuilt building ($PMS$ = { MODE = ... }, one
+# list per building in nuclear_raze_generated.txt). A rebuilt building starts
+# on methods the engine picks, so the ones it ran are recorded first and
+# activated again after.
+nd_raze_pm_record = {
+	if = {
+		limit = { b:$BUILDING$ ?= { has_active_production_method = $PM$ } }
+		set_variable = nd_raze_pm_$PM$
+	}
+}
+
+nd_raze_pm_restore = {
+	if = {
+		limit = { has_variable = nd_raze_pm_$PM$ }
+		activate_production_method = {
+			building_type = $BUILDING$
+			production_method = $PM$
+		}
+		remove_variable = nd_raze_pm_$PM$
+	}
+}
+
+# The self-check's copy of the methods recorded (nd_raze_selfcheck_arm, between
+# the record and the restore), and its read a few days later: a method that is
+# no longer active counts as a miss.
+nd_raze_pm_sc_arm = {
+	if = {
+		limit = { has_variable = nd_raze_pm_$PM$ }
+		set_variable = { name = nd_raze_sc_pm_$PM$ value = flag:$BUILDING$ }
+		change_variable = { name = nd_raze_sc_pm_n add = 1 }
+	}
+}
+
+nd_raze_pm_sc_read = {
+	if = {
+		limit = { has_variable = nd_raze_sc_pm_$PM$ }
+		remove_variable = nd_raze_sc_pm_$PM$
+		change_variable = { name = nd_raze_sc_pm_seen add = 1 }
+		if = {
+			limit = {
+				NOT = { b:$BUILDING$ ?= { has_active_production_method = $PM$ } }
+			}
+			change_variable = { name = nd_raze_sc_pm_miss add = 1 }
+		}
+	}
+}
+
+# State scope, before $BUILDING$ loses levels: tell each player country whose
+# investors held part of it that the shares are gone (owner, 2026-11-19: a
+# notice). Once a day each, so a salvo sends one; it names the first state.
+# Players only: a notice to an AI does nothing, and the ownership test is the
+# costly part.
+nd_raze_tell_investors = {
+	every_country = {
+		limit = {
+			is_ai = no
+			NOT = { THIS = scope:nd_raze_owner }
+			NOT = { has_variable = nd_raze_told }
+			scope:nd_raze_owner = {
+				gdp_ownership_ratio = {
+					target = PREV
+					value > 0
+				}
+			}
+		}
+		save_scope_as = nd_raze_investor
+		if = {
+			limit = {
+				scope:nd_raze_state = {
+					b:$BUILDING$ ?= { nd_raze_investor_share > 0 }
+				}
+			}
+			set_variable = { name = nd_raze_told value = 1 days = 1 }
+			post_notification = nd_raze_foreign_assets_lost
+		}
+	}
+}
+
+# State scope (a loose warhead's state, nuclear_loose_effects.txt), just before
+# its strike: a device carried in by hand is cruder than a missile's warhead,
+# so its share destroyed is multiplied by a factor from 0.1 to 1 (owner,
+# 2026-11-19). The strike's razing reads and removes it.
+nd_raze_roll_terror_factor = {
+	random_list = {
+		1 = { set_variable = { name = nd_raze_factor value = 0.1 } }
+		1 = { set_variable = { name = nd_raze_factor value = 0.2 } }
+		1 = { set_variable = { name = nd_raze_factor value = 0.3 } }
+		1 = { set_variable = { name = nd_raze_factor value = 0.4 } }
+		1 = { set_variable = { name = nd_raze_factor value = 0.5 } }
+		1 = { set_variable = { name = nd_raze_factor value = 0.6 } }
+		1 = { set_variable = { name = nd_raze_factor value = 0.7 } }
+		1 = { set_variable = { name = nd_raze_factor value = 0.8 } }
+		1 = { set_variable = { name = nd_raze_factor value = 0.9 } }
+		1 = { set_variable = { name = nd_raze_factor value = 1 } }
+	}
+}
+
+# ---- Self-check: nuclear_raze_rebuild ---------------------------------------
+# Once a game (docs/testing/nuclear-playtest.md, Self-checks): is a building
+# removed and rebuilt with add_ownership = { country = ... } in one effect
+# rebuilt at the level asked, wholly government-owned, on the methods it ran?
+# Nobody has seen the ownership of such a rebuild (scripting_best_practices.md
+# § "Building Lifecycle Effect Gotchas", point 4). Armed at the first rebuild of
+# two levels or more of a building the government did not wholly own, in a
+# country not under Laissez-Faire (which sells government buildings off); read
+# three days later by nuclear_weapon_events.34, before construction or a sale
+# could move the figures. A state that changed hands or was struck again
+# meanwhile gives NO_VERDICT, and the check arms again.
+
+# Before the removal: the government's share of the building as it stood (the
+# fraction read from building scope, as te_demog_um_effects.txt reads it).
+nd_raze_selfcheck_before = {
+	if = {
+		limit = { NOT = { has_global_variable = nd_raze_sc_armed } }
+		b:$BUILDING$ ?= {
+			scope:nd_raze_state = {
+				set_variable = { name = nd_raze_gov_before value = prev.country_ownership_fraction }
+			}
+		}
+	}
+}
+
+# After the rebuild, before the methods are put back.
+nd_raze_selfcheck_arm = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = nd_raze_sc_armed }
+			has_variable = nd_raze_gov_before
+			var:nd_raze_gov_before < 0.99
+			var:nd_raze_built >= 2
+			scope:nd_raze_owner = {
+				NOT = { has_law_or_variant = law_type:law_laissez_faire }
+			}
+		}
+		set_global_variable = nd_raze_sc_armed
+		set_variable = { name = nd_raze_sc_type value = $INDEX$ }
+		set_variable = { name = nd_raze_sc_kind value = flag:$BUILDING$ }
+		set_variable = { name = nd_raze_sc_expected value = var:nd_raze_built }
+		set_variable = { name = nd_raze_sc_gov_before value = var:nd_raze_gov_before }
+		set_variable = { name = nd_raze_sc_count value = var:nd_raze_count }
+		set_variable = { name = nd_raze_sc_pm_n value = 0 }
+		$PMS$ = { MODE = sc_arm }
+		scope:nd_raze_owner = {
+			set_variable = { name = nd_raze_sc_state value = scope:nd_raze_state days = 30 }
+			trigger_event = { id = nuclear_weapon_events.34 days = 3 }
+		}
+	}
+	if = {
+		limit = { has_variable = nd_raze_gov_before }
+		remove_variable = nd_raze_gov_before
+	}
+}
+
+# State scope, from nd_raze_selfcheck_read (generated), scope:nd_raze_sc_country
+# the country the check was armed for. nd_raze_count only grows, and both counts
+# are set before the check arms.
+nd_raze_selfcheck_verdict = {
+	if = {
+		limit = {
+			OR = {
+				NOT = { owner ?= scope:nd_raze_sc_country }
+				var:nd_raze_count > var:nd_raze_sc_count
+			}
+		}
+		debug_log = "TE_SELF_CHECK NO_VERDICT nuclear_raze_rebuild: [THIS.GetState.GetNameNoFormatting] changed hands or was struck again before the read; the check arms again (type=[THIS.Var('nd_raze_sc_type').GetValue|0])"
+		remove_global_variable = nd_raze_sc_armed
+	}
+	else_if = {
+		limit = {
+			var:nd_raze_sc_level = var:nd_raze_sc_expected
+			var:nd_raze_sc_gov >= 0.99
+			var:nd_raze_sc_pm_miss = 0
+			var:nd_raze_sc_pm_seen = var:nd_raze_sc_pm_n
+		}
+		debug_log = "TE_SELF_CHECK OK nuclear_raze_rebuild: [THIS.Var('nd_raze_sc_kind').GetFlagName] in [THIS.GetState.GetNameNoFormatting] rebuilt at level=[THIS.Var('nd_raze_sc_level').GetValue|0] expected=[THIS.Var('nd_raze_sc_expected').GetValue|0], gov=[THIS.Var('nd_raze_sc_gov').GetValue|2] gov_before=[THIS.Var('nd_raze_sc_gov_before').GetValue|2], methods put back [THIS.Var('nd_raze_sc_pm_seen').GetValue|0] of [THIS.Var('nd_raze_sc_pm_n').GetValue|0] (type=[THIS.Var('nd_raze_sc_type').GetValue|0]; date=[TimeKeeper.GetCurrentDate.GetString])"
+	}
+	else = {
+		debug_log = "TE_SELF_CHECK BROKEN nuclear_raze_rebuild: [THIS.Var('nd_raze_sc_kind').GetFlagName] in [THIS.GetState.GetNameNoFormatting] level=[THIS.Var('nd_raze_sc_level').GetValue|0] expected=[THIS.Var('nd_raze_sc_expected').GetValue|0] (-1: gone), gov=[THIS.Var('nd_raze_sc_gov').GetValue|2] gov_before=[THIS.Var('nd_raze_sc_gov_before').GetValue|2], methods missing [THIS.Var('nd_raze_sc_pm_miss').GetValue|0] of [THIS.Var('nd_raze_sc_pm_n').GetValue|0] (read [THIS.Var('nd_raze_sc_pm_seen').GetValue|0]) (type=[THIS.Var('nd_raze_sc_type').GetValue|0]; date=[TimeKeeper.GetCurrentDate.GetString])"
+	}
+	remove_variable = nd_raze_sc_type
+	remove_variable = nd_raze_sc_kind
+	remove_variable = nd_raze_sc_expected
+	remove_variable = nd_raze_sc_gov_before
+	remove_variable = nd_raze_sc_count
+	remove_variable = nd_raze_sc_pm_n
+	remove_variable = nd_raze_sc_level
+	remove_variable = nd_raze_sc_gov
+	remove_variable = nd_raze_sc_pm_miss
+	remove_variable = nd_raze_sc_pm_seen
+}

@@ -13,8 +13,10 @@ import re
 from bisect import bisect_right
 from dataclasses import dataclass, field
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
 from iterator_limit_audit import blank_comments_and_strings
-from prev_scope_audit import _is_scope_change, _parse_reviewed, load_links
+from prev_scope_audit import _is_scope_change, load_links
 
 AUDIT_DIRS = ("common", "events")
 BUILDING_ITERATORS = {
@@ -46,7 +48,7 @@ class Flag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[Flag] = field(default_factory=list)
     files_audited: int = 0
 
@@ -111,7 +113,7 @@ def _scan(text: str, rel_path: str, links: set[str], aliases: set[str]):
                 flags.append(Flag(
                     file=rel_path, line=flag_line, construct=construct,
                     enclosing_iterator=current[0], enclosing_line=current[1],
-                    exemption=_parse_reviewed(comments.get(flag_line)),
+                    exemption=parse_reviewed(comments.get(flag_line)),
                 ))
         if m.group("open"):
             if _building_scope(key, aliases):
@@ -179,7 +181,7 @@ def render_report(result: AuditResult) -> str:
     ]
     for title, reviewed in (("Unreviewed Flags", False), ("Reviewed Exemptions", True)):
         out.extend([f"## {title}", ""])
-        flags = [f for f in result.flags if bool(f.exemption) == reviewed]
+        flags = result.exemptions if reviewed else result.unreviewed
         if not flags:
             out.append("_None._")
         for f in flags:
@@ -197,8 +199,8 @@ def render_report(result: AuditResult) -> str:
     out.extend([
         "## Coverage", "",
         f"- total flags: {len(result.flags)}",
-        f"- unreviewed: {sum(not f.exemption for f in result.flags)}",
-        f"- exempted: {sum(bool(f.exemption) for f in result.flags)}", "",
+        f"- unreviewed: {len(result.unreviewed)}",
+        f"- exempted: {len(result.exemptions)}", "",
     ])
     return "\n".join(out) + "\n"
 
@@ -206,26 +208,21 @@ def render_report(result: AuditResult) -> str:
 def regenerate(mod_state=None) -> dict:
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
-    path = os.path.join(mod_path, "docs", "engine", "building_scope_variable_report.md")
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w", encoding="utf-8") as fh:
-        fh.write(render_report(result))
+    write_text(os.path.join(mod_path, "docs", "engine", "building_scope_variable_report.md"),
+               render_report(result))
     return {
         "files_audited": result.files_audited,
         "total_flags": len(result.flags),
-        "unreviewed": sum(not f.exemption for f in result.flags),
-        "exempted": sum(bool(f.exemption) for f in result.flags),
+        "unreviewed": len(result.unreviewed),
+        "exempted": len(result.exemptions),
     }
 
 
 def main(argv=None) -> int:
-    import argparse
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--strict", action="store_true")
-    args = parser.parse_args(argv)
-    result = audit()
-    print(render_report(result))
-    return int(args.strict and any(not f.exemption for f in result.flags))
+    """Print the report; `--strict` (CI) exits 1 if any flag lacks a
+    `# REVIEWED ...` exemption."""
+    return cli_main(lambda args: audit(), lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0])
 
 
 if __name__ == "__main__":

@@ -1,0 +1,15 @@
+﻿# STATE PICTURES - the yearly pass (common/scripted_effects/te_state_picture_effects.txt).
+# The Demographics walk this reads (te_dg_urban) runs on the same pulse; whichever goes first, the
+# pass is at most a year behind it.
+
+on_yearly_pulse_state = {
+	on_actions = {
+		te_state_picture_yearly_on_action
+	}
+}
+
+te_state_picture_yearly_on_action = {
+	effect = {
+		te_state_picture_refresh = yes
+	}
+}

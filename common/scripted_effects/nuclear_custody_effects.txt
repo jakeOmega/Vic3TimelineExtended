@@ -172,10 +172,15 @@ nd_custody_lose_warheads = {
 		limit = { NOT = { has_global_variable = nd_loose_warheads } }
 		set_global_variable = { name = nd_loose_warheads value = 0 }
 	}
-	change_global_variable = { name = nd_loose_warheads add = var:nd_clw_amount }
-	nd_ledger_ensure = yes
-	var:nd_arsenal_record ?= {
-		change_variable = { name = nd_ar_loose add = scope:nd_clw_holder.var:nd_clw_amount }
+	# Only once the set above has run: an option's tooltip walks this body
+	# writing nothing, so nd_clw_amount is unset there (tooltip_walk_variable_audit).
+	if = {
+		limit = { has_variable = nd_clw_amount }
+		change_global_variable = { name = nd_loose_warheads add = var:nd_clw_amount }
+		nd_ledger_ensure = yes
+		var:nd_arsenal_record ?= {
+			change_variable = { name = nd_ar_loose add = scope:nd_clw_holder.var:nd_clw_amount }
+		}
 	}
 	remove_variable = nd_clw_amount
 }
@@ -221,8 +226,14 @@ nd_custody_round = {
 # mod's own `annex` sites, and from on_monthly_pulse as the catch-all for every
 # other path (te_civil_war_on_actions.txt).
 nd_custody_reconcile = {
+	# Not with the rule switched off mid-game (2026-11-08): no arsenal changes
+	# hands, and no custody event fires; an ended owner's record waits for the
+	# rule's return, when the next pass settles it.
 	if = {
-		limit = { has_global_variable_list = nd_arsenal_records }
+		limit = {
+			has_game_rule = nuclear_weapons_enabled
+			has_global_variable_list = nd_arsenal_records
+		}
 		every_in_global_list = {
 			variable = nd_arsenal_records
 			limit = { nd_ar_owner_gone = yes }
@@ -303,13 +314,22 @@ nd_custody_settle_record = {
 			}
 			change_variable = { name = nd_custody_received add = scope:nd_settle_record.var:nd_ar_moving }
 			change_variable = { name = nd_custody_lost add = scope:nd_settle_record.var:nd_ar_lost }
+			# Every warhead ever taken into custody, for the arsenal watch's
+			# TE_NUCLEAR arsenal_milestone line (nd_log_arsenal_watch).
+			if = {
+				limit = { NOT = { has_variable = nd_log_custody_total } }
+				set_variable = { name = nd_log_custody_total value = 0 }
+			}
+			change_variable = { name = nd_log_custody_total add = scope:nd_settle_record.var:nd_ar_moving }
 			if = {
 				limit = { NOT = { has_variable = nd_custody_arrival_pending } }
 				set_variable = { name = nd_custody_arrival_pending value = 1 }
 				trigger_event = { id = nuclear_custody.2 }
 			}
 		}
-		debug_log = "TE_CUSTODY: settled an ended arsenal to [SCOPE.sCountry('nd_settle_successor').GetNameNoFormatting]"
+		set_global_variable = { name = nd_log_custody_moving_now value = var:nd_ar_moving }
+		debug_log = "TE_CUSTODY: settled an ended arsenal to [SCOPE.sCountry('nd_settle_successor').GetNameNoFormatting]; warheads=[SCOPE.ScriptValue('nd_log_custody_moving')|0]"
+		remove_global_variable = nd_log_custody_moving_now
 		# ---- the old owner's pledges and defiance records lapse -----------
 		# Best effort: only while the dead owner still resolves.
 		var:nd_ar_owner ?= {
@@ -360,6 +380,16 @@ nd_custody_reconcile_soon = {
 # immediate): a rebel given its share at an outbreak, or the successor of an
 # ended arsenal. Everything the arsenal needs that must run with ROOT = the
 # holder, then the one notice.
+#
+# The entry: being armed meets its possible and is_shown_when_inactive
+# (nuclear_program_entry_applies), so a holder with an inactive copy, which is
+# every country (the entry never concludes, and can_deactivate keeps the
+# record), gets it at the engine's next check, within two weeks. The add is
+# only for a holder with no record (one the engine left out): over an inactive
+# copy it is refused with an error ("already has a journal entry of type",
+# scripting_best_practices.md, the has_journal_entry bullet; #1416). The
+# entry's weekly pulse restores the carried progress whenever it activates
+# (nd_custody_restore_progress).
 nd_custody_after_arrival = {
 	if = {
 		limit = { has_variable = nd_custody_arrival_pending }
@@ -371,6 +401,7 @@ nd_custody_after_arrival = {
 			limit = {
 				has_game_rule = nuclear_weapons_enabled
 				NOT = { has_journal_entry = je_nuclear_program }
+				NOT = { has_inactive_journal_entry = je_nuclear_program }
 			}
 			add_journal_entry = { type = je_nuclear_program }
 		}
@@ -476,7 +507,9 @@ nd_custody_on_civil_war_start = {
 #   nd_cw_<MODE>_lost    of those, the ones nobody can account for
 #   nd_cw_<MODE>_taken   of those, the ones the rebels hold
 #   nd_cw_<MODE>_kept    what stays with us (the option tooltips print it)
+#   nd_cw_roll_rebel     the uprising the roll is for (nd_cw_apply_split)
 nd_cw_roll_split = {
+	set_variable = { name = nd_cw_roll_rebel value = scope:nd_cw_rebel }
 	set_variable = { name = nd_cw_hold_seized value = nd_cw_seizable_share }
 	set_variable = { name = nd_cw_pull_seized value = nd_cw_pullback_share }
 	nd_cw_roll_one = { MODE = hold }
@@ -521,11 +554,39 @@ nd_cw_roll_one = {
 # TT = the tooltip key that prints its numbers (a literal, so organize_loc sees
 # the key used; #451). The numbers are re-capped at the stockpile we hold now —
 # a launch may have spent some since the roll.
+#
+# Two uprisings in one tick send two of these events, and both roll into the
+# same variables: the second roll overwrites the first, and the first answer's
+# nd_cw_clear_roll removes it before the second answer applies (Russian
+# Republic, 2026-11-07: the second "pull back" read nothing set, and its rebels
+# got no share). So an answer whose roll is another uprising's, or gone, rolls
+# again for its own rebels first. The re-roll sits behind a click-only marker:
+# the option's tooltip walk tests every limit, inside hidden_effect too, and
+# writes nothing, so unfenced it would read the roll it never set, every frame
+# (scripting_best_practices.md, § An Option's Tooltip Walks Its Effects). The
+# reads below test has_variable for the same walk, which a second copy of the
+# event shows once the first answer has cleared the roll.
 nd_cw_apply_split = {
+	hidden_effect = {
+		set_variable = nd_cw_roll_click
+		if = {
+			limit = { has_variable = nd_cw_roll_click }
+			remove_variable = nd_cw_roll_click
+			if = {
+				limit = {
+					NOT = { var:nd_cw_roll_rebel ?= scope:nd_cw_rebel }
+				}
+				nd_cw_roll_split = yes
+			}
+		}
+	}
 	custom_tooltip = {
 		text = $TT$
 		if = {
-			limit = { var:nd_cw_$MODE$_seized > nd_stockpile }
+			limit = {
+				has_variable = nd_cw_$MODE$_seized
+				var:nd_cw_$MODE$_seized > nd_stockpile
+			}
 			set_variable = { name = nd_cw_$MODE$_seized value = nd_stockpile }
 			if = {
 				limit = { var:nd_cw_$MODE$_lost > var:nd_cw_$MODE$_seized }
@@ -541,6 +602,7 @@ nd_cw_apply_split = {
 		}
 		if = {
 			limit = {
+				has_variable = nd_cw_$MODE$_seized
 				var:nd_cw_$MODE$_seized > 0
 				exists = scope:nd_cw_rebel
 				scope:nd_cw_rebel = { is_country_alive = yes }
@@ -561,6 +623,11 @@ nd_cw_apply_split = {
 				change_variable = { name = nd_custody_received add = ROOT.var:nd_cw_$MODE$_taken }
 				change_variable = { name = nd_custody_lost add = ROOT.var:nd_cw_$MODE$_lost }
 				if = {
+					limit = { NOT = { has_variable = nd_log_custody_total } }
+					set_variable = { name = nd_log_custody_total value = 0 }
+				}
+				change_variable = { name = nd_log_custody_total add = ROOT.var:nd_cw_$MODE$_taken }
+				if = {
 					limit = { NOT = { has_variable = nd_custody_arrival_pending } }
 					set_variable = { name = nd_custody_arrival_pending value = 1 }
 					trigger_event = { id = nuclear_custody.2 }
@@ -578,6 +645,10 @@ nd_cw_apply_split = {
 }
 
 nd_cw_clear_roll = {
+	if = {
+		limit = { has_variable = nd_cw_roll_rebel }
+		remove_variable = nd_cw_roll_rebel
+	}
 	if = {
 		limit = { has_variable = nd_cw_hold_seized }
 		remove_variable = nd_cw_hold_seized
@@ -796,7 +867,9 @@ nd_cw_notify_world = {
 		limit = { nd_cw_would_watch = { ORIGIN = scope:nd_cw_origin REBEL = scope:nd_cw_rebel } }
 		set_variable = { name = nd_cwr_origin value = scope:nd_cw_origin days = 30 }
 		set_variable = { name = nd_cwr_rebel value = scope:nd_cw_rebel days = 30 }
-		trigger_event = { id = nuclear_custody.6 days = 7 popup = yes }
+		# Through the hidden .13, which opens .6 when due (#1596): .6's trigger
+		# reads the pair at war, which may not hold on the uprising's first day.
+		trigger_event = { id = nuclear_custody.13 days = 7 }
 	}
 }
 
@@ -1065,7 +1138,9 @@ nd_bp_press = {
 							}
 						}
 					}
-					trigger_event = { id = nuclear_custody.11 days = 30 popup = yes }
+					# Through the hidden .14, which opens .11 when due (#1596): .11's
+					# trigger needs a guarantor in the list this presser joins below.
+					trigger_event = { id = nuclear_custody.14 days = 30 }
 				}
 				add_to_variable_list = { name = nd_bp_guarantors target = ROOT }
 			}
@@ -1237,7 +1312,7 @@ nd_bp_answer = {
 		set_variable = { name = nd_bp_answer value = $ANSWER$ }
 		if = {
 			limit = {
-				var:nd_bp_answer = 1
+				var:nd_bp_answer ?= 1 # false when unset: the options' tooltips walk this writing nothing
 				NOT = { scope:nd_bp_answering = { nd_is_guaranteed_by_treaty = { GUARANTOR = scope:nd_bp_signer } } }
 			}
 			set_variable = { name = nd_bp_answer value = 3 }

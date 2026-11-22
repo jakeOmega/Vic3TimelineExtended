@@ -5,9 +5,10 @@ The Local Climate design (docs/superpowers/specs/2026-11-01-local-climate-design
 every land state region a small record: the warmest month's mean temperature and dew-point class,
 the coldest month's mean, water for settlement, malaria as of 1836, and latitude, all taken where
 most of the region's people live, and (§ 11, heat v2) the hottest day of a typical year and the heat
-stress on the year's worst day, from station records. The rows are
+stress on the year's worst day, from station records, and (§ 13) the winter's daily sunshine, from
+satellite data (scripts/analysis/local_climate_sun_pull.py). The rows are
 scripts/generators/data/local_climate.csv (state, ref_place, summer_mean_c, summer_humidity,
-winter_mean_c, aridity, malaria, latitude, hot_day_c, heat_index, heat_source, reason). This writes a
+winter_mean_c, aridity, malaria, latitude, hot_day_c, heat_index, winter_sun_h, heat_source, reason). This writes a
 state-scope script value for each field a script reads, each an if-chain on state_region,
 so every piece of a split region reads the region's climate. A region with no row reads neutral
 values (no penalty). Needs nothing but the repo. Re-run after editing the CSV;
@@ -21,6 +22,7 @@ exits 1 on a validation error. A plain run writes the file even when a row fails
 import argparse
 import collections
 import csv
+import math
 import os
 import re
 import sys
@@ -32,10 +34,10 @@ STATE_REGIONS = os.path.join(REPO, "map_data", "state_regions")
 SEAS = "99_seas.txt"
 
 FIELDS = ("state ref_place summer_mean_c summer_humidity winter_mean_c aridity malaria latitude hot_day_c heat_index "
-          "heat_source reason")
+          "winter_sun_h heat_source reason")
 Row = collections.namedtuple("Row", FIELDS)
 NUMERIC = ("summer_mean_c", "summer_humidity", "winter_mean_c", "aridity", "malaria", "latitude")
-FLOATS = ("hot_day_c", "heat_index")
+FLOATS = ("hot_day_c", "heat_index", "winter_sun_h")
 # Where a row's heat figures come from (§ 11.2): a station (its code and distance), the station with one figure
 # from the fit on the record's own fields (a far or high station that missed the fit by 2.5 or more on it), the
 # fit for both, or another region's row.
@@ -54,10 +56,14 @@ VALUES = (
     ("te_climate_hot_day", "hot_day_c", 20, "the hottest day of a typical year, °C (the mean of each year's highest)"),
     ("te_climate_heat_index", "heat_index", 0,
      "heat stress on a typical year's worst day, °C: 0.7 x wet-bulb + 0.3 x air temperature"),
+    # The default is London's, the sunshine term's neutral point (te_climate_sun_neutral), so it costs nothing.
+    ("te_climate_winter_sun", "winter_sun_h", 2.4,
+     "mean daily hours of sunshine in the three months around the winter solstice (Dec-Feb north, Jun-Aug south)"),
 )
 
 RANGES = {"summer_mean_c": (-10, 45), "winter_mean_c": (-50, 30), "summer_humidity": (0, 3),
-          "aridity": (0, 2), "malaria": (0, 2), "latitude": (-90, 90), "hot_day_c": (10, 52), "heat_index": (5, 40)}
+          "aridity": (0, 2), "malaria": (0, 2), "latitude": (-90, 90), "hot_day_c": (10, 52), "heat_index": (5, 40),
+          "winter_sun_h": (0, 12)}
 
 # A vanilla desert trait needs water 1 or more, except where the region's people live by a great river or
 # outside the desert: the trait describes the land, the record where people live (2026-11-01, PR #1307 review).
@@ -67,8 +73,44 @@ DESERT_TRAIT_EXCEPTIONS = {
     "STATE_NORTHERN_TERRITORY": "its people live in the wet tropical Top End",
 }
 
+# Vanilla 1.15's cold (#1407): each state region's max_cold_effect, its cold at the peak of winter, which vanilla reads
+# as moderate from 0.5 and severe from 0.75 (NWinter's MODERATE_ / SEVERE_COLD_EFFECT_THRESHOLD) for its world market
+# access, supply ships and fleet speed. Nothing moves it at runtime, so Global Warming leaves it alone. The record's winter
+# and vanilla's cold agree across the map (a straight line through winter and latitude misses vanilla's figure by 0.12, root
+# mean square); cold_band_flags names a row that disagrees in kind, and each one it names here, with its reason, is accepted:
+COLD_MODERATE, COLD_SEVERE = 0.5, 0.75
+COLD_BAND_EXCEPTIONS = {
+    # A mountain region whose people live in a valley: vanilla's cold covers the high ground, the record the valley.
+    "STATE_HIMALAYAS": "its people live in the Kathmandu valley, below the snows vanilla's cold covers",
+    "STATE_EASTERN_HIMALAYAS": "its people live in Bhutan's valleys (Punakha), below the snows vanilla's cold covers",
+    "STATE_TAJIKISTAN": "its people live in the Hisor valley at Dushanbe, below the Pamirs vanilla's cold covers",
+    "STATE_ALASKA": "its people lived on the mild panhandle coast at Sitka, not the arctic interior",
+    # Vanilla's cold runs low across dry continental East Asia and the Armenian plateau, though the stations' winters
+    # are hard: the record is the station's.
+    "STATE_DZUNGARIA": "Urumqi's January is -12 C; vanilla's cold runs low on dry continental winters",
+    "STATE_HINGGAN": "Hohhot's January is -11 C; vanilla's cold runs low on dry continental winters",
+    "STATE_SHENGJING": "Mukden's January is -11 C; vanilla's cold runs low on dry continental winters",
+    "STATE_SOUTHERN_MANCHURIA": "Jilin's January is -17 C; vanilla's cold runs low on dry continental winters",
+    "STATE_KARS": "Kars's January is -11 C on the plateau; vanilla's cold runs low there",
+}
+# STATE_NORTH_RHINE is the one cold-wintered land region vanilla gives no cold pair at all (Cologne, 2 C; its
+# neighbors read 0.49 to 0.56). The mod's state-region copies pass vanilla's fields through unchanged
+# (test_state_regions_vanilla_sync), so it stays a vanilla gap; its winter of 2 C is under every band.
+
 STATE_RE = re.compile(r"(?m)^(STATE_\w+)\s*=\s*\{")
 TRAITS_RE = re.compile(r"traits\s*=\s*\{([^}]*)\}")
+COLD_RE = re.compile(r"(?m)^\s*max_cold_effect\s*=\s*([\d.]+)")
+
+
+def winter_day_hours(lat):
+    """The mean astronomical day length, hours, over the three months around the winter solstice at a latitude:
+    the most sunshine those months can hold (Cooper's declination, at each month's middle day)."""
+    total = 0.0
+    for day in ((349, 15, 46) if lat >= 0 else (166, 196, 227)):
+        decl = math.radians(23.44) * math.sin(2 * math.pi * (284 + day) / 365)
+        x = -math.tan(math.radians(lat)) * math.tan(decl)
+        total += 0.0 if x >= 1 else 24.0 if x <= -1 else 24 * math.acos(x) / math.pi
+    return total / 3
 
 
 def load_rows(path=CSV):
@@ -111,6 +153,34 @@ def region_traits(repo=REPO):
     return traits
 
 
+def region_cold(repo=REPO):
+    """STATE_X -> its max_cold_effect (vanilla's, passed through), 0 where its block has none."""
+    cold = {}
+    for _, text in _region_files(repo):
+        starts = list(STATE_RE.finditer(text))
+        for i, m in enumerate(starts):
+            end = starts[i + 1].start() if i + 1 < len(starts) else len(text)
+            c = COLD_RE.search(text, m.end(), end)
+            cold[m.group(1)] = float(c.group(1)) if c else 0.0
+    return cold
+
+
+def cold_band_flags(rows, cold):
+    """{state: why} for each row whose winter disagrees in kind with vanilla's cold at the peak of winter: a winter
+    above freezing where vanilla's cold is severe, one milder than London's (3 C, the winter term's neutral) where it is
+    at least moderate, or one of -10 C or harder where it isn't moderate."""
+    flags = {}
+    for r in rows:
+        c, w = cold.get(r.state, 0.0), r.winter_mean_c
+        if c >= COLD_SEVERE and w > 0:
+            flags[r.state] = f"a {w} C winter under vanilla's severe cold ({c})"
+        elif c >= COLD_MODERATE and w > 3:
+            flags[r.state] = f"a {w} C winter under vanilla's moderate cold ({c})"
+        elif w <= -10 and c < COLD_MODERATE:
+            flags[r.state] = f"a {w} C winter where vanilla's cold is only {c}"
+    return flags
+
+
 def validate(rows, regions, traits):
     """One error string per problem, each naming its state."""
     errors = []
@@ -133,6 +203,9 @@ def validate(rows, regions, traits):
             errors.append(f"{r.state}: hottest day {r.hot_day_c} cooler than the warmest month {r.summer_mean_c}")
         if r.heat_index > r.hot_day_c:
             errors.append(f"{r.state}: heat index {r.heat_index} above the hottest day {r.hot_day_c}")
+        if r.winter_sun_h > winter_day_hours(r.latitude) + 0.05:
+            errors.append(f"{r.state}: winter sunshine {r.winter_sun_h} h a day, more than the "
+                          f"{winter_day_hours(r.latitude):.1f} h of daylight at latitude {r.latitude}")
         if not HEAT_SOURCE_RE.fullmatch(r.heat_source):
             errors.append(f"{r.state}: heat_source {r.heat_source!r} is not code:Nkm[;fit_hot_day|;fit_index], "
                           "fit or analog:STATE_X")
@@ -167,6 +240,8 @@ def implausible(rows):
                          f"winter {r.winter_mean_c} °C (a highland?)")
         if r.summer_humidity == 3 and r.aridity == 2:
             notes.append(f"{r.state} ({r.ref_place}): oppressive summer humidity in a region scarce of water")
+    for state, why in cold_band_flags(rows, region_cold()).items():
+        notes.append(f"{state}: {why}{' (accepted: ' + COLD_BAND_EXCEPTIONS[state] + ')' if state in COLD_BAND_EXCEPTIONS else ''}")
     return notes
 
 

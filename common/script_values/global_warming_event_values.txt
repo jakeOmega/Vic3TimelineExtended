@@ -1,0 +1,50 @@
+﻿# ============================================================================
+# GLOBAL WARMING — weights of the recurring climate events
+# ============================================================================
+# Read by the monthly draw of environmentalism events in
+# common/on_actions/extra_on_actions.txt (the random_list under "Recurring
+# random events for countries experiencing global warming"). Country scope.
+#
+# Geography (#1454): the disease outbreak (environmentalism_events.14) and the
+# water shortage (.10) used to be drawn at the same weight in Siberia as in the
+# Congo. They now scale with the share of the country's incorporated states
+# that lie between the tropics (in_tropics, vanilla 1.15: the state region's
+# centre point). A random_list weight must be a literal, so each branch keeps
+# its literal and adds one of these in a `modifier` (scripting_best_practices.md,
+# "random_list Requires Literal Integer Weights").
+# ============================================================================
+
+# Incorporated states between the tropics over all incorporated states, 0 to 1.
+gw_tropical_incorporated_share = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			is_incorporated = yes
+			in_tropics = yes
+		}
+		add = 1
+	}
+	divide = { value = gw_incorporated_state_count min = 1 }
+}
+
+gw_incorporated_state_count = {
+	value = 0
+	every_scope_state = {
+		limit = { is_incorporated = yes }
+		add = 1
+	}
+}
+
+# Disease outbreak: 0 with no tropical state (the branch never draws), 10 at
+# half the country (the flat weight it had before), 20 for a wholly tropical one.
+gw_disease_event_weight = {
+	value = gw_tropical_incorporated_share
+	multiply = 20
+}
+
+# Water shortage: drought is not only tropical, so the branch keeps a literal 5
+# and this adds up to 10 more (10 at half the country, as before).
+gw_water_shortage_tropical_weight = {
+	value = gw_tropical_incorporated_share
+	multiply = 10
+}

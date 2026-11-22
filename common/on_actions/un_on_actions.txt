@@ -16,17 +16,7 @@ un_events_on_action = {
 		}
 
 		# The bound mandate's war support at Strong and above (redesign phase
-		# 5, un_teeth_effects.txt): removed and re-added every month, here
-		# because the multiplier needs a country ROOT.
-		if = {
-			limit = {
-				OR = {
-					has_variable = un_mandate_current
-					has_modifier = un_mandate_war_support_modifier
-				}
-			}
-			un_teeth_mandate_support_refresh = yes
-		}
+		# 5) is declared on je_united_nations.
 
 		# The per-member random event roll that used to follow is gone (redesign
 		# phase 4): the UN's events are raised by the docket, a global scan of
@@ -55,8 +45,50 @@ on_monthly_pulse = {
 
 un_global_authority_on_action = {
 	effect = {
+		# The rule switched off mid-game, from the screen that changes country
+		# (2026-11-08): the organisation ends, quietly (un_stop_for_rule), and
+		# nothing below runs, so neither the ladder's decline nor a founding
+		# conference can act on a UN the rule has done away with.
 		if = {
-			limit = { has_global_variable = un_founded }
+			limit = { NOT = { te_united_nations_on = yes } }
+			un_stop_for_rule = yes
+		}
+		# The age of Intergovernmental Organizations: ends the early unlock's
+		# league stage (un_league_stage). Set whatever the rule, so a switch
+		# to the early unlock later, from Late or from Disabled, finds it and
+		# never shows a league the age has already passed.
+		if = {
+			limit = {
+				NOT = { has_global_variable = un_igo_age }
+				any_country = { has_technology_researched = intergovernmental_organizations }
+			}
+			# A standing league takes the name United Nations this month
+			# (un_ov_league_sgui): its members and every player are told once.
+			# Read before the variable is set, while un_league_stage holds;
+			# un_league_stage asks the early unlock, so neither Late Unlock
+			# nor Disabled sends it, and un_founded asks for a league.
+			if = {
+				limit = {
+					un_league_stage = yes
+					has_global_variable = un_founded
+				}
+				every_country = {
+					limit = {
+						OR = {
+							je:je_united_nations ?= { has_modifier = un_member_modifier }
+							is_player = yes
+						}
+					}
+					post_notification = un_league_becomes_un_notice
+				}
+			}
+			set_global_variable = un_igo_age
+		}
+		if = {
+			limit = {
+				te_united_nations_on = yes
+				has_global_variable = un_founded
+			}
 
 			# One-time legacy-save migration: pre-refactor saves stored un_authority
 			# per-country and have no global. Seed a neutral 50 and strip the stale
@@ -138,14 +170,17 @@ un_global_authority_on_action = {
 
 		# Founded or not (un_ladder_effects.txt): power blocs fill the vacuum
 		# while the UN is Moribund or dissolved, and a founding conference for a
-		# new UN ages toward its founding.
-		un_ladder_bloc_vacuum_update = yes
-		un_conference_monthly_update = yes
+		# new UN ages toward its founding. Only with the rule.
+		if = {
+			limit = { te_united_nations_on = yes }
+			un_ladder_bloc_vacuum_update = yes
+			un_conference_monthly_update = yes
 
-		# The overview's Security Council flags (un_overview_display_effects.txt),
-		# last: after un_seat_monthly_update has filled or emptied this month's
-		# seats.
-		un_p5_display_refresh = yes
+			# The overview's Security Council flags (un_overview_display_effects.txt),
+			# last: after un_seat_monthly_update has filled or emptied this month's
+			# seats.
+			un_p5_display_refresh = yes
+		}
 	}
 }
 

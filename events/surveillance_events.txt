@@ -329,7 +329,8 @@ surveillance_events.3 = {
 	}
 }
 
-# Event 4: AI Predictive Policing
+# Event 4: Predictive Policing (era 9 software: the gate has no AI technology,
+# so neither the text nor the modifiers' names say AI; #1616)
 # AI systems begin predicting crimes before they happen.
 surveillance_events.4 = {
 	type = country_event
@@ -347,15 +348,12 @@ surveillance_events.4 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = automated_surveillance
 		has_technology_researched = cybersecurity
 		NOT = { has_law = law_type:law_strong_privacy_rights }
-		NOT = { has_variable = ai_predictive_policing_debate_happened }
-	}
-
-	immediate = {
-		set_variable = ai_predictive_policing_debate_happened
 	}
 
 	# Deploy predictive policing
@@ -389,7 +387,7 @@ surveillance_events.4 = {
 		}
 	}
 
-	# Ban AI policing systems
+	# Ban the prediction software from policing
 	option = {
 		name = surveillance_events.4.c
 		ai_chance = {
@@ -434,13 +432,13 @@ surveillance_events.5 = {
 			# Covert warfare on: the event follows an operation our counterintelligence exposed.
 			triggered_desc = {
 				trigger = {
-					has_game_rule = covert_warfare_enabled
+					te_covert_warfare_on = yes
 					exists = scope:surv_cyber_spy
 				}
 				desc = surveillance_events.5.d_exposed_named
 			}
 			triggered_desc = {
-				trigger = { has_game_rule = covert_warfare_enabled }
+				trigger = { te_covert_warfare_on = yes }
 				desc = surveillance_events.5.d_exposed
 			}
 			triggered_desc = {
@@ -476,7 +474,7 @@ surveillance_events.5 = {
 			# country's monthly pulse (covert_warfare_monthly_country), whether or
 			# not it runs a covert service of its own.
 			AND = {
-				has_game_rule = covert_warfare_enabled
+				te_covert_warfare_on = yes
 				covert_code_tier_mild = { VAR = iw_last_exposed_type }
 				has_variable = iw_last_exposed_age
 				var:iw_last_exposed_age < 24
@@ -489,7 +487,7 @@ surveillance_events.5 = {
 		# (covert_op_burn's record, the same write as the type the trigger
 		# reads).
 		if = {
-			limit = { has_game_rule = covert_warfare_enabled }
+			limit = { te_covert_warfare_on = yes }
 			var:iw_last_exposed_country ?= { save_scope_as = surv_cyber_spy }
 		}
 	}
@@ -603,7 +601,7 @@ surveillance_events.200 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/digital_freedom_secured.dds" }
+	event_image = { texture = "gfx/event_pictures/civil_rights_victory.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 

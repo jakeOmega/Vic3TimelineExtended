@@ -16,15 +16,16 @@ populist_party = {
 			triggered_desc = {
 				desc = party_national_rally
 				trigger = {
-					country_has_primary_culture = cu:french
+					country_has_primary_culture = cu:french # REVIEWED 2026-11-07 (culture_merge_ref): cm_latin left out: this is a first_valid ladder, and a Latin Spain, Portugal or Italy would take the French name
 				}
 			}
 			triggered_desc = {
 				desc = party_five_star_movement
 				trigger = {
-					OR = {
+					OR = { # REVIEWED 2026-11-07 (culture_merge_ref): cm_latin left out: this is a first_valid ladder, and a Latin Spain, Portugal or France would take the Italian name
 						country_has_primary_culture = cu:north_italian
 						country_has_primary_culture = cu:south_italian
+						country_has_primary_culture = cu:cm_italian
 					}
 					NOR = {
 						c:AUS ?= this
@@ -46,19 +47,20 @@ populist_party = {
 					OR = {
 						country_has_primary_culture = cu:north_german
 						country_has_primary_culture = cu:south_german
+						country_has_primary_culture = cu:cm_german
 					}
 				}
 			}
 			triggered_desc = {
 				desc = party_sweden_democrats
 				trigger = {
-					country_has_primary_culture = cu:swedish
+					country_has_primary_culture = cu:swedish # REVIEWED 2026-11-07 (culture_merge_ref): cm_scandinavian left out: the Sweden Democrats are a Swedish party, and Denmark and Norway would take the name
 				}
 			}
 			triggered_desc = {
 				desc = party_one_nation
 				trigger = {
-					country_has_primary_culture = cu:australian
+					country_has_primary_culture = cu:australian # REVIEWED 2026-11-07 (culture_merge_ref): cm_anglophone left out: One Nation is Australian, and Britain and America hold the Anglophone culture
 				}
 			}
 			triggered_desc = {
@@ -75,6 +77,7 @@ populist_party = {
 						country_has_primary_culture = cu:telegu
 						country_has_primary_culture = cu:tamil
 						country_has_primary_culture = cu:kannada
+						country_has_primary_culture = cu:cm_dravidian
 					}
 				}
 			}
@@ -119,25 +122,33 @@ populist_party = {
 	}
 
 	available_for_interest_group = {
-		owner = {
-			country_has_voting_franchise = yes
-			OR = {
-				py:populist_party ?= {
-					any_member = {}
-				}
-				ig:ig_rural_folk ?= {
-					ig_counts_as_marginal = no
-				}
-				ig:ig_petty_bourgeoisie ?= {
-					ig_counts_as_marginal = no
+		trigger_if = { # Single-Party State: open to the dominant party's groups, as vanilla's parties are
+			limit = {
+				ig_is_member_of_dominant_party = { PARTY = populist }
+			}
+			always = yes
+		}
+		trigger_else = {
+			owner = {
+				country_has_voting_franchise = yes
+				OR = {
+					py:populist_party ?= {
+						any_member = {}
+					}
+					ig:ig_rural_folk ?= {
+						ig_counts_as_marginal = no
+					}
+					ig:ig_petty_bourgeoisie ?= {
+						ig_counts_as_marginal = no
+					}
 				}
 			}
-		}
-		leader ?= {
-			NOR = {
-				has_ideology = ideology:ideology_communist
-				has_ideology = ideology:ideology_vanguardist
-				has_ideology = ideology:ideology_anarchist
+			leader ?= {
+				NOR = {
+					has_ideology = ideology:ideology_communist_leader
+					has_ideology = ideology:ideology_vanguardist
+					has_ideology = ideology:ideology_anarchist
+				}
 			}
 		}
 	}
@@ -279,9 +290,9 @@ populist_party = {
 			limit = {
 				leader ?= {
 					OR = {
-						has_ideology = ideology:ideology_communist
+						has_ideology = ideology:ideology_communist_leader
 						has_ideology = ideology:ideology_vanguardist
-						has_ideology = ideology:ideology_social_democrat
+						has_ideology = ideology:ideology_state_socialist
 					}
 				}
 			}
@@ -333,6 +344,15 @@ populist_party = {
 			add = {
 				value = -5
 				desc = "from_fascist_distinction"
+			}
+		}
+		if = { # Single-Party State: the dominant party keeps its groups (vanilla 1.15.2's term)
+			limit = {
+				ig_is_member_of_dominant_party = { PARTY = populist }
+			}
+			add = {
+				value = 1000
+				desc = "amendment_populist_party_dominance"
 			}
 		}
 		# First Past the Post (amendment_first_past_the_post): one of the two

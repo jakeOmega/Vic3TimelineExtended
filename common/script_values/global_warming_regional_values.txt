@@ -1,0 +1,112 @@
+﻿# ============================================================================
+# Regional Climate Warming: the band each state takes and the scale it applies at (#1681)
+# ============================================================================
+# docs/superpowers/specs/2026-11-13-regional-climate-warming-design.md; system doc
+# docs/systems/mod_systems/global_warming.md, "Regional warming".
+#
+# A state between the tropics carries global_warming_tropics and one 55 degrees or
+# more from the equator global_warming_high_latitudes (extra_modifiers.txt), on top
+# of Climate Warming and at the same scale; a mid-latitude state carries neither.
+# The refresh is gw_regional_refresh_effect (global_warming_regional_effects.txt),
+# from the monthly state pulse (global_warming_regional_on_actions.txt).
+# ============================================================================
+
+# The high latitudes begin this many degrees from the equator (the Local Climate
+# record's reference place, te_climate_abs_latitude, whole degrees). At 50 the band
+# took in England, the Low Countries, northern Germany, Poland and Ukraine (132
+# regions); at 55 it is the boreal north (64). Spec § 3.
+gw_regional_high_latitude_min = 55
+
+# State scope. The band: 1 the tropics (vanilla 1.15's in_tropics, the state
+# region's centre point, as the disease outbreak's weight reads it), 2 the high
+# latitudes, 0 the mid-latitudes and a region with no climate record (whose
+# latitude reads 0). Read once per state, by the first refresh: the latitude is an
+# if-chain over every state region (local_climate_generated.txt).
+gw_regional_band_value = {
+	value = 0
+	if = {
+		limit = { in_tropics = yes }
+		value = 1
+	}
+	else_if = {
+		limit = { te_climate_abs_latitude >= gw_regional_high_latitude_min }
+		value = 2
+	}
+}
+
+# Any scope. The scale the band's modifier applies at: Climate Warming's own, the
+# felt anomaly (after any aerosol mask, already to 0.01) floored at 0, once the
+# World Climate entry has opened (gw_g_world_climate_open: the first month the
+# unmasked warming reaches 0.1 C under the rule, set in
+# global_warming_events_on_action and never removed, as the entry never closes),
+# and 0 before. Reads globals only.
+gw_regional_target = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gw_g_world_climate_open }
+		value = temperature_anomaly_display
+		min = 0
+	}
+}
+
+# State scope: how far the scale in force is from the target. 0 on a state that has
+# never applied one (a mid-latitude state, which stores only its band), so the
+# monthly trigger can read it on any state.
+gw_regional_gap = {
+	value = 0
+	if = {
+		limit = { has_variable = gw_regional_applied }
+		value = var:gw_regional_applied
+		subtract = gw_regional_target
+	}
+}
+
+# Country scope, for the Warming Penalty cell's hover (gw_cond_penalty_tt): how many
+# of the country's states carry each band. A hover reads it only while it shows.
+gw_regional_n_tropics = {
+	value = 0
+	every_scope_state = {
+		limit = { var:gw_regional_band ?= 1 }
+		add = 1
+	}
+}
+
+gw_regional_n_high_latitudes = {
+	value = 0
+	every_scope_state = {
+		limit = { var:gw_regional_band ?= 2 }
+		add = 1
+	}
+}
+
+# The self-check's counts, for its debug_log line, which can't see the effect's
+# scopes (gw_regional_selfcheck_effect, global_warming_regional_effects.txt).
+gw_rg_chk_states_g = { value = global_var:gw_rg_chk_states }
+gw_rg_chk_tropics_g = { value = global_var:gw_rg_chk_tropics }
+gw_rg_chk_tropics_mod_g = { value = global_var:gw_rg_chk_tropics_mod }
+gw_rg_chk_high_g = { value = global_var:gw_rg_chk_high }
+gw_rg_chk_high_mod_g = { value = global_var:gw_rg_chk_high_mod }
+# Its thresholds: at most half of all states in the tropics, and nine in ten of each
+# band's states carrying its modifier.
+gw_rg_chk_tropics_max_g = {
+	value = global_var:gw_rg_chk_states
+	multiply = 0.5
+}
+gw_rg_chk_tropics_mod_min_g = {
+	value = global_var:gw_rg_chk_tropics
+	multiply = 0.9
+}
+gw_rg_chk_high_mod_min_g = {
+	value = global_var:gw_rg_chk_high
+	multiply = 0.9
+}
+# The scale check: one tropical state's heatwave duration, and what Climate Warming
+# (0.5 a degree) and Tropical Warming (0.25 at the state's applied scale) should
+# give. A band modifier stuck at x1 (the multiplier misread) reads 0.25 x |1 -
+# scale| away, so the check skips a scale within 0.2 of 1.
+gw_rg_chk_reading_g = { value = global_var:gw_rg_chk_reading }
+gw_rg_chk_expected_g = { value = global_var:gw_rg_chk_expected }
+gw_rg_chk_scale_gap = {
+	value = global_var:gw_rg_chk_reading
+	subtract = global_var:gw_rg_chk_expected
+}

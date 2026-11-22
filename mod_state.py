@@ -169,6 +169,22 @@ VANILLA_COMMON_DIRS = {
     "Pop Types": "pop_types",
     "Terrains": "terrain",
     "Game Concepts": "game_concepts",
+    # 1.15: glossary entries (`[glossary_x]` / `Glossary('glossary_x', …)`
+    # links, read by concept_reference_audit and check_gui_lint), regional
+    # exile pools (`exile_character = { exile_pool = … }`), and the AI ship
+    # categories every ship type must name (`ai_ship_category`).
+    "Glossary": "glossary",
+    "Regional Exile Pools": "regional_exile_pools",
+    "AI Ship Categories": "ai_ship_categories",
+    # Which state regions each strategic region holds (#917), a named
+    # prestige good's base good (#749: the roster audit and the engine's cap
+    # of three per base good), and vanilla's progress bars (#1403 item 4).
+    "Strategic Regions": "strategic_regions",
+    "Prestige Goods": "prestige_goods",
+    "Scripted Progress Bars": "scripted_progress_bars",
+    # Vanilla's game rules, so a cloud session can read what each base-game
+    # setting carries (its flags and apply_modifier lines) without the game.
+    "Game Rules": "game_rules",
 }
 
 # Entity types ModState reads from the mod alone, as {entity_type: directory
@@ -178,7 +194,6 @@ MOD_ONLY_DIRS = {
     "Scripted Effects": "common/scripted_effects",
     "Scripted Triggers": "common/scripted_triggers",
     "Scripted GUIs": "common/scripted_guis",
-    "Scripted Progress Bars": "common/scripted_progress_bars",
     "On Actions": "common/on_actions",
     "Events": "events",
 }

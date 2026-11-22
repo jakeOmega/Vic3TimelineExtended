@@ -220,8 +220,8 @@ un_mission_volunteer_count = {
 }
 
 # The week's cost of every mission the scoped country pays to serve in.
-# Cached as var:un_msn_service_cached by un_mission_service_refresh, the
-# multiplier of un_mission_service_cost. Scope: country
+# Cached as var:un_msn_service_cached by un_mission_service_refresh, the value
+# of un_mission_service_cost's declaration on je_united_nations. Scope: country
 un_mission_service_expense_value = {
 	value = un_mission_service_one_expense_value
 	multiply = un_mission_service_count
@@ -297,6 +297,27 @@ un_mission_ai_join_score = {
 	if = {
 		limit = { ROOT = { has_law = law_type:law_humanitarian_regulations } }
 		add = 5
+	}
+	# 1.15 (#1450): an armed contingent has to get there. A member whose army
+	# can't realistically reach a peacekeeping or Stabilization mission's state
+	# (has_military_reach, te_military_reach_values.txt) is much less keen.
+	if = {
+		limit = {
+			OR = {
+				has_tag = un_msn_peacekeeping
+				has_tag = un_msn_stabilisation
+			}
+			var:un_msn_state ?= { save_temporary_scope_as = un_msn_reach_state }
+			ROOT = {
+				NOT = {
+					has_military_reach = {
+						target = scope:un_msn_reach_state
+						min_reach = te_reach_realistic
+					}
+				}
+			}
+		}
+		add = -15
 	}
 	if = {
 		limit = { ROOT = { country_rank >= rank_value:great_power } }
@@ -1180,7 +1201,7 @@ un_state_mission_barred = {
 un_lean_interests_observer_request = {
 	value = 0
 	if = {
-		limit = { un_mission_holds_elections = yes }
+		limit = { te_holds_elections = yes }
 		add = 15
 	}
 	if = {

@@ -1,0 +1,34 @@
+﻿# TEMPORARY self-check (2026-11-06, #1404): does an event's fire_only_once
+# record last?
+#
+# 32 events that used to guard themselves with a never-removed country variable
+# now rely on 1.15's fire_only_once (design: docs/superpowers/specs/
+# 2026-11-06-scaling-modifiers-design.md § 2). Probed: it is per country and a
+# failed trigger doesn't use it up. Not probed: whether the record survives a
+# save and load, and whether a revolution's winner inherits it, as it inherits
+# variables.
+#
+# fire_only_once_kept, from society_technology_events.1 (the canary), in a game
+# started after this file (the marker below is set only at game start, so an
+# older save, whose variable predates the record, stays out):
+#   BROKEN  the canary fired a second time for one nation: the record was lost.
+#           Put the variables back: each event sets its own again in
+#           `immediate`, and its trigger already reads it.
+# Nothing logs while the record holds; OK is the absence of BROKEN over a game
+# with saves, loads and a revolution won (the canary's ten-year modifier
+# expires, and a winner loses it, so its trigger reopens either way).
+#
+# Play-test row: docs/testing/vanilla-1-15-playtest.md, C20. Delete this file,
+# and the canary's OR and logging in society_technology_events.1, once C20 is
+# answered.
+on_game_started = {
+	on_actions = {
+		te_fire_only_once_canary_arm
+	}
+}
+
+te_fire_only_once_canary_arm = {
+	effect = {
+		set_global_variable = te_fire_only_once_canary_armed
+	}
+}

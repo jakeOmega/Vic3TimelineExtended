@@ -26,7 +26,8 @@ from typing import Any, Callable, Iterable
 class Annotator:
     name: str               # short identifier used in ?annotate=<name>
     entity_type: str        # mod_parsers key, e.g. "ProductionMethods"
-    fields: list[str]       # field names this annotator adds to entries
+    fields: list[str]       # the fields this annotator adds to entries; a
+                            # compute() row's other keys are not merged
     description: str        # one-line, surfaced via GET /annotators
     compute: Callable[[Path], dict[str, dict]] = field(repr=False)
         # repo_root -> {entity_id: {field_name: value, ...}}
@@ -139,6 +140,13 @@ def annotate_entries(
     `cache` (optional) is a caller-owned dict keyed by `(annotator.name,
     entity_type)` that stores `compute()` results so a single request only
     runs each compute once.
+
+    Only the fields an annotator declares are merged. Those are its own, so
+    a second pass refreshes them; every other key of a `compute()` row stays
+    out, so the entry's own keys are never overwritten. The PM balance row
+    also carries the mod file that defines the PM, and merging that put
+    `file: extra_pms.txt` on a `source: vanilla` entry for a vanilla PM the
+    mod redefines.
     """
     names = _resolve_requested(requested)
     annotators = _annotators_for(entity_type, names)
@@ -161,7 +169,7 @@ def annotate_entries(
                 continue
             extra = per_id.get(eid)
             if extra:
-                e.update(extra)
+                e.update({k: extra[k] for k in ann.fields if k in extra})
 
 
 def apply_to_response(

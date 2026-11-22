@@ -181,7 +181,7 @@ banking_cycle_events.151 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/cooperative_market_success.dds" }
+	event_image = { texture = "gfx/event_pictures/cooperative_assembly_hall.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
@@ -275,7 +275,7 @@ banking_cycle_events.104 = {
 		name = banking_cycle_events.104.b
 		banking_change_cycle_value = { ADD = -5 TEXT = CYCLE_VALUE_MINUS_5_DESC }
 		banking_change_bubble_pressure = { ADD = -10 TEXT = BUBBLE_PRESSURE_MINUS_10_DESC }
-		add_modifier = { name = banking_event_deposit_guarantee_emergency multiplier = banking_event_expense_huge days = normal_modifier_time is_decaying = yes }
+		add_modifier = { name = banking_event_stockpile_release multiplier = banking_event_expense_huge days = normal_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals strata = lower }
 		ai_chance = { base = 60 }
 	}
@@ -329,7 +329,7 @@ banking_cycle_events.154 = {
 		name = banking_cycle_events.154.b
 		banking_change_cycle_value = { ADD = -5 TEXT = CYCLE_VALUE_MINUS_5_DESC }
 		banking_change_bubble_pressure = { ADD = -10 TEXT = BUBBLE_PRESSURE_MINUS_10_DESC }
-		add_modifier = { name = banking_event_deposit_guarantee_emergency multiplier = banking_event_expense_huge days = normal_modifier_time is_decaying = yes }
+		add_modifier = { name = banking_event_federation_relief_fund multiplier = banking_event_expense_huge days = normal_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals strata = lower }
 		ai_chance = { base = 60 }
 	}
@@ -576,7 +576,7 @@ banking_cycle_events.4 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/bank_run_crowd.dds" }
+	event_image = { texture = "gfx/event_pictures/financial_distress_street.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
@@ -884,7 +884,7 @@ banking_cycle_events.8 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
@@ -1047,7 +1047,7 @@ banking_cycle_events.10 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
@@ -1495,7 +1495,7 @@ banking_cycle_events.15 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
@@ -1711,7 +1711,7 @@ banking_cycle_events.16 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
@@ -1860,7 +1860,7 @@ banking_cycle_events.116 = {
 		name = banking_cycle_events.116.a
 		default_option = yes
 		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
-		add_modifier = { name = banking_event_cb_independence days = long_modifier_time is_decaying = yes }
+		add_modifier = { name = banking_event_plan_figures_upheld days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = small_radicals pop_type = academics }
 		ai_chance = { base = 50 }
 	}
@@ -1909,7 +1909,7 @@ banking_cycle_events.166 = {
 		name = banking_cycle_events.166.a
 		default_option = yes
 		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
-		add_modifier = { name = banking_event_cb_independence days = long_modifier_time is_decaying = yes }
+		add_modifier = { name = banking_event_old_slate_upheld days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = small_radicals pop_type = capitalists }
 		ai_chance = { base = 50 }
 	}
@@ -2073,7 +2073,7 @@ banking_cycle_events.167 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/cooperative_market_success.dds" }
+	event_image = { texture = "gfx/event_pictures/cooperative_assembly_hall.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -2206,7 +2206,7 @@ banking_cycle_events.19 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
@@ -2408,7 +2408,7 @@ banking_cycle_events.170 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/cooperative_market_success.dds" }
+	event_image = { texture = "gfx/event_pictures/cooperative_assembly_hall.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
@@ -2700,7 +2700,7 @@ banking_cycle_events.25 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
@@ -3014,7 +3014,7 @@ banking_cycle_events.30 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
@@ -3082,15 +3082,13 @@ banking_cycle_events.30 = {
 # (banking_can_enact_cb_bank_holiday), and option A enacts the tool itself —
 # banking_effect_cb_bank_holiday: 90 days, the five-year cooldown, the two
 # intervention points the holiday holds, the history marker — rather than a
-# bespoke modifier beside it (#428). banking_event_bank_holiday, which option A
-# used to grant, stays defined for saves that carry it (PENDING REMOVAL in
-# common/scripted_effects/legacy_modifier_cleanup.txt).
+# bespoke modifier beside it (#428).
 # --------------------------------------------------------------------------
 banking_cycle_events.31 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/bank_run_crowd.dds" }
+	event_image = { texture = "gfx/event_pictures/financial_distress_street.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
@@ -3326,7 +3324,7 @@ banking_cycle_events.34 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
@@ -3691,7 +3689,7 @@ banking_cycle_events.39 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
@@ -4158,7 +4156,7 @@ banking_cycle_events.45 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
@@ -4171,7 +4169,7 @@ banking_cycle_events.45 = {
 
 	# Once asked, we answer: the donor's own gate (banking_can_offer_bailout)
 	# was read when its pulse put the question to the partner (.68).
-	trigger = { exists = scope:bailout_country }
+	trigger = { exists = scope:bailout_country } # REVIEWED 2026-11-13 (delayed_trigger): scope:bailout_country is saved before .68 is sent (banking_rescue_review) and rides along
 
 	cancellation_trigger = { NOT = { exists = scope:bailout_country } }
 
@@ -4378,7 +4376,7 @@ banking_cycle_events.69 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
@@ -5153,7 +5151,7 @@ banking_cycle_events.64 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/cooperative_market_success.dds" }
+	event_image = { texture = "gfx/event_pictures/cooperative_assembly_hall.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -5465,7 +5463,7 @@ banking_cycle_events.47 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/bank_run_crowd.dds" }
+	event_image = { texture = "gfx/event_pictures/financial_distress_street.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -5635,7 +5633,7 @@ banking_cycle_events.58 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
@@ -5727,7 +5725,7 @@ banking_cycle_events.59 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/stock_exchange.dds" }
+	event_image = { texture = "gfx/event_pictures/financial_fraud_exposed.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 

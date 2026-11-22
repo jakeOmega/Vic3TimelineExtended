@@ -67,6 +67,23 @@ REPLACE:building_synthetics_plant = {
 
 	required_construction = construction_cost_very_high
 
+	ai_value = {
+		value = 1000
+
+		if = {
+			limit = {
+				owner ?= {
+					has_journal_entry = je_five_year_plan
+					je:je_five_year_plan ?= {
+						has_variable = five_year_plan_heavy_industry_var
+					}
+					five_year_plan_heavy_industry_goal_met = no
+				}
+			}
+			add = 2500
+		}
+	}
+
 	possible = {
 		is_industrial_production_allowed = yes
 	}
@@ -113,6 +130,23 @@ REPLACE:building_electrics_industry = {
 
 	required_construction = construction_cost_super_high
 
+	ai_value = {
+		value = 1000
+
+		if = {
+			limit = {
+				owner ?= {
+					has_journal_entry = je_five_year_plan
+					je:je_five_year_plan ?= {
+						has_variable = five_year_plan_heavy_industry_var
+					}
+					five_year_plan_heavy_industry_goal_met = no
+				}
+			}
+			add = 2500
+		}
+	}
+
 	possible = {
 		is_industrial_production_allowed = yes
 	}
@@ -145,6 +179,36 @@ INJECT:building_power_plant = {
 		default_auto_expand_rule = yes
 		state = { rt_fossil_construction_allowed_here = yes }
 	}
+
+	# AI coverage (#1822): vanilla 1.15.1's ai_value restated, with one change. Vanilla adds 4000
+	# in a state with no building_power_plant built or under way; the test is now "nothing here
+	# makes Electricity" (te_state_has_a_power_plant: any plant, a Grid Transfer Station, a company
+	# power station), so a state that already has power no longer draws a coal plant for the
+	# bonus. The mod's own plants take no such bonus. An INJECTed script-value field replaces
+	# vanilla's (read on interest groups and parties), so the whole field is restated; if the
+	# engine kept vanilla's instead, nothing changes.
+	# test_ai_building_values.py holds the restated lines to vanilla's.
+	ai_value = {
+		value = 1000
+
+		if = {
+			limit = { te_state_has_a_power_plant = no }
+			add = 4000
+		}
+
+		if = { # Five-Year Plan electrification objective
+			limit = {
+				owner ?= {
+					has_journal_entry = je_five_year_plan
+					je:je_five_year_plan ?= {
+						has_variable = five_year_plan_electrification_var
+					}
+					five_year_plan_electrification_goal_met = no
+				}
+			}
+			add = 2500
+		}
+	}
 }
 
 REPLACE:building_automotive_industry = {
@@ -169,6 +233,23 @@ REPLACE:building_automotive_industry = {
 
 	required_construction = construction_cost_very_high
 
+	ai_value = {
+		value = 1000
+
+		if = {
+			limit = {
+				owner ?= {
+					has_journal_entry = je_five_year_plan
+					je:je_five_year_plan ?= {
+						has_variable = five_year_plan_heavy_industry_var
+					}
+					five_year_plan_heavy_industry_goal_met = no
+				}
+			}
+			add = 2500
+		}
+	}
+
 	possible = {
 		is_industrial_production_allowed = yes
 	}
@@ -192,6 +273,8 @@ REPLACE_OR_CREATE:building_space_elevator_construction_site = {
 	}
 
 	required_construction = construction_cost_medium
+	# The engine's base, and nothing for a country in default (te_ai_coverage_values.txt, #1822).
+	ai_value = { value = te_megaproject_ai_value }
 
 	expandable = no
 
@@ -204,6 +287,9 @@ REPLACE_OR_CREATE:building_space_elevator_construction_site = {
 			NOT = { has_building = building_space_elevator }
 			b:building_space_elevator.level < 20
 		}
+		# A hand-kept list of 92 state regions near the equator, not in_tropics:
+		# the engine's band roughly doubled the sites (about 183), which the owner
+		# judged too many (2026-11-12; see #1454, #1672).
 		OR = {
 			state_region = s:STATE_RIFT_VALLEY
 			state_region = s:STATE_IVORY_COAST
@@ -386,6 +472,8 @@ REPLACE_OR_CREATE:building_space_program = {
 		pmg_base_building_space_program
 		pmg_space_program_debris_removal # orbital debris cleanup (te_orbital_debris_pmgs.txt)
 		pmg_space_program_module_fabrication # colony modules (sr_colony_module_pmgs.txt)
+		pmg_space_program_module_storage # the module stock's storage (sr_colony_module_pmgs.txt)
+		pmg_space_program_mission_ceiling # the AI's mission budget ceiling (sr_mission_ceiling_pmgs.txt)
 	}
 
 	possible = {
@@ -398,8 +486,12 @@ REPLACE_OR_CREATE:building_space_program = {
 
 	required_construction = construction_cost_super_high
 
+	# A player's government always may; an AI's only by the means test its
+	# budget pass reverses to pull a program down (sr_ai_may_build_space_program,
+	# sr_ai_mission_budget_triggers.txt; ai.md § Space Program Mission Budget),
+	# as Found a Space Program's AI weight asks.
 	can_build_government = {
-		always = yes
+		owner ?= { sr_ai_may_build_space_program = yes }
 	}
 
 	can_build_private = {
@@ -571,6 +663,20 @@ INJECT:building_gold_mine = {
 	}
 }
 
+# Vanilla's copper mine (1.15), which replaced the mod's own. It joins the mod's
+# discoverable mines (bg_discoverable_mining, a child of bg_mining), so the
+# deposits resources.py writes start undiscovered past vanilla's own caps, which
+# it keeps as each state's discovered amount. Left capped, the mod's deposit
+# scores would open about 10,700 copper levels in 1836, where vanilla has 609.
+INJECT:building_copper_mine = {
+	building_group = bg_discoverable_mining
+
+	production_method_groups = {
+		pmg_tailings_wastewater_management
+		pmg_maintenance_mine
+	}
+}
+
 # Precision environmental management for cereal grain farms
 INJECT:building_rye_farm = {
 	production_method_groups = {
@@ -602,6 +708,85 @@ INJECT:building_millet_farm = {
 	}
 }
 
+# Feed Additives for the Livestock Ranch, Antibiotic Growth Promoters' group of
+# its own (PR #1828; docs/systems/mod_systems/production_methods.md
+# § "Livestock ranches and plantations"). Group in extra_pm_groups.txt.
+INJECT:building_livestock_ranch = {
+	production_method_groups = {
+		pmg_feed_additives_building_livestock_ranch
+	}
+}
+
+# Harvesting Process for the plantation-type buildings: the nine plantations,
+# the Vineyard and the Rubber Plantation (Workshop request, 2026-11-15;
+# docs/systems/mod_systems/production_methods.md § "Livestock ranches and
+# plantations"). Groups in extra_pm_groups.txt.
+INJECT:building_banana_plantation = {
+	production_method_groups = {
+		pmg_harvesting_process_plantation
+	}
+}
+
+INJECT:building_coffee_plantation = {
+	production_method_groups = {
+		pmg_harvesting_process_plantation
+	}
+}
+
+INJECT:building_cotton_plantation = {
+	production_method_groups = {
+		pmg_harvesting_process_plantation
+	}
+}
+
+INJECT:building_dye_plantation = {
+	production_method_groups = {
+		pmg_harvesting_process_plantation
+	}
+}
+
+INJECT:building_opium_plantation = {
+	production_method_groups = {
+		pmg_harvesting_process_plantation
+	}
+}
+
+INJECT:building_silk_plantation = {
+	production_method_groups = {
+		pmg_harvesting_process_plantation
+	}
+}
+
+INJECT:building_sugar_plantation = {
+	production_method_groups = {
+		pmg_harvesting_process_plantation
+	}
+}
+
+INJECT:building_tea_plantation = {
+	production_method_groups = {
+		pmg_harvesting_process_plantation
+	}
+}
+
+INJECT:building_tobacco_plantation = {
+	production_method_groups = {
+		pmg_harvesting_process_plantation
+	}
+}
+
+INJECT:building_vineyard = {
+	production_method_groups = {
+		pmg_harvesting_process_plantation
+	}
+}
+
+INJECT:building_rubber_plantation = {
+	production_method_groups = {
+		pmg_harvesting_process_building_rubber_plantation
+	}
+}
+
 REPLACE_OR_CREATE:building_solar_collector_construction_site = {
 	building_group = bg_government
 	icon = "gfx/interface/icons/building_icons/building_solar_collector_construction_site.dds"
@@ -617,6 +802,8 @@ REPLACE_OR_CREATE:building_solar_collector_construction_site = {
 	}
 
 	required_construction = construction_cost_medium
+	# The engine's base, and nothing for a country in default (te_ai_coverage_values.txt, #1822).
+	ai_value = { value = te_megaproject_ai_value }
 
 	expandable = no
 
@@ -723,6 +910,8 @@ REPLACE_OR_CREATE:building_orbital_battlestation_construction_site = {
 	}
 
 	required_construction = construction_cost_medium
+	# The engine's base, and nothing for a country in default (te_ai_coverage_values.txt, #1822).
+	ai_value = { value = te_megaproject_ai_value }
 
 	expandable = no
 
@@ -789,6 +978,8 @@ REPLACE_OR_CREATE:building_mind_upload_nexus_construction_site = {
 	}
 
 	required_construction = construction_cost_medium
+	# The engine's base, and nothing for a country in default (te_ai_coverage_values.txt, #1822).
+	ai_value = { value = te_megaproject_ai_value }
 
 	expandable = no
 
@@ -848,6 +1039,8 @@ REPLACE_OR_CREATE:building_antimatter_facility_construction_site = {
 	}
 
 	required_construction = construction_cost_medium
+	# The engine's base, and nothing for a country in default (te_ai_coverage_values.txt, #1822).
+	ai_value = { value = te_megaproject_ai_value }
 
 	expandable = no
 
@@ -948,6 +1141,8 @@ REPLACE_OR_CREATE:building_antimatter_warhead_plant = {
 	}
 
 	required_construction = construction_cost_medium
+	# The engine's base, and nothing for a country in default (te_ai_coverage_values.txt, #1822).
+	ai_value = { value = te_megaproject_ai_value }
 
 	possible = {
 		custom_tooltip = {
@@ -992,6 +1187,8 @@ REPLACE_OR_CREATE:building_nanofabrication_center_construction_site = {
 	}
 
 	required_construction = construction_cost_medium
+	# The engine's base, and nothing for a country in default (te_ai_coverage_values.txt, #1822).
+	ai_value = { value = te_megaproject_ai_value }
 
 	expandable = no
 
@@ -1052,6 +1249,8 @@ REPLACE_OR_CREATE:building_consciousness_network_construction_site = {
 	}
 
 	required_construction = construction_cost_medium
+	# The engine's base, and nothing for a country in default (te_ai_coverage_values.txt, #1822).
+	ai_value = { value = te_megaproject_ai_value }
 
 	expandable = no
 

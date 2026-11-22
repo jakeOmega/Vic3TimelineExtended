@@ -20,7 +20,7 @@ the things only the game can show. Strike a fixed item through with the commit t
 |---|---|---|
 | `TE_SELF_CHECK OK covert_catch_decision` | A caught operation's saved scope reached the defender's decision event (`covert_warfare.3`), attacker to defender. | At the roll, write the attacker and type code on the target as variables and look the operation up in `.3`'s `immediate` (one decision open per target at a time). |
 | `TE_SELF_CHECK BROKEN covert_catch_decision` | `.3` never ran for a pending catch; the operation was released for the next roll. | As above. |
-| `TE_SELF_CHECK OK covert_watch_expose` | An exposure of a watched operation reached the attacker's `covert_warfare.1`, defender to attacker. | — |
+| `TE_SELF_CHECK OK covert_watch_expose` | An exposure of a watched operation reached the attacker's `covert_warfare.1`, defender to attacker. **First verdict: OK, 2026-11-17**, in the owner's 1.15.1 game (a 1929 save, launch of 14:46), 1 June 1952: `attacker=SWE` | — |
 | `TE_SELF_CHECK BROKEN covert_watch_expose` | An ordered exposure was sent but `.1` never ran. | `covert_watch_expose_record` flags the operation (`iw_expose_requested`), and the attacker's own monthly pass finds it and calls `covert_exposure_fire`. |
 | `TE_SELF_CHECK OK covert_can_research_current` | `can_research` held for every country's current production or military research whose prerequisites it holds (`held=` countries, `can_research=` of them). Logged on the first monthly pulse with a sample. | — |
 | `TE_SELF_CHECK BROKEN covert_can_research_current` | `can_research` failed for some current research with its prerequisites held. | Keep the prerequisite lines in covert tech theft (as built); delete the check. |
@@ -143,6 +143,7 @@ operation against us now.
 |---|---|---|
 | **Three exposures.** Catch an operation and hover each option. | "Expose them and shore up our counterintelligence" (default) previews Counterintelligence Alert; "…and expel their diplomats" previews −25 relations and the network losses; "…and turn it against them" the network of up to 25. "Let it run, and watch" is last. | |
 | **No second event.** Pick each exposure in turn, on three catches. | The attacker's event resolves, then a feed notice names the attacker and the operation and says what followed: Operation Exposed (the alert shows among our modifiers), Operation Exposed, Diplomats Expelled (relations −25), Operation Exposed and Turned (a network inside them under Agent Networks). Foreign Interference Detected does not open. | A notice with raw keys or a blank name: the saved scope or `GetPlayer`'s record did not reach the notice. |
+| **The expulsion's networks** (#448, #798). Run a network inside the attacker, note our network's strength under Agent Networks (and theirs inside us, from the attacker's side: switch to it before and after), then expel their diplomats, from this event or from Foreign Interference Detected (`covert_warfare.2` c). | Their network inside us falls by 25 (or is gone at the next monthly pass if that empties it), and ours inside them falls by 25 too. | No change: `covert_net_expel`'s `random_in_list` found no network for the target (`var:iw_target ?= $TARGET$`). |
 | **The alert refreshes.** Expose two operations with shore up, a month apart. | One Counterintelligence Alert, renewed, not two. | |
 | **Locked.** Catch two operations of one attacker in a month (or expose one while its first exposure is open). | The second waits under Known Foreign Operations as ordered and goes out once the first settles, with the follow-up chosen for it. | |
 | **Panel Expose.** Watch an operation, then Expose it from Known Foreign Operations. | Operation Exposed, with the alert. | |
@@ -151,3 +152,18 @@ operation against us now.
 | **Expose / Ask if severe.** Set each and catch a mild operation, then (under Ask if severe) a severe one (regime change, nuclear sabotage). | The mild one is exposed with no event, then Operation Exposed; the severe one opens A Foreign Operation Uncovered. | |
 | **Mute.** Message Settings lists Counterintelligence. | Muting it hides all four notices. | |
 | **AI defender.** An AI that exposes a watched operation. | Its exposure still opens Foreign Interference Detected (its own choice); nothing changes for AI countries. | |
+
+## Harness run, 2026-11-11 (1.15.1)
+
+Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
+
+`covert_can_research_current` OK (`held=75 can_research=75`).
+
+## The world's best capacity, once a month (#1724)
+
+The first holder to pulse each month stores `global_max_ic`, and a 25-day global lock (`iw_max_ic_lock`) spares the rest.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The figure is there.** Any game past the first month with the entry active: hover the overview's Capacity bar. | "of the world's best (N)" with N the leading service's capacity, well above 1, and the standing icon (Vulnerable … Fortress) as before. | N reads 1 and every holder's bar is full: `global_max_ic` isn't being set (the display starts at 1); read `has_global_variable = iw_max_ic_lock`. A lock that never lapses would freeze the figure. |
+| **It refreshes.** The same game two months later. | N changes as the leading service grows or shrinks. | The same N month after month while capacities change: the lock isn't expiring. |

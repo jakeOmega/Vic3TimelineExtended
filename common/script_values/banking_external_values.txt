@@ -24,8 +24,71 @@ banking_external_inflow_damp = {
 banking_external_gold_pressure_factor = {
 	value = 1
 	if = {
-		limit = { banking_external_eligible_sterilize_inflows = yes banking_tool_sterilize_inflows_active = yes has_variable = banking_external_sterilization_funded var:banking_external_sterilization_funded = 1 }
+		limit = { te_mon_has_gold_flows = yes banking_external_eligible_sterilize_inflows = yes banking_tool_sterilize_inflows_active = yes has_variable = banking_external_sterilization_funded var:banking_external_sterilization_funded = 1 }
 		value = banking_external_sterilized_factor
+	}
+}
+
+# STERILIZATION ON A FLOATING CURRENCY (2026-11-14,
+# docs/superpowers/archive/specs/2026-11-14-external-currency-tools-design.md): the
+# central bank buys or sells foreign money against the move and sells bills to
+# absorb what it paid, so the index closes half its usual share of the distance
+# to its target each month, up or down (te_mon_fx_shadow_step reads this). A
+# shock decays at its own speed, so it moves a sterilized currency less than
+# half as far. Funded as on gold: the flag is the monthly update's, set before
+# step 5b reads it.
+banking_external_fx_sterilized_speed = { value = 0.5 }
+banking_external_fx_adjust_factor = {
+	value = 1
+	if = {
+		limit = {
+			te_mon_fx_floats = yes
+			banking_external_eligible_sterilize_inflows = yes
+			banking_tool_sterilize_inflows_active = yes
+			has_variable = banking_external_sterilization_funded
+			var:banking_external_sterilization_funded = 1
+		}
+		value = banking_external_fx_sterilized_speed
+	}
+}
+
+# FOREIGN EXCHANGE SURRENDER ON A FLOATING CURRENCY (2026-11-14): exporters who
+# must sell their foreign earnings for the home currency hold up its price. A
+# term of the exchange-rate target (te_mon_fx_target_value), 4 points at the full
+# export share, banded as the gold purchase is (banking_external_export_share):
+# what a real rate one point above the world's buys. No treasury money moves.
+banking_external_surrender_fx_points = { value = 4 }
+banking_external_surrender_fx_reach = {
+	value = banking_external_surrender_fx_points
+	multiply = banking_external_export_share
+}
+banking_external_surrender_fx_term = {
+	value = 0
+	if = {
+		limit = {
+			te_mon_fx_floats = yes
+			banking_external_eligible_fx_surrender = yes
+			banking_tool_fx_surrender_active = yes
+		}
+		value = banking_external_surrender_fx_reach
+	}
+}
+
+# How far the index still has to go to its target, either way: the floating AI
+# sterilizes a move of 8 points or more (banking_ai_core_cb_sterilize_inflows).
+banking_external_fx_target_gap = {
+	value = 0
+	if = {
+		limit = { has_variable = te_fx_index }
+		value = te_mon_fx_target_value
+		subtract = var:te_fx_index
+	}
+}
+banking_external_fx_target_distance = {
+	value = banking_external_fx_target_gap
+	if = {
+		limit = { banking_external_fx_target_gap < 0 }
+		multiply = -1
 	}
 }
 # The stock of safer debt survives a repeal, revolution or temporary law change;
@@ -65,15 +128,12 @@ banking_external_sterilization_cost = {
 	min = 0
 }
 # A month's sterilization bill, charged a quarter of it a week as a government
-# expense (banking_external_charge_sterilization, owner 2026-10-27). The
-# multiplier is evaluated in the entry's scope, so it reads the owner.
+# expense (owner 2026-10-27). banking_external_charge_sterilization caches it in
+# banking_external_sterilization_charge_cached, which je_banking_cycle declares
+# banking_external_sterilization_charge at while the tool is on.
 banking_external_sterilization_weekly_charge = {
 	value = banking_external_sterilization_cost
 	divide = 4
-}
-banking_external_sterilization_weekly_charge_for_je = {
-	value = 0
-	owner = { add = banking_external_sterilization_weekly_charge }
 }
 banking_external_surrender_purchase = {
 	value = gdp
@@ -108,14 +168,11 @@ banking_external_import_cost = {
 	multiply = gdp
 	min = 0
 }
-# ...and import financing's, at this month's escalated cost.
+# ...and import financing's, at this month's escalated cost
+# (banking_external_charge_import, into banking_external_import_charge_cached).
 banking_external_import_weekly_charge = {
 	value = banking_external_import_cost
 	divide = 4
-}
-banking_external_import_weekly_charge_for_je = {
-	value = 0
-	owner = { add = banking_external_import_weekly_charge }
 }
 
 banking_external_real_gap = {
@@ -158,7 +215,149 @@ banking_external_purchase_cash = {
 banking_external_surrender_purchase_display = {
 	value = 0
 	if = {
-		limit = { banking_tool_fx_surrender_active = yes }
+		limit = { banking_tool_fx_surrender_active = yes te_mon_has_gold_flows = yes }
 		value = banking_external_surrender_purchase
 	}
+}
+
+# --- "On this currency": what each tool changes, for the dashboard ----------
+# The line under each exchange tool's description in its dashboard tooltip
+# (banking_ext_now_* in banking_dash_custom_loc.txt) gives the figure the tool
+# changes on this country's currency, without the tool and with it, everything
+# else as it stands. Each re-reads the formula the monthly pulse runs, with the
+# tool's own factor taken out or put in; nothing the pulse runs reads these.
+# Design: docs/superpowers/archive/specs/2026-11-14-external-currency-tools-design.md.
+
+# The World Rate Gap before controls: te_mon_gold_gap_value without
+# te_mon_controls_damp, so clamped to five points either way.
+banking_ext_disp_gold_gap = {
+	value = 0
+	if = {
+		limit = { has_variable = te_policy_rate has_variable = te_mon_world_rate_now }
+		add = var:te_policy_rate
+		subtract = var:te_mon_world_rate_now
+		min = {
+			value = te_mon_gold_gap_clamp
+			multiply = -1
+		}
+		max = te_mon_gold_gap_clamp
+	}
+}
+# ...and as it counts under controls.
+banking_ext_disp_gold_gap_controlled = {
+	value = banking_ext_disp_gold_gap
+	multiply = te_mon_controls_damp_value
+}
+
+# The rate term of the exchange-rate target before either tool: te_mon_fx_term_rate
+# without te_mon_controls_damp or banking_external_inflow_damp. Zero without a
+# dial, as there.
+banking_ext_disp_rate_points = {
+	value = 0
+	if = {
+		limit = {
+			te_mon_has_dial = yes
+			has_variable = te_policy_rate
+			has_variable = te_mon_world_rate_now
+		}
+		add = var:te_policy_rate
+		subtract = te_mon_fx_inflation_read
+		subtract = var:te_mon_world_rate_now
+		min = {
+			value = te_mon_fx_rate_gap_clamp
+			multiply = -1
+		}
+		max = te_mon_fx_rate_gap_clamp
+		multiply = te_mon_fx_rate_weight
+	}
+}
+# Capital Controls' pair: the term with the inflow restriction as it stands,
+# without controls and with them.
+banking_ext_disp_rate_points_free = {
+	value = banking_ext_disp_rate_points
+	if = {
+		limit = { te_mon_external_positive_carry = yes }
+		multiply = banking_external_inflow_damp
+	}
+}
+banking_ext_disp_rate_points_controlled = {
+	value = banking_ext_disp_rate_points_free
+	multiply = te_mon_controls_damp_value
+}
+# Restrict Speculative Inflows' pair: the term with controls as they stand
+# (forced ones included), without the restriction and with it.
+banking_ext_disp_rate_points_unrestricted = {
+	value = banking_ext_disp_rate_points
+	multiply = te_mon_controls_damp
+}
+banking_ext_disp_rate_points_restricted = {
+	value = banking_ext_disp_rate_points_unrestricted
+	if = {
+		limit = { te_mon_external_positive_carry = yes }
+		multiply = banking_external_inflow_factor
+	}
+}
+
+# Sterilization's pair: what last month's gold inflow adds to price pressure
+# (te_mon_pressure_gold_flow, its +6 cap included), unsterilized and
+# sterilized. Zero while gold is leaving, which sterilization does not touch.
+banking_ext_disp_gold_pressure = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_gold_flow_pct
+			te_mon_gold_flow_signed > 0
+		}
+		add = var:te_gold_flow_pct
+		multiply = te_mon_gold_flow_pressure_per_pct
+		max = 6
+	}
+}
+banking_ext_disp_gold_pressure_sterilized = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_gold_flow_pct
+			te_mon_gold_flow_signed > 0
+		}
+		add = var:te_gold_flow_pct
+		multiply = te_mon_gold_flow_pressure_per_pct
+		multiply = banking_external_sterilized_factor
+		max = 6
+	}
+}
+
+# Limit Foreign-Currency Borrowing's pair: the risk premium a currency below
+# par adds (te_mon_premium_fx), without the protection and with what is built.
+banking_ext_disp_fx_weak_points = {
+	value = 0
+	if = {
+		limit = { has_variable = te_fx_index }
+		value = te_mon_fx_weak_points
+	}
+}
+banking_ext_disp_fx_premium = {
+	value = banking_ext_disp_fx_weak_points
+	multiply = te_mon_fx_premium_per_point
+}
+banking_ext_disp_fx_premium_protected = {
+	value = banking_ext_disp_fx_premium
+	multiply = banking_external_fx_exposure
+}
+
+# Sterilization's pair on a floating currency: this month's move of the index
+# toward its target (te_mon_fx_shadow_step, the index being the shadow there),
+# at the usual speed and sterilized.
+banking_ext_disp_fx_step = {
+	value = 0
+	if = {
+		limit = { has_variable = te_fx_shadow }
+		value = te_mon_fx_target_value
+		subtract = var:te_fx_shadow
+		multiply = te_mon_fx_adjust_speed
+	}
+}
+banking_ext_disp_fx_step_sterilized = {
+	value = banking_ext_disp_fx_step
+	multiply = banking_external_fx_sterilized_speed
 }

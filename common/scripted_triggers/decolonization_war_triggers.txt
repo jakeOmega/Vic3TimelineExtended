@@ -39,9 +39,13 @@ decol_iw_can_declare = {
 
 # A territory the collapse wave (decolonization_events.77) may take: what a
 # release could offer (is_decolonization_eligible_state), as the collapse took
-# before the wave. Scope: state.
+# before the wave, that has not declared, or been reconquered, in the last ten
+# years (decol_declared), the wait Order Restored (.72) promises. Without it a
+# territory won back during the wave declared again at the next step: .72's
+# radicals make it the likeliest to rise. Scope: state.
 decol_wave_candidate = {
 	is_decolonization_eligible_state = yes
+	NOT = { has_variable = decol_declared }
 }
 
 # Our distribution of power lets people vote: the regime crisis (.75) and the
@@ -137,7 +141,9 @@ decol_iw_at_war_with_great_power = {
 # rebels fighting its ally, its bloc partner, its overlord or its subject, nor
 # one it has a truce with or is already at war beside, and not while it is at
 # war itself. scope:decol_iw_gp_metropole is us, scope:decol_iw_gp_rebels the
-# rebels. Scope: country (the great power).
+# rebels. It needs the larger army and, since 1.15 (#1450), the reach to get
+# an army to the rebels (has_military_reach; te_military_reach_values.txt),
+# checked last as the dearest test. Scope: country (the great power).
 decol_iw_can_intervene = {
 	country_rank >= rank_value:great_power
 	is_subject = no
@@ -161,6 +167,10 @@ decol_iw_can_intervene = {
 		is_country_alive = yes
 		has_war_with = scope:decol_iw_gp_metropole
 		NOT = { has_variable = decol_iw_conceded }
+	}
+	has_military_reach = {
+		target = scope:decol_iw_gp_rebels
+		min_reach = te_reach_realistic
 	}
 }
 

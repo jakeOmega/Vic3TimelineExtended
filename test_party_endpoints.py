@@ -141,7 +141,7 @@ class RegistrationTests(unittest.TestCase):
         state, _ = _committed_state()
         vanilla = state.base_parsers["Parties"].data
         self.assertEqual(len(vanilla), manifest["entity_types"]["Parties"]["entities"])
-        self.assertIn("social_democrat_party", vanilla)  # in social_democrats_party.txt
+        self.assertIn("socialist_party", vanilla)  # in socialist_party.txt (social_democrat_party until 1.15)
         self.assertIn("revolutionary_party", vanilla)
 
     def test_path_tables_cover_every_type(self):

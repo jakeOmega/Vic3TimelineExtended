@@ -143,17 +143,27 @@ class BenefitModifierTest(unittest.TestCase):
         self.assertNotIn("bureaucracy", body)
         self.assertNotIn("ministry_of_commerce", body)
 
-    def test_every_add_scales_by_the_size(self):
-        # Without its multiplier the modifier grants Substantial's benefits at
-        # any size.
-        pattern = re.compile(r"add_modifier\s*=\s*\{\s*name\s*=\s*un_development_contributor_modifier\b([^}]*)\}")
-        found = 0
+    def test_the_benefits_scale_by_the_size(self):
+        # The entry declares the benefits at the stored factor (#1404); without
+        # it the modifier would grant Substantial's benefits at any size.
+        je = _flat(_read(JE))
+        self.assertIn("modifier = un_development_contributor_modifier value = { value = 0 if = { "
+                      "limit = { has_variable = un_development_contributor_modifier_on "
+                      "has_variable = un_dev_fund_benefit } add = var:un_dev_fund_benefit } }", je)
+        # The button, its scripted GUI, the resize and the month set the factor.
+        writes = "set_variable = { name = un_dev_fund_benefit value = un_dev_fund_benefit_value }"
+        self.assertIn(writes, _flat(_block(_read(BUTTONS), "un_fund_development_button")))
+        self.assertIn(writes, _flat(_block(_read(_path("common", "scripted_guis", "un_action_sguis.txt")),
+                                           "un_act_fund_development_sgui")))
+        effects = _read(ECONOMY_EFFECTS)
+        for block in ("un_dev_fund_resize", "un_dev_fund_contribution_monthly"):
+            with self.subTest(block=block):
+                self.assertIn(writes, _flat(_block(effects, block)))
+        # Nothing adds the modifier by hand beside the declaration.
         for path in _script_files():
-            for m in pattern.finditer(_read(path)):
-                found += 1
-                with self.subTest(path=os.path.relpath(path, REPO)):
-                    self.assertRegex(m.group(1), r"multiplier\s*=\s*root\.var:un_dev_fund_benefit\b")
-        self.assertGreaterEqual(found, 3)  # the button, the resize, the restore
+            with self.subTest(path=os.path.relpath(path, REPO)):
+                self.assertNotRegex(_read(path),
+                                    r"add_modifier\s*=\s*\{\s*name\s*=\s*un_development_contributor_modifier\b")
 
     def test_patron_modifier_and_its_display_agree(self):
         body = _block(_read(MODIFIERS), "un_development_patron_modifier")

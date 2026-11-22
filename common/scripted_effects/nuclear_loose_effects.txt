@@ -160,6 +160,9 @@ nd_loose_surface = {
 			limit = { exists = scope:nd_loose_state }
 			set_variable = { name = nd_loose_state value = scope:nd_loose_state }
 			scope:nd_loose_state = {
+				# A device carried in by hand razes less than a missile's
+				# warhead (nuclear_raze_effects.txt).
+				nd_raze_roll_terror_factor = yes
 				nuclear_industrial_strike = yes
 			}
 			# The nuclear taboo: no government chose this, so it is not a use;
@@ -558,7 +561,7 @@ nd_loose_monthly = {
 		limit = {
 			has_game_rule = nuclear_weapons_enabled
 			nd_loose_has_line = yes
-			has_modifier = un_physical_protection_modifier
+			has_variable = un_physical_protection_modifier_on
 		}
 		random = {
 			chance = nd_loose_convention_chance

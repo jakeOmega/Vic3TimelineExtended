@@ -58,6 +58,7 @@ CONSTRUCTION_PMS = frozenset({
     "pm_tower_cranes",
     "pm_computer_aided_design",
     "pm_3d_printed_buildings",
+    "pm_3d_printed_buildings_nanomaterial",  # the flat-crew copy for the two later tiers (#1684)
     "pm_te_direct_construction_iron_frame",
     "pm_te_direct_construction_steel_frame",
     "pm_te_direct_construction_arc_welded",

@@ -42,7 +42,7 @@ types state_panel_types
 
 				# "Choose State Name" section
 				flowcontainer = {
-					direction = vertical	
+					direction = vertical
 					spacing = 2
 
 					textbox = {
@@ -77,15 +77,15 @@ types state_panel_types
 						focus_on_visible = yes
 						align = left|nobaseline
 					}
-					
+
 					widget = {
 						size = { 420 10 }
 					}
 				}
-				
+
 				# "Choose City Name" section
 				flowcontainer = {
-					direction = vertical	
+					direction = vertical
 					spacing = 2
 					visible = "[StateNameChangePopup.ShouldHaveCityHub]"
 
@@ -121,15 +121,15 @@ types state_panel_types
 						focus_on_visible = yes
 						align = left|nobaseline
 					}
-					
+
 					widget = {
 						size = { 420 10 }
 					}
 				}
-				
+
 				# "Choose Port Name" section
 				flowcontainer = {
-					direction = vertical	
+					direction = vertical
 					spacing = 2
 					visible = "[StateNameChangePopup.ShouldHavePortHub]"
 
@@ -165,15 +165,15 @@ types state_panel_types
 						focus_on_visible = yes
 						align = left|nobaseline
 					}
-					
+
 					widget = {
 						size = { 420 10 }
 					}
 				}
-				
+
 				# "Choose Farm Name" section
 				flowcontainer = {
-					direction = vertical	
+					direction = vertical
 					spacing = 2
 					visible = "[StateNameChangePopup.ShouldHaveFarmHub]"
 
@@ -209,15 +209,15 @@ types state_panel_types
 						focus_on_visible = yes
 						align = left|nobaseline
 					}
-					
+
 					widget = {
 						size = { 420 10 }
 					}
 				}
-				
+
 				# "Choose Mine Name" section
 				flowcontainer = {
-					direction = vertical	
+					direction = vertical
 					spacing = 2
 					visible = "[StateNameChangePopup.ShouldHaveMineHub]"
 
@@ -253,15 +253,15 @@ types state_panel_types
 						focus_on_visible = yes
 						align = left|nobaseline
 					}
-					
+
 					widget = {
 						size = { 420 10 }
 					}
 				}
-				
+
 				# "Choose Wood Name" section
 				flowcontainer = {
-					direction = vertical	
+					direction = vertical
 					spacing = 2
 					visible = "[StateNameChangePopup.ShouldHaveWoodHub]"
 
@@ -297,7 +297,7 @@ types state_panel_types
 						focus_on_visible = yes
 						align = left|nobaseline
 					}
-					
+
 					widget = {
 						size = { 420 10 }
 					}
@@ -330,7 +330,7 @@ types state_panel_types
 				}
 			}
 		}
-		
+
 		blockoverride "bottom_margin"
 		{
 			margin_bottom = 50
@@ -363,15 +363,15 @@ types state_panel_types
 				input_action = "go_to_details"
 			}
 		}
-		
+
 		blockoverride "edit_visibility" {
 			visible = "[StatesPanel.GetState.GetCountry.IsPlayer]"
 		}
-		
+
 		blockoverride "edit_tooltip" {
 			tooltip = "CUSTOMIZE_STATE_NAMES"
 		}
-		
+
 		blockoverride "edit_properties" {
 			onclick = "[PopupManager.ShowStateChangeName(StatesPanel.GetState.Self)]"
 		}
@@ -650,7 +650,7 @@ types state_panel_types
 											direction = vertical
 											spacing =  3
 											parentanchor = vcenter
-											
+
 											textbox = {
 												text = "[Goods.GetStateProductionWithTooltip|Dv]"
 												alpha = "[TransparentIfZero(Goods.GetStateProduction)]"
@@ -668,13 +668,13 @@ types state_panel_types
 												}
 
 												visible = "[NotZero_CFixedPoint(Goods.GetStateImports)]"
-												
+
 												parentanchor = hcenter
 												size = { 46 6 }
 
 												gold_progressbar_horizontal = {
 													size = { 100% 100% }
-													
+
 													blockoverride "values" {
 														min = 0
 														max = "[Goods.GetStateProduction]"
@@ -685,12 +685,12 @@ types state_panel_types
 										}
 
 										vertical_divider = {}
-										
+
 										flowcontainer = {
 											direction = vertical
 											spacing =  3
 											parentanchor = vcenter
-											
+
 											textbox = {
 												align = hcenter|nobaseline
 												text = "[Goods.GetStateConsumptionWithTooltip|Dv]"
@@ -712,7 +712,7 @@ types state_panel_types
 
 												gold_progressbar_horizontal = {
 													size = { 100% 100% }
-													
+
 													blockoverride "values" {
 														min = 0
 														max = "[Goods.GetStateConsumption]"
@@ -814,7 +814,7 @@ types state_panel_types
 													min = 0
 													max = 0.75
 												}
-												
+
 												blockoverride "value_left" {
 													value = "[FixedPointToFloat(Goods.GetPercentageDeltaAgainstBasePrice(Goods.GetStatePrice))]"
 												}
@@ -869,7 +869,7 @@ types state_panel_types
 													min = 0
 													max = 0.75
 												}
-												
+
 												blockoverride "value_left" {
 													value = "[FixedPointToFloat(Goods.GetPercentageDeltaAgainstBasePrice(Goods.GetMarketPrice))]"
 												}
@@ -881,11 +881,11 @@ types state_panel_types
 									}
 
 									vertical_divider = {}
-									
+
 									widget = {
 										size = { 70 40 }
 										parentanchor = vcenter
-										
+
 										textbox = {
 											visible = "[Not(Goods.IsLocal)]"
 											align = right|nobaseline
@@ -900,7 +900,7 @@ types state_panel_types
 											alpha = "[TransparentIfTrue(Goods.IsLocal)]"
 											align = right|nobaseline
 											text = "NOT_AVAILABLE"
-											tooltip = "concept_local_good_desc"	
+											tooltip = "concept_local_good_desc"
 											size = { 70 40 }
 											margin_right = 10
 										}
@@ -996,7 +996,7 @@ types state_panel_types
 
 			button_icon_zoom = {
 				onclick = "[State.ZoomToCapital]"
-				onrightclick = "[GetVariableSystem.Toggle('zoom_close_to_capital')]"			
+				onrightclick = "[GetVariableSystem.Toggle('zoom_close_to_capital')]"
 				visible = "[Not(GetVariableSystem.Exists('zoom_close_to_capital'))]"
 
 				tooltip = "ZOOM_TO_STATE"
@@ -1006,14 +1006,14 @@ types state_panel_types
 
 			button_icon_zoom = {
 				onclick = "[State.ZoomExtraCloseToCapital]"
-				onrightclick = "[GetVariableSystem.Toggle('zoom_close_to_capital')]"			
+				onrightclick = "[GetVariableSystem.Toggle('zoom_close_to_capital')]"
 				visible = "[GetVariableSystem.Exists('zoom_close_to_capital')]"
 
 				tooltip = "ZOOM_CLOSE_TO_STATE"
 				input_action = "zoom_to"
 				size = { 100% 100% }
 			}
-			
+
 		}
 	}
 
@@ -1030,13 +1030,18 @@ types state_panel_types
 			button = {
 				size = { @panel_width_plus_14 274 }
 				texture = "[State.GetBestTexture]"
+				### TIMELINE EXTENDED - what the picture is and why it shows (docs/systems/mod_systems/state_pictures.md,
+				### "The banner's hover"). Each mod picture plays an overlay of its own name, and the hover is the text of
+				### that name (te_sp_tt_<overlay>); each vanilla overlay's text is empty, so a vanilla picture has none.
+				tooltip = "[Localize( Concatenate( 'te_sp_tt_', State.GetBestTextureEffect ) )]"
 				onrightclick = "[RightClickMenuManager.ShowForState(State.AccessSelf)]"
 				effectname = "NoHighlight"
 				distribute_visual_state = no
 				inherit_visual_state = no
-				using = fade_top_illus
+				using = illus_top_shadow_bottom_fade
 
 				vfx = {
+					size = { 100% 83% }
 					blockoverride "entity_instance" {
 						entity_instance = "[State.GetBestTextureEffect]"
 					}
@@ -1186,13 +1191,13 @@ types state_panel_types
 					parentanchor = top|right
 					widgetanchor = top|right
 					#position =  { -15 65 }
-					spacing = 5
+					spacing = 3
 
 					# Harvest conditions
 					flowcontainer = {
 						visible = "[Not(IsDataModelEmpty(State.GetHarvestConditions))]"
 						datamodel = "[State.GetHarvestConditions]"
-						spacing = 5
+						spacing = 3
 
 						item = {
 							icon = {
@@ -1215,15 +1220,32 @@ types state_panel_types
 						visible = "[State.HasFamine]"
 						tooltip = "[State.GetFamineDesc]"
 						using = tooltip_se
-						size = { 50 50 }
+						size = { 45 45 }
 						texture = "gfx/interface/backgrounds/round_button_bg.dds"
 						using = clickthrough_blocker
 
 						icon = {
-							size = { 50 50 }
+							size = { 45 45 }
 							parentanchor = center
 							texture = "gfx/interface/icons/famine_icons/famine_icon.dds"
 						}
+					}
+				}
+
+				# Cold icon
+				icon = {
+					visible = "[State.GetStateRegion.HasModerateOrSevereCold]"
+					tooltip = "[State.GetColdDesc]"
+					using = tooltip_se
+					size = { 45 45 }
+					texture = "gfx/interface/backgrounds/round_button_bg.dds"
+					using = clickthrough_blocker
+					parentanchor = right
+
+					icon = {
+						size = { 40 40 }
+						parentanchor = center
+						texture = "gfx/interface/icons/generic_icons/cold_value.dds"
 					}
 				}
 			}
@@ -1247,7 +1269,7 @@ types state_panel_types
 
 				item = {
 					icon = {
-						visible = "[Not(Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_state_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_tariff_export_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_tariff_import_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_artistic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_athletic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_civic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_crown')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_industrial')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_leader')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_naturalist')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_religious')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_republic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_revolution')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_scientific')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_sig_antiquity')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_sig_archive')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_sig_first_emperor')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_tourism')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_war_memorial')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_concentrated_property')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_dispersed_property')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_forced_heirship_rural')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_land_hunger')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_primogeniture_rural')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_undivided_farm_rural')), Or(EqualTo_string(TimedModifier.GetName, Localize('local_climate_amenity')), Or(EqualTo_string(TimedModifier.GetName, Localize('local_climate_discomfort')), Or(EqualTo_string(TimedModifier.GetName, Localize('migration_crowding')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_mt_crowding')), Or(EqualTo_string(TimedModifier.GetName, Localize('pollution_generation_mult_effect')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_births_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_births_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_conscription_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_conscription_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_fewer_men')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_inequality')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_more_men')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_wealth_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_wealth_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_workforce_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_workforce_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_youth_bulge')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_births_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_births_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_farmers_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_farmers_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_laborers_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_laborers_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_machinists_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_machinists_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_peasants_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_peasants_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_wealth_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_wealth_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_working_adults_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_working_adults_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_lx_gap_labor')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_mt_dispersed')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_mt_metropolis')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_primate_city')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_provincial_neglect')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_map_mode_overlay')), Or(EqualTo_string(TimedModifier.GetName, Localize('tourism_output')), EqualTo_string(TimedModifier.GetName, Localize('tourism_throughput'))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))]"
+						visible = "[Not(Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_state_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_tariff_export_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_tariff_import_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_artistic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_athletic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_civic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_crown')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_industrial')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_leader')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_naturalist')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_religious')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_republic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_revolution')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_scientific')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_sig_antiquity')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_sig_archive')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_sig_first_emperor')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_tourism')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_war_memorial')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_concentrated_property')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_dispersed_property')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_forced_heirship_rural')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_land_hunger')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_primogeniture_rural')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_undivided_farm_rural')), Or(EqualTo_string(TimedModifier.GetName, Localize('local_climate_amenity')), Or(EqualTo_string(TimedModifier.GetName, Localize('local_climate_discomfort')), Or(EqualTo_string(TimedModifier.GetName, Localize('migration_crowding')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_mt_crowding')), Or(EqualTo_string(TimedModifier.GetName, Localize('pollution_generation_mult_effect')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_construction_market_crew_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_births_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_births_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_conscription_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_conscription_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_fewer_men')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_inequality')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_more_men')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_wealth_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_wealth_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_workforce_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_workforce_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_youth_bulge')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_births_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_births_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_farmers_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_farmers_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_laborers_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_laborers_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_machinists_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_machinists_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_peasants_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_peasants_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_wealth_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_wealth_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_working_adults_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_working_adults_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_lx_gap_labor')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_mt_dispersed')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_mt_metropolis')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_primate_city')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_provincial_neglect')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_map_mode_overlay')), Or(EqualTo_string(TimedModifier.GetName, Localize('tourism_output')), EqualTo_string(TimedModifier.GetName, Localize('tourism_throughput')))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))]"
 						size = { 30 30 }
 						tooltip = "[TimedModifier.GetTooltip]"
 						using = tooltip_se
@@ -1332,6 +1354,7 @@ types state_panel_types
 				}
 
 				blockoverride "goto" {
+					datacontext = "[State.GetMarket]"
 					tooltip = "GO_TO_BUTTON_MARKET"
 					onclick = "[InformationPanelBar.OpenMarketPanel(State.GetMarket)]"
 				}
@@ -1755,6 +1778,76 @@ types state_panel_types
 				}
 			}
 
+			#COSSACK HOST DISBAND
+			state_panel_status_item_small = {
+				visible = "[State.HasBuilding('building_cossack_host')]"
+				tooltip = "TOOLTIP_STATE_COSSACK_HOST"
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/state_status_icons/establish_cossack_host.dds"
+				}
+
+				blockoverride "name" {
+					text = "STATE_COSSACK_HOST_STATUS"
+				}
+
+				blockoverride "goto" {
+
+				}
+
+				blockoverride "navigation_button" {
+					button_icon_goto = {
+						position = { -5 5 }
+						parentanchor = top|right
+						size = { 25 25 }
+						datacontext = "[State.AccessBuilding('building_cossack_host')]"
+						tooltip = "GO_TO_BUTTON_BUILDING"
+						onclick = "[InformationPanelBar.OpenBuildingDetailsPanel(Building.AccessSelf)]"
+					}
+				}
+
+				blockoverride "extra_widget" {
+					button = {
+						visible = "[ObjectsEqual(State.GetOwner.Self, GetPlayer.Self)]"
+						enabled = "[IsValid( State.DisbandCossackHost )]"
+						onclick = "[PopupManager.AskConfirmation( State.DisbandCossackHost )]"
+						size = { 160 40 }
+						align = left|nobaseline
+						margin_left = 10
+						text = "DISBAND_COSSACK_HOST"
+						tooltip = "TOOLTIP_DISBAND_COSSACK_HOST"
+						using = default_button
+					}
+				}
+			}
+
+			#COSSACK HOST ESTABLISH
+			state_panel_status_item_small = {
+				visible = "[And(Not(State.HasBuilding('building_cossack_host')), And(ObjectsEqual(State.GetOwner.Self, GetPlayer.Self), GetPlayer.CanFoundCossackHost))]"
+				tooltip = "TOOLTIP_STATE_NO_COSSACK_HOST"
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/state_status_icons/establish_cossack_host.dds"
+				}
+
+				blockoverride "name" {
+					text = "STATE_NO_COSSACK_HOST_STATUS"
+				}
+
+				blockoverride "extra_widget" {
+					button = {
+						enabled = "[IsValid( State.EstablishCossackHost )]"
+						onclick = "[Execute( State.EstablishCossackHost )]"
+						size = { 160 40 }
+						align = left|nobaseline
+						margin_left = 10
+						text = "ESTABLISH_COSSACK_HOST_BUTTON"
+						tooltip = "TOOLTIP_ESTABLISH_COSSACK_HOST"
+						using = default_button
+					}
+				}
+			}
+
 			state_panel_status_item_small = {
 				visible = "[GreaterThan_CFixedPoint(State.GetStateRegion.GetPollutionImpact, '(CFixedPoint)0')]"
 				datacontext = "[State.GetStateRegion]"
@@ -1857,7 +1950,7 @@ types state_panel_types
 					text = "STATE_DEVASTATION"
 				}
 			}
-			
+
 			state_panel_status_item_small = {
 				visible = "[GreaterThan_CFixedPoint(State.GetBlockadeLevel, '(CFixedPoint)0')]"
 				datacontext = "[State.GetStateRegion]"
@@ -1870,8 +1963,8 @@ types state_panel_types
 				blockoverride "name" {
 					text = "STATE_BLOCKADE_LEVEL"
 				}
-			}			
-			
+			}
+
 			state_panel_status_item_small = {
 				visible = "[State.IsBeingBombarded]"
 				tooltip = "TOOLTIP_STATE_BOMBARDMENT"
@@ -1903,13 +1996,13 @@ types state_panel_types
 
 				blockoverride "navigation_button" {
 					datacontext = "[State.AccessBuilding('building_trade_center')]"
-					
+
 					# BUILD IF TRADE CAPACITY IS ZERO
 					button_icon_plus_action = {
 						visible = "[And(IsValid( Building.QueueConstruction ), EqualTo_int32(State.GetTradeCapacity,'(int32)0'))]"
 						tooltip = "[Building.GetQueueConstructionTooltip]"
 						onclick = "[Execute( Building.QueueConstruction )]"
-						
+
 						position = { -5 5 }
 						size = { 25 25 }
 						parentanchor = top|right
@@ -1920,14 +2013,14 @@ types state_panel_types
 						visible = "[GreaterThan_int32(State.GetTradeCapacity,'(int32)0')]"
 						onclick = "[InformationPanelBar.OpenPanel('world_market')]"
 						tooltip = "GOTO_WORLD_MARKET"
-						
+
 						position = { -5 5 }
 						size = { 25 25 }
 						parentanchor = top|right
 					}
 				}
-			}			
-			
+			}
+
 			state_panel_status_item_small = {
 				tooltip = "STATE_TRADE_CAPACITY_DESC"
 				visible = "[GreaterThan_int32(State.GetTradeCapacity,'(int32)0')]"
@@ -1937,35 +2030,45 @@ types state_panel_types
 					texture = "gfx/interface/icons/state_status_icons/trade_capacity.dds"
 				}
 
-				blockoverride "name" {
-					text = "STATE_TRADE_CAPACITY"
-				}
+				blockoverride "title" {
+					widget = {
+						size = { 160 25 }
 
-				blockoverride "goto" {
-					
-				}
-
-				blockoverride "navigation_button" {
-					flowcontainer = {
-						position = { -5 5 }
-						parentanchor = top|right
-						datacontext = "[State.AccessBuilding('building_trade_center')]"
-						spacing = 1
-
-						button_icon_plus_action = {
-							size = { 25 25 }
-							visible = "[IsValid( Building.QueueConstruction )]"
-							tooltip = "[Building.GetQueueConstructionTooltip]"
-							onclick = "[Execute( Building.QueueConstruction )]"
+						textbox = {
+							parentanchor = vcenter
+							max_width = 105
+							autoresize = yes
+							align = nobaseline
+							using = elide_fontsize_min
+							raw_text = "[concept_trade_capacity]"
 						}
 
-						button_icon_goto = {
-							size = { 25 25 }
-							tooltip = "GO_TO_BUTTON_BUILDING"
-							onclick = "[InformationPanelBar.OpenBuildingDetailsPanel(Building.AccessSelf)]"
+						flowcontainer = {
+							parentanchor = right|vcenter
+							spacing = 1
+							datacontext = "[State.AccessBuilding('building_trade_center')]"
+
+							button_icon_plus_action = {
+								visible = "[IsValid( Building.QueueConstruction )]"
+								size = { 25 25 }
+								onclick = "[Execute( Building.QueueConstruction )]"
+								tooltip = "[Building.GetQueueConstructionTooltip]"
+							}
+
+							button_icon_goto = {
+								size = { 25 25 }
+								onclick = "[InformationPanelBar.OpenBuildingDetailsPanel(Building.AccessSelf)]"
+								tooltip = "GO_TO_BUTTON_BUILDING"
+							}
 						}
 					}
 				}
+
+				blockoverride "name" {
+					text = "STATE_TRADE_CAPACITY_CONDENSED"
+				}
+
+				blockoverride "navigation_button" {}
 
 				blockoverride "extra_widget" {
 					flowcontainer = {
@@ -1975,15 +2078,15 @@ types state_panel_types
 							block "trade_center_extra_info_size" {
 								size = { 70 23 }
 							}
-							
+
 							datamodel = "[DataModelFirst(Building.AccessState.GetImports, '(int32)3')]"
-							
+
 							item = {
 								small_goods_button = {
 									blockoverride "tooltip" {
 										tooltip = "[Goods.GetStateImportsDesc]"
 									}
-								}		
+								}
 							}
 						}
 
@@ -1993,20 +2096,20 @@ types state_panel_types
 							block "trade_center_extra_info_size" {
 								size = { 70 23 }
 							}
-							
+
 							datamodel = "[DataModelFirst(Building.AccessState.GetExports, '(int32)3')]"
-							
+
 							item = {
 								small_goods_button = {
 									blockoverride "tooltip" {
 										tooltip = "[Goods.GetStateExportsDesc]"
 									}
-								}		
+								}
 							}
 						}
 					}
 				}
-			}			
+			}
 
 			state_panel_status_item_small = {
 				name = "tutorial_highlight_state_infrastructure"
@@ -2136,7 +2239,7 @@ types state_panel_types
 					text = "[concept_treaty_port]"
 				}
 			}
-			
+
 			state_panel_status_item_small = {
 				visible = "[State.HasClaims]"
 
@@ -2146,6 +2249,19 @@ types state_panel_types
 
 				blockoverride "name" {
 					text = "TOOLTIP_CLAIMS"
+				}
+			}
+
+			state_panel_status_item_small = {
+				visible = "[State.GetStateRegion.HasModerateOrSevereCold]"
+				tooltip = "[State.GetColdDesc]"
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/generic_icons/cold_value.dds"
+				}
+
+				blockoverride "name" {
+					text = "STATE_STATUS_ITEM_COLD"
 				}
 			}
 
@@ -2418,9 +2534,11 @@ types state_panel_types
 				}
 			}
 
-			### SEABED LICENCES (Global Commons, spec § 2.7): on a coastal state
-			### once its owner has taken part in a seabed sharing
-			### (te_seabed_tile_shown). The rows are this state's: its basin, the
+			### SEABED LICENCES (Global Commons, spec § 2.7): on the player's own
+			### coastal state once the player has taken part in a seabed sharing
+			### (te_seabed_tile_shown and State.GetOwner.IsLocalPlayer: its words
+			### are written for the player, #1352; another country's coastal state
+			### shows the Ocean Basin tile below). The rows are this state's: its basin, the
 			### licences on its Deep-Sea Mine levels and how many are another
 			### basin's, our unused claims in its basin (what a new level here
 			### would take at full throughput) and what it adds to our claim
@@ -2428,7 +2546,7 @@ types state_panel_types
 			### has the country's licences and sends the player to the Seabed tab
 			### for each basin's figures (GUI audit VAN-8).
 			state_panel_status_item_small = {
-				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_tile_shown'), '(CFixedPoint)0')]"
+				visible = "[And( GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_tile_shown'), '(CFixedPoint)0'), State.GetOwner.IsLocalPlayer )]"
 				tooltip = "TE_STATE_SEABED_TT"
 
 				blockoverride "texture" {
@@ -2523,14 +2641,15 @@ types state_panel_types
 			}
 
 			### OCEAN BASIN (GUI audit VAN-8b, owner 2026-10-27): a coastal state
-			### without the Seabed Licences tile above (its owner never took part
-			### in a sharing, or it is another country's) shows its basin once
-			### the viewing player has researched Abyssal Plain Mining, so the
+			### without the Seabed Licences tile above (another country's, or the
+			### player's own before it took part in a sharing) shows its basin
+			### once the viewing player has researched Abyssal Plain Mining, so the
 			### player can see which pool a port there would weigh in. The cheap
-			### state test first; Not( GetMetaPlayer.IsObserver ) before the
-			### GetPlayer-rooted gate, since an observer has no player.
+			### state tests first, then the Licences tile's own test negated;
+			### Not( GetMetaPlayer.IsObserver ) before the GetPlayer-rooted gate,
+			### since an observer has no player.
 			state_panel_status_item_small = {
-				visible = "[And( GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_basin_tile_shown'), '(CFixedPoint)0'), And( Not( GetMetaPlayer.IsObserver ), GetScriptedGui('te_seabed_basin_tile_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+				visible = "[And( GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_basin_tile_shown'), '(CFixedPoint)0'), And( Not( And( GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_tile_shown'), '(CFixedPoint)0'), State.GetOwner.IsLocalPlayer ) ), And( Not( GetMetaPlayer.IsObserver ), GetScriptedGui('te_seabed_basin_tile_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 				tooltip = "TE_STATE_SEABED_BASIN_TT"
 
 				blockoverride "texture" {
@@ -2811,7 +2930,7 @@ types state_panel_types
 									datacontext = "[Decree.GetType]"
 								}
 							}
-							
+
 							blockoverride "texture" {
 								texture = "[Decree.GetTexture]"
 							}
@@ -3107,39 +3226,44 @@ types state_panel_types
 					datamodel = "[State.GetCulturalCommunities]"
 					datamodel_wrap = 3
 					flipdirection = yes
+
 					item = {
 						widget = {
 							size = { 180 40 }
 							widget = {
+								size = { 170 35 }
 								parentanchor = center
-							  	size = { 170 35 }
-							 	background = {
+								using = tooltip_se
+
+								background = {
 									using = entry_bg_simple
-							  	}
-							  	textbox = {
-									parentanchor = left|vcenter
-									autoresize = yes
-								  	align = nobaseline
-								  	max_width = 165
-								  	fontsize_min = 14
-								  	elide = right
-								 	text = "[CulturalCommunity.GetCulture.GetNameNoFormatting|v]"
-								 	position = { 10 0 }
-							  	}
+								}
 
-							  	textbox = {
-							  		visible = "[NotZero_CFixedPoint(CulturalCommunity.GetLocalAcceptanceDifference)]"
-									parentanchor = right|vcenter
-									autoresize = yes
-								  	align = nobaseline
-								  	text = "[CulturalCommunity.GetLocalAcceptanceDifference|+=0]"
-								  	position = { -10 0 }
-							  	}
+								tooltipwidget = {
+									FancyTooltip_CulturalCommunity = {}
+								}
 
-							  	tooltipwidget = {
-							 		FancyTooltip_CulturalCommunity = {}
-							  	}
-						   	}
+								hbox = {
+									layoutpolicy_horizontal = expanding
+									spacing = 5
+									margin = { 10 0 }
+
+									textbox = {
+										layoutpolicy_horizontal = expanding
+										size = { 0 20 }
+										align = nobaseline
+										using = elide_fontsize_min
+										text = "[CulturalCommunity.GetCulture.GetNameNoFormatting|v]"
+									}
+
+									textbox = {
+										visible = "[NotZero_CFixedPoint(CulturalCommunity.GetLocalAcceptanceDifference)]"
+										autoresize = yes
+										align = nobaseline
+										text = "[CulturalCommunity.GetLocalAcceptanceDifference|+=0]"
+									}
+								}
+							}
 						}
 					}
 				}
@@ -3669,6 +3793,9 @@ types state_panel_types
 				block "spacing" {
 					spacing = 5
 				}
+
+				block "title" {}
+
 				textbox = {
 					block "name" {}
 					block "alpha" {}
@@ -3829,7 +3956,7 @@ types state_panel_types
 					}
 				}
 
-				using = fade_top_illus
+				using = illus_top_shadow_bottom_fade
 
 				toggle_condensed = {}
 			}
@@ -4040,7 +4167,7 @@ types state_panel_types
 
 					item = {
 						widget = {
-							visible = "[Not(Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_state_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_tariff_export_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_tariff_import_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_artistic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_athletic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_civic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_crown')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_industrial')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_leader')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_naturalist')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_religious')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_republic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_revolution')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_scientific')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_sig_antiquity')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_sig_archive')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_sig_first_emperor')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_tourism')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_war_memorial')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_concentrated_property')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_dispersed_property')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_forced_heirship_rural')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_land_hunger')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_primogeniture_rural')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_undivided_farm_rural')), Or(EqualTo_string(TimedModifier.GetName, Localize('local_climate_amenity')), Or(EqualTo_string(TimedModifier.GetName, Localize('local_climate_discomfort')), Or(EqualTo_string(TimedModifier.GetName, Localize('migration_crowding')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_mt_crowding')), Or(EqualTo_string(TimedModifier.GetName, Localize('pollution_generation_mult_effect')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_births_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_births_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_conscription_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_conscription_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_fewer_men')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_inequality')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_more_men')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_wealth_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_wealth_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_workforce_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_workforce_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_youth_bulge')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_births_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_births_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_farmers_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_farmers_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_laborers_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_laborers_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_machinists_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_machinists_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_peasants_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_peasants_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_wealth_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_wealth_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_working_adults_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_working_adults_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_lx_gap_labor')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_mt_dispersed')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_mt_metropolis')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_primate_city')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_provincial_neglect')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_map_mode_overlay')), Or(EqualTo_string(TimedModifier.GetName, Localize('tourism_output')), EqualTo_string(TimedModifier.GetName, Localize('tourism_throughput'))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))]"
+							visible = "[Not(Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_state_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_tariff_export_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('free_port_tariff_import_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_artistic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_athletic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_civic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_crown')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_industrial')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_leader')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_naturalist')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_religious')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_republic')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_revolution')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_scientific')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_sig_antiquity')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_sig_archive')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_sig_first_emperor')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_tourism')), Or(EqualTo_string(TimedModifier.GetName, Localize('gm_local_war_memorial')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_concentrated_property')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_dispersed_property')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_forced_heirship_rural')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_land_hunger')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_primogeniture_rural')), Or(EqualTo_string(TimedModifier.GetName, Localize('inh_undivided_farm_rural')), Or(EqualTo_string(TimedModifier.GetName, Localize('local_climate_amenity')), Or(EqualTo_string(TimedModifier.GetName, Localize('local_climate_discomfort')), Or(EqualTo_string(TimedModifier.GetName, Localize('migration_crowding')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_mt_crowding')), Or(EqualTo_string(TimedModifier.GetName, Localize('pollution_generation_mult_effect')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_construction_market_crew_modifier')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_births_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_births_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_conscription_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_conscription_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_fewer_men')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_inequality')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_more_men')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_wealth_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_wealth_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_workforce_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_workforce_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_youth_bulge')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_births_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_births_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_farmers_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_farmers_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_laborers_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_laborers_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_machinists_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_machinists_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_peasants_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_peasants_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_wealth_deaths_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_wealth_deaths_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_working_adults_down')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_line_working_adults_up')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_lx_gap_labor')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_mt_dispersed')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_mt_metropolis')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_primate_city')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_provincial_neglect')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_map_mode_overlay')), Or(EqualTo_string(TimedModifier.GetName, Localize('tourism_output')), EqualTo_string(TimedModifier.GetName, Localize('tourism_throughput')))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))]"
 							size = { 30 30 }
 							icon = {
 								tooltip = "[TimedModifier.GetTooltip]"
@@ -4073,7 +4200,7 @@ types state_panel_types
 					blockoverride "name" {
 						text = "STATE_GDP_STATUS_CONDENSED"
 					}
-				}	
+				}
 				state_panel_status_item_condensed = {
 					visible = "[State.IsMarketCapital]"
 					tooltip = "TOOLTIP_MARKET_CAPITAL_STATE"
@@ -4804,7 +4931,7 @@ types building_item_types
 			button_icon_goto = {
 				parentanchor = vcenter
 				size = { 30 30 }
-				using = tooltip_above
+				using = tooltip_ne
 				tooltip = "GO_TO_BUTTON_BUILDING"
 				onclick = "[InformationPanelBar.OpenBuildingDetailsPanel(Building.AccessSelf)]"
 			}
@@ -4842,7 +4969,7 @@ types building_item_types
 					visible = "[Building.GetBuildingType.CanBeSubsidized]"
 					size = { 30 30 }
 					parentanchor = vcenter
-					
+
 					icon = {
 						visible = "[Building.IsSubsidized]"
 						size = { 130% 130% }
@@ -4856,10 +4983,10 @@ types building_item_types
 						visible = "[Building.IsSubsidized]"
 						size = { 100% 100% }
 						enabled = "[IsValid( Building.ToggleSubsidies )]"
-						onclick = "[Execute( Building.ToggleSubsidies )]" 
+						onclick = "[Execute( Building.ToggleSubsidies )]"
 						tooltip = "SUBSIDIZED_YES"
 						using = icon_toggle_single_off_sound
-						
+
 						blockoverride "icon" {
 							texture = "gfx/interface/production_methods/subsidized.dds"
 						}
@@ -4868,19 +4995,19 @@ types building_item_types
 							size = { 80% 80% }
 						}
 					}
-					
+
 					button_icon_round_action = {
 						visible = "[Not(Building.IsSubsidized)]"
-						size = { 100% 100% }							
+						size = { 100% 100% }
 						enabled = "[IsValid( Building.ToggleSubsidies )]"
-						onclick = "[Execute( Building.ToggleSubsidies )]" 
+						onclick = "[Execute( Building.ToggleSubsidies )]"
 						tooltip = "SUBSIDIZED_NO"
 						using = icon_toggle_single_on_sound
-						
+
 						blockoverride "icon" {
 							texture = "gfx/interface/production_methods/subsidized_not.dds"
 						}
-						
+
 						blockoverride "icon_size" {
 							size = { 80% 80% }
 						}
@@ -5033,7 +5160,7 @@ types building_item_types
 						enabled = "[IsValid( Building.Downsize )]"
 						visible = no
 						#visible = "[And(And( And( Building.IsValid, Building.IsDownsizeable ), Not( ShouldAskConfirmation( Building.Downsize ) ) ), Not(Building.GeneratesCombatUnits))]"
-						using = tooltip_below
+						using = tooltip_se
 					}
 
 					### DOWNSIZE WITH CONFIRMATION
@@ -5046,7 +5173,7 @@ types building_item_types
 						enabled = "[IsValid( Building.Downsize )]"
 						visible = no
 						#visible = "[And(And( And( Building.IsValid, Building.IsDownsizeable ), ShouldAskConfirmation( Building.Downsize ) ), Not(Building.GeneratesCombatUnits))]"
-						using = tooltip_below
+						using = tooltip_se
 					}
 
 					### CANCEL CONSTRUCTION
@@ -5058,7 +5185,7 @@ types building_item_types
 						visible = no
 						#visible = "[And(IsValid( Building.CancelConstruction ), Not(Building.IsMilitaryBuilding))]"
 						onclick = "[Execute( Building.CancelConstruction )]"
-						using = tooltip_below
+						using = tooltip_se
 					}
 
 					### EXPAND BUTTON
@@ -5070,7 +5197,7 @@ types building_item_types
 						block "expand_button_placement" {
 							position = { -5 -5 }
 						}
-						
+
 						blockoverride "button_size" {
 							size = { 29 29 }
 						}
@@ -5094,7 +5221,7 @@ types building_item_types
 								autoresize = yes
 								minimumsize = { 23 27 }
 								margin_right = 6
-								using = tooltip_above
+								using = tooltip_ne
 								tooltip = "TOOLTIP_BUILDING_PRODUCTIVITY"
 
 								tooltipwidget = {
@@ -5108,13 +5235,13 @@ types building_item_types
 							}
 
 							icon = {
-								parentanchor = right
-								texture = "gfx/interface/icons/generic_icons/government_building_icon.dds"
-								alwaystransparent = no
-								size = { 23 23 }
 								visible = "[And(Building.IsGovernmentFunded, Building.IsActive)]"
+								size = { 23 23 }
+								parentanchor = right
+								alwaystransparent = no
+								using = tooltip_ne
 								tooltip = "TOOLTIP_BUILDINGS_BUDGET"
-								using = tooltip_above
+								texture = "gfx/interface/icons/generic_icons/government_building_icon.dds"
 							}
 
 							### subsidize
@@ -5305,7 +5432,7 @@ types building_item_types
 
 					flowcontainer = {
 						direction = vertical
-						parentanchor = left 
+						parentanchor = left
 						margin_left = 5
 						margin_top = 5
 
@@ -5334,7 +5461,7 @@ types building_item_types
 				container = {
 					minimumsize = { 135 35 }
 					using = building_size_tooltip_with_ownership
-					
+
 
 					background = {
 						using = entry_bg
@@ -5354,7 +5481,7 @@ types building_item_types
 						tooltip = "[Building.GetDownsizeTooltip]"
 						onclick = "[Execute( Building.Downsize )]"
 						enabled = "[IsValid( Building.Downsize )]"
-						using = tooltip_below
+						using = tooltip_se
 					}
 
 					### DOWNSIZE WITH CONFIRMATION
@@ -5366,7 +5493,7 @@ types building_item_types
 						tooltip = "[Building.GetDownsizeTooltip]"
 						onclick = "[PopupManager.AskConfirmation( Building.Downsize )]"
 						enabled = "[IsValid( Building.Downsize )]"
-						using = tooltip_below
+						using = tooltip_se
 					}
 
 					### CANCEL CONSTRUCTION
@@ -5377,7 +5504,7 @@ types building_item_types
 						position = { 5 0 }
 						tooltip = "[Building.GetCancelConstructionTooltip]"
 						onclick = "[Execute( Building.CancelConstruction )]"
-						using = tooltip_below
+						using = tooltip_se
 					}
 
 					### EXPAND BUTTON
@@ -5387,7 +5514,7 @@ types building_item_types
 						block "expand_button_placement" {
 							position = { -5 0 }
 						}
-						
+
 						blockoverride "button_size" {
 							size = { 28 28 }
 						}
@@ -5436,7 +5563,7 @@ types building_item_types
 					position = { -8 -8 }
 
 					### EMPLOYMENT WARNING
-					employment_indicator_icon = {}					
+					employment_indicator_icon = {}
 
 					### INPUT WARNING
 					icon = {
@@ -5454,13 +5581,13 @@ types building_item_types
 				parentanchor = vcenter
 
 				textbox = {
+					minimumsize = { 65 -1 }
+					parentanchor = vcenter
 					autoresize = yes
 					alpha = "[TransparentIfFalse(Building.IsActive)]"
-					text = "[Building.GetExpansionLevelDesc]"
-					using = tooltip_above
 					align = nobaseline
-					parentanchor = vcenter
-					minimumsize = { 65 -1 }
+					using = tooltip_ne
+					text = "[Building.GetExpansionLevelDesc]"
 				}
 
 				widget = {
@@ -5468,25 +5595,26 @@ types building_item_types
 					parentanchor = vcenter
 					textbox = {
 						visible = "[And(And(And(Not(Building.IsGovernmentFunded), Building.IsActive), Not(Building.IsSubsidized)), Not(Building.IsSubsistenceBuilding))]"
-						raw_text = "#v @money![Building.GetAverageAnnualEarningsPerEmployeeFormatted|1+]#!"
+						parentanchor = center
+						autoresize = yes
+						alpha = "[TransparentIfFalse(Building.IsActive)]"
+						align = nobaseline
+						using = tooltip_ne
 						tooltip = "TOOLTIP_BUILDING_PRODUCTIVITY"
+						raw_text = "#v @money![Building.GetAverageAnnualEarningsPerEmployeeFormatted|1+]#!"
+
 						tooltipwidget = {
 							GraphTooltip_Productivity = {}
 						}
-						autoresize = yes
-						using = tooltip_above
-						alpha = "[TransparentIfFalse(Building.IsActive)]"
-						align = left|nobaseline
-						parentanchor = center
 					}
 
 					icon = {
 						visible = "[And(Building.IsGovernmentFunded, Building.IsActive)]"
-						texture = "gfx/interface/icons/generic_icons/government_building_icon.dds"
 						size = { 23 23 }
-						tooltip = "TOOLTIP_BUILDINGS_BUDGET"
-						using = tooltip_above
 						parentanchor = center
+						using = tooltip_ne
+						tooltip = "TOOLTIP_BUILDINGS_BUDGET"
+						texture = "gfx/interface/icons/generic_icons/government_building_icon.dds"
 					}
 				}
 

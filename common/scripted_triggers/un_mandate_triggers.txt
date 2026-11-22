@@ -102,7 +102,7 @@ un_mandate_is_closed = {
 # safe: a variable that is gone fails here before any stale scope is read.
 # Scope: mandate container
 un_mandate_still_valid = {
-	has_game_rule = united_nations_enabled
+	te_united_nations_on = yes
 	exists = var:un_mnd_actor
 	exists = var:un_mnd_target
 	exists = var:un_mnd_beneficiary
@@ -223,6 +223,7 @@ un_mandate_has_prohibited_goal = {
 		un_mandate_prohibited_goal_held = { TYPE = conquer_state TARGET = $TARGET$ }
 		un_mandate_prohibited_goal_held = { TYPE = return_state TARGET = $TARGET$ }
 		un_mandate_prohibited_goal_held = { TYPE = take_treaty_port TARGET = $TARGET$ }
+		un_mandate_prohibited_goal_held = { TYPE = te_seize_strait TARGET = $TARGET$ }
 		un_mandate_prohibited_goal_held = { TYPE = liberate_country TARGET = $TARGET$ }
 		un_mandate_prohibited_goal_held = { TYPE = secession TARGET = $TARGET$ }
 		un_mandate_prohibited_goal_held = { TYPE = unification TARGET = $TARGET$ }
@@ -240,6 +241,20 @@ un_mandate_has_prohibited_goal = {
 		un_mandate_prohibited_goal_held = { TYPE = regime_change TARGET = $TARGET$ }
 		un_mandate_prohibited_goal_held = { TYPE = humiliation TARGET = $TARGET$ }
 	}
+}
+
+# After a strike loop (un_mandate_strike_goal_type, un_force_strike_goal):
+# the holder's play test, read again in the same block, finds no goal of
+# $TYPE$ against $TARGET$, and the loop stopped before its cap of 30 calls.
+# Then the play test saw each removal at once, and the loop's count is the
+# goals it removed. un_strike_goals_self_check logs it once a game for each
+# kind. un_force_strike_goal gives the collateral's infamy back only when it
+# holds, since otherwise the count may be mostly calls that found nothing.
+# Parameters: $TYPE$ = war goal type; $TARGET$ = the protected country
+# Scope: the holder, holding un_strike_chk_calls
+un_strike_goals_loop_clean = {
+	var:un_strike_chk_calls < 30
+	NOT = { play_participant_has_war_goal_of_type_against = { type = $TYPE$ target = $TARGET$ } }
 }
 
 # Whether the scoped country holds a goal of $TYPE$ against $TARGET$, and the
@@ -316,7 +331,7 @@ un_mandate_began_other_war = {
 # un_mandate_create saves before calling it.
 # Scope: the resolution's proposer (the prospective actor)
 un_mandate_can_create = {
-	has_game_rule = united_nations_enabled
+	te_united_nations_on = yes
 	un_mandate_actor_in_good_standing = yes
 	NOT = { un_mandate_has_live_mandate = yes }
 	exists = scope:un_mnd_target_scope

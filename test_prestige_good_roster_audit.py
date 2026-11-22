@@ -19,7 +19,7 @@ import textwrap
 import unittest
 
 from paradox_file_parser import ParadoxFileParser
-from prestige_good_roster_audit import audit, load_state, render_report
+from prestige_good_roster_audit import audit, load_state, prestige_slots, render_report
 
 # Three buildings, one good each, through one PM group each.
 _BUILDINGS = """
@@ -73,7 +73,7 @@ def _company(name: str, roster=(), extensions=(), prestige=(), opener_comment=""
 class _Tree:
     """A temp mod tree holding `companies`, over shared buildings/PMs/goods."""
 
-    def __init__(self, companies="", vanilla_companies="", prestige=_PRESTIGE):
+    def __init__(self, companies="", vanilla_companies="", prestige=_PRESTIGE, vanilla_prestige=""):
         self._tmp = tempfile.TemporaryDirectory()
         self.root = self._tmp.name
         for sub, text in (
@@ -90,6 +90,7 @@ class _Tree:
                     fh.write(textwrap.dedent(text))
         self.vanilla = {
             "Company Types": _parse(vanilla_companies) if vanilla_companies else {},
+            "Prestige Goods": _parse(vanilla_prestige) if vanilla_prestige else {},
         }
 
     def run(self):
@@ -238,6 +239,83 @@ class PrestigeGoodRosterAuditTest(unittest.TestCase):
         ))
         self.assertEqual(self._kinds(result), [])
         self.assertEqual(result.flags[0].exemption["date"], "2026-10-05")
+
+    # ---- vanilla's prestige goods (#749) -----------------------------------
+
+    _VANILLA_NAMED = "prestige_good_sheffield_steel = {\n    base_good = steel\n    prestige_bonus = 0.1\n}\n"
+
+    def test_vanilla_named_good_is_judged_by_its_base_good(self):
+        # Vanilla defines Sheffield Steel on steel; the lab makes none.
+        result = self._run(
+            vanilla_prestige=self._VANILLA_NAMED,
+            companies=_company("company_a", roster=["building_lab"],
+                               prestige=["prestige_good_sheffield_steel"]))
+        self.assertEqual(self._kinds(result), [("not_produced", "company_a", "prestige_good_sheffield_steel")])
+        self.assertEqual(result.flags[0].base_good, "steel")
+        self.assertEqual(result.unresolved, {})
+
+    def test_vanilla_named_good_made_by_the_roster_is_clean(self):
+        result = self._run(
+            vanilla_prestige=self._VANILLA_NAMED,
+            companies=_company("company_a", roster=["building_steel_mill"],
+                               prestige=["prestige_good_sheffield_steel"]))
+        self.assertEqual(self._kinds(result, unreviewed_only=False), [])
+        self.assertEqual(result.prestige_goods_checked, 1)
+
+    @staticmethod
+    def _steel_goods(n, prefix="prestige_good_v"):
+        return "".join(f"{prefix}{i} = {{\n    base_good = steel\n}}\n" for i in range(n))
+
+    def test_fourth_prestige_good_on_a_base_good_is_flagged(self):
+        result = self._run(
+            vanilla_prestige=self._steel_goods(3),
+            prestige=_PRESTIGE + "prestige_good_mod_steel = {\n    base_good = steel\n}\n")
+        self.assertEqual(self._kinds(result), [("base_good_cap", "", "prestige_good_mod_steel")])
+        flag = result.flags[0]
+        self.assertEqual(flag.base_good, "steel")
+        self.assertEqual((flag.file, flag.line), ("common/prestige_goods/test.txt", 4))
+        self.assertIn("has 4 prestige goods", flag.detail)
+        self.assertIn("### base_good_cap", render_report(result))
+
+    def test_three_on_a_base_good_is_within_the_cap(self):
+        result = self._run(
+            vanilla_prestige=self._steel_goods(2),
+            prestige=_PRESTIGE + "prestige_good_mod_steel = {\n    base_good = steel\n}\n")
+        self.assertEqual(self._kinds(result, unreviewed_only=False), [])
+
+    def test_vanilla_alone_over_the_cap_is_not_the_mods_flag(self):
+        result = self._run(vanilla_prestige=self._steel_goods(4))
+        self.assertEqual(self._kinds(result, unreviewed_only=False), [])
+
+    def test_reviewed_on_a_mod_definition_suppresses_the_cap_flag(self):
+        result = self._run(
+            vanilla_prestige=self._steel_goods(3),
+            prestige="prestige_good_mod_steel = { # REVIEWED 2026-11-11: replaces a vanilla one\n"
+                     "    base_good = steel\n}\n")
+        self.assertEqual(self._kinds(result), [])
+        self.assertEqual(result.flags[0].exemption["date"], "2026-11-11")
+
+    def test_vanilla_prestige_good_on_a_local_good_is_not_flagged(self):
+        # local_base_good judges the mod's definitions; vanilla's are vanilla's.
+        result = self._run(vanilla_prestige="prestige_good_v_power = {\n    base_good = electricity\n}\n")
+        self.assertEqual(self._kinds(result, unreviewed_only=False), [])
+
+    def test_prestige_slots_counts_against_the_cap(self):
+        vanilla = _parse(self._steel_goods(2) + "prestige_good_v_tools = {\n    base_good = tools\n    prestige_bonus = 0.2\n}\n")
+        merged = dict(vanilla)
+        merged.update(_parse("prestige_good_mod_steel = {\n    base_good = steel\n    prestige_bonus = 0.1\n}\n"))
+        companies = _parse(_company("company_a", prestige=["prestige_good_v0", "prestige_good_mod_steel"])
+                           + _company("company_b", prestige=["prestige_good_v0"]))
+        rows = prestige_slots(merged, vanilla, companies)
+        self.assertEqual([r["base_good"] for r in rows], ["steel", "tools"])
+        steel = rows[0]
+        self.assertEqual((steel["count"], steel["cap"], steel["free"]), (3, 3, 0))
+        by_name = {g["name"]: g for g in steel["prestige_goods"]}
+        self.assertEqual(by_name["prestige_good_v0"]["origin"], "vanilla")
+        self.assertEqual(by_name["prestige_good_v0"]["companies"], ["company_a", "company_b"])
+        self.assertEqual(by_name["prestige_good_mod_steel"]["origin"], "mod")
+        self.assertEqual(by_name["prestige_good_mod_steel"]["prestige_bonus"], 0.1)
+        self.assertEqual(rows[1]["free"], 2)
 
 
 if __name__ == "__main__":

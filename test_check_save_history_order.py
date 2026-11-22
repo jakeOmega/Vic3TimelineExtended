@@ -9,8 +9,8 @@ synthetic `.v3` byte for byte and asserting the values come back out.
 
 They also pin what fails: a store out of order, live or `frozen` (stopped
 recording). A frozen one used to pass, being unreachable; National Info shows
-another country's charts, so it fails now, and the old-save repair
-te_repair_history_order sorts every store once. `frozen` is still printed, one
+another country's charts, so it fails now (the old-save repair
+te_repair_history_order sorted every store once until vanilla 1.15). `frozen` is still printed, one
 month (or, for Demographics' yearly te_dg_hist, one year) of slack, because a
 store can miss the current step depending on where its pulse sits relative to
 the save. te_dg_hist is checked too, on its own clock.
@@ -183,7 +183,7 @@ class ClassificationTests(unittest.TestCase):
         self.assertEqual(broken, 1)
         self.assertIn('frozen', out)
         self.assertIn('break@', out)
-        self.assertIn('te_repair_history_order', out)
+        self.assertIn('#356', out)
 
     def test_a_frozen_store_in_order_passes(self):
         broken, out = _run([_ordered(1, NOW), _ordered(50, NOW - 100)])

@@ -105,7 +105,15 @@ def _authority_cost(policy):
     shared `gw_policy_<p>_active` trigger (the button's key and the modifier's
     name differ for reforestation)."""
     trigger = _top_level_block(_text(TRIGGERS), f"gw_policy_{policy}_active")
-    modifier = re.search(r"has_modifier = (\w+)", trigger).group(1)
+    # Tariffs follow the market leader: its own policy is gw_runs_fossil_fuel_tariffs.
+    own = re.search(r"\b(gw_runs_\w+) = yes", trigger)
+    if own:
+        trigger = _top_level_block(_text(TRIGGERS), own.group(1))
+    # Every policy is a country variable: the entry declares its modifier at 1 while the variable
+    # is set (scaling_modifiers_while_active, #1404, #1466).
+    variable = re.search(r"has_variable = (\w+)", trigger).group(1)
+    modifier = re.search(r"modifier = (\w+)\s*value = \{\s*value = 0\s*if = \{\s*limit = \{ has_variable = "
+                         + variable + r" \}\s*add = 1\s*\}", _text(JE)).group(1)
     block = _top_level_block(_text(MODIFIERS), modifier)
     m = re.search(r"country_authority_cost_add = (-?\d+)", block)
     return int(m.group(1)) if m else 0
@@ -143,17 +151,31 @@ class GwAiPolicyTableTest(unittest.TestCase):
                 self.assertNotIn("temperature_anomaly_display", chance)
 
     def test_repeal_margin_is_derived_from_the_adopt_margin(self):
+        """One threshold per policy, written once. The seven policies the
+        Environmental Movement asks for keep it in gw_ai_base_margin_<p>: their
+        adopt margin adds the movement's answer points and their repeal
+        subtracts the points of the pressure the policies hold back
+        (test_gw_ai_movement_pressure.py); the others' adopt margin holds it."""
+        wants = set(re.findall(r"(?m)^gw_ai_movement_answer_points_(\w+) = \{", _text(VALUES)))
+        self.assertEqual(len(wants), 7, wants)
         for p in _policies():
             with self.subTest(policy=p):
-                adopt = _body(self.values[f"gw_ai_adopt_margin_{p}"])
-                self.assertEqual(adopt["value"][1], f"gw_ai_will_{p}")
-                int(adopt["subtract"][1])  # the threshold, written once, here
+                margin = f"gw_ai_base_margin_{p}" if p in wants else f"gw_ai_adopt_margin_{p}"
+                threshold = _body(self.values[margin])
+                self.assertEqual(threshold["value"][1], f"gw_ai_will_{p}")
+                int(threshold["subtract"][1])  # the threshold, written once, here
                 repeal = _body(self.values[f"gw_ai_repeal_margin_{p}"])
                 self.assertEqual(repeal["value"][1], "0")
                 subtracted = [s[1] for s in _items(repeal["subtract"])]
-                self.assertEqual(
-                    subtracted, [f"gw_ai_adopt_margin_{p}", "gw_ai_repeal_band"]
-                )
+                if p in wants:
+                    adopt = _body(self.values[f"gw_ai_adopt_margin_{p}"])
+                    self.assertEqual(adopt["value"][1], margin)
+                    self.assertEqual(adopt["add"][1], f"gw_ai_movement_answer_points_{p}")
+                    hold = ("gw_ai_movement_hold_points_renewable_investment" if p == "renewable_investment"
+                            else "gw_ai_movement_hold_points")
+                    self.assertEqual(subtracted, [margin, "gw_ai_repeal_band", hold])
+                else:
+                    self.assertEqual(subtracted, [margin, "gw_ai_repeal_band"])
 
     def test_each_will_is_the_shared_core_plus_every_signal(self):
         for p in _policies():

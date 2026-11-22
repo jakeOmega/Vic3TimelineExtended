@@ -75,6 +75,9 @@ import os
 import re
 from dataclasses import dataclass, field
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import cli_main, parse_reviewed, write_text
+
 
 @dataclass(frozen=True)
 class ScanRoot:
@@ -103,9 +106,11 @@ class ScanRoot:
     # the context; see `_child_context`.
     body_context: str | None = None
     # Schema blocks of this root only that hold triggers (a journal entry's
-    # `complete`, a treaty article's `conditions`), on top of the global names
-    # and patterns in `_child_context`.
+    # `disable_evaluation`, a treaty article's `conditions`), on top of the
+    # global names and patterns in `_child_context`.
     trigger_blocks: frozenset[str] = frozenset()
+    # The same for effects (a journal entry's `effect_all_involved`).
+    effect_blocks: frozenset[str] = frozenset()
 
 
 # Script contexts (#1142): the engine reads a block's keys either as triggers or
@@ -151,7 +156,9 @@ _ENTITY_GATES: frozenset[str] = frozenset({
 # directories too, and an unknown keyword there (a deleted scripted effect still
 # called from a button, a trigger vanilla removed) was previously invisible.
 SCAN_ROOTS: tuple[ScanRoot, ...] = (
-    ScanRoot("events"),
+    # 1.15 event fields (changes_features.md, "One Time Events") that no
+    # vanilla event sets, so the bootstrap can't harvest them.
+    ScanRoot("events", extra_valid=frozenset({"fire_only_once", "fire_only_once_globally"})),
     ScanRoot(os.path.join("common", "scripted_effects"), body_context=CTX_EFFECT),
     ScanRoot(os.path.join("common", "scripted_triggers"), body_context=CTX_TRIGGER),
     ScanRoot(os.path.join("common", "on_actions")),
@@ -160,27 +167,59 @@ SCAN_ROOTS: tuple[ScanRoot, ...] = (
         os.path.join("common", "scripted_buttons"),
         extra_valid=_ENTITY_GATES,
     ),
+    # The 1.15 schema (game/common/journal_entries/journal_entries.md, and
+    # what vanilla's 1.15 entries use beyond it). 1.15 replaced complete /
+    # on_complete, fail / on_fail, invalid / on_invalid, on_timeout, the
+    # custom_*_header fields and event_outcome_{completed,failed}_*_desc with
+    # `outcome = { }` blocks, and the catalog (re-bootstrapped from 1.15)
+    # dropped every one of them, so a leftover old block flags here.
     ScanRoot(
         os.path.join("common", "journal_entries"),
         extra_valid=_ENTITY_GATES | frozenset({
-            "group", "header", "progressbar", "widget", "gui", "container",
-            "scripted_button", "scripted_progress_bar",
-            "can_revolution_inherit", "can_deactivate",
+            "group", "context", "dlc", "icon", "progressbar", "widget", "gui",
+            "container", "scripted_button", "scripted_progress_bar",
+            "can_revolution_inherit", "can_deactivate", "transferable",
             "should_update_on_player_command",
+            "should_be_pinned_by_default_involved",
             "should_be_pinned_by_default_uninvolved_or_context",
-            "is_shown_when_inactive", "is_shown_in_lobby",
-            "complete", "fail", "invalid",
-            "on_complete", "on_fail", "on_invalid", "on_timeout",
-            "on_weekly_pulse", "current_value", "goal_add_value",
-            "progress_desc", "status_desc",
-            "custom_completion_header", "custom_on_completion_header",
-            "custom_failure_header", "custom_on_failure_header",
-            "event_outcome_activated_effect_desc",
-            "event_outcome_completed_effect_desc",
-            "event_outcome_failed_effect_desc",
+            "is_shown_when_inactive", "is_shown_in_lobby", "disable_evaluation",
+            "should_be_involved", "should_show_when_not_involved",
+            "activation_description", "immediate_all_involved",
+            "on_become_involved_after_activation", "on_no_longer_involved",
+            "on_weekly_pulse", "on_monthly_pulse", "on_yearly_pulse",
+            "current_value", "goal_add_value", "is_progressing", "weight",
+            "highlight", "timeout", "reason", "progress_desc", "status_desc",
+            "display_progressbar_as_months", "how_tutorial", "why_tutorial",
+            "event_outcome_activated_desc", "event_outcome_activated_effect_desc",
+            "modifiers_while_active", "scaling_modifiers_while_active",
+            "modifier", "value",
+            # Map mode: map_color / map_color_second are script values (a
+            # named or literal color, or a lerp), map_tooltip a display-only
+            # effect block.
+            "map_color", "map_color_second", "map_tooltip",
+            "lerp", "min_color", "max_color", "factor",
+            # outcome = { header effect_header conclusion_desc color flags
+            # trigger effect effect_all_involved event_outcome_desc
+            # event_outcome_effect_desc }
+            "outcome", "header", "effect_header", "conclusion_desc", "color",
+            "flags", "trigger", "effect", "effect_all_involved",
+            "event_outcome_desc", "event_outcome_effect_desc",
         }),
         skip_blocks=_STATIC_MODIFIER_BLOCKS,
-        trigger_blocks=frozenset({"complete", "fail", "invalid", "is_progressing"}),
+        # An outcome's `trigger` is a trigger block wherever it is (the
+        # global names); `activation_description` (on every 1.15 vanilla
+        # entry, not in the readme) holds `always = yes` or a custom_tooltip.
+        trigger_blocks=frozenset({
+            "is_progressing", "disable_evaluation", "activation_description",
+        }),
+        # Effects, though no `on_` / `_effect` name says so: the per-country
+        # copies of `immediate` and an outcome's `effect`, the map mode's
+        # tooltip (built like an effect block, never run) and an outcome's
+        # effect description (`header` + `effect = { }`, or effects directly).
+        effect_blocks=frozenset({
+            "immediate_all_involved", "effect_all_involved", "map_tooltip",
+            "event_outcome_effect_desc",
+        }),
     ),
     ScanRoot(
         os.path.join("common", "diplomatic_actions"),
@@ -233,12 +272,21 @@ SCAN_ROOTS: tuple[ScanRoot, ...] = (
         os.path.join("common", "character_interactions"),
         extra_valid=_ENTITY_GATES | frozenset({"show_confirmation_box"}),
     ),
+    # 1.15 schema (game/common/scripted_progress_bars/scripted_progress_bars.md):
+    # the three ready-made looks stay, the double_sided_* presets are gone
+    # (vanilla's own were restyled with the texture/color/marker/icon keys),
+    # and `progress_condition` works like an `if` inside a *_progress block
+    # (its `limit` a trigger, an `else` inside it taking over).
     ScanRoot(
         os.path.join("common", "scripted_progress_bars"),
         extra_valid=_ENTITY_GATES | frozenset({
-            "start_value", "min_value", "max_value", "monthly_progress",
-            "default_green", "default_bad", "double_sided_gold",
-            "second_desc",  # vanilla 00_great_game_progress_bars.txt
+            "name", "desc", "second_desc", "is_inverted",
+            "start_value", "min_value", "max_value",
+            "weekly_progress", "monthly_progress", "yearly_progress",
+            "progress_condition", "add", "value",
+            "default", "default_green", "default_bad",
+            "progress_texture", "background_texture", "glow_texture",
+            "glow_line_texture", "color", "marker", "left_icon", "right_icon",
         }),
     ),
     ScanRoot(
@@ -323,8 +371,17 @@ SCAN_ROOTS: tuple[ScanRoot, ...] = (
     ),
 )
 
+# The per-root schema blocks, for `_root_for`'s fallback root (a directory the
+# audit doesn't scan whose schema shares names). Plus 1.15's AI regional
+# objectives, which keep the pre-1.15 journal entry names (`complete` and
+# `invalid` triggers; `on_complete` / `on_invalid` read as effects by prefix),
+# so the context harvest reads them as it did before 1.15 moved journal
+# entries to outcomes.
 _ALL_ROOT_TRIGGER_BLOCKS: frozenset[str] = frozenset().union(
     *(root.trigger_blocks for root in SCAN_ROOTS)
+) | frozenset({"complete", "invalid", "fail"})
+_ALL_ROOT_EFFECT_BLOCKS: frozenset[str] = frozenset().union(
+    *(root.effect_blocks for root in SCAN_ROOTS)
 )
 
 _CATALOG_REL = os.path.join("docs", "engine", "effect_trigger_valid_keys.txt")
@@ -376,9 +433,6 @@ _HELPER_NAME_DIRS = (
     os.path.join("common", "on_actions"),
     os.path.join("common", "script_values"),
 )
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
-)
 # Top-level entity definition: `name = {` (optionally merge-prefixed).
 _TOP_DEF_RE = re.compile(
     r"^[ \t]*(?:REPLACE:|INJECT:|REPLACE_OR_CREATE:)?([a-z_][a-z0-9_]*)[ \t]*=[ \t]*\{"
@@ -398,7 +452,7 @@ class Flag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
     flags: list[Flag] = field(default_factory=list)
     coverage: dict = field(default_factory=dict)
 
@@ -432,13 +486,8 @@ def _split_code(line: str, in_quote: bool = False) -> tuple[str, str, bool]:
     return "".join(out), "", in_quote
 
 
-def parse_reviewed_comment(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
+# This audit's old name for the shared parser.
+parse_reviewed_comment = parse_reviewed
 
 
 def _iter_txt(base: str):
@@ -502,7 +551,10 @@ _NEUTRAL_BLOCKS: frozenset[str] = frozenset({
     "modulo", "round_to", "factor", "base", "days", "weeks", "months", "years",
     "delay", "cooldown", "random_range", "fixed_range", "integer_range",
     "current_value", "goal_add_value", "start_value", "min_value", "max_value",
-    "monthly_progress",
+    "weekly_progress", "monthly_progress", "yearly_progress",
+    # A journal entry's map mode colors (1.15): script values that return a
+    # color, with `if` / `limit` reading triggers as in any script value.
+    "map_color", "map_color_second", "lerp",
 })
 _NEUTRAL_SUFFIXES = ("_weight", "_score", "_chance")
 
@@ -558,7 +610,10 @@ def _child_context(
         or (root is not None and name in root.trigger_blocks)
     ):
         return CTX_TRIGGER
-    if name in _EFFECT_BLOCKS or name.startswith("on_") or name.endswith("_effect"):
+    if (
+        name in _EFFECT_BLOCKS or name.startswith("on_") or name.endswith("_effect")
+        or (root is not None and name in root.effect_blocks)
+    ):
         return CTX_EFFECT
     return parent
 
@@ -709,9 +764,83 @@ def _summary_names(path: str) -> set[str]:
     return names
 
 
-def bootstrap_catalog(base_game_path: str, mod_path: str) -> dict:
+def _catalog_entries(text: str) -> set[str]:
+    """The entries of a catalog file: its lines, comments and blanks aside. One
+    under a `[section]` header reads `[section] name`, so a name that moves
+    between the context catalog's sections shows as removed and added."""
+    entries: set[str] = set()
+    section = ""
+    for line in text.lstrip("\ufeff").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if line.startswith("[") and line.endswith("]"):
+            section = line + " "
+            continue
+        entries.add(section + line)
+    return entries
+
+
+class BootstrapRefused(FileNotFoundError):
+    """A bootstrap that could not find what it reads, and so wrote nothing."""
+
+
+def _write_catalog(
+    out_path: str, text: str, dry_run: bool, *,
+    vanilla_files: int, game_dir: str, allow_no_install: bool = False,
+) -> dict:
+    """Write a bootstrapped catalog, or with `dry_run` write nothing (not even
+    the directory) and return what the write would change: `written` False,
+    `exists`, `current` (entries in the file now), `added`, `removed`, and
+    `identical` when the file would come out byte for byte the same.
+
+    A real write built from no vanilla script (`vanilla_files` 0: no install
+    under `game_dir`) raises `BootstrapRefused` and leaves the file alone,
+    unless `allow_no_install` (#1403: it cut the catalog from 9,513 entries to
+    5,702 and said nothing)."""
+    refused = not dry_run and not vanilla_files and not allow_no_install
+    if not dry_run and not refused:
+        os.makedirs(os.path.dirname(out_path), exist_ok=True)
+        with open(out_path, "w", encoding="utf-8") as f:
+            f.write(text)
+        return {}
+    try:
+        with open(out_path, encoding="utf-8") as fh:
+            old_text = fh.read()
+        exists = True
+    except FileNotFoundError:
+        old_text, exists = "", False
+    old, new = _catalog_entries(old_text), _catalog_entries(text)
+    if refused:
+        raise BootstrapRefused(
+            f"{out_path} not written. No vanilla script was found under "
+            f"{game_dir}, so the catalog would be built from the engine docs "
+            f"alone: {len(old)} entries now, {len(new)} after. Run it on the "
+            "machine with the game, look first with --dry-run, or pass "
+            "--allow-no-install to write it anyway."
+        )
+    return {
+        "written": False,
+        "exists": exists,
+        "current": len(old),
+        "added": sorted(new - old),
+        "removed": sorted(old - new),
+        "identical": exists and old_text == text,
+    }
+
+
+def bootstrap_catalog(
+    base_game_path: str, mod_path: str, dry_run: bool = False,
+    allow_no_install: bool = False,
+) -> dict:
     """Extract the frozen valid-key catalog from vanilla and write it to
-    `docs/engine/effect_trigger_valid_keys.txt`. Re-run on a vanilla bump."""
+    `docs/engine/effect_trigger_valid_keys.txt`. Re-run on a vanilla bump.
+
+    `dry_run` writes nothing and adds `_write_catalog`'s account of what would
+    change. `vanilla_files` counts the vanilla script files read: at 0 there is
+    no install under `base_game_path`, the catalog would shrink to the summary
+    names, and a real run raises `BootstrapRefused` unless `allow_no_install`
+    (#1403)."""
     game = os.path.join(base_game_path, "game")
     engine_docs = os.path.join(mod_path, "docs", "engine")
 
@@ -723,6 +852,7 @@ def bootstrap_catalog(base_game_path: str, mod_path: str) -> dict:
     # e.g. `common/journal_entries/` lands in the catalog (and each root's
     # `extra_valid` shrinks), while modifier names inside `modifier = { ... }`
     # blocks stay out of it.
+    vanilla_files = 0
     for root in SCAN_ROOTS:
         base = os.path.join(game, root.rel)
         if not os.path.isdir(base):
@@ -733,6 +863,7 @@ def bootstrap_catalog(base_game_path: str, mod_path: str) -> dict:
                     keys |= extract_lhs_keys(fh.read(), root.skip_blocks)
             except OSError:
                 continue
+            vanilla_files += 1
 
     # Vanilla's own callable helpers. The depth-0 rule above drops their names,
     # and a mod call to one that vanilla never uses at depth > 0 (1.14.5's
@@ -742,22 +873,25 @@ def bootstrap_catalog(base_game_path: str, mod_path: str) -> dict:
         keys |= _top_level_names(os.path.join(game, rel))
 
     out_path = os.path.join(mod_path, _CATALOG_REL)
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as f:
-        f.write(
-            "# AUTO-GENERATED valid effect/trigger/scope/control-flow keyword "
-            "catalog.\n# Union of effects_summary.txt + triggers_summary.txt "
-            "names, every LHS keyword\n# vanilla uses in the audit's "
-            "SCAN_ROOTS (events/ + the script-bearing common/ dirs),\n"
-            "# excluding depth-0 entity names and static-modifier block "
-            "bodies, and the top-level\n# names vanilla defines under "
-            "scripted_effects/scripted_triggers/on_actions/script_values."
-            "\n# Regenerate on a vanilla bump: "
-            "effect_trigger_validity_audit.bootstrap_catalog(...).\n"
-        )
-        for k in sorted(keys):
-            f.write(k + "\n")
-    return {"keys": len(keys), "path": out_path}
+    text = (
+        "# AUTO-GENERATED valid effect/trigger/scope/control-flow keyword "
+        "catalog.\n# Union of effects_summary.txt + triggers_summary.txt "
+        "names, every LHS keyword\n# vanilla uses in the audit's "
+        "SCAN_ROOTS (events/ + the script-bearing common/ dirs),\n"
+        "# excluding depth-0 entity names and static-modifier block "
+        "bodies, and the top-level\n# names vanilla defines under "
+        "scripted_effects/scripted_triggers/on_actions/script_values."
+        "\n# Regenerate on a vanilla bump: "
+        "effect_trigger_validity_audit.bootstrap_catalog(...).\n"
+    ) + "".join(k + "\n" for k in sorted(keys))
+    change = _write_catalog(
+        out_path, text, dry_run, vanilla_files=vanilla_files, game_dir=game,
+        allow_no_install=allow_no_install,
+    )
+    return {
+        "keys": len(keys), "path": out_path, "vanilla_files": vanilla_files,
+        **change,
+    }
 
 
 def load_catalog(mod_path: str) -> set[str]:
@@ -809,12 +943,14 @@ def _root_for(rel_path: str) -> ScanRoot:
         prefix = root.rel.replace("\\", "/") + "/"
         if rel_path.startswith(prefix):
             return root
-    # The per-root trigger blocks too, for a directory that shares a schema
-    # (an objective's `complete`); on 1.14.5 they add three names to the
-    # trigger-context harvest and change neither catalog section.
+    # The per-root trigger and effect blocks too, for a directory that shares
+    # a schema (1.15's AI regional objectives' `complete` and `invalid`); on
+    # 1.14.5 they added three names to the trigger-context harvest and
+    # changed neither catalog section.
     return ScanRoot(
         os.path.dirname(rel_path), skip_blocks=_STATIC_MODIFIER_BLOCKS,
         trigger_blocks=_ALL_ROOT_TRIGGER_BLOCKS,
+        effect_blocks=_ALL_ROOT_EFFECT_BLOCKS,
     )
 
 
@@ -830,9 +966,12 @@ def context_key_uses(lines, root: ScanRoot):
                 yield ctx, m.group(1), sl.lineno, sl
 
 
-def harvest_context_keys(game_dir: str) -> dict[str, set[str]]:
+def harvest_context_keys(
+    game_dir: str, read: list[str] | None = None,
+) -> dict[str, set[str]]:
     """Every LHS keyword vanilla reads in trigger context and in effect context,
-    over all of `game/common/` and `game/events/`."""
+    over all of `game/common/` and `game/events/`. The files it read are
+    appended to `read`, when given."""
     used: dict[str, set[str]] = {CTX_TRIGGER: set(), CTX_EFFECT: set()}
     for top in ("common", "events"):
         base = os.path.join(game_dir, top)
@@ -845,17 +984,25 @@ def harvest_context_keys(game_dir: str) -> dict[str, set[str]]:
                     lines = fh.readlines()
             except OSError:
                 continue
+            if read is not None:
+                read.append(path)
             for ctx, key, _lineno, _sl in context_key_uses(lines, root):
                 used[ctx].add(key)
     return used
 
 
 def bootstrap_context_catalog(
-    base_game_path: str, mod_path: str, engine_docs_path: str,
+    base_game_path: str, mod_path: str, engine_docs_path: str | None,
+    dry_run: bool = False, allow_no_install: bool = False,
 ) -> dict:
     """Write `docs/engine/effect_trigger_context_keys.txt`: the effect names the
     engine rejects in trigger context and the trigger names it rejects in
-    effect context. Re-run on a vanilla bump, like `bootstrap_catalog`.
+    effect context. Re-run on a vanilla bump, like `bootstrap_catalog`, whose
+    `dry_run`, `vanilla_files` and `allow_no_install` this shares: with no
+    install nothing is subtracted for vanilla's own usage and vanilla's
+    scripted effects and triggers are missing. With no engine docs
+    (`engine_docs_path` unset, or without the two logs) it raises
+    `BootstrapRefused` whatever the flags.
 
     effect_only = names in `effects.log`, not in `triggers.log`, and never an
     LHS in trigger context anywhere in vanilla's `common/` or `events/`, plus
@@ -865,13 +1012,22 @@ def bootstrap_context_catalog(
     (vanilla uses it in both) out of the check even where the docs list it on
     one side only."""
     game = os.path.join(base_game_path, "game")
+    if not engine_docs_path:
+        raise BootstrapRefused(
+            "nothing written. The engine docs path is not set: point "
+            "VIC3_VANILLA_DOCS_SNAPSHOT, or `vanilla_snapshot_docs_path` in "
+            "paths.local.json, at the folder that holds the new version's "
+            "effects.log and triggers.log."
+        )
     effects = _engine_doc_names(os.path.join(engine_docs_path, "effects.log"))
     triggers = _engine_doc_names(os.path.join(engine_docs_path, "triggers.log"))
     if not effects or not triggers:
-        raise FileNotFoundError(
-            f"effects.log / triggers.log not found under {engine_docs_path}"
+        raise BootstrapRefused(
+            "nothing written. effects.log / triggers.log not found under "
+            f"{engine_docs_path}"
         )
-    used = harvest_context_keys(game)
+    read: list[str] = []
+    used = harvest_context_keys(game, read)
     sc_effects = _top_level_names(os.path.join(game, "common", "scripted_effects"))
     sc_triggers = _top_level_names(os.path.join(game, "common", "scripted_triggers"))
     svalues = _top_level_names(os.path.join(game, "common", "script_values"))
@@ -891,38 +1047,41 @@ def bootstrap_context_catalog(
     }
 
     out_path = os.path.join(mod_path, _CONTEXT_CATALOG_REL)
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as f:
-        f.write(
-            "# AUTO-GENERATED effect/trigger context catalog (#1142).\n"
-            "# [effect_only]: names the engine reads only as effects, so a "
-            "trigger block rejects them\n# (`Unknown trigger type`). Names in "
-            "effects.log and not in triggers.log, plus\n# vanilla's scripted "
-            "effects that are not also scripted triggers or script values,\n"
-            "# less every LHS keyword vanilla's common/ and events/ use in "
-            "trigger context.\n# [trigger_only]: the mirror image, for effect "
-            "context.\n# Regenerate on a vanilla bump: python3 "
-            "effect_trigger_validity_audit.py bootstrap-context\n"
-            f"# Sizes: {len(sections[_EFFECT_ONLY])} effect-only, "
-            f"{len(sections[_TRIGGER_ONLY])} trigger-only.\n"
+    parts = [
+        "# AUTO-GENERATED effect/trigger context catalog (#1142).\n"
+        "# [effect_only]: names the engine reads only as effects, so a "
+        "trigger block rejects them\n# (`Unknown trigger type`). Names in "
+        "effects.log and not in triggers.log, plus\n# vanilla's scripted "
+        "effects that are not also scripted triggers or script values,\n"
+        "# less every LHS keyword vanilla's common/ and events/ use in "
+        "trigger context.\n# [trigger_only]: the mirror image, for effect "
+        "context.\n# Regenerate on a vanilla bump: python3 "
+        "effect_trigger_validity_audit.py bootstrap-context\n"
+        f"# Sizes: {len(sections[_EFFECT_ONLY])} effect-only, "
+        f"{len(sections[_TRIGGER_ONLY])} trigger-only.\n"
+    ]
+    for section in (_EFFECT_ONLY, _TRIGGER_ONLY):
+        # Names the docs put on one side that vanilla also writes on the
+        # other (effect arguments named like triggers: create_character's
+        # `age`, add_loyalists' `strata`), so they are never checked.
+        parts.append(
+            f"# Left out of [{section}], used by vanilla in the other "
+            f"context: {', '.join(dropped[section]) or 'none'}\n"
         )
-        for section in (_EFFECT_ONLY, _TRIGGER_ONLY):
-            # Names the docs put on one side that vanilla also writes on the
-            # other (effect arguments named like triggers: create_character's
-            # `age`, add_loyalists' `strata`), so they are never checked.
-            f.write(
-                f"# Left out of [{section}], used by vanilla in the other "
-                f"context: {', '.join(dropped[section]) or 'none'}\n"
-            )
-        for section in (_EFFECT_ONLY, _TRIGGER_ONLY):
-            f.write(f"[{section}]\n")
-            for k in sorted(sections[section]):
-                f.write(k + "\n")
+    for section in (_EFFECT_ONLY, _TRIGGER_ONLY):
+        parts.append(f"[{section}]\n")
+        parts.extend(k + "\n" for k in sorted(sections[section]))
+    change = _write_catalog(
+        out_path, "".join(parts), dry_run, vanilla_files=len(read),
+        game_dir=game, allow_no_install=allow_no_install,
+    )
     return {
         "effect_only": len(sections[_EFFECT_ONLY]),
         "trigger_only": len(sections[_TRIGGER_ONLY]),
         "dropped_as_used_by_vanilla": dropped,
         "path": out_path,
+        "vanilla_files": len(read),
+        **change,
     }
 
 
@@ -974,7 +1133,7 @@ def _run_on_string_flags(path: str, lines: list[str], run_on: list) -> list[Flag
             if span <= _MAX_STRING_LINES:
                 continue
             what = f"string over {span} lines"
-            exemption = parse_reviewed_comment(_split_code(lines[end - 1], True)[1])
+            exemption = parse_reviewed(_split_code(lines[end - 1], True)[1])
         out.append(Flag(
             path, start, what, "unterminated-string",
             lines[start - 1].strip(), exemption,
@@ -1040,7 +1199,7 @@ def audit(
                 continue
             run_on: list = []
             for sl in _scan_lines(lines, root.skip_blocks, root, run_on):
-                exemption = parse_reviewed_comment(sl.comment)
+                exemption = parse_reviewed(sl.comment)
                 for i, m in enumerate(_LHS_RE.finditer(sl.code)):
                     if sl.depth == 0 and i == 0:
                         continue    # the entity being defined
@@ -1108,8 +1267,8 @@ def unresolved_helper_calls(mod_path: str, result: AuditResult | None = None) ->
 
 
 def render_report(result: AuditResult, mod_path: str = "") -> str:
-    unreviewed = [f for f in result.flags if not f.exemption]
-    exempted = [f for f in result.flags if f.exemption]
+    unreviewed = result.unreviewed
+    exempted = result.exemptions
     cov = result.coverage
 
     def _rel(f: Flag) -> str:
@@ -1217,16 +1376,13 @@ def regenerate(mod_state=None) -> dict:
     out_path = os.path.join(
         mod_path, "docs", "engine", "effect_trigger_validity_report.md"
     )
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as f:
-        f.write(report)
+    write_text(out_path, report)
 
     return {
-        "unreviewed": sum(1 for f in result.flags if not f.exemption),
-        "exempted": sum(1 for f in result.flags if f.exemption),
+        "unreviewed": len(result.unreviewed),
+        "exempted": len(result.exemptions),
         "unresolved_helper_calls": sum(
-            1 for f in result.flags
-            if f.kind == "unresolved-helper-call" and not f.exemption
+            1 for f in result.unreviewed if f.kind == "unresolved-helper-call"
         ),
         # Coverage, which the committed report no longer prints.
         **result.coverage,
@@ -1234,36 +1390,108 @@ def regenerate(mod_state=None) -> dict:
     }
 
 
+def render_dry_run(info: dict, mod_path: str, base_game_path: str) -> str:
+    """What a bootstrap's `dry_run` found, for the terminal: the totals first,
+    then every entry the write would add (`+`) or drop (`-`)."""
+    rel = os.path.relpath(info["path"], mod_path)
+    added, removed = info["added"], info["removed"]
+    after = info["current"] + len(added) - len(removed)
+    lines = [
+        f"DRY RUN: {rel} not written.",
+        f"  {info['current']} entries now, {after} after: "
+        f"{len(added)} added, {len(removed)} removed.",
+    ]
+    if not info["exists"]:
+        lines.append("  The file does not exist yet.")
+    elif info["identical"]:
+        lines.append("  The file would not change.")
+    elif not added and not removed:
+        lines.append("  Only its header comments would change.")
+    warning = []
+    if info.get("vanilla_files") == 0:
+        warning = [
+            f"WARNING: no vanilla script found under "
+            f"{os.path.join(base_game_path, 'game')}, so the catalog would "
+            "be built from the engine docs alone. Run the bootstrap on the "
+            "machine with the game; a real run here refuses unless given "
+            "--allow-no-install."
+        ]
+    changes = [f"  + {name}" for name in added] + [f"  - {name}" for name in removed]
+    # The list can run to thousands of lines: say it before and after.
+    return "\n".join(lines + warning + changes + (warning if changes else []))
+
+
+_BOOTSTRAP_FLAGS = ("--dry-run", "--allow-no-install")
+
+
+def _bootstrap_main(argv: list[str], mod_path: str) -> int:
+    """`bootstrap` / `bootstrap-context` and their flags. Returns 2, having
+    read and written nothing, on an argument it does not know: a misspelt
+    `--dry-run` used to run for real. Returns 1 on `BootstrapRefused`."""
+    import sys
+
+    command, flags = argv[0], argv[1:]
+    unknown = [a for a in flags if a not in _BOOTSTRAP_FLAGS]
+    if unknown:
+        print(
+            f"ERROR: {command}: unknown argument(s) {' '.join(unknown)}; it "
+            f"takes {' and '.join(_BOOTSTRAP_FLAGS)}. Nothing was written.",
+            file=sys.stderr,
+        )
+        return 2
+    dry_run = "--dry-run" in flags
+    allow_no_install = "--allow-no-install" in flags
+    # Only the bootstrap subcommands read vanilla; keep the default audit
+    # runnable on a machine with no Victoria 3 install.
+    from path_constants import base_game_path
+
+    try:
+        if command == "bootstrap":
+            info = bootstrap_catalog(
+                base_game_path, mod_path, dry_run=dry_run,
+                allow_no_install=allow_no_install,
+            )
+        else:
+            # The effect-only / trigger-only catalog (#1142): engine docs from
+            # the pinned snapshot, usage from the live install's game/common +
+            # events.
+            from path_constants import vanilla_snapshot_docs_path
+
+            info = bootstrap_context_catalog(
+                base_game_path, mod_path, vanilla_snapshot_docs_path,
+                dry_run=dry_run, allow_no_install=allow_no_install,
+            )
+    except BootstrapRefused as exc:
+        print(f"ERROR: {command}: {exc}", file=sys.stderr)
+        return 1
+    if dry_run:
+        print(render_dry_run(info, mod_path, base_game_path))
+        return 0
+    print(info)
+    if not info["vanilla_files"]:
+        print(
+            f"WARNING: {command}: written from no vanilla script "
+            "(--allow-no-install).", file=sys.stderr,
+        )
+    return 0
+
+
 def main(argv: list[str] | None = None, mod_path: str | None = None) -> int:
     """The CLI: `bootstrap`, `bootstrap-context`, or the audit, whose report
     goes to stdout. With `--strict` (CI) it returns 1 if any flag lacks a
-    `# REVIEWED ...` exemption."""
+    `# REVIEWED ...` exemption. `--dry-run` after either bootstrap prints what
+    the rewrite would change and writes nothing; `--allow-no-install` lets a
+    real one write with no vanilla script to read."""
     import sys
 
     argv = sys.argv[1:] if argv is None else argv
     if mod_path is None:
         from path_constants import mod_path
-    if argv[:1] == ["bootstrap"]:
-        # Only the bootstrap subcommands read vanilla; keep the default audit
-        # runnable on a machine with no Victoria 3 install.
-        from path_constants import base_game_path
-
-        print(bootstrap_catalog(base_game_path, mod_path))
-        return 0
-    if argv[:1] == ["bootstrap-context"]:
-        # The effect-only / trigger-only catalog (#1142): engine docs from the
-        # pinned snapshot, usage from the live install's game/common + events.
-        from path_constants import base_game_path, vanilla_snapshot_docs_path
-
-        print(bootstrap_context_catalog(
-            base_game_path, mod_path, vanilla_snapshot_docs_path,
-        ))
-        return 0
-    result = audit(mod_path)
-    print(render_report(result, mod_path))
-    if "--strict" in argv:
-        return 1 if any(not f.exemption for f in result.flags) else 0
-    return 0
+    if argv[:1] in (["bootstrap"], ["bootstrap-context"]):
+        return _bootstrap_main(argv, mod_path)
+    return cli_main(lambda args: audit(mod_path),
+                    lambda result, args: render_report(result, mod_path),
+                    argv=argv, description=__doc__.splitlines()[0])
 
 
 if __name__ == "__main__":

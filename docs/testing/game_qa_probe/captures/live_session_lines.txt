@@ -1,0 +1,22 @@
+[16:11:38][jomini_effect_impl.cpp:459]: events/te_qa_probe_events.txt:9: TE_QA_PROBE carrier fired country=FRA date=January 2, 1836
+[16:11:38][jomini_effect_impl.cpp:459]: common/scripted_effects/te_qa_probe_effects.txt:2: TE_QA_PROBE mailbox version=1 country=FRA
+[16:11:38][console.cpp:1203]: console_success: Executed "te_qa_probe.1"
+[16:12:11][console.cpp:1175]: Running console command: event te_qa_probe.1
+[16:12:11][jomini_effect_impl.cpp:459]: events/te_qa_probe_events.txt:9: TE_QA_PROBE carrier fired country=FRA date=January 2, 1836
+[16:12:11][jomini_effect_impl.cpp:459]: common/scripted_effects/te_qa_probe_effects.txt:2: TE_QA_PROBE mailbox version=1 country=FRA
+[16:12:11][console.cpp:1203]: console_success: Executed "te_qa_probe.1"
+[16:12:23][console.cpp:1175]: Running console command: event te_qa_probe.1
+[16:12:23][jomini_effect_impl.cpp:459]: events/te_qa_probe_events.txt:9: TE_QA_PROBE carrier fired country=FRA date=January 2, 1836
+[16:12:23][jomini_effect_impl.cpp:459]: common/scripted_effects/te_qa_probe_effects.txt:2: TE_QA_PROBE mailbox version=1 country=FRA
+[16:12:23][console.cpp:1203]: console_success: Executed "te_qa_probe.1"
+[16:12:23][console.cpp:1175]: Running console command: event te_qa_probe.7
+[16:12:23][console.cpp:1203]: console_success: Executed "te_qa_probe.7"
+[16:13:49][console.cpp:1175]: Running console command: event te_qa_probe.1
+[16:13:49][jomini_effect_impl.cpp:459]: events/te_qa_probe_events.txt:9: TE_QA_PROBE carrier fired country=FRA date=January 11, 1836
+[16:13:49][jomini_effect_impl.cpp:459]: common/scripted_effects/te_qa_probe_effects.txt:2: TE_QA_PROBE mailbox version=1 country=FRA
+[16:13:49][console.cpp:1203]: console_success: Executed "te_qa_probe.1"
+[16:13:49][console.cpp:1175]: Running console command: event te_qa_probe.7
+[16:13:49][console.cpp:1203]: console_success: Executed "te_qa_probe.7"
+[16:14:11][console.cpp:1175]: Running console command: help
+[16:14:13][console.cpp:1175]: Running console command: help
+[16:14:44][console.cpp:1175]: Running console command: help observe

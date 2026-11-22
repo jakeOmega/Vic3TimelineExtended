@@ -143,15 +143,39 @@ un_dev_fund_no_contributions = {
 	}
 }
 
-# The grant can go into our investment pool: our laws keep one, and the
-# banking cycle that moves a weekly pool grant into it is running here
+# The grant can go into our investment pool: our laws keep one, and we hold
+# the Banking Cycle entry whose weekly pulse moves a weekly pool grant into it
 # (country_weekly_investment_pool_add is the mod's own modifier, read only by
-# the Banking Cycle entry's weekly pulse, banking_cycle_weekly_effects).
-# Otherwise the grant goes into the treasury.
+# banking_weekly_investment_pool_add). That pulse runs whether or not our cycle
+# has started (owner, 2026-11-07), so this asks for the entry itself, not
+# te_banking_cycle_running as it did until then. Otherwise (the rule off, a
+# decentralized nation, rebels) the grant goes into the treasury.
 # Scope: country
 un_dev_fund_pays_into_pool = {
-	te_banking_cycle_running = yes
+	has_journal_entry = je_banking_cycle
 	NOT = { modifier:country_disable_investment_pool_bool = yes }
+}
+
+# The Fund pays the scoped country a grant this month (var:un_dev_fund_grant,
+# which un_dev_fund_monthly_update writes and sets to 0 when it stops), into
+# its investment pool or, where the pool can't take it, into its treasury: the
+# gates of the two grant modifiers' declarations on je_united_nations, and of
+# the chamber's lines that name them.
+# Scope: country
+un_dev_fund_grant_paid = {
+	has_global_variable = un_inst_development_fund
+	has_variable = un_dev_fund_grant
+	var:un_dev_fund_grant > 0
+}
+
+un_dev_fund_grant_into_pool = {
+	un_dev_fund_grant_paid = yes
+	un_dev_fund_pays_into_pool = yes
+}
+
+un_dev_fund_grant_into_treasury = {
+	un_dev_fund_grant_paid = yes
+	NOT = { un_dev_fund_pays_into_pool = yes }
 }
 
 # Recipients of the Fund among our subjects, bloc partners and allies, whose

@@ -14,6 +14,7 @@ INJECT:pmg_automation_building_food_industry = {
 	production_methods = {
 		pm_mass_produced_packaged_food
 		pm_robotic_food_processing
+		pm_robotic_food_processing_synthesis
 	}
 }
 INJECT:pmg_base_building_textile_mill = {
@@ -299,8 +300,33 @@ INJECT:pmg_secondary_building_millet_farm = {
 		pm_designed_fig_orchards
 	}
 }
-INJECT:pmg_sheep_ranch = {
+# Livestock Ranch: the meat ladder after Mechanized Slaughterhouses, and Herd
+# Management's (Fencing's) labor ladder after Electric Fences (Workshop request,
+# 2026-11-15; docs/systems/mod_systems/production_methods.md).
+INJECT:pmg_base_building_livestock_ranch = {
 	production_methods = {
+		pm_industrial_feedlots
+		pm_recombinant_growth_hormones
+		pm_gene_edited_livestock
+	}
+}
+INJECT:pmg_fencing = {
+	production_methods = {
+		pm_mechanized_feeding_lines
+		pm_robotic_barns
+	}
+}
+# Feed Additives: Antibiotic Growth Promoters, which sat in vanilla's Wool
+# Production (pmg_sheep_ranch) as its top tier although it adds meat too, in a
+# group of its own (PR #1828, after the owner found the placement odd), so it
+# stacks on any wool method and
+# Wool Production is vanilla's again. Its wool is the 15 it added over
+# Intensive Wool Gathering, so the two make what it made alone. Attached in
+# common/buildings/extra_buildings.txt.
+REPLACE_OR_CREATE:pmg_feed_additives_building_livestock_ranch = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_refining.dds"
+	production_methods = {
+		pm_plain_feed
 		pm_antibiotic_growth_promoters
 	}
 }
@@ -414,6 +440,31 @@ INJECT:pmg_steam_automation_building_gold_mine = {
 		pm_laser_excavation_technology_gold_mine
 	}
 }
+INJECT:pmg_mining_equipment_building_copper_mine = {
+	production_methods = {
+		pm_high_pressure_hydraulic_pump_building_copper_mine
+		pm_continuous_miners_building_copper_mine
+		pm_smart_miners_building_copper_mine
+	}
+}
+INJECT:pmg_explosives_building_copper_mine = {
+	production_methods = {
+		pm_ammonium_nitrate_building_copper_mine
+		pm_metamaterial_explosives_building_copper_mine
+	}
+}
+INJECT:pmg_steam_automation_building_copper_mine = {
+	production_methods = {
+		pm_dragline_excavators_copper_mine
+		pm_large_scale_earth_movers_copper_mine
+		pm_geophysical_survey_techniques_copper_mine
+		pm_ore_sorting_and_separation_technology_copper_mine
+		pm_laser_excavation_technology_copper_mine
+	}
+}
+# The tech metals mine family. No building runs these three groups: each of the four
+# tech metals mines runs its own copy, with the output split across several goods
+# (scripts/generators/gen_mine_coproducts.py, #1419). Edit the ladder here, then rerun it.
 REPLACE_OR_CREATE:pmg_mining_equipment_building_tech_metals_mine = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	production_methods = {
@@ -501,6 +552,31 @@ INJECT:pmg_base_building_vineyard = {
 	production_methods = {
 		factory_farm_building_vineyard
 		GMO_plantation_building_vineyard
+	}
+}
+# Harvesting Process for the plantation-type buildings (Workshop request,
+# 2026-11-15; docs/systems/mod_systems/production_methods.md § "Livestock
+# ranches and plantations"), the farms' group of that name. A plantation's base
+# methods already carry its labor savings, down to a floor of no laborers on
+# rail transport, so these tiers cut the farmers and engineers left. One group
+# for the ten buildings whose late bases staff alike (as
+# pmg_precision_environmental_management is one for the grain farms); the
+# Rubber Plantation's Mechanized Farm keeps fewer, so it has its own
+# autonomous copy. Attached in common/buildings/extra_buildings.txt.
+REPLACE_OR_CREATE:pmg_harvesting_process_plantation = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_automation.dds"
+	production_methods = {
+		pm_hand_harvesting
+		pm_mechanical_harvesters_plantation
+		pm_autonomous_harvesters_plantation
+	}
+}
+REPLACE_OR_CREATE:pmg_harvesting_process_building_rubber_plantation = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_automation.dds"
+	production_methods = {
+		pm_hand_harvesting
+		pm_mechanical_harvesters_plantation
+		pm_autonomous_harvesters_building_rubber_plantation
 	}
 }
 INJECT:pmg_amenities = {
@@ -599,7 +675,6 @@ INJECT:pmg_government_administration_bureaucrat_professionalism = {
 	production_methods = {
 		pm_automated_casework
 		pm_service_contractors
-		pm_recallable_delegates
 	}
 }
 INJECT:pmg_base_building_university = {
@@ -779,6 +854,15 @@ REPLACE_OR_CREATE:pmg_synthetic_fruit = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_refining.dds"
 	production_methods = {
 		pm_synthetic_fruit
+	}
+}
+# The Cultured Produce Facility's secondary product, as the farms' secondary
+# group: tobacco leaf in place of some fruit (Workshop request, 2026-11-15).
+REPLACE_OR_CREATE:pmg_secondary_building_synthetics_plant_fruit = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_refining.dds"
+	production_methods = {
+		pm_no_secondary
+		pm_cultured_tobacco_leaf
 	}
 }
 REPLACE_OR_CREATE:pmg_synthetic_drinks = {
@@ -1117,6 +1201,15 @@ REPLACE_OR_CREATE:pmg_base_building_space_program = {
 	# most_productive to every building of that kind (university, government
 	# administration, every monument). The te_decision_space_mission_*
 	# decisions also advance the mission (extra_decisions.txt).
+	# Under most_productive the AI climbed straight to the dearest mission its
+	# technology allowed, however little it could pay (nine AI programs on
+	# Solar Colonization in the owner's 1958 save, at up to eight times their
+	# government's own revenue). It keeps most_productive, which climbs toward
+	# the mission the AI may afford: the Mission Limit group
+	# (sr_mission_ceiling_pmgs.txt) caps how far, and the AI's monthly budget
+	# pass sets the cap (sr_ai_mission_budget_effects.txt). Under the default,
+	# most_profitable, the engine would pull every AI program down to Earth
+	# Orbit, which no ceiling gates, failing its milestones.
 	ai_selection = most_productive
 	production_methods = {
 		pm_earth_orbit
@@ -1141,6 +1234,8 @@ INJECT:pmg_base_building_power_bloc_statue = {
 	production_methods = {
 		pm_power_bloc_statue_cultural
 		pm_power_bloc_statue_diplomatic
+		pm_power_bloc_statue_creditors_consortium
+		pm_power_bloc_statue_research_commons
 	}
 }
 
@@ -1185,6 +1280,16 @@ REPLACE_OR_CREATE:pmg_train_automation_building_sulfur_mine = {
 }
 
 REPLACE_OR_CREATE:pmg_train_automation_building_gold_mine = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_automation.dds"
+	production_methods = {
+		pm_road_carts
+		pm_partial_bulk_transport
+		pm_rail_transport_mine
+		pm_rail_transport_mine_infrastructure_4
+	}
+}
+
+REPLACE_OR_CREATE:pmg_train_automation_building_copper_mine = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_automation.dds"
 	production_methods = {
 		pm_road_carts
@@ -1399,6 +1504,7 @@ REPLACE_OR_CREATE:pmg_construction_automation = {
 		pm_tower_cranes
 		pm_computer_aided_design
 		pm_3d_printed_buildings
+		pm_3d_printed_buildings_nanomaterial
 	}
 }
 

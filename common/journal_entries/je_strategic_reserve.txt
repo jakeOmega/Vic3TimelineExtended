@@ -17,7 +17,13 @@
 
 je_strategic_reserve = {
 	icon = "gfx/interface/icons/event_icons/je_strategic_reserve.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
+
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
 
 	# The rebels of a running revolution start no reserve of their own when
 	# the hub's state falls to them (the hub is kept for the nation,
@@ -45,6 +51,22 @@ je_strategic_reserve = {
 		st_res_je_immediate_effect = yes
 	}
 
+	# The week's reserve sales income, booked weekly into st_res_sell_profit by
+	# st_res_apply_sell_profit_effect: a 1.15 scaling modifier (#1404), so the
+	# engine follows the variable (a few days late) instead of the week's
+	# remove and re-add on the country. 0 with no hub, before the first week,
+	# and in a save that predates the variable.
+	scaling_modifiers_while_active = {
+		modifier = st_res_sell_profit_modifier
+		value = {
+			value = 0
+			if = {
+				limit = { has_variable = st_res_sell_profit }
+				add = var:st_res_sell_profit
+			}
+		}
+	}
+
 	# No invalid. An entry that goes invalid is finished for good: the engine
 	# never activates it again, even once a hub stands again. Losing the hub
 	# used to end it, so a country whose hub state fell to the rebels lost
@@ -54,8 +76,9 @@ je_strategic_reserve = {
 	# a hub the entry stays open and waits: the weekly pulse moves nothing
 	# (st_res_weekly_update_effect's no-hub branch), the clamp leaves the
 	# stock alone (st_res_clamp_stockpiles_effect), and the status line and
-	# the decision Establish a Strategic Reserve offer a new hub. A captured
-	# hub still costs the stock (st_res_on_state_owner_change).
+	# the decision Establish a Strategic Reserve offer a new hub (which an AI
+	# minor below st_res_ai_hub_gdp_tier does not take). A captured hub still
+	# costs the stock (st_res_on_state_owner_change).
 
 	# The panel, in two parts (gui/journal_entry_widgets/strategic_reserve_widget.gui):
 	# the overview at the top, with the "?" to the Help page above it, and the

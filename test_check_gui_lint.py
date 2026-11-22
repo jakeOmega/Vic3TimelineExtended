@@ -1,4 +1,5 @@
 """scripts/analysis/check_gui_lint.py: what it flags, on a throwaway repository."""
+import glob
 import os
 import subprocess
 import sys
@@ -40,10 +41,14 @@ NEW_GUI = BOM + """types t {
 		textbox = { text = "[SelectLocalization( GetScriptedGui('known_sgui').IsShown( GuiScope.End ), 'known_key', 'gone_key' )]" }
 		icon = { texture = "gfx/interface/nope.dds" }
 		button = { onclick = "[GetVariableSystem.Toggle('te_new_details')]" }
+		widget = { alpha = "[Select_float( GetVariableSystem.Exists('te_new_fade'), '(float)0.3', '(float)1' )]" }
+		button = { onclick = "[GetVariableSystem.Toggle('te_new_fade')]" }
 		widget = { datacontext = "[MarketPanel.GetMarket.GetOwner.GetJournalEntry('je_x')]" }
 		widget = { datacontext = "[Market.AccessMarketCapital.AccessOwner.GetJournalEntry('je_x')]" }
 		widget = { datacontext = "[MarketPanel.GetMarket.GetOwner]" }
 		widget = { datacontext = "[GetPlayerJournalEntry('je_x')]" }
+		button = { onclick = "[InformationPanelBar.OpenJournalEntryPanel(GetPlayerJournalEntry('je_x'))]" }
+		button = { onclick = "[InformationPanelBar.OpenJournalEntryPanel(GetPlayerJournalEntry('je_x').AccessSelf)]" }
 		widget = {
 			size = { 400 84 }
 			margin_right = 8
@@ -54,6 +59,24 @@ NEW_GUI = BOM + """types t {
 		flowcontainer = { margin_right = 8 }
 		textbox = { margin_left = 4 }
 	}
+"""
+
+# Long strings above an unproven widget and property: their offsets in the
+# string-collapsed text sit lines earlier than in the file (a widget at :520
+# was reported at :356).
+LINES_GUI = BOM + """types lines {
+	type te_lines_row = flowcontainer {
+		textbox = { text = "a long string of loc that the collapsed text drops entirely, one" }
+		textbox = { text = "a long string of loc that the collapsed text drops entirely, two" }
+		textbox = { text = "a long string of loc that the collapsed text drops entirely, three" }
+		textbox = { text = "a long string of loc that the collapsed text drops entirely, four" }
+		textbox = { text = "a long string of loc that the collapsed text drops entirely, five" }
+		textbox = { tooltip = "a string that runs
+over two lines" }
+		lines_fancywidget = {}
+		lines_typo_prop = left
+	}
+}
 """
 
 INHERITED_GUI = BOM + """types inherited {
@@ -92,6 +115,8 @@ class LintTest(unittest.TestCase):
             f.write(NEW_GUI)
         with open(os.path.join(repo, "gui", "inherited.gui"), "w", encoding="utf-8") as f:
             f.write(INHERITED_GUI.replace("margin_top = 5", "margin_top = 5\n\t\t\tsize = { 10 10 }"))
+        with open(os.path.join(repo, "gui", "lines.gui"), "w", encoding="utf-8") as f:
+            f.write(LINES_GUI)
         with open(os.path.join(repo, "gui", "clean.gui"), "w", encoding="utf-8") as f:
             f.write(BASE_GUI.replace("types base", "types clean").replace("proven_row", "clean_row"))
         linter = lint.Linter(repo, "HEAD")
@@ -108,7 +133,8 @@ class LintTest(unittest.TestCase):
         return [m for s, p, _, m in self.findings if p == path and (sev is None or s == sev)]
 
     def test_untracked_files_are_linted(self):
-        self.assertEqual(sorted(self.changed), ["gui/clean.gui", "gui/inherited.gui", "gui/new.gui"])
+        self.assertEqual(sorted(self.changed),
+                         ["gui/clean.gui", "gui/inherited.gui", "gui/lines.gui", "gui/new.gui"])
 
     def test_clean_file_has_no_findings(self):
         self.assertEqual(self.msgs("gui/clean.gui"), [])
@@ -124,6 +150,11 @@ class LintTest(unittest.TestCase):
         # Both ways into another country's journal entry failed in game; a Country
         # datacontext and GetPlayerJournalEntry are fine.
         self.assertEqual(errs.count("another country's journal entry (.GetJournalEntry)"), 2)
+        # A promote-only call as an argument fails at load (the map test strip,
+        # 2026-11-05), and so does a const one ended with .AccessSelf (third
+        # session); as a datacontext it is fine.
+        self.assertEqual(errs.count("GetPlayerJournalEntry(...) is a promote only"), 1)
+        self.assertEqual(errs.count("GetPlayerJournalEntry(...) is a const promote"), 1)
 
     def test_margin_on_plain_widget(self):
         # The engine logs "Property 'margin_right' not handled" for a plain
@@ -160,6 +191,13 @@ class LintTest(unittest.TestCase):
         self.assertIn("gfx/interface/nope.dds", warns)
         self.assertNotIn("vanilla_icon", warns)
         self.assertIn("te_new_details should end _open", warns)
+        self.assertNotIn("te_new_fade", warns, "a flag that fades, read by no visible, isn't a collapse flag")
+
+    def test_unproven_warnings_name_their_own_line(self):
+        lines = {m: ln for s, p, ln, m in self.findings if p == "gui/lines.gui" and s == "WARN"}
+        widget = next(ln for m, ln in lines.items() if "'lines_fancywidget'" in m)
+        prop = next(ln for m, ln in lines.items() if "'lines_typo_prop'" in m)
+        self.assertEqual((widget, prop), (10, 11))
 
     def test_loc_args(self):
         self.assertEqual(lint.loc_args("Localize('te_tt_break')"), ["te_tt_break"])
@@ -167,6 +205,45 @@ class LintTest(unittest.TestCase):
                 "'(CFixedPoint)1' ), 'key_a', 'key_b' )")
         self.assertEqual(lint.loc_args(expr), ["key_a", "key_b"])
 
+
+
+class GlossaryLintTest(unittest.TestCase):
+    """1.15 glossary links, in a .gui expression and in added loc, resolve
+    against common/glossary/ and vanilla_parsed/common/glossary.json."""
+
+    def test_glossary_links(self):
+        with tempfile.TemporaryDirectory() as repo:
+            files = {
+                "gui/base.gui": BASE_GUI,
+                "common/glossary/g.txt": BOM + "glossary_mod_entry = {}\n",
+                "vanilla_parsed/common/glossary.json": '{"glossary_zaibatsu": ["=", {}]}',
+                "localization/english/x_l_english.yml": BOM + 'l_english:\n known_key: "Known"\n',
+            }
+            for rel, text in files.items():
+                os.makedirs(os.path.dirname(os.path.join(repo, rel)), exist_ok=True)
+                with open(os.path.join(repo, rel), "w", encoding="utf-8") as f:
+                    f.write(text)
+            _git(repo, "init", "-q")
+            _git(repo, "add", "-A")
+            _git(repo, "-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "base")
+            with open(os.path.join(repo, "gui", "g.gui"), "w", encoding="utf-8") as f:
+                f.write(BOM + "types g {\n\ttype g_row = proven_row {\n"
+                        "\t\ttextbox = { text = \"[Glossary('glossary_zaibatsu','zaibatsu')]\" }\n"
+                        "\t\ttextbox = { text = \"[Glossary('glossary_gone','gone')]\" }\n"
+                        "\t}\n}\n")
+            with open(os.path.join(repo, "localization/english/x_l_english.yml"), "a", encoding="utf-8") as f:
+                f.write(' k_ok: "[glossary_mod_entry] [Glossary(\'glossary_zaibatsu\',\'z\')]"\n'
+                        ' k_bad: "[glossary_missing] [Glossary(\'glossary_absent\',\'a\')]"\n')
+            linter = lint.Linter(repo, "HEAD")
+            for p in linter.changed_gui():
+                linter.lint_file(p)
+            linter.lint_added_loc()
+            errs = [m for s, _p, _ln, m in linter.findings if s == "ERROR" and "glossary" in m]
+            self.assertEqual(sorted(errs), [
+                "glossary entry glossary_gone is not defined",
+                "k_bad: glossary entry glossary_absent is not defined",
+                "k_bad: glossary entry glossary_missing is not defined",
+            ])
 
 
 class DefinitionRuleTest(unittest.TestCase):
@@ -181,6 +258,103 @@ class DefinitionRuleTest(unittest.TestCase):
             linter = lint.Linter.__new__(lint.Linter)
             linter.repo = repo
             self.assertEqual(linter._top_level_keys("common/scripted_guis/**/*.txt"), {"real_sgui", "made"})
+
+
+BOX_GUI = """types boxes {
+	type te_flow_row = flowcontainer {
+		direction = vertical
+		vbox = {}
+	}
+	type te_toggle_row = hbox {
+		spacing = 5
+	}
+	type te_panel = vbox {
+		flowcontainer = {
+			direction = vertical
+			visible = "[Not(EqualTo_string(Law.GetGroup.GetKey, 'lawgroup_taxation'))]"
+			hbox = {
+				spacing = 5
+			}
+			te_toggle_row = {}
+			textbox = { text = "x" }
+			flowcontainer = {
+				direction = horizontal
+			}
+			blockoverride "row" {
+				hbox = {}
+			}
+		}
+		vbox = {
+			hbox = {}
+		}
+		te_flow_row = {
+			hbox = {}
+		}
+	}
+}
+"""
+
+
+class BoxInFlowcontainerTest(unittest.TestCase):
+    def test_box_children_of_a_flowcontainer(self):
+        # #1402's tax-law wrapper held vanilla 1.15's toggle hbox in a
+        # flowcontainer, and the game overflowed its stack building it.
+        text = lint.strip_comments(BOX_GUI)
+        hits = lint.box_in_flowcontainer(text, lint.gui_type_bases(text))
+        self.assertEqual(hits, [(4, "vbox", "vbox"), (13, "hbox", "hbox"), (16, "te_toggle_row", "hbox"),
+                                (29, "hbox", "hbox")])
+
+    def test_no_box_in_a_flowcontainer_in_the_repository(self):
+        # The lint judges only the files a branch changes, and CI doesn't run it,
+        # so this test is the gate over every .gui in the mod.
+        repo = os.path.dirname(os.path.abspath(__file__))
+        paths = sorted(glob.glob(os.path.join(repo, "gui", "**", "*.gui"), recursive=True))
+        texts = {p: lint.strip_comments(lint._read(p)) for p in paths}
+        bases = lint.gui_type_bases("\n".join(texts.values()))
+        hits = [f"{os.path.relpath(p, repo)}:{ln}: {child} ({kind})"
+                for p, text in texts.items() for ln, child, kind in lint.box_in_flowcontainer(text, bases)]
+        self.assertEqual(hits, [])
+
+
+class ConstPromoteAccessTest(unittest.TestCase):
+    def test_const_promote_chained_to_access(self):
+        text = ("a = \"[InformationPanelBar.OpenJournalEntryPanel(GetPlayerJournalEntry('je_x').AccessSelf)]\"\n"
+                "b = \"[GetPlayerJournalEntry('je_x')]\"\n"
+                "c = \"[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]\"\n"
+                "d = \"[GetPlayerJournalEntry('je_x').GetOwner.AccessSelf]\"\n"
+                "e = \"[AccessPlayerJournalEntry('je_x').AccessSelf]\"\n"
+                "f = \"[GetScriptedGui('s').Execute( GuiScope.End )]\"\n")
+        self.assertEqual(lint.const_promote_access(text),
+                         [(1, "GetPlayerJournalEntry", "AccessSelf"), (4, "GetPlayerJournalEntry", "AccessSelf")])
+
+    def test_none_in_the_repository(self):
+        # The engine drops such a callback at load; CI doesn't run the lint, so
+        # this is the gate over every .gui in the mod.
+        repo = os.path.dirname(os.path.abspath(__file__))
+        paths = sorted(glob.glob(os.path.join(repo, "gui", "**", "*.gui"), recursive=True))
+        hits = [f"{os.path.relpath(p, repo)}:{ln}: {name}.{step}" for p in paths
+                for ln, name, step in lint.const_promote_access(lint.strip_comments(lint._read(p)))]
+        self.assertEqual(hits, [])
+
+
+class PromoteAsArgumentTest(unittest.TestCase):
+    def test_bare_promote_arguments(self):
+        text = ("a = \"[InformationPanelBar.OpenJournalEntryPanel(GetPlayerJournalEntry('je_x'))]\"\n"
+                "b = \"[InformationPanelBar.OpenJournalEntryPanel(GetPlayerJournalEntry('je_x').AccessSelf)]\"\n"
+                "c = \"[GetPlayerJournalEntry('je_x')]\"\n"
+                "d = \"[Foo(GetPlayer, AccessPlayerJournalEntry('je_y'))]\"\n"
+                "e = \"[Foo(GetBuildingType('building_shipyard'))]\"\n")
+        self.assertEqual(lint.promote_as_argument(text), [(1, "GetPlayerJournalEntry"), (4, "AccessPlayerJournalEntry")])
+
+    def test_no_bare_promote_argument_in_the_repository(self):
+        # The engine drops a callback whose argument is a bare promote; CI doesn't
+        # run the lint, so this is the gate over every .gui in the mod.
+        repo = os.path.dirname(os.path.abspath(__file__))
+        paths = sorted(glob.glob(os.path.join(repo, "gui", "**", "*.gui"), recursive=True))
+        hits = [f"{os.path.relpath(p, repo)}:{ln}: {name}" for p in paths
+                for ln, name in lint.promote_as_argument(lint.strip_comments(lint._read(p)))]
+        self.assertEqual(hits, [])
+
 
 if __name__ == "__main__":
     unittest.main()

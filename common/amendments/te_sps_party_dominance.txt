@@ -1,0 +1,98 @@
+﻿# Single-Party State: the mod's three parties as the dominant party (#1908).
+#
+# Vanilla 1.15.2 names the party a Single-Party State keeps. Its event
+# single_party_state.8 offers one option per vanilla party; each calls
+# set_sps_dominant_party_effect = { PARTY = <name> }, which stores the chosen
+# group in var:sps_dominant_party_ig_var and attaches
+# amendment_<name>_party_dominance to the enacting law. The law's on_activate
+# makes that group's party the only legal one, and each party's join_weight
+# gives +1000 to the dominant party's groups (ig_is_member_of_dominant_party).
+#
+# The mod's Green, Populist and Technocratic parties take the same path through
+# te_single_party_state.1 (events/te_single_party_state_events.txt), which calls
+# vanilla's effect with PARTY = green, populist or technocratic. These three
+# amendments are the ones that effect names; each copies vanilla's
+# amendment_agrarian_party_dominance (00_amendments_enactment_04.txt).
+# The join_weight and available_for_interest_group terms are in each party's
+# file under common/parties/.
+
+amendment_green_party_dominance = { # REVIEWED 2026-11-19 (amendment_reachability): attached by vanilla's set_sps_dominant_party_effect = { PARTY = green } from te_single_party_state.1, which builds the name from $PARTY$
+
+	parent = law_single_party_state
+
+	allowed_laws = {
+		law_single_party_state
+	}
+
+	sponsor_modifier = {
+		interest_group_pol_str_mult = 0.15
+	}
+
+	possible = {
+		always = yes
+	}
+
+	ai_will_revoke = {
+		always = no
+	}
+
+	can_repeal = {
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+	}
+
+	amendment_activism_multiplier = 0.25
+}
+
+amendment_populist_party_dominance = { # REVIEWED 2026-11-19 (amendment_reachability): attached by vanilla's set_sps_dominant_party_effect = { PARTY = populist } from te_single_party_state.1, which builds the name from $PARTY$
+
+	parent = law_single_party_state
+
+	allowed_laws = {
+		law_single_party_state
+	}
+
+	sponsor_modifier = {
+		interest_group_pol_str_mult = 0.15
+	}
+
+	possible = {
+		always = yes
+	}
+
+	ai_will_revoke = {
+		always = no
+	}
+
+	can_repeal = {
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+	}
+
+	amendment_activism_multiplier = 0.25
+}
+
+amendment_technocratic_party_dominance = { # REVIEWED 2026-11-19 (amendment_reachability): attached by vanilla's set_sps_dominant_party_effect = { PARTY = technocratic } from te_single_party_state.1, which builds the name from $PARTY$
+
+	parent = law_single_party_state
+
+	allowed_laws = {
+		law_single_party_state
+	}
+
+	sponsor_modifier = {
+		interest_group_pol_str_mult = 0.15
+	}
+
+	possible = {
+		always = yes
+	}
+
+	ai_will_revoke = {
+		always = no
+	}
+
+	can_repeal = {
+		NOT = { has_law_or_variant = law_type:law_single_party_state }
+	}
+
+	amendment_activism_multiplier = 0.25
+}

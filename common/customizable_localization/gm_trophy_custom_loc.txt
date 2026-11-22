@@ -229,10 +229,6 @@ gm_tr_form_name = {
 		localization_key = gm_form_tower
 	}
 	text = {
-		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:memorial }
-		localization_key = gm_form_memorial
-	}
-	text = {
 		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:opera_house }
 		localization_key = gm_form_opera_house
 	}
@@ -519,10 +515,6 @@ gm_tr_part_name = {
 	text = {
 		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:tower }
 		localization_key = gm_tr_part_bells
-	}
-	text = {
-		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:memorial }
-		localization_key = gm_tr_part_plaques
 	}
 	text = {
 		trigger = { has_variable = gm_tr_form var:gm_tr_form = flag:opera_house }

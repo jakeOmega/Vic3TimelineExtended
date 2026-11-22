@@ -15,6 +15,7 @@ table. These tests hold:
   Cede Colony's article and the panel's rows.
 """
 
+import glob
 import os
 import re
 import sys
@@ -51,6 +52,7 @@ def _block(text, name):
 
 GENERATED = {
     gss.EFFECTS_OUT: "effects",
+    gss.ENTRY_OUT: "the entry's declarations",
     gss.TRIGGERS_OUT: "triggers",
     gss.VALUES_OUT: "values",
     gss.DISPLAY_OUT: "display values",
@@ -70,7 +72,7 @@ class TableTest(unittest.TestCase):
                 start = events.index(f"space_race_colony_events.{site.event} = {{")
                 nxt = events.find("\nspace_race_colony_events.", start + 10)
                 body = events[start:nxt if nxt > 0 else len(events)]
-                granted = re.findall(r"sr_grant_colony_modifier = \{ MODIFIER = (\w+) \}", body)
+                granted = re.findall(r"sr_site_choose_(\w+) = yes", body)
                 self.assertEqual(tuple(granted), gss.spec_modifiers(site))
 
     def test_every_specialization_modifier_is_a_site_s(self):
@@ -99,7 +101,7 @@ class TableTest(unittest.TestCase):
                            _raw("common", "scripted_effects", "space_race_discovery_effects.txt"))
         self.assertEqual(sorted(seeded), sorted(rolls))
         self.assertEqual(len(seeded), len(set(seeded)))
-        outcomes = set(re.findall(r"MODIFIER = (sr_discovery_\w+)", _raw("events", "space_race_discovery_events.txt")))
+        outcomes = set(re.findall(r"sr_site_choose_(sr_discovery_\w+) = yes", _raw("events", "space_race_discovery_events.txt")))
         table = {m for d in seeded for m in gss.discovery_modifiers(d)}
         self.assertEqual(table, outcomes)
 
@@ -188,14 +190,25 @@ class RecordTest(unittest.TestCase):
                     self.assertRegex(self.effects, rf"(?m)^sr_site_{kind}_{site.key} = \{{")
 
     def test_every_granted_modifier_has_a_dispatcher(self):
-        granted = set(re.findall(r"sr_grant_colony_modifier = \{ MODIFIER = (\w+) \}",
-                                 _raw("events", "space_race_colony_events.txt")
-                                 + _raw("events", "space_race_discovery_events.txt")))
+        events = _raw("events", "space_race_colony_events.txt") + _raw("events", "space_race_discovery_events.txt")
+        granted = set(re.findall(r"sr_site_choose_(\w+) = yes", events))
         self.assertEqual(len(granted), 120)
         dispatched = set(re.findall(r"(?m)^sr_site_choose_(\w+) = \{", self.effects))
         self.assertEqual(granted, dispatched)
-        grant = _block(_raw("common", "scripted_effects", "space_race_effects.txt"), "sr_grant_colony_modifier")
-        self.assertIn("hidden_effect = { sr_site_choose_$MODIFIER$ = yes }", grant)
+        self.assertNotIn("sr_grant_colony_modifier", events + _raw("common", "scripted_effects", "space_race_effects.txt"))
+        for modifier in granted:
+            body = _block(self.effects, f"sr_site_choose_{modifier}")
+            with self.subTest(modifier=modifier):
+                # The option's tooltip shows the modifier the entry then declares (a
+                # preview: has_modifier can't see a declared one, and nothing adds it);
+                # the record, the held mark and the sync are bookkeeping, hidden.
+                self.assertTrue(body.strip().startswith(
+                    "show_as_tooltip = { je:je_space_race_solar_colonization ?= "
+                    f"{{ add_modifier = {{ name = {modifier} }} }} }}"))
+                hidden = _block(body, "hidden_effect")
+                self.assertIn(f"set_variable = {{ name = {modifier}_held value = yes }}", hidden)
+                self.assertRegex(hidden, r"sr_site_sync_\w+ = yes\s*$")
+                self.assertNotIn("_mult", body)
 
     def test_the_draw_names_the_holder_after_the_claim(self):
         draw = _block(self.effects, "sr_establish_colony_effect")
@@ -227,7 +240,7 @@ class RecordTest(unittest.TestCase):
                 own |= set(gss.discovery_modifiers(d))
             for kind in ("mirror_on", "unmirror"):
                 body = _block(self.effects, f"sr_site_{kind}_{site.key}")
-                named = set(re.findall(r"MODIFIER = (\w+)", body))
+                named = set(re.findall(r"VAR = (\w+)_held", body))
                 with self.subTest(site=site.key, kind=kind):
                     self.assertEqual(named, own)
                     self.assertIn("set_variable = { name = sr_colony_count value = sr_sites_held_count }", body)
@@ -241,7 +254,7 @@ class RecordTest(unittest.TestCase):
                 self.assertIn("is_country_alive = yes", body)
 
     def test_the_shared_helpers_remove_only_what_is_there(self):
-        for name in ("sr_site_hide_modifier", "sr_site_hide_modifier_at", "sr_site_clear_discovery", "sr_site_set_discovery_done"):
+        for name in ("sr_site_mark_held", "sr_site_clear_held", "sr_site_clear_discovery", "sr_site_set_discovery_done"):
             body = _block(self.shared, name)
             for m in re.finditer(r"remove_(variable|modifier) = (\S+)", body):
                 with self.subTest(helper=name, target=m.group(2)):
@@ -268,11 +281,6 @@ class RecordTest(unittest.TestCase):
             for side in ("gained", "lost"):
                 with self.subTest(cause=cause, side=side):
                     self.assertRegex(self.shared, rf"(?m)^sr_site_{side}_{cause} = \{{")
-
-    def test_the_migration_reads_every_record(self):
-        body = _block(self.effects, "sr_sites_migrate_country")
-        held = set(re.findall(r"has_variable = (\w+)_held", body))
-        self.assertEqual(held, {m for m, *_ in gss.choices()})
 
     def test_the_revolution_repoints_every_world(self):
         body = _block(self.effects, "sr_sites_repoint_loser")
@@ -390,7 +398,7 @@ class FirstLunarColonyTest(unittest.TestCase):
             self.assertIn(line, body)
         # sr_was_first_moon_base, which .6's text reads, is set before the event.
         self.assertLess(body.index("sr_was_first_moon_base value = yes"), body.index("space_race_events.6"))
-        for repost in ("sr_recalculate_cost", "sr_complete_milestone_effect", "sr_apply_moon_base_reward"):
+        for repost in ("sr_refresh_milestone_statuses", "sr_complete_milestone_effect", "sr_apply_moon_base_reward"):
             self.assertNotIn(repost, body)
 
     def test_event_6_pays_the_reward_in_its_one_option(self):
@@ -405,11 +413,11 @@ class FirstLunarColonyTest(unittest.TestCase):
         self.assertNotIn("sr_moon_base_scientific", event)
 
 
-class LunarMigrationTest(unittest.TestCase):
-    """Old saves: a finished Moon Base becomes a lunar colony, an open one's
-    progress moves onto Solar System Colonization, and in a race that ended
-    before the Moon existed the finished programmes keep everything and may
-    resume for the Moon (lunar colonization design § 10; owner, 2026-10-29)."""
+class LunarMoonByChoiceTest(unittest.TestCase):
+    """A race that ended with a lunar world free again: the finished programmes
+    keep everything and may resume for the Moon (lunar colonization design § 10;
+    owner, 2026-10-29). The old-save migration, carry and notice for the
+    retired Moon Base went with vanilla 1.15, which loads no older save (#1407)."""
 
     @classmethod
     def setUpClass(cls):
@@ -421,130 +429,37 @@ class LunarMigrationTest(unittest.TestCase):
         cls.on_actions = _strip(_raw("common", "on_actions", "space_race_on_actions.txt"))
         cls.space = _strip(_raw("common", "scripted_effects", "space_race_effects.txt"))
 
-    def test_the_chain_gives_the_purpose_s_world_first(self):
-        chain = _block(self.effects, "sr_lunar_migrate_country")
-        self.assertTrue(chain.split()[:12] == ["if", "=", "{", "limit", "=", "{", "NOT", "=", "{",
-                                               "sr_holds_lunar_world", "=", "yes"])
-        branches = re.findall(r"(?:if|else_if) = \{\s*limit = \{\s*([^{}]*?(?:\{[^{}]*\}[^{}]*?)?)\s*"
-                              r"sr_lunar_world_free_(\w+) = yes\s*\}\s*"
-                              r"sr_lunar_migrate_take_(\w+) = \{ SPEC = (\d) \}", chain)
-        got = [(test, free, int(spec)) for test, free, take, spec in branches if free == take]
-        self.assertEqual(len(got), len(branches))
-        self.assertEqual(got, [
-            ("has_variable = sr_moon_base_scientific", "daedalus", 1),     # Lunar Telescope
-            ("has_variable = sr_moon_base_industrial", "imbrium", 1),      # Mass Driver
-            ("has_variable = sr_moon_base_military", "marius_hills", 2),   # Hardened Bunkers
-            ("NOT = { sr_moon_base_choice_made = yes }", "tranquility", 1),  # Heritage Site
-            *[("", s.key, 1) for s in gss.LUNAR],                          # first free in table order
-        ])
-        # the purpose's specialization (design § 3.1): the founding event's option
-        by_key = {s.key: s for s in gss.LUNAR}
-        self.assertEqual([gss.spec_modifiers(by_key[key])[spec - 1] for _, key, spec in got[:4]],
-                         ["sr_colony_daedalus_telescope", "sr_colony_imbrium_massdriver",
-                          "sr_colony_marius_hardened", "sr_colony_tranquility_heritage"])
+    def test_the_old_save_migration_is_gone(self):
+        names = ("sr_lunar_migrate", "sr_lunar_initialized", "sr_lunar_carry", "sr_lunar_note",
+                 "sr_lunar_fire_notice", "sr_lunar_notice", "sr_launch_banked_progress", "sr_holds_lunar_world",
+                 "sr_lunar_world_free_any", "space_race_events.109", "te_debug_space_race.8",
+                 # the record's old-save migration and its grace (#1429)
+                 "sr_sites_migrate_country", "sr_sites_initialized", "sr_sites_grace")
+        for top in ("common", "events"):
+            for path in glob.glob(os.path.join(REPO, top, "**", "*.txt"), recursive=True):
+                text = _strip(_raw(path))
+                for name in names:
+                    with self.subTest(path=os.path.relpath(path, REPO), name=name):
+                        self.assertNotIn(name, text)
+        self.assertFalse(hasattr(gss, "LUNAR_MIGRATION"))
+        # the launch month still puts back the fleets a stopped programme banked
+        restore = _block(self.windows, "sr_launch_restore_banked_fleets")
+        self.assertIn("remove_variable = sr_launch_banked_fleets", restore)
+
+    def test_a_lunar_world_is_free_unclaimed_and_whole(self):
         for site in gss.LUNAR:
             free = _block(self.triggers, f"sr_lunar_world_free_{site.key}")
             self.assertIn(f"NOT = {{ has_global_variable = sr_colony_{site.key} }}", free)
             self.assertIn(f"NOT = {{ has_global_variable = sr_site_ruined_{site.key} }}", free)
-        holds = _block(self.triggers, "sr_holds_lunar_world")
-        self.assertEqual(re.findall(r"global_var:sr_site_holder_(\w+) \?= this", holds), [s.key for s in gss.LUNAR])
+        self.assertEqual(re.findall(r"sr_lunar_world_free_(\w+) = yes", _block(self.triggers, "sr_sites_lunar_open")),
+                         [s.key for s in gss.LUNAR])
 
-    def test_a_migrated_world_is_received_not_founded(self):
-        for site in gss.LUNAR:
-            k = site.key
-            # the definition, at the line's start (the chain's calls are indented)
-            m = re.search(rf"(?m)^sr_lunar_migrate_take_{k} = \{{\n", self.effects)
-            take = self.effects[m.end():self.effects.index("\n}\n", m.end())]
-            with self.subTest(world=k):
-                for line in (f"set_global_variable = {{ name = sr_colony_{k} value = yes }}",
-                             f"set_global_variable = {{ name = sr_site_holder_{k} value = this }}",
-                             f"set_global_variable = {{ name = sr_site_spec_{k} value = $SPEC$ }}",
-                             f"sr_site_sync_{k} = yes",
-                             f"sr_site_gained_quiet = {{ INDEX = {site.index} }}",
-                             f"sr_lunar_note_migrated = {{ INDEX = {site.index} }}"):
-                    self.assertIn(line, take)
-                # the sync counts the world before the entry opens on it
-                self.assertLess(take.index(f"sr_site_sync_{k} = yes"), take.index("sr_site_gained_quiet"))
-                for founding in ("sr_site_found_", "sr_lunar_colony_founded", "space_race_colony_events",
-                                 "sr_cf_after_found"):
-                    self.assertNotIn(founding, take)
-
-    def test_the_migration_runs_once_first_movers_first(self):
-        monthly = _block(self.shared, "sr_sites_global_monthly")
-        guard = re.search(r"if = \{\s*limit = \{ NOT = \{ has_global_variable = sr_lunar_initialized \} \}\s*"
-                          r"set_global_variable = \{ name = sr_lunar_initialized value = yes \}\s*"
-                          r"sr_lunar_migrate = yes\s*\}", monthly)
-        self.assertIsNotNone(guard)
-        self.assertLess(monthly.index("name = sr_sites_initialized"), guard.start())
-        migrate = _block(self.shared, "sr_lunar_migrate")
-        first = migrate.index("limit = { has_variable = sr_was_first_moon_base }")
-        rest = migrate.index("NOT = { has_variable = sr_was_first_moon_base }")
-        self.assertLess(first, rest)
-        self.assertEqual(migrate.count("sr_lunar_migrate_country = yes"), 2)
-        order = [migrate.index(x) for x in ("sr_lunar_migrate_country = yes", "sr_lunar_note_moon_open = yes",
-                                            "sr_sites_stage_after_claim = yes", "sr_lunar_selfcheck_migration = yes")]
-        self.assertEqual(order, sorted(order))
-        self.assertIn("has_global_variable = sr_colonization_stage", migrate)
-        check = _block(self.shared, "sr_lunar_selfcheck_migration")
-        self.assertIn("TE_SELF_CHECK BROKEN lunar_migration", check)
-        self.assertIn("TE_SELF_CHECK OK lunar_migration", check)
-        self.assertIn("global_var:sr_lunar_migrated_count > 0", check)
-        self.assertIn("change_global_variable = { name = sr_lunar_migrated_count add = 1 }",
-                      _block(self.shared, "sr_lunar_note_migrated"))
-
-    def test_an_open_moon_base_is_carried_before_the_cleanup_deletes_it(self):
-        pulse = _block(self.on_actions, "space_race_on_action")
-        self.assertLess(pulse.index("sr_lunar_carry_moon_base = yes"),
-                        pulse.index("sr_cleanup_inactive_space_race_milestones = yes"))
-        carry = _block(self.windows, "sr_lunar_carry_moon_base")
-        self.assertIn("NOT = { has_variable = sr_completed_moon_base }", carry)
-        self.assertIn("set_variable = { name = sr_launch_banked_progress value = sr_lunar_carry_value }", carry)
-        self.assertIn("remove_variable = sr_progress_moon_base", carry)
-        # one cost repost, the cleanup's, for the flag the carry raises
-        self.assertNotIn("sr_recalculate_cost", carry)
-        self.assertNotIn("sr_cleanup_milestone_variables_effect", carry)
-        self.assertIn("set_variable = { name = sr_space_race_cleanup_changed value = yes }", carry)
-        cleanup = _block(self.space, "sr_cleanup_inactive_space_race_milestones")
-        self.assertRegex(cleanup, r"has_variable = sr_space_race_cleanup_changed \}\s*"
-                                  r"remove_variable = sr_space_race_cleanup_changed\s*sr_recalculate_cost = yes")
-        value = _block(self.window_values, "sr_lunar_carry_value")
-        self.assertIn("value = var:sr_progress_moon_base", value)
-        self.assertIn("add = var:sr_launch_banked_progress", value)
-        self.assertIn("max = sr_colonization_goal_stage_0", value)
-        self.assertIn("TE_SELF_CHECK OK lunar_migration carried=", _block(self.windows, "sr_lunar_carry_self_check"))
-
-    def test_the_carried_progress_comes_back_in_a_launch_month(self):
-        self.assertTrue(_block(self.windows, "sr_launch_month").split()[:3]
-                        == ["sr_launch_restore_banked_fleets", "=", "yes"])
-        restore = _block(self.windows, "sr_launch_restore_banked_fleets")
-        part = restore[restore.index("has_variable = sr_launch_banked_progress"):]
-        self.assertIn("change_variable = { name = sr_progress_solar_colonization add = var:sr_launch_banked_progress }",
-                      part)
-        # spent while a world is left, the Moon of an old all-claimed save too
-        self.assertIn("limit = { sr_any_site_unclaimed = yes }", part)
-        self.assertIn("remove_variable = sr_launch_banked_progress", part)
-
-    def test_a_race_ended_before_the_moon_keeps_everything(self):
-        """Owner, 2026-10-29: nothing is removed. The flag stays as history, the
-        finished programmes keep their record, Interplanetary Trade Networks and
-        the dividend, and a player among them is told the Moon is open to it."""
+    def test_a_race_ended_with_the_moon_free_keeps_everything(self):
+        """Owner, 2026-10-29: nothing is removed. The flag stays as history, and
+        the finished programmes keep their record, Interplanetary Trade Networks
+        and the dividend."""
         self.assertNotIn("sr_lunar_reopen_colonization", self.shared)
         self.assertNotIn("remove_global_variable = sr_all_colonies_complete", self.shared)
-        migrate = _block(self.shared, "sr_lunar_migrate")
-        self.assertRegex(migrate, r"limit = \{ sr_race_over_moon_free = yes \}\s*every_country = \{\s*limit = \{\s*"
-                                  r"is_player = yes\s*OR = \{\s*has_variable = sr_completed_solar_colonization\s*"
-                                  r"modifier:country_sr_solar_colonization_program_bool = yes\s*\}\s*\}\s*"
-                                  r"sr_lunar_note_moon_open = yes")
-        note = _block(self.shared, "sr_lunar_note_moon_open")
-        self.assertIn("set_variable = { name = sr_lunar_notice_reopened value = yes }", note)
-        # one .109 for a player both migrated and told (review M2)
-        for name in ("sr_lunar_note_moon_open", "sr_lunar_note_migrated"):
-            self.assertIn("sr_lunar_fire_notice = yes", _block(self.shared, name))
-            self.assertNotIn("trigger_event", _block(self.shared, name))
-        fire = _block(self.shared, "sr_lunar_fire_notice")
-        self.assertRegex(fire, r"limit = \{ NOT = \{ has_variable = sr_lunar_notice_queued \} \}\s*"
-                               r"set_variable = \{ name = sr_lunar_notice_queued value = yes days = 30 \}\s*"
-                               r"trigger_event = \{ id = space_race_events.109 days = 1 \}")
         # the stage check sets the flag as it does on main: no extra unclaimed test
         check = _block(self.effects, "sr_check_colony_stage_effect")
         self.assertNotIn("sr_any_site_unclaimed", check)
@@ -552,6 +467,14 @@ class LunarMigrationTest(unittest.TestCase):
                            "sr_space_race_concluded")
         self.assertIn("has_global_variable = sr_all_colonies_complete", concluded)
         self.assertIn("sr_has_running_milestone = yes", concluded)
+
+    def test_the_choice_line_shows_only_where_it_applies(self):
+        """The entry's choice line (re-review nit)."""
+        je = _strip(_raw("common", "journal_entries", "je_space_race.txt"))
+        possible = _block(_block(je, "je_space_race_solar_colonization"), "possible")
+        self.assertRegex(possible, r"trigger_if = \{\s*limit = \{ sr_race_over_moon_free = yes \}\s*"
+                                   r"custom_tooltip = \{\s*text = sr_colonization_by_choice_tt\s*"
+                                   r"has_variable = sr_colonization_resumed\s*\}\s*\}")
 
     def test_a_finished_programme_resumes_for_the_moon_only_by_choice(self):
         triggers = _strip(_raw("common", "scripted_triggers", "space_race_triggers.txt"))
@@ -572,7 +495,7 @@ class LunarMigrationTest(unittest.TestCase):
         started = resume[resume.index("has_journal_entry = je_space_race_solar_colonization"):]
         for line in ("set_variable = { name = sr_active_solar_colonization value = yes }",
                      "set_variable = { name = sr_funding_solar_colonization value = 1 }",
-                     "sr_recalculate_cost = yes"):
+                     "sr_refresh_milestone_statuses = yes"):
             self.assertIn(line, started)
         self.assertNotRegex(resume, r"remove_(variable|modifier)")
         # with the entry closed the marker opens it, and its immediate starts it
@@ -611,9 +534,14 @@ class LunarMigrationTest(unittest.TestCase):
         done = done[:done.index("sr_complete_milestone_effect = yes")]
         self.assertRegex(done, r"OR = \{\s*NOT = \{ has_variable = sr_colonization_resumed \}\s*"
                                r"NOT = \{ sr_sites_lunar_open = yes \}\s*\}")
-        self.assertRegex(done, r"if = \{\s*limit = \{ je:je_space_race_solar_colonization \?= \{ NOT = \{ "
-                               r"has_modifier = sr_solar_system_trade \} \} \}\s*"
-                               r"je:je_space_race_solar_colonization = \{ add_modifier = \{ name = sr_solar_system_trade \} \}")
+        # The record alone: the entry declares Interplanetary Trade Networks from
+        # it, once however often the programme finishes (1.15 scaling modifiers).
+        self.assertIn("set_variable = { name = sr_completed_solar_colonization value = yes }", done)
+        self.assertNotIn("sr_solar_system_trade", done)
+        self.assertRegex(_block(entry, "je_space_race_solar_colonization"),
+                         r"scaling_modifiers_while_active = \{\s*modifier = sr_solar_system_trade\s*value = \{\s*"
+                         r"value = 0\s*if = \{\s*limit = \{ has_variable = sr_completed_solar_colonization \}\s*"
+                         r"add = 1\s*\}\s*\}\s*\}")
         self.assertIn("remove_variable = sr_colonization_resumed", done)
         # no launch-side reader treats the flag as "nothing left to claim"
         for path in (("common", "script_values", "sr_launch_window_values.txt"),
@@ -623,28 +551,6 @@ class LunarMigrationTest(unittest.TestCase):
                 self.assertNotIn("sr_all_colonies_complete", _strip(_raw(*path)))
         self.assertIn("sr_any_site_unclaimed = yes",
                       _block(_block(decisions, "te_decision_space_mission_solar"), "is_shown"))
-
-    def test_the_notice_and_the_console(self):
-        events = _strip(_raw("events", "space_race_events.txt"))
-        notice = _block(events, "space_race_events.109")
-        self.assertIn("lunar_base_dome.dds", notice)
-        # a notice with no migrated world is titled for the Moon, not the base
-        self.assertIn("desc = space_race_events.109.t_moon_open", _block(notice, "title"))
-        self.assertIn("desc = space_race_events.109.f_moon_open", _block(notice, "flavor"))
-        # the entry's choice line shows only where it applies (re-review nit)
-        je = _strip(_raw("common", "journal_entries", "je_space_race.txt"))
-        possible = _block(_block(je, "je_space_race_solar_colonization"), "possible")
-        self.assertRegex(possible, r"trigger_if = \{\s*limit = \{ sr_race_over_moon_free = yes \}\s*"
-                                   r"custom_tooltip = \{\s*text = sr_colonization_by_choice_tt\s*"
-                                   r"has_variable = sr_colonization_resumed\s*\}\s*\}")
-        trigger = _block(notice[notice.index("duration = "):], "trigger")
-        for var in ("sr_lunar_notice_site", "sr_lunar_notice_reopened"):
-            self.assertIn(f"has_variable = {var}", trigger)
-            self.assertIn(f"remove_variable = {var}", _block(notice, "after"))
-        names = _raw(str(gss.CUSTOM_LOC_OUT))
-        self.assertIn("var:sr_lunar_notice_site = 35", _block(names, "sr_lunar_notice_name"))
-        console = _block(_strip(_raw("events", "te_debug_space_race_events.txt")), "te_debug_space_race.8")
-        self.assertIn("sr_lunar_selfcheck_migration = yes", console)
 
 
 class RuleTest(unittest.TestCase):
@@ -1144,7 +1050,11 @@ class MoonStageTest(unittest.TestCase):
         self.assertIn("country_sr_module_fabrication_add", _block(modifiers, "sr_colony_imbrium_massdriver"))
         check = _block(_strip(_raw("common", "scripted_effects", "sr_colony_module_effects.txt")),
                        "sr_mod_fabrication_self_check")
-        self.assertIn("NOT = { has_variable = sr_colony_imbrium_massdriver_mult }", _block(check, "limit"))
+        self.assertIn("NOT = { has_variable = sr_colony_imbrium_massdriver_held }", _block(check, "limit"))
+        # the record the declaration's gate reads, which the generated code writes (#1404)
+        generated = _raw("common", "scripted_effects", "sr_sites_generated.txt")
+        self.assertIn("sr_site_mark_held = { VAR = sr_colony_imbrium_massdriver_held }", generated)
+        self.assertNotIn("_mult", _block(check, "limit"))
         # the only specialization that fabricates
         fabricating = [m for s in gss.SITES for m in gss.spec_modifiers(s)
                        if "country_sr_module_fabrication_add" in _block(modifiers, m)]
@@ -1252,37 +1162,38 @@ class PopulationTest(unittest.TestCase):
         self.assertIn("count = local_var:sr_emig_batches", month)
         self.assertIn("sr_colonies_contested_enabled = yes", month)
 
-    def test_the_entry_s_modifiers_are_removed_first_and_read_through_owner(self):
-        refresh = _block(self.population, "sr_emig_refresh_modifiers")
-        for name in ("sr_emigration_programme", "sr_offworld_population"):
-            self.assertLess(refresh.index(f"remove_modifier = {name}"), refresh.index(f"name = {name} multiplier"))
-        for value in ("sr_emig_upkeep_units", "sr_offworld_bonus_units"):
-            self.assertIn("owner = {", _block(self.pop_values, value))
+    def test_the_entry_declares_its_population_modifiers(self):
+        # 1.15 scaling modifiers (#1404): the emigration programme's upkeep and
+        # the off-world bonus are declared on the entry from the country values
+        # the monthly refresh used to apply them at (test_sr_solar_scaling_modifiers
+        # pins all six); no refresh is left to call.
         je = _strip(_raw("common", "journal_entries", "je_space_race.txt"))
-        pulse = _block(_block(je, "je_space_race_solar_colonization"), "on_monthly_pulse")
-        for call in ("sr_emig_ai_review = yes", "sr_emig_month = yes", "sr_emig_refresh_modifiers = yes"):
+        entry = _block(je, "je_space_race_solar_colonization")
+        for name, limit, value in (
+                ("sr_emigration_programme", "sr_emig_level_value >= 1", "sr_emig_level_value"),
+                ("sr_offworld_population", "sr_offworld_pop_total >= sr_offworld_bonus_minimum", "sr_offworld_units")):
+            with self.subTest(modifier=name):
+                self.assertRegex(entry, r"scaling_modifiers_while_active = \{\s*modifier = " + name + r"\s*value = \{"
+                                 r"\s*value = 0\s*if = \{\s*limit = \{\s*sr_colonies_contested_enabled = yes\s*"
+                                 + re.escape(limit) + r"\s*\}\s*add = " + value + r"\s*\}\s*\}\s*\}")
+        self.assertNotIn("sr_emig_refresh_modifiers", self.population)
+        pulse = _block(entry, "on_monthly_pulse")
+        for call in ("sr_emig_ai_review = yes", "sr_emig_month = yes"):
             self.assertIn(call, pulse)
 
-    def test_the_entry_s_modifiers_refresh_once_per_effect(self):
-        # Whether has_modifier sees an add_modifier made earlier in the same
-        # effect is unverified, so a second refresh in one effect could skip
-        # the removal and stack a copy: the AI's review sets the level in the
-        # same pulse that refreshes afterwards.
-        refresh = "sr_emig_refresh_modifiers = yes"
-        self.assertNotIn(refresh, _block(self.population, "sr_emig_set_level"))
-        self.assertNotIn(refresh, _block(self.population, "sr_emig_ai_review"))
-        step = _block(self.population, "sr_emig_step_level")
-        self.assertEqual(step.count(refresh), 1)
-        self.assertGreater(step.index(refresh), step.rindex("sr_emig_set_level"))
-        je = _strip(_raw("common", "journal_entries", "je_space_race.txt"))
-        pulse = _block(_block(je, "je_space_race_solar_colonization"), "on_monthly_pulse")
-        self.assertEqual(pulse.count(refresh), 1)
-        self.assertGreater(pulse.index(refresh), pulse.index("sr_emig_ai_review = yes"))
-        debug = _strip(_raw("events", "te_debug_space_race_events.txt"))
-        for option in re.findall(r"(?ms)^\toption = \{\n(.*?)^\t\}", debug):
-            if "sr_emig_set_level" in option:
-                with self.subTest(option=option.split()[2]):
-                    self.assertEqual(option.count(refresh), 1)
+    def test_nothing_refreshes_the_entry_s_modifiers(self):
+        # The declarations follow their inputs (a level set by the AI's review or
+        # the Settlers button, a supply toggled, a module landed): the monthly
+        # refresh and its callers are gone, with the once-per-effect rule it needed.
+        for parts in (("common", "scripted_effects", "sr_colony_population_effects.txt"),
+                      ("common", "scripted_guis", "sr_colony_sguis.txt"),
+                      ("common", "journal_entries", "je_space_race.txt"),
+                      ("events", "te_debug_space_race_events.txt"),
+                      (str(gss.EFFECTS_OUT),)):
+            with self.subTest(file=parts[-1]):
+                text = _strip(_raw(*parts))
+                self.assertNotIn("sr_emig_refresh_modifiers", text)
+                self.assertNotIn("sr_mod_refresh_facilities", text)
 
     def test_every_settler_sent_lands(self):
         # A colony capped at its free room passes the rest on: passes share
@@ -1395,46 +1306,29 @@ class ModulesTest(unittest.TestCase):
                     self.assertIn(f"value = sr_site_lvl_{slot}_value_{k}", mult)
                     self.assertIn(f"multiply = sr_site_staffing_{k}", mult)
 
-    def test_the_mirror_shows_each_specialization_at_its_multiplier(self):
+    def test_the_mirror_marks_each_specialization_from_its_level(self):
+        # The record the entry's declaration reads (<modifier>_held) is marked
+        # while the level is at least 1, cleared otherwise; the declaration's
+        # value is the multiplier (test_sr_solar_scaling_modifiers).
         for site in gss.SITES:
             k = site.key
             body = _block(self.effects, f"sr_site_mirror_on_{k}")
             for slot, modifier in zip(("a", "b"), gss.spec_modifiers(site)):
                 with self.subTest(site=k, slot=slot):
-                    self.assertIn(f"sr_site_lvl_{slot}_value_{k} >= 1", body)
-                    self.assertIn(f"sr_site_show_modifier_at = {{ MODIFIER = {modifier} MULT = sr_site_mult_{slot}_{k} }}",
-                                  body)
-                    self.assertIn(f"sr_site_hide_modifier_at = {{ MODIFIER = {modifier} }}", body)
+                    self.assertRegex(body, rf"if = \{{\s*limit = \{{ sr_site_lvl_{slot}_value_{k} >= 1 \}}\s*"
+                                           rf"sr_site_mark_held = \{{ VAR = {modifier}_held \}}\s*\}}\s*else = \{{\s*"
+                                           rf"sr_site_clear_held = \{{ VAR = {modifier}_held \}}\s*\}}")
 
-    def test_the_multiplier_is_tested_by_its_record_not_has_modifier(self):
-        show = _block(self.shared, "sr_site_show_modifier_at")
-        test = _block(show, "limit") if "limit" in show else ""
-        self.assertIn("NOT = { var:$MODIFIER$_mult = $MULT$ }", show)
-        self.assertNotIn("has_modifier", show[:show.index("je:je_space_race_solar_colonization")])
-        inner = show[show.index("je:je_space_race_solar_colonization"):]
-        self.assertLess(inner.index("remove_modifier = $MODIFIER$"), inner.index("add_modifier"))
-        self.assertIn("add_modifier = { name = $MODIFIER$ multiplier = $MULT$ }", inner)
-        self.assertIn("owner = { set_variable = { name = $MODIFIER$_mult value = $MULT$ } }", inner)
-        self.assertTrue(test)
-        # The founding choice records multiplier 1 for the unscaled modifier the grant just added.
-        for modifier, site, kind, _ in gss.choices():
-            if kind != "spec":
-                continue
-            body = _block(self.effects, f"sr_site_choose_{modifier}")
-            with self.subTest(modifier=modifier):
-                self.assertLess(body.index(f"set_variable = {{ name = {modifier}_mult value = 1 }}"),
-                                body.index(f"sr_site_sync_{site.key} = yes"))
-        hide_at = _block(self.shared, "sr_site_hide_modifier_at")
-        self.assertIn("limit = { has_variable = $MODIFIER$_mult }\n\t\tremove_variable = $MODIFIER$_mult", hide_at)
-        # A discovery's modifier has no multiplier record: the plain hide mustn't read one,
-        # or the parse-time validator reports every discovery's <modifier>_mult as never set.
-        self.assertNotIn("_mult", _block(self.shared, "sr_site_hide_modifier"))
-        for site in gss.SITES:
-            body = _block(self.effects, f"sr_site_mirror_on_{site.key}") + _block(self.effects, f"sr_site_unmirror_{site.key}")
-            for d in site.discoveries:
-                for modifier in gss.discovery_modifiers(d):
-                    with self.subTest(site=site.key, modifier=modifier):
-                        self.assertNotIn(f"sr_site_hide_modifier_at = {{ MODIFIER = {modifier} }}", body)
+    def test_no_multiplier_record_is_left(self):
+        # The <modifier>_mult record only spared a re-add whose multiplier had
+        # not changed; a declaration has none to spare (1.15 scaling modifiers, #1404).
+        for text in (self.shared, self.effects, _strip(_raw("common", "scripted_effects", "space_race_effects.txt"))):
+            self.assertNotIn("_mult value", text)
+            self.assertNotIn("$MODIFIER$_mult", text)
+        for name in ("sr_site_show_modifier_at", "sr_site_hide_modifier_at", "sr_site_show_modifier",
+                     "sr_site_hide_modifier", "sr_mod_seen_self_check", "sr_sites_sync_entry_specs"):
+            with self.subTest(name=name):
+                self.assertNotRegex(self.shared + self.effects + self.modules, rf"(?m)^{name} = \{{")
 
     def test_release_clears_the_modules_and_the_unmirror_the_queue(self):
         for site in gss.SITES:
@@ -1499,10 +1393,12 @@ class ModulesTest(unittest.TestCase):
             with self.subTest(site=site.key):
                 self.assertIn(f"local_var:sr_mq_head_site = {site.index} global_var:sr_site_holder_{site.key} ?= this",
                               head)
+                # A lunar world's module takes no shipment slot (the owner, 2026-11-15).
+                build = "sr_mod_fab_build_lunar" if site in gss.LUNAR else "sr_mod_fab_build"
                 for t in gss.module_types(site):
                     # A Terraforming level for a world finished meanwhile is dropped unbuilt.
                     extra = f" sr_site_terra_open_{site.key} = yes" if t == "terra" else ""
-                    self.assertIn(f"local_var:sr_mq_head_type = {gss.MODULE_CODES[t]}{extra} }} sr_mod_fab_build = "
+                    self.assertIn(f"local_var:sr_mq_head_type = {gss.MODULE_CODES[t]}{extra} }} {build} = "
                                   f"{{ KEY = {site.key} TYPE = {t} CODE = {gss.MODULE_CODES[t]} INDEX = {site.index} }}",
                                   head)
         # A new entry takes the first free place; a removal moves every later entry up one.
@@ -1718,6 +1614,262 @@ class ModulesTest(unittest.TestCase):
                                                        "space_race_modifier_types.txt"),
                                                   "country_sr_module_fabrication_add"))
 
+    # ---- The module stock, Moon modules and the price past a world's slots (the owner, 2026-11-15) ----
+
+    def test_the_stock_holds_a_base_a_year_of_fabrication_and_storage(self):
+        values = _strip(_raw("common", "script_values", "sr_colony_module_values.txt"))
+        self.assertIn("sr_mod_fab_stock_base = { value = 500 }", values)
+        self.assertIn("sr_mod_fab_stock_months = { value = 12 }", values)
+        cap = _block(values, "sr_mod_fab_stock_cap")
+        for line in ("value = sr_mod_fab_stock_base", "add = sr_mod_fab_stock_year", "add = sr_mod_fab_storage"):
+            self.assertIn(line, cap)
+        year = _block(values, "sr_mod_fab_stock_year")
+        self.assertIn("value = sr_mod_fab_rate", year)
+        self.assertIn("multiply = sr_mod_fab_stock_months", year)
+        self.assertIn("modifier:country_sr_module_storage_add", _block(values, "sr_mod_fab_storage"))
+        # The month fills to the cap, or to the queue's first module's price where
+        # that is more, so a module queued under a higher cap is still built.
+        fill = _block(values, "sr_mod_fab_stock_fill_cap")
+        self.assertIn("value = sr_mod_fab_stock_cap", fill)
+        self.assertRegex(fill, r"limit = \{ has_variable = sr_mq_1_site \}\s*min = sr_mq_head_cost")
+        # Points go in only below it, so a stock above a cap that fell is kept, not cut.
+        month = _block(self.modules, "sr_mod_month")
+        add = month[:month.index("set_local_variable = { name = sr_fab_built")]
+        self.assertIn("sr_mod_fab_stock_value < sr_mod_fab_stock_fill_cap", add)
+        self.assertIn("max = sr_mod_fab_stock_fill_cap", add)
+
+    def test_the_storage_group_is_on_the_space_program(self):
+        buildings = _strip(_raw("common", "buildings", "extra_buildings.txt"))
+        self.assertIn("pmg_space_program_module_storage", _block(buildings, "REPLACE_OR_CREATE:building_space_program"))
+        group = _block(_strip(_raw("common", "production_method_groups", "sr_colony_module_pmgs.txt")),
+                       "pmg_space_program_module_storage")
+        methods = ("pm_sr_storage_none", "pm_sr_storage_component_depot", "pm_sr_storage_orbital_depot")
+        self.assertEqual(re.findall(r"pm_sr_storage_\w+", group), list(methods))
+        pms = _strip(_raw("common", "production_methods", "sr_colony_module_pms.txt"))
+        storage = {}
+        for method in methods:
+            body = _block(pms, method)
+            m = re.search(r"country_modifiers = \{\s*workforce_scaled = \{\s*country_sr_module_storage_add = (\d+)", body)
+            storage[method] = int(m.group(1)) if m else 0
+        self.assertEqual(storage, {"pm_sr_storage_none": 0, "pm_sr_storage_component_depot": 1000,
+                                   "pm_sr_storage_orbital_depot": 3000})
+        self.assertIn("cislunar_infrastructure", _block(pms, "pm_sr_storage_component_depot"))
+        self.assertIn("space_colonization", _block(pms, "pm_sr_storage_orbital_depot"))
+        types = _raw("common", "modifier_type_definitions", "space_race_modifier_types.txt")
+        self.assertIn("script_only = yes", _block(types, "country_sr_module_storage_add"))
+        # The self-check reads both methods, and the month runs it.
+        triggers = _strip(_raw("common", "scripted_triggers", "sr_colony_module_triggers.txt"))
+        runs = _block(triggers, "sr_mod_storage_runs")
+        for method in methods[1:]:
+            self.assertIn(f"has_active_production_method = {method}", runs)
+        self.assertIn("occupancy >= 0.5", runs)
+        self.assertIn("sr_mod_storage_self_check = yes", _block(self.modules, "sr_mod_month"))
+
+    # ---- The methods' goods (the owner, 2026-11-20) ----
+
+    FABRICATION = ("pm_sr_fabrication_orbital_assembly", "pm_sr_fabrication_lunar_foundries",
+                   "pm_sr_fabrication_fusion_shipyards")
+    STORAGE = ("pm_sr_storage_component_depot", "pm_sr_storage_orbital_depot")
+
+    @staticmethod
+    def _tech_era(tech):
+        for path in glob.glob(os.path.join(REPO, "common", "technology", "technologies", "era_*.txt")):
+            with open(path, encoding="utf-8-sig") as f:
+                if re.search(rf"(?m)^{tech} = \{{", f.read()):
+                    return int(re.search(r"era_(\d+)\.txt$", path).group(1))
+        raise AssertionError(f"no era file defines {tech}")
+
+    @staticmethod
+    def _bill(body, prices):
+        """A method's weekly bill at full staff and base prices."""
+        return sum(float(qty) * prices[good] for good, qty in re.findall(r"goods_input_(\w+)_add = ([\d.]+)", body))
+
+    def test_no_method_takes_advanced_materials_before_the_fabricator(self):
+        """Orbital Assembly and Component Depot (Cislunar Infrastructure, era 10)
+        once took Advanced Materials, whose fabricator comes in era 11."""
+        industry = _strip(_raw("common", "buildings", "01_zz_te_industry.txt"))
+        fabricator = _block(industry, "building_advanced_material_fabricator")
+        unlock = re.search(r"unlocking_technologies = \{\s*(\w+)", fabricator).group(1)
+        fabricator_era = self._tech_era(unlock)
+        pms = _strip(_raw("common", "production_methods", "sr_colony_module_pms.txt"))
+        for method in self.FABRICATION + self.STORAGE:
+            body = _block(pms, method)
+            era = self._tech_era(re.search(r"unlocking_technologies = \{\s*(\w+)", body).group(1))
+            with self.subTest(method=method, era=era):
+                if era < fabricator_era:
+                    self.assertNotIn("goods_input_advanced_materials_add", body)
+        for method in ("pm_sr_fabrication_orbital_assembly", "pm_sr_storage_component_depot"):
+            self.assertLess(self._tech_era(re.search(r"unlocking_technologies = \{\s*(\w+)",
+                                                     _block(pms, method)).group(1)), fabricator_era)
+
+    def test_each_later_method_costs_more_a_week_and_a_little_less_a_point(self):
+        """At base prices each later method's bill is higher and its cost a point
+        (of fabrication a month, or of storage) 5% to 15% lower than the one before:
+        the owner's 2026-11-20 rule, about 10%. Until then Fusion Shipyards cost a
+        quarter of Orbital Assembly a point, and the Orbital Depot more than the
+        Component Depot."""
+        import pm_costs
+
+        prices = pm_costs.load_goods()
+        pms = _strip(_raw("common", "production_methods", "sr_colony_module_pms.txt"))
+        for methods, field in ((self.FABRICATION, "country_sr_module_fabrication_add"),
+                               (self.STORAGE, "country_sr_module_storage_add")):
+            rows = []
+            for method in methods:
+                body = _block(pms, method)
+                units = float(re.search(rf"{field} = ([\d.]+)", body).group(1))
+                rows.append((method, self._bill(body, prices), units))
+            for (low, low_bill, low_units), (high, high_bill, high_units) in zip(rows, rows[1:]):
+                with self.subTest(low=low, high=high):
+                    self.assertGreater(high_bill, low_bill)
+                    ratio = (high_bill / high_units) / (low_bill / low_units)
+                    self.assertGreaterEqual(ratio, 0.85)
+                    self.assertLessEqual(ratio, 0.95)
+
+    def test_the_ai_takes_the_dearest_method_within_its_budget(self):
+        """The two dearer methods run only while their bill fits in the AI's
+        fabrication budget, half the mission's climbing share; the cheapest one
+        the country has runs whatever the budget."""
+        import pm_costs
+
+        prices = pm_costs.load_goods()
+        pms = _strip(_raw("common", "production_methods", "sr_colony_module_pms.txt"))
+        values = _strip(_raw("common", "script_values", "sr_colony_module_values.txt"))
+        for key in ("lunar_foundries", "fusion_shipyards"):
+            with self.subTest(method=key):
+                base = float(re.search(r"value = ([\d.]+)", _block(values, f"sr_mod_fab_bill_base_{key}")).group(1))
+                self.assertEqual(base, self._bill(_block(pms, f"pm_sr_fabrication_{key}"), prices))
+                room = _block(values, f"sr_mod_ai_fab_room_{key}")
+                self.assertIn("value = sr_mod_ai_fab_budget", room)
+                self.assertIn(f"value = sr_mod_fab_bill_base_{key}", room)
+                self.assertIn("multiply = sr_mod_fab_bill_price_factor", room)
+        factor = _block(values, "sr_mod_fab_bill_price_factor")
+        self.assertIn("value = sr_ai_program_throughput_funded", factor)
+        self.assertIn("add = sr_launch_capacity_price_up", factor)
+        self.assertIn("value = fixed_income", _block(values, "sr_mod_ai_fab_budget"))
+        share = float(re.search(r"value = ([\d.]+)", _block(values, "sr_mod_ai_fab_share")).group(1))
+        budget = _strip(_raw("common", "script_values", "sr_ai_mission_budget_values.txt"))
+        climb = float(re.search(r"(?m)^sr_ai_mission_share_up = ([\d.]+)", budget).group(1))
+        self.assertAlmostEqual(share, climb / 2)
+        # The ladder, dearest first; the budget gates only the two dearer methods.
+        best = _block(self.modules, "sr_mod_activate_best_fabrication")
+        branches = re.findall(r"limit = \{([^{}]*)\}\s*sr_mod_run_method = \{ PM = (\w+) \}", best)
+        self.assertEqual([(" ".join(cond.split()), pm) for cond, pm in branches], [
+            ("has_technology_researched = compact_fusion_reactors sr_mod_ai_fab_room_fusion_shipyards >= 0",
+             "pm_sr_fabrication_fusion_shipyards"),
+            ("has_technology_researched = space_colonization sr_mod_ai_fab_room_lunar_foundries >= 0",
+             "pm_sr_fabrication_lunar_foundries"),
+            ("has_technology_researched = cislunar_infrastructure", "pm_sr_fabrication_orbital_assembly"),
+            ("has_technology_researched = space_colonization", "pm_sr_fabrication_lunar_foundries"),
+            ("has_technology_researched = compact_fusion_reactors", "pm_sr_fabrication_fusion_shipyards"),
+        ])
+        # One chain, so only the first branch that holds runs.
+        self.assertTrue(best.strip().startswith("if = {"))
+        self.assertEqual(len(re.findall(r"\belse_if = \{", best)), 4)
+        self.assertIn("sr_mod_activate_best_fabrication = yes", _block(self.modules, "sr_mod_ai_review"))
+
+    def test_a_lunar_module_takes_no_shipment_slot(self):
+        lunar = sorted(s.index for s in gss.LUNAR)
+        self.assertEqual(len(lunar), 6)
+        head = _block(self.triggers, "sr_mq_head_lunar_open")
+        self.assertEqual(sorted(int(i) for i in re.findall(r"var:sr_mq_1_site \?= (\d+)", head)), lunar)
+        # Only a world that can take the module now: a blockaded or occupied one
+        # would lose it the month it is paid for (review of #1847).
+        for site in gss.LUNAR:
+            self.assertIn(f"AND = {{ var:sr_mq_1_site ?= {site.index} NOT = {{ has_global_variable = sr_site_blockaded_{site.key} }} "
+                          f"NOT = {{ has_global_variable = sr_site_occupier_{site.key} }} }}", head)
+        triggers = _strip(_raw("common", "scripted_triggers", "sr_colony_module_triggers.txt"))
+        no_slot = _block(triggers, "sr_mq_head_needs_no_slot")
+        self.assertIn("sr_mq_head_lunar_open = yes", no_slot)
+        self.assertIn("NOT = { sr_launches_barred = yes }", no_slot)
+        # The build loop takes a free slot or a head that needs none.
+        loop = _block(_block(self.modules, "sr_mod_month"), "while")
+        self.assertRegex(_block(loop, "limit"),
+                         r"OR = \{\s*sr_ms_has_free_slot = yes\s*sr_mq_head_needs_no_slot = yes\s*\}")
+        # Installed at once through the landing's install, unless launches are
+        # barred; then into a slot like any other.
+        build = _block(self.modules, "sr_mod_fab_build_lunar")
+        go = build[:build.index("else = {")]
+        # The same three tests as sr_mq_head_needs_no_slot, so the slot branch runs only with a slot free.
+        for term in ("NOT = { sr_launches_barred = yes }", "NOT = { has_global_variable = sr_site_blockaded_$KEY$ }",
+                     "NOT = { has_global_variable = sr_site_occupier_$KEY$ }"):
+            self.assertIn(term, _block(go, "limit"))
+        self.assertIn("change_variable = { name = sr_fab_stock subtract = local_var:sr_mq_head_cost_now }", go)
+        self.assertIn("set_local_variable = { name = sr_ms_type_now value = $CODE$ }", go)
+        self.assertLess(go.index("name = sr_ms_installed value = 0"), go.index("sr_mod_install_$KEY$ = yes"))
+        self.assertNotIn("sr_ms_store_new", go)
+        self.assertIn("sr_mod_fab_build = { KEY = $KEY$ TYPE = $TYPE$ CODE = $CODE$ INDEX = $INDEX$ }",
+                      build[build.index("else = {"):])
+        # The install a landing runs: the world's own blockade and occupation lose it.
+        for site in gss.LUNAR:
+            install = _block(self.effects, f"sr_mod_install_{site.key}")
+            self.assertIn(f"NOT = {{ has_global_variable = sr_site_blockaded_{site.key} }}", install)
+            self.assertIn(f"sr_site_sync_{site.key} = yes", install)
+
+    def test_a_lunar_module_goes_ahead_of_a_head_waiting_for_a_slot(self):
+        promote = _block(self.effects, "sr_mq_promote_lunar")
+        gate = _block(promote, "limit")
+        for term in ("has_variable = sr_mq_1_site", "NOT = { sr_ms_has_free_slot = yes }",
+                     "NOT = { sr_launches_barred = yes }"):
+            self.assertIn(term, gate)
+        self.assertIn("NOT = { sr_mq_head_lunar_open = yes }", gate)
+        # The first lunar entry from place 2 on that can be installed now and that
+        # the stock can pay for moves to the top (review of #1847).
+        moves = re.findall(r"limit = \{ (OR = \{ .*?) \}\s*sr_mq_to_top_(\d+) = yes", promote)
+        self.assertEqual([int(n) for _, n in moves], list(range(2, gss.QUEUE_SLOTS + 1)))
+        for test, n in moves:
+            with self.subTest(place=n):
+                self.assertEqual(test.strip(), gss.lunar_open_test(f"var:sr_mq_{n}_site", f"var:sr_mq_{n}_type"))
+                for site in gss.LUNAR:
+                    self.assertIn(f"var:sr_mq_{n}_site ?= {site.index} NOT = {{ has_global_variable = sr_site_blockaded_{site.key} }} "
+                                  f"NOT = {{ has_global_variable = sr_site_occupier_{site.key} }} "
+                                  "sr_mod_fab_stock_value >= sr_module_points "
+                                  f"OR = {{ var:sr_mq_{n}_type ?= 1 var:sr_mq_{n}_type ?= 2 "
+                                  f"sr_mod_fab_stock_value >= sr_mod_generic_cost_{site.key} }}", test)
+        # The hover's Moon note reads the same entries behind the head.
+        behind = _block(self.triggers, "sr_mq_lunar_behind")
+        self.assertNotIn("var:sr_mq_1_site", behind)
+        for n in range(2, gss.QUEUE_SLOTS + 1):
+            self.assertIn(gss.lunar_open_test(f"var:sr_mq_{n}_site"), behind)
+        # Before the first build and after each.
+        month = _block(self.modules, "sr_mod_month")
+        self.assertLess(month.index("sr_mq_promote_lunar = yes"), month.index("while = {"))
+        loop = _block(month, "while")
+        self.assertLess(loop.index("sr_mod_fab_head = yes"), loop.index("sr_mq_promote_lunar = yes"))
+
+    def test_past_its_slots_a_module_needs_its_price_in_stock(self):
+        self.assertEqual(gss.SLOTS_PAST_MAX, 8)
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                self.assertIn(f"sr_site_slots_max_{k} = {{ value = sr_site_slots_{k} add = 8 }}", self.values)
+                for t in gss.generic_types(site):
+                    self.assertIn(f"sr_mod_next_cost_{k} <= sr_mod_fab_stock_cap",
+                                  _block(self.triggers, f"sr_mod_can_queue_{t}_{k}"))
+                self.assertIn(f"AND = {{ scope:site = {site.index} sr_mod_next_cost_{k} <= sr_mod_fab_stock_cap }}",
+                              _block(self.triggers, "sr_mod_scope_price_fits"))
+        sgui = _strip(_raw("common", "scripted_guis", "sr_colony_sguis.txt"))
+        self.assertRegex(sgui, r"text = sr_mod_req_price_fits_tt\s*sr_mod_scope_price_fits = yes")
+
+    def test_the_hover_reads_each_waiting_shipment_s_window(self):
+        gated = [s for s in gss.SITES if s.body]
+        for site in gated:
+            with self.subTest(site=site.key):
+                # In a window's last month one still waiting leaves at the next window
+                # (review of #1847): the gap since the last one less 2 stands in for it.
+                self.assertIn(f"sr_mod_wait_months_{site.key} = {{ value = 0 if = {{ limit = {{ sr_launch_windows_apply = yes }} "
+                              f"value = sr_window_months_to_next_{site.body} if = {{ limit = {{ te_history_month_index > "
+                              f"sr_window_next_optimum_{site.body} }} value = sr_window_previous_gap_{site.body} subtract = 2 }} }} }}",
+                              self.values)
+        for n in range(1, gss.SHIP_SLOTS + 1):
+            body = _block(self.values, f"sr_ms_wait_months_{n}")
+            with self.subTest(slot=n):
+                self.assertIn(f"has_variable = sr_ms_{n}_site NOT = {{ has_variable = sr_ms_{n}_arrive }}", body)
+                self.assertEqual(sorted(int(i) for i in re.findall(rf"var:sr_ms_{n}_site = (\d+)", body)),
+                                 sorted(s.index for s in gated))
+        # The Moon and Mercury are never gated: a module waiting for one leaves the next month.
+        self.assertFalse(any(s.body for s in gss.LUNAR))
+
     def test_the_module_rows_follow_the_table(self):
         rows = self.rows[self.rows.index("type te_sr_colony_rows = flowcontainer {"):]
         rows = rows[:rows.index("\ttype ", 1)] if "\ttype " in rows[1:] else rows
@@ -1841,6 +1993,59 @@ class FreeColoniesTest(unittest.TestCase):
                     self.assertIn(term, pressure)
                 self.assertIn(f"sr_transit_months_{gss.transit_body(site)}", pressure)
 
+    def test_colony_politics_need_a_free_colonys_people(self):
+        """Owner, 2026-11-12 (#1620): a world under sr_free_colony_minimum people
+        builds no autonomy (its pressure is 0, so it only settles) and neither
+        demands self-government nor breaks away, and the overview counts and
+        lists only colonies that size as restless."""
+        self.assertEqual(self._number("sr_free_colony_minimum"), 1000)
+        count = _block(self.display, "sr_disp_aut_restless_count")
+        listed = _block(self.effects, "sr_ov_list_restless")
+        named = _block(self.custom_loc, "sr_ov_restless_site")
+        for site in gss.SITES:
+            k = site.key
+            peopled = f"sr_site_peopled_{k} = yes"
+            with self.subTest(site=k):
+                self.assertEqual(_block(self.triggers, f"sr_site_peopled_{k}").strip(),
+                                 f"sr_site_pop_value_{k} >= sr_free_colony_minimum")
+                # the pressure's last line zeroes it under the minimum
+                pressure = _block(self.values, f"sr_site_aut_pressure_{k}").strip().splitlines()
+                self.assertEqual(pressure[-1].strip(), f"if = {{ limit = {{ NOT = {{ {peopled} }} }} value = 0 }}")
+                # both thresholds test the people
+                step = _block(self.effects, f"sr_site_aut_step_{k}")
+                brk = step[step.rindex("limit", 0, step.index("sr_aut_break_away")):step.index("sr_aut_break_away")]
+                ask = step[step.index("else_if"):step.index("sr_aut_ask =")]
+                self.assertIn("sr_aut_break_level", brk)
+                self.assertIn(peopled, brk)
+                self.assertIn("sr_aut_ask_level", ask)
+                self.assertIn(peopled, ask)
+                # the overview's count, list and name
+                self.assertIn(f"sr_site_autonomy_value_{k} >= sr_aut_ask_level {peopled}", count)
+                self.assertIn(f"sr_site_autonomy_value_{k} >= sr_aut_ask_level {peopled}", listed)
+                self.assertIn(f"sr_site_autonomy_value_{k} >= sr_aut_ask_level {peopled}", named)
+                # the drift hover's flag
+                self.assertIn(f"if = {{ limit = {{ NOT = {{ {peopled} }} }} value = 1 }}",
+                              _block(self.display, f"sr_disp_aut_unpeopled_{k}"))
+        # No other reader of the two levels in the generated script skips the test.
+        for text in (self.effects, self.values, self.display, self.custom_loc, self.triggers):
+            for m in re.finditer(r"autonomy_value_(\w+) >= sr_aut_(?:ask|break)_level", text):
+                # the same limit names the world's people, on that line or the next
+                near = text[m.end():m.end() + 120].split("}")[0]
+                self.assertIn(f"sr_site_peopled_{m.group(1)} = yes", near, text[m.start():m.end() + 120])
+        # An autonomy gain needs the people too (incitement, sabotage, a destroyed colony's resentment).
+        add = _block(self.shared, "sr_site_aut_add_at")
+        self.assertIn("local_var:sr_aut_delta < 0", add)
+        self.assertIn("sr_site_peopled_$KEY$ = yes", add)
+        # Incite Colonial Autonomy starts only against a colony that size.
+        ops = _strip(_raw("common", "diplomatic_actions", "covert_operations.txt"))
+        incite = _block(ops, "covert_incite_autonomy_action")
+        possible = _block(incite, "possible")
+        self.assertIn("sr_life_has_colony = { MIN = sr_free_colony_minimum }", possible)
+        # .93's free option needs it as well.
+        free = _block(self.events, "space_race_events.93")
+        free = free[free.index("name = space_race_events.93.b"):]
+        self.assertIn("MIN = sr_free_colony_minimum", free[:free.index("custom_tooltip")])
+
     def test_autonomy_settles_at_a_hundred_times_its_pressure(self):
         """Settling (colony management design § 4.2): 1% of the autonomy a month,
         so a colony settles at 100 x the other terms' sum."""
@@ -1922,6 +2127,28 @@ class FreeColoniesTest(unittest.TestCase):
         self.assertEqual(self._number("sr_life_breach_chance"), 1)
         self.assertIn("chance = 50", month[month.index("chance = sr_life_breach_chance"):])
         self.assertNotRegex(month, r"chance = \d+\.\d")
+
+    def test_the_first_child_waits_for_years_not_only_people(self):
+        # Owner, 2026-11-20: at 2,000 people alone the first child came one to
+        # four months after the settlers, since a people bar counts months of
+        # emigration. The nation's clock starts at its first colony of
+        # sr_free_colony_minimum people, once, and the pick waits three years.
+        month = _block(self.shared, "sr_life_month")
+        first = month[:month.index("space_race_events.95")]
+        start = first.index("set_variable = { name = sr_life_first_child_from value = te_history_month_index }")
+        clock = first[first.rindex("if = {", 0, start):start]
+        self.assertIn("NOT = { has_variable = sr_life_first_child_from }", clock)
+        self.assertIn("sr_life_has_colony = { MIN = sr_free_colony_minimum }", clock)
+        pick = first.index("sr_life_first_child_pick = yes")
+        self.assertLess(start, pick)
+        self.assertIn("sr_life_first_child_months_settled >= sr_life_first_child_wait_months",
+                      first[start:pick])
+        self.assertIn("remove_variable = sr_life_first_child_from", first[pick:])
+        self.assertEqual(self._number("sr_life_first_child_people"), 5000)
+        self.assertEqual(self._number("sr_life_first_child_wait_months"), 36)
+        settled = _block(self.numbers, "sr_life_first_child_months_settled")
+        self.assertIn("has_variable = sr_life_first_child_from", settled)
+        self.assertIn("subtract = var:sr_life_first_child_from", settled)
 
     def test_the_autonomy_and_free_rows_follow_the_table(self):
         for row_type in ("te_sr_colony_rows", "te_sr_free_rows"):

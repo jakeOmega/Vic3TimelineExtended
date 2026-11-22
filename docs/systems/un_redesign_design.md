@@ -508,9 +508,9 @@ the two decisions is **(proposed)**: a first shape to tune. Not yet seen in a ru
   votes against at most **(owner, 2026-10-16)**. An enforcer that is still the petitioner's rival
   takes the rivalry, the relations and its own term together, which puts it well past the veto
   line, so one with a seat vetoes, at the veto's usual cost.
-- **Members who voted against.** In `un_vote.3` accepting earns no compliance standing and
-  denouncing books no defiance: the lift asks nothing of them. Refusing still costs the relations
-  and infamy it costs on every resolution.
+- **Members who voted against.** The lift asks nothing of them, so since 2026-11-10 `un_vote.3`
+  gives them only the acknowledgement (`un_vote_3_can_refuse`): no compliance standing, and no
+  refusal to pay relations and infamy for.
 
 ### The lean (`un_lean_interests_lift_sanctions`)
 
@@ -841,7 +841,7 @@ hidden until Reform I carries (`un_charter_reform_ii_in_view`, through
 still ask `un_charter_has_reform`. The resolution triggers sort the topics as the table above
 says; `un_resolution_veto_blocks` names the four with no graduated form, and
 `un_resolution_asks_pledges` keeps an observer request out of `un_vote.3`'s pledge wording
-(the UN's budget pays the observers, so refusing it only denounces it). `un_vote.3` books no
+(the UN's budget pays the observers, so there is nothing to refuse and a no-voter only acknowledges it). `un_vote.3` books no
 standing or defiance for accepting or denouncing a court referral or a supervised referendum:
 only the country each names answers for it, in its own event (`un_court.2`, `un_referendum.1`). The Standing Force and
 the Fund each take a share of the budget (`un_force_budget_share` 0.1,
@@ -900,8 +900,14 @@ the classification and the loc.
    stabilisation hosts. At Supranational `un_teeth_war_goal_surcharge` strikes, instead of
    charging, each goal of a listed type that a represented member initiating the play holds
    against a host of an active peacekeeping or stabilisation mission (`remove_war_goal`; a
-   notice to a human), except a goal of the type the play opened with. A play opens with its
-   type's `war_goal`, so `is_diplomatic_play_type` tells which (`un_force_has_strikeable_goal`;
+   notice to a human), except a goal of the type the play opened with. Each call takes the
+   holder's first goal of the type, whatever it targets, so `un_force_strike_goal` repeats it,
+   at most 30 times, while one against the host is left, and a goal of that type against another
+   country that comes first goes too (#1892; until then one call per type left the rest). Such a
+   goal gets back the doubled surcharge it paid, counted as the loop's calls less one
+   (`un_force_collateral_refund_value`, #1896); without that, an AI re-adding it paid each time. A
+   play opens with its type's `war_goal`, so `is_diplomatic_play_type` tells which
+   (`un_force_has_strikeable_goal`;
    `test_un_force_play_types.py` pins the lists to vanilla's and the mod's plays). That goal, a
    later goal of the same type, and unification goals (never struck: every formable adds such a
    play) pay the surcharge, doubled, as before the Force; so does a suspended member. Subjects
@@ -924,11 +930,15 @@ the classification and the loc.
    a member defending in one of them. Each such month: war
    support −2.5 × E in each war, aggression record +1, and an order debit of 0.25 that accrues
    on the aggressor and is booked every six months and when the order ends (ledger 30), so a
-   long order does not fill the twelve-entry log. After three months of fighting on, standing
+   long order does not fill the twelve-entry log. The count (`un_cf_debit_months`) starts at 0
+   when the order is imposed, with the order's other counters; until 2026-11-15 nothing set it,
+   so the month's `change_variable` failed and no debit was ever booked (#1818;
+   `test_un_ceasefire_order.py`). After three months of fighting on, standing
    −5 once (−2 if it accepted the censure; code 39). At imposition the aggressor records the
    victim's state count and capital region. The order then ends one of five ways (the
    `un_order_effects.txt` header): **kept** when the war with the victim is over, the aggressor
-   fights no other member and gained nothing — delivery +1.5 (ledger 31), standing +2 (code 5) if
+   fights no other member and gained nothing — delivery +0.75 (ledger 31; 1.5 until every delivery reward was
+   halved on 2026-10-06, `un_cf_delivery_credit`), standing +2 (code 5) if
    within the three months, and peacekeepers in the victim's most devastated state; **defied**
    when it gained (the victim lost a state, became its subject, or lost its capital region to it)
    or the order ran out with the war on — credibility −1 (ledger 32) and nothing earned;
@@ -1036,7 +1046,8 @@ the classification and the loc.
       (the mod's first `is_diplomatic_play_type`).
 - [ ] Electoral mission: closes after a campaign ends; Election Interference's cut halved.
 - [ ] Ceasefire: war support falls monthly and the war ends by capitulation; at most five log
-      entries per order. A peace that takes a state gives `.5` and no mission; a white peace
+      entries per order, the first after six months of fighting on
+      (`docs/testing/un-tooltips-playtest.md`, "The ceasefire order's debit"). A peace that takes a state gives `.5` and no mission; a white peace
       gives `.3` and a mission; a victim suspended mid-war lapses quietly; the vote events name
       the victim and the subject (`SCOPE.sCountry(…).MakeScope.Var(…).GetState`).
 - [ ] Referendum: `make_independent` on a dominion; the roll matches the shown odds.
@@ -1066,6 +1077,7 @@ good standing; a negative one counts for anyone (§0.10 ruling 2). All are pinne
 | Humanitarian Regulations | +1 | `extra_laws.txt` |
 | Limited War | +1.5 | `extra_laws.txt` |
 | Isolationism (vanilla) | −1.5 | `INJECT:law_isolationism`, `extra_laws.txt` |
+| Canton System, Sakoku (Isolationism's vanilla variants, #1406) | −1.5 | `INJECT:law_canton_system`, `INJECT:law_sakoku`, `extra_laws.txt`; the same law group as Isolationism, so never on top of it |
 | Ministry of International Aid | +0.15 a level (+1.35 at the cap of 9) | the institution, `extra_institutions.txt` |
 | Doctrine: No First Use / Existential Deterrence / Flexible First Use / Compellence / Warfighting | +0.5 / 0 / −0.5 / −1 / −1.5 | `nd_doctrine_mod_*`, on `je_nuclear_program` |
 | The Burden of the Bomb | −1 × burden (0..1) | `nd_taboo_possession_cost`, on `je_nuclear_program` |
@@ -1282,30 +1294,45 @@ credit, its conventions, and its terms under the regimes.
 
 ### The contract
 
-- **Every UN state modifier has a mirror variable, `<modifier>_on`. The variable is the truth,
-  and the modifier is rebuilt from it.**
-- Mirrored on the journal entry: membership, founding member, headquarters, the Security Council
-  seat, the permanent seat, the six programmes and stances, the two programme costs, and the
-  seven convention modifiers. Mirrored on the country: the law of the sea, the ICC and the physical
-  protection of nuclear material (#474).
-- Not mirrored, because the monthly pulse derives them: the privileges and benefits, NPT
-  enforcement, both pariah modifiers, the standing tier, the dues and every `un_regime_*`
-  modifier.
-- **Every write goes through a helper** in `common/scripted_effects/un_state_effects.txt`
-  (`un_state_on`/`_off`, `un_convention_on`, `un_convention_country_on`,
-  `un_state_country_off`). `un_state_on` and `un_convention_on` record the mirror only where
-  the entry exists, so the modifier was really added. A country that signs the charter before
-  its entry is active therefore stays outside, as before (see Known roughnesses). The
-  removals are guarded: `remove_modifier` on a modifier the scope does not hold logs an error
-  (#469), and the suspension strip runs every month. Two kinds of site write the modifier
-  themselves and call
-  `un_state_record`/`un_state_forget` beside it:
-  - the programme buttons, because `gen_un_button_descs.py` reads their literal modifier
-    lines;
-  - the two programme costs, because their multiplier reads the caller's root.
-- `test_un_state_mirror.py` fails on any add or remove of a mirrored modifier whose statement
-  list lacks its mirror write. A new UN state modifier needs a helper call, a line in each list
-  in `un_state_effects.txt` and `un_state_triggers.txt`, and a line in the test's table.
+- **Every UN state modifier has a mirror variable, `<modifier>_on`. The variable is the truth.**
+  Since 1.15 (#1404) there are two kinds:
+  - **Rebuilt:** the modifier is added beside its mirror and rebuilt from it. Membership,
+    founding member, headquarters, the Security Council seat and the permanent seat, all on the
+    journal entry.
+  - **Declared:** `je_united_nations` declares the modifier (`scaling_modifiers_while_active`)
+    while the mirror is set, so the variable is all there is. Nothing adds, removes, restores or
+    reconciles it, its readers test the mirror, and a revolution's winner keeps it by
+    construction. A loyalist winner would keep the rebels' as well, so an uprising may not
+    join or found the UN (the Join and Found buttons, the charter's invitation, a treaty's
+    enrolment, `un_events.10` and a founding conference's top power test
+    `is_revolutionary = no`). The six programmes and stances, the two programme costs, and the sixteen
+    convention modifiers, at the UN's enforcement. Nine of them sat on the country before
+    1.15 (the law of the sea, the ICC and the physical protection of nuclear material from
+    #474, then six more); all sit on the entry now.
+- Not mirrored, because the monthly pulse derives them: the privileges, NPT enforcement, both
+  pariah modifiers and the standing tier. Declared from variables of their own: the benefits, the
+  dues, the Development Fund's patron and grants, the missions' cost and observers, the mandate's
+  war support, the seabed royalty, every `un_regime_*` term (a presence variable that
+  `un_regime_refresh_country` sets once an epoch), both arms embargoes and the sanctions regime
+  (`un_sanctions_target_on`).
+- **Every write of a rebuilt modifier goes through a helper** in
+  `common/scripted_effects/un_state_effects.txt` (`un_state_on`/`_off`). `un_state_on` records
+  the mirror only where the entry exists, so the modifier was really added. A country that signs
+  the charter before its entry is active therefore stays outside, as before (see Known
+  roughnesses). The removals are guarded: `remove_modifier` on a modifier the scope does not
+  hold logs an error (#469), and the suspension strip runs every month.
+- **A declared mirror is written by its variable's name**, since no effect may be handed a
+  declared modifier's name (`test_journal_entry_shape.py`): `un_mirror_set`/`un_mirror_clear`
+  (`MIRROR = <modifier>_on`), `un_convention_on` (`CONVENTION = <stem>`, which previews the
+  modifier), and `un_programmes_end` / `un_conventions_end`, which end them all. A start
+  previews its modifier with `show_as_tooltip`, and a programme or stance commits its influence
+  for a week (`un_influence_pending`), which the influence gates count until the declared cost
+  reaches the country.
+- `test_un_state_mirror.py` fails on any add or remove of a mirrored or declared modifier whose
+  statement list lacks its mirror write, and on any declared modifier the rebuild machinery
+  names. A new rebuilt modifier needs a helper call, a line in each list in
+  `un_state_effects.txt` and `un_state_triggers.txt`, and a line in the test's table; a new
+  declared one needs a declaration, the `_on` helpers and a line in `test_un_scaling_modifiers.py`.
 
 ### When the entry is rebuilt
 
@@ -1350,18 +1377,18 @@ credit, its conventions, and its terms under the regimes.
 
 ### What the restore brings back, and what the heal forgets
 
-- Membership, founding status and conventions come back for any member. A suspended member
-  keeps them (§0.8).
+- Membership and founding status come back for any member. A suspended member keeps them
+  (§0.8), as it keeps its conventions, which are declared from their mirrors.
 - The headquarters comes back only while we are the host.
-- The permanent seat, the Council seat and the programmes come back only while we conduct our
-  own foreign policy, as `un_representation_monthly_update` would strip them otherwise. The seat
-  also needs `un_permanent_seat_count` ≤ 5, counting our own mirror.
+- The permanent seat and the Council seat come back only while we conduct our own foreign
+  policy, as `un_representation_monthly_update` would strip them otherwise. The seat also needs
+  `un_permanent_seat_count` ≤ 5, counting our own mirror. The programmes are declared from their
+  mirrors, and the heal ends them (`un_programmes_end`) where we no longer conduct it.
 - Championing and undermining exclude each other. If a merge delivers both mirrors, the
-  nation's championing is kept.
-- The programme costs are re-added from a fresh expense figure, as their buttons add them.
-- `un_regime_stamp` is removed, so the next ordinary pulse re-reads our regime terms. Those are
-  country modifiers, and the merge dropped them too. Without this they would wait for the next
-  epoch.
+  nation's championing is kept (`un_undermines_the_order`, and the heal drops the other mirror).
+- `un_regime_stamp` is removed, so the next ordinary pulse re-reads our regime terms. The winner
+  inherits the loser's presence variables, which describe the loser; without this they would
+  wait for the next epoch.
 - The restore never forgets. At the pulse heal, a mirror the rebuild still cannot honour is
   forgotten, never forced.
 - **No rejoining in the gap.** The Join button, `un_events.10` option E and the charter
@@ -2247,9 +2274,8 @@ charter reforms' own teeth), §5.3 (convention regimes, the ICC indictment), §7
    Established a full deployment. The state-mission forms wait for phase 6.
 10. **Mandates by tier:** from Strong the holder of a bound mandate carries
     `un_mandate_war_support_modifier` (war support lost to casualties and defeats −15% × E),
-    removed and re-added every month from the country pulse (`un_teeth_mandate_support_refresh`
-    in `un_events_on_action`), so a tier change reaches it, and from a country ROOT, which the
-    multiplier slot needs. **Not built:** "cannot be contested by members" at Supranational.
+    declared by `je_united_nations` at E while `un_teeth_mandate_support_applies` holds (#1404;
+    it was re-added every month until 1.15), so a tier change reaches it within days. **Not built:** "cannot be contested by members" at Supranational.
 11. **Veto restraint (Charter Reform II):** §4.1 names the reform but not the rule. Ruling: once
     the charter carries Reform II, a simple-majority topic that a veto would have downgraded or
     blocked carries in full when it also has a two-thirds supermajority of the members with a
@@ -2271,13 +2297,16 @@ charter reforms' own teeth), §5.3 (convention regimes, the ICC indictment), §7
     exists before there is a treaty to be outside of. An AI threshold state at Supranational
     refuses ratification a quarter as often.
 14. **Convention regimes (§5.3):**
-    - Every convention's member modifier is applied with `multiplier = un_convention_multiplier`:
-      E, but never below 0.01, so ×0.01 at Moribund and ×2.5 at Supranational. Holding the
-      member modifier **is** having ratified (the terms, the court's reach and the lean read
-      it), and nothing guarantees a ×0 modifier is kept, so a Moribund spell leaves the
-      conventions dormant rather than risk every ratification (review fix).
+    - Every convention's member modifier is declared by `je_united_nations` at
+      `un_convention_multiplier`, E: ×0 at Moribund (off) and ×2.5 at Supranational. The mirror
+      `<modifier>_on` **is** the ratification (the terms, the court's reach and the lean read
+      it), so a Moribund spell takes the modifiers off and keeps every ratification. Until 1.15
+      the modifier was the ratification, and the multiplier floored at ×0.01 so a ×0 copy could
+      not be lost (#1404).
     - Each convention names a winner or a loser (`un_regime_*_modifier`, × E); the table is at
-      the top of `un_regime_values.txt`.
+      the top of `un_regime_values.txt`. The refresh decides the terms and sets a presence
+      variable per term; the entry declares each modifier from it, at its multiplier read live
+      (#1404).
     - **Ratification binds (reconciled with PR #422):** the terms reach only members that carry
       the convention's member modifier. A member that chose "Refuse to ratify it" stays outside
       the convention: no benefit and no cost. The decolonisation declaration is a decision, not

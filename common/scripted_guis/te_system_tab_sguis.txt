@@ -109,7 +109,7 @@ te_budget_tax_tab_unlock_sgui = {
 te_society_ch_tab_sgui = {
 	scope = country
 	is_shown = {
-		has_game_rule = cultural_hegemony_enabled
+		te_cultural_hegemony_on = yes
 		has_journal_entry = je_cultural_hegemony
 	}
 	ai_is_valid = { always = no }
@@ -119,7 +119,7 @@ te_society_ch_tab_sgui = {
 
 te_society_ch_tab_unlock_sgui = {
 	scope = country
-	is_shown = { has_game_rule = cultural_hegemony_enabled }
+	is_shown = { te_cultural_hegemony_on = yes }
 	ai_is_valid = { always = no }
 	is_valid = { ch_entry_unlocked = yes }
 	effect = { }
@@ -133,7 +133,7 @@ te_society_ch_tab_unlock_sgui = {
 te_diplomacy_un_tab_sgui = {
 	scope = country
 	is_shown = {
-		has_game_rule = united_nations_enabled
+		te_united_nations_on = yes
 		has_journal_entry = je_united_nations
 	}
 	ai_is_valid = { always = no }
@@ -143,7 +143,7 @@ te_diplomacy_un_tab_sgui = {
 
 te_diplomacy_un_tab_unlock_sgui = {
 	scope = country
-	is_shown = { has_game_rule = united_nations_enabled }
+	is_shown = { te_united_nations_on = yes }
 	ai_is_valid = { always = no }
 	is_valid = { un_entry_unlocked = yes }
 	effect = { }
@@ -200,13 +200,17 @@ te_ni_nuclear_tab_sgui = {
 
 # ---------------------------------------------------------------------------
 # Covert Warfare: Military panel (gui/panel_military.gui, the fifth slot),
-# je_covert_warfare. The entry is active once a country holds one operation
-# slot more than its rank grants, and stays active (can_deactivate = no).
+# je_covert_warfare. The entry is active once the setting's gate is met
+# (covert_warfare_entry_unlocked, covert_warfare_triggers.txt): a named source
+# of an operation slot beyond the rank's, Mainframe Computers, Computer
+# Networks, Cyber Warfare, Quantum Computing or the Ministry of Intelligence
+# and Security's law (covert_warfare_slot_source), or under the early unlock
+# Central Archives too. It stays active (can_deactivate = no).
 # ---------------------------------------------------------------------------
 te_military_covert_tab_sgui = {
 	scope = country
 	is_shown = {
-		has_game_rule = covert_warfare_enabled
+		te_covert_warfare_on = yes
 		has_journal_entry = je_covert_warfare
 	}
 	ai_is_valid = { always = no }
@@ -216,7 +220,7 @@ te_military_covert_tab_sgui = {
 
 te_military_covert_tab_unlock_sgui = {
 	scope = country
-	is_shown = { has_game_rule = covert_warfare_enabled }
+	is_shown = { te_covert_warfare_on = yes }
 	ai_is_valid = { always = no }
 	is_valid = { covert_warfare_entry_unlocked = yes }
 	effect = { }
@@ -342,7 +346,7 @@ te_pops_demog_tab_unlock_sgui = {
 # window is up for every played country (gui/te_systems_window.gui).
 
 # ---------------------------------------------------------------------------
-# Space Race: the nine je_space_race_* entries (je_space_race.txt). The tab
+# Space Race: the eight je_space_race_* entries (je_space_race.txt). The tab
 # opens with the first milestone and stays open from then on (sr_in_space_race:
 # the country has run a milestone, or holds an entry), so the Space Powers
 # standings and Orbit, which read no entry, show between milestones too
@@ -427,16 +431,6 @@ te_window_space_race_probe_sgui = {
 	effect = { }
 }
 
-te_window_space_race_moon_base_sgui = {
-	scope = country
-	is_shown = {
-		sr_space_race_on = yes
-		has_journal_entry = je_space_race_moon_base
-	}
-	ai_is_valid = { always = no }
-	is_valid = { always = no }
-	effect = { }
-}
 
 te_window_space_race_mars_landing_sgui = {
 	scope = country
@@ -578,5 +572,34 @@ te_window_seabed_tab_unlock_sgui = {
 	is_shown = { te_global_commons_enabled = yes }
 	ai_is_valid = { always = no }
 	is_valid = { te_seabed_tab_unlocked = yes }
+	effect = { }
+}
+
+# ---------------------------------------------------------------------------
+# Power Grids (power_grid_*.txt). No journal entry and no game rule: open once
+# the country has researched Electrical Capacitors, or holds a station without
+# it (a conquered one), and always on the strip. The gate is read several times
+# a frame while the window is open, so it asks nothing that walks buildings:
+# te_grid_state_has_station's any_scope_building would, in every state of a
+# country with no station (review of the tab's PR, 2026-11-05).
+# ---------------------------------------------------------------------------
+te_window_power_grids_tab_sgui = {
+	scope = country
+	is_shown = {
+		OR = {
+			has_technology_researched = electrical_capacitors
+			any_scope_state = { has_building = building_grid_transfer_station }
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_power_grids_tab_unlock_sgui = {
+	scope = country
+	is_shown = { always = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_grid_tab_unlocked = yes }
 	effect = { }
 }

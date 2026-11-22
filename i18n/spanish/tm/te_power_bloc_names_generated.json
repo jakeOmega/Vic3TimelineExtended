@@ -479,10 +479,6 @@
   "en": "League of $HUB_NAME_STATE_CHUGOKU_city$",
   "es": "Liga de $HUB_NAME_STATE_CHUGOKU_city$"
  },
- "te_pb_name_league_STATE_CHUKOTKA": {
-  "en": "League of $HUB_NAME_STATE_CHUKOTKA_city$",
-  "es": "Liga de $HUB_NAME_STATE_CHUKOTKA_city$"
- },
  "te_pb_name_league_STATE_CHUVASHIA": {
   "en": "League of $HUB_NAME_STATE_CHUVASHIA_city$",
   "es": "Liga de $HUB_NAME_STATE_CHUVASHIA_city$"
@@ -794,10 +790,6 @@
  "te_pb_name_league_STATE_GABON": {
   "en": "League of $HUB_NAME_STATE_GABON_city$",
   "es": "Liga de $HUB_NAME_STATE_GABON_city$"
- },
- "te_pb_name_league_STATE_GALICH": {
-  "en": "League of $HUB_NAME_STATE_GALICH_city$",
-  "es": "Liga de $HUB_NAME_STATE_GALICH_city$"
  },
  "te_pb_name_league_STATE_GALICIA": {
   "en": "League of $HUB_NAME_STATE_GALICIA_city$",
@@ -1123,10 +1115,6 @@
   "en": "League of $HUB_NAME_STATE_KATANGA_city$",
   "es": "Liga de $HUB_NAME_STATE_KATANGA_city$"
  },
- "te_pb_name_league_STATE_KAUNAS": {
-  "en": "League of $HUB_NAME_STATE_KAUNAS_city$",
-  "es": "Liga de $HUB_NAME_STATE_KAUNAS_city$"
- },
  "te_pb_name_league_STATE_KAZAN": {
   "en": "League of $HUB_NAME_STATE_KAZAN_city$",
   "es": "Liga de $HUB_NAME_STATE_KAZAN_city$"
@@ -1190,6 +1178,10 @@
  "te_pb_name_league_STATE_KOSOVO": {
   "en": "League of $HUB_NAME_STATE_KOSOVO_city$",
   "es": "Liga de $HUB_NAME_STATE_KOSOVO_city$"
+ },
+ "te_pb_name_league_STATE_KOSTROMA": {
+  "en": "League of $HUB_NAME_STATE_KOSTROMA_city$",
+  "es": "Liga de $HUB_NAME_STATE_KOSTROMA_city$"
  },
  "te_pb_name_league_STATE_KRASNOYARSK": {
   "en": "League of $HUB_NAME_STATE_KRASNOYARSK_city$",
@@ -1286,6 +1278,10 @@
  "te_pb_name_league_STATE_LINDI": {
   "en": "League of $HUB_NAME_STATE_LINDI_city$",
   "es": "Liga de $HUB_NAME_STATE_LINDI_city$"
+ },
+ "te_pb_name_league_STATE_LITHUANIA": {
+  "en": "League of $HUB_NAME_STATE_LITHUANIA_city$",
+  "es": "Liga de $HUB_NAME_STATE_LITHUANIA_city$"
  },
  "te_pb_name_league_STATE_LOMBARDY": {
   "en": "League of $HUB_NAME_STATE_LOMBARDY_city$",
@@ -1995,6 +1991,10 @@
   "en": "League of $HUB_NAME_STATE_SAO_PAULO_city$",
   "es": "Liga de $HUB_NAME_STATE_SAO_PAULO_city$"
  },
+ "te_pb_name_league_STATE_SARATOV": {
+  "en": "League of $HUB_NAME_STATE_SARATOV_city$",
+  "es": "Liga de $HUB_NAME_STATE_SARATOV_city$"
+ },
  "te_pb_name_league_STATE_SARDINIA": {
   "en": "League of $HUB_NAME_STATE_SARDINIA_city$",
   "es": "Liga de $HUB_NAME_STATE_SARDINIA_city$"
@@ -2235,10 +2235,6 @@
   "en": "League of $HUB_NAME_STATE_TARAPACA_city$",
   "es": "Liga de $HUB_NAME_STATE_TARAPACA_city$"
  },
- "te_pb_name_league_STATE_TARTARIA": {
-  "en": "League of $HUB_NAME_STATE_TARTARIA_city$",
-  "es": "Liga de $HUB_NAME_STATE_TARTARIA_city$"
- },
  "te_pb_name_league_STATE_TARTU": {
   "en": "League of $HUB_NAME_STATE_TARTU_city$",
   "es": "Liga de $HUB_NAME_STATE_TARTU_city$"
@@ -2334,6 +2330,10 @@
  "te_pb_name_league_STATE_TUCUMAN": {
   "en": "League of $HUB_NAME_STATE_TUCUMAN_city$",
   "es": "Liga de $HUB_NAME_STATE_TUCUMAN_city$"
+ },
+ "te_pb_name_league_STATE_TULA": {
+  "en": "League of $HUB_NAME_STATE_TULA_city$",
+  "es": "Liga de $HUB_NAME_STATE_TULA_city$"
  },
  "te_pb_name_league_STATE_TUNISIA": {
   "en": "League of $HUB_NAME_STATE_TUNISIA_city$",
@@ -2474,6 +2474,10 @@
  "te_pb_name_league_STATE_VOLHYNIA": {
   "en": "League of $HUB_NAME_STATE_VOLHYNIA_city$",
   "es": "Liga de $HUB_NAME_STATE_VOLHYNIA_city$"
+ },
+ "te_pb_name_league_STATE_VOLOGDA": {
+  "en": "League of $HUB_NAME_STATE_VOLOGDA_city$",
+  "es": "Liga de $HUB_NAME_STATE_VOLOGDA_city$"
  },
  "te_pb_name_league_STATE_VOLTA": {
   "en": "League of $HUB_NAME_STATE_VOLTA_city$",
@@ -3175,10 +3179,6 @@
   "en": "$HUB_NAME_STATE_CHUGOKU_city$ Pact",
   "es": "Pacto de $HUB_NAME_STATE_CHUGOKU_city$"
  },
- "te_pb_name_pact_STATE_CHUKOTKA": {
-  "en": "$HUB_NAME_STATE_CHUKOTKA_city$ Pact",
-  "es": "Pacto de $HUB_NAME_STATE_CHUKOTKA_city$"
- },
  "te_pb_name_pact_STATE_CHUVASHIA": {
   "en": "$HUB_NAME_STATE_CHUVASHIA_city$ Pact",
   "es": "Pacto de $HUB_NAME_STATE_CHUVASHIA_city$"
@@ -3486,10 +3486,6 @@
  "te_pb_name_pact_STATE_GABON": {
   "en": "$HUB_NAME_STATE_GABON_city$ Pact",
   "es": "Pacto de $HUB_NAME_STATE_GABON_city$"
- },
- "te_pb_name_pact_STATE_GALICH": {
-  "en": "$HUB_NAME_STATE_GALICH_city$ Pact",
-  "es": "Pacto de $HUB_NAME_STATE_GALICH_city$"
  },
  "te_pb_name_pact_STATE_GALICIA": {
   "en": "$HUB_NAME_STATE_GALICIA_city$ Pact",
@@ -3819,10 +3815,6 @@
   "en": "$HUB_NAME_STATE_KATANGA_city$ Pact",
   "es": "Pacto de $HUB_NAME_STATE_KATANGA_city$"
  },
- "te_pb_name_pact_STATE_KAUNAS": {
-  "en": "$HUB_NAME_STATE_KAUNAS_city$ Pact",
-  "es": "Pacto de $HUB_NAME_STATE_KAUNAS_city$"
- },
  "te_pb_name_pact_STATE_KAZAN": {
   "en": "$HUB_NAME_STATE_KAZAN_city$ Pact",
   "es": "Pacto de $HUB_NAME_STATE_KAZAN_city$"
@@ -3886,6 +3878,10 @@
  "te_pb_name_pact_STATE_KOSOVO": {
   "en": "$HUB_NAME_STATE_KOSOVO_city$ Pact",
   "es": "Pacto de $HUB_NAME_STATE_KOSOVO_city$"
+ },
+ "te_pb_name_pact_STATE_KOSTROMA": {
+  "en": "$HUB_NAME_STATE_KOSTROMA_city$ Pact",
+  "es": "Pacto de $HUB_NAME_STATE_KOSTROMA_city$"
  },
  "te_pb_name_pact_STATE_KRASNOYARSK": {
   "en": "$HUB_NAME_STATE_KRASNOYARSK_city$ Pact",
@@ -3978,6 +3974,10 @@
  "te_pb_name_pact_STATE_LINDI": {
   "en": "$HUB_NAME_STATE_LINDI_city$ Pact",
   "es": "Pacto de $HUB_NAME_STATE_LINDI_city$"
+ },
+ "te_pb_name_pact_STATE_LITHUANIA": {
+  "en": "$HUB_NAME_STATE_LITHUANIA_city$ Pact",
+  "es": "Pacto de $HUB_NAME_STATE_LITHUANIA_city$"
  },
  "te_pb_name_pact_STATE_LOMBARDY": {
   "en": "$HUB_NAME_STATE_LOMBARDY_city$ Pact",
@@ -4683,6 +4683,10 @@
   "en": "$HUB_NAME_STATE_SAO_PAULO_city$ Pact",
   "es": "Pacto de $HUB_NAME_STATE_SAO_PAULO_city$"
  },
+ "te_pb_name_pact_STATE_SARATOV": {
+  "en": "$HUB_NAME_STATE_SARATOV_city$ Pact",
+  "es": "Pacto de $HUB_NAME_STATE_SARATOV_city$"
+ },
  "te_pb_name_pact_STATE_SARDINIA": {
   "en": "$HUB_NAME_STATE_SARDINIA_city$ Pact",
   "es": "Pacto de $HUB_NAME_STATE_SARDINIA_city$"
@@ -4923,10 +4927,6 @@
   "en": "$HUB_NAME_STATE_TARAPACA_city$ Pact",
   "es": "Pacto de $HUB_NAME_STATE_TARAPACA_city$"
  },
- "te_pb_name_pact_STATE_TARTARIA": {
-  "en": "$HUB_NAME_STATE_TARTARIA_city$ Pact",
-  "es": "Pacto de $HUB_NAME_STATE_TARTARIA_city$"
- },
  "te_pb_name_pact_STATE_TARTU": {
   "en": "$HUB_NAME_STATE_TARTU_city$ Pact",
   "es": "Pacto de $HUB_NAME_STATE_TARTU_city$"
@@ -5022,6 +5022,10 @@
  "te_pb_name_pact_STATE_TUCUMAN": {
   "en": "$HUB_NAME_STATE_TUCUMAN_city$ Pact",
   "es": "Pacto de $HUB_NAME_STATE_TUCUMAN_city$"
+ },
+ "te_pb_name_pact_STATE_TULA": {
+  "en": "$HUB_NAME_STATE_TULA_city$ Pact",
+  "es": "Pacto de $HUB_NAME_STATE_TULA_city$"
  },
  "te_pb_name_pact_STATE_TURKMENIA": {
   "en": "$HUB_NAME_STATE_TURKMENIA_city$ Pact",
@@ -5154,6 +5158,10 @@
  "te_pb_name_pact_STATE_VOLHYNIA": {
   "en": "$HUB_NAME_STATE_VOLHYNIA_city$ Pact",
   "es": "Pacto de $HUB_NAME_STATE_VOLHYNIA_city$"
+ },
+ "te_pb_name_pact_STATE_VOLOGDA": {
+  "en": "$HUB_NAME_STATE_VOLOGDA_city$ Pact",
+  "es": "Pacto de $HUB_NAME_STATE_VOLOGDA_city$"
  },
  "te_pb_name_pact_STATE_VOLTA": {
   "en": "$HUB_NAME_STATE_VOLTA_city$ Pact",

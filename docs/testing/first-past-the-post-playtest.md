@@ -30,3 +30,9 @@ checks"). Design: `docs/superpowers/specs/2026-10-25-first-past-the-post-design.
 | 7 | A third party rises | Over a long game, a USA party can lose a major's place to a growing one (the marks follow members' clout monthly). The new major gains the +10 at the next campaign. | Never moves: the ranking is stuck (self-check above). |
 | 8 | How far it spreads | In a long observer run, count the AI countries holding First Past the Post (the voting law's amendments). Negotiation can add it wherever the two largest parties hold 60% of the clout. | Too many: tighten `would_sponsor` (more clout, or powerful groups only). |
 | 9 | A revolution | A USA revolution that wins on a new voting law asks "Counting the Votes" at its end (`te_fptp_repair_after_civil_war`); a USA that had repealed it doesn't get it back from the rebels. | No event: the merge didn't hand `te_fptp_var` over, or `te_civil_war_on_won` didn't reach the repair. |
+
+## Harness run, 2026-11-11 (1.15.1)
+
+Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
+
+Item 4 OK both ways (keep, then decline and no second ask), with `activate_law` standing in for enactment. Self-check `fptp_major_parties` OK.

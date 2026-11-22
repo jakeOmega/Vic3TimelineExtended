@@ -117,17 +117,42 @@ un_resolution_accuses_target = {
 
 # Whether the target's vote for the resolution accepts its verdict
 # (un_vote_cast_yes: un_self_corrected_modifier and un_res_target_accepted).
-# Every topic that accuses it, except the three that acceptance cannot soften:
-# an expulsion, a military mandate and a World Court referral, whose effects
-# never read un_res_target_accepted. On those the target's yes is an ordinary
-# yes, so it is not charged for a confession that buys nothing.
+# Every topic that accuses it, except the two that acceptance cannot soften:
+# an expulsion and a military mandate, whose effects never read
+# un_res_target_accepted. On those the target's yes is an ordinary yes, so it
+# is not charged for a confession that buys nothing. A World Court referral
+# may be accepted (owner, 2026-11-12, issue #978): a holder that voted for it
+# must obey a ruling against it (un_court.2 offers no defiance), as an
+# overlord that voted for a referendum must hold it (un_referendum.1).
 # Scope: resolution container
 un_resolution_target_may_accept = {
 	un_resolution_accuses_target = yes
 	NOR = {
 		has_tag = un_topic_expulsion
 		has_tag = un_topic_military_mandate
-		has_tag = un_topic_court_referral
+	}
+}
+
+# Whether the carried resolution did something to its target that the target
+# did not accept by its own vote: a condemnation or sanctions (their vetoed
+# forms included), or the loss of its permanent seat. un_vote.2 then sends the
+# target un_vote.8, whatever its membership, in place of the members' un_vote.3
+# (#1555: a non-member or suspended target heard nothing, and a member target
+# only the general result). A target that voted for its own censure chose it
+# in un_vote.1 and keeps un_vote.3.
+# Scope: resolution container
+un_resolution_tells_target = {
+	has_tag = un_res_passed
+	exists = var:un_res_target
+	OR = {
+		has_tag = un_topic_expulsion
+		AND = {
+			OR = {
+				has_tag = un_topic_condemn
+				has_tag = un_topic_sanctions
+			}
+			NOT = { has_tag = un_res_target_accepted }
+		}
 	}
 }
 
@@ -292,16 +317,71 @@ un_resolution_asks_pledges = {
 }
 
 # Whether ROOT voted against scope:un_resolution, the resolution carried, and
-# it is of kind $KIND$ (convention, pledge or decision): the case in which
-# un_vote.3 offers to accept it after all or to refuse, and says what refusing
-# would mean.
+# it is of kind $KIND$ (convention, pledge or decision), and refusing it would
+# change something (un_vote_3_can_refuse): the case in which un_vote.3 offers
+# to accept it after all or to refuse, and says what refusing would mean.
 # Parameters: $KIND$ = convention | pledge | decision
 # Scope: the country (un_vote.3's ROOT); expects scope:un_resolution
 un_vote_3_we_opposed_passed = {
+	un_vote_3_can_refuse = yes
+	scope:un_resolution ?= { un_resolution_kind_is_$KIND$ = yes }
+}
+
+# Whether a pledge resolution would bill ROOT if it took part: a member of
+# major-power rank, asked for aid or for a full peacekeeping deployment
+# (un_vote_apply_resolution_compliance's own gates). A smaller member is
+# asked for nothing, and so is everyone when the request sends observers only.
+# Scope: the country (un_vote.3's ROOT); expects scope:un_resolution
+un_vote_3_pledge_bills_us = {
+	country_rank >= rank_value:major_power
+	scope:un_resolution ?= {
+		OR = {
+			has_tag = un_topic_aid_request
+			un_resolution_peacekeeping_full = yes
+		}
+	}
+}
+
+# Whether denouncing a decision of the Assembly sides ROOT with a country the
+# decision accuses: a condemnation, sanctions, an arms embargo, a mandate, a
+# ceasefire order, a suspension, an expulsion, a court referral or a
+# referendum, aimed at a living country other than ROOT. Read from the
+# resolution's own variable, so it holds in the event's description as well as
+# in its options.
+# Scope: the country (un_vote.3's ROOT); expects scope:un_resolution
+un_vote_3_can_stand_with_target = {
+	is_country_alive = yes
+	scope:un_resolution ?= {
+		NOT = { un_resolution_is_convention = yes }
+		un_resolution_accuses_target = yes
+		var:un_res_target ?= {
+			is_country_alive = yes
+			NOT = { this = root }
+		}
+	}
+}
+
+# Whether un_vote.3 offers ROOT a choice: it voted against a resolution that
+# carried, and refusing would change something (owner, 2026-11-10: an answer
+# that only costs is not an option). Three cases:
+#   - a convention, which it may stay outside;
+#   - a request that would bill it (un_vote_3_pledge_bills_us);
+#   - a decision that accuses another country, which it may stand with
+#     (un_vote_3_can_stand_with_target).
+# Everything else it only acknowledges: a reform, a standing force, the
+# decolonization resolution, an observer request, a petition to lift
+# sanctions, a verdict on ROOT itself (its ballot was its answer), a request
+# that asks nothing of a member of its rank.
+# Scope: the country (un_vote.3's ROOT); expects scope:un_resolution
+un_vote_3_can_refuse = {
 	scope:un_resolution ?= {
 		has_tag = un_res_passed
 		un_resolution_has_vote = { LIST = un_res_no }
-		un_resolution_kind_is_$KIND$ = yes
+	}
+	OR = {
+		scope:un_resolution ?= { un_resolution_is_convention = yes }
+		un_vote_3_pledge_bills_us = yes
+		un_vote_3_can_stand_with_target = yes
 	}
 }
 

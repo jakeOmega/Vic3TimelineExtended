@@ -1,0 +1,154 @@
+{
+ "ship_type_amphibious_assault_ship": {
+  "en": "Amphibious Assault Ship",
+  "ru": "Десантный корабль"
+ },
+ "ship_type_amphibious_assault_ship_desc": {
+  "en": "A modern landing helicopter assault platform that can deploy a [concept_battalion] of marines onto a hostile coast in a single wave. Replaces wartime troop transports.",
+  "ru": "Современная десантная вертолётоносная платформа, способная высадить [concept_battalion|l] морской пехоты на вражеский берег за одну волну. Заменяет военные транспорты."
+ },
+ "ship_type_antimatter_battleship": {
+  "en": "Antimatter Battleship",
+  "ru": "Антиматериальный линкор"
+ },
+ "ship_type_antimatter_battleship_desc": {
+  "en": "A fusion-driven capital ship armed with antimatter-tipped mass-driver projectiles. The terminal expression of surface naval firepower.",
+  "ru": "Линкор на термоядерной тяге, вооружённый метаемыми снарядами с антиматерией. Предел развития огневой мощи надводного флота."
+ },
+ "ship_type_arsenal_ship": {
+  "en": "Arsenal Ship",
+  "ru": "Корабль-арсенал"
+ },
+ "ship_type_arsenal_ship_desc": {
+  "en": "A capital-class missile platform packing hundreds of vertical-launch cells. Slow and lightly defended, but unmatched in sustained firepower.",
+  "ru": "Ракетная платформа класса крупного корабля с сотнями ячеек вертикального пуска. Медленная и слабо защищённая, но не имеет равных по продолжительной огневой мощи."
+ },
+ "ship_type_asw_destroyer": {
+  "en": "ASW Destroyer",
+  "ru": "Эсминец ПЛО"
+ },
+ "ship_type_asw_destroyer_desc": {
+  "en": "An anti-submarine specialist destroyer equipped with sonar arrays and depth charges. Outclasses earlier destroyers against subsurface threats.",
+  "ru": "Эсминец-специалист по борьбе с подлодками, оснащённый гидроакустическими станциями и глубинными бомбами. Превосходит прежние эсминцы против подводных угроз."
+ },
+ "ship_type_autonomous_swarm_submarine": {
+  "en": "Autonomous Swarm Submarine",
+  "ru": "Автономная подводная лодка роя"
+ },
+ "ship_type_autonomous_swarm_submarine_desc": {
+  "en": "An unmanned wolfpack of cooperating attack drones, coordinated by onboard AI. Devastating against capitals; vulnerable to dedicated point-defense escorts.",
+  "ru": "Беспилотная волчья стая взаимодействующих ударных дронов под управлением бортового ИИ. Разрушительна против крупных кораблей; уязвима для специализированного эскорта точечной обороны."
+ },
+ "ship_type_expeditionary_fast_transport": {
+  "en": "Expeditionary Fast Transport",
+  "ru": "Экспедиционный скоростной транспорт"
+ },
+ "ship_type_expeditionary_fast_transport_desc": {
+  "en": "A high-speed catamaran troop transport that keeps pace with carrier strike groups. Trades capacity for speed — the inverse doctrine of the Expeditionary Sea Base.",
+  "ru": "Скоростной катамаран-транспорт для войск, идущий наравне с авианосными ударными группами. Жертвует вместимостью ради скорости — обратная доктрина экспедиционной морской базы."
+ },
+ "ship_type_expeditionary_sea_base": {
+  "en": "Expeditionary Sea Base",
+  "ru": "Экспедиционная морская база"
+ },
+ "ship_type_expeditionary_sea_base_desc": {
+  "en": "A floating staging platform that supports rapid forward deployment of marines and supplies far from any friendly port.",
+  "ru": "Плавучая платформа развёртывания, обеспечивающая быструю переброску морской пехоты и припасов далеко от любого дружественного порта."
+ },
+ "ship_type_fleet_carrier": {
+  "en": "Fleet Carrier",
+  "ru": "Флотский авианосец"
+ },
+ "ship_type_fleet_carrier_desc": {
+  "en": "A heavy fleet carrier purpose-built around carrier aviation doctrine. Projects air power across a task force at long range while [concept_screening] capital ships from torpedo strikes.",
+  "ru": "Тяжёлый флотский авианосец, созданный под доктрину палубной авиации. Проецирует воздушную мощь на соединение на большой дальности, а [concept_screening|l] защищает крупные корабли от торпедных ударов."
+ },
+ "ship_type_guided_missile_ship": {
+  "en": "Guided Missile Ship",
+  "ru": "Ракетный корабль"
+ },
+ "ship_type_guided_missile_ship_desc": {
+  "en": "A destroyer-class warship armed with guided anti-ship missiles. Trades close-in armament for stand-off precision strike capability.",
+  "ru": "Корабль класса эсминца с управляемыми противокорабельными ракетами. Меняет оружие ближнего боя на возможность высокоточного удара с дистанции."
+ },
+ "ship_type_hypersonic_missile_platform": {
+  "en": "Hypersonic Missile Platform",
+  "ru": "Гиперзвуковая ракетная платформа"
+ },
+ "ship_type_hypersonic_missile_platform_desc": {
+  "en": "A capital warship optimized as a launch platform for hypersonic anti-ship missiles, capable of striking targets thousands of kilometers away in minutes.",
+  "ru": "Крупный боевой корабль, оптимизированный как пусковая платформа гиперзвуковых противокорабельных ракет, способный поражать цели за тысячи километров за считаные минуты."
+ },
+ "ship_type_marine_assault_ship": {
+  "en": "Marine Assault Ship",
+  "ru": "Десантный корабль морской пехоты"
+ },
+ "ship_type_marine_assault_ship_desc": {
+  "en": "A Cold War-era helicopter-capable amphibious assault ship. Replaces wartime LHAs as the standard troop transport once precision-guided munitions doctrine matures.",
+  "ru": "Десантный корабль эпохи холодной войны с вертолётами. Заменяет военные УДК в роли стандартного войскового транспорта, когда созревает доктрина высокоточных боеприпасов."
+ },
+ "ship_type_networked_air_defense_cruiser": {
+  "en": "Networked Air Defense Cruiser",
+  "ru": "Сетевой крейсер ПВО"
+ },
+ "ship_type_networked_air_defense_cruiser_desc": {
+  "en": "An anti-air and anti-missile escort that pools tracking data with allied ships and aircraft. Excels at swatting incoming guided weapons before they reach the fleet.",
+  "ru": "Эскорт ПВО и ПРО, объединяющий данные сопровождения с союзными кораблями и самолётами. Превосходно отбивает приближающееся управляемое оружие, пока оно не достигло флота."
+ },
+ "ship_type_nuclear_submarine": {
+  "en": "Nuclear Submarine",
+  "ru": "Атомная подводная лодка"
+ },
+ "ship_type_nuclear_submarine_desc": {
+  "en": "A nuclear-powered attack submarine capable of patrolling the deep ocean for months without surfacing. Devastating against capital ships.",
+  "ru": "Атомная ударная подводная лодка, способная месяцами патрулировать глубины океана, не всплывая. Разрушительна против крупных кораблей."
+ },
+ "ship_type_nuclear_supercarrier": {
+  "en": "Nuclear Supercarrier",
+  "ru": "Атомный суперавианосец"
+ },
+ "ship_type_nuclear_supercarrier_desc": {
+  "en": "A massive nuclear-powered fleet carrier with virtually unlimited endurance, projecting overwhelming air power across the world's oceans.",
+  "ru": "Огромный атомный флотский авианосец практически неограниченной автономности, проецирующий подавляющую воздушную мощь над океанами мира."
+ },
+ "ship_type_orbital_support_amphibious_mothership": {
+  "en": "Orbital Support Mothership",
+  "ru": "Орбитальный корабль поддержки"
+ },
+ "ship_type_orbital_support_amphibious_mothership_desc": {
+  "en": "A sea-based mothership that calls in orbital drop pods for marine deployment. Carries a brigade of marines and weeks of independent supply.",
+  "ru": "Морской корабль-матка, вызывающий орбитальные десантные капсулы для высадки морской пехоты. Несёт бригаду морпехов и запасы на недели автономной работы."
+ },
+ "ship_type_pulsed_laser_escort": {
+  "en": "Pulsed Laser Escort",
+  "ru": "Лазерный эскорт с импульсными лазерами"
+ },
+ "ship_type_pulsed_laser_escort_desc": {
+  "en": "A cruiser equipped with directed-energy weapons. Pinpoint accuracy makes it devastating against missiles, aircraft, and small craft.",
+  "ru": "Крейсер с оружием направленной энергии. Точечная точность делает его разрушительным против ракет, самолётов и малых судов."
+ },
+ "ship_type_stealth_attack_submarine": {
+  "en": "Stealth Attack Submarine",
+  "ru": "Малозаметная ударная подводная лодка"
+ },
+ "ship_type_stealth_attack_submarine_desc": {
+  "en": "An air-independent-propulsion boat with a near-silent acoustic signature. Carries a heavy torpedo and cruise-missile payload designed to gut capital ships.",
+  "ru": "Лодка с воздухонезависимой силовой установкой и почти бесшумной акустической сигнатурой. Несёт тяжёлую торпедную и крылаторакетную нагрузку, предназначенную потрошить крупные корабли."
+ },
+ "ship_type_stealth_battlecruiser": {
+  "en": "Stealth Battlecruiser",
+  "ru": "Малозаметный линейный крейсер"
+ },
+ "ship_type_stealth_battlecruiser_desc": {
+  "en": "A network-linked capital ship with a radar-absorbent hull. Coordinates with offboard sensors to engage at extreme range while remaining hard to detect.",
+  "ru": "Сетевой крупный корабль с радиопоглощающим корпусом. Взаимодействует с внешними датчиками, чтобы вести бой на предельной дальности и оставаться трудным для обнаружения."
+ },
+ "ship_type_swarm_coordination_vessel": {
+  "en": "Swarm Coordination Vessel",
+  "ru": "Корабль координации роя"
+ },
+ "ship_type_swarm_coordination_vessel_desc": {
+  "en": "Cruiser-sized command ship that coordinates large drone swarms, multiplying the effective firepower of every other ship in its fleet.",
+  "ru": "Командный корабль размером с крейсер, координирующий большие рои дронов и умножающий эффективную огневую мощь всех прочих кораблей флота."
+ }
+}

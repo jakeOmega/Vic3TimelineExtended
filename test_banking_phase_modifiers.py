@@ -1,11 +1,14 @@
-"""The banking cycle's monthly phase modifiers, and the cooperative pool term.
+"""The banking cycle's phase and bubble-inertia modifiers, and the cooperative pool term.
 
-`banking_cycle_apply_phase_modifiers` removes every phase and bubble-inertia
-modifier, then adds this month's. A modifier it adds that
-`remove_all_banking_phase_modifiers` does not remove is never taken off: the
-next month adds another copy, and the journal entry ends up carrying every
-phase it has ever been in. The engine says nothing. The cooperative inertia
-variants added on 2026-10-05 were the latest names that had to go in both.
+Since vanilla 1.15 (#1404) je_banking_cycle declares the 18 phase modifiers
+and the six bubble-inertia tiers (scaling_modifiers_while_active) instead of
+`banking_cycle_apply_phase_modifiers` removing all 24 and adding this month's,
+every month and after every banking event. The old pair had to agree on the
+roster: a modifier the apply added that the remove did not take off stacked a
+copy a month. A declaration has nothing to take off; what it must keep is the
+old gate. These tests run each declaration over a grid of cycle values, bubble
+pressures and economies and compare it with that refresh (OLD_PHASE,
+OLD_INERTIA, transcribed from it), edge by edge.
 
 The cooperative phases' `country_weekly_investment_pool_mult` is a share of
 the pool's weekly gross income. Until 2026-10-05 it multiplied the pool's
@@ -17,10 +20,13 @@ import re
 import unittest
 from pathlib import Path
 
+from test_banking_scaling_modifiers import ECONOMIES, INERTIA, PHASE_KEYS, PHASES, Country
+
 ROOT = Path(__file__).resolve().parent
-EFFECTS = ROOT / "common/scripted_effects/banking_cycle_effects.txt"
 MODIFIERS = ROOT / "common/static_modifiers/extra_modifiers.txt"
 SCRIPT_VALUES = ROOT / "common/script_values/extra_script_values.txt"
+CYCLE_EDGES = (10, 25, 40, 60, 75, 88)
+BUBBLE_EDGES = (0.5, 15, 35, 50, 65)
 
 
 def _text(path):
@@ -39,26 +45,78 @@ def _strip_comments(body):
     return re.sub(r"#[^\n]*", "", body)
 
 
-class PhaseModifierRemoval(unittest.TestCase):
-    def setUp(self):
-        effects = _text(EFFECTS)
-        self.apply = _strip_comments(_top_level_block(effects, "banking_cycle_apply_phase_modifiers"))
-        self.remove = _strip_comments(_top_level_block(effects, "remove_all_banking_phase_modifiers"))
+def _around(edges, top):
+    """Each edge, just under and just over it, and a coarse sweep."""
+    points = {0, top}
+    for e in edges:
+        points.update((e - 0.01, e, e + 0.01))
+    points.update(range(0, top + 1, 5))
+    return sorted(p for p in points if 0 <= p <= top)
 
-    def test_apply_still_calls_remove_first(self):
-        first = self.apply.index("remove_all_banking_phase_modifiers = yes")
-        self.assertLess(first, self.apply.index("add_modifier"))
 
-    def test_every_added_modifier_is_removed(self):
-        added = set(re.findall(r"add_modifier = \{ name = (\w+)", self.apply))
-        removed = set(re.findall(r"remove_modifier = (\w+)", self.remove))
-        self.assertGreaterEqual(len(added), 24, "the phase roster shrank; update the floor if deliberate")
-        self.assertEqual(added - removed, set(), "added monthly but never removed, so it stacks")
+def OLD_PHASE(cycle, economy):
+    """The phase modifier banking_cycle_apply_phase_modifiers added: none in Stable."""
+    for edge, phase in zip(CYCLE_EDGES, ("panic", "downturn", "stagnation", None, "expansion", "boom")):
+        if cycle < edge:
+            break
+    else:
+        phase = "frenzy"
+    return None if phase is None else f"financial_cycle_phase_{phase}{ECONOMIES[economy]}"
 
-    def test_every_added_modifier_exists(self):
-        modifiers = _text(MODIFIERS)
-        for name in re.findall(r"add_modifier = \{ name = (\w+)", self.apply):
-            self.assertRegex(modifiers, r"(?m)^%s = \{" % name)
+
+def OLD_INERTIA(bubble, economy):
+    """The inertia tier it added: by band, the _coop set under Cooperative Ownership, none under command."""
+    if economy == "command" or bubble <= 0.5:
+        return None
+    band = "extreme" if bubble >= 65 else "high" if bubble >= 35 else "moderate"
+    return f"bubble_inertia_{band}{'_coop' if economy == 'coop' else ''}"
+
+
+def CURVE(bubble):
+    """bubble_inertia_curve as its comment states it."""
+    if bubble <= 15:
+        return 0.0
+    if bubble < 50:
+        return (bubble - 15) * 0.25 / 35
+    return 0.25 + 0.005 * (bubble - 50) - 0.00002 * (bubble - 50) ** 2
+
+
+class PhaseDeclarations(unittest.TestCase):
+    def test_each_phase_is_declared_in_its_band_and_economy(self):
+        for economy in ECONOMIES:
+            for cycle in _around(CYCLE_EDGES, 100):
+                country = Country(law=economy, finance_cycle_value=cycle, bubble_pressure=0)
+                on = {m for m in PHASE_KEYS if country.declared(m)}
+                with self.subTest(economy=economy, cycle=cycle):
+                    expected = OLD_PHASE(cycle, economy)
+                    self.assertEqual(on, {expected} if expected else set())
+                    self.assertTrue(all(country.declared(m) in (0, 1) for m in PHASE_KEYS))
+
+    def test_every_phase_is_reached(self):
+        reached = {OLD_PHASE(c, e) for e in ECONOMIES for c in _around(CYCLE_EDGES, 100)} - {None}
+        self.assertEqual(reached, set(PHASE_KEYS))
+        self.assertEqual(len(PHASE_KEYS), 3 * len(PHASES))
+
+
+class InertiaDeclarations(unittest.TestCase):
+    def test_each_tier_is_the_curve_in_its_band_and_economy(self):
+        for economy in ECONOMIES:
+            for bubble in _around(BUBBLE_EDGES, 100):
+                country = Country(law=economy, finance_cycle_value=50, bubble_pressure=bubble)
+                values = {m: country.declared(m) for m in INERTIA}
+                expected = OLD_INERTIA(bubble, economy)
+                with self.subTest(economy=economy, bubble=bubble):
+                    for modifier, value in values.items():
+                        self.assertAlmostEqual(value, CURVE(bubble) if modifier == expected else 0, places=9)
+
+    def test_the_curve_is_the_old_multiplier_read_from_the_country(self):
+        country = Country(bubble_pressure=0)
+        for bubble in _around(BUBBLE_EDGES, 100):
+            country.vars["bubble_pressure"] = bubble
+            with self.subTest(bubble=bubble):
+                self.assertAlmostEqual(country.number("bubble_inertia_curve"), CURVE(bubble),
+                                       places=9)
+        self.assertAlmostEqual(CURVE(100), 0.45)
 
     def test_cooperative_inertia_is_a_fifth_of_the_market(self):
         modifiers = _text(MODIFIERS)

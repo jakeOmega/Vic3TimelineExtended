@@ -6,6 +6,7 @@ counts as protected by a ready guarantor, weapons next to a country cut its
 warning time, and some of the guest's weapons accidents happen on the host's
 soil."""
 
+import re
 import unittest
 
 from test_nuclear_deterrence import (ROOT, block, loc_value, option_body, read, squash,
@@ -121,12 +122,39 @@ class TestHostAccidents(unittest.TestCase):
                         self.immediate.index("nd_accident_local_damage = yes"))
         self.assertIn("limit = { var:nd_accident_kind = 4 } nd_accident_lose_warhead = yes", self.immediate)
 
+    def test_a_kind_that_names_a_carrier_needs_its_technology(self):
+        """An arsenal held by custody can sit with a country that never researched the programme's
+        prerequisites, so the bomber kinds (1, 3) need bombing_aircraft as the silo (2) needs ICBMs
+        (#1619), read through nd_fields_icbms (2026-11-20 delivery spec §4). Kinds 4 and 5 are always
+        in the draw, so it is never empty."""
+        draw = self.immediate[:self.immediate.index("save_scope_as = nd_accident_guest")]
+        for kind, gate, weight in ((1, "has_technology_researched = bombing_aircraft", 30),
+                                   (2, "nd_fields_icbms = yes", 20),
+                                   (3, "has_technology_researched = bombing_aircraft", 15)):
+            self.assertIn(f"0 = {{ modifier = {{ if = {{ limit = {{ {gate} }} "
+                          f"add = {weight} }} }} set_variable = {{ name = nd_accident_kind value = {kind} }} }}", draw)
+        for kind, weight in ((4, 10), (5, 25)):
+            self.assertIn(f"{weight} = {{ set_variable = {{ name = nd_accident_kind value = {kind} }} }}", draw)
+
     def test_site_is_a_hosts_incorporated_state(self):
         abroad = squash(block(self.effects, "nd_accident_site_abroad"))
         for needle in ("nd_hosts_weapons_of = { GUEST = scope:nd_accident_guest }", "save_scope_as = nd_accident_host",
                        "random_scope_state = { limit = { is_incorporated = yes } save_scope_as = nd_accident_state }",
                        "set_variable = nd_accident_abroad"):
             self.assertIn(needle, abroad)
+        # Abroad only once a host is saved, else at home (2026-11-07: a French
+        # accident marked abroad with no host saved read the unset scope).
+        self.assertIn("if = { limit = { exists = scope:nd_accident_host } set_variable = nd_accident_abroad }"
+                      " else = { nd_accident_site_home = yes }", abroad)
+        self.assertLess(abroad.index("save_scope_as = nd_accident_host"), abroad.index("set_variable = nd_accident_abroad"))
+        # The pick reports itself: OK once a game, BROKEN each time it fails.
+        self.assertIn("TE_SELF_CHECK OK nd_accident_host_pick", abroad)
+        self.assertIn("TE_SELF_CHECK BROKEN nd_accident_host_pick", abroad)
+        self.assertIn("has_global_variable = nd_accident_host_pick_self_check_done", abroad)
+        # And no flag from an earlier accident survives into this one's siting.
+        clear = "if = { limit = { has_variable = nd_accident_abroad } remove_variable = nd_accident_abroad }"
+        self.assertIn(clear, self.immediate)
+        self.assertLess(self.immediate.index(clear), self.immediate.index("nd_accident_site_abroad = yes"))
         home = squash(block(self.effects, "nd_accident_site_home"))
         self.assertIn("random_scope_state = { limit = { is_incorporated = yes } save_scope_as = nd_accident_state }", home)
 
@@ -148,7 +176,8 @@ class TestHostAccidents(unittest.TestCase):
         self.assertIn("NOT = { has_variable = nd_accident_abroad }", system)
 
     def test_host_hears_of_it(self):
-        sent = self.immediate[self.immediate.index("limit = { has_variable = nd_accident_abroad } scope:nd_accident_host"):]
+        sent = self.immediate[self.immediate.index("limit = { has_variable = nd_accident_abroad exists = scope:nd_accident_host }"
+                                                   " scope:nd_accident_host"):]
         self.assertIn("set_variable = { name = nd_host_accident_kind value = scope:nd_accident_guest.var:nd_accident_kind }",
                       sent)
         self.assertIn("trigger_event = { id = nuclear_incident.31", sent)
@@ -182,6 +211,53 @@ class TestHostAccidents(unittest.TestCase):
                     "nd_host_accident_silence", "nd_host_accident_silence_desc"):
             self.assertTrue(loc_value(key), key)
         self.assertIn("remove_variable = nd_host_accident_kind", squash(block(self.host, "after")))
+
+class TestArticleFigures(unittest.TestCase):
+    """The treaty articles' descriptions write their figures (2026-11-20
+    delivery spec §5.3, plan D15): an article's description has no country
+    scope to call a script value from, so each written number is held here
+    to the script it states."""
+
+    VALUES = ROOT / "common/script_values/nuclear_deterrence_values.txt"
+    GUARANTEE = ROOT / "common/treaty_articles/115_nuclear_guarantee.txt"
+    CRISIS_EFFECTS = ROOT / "common/scripted_effects/nuclear_crisis_effects.txt"
+
+    def setUp(self):
+        self.values = strip_comments(read(self.VALUES))
+
+    def test_basing(self):
+        text = loc_value("nuclear_basing_effects_desc")
+        penalty = re.search(r"(?m)^nd_warning_time_penalty = (\d+)$", self.values).group(1)
+        self.assertIn(f"#R {penalty}#! less survivability", text)
+        # One sited accident in three abroad (nuclear_incident.30's draw).
+        events = strip_comments(read(INCIDENT_EVENTS))
+        self.assertIn("random_list = { 1 = { nd_accident_site_abroad = yes } 2 = { nd_accident_site_home = yes } }",
+                      squash(block(block(events, "nuclear_incident.30"), "immediate")))
+        self.assertIn("one in three", text)
+        # Ending it costs nothing of its own: its break hooks only rebuild reach.
+        article = strip_comments(read(ARTICLE))
+        for hook in ("on_break", "on_withdrawal"):
+            body = squash(block(article, hook))
+            self.assertNotIn("change_", body, hook)
+            self.assertNotIn("add_modifier", body, hook)
+        self.assertIn("no cost of its own", text)
+
+    def test_guarantee(self):
+        text = loc_value("nuclear_guarantee_effects_desc")
+        protector = squash(block(self.values, "nd_yp_protector_value"))
+        for points in re.findall(r"subtract = (\d+)", protector):
+            self.assertIn(f"#R -{points}#!", text, points)
+        self.assertEqual(sorted(re.findall(r"subtract = (\d+)", protector)), ["10", "15", "20"])
+        abandon = squash(block(strip_comments(read(self.CRISIS_EFFECTS)), "nd_guarantee_act_abandon"))
+        guarantee = abandon[abandon.index("custom_tooltip = nd_tt_guarantee_abandon"):]
+        self.assertIn("nd_change_credibility = { AMOUNT = -15 }", guarantee)
+        self.assertIn("name = nd_guarantee_abandoned years = 5", guarantee)
+        self.assertIn("change_relations = { country = scope:nd_guarantor_self value = -30 }", guarantee)
+        for needle in ("#R 15#! credibility", "five years", "#R 30#!"):
+            self.assertIn(needle, text, needle)
+        # Leaving the treaty has no hook of its own.
+        self.assertNotIn("on_break", strip_comments(read(self.GUARANTEE)))
+
 
 if __name__ == "__main__":
     unittest.main()

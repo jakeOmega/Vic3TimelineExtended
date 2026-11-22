@@ -12,8 +12,7 @@
 # at base prices) and gui_tp_trade_pct_gdp (that yearly trade as a percentage
 # of the owner's yearly GDP), with the partner's owner passed as
 # scope:tp_partner_country. The fifteen per-rank variables the five copied
-# rows read (tp_<N>_tc, tp_<N>_total, tp_<N>_gdp_pct) and tp_count are gone;
-# older saves' copies are removed below.
+# rows read (tp_<N>_tc, tp_<N>_total, tp_<N>_gdp_pct) and tp_count are gone.
 #
 # NOTE: Per-good per-partner trade data is not reachable from the SCRIPT layer
 # here: market_imports_reliance(target) in parenthesized form only passes the
@@ -25,115 +24,6 @@
 # otherMarket, Goods) / Market.GetExportedAmountToMarket(otherMarket, Goods) give
 # per-good per-market-pair amounts. The Top Trade Partners rows use exactly that
 # for their goods-breakdown tooltip (see gui/te_trade_partner_tooltips.gui).
-
-# Older saves' per-rank variables, from before the rows were a list. Scope: the
-# market owner.
-te_tp_drop_rank_variables = {
-	if = {
-		limit = { has_variable = tp_1_tc }
-		remove_variable = tp_1_tc
-	}
-	if = {
-		limit = { has_variable = tp_1_total }
-		remove_variable = tp_1_total
-	}
-	if = {
-		limit = { has_variable = tp_1_gdp_pct }
-		remove_variable = tp_1_gdp_pct
-	}
-	if = {
-		limit = { has_variable = tp_1_imp_rel }
-		remove_variable = tp_1_imp_rel
-	}
-	if = {
-		limit = { has_variable = tp_1_exp_rel }
-		remove_variable = tp_1_exp_rel
-	}
-	if = {
-		limit = { has_variable = tp_2_tc }
-		remove_variable = tp_2_tc
-	}
-	if = {
-		limit = { has_variable = tp_2_total }
-		remove_variable = tp_2_total
-	}
-	if = {
-		limit = { has_variable = tp_2_gdp_pct }
-		remove_variable = tp_2_gdp_pct
-	}
-	if = {
-		limit = { has_variable = tp_2_imp_rel }
-		remove_variable = tp_2_imp_rel
-	}
-	if = {
-		limit = { has_variable = tp_2_exp_rel }
-		remove_variable = tp_2_exp_rel
-	}
-	if = {
-		limit = { has_variable = tp_3_tc }
-		remove_variable = tp_3_tc
-	}
-	if = {
-		limit = { has_variable = tp_3_total }
-		remove_variable = tp_3_total
-	}
-	if = {
-		limit = { has_variable = tp_3_gdp_pct }
-		remove_variable = tp_3_gdp_pct
-	}
-	if = {
-		limit = { has_variable = tp_3_imp_rel }
-		remove_variable = tp_3_imp_rel
-	}
-	if = {
-		limit = { has_variable = tp_3_exp_rel }
-		remove_variable = tp_3_exp_rel
-	}
-	if = {
-		limit = { has_variable = tp_4_tc }
-		remove_variable = tp_4_tc
-	}
-	if = {
-		limit = { has_variable = tp_4_total }
-		remove_variable = tp_4_total
-	}
-	if = {
-		limit = { has_variable = tp_4_gdp_pct }
-		remove_variable = tp_4_gdp_pct
-	}
-	if = {
-		limit = { has_variable = tp_4_imp_rel }
-		remove_variable = tp_4_imp_rel
-	}
-	if = {
-		limit = { has_variable = tp_4_exp_rel }
-		remove_variable = tp_4_exp_rel
-	}
-	if = {
-		limit = { has_variable = tp_5_tc }
-		remove_variable = tp_5_tc
-	}
-	if = {
-		limit = { has_variable = tp_5_total }
-		remove_variable = tp_5_total
-	}
-	if = {
-		limit = { has_variable = tp_5_gdp_pct }
-		remove_variable = tp_5_gdp_pct
-	}
-	if = {
-		limit = { has_variable = tp_5_imp_rel }
-		remove_variable = tp_5_imp_rel
-	}
-	if = {
-		limit = { has_variable = tp_5_exp_rel }
-		remove_variable = tp_5_exp_rel
-	}
-	if = {
-		limit = { has_variable = tp_count }
-		remove_variable = tp_count
-	}
-}
 
 # ============================================================================
 # PER-MARKET: update the trade partner lists for a single market
@@ -154,7 +44,6 @@ update_market_trade_partners = {
 		}
 
 		scope:tp_market_owner = {
-			te_tp_drop_rank_variables = yes
 			if = {
 				limit = { has_variable_list = te_tp_top_markets }
 				clear_variable_list = te_tp_top_markets

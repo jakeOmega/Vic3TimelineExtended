@@ -9,61 +9,29 @@
 # The button and the widget's nuclear_program_funding_sgui both call the helper,
 # so the hidden grid and the panel cannot drift apart.
 #
-# The funding modifier sits on the journal entry, and the engine re-evaluates a
-# journal-entry modifier's multiplier in JE scope, where the bare
-# `var:nuclear_weapons_program_funding` inside nuclear_weapons_program_current_cost
-# reads 'none' ("Value of wrong type ... Got value of type 'none'" on the
-# add_modifier line, every recalculation). So the cost is cached on the country
-# and read through root, as the UN and banking entries do
-# (scripting_best_practices.md, "JE scope can't read country properties").
-# nuclear_program_refresh_state_effect re-applies a modifier left over from the
-# old form once.
+# They only move the funding variable. The weekly innovation it costs is
+# je_nuclear_program's declared nuclear_weapon_program_funding (value
+# nuclear_program_display_weekly_cost), which follows the variable at the
+# entry's next update. The custom tooltip is the click's preview: it names the
+# step's cost, since change_variable renders nothing.
 
 nuclear_program_effect_increase_funding = {
-	custom_tooltip = { # REVIEWED 2026-10-27 (hidden_modifier): a refresh, removing and re-adding the funding modifier at the new total; its lines would print the whole cost at the multiplier from before the click, so the text gives the step the click changes
+	custom_tooltip = {
 		text = "INCREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC"
 		change_variable = {
 			name = nuclear_weapons_program_funding
 			add = 1
-		}
-		set_variable = {
-			name = nuclear_weapons_program_cost_cached
-			value = nuclear_weapons_program_current_cost
-		}
-		je:je_nuclear_program = {
-			if = {
-				limit = { has_modifier = nuclear_weapon_program_funding }
-				remove_modifier = nuclear_weapon_program_funding
-			}
-			add_modifier = {
-				name = nuclear_weapon_program_funding
-				multiplier = root.var:nuclear_weapons_program_cost_cached
-			}
 		}
 	}
 	nuclear_program_refresh_state_effect = yes
 }
 
 nuclear_program_effect_decrease_funding = {
-	custom_tooltip = { # REVIEWED 2026-10-27 (hidden_modifier): a refresh, removing and re-adding the funding modifier at the new total; its lines would print the whole cost at the multiplier from before the click, so the text gives the step the click changes
+	custom_tooltip = {
 		text = "DECREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC"
 		change_variable = {
 			name = nuclear_weapons_program_funding
 			subtract = 1
-		}
-		set_variable = {
-			name = nuclear_weapons_program_cost_cached
-			value = nuclear_weapons_program_current_cost
-		}
-		je:je_nuclear_program = {
-			if = {
-				limit = { has_modifier = nuclear_weapon_program_funding }
-				remove_modifier = nuclear_weapon_program_funding
-			}
-			add_modifier = {
-				name = nuclear_weapon_program_funding
-				multiplier = root.var:nuclear_weapons_program_cost_cached
-			}
 		}
 	}
 	nuclear_program_refresh_state_effect = yes
@@ -82,13 +50,8 @@ nuclear_program_effect_decrease_funding = {
 # Moved here verbatim from the entry when posture and crises were merged into
 # it (2026-09-25), so the entry's pulse reads as programme, then posture.
 nuclear_program_weekly_progress = {
-	# A pause treaty zeroes funding. Taking the funding modifier back off is
-	# left to nuclear_program_refresh_state_effect, which the entry's pulse runs
-	# straight after this effect — the one site that owns that modifier. The
-	# remove_modifier that used to sit here ran in *country* scope, while the
-	# buttons apply the modifier in `je:je_nuclear_program` scope — so it was a
-	# silent no-op and a paused programme went on paying its full weekly
-	# innovation bill for ever.
+	# A pause treaty zeroes funding, and with it the entry's declared funding
+	# cost.
 	if = {
 		limit = {
 			modifier:country_nuclear_program_pause_bool = yes
@@ -109,8 +72,42 @@ nuclear_program_weekly_progress = {
 			}
 		}
 	}
+	# An AI at its arsenal cap (nuclear_ai_stockpile_cap, twice what it wants)
+	# builds nothing and pays nothing (2026-11-07): France reached some 1,200
+	# warheads in an observer game, the funding buttons' race terms outweighing
+	# the decrease at any size. Its progress is kept, up to one warhead's
+	# worth, for when it falls below the cap. Logged once a hold.
+	if = {
+		limit = { nuclear_program_ai_at_stockpile_cap = yes }
+		if = {
+			limit = { NOT = { has_variable = nd_ai_cap_held } }
+			set_variable = nd_ai_cap_held
+			debug_log = "TE_NUCLEAR: type=ai_stockpile_cap; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; stockpile=[THIS.Var('nuclear_weapon_stockpile').GetValue|0]; cap=[THIS.ScriptValue('nuclear_ai_stockpile_cap')|0]; desired=[THIS.ScriptValue('nuclear_ai_desired_stockpile')|0]; funding=[THIS.Var('nuclear_weapons_program_funding').GetValue|0]; innovation=[THIS.ScriptValue('nd_log_innovation')|0]; at_war=[THIS.ScriptValue('nd_log_at_war')|0] (an AI arsenal reached its cap: its programme builds nothing and is unfunded until the arsenal falls below it)"
+		}
+		if = {
+			limit = { var:nuclear_weapons_program_funding > 0 }
+			set_variable = {
+				name = nuclear_weapons_program_funding
+				value = 0
+			}
+		}
+	}
+	else_if = {
+		limit = { has_variable = nd_ai_cap_held }
+		remove_variable = nd_ai_cap_held
+	}
+	# The week's warheads, at most nuclear_weapon_program_max_per_week: the loop
+	# otherwise runs until the engine's 1,000-pass limit stops it. Only on a
+	# Warheads focus: a project's progress builds its leg (below).
+	set_local_variable = { name = nd_built_this_week value = 0 }
 	while = {
-		limit = {var:nuclear_weapon_program_progress >= nuclear_weapon_program_goal_value}
+		limit = {
+			nd_focus_is_warheads = yes
+			var:nuclear_weapon_program_progress >= nuclear_weapon_program_goal_value
+			local_var:nd_built_this_week < nuclear_weapon_program_max_per_week
+			NOT = { nuclear_program_ai_at_stockpile_cap = yes }
+		}
+		change_local_variable = { name = nd_built_this_week add = 1 }
 		change_variable = {
 			name = nuclear_weapon_program_progress
 			subtract = nuclear_weapon_program_goal_value
@@ -142,7 +139,7 @@ nuclear_program_weekly_progress = {
 			if = {
 				limit = {
 					un_propose_npt_in_force = yes
-					NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
+					NOT = { has_variable = un_nonproliferation_modifier_on }
 				}
 				set_variable = un_npt_built_outside
 			}
@@ -167,6 +164,44 @@ nuclear_program_weekly_progress = {
 				}
 				trigger_event = { id = nuclear_weapon_events.9 days = 14 }
 			}
+		}
+	}
+	# A project at its goal fields its leg, and the focus returns to Warheads
+	# with the warheads' parked progress (nd_field_leg). After the loop, so a
+	# warhead slot loaded at completion waits for next week's step.
+	if = {
+		limit = {
+			nd_focus_is_icbms = yes
+			var:nuclear_weapon_program_progress >= nuclear_weapon_program_goal_value
+		}
+		nd_field_leg = { LEG = icbms }
+	}
+	else_if = {
+		limit = {
+			nd_focus_is_submarines = yes
+			var:nuclear_weapon_program_progress >= nuclear_weapon_program_goal_value
+		}
+		nd_field_leg = { LEG = subs }
+	}
+	# More than one warhead in a week is rare (a warhead a week needs funding
+	# times 1 + the progress modifiers of 40), so the week says what drove it.
+	if = {
+		limit = { local_var:nd_built_this_week >= 2 }
+		set_variable = { name = nd_log_built value = local_var:nd_built_this_week }
+		debug_log = "TE_NUCLEAR: type=build_burst; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; built=[THIS.Var('nd_log_built').GetValue|0]; stockpile=[THIS.Var('nuclear_weapon_stockpile').GetValue|0]; funding=[THIS.Var('nuclear_weapons_program_funding').GetValue|0]; progress=[THIS.Var('nuclear_weapon_program_progress').GetValue|0]; progress_mult=[THIS.ScriptValue('nd_log_progress_mult')|2]; ai=[THIS.ScriptValue('nd_log_is_ai')|0]"
+		remove_variable = nd_log_built
+	}
+	# Progress the week's cap left over is dropped to one warhead's worth, so
+	# a figure gone wrong can't bank a backlog; the held AI's too.
+	if = {
+		limit = { var:nuclear_weapon_program_progress > nuclear_weapon_program_goal_value }
+		if = {
+			limit = { local_var:nd_built_this_week >= nuclear_weapon_program_max_per_week }
+			debug_log = "TE_NUCLEAR: type=build_cap; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; progress=[THIS.Var('nuclear_weapon_program_progress').GetValue|0]; stockpile=[THIS.Var('nuclear_weapon_stockpile').GetValue|0]; funding=[THIS.Var('nuclear_weapons_program_funding').GetValue|0]; progress_mult=[THIS.ScriptValue('nd_log_progress_mult')|2]; ai=[THIS.ScriptValue('nd_log_is_ai')|0] (a week's progress held more warheads than the weekly cap; the rest was dropped)"
+		}
+		set_variable = {
+			name = nuclear_weapon_program_progress
+			value = nuclear_weapon_program_goal_value
 		}
 	}
 
@@ -223,101 +258,369 @@ nuclear_program_weekly_progress = {
 }
 
 # ----------------------------------------------------------------------------
+# THE FOCUS AND ITS PARKED PROGRESS (2026-11-20 delivery spec §4.1; phase 2
+# plan D2-D6). ROOT is the country throughout.
+# ----------------------------------------------------------------------------
+# The native bar reads nuclear_weapon_program_progress: the progress of the
+# focus in force. What isn't in focus waits in its own slot:
+#   nd_proj_warhead_progress   Warheads (focus 1, nd_prog_focus unset)
+#   nd_proj_icbm_progress      the ICBM project (focus 2)
+#   nd_proj_sub_progress       the missile submarine project (focus 3)
+# INVARIANT: the slot of the focus in force exists only between an activation
+# (whose immediate parks the live figure before zeroing it, so the bar's goal
+# stays 100) and the next weekly pulse (nd_focus_restore loads it back). So a
+# restore is never ambiguous, and nothing is ever loaded twice.
+
+# Parks the live figure, if over 0, in the slot of the focus in force. Called
+# by nd_focus_set, and by je_nuclear_program's immediate before it zeroes the
+# live figure: a re-activation (rank lost and regained) keeps its progress, and
+# a revolution's winner holds it in the slot as well as in the custody carry.
+nd_focus_park_live = {
+	if = {
+		limit = {
+			has_variable = nuclear_weapon_program_progress
+			var:nuclear_weapon_program_progress > 0
+		}
+		if = {
+			limit = { nd_focus_is_icbms = yes }
+			nd_focus_park_into = { SLOT = nd_proj_icbm_progress }
+		}
+		else_if = {
+			limit = { nd_focus_is_submarines = yes }
+			nd_focus_park_into = { SLOT = nd_proj_sub_progress }
+		}
+		else = {
+			nd_focus_park_into = { SLOT = nd_proj_warhead_progress }
+		}
+	}
+}
+
+# The larger of the slot and the live figure: a slot already there (an
+# activation's park not yet restored) is never lowered.
+nd_focus_park_into = {
+	if = {
+		limit = { NOT = { has_variable = $SLOT$ } }
+		set_variable = { name = $SLOT$ value = var:nuclear_weapon_program_progress }
+	}
+	else_if = {
+		limit = { var:$SLOT$ < var:nuclear_weapon_program_progress }
+		set_variable = { name = $SLOT$ value = var:nuclear_weapon_program_progress }
+	}
+}
+
+# The weekly pulse's load-back, right after nd_custody_restore_progress: the
+# slot of the focus in force (there only after an activation) raises the live
+# figure, never lowers it, and goes. Raising only makes the custody carry and
+# this agree whichever comes first.
+nd_focus_restore = {
+	if = {
+		limit = {
+			nd_focus_is_icbms = yes
+			has_variable = nd_proj_icbm_progress
+		}
+		nd_focus_restore_slot = { SLOT = nd_proj_icbm_progress }
+	}
+	else_if = {
+		limit = {
+			nd_focus_is_submarines = yes
+			has_variable = nd_proj_sub_progress
+		}
+		nd_focus_restore_slot = { SLOT = nd_proj_sub_progress }
+	}
+	else_if = {
+		limit = {
+			nd_focus_is_warheads = yes
+			has_variable = nd_proj_warhead_progress
+		}
+		nd_focus_restore_slot = { SLOT = nd_proj_warhead_progress }
+	}
+}
+
+nd_focus_restore_slot = {
+	if = {
+		limit = {
+			has_variable = nuclear_weapon_program_progress
+			var:nuclear_weapon_program_progress < var:$SLOT$
+		}
+		set_variable = { name = nuclear_weapon_program_progress value = var:$SLOT$ }
+	}
+	remove_variable = $SLOT$
+}
+
+# The one writer of nd_prog_focus. F = 1 Warheads | 2 ICBMs | 3 Missile
+# Submarines. Parks the live figure in the old focus's slot, loads the new
+# focus's slot (or 0) and removes it, sets the focus, then refreshes the hold
+# once: a ceiling holds only a Warheads focus, so the hold's pause comes off
+# the moment a project is in focus and goes back on with Warheads
+# (nd_taboo_refresh_held; add_modifier and remove_modifier are not visible in
+# the same block, so it is called once and last). Callers: the Focus rows'
+# click (nd_focus_choose), the weekly availability check, nd_field_leg, the
+# migration and the removal. It marks the block (local nd_focus_hold_refreshed)
+# so the status refresh after it reads the hold from its cause, which this
+# block just changed, not from the modifier, which it can't see yet.
+nd_focus_set = {
+	nd_focus_set_core = { F = $F$ }
+	nd_taboo_refresh_held = yes
+	set_local_variable = { name = nd_focus_hold_refreshed value = 1 }
+}
+
+# nd_focus_set without the hold's refresh, for the AI's choice
+# (nd_ai_focus_pick). Its review runs inside the entry's monthly pulse, whose
+# taboo half refreshes the hold once, later in the same block
+# (nd_taboo_country_monthly): a second refresh here would add the hold a second
+# time, since neither can see the other's add. A review fired outside that
+# pulse (a crisis opening, a new regime) leaves the hold to the next monthly
+# pass, as its arsenal review already does (nd_taboo_ai_arsenal_due).
+nd_focus_set_core = {
+	set_local_variable = { name = nd_focus_new value = $F$ }
+	nd_focus_park_live = yes
+	if = {
+		limit = { local_var:nd_focus_new = 2 }
+		if = {
+			limit = { has_variable = nd_proj_icbm_progress }
+			set_variable = { name = nuclear_weapon_program_progress value = var:nd_proj_icbm_progress }
+			remove_variable = nd_proj_icbm_progress
+		}
+		else = {
+			set_variable = { name = nuclear_weapon_program_progress value = 0 }
+		}
+		set_variable = { name = nd_prog_focus value = 2 }
+	}
+	else_if = {
+		limit = { local_var:nd_focus_new = 3 }
+		if = {
+			limit = { has_variable = nd_proj_sub_progress }
+			set_variable = { name = nuclear_weapon_program_progress value = var:nd_proj_sub_progress }
+			remove_variable = nd_proj_sub_progress
+		}
+		else = {
+			set_variable = { name = nuclear_weapon_program_progress value = 0 }
+		}
+		set_variable = { name = nd_prog_focus value = 3 }
+	}
+	else = {
+		if = {
+			limit = { has_variable = nd_proj_warhead_progress }
+			set_variable = { name = nuclear_weapon_program_progress value = var:nd_proj_warhead_progress }
+			remove_variable = nd_proj_warhead_progress
+		}
+		else = {
+			set_variable = { name = nuclear_weapon_program_progress value = 0 }
+		}
+		if = {
+			limit = { has_variable = nd_prog_focus }
+			remove_variable = nd_prog_focus
+		}
+	}
+}
+
+# Ops 1-3 of nuclear_program_focus_sgui (F as nd_focus_set's). Behind a
+# click-only marker: a tooltip walk writes nothing, so nd_focus_set's park and
+# load would read a focus and slots it never set, every frame.
+nd_focus_choose = {
+	custom_tooltip = nd_tt_focus_set_$F$
+	set_variable = nd_focus_click
+	if = {
+		limit = { has_variable = nd_focus_click }
+		remove_variable = nd_focus_click
+		nd_focus_set = { F = $F$ }
+		# The status line and the overview show the new focus at once.
+		nuclear_program_refresh_state_effect = yes
+	}
+}
+
+# The weekly pulse, after nd_focus_restore: a project in focus that lost a
+# lasting requirement (the coast lost, the technology gone, the leg fielded
+# some other way) returns the focus to Warheads, its progress parked for when
+# it is available again. A held project stays in focus: a hold is a pause, and
+# so is lost standing (spec §4.1, §4.4), which holds the whole programme
+# without moving its focus (nd_proj_*_lasting leaves the programme out).
+nd_focus_check_available = {
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					nd_focus_is_icbms = yes
+					NOT = { nd_proj_icbms_lasting = yes }
+				}
+				AND = {
+					nd_focus_is_submarines = yes
+					NOT = { nd_proj_subs_lasting = yes }
+				}
+			}
+		}
+		nd_focus_set = { F = 1 }
+	}
+}
+
+# A project at its goal: the leg is fielded (LEG = icbms | subs, the variable
+# holding the year, for the panel). The project's progress is spent, the week's
+# overflow with it, and the focus returns to Warheads with their parked
+# progress, which refreshes the hold: a ceiling holds warheads again. Then the
+# figures the leg changes: reach, the upkeep cache and the main rival's.
+# Called from nuclear_program_weekly_progress only. Last, the notices
+# (nd_leg_notices_<leg>): fielding is public.
+nd_field_leg = {
+	set_variable = { name = nd_$LEG$_fielded value = year }
+	set_variable = { name = nuclear_weapon_program_progress value = 0 }
+	nd_focus_set = { F = 1 }
+	nd_reach_refresh = yes
+	nd_apply_posture_modifiers = yes
+	nd_refresh_main_rival = yes
+	debug_log = "TE_NUCLEAR: type=leg_fielded; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; leg=$LEG$; stockpile=[THIS.Var('nuclear_weapon_stockpile').GetValue|0]; funding=[THIS.Var('nuclear_weapons_program_funding').GetValue|0]; ai=[THIS.ScriptValue('nd_log_is_ai')|0]"
+	nd_leg_notices_$LEG$ = yes
+}
+
+# A leg fielded is public (2026-11-20 delivery spec §4.1, phase 2 plan D12):
+# the fielder hears at once, and a week later its rivals either way, every
+# country believed armed and its neighbors (nuclear_weapon_events.35 for ICBMs,
+# .36 for missile submarines; the fielder's text and the world's split on
+# scope:nd_leg_fielder). The world's first fielder of each leg also makes a
+# headline for every human; the one-time migration of 2026-11-20 sets the same
+# flag when any leg came from a technology (nd_delivery_migrate), so the
+# headline is never late news. Nothing here writes the taboo's ledger:
+# deployment isn't use. ROOT is the fielder.
+nd_leg_notices_icbms = {
+	save_scope_as = nd_leg_fielder
+	if = {
+		limit = { NOT = { has_global_variable = nd_headline_icbms_fielded } }
+		set_global_variable = nd_headline_icbms_fielded
+		every_country = {
+			limit = { is_ai = no }
+			post_notification = headlines_nd_icbms_fielded
+		}
+	}
+	trigger_event = { id = nuclear_weapon_events.35 }
+	every_country = {
+		limit = {
+			NOT = { THIS = scope:nd_leg_fielder }
+			NOT = { is_country_type = decentralized }
+			OR = {
+				any_rival_country = { THIS = scope:nd_leg_fielder }
+				any_rivaling_country = { THIS = scope:nd_leg_fielder }
+				nd_believed_armed = yes
+				any_neighbouring_state = { owner = scope:nd_leg_fielder }
+			}
+		}
+		trigger_event = { id = nuclear_weapon_events.35 days = 7 }
+	}
+}
+
+nd_leg_notices_subs = {
+	save_scope_as = nd_leg_fielder
+	if = {
+		limit = { NOT = { has_global_variable = nd_headline_subs_fielded } }
+		set_global_variable = nd_headline_subs_fielded
+		every_country = {
+			limit = { is_ai = no }
+			post_notification = headlines_nd_subs_fielded
+		}
+	}
+	trigger_event = { id = nuclear_weapon_events.36 }
+	every_country = {
+		limit = {
+			NOT = { THIS = scope:nd_leg_fielder }
+			NOT = { is_country_type = decentralized }
+			OR = {
+				any_rival_country = { THIS = scope:nd_leg_fielder }
+				any_rivaling_country = { THIS = scope:nd_leg_fielder }
+				nd_believed_armed = yes
+				any_neighbouring_state = { owner = scope:nd_leg_fielder }
+			}
+		}
+		trigger_event = { id = nuclear_weapon_events.36 days = 7 }
+	}
+}
+
+# ----------------------------------------------------------------------------
+# The arsenal watch (2026-11-07): a TE_NUCLEAR line each time an arsenal first
+# reaches 50 warheads, then 100, 200 and each doubling, whatever brought it
+# there (the programme, a custody transfer, a console), with what the funding
+# buttons weigh. France reached some 1,200 in an observer game and nothing in
+# the log said how. Each country logs a milestone once: nd_log_next_milestone
+# holds the next, and falls back to the first below which the arsenal drops
+# under a quarter of it. ROOT is the country (je_nuclear_program's weekly
+# pulse, before the ledger).
+# ----------------------------------------------------------------------------
+nd_log_arsenal_watch = {
+	if = {
+		limit = { has_variable = nuclear_weapon_stockpile }
+		if = {
+			limit = { NOT = { has_variable = nd_log_next_milestone } }
+			set_variable = { name = nd_log_next_milestone value = 50 }
+		}
+		if = {
+			limit = { var:nuclear_weapon_stockpile >= var:nd_log_next_milestone }
+			debug_log = "TE_NUCLEAR: type=arsenal_milestone; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; stockpile=[THIS.Var('nuclear_weapon_stockpile').GetValue|0]; milestone=[THIS.Var('nd_log_next_milestone').GetValue|0]; funding=[THIS.Var('nuclear_weapons_program_funding').GetValue|0]; progress_mult=[THIS.ScriptValue('nd_log_progress_mult')|2]; desired=[THIS.ScriptValue('nuclear_ai_desired_stockpile')|0]; ai_cap=[THIS.ScriptValue('nuclear_ai_stockpile_cap')|0]; ai=[THIS.ScriptValue('nd_log_is_ai')|0]; innovation=[THIS.ScriptValue('nd_log_innovation')|0]; at_war=[THIS.ScriptValue('nd_log_at_war')|0]; rival_bigger=[THIS.ScriptValue('nd_log_rival_bigger')|0]; custody_total=[THIS.ScriptValue('nd_log_custody_total_value')|0]"
+			while = {
+				limit = { var:nuclear_weapon_stockpile >= var:nd_log_next_milestone }
+				change_variable = { name = nd_log_next_milestone multiply = 2 }
+			}
+		}
+		else_if = {
+			limit = {
+				var:nd_log_next_milestone > 50
+				var:nuclear_weapon_stockpile < nd_log_milestone_reset_line
+			}
+			set_variable = { name = nd_log_next_milestone value = 50 }
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
 # The single derivation site for everything the panel displays.
 # ----------------------------------------------------------------------------
-# Called from exactly four places in play, which between them cover every way the
+# Called from exactly five places in play, which between them cover every way the
 # programme's state can move: je_nuclear_program's `immediate` (so an active
 # entry always has a status code), its on_weekly_pulse right after the
-# programme step, and the two button effects above — and therefore both stepper
-# ops in the widget, which delegate to those effects. (events/te_debug_nuclear_events.txt also calls it,
+# programme step, the two button effects above — and therefore both stepper
+# ops in the widget, which delegate to those effects — and a Focus row's click
+# (nd_focus_choose). (events/te_debug_nuclear_events.txt also calls it,
 # from the console only, after forcing state by hand.)
-# In `immediate` the journal entry is still being
-# activated, which is why the modifier guard below reaches it through `?=`:
-# whether `je:je_nuclear_program` resolves that early is untested, and either
-# answer is safe (unresolved is skipped; resolved has no modifier yet on a fresh
-# entry, and on a re-activation the old entry's modifier died with it). Nothing
-# else may write nuclear_program_last_status, and neither the .gui nor the
-# localization may re-derive it — see
+# Nothing else may write nuclear_program_last_status, and neither the .gui nor
+# the localization may re-derive it — see
 # docs/guides/scripting_best_practices.md, "Journal-Entry Widgets: Derive Display
 # State Once, in Script".
 #
-# WHY THE FUNDING MODIFIER IS DECIDED FROM THE VARIABLE, NOT FROM has_modifier.
-# add_modifier / remove_modifier results are not visible inside the same effect
-# block, and a scripted effect call is inlined into its caller's block, so a
-# has_modifier read here may see the state as it was *before* the button body
-# ran. change_variable results, by contrast, are visible immediately. The
-# decision is therefore taken from var:nuclear_weapons_program_funding, which
-# this block's caller has just written. Walking every caller, with the invariant
-# "funding >= 1 implies the modifier is on the journal entry":
-#   increase, F -> F+1       funding >= 1, guard skipped; the button body already
-#                            re-added the modifier at the new multiplier.
-#   decrease, F -> F-1 >= 1  same: nothing to do.
-#   decrease, 1 -> 0         funding = 0. Pre-block the modifier was present
-#                            (funding was 1), so the has_modifier read is true,
-#                            and the body removed and re-added it at multiplier
-#                            0 — so it really is present and the remove lands.
-#                            Without this the entry would keep a "-0 weekly
-#                            innovation" row for ever.
-#   pulse, pause in force    the pulse zeroes funding earlier in the same block;
-#                            the modifier is genuinely still present, so the read
-#                            is true and the innovation drain finally stops.
-#   pulse, standing lost     the same, from the entry's own else_if: an armed
-#                            power demoted below nuclear_program_has_programme
-#                            keeps the entry but stops paying.
-#   pulse, already at 0      modifier absent, read false, so no remove_modifier
-#                            on a missing modifier (which logs an error).
-#   pulse, steady funding>=1 funding /= 0, guard skipped, modifier left exactly
-#                            as it is rather than re-added every week.
-# The guard is correct whether the has_modifier read sees the pre-block or the
-# live state, because the only caller where the two differ is "decrease 1 -> 0",
-# and there both readings say "present".
+# It no longer touches the funding modifier: since vanilla 1.15 the entry
+# declares it (scaling_modifiers_while_active), with a value that reads
+# var:nuclear_weapons_program_funding, so every caller that moves the variable
+# moves the cost.
 nuclear_program_refresh_state_effect = {
-	# Migration: a save funded before the cost was cached carries the modifier
-	# with the old JE-scope multiplier; re-apply it once in the cached form.
-	if = {
-		limit = {
-			has_variable = nuclear_weapons_program_funding
-			var:nuclear_weapons_program_funding >= 1
-			NOT = { has_variable = nuclear_weapons_program_cost_cached }
-		}
-		set_variable = {
-			name = nuclear_weapons_program_cost_cached
-			value = nuclear_weapons_program_current_cost
-		}
-		je:je_nuclear_program ?= {
-			if = {
-				limit = { has_modifier = nuclear_weapon_program_funding }
-				remove_modifier = nuclear_weapon_program_funding
-			}
-			add_modifier = {
-				name = nuclear_weapon_program_funding
-				multiplier = root.var:nuclear_weapons_program_cost_cached
-			}
-		}
-	}
-	if = {
-		limit = {
-			has_variable = nuclear_weapons_program_funding
-			var:nuclear_weapons_program_funding = 0
-			je:je_nuclear_program ?= { has_modifier = nuclear_weapon_program_funding }
-		}
-		je:je_nuclear_program ?= { remove_modifier = nuclear_weapon_program_funding }
-	}
-
 	# The status code the panel and the status line read. Order matters: a pause
 	# treaty forces funding to 0, so without testing the pause first a frozen
 	# programme would report itself as merely unfunded.
-	# 5 and 4 before 3: the taboo's hold carries the same pause flag.
+	# 5 and 4 before 3: the taboo's hold carries the same pause flag. 5 and 3
+	# are read from what causes them, not from the hold's modifier or the pause
+	# flag. 4 follows the hold in force (has_modifier, on a Warheads focus: a
+	# ceiling holds no other), which the monthly pass refreshes, so the status
+	# never says "held" while warheads are still being built, nor the reverse.
+	# Where this block itself just refreshed the hold (nd_focus_set: a Focus
+	# row's click, a fielding, the weekly availability check), the modifier
+	# can't show the change yet, so 4 reads the hold's cause instead (2026-11-20
+	# delivery spec §4.1, phase 2 plan D11; the 2a review).
 	if = {
 		limit = { nd_taboo_is_dismantling = yes }
 		set_variable = { name = nuclear_program_last_status value = 5 }
 	}
 	else_if = {
-		limit = { has_modifier = nd_taboo_programme_held }
+		limit = {
+			OR = {
+				AND = {
+					has_local_variable = nd_focus_hold_refreshed
+					nd_taboo_programme_should_be_held = yes
+				}
+				AND = {
+					NOT = { has_local_variable = nd_focus_hold_refreshed }
+					nd_focus_is_warheads = yes
+					has_modifier = nd_taboo_programme_held
+				}
+			}
+		}
 		set_variable = { name = nuclear_program_last_status value = 4 }
 	}
 	else_if = {
-		limit = { modifier:country_nuclear_program_pause_bool = yes }
+		limit = { nuclear_program_is_frozen = yes }
 		set_variable = { name = nuclear_program_last_status value = 3 }
 	}
 	else_if = {
@@ -326,6 +629,16 @@ nuclear_program_refresh_state_effect = {
 			var:nuclear_weapons_program_funding = 0
 		}
 		set_variable = { name = nuclear_program_last_status value = 0 }
+	}
+	# A delivery project in focus (9 ICBMs, 10 missile submarines), funded and
+	# free of a hold: the developing icon.
+	else_if = {
+		limit = { nd_focus_is_icbms = yes }
+		set_variable = { name = nuclear_program_last_status value = 9 }
+	}
+	else_if = {
+		limit = { nd_focus_is_submarines = yes }
+		set_variable = { name = nuclear_program_last_status value = 10 }
 	}
 	else_if = {
 		limit = {
@@ -340,9 +653,14 @@ nuclear_program_refresh_state_effect = {
 }
 
 # Rebuilds nd_powers, the ten largest arsenals AS THE WORLD ESTIMATES THEM
-# (nd_display_public_estimate, re-observed yearly with an error;
-# docs/systems/nuclear_crisis_design.md §0.6), largest first: a variable list
-# of their capitals on the panel's global store (nd_lists_store_ensure,
+# (nd_shown_public_estimate, re-observed yearly with an error;
+# docs/systems/nuclear_crisis_design.md §0.6), largest first. Listed is what
+# the world sees (#1366): a country believed armed whose estimate is at least
+# one, never the true stockpile, so a country that fires its last warhead stays
+# listed until the world's estimate says otherwise (the yearly observation, or
+# a strike's snap to the truth). Ordered by the same no-fallback value each
+# row prints, never one that falls back to the truth. A variable list of
+# their capitals on the panel's global store (nd_lists_store_ensure,
 # nuclear_crisis_effects.txt). The Nuclear Powers section draws it as a
 # datamodel (NUC-14 of the 2026-10-27 GUI audit), reading each country through
 # its capital (gui_modding_guide.md gotcha #15): its flag, the estimate and its
@@ -360,11 +678,10 @@ update_nuclear_powers_ranking = {
 	set_global_variable = { name = nuke_ldr_idx value = 0 }
 	ordered_country = {
 		limit = {
-			has_modifier = nuclear_power
-			has_variable = nuclear_weapon_stockpile
-			var:nuclear_weapon_stockpile >= 1
+			nd_believed_armed = yes
+			nd_shown_public_estimate >= 1
 		}
-		order_by = nd_display_public_estimate
+		order_by = nd_shown_public_estimate
 		check_range_bounds = no
 
 		if = {

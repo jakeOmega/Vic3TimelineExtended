@@ -1,8 +1,10 @@
 """Integration tests for the annotator registry endpoints.
 
-Requires the mod state server running on http://127.0.0.1:8950. Tests
-self-skip when it isn't up, mirroring the pattern in
-`test_reload_post_load.py` / `test_engine_coverage_validator.py`.
+Requires the mod state server running on http://127.0.0.1:8950, or at the
+base URL in `VIC3_MOD_STATE_SERVER` (a worktree's server on another port:
+`VIC3_MOD_STATE_SERVER=http://127.0.0.1:8951`). Tests self-skip when it
+isn't up, mirroring the pattern in `test_reload_post_load.py` /
+`test_engine_coverage_validator.py`.
 
 Run:
     .venv/bin/python -m unittest test_annotator_endpoints -v
@@ -10,13 +12,15 @@ Run:
 from __future__ import annotations
 
 import json
+import os
 import unittest
 import urllib.error
 import urllib.parse
 import urllib.request
 
 
-SERVER = "http://127.0.0.1:8950"
+DEFAULT_SERVER = "http://127.0.0.1:8950"
+SERVER = (os.environ.get("VIC3_MOD_STATE_SERVER") or DEFAULT_SERVER).rstrip("/")
 
 # Documented `flag` values emitted by the PMs `balance` annotator.
 BALANCE_FLAGS = (

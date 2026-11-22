@@ -38,6 +38,9 @@ of your primary cultures is settled land, not a colony.
 separated from your capital in the same way, none of whose primary cultures
 shares a heritage trait with yours.
 
+It waits while you fight a civil war of your own, which can cut a state off
+from your capital for a while; a war with another country doesn't hold it back.
+
 This is the test the United Nations used in 1960. France's Algeria and its
 Tunisian and Moroccan protectorates, Japan's Korea and Taiwan, and Italy's Libya
 are colonies, across the sea from their capitals. Land empires are not: Russia's
@@ -50,6 +53,9 @@ A great power with a few well-integrated colonies and little international
 opposition can hold on; a smaller empire condemned by the big powers usually
 can't. Two era 9 technologies, Knowledge Economy and Globalization, add −0.75
 and −1.5 a month to the drift, so holding on gets harder as the game goes on.
+Six other era 9 technologies make the colonial programs stronger, so an empire
+that pays for all three at level 3 can still hold on (see
+[The three colonial programs](#the-three-colonial-programs)).
 
 ### The Colonial Empire panels
 
@@ -154,7 +160,8 @@ The Colonial Stability bar runs from 0 to 100 and starts at 50. Once a month it
 moves by the sum of everything acting on it, but never by more than 1.5 up or
 down, so crossing the whole bar takes at least five and a half years. Where the bar sits
 puts you in one of five bands. Each band applies a modifier to the journal
-entry, and the lower three also raise your colonial subjects' liberty desire.
+entry, which follows the bar into a new band within a few days, and the lower
+three also raise your colonial subjects' liberty desire.
 
 | Band | Bar | While in this band |
 |---|---|---|
@@ -240,8 +247,10 @@ often as it condemns once it also has Colonial Exploitation or an ally that
 holds colonies. An AI takes a side only with 150 influence and 100
 more to spare, and drops its stance when its influence runs negative. When a
 Decolonization Resolution passes at the United Nations, every great power that
-voted for it, or voted against it and then accepted it, takes the anti-colonial
-stance automatically, and can't change it for 24 months.
+voted for it takes the anti-colonial stance automatically, and can't change it
+for 24 months; one that voted against it is bound by the resolution but takes no
+stance. An AI power with colonies or colonial subjects leans against the
+resolution.
 
 Each condemning great power costs you about 0.45 a month and each supporter adds
 about 0.3, scaled by its prestige against yours: from a quarter as much, for a
@@ -278,8 +287,8 @@ Each program runs at a level from 0 (off) to 3, set with the minus and plus
 buttons on its row. Level 3 is the full program and each level is a third of
 it: a third of its value to the bar every month, a third of its effects and a
 third of its running cost. The bar values below are the base at level 3; your
-laws change them, and the row shows what the program adds now; hover it for
-what one more level would add and for its costs.
+laws and some technologies change them, and the row shows what the program adds
+now; hover it for what one more level would add and for its costs.
 
 | Program | Requirement | Bar, per month at level 3 | Costs and side effects at level 3 |
 |---|---|---|---|
@@ -304,6 +313,18 @@ Assimilation minority-rights law strengthen assimilation, and Universal
 Citizenship weakens it. The program you run longest also decides how the empire
 ends (see [How a colonial empire ends](#how-a-colonial-empire-ends)); a month at
 a lower level counts as a third of a month for each level.
+
+Six era 9 technologies each make one program worth +0.25 a month more at level
+3: Globalization and Digital Telecommunications strengthen investment, Terrorism
+and Antiterrorism and Automated Surveillance the garrison, and Digital Education
+and Digital Entertainment assimilation. With all three programs at level 3 that
+is +1.5 a month, against the −2.25 that Knowledge Economy and Globalization
+take. So late in the game a great power with a colony or two and little
+condemnation can still hold them if it pays for every program, and an empire
+that doesn't pay can't. The laws that weaken the garrison and assimilation
+still do: under Protected Speech, the Protection or Affirmative Action
+minority-rights law and Universal Citizenship, the two are worth only about +0.4
+and +0.2 a month at level 3, even with all four of their technologies.
 
 ### Releasing colonies
 
@@ -357,7 +378,7 @@ subject ends the entry (see [How a colonial empire ends](#how-a-colonial-empire-
 
 Once the UN charter carries Charter Reform II and the Decolonization Resolution
 is in force, the General Assembly can order a referendum in a direct subject
-whose liberty desire is 50 or more. You hold it, and the subject leaves with a
+whose liberty desire is 50 or more, unless a war is already set to free it. You hold it, and the subject leaves with a
 chance equal to its liberty desire, or you refuse and pay in standing,
 prestige and the loyalty of every subject (see [Supervised
 referendums](10-united-nations.md#supervised-referendums)).
@@ -449,7 +470,8 @@ Open Talks on a war's row asks for a popup first. Talks take six months while
 the fighting goes on. When the accords are signed, your claim is dropped and
 the rebels accept a peace: offer one from the peace screen, conceding their
 independence if they refuse a white peace. An AI opens talks after half a year
-of war support in the red, or after four years.
+of war support in the red, after four years, or once the war is counting down
+to a stalemate.
 
 A war that has run four years, with your war support in it at 25 or below for a
 year running, breaks the home front. Without a voting franchise, junior
@@ -457,7 +479,7 @@ officers rise in The Captains' Revolt: step aside, and talks open on every war,
 every territory you could release goes, and the country gets universal
 suffrage and a parliamentary republic (a monarchy keeps its crown); or crush
 the officers, at −20 legitimacy for two years, and face them again a year
-later. With one, it is The Republic in Danger: call the general, who brings a
+later. With one, it is Committee of Public Safety: call the general, who brings a
 presidential republic, +100 authority for three years and a peace by the
 accords that costs no legitimacy; or hold the line at −15 legitimacy.
 
@@ -468,7 +490,8 @@ condemns colonialism decides in War in (the territory): condemn it (relations
 −20), arm the rebels (they fight harder and keep their resolve, it pays them a
 monthly sum, and relations fall by 30), intervene, or stay out. Intervening
 joins the war on the rebels' side and is rare: it is open only to a great power
-at peace that is your rival with the larger army, and never to your ally,
+at peace that is your rival with the larger army and the reach to get it to the
+rebels, and never to your ally,
 defensive-pact partner, power bloc partner, subject or overlord, or one under a
 truce with you. A great power that backs colonial rule may send you arms
 instead, for two years, but never joins the war.
@@ -478,7 +501,11 @@ instead, for two years, but never joins the war.
 The journal entry ends in one of four ways. The event you get when the empire
 holds or collapses depends on the program you ran longest, counting a month at
 level 1 or 2 as a third or two thirds of a month, and only a program with more
-than 24 months.
+than 24 months. On a tie, Military Garrison counts as the longest, then
+Colonial Development Investment. The journal panel lists each of the nine
+endings (the two federations, the four ways the empire holds, the voluntary end
+and the two collapses) with its conditions and the months each program has
+run, so you can see which one the empire is heading for.
 
 | Ending | Condition | Result |
 |---|---|---|
@@ -486,6 +513,10 @@ than 24 months.
 | Federation | You take the Imperial Federation Act or the Civilizing Mission Compact | Imperial Federation from the decision, plus a permanent The Iron Fist (Act) or The Commonwealth Path (Compact). Well-accepted overseas states become homelands. You can never get the entry again. |
 | Collapse | The bar reaches 0 | Up to three of your territories declare independence, the one most likely to rise first, two months apart, and you can let each go, negotiate or [fight](#wars-of-independence); those that go inherit the legacy of your longest program (below). Every colonial subject gains Imperial Collapse Aftershock, a large liberty-desire increase for 20 years, and its relations with you drop by 50. The entry can't return for ten years; after that it starts again within two months if you still hold a colony or colonial subject. |
 | Voluntary end | You no longer hold any colony or colonial subject while the bar is above 0 | A decaying boost to diplomatic reputation; the event's wording depends on whether you freed colonies by choice. There is no ten-year lockout: after a year, the entry starts again within two months of your holding a colony or colonial subject. |
+
+As when it first starts, the entry doesn't start again during a civil war of
+your own. If you still hold a colony or colonial subject when the war ends, the
+two months count from then.
 
 | Longest program | If the empire holds | If it collapses | The countries you free |
 |---|---|---|---|
@@ -516,7 +547,7 @@ runs: as a subject's liberty desire climbs, when great powers condemn or back
 you, when colonies resist, and as the cost of empire tells at home. Repressive
 options usually add Colonial Crackdown, which strengthens your garrison but
 costs prestige and bureaucracy and gives the Intelligentsia more clout; a war
-fought while it lasts can bring on the Conscription Crisis. Conciliatory options
+fought while it lasts can bring on a conscription crisis, Not Enough Men. Conciliatory options
 add Decolonization Negotiations or free the colony. With the Neocolonialism law,
 four events offer independence on your terms and give you Neocolonial Economic
 Concessions. Each event and what triggers it is in [Colonial power event
@@ -587,9 +618,13 @@ power with no settlers and two condemners about one time in four. A country
 that isn't a great power is much less likely to fight, and one in default or
 already at war with a great power never does.
 
-An AI that isn't a great power leans strongly toward Planned Full Decolonization,
-more so when three great powers condemn it or three of its colonies are badly
-unaccepted. AI great powers are less willing, and no AI plans full
-decolonization while two of its colonies are well accepted. In events, AI
-empires lean toward negotiation and release, and an AI takes the Imperial
-Federation Act or Civilizing Mission Compact whenever it qualifies.
+An AI leans toward Planned Full Decolonization when three great powers condemn
+it or three of its colonies are badly unaccepted. One that isn't a great power
+leans more strongly, and also when its bar is below 40, but never without one of
+those reasons. No AI plans full decolonization while two of its colonies are
+well accepted. No AI lets a colony go, by decision or in an event, during a
+civil war of its own while its bar is 40 or more: a civil war is often short,
+and it can cut a state off from the capital long enough to make it look like a
+colony. A colony's own secession doesn't count; it is a war of independence. In events, AI empires lean toward negotiation and release, and an AI
+takes the Imperial Federation Act or Civilizing Mission Compact whenever it
+qualifies.

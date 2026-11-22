@@ -777,7 +777,7 @@ def render_lx_values():
     for tech, v in diffusion_techs():
         o(f"if = {{ limit = {{ has_technology_researched = {tech} }} add = {_lit(v)} }}")
     o("if = {")
-    o("limit = { je:je_united_nations ?= { has_modifier = un_pandemic_cooperation_modifier } }")
+    o("limit = { has_variable = un_pandemic_cooperation_modifier_on }")
     o("add = {")
     o(f"value = {_lit(P.WHO_DIFFUSION)}")
     o("multiply = un_convention_multiplier")

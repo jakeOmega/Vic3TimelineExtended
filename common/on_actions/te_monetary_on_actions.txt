@@ -93,6 +93,10 @@ on_monthly_pulse_country = {
 te_monetary_monthly_on_action = {
 	effect = {
 		te_monetary_monthly_update = yes
+		# The months left of five timed modifiers, for a revolution's winner
+		# (#470; te_monetary_civil_war_effects.txt). Outside the update: a
+		# modifier's days run whatever the banking rule says.
+		te_mon_cw_tick_penalty_clocks = yes
 		# The civil-war copy's once-per-loser marker names the loser whose bank
 		# this country took (te_monetary_repair_after_civil_war says why). It
 		# goes once that object no longer resolves — the engine deleted the dead
@@ -401,15 +405,30 @@ te_monetary_on_country_default = {
 			set_variable = { name = te_mon_lolr_call_forget value = te_mon_lolr_call_forget_months }
 			set_variable = { name = te_mon_lolr_default_cooldown value = te_mon_lolr_default_cooldown_months }
 			save_scope_as = te_lolr_ward
-			# A treaty guarantor first; else [5b] the leader of a tier-3 monetary
-			# union, which is lender of last resort to every adopter (§15A.3).
+			# A treaty guarantor first; else the leader of the member's Creditors'
+			# Consortium, which rescues on terms (te_cc.1; spec
+			# 2026-11-16-power-bloc-identities-design.md § 5.3); else [5b] the
+			# leader of a tier-3 monetary union, which is lender of last resort
+			# to every adopter (§15A.3). One call: the counter and the cooldown
+			# above are the member's whichever backer answers.
 			if = {
 				limit = { te_mon_lolr_is_effective = yes }
 				var:te_mon_lolr_guarantor = {
 					trigger_event = { id = te_lolr.1 popup = yes }
 				}
 			}
-			else = {
+			else_if = {
+				limit = { te_cred_guarantee_is_effective = yes }
+				te_cred_call_consortium = yes
+			}
+			else_if = {
+				limit = {
+					te_mon_union_backstop_is_effective = yes
+					exists = var:te_mon_anchor
+					# A debtor under a receivership is not called for again: a
+					# receiver is a creditor, not a guarantor (114's header).
+					te_mon_has_treaty_debt_relief = no
+				}
 				var:te_mon_anchor = {
 					trigger_event = { id = te_lolr.1 popup = yes }
 				}

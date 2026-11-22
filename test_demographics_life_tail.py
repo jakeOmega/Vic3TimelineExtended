@@ -3,7 +3,7 @@
 The life tables sum person-years over the age groups, which end at 145-149; the survivors at 150 now live on at the death
 rate past 150 (demographics_model.tail_years, te_demog_lt_tail), in e0 and e65 alone. The panel shows e0 and e65 as they
 are up to 10,000 years and "over 10,000" past that; the stored figures stay exact. The Life Expectancy chart's axis runs to
-the largest figure its samples hold, 100 to 10,000, and a bar stops at 10,000. demographics-playtest.md has the in-game
+the largest figure its samples hold, 10 to 10,000, and a bar stops at 10,000. demographics-playtest.md has the in-game
 checks."""
 
 import re
@@ -22,6 +22,7 @@ from test_demographics_registry import (  # noqa: E402
 from gui_test_helpers import history_charts  # noqa: E402
 
 GUI = ROOT / "gui" / "te_demographics_widgets.gui"
+MAPS = ROOT / "common" / "journal_entries" / "te_journal_maps.txt"
 LOC = ROOT / "localization" / "english" / "te_miscellaneous_l_english.yml"
 # the figures the panel shows: the state's and the country's (the same names), and a history sample's
 SHOWN = ("te_dg_e0", "te_dg_e0f", "te_dg_e0m", "te_dg_e65", "te_dg_prev_e0")
@@ -151,6 +152,9 @@ class TestE0DisplayCap(unittest.TestCase):
         """Every use of `key` sits behind the cap's switch on `read`, or inside a key every use of which does."""
         self.assertLess(depth, 4, key)
         uses = [(k, t) for k, t in corpus.items() if f"'{key}'" in t]
+        if not uses and depth == 0 and f"custom_tooltip_no_bullet = {key}\n" in _text(MAPS):
+            self.map_guarded(key)
+            return
         self.assertTrue(uses, f"{key} is never used")
         for k, t in uses:
             for m in re.finditer(re.escape(f"'{key}'"), t):
@@ -162,6 +166,16 @@ class TestE0DisplayCap(unittest.TestCase):
                         and f"GreaterThanOrEqualTo_CFixedPoint( {read}, '(CFixedPoint)9999.5' )" not in switch):
                     self.assertNotEqual(k, "<gui>", f"{key} in the GUI with no cap")
                     self.guarded(k, read, corpus, depth + 1)
+
+    def map_guarded(self, key):
+        """A Map Room hover key (te_journal_maps.txt's map_tooltip, the state as THIS): the switch is in script, an
+        earlier branch of the same ladder sending a figure past the cap to the key's _over twin. A SelectLocalization
+        there lost THIS (2026-11-05), so the map can't use the loc-side switch."""
+        text = _text(MAPS)
+        at = text.index(f"custom_tooltip_no_bullet = {key}\n")
+        ladder = text[text.rindex("map_tooltip = {", 0, at):at]
+        self.assertRegex(ladder, rf"var:te_dg_e0 > {P.E0_SHOWN_MAX}\s*\}}\s*custom_tooltip_no_bullet = {key}_over\n",
+                         f"{key}: no branch before it sends life expectancy over {P.E0_SHOWN_MAX} to {key}_over")
 
     def test_every_shown_figure_is_switched(self):
         keys = self.number_keys()
@@ -193,7 +207,7 @@ class TestE0DisplayCap(unittest.TestCase):
 
 
 class TestE0ChartAxis(unittest.TestCase):
-    """The Life Expectancy chart: its axis te_dg_h_e0_max (100 to 10,000, the largest sample), a bar stopping at 10,000."""
+    """The Life Expectancy chart: its axis te_dg_h_e0_max (10 to 10,000, the largest sample), a bar stopping at 10,000."""
 
     def test_the_bars_read_the_axis_and_stop_at_the_cap(self):
         # the chart is its generated wrapper's (gen_te_history_charts.py)
@@ -210,19 +224,29 @@ class TestE0ChartAxis(unittest.TestCase):
     def test_the_axis_falls_back_where_no_census_has_set_it(self):
         eng = _Engine({})
         value = eng._tree(eng.values, "te_demog_hist_e0_axis_shown")
-        self.assertEqual(eng.value(value), P.E0_AXIS_MIN)          # a save from before: no te_dg_h_e0_max
+        # a save from before holds no te_dg_h_e0_max: the chart's old fixed axis, not the small minimum
+        self.assertEqual(eng.value(value), eng.number("te_demog_hist_e0_axis_unset"))
+        self.assertEqual(eng.number("te_demog_hist_e0_axis_unset"), 100)
+        self.assertLess(P.E0_AXIS_MIN, 100)
         eng.vars["te_dg_h_e0_max"] = 1708.9
         self.assertEqual(eng.value(value), 1708.9)
 
     def test_the_store_sets_the_axis_after_the_samples(self):
+        # the five axes are set together (test_demographics_chart_axes.py runs them); life expectancy's alone has a top
         text = _text(HISTORY_EFFECTS)
         record = _block(text, "te_demog_history_record")
-        self.assertGreater(record.index("te_demog_history_e0_axis = yes"), record.index("te_demog_history_markers = yes"))
-        axis = _block(text, "te_demog_history_e0_axis")
-        self.assertIn("set_local_variable = { name = te_dg_h_ax value = te_demog_k_e0_axis_min }", axis)
-        self.assertIn("variable = te_dg_hist", axis)
-        self.assertIn("max = te_demog_k_e0_shown_max", axis)
+        self.assertGreater(record.index("te_demog_history_axes = yes"), record.index("te_demog_history_markers = yes"))
+        axes = _block(text, "te_demog_history_axes")
+        self.assertIn("set_local_variable = { name = te_dg_hax_e0 value = te_demog_k_e0_axis_min }", axes)
+        self.assertIn("variable = te_dg_hist", axes)
+        self.assertIn("te_demog_history_axis_take = { AXIS = e0 VAR = te_dg_h_e0 }", axes)
+        cap = "value = { value = local_var:te_dg_hax_e0 max = te_demog_k_e0_shown_max }"
+        self.assertLess(axes.index(cap), axes.index("te_demog_history_axis_set = { AXIS = e0 }"))
 
+    def test_the_label_prints_the_axis(self):
+        (chart,) = [c for c in history_charts(_text(GUI)) if 'text = "te_demog_hist_e0_title"' in c]
+        self.assertIn("raw_text = \"[Country.MakeScope.ScriptValue('te_demog_hist_e0_axis_shown')|0]\"", chart)
+        self.assertNotIn('raw_text = "100"', chart)
 
 if __name__ == "__main__":
     unittest.main()

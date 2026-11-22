@@ -116,7 +116,7 @@ cultural_hegemony.2 = {
 		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total < 5
-		has_modifier = cultural_hegemony_foreign_benchmark
+		ch_trails_hegemon = yes
 		has_technology_researched = mass_media
 	}
 
@@ -320,7 +320,7 @@ cultural_hegemony.4 = {
 		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total < 8
-		has_modifier = cultural_hegemony_foreign_benchmark
+		ch_trails_hegemon = yes
 		has_technology_researched = mass_media
 		any_interest_group = {
 			OR = {
@@ -339,15 +339,24 @@ cultural_hegemony.4 = {
 		name = cultural_hegemony.4.a
 		default_option = yes
 
-		# Channel nationalism - armed forces & devout rally, radicals calm
-		ig:ig_armed_forces = {
+		# Channel nationalism - the three groups the trigger and the
+		# description name (officers, clergy, landowners) rally, radicals calm.
+		# The Landowners were in the gate but not in the options until #1615.
+		ig:ig_armed_forces ?= {
 			add_modifier = {
 				name = ch_nationalist_rally_ig
 				days = normal_modifier_time
 				is_decaying = yes
 			}
 		}
-		ig:ig_devout = {
+		ig:ig_devout ?= {
+			add_modifier = {
+				name = ch_nationalist_rally_ig
+				days = short_modifier_time
+				is_decaying = yes
+			}
+		}
+		ig:ig_landowners ?= {
 			add_modifier = {
 				name = ch_nationalist_rally_ig
 				days = short_modifier_time
@@ -361,6 +370,10 @@ cultural_hegemony.4 = {
 			}
 			add_loyalists_in_state = {
 				interest_group = ig:ig_devout
+				value = very_small_radicals
+			}
+			add_loyalists_in_state = {
+				interest_group = ig:ig_landowners
 				value = very_small_radicals
 			}
 		}
@@ -385,6 +398,10 @@ cultural_hegemony.4 = {
 			}
 			add_radicals_in_state = {
 				interest_group = ig:ig_devout
+				value = small_radicals
+			}
+			add_radicals_in_state = {
+				interest_group = ig:ig_landowners
 				value = small_radicals
 			}
 			add_loyalists_in_state = {
@@ -493,7 +510,7 @@ cultural_hegemony.6 = {
 		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total < 3
-		has_modifier = cultural_hegemony_foreign_benchmark
+		ch_trails_hegemon = yes
 		has_technology_researched = mass_media
 		any_scope_state = {
 			any_scope_pop = {
@@ -540,8 +557,7 @@ cultural_hegemony.6 = {
 			}
 		}
 		# On the journal entry, like every other cultural-hegemony event
-		# modifier: legacy_je_modifier_cleanup_effect strips a country-level
-		# ch_brain_drain_remittances every month.
+		# modifier.
 		je:je_cultural_hegemony ?= { add_modifier = {
 				name = ch_brain_drain_remittances
 				days = normal_modifier_time
@@ -586,7 +602,7 @@ cultural_hegemony.7 = {
 		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total < 10
-		has_modifier = cultural_hegemony_foreign_benchmark
+		ch_trails_hegemon = yes
 		has_technology_researched = mass_media
 		any_country = {
 			NOT = { this = ROOT }
@@ -887,14 +903,11 @@ cultural_hegemony.8 = {
 
 	duration = 3
 
+	fire_only_once = yes
+
 	trigger = {
 		has_journal_entry = je_cultural_hegemony
 		cultural_pull_total >= 10
-		NOT = { has_variable = ch_milestone_significant }
-	}
-
-	immediate = {
-		set_variable = ch_milestone_significant
 	}
 
 	option = {
@@ -953,27 +966,24 @@ cultural_hegemony.9 = {
 	# "The undisputed cultural center of the world": a 25% share alone can be
 	# held by up to four countries, so the event also needs this country to
 	# be the leaderboard's #1 (ch_rank_1, set by the monthly ranking pass).
-	# The latch is set in `immediate`, so a country at 25% but not #1 keeps
-	# the milestone open and the JE pulse re-offers it once it takes the lead.
+	# fire_only_once counts only a firing, not a try whose trigger fails, so a
+	# country at 25% but not #1 keeps the milestone open and the JE pulse
+	# re-offers it once it takes the lead.
+	fire_only_once = yes
+
 	trigger = {
 		has_journal_entry = je_cultural_hegemony
 		cultural_pull_total >= 25
 		has_global_variable = ch_rank_1
 		exists = global_var:ch_rank_1
 		THIS = global_var:ch_rank_1
-		NOT = { has_variable = ch_milestone_dominant }
-	}
-
-	immediate = {
-		set_variable = ch_milestone_dominant
 	}
 
 	option = {
 		name = cultural_hegemony.9.a
 		default_option = yes
 
-		# On the journal entry, as in .5 and .8: legacy_je_modifier_cleanup_effect
-		# strips a country-level ch_soft_power_dividend every month.
+		# On the journal entry, as in .5 and .8.
 		je:je_cultural_hegemony ?= { add_modifier = {
 				name = ch_soft_power_dividend
 				days = long_modifier_time
@@ -1316,7 +1326,7 @@ cultural_hegemony.14 = {
 		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total < 8
-		has_modifier = cultural_hegemony_foreign_benchmark
+		ch_trails_hegemon = yes
 		has_technology_researched = mass_media
 		any_country = {
 			NOT = { this = ROOT }
@@ -1473,7 +1483,6 @@ cultural_hegemony.14 = {
 # ============================================================================
 
 cultural_hegemony.15 = {
-	# REVIEWED 2026-09-25 (imputed_foreign_action): our reformers cite the hegemon's universities; the hegemon is not said to act
 	type = country_event
 	placement = root
 
@@ -1491,7 +1500,7 @@ cultural_hegemony.15 = {
 		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total < 10
-		has_modifier = cultural_hegemony_foreign_benchmark
+		ch_trails_hegemon = yes
 		has_technology_researched = mass_media
 		any_country = {
 			NOT = { this = ROOT }
@@ -1643,7 +1652,7 @@ cultural_hegemony.16 = {
 
 	trigger = {
 		has_journal_entry = je_cultural_hegemony
-		has_modifier = cultural_hegemony_foreign_benchmark
+		ch_trails_hegemon = yes
 		has_technology_researched = mass_media
 		has_global_variable = ch_top_cultural_pull
 		global_var:ch_top_cultural_pull >= 25
@@ -2031,7 +2040,7 @@ cultural_hegemony.17 = {
 	duration = 3
 	cooldown = { days = very_long_modifier_time }
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): te_debug_ch_stage_hegemon_event sets every condition before the call (console only)
 		has_journal_entry = je_cultural_hegemony
 		has_technology_researched = mass_media
 		exists = global_var:ch_rank_1
@@ -2154,10 +2163,10 @@ cultural_hegemony.18 = {
 	duration = 3
 	cooldown = { days = very_long_modifier_time }
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): te_debug_ch_stage_follower_events sets every condition before the call (console only)
 		has_journal_entry = je_cultural_hegemony
 		has_technology_researched = mass_media
-		has_modifier = cultural_hegemony_foreign_benchmark
+		ch_trails_hegemon = yes
 		has_variable = ch_total
 		var:ch_total < 10
 		exists = global_var:ch_rank_1
@@ -2266,7 +2275,7 @@ cultural_hegemony.19 = {
 	duration = 3
 	cooldown = { days = normal_modifier_time }
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: queued only for a country whose census is the leader's previous model just after the leader changed model; cancels if the change is undone within the fortnight
 		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_model_census
 		has_global_variable = ch_rank_1_ideology_prev
@@ -2346,7 +2355,7 @@ cultural_hegemony.20 = {
 	duration = 3
 	cooldown = { days = normal_modifier_time }
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: ch_domino_source is set just before the call, on a country whose census differs from the leader's model; cancels if it switches within the fortnight
 		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_domino_source
 		exists = var:ch_domino_source

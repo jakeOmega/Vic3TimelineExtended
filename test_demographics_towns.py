@@ -65,10 +65,11 @@ class GeneratorTest(unittest.TestCase):
         The ocean mine says port, which it keeps; a railway (no city_type) counts for the capital."""
         mines = _trigger_types(self.triggers, "te_demog_town_mine_work")
         vanilla = json.loads((ROOT / "vanilla_parsed" / "common" / "buildings.json").read_text(encoding="utf-8"))
-        for key in ("building_copper_mine", "building_lithium_mine", "building_rare_earth_metals_mine",
-                    "building_bauxite_mine"):
+        for key in ("building_lithium_mine", "building_rare_earth_metals_mine", "building_bauxite_mine"):
             self.assertNotIn(key, vanilla, "a mod mine")
             self.assertIn(key, mines)
+        # 1.15's own copper mine (city_type = mine) is a mine whichever definition the mod leaves standing.
+        self.assertIn("building_copper_mine", mines)
         self.assertIn("building_ocean_mine", _trigger_types(self.triggers, "te_demog_town_port_work"))
         listed = set(re.findall(r"is_building_type = (\w+)", self.triggers))
         self.assertNotIn("building_railway", listed)

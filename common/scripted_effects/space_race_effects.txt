@@ -1,7 +1,7 @@
 ﻿# Space Race Scripted Effects
 
 # Per-JE on_monthly_pulse body for the milestone progress tick. Country scope.
-# Drives 7 of the 8 milestone JEs (solar_colonization has a structurally
+# Drives 6 of the 7 milestone JEs (solar_colonization has a structurally
 # different progress loop and stays inline). The failure roll reads
 # sr_risk_pct_$MILESTONE$, the same script value the journal-entry widget shows
 # as "Setback risk" — there is no longer a sr_base_risk proxy variable and no
@@ -17,12 +17,17 @@
 #
 # Parameters:
 #   $MILESTONE$ — milestone token (suborbital, orbital, moon_landing, probe,
-#                 moon_base, mars_landing, interstellar_probe). Resolves the
+#                 mars_landing, interstellar_probe). Resolves the
 #                 sr_safe_/sr_ambitious_/sr_progress_/sr_failed_ variable
 #                 namespace and the sr_risk_pct_/sr_base_risk_ script values.
 sr_monthly_progress_update_effect = {
+	# Not with the rule switched off mid-game: the entry ends on its next update
+	# (its invalid outcome), and until then no roll or setback.
 	if = {
-		limit = { sr_ai_should_participate = yes }
+		limit = {
+			sr_space_race_on = yes
+			sr_ai_should_participate = yes
+		}
 		change_variable = { name = sr_progress_$MILESTONE$ add = sr_progress }
 		random = {
 			chance = sr_risk_pct_$MILESTONE$
@@ -41,85 +46,32 @@ sr_monthly_progress_update_effect = {
 	sr_set_milestone_status_base = { MILESTONE = $MILESTONE$ }
 }
 
-# Recalculate space program cost modifiers on each active JE
-# Called whenever funding/approach changes or a milestone completes
-sr_recalculate_cost = {
-	# Remove per-JE cost and funding progress modifiers from all JEs.
-	# ?= silently no-ops when the JE isn't currently active.
-	sr_clear_milestone_cost_modifiers_base = { MILESTONE = suborbital         }
-	sr_clear_milestone_cost_modifiers_base = { MILESTONE = orbital            }
-	sr_clear_milestone_cost_modifiers_base = { MILESTONE = moon_landing       }
-	sr_clear_milestone_cost_modifiers_base = { MILESTONE = probe              }
-	sr_clear_milestone_cost_modifiers_base = { MILESTONE = moon_base          }
-	sr_clear_milestone_cost_modifiers_base = { MILESTONE = mars_landing       }
-	sr_clear_milestone_cost_modifiers_base = { MILESTONE = interstellar_probe }
-	sr_clear_milestone_cost_modifiers_base = { MILESTONE = solar_colonization }
-	# Apply per-JE cost and funding progress modifiers for active milestones.
-	sr_apply_milestone_cost_modifiers_base = { MILESTONE = suborbital         }
-	sr_apply_milestone_cost_modifiers_base = { MILESTONE = orbital            }
-	sr_apply_milestone_cost_modifiers_base = { MILESTONE = moon_landing       }
-	sr_apply_milestone_cost_modifiers_base = { MILESTONE = probe              }
-	sr_apply_milestone_cost_modifiers_base = { MILESTONE = moon_base          }
-	sr_apply_milestone_cost_modifiers_base = { MILESTONE = mars_landing       }
-	sr_apply_milestone_cost_modifiers_base = { MILESTONE = interstellar_probe }
-	sr_apply_milestone_cost_modifiers_base = { MILESTONE = solar_colonization }
-	# The participation the approach costs above were computed with (sr_<m>_cost
-	# gates them on sr_ai_should_participate). space_race_on_action compares it
-	# with the live value each month and recalculates when it is stale.
-	if = {
-		limit = { sr_ai_should_participate = yes }
-		set_variable = { name = sr_cost_participation value = 1 } # REVIEWED 2026-09-26: a cache of live state (global ranking), re-derived on every call; nothing a revolution's winner could lose
-	}
-	else = {
-		set_variable = { name = sr_cost_participation value = 0 } # REVIEWED 2026-09-26: a cache of live state (global ranking), re-derived on every call; nothing a revolution's winner could lose
-	}
-	# The funding cap the pace multipliers above were computed with
-	# (sr_funding_<m>_effective reads sr_max_funding_level; lunar colonization
-	# design § 5.1). Technologies and a power bloc principle move the cap with
-	# no button press, so space_race_on_action recalculates when this is stale.
-	set_variable = { name = sr_cost_funding_cap value = sr_max_funding_level } # REVIEWED 2026-10-29: a cache of live state (the funding cap), re-derived on every call; nothing a revolution's winner could lose
-	# Whether solar colonization was billed (sr_milestone_billed_solar_colonization).
-	# Its production method can be switched off with no button press, so
-	# space_race_on_action recalculates when this is stale.
-	if = {
-		limit = { sr_milestone_billed_solar_colonization = yes }
-		set_variable = { name = sr_cost_solar_running value = 1 } # REVIEWED 2026-09-29: a cache of live state (the production method), re-derived on every call; nothing a revolution's winner could lose
-	}
-	else = {
-		set_variable = { name = sr_cost_solar_running value = 0 } # REVIEWED 2026-09-29: a cache of live state (the production method), re-derived on every call; nothing a revolution's winner could lose
-	}
-	# Refresh the widget's display state. This effect is the shared tail of every
-	# approach / funding button, every journal entry's `immediate`, milestone
-	# completion and the monthly cleanup, so the panel's status label reacts to a
-	# click instead of lagging a month. Status is derived from variables only
-	# (never from a modifier), so the add_modifier churn above cannot affect it.
-	sr_refresh_milestone_statuses = yes # REVIEWED 2026-09-26: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
-}
-
-# Re-derive every milestone's widget status (sr_<m>_last_status). The tail of
-# sr_recalculate_cost, and of the two mission-failure effects, whose options may
-# switch the approach — without this the panel showed the old state until the
-# next monthly pulse.
+# Re-derive every milestone's widget status (sr_<m>_last_status). The shared
+# tail of every approach and funding control, every milestone entry's
+# `immediate`, completion and the monthly cleanup, and of the two
+# mission-failure effects, whose options may switch the approach — without it
+# the panel showed the old state until the next monthly pulse. Status is
+# derived from variables only, never from a modifier. Until #1404 it was the
+# tail of sr_recalculate_cost, which re-posted each milestone's cost and
+# funding modifiers; its entry declares them now.
 sr_refresh_milestone_statuses = {
-	sr_set_milestone_status_base = { MILESTONE = suborbital         }
-	sr_set_milestone_status_base = { MILESTONE = orbital            }
-	sr_set_milestone_status_base = { MILESTONE = moon_landing       }
-	sr_set_milestone_status_base = { MILESTONE = probe              }
-	sr_set_milestone_status_base = { MILESTONE = moon_base          }
-	sr_set_milestone_status_base = { MILESTONE = mars_landing       }
-	sr_set_milestone_status_base = { MILESTONE = interstellar_probe }
-	sr_set_milestone_status_base = { MILESTONE = solar_colonization }
+	sr_set_milestone_status_base = { MILESTONE = suborbital         } # REVIEWED 2026-09-26: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
+	sr_set_milestone_status_base = { MILESTONE = orbital            } # REVIEWED 2026-09-26: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
+	sr_set_milestone_status_base = { MILESTONE = moon_landing       } # REVIEWED 2026-09-26: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
+	sr_set_milestone_status_base = { MILESTONE = probe              } # REVIEWED 2026-09-26: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
+	sr_set_milestone_status_base = { MILESTONE = mars_landing       } # REVIEWED 2026-09-26: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
+	sr_set_milestone_status_base = { MILESTONE = interstellar_probe } # REVIEWED 2026-09-26: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
+	sr_set_milestone_status_base = { MILESTONE = solar_colonization } # REVIEWED 2026-09-26: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
 }
 
 # Keeps live milestone state aligned with the JEs that own it.
 # This is permanent logic for intentionally deactivatable JEs, not a save-migration
-# cleanup (bar one marked old-save strip below).
+# cleanup.
 sr_cleanup_inactive_space_race_milestones = {
 	sr_cleanup_milestone_if_inactive_base = { MILESTONE = suborbital         }
 	sr_cleanup_milestone_if_inactive_base = { MILESTONE = orbital            }
 	sr_cleanup_milestone_if_inactive_base = { MILESTONE = moon_landing       }
 	sr_cleanup_milestone_if_inactive_base = { MILESTONE = probe              }
-	sr_cleanup_milestone_if_inactive_base = { MILESTONE = moon_base          }
 	sr_cleanup_milestone_if_inactive_base = { MILESTONE = mars_landing       }
 	sr_cleanup_milestone_if_inactive_base = { MILESTONE = interstellar_probe }
 	# Solar colonization's fleets staged in orbit wait for a deactivated
@@ -145,16 +97,10 @@ sr_cleanup_inactive_space_race_milestones = {
 			if = { limit = { has_variable = sr_interstellar_transit_progress } remove_variable = sr_interstellar_transit_progress }
 		}
 	}
-	# Old saves: sr_active_milestone was retired for sr_has_running_milestone
-	# (#480). Nothing reads it any more; strip what a save still carries.
-	if = {
-		limit = { has_variable = sr_active_milestone }
-		remove_variable = sr_active_milestone
-	}
 	if = {
 		limit = { has_variable = sr_space_race_cleanup_changed }
 		remove_variable = sr_space_race_cleanup_changed
-		sr_recalculate_cost = yes
+		sr_refresh_milestone_statuses = yes
 	}
 }
 
@@ -187,7 +133,6 @@ sr_temporary_safety_review_effect = {
 	sr_apply_safety_review_to_milestone_base = { MILESTONE = orbital            }
 	sr_apply_safety_review_to_milestone_base = { MILESTONE = moon_landing       }
 	sr_apply_safety_review_to_milestone_base = { MILESTONE = probe              }
-	sr_apply_safety_review_to_milestone_base = { MILESTONE = moon_base          }
 	sr_apply_safety_review_to_milestone_base = { MILESTONE = mars_landing       }
 	sr_apply_safety_review_to_milestone_base = { MILESTONE = interstellar_probe }
 	sr_apply_safety_review_to_milestone_base = { MILESTONE = solar_colonization }
@@ -204,7 +149,6 @@ sr_setback_lose_months = {
 	sr_setback_lose_months_base = { MILESTONE = orbital            MONTHS = $MONTHS$ }
 	sr_setback_lose_months_base = { MILESTONE = moon_landing       MONTHS = $MONTHS$ }
 	sr_setback_lose_months_base = { MILESTONE = probe              MONTHS = $MONTHS$ }
-	sr_setback_lose_months_base = { MILESTONE = moon_base          MONTHS = $MONTHS$ }
 	sr_setback_lose_months_base = { MILESTONE = mars_landing       MONTHS = $MONTHS$ }
 	sr_setback_lose_months_base = { MILESTONE = interstellar_probe MONTHS = $MONTHS$ }
 	sr_setback_lose_months_base = { MILESTONE = solar_colonization MONTHS = $MONTHS$ }
@@ -216,7 +160,6 @@ sr_clear_failed_milestone_flags = {
 	sr_clear_failed_flag_base = { MILESTONE = orbital            }
 	sr_clear_failed_flag_base = { MILESTONE = moon_landing       }
 	sr_clear_failed_flag_base = { MILESTONE = probe              }
-	sr_clear_failed_flag_base = { MILESTONE = moon_base          }
 	sr_clear_failed_flag_base = { MILESTONE = mars_landing       }
 	sr_clear_failed_flag_base = { MILESTONE = interstellar_probe }
 	sr_clear_failed_flag_base = { MILESTONE = solar_colonization }
@@ -232,7 +175,6 @@ sr_switch_setback_milestone_to_safe = {
 	sr_switch_setback_milestone_to_safe_base = { MILESTONE = orbital            }
 	sr_switch_setback_milestone_to_safe_base = { MILESTONE = moon_landing       }
 	sr_switch_setback_milestone_to_safe_base = { MILESTONE = probe              }
-	sr_switch_setback_milestone_to_safe_base = { MILESTONE = moon_base          }
 	sr_switch_setback_milestone_to_safe_base = { MILESTONE = mars_landing       }
 	sr_switch_setback_milestone_to_safe_base = { MILESTONE = interstellar_probe }
 	# Only while its controls are offered (sr_solar_controls_shown), so the event
@@ -251,7 +193,6 @@ sr_boost_active_milestones = {
 	sr_boost_active_milestone_base = { MILESTONE = orbital            MONTHS = $MONTHS$ }
 	sr_boost_active_milestone_base = { MILESTONE = moon_landing       MONTHS = $MONTHS$ }
 	sr_boost_active_milestone_base = { MILESTONE = probe              MONTHS = $MONTHS$ }
-	sr_boost_active_milestone_base = { MILESTONE = moon_base          MONTHS = $MONTHS$ }
 	sr_boost_active_milestone_base = { MILESTONE = mars_landing       MONTHS = $MONTHS$ }
 	sr_boost_active_milestone_base = { MILESTONE = interstellar_probe MONTHS = $MONTHS$ }
 	# Solar colonization's journal entry stays open, frozen, while its production
@@ -323,10 +264,11 @@ sr_lose_progress_months = {
 	}
 }
 
-# Called when a milestone is completed - handles cleanup
+# Called when a milestone is completed: the widget's statuses follow at once
+# (per-JE vars cleaned in the per-milestone effect). Its cost and funding
+# modifiers need nothing: the entry declares them, and it closes now.
 sr_complete_milestone_effect = {
-	# Recalculate JE cost modifiers (per-JE vars cleaned in per-milestone effect)
-	sr_recalculate_cost = yes
+	sr_refresh_milestone_statuses = yes
 }
 
 # Notify all countries about a space race milestone achievement
@@ -397,24 +339,6 @@ sr_take_milestone_notice_base = {
 	}
 }
 
-# Old-save migration: a receiver can still hold the single-variable format a
-# notification queued before the per-milestone lists wrote. Such a queued .20
-# fails its trigger and is dropped (its immediate never runs); the variables it
-# left behind are inert and are stripped here, by the next new-format
-# notification that reaches that receiver. Called from space_race_events.20's
-# immediate.
-sr_clear_legacy_milestone_notice = {
-	if = { limit = { has_variable = sr_notify_achiever_capital      } remove_variable = sr_notify_achiever_capital      }
-	if = { limit = { has_variable = sr_notify_is_first              } remove_variable = sr_notify_is_first              }
-	if = { limit = { has_variable = sr_notify_suborbital            } remove_variable = sr_notify_suborbital            }
-	if = { limit = { has_variable = sr_notify_orbital               } remove_variable = sr_notify_orbital               }
-	if = { limit = { has_variable = sr_notify_moon_landing          } remove_variable = sr_notify_moon_landing          }
-	if = { limit = { has_variable = sr_notify_probe                 } remove_variable = sr_notify_probe                 }
-	if = { limit = { has_variable = sr_notify_moon_base             } remove_variable = sr_notify_moon_base             }
-	if = { limit = { has_variable = sr_notify_mars_landing          } remove_variable = sr_notify_mars_landing          }
-	if = { limit = { has_variable = sr_notify_interstellar_probe    } remove_variable = sr_notify_interstellar_probe    }
-}
-
 # --- Per-milestone completion / reward / cleanup helpers ---------------------
 # Each milestone exposes three named entry points (sr_complete_<X>_effect,
 # sr_apply_<X>_reward, and the JE-driven sr_cleanup_milestone_variables_effect)
@@ -455,28 +379,58 @@ sr_apply_milestone_reward_base = {
 }
 
 # Used by JE on_fail blocks. Removes per-milestone variables (sr_active_X is
-# JE-only, so it appears here but not in the completion path) and reposts cost.
+# JE-only, so it appears here but not in the completion path) and refreshes the
+# widget's statuses.
+#
+# It also marks the milestone closed on a programme loss, naming the country,
+# for the re-entry pass's self-checks (sr_reentry_monthly): the pass brings the
+# milestone back once the programme can carry it again, since the engine never
+# re-activates a concluded entry. An add of the pass's that closes again before
+# the pass has judged it gives no verdict, so its mark goes here.
 sr_cleanup_milestone_variables_effect = {
+	save_temporary_scope_as = sr_closing_country
+	set_variable = { name = sr_closed_by_loss_$MILESTONE$ value = scope:sr_closing_country }
+	if = { limit = { has_variable = sr_reentry_added_$MILESTONE$ } remove_variable = sr_reentry_added_$MILESTONE$ }
 	if = { limit = { has_variable = sr_active_$MILESTONE$ } remove_variable = sr_active_$MILESTONE$ }
 	if = { limit = { has_variable = sr_progress_$MILESTONE$ } remove_variable = sr_progress_$MILESTONE$ }
 	if = { limit = { has_variable = sr_funding_$MILESTONE$ } remove_variable = sr_funding_$MILESTONE$ }
 	if = { limit = { has_variable = sr_safe_$MILESTONE$ } remove_variable = sr_safe_$MILESTONE$ }
 	if = { limit = { has_variable = sr_ambitious_$MILESTONE$ } remove_variable = sr_ambitious_$MILESTONE$ }
-	sr_recalculate_cost = yes
+	sr_refresh_milestone_statuses = yes
+}
+
+# Country scope. The Space Race rule switched off mid-game, from the screen that
+# changes country (2026-11-08): je_space_race_<m>'s invalid outcome. The
+# milestone's running variables go, as sr_cleanup_milestone_variables_effect
+# takes them, with its setback flag and any re-entry wait, but without the loss
+# mark (sr_closed_by_loss_<m>), which the re-entry self-checks read as a
+# programme lost, and without sr_report_program_loss's notice. Completion
+# records and rewards stay. sr_reentry_monthly adds the milestone back once the
+# rule is switched on again.
+sr_stop_for_rule_base = {
+	if = { limit = { has_variable = sr_reentry_added_$MILESTONE$ } remove_variable = sr_reentry_added_$MILESTONE$ }
+	if = { limit = { has_variable = sr_reentry_waiting_$MILESTONE$ } remove_variable = sr_reentry_waiting_$MILESTONE$ }
+	if = { limit = { has_variable = sr_active_$MILESTONE$ } remove_variable = sr_active_$MILESTONE$ }
+	if = { limit = { has_variable = sr_progress_$MILESTONE$ } remove_variable = sr_progress_$MILESTONE$ }
+	if = { limit = { has_variable = sr_funding_$MILESTONE$ } remove_variable = sr_funding_$MILESTONE$ }
+	if = { limit = { has_variable = sr_safe_$MILESTONE$ } remove_variable = sr_safe_$MILESTONE$ }
+	if = { limit = { has_variable = sr_ambitious_$MILESTONE$ } remove_variable = sr_ambitious_$MILESTONE$ }
+	if = { limit = { has_variable = sr_failed_$MILESTONE$ } remove_variable = sr_failed_$MILESTONE$ }
+	sr_refresh_milestone_statuses = yes
 }
 
 # --- Per-milestone iteration bases (Style B inline orchestrator pattern) -----
 # The top-level helpers (sr_temporary_safety_review_effect,
 # sr_setback_lose_months, sr_clear_failed_milestone_flags,
 # sr_switch_setback_milestone_to_safe, sr_boost_active_milestones) all walk the
-# same 8 milestones (suborbital..solar_colonization). Each delegates to one of
+# same 7 milestones (suborbital..solar_colonization). Each delegates to one of
 # these bases and the orchestrator lists the tokens explicitly so the support
 # matrix stays grep-able at the call site.
 
 # Apply a temporary safety review modifier to the JE owning the failed milestone
 # (scope:sr_setback_$MILESTONE$ — see "The setback a failure event reports"
 # above), and clear that milestone's failure flag. Country scope. Caller
-# iterates the standard 8 milestone tokens.
+# iterates the standard 7 milestone tokens.
 sr_apply_safety_review_to_milestone_base = {
 	if = {
 		limit = { exists = scope:sr_setback_$MILESTONE$ }
@@ -535,7 +489,6 @@ sr_resolve_setback_markers = {
 		sr_resolve_setback_marker_base = { MILESTONE = orbital            }
 		sr_resolve_setback_marker_base = { MILESTONE = moon_landing       }
 		sr_resolve_setback_marker_base = { MILESTONE = probe              }
-		sr_resolve_setback_marker_base = { MILESTONE = moon_base          }
 		sr_resolve_setback_marker_base = { MILESTONE = mars_landing       }
 		sr_resolve_setback_marker_base = { MILESTONE = interstellar_probe }
 		sr_resolve_setback_marker_base = { MILESTONE = solar_colonization }
@@ -558,47 +511,9 @@ sr_boost_active_milestone_base = {
 	}
 }
 
-# Strip the cost and the two funding modifiers (pace and throughput) from one
-# milestone's JE. Country scope. Uses ?= so an inactive JE silently no-ops
-# instead of erroring. sr_recalculate_cost runs it on every entry before
-# sr_apply_milestone_cost_modifiers_base, so each modifier is removed before it
-# is added again (a same-name add_modifier stacks).
-sr_clear_milestone_cost_modifiers_base = {
-	je:je_space_race_$MILESTONE$ ?= {
-		if = { limit = { has_modifier = sr_space_program_cost } remove_modifier = sr_space_program_cost }
-		if = { limit = { has_modifier = sr_funding_progress   } remove_modifier = sr_funding_progress   }
-		if = { limit = { has_modifier = sr_funding_throughput } remove_modifier = sr_funding_throughput }
-	}
-}
-
-# Re-apply the cost and the two funding modifiers to one milestone's JE,
-# gated on sr_milestone_billed_<X> (the active flag; for solar colonization,
-# its programme actually running). The pace (sr_funding_progress) takes the
-# effective level, which counts the levels past the cap for less; the
-# throughput (sr_funding_throughput) and the cost take the level itself, so a
-# level past the cap still costs in full and adds its full +25% (lunar
-# colonization design § 5.1). Multiplier names interpolate from $MILESTONE$
-# (sr_<X>_cost, sr_funding_<X>_effective and sr_funding_<X>_level — verified to
-# exist for all 8 tokens). Country scope. ?= because each milestone entry's immediate
-# sets sr_active_<X> and then runs sr_recalculate_cost, and when a
-# revolution's winner inherits the entry that immediate runs before je: can
-# find it ("Failed to scope to journal entry by tag", Spain's moon landing in
-# the 2026-10-10 observer run). The monthly pulse then puts them back
-# (sr_cost_modifiers_missing, space_race_on_actions.txt).
-sr_apply_milestone_cost_modifiers_base = {
-	if = {
-		limit = { sr_milestone_billed_$MILESTONE$ = yes }
-		je:je_space_race_$MILESTONE$ ?= {
-			add_modifier = { name = sr_space_program_cost multiplier = sr_$MILESTONE$_cost              }
-			add_modifier = { name = sr_funding_progress   multiplier = sr_funding_$MILESTONE$_effective }
-			add_modifier = { name = sr_funding_throughput multiplier = sr_funding_$MILESTONE$_level     }
-		}
-	}
-}
-
 # When a milestone JE is no longer active, clear its 5-var family (active /
 # progress / funding / safe / ambitious) and flag a cleanup-changed signal so
-# the orchestrator runs sr_recalculate_cost once at the end. Country scope.
+# the orchestrator runs sr_refresh_milestone_statuses once at the end. Country scope.
 # interstellar_results does NOT use this base — it has only 2 vars (handled
 # inline in sr_cleanup_inactive_space_race_milestones).
 sr_cleanup_milestone_if_inactive_base = {
@@ -627,7 +542,7 @@ sr_cleanup_milestone_if_inactive_base = {
 		}
 		# The rivals estimate (display only; sr_rivals_estimate_refresh): this
 		# country's offset as a rival, and its own snapshot as a viewer. Outside
-		# the block above, so it never asks for a cost recalculation.
+		# the block above, so it never asks for a status refresh.
 		if = { limit = { has_variable = sr_fuzz_$MILESTONE$       } remove_variable = sr_fuzz_$MILESTONE$       }
 		if = { limit = { has_variable = sr_fuzz_until_$MILESTONE$ } remove_variable = sr_fuzz_until_$MILESTONE$ }
 		sr_clear_rival_slots = { MILESTONE = $MILESTONE$ }
@@ -636,9 +551,9 @@ sr_cleanup_milestone_if_inactive_base = {
 
 # --- Shared bodies for the milestone controls --------------------------------
 # The five things a player can do to a running milestone, four of them also the
-# AI's. Each of the 32 journal-entry buttons and each op on that milestone's
+# AI's. Each of the 28 journal-entry buttons and each op on that milestone's
 # scripted GUI runs the body from here, so the two surfaces cannot drift apart.
-# $MILESTONE$ is one of the eight milestone tokens. Standard is the player's
+# $MILESTONE$ is one of the seven milestone tokens. Standard is the player's
 # only (op 4 on the scripted GUI): the AI never had a way back from an approach,
 # and starts on Standard like everyone.
 #
@@ -646,6 +561,13 @@ sr_cleanup_milestone_if_inactive_base = {
 # ExecuteTooltip both render, so they belong here rather than at the call sites.
 # Each approach body ends with its cost line (sr_approach_cost_*_<m>, the weekly
 # innovation from sr_disp_cost_*_<m>), outside the wrapper so it prints.
+#
+# The bodies set variables only. The milestone's entry declares its approach,
+# cost and funding modifiers from them (scaling_modifiers_while_active,
+# je_space_race.txt; #1404), so a change reaches the modifiers on the entry's
+# next update, 2 to 5 days later, while the panel's own figures, which read
+# the variables, move at once. The wrappers' text names the change
+# (SR_*_APPROACH_EFFECT prints the approach modifier's description).
 
 sr_effect_safe = {
 	custom_tooltip = {
@@ -655,11 +577,7 @@ sr_effect_safe = {
 			limit = { has_variable = sr_ambitious_$MILESTONE$ }
 			remove_variable = sr_ambitious_$MILESTONE$
 		}
-		je:je_space_race_$MILESTONE$ = {
-			remove_modifier = sr_ambitious_approach
-			add_modifier = sr_safe_approach
-		}
-		sr_recalculate_cost = yes
+		sr_refresh_milestone_statuses = yes
 	}
 	custom_tooltip = sr_approach_cost_safe_$MILESTONE$
 }
@@ -672,11 +590,7 @@ sr_effect_ambitious = {
 			limit = { has_variable = sr_safe_$MILESTONE$ }
 			remove_variable = sr_safe_$MILESTONE$
 		}
-		je:je_space_race_$MILESTONE$ = {
-			remove_modifier = sr_safe_approach
-			add_modifier = sr_ambitious_approach
-		}
-		sr_recalculate_cost = yes
+		sr_refresh_milestone_statuses = yes
 	}
 	custom_tooltip = sr_approach_cost_ambitious_$MILESTONE$
 }
@@ -692,11 +606,7 @@ sr_effect_standard = {
 			limit = { has_variable = sr_ambitious_$MILESTONE$ }
 			remove_variable = sr_ambitious_$MILESTONE$
 		}
-		je:je_space_race_$MILESTONE$ = {
-			remove_modifier = sr_safe_approach
-			remove_modifier = sr_ambitious_approach
-		}
-		sr_recalculate_cost = yes
+		sr_refresh_milestone_statuses = yes
 	}
 	custom_tooltip = SR_APPROACH_COST_STANDARD
 }
@@ -705,7 +615,7 @@ sr_effect_fund_up = {
 	custom_tooltip = {
 		text = "SR_INCREASE_FUNDING_EFFECT"
 		change_variable = { name = sr_funding_$MILESTONE$ add = 1 }
-		sr_recalculate_cost = yes
+		sr_refresh_milestone_statuses = yes
 	}
 	# The next level is past the cap: say what share of a level's pace it adds
 	# (lunar colonization design § 5.1). Tooltip lines only; each renders
@@ -749,7 +659,7 @@ sr_effect_fund_down = {
 	custom_tooltip = {
 		text = "SR_DECREASE_FUNDING_EFFECT"
 		change_variable = { name = sr_funding_$MILESTONE$ subtract = 1 }
-		sr_recalculate_cost = yes
+		sr_refresh_milestone_statuses = yes
 	}
 }
 
@@ -760,9 +670,9 @@ sr_effect_fund_down = {
 
 # The one derivation site for sr_<MILESTONE>_last_status, the integer the widget
 # and the profile custom loc branch on. Country scope. Called from two places:
-# sr_refresh_milestone_statuses (the tail of sr_recalculate_cost — every button,
-# every journal entry's `immediate`, completion and cleanup — and of the two
-# mission-failure effects) and the tail of the monthly progress pulse.
+# sr_refresh_milestone_statuses (the tail of every button, every journal
+# entry's `immediate`, completion and cleanup, and of the two mission-failure
+# effects) and the tail of the monthly progress pulse.
 #
 #   (no variable)  the milestone is not running — the panel shows it as Idle
 #   0              standard approach (neither variable)
@@ -770,12 +680,11 @@ sr_effect_fund_down = {
 #   2              ambitious approach
 #
 # States 3 to 5 ("shielded", inside the post-setback cooldown) went with the
-# cooldown on 2026-10-31; the monthly country pulse re-derives an old save's
-# (space_race_on_actions.txt, its cooldown strip).
+# cooldown on 2026-10-31.
 # Deliberately no "programme incompatible" state — that is the journal entry's
 # own `fail` block, which already explains itself through
 # sr_space_program_incompatible_tt, and it would need a second parameter because
-# the eight milestones gate on five different country_sr_*_program_bool modifiers.
+# the milestones gate on different country_sr_*_program_bool modifiers.
 sr_set_milestone_status_base = {
 	if = {
 		limit = { NOT = { has_variable = sr_active_$MILESTONE$ } }
@@ -829,7 +738,6 @@ sr_complete_suborbital_effect       = { sr_complete_milestone_effect_base = { MI
 sr_complete_orbital_effect          = { sr_complete_milestone_effect_base = { MILESTONE = orbital          } }
 sr_complete_moon_landing_effect     = { sr_complete_milestone_effect_base = { MILESTONE = moon_landing     } }
 sr_complete_probe_effect            = { sr_complete_milestone_effect_base = { MILESTONE = probe            } }
-sr_complete_moon_base_effect        = { sr_complete_milestone_effect_base = { MILESTONE = moon_base        } }
 sr_complete_mars_landing_effect     = { sr_complete_milestone_effect_base = { MILESTONE = mars_landing     } }
 
 # Interstellar probe is the same shape but additionally raises the
@@ -851,17 +759,18 @@ sr_apply_interstellar_probe_reward = { sr_apply_milestone_reward_base = { MILEST
 # The Moon Base milestone is retired (§ 7): the first lunar world a country
 # founds with its own fleet takes its place in the race. Called by each lunar
 # world's sr_site_found_<key> and lunar draw branch (gen_solar_sites.py), after
-# the world's sync, so a world received by treaty, inheritance, seizure, a
-# petition or the old-save migration (sr_lunar_migrate_take_<key>) never counts.
+# the world's sync, so a world received by treaty, inheritance, seizure or a
+# petition never counts.
 # The record keeps the Moon Base's names, so every reader of
 # sr_completed_moon_base, sr_was_first_moon_base and sr_global_first_moon_base
 # (the Program row, Space Powers, the UN count, covert "ahead in space", the
 # Grand Monument) works unchanged. The bookkeeping is
-# sr_complete_milestone_effect_base's without its sr_recalculate_cost: this runs
-# inside the colonization pulse, where a second cost repost would stack the
-# cost modifier (add/remove are not visible within one effect). The reward is
-# paid by space_race_events.6's option, which plays the day after the founding
-# event. Country scope: the founder.
+# sr_complete_milestone_effect_base's record and notice, without its tail
+# (sr_complete_milestone_effect): this runs inside the colonization pulse,
+# whose programme goes on. Until #1404 that tail re-posted the cost, which
+# there stacked the cost modifier. The reward is paid by space_race_events.6's
+# option, which plays the day after the founding event. Country scope: the
+# founder.
 sr_lunar_colony_founded = {
 	if = {
 		limit = { NOT = { has_variable = sr_completed_moon_base } }
@@ -931,13 +840,14 @@ sr_fire_ambitious_failure_event = {
 			}
 			trigger_event = { id = space_race_events.12 }
 		}
-		# Deep Space Signal Lost (probe/interstellar). Same gate as the event's
-		# own trigger, so the roll can never pick an event that then refuses to fire.
+		# Deep Space Signal Lost (the Deep-Space Probe; not the interstellar
+		# probe, which is still on the pad). Same gate as the event's own
+		# trigger, so the roll can never pick an event that then refuses to fire.
 		10 = {
 			trigger = { sr_setback_is_deep_space_probe = yes }
 			trigger_event = { id = space_race_events.13 }
 		}
-		# Habitat Depressurization (moon base/mars/colonization)
+		# Habitat Depressurization (mars/colonization)
 		10 = {
 			trigger = { sr_setback_is_crewed_outpost = yes }
 			trigger_event = { id = space_race_events.14 }
@@ -956,7 +866,7 @@ sr_fire_ambitious_failure_event = {
 			}
 			trigger_event = { id = space_race_events.16 }
 		}
-		# Crew Medical Emergency (moon base/mars/colonization)
+		# Crew Medical Emergency (mars/colonization)
 		10 = {
 			trigger = { sr_setback_is_crewed_outpost = yes }
 			trigger_event = { id = space_race_events.17 }
@@ -984,7 +894,7 @@ sr_fire_ambitious_failure_event = {
 		10 = {
 			trigger_event = { id = space_race_events.70 }
 		}
-		# Capsule Depressurization (moon base/mars/colonization)
+		# Capsule Depressurization (mars/colonization)
 		10 = {
 			trigger = { sr_setback_is_crewed_outpost = yes }
 			trigger_event = { id = space_race_events.71 }
@@ -1098,7 +1008,6 @@ sr_rivals_estimate_refresh = {
 	sr_rivals_estimate_refresh_base = { MILESTONE = orbital            }
 	sr_rivals_estimate_refresh_base = { MILESTONE = moon_landing       }
 	sr_rivals_estimate_refresh_base = { MILESTONE = probe              }
-	sr_rivals_estimate_refresh_base = { MILESTONE = moon_base          }
 	sr_rivals_estimate_refresh_base = { MILESTONE = mars_landing       }
 	sr_rivals_estimate_refresh_base = { MILESTONE = interstellar_probe }
 	sr_rivals_estimate_refresh_base = { MILESTONE = solar_colonization }
@@ -1176,23 +1085,14 @@ sr_own_fuzz_refresh = {
 	sr_power_fuzz_base = { MILESTONE = orbital            }
 	sr_power_fuzz_base = { MILESTONE = moon_landing       }
 	sr_power_fuzz_base = { MILESTONE = probe              }
-	sr_power_fuzz_base = { MILESTONE = moon_base          }
 	sr_power_fuzz_base = { MILESTONE = mars_landing       }
 	sr_power_fuzz_base = { MILESTONE = interstellar_probe }
 	sr_power_fuzz_base = { MILESTONE = solar_colonization }
 }
 
-# The viewer's snapshot for a milestone: the list, and the five slots and the
-# count that held it before audit SPC-9 (2026-10-27), so an older save drops
-# them at its first refresh. Scope: the viewer.
+# The viewer's snapshot for a milestone: the list. Scope: the viewer.
 sr_clear_rival_slots = {
 	if = { limit = { has_variable_list = sr_rivals_list_$MILESTONE$ } clear_variable_list = sr_rivals_list_$MILESTONE$ }
-	if = { limit = { has_variable = sr_rival_total_$MILESTONE$ } remove_variable = sr_rival_total_$MILESTONE$ }
-	if = { limit = { has_variable = sr_rival_$MILESTONE$_1 } remove_variable = sr_rival_$MILESTONE$_1 }
-	if = { limit = { has_variable = sr_rival_$MILESTONE$_2 } remove_variable = sr_rival_$MILESTONE$_2 }
-	if = { limit = { has_variable = sr_rival_$MILESTONE$_3 } remove_variable = sr_rival_$MILESTONE$_3 }
-	if = { limit = { has_variable = sr_rival_$MILESTONE$_4 } remove_variable = sr_rival_$MILESTONE$_4 }
-	if = { limit = { has_variable = sr_rival_$MILESTONE$_5 } remove_variable = sr_rival_$MILESTONE$_5 }
 }
 
 # --- Display-only: the Space Powers standings --------------------------------
@@ -1228,7 +1128,6 @@ sr_powers_refresh = {
 		sr_power_fuzz_base = { MILESTONE = orbital            }
 		sr_power_fuzz_base = { MILESTONE = moon_landing       }
 		sr_power_fuzz_base = { MILESTONE = probe              }
-		sr_power_fuzz_base = { MILESTONE = moon_base          }
 		sr_power_fuzz_base = { MILESTONE = mars_landing       }
 		sr_power_fuzz_base = { MILESTONE = interstellar_probe }
 		sr_power_fuzz_base = { MILESTONE = solar_colonization }
@@ -1326,21 +1225,11 @@ sr_power_fuzz_first = {
 	}
 }
 
-# The snapshot: the list and the count, and the eight slots that held it
-# before audit SPC-9 (2026-10-27), so an older save drops them at its first
-# refresh. From the refresh, and for a country that no longer views it (no
-# longer played). Scope: the country.
+# The snapshot: the list and the count. From the refresh, and for a country
+# that no longer views it (no longer played). Scope: the country.
 sr_powers_clear = {
 	if = { limit = { has_variable_list = sr_powers_list } clear_variable_list = sr_powers_list }
 	if = { limit = { has_variable = sr_power_total } remove_variable = sr_power_total }
-	if = { limit = { has_variable = sr_power_1 } remove_variable = sr_power_1 }
-	if = { limit = { has_variable = sr_power_2 } remove_variable = sr_power_2 }
-	if = { limit = { has_variable = sr_power_3 } remove_variable = sr_power_3 }
-	if = { limit = { has_variable = sr_power_4 } remove_variable = sr_power_4 }
-	if = { limit = { has_variable = sr_power_5 } remove_variable = sr_power_5 }
-	if = { limit = { has_variable = sr_power_6 } remove_variable = sr_power_6 }
-	if = { limit = { has_variable = sr_power_7 } remove_variable = sr_power_7 }
-	if = { limit = { has_variable = sr_power_8 } remove_variable = sr_power_8 }
 }
 
 # --- A launch complex that can no longer carry a milestone -------------------
@@ -1353,7 +1242,7 @@ sr_powers_clear = {
 # on_fail used to fire its own identical space_race_events.76. Each on_fail now
 # records its milestone, and only the first one queues the report — five days
 # out, so every journal entry failing over the same change has recorded itself
-# by the time it fires. Country scope. Called from the eight on_fail blocks.
+# by the time it fires. Country scope. Called from the seven on_fail blocks.
 sr_report_program_loss = {
 	set_variable = { name = sr_program_lost_$MILESTONE$ value = yes }
 	if = {
@@ -1380,11 +1269,182 @@ sr_take_program_losses = {
 	sr_take_program_loss_base = { MILESTONE = orbital            }
 	sr_take_program_loss_base = { MILESTONE = moon_landing       }
 	sr_take_program_loss_base = { MILESTONE = probe              }
-	sr_take_program_loss_base = { MILESTONE = moon_base          }
 	sr_take_program_loss_base = { MILESTONE = mars_landing       }
 	sr_take_program_loss_base = { MILESTONE = interstellar_probe }
 	sr_take_program_loss_base = { MILESTONE = solar_colonization }
 	if = { limit = { has_variable = sr_program_loss_report_queued } remove_variable = sr_program_loss_report_queued }
+}
+
+# --- A milestone starting again after a programme loss (2026-11-06) --------
+# A milestone's failure outcome (the launch complex can no longer carry it: a
+# lowered method, a lost building) concludes its journal entry. The engine
+# deletes a concluded record three days later and never activates the type
+# again (docs/guides/scripting_best_practices.md, "A finished record is
+# deleted": the Colonial Empire's 1910 save), and nothing else adds a
+# milestone back, so a refit ended the milestone for good. This pass gives it
+# back once the programme can carry it again, from zero: the progress lost at
+# the failure stays lost (owner, 2026-11-06), as .76 and the setback tooltips
+# say. Monthly, for every country while the race is on, players and AI alike,
+# from space_race_on_action after the inactive-milestone cleanup. Per
+# milestone (sr_reentry_milestone):
+#
+#   1. The self-check of last month's add, before anything is added this month
+#      (sr_reentry_added_<m>, naming the country it was set on):
+#        TE_SELF_CHECK OK sr_reentry      the entry the pass added is running
+#        TE_SELF_CHECK BROKEN sr_reentry  it is not, though the country is
+#                                         still due it
+#      Judged only for a country whose milestone closed on a programme loss
+#      (sr_closed_by_loss_<m> naming it, set by the failure cleanup), which is
+#      the question the check is for: does add_journal_entry bring back a type
+#      the country has finished? An add to a country without the mark (a save
+#      from before this change, whose milestone may have closed then) is made
+#      and not judged, and so is one whose entry closed again within the
+#      month (the failure cleanup drops the add's mark). A country no longer
+#      due gives no verdict. Once a game for each verdict: an AI may refit
+#      often.
+#   2. The bug's own check, once a game for each verdict:
+#        TE_SELF_CHECK OK sr_closed_record      at an add to a country with
+#                                               the mark (step 3): due for a
+#                                               whole month, with no record of
+#                                               the milestone at all
+#        TE_SELF_CHECK BROKEN sr_closed_record  a milestone with the mark is
+#                                               running again and the pass did
+#                                               not add it: the engine brought
+#                                               it back, and the pass is idle
+#                                               there (its record tests)
+#      "Running" is the entry active with sr_active_<m> set, which its
+#      immediate sets and the failure cleanup removed, so a concluded record
+#      not yet deleted (the three days) never reads as running.
+#   3. A whole month first. The first pass that finds the country due marks it
+#      (sr_reentry_waiting_<m>, naming the country), and the next adds the
+#      entry. The engine updates inactive records every
+#      JOURNAL_ENTRY_UPDATE_INACTIVE = 14 days, so the month takes in at least
+#      two of its updates and the pass never races its activation of a record
+#      that still exists (the due trigger's record tests stop the add while
+#      one does). The mark goes when the country stops being due. Marks name
+#      the country because a revolution's winner inherits the loser's
+#      variables: a mark naming the dead loser is not the winner's.
+#
+# The added entry's immediate starts the milestone afresh (progress 0, funding
+# 1, Standard: the failure cleanup removed them) and keeps a choice already
+# made (sr_<m>_choice_made). A revolution's winner holds fresh records, so its
+# closed marks are dropped (sr_reentry_after_civil_war).
+#
+# If BROKEN sr_reentry reads, add_journal_entry cannot bring back a finished
+# type. The fallback: the milestones stop concluding on a programme loss. Drop
+# the failure outcome, so the entry deactivates instead (can_deactivate = yes,
+# and its possible requires the method) and keeps its record, which the
+# engine re-activates itself; report the loss from the monthly cleanup
+# (docs/testing/space-race-playtest.md, Self-checks).
+# Scope: country. From space_race_on_action (space_race_on_actions.txt).
+sr_reentry_monthly = {
+	save_scope_as = sr_reentry_country
+	sr_reentry_milestone = { MILESTONE = suborbital         }
+	sr_reentry_milestone = { MILESTONE = orbital            }
+	sr_reentry_milestone = { MILESTONE = moon_landing       }
+	sr_reentry_milestone = { MILESTONE = probe              }
+	sr_reentry_milestone = { MILESTONE = mars_landing       }
+	sr_reentry_milestone = { MILESTONE = interstellar_probe }
+	sr_reentry_milestone = { MILESTONE = solar_colonization }
+}
+
+# sr_reentry_monthly's body for one milestone. Country scope, with
+# scope:sr_reentry_country the country itself.
+sr_reentry_milestone = {
+	# 1. Did last month's add take? Read before step 3 can add again.
+	if = {
+		limit = { has_variable = sr_reentry_added_$MILESTONE$ }
+		if = {
+			limit = {
+				var:sr_reentry_added_$MILESTONE$ ?= scope:sr_reentry_country
+				var:sr_closed_by_loss_$MILESTONE$ ?= scope:sr_reentry_country
+			}
+			if = {
+				limit = {
+					has_journal_entry = je_space_race_$MILESTONE$
+					has_variable = sr_active_$MILESTONE$
+				}
+				if = {
+					limit = { NOT = { has_global_variable = sr_reentry_ok_logged } }
+					set_global_variable = { name = sr_reentry_ok_logged value = yes }
+					debug_log = "TE_SELF_CHECK OK sr_reentry milestone=$MILESTONE$ country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString] (the re-entry pass added je_space_race_$MILESTONE$ last month to a country whose milestone had closed on a programme loss, and it is running: add_journal_entry brings back a type the country has finished)"
+				}
+				# It is back: the mark has done its work.
+				remove_variable = sr_closed_by_loss_$MILESTONE$
+			}
+			else_if = {
+				limit = { sr_reentry_due_$MILESTONE$ = yes }
+				if = {
+					limit = { NOT = { has_global_variable = sr_reentry_broken_logged } }
+					set_global_variable = { name = sr_reentry_broken_logged value = yes }
+					debug_log = "TE_SELF_CHECK BROKEN sr_reentry milestone=$MILESTONE$ country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString] (the re-entry pass added je_space_race_$MILESTONE$ last month to a country whose milestone had closed on a programme loss; it is still due the milestone but holds no record of it: add_journal_entry does not bring back a type the country has finished; take the fallback in docs/testing/space-race-playtest.md)"
+				}
+			}
+		}
+		remove_variable = sr_reentry_added_$MILESTONE$
+	}
+	# 2. Back without the pass: the engine re-activated a closed milestone.
+	else_if = {
+		limit = {
+			var:sr_closed_by_loss_$MILESTONE$ ?= scope:sr_reentry_country
+			has_journal_entry = je_space_race_$MILESTONE$
+			has_variable = sr_active_$MILESTONE$
+		}
+		if = {
+			limit = { NOT = { has_global_variable = sr_closed_record_broken_logged } }
+			set_global_variable = { name = sr_closed_record_broken_logged value = yes }
+			debug_log = "TE_SELF_CHECK BROKEN sr_closed_record milestone=$MILESTONE$ country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString] (je_space_race_$MILESTONE$ closed on a programme loss and is running again, and the re-entry pass did not add it: the engine brings a concluded milestone back by itself, so the pass is idle; correct scripting_best_practices.md's 'A finished record is deleted')"
+		}
+		remove_variable = sr_closed_by_loss_$MILESTONE$
+	}
+
+	# 3. Due for a whole month: add the entry.
+	if = {
+		limit = { sr_reentry_due_$MILESTONE$ = yes }
+		if = {
+			limit = { var:sr_reentry_waiting_$MILESTONE$ ?= scope:sr_reentry_country }
+			remove_variable = sr_reentry_waiting_$MILESTONE$
+			if = {
+				limit = {
+					var:sr_closed_by_loss_$MILESTONE$ ?= scope:sr_reentry_country
+					NOT = { has_global_variable = sr_closed_record_ok_logged }
+				}
+				set_global_variable = { name = sr_closed_record_ok_logged value = yes }
+				debug_log = "TE_SELF_CHECK OK sr_closed_record milestone=$MILESTONE$ country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString] (je_space_race_$MILESTONE$ closed on a programme loss; the programme has been able to carry it for a whole month and the country holds no record of it, active or inactive: the engine does not bring a concluded milestone back, so the re-entry pass adds it now)"
+			}
+			add_journal_entry = { type = je_space_race_$MILESTONE$ } # REVIEWED 2026-11-06 (add_journal_entry): the re-entry after a programme loss concluded the entry; guarded, through the parameter the test cannot follow, by sr_reentry_due_<m>'s NOT = { has_inactive_journal_entry = je_space_race_<m> } (test_space_race_reentry.py pins it in all seven)
+			set_variable = { name = sr_reentry_added_$MILESTONE$ value = scope:sr_reentry_country }
+		}
+		else = {
+			set_variable = { name = sr_reentry_waiting_$MILESTONE$ value = scope:sr_reentry_country }
+		}
+	}
+	else_if = {
+		limit = { has_variable = sr_reentry_waiting_$MILESTONE$ }
+		remove_variable = sr_reentry_waiting_$MILESTONE$
+	}
+}
+
+# A revolution's winner holds fresh records of every milestone, so a milestone
+# it closed before the war can come back to it by itself: drop the closed
+# marks, which would read that as BROKEN sr_closed_record. Only self-check
+# state: the milestones themselves don't read the marks. Country scope: the
+# winner, from sr_repair_after_civil_war.
+sr_reentry_after_civil_war = {
+	sr_reentry_forget_closure = { MILESTONE = suborbital         }
+	sr_reentry_forget_closure = { MILESTONE = orbital            }
+	sr_reentry_forget_closure = { MILESTONE = moon_landing       }
+	sr_reentry_forget_closure = { MILESTONE = probe              }
+	sr_reentry_forget_closure = { MILESTONE = mars_landing       }
+	sr_reentry_forget_closure = { MILESTONE = interstellar_probe }
+	sr_reentry_forget_closure = { MILESTONE = solar_colonization }
+}
+
+sr_reentry_forget_closure = {
+	if = {
+		limit = { has_variable = sr_closed_by_loss_$MILESTONE$ }
+		remove_variable = sr_closed_by_loss_$MILESTONE$
+	}
 }
 
 # --- Interstellar probe results describe one shared universe -----------------
@@ -1418,34 +1478,25 @@ sr_record_probe_result = {
 #   - sr_first_<m> / sr_<m> (country): from sr_completed_<m> and
 #     sr_was_first_<m>, by sr_restore_milestone_rewards.
 #   - sr_probe_*_data (country): from <modifier>_held, by sr_sync_probe_data.
-#   - sr_safe_approach / sr_ambitious_approach (entry): from sr_safe_<m> /
-#     sr_ambitious_<m>, by sr_sync_<m>_entry.
-#   - sr_choice_* (entry): from the choice variable (sr_orbital_military, ...),
-#     by sr_sync_<m>_entry.
-#   - sr_colony_* (solar colonization entry): from <modifier>_held, by
-#     sr_sync_solar_colonization_entry.
-#   - sr_solar_system_trade (solar colonization entry): from
-#     sr_completed_solar_colonization, by sr_sync_solar_colonization_entry.
+#   - sr_safe_approach / sr_ambitious_approach, sr_choice_* and
+#     sr_space_program_cost / sr_funding_progress / sr_funding_throughput
+#     (entry): nothing to rebuild. Each milestone's entry declares them
+#     (scaling_modifiers_while_active, je_space_race.txt; #1404) from the
+#     approach, choice and funding variables the winner inherits.
+#   - sr_colony_* and sr_discovery_* (solar colonization entry): declared
+#     while <modifier>_held is set, and sr_solar_system_trade while
+#     sr_completed_solar_colonization is (1.15 scaling_modifiers_while_active,
+#     #1404): nothing to rebuild, the winner inherits the variables.
 #   - sr_commercial_space_dividend (country): from the variables
 #     sr_space_race_concluded reads, by sr_refresh_space_dividend, which
 #     re-applies it every month anyway (end of this file).
-#   - sr_space_program_cost / sr_funding_progress / sr_funding_throughput
-#     (entry): from sr_funding_<m>
-#     and the approach variables, by sr_recalculate_cost, which every
-#     `immediate` runs and the monthly pulse runs when an entry lacks one
-#     (sr_cost_modifiers_missing). The `immediate` alone was not enough: an
-#     inherited entry's `immediate` could not find its own entry by `je:`
-#     (Spain's moon landing, 2026-10-10 observer run).
 #
 # Country modifiers come back in sr_repair_after_civil_war, which the shared
 # civil-war hook runs for the winner (te_civil_war_on_won in
-# common/on_actions/te_civil_war_on_actions.txt). Journal-entry modifiers do
-# not: whether on_civil_war_won runs before or after an inherited entry's
-# `immediate` is unknown. Each entry's own `immediate` rebuilds them, and the
-# monthly country pulse (sr_sync_space_race_entries) is the backstop. Every
-# step puts back only what a record says is missing (the one removal, of a
-# stale approach modifier, is not about revolutions), so a loyalist winner,
-# which still holds its modifiers, sees no change.
+# common/on_actions/te_civil_war_on_actions.txt). Journal-entry modifiers need
+# nothing: every one the space race keeps on an entry is declared there
+# (#1404). Every step puts back only what a record says is missing, so a
+# loyalist winner, which still holds its modifiers, sees no change.
 #
 # Not rebuilt: timed modifiers (the completion events' themed rewards, the
 # failure penalties, sr_temporary_safety_review), whose remaining time is
@@ -1510,6 +1561,9 @@ sr_repair_after_civil_war = {
 	}
 	# Interdiction's records that name the old government (6c).
 	sr_icpt_repair_after_civil_war = yes
+	# The re-entry pass's closed marks (self-check state only): the winner
+	# holds fresh records.
+	sr_reentry_after_civil_war = yes
 }
 
 # The interstellar probe's result: one of four permanent country modifiers,
@@ -1554,186 +1608,6 @@ sr_sync_probe_data = {
 	}
 }
 
-# A colony's specialisation: one of 68 modifiers on the solar colonization
-# entry, granted by an option of space_race_colony_events.1-40. Recorded as
-# <modifier>_held in the same effect. Country scope.
-sr_grant_colony_modifier = {
-	je:je_space_race_solar_colonization = { add_modifier = { name = $MODIFIER$ } }
-	set_variable = { name = $MODIFIER$_held value = yes }
-	# The world's record (sr_sites_generated.txt): which specialization or
-	# discovery outcome it carries, whoever holds it later. Bookkeeping behind
-	# the modifier the option already shows, so hidden from its tooltip.
-	hidden_effect = { sr_site_choose_$MODIFIER$ = yes }
-}
-
-# Country scope. One colony modifier, both ways, as sr_sync_probe_data_base.
-# The entry is open whenever a colony is held (its `possible`), so both
-# directions can always reach it. A discovery's outcome; a specialization
-# takes sr_sync_colony_spec_base below.
-sr_sync_colony_modifier_base = {
-	if = {
-		limit = {
-			NOT = { has_variable = $MODIFIER$_held }
-			je:je_space_race_solar_colonization ?= { has_modifier = $MODIFIER$ }
-		}
-		set_variable = { name = $MODIFIER$_held value = yes }
-	}
-	else_if = {
-		limit = {
-			has_variable = $MODIFIER$_held
-			je:je_space_race_solar_colonization ?= { NOT = { has_modifier = $MODIFIER$ } }
-		}
-		je:je_space_race_solar_colonization = { add_modifier = { name = $MODIFIER$ } }
-	}
-}
-
-# Country scope. One colony specialization, both ways, as the above. A record
-# with no modifier (a revolution's winner, whose inherited entry arrives empty)
-# gets it back at MULT, its level times the colony's staffing
-# (sr_site_mult_<a|b>_<key>; colony modules design § 7), and the multiplier
-# applied is recorded as the world's sync records it (sr_site_show_modifier_at).
-sr_sync_colony_spec_base = {
-	if = {
-		limit = {
-			NOT = { has_variable = $MODIFIER$_held }
-			je:je_space_race_solar_colonization ?= { has_modifier = $MODIFIER$ }
-		}
-		set_variable = { name = $MODIFIER$_held value = yes }
-	}
-	else_if = {
-		limit = {
-			has_variable = $MODIFIER$_held
-			je:je_space_race_solar_colonization ?= { NOT = { has_modifier = $MODIFIER$ } }
-		}
-		je:je_space_race_solar_colonization = { add_modifier = { name = $MODIFIER$ multiplier = $MULT$ } }
-		set_variable = { name = $MODIFIER$_mult value = $MULT$ } # REVIEWED 2026-10-25: records the multiplier just applied, recomputed from the world's global record; nothing built up is lost
-	}
-}
-
-# Country scope. The approach modifier on a running milestone's entry follows
-# the approach variable, which sr_effect_safe / sr_effect_ambitious set together
-# with it ($APPROACH$ = safe | ambitious). Added when the variable is set and
-# the entry lacks it (an entry a revolution's winner inherited). Removed when
-# the variable is gone and the entry still has it, which needs no revolution:
-# the monthly cleanup clears a deactivated milestone's approach variable but
-# cannot reach the inactive entry's modifiers, so the entry came back with its
-# old approach modifier and no approach selected (the German-revolution saves'
-# inactive orbital entry carried sr_safe_approach, with no sr_safe_orbital);
-# and a finished solar colonization kept its approach modifier on the entry
-# that stays open for the colonies.
-sr_sync_approach_modifier_base = {
-	if = {
-		limit = {
-			has_variable = sr_$APPROACH$_$MILESTONE$
-			je:je_space_race_$MILESTONE$ ?= { NOT = { has_modifier = sr_$APPROACH$_approach } }
-		}
-		je:je_space_race_$MILESTONE$ = { add_modifier = sr_$APPROACH$_approach }
-	}
-	else_if = {
-		limit = {
-			NOT = { has_variable = sr_$APPROACH$_$MILESTONE$ }
-			je:je_space_race_$MILESTONE$ ?= { has_modifier = sr_$APPROACH$_approach }
-		}
-		je:je_space_race_$MILESTONE$ = { remove_modifier = sr_$APPROACH$_approach }
-	}
-}
-
-# Country scope. A running milestone's choice ($CHOICE$, the variable the choice
-# event's option sets) puts $MODIFIER$ on its entry; put it back when the entry
-# lacks it. Only while the milestone runs: these modifiers shape the run's risk
-# and speed (see their header in space_race_modifiers.txt).
-sr_sync_choice_modifier_base = {
-	if = {
-		limit = {
-			has_variable = sr_active_$MILESTONE$
-			has_variable = $CHOICE$
-			je:je_space_race_$MILESTONE$ ?= { NOT = { has_modifier = $MODIFIER$ } }
-		}
-		je:je_space_race_$MILESTONE$ = { add_modifier = $MODIFIER$ }
-	}
-}
-
-# One per entry, called from that entry's `immediate`; sr_sync_space_race_entries
-# runs them all from the monthly country pulse. An `immediate` syncs only its
-# own entry, so no block reads a modifier another block may have just changed
-# on a second entry.
-sr_sync_suborbital_entry = {
-	sr_sync_approach_modifier_base = { MILESTONE = suborbital APPROACH = safe      }
-	sr_sync_approach_modifier_base = { MILESTONE = suborbital APPROACH = ambitious }
-}
-sr_sync_orbital_entry = {
-	sr_sync_approach_modifier_base = { MILESTONE = orbital APPROACH = safe      }
-	sr_sync_approach_modifier_base = { MILESTONE = orbital APPROACH = ambitious }
-	sr_sync_choice_modifier_base = { MILESTONE = orbital CHOICE = sr_orbital_civilian  MODIFIER = sr_choice_orbital_civilian }
-	sr_sync_choice_modifier_base = { MILESTONE = orbital CHOICE = sr_orbital_military  MODIFIER = sr_choice_orbital_military }
-	sr_sync_choice_modifier_base = { MILESTONE = orbital CHOICE = sr_orbital_scientist MODIFIER = sr_choice_orbital_scientist }
-}
-sr_sync_moon_landing_entry = {
-	sr_sync_approach_modifier_base = { MILESTONE = moon_landing APPROACH = safe      }
-	sr_sync_approach_modifier_base = { MILESTONE = moon_landing APPROACH = ambitious }
-	sr_sync_choice_modifier_base = { MILESTONE = moon_landing CHOICE = sr_moon_site_shackleton  MODIFIER = sr_choice_site_shackleton }
-	sr_sync_choice_modifier_base = { MILESTONE = moon_landing CHOICE = sr_moon_site_equatorial  MODIFIER = sr_choice_site_equatorial }
-	sr_sync_choice_modifier_base = { MILESTONE = moon_landing CHOICE = sr_moon_site_tranquility MODIFIER = sr_choice_site_tranquility }
-	sr_sync_choice_modifier_base = { MILESTONE = moon_landing CHOICE = sr_moon_site_far_side    MODIFIER = sr_choice_site_far_side }
-}
-sr_sync_probe_entry = {
-	sr_sync_approach_modifier_base = { MILESTONE = probe APPROACH = safe      }
-	sr_sync_approach_modifier_base = { MILESTONE = probe APPROACH = ambitious }
-	sr_sync_choice_modifier_base = { MILESTONE = probe CHOICE = sr_probe_target_venus    MODIFIER = sr_choice_probe_venus }
-	sr_sync_choice_modifier_base = { MILESTONE = probe CHOICE = sr_probe_target_mars     MODIFIER = sr_choice_probe_mars }
-	sr_sync_choice_modifier_base = { MILESTONE = probe CHOICE = sr_probe_target_asteroid MODIFIER = sr_choice_probe_asteroid }
-}
-sr_sync_moon_base_entry = {
-	sr_sync_approach_modifier_base = { MILESTONE = moon_base APPROACH = safe      }
-	sr_sync_approach_modifier_base = { MILESTONE = moon_base APPROACH = ambitious }
-	sr_sync_choice_modifier_base = { MILESTONE = moon_base CHOICE = sr_moon_base_scientific MODIFIER = sr_choice_moon_base_scientific }
-	sr_sync_choice_modifier_base = { MILESTONE = moon_base CHOICE = sr_moon_base_industrial MODIFIER = sr_choice_moon_base_industrial }
-	sr_sync_choice_modifier_base = { MILESTONE = moon_base CHOICE = sr_moon_base_military   MODIFIER = sr_choice_moon_base_military }
-}
-sr_sync_mars_landing_entry = {
-	sr_sync_approach_modifier_base = { MILESTONE = mars_landing APPROACH = safe      }
-	sr_sync_approach_modifier_base = { MILESTONE = mars_landing APPROACH = ambitious }
-	sr_sync_choice_modifier_base = { MILESTONE = mars_landing CHOICE = sr_mars_direct        MODIFIER = sr_choice_mars_direct }
-	sr_sync_choice_modifier_base = { MILESTONE = mars_landing CHOICE = sr_mars_orbital_first MODIFIER = sr_choice_mars_orbital }
-	sr_sync_choice_modifier_base = { MILESTONE = mars_landing CHOICE = sr_mars_robotic       MODIFIER = sr_choice_mars_robotic }
-}
-sr_sync_interstellar_probe_entry = {
-	sr_sync_approach_modifier_base = { MILESTONE = interstellar_probe APPROACH = safe      }
-	sr_sync_approach_modifier_base = { MILESTONE = interstellar_probe APPROACH = ambitious }
-}
-sr_sync_solar_colonization_entry = {
-	sr_sync_approach_modifier_base = { MILESTONE = solar_colonization APPROACH = safe      }
-	sr_sync_approach_modifier_base = { MILESTONE = solar_colonization APPROACH = ambitious }
-	# Only a colony holder has any, and its entry is always open.
-	if = {
-		limit = { sr_has_space_colony = yes }
-		sr_sync_colony_discovery_modifiers = yes
-		# The colony specialisations, each at its level times the colony's
-		# staffing (sr_sites_generated.txt; colony modules design § 7).
-		sr_sites_sync_entry_specs = yes
-		# The all-colonies reward: the entry's pulse adds it in the block that
-		# sets sr_completed_solar_colonization, so the variable alone records it.
-		if = {
-			limit = {
-				has_variable = sr_completed_solar_colonization
-				je:je_space_race_solar_colonization ?= { NOT = { has_modifier = sr_solar_system_trade } }
-			}
-			je:je_space_race_solar_colonization = { add_modifier = { name = sr_solar_system_trade } }
-		}
-	}
-}
-
-sr_sync_space_race_entries = {
-	sr_sync_suborbital_entry = yes
-	sr_sync_orbital_entry = yes
-	sr_sync_moon_landing_entry = yes
-	sr_sync_probe_entry = yes
-	sr_sync_moon_base_entry = yes
-	sr_sync_mars_landing_entry = yes
-	sr_sync_interstellar_probe_entry = yes
-	sr_sync_solar_colonization_entry = yes
-}
-
 # ======= After the race: Commercial Space Industry =======
 # Country scope; its one refresh site is the monthly country pulse
 # (space_race_on_action). Once the race is over for the country
@@ -1751,7 +1625,20 @@ sr_refresh_space_dividend = {
 		limit = { has_modifier = sr_commercial_space_dividend }
 		remove_modifier = sr_commercial_space_dividend
 	}
+	# The month the race concludes, the last milestone's funding is still
+	# declared on its entry for a few days (scaling_modifiers_while_active
+	# follows the variables 2-5 days late, #1404; solar colonization's entry stays
+	# open for its colonies), so the first payment waits a month rather than
+	# count it. A country that was paid before the wait existed is settled.
 	if = {
+		limit = {
+			sr_space_race_concluded = yes
+			NOT = { has_variable = sr_space_dividend_settled }
+			NOT = { has_variable = sr_space_dividend_announced }
+		}
+		set_variable = { name = sr_space_dividend_settled value = yes }
+	}
+	else_if = {
 		limit = {
 			sr_space_race_concluded = yes
 			sr_space_dividend_points > 0

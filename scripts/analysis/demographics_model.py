@@ -156,7 +156,7 @@ def cause_factors(inp):
         if factor == "literacy":
             return 1 - P.LITERACY_INFECTION_WEIGHT * inp.literacy
         if factor == "crowding":
-            return 1 + P.CROWDING_INFECTION_PER_PULL * inp.crowding
+            return 1 + P.CROWDING_INFECTION_PER_PULL * min(inp.crowding, P.CROWDING_INFECTION_PULL_MAX)
         if factor == "laws":
             return plain_multiplier(inp, cause)
         if factor == "turmoil":
@@ -908,11 +908,39 @@ def workforce_term_target(figures):
     return wf_target(figures) - P.WORKING_ADULT_BASE
 
 
-def workforce_term(target_w, remainder):
-    """W after one census step (te_demog_workforce_refresh): its target, raised so the lowest pop base plus W plus the
-    remainder (the lines on top) stays at P.WF_POP_RATIO_MIN. No ramp (owner, 2026-10-20): the engine's own pull toward
-    a pop's ratio phases the change in."""
-    return max(target_w, P.WF_POP_RATIO_MIN - P.POP_BASE_RATIO_MIN - remainder)
+def workforce_pull_share(cbr):
+    """The share of the gap between a state's workforce share and the ratio its pops are set to that the engine closes
+    in one census step: newborns join at the set ratio and the dead leave at the pop's own, so the share moves
+    b x (set - share) a year, b the births per head (P.WF_LEAD_HALF's comment). 1 - e^-b, to fourth order as the script
+    computes it (te_demog_wf_pull_share). cbr: the census's births per 1,000 over its last step (te_dg_cbr)."""
+    b = min(max(cbr / 1000.0, 0.0), P.WF_PULL_B_MAX)
+    return b * (1 - b / 2 + b * b / 6)
+
+
+def workforce_lead(target_w, remainder, wbase, engine, cbr):
+    """W's lead past its target at a census step (te_demog_workforce_lead): as much as makes the game's figure (engine,
+    the walk's te_dg_wf_engine) close P.WF_LEAD_HALF of its gap to the aim (wbase + target_w + remainder) in the census
+    year to come, at most P.WF_LEAD_CAP either way; a lead up never takes the highest pop base + W + the remainder past
+    P.WF_POP_RATIO_MAX (it takes the lead only, never the target)."""
+    gap = wbase + target_w + remainder - engine
+    lead = gap * (P.WF_LEAD_HALF / max(workforce_pull_share(cbr), P.WF_PULL_SHARE_MIN) - 1)
+    lead = max(-P.WF_LEAD_CAP, min(P.WF_LEAD_CAP, lead))
+    if lead > 0:
+        lead = min(lead, max(0.0, P.WF_POP_RATIO_MAX - P.POP_BASE_RATIO_MAX - remainder - target_w))
+    return lead
+
+
+def workforce_term(target_w, remainder, lead=0.0):
+    """W after one census step (te_demog_workforce_refresh): its target plus its lead (workforce_lead; 0 before the walk
+    has read the game's figure), raised so the lowest pop base plus W plus the remainder (the lines on top) stays at
+    P.WF_POP_RATIO_MIN. No ramp (owner, 2026-10-20): it lands at once, and the lead makes up for the engine's own pull."""
+    return max(target_w + lead, P.WF_POP_RATIO_MIN - P.POP_BASE_RATIO_MIN - remainder)
+
+
+def workforce_pull_move(wbase, w, remainder, engine, cbr):
+    """What the game's figure should move by in the census step to come, by the births (workforce_pull_share): the
+    self-check workforce_pull_births's prediction (te_debug_demog_wf_pull_mark)."""
+    return (wbase + w + remainder - engine) * workforce_pull_share(cbr)
 
 
 def engine_total(figures, wbase, remainder=0.0):
@@ -1313,7 +1341,7 @@ def ring_migrate(ring):
     return ring
 
 
-def rate_term(target, bare, absorbed=0.0, other=0.0, on_top=0.0, added=0.0):
+def rate_term(target, bare, absorbed=0.0, other=0.0, on_top=0.0, added=0.0, ceiling=None):
     """The census's births or deaths modifier for one state (phase 2 step 4). Returns (M, clamped).
 
     The engine gives each pop bare x max(0, 1 + its terms + M) (growth probe), so over a state M adds
@@ -1327,8 +1355,9 @@ def rate_term(target, bare, absorbed=0.0, other=0.0, on_top=0.0, added=0.0):
     go lower. `added` is the moved lines' on-top family (owner, 2026-10-11; the engine-lines plan): script-only, so the
     engine doesn't apply it, and the census adds it at its own rate, + added x target / bare. `other` is the state read without the census's and fast mode's
     terms: other + M stays at or above RATE_TOTAL_FLOOR, the engine's own per-pop floor, and M never goes below 0 when
-    other alone is past it. No ceiling (owner, 2026-10-20). The script also skips a walk under RATE_BARE_MIN, less than
-    one person at the curves' lowest, in its own units; callers here never pass one.
+    other alone is past it. `ceiling`, births' P.RATE_BIRTHS_CEILING (#1476), caps M where no figure in range reaches;
+    deaths have none (owner, 2026-10-20). The script also skips a walk under RATE_BARE_MIN, less than one person at the
+    curves' lowest, in its own units; callers here never pass one.
     """
     if bare <= 0:
         return 0.0, False
@@ -1336,7 +1365,36 @@ def rate_term(target, bare, absorbed=0.0, other=0.0, on_top=0.0, added=0.0):
     lo = min(0.0, P.RATE_TOTAL_FLOOR - other)
     if m < lo:
         return lo, True
+    if ceiling is not None and m > ceiling:
+        return ceiling, True
     return m, False
+
+
+def census_out_of_range(people, e0=None, cbr_model=None, cdr_model=None, kill_share=None):
+    """Why the census's own figures are out of range (#1476), the script's te_demog_census_out_of_range in the order
+    te_demog_rates_refresh stores it as te_dg_rate_guard: 1 its people's sum below 0 (wrapped at the script's fixed-point
+    limit) or above P.RATE_GUARD_PEOPLE_MAX, 2 life expectancy under P.RATE_GUARD_E0_MIN, 3 the model's birth or death
+    rate below 0, 4 known kills of P.RATE_GUARD_KILLS_SHARE or more of its people in the step's window (kill_share, the
+    script's local te_dg_kill_share; above 1 counts too); 0 in range. A figure the state doesn't hold (None) says nothing.
+    Out of range, the census clears its terms and the engine's own rates run, as under Display only."""
+    if people is not None and (people < 0 or people > P.RATE_GUARD_PEOPLE_MAX):
+        return 1
+    if e0 is not None and e0 < P.RATE_GUARD_E0_MIN:
+        return 2
+    if (cbr_model is not None and cbr_model < 0) or (cdr_model is not None and cdr_model < 0):
+        return 3
+    if kill_share is not None and kill_share >= P.RATE_GUARD_KILLS_SHARE:
+        return 4
+    return 0
+
+
+def kill_share(kills, people_last):
+    """The census's fourth guard's figure (owner, 2026-11-19), the script's te_demog_kill_share_store: the known kills a
+    step's window holds (te_dg_kills_in) over the people at the last count (te_dg_pop_last, at least 1), uncapped; None
+    with no kills noted (the script then sets no local)."""
+    if kills is None:
+        return None
+    return kills / max(people_last, 1.0)
 
 
 def on_top_scale(engine, target):

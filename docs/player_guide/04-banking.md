@@ -13,16 +13,16 @@ chapter, *Simplified* keeps the cycle and drops the monetary layer, and
 Under every setting the mod replaces the base game's flat interest rate on
 government debt. You borrow at a rate built from a world reference rate, your
 country's credit standing and a risk premium, so a banking panic makes your
-loans dearer and a sound currency makes them cheaper.
+loans more expensive and a sound currency makes them cheaper.
 
 ## The Banking Cycle journal entry
 
-The cycle lives in a journal entry in the Domestic Affairs group. Its title
-follows your economic system: Boom & Bust Cycle in a market economy, Logistics &
-Allocation Gauge under Command Economy, and Cooperative Finance Dashboard under
-Cooperative Ownership. Its description changes with the title and explains what
-the readings mean in that economy. The model is the same in all three; the phase
-effects and the tools differ.
+The cycle lives in a journal entry in the Timeline Extended Systems section of
+the journal. Its title follows your economic system: Boom & Bust Cycle in a
+market economy, Logistics & Allocation Gauge under Command Economy, and
+Cooperative Finance Dashboard under Cooperative Ownership. Its description
+changes with the title and explains what the readings mean in that economy. The
+model is the same in all three; the phase effects and the tools differ.
 
 Every country has the entry from the start of the game, but its financial
 cycle starts only once you have researched Stock Exchange and own an Urban
@@ -167,7 +167,7 @@ economies 20% less, and less still when the crash is imported.
 
 ### Responding to a banking crash
 
-The crash event always offers Weather the storm, which is free but angers the
+The crash event always offers "Let the losses fall where they fall.", which is free but angers the
 upper and middle strata. Beside it you get one response set by your financial
 regulation law and up to four more, depending on your technology and laws: an
 emergency discount window (Central Banking), coordinated swap lines (Investment
@@ -182,8 +182,12 @@ budget](#the-intervention-budget)), and radicalizes some
 of the upper strata. If your intervention budget goes negative, for example
 after a law downgrade, the game switches off one crash response a month. Once
 those are gone, it lifts one of the five monetary interventions in External &
-Currency each month
-until the budget balances or none of those interventions remains.
+Currency each month, and then your other tools, the cheapest first, until the
+budget balances. A notification names each tool as it goes. Lift a costlier
+tool yourself if you would rather keep a cheap one. A Bank Holiday is left to
+run out. In a month when something else has already lifted a tool, such as a
+new banking law's cap on credit sectors or Emergency Liquidity winding down,
+nothing more is lifted until the next month.
 
 ### Banking contagion
 
@@ -284,15 +288,24 @@ tables in this chapter use the full names.
 
 The intervention budget is the pool of points your active policies hold. Your
 financial regulation law gives 1 to 7 points, National Bank Established 1 more,
-and a power bloc's banking union 1 more. The overview's Budget box shows how
+a power bloc's banking union 1 more, and leading a common currency up to 3 on
+top of that (see [The Monetary Union principle
+group](#the-monetary-union-principle-group)). The overview's Budget box shows how
 many are in use and how many are free. Hover the free figure to see what each
 grant adds and what each active tool holds.
 
-Switching a tool on has its own price: the lending tools charge the treasury
-0.2% to 2.5% of GDP, most regulatory tools create radicals, and Capital Controls
-(Outflows) costs infamy and great-power relations. Sterilize Capital Inflows and
-Emergency Import Financing add a weekly government expense while they run, a
-quarter of their monthly rate, so a year costs 13 months' worth. It shows in the
+Switching a tool on has a small price, the same for every tool you use from
+cycle to cycle: 0.5% of pops radicalize, or, for Open-Market Operations, the
+directed-credit sectors and Export Credit Facility, 0.2% of GDP comes out of the
+treasury. Lifting the tool costs nothing, so neither does a lift forced by a law
+change or by the tool's own conditions ending. Expand Deposit Guarantee works the
+other way round: 2% of pops turn loyalist when you expand it and 2.5% radicalize
+when you withdraw it, so a round trip nets the same 0.5%. Moral Suasion costs
+nothing either way. The four crisis tools (Bank Holiday, Emergency Liquidity,
+Asset Relief and Bail-in) have a larger price of their own, and Capital Controls
+costs infamy and great-power relations. Sterilization and Emergency Import
+Financing also add a weekly government expense while they run,
+a quarter of their monthly rate, so a year costs 13 months' worth. It shows in the
 Budget panel under Banking, and their tooltips show the current weekly cost.
 
 ### Market economy banking tools
@@ -320,9 +333,9 @@ International Exchange Standards; the other three are available from the start.
 | Tool | What you gain each month | What you pay or give up |
 |---|---|---|
 | Moral Suasion | −0.15 bubble pressure, −0.02 momentum | 1 point and nothing else. |
-| Raise Reserve Requirements | −0.9 bubble pressure, −0.04 momentum; under the full Banking System, half a point less inflation pressure | 2 points and 5% lower investment efficiency for capitalists. 2% of pops radicalize when you raise them, and again when you lift them. |
-| Enable Counter-cyclical Buffer | −1.5 bubble pressure, −0.05 momentum | 2 points. Capitalists pay 1 point and shopkeepers 5 points less of their income into the investment pool. Radicals when you enable it and when you lift it, as above. |
-| Raise Margin Requirements | −1.2 bubble pressure, −0.05 momentum | 2 points and −0.5 standard of living for the middle strata. Radicals when you raise them and when you lift them. |
+| Raise Reserve Requirements | −0.9 bubble pressure, −0.04 momentum; under the full Banking System, half a point less inflation pressure | 2 points and 5% lower investment efficiency for capitalists. |
+| Enable Counter-cyclical Buffer | −1.5 bubble pressure, −0.05 momentum | 2 points. Capitalists pay 1 point and shopkeepers 5 points less of their income into the investment pool. |
+| Raise Margin Requirements | −1.2 bubble pressure, −0.05 momentum | 2 points and −1 standard of living for the middle strata. |
 
 Measure them against the phases: Expansion adds 3 bubble pressure a month, Boom
 4 and Frenzy 8. All four together drain about 3.75 and take 7 points, enough to
@@ -343,8 +356,7 @@ climbing, and drops Moral Suasion more freely, since switching it costs nothing.
 Directed credit steers cheap loans to one sector. Each sector builds its
 buildings 10% faster, pleases some interest groups and angers others, and adds
 momentum and bubble pressure, so it belongs in a cycle at or below Stable, not in
-a boom. Switching one on costs a one-off 0.8% of GDP from the treasury, the
-state's share of the loans, and lifting it radicalizes 2% of pops. Only one
+a boom. Switching one on costs 0.2% of GDP from the treasury. Only one
 sector runs at a time, two under Directed Credit & Development Banks, and
 Prudential / Narrow Banking forbids them all. Electrification needs Rural
 Electrification; the other four are available from the start.
@@ -405,8 +417,8 @@ Globalization and the deposit guarantee Consumer Credit.
 | Emergency Liquidity Program | +12 cycle value at once, once per crisis, then −0.8 points of risk premium and +0.08 momentum a month. | 4 points; 1.2% of GDP when you open it, 1% refunded when you close it. +10 bubble pressure at once, with the +12, and +0.8 a month. Only in a Downturn or Panic. Closes itself, with the refund, once the cycle has held at Stable or above for 12 months. |
 | Asset Relief Program | +0.3 cycle value a month. | 5 points; 2.5% of GDP at once; −5% tax collection and −5% bureaucracy; 3% of pops radicalize. |
 | Bail-in Regime | +0.15 cycle value and −0.3 bubble pressure a month. | 3 points and nothing from the treasury: the banks' creditors take the losses. +0.1 point of risk premium, and 3% of upper-strata pops radicalize. |
-| Expand Deposit Guarantee | −0.2 points of risk premium, +0.03 momentum and −0.2 bubble pressure a month. | 4 points. 2% of pops turn loyalist when you expand it; 3% radicalize when you withdraw it. |
-| Open-Market Operations | +0.1 momentum a month and +5% services output. | 4 points and 0.5% of GDP at the start; +1.5 bubble pressure a month and, under the full Banking System, about a point of inflation pressure. |
+| Expand Deposit Guarantee | −0.2 points of risk premium, +0.03 momentum and −0.2 bubble pressure a month. | 4 points. 2% of pops turn loyalist when you expand it; 2.5% radicalize when you withdraw it. |
+| Open-Market Operations | +0.1 momentum a month and +5% services output. | 4 points and 0.2% of GDP at the start; +1.5 bubble pressure a month and, under the full Banking System, 1 point of inflation pressure, more while inflation is under target. |
 
 A Bank Holiday is the first answer to a Panic: it stops the fall at once, holds
 it while the banks are shut and keeps a trading partner's crash out, but you get
@@ -426,9 +438,11 @@ the cycle twice as fast, at 2.5% of GDP and a standing cost in tax and
 bureaucracy; a bail-in costs the treasury nothing and angers the upper strata
 instead. Open-Market Operations is what is left when you can't cut any further:
 under the full Banking System it needs Fiat Money or Digital Currency with your
-policy rate at its floor. A bank running its mandate also buys assets itself at
-the floor (see [When the bank cannot cut](#when-the-bank-cannot-cut)); that adds
-to this tool rather than replacing it.
+policy rate at its floor. Its inflation pressure grows with the shortfall: 1
+point with inflation on its 2% target or above, half a point more for each point
+below, up to 5 points from −6% down. A bank running its mandate also buys assets
+itself at the floor (see [When the bank cannot cut](#when-the-bank-cannot-cut));
+that adds to this tool rather than replacing it.
 
 The AI declares a Bank Holiday and opens Emergency Liquidity in a Panic, or in a
 Downturn that is still falling fast. It expands the deposit guarantee in a
@@ -439,28 +453,45 @@ climbs back to Stable and beyond.
 
 ### Managing foreign capital and import credit
 
-External & Currency groups export lending and outflow controls with five
-monetary interventions. These five appear only under the full Banking System.
-Each holds 2 points while it runs (Emergency Import Financing 3), leaving fewer
-for deposit guarantees, domestic credit or crisis relief. Restrict Speculative
-Inflows needs your own policy rate; Sterilize Capital Inflows and the surrender
-requirement need a convertible Gold Standard with your own policy rate; Limit
+External & Currency groups Export Credit Facility and Capital Controls with
+five monetary interventions. These five appear only under the full Banking
+System. Each holds 2 points while it runs (Emergency Import Financing 3),
+leaving fewer for deposit guarantees, domestic credit or crisis relief. Restrict
+Speculative Inflows, Sterilization and the surrender requirement need your own
+policy rate on a convertible Gold Standard or a floating currency; Limit
 Foreign-Currency Borrowing and Emergency Import Financing need National Bank
-Established. The tooltips show their current costs and restrictions.
+Established, and Limit Foreign-Currency Borrowing is hidden while your currency
+is held at par on metal. The tooltips show their current costs and
+restrictions.
+
+What the exchange tools do depends on your currency. On a convertible Gold
+Standard with National Bank Established, the gap between your policy rate and
+the World Rate moves gold in and out of the central bank's vault. On a floating
+currency (Fiat Money or Digital Currency with a national bank, or a Gold
+Standard whose convertibility is suspended) it moves the target your Exchange
+Rate Index heads for instead (see
+[The exchange-rate index and capital controls](#the-exchange-rate-index-and-capital-controls)).
+On Commodity Money no rate of yours moves money across the border, so Capital
+Controls does nothing there beyond its modifiers and the other three flow tools
+are unavailable. Each tool's tooltip has an "On this currency" line that says what it
+does on the currency you have, with the figure it changes now and with the
+tool.
 
 | Intervention | What you gain | What you pay or give up |
 |---|---|---|
-| Restrict Speculative Inflows | Halves incoming speculative gold and the upward exchange-rate pressure from a positive real-rate gap. Gold can still leave at its usual speed. | Slower reserve accumulation, −3% bureaucracy and slightly slower credit growth. Bubble pressure also falls. |
-| Sterilize Capital Inflows | Removes 75% of the inflation pressure from incoming gold. | 0.01% of annual GDP a month, charged weekly as a government expense, with slightly slower credit growth and less bubble pressure. Foreign lenders retain their claims on the vault, and outgoing gold still causes deflation. |
-| Limit Foreign-Currency Borrowing | Gradually reduces the risk premium caused by a weak currency, reaching half that component after about 24 months. | Adds 0.25 percentage points of risk premium while active and slows credit growth. Protection takes time to build; it also takes about 24 months to disappear after you lift the limits. |
-| Foreign Exchange Surrender Requirement | Buys gold for the central bank with treasury cash, without adding Borrowed Gold that foreign lenders can withdraw. | −10% export advantage and −3% bureaucracy, plus the cash spent on reserves. Purchases stop at the vault's capacity and cannot exceed available cash. |
+| Capital Controls | Your interest rate moves a quarter as much money across the border, in or out. On gold the World Rate Gap counts at a quarter, both for the gold it moves and for the Peg Confidence a low rate drains; on a floating currency the rate's push on the exchange rate falls to a quarter. Under a treaty peg, an overvalued peg loses a quarter as much Peg Confidence. | Infamy and great-power relations when imposed, and a step of Trapped Capital for each peacetime year it stays on. It does nothing for a currency distrusted for its inflation or its debts. |
+| Restrict Speculative Inflows | Money drawn in by a rate above the world's arrives at half speed, and money leaving is not slowed. On gold it halves the gold, and so the Borrowed Gold, that a high rate brings in; on a floating currency it halves the rise a high real rate gives the exchange rate. | −3% bureaucracy and slightly slower credit growth. Bubble pressure also falls. On gold the vault fills more slowly. |
+| Sterilization | Money crossing the border moves prices at home less. On gold it removes 75% of the inflation pressure from incoming gold; on a floating currency the exchange rate moves toward its target at half speed, up or down, so a fall reaches prices more slowly and a rise reaches exporters more slowly. | 0.01% of annual GDP a month, charged weekly as a government expense, with slightly slower credit growth and less bubble pressure. On gold, foreign lenders retain their claims on the vault, and outgoing gold still causes deflation. |
+| Limit Foreign-Currency Borrowing | Gradually reduces the risk premium caused by a currency below par, reaching half that component after about 24 months. On metal your currency stays at par unless you devalue, so the tool is hidden there. | Adds 0.25 percentage points of risk premium while active and slows credit growth. Protection takes time to build; it also takes about 24 months to disappear after you lift the limits. |
+| Foreign Exchange Surrender Requirement | Exporters must sell what they earn abroad to the central bank. On gold the treasury buys gold for the bank with it, without adding Borrowed Gold that foreign lenders can withdraw; on a floating currency the earnings hold up the currency, lifting the target your exchange rate heads for by up to 4 points. | −10% export advantage and −3% bureaucracy. On gold, the cash spent on reserves: purchases stop at the vault's capacity and cannot exceed available cash. On a floating currency no cash is spent, but the stronger currency costs a further 1.25% export advantage a point. |
 | Emergency Import Financing | +15% import advantage while a financial crisis lasts. | A weekly government expense of a quarter of the monthly rate: initially 0.05% of annual GDP a month, rising to 0.10% after 12 funded months. Holds 3 intervention points. |
 
 Surrender purchases depend on your market's exports. The monthly cap is 0.05%
 of annual GDP when export reliance is above 30%, half that amount above 10%,
 and a quarter with any smaller positive share. A market with no exports buys
 nothing. Cash needed for the other funded interventions reduces what you can
-spend on these purchases.
+spend on these purchases. On a floating currency the same bands set the lift:
+4 points above 30%, 2 above 10%, 1 below, and none without exports.
 
 Emergency Import Financing is available during a Downturn or Panic, a gold
 crisis with Peg Confidence at 40 or below, or hyperinflation. War alone does not
@@ -469,19 +500,25 @@ ships through a blockade. The tool ends when the crisis passes or you cannot
 fund it. Each inactive month removes one month of its accumulated surcharge;
 switching it off and back on does not reset the cost.
 
-Sterilize Capital Inflows ends if the treasury cannot cover a month of it. The
-surrender requirement's purchases stay monthly: the treasury pays the same day,
-and the same sum, as the vault receives. Both it and Foreign
-Exchange Surrender Requirement end when you lose the conditions for convertible
-gold flows, including a suspension of convertibility. Other tools are lifted
-when their law or monetary requirements no longer hold. Restrict Speculative
-Inflows and the surrender requirement share the outflow control's wartime
-exception to restrictive financial regulation laws.
+Sterilization ends if the treasury cannot cover a month of it. The surrender
+requirement's purchases stay monthly: the treasury pays the same day, and the
+same sum, as the vault receives. Restrict Speculative Inflows, Sterilization
+and the surrender requirement end when your rate no longer moves money across
+the border: on Commodity Money, or without a national bank setting your own
+rate. Moving between gold and a floating currency, by suspending convertibility
+for instance, changes what they do but does not lift them. Limit
+Foreign-Currency Borrowing is lifted when your currency comes to be held at par
+on metal, and its protection then unwinds as after any repeal. Other tools are
+lifted when their law or monetary requirements no longer hold. Restrict Speculative Inflows and the surrender
+requirement share Capital Controls' wartime exception to restrictive financial
+regulation laws.
 
 The AI restricts inflows when positive rate pressure accompanies an Expansion
-or hotter cycle, and sterilizes when gold is arriving during those phases. It
-uses borrowing limits when the Exchange Rate Index is below 95, surrender
-requirements when its vault is less than half full and it has cash, and import
+or hotter cycle, and sterilizes when gold is arriving during those phases or,
+on a floating currency, when its exchange rate still has 8 points or more to
+move. It uses borrowing limits when the Exchange Rate Index is below 95,
+surrender requirements when its vault is less than half full and it has cash
+or, on a floating currency, when the index is below 95, and import
 financing during a financial crisis. It favors lifting each tool when those
 reasons end.
 
@@ -493,6 +530,15 @@ point cost. Under Cooperative Ownership it measures the balance between what
 worker-owners pay themselves and what they reinvest, and there are eight council
 tools. Changing economic system switches the old system's tools off. An open
 Emergency Liquidity Program still refunds 1% of GDP when that closes it.
+
+Switching a planning or council tool on costs 0.5% of pops radicalized, as in a
+market economy, and lifting it costs nothing. The three one-point tools cost
+nothing either way. Five tools pay with one stratum instead, 2.5% radicalized on
+one switch and 2% turned loyalist on the other, so a round trip nets the same
+0.5%: Production Target Reduction and Administrative Performance Campaign (upper
+strata), Dividend Restraint Resolution (middle) and Consumption Ceiling
+Resolution (lower) radicalize when you switch them on, and Mutual Aid Fund
+Deployment (lower) wins loyalists when you deploy it.
 
 | Economy | Category | Tools (points) |
 |---|---|---|
@@ -524,13 +570,13 @@ may use and which response the crash event offers.
 
 | Law | Unlocked by | Points | Volatility | Crash likelihood | Locks |
 |---|---|---|---|---|---|
-| Unregulated Banking | default | 1 | +50% | +25% | Capital Controls (Outflows), Asset Relief Program |
-| Free & Mutual Banking | Postal Savings | 3 | – | −10% | Capital Controls (Outflows), Asset Relief Program |
-| Universal Banking (Light Prudence) | Central Banking | 4 | +10% | – | Capital Controls (Outflows), Asset Relief Program |
+| Unregulated Banking | default | 1 | +50% | +25% | Capital Controls, Asset Relief Program |
+| Free & Mutual Banking | Postal Savings | 3 | – | −10% | Capital Controls, Asset Relief Program |
+| Universal Banking (Light Prudence) | Central Banking | 4 | +10% | – | Capital Controls, Asset Relief Program |
 | Prudential / Narrow Banking | Modern Financial Instruments | 7 | −60% | −50% | Open-Market Operations, all directed credit, Export Credit Facility |
 | Directed Credit & Development Banks | Central Planning | 5 | −20% | −20% | none (two credit sectors) |
-| State-Owned Banking | needs Command Economy | 7 | −35% | −35% | Capital Controls (Outflows), Asset Relief Program |
-| Central Bank Independence | Keynesian Economics, with National Bank Established | 7 | −10% | – | Capital Controls (Outflows) |
+| State-Owned Banking | needs Command Economy | 7 | −35% | −35% | Capital Controls, Asset Relief Program |
+| Central Bank Independence | Keynesian Economics, with National Bank Established | 7 | −10% | – | Capital Controls |
 
 The capital-controls locks in the table also apply to Restrict Speculative
 Inflows and Foreign Exchange Surrender Requirement. All three are allowed in
@@ -563,7 +609,8 @@ controls open when the cycle starts.
 The Monetary Policy section's rows are grouped under The Rate, Gold and the Peg (on a gold standard with a dial),
 Exchange Rate, International Arrangements (while you are anchored, party to a
 monetary treaty or in a bloc with a Monetary Union principle), What Borrowing
-Costs and Prices. Hover a row's label for what the term means and the row for
+Costs and Prices. International Arrangements can be closed on its own, since in
+a monetary union it lists every partner and member. Hover a row's label for what the term means and the row for
 its reading and what moves it; the Help page has the rules behind each
 group. Each mandate button says what its rule does. Your Policy Stance and price band are in the
 overview, with the policy rate and the past year's inflation under them.
@@ -679,8 +726,11 @@ are always delegated, so they get the purchases too.
 
 Under Central Bank Independence you can't print for the treasury, so a long
 deflation leaves you the bank's purchases, Open-Market Operations and a budget
-deficit above 1% of GDP, which adds a little pressure of its own. Recovery from
-a deep deflation can still take years. Leaving independence for Monetize Deficit is
+deficit above 1% of GDP, which adds a little pressure of its own. Together the
+two purchases can add up to 10 points of pressure in a deep deflation. Switch
+Open-Market Operations on as soon as the rate reaches its floor: under Fiat
+Money a Panic with prices falling 10% a year holds the real rate near +10%, and
+climbing out of it still takes two to three years. Leaving independence for Monetize Deficit is
 possible but costly: you lose its credit-standing bonus and some of the
 intervention budget.
 
@@ -697,7 +747,7 @@ momentum and +1.5 bubble pressure a month, so loosening much further adds
 nothing to the cycle. On the tight side it goes to about −0.5 momentum and −3
 bubble pressure a month.
 
-Six months on the tight side bring Dear Money Politics (Landowners and Petite
+Six months on the tight side bring Tight Money Politics (Landowners and Petite
 Bourgeoisie approve; Industrialists, Rural Folk and Trade Unions disapprove),
 and six months on the loose side bring Cheap Money Politics, the reverse. Both
 fade after a return to Neutral.
@@ -711,8 +761,9 @@ actually happened, and never falls below 0.5%.
 
 Credit standing is what your country is: rank, finance technologies and a stock
 exchange, institutions, your courts (the Judiciary law and Judicial
-Independence) and currency credibility. It cannot go below 0.5 points
-(0.25 under Central Bank Independence). Risk premium is what is happening: the
+Independence) and currency credibility. It cannot go below its floor of 0.5
+points, which Central Bank Independence lowers by 0.25 and Machine Learning and
+Universal Digital Identity by 0.1 each. Risk premium is what is happening: the
 cycle phase, crisis tools, banking events, bankruptcy, a debt load past a
 quarter of your credit limit (up to +4 points at the limit), expectations that
 have strayed from target, money printing and a weak currency.
@@ -726,7 +777,7 @@ rates are measured against it.
 
 Inflation shows what prices did over the last year, and Expected Inflation what
 lenders and workers assume they will do. A loose stance, a boom, deficits, money
-printing, dearer goods and imports, and inflowing gold push it up, as do the
+printing, costlier goods and imports, and inflowing gold push it up, as do the
 Wage Pressure of your labor and welfare laws and any other standing Inflationary
 Pressure, such as a devaluation. A deficit adds at most 1.5 points of pressure
 (3 at war), and none in default or once dollarized, when nobody lends to cover
@@ -781,8 +832,9 @@ Command and dollarized economies never get it.
 ### Monetizing the deficit
 
 Monetize Deficit, from 0 to 3, has your national bank print money for the
-treasury. Each level mints about 1% of a year's GDP, adds about 2.5 points of
-inflation pressure and half a point of risk premium. It needs Fiat Money or
+treasury. Each level mints about 1% of a year's GDP before minting bonuses (the
+same ones as for [seigniorage](#the-monetary-union-principle-group)), adds about
+2.5 points of inflation pressure and half a point of risk premium. It needs Fiat Money or
 Digital Currency and a bank that takes instructions, so Central Bank
 Independence, Command Economy, dollarization and an anchored currency rule it
 out. An independent bank still buys assets by itself in a deflation (see [When
@@ -810,7 +862,7 @@ treasury. Each point your rate sits above the World Rate draws in gold worth
 0.2% of GDP a month, and each point below sends as much out. Gold drawn in is
 Borrowed Gold. It costs your budget nothing, but it leaves first, at double
 speed, once your rate is no longer above the world's. What the high rate costs
-you is a tighter Policy Stance and dearer borrowing for your government.
+you is a tighter Policy Stance and costlier borrowing for your government.
 Recapitalize the Bank moves a tenth of the reserve's limit from treasury to
 vault, in cash, for good.
 
@@ -872,14 +924,17 @@ sets the index: it moves between 50 and 150, drifting toward a target that
 rises when your real interest rate beats the World Rate and falls when your
 inflation runs above the world's (running below it does not raise it), when
 lenders charge you a risk premium, or
-when events knock it; the tooltip lists each term. Every point below par
+when events knock it; the tooltip lists each term. The Foreign Exchange
+Surrender Requirement adds up to 4 points to the target, and Sterilization
+halves the speed at which the index closes on it. Every point below par
 gives +1.25% export advantage and −1.25% import advantage, and above par the
 reverse. A weak currency adds risk premium, and a fall below its three-year
 average raises prices for a while.
 
-Capital Controls (Outflows), an External & Currency tool for 2 points, cut the
-effect of the gap between your rate and the world's on your exchange rate, gold
-and peg to a quarter. Each peacetime year
+Capital Controls, an External & Currency tool for 2 points, cut to a quarter
+how far the gap between your rate and the world's moves money across the
+border, in or out: the exchange rate on a floating currency, gold and Peg
+Confidence on the Gold Standard. Each peacetime year
 they stay on adds a step of Trapped Capital, up to five, costing Industrialist
 and Petite Bourgeoisie approval and investment efficiency. The count freezes in
 a war or crisis and fades after the controls come off.
@@ -935,7 +990,7 @@ Each side signs for its own reasons:
 
 | Article | Why the weaker side takes it | Why the stronger side agrees |
 |---|---|---|
-| Currency Peg | A small economy that trades mostly inside a bigger country's market, or a fiat currency whose bank commands little trust (a rate set by hand, State-Owned Banking, inflation running high). It borrows more cheaply and takes on the anchor's credibility, but gives up its dial and money printing, and suffers when its inflation outruns the anchor's. | A great or major power, or a market leader, drawing trading partners into its monetary orbit at no risk to itself: +2% prestige, better relations, and cheaper borrowing as more of the world's GDP pegs to it. A bloc leader also gains 200 leverage generation over the pegger. It pays the article's upkeep. |
+| Currency Peg | A small economy that trades mostly inside a bigger country's market, or a fiat currency whose bank commands little trust (a rate set by hand, State-Owned Banking, inflation running high). It borrows more cheaply and takes on the anchor's credibility, but gives up its dial and money printing, and suffers when its inflation outruns the anchor's. | A great or major power, or a market leader, drawing trading partners into its monetary orbit at no risk to itself: +2% prestige, better relations, and cheaper borrowing as more of the world's GDP pegs to it, in credit standing or, once its standing is at the floor, in risk premium. A bloc leader also gains 200 leverage generation over the pegger. It pays the article's upkeep. |
 | Swap Line | A country with high borrowing costs, a shaky gold peg or a habit of financial crises: −1 point of risk premium at once, +2 Peg Confidence a month, and credit of up to 2% of its GDP in a crisis, repaid afterwards. | A larger economy backing a partner cheaply: +1% prestige and better relations, and as a bloc leader 150 leverage generation over the partner, for extra risk premium in proportion to the partner's size (a sliver when a great power backs a minor) and loans in a crisis. It pays the upkeep. |
 | Lender of Last Resort | A heavily indebted country: its debt-load premium halves, imported panics start shallower, and a default brings a payout unless the guarantor refuses. Each payout makes the guarantee worth less. | A rich power sure of its ward: +2% prestige and better relations, and as a bloc leader 300 leverage generation over the ward, for extra risk premium in proportion to the ward's size. On a default it pays 5% to 15% of the ward's GDP, or refuses at a cost in infamy, prestige, relations and its own borrowing costs. |
 | Imposed Currency Peg | Nothing it would choose: it is forced on a country in default. | A major power or better that wants a defaulted country's money tied to its own for good; a bloc leader also gains 400 leverage generation over it. |
@@ -945,17 +1000,53 @@ Each side signs for its own reasons:
 
 A power bloc can bind its members' money together through the Monetary Union
 principles. Each tier includes the ones before, and all need Central Banking.
+The leader's column applies once at least one member has adopted its currency.
 
-| Tier | Principle | Effect |
-|---|---|---|
-| I | Monetary Cooperation | Every member gets half a swap line from the leader |
-| II | Common Currency | Members may adopt the leader's money: its rate with no spread, its exchange rate and +5% export and import advantage |
-| III | Fiscal Backstop | The leader is lender of last resort to every adopter |
-| IV | Banking Union | Adopters get −25% crash likelihood and volatility and an intervention point; needs Keynesian Economics |
-| V | Reserve Currency | The leader borrows more cheaply and earns on the world's balances; adopters gain more trade advantage; needs Globalization |
+| Tier | Principle | Members | The leader |
+|---|---|---|---|
+| I | Monetary Cooperation | Every member gets half a swap line from the leader | Nothing |
+| II | Common Currency | Members may adopt the leader's money: its rate with no spread, its exchange rate, +5% export and import advantage and 2 points more capitalists' investment-pool contribution | What its adopters get; seigniorage of up to 0.5% of its GDP a year before minting bonuses; up to 0.5 points off its risk premium; 1 intervention point |
+| III | Fiscal Backstop | The leader is lender of last resort to every adopter | Up to 0.75% and 0.75 points; 2 intervention points |
+| IV | Banking Union | Adopters get −25% crash likelihood and volatility, an intervention point and 1 point more pool contribution; needs Keynesian Economics | Up to 1% and 1 point; 3 intervention points |
+| V | Reserve Currency | Adopters gain 5% more trade advantage, better credit standing and 2 points more pool contribution; needs Globalization | Up to 1.5% and 1.5 points; 4 intervention points; countries pegged to its money by treaty count toward its reach |
+
+Leading costs risk premium: the leader backs every member, every adopter's debts
+from tier III and their banks from tier IV, each in proportion to the member's
+GDP beside its own. What it earns depends on its currency's reach, which grows
+with the economies that use its money beside its own. Reach is a half when they
+come to 15% of the leader's GDP and three quarters at 45%, so the first adopters
+count most; the Monetary Union row's tooltip shows it. Seigniorage and the cut
+in risk premium are the tier's figures times reach: at tier V with a reach of a
+half, the leader mints 0.75% of its GDP a year and pays 0.75 points less. The
+cut is risk premium, not credit standing, so it counts even for a country whose
+credit standing is already at its floor. A leader at its floor also has the
+reserve-currency cut an anchor gets, since its adopters count toward it as
+pegs do; it gets the larger of the two cuts, not both.
+
+The seigniorage figures are before minting bonuses, which raise it as they
+raise all your minting: 10% under Fiat Money or 25% under Digital Currency, and
+10% for each of the five finance technologies from Banking to Modern Financial
+Instruments, so up to 75% more. At tier V and full reach that is about 2.6% of
+its GDP a year. Very High inflation takes 30 points off the bonus and
+Hyperinflation 80. The Monetary Union row's tooltip gives the leader's
+seigniorage in pounds a week, before the bonuses and with them.
+
+The intervention points are room in [the intervention
+budget](#the-intervention-budget) for more tools at once: under Central Bank
+Independence, two of them keep the three leaning tools on beside Expand Deposit
+Guarantee. A leader under Unregulated Banking gets none, and no country under
+that law is in the banking union, leader or adopter: it gets neither the
+union's intervention point nor its steadier cycle, and its Monetary Union row
+says so. If the points go, because the last adopter leaves,
+the bloc loses the tier or you stop leading, the tools your budget no longer
+covers are lifted one a month. A country under Excess Private Construction gets
+none of the extra pool contribution.
 
 Adopting needs Fiat Money or Digital Currency with a national bank, inflation
-within 3 points of the leader's and debt under half your credit limit. Leaving
+within 3 points of the leader's and debt under half your credit limit. An
+adopter keeps its own banking cycle and inflation, but goods traded in one money
+sell at one price, so its inflation is pulled toward the leader's, harder the
+further apart they are. Leaving
 worsens your credit standing for ten years, costs investment pool, relations and
 bloc cohesion, and bars you for ten years. A leader can Press for Convergence at
 50 influence per holdout, which waives the debt condition and puts The Question
@@ -970,8 +1061,9 @@ identities](09-diplomacy.md#power-bloc-principles-and-identities).
 ### Currency boards for subjects
 
 A puppet, vassal, colony or crown land whose overlord has a dial runs a currency
-board: the overlord's rate plus a quarter point, its exchange rate, and half the
-subject's minting goes to the overlord. Six months at Very Tight or Very Loose
+board: the overlord's rate plus a quarter point, its exchange rate, and half of
+what the subject mints before its bonuses goes to the overlord, whose own
+minting bonuses then raise it. Six months at Very Tight or Very Loose
 bring The Overlord's Rate, which raises liberty desire. More autonomy ends the
 board.
 
@@ -992,7 +1084,7 @@ a quarter full and the treasury is flush.
 rescue appeals, the Great Depression, the seventeen cycle tools and the
 financial regulation laws. The five additional monetary interventions in
 External & Currency are unavailable; Export Credit Facility and Capital
-Controls (Outflows) remain. It drops the monetary layer: no rate target or
+Controls remain. It drops the monetary layer: no rate target or
 mandates, inflation,
 exchange rate, gold reserve, monetary treaty articles, Monetary Union principles
 or currency boards.
@@ -1000,7 +1092,7 @@ or currency boards.
 You still borrow at a rate of your own: the Reference Rate, a point more
 without a national bank, plus credit standing and risk premium, so a Panic still
 raises your interest. Open-Market Operations needs only Keynesian Economics,
-four points and a law that allows it, and The Gold Window Closes, a
+four points and a law that allows it, and A Run on Gold, a
 gold-standard crisis event, appears only under this setting. With the rule on
 *Disabled* interest works the same way, minus the cycle's premium.
 
@@ -1045,9 +1137,11 @@ A rescue comes through the random banking events of a possible rescuer: a
 country that has researched Keynesian Economics, holds cycle value 40 or more
 and is not in default. Its event can pick a smaller trading partner in a
 Downturn or Panic, not at war with it, where one of the two markets relies on
-the other for at least 5% of its trade. That partner gets Appeal for a Rescue?;
+the other for at least 5% of its trade. Two countries in the same market, such
+as a customs union or an overlord and its subject, qualify without that. That
+partner gets Appeal for a Rescue?;
 asking costs 5% prestige for a while (Hat in Hand). The rescuer then answers
-International Bailout Request:
+A Partner Asks for Help:
 
 | Answer | Effect |
 |---|---|

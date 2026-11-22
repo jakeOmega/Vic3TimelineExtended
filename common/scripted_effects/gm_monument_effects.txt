@@ -38,29 +38,6 @@ gm_monument_monthly = {
 		}
 		gm_world_base_self_check = yes
 	}
-	# An older save's finished monuments, marked once before any is migrated
-	# (sites spec 2026-10-18 §3.5): gm_state_needs_migration reads the mark, and
-	# a finished building with neither it nor gm_migrated is a stray
-	# (gm_state_stray_building).
-	if = {
-		limit = {
-			gm_system_enabled = yes
-			NOT = { has_global_variable = gm_sites_marked }
-		}
-		set_global_variable = gm_sites_marked
-		every_state = {
-			limit = {
-				has_building = building_grand_monument
-				NOT = { has_variable = gm_migrated }
-			}
-			set_variable = gm_premigration
-		}
-	}
-	# Old saves' held specials, once a round (signatures spec §5.6).
-	if = {
-		limit = { gm_system_enabled = yes }
-		gm_sig_seed_monthly = yes
-	}
 	if = {
 		limit = {
 			gm_system_enabled = yes
@@ -198,13 +175,15 @@ gm_mon_add_age = {
 	}
 }
 
-# Container scope: this secondary monument into its state's list.
+# Container scope: this secondary monument into its state's list. Not while
+# its state is merged away and still resolves with no owner
+# (gm_tr_origin_gone): gm_tr_repair_places moves it first, or next month.
 gm_mon_list_one = {
 	save_scope_as = gm_mon_listing
 	if = {
 		limit = {
 			has_variable = gm_tr_origin
-			exists = var:gm_tr_origin
+			gm_tr_origin_gone = no
 		}
 		set_global_variable = gm_mon_lists_written
 		var:gm_tr_origin = {
@@ -254,7 +233,7 @@ gm_state_promote_secondary = {
 			remove_list_global_variable = { name = gm_monuments target = scope:gm_mon_promoted }
 			gm_state_tr_rebuild_from_moving = yes
 			scope:gm_mon_promoted = { destroy_container = yes }
-			owner = { trigger_event = { id = monument_events.20 } }
+			owner = { trigger_event = { id = monument_events.20 } } # REVIEWED 2026-11-12 (trigger_event_cycle): the secondary raised is taken off gm_monuments_here and its container destroyed above, so a state has one fewer to promote on every pass, and gm_state_tr_rebuild_from_moving has put back the building whose absence gm_monument_pass reads
 		}
 	}
 }
@@ -351,6 +330,7 @@ gm_state_demote_primary = {
 			gm_tr_copy_from_state = { FROM = gm_ceremony_level TO = gm_tr_ceremony_level }
 			gm_tr_copy_from_state = { FROM = gm_signature TO = gm_tr_signature }
 			gm_tr_copy_from_state = { FROM = gm_sig_parent TO = gm_tr_sig_parent }
+			gm_tr_copy_from_state = { FROM = gm_unearthed_for_com TO = gm_tr_unearthed_for_com }
 			set_variable = gm_tr_seen
 			gm_tr_update_picture = yes
 		}
@@ -475,6 +455,8 @@ gm_mon_check_contest = {
 # owner did not raise honours a foreign order (contested), a shrine becomes
 # heritage. Not for a civil war's transfers.
 gm_mon_changed_hands = {
+	# A find's mark was for the old owner's opportunity (gm_arch_place).
+	gm_remove_state_var = { VAR = gm_tr_unearthed_for_com }
 	if = {
 		limit = {
 			has_variable = gm_tr_seen
@@ -563,7 +545,7 @@ gm_mon_order_choice = {
 		set_variable = { name = gm_mon_order_by value = scope:gm_mon_order_owner }
 	}
 	var:gm_tr_origin ?= {
-		trigger_event = { id = monument_events.30 }
+		trigger_event = { id = monument_events.30 } # REVIEWED 2026-11-12 (trigger_event_cycle): the way back is monument_events.16's option, sent to a player only (gm_notify_new_contests: is_ai = no) and only for a contest newly marked: its immediate removes every gm_tr_new_contest before the click that orders this
 	}
 }
 
@@ -573,6 +555,14 @@ gm_mon_order_choice = {
 # 2026-10-18 §3.3: the building is not rebuilt).
 gm_mon_tear_down_one = {
 	save_scope_as = gm_mon_down
+	# Logged, as gm_state_tear_down is (log triage 2026-11-06).
+	if = {
+		limit = { has_variable = gm_tr_landmark }
+		debug_log = "TE_MONUMENTS: pulled down beside another monument: landmark [THIS.Var('gm_tr_landmark').GetFlagName] in [SCOPE.sState('gm_mon_run_state').GetOwner.GetTagName]'s part of [SCOPE.sState('gm_mon_run_state').GetNameNoFormatting]"
+	}
+	else = {
+		debug_log = "TE_MONUMENTS: pulled down beside another monument: a monument in [SCOPE.sState('gm_mon_run_state').GetOwner.GetTagName]'s part of [SCOPE.sState('gm_mon_run_state').GetNameNoFormatting]"
+	}
 	set_variable = { name = gm_tr_g value = gm_mon_grandeur }
 	var:gm_tr_origin ?= {
 		owner = {
@@ -667,9 +657,9 @@ gm_state_run_mon_orders = {
 					has_variable = gm_mon_order
 				}
 			}
-			trigger_event = { id = monument_events.30 days = 1 }
+			gm_state_tomorrow = { MARK = gm_mon_orders_tomorrow QUEUED = gm_mon_orders_relay_queued EVENT = monument_events.34 }
 		}
-		owner = { trigger_event = { id = monument_events.20 } }
+		owner = { trigger_event = { id = monument_events.20 } } # REVIEWED 2026-11-12 (trigger_event_cycle): every order run here is spent first (gm_mon_order removed, or its monument destroyed by gm_mon_tear_down_one) and what is left waits a day (gm_state_tomorrow); a new order comes only from a player's click or the AI's monthly pass, neither inside the refresh
 	}
 }
 
@@ -685,6 +675,7 @@ gm_mon_forget_home = {
 	gm_remove_state_var = { VAR = gm_tr_new_contest }
 	gm_remove_state_var = { VAR = gm_mon_order }
 	gm_remove_state_var = { VAR = gm_mon_order_by }
+	gm_remove_state_var = { VAR = gm_tr_unearthed_for_com }
 }
 
 # ---- The swap (spec 2026-10-16 §3.3) -----------------------------------------------
@@ -711,7 +702,7 @@ gm_state_raise_secondary = {
 	}
 	remove_list_global_variable = { name = gm_monuments target = scope:gm_mon_raise }
 	scope:gm_mon_raise = { destroy_container = yes }
-	owner = { trigger_event = { id = monument_events.20 } }
+	owner = { trigger_event = { id = monument_events.20 } } # REVIEWED 2026-11-12 (trigger_event_cycle): each caller spends what brought it here first: gm_state_settle_newcomer removes gm_newcomer, gm_state_run_mon_orders removes the gm_mon_order, and gm_state_raise_orphan's orphan has its gm_tr_origin (gm_sh_adopt_beside, which fires no refresh of its own: issue #1696); the container raised is destroyed above
 }
 
 # State scope, from monument_events.29 once a newcomer (gm_newcomer, a
@@ -1087,8 +1078,11 @@ gm_mon_copy_record = {
 # State scope, before gm_state_tr_take on the AI's occupation roll. One roll
 # falls on one monument of the state: the primary, or (every monument as
 # likely) a secondary, named in gm_tr_take_target. A primary that cannot go
-# (undedicated, a Grand Shrine: gm_state_tr_takeable) leaves the roll to the
-# secondaries, which the caller's gm_state_tr_any_takeable found open.
+# (undedicated, a Grand Shrine, a piece of it abroad: gm_state_tr_takeable)
+# leaves the roll to the secondaries, which the caller's
+# gm_state_tr_any_takeable found open. A secondary with a piece of it abroad is
+# never the pick (gm_mon_tr_piece_abroad): a monument is looted once until what
+# was taken comes home.
 gm_state_tr_ai_choose_target = {
 	gm_remove_state_var = { VAR = gm_tr_take_target }
 	if = {
@@ -1099,12 +1093,20 @@ gm_state_tr_ai_choose_target = {
 		clear_saved_scope = gm_mon_pick
 		if = {
 			limit = { gm_state_tr_takeable = no }
-			random_in_list = { variable = gm_monuments_here save_scope_as = gm_mon_pick }
+			random_in_list = {
+				variable = gm_monuments_here
+				limit = { gm_mon_tr_piece_abroad = no }
+				save_scope_as = gm_mon_pick
+			}
 		}
 		else = {
 			random = {
 				chance = gm_state_tr_ai_secondary_chance
-				random_in_list = { variable = gm_monuments_here save_scope_as = gm_mon_pick }
+				random_in_list = {
+					variable = gm_monuments_here
+					limit = { gm_mon_tr_piece_abroad = no }
+					save_scope_as = gm_mon_pick
+				}
 			}
 		}
 		if = {
@@ -1160,7 +1162,10 @@ gm_seed_landmark_beside = {
 			set_variable = gm_mon_listed
 			trigger_event = { id = monument_events.20 }
 		}
-		debug_log = "TE_MONUMENTS: landmark $KEY$ placed beside the monument already standing in its state: level $LEVEL$, form $FORM$"
+		# its records, not its arguments (no $X$ inside a debug_log string: te_debug_log_arg_effects.txt)
+		scope:gm_tr_moving = {
+			debug_log = "TE_MONUMENTS: landmark [THIS.Var('gm_tr_landmark').GetFlagName] placed beside the monument already standing in its state: level [THIS.Var('gm_tr_levels').GetValue|0], form [THIS.Var('gm_tr_form').GetFlagName]"
+		}
 	}
 }
 
@@ -1184,6 +1189,11 @@ gm_seed_landmark_beside = {
 # only by the pass and a raise; the refresh, which tooltips walk, only asks
 # the hidden event. No timed variable on a shadow
 # (container_timed_variable_audit).
+# One monument, one shadow (issue #1409): no shadow is written for a state
+# whose records are a second copy of a monument another state keeps
+# (gm_state_records_a_copy), and an orphan whose landmark already stands is a
+# second copy too, dropped without a loss (gm_sh_landmark_stands). The loss
+# line and monument_merge_kept name the monument they read.
 
 # No scope, from gm_monument_monthly. Orphans first, then stale shadows, then
 # every recorded primary's shadow written afresh.
@@ -1227,7 +1237,14 @@ gm_shadow_monthly = {
 				save_temporary_scope_as = gm_tmp_sh
 				var:gm_tr_origin = {
 					OR = {
-						NOT = { has_building = building_grand_monument }
+						# Not while its building may stand, unrecorded, in another
+						# part of its region: a merge's old state still resolves for
+						# a day or two before the shadow reads as an orphan
+						# (2026-11-06, Jantar Mantar).
+						AND = {
+							NOT = { has_building = building_grand_monument }
+							NOT = { state_region = { any_scope_state = { gm_state_unrecorded = yes } } }
+						}
 						NOT = { has_variable = gm_seen }
 						NOT = { var:gm_shadow ?= scope:gm_tmp_sh }
 					}
@@ -1250,6 +1267,10 @@ gm_shadow_monthly = {
 # primary's shadow, made once and refreshed in place. Not while its method is
 # being put back, a ceremony asks or script made its building today, when its
 # dedication may read as the engine's copy: last month's stands meanwhile.
+# Not for a second copy of a monument another state keeps
+# (gm_state_records_a_copy, issue #1409): its shadow would take over the other
+# state's, or be a second one that orphans when the copy's part merges back.
+# Noted in the log once a year a state.
 gm_state_write_shadow = {
 	if = {
 		limit = {
@@ -1259,6 +1280,7 @@ gm_state_write_shadow = {
 			NOT = { has_variable = gm_restore_pm }
 			NOT = { has_variable = gm_ceremony_pending }
 			NOT = { has_variable = gm_rebuilding }
+			gm_state_records_a_copy = no
 		}
 		save_scope_as = gm_tr_state
 		clear_saved_scope = gm_sh_new
@@ -1318,10 +1340,27 @@ gm_state_write_shadow = {
 				gm_sh_mirror = { FROM = gm_ceremony_level TO = gm_tr_ceremony_level }
 				gm_sh_mirror = { FROM = gm_signature TO = gm_tr_signature }
 				gm_sh_mirror = { FROM = gm_sig_parent TO = gm_tr_sig_parent }
+				gm_sh_mirror = { FROM = gm_unearthed_for_com TO = gm_tr_unearthed_for_com }
 				gm_sh_mirror = { FROM = gm_picture_code TO = gm_tr_picture_code }
 				set_variable = gm_tr_seen
 			}
 			remove_variable = gm_sh_levels
+		}
+	}
+	else_if = {
+		limit = {
+			has_building = building_grand_monument
+			has_variable = gm_seen
+			NOT = { has_variable = gm_sh_copy_noted }
+			gm_state_records_a_copy = yes
+		}
+		set_variable = { name = gm_sh_copy_noted days = 365 }
+		if = {
+			limit = { has_variable = gm_landmark }
+			debug_log = "TE_MONUMENTS: no shadow written for the monument of [THIS.GetState.GetOwner.GetTagName]'s part of [THIS.GetState.GetNameNoFormatting]: its records are a second copy of [THIS.Var('gm_landmark').GetFlagName], which another state's shadow keeps (issue 1409)"
+		}
+		else = {
+			debug_log = "TE_MONUMENTS: no shadow written for the monument of [THIS.GetState.GetOwner.GetTagName]'s part of [THIS.GetState.GetNameNoFormatting]: its records are a second copy of another state's, whose shadow its own link names (issue 1409)"
 		}
 	}
 }
@@ -1372,6 +1411,30 @@ gm_state_drop_shadow = {
 	}
 }
 
+# State scope. This state's event again tomorrow: gm_state_run_mon_orders's
+# orders left over (monument_events.30) and gm_state_adopt_orphans's wait for a
+# rebuild in the region (.31). A state event triggered with a delay never runs
+# (the delayed_state_event self-check, BROKEN in the 2026-11-08 new game; the
+# 1.14.5 and 1.15 saves showed it first), so the day waits on a country event,
+# the relay (.34 for .30, .35 for .31), sent to the owner: it runs the state's
+# event undelayed, which runs it at once. MARK names the states that asked;
+# the relay walks every state, so one that changed hands in the day keeps its
+# pass, and takes the mark off before it runs, so a state asked again while it
+# runs waits for the next relay. QUEUED, on the owner, keeps one relay of a kind
+# on its way to each country: the relay removes it first, and the mark expires
+# in two days, should the owner be gone before its relay runs. Another country's
+# relay that day finds the marks already taken off, and runs nothing.
+gm_state_tomorrow = {
+	set_variable = { name = $MARK$ days = 2 }
+	owner = {
+		if = {
+			limit = { NOT = { has_variable = $QUEUED$ } }
+			set_variable = { name = $QUEUED$ days = 2 }
+			trigger_event = { id = $EVENT$ days = 1 }
+		}
+	}
+}
+
 # State scope, real execution only: monument_events.1, .29 and .31, and
 # gm_state_changed_hands. Adopt every orphan of this state's region. With a
 # building in the region made or removed today (it may not read back yet), it
@@ -1383,7 +1446,7 @@ gm_state_adopt_orphans = {
 		limit = {
 			scope:gm_sh_region = { any_scope_state = { has_variable = gm_rebuilding } }
 		}
-		trigger_event = { id = monument_events.31 days = 1 }
+		gm_state_tomorrow = { MARK = gm_adopt_orphans_tomorrow QUEUED = gm_adopt_orphans_relay_queued EVENT = monument_events.35 }
 	}
 	else = {
 		# The monuments that stood beside it come first: the lists must name
@@ -1416,7 +1479,7 @@ gm_state_adopt_orphans = {
 				limit = {
 					scope:gm_sh_region = { any_scope_state = { has_variable = gm_rebuilding } }
 				}
-				trigger_event = { id = monument_events.31 days = 1 }
+				gm_state_tomorrow = { MARK = gm_adopt_orphans_tomorrow QUEUED = gm_adopt_orphans_relay_queued EVENT = monument_events.35 }
 			}
 			else = {
 				gm_sh_settle_region = yes
@@ -1449,8 +1512,8 @@ gm_sh_settle_region = {
 		list = gm_sh_left
 		gm_sh_settle_one = yes
 	}
-	# Not an older save's building before monument_events.32 records it: it
-	# stands at its full height until then (gm_migrated).
+	# Only a building script made (gm_migrated): one no record describes is a
+	# stray's, not this monument's.
 	scope:gm_sh_region = {
 		every_scope_state = {
 			limit = {
@@ -1469,60 +1532,97 @@ gm_sh_settle_region = {
 # takes a finished building no record describes as its own (the merge brought
 # it), stands beside the monument there, or, with no finished building there,
 # is raised as that part's monument into a new one. With no such part (it
-# changed hands as it merged), the most populous part of the region with a
-# finished building takes it beside its monument. Else it is lost.
+# changed hands as it merged), a part with a finished building no record
+# describes takes it as its own (an annexation brought the building there),
+# else the most populous part of the region with a finished building takes it
+# beside its monument. Else it is lost. First, an
+# orphan whose landmark already stands is a second copy of that monument's
+# records (issue #1409): dropped, neither kept nor lost.
 gm_sh_settle_one = {
 	if = {
 		limit = { gm_sh_orphan_of = { REGION = scope:gm_sh_region } }
 		save_scope_as = gm_sh_pick
 		clear_saved_scope = gm_sh_was_owner
 		clear_saved_scope = gm_sh_target
-		var:gm_sh_owner ?= { save_scope_as = gm_sh_was_owner }
 		if = {
-			limit = { exists = scope:gm_sh_was_owner }
-			scope:gm_sh_region = {
-				random_scope_state = {
-					limit = { exists = owner owner = scope:gm_sh_was_owner }
-					save_scope_as = gm_sh_target
-				}
-			}
-		}
-		if = {
-			limit = { NOT = { exists = scope:gm_sh_target } }
-			scope:gm_sh_region = {
-				ordered_scope_state = {
-					limit = {
-						has_building = building_grand_monument
-						has_variable = gm_seen
-					}
-					order_by = state_population
-					position = 0
-					check_range_bounds = no
-					save_scope_as = gm_sh_target
-				}
-			}
-		}
-		if = {
-			limit = { NOT = { exists = scope:gm_sh_target } }
-			gm_sh_lost = yes
-		}
-		else_if = {
-			limit = { scope:gm_sh_target = { gm_state_unrecorded = yes } }
-			scope:gm_sh_target = { gm_state_raise_orphan = yes }
-		}
-		else_if = {
-			limit = { scope:gm_sh_target = { has_building = building_grand_monument has_variable = gm_seen } }
-			gm_sh_adopt_beside = yes
-			debug_log = "TE_MONUMENTS: a monument whose state merged into another part of its region stands beside the monument there: [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded"
-		}
-		else_if = {
-			limit = { scope:gm_sh_target = { NOT = { has_building = building_grand_monument } } }
-			scope:gm_sh_target = { gm_state_raise_orphan = yes }
+			limit = { gm_sh_landmark_stands = yes }
+			gm_sh_drop_copy = yes
 		}
 		else = {
-			gm_sh_lost = yes
+			var:gm_sh_owner ?= { save_scope_as = gm_sh_was_owner }
+			if = {
+				limit = { exists = scope:gm_sh_was_owner }
+				scope:gm_sh_region = {
+					random_scope_state = {
+						limit = { exists = owner owner = scope:gm_sh_was_owner }
+						save_scope_as = gm_sh_target
+					}
+				}
+			}
+			# Its last owner holds no part, but the merge brought its building
+			# into another's (an annexation: 2026-11-06, Jantar Mantar in the
+			# East India Company's part of Rajputana): the part with a
+			# finished building no record describes takes it as its own.
+			if = {
+				limit = { NOT = { exists = scope:gm_sh_target } }
+				scope:gm_sh_region = {
+					random_scope_state = {
+						limit = { gm_state_unrecorded = yes }
+						save_scope_as = gm_sh_target
+					}
+				}
+			}
+			if = {
+				limit = { NOT = { exists = scope:gm_sh_target } }
+				scope:gm_sh_region = {
+					ordered_scope_state = {
+						limit = {
+							has_building = building_grand_monument
+							has_variable = gm_seen
+						}
+						order_by = state_population
+						position = 0
+						check_range_bounds = no
+						save_scope_as = gm_sh_target
+					}
+				}
+			}
+			if = {
+				limit = { NOT = { exists = scope:gm_sh_target } }
+				gm_sh_lost = yes
+			}
+			else_if = {
+				limit = { scope:gm_sh_target = { gm_state_unrecorded = yes } }
+				scope:gm_sh_target = { gm_state_raise_orphan = yes }
+			}
+			else_if = {
+				limit = { scope:gm_sh_target = { has_building = building_grand_monument has_variable = gm_seen } }
+				gm_sh_adopt_beside = yes
+				debug_log = "TE_MONUMENTS: a monument whose state merged into another part of its region stands beside the monument there: [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded"
+				scope:gm_sh_target = {
+					owner = { trigger_event = { id = monument_events.20 } } # REVIEWED 2026-11-13 (trigger_event_cycle): gm_sh_adopt_beside, above, set this orphan's gm_tr_origin, which ends its being an orphan (gm_sh_orphan_of), so the refresh's gm_state_merge_pending -> monument_events.29 -> gm_state_adopt_orphans finds one fewer on every pass
+				}
+			}
+			else_if = {
+				limit = { scope:gm_sh_target = { NOT = { has_building = building_grand_monument } } }
+				scope:gm_sh_target = { gm_state_raise_orphan = yes }
+			}
+			else = {
+				gm_sh_lost = yes
+			}
 		}
 	}
+}
+
+# Container scope, an orphaned shadow whose landmark already stands
+# (gm_sh_landmark_stands; scope:gm_sh_region its region). A second copy of
+# that monument's records, from a state whose variables the engine copied
+# (issue #1409): it goes, logged, and is no merge for monument_merge_kept to
+# read, kept or lost.
+gm_sh_drop_copy = {
+	gm_sh_log_numbers = yes
+	debug_log = "TE_MONUMENTS: a shadow whose state merged into another part of its region is dropped, not lost: its landmark [THIS.Var('gm_sh_log_id').GetFlagName] already stands, so it was a second copy of its records ([SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded, [SCOPE.ScriptValue('gm_sh_log_buildings')|0] finished buildings in [THIS.Var('gm_sh_log_place').GetState.GetNameNoFormatting]; issue 1409)"
+	gm_sh_drop = yes
 }
 
 # Container scope, an orphaned shadow, with scope:gm_sh_target the state that
@@ -1530,7 +1630,12 @@ gm_sh_settle_one = {
 # a monument beside the one there, as a returned trophy does
 # (gm_tr_become_monument): the same container, retagged and moved from
 # gm_shadows to gm_monuments, in the state's and its owner's lists at once, its
-# size its records (sites spec 2026-10-18 §3.3).
+# size its records (sites spec 2026-10-18 §3.3). It fires no refresh: its
+# caller does once it is done with the monument. gm_state_raise_orphan goes on
+# to raise it onto the state's variables, and a refresh before that read the
+# state as still unrecorded: it settled the region's next orphan onto the same
+# building, whose records the raise then cleared, or read the building as a
+# stray and removed it (issue #1696).
 gm_sh_adopt_beside = {
 	save_scope_as = gm_sh_moving
 	gm_sh_log_numbers = yes
@@ -1552,11 +1657,12 @@ gm_sh_adopt_beside = {
 		owner = {
 			add_to_variable_list = { name = gm_monuments_held target = scope:gm_sh_moving }
 			set_variable = gm_mon_listed
-			trigger_event = { id = monument_events.20 }
 		}
 	}
 	set_global_variable = { name = gm_sh_log_kept_now value = 1 }
 	gm_monument_merge_self_check = yes
+	# The log's names come off a monument that stays (gm_sh_log_numbers).
+	gm_sh_log_clear = yes
 }
 
 # State scope (scope:gm_sh_target), with scope:gm_sh_pick an orphaned shadow of
@@ -1565,7 +1671,10 @@ gm_sh_adopt_beside = {
 # stands. It stands beside first (the lists), then is raised onto the state's
 # variables as a swap raises a secondary (gm_state_raise_secondary): its
 # records, its dedication put back through gm_restore_pm. Its shadow again at
-# once when its method already reads back.
+# once when its method already reads back. No refresh runs between the two
+# (gm_sh_adopt_beside fires none; the raise fires one once the records are
+# here), so the region's next orphan, at its turn, finds this monument
+# recorded and stands beside it (issue #1696).
 gm_state_raise_orphan = {
 	if = {
 		limit = { NOT = { has_building = building_grand_monument } }
@@ -1585,25 +1694,91 @@ gm_state_raise_orphan = {
 }
 
 # Container scope, an orphaned shadow no part of its region takes. Logged, then
-# gone.
+# gone. The line names it (issue #1409): its landmark or style, its region and
+# its last owner, and whether that owner holds a part of the region.
 gm_sh_lost = {
 	gm_sh_log_numbers = yes
 	set_global_variable = { name = gm_sh_log_kept_now value = 0 }
-	debug_log = "TE_MONUMENTS: a monument whose state merged into another part of its region is lost, no part of the region taking it: [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded, [SCOPE.ScriptValue('gm_sh_log_buildings')|0] finished buildings in its region"
+	if = {
+		limit = { has_variable = gm_sh_log_owner_at }
+		debug_log = "TE_MONUMENTS: a monument whose state merged into another part of its region is lost, no part of the region taking it: [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded, [SCOPE.ScriptValue('gm_sh_log_buildings')|0] finished buildings in its region; it is [THIS.Var('gm_sh_log_id').GetFlagName] in [THIS.Var('gm_sh_log_place').GetState.GetNameNoFormatting], last owner [THIS.Var('gm_sh_log_owner_at').GetState.GetOwner.GetTagName], parts of the region it holds [SCOPE.ScriptValue('gm_sh_log_owner_parts')|0]"
+	}
+	else = {
+		debug_log = "TE_MONUMENTS: a monument whose state merged into another part of its region is lost, no part of the region taking it: [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded, [SCOPE.ScriptValue('gm_sh_log_buildings')|0] finished buildings in its region; it is [THIS.Var('gm_sh_log_id').GetFlagName] in [THIS.Var('gm_sh_log_place').GetState.GetNameNoFormatting], its last owner gone"
+	}
 	gm_monument_merge_self_check = yes
 	gm_sh_drop = yes
 }
 
-# Container scope, a shadow: what the log line and the self-check print.
+# Container scope, a shadow (scope:gm_sh_region its region): what the log
+# lines and the self-check print. The numbers go into globals, which
+# SCOPE.ScriptValue wrappers read (a script value in debug_log is evaluated
+# against ROOT and sees no saved scope). The names go onto the shadow, which
+# the lines read in its own scope through chains scripting_best_practices.md
+# shows printing (issue #1409): its landmark, or its style if it has none, as
+# a flag (THIS.Var('x').GetFlagName); a state of its region and its last
+# owner's capital, as states (THIS.Var('x').GetState.GetNameNoFormatting, its
+# GetOwner.GetTagName; a country read through Var().GetCountry printed
+# nothing). A state of the region always stands: the state adopting the
+# orphans is in it. gm_sh_log_clear takes the names off a shadow that stays.
 gm_sh_log_numbers = {
 	set_global_variable = { name = gm_sh_log_levels_now value = gm_mon_levels }
 	set_global_variable = { name = gm_sh_log_buildings_now value = 0 }
+	set_global_variable = { name = gm_sh_log_owner_parts_now value = 0 }
+	clear_saved_scope = gm_sh_log_state
+	clear_saved_scope = gm_sh_log_owner
+	clear_saved_scope = gm_sh_log_owner_cap
+	var:gm_sh_owner ?= {
+		save_scope_as = gm_sh_log_owner
+		if = {
+			limit = { is_country_alive = yes }
+			capital ?= { save_scope_as = gm_sh_log_owner_cap }
+		}
+	}
 	scope:gm_sh_region = {
 		every_scope_state = {
 			limit = { has_building = building_grand_monument }
 			change_global_variable = { name = gm_sh_log_buildings_now add = 1 }
 		}
+		random_scope_state = { save_scope_as = gm_sh_log_state }
+		if = {
+			limit = { exists = scope:gm_sh_log_owner_cap }
+			every_scope_state = {
+				limit = { exists = owner owner = scope:gm_sh_log_owner }
+				change_global_variable = { name = gm_sh_log_owner_parts_now add = 1 }
+			}
+		}
 	}
+	if = {
+		limit = { has_variable = gm_tr_landmark }
+		set_variable = { name = gm_sh_log_id value = var:gm_tr_landmark }
+	}
+	else_if = {
+		limit = { has_variable = gm_tr_skin }
+		set_variable = { name = gm_sh_log_id value = var:gm_tr_skin }
+	}
+	else = {
+		set_variable = { name = gm_sh_log_id value = flag:none }
+	}
+	if = {
+		limit = { exists = scope:gm_sh_log_state }
+		set_variable = { name = gm_sh_log_place value = scope:gm_sh_log_state }
+	}
+	if = {
+		limit = { exists = scope:gm_sh_log_owner_cap }
+		set_variable = { name = gm_sh_log_owner_at value = scope:gm_sh_log_owner_cap }
+	}
+	else = {
+		gm_remove_state_var = { VAR = gm_sh_log_owner_at }
+	}
+}
+
+# Container scope, a shadow that stays (gm_sh_adopt_beside): the names
+# gm_sh_log_numbers put on it for the log lines, gone once they are printed.
+gm_sh_log_clear = {
+	gm_remove_state_var = { VAR = gm_sh_log_id }
+	gm_remove_state_var = { VAR = gm_sh_log_place }
+	gm_remove_state_var = { VAR = gm_sh_log_owner_at }
 }
 
 # State scope, a state of a merged region: its finished building stands taller
@@ -1689,8 +1864,12 @@ gm_mon_repair_origin = {
 }
 
 # ---- Self-check: a merge keeps its monument (issue #936) -------------------------------
-# Any scope (the globals gm_sh_log_numbers wrote), the first time a game
-# settles an orphan: whether it was kept (stands beside, or raised) or lost.
+# Container scope, the orphaned shadow being settled (gm_sh_adopt_beside,
+# gm_sh_lost), after gm_sh_log_numbers: the first time a game settles an
+# orphan, whether it was kept (stands beside, or raised) or lost, naming it
+# (issue #1409). Not for a shadow of no levels, nor for one dropped as a second
+# copy of a landmark that stands (gm_sh_drop_copy never calls it): no monument
+# was merged away there, so neither OK nor BROKEN would say anything.
 gm_monument_merge_self_check = {
 	if = {
 		limit = {
@@ -1701,10 +1880,14 @@ gm_monument_merge_self_check = {
 		set_global_variable = gm_merge_self_checked
 		if = {
 			limit = { global_var:gm_sh_log_kept_now = 1 }
-			debug_log = "TE_SELF_CHECK OK monument_merge_kept (a monument whose state merged into another part of its region stands again from its shadow: [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded, [SCOPE.ScriptValue('gm_sh_log_buildings')|0] finished buildings in the region)"
+			debug_log = "TE_SELF_CHECK OK monument_merge_kept (a monument whose state merged into another part of its region stands again from its shadow: [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded, [SCOPE.ScriptValue('gm_sh_log_buildings')|0] finished buildings in the region; it is [THIS.Var('gm_sh_log_id').GetFlagName] in [THIS.Var('gm_sh_log_place').GetState.GetNameNoFormatting])"
+		}
+		else_if = {
+			limit = { has_variable = gm_sh_log_owner_at }
+			debug_log = "TE_SELF_CHECK BROKEN monument_merge_kept (a monument whose state merged into another part of its region is lost: no part of its region took it; [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded, [SCOPE.ScriptValue('gm_sh_log_buildings')|0] finished buildings there; it is [THIS.Var('gm_sh_log_id').GetFlagName] in [THIS.Var('gm_sh_log_place').GetState.GetNameNoFormatting], last owner [THIS.Var('gm_sh_log_owner_at').GetState.GetOwner.GetTagName], parts of the region it holds [SCOPE.ScriptValue('gm_sh_log_owner_parts')|0]; see docs/testing/grand-monuments-ageing-playtest.md)"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN monument_merge_kept (a monument whose state merged into another part of its region is lost: no part of its region took it; [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded, [SCOPE.ScriptValue('gm_sh_log_buildings')|0] finished buildings there; see docs/testing/grand-monuments-ageing-playtest.md)"
+			debug_log = "TE_SELF_CHECK BROKEN monument_merge_kept (a monument whose state merged into another part of its region is lost: no part of its region took it; [SCOPE.ScriptValue('gm_sh_log_levels')|0] levels recorded, [SCOPE.ScriptValue('gm_sh_log_buildings')|0] finished buildings there; it is [THIS.Var('gm_sh_log_id').GetFlagName] in [THIS.Var('gm_sh_log_place').GetState.GetNameNoFormatting], its last owner gone; see docs/testing/grand-monuments-ageing-playtest.md)"
 		}
 	}
 }

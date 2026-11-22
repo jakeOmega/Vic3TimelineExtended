@@ -129,6 +129,22 @@ defaults (September 2026, ~350 icons):
   masks) or one object on a small base.
 - A drawn `damage` crack is dark, and vanishes on a dark surface (a deep-blue
   dome): derive the damaged state from a lighter candidate.
+- A colour that is also a thing can be drawn as the thing: "two big round orange
+  propellant tank spheres" drew an orange with a cap on one seed in four (the fleet
+  cards, 2026-11-14).
+- A plain pale face inside a rim cuts out to the rim alone (a bare steel shield,
+  three seeds in four): pick the candidate whose face is a solid mid-tone.
+- A long ship seen from the side is a sliver at 24 px. Of the candidates, the one
+  drawn at an angle, with the most bulk, reads best; a dark grey one sinks into the
+  panel's dark ground and is gone when the panel fades it (the Warships role is the
+  warship in silver).
+- In a wide picture, white spacecraft over the Earth draw space shuttles, two seeds
+  in four with hull lettering, and are lost against bright cloud at half size; a
+  planet asked for "small in the distance behind" the ships came out large, with a
+  second one beside it. Ask for dark hulls on a dark ground, and for the planet as
+  "the small disc of" it at an edge (Space Fleets' banners, 2026-11-14).
+- Fire loses its reds to the folder's grade: an explosion came out salmon, weaker
+  at 20 px than the drawn red burst it replaced. On a drawn red disc it reads.
 When both candidates miss, change the subject. When the idea is right and the
 renders are weak, `generate_icons.py --seeds 4` adds two more candidates and
 keeps the first two.
@@ -527,6 +543,17 @@ CATEGORIES = {
     **{sys_: dict(folder=folder, size=150, mode="cutout", fill=0.92, grade_strength=0.5,
                   grade_folder="alert_icons", neighbours="alert_icons", gui=(_GUI_FILES[sys_],), style=UN_STYLE)
        for sys_, folder in _GUI_SYSTEMS.items()},
+    # Space Fleets' banner (space_race_gui_icons.md, "Space Fleets: the banner"): the picture that
+    # heads the section, one per drive level, in te_sr_fleet_banner (480 x 110). Written at twice
+    # that, 960 x 220: the widget's own shape, so the game crops nothing, and both sides multiples of
+    # 4, which block compression needs. Rendered wide (1792 x 416) so the scene is composed for the
+    # shape, not cut from a taller one. Block-compressed like the institution strips.
+    "space_banner": dict(
+        folder="space_race", root="gfx/interface/illustrations", size=(960, 220),
+        gen_size=(1792, 416), mode="banner", dds_format="BC7_UNORM_SRGB",
+        gui=("gui/journal_entry_widgets/space_race_widget.gui",),
+        style="{subject}, wide panoramic view with the ships in a horizontal band across the middle of the "
+              "picture, digital painting, cinematic light, hard science fiction, visible brush strokes"),
     # The Demographics History charts' pips (9-10 px, in a lane above a census
     # year's bars): at that size only a flat one-colour shape reads, so a
     # silhouette is embossed in one colour, as the mobilization options are,
@@ -1046,7 +1073,6 @@ ICONS: dict[str, dict[str, dict]] = {
         "building_manganese_mine": {"subject": "a mine with a timber headframe and ore sheds on dark rocky ground, with a heap of lumpy black-brown manganese ore nodules in the foreground", "seed": 0},
         "building_chromium_mine": {"subject": "a terraced open-pit mine in dark grey rock, a processing plant and a long ore conveyor at its rim, loosely hand-painted with visible brush strokes", "seed": 2},
         "building_specialty_alloy_metal_mine": {"subject": "a mountainside mine with a steel headframe and ore bins, with a bundle of dull grey tungsten rods and dark metallic ore crystals in the foreground", "seed": 1},
-        "building_copper_mine": {"subject": "a huge stepped open-pit copper mine with terraced orange-brown walls and a turquoise pool at the bottom, with a stack of shiny reddish copper ingots in the foreground", "seed": 0},
         "building_bauxite_mine": {"subject": "an open-pit mine cut into deep red earth with trucks on its terraces, with a heap of red-brown bauxite ore pebbles in the foreground", "seed": 1},
         "building_precious_minor_base_metal_mine": {"subject": "a hillside mine entrance with a timber headframe and ore carts, with a stack of silver bars and dull grey tin ingots in the foreground", "seed": 0},
         "building_nickel_cobalt_mine": {"subject": "an open-pit mine with rust-orange earthen walls, with a heap of silvery nickel pellets and deep blue cobalt ore crystals in the foreground", "seed": 0},
@@ -1275,7 +1301,6 @@ ICONS: dict[str, dict[str, dict]] = {
         # Vanilla draws each bureaucracy law as an object beside a quill in an inkwell.
         "law_automated_bureaucracy": {"subject": "a small brass robot arm holding a feather quill over a square glass inkwell", "seed": 1},
         "law_contracted_administration": {"subject": "a closed leather briefcase beside a feather quill standing in a square glass inkwell", "seed": 0},
-        "law_communal_administration": {"subject": "three raised open hands side by side beside a feather quill in a square glass inkwell", "seed": 0},
         "law_private_policing": {"subject": "a security guard's peaked cap lying beside a big ring of keys and a flashlight", "seed": 0},
         # gen_law_icons.py's flat bronze glyphs (2026-04-12), many near-identical
         # (spec, "Batch 4"). One object per law in the law style; siblings differ in
@@ -1351,9 +1376,9 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_morphological_freedom": {"subject": "a soft fox tail and a pair of pointed fox ears lying on a folded silk scarf", "seed": 0},
         # Clade Citizenship (era 13 spec § 7.3) borrows Unrestricted Augmentation's icon.
         "law_clade_citizenship": {"subject": "a citizen's passport lying open, its photograph showing a smiling face with feathery gills at the neck", "seed": 0},
-        # Prescribed Form (owner, 2026-11-04) borrows Mandatory Augmentation's
-        # icon until it is painted (seed None: not yet picked).
-        "law_prescribed_form": {"subject": "a row of identical plain grey artist's mannequins standing shoulder to shoulder on one long wooden stand", "seed": None},
+        # Prescribed Form (owner, 2026-11-04) borrowed Mandatory Augmentation's
+        # icon until icon batch 10 (2026-11-06) painted its own.
+        "law_prescribed_form": {"subject": "a row of identical plain grey artist's mannequins standing shoulder to shoulder on one long wooden stand", "seed": 1},
         # Inheritance Laws
         "law_equal_inheritance": {"subject": "a long crusty loaf of bread cut into identical even slices on a wooden board", "seed": 2},
         # 2026-10-08 redesign (#822). Testation: a pen lying across the scroll
@@ -1531,6 +1556,8 @@ ICONS: dict[str, dict[str, dict]] = {
     # Diplomatic Framework, on the Ideological Union's lectern.
     "power_bloc_identity": {
         "identity_diplomatic": {"subject": "a rolled treaty parchment with a red wax seal, a gilded olive branch laid across it", "seed": 0},
+        "identity_creditors_consortium": {"subject": "a heavy iron-bound strongbox with gilded corners and a large brass padlock, a rolled bond certificate tied with a red ribbon lying on its lid", "seed": 1},
+        "identity_research_commons": {"subject": "an ornate brass model of an atom, three gilded elliptical orbits around a round glowing nucleus, on a small round wooden stand", "seed": 3},
     },
     "leader_ideology": {
         "ideology_multicultural": {"subject": "three hands clasping each other's wrists to form a triangle", "seed": 0},
@@ -1614,6 +1641,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "je_world_war": {"subject": "a dark thundercloud with yellow lightning bolts above a small black iron field cannon", "seed": 0},
         # Legislated tax code: s1 stamped a coin with $ and s3 with a rouble sign.
         "je_tax_code": {"subject": "a thick open ledger book with a red wax seal on its page and a short stack of gold coins beside it", "seed": 2},
+        "je_research_commons": {"subject": "a polished brass laboratory microscope beside a round-bottomed glass flask of glowing green liquid", "seed": 2},
     },
     # The Space Race milestones, in order, over the shared backdrop. Silhouettes
     # have to differ at 40 px, and none may redraw a space tech's icon
@@ -1627,7 +1655,9 @@ ICONS: dict[str, dict[str, dict]] = {
         "je_space_race_orbital": {"subject": "a polished silver sphere with four long swept-back whip antennas", "seed": 3},
         "je_space_race_moon_landing": {"subject": "a spindly gold-foil-wrapped lunar lander with four thin legs, standing on a small mound of grey moon dust", "seed": 0},
         "je_space_race_probe": {"subject": "a deep-space probe with a large gold parabolic dish, a long boom carrying a small instrument box, and a grey cylindrical power unit", "seed": 1},
-        "je_space_race_moon_base": {"subject": "a low moon habitat of two silver-grey rounded domes joined by a short tube, small square lit windows along its side, on a mound of grey moon dust", "seed": 2},
+        # The retired Moon Base (#1407) has no entry to wire any more, so it left the
+        # registry; its icon (event_icons/je_space_race_moon_base.dds, s2: "a low moon habitat of
+        # two silver-grey rounded domes") stays, for the record's programme row and notice.
         "je_space_race_mars_landing": {"subject": "a dark grey cone-shaped crew capsule standing on three legs, its hatch open with a small ladder, on a mound of rust-red rocky ground", "seed": 2},
         "je_space_race_interstellar_probe": {"subject": "a long slim silver needle-shaped spacecraft with a wide round gold shield disc at its rear and a bright blue engine flame", "seed": 1},
         "je_space_race_interstellar_results": {"subject": "three large grey radio-telescope dishes in a row, tilted up toward the sky on steel frames", "seed": 1},
@@ -2226,6 +2256,14 @@ ICONS: dict[str, dict[str, dict]] = {
         # A colony's own flag on its page's Autonomy tile (batch 8). Teal, not the gold of the
         # overview's first-to-finish pennant, which marks the home country's claim.
         "pennant": {"subject": "a small bold teal-green pennant flag on a thick short staff", "seed": 1},
+        # The world a fleet's four postures are drawn around (space_state posture_*, 20 px). No one
+        # world: teal-green is the colour of none of the kind-of-world icons.
+        "world": {"subject": "a small round deep teal-green planet with soft darker swirled cloud bands, evenly lit",
+                  "seed": 3},
+        # A battle, on the red disc of Locations' statuses (space_state/status_battle). On its own the
+        # folder's grade dulled its reds to salmon, weaker at 20 px than the drawn red burst it replaced.
+        "burst": {"subject": "a chunky explosion burst of red, orange and yellow fire with thick jagged points",
+                  "seed": 0},
     },
     "space": {
         "first": {"subject": "a gold pennant flag on a staff planted on the rim of a grey moon crater", "seed": 3,
@@ -2315,6 +2353,83 @@ ICONS: dict[str, dict[str, dict]] = {
         "page_crews": {"subject": "a colonist in a bulky orange pressure suit and round white-rimmed helmet with a gold "
                                   "visor, seen from the side, holding a big steel wrench",
                        "seed": 3, "now": f"{_GI}/character_trait_icons/engineer.dds"},
+        # The fleet cards and Locations (space_race_gui_icons.md, 2026-11-14): 24 px on a card, 18-30 px
+        # in Locations. Each replaced the line pictogram of its own name (gen_space_fleet_pictograms.py
+        # until then), so `now` is its own path: the drawn file, until this one is written over it.
+        # The five ship roles sit side by side, lit or at 30%, so each has a silhouette and a colour
+        # of its own: the dark grey warship (space_state/role_war), a silver dart, a bronze hull under
+        # one long gun, a flat grey deck with an orange lander, two orange tanks.
+        "fleet": {"subject": "a bold gold heraldic shield badge with two thick silver chevrons across its middle "
+                             "and one small silver star above them",
+                  "seed": 3, "now": f"{_GI}/space_race_icons/fleet.dds"},
+        "fleet_other": {"subject": "a plain bare steel-grey heraldic shield badge with a thick raised rim and "
+                                   "nothing on its face",
+                        "seed": 1, "now": f"{_GI}/space_race_icons/fleet_other.dds"},
+        # No exhaust: a glow cuts out to a grey blob. Steel-blue: asked for in silver (round 1, raws
+        # role_rapid_r1) the dart came out near white, pale at 24 px and the silver warship's colour.
+        "role_rapid": {"subject": "a slim arrowhead-shaped interceptor spacecraft seen from the side, its hull dark "
+                                  "steel-blue metal, a needle nose, two sharply swept-back fins with yellow tips and "
+                                  "one big engine nozzle at the back",
+                       "seed": 3, "now": f"{_GI}/space_race_icons/role_rapid.dds"},
+        "role_siege": {"subject": "a stubby heavy dark bronze armoured gunship spacecraft seen from the side, built "
+                                  "around one enormous thick grey cannon barrel that runs along its whole length "
+                                  "and sticks far out past its nose",
+                       "seed": 0, "now": f"{_GI}/space_race_icons/role_siege.dds"},
+        # Three lit hangar bays. The list's flat deck with landers lifting off (round 1, raws
+        # role_carrier_r1: one orange lander on a long deck) came out seen from the bow, a grey wedge
+        # with a speck on it at 24 px.
+        "role_carrier": {"subject": "a wide boxy grey spacecraft seen from the side with three big open square "
+                                    "hangar bays in a row along its hull, each lit warm orange inside, and a small "
+                                    "bridge tower on top",
+                         "seed": 0, "now": f"{_GI}/space_race_icons/role_carrier.dds"},
+        # Orange tanks in a thick collar: the list's white sphere in a girder frame would lose its body
+        # in the cut-out and its frame to hairlines.
+        "role_tender": {"subject": "a tanker spacecraft seen from the side, two big round orange propellant tank "
+                                   "spheres in a row held in a thick grey metal collar, a short thick docking probe "
+                                   "sticking out of the front",
+                        "seed": 2, "now": f"{_GI}/space_race_icons/role_tender.dds"},
+        # Earth Orbit in Locations (30 px) and on a fleet card (24 px), on the Earth-orbit production
+        # method's embossed icon until now. The continents and oceans are named, or a "globe" is a plain
+        # green ball; a thick ring, no cloud: a thin one is a hairline and white cloud cuts out.
+        "location_earth": {"subject": "a round planet Earth showing deep blue oceans and green and tan continents, "
+                                      "circled by one thick gold orbit ring tilted steeply around its middle, the "
+                                      "ring passing in front of the planet",
+                           "seed": 0, "now": f"{_GI}/production_method_icons/pm_earth_orbit.dds"},
+    },
+    # Space Fleets' banner: a fleet of the day for each drive our program flies on, on event pictures
+    # until now. Each keeps its ships in a band across the middle: the picture is 4.4 to 1. The
+    # exhaust carries the drive (owner, 2026-11-14): orange, blue, white, violet.
+    "space_banner": {
+        # Round 1 (raws fleet_banner_chemical_r1) asked for white rocket warships over the Earth's
+        # blue edge and drew space shuttles and pods with no flame, blue the only colour. Dark hulls
+        # over the night side, so the orange flames carry the picture.
+        "fleet_banner_chemical": {
+            "subject": "a squadron of four armed military rocket spacecraft in low orbit seen from the side, flying "
+                       "from left to right, each a dark grey cylindrical rocket stage with no wings, gun turrets "
+                       "and missile pods along its hull and a cluster of engine bells at the stern trailing a long "
+                       "bright orange flame that lights its hull, plain unmarked hulls, the dark night side of the "
+                       "Earth with scattered warm city lights curving along the bottom, black starry space above",
+            "seed": 2, "now": "gfx/event_pictures/orbital_arms_race.dds"},
+        "fleet_banner_fusion": {
+            "subject": "three long slender warships built of open girder trusses, each with big ring-shaped "
+                       "radiators around its middle and a blue-white fusion engine flame, sailing in a line away "
+                       "from a large orbital shipyard of girders and docking arms at the left, black starry space "
+                       "behind",
+            "seed": 0, "now": "gfx/event_pictures/orbital_battlestation_construction.dds"},
+        # Round 1 (raws fleet_banner_torch_r1) ran its plumes back in steep perspective past a large
+        # Jupiter, which read as odd depth, and "Jupiter small in the distance behind them" drew a
+        # second gas giant. Seen flat from the side, Jupiter a small disc at the edge.
+        "fleet_banner_torch": {
+            "subject": "a squadron of four slender dart-shaped silver warships seen from the side, flying from "
+                       "left to right in a level staggered line, their engines blazing brilliant white with long "
+                       "straight pure white exhaust trails streaming behind them, black starry space, the small "
+                       "banded disc of the planet Jupiter far in the distance at the upper right",
+            "seed": 1, "now": "gfx/event_pictures/interstellar_probe_departure.dds"},
+        "fleet_banner_antimatter": {
+            "subject": "three sleek dark angular warships flying in formation, each with a ring-shaped magnetic "
+                       "engine nozzle at the back throwing a long thin violet-white beam, heading toward a large "
+                       "ringed planet at the right, black starry space",
+            "seed": 0, "now": "gfx/event_pictures/antimatter_propulsion_drive.dds"},
     },
     # Power grids (#1109): the HVDC Undersea Interconnector's cable (the station's method until 2026-10-25),
     # on vanilla's electric engines until now.
@@ -2737,6 +2852,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "pm_ai_managed_power_plant_aneutronic": {"use": f"{_GI}/production_method_icons/pm_ai_managed_power_plant.dds"},
         "pm_ai_managed_power_plant_hydro": {"use": f"{_GI}/production_method_icons/pm_ai_managed_power_plant.dds"},
         "pm_ai_managed_power_plant_reactor": {"use": f"{_GI}/production_method_icons/pm_ai_managed_power_plant.dds"},
+        "pm_robotic_food_processing_synthesis": {"use": f"{_GI}/production_method_icons/pm_robotic_food_processing.dds"},
+        "pm_3d_printed_buildings_nanomaterial": {"use": f"{_GI}/production_method_icons/pm_3d_printed_buildings.dds"},
         "pm_automated_harvesters_and_planters_building_rice_farm": {"use": f"{_GI}/production_method_icons/pm_automated_harvesters_and_planters.dds"},
         "pm_designed_crops_rice_farm": {"use": f"{_GI}/production_method_icons/pm_designed_crops.dds"},
         "pm_laser_excavation_technology_gold_mine": {"use": f"{_GI}/production_method_icons/pm_laser_excavation_technology_coal_mine.dds"},
@@ -2830,6 +2947,21 @@ ICONS: dict[str, dict[str, dict]] = {
         "pm_programmable_paper": {"subject": "a sheet of paper half dissolved into a cloud of small cubes", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
         "pm_programmable_plastics": {"subject": "a plastic bottle half dissolved into a cloud of small cubes", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
         "pm_programmable_sweetness": {"subject": "a lollipop half dissolved into a cloud of small cubes", "seed": 1},
+        # Ranch and plantation methods (#1828), on other methods' icons until now. The ranch's
+        # meat ladder is bronze as vanilla's slaughterhouses are, Herd Management green as its
+        # fences are, and the Cultured Produce Facility's secondary purple as the farms' are.
+        # Robotic Barns' seed drew stray grass tufts along the ground; they are retouched out of its
+        # raw, so the committed DDS is the record. The side views of the bull and the cow left the
+        # animal too small to read at 52 px, so both are head-on.
+        "pm_industrial_feedlots": {"subject": "two cows side by side with their heads lowered, eating from one long low feed trough heaped with grain, seen from the side", "seed": 1},
+        "pm_recombinant_growth_hormones": {"subject": "the head of a big bull seen from the front with wide curved horns, a large syringe standing upright beside it", "seed": 1},
+        "pm_gene_edited_livestock": {"subject": "the head of a cow seen from the front, a tall DNA double helix standing upright beside it", "seed": 2},
+        "pm_mechanized_feeding_lines": {"subject": "a long raised conveyor belt on legs pouring grain down into a long feed trough, a cow's head eating at the trough", "seed": 0,
+                                        "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_robotic_barns": {"subject": "a low round dome-shaped robot on small wheels pushing a heap of hay toward a cow that stands eating from the heap, seen from the side", "seed": 1,
+                             "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_cultured_tobacco_leaf": {"subject": "a broad tobacco leaf growing up out of a round laboratory flask", "seed": 2,
+                                     "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
     },
     "carbon_capture": {
         "carbon_capture_none": {"now": f"{_GI}/production_method_icons/cat_shield_gold_p0.dds", "subject": "a factory chimney with a capture hood on top inside a thick round ring with one thick diagonal bar across it", "seed": 4},
@@ -4120,6 +4252,44 @@ ICONS.update({
         "page_crewed": {"from": "space/module", "base": {"scale": 0.88, "at": (0.44, 0.44)},
                         "marks": [{"icon": f"{_GI}/generic_icons/population.dds", "at": (0.74, 0.74), "scale": 0.46}],
                         "now": f"{_GI}/generic_icons/employment_not_full.dds"},
+        # The fleet cards (2026-11-14), each on the line pictogram of its own name until now. The
+        # Warships role is the Locations warship in silver: as it is, dark grey, it sank into the
+        # card's dark ground at 24 px and was gone at the 30% of a role the fleet has none of.
+        "role_war": {"from": "space/warship", "tint": "silver", "now": f"{_GI}/space_race_icons/role_war.dds"},
+        # A fleet's four postures (20 px, over the word on its button): one world, and what the fleet
+        # does about it. The list's scenes (a ship parked on an orbit ring, a line of ships held off,
+        # ships diving, a stopped freighter) are specks at that size, so each is the world under one
+        # bold mark, as the milestone's states are the rocket: guarded inside a shield, ringed at a
+        # distance, closed on from four sides, barred.
+        "posture_station": {"from": "space_part/world", "base": {"scale": 0.58, "at": (0.5, 0.5)},
+                            "marks": [{"draw": "shield", "colour": "blue", "filled": True, "under": True,
+                                       "at": (0.5, 0.52), "scale": 0.98}],
+                            "now": f"{_GI}/space_race_icons/posture_station.dds"},
+        "posture_standoff": {"from": "space_part/world", "base": {"scale": 0.56, "at": (0.5, 0.5)},
+                             "marks": [{"draw": "bubble", "colour": "white", "at": (0.5, 0.5), "scale": 0.98}],
+                             "now": f"{_GI}/space_race_icons/posture_standoff.dds"},
+        "posture_closein": {"from": "space_part/world", "base": {"scale": 0.4, "at": (0.5, 0.5)},
+                            "marks": [{"draw": "arrow", "dir": d, "colour": "white", "at": at, "scale": 0.34}
+                                      for d, at in (("down", (0.5, 0.17)), ("up", (0.5, 0.83)),
+                                                    ("right", (0.17, 0.5)), ("left", (0.83, 0.5)))],
+                            "now": f"{_GI}/space_race_icons/posture_closein.dds"},
+        "posture_interdict": {"from": "space_part/world", "base": {"scale": 0.7, "at": (0.5, 0.44)},
+                              "marks": [{"draw": "barrier", "at": (0.5, 0.6), "scale": 0.96}],
+                              "now": f"{_GI}/space_race_icons/posture_interdict.dds"},
+        # Locations' statuses that are bad for us (20 px), each on one red disc: a battle's burst, and
+        # the enemy's posture. Ours wear the posture's own icon.
+        "status_battle": {"from": "space_part/burst", "base": {"scale": 0.78, "at": (0.5, 0.5)},
+                          "marks": [{"draw": "disc", "colour": "red", "under": True, "at": (0.5, 0.5), "scale": 1.0}],
+                          "now": f"{_GI}/space_race_icons/status_battle.dds"},
+        "status_blockaded": {"from": "space_part/world", "base": {"scale": 0.46, "at": (0.5, 0.5)},
+                             "marks": [{"draw": "disc", "colour": "red", "under": True, "at": (0.5, 0.5), "scale": 1.0},
+                                       {"draw": "bubble", "colour": "white", "at": (0.5, 0.5), "scale": 0.8}],
+                             "now": f"{_GI}/space_race_icons/status_blockaded.dds"},
+        "status_interdicted": {"from": "space_part/world", "base": {"scale": 0.52, "at": (0.5, 0.42)},
+                               "marks": [{"draw": "disc", "colour": "red", "under": True, "at": (0.5, 0.5),
+                                          "scale": 1.0},
+                                         {"draw": "barrier", "at": (0.5, 0.6), "scale": 0.8}],
+                               "now": f"{_GI}/space_race_icons/status_interdicted.dds"},
     },
     "st_res_state": {
         # One crate; the lane's state is the mark in its word's colour.

@@ -241,7 +241,8 @@ class LawsTest(unittest.TestCase):
 
         import gen_law_consistency as glc
 
-        laws = glc.parse_laws(glc.load_vanilla()["laws"])
+        vanilla = glc.load_vanilla()  # None on a machine with the game: parse_laws then reads the game's files
+        laws = glc.parse_laws(vanilla and vanilla["laws"])
         group = glc.laws_by_group(laws)[GROUP]
         self.assertEqual(sorted(group), sorted(ORDER))
         fallbacks = [
@@ -263,7 +264,7 @@ class LawsTest(unittest.TestCase):
     def test_international_oversight_needs_the_un(self):
         body = _strip_comments(_block(_read(LAWS), "law_international_ai_oversight"))
         self.assertIn("te_frontier_ai_un_member = yes", body[body.index("can_enact"):])
-        self.assertIn("has_game_rule = united_nations_enabled", body[body.index("is_visible"):])
+        self.assertIn("te_united_nations_on = yes", body[body.index("is_visible"):])
         trigger = _strip_comments(_block(_read(TRIGGERS), "te_frontier_ai_un_member"))
         self.assertIn("has_modifier = un_member_modifier", trigger)
         self.assertIn("has_variable = un_member_modifier_on", trigger)
@@ -295,9 +296,9 @@ class OpeningTest(unittest.TestCase):
         self.assertIn("te_frontier_ai_fix_law = yes", _strip_comments(_block(_read(EXTRA_EFFECTS), "fix_incompatible_laws")))
         body = _strip_comments(_block(_read(EFFECTS), "te_frontier_ai_fix_law"))
         self.assertRegex(body, r"has_law = law_type:law_no_frontier_ai_policy\s+has_technology_researched = ai_agents"
-                         r"\s+\}\s+activate_law = law_type:law_private_ai_labs")
+                         r"\s+\}\s+set_variable = te_law_sweep_replacing\s+activate_law = law_type:law_private_ai_labs")
         self.assertRegex(body, r"has_law = law_type:law_international_ai_oversight\s+NOT = \{ te_frontier_ai_un_member = yes \}"
-                         r"\s+\}\s+activate_law = law_type:law_national_ai_licensing")
+                         r"\s+\}\s+set_variable = te_law_sweep_replacing\s+activate_law = law_type:law_national_ai_licensing")
 
     def test_leaving_the_un_drops_oversight_and_says_so(self):
         ladder = _strip_comments(_read(UN_LADDER))

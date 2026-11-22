@@ -11,3 +11,7 @@ gui/te_systems_window.gui = te_systems_window
 # The mod's centred popups (Space Race UI pass design § 3): one root, a popup
 # type instanced in it per picker.
 gui/te_popups.gui = te_popups
+#
+# The Map Room's repainter (journal map modes): closes and reopens the Map Room's
+# page after a pick, from outside the page, so a paused map repaints.
+gui/te_map_widgets.gui = te_jmap_repainter

@@ -20,7 +20,7 @@ society_technology_events.1 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/women_workforce_revolution.dds" }
+	event_image = { texture = "gfx/event_pictures/home_front_factory.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -31,18 +31,42 @@ society_technology_events.1 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	# THE fire_only_once CANARY (#1404; common/on_actions/
+	# te_fire_only_once_selfcheck_on_actions.txt says what it watches). In a
+	# game started after the change the variable no longer guards the event, so
+	# fire_only_once alone keeps it to one firing; in an older save it still does.
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = second_wave_feminism
 		NOT = { has_modifier = ste_women_workforce }
 		NOT = { has_modifier = ste_women_workforce_blocked }
-		NOT = { has_variable = ste_event_1_fired }
 		OR = {
-			has_law = law_type:law_women_in_the_workplace
+			has_global_variable = te_fire_only_once_canary_armed
+			NOT = { has_variable = ste_event_1_fired }
+		}
+		# Any law under which women work and can still be turned away for
+		# their sex. Women's Suffrage is here since #1616: the law tests are by
+		# name, so a country that already had the vote when it researched the
+		# technology never saw this event or .2. Protected Class is left out:
+		# there a refusal "for no reason but their sex" is against the law.
+		OR = {
 			has_law = law_type:law_women_own_property
+			has_law = law_type:law_women_in_the_workplace
+			has_law = law_type:law_womens_suffrage
 		}
 	}
 
 	immediate = {
+		# Held already: this event fired before for this nation, so the engine's
+		# fire record was lost (a save and load, or a revolution's winner).
+		if = {
+			limit = {
+				has_global_variable = te_fire_only_once_canary_armed
+				has_variable = ste_event_1_fired
+			}
+			debug_log = "TE_SELF_CHECK BROKEN fire_only_once_kept (society_technology_events.1 fired a second time for one nation in a game started after issue 1404: the engine's fire record didn't survive a save and load, or didn't pass to a revolution's winner. Put the once-guard variables back; docs/testing/vanilla-1-15-playtest.md, C20)"
+		}
 		set_variable = ste_event_1_fired
 	}
 
@@ -52,7 +76,12 @@ society_technology_events.1 = {
 		ai_chance = {
 			base = 3
 			modifier = {
-				trigger = { has_law = law_type:law_women_in_the_workplace }
+				trigger = {
+					OR = {
+						has_law = law_type:law_women_in_the_workplace
+						has_law = law_type:law_womens_suffrage
+					}
+				}
 				add = 2
 			}
 		}
@@ -97,7 +126,7 @@ society_technology_events.2 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/women_workforce_revolution.dds" }
+	event_image = { texture = "gfx/event_pictures/home_front_factory.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
@@ -108,16 +137,17 @@ society_technology_events.2 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = second_wave_feminism
 		NOT = { has_modifier = ste_equal_pay_reform }
 		NOT = { has_modifier = ste_equal_pay_rejected }
-		NOT = { has_variable = ste_event_2_fired }
-		has_law = law_type:law_women_in_the_workplace
-	}
-
-	immediate = {
-		set_variable = ste_event_2_fired
+		# Women's Suffrage too (#1616, as .1): the vote does not set pay.
+		OR = {
+			has_law = law_type:law_women_in_the_workplace
+			has_law = law_type:law_womens_suffrage
+		}
 	}
 
 	option = {
@@ -177,16 +207,13 @@ society_technology_events.3 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = contraceptive_pill
 		NOT = { has_modifier = ste_pill_available }
 		NOT = { has_modifier = ste_pill_restricted }
 		NOT = { has_modifier = ste_pill_subsidized }
-		NOT = { has_variable = ste_event_3_fired }
-	}
-
-	immediate = {
-		set_variable = ste_event_3_fired
 	}
 
 	option = {
@@ -215,7 +242,7 @@ society_technology_events.3 = {
 			modifier = {
 				trigger = {
 					OR = {
-						has_law = law_type:law_state_religion
+						has_law_or_variant = law_type:law_state_religion
 						has_law = law_type:law_theocracy
 					}
 				}
@@ -271,20 +298,22 @@ society_technology_events.4 = {
 
 	title = society_technology_events.4.t
 	desc = society_technology_events.4.d
-	flavor = society_technology_events.4.f
+	flavor = {
+		first_valid = {
+			triggered_desc = { trigger = { religion = { has_discrimination_trait = heritage_christian } } desc = society_technology_events.4.f }
+			triggered_desc = { trigger = { always = yes } desc = society_technology_events.4.f_matchmaker }
+		}
+	}
 
 	duration = 3
 	cooldown = { days = long_modifier_time }
+
+	fire_only_once = yes
 
 	trigger = {
 		has_technology_researched = sexual_revolution
 		NOT = { has_modifier = ste_sexual_revolution_embraced }
 		NOT = { has_modifier = ste_sexual_revolution_backlash }
-		NOT = { has_variable = ste_event_4_fired }
-	}
-
-	immediate = {
-		set_variable = ste_event_4_fired
 	}
 
 	option = {
@@ -313,7 +342,7 @@ society_technology_events.4 = {
 			modifier = {
 				trigger = {
 					OR = {
-						has_law = law_type:law_state_religion
+						has_law_or_variant = law_type:law_state_religion
 						has_law = law_type:law_theocracy
 					}
 				}
@@ -347,15 +376,12 @@ society_technology_events.5 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = sexual_revolution
 		NOT = { has_modifier = ste_divorce_reform }
 		NOT = { has_modifier = ste_divorce_tradition }
-		NOT = { has_variable = ste_event_5_fired }
-	}
-
-	immediate = {
-		set_variable = ste_event_5_fired
 	}
 
 	option = {
@@ -378,7 +404,7 @@ society_technology_events.5 = {
 		ai_chance = {
 			base = 2
 			modifier = {
-				trigger = { has_law = law_type:law_state_religion }
+				trigger = { has_law_or_variant = law_type:law_state_religion }
 				add = 2
 			}
 		}
@@ -403,7 +429,7 @@ society_technology_events.6 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/gaming_industry_arcade.dds" }
+	event_image = { texture = "gfx/event_pictures/meaning_crisis_abundance.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -414,11 +440,12 @@ society_technology_events.6 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = video_games
 		NOT = { has_modifier = ste_gaming_industry_boom }
 		NOT = { has_modifier = ste_gaming_industry_regulated }
-		NOT = { has_variable = ste_event_6_fired }
 		any_scope_building = {
 			OR = {
 				is_building_type = building_art_academy
@@ -426,10 +453,6 @@ society_technology_events.6 = {
 			}
 			level >= 2
 		}
-	}
-
-	immediate = {
-		set_variable = ste_event_6_fired
 	}
 
 	option = {
@@ -454,7 +477,7 @@ society_technology_events.6 = {
 			modifier = {
 				trigger = {
 					OR = {
-						has_law = law_type:law_state_religion
+						has_law_or_variant = law_type:law_state_religion
 						has_law = law_type:law_outlawed_dissent
 					}
 				}
@@ -484,7 +507,7 @@ society_technology_events.7 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/pride_march_colorful.dds" }
+	event_image = { texture = "gfx/event_pictures/civil_rights_peaceful_march.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -676,7 +699,7 @@ society_technology_events.8 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/pride_march_colorful.dds" }
+	event_image = { texture = "gfx/event_pictures/civil_rights_peaceful_march.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
@@ -862,7 +885,7 @@ society_technology_events.9 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/factory_outsourced_closed.dds" }
+	event_image = { texture = "gfx/event_pictures/labor_strike_picket.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
@@ -873,16 +896,13 @@ society_technology_events.9 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = globalization
 		NOT = { has_modifier = ste_outsourcing_embrace }
 		NOT = { has_modifier = ste_outsourcing_protect }
-		NOT = { has_variable = ste_event_9_fired }
 		country_rank >= rank_value:major_power
-	}
-
-	immediate = {
-		set_variable = ste_event_9_fired
 	}
 
 	option = {
@@ -964,6 +984,12 @@ society_technology_events.10 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
+		add_modifier = {
+			name = ste_antiglobal_concession_cost
+			days = normal_modifier_time
+			is_decaying = yes
+			multiplier = sv_money_flow_event_tiny
+		}
 		add_loyalists = { value = small_radicals strata = lower }
 		add_radicals = { value = very_small_radicals strata = upper }
 	}
@@ -1033,6 +1059,12 @@ society_technology_events.11 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		add_modifier = {
+			name = ste_terror_security_state_cost
+			days = long_modifier_time
+			is_decaying = yes
+			multiplier = sv_money_flow_event_modest
+		}
 		social_regressive_reaction_effect = { DAYS = long_modifier_time }
 		discriminated_pops_radicalism_effect = { VALUE = small_radicals }
 	}
@@ -1097,11 +1129,12 @@ society_technology_events.12 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = terrorism_and_anti_terrorism
 		NOT = { has_modifier = ste_mass_surveillance }
 		NOT = { has_modifier = ste_privacy_preserved }
-		NOT = { has_variable = ste_event_12_fired }
 		OR = {
 			has_technology_researched = cybersecurity
 			has_technology_researched = social_media
@@ -1111,10 +1144,6 @@ society_technology_events.12 = {
 			has_law = law_type:law_strong_privacy_rights
 			has_law = law_type:law_intrusive_surveillance
 		}
-	}
-
-	immediate = {
-		set_variable = ste_event_12_fired
 	}
 
 	option = {
@@ -1178,7 +1207,8 @@ society_technology_events.13 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/misinformation_spreading.dds" }
+	# Interim art: misinformation_spreading is pending a new render (event_image_prompts.py).
+	event_image = { texture = "gfx/event_pictures/media_moral_panic.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
@@ -1189,16 +1219,13 @@ society_technology_events.13 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = social_media
 		NOT = { has_modifier = ste_misinfo_regulate }
 		NOT = { has_modifier = ste_misinfo_free_speech }
 		NOT = { has_modifier = ste_misinfo_literacy }
-		NOT = { has_variable = ste_event_13_fired }
-	}
-
-	immediate = {
-		set_variable = ste_event_13_fired
 	}
 
 	option = {
@@ -1274,7 +1301,7 @@ society_technology_events.14 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: .32 picks a rival in its campaign (te_ea_ir_election_target) under the covert rule; cancels if the campaign ends in the three days
 		# The dedicated system owns this outcome when enabled.
 		has_game_rule = covert_warfare_disabled
 		exists = scope:interfering_country
@@ -1389,7 +1416,7 @@ society_technology_events.15 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/draft_resistance_protest.dds" }
+	event_image = { texture = "gfx/event_pictures/student_protest_campus.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -1488,12 +1515,13 @@ society_technology_events.16 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = brain_computer_interfaces
 		NOT = { has_modifier = ste_bci_consumer_rollout }
 		NOT = { has_modifier = ste_bci_regulated_access }
 		NOT = { has_modifier = ste_bci_banned }
-		NOT = { has_variable = ste_event_16_fired }
 		# Every option below is gated on the augmentation law it agrees with; this
 		# guarantees one is always available.
 		OR = {
@@ -1504,10 +1532,6 @@ society_technology_events.16 = {
 			has_law = law_type:law_unrestricted_augmentation
 			has_law = law_type:law_mandatory_augmentation
 		}
-	}
-
-	immediate = {
-		set_variable = ste_event_16_fired
 	}
 
 	option = {
@@ -1608,20 +1632,17 @@ society_technology_events.17 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = biohacking_and_human_augmentation
 		NOT = { has_modifier = ste_augmented_sports_separate }
 		NOT = { has_modifier = ste_augmented_sports_embrace }
-		NOT = { has_variable = ste_event_17_fired }
 		# Augmented athletes competing at home need a law that permits enhancement.
 		NOR = {
 			has_law = law_type:law_human_purity
 			has_law = law_type:law_no_augmentation
 		}
-	}
-
-	immediate = {
-		set_variable = ste_event_17_fired
 	}
 
 	option = {
@@ -1681,7 +1702,7 @@ society_technology_events.18 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): cancels: sent on the first colony, sr_colony_count set before the call and neither charter modifier nor ste_event_18_fired present; cancels if the charter came another way
 		NOT = { has_modifier = ste_space_colony_national }
 		NOT = { has_modifier = ste_space_colony_international }
 		NOT = { has_variable = ste_event_18_fired }
@@ -1717,6 +1738,12 @@ society_technology_events.18 = {
 			name = ste_space_colony_national
 			days = long_modifier_time
 			is_decaying = yes
+		}
+		add_modifier = {
+			name = ste_space_colony_national_cost
+			days = long_modifier_time
+			is_decaying = yes
+			multiplier = sv_money_flow_event_tiny
 		}
 		add_loyalists = { value = medium_radicals strata = lower }
 		add_loyalists = { value = small_radicals strata = upper }
@@ -1758,10 +1785,11 @@ society_technology_events.19 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		NOT = { has_modifier = ste_space_gov_direct }
 		NOT = { has_modifier = ste_space_gov_autonomy }
-		NOT = { has_variable = ste_event_19_fired }
 		OR = {
 			AND = {
 				sr_space_race_on = yes
@@ -1776,12 +1804,11 @@ society_technology_events.19 = {
 					is_building_type = building_space_elevator
 					level >= 1
 				}
+				# The settlers petition only after .18 has told the country
+				# that its first settlement was founded (#1616).
+				has_variable = ste_event_18_fired
 			}
 		}
-	}
-
-	immediate = {
-		set_variable = ste_event_19_fired
 	}
 
 	option = {
@@ -1838,16 +1865,13 @@ society_technology_events.20 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = telepathic_communities
 		NOT = { has_modifier = ste_hivemind_tolerate }
 		NOT = { has_modifier = ste_hivemind_integrate }
 		NOT = { has_modifier = ste_hivemind_suppress }
-		NOT = { has_variable = ste_event_20_fired }
-	}
-
-	immediate = {
-		set_variable = ste_event_20_fired
 	}
 
 	option = {
@@ -1928,11 +1952,12 @@ society_technology_events.21 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = telepathic_communities
 		NOT = { has_modifier = ste_telepathic_diplomacy }
 		NOT = { has_modifier = ste_telepathic_diplomacy_rejected }
-		NOT = { has_variable = ste_event_21_fired }
 		any_country = {
 			NOT = { this = root }
 			has_technology_researched = telepathic_communities
@@ -1940,7 +1965,6 @@ society_technology_events.21 = {
 	}
 
 	immediate = {
-		set_variable = ste_event_21_fired
 		save_scope_as = telepathic_proposer
 		random_country = {
 			limit = {
@@ -2164,6 +2188,12 @@ society_technology_events.23 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		add_modifier = {
+			name = ste_meltdown_evacuate_cost
+			days = long_modifier_time
+			is_decaying = yes
+			multiplier = sv_money_flow_event_modest
+		}
 		add_radicals = { value = large_radicals strata = lower }
 		add_radicals = { value = medium_radicals strata = upper }
 	}
@@ -2198,6 +2228,12 @@ society_technology_events.23 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		add_modifier = {
+			name = ste_meltdown_institutional_response_cost
+			days = long_modifier_time
+			is_decaying = yes
+			multiplier = sv_money_flow_event_tiny
+		}
 		add_radicals = { value = medium_radicals strata = lower }
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
@@ -2209,7 +2245,7 @@ society_technology_events.24 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/anti_nuclear_movement.dds" }
+	event_image = { texture = "gfx/event_pictures/anti_nuclear_energy_protest.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -2288,7 +2324,7 @@ society_technology_events.25 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/deepfake_crisis_screen.dds" }
+	event_image = { texture = "gfx/event_pictures/diplomatic_meeting.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
@@ -2299,16 +2335,13 @@ society_technology_events.25 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = generative_ai
 		NOT = { has_modifier = ste_deepfake_regulate }
 		NOT = { has_modifier = ste_deepfake_authenticate }
 		NOT = { has_modifier = ste_deepfake_ignore }
-		NOT = { has_variable = ste_event_25_fired }
-	}
-
-	immediate = {
-		set_variable = ste_event_25_fired
 	}
 
 	option = {
@@ -2397,16 +2430,13 @@ society_technology_events.26 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = artificial_intelligence
 		NOT = { has_modifier = ste_ai_safety_protocols }
 		NOT = { has_modifier = ste_ai_alignment_research }
 		NOT = { has_modifier = ste_ai_alignment_dismissed }
-		NOT = { has_variable = ste_event_26_fired }
-	}
-
-	immediate = {
-		set_variable = ste_event_26_fired
 	}
 
 	option = {
@@ -2457,7 +2487,7 @@ society_technology_events.27 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/algorithmic_governance_office.dds" }
+	event_image = { texture = "gfx/event_pictures/ministry_reform.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -2468,16 +2498,13 @@ society_technology_events.27 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = ai_agents
 		NOT = { has_modifier = ste_algo_gov_adopt }
 		NOT = { has_modifier = ste_algo_gov_reject }
-		NOT = { has_variable = ste_event_27_fired }
 		NOT = { has_law = law_type:law_automated_bureaucracy }
-	}
-
-	immediate = {
-		set_variable = ste_event_27_fired
 	}
 
 	option = {
@@ -2534,6 +2561,8 @@ society_technology_events.28 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = genetic_engineering
 		NOT = { has_modifier = ste_designer_baby_ban }
@@ -2542,11 +2571,6 @@ society_technology_events.28 = {
 		NOT = { has_modifier = ste_designer_baby_state_eugenics }
 		NOT = { has_modifier = ste_designer_baby_open_source }
 		NOT = { has_modifier = ste_designer_baby_corporate }
-		NOT = { has_variable = ste_event_28_fired }
-	}
-
-	immediate = {
-		set_variable = ste_event_28_fired
 	}
 
 	option = {
@@ -2657,11 +2681,12 @@ society_technology_events.29 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = synthetic_biology
 		NOT = { has_modifier = ste_synthetic_crops_adopt }
 		NOT = { has_modifier = ste_synthetic_crops_ban }
-		NOT = { has_variable = ste_event_29_fired }
 		any_scope_building = {
 			OR = {
 				is_building_group = bg_agriculture
@@ -2669,10 +2694,6 @@ society_technology_events.29 = {
 			}
 			level >= 3
 		}
-	}
-
-	immediate = {
-		set_variable = ste_event_29_fired
 	}
 
 	option = {
@@ -2729,16 +2750,13 @@ society_technology_events.30 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = autonomous_vehicles
 		NOT = { has_modifier = ste_av_full_adoption }
 		NOT = { has_modifier = ste_av_cautious_rollout }
 		NOT = { has_modifier = ste_av_blocked }
-		NOT = { has_variable = ste_event_30_fired }
-	}
-
-	immediate = {
-		set_variable = ste_event_30_fired
 	}
 
 	option = {
@@ -2822,19 +2840,16 @@ society_technology_events.31 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	fire_only_once = yes
+
 	trigger = {
 		has_technology_researched = autonomous_vehicles
 		NOT = { has_modifier = ste_av_crash_pause }
 		NOT = { has_modifier = ste_av_crash_continue }
-		NOT = { has_variable = ste_event_31_fired }
 		OR = {
 			has_modifier = ste_av_full_adoption
 			has_modifier = ste_av_cautious_rollout
 		}
-	}
-
-	immediate = {
-		set_variable = ste_event_31_fired
 	}
 
 	option = {
@@ -2966,7 +2981,7 @@ society_technology_events.36 = {
 				trigger = {
 					OR = {
 						has_law = law_type:law_single_party_state
-						has_law = law_type:law_secret_police
+						has_law_or_variant = law_type:law_secret_police
 						has_law = law_type:law_outlawed_dissent
 					}
 				}
@@ -3086,7 +3101,7 @@ society_technology_events.32 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/social_media_campaign.dds" }
+	event_image = { texture = "gfx/event_pictures/election_campaign_rally.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -3173,7 +3188,7 @@ society_technology_events.33 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/social_media_crisis.dds" }
+	event_image = { texture = "gfx/event_pictures/election_interference_cyber.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_election.dds"
 
@@ -3204,7 +3219,7 @@ society_technology_events.33 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): scope:interference_target rides along from .32 through .14; a filter
 		exists = scope:interference_target
 	}
 
@@ -3236,7 +3251,7 @@ society_technology_events.34 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): scope:telepathic_proposer is saved by .21 before its options; a filter
 		exists = scope:telepathic_proposer
 	}
 
@@ -3306,7 +3321,7 @@ society_technology_events.35 = {
 
 	duration = 3
 
-	trigger = {
+	trigger = { # REVIEWED 2026-11-13 (delayed_trigger): scope:telepathic_partner is saved by .21 and rides along through .34; a filter
 		exists = scope:telepathic_partner
 	}
 

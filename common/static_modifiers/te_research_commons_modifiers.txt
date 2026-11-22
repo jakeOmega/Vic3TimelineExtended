@@ -1,0 +1,47 @@
+﻿# ============================================================================
+# RESEARCH COMMONS (identity_research_commons): static modifiers
+# ============================================================================
+# docs/systems/mod_systems/power_blocs.md § Research Commons.
+#
+# Unit modifiers. The first three are declared on je_research_commons
+# (scaling_modifiers_while_active), so the engine re-reads their values every
+# few days and nothing adds, removes or tests them by name: te_rc_contribution
+# on each member (its value is var:te_rc_contributed), te_rc_pool and
+# te_rc_pool_cap on the leader (te_rc_pool_value and te_rc_pool_cap_value).
+# There is no country_weekly_innovation_max_mult, so the cap rise is an add.
+# ============================================================================
+
+te_rc_contribution = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_negative.dds
+	country_weekly_innovation_add = -1
+}
+
+te_rc_pool = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_weekly_innovation_add = 1
+}
+
+te_rc_pool_cap = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_weekly_innovation_max_add = 1
+}
+
+# Institutes Left Behind: a member that leaves keeps what it learned but not
+# the institutes it worked through. Applied the day the entry ends on leaving
+# (te_rc_start_institutes_left_behind) and re-applied each month from the
+# country's own pulse with multiplier = te_rc_ilb_fraction (1 falling to 0 over
+# ten years) and a two-month duration, so it lapses if the pulse ever stops.
+# It is rebuilt from variables, so a revolution's winner carries it on.
+te_rc_institutes_left_behind = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_negative.dds
+	country_tech_research_speed_mult = -0.5
+}
+
+# Technology Embargo, on its target: 1 point = -1% technology spread. Applied
+# each month by the embargo pact's monthly_effect with multiplier =
+# te_rc_embargo_points and a two-month duration, so it lapses once the pact
+# ends.
+te_rc_technology_embargoed = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_negative.dds
+	country_tech_spread_mult = -0.01
+}

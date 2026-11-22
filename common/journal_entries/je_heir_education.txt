@@ -4,8 +4,20 @@
 
 je_heir_education = {
 	icon = "gfx/interface/icons/event_icons/je_heir_education.dds"
-	group = je_group_internal_affairs
+	group = je_group_te_systems
 
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
+
+	# 1.15: with the rule off, drop the inactive record for good. A rule can be changed
+	# mid-game, from the screen that changes country; an active entry ends through its
+	# invalid outcome on the rule.
+	disable_evaluation = {
+		NOT = { has_game_rule = heir_education_enabled }
+	}
 	is_shown_when_inactive = {
 		has_law = law_type:law_monarchy
 		has_game_rule = heir_education_enabled
@@ -70,17 +82,52 @@ je_heir_education = {
 		add_modifier = { name = heir_education_grace_period days = 365 }
 	}
 
-	complete = {
-		exists = heir
-		heir ?= {
-			has_variable = being_educated
-			NOT = { age < define:NCharacters|ADULT_AGE }
+	outcome = {
+		header = je_standard_completion_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_heir_education_complete_conclusion_desc
+		trigger = {
+			exists = heir
+			heir ?= {
+				has_variable = being_educated
+				NOT = { age < define:NCharacters|ADULT_AGE }
+			}
+			NOT = { has_modifier = heir_education_grace_period }
 		}
-		NOT = { has_modifier = heir_education_grace_period }
+		effect = {
+			trigger_event = { id = heir_education_events.200 }
+		}
 	}
 
-	on_complete = {
-		trigger_event = { id = heir_education_events.200 }
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_heir_education_invalid_conclusion_desc
+		trigger = {
+			OR = {
+				NOT = { has_law = law_type:law_monarchy }
+				# The rule switched off mid-game, from the screen that changes country.
+				NOT = { has_game_rule = heir_education_enabled }
+			}
+		}
+		effect = {
+			# Clean up all heir education variables and modifiers when the JE is invalidated
+			# (e.g. government type switched away from monarchy, or the Heir Education rule
+			# switched off). Without this, authority cost modifiers like
+			# heir_ed_trait_focus_active would persist indefinitely.
+			heir_education_cleanup_effect = yes
+		}
+	}
+
+	outcome = {
+		header = JOURNAL_ENTRY_TIMEOUT
+		effect_header = JOURNAL_ENTRY_ON_TIMEOUT
+		flags = { timeout }
+		conclusion_desc = je_heir_education_timeout_conclusion_desc
+		effect = {
+			heir_education_resolve_effect = yes
+			heir_education_cleanup_effect = yes
+		}
 	}
 
 	# If the heir changes (dies, replaced), detect and reset
@@ -172,7 +219,7 @@ je_heir_education = {
 			# track with no focus set: after the heir-change reset above, in saves
 			# where that reset left the modifiers behind, and after any other path
 			# that clears a focus without its modifier. (With no active entry,
-			# legacy_modifier_cleanup.txt removes them.)
+			# every way out runs heir_education_cleanup_effect.)
 			if = {
 				limit = {
 					has_modifier = heir_ed_trait_focus_active
@@ -311,17 +358,6 @@ je_heir_education = {
 		}
 	}
 
-	invalid = {
-		NOT = { has_law = law_type:law_monarchy }
-	}
-
-	on_invalid = {
-		# Clean up all heir education variables and modifiers when the JE is invalidated
-		# (e.g. government type switched away from monarchy). Without this, authority
-		# cost modifiers like heir_ed_trait_focus_active would persist indefinitely.
-		heir_education_cleanup_effect = yes
-	}
-
 	progressbar = no
 	should_be_pinned_by_default_uninvolved_or_context = yes
 
@@ -364,11 +400,6 @@ je_heir_education = {
 	weight = 100
 
 	timeout = 6570 # 18 years - safety fallback
-	on_timeout = {
-		heir_education_resolve_effect = yes
-		heir_education_cleanup_effect = yes
-	}
-
 	current_value = {
 		value = var:heir_ed_total
 	}

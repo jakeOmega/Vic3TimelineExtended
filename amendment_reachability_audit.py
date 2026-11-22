@@ -48,7 +48,8 @@ amendment's opening `<name> = {` line it covers that amendment's
 `unreachable`, `sponsor_only`, `dead_adds_only` and `unknown_allowed_law`
 flags; on an `allowed_laws` entry's line, that entry's flag. For
 `unknown_type`, on the `add_amendment = {` line or its `type =` line. A tag
-that suppresses nothing is reported as `stale_review` and fails `--strict`.
+that suppresses nothing is reported as `stale_review` (in `AuditResult.stale`)
+and fails `--strict`.
 
 Data source
 -----------
@@ -64,6 +65,8 @@ import re
 from bisect import bisect_right
 from dataclasses import dataclass, field
 
+from audit_common import AuditResult as _AuditResult
+from audit_common import StaleTag, cli_main, parse_reviewed, write_text
 from iterator_limit_audit import blank_comments_and_strings
 
 AMENDMENTS_DIR = os.path.join("common", "amendments")
@@ -82,29 +85,20 @@ _MAX_DEPTH = 6
 
 _OPERATORS = ("=", "?=", "<", ">", "<=", ">=", "!=", "==")
 
-_REVIEWED_RE = re.compile(
-    r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*\((?P<check>\w+)\)\s*:\s*(?P<rationale>.+)$"
-)
 _ADD_RE = re.compile(r"(?<![\w.:$])add_amendment\s*=\s*\{")
 _TYPE_RE = re.compile(r"(?<![\w.:$])type\s*=\s*([^\s{}]+)")
 _TOP_KEY_RE = re.compile(r"([A-Za-z0-9_.:\-$@]+)\s*=\s*\{")
 _PARAM_RE = re.compile(r"\$(\w+)\$")
 
 
-def _parse_reviewed(comment: str | None) -> dict | None:
-    if not comment:
-        return None
-    m = _REVIEWED_RE.search(comment)
-    if not m or m.group("check") != CHECK:
-        return None
-    return {"date": m.group("date"), "rationale": m.group("rationale").strip()}
+STALE_DETAIL = f"`({CHECK})` REVIEWED tag that suppresses nothing; remove it"
 
 
 def _review(sites) -> tuple:
     """(exemption, (file, line)) from the first of `sites` ((file, line,
     comment) triples) carrying this audit's tag, else (None, None)."""
     for file, line, comment in sites:
-        rev = _parse_reviewed(comment)
+        rev = parse_reviewed(comment, (CHECK,))
         if rev:
             return rev, (file, line)
     return None, None
@@ -495,7 +489,9 @@ class Flag:
 
 
 @dataclass
-class AuditResult:
+class AuditResult(_AuditResult):
+    """The flags, and in `stale` the `stale_review` tags."""
+
     flags: list = field(default_factory=list)
     amendments_checked: int = 0
     vanilla_overrides: list = field(default_factory=list)
@@ -507,7 +503,7 @@ class AuditResult:
 def check(mod_amendments: dict, all_amendments: set, all_laws: set,
           sites: list, resolved: list, vanilla_amendments: set, tags: set = frozenset()) -> AuditResult:
     """`tags` holds every (file, line) carrying this audit's REVIEWED tag;
-    those that suppress nothing come back as `stale_review` flags."""
+    those that suppress nothing come back in `stale` (`stale_review`)."""
     result = AuditResult()
     result.add_sites = len(sites)
 
@@ -567,11 +563,7 @@ def check(mod_amendments: dict, all_amendments: set, all_laws: set,
         result.flags.append(flag)
 
     used = {f.exemption_at for f in result.flags if f.exemption_at}
-    for file, line in sorted(set(tags) - used):
-        result.flags.append(Flag(
-            "stale_review", f"{file}:{line}",
-            f"`({CHECK})` REVIEWED tag that suppresses nothing; remove it", file, line,
-        ))
+    result.stale = [StaleTag(file, line, CHECK) for file, line in sorted(set(tags) - used)]
     return result
 
 
@@ -583,7 +575,7 @@ def find_tags(files: list) -> set:
         if needle not in f.raw:
             continue
         for line, comment in f.comments.items():
-            if _parse_reviewed(comment):
+            if parse_reviewed(comment, (CHECK,)):
                 out.add((f.rel, line))
     return out
 
@@ -653,8 +645,8 @@ def audit(mod_state=None, mod_path: str | None = None) -> AuditResult:
 
 
 def render_report(result: AuditResult) -> str:
-    unrev = [f for f in result.flags if not f.exemption]
-    exemp = [f for f in result.flags if f.exemption]
+    unrev = result.unreviewed
+    exemp = result.exemptions
 
     out = [
         "# Amendment reachability audit report",
@@ -684,18 +676,18 @@ def render_report(result: AuditResult) -> str:
         "## Unreviewed Flags",
         "",
     ]
-    if not unrev:
+    if not result.failing:
         out += ["_None._", ""]
     else:
         for kind in KIND_ORDER:
-            rows = [f for f in unrev if f.kind == kind]
-            if not rows:
-                continue
-            out += [f"### {kind}", ""]
-            for f in rows:
-                where = f" ({f.file}:{f.line})" if f.file and f.kind not in ("unknown_type", "stale_review") else ""
-                out.append(f"- `{f.subject}`: {f.detail}{where}")
-            out.append("")
+            if kind == "stale_review":
+                rows = [f"- `{t.file}:{t.line}`: {STALE_DETAIL}" for t in result.stale]
+            else:
+                rows = [f"- `{f.subject}`: {f.detail}"
+                        + (f" ({f.file}:{f.line})" if f.file and f.kind != "unknown_type" else "")
+                        for f in unrev if f.kind == kind]
+            if rows:
+                out += [f"### {kind}", "", *rows, ""]
 
     out += ["## Reviewed Exemptions", ""]
     if not exemp:
@@ -715,8 +707,9 @@ def render_report(result: AuditResult) -> str:
         f"- attached by a live `add_amendment`: {len(result.by_add)}",
         f"- `REPLACE:`/`INJECT:` of vanilla amendments, not judged: {len(result.vanilla_overrides)}",
         f"- `add_amendment` sites scanned: {result.add_sites}",
-        f"- total flags: {len(result.flags)}",
-        f"- unreviewed: {len(unrev)}",
+        # A stale tag counts as a flag, and as unreviewed.
+        f"- total flags: {len(result.flags) + len(result.stale)}",
+        f"- unreviewed: {len(result.failing)}",
         f"- exempted: {len(exemp)}",
         "",
     ]
@@ -727,27 +720,23 @@ def regenerate(mod_state=None) -> dict:
     """POST_LOAD_AUDITS hook: run the audit and write the report."""
     from path_constants import mod_path
     result = audit(mod_state, mod_path=mod_path)
-    out_path = os.path.join(mod_path, REPORT_PATH)
-    os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(render_report(result))
-    unrev = sum(1 for f in result.flags if not f.exemption)
+    write_text(os.path.join(mod_path, REPORT_PATH), render_report(result))
     return {
         "amendments_checked": result.amendments_checked,
         "add_sites": result.add_sites,
-        "total_flags": len(result.flags),
-        "unreviewed": unrev,
-        "exempted": len(result.flags) - unrev,
+        "total_flags": len(result.flags) + len(result.stale),
+        "unreviewed": len(result.failing),
+        "exempted": len(result.exemptions),
     }
 
 
-if __name__ == "__main__":
-    import sys
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+def main(argv=None) -> int:
+    """Print the report; `--strict` (CI) exits 1 on any flag without a
+    `# REVIEWED ... (amendment_reachability)` exemption, a stale tag included."""
     from path_constants import mod_path
-    result = audit(mod_path=mod_path)
-    print(render_report(result))
-    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ... (amendment_reachability)`
-    # exemption, including a stale tag.
-    if "--strict" in sys.argv:
-        raise SystemExit(1 if any(not f.exemption for f in result.flags) else 0)
+    return cli_main(lambda args: audit(mod_path=mod_path), lambda result, args: render_report(result),
+                    argv=argv, description=__doc__.splitlines()[0])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,19 @@
+﻿# History stores after a revolution (#1477): the second self-check,
+# history_after_civil_war_kept, read two months after a winner took the
+# loser's samples (common/scripted_effects/te_history_civil_war_effects.txt).
+# A country that was never armed skips it at its first test.
+
+on_monthly_pulse_country = {
+	on_actions = {
+		te_history_cw_selfcheck_on_action
+	}
+}
+
+te_history_cw_selfcheck_on_action = {
+	effect = {
+		if = {
+			limit = { has_variable = te_hcw_check_due_i }
+			te_history_cw_selfcheck_kept = yes
+		}
+	}
+}

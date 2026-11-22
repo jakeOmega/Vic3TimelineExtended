@@ -261,7 +261,10 @@ class IdeologyLawgroupTests(unittest.TestCase):
             INJECT:ideology_vanilla = { lawgroup_alpha = { law_m_alpha = neutral } }
             """)
         r = self._run(text)
-        self.assertEqual([(f.kind, f.line) for f in r.flags], [("stale_review", 2)])
+        self.assertEqual(r.flags, [])
+        self.assertEqual([(t.line, t.tag) for t in r.stale], [(2, "ideology_lawgroup")])
+        self.assertTrue(r.failed)
+        self.assertIn("### stale_review (1)", render_report(r))
 
 
 class LiveTreeTest(unittest.TestCase):
@@ -272,6 +275,7 @@ class LiveTreeTest(unittest.TestCase):
         self.assertEqual(
             [f"{f.kind}: {f.ideology} {f.lawgroup} {f.laws}" for f in r.flags if not f.exemption], []
         )
+        self.assertEqual(r.stale, [])
 
 
 if __name__ == "__main__":
