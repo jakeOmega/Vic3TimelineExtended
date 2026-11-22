@@ -17,8 +17,10 @@ grades come from ``gen_solar_sites.SITES``. Nothing here reads a file at import.
 
 from __future__ import annotations
 
+import functools
 import sys
 from pathlib import Path
+from typing import NamedTuple
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
@@ -140,3 +142,69 @@ def good_base_price(good: str) -> float:
 
         _PRICES = pm_costs.load_goods()
     return _PRICES[good]
+
+
+# --- The base methods (Task 2) ----------------------------------------------------
+
+BASE_GROUP = "pmg_base_building_space_mine"
+
+
+class MethodGoods(NamedTuple):
+    """A method's goods a level at grade 0: its `workforce_scaled` lines."""
+
+    outputs: dict[str, float]
+    inputs: dict[str, float]
+
+
+def _unwrap(value):
+    while isinstance(value, tuple) and len(value) == 2:
+        value = value[1]
+    return value
+
+
+def _parse_dir(*parts: str) -> dict:
+    from paradox_file_parser import ParadoxFileParser
+
+    parser = ParadoxFileParser()
+    for path in sorted((ROOT.joinpath(*parts)).glob("*.txt")):
+        parser.parse_file(str(path))
+    return {key: _unwrap(value) for key, value in parser.data.items()}
+
+
+def _goods_lines(block: dict, direction: str) -> dict[str, float]:
+    prefix, suffix = f"goods_{direction}_", "_add"
+    return {key[len(prefix):-len(suffix)]: float(_unwrap(v)) for key, v in block.items()
+            if key.startswith(prefix) and key.endswith(suffix)}
+
+
+@functools.lru_cache(maxsize=1)
+def _read_base_methods() -> tuple[tuple[str, MethodGoods], ...]:
+    groups = _parse_dir("common", "production_method_groups")
+    pms = _parse_dir("common", "production_methods")
+    listed = _unwrap(groups[BASE_GROUP]["production_methods"])
+    listed = listed if isinstance(listed, list) else [listed]
+    out = []
+    for pm in map(str, listed):
+        block = _unwrap(_unwrap(pms[pm])["building_modifiers"])
+        block = _unwrap(block["workforce_scaled"])
+        out.append((pm, MethodGoods(_goods_lines(block, "output"), _goods_lines(block, "input"))))
+    return tuple(out)
+
+
+def base_methods() -> dict[str, MethodGoods]:
+    """Every method of the Extraplanetary Base's base group (BASE_GROUP), in the group's
+    order, with its `workforce_scaled` goods a level, read from the mod's production
+    method files on first use. Never a hard-coded list: the Resort Colony may leave the
+    group (#1948). A method's goods outside GOODS get no mix."""
+    return {pm: MethodGoods(dict(m.outputs), dict(m.inputs)) for pm, m in _read_base_methods()}
+
+
+def method_goods() -> tuple[str, ...]:
+    """Every good any base method makes or uses, GOODS first and then the rest in the
+    order the methods name them: each needs a price (§ 8.3)."""
+    seen = list(GOODS)
+    for m in base_methods().values():
+        for g in (*m.outputs, *m.inputs):
+            if g not in seen:
+                seen.append(g)
+    return tuple(seen)

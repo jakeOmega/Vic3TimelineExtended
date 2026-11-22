@@ -82,5 +82,64 @@ class GroundTypes(unittest.TestCase):
         self.assertEqual(eg.mix("mixed"), {g: 0.0 for g in eg.GOODS})
 
 
+class Basket(unittest.TestCase):
+    """§ 7: the four mining methods share one basket, the same seven goods in the same
+    shares of output value at base prices, so a site's mix means the same under each
+    and cancels at base prices for every one."""
+
+    MINING = ("pm_regolith_processing", "pm_space_mine", "pm_space_colony_mining", "pm_self_replicating_miners")
+
+    def setUp(self):
+        self.methods = eg.base_methods()
+        self.mining = {pm: m for pm, m in self.methods.items() if set(m.outputs) <= set(eg.GOODS)}
+
+    @staticmethod
+    def _value(goods):
+        return sum(qty * eg.good_base_price(g) for g, qty in goods.items())
+
+    def test_reads_every_method_of_the_base_group(self):
+        for pm in self.MINING:
+            with self.subTest(pm=pm):
+                self.assertIn(pm, self.mining)
+        for pm, m in self.methods.items():
+            with self.subTest(pm=pm):
+                self.assertTrue(m.outputs)
+                self.assertIn("launch_capacity", m.inputs)
+
+    def test_asteroid_mine_is_the_basket(self):
+        self.assertEqual(self.methods["pm_space_mine"].outputs, eg.BASKET)
+
+    def test_mining_methods_share_the_basket(self):
+        basket = eg.shares(eg.BASKET)
+        for pm, m in self.mining.items():
+            shares = eg.shares(m.outputs)
+            self.assertEqual(set(shares), set(eg.GOODS), pm)
+            for g in eg.GOODS:
+                with self.subTest(pm=pm, good=g):
+                    self.assertAlmostEqual(shares[g], basket[g], delta=0.0001)
+
+    def test_every_type_earns_base_profit_at_base_prices(self):
+        for pm, m in self.mining.items():
+            base = self._value(m.outputs) - self._value(m.inputs)
+            for t in eg.TYPES:
+                with self.subTest(pm=pm, type=t):
+                    typed = sum(qty * eg.good_base_price(g) * (1 + eg.mix(t)[g])
+                                for g, qty in m.outputs.items()) - self._value(m.inputs)
+                    self.assertLessEqual(abs(typed - base), 0.001 * abs(base))
+
+    def test_regolith_output_value_is_unchanged(self):
+        self.assertAlmostEqual(self._value(self.methods["pm_regolith_processing"].outputs), 16600, delta=0.005)
+
+    def test_regolith_every_type_within_fifty_pence(self):
+        """§ 7: with two decimals every type earns £1,600 a level at grade 0 and base
+        prices to within £0.50."""
+        m = self.methods["pm_regolith_processing"]
+        for t in eg.TYPES:
+            with self.subTest(type=t):
+                typed = sum(qty * eg.good_base_price(g) * (1 + eg.mix(t)[g])
+                            for g, qty in m.outputs.items()) - self._value(m.inputs)
+                self.assertAlmostEqual(typed, 1600, delta=0.5)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -57,8 +57,10 @@ LOGISTICS = {
     "pmg_transport_in_space_building_space_mine": "compact_fusion_reactors",
 }
 LOGISTICS_MODIFIER = "goods_input_launch_capacity_mult"
-# The one good an Asteroid Mine level makes more of than a Deep-Sea Mine level.
+# The goods an Asteroid Mine level makes more of than a Deep-Sea Mine level: the one the
+# asteroids lead in, and the one the seabed can't make (ground types design § 7).
 ASTEROIDS_LEAD = "tech_metals"
+ASTEROIDS_ONLY = "glass"
 LOGISTICS_CUT = -0.3
 LAND_TECH_METAL_MINE = "pm_smart_miners_building_tech_metals_mine"
 # The Deep-Sea Mine's support vessels: one free default and one upgrade, each costing one
@@ -280,10 +282,12 @@ class DeepSeaMineAgainstExtraplanetaryBase(unittest.TestCase):
             with self.subTest(extraplanetary=space, throughput=best):
                 self.assertGreater(min(self.d.deep_profits(base[0]).values()), best * self.d.profit(space))
 
-    def test_era_11_outputs_each_at_least_the_asteroid_mine_but_tech_critical(self):
-        """Every good but one: the seabed's nodules are manganese, nickel and copper,
+    def test_era_11_outputs_each_at_least_the_asteroid_mine_but_tech_critical_and_glass(self):
+        """Every good but two: the seabed's nodules are manganese, nickel and copper,
         booked mostly as Structural and Conductive Metals (DeepSeaMineMix), and the
-        asteroids are where Tech-Critical Metals come from."""
+        asteroids are where Tech-Critical Metals come from. The bases also make Glass and
+        Plastics, which the seabed can't: it has no plastics feedstock (ground types
+        design § 7, owner 2026-11-21)."""
         era_11 = [pm for pm in self.space if self.d.method_era(pm, SPACE) == 11]
         self.assertTrue(era_11)
         base = [pm for pm in self.deep if self.d.method_era(pm, DEEP_SEA) == 11]
@@ -292,7 +296,7 @@ class DeepSeaMineAgainstExtraplanetaryBase(unittest.TestCase):
         for pm in era_11:
             for good, qty in self.d.goods(pm, "output").items():
                 with self.subTest(extraplanetary=pm, good=good):
-                    if good == ASTEROIDS_LEAD:
+                    if good in {ASTEROIDS_LEAD, ASTEROIDS_ONLY}:
                         self.assertLess(deep_out.get(good, 0.0), qty)
                     else:
                         self.assertGreaterEqual(deep_out.get(good, 0.0), qty)
