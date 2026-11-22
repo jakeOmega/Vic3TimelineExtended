@@ -6190,7 +6190,7 @@
  te_debug_space_race.3.b:0 "Send a fleet now to the first site we may target, at no cost"
  te_debug_space_race.3.c:0 "Land every fleet in flight now"
  te_debug_space_race.3.d:0 "Console-only shortcuts for testing colony fleets and settlers under Simple and Full Colonies. The lines go to debug.log as TE_SR_FLEETS and TE_SR_SETTLERS."
- te_debug_space_race.3.e:0 "Set emigration to High and send this month's settlers now"
+ te_debug_space_race.3.e:0 "Set settlers to 2,000 a month and send this month's settlers now"
  te_debug_space_race.3.f:0 "\"Every ship in the sky, and every soul on every rock. Count them.\""
  te_debug_space_race.3.g:0 "Fill our colonies to half their room"
  te_debug_space_race.3.t:0 "Colony Fleets Console"

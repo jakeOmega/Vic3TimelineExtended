@@ -251,8 +251,8 @@ shows:
 
 | View | Shows | Above the rows |
 |---|---|---|
-| People (the default) | Each colony's people and room, its crews and its settler priority | Emigration, settlers a month and your people off Earth |
-| Modules | Each colony's crews' share of its modules, its slots in use (red past them) and its Extraplanetary Base room and grade, then every module's level with a button to queue one more | Fabrication, shipments, module upkeep, Extraplanetary Base and Resort Colony room, and the queue in a box of its own with when its next module is built |
+| People (the default) | Each colony's people and room, its crews (and, red, the crews it needs while short) and its settler priority | Settlers a month, last month's settlers and their Launch Capacity a week, and your people off Earth |
+| Modules | Each colony's crews against the crews it needs (red while short), its Habitats against their cap (red past it) and its Extraplanetary Base room and grade, then every module's level with a button to queue one more | Fabrication, shipments, module upkeep, Extraplanetary Base and Resort Colony room, and the queue in a box of its own with when its next module is built |
 | Autonomy | Each colony's autonomy, how much it moves a month (hover it for that colony's terms), what it is building of its own, its charter or garrison, and Abandon | Free colony trade; the free colonies are listed below the rows |
 | Defenses | Each colony's Defenses, integrity and marines, and what threatens it | |
 | Bases | With In-Situ Resource Utilization, the Near-Earth Asteroids and each colony: its ground type and grade, your levels there against its room with − and + to assign them, and a level's profit and output (see [The Bases view](#the-bases-view)) | The Assign for the most profit checkbox, your levels against your room, what is moving and why, and your bases' output and profit a week |
@@ -553,7 +553,7 @@ and no transit: under every setting, a colony fleet bound for the Moon founds it
 colony the month it leaves, and it never takes one of the six places for fleets
 in flight.
 
-| Site | People room | Slots | Base room | Specializations |
+| Site | People room | Habitat cap | Base room | Specializations |
 |---|---|---|---|---|
 | Shackleton Crater | 25,000 | 2 | 75 | Propellant Depot, Polar Outpost |
 | Peary Crater | 15,000 | 1 | 50 | Solar Power, Polar Observatory |
@@ -574,8 +574,7 @@ hold it, with its specialization built and the colony neither blockaded nor
 occupied, your fleets can leave outside a launch window as they do with Asteroid
 Mining (see [Launch windows](#launch-windows)).
 
-A lunar colony has no Spaceport: its fleets dock at Earth, the same location, so
-its slots hold only Habitats and Defenses. A colony on the Moon doesn't count
+A lunar colony has no Spaceport: its fleets dock at Earth, the same location. A colony on the Moon doesn't count
 toward the Deep Space rule above. Under Full Colonies the Moon is fought over
 with Earth orbit (see [Battles in space](#battles-in-space)).
 
@@ -641,7 +640,7 @@ Colony Fleets, in Solar System Colonization, says where your next colony fleet
 goes. Click Choose there (Change once you have a target) to open the Colony
 Target window. It lists the unclaimed sites your program can send its next fleet
 to this month, under their locations, each with who holds it and its launch
-window (under Simple and Full Colonies, also its slots, its base room and grade,
+window (under Simple and Full Colonies, also its Habitat cap, its base room and grade,
 and the fleets on their way); Show all
 lists all 40, and a site you can't target says why on its button. Hover a site's
 name for what it offers: its stage, its two specializations and how long your
@@ -703,50 +702,54 @@ then by about 2.4% a year up to its room (3.7% once you have Self-Directed
 Evolution, era 13, whose people are adapted to low gravity and radiation), from 10,000 people on the smallest
 moons and the farthest dwarf planets to 50,000 at Valles Marineris and the Hellas
 and Utopia plains. The Colonies section's People view in Solar System
-Colonization sets how many settlers you send from Earth:
+Colonization sets how many settlers you send from Earth each month: Off, or 500,
+doubling with each press of + (1,000, 2,000, 4,000 and on) and halving with each
+press of −. A month sends no more than your colonies' free room, and no more than
+1% of your people. Every state gives its share by its people, in groups of 500,
+half from the middle strata and half from the lower, so a small state gives a
+group every few months; each state's census counts them as emigrants.
 
-| Emigration | Settlers a month | Launch Capacity bill |
-|---|---|---|
-| Off | none | none |
-| Low | 500 | +5% Space Program throughput |
-| Steady | 1,000 | +10% |
-| High | 2,000 | +15% |
+Each settler takes 3 Launch Capacity, which your Space Program buys beside its
+own, listed in its inputs as Settler Launches: 4,000 settlers a month take about
+2,800 a week. The People view shows last month's settlers and their Launch
+Capacity a week. The bill ends within two months of setting settlers to Off.
 
-The settlers leave the state that holds your Space Program, half from the middle
-strata and half from the lower, and only while your colonies have room; that
-state's census counts them as emigrants. Each colony's row shows its people and
+Each colony's row shows its people and
 room and a priority button that steps through Normal, High, Closed and Low. A
 colony's share of each month's settlers is its priority (Closed none, Low 1,
 Normal 2, High 4) times its free room, and a colony that fills up passes the rest
 of its share to the others. So set the colony you are building up to High and the
 ones you don't want settled to Closed.
 
-People are crews: the Crews figure counts how many module levels a colony's
-people can run, one for every 5,000. A colony's founding specialization runs
-without a crew. With Artificial General Intelligence colonies need no crews at
-all, and the figure reads AGI. Habitats, and Terraforming on the worlds that
+People are crews: each 10,000 of a colony's people crew one module level, or
+each 5,000 with Artificial General Intelligence. A colony's founding
+specialization runs without a crew, and Habitats need none. Habitats, and Terraforming on the worlds that
 take it, add room for more people (see [Colony modules](#colony-modules)).
 
 Your people off Earth give Off-World Population on Solar System Colonization:
 +1% prestige and +2% cultural pull for every 100,000 of them, up to a million.
 A colony's people go with it when it changes hands, stay on it when it becomes
-a free colony, and are lost if it is released. AI programs set Emigration to Steady while they hold a colony or are in the top three
-of the space race, with money to spare; to Low otherwise; and to Off in default
-or when their colonies are full.
+a free colony, and are lost if it is released. AI programs that hold a colony or are in the top three of the space race, with
+money to spare, send as many settlers as their module fabrication's budget leaves
+room for, 500 at the least; others send 500; in default, or when their colonies
+are full, none.
 
 ### Colony modules
 
 Under Simple Colonies and Full Colonies, you build up each colony with modules,
 listed in the Colonies section's Modules view in Solar System Colonization:
 
-| Module | What a level does | Room for it |
+| Module | What a level does | Limit |
 |---|---|---|
 | The two specializations | Adds the specialization's bonus once more: level 3 gives three times the founding bonus | Four levels between the two: one at 4, both at 2, or 1 and 3. The founding choice is level 1 |
-| Habitat | Adds half of the colony's starting room for people | The colony's slots, shared with Spaceports, Defenses and facilities: four on Valles Marineris and the Hellas and Utopia plains, one on the smallest moons and dwarf planets |
-| Terraforming | Adds 4% of the colony's starting room for people a year while it works, until the world has +300% (see below) | The colony's slots, up to three at once; only on Mars, Venus, Titan, Ganymede and Callisto, with the Terraforming technology |
-| Spaceport | Under Full Colonies, a dock for your fleets: they refill supply, repair 10% of their damage a month a level and refit there, and refuel on a site that makes propellant. Under Simple Colonies, nothing | The colony's slots; none on the Moon |
-| Defenses | Under Full Colonies, guns that fire on enemy fleets closing in on the colony and make it harder to wear down. Under Simple Colonies, nothing | The colony's slots |
-| Facilities | See the table below | The colony's slots |
+| Habitat | Adds half of the colony's starting room for people, more with five technologies (see below) | A cap by the colony's size: four on Valles Marineris and the Hellas and Utopia plains, one on the smallest moons and dwarf planets; past it each costs more |
+| Terraforming | Adds 4% of the colony's starting room for people a year while it works, until the world has +300% (see below) | Up to three at once; only on Mars, Venus, Titan, Ganymede and Callisto, with the Terraforming technology |
+| Spaceport | Under Full Colonies, a dock for your fleets: they refill supply, repair 10% of their damage a month a level and refit there, and refuel on a site that makes propellant. Under Simple Colonies, nothing | None on the Moon |
+| Defenses | Under Full Colonies, guns that fire on enemy fleets closing in on the colony and make it harder to wear down. Under Simple Colonies, nothing | None |
+| Facilities | See the table below | None |
+
+Every module but the Habitat needs a crew (see below), so a colony's people are
+what limits the rest.
 
 The facilities each give their bonus for every staffed level, across all your
 colonies:
@@ -762,7 +765,7 @@ colonies:
 | Training Ground | +4% army experience gain |
 | Nuclear Command Center | +4 nuclear command reliability, at most +12; +2 Command Redundancy against a salvo on the capital, at most +6 |
 | Materials Foundry | +3% advanced materials output |
-| Administration | −0.15 a month to the colony's autonomy |
+| Administration | −0.15 a month to the colony's autonomy, for 25 authority |
 
 A blockade stops the Mining Complex, Orbital Yard, resort and foundry; an
 occupied colony's facilities give nothing.
@@ -772,26 +775,30 @@ Geoengineering) works the world itself, on the five Martian sites, the Venus
 cloud habitat, Titan, Ganymede and Callisto. Each staffed level adds 4% of the
 colony's starting room for people a year. Up to three work at a colony at once,
 so a world takes at least 25 years to finish, at +300%, where a Habitat gives
-+50% at once and holds its slot for good. The room the work has added belongs
++50% at once and stays for good. The room the work has added belongs
 to the world: it stays when the colony changes hands, is released, or takes a
 level down. A finished world's Terraforming levels stand down and free their
-slots. An occupation stops the work, and a colony short of crews works at its
+crews. An occupation stops the work, and a colony short of crews works at its
 staffing share. Once you have the technology, the Modules view shows a
 Terraforming line under the facilities, with the room added so far and the
 years to go at this month's pace; the colony's page shows the same in its
 Terraformed tile.
 
-A colony has 1 to 4 slots by its size, and one more each with Nuclear Thermal
-Propulsion, Orbital Manufacturing, Advanced Nanofabrication, Space Colonization
-and Molecular Assemblers, whose tooltips list Colony Module Slots. Past them it
-still takes up to eight more modules, each costing 100 fabrication points more
-than the last: 200, then 300, and so on up to 900. You can queue one only while
-your module stock can hold its price (see below), so without storage or much
-fabrication you stop at the fourth, at 500. One already queued is still built if
-the stock shrinks later. The Modules view's Slots figure turns
-red past them, and its hover gives the next module's price. Solar System shows
-each site's slots, Extraplanetary Base room and Resort Colony room under its
-name, so you can weigh a site before you settle it.
+Each Habitat holds half of the colony's starting room, and 10 points more each
+with Nuclear Thermal Propulsion, Orbital Manufacturing, Advanced Nanofabrication,
+Space Colonization and Molecular Assemblers, whose tooltips list Habitat Room:
+with all five, a Habitat doubles the starting room. A colony keeps the best
+Habitat room it has had when it changes hands. Past its cap a colony still takes Habitats,
+each costing 100 fabrication points more than the last: 200, then 300, with no
+top. You can queue one only while your module stock can hold its price (see
+below), so without storage or much fabrication you stop at the fourth past the
+cap, at 500. One already queued is still built if the stock shrinks later. The
+Modules view's Habitats figure turns red past the cap, and its hover gives the
+next one's price. Solar System shows each site's Habitat cap, Extraplanetary
+Base room and Resort Colony room under its name, and the cap's hover the people
+and crews it would hold at the cap, so you can weigh a site before you settle
+it; Colony Fleets' target line does the same for your target. When you choose
+no site, the program favors one with a higher cap.
 
 The founding event has to be answered before you can add a specialization
 level. Each row's buttons add one more level of a module to the end of your
@@ -808,7 +815,7 @@ with the level still standing, so a colony can't be stripped bare once a rival
 moves on it. The founding specialization keeps its first level. A Habitat can't
 come down while the colony's people need its room, and while one comes down the
 colony takes in no more people than the room it will have. Pressing the button
-again stops the work; the months spent are lost. The freed slot takes a new
+again stops the work; the months spent are lost. The freed crew takes a new
 module once the level is gone.
 
 Modules are built at Earth by your Space Program's third production method
@@ -826,7 +833,7 @@ Telecommunication Gear, and the two later ones Advanced Materials as well. A
 later method costs much more a week but builds each module only about a tenth
 cheaper, so take it to get modules sooner, not to save money.
 
-Each module within a colony's slots costs 100 points, so a fully staffed Space Program builds one every
+Each module costs 100 points (a Habitat past its colony's cap more), so a fully staffed Space Program builds one every
 20, 8 or 4 months, more often with higher funding. Mare Imbrium's Mass Driver
 adds 3 points a month a level of its own, with or without a fabrication method. Fabrication builds the queue
 in order, first in first out: the module at the top is next. The arrow on each
@@ -864,28 +871,32 @@ down the queue goes ahead of a module waiting for a slot once your stock covers
 it. While Earth or that Moon colony is blockaded, or the colony occupied, it takes
 a slot as before.
 A module lands for whoever holds the colony then, and is lost if the site was
-released or filled to four past its slots in the meantime.
+released in the meantime, or its specializations' four levels or a finished
+world's Terraforming leave no room for it.
 
-Every level past the first needs a crew of 5,000 people, except Habitats, which
-house the crews. A colony short of crews runs its modules at the share it can
-staff: four levels with no crews run at a quarter each, which the Crew column
-shows. With Artificial General Intelligence every module runs. Each level past
+Every level past the first needs a crew of 10,000 people (5,000 with Artificial
+General Intelligence), except Habitats, which house the crews. A colony short of
+crews runs every crewed module at the share it can staff: eight levels with five
+crews run at three quarters each, four with none at a quarter. The Modules view's
+Crews figure reads the crews against the crews needed, red while short; a
+module's + button says whether the colony has a crew to spare, and the overview
+shows a Crews cell while any colony of yours is short. Each level past
 each colony's first adds +1% to your Space Program's throughput, raising its
 Launch Capacity bill (Module Upkeep in the Modules view).
 
 A colony's modules stay with it when it changes hands, and the Cede Colony AI
 values a colony more for each of them. An AI that holds a colony, or is in the
 top three, queues one module a year at each colony when it has money to spare:
-a Habitat once its people fill three quarters of its room, otherwise the next
+a Habitat once its people fill three quarters of its room, within the cap, otherwise the next
 specialization level its crews can run, its founding specialization first, then
-a facility: an Administration where autonomy has reached 25 and is heading for 45
-or more, a Mining Complex when its bases outgrow their room, an Off-World Resort once
+a facility its crews can run: an Administration where autonomy has reached 25 and is heading for 45
+or more and it has 50 authority to spare, a Mining Complex when its bases outgrow their room, an Off-World Resort once
 its Resort Colonies, built and queued, fill all of its resort room, Terraforming once its
 people fill half its room, a Nuclear Command Center with nuclear weapons, an Orbital Yard with a Space Command, otherwise a Research Station. While
 anything is queued it runs the best fabrication method it has whose cost fits
 in a twentieth of its government's weekly income, or its cheapest one if none
-does. It never builds Spaceports or Defenses, and never pays for a module past
-a colony's slots.
+does. It never builds Spaceports or Defenses, and never pays for a Habitat past
+a colony's cap.
 
 ### Extraplanetary Base room
 
@@ -1110,7 +1121,7 @@ terms add up to +0.3 a month settles near 30; one demands self-government only
 when they reach +0.5, as for a colony far out that goes a year without contact,
 or a large one at war. A Mars colony that keeps receiving settlers stays near 0. Better
 drives bring the outer colonies closer: with a fusion torch the distance all but
-disappears. Keep settlers or modules arriving, on Low emigration if nothing
+disappears. Keep settlers or modules arriving, on 500 settlers a month if nothing
 else, so that no colony goes a year without contact.
 
 A colony of fewer than 1,000 people has none of these terms: its autonomy only
@@ -1137,9 +1148,9 @@ a colony go only when they have no Space Program to supply it.
 **A colony's own modules.** Autonomy has its use: each month a colony gains its
 autonomy ÷ 100 × its people ÷ 10,000 points toward a module of its own, at most
 5, shown as Building in the Autonomy view. At 100 it builds one, free and at
-once, within its slots: a Habitat once its people fill three quarters of its
-room, a level of its founding specialization (up to 3) or of the other, or a
-Research Station or Cultural Center. A colony at 50 autonomy with 30,000 people
+once: a Habitat once its people fill three quarters of its room, within the cap,
+or, while it has a crew to spare, a level of its founding specialization (up to
+3) or of the other, or a Research Station or Cultural Center. A colony at 50 autonomy with 30,000 people
 builds one about every five and a half years.
 
 **Abandoning a colony.** Each colony's row has an Abandon button, which asks
