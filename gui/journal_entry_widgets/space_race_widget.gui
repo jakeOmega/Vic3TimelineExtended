@@ -1412,7 +1412,7 @@ types space_race_widget_types
 
 				### People: the colony's priority for settlers (sr_colony_priority_sgui).
 				button = {
-					visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), Or( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') ), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) ) ) ) )]"
+					visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), Or( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') ), Or( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'bases') ), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) ) ) ) ) )]"
 					using = default_button_action
 					size = { 80 24 }
 					block "priority_button" {}
@@ -1629,11 +1629,23 @@ types space_race_widget_types
 						}
 					}
 				}
+				### Bases (Extraplanetary Base ground types design § 9.1): the
+				### site's ground type and grade, its room, grade and ground on hover.
+				te_sr_eb_ground_part = {
+					visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'bases') ) )]"
+					block "eb_ground_tooltip" {}
+					blockoverride "ebg_ground" {
+						block "eb_ground" {}
+					}
+					blockoverride "ebg_grade" {
+						block "eb_grade" {}
+					}
+				}
 			}
 		}
 		### People: people and room, crews.
 		flowcontainer = {
-			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), Or( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') ), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) ) ) ) )]"
+			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), Or( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') ), Or( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'bases') ), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) ) ) ) ) )]"
 			direction = horizontal
 			ignoreinvisible = yes
 			spacing = 4
@@ -2260,6 +2272,68 @@ types space_race_widget_types
 					using = te_sr_fontsize_row
 					elide = right
 					block "def_marines" {}
+				}
+			}
+		}
+		### Bases (Extraplanetary Base ground types design § 9.1): our levels
+		### here over its room, − and +, its profit a level; why it doesn't
+		### serve us; a level's output of the seven goods.
+		flowcontainer = {
+			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'bases') ) )]"
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 1
+
+			te_sr_eb_level_line = {
+				blockoverride "ebl_levels" {
+					block "eb_levels" {}
+				}
+				blockoverride "ebl_target" {
+					block "eb_target" {}
+				}
+				blockoverride "ebl_minus" {
+					block "eb_minus" {}
+				}
+				blockoverride "ebl_plus" {
+					block "eb_plus" {}
+				}
+				blockoverride "ebl_profit" {
+					block "eb_profit" {}
+				}
+				blockoverride "ebl_away_visible" {
+					block "eb_away_visible" {}
+				}
+				blockoverride "ebl_blockaded_visible" {
+					block "eb_blockaded_visible" {}
+				}
+				blockoverride "ebl_occupied_visible" {
+					block "eb_occupied_visible" {}
+				}
+				blockoverride "ebl_away" {
+					block "eb_away" {}
+				}
+			}
+			te_sr_eb_box_goods_line = {
+				blockoverride "g_iron" {
+					block "eb_out_iron" {}
+				}
+				blockoverride "g_tech_metals" {
+					block "eb_out_tech_metals" {}
+				}
+				blockoverride "g_gold" {
+					block "eb_out_gold" {}
+				}
+				blockoverride "g_copper" {
+					block "eb_out_copper" {}
+				}
+				blockoverride "g_lead" {
+					block "eb_out_lead" {}
+				}
+				blockoverride "g_sulfur" {
+					block "eb_out_sulfur" {}
+				}
+				blockoverride "g_glass" {
+					block "eb_out_glass" {}
 				}
 			}
 		}
@@ -3180,7 +3254,7 @@ types space_race_widget_types
 		margin = { 4 1 }
 
 		te_sr_colony_heads_people = {
-			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), Or( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') ), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) ) ) ) )]"
+			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), Or( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') ), Or( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'bases') ), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) ) ) ) ) )]"
 		}
 		te_sr_colony_heads_autonomy = {
 			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'autonomy') )]"
@@ -3603,11 +3677,461 @@ types space_race_widget_types
 		}
 	}
 
-	### A button of the Colonies view switch, 112 wide: greyed while its view is
+	### The Bases view (Extraplanetary Base ground types design § 9.1). A good:
+	### its icon (its name on hover) and a figure of five characters at most
+	### ("1893", "12.3K"), 64 wide. Seven in the goods' order
+	### (te_sr_eb_goods_line) are 7 × 64 + 6 × 2 = 460, in a colony row's 472.
+	type te_sr_eb_good_cell = widget {
+		size = { 64 22 }
+		parentanchor = vcenter
+
+		icon = {
+			size = { 16 16 }
+			parentanchor = left|vcenter
+			block "good_icon" {}
+		}
+		textbox = {
+			parentanchor = left|vcenter
+			position = { 17 0 }
+			autoresize = yes
+			max_width = 47
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			block "good_figure" {}
+		}
+	}
+
+	### The seven goods of the Extraplanetary Base's mining methods
+	### (ebase_ground.GOODS), icons first: a level's output in a box, the
+	### base's in the totals. Each figure is the instance's g_<good>, each
+	### hover its t_<good> (the good's name unless the instance says more).
+	type te_sr_eb_goods_line = flowcontainer {
+		direction = horizontal
+		spacing = 2
+		margin_left = 4
+
+		te_sr_eb_good_cell = {
+			block "t_iron" {
+				tooltip = "iron"
+			}
+			blockoverride "good_icon" {
+				texture = "gfx/interface/icons/goods_icons/iron.dds"
+			}
+			blockoverride "good_figure" {
+				block "g_iron" {}
+			}
+		}
+		te_sr_eb_good_cell = {
+			block "t_tech_metals" {
+				tooltip = "tech_metals"
+			}
+			blockoverride "good_icon" {
+				texture = "gfx/interface/icons/goods_icons/tech_metals.dds"
+			}
+			blockoverride "good_figure" {
+				block "g_tech_metals" {}
+			}
+		}
+		te_sr_eb_good_cell = {
+			block "t_gold" {
+				tooltip = "gold"
+			}
+			blockoverride "good_icon" {
+				texture = "gfx/interface/icons/goods_icons/gold.dds"
+			}
+			blockoverride "good_figure" {
+				block "g_gold" {}
+			}
+		}
+		te_sr_eb_good_cell = {
+			block "t_copper" {
+				tooltip = "copper"
+			}
+			blockoverride "good_icon" {
+				texture = "gfx/interface/icons/goods_icons/copper.dds"
+			}
+			blockoverride "good_figure" {
+				block "g_copper" {}
+			}
+		}
+		te_sr_eb_good_cell = {
+			block "t_lead" {
+				tooltip = "lead"
+			}
+			blockoverride "good_icon" {
+				texture = "gfx/interface/icons/goods_icons/lead.dds"
+			}
+			blockoverride "good_figure" {
+				block "g_lead" {}
+			}
+		}
+		te_sr_eb_good_cell = {
+			block "t_sulfur" {
+				tooltip = "sulfur"
+			}
+			blockoverride "good_icon" {
+				texture = "gfx/interface/icons/goods_icons/sulfur.dds"
+			}
+			blockoverride "good_figure" {
+				block "g_sulfur" {}
+			}
+		}
+		te_sr_eb_good_cell = {
+			block "t_glass" {
+				tooltip = "glass"
+			}
+			blockoverride "good_icon" {
+				texture = "gfx/interface/icons/goods_icons/glass.dds"
+			}
+			blockoverride "good_figure" {
+				block "g_glass" {}
+			}
+		}
+	}
+
+	### A box's goods line in the Bases view: a level's output of each good
+	### here, the hover naming the method it stands for. The box's figures
+	### are its eb_out_<good> (gen_ebase.colony_row_overrides).
+	type te_sr_eb_box_goods_line = te_sr_eb_goods_line {
+		blockoverride "t_iron" {
+			tooltip = "je_space_race_widget_eb_out_iron_tt"
+		}
+		blockoverride "t_tech_metals" {
+			tooltip = "je_space_race_widget_eb_out_tech_metals_tt"
+		}
+		blockoverride "t_gold" {
+			tooltip = "je_space_race_widget_eb_out_gold_tt"
+		}
+		blockoverride "t_copper" {
+			tooltip = "je_space_race_widget_eb_out_copper_tt"
+		}
+		blockoverride "t_lead" {
+			tooltip = "je_space_race_widget_eb_out_lead_tt"
+		}
+		blockoverride "t_sulfur" {
+			tooltip = "je_space_race_widget_eb_out_sulfur_tt"
+		}
+		blockoverride "t_glass" {
+			tooltip = "je_space_race_widget_eb_out_glass_tt"
+		}
+	}
+
+	### A box's second line in the Bases view: our levels working at the
+	### place over its room, with "→ N" while they move toward the levels we
+	### assign it; − and + (a click 5 levels, a right-click 25); its profit a
+	### level a week. 28 + 200 + 4 + 24 + 4 + 24 + 4 + 150 = 438, in 472.
+	### Under it, while a colony doesn't serve us, why, and how many of its
+	### levels work elsewhere until it is freed.
+	type te_sr_eb_level_line = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 1
+
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 4
+			margin_left = 28
+
+			widget = {
+				size = { 200 24 }
+				parentanchor = vcenter
+				tooltip = "je_space_race_widget_eb_levels_tt"
+
+				flowcontainer = {
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 4
+					parentanchor = left|vcenter
+
+					textbox = {
+						parentanchor = vcenter
+						autoresize = yes
+						max_width = 124
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						block "ebl_levels" {}
+					}
+					textbox = {
+						parentanchor = vcenter
+						autoresize = yes
+						max_width = 68
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						default_format = "#v"
+						block "ebl_target" {}
+					}
+				}
+			}
+			button_icon_minus_action = {
+				size = { 24 24 }
+				parentanchor = vcenter
+				block "ebl_minus" {}
+			}
+			button_icon_plus_action = {
+				size = { 24 24 }
+				parentanchor = vcenter
+				block "ebl_plus" {}
+			}
+			widget = {
+				size = { 150 24 }
+				parentanchor = vcenter
+				tooltip = "je_space_race_widget_eb_profit_tt"
+
+				flowcontainer = {
+					direction = horizontal
+					spacing = 4
+					parentanchor = right|vcenter
+
+					textbox = {
+						parentanchor = vcenter
+						autoresize = yes
+						max_width = 76
+						align = right|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						block "ebl_profit" {}
+					}
+					textbox = {
+						parentanchor = vcenter
+						autoresize = yes
+						max_width = 66
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						text = "je_space_race_widget_eb_a_level"
+					}
+				}
+			}
+		}
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 4
+			margin_left = 28
+			tooltip = "je_space_race_widget_eb_away_tt"
+			block "ebl_away_visible" {}
+
+			textbox = {
+				parentanchor = vcenter
+				autoresize = yes
+				max_width = 96
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				default_format = "#R"
+				text = "je_space_race_widget_eb_blockaded"
+				block "ebl_blockaded_visible" {}
+			}
+			textbox = {
+				parentanchor = vcenter
+				autoresize = yes
+				max_width = 96
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				default_format = "#R"
+				text = "je_space_race_widget_eb_occupied"
+				block "ebl_occupied_visible" {}
+			}
+			textbox = {
+				parentanchor = vcenter
+				autoresize = yes
+				max_width = 48
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				block "ebl_away" {}
+			}
+			textbox = {
+				parentanchor = vcenter
+				autoresize = yes
+				max_width = 264
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				text = "je_space_race_widget_eb_elsewhere"
+			}
+		}
+	}
+
+	### A place's ground type and grade on a box's first line, the place's
+	### room, grade and ground on hover: "Carbonaceous" at the longest, then
+	### "−45%". 116 + 4 + 44 = 164.
+	type te_sr_eb_ground_part = flowcontainer {
+		direction = horizontal
+		spacing = 4
+		parentanchor = vcenter
+
+		textbox = {
+			parentanchor = vcenter
+			autoresize = yes
+			max_width = 116
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			block "ebg_ground" {}
+		}
+		textbox = {
+			parentanchor = vcenter
+			autoresize = yes
+			max_width = 44
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			default_format = "#v"
+			block "ebg_grade" {}
+		}
+	}
+
+	### The near-Earth asteroids in the Bases view (place 0, ground types
+	### design § 8.6): a box as a colony's row draws it, with no page to open,
+	### so the name takes the go-to arrow's width as well (208, for
+	### "Near-Earth Asteroids"). Its figures and buttons are
+	### te_sr_eb_near_earth_row's (gen_ebase.near_earth_row), in the blocks a
+	### colony row's Bases parts use.
+	type te_sr_eb_near_earth_box = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 1
+		margin = { 4 3 }
+
+		background = {
+			using = entry_bg_simple
+		}
+
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 4
+
+			widget = {
+				size = { 24 24 }
+				parentanchor = top
+
+				icon = {
+					size = { 24 24 }
+					parentanchor = center
+					texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
+				}
+			}
+			widget = {
+				size = { 208 24 }
+				parentanchor = top
+
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 208
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					text = "sr_site_name_near_earth"
+				}
+			}
+			te_sr_eb_ground_part = {
+				block "eb_ground_tooltip" {}
+				blockoverride "ebg_ground" {
+					block "eb_ground" {}
+				}
+				blockoverride "ebg_grade" {
+					block "eb_grade" {}
+				}
+			}
+		}
+		te_sr_eb_level_line = {
+			blockoverride "ebl_levels" {
+				block "eb_levels" {}
+			}
+			blockoverride "ebl_target" {
+				block "eb_target" {}
+			}
+			blockoverride "ebl_minus" {
+				block "eb_minus" {}
+			}
+			blockoverride "ebl_plus" {
+				block "eb_plus" {}
+			}
+			blockoverride "ebl_profit" {
+				block "eb_profit" {}
+			}
+			blockoverride "ebl_away_visible" {
+				block "eb_away_visible" {}
+			}
+		}
+		te_sr_eb_box_goods_line = {
+			blockoverride "g_iron" {
+				block "eb_out_iron" {}
+			}
+			blockoverride "g_tech_metals" {
+				block "eb_out_tech_metals" {}
+			}
+			blockoverride "g_gold" {
+				block "eb_out_gold" {}
+			}
+			blockoverride "g_copper" {
+				block "eb_out_copper" {}
+			}
+			blockoverride "g_lead" {
+				block "eb_out_lead" {}
+			}
+			blockoverride "g_sulfur" {
+				block "eb_out_sulfur" {}
+			}
+			blockoverride "g_glass" {
+				block "eb_out_glass" {}
+			}
+		}
+	}
+
+	### A line of the Bases view's totals: its name, the base's profit a week
+	### on the right. 260 + 4 + 200 = 464, with its margins 472.
+	type te_sr_eb_total_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 4 1 }
+
+		textbox = {
+			autoresize = yes
+			minimumsize = { 260 -1 }
+			maximumsize = { 260 -1 }
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			block "total_label" {}
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 200 -1 }
+			maximumsize = { 200 -1 }
+			align = right|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			default_format = "#v"
+			block "total_value" {}
+		}
+	}
+
+	### A line of the Bases view's move area, above the totals: single-line,
+	### the panel's width less a value row's margins.
+	type te_sr_eb_move_text = textbox {
+		autoresize = yes
+		maximumsize = { 472 -1 }
+		align = left|nobaseline
+		using = te_sr_fontsize_row
+		elide = right
+	}
+
+	### A button of the Colonies view switch, 92 wide: greyed while its view is
 	### shown (the radio pattern of the Demographics history's range buttons).
+	### Five fit the 480 column: 5 × 92 + 4 × 4 = 476.
 	type te_sr_colony_view_button = button {
 		using = default_button
-		size = { 112 28 }
+		size = { 92 28 }
 		parentanchor = vcenter
 		block "view_button" {}
 
@@ -3615,7 +4139,7 @@ types space_race_widget_types
 			parentanchor = center
 			align = center|nobaseline
 			autoresize = yes
-			max_width = 106
+			max_width = 86
 			elide = right
 			using = te_sr_fontsize_row
 			block "view_label" {}
@@ -3722,7 +4246,7 @@ types space_race_widget_types
 				te_sr_colony_view_button = {
 					tooltip = "je_space_race_widget_cv_people_tt"
 					blockoverride "view_button" {
-						enabled = "[Not( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), Or( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') ), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) ) ) ) ) )]"
+						enabled = "[Not( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), Or( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') ), Or( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'bases') ), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) ) ) ) ) ) )]"
 						onclick = "[GetVariableSystem.Clear('sr_colony_view')]"
 					}
 					blockoverride "view_label" {
@@ -3760,11 +4284,22 @@ types space_race_widget_types
 						text = "je_space_race_widget_cv_defences"
 					}
 				}
+				te_sr_colony_view_button = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' )]"
+					tooltip = "je_space_race_widget_cv_bases_tt"
+					blockoverride "view_button" {
+						enabled = "[Not( GetVariableSystem.HasValue('sr_colony_view', 'bases') )]"
+						onclick = "[GetVariableSystem.Set('sr_colony_view', 'bases')]"
+					}
+					blockoverride "view_label" {
+						text = "je_space_race_widget_cv_bases"
+					}
+				}
 			}
 
 			### People: the emigration program, the settlers it sends, our people off Earth.
 			flowcontainer = {
-				visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), Or( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') ), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) ) ) ) )]"
+				visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), Or( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') ), Or( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'bases') ), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) ) ) ) ) )]"
 				direction = vertical
 				ignoreinvisible = yes
 				spacing = 2
@@ -3974,6 +4509,245 @@ types space_race_widget_types
 					blockoverride "row_value" {
 						text = "je_space_race_widget_free_trade_figure"
 					}
+				}
+			}
+
+			### Bases (Extraplanetary Base ground types design § 9.1): the
+			### checkbox, our levels and room, what moves and why, the base's
+			### totals before other modifiers, then the near-Earth asteroids'
+			### box above the colonies'. The figures are the refresh's and the
+			### clicks' (sr_eb_* variables, the stored profits a level): nothing
+			### here reads a market or walks a building.
+			flowcontainer = {
+				visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'bases') ) )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 2
+
+				### The checkbox (sr_ebase_auto_sgui): ticked while sr_eb_manual is not set.
+				flowcontainer = {
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 6
+					margin = { 4 1 }
+
+					checkbutton = {
+						using = check_button
+						size = { 24 24 }
+						parentanchor = vcenter
+						checked = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_manual'), '(CFixedPoint)0' )]"
+						enabled = "[GetScriptedGui('sr_ebase_auto_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						onclick = "[GetScriptedGui('sr_ebase_auto_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "[Concatenate( GetScriptedGui('sr_ebase_auto_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), Concatenate( GetScriptedGui('sr_ebase_auto_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), Localize( 'je_space_race_widget_eb_auto_tt' ) ) ) ) )]"
+					}
+					textbox = {
+						parentanchor = vcenter
+						autoresize = yes
+						max_width = 440
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						tooltip = "je_space_race_widget_eb_auto_tt"
+						text = "je_space_race_widget_eb_auto"
+					}
+				}
+				te_sr_value_row = {
+					tooltip = "je_space_race_widget_ebase_tt"
+					blockoverride "row_label" {
+						text = "je_space_race_widget_ebase_label"
+					}
+					blockoverride "row_value" {
+						text = "je_space_race_widget_ebase_figure"
+					}
+				}
+				te_sr_value_row = {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_queued'), '(CFixedPoint)0' )]"
+					tooltip = "je_space_race_widget_ebase_tt"
+					blockoverride "row_label" {
+						text = "je_space_race_widget_ebase_queued_label"
+					}
+					blockoverride "row_value" {
+						text = "je_space_race_widget_ebase_queued_figure"
+					}
+				}
+
+				### What moves and why, once a level has been placed: with the
+				### checkbox off, how far our levels are from our assignments;
+				### with it on, the move under way (its source, destination,
+				### year and gain) or why nothing moves; then, while nothing
+				### moves, the last move.
+				flowcontainer = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_placed'), '(CFixedPoint)1' )]"
+					direction = vertical
+					ignoreinvisible = yes
+					margin = { 4 4 }
+
+					flowcontainer = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_manual'), '(CFixedPoint)1' )]"
+						direction = vertical
+						ignoreinvisible = yes
+						tooltip = "je_space_race_widget_eb_toward_tt"
+
+						te_sr_eb_move_text = {
+							visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_to_go'), '(CFixedPoint)0' )]"
+							text = "je_space_race_widget_eb_toward"
+						}
+						te_sr_eb_move_text = {
+							visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_to_go'), '(CFixedPoint)0' )]"
+							text = "je_space_race_widget_eb_toward_months"
+						}
+						te_sr_eb_move_text = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_to_go'), '(CFixedPoint)0' )]"
+							text = "je_space_race_widget_eb_at_assignments_line"
+						}
+					}
+					flowcontainer = {
+						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_manual'), '(CFixedPoint)0' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_moving'), '(CFixedPoint)1' ) )]"
+						direction = vertical
+						ignoreinvisible = yes
+						tooltip = "je_space_race_widget_eb_moving_tt"
+
+						te_sr_eb_move_text = {
+							text = "je_space_race_widget_eb_moving"
+						}
+						te_sr_eb_move_text = {
+							text = "je_space_race_widget_eb_from_to"
+						}
+						te_sr_eb_move_text = {
+							visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_move_from_profit'), '(CFixedPoint)0' )]"
+							text = "je_space_race_widget_eb_gain"
+						}
+						te_sr_eb_move_text = {
+							visible = "[Not( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_move_from_profit'), '(CFixedPoint)0' ) )]"
+							text = "je_space_race_widget_eb_loss"
+						}
+					}
+					flowcontainer = {
+						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_manual'), '(CFixedPoint)0' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_moving'), '(CFixedPoint)0' ) )]"
+						direction = vertical
+						ignoreinvisible = yes
+						tooltip = "je_space_race_widget_eb_stay_tt"
+
+						te_sr_eb_move_text = {
+							text = "je_space_race_widget_eb_stay"
+						}
+						te_sr_eb_move_text = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_all_lose'), '(CFixedPoint)1' )]"
+							text = "je_space_race_widget_eb_all_lose"
+						}
+						te_sr_eb_move_text = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_all_lose'), '(CFixedPoint)0' )]"
+							text = "je_space_race_widget_eb_no_gain"
+						}
+					}
+					flowcontainer = {
+						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_moving'), '(CFixedPoint)0' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_last'), '(CFixedPoint)1' ) )]"
+						direction = vertical
+						ignoreinvisible = yes
+						tooltip = "je_space_race_widget_eb_last_tt"
+
+						te_sr_eb_move_text = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_last_one_year'), '(CFixedPoint)0' )]"
+							text = "je_space_race_widget_eb_last"
+						}
+						te_sr_eb_move_text = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_last_one_year'), '(CFixedPoint)1' )]"
+							text = "je_space_race_widget_eb_last_one"
+						}
+						te_sr_eb_move_text = {
+							text = "je_space_race_widget_eb_last_from_to"
+						}
+					}
+				}
+
+				### The totals (sr_eb_totals, Task 7): goods a week and profit a
+				### week from where our levels work, then where they are headed
+				### (If prices hold with the checkbox on, At our assignments off).
+				te_sr_subheader = {
+					tooltip = "je_space_race_widget_eb_totals_tt"
+					blockoverride "subheader_text" {
+						text = "je_space_race_widget_eb_totals_header"
+					}
+				}
+				te_sr_eb_total_row = {
+					tooltip = "je_space_race_widget_eb_now_tt"
+					blockoverride "total_label" {
+						text = "je_space_race_widget_eb_now"
+					}
+					blockoverride "total_value" {
+						text = "je_space_race_widget_eb_now_profit"
+					}
+				}
+				te_sr_eb_goods_line = {
+					blockoverride "g_iron" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_now_iron')|K]"
+					}
+					blockoverride "g_tech_metals" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_now_tech_metals')|K]"
+					}
+					blockoverride "g_gold" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_now_gold')|K]"
+					}
+					blockoverride "g_copper" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_now_copper')|K]"
+					}
+					blockoverride "g_lead" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_now_lead')|K]"
+					}
+					blockoverride "g_sulfur" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_now_sulfur')|K]"
+					}
+					blockoverride "g_glass" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_now_glass')|K]"
+					}
+				}
+				te_sr_eb_total_row = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_manual'), '(CFixedPoint)0' )]"
+					tooltip = "je_space_race_widget_eb_if_prices_hold_tt"
+					blockoverride "total_label" {
+						text = "je_space_race_widget_eb_if_prices_hold"
+					}
+					blockoverride "total_value" {
+						text = "je_space_race_widget_eb_end_profit"
+					}
+				}
+				te_sr_eb_total_row = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_manual'), '(CFixedPoint)1' )]"
+					tooltip = "je_space_race_widget_eb_at_assignments_tt"
+					blockoverride "total_label" {
+						text = "je_space_race_widget_eb_at_assignments"
+					}
+					blockoverride "total_value" {
+						text = "je_space_race_widget_eb_end_profit"
+					}
+				}
+				te_sr_eb_goods_line = {
+					blockoverride "g_iron" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_end_iron')|K]"
+					}
+					blockoverride "g_tech_metals" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_end_tech_metals')|K]"
+					}
+					blockoverride "g_gold" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_end_gold')|K]"
+					}
+					blockoverride "g_copper" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_end_copper')|K]"
+					}
+					blockoverride "g_lead" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_end_lead')|K]"
+					}
+					blockoverride "g_sulfur" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_end_sulfur')|K]"
+					}
+					blockoverride "g_glass" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_end_glass')|K]"
+					}
+				}
+
+				### The near-Earth asteroids (place 0), with Asteroid Mining.
+				te_sr_eb_near_earth_row = {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_room_near_earth'), '(CFixedPoint)0' )]"
 				}
 			}
 

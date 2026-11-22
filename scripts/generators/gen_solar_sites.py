@@ -3613,6 +3613,7 @@ def render_display() -> str:
     out += render_autonomy_display()
     out += render_overview_display()
     out += render_window_display()
+    out += _ebase_view().render_view_display()
     return "\n".join(out) + "\n"
 
 
@@ -3794,6 +3795,7 @@ def render_custom_loc() -> str:
                 f"\t\tlocalization_key = {overview_name_key(site)}",
                 "\t}"]
     out += ["\ttext = {", "\t\tlocalization_key = sr_site_name_unknown", "\t}", "}", ""]
+    out += _ebase_view().view_custom_loc()
     out += ["# Each queue place's module, from its type code."]
     for n in range(1, QUEUE_SLOTS + 1):
         out += [f"sr_mq_{n}_module_name = {{", "\ttype = country", "\trandom_valid = no", ""]
@@ -3878,6 +3880,18 @@ def ground_type(site: Site) -> str:
     return ebase_ground.GROUND[site.key]
 
 
+def _ebase_view():
+    """gen_ebase, for the Colonies section's Bases view (ground types design § 9.1): its
+    rows' blocks, display values and custom loc are written there and land in this
+    module's outputs. Imported here, not at the top: gen_ebase imports this module."""
+    here = str(Path(__file__).resolve().parent)
+    if here not in sys.path:
+        sys.path.insert(0, here)
+    import gen_ebase
+
+    return gen_ebase
+
+
 def _site_row(site: Site, *, picker: bool) -> list[str]:
     """One world: in Solar System (a list to read), or in the colony target
     popup (UI pass design § 5) with its Target button and launch window."""
@@ -3933,6 +3947,9 @@ _CONTESTED = "EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue
 _FULL = "EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' )"
 _VIEW_DEFENCES = f"And( {_FULL}, GetVariableSystem.HasValue('sr_colony_view', 'defences') )"
 _VIEW_DETAIL = "GetVariableSystem.HasValue('sr_colony_view', 'detail')"
+# The Bases view (ground types design § 9.1), with In-Situ Resource Utilization.
+_EBASE_SHOWN = "EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' )"
+_VIEW_BASES = f"And( {_EBASE_SHOWN}, GetVariableSystem.HasValue('sr_colony_view', 'bases') )"
 
 
 def _FOCUS(k: str) -> str:
@@ -3942,16 +3959,17 @@ TP_ALL = "sr_panel_target_popup_all_open"   # the colony target popup's Show all
 
 
 def _colony_row(site: Site) -> list[str]:
-    """One colony in Colonies: under every view but Defenses while it is ours
-    and not occupied (sr_disp_site_<key> 1), under Defenses while it is ours at
-    all (sr_disp_def_<key>, gen_space_fleets), so an occupied colony shows there
-    with its occupier."""
+    """One colony in Colonies: under every view but Defenses and Bases while it
+    is ours and not occupied (sr_disp_site_<key> 1), under Defenses and Bases
+    while it is ours at all (sr_disp_def_<key>, gen_space_fleets), so an
+    occupied colony shows there with its occupier, or with its levels away."""
     k = site.key
     prio, status, dstatus = f"sr_disp_site_prio_{k}", f"sr_disp_site_aut_status_{k}", f"sr_disp_def_status_{k}"
     out = ["\t\tte_sr_colony_row = {"]
     # A colony's page shows this row alone (colony management design § 8).
-    listed = (f"Or( And( {_VIEW_DEFENCES}, {_eq(f'sr_disp_def_{k}', 1)} ), "
-              f"And( Not( {_VIEW_DEFENCES} ), {_eq(f'sr_disp_site_{k}', 1)} ) )")
+    held_all = f"Or( {_VIEW_DEFENCES}, {_VIEW_BASES} )"
+    listed = (f"Or( And( {held_all}, {_eq(f'sr_disp_def_{k}', 1)} ), "
+              f"And( Not( {held_all} ), {_eq(f'sr_disp_site_{k}', 1)} ) )")
     paged = (f"And( {_FOCUS(k)}, Or( {_eq(f'sr_disp_def_{k}', 1)}, {_eq(f'sr_disp_site_{k}', 1)} ) )")
     out += _override("colony_visible",
                      f'visible = "[Or( And( Not( {_VIEW_DETAIL} ), {listed} ), And( {_VIEW_DETAIL}, {paged} ) )]"')
@@ -4055,6 +4073,8 @@ def _colony_row(site: Site) -> list[str]:
     out += _override("def_occupier_context",
                      f"datacontext = \"[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_{k}').GetState]\"",
                      f'visible = "[{_eq(f"sr_disp_def_occupier_{k}", 1)}]"')
+    # Bases (gen_ebase.colony_row_overrides; ground types design § 9.1)
+    out += _ebase_view().colony_row_overrides(k)
     return out + ["\t\t}"]
 
 
@@ -4234,7 +4254,10 @@ def render_gui() -> str:
             "\t\tspacing = 4"]
     for site in panel_order():
         out += [""] + _colony_row(site)
-    out += ["\t}", "",
+    out += ["\t}", ""]
+    # The near-Earth asteroids' box in the Bases view (gen_ebase.near_earth_row).
+    out += _ebase_view().near_earth_row()
+    out += ["",
             "\ttype te_sr_cf_slot_rows = flowcontainer {",
             "\t\tdirection = vertical",
             "\t\tignoreinvisible = yes",

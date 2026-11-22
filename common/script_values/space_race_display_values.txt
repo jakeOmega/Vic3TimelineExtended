@@ -1361,3 +1361,66 @@ sr_disp_ebase_shown = {
 	value = 0
 	if = { limit = { has_technology_researched = in_situ_resource_utilization } value = 1 }
 }
+# The Bases view (Extraplanetary Base ground types design § 9.1): 1 with the
+# checkbox off; 1 once a level has been placed; 1 while a move runs (in
+# either mode); 1 once a move has ended. The per-place and per-good values
+# are generated (gen_ebase.render_view_display, sr_sites_display_generated.txt).
+sr_disp_eb_manual = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual } value = 1 }
+}
+sr_disp_eb_placed = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_placed } value = 1 }
+}
+sr_disp_eb_moving = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_move_from } value = 1 }
+}
+sr_disp_eb_last = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_last_from } value = 1 }
+}
+# The move line's years, from te_history_month_index (year * 12 + the month
+# from 0): when the current move began, and the last move's first and last
+# months; 1 when the last move began and ended in the same year.
+sr_disp_eb_move_began_year = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_move_began } value = var:sr_eb_move_began divide = 12 }
+	floor = yes
+}
+sr_disp_eb_last_began_year = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_last_began } value = var:sr_eb_last_began divide = 12 }
+	floor = yes
+}
+sr_disp_eb_last_ended_year = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_last_ended } value = var:sr_eb_last_ended divide = 12 }
+	floor = yes
+}
+sr_disp_eb_last_one_year = {
+	value = 0
+	if = { limit = { sr_disp_eb_last_began_year = sr_disp_eb_last_ended_year } value = 1 }
+}
+# With the checkbox on and a move running, how much more a level earns at its
+# destination than at its source, a fraction of the source's (0 while the
+# source loses money, when the line says so instead); "999%" at most.
+sr_disp_eb_gap = {
+	value = 0
+	if = {
+		limit = { sr_disp_eb_move_from_profit > 0 }
+		value = sr_eb_view_move_to_profit
+		subtract = sr_disp_eb_move_from_profit
+		divide = sr_disp_eb_move_from_profit
+		min = 0
+		max = 9.99
+	}
+}
+# With the checkbox off, about how many months the levels left to move take
+# at our pace.
+sr_disp_eb_months = {
+	value = sr_disp_eb_to_go
+	divide = sr_disp_eb_pace
+	ceiling = yes
+}

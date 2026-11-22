@@ -516,14 +516,15 @@ class ColoniesTest(unittest.TestCase):
         self.assertIn('visible = "[JournalEntry.IsActive]"', self.section.split("\n\n")[0])
 
     def test_the_view_switch(self):
-        """Four views (Defenses under Full Colonies only), picked by
-        GetVariableSystem's sr_colony_view; the switch's button for the view
-        shown is greyed. Each view's section items, heads and row cells are
-        gated on the same test."""
+        """Five views (Defenses under Full Colonies only, Bases with In-Situ
+        Resource Utilization), picked by GetVariableSystem's sr_colony_view;
+        the switch's button for the view shown is greyed. Each view's section
+        items, heads and row cells are gated on the same test."""
         views = {"people": "GetVariableSystem.Clear('sr_colony_view')",
                  "modules": "GetVariableSystem.Set('sr_colony_view', 'modules')",
                  "autonomy": "GetVariableSystem.Set('sr_colony_view', 'autonomy')",
-                 "defences": "GetVariableSystem.Set('sr_colony_view', 'defences')"}
+                 "defences": "GetVariableSystem.Set('sr_colony_view', 'defences')",
+                 "bases": "GetVariableSystem.Set('sr_colony_view', 'bases')"}
         for view, onclick in views.items():
             with self.subTest(view=view):
                 self.assertIn(f'onclick = "[{onclick}]"', self.section)
@@ -539,6 +540,20 @@ class ColoniesTest(unittest.TestCase):
         # the People view is the default: no value, or one the rule doesn't offer
         self.assertIn("Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules')", row)
         self.assertIn("ScriptValue('sr_disp_colonies_full')", self.section)
+        # Bases: line 1's part and the lines under it, the section's items; and
+        # every People test leaves it out, as it does the others
+        bases = ("And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), "
+                 "'(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'bases') )")
+        self.assertGreaterEqual(row.count(bases), 2)
+        self.assertIn(bases, self.section)
+        people = re.findall(r"Not\( Or\( GetVariableSystem\.HasValue\('sr_colony_view', 'modules'\).*?\]\"", self.gui)
+        self.assertEqual(len(people), 5)   # the row's button and line, the heads, the switch, the section
+        for test in people:
+            self.assertIn(bases, test)
+        # five buttons in the 480 column
+        button = _type_body(self.gui, "te_sr_colony_view_button")
+        width = int(re.search(r"size = \{ (\d+) 28 \}", button).group(1))
+        self.assertLessEqual(5 * width + 4 * 4, 480)
 
     def test_a_row_reads_its_own_world(self):
         for site in gss.panel_order():
@@ -555,6 +570,76 @@ class ColoniesTest(unittest.TestCase):
                                  {str(site.index)})
                 for slot, mod in zip(("a", "b"), gss.spec_modifiers(site)):
                     self.assertIn(f'tooltip = "je_space_race_widget_colony_{mod[len("sr_colony_"):]}_tt"', row)
+
+    def test_a_row_s_bases_parts(self):
+        """The Bases view (ground types design § 9.1): every colony row carries
+        its own site's ground type and grade, its levels, profit and output a
+        level, and − and + on sr_ebase_assign_sgui with its own place index,
+        a click 5 levels and a right-click 25 (ops 1 to 4)."""
+        import ebase_ground as eg
+        for site in gss.panel_order():
+            k = site.key
+            row = self._row_of(k)
+            with self.subTest(world=k):
+                self.assertRegex(row, rf'blockoverride "eb_ground" \{{\s*text = "sr_ground_{eg.GROUND[k]}"')
+                self.assertIn(f'tooltip = "je_space_race_widget_bases_tt_{k}"', row)
+                grade = f"{site.ebase_grade:+d}%".replace("-", "\u2212")
+                self.assertRegex(row, rf'blockoverride "eb_grade" \{{\s*raw_text = "{re.escape(grade)}"')
+                for value in (f"sr_disp_eb_at_{k}", f"sr_disp_site_ebase_room_{k}", f"sr_disp_eb_target_{k}",
+                              f"sr_disp_eb_arrow_{k}", f"sr_disp_eb_profit_{k}", f"sr_disp_eb_serve_{k}",
+                              f"sr_disp_eb_away_{k}", *(f"sr_disp_eb_out_{k}_{g}" for g in eg.GOODS)):
+                    self.assertIn(f"ScriptValue('{value}')", row)
+                for block, (click, right) in (("eb_plus", (1, 3)), ("eb_minus", (2, 4))):
+                    body = re.search(rf'blockoverride "{block}" \{{(.*?)\n\t\t\t\}}', row, re.S).group(1)
+                    calls = re.findall(r"GetScriptedGui\('(\w+)'\)\.(\w+)\( GuiScope\.SetRoot\( JournalEntry\.GetCountry"
+                                       r"\.MakeScope \)\.AddScope\( 'site', MakeScopeValue\( '\(CFixedPoint\)(\d+)' \) \)"
+                                       r"\.AddScope\( 'op', MakeScopeValue\( '\(CFixedPoint\)(\d+)' \) \)\.End \)", body)
+                    self.assertEqual({c[0] for c in calls}, {"sr_ebase_assign_sgui"})
+                    self.assertEqual({c[2] for c in calls}, {str(eg.PLACES.index(k))})
+                    self.assertEqual(eg.PLACES.index(k), site.index)
+                    self.assertEqual({(c[1], int(c[3])) for c in calls},
+                                     {("IsValid", click), ("Execute", click), ("Execute", right),
+                                      ("IsValidTooltip", click), ("ExecuteTooltip", click)})
+                    self.assertRegex(body, rf"onrightclick = \"\[GetScriptedGui\('sr_ebase_assign_sgui'\)\.Execute\("
+                                           rf"[^\n]*'\(CFixedPoint\){right}' \) \)\.End \)\]\"")
+
+    def test_the_near_earth_row_is_place_0(self):
+        """The near-Earth asteroids' box (place 0) above the colonies' rows,
+        shown with Asteroid Mining: its buttons address place 0, its ground is
+        Mixed, and it never reads a blockade."""
+        rows = self.rows_file[self.rows_file.index("type te_sr_eb_near_earth_row = flowcontainer {"):]
+        box = rows[:rows.index("\ttype ", 1)]
+        self.assertIn("te_sr_eb_near_earth_box = {", box)
+        self.assertEqual(set(re.findall(r"AddScope\( 'site', MakeScopeValue\( '\(CFixedPoint\)(\d+)' \)", box)), {"0"})
+        self.assertRegex(box, r'blockoverride "eb_ground" \{\s*text = "sr_ground_mixed"')
+        self.assertRegex(box, r'blockoverride "eb_away_visible" \{\s*visible = no')
+        self.assertIn("ScriptValue('sr_disp_eb_room_near_earth')", box)
+        self.assertNotIn("sr_disp_eb_serve_", box)
+        self.assertIn("te_sr_eb_near_earth_row = {", self.section)
+        self.assertIn('text = "sr_site_name_near_earth"', _type_body(self.gui, "te_sr_eb_near_earth_box"))
+
+    def test_bases_lists_every_held_colony(self):
+        """Bases lists a held colony as Defenses does, occupied included, so a
+        colony that doesn't serve us still shows why."""
+        for site in gss.panel_order():
+            k = site.key
+            row = self._row_of(k)
+            with self.subTest(world=k):
+                visible = re.search(r'blockoverride "colony_visible" \{\s*visible = "([^"]*)"', row).group(1)
+                held = visible[visible.index("Or( And( Or( "):]
+                self.assertIn("GetVariableSystem.HasValue('sr_colony_view', 'bases')", held.split(f"sr_disp_def_{k}")[0])
+
+    def test_the_checkbox(self):
+        """Assign for the most profit: a checkbutton on sr_ebase_auto_sgui,
+        ticked while sr_eb_manual is not set (sr_disp_eb_manual 0)."""
+        box = re.search(r"checkbutton = \{(.*?)\n\t+\}", self.section, re.S).group(1)
+        self.assertIn("using = check_button", box)
+        self.assertIn("checked = \"[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_manual'), "
+                      "'(CFixedPoint)0' )]\"", box)
+        self.assertIn("onclick = \"[GetScriptedGui('sr_ebase_auto_sgui').Execute( GuiScope.SetRoot( "
+                      "JournalEntry.GetCountry.MakeScope ).End )]\"", box)
+        self.assertIn("IsValidTooltip", box)
+        self.assertIn('text = "je_space_race_widget_eb_auto"', self.section)
 
     def test_every_name_fits_its_row(self):
         row = _type_body(self.gui, "te_sr_colony_row")
@@ -1073,7 +1158,10 @@ VANILLA_KEPT = {"gfx/interface/backgrounds/round_frame_dec.dds",
                 "gfx/interface/icons/generic_icons/up_up.dds",
                 # a fleet card's roll-down button, beside up_up as its roll-up (the fleet cards)
                 "gfx/interface/icons/generic_icons/down_down.dds",
-                "gfx/interface/progressbar/progressbar_marker.dds"}
+                "gfx/interface/progressbar/progressbar_marker.dds",
+                # the Bases view's goods (ground types design § 9.1), each by its own good's icon
+                *(f"gfx/interface/icons/goods_icons/{g}.dds"
+                  for g in ("iron", "tech_metals", "gold", "copper", "lead", "sulfur", "glass"))}
 # Space Fleets' banner (space_race_gui_icons.md, "Space Fleets: the banner"): the
 # picture for each drive level, painted for the slot (icon_prompts.py, category
 # `space_banner`); event pictures stood in for them at first.

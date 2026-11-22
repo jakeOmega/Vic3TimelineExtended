@@ -1417,5 +1417,133 @@ class MixSelfCheckTest(unittest.TestCase):
         self.assertIn("`TE_SELF_CHECK OK/BROKEN ebase_mix", playtest)
 
 
+
+class BasesViewTest(unittest.TestCase):
+    """The Bases view's display values (ground types design § 9.1, plan Task 8), run
+    in the twin from the files as they are: the generated ones
+    (gen_ebase.render_view_display, in sr_sites_display_generated.txt) and the
+    hand-written ones beside the other display values. Each reads what the refresh
+    and the clicks store, never a market or a building (the contract's addition of
+    2026-11-21: the view is evaluated every frame it shows)."""
+
+    FILES = (("common", "script_values", "sr_sites_display_generated.txt"),
+             ("common", "script_values", "space_race_display_values.txt"))
+
+    def _twin(self):
+        tw = Twin()
+        tw.values = dict(tw.values)
+        for parts in self.FILES:
+            tw.values.update(_top_raw(_raw(*parts)))
+        return tw
+
+    @staticmethod
+    def _view_values():
+        out = {}
+        for parts in BasesViewTest.FILES:
+            for name, body in _top_raw(_strip(_raw(*parts))).items():
+                if re.match(r"sr_(disp_eb|eb_view)_", name):
+                    out[name] = body
+        return out
+
+    def test_output_figures_use_the_model(self):
+        """A box's output a level of each good is the basket scaled by the method most
+        of our levels run (its value against the basket's at base prices: § 7's four
+        methods share the basket's proportions) times (1 + score), at every place, for
+        each method var:sr_eb_lead_method names; with none, or -1, the group's first."""
+        def value(outputs):
+            return sum(q * eg.good_base_price(g) for g, q in outputs.items())
+        methods = list(eg.mining_methods().items())
+        for pm, goods in methods:
+            scale = value(goods.outputs) / value(eg.BASKET)
+            for g in eg.GOODS:
+                with self.subTest(method=pm, good=g):  # one method's figures stand for all
+                    self.assertAlmostEqual(goods.outputs[g], eg.BASKET[g] * scale, delta=0.005 * goods.outputs[g])
+        largest = 0.0
+        for lead, (pm, goods) in [(None, methods[0]), (-1, methods[0]), *enumerate(methods)]:
+            tw = self._twin()
+            if lead is not None:
+                tw.vars["sr_eb_lead_method"] = fx(lead)
+            scale = value(goods.outputs) / value(eg.BASKET)
+            for k in eg.PLACES:
+                for g in eg.GOODS:
+                    with self.subTest(lead=lead, place=k, good=g):
+                        want = eg.BASKET[g] * scale * (1 + eg.score(k, g))
+                        got = unfx(tw.num(f"sr_disp_eb_out_{k}_{g}"))
+                        self.assertAlmostEqual(got, want, delta=0.01)
+                        largest = max(largest, got)
+        self.assertLess(largest, 10_000)   # four digits in a five-character cell
+
+    def test_the_view_reads_no_market_and_no_building(self):
+        """Nothing the view reads walks a building or re-reads the market: the profit a
+        level, the yardstick and the lead method are the refresh's stored figures."""
+        values = self._view_values()
+        self.assertGreater(len(values), 41 * 12)
+        banned = (r"\bsr_eb_profit_", r"\bsr_eb_margin_", r"\bsr_eb_levels_", r"\bsr_eb_share_", r"\bsr_ebase_levels\b",
+                  r"(?<!var:)(?<!has_variable = )\bsr_eb_yardstick\b", r"\bmarket\b", r"\bevery_scope_", r"\bany_scope_")
+        for name, body in values.items():
+            for pattern in banned:
+                with self.subTest(value=name, pattern=pattern):
+                    self.assertNotRegex(body, pattern)
+        for k in eg.PLACES:
+            self.assertIn(f"var:sr_eb_level_profit_{k}", values[f"sr_disp_eb_profit_{k}"])
+        self.assertIn("var:sr_eb_lead_method", values["sr_eb_view_scale"])
+
+    def _two_sites(self, tw, *, ceres_serves=True):
+        for k, room in (("psyche", 300), ("ceres", 200)):
+            tw.hold(k, serves=k != "ceres" or ceres_serves)
+            tw.room(k, room)
+
+    def test_levels_to_go_and_months(self):
+        """With the checkbox off: the levels above their assignments, as far as the
+        places below theirs have room serving us; about that over the pace, months."""
+        tw = self._twin()
+        self._two_sites(tw)
+        tw.vars.update(sr_eb_over=fx(0), sr_eb_at_psyche=fx(100), sr_eb_target_psyche=fx(50),
+                       sr_eb_target_ceres=fx(80))
+        self.assertEqual(tw.num("sr_disp_eb_to_go"), 0)   # the checkbox on: nothing to go
+        tw.vars["sr_eb_manual"] = fx(1)
+        self.assertEqual(unfx(tw.num("sr_disp_eb_to_go")), 50)
+        self.assertEqual(unfx(tw.num("sr_disp_eb_pace")), 3)      # 100 levels: a 48th, rounded up
+        self.assertEqual(unfx(tw.num("sr_disp_eb_months")), 17)   # 50 / 3, rounded up
+        self.assertEqual(unfx(tw.num("sr_disp_eb_arrow_psyche")), 1)
+        self.assertEqual(unfx(tw.num("sr_disp_eb_arrow_vesta")), 0)
+        tw = self._twin()
+        self._two_sites(tw, ceres_serves=False)
+        tw.vars.update(sr_eb_manual=fx(1), sr_eb_over=fx(0), sr_eb_at_psyche=fx(100), sr_eb_target_psyche=fx(50),
+                       sr_eb_target_ceres=fx(80))
+        self.assertEqual(tw.num("sr_disp_eb_to_go"), 0)   # Ceres blockaded: no room to go to
+        self.assertEqual(unfx(tw.num("sr_disp_eb_serve_ceres")), 1)
+
+    def test_every_site_losing_money(self):
+        tw = self._twin()
+        self._two_sites(tw)
+        tw.vars.update(sr_eb_level_profit_psyche=fx(-10), sr_eb_level_profit_ceres=fx(-5),
+                       sr_eb_level_profit_near_earth=fx(50))
+        self.assertEqual(unfx(tw.num("sr_disp_eb_all_lose")), 1)   # near-Earth earns, but without Asteroid Mining
+        tw.vars["sr_eb_level_profit_ceres"] = fx(5)
+        self.assertEqual(unfx(tw.num("sr_disp_eb_all_lose")), 0)
+        tw = self._twin()
+        self._two_sites(tw, ceres_serves=False)
+        tw.vars.update(sr_eb_level_profit_psyche=fx(-10), sr_eb_level_profit_ceres=fx(5))
+        self.assertEqual(unfx(tw.num("sr_disp_eb_all_lose")), 1)   # Ceres earns, but doesn't serve us
+
+    def test_the_gap_and_the_years(self):
+        """§ 9.1's sketch: 16 Psyche to Ceres, Ceres 23% more a level; the move began in
+        March 2071 (te_history_month_index 2071 × 12 + 2)."""
+        tw = self._twin()
+        tw.vars.update(sr_eb_move_from=fx(eg.PLACES.index("psyche")), sr_eb_move_to=fx(eg.PLACES.index("ceres")),
+                       sr_eb_move_began=fx(2071 * 12 + 2), sr_eb_level_profit_psyche=fx(SKETCH["psyche"]),
+                       sr_eb_level_profit_ceres=fx(SKETCH["ceres"]))
+        self.assertAlmostEqual(unfx(tw.num("sr_disp_eb_gap")), 0.2336, delta=0.0001)
+        self.assertEqual(unfx(tw.num("sr_disp_eb_move_began_year")), 2071)
+        tw.vars["sr_eb_level_profit_psyche"] = fx(-100)
+        self.assertEqual(tw.num("sr_disp_eb_gap"), 0)   # the source loses money: the line says so instead
+        tw.vars["sr_eb_level_profit_psyche"] = fx(1)
+        self.assertEqual(unfx(tw.num("sr_disp_eb_gap")), 9.99)
+        tw.vars.update(sr_eb_last_began=fx(2071 * 12 + 11), sr_eb_last_ended=fx(2072 * 12))
+        self.assertEqual((unfx(tw.num("sr_disp_eb_last_began_year")), unfx(tw.num("sr_disp_eb_last_ended_year")),
+                          unfx(tw.num("sr_disp_eb_last_one_year"))), (2071, 2072, 0))
+
+
 if __name__ == "__main__":
     unittest.main()

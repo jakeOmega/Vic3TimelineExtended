@@ -993,5 +993,253 @@ def main() -> int:
     return int(args.check and result["changed"])
 
 
+# --- The Bases view (§ 9.1, plan Task 8) --------------------------------------------
+#
+# The Colonies section's fifth view: where our levels work and what they make. Its
+# layout is hand-written in gui/journal_entry_widgets/space_race_widget.gui (te_sr_eb_*
+# and the Bases parts of te_sr_colony_row). What differs from place to place is written
+# here and lands in gen_solar_sites' outputs beside the other views' rows and values:
+#
+# - colony_row_overrides(place): a colony's (or the near-Earth asteroids') Bases blocks,
+#   which gen_solar_sites._colony_row adds to each te_sr_colony_row;
+# - near_earth_row(): te_sr_eb_near_earth_row, the near-Earth asteroids' box with its
+#   blocks, for the rows file (sr_sites_generated_rows.gui);
+# - render_view_display(): the view's per-place, per-method and per-good display values,
+#   for sr_sites_display_generated.txt (read by the GUI only, as every sr_disp_* is);
+# - view_custom_loc(): sr_eb_method_name, the method most of our levels run, for
+#   sr_sites_generated_custom_loc.txt.
+#
+# The scripted GUIs (sr_ebase_auto_sgui, sr_ebase_assign_sgui), the totals' variables
+# (sr_eb_now_*, sr_eb_end_*), the readings the refresh stores for the view
+# (sr_eb_level_profit_<k>, sr_eb_yardstick, sr_eb_lead_method) and the place names
+# (sr_eb_place_*) are Task 7's and Task 9's, named by the build's contract. Nothing the
+# view reads per frame touches a market or a building: those figures are stored.
+
+ASSIGN_SGUI = "sr_ebase_assign_sgui"
+# scope:op of sr_ebase_assign_sgui: + and − a click (eg.STEPS[0] levels) and a
+# right-click (eg.STEPS[1]).
+OP_PLUS, OP_MINUS, OP_PLUS_MANY, OP_MINUS_MANY = 1, 2, 3, 4
+
+
+def method_scale(pm: str) -> float:
+    """A mining method's output a level against the basket's (the Asteroid Mine's), by
+    value at base prices (§ 7: the four share the basket's proportions, so a method's
+    goods are the basket times this)."""
+    m = eg.mining_methods()[pm]
+    value = sum(q * eg.good_base_price(g) for g, q in m.outputs.items())
+    return value / sum(q * eg.good_base_price(g) for g, q in eg.BASKET.items())
+
+
+def lead_method(pm: str) -> int:
+    """The position of `pm` in eg.mining_methods() order: the value of Task 7's
+    var:sr_eb_lead_method while it is the method most of our mining levels run (-1 with
+    no mining levels)."""
+    return list(eg.mining_methods()).index(pm)
+
+
+def _lead_is(i: int) -> str:
+    return f"has_variable = sr_eb_lead_method var:sr_eb_lead_method = {i}"
+
+
+def output_factor(k: str, good: str) -> float:
+    """A level's output of `good` at place `k` on the Asteroid Mine (the basket), before
+    other modifiers: BASKET × (1 + score)."""
+    return eg.BASKET[good] * (1 + eg.score(k, good))
+
+
+def _sv(name_: str) -> str:
+    return f"JournalEntry.GetCountry.MakeScope.ScriptValue('{name_}')"
+
+
+def _eq(name_: str, value: int) -> str:
+    return f"EqualTo_CFixedPoint( {_sv(name_)}, '(CFixedPoint){value}' )"
+
+
+def _override(block: str, *lines: str) -> list[str]:
+    """A blockoverride at a row instance's top level (three tabs), as gen_solar_sites
+    writes them."""
+    return [f'\t\t\tblockoverride "{block}" {{', *[f"\t\t\t\t{line}" for line in lines], "\t\t\t}"]
+
+
+def _assign_scope(i: int, op: int) -> str:
+    return (f"GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( "
+            f"'(CFixedPoint){i}' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint){op}' ) ).End")
+
+
+def _assign_button(i: int, click: int, right_click: int) -> list[str]:
+    """− or +: a click changes the place's assignment by eg.STEPS[0] levels, a right-click
+    by eg.STEPS[1]. The hover gives why it is greyed and what the click does (gotcha
+    #16), then the right-click's step."""
+    sgui = f"GetScriptedGui('{ASSIGN_SGUI}')"
+    scope = _assign_scope(i, click)
+    return [f'enabled = "[{sgui}.IsValid( {scope} )]"',
+            f'onclick = "[{sgui}.Execute( {scope} )]"',
+            f'onrightclick = "[{sgui}.Execute( {_assign_scope(i, right_click)} )]"',
+            f"tooltip = \"[Concatenate( {sgui}.IsValidTooltip( {scope} ), Concatenate( Localize( 'te_tt_break' ), "
+            f"Concatenate( {sgui}.ExecuteTooltip( {scope} ), Concatenate( Localize( 'te_tt_break' ), "
+            f"Localize( 'je_space_race_widget_eb_step_tt' ) ) ) ) )]\""]
+
+
+def colony_row_overrides(place: str) -> list[str]:
+    """The Bases view's blocks for one place (§ 9.1): its ground type's word and its grade
+    (the word's hover the site's room, grade and ground); its levels over its room, with
+    "→ N" while they move toward our assignment; − and +; a level's profit a week (Task
+    7's stored figure, the checkbox's own); under them, while a colony doesn't serve us,
+    why and how many of its levels work elsewhere; and a level's output of the seven
+    goods. `place` is a key of eg.PLACES: a colony's for its te_sr_colony_row,
+    `near_earth` for its own box."""
+    k = place
+    i = eg.PLACES.index(k)
+    near = k == eg.NEAR_EARTH
+    out = _override("eb_ground", f'text = "sr_ground_{eg.GROUND[k]}"')
+    out += _override("eb_grade", f'raw_text = "{gss._signed(grade_pct(k))}%"')
+    hover = "je_space_race_widget_eb_near_earth_tt" if near else f"je_space_race_widget_bases_tt_{k}"
+    out += _override("eb_ground_tooltip", f'tooltip = "{hover}"')
+    if near:
+        # Serving whenever it shows (Asteroid Mining): no blockade, no occupier.
+        out += _override("eb_away_visible", "visible = no")
+        room = "sr_disp_eb_room_near_earth"
+    else:
+        serve = f"sr_disp_eb_serve_{k}"
+        out += _override("eb_away_visible",
+                         f"visible = \"[GreaterThanOrEqualTo_CFixedPoint( {_sv(serve)}, '(CFixedPoint)1' )]\"")
+        out += _override("eb_blockaded_visible", f'visible = "[{_eq(serve, 1)}]"')
+        out += _override("eb_occupied_visible", f'visible = "[{_eq(serve, 2)}]"')
+        out += _override("eb_away", f'raw_text = "#v [{_sv(f"sr_disp_eb_away_{k}")}|0]#!"')
+        room = f"sr_disp_site_ebase_room_{k}"
+    out += _override("eb_levels", f'raw_text = "#v [{_sv(f"sr_disp_eb_at_{k}")}|0]#! / [{_sv(room)}|0]"')
+    out += _override("eb_target", f'visible = "[{_eq(f"sr_disp_eb_arrow_{k}", 1)}]"',
+                     f'raw_text = "→ [{_sv(f"sr_disp_eb_target_{k}")}|0]"')
+    out += _override("eb_minus", *_assign_button(i, OP_MINUS, OP_MINUS_MANY))
+    out += _override("eb_plus", *_assign_button(i, OP_PLUS, OP_PLUS_MANY))
+    out += _override("eb_profit", f'raw_text = "@money![{_sv(f"sr_disp_eb_profit_{k}")}|K+=]"')
+    for g in eg.GOODS:
+        out += _override(f"eb_out_{g}", f'raw_text = "[{_sv(f"sr_disp_eb_out_{k}_{g}")}|0]"')
+    return out
+
+
+def near_earth_row() -> list[str]:
+    """te_sr_eb_near_earth_row, for the rows file: the near-Earth asteroids' box in the
+    Bases view (te_sr_eb_near_earth_box) with its blocks."""
+    return ["\ttype te_sr_eb_near_earth_row = flowcontainer {",
+            "\t\tdirection = vertical",
+            "\t\tignoreinvisible = yes",
+            "",
+            "\t\tte_sr_eb_near_earth_box = {",
+            *["\t" + line for line in colony_row_overrides(eg.NEAR_EARTH)],
+            "\t\t}",
+            "\t}"]
+
+
+def _guarded(name_: str, var: str) -> list[str]:
+    return [f"{name_} = {{", "\tvalue = 0", f"\tif = {{ limit = {{ has_variable = {var} }} value = var:{var} }}", "}"]
+
+
+def render_view_display() -> list[str]:
+    """The Bases view's display values (§ 9.1), country scope, for
+    sr_sites_display_generated.txt. Each reads a country variable the refresh stores
+    (Tasks 6 and 7) or a cheap trigger, never a market or a building: a display value
+    is evaluated every frame the view shows (contract, 2026-11-21: the profit a level
+    and the yardstick are Task 7's stored figures, at the refresh's prices)."""
+    pms = list(eg.mining_methods())
+    out = ["",
+           "# ---- The Bases view (Extraplanetary Base ground types design § 9.1), from",
+           "# scripts/generators/gen_ebase.py (render_view_display) ----",
+           "# A level's output is for the method most of our mining levels run (var:sr_eb_lead_method,",
+           "# its place in the group's mining methods; the group's first with none): the basket times",
+           "# that method's scale (§ 7).",
+           "sr_eb_view_scale = {", f"\tvalue = {num(method_scale(pms[0]), 5)}"]
+    for pm in pms[1:]:
+        out.append(f"\tif = {{ limit = {{ {_lead_is(lead_method(pm))} }} value = {num(method_scale(pm), 5)} }}")
+    out += ["}",
+            "# What the checkbox's move must gain a level a week: the margin of the yardstick (§ 8.3).",
+            "sr_disp_eb_margin = {",
+            "\tvalue = 0",
+            f"\tif = {{ limit = {{ has_variable = sr_eb_yardstick }} value = var:sr_eb_yardstick multiply = {num(eg.MARGIN)} }}",
+            "}",
+            "# The near-Earth asteroids' room (§ 8.6).",
+            "sr_disp_eb_room_near_earth = {",
+            "\tvalue = 0",
+            f"\tif = {{ limit = {{ has_technology_researched = {gss.NEAR_EARTH_TECH} }} value = {gss.NEAR_EARTH_ROOM} }}",
+            "}",
+            "# The totals (Task 7's sr_eb_totals): what the base makes a week of each good and earns,",
+            "# now and where the levels are headed (If prices hold / At our assignments)."]
+    out += ["# Our pace (§ 8.5): a 48th of the levels on record, at least 1 a month. The record's",
+            "# levels, not the buildings', so the panel walks no building."]
+    out += ["sr_disp_eb_pace = {", "\tvalue = 0", "\tif = { limit = { has_variable = sr_eb_over } value = var:sr_eb_over }"]
+    out += [f"\tadd = sr_disp_eb_at_{k}" for _, k in places()]
+    out += [f"\tdivide = {eg.PACE_MONTHS}", "\tceiling = yes", "\tmin = 1", "}"]
+    for row in ("now", "end"):
+        for g in (*eg.GOODS, "profit"):
+            out += _guarded(f"sr_disp_eb_{row}_{g}", f"sr_eb_{row}_{g}")
+    out += ["# Each place: its levels, its assignment and its levels away (§ 8.1); a level's profit a",
+            "# week at the refresh's prices; 1 while its levels move toward an assignment that differs",
+            "# from them (the box's arrow); for a colony, 0 serving, 1 blockaded, 2 occupied; a level's",
+            "# output of each good, before other modifiers."]
+    for _, k in places():
+        out += _guarded(f"sr_disp_eb_at_{k}", f"sr_eb_at_{k}")
+        out += _guarded(f"sr_disp_eb_target_{k}", f"sr_eb_target_{k}")
+        out += _guarded(f"sr_disp_eb_profit_{k}", f"sr_eb_level_profit_{k}")
+        out += [f"sr_disp_eb_arrow_{k} = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ has_variable = sr_eb_manual NOT = {{ sr_disp_eb_target_{k} = sr_disp_eb_at_{k} }} }} value = 1 }}",
+                "}"]
+        if k != eg.NEAR_EARTH:  # the near-Earth asteroids serve whenever they show
+            out += _guarded(f"sr_disp_eb_away_{k}", f"sr_eb_away_{k}")
+            out += [f"sr_disp_eb_serve_{k} = {{",
+                    "\tvalue = 0",
+                    f"\tif = {{ limit = {{ has_global_variable = sr_site_occupier_{k} }} value = 2 }}",
+                    f"\telse_if = {{ limit = {{ has_global_variable = sr_site_blockaded_{k} }} value = 1 }}",
+                    "}"]
+        out += [f"sr_disp_eb_out_{k}_{g} = {{ value = sr_eb_view_scale multiply = {num(output_factor(k, g))} }}"
+                for g in eg.GOODS]
+    out += ["# With the checkbox off, the levels the paced moves still have to carry toward our",
+            "# assignments (§ 8.4): the levels above their places' assignments, as far as the places",
+            "# below theirs have room serving us (each pass moves the lesser of the two).",
+            "sr_eb_view_excess = {", "\tvalue = 0"]
+    out += [f"\tadd = {{ value = sr_disp_eb_at_{k} subtract = sr_disp_eb_target_{k} min = 0 }}" for _, k in places()]
+    out += ["}", "sr_eb_view_deficit = {", "\tvalue = 0"]
+    out += [f"\tadd = {{ value = sr_disp_eb_target_{k} max = sr_eb_room_{k} subtract = sr_disp_eb_at_{k} min = 0 }}"
+            for _, k in places()]
+    out += ["}",
+            "sr_disp_eb_to_go = {",
+            "\tvalue = 0",
+            "\tif = { limit = { has_variable = sr_eb_manual } value = sr_eb_view_excess max = sr_eb_view_deficit }",
+            "}",
+            "# 0 while some place serving us earns money a level at the refresh's prices; 1 when every",
+            "# one loses money (§ 8.3: nothing moves). The first that earns ends the search.",
+            "sr_disp_eb_all_lose = {",
+            "\tvalue = 1",
+            "\tif = {",
+            "\t\tlimit = {",
+            "\t\t\tOR = {"]
+    for _, k in places():
+        out.append(f"\t\t\t\tAND = {{ {serves(k)} sr_disp_eb_profit_{k} > 0 }}")
+    out += ["\t\t\t}", "\t\t}", "\t\tvalue = 0", "\t}", "}",
+            "# A level's profit at the current move's source and destination (§ 9.1's move line;",
+            "# the destination's is read by the hand-written sr_disp_eb_gap only)."]
+    for value, var in (("sr_disp_eb_move_from_profit", "sr_eb_move_from"), ("sr_eb_view_move_to_profit", "sr_eb_move_to")):
+        out += [f"{value} = {{", "\tvalue = 0", "\tif = {", f"\t\tlimit = {{ has_variable = {var} }}"]
+        for i, k in places():
+            out.append(f"\t\t{'if' if i == 0 else 'else_if'} = {{ limit = {{ var:{var} = {i} }} "
+                       f"value = sr_disp_eb_profit_{k} }}")
+        out += ["\t}", "}"]
+    return out
+
+
+def view_custom_loc() -> list[str]:
+    """sr_eb_method_name (§ 9.1): the method most of our mining levels run, by its own
+    name, for the view's hovers: var:sr_eb_lead_method's, the group's first with none, as
+    sr_eb_view_scale reads it."""
+    pms = list(eg.mining_methods())
+    out = ["# The Bases view (Extraplanetary Base ground types design § 9.1, gen_ebase.view_custom_loc):",
+           "# the method most of our mining levels run (var:sr_eb_lead_method), the group's first with none.",
+           "sr_eb_method_name = {", "\ttype = country", "\trandom_valid = no", ""]
+    for pm in pms[1:]:
+        out += ["\ttext = {", f"\t\ttrigger = {{ {_lead_is(lead_method(pm))} }}", f"\t\tlocalization_key = {pm}", "\t}"]
+    out += ["\ttext = {", f"\t\tlocalization_key = {pms[0]}", "\t}", "}", ""]
+    return out
+
+
 if __name__ == "__main__":
     raise SystemExit(main())

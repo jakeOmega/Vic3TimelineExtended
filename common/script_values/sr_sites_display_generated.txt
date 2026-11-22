@@ -9126,3 +9126,1692 @@ sr_disp_win_cached = {
 	value = 0
 	if = { limit = { has_global_variable = sr_window_cache_month } value = 1 }
 }
+
+# ---- The Bases view (Extraplanetary Base ground types design § 9.1), from
+# scripts/generators/gen_ebase.py (render_view_display) ----
+# A level's output is for the method most of our mining levels run (var:sr_eb_lead_method,
+# its place in the group's mining methods; the group's first with none): the basket times
+# that method's scale (§ 7).
+sr_eb_view_scale = {
+	value = 0.44564
+	if = { limit = { has_variable = sr_eb_lead_method var:sr_eb_lead_method = 1 } value = 1 }
+	if = { limit = { has_variable = sr_eb_lead_method var:sr_eb_lead_method = 2 } value = 4 }
+	if = { limit = { has_variable = sr_eb_lead_method var:sr_eb_lead_method = 3 } value = 5 }
+}
+# What the checkbox's move must gain a level a week: the margin of the yardstick (§ 8.3).
+sr_disp_eb_margin = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_yardstick } value = var:sr_eb_yardstick multiply = 0.05 }
+}
+# The near-Earth asteroids' room (§ 8.6).
+sr_disp_eb_room_near_earth = {
+	value = 0
+	if = { limit = { has_technology_researched = asteroid_mining } value = 10 }
+}
+# The totals (Task 7's sr_eb_totals): what the base makes a week of each good and earns,
+# now and where the levels are headed (If prices hold / At our assignments).
+# Our pace (§ 8.5): a 48th of the levels on record, at least 1 a month. The record's
+# levels, not the buildings', so the panel walks no building.
+sr_disp_eb_pace = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_over } value = var:sr_eb_over }
+	add = sr_disp_eb_at_near_earth
+	add = sr_disp_eb_at_valles_marineris
+	add = sr_disp_eb_at_olympus_mons
+	add = sr_disp_eb_at_hellas_planitia
+	add = sr_disp_eb_at_utopia_planitia
+	add = sr_disp_eb_at_arcadia_planitia
+	add = sr_disp_eb_at_ceres
+	add = sr_disp_eb_at_vesta
+	add = sr_disp_eb_at_psyche
+	add = sr_disp_eb_at_pallas
+	add = sr_disp_eb_at_hygiea
+	add = sr_disp_eb_at_io
+	add = sr_disp_eb_at_europa
+	add = sr_disp_eb_at_ganymede
+	add = sr_disp_eb_at_callisto
+	add = sr_disp_eb_at_himalia
+	add = sr_disp_eb_at_amalthea
+	add = sr_disp_eb_at_venus
+	add = sr_disp_eb_at_mercury
+	add = sr_disp_eb_at_titan
+	add = sr_disp_eb_at_enceladus
+	add = sr_disp_eb_at_rhea
+	add = sr_disp_eb_at_mimas
+	add = sr_disp_eb_at_iapetus
+	add = sr_disp_eb_at_titania
+	add = sr_disp_eb_at_oberon
+	add = sr_disp_eb_at_miranda
+	add = sr_disp_eb_at_ariel
+	add = sr_disp_eb_at_triton
+	add = sr_disp_eb_at_proteus
+	add = sr_disp_eb_at_pluto
+	add = sr_disp_eb_at_eris
+	add = sr_disp_eb_at_makemake
+	add = sr_disp_eb_at_haumea
+	add = sr_disp_eb_at_sedna
+	add = sr_disp_eb_at_shackleton
+	add = sr_disp_eb_at_peary
+	add = sr_disp_eb_at_tranquility
+	add = sr_disp_eb_at_marius_hills
+	add = sr_disp_eb_at_daedalus
+	add = sr_disp_eb_at_imbrium
+	divide = 48
+	ceiling = yes
+	min = 1
+}
+sr_disp_eb_now_iron = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_now_iron } value = var:sr_eb_now_iron }
+}
+sr_disp_eb_now_tech_metals = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_now_tech_metals } value = var:sr_eb_now_tech_metals }
+}
+sr_disp_eb_now_gold = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_now_gold } value = var:sr_eb_now_gold }
+}
+sr_disp_eb_now_copper = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_now_copper } value = var:sr_eb_now_copper }
+}
+sr_disp_eb_now_lead = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_now_lead } value = var:sr_eb_now_lead }
+}
+sr_disp_eb_now_sulfur = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_now_sulfur } value = var:sr_eb_now_sulfur }
+}
+sr_disp_eb_now_glass = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_now_glass } value = var:sr_eb_now_glass }
+}
+sr_disp_eb_now_profit = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_now_profit } value = var:sr_eb_now_profit }
+}
+sr_disp_eb_end_iron = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_end_iron } value = var:sr_eb_end_iron }
+}
+sr_disp_eb_end_tech_metals = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_end_tech_metals } value = var:sr_eb_end_tech_metals }
+}
+sr_disp_eb_end_gold = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_end_gold } value = var:sr_eb_end_gold }
+}
+sr_disp_eb_end_copper = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_end_copper } value = var:sr_eb_end_copper }
+}
+sr_disp_eb_end_lead = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_end_lead } value = var:sr_eb_end_lead }
+}
+sr_disp_eb_end_sulfur = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_end_sulfur } value = var:sr_eb_end_sulfur }
+}
+sr_disp_eb_end_glass = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_end_glass } value = var:sr_eb_end_glass }
+}
+sr_disp_eb_end_profit = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_end_profit } value = var:sr_eb_end_profit }
+}
+# Each place: its levels, its assignment and its levels away (§ 8.1); a level's profit a
+# week at the refresh's prices; 1 while its levels move toward an assignment that differs
+# from them (the box's arrow); for a colony, 0 serving, 1 blockaded, 2 occupied; a level's
+# output of each good, before other modifiers.
+sr_disp_eb_at_near_earth = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_near_earth } value = var:sr_eb_at_near_earth }
+}
+sr_disp_eb_target_near_earth = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_near_earth } value = var:sr_eb_target_near_earth }
+}
+sr_disp_eb_profit_near_earth = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_near_earth } value = var:sr_eb_level_profit_near_earth }
+}
+sr_disp_eb_arrow_near_earth = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_near_earth = sr_disp_eb_at_near_earth } } value = 1 }
+}
+sr_disp_eb_out_near_earth_iron = { value = sr_eb_view_scale multiply = 250 }
+sr_disp_eb_out_near_earth_tech_metals = { value = sr_eb_view_scale multiply = 175 }
+sr_disp_eb_out_near_earth_gold = { value = sr_eb_view_scale multiply = 50 }
+sr_disp_eb_out_near_earth_copper = { value = sr_eb_view_scale multiply = 95 }
+sr_disp_eb_out_near_earth_lead = { value = sr_eb_view_scale multiply = 10 }
+sr_disp_eb_out_near_earth_sulfur = { value = sr_eb_view_scale multiply = 25 }
+sr_disp_eb_out_near_earth_glass = { value = sr_eb_view_scale multiply = 70 }
+sr_disp_eb_at_valles_marineris = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_valles_marineris } value = var:sr_eb_at_valles_marineris }
+}
+sr_disp_eb_target_valles_marineris = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_valles_marineris } value = var:sr_eb_target_valles_marineris }
+}
+sr_disp_eb_profit_valles_marineris = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_valles_marineris } value = var:sr_eb_level_profit_valles_marineris }
+}
+sr_disp_eb_arrow_valles_marineris = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_valles_marineris = sr_disp_eb_at_valles_marineris } } value = 1 }
+}
+sr_disp_eb_away_valles_marineris = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_valles_marineris } value = var:sr_eb_away_valles_marineris }
+}
+sr_disp_eb_serve_valles_marineris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_valles_marineris } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_valles_marineris } value = 1 }
+}
+sr_disp_eb_out_valles_marineris_iron = { value = sr_eb_view_scale multiply = 347.11 }
+sr_disp_eb_out_valles_marineris_tech_metals = { value = sr_eb_view_scale multiply = 186.9054 }
+sr_disp_eb_out_valles_marineris_gold = { value = sr_eb_view_scale multiply = 26.7008 }
+sr_disp_eb_out_valles_marineris_copper = { value = sr_eb_view_scale multiply = 86.2435 }
+sr_disp_eb_out_valles_marineris_lead = { value = sr_eb_view_scale multiply = 9.0783 }
+sr_disp_eb_out_valles_marineris_sulfur = { value = sr_eb_view_scale multiply = 29.3708 }
+sr_disp_eb_out_valles_marineris_glass = { value = sr_eb_view_scale multiply = 104.667 }
+sr_disp_eb_at_olympus_mons = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_olympus_mons } value = var:sr_eb_at_olympus_mons }
+}
+sr_disp_eb_target_olympus_mons = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_olympus_mons } value = var:sr_eb_target_olympus_mons }
+}
+sr_disp_eb_profit_olympus_mons = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_olympus_mons } value = var:sr_eb_level_profit_olympus_mons }
+}
+sr_disp_eb_arrow_olympus_mons = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_olympus_mons = sr_disp_eb_at_olympus_mons } } value = 1 }
+}
+sr_disp_eb_away_olympus_mons = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_olympus_mons } value = var:sr_eb_away_olympus_mons }
+}
+sr_disp_eb_serve_olympus_mons = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_olympus_mons } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_olympus_mons } value = 1 }
+}
+sr_disp_eb_out_olympus_mons_iron = { value = sr_eb_view_scale multiply = 347.11 }
+sr_disp_eb_out_olympus_mons_tech_metals = { value = sr_eb_view_scale multiply = 186.9054 }
+sr_disp_eb_out_olympus_mons_gold = { value = sr_eb_view_scale multiply = 26.7008 }
+sr_disp_eb_out_olympus_mons_copper = { value = sr_eb_view_scale multiply = 86.2435 }
+sr_disp_eb_out_olympus_mons_lead = { value = sr_eb_view_scale multiply = 9.0783 }
+sr_disp_eb_out_olympus_mons_sulfur = { value = sr_eb_view_scale multiply = 29.3708 }
+sr_disp_eb_out_olympus_mons_glass = { value = sr_eb_view_scale multiply = 104.667 }
+sr_disp_eb_at_hellas_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_hellas_planitia } value = var:sr_eb_at_hellas_planitia }
+}
+sr_disp_eb_target_hellas_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_hellas_planitia } value = var:sr_eb_target_hellas_planitia }
+}
+sr_disp_eb_profit_hellas_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_hellas_planitia } value = var:sr_eb_level_profit_hellas_planitia }
+}
+sr_disp_eb_arrow_hellas_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_hellas_planitia = sr_disp_eb_at_hellas_planitia } } value = 1 }
+}
+sr_disp_eb_away_hellas_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_hellas_planitia } value = var:sr_eb_away_hellas_planitia }
+}
+sr_disp_eb_serve_hellas_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_hellas_planitia } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_hellas_planitia } value = 1 }
+}
+sr_disp_eb_out_hellas_planitia_iron = { value = sr_eb_view_scale multiply = 347.11 }
+sr_disp_eb_out_hellas_planitia_tech_metals = { value = sr_eb_view_scale multiply = 186.9054 }
+sr_disp_eb_out_hellas_planitia_gold = { value = sr_eb_view_scale multiply = 26.7008 }
+sr_disp_eb_out_hellas_planitia_copper = { value = sr_eb_view_scale multiply = 86.2435 }
+sr_disp_eb_out_hellas_planitia_lead = { value = sr_eb_view_scale multiply = 9.0783 }
+sr_disp_eb_out_hellas_planitia_sulfur = { value = sr_eb_view_scale multiply = 29.3708 }
+sr_disp_eb_out_hellas_planitia_glass = { value = sr_eb_view_scale multiply = 104.667 }
+sr_disp_eb_at_utopia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_utopia_planitia } value = var:sr_eb_at_utopia_planitia }
+}
+sr_disp_eb_target_utopia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_utopia_planitia } value = var:sr_eb_target_utopia_planitia }
+}
+sr_disp_eb_profit_utopia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_utopia_planitia } value = var:sr_eb_level_profit_utopia_planitia }
+}
+sr_disp_eb_arrow_utopia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_utopia_planitia = sr_disp_eb_at_utopia_planitia } } value = 1 }
+}
+sr_disp_eb_away_utopia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_utopia_planitia } value = var:sr_eb_away_utopia_planitia }
+}
+sr_disp_eb_serve_utopia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_utopia_planitia } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_utopia_planitia } value = 1 }
+}
+sr_disp_eb_out_utopia_planitia_iron = { value = sr_eb_view_scale multiply = 275.9631 }
+sr_disp_eb_out_utopia_planitia_tech_metals = { value = sr_eb_view_scale multiply = 183.5155 }
+sr_disp_eb_out_utopia_planitia_gold = { value = sr_eb_view_scale multiply = 33.1156 }
+sr_disp_eb_out_utopia_planitia_copper = { value = sr_eb_view_scale multiply = 94.3794 }
+sr_disp_eb_out_utopia_planitia_lead = { value = sr_eb_view_scale multiply = 9.9347 }
+sr_disp_eb_out_utopia_planitia_sulfur = { value = sr_eb_view_scale multiply = 44.1541 }
+sr_disp_eb_out_utopia_planitia_glass = { value = sr_eb_view_scale multiply = 139.0854 }
+sr_disp_eb_at_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_arcadia_planitia } value = var:sr_eb_at_arcadia_planitia }
+}
+sr_disp_eb_target_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_arcadia_planitia } value = var:sr_eb_target_arcadia_planitia }
+}
+sr_disp_eb_profit_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_arcadia_planitia } value = var:sr_eb_level_profit_arcadia_planitia }
+}
+sr_disp_eb_arrow_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_arcadia_planitia = sr_disp_eb_at_arcadia_planitia } } value = 1 }
+}
+sr_disp_eb_away_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_arcadia_planitia } value = var:sr_eb_away_arcadia_planitia }
+}
+sr_disp_eb_serve_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_arcadia_planitia } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_arcadia_planitia } value = 1 }
+}
+sr_disp_eb_out_arcadia_planitia_iron = { value = sr_eb_view_scale multiply = 275.9631 }
+sr_disp_eb_out_arcadia_planitia_tech_metals = { value = sr_eb_view_scale multiply = 183.5155 }
+sr_disp_eb_out_arcadia_planitia_gold = { value = sr_eb_view_scale multiply = 33.1156 }
+sr_disp_eb_out_arcadia_planitia_copper = { value = sr_eb_view_scale multiply = 94.3794 }
+sr_disp_eb_out_arcadia_planitia_lead = { value = sr_eb_view_scale multiply = 9.9347 }
+sr_disp_eb_out_arcadia_planitia_sulfur = { value = sr_eb_view_scale multiply = 44.1541 }
+sr_disp_eb_out_arcadia_planitia_glass = { value = sr_eb_view_scale multiply = 139.0854 }
+sr_disp_eb_at_ceres = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_ceres } value = var:sr_eb_at_ceres }
+}
+sr_disp_eb_target_ceres = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_ceres } value = var:sr_eb_target_ceres }
+}
+sr_disp_eb_profit_ceres = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_ceres } value = var:sr_eb_level_profit_ceres }
+}
+sr_disp_eb_arrow_ceres = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_ceres = sr_disp_eb_at_ceres } } value = 1 }
+}
+sr_disp_eb_away_ceres = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_ceres } value = var:sr_eb_away_ceres }
+}
+sr_disp_eb_serve_ceres = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_ceres } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_ceres } value = 1 }
+}
+sr_disp_eb_out_ceres_iron = { value = sr_eb_view_scale multiply = 237.92 }
+sr_disp_eb_out_ceres_tech_metals = { value = sr_eb_view_scale multiply = 187.362 }
+sr_disp_eb_out_ceres_gold = { value = sr_eb_view_scale multiply = 38.662 }
+sr_disp_eb_out_ceres_copper = { value = sr_eb_view_scale multiply = 101.7108 }
+sr_disp_eb_out_ceres_lead = { value = sr_eb_view_scale multiply = 10.7064 }
+sr_disp_eb_out_ceres_sulfur = { value = sr_eb_view_scale multiply = 59.48 }
+sr_disp_eb_out_ceres_glass = { value = sr_eb_view_scale multiply = 174.8712 }
+sr_disp_eb_at_vesta = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_vesta } value = var:sr_eb_at_vesta }
+}
+sr_disp_eb_target_vesta = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_vesta } value = var:sr_eb_target_vesta }
+}
+sr_disp_eb_profit_vesta = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_vesta } value = var:sr_eb_level_profit_vesta }
+}
+sr_disp_eb_arrow_vesta = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_vesta = sr_disp_eb_at_vesta } } value = 1 }
+}
+sr_disp_eb_away_vesta = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_vesta } value = var:sr_eb_away_vesta }
+}
+sr_disp_eb_serve_vesta = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_vesta } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_vesta } value = 1 }
+}
+sr_disp_eb_out_vesta_iron = { value = sr_eb_view_scale multiply = 378.6655 }
+sr_disp_eb_out_vesta_tech_metals = { value = sr_eb_view_scale multiply = 203.8968 }
+sr_disp_eb_out_vesta_gold = { value = sr_eb_view_scale multiply = 29.1281 }
+sr_disp_eb_out_vesta_copper = { value = sr_eb_view_scale multiply = 94.0838 }
+sr_disp_eb_out_vesta_lead = { value = sr_eb_view_scale multiply = 9.9036 }
+sr_disp_eb_out_vesta_sulfur = { value = sr_eb_view_scale multiply = 32.0409 }
+sr_disp_eb_out_vesta_glass = { value = sr_eb_view_scale multiply = 114.1822 }
+sr_disp_eb_at_psyche = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_psyche } value = var:sr_eb_at_psyche }
+}
+sr_disp_eb_target_psyche = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_psyche } value = var:sr_eb_target_psyche }
+}
+sr_disp_eb_profit_psyche = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_psyche } value = var:sr_eb_level_profit_psyche }
+}
+sr_disp_eb_arrow_psyche = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_psyche = sr_disp_eb_at_psyche } } value = 1 }
+}
+sr_disp_eb_away_psyche = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_psyche } value = var:sr_eb_away_psyche }
+}
+sr_disp_eb_serve_psyche = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_psyche } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_psyche } value = 1 }
+}
+sr_disp_eb_out_psyche_iron = { value = sr_eb_view_scale multiply = 363.0514 }
+sr_disp_eb_out_psyche_tech_metals = { value = sr_eb_view_scale multiply = 232.958 }
+sr_disp_eb_out_psyche_gold = { value = sr_eb_view_scale multiply = 84.712 }
+sr_disp_eb_out_psyche_copper = { value = sr_eb_view_scale multiply = 137.9595 }
+sr_disp_eb_out_psyche_lead = { value = sr_eb_view_scale multiply = 12.1017 }
+sr_disp_eb_out_psyche_sulfur = { value = sr_eb_view_scale multiply = 9.0763 }
+sr_disp_eb_out_psyche_glass = { value = sr_eb_view_scale multiply = 8.4712 }
+sr_disp_eb_at_pallas = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_pallas } value = var:sr_eb_at_pallas }
+}
+sr_disp_eb_target_pallas = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_pallas } value = var:sr_eb_target_pallas }
+}
+sr_disp_eb_profit_pallas = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_pallas } value = var:sr_eb_level_profit_pallas }
+}
+sr_disp_eb_arrow_pallas = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_pallas = sr_disp_eb_at_pallas } } value = 1 }
+}
+sr_disp_eb_away_pallas = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_pallas } value = var:sr_eb_away_pallas }
+}
+sr_disp_eb_serve_pallas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_pallas } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_pallas } value = 1 }
+}
+sr_disp_eb_out_pallas_iron = { value = sr_eb_view_scale multiply = 227.5757 }
+sr_disp_eb_out_pallas_tech_metals = { value = sr_eb_view_scale multiply = 179.2158 }
+sr_disp_eb_out_pallas_gold = { value = sr_eb_view_scale multiply = 36.981 }
+sr_disp_eb_out_pallas_copper = { value = sr_eb_view_scale multiply = 97.2886 }
+sr_disp_eb_out_pallas_lead = { value = sr_eb_view_scale multiply = 10.2409 }
+sr_disp_eb_out_pallas_sulfur = { value = sr_eb_view_scale multiply = 56.8939 }
+sr_disp_eb_out_pallas_glass = { value = sr_eb_view_scale multiply = 167.2681 }
+sr_disp_eb_at_hygiea = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_hygiea } value = var:sr_eb_at_hygiea }
+}
+sr_disp_eb_target_hygiea = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_hygiea } value = var:sr_eb_target_hygiea }
+}
+sr_disp_eb_profit_hygiea = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_hygiea } value = var:sr_eb_level_profit_hygiea }
+}
+sr_disp_eb_arrow_hygiea = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_hygiea = sr_disp_eb_at_hygiea } } value = 1 }
+}
+sr_disp_eb_away_hygiea = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_hygiea } value = var:sr_eb_away_hygiea }
+}
+sr_disp_eb_serve_hygiea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_hygiea } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_hygiea } value = 1 }
+}
+sr_disp_eb_out_hygiea_iron = { value = sr_eb_view_scale multiply = 217.2313 }
+sr_disp_eb_out_hygiea_tech_metals = { value = sr_eb_view_scale multiply = 171.0697 }
+sr_disp_eb_out_hygiea_gold = { value = sr_eb_view_scale multiply = 35.3001 }
+sr_disp_eb_out_hygiea_copper = { value = sr_eb_view_scale multiply = 92.8664 }
+sr_disp_eb_out_hygiea_lead = { value = sr_eb_view_scale multiply = 9.7754 }
+sr_disp_eb_out_hygiea_sulfur = { value = sr_eb_view_scale multiply = 54.3078 }
+sr_disp_eb_out_hygiea_glass = { value = sr_eb_view_scale multiply = 159.665 }
+sr_disp_eb_at_io = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_io } value = var:sr_eb_at_io }
+}
+sr_disp_eb_target_io = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_io } value = var:sr_eb_target_io }
+}
+sr_disp_eb_profit_io = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_io } value = var:sr_eb_level_profit_io }
+}
+sr_disp_eb_arrow_io = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_io = sr_disp_eb_at_io } } value = 1 }
+}
+sr_disp_eb_away_io = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_io } value = var:sr_eb_away_io }
+}
+sr_disp_eb_serve_io = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_io } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_io } value = 1 }
+}
+sr_disp_eb_out_io_iron = { value = sr_eb_view_scale multiply = 199.5911 }
+sr_disp_eb_out_io_tech_metals = { value = sr_eb_view_scale multiply = 148.4459 }
+sr_disp_eb_out_io_gold = { value = sr_eb_view_scale multiply = 29.9387 }
+sr_disp_eb_out_io_copper = { value = sr_eb_view_scale multiply = 94.8058 }
+sr_disp_eb_out_io_lead = { value = sr_eb_view_scale multiply = 9.9796 }
+sr_disp_eb_out_io_sulfur = { value = sr_eb_view_scale multiply = 99.7955 }
+sr_disp_eb_out_io_glass = { value = sr_eb_view_scale multiply = 83.8283 }
+sr_disp_eb_at_europa = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_europa } value = var:sr_eb_at_europa }
+}
+sr_disp_eb_target_europa = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_europa } value = var:sr_eb_target_europa }
+}
+sr_disp_eb_profit_europa = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_europa } value = var:sr_eb_level_profit_europa }
+}
+sr_disp_eb_arrow_europa = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_europa = sr_disp_eb_at_europa } } value = 1 }
+}
+sr_disp_eb_away_europa = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_europa } value = var:sr_eb_away_europa }
+}
+sr_disp_eb_serve_europa = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_europa } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_europa } value = 1 }
+}
+sr_disp_eb_out_europa_iron = { value = sr_eb_view_scale multiply = 199.5911 }
+sr_disp_eb_out_europa_tech_metals = { value = sr_eb_view_scale multiply = 148.4459 }
+sr_disp_eb_out_europa_gold = { value = sr_eb_view_scale multiply = 29.9387 }
+sr_disp_eb_out_europa_copper = { value = sr_eb_view_scale multiply = 94.8058 }
+sr_disp_eb_out_europa_lead = { value = sr_eb_view_scale multiply = 9.9796 }
+sr_disp_eb_out_europa_sulfur = { value = sr_eb_view_scale multiply = 99.7955 }
+sr_disp_eb_out_europa_glass = { value = sr_eb_view_scale multiply = 83.8283 }
+sr_disp_eb_at_ganymede = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_ganymede } value = var:sr_eb_at_ganymede }
+}
+sr_disp_eb_target_ganymede = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_ganymede } value = var:sr_eb_target_ganymede }
+}
+sr_disp_eb_profit_ganymede = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_ganymede } value = var:sr_eb_level_profit_ganymede }
+}
+sr_disp_eb_arrow_ganymede = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_ganymede = sr_disp_eb_at_ganymede } } value = 1 }
+}
+sr_disp_eb_away_ganymede = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_ganymede } value = var:sr_eb_away_ganymede }
+}
+sr_disp_eb_serve_ganymede = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_ganymede } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_ganymede } value = 1 }
+}
+sr_disp_eb_out_ganymede_iron = { value = sr_eb_view_scale multiply = 250.8755 }
+sr_disp_eb_out_ganymede_tech_metals = { value = sr_eb_view_scale multiply = 166.8322 }
+sr_disp_eb_out_ganymede_gold = { value = sr_eb_view_scale multiply = 30.1051 }
+sr_disp_eb_out_ganymede_copper = { value = sr_eb_view_scale multiply = 85.7994 }
+sr_disp_eb_out_ganymede_lead = { value = sr_eb_view_scale multiply = 9.0315 }
+sr_disp_eb_out_ganymede_sulfur = { value = sr_eb_view_scale multiply = 40.1401 }
+sr_disp_eb_out_ganymede_glass = { value = sr_eb_view_scale multiply = 126.4413 }
+sr_disp_eb_at_callisto = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_callisto } value = var:sr_eb_at_callisto }
+}
+sr_disp_eb_target_callisto = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_callisto } value = var:sr_eb_target_callisto }
+}
+sr_disp_eb_profit_callisto = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_callisto } value = var:sr_eb_level_profit_callisto }
+}
+sr_disp_eb_arrow_callisto = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_callisto = sr_disp_eb_at_callisto } } value = 1 }
+}
+sr_disp_eb_away_callisto = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_callisto } value = var:sr_eb_away_callisto }
+}
+sr_disp_eb_serve_callisto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_callisto } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_callisto } value = 1 }
+}
+sr_disp_eb_out_callisto_iron = { value = sr_eb_view_scale multiply = 206.887 }
+sr_disp_eb_out_callisto_tech_metals = { value = sr_eb_view_scale multiply = 162.9235 }
+sr_disp_eb_out_callisto_gold = { value = sr_eb_view_scale multiply = 33.6191 }
+sr_disp_eb_out_callisto_copper = { value = sr_eb_view_scale multiply = 88.4442 }
+sr_disp_eb_out_callisto_lead = { value = sr_eb_view_scale multiply = 9.3099 }
+sr_disp_eb_out_callisto_sulfur = { value = sr_eb_view_scale multiply = 51.7217 }
+sr_disp_eb_out_callisto_glass = { value = sr_eb_view_scale multiply = 152.0619 }
+sr_disp_eb_at_himalia = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_himalia } value = var:sr_eb_at_himalia }
+}
+sr_disp_eb_target_himalia = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_himalia } value = var:sr_eb_target_himalia }
+}
+sr_disp_eb_profit_himalia = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_himalia } value = var:sr_eb_level_profit_himalia }
+}
+sr_disp_eb_arrow_himalia = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_himalia = sr_disp_eb_at_himalia } } value = 1 }
+}
+sr_disp_eb_away_himalia = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_himalia } value = var:sr_eb_away_himalia }
+}
+sr_disp_eb_serve_himalia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_himalia } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_himalia } value = 1 }
+}
+sr_disp_eb_out_himalia_iron = { value = sr_eb_view_scale multiply = 217.2313 }
+sr_disp_eb_out_himalia_tech_metals = { value = sr_eb_view_scale multiply = 171.0697 }
+sr_disp_eb_out_himalia_gold = { value = sr_eb_view_scale multiply = 35.3001 }
+sr_disp_eb_out_himalia_copper = { value = sr_eb_view_scale multiply = 92.8664 }
+sr_disp_eb_out_himalia_lead = { value = sr_eb_view_scale multiply = 9.7754 }
+sr_disp_eb_out_himalia_sulfur = { value = sr_eb_view_scale multiply = 54.3078 }
+sr_disp_eb_out_himalia_glass = { value = sr_eb_view_scale multiply = 159.665 }
+sr_disp_eb_at_amalthea = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_amalthea } value = var:sr_eb_at_amalthea }
+}
+sr_disp_eb_target_amalthea = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_amalthea } value = var:sr_eb_target_amalthea }
+}
+sr_disp_eb_profit_amalthea = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_amalthea } value = var:sr_eb_level_profit_amalthea }
+}
+sr_disp_eb_arrow_amalthea = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_amalthea = sr_disp_eb_at_amalthea } } value = 1 }
+}
+sr_disp_eb_away_amalthea = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_amalthea } value = var:sr_eb_away_amalthea }
+}
+sr_disp_eb_serve_amalthea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_amalthea } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_amalthea } value = 1 }
+}
+sr_disp_eb_out_amalthea_iron = { value = sr_eb_view_scale multiply = 210.0959 }
+sr_disp_eb_out_amalthea_tech_metals = { value = sr_eb_view_scale multiply = 156.2588 }
+sr_disp_eb_out_amalthea_gold = { value = sr_eb_view_scale multiply = 31.5144 }
+sr_disp_eb_out_amalthea_copper = { value = sr_eb_view_scale multiply = 99.7955 }
+sr_disp_eb_out_amalthea_lead = { value = sr_eb_view_scale multiply = 10.5048 }
+sr_disp_eb_out_amalthea_sulfur = { value = sr_eb_view_scale multiply = 105.0479 }
+sr_disp_eb_out_amalthea_glass = { value = sr_eb_view_scale multiply = 88.2403 }
+sr_disp_eb_at_venus = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_venus } value = var:sr_eb_at_venus }
+}
+sr_disp_eb_target_venus = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_venus } value = var:sr_eb_target_venus }
+}
+sr_disp_eb_profit_venus = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_venus } value = var:sr_eb_level_profit_venus }
+}
+sr_disp_eb_arrow_venus = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_venus = sr_disp_eb_at_venus } } value = 1 }
+}
+sr_disp_eb_away_venus = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_venus } value = var:sr_eb_away_venus }
+}
+sr_disp_eb_serve_venus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_venus } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_venus } value = 1 }
+}
+sr_disp_eb_out_venus_iron = { value = sr_eb_view_scale multiply = 189.0863 }
+sr_disp_eb_out_venus_tech_metals = { value = sr_eb_view_scale multiply = 140.6329 }
+sr_disp_eb_out_venus_gold = { value = sr_eb_view_scale multiply = 28.3629 }
+sr_disp_eb_out_venus_copper = { value = sr_eb_view_scale multiply = 89.816 }
+sr_disp_eb_out_venus_lead = { value = sr_eb_view_scale multiply = 9.4543 }
+sr_disp_eb_out_venus_sulfur = { value = sr_eb_view_scale multiply = 94.5431 }
+sr_disp_eb_out_venus_glass = { value = sr_eb_view_scale multiply = 79.4162 }
+sr_disp_eb_at_mercury = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_mercury } value = var:sr_eb_at_mercury }
+}
+sr_disp_eb_target_mercury = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_mercury } value = var:sr_eb_target_mercury }
+}
+sr_disp_eb_profit_mercury = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_mercury } value = var:sr_eb_level_profit_mercury }
+}
+sr_disp_eb_arrow_mercury = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_mercury = sr_disp_eb_at_mercury } } value = 1 }
+}
+sr_disp_eb_away_mercury = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_mercury } value = var:sr_eb_away_mercury }
+}
+sr_disp_eb_serve_mercury = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_mercury } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_mercury } value = 1 }
+}
+sr_disp_eb_out_mercury_iron = { value = sr_eb_view_scale multiply = 331.3323 }
+sr_disp_eb_out_mercury_tech_metals = { value = sr_eb_view_scale multiply = 178.4097 }
+sr_disp_eb_out_mercury_gold = { value = sr_eb_view_scale multiply = 25.4871 }
+sr_disp_eb_out_mercury_copper = { value = sr_eb_view_scale multiply = 82.3233 }
+sr_disp_eb_out_mercury_lead = { value = sr_eb_view_scale multiply = 8.6656 }
+sr_disp_eb_out_mercury_sulfur = { value = sr_eb_view_scale multiply = 28.0358 }
+sr_disp_eb_out_mercury_glass = { value = sr_eb_view_scale multiply = 99.9094 }
+sr_disp_eb_at_titan = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_titan } value = var:sr_eb_at_titan }
+}
+sr_disp_eb_target_titan = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_titan } value = var:sr_eb_target_titan }
+}
+sr_disp_eb_profit_titan = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_titan } value = var:sr_eb_level_profit_titan }
+}
+sr_disp_eb_arrow_titan = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_titan = sr_disp_eb_at_titan } } value = 1 }
+}
+sr_disp_eb_away_titan = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_titan } value = var:sr_eb_away_titan }
+}
+sr_disp_eb_serve_titan = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_titan } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_titan } value = 1 }
+}
+sr_disp_eb_out_titan_iron = { value = sr_eb_view_scale multiply = 159.1187 }
+sr_disp_eb_out_titan_tech_metals = { value = sr_eb_view_scale multiply = 126.2342 }
+sr_disp_eb_out_titan_gold = { value = sr_eb_view_scale multiply = 21.2158 }
+sr_disp_eb_out_titan_copper = { value = sr_eb_view_scale multiply = 64.4961 }
+sr_disp_eb_out_titan_lead = { value = sr_eb_view_scale multiply = 6.7891 }
+sr_disp_eb_out_titan_sulfur = { value = sr_eb_view_scale multiply = 38.1885 }
+sr_disp_eb_out_titan_glass = { value = sr_eb_view_scale multiply = 207.9151 }
+sr_disp_eb_at_enceladus = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_enceladus } value = var:sr_eb_at_enceladus }
+}
+sr_disp_eb_target_enceladus = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_enceladus } value = var:sr_eb_target_enceladus }
+}
+sr_disp_eb_profit_enceladus = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_enceladus } value = var:sr_eb_level_profit_enceladus }
+}
+sr_disp_eb_arrow_enceladus = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_enceladus = sr_disp_eb_at_enceladus } } value = 1 }
+}
+sr_disp_eb_away_enceladus = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_enceladus } value = var:sr_eb_away_enceladus }
+}
+sr_disp_eb_serve_enceladus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_enceladus } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_enceladus } value = 1 }
+}
+sr_disp_eb_out_enceladus_iron = { value = sr_eb_view_scale multiply = 165.5096 }
+sr_disp_eb_out_enceladus_tech_metals = { value = sr_eb_view_scale multiply = 130.3388 }
+sr_disp_eb_out_enceladus_gold = { value = sr_eb_view_scale multiply = 26.8953 }
+sr_disp_eb_out_enceladus_copper = { value = sr_eb_view_scale multiply = 70.7553 }
+sr_disp_eb_out_enceladus_lead = { value = sr_eb_view_scale multiply = 7.4479 }
+sr_disp_eb_out_enceladus_sulfur = { value = sr_eb_view_scale multiply = 41.3774 }
+sr_disp_eb_out_enceladus_glass = { value = sr_eb_view_scale multiply = 121.6495 }
+sr_disp_eb_at_rhea = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_rhea } value = var:sr_eb_at_rhea }
+}
+sr_disp_eb_target_rhea = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_rhea } value = var:sr_eb_target_rhea }
+}
+sr_disp_eb_profit_rhea = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_rhea } value = var:sr_eb_level_profit_rhea }
+}
+sr_disp_eb_arrow_rhea = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_rhea = sr_disp_eb_at_rhea } } value = 1 }
+}
+sr_disp_eb_away_rhea = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_rhea } value = var:sr_eb_away_rhea }
+}
+sr_disp_eb_serve_rhea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_rhea } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_rhea } value = 1 }
+}
+sr_disp_eb_out_rhea_iron = { value = sr_eb_view_scale multiply = 213.2442 }
+sr_disp_eb_out_rhea_tech_metals = { value = sr_eb_view_scale multiply = 141.8074 }
+sr_disp_eb_out_rhea_gold = { value = sr_eb_view_scale multiply = 25.5893 }
+sr_disp_eb_out_rhea_copper = { value = sr_eb_view_scale multiply = 72.9295 }
+sr_disp_eb_out_rhea_lead = { value = sr_eb_view_scale multiply = 7.6768 }
+sr_disp_eb_out_rhea_sulfur = { value = sr_eb_view_scale multiply = 34.1191 }
+sr_disp_eb_out_rhea_glass = { value = sr_eb_view_scale multiply = 107.4751 }
+sr_disp_eb_at_mimas = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_mimas } value = var:sr_eb_at_mimas }
+}
+sr_disp_eb_target_mimas = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_mimas } value = var:sr_eb_target_mimas }
+}
+sr_disp_eb_profit_mimas = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_mimas } value = var:sr_eb_level_profit_mimas }
+}
+sr_disp_eb_arrow_mimas = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_mimas = sr_disp_eb_at_mimas } } value = 1 }
+}
+sr_disp_eb_away_mimas = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_mimas } value = var:sr_eb_away_mimas }
+}
+sr_disp_eb_serve_mimas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_mimas } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_mimas } value = 1 }
+}
+sr_disp_eb_out_mimas_iron = { value = sr_eb_view_scale multiply = 200.7004 }
+sr_disp_eb_out_mimas_tech_metals = { value = sr_eb_view_scale multiply = 133.4658 }
+sr_disp_eb_out_mimas_gold = { value = sr_eb_view_scale multiply = 24.0841 }
+sr_disp_eb_out_mimas_copper = { value = sr_eb_view_scale multiply = 68.6395 }
+sr_disp_eb_out_mimas_lead = { value = sr_eb_view_scale multiply = 7.2252 }
+sr_disp_eb_out_mimas_sulfur = { value = sr_eb_view_scale multiply = 32.1121 }
+sr_disp_eb_out_mimas_glass = { value = sr_eb_view_scale multiply = 101.153 }
+sr_disp_eb_at_iapetus = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_iapetus } value = var:sr_eb_at_iapetus }
+}
+sr_disp_eb_target_iapetus = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_iapetus } value = var:sr_eb_target_iapetus }
+}
+sr_disp_eb_profit_iapetus = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_iapetus } value = var:sr_eb_level_profit_iapetus }
+}
+sr_disp_eb_arrow_iapetus = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_iapetus = sr_disp_eb_at_iapetus } } value = 1 }
+}
+sr_disp_eb_away_iapetus = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_iapetus } value = var:sr_eb_away_iapetus }
+}
+sr_disp_eb_serve_iapetus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_iapetus } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_iapetus } value = 1 }
+}
+sr_disp_eb_out_iapetus_iron = { value = sr_eb_view_scale multiply = 149.7588 }
+sr_disp_eb_out_iapetus_tech_metals = { value = sr_eb_view_scale multiply = 118.8086 }
+sr_disp_eb_out_iapetus_gold = { value = sr_eb_view_scale multiply = 19.9678 }
+sr_disp_eb_out_iapetus_copper = { value = sr_eb_view_scale multiply = 60.7022 }
+sr_disp_eb_out_iapetus_lead = { value = sr_eb_view_scale multiply = 6.3897 }
+sr_disp_eb_out_iapetus_sulfur = { value = sr_eb_view_scale multiply = 35.9421 }
+sr_disp_eb_out_iapetus_glass = { value = sr_eb_view_scale multiply = 195.6848 }
+sr_disp_eb_at_titania = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_titania } value = var:sr_eb_at_titania }
+}
+sr_disp_eb_target_titania = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_titania } value = var:sr_eb_target_titania }
+}
+sr_disp_eb_profit_titania = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_titania } value = var:sr_eb_level_profit_titania }
+}
+sr_disp_eb_arrow_titania = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_titania = sr_disp_eb_at_titania } } value = 1 }
+}
+sr_disp_eb_away_titania = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_titania } value = var:sr_eb_away_titania }
+}
+sr_disp_eb_serve_titania = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_titania } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_titania } value = 1 }
+}
+sr_disp_eb_out_titania_iron = { value = sr_eb_view_scale multiply = 188.1567 }
+sr_disp_eb_out_titania_tech_metals = { value = sr_eb_view_scale multiply = 125.1242 }
+sr_disp_eb_out_titania_gold = { value = sr_eb_view_scale multiply = 22.5788 }
+sr_disp_eb_out_titania_copper = { value = sr_eb_view_scale multiply = 64.3496 }
+sr_disp_eb_out_titania_lead = { value = sr_eb_view_scale multiply = 6.7736 }
+sr_disp_eb_out_titania_sulfur = { value = sr_eb_view_scale multiply = 30.1051 }
+sr_disp_eb_out_titania_glass = { value = sr_eb_view_scale multiply = 94.831 }
+sr_disp_eb_at_oberon = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_oberon } value = var:sr_eb_at_oberon }
+}
+sr_disp_eb_target_oberon = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_oberon } value = var:sr_eb_target_oberon }
+}
+sr_disp_eb_profit_oberon = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_oberon } value = var:sr_eb_level_profit_oberon }
+}
+sr_disp_eb_arrow_oberon = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_oberon = sr_disp_eb_at_oberon } } value = 1 }
+}
+sr_disp_eb_away_oberon = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_oberon } value = var:sr_eb_away_oberon }
+}
+sr_disp_eb_serve_oberon = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_oberon } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_oberon } value = 1 }
+}
+sr_disp_eb_out_oberon_iron = { value = sr_eb_view_scale multiply = 188.1567 }
+sr_disp_eb_out_oberon_tech_metals = { value = sr_eb_view_scale multiply = 125.1242 }
+sr_disp_eb_out_oberon_gold = { value = sr_eb_view_scale multiply = 22.5788 }
+sr_disp_eb_out_oberon_copper = { value = sr_eb_view_scale multiply = 64.3496 }
+sr_disp_eb_out_oberon_lead = { value = sr_eb_view_scale multiply = 6.7736 }
+sr_disp_eb_out_oberon_sulfur = { value = sr_eb_view_scale multiply = 30.1051 }
+sr_disp_eb_out_oberon_glass = { value = sr_eb_view_scale multiply = 94.831 }
+sr_disp_eb_at_miranda = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_miranda } value = var:sr_eb_at_miranda }
+}
+sr_disp_eb_target_miranda = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_miranda } value = var:sr_eb_target_miranda }
+}
+sr_disp_eb_profit_miranda = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_miranda } value = var:sr_eb_level_profit_miranda }
+}
+sr_disp_eb_arrow_miranda = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_miranda = sr_disp_eb_at_miranda } } value = 1 }
+}
+sr_disp_eb_away_miranda = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_miranda } value = var:sr_eb_away_miranda }
+}
+sr_disp_eb_serve_miranda = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_miranda } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_miranda } value = 1 }
+}
+sr_disp_eb_out_miranda_iron = { value = sr_eb_view_scale multiply = 175.6129 }
+sr_disp_eb_out_miranda_tech_metals = { value = sr_eb_view_scale multiply = 116.7826 }
+sr_disp_eb_out_miranda_gold = { value = sr_eb_view_scale multiply = 21.0735 }
+sr_disp_eb_out_miranda_copper = { value = sr_eb_view_scale multiply = 60.0596 }
+sr_disp_eb_out_miranda_lead = { value = sr_eb_view_scale multiply = 6.3221 }
+sr_disp_eb_out_miranda_sulfur = { value = sr_eb_view_scale multiply = 28.0981 }
+sr_disp_eb_out_miranda_glass = { value = sr_eb_view_scale multiply = 88.5089 }
+sr_disp_eb_at_ariel = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_ariel } value = var:sr_eb_at_ariel }
+}
+sr_disp_eb_target_ariel = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_ariel } value = var:sr_eb_target_ariel }
+}
+sr_disp_eb_profit_ariel = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_ariel } value = var:sr_eb_level_profit_ariel }
+}
+sr_disp_eb_arrow_ariel = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_ariel = sr_disp_eb_at_ariel } } value = 1 }
+}
+sr_disp_eb_away_ariel = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_ariel } value = var:sr_eb_away_ariel }
+}
+sr_disp_eb_serve_ariel = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_ariel } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_ariel } value = 1 }
+}
+sr_disp_eb_out_ariel_iron = { value = sr_eb_view_scale multiply = 175.6129 }
+sr_disp_eb_out_ariel_tech_metals = { value = sr_eb_view_scale multiply = 116.7826 }
+sr_disp_eb_out_ariel_gold = { value = sr_eb_view_scale multiply = 21.0735 }
+sr_disp_eb_out_ariel_copper = { value = sr_eb_view_scale multiply = 60.0596 }
+sr_disp_eb_out_ariel_lead = { value = sr_eb_view_scale multiply = 6.3221 }
+sr_disp_eb_out_ariel_sulfur = { value = sr_eb_view_scale multiply = 28.0981 }
+sr_disp_eb_out_ariel_glass = { value = sr_eb_view_scale multiply = 88.5089 }
+sr_disp_eb_at_triton = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_triton } value = var:sr_eb_at_triton }
+}
+sr_disp_eb_target_triton = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_triton } value = var:sr_eb_target_triton }
+}
+sr_disp_eb_profit_triton = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_triton } value = var:sr_eb_level_profit_triton }
+}
+sr_disp_eb_arrow_triton = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_triton = sr_disp_eb_at_triton } } value = 1 }
+}
+sr_disp_eb_away_triton = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_triton } value = var:sr_eb_away_triton }
+}
+sr_disp_eb_serve_triton = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_triton } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_triton } value = 1 }
+}
+sr_disp_eb_out_triton_iron = { value = sr_eb_view_scale multiply = 175.6129 }
+sr_disp_eb_out_triton_tech_metals = { value = sr_eb_view_scale multiply = 116.7826 }
+sr_disp_eb_out_triton_gold = { value = sr_eb_view_scale multiply = 21.0735 }
+sr_disp_eb_out_triton_copper = { value = sr_eb_view_scale multiply = 60.0596 }
+sr_disp_eb_out_triton_lead = { value = sr_eb_view_scale multiply = 6.3221 }
+sr_disp_eb_out_triton_sulfur = { value = sr_eb_view_scale multiply = 28.0981 }
+sr_disp_eb_out_triton_glass = { value = sr_eb_view_scale multiply = 88.5089 }
+sr_disp_eb_at_proteus = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_proteus } value = var:sr_eb_at_proteus }
+}
+sr_disp_eb_target_proteus = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_proteus } value = var:sr_eb_target_proteus }
+}
+sr_disp_eb_profit_proteus = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_proteus } value = var:sr_eb_level_profit_proteus }
+}
+sr_disp_eb_arrow_proteus = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_proteus = sr_disp_eb_at_proteus } } value = 1 }
+}
+sr_disp_eb_away_proteus = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_proteus } value = var:sr_eb_away_proteus }
+}
+sr_disp_eb_serve_proteus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_proteus } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_proteus } value = 1 }
+}
+sr_disp_eb_out_proteus_iron = { value = sr_eb_view_scale multiply = 163.0691 }
+sr_disp_eb_out_proteus_tech_metals = { value = sr_eb_view_scale multiply = 108.441 }
+sr_disp_eb_out_proteus_gold = { value = sr_eb_view_scale multiply = 19.5683 }
+sr_disp_eb_out_proteus_copper = { value = sr_eb_view_scale multiply = 55.7696 }
+sr_disp_eb_out_proteus_lead = { value = sr_eb_view_scale multiply = 5.8705 }
+sr_disp_eb_out_proteus_sulfur = { value = sr_eb_view_scale multiply = 26.0911 }
+sr_disp_eb_out_proteus_glass = { value = sr_eb_view_scale multiply = 82.1868 }
+sr_disp_eb_at_pluto = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_pluto } value = var:sr_eb_at_pluto }
+}
+sr_disp_eb_target_pluto = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_pluto } value = var:sr_eb_target_pluto }
+}
+sr_disp_eb_profit_pluto = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_pluto } value = var:sr_eb_level_profit_pluto }
+}
+sr_disp_eb_arrow_pluto = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_pluto = sr_disp_eb_at_pluto } } value = 1 }
+}
+sr_disp_eb_away_pluto = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_pluto } value = var:sr_eb_away_pluto }
+}
+sr_disp_eb_serve_pluto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_pluto } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_pluto } value = 1 }
+}
+sr_disp_eb_out_pluto_iron = { value = sr_eb_view_scale multiply = 121.679 }
+sr_disp_eb_out_pluto_tech_metals = { value = sr_eb_view_scale multiply = 96.532 }
+sr_disp_eb_out_pluto_gold = { value = sr_eb_view_scale multiply = 16.2239 }
+sr_disp_eb_out_pluto_copper = { value = sr_eb_view_scale multiply = 49.3206 }
+sr_disp_eb_out_pluto_lead = { value = sr_eb_view_scale multiply = 5.1916 }
+sr_disp_eb_out_pluto_sulfur = { value = sr_eb_view_scale multiply = 29.203 }
+sr_disp_eb_out_pluto_glass = { value = sr_eb_view_scale multiply = 158.9939 }
+sr_disp_eb_at_eris = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_eris } value = var:sr_eb_at_eris }
+}
+sr_disp_eb_target_eris = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_eris } value = var:sr_eb_target_eris }
+}
+sr_disp_eb_profit_eris = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_eris } value = var:sr_eb_level_profit_eris }
+}
+sr_disp_eb_arrow_eris = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_eris = sr_disp_eb_at_eris } } value = 1 }
+}
+sr_disp_eb_away_eris = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_eris } value = var:sr_eb_away_eris }
+}
+sr_disp_eb_serve_eris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_eris } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_eris } value = 1 }
+}
+sr_disp_eb_out_eris_iron = { value = sr_eb_view_scale multiply = 150.5253 }
+sr_disp_eb_out_eris_tech_metals = { value = sr_eb_view_scale multiply = 100.0993 }
+sr_disp_eb_out_eris_gold = { value = sr_eb_view_scale multiply = 18.063 }
+sr_disp_eb_out_eris_copper = { value = sr_eb_view_scale multiply = 51.4797 }
+sr_disp_eb_out_eris_lead = { value = sr_eb_view_scale multiply = 5.4189 }
+sr_disp_eb_out_eris_sulfur = { value = sr_eb_view_scale multiply = 24.0841 }
+sr_disp_eb_out_eris_glass = { value = sr_eb_view_scale multiply = 75.8648 }
+sr_disp_eb_at_makemake = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_makemake } value = var:sr_eb_at_makemake }
+}
+sr_disp_eb_target_makemake = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_makemake } value = var:sr_eb_target_makemake }
+}
+sr_disp_eb_profit_makemake = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_makemake } value = var:sr_eb_level_profit_makemake }
+}
+sr_disp_eb_arrow_makemake = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_makemake = sr_disp_eb_at_makemake } } value = 1 }
+}
+sr_disp_eb_away_makemake = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_makemake } value = var:sr_eb_away_makemake }
+}
+sr_disp_eb_serve_makemake = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_makemake } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_makemake } value = 1 }
+}
+sr_disp_eb_out_makemake_iron = { value = sr_eb_view_scale multiply = 112.3191 }
+sr_disp_eb_out_makemake_tech_metals = { value = sr_eb_view_scale multiply = 89.1065 }
+sr_disp_eb_out_makemake_gold = { value = sr_eb_view_scale multiply = 14.9759 }
+sr_disp_eb_out_makemake_copper = { value = sr_eb_view_scale multiply = 45.5267 }
+sr_disp_eb_out_makemake_lead = { value = sr_eb_view_scale multiply = 4.7923 }
+sr_disp_eb_out_makemake_sulfur = { value = sr_eb_view_scale multiply = 26.9566 }
+sr_disp_eb_out_makemake_glass = { value = sr_eb_view_scale multiply = 146.7636 }
+sr_disp_eb_at_haumea = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_haumea } value = var:sr_eb_at_haumea }
+}
+sr_disp_eb_target_haumea = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_haumea } value = var:sr_eb_target_haumea }
+}
+sr_disp_eb_profit_haumea = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_haumea } value = var:sr_eb_level_profit_haumea }
+}
+sr_disp_eb_arrow_haumea = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_haumea = sr_disp_eb_at_haumea } } value = 1 }
+}
+sr_disp_eb_away_haumea = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_haumea } value = var:sr_eb_away_haumea }
+}
+sr_disp_eb_serve_haumea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_haumea } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_haumea } value = 1 }
+}
+sr_disp_eb_out_haumea_iron = { value = sr_eb_view_scale multiply = 150.5253 }
+sr_disp_eb_out_haumea_tech_metals = { value = sr_eb_view_scale multiply = 100.0993 }
+sr_disp_eb_out_haumea_gold = { value = sr_eb_view_scale multiply = 18.063 }
+sr_disp_eb_out_haumea_copper = { value = sr_eb_view_scale multiply = 51.4797 }
+sr_disp_eb_out_haumea_lead = { value = sr_eb_view_scale multiply = 5.4189 }
+sr_disp_eb_out_haumea_sulfur = { value = sr_eb_view_scale multiply = 24.0841 }
+sr_disp_eb_out_haumea_glass = { value = sr_eb_view_scale multiply = 75.8648 }
+sr_disp_eb_at_sedna = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_sedna } value = var:sr_eb_at_sedna }
+}
+sr_disp_eb_target_sedna = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_sedna } value = var:sr_eb_target_sedna }
+}
+sr_disp_eb_profit_sedna = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_sedna } value = var:sr_eb_level_profit_sedna }
+}
+sr_disp_eb_arrow_sedna = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_sedna = sr_disp_eb_at_sedna } } value = 1 }
+}
+sr_disp_eb_away_sedna = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_sedna } value = var:sr_eb_away_sedna }
+}
+sr_disp_eb_serve_sedna = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_sedna } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_sedna } value = 1 }
+}
+sr_disp_eb_out_sedna_iron = { value = sr_eb_view_scale multiply = 102.9592 }
+sr_disp_eb_out_sedna_tech_metals = { value = sr_eb_view_scale multiply = 81.6809 }
+sr_disp_eb_out_sedna_gold = { value = sr_eb_view_scale multiply = 13.7279 }
+sr_disp_eb_out_sedna_copper = { value = sr_eb_view_scale multiply = 41.7328 }
+sr_disp_eb_out_sedna_lead = { value = sr_eb_view_scale multiply = 4.3929 }
+sr_disp_eb_out_sedna_sulfur = { value = sr_eb_view_scale multiply = 24.7102 }
+sr_disp_eb_out_sedna_glass = { value = sr_eb_view_scale multiply = 134.5333 }
+sr_disp_eb_at_shackleton = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_shackleton } value = var:sr_eb_at_shackleton }
+}
+sr_disp_eb_target_shackleton = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_shackleton } value = var:sr_eb_target_shackleton }
+}
+sr_disp_eb_profit_shackleton = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_shackleton } value = var:sr_eb_level_profit_shackleton }
+}
+sr_disp_eb_arrow_shackleton = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_shackleton = sr_disp_eb_at_shackleton } } value = 1 }
+}
+sr_disp_eb_away_shackleton = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_shackleton } value = var:sr_eb_away_shackleton }
+}
+sr_disp_eb_serve_shackleton = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_shackleton } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_shackleton } value = 1 }
+}
+sr_disp_eb_out_shackleton_iron = { value = sr_eb_view_scale multiply = 250.8755 }
+sr_disp_eb_out_shackleton_tech_metals = { value = sr_eb_view_scale multiply = 166.8322 }
+sr_disp_eb_out_shackleton_gold = { value = sr_eb_view_scale multiply = 30.1051 }
+sr_disp_eb_out_shackleton_copper = { value = sr_eb_view_scale multiply = 85.7994 }
+sr_disp_eb_out_shackleton_lead = { value = sr_eb_view_scale multiply = 9.0315 }
+sr_disp_eb_out_shackleton_sulfur = { value = sr_eb_view_scale multiply = 40.1401 }
+sr_disp_eb_out_shackleton_glass = { value = sr_eb_view_scale multiply = 126.4413 }
+sr_disp_eb_at_peary = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_peary } value = var:sr_eb_at_peary }
+}
+sr_disp_eb_target_peary = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_peary } value = var:sr_eb_target_peary }
+}
+sr_disp_eb_profit_peary = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_peary } value = var:sr_eb_level_profit_peary }
+}
+sr_disp_eb_arrow_peary = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_peary = sr_disp_eb_at_peary } } value = 1 }
+}
+sr_disp_eb_away_peary = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_peary } value = var:sr_eb_away_peary }
+}
+sr_disp_eb_serve_peary = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_peary } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_peary } value = 1 }
+}
+sr_disp_eb_out_peary_iron = { value = sr_eb_view_scale multiply = 250.8755 }
+sr_disp_eb_out_peary_tech_metals = { value = sr_eb_view_scale multiply = 166.8322 }
+sr_disp_eb_out_peary_gold = { value = sr_eb_view_scale multiply = 30.1051 }
+sr_disp_eb_out_peary_copper = { value = sr_eb_view_scale multiply = 85.7994 }
+sr_disp_eb_out_peary_lead = { value = sr_eb_view_scale multiply = 9.0315 }
+sr_disp_eb_out_peary_sulfur = { value = sr_eb_view_scale multiply = 40.1401 }
+sr_disp_eb_out_peary_glass = { value = sr_eb_view_scale multiply = 126.4413 }
+sr_disp_eb_at_tranquility = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_tranquility } value = var:sr_eb_at_tranquility }
+}
+sr_disp_eb_target_tranquility = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_tranquility } value = var:sr_eb_target_tranquility }
+}
+sr_disp_eb_profit_tranquility = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_tranquility } value = var:sr_eb_level_profit_tranquility }
+}
+sr_disp_eb_arrow_tranquility = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_tranquility = sr_disp_eb_at_tranquility } } value = 1 }
+}
+sr_disp_eb_away_tranquility = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_tranquility } value = var:sr_eb_away_tranquility }
+}
+sr_disp_eb_serve_tranquility = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_tranquility } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_tranquility } value = 1 }
+}
+sr_disp_eb_out_tranquility_iron = { value = sr_eb_view_scale multiply = 331.3323 }
+sr_disp_eb_out_tranquility_tech_metals = { value = sr_eb_view_scale multiply = 178.4097 }
+sr_disp_eb_out_tranquility_gold = { value = sr_eb_view_scale multiply = 25.4871 }
+sr_disp_eb_out_tranquility_copper = { value = sr_eb_view_scale multiply = 82.3233 }
+sr_disp_eb_out_tranquility_lead = { value = sr_eb_view_scale multiply = 8.6656 }
+sr_disp_eb_out_tranquility_sulfur = { value = sr_eb_view_scale multiply = 28.0358 }
+sr_disp_eb_out_tranquility_glass = { value = sr_eb_view_scale multiply = 99.9094 }
+sr_disp_eb_at_marius_hills = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_marius_hills } value = var:sr_eb_at_marius_hills }
+}
+sr_disp_eb_target_marius_hills = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_marius_hills } value = var:sr_eb_target_marius_hills }
+}
+sr_disp_eb_profit_marius_hills = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_marius_hills } value = var:sr_eb_level_profit_marius_hills }
+}
+sr_disp_eb_arrow_marius_hills = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_marius_hills = sr_disp_eb_at_marius_hills } } value = 1 }
+}
+sr_disp_eb_away_marius_hills = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_marius_hills } value = var:sr_eb_away_marius_hills }
+}
+sr_disp_eb_serve_marius_hills = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_marius_hills } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_marius_hills } value = 1 }
+}
+sr_disp_eb_out_marius_hills_iron = { value = sr_eb_view_scale multiply = 331.3323 }
+sr_disp_eb_out_marius_hills_tech_metals = { value = sr_eb_view_scale multiply = 178.4097 }
+sr_disp_eb_out_marius_hills_gold = { value = sr_eb_view_scale multiply = 25.4871 }
+sr_disp_eb_out_marius_hills_copper = { value = sr_eb_view_scale multiply = 82.3233 }
+sr_disp_eb_out_marius_hills_lead = { value = sr_eb_view_scale multiply = 8.6656 }
+sr_disp_eb_out_marius_hills_sulfur = { value = sr_eb_view_scale multiply = 28.0358 }
+sr_disp_eb_out_marius_hills_glass = { value = sr_eb_view_scale multiply = 99.9094 }
+sr_disp_eb_at_daedalus = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_daedalus } value = var:sr_eb_at_daedalus }
+}
+sr_disp_eb_target_daedalus = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_daedalus } value = var:sr_eb_target_daedalus }
+}
+sr_disp_eb_profit_daedalus = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_daedalus } value = var:sr_eb_level_profit_daedalus }
+}
+sr_disp_eb_arrow_daedalus = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_daedalus = sr_disp_eb_at_daedalus } } value = 1 }
+}
+sr_disp_eb_away_daedalus = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_daedalus } value = var:sr_eb_away_daedalus }
+}
+sr_disp_eb_serve_daedalus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_daedalus } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_daedalus } value = 1 }
+}
+sr_disp_eb_out_daedalus_iron = { value = sr_eb_view_scale multiply = 315.5545 }
+sr_disp_eb_out_daedalus_tech_metals = { value = sr_eb_view_scale multiply = 169.914 }
+sr_disp_eb_out_daedalus_gold = { value = sr_eb_view_scale multiply = 24.2734 }
+sr_disp_eb_out_daedalus_copper = { value = sr_eb_view_scale multiply = 78.4032 }
+sr_disp_eb_out_daedalus_lead = { value = sr_eb_view_scale multiply = 8.253 }
+sr_disp_eb_out_daedalus_sulfur = { value = sr_eb_view_scale multiply = 26.7008 }
+sr_disp_eb_out_daedalus_glass = { value = sr_eb_view_scale multiply = 95.1518 }
+sr_disp_eb_at_imbrium = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_at_imbrium } value = var:sr_eb_at_imbrium }
+}
+sr_disp_eb_target_imbrium = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_target_imbrium } value = var:sr_eb_target_imbrium }
+}
+sr_disp_eb_profit_imbrium = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_level_profit_imbrium } value = var:sr_eb_level_profit_imbrium }
+}
+sr_disp_eb_arrow_imbrium = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual NOT = { sr_disp_eb_target_imbrium = sr_disp_eb_at_imbrium } } value = 1 }
+}
+sr_disp_eb_away_imbrium = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_away_imbrium } value = var:sr_eb_away_imbrium }
+}
+sr_disp_eb_serve_imbrium = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_occupier_imbrium } value = 2 }
+	else_if = { limit = { has_global_variable = sr_site_blockaded_imbrium } value = 1 }
+}
+sr_disp_eb_out_imbrium_iron = { value = sr_eb_view_scale multiply = 315.5545 }
+sr_disp_eb_out_imbrium_tech_metals = { value = sr_eb_view_scale multiply = 169.914 }
+sr_disp_eb_out_imbrium_gold = { value = sr_eb_view_scale multiply = 24.2734 }
+sr_disp_eb_out_imbrium_copper = { value = sr_eb_view_scale multiply = 78.4032 }
+sr_disp_eb_out_imbrium_lead = { value = sr_eb_view_scale multiply = 8.253 }
+sr_disp_eb_out_imbrium_sulfur = { value = sr_eb_view_scale multiply = 26.7008 }
+sr_disp_eb_out_imbrium_glass = { value = sr_eb_view_scale multiply = 95.1518 }
+# With the checkbox off, the levels the paced moves still have to carry toward our
+# assignments (§ 8.4): the levels above their places' assignments, as far as the places
+# below theirs have room serving us (each pass moves the lesser of the two).
+sr_eb_view_excess = {
+	value = 0
+	add = { value = sr_disp_eb_at_near_earth subtract = sr_disp_eb_target_near_earth min = 0 }
+	add = { value = sr_disp_eb_at_valles_marineris subtract = sr_disp_eb_target_valles_marineris min = 0 }
+	add = { value = sr_disp_eb_at_olympus_mons subtract = sr_disp_eb_target_olympus_mons min = 0 }
+	add = { value = sr_disp_eb_at_hellas_planitia subtract = sr_disp_eb_target_hellas_planitia min = 0 }
+	add = { value = sr_disp_eb_at_utopia_planitia subtract = sr_disp_eb_target_utopia_planitia min = 0 }
+	add = { value = sr_disp_eb_at_arcadia_planitia subtract = sr_disp_eb_target_arcadia_planitia min = 0 }
+	add = { value = sr_disp_eb_at_ceres subtract = sr_disp_eb_target_ceres min = 0 }
+	add = { value = sr_disp_eb_at_vesta subtract = sr_disp_eb_target_vesta min = 0 }
+	add = { value = sr_disp_eb_at_psyche subtract = sr_disp_eb_target_psyche min = 0 }
+	add = { value = sr_disp_eb_at_pallas subtract = sr_disp_eb_target_pallas min = 0 }
+	add = { value = sr_disp_eb_at_hygiea subtract = sr_disp_eb_target_hygiea min = 0 }
+	add = { value = sr_disp_eb_at_io subtract = sr_disp_eb_target_io min = 0 }
+	add = { value = sr_disp_eb_at_europa subtract = sr_disp_eb_target_europa min = 0 }
+	add = { value = sr_disp_eb_at_ganymede subtract = sr_disp_eb_target_ganymede min = 0 }
+	add = { value = sr_disp_eb_at_callisto subtract = sr_disp_eb_target_callisto min = 0 }
+	add = { value = sr_disp_eb_at_himalia subtract = sr_disp_eb_target_himalia min = 0 }
+	add = { value = sr_disp_eb_at_amalthea subtract = sr_disp_eb_target_amalthea min = 0 }
+	add = { value = sr_disp_eb_at_venus subtract = sr_disp_eb_target_venus min = 0 }
+	add = { value = sr_disp_eb_at_mercury subtract = sr_disp_eb_target_mercury min = 0 }
+	add = { value = sr_disp_eb_at_titan subtract = sr_disp_eb_target_titan min = 0 }
+	add = { value = sr_disp_eb_at_enceladus subtract = sr_disp_eb_target_enceladus min = 0 }
+	add = { value = sr_disp_eb_at_rhea subtract = sr_disp_eb_target_rhea min = 0 }
+	add = { value = sr_disp_eb_at_mimas subtract = sr_disp_eb_target_mimas min = 0 }
+	add = { value = sr_disp_eb_at_iapetus subtract = sr_disp_eb_target_iapetus min = 0 }
+	add = { value = sr_disp_eb_at_titania subtract = sr_disp_eb_target_titania min = 0 }
+	add = { value = sr_disp_eb_at_oberon subtract = sr_disp_eb_target_oberon min = 0 }
+	add = { value = sr_disp_eb_at_miranda subtract = sr_disp_eb_target_miranda min = 0 }
+	add = { value = sr_disp_eb_at_ariel subtract = sr_disp_eb_target_ariel min = 0 }
+	add = { value = sr_disp_eb_at_triton subtract = sr_disp_eb_target_triton min = 0 }
+	add = { value = sr_disp_eb_at_proteus subtract = sr_disp_eb_target_proteus min = 0 }
+	add = { value = sr_disp_eb_at_pluto subtract = sr_disp_eb_target_pluto min = 0 }
+	add = { value = sr_disp_eb_at_eris subtract = sr_disp_eb_target_eris min = 0 }
+	add = { value = sr_disp_eb_at_makemake subtract = sr_disp_eb_target_makemake min = 0 }
+	add = { value = sr_disp_eb_at_haumea subtract = sr_disp_eb_target_haumea min = 0 }
+	add = { value = sr_disp_eb_at_sedna subtract = sr_disp_eb_target_sedna min = 0 }
+	add = { value = sr_disp_eb_at_shackleton subtract = sr_disp_eb_target_shackleton min = 0 }
+	add = { value = sr_disp_eb_at_peary subtract = sr_disp_eb_target_peary min = 0 }
+	add = { value = sr_disp_eb_at_tranquility subtract = sr_disp_eb_target_tranquility min = 0 }
+	add = { value = sr_disp_eb_at_marius_hills subtract = sr_disp_eb_target_marius_hills min = 0 }
+	add = { value = sr_disp_eb_at_daedalus subtract = sr_disp_eb_target_daedalus min = 0 }
+	add = { value = sr_disp_eb_at_imbrium subtract = sr_disp_eb_target_imbrium min = 0 }
+}
+sr_eb_view_deficit = {
+	value = 0
+	add = { value = sr_disp_eb_target_near_earth max = sr_eb_room_near_earth subtract = sr_disp_eb_at_near_earth min = 0 }
+	add = { value = sr_disp_eb_target_valles_marineris max = sr_eb_room_valles_marineris subtract = sr_disp_eb_at_valles_marineris min = 0 }
+	add = { value = sr_disp_eb_target_olympus_mons max = sr_eb_room_olympus_mons subtract = sr_disp_eb_at_olympus_mons min = 0 }
+	add = { value = sr_disp_eb_target_hellas_planitia max = sr_eb_room_hellas_planitia subtract = sr_disp_eb_at_hellas_planitia min = 0 }
+	add = { value = sr_disp_eb_target_utopia_planitia max = sr_eb_room_utopia_planitia subtract = sr_disp_eb_at_utopia_planitia min = 0 }
+	add = { value = sr_disp_eb_target_arcadia_planitia max = sr_eb_room_arcadia_planitia subtract = sr_disp_eb_at_arcadia_planitia min = 0 }
+	add = { value = sr_disp_eb_target_ceres max = sr_eb_room_ceres subtract = sr_disp_eb_at_ceres min = 0 }
+	add = { value = sr_disp_eb_target_vesta max = sr_eb_room_vesta subtract = sr_disp_eb_at_vesta min = 0 }
+	add = { value = sr_disp_eb_target_psyche max = sr_eb_room_psyche subtract = sr_disp_eb_at_psyche min = 0 }
+	add = { value = sr_disp_eb_target_pallas max = sr_eb_room_pallas subtract = sr_disp_eb_at_pallas min = 0 }
+	add = { value = sr_disp_eb_target_hygiea max = sr_eb_room_hygiea subtract = sr_disp_eb_at_hygiea min = 0 }
+	add = { value = sr_disp_eb_target_io max = sr_eb_room_io subtract = sr_disp_eb_at_io min = 0 }
+	add = { value = sr_disp_eb_target_europa max = sr_eb_room_europa subtract = sr_disp_eb_at_europa min = 0 }
+	add = { value = sr_disp_eb_target_ganymede max = sr_eb_room_ganymede subtract = sr_disp_eb_at_ganymede min = 0 }
+	add = { value = sr_disp_eb_target_callisto max = sr_eb_room_callisto subtract = sr_disp_eb_at_callisto min = 0 }
+	add = { value = sr_disp_eb_target_himalia max = sr_eb_room_himalia subtract = sr_disp_eb_at_himalia min = 0 }
+	add = { value = sr_disp_eb_target_amalthea max = sr_eb_room_amalthea subtract = sr_disp_eb_at_amalthea min = 0 }
+	add = { value = sr_disp_eb_target_venus max = sr_eb_room_venus subtract = sr_disp_eb_at_venus min = 0 }
+	add = { value = sr_disp_eb_target_mercury max = sr_eb_room_mercury subtract = sr_disp_eb_at_mercury min = 0 }
+	add = { value = sr_disp_eb_target_titan max = sr_eb_room_titan subtract = sr_disp_eb_at_titan min = 0 }
+	add = { value = sr_disp_eb_target_enceladus max = sr_eb_room_enceladus subtract = sr_disp_eb_at_enceladus min = 0 }
+	add = { value = sr_disp_eb_target_rhea max = sr_eb_room_rhea subtract = sr_disp_eb_at_rhea min = 0 }
+	add = { value = sr_disp_eb_target_mimas max = sr_eb_room_mimas subtract = sr_disp_eb_at_mimas min = 0 }
+	add = { value = sr_disp_eb_target_iapetus max = sr_eb_room_iapetus subtract = sr_disp_eb_at_iapetus min = 0 }
+	add = { value = sr_disp_eb_target_titania max = sr_eb_room_titania subtract = sr_disp_eb_at_titania min = 0 }
+	add = { value = sr_disp_eb_target_oberon max = sr_eb_room_oberon subtract = sr_disp_eb_at_oberon min = 0 }
+	add = { value = sr_disp_eb_target_miranda max = sr_eb_room_miranda subtract = sr_disp_eb_at_miranda min = 0 }
+	add = { value = sr_disp_eb_target_ariel max = sr_eb_room_ariel subtract = sr_disp_eb_at_ariel min = 0 }
+	add = { value = sr_disp_eb_target_triton max = sr_eb_room_triton subtract = sr_disp_eb_at_triton min = 0 }
+	add = { value = sr_disp_eb_target_proteus max = sr_eb_room_proteus subtract = sr_disp_eb_at_proteus min = 0 }
+	add = { value = sr_disp_eb_target_pluto max = sr_eb_room_pluto subtract = sr_disp_eb_at_pluto min = 0 }
+	add = { value = sr_disp_eb_target_eris max = sr_eb_room_eris subtract = sr_disp_eb_at_eris min = 0 }
+	add = { value = sr_disp_eb_target_makemake max = sr_eb_room_makemake subtract = sr_disp_eb_at_makemake min = 0 }
+	add = { value = sr_disp_eb_target_haumea max = sr_eb_room_haumea subtract = sr_disp_eb_at_haumea min = 0 }
+	add = { value = sr_disp_eb_target_sedna max = sr_eb_room_sedna subtract = sr_disp_eb_at_sedna min = 0 }
+	add = { value = sr_disp_eb_target_shackleton max = sr_eb_room_shackleton subtract = sr_disp_eb_at_shackleton min = 0 }
+	add = { value = sr_disp_eb_target_peary max = sr_eb_room_peary subtract = sr_disp_eb_at_peary min = 0 }
+	add = { value = sr_disp_eb_target_tranquility max = sr_eb_room_tranquility subtract = sr_disp_eb_at_tranquility min = 0 }
+	add = { value = sr_disp_eb_target_marius_hills max = sr_eb_room_marius_hills subtract = sr_disp_eb_at_marius_hills min = 0 }
+	add = { value = sr_disp_eb_target_daedalus max = sr_eb_room_daedalus subtract = sr_disp_eb_at_daedalus min = 0 }
+	add = { value = sr_disp_eb_target_imbrium max = sr_eb_room_imbrium subtract = sr_disp_eb_at_imbrium min = 0 }
+}
+sr_disp_eb_to_go = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_manual } value = sr_eb_view_excess max = sr_eb_view_deficit }
+}
+# 0 while some place serving us earns money a level at the refresh's prices; 1 when every
+# one loses money (§ 8.3: nothing moves). The first that earns ends the search.
+sr_disp_eb_all_lose = {
+	value = 1
+	if = {
+		limit = {
+			OR = {
+				AND = { has_technology_researched = asteroid_mining sr_disp_eb_profit_near_earth > 0 }
+				AND = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_blockaded_valles_marineris } NOT = { has_global_variable = sr_site_occupier_valles_marineris } sr_disp_eb_profit_valles_marineris > 0 }
+				AND = { global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_blockaded_olympus_mons } NOT = { has_global_variable = sr_site_occupier_olympus_mons } sr_disp_eb_profit_olympus_mons > 0 }
+				AND = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_hellas_planitia } NOT = { has_global_variable = sr_site_occupier_hellas_planitia } sr_disp_eb_profit_hellas_planitia > 0 }
+				AND = { global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_utopia_planitia } NOT = { has_global_variable = sr_site_occupier_utopia_planitia } sr_disp_eb_profit_utopia_planitia > 0 }
+				AND = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_arcadia_planitia } NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } sr_disp_eb_profit_arcadia_planitia > 0 }
+				AND = { global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_blockaded_ceres } NOT = { has_global_variable = sr_site_occupier_ceres } sr_disp_eb_profit_ceres > 0 }
+				AND = { global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_blockaded_vesta } NOT = { has_global_variable = sr_site_occupier_vesta } sr_disp_eb_profit_vesta > 0 }
+				AND = { global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_blockaded_psyche } NOT = { has_global_variable = sr_site_occupier_psyche } sr_disp_eb_profit_psyche > 0 }
+				AND = { global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_blockaded_pallas } NOT = { has_global_variable = sr_site_occupier_pallas } sr_disp_eb_profit_pallas > 0 }
+				AND = { global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_blockaded_hygiea } NOT = { has_global_variable = sr_site_occupier_hygiea } sr_disp_eb_profit_hygiea > 0 }
+				AND = { global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_blockaded_io } NOT = { has_global_variable = sr_site_occupier_io } sr_disp_eb_profit_io > 0 }
+				AND = { global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_blockaded_europa } NOT = { has_global_variable = sr_site_occupier_europa } sr_disp_eb_profit_europa > 0 }
+				AND = { global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_blockaded_ganymede } NOT = { has_global_variable = sr_site_occupier_ganymede } sr_disp_eb_profit_ganymede > 0 }
+				AND = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_blockaded_callisto } NOT = { has_global_variable = sr_site_occupier_callisto } sr_disp_eb_profit_callisto > 0 }
+				AND = { global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_blockaded_himalia } NOT = { has_global_variable = sr_site_occupier_himalia } sr_disp_eb_profit_himalia > 0 }
+				AND = { global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_blockaded_amalthea } NOT = { has_global_variable = sr_site_occupier_amalthea } sr_disp_eb_profit_amalthea > 0 }
+				AND = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_blockaded_venus } NOT = { has_global_variable = sr_site_occupier_venus } sr_disp_eb_profit_venus > 0 }
+				AND = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_blockaded_mercury } NOT = { has_global_variable = sr_site_occupier_mercury } sr_disp_eb_profit_mercury > 0 }
+				AND = { global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_blockaded_titan } NOT = { has_global_variable = sr_site_occupier_titan } sr_disp_eb_profit_titan > 0 }
+				AND = { global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_blockaded_enceladus } NOT = { has_global_variable = sr_site_occupier_enceladus } sr_disp_eb_profit_enceladus > 0 }
+				AND = { global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_blockaded_rhea } NOT = { has_global_variable = sr_site_occupier_rhea } sr_disp_eb_profit_rhea > 0 }
+				AND = { global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_blockaded_mimas } NOT = { has_global_variable = sr_site_occupier_mimas } sr_disp_eb_profit_mimas > 0 }
+				AND = { global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_blockaded_iapetus } NOT = { has_global_variable = sr_site_occupier_iapetus } sr_disp_eb_profit_iapetus > 0 }
+				AND = { global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_blockaded_titania } NOT = { has_global_variable = sr_site_occupier_titania } sr_disp_eb_profit_titania > 0 }
+				AND = { global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_blockaded_oberon } NOT = { has_global_variable = sr_site_occupier_oberon } sr_disp_eb_profit_oberon > 0 }
+				AND = { global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_blockaded_miranda } NOT = { has_global_variable = sr_site_occupier_miranda } sr_disp_eb_profit_miranda > 0 }
+				AND = { global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_blockaded_ariel } NOT = { has_global_variable = sr_site_occupier_ariel } sr_disp_eb_profit_ariel > 0 }
+				AND = { global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_blockaded_triton } NOT = { has_global_variable = sr_site_occupier_triton } sr_disp_eb_profit_triton > 0 }
+				AND = { global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_blockaded_proteus } NOT = { has_global_variable = sr_site_occupier_proteus } sr_disp_eb_profit_proteus > 0 }
+				AND = { global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_blockaded_pluto } NOT = { has_global_variable = sr_site_occupier_pluto } sr_disp_eb_profit_pluto > 0 }
+				AND = { global_var:sr_site_holder_eris ?= this NOT = { has_global_variable = sr_site_blockaded_eris } NOT = { has_global_variable = sr_site_occupier_eris } sr_disp_eb_profit_eris > 0 }
+				AND = { global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_blockaded_makemake } NOT = { has_global_variable = sr_site_occupier_makemake } sr_disp_eb_profit_makemake > 0 }
+				AND = { global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_blockaded_haumea } NOT = { has_global_variable = sr_site_occupier_haumea } sr_disp_eb_profit_haumea > 0 }
+				AND = { global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_blockaded_sedna } NOT = { has_global_variable = sr_site_occupier_sedna } sr_disp_eb_profit_sedna > 0 }
+				AND = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_blockaded_shackleton } NOT = { has_global_variable = sr_site_occupier_shackleton } sr_disp_eb_profit_shackleton > 0 }
+				AND = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_blockaded_peary } NOT = { has_global_variable = sr_site_occupier_peary } sr_disp_eb_profit_peary > 0 }
+				AND = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_blockaded_tranquility } NOT = { has_global_variable = sr_site_occupier_tranquility } sr_disp_eb_profit_tranquility > 0 }
+				AND = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_blockaded_marius_hills } NOT = { has_global_variable = sr_site_occupier_marius_hills } sr_disp_eb_profit_marius_hills > 0 }
+				AND = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_blockaded_daedalus } NOT = { has_global_variable = sr_site_occupier_daedalus } sr_disp_eb_profit_daedalus > 0 }
+				AND = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_blockaded_imbrium } NOT = { has_global_variable = sr_site_occupier_imbrium } sr_disp_eb_profit_imbrium > 0 }
+			}
+		}
+		value = 0
+	}
+}
+# A level's profit at the current move's source and destination (§ 9.1's move line;
+# the destination's is read by the hand-written sr_disp_eb_gap only).
+sr_disp_eb_move_from_profit = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_eb_move_from }
+		if = { limit = { var:sr_eb_move_from = 0 } value = sr_disp_eb_profit_near_earth }
+		else_if = { limit = { var:sr_eb_move_from = 1 } value = sr_disp_eb_profit_valles_marineris }
+		else_if = { limit = { var:sr_eb_move_from = 2 } value = sr_disp_eb_profit_olympus_mons }
+		else_if = { limit = { var:sr_eb_move_from = 3 } value = sr_disp_eb_profit_hellas_planitia }
+		else_if = { limit = { var:sr_eb_move_from = 4 } value = sr_disp_eb_profit_utopia_planitia }
+		else_if = { limit = { var:sr_eb_move_from = 5 } value = sr_disp_eb_profit_arcadia_planitia }
+		else_if = { limit = { var:sr_eb_move_from = 6 } value = sr_disp_eb_profit_ceres }
+		else_if = { limit = { var:sr_eb_move_from = 7 } value = sr_disp_eb_profit_vesta }
+		else_if = { limit = { var:sr_eb_move_from = 8 } value = sr_disp_eb_profit_psyche }
+		else_if = { limit = { var:sr_eb_move_from = 9 } value = sr_disp_eb_profit_pallas }
+		else_if = { limit = { var:sr_eb_move_from = 10 } value = sr_disp_eb_profit_hygiea }
+		else_if = { limit = { var:sr_eb_move_from = 11 } value = sr_disp_eb_profit_io }
+		else_if = { limit = { var:sr_eb_move_from = 12 } value = sr_disp_eb_profit_europa }
+		else_if = { limit = { var:sr_eb_move_from = 13 } value = sr_disp_eb_profit_ganymede }
+		else_if = { limit = { var:sr_eb_move_from = 14 } value = sr_disp_eb_profit_callisto }
+		else_if = { limit = { var:sr_eb_move_from = 15 } value = sr_disp_eb_profit_himalia }
+		else_if = { limit = { var:sr_eb_move_from = 16 } value = sr_disp_eb_profit_amalthea }
+		else_if = { limit = { var:sr_eb_move_from = 17 } value = sr_disp_eb_profit_venus }
+		else_if = { limit = { var:sr_eb_move_from = 18 } value = sr_disp_eb_profit_mercury }
+		else_if = { limit = { var:sr_eb_move_from = 19 } value = sr_disp_eb_profit_titan }
+		else_if = { limit = { var:sr_eb_move_from = 20 } value = sr_disp_eb_profit_enceladus }
+		else_if = { limit = { var:sr_eb_move_from = 21 } value = sr_disp_eb_profit_rhea }
+		else_if = { limit = { var:sr_eb_move_from = 22 } value = sr_disp_eb_profit_mimas }
+		else_if = { limit = { var:sr_eb_move_from = 23 } value = sr_disp_eb_profit_iapetus }
+		else_if = { limit = { var:sr_eb_move_from = 24 } value = sr_disp_eb_profit_titania }
+		else_if = { limit = { var:sr_eb_move_from = 25 } value = sr_disp_eb_profit_oberon }
+		else_if = { limit = { var:sr_eb_move_from = 26 } value = sr_disp_eb_profit_miranda }
+		else_if = { limit = { var:sr_eb_move_from = 27 } value = sr_disp_eb_profit_ariel }
+		else_if = { limit = { var:sr_eb_move_from = 28 } value = sr_disp_eb_profit_triton }
+		else_if = { limit = { var:sr_eb_move_from = 29 } value = sr_disp_eb_profit_proteus }
+		else_if = { limit = { var:sr_eb_move_from = 30 } value = sr_disp_eb_profit_pluto }
+		else_if = { limit = { var:sr_eb_move_from = 31 } value = sr_disp_eb_profit_eris }
+		else_if = { limit = { var:sr_eb_move_from = 32 } value = sr_disp_eb_profit_makemake }
+		else_if = { limit = { var:sr_eb_move_from = 33 } value = sr_disp_eb_profit_haumea }
+		else_if = { limit = { var:sr_eb_move_from = 34 } value = sr_disp_eb_profit_sedna }
+		else_if = { limit = { var:sr_eb_move_from = 35 } value = sr_disp_eb_profit_shackleton }
+		else_if = { limit = { var:sr_eb_move_from = 36 } value = sr_disp_eb_profit_peary }
+		else_if = { limit = { var:sr_eb_move_from = 37 } value = sr_disp_eb_profit_tranquility }
+		else_if = { limit = { var:sr_eb_move_from = 38 } value = sr_disp_eb_profit_marius_hills }
+		else_if = { limit = { var:sr_eb_move_from = 39 } value = sr_disp_eb_profit_daedalus }
+		else_if = { limit = { var:sr_eb_move_from = 40 } value = sr_disp_eb_profit_imbrium }
+	}
+}
+sr_eb_view_move_to_profit = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_eb_move_to }
+		if = { limit = { var:sr_eb_move_to = 0 } value = sr_disp_eb_profit_near_earth }
+		else_if = { limit = { var:sr_eb_move_to = 1 } value = sr_disp_eb_profit_valles_marineris }
+		else_if = { limit = { var:sr_eb_move_to = 2 } value = sr_disp_eb_profit_olympus_mons }
+		else_if = { limit = { var:sr_eb_move_to = 3 } value = sr_disp_eb_profit_hellas_planitia }
+		else_if = { limit = { var:sr_eb_move_to = 4 } value = sr_disp_eb_profit_utopia_planitia }
+		else_if = { limit = { var:sr_eb_move_to = 5 } value = sr_disp_eb_profit_arcadia_planitia }
+		else_if = { limit = { var:sr_eb_move_to = 6 } value = sr_disp_eb_profit_ceres }
+		else_if = { limit = { var:sr_eb_move_to = 7 } value = sr_disp_eb_profit_vesta }
+		else_if = { limit = { var:sr_eb_move_to = 8 } value = sr_disp_eb_profit_psyche }
+		else_if = { limit = { var:sr_eb_move_to = 9 } value = sr_disp_eb_profit_pallas }
+		else_if = { limit = { var:sr_eb_move_to = 10 } value = sr_disp_eb_profit_hygiea }
+		else_if = { limit = { var:sr_eb_move_to = 11 } value = sr_disp_eb_profit_io }
+		else_if = { limit = { var:sr_eb_move_to = 12 } value = sr_disp_eb_profit_europa }
+		else_if = { limit = { var:sr_eb_move_to = 13 } value = sr_disp_eb_profit_ganymede }
+		else_if = { limit = { var:sr_eb_move_to = 14 } value = sr_disp_eb_profit_callisto }
+		else_if = { limit = { var:sr_eb_move_to = 15 } value = sr_disp_eb_profit_himalia }
+		else_if = { limit = { var:sr_eb_move_to = 16 } value = sr_disp_eb_profit_amalthea }
+		else_if = { limit = { var:sr_eb_move_to = 17 } value = sr_disp_eb_profit_venus }
+		else_if = { limit = { var:sr_eb_move_to = 18 } value = sr_disp_eb_profit_mercury }
+		else_if = { limit = { var:sr_eb_move_to = 19 } value = sr_disp_eb_profit_titan }
+		else_if = { limit = { var:sr_eb_move_to = 20 } value = sr_disp_eb_profit_enceladus }
+		else_if = { limit = { var:sr_eb_move_to = 21 } value = sr_disp_eb_profit_rhea }
+		else_if = { limit = { var:sr_eb_move_to = 22 } value = sr_disp_eb_profit_mimas }
+		else_if = { limit = { var:sr_eb_move_to = 23 } value = sr_disp_eb_profit_iapetus }
+		else_if = { limit = { var:sr_eb_move_to = 24 } value = sr_disp_eb_profit_titania }
+		else_if = { limit = { var:sr_eb_move_to = 25 } value = sr_disp_eb_profit_oberon }
+		else_if = { limit = { var:sr_eb_move_to = 26 } value = sr_disp_eb_profit_miranda }
+		else_if = { limit = { var:sr_eb_move_to = 27 } value = sr_disp_eb_profit_ariel }
+		else_if = { limit = { var:sr_eb_move_to = 28 } value = sr_disp_eb_profit_triton }
+		else_if = { limit = { var:sr_eb_move_to = 29 } value = sr_disp_eb_profit_proteus }
+		else_if = { limit = { var:sr_eb_move_to = 30 } value = sr_disp_eb_profit_pluto }
+		else_if = { limit = { var:sr_eb_move_to = 31 } value = sr_disp_eb_profit_eris }
+		else_if = { limit = { var:sr_eb_move_to = 32 } value = sr_disp_eb_profit_makemake }
+		else_if = { limit = { var:sr_eb_move_to = 33 } value = sr_disp_eb_profit_haumea }
+		else_if = { limit = { var:sr_eb_move_to = 34 } value = sr_disp_eb_profit_sedna }
+		else_if = { limit = { var:sr_eb_move_to = 35 } value = sr_disp_eb_profit_shackleton }
+		else_if = { limit = { var:sr_eb_move_to = 36 } value = sr_disp_eb_profit_peary }
+		else_if = { limit = { var:sr_eb_move_to = 37 } value = sr_disp_eb_profit_tranquility }
+		else_if = { limit = { var:sr_eb_move_to = 38 } value = sr_disp_eb_profit_marius_hills }
+		else_if = { limit = { var:sr_eb_move_to = 39 } value = sr_disp_eb_profit_daedalus }
+		else_if = { limit = { var:sr_eb_move_to = 40 } value = sr_disp_eb_profit_imbrium }
+	}
+}
