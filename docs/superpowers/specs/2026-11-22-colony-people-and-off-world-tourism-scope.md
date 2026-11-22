@@ -214,10 +214,9 @@ binds first once a country has a Component Depot. Without it, the stock binds:
 Time binds too: 8 past cost 4,400 points in all (about 15 years at 25 a
 month), and 20 past cost 23,000 (about 77 years). The stock still fills to the
 queue head's price (`sr_mod_fab_stock_fill_cap`), so a Habitat queued while the
-stock was larger is still built. **For the design to settle:** keep the stock
-rule for Habitats, so storage buys reach past the cap (recommended: a soft cap
-the player pays for, and a clear job for Module Storage), or drop it and leave
-only the price and the time.
+stock was larger is still built. **The stock rule stays for Habitats** (owner,
+2026-11-22): storage buys reach past the cap, a soft cap the player pays for,
+and Module Storage keeps a clear job.
 
 ### 3.3 The five slot technologies
 
@@ -433,7 +432,9 @@ recommendation where the owner chose otherwise.
 6. **Settlers' origin: the Settlement Authority's walk** over the country's
    states, and **who goes stays as today, half middle and half lower strata**.
 7. **Past the Habitat cap: no limit, at the rising price** (the recommendation
-   was to keep today's 8). § 3.2 has what it changes for Module Storage.
+   was to keep today's 8). **The stock rule stays**: a Habitat past the cap is
+   queued only while its price fits in the module stock, so Module Storage and
+   the fabrication rate set how far past the cap a colony can go (§ 3.2).
 8. **The Administration's further cost: authority a level** (a positive
    `country_authority_cost_add` at its staffed levels). With the crew at
    10,000, holding the largest colony takes seven Administrations of its 25
