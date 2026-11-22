@@ -585,6 +585,9 @@ class ColoniesTest(unittest.TestCase):
                 self.assertIn(f'tooltip = "je_space_race_widget_bases_tt_{k}"', row)
                 grade = f"{site.ebase_grade:+d}%".replace("-", "\u2212")
                 self.assertRegex(row, rf'blockoverride "eb_grade" \{{\s*raw_text = "{re.escape(grade)}"')
+                # the not-serving line only while some of its levels work elsewhere
+                away = re.search(r'blockoverride "eb_away_visible" \{\s*visible = "([^"]*)"', row).group(1)
+                self.assertIn(f"ScriptValue('sr_disp_eb_away_{k}'), '(CFixedPoint)0' )", away)
                 for value in (f"sr_disp_eb_at_{k}", f"sr_disp_site_ebase_room_{k}", f"sr_disp_eb_target_{k}",
                               f"sr_disp_eb_arrow_{k}", f"sr_disp_eb_profit_{k}", f"sr_disp_eb_serve_{k}",
                               f"sr_disp_eb_away_{k}", *(f"sr_disp_eb_out_{k}_{g}" for g in eg.GOODS)):
@@ -638,8 +641,32 @@ class ColoniesTest(unittest.TestCase):
                       "'(CFixedPoint)0' )]\"", box)
         self.assertIn("onclick = \"[GetScriptedGui('sr_ebase_auto_sgui').Execute( GuiScope.SetRoot( "
                       "JournalEntry.GetCountry.MakeScope ).End )]\"", box)
-        self.assertIn("IsValidTooltip", box)
+        # sr_ebase_auto_sgui has no is_valid: nothing greys it, and the hover opens on
+        # what the click does, not a blank break (final review, finding 12)
+        self.assertNotIn("IsValidTooltip", box)
+        self.assertNotIn("enabled = ", box)
+        self.assertIn("ExecuteTooltip", box)
         self.assertIn('text = "je_space_race_widget_eb_auto"', self.section)
+
+    def test_the_view_switch_is_a_fixed_slot(self):
+        """The switch sits in a slot as wide as its five buttons, from the slot's
+        left edge, so the Bases button appearing mid-game moves nothing (rule 8)."""
+        start = self.section.index("### The view switch")
+        slot = self.section[start:self.section.index("te_sr_colony_view_button = {", start)]
+        width = int(re.search(r"size = \{ (\d+) \d+ \}", slot).group(1))
+        button = int(re.search(r"size = \{ (\d+) 28 \}", _type_body(self.gui, "te_sr_colony_view_button")).group(1))
+        self.assertEqual(width, 5 * button + 4 * 4)
+        self.assertLessEqual(width, 480)
+        self.assertIn("parentanchor = left|vcenter", slot)
+
+    def test_unassigned_levels(self):
+        """With the checkbox off, one row above the boxes says how many levels no
+        site is assigned (finding 9): built and queued less the assignments."""
+        self.assertIn('text = "je_space_race_widget_eb_unassigned_label"', self.section)
+        body = _block(self.values, "sr_disp_eb_unassigned")
+        self.assertIn("sr_ebase_queued_levels", body)
+        self.assertIn("subtract = sr_eb_assigned", body)
+        self.assertIn("min = 0", body)
 
     def test_every_name_fits_its_row(self):
         row = _type_body(self.gui, "te_sr_colony_row")

@@ -159,7 +159,9 @@ class ConceptsAndHelp(unittest.TestCase):
         for t in eg.TYPES:
             with self.subTest(type=t):
                 self.assertIn(f"\\n#b $sr_ground_{t}$#!:", text)
-        self.assertIn("a quarter of our levels a year", text)
+        # the pace as the script runs it, ceil(L / 48): never "up to a quarter" (final review, finding 2)
+        self.assertIn("a 48th of our levels, rounded up, and at least one", text)
+        self.assertNotIn("quarter", text)
         self.assertIn("5%", text)
         self.assertIn('text = "je_space_race_widget_howc_bases"', _read(GUI))
 

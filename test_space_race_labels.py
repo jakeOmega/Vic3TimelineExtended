@@ -285,7 +285,7 @@ def _longest_figure(name):
              "sr_disp_eb_pace": EB_PACE, "sr_disp_eb_months": EB_MONTHS, "sr_disp_eb_to_go": EBASE_LEVELS,
              "sr_disp_eb_gap": EB_GAP, "sr_disp_eb_margin": EB_MARGIN, "sr_disp_eb_move_began_year": END_YEAR,
              "sr_disp_eb_last_began_year": END_YEAR, "sr_disp_eb_last_ended_year": END_YEAR,
-             "sr_disp_eb_now_profit": EB_PROFIT, "sr_disp_eb_end_profit": EB_PROFIT}
+             "sr_disp_eb_now_profit": EB_PROFIT, "sr_disp_eb_end_profit": EB_PROFIT, "sr_disp_eb_unassigned": EBASE_LEVELS}
     assert name in fixed, f"no longest figure known for {name}: add one to _longest_figure"
     return fixed[name]
 
@@ -405,12 +405,13 @@ CELLS = {
         ("te_sr_value_row", 'block "row_label"'),
         r"je_space_race_widget_(setbacks_label|eta_label|colonies_held_label|cf_in_flight_label"
         r"|emig_month_label|offworld_label|orbit_\w+_label|fab_label|shipments_label|mod_upkeep_label"
-        r"|ebase_label|ebase_queued_label|resort_label|resort_queued_label|free_trade_label|sc_rate_label|sc_strength_label|sc_upkeep_label|sc_reserve_label"
+        r"|ebase_label|ebase_queued_label|eb_unassigned_label|resort_label|resort_queued_label|free_trade_label|sc_rate_label|sc_strength_label|sc_upkeep_label|sc_reserve_label"
         r"|cf_drive_label|mq_next_label)"),
     "value-row figure (te_sr_value_row)": (
         ("te_sr_value_row", 'block "row_value"'),
         r"je_space_race_widget_((setbacks|eta)_(?!label)\w+|colonies_held_figure|cf_in_flight_figure"
         r"|emig_month_figure|offworld_figure|fab_figure|shipments_figure|mod_upkeep_figure|ebase_figure|ebase_queued_figure"
+        r"|eb_unassigned_figure"
         r"|resort_figure|resort_queued_figure"
         r"|free_trade_figure|sc_rate_figure|sc_rate_paused|sc_strength_figure|sc_upkeep_figure|sc_reserve_figure"
         r"|cf_drive_value|mq_next_(?:months|full|none))"),
@@ -864,8 +865,11 @@ class LabelBudgetTest(unittest.TestCase):
                 self.assertNotIn("GetCustom", text)
                 need = len(_render(text)) * UNITS_PER_CHAR[font] * MARGIN
                 self.assertLessEqual(need, width, f"{key} renders {_render(text)!r}: {need:.0f} units")
-        self.assertEqual(_render(_loc("je_space_race_widget_eb_toward")), "Moving toward our assignments: 99999 levels to go")
-        self.assertEqual(_render(_loc("je_space_race_widget_eb_moving")), "Moving up to 9999 levels a month, since 2136")
+        # no count before a plural unit, so 1 reads right (final review, finding 13)
+        self.assertEqual(_render(_loc("je_space_race_widget_eb_toward")), "Levels to move to our assignments: 99999")
+        self.assertEqual(_render(_loc("je_space_race_widget_eb_moving")), "Moving since 2136, up to 9999 a month")
+        self.assertEqual(_render(_loc("je_space_race_widget_eb_toward_months")), "Months to go: about 99, at up to 9999 a month")
+        self.assertEqual(_loc("je_space_race_widget_eb_elsewhere"), "working elsewhere until freed")
 
     def test_the_owners_overrun_is_caught(self):
         """The budget flags what the owner saw: "Next Colony" in the old 90."""
@@ -1021,6 +1025,8 @@ class FigureBudgetTest(unittest.TestCase):
                                             "ebl_profit": "\u00a3\u00a3+999K", "ebl_away": "99999"})
         self._check("te_sr_eb_good_cell", {"good_figure": "99999"})
         self._check("te_sr_eb_ground_part", {"ebg_grade": "\u221245%"})
+        # the word's cell is fixed, so the grades form a column (final review, finding 14)
+        self.assertIn("minimumsize = { 116 -1 }", _textbox_with(_type_body(_read(GUI), "te_sr_eb_ground_part"), 'block "ebg_ground"'))
         gui, rows = _read(GUI), _read(ROWS)
         box = _textbox_with(_type_body(gui, "te_sr_eb_ground_part"), 'block "ebg_ground"')
         words = re.findall(r'blockoverride "eb_ground" \{\s*text = "(sr_ground_\w+)"', rows)

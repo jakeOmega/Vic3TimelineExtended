@@ -7336,7 +7336,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_shackleton"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_shackleton'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_shackleton'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_shackleton'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_shackleton'), '(CFixedPoint)1' )]"
@@ -7897,7 +7897,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_peary"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_peary'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_peary'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_peary'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_peary'), '(CFixedPoint)1' )]"
@@ -8458,7 +8458,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_tranquility"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_tranquility'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_tranquility'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_tranquility'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_tranquility'), '(CFixedPoint)1' )]"
@@ -9019,7 +9019,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_marius_hills"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_marius_hills'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_marius_hills'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_marius_hills'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_marius_hills'), '(CFixedPoint)1' )]"
@@ -9580,7 +9580,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_daedalus"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_daedalus'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_daedalus'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_daedalus'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_daedalus'), '(CFixedPoint)1' )]"
@@ -10141,7 +10141,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_imbrium"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_imbrium'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_imbrium'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_imbrium'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_imbrium'), '(CFixedPoint)1' )]"
@@ -10752,7 +10752,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_venus"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_venus'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_venus'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_venus'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_venus'), '(CFixedPoint)1' )]"
@@ -11321,7 +11321,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_mercury"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_mercury'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_mercury'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_mercury'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_mercury'), '(CFixedPoint)1' )]"
@@ -11932,7 +11932,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_valles_marineris"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_valles_marineris'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_valles_marineris'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_valles_marineris'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_valles_marineris'), '(CFixedPoint)1' )]"
@@ -12543,7 +12543,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_olympus_mons"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_olympus_mons'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_olympus_mons'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_olympus_mons'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_olympus_mons'), '(CFixedPoint)1' )]"
@@ -13154,7 +13154,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_hellas_planitia"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_hellas_planitia'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_hellas_planitia'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_hellas_planitia'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_hellas_planitia'), '(CFixedPoint)1' )]"
@@ -13765,7 +13765,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_utopia_planitia"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_utopia_planitia'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_utopia_planitia'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_utopia_planitia'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_utopia_planitia'), '(CFixedPoint)1' )]"
@@ -14376,7 +14376,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_arcadia_planitia"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_arcadia_planitia'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_arcadia_planitia'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_arcadia_planitia'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_arcadia_planitia'), '(CFixedPoint)1' )]"
@@ -14945,7 +14945,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_ceres"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_ceres'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_ceres'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_ceres'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_ceres'), '(CFixedPoint)1' )]"
@@ -15514,7 +15514,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_vesta"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_vesta'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_vesta'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_vesta'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_vesta'), '(CFixedPoint)1' )]"
@@ -16083,7 +16083,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_psyche"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_psyche'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_psyche'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_psyche'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_psyche'), '(CFixedPoint)1' )]"
@@ -16652,7 +16652,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_pallas"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_pallas'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_pallas'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_pallas'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_pallas'), '(CFixedPoint)1' )]"
@@ -17221,7 +17221,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_hygiea"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_hygiea'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_hygiea'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_hygiea'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_hygiea'), '(CFixedPoint)1' )]"
@@ -17790,7 +17790,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_io"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_io'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_io'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_io'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_io'), '(CFixedPoint)1' )]"
@@ -18359,7 +18359,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_europa"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_europa'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_europa'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_europa'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_europa'), '(CFixedPoint)1' )]"
@@ -18970,7 +18970,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_ganymede"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_ganymede'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_ganymede'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_ganymede'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_ganymede'), '(CFixedPoint)1' )]"
@@ -19581,7 +19581,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_callisto"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_callisto'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_callisto'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_callisto'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_callisto'), '(CFixedPoint)1' )]"
@@ -20150,7 +20150,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_himalia"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_himalia'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_himalia'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_himalia'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_himalia'), '(CFixedPoint)1' )]"
@@ -20719,7 +20719,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_amalthea"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_amalthea'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_amalthea'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_amalthea'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_amalthea'), '(CFixedPoint)1' )]"
@@ -21330,7 +21330,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_titan"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_titan'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_titan'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_titan'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_titan'), '(CFixedPoint)1' )]"
@@ -21899,7 +21899,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_enceladus"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_enceladus'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_enceladus'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_enceladus'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_enceladus'), '(CFixedPoint)1' )]"
@@ -22468,7 +22468,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_rhea"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_rhea'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_rhea'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_rhea'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_rhea'), '(CFixedPoint)1' )]"
@@ -23037,7 +23037,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_mimas"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_mimas'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_mimas'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_mimas'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_mimas'), '(CFixedPoint)1' )]"
@@ -23606,7 +23606,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_iapetus"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_iapetus'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_iapetus'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_iapetus'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_iapetus'), '(CFixedPoint)1' )]"
@@ -24175,7 +24175,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_titania"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_titania'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_titania'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_titania'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_titania'), '(CFixedPoint)1' )]"
@@ -24744,7 +24744,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_oberon"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_oberon'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_oberon'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_oberon'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_oberon'), '(CFixedPoint)1' )]"
@@ -25313,7 +25313,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_miranda"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_miranda'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_miranda'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_miranda'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_miranda'), '(CFixedPoint)1' )]"
@@ -25882,7 +25882,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_ariel"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_ariel'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_ariel'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_ariel'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_ariel'), '(CFixedPoint)1' )]"
@@ -26451,7 +26451,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_triton"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_triton'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_triton'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_triton'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_triton'), '(CFixedPoint)1' )]"
@@ -27020,7 +27020,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_proteus"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_proteus'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_proteus'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_proteus'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_proteus'), '(CFixedPoint)1' )]"
@@ -27589,7 +27589,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_pluto"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_pluto'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_pluto'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_pluto'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_pluto'), '(CFixedPoint)1' )]"
@@ -28158,7 +28158,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_eris"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_eris'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_eris'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_eris'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_eris'), '(CFixedPoint)1' )]"
@@ -28727,7 +28727,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_makemake"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_makemake'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_makemake'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_makemake'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_makemake'), '(CFixedPoint)1' )]"
@@ -29296,7 +29296,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_haumea"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_haumea'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_haumea'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_haumea'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_haumea'), '(CFixedPoint)1' )]"
@@ -29865,7 +29865,7 @@ types sr_sites_generated_rows_types
 				tooltip = "je_space_race_widget_bases_tt_sedna"
 			}
 			blockoverride "eb_away_visible" {
-				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_sedna'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_sedna'), '(CFixedPoint)1' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_away_sedna'), '(CFixedPoint)0' ) )]"
 			}
 			blockoverride "eb_blockaded_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_serve_sedna'), '(CFixedPoint)1' )]"

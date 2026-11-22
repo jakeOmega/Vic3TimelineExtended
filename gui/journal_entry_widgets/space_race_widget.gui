@@ -3977,7 +3977,7 @@ types space_race_widget_types
 			textbox = {
 				parentanchor = vcenter
 				autoresize = yes
-				max_width = 264
+				max_width = 272
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
@@ -3988,7 +3988,8 @@ types space_race_widget_types
 
 	### A place's ground type and grade on a box's first line, the place's
 	### room, grade and ground on hover: "Carbonaceous" at the longest, then
-	### "−45%". 116 + 4 + 44 = 164.
+	### "−45%". 116 + 4 + 44 = 164, the word's cell fixed so the grades
+	### form a column down the boxes.
 	type te_sr_eb_ground_part = flowcontainer {
 		direction = horizontal
 		spacing = 4
@@ -3997,6 +3998,7 @@ types space_race_widget_types
 		textbox = {
 			parentanchor = vcenter
 			autoresize = yes
+			minimumsize = { 116 -1 }
 			max_width = 116
 			align = left|nobaseline
 			using = te_sr_fontsize_row
@@ -4262,65 +4264,72 @@ types space_race_widget_types
 				text = "je_space_race_widget_colonies_empty"
 			}
 
-			### The view switch (Simple and Full Colonies), said once above the rows.
-			flowcontainer = {
+			### The view switch (Simple and Full Colonies), said once above the rows:
+			### a fixed slot as wide as five buttons (5 x 92 + 4 x 4), the buttons from
+			### its left edge, so the Bases button joining mid-game (In-Situ Resource
+			### Utilization) moves nothing (gui_style_guide rule 8).
+			widget = {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
-				direction = horizontal
-				ignoreinvisible = yes
+				size = { 476 36 }
 				parentanchor = hcenter
-				spacing = 4
-				margin = { 0 4 }
 
-				te_sr_colony_view_button = {
-					tooltip = "je_space_race_widget_cv_people_tt"
-					blockoverride "view_button" {
-						enabled = "[Not( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), Or( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') ), Or( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'bases') ), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) ) ) ) ) ) )]"
-						onclick = "[GetVariableSystem.Clear('sr_colony_view')]"
+				flowcontainer = {
+					direction = horizontal
+					ignoreinvisible = yes
+					parentanchor = left|vcenter
+					spacing = 4
+
+					te_sr_colony_view_button = {
+						tooltip = "je_space_race_widget_cv_people_tt"
+						blockoverride "view_button" {
+							enabled = "[Not( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), Not( Or( GetVariableSystem.HasValue('sr_colony_view', 'modules'), Or( GetVariableSystem.HasValue('sr_colony_view', 'autonomy'), Or( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'defences') ), Or( And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'bases') ), GetVariableSystem.HasValue('sr_colony_view', 'detail') ) ) ) ) ) ) )]"
+							onclick = "[GetVariableSystem.Clear('sr_colony_view')]"
+						}
+						blockoverride "view_label" {
+							text = "je_space_race_widget_cv_people"
+						}
 					}
-					blockoverride "view_label" {
-						text = "je_space_race_widget_cv_people"
+					te_sr_colony_view_button = {
+						tooltip = "je_space_race_widget_cv_modules_tt"
+						blockoverride "view_button" {
+							enabled = "[Not( GetVariableSystem.HasValue('sr_colony_view', 'modules') )]"
+							onclick = "[GetVariableSystem.Set('sr_colony_view', 'modules')]"
+						}
+						blockoverride "view_label" {
+							text = "je_space_race_widget_cv_modules"
+						}
 					}
-				}
-				te_sr_colony_view_button = {
-					tooltip = "je_space_race_widget_cv_modules_tt"
-					blockoverride "view_button" {
-						enabled = "[Not( GetVariableSystem.HasValue('sr_colony_view', 'modules') )]"
-						onclick = "[GetVariableSystem.Set('sr_colony_view', 'modules')]"
+					te_sr_colony_view_button = {
+						tooltip = "je_space_race_widget_cv_autonomy_tt"
+						blockoverride "view_button" {
+							enabled = "[Not( GetVariableSystem.HasValue('sr_colony_view', 'autonomy') )]"
+							onclick = "[GetVariableSystem.Set('sr_colony_view', 'autonomy')]"
+						}
+						blockoverride "view_label" {
+							text = "je_space_race_widget_cv_autonomy"
+						}
 					}
-					blockoverride "view_label" {
-						text = "je_space_race_widget_cv_modules"
+					te_sr_colony_view_button = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' )]"
+						tooltip = "je_space_race_widget_cv_defences_tt"
+						blockoverride "view_button" {
+							enabled = "[Not( GetVariableSystem.HasValue('sr_colony_view', 'defences') )]"
+							onclick = "[GetVariableSystem.Set('sr_colony_view', 'defences')]"
+						}
+						blockoverride "view_label" {
+							text = "je_space_race_widget_cv_defences"
+						}
 					}
-				}
-				te_sr_colony_view_button = {
-					tooltip = "je_space_race_widget_cv_autonomy_tt"
-					blockoverride "view_button" {
-						enabled = "[Not( GetVariableSystem.HasValue('sr_colony_view', 'autonomy') )]"
-						onclick = "[GetVariableSystem.Set('sr_colony_view', 'autonomy')]"
-					}
-					blockoverride "view_label" {
-						text = "je_space_race_widget_cv_autonomy"
-					}
-				}
-				te_sr_colony_view_button = {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' )]"
-					tooltip = "je_space_race_widget_cv_defences_tt"
-					blockoverride "view_button" {
-						enabled = "[Not( GetVariableSystem.HasValue('sr_colony_view', 'defences') )]"
-						onclick = "[GetVariableSystem.Set('sr_colony_view', 'defences')]"
-					}
-					blockoverride "view_label" {
-						text = "je_space_race_widget_cv_defences"
-					}
-				}
-				te_sr_colony_view_button = {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' )]"
-					tooltip = "je_space_race_widget_cv_bases_tt"
-					blockoverride "view_button" {
-						enabled = "[Not( GetVariableSystem.HasValue('sr_colony_view', 'bases') )]"
-						onclick = "[GetVariableSystem.Set('sr_colony_view', 'bases')]"
-					}
-					blockoverride "view_label" {
-						text = "je_space_race_widget_cv_bases"
+					te_sr_colony_view_button = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' )]"
+						tooltip = "je_space_race_widget_cv_bases_tt"
+						blockoverride "view_button" {
+							enabled = "[Not( GetVariableSystem.HasValue('sr_colony_view', 'bases') )]"
+							onclick = "[GetVariableSystem.Set('sr_colony_view', 'bases')]"
+						}
+						blockoverride "view_label" {
+							text = "je_space_race_widget_cv_bases"
+						}
 					}
 				}
 			}
@@ -4567,7 +4576,10 @@ types space_race_widget_types
 			### totals before other modifiers, then the near-Earth asteroids'
 			### box above the colonies'. The figures are the refresh's and the
 			### clicks' (sr_eb_* variables, the stored profits a level): nothing
-			### here reads a market or walks a building.
+			### here reads a market. Three things do walk the buildings: the levels
+			### rows (sr_ebase_levels, sr_ebase_queued_levels, as in Modules), the
+			### unassigned row (sr_ebase_queued_levels, once) and each box's +,
+			### whose validity counts the queued levels (sr_ebase_assign_sgui).
 			flowcontainer = {
 				visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'bases') ) )]"
 				direction = vertical
@@ -4575,6 +4587,8 @@ types space_race_widget_types
 				spacing = 2
 
 				### The checkbox (sr_ebase_auto_sgui): ticked while sr_eb_manual is not set.
+				### The scripted GUI has no is_valid, so nothing greys it and its hover
+				### is what the click does, then the rule.
 				flowcontainer = {
 					direction = horizontal
 					ignoreinvisible = yes
@@ -4586,9 +4600,8 @@ types space_race_widget_types
 						size = { 24 24 }
 						parentanchor = vcenter
 						checked = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_manual'), '(CFixedPoint)0' )]"
-						enabled = "[GetScriptedGui('sr_ebase_auto_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						onclick = "[GetScriptedGui('sr_ebase_auto_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						tooltip = "[Concatenate( GetScriptedGui('sr_ebase_auto_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), Concatenate( GetScriptedGui('sr_ebase_auto_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), Localize( 'je_space_race_widget_eb_auto_tt' ) ) ) ) )]"
+						tooltip = "[Concatenate( GetScriptedGui('sr_ebase_auto_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), Localize( 'je_space_race_widget_eb_auto_tt' ) ) )]"
 					}
 					textbox = {
 						parentanchor = vcenter
@@ -4618,6 +4631,19 @@ types space_race_widget_types
 					}
 					blockoverride "row_value" {
 						text = "je_space_race_widget_ebase_queued_figure"
+					}
+				}
+				### With the checkbox off, the levels built and queued that no site
+				### is assigned: + needs some (sr_ebase_assign_sgui), and with the
+				### checkbox on every level counts as assigned where it works.
+				te_sr_value_row = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_manual'), '(CFixedPoint)1' )]"
+					tooltip = "je_space_race_widget_eb_unassigned_tt"
+					blockoverride "row_label" {
+						text = "je_space_race_widget_eb_unassigned_label"
+					}
+					blockoverride "row_value" {
+						text = "je_space_race_widget_eb_unassigned_figure"
 					}
 				}
 
