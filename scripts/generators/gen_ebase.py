@@ -278,7 +278,8 @@ def render_control_values() -> list[str]:
     for i, k in places():
         out += [f"sr_eb_held_room_{k} = {{", "\tvalue = 0", f"\tif = {{ limit = {{ {held(k)} }} value = {room_value(k)} }}", "}"]
     out += ["# The levels assigned: the targets with the checkbox off; with it on, what switching it off",
-            "# would set them to, each place's levels and those it is owed (ebase_ground.set_checkbox).",
+            "# would set them to, each place's levels and those it is owed, less what the return will",
+            "# take back from it (ebase_ground.set_checkbox, the refresh's sr_eb_switch_cut_<k>).",
             "sr_eb_assigned = {",
             "\tvalue = 0",
             "\tif = {",
@@ -287,7 +288,8 @@ def render_control_values() -> list[str]:
     out += ["\t}", "\telse = {"]
     for _, k in places():
         out += [f"\t\tif = {{ limit = {{ has_variable = sr_eb_at_{k} }} add = var:sr_eb_at_{k} }}",
-                f"\t\tif = {{ limit = {{ has_variable = sr_eb_away_{k} }} add = var:sr_eb_away_{k} }}"]
+                f"\t\tif = {{ limit = {{ has_variable = sr_eb_away_{k} }} add = var:sr_eb_away_{k} }}",
+                f"\t\tif = {{ limit = {{ has_variable = sr_eb_switch_cut_{k} }} subtract = var:sr_eb_switch_cut_{k} }}"]
     out += ["\t}", "}",
             "# scope:site's target, the same way, and its room while we hold it.",
             "sr_eb_scope_target = {",
@@ -305,6 +307,7 @@ def render_control_values() -> list[str]:
                 f"\t\t\tlimit = {{ scope:site = {i} }}",
                 f"\t\t\tif = {{ limit = {{ has_variable = sr_eb_at_{k} }} add = var:sr_eb_at_{k} }}",
                 f"\t\t\tif = {{ limit = {{ has_variable = sr_eb_away_{k} }} add = var:sr_eb_away_{k} }}",
+                f"\t\t\tif = {{ limit = {{ has_variable = sr_eb_switch_cut_{k} }} subtract = var:sr_eb_switch_cut_{k} }}",
                 "\t\t}"]
     out += ["\t}", "}", "sr_eb_scope_room = {", "\tvalue = 0"]
     out += [f"\t{'if' if i == 0 else 'else_if'} = {{ limit = {{ scope:site = {i} }} value = sr_eb_held_room_{k} }}"
@@ -751,15 +754,24 @@ def render_move_pass(effect: str, fam: str, *, paced: bool, record: bool) -> lis
             "\tif = {",
             f"\t\tlimit = {{ {lv(ok)} = 1 }}",
             f"\t\t{_setl(n, f'{{ value = {lv(srcn)} max = {lv(dstn)}{cap} }}')}"]
-    out += _ind(_dispatch(src, lambda k: [_chg(at(fam, k), "subtract", lv(n))]), 2)
-    out += _ind(_dispatch(dst, lambda k: [_chg(at(fam, k), "add", lv(n))]), 2)
+    st, dt = f"{fam}_st", f"{fam}_dt"
+
+    def typed(local: str):
+        return (lambda k: [_setl(local, str(eg.TYPES.index(eg.GROUND[k])))]) if record else (lambda k: [])
+
+    out += _ind(_dispatch(src, lambda k: [_chg(at(fam, k), "subtract", lv(n)), *typed(st)(k)]), 2)
+    out += _ind(_dispatch(dst, lambda k: [_chg(at(fam, k), "add", lv(n)), *typed(dt)(k)]), 2)
     if paced:
         out.append(f"\t\t{_chg(fam + '_left', 'subtract', lv(n))}")
     if record:
         mfrom, mto, mn = f"{fam}_mfrom", f"{fam}_mto", f"{fam}_mn"
-        out += ["\t\t# The month's move (§ 9.1, § 9.4): its first pair, and the levels it carried",
-                f"\t\tif = {{ limit = {{ {lv(mfrom)} < 0 }} {_setl(mfrom, lv(src))} {_setl(mto, lv(dst))} }}",
-                f"\t\tif = {{ limit = {{ {lv(mfrom)} = {lv(src)} {lv(mto)} = {lv(dst)} }} {_chg(mn, 'add', lv(n))} }}"]
+        mft, mtt, mtn = f"{fam}_mft", f"{fam}_mtt", f"{fam}_mtn"
+        out += ["\t\t# The month's move (§ 9.1, § 9.4): its first pair, and the levels it carried; and its",
+                "\t\t# first pair's types, and the levels every pass between them carried (the notice's)",
+                f"\t\tif = {{ limit = {{ {lv(mfrom)} < 0 }} {_setl(mfrom, lv(src))} {_setl(mto, lv(dst))} "
+                f"{_setl(mft, lv(st))} {_setl(mtt, lv(dt))} }}",
+                f"\t\tif = {{ limit = {{ {lv(mfrom)} = {lv(src)} {lv(mto)} = {lv(dst)} }} {_chg(mn, 'add', lv(n))} }}",
+                f"\t\tif = {{ limit = {{ {lv(mft)} = {lv(st)} {lv(mtt)} = {lv(dt)} }} {_chg(mtn, 'add', lv(n))} }}"]
     out += ["\t}",
             f"\telse = {{ {_setl(fam + '_go', '0')} }}",
             "}"]
@@ -776,7 +788,8 @@ def render_move_loop(effect: str, fam: str, pass_effect: str, *, ceiling: int, p
         out.append(f"\t{_setl(left, lv(INPUTS + '_pace'))}")
     out += [f"\t{_setl(passes, '0')}", f"\t{_setl(go, '1')}"]
     if record:
-        out += [f"\t{_setl(fam + '_mfrom', '-1')}", f"\t{_setl(fam + '_mto', '-1')}", f"\t{_setl(fam + '_mn', '0')}"]
+        out += [f"\t{_setl(fam + '_mfrom', '-1')}", f"\t{_setl(fam + '_mto', '-1')}", f"\t{_setl(fam + '_mn', '0')}",
+                f"\t{_setl(fam + '_mft', '-1')}", f"\t{_setl(fam + '_mtt', '-1')}", f"\t{_setl(fam + '_mtn', '0')}"]
     out += ["\twhile = {",
             f"\t\tlimit = {{ {lv(go)} = 1{f' {lv(left)} > 0' if paced else ''} {lv(passes)} < {ceiling} }}",
             f"\t\t{_chg(passes, 'add', '1')}",
@@ -816,8 +829,10 @@ def render_record_move(effect: str = "sr_eb_record_move", fam: str = MONTH) -> l
            "# levels it has carried (sr_eb_move_carried, for the notice's 5%); the last move's",
            "# (sr_eb_last_from, _to, _began, _ended: its first and last months). A month's move is",
            "# its first pass's pair; while the pair holds it adds the levels that pair carried;",
-           "# another pair starts a new move; a month with none ends it.",
-           "# Only the paced moves count (not new levels, displacement or return).",
+           "# another pair starts a new move; a month with none ends it, and so does switching the",
+           "# checkbox either way (sr_eb_checkbox_off, _on), so a record is all the checkbox's or all",
+           "# the player's. Only the paced moves count (not new levels, displacement or return). The",
+           "# notice's 5% counts by pair of types instead (sr_eb_type_move_carried, below).",
            "sr_eb_end_move = {"]
     out += end
     out += ["}",
@@ -842,6 +857,28 @@ def render_record_move(effect: str = "sr_eb_record_move", fam: str = MONTH) -> l
             f"\t\tset_variable = {{ name = sr_eb_move_carried value = {lv(mn)} }}",
             "\t}",
             "\telse = { sr_eb_end_move = yes }",
+            "\t# The notice's count by pair of ground types (§ 9.4, ebase_ground.type_move): the levels the",
+            "\t# checkbox has carried between the types of its moves' first pair, whichever sites; a month",
+            "\t# whose first pair is another pair of types starts it again; a month with no move, or the",
+            "\t# checkbox off, leaves it. sr_eb_type_move_ft and _tt are the types' indices in TYPES.",
+            "\tif = {",
+            f"\t\tlimit = {{ {lv(mfrom)} >= 0 NOT = {{ has_variable = sr_eb_manual }} }}",
+            "\t\tif = {",
+            "\t\t\tlimit = {",
+            "\t\t\t\thas_variable = sr_eb_type_move_ft",
+            "\t\t\t\thas_variable = sr_eb_type_move_tt",
+            "\t\t\t\thas_variable = sr_eb_type_move_carried",
+            f"\t\t\t\tvar:sr_eb_type_move_ft = {lv(fam + '_mft')}",
+            f"\t\t\t\tvar:sr_eb_type_move_tt = {lv(fam + '_mtt')}",
+            "\t\t\t}",
+            f"\t\t\tchange_variable = {{ name = sr_eb_type_move_carried add = {lv(fam + '_mtn')} }}",
+            "\t\t}",
+            "\t\telse = {",
+            f"\t\t\tset_variable = {{ name = sr_eb_type_move_ft value = {lv(fam + '_mft')} }}",
+            f"\t\t\tset_variable = {{ name = sr_eb_type_move_tt value = {lv(fam + '_mtt')} }}",
+            f"\t\t\tset_variable = {{ name = sr_eb_type_move_carried value = {lv(fam + '_mtn')} }}",
+            "\t\t}",
+            "\t}",
             "}"]
     return out
 
@@ -873,6 +910,9 @@ def render_month() -> list[str]:
             f"\t{_setl(MONTH + '_mfrom', '-1')}",
             f"\t{_setl(MONTH + '_mto', '-1')}",
             f"\t{_setl(MONTH + '_mn', '0')}",
+            f"\t{_setl(MONTH + '_mft', '-1')}",
+            f"\t{_setl(MONTH + '_mtt', '-1')}",
+            f"\t{_setl(MONTH + '_mtn', '0')}",
             "\tif = {",
             "\t\tlimit = {",
             "\t\t\thas_variable = sr_eb_placed",
@@ -900,13 +940,22 @@ def render_forecast(effect: str = "sr_eb_forecast", fam: str = FORECAST) -> list
     run from where the levels are to where it stops, with no pace, on a copy of the
     country's counts (<fam>_at_<k>, <fam>_over). Needs the inputs (sr_eb_read_inputs) and
     the targets (sr_ebr_tg_<k>, from sr_eb_load or render_load(records=True)) already in
-    locals; reads and writes no country variable."""
+    locals; writes one country variable, sr_eb_move_due (docs review finding 5)."""
     out = ["# § 9.1's second row (ebase_ground.forecast): the rule in force run to where it stops,",
            f"# with no pace, on a copy of our counts ({fam}_at_<k>). After sr_eb_read_inputs and the",
-           "# targets' load; writes no variable.",
+           "# targets' load; writes only var:sr_eb_move_due.",
            f"{effect} = {{"]
     out += _ind(_load_lines(fam, records=False), 1)
-    out += [f"\t{effect}_moves = yes", "}"]
+    out += [f"\t{effect}_moves = yes",
+            "\t# With the checkbox on, whether its first pass found a move (ebase_ground.move_due; a pass",
+            "\t# that finds none ends the loop): while no move is under way, the Bases view says the",
+            "\t# levels start moving next month.",
+            "\tif = {",
+            f"\t\tlimit = {{ NOT = {{ has_variable = sr_eb_manual }} {lv(fam + '_pass')} > 1 }}",
+            "\t\tset_variable = { name = sr_eb_move_due value = yes }",
+            "\t}",
+            "\telse_if = { limit = { has_variable = sr_eb_move_due } remove_variable = sr_eb_move_due }",
+            "}"]
     out += render_move_loop(f"{effect}_moves", fam, f"{effect}_pass", ceiling=FORECAST_PASSES, paced=False,
                             record=False, log=False)
     out += render_move_pass(f"{effect}_pass", fam, paced=False, record=False)
@@ -1134,57 +1183,132 @@ def render_after_click() -> list[str]:
             "}"]
 
 
+def render_switch_cuts() -> list[str]:
+    """What switching the checkbox off takes off each place's levels (ebase_ground.switch_cuts,
+    the final review's S1), as country variables sr_eb_switch_cut_<k>, set only where above 0."""
+    need, src, srcp, tk, passes = (f"{ASSIGN}_need", f"{ASSIGN}_tsrc", f"{ASSIGN}_tsrcp", f"{ASSIGN}_tk",
+                                   f"{ASSIGN}_tpass")
+
+    def left(k: str) -> str:
+        return f"{ASSIGN}_left_{k}"
+
+    def cut(k: str) -> str:
+        return f"{ASSIGN}_cut_{k}"
+
+    def prof(k: str) -> str:
+        return f"{ASSIGN}_p_{k}"
+
+    out = ["# What switching Assign for the most profit off takes off each place's levels, so that each",
+           "# target is what the place will hold once every blockade has returned (ebase_ground.switch_cuts):",
+           "# a blockaded site is owed its away; the return takes those levels from the levels past the",
+           "# room first and then along the checkbox's take order, the worst stored profit a level first",
+           "# (var:sr_eb_level_profit_<k>), ties to the higher index, so max(0, sum(away) - over) comes off",
+           "# the places owed nothing, never below 0. Into var:sr_eb_switch_cut_<k>, set only above 0: from",
+           "# the refresh (players) and sr_eb_checkbox_off; sr_eb_assigned and sr_eb_scope_target read them",
+           "# while the checkbox is on. Its own locals: it runs beside the month's.",
+           "sr_eb_switch_cuts = {",
+           f"\t{_setl(need, '0')}"]
+    for _, k in places():
+        out.append(f"\tif = {{ limit = {{ has_variable = sr_eb_away_{k} }} {_chg(need, 'add', f'var:sr_eb_away_{k}')} }}")
+    out.append(f"\tif = {{ limit = {{ has_variable = sr_eb_over }} {_chg(need, 'subtract', 'var:sr_eb_over')} }}")
+    for _, k in places():
+        out += [f"\t{_setl(cut(k), '0')}",
+                f"\t{_setl(left(k), '0')}",
+                f"\tif = {{ limit = {{ has_variable = sr_eb_at_{k} NOT = {{ has_variable = sr_eb_away_{k} }} }} "
+                f"{_setl(left(k), f'var:sr_eb_at_{k}')} }}",
+                f"\t{_setl(prof(k), '0')}",
+                f"\tif = {{ limit = {{ has_variable = sr_eb_level_profit_{k} }} "
+                f"{_setl(prof(k), f'var:sr_eb_level_profit_{k}')} }}"]
+    out += [f"\t{_setl(passes, '0')}",
+            "\twhile = {",
+            f"\t\tlimit = {{ {lv(need)} > 0 {lv(passes)} < {SELECT_PASSES} }}",
+            f"\t\t{_chg(passes, 'add', '1')}",
+            f"\t\t{_setl(src, '-1')}", f"\t\t{_setl(srcp, str(BIG))}"]
+    for i, k in places():
+        out.append(f"\t\tif = {{ limit = {{ {lv(left(k))} > 0 {lv(prof(k))} <= {lv(srcp)} }} "
+                   f"{_setl(src, str(i))} {_setl(srcp, lv(prof(k)))} }}")
+    out += [f"\t\tif = {{ limit = {{ {lv(src)} < 0 }} {_setl(need, '0')} }}",
+            "\t\telse = {"]
+    out += _ind(_dispatch(src, lambda k: [_setl(tk, f"{{ value = {lv(left(k))} max = {lv(need)} }}"),
+                                         _chg(left(k), "subtract", lv(tk)), _chg(cut(k), "add", lv(tk))]), 3)
+    out += [f"\t\t\t{_chg(need, 'subtract', lv(tk))}", "\t\t}", "\t}"]
+    for _, k in places():
+        var = f"sr_eb_switch_cut_{k}"
+        out += [f"\tif = {{ limit = {{ {lv(cut(k))} > 0 }} set_variable = {{ name = {var} value = {lv(cut(k))} }} }}",
+                f"\telse_if = {{ limit = {{ has_variable = {var} }} remove_variable = {var} }}"]
+    out.append("}")
+    return out
+
+
 def render_checkbox() -> list[str]:
-    """§ 8.4 (ebase_ground.set_checkbox): off sets every target to the place's at + away and
-    sets sr_eb_manual; on drops the targets and clears it. Neither moves a level."""
+    """§ 8.4 (ebase_ground.set_checkbox): off sets every target to the levels the place will
+    hold once every blockade has returned (at + away - the switch cut) and sets sr_eb_manual;
+    on drops the targets and clears it. Either way the running move ends. Neither moves a
+    level."""
     n = f"{ASSIGN}_n"
     out = ["# Switching Assign for the most profit off (§ 8.4, ebase_ground.set_checkbox): each place's",
-           "# target becomes its levels and those it is owed (a blockaded site's levels, back, meet",
-           "# their own target), so nothing moves until the player changes one. Only the two scripted",
-           "# GUIs call it: the AI never sets sr_eb_manual. Moves no level.",
+           "# target becomes the levels it will hold once every blockade has returned, its levels and",
+           "# those it is owed less what the return will take back from it (sr_eb_switch_cuts), so",
+           "# nothing moves until the player changes one, and the targets sum to the built levels at",
+           "# most. The running move ends: its record is the checkbox's, and the next is the player's.",
+           "# Only the two scripted GUIs call it: the AI never sets sr_eb_manual. Moves no level.",
            "sr_eb_checkbox_off = {",
            "\tif = {",
-           "\t\tlimit = { NOT = { has_variable = sr_eb_manual } }"]
+           "\t\tlimit = { NOT = { has_variable = sr_eb_manual } }",
+           "\t\tsr_eb_switch_cuts = yes",
+           "\t\tsr_eb_end_move = yes"]
     for _, k in places():
         out += [f"\t\t{_setl(n, '0')}",
                 f"\t\tif = {{ limit = {{ has_variable = sr_eb_at_{k} }} {_chg(n, 'add', f'var:sr_eb_at_{k}')} }}",
                 f"\t\tif = {{ limit = {{ has_variable = sr_eb_away_{k} }} {_chg(n, 'add', f'var:sr_eb_away_{k}')} }}",
+                f"\t\tif = {{ limit = {{ has_variable = sr_eb_switch_cut_{k} }} "
+                f"{_chg(n, 'subtract', f'var:sr_eb_switch_cut_{k}')} }}",
                 f"\t\tif = {{ limit = {{ {lv(n)} > 0 }} set_variable = {{ name = sr_eb_target_{k} value = {lv(n)} }} }}",
                 f"\t\telse_if = {{ limit = {{ has_variable = sr_eb_target_{k} }} remove_variable = sr_eb_target_{k} }}"]
     out += ["\t\tset_variable = { name = sr_eb_manual value = yes }",
             "\t}",
             "}",
-            "# Switching it back on: the targets are dropped, and the checkbox's moves start from where",
-            "# the levels are, at the same pace.",
-            "sr_eb_checkbox_on = {"]
-    out += [f"\tif = {{ limit = {{ has_variable = sr_eb_target_{k} }} remove_variable = sr_eb_target_{k} }}"
+            "# Switching it back on: the targets are dropped, the running move (the player's) ends, and",
+            "# the checkbox's moves start from where the levels are, at the same pace. Also the refresh's,",
+            "# for a country the AI now runs.",
+            "sr_eb_checkbox_on = {",
+            "\tif = {",
+            "\t\tlimit = { has_variable = sr_eb_manual }",
+            "\t\tsr_eb_end_move = yes"]
+    out += [f"\t\tif = {{ limit = {{ has_variable = sr_eb_target_{k} }} remove_variable = sr_eb_target_{k} }}"
             for _, k in places()]
-    out += ["\tif = { limit = { has_variable = sr_eb_manual } remove_variable = sr_eb_manual }", "}"]
+    out += ["\t\tremove_variable = sr_eb_manual", "\t}", "}"]
     return out
 
 
 def render_assign() -> list[str]:
     """§ 8.4's - and + (ebase_ground.assign): scope:site's target by scope:op (1 +5, 2 -5,
-    3 +25, 4 -25), the checkbox switched off first. Minus stops at 0; plus at the place's
-    room while we hold it and at the unassigned levels (built and queued less the targets)."""
-    step, free, tgt, add = f"{ASSIGN}_step", f"{ASSIGN}_free", f"{ASSIGN}_tg", f"{ASSIGN}_add"
+    3 +25, 4 -25). The new target is worked out first, from the target the place has or
+    (checkbox on) would have; only if it differs is the checkbox switched off and the
+    target set (the final review's S3: a click on a greyed button changes nothing). Minus
+    stops at 0; plus at the place's room while we hold it and at the unassigned levels
+    (built and queued less the targets)."""
+    step, free, tgt, old, add = (f"{ASSIGN}_step", f"{ASSIGN}_free", f"{ASSIGN}_tg", f"{ASSIGN}_old",
+                                 f"{ASSIGN}_add")
     small, large = eg.STEPS
     out = ["# § 8.4's - and + (ebase_ground.assign), from sr_ebase_assign_sgui: scope:site is the place's",
-           f"# index, scope:op 1 = +{small}, 2 = -{small}, 3 = +{large}, 4 = -{large}. A click with the checkbox on",
-           "# switches it off first, keeping where the levels are as the targets. Minus stops at 0;",
-           "# plus at the place's room while we hold it, and at the unassigned levels (built and",
-           "# queued, sr_ebase_queued_levels, less the targets). Moves no level.",
+           f"# index, scope:op 1 = +{small}, 2 = -{small}, 3 = +{large}, 4 = -{large}. The new target first, from",
+           "# sr_eb_scope_target (with the checkbox on, what switching it off would set, from switch cuts",
+           "# worked out afresh); only a click that changes it switches the checkbox off (keeping where",
+           "# the levels will be as the targets) and sets it. Minus stops at 0; plus at the place's room",
+           "# while we hold it, and at the unassigned levels (built and queued, sr_ebase_queued_levels,",
+           "# less the targets). Moves no level.",
            "sr_eb_assign = {",
-           "\tsr_eb_checkbox_off = yes",
+           "\tif = { limit = { NOT = { has_variable = sr_eb_manual } } sr_eb_switch_cuts = yes }",
            f"\t{_setl(step, str(small))}",
            f"\tif = {{ limit = {{ OR = {{ scope:op = 3 scope:op = 4 }} }} {_setl(step, str(large))} }}",
-           f"\t{_setl(free, '{ value = sr_ebase_queued_levels subtract = sr_eb_assigned }')}"]
+           f"\t{_setl(free, '{ value = sr_ebase_queued_levels subtract = sr_eb_assigned }')}",
+           f"\t{_setl(tgt, 'sr_eb_scope_target')}",
+           f"\t{_setl(old, lv(tgt))}"]
 
     def body(k: str) -> list[str]:
         var = f"sr_eb_target_{k}"
-        return [_setl(tgt, "0"),
-                f"if = {{ limit = {{ has_variable = {var} }} {_setl(tgt, f'var:{var}')} }}",
-                "if = {",
+        return ["if = {",
                 "\tlimit = { OR = { scope:op = 2 scope:op = 4 } }",
                 f"\t{_setl(tgt, f'{{ value = {lv(tgt)} subtract = {lv(step)} min = 0 }}')}",
                 "}",
@@ -1193,8 +1317,12 @@ def render_assign() -> list[str]:
                 f"\t{_setl(add, f'{{ value = sr_eb_held_room_{k} subtract = {lv(tgt)} max = {lv(add)} min = 0 }}')}",
                 f"\t{_chg(tgt, 'add', lv(add))}",
                 "}",
-                f"if = {{ limit = {{ {lv(tgt)} > 0 }} set_variable = {{ name = {var} value = {lv(tgt)} }} }}",
-                f"else_if = {{ limit = {{ has_variable = {var} }} remove_variable = {var} }}"]
+                "if = {",
+                f"\tlimit = {{ NOT = {{ {lv(tgt)} = {lv(old)} }} }}",
+                "\tsr_eb_checkbox_off = yes",
+                f"\tif = {{ limit = {{ {lv(tgt)} > 0 }} set_variable = {{ name = {var} value = {lv(tgt)} }} }}",
+                f"\telse_if = {{ limit = {{ has_variable = {var} }} remove_variable = {var} }}",
+                "}"]
 
     for i, k in places():
         out += [f"\t{'if' if i == 0 else 'else_if'} = {{", f"\t\tlimit = {{ scope:site = {i} }}"]
@@ -1212,7 +1340,8 @@ def render_notice(effect: str = "sr_eb_move_notice") -> list[str]:
                                                f"{q}_gap", f"{q}_best", f"{q}_good")
     out = ["# § 9.4, the move notice (ebase_ground.notice_due), from the refresh after the month:",
            "# when Assign for the most profit is moving levels toward a different ground type, once the",
-           f"# move has carried {num(eg.NOTICE_SHARE)} of our levels (sr_eb_notice_threshold), for a pair of types",
+           f"# checkbox has carried {num(eg.NOTICE_SHARE)} of our levels between the move's two types, whichever",
+           "# sites (sr_eb_type_move_carried, sr_eb_notice_threshold), for a pair of types",
            f"# other than the last notice's, and at least {eg.NOTICE_GAP_MONTHS} months after it. Players only; never for",
            "# the player's own moves (the checkbox off). It names the good whose value a level gains",
            "# most from the source to the destination at today's prices (ebase_ground.notice_good).",
@@ -1226,8 +1355,10 @@ def render_notice(effect: str = "sr_eb_move_notice") -> list[str]:
            "\t\t\tNOT = { has_variable = sr_eb_manual }",
            "\t\t\thas_variable = sr_eb_move_from",
            "\t\t\thas_variable = sr_eb_move_to",
-           "\t\t\thas_variable = sr_eb_move_carried",
-           "\t\t\tvar:sr_eb_move_carried >= sr_eb_notice_threshold",
+           "\t\t\thas_variable = sr_eb_type_move_ft",
+           "\t\t\thas_variable = sr_eb_type_move_tt",
+           "\t\t\thas_variable = sr_eb_type_move_carried",
+           "\t\t\tvar:sr_eb_type_move_carried >= sr_eb_notice_threshold",
            "\t\t\tOR = {",
            "\t\t\t\tNOT = { has_variable = sr_eb_notice_next }",
            "\t\t\t\tte_history_month_index >= var:sr_eb_notice_next",
@@ -1256,7 +1387,8 @@ def render_notice(effect: str = "sr_eb_move_notice") -> list[str]:
             f"\t\t\t{_setl(same, '1')}",
             "\t\t}",
             "\t\tif = {",
-            f"\t\t\tlimit = {{ {lv(same)} = 0 NOT = {{ {lv(ft)} = {lv(tt)} }} }}",
+            f"\t\t\tlimit = {{ {lv(same)} = 0 NOT = {{ {lv(ft)} = {lv(tt)} }} "
+            f"var:sr_eb_type_move_ft = {lv(ft)} var:sr_eb_type_move_tt = {lv(tt)} }}",
             "\t\t\t# The good whose value a level gains most, at today's prices (ties to the first)",
             f"\t\t\t{_setl(best, str(-BIG))}",
             f"\t\t\t{_setl(good, '0')}"]
@@ -1386,6 +1518,7 @@ def render_effects() -> str:
     out += render_forecast() + [""]
     out += render_totals() + [""]
     out += render_after_click() + [""]
+    out += render_switch_cuts() + [""]
     out += render_checkbox() + [""]
     out += render_assign() + [""]
     out += render_notice()

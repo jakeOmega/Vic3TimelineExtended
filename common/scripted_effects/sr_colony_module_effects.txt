@@ -465,16 +465,28 @@ sr_ebase_refresh = {
 			has_technology_researched = in_situ_resource_utilization
 		}
 		set_variable = { name = sr_ebase_room value = sr_ebase_room_total }
+		# A country the AI now runs (its player left): the checkbox back on. The AI
+		# never switches it off, so a player's assignments would hold for good.
+		if = {
+			limit = {
+				is_ai = yes
+				has_variable = sr_eb_manual
+			}
+			sr_eb_checkbox_on = yes
+		}
 		sr_eb_count_methods = yes
 		# Where the levels work (§ 8.2's steps 1 to 5).
 		sr_eb_month = yes
 		# The Bases view's totals and the move notice (§ 9.1, § 9.4), players only: the
-		# forecast runs from this month's result while the month's locals are set.
+		# forecast runs from this month's result while the month's locals are set. Then
+		# what switching the checkbox off would take off each place (the buttons read
+		# it while the checkbox is on).
 		if = {
 			limit = { is_ai = no }
 			sr_eb_forecast = yes
 			sr_eb_totals = yes
 			sr_eb_move_notice = yes
+			sr_eb_switch_cuts = yes
 		}
 		sr_eb_compute_mix = yes
 		if = {

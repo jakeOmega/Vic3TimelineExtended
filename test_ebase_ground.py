@@ -484,11 +484,41 @@ class Month(unittest.TestCase):
         self.assertEqual(eg.mix_now(eg.BaseState()), (0.0, {g: 0.0 for g in eg.GOODS}))
 
     def test_switching_off_keeps_where_the_levels_are(self):
-        s = eg.set_checkbox(_state({"psyche": 100, "ceres": 20}, away={"io": 30}), on=False)
+        """Each target is what the place will hold once every blockade has returned (the
+        final review's S1): a blockaded site its at + away; the levels it is owed, less the
+        levels past the room, off the others, worst stored profit first."""
+        profit = {"psyche": 9000, "ceres": 8000}
+        s = eg.set_checkbox(_state({"psyche": 100, "ceres": 20}), on=False, profit=profit)
         self.assertTrue(s.manual)
-        self.assertEqual(s.target, {"psyche": 100, "ceres": 20, "io": 30})
+        self.assertEqual(s.target, {"psyche": 100, "ceres": 20})
+        s = eg.set_checkbox(_state({"psyche": 100, "ceres": 20}, away={"io": 30}), on=False, profit=profit)
+        self.assertEqual(s.target, {"psyche": 90, "io": 30})
+        self.assertEqual(eg.switch_cuts(_state({"psyche": 100, "ceres": 20}, away={"io": 30}), profit),
+                         {"ceres": 20, "psyche": 10})
+        s = eg.set_checkbox(_state({"psyche": 100, "ceres": 20}, away={"io": 30}, over=10), on=False, profit=profit)
+        self.assertEqual(s.target, {"psyche": 100, "io": 30})
+        self.assertEqual(sum(s.target.values()), s.levels)
+        # Ties go to the higher index first, as the checkbox's own take order does.
+        self.assertEqual(eg.switch_cuts(_state({"psyche": 100, "ceres": 20}, away={"io": 30})), {"psyche": 30})
         s = eg.set_checkbox(s, on=True)
         self.assertEqual((s.manual, s.target), (False, {}))
+
+    def test_a_click_that_changes_nothing(self):
+        """The final review's S3: − at a site assigned nothing, with the checkbox on, leaves
+        the checkbox on."""
+        s = _state({"psyche": 150})
+        self.assertEqual(eg.assign(s, "ceres", -5, room=TWO_SITES, built=150, queued=0), s)
+        self.assertEqual(eg.assign(s, "ceres", 25, room=TWO_SITES, built=150, queued=0), s)
+
+    def test_the_notice_counts_by_pair_of_types(self):
+        moves = (("europa", "ceres", 3), ("io", "ceres", 2), ("psyche", "vesta", 4))
+        self.assertEqual(eg.type_move(None, 0, moves, False), (("sulfurous", "carbonaceous"), 5))
+        self.assertEqual(eg.type_move(("sulfurous", "carbonaceous"), 5, (("io", "ceres", 5),), False),
+                         (("sulfurous", "carbonaceous"), 10))
+        self.assertEqual(eg.type_move(("sulfurous", "carbonaceous"), 10, (("ceres", "io", 5),), False),
+                         (("carbonaceous", "sulfurous"), 5))
+        self.assertEqual(eg.type_move(("sulfurous", "carbonaceous"), 10, (), False), (("sulfurous", "carbonaceous"), 10))
+        self.assertEqual(eg.type_move(None, 0, moves, True), (None, 0))
 
     def test_the_buttons(self):
         room = TWO_SITES

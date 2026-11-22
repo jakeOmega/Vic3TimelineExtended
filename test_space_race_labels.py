@@ -377,7 +377,8 @@ BOUNDED_WORDS = {"je_space_race_widget_ovc_ebase_word_split": _ebase_split_bound
 # cell are measured against each.
 MULTILINE = (r"je_space_race_widget_(how_\w+|profile_\w+|colonies_(?:brief_)?empty|solar_system_note"
              r"|powers_(?:more|pending|none)|free_empty|sc_blockaded_note|sc_site_lost_note|space_fleets_empty|space_fleets_no_sc"
-             r"|howc_(?!sub_)\w+|win_none|win_beyond|tp_intro|tp_none|tp_gone|xf_intro|xf_gone|dp_why_\w+|dp_gone|ft_intro)")
+             r"|howc_(?!sub_)\w+|win_none|win_beyond|tp_intro|tp_none|tp_gone|xf_intro|xf_gone|dp_why_\w+|dp_gone|ft_intro"
+             r"|eb_no_gain)")
 CELLS = {
     # (type, marker picking the textbox): patterns of the keys it shows
     "state, risk, first and stage (te_sr_ov_icon_label)": (
@@ -558,7 +559,7 @@ CELLS = {
         r"je_space_race_widget_eb_(now|end)_profit"),
     "a line of the Bases move area (te_sr_eb_move_text)": (
         ("te_sr_eb_move_text", None),
-        r"je_space_race_widget_eb_(toward|toward_months|at_assignments_line|moving|stay|all_lose|no_gain|last|last_one)"),
+        r"je_space_race_widget_eb_(toward|toward_months|at_assignments_line|moving|stay|all_lose|next_month|last|last_one)"),
     "the next fleet's label (te_sr_cf_dest_row)": (
         ("te_sr_cf_dest_row", 'block "dest_label"'),
         r"je_space_race_widget_cf_(target_label|next_label)"),

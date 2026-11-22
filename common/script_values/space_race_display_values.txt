@@ -1441,6 +1441,13 @@ sr_disp_eb_moving = {
 	value = 0
 	if = { limit = { has_variable = sr_eb_move_from } value = 1 }
 }
+# 1 while the checkbox has a move to make that waits for next month's turn
+# (the forecast's sr_eb_move_due): the move area says so in place of why
+# nothing moves.
+sr_disp_eb_due = {
+	value = 0
+	if = { limit = { has_variable = sr_eb_move_due } value = 1 }
+}
 sr_disp_eb_last = {
 	value = 0
 	if = { limit = { has_variable = sr_eb_last_from } value = 1 }

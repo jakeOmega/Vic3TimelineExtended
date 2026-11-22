@@ -4712,7 +4712,18 @@ types space_race_widget_types
 							text = "je_space_race_widget_eb_all_lose"
 						}
 						te_sr_eb_move_text = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_all_lose'), '(CFixedPoint)0' )]"
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_due'), '(CFixedPoint)1' )]"
+							text = "je_space_race_widget_eb_next_month"
+						}
+						### Why nothing moves: it names what the best site with
+						### room is measured against, so it wraps to a second line.
+						textbox = {
+							visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_all_lose'), '(CFixedPoint)0' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_due'), '(CFixedPoint)0' ) )]"
+							autoresize = yes
+							multiline = yes
+							maximumsize = { 472 -1 }
+							align = left|nobaseline
+							using = te_sr_fontsize_row
 							text = "je_space_race_widget_eb_no_gain"
 						}
 					}
