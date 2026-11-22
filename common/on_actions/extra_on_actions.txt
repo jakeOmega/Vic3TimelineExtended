@@ -311,6 +311,7 @@ decol_leave_overlord_plays_on_action = {
 
 on_monthly_pulse_state = {
 	on_actions = {
+		sr_resort_state_on_action
 		te_homeland_monthly
 		space_elevator_on_action
 		solar_collector_on_action
@@ -1990,6 +1991,18 @@ te_free_elections_country_pulse = {
 tourism_on_action = {
 	effect = {
 		te_update_tourism_modifier = yes
+	}
+}
+
+# The Resort Colony free of its state (#1953): its one refresh site, sr_resort_state_refresh
+# (sr_colony_module_effects.txt), which takes the state's share of its Tourism and Fine Art
+# output multipliers back off the building. State scope, as tourism_on_action is: the share is
+# the state's read less its owner's. First in the monthly state list, so it reads the state's
+# sums as they stood before this pulse's refreshes (tourism_on_action, pollution_on_action)
+# change them; the cancel is at most a month behind the state either way.
+sr_resort_state_on_action = {
+	effect = {
+		sr_resort_state_refresh = yes
 	}
 }
 

@@ -1171,3 +1171,26 @@ it. No self-check: the fill, the refresh and the building's throughput type are 
    Resort Room tile and in the overview.
 4. **An old save.** A base still on the Resort Colony method (if a pre-#1948 save is at hand): note which method the
    engine gives it, and that the log names nothing about the missing method.
+
+## The Resort Colony free of its state (#1953, 2026-11-22)
+
+`sr_resort_state_refresh`, on each state's monthly pulse, takes the state's share of a Resort Colony's Tourism and Fine
+Art output multipliers (the state's read less its owner's) back off the building as Off-World Hotels. Scope:
+`docs/superpowers/specs/2026-11-22-colony-people-and-off-world-tourism-scope.md` § 2.
+
+| Line in `debug.log` | When | OK means | BROKEN means | Fallback |
+|---|---|---|---|---|
+| `TE_SELF_CHECK OK/BROKEN resort_state building=… state=… country=… share=… own=…` | once a game, at the monthly refresh of the first state whose last cancel was 40% or more either way, whose owner's own Tourism line is 30% or more either way (such as Multicultural with Guaranteed Liberties, or a secret police law), and whose share has moved 5 points or less since; read before the refresh strips the cancel (a month old) | `own`, the building's Tourism read less the state's plus last month's share, is −0.05 to +0.25 (0, or a company's +0.2): the state's read carries the country's lines, the building's read carries the state's, and Off-World Hotels reaches the building at its multiplier | `own` near `share` / 100: the cancel never reached the building. Near `country`: the state's read leaves the country's lines out, so the share double-counts them. Near minus `share` / 100: the building's read leaves the state's lines out, so read the output tooltip by hand (item 1) | the first: apply the pair from `every_scope_building = { limit = { is_building_type = building_space_resort } … }` in place of `b:building_space_resort`, as `sr_eb_apply_mix` does. The second: take the share as the state's read alone. The third: if the building's output tooltip still lists the state's lines, the engine applies them though the read leaves them out, and the cancel works; if it doesn't, the state's lines never reached the resort and the cancel must go |
+
+1. **A big airport.** A Resort Colony in a state with a large Airport on its Airport or Spaceport method, at a world with its
+   room free. The building's Tourism output breakdown lists the state's lines (Tourism Output, the Airport) and one
+   Off-World Hotels line that takes their sum off, within a month of building it, so its Tourism comes to the
+   method's line × throughput × (1 + the country's lines). The Tourism Industry in the same state keeps every line. The
+   building's throughput still lists the Spaceport's +1% a staffed level.
+2. **A polluted state.** A Resort Colony in a heavily polluted state (or one in turmoil) whose Tourism Industry makes
+   no Tourism. The resort's Tourism is at par: the same as an identical Resort Colony in a clean state with no
+   Airport. If it is far above par, the engine clamps the state's sum at −100% before it adds the building's line:
+   cap the bonus at 100 units in `sr_resort_state_good` (scope § 2, "The clamp").
+3. **Studios.** A Resort Colony in the state of a Sony Pictures Studios, Netflix Animation Studios, Nintendo
+   Development Center or Universal Studios Hollywood: its Art and Entertainment breakdown shows the studio's line and
+   an Off-World Hotels line that cancels it.

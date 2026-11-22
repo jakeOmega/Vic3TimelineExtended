@@ -600,6 +600,181 @@ sr_resort_hook_fire = {
 	}
 }
 
+# ---- The Resort Colony free of its state (#1953) -----------------------------------------
+# State scope, ROOT the state, from sr_resort_state_on_action on the state's monthly
+# pulse: the one refresh site of the four Resorts Off-World modifiers. The hotels and
+# their guests are off-world, so the Earth state a Resort Colony is booked in mustn't
+# move its output (owner, 2026-11-22; the scope
+# docs/superpowers/specs/2026-11-22-colony-people-and-off-world-tourism-scope.md § 2).
+# The Tourism Industry keeps every state bonus. For Tourism and Fine Art, the state's
+# share of the good's output multiplier is the state's read less its owner's (a state's
+# read carries its country's lines: scripting_best_practices.md, "A state's
+# modifier:state_* read includes the country's modifiers"): the appeal
+# (tourism_output), the transport methods, monuments, the film studios, pollution,
+# turmoil and obstinance. The building takes it back off with a unit pair at the
+# share's size in percent, and keeps its country's lines (laws, bloc principles,
+# cultural hegemony), its own (a company's) and its throughput (the draw, the
+# Spaceport's +1%). The read is the state's settled sum: a building's lines never
+# reach its state's read, and a line the state gains reaches the resort for at most a
+# month. Whatever the game rule, since the hotels are off-world under Races Only too.
+# A Resort Colony's modifiers go with the building; the state's figures are dropped
+# when it has none.
+sr_resort_state_refresh = {
+	if = {
+		limit = {
+			exists = owner
+			has_building = building_space_resort
+		}
+		# Before anything is stripped: the self-check reads last month's cancel.
+		sr_resort_state_self_check = yes
+		sr_resort_state_good = { GOOD = tourism }
+		sr_resort_state_good = { GOOD = fine_art }
+	}
+	else_if = {
+		limit = { has_variable = sr_resort_state_tourism }
+		remove_variable = sr_resort_state_tourism
+		remove_variable = sr_resort_state_tourism_units
+		remove_variable = sr_resort_state_fine_art
+		remove_variable = sr_resort_state_fine_art_units
+	}
+}
+
+# ROOT the state, in sr_resort_state_refresh: one good's cancel ($GOOD$ tourism or
+# fine_art). var:sr_resort_state_$GOOD$ is the state's share in percent, signed;
+# _units its size. A share above 0 (the state lifts the good) takes the penalty at
+# its size, one below 0 (the state holds it down) the bonus. Removed first: a
+# same-name add stacks.
+sr_resort_state_good = {
+	set_variable = {
+		name = sr_resort_state_$GOOD$
+		value = {
+			value = modifier:goods_output_$GOOD$_mult
+			subtract = owner.modifier:goods_output_$GOOD$_mult
+			multiply = 100
+		}
+	}
+	set_variable = { name = sr_resort_state_$GOOD$_units value = var:sr_resort_state_$GOOD$ }
+	if = {
+		limit = { var:sr_resort_state_$GOOD$ < 0 }
+		set_variable = {
+			name = sr_resort_state_$GOOD$_units
+			value = {
+				value = var:sr_resort_state_$GOOD$
+				multiply = -1
+			}
+		}
+	}
+	b:building_space_resort = {
+		if = {
+			limit = { has_modifier = sr_resort_state_$GOOD$_bonus }
+			remove_modifier = sr_resort_state_$GOOD$_bonus
+		}
+		if = {
+			limit = { has_modifier = sr_resort_state_$GOOD$_penalty }
+			remove_modifier = sr_resort_state_$GOOD$_penalty
+		}
+		if = {
+			limit = { root.var:sr_resort_state_$GOOD$ > 0 }
+			add_modifier = { name = sr_resort_state_$GOOD$_penalty multiplier = root.var:sr_resort_state_$GOOD$_units }
+		}
+		else_if = {
+			limit = { root.var:sr_resort_state_$GOOD$ < 0 }
+			add_modifier = { name = sr_resort_state_$GOOD$_bonus multiplier = root.var:sr_resort_state_$GOOD$_units }
+		}
+	}
+}
+
+# State scope, in sr_resort_state_refresh before its strip. TE_SELF_CHECK
+# resort_state (#1953): the building's read of its Tourism output multiplier, less
+# the state's read, plus last month's share (which the cancel took off), is the
+# building's own lines: 0, or a company's +0.2 (Axiom Space, if its prosperity
+# reaches the building and not the country). OK from -0.05 to +0.25: the state's
+# read carries its country's lines, the building's read carries its state's, and
+# the cancel reaches the building at its multiplier. Armed only where none of the
+# three failures can land in the band (each is 0.3 or more off):
+# - last month's share was 40% or more either way, on a building that carries its
+#   cancel: a cancel that never arrived, or arrived at multiplier 1, is off by it;
+# - the country's own line is 30% or more either way: were it missing from the
+#   state's read, the share would be the state's lines less the country's, the
+#   resort would take the country's lines twice, and the reading would be off by
+#   the country's line;
+# - the state's share has moved 5 points or less since: were the state's lines
+#   missing from the building's read, the reading would be off by the share now,
+#   still 35% or more.
+# Otherwise it waits a month. The cancel is a month old by then (a modifier sum
+# can lag a day). Once a game. It can't see whether the engine sums before it
+# clamps at -100%: the play-test list's polluted state does.
+sr_resort_state_self_check = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = sr_resort_state_checked }
+			has_variable = sr_resort_state_tourism_units
+			var:sr_resort_state_tourism_units >= 40
+			b:building_space_resort = {
+				OR = {
+					has_modifier = sr_resort_state_tourism_bonus
+					has_modifier = sr_resort_state_tourism_penalty
+				}
+			}
+			owner = {
+				OR = {
+					modifier:goods_output_tourism_mult >= 0.3
+					modifier:goods_output_tourism_mult <= -0.3
+				}
+			}
+		}
+		# The state's share now less last month's, in points.
+		set_local_variable = {
+			name = sr_rsc_drift
+			value = {
+				value = modifier:goods_output_tourism_mult
+				subtract = owner.modifier:goods_output_tourism_mult
+				multiply = 100
+				subtract = var:sr_resort_state_tourism
+			}
+		}
+		if = {
+			limit = {
+				local_var:sr_rsc_drift <= 5
+				local_var:sr_rsc_drift >= -5
+			}
+			set_global_variable = { name = sr_resort_state_checked value = yes }
+			set_variable = { name = sr_rsc_check_state value = modifier:goods_output_tourism_mult }
+			set_variable = { name = sr_rsc_check_country value = owner.modifier:goods_output_tourism_mult }
+			b:building_space_resort = {
+				root = {
+					set_variable = { name = sr_rsc_check_building value = prev.modifier:goods_output_tourism_mult }
+				}
+			}
+			set_variable = {
+				name = sr_rsc_check_own
+				value = {
+					value = var:sr_rsc_check_building
+					subtract = var:sr_rsc_check_state
+					add = {
+						value = var:sr_resort_state_tourism
+						divide = 100
+					}
+				}
+			}
+			if = {
+				limit = {
+					var:sr_rsc_check_own >= -0.05
+					var:sr_rsc_check_own <= 0.25
+				}
+				debug_log = "TE_SELF_CHECK OK resort_state building=[THIS.Var('sr_rsc_check_building').GetValue|3] state=[THIS.Var('sr_rsc_check_state').GetValue|3] country=[THIS.Var('sr_rsc_check_country').GetValue|3] share=[THIS.Var('sr_resort_state_tourism').GetValue|1] own=[THIS.Var('sr_rsc_check_own').GetValue|3] (a Resort Colony's Tourism output multiplier is its country's and its own, the state's share taken off: the state's read carries the country's lines, the building's the state's, and the cancel reaches it) state=[THIS.GetState.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN resort_state building=[THIS.Var('sr_rsc_check_building').GetValue|3] state=[THIS.Var('sr_rsc_check_state').GetValue|3] country=[THIS.Var('sr_rsc_check_country').GetValue|3] share=[THIS.Var('sr_resort_state_tourism').GetValue|1] own=[THIS.Var('sr_rsc_check_own').GetValue|3] (own near share/100: the cancel never reached the building; near country: the state's read leaves the country's lines out; near minus share/100: the building's read leaves the state's lines out; docs/testing/solar-colonies-playtest.md) state=[THIS.GetState.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			remove_variable = sr_rsc_check_state
+			remove_variable = sr_rsc_check_country
+			remove_variable = sr_rsc_check_building
+			remove_variable = sr_rsc_check_own
+		}
+	}
+}
+
 # ---- Self-checks (design § 12) -----------------------------------------------------------
 # Country scope, from sr_mod_month. TE_SELF_CHECK module_fabrication: a Space
 # Program that runs a fabrication method at half staff or more must give its
