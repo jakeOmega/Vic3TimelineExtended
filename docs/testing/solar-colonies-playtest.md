@@ -1214,8 +1214,9 @@ sends them) and `event te_debug_space_race.4` (b fills the stock, c queues one o
    red, and the overview shows a Crews cell, "1 short". With Artificial General Intelligence the same
    colony reads 9/7, not red, and the cell goes.
 2. **The + button's crew line.** At that colony the + button on a facility shows "No crew to spare" in red and
-   still lets us queue; at a fully crewed colony it reads "Needs a crew: this colony's people have one to spare"; on a
-   Habitat the line is absent.
+   still lets us queue; at a fully crewed colony with one crew to spare it reads "Needs a crew: this colony's people
+   have one to spare", and after one more crewed module is queued it reads short; on a Habitat the line is absent.
+   Under Full Colonies the colony's Defenses fire at its staffing: at half strength at 50%.
 3. **The Habitat cap and its price.** At a 2-cap world with two Habitats, the Modules view's Habitats reads 2/2; the
    hover gives the people each holds, its share of the starting room (50% without the technologies, 100% with
    all five) and the next price, 200, then 300 for the one after. Once the next price passes the module stock's cap
@@ -1230,8 +1231,8 @@ sends them) and `event te_debug_space_race.4` (b fills the stock, c queues one o
    the line is off by the throughput, drop the throughput from `sr_emig_bill_divisor`). Step up to 32,000: the
    line grows eightfold. Set settlers Off: the line is gone within two months, also after the entry ends.
 6. **Settlers from several states.** A country of three states, 4 million, 2 million and 100,000 people, at 32,000 a
-   month: over a year the states lose about 256,000, 128,000 and 6,000 (the census's emigrants by state), the small
-   state a batch every few months. Strata: in the largest state, middle and lower pops each fall, spread over the
+   month: "Sent last month" reads 32,000 every month, and over a year the states lose about 256,000, 128,000 and
+   6,000 (the census's emigrants by state), each within 500 of that, the small state a batch every few months. Strata: in the largest state, middle and lower pops each fall, spread over the
    state's pops, not one pop emptied (`kill_population_in_state` by stratum). A country of 1 million at 32,000 a
    month sends 10,000 (the 1% cap).
 7. **An Administration's authority.** Build one at a fully crewed colony: the country's authority breakdown lists

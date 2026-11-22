@@ -90,10 +90,29 @@ class TwinTest(unittest.TestCase):
         self.assertEqual(sum(takes), 40_000)
         self.assertEqual(D.month_batches(400_000, 4_000_000), 80)
 
-    def test_a_state_the_month_runs_out_before_keeps_its_whole_due(self):
+    def test_the_batches_left_go_to_the_largest_remainders(self):
+        """The final review of #1958: with whole batches alone a country of many
+        states sent nothing for months. What the floors leave goes, a batch
+        each, to the largest remainders, whose carries go below 0."""
         takes, carries = D.draw(500, [(1_000_000, 0.0), (1_000_000, 0.0)])
-        self.assertEqual(sorted(takes), [0, 0])
-        self.assertEqual(carries, [250.0, 250.0])
+        self.assertEqual(takes, [500, 0])
+        self.assertEqual(carries, [-250.0, 250.0])
+        takes, carries = D.draw(1_000, [(3_000_000, 0.0), (1_000_000, 0.0), (1_000_000, 0.0)])
+        self.assertEqual(takes, [500, 500, 0])
+        self.assertEqual(carries, [100.0, -300.0, 200.0])
+
+    def test_a_country_of_many_states_sends_the_amount_every_month(self):
+        pops = [1_000_000 + 150_000 * i for i in range(48)]
+        for amount in (500, 4_000):
+            totals, carries, sent = _run(amount, pops, 36)
+            with self.subTest(amount=amount):
+                self.assertEqual(sent, [amount] * 36)
+                self.assertAlmostEqual(sum(carries), 0.0, places=3)
+                people = sum(pops)
+                for pop, total in zip(pops, totals):
+                    self.assertLess(abs(total - 36 * amount * pop / people), D.BATCH)
+
+    def test_a_state_the_month_runs_out_before_keeps_its_whole_due(self):
         takes, carries = D.draw(500, [(1_000_000, 250.0), (1_000_000, 300.0)])
         self.assertEqual(takes, [0, 500])
         self.assertEqual(carries, [500.0, 50.0])
@@ -140,15 +159,29 @@ class ScriptTest(unittest.TestCase):
         self.assertIn("sr_emig_due_value = {", self.values)
 
     def test_the_take_kills_whole_batches_and_keeps_the_rest(self):
-        take = _inner(self.month, "ordered_scope_state = {")
-        loop = _inner(take, "while = {")
+        give = _block(self.effects, "sr_emig_take_batches")
+        loop = _inner(give, "while = {")
         self.assertIn("count = local_var:sr_emig_take", loop)
         self.assertIn("kill_population_in_state = { value = 250 strata = middle }", loop)
         self.assertIn("kill_population_in_state = { value = 250 strata = lower }", loop)
-        self.assertIn("te_demog_sr_note_settlers = yes", take)
-        self.assertIn("name = sr_emig_carry", take)
-        self.assertIn("remove_variable = sr_emig_due", take)
-        self.assertLess(self.month.index("ordered_scope_state = {"), self.month.index("sr_emig_distribute = yes"))
+        self.assertIn("te_demog_sr_note_settlers = yes", give)
+        self.assertIn("change_variable = { name = sr_emig_due subtract = local_var:sr_emig_took_now }", give)
+        # Pass 2, the floors: whole batches, the due kept for pass 3.
+        floors = _inner(self.month, "ordered_scope_state = {")
+        self.assertIn("sr_emig_take_batches = yes", floors)
+        self.assertNotIn("remove_variable = sr_emig_due", floors)
+        # Pass 3, the remainders: a batch each to the largest while batches are left,
+        # then every state keeps what it owes, below 0 too.
+        rest_at = self.month.index("ordered_scope_state = {", self.month.index("ordered_scope_state = {") + 1)
+        rest = _inner(self.month[rest_at:], "ordered_scope_state = {")
+        self.assertIn("order_by = sr_emig_due_value", rest)
+        self.assertIn("sr_emig_due_value > 0", rest)
+        self.assertIn("set_local_variable = { name = sr_emig_take value = 1 }", rest)
+        self.assertIn("sr_emig_take_batches = yes", rest)
+        self.assertIn("NOT = { var:sr_emig_due = 0 }", rest)
+        self.assertIn("name = sr_emig_carry", rest)
+        self.assertIn("remove_variable = sr_emig_due", rest)
+        self.assertLess(rest_at, self.month.index("sr_emig_distribute = yes"))
         # 40 days: the always-on pulse clears the bill once it lapses (Task 8, Review Focus 3).
         self.assertIn("set_variable = { name = sr_emig_last_sent value = local_var:sr_emig_sent days = 40 }", self.month)
 
@@ -164,8 +197,9 @@ class ScriptTest(unittest.TestCase):
         self.assertNotIn("te_dg_rs_in", body)
 
     def test_the_self_check_sums_the_falls(self):
-        take = _inner(self.month, "ordered_scope_state = {")
-        self.assertIn("sr_emig_fell_before", take)
+        give = _block(self.effects, "sr_emig_take_batches")
+        self.assertIn("sr_emig_fell_before", give)
+        self.assertIn("sr_emig_fell_after", give)
         check = _block(self.effects, "sr_emig_self_check")
         self.assertIn("sr_emig_log_fell >= sr_emig_log_fell_needed", check)
 

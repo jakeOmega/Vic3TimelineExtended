@@ -6586,49 +6586,50 @@ sr_mod_scope_spec_room = {
 		AND = { scope:site = 40 sr_mod_spec_used_imbrium < sr_mod_spec_budget }
 	}
 }
-# Its people can crew one more module level (colony people design § 10: the + button's line).
+# Its people can crew one more module level, counting the crewed modules queued and
+# on their way (colony people design § 10: the + button's line; the final review of #1958).
 sr_mod_scope_crew_spare = {
 	OR = {
-		AND = { scope:site = 1 sr_site_crews_valles_marineris >= sr_site_levels_valles_marineris }
-		AND = { scope:site = 2 sr_site_crews_olympus_mons >= sr_site_levels_olympus_mons }
-		AND = { scope:site = 3 sr_site_crews_hellas_planitia >= sr_site_levels_hellas_planitia }
-		AND = { scope:site = 4 sr_site_crews_utopia_planitia >= sr_site_levels_utopia_planitia }
-		AND = { scope:site = 5 sr_site_crews_arcadia_planitia >= sr_site_levels_arcadia_planitia }
-		AND = { scope:site = 6 sr_site_crews_ceres >= sr_site_levels_ceres }
-		AND = { scope:site = 7 sr_site_crews_vesta >= sr_site_levels_vesta }
-		AND = { scope:site = 8 sr_site_crews_psyche >= sr_site_levels_psyche }
-		AND = { scope:site = 9 sr_site_crews_pallas >= sr_site_levels_pallas }
-		AND = { scope:site = 10 sr_site_crews_hygiea >= sr_site_levels_hygiea }
-		AND = { scope:site = 11 sr_site_crews_io >= sr_site_levels_io }
-		AND = { scope:site = 12 sr_site_crews_europa >= sr_site_levels_europa }
-		AND = { scope:site = 13 sr_site_crews_ganymede >= sr_site_levels_ganymede }
-		AND = { scope:site = 14 sr_site_crews_callisto >= sr_site_levels_callisto }
-		AND = { scope:site = 15 sr_site_crews_himalia >= sr_site_levels_himalia }
-		AND = { scope:site = 16 sr_site_crews_amalthea >= sr_site_levels_amalthea }
-		AND = { scope:site = 17 sr_site_crews_venus >= sr_site_levels_venus }
-		AND = { scope:site = 18 sr_site_crews_mercury >= sr_site_levels_mercury }
-		AND = { scope:site = 19 sr_site_crews_titan >= sr_site_levels_titan }
-		AND = { scope:site = 20 sr_site_crews_enceladus >= sr_site_levels_enceladus }
-		AND = { scope:site = 21 sr_site_crews_rhea >= sr_site_levels_rhea }
-		AND = { scope:site = 22 sr_site_crews_mimas >= sr_site_levels_mimas }
-		AND = { scope:site = 23 sr_site_crews_iapetus >= sr_site_levels_iapetus }
-		AND = { scope:site = 24 sr_site_crews_titania >= sr_site_levels_titania }
-		AND = { scope:site = 25 sr_site_crews_oberon >= sr_site_levels_oberon }
-		AND = { scope:site = 26 sr_site_crews_miranda >= sr_site_levels_miranda }
-		AND = { scope:site = 27 sr_site_crews_ariel >= sr_site_levels_ariel }
-		AND = { scope:site = 28 sr_site_crews_triton >= sr_site_levels_triton }
-		AND = { scope:site = 29 sr_site_crews_proteus >= sr_site_levels_proteus }
-		AND = { scope:site = 30 sr_site_crews_pluto >= sr_site_levels_pluto }
-		AND = { scope:site = 31 sr_site_crews_eris >= sr_site_levels_eris }
-		AND = { scope:site = 32 sr_site_crews_makemake >= sr_site_levels_makemake }
-		AND = { scope:site = 33 sr_site_crews_haumea >= sr_site_levels_haumea }
-		AND = { scope:site = 34 sr_site_crews_sedna >= sr_site_levels_sedna }
-		AND = { scope:site = 35 sr_site_crews_shackleton >= sr_site_levels_shackleton }
-		AND = { scope:site = 36 sr_site_crews_peary >= sr_site_levels_peary }
-		AND = { scope:site = 37 sr_site_crews_tranquility >= sr_site_levels_tranquility }
-		AND = { scope:site = 38 sr_site_crews_marius_hills >= sr_site_levels_marius_hills }
-		AND = { scope:site = 39 sr_site_crews_daedalus >= sr_site_levels_daedalus }
-		AND = { scope:site = 40 sr_site_crews_imbrium >= sr_site_levels_imbrium }
+		AND = { scope:site = 1 sr_site_crews_valles_marineris >= sr_mod_crewed_pending_valles_marineris }
+		AND = { scope:site = 2 sr_site_crews_olympus_mons >= sr_mod_crewed_pending_olympus_mons }
+		AND = { scope:site = 3 sr_site_crews_hellas_planitia >= sr_mod_crewed_pending_hellas_planitia }
+		AND = { scope:site = 4 sr_site_crews_utopia_planitia >= sr_mod_crewed_pending_utopia_planitia }
+		AND = { scope:site = 5 sr_site_crews_arcadia_planitia >= sr_mod_crewed_pending_arcadia_planitia }
+		AND = { scope:site = 6 sr_site_crews_ceres >= sr_mod_crewed_pending_ceres }
+		AND = { scope:site = 7 sr_site_crews_vesta >= sr_mod_crewed_pending_vesta }
+		AND = { scope:site = 8 sr_site_crews_psyche >= sr_mod_crewed_pending_psyche }
+		AND = { scope:site = 9 sr_site_crews_pallas >= sr_mod_crewed_pending_pallas }
+		AND = { scope:site = 10 sr_site_crews_hygiea >= sr_mod_crewed_pending_hygiea }
+		AND = { scope:site = 11 sr_site_crews_io >= sr_mod_crewed_pending_io }
+		AND = { scope:site = 12 sr_site_crews_europa >= sr_mod_crewed_pending_europa }
+		AND = { scope:site = 13 sr_site_crews_ganymede >= sr_mod_crewed_pending_ganymede }
+		AND = { scope:site = 14 sr_site_crews_callisto >= sr_mod_crewed_pending_callisto }
+		AND = { scope:site = 15 sr_site_crews_himalia >= sr_mod_crewed_pending_himalia }
+		AND = { scope:site = 16 sr_site_crews_amalthea >= sr_mod_crewed_pending_amalthea }
+		AND = { scope:site = 17 sr_site_crews_venus >= sr_mod_crewed_pending_venus }
+		AND = { scope:site = 18 sr_site_crews_mercury >= sr_mod_crewed_pending_mercury }
+		AND = { scope:site = 19 sr_site_crews_titan >= sr_mod_crewed_pending_titan }
+		AND = { scope:site = 20 sr_site_crews_enceladus >= sr_mod_crewed_pending_enceladus }
+		AND = { scope:site = 21 sr_site_crews_rhea >= sr_mod_crewed_pending_rhea }
+		AND = { scope:site = 22 sr_site_crews_mimas >= sr_mod_crewed_pending_mimas }
+		AND = { scope:site = 23 sr_site_crews_iapetus >= sr_mod_crewed_pending_iapetus }
+		AND = { scope:site = 24 sr_site_crews_titania >= sr_mod_crewed_pending_titania }
+		AND = { scope:site = 25 sr_site_crews_oberon >= sr_mod_crewed_pending_oberon }
+		AND = { scope:site = 26 sr_site_crews_miranda >= sr_mod_crewed_pending_miranda }
+		AND = { scope:site = 27 sr_site_crews_ariel >= sr_mod_crewed_pending_ariel }
+		AND = { scope:site = 28 sr_site_crews_triton >= sr_mod_crewed_pending_triton }
+		AND = { scope:site = 29 sr_site_crews_proteus >= sr_mod_crewed_pending_proteus }
+		AND = { scope:site = 30 sr_site_crews_pluto >= sr_mod_crewed_pending_pluto }
+		AND = { scope:site = 31 sr_site_crews_eris >= sr_mod_crewed_pending_eris }
+		AND = { scope:site = 32 sr_site_crews_makemake >= sr_mod_crewed_pending_makemake }
+		AND = { scope:site = 33 sr_site_crews_haumea >= sr_mod_crewed_pending_haumea }
+		AND = { scope:site = 34 sr_site_crews_sedna >= sr_mod_crewed_pending_sedna }
+		AND = { scope:site = 35 sr_site_crews_shackleton >= sr_mod_crewed_pending_shackleton }
+		AND = { scope:site = 36 sr_site_crews_peary >= sr_mod_crewed_pending_peary }
+		AND = { scope:site = 37 sr_site_crews_tranquility >= sr_mod_crewed_pending_tranquility }
+		AND = { scope:site = 38 sr_site_crews_marius_hills >= sr_mod_crewed_pending_marius_hills }
+		AND = { scope:site = 39 sr_site_crews_daedalus >= sr_mod_crewed_pending_daedalus }
+		AND = { scope:site = 40 sr_site_crews_imbrium >= sr_mod_crewed_pending_imbrium }
 	}
 }
 # Its Habitats are at or past its cap, so the next one costs more (colony people design § 4.3).

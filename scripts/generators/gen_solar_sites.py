@@ -1958,7 +1958,8 @@ def render_module_values() -> list[str]:
            "#   sr_site_<spec|generic>_built_<key>  the levels against each cap",
            "# Country scope, counting THIS's queue and every shipment on its way:",
            "#   sr_mod_spec_used_<key> (against sr_mod_spec_budget), sr_mod_hab_used_<key> (against",
-           "#   sr_site_hab_cap_<key>, colony people design § 4.3)"]
+           "#   sr_site_hab_cap_<key>, colony people design § 4.3), sr_mod_crewed_pending_<key>",
+           "#   (the crewed levels, against the crews)"]
     for site in SITES:
         k = site.key
         for slot, option in (("a", 1), ("b", 2)):
@@ -2013,7 +2014,11 @@ def render_module_values() -> list[str]:
                 *[f"\t{'value' if i == 0 else 'add'} = sr_site_{t}_value_{k}" for i, t in enumerate(generic_types(site))],
                 "}"]
         out += _hab_values(site)
-        for name, types, built in (("spec_used", ("a", "b"), "sr_site_spec_built"), ("hab_used", ("hab",), "sr_site_hab_value")):
+        # sr_mod_crewed_pending_<key>: its crewed levels with THIS's queue and every
+        # shipment of them, for the + button's crew line (sr_mod_scope_crew_spare;
+        # the final review of #1958).
+        for name, types, built in (("spec_used", ("a", "b"), "sr_site_spec_built"), ("hab_used", ("hab",), "sr_site_hab_value"),
+                                   ("crewed_pending", crewed_types(site), "sr_site_levels")):
             out += [f"sr_mod_{name}_{k} = {{", f"\tvalue = {built}_{k}"]
             for t in types:
                 out += [f"\tif = {{ limit = {{ has_variable = sr_mq_{t}_{k} }} add = var:sr_mq_{t}_{k} }}",
@@ -2715,9 +2720,10 @@ def render_module_triggers() -> list[str]:
             "sr_mod_scope_spec_room = {", "\tOR = {"]
     out += [f"\t\tAND = {{ scope:site = {s.index} sr_mod_spec_used_{s.key} < sr_mod_spec_budget }}" for s in SITES]
     out += ["\t}", "}",
-            "# Its people can crew one more module level (colony people design § 10: the + button's line).",
+            "# Its people can crew one more module level, counting the crewed modules queued and",
+            "# on their way (colony people design § 10: the + button's line; the final review of #1958).",
             "sr_mod_scope_crew_spare = {", "\tOR = {"]
-    out += [f"\t\tAND = {{ scope:site = {s.index} sr_site_crews_{s.key} >= sr_site_levels_{s.key} }}" for s in SITES]
+    out += [f"\t\tAND = {{ scope:site = {s.index} sr_site_crews_{s.key} >= sr_mod_crewed_pending_{s.key} }}" for s in SITES]
     out += ["\t}", "}",
             "# Its Habitats are at or past its cap, so the next one costs more (colony people design § 4.3).",
             "sr_mod_scope_past_hab_cap = {", "\tOR = {"]
@@ -3448,11 +3454,15 @@ def render_slice6_values() -> list[str]:
                 f"\tvalue = sr_site_marines_value_{k}",
                 f"\tif = {{ limit = {{ NOT = {{ has_global_variable = sr_site_occupier_{k} }} }} add = sr_site_militia_value_{k} }}",
                 "}",
+                # Defences run at the colony's staffing, as every crewed level does
+                # (colony people design § 4.1; the final review of #1958: with slots
+                # gone, unstaffed Defences at full strength had no limit).
                 f"sr_site_def_fire_{k} = {{",
                 "\tvalue = 0",
                 "\tif = {",
                 f"\t\tlimit = {{ NOT = {{ has_global_variable = sr_site_occupier_{k} }} sr_site_def_value_{k} > 0 }}",
                 f"\t\tvalue = sr_site_def_value_{k}",
+                f"\t\tmultiply = sr_site_staffing_{k}",
                 "\t\tmultiply = sr_def_strength_per_level",
                 "\t\tmultiply = sr_def_fire_factor",
                 f"\t\tif = {{ limit = {{ global_var:sr_site_holder_{k} ?= {{ has_technology_researched = orbital_weapon_platforms }} }} "
@@ -3462,11 +3472,13 @@ def render_slice6_values() -> list[str]:
                 "}",
                 f"sr_site_hardness_{k} = {{",
                 f"\tvalue = sr_site_def_value_{k}",
+                f"\tmultiply = sr_site_staffing_{k}",
                 "\tmultiply = sr_def_hardness_per_level",
                 "\tadd = sr_def_hardness_base",
                 "}",
                 f"sr_site_target_strength_{k} = {{",
                 f"\tvalue = sr_site_def_value_{k}",
+                f"\tmultiply = sr_site_staffing_{k}",
                 "\tmultiply = sr_def_strength_per_level",
                 "\tadd = sr_def_hull_strength",
                 "}",

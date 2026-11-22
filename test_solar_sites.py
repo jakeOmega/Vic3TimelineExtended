@@ -1157,12 +1157,15 @@ class PopulationTest(unittest.TestCase):
         """Every state gives in proportion to its people (colony people design
         § 6.3; test_sr_settler_draw.py holds the rule)."""
         month = _block(self.population, "sr_emig_month")
-        kills = re.findall(r"kill_population_in_state = \{ value = (\d+) strata = (\w+) \}", month)
+        # The batches are taken in sr_emig_take_batches, from both of the month's passes.
+        give = _block(self.population, "sr_emig_take_batches")
+        self.assertEqual(month.count("sr_emig_take_batches = yes"), 2)
+        kills = re.findall(r"kill_population_in_state = \{ value = (\d+) strata = (\w+) \}", give)
         self.assertEqual(kills, [("250", "middle"), ("250", "lower")])
         batch = float(re.search(r"sr_emig_batch_people = \{\s*value = (\d+)", self.pop_values).group(1))
         self.assertEqual(sum(int(v) for v, _ in kills), batch)
         self.assertNotIn("building_space_program", month)
-        self.assertIn("count = local_var:sr_emig_take", month)
+        self.assertIn("count = local_var:sr_emig_take", give)
         self.assertIn("sr_colonies_contested_enabled = yes", month)
 
     def test_the_entry_declares_its_population_modifiers(self):

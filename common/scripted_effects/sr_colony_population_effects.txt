@@ -25,15 +25,44 @@
 #   1. each state's due is the share x its people + its carry (sr_emig_carry,
 #      what it owed and didn't give before), one pass reading only
 #      state_population, so no count of its pops;
-#   2. largest due first, each state gives its whole batches while the month has
-#      batches left (local sr_emig_left), and keeps the rest as its carry; a
-#      state the month runs out before keeps its whole due, so it comes earlier
-#      next month.
-# Over a few months every state gives its share, within a batch, and no month
-# sends more than its settlers. The census books each state's take as known
+#   2. the floors, largest due first: each state gives its whole batches while
+#      the month has batches left (local sr_emig_left); a state the month runs
+#      out before keeps its whole due, so it comes earlier next month;
+#   3. the remainders (the final review of #1958): the batches the floors left go
+#      one each to the largest dues still owed, and every state keeps what it
+#      owes as its carry, below 0 for one that gave a batch more than it owed.
+# So every month sends its settlers, the carries sum to 0, and each state's
+# running total stays within a batch of its share. With the floors alone a
+# country of 48 states at 500 a month sent nothing for a year. The census books each state's take as known
 # moves out, by Organized Colonization's profile (te_demog_sr_note_settlers).
 # Under Full Colonies none leave while Earth is blockaded or the launch site is
 # occupied (slice 6 fleets design § 15).
+# State scope, from sr_emig_month's passes 2 and 3: this state gives
+# local_var:sr_emig_take batches (half middle strata, half lower;
+# kill_population_in_state takes a constant), the census books them, and they
+# come off its due and the month's batches left.
+sr_emig_take_batches = {
+	set_local_variable = {
+		name = sr_emig_took_now
+		value = {
+			value = local_var:sr_emig_take
+			multiply = sr_emig_batch_people
+		}
+	}
+	change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_take }
+	change_local_variable = { name = sr_emig_sent add = local_var:sr_emig_took_now }
+	# The emigration_batch self-check's reading (sr_emig_self_check).
+	change_local_variable = { name = sr_emig_fell_before add = state_population }
+	while = {
+		count = local_var:sr_emig_take
+		kill_population_in_state = { value = 250 strata = middle }
+		kill_population_in_state = { value = 250 strata = lower }
+	}
+	change_local_variable = { name = sr_emig_fell_after add = state_population }
+	te_demog_sr_note_settlers = yes
+	change_variable = { name = sr_emig_due subtract = local_var:sr_emig_took_now }
+}
+
 sr_emig_month = {
 	if = {
 		limit = {
@@ -59,7 +88,7 @@ sr_emig_month = {
 			}
 			if = { limit = { has_variable = sr_emig_carry } remove_variable = sr_emig_carry }
 		}
-		# 2. The take, largest due first; every state, then each keeps what it owes.
+		# 2. The floors, largest due first: whole batches; the due stays for 3.
 		ordered_scope_state = {
 			limit = { has_variable = sr_emig_due }
 			order_by = sr_emig_due_value
@@ -79,28 +108,26 @@ sr_emig_month = {
 						max = local_var:sr_emig_left
 					}
 				}
-				set_local_variable = {
-					name = sr_emig_took_now
-					value = {
-						value = local_var:sr_emig_take
-						multiply = sr_emig_batch_people
-					}
+				sr_emig_take_batches = yes
+			}
+		}
+		# 3. The remainders, largest due first: a batch each while batches are
+		#    left; then every state keeps what it owes, below 0 too.
+		ordered_scope_state = {
+			limit = { has_variable = sr_emig_due }
+			order_by = sr_emig_due_value
+			max = 1000
+			check_range_bounds = no
+			if = {
+				limit = {
+					local_var:sr_emig_left >= 1
+					sr_emig_due_value > 0
 				}
-				change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_take }
-				change_local_variable = { name = sr_emig_sent add = local_var:sr_emig_took_now }
-				# The emigration_batch self-check's reading (sr_emig_self_check).
-				change_local_variable = { name = sr_emig_fell_before add = state_population }
-				while = {
-					count = local_var:sr_emig_take
-					kill_population_in_state = { value = 250 strata = middle }
-					kill_population_in_state = { value = 250 strata = lower }
-				}
-				change_local_variable = { name = sr_emig_fell_after add = state_population }
-				te_demog_sr_note_settlers = yes
-				change_variable = { name = sr_emig_due subtract = local_var:sr_emig_took_now }
+				set_local_variable = { name = sr_emig_take value = 1 }
+				sr_emig_take_batches = yes
 			}
 			if = {
-				limit = { var:sr_emig_due > 0 }
+				limit = { NOT = { var:sr_emig_due = 0 } }
 				set_variable = { name = sr_emig_carry value = var:sr_emig_due }
 			}
 			remove_variable = sr_emig_due

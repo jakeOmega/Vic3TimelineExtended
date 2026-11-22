@@ -593,7 +593,7 @@ class ModulesViewTest(unittest.TestCase):
     def test_the_plus_button_says_whether_a_crew_is_free(self):
         self.assertRegex(self.triggers, r"(?m)^sr_mod_scope_crew_spare = \{")
         for site in gss.SITES:
-            self.assertIn(f"AND = {{ scope:site = {site.index} sr_site_crews_{site.key} >= sr_site_levels_{site.key} }}",
+            self.assertIn(f"AND = {{ scope:site = {site.index} sr_site_crews_{site.key} >= sr_mod_crewed_pending_{site.key} }}",
                           _block(self.triggers, "sr_mod_scope_crew_spare"))
         module = _block(self.sguis, "sr_colony_module_sgui")
         self.assertRegex(module, r"sr_mod_scope_crew_spare = yes\s*\}\s*custom_tooltip = sr_mod_queue_crew_spare_tt")
@@ -683,3 +683,50 @@ def gss_top():
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ReviewFixesTest(unittest.TestCase):
+    """The final review's findings (PR #1958): Defences thin with a short crew,
+    the + button's crew line counts what is on its way, and the Habitat and
+    Spaceport text no longer speaks of slots or a fixed half."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.values = _strip(_raw(str(gss.VALUES_OUT)))
+        cls.display = _strip(_raw("common", "script_values", "sr_sites_display_generated.txt"))
+        cls.triggers = _strip(_raw(str(gss.TRIGGERS_OUT)))
+        cls.loc = "".join(_raw(p) for p in glob.glob(os.path.join(REPO, "localization", "english", "*.yml")))
+
+    def test_defences_run_at_the_colony_s_staffing(self):
+        """Design § 4.1: every crewed level, Defences included, runs at the
+        shared staffing share, so Defences past the crews add little."""
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                for name in (f"sr_site_def_fire_{k}", f"sr_site_hardness_{k}", f"sr_site_target_strength_{k}"):
+                    body = _block(self.values, name)
+                    self.assertIn(f"value = sr_site_def_value_{k}\n", body.replace("\t", ""), name)
+                    self.assertIn(f"multiply = sr_site_staffing_{k}", body, name)
+
+    def test_the_crew_line_counts_the_modules_on_their_way(self):
+        spare = _block(self.triggers, "sr_mod_scope_crew_spare")
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                self.assertIn(f"sr_site_crews_{k} >= sr_mod_crewed_pending_{k}", spare)
+                body = _block(self.values, f"sr_mod_crewed_pending_{k}")
+                self.assertIn(f"value = sr_site_levels_{k}", body)
+                for t in ("a", "b", *gss.generic_types(site)):
+                    queued = f"add = var:sr_mq_{t}_{k}"
+                    shipped = f"add = global_var:sr_site_ship_{t}_{k}"
+                    if t == "hab":
+                        self.assertNotIn(queued, body)
+                    else:
+                        self.assertIn(queued, body)
+                        self.assertIn(shipped, body)
+
+    def test_the_habitat_and_spaceport_text_is_current(self):
+        port = re.search(r'(?m)^ je_space_race_widget_mod_port_tt:0 "([^\n]*)"', self.loc).group(1)
+        self.assertNotIn("slot", port)
+        hab = re.search(r'(?m)^ sr_mod_queue_hab_tt:0 "([^\n]*)"', self.loc).group(1)
+        self.assertNotIn("half", hab)

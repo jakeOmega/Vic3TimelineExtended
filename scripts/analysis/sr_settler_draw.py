@@ -9,12 +9,16 @@ colonies' free room (the caller's) or 1% of its people, in batches of 500:
 
 1. The share: the month's settlers / the country's people.
 2. Each state's due: the share x its people + its carry (what it owed before).
-3. The take, largest due first: each state gives its whole batches while the
-   month has batches left, and keeps the rest as its carry; a state the month
-   runs out before keeps its whole due, so it comes earlier next month.
+3. The floors, largest due first: each state gives its whole batches while the
+   month has batches left; a state the month runs out before keeps its whole
+   due, so it comes earlier next month.
+4. The remainders (the final review of #1958): the batches the floors leave go
+   one each to the largest dues left, and each state keeps what it still owes
+   as its carry, below 0 for one that gave a batch more than it owed.
 
-Over a few months every state gives its share, within a batch, and a month's
-take never passes its settlers.
+So every month sends its settlers, the carries sum to 0, and each state's
+running total stays within a batch of its share. With the floors alone a
+country of 48 states at 500 a month sent nothing for a year.
 
 Usage: python3 scripts/analysis/sr_settler_draw.py [AMOUNT] [MONTHS] [POP ...]
 """
@@ -53,10 +57,16 @@ def draw(amount: float, states: list[tuple[float, float]], cap: float = PEOPLE_C
     for i in sorted(range(len(states)), key=lambda i: dues[i], reverse=True):
         if left < 1:
             break
-        give = min(math.floor(dues[i] / batch), left)
+        give = min(max(math.floor(dues[i] / batch), 0), left)
         takes[i] = give * batch
         carries[i] = dues[i] - give * batch
         left -= give
+    for i in sorted(range(len(states)), key=lambda i: carries[i], reverse=True):
+        if left < 1 or carries[i] <= 0:
+            break
+        takes[i] += batch
+        carries[i] -= batch
+        left -= 1
     return takes, carries
 
 

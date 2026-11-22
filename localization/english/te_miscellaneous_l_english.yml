@@ -6959,7 +6959,7 @@
  sr_mod_queue_culture_tt:0 "Queue a Cultural Center: #v +3%#! cultural pull and #v +1%#! prestige a staffed level."
  sr_mod_queue_def_tt:0 "Queue Defenses, which fire on enemy [concept_sr_space_fleet]s closing in on the colony (Full Colonies only)."
  sr_mod_queue_foundry_tt:0 "Queue a Materials Foundry: #v +3%#! advanced materials output a staffed level."
- sr_mod_queue_hab_tt:0 "Queue a Habitat: half of the colony's starting room again for people."
+ sr_mod_queue_hab_tt:0 "Queue a Habitat: more room for the colony's people, its share of the starting room again."
  sr_mod_queue_lab_tt:0 "Queue a Research Station: #v +2%#! research speed a staffed level."
  sr_mod_queue_mine_tt:0 "Queue a Mining Complex: #v 50#! more Extraplanetary Base room here a staffed level."
  sr_mod_queue_past_hab_cap_tt:0 "#R Past its Habitat cap:#! this Habitat costs more fabrication points than the last."

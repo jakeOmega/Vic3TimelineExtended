@@ -3895,7 +3895,8 @@ sr_mod_spec_budget = { value = 4 }
 #   sr_site_<spec|generic>_built_<key>  the levels against each cap
 # Country scope, counting THIS's queue and every shipment on its way:
 #   sr_mod_spec_used_<key> (against sr_mod_spec_budget), sr_mod_hab_used_<key> (against
-#   sr_site_hab_cap_<key>, colony people design § 4.3)
+#   sr_site_hab_cap_<key>, colony people design § 4.3), sr_mod_crewed_pending_<key>
+#   (the crewed levels, against the crews)
 sr_site_lvl_a_value_valles_marineris = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_lvl_a_valles_marineris } value = global_var:sr_site_lvl_a_valles_marineris }
@@ -4075,6 +4076,39 @@ sr_mod_hab_used_valles_marineris = {
 	value = sr_site_hab_value_valles_marineris
 	if = { limit = { has_variable = sr_mq_hab_valles_marineris } add = var:sr_mq_hab_valles_marineris }
 	if = { limit = { has_global_variable = sr_site_ship_hab_valles_marineris } add = global_var:sr_site_ship_hab_valles_marineris }
+}
+sr_mod_crewed_pending_valles_marineris = {
+	value = sr_site_levels_valles_marineris
+	if = { limit = { has_variable = sr_mq_a_valles_marineris } add = var:sr_mq_a_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_a_valles_marineris } add = global_var:sr_site_ship_a_valles_marineris }
+	if = { limit = { has_variable = sr_mq_b_valles_marineris } add = var:sr_mq_b_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_b_valles_marineris } add = global_var:sr_site_ship_b_valles_marineris }
+	if = { limit = { has_variable = sr_mq_def_valles_marineris } add = var:sr_mq_def_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_def_valles_marineris } add = global_var:sr_site_ship_def_valles_marineris }
+	if = { limit = { has_variable = sr_mq_port_valles_marineris } add = var:sr_mq_port_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_port_valles_marineris } add = global_var:sr_site_ship_port_valles_marineris }
+	if = { limit = { has_variable = sr_mq_mine_valles_marineris } add = var:sr_mq_mine_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_mine_valles_marineris } add = global_var:sr_site_ship_mine_valles_marineris }
+	if = { limit = { has_variable = sr_mq_yard_valles_marineris } add = var:sr_mq_yard_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_yard_valles_marineris } add = global_var:sr_site_ship_yard_valles_marineris }
+	if = { limit = { has_variable = sr_mq_lab_valles_marineris } add = var:sr_mq_lab_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_lab_valles_marineris } add = global_var:sr_site_ship_lab_valles_marineris }
+	if = { limit = { has_variable = sr_mq_culture_valles_marineris } add = var:sr_mq_culture_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_culture_valles_marineris } add = global_var:sr_site_ship_culture_valles_marineris }
+	if = { limit = { has_variable = sr_mq_resort_valles_marineris } add = var:sr_mq_resort_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_resort_valles_marineris } add = global_var:sr_site_ship_resort_valles_marineris }
+	if = { limit = { has_variable = sr_mq_black_valles_marineris } add = var:sr_mq_black_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_black_valles_marineris } add = global_var:sr_site_ship_black_valles_marineris }
+	if = { limit = { has_variable = sr_mq_train_valles_marineris } add = var:sr_mq_train_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_train_valles_marineris } add = global_var:sr_site_ship_train_valles_marineris }
+	if = { limit = { has_variable = sr_mq_bunker_valles_marineris } add = var:sr_mq_bunker_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_valles_marineris } add = global_var:sr_site_ship_bunker_valles_marineris }
+	if = { limit = { has_variable = sr_mq_foundry_valles_marineris } add = var:sr_mq_foundry_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_valles_marineris } add = global_var:sr_site_ship_foundry_valles_marineris }
+	if = { limit = { has_variable = sr_mq_admin_valles_marineris } add = var:sr_mq_admin_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_admin_valles_marineris } add = global_var:sr_site_ship_admin_valles_marineris }
+	if = { limit = { has_variable = sr_mq_terra_valles_marineris } add = var:sr_mq_terra_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_terra_valles_marineris } add = global_var:sr_site_ship_terra_valles_marineris }
 }
 # The next Habitat THIS queues at Valles Marineris costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
@@ -4262,6 +4296,39 @@ sr_mod_hab_used_olympus_mons = {
 	if = { limit = { has_variable = sr_mq_hab_olympus_mons } add = var:sr_mq_hab_olympus_mons }
 	if = { limit = { has_global_variable = sr_site_ship_hab_olympus_mons } add = global_var:sr_site_ship_hab_olympus_mons }
 }
+sr_mod_crewed_pending_olympus_mons = {
+	value = sr_site_levels_olympus_mons
+	if = { limit = { has_variable = sr_mq_a_olympus_mons } add = var:sr_mq_a_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_a_olympus_mons } add = global_var:sr_site_ship_a_olympus_mons }
+	if = { limit = { has_variable = sr_mq_b_olympus_mons } add = var:sr_mq_b_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_b_olympus_mons } add = global_var:sr_site_ship_b_olympus_mons }
+	if = { limit = { has_variable = sr_mq_def_olympus_mons } add = var:sr_mq_def_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_def_olympus_mons } add = global_var:sr_site_ship_def_olympus_mons }
+	if = { limit = { has_variable = sr_mq_port_olympus_mons } add = var:sr_mq_port_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_port_olympus_mons } add = global_var:sr_site_ship_port_olympus_mons }
+	if = { limit = { has_variable = sr_mq_mine_olympus_mons } add = var:sr_mq_mine_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_mine_olympus_mons } add = global_var:sr_site_ship_mine_olympus_mons }
+	if = { limit = { has_variable = sr_mq_yard_olympus_mons } add = var:sr_mq_yard_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_yard_olympus_mons } add = global_var:sr_site_ship_yard_olympus_mons }
+	if = { limit = { has_variable = sr_mq_lab_olympus_mons } add = var:sr_mq_lab_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_lab_olympus_mons } add = global_var:sr_site_ship_lab_olympus_mons }
+	if = { limit = { has_variable = sr_mq_culture_olympus_mons } add = var:sr_mq_culture_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_culture_olympus_mons } add = global_var:sr_site_ship_culture_olympus_mons }
+	if = { limit = { has_variable = sr_mq_resort_olympus_mons } add = var:sr_mq_resort_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_resort_olympus_mons } add = global_var:sr_site_ship_resort_olympus_mons }
+	if = { limit = { has_variable = sr_mq_black_olympus_mons } add = var:sr_mq_black_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_black_olympus_mons } add = global_var:sr_site_ship_black_olympus_mons }
+	if = { limit = { has_variable = sr_mq_train_olympus_mons } add = var:sr_mq_train_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_train_olympus_mons } add = global_var:sr_site_ship_train_olympus_mons }
+	if = { limit = { has_variable = sr_mq_bunker_olympus_mons } add = var:sr_mq_bunker_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_olympus_mons } add = global_var:sr_site_ship_bunker_olympus_mons }
+	if = { limit = { has_variable = sr_mq_foundry_olympus_mons } add = var:sr_mq_foundry_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_olympus_mons } add = global_var:sr_site_ship_foundry_olympus_mons }
+	if = { limit = { has_variable = sr_mq_admin_olympus_mons } add = var:sr_mq_admin_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_admin_olympus_mons } add = global_var:sr_site_ship_admin_olympus_mons }
+	if = { limit = { has_variable = sr_mq_terra_olympus_mons } add = var:sr_mq_terra_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_terra_olympus_mons } add = global_var:sr_site_ship_terra_olympus_mons }
+}
 # The next Habitat THIS queues at Olympus Mons costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
 sr_mod_next_hab_cost_olympus_mons = {
@@ -4446,6 +4513,39 @@ sr_mod_hab_used_hellas_planitia = {
 	value = sr_site_hab_value_hellas_planitia
 	if = { limit = { has_variable = sr_mq_hab_hellas_planitia } add = var:sr_mq_hab_hellas_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_hab_hellas_planitia } add = global_var:sr_site_ship_hab_hellas_planitia }
+}
+sr_mod_crewed_pending_hellas_planitia = {
+	value = sr_site_levels_hellas_planitia
+	if = { limit = { has_variable = sr_mq_a_hellas_planitia } add = var:sr_mq_a_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_a_hellas_planitia } add = global_var:sr_site_ship_a_hellas_planitia }
+	if = { limit = { has_variable = sr_mq_b_hellas_planitia } add = var:sr_mq_b_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_b_hellas_planitia } add = global_var:sr_site_ship_b_hellas_planitia }
+	if = { limit = { has_variable = sr_mq_def_hellas_planitia } add = var:sr_mq_def_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_def_hellas_planitia } add = global_var:sr_site_ship_def_hellas_planitia }
+	if = { limit = { has_variable = sr_mq_port_hellas_planitia } add = var:sr_mq_port_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_port_hellas_planitia } add = global_var:sr_site_ship_port_hellas_planitia }
+	if = { limit = { has_variable = sr_mq_mine_hellas_planitia } add = var:sr_mq_mine_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_mine_hellas_planitia } add = global_var:sr_site_ship_mine_hellas_planitia }
+	if = { limit = { has_variable = sr_mq_yard_hellas_planitia } add = var:sr_mq_yard_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_yard_hellas_planitia } add = global_var:sr_site_ship_yard_hellas_planitia }
+	if = { limit = { has_variable = sr_mq_lab_hellas_planitia } add = var:sr_mq_lab_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_lab_hellas_planitia } add = global_var:sr_site_ship_lab_hellas_planitia }
+	if = { limit = { has_variable = sr_mq_culture_hellas_planitia } add = var:sr_mq_culture_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_culture_hellas_planitia } add = global_var:sr_site_ship_culture_hellas_planitia }
+	if = { limit = { has_variable = sr_mq_resort_hellas_planitia } add = var:sr_mq_resort_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_resort_hellas_planitia } add = global_var:sr_site_ship_resort_hellas_planitia }
+	if = { limit = { has_variable = sr_mq_black_hellas_planitia } add = var:sr_mq_black_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_black_hellas_planitia } add = global_var:sr_site_ship_black_hellas_planitia }
+	if = { limit = { has_variable = sr_mq_train_hellas_planitia } add = var:sr_mq_train_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_train_hellas_planitia } add = global_var:sr_site_ship_train_hellas_planitia }
+	if = { limit = { has_variable = sr_mq_bunker_hellas_planitia } add = var:sr_mq_bunker_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_hellas_planitia } add = global_var:sr_site_ship_bunker_hellas_planitia }
+	if = { limit = { has_variable = sr_mq_foundry_hellas_planitia } add = var:sr_mq_foundry_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_hellas_planitia } add = global_var:sr_site_ship_foundry_hellas_planitia }
+	if = { limit = { has_variable = sr_mq_admin_hellas_planitia } add = var:sr_mq_admin_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_admin_hellas_planitia } add = global_var:sr_site_ship_admin_hellas_planitia }
+	if = { limit = { has_variable = sr_mq_terra_hellas_planitia } add = var:sr_mq_terra_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_terra_hellas_planitia } add = global_var:sr_site_ship_terra_hellas_planitia }
 }
 # The next Habitat THIS queues at Hellas Planitia costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
@@ -4634,6 +4734,39 @@ sr_mod_hab_used_utopia_planitia = {
 	if = { limit = { has_variable = sr_mq_hab_utopia_planitia } add = var:sr_mq_hab_utopia_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_hab_utopia_planitia } add = global_var:sr_site_ship_hab_utopia_planitia }
 }
+sr_mod_crewed_pending_utopia_planitia = {
+	value = sr_site_levels_utopia_planitia
+	if = { limit = { has_variable = sr_mq_a_utopia_planitia } add = var:sr_mq_a_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_a_utopia_planitia } add = global_var:sr_site_ship_a_utopia_planitia }
+	if = { limit = { has_variable = sr_mq_b_utopia_planitia } add = var:sr_mq_b_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_b_utopia_planitia } add = global_var:sr_site_ship_b_utopia_planitia }
+	if = { limit = { has_variable = sr_mq_def_utopia_planitia } add = var:sr_mq_def_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_def_utopia_planitia } add = global_var:sr_site_ship_def_utopia_planitia }
+	if = { limit = { has_variable = sr_mq_port_utopia_planitia } add = var:sr_mq_port_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_port_utopia_planitia } add = global_var:sr_site_ship_port_utopia_planitia }
+	if = { limit = { has_variable = sr_mq_mine_utopia_planitia } add = var:sr_mq_mine_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_mine_utopia_planitia } add = global_var:sr_site_ship_mine_utopia_planitia }
+	if = { limit = { has_variable = sr_mq_yard_utopia_planitia } add = var:sr_mq_yard_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_yard_utopia_planitia } add = global_var:sr_site_ship_yard_utopia_planitia }
+	if = { limit = { has_variable = sr_mq_lab_utopia_planitia } add = var:sr_mq_lab_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_lab_utopia_planitia } add = global_var:sr_site_ship_lab_utopia_planitia }
+	if = { limit = { has_variable = sr_mq_culture_utopia_planitia } add = var:sr_mq_culture_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_culture_utopia_planitia } add = global_var:sr_site_ship_culture_utopia_planitia }
+	if = { limit = { has_variable = sr_mq_resort_utopia_planitia } add = var:sr_mq_resort_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_resort_utopia_planitia } add = global_var:sr_site_ship_resort_utopia_planitia }
+	if = { limit = { has_variable = sr_mq_black_utopia_planitia } add = var:sr_mq_black_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_black_utopia_planitia } add = global_var:sr_site_ship_black_utopia_planitia }
+	if = { limit = { has_variable = sr_mq_train_utopia_planitia } add = var:sr_mq_train_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_train_utopia_planitia } add = global_var:sr_site_ship_train_utopia_planitia }
+	if = { limit = { has_variable = sr_mq_bunker_utopia_planitia } add = var:sr_mq_bunker_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_utopia_planitia } add = global_var:sr_site_ship_bunker_utopia_planitia }
+	if = { limit = { has_variable = sr_mq_foundry_utopia_planitia } add = var:sr_mq_foundry_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_utopia_planitia } add = global_var:sr_site_ship_foundry_utopia_planitia }
+	if = { limit = { has_variable = sr_mq_admin_utopia_planitia } add = var:sr_mq_admin_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_admin_utopia_planitia } add = global_var:sr_site_ship_admin_utopia_planitia }
+	if = { limit = { has_variable = sr_mq_terra_utopia_planitia } add = var:sr_mq_terra_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_terra_utopia_planitia } add = global_var:sr_site_ship_terra_utopia_planitia }
+}
 # The next Habitat THIS queues at Utopia Planitia costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
 sr_mod_next_hab_cost_utopia_planitia = {
@@ -4819,6 +4952,39 @@ sr_mod_hab_used_arcadia_planitia = {
 	if = { limit = { has_variable = sr_mq_hab_arcadia_planitia } add = var:sr_mq_hab_arcadia_planitia }
 	if = { limit = { has_global_variable = sr_site_ship_hab_arcadia_planitia } add = global_var:sr_site_ship_hab_arcadia_planitia }
 }
+sr_mod_crewed_pending_arcadia_planitia = {
+	value = sr_site_levels_arcadia_planitia
+	if = { limit = { has_variable = sr_mq_a_arcadia_planitia } add = var:sr_mq_a_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_a_arcadia_planitia } add = global_var:sr_site_ship_a_arcadia_planitia }
+	if = { limit = { has_variable = sr_mq_b_arcadia_planitia } add = var:sr_mq_b_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_b_arcadia_planitia } add = global_var:sr_site_ship_b_arcadia_planitia }
+	if = { limit = { has_variable = sr_mq_def_arcadia_planitia } add = var:sr_mq_def_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_def_arcadia_planitia } add = global_var:sr_site_ship_def_arcadia_planitia }
+	if = { limit = { has_variable = sr_mq_port_arcadia_planitia } add = var:sr_mq_port_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_port_arcadia_planitia } add = global_var:sr_site_ship_port_arcadia_planitia }
+	if = { limit = { has_variable = sr_mq_mine_arcadia_planitia } add = var:sr_mq_mine_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_mine_arcadia_planitia } add = global_var:sr_site_ship_mine_arcadia_planitia }
+	if = { limit = { has_variable = sr_mq_yard_arcadia_planitia } add = var:sr_mq_yard_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_yard_arcadia_planitia } add = global_var:sr_site_ship_yard_arcadia_planitia }
+	if = { limit = { has_variable = sr_mq_lab_arcadia_planitia } add = var:sr_mq_lab_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_lab_arcadia_planitia } add = global_var:sr_site_ship_lab_arcadia_planitia }
+	if = { limit = { has_variable = sr_mq_culture_arcadia_planitia } add = var:sr_mq_culture_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_culture_arcadia_planitia } add = global_var:sr_site_ship_culture_arcadia_planitia }
+	if = { limit = { has_variable = sr_mq_resort_arcadia_planitia } add = var:sr_mq_resort_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_resort_arcadia_planitia } add = global_var:sr_site_ship_resort_arcadia_planitia }
+	if = { limit = { has_variable = sr_mq_black_arcadia_planitia } add = var:sr_mq_black_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_black_arcadia_planitia } add = global_var:sr_site_ship_black_arcadia_planitia }
+	if = { limit = { has_variable = sr_mq_train_arcadia_planitia } add = var:sr_mq_train_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_train_arcadia_planitia } add = global_var:sr_site_ship_train_arcadia_planitia }
+	if = { limit = { has_variable = sr_mq_bunker_arcadia_planitia } add = var:sr_mq_bunker_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_arcadia_planitia } add = global_var:sr_site_ship_bunker_arcadia_planitia }
+	if = { limit = { has_variable = sr_mq_foundry_arcadia_planitia } add = var:sr_mq_foundry_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_arcadia_planitia } add = global_var:sr_site_ship_foundry_arcadia_planitia }
+	if = { limit = { has_variable = sr_mq_admin_arcadia_planitia } add = var:sr_mq_admin_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_admin_arcadia_planitia } add = global_var:sr_site_ship_admin_arcadia_planitia }
+	if = { limit = { has_variable = sr_mq_terra_arcadia_planitia } add = var:sr_mq_terra_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_terra_arcadia_planitia } add = global_var:sr_site_ship_terra_arcadia_planitia }
+}
 # The next Habitat THIS queues at Arcadia Planitia costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
 sr_mod_next_hab_cost_arcadia_planitia = {
@@ -4997,6 +5163,37 @@ sr_mod_hab_used_ceres = {
 	value = sr_site_hab_value_ceres
 	if = { limit = { has_variable = sr_mq_hab_ceres } add = var:sr_mq_hab_ceres }
 	if = { limit = { has_global_variable = sr_site_ship_hab_ceres } add = global_var:sr_site_ship_hab_ceres }
+}
+sr_mod_crewed_pending_ceres = {
+	value = sr_site_levels_ceres
+	if = { limit = { has_variable = sr_mq_a_ceres } add = var:sr_mq_a_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_a_ceres } add = global_var:sr_site_ship_a_ceres }
+	if = { limit = { has_variable = sr_mq_b_ceres } add = var:sr_mq_b_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_b_ceres } add = global_var:sr_site_ship_b_ceres }
+	if = { limit = { has_variable = sr_mq_def_ceres } add = var:sr_mq_def_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_def_ceres } add = global_var:sr_site_ship_def_ceres }
+	if = { limit = { has_variable = sr_mq_port_ceres } add = var:sr_mq_port_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_port_ceres } add = global_var:sr_site_ship_port_ceres }
+	if = { limit = { has_variable = sr_mq_mine_ceres } add = var:sr_mq_mine_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_mine_ceres } add = global_var:sr_site_ship_mine_ceres }
+	if = { limit = { has_variable = sr_mq_yard_ceres } add = var:sr_mq_yard_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_yard_ceres } add = global_var:sr_site_ship_yard_ceres }
+	if = { limit = { has_variable = sr_mq_lab_ceres } add = var:sr_mq_lab_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_lab_ceres } add = global_var:sr_site_ship_lab_ceres }
+	if = { limit = { has_variable = sr_mq_culture_ceres } add = var:sr_mq_culture_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_culture_ceres } add = global_var:sr_site_ship_culture_ceres }
+	if = { limit = { has_variable = sr_mq_resort_ceres } add = var:sr_mq_resort_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_resort_ceres } add = global_var:sr_site_ship_resort_ceres }
+	if = { limit = { has_variable = sr_mq_black_ceres } add = var:sr_mq_black_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_black_ceres } add = global_var:sr_site_ship_black_ceres }
+	if = { limit = { has_variable = sr_mq_train_ceres } add = var:sr_mq_train_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_train_ceres } add = global_var:sr_site_ship_train_ceres }
+	if = { limit = { has_variable = sr_mq_bunker_ceres } add = var:sr_mq_bunker_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_ceres } add = global_var:sr_site_ship_bunker_ceres }
+	if = { limit = { has_variable = sr_mq_foundry_ceres } add = var:sr_mq_foundry_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_ceres } add = global_var:sr_site_ship_foundry_ceres }
+	if = { limit = { has_variable = sr_mq_admin_ceres } add = var:sr_mq_admin_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_admin_ceres } add = global_var:sr_site_ship_admin_ceres }
 }
 # The next Habitat THIS queues at Ceres costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
@@ -5177,6 +5374,37 @@ sr_mod_hab_used_vesta = {
 	if = { limit = { has_variable = sr_mq_hab_vesta } add = var:sr_mq_hab_vesta }
 	if = { limit = { has_global_variable = sr_site_ship_hab_vesta } add = global_var:sr_site_ship_hab_vesta }
 }
+sr_mod_crewed_pending_vesta = {
+	value = sr_site_levels_vesta
+	if = { limit = { has_variable = sr_mq_a_vesta } add = var:sr_mq_a_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_a_vesta } add = global_var:sr_site_ship_a_vesta }
+	if = { limit = { has_variable = sr_mq_b_vesta } add = var:sr_mq_b_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_b_vesta } add = global_var:sr_site_ship_b_vesta }
+	if = { limit = { has_variable = sr_mq_def_vesta } add = var:sr_mq_def_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_def_vesta } add = global_var:sr_site_ship_def_vesta }
+	if = { limit = { has_variable = sr_mq_port_vesta } add = var:sr_mq_port_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_port_vesta } add = global_var:sr_site_ship_port_vesta }
+	if = { limit = { has_variable = sr_mq_mine_vesta } add = var:sr_mq_mine_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_mine_vesta } add = global_var:sr_site_ship_mine_vesta }
+	if = { limit = { has_variable = sr_mq_yard_vesta } add = var:sr_mq_yard_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_yard_vesta } add = global_var:sr_site_ship_yard_vesta }
+	if = { limit = { has_variable = sr_mq_lab_vesta } add = var:sr_mq_lab_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_lab_vesta } add = global_var:sr_site_ship_lab_vesta }
+	if = { limit = { has_variable = sr_mq_culture_vesta } add = var:sr_mq_culture_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_culture_vesta } add = global_var:sr_site_ship_culture_vesta }
+	if = { limit = { has_variable = sr_mq_resort_vesta } add = var:sr_mq_resort_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_resort_vesta } add = global_var:sr_site_ship_resort_vesta }
+	if = { limit = { has_variable = sr_mq_black_vesta } add = var:sr_mq_black_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_black_vesta } add = global_var:sr_site_ship_black_vesta }
+	if = { limit = { has_variable = sr_mq_train_vesta } add = var:sr_mq_train_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_train_vesta } add = global_var:sr_site_ship_train_vesta }
+	if = { limit = { has_variable = sr_mq_bunker_vesta } add = var:sr_mq_bunker_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_vesta } add = global_var:sr_site_ship_bunker_vesta }
+	if = { limit = { has_variable = sr_mq_foundry_vesta } add = var:sr_mq_foundry_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_vesta } add = global_var:sr_site_ship_foundry_vesta }
+	if = { limit = { has_variable = sr_mq_admin_vesta } add = var:sr_mq_admin_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_admin_vesta } add = global_var:sr_site_ship_admin_vesta }
+}
 # The next Habitat THIS queues at 4 Vesta costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
 sr_mod_next_hab_cost_vesta = {
@@ -5356,6 +5584,37 @@ sr_mod_hab_used_psyche = {
 	if = { limit = { has_variable = sr_mq_hab_psyche } add = var:sr_mq_hab_psyche }
 	if = { limit = { has_global_variable = sr_site_ship_hab_psyche } add = global_var:sr_site_ship_hab_psyche }
 }
+sr_mod_crewed_pending_psyche = {
+	value = sr_site_levels_psyche
+	if = { limit = { has_variable = sr_mq_a_psyche } add = var:sr_mq_a_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_a_psyche } add = global_var:sr_site_ship_a_psyche }
+	if = { limit = { has_variable = sr_mq_b_psyche } add = var:sr_mq_b_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_b_psyche } add = global_var:sr_site_ship_b_psyche }
+	if = { limit = { has_variable = sr_mq_def_psyche } add = var:sr_mq_def_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_def_psyche } add = global_var:sr_site_ship_def_psyche }
+	if = { limit = { has_variable = sr_mq_port_psyche } add = var:sr_mq_port_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_port_psyche } add = global_var:sr_site_ship_port_psyche }
+	if = { limit = { has_variable = sr_mq_mine_psyche } add = var:sr_mq_mine_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_mine_psyche } add = global_var:sr_site_ship_mine_psyche }
+	if = { limit = { has_variable = sr_mq_yard_psyche } add = var:sr_mq_yard_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_yard_psyche } add = global_var:sr_site_ship_yard_psyche }
+	if = { limit = { has_variable = sr_mq_lab_psyche } add = var:sr_mq_lab_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_lab_psyche } add = global_var:sr_site_ship_lab_psyche }
+	if = { limit = { has_variable = sr_mq_culture_psyche } add = var:sr_mq_culture_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_culture_psyche } add = global_var:sr_site_ship_culture_psyche }
+	if = { limit = { has_variable = sr_mq_resort_psyche } add = var:sr_mq_resort_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_resort_psyche } add = global_var:sr_site_ship_resort_psyche }
+	if = { limit = { has_variable = sr_mq_black_psyche } add = var:sr_mq_black_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_black_psyche } add = global_var:sr_site_ship_black_psyche }
+	if = { limit = { has_variable = sr_mq_train_psyche } add = var:sr_mq_train_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_train_psyche } add = global_var:sr_site_ship_train_psyche }
+	if = { limit = { has_variable = sr_mq_bunker_psyche } add = var:sr_mq_bunker_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_psyche } add = global_var:sr_site_ship_bunker_psyche }
+	if = { limit = { has_variable = sr_mq_foundry_psyche } add = var:sr_mq_foundry_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_psyche } add = global_var:sr_site_ship_foundry_psyche }
+	if = { limit = { has_variable = sr_mq_admin_psyche } add = var:sr_mq_admin_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_admin_psyche } add = global_var:sr_site_ship_admin_psyche }
+}
 # The next Habitat THIS queues at 16 Psyche costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
 sr_mod_next_hab_cost_psyche = {
@@ -5534,6 +5793,37 @@ sr_mod_hab_used_pallas = {
 	value = sr_site_hab_value_pallas
 	if = { limit = { has_variable = sr_mq_hab_pallas } add = var:sr_mq_hab_pallas }
 	if = { limit = { has_global_variable = sr_site_ship_hab_pallas } add = global_var:sr_site_ship_hab_pallas }
+}
+sr_mod_crewed_pending_pallas = {
+	value = sr_site_levels_pallas
+	if = { limit = { has_variable = sr_mq_a_pallas } add = var:sr_mq_a_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_a_pallas } add = global_var:sr_site_ship_a_pallas }
+	if = { limit = { has_variable = sr_mq_b_pallas } add = var:sr_mq_b_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_b_pallas } add = global_var:sr_site_ship_b_pallas }
+	if = { limit = { has_variable = sr_mq_def_pallas } add = var:sr_mq_def_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_def_pallas } add = global_var:sr_site_ship_def_pallas }
+	if = { limit = { has_variable = sr_mq_port_pallas } add = var:sr_mq_port_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_port_pallas } add = global_var:sr_site_ship_port_pallas }
+	if = { limit = { has_variable = sr_mq_mine_pallas } add = var:sr_mq_mine_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_mine_pallas } add = global_var:sr_site_ship_mine_pallas }
+	if = { limit = { has_variable = sr_mq_yard_pallas } add = var:sr_mq_yard_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_yard_pallas } add = global_var:sr_site_ship_yard_pallas }
+	if = { limit = { has_variable = sr_mq_lab_pallas } add = var:sr_mq_lab_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_lab_pallas } add = global_var:sr_site_ship_lab_pallas }
+	if = { limit = { has_variable = sr_mq_culture_pallas } add = var:sr_mq_culture_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_culture_pallas } add = global_var:sr_site_ship_culture_pallas }
+	if = { limit = { has_variable = sr_mq_resort_pallas } add = var:sr_mq_resort_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_resort_pallas } add = global_var:sr_site_ship_resort_pallas }
+	if = { limit = { has_variable = sr_mq_black_pallas } add = var:sr_mq_black_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_black_pallas } add = global_var:sr_site_ship_black_pallas }
+	if = { limit = { has_variable = sr_mq_train_pallas } add = var:sr_mq_train_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_train_pallas } add = global_var:sr_site_ship_train_pallas }
+	if = { limit = { has_variable = sr_mq_bunker_pallas } add = var:sr_mq_bunker_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_pallas } add = global_var:sr_site_ship_bunker_pallas }
+	if = { limit = { has_variable = sr_mq_foundry_pallas } add = var:sr_mq_foundry_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_pallas } add = global_var:sr_site_ship_foundry_pallas }
+	if = { limit = { has_variable = sr_mq_admin_pallas } add = var:sr_mq_admin_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_admin_pallas } add = global_var:sr_site_ship_admin_pallas }
 }
 # The next Habitat THIS queues at 2 Pallas costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
@@ -5715,6 +6005,37 @@ sr_mod_hab_used_hygiea = {
 	if = { limit = { has_variable = sr_mq_hab_hygiea } add = var:sr_mq_hab_hygiea }
 	if = { limit = { has_global_variable = sr_site_ship_hab_hygiea } add = global_var:sr_site_ship_hab_hygiea }
 }
+sr_mod_crewed_pending_hygiea = {
+	value = sr_site_levels_hygiea
+	if = { limit = { has_variable = sr_mq_a_hygiea } add = var:sr_mq_a_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_a_hygiea } add = global_var:sr_site_ship_a_hygiea }
+	if = { limit = { has_variable = sr_mq_b_hygiea } add = var:sr_mq_b_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_b_hygiea } add = global_var:sr_site_ship_b_hygiea }
+	if = { limit = { has_variable = sr_mq_def_hygiea } add = var:sr_mq_def_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_def_hygiea } add = global_var:sr_site_ship_def_hygiea }
+	if = { limit = { has_variable = sr_mq_port_hygiea } add = var:sr_mq_port_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_port_hygiea } add = global_var:sr_site_ship_port_hygiea }
+	if = { limit = { has_variable = sr_mq_mine_hygiea } add = var:sr_mq_mine_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_mine_hygiea } add = global_var:sr_site_ship_mine_hygiea }
+	if = { limit = { has_variable = sr_mq_yard_hygiea } add = var:sr_mq_yard_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_yard_hygiea } add = global_var:sr_site_ship_yard_hygiea }
+	if = { limit = { has_variable = sr_mq_lab_hygiea } add = var:sr_mq_lab_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_lab_hygiea } add = global_var:sr_site_ship_lab_hygiea }
+	if = { limit = { has_variable = sr_mq_culture_hygiea } add = var:sr_mq_culture_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_culture_hygiea } add = global_var:sr_site_ship_culture_hygiea }
+	if = { limit = { has_variable = sr_mq_resort_hygiea } add = var:sr_mq_resort_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_resort_hygiea } add = global_var:sr_site_ship_resort_hygiea }
+	if = { limit = { has_variable = sr_mq_black_hygiea } add = var:sr_mq_black_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_black_hygiea } add = global_var:sr_site_ship_black_hygiea }
+	if = { limit = { has_variable = sr_mq_train_hygiea } add = var:sr_mq_train_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_train_hygiea } add = global_var:sr_site_ship_train_hygiea }
+	if = { limit = { has_variable = sr_mq_bunker_hygiea } add = var:sr_mq_bunker_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_hygiea } add = global_var:sr_site_ship_bunker_hygiea }
+	if = { limit = { has_variable = sr_mq_foundry_hygiea } add = var:sr_mq_foundry_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_hygiea } add = global_var:sr_site_ship_foundry_hygiea }
+	if = { limit = { has_variable = sr_mq_admin_hygiea } add = var:sr_mq_admin_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_admin_hygiea } add = global_var:sr_site_ship_admin_hygiea }
+}
 # The next Habitat THIS queues at 10 Hygiea costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
 sr_mod_next_hab_cost_hygiea = {
@@ -5894,6 +6215,37 @@ sr_mod_hab_used_io = {
 	if = { limit = { has_variable = sr_mq_hab_io } add = var:sr_mq_hab_io }
 	if = { limit = { has_global_variable = sr_site_ship_hab_io } add = global_var:sr_site_ship_hab_io }
 }
+sr_mod_crewed_pending_io = {
+	value = sr_site_levels_io
+	if = { limit = { has_variable = sr_mq_a_io } add = var:sr_mq_a_io }
+	if = { limit = { has_global_variable = sr_site_ship_a_io } add = global_var:sr_site_ship_a_io }
+	if = { limit = { has_variable = sr_mq_b_io } add = var:sr_mq_b_io }
+	if = { limit = { has_global_variable = sr_site_ship_b_io } add = global_var:sr_site_ship_b_io }
+	if = { limit = { has_variable = sr_mq_def_io } add = var:sr_mq_def_io }
+	if = { limit = { has_global_variable = sr_site_ship_def_io } add = global_var:sr_site_ship_def_io }
+	if = { limit = { has_variable = sr_mq_port_io } add = var:sr_mq_port_io }
+	if = { limit = { has_global_variable = sr_site_ship_port_io } add = global_var:sr_site_ship_port_io }
+	if = { limit = { has_variable = sr_mq_mine_io } add = var:sr_mq_mine_io }
+	if = { limit = { has_global_variable = sr_site_ship_mine_io } add = global_var:sr_site_ship_mine_io }
+	if = { limit = { has_variable = sr_mq_yard_io } add = var:sr_mq_yard_io }
+	if = { limit = { has_global_variable = sr_site_ship_yard_io } add = global_var:sr_site_ship_yard_io }
+	if = { limit = { has_variable = sr_mq_lab_io } add = var:sr_mq_lab_io }
+	if = { limit = { has_global_variable = sr_site_ship_lab_io } add = global_var:sr_site_ship_lab_io }
+	if = { limit = { has_variable = sr_mq_culture_io } add = var:sr_mq_culture_io }
+	if = { limit = { has_global_variable = sr_site_ship_culture_io } add = global_var:sr_site_ship_culture_io }
+	if = { limit = { has_variable = sr_mq_resort_io } add = var:sr_mq_resort_io }
+	if = { limit = { has_global_variable = sr_site_ship_resort_io } add = global_var:sr_site_ship_resort_io }
+	if = { limit = { has_variable = sr_mq_black_io } add = var:sr_mq_black_io }
+	if = { limit = { has_global_variable = sr_site_ship_black_io } add = global_var:sr_site_ship_black_io }
+	if = { limit = { has_variable = sr_mq_train_io } add = var:sr_mq_train_io }
+	if = { limit = { has_global_variable = sr_site_ship_train_io } add = global_var:sr_site_ship_train_io }
+	if = { limit = { has_variable = sr_mq_bunker_io } add = var:sr_mq_bunker_io }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_io } add = global_var:sr_site_ship_bunker_io }
+	if = { limit = { has_variable = sr_mq_foundry_io } add = var:sr_mq_foundry_io }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_io } add = global_var:sr_site_ship_foundry_io }
+	if = { limit = { has_variable = sr_mq_admin_io } add = var:sr_mq_admin_io }
+	if = { limit = { has_global_variable = sr_site_ship_admin_io } add = global_var:sr_site_ship_admin_io }
+}
 # The next Habitat THIS queues at Io costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
 sr_mod_next_hab_cost_io = {
@@ -6071,6 +6423,37 @@ sr_mod_hab_used_europa = {
 	value = sr_site_hab_value_europa
 	if = { limit = { has_variable = sr_mq_hab_europa } add = var:sr_mq_hab_europa }
 	if = { limit = { has_global_variable = sr_site_ship_hab_europa } add = global_var:sr_site_ship_hab_europa }
+}
+sr_mod_crewed_pending_europa = {
+	value = sr_site_levels_europa
+	if = { limit = { has_variable = sr_mq_a_europa } add = var:sr_mq_a_europa }
+	if = { limit = { has_global_variable = sr_site_ship_a_europa } add = global_var:sr_site_ship_a_europa }
+	if = { limit = { has_variable = sr_mq_b_europa } add = var:sr_mq_b_europa }
+	if = { limit = { has_global_variable = sr_site_ship_b_europa } add = global_var:sr_site_ship_b_europa }
+	if = { limit = { has_variable = sr_mq_def_europa } add = var:sr_mq_def_europa }
+	if = { limit = { has_global_variable = sr_site_ship_def_europa } add = global_var:sr_site_ship_def_europa }
+	if = { limit = { has_variable = sr_mq_port_europa } add = var:sr_mq_port_europa }
+	if = { limit = { has_global_variable = sr_site_ship_port_europa } add = global_var:sr_site_ship_port_europa }
+	if = { limit = { has_variable = sr_mq_mine_europa } add = var:sr_mq_mine_europa }
+	if = { limit = { has_global_variable = sr_site_ship_mine_europa } add = global_var:sr_site_ship_mine_europa }
+	if = { limit = { has_variable = sr_mq_yard_europa } add = var:sr_mq_yard_europa }
+	if = { limit = { has_global_variable = sr_site_ship_yard_europa } add = global_var:sr_site_ship_yard_europa }
+	if = { limit = { has_variable = sr_mq_lab_europa } add = var:sr_mq_lab_europa }
+	if = { limit = { has_global_variable = sr_site_ship_lab_europa } add = global_var:sr_site_ship_lab_europa }
+	if = { limit = { has_variable = sr_mq_culture_europa } add = var:sr_mq_culture_europa }
+	if = { limit = { has_global_variable = sr_site_ship_culture_europa } add = global_var:sr_site_ship_culture_europa }
+	if = { limit = { has_variable = sr_mq_resort_europa } add = var:sr_mq_resort_europa }
+	if = { limit = { has_global_variable = sr_site_ship_resort_europa } add = global_var:sr_site_ship_resort_europa }
+	if = { limit = { has_variable = sr_mq_black_europa } add = var:sr_mq_black_europa }
+	if = { limit = { has_global_variable = sr_site_ship_black_europa } add = global_var:sr_site_ship_black_europa }
+	if = { limit = { has_variable = sr_mq_train_europa } add = var:sr_mq_train_europa }
+	if = { limit = { has_global_variable = sr_site_ship_train_europa } add = global_var:sr_site_ship_train_europa }
+	if = { limit = { has_variable = sr_mq_bunker_europa } add = var:sr_mq_bunker_europa }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_europa } add = global_var:sr_site_ship_bunker_europa }
+	if = { limit = { has_variable = sr_mq_foundry_europa } add = var:sr_mq_foundry_europa }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_europa } add = global_var:sr_site_ship_foundry_europa }
+	if = { limit = { has_variable = sr_mq_admin_europa } add = var:sr_mq_admin_europa }
+	if = { limit = { has_global_variable = sr_site_ship_admin_europa } add = global_var:sr_site_ship_admin_europa }
 }
 # The next Habitat THIS queues at Europa costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
@@ -6257,6 +6640,39 @@ sr_mod_hab_used_ganymede = {
 	if = { limit = { has_variable = sr_mq_hab_ganymede } add = var:sr_mq_hab_ganymede }
 	if = { limit = { has_global_variable = sr_site_ship_hab_ganymede } add = global_var:sr_site_ship_hab_ganymede }
 }
+sr_mod_crewed_pending_ganymede = {
+	value = sr_site_levels_ganymede
+	if = { limit = { has_variable = sr_mq_a_ganymede } add = var:sr_mq_a_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_a_ganymede } add = global_var:sr_site_ship_a_ganymede }
+	if = { limit = { has_variable = sr_mq_b_ganymede } add = var:sr_mq_b_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_b_ganymede } add = global_var:sr_site_ship_b_ganymede }
+	if = { limit = { has_variable = sr_mq_def_ganymede } add = var:sr_mq_def_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_def_ganymede } add = global_var:sr_site_ship_def_ganymede }
+	if = { limit = { has_variable = sr_mq_port_ganymede } add = var:sr_mq_port_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_port_ganymede } add = global_var:sr_site_ship_port_ganymede }
+	if = { limit = { has_variable = sr_mq_mine_ganymede } add = var:sr_mq_mine_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_mine_ganymede } add = global_var:sr_site_ship_mine_ganymede }
+	if = { limit = { has_variable = sr_mq_yard_ganymede } add = var:sr_mq_yard_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_yard_ganymede } add = global_var:sr_site_ship_yard_ganymede }
+	if = { limit = { has_variable = sr_mq_lab_ganymede } add = var:sr_mq_lab_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_lab_ganymede } add = global_var:sr_site_ship_lab_ganymede }
+	if = { limit = { has_variable = sr_mq_culture_ganymede } add = var:sr_mq_culture_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_culture_ganymede } add = global_var:sr_site_ship_culture_ganymede }
+	if = { limit = { has_variable = sr_mq_resort_ganymede } add = var:sr_mq_resort_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_resort_ganymede } add = global_var:sr_site_ship_resort_ganymede }
+	if = { limit = { has_variable = sr_mq_black_ganymede } add = var:sr_mq_black_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_black_ganymede } add = global_var:sr_site_ship_black_ganymede }
+	if = { limit = { has_variable = sr_mq_train_ganymede } add = var:sr_mq_train_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_train_ganymede } add = global_var:sr_site_ship_train_ganymede }
+	if = { limit = { has_variable = sr_mq_bunker_ganymede } add = var:sr_mq_bunker_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_ganymede } add = global_var:sr_site_ship_bunker_ganymede }
+	if = { limit = { has_variable = sr_mq_foundry_ganymede } add = var:sr_mq_foundry_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_ganymede } add = global_var:sr_site_ship_foundry_ganymede }
+	if = { limit = { has_variable = sr_mq_admin_ganymede } add = var:sr_mq_admin_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_admin_ganymede } add = global_var:sr_site_ship_admin_ganymede }
+	if = { limit = { has_variable = sr_mq_terra_ganymede } add = var:sr_mq_terra_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_terra_ganymede } add = global_var:sr_site_ship_terra_ganymede }
+}
 # The next Habitat THIS queues at Ganymede costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
 sr_mod_next_hab_cost_ganymede = {
@@ -6442,6 +6858,39 @@ sr_mod_hab_used_callisto = {
 	if = { limit = { has_variable = sr_mq_hab_callisto } add = var:sr_mq_hab_callisto }
 	if = { limit = { has_global_variable = sr_site_ship_hab_callisto } add = global_var:sr_site_ship_hab_callisto }
 }
+sr_mod_crewed_pending_callisto = {
+	value = sr_site_levels_callisto
+	if = { limit = { has_variable = sr_mq_a_callisto } add = var:sr_mq_a_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_a_callisto } add = global_var:sr_site_ship_a_callisto }
+	if = { limit = { has_variable = sr_mq_b_callisto } add = var:sr_mq_b_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_b_callisto } add = global_var:sr_site_ship_b_callisto }
+	if = { limit = { has_variable = sr_mq_def_callisto } add = var:sr_mq_def_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_def_callisto } add = global_var:sr_site_ship_def_callisto }
+	if = { limit = { has_variable = sr_mq_port_callisto } add = var:sr_mq_port_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_port_callisto } add = global_var:sr_site_ship_port_callisto }
+	if = { limit = { has_variable = sr_mq_mine_callisto } add = var:sr_mq_mine_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_mine_callisto } add = global_var:sr_site_ship_mine_callisto }
+	if = { limit = { has_variable = sr_mq_yard_callisto } add = var:sr_mq_yard_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_yard_callisto } add = global_var:sr_site_ship_yard_callisto }
+	if = { limit = { has_variable = sr_mq_lab_callisto } add = var:sr_mq_lab_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_lab_callisto } add = global_var:sr_site_ship_lab_callisto }
+	if = { limit = { has_variable = sr_mq_culture_callisto } add = var:sr_mq_culture_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_culture_callisto } add = global_var:sr_site_ship_culture_callisto }
+	if = { limit = { has_variable = sr_mq_resort_callisto } add = var:sr_mq_resort_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_resort_callisto } add = global_var:sr_site_ship_resort_callisto }
+	if = { limit = { has_variable = sr_mq_black_callisto } add = var:sr_mq_black_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_black_callisto } add = global_var:sr_site_ship_black_callisto }
+	if = { limit = { has_variable = sr_mq_train_callisto } add = var:sr_mq_train_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_train_callisto } add = global_var:sr_site_ship_train_callisto }
+	if = { limit = { has_variable = sr_mq_bunker_callisto } add = var:sr_mq_bunker_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_callisto } add = global_var:sr_site_ship_bunker_callisto }
+	if = { limit = { has_variable = sr_mq_foundry_callisto } add = var:sr_mq_foundry_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_callisto } add = global_var:sr_site_ship_foundry_callisto }
+	if = { limit = { has_variable = sr_mq_admin_callisto } add = var:sr_mq_admin_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_admin_callisto } add = global_var:sr_site_ship_admin_callisto }
+	if = { limit = { has_variable = sr_mq_terra_callisto } add = var:sr_mq_terra_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_terra_callisto } add = global_var:sr_site_ship_terra_callisto }
+}
 # The next Habitat THIS queues at Callisto costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
 sr_mod_next_hab_cost_callisto = {
@@ -6621,6 +7070,37 @@ sr_mod_hab_used_himalia = {
 	if = { limit = { has_variable = sr_mq_hab_himalia } add = var:sr_mq_hab_himalia }
 	if = { limit = { has_global_variable = sr_site_ship_hab_himalia } add = global_var:sr_site_ship_hab_himalia }
 }
+sr_mod_crewed_pending_himalia = {
+	value = sr_site_levels_himalia
+	if = { limit = { has_variable = sr_mq_a_himalia } add = var:sr_mq_a_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_a_himalia } add = global_var:sr_site_ship_a_himalia }
+	if = { limit = { has_variable = sr_mq_b_himalia } add = var:sr_mq_b_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_b_himalia } add = global_var:sr_site_ship_b_himalia }
+	if = { limit = { has_variable = sr_mq_def_himalia } add = var:sr_mq_def_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_def_himalia } add = global_var:sr_site_ship_def_himalia }
+	if = { limit = { has_variable = sr_mq_port_himalia } add = var:sr_mq_port_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_port_himalia } add = global_var:sr_site_ship_port_himalia }
+	if = { limit = { has_variable = sr_mq_mine_himalia } add = var:sr_mq_mine_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_mine_himalia } add = global_var:sr_site_ship_mine_himalia }
+	if = { limit = { has_variable = sr_mq_yard_himalia } add = var:sr_mq_yard_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_yard_himalia } add = global_var:sr_site_ship_yard_himalia }
+	if = { limit = { has_variable = sr_mq_lab_himalia } add = var:sr_mq_lab_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_lab_himalia } add = global_var:sr_site_ship_lab_himalia }
+	if = { limit = { has_variable = sr_mq_culture_himalia } add = var:sr_mq_culture_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_culture_himalia } add = global_var:sr_site_ship_culture_himalia }
+	if = { limit = { has_variable = sr_mq_resort_himalia } add = var:sr_mq_resort_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_resort_himalia } add = global_var:sr_site_ship_resort_himalia }
+	if = { limit = { has_variable = sr_mq_black_himalia } add = var:sr_mq_black_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_black_himalia } add = global_var:sr_site_ship_black_himalia }
+	if = { limit = { has_variable = sr_mq_train_himalia } add = var:sr_mq_train_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_train_himalia } add = global_var:sr_site_ship_train_himalia }
+	if = { limit = { has_variable = sr_mq_bunker_himalia } add = var:sr_mq_bunker_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_himalia } add = global_var:sr_site_ship_bunker_himalia }
+	if = { limit = { has_variable = sr_mq_foundry_himalia } add = var:sr_mq_foundry_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_himalia } add = global_var:sr_site_ship_foundry_himalia }
+	if = { limit = { has_variable = sr_mq_admin_himalia } add = var:sr_mq_admin_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_admin_himalia } add = global_var:sr_site_ship_admin_himalia }
+}
 # The next Habitat THIS queues at Himalia costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
 sr_mod_next_hab_cost_himalia = {
@@ -6799,6 +7279,37 @@ sr_mod_hab_used_amalthea = {
 	value = sr_site_hab_value_amalthea
 	if = { limit = { has_variable = sr_mq_hab_amalthea } add = var:sr_mq_hab_amalthea }
 	if = { limit = { has_global_variable = sr_site_ship_hab_amalthea } add = global_var:sr_site_ship_hab_amalthea }
+}
+sr_mod_crewed_pending_amalthea = {
+	value = sr_site_levels_amalthea
+	if = { limit = { has_variable = sr_mq_a_amalthea } add = var:sr_mq_a_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_a_amalthea } add = global_var:sr_site_ship_a_amalthea }
+	if = { limit = { has_variable = sr_mq_b_amalthea } add = var:sr_mq_b_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_b_amalthea } add = global_var:sr_site_ship_b_amalthea }
+	if = { limit = { has_variable = sr_mq_def_amalthea } add = var:sr_mq_def_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_def_amalthea } add = global_var:sr_site_ship_def_amalthea }
+	if = { limit = { has_variable = sr_mq_port_amalthea } add = var:sr_mq_port_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_port_amalthea } add = global_var:sr_site_ship_port_amalthea }
+	if = { limit = { has_variable = sr_mq_mine_amalthea } add = var:sr_mq_mine_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_mine_amalthea } add = global_var:sr_site_ship_mine_amalthea }
+	if = { limit = { has_variable = sr_mq_yard_amalthea } add = var:sr_mq_yard_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_yard_amalthea } add = global_var:sr_site_ship_yard_amalthea }
+	if = { limit = { has_variable = sr_mq_lab_amalthea } add = var:sr_mq_lab_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_lab_amalthea } add = global_var:sr_site_ship_lab_amalthea }
+	if = { limit = { has_variable = sr_mq_culture_amalthea } add = var:sr_mq_culture_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_culture_amalthea } add = global_var:sr_site_ship_culture_amalthea }
+	if = { limit = { has_variable = sr_mq_resort_amalthea } add = var:sr_mq_resort_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_resort_amalthea } add = global_var:sr_site_ship_resort_amalthea }
+	if = { limit = { has_variable = sr_mq_black_amalthea } add = var:sr_mq_black_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_black_amalthea } add = global_var:sr_site_ship_black_amalthea }
+	if = { limit = { has_variable = sr_mq_train_amalthea } add = var:sr_mq_train_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_train_amalthea } add = global_var:sr_site_ship_train_amalthea }
+	if = { limit = { has_variable = sr_mq_bunker_amalthea } add = var:sr_mq_bunker_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_amalthea } add = global_var:sr_site_ship_bunker_amalthea }
+	if = { limit = { has_variable = sr_mq_foundry_amalthea } add = var:sr_mq_foundry_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_amalthea } add = global_var:sr_site_ship_foundry_amalthea }
+	if = { limit = { has_variable = sr_mq_admin_amalthea } add = var:sr_mq_admin_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_admin_amalthea } add = global_var:sr_site_ship_admin_amalthea }
 }
 # The next Habitat THIS queues at Amalthea costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
@@ -6986,6 +7497,39 @@ sr_mod_hab_used_venus = {
 	if = { limit = { has_variable = sr_mq_hab_venus } add = var:sr_mq_hab_venus }
 	if = { limit = { has_global_variable = sr_site_ship_hab_venus } add = global_var:sr_site_ship_hab_venus }
 }
+sr_mod_crewed_pending_venus = {
+	value = sr_site_levels_venus
+	if = { limit = { has_variable = sr_mq_a_venus } add = var:sr_mq_a_venus }
+	if = { limit = { has_global_variable = sr_site_ship_a_venus } add = global_var:sr_site_ship_a_venus }
+	if = { limit = { has_variable = sr_mq_b_venus } add = var:sr_mq_b_venus }
+	if = { limit = { has_global_variable = sr_site_ship_b_venus } add = global_var:sr_site_ship_b_venus }
+	if = { limit = { has_variable = sr_mq_def_venus } add = var:sr_mq_def_venus }
+	if = { limit = { has_global_variable = sr_site_ship_def_venus } add = global_var:sr_site_ship_def_venus }
+	if = { limit = { has_variable = sr_mq_port_venus } add = var:sr_mq_port_venus }
+	if = { limit = { has_global_variable = sr_site_ship_port_venus } add = global_var:sr_site_ship_port_venus }
+	if = { limit = { has_variable = sr_mq_mine_venus } add = var:sr_mq_mine_venus }
+	if = { limit = { has_global_variable = sr_site_ship_mine_venus } add = global_var:sr_site_ship_mine_venus }
+	if = { limit = { has_variable = sr_mq_yard_venus } add = var:sr_mq_yard_venus }
+	if = { limit = { has_global_variable = sr_site_ship_yard_venus } add = global_var:sr_site_ship_yard_venus }
+	if = { limit = { has_variable = sr_mq_lab_venus } add = var:sr_mq_lab_venus }
+	if = { limit = { has_global_variable = sr_site_ship_lab_venus } add = global_var:sr_site_ship_lab_venus }
+	if = { limit = { has_variable = sr_mq_culture_venus } add = var:sr_mq_culture_venus }
+	if = { limit = { has_global_variable = sr_site_ship_culture_venus } add = global_var:sr_site_ship_culture_venus }
+	if = { limit = { has_variable = sr_mq_resort_venus } add = var:sr_mq_resort_venus }
+	if = { limit = { has_global_variable = sr_site_ship_resort_venus } add = global_var:sr_site_ship_resort_venus }
+	if = { limit = { has_variable = sr_mq_black_venus } add = var:sr_mq_black_venus }
+	if = { limit = { has_global_variable = sr_site_ship_black_venus } add = global_var:sr_site_ship_black_venus }
+	if = { limit = { has_variable = sr_mq_train_venus } add = var:sr_mq_train_venus }
+	if = { limit = { has_global_variable = sr_site_ship_train_venus } add = global_var:sr_site_ship_train_venus }
+	if = { limit = { has_variable = sr_mq_bunker_venus } add = var:sr_mq_bunker_venus }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_venus } add = global_var:sr_site_ship_bunker_venus }
+	if = { limit = { has_variable = sr_mq_foundry_venus } add = var:sr_mq_foundry_venus }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_venus } add = global_var:sr_site_ship_foundry_venus }
+	if = { limit = { has_variable = sr_mq_admin_venus } add = var:sr_mq_admin_venus }
+	if = { limit = { has_global_variable = sr_site_ship_admin_venus } add = global_var:sr_site_ship_admin_venus }
+	if = { limit = { has_variable = sr_mq_terra_venus } add = var:sr_mq_terra_venus }
+	if = { limit = { has_global_variable = sr_site_ship_terra_venus } add = global_var:sr_site_ship_terra_venus }
+}
 # The next Habitat THIS queues at Venus Cloud Habitat costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
 sr_mod_next_hab_cost_venus = {
@@ -7165,6 +7709,37 @@ sr_mod_hab_used_mercury = {
 	value = sr_site_hab_value_mercury
 	if = { limit = { has_variable = sr_mq_hab_mercury } add = var:sr_mq_hab_mercury }
 	if = { limit = { has_global_variable = sr_site_ship_hab_mercury } add = global_var:sr_site_ship_hab_mercury }
+}
+sr_mod_crewed_pending_mercury = {
+	value = sr_site_levels_mercury
+	if = { limit = { has_variable = sr_mq_a_mercury } add = var:sr_mq_a_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_a_mercury } add = global_var:sr_site_ship_a_mercury }
+	if = { limit = { has_variable = sr_mq_b_mercury } add = var:sr_mq_b_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_b_mercury } add = global_var:sr_site_ship_b_mercury }
+	if = { limit = { has_variable = sr_mq_def_mercury } add = var:sr_mq_def_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_def_mercury } add = global_var:sr_site_ship_def_mercury }
+	if = { limit = { has_variable = sr_mq_port_mercury } add = var:sr_mq_port_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_port_mercury } add = global_var:sr_site_ship_port_mercury }
+	if = { limit = { has_variable = sr_mq_mine_mercury } add = var:sr_mq_mine_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_mine_mercury } add = global_var:sr_site_ship_mine_mercury }
+	if = { limit = { has_variable = sr_mq_yard_mercury } add = var:sr_mq_yard_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_yard_mercury } add = global_var:sr_site_ship_yard_mercury }
+	if = { limit = { has_variable = sr_mq_lab_mercury } add = var:sr_mq_lab_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_lab_mercury } add = global_var:sr_site_ship_lab_mercury }
+	if = { limit = { has_variable = sr_mq_culture_mercury } add = var:sr_mq_culture_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_culture_mercury } add = global_var:sr_site_ship_culture_mercury }
+	if = { limit = { has_variable = sr_mq_resort_mercury } add = var:sr_mq_resort_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_resort_mercury } add = global_var:sr_site_ship_resort_mercury }
+	if = { limit = { has_variable = sr_mq_black_mercury } add = var:sr_mq_black_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_black_mercury } add = global_var:sr_site_ship_black_mercury }
+	if = { limit = { has_variable = sr_mq_train_mercury } add = var:sr_mq_train_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_train_mercury } add = global_var:sr_site_ship_train_mercury }
+	if = { limit = { has_variable = sr_mq_bunker_mercury } add = var:sr_mq_bunker_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_mercury } add = global_var:sr_site_ship_bunker_mercury }
+	if = { limit = { has_variable = sr_mq_foundry_mercury } add = var:sr_mq_foundry_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_mercury } add = global_var:sr_site_ship_foundry_mercury }
+	if = { limit = { has_variable = sr_mq_admin_mercury } add = var:sr_mq_admin_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_admin_mercury } add = global_var:sr_site_ship_admin_mercury }
 }
 # The next Habitat THIS queues at Mercury costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
@@ -7352,6 +7927,39 @@ sr_mod_hab_used_titan = {
 	if = { limit = { has_variable = sr_mq_hab_titan } add = var:sr_mq_hab_titan }
 	if = { limit = { has_global_variable = sr_site_ship_hab_titan } add = global_var:sr_site_ship_hab_titan }
 }
+sr_mod_crewed_pending_titan = {
+	value = sr_site_levels_titan
+	if = { limit = { has_variable = sr_mq_a_titan } add = var:sr_mq_a_titan }
+	if = { limit = { has_global_variable = sr_site_ship_a_titan } add = global_var:sr_site_ship_a_titan }
+	if = { limit = { has_variable = sr_mq_b_titan } add = var:sr_mq_b_titan }
+	if = { limit = { has_global_variable = sr_site_ship_b_titan } add = global_var:sr_site_ship_b_titan }
+	if = { limit = { has_variable = sr_mq_def_titan } add = var:sr_mq_def_titan }
+	if = { limit = { has_global_variable = sr_site_ship_def_titan } add = global_var:sr_site_ship_def_titan }
+	if = { limit = { has_variable = sr_mq_port_titan } add = var:sr_mq_port_titan }
+	if = { limit = { has_global_variable = sr_site_ship_port_titan } add = global_var:sr_site_ship_port_titan }
+	if = { limit = { has_variable = sr_mq_mine_titan } add = var:sr_mq_mine_titan }
+	if = { limit = { has_global_variable = sr_site_ship_mine_titan } add = global_var:sr_site_ship_mine_titan }
+	if = { limit = { has_variable = sr_mq_yard_titan } add = var:sr_mq_yard_titan }
+	if = { limit = { has_global_variable = sr_site_ship_yard_titan } add = global_var:sr_site_ship_yard_titan }
+	if = { limit = { has_variable = sr_mq_lab_titan } add = var:sr_mq_lab_titan }
+	if = { limit = { has_global_variable = sr_site_ship_lab_titan } add = global_var:sr_site_ship_lab_titan }
+	if = { limit = { has_variable = sr_mq_culture_titan } add = var:sr_mq_culture_titan }
+	if = { limit = { has_global_variable = sr_site_ship_culture_titan } add = global_var:sr_site_ship_culture_titan }
+	if = { limit = { has_variable = sr_mq_resort_titan } add = var:sr_mq_resort_titan }
+	if = { limit = { has_global_variable = sr_site_ship_resort_titan } add = global_var:sr_site_ship_resort_titan }
+	if = { limit = { has_variable = sr_mq_black_titan } add = var:sr_mq_black_titan }
+	if = { limit = { has_global_variable = sr_site_ship_black_titan } add = global_var:sr_site_ship_black_titan }
+	if = { limit = { has_variable = sr_mq_train_titan } add = var:sr_mq_train_titan }
+	if = { limit = { has_global_variable = sr_site_ship_train_titan } add = global_var:sr_site_ship_train_titan }
+	if = { limit = { has_variable = sr_mq_bunker_titan } add = var:sr_mq_bunker_titan }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_titan } add = global_var:sr_site_ship_bunker_titan }
+	if = { limit = { has_variable = sr_mq_foundry_titan } add = var:sr_mq_foundry_titan }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_titan } add = global_var:sr_site_ship_foundry_titan }
+	if = { limit = { has_variable = sr_mq_admin_titan } add = var:sr_mq_admin_titan }
+	if = { limit = { has_global_variable = sr_site_ship_admin_titan } add = global_var:sr_site_ship_admin_titan }
+	if = { limit = { has_variable = sr_mq_terra_titan } add = var:sr_mq_terra_titan }
+	if = { limit = { has_global_variable = sr_site_ship_terra_titan } add = global_var:sr_site_ship_terra_titan }
+}
 # The next Habitat THIS queues at Titan costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
 sr_mod_next_hab_cost_titan = {
@@ -7530,6 +8138,37 @@ sr_mod_hab_used_enceladus = {
 	value = sr_site_hab_value_enceladus
 	if = { limit = { has_variable = sr_mq_hab_enceladus } add = var:sr_mq_hab_enceladus }
 	if = { limit = { has_global_variable = sr_site_ship_hab_enceladus } add = global_var:sr_site_ship_hab_enceladus }
+}
+sr_mod_crewed_pending_enceladus = {
+	value = sr_site_levels_enceladus
+	if = { limit = { has_variable = sr_mq_a_enceladus } add = var:sr_mq_a_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_a_enceladus } add = global_var:sr_site_ship_a_enceladus }
+	if = { limit = { has_variable = sr_mq_b_enceladus } add = var:sr_mq_b_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_b_enceladus } add = global_var:sr_site_ship_b_enceladus }
+	if = { limit = { has_variable = sr_mq_def_enceladus } add = var:sr_mq_def_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_def_enceladus } add = global_var:sr_site_ship_def_enceladus }
+	if = { limit = { has_variable = sr_mq_port_enceladus } add = var:sr_mq_port_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_port_enceladus } add = global_var:sr_site_ship_port_enceladus }
+	if = { limit = { has_variable = sr_mq_mine_enceladus } add = var:sr_mq_mine_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_mine_enceladus } add = global_var:sr_site_ship_mine_enceladus }
+	if = { limit = { has_variable = sr_mq_yard_enceladus } add = var:sr_mq_yard_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_yard_enceladus } add = global_var:sr_site_ship_yard_enceladus }
+	if = { limit = { has_variable = sr_mq_lab_enceladus } add = var:sr_mq_lab_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_lab_enceladus } add = global_var:sr_site_ship_lab_enceladus }
+	if = { limit = { has_variable = sr_mq_culture_enceladus } add = var:sr_mq_culture_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_culture_enceladus } add = global_var:sr_site_ship_culture_enceladus }
+	if = { limit = { has_variable = sr_mq_resort_enceladus } add = var:sr_mq_resort_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_resort_enceladus } add = global_var:sr_site_ship_resort_enceladus }
+	if = { limit = { has_variable = sr_mq_black_enceladus } add = var:sr_mq_black_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_black_enceladus } add = global_var:sr_site_ship_black_enceladus }
+	if = { limit = { has_variable = sr_mq_train_enceladus } add = var:sr_mq_train_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_train_enceladus } add = global_var:sr_site_ship_train_enceladus }
+	if = { limit = { has_variable = sr_mq_bunker_enceladus } add = var:sr_mq_bunker_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_enceladus } add = global_var:sr_site_ship_bunker_enceladus }
+	if = { limit = { has_variable = sr_mq_foundry_enceladus } add = var:sr_mq_foundry_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_enceladus } add = global_var:sr_site_ship_foundry_enceladus }
+	if = { limit = { has_variable = sr_mq_admin_enceladus } add = var:sr_mq_admin_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_admin_enceladus } add = global_var:sr_site_ship_admin_enceladus }
 }
 # The next Habitat THIS queues at Enceladus costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
@@ -7710,6 +8349,37 @@ sr_mod_hab_used_rhea = {
 	if = { limit = { has_variable = sr_mq_hab_rhea } add = var:sr_mq_hab_rhea }
 	if = { limit = { has_global_variable = sr_site_ship_hab_rhea } add = global_var:sr_site_ship_hab_rhea }
 }
+sr_mod_crewed_pending_rhea = {
+	value = sr_site_levels_rhea
+	if = { limit = { has_variable = sr_mq_a_rhea } add = var:sr_mq_a_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_a_rhea } add = global_var:sr_site_ship_a_rhea }
+	if = { limit = { has_variable = sr_mq_b_rhea } add = var:sr_mq_b_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_b_rhea } add = global_var:sr_site_ship_b_rhea }
+	if = { limit = { has_variable = sr_mq_def_rhea } add = var:sr_mq_def_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_def_rhea } add = global_var:sr_site_ship_def_rhea }
+	if = { limit = { has_variable = sr_mq_port_rhea } add = var:sr_mq_port_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_port_rhea } add = global_var:sr_site_ship_port_rhea }
+	if = { limit = { has_variable = sr_mq_mine_rhea } add = var:sr_mq_mine_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_mine_rhea } add = global_var:sr_site_ship_mine_rhea }
+	if = { limit = { has_variable = sr_mq_yard_rhea } add = var:sr_mq_yard_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_yard_rhea } add = global_var:sr_site_ship_yard_rhea }
+	if = { limit = { has_variable = sr_mq_lab_rhea } add = var:sr_mq_lab_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_lab_rhea } add = global_var:sr_site_ship_lab_rhea }
+	if = { limit = { has_variable = sr_mq_culture_rhea } add = var:sr_mq_culture_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_culture_rhea } add = global_var:sr_site_ship_culture_rhea }
+	if = { limit = { has_variable = sr_mq_resort_rhea } add = var:sr_mq_resort_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_resort_rhea } add = global_var:sr_site_ship_resort_rhea }
+	if = { limit = { has_variable = sr_mq_black_rhea } add = var:sr_mq_black_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_black_rhea } add = global_var:sr_site_ship_black_rhea }
+	if = { limit = { has_variable = sr_mq_train_rhea } add = var:sr_mq_train_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_train_rhea } add = global_var:sr_site_ship_train_rhea }
+	if = { limit = { has_variable = sr_mq_bunker_rhea } add = var:sr_mq_bunker_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_rhea } add = global_var:sr_site_ship_bunker_rhea }
+	if = { limit = { has_variable = sr_mq_foundry_rhea } add = var:sr_mq_foundry_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_rhea } add = global_var:sr_site_ship_foundry_rhea }
+	if = { limit = { has_variable = sr_mq_admin_rhea } add = var:sr_mq_admin_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_admin_rhea } add = global_var:sr_site_ship_admin_rhea }
+}
 # The next Habitat THIS queues at Rhea costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
 sr_mod_next_hab_cost_rhea = {
@@ -7887,6 +8557,37 @@ sr_mod_hab_used_mimas = {
 	value = sr_site_hab_value_mimas
 	if = { limit = { has_variable = sr_mq_hab_mimas } add = var:sr_mq_hab_mimas }
 	if = { limit = { has_global_variable = sr_site_ship_hab_mimas } add = global_var:sr_site_ship_hab_mimas }
+}
+sr_mod_crewed_pending_mimas = {
+	value = sr_site_levels_mimas
+	if = { limit = { has_variable = sr_mq_a_mimas } add = var:sr_mq_a_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_a_mimas } add = global_var:sr_site_ship_a_mimas }
+	if = { limit = { has_variable = sr_mq_b_mimas } add = var:sr_mq_b_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_b_mimas } add = global_var:sr_site_ship_b_mimas }
+	if = { limit = { has_variable = sr_mq_def_mimas } add = var:sr_mq_def_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_def_mimas } add = global_var:sr_site_ship_def_mimas }
+	if = { limit = { has_variable = sr_mq_port_mimas } add = var:sr_mq_port_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_port_mimas } add = global_var:sr_site_ship_port_mimas }
+	if = { limit = { has_variable = sr_mq_mine_mimas } add = var:sr_mq_mine_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_mine_mimas } add = global_var:sr_site_ship_mine_mimas }
+	if = { limit = { has_variable = sr_mq_yard_mimas } add = var:sr_mq_yard_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_yard_mimas } add = global_var:sr_site_ship_yard_mimas }
+	if = { limit = { has_variable = sr_mq_lab_mimas } add = var:sr_mq_lab_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_lab_mimas } add = global_var:sr_site_ship_lab_mimas }
+	if = { limit = { has_variable = sr_mq_culture_mimas } add = var:sr_mq_culture_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_culture_mimas } add = global_var:sr_site_ship_culture_mimas }
+	if = { limit = { has_variable = sr_mq_resort_mimas } add = var:sr_mq_resort_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_resort_mimas } add = global_var:sr_site_ship_resort_mimas }
+	if = { limit = { has_variable = sr_mq_black_mimas } add = var:sr_mq_black_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_black_mimas } add = global_var:sr_site_ship_black_mimas }
+	if = { limit = { has_variable = sr_mq_train_mimas } add = var:sr_mq_train_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_train_mimas } add = global_var:sr_site_ship_train_mimas }
+	if = { limit = { has_variable = sr_mq_bunker_mimas } add = var:sr_mq_bunker_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_mimas } add = global_var:sr_site_ship_bunker_mimas }
+	if = { limit = { has_variable = sr_mq_foundry_mimas } add = var:sr_mq_foundry_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_mimas } add = global_var:sr_site_ship_foundry_mimas }
+	if = { limit = { has_variable = sr_mq_admin_mimas } add = var:sr_mq_admin_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_admin_mimas } add = global_var:sr_site_ship_admin_mimas }
 }
 # The next Habitat THIS queues at Mimas costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
@@ -8067,6 +8768,37 @@ sr_mod_hab_used_iapetus = {
 	if = { limit = { has_variable = sr_mq_hab_iapetus } add = var:sr_mq_hab_iapetus }
 	if = { limit = { has_global_variable = sr_site_ship_hab_iapetus } add = global_var:sr_site_ship_hab_iapetus }
 }
+sr_mod_crewed_pending_iapetus = {
+	value = sr_site_levels_iapetus
+	if = { limit = { has_variable = sr_mq_a_iapetus } add = var:sr_mq_a_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_a_iapetus } add = global_var:sr_site_ship_a_iapetus }
+	if = { limit = { has_variable = sr_mq_b_iapetus } add = var:sr_mq_b_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_b_iapetus } add = global_var:sr_site_ship_b_iapetus }
+	if = { limit = { has_variable = sr_mq_def_iapetus } add = var:sr_mq_def_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_def_iapetus } add = global_var:sr_site_ship_def_iapetus }
+	if = { limit = { has_variable = sr_mq_port_iapetus } add = var:sr_mq_port_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_port_iapetus } add = global_var:sr_site_ship_port_iapetus }
+	if = { limit = { has_variable = sr_mq_mine_iapetus } add = var:sr_mq_mine_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_mine_iapetus } add = global_var:sr_site_ship_mine_iapetus }
+	if = { limit = { has_variable = sr_mq_yard_iapetus } add = var:sr_mq_yard_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_yard_iapetus } add = global_var:sr_site_ship_yard_iapetus }
+	if = { limit = { has_variable = sr_mq_lab_iapetus } add = var:sr_mq_lab_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_lab_iapetus } add = global_var:sr_site_ship_lab_iapetus }
+	if = { limit = { has_variable = sr_mq_culture_iapetus } add = var:sr_mq_culture_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_culture_iapetus } add = global_var:sr_site_ship_culture_iapetus }
+	if = { limit = { has_variable = sr_mq_resort_iapetus } add = var:sr_mq_resort_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_resort_iapetus } add = global_var:sr_site_ship_resort_iapetus }
+	if = { limit = { has_variable = sr_mq_black_iapetus } add = var:sr_mq_black_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_black_iapetus } add = global_var:sr_site_ship_black_iapetus }
+	if = { limit = { has_variable = sr_mq_train_iapetus } add = var:sr_mq_train_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_train_iapetus } add = global_var:sr_site_ship_train_iapetus }
+	if = { limit = { has_variable = sr_mq_bunker_iapetus } add = var:sr_mq_bunker_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_iapetus } add = global_var:sr_site_ship_bunker_iapetus }
+	if = { limit = { has_variable = sr_mq_foundry_iapetus } add = var:sr_mq_foundry_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_iapetus } add = global_var:sr_site_ship_foundry_iapetus }
+	if = { limit = { has_variable = sr_mq_admin_iapetus } add = var:sr_mq_admin_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_admin_iapetus } add = global_var:sr_site_ship_admin_iapetus }
+}
 # The next Habitat THIS queues at Iapetus costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
 sr_mod_next_hab_cost_iapetus = {
@@ -8246,6 +8978,37 @@ sr_mod_hab_used_titania = {
 	if = { limit = { has_variable = sr_mq_hab_titania } add = var:sr_mq_hab_titania }
 	if = { limit = { has_global_variable = sr_site_ship_hab_titania } add = global_var:sr_site_ship_hab_titania }
 }
+sr_mod_crewed_pending_titania = {
+	value = sr_site_levels_titania
+	if = { limit = { has_variable = sr_mq_a_titania } add = var:sr_mq_a_titania }
+	if = { limit = { has_global_variable = sr_site_ship_a_titania } add = global_var:sr_site_ship_a_titania }
+	if = { limit = { has_variable = sr_mq_b_titania } add = var:sr_mq_b_titania }
+	if = { limit = { has_global_variable = sr_site_ship_b_titania } add = global_var:sr_site_ship_b_titania }
+	if = { limit = { has_variable = sr_mq_def_titania } add = var:sr_mq_def_titania }
+	if = { limit = { has_global_variable = sr_site_ship_def_titania } add = global_var:sr_site_ship_def_titania }
+	if = { limit = { has_variable = sr_mq_port_titania } add = var:sr_mq_port_titania }
+	if = { limit = { has_global_variable = sr_site_ship_port_titania } add = global_var:sr_site_ship_port_titania }
+	if = { limit = { has_variable = sr_mq_mine_titania } add = var:sr_mq_mine_titania }
+	if = { limit = { has_global_variable = sr_site_ship_mine_titania } add = global_var:sr_site_ship_mine_titania }
+	if = { limit = { has_variable = sr_mq_yard_titania } add = var:sr_mq_yard_titania }
+	if = { limit = { has_global_variable = sr_site_ship_yard_titania } add = global_var:sr_site_ship_yard_titania }
+	if = { limit = { has_variable = sr_mq_lab_titania } add = var:sr_mq_lab_titania }
+	if = { limit = { has_global_variable = sr_site_ship_lab_titania } add = global_var:sr_site_ship_lab_titania }
+	if = { limit = { has_variable = sr_mq_culture_titania } add = var:sr_mq_culture_titania }
+	if = { limit = { has_global_variable = sr_site_ship_culture_titania } add = global_var:sr_site_ship_culture_titania }
+	if = { limit = { has_variable = sr_mq_resort_titania } add = var:sr_mq_resort_titania }
+	if = { limit = { has_global_variable = sr_site_ship_resort_titania } add = global_var:sr_site_ship_resort_titania }
+	if = { limit = { has_variable = sr_mq_black_titania } add = var:sr_mq_black_titania }
+	if = { limit = { has_global_variable = sr_site_ship_black_titania } add = global_var:sr_site_ship_black_titania }
+	if = { limit = { has_variable = sr_mq_train_titania } add = var:sr_mq_train_titania }
+	if = { limit = { has_global_variable = sr_site_ship_train_titania } add = global_var:sr_site_ship_train_titania }
+	if = { limit = { has_variable = sr_mq_bunker_titania } add = var:sr_mq_bunker_titania }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_titania } add = global_var:sr_site_ship_bunker_titania }
+	if = { limit = { has_variable = sr_mq_foundry_titania } add = var:sr_mq_foundry_titania }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_titania } add = global_var:sr_site_ship_foundry_titania }
+	if = { limit = { has_variable = sr_mq_admin_titania } add = var:sr_mq_admin_titania }
+	if = { limit = { has_global_variable = sr_site_ship_admin_titania } add = global_var:sr_site_ship_admin_titania }
+}
 # The next Habitat THIS queues at Titania costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
 sr_mod_next_hab_cost_titania = {
@@ -8424,6 +9187,37 @@ sr_mod_hab_used_oberon = {
 	if = { limit = { has_variable = sr_mq_hab_oberon } add = var:sr_mq_hab_oberon }
 	if = { limit = { has_global_variable = sr_site_ship_hab_oberon } add = global_var:sr_site_ship_hab_oberon }
 }
+sr_mod_crewed_pending_oberon = {
+	value = sr_site_levels_oberon
+	if = { limit = { has_variable = sr_mq_a_oberon } add = var:sr_mq_a_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_a_oberon } add = global_var:sr_site_ship_a_oberon }
+	if = { limit = { has_variable = sr_mq_b_oberon } add = var:sr_mq_b_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_b_oberon } add = global_var:sr_site_ship_b_oberon }
+	if = { limit = { has_variable = sr_mq_def_oberon } add = var:sr_mq_def_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_def_oberon } add = global_var:sr_site_ship_def_oberon }
+	if = { limit = { has_variable = sr_mq_port_oberon } add = var:sr_mq_port_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_port_oberon } add = global_var:sr_site_ship_port_oberon }
+	if = { limit = { has_variable = sr_mq_mine_oberon } add = var:sr_mq_mine_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_mine_oberon } add = global_var:sr_site_ship_mine_oberon }
+	if = { limit = { has_variable = sr_mq_yard_oberon } add = var:sr_mq_yard_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_yard_oberon } add = global_var:sr_site_ship_yard_oberon }
+	if = { limit = { has_variable = sr_mq_lab_oberon } add = var:sr_mq_lab_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_lab_oberon } add = global_var:sr_site_ship_lab_oberon }
+	if = { limit = { has_variable = sr_mq_culture_oberon } add = var:sr_mq_culture_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_culture_oberon } add = global_var:sr_site_ship_culture_oberon }
+	if = { limit = { has_variable = sr_mq_resort_oberon } add = var:sr_mq_resort_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_resort_oberon } add = global_var:sr_site_ship_resort_oberon }
+	if = { limit = { has_variable = sr_mq_black_oberon } add = var:sr_mq_black_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_black_oberon } add = global_var:sr_site_ship_black_oberon }
+	if = { limit = { has_variable = sr_mq_train_oberon } add = var:sr_mq_train_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_train_oberon } add = global_var:sr_site_ship_train_oberon }
+	if = { limit = { has_variable = sr_mq_bunker_oberon } add = var:sr_mq_bunker_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_oberon } add = global_var:sr_site_ship_bunker_oberon }
+	if = { limit = { has_variable = sr_mq_foundry_oberon } add = var:sr_mq_foundry_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_oberon } add = global_var:sr_site_ship_foundry_oberon }
+	if = { limit = { has_variable = sr_mq_admin_oberon } add = var:sr_mq_admin_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_admin_oberon } add = global_var:sr_site_ship_admin_oberon }
+}
 # The next Habitat THIS queues at Oberon costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
 sr_mod_next_hab_cost_oberon = {
@@ -8601,6 +9395,37 @@ sr_mod_hab_used_miranda = {
 	value = sr_site_hab_value_miranda
 	if = { limit = { has_variable = sr_mq_hab_miranda } add = var:sr_mq_hab_miranda }
 	if = { limit = { has_global_variable = sr_site_ship_hab_miranda } add = global_var:sr_site_ship_hab_miranda }
+}
+sr_mod_crewed_pending_miranda = {
+	value = sr_site_levels_miranda
+	if = { limit = { has_variable = sr_mq_a_miranda } add = var:sr_mq_a_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_a_miranda } add = global_var:sr_site_ship_a_miranda }
+	if = { limit = { has_variable = sr_mq_b_miranda } add = var:sr_mq_b_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_b_miranda } add = global_var:sr_site_ship_b_miranda }
+	if = { limit = { has_variable = sr_mq_def_miranda } add = var:sr_mq_def_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_def_miranda } add = global_var:sr_site_ship_def_miranda }
+	if = { limit = { has_variable = sr_mq_port_miranda } add = var:sr_mq_port_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_port_miranda } add = global_var:sr_site_ship_port_miranda }
+	if = { limit = { has_variable = sr_mq_mine_miranda } add = var:sr_mq_mine_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_mine_miranda } add = global_var:sr_site_ship_mine_miranda }
+	if = { limit = { has_variable = sr_mq_yard_miranda } add = var:sr_mq_yard_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_yard_miranda } add = global_var:sr_site_ship_yard_miranda }
+	if = { limit = { has_variable = sr_mq_lab_miranda } add = var:sr_mq_lab_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_lab_miranda } add = global_var:sr_site_ship_lab_miranda }
+	if = { limit = { has_variable = sr_mq_culture_miranda } add = var:sr_mq_culture_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_culture_miranda } add = global_var:sr_site_ship_culture_miranda }
+	if = { limit = { has_variable = sr_mq_resort_miranda } add = var:sr_mq_resort_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_resort_miranda } add = global_var:sr_site_ship_resort_miranda }
+	if = { limit = { has_variable = sr_mq_black_miranda } add = var:sr_mq_black_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_black_miranda } add = global_var:sr_site_ship_black_miranda }
+	if = { limit = { has_variable = sr_mq_train_miranda } add = var:sr_mq_train_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_train_miranda } add = global_var:sr_site_ship_train_miranda }
+	if = { limit = { has_variable = sr_mq_bunker_miranda } add = var:sr_mq_bunker_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_miranda } add = global_var:sr_site_ship_bunker_miranda }
+	if = { limit = { has_variable = sr_mq_foundry_miranda } add = var:sr_mq_foundry_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_miranda } add = global_var:sr_site_ship_foundry_miranda }
+	if = { limit = { has_variable = sr_mq_admin_miranda } add = var:sr_mq_admin_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_admin_miranda } add = global_var:sr_site_ship_admin_miranda }
 }
 # The next Habitat THIS queues at Miranda costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
@@ -8781,6 +9606,37 @@ sr_mod_hab_used_ariel = {
 	if = { limit = { has_variable = sr_mq_hab_ariel } add = var:sr_mq_hab_ariel }
 	if = { limit = { has_global_variable = sr_site_ship_hab_ariel } add = global_var:sr_site_ship_hab_ariel }
 }
+sr_mod_crewed_pending_ariel = {
+	value = sr_site_levels_ariel
+	if = { limit = { has_variable = sr_mq_a_ariel } add = var:sr_mq_a_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_a_ariel } add = global_var:sr_site_ship_a_ariel }
+	if = { limit = { has_variable = sr_mq_b_ariel } add = var:sr_mq_b_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_b_ariel } add = global_var:sr_site_ship_b_ariel }
+	if = { limit = { has_variable = sr_mq_def_ariel } add = var:sr_mq_def_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_def_ariel } add = global_var:sr_site_ship_def_ariel }
+	if = { limit = { has_variable = sr_mq_port_ariel } add = var:sr_mq_port_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_port_ariel } add = global_var:sr_site_ship_port_ariel }
+	if = { limit = { has_variable = sr_mq_mine_ariel } add = var:sr_mq_mine_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_mine_ariel } add = global_var:sr_site_ship_mine_ariel }
+	if = { limit = { has_variable = sr_mq_yard_ariel } add = var:sr_mq_yard_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_yard_ariel } add = global_var:sr_site_ship_yard_ariel }
+	if = { limit = { has_variable = sr_mq_lab_ariel } add = var:sr_mq_lab_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_lab_ariel } add = global_var:sr_site_ship_lab_ariel }
+	if = { limit = { has_variable = sr_mq_culture_ariel } add = var:sr_mq_culture_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_culture_ariel } add = global_var:sr_site_ship_culture_ariel }
+	if = { limit = { has_variable = sr_mq_resort_ariel } add = var:sr_mq_resort_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_resort_ariel } add = global_var:sr_site_ship_resort_ariel }
+	if = { limit = { has_variable = sr_mq_black_ariel } add = var:sr_mq_black_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_black_ariel } add = global_var:sr_site_ship_black_ariel }
+	if = { limit = { has_variable = sr_mq_train_ariel } add = var:sr_mq_train_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_train_ariel } add = global_var:sr_site_ship_train_ariel }
+	if = { limit = { has_variable = sr_mq_bunker_ariel } add = var:sr_mq_bunker_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_ariel } add = global_var:sr_site_ship_bunker_ariel }
+	if = { limit = { has_variable = sr_mq_foundry_ariel } add = var:sr_mq_foundry_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_ariel } add = global_var:sr_site_ship_foundry_ariel }
+	if = { limit = { has_variable = sr_mq_admin_ariel } add = var:sr_mq_admin_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_admin_ariel } add = global_var:sr_site_ship_admin_ariel }
+}
 # The next Habitat THIS queues at Ariel costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
 sr_mod_next_hab_cost_ariel = {
@@ -8959,6 +9815,37 @@ sr_mod_hab_used_triton = {
 	value = sr_site_hab_value_triton
 	if = { limit = { has_variable = sr_mq_hab_triton } add = var:sr_mq_hab_triton }
 	if = { limit = { has_global_variable = sr_site_ship_hab_triton } add = global_var:sr_site_ship_hab_triton }
+}
+sr_mod_crewed_pending_triton = {
+	value = sr_site_levels_triton
+	if = { limit = { has_variable = sr_mq_a_triton } add = var:sr_mq_a_triton }
+	if = { limit = { has_global_variable = sr_site_ship_a_triton } add = global_var:sr_site_ship_a_triton }
+	if = { limit = { has_variable = sr_mq_b_triton } add = var:sr_mq_b_triton }
+	if = { limit = { has_global_variable = sr_site_ship_b_triton } add = global_var:sr_site_ship_b_triton }
+	if = { limit = { has_variable = sr_mq_def_triton } add = var:sr_mq_def_triton }
+	if = { limit = { has_global_variable = sr_site_ship_def_triton } add = global_var:sr_site_ship_def_triton }
+	if = { limit = { has_variable = sr_mq_port_triton } add = var:sr_mq_port_triton }
+	if = { limit = { has_global_variable = sr_site_ship_port_triton } add = global_var:sr_site_ship_port_triton }
+	if = { limit = { has_variable = sr_mq_mine_triton } add = var:sr_mq_mine_triton }
+	if = { limit = { has_global_variable = sr_site_ship_mine_triton } add = global_var:sr_site_ship_mine_triton }
+	if = { limit = { has_variable = sr_mq_yard_triton } add = var:sr_mq_yard_triton }
+	if = { limit = { has_global_variable = sr_site_ship_yard_triton } add = global_var:sr_site_ship_yard_triton }
+	if = { limit = { has_variable = sr_mq_lab_triton } add = var:sr_mq_lab_triton }
+	if = { limit = { has_global_variable = sr_site_ship_lab_triton } add = global_var:sr_site_ship_lab_triton }
+	if = { limit = { has_variable = sr_mq_culture_triton } add = var:sr_mq_culture_triton }
+	if = { limit = { has_global_variable = sr_site_ship_culture_triton } add = global_var:sr_site_ship_culture_triton }
+	if = { limit = { has_variable = sr_mq_resort_triton } add = var:sr_mq_resort_triton }
+	if = { limit = { has_global_variable = sr_site_ship_resort_triton } add = global_var:sr_site_ship_resort_triton }
+	if = { limit = { has_variable = sr_mq_black_triton } add = var:sr_mq_black_triton }
+	if = { limit = { has_global_variable = sr_site_ship_black_triton } add = global_var:sr_site_ship_black_triton }
+	if = { limit = { has_variable = sr_mq_train_triton } add = var:sr_mq_train_triton }
+	if = { limit = { has_global_variable = sr_site_ship_train_triton } add = global_var:sr_site_ship_train_triton }
+	if = { limit = { has_variable = sr_mq_bunker_triton } add = var:sr_mq_bunker_triton }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_triton } add = global_var:sr_site_ship_bunker_triton }
+	if = { limit = { has_variable = sr_mq_foundry_triton } add = var:sr_mq_foundry_triton }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_triton } add = global_var:sr_site_ship_foundry_triton }
+	if = { limit = { has_variable = sr_mq_admin_triton } add = var:sr_mq_admin_triton }
+	if = { limit = { has_global_variable = sr_site_ship_admin_triton } add = global_var:sr_site_ship_admin_triton }
 }
 # The next Habitat THIS queues at Triton costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
@@ -9139,6 +10026,37 @@ sr_mod_hab_used_proteus = {
 	if = { limit = { has_variable = sr_mq_hab_proteus } add = var:sr_mq_hab_proteus }
 	if = { limit = { has_global_variable = sr_site_ship_hab_proteus } add = global_var:sr_site_ship_hab_proteus }
 }
+sr_mod_crewed_pending_proteus = {
+	value = sr_site_levels_proteus
+	if = { limit = { has_variable = sr_mq_a_proteus } add = var:sr_mq_a_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_a_proteus } add = global_var:sr_site_ship_a_proteus }
+	if = { limit = { has_variable = sr_mq_b_proteus } add = var:sr_mq_b_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_b_proteus } add = global_var:sr_site_ship_b_proteus }
+	if = { limit = { has_variable = sr_mq_def_proteus } add = var:sr_mq_def_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_def_proteus } add = global_var:sr_site_ship_def_proteus }
+	if = { limit = { has_variable = sr_mq_port_proteus } add = var:sr_mq_port_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_port_proteus } add = global_var:sr_site_ship_port_proteus }
+	if = { limit = { has_variable = sr_mq_mine_proteus } add = var:sr_mq_mine_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_mine_proteus } add = global_var:sr_site_ship_mine_proteus }
+	if = { limit = { has_variable = sr_mq_yard_proteus } add = var:sr_mq_yard_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_yard_proteus } add = global_var:sr_site_ship_yard_proteus }
+	if = { limit = { has_variable = sr_mq_lab_proteus } add = var:sr_mq_lab_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_lab_proteus } add = global_var:sr_site_ship_lab_proteus }
+	if = { limit = { has_variable = sr_mq_culture_proteus } add = var:sr_mq_culture_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_culture_proteus } add = global_var:sr_site_ship_culture_proteus }
+	if = { limit = { has_variable = sr_mq_resort_proteus } add = var:sr_mq_resort_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_resort_proteus } add = global_var:sr_site_ship_resort_proteus }
+	if = { limit = { has_variable = sr_mq_black_proteus } add = var:sr_mq_black_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_black_proteus } add = global_var:sr_site_ship_black_proteus }
+	if = { limit = { has_variable = sr_mq_train_proteus } add = var:sr_mq_train_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_train_proteus } add = global_var:sr_site_ship_train_proteus }
+	if = { limit = { has_variable = sr_mq_bunker_proteus } add = var:sr_mq_bunker_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_proteus } add = global_var:sr_site_ship_bunker_proteus }
+	if = { limit = { has_variable = sr_mq_foundry_proteus } add = var:sr_mq_foundry_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_proteus } add = global_var:sr_site_ship_foundry_proteus }
+	if = { limit = { has_variable = sr_mq_admin_proteus } add = var:sr_mq_admin_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_admin_proteus } add = global_var:sr_site_ship_admin_proteus }
+}
 # The next Habitat THIS queues at Proteus costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
 sr_mod_next_hab_cost_proteus = {
@@ -9317,6 +10235,37 @@ sr_mod_hab_used_pluto = {
 	value = sr_site_hab_value_pluto
 	if = { limit = { has_variable = sr_mq_hab_pluto } add = var:sr_mq_hab_pluto }
 	if = { limit = { has_global_variable = sr_site_ship_hab_pluto } add = global_var:sr_site_ship_hab_pluto }
+}
+sr_mod_crewed_pending_pluto = {
+	value = sr_site_levels_pluto
+	if = { limit = { has_variable = sr_mq_a_pluto } add = var:sr_mq_a_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_a_pluto } add = global_var:sr_site_ship_a_pluto }
+	if = { limit = { has_variable = sr_mq_b_pluto } add = var:sr_mq_b_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_b_pluto } add = global_var:sr_site_ship_b_pluto }
+	if = { limit = { has_variable = sr_mq_def_pluto } add = var:sr_mq_def_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_def_pluto } add = global_var:sr_site_ship_def_pluto }
+	if = { limit = { has_variable = sr_mq_port_pluto } add = var:sr_mq_port_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_port_pluto } add = global_var:sr_site_ship_port_pluto }
+	if = { limit = { has_variable = sr_mq_mine_pluto } add = var:sr_mq_mine_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_mine_pluto } add = global_var:sr_site_ship_mine_pluto }
+	if = { limit = { has_variable = sr_mq_yard_pluto } add = var:sr_mq_yard_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_yard_pluto } add = global_var:sr_site_ship_yard_pluto }
+	if = { limit = { has_variable = sr_mq_lab_pluto } add = var:sr_mq_lab_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_lab_pluto } add = global_var:sr_site_ship_lab_pluto }
+	if = { limit = { has_variable = sr_mq_culture_pluto } add = var:sr_mq_culture_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_culture_pluto } add = global_var:sr_site_ship_culture_pluto }
+	if = { limit = { has_variable = sr_mq_resort_pluto } add = var:sr_mq_resort_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_resort_pluto } add = global_var:sr_site_ship_resort_pluto }
+	if = { limit = { has_variable = sr_mq_black_pluto } add = var:sr_mq_black_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_black_pluto } add = global_var:sr_site_ship_black_pluto }
+	if = { limit = { has_variable = sr_mq_train_pluto } add = var:sr_mq_train_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_train_pluto } add = global_var:sr_site_ship_train_pluto }
+	if = { limit = { has_variable = sr_mq_bunker_pluto } add = var:sr_mq_bunker_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_pluto } add = global_var:sr_site_ship_bunker_pluto }
+	if = { limit = { has_variable = sr_mq_foundry_pluto } add = var:sr_mq_foundry_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_pluto } add = global_var:sr_site_ship_foundry_pluto }
+	if = { limit = { has_variable = sr_mq_admin_pluto } add = var:sr_mq_admin_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_admin_pluto } add = global_var:sr_site_ship_admin_pluto }
 }
 # The next Habitat THIS queues at Pluto-Charon costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
@@ -9497,6 +10446,37 @@ sr_mod_hab_used_eris = {
 	if = { limit = { has_variable = sr_mq_hab_eris } add = var:sr_mq_hab_eris }
 	if = { limit = { has_global_variable = sr_site_ship_hab_eris } add = global_var:sr_site_ship_hab_eris }
 }
+sr_mod_crewed_pending_eris = {
+	value = sr_site_levels_eris
+	if = { limit = { has_variable = sr_mq_a_eris } add = var:sr_mq_a_eris }
+	if = { limit = { has_global_variable = sr_site_ship_a_eris } add = global_var:sr_site_ship_a_eris }
+	if = { limit = { has_variable = sr_mq_b_eris } add = var:sr_mq_b_eris }
+	if = { limit = { has_global_variable = sr_site_ship_b_eris } add = global_var:sr_site_ship_b_eris }
+	if = { limit = { has_variable = sr_mq_def_eris } add = var:sr_mq_def_eris }
+	if = { limit = { has_global_variable = sr_site_ship_def_eris } add = global_var:sr_site_ship_def_eris }
+	if = { limit = { has_variable = sr_mq_port_eris } add = var:sr_mq_port_eris }
+	if = { limit = { has_global_variable = sr_site_ship_port_eris } add = global_var:sr_site_ship_port_eris }
+	if = { limit = { has_variable = sr_mq_mine_eris } add = var:sr_mq_mine_eris }
+	if = { limit = { has_global_variable = sr_site_ship_mine_eris } add = global_var:sr_site_ship_mine_eris }
+	if = { limit = { has_variable = sr_mq_yard_eris } add = var:sr_mq_yard_eris }
+	if = { limit = { has_global_variable = sr_site_ship_yard_eris } add = global_var:sr_site_ship_yard_eris }
+	if = { limit = { has_variable = sr_mq_lab_eris } add = var:sr_mq_lab_eris }
+	if = { limit = { has_global_variable = sr_site_ship_lab_eris } add = global_var:sr_site_ship_lab_eris }
+	if = { limit = { has_variable = sr_mq_culture_eris } add = var:sr_mq_culture_eris }
+	if = { limit = { has_global_variable = sr_site_ship_culture_eris } add = global_var:sr_site_ship_culture_eris }
+	if = { limit = { has_variable = sr_mq_resort_eris } add = var:sr_mq_resort_eris }
+	if = { limit = { has_global_variable = sr_site_ship_resort_eris } add = global_var:sr_site_ship_resort_eris }
+	if = { limit = { has_variable = sr_mq_black_eris } add = var:sr_mq_black_eris }
+	if = { limit = { has_global_variable = sr_site_ship_black_eris } add = global_var:sr_site_ship_black_eris }
+	if = { limit = { has_variable = sr_mq_train_eris } add = var:sr_mq_train_eris }
+	if = { limit = { has_global_variable = sr_site_ship_train_eris } add = global_var:sr_site_ship_train_eris }
+	if = { limit = { has_variable = sr_mq_bunker_eris } add = var:sr_mq_bunker_eris }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_eris } add = global_var:sr_site_ship_bunker_eris }
+	if = { limit = { has_variable = sr_mq_foundry_eris } add = var:sr_mq_foundry_eris }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_eris } add = global_var:sr_site_ship_foundry_eris }
+	if = { limit = { has_variable = sr_mq_admin_eris } add = var:sr_mq_admin_eris }
+	if = { limit = { has_global_variable = sr_site_ship_admin_eris } add = global_var:sr_site_ship_admin_eris }
+}
 # The next Habitat THIS queues at Eris costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
 sr_mod_next_hab_cost_eris = {
@@ -9674,6 +10654,37 @@ sr_mod_hab_used_makemake = {
 	value = sr_site_hab_value_makemake
 	if = { limit = { has_variable = sr_mq_hab_makemake } add = var:sr_mq_hab_makemake }
 	if = { limit = { has_global_variable = sr_site_ship_hab_makemake } add = global_var:sr_site_ship_hab_makemake }
+}
+sr_mod_crewed_pending_makemake = {
+	value = sr_site_levels_makemake
+	if = { limit = { has_variable = sr_mq_a_makemake } add = var:sr_mq_a_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_a_makemake } add = global_var:sr_site_ship_a_makemake }
+	if = { limit = { has_variable = sr_mq_b_makemake } add = var:sr_mq_b_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_b_makemake } add = global_var:sr_site_ship_b_makemake }
+	if = { limit = { has_variable = sr_mq_def_makemake } add = var:sr_mq_def_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_def_makemake } add = global_var:sr_site_ship_def_makemake }
+	if = { limit = { has_variable = sr_mq_port_makemake } add = var:sr_mq_port_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_port_makemake } add = global_var:sr_site_ship_port_makemake }
+	if = { limit = { has_variable = sr_mq_mine_makemake } add = var:sr_mq_mine_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_mine_makemake } add = global_var:sr_site_ship_mine_makemake }
+	if = { limit = { has_variable = sr_mq_yard_makemake } add = var:sr_mq_yard_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_yard_makemake } add = global_var:sr_site_ship_yard_makemake }
+	if = { limit = { has_variable = sr_mq_lab_makemake } add = var:sr_mq_lab_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_lab_makemake } add = global_var:sr_site_ship_lab_makemake }
+	if = { limit = { has_variable = sr_mq_culture_makemake } add = var:sr_mq_culture_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_culture_makemake } add = global_var:sr_site_ship_culture_makemake }
+	if = { limit = { has_variable = sr_mq_resort_makemake } add = var:sr_mq_resort_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_resort_makemake } add = global_var:sr_site_ship_resort_makemake }
+	if = { limit = { has_variable = sr_mq_black_makemake } add = var:sr_mq_black_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_black_makemake } add = global_var:sr_site_ship_black_makemake }
+	if = { limit = { has_variable = sr_mq_train_makemake } add = var:sr_mq_train_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_train_makemake } add = global_var:sr_site_ship_train_makemake }
+	if = { limit = { has_variable = sr_mq_bunker_makemake } add = var:sr_mq_bunker_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_makemake } add = global_var:sr_site_ship_bunker_makemake }
+	if = { limit = { has_variable = sr_mq_foundry_makemake } add = var:sr_mq_foundry_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_makemake } add = global_var:sr_site_ship_foundry_makemake }
+	if = { limit = { has_variable = sr_mq_admin_makemake } add = var:sr_mq_admin_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_admin_makemake } add = global_var:sr_site_ship_admin_makemake }
 }
 # The next Habitat THIS queues at Makemake costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
@@ -9854,6 +10865,37 @@ sr_mod_hab_used_haumea = {
 	if = { limit = { has_variable = sr_mq_hab_haumea } add = var:sr_mq_hab_haumea }
 	if = { limit = { has_global_variable = sr_site_ship_hab_haumea } add = global_var:sr_site_ship_hab_haumea }
 }
+sr_mod_crewed_pending_haumea = {
+	value = sr_site_levels_haumea
+	if = { limit = { has_variable = sr_mq_a_haumea } add = var:sr_mq_a_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_a_haumea } add = global_var:sr_site_ship_a_haumea }
+	if = { limit = { has_variable = sr_mq_b_haumea } add = var:sr_mq_b_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_b_haumea } add = global_var:sr_site_ship_b_haumea }
+	if = { limit = { has_variable = sr_mq_def_haumea } add = var:sr_mq_def_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_def_haumea } add = global_var:sr_site_ship_def_haumea }
+	if = { limit = { has_variable = sr_mq_port_haumea } add = var:sr_mq_port_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_port_haumea } add = global_var:sr_site_ship_port_haumea }
+	if = { limit = { has_variable = sr_mq_mine_haumea } add = var:sr_mq_mine_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_mine_haumea } add = global_var:sr_site_ship_mine_haumea }
+	if = { limit = { has_variable = sr_mq_yard_haumea } add = var:sr_mq_yard_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_yard_haumea } add = global_var:sr_site_ship_yard_haumea }
+	if = { limit = { has_variable = sr_mq_lab_haumea } add = var:sr_mq_lab_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_lab_haumea } add = global_var:sr_site_ship_lab_haumea }
+	if = { limit = { has_variable = sr_mq_culture_haumea } add = var:sr_mq_culture_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_culture_haumea } add = global_var:sr_site_ship_culture_haumea }
+	if = { limit = { has_variable = sr_mq_resort_haumea } add = var:sr_mq_resort_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_resort_haumea } add = global_var:sr_site_ship_resort_haumea }
+	if = { limit = { has_variable = sr_mq_black_haumea } add = var:sr_mq_black_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_black_haumea } add = global_var:sr_site_ship_black_haumea }
+	if = { limit = { has_variable = sr_mq_train_haumea } add = var:sr_mq_train_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_train_haumea } add = global_var:sr_site_ship_train_haumea }
+	if = { limit = { has_variable = sr_mq_bunker_haumea } add = var:sr_mq_bunker_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_haumea } add = global_var:sr_site_ship_bunker_haumea }
+	if = { limit = { has_variable = sr_mq_foundry_haumea } add = var:sr_mq_foundry_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_haumea } add = global_var:sr_site_ship_foundry_haumea }
+	if = { limit = { has_variable = sr_mq_admin_haumea } add = var:sr_mq_admin_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_admin_haumea } add = global_var:sr_site_ship_admin_haumea }
+}
 # The next Habitat THIS queues at Haumea costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
 sr_mod_next_hab_cost_haumea = {
@@ -10032,6 +11074,37 @@ sr_mod_hab_used_sedna = {
 	if = { limit = { has_variable = sr_mq_hab_sedna } add = var:sr_mq_hab_sedna }
 	if = { limit = { has_global_variable = sr_site_ship_hab_sedna } add = global_var:sr_site_ship_hab_sedna }
 }
+sr_mod_crewed_pending_sedna = {
+	value = sr_site_levels_sedna
+	if = { limit = { has_variable = sr_mq_a_sedna } add = var:sr_mq_a_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_a_sedna } add = global_var:sr_site_ship_a_sedna }
+	if = { limit = { has_variable = sr_mq_b_sedna } add = var:sr_mq_b_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_b_sedna } add = global_var:sr_site_ship_b_sedna }
+	if = { limit = { has_variable = sr_mq_def_sedna } add = var:sr_mq_def_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_def_sedna } add = global_var:sr_site_ship_def_sedna }
+	if = { limit = { has_variable = sr_mq_port_sedna } add = var:sr_mq_port_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_port_sedna } add = global_var:sr_site_ship_port_sedna }
+	if = { limit = { has_variable = sr_mq_mine_sedna } add = var:sr_mq_mine_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_mine_sedna } add = global_var:sr_site_ship_mine_sedna }
+	if = { limit = { has_variable = sr_mq_yard_sedna } add = var:sr_mq_yard_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_yard_sedna } add = global_var:sr_site_ship_yard_sedna }
+	if = { limit = { has_variable = sr_mq_lab_sedna } add = var:sr_mq_lab_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_lab_sedna } add = global_var:sr_site_ship_lab_sedna }
+	if = { limit = { has_variable = sr_mq_culture_sedna } add = var:sr_mq_culture_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_culture_sedna } add = global_var:sr_site_ship_culture_sedna }
+	if = { limit = { has_variable = sr_mq_resort_sedna } add = var:sr_mq_resort_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_resort_sedna } add = global_var:sr_site_ship_resort_sedna }
+	if = { limit = { has_variable = sr_mq_black_sedna } add = var:sr_mq_black_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_black_sedna } add = global_var:sr_site_ship_black_sedna }
+	if = { limit = { has_variable = sr_mq_train_sedna } add = var:sr_mq_train_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_train_sedna } add = global_var:sr_site_ship_train_sedna }
+	if = { limit = { has_variable = sr_mq_bunker_sedna } add = var:sr_mq_bunker_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_sedna } add = global_var:sr_site_ship_bunker_sedna }
+	if = { limit = { has_variable = sr_mq_foundry_sedna } add = var:sr_mq_foundry_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_sedna } add = global_var:sr_site_ship_foundry_sedna }
+	if = { limit = { has_variable = sr_mq_admin_sedna } add = var:sr_mq_admin_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_admin_sedna } add = global_var:sr_site_ship_admin_sedna }
+}
 # The next Habitat THIS queues at Sedna costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
 sr_mod_next_hab_cost_sedna = {
@@ -10206,6 +11279,35 @@ sr_mod_hab_used_shackleton = {
 	if = { limit = { has_variable = sr_mq_hab_shackleton } add = var:sr_mq_hab_shackleton }
 	if = { limit = { has_global_variable = sr_site_ship_hab_shackleton } add = global_var:sr_site_ship_hab_shackleton }
 }
+sr_mod_crewed_pending_shackleton = {
+	value = sr_site_levels_shackleton
+	if = { limit = { has_variable = sr_mq_a_shackleton } add = var:sr_mq_a_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_a_shackleton } add = global_var:sr_site_ship_a_shackleton }
+	if = { limit = { has_variable = sr_mq_b_shackleton } add = var:sr_mq_b_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_b_shackleton } add = global_var:sr_site_ship_b_shackleton }
+	if = { limit = { has_variable = sr_mq_def_shackleton } add = var:sr_mq_def_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_def_shackleton } add = global_var:sr_site_ship_def_shackleton }
+	if = { limit = { has_variable = sr_mq_mine_shackleton } add = var:sr_mq_mine_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_mine_shackleton } add = global_var:sr_site_ship_mine_shackleton }
+	if = { limit = { has_variable = sr_mq_yard_shackleton } add = var:sr_mq_yard_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_yard_shackleton } add = global_var:sr_site_ship_yard_shackleton }
+	if = { limit = { has_variable = sr_mq_lab_shackleton } add = var:sr_mq_lab_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_lab_shackleton } add = global_var:sr_site_ship_lab_shackleton }
+	if = { limit = { has_variable = sr_mq_culture_shackleton } add = var:sr_mq_culture_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_culture_shackleton } add = global_var:sr_site_ship_culture_shackleton }
+	if = { limit = { has_variable = sr_mq_resort_shackleton } add = var:sr_mq_resort_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_resort_shackleton } add = global_var:sr_site_ship_resort_shackleton }
+	if = { limit = { has_variable = sr_mq_black_shackleton } add = var:sr_mq_black_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_black_shackleton } add = global_var:sr_site_ship_black_shackleton }
+	if = { limit = { has_variable = sr_mq_train_shackleton } add = var:sr_mq_train_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_train_shackleton } add = global_var:sr_site_ship_train_shackleton }
+	if = { limit = { has_variable = sr_mq_bunker_shackleton } add = var:sr_mq_bunker_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_shackleton } add = global_var:sr_site_ship_bunker_shackleton }
+	if = { limit = { has_variable = sr_mq_foundry_shackleton } add = var:sr_mq_foundry_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_shackleton } add = global_var:sr_site_ship_foundry_shackleton }
+	if = { limit = { has_variable = sr_mq_admin_shackleton } add = var:sr_mq_admin_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_admin_shackleton } add = global_var:sr_site_ship_admin_shackleton }
+}
 # The next Habitat THIS queues at Shackleton Crater costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
 sr_mod_next_hab_cost_shackleton = {
@@ -10379,6 +11481,35 @@ sr_mod_hab_used_peary = {
 	value = sr_site_hab_value_peary
 	if = { limit = { has_variable = sr_mq_hab_peary } add = var:sr_mq_hab_peary }
 	if = { limit = { has_global_variable = sr_site_ship_hab_peary } add = global_var:sr_site_ship_hab_peary }
+}
+sr_mod_crewed_pending_peary = {
+	value = sr_site_levels_peary
+	if = { limit = { has_variable = sr_mq_a_peary } add = var:sr_mq_a_peary }
+	if = { limit = { has_global_variable = sr_site_ship_a_peary } add = global_var:sr_site_ship_a_peary }
+	if = { limit = { has_variable = sr_mq_b_peary } add = var:sr_mq_b_peary }
+	if = { limit = { has_global_variable = sr_site_ship_b_peary } add = global_var:sr_site_ship_b_peary }
+	if = { limit = { has_variable = sr_mq_def_peary } add = var:sr_mq_def_peary }
+	if = { limit = { has_global_variable = sr_site_ship_def_peary } add = global_var:sr_site_ship_def_peary }
+	if = { limit = { has_variable = sr_mq_mine_peary } add = var:sr_mq_mine_peary }
+	if = { limit = { has_global_variable = sr_site_ship_mine_peary } add = global_var:sr_site_ship_mine_peary }
+	if = { limit = { has_variable = sr_mq_yard_peary } add = var:sr_mq_yard_peary }
+	if = { limit = { has_global_variable = sr_site_ship_yard_peary } add = global_var:sr_site_ship_yard_peary }
+	if = { limit = { has_variable = sr_mq_lab_peary } add = var:sr_mq_lab_peary }
+	if = { limit = { has_global_variable = sr_site_ship_lab_peary } add = global_var:sr_site_ship_lab_peary }
+	if = { limit = { has_variable = sr_mq_culture_peary } add = var:sr_mq_culture_peary }
+	if = { limit = { has_global_variable = sr_site_ship_culture_peary } add = global_var:sr_site_ship_culture_peary }
+	if = { limit = { has_variable = sr_mq_resort_peary } add = var:sr_mq_resort_peary }
+	if = { limit = { has_global_variable = sr_site_ship_resort_peary } add = global_var:sr_site_ship_resort_peary }
+	if = { limit = { has_variable = sr_mq_black_peary } add = var:sr_mq_black_peary }
+	if = { limit = { has_global_variable = sr_site_ship_black_peary } add = global_var:sr_site_ship_black_peary }
+	if = { limit = { has_variable = sr_mq_train_peary } add = var:sr_mq_train_peary }
+	if = { limit = { has_global_variable = sr_site_ship_train_peary } add = global_var:sr_site_ship_train_peary }
+	if = { limit = { has_variable = sr_mq_bunker_peary } add = var:sr_mq_bunker_peary }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_peary } add = global_var:sr_site_ship_bunker_peary }
+	if = { limit = { has_variable = sr_mq_foundry_peary } add = var:sr_mq_foundry_peary }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_peary } add = global_var:sr_site_ship_foundry_peary }
+	if = { limit = { has_variable = sr_mq_admin_peary } add = var:sr_mq_admin_peary }
+	if = { limit = { has_global_variable = sr_site_ship_admin_peary } add = global_var:sr_site_ship_admin_peary }
 }
 # The next Habitat THIS queues at Peary Crater costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
@@ -10555,6 +11686,35 @@ sr_mod_hab_used_tranquility = {
 	if = { limit = { has_variable = sr_mq_hab_tranquility } add = var:sr_mq_hab_tranquility }
 	if = { limit = { has_global_variable = sr_site_ship_hab_tranquility } add = global_var:sr_site_ship_hab_tranquility }
 }
+sr_mod_crewed_pending_tranquility = {
+	value = sr_site_levels_tranquility
+	if = { limit = { has_variable = sr_mq_a_tranquility } add = var:sr_mq_a_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_a_tranquility } add = global_var:sr_site_ship_a_tranquility }
+	if = { limit = { has_variable = sr_mq_b_tranquility } add = var:sr_mq_b_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_b_tranquility } add = global_var:sr_site_ship_b_tranquility }
+	if = { limit = { has_variable = sr_mq_def_tranquility } add = var:sr_mq_def_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_def_tranquility } add = global_var:sr_site_ship_def_tranquility }
+	if = { limit = { has_variable = sr_mq_mine_tranquility } add = var:sr_mq_mine_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_mine_tranquility } add = global_var:sr_site_ship_mine_tranquility }
+	if = { limit = { has_variable = sr_mq_yard_tranquility } add = var:sr_mq_yard_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_yard_tranquility } add = global_var:sr_site_ship_yard_tranquility }
+	if = { limit = { has_variable = sr_mq_lab_tranquility } add = var:sr_mq_lab_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_lab_tranquility } add = global_var:sr_site_ship_lab_tranquility }
+	if = { limit = { has_variable = sr_mq_culture_tranquility } add = var:sr_mq_culture_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_culture_tranquility } add = global_var:sr_site_ship_culture_tranquility }
+	if = { limit = { has_variable = sr_mq_resort_tranquility } add = var:sr_mq_resort_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_resort_tranquility } add = global_var:sr_site_ship_resort_tranquility }
+	if = { limit = { has_variable = sr_mq_black_tranquility } add = var:sr_mq_black_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_black_tranquility } add = global_var:sr_site_ship_black_tranquility }
+	if = { limit = { has_variable = sr_mq_train_tranquility } add = var:sr_mq_train_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_train_tranquility } add = global_var:sr_site_ship_train_tranquility }
+	if = { limit = { has_variable = sr_mq_bunker_tranquility } add = var:sr_mq_bunker_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_tranquility } add = global_var:sr_site_ship_bunker_tranquility }
+	if = { limit = { has_variable = sr_mq_foundry_tranquility } add = var:sr_mq_foundry_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_tranquility } add = global_var:sr_site_ship_foundry_tranquility }
+	if = { limit = { has_variable = sr_mq_admin_tranquility } add = var:sr_mq_admin_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_admin_tranquility } add = global_var:sr_site_ship_admin_tranquility }
+}
 # The next Habitat THIS queues at Tranquility Base costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
 sr_mod_next_hab_cost_tranquility = {
@@ -10728,6 +11888,35 @@ sr_mod_hab_used_marius_hills = {
 	if = { limit = { has_variable = sr_mq_hab_marius_hills } add = var:sr_mq_hab_marius_hills }
 	if = { limit = { has_global_variable = sr_site_ship_hab_marius_hills } add = global_var:sr_site_ship_hab_marius_hills }
 }
+sr_mod_crewed_pending_marius_hills = {
+	value = sr_site_levels_marius_hills
+	if = { limit = { has_variable = sr_mq_a_marius_hills } add = var:sr_mq_a_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_a_marius_hills } add = global_var:sr_site_ship_a_marius_hills }
+	if = { limit = { has_variable = sr_mq_b_marius_hills } add = var:sr_mq_b_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_b_marius_hills } add = global_var:sr_site_ship_b_marius_hills }
+	if = { limit = { has_variable = sr_mq_def_marius_hills } add = var:sr_mq_def_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_def_marius_hills } add = global_var:sr_site_ship_def_marius_hills }
+	if = { limit = { has_variable = sr_mq_mine_marius_hills } add = var:sr_mq_mine_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_mine_marius_hills } add = global_var:sr_site_ship_mine_marius_hills }
+	if = { limit = { has_variable = sr_mq_yard_marius_hills } add = var:sr_mq_yard_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_yard_marius_hills } add = global_var:sr_site_ship_yard_marius_hills }
+	if = { limit = { has_variable = sr_mq_lab_marius_hills } add = var:sr_mq_lab_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_lab_marius_hills } add = global_var:sr_site_ship_lab_marius_hills }
+	if = { limit = { has_variable = sr_mq_culture_marius_hills } add = var:sr_mq_culture_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_culture_marius_hills } add = global_var:sr_site_ship_culture_marius_hills }
+	if = { limit = { has_variable = sr_mq_resort_marius_hills } add = var:sr_mq_resort_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_resort_marius_hills } add = global_var:sr_site_ship_resort_marius_hills }
+	if = { limit = { has_variable = sr_mq_black_marius_hills } add = var:sr_mq_black_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_black_marius_hills } add = global_var:sr_site_ship_black_marius_hills }
+	if = { limit = { has_variable = sr_mq_train_marius_hills } add = var:sr_mq_train_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_train_marius_hills } add = global_var:sr_site_ship_train_marius_hills }
+	if = { limit = { has_variable = sr_mq_bunker_marius_hills } add = var:sr_mq_bunker_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_marius_hills } add = global_var:sr_site_ship_bunker_marius_hills }
+	if = { limit = { has_variable = sr_mq_foundry_marius_hills } add = var:sr_mq_foundry_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_marius_hills } add = global_var:sr_site_ship_foundry_marius_hills }
+	if = { limit = { has_variable = sr_mq_admin_marius_hills } add = var:sr_mq_admin_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_admin_marius_hills } add = global_var:sr_site_ship_admin_marius_hills }
+}
 # The next Habitat THIS queues at Marius Hills costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
 sr_mod_next_hab_cost_marius_hills = {
@@ -10900,6 +12089,35 @@ sr_mod_hab_used_daedalus = {
 	value = sr_site_hab_value_daedalus
 	if = { limit = { has_variable = sr_mq_hab_daedalus } add = var:sr_mq_hab_daedalus }
 	if = { limit = { has_global_variable = sr_site_ship_hab_daedalus } add = global_var:sr_site_ship_hab_daedalus }
+}
+sr_mod_crewed_pending_daedalus = {
+	value = sr_site_levels_daedalus
+	if = { limit = { has_variable = sr_mq_a_daedalus } add = var:sr_mq_a_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_a_daedalus } add = global_var:sr_site_ship_a_daedalus }
+	if = { limit = { has_variable = sr_mq_b_daedalus } add = var:sr_mq_b_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_b_daedalus } add = global_var:sr_site_ship_b_daedalus }
+	if = { limit = { has_variable = sr_mq_def_daedalus } add = var:sr_mq_def_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_def_daedalus } add = global_var:sr_site_ship_def_daedalus }
+	if = { limit = { has_variable = sr_mq_mine_daedalus } add = var:sr_mq_mine_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_mine_daedalus } add = global_var:sr_site_ship_mine_daedalus }
+	if = { limit = { has_variable = sr_mq_yard_daedalus } add = var:sr_mq_yard_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_yard_daedalus } add = global_var:sr_site_ship_yard_daedalus }
+	if = { limit = { has_variable = sr_mq_lab_daedalus } add = var:sr_mq_lab_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_lab_daedalus } add = global_var:sr_site_ship_lab_daedalus }
+	if = { limit = { has_variable = sr_mq_culture_daedalus } add = var:sr_mq_culture_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_culture_daedalus } add = global_var:sr_site_ship_culture_daedalus }
+	if = { limit = { has_variable = sr_mq_resort_daedalus } add = var:sr_mq_resort_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_resort_daedalus } add = global_var:sr_site_ship_resort_daedalus }
+	if = { limit = { has_variable = sr_mq_black_daedalus } add = var:sr_mq_black_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_black_daedalus } add = global_var:sr_site_ship_black_daedalus }
+	if = { limit = { has_variable = sr_mq_train_daedalus } add = var:sr_mq_train_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_train_daedalus } add = global_var:sr_site_ship_train_daedalus }
+	if = { limit = { has_variable = sr_mq_bunker_daedalus } add = var:sr_mq_bunker_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_daedalus } add = global_var:sr_site_ship_bunker_daedalus }
+	if = { limit = { has_variable = sr_mq_foundry_daedalus } add = var:sr_mq_foundry_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_daedalus } add = global_var:sr_site_ship_foundry_daedalus }
+	if = { limit = { has_variable = sr_mq_admin_daedalus } add = var:sr_mq_admin_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_admin_daedalus } add = global_var:sr_site_ship_admin_daedalus }
 }
 # The next Habitat THIS queues at Daedalus Crater costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
@@ -11075,6 +12293,35 @@ sr_mod_hab_used_imbrium = {
 	value = sr_site_hab_value_imbrium
 	if = { limit = { has_variable = sr_mq_hab_imbrium } add = var:sr_mq_hab_imbrium }
 	if = { limit = { has_global_variable = sr_site_ship_hab_imbrium } add = global_var:sr_site_ship_hab_imbrium }
+}
+sr_mod_crewed_pending_imbrium = {
+	value = sr_site_levels_imbrium
+	if = { limit = { has_variable = sr_mq_a_imbrium } add = var:sr_mq_a_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_a_imbrium } add = global_var:sr_site_ship_a_imbrium }
+	if = { limit = { has_variable = sr_mq_b_imbrium } add = var:sr_mq_b_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_b_imbrium } add = global_var:sr_site_ship_b_imbrium }
+	if = { limit = { has_variable = sr_mq_def_imbrium } add = var:sr_mq_def_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_def_imbrium } add = global_var:sr_site_ship_def_imbrium }
+	if = { limit = { has_variable = sr_mq_mine_imbrium } add = var:sr_mq_mine_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_mine_imbrium } add = global_var:sr_site_ship_mine_imbrium }
+	if = { limit = { has_variable = sr_mq_yard_imbrium } add = var:sr_mq_yard_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_yard_imbrium } add = global_var:sr_site_ship_yard_imbrium }
+	if = { limit = { has_variable = sr_mq_lab_imbrium } add = var:sr_mq_lab_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_lab_imbrium } add = global_var:sr_site_ship_lab_imbrium }
+	if = { limit = { has_variable = sr_mq_culture_imbrium } add = var:sr_mq_culture_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_culture_imbrium } add = global_var:sr_site_ship_culture_imbrium }
+	if = { limit = { has_variable = sr_mq_resort_imbrium } add = var:sr_mq_resort_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_resort_imbrium } add = global_var:sr_site_ship_resort_imbrium }
+	if = { limit = { has_variable = sr_mq_black_imbrium } add = var:sr_mq_black_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_black_imbrium } add = global_var:sr_site_ship_black_imbrium }
+	if = { limit = { has_variable = sr_mq_train_imbrium } add = var:sr_mq_train_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_train_imbrium } add = global_var:sr_site_ship_train_imbrium }
+	if = { limit = { has_variable = sr_mq_bunker_imbrium } add = var:sr_mq_bunker_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_bunker_imbrium } add = global_var:sr_site_ship_bunker_imbrium }
+	if = { limit = { has_variable = sr_mq_foundry_imbrium } add = var:sr_mq_foundry_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_foundry_imbrium } add = global_var:sr_site_ship_foundry_imbrium }
+	if = { limit = { has_variable = sr_mq_admin_imbrium } add = var:sr_mq_admin_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_admin_imbrium } add = global_var:sr_site_ship_admin_imbrium }
 }
 # The next Habitat THIS queues at Mare Imbrium costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
@@ -15549,6 +16796,7 @@ sr_site_def_fire_valles_marineris = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_valles_marineris } sr_site_def_value_valles_marineris > 0 }
 		value = sr_site_def_value_valles_marineris
+		multiply = sr_site_staffing_valles_marineris
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_valles_marineris ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -15557,11 +16805,13 @@ sr_site_def_fire_valles_marineris = {
 }
 sr_site_hardness_valles_marineris = {
 	value = sr_site_def_value_valles_marineris
+	multiply = sr_site_staffing_valles_marineris
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_valles_marineris = {
 	value = sr_site_def_value_valles_marineris
+	multiply = sr_site_staffing_valles_marineris
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -15597,6 +16847,7 @@ sr_site_def_fire_olympus_mons = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_olympus_mons } sr_site_def_value_olympus_mons > 0 }
 		value = sr_site_def_value_olympus_mons
+		multiply = sr_site_staffing_olympus_mons
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_olympus_mons ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -15605,11 +16856,13 @@ sr_site_def_fire_olympus_mons = {
 }
 sr_site_hardness_olympus_mons = {
 	value = sr_site_def_value_olympus_mons
+	multiply = sr_site_staffing_olympus_mons
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_olympus_mons = {
 	value = sr_site_def_value_olympus_mons
+	multiply = sr_site_staffing_olympus_mons
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -15645,6 +16898,7 @@ sr_site_def_fire_hellas_planitia = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_hellas_planitia } sr_site_def_value_hellas_planitia > 0 }
 		value = sr_site_def_value_hellas_planitia
+		multiply = sr_site_staffing_hellas_planitia
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_hellas_planitia ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -15653,11 +16907,13 @@ sr_site_def_fire_hellas_planitia = {
 }
 sr_site_hardness_hellas_planitia = {
 	value = sr_site_def_value_hellas_planitia
+	multiply = sr_site_staffing_hellas_planitia
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_hellas_planitia = {
 	value = sr_site_def_value_hellas_planitia
+	multiply = sr_site_staffing_hellas_planitia
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -15693,6 +16949,7 @@ sr_site_def_fire_utopia_planitia = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_utopia_planitia } sr_site_def_value_utopia_planitia > 0 }
 		value = sr_site_def_value_utopia_planitia
+		multiply = sr_site_staffing_utopia_planitia
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_utopia_planitia ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -15701,11 +16958,13 @@ sr_site_def_fire_utopia_planitia = {
 }
 sr_site_hardness_utopia_planitia = {
 	value = sr_site_def_value_utopia_planitia
+	multiply = sr_site_staffing_utopia_planitia
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_utopia_planitia = {
 	value = sr_site_def_value_utopia_planitia
+	multiply = sr_site_staffing_utopia_planitia
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -15741,6 +17000,7 @@ sr_site_def_fire_arcadia_planitia = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } sr_site_def_value_arcadia_planitia > 0 }
 		value = sr_site_def_value_arcadia_planitia
+		multiply = sr_site_staffing_arcadia_planitia
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -15749,11 +17009,13 @@ sr_site_def_fire_arcadia_planitia = {
 }
 sr_site_hardness_arcadia_planitia = {
 	value = sr_site_def_value_arcadia_planitia
+	multiply = sr_site_staffing_arcadia_planitia
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_arcadia_planitia = {
 	value = sr_site_def_value_arcadia_planitia
+	multiply = sr_site_staffing_arcadia_planitia
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -15789,6 +17051,7 @@ sr_site_def_fire_ceres = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_ceres } sr_site_def_value_ceres > 0 }
 		value = sr_site_def_value_ceres
+		multiply = sr_site_staffing_ceres
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_ceres ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -15797,11 +17060,13 @@ sr_site_def_fire_ceres = {
 }
 sr_site_hardness_ceres = {
 	value = sr_site_def_value_ceres
+	multiply = sr_site_staffing_ceres
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_ceres = {
 	value = sr_site_def_value_ceres
+	multiply = sr_site_staffing_ceres
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -15837,6 +17102,7 @@ sr_site_def_fire_vesta = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_vesta } sr_site_def_value_vesta > 0 }
 		value = sr_site_def_value_vesta
+		multiply = sr_site_staffing_vesta
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_vesta ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -15845,11 +17111,13 @@ sr_site_def_fire_vesta = {
 }
 sr_site_hardness_vesta = {
 	value = sr_site_def_value_vesta
+	multiply = sr_site_staffing_vesta
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_vesta = {
 	value = sr_site_def_value_vesta
+	multiply = sr_site_staffing_vesta
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -15885,6 +17153,7 @@ sr_site_def_fire_psyche = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_psyche } sr_site_def_value_psyche > 0 }
 		value = sr_site_def_value_psyche
+		multiply = sr_site_staffing_psyche
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_psyche ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -15893,11 +17162,13 @@ sr_site_def_fire_psyche = {
 }
 sr_site_hardness_psyche = {
 	value = sr_site_def_value_psyche
+	multiply = sr_site_staffing_psyche
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_psyche = {
 	value = sr_site_def_value_psyche
+	multiply = sr_site_staffing_psyche
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -15933,6 +17204,7 @@ sr_site_def_fire_pallas = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_pallas } sr_site_def_value_pallas > 0 }
 		value = sr_site_def_value_pallas
+		multiply = sr_site_staffing_pallas
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_pallas ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -15941,11 +17213,13 @@ sr_site_def_fire_pallas = {
 }
 sr_site_hardness_pallas = {
 	value = sr_site_def_value_pallas
+	multiply = sr_site_staffing_pallas
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_pallas = {
 	value = sr_site_def_value_pallas
+	multiply = sr_site_staffing_pallas
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -15981,6 +17255,7 @@ sr_site_def_fire_hygiea = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_hygiea } sr_site_def_value_hygiea > 0 }
 		value = sr_site_def_value_hygiea
+		multiply = sr_site_staffing_hygiea
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_hygiea ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -15989,11 +17264,13 @@ sr_site_def_fire_hygiea = {
 }
 sr_site_hardness_hygiea = {
 	value = sr_site_def_value_hygiea
+	multiply = sr_site_staffing_hygiea
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_hygiea = {
 	value = sr_site_def_value_hygiea
+	multiply = sr_site_staffing_hygiea
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -16029,6 +17306,7 @@ sr_site_def_fire_io = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_io } sr_site_def_value_io > 0 }
 		value = sr_site_def_value_io
+		multiply = sr_site_staffing_io
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_io ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -16037,11 +17315,13 @@ sr_site_def_fire_io = {
 }
 sr_site_hardness_io = {
 	value = sr_site_def_value_io
+	multiply = sr_site_staffing_io
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_io = {
 	value = sr_site_def_value_io
+	multiply = sr_site_staffing_io
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -16077,6 +17357,7 @@ sr_site_def_fire_europa = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_europa } sr_site_def_value_europa > 0 }
 		value = sr_site_def_value_europa
+		multiply = sr_site_staffing_europa
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_europa ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -16085,11 +17366,13 @@ sr_site_def_fire_europa = {
 }
 sr_site_hardness_europa = {
 	value = sr_site_def_value_europa
+	multiply = sr_site_staffing_europa
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_europa = {
 	value = sr_site_def_value_europa
+	multiply = sr_site_staffing_europa
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -16125,6 +17408,7 @@ sr_site_def_fire_ganymede = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_ganymede } sr_site_def_value_ganymede > 0 }
 		value = sr_site_def_value_ganymede
+		multiply = sr_site_staffing_ganymede
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_ganymede ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -16133,11 +17417,13 @@ sr_site_def_fire_ganymede = {
 }
 sr_site_hardness_ganymede = {
 	value = sr_site_def_value_ganymede
+	multiply = sr_site_staffing_ganymede
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_ganymede = {
 	value = sr_site_def_value_ganymede
+	multiply = sr_site_staffing_ganymede
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -16173,6 +17459,7 @@ sr_site_def_fire_callisto = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_callisto } sr_site_def_value_callisto > 0 }
 		value = sr_site_def_value_callisto
+		multiply = sr_site_staffing_callisto
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_callisto ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -16181,11 +17468,13 @@ sr_site_def_fire_callisto = {
 }
 sr_site_hardness_callisto = {
 	value = sr_site_def_value_callisto
+	multiply = sr_site_staffing_callisto
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_callisto = {
 	value = sr_site_def_value_callisto
+	multiply = sr_site_staffing_callisto
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -16221,6 +17510,7 @@ sr_site_def_fire_himalia = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_himalia } sr_site_def_value_himalia > 0 }
 		value = sr_site_def_value_himalia
+		multiply = sr_site_staffing_himalia
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_himalia ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -16229,11 +17519,13 @@ sr_site_def_fire_himalia = {
 }
 sr_site_hardness_himalia = {
 	value = sr_site_def_value_himalia
+	multiply = sr_site_staffing_himalia
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_himalia = {
 	value = sr_site_def_value_himalia
+	multiply = sr_site_staffing_himalia
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -16269,6 +17561,7 @@ sr_site_def_fire_amalthea = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_amalthea } sr_site_def_value_amalthea > 0 }
 		value = sr_site_def_value_amalthea
+		multiply = sr_site_staffing_amalthea
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_amalthea ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -16277,11 +17570,13 @@ sr_site_def_fire_amalthea = {
 }
 sr_site_hardness_amalthea = {
 	value = sr_site_def_value_amalthea
+	multiply = sr_site_staffing_amalthea
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_amalthea = {
 	value = sr_site_def_value_amalthea
+	multiply = sr_site_staffing_amalthea
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -16317,6 +17612,7 @@ sr_site_def_fire_venus = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_venus } sr_site_def_value_venus > 0 }
 		value = sr_site_def_value_venus
+		multiply = sr_site_staffing_venus
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_venus ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -16325,11 +17621,13 @@ sr_site_def_fire_venus = {
 }
 sr_site_hardness_venus = {
 	value = sr_site_def_value_venus
+	multiply = sr_site_staffing_venus
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_venus = {
 	value = sr_site_def_value_venus
+	multiply = sr_site_staffing_venus
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -16365,6 +17663,7 @@ sr_site_def_fire_mercury = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_mercury } sr_site_def_value_mercury > 0 }
 		value = sr_site_def_value_mercury
+		multiply = sr_site_staffing_mercury
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_mercury ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -16373,11 +17672,13 @@ sr_site_def_fire_mercury = {
 }
 sr_site_hardness_mercury = {
 	value = sr_site_def_value_mercury
+	multiply = sr_site_staffing_mercury
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_mercury = {
 	value = sr_site_def_value_mercury
+	multiply = sr_site_staffing_mercury
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -16413,6 +17714,7 @@ sr_site_def_fire_titan = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_titan } sr_site_def_value_titan > 0 }
 		value = sr_site_def_value_titan
+		multiply = sr_site_staffing_titan
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_titan ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -16421,11 +17723,13 @@ sr_site_def_fire_titan = {
 }
 sr_site_hardness_titan = {
 	value = sr_site_def_value_titan
+	multiply = sr_site_staffing_titan
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_titan = {
 	value = sr_site_def_value_titan
+	multiply = sr_site_staffing_titan
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -16461,6 +17765,7 @@ sr_site_def_fire_enceladus = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_enceladus } sr_site_def_value_enceladus > 0 }
 		value = sr_site_def_value_enceladus
+		multiply = sr_site_staffing_enceladus
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_enceladus ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -16469,11 +17774,13 @@ sr_site_def_fire_enceladus = {
 }
 sr_site_hardness_enceladus = {
 	value = sr_site_def_value_enceladus
+	multiply = sr_site_staffing_enceladus
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_enceladus = {
 	value = sr_site_def_value_enceladus
+	multiply = sr_site_staffing_enceladus
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -16509,6 +17816,7 @@ sr_site_def_fire_rhea = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_rhea } sr_site_def_value_rhea > 0 }
 		value = sr_site_def_value_rhea
+		multiply = sr_site_staffing_rhea
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_rhea ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -16517,11 +17825,13 @@ sr_site_def_fire_rhea = {
 }
 sr_site_hardness_rhea = {
 	value = sr_site_def_value_rhea
+	multiply = sr_site_staffing_rhea
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_rhea = {
 	value = sr_site_def_value_rhea
+	multiply = sr_site_staffing_rhea
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -16557,6 +17867,7 @@ sr_site_def_fire_mimas = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_mimas } sr_site_def_value_mimas > 0 }
 		value = sr_site_def_value_mimas
+		multiply = sr_site_staffing_mimas
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_mimas ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -16565,11 +17876,13 @@ sr_site_def_fire_mimas = {
 }
 sr_site_hardness_mimas = {
 	value = sr_site_def_value_mimas
+	multiply = sr_site_staffing_mimas
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_mimas = {
 	value = sr_site_def_value_mimas
+	multiply = sr_site_staffing_mimas
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -16605,6 +17918,7 @@ sr_site_def_fire_iapetus = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_iapetus } sr_site_def_value_iapetus > 0 }
 		value = sr_site_def_value_iapetus
+		multiply = sr_site_staffing_iapetus
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_iapetus ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -16613,11 +17927,13 @@ sr_site_def_fire_iapetus = {
 }
 sr_site_hardness_iapetus = {
 	value = sr_site_def_value_iapetus
+	multiply = sr_site_staffing_iapetus
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_iapetus = {
 	value = sr_site_def_value_iapetus
+	multiply = sr_site_staffing_iapetus
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -16653,6 +17969,7 @@ sr_site_def_fire_titania = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_titania } sr_site_def_value_titania > 0 }
 		value = sr_site_def_value_titania
+		multiply = sr_site_staffing_titania
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_titania ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -16661,11 +17978,13 @@ sr_site_def_fire_titania = {
 }
 sr_site_hardness_titania = {
 	value = sr_site_def_value_titania
+	multiply = sr_site_staffing_titania
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_titania = {
 	value = sr_site_def_value_titania
+	multiply = sr_site_staffing_titania
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -16701,6 +18020,7 @@ sr_site_def_fire_oberon = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_oberon } sr_site_def_value_oberon > 0 }
 		value = sr_site_def_value_oberon
+		multiply = sr_site_staffing_oberon
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_oberon ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -16709,11 +18029,13 @@ sr_site_def_fire_oberon = {
 }
 sr_site_hardness_oberon = {
 	value = sr_site_def_value_oberon
+	multiply = sr_site_staffing_oberon
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_oberon = {
 	value = sr_site_def_value_oberon
+	multiply = sr_site_staffing_oberon
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -16749,6 +18071,7 @@ sr_site_def_fire_miranda = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_miranda } sr_site_def_value_miranda > 0 }
 		value = sr_site_def_value_miranda
+		multiply = sr_site_staffing_miranda
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_miranda ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -16757,11 +18080,13 @@ sr_site_def_fire_miranda = {
 }
 sr_site_hardness_miranda = {
 	value = sr_site_def_value_miranda
+	multiply = sr_site_staffing_miranda
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_miranda = {
 	value = sr_site_def_value_miranda
+	multiply = sr_site_staffing_miranda
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -16797,6 +18122,7 @@ sr_site_def_fire_ariel = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_ariel } sr_site_def_value_ariel > 0 }
 		value = sr_site_def_value_ariel
+		multiply = sr_site_staffing_ariel
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_ariel ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -16805,11 +18131,13 @@ sr_site_def_fire_ariel = {
 }
 sr_site_hardness_ariel = {
 	value = sr_site_def_value_ariel
+	multiply = sr_site_staffing_ariel
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_ariel = {
 	value = sr_site_def_value_ariel
+	multiply = sr_site_staffing_ariel
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -16845,6 +18173,7 @@ sr_site_def_fire_triton = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_triton } sr_site_def_value_triton > 0 }
 		value = sr_site_def_value_triton
+		multiply = sr_site_staffing_triton
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_triton ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -16853,11 +18182,13 @@ sr_site_def_fire_triton = {
 }
 sr_site_hardness_triton = {
 	value = sr_site_def_value_triton
+	multiply = sr_site_staffing_triton
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_triton = {
 	value = sr_site_def_value_triton
+	multiply = sr_site_staffing_triton
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -16893,6 +18224,7 @@ sr_site_def_fire_proteus = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_proteus } sr_site_def_value_proteus > 0 }
 		value = sr_site_def_value_proteus
+		multiply = sr_site_staffing_proteus
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_proteus ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -16901,11 +18233,13 @@ sr_site_def_fire_proteus = {
 }
 sr_site_hardness_proteus = {
 	value = sr_site_def_value_proteus
+	multiply = sr_site_staffing_proteus
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_proteus = {
 	value = sr_site_def_value_proteus
+	multiply = sr_site_staffing_proteus
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -16941,6 +18275,7 @@ sr_site_def_fire_pluto = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_pluto } sr_site_def_value_pluto > 0 }
 		value = sr_site_def_value_pluto
+		multiply = sr_site_staffing_pluto
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_pluto ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -16949,11 +18284,13 @@ sr_site_def_fire_pluto = {
 }
 sr_site_hardness_pluto = {
 	value = sr_site_def_value_pluto
+	multiply = sr_site_staffing_pluto
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_pluto = {
 	value = sr_site_def_value_pluto
+	multiply = sr_site_staffing_pluto
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -16989,6 +18326,7 @@ sr_site_def_fire_eris = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_eris } sr_site_def_value_eris > 0 }
 		value = sr_site_def_value_eris
+		multiply = sr_site_staffing_eris
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_eris ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -16997,11 +18335,13 @@ sr_site_def_fire_eris = {
 }
 sr_site_hardness_eris = {
 	value = sr_site_def_value_eris
+	multiply = sr_site_staffing_eris
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_eris = {
 	value = sr_site_def_value_eris
+	multiply = sr_site_staffing_eris
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -17037,6 +18377,7 @@ sr_site_def_fire_makemake = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_makemake } sr_site_def_value_makemake > 0 }
 		value = sr_site_def_value_makemake
+		multiply = sr_site_staffing_makemake
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_makemake ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -17045,11 +18386,13 @@ sr_site_def_fire_makemake = {
 }
 sr_site_hardness_makemake = {
 	value = sr_site_def_value_makemake
+	multiply = sr_site_staffing_makemake
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_makemake = {
 	value = sr_site_def_value_makemake
+	multiply = sr_site_staffing_makemake
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -17085,6 +18428,7 @@ sr_site_def_fire_haumea = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_haumea } sr_site_def_value_haumea > 0 }
 		value = sr_site_def_value_haumea
+		multiply = sr_site_staffing_haumea
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_haumea ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -17093,11 +18437,13 @@ sr_site_def_fire_haumea = {
 }
 sr_site_hardness_haumea = {
 	value = sr_site_def_value_haumea
+	multiply = sr_site_staffing_haumea
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_haumea = {
 	value = sr_site_def_value_haumea
+	multiply = sr_site_staffing_haumea
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -17133,6 +18479,7 @@ sr_site_def_fire_sedna = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_sedna } sr_site_def_value_sedna > 0 }
 		value = sr_site_def_value_sedna
+		multiply = sr_site_staffing_sedna
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_sedna ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -17141,11 +18488,13 @@ sr_site_def_fire_sedna = {
 }
 sr_site_hardness_sedna = {
 	value = sr_site_def_value_sedna
+	multiply = sr_site_staffing_sedna
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_sedna = {
 	value = sr_site_def_value_sedna
+	multiply = sr_site_staffing_sedna
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -17181,6 +18530,7 @@ sr_site_def_fire_shackleton = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_shackleton } sr_site_def_value_shackleton > 0 }
 		value = sr_site_def_value_shackleton
+		multiply = sr_site_staffing_shackleton
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_shackleton ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -17189,11 +18539,13 @@ sr_site_def_fire_shackleton = {
 }
 sr_site_hardness_shackleton = {
 	value = sr_site_def_value_shackleton
+	multiply = sr_site_staffing_shackleton
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_shackleton = {
 	value = sr_site_def_value_shackleton
+	multiply = sr_site_staffing_shackleton
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -17229,6 +18581,7 @@ sr_site_def_fire_peary = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_peary } sr_site_def_value_peary > 0 }
 		value = sr_site_def_value_peary
+		multiply = sr_site_staffing_peary
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_peary ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -17237,11 +18590,13 @@ sr_site_def_fire_peary = {
 }
 sr_site_hardness_peary = {
 	value = sr_site_def_value_peary
+	multiply = sr_site_staffing_peary
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_peary = {
 	value = sr_site_def_value_peary
+	multiply = sr_site_staffing_peary
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -17277,6 +18632,7 @@ sr_site_def_fire_tranquility = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_tranquility } sr_site_def_value_tranquility > 0 }
 		value = sr_site_def_value_tranquility
+		multiply = sr_site_staffing_tranquility
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_tranquility ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -17285,11 +18641,13 @@ sr_site_def_fire_tranquility = {
 }
 sr_site_hardness_tranquility = {
 	value = sr_site_def_value_tranquility
+	multiply = sr_site_staffing_tranquility
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_tranquility = {
 	value = sr_site_def_value_tranquility
+	multiply = sr_site_staffing_tranquility
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -17325,6 +18683,7 @@ sr_site_def_fire_marius_hills = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_marius_hills } sr_site_def_value_marius_hills > 0 }
 		value = sr_site_def_value_marius_hills
+		multiply = sr_site_staffing_marius_hills
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_marius_hills ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -17333,11 +18692,13 @@ sr_site_def_fire_marius_hills = {
 }
 sr_site_hardness_marius_hills = {
 	value = sr_site_def_value_marius_hills
+	multiply = sr_site_staffing_marius_hills
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_marius_hills = {
 	value = sr_site_def_value_marius_hills
+	multiply = sr_site_staffing_marius_hills
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -17373,6 +18734,7 @@ sr_site_def_fire_daedalus = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_daedalus } sr_site_def_value_daedalus > 0 }
 		value = sr_site_def_value_daedalus
+		multiply = sr_site_staffing_daedalus
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_daedalus ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -17381,11 +18743,13 @@ sr_site_def_fire_daedalus = {
 }
 sr_site_hardness_daedalus = {
 	value = sr_site_def_value_daedalus
+	multiply = sr_site_staffing_daedalus
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_daedalus = {
 	value = sr_site_def_value_daedalus
+	multiply = sr_site_staffing_daedalus
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -17421,6 +18785,7 @@ sr_site_def_fire_imbrium = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_site_occupier_imbrium } sr_site_def_value_imbrium > 0 }
 		value = sr_site_def_value_imbrium
+		multiply = sr_site_staffing_imbrium
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_imbrium ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -17429,11 +18794,13 @@ sr_site_def_fire_imbrium = {
 }
 sr_site_hardness_imbrium = {
 	value = sr_site_def_value_imbrium
+	multiply = sr_site_staffing_imbrium
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_imbrium = {
 	value = sr_site_def_value_imbrium
+	multiply = sr_site_staffing_imbrium
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
