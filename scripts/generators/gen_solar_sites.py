@@ -105,6 +105,17 @@ class Site:
         nothing while it is blockaded (slice 6 design § 8)."""
         return SHIPPING[self.key]
 
+    @property
+    def resort_room(self) -> int:
+        """Resort Colony levels the world's own room holds (#1948 design § 6.1)."""
+        return RESORTS[self.key][0]
+
+    @property
+    def resort_draw(self) -> int:
+        """The throughput a Resort Colony level in its room gets, in percent
+        (#1948 design § 6.2)."""
+        return RESORTS[self.key][1]
+
 
 def _s(key, name, stage, location, body, event, specs, discoveries, kind, room, slots, ebase_room, ebase_grade):
     return Site(key, name, stage, location, body, event, tuple(specs), tuple(discoveries), kind, room,
@@ -187,6 +198,57 @@ SHIPPING: dict[str, tuple[bool, bool]] = {
     "eris": (True, False), "makemake": (False, False), "haumea": (False, True), "sedna": (False, False),
     "shackleton": (True, False), "peary": (True, False), "tranquility": (True, True),
     "marius_hills": (False, False), "daedalus": (False, False), "imbrium": (True, True),
+}
+
+# The Resort Colony (#1948, docs/superpowers/specs/2026-11-21-resort-colony-building-design.md
+# § 6): each world's own room for Resort Colony levels and its draw, the throughput
+# a level there gets in percent, (room, draw). The room starts as the world's room
+# for people in thousands (`room`), a world that houses more people housing more
+# guests, but is its own figure, to tune on its own; Habitats and Terraforming
+# don't raise it, the Off-World Resort module does. The draw is spectacle against
+# the length of the trip, set by hand (§ 6.2's table). A table beside SITES, read
+# through Site.resort_room and Site.resort_draw, as SHIPPING is.
+RESORTS: dict[str, tuple[int, int]] = {
+    "valles_marineris": (50, 25),  # the longest canyon in the solar system
+    "olympus_mons": (40, 25),  # the tallest volcano
+    "hellas_planitia": (50, 5),  # the deepest basin, the thickest air on Mars
+    "utopia_planitia": (50, 0),
+    "arcadia_planitia": (40, 0),
+    "ceres": (40, 5),  # Occator's bright salt spots
+    "vesta": (25, 10),  # Rheasilvia's central peak, more than twice Everest
+    "psyche": (20, 0),  # bare metal
+    "pallas": (20, -5),
+    "hygiea": (15, -10),
+    "io": (15, -5),  # volcanoes inside the radiation belts
+    "europa": (30, 0),  # Jupiter overhead, hard radiation
+    "ganymede": (40, 0),
+    "callisto": (40, 10),  # Jupiter in the sky, outside the radiation belts
+    "himalia": (10, -15),
+    "amalthea": (10, -5),  # Jupiter close up, inside the belts
+    "venus": (30, 15),  # a city floating in the clouds
+    "mercury": (25, -5),  # the Sun up to three times as large
+    "titan": (40, 10),  # flying in thick air over methane lakes
+    "enceladus": (20, 15),  # ice geysers under Saturn
+    "rhea": (20, 5),  # Saturn filling the sky
+    "mimas": (10, 5),  # Herschel crater
+    "iapetus": (15, 15),  # the only large moon that sees the rings at an angle
+    "titania": (20, -15),
+    "oberon": (20, -15),
+    "miranda": (10, 0),  # Verona Rupes, the tallest cliff known, at the edge of the trip
+    "ariel": (15, -15),
+    "triton": (20, -5),  # nitrogen geysers, Neptune overhead, years out
+    "proteus": (10, -25),
+    "pluto": (20, -10),  # the heart's nitrogen plains, Charon overhead
+    "eris": (10, -30),
+    "makemake": (10, -30),
+    "haumea": (10, -25),  # a ring and a four-hour day
+    "sedna": (10, -35),
+    "shackleton": (25, 15),  # near-endless sunlight on the rim, Earth on the horizon
+    "peary": (15, 10),  # the north pole's sunlit rim
+    "tranquility": (20, 30),  # Apollo 11's landing site, three days from home
+    "marius_hills": (40, 15),  # lava tubes to walk through
+    "daedalus": (10, 0),  # the far side: no Earth in the sky
+    "imbrium": (25, 10),  # Earth over the grey plains
 }
 
 # The panel's locations, in its order: the owner's nine, Earth and the Moon
@@ -359,6 +421,13 @@ NEAR_EARTH_ROOM = 10
 NEAR_EARTH_TECH = "asteroid_mining"
 OVERFLOW_GRADE = -75
 
+# The Resort Colony (#1948 design § 6.1): Earth orbit's room, for every country
+# with the building's technology, at draw 0; the draw of a level past all of the
+# room, the base's figure but its own constant.
+ORBIT_RESORT_ROOM = 10
+RESORT_TECH = "space_colonization"
+RESORT_OVERFLOW_DRAW = -75
+
 # The Moon's six worlds (lunar colonization design § 3): stage 0, at Earth's
 # location, never gated, founded the month their fleet leaves (§ 3.3). A module
 # for one takes no shipment slot either (the owner, 2026-11-15): it is installed
@@ -475,6 +544,13 @@ def ebase_tiers() -> list[Site | None]:
     """The Extraplanetary Base room in filling order (design § 9): the best grade
     first, ties in table order, the near-Earth room (None) first among grade 0."""
     keyed = [((-s.ebase_grade, 1, s.index), s) for s in SITES] + [((0, 0, 0), None)]
+    return [s for _, s in sorted(keyed, key=lambda pair: pair[0])]
+
+
+def resort_tiers() -> list[Site | None]:
+    """The Resort Colony room in filling order (#1948 design § 6.3): the best
+    draw first, ties in table order, Earth orbit (None) first among draw 0."""
+    keyed = [((-s.resort_draw, 1, s.index), s) for s in SITES] + [((0, 0, 0), None)]
     return [s for _, s in sorted(keyed, key=lambda pair: pair[0])]
 
 
@@ -1922,6 +1998,14 @@ def render_module_values() -> list[str]:
             f"\tif = {{ limit = {{ has_technology_researched = {NEAR_EARTH_TECH} }} add = {NEAR_EARTH_ROOM} }}"]
     out += [f"\tif = {{ limit = {{ {site_serves(s)} }} add = sr_site_ebase_room_{s.key} }}" for s in SITES]
     out.append("}")
+    out += ["",
+            "# Country scope: THIS's Resort Colony room, in levels (#1948 design § 6.1): Earth",
+            f"# orbit's {ORBIT_RESORT_ROOM} with {RESORT_TECH}, the building's technology, and every colony",
+            "# that serves it.",
+            "sr_resort_room_total = {", "\tvalue = 0",
+            f"\tif = {{ limit = {{ has_technology_researched = {RESORT_TECH} }} add = {ORBIT_RESORT_ROOM} }}"]
+    out += [f"\tif = {{ limit = {{ {site_serves(s)} }} add = sr_site_resort_room_{s.key} }}" for s in SITES]
+    out.append("}")
     out += render_shipment_wait_values()
     return out
 
@@ -1988,6 +2072,11 @@ def _slot_values(site: Site) -> list[str]:
             f"sr_site_ebase_room_{k} = {{",
             f"\tvalue = {site.ebase_room}",
             f"\tadd = {{ value = sr_site_mine_staffed_{k} multiply = sr_mod_mine_room floor = yes }}",
+            "}",
+            "# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).",
+            f"sr_site_resort_room_{k} = {{",
+            f"\tvalue = {site.resort_room}",
+            f"\tadd = {{ value = sr_site_resort_staffed_{k} multiply = sr_mod_resort_room floor = yes }}",
             "}"]
     return out
 
@@ -2437,8 +2526,9 @@ def render_module_effects() -> list[str]:
                 "\t\t\tset_local_variable = { name = sr_eb_next_found value = 1 }",
                 "\t\t}",
                 "\t}"]
-    out += ["}", "",
-            "# Console (te_debug_space_race.4): every colony's modules, and its caps' use counting",
+    out += ["}", ""]
+    out += render_resort_fill()
+    out += ["# Console (te_debug_space_race.4): every colony's modules, and its caps' use counting",
             "# our queue and every shipment.",
             "sr_mod_debug_log = {"]
     for site in SITES:
@@ -2475,6 +2565,62 @@ def render_module_effects() -> list[str]:
             out.append(f"\tif = {{ limit = {{ global_var:sr_site_holder_{k} ?= this }} "
                        f"sr_site_terra_step_{k} = {{ MONTHS = 120 }} sr_site_sync_{k} = yes }}")
     out.append("}")
+    return out
+
+
+def render_resort_fill() -> list[str]:
+    """The Resort Colony room filled best draw first, and the draw the next level
+    would work at (#1948 design § 6.3): the twins of sr_ebase_fill and
+    sr_ebase_next_fill, over resort_tiers()."""
+    def tier_parts(tier: Site | None) -> tuple[str, int, str, str]:
+        if tier is None:
+            return str(ORBIT_RESORT_ROOM), 0, "Earth orbit", f" has_technology_researched = {RESORT_TECH}"
+        return f"sr_site_resort_room_{tier.key}", tier.resort_draw, tier.name, f" {site_serves(tier)}"
+
+    out = ["# Resort Colony room filled best draw first (#1948 design § 6.3): local_var:sr_rs_left",
+           "# levels to place, local_var:sr_rs_sum the levels x draw so far (percent).",
+           "sr_resort_fill = {"]
+    for tier in resort_tiers():
+        room, draw, name, held = tier_parts(tier)
+        size = f"{ORBIT_RESORT_ROOM}" if tier is None else f"{tier.resort_room} and its Off-World Resorts'"
+        out += [f"\t# {name}: room for {size} at {draw:+d}%",
+                "\tif = {",
+                f"\t\tlimit = {{ local_var:sr_rs_left > 0{held} }}",
+                f"\t\tset_local_variable = {{ name = sr_rs_take value = {{ value = local_var:sr_rs_left max = {room} }} }}"]
+        if draw:
+            out.append("\t\tset_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take "
+                       f"multiply = {draw} add = local_var:sr_rs_sum }} }}")
+        out += ["\t\tchange_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }", "\t}"]
+    out += ["\t# Past all of it",
+            "\tif = {",
+            "\t\tlimit = { local_var:sr_rs_left > 0 }",
+            "\t\tset_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_left "
+            f"multiply = {RESORT_OVERFLOW_DRAW} add = local_var:sr_rs_sum }} }}",
+            "\t}",
+            "}", "",
+            "# The draw the next Resort Colony level would work at (#1948 design § 6.3): built",
+            "# and queued levels fill the room best draw first, as sr_resort_fill does; the first",
+            f"# room left unfilled is where the next one goes, past all of it {RESORT_OVERFLOW_DRAW}%.",
+            "# Into var:sr_resort_next_draw, from sr_resort_refresh.",
+            "sr_resort_next_fill = {",
+            "\tset_local_variable = { name = sr_rs_next_left value = sr_resort_queued_levels }",
+            "\tset_local_variable = { name = sr_rs_next_found value = 0 }",
+            f"\tset_variable = {{ name = sr_resort_next_draw value = {RESORT_OVERFLOW_DRAW} }}"]
+    for tier in resort_tiers():
+        room, draw, name, held = tier_parts(tier)
+        out += [f"\t# {name} at {draw:+d}%",
+                "\tif = {",
+                f"\t\tlimit = {{ local_var:sr_rs_next_found = 0{held} }}",
+                "\t\tif = {",
+                f"\t\t\tlimit = {{ local_var:sr_rs_next_left >= {room} }}",
+                f"\t\t\tchange_local_variable = {{ name = sr_rs_next_left subtract = {room} }}",
+                "\t\t}",
+                "\t\telse = {",
+                f"\t\t\tset_variable = {{ name = sr_resort_next_draw value = {draw} }}",
+                "\t\t\tset_local_variable = { name = sr_rs_next_found value = 1 }",
+                "\t\t}",
+                "\t}"]
+    out += ["}", ""]
     return out
 
 
@@ -3655,6 +3801,7 @@ def render_display() -> str:
                 "}",
                 f"sr_disp_mod_next_cost_{k} = {{ value = sr_mod_next_cost_{k} }}",
                 f"sr_disp_site_ebase_room_{k} = {{ value = sr_site_ebase_room_{k} }}",
+                f"sr_disp_site_resort_room_{k} = {{ value = sr_site_resort_room_{k} }}",
                 # Solar System's line under the name: the slots it would have as ours.
                 f"sr_disp_ss_slots_{k} = {{ value = {site.slots} add = modifier:{SLOTS_MODIFIER} }}"]
     out += render_terra_display()
