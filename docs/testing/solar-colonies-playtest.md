@@ -1047,3 +1047,12 @@ Bases view with In-Situ Resource Utilization and a base of a hundred or more lev
    the same sites and good.
 7. **A click's cost.** On a late save with a large base, a click on − or + doesn't hitch: the forecast behind the
    totals (up to 41 passes over the 41 places) runs once on the click, from the figures the last refresh stored.
+8. **The Base Room cell names the next place.** The overview's Base Room cell's last line names the site the next
+   level goes to (queued levels counted) in the overview's short names: "Ceres", "Near-Earth", "Valles Marineris"
+   without "...". With built and queued levels at or past the room it reads "next at -75%" the moment levels are
+   queued, before any refresh. The hover's second paragraph gives that site's Ground Type, Base Grade and profit a
+   level a week, both concept links working, or past the room the −75% line; neither shows a raw key (the two
+   `AddLocalizationIf` sub-keys). A click on − or + that changes where the next level goes changes the line at once.
+9. **The room modifiers' descriptions.** Hover Extraplanetary Base Room in the Nation tab's modifiers: the
+   description says the levels work at their sites' Base Grade where the Bases view puts them, not "the richest
+   first".

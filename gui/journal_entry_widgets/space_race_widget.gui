@@ -9623,8 +9623,8 @@ types space_race_widget_types
 						### Base Room (UI pass design § 8, the parallel to Seabed's Long-haul):
 						### our Extraplanetary Base levels, built and queued, against our room
 						### ("120 +20 / 400", or "140 / 400" once the figures run too long for the
-						### word to show them apart), red once they pass it; the grade the next
-						### level would work at; on hover the average now and the rule. Shown once
+						### word to show them apart), red once they pass it; where the next level goes
+						### (§ 9.3), or -75% past the room; on hover that site's figures. Shown once
 						### the building is ours to build. Levels, queue and room are read live; the
 						### grades come from the monthly refresh and the one when a base is built
 						### (space_race_events.110).
@@ -9672,12 +9672,12 @@ types space_race_widget_types
 								blockoverride "third_line" {
 									te_banking_ov_word = {
 										position = { 78 46 }
-										visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_next_grade'), '(CFixedPoint)0' )]"
-										text = "je_space_race_widget_ovc_ebase_fig_plus"
+										visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_next_past'), '(CFixedPoint)1' )]"
+										text = "je_space_race_widget_ovc_ebase_fig_past"
 									}
 									te_banking_ov_word = {
 										position = { 78 46 }
-										visible = "[Not( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_next_grade'), '(CFixedPoint)0' ) )]"
+										visible = "[Not( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_next_past'), '(CFixedPoint)1' ) )]"
 										text = "je_space_race_widget_ovc_ebase_fig"
 									}
 								}

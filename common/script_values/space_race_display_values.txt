@@ -1332,6 +1332,20 @@ sr_disp_ebase_next_grade = {
 	# freshly queued batch (or read 0 before any refresh has run).
 	if = { limit = { sr_ebase_queued_levels >= sr_ebase_room_total } value = -75 }
 }
+# Where the next level goes (ground types design § 9.3): 1 once it is past all of
+# the room, read live as sr_disp_ebase_next_grade's -75 is (the cell then reads
+# "next at -75%", and otherwise the place's name, sr_eb_place_next_short); and that
+# place's profit a level, from the refresh (sr_eb_next_place) or a click.
+sr_disp_ebase_next_past = {
+	value = 0
+	# The index is -1 past the room, 0 to 40 for a place: 1, else 0.
+	if = { limit = { has_variable = sr_ebase_next_place } value = { value = var:sr_ebase_next_place multiply = -1 min = 0 max = 1 } }
+	if = { limit = { sr_ebase_queued_levels >= sr_ebase_room_total } value = 1 }
+}
+sr_disp_ebase_next_profit = {
+	value = 0
+	if = { limit = { has_variable = sr_ebase_next_profit } value = var:sr_ebase_next_profit }
+}
 sr_disp_ebase_past = {
 	value = 0
 	if = { limit = { sr_ebase_queued_levels > sr_ebase_room_total } value = 1 }

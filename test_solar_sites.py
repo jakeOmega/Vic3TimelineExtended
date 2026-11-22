@@ -2223,12 +2223,14 @@ class EbaseCellTest(unittest.TestCase):
         self.assertIn("ScriptValue('sr_disp_ebase_shown')", self.widget[start:cell.start()])
         self.assertEqual(cell.group(1), "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' )]")
         self.assertIn('text = "je_space_race_widget_ovc_ebase_cap"', body)
-        for word in ("word", "word_past", "word_split", "word_split_past", "fig", "fig_plus"):
+        for word in ("word", "word_past", "word_split", "word_split_past", "fig", "fig_past"):
             with self.subTest(word=word):
                 self.assertIn(f'text = "je_space_race_widget_ovc_ebase_{word}"', body)
         self.assertIn("ScriptValue('sr_disp_ebase_past')", body)
         self.assertIn("ScriptValue('sr_disp_ebase_split')", body)
-        self.assertIn("ScriptValue('sr_disp_ebase_next_grade')", body)
+        # Its last line: the next place's name, or past the room "next at -75%" (ground
+        # types design § 9.3), read live.
+        self.assertIn("ScriptValue('sr_disp_ebase_next_past')", body)
         self.assertIn("building_space_mine.dds", body)
         # It sits after the Modules cell, on a row of its own, in the grid that
         # shows under Simple and Full Colonies only.

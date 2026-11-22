@@ -1977,6 +1977,26 @@ class CustomLocTest(unittest.TestCase):
             with self.subTest(key=key):
                 self.assertIn(key, loc)
 
+    def test_the_base_room_cell_names_the_next_place(self):
+        """§ 9.3: the cell's third line names the next place (the overview's short
+        form), or reads -75% live past the room; its hover gives the place's type, grade
+        and profit a level."""
+        loc = {}
+        for path in ("te_journal_entries_l_english.yml",):
+            loc.update(re.findall(r'(?m)^ ([\w.]+):\d* "(.*)"$', _raw("localization", "english", path)))
+        self.assertEqual(loc["je_space_race_widget_ovc_ebase_fig"], "[Country.GetCustom('sr_eb_place_next_short')]")
+        self.assertNotIn("je_space_race_widget_ovc_ebase_fig_plus", loc)
+        nxt = loc["je_space_race_widget_ovc_ebase_tt_next"]
+        for read in ("GetCustom('sr_eb_place_next')", "GetCustom('sr_eb_place_next_type')",
+                     "ScriptValue('sr_disp_ebase_next_grade')", "ScriptValue('sr_disp_ebase_next_profit')"):
+            with self.subTest(read=read):
+                self.assertIn(read, nxt)
+        self.assertNotIn("best room first", loc["je_space_race_widget_ovc_ebase_tt"])
+        display = _strip(_raw("common", "script_values", "space_race_display_values.txt"))
+        self.assertIn("if = { limit = { sr_ebase_queued_levels >= sr_ebase_room_total } value = 1 }",
+                      _block(display, "sr_disp_ebase_next_past"))
+        self.assertIn("value = var:sr_ebase_next_profit", _block(display, "sr_disp_ebase_next_profit"))
+
     def test_the_next_place_s_figures(self):
         """sr_eb_next_place stores the next place's profit a level beside its grade: the
         place's own, or past the room a Mixed level's at -75%."""
@@ -1994,6 +2014,14 @@ class CustomLocTest(unittest.TestCase):
                 else:
                     want = eg.profit_a_level(eg.PLACES[k], tw.shares, tw.rel)
                 self.assertAlmostEqual(unfx(tw.vars["sr_ebase_next_profit"]), want, delta=0.05)
+
+    def test_the_room_modifiers_say_the_new_rule(self):
+        concepts = _raw("localization", "english", "te_concepts_l_english.yml")
+        for key in ("sr_ebase_room_bonus_desc", "sr_ebase_room_penalty_desc"):
+            with self.subTest(key=key):
+                text = re.search(rf'(?m)^ {key}:\d* "(.*)"$', concepts).group(1)
+                self.assertNotIn("richest first", text)
+                self.assertIn("Bases view", text)
 
 
 if __name__ == "__main__":

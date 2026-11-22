@@ -721,6 +721,23 @@ class LabelBudgetTest(unittest.TestCase):
         for key in ("je_space_race_widget_ovc_ebase_word_split", "je_space_race_widget_ovc_ebase_word_split_past"):
             self.assertIn(key, self.keys)
 
+    def test_the_base_room_cell_names_the_next_place(self):
+        """The cell's last line names where the next level goes (ground types design
+        § 9.3) in the overview's short forms, measured at the longest place name in the
+        cell's column ("next: " would not fit beside the 16-character names); past the
+        room it reads "next at -75%"."""
+        width, font = _cell(self.gui, "te_banking_ov_word", None)
+        self.assertEqual(width, 154)
+        names = [_render(_loc(k)) for k in _custom_options("sr_eb_place_next_short")]
+        self.assertEqual(len(names), 41 + 2)   # the places, past the room, the fallback
+        longest = max(names, key=len)
+        self.assertEqual(len(longest), 16)
+        self.assertEqual(_render(_loc("je_space_race_widget_ovc_ebase_fig")), longest)
+        self.assertLessEqual(len(longest) * UNITS_PER_CHAR[font] * MARGIN, width, longest)
+        self.assertEqual(_render(_loc("je_space_race_widget_ovc_ebase_fig_past")), "next at -75%")
+        for key in ("je_space_race_widget_ovc_ebase_fig", "je_space_race_widget_ovc_ebase_fig_past"):
+            self.assertIn(key, self.keys)
+
     def test_the_panel_is_on_the_house_ladder(self):
         """Rows 17, headings 20, the overview 16, through the panel's own
         templates; no bare vanilla size is left (audit SPC-11)."""
