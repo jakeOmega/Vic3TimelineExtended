@@ -62,6 +62,16 @@ merges); and the ground-types design
 - **Order:** Part A follows #1950 directly. Part B is designed after the
   ground-types build lands, since both rework the Modules view.
 
+**On the first draft of this scope (the same day)**
+
+- **Administrations may need a cost beyond their crew**, "authority? money?",
+  because holding a large colony takes only "7 out of 50 modules" (§ 3.6).
+- **Every module's effect needs a review, not only the two that add room**:
+  "with 50 crews, these might not be the only ones that become unbalanced"
+  (§ 3.7).
+- **Settlers can reuse the Settlement Authority's code** for taking people
+  from many states (§ 3.5).
+
 ## 1. Today
 
 ### 1.1 What reaches the Resort Colony from its state
@@ -219,8 +229,17 @@ It stops waiving crews. Recommendation: it halves the crew a level needs
 - **Three limits remain**, as the owner said: people at home, Launch Capacity
   (its price rises as the program buys more) and room at the colonies.
 - **Where they come from.** Today all settlers leave the Space Program's state.
-  At tens of thousands a month that would empty it. Recommendation: from the
-  country's incorporated states by population.
+  At tens of thousands a month that would empty it. They should come from the
+  country's states, and the owner points to the Settlement Authority
+  (`resettlement_country_monthly`, `pops_and_migration.md` § Internal
+  Resettlement), which already does this: it walks the owner's states in order
+  of eligible population, takes at most 2% of a source and of any one pop a
+  month, counts each source once a month (the fix for a 17-second tick), and
+  books every move in the Demographics census by age and sex. The colony
+  programme reuses the walk, the budget, the count and the census booking. Its
+  take differs: the Authority moves pops to a state (`move_partial_pop`), and
+  settlers leave the map into the world's record. The design also says who is
+  eligible, where today it is half middle and half lower strata.
 - **No reward for toggling**, per the design defaults. Settlers are sent
   monthly whatever the launch windows, as today.
 
@@ -234,26 +253,63 @@ crew). So autonomy, not the Habitat cap, becomes the practical limit on a
 large colony, and Administrations compete with every other module for crews.
 
 This is the tension the owner wants. The design should tabulate where colonies
-of several sizes settle, as the colony management design § 4.2 does, and retune
-the people term or the Administration if a built-out colony can't be held at
-all.
+of several sizes settle, as the colony management design § 4.2 does.
 
-### 3.7 Modules that add room
+**Seven crews of fifty is too cheap** (owner). Holding the largest colony
+should cost enough that a charter (a fifth of its output), a garrison or
+letting it go are real alternatives. Candidates, which can combine:
 
-A staffed Mining Complex adds 50 Extraplanetary Base room at its world, and
-after #1950 a staffed Off-World Resort adds 10 Resort Colony room. Without
-slots, a colony with 50 crews could add 2,500 base room at one world whose own
-room is at most 300, against 4,325 in the whole table. The ground-types
-checkbox moves levels to the site that earns most, so cheap room at the best
-site would empty the others and flatten the choice of ground.
+- **Authority a level** (a positive `country_authority_cost_add` on the
+  `sr_module_admin` declaration, at its staffed levels). Recommended: authority
+  is a pool with other uses, where late in the game money is not scarce. The
+  AI's plan then needs an authority test before it queues one.
+- **Bureaucracy or money a level.** Simpler for the AI, weaker as a limit.
+- **Each further Administration at a world does less**, so the largest
+  colonies can't be held by Administrations alone.
+- **A larger crew** (§ 3.7), which raises seven of fifty to seven of
+  thirty-three without touching the Administration.
 
-The design must answer this. Candidates:
+### 3.7 Every module's effect, at fifty crews
 
-- a world's module room counts in full up to its own table room and at half
-  past it;
-- room modules need two crews a level;
-- leave it, if the arithmetic shows autonomy and the price of settlers hold it
-  down.
+Each facility gives its effect per staffed level with no ceiling (the Nuclear
+Command Center's +12 aside). Slots have been the ceiling: at most 13 crewed
+levels at the largest world, and 444 in the whole table with every technology
+(284 slot modules and 160 specialization levels). Without slots, one large
+colony can put fifty crews into one type:
+
+| Module | A staffed level | Fifty at one world |
+|---|---|---|
+| Mining Complex | +50 Extraplanetary Base room there | +2,500, where the world's own room is at most 300 and the table's is 4,325 |
+| Off-World Resort (after #1950) | +10 Resort Colony room there | +500, against 955 in all |
+| Research Station | +2% research speed | +100% |
+| Cultural Center | +3% cultural pull, +1% prestige | +150%, +50% |
+| Black Site | +1 intelligence capacity, +3% covert efficiency | +50, +150% |
+| Training Ground | +4% army experience gain | +200% |
+| Materials Foundry | +3% Advanced Materials output | +150% |
+| Orbital Yard | +4 fabrication points a month, +0.5 Space Command strength | +200 points, two modules a month from one colony |
+
+The two that add room are the sharpest case. The ground-types checkbox moves
+levels to the site that earns most, so cheap room at the best site would empty
+the others and flatten the choice of ground.
+
+**The design reviews all of them, with these dials:**
+
+- **Crew size, first.** It sets the total. With more people per Habitat
+  (§ 3.3), a crew of 7,500 gives 447 crews when every world is built out, which
+  is today's 444, and a crew of 10,000 gives 335. Valles Marineris then has 33
+  or 25 crews in place of 50. Per-level effects could stay as they are.
+- **Artificial Intelligence's figure** (§ 3.4) multiplies every row, so it is
+  set in the same pass. Halving the crew doubles the table.
+- **Concentration, second.** Crew size doesn't stop one world holding 33 of one
+  type. Candidates: each further level of a type at a world gives less; a
+  ceiling per type for the country, as the Nuclear Command Center has; or, for
+  the two room modules, module room counting in full up to the world's own
+  table room and at half past it.
+- **Leave a row alone** where the arithmetic shows autonomy and the price of
+  settlers already hold it down.
+
+The design should tabulate each module at a built-out world and a built-out
+country, before and after, as this table does for one case.
 
 ### 3.8 The AI
 
@@ -315,7 +371,8 @@ also updates `02-timeline.md` where the five technologies are described.
 
 ## 5. Open calls
 
-Each has a recommendation. None blocks Part A except the last two.
+Each has a recommendation where I have one. None blocks Part A except the
+last two.
 
 1. **The slot technologies' reward:** more people per Habitat (recommended) or
    Habitat slots (§ 3.3).
@@ -323,15 +380,19 @@ Each has a recommendation. None blocks Part A except the last two.
    figure (§ 3.4).
 3. **A colony short of crews:** every module at the same share, as today
    (recommended, no new control), or an order the player sets.
-4. **Modules that add room:** which of § 3.7's answers.
+4. **Module effects at many crews:** the crew size (7,500 reproduces today's
+   built-out total; recommended as the starting point), and which answer to
+   concentration, for the room modules above all (§ 3.7).
 5. **Settlers' bill:** Launch Capacity per settler on the Space Program
    building (recommended). Should a farther world cost more per settler?
-6. **Settlers' origin:** all incorporated states by population (recommended),
-   or the Space Program's state as today.
+6. **Settlers' origin:** the Settlement Authority's walk over the country's
+   states (the owner's suggestion). Who is eligible to go?
 7. **Past the Habitat cap:** keep today's 8 at a rising price (recommended).
-8. **Part A, a state zeroed by pollution or turmoil:** cancel it in full, so
+8. **The Administration's further cost:** authority a level (recommended),
+   bureaucracy or money, a falling effect, or the larger crew alone (§ 3.6).
+9. **Part A, a state zeroed by pollution or turmoil:** cancel it in full, so
    the resort is at par (recommended, it is what "the state doesn't matter"
    means), or let a state in crisis still hurt it.
-9. **Part A, turmoil specifically:** a strike or unrest in the state is local
+10. **Part A, turmoil specifically:** a strike or unrest in the state is local
    to the ground crew. Cancel it with the rest (recommended), or keep it as
    the one local penalty.
