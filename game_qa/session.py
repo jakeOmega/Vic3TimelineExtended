@@ -210,6 +210,12 @@ GUI_RELOAD_POLL_S = 0.25
 GUI_SETTLE_S = 0.5                      # from the create to the shot: the widget drawn
 GUI_CROP_MARGIN = 8                     # pixels of backdrop kept round the panel (spec § 5.2, step 7)
 GUI_WIDTH_RANGE = (100, 3000)           # what --width takes, in UI units
+GUI_DEBUG = "gui.debug"                 # toggles; answers Enabled or Disabled (live, 2026-11-23)
+GUI_DRAWALL = "gui.debug.drawall"       # toggles; draws every widget's box only while GUI_DEBUG is on
+SET_SCALE = "gui.setscale %s"           # the game's UI scale, live; the console keeps its own
+CLEAR_CREATE = "gui.createwidget %s %s" % (gui_preview.PREVIEW_FILE, gui_preview.CLEAR_WIDGET)
+SETTINGS_FILE = "pdx_settings.json"     # under the user data: GUI.scale is the scale the settings menu set
+GUI_SCALE_RANGE = (0.25, 4.0)
 ENTER_SETTLE_S = 10.0                   # after Start, before the console is looked for: the game loads (a guess; live
                                         # 2026-11-11 the console answered after Start, how soon is unmeasured)
 ENTER_WAIT_S = 90.0                     # then, for the console to take commands again (a guess, generous)
@@ -269,9 +275,9 @@ class SessionError(Exception):
     (also `start`'s, when a stop was asked while it ran), watch_ended, already_pending, add_mod_refused (with
     `reason`, addmod's code), add_mod_changed, and the profile verbs' profile_refused, not_profiling,
     not_snapshotted, label_used, dump_refused, not_written, changed, rows_mismatch, and gui-show's not_a_repo,
-    gui_parse_error, unknown_type, je_root, popup_shell, not_reloaded and no_preview. A read-side error carries
-    `maybe_stopped` when the game may still be stopped at the breakpoint (the next verb then releases it first,
-    or refuses `maybe_stopped`). After `launch`, a console error that ended `start` keeps its own code (no_ack,
+    gui_parse_error, unknown_type, je_root, popup_shell, not_reloaded, no_preview and no_scale.
+    A read-side error carries `maybe_stopped` when the game may still be stopped at the breakpoint (the next
+    verb then releases it first, or refuses `maybe_stopped`). After `launch`, a console error that ended `start` keeps its own code (no_ack,
     not_foreground, …) and `entered`, as does one that ended `try_event` (whose error also carries the rows so
     far, `options`)."""
 
@@ -415,6 +421,7 @@ class Session:
         self._notes: list[str] = []         # for the stop's reply and the summary
         self._errors_seen: list[str] | None = None       # while try_event collects: the error.log lines polled
         self._vanilla_gui_types: dict[str, Any] | None = None     # gui-show's index of the installed game's types
+        self._preview_kept: dict[str, str] | None = None    # a kept preview's client-side values (None: none kept)
         self._burst: list[str] | None = None             # while try_event collects: the debugger's own output
         self._loaded_revision = 0           # the newest revision of te_qa_effects.txt the game has logged (add-setup)
         self._rules: dict | None = None     # the rule settings of the fixture loaded, and what was switched in it
@@ -2221,6 +2228,13 @@ class Session:
                 GUI_WIDTH_RANGE[0] <= width <= GUI_WIDTH_RANGE[1]):
             raise SessionError("bad_argument", "width is a whole number of UI units from %d to %d, not %r"
                                % (GUI_WIDTH_RANGE + (width,)))
+        if scale is not None and (isinstance(scale, bool) or not isinstance(scale, (int, float))
+                                  or not GUI_SCALE_RANGE[0] <= scale <= GUI_SCALE_RANGE[1]):
+            raise SessionError("bad_argument", "scale is a number from %g to %g, not %r" % (GUI_SCALE_RANGE + (scale,)))
+        owner_scale = self._owner_ui_scale() if scale is not None else None
+        if setup is not None and setup not in self._overlay.setup_events:
+            raise SessionError("unknown_setup", "no setup %r; the overlay has %s"
+                               % (setup, sorted(self._overlay.setup_events) or "none"))
         with self._step("gui_show", type=type_name, context=context, width=width) as out:
             try:
                 changes = gui_preview.branch_changes(Path(repo))
@@ -2237,6 +2251,8 @@ class Session:
                 raise SessionError(e.code, e.detail, **e.info) from e
             except OSError as e:
                 raise SessionError("not_a_repo", "the branch's files could not be read from %s: %s" % (repo, e)) from e
+            if self._preview_kept:
+                self._clear_preview()           # the last wrapper's clear widget clears the values it kept
             revision = self._overlay.preview_revision + 1
             result: dict[str, Any] = {"type": type_name, "context": context, "revision": revision,
                                       "stale_script": changes.script}
@@ -2249,19 +2265,106 @@ class Session:
                 except overlay.OverlayError as e:
                     raise SessionError("overlay_refused", str(e)) from e
                 self._await_preview(revision)
+                if setup is not None:
+                    result["setup_lines"] = self.run_setup(setup)
                 self._console.run(CLEAR_WIDGETS)
                 self._console.run(PREVIEW_CREATE)
-                self._sleep(GUI_SETTLE_S)
-                self.click(console=True)
-                result.update(self._preview_shot(type_name))
+                self._preview_kept = dict(variables)
+                with self._preview_options(outlines, scale, owner_scale, result):
+                    self._sleep(GUI_SETTLE_S)
+                    self.click(console=True)
+                    result.update(self._preview_shot(type_name))
                 self._new_lines()
                 result["log"] = gui_preview.gui_log(self._errors_seen, list(files) + [gui_preview.PREVIEW_FILE])
                 if not keep:
-                    self._console.run(CLEAR_WIDGETS)
+                    self._clear_preview()
             finally:
                 self._errors_seen = None
             out.update({k: v for k, v in result.items() if k != "log"}, log_lines=len(result["log"]))
         return result
+
+    def gui_hide(self) -> dict:
+        """Clear the preview `gui-show --keep` left up, and the client-side values it set (its wrapper's clear
+        widget, created once). `stop` needs nothing: the values are the client's, never saved."""
+        self._require_game()
+        with self._step("gui_hide") as out:
+            cleared = sorted(self._preview_kept or {})
+            self._clear_preview()
+            out.update(variables_cleared=cleared)
+        return {"cleared": True, "variables_cleared": cleared}
+
+    def _clear_preview(self) -> None:
+        """Clear the created widgets; when the preview set client-side values, create the wrapper's clear widget,
+        whose state clears them on creation, and clear that too."""
+        self._console.run(CLEAR_WIDGETS)
+        if self._preview_kept:
+            self._console.run(CLEAR_CREATE)
+            self._console.run(CLEAR_WIDGETS)
+        self._preview_kept = None
+
+    def _owner_ui_scale(self) -> float:
+        """The UI scale the owner's settings hold (`GUI.scale` in the user data's SETTINGS_FILE), which a
+        preview's `scale` is put back to: `no_scale` when it cannot be read, before anything is written."""
+        path = self._paths.user_data / SETTINGS_FILE
+        try:
+            value = _json.loads(path.read_text(encoding="utf-8-sig"))["GUI"]["scale"]
+        except (OSError, ValueError, KeyError, TypeError) as e:
+            raise SessionError("no_scale", "the owner's UI scale could not be read from %s (%s: %s), so a scale "
+                               "could not be put back: show without --scale" % (path, type(e).__name__, e)) from e
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise SessionError("no_scale", "%s holds GUI.scale = %r, not a number" % (path, value))
+        return float(value)
+
+    @contextmanager
+    def _preview_options(self, outlines: bool, scale: float | None, owner_scale: float | None, result: dict):
+        """Outlines and scale on for the block, and put back after it whatever happens in it: the scale set to the
+        owner's and outlines off, in the reverse order, each tried even when one before it failed. A failure
+        putting them back is named as `restore_failed`: in `result` when the block succeeded (the shot stands),
+        on the error when it had failed with a SessionError."""
+        done: list[str] = []
+        try:
+            if outlines:
+                for command in (GUI_DEBUG, GUI_DRAWALL):
+                    self._gui_toggle(command, "Enabled")
+                    done.append(command)
+            if scale is not None:
+                done.append("scale")
+                self._console.run(SET_SCALE % format(scale, "g"))
+            yield
+        except BaseException as failure:
+            failed = self._undo_preview_options(done, owner_scale)
+            if failed and isinstance(failure, SessionError):
+                failure.info["restore_failed"] = "; ".join(failed)
+            raise
+        failed = self._undo_preview_options(done, owner_scale)
+        if failed:
+            result["restore_failed"] = "; ".join(failed)
+        result.update(outlines=outlines, scale=scale)
+
+    def _undo_preview_options(self, done: list[str], owner_scale: float | None) -> list[str]:
+        """Put back each option in `done`, last first, trying every one: what failed, as text (empty: none)."""
+        failed: list[str] = []
+        for item in reversed(done):
+            try:
+                if item == "scale":
+                    self._console.run(SET_SCALE % format(owner_scale, "g"))
+                else:
+                    self._gui_toggle(item, "Disabled")
+            except Exception as e:
+                failed.append("%s: %s" % (item if item != "scale" else "gui.setscale", e))
+        return failed
+
+    def _gui_toggle(self, command: str, want: str) -> None:
+        """Send a toggling console command until it answers `want` (Enabled or Disabled), twice at most: one that
+        answers neither is `bad_reply`."""
+        said: list[str] = []
+        for _ in range(2):
+            said = [line.strip() for line in self._console.run(command).lines]
+            if want in said:
+                return
+            if not {"Enabled", "Disabled"} & set(said):
+                break
+        raise SessionError("bad_reply", "%s answered %r, not %s" % (command, said, want))
 
     def _await_preview(self, revision: int) -> None:
         """Poll the logs until the wrapper's token names `revision` (the game parsed the new file), up to

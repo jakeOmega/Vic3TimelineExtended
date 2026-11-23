@@ -1943,7 +1943,7 @@ done
 
 ## Seeing a GUI in the Running Game
 
-Probed on 1.15.2 with `-debug_mode`, in a `game_qa` session on the country-select screen (2026-11-23, run `20261123T221454Z`). The design that builds a harness verb on these is `docs/superpowers/specs/2026-11-23-gui-preview-design.md`.
+Probed on 1.15.2 with `-debug_mode`, in a `game_qa` session on the country-select screen (2026-11-23, run `20261123T221454Z`). The harness verb built on these, `python3 -m game_qa gui-show TYPE`, shows one type from your checkout alone in the game and returns a full-resolution crop (the `game-qa` skill; design `docs/superpowers/specs/2026-11-23-gui-preview-design.md`).
 
 - **`gui.createwidget <file> <widget>` opens any top-level widget of a mod's `.gui` file**, named by its path from the mod root and its `name` (`gui.createwidget gui/te_qa_preview.gui te_qa_preview`); `gui.clearwidgets` removes every widget so created. Neither answers in the console. A wrapper window with `datacontext = "[GetPlayer]"` drew the mod's `te_tax_overview_panel` with the played country's data.
 - **A `.gui` edit hot-reloads within a second**, unlike a script edit (40-90 s with this mod). An open widget rebuilds when its own file changes, but **not when a type it uses changes in another file**: recreate it (`gui.clearwidgets`, then `gui.createwidget`) to see a type edit. A `.gui` file added mid-game to a loaded mod folder was picked up too.

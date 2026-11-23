@@ -142,6 +142,15 @@ class FakeSession:
                 "screenshot": "/backups/runs/%s/shot_01.png" % SNAP, "crop": "/backups/runs/%s/profiler_roots_01.png"
                 % SNAP, "scale": 1}
 
+    def gui_show(self, type_name, repo, context="player", width=520, variables=None, outlines=False, scale=None,
+                 setup=None, keep=False):
+        self._call("gui_show", type_name, repo, context, width, variables, outlines, scale, setup, keep)
+        return {"type": type_name, "crop": "/backups/runs/%s/gui_01_%s.png" % (SNAP, type_name), "log": []}
+
+    def gui_hide(self):
+        self._call("gui_hide")
+        return {"cleared": True, "variables_cleared": []}
+
     def try_event(self, event, setup, reads):
         self._call("try_event", event, setup, list(reads))
         return dict(self.try_event_reply, event=event, setup=setup)
@@ -371,6 +380,32 @@ class ProfilerRootsVerbTest(ServerTestCase):
         self.assertEqual(fake.calls[-1], ("profiler_roots", [0.1, 0.2, 0.9, 0.8]))
         self.run_cli("profiler-roots", "--as-shown")
         self.assertEqual(fake.calls[-1], ("profiler_roots", None, "as_shown"))
+
+class GuiVerbsTest(ServerTestCase):
+    def test_gui_show_sends_the_callers_checkout_and_its_options(self):
+        fake, _thread = self.serve()
+        top = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True,
+                             check=True).stdout.strip()
+        reply, code = self.run_cli("gui-show", "te_x")
+        self.assertEqual((code, reply["type"]), (0, "te_x"))
+        self.assertEqual(fake.calls[-1], ("gui_show", "te_x", top, "player", 520, {}, False, None, None, False))
+        self.run_cli("gui-show", "te_x", "--context", "je:je_x", "--width", "600", "--var", "a=b", "--var", "c=d",
+                     "--outlines", "--scale", "1.25", "--setup", "fill", "--keep")
+        self.assertEqual(fake.calls[-1], ("gui_show", "te_x", top, "je:je_x", 600, {"a": "b", "c": "d"}, True, 1.25,
+                                          "fill", True))
+
+    def test_a_var_without_an_equals_sign_is_refused_before_anything_is_sent(self):
+        fake, _thread = self.serve()
+        reply, code = self.run_cli("gui-show", "te_x", "--var", "ab")
+        self.assertEqual((code, reply["refused"]), (2, "bad_argument"))
+        self.assertNotIn("gui_show", [c[0] for c in fake.calls])
+
+    def test_gui_hide_routes_to_the_session(self):
+        fake, _thread = self.serve()
+        reply, code = self.run_cli("gui-hide")
+        self.assertEqual((code, reply), (0, {"cleared": True, "variables_cleared": []}))
+        self.assertEqual(fake.calls[-1], ("gui_hide",))
+
 
 class VerbTest(ServerTestCase):
     def test_a_verb_round_trips_json(self):

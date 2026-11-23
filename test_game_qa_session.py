@@ -2808,6 +2808,7 @@ class GuiShowTestBase(SessionTestCase):
     magenta backdrop with a grey 170 x 150 panel at the centre of a 400 x 300 window."""
 
     X_GUI = "types t {\n\ttype te_x_section = widget {}\n}\n"
+    START_KWARGS: dict = {}
 
     def setUp(self):
         super().setUp()
@@ -2841,7 +2842,7 @@ class GuiShowTestBase(SessionTestCase):
             patcher = mock.patch.object(overlay, name, fn)
             patcher.start()
             self.addCleanup(patcher.stop)
-        self.started()
+        self.start_reply = self.started(**self.START_KWARGS)
         self.game.pending_events = []
         self.session.events()                   # the console open, as after any verb that types
         self.game.screenshot = self.panel_shot
@@ -2965,6 +2966,146 @@ class GuiShowTest(GuiShowTestBase):
         sgui.parent.mkdir(parents=True)
         sgui.write_text("x = {}\n", encoding="utf-8")
         self.assertEqual(self.show()["stale_script"], ["common/scripted_guis/x.txt"])
+
+
+class GuiShowOptionsTest(GuiShowTestBase):
+    """gui-show's options: outlines, scale, client-side values, a setup, keep; and gui-hide."""
+
+    START_KWARGS = {"setups": {"fill": "set_variable = te_x"}}
+
+    def setUp(self):
+        super().setUp()
+        self.settings = self.user / session.SETTINGS_FILE
+        self.settings.write_text('\ufeff{"GUI": {"scale": 1.5, "tools_gui_scale": 2}}', encoding="utf-8")
+
+    def toggles(self, *commands):
+        """Each of `commands` answers Enabled, then Disabled, alternately, as gui.debug does live."""
+        state = {c: False for c in commands}
+        before = self.game.on_command
+
+        def hook(text):
+            if text in state:
+                state[text] = not state[text]
+                self.game.on(text, success=["Enabled" if state[text] else "Disabled"])
+            if before is not None:
+                before(text)
+        self.game.on_command = hook
+
+    def gui_typed(self) -> list[str]:
+        return [c for c in self.typed() if c.startswith("gui.")]   # the console's log flushes come between
+
+    def test_outlines_are_switched_on_for_the_shot_and_off_after(self):
+        self.toggles(session.GUI_DEBUG, session.GUI_DRAWALL)
+        self.show(outlines=True)
+        self.assertEqual(self.gui_typed(), [session.CLEAR_WIDGETS, session.PREVIEW_CREATE, session.GUI_DEBUG,
+                                            session.GUI_DRAWALL, session.GUI_DRAWALL, session.GUI_DEBUG,
+                                            session.CLEAR_WIDGETS])
+
+    def test_outlines_already_on_are_toggled_until_on(self):
+        self.toggles(session.GUI_DEBUG, session.GUI_DRAWALL)
+        self.session.console(session.GUI_DEBUG)                     # someone left it on: the next toggle is off
+        self.show(outlines=True)
+        cmds = self.gui_typed()
+        self.assertEqual(cmds.count(session.GUI_DEBUG), 1 + 2 + 1)  # the one above, off then on, then off after
+
+    def test_an_outline_toggle_that_answers_neither_is_a_bad_reply(self):
+        self.game.on(session.GUI_DEBUG, success=["Called "])
+        self.assertEqual(self.session_error(self.show, outlines=True).code, "bad_reply")
+
+    def test_scale_is_set_for_the_shot_and_put_back_from_the_settings_file(self):
+        self.show(scale=1.0)
+        self.assertEqual([c for c in self.typed() if c.startswith("gui.setscale")],
+                         ["gui.setscale 1", "gui.setscale 1.5"])
+
+    def test_no_scale_in_the_settings_refuses_before_anything_is_written(self):
+        for text in (None, '{"GUI": {}}', "not json"):
+            with self.subTest(text=text):
+                if text is None:
+                    self.settings.unlink(missing_ok=True)
+                else:
+                    self.settings.write_text(text, encoding="utf-8")
+                self.assertEqual(self.session_error(self.show, scale=1.0).code, "no_scale")
+        self.assertEqual(self.written, [])
+
+    def test_a_bad_scale_is_refused(self):
+        for scale in (0, -1, 9, True, "1"):
+            with self.subTest(scale=scale):
+                self.assertEqual(self.session_error(self.show, scale=scale).code, "bad_argument")
+
+    def test_outlines_and_scale_are_put_back_after_a_failure(self):
+        self.toggles(session.GUI_DEBUG, session.GUI_DRAWALL)
+        with mock.patch.object(self.session, "click", side_effect=session.SessionError("click_refused", "x")):
+            self.assertEqual(self.session_error(self.show, outlines=True, scale=1.0).code, "click_refused")
+        cmds = self.gui_typed()
+        self.assertEqual([c for c in cmds if c.startswith("gui.setscale")], ["gui.setscale 1", "gui.setscale 1.5"])
+        self.assertEqual((cmds.count(session.GUI_DEBUG), cmds.count(session.GUI_DRAWALL)), (2, 2))
+
+    def test_a_failed_put_back_is_named_on_the_error_and_the_rest_still_put_back(self):
+        self.toggles(session.GUI_DEBUG, session.GUI_DRAWALL)
+
+        def fail(*args, **kwargs):              # the click fails, and drawall stops answering Enabled/Disabled
+            debug_on = [True]
+
+            def debug_only(text):               # gui.debug, on now, still toggles
+                if text == session.GUI_DEBUG:
+                    debug_on[0] = not debug_on[0]
+                    self.game.on(text, success=["Enabled" if debug_on[0] else "Disabled"])
+            self.game.on_command = debug_only
+            self.game.on(session.GUI_DRAWALL, success=["Called "])
+            raise session.SessionError("click_refused", "x")
+        with mock.patch.object(self.session, "click", side_effect=fail):
+            e = self.session_error(self.show, outlines=True, scale=1.0)
+        self.assertEqual(e.code, "click_refused")
+        self.assertTrue(e.info["restore_failed"].startswith(session.GUI_DRAWALL + ": "))
+        self.assertNotIn("; ", e.info["restore_failed"])                # drawall's failure alone
+        cmds = self.gui_typed()
+        self.assertIn("gui.setscale 1.5", cmds)                         # the scale put back all the same,
+        self.assertEqual(cmds.count(session.GUI_DEBUG), 2)              # and gui.debug switched off after drawall
+
+    def test_a_failed_put_back_after_a_good_shot_still_answers_with_the_crop(self):
+        self.toggles(session.GUI_DEBUG, session.GUI_DRAWALL)
+        real_click = self.session.click
+
+        def click(*args, **kwargs):             # drawall stops answering Enabled/Disabled after the create
+            reply = real_click(*args, **kwargs)
+            self.game.on_command = None
+            self.game.on(session.GUI_DRAWALL, success=["Called "])
+            self.game.on(session.GUI_DEBUG, success=["Disabled"])
+            return reply
+        with mock.patch.object(self.session, "click", side_effect=click):
+            reply = self.show(outlines=True)
+        self.assertIsNotNone(reply["crop"])
+        self.assertTrue(reply["restore_failed"].startswith(session.GUI_DRAWALL + ": "))
+
+    def test_variables_are_cleared_after_the_shot_unless_kept_then_by_gui_hide(self):
+        self.show(variables={"te_ni_tab": "economy"})
+        self.assertEqual(self.gui_typed()[-3:], [session.CLEAR_WIDGETS, session.CLEAR_CREATE, session.CLEAR_WIDGETS])
+        self.show(variables={"te_ni_tab": "economy"}, keep=True)
+        self.assertEqual(self.gui_typed()[-1], session.PREVIEW_CREATE)
+        self.assertEqual(self.session.gui_hide(), {"cleared": True, "variables_cleared": ["te_ni_tab"]})
+        self.assertEqual(self.gui_typed()[-3:], [session.CLEAR_WIDGETS, session.CLEAR_CREATE, session.CLEAR_WIDGETS])
+        self.assertEqual(self.session.gui_hide(), {"cleared": True, "variables_cleared": []})
+        self.assertEqual(self.gui_typed()[-1], session.CLEAR_WIDGETS)
+
+    def test_kept_variables_are_cleared_before_the_next_preview(self):
+        self.show(variables={"te_ni_tab": "economy"}, keep=True)
+        self.written.clear()
+        before = len(self.gui_typed())
+        self.show()
+        self.assertEqual(self.gui_typed()[before:before + 3],
+                         [session.CLEAR_WIDGETS, session.CLEAR_CREATE, session.CLEAR_WIDGETS])
+        self.assertEqual(self.session.gui_hide()["variables_cleared"], [])
+
+    def test_a_setup_runs_before_the_create(self):
+        event = self.start_reply["overlay"]["setup_events"]["fill"]
+        self.game.setups = {event: ("fill", ["filled"])}
+        self.show(setup="fill")
+        cmds = self.typed()
+        self.assertLess(cmds.index("event " + event), cmds.index(session.PREVIEW_CREATE))
+
+    def test_an_unknown_setup_is_refused_before_anything_is_written(self):
+        self.assertEqual(self.session_error(self.show, setup="nothing").code, "unknown_setup")
+        self.assertEqual(self.written, [])
 
 
 class AdvanceTest(SessionTestCase):

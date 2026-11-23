@@ -43,6 +43,12 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
                                              # the script profiler at its roots, shot at the window's own size,
                                              # and its call graph cropped out of the shot (--as-shown: as it is,
                                              # nothing typed)
+    python3 -m game_qa gui-show TYPE [--context player|none|je:KEY] [--width N] [--var KEY=VALUE]... [--outlines]
+                       [--scale S] [--setup NAME] [--keep]
+                                             # one GUI type from this checkout's branch, alone in the game: its
+                                             # changed .gui files synced into the overlay, the reload proved, a
+                                             # full-size crop of the panel and the GUI lines the game logged
+    python3 -m game_qa gui-hide              # clear a preview left up by --keep, and the values it set
     python3 -m game_qa try-event EVENT [--setup NAME] --read "<expr>"...
                                              # each option of EVENT: setup, fire, read, pick, read; exit 0 only
                                              # when every option fired and was picked
@@ -94,6 +100,9 @@ POLL_S = 0.2
 STATUS_TIMEOUT_S = 10.0                 # a server that has not answered `status` by then is busy, not dead
 VERB_TIMEOUT_S = 300.0                  # a console command may wait 120 s for the game to come to the front
 ENTER_TIMEOUT_S = 1500.0
+# gui-show builds the installed game's type index on its first call (about 10 s), waits up to
+# session.GUI_RELOAD_WAIT_S for the reload and types a dozen commands.
+GUI_SHOW_TIMEOUT_S = 180.0
 # add-setup waits session.RELOAD_WAIT_S (300 s) for the reload (about 90 s, live), a last look may take a console
 # command's 30 s and LOADED_WAIT_S more, and the debugger is attached again: about 350 s, with room.
 ADD_SETUP_TIMEOUT_S = 600.0
@@ -971,6 +980,27 @@ def cmd_profiler_roots(args) -> tuple[dict, int]:
     return call(_backup_root(), "profiler-roots", body)
 
 
+def cmd_gui_show(args) -> tuple[dict, int]:
+    variables: dict[str, str] = {}
+    for item in args.var or []:
+        key, sep, value = item.partition("=")
+        if not sep:
+            return {"refused": "bad_argument", "detail": "--var takes KEY=VALUE, not %r" % item}, 2
+        variables[key] = value
+    top = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True)
+    if top.returncode != 0:
+        return {"refused": "not_a_repo", "detail": "gui-show previews this checkout's branch, and %s is not in a git "
+                                                   "checkout: %s" % (os.getcwd(), top.stderr.strip())}, 2
+    body = {"type": args.type, "repo": top.stdout.strip(), "context": args.context, "width": args.width,
+            "variables": variables, "outlines": args.outlines, "scale": args.scale, "setup": args.setup,
+            "keep": args.keep}
+    return call(_backup_root(), "gui-show", body, GUI_SHOW_TIMEOUT_S)
+
+
+def cmd_gui_hide(args) -> tuple[dict, int]:
+    return call(_backup_root(), "gui-hide", {})
+
+
 def cmd_try_event(args) -> tuple[dict, int]:
     return call(_backup_root(), "try-event", {"event": args.event, "setup": args.setup, "reads": args.reads},
                 LONG_TIMEOUT_S)
@@ -1159,6 +1189,23 @@ def add_verbs(sub) -> None:
     p.add_argument("--as-shown", action="store_true",
                    help="type nothing: shoot and crop the window as it is (after a click on a row, or a wheel)")
     p.set_defaults(run=cmd_profiler_roots)
+    p = sub.add_parser("gui-show", help="show one GUI type from this checkout's branch, alone in the running game: "
+                                        "a full-size crop of it and the GUI lines the game logged")
+    p.add_argument("type", help="a GUI type (not a journal entry's root widget or a popup's shell: the refusal "
+                                "names the types to show instead)")
+    p.add_argument("--context", default="player", help="the data the type reads: player (the played country, "
+                                                       "the default), none, or je:KEY (a journal entry)")
+    p.add_argument("--width", type=int, default=520, help="the content's width in UI units (default 520, a "
+                                                          "journal entry's widgets)")
+    p.add_argument("--var", action="append", metavar="KEY=VALUE",
+                   help="a client-side GUI value set while the preview shows (a tab, an open section); repeatable")
+    p.add_argument("--outlines", action="store_true", help="draw every widget's box (gui.debug.drawall)")
+    p.add_argument("--scale", type=float, help="the game's UI scale for the shot, put back to the owner's after")
+    p.add_argument("--setup", metavar="NAME", help="a setup given at start, run before the preview is created")
+    p.add_argument("--keep", action="store_true", help="leave the preview up (gui-hide clears it)")
+    p.set_defaults(run=cmd_gui_show)
+    p = sub.add_parser("gui-hide", help="clear a preview gui-show --keep left up, and the values it set")
+    p.set_defaults(run=cmd_gui_hide)
     p = sub.add_parser("try-event", help="the owner's first check: for each option of EVENT, run the setup, fire "
                                          "the event, read, pick that option, read again; one table in the report")
     p.add_argument("event")
