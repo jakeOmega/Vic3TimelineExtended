@@ -1160,14 +1160,19 @@ sr_disp_fab_stock = {
 }
 # The queue's head (the owner, 2026-10-31): 0 nothing queued; 1 being
 # fabricated, built in sr_disp_mq_next_months; 2 its points are in stock but
-# every shipment slot is taken (a lunar world's module needs none:
-# sr_mq_head_needs_no_slot); 3 stopped: the launch site lost, or no points a
-# month and too few in stock (sr_disp_mq_stop_reason says which). A price past
-# the stock's cap doesn't stop it: the stock fills to the head's price
-# (sr_mod_fab_stock_fill_cap). The month's pulse adds the rate and then builds (sr_mod_month),
-# whose build loop asks only the launch site, the stock, a free slot and the
-# queue, never the rate: a head the stock covers is built with no fabrication.
-# So the head waits at least one month.
+# every shipment slot it needs is taken (a lunar world's needs none); 3 stopped:
+# the launch site lost, or no points a month and too few in stock
+# (sr_disp_mq_stop_reason says which); 4 waiting for its launch window, built in
+# sr_disp_mq_next_months, which counts down sr_mq_head_window_months too; 5 on
+# hold: Earth blockaded, or its Moon colony blockaded or occupied
+# (sr_disp_launches_barred says which). 4 and 5 are the owner's 2026-11-23 rule
+# (sr_mq_head_ready): such a head isn't built, and one further down that can be
+# goes ahead of it (sr_mq_promote_ready). A price past the stock's cap doesn't
+# stop it: the stock fills to the head's price (sr_mod_fab_stock_fill_cap). The
+# month's pulse adds the rate and then builds (sr_mod_month), whose build loop
+# asks only the launch site, the stock, whether the head can go and the queue,
+# never the rate: a head the stock covers is built with no fabrication. So the
+# head waits at least one month.
 sr_disp_mq_next_state = {
 	value = 0
 	if = {
@@ -1178,18 +1183,30 @@ sr_disp_mq_next_state = {
 			value = 3
 		}
 		else_if = {
-			limit = { sr_mod_fab_stock_value >= sr_mq_head_cost }
-			if = {
-				limit = {
-					NOT = { sr_ms_has_free_slot = yes }
-					NOT = { sr_mq_head_needs_no_slot = yes }
-				}
-				value = 2
-			}
+			limit = { sr_launches_barred = yes }
+			value = 5
 		}
 		else_if = {
-			limit = { NOT = { sr_mod_fab_rate > 0 } }
+			limit = {
+				sr_mod_fab_stock_value < sr_mq_head_cost
+				NOT = { sr_mod_fab_rate > 0 }
+			}
 			value = 3
+		}
+		else_if = {
+			limit = { sr_mq_head_window_months > 0 }
+			value = 4
+		}
+		else_if = {
+			limit = { sr_mq_head_lunar_closed = yes }
+			value = 5
+		}
+		else_if = {
+			limit = {
+				sr_mod_fab_stock_value >= sr_mq_head_cost
+				NOT = { sr_mq_head_ready = yes }
+			}
+			value = 2
 		}
 	}
 }
@@ -1204,7 +1221,7 @@ sr_disp_mq_stop_reason = {
 }
 # 1 while a module for a lunar world that can take it waits behind the head
 # (sr_mq_lunar_behind): the hover's note that it goes ahead of a head waiting
-# for a slot once the stock covers it (sr_mq_promote_lunar).
+# for a slot once the stock covers it (sr_mq_promote_ready).
 sr_disp_mq_lunar_behind = {
 	value = 0
 	if = {
@@ -1247,6 +1264,11 @@ sr_disp_mq_next_months = {
 		subtract = sr_mod_fab_stock_value
 		divide = sr_mod_fab_rate
 		ceiling = yes
+	}
+	# A head waiting for its launch window is built no sooner (state 4).
+	if = {
+		limit = { sr_mq_head_window_months > 0 }
+		min = sr_mq_head_window_months
 	}
 	min = 1
 	max = 999

@@ -1785,26 +1785,33 @@ class ModulesTest(unittest.TestCase):
     def test_a_lunar_module_takes_no_shipment_slot(self):
         lunar = sorted(s.index for s in gss.LUNAR)
         self.assertEqual(len(lunar), 6)
-        head = _block(self.triggers, "sr_mq_head_lunar_open")
-        self.assertEqual(sorted(int(i) for i in re.findall(r"var:sr_mq_1_site \?= (\d+)", head)), lunar)
+        head = _block(self.triggers, "sr_mq_head_ready")
+        # The head can go: never while launches are barred, a lunar world's with no slot.
+        self.assertEqual(head.strip(), "NOT = { sr_launches_barred = yes } " + gss.ready_test("var:sr_mq_1_site"))
+        lunar_part = gss.lunar_open_test("var:sr_mq_1_site")
+        self.assertEqual(sorted(int(i) for i in re.findall(r"var:sr_mq_1_site \?= (\d+)", lunar_part)), lunar)
+        self.assertLess(head.index(lunar_part), head.index("sr_ms_has_free_slot = yes"))
         # Only a world that can take the module now: a blockaded or occupied one
-        # would lose it the month it is paid for (review of #1847).
+        # would lose it the month it is paid for (review of #1847), so it waits
+        # in the queue (the owner, 2026-11-23).
         for site in gss.LUNAR:
             self.assertIn(f"AND = {{ var:sr_mq_1_site ?= {site.index} NOT = {{ has_global_variable = sr_site_blockaded_{site.key} }} "
                           f"NOT = {{ has_global_variable = sr_site_occupier_{site.key} }} }}", head)
+        closed = _block(self.triggers, "sr_mq_head_lunar_closed")
+        for site in gss.LUNAR:
+            self.assertIn(f"AND = {{ var:sr_mq_1_site ?= {site.index} OR = {{ has_global_variable = sr_site_blockaded_{site.key} "
+                          f"has_global_variable = sr_site_occupier_{site.key} }} }}", closed)
         triggers = _strip(_raw("common", "scripted_triggers", "sr_colony_module_triggers.txt"))
-        no_slot = _block(triggers, "sr_mq_head_needs_no_slot")
-        self.assertIn("sr_mq_head_lunar_open = yes", no_slot)
-        self.assertIn("NOT = { sr_launches_barred = yes }", no_slot)
-        # The build loop takes a free slot or a head that needs none.
+        self.assertNotIn("sr_mq_head_needs_no_slot", triggers)
+        # The build loop takes only a head that can go; the test holds the slot.
         loop = _block(_block(self.modules, "sr_mod_month"), "while")
-        self.assertRegex(_block(loop, "limit"),
-                         r"OR = \{\s*sr_ms_has_free_slot = yes\s*sr_mq_head_needs_no_slot = yes\s*\}")
+        self.assertIn("sr_mq_head_ready = yes", _block(loop, "limit"))
+        self.assertNotIn("sr_ms_has_free_slot", _block(loop, "limit"))
         # Installed at once through the landing's install, unless launches are
         # barred; then into a slot like any other.
         build = _block(self.modules, "sr_mod_fab_build_lunar")
         go = build[:build.index("else = {")]
-        # The same three tests as sr_mq_head_needs_no_slot, so the slot branch runs only with a slot free.
+        # The same three tests as sr_mq_head_ready's lunar part, so the loop never reaches the slot branch.
         for term in ("NOT = { sr_launches_barred = yes }", "NOT = { has_global_variable = sr_site_blockaded_$KEY$ }",
                      "NOT = { has_global_variable = sr_site_occupier_$KEY$ }"):
             self.assertIn(term, _block(go, "limit"))
@@ -1820,26 +1827,70 @@ class ModulesTest(unittest.TestCase):
             self.assertIn(f"NOT = {{ has_global_variable = sr_site_blockaded_{site.key} }}", install)
             self.assertIn(f"sr_site_sync_{site.key} = yes", install)
 
-    def test_a_lunar_module_goes_ahead_of_a_head_waiting_for_a_slot(self):
-        promote = _block(self.effects, "sr_mq_promote_lunar")
+    def test_a_module_is_built_only_once_its_window_is_near(self):
+        """The owner, 2026-11-23: a module waiting for a launch window stays in
+        the queue, its points in the stock, instead of holding a shipment slot;
+        it is built once its window is a month off (sr_mod_build_lead_months)."""
+        values = _strip(_raw("common", "script_values", "sr_colony_module_values.txt"))
+        self.assertRegex(values, r"(?m)^sr_mod_build_lead_months = \{ value = 1 \}")
+        test = gss.ready_test("var:sr_mq_4_site")
+        slot = test[test.index("AND = { sr_ms_has_free_slot = yes"):]
+        for site in gss.SITES:
+            with self.subTest(site=site.key):
+                if site in gss.LUNAR:
+                    # No slot, no window: the Moon is at Earth's location.
+                    self.assertNotIn(f"var:sr_mq_4_site ?= {site.index} ", slot)
+                    self.assertIsNone(site.body)
+                elif site.body:
+                    self.assertIn(f"AND = {{ var:sr_mq_4_site ?= {site.index} "
+                                  f"sr_mod_wait_months_{site.key} <= sr_mod_build_lead_months }}", slot)
+                else:
+                    # Mercury has no window: only a slot.
+                    self.assertIn(f"AND = {{ var:sr_mq_4_site ?= {site.index} }}", slot)
+        self.assertEqual([s.key for s in gss.SITES if not s.body and s not in gss.LUNAR], ["mercury"])
+        # The wait the gate reads is the Next Module hover's: 0 while the window is
+        # open or windows don't bind THIS, and a window's last month counts as missed.
+        for site in (s for s in gss.SITES if s.body):
+            self.assertIn(f"sr_mod_wait_months_{site.key} = {{ value = 0 if = {{ limit = {{ sr_launch_windows_apply = yes }} ",
+                          self.values)
+        # The head's wait, for the Next Module row (sr_mq_head_window_months).
+        wait = _block(self.values, "sr_mq_head_wait_months")
+        self.assertEqual(sorted(int(i) for i in re.findall(r"var:sr_mq_1_site \?= (\d+)", wait)),
+                         sorted(s.index for s in gss.SITES if s.body))
+        for site in (s for s in gss.SITES if s.body):
+            self.assertIn(f"limit = {{ var:sr_mq_1_site ?= {site.index} }} value = sr_mod_wait_months_{site.key}", wait)
+        window = _block(values, "sr_mq_head_window_months")
+        self.assertRegex(window, r"value = sr_mq_head_wait_months\s*subtract = sr_mod_build_lead_months\s*min = 0")
+
+    def test_the_first_module_that_can_go_goes_ahead_of_a_head_that_can_t(self):
+        promote = _block(self.effects, "sr_mq_promote_ready")
+        self.assertNotIn("sr_mq_promote_lunar", self.effects + self.modules)
         gate = _block(promote, "limit")
-        for term in ("has_variable = sr_mq_1_site", "NOT = { sr_ms_has_free_slot = yes }",
+        for term in ("has_variable = sr_mq_1_site", "NOT = { sr_mq_head_ready = yes }",
                      "NOT = { sr_launches_barred = yes }"):
             self.assertIn(term, gate)
-        self.assertIn("NOT = { sr_mq_head_lunar_open = yes }", gate)
-        # The first lunar entry from place 2 on that can be installed now and that
-        # the stock can pay for moves to the top (review of #1847).
+        # The first entry from place 2 on that can go now and that the stock can
+        # pay for moves to the top (review of #1847: an unpaid one would hold a paid
+        # head back), so a Mercury module never waits behind a Mars one.
         moves = re.findall(r"limit = \{ (OR = \{ .*?) \}\s*sr_mq_to_top_(\d+) = yes", promote)
         self.assertEqual([int(n) for _, n in moves], list(range(2, gss.QUEUE_SLOTS + 1)))
         for test, n in moves:
             with self.subTest(place=n):
-                self.assertEqual(test.strip(), gss.lunar_open_test(f"var:sr_mq_{n}_site", f"var:sr_mq_{n}_type"))
+                self.assertEqual(test.strip(), gss.ready_test(f"var:sr_mq_{n}_site", f"var:sr_mq_{n}_type"))
                 for site in gss.LUNAR:
                     self.assertIn(f"var:sr_mq_{n}_site ?= {site.index} NOT = {{ has_global_variable = sr_site_blockaded_{site.key} }} "
                                   f"NOT = {{ has_global_variable = sr_site_occupier_{site.key} }} "
                                   "sr_mod_fab_stock_value >= sr_module_points "
                                   f"OR = {{ NOT = {{ var:sr_mq_{n}_type ?= 3 }} "
                                   f"sr_mod_fab_stock_value >= sr_mod_hab_cost_{site.key} }}", test)
+                for site in gss.SITES:
+                    if site in gss.LUNAR:
+                        continue
+                    wait = f" sr_mod_wait_months_{site.key} <= sr_mod_build_lead_months" if site.body else ""
+                    self.assertIn(f"AND = {{ var:sr_mq_{n}_site ?= {site.index}{wait} "
+                                  "sr_mod_fab_stock_value >= sr_module_points "
+                                  f"OR = {{ NOT = {{ var:sr_mq_{n}_type ?= 3 }} "
+                                  f"sr_mod_fab_stock_value >= sr_mod_hab_cost_{site.key} }} }}", test)
         # The hover's Moon note reads the same entries behind the head.
         behind = _block(self.triggers, "sr_mq_lunar_behind")
         self.assertNotIn("var:sr_mq_1_site", behind)
@@ -1847,9 +1898,9 @@ class ModulesTest(unittest.TestCase):
             self.assertIn(gss.lunar_open_test(f"var:sr_mq_{n}_site"), behind)
         # Before the first build and after each.
         month = _block(self.modules, "sr_mod_month")
-        self.assertLess(month.index("sr_mq_promote_lunar = yes"), month.index("while = {"))
+        self.assertLess(month.index("sr_mq_promote_ready = yes"), month.index("while = {"))
         loop = _block(month, "while")
-        self.assertLess(loop.index("sr_mod_fab_head = yes"), loop.index("sr_mq_promote_lunar = yes"))
+        self.assertLess(loop.index("sr_mod_fab_head = yes"), loop.index("sr_mq_promote_ready = yes"))
 
     def test_past_its_cap_a_habitat_needs_its_price_in_stock(self):
         """No top past the cap (the owner's call 7, colony people design § 4.3):

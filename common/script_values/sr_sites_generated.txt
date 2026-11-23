@@ -13434,6 +13434,46 @@ sr_mod_wait_months_makemake = { value = 0 if = { limit = { sr_launch_windows_app
 sr_mod_wait_months_haumea = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_kuiper if = { limit = { te_history_month_index > sr_window_next_optimum_kuiper } value = sr_window_previous_gap_kuiper subtract = 2 } } }
 sr_mod_wait_months_sedna = { value = 0 if = { limit = { sr_launch_windows_apply = yes } value = sr_window_months_to_next_kuiper if = { limit = { te_history_month_index > sr_window_next_optimum_kuiper } value = sr_window_previous_gap_kuiper subtract = 2 } } }
 
+# Country scope: the same for the queue's first module (0 for one with no windows, or
+# nothing queued). It is built once this is at most sr_mod_build_lead_months
+# (sr_mq_head_ready; the owner, 2026-11-23), and the Next Module row counts down to that.
+sr_mq_head_wait_months = {
+	value = 0
+	if = { limit = { var:sr_mq_1_site ?= 1 } value = sr_mod_wait_months_valles_marineris }
+	else_if = { limit = { var:sr_mq_1_site ?= 2 } value = sr_mod_wait_months_olympus_mons }
+	else_if = { limit = { var:sr_mq_1_site ?= 3 } value = sr_mod_wait_months_hellas_planitia }
+	else_if = { limit = { var:sr_mq_1_site ?= 4 } value = sr_mod_wait_months_utopia_planitia }
+	else_if = { limit = { var:sr_mq_1_site ?= 5 } value = sr_mod_wait_months_arcadia_planitia }
+	else_if = { limit = { var:sr_mq_1_site ?= 6 } value = sr_mod_wait_months_ceres }
+	else_if = { limit = { var:sr_mq_1_site ?= 7 } value = sr_mod_wait_months_vesta }
+	else_if = { limit = { var:sr_mq_1_site ?= 8 } value = sr_mod_wait_months_psyche }
+	else_if = { limit = { var:sr_mq_1_site ?= 9 } value = sr_mod_wait_months_pallas }
+	else_if = { limit = { var:sr_mq_1_site ?= 10 } value = sr_mod_wait_months_hygiea }
+	else_if = { limit = { var:sr_mq_1_site ?= 11 } value = sr_mod_wait_months_io }
+	else_if = { limit = { var:sr_mq_1_site ?= 12 } value = sr_mod_wait_months_europa }
+	else_if = { limit = { var:sr_mq_1_site ?= 13 } value = sr_mod_wait_months_ganymede }
+	else_if = { limit = { var:sr_mq_1_site ?= 14 } value = sr_mod_wait_months_callisto }
+	else_if = { limit = { var:sr_mq_1_site ?= 15 } value = sr_mod_wait_months_himalia }
+	else_if = { limit = { var:sr_mq_1_site ?= 16 } value = sr_mod_wait_months_amalthea }
+	else_if = { limit = { var:sr_mq_1_site ?= 17 } value = sr_mod_wait_months_venus }
+	else_if = { limit = { var:sr_mq_1_site ?= 19 } value = sr_mod_wait_months_titan }
+	else_if = { limit = { var:sr_mq_1_site ?= 20 } value = sr_mod_wait_months_enceladus }
+	else_if = { limit = { var:sr_mq_1_site ?= 21 } value = sr_mod_wait_months_rhea }
+	else_if = { limit = { var:sr_mq_1_site ?= 22 } value = sr_mod_wait_months_mimas }
+	else_if = { limit = { var:sr_mq_1_site ?= 23 } value = sr_mod_wait_months_iapetus }
+	else_if = { limit = { var:sr_mq_1_site ?= 24 } value = sr_mod_wait_months_titania }
+	else_if = { limit = { var:sr_mq_1_site ?= 25 } value = sr_mod_wait_months_oberon }
+	else_if = { limit = { var:sr_mq_1_site ?= 26 } value = sr_mod_wait_months_miranda }
+	else_if = { limit = { var:sr_mq_1_site ?= 27 } value = sr_mod_wait_months_ariel }
+	else_if = { limit = { var:sr_mq_1_site ?= 28 } value = sr_mod_wait_months_triton }
+	else_if = { limit = { var:sr_mq_1_site ?= 29 } value = sr_mod_wait_months_proteus }
+	else_if = { limit = { var:sr_mq_1_site ?= 30 } value = sr_mod_wait_months_pluto }
+	else_if = { limit = { var:sr_mq_1_site ?= 31 } value = sr_mod_wait_months_eris }
+	else_if = { limit = { var:sr_mq_1_site ?= 32 } value = sr_mod_wait_months_makemake }
+	else_if = { limit = { var:sr_mq_1_site ?= 33 } value = sr_mod_wait_months_haumea }
+	else_if = { limit = { var:sr_mq_1_site ?= 34 } value = sr_mod_wait_months_sedna }
+}
+
 # Country scope: the same for the module waiting in shipment slot n, 999 while the
 # slot is empty or its module in flight (sr_disp_ms_first_leave, the panel's, takes the least).
 sr_ms_wait_months_1 = {

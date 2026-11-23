@@ -845,7 +845,8 @@ in order, first in first out: the module at the top is next. The arrow on each
 line from the second on moves that module up a place; Alt+Click moves it to the
 top.
 
-Points wait in a stock while nothing is queued or every shipment slot is taken.
+Points wait in a stock while nothing is queued, every shipment slot is taken,
+or the queue waits for a launch window.
 It holds 500, plus a year of your current fabrication, plus what the Space
 Program's fourth production method group, Module Storage, adds:
 
@@ -864,17 +865,24 @@ Points made while the stock is full are lost, unless the next module in the
 queue costs more, when the stock fills to its price. The Fabrication hover in
 the Modules view breaks the stock's size down.
 
-A finished module waits at Earth for its site's launch window, or leaves at
-once with a fusion torch or antimatter drive, and lands after the transit your
-drive buys (see [Colony fleets in flight](#colony-fleets-in-flight)). Eight
-modules can wait or fly at once, and a slot is free again only when its module
-lands, so modules waiting for one launch window can hold all eight for two years.
-While all eight are taken the queue waits, and the next module reads "shipping
-full"; its hover says when the first can leave and when the first lands. A module
-for the Moon takes no slot: it is installed the month it is built, and one further
-down the queue goes ahead of a module waiting for a slot once your stock covers
-it. While Earth or that Moon colony is blockaded, or the colony occupied, it takes
-a slot as before.
+A module for a site with launch windows is built a month before its window
+opens, waits at Earth and leaves with the window; with a fusion torch or
+antimatter drive it leaves at once. It lands after the transit your drive buys
+(see [Colony fleets in flight](#colony-fleets-in-flight)). Until its window is
+that near, the module stays in the queue with its points in the stock, and the
+next module reads "in N mo", counting down to it. Meanwhile the first module
+further down the queue that can launch now, and that your stock covers, is built
+ahead of it, and the modules it passes keep their order. So a module for Mercury
+or the Moon never waits on a Mars window, and the queue needs no reordering for
+it. At two modules a month, about six can be built in time for one window.
+
+Eight modules can wait or fly at once, and a slot is free again only when its
+module lands. While all eight are taken the queue waits, and the next module
+reads "shipping full"; its hover says when the first can leave and when the
+first lands. A module for the Moon takes no slot: it is installed the month it
+is built. While Earth is blockaded no module is built, and a module for a
+blockaded or occupied Moon colony waits in the queue until the colony is free;
+the next module reads "on hold".
 A module lands for whoever holds the colony then, and is lost if the site was
 released in the meantime, or its specializations' four levels or a finished
 world's Terraforming leave no room for it.
