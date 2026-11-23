@@ -1780,7 +1780,17 @@ class ModulesTest(unittest.TestCase):
         # One chain, so only the first branch that holds runs.
         self.assertTrue(best.strip().startswith("if = {"))
         self.assertEqual(len(re.findall(r"\belse_if = \{", best)), 4)
-        self.assertIn("sr_mod_activate_best_fabrication = yes", _block(self.modules, "sr_mod_ai_review"))
+        review = _block(self.modules, "sr_mod_ai_review")
+        self.assertIn("sr_mod_activate_best_fabrication = yes", review)
+        # Only while something is queued and the stock has room (the owner,
+        # 2026-11-23): a module waiting for its window stays queued, and a full
+        # stock would bill the method for points the month throws away.
+        fabricate = review[:review.index("sr_mod_activate_best_fabrication = yes")]
+        fabricate = fabricate[fabricate.rindex("limit = {"):]
+        for term in ("sr_mq_any = yes", "sr_mod_fab_stock_value < sr_mod_fab_stock_fill_cap",
+                     "in_default = no", "net_fixed_income > 0"):
+            self.assertIn(term, fabricate)
+        self.assertIn("sr_mod_stop_fabrication = yes", review[review.index("sr_mod_activate_best_fabrication = yes"):])
 
     def test_a_lunar_module_takes_no_shipment_slot(self):
         lunar = sorted(s.index for s in gss.LUNAR)

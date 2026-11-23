@@ -388,8 +388,14 @@ sr_mod_stop_storage = {
 # (sr_mod_ai_plan_<key>: a Habitat when its people fill three quarters of its
 # room, else its next specialization level its crews can run; never the
 # placeholder Defences or Spaceport), and runs the dearest fabrication method
-# within its budget while anything is queued (sr_mod_activate_best_fabrication);
-# otherwise fabrication goes off. Storage stays off.
+# within its budget while anything is queued and the stock has room
+# (sr_mod_activate_best_fabrication); otherwise fabrication goes off. The room
+# test is the owner's (2026-11-23): a module waiting for its launch window stays
+# queued (sr_mq_head_ready), so with the stock at its cap (sr_mod_fab_stock_fill_cap)
+# the method would bill its goods for points the month throws away, for up to a
+# Mars cycle. The review runs before the month's builds, so it reads last month's
+# stock; one switched off keeps its points and is switched on again at the first
+# review that finds the stock below the cap. Storage stays off.
 sr_mod_ai_review = {
 	if = {
 		limit = {
@@ -410,6 +416,7 @@ sr_mod_ai_review = {
 		if = {
 			limit = {
 				sr_mq_any = yes
+				sr_mod_fab_stock_value < sr_mod_fab_stock_fill_cap
 				in_default = no
 				net_fixed_income > 0
 			}
