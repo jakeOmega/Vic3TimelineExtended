@@ -91,23 +91,33 @@ class GuiIndex:
     roots: dict[str, Any] = field(default_factory=dict)     # a root widget's name -> its node, in its file
 
 
-def gui_index(repo: Path, base_game: Path | None) -> GuiIndex:
-    """The types a preview can instance: the installed game's (`VANILLA_GUI_DIRS` under `base_game`, when there),
-    then the repo's `gui/`, so that the mod's definition of a name wins as the engine's load order makes it; and the
-    root widgets the repo's journal entries attach (`widget = { gui = "..." name = "..." }`)."""
+def vanilla_types(base_game: Path | None) -> dict[str, Any]:
+    """The installed game's types (`VANILLA_GUI_DIRS` under `base_game`, when there), by name: about 8 seconds over
+    the real install, so a session computes it once and hands it to `gui_index`."""
     import gui_tree     # a repo-root module: imported here, so that importing this module never needs the repo root
 
-    repo = Path(repo)
     trees: dict[str, Any] = {}
     for folder in VANILLA_GUI_DIRS:
         root = Path(base_game) / folder if base_game is not None else None
         if root is not None and root.is_dir():
             for path in sorted(root.rglob("*.gui")):
-                trees["0 %s/%s" % (folder, path.relative_to(root).as_posix())] = gui_tree.parse_file(path)
-    mod_trees = {"1 " + path.relative_to(repo).as_posix(): gui_tree.parse_file(path)
-                 for path in gui_tree.gui_files(repo)}
-    types = gui_tree.type_index({**trees, **mod_trees})
-    mod_types = frozenset(gui_tree.type_index(mod_trees))
+                trees["%s/%s" % (folder, path.relative_to(root).as_posix())] = gui_tree.parse_file(path)
+    return gui_tree.type_index(trees)
+
+
+def gui_index(repo: Path, base_game: Path | None, vanilla: dict[str, Any] | None = None) -> GuiIndex:
+    """The types a preview can instance: the installed game's (`vanilla`, else `vanilla_types(base_game)`), then the
+    repo's `gui/` over them, so that the mod's definition of a name wins as the engine's load order makes it; and the
+    root widgets the repo's journal entries attach (`widget = { gui = "..." name = "..." }`)."""
+    import gui_tree
+
+    repo = Path(repo)
+    if vanilla is None:
+        vanilla = vanilla_types(base_game)
+    mod_trees = {path.relative_to(repo).as_posix(): gui_tree.parse_file(path) for path in gui_tree.gui_files(repo)}
+    mod = gui_tree.type_index(mod_trees)
+    types = {**vanilla, **mod}
+    mod_types = frozenset(mod)
     je_roots: dict[str, str] = {}
     for path in sorted((repo / "common" / "journal_entries").glob("*.txt")):
         for block in _JE_WIDGET.finditer(path.read_text(encoding="utf-8-sig", errors="replace")):
@@ -116,7 +126,7 @@ def gui_index(repo: Path, base_game: Path | None) -> GuiIndex:
                 je_roots[name[1]] = gui[1]
     roots: dict[str, Any] = {}
     for name, rel in je_roots.items():
-        tree = mod_trees.get("1 " + rel)
+        tree = mod_trees.get(rel)
         for node in tree.children if tree is not None else ():
             prop = node.prop("name")
             if prop is not None and prop.value == name:

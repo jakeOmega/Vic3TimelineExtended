@@ -143,7 +143,7 @@ class CheckTypeTest(unittest.TestCase):
     def setUp(self):
         tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
-        repo, game = Path(tmp.name) / "repo", Path(tmp.name) / "game"
+        self.repo, self.game = repo, game = Path(tmp.name) / "repo", Path(tmp.name) / "game"
         write(repo, "gui/x.gui", X_GUI)
         write(repo, "gui/lib.gui", LIB_GUI)
         write(repo, "common/journal_entries/je_x.txt", JE_X)
@@ -174,6 +174,13 @@ class CheckTypeTest(unittest.TestCase):
         self.assertEqual(e.code, "je_root")
         # an instance's own written content is the root's too (te_je_country = { te_tax_status_sections = {} })
         self.assertEqual(e.info["hint"], ["te_x_section", "te_x_table", "te_x_wrapper", "te_x_inner"])
+
+    def test_vanilla_types_computed_once_give_the_same_index(self):
+        vanilla = gui_preview.vanilla_types(self.game)
+        self.assertIn("vanilla_only_type", vanilla)
+        again = gui_preview.gui_index(self.repo, self.game, vanilla=vanilla)
+        self.assertEqual(sorted(again.types), sorted(self.idx.types))
+        self.assertEqual(again.mod_types, self.idx.mod_types)
 
     def test_a_popup_shell_is_refused_with_its_body(self):
         e = self.error_of("te_x_help_popup")
