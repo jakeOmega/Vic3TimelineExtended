@@ -7,7 +7,8 @@
 # for a country not involved in its entry (play-test check 14, 2026-11-05).
 #
 # is_valid is false on the current pick, which the button draws pressed. is_shown hides a census map while the
-# census doesn't run (te_demog_cohorts_run) and a system's map while its rule is off. A pick also notes the player
+# census doesn't run (te_demog_cohorts_run) and a system's map while its rule is off; a class has two, its people
+# and its share, of which Map Options' Count/Share switch shows one (te_jmap_class_mode). A pick also notes the player
 # as the maps' viewer (te_jmap_set_selector), for the maps drawn for "your" country. Selector numbers:
 # te_journal_map_values.txt. The options' scripted GUIs are hand-written: te_journal_map_sguis.txt.
 
@@ -240,12 +241,29 @@ te_jmap_pick_health_care_sgui = {
 	}
 }
 
-# Classes: four classes' share of the people, the yearly walk's (whatever the Demographics rule): the old elites, then
-# the new.
+# Classes: every pop type, the yearly walk's (whatever the Demographics rule), by its people or by its share of the
+# people as Map Options' Count/Share switch says (the header's right names it): property, learning and the state,
+# industry, the land, offices and the army.
 
-te_jmap_pick_aristocrats_sgui = {
+te_jmap_pick_class_aristocrats_count_sgui = {
 	scope = country
-	is_shown = { is_player = yes }
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 48 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 48 }
+	}
+}
+
+te_jmap_pick_class_aristocrats_share_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 1
+	}
 	ai_is_valid = { always = no }
 	is_valid = { NOT = { te_jmap_selector = 42 } }
 	effect = {
@@ -253,19 +271,25 @@ te_jmap_pick_aristocrats_sgui = {
 	}
 }
 
-te_jmap_pick_clergy_sgui = {
+te_jmap_pick_class_capitalists_count_sgui = {
 	scope = country
-	is_shown = { is_player = yes }
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 0
+	}
 	ai_is_valid = { always = no }
-	is_valid = { NOT = { te_jmap_selector = 43 } }
+	is_valid = { NOT = { te_jmap_selector = 49 } }
 	effect = {
-		te_jmap_set_selector = { SEL = 43 }
+		te_jmap_set_selector = { SEL = 49 }
 	}
 }
 
-te_jmap_pick_capitalists_sgui = {
+te_jmap_pick_class_capitalists_share_sgui = {
 	scope = country
-	is_shown = { is_player = yes }
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 1
+	}
 	ai_is_valid = { always = no }
 	is_valid = { NOT = { te_jmap_selector = 41 } }
 	effect = {
@@ -273,13 +297,341 @@ te_jmap_pick_capitalists_sgui = {
 	}
 }
 
-te_jmap_pick_academics_sgui = {
+te_jmap_pick_class_shopkeepers_count_sgui = {
 	scope = country
-	is_shown = { is_player = yes }
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 50 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 50 }
+	}
+}
+
+te_jmap_pick_class_shopkeepers_share_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 1
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 63 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 63 }
+	}
+}
+
+te_jmap_pick_class_academics_count_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 51 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 51 }
+	}
+}
+
+te_jmap_pick_class_academics_share_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 1
+	}
 	ai_is_valid = { always = no }
 	is_valid = { NOT = { te_jmap_selector = 44 } }
 	effect = {
 		te_jmap_set_selector = { SEL = 44 }
+	}
+}
+
+te_jmap_pick_class_clergymen_count_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 52 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 52 }
+	}
+}
+
+te_jmap_pick_class_clergymen_share_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 1
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 43 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 43 }
+	}
+}
+
+te_jmap_pick_class_bureaucrats_count_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 53 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 53 }
+	}
+}
+
+te_jmap_pick_class_bureaucrats_share_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 1
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 64 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 64 }
+	}
+}
+
+te_jmap_pick_class_engineers_count_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 54 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 54 }
+	}
+}
+
+te_jmap_pick_class_engineers_share_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 1
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 65 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 65 }
+	}
+}
+
+te_jmap_pick_class_machinists_count_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 55 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 55 }
+	}
+}
+
+te_jmap_pick_class_machinists_share_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 1
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 66 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 66 }
+	}
+}
+
+te_jmap_pick_class_laborers_count_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 56 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 56 }
+	}
+}
+
+te_jmap_pick_class_laborers_share_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 1
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 67 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 67 }
+	}
+}
+
+te_jmap_pick_class_farmers_count_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 57 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 57 }
+	}
+}
+
+te_jmap_pick_class_farmers_share_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 1
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 68 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 68 }
+	}
+}
+
+te_jmap_pick_class_peasants_count_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 58 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 58 }
+	}
+}
+
+te_jmap_pick_class_peasants_share_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 1
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 69 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 69 }
+	}
+}
+
+te_jmap_pick_class_slaves_count_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 59 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 59 }
+	}
+}
+
+te_jmap_pick_class_slaves_share_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 1
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 70 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 70 }
+	}
+}
+
+te_jmap_pick_class_clerks_count_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 60 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 60 }
+	}
+}
+
+te_jmap_pick_class_clerks_share_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 1
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 71 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 71 }
+	}
+}
+
+te_jmap_pick_class_officers_count_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 61 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 61 }
+	}
+}
+
+te_jmap_pick_class_officers_share_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 1
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 72 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 72 }
+	}
+}
+
+te_jmap_pick_class_soldiers_count_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 62 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 62 }
+	}
+}
+
+te_jmap_pick_class_soldiers_share_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 1
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 73 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 73 }
 	}
 }
 

@@ -103,6 +103,9 @@ import math
 import os
 import sys
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import journal_map_classes as classes  # noqa: E402  (the class maps' table, #1975)
+
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 OUT = os.path.join(REPO, "common", "script_values", "te_journal_map_scales_generated.txt")
 EFFECTS_OUT = os.path.join(REPO, "common", "scripted_effects", "te_journal_map_ranges_generated.txt")
@@ -365,28 +368,8 @@ TABLE = [
          where=["has_variable = te_dg_fam", "has_variable = te_dg_people"], world=rel(linear(0.08, 0.2)),
          min_span=0.02,
          note="Fighting-Age Men, the census's men aged 20 to 39 (the conscription pool, te_dg_fam) over its people"),
-    # The classes, Trade Capacity and Investment (2026-11-11). Each class's share of the state's people (the yearly walk's, whatever
-    # the Demographics rule). Capitalists and Academics gather in a few great cities, so half their color goes by a
-    # fifth of the world's range, as turmoil's; Aristocrats and Clergymen spread more evenly, so straight.
-    dict(name="capitalists", input="te_jmap_capitalists_share", guards=[], three=False, sel=41,
-         where=["has_variable = te_dg_capitalists", "has_variable = te_dg_walk_pop", "var:te_dg_walk_pop > 0"],
-         world=rel(soft_cap(0, 0.002, 0.01)), min_span=0.002,
-         note="Capitalists, their share of the state's people (the yearly walk's): half the color by a fifth of the "
-              "world's range"),
-    dict(name="aristocrats", input="te_jmap_aristocrats_share", guards=[], three=False, sel=42,
-         where=["has_variable = te_dg_aristocrats", "has_variable = te_dg_walk_pop", "var:te_dg_walk_pop > 0"],
-         world=rel(linear(0, 0.04)), min_span=0.005,
-         note="Aristocrats, their share of the state's people (the yearly walk's)"),
-    dict(name="clergy", input="te_jmap_clergy_share", guards=[], three=False, sel=43,
-         where=["has_variable = te_dg_clergy", "has_variable = te_dg_walk_pop", "var:te_dg_walk_pop > 0"],
-         world=rel(linear(0, 0.04)), min_span=0.005,
-         note="Clergymen, their share of the state's people (the yearly walk's)"),
-    dict(name="academics", input="te_jmap_academics_share", guards=[], three=False, sel=44,
-         where=["has_variable = te_dg_academics", "has_variable = te_dg_walk_pop", "var:te_dg_walk_pop > 0"],
-         world=rel(soft_cap(0, 0.002, 0.01)), min_span=0.002,
-         note="Academics, their share of the state's people (the yearly walk's): half the color by a fifth of the "
-              "world's range"),
-    # Trade Capacity: the state's own (state_trade_capacity_add times its multipliers, te_jmap_trade_capacity), which
+    # The classes (#1975; four share maps since 2026-11-11) come from journal_map_classes.py, after the table.
+    # Trade Capacity (2026-11-11): the state's own (state_trade_capacity_add times its multipliers, te_jmap_trade_capacity), which
     # runs from one Trade Center level's 10 to a great entrepot's thousands, so a doubling at a time; a state with
     # none pale, apart from the scale.
     dict(name="trade", input="te_jmap_trade_capacity", guards=[], three=False, sel=45,
@@ -407,6 +390,32 @@ TABLE = [
          note="Population Density, the state's people per km² of land: the same share of the color for each "
               "doubling from the world's low (at least 0.01) to its high"),
 ]
+
+
+def class_rows(c):
+    """A class's two maps (journal_map_classes.py, #1975): its people, a doubling at a time from the world's low (at
+    least COUNT_FLOOR people) to its high, and its share of the state's people, fitted to the world. Both read the
+    yearly walk's count (te_dg_cls_<pop>), whatever the Demographics rule."""
+    name, var = c["name"], classes.count_var(c)
+    lo, hi = c["count"]
+    count = dict(name=classes.count_scale(c), input=f"var:{var}", guards=[var], three=False, sel=c["count_sel"],
+                 where=[f"has_variable = {var}", f"var:{var} > 0"],
+                 world=rel_doubling(lo, hi, classes.COUNT_MIN_RATIO, classes.COUNT_FLOOR),
+                 min_span=classes.COUNT_MIN_RATIO,
+                 note=f"{name}, their people (the yearly walk's): the same share of the color for each doubling from "
+                      f"the world's low (at least {classes.COUNT_FLOOR} people) to its high")
+    kind, top = c["share"]
+    curve = linear(0, top) if kind == "linear" else soft_cap(0, top, 5 * top)
+    share = dict(name=classes.share_scale(c), input=classes.share_value(c), guards=[], three=False,
+                 sel=c["share_sel"], where=[f"has_variable = {var}", "has_variable = te_dg_walk_pop",
+                                            "var:te_dg_walk_pop > 0"],
+                 world=rel(curve), min_span=c["share_min"],
+                 note=f"{name}, their share of the state's people (the yearly walk's)"
+                      + (": half the color by a fifth of the world's range" if kind == "knee" else ""))
+    return [count, share]
+
+
+TABLE += [row for c in classes.CLASSES for row in class_rows(c)]
 
 
 def _room_twin(scale):

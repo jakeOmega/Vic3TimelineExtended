@@ -27,6 +27,8 @@ import textwrap
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import journal_map_classes as classes  # noqa: E402  (the class maps' table, #1975)
 
 SGUI_FILE = Path("common/scripted_guis/te_journal_map_picks_generated.txt")
 GUI_FILE = Path("gui/journal_entry_widgets/te_map_room_picks_generated.gui")
@@ -81,14 +83,18 @@ MAPS = [
     dict(key="family_planning", sel=38, gate=CENSUS),
     dict(key="health_care", sel=39, gate=CENSUS),
     dict(key="fighting_age_men", sel=40, gate=CENSUS),
-    dict(key="capitalists", sel=41),
-    dict(key="aristocrats", sel=42),
-    dict(key="clergy", sel=43),
-    dict(key="academics", sel=44),
     dict(key="trade_capacity", sel=45),
     dict(key="investment", sel=46),
     dict(key="population_density", sel=47),
 ]
+# The class maps (#1975): two per pop type, its people and its share of the people, from journal_map_classes.py. The
+# Count/Share switch (te_jmap_class_mode) shows one of a class's two buttons, so `mode` joins the pick's is_shown.
+MAPS += [m for c in classes.CLASSES for m in (
+    dict(key=classes.count_key(c), sel=c["count_sel"], mode=classes.MODE_COUNT),
+    dict(key=classes.share_key(c), sel=c["share_sel"], mode=classes.MODE_SHARE))]
+
+# A place in a row: one map, or a class's two picks, of which the switch shows one (slot -> its maps' keys).
+SLOTS = {classes.slot(c): [classes.count_key(c), classes.share_key(c)] for c in classes.CLASSES}
 
 # The page's groups, by theme rather than by the game system a map comes from (owner, 2026-11-23): each group's key
 # (te_jmap_cat_<key>, its loc and its open flag), its name as the loc gives it, what it holds (the comment above it on the page) and its rows, three
@@ -112,10 +118,11 @@ GROUPS = [
          rows=[["life_expectancy", "infant_mortality", "leading_cause"],
                ["health_care"]]),
     dict(key="classes", name="Classes",
-         note="four classes' share of the people, the yearly walk's (whatever the Demographics rule): the old elites, "
-              "then the new",
-         rows=[["aristocrats", "clergy"],
-               ["capitalists", "academics"]]),
+         note="every pop type, the yearly walk's (whatever the Demographics rule), by its people or by its share of "
+              "the people as Map Options' Count/Share switch says (the header's right names it): property, learning "
+              "and the state, industry, the land, offices and the army",
+         rows=[[classes.slot(c) for c in classes.CLASSES if c["pop"] in row] for row in classes.ROWS],
+         right="te_jmap_classes_now"),
     dict(key="economy", name="Economy",
          note="wealth (GDP per capita, then the walk's Gini and Dynastic Wealth); who owns the capital and where the "
               "companies keep their headquarters; what the owners invest, the trade a state can carry and the power "
@@ -155,13 +162,23 @@ def by_key() -> dict[str, dict]:
     return {m["key"]: m for m in MAPS}
 
 
+def expand(slot: str) -> list[str]:
+    """The maps a row's place holds: itself, or a class's two picks (SLOTS)."""
+    return SLOTS.get(slot, [slot])
+
+
+def row_maps(row: list[str]) -> list[str]:
+    return [k for s in row for k in expand(s)]
+
+
 def validate() -> None:
     """Every map in exactly one group's row, every selector one map's, no row too wide."""
+    classes.validate()
     keys = [m["key"] for m in MAPS]
     sels = [m["sel"] for m in MAPS]
     if len(set(keys)) != len(keys) or len(set(sels)) != len(sels):
         raise ValueError("a map key or a selector is listed twice")
-    placed = [k for g in GROUPS for row in g["rows"] for k in row]
+    placed = [k for g in GROUPS for row in g["rows"] for k in row_maps(row)]
     if sorted(placed) != sorted(keys):
         missing = sorted(set(keys) - set(placed))
         extra = sorted(set(placed) - set(keys))
@@ -176,7 +193,7 @@ def validate() -> None:
 def group_gates(group: dict) -> list[str] | None:
     """The distinct gates of a group whose every map is gated, in order; None when a map shows to every player."""
     maps = by_key()
-    gates = [maps[k].get("gate") for row in group["rows"] for k in row]
+    gates = [maps[k].get("gate") for row in group["rows"] for k in row_maps(row)]
     if any(g is None for g in gates):
         return None
     return list(dict.fromkeys(gates))
@@ -185,8 +202,16 @@ def group_gates(group: dict) -> list[str] | None:
 def row_gate(row: list[str]) -> str | None:
     """The one gate every map of a row shares, or None."""
     maps = by_key()
-    gates = {maps[k].get("gate") for k in row}
+    gates = {maps[k].get("gate") for k in row_maps(row)}
     return gates.pop() if len(gates) == 1 else None
+
+
+def _shown_lines(m: dict) -> list[str]:
+    """What a pick's is_shown asks besides a player: its gate, and a class map's switch setting."""
+    lines = [m["gate"]] if m.get("gate") else []
+    if "mode" in m:
+        lines.append(f"te_jmap_class_mode = {m['mode']}")
+    return lines
 
 
 def _is_shown(gate_lines: list[str]) -> list[str]:
@@ -206,7 +231,8 @@ def render_sguis() -> str:
         "# for a country not involved in its entry (play-test check 14, 2026-11-05).",
         "#",
         "# is_valid is false on the current pick, which the button draws pressed. is_shown hides a census map while the",
-        "# census doesn't run (te_demog_cohorts_run) and a system's map while its rule is off. A pick also notes the player",
+        "# census doesn't run (te_demog_cohorts_run) and a system's map while its rule is off; a class has two, its people",
+        "# and its share, of which Map Options' Count/Share switch shows one (te_jmap_class_mode). A pick also notes the player",
         "# as the maps' viewer (te_jmap_set_selector), for the maps drawn for \"your\" country. Selector numbers:",
         "# te_journal_map_values.txt. The options' scripted GUIs are hand-written: te_journal_map_sguis.txt.",
         "",
@@ -214,12 +240,12 @@ def render_sguis() -> str:
     for group in GROUPS:
         out += _comment(f"{group['name']}: {group['note']}.") + [""]
         for row in group["rows"]:
-            for key in row:
+            for key in row_maps(row):
                 m = maps[key]
                 out += [
                     f"te_jmap_pick_{key}_sgui = {{",
                     "\tscope = country",
-                    *_is_shown([m["gate"]] if m.get("gate") else []),
+                    *_is_shown(_shown_lines(m)),
                     "\tai_is_valid = { always = no }",
                     f"\tis_valid = {{ NOT = {{ te_jmap_selector = {m['sel']} }} }}",
                     "\teffect = {",
@@ -284,6 +310,16 @@ def _group(group: dict) -> list[str]:
         "\tblockoverride \"left_text\" {",
         f"\t\ttext = \"te_jmap_cat_{key}\"",
         "\t}",
+    ]
+    if group.get("right"):
+        out += [
+            "\tblockoverride \"right_text\" {",
+            "\t\tsection_header_right_text = {",
+            f"\t\t\ttext = \"{group['right']}\"",
+            "\t\t}",
+            "\t}",
+        ]
+    out += [
         "\tblockoverride \"onclick\" {",
         f"\t\tonclick = \"[GetVariableSystem.Toggle('{flag}')]\"",
         "\t}",
@@ -304,14 +340,14 @@ def _group(group: dict) -> list[str]:
         gate = row_gate(row)
         out += ["", "\tflowcontainer = {"]
         if gate is not None:
-            out.append(f"\t\tvisible = \"[{_shown(f'te_jmap_pick_{row[0]}_sgui')}]\"")
+            out.append(f"\t\tvisible = \"[{_shown(f'te_jmap_pick_{row_maps(row)[0]}_sgui')}]\"")
         out += [
             "\t\tdirection = horizontal",
             "\t\tparentanchor = hcenter",
             "\t\tignoreinvisible = yes",
             "\t\tspacing = 4",
         ]
-        for key_ in row:
+        for key_ in row_maps(row):
             out += [""] + _indent(_button(key_), 2)
         out.append("\t}")
     out.append("}")

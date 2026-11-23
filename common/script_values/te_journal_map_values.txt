@@ -14,10 +14,11 @@
 # 2026-11-07); 32 city rank (tourism's), 33 armed forces (Soldiers and Officers, the yearly walk's), 34 company
 # headquarters (their weekly profit), 35 war dead (the census's, last year; 2026-11-08); 36 ownership (the walk's), 37
 # population growth (the walk's), 38 family planning, 39 health care, 40 fighting-age men (the census's; 2026-11-08,
-# second round); 41 capitalists, 42 aristocrats, 43 clergy, 44 academics (each class's share of the people, the
+# second round); 41 capitalists, 42 aristocrats, 43 clergymen, 44 academics (each class's share of the people, the
 # walk's), 45 trade capacity (the state's own, its Trade Center's; 2026-11-11), 46 investment (what the state's owners
-# pay into the Investment Pool, estimated; 2026-11-11), 47 population density (people per km² of land; 2026-11-16); 0
-# none. 2 was literacy, retired because
+# pay into the Investment Pool, estimated; 2026-11-11), 47 population density (people per km² of land; 2026-11-16);
+# 48-62 each class's people and 63-73 the other eleven classes' shares (#1975: journal_map_classes.py names each
+# class's two); 0 none. 2 was literacy, retired because
 # vanilla's own literacy map mode shows it (a save holding 2 shows the unpainted map and "Pick a map" until the next
 # pick); 6 was the scope probe until the fourth session. A global variable (te_jmap_set_selector), since a state's map_color reaches neither the
 # entry nor a country (the scope probe painted blue, 2026-11-05): one player's pick is every player's in multiplayer.
@@ -92,6 +93,19 @@ te_jmap_color = {
 	if = {
 		limit = { has_global_variable = te_jmap_opt_color }
 		value = global_var:te_jmap_opt_color
+	}
+}
+
+# The Count/Share switch (#1975): 0 the class maps color by each class's people (the default), 1 by its share of the
+# state's people. It decides which of a class's two maps its button picks (te_jmap_pick_class_<pop>_count_sgui and
+# _share_sgui, te_journal_map_picks_generated.txt), and flipping it moves a class map on the page to the other
+# (te_jmap_set_class_mode). Only the class maps read it, so the options' header and line leave it out; the Classes
+# group's header names it instead.
+te_jmap_class_mode = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_opt_class }
+		value = global_var:te_jmap_opt_class
 	}
 }
 
@@ -396,76 +410,8 @@ te_jmap_soldiers_share = {
 	max = 1
 }
 
-# The classes (41-44, 2026-11-11): a class's people over the state's, 0-1, both the yearly walk's (te_dg_capitalists,
-# te_dg_aristocrats, te_dg_clergy, te_dg_academics from te_demog_work_walk_pop; te_dg_walk_pop), whatever the
-# Demographics rule. Each map's input and its hover's figure.
-te_jmap_capitalists_share = {
-	value = 0
-	if = {
-		limit = {
-			has_variable = te_dg_capitalists
-			has_variable = te_dg_walk_pop
-		}
-		value = var:te_dg_capitalists
-		divide = {
-			value = var:te_dg_walk_pop
-			min = 1
-		}
-	}
-	min = 0
-	max = 1
-}
-
-te_jmap_aristocrats_share = {
-	value = 0
-	if = {
-		limit = {
-			has_variable = te_dg_aristocrats
-			has_variable = te_dg_walk_pop
-		}
-		value = var:te_dg_aristocrats
-		divide = {
-			value = var:te_dg_walk_pop
-			min = 1
-		}
-	}
-	min = 0
-	max = 1
-}
-
-te_jmap_clergy_share = {
-	value = 0
-	if = {
-		limit = {
-			has_variable = te_dg_clergy
-			has_variable = te_dg_walk_pop
-		}
-		value = var:te_dg_clergy
-		divide = {
-			value = var:te_dg_walk_pop
-			min = 1
-		}
-	}
-	min = 0
-	max = 1
-}
-
-te_jmap_academics_share = {
-	value = 0
-	if = {
-		limit = {
-			has_variable = te_dg_academics
-			has_variable = te_dg_walk_pop
-		}
-		value = var:te_dg_academics
-		divide = {
-			value = var:te_dg_walk_pop
-			min = 1
-		}
-	}
-	min = 0
-	max = 1
-}
+# The classes (#1975; four share maps since 2026-11-11): each class's share of the state's people is generated with
+# the rest of the class family (te_jmap_share_<pop>, te_journal_map_classes_generated.txt).
 
 # Trade Capacity (45; Trade Volume until 2026-11-11, when it painted the owner's trade and every state of a country
 # alike): the state's own Trade Capacity, what its Trade Center gives it (pm_trade_center's workforce-scaled

@@ -83,7 +83,7 @@ class GatesTest(unittest.TestCase):
     def test_a_group_hides_only_when_every_map_in_it_is_gated(self):
         for group in gen.GROUPS:
             gates = gen.group_gates(group)
-            keys = [k for row in group["rows"] for k in row]
+            keys = [k for row in group["rows"] for k in gen.row_maps(row)]
             with self.subTest(group=group["key"]):
                 if any(gen.by_key()[k].get("gate") is None for k in keys):
                     self.assertIsNone(gates)
@@ -95,7 +95,7 @@ class GatesTest(unittest.TestCase):
         for group in gen.GROUPS:
             for row in group["rows"]:
                 gate = gen.row_gate(row)
-                first = f"te_jmap_pick_{row[0]}_sgui"
+                first = f"te_jmap_pick_{gen.row_maps(row)[0]}_sgui"
                 row_line = (f"\t\t\t\tvisible = \"[GetScriptedGui('{first}').IsShown( GuiScope.SetRoot( "
                             "GetPlayer.MakeScope ).End )]\"\n\t\t\t\tdirection = horizontal")
                 with self.subTest(row=row):
@@ -112,6 +112,34 @@ class GatesTest(unittest.TestCase):
             self.assertIn("\t\tOR = {\n\t\t\thas_game_rule = global_warming_enabled\n", block)
         finally:
             gen.GROUPS.remove(group)
+
+
+class SlotTest(unittest.TestCase):
+    """A class's two maps share a place in its row (#1975): the Count/Share switch shows one of them."""
+
+    def test_each_class_slot_holds_its_count_then_its_share(self):
+        classes = gen.classes
+        self.assertEqual(set(gen.SLOTS), {classes.slot(c) for c in classes.CLASSES})
+        for c in classes.CLASSES:
+            count, share = gen.SLOTS[classes.slot(c)]
+            maps = gen.by_key()
+            self.assertEqual((maps[count]["sel"], maps[count]["mode"]), (c["count_sel"], classes.MODE_COUNT))
+            self.assertEqual((maps[share]["sel"], maps[share]["mode"]), (c["share_sel"], classes.MODE_SHARE))
+
+    def test_a_row_counts_its_slots_not_its_buttons(self):
+        rows = next(g["rows"] for g in gen.GROUPS if g["key"] == "classes")
+        self.assertEqual(rows, [[f"class_{p}" for p in row] for row in gen.classes.ROWS])
+        self.assertTrue(all(len(row) == gen.ROW_WIDTH for row in rows))
+        self.assertTrue(all(len(gen.row_maps(row)) == 2 * gen.ROW_WIDTH for row in rows))
+
+    def test_a_class_pick_asks_the_switch(self):
+        body = gen.render_sguis()
+        for m in gen.MAPS:
+            block = body[body.index(f"te_jmap_pick_{m['key']}_sgui = {{"):]
+            block = block[:block.index("\n}\n")]
+            self.assertEqual("te_jmap_class_mode = " in block, "mode" in m, m["key"])
+            if "mode" in m:
+                self.assertIn(f"\t\tte_jmap_class_mode = {m['mode']}\n", block)
 
 
 class ReachTest(unittest.TestCase):

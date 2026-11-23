@@ -296,11 +296,17 @@ types te_map_room_picks_generated
 			}
 		}
 
-		# Classes: four classes' share of the people, the yearly walk's (whatever the Demographics rule): the old
-		# elites, then the new.
+		# Classes: every pop type, the yearly walk's (whatever the Demographics rule), by its people or by its share
+		# of the people as Map Options' Count/Share switch says (the header's right names it): property, learning and
+		# the state, industry, the land, offices and the army.
 		te_jmap_category_header = {
 			blockoverride "left_text" {
 				text = "te_jmap_cat_classes"
+			}
+			blockoverride "right_text" {
+				section_header_right_text = {
+					text = "te_jmap_classes_now"
+				}
 			}
 			blockoverride "onclick" {
 				onclick = "[GetVariableSystem.Toggle('te_jmap_cat_classes_open')]"
@@ -322,20 +328,56 @@ types te_map_room_picks_generated
 				spacing = 4
 
 				te_jmap_pick_button = {
-					text = "te_jmap_pick_aristocrats"
-					tooltip = "te_jmap_pick_aristocrats_desc"
-					visible = "[GetScriptedGui('te_jmap_pick_aristocrats_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-					down = "[Not( GetScriptedGui('te_jmap_pick_aristocrats_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-					onclick = "[GetScriptedGui('te_jmap_pick_aristocrats_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					text = "te_jmap_pick_class_aristocrats_count"
+					tooltip = "te_jmap_pick_class_aristocrats_count_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_aristocrats_count_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_aristocrats_count_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_aristocrats_count_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
 				}
 
 				te_jmap_pick_button = {
-					text = "te_jmap_pick_clergy"
-					tooltip = "te_jmap_pick_clergy_desc"
-					visible = "[GetScriptedGui('te_jmap_pick_clergy_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-					down = "[Not( GetScriptedGui('te_jmap_pick_clergy_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-					onclick = "[GetScriptedGui('te_jmap_pick_clergy_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					text = "te_jmap_pick_class_aristocrats_share"
+					tooltip = "te_jmap_pick_class_aristocrats_share_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_aristocrats_share_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_aristocrats_share_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_aristocrats_share_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_capitalists_count"
+					tooltip = "te_jmap_pick_class_capitalists_count_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_capitalists_count_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_capitalists_count_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_capitalists_count_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_capitalists_share"
+					tooltip = "te_jmap_pick_class_capitalists_share_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_capitalists_share_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_capitalists_share_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_capitalists_share_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_shopkeepers_count"
+					tooltip = "te_jmap_pick_class_shopkeepers_count_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_shopkeepers_count_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_shopkeepers_count_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_shopkeepers_count_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_shopkeepers_share"
+					tooltip = "te_jmap_pick_class_shopkeepers_share_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_shopkeepers_share_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_shopkeepers_share_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_shopkeepers_share_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
 				}
 			}
@@ -347,20 +389,239 @@ types te_map_room_picks_generated
 				spacing = 4
 
 				te_jmap_pick_button = {
-					text = "te_jmap_pick_capitalists"
-					tooltip = "te_jmap_pick_capitalists_desc"
-					visible = "[GetScriptedGui('te_jmap_pick_capitalists_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-					down = "[Not( GetScriptedGui('te_jmap_pick_capitalists_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-					onclick = "[GetScriptedGui('te_jmap_pick_capitalists_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					text = "te_jmap_pick_class_academics_count"
+					tooltip = "te_jmap_pick_class_academics_count_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_academics_count_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_academics_count_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_academics_count_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
 				}
 
 				te_jmap_pick_button = {
-					text = "te_jmap_pick_academics"
-					tooltip = "te_jmap_pick_academics_desc"
-					visible = "[GetScriptedGui('te_jmap_pick_academics_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-					down = "[Not( GetScriptedGui('te_jmap_pick_academics_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-					onclick = "[GetScriptedGui('te_jmap_pick_academics_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					text = "te_jmap_pick_class_academics_share"
+					tooltip = "te_jmap_pick_class_academics_share_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_academics_share_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_academics_share_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_academics_share_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_clergymen_count"
+					tooltip = "te_jmap_pick_class_clergymen_count_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_clergymen_count_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_clergymen_count_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_clergymen_count_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_clergymen_share"
+					tooltip = "te_jmap_pick_class_clergymen_share_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_clergymen_share_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_clergymen_share_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_clergymen_share_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_bureaucrats_count"
+					tooltip = "te_jmap_pick_class_bureaucrats_count_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_bureaucrats_count_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_bureaucrats_count_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_bureaucrats_count_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_bureaucrats_share"
+					tooltip = "te_jmap_pick_class_bureaucrats_share_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_bureaucrats_share_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_bureaucrats_share_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_bureaucrats_share_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+			}
+
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_engineers_count"
+					tooltip = "te_jmap_pick_class_engineers_count_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_engineers_count_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_engineers_count_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_engineers_count_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_engineers_share"
+					tooltip = "te_jmap_pick_class_engineers_share_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_engineers_share_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_engineers_share_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_engineers_share_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_machinists_count"
+					tooltip = "te_jmap_pick_class_machinists_count_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_machinists_count_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_machinists_count_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_machinists_count_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_machinists_share"
+					tooltip = "te_jmap_pick_class_machinists_share_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_machinists_share_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_machinists_share_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_machinists_share_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_laborers_count"
+					tooltip = "te_jmap_pick_class_laborers_count_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_laborers_count_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_laborers_count_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_laborers_count_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_laborers_share"
+					tooltip = "te_jmap_pick_class_laborers_share_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_laborers_share_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_laborers_share_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_laborers_share_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+			}
+
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_farmers_count"
+					tooltip = "te_jmap_pick_class_farmers_count_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_farmers_count_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_farmers_count_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_farmers_count_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_farmers_share"
+					tooltip = "te_jmap_pick_class_farmers_share_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_farmers_share_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_farmers_share_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_farmers_share_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_peasants_count"
+					tooltip = "te_jmap_pick_class_peasants_count_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_peasants_count_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_peasants_count_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_peasants_count_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_peasants_share"
+					tooltip = "te_jmap_pick_class_peasants_share_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_peasants_share_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_peasants_share_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_peasants_share_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_slaves_count"
+					tooltip = "te_jmap_pick_class_slaves_count_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_slaves_count_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_slaves_count_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_slaves_count_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_slaves_share"
+					tooltip = "te_jmap_pick_class_slaves_share_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_slaves_share_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_slaves_share_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_slaves_share_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+			}
+
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_clerks_count"
+					tooltip = "te_jmap_pick_class_clerks_count_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_clerks_count_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_clerks_count_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_clerks_count_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_clerks_share"
+					tooltip = "te_jmap_pick_class_clerks_share_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_clerks_share_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_clerks_share_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_clerks_share_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_officers_count"
+					tooltip = "te_jmap_pick_class_officers_count_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_officers_count_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_officers_count_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_officers_count_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_officers_share"
+					tooltip = "te_jmap_pick_class_officers_share_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_officers_share_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_officers_share_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_officers_share_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_soldiers_count"
+					tooltip = "te_jmap_pick_class_soldiers_count_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_soldiers_count_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_soldiers_count_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_soldiers_count_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_soldiers_share"
+					tooltip = "te_jmap_pick_class_soldiers_share_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_soldiers_share_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_soldiers_share_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_soldiers_share_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
 				}
 			}

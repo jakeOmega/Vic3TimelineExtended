@@ -42,7 +42,7 @@ while its game rule is on; a group with none of its maps to show is hidden.
 | Population | Population Density, Urban People, City Rank, Population Growth, Net Migration, Crowding Penalty |
 | Families and Ages | Birth Rate, Death Rate, Natural Change, Fertility, Family Planning, Median Age, Aged 65 and Over, Sex Balance |
 | Living Conditions | Life Expectancy, Infant Mortality, Leading Cause, Health Care |
-| Classes | Aristocrats, Clergymen, Capitalists, Academics: each class's share of the state's people |
+| Classes | Every pop type, from Aristocrats to Soldiers |
 | Economy | GDP per Capita, Gini Coefficient, Dynastic Wealth, Ownership, Company HQs, Investment, Trade Capacity, Power Grids |
 | Politics | Turmoil, Political Models, United Nations, Colonies |
 | Military and Security | Armed Forces, Fighting-Age Men, War Dead, Devastation, Nuclear Weapons, Agent Networks |
@@ -54,7 +54,11 @@ its owners pay into the Investment Pool each week, an estimate from the
 profit of its financial districts, manor houses and company headquarters.
 Population Density colors it by its people per km² of land; where countries
 split a state region, each part takes the region's land in proportion to its
-provinces.
+provinces. A class map colors each state by how many of the class live there, a
+doubling at a time, in the color the state panel's pop chart gives that pop
+type, and leaves a state with none of the class pale; set Map Options' Classes
+row to Share and it colors the class's share of the state's people instead. The
+hover gives both, and the classes are counted once a year.
 
 A map of figures shows how states differ now, not how the world has moved: its
 colors run from the fifth lowest state in the world to the fifth highest, the
@@ -103,8 +107,9 @@ so they start gray.
 
 Map Options, below the groups, changes where the Map Room draws its maps,
 how a map of figures measures its range, the scale its colors run on and the
-colors themselves. Its header names whatever is off its default, and the page
-says so at the top.
+colors themselves, and whether the class maps count people or shares. Its header
+names whatever is off its default, and the page says so at the top; the Classes
+group's header says By Count or By Share.
 
 | Option | Settings | What it does |
 |---|---|---|
@@ -112,6 +117,7 @@ says so at the top.
 | Outliers | Trim 4 Each End, Keep All, Trim 5% | Sets how many states each end of a range leaves out: four, none, or 5% of the states with a figure. |
 | Scale | Map Default, Linear, Logarithmic, Ranked | Sets how the colors run between the range's ends: on the curve drawn for the map, straight, by doublings, or by each state's place in line. |
 | Color | Map Default, Colorblind-Safe, Grayscale | Sets the colors a map of figures is painted in: the map's own, a ramp that stays readable with color blindness, or grays. |
+| Classes | Count, Share | Sets whether a class's button picks its people or its share of the state's people. A class map on the page changes at once; on any other map the buttons are grayed. |
 
 Limit GDP per Capita to Europe and its colors run over Europe's states alone,
 so you see how they differ where the world map shows them all as rich.

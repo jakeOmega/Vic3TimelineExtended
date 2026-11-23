@@ -81,6 +81,9 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/scripted_effects/te_journal_map_ranges_generated.txt",
     "common/scripted_guis/te_journal_map_picks_generated.txt",
     "gui/journal_entry_widgets/te_map_room_picks_generated.gui",
+    "common/script_values/te_journal_map_classes_generated.txt",
+    "common/scripted_effects/te_journal_map_classes_generated.txt",
+    "common/named_colors/te_journal_map_classes_generated.txt",
     "common/script_values/sr_launch_windows_generated.txt",
     "common/script_values/sr_fleet_legs_generated.txt",
     "common/scripted_effects/sr_sites_generated.txt",
@@ -232,6 +235,7 @@ INTENTIONALLY_NOT_EXCLUDED = {
     "common/script_values/covert_warfare_script_values.txt": "input to gen_covert_tech_theft.py (theft share, phase/priority multipliers) — hand-authored",
     "common/technology/eras/00_eras.txt": "input to gen_covert_tech_theft.py (era technology costs) — hand-authored",
     "common/defines/extra_defines.txt": "input to gen_demographics.py (the engine's growth curves) — hand-authored defines, not generator output",
+    "common/journal_entries/te_journal_maps.txt": "the Map Room's entry, hand-authored; gen_journal_map_classes.py manages only the class maps' branches between its BEGIN and END marker lines",
     "common/static_modifiers/extra_modifiers.txt": "input to gen_un_button_descs.py — modifier defs hand-authored; generator reads them to produce the UN_*_EFFECTS loc, never writes here",
 }
 

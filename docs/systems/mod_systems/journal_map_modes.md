@@ -27,9 +27,10 @@ tooltips so that each is true under every scale and color (§ The Map Room's Opt
 (2026-11-16, the owner's ask: "a population density map mode") adds Population Density, people per km² of land.
 The sixteenth (2026-11-23, #1974, the first of four the owner asked for: "I'd like the modes to be grouped more by
 theme than by game system or effect") regroups the picks by theme in eight groups and generates them, with their
-scripted GUIs, from one table (§ Buttons), and retires the Cartographic Survey. Three more follow: every pop type by
-headcount with a Count/Share switch (#1975), maps of living standards, the economy and politics (#1976), and five
-more, each with a self-check (#1977).
+scripted GUIs, from one table (§ Buttons), and retires the Cartographic Survey. The seventeenth (the same day, #1975,
+the second) maps every pop type by its people and by its share of the people, with a Count/Share switch in Map Options,
+all from one table of classes (§ The Class Maps). Two more follow: maps of living standards, the economy and politics
+(#1976), and five more, each with a self-check (#1977).
 `docs/testing/journal-map-modes-playtest.md` lists what is still open, and this file says which parts rest on an
 unverified engine fact. Update both as the answers come in.
 
@@ -214,13 +215,11 @@ entry, in no country's journal.
   less) over the people (`te_demog_fam_share`, what the conscription term reads), the hover adding its share of the
   men.
 - **The tenth pass's five** (2026-11-11, the owner's ask). 41 **Capitalists**, 42 **Aristocrats**, 43 **Clergymen**
-  and 44 **Academics**: each class's share of the state's people (`te_jmap_<class>_share`), from counts the yearly walk
-  stores whatever the Demographics rule (`te_dg_capitalists`, `te_dg_aristocrats`, `te_dg_clergy`, `te_dg_academics`),
-  as Armed Forces' soldiers. They are counted by three calls of the Map Room's own in the walk (`te_jmap_class_walk_init`,
-  `_pop`, `_store`, `te_journal_map_effects.txt`), not in the census's helpers, which set nothing outside the census
-  (`test_demographics_registry.py`, `TestWorkWalk`); `test_demographics_golden.py` leaves the three lines out of the
-  walk it pins. Capitalists and Academics gather in a few great cities, so half their color goes by a fifth of the
-  world's range; Aristocrats and Clergymen run straight.
+  and 44 **Academics**: each class's share of the state's people, from counts the yearly walk stores whatever the
+  Demographics rule, as Armed Forces' soldiers. Since the seventeenth pass (#1975) the four are the share maps of a
+  family of thirty, every pop type by its people and by its share, generated from one table (§ The Class Maps), and
+  keep their selectors. Capitalists and Academics gather in a few great cities, so half their color goes by a fifth of
+  the world's range; Aristocrats and Clergymen run straight.
 - **The eleventh pass's two** (2026-11-11, the owner's ask). 45 **Trade Capacity**: the state's own Trade Capacity
   (`te_jmap_trade_capacity`: `modifier:state_trade_capacity_add`, which a Trade Center's `pm_trade_center` gives its
   state, 10 a level fully staffed, with a company flagship's or a treaty port's on top, times 1 plus
@@ -609,6 +608,65 @@ ladders out for each state, or of the length of a game day. A harness measuremen
 its page open (play-test list, ninth session). If the page is ever felt to be slow, measure before rebuilding: the
 paint's 138 branches tried in order are as likely a cost as any factor, and a stored factor would not shorten them.
 
+## The Class Maps
+
+Seventeenth pass (2026-11-23, #1975, the second of the owner's four Map Room changes: "All 15 pop types", "colored by
+headcount, not share", "A Count/Share switch in Map Options"). Until then four classes had a map each, their share
+of the state's people (the tenth pass).
+
+- **Every pop type, two maps each.** The fifteen pop types vanilla defines (`common/pop_types`; the mod adds none,
+  which `ClassMapsTest` checks against `vanilla_parsed/`), each by its people (the count: 48 to 62) and by its share
+  of the state's people (the share: 41 to 44 kept, so a save holding one shows it, and 63 to 73).
+- **The count is the default** (the owner's reasoning: headcounts don't just repeat the population map; a developed
+  country has few peasants, an urban state few farmers, an automated late economy fewer laborers). It runs on the
+  doubling scale Armed Forces uses (`rel_doubling`), from the world's low (at least 10 people, `COUNT_FLOOR`) to its
+  high (at least four times it), and a state with none of the class is pale (`te_jmap_none`), as Armed Forces'. The
+  share keeps the fitted curve the four had: straight, or half the color by a fifth of the range for a class that
+  gathers in a few places (Capitalists, Academics, Engineers, Machinists). A class's two maps share its colors and its
+  hover: the people, then their share.
+- **The figures.** The yearly walk counts every class into `te_dg_cls_<pop>`, whatever the Demographics rule, in one
+  `is_pop_type` ladder a pop (`te_jmap_class_walk_pop`, the classes with the most pops asked first). The Map Room's
+  three calls in the walk are `te_jmap_walk_init`, `_pop` and `_store` (`te_journal_map_effects.txt`; they were
+  `te_jmap_class_walk_*` until this pass, a name the generated part took), not the census's helpers, which set nothing
+  outside the census (`test_demographics_registry.py`, `TestWorkWalk`); `test_demographics_golden.py` leaves them out
+  of the walk it pins. The tenth pass's `te_dg_capitalists`, `te_dg_aristocrats`, `te_dg_clergy` and
+  `te_dg_academics` are renamed with the rest, since `te_dg_soldiers` already meant Soldiers and Officers (Armed
+  Forces keeps it); the walk removes the old four from a save that holds them. So a save from before shows a class
+  map grey ("No census figures yet") in each state until its next yearly walk.
+- **The Count/Share switch.** A global option, as the others are (`te_jmap_opt_class`, read through
+  `te_jmap_class_mode`: 0 the count, the default, 1 the share), on a Classes row at the end of Map Options. Each class
+  has two pick buttons side by side in its row, one per selector, each shown under one setting (the pick's `is_shown`
+  asks `te_jmap_class_mode`), so the switch decides which of a class's two maps its button picks: the buttons carry
+  the class's name either way. Its two buttons are greyed off a class map (`te_jmap_pick_class`, generated), with
+  "Only the class maps are drawn two ways" as the reason. On one, a click sets the option and moves the map on the
+  page to the same class's other map (`te_jmap_class_flip`, generated: `te_jmap_set_selector` with the other number,
+  which measures its range and notes the viewer), then fires the picks' repaint. Ranges, Scale, Color and Ranked are
+  keyed on the selector, so each of the thirty maps has its range, its rank effect and its ramp row from the curve
+  generator, and they needed no change.
+- **What the page says.** The Classes group's header names the setting at its right ("By Count" or "By Share",
+  `te_jmap_classes_now`), beside the buttons it governs. The options' header and the line at the top of the page
+  leave it out: it governs the class maps alone, and at its longest the header's summary already fills the room
+  beside its title (§ Color, "The header and the line").
+- **One table.** `scripts/generators/journal_map_classes.py`'s `CLASSES` names each class once: its two selectors,
+  what draws it (the picks' first line), its count's default range, its share's shape, its colors and its place in the
+  walk; `ROWS` its place on the page, three to a row by theme (property, learning and the state, industry, the land,
+  offices and the army). Each class's colors are its pop type's hue in vanilla's pop charts (`common/pop_types`'
+  `color`), from nearly white to deep, so the map matches the state panel's pop chart; the tenth pass's four took
+  new colors with the rest. `gen_journal_map_classes.py` writes the share values (`te_jmap_share_<pop>`), the walk's
+  counts, the switch's flip, the colors and the loc (`te_jmap_pick_class_*`, `te_jmap_tt_class_*`: `organize_loc.py`'s
+  `JOURNAL_MAPS_GENERATED`), and splices the family's paint, hover and "no data" branches into `je_te_map_room`'s
+  `map_color` and `map_tooltip` between the BEGIN and END marker lines it owns; the rest of that file stays
+  hand-written. `gen_journal_map_scales.py` builds each map's curve row from it (`class_rows`), and
+  `gen_journal_map_picks.py` its two picks (one slot of a row, `SLOTS`). `test_journal_map_classes.py` holds the
+  generator, `ClassMapsTest` what the family paints and walks.
+- **Cost, not measured.** The family's 45 paint branches (a count's lerp and its pale none, a share's lerp) and its
+  "no data" branch come last in the ladder (151 branches before this pass, 193 now), so no other map pays for them; a
+  class map pays for the 146 branches above them and up to 44 of its own family's. The generated values file went from 12,202 lines to 19,080 (each
+  fitted map's three other scales), and the Color option's shared branches read a ladder of 62 fitted picks where
+  they read 36. Play-test check 33 asks for the frame counter on a class map, and names the fallback.
+- **Unverified** (play-test check 33): the colors, the buttons' labels once Share is set, the switch's move and the
+  frame rate.
+
 ## The See-Through Page
 
 `gui/journal_entry.gui` (the mod's copy of vanilla's panel) puts a crossed-out eye (`visibility.dds`) in the header's
@@ -705,8 +763,8 @@ Every map button clears the see-through flag before it opens a page.
   flags outlive a pick's reopen, as the see-through flag does, so a group opened stays open from map to map. Population
   (Population Density, Urban People, City Rank; Population Growth, Net Migration, Crowding Penalty); Families and Ages
   (Births, Deaths, Natural Change; Fertility, Family Planning, Median Age; Aged 65 and Over, Sex Balance); Living
-  Conditions (Life Expectancy, Infant Mortality, Leading Cause; Health Care); Classes (Aristocrats, Clergymen;
-  Capitalists, Academics); Economy (GDP per Capita, Gini, Dynastic Wealth; Ownership, Company HQs; Investment, Trade
+  Conditions (Life Expectancy, Infant Mortality, Leading Cause; Health Care); Classes (every pop type since #1975,
+  five rows of three by theme, each class's two picks in one place: § The Class Maps); Economy (GDP per Capita, Gini, Dynastic Wealth; Ownership, Company HQs; Investment, Trade
   Capacity, Power Grids); Politics (Turmoil; Political Models, United Nations, Colonies); Military and Security (Armed
   Forces, Fighting-Age Men, War Dead; Devastation, Nuclear Weapons, Agent Networks); Land and Environment (Base Comfort,
   Current Comfort, Tourism Appeal; Emissions, Ocean Basins, Grandeur). Each button keeps its own gate, so a census map
@@ -732,6 +790,10 @@ Every map button clears the see-through flag before it opens a page.
   nested where there are two reasons). A click on the option already in force measures and repaints again. `OptionsTest` holds each button to
   its scripted GUI, its number and the repaint.
 
+- **The class maps' Classes row** (#1975), last in Map Options: Count and Share (150 each), on the class maps'
+  switch (`te_jmap_classes_count_sgui`, `te_jmap_classes_share_sgui`, `te_jmap_set_class_mode`), pressed from
+  `te_jmap_class_mode` and greyed off a class map (§ The Class Maps).
+
 The play-test's harness is gone: the debug strip, the scope probe (selector 6), the Potential probe entry and the
 listed copy of the journal map mode, each answered (`docs/testing/journal-map-modes-playtest.md`, fourth session).
 
@@ -756,7 +818,10 @@ listed copy of the journal map mode, each answered (`docs/testing/journal-map-mo
    data" must join `te_jmap_pick_below` (`ColorTest` fails until it does). Mark it
    `entry` if a system's own entry draws it: the entry then reads `te_jmap_<map>_factor`, on the whole world's range,
    and the Map Room its twin, `te_jmap_<map>_room_factor` (and `te_jmap_<map>_room_lo` / `_hi` in the tooltip).
-2. A system with no entry borrows the Map Room: a new selector number, its branches in `map_color` and `map_tooltip`, a
+2. A pop type the game adds is a row in `journal_map_classes.py`'s `CLASSES` and a place in its `ROWS`, then the three
+   generators (`gen_journal_map_classes.py`, `gen_journal_map_scales.py`, `gen_journal_map_picks.py`) and
+   `organize_loc.py`: its two maps, picks, colors and loc come with it (§ The Class Maps).
+3. A system with no entry borrows the Map Room: a new selector number, its branches in `map_color` and `map_tooltip`, a
    row in `gen_journal_map_picks.py`'s `MAPS` (its key, selector and gate) and a place in one of its `GROUPS`, then a
    rerun, which writes its pick's scripted GUI and button; and loc for both (`te_jmap_pick_<key>`, `_desc`). A map that reads a stored
    figure joins `map_color`'s "no data" `OR` and one of `map_tooltip`'s (`test_journal_map_modes.py` checks it). A
@@ -764,8 +829,8 @@ listed copy of the journal map mode, each answered (`docs/testing/journal-map-mo
    (tourism's and Local Climate's are the pattern). The Area option needs nothing from a new map: `map_color`'s and
    `map_tooltip`'s first branches grey a state outside the area before any selector is read. A new stripe or second
    hover line asks `te_jmap_in_area = yes` after its selector.
-3. A map on both an entry and the Map Room asks shared triggers (`te_journal_map_triggers.txt`) in the same order in
+4. A map on both an entry and the Map Room asks shared triggers (`te_journal_map_triggers.txt`) in the same order in
    both, and joins `SYSTEM_MAPS` in `test_journal_map_modes.py`, whose parity test compares them.
-4. A "show on the map" button opens a page: the entry's (`te_jmap_banking_map_button`) when every country holds it,
+5. A "show on the map" button opens a page: the entry's (`te_jmap_banking_map_button`) when every country holds it,
    or the Map Room on the system's pick (`te_jmap_gw_map_button`) when not. A tab showing an entry's content doesn't
    trigger its map.

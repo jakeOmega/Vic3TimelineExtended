@@ -230,6 +230,29 @@ te_jmap_color_grey_sgui = {
 	}
 }
 
+# Count/Share (#1975): the class maps by each class's people or by its share of the people (te_jmap_class_mode). Both
+# are greyed off a class map (te_jmap_pick_class, generated), with that as the tooltip: the switch decides which of a
+# class's two maps its button picks, and flipping it moves the class map on the page to the other.
+te_jmap_classes_count_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_jmap_pick_class = 1 }
+	effect = {
+		te_jmap_set_class_mode = { MODE = 0 }
+	}
+}
+
+te_jmap_classes_share_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_jmap_pick_class = 1 }
+	effect = {
+		te_jmap_set_class_mode = { MODE = 1 }
+	}
+}
+
 # A map button that opens a page without picking (the Timeline Extended window's, and each system tab's): notes the
 # player as the maps' viewer first (te_jmap_note_viewer).
 te_jmap_note_viewer_sgui = {
