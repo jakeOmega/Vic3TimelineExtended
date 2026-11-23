@@ -374,6 +374,38 @@ class SnapshotReproducesCommittedFilesTest(unittest.TestCase):
         self.assertEqual(_read_text(dst), _read_text(src))
 
 
+class EmploymentCommentTest(unittest.TestCase):
+    """The Employment line counts every level_scaled block's staffing, not the
+    first block's: a country or state block can come first (#1965)."""
+
+    def test_a_country_block_before_the_building_block(self):
+        pm = textwrap.dedent("""\
+            pm_x = {
+            \tcountry_modifiers = {
+            \t\tlevel_scaled = {
+            \t\t\tcountry_antimatter_facility_max_level_add = -1
+            \t\t}
+            \t}
+            \tbuilding_modifiers = {
+            \t\tworkforce_scaled = {
+            \t\t\tgoods_input_oil_add = 10
+            \t\t\tgoods_output_tanks_add = 5
+            \t\t}
+            \t\tlevel_scaled = {
+            \t\t\tbuilding_employment_engineers_add = 500
+            \t\t\tbuilding_employment_officers_add = 250
+            \t\t}
+            \t}
+            }
+            """)
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, "pms.txt")
+            with open(path, "w", encoding="utf-8-sig") as f:
+                f.write(pm)
+            process_and_update_production_methods_grouped(path, GOODS, calculate_costs, calculate_employment)
+            self.assertIn("# Employment: 750\n", _read_text(path))
+
+
 class VanillaDocsGateTest(unittest.TestCase):
     """The two docs/engine/commented_vanilla_* files are cut from raw vanilla
     text, so only a run with usable game files writes them."""

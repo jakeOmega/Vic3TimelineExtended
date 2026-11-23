@@ -162,11 +162,11 @@ def process_and_update_production_methods_grouped(
         workforce_scaled_match = workforce_scaled_pattern.findall(pm_content)
         level_scaled_match = level_scaled_pattern.findall(pm_content)
         updated_pm_content = pm_content
-        employment = (
-            calculate_employment_func(level_scaled_match[0])
-            if level_scaled_match
-            else 0
-        )
+        # Every level_scaled block, not the first: a country_modifiers or
+        # state_modifiers one can come before building_modifiers' (the
+        # antimatter consumers' slot cost, #1965), and only the
+        # building_employment_* lines count.
+        employment = sum(calculate_employment_func(m) for m in level_scaled_match)
         for workforce_scaled_content in workforce_scaled_match:
             original_workforce_scaled_content = workforce_scaled_content
             # Clear existing comments (preserve newlines to avoid merging lines)
