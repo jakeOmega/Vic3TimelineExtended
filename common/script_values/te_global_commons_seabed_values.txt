@@ -307,11 +307,18 @@ te_seabed_npp_ratio_disp = {
 # ---- State reads (state scope) ----
 
 # Deep-Sea Mine levels in the state, built or queued (model: State.levels).
+# The state's one Deep-Sea Mine by the engine's own lookup (b:), never a walk
+# of the state's buildings: each read of the building gate (te_seabed_gate)
+# reads this for every coastal state of the owner with a mine, several times.
+# A walk here cost 2.54 ms a gate read on the owner's USA of 2024, b: 0.38 ms
+# (docs/audits/late_game_performance.md § "The USA of 2024"). b: finds a mine
+# whose levels are all queued: New York's, 1,000 queued and none built, read
+# 1000 here and 0 for the built levels (in game, 2026-11-22).
 te_seabed_state_levels = {
 	value = 0
-	every_scope_building = {
-		limit = { is_building_type = building_ocean_mine }
-		add = level_after_queued_constructions
+	if = {
+		limit = { exists = b:building_ocean_mine }
+		value = b:building_ocean_mine.level_after_queued_constructions
 	}
 }
 
@@ -319,9 +326,9 @@ te_seabed_state_levels = {
 # under construction (model: State.queued).
 te_seabed_state_built_levels = {
 	value = 0
-	every_scope_building = {
-		limit = { is_building_type = building_ocean_mine }
-		add = level
+	if = {
+		limit = { exists = b:building_ocean_mine }
+		value = b:building_ocean_mine.level
 	}
 }
 
@@ -595,10 +602,14 @@ te_seabed_own_claims_southern = {
 	min = 0
 }
 # Levels in the country's coastal states without a record, built or queued.
+# A state with no Deep-Sea Mine has none, so only those with one are read.
 te_seabed_unrecorded_total = {
 	value = 0
 	every_scope_state = {
-		limit = { is_coastal = yes }
+		limit = {
+			is_coastal = yes
+			exists = b:building_ocean_mine
+		}
 		add = te_seabed_state_unrecorded
 	}
 }
@@ -627,7 +638,9 @@ te_seabed_room_shown = {
 # basin is reached, so a level built on that claim would leave the basin's
 # long-haul count unchanged. The distant term also holds the room below 0
 # after the gate's under-construction branch lets one level in at room 0 and
-# the recording gives it another basin's licence (the model's header).
+# the recording gives it another basin's licence (the model's header). The
+# walk reads only the states either term can be above 0 in
+# (te_seabed_state_counts_locally): a Deep-Sea Mine, or records.
 te_seabed_local_room_pacific = {
 	value = 0
 	if = {
@@ -638,6 +651,7 @@ te_seabed_local_room_pacific = {
 		limit = {
 			is_coastal = yes
 			var:te_seabed_basin ?= 1
+			te_seabed_state_counts_locally = yes
 		}
 		subtract = te_seabed_state_unrecorded
 		subtract = te_seabed_state_distant_records
@@ -654,6 +668,7 @@ te_seabed_local_room_atlantic = {
 		limit = {
 			is_coastal = yes
 			var:te_seabed_basin ?= 2
+			te_seabed_state_counts_locally = yes
 		}
 		subtract = te_seabed_state_unrecorded
 		subtract = te_seabed_state_distant_records
@@ -670,6 +685,7 @@ te_seabed_local_room_indian = {
 		limit = {
 			is_coastal = yes
 			var:te_seabed_basin ?= 3
+			te_seabed_state_counts_locally = yes
 		}
 		subtract = te_seabed_state_unrecorded
 		subtract = te_seabed_state_distant_records
@@ -686,6 +702,7 @@ te_seabed_local_room_arctic = {
 		limit = {
 			is_coastal = yes
 			var:te_seabed_basin ?= 4
+			te_seabed_state_counts_locally = yes
 		}
 		subtract = te_seabed_state_unrecorded
 		subtract = te_seabed_state_distant_records
@@ -702,6 +719,7 @@ te_seabed_local_room_southern = {
 		limit = {
 			is_coastal = yes
 			var:te_seabed_basin ?= 5
+			te_seabed_state_counts_locally = yes
 		}
 		subtract = te_seabed_state_unrecorded
 		subtract = te_seabed_state_distant_records

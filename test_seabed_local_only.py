@@ -255,7 +255,8 @@ class LocalOnlyScriptTest(unittest.TestCase):
             with self.subTest(basin=b):
                 room = block(self.values, f"te_seabed_local_room_{b}")
                 self.assertIn(f"value = var:te_seabed_unbuilt_{b}", room)
-                self.assertRegex(room, rf"every_scope_state = \{{\s*limit = \{{\s*is_coastal = yes\s*var:te_seabed_basin \?= {n}\s*\}}"
+                self.assertRegex(room, rf"every_scope_state = \{{\s*limit = \{{\s*is_coastal = yes\s*var:te_seabed_basin \?= {n}"
+                                       r"\s*te_seabed_state_counts_locally = yes\s*\}"
                                        r"\s*subtract = te_seabed_state_unrecorded\s*subtract = te_seabed_state_distant_records")
                 state = block(self.values, "te_seabed_state_local_room")
                 self.assertRegex(state, rf"var:te_seabed_basin = {n} \}}\s*owner = \{{ add = te_seabed_local_room_{b} \}}")
