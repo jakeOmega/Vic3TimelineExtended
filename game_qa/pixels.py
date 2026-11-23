@@ -5,6 +5,7 @@ nothing else: the harness compares its own shots, it is not an image library. `c
 for `enter-game` (#1598): did the country-select screen's side panel change after the country click, which it
 does when a country is selected and does not when a window covers the click. `scaled_up` and `encode_png` make
 `profiler-roots`' crop (#1701): a part of a shot, each pixel repeated, so that its small text can be read.
+`backdrop_box` and `cut` make `gui-show`'s: the panel drawn over the preview's magenta backdrop.
 """
 
 from __future__ import annotations
@@ -64,6 +65,87 @@ def region(image: tuple[int, int, bytes], box: tuple[float, float, float, float]
     left, top, right, bottom = (int(width * box[0]), int(height * box[1]), int(width * box[2]), int(height * box[3]))
     if right <= left or bottom <= top:
         raise PixelsError("the region is empty in a %dx%d image" % (width, height))
+    rows = [rgb[(y * width + left) * 3:(y * width + right) * 3] for y in range(top, bottom)]
+    return right - left, bottom - top, b"".join(rows)
+
+
+def _is_backdrop(rgb: bytes, offset: int, colour: tuple[int, int, int], tolerance: int) -> bool:
+    return all(abs(rgb[offset + i] - colour[i]) <= tolerance for i in range(3))
+
+
+def backdrop_box(image: tuple[int, int, bytes], colour: tuple[int, int, int] = (255, 0, 255), tolerance: int = 40,
+                 run: int = 3, gap: int = 0) -> tuple[int, int, int, int]:
+    """The pixel box (left, top, right, bottom; right and bottom exclusive) of what is drawn around the image's
+    centre on a backdrop of `colour`: from the centre, along its row and its column, each edge is where the first
+    run of `run` backdrop pixels begins (a stray one inside the panel ends nothing), or the image's edge. With a
+    `gap`, the box then grows to take in whatever is drawn within `gap` pixels outside an edge, again from what it
+    took in, until nothing is (live 2026-11-23, a type drawn spilling out of its panel). A pixel is backdrop when
+    each channel is within `tolerance` of `colour`. PixelsError when the centre itself is backdrop."""
+    width, height, rgb = image
+    cx, cy = width // 2, height // 2
+
+    def backdrop(x: int, y: int) -> bool:
+        return _is_backdrop(rgb, (y * width + x) * 3, colour, tolerance)
+
+    if backdrop(cx, cy):
+        raise PixelsError("nothing drawn at the centre of the %dx%d shot: the panel is not there" % (width, height))
+
+    def reach(start: int, step: int, limit: int, at) -> int:
+        """The last drawn position from `start` going by `step`: the one before the first run of `run` backdrop
+        pixels (a run cut short by the image's edge counts), or the edge."""
+        pos = start
+        while 0 <= pos + step < limit:
+            ahead = [p for p in (pos + step * k for k in range(1, run + 1)) if 0 <= p < limit]
+            if all(at(p) for p in ahead):
+                return pos
+            pos += step
+        return pos
+
+    left = reach(cx, -1, width, lambda x: backdrop(x, cy))
+    right = reach(cx, 1, width, lambda x: backdrop(x, cy)) + 1
+    top = reach(cy, -1, height, lambda y: backdrop(cx, y))
+    bottom = reach(cy, 1, height, lambda y: backdrop(cx, y)) + 1
+    if gap <= 0:
+        return left, top, right, bottom
+    exact = bytes(colour) * width                   # a stretch that is all backdrop, exactly, is passed at C speed
+
+    def drawn_in_row(y: int, x0: int, x1: int) -> bool:
+        x0, x1 = max(0, x0), min(width, x1)
+        if x1 <= x0 or rgb[(y * width + x0) * 3:(y * width + x1) * 3] == exact[:(x1 - x0) * 3]:
+            return False
+        return any(not backdrop(x, y) for x in range(x0, x1))
+
+    def drawn_in_column(x: int, y0: int, y1: int) -> bool:
+        return any(not backdrop(x, y) for y in range(max(0, y0), min(height, y1)))
+
+    while True:
+        before = (left, top, right, bottom)
+        for y in range(min(height, bottom + gap) - 1, bottom - 1, -1):       # below: the furthest drawn row
+            if drawn_in_row(y, left - gap, right + gap):
+                bottom = y + 1
+                break
+        for y in range(max(0, top - gap), top):                             # above
+            if drawn_in_row(y, left - gap, right + gap):
+                top = y
+                break
+        for x in range(min(width, right + gap) - 1, right - 1, -1):          # right
+            if drawn_in_column(x, top, bottom):
+                right = x + 1
+                break
+        for x in range(max(0, left - gap), left):                           # left
+            if drawn_in_column(x, top, bottom):
+                left = x
+                break
+        if (left, top, right, bottom) == before:
+            return left, top, right, bottom
+
+
+def cut(image: tuple[int, int, bytes], box: tuple[int, int, int, int]) -> tuple[int, int, bytes]:
+    """The pixels inside a pixel box (left, top, right, bottom; right and bottom exclusive)."""
+    width, height, rgb = image
+    left, top, right, bottom = (max(0, box[0]), max(0, box[1]), min(width, box[2]), min(height, box[3]))
+    if right <= left or bottom <= top:
+        raise PixelsError("the box %s is empty in a %dx%d image" % (list(box), width, height))
     rows = [rgb[(y * width + left) * 3:(y * width + right) * 3] for y in range(top, bottom)]
     return right - left, bottom - top, b"".join(rows)
 

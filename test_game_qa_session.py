@@ -2802,6 +2802,384 @@ class ProfilerRootsTest(SessionTestCase):
 
 
 
+class GuiShowTestBase(SessionTestCase):
+    """`gui-show` (spec docs/superpowers/specs/2026-11-23-gui-preview-design.md): a branch in a throwaway repo adds
+    gui/x.gui; the fake game logs the wrapper's revision line when the wrapper is written, and its screenshots are a
+    magenta backdrop with a grey 170 x 150 panel at the centre of a 400 x 300 window."""
+
+    X_GUI = "types t {\n\ttype te_x_section = widget {}\n}\n"
+    START_KWARGS: dict = {}
+
+    def setUp(self):
+        super().setUp()
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.repo = Path(tmp.name) / "repo"
+        (self.repo / "gui").mkdir(parents=True)
+        (self.repo / "gui" / "lib.gui").write_text("types l {\n\ttype te_lib = widget {}\n}\n", encoding="utf-8")
+        for args in (["init", "-q", "-b", "main"], ["config", "user.email", "t@example.invalid"],
+                     ["config", "user.name", "t"], ["add", "-A"], ["commit", "-q", "-m", "first"],
+                     ["update-ref", "refs/remotes/origin/main", "HEAD"], ["checkout", "-q", "-b", "work"]):
+            subprocess.run(["git", "-C", str(self.repo), *args], check=True, capture_output=True)
+        (self.repo / "gui" / "x.gui").write_text(self.X_GUI, encoding="utf-8")
+        self.game.client = (0, 0, 400, 300)
+        self.drawn = True
+        self.spill = False                      # a line drawn 12 px below the panel, outside it (live 2026-11-23)
+        self.reload_logs = True
+        self.written: list[str] = []
+        real_sync, real_preview = overlay.sync_gui, overlay.write_preview
+
+        def sync(ov, rel, data):
+            self.written.append("sync " + rel)
+            return real_sync(ov, rel, data)
+
+        def preview(ov, text, revision):
+            self.written.append("preview %d" % revision)
+            real_preview(ov, text, revision)
+            if self.reload_logs:
+                self.game.error("Unlocalized text 'te_qa_rev_%d' at gui/te_qa_preview.gui:31, either localize it or "
+                                "use the raw_text property instead of text" % revision)
+        for name, fn in (("sync_gui", sync), ("write_preview", preview)):
+            patcher = mock.patch.object(overlay, name, fn)
+            patcher.start()
+            self.addCleanup(patcher.stop)
+        self.start_reply = self.started(**self.START_KWARGS)
+        self.game.pending_events = []
+        self.session.events()                   # the console open, as after any verb that types
+        self.game.screenshot = self.panel_shot
+
+    def panel_shot(self, pid, path, max_width=1600):
+        width, height = self.game.client[2], self.game.client[3]
+        grey, magenta = bytes((90, 90, 90)), bytes((255, 0, 255))
+        def drawn(x, y):
+            return self.drawn and (115 <= x < 285 and 75 <= y < 225 or self.spill and 125 <= x < 200 and 237 <= y < 250)
+        rows = b"".join((grey if drawn(x, y) else magenta) for y in range(height) for x in range(width))
+        path = Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(fakes.win_helper.encode_png(width, height, rows))
+        self.game.screenshots.append((pid, path, max_width))
+        return path
+
+    @property
+    def overlay_dir(self) -> Path:
+        return self.paths.overlay_dir
+
+    def input_line_px(self) -> tuple[int, int]:
+        return round(400 * session.CONSOLE_INPUT_LINE[0]), round(300 * session.CONSOLE_INPUT_LINE[1])
+
+    def show(self, *args, **kwargs) -> dict:
+        return self.session.gui_show("te_x_section", str(self.repo), *args, **kwargs)
+
+
+class GuiShowTest(GuiShowTestBase):
+    def test_it_syncs_writes_waits_recreates_parks_and_crops(self):
+        reply = self.show()
+        cmds = self.typed()
+        i = cmds.index(session.PREVIEW_CREATE)
+        gui_cmds = [c for c in cmds if c.startswith("gui.")]          # the console's log flushes come between
+        self.assertEqual(gui_cmds, [session.CLEAR_WIDGETS, session.PREVIEW_CREATE, session.CLEAR_WIDGETS])
+        self.assertEqual(reply["synced"], ["gui/x.gui"])
+        self.assertEqual((self.overlay_dir / "gui/x.gui").read_text(encoding="utf-8"), self.X_GUI)
+        self.assertIn(self.input_line_px(), self.game.clicks)            # click --console parked the cursor
+        shots = [s for s in self.game.screenshots if s[2] == 400]
+        self.assertTrue(shots)                                            # a shot at the window's own width
+        crop = pixels.decode_png(Path(reply["crop"]).read_bytes())
+        self.assertEqual(reply["crop_size"], [crop[0], crop[1]])
+        margin = session.GUI_CROP_MARGIN
+        self.assertEqual((crop[0], crop[1]), (170 + 2 * margin, 150 + 2 * margin))
+        self.assertEqual(Path(reply["crop"]).parent, Path(self.session.status()["run_dir"]))
+        self.assertEqual((reply["type"], reply["context"], reply["revision"]), ("te_x_section", "player", 1))
+        self.assertIn(session.CLEAR_WIDGETS, cmds[i + 1:])               # not kept: cleared after the shot
+
+    def test_the_crop_takes_in_what_is_drawn_just_outside_the_panel(self):
+        self.spill = True
+        reply = self.show()
+        margin = session.GUI_CROP_MARGIN
+        self.assertEqual(reply["crop_size"], [170 + 2 * margin, 250 - 75 + 2 * margin])
+
+    def test_the_wrapper_holds_the_type_and_the_revision(self):
+        self.show(context="je:je_x", width=600)
+        text = (self.overlay_dir / overlay.PREVIEW_FILE).read_text(encoding="utf-8-sig")
+        self.assertIn("te_x_section = {}", text)
+        self.assertIn('text = "te_qa_rev_1"', text)
+        self.assertIn("GetPlayerJournalEntry('je_x')", text)
+        self.assertIn("minimumsize = { 600 -1 }", text)
+        self.assertEqual(self.show()["revision"], 2)
+
+    def test_start_writes_the_empty_wrapper(self):
+        text = (self.overlay_dir / overlay.PREVIEW_FILE).read_text(encoding="utf-8-sig")
+        self.assertIn('text = "te_qa_rev_0"', text)
+
+    def test_synced_files_are_written_before_the_wrapper(self):
+        self.show()
+        self.assertEqual(self.written, ["sync gui/x.gui", "preview 1"])
+
+    def test_an_unchanged_file_is_not_synced_again(self):
+        self.show()
+        self.assertEqual(self.show()["synced"], [])
+
+    def test_a_brace_problem_refuses_before_any_write(self):
+        (self.repo / "gui" / "x.gui").write_text("types t {\n\ttype te_x_section = widget {\n}\n", encoding="utf-8")
+        steps = len(self.game.steps)
+        e = self.session_error(self.show)
+        self.assertEqual((e.code, e.info["file"]), ("gui_parse_error", "gui/x.gui"))
+        self.assertFalse((self.overlay_dir / "gui/x.gui").exists())
+        self.assertEqual((self.written, len(self.game.steps)), ([], steps))
+
+    def test_keyboard_away_refuses_before_any_write(self):
+        self.session.click(0.6, 0.6)
+        self.assertEqual(self.session_error(self.show).code, "keyboard_away")
+        self.assertFalse((self.overlay_dir / "gui/x.gui").exists())
+        self.assertEqual(self.written, [])
+
+    def test_no_token_line_is_not_reloaded_and_no_shot(self):
+        self.reload_logs = False
+        shots = len(self.game.screenshots)
+        e = self.session_error(self.show)
+        self.assertEqual((e.code, e.info["revision"]), ("not_reloaded", 1))
+        self.assertNotIn(session.PREVIEW_CREATE, self.typed())
+        self.assertEqual(len(self.game.screenshots), shots)
+
+    def test_nothing_drawn_still_answers_with_the_shot_and_log(self):
+        self.drawn = False
+        real = overlay.write_preview
+
+        def preview(ov, text, revision):
+            real(ov, text, revision)
+            self.game.error("FetchData failed for 'X.Y' - gui/x.gui:2")
+        with mock.patch.object(overlay, "write_preview", preview):
+            reply = self.show()
+        self.assertIsNone(reply["crop"])
+        self.assertIn("nothing drawn", reply["crop_error"])
+        self.assertTrue(Path(reply["screenshot"]).is_file())
+        self.assertEqual([(entry["count"], "FetchData failed" in entry["text"]) for entry in reply["log"]], [(1, True)])
+
+    def test_lines_logged_before_the_show_are_not_in_its_log(self):
+        self.game.error("FetchData failed for 'OLD.Y' - gui/x.gui:2")      # an earlier preview's flood (live)
+        real = overlay.write_preview
+
+        def preview(ov, text, revision):
+            real(ov, text, revision)
+            self.game.error("FetchData failed for 'NEW.Y' - gui/x.gui:2")
+        with mock.patch.object(overlay, "write_preview", preview):
+            reply = self.show()
+        self.assertEqual([("NEW.Y" in e["text"], "OLD.Y" in e["text"]) for e in reply["log"]], [(True, False)])
+
+    def test_a_failure_after_the_create_clears_the_widget(self):
+        with mock.patch.object(self.session, "click", side_effect=session.SessionError("click_refused", "x")):
+            e = self.session_error(self.show)
+        self.assertEqual(e.code, "click_refused")
+        cmds = [c for c in self.typed() if c.startswith("gui.")]
+        self.assertEqual(cmds[-2:], [session.PREVIEW_CREATE, session.CLEAR_WIDGETS])
+        self.assertNotIn("preview_left_up", e.info)
+
+    def test_a_failure_whose_clear_fails_says_the_preview_is_left_up(self):
+        clear = session.SessionError("bad_reply", "the console answered nothing")
+        with mock.patch.object(self.session, "click", side_effect=session.SessionError("click_refused", "x")), \
+                mock.patch.object(self.session, "_clear_preview", side_effect=clear):
+            e = self.session_error(self.show)
+        self.assertEqual((e.code, e.info["preview_left_up"]), ("click_refused", True))
+        self.assertIn("gui-hide", e.info["next"])
+
+    def test_a_failed_clear_after_a_good_shot_keeps_the_crop(self):
+        clear = session.SessionError("bad_reply", "the console answered nothing")
+        with mock.patch.object(self.session, "_clear_preview", side_effect=clear):
+            reply = self.show()
+        self.assertIsNotNone(reply["crop"])
+        self.assertTrue(reply["preview_left_up"])
+        self.assertIn("bad_reply", reply["clear_failed"])
+
+    def test_a_kept_preview_is_left_up_on_a_failure_and_says_so(self):
+        with mock.patch.object(self.session, "click", side_effect=session.SessionError("click_refused", "x")):
+            e = self.session_error(self.show, keep=True)
+        self.assertTrue(e.info["preview_left_up"])
+        self.assertEqual([c for c in self.typed() if c.startswith("gui.")][-1], session.PREVIEW_CREATE)
+
+    def test_a_file_reverted_on_the_branch_is_synced_back_to_the_repos(self):
+        lib = self.repo / "gui" / "lib.gui"
+        base = lib.read_text(encoding="utf-8")
+        lib.write_text(base.replace("te_lib = widget {}", "te_lib = widget { name = edited }"), encoding="utf-8")
+        self.assertIn("gui/lib.gui", self.show()["synced"])
+        subprocess.run(["git", "-C", str(self.repo), "checkout", "gui/lib.gui"], check=True, capture_output=True)
+        self.assertIn("gui/lib.gui", self.show()["synced"])
+        self.assertEqual((self.overlay_dir / "gui/lib.gui").read_text(encoding="utf-8"), base)
+
+    def test_a_file_gone_from_the_branch_is_removed_from_the_overlay(self):
+        self.show()
+        (self.repo / "gui" / "x.gui").unlink()
+        reply = self.session.gui_show("te_lib", str(self.repo))
+        self.assertEqual(reply["removed"], ["gui/x.gui"])
+        self.assertFalse((self.overlay_dir / "gui/x.gui").exists())
+        self.assertNotIn("removed", self.session.gui_show("te_lib", str(self.repo)))
+
+    def test_type_refusals_come_through_with_their_hints(self):
+        e = self.session_error(self.session.gui_show, "te_nothing", str(self.repo))
+        self.assertEqual(e.code, "unknown_type")
+        self.assertEqual(self.written, [])
+
+    def test_bad_arguments_are_refused_before_any_write(self):
+        for kwargs in ({"context": "country"}, {"width": 5}, {"width": "520"}, {"variables": {"a b": "c"}}):
+            with self.subTest(kwargs=kwargs):
+                self.assertEqual(self.session_error(self.show, **kwargs).code, "bad_argument")
+        self.assertEqual(self.written, [])
+
+    def test_a_folder_that_is_not_a_checkout_is_not_a_repo(self):
+        e = self.session_error(self.session.gui_show, "te_x_section", str(self.paths.backup_root))
+        self.assertEqual(e.code, "not_a_repo")
+
+    def test_stale_script_lists_the_branchs_script_side_files(self):
+        sgui = self.repo / "common" / "scripted_guis" / "x.txt"
+        sgui.parent.mkdir(parents=True)
+        sgui.write_text("x = {}\n", encoding="utf-8")
+        self.assertEqual(self.show()["stale_script"], ["common/scripted_guis/x.txt"])
+
+
+class GuiShowOptionsTest(GuiShowTestBase):
+    """gui-show's options: outlines, scale, client-side values, a setup, keep; and gui-hide."""
+
+    START_KWARGS = {"setups": {"fill": "set_variable = te_x"}}
+
+    def setUp(self):
+        super().setUp()
+        self.settings = self.user / session.SETTINGS_FILE
+        self.settings.write_text('\ufeff{"GUI": {"scale": 1.5, "tools_gui_scale": 2}}', encoding="utf-8")
+
+    def toggles(self, *commands):
+        """Each of `commands` answers Enabled, then Disabled, alternately, as gui.debug does live."""
+        state = {c: False for c in commands}
+        before = self.game.on_command
+
+        def hook(text):
+            if text in state:
+                state[text] = not state[text]
+                self.game.on(text, success=["Enabled" if state[text] else "Disabled"])
+            if before is not None:
+                before(text)
+        self.game.on_command = hook
+
+    def gui_typed(self) -> list[str]:
+        return [c for c in self.typed() if c.startswith("gui.")]   # the console's log flushes come between
+
+    def test_outlines_are_switched_on_for_the_shot_and_off_after(self):
+        self.toggles(session.GUI_DEBUG, session.GUI_DRAWALL)
+        self.show(outlines=True)
+        self.assertEqual(self.gui_typed(), [session.CLEAR_WIDGETS, session.PREVIEW_CREATE, session.GUI_DEBUG,
+                                            session.GUI_DRAWALL, session.GUI_DRAWALL, session.GUI_DEBUG,
+                                            session.CLEAR_WIDGETS])
+
+    def test_outlines_already_on_are_toggled_until_on(self):
+        self.toggles(session.GUI_DEBUG, session.GUI_DRAWALL)
+        self.session.console(session.GUI_DEBUG)                     # someone left it on: the next toggle is off
+        self.show(outlines=True)
+        cmds = self.gui_typed()
+        self.assertEqual(cmds.count(session.GUI_DEBUG), 1 + 2 + 1)  # the one above, off then on, then off after
+
+    def test_an_outline_toggle_that_answers_neither_is_a_bad_reply(self):
+        self.game.on(session.GUI_DEBUG, success=["Called "])
+        self.assertEqual(self.session_error(self.show, outlines=True).code, "bad_reply")
+
+    def test_scale_is_set_for_the_shot_and_put_back_from_the_settings_file(self):
+        self.show(scale=1.0)
+        self.assertEqual([c for c in self.typed() if c.startswith("gui.setscale")],
+                         ["gui.setscale 1", "gui.setscale 1.5"])
+
+    def test_the_settings_files_scale_as_text_is_read(self):
+        self.settings.write_text('{"GUI": {"scale": "1.5"}}', encoding="utf-8")       # as the owner's file has it
+        self.show(scale=1.0)
+        self.assertEqual([c for c in self.typed() if c.startswith("gui.setscale")],
+                         ["gui.setscale 1", "gui.setscale 1.5"])
+
+    def test_no_scale_in_the_settings_refuses_before_anything_is_written(self):
+        for text in (None, '{"GUI": {}}', "not json", '{"GUI": {"scale": "big"}}', '{"GUI": {"scale": true}}'):
+            with self.subTest(text=text):
+                if text is None:
+                    self.settings.unlink(missing_ok=True)
+                else:
+                    self.settings.write_text(text, encoding="utf-8")
+                self.assertEqual(self.session_error(self.show, scale=1.0).code, "no_scale")
+        self.assertEqual(self.written, [])
+
+    def test_a_bad_scale_is_refused(self):
+        for scale in (0, -1, 9, True, "1"):
+            with self.subTest(scale=scale):
+                self.assertEqual(self.session_error(self.show, scale=scale).code, "bad_argument")
+
+    def test_outlines_and_scale_are_put_back_after_a_failure(self):
+        self.toggles(session.GUI_DEBUG, session.GUI_DRAWALL)
+        with mock.patch.object(self.session, "click", side_effect=session.SessionError("click_refused", "x")):
+            self.assertEqual(self.session_error(self.show, outlines=True, scale=1.0).code, "click_refused")
+        cmds = self.gui_typed()
+        self.assertEqual([c for c in cmds if c.startswith("gui.setscale")], ["gui.setscale 1", "gui.setscale 1.5"])
+        self.assertEqual((cmds.count(session.GUI_DEBUG), cmds.count(session.GUI_DRAWALL)), (2, 2))
+
+    def test_a_failed_put_back_is_named_on_the_error_and_the_rest_still_put_back(self):
+        self.toggles(session.GUI_DEBUG, session.GUI_DRAWALL)
+
+        def fail(*args, **kwargs):              # the click fails, and drawall stops answering Enabled/Disabled
+            debug_on = [True]
+
+            def debug_only(text):               # gui.debug, on now, still toggles
+                if text == session.GUI_DEBUG:
+                    debug_on[0] = not debug_on[0]
+                    self.game.on(text, success=["Enabled" if debug_on[0] else "Disabled"])
+            self.game.on_command = debug_only
+            self.game.on(session.GUI_DRAWALL, success=["Called "])
+            raise session.SessionError("click_refused", "x")
+        with mock.patch.object(self.session, "click", side_effect=fail):
+            e = self.session_error(self.show, outlines=True, scale=1.0)
+        self.assertEqual(e.code, "click_refused")
+        self.assertTrue(e.info["restore_failed"].startswith(session.GUI_DRAWALL + ": "))
+        self.assertNotIn("; ", e.info["restore_failed"])                # drawall's failure alone
+        cmds = self.gui_typed()
+        self.assertIn("gui.setscale 1.5", cmds)                         # the scale put back all the same,
+        self.assertEqual(cmds.count(session.GUI_DEBUG), 2)              # and gui.debug switched off after drawall
+
+    def test_a_failed_put_back_after_a_good_shot_still_answers_with_the_crop(self):
+        self.toggles(session.GUI_DEBUG, session.GUI_DRAWALL)
+        real_click = self.session.click
+
+        def click(*args, **kwargs):             # drawall stops answering Enabled/Disabled after the create
+            reply = real_click(*args, **kwargs)
+            self.game.on_command = None
+            self.game.on(session.GUI_DRAWALL, success=["Called "])
+            self.game.on(session.GUI_DEBUG, success=["Disabled"])
+            return reply
+        with mock.patch.object(self.session, "click", side_effect=click):
+            reply = self.show(outlines=True)
+        self.assertIsNotNone(reply["crop"])
+        self.assertTrue(reply["restore_failed"].startswith(session.GUI_DRAWALL + ": "))
+
+    def test_variables_are_cleared_after_the_shot_unless_kept_then_by_gui_hide(self):
+        self.show(variables={"te_ni_tab": "economy"})
+        self.assertEqual(self.gui_typed()[-3:], [session.CLEAR_WIDGETS, session.CLEAR_CREATE, session.CLEAR_WIDGETS])
+        self.show(variables={"te_ni_tab": "economy"}, keep=True)
+        self.assertEqual(self.gui_typed()[-1], session.PREVIEW_CREATE)
+        self.assertEqual(self.session.gui_hide(), {"cleared": True, "variables_cleared": ["te_ni_tab"]})
+        self.assertEqual(self.gui_typed()[-3:], [session.CLEAR_WIDGETS, session.CLEAR_CREATE, session.CLEAR_WIDGETS])
+        self.assertEqual(self.session.gui_hide(), {"cleared": True, "variables_cleared": []})
+        self.assertEqual(self.gui_typed()[-1], session.CLEAR_WIDGETS)
+
+    def test_kept_variables_are_cleared_before_the_next_preview(self):
+        self.show(variables={"te_ni_tab": "economy"}, keep=True)
+        self.written.clear()
+        before = len(self.gui_typed())
+        self.show()
+        self.assertEqual(self.gui_typed()[before:before + 3],
+                         [session.CLEAR_WIDGETS, session.CLEAR_CREATE, session.CLEAR_WIDGETS])
+        self.assertEqual(self.session.gui_hide()["variables_cleared"], [])
+
+    def test_a_setup_runs_before_the_create(self):
+        event = self.start_reply["overlay"]["setup_events"]["fill"]
+        self.game.setups = {event: ("fill", ["filled"])}
+        self.show(setup="fill")
+        cmds = self.typed()
+        self.assertLess(cmds.index("event " + event), cmds.index(session.PREVIEW_CREATE))
+
+    def test_an_unknown_setup_is_refused_before_anything_is_written(self):
+        self.assertEqual(self.session_error(self.show, setup="nothing").code, "unknown_setup")
+        self.assertEqual(self.written, [])
+
+
 class AdvanceTest(SessionTestCase):
     def test_advance_reaches_at_least_the_days_asked(self):
         self.started()
@@ -3966,7 +4344,7 @@ class ProfilerWindowStartTest(SessionTestCase):
         reply = self.start()                    # base_game holds no jomini/ folder here, as in CI
         self.assertFalse(reply["profiler_window"]["enlarged"])
         self.assertIn("could not be read", reply["profiler_window"]["why"])
-        self.assertFalse((self.paths.overlay_dir / "gui").exists())
+        self.assertFalse((self.paths.overlay_dir / overlay.PROFILER_GUI_FILE).exists())    # gui/ holds the preview
         self.assertEqual(reply["country"], "FRA")
 
     def test_a_changed_game_file_is_left_out_and_said_so(self):
@@ -3974,7 +4352,7 @@ class ProfilerWindowStartTest(SessionTestCase):
         reply = self.start()
         self.assertFalse(reply["profiler_window"]["enlarged"])
         self.assertIn("{ 0 150 }", reply["profiler_window"]["why"])
-        self.assertFalse((self.paths.overlay_dir / "gui").exists())
+        self.assertFalse((self.paths.overlay_dir / overlay.PROFILER_GUI_FILE).exists())    # gui/ holds the preview
 
 class RunPlaysetPinTest(unittest.TestCase):
     """`session.run_playset` copies `launch`'s rule (`__main__._plan_playset`, which the session cannot import):

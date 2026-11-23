@@ -51,7 +51,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-from game_qa import addmod, fixture, overlay, pixels, profiling, rules, script_docs, snapshot
+from game_qa import addmod, fixture, gui_preview, overlay, pixels, profiling, rules, script_docs, snapshot
 from game_qa.console import (CLEAR_BACKSPACES, KEYBOARD_AWAY, MAX_UNRESPONSIVE_S, MENU_PROBE_COMMAND, PROBE_COMMAND,
                              UNRESPONSIVE_S, Console, ConsoleError, Reply)
 from game_qa.dap import Debugger, DebuggerError
@@ -201,6 +201,23 @@ PROFILER_SETTLE_S = 1.0                 # from the command's reply to the shot (
 SHOT_WIDTH = 1600                       # what `shot` takes (the helper's default)
 PROFILER_CROP_RESOLUTION = 2.0
 PROFILER_MAX_SCALE = 4
+# gui-show (spec docs/superpowers/specs/2026-11-23-gui-preview-design.md): the console commands, and the waits. A .gui
+# edit reloaded within a second in the test session of 2026-11-23; the wrapper's reload is proved by its token's line.
+CLEAR_WIDGETS = "gui.clearwidgets"
+PREVIEW_CREATE = "gui.createwidget %s %s" % (gui_preview.PREVIEW_FILE, gui_preview.PREVIEW_WIDGET)
+GUI_RELOAD_WAIT_S = 15.0                # from the wrapper's write to its token's line in error.log
+GUI_RELOAD_POLL_S = 0.25
+GUI_SETTLE_S = 0.5                      # from the create to the shot: the widget drawn
+GUI_CROP_MARGIN = 8                     # pixels of backdrop kept round the panel (spec § 5.2, step 7)
+GUI_CROP_GAP = 64                       # what is drawn this near the panel joins the crop (live: a 23 px gap)
+GUI_WIDTH_RANGE = (100, 3000)           # what --width takes, in UI units
+GUI_DEBUG = "gui.debug"                 # toggles; answers Enabled or Disabled (live, 2026-11-23)
+GUI_DRAWALL = "gui.debug.drawall"       # toggles; draws every widget's box only while GUI_DEBUG is on
+SET_SCALE = "gui.setscale %s"           # the game's UI scale, live; the console keeps its own
+CLEAR_CREATE = "gui.createwidget %s %s" % (gui_preview.PREVIEW_FILE, gui_preview.CLEAR_WIDGET)
+SETTINGS_FILE = "pdx_settings.json"     # under the user data: GUI.scale is the scale the settings menu set
+GUI_SCALE_RANGE = (0.25, 4.0)
+GUI_HIDE_NEXT = "gui-hide, to clear the preview left up (click --console first if a reply said keyboard_away)"
 ENTER_SETTLE_S = 10.0                   # after Start, before the console is looked for: the game loads (a guess; live
                                         # 2026-11-11 the console answered after Start, how soon is unmeasured)
 ENTER_WAIT_S = 90.0                     # then, for the console to take commands again (a guess, generous)
@@ -259,9 +276,10 @@ class SessionError(Exception):
     bad_days, stalled, not_started, stopped
     (also `start`'s, when a stop was asked while it ran), watch_ended, already_pending, add_mod_refused (with
     `reason`, addmod's code), add_mod_changed, and the profile verbs' profile_refused, not_profiling,
-    not_snapshotted, label_used, dump_refused, not_written, changed, rows_mismatch. A read-side error carries
-    `maybe_stopped` when the game may still be stopped at the breakpoint (the next verb then releases it first,
-    or refuses `maybe_stopped`). After `launch`, a console error that ended `start` keeps its own code (no_ack,
+    not_snapshotted, label_used, dump_refused, not_written, changed, rows_mismatch, and gui-show's not_a_repo,
+    gui_parse_error, unknown_type, je_root, popup_shell, not_reloaded, no_preview and no_scale.
+    A read-side error carries `maybe_stopped` when the game may still be stopped at the breakpoint (the next
+    verb then releases it first, or refuses `maybe_stopped`). After `launch`, a console error that ended `start` keeps its own code (no_ack,
     not_foreground, …) and `entered`, as does one that ended `try_event` (whose error also carries the rows so
     far, `options`)."""
 
@@ -404,6 +422,8 @@ class Session:
         self._sends = _ProvedHelper(self)       # the only way a key, focus or click goes out (`_prove_game`)
         self._notes: list[str] = []         # for the stop's reply and the summary
         self._errors_seen: list[str] | None = None       # while try_event collects: the error.log lines polled
+        self._vanilla_gui_types: dict[str, Any] | None = None     # gui-show's index of the installed game's types
+        self._preview_kept: dict[str, str] | None = None    # a kept preview's client-side values (None: none kept)
         self._burst: list[str] | None = None             # while try_event collects: the debugger's own output
         self._loaded_revision = 0           # the newest revision of te_qa_effects.txt the game has logged (add-setup)
         self._rules: dict | None = None     # the rule settings of the fixture loaded, and what was switched in it
@@ -535,7 +555,9 @@ class Session:
         # The profiler window, enlarged (#1710): read from the game's install, never stops a start (`why` says).
         gui, self._profiler_window = overlay.profiler_gui(self._paths.base_game)
         try:
-            self._overlay = overlay.build(self._paths.overlay_dir, setups, self._paths.game_version, profiler_gui=gui)
+            self._overlay = overlay.build(
+                self._paths.overlay_dir, setups, self._paths.game_version, profiler_gui=gui,
+                preview_gui=gui_preview.wrapper_text(None, "none", gui_preview.DEFAULT_WIDTH, 0, {}))
         except overlay.OverlayError as e:
             raise SessionError("overlay_refused", str(e)) from e
         if self._overlay.profiler_gui is not None:
@@ -2174,6 +2196,271 @@ class Session:
             except (OSError, pixels.PixelsError) as e:
                 result.update(crop=None, crop_error=str(e))
             out.update(result)
+        return result
+
+    def gui_show(self, type_name: str, repo: str, context: str = "player", width: int = gui_preview.DEFAULT_WIDTH,
+                 variables: Mapping[str, str] | None = None, outlines: bool = False, scale: float | None = None,
+                 setup: str | None = None, keep: bool = False) -> dict:
+        """Show one GUI type from the caller's working tree, alone, in the running game, and answer with a crop of
+        it at the window's own resolution and the GUI lines the game logged (spec
+        docs/superpowers/specs/2026-11-23-gui-preview-design.md § 5.2).
+
+        Everything is checked before anything is written or typed: the arguments, the branch's files (`repo` is the
+        caller's checkout; the `.gui` files its branch changed against its merge base with origin/main), each
+        file's braces (`gui_parse_error`: the game reloads a broken file without a word), and the type
+        (`unknown_type`, `je_root`, `popup_shell`, each with a `hint`). Then the files are copied into the overlay,
+        the wrapper after them, and the game's reload of the wrapper is waited for (its revision token's line;
+        `not_reloaded`, with nothing shot, when it does not come), since an open widget is not rebuilt when a type
+        it uses changes: the widget is cleared and created again. The cursor is parked on the console's input line
+        (a tooltip under it would cover the panel), and a full-size shot is cropped to what is drawn on the
+        backdrop: `crop: null` with `crop_error` when nothing is (the type's gate shut, say), never a refusal.
+        `stale_script` names the branch's script-side files, which a preview does not sync. The widget is cleared
+        afterwards unless `keep`."""
+        self._require_game()
+        if self._overlay is None or self._overlay.preview_file is None:
+            raise SessionError("no_preview", "this session's overlay has no preview wrapper")
+        variables = dict(variables or {})
+        try:
+            context = gui_preview.parse_context(context)
+            for key, value in variables.items():
+                gui_preview.parse_var("%s=%s" % (key, value))
+        except gui_preview.PreviewError as e:
+            raise SessionError(e.code, e.detail, **e.info) from e
+        if isinstance(width, bool) or not isinstance(width, int) or not (
+                GUI_WIDTH_RANGE[0] <= width <= GUI_WIDTH_RANGE[1]):
+            raise SessionError("bad_argument", "width is a whole number of UI units from %d to %d, not %r"
+                               % (GUI_WIDTH_RANGE + (width,)))
+        if scale is not None and (isinstance(scale, bool) or not isinstance(scale, (int, float))
+                                  or not GUI_SCALE_RANGE[0] <= scale <= GUI_SCALE_RANGE[1]):
+            raise SessionError("bad_argument", "scale is a number from %g to %g, not %r" % (GUI_SCALE_RANGE + (scale,)))
+        owner_scale = self._owner_ui_scale() if scale is not None else None
+        if setup is not None and setup not in self._overlay.setup_events:
+            raise SessionError("unknown_setup", "no setup %r; the overlay has %s"
+                               % (setup, sorted(self._overlay.setup_events) or "none"))
+        with self._step("gui_show", type=type_name, context=context, width=width) as out:
+            try:
+                changes = gui_preview.branch_changes(Path(repo))
+                # The branch's files, and every file synced earlier in the session, kept equal to the repo's: one
+                # reverted since is synced back, one gone is removed from the overlay (spec § 5.2 step 1).
+                files: dict[str, bytes] = {}
+                gone: list[str] = []
+                for rel in sorted(set(changes.gui) | set(self._overlay.synced)):
+                    if (Path(repo) / rel).is_file():
+                        files[rel] = (Path(repo) / rel).read_bytes()
+                    else:
+                        gone.append(rel)
+                for rel, data in files.items():
+                    problem = overlay.brace_problem(data.decode("utf-8-sig", errors="replace"))
+                    if problem:
+                        raise gui_preview.PreviewError("gui_parse_error", "%s: %s" % (rel, problem), file=rel)
+                if self._vanilla_gui_types is None:
+                    self._vanilla_gui_types = gui_preview.vanilla_types(self._paths.base_game)
+                gui_preview.check_type(type_name, gui_preview.gui_index(Path(repo), self._paths.base_game,
+                                                                         vanilla=self._vanilla_gui_types))
+            except gui_preview.PreviewError as e:
+                raise SessionError(e.code, e.detail, **e.info) from e
+            except OSError as e:
+                raise SessionError("not_a_repo", "the branch's files could not be read from %s: %s" % (repo, e)) from e
+            if self._preview_kept:
+                self._clear_preview()           # the last wrapper's clear widget clears the values it kept
+            revision = self._overlay.preview_revision + 1
+            result: dict[str, Any] = {"type": type_name, "context": context, "revision": revision,
+                                      "stale_script": changes.script}
+            self._new_lines()                   # what was logged before (an earlier preview's flood) is not this one's
+            self._errors_seen = []
+            created = False
+            try:
+                try:
+                    result["synced"] = [rel for rel, data in files.items() if overlay.sync_gui(self._overlay, rel, data)]
+                    removed = [rel for rel in gone if overlay.unsync_gui(self._overlay, rel)]
+                    if removed:
+                        result["removed"] = removed
+                    overlay.write_preview(self._overlay, gui_preview.wrapper_text(
+                        type_name, context, width, revision, variables), revision)
+                except overlay.OverlayError as e:
+                    raise SessionError("overlay_refused", str(e)) from e
+                self._await_preview(revision)
+                if setup is not None:
+                    result["setup_lines"] = self.run_setup(setup)
+                self._console.run(CLEAR_WIDGETS)
+                created = True                  # from here a failure may leave the widget (and its values) up
+                self._preview_kept = dict(variables)
+                self._console.run(PREVIEW_CREATE)
+                with self._preview_options(outlines, scale, owner_scale, result):
+                    self._sleep(GUI_SETTLE_S)
+                    self.click(console=True)
+                    result.update(self._preview_shot(type_name))
+                self._new_lines()
+                result["log"] = gui_preview.gui_log(self._errors_seen, list(files) + [gui_preview.PREVIEW_FILE])
+            except Exception as failure:
+                if not created:
+                    raise
+                error = self._preview_failed(failure, keep)
+                if error is failure:
+                    raise
+                raise error from failure
+            finally:
+                self._errors_seen = None
+            if not keep:
+                try:
+                    self._clear_preview()
+                except Exception as e:          # the shot stands: say what is left up rather than lose it
+                    result.update(preview_left_up=True, clear_failed="%s: %s" % (type(e).__name__, e),
+                                  next=GUI_HIDE_NEXT)
+            out.update({k: v for k, v in result.items() if k != "log"}, log_lines=len(result["log"]))
+        return result
+
+    def gui_hide(self) -> dict:
+        """Clear the preview `gui-show --keep` left up, and the client-side values it set (its wrapper's clear
+        widget, created once). `stop` needs nothing: the values are the client's, never saved."""
+        self._require_game()
+        with self._step("gui_hide") as out:
+            cleared = sorted(self._preview_kept or {})
+            self._clear_preview()
+            out.update(variables_cleared=cleared)
+        return {"cleared": True, "variables_cleared": cleared}
+
+    def _preview_failed(self, failure: Exception, keep: bool) -> Exception:
+        """After a failure with the preview created: clear it unless `keep`, and when it stays up (kept, or the
+        clear failed too) say so on the error (`preview_left_up`, `next`), since its full-screen backdrop covers
+        the game for every later verb. A failure that is not a SessionError is wrapped in one to say it."""
+        left = keep
+        if not keep:
+            try:
+                self._clear_preview()
+            except Exception:
+                left = True
+        if not left:
+            return failure
+        if isinstance(failure, SessionError):
+            failure.info.update(preview_left_up=True, next=GUI_HIDE_NEXT)
+            return failure
+        return SessionError(getattr(failure, "code", type(failure).__name__), getattr(failure, "detail", str(failure)),
+                            preview_left_up=True, next=GUI_HIDE_NEXT)
+
+    def _clear_preview(self) -> None:
+        """Clear the created widgets; when the preview set client-side values, create the wrapper's clear widget,
+        whose state clears them on creation, and clear that too."""
+        self._console.run(CLEAR_WIDGETS)
+        if self._preview_kept:
+            self._console.run(CLEAR_CREATE)
+            self._console.run(CLEAR_WIDGETS)
+        self._preview_kept = None
+
+    def _owner_ui_scale(self) -> float:
+        """The UI scale the owner's settings hold (`GUI.scale` in the user data's SETTINGS_FILE), which a
+        preview's `scale` is put back to: `no_scale` when it cannot be read, before anything is written."""
+        path = self._paths.user_data / SETTINGS_FILE
+        try:
+            value = _json.loads(path.read_text(encoding="utf-8-sig"))["GUI"]["scale"]
+        except (OSError, ValueError, KeyError, TypeError) as e:
+            raise SessionError("no_scale", "the owner's UI scale could not be read from %s (%s: %s), so a scale "
+                               "could not be put back: show without --scale" % (path, type(e).__name__, e)) from e
+        try:                                # the owner's file holds it as text, "1.5" (live, 2026-11-23)
+            if isinstance(value, bool):
+                raise ValueError
+            scale = float(value)
+            if not math.isfinite(scale) or scale <= 0:
+                raise ValueError
+        except (TypeError, ValueError) as e:
+            raise SessionError("no_scale", "%s holds GUI.scale = %r, not a number" % (path, value)) from e
+        return scale
+
+    @contextmanager
+    def _preview_options(self, outlines: bool, scale: float | None, owner_scale: float | None, result: dict):
+        """Outlines and scale on for the block, and put back after it whatever happens in it: the scale set to the
+        owner's and outlines off, in the reverse order, each tried even when one before it failed. A failure
+        putting them back is named as `restore_failed`: in `result` when the block succeeded (the shot stands),
+        on the error when it had failed with a SessionError."""
+        done: list[str] = []
+        try:
+            if outlines:
+                for command in (GUI_DEBUG, GUI_DRAWALL):
+                    self._gui_toggle(command, "Enabled")
+                    done.append(command)
+            if scale is not None:
+                done.append("scale")
+                self._console.run(SET_SCALE % format(scale, "g"))
+            yield
+        except BaseException as failure:
+            failed = self._undo_preview_options(done, owner_scale)
+            if failed and isinstance(failure, SessionError):
+                failure.info["restore_failed"] = "; ".join(failed)
+            raise
+        failed = self._undo_preview_options(done, owner_scale)
+        if failed:
+            result["restore_failed"] = "; ".join(failed)
+        result.update(outlines=outlines, scale=scale)
+
+    def _undo_preview_options(self, done: list[str], owner_scale: float | None) -> list[str]:
+        """Put back each option in `done`, last first, trying every one: what failed, as text (empty: none)."""
+        failed: list[str] = []
+        for item in reversed(done):
+            try:
+                if item == "scale":
+                    self._console.run(SET_SCALE % format(owner_scale, "g"))
+                else:
+                    self._gui_toggle(item, "Disabled")
+            except Exception as e:
+                failed.append("%s: %s" % (item if item != "scale" else "gui.setscale", e))
+        return failed
+
+    def _gui_toggle(self, command: str, want: str) -> None:
+        """Send a toggling console command until it answers `want` (Enabled or Disabled), twice at most: one that
+        answers neither is `bad_reply`."""
+        said: list[str] = []
+        for _ in range(2):
+            said = [line.strip() for line in self._console.run(command).lines]
+            if want in said:
+                return
+            if not {"Enabled", "Disabled"} & set(said):
+                break
+        raise SessionError("bad_reply", "%s answered %r, not %s" % (command, said, want))
+
+    def _await_preview(self, revision: int) -> None:
+        """Poll the logs until the wrapper's token names `revision` (the game parsed the new file), up to
+        GUI_RELOAD_WAIT_S: `not_reloaded` otherwise, with the newest revision seen."""
+        deadline = self._clock() + GUI_RELOAD_WAIT_S
+        seen = None
+        while True:
+            self._new_lines()
+            for line in self._errors_seen or ():
+                found = gui_preview.rev_in(parse(line).text)
+                if found is not None:
+                    seen = found if seen is None else max(seen, found)
+            if seen is not None and seen >= revision:
+                return
+            if self._clock() >= deadline:
+                raise SessionError("not_reloaded", "the game had not logged revision %d of %s after %.0f s (it last "
+                                   "logged %s): nothing was shot. A .gui edit reloaded within a second in the test "
+                                   "session; look at the game, then show again"
+                                   % (revision, gui_preview.PREVIEW_FILE, GUI_RELOAD_WAIT_S,
+                                      "none" if seen is None else "revision %d" % seen),
+                                   revision=revision, seen=seen)
+            self._sleep(GUI_RELOAD_POLL_S)
+            self._check_watch()
+
+    def _preview_shot(self, type_name: str) -> dict:
+        """A shot at the window's own width, and the panel cut out of it with GUI_CROP_MARGIN pixels round it:
+        `screenshot`, `crop`, `crop_size`, or `crop: None` with `crop_error` (and `screenshot: None` with
+        `screenshot_error` when the shot failed)."""
+        try:
+            width = self._helper.window(self._proc.pid).client[2]
+            shot = self._shot(max_width=max(1, width))
+        except HelperError as e:
+            return {"screenshot": None, "screenshot_error": "%s: %s" % (e.code, e.detail), "crop": None,
+                    "crop_error": "no shot"}
+        result: dict[str, Any] = {"screenshot": str(shot)}
+        crop = shot.with_name("gui_%02d_%s.png" % (self._shots, type_name))
+        try:
+            image = pixels.decode_png(shot.read_bytes())
+            left, top, right, bottom = pixels.backdrop_box(image, gui_preview.BACKDROP, gap=GUI_CROP_GAP)
+            m = GUI_CROP_MARGIN
+            part = pixels.cut(image, (left - m, top - m, right + m, bottom + m))
+            crop.write_bytes(pixels.encode_png(part))
+            result.update(crop=str(crop), crop_size=[part[0], part[1]])
+        except (OSError, pixels.PixelsError) as e:
+            result.update(crop=None, crop_error=str(e))
         return result
 
     def try_event(self, event: str, setup: str | None, reads: Sequence[str]) -> dict:

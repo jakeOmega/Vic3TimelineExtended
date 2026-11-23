@@ -39,7 +39,7 @@ removes the folder (spec § 5.2, Review Focus 1).
                summary` reads the copies and needs no server
     status     the server and the session, answered here without asking the game anything
     the rest   console, run-setup, add-setup, press, events, pick, read, tag, enter-game, advance, shot, click, try-event,
-               profiler-roots, wheel, drag
+               profiler-roots, wheel, drag, gui-show, gui-hide
 
 An error inside a verb becomes a refusal, `{"refused": <code>, "detail": …}`, with `entered` for a console error
 and whatever else the error carries (a `SessionError`'s `info`), and the server keeps running.
@@ -186,6 +186,7 @@ class SessionServer:
             "shot": self._shot, "click": self._click, "try-event": self._try_event,
             "selfchecks": self._selfchecks,
             "profiler-roots": self._profiler_roots,
+            "gui-show": self._gui_show, "gui-hide": self._gui_hide,
             "wheel": self._wheel, "drag": self._drag,
             "profile-start": self._profile_start,
             "profile-dump": self._profile_dump,
@@ -409,6 +410,15 @@ class SessionServer:
 
     def _profiler_roots(self, body: dict) -> tuple[dict, int]:
         return self._session.profiler_roots(body.get("box"), as_shown=body.get("as_shown") is True), 0
+
+    def _gui_show(self, body: dict) -> tuple[dict, int]:
+        return self._session.gui_show(
+            _arg(body, "type"), _arg(body, "repo"), context=body.get("context") or "player",
+            width=body.get("width", 520), variables=body.get("variables") or {}, outlines=body.get("outlines") is True,
+            scale=body.get("scale"), setup=body.get("setup"), keep=body.get("keep") is True), 0
+
+    def _gui_hide(self, body: dict) -> tuple[dict, int]:
+        return self._session.gui_hide(), 0
 
     def _try_event(self, body: dict) -> tuple[dict, int]:
         reply = self._session.try_event(_arg(body, "event"), body.get("setup"), _arg(body, "reads"))

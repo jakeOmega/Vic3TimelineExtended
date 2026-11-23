@@ -11,7 +11,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-from game_qa import overlay
+from game_qa import gui_preview, overlay
 
 BOM = b"\xef\xbb\xbf"
 READ_LINE_TEXT = (
@@ -875,6 +875,88 @@ class ProfilerWindowTest(OverlayTestCase):
         ov = overlay.build(self.dest, {}, "1.15.0")
         self.assertIsNone(ov.profiler_gui)
         self.assertFalse((self.dest / "gui").exists())
+
+
+class PreviewFilesTest(OverlayTestCase):
+    """`gui-show`'s files in the overlay (spec docs/superpowers/specs/2026-11-23-gui-preview-design.md § 5.2)."""
+
+    def setUp(self):
+        super().setUp()
+        self.ov = overlay.build(self.dest, {}, "1.15.2", preview_gui=gui_preview.wrapper_text(None, "none", 520, 0, {}))
+
+    def test_build_writes_the_empty_wrapper_so_the_game_watches_it_from_launch(self):
+        self.assertEqual(self.ov.preview_file, self.dest / overlay.PREVIEW_FILE)
+        self.assertTrue(self.ov.preview_file.read_bytes().startswith(BOM))
+        self.assertIn("te_qa_rev_0", self.ov.preview_file.read_text(encoding="utf-8-sig"))
+        self.assertEqual(self.ov.preview_revision, 0)
+
+    def test_unsync_removes_a_copy_this_session_synced_and_nothing_else(self):
+        overlay.sync_gui(self.ov, "gui/a.gui", b"types t {}\n")
+        self.assertTrue(overlay.unsync_gui(self.ov, "gui/a.gui"))
+        self.assertFalse((self.dest / "gui/a.gui").exists())
+        self.assertNotIn("gui/a.gui", self.ov.synced)
+        self.assertFalse(overlay.unsync_gui(self.ov, "gui/a.gui"))                 # not synced (any more)
+        self.assertFalse(overlay.unsync_gui(self.ov, overlay.PREVIEW_FILE))        # never the harness's own
+        self.assertTrue(self.ov.preview_file.is_file())
+
+    def test_unsync_refuses_an_overlay_that_is_not_ours(self):
+        overlay.sync_gui(self.ov, "gui/a.gui", b"types t {}\n")
+        (self.dest / ".metadata" / "metadata.json").write_text("{}", encoding="utf-8")
+        with self.assertRaises(overlay.OverlayError):
+            overlay.unsync_gui(self.ov, "gui/a.gui")
+        self.assertTrue((self.dest / "gui/a.gui").exists())
+
+    def test_build_without_it_writes_no_wrapper(self):
+        ov = overlay.build(self.mods / overlay.OVERLAY_NAME, {}, "1.15.2")
+        self.assertIsNone(ov.preview_file)
+        self.assertFalse((ov.dir / overlay.PREVIEW_FILE).exists())
+
+    def test_write_preview_rewrites_in_place_and_records_the_revision(self):
+        overlay.write_preview(self.ov, "widget = { }\n", 4)
+        self.assertEqual((self.ov.preview_revision, self.ov.preview_file.read_text(encoding="utf-8-sig")),
+                         (4, "widget = { }\n"))
+        self.assertTrue(self.ov.preview_file.read_bytes().startswith(BOM))
+
+    def test_a_failed_write_puts_the_old_wrapper_back(self):
+        before = self.ov.preview_file.read_bytes()
+        real = Path.write_bytes
+        calls = []
+
+        def flaky(path, data):
+            calls.append(path)
+            if len(calls) == 1:
+                raise OSError("disk full")
+            return real(path, data)
+        with mock.patch.object(Path, "write_bytes", flaky), self.assertRaises(overlay.OverlayError):
+            overlay.write_preview(self.ov, "widget = { }\n", 1)
+        self.assertEqual((self.ov.preview_file.read_bytes(), self.ov.preview_revision), (before, 0))
+
+    def test_sync_gui_writes_under_gui_and_skips_unchanged(self):
+        rel, data = "gui/journal_entry_widgets/x.gui", BOM + b"a = {}\n"
+        self.assertTrue(overlay.sync_gui(self.ov, rel, data))
+        self.assertFalse(overlay.sync_gui(self.ov, rel, data))
+        self.assertEqual((self.dest / rel).read_bytes(), data)
+        self.assertIn(rel, self.ov.synced)
+        self.assertTrue(overlay.sync_gui(self.ov, rel, BOM + b"b = {}\n"))
+
+    def test_sync_gui_refuses_paths_outside_gui_and_the_harness_own_files(self):
+        for rel in ("common/x.txt", "gui/../events/x.gui", "/gui/x.gui", "gui/x.txt", "gui\\x.gui", "gui/",
+                    overlay.PREVIEW_FILE, overlay.PROFILER_GUI_FILE):
+            with self.subTest(rel=rel), self.assertRaises(overlay.OverlayError):
+                overlay.sync_gui(self.ov, rel, b"a = {}\n")
+        self.assertEqual(self.ov.synced, {})
+
+    def test_writes_into_a_folder_that_is_no_longer_ours_are_refused(self):
+        (self.dest / overlay.METADATA_FILE).unlink()
+        with self.assertRaises(overlay.OverlayError):
+            overlay.write_preview(self.ov, "x", 5)
+        with self.assertRaises(overlay.OverlayError):
+            overlay.sync_gui(self.ov, "gui/x.gui", b"a")
+        self.assertFalse((self.dest / "gui/x.gui").exists())
+
+    def test_brace_problem_is_public(self):
+        self.assertIsNone(overlay.brace_problem("a = { b = \"}\" }"))
+        self.assertIn("never closed", overlay.brace_problem("a = {"))
 
 
 if __name__ == "__main__":

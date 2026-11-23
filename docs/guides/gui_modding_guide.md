@@ -1943,11 +1943,15 @@ done
 
 ## Seeing a GUI in the Running Game
 
-Probed on 1.15.2 with `-debug_mode`, in a `game_qa` session on the country-select screen (2026-11-23, run `20261123T221454Z`). The design that builds a harness verb on these is `docs/superpowers/specs/2026-11-23-gui-preview-design.md`.
+Probed on 1.15.2 with `-debug_mode`, in a `game_qa` session on the country-select screen (2026-11-23, run `20261123T221454Z`). The harness verb built on these, `python3 -m game_qa gui-show TYPE`, shows one type from your checkout alone in the game and returns a full-resolution crop (the `game-qa` skill; design `docs/superpowers/specs/2026-11-23-gui-preview-design.md`).
 
 - **`gui.createwidget <file> <widget>` opens any top-level widget of a mod's `.gui` file**, named by its path from the mod root and its `name` (`gui.createwidget gui/te_qa_preview.gui te_qa_preview`); `gui.clearwidgets` removes every widget so created. Neither answers in the console. A wrapper window with `datacontext = "[GetPlayer]"` drew the mod's `te_tax_overview_panel` with the played country's data.
 - **A `.gui` edit hot-reloads within a second**, unlike a script edit (40-90 s with this mod). An open widget rebuilds when its own file changes, but **not when a type it uses changes in another file**: recreate it (`gui.clearwidgets`, then `gui.createwidget`) to see a type edit. A `.gui` file added mid-game to a loaded mod folder was picked up too.
 - **A broken `.gui` file reloads silently**: an unclosed brace logged nothing in `error.log`, `debug.log` or `gui.log`. Parse it yourself (`paradox_file_parser`) before trusting a quiet log.
 - **Each reload logs `Unlocalized text '<text>' at gui/<file>:<line>`** in `error.log` for every `text =` that is not a loc key; `raw_text` takes the same bindings and logs nothing.
 - **`gui.debug`, then `gui.debug.drawall`, outline every widget's box** (each answers `Enabled`; `gui.debug` toggles). `drawall` alone draws nothing.
+- **A `window` does not grow with a `resizeparent` flowcontainer whose content lays out late** (live, 2026-11-23, `gui-show`'s first run): it kept the size the flowcontainer had before an instanced type's autoresized text laid out, and the type drew outside it. A flowcontainer carrying the background itself (`using = Window_Background`) grew round all of its content.
+- **`Window_Background` draws its background 23 by 17 units inside its widget** (`margin = { -23 -17 }` in vanilla's `windows.gui`): pad content by more than that, or it overhangs the background.
+- **A type shown where its bindings have no context logs every frame**: a Country-reading type under a journal entry's datacontext logged `FetchData failed` hundreds of times a second and the window stopped answering for over 10 s.
+- **A `trigger_on_create = yes` state's `on_start = "[GetVariableSystem.Set( 'k', 'v' )]"` works in a created widget**, and a second widget's `Clear` clears it (live, 2026-11-23).
 - **`gui.setscale <s>` rescales the game's UI live** (not the console): at 0.5 a 560-unit window was 258 px on a 3840x2160 screen, and 1.5 restored the owner's scale.
