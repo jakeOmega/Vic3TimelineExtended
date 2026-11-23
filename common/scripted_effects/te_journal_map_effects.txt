@@ -16,6 +16,11 @@ te_jmap_set_selector = {
 		limit = { global_var:te_jmap_sel ?= 46 }
 		te_jmap_store_invest = yes
 	}
+	# And so does Unemployment (#1976).
+	if = {
+		limit = { global_var:te_jmap_sel ?= 78 }
+		te_jmap_store_unemp = yes
+	}
 	# The player who picks is the maps' viewer, and the Map Room's area is drawn around the viewer (its market, its
 	# power bloc, its country), so the area is marked again before the range that reads the marks.
 	te_jmap_note_viewer = yes
@@ -105,6 +110,15 @@ te_jmap_set_scale = {
 te_jmap_set_color = {
 	set_global_variable = { name = te_jmap_opt_color value = $COLOR$ }
 	debug_log = "TE_JMAP color $COLOR$ date=[TimeKeeper.GetCurrentDate.GetString]"
+}
+
+# MODE: the Count/Share switch (#1975), 0 the class maps by each class's people (the default), 1 by its share of the
+# people. Its buttons are greyed off a class map (te_jmap_pick_class), so a class map is on the page: it moves to the
+# same class's other map (te_jmap_class_flip, generated), whose pick measures its range and notes the viewer.
+te_jmap_set_class_mode = {
+	set_global_variable = { name = te_jmap_opt_class value = $MODE$ }
+	te_jmap_class_flip = yes
+	debug_log = "TE_JMAP classes $MODE$ date=[TimeKeeper.GetCurrentDate.GetString]"
 }
 
 # An option changed. Country scope: the player's, who becomes the viewer the area is drawn around.
@@ -489,6 +503,37 @@ te_jmap_monthly_invest = {
 	}
 }
 
+# Unemployment (78, #1976): the share of each state's workforce without work (te_state_unemployment_share,
+# te_unemployment_values.txt: the engine's state_unemployment_rate is per person, not per worker), stored as te_jmap_unemp
+# where people live and removed where none do. A GUI reads state_unemployment_rate as none, even through a script value
+# (scripting_best_practices.md, "The op slots accept..."), so the hover couldn't read it live, and the paint, which
+# runs beside the GUI, might not either: a figure stored from an effect is what every other reader of it takes (the
+# census's te_dg_unemp). At a pick of the map and from the global monthly pulse while it is the pick, so nothing is
+# walked for a map nobody is looking at; up to a month old. No root: every_state walks the world.
+te_jmap_store_unemp = {
+	every_state = {
+		if = {
+			limit = { state_population > 0 }
+			set_variable = { name = te_jmap_unemp value = te_state_unemployment_share }
+		}
+		else_if = {
+			limit = { has_variable = te_jmap_unemp }
+			remove_variable = te_jmap_unemp
+		}
+	}
+}
+
+# The monthly store, behind the pick: the global monthly pulse calls it before the ranges (te_journal_map_on_actions.txt).
+te_jmap_monthly_unemp = {
+	if = {
+		limit = {
+			has_global_variable = te_jmap_sel
+			global_var:te_jmap_sel = 78
+		}
+		te_jmap_store_unemp = yes
+	}
+}
+
 # TE_SELF_CHECK invest_rate (docs/testing/journal-map-modes-playtest.md, check 28). The Investment map (46) multiplies
 # an owners' building's profit by the share its owners reinvest, read in the state (modifier:state_capitalists_
 # investment_pool_contribution_add), on the unverified fact that the state's read carries the country's base (0.30
@@ -537,43 +582,34 @@ te_jmap_invest_selfcheck = {
 	}
 }
 
-# The class maps' figures (41-44; te_journal_map_values.txt): each state's Capitalists, Aristocrats, Clergymen and
-# Academics, counted in Demographics' yearly walk (te_demog_walks, te_demog_effects.txt), whatever the rule, as Armed
-# Forces' soldiers are, and stored as te_dg_capitalists, te_dg_aristocrats, te_dg_clergy and te_dg_academics. Three calls
-# of their own, not the census's helpers, which set nothing outside the census (test_demographics_registry.py,
-# TestWorkWalk); test_demographics_golden.py leaves their three lines out of the walk it pins.
+# The Map Room's own sums in Demographics' yearly walk (te_demog_walks, te_demog_effects.txt), whatever the rule:
+# every class's people (te_jmap_class_walk_*, generated from journal_map_classes.py: te_journal_map_classes_generated.txt)
+# and the people's mean wealth (te_dg_wealth, the Wealth map's figure, #1976). Calls of the Map Room's own, not the census's helpers,
+# which set nothing outside the census (test_demographics_registry.py, TestWorkWalk); test_demographics_golden.py
+# leaves the three lines out of the walk it pins.
 # State scope, before the walk's pop loop.
-te_jmap_class_walk_init = {
-	set_local_variable = { name = te_jmap_w_cap value = 0 }
-	set_local_variable = { name = te_jmap_w_ari value = 0 }
-	set_local_variable = { name = te_jmap_w_cle value = 0 }
-	set_local_variable = { name = te_jmap_w_aca value = 0 }
+te_jmap_walk_init = {
+	te_jmap_class_walk_init = yes
+	set_local_variable = { name = te_jmap_w_wealth value = 0 }
 }
 
 # Pop scope, in the walk's pop loop.
-te_jmap_class_walk_pop = {
-	if = {
-		limit = { is_pop_type = capitalists }
-		change_local_variable = { name = te_jmap_w_cap add = total_size }
-	}
-	else_if = {
-		limit = { is_pop_type = aristocrats }
-		change_local_variable = { name = te_jmap_w_ari add = total_size }
-	}
-	else_if = {
-		limit = { is_pop_type = clergymen }
-		change_local_variable = { name = te_jmap_w_cle add = total_size }
-	}
-	else_if = {
-		limit = { is_pop_type = academics }
-		change_local_variable = { name = te_jmap_w_aca add = total_size }
-	}
+te_jmap_walk_pop = {
+	te_jmap_class_walk_pop = yes
+	change_local_variable = { name = te_jmap_w_wealth add = te_jmap_pop_wealth }
 }
 
-# State scope, after the walk's pop loop.
-te_jmap_class_walk_store = {
-	set_variable = { name = te_dg_capitalists value = local_var:te_jmap_w_cap }
-	set_variable = { name = te_dg_aristocrats value = local_var:te_jmap_w_ari }
-	set_variable = { name = te_dg_clergy value = local_var:te_jmap_w_cle }
-	set_variable = { name = te_dg_academics value = local_var:te_jmap_w_aca }
+# State scope, after the walk's pop loop, which has stored te_dg_walk_pop, the people it summed.
+te_jmap_walk_store = {
+	te_jmap_class_walk_store = yes
+	set_variable = {
+		name = te_dg_wealth
+		value = {
+			value = local_var:te_jmap_w_wealth
+			divide = {
+				value = var:te_dg_walk_pop
+				min = 1
+			}
+		}
+	}
 }

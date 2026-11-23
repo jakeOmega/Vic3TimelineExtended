@@ -1537,166 +1537,6 @@ te_jmap_measure_fam = {
 	}
 }
 
-# Capitalists, their share of the state's people (the yearly walk's): half the color by a fifth of the world's range.
-# The Map Room's range, under its options.
-te_jmap_range_capitalists = {
-	if = {
-		limit = { has_global_variable = te_jmap_rng_capitalists_lo }
-		remove_global_variable = te_jmap_rng_capitalists_lo
-	}
-	if = {
-		limit = { has_global_variable = te_jmap_rng_capitalists_hi }
-		remove_global_variable = te_jmap_rng_capitalists_hi
-	}
-	set_global_variable = { name = te_jmap_n value = 0 }
-	every_state = {
-		limit = { has_variable = te_dg_capitalists has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
-		change_global_variable = { name = te_jmap_n add = 1 }
-	}
-	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
-	te_jmap_measure_at = { MAP = capitalists }
-	# What the Map Room's page says the map was measured over.
-	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
-	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
-}
-# Its two ends: the state K places from the top, and from the bottom.
-te_jmap_measure_capitalists = {
-	ordered_state = {
-		limit = { has_variable = te_dg_capitalists has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
-		order_by = te_jmap_capitalists_input
-		position = $K$
-		check_range_bounds = no
-		set_global_variable = { name = te_jmap_rng_capitalists_hi value = te_jmap_capitalists_input }
-	}
-	ordered_state = {
-		limit = { has_variable = te_dg_capitalists has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
-		order_by = te_jmap_capitalists_input_neg
-		position = $K$
-		check_range_bounds = no
-		set_global_variable = { name = te_jmap_rng_capitalists_lo value = te_jmap_capitalists_input }
-	}
-}
-
-# Aristocrats, their share of the state's people (the yearly walk's).
-# The Map Room's range, under its options.
-te_jmap_range_aristocrats = {
-	if = {
-		limit = { has_global_variable = te_jmap_rng_aristocrats_lo }
-		remove_global_variable = te_jmap_rng_aristocrats_lo
-	}
-	if = {
-		limit = { has_global_variable = te_jmap_rng_aristocrats_hi }
-		remove_global_variable = te_jmap_rng_aristocrats_hi
-	}
-	set_global_variable = { name = te_jmap_n value = 0 }
-	every_state = {
-		limit = { has_variable = te_dg_aristocrats has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
-		change_global_variable = { name = te_jmap_n add = 1 }
-	}
-	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
-	te_jmap_measure_at = { MAP = aristocrats }
-	# What the Map Room's page says the map was measured over.
-	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
-	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
-}
-# Its two ends: the state K places from the top, and from the bottom.
-te_jmap_measure_aristocrats = {
-	ordered_state = {
-		limit = { has_variable = te_dg_aristocrats has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
-		order_by = te_jmap_aristocrats_input
-		position = $K$
-		check_range_bounds = no
-		set_global_variable = { name = te_jmap_rng_aristocrats_hi value = te_jmap_aristocrats_input }
-	}
-	ordered_state = {
-		limit = { has_variable = te_dg_aristocrats has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
-		order_by = te_jmap_aristocrats_input_neg
-		position = $K$
-		check_range_bounds = no
-		set_global_variable = { name = te_jmap_rng_aristocrats_lo value = te_jmap_aristocrats_input }
-	}
-}
-
-# Clergymen, their share of the state's people (the yearly walk's).
-# The Map Room's range, under its options.
-te_jmap_range_clergy = {
-	if = {
-		limit = { has_global_variable = te_jmap_rng_clergy_lo }
-		remove_global_variable = te_jmap_rng_clergy_lo
-	}
-	if = {
-		limit = { has_global_variable = te_jmap_rng_clergy_hi }
-		remove_global_variable = te_jmap_rng_clergy_hi
-	}
-	set_global_variable = { name = te_jmap_n value = 0 }
-	every_state = {
-		limit = { has_variable = te_dg_clergy has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
-		change_global_variable = { name = te_jmap_n add = 1 }
-	}
-	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
-	te_jmap_measure_at = { MAP = clergy }
-	# What the Map Room's page says the map was measured over.
-	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
-	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
-}
-# Its two ends: the state K places from the top, and from the bottom.
-te_jmap_measure_clergy = {
-	ordered_state = {
-		limit = { has_variable = te_dg_clergy has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
-		order_by = te_jmap_clergy_input
-		position = $K$
-		check_range_bounds = no
-		set_global_variable = { name = te_jmap_rng_clergy_hi value = te_jmap_clergy_input }
-	}
-	ordered_state = {
-		limit = { has_variable = te_dg_clergy has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
-		order_by = te_jmap_clergy_input_neg
-		position = $K$
-		check_range_bounds = no
-		set_global_variable = { name = te_jmap_rng_clergy_lo value = te_jmap_clergy_input }
-	}
-}
-
-# Academics, their share of the state's people (the yearly walk's): half the color by a fifth of the world's range.
-# The Map Room's range, under its options.
-te_jmap_range_academics = {
-	if = {
-		limit = { has_global_variable = te_jmap_rng_academics_lo }
-		remove_global_variable = te_jmap_rng_academics_lo
-	}
-	if = {
-		limit = { has_global_variable = te_jmap_rng_academics_hi }
-		remove_global_variable = te_jmap_rng_academics_hi
-	}
-	set_global_variable = { name = te_jmap_n value = 0 }
-	every_state = {
-		limit = { has_variable = te_dg_academics has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
-		change_global_variable = { name = te_jmap_n add = 1 }
-	}
-	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
-	te_jmap_measure_at = { MAP = academics }
-	# What the Map Room's page says the map was measured over.
-	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
-	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
-}
-# Its two ends: the state K places from the top, and from the bottom.
-te_jmap_measure_academics = {
-	ordered_state = {
-		limit = { has_variable = te_dg_academics has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
-		order_by = te_jmap_academics_input
-		position = $K$
-		check_range_bounds = no
-		set_global_variable = { name = te_jmap_rng_academics_hi value = te_jmap_academics_input }
-	}
-	ordered_state = {
-		limit = { has_variable = te_dg_academics has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
-		order_by = te_jmap_academics_input_neg
-		position = $K$
-		check_range_bounds = no
-		set_global_variable = { name = te_jmap_rng_academics_lo value = te_jmap_academics_input }
-	}
-}
-
 # Trade Capacity, the state's own, its Trade Center's: the same share of the color for each doubling from the world's low (at least 1) to its high.
 # The Map Room's range, under its options.
 te_jmap_range_trade = {
@@ -1817,6 +1657,1606 @@ te_jmap_measure_density = {
 	}
 }
 
+# Standard of Living, the state's people's mean at the yearly walk.
+# The Map Room's range, under its options.
+te_jmap_range_sol = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_sol_lo }
+		remove_global_variable = te_jmap_rng_sol_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_sol_hi }
+		remove_global_variable = te_jmap_rng_sol_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = sol }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_sol = {
+	ordered_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_sol_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_sol_hi value = te_jmap_sol_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_sol_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_sol_lo value = te_jmap_sol_input }
+	}
+}
+
+# Wealth, the state's people's mean wealth at the yearly walk.
+# The Map Room's range, under its options.
+te_jmap_range_wealth = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_wealth_lo }
+		remove_global_variable = te_jmap_rng_wealth_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_wealth_hi }
+		remove_global_variable = te_jmap_rng_wealth_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = wealth }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_wealth = {
+	ordered_state = {
+		limit = { has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_wealth_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_wealth_hi value = te_jmap_wealth_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_wealth_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_wealth_lo value = te_jmap_wealth_input }
+	}
+}
+
+# Standard of Living less Wealth, the yearly walk's, split at none.
+# The Map Room's range, under its options.
+te_jmap_range_sol_wealth = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_sol_wealth_lo }
+		remove_global_variable = te_jmap_rng_sol_wealth_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_sol_wealth_hi }
+		remove_global_variable = te_jmap_rng_sol_wealth_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = sol_wealth }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_sol_wealth = {
+	ordered_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_sol_wealth_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_sol_wealth_hi value = te_jmap_sol_wealth_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_sol_wealth_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_sol_wealth_lo value = te_jmap_sol_wealth_input }
+	}
+}
+
+# Standard of Living against the expected one, live (average_sol less average_expected_sol), split at none.
+# The Map Room's range, under its options.
+te_jmap_range_sol_expected = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_sol_expected_lo }
+		remove_global_variable = te_jmap_rng_sol_expected_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_sol_expected_hi }
+		remove_global_variable = te_jmap_rng_sol_expected_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = sol_expected }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_sol_expected = {
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_sol_expected_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_sol_expected_hi value = te_jmap_sol_expected_input }
+	}
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_sol_expected_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_sol_expected_lo value = te_jmap_sol_expected_input }
+	}
+}
+
+# Literacy, the state's people's, 0-1, live.
+# The Map Room's range, under its options.
+te_jmap_range_literacy = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_literacy_lo }
+		remove_global_variable = te_jmap_rng_literacy_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_literacy_hi }
+		remove_global_variable = te_jmap_rng_literacy_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = literacy }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_literacy = {
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_literacy_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_literacy_hi value = te_jmap_literacy_input }
+	}
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_literacy_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_literacy_lo value = te_jmap_literacy_input }
+	}
+}
+
+# Unemployment, the share of the state's workforce without work: two-thirds of the color by a third of the world's range.
+# The Map Room's range, under its options.
+te_jmap_range_unemp = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_unemp_lo }
+		remove_global_variable = te_jmap_rng_unemp_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_unemp_hi }
+		remove_global_variable = te_jmap_rng_unemp_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_jmap_unemp te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = unemp }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_unemp = {
+	ordered_state = {
+		limit = { has_variable = te_jmap_unemp te_jmap_in_area = yes }
+		order_by = te_jmap_unemp_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_unemp_hi value = te_jmap_unemp_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_jmap_unemp te_jmap_in_area = yes }
+		order_by = te_jmap_unemp_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_unemp_lo value = te_jmap_unemp_input }
+	}
+}
+
+# Population, the state's people: the same share of the color for each doubling from the world's low (at least 100 people) to its high.
+# The Map Room's range, under its options.
+te_jmap_range_people = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_people_lo }
+		remove_global_variable = te_jmap_rng_people_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_people_hi }
+		remove_global_variable = te_jmap_rng_people_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = people }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_people = {
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_people_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_people_hi value = te_jmap_people_input }
+	}
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_people_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_people_lo value = te_jmap_people_input }
+	}
+}
+
+# GDP, the state's yearly GDP in pounds: the same share of the color for each doubling from the world's low (at least 1) to its high.
+# The Map Room's range, under its options.
+te_jmap_range_gdp = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_gdp_lo }
+		remove_global_variable = te_jmap_rng_gdp_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_gdp_hi }
+		remove_global_variable = te_jmap_rng_gdp_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { te_jmap_gdp_value > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = gdp }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_gdp = {
+	ordered_state = {
+		limit = { te_jmap_gdp_value > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_gdp_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_gdp_hi value = te_jmap_gdp_input }
+	}
+	ordered_state = {
+		limit = { te_jmap_gdp_value > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_gdp_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_gdp_lo value = te_jmap_gdp_input }
+	}
+}
+
+# Infrastructure less its usage, live, split at none.
+# The Map Room's range, under its options.
+te_jmap_range_infra = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_infra_lo }
+		remove_global_variable = te_jmap_rng_infra_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_infra_hi }
+		remove_global_variable = te_jmap_rng_infra_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = infra }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_infra = {
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_infra_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_infra_hi value = te_jmap_infra_input }
+	}
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_infra_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_infra_lo value = te_jmap_infra_input }
+	}
+}
+
+# Loyalists less radicals, each a share of the state's people, live, split at none.
+# The Map Room's range, under its options.
+te_jmap_range_loyal = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_loyal_lo }
+		remove_global_variable = te_jmap_rng_loyal_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_loyal_hi }
+		remove_global_variable = te_jmap_rng_loyal_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = loyal }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_loyal = {
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_loyal_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_loyal_hi value = te_jmap_loyal_input }
+	}
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_loyal_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_loyal_lo value = te_jmap_loyal_input }
+	}
+}
+
+# Aristocrats, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+# The Map Room's range, under its options.
+te_jmap_range_class_aristocrats = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_aristocrats_lo }
+		remove_global_variable = te_jmap_rng_class_aristocrats_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_aristocrats_hi }
+		remove_global_variable = te_jmap_rng_class_aristocrats_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_aristocrats var:te_dg_cls_aristocrats > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_aristocrats }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_aristocrats = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_aristocrats var:te_dg_cls_aristocrats > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_aristocrats_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_aristocrats_hi value = te_jmap_class_aristocrats_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_aristocrats var:te_dg_cls_aristocrats > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_aristocrats_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_aristocrats_lo value = te_jmap_class_aristocrats_input }
+	}
+}
+
+# Aristocrats, their share of the state's people (the yearly walk's).
+# The Map Room's range, under its options.
+te_jmap_range_class_aristocrats_share = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_aristocrats_share_lo }
+		remove_global_variable = te_jmap_rng_class_aristocrats_share_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_aristocrats_share_hi }
+		remove_global_variable = te_jmap_rng_class_aristocrats_share_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_aristocrats has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_aristocrats_share }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_aristocrats_share = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_aristocrats has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_aristocrats_share_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_aristocrats_share_hi value = te_jmap_class_aristocrats_share_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_aristocrats has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_aristocrats_share_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_aristocrats_share_lo value = te_jmap_class_aristocrats_share_input }
+	}
+}
+
+# Capitalists, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+# The Map Room's range, under its options.
+te_jmap_range_class_capitalists = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_capitalists_lo }
+		remove_global_variable = te_jmap_rng_class_capitalists_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_capitalists_hi }
+		remove_global_variable = te_jmap_rng_class_capitalists_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_capitalists var:te_dg_cls_capitalists > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_capitalists }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_capitalists = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_capitalists var:te_dg_cls_capitalists > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_capitalists_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_capitalists_hi value = te_jmap_class_capitalists_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_capitalists var:te_dg_cls_capitalists > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_capitalists_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_capitalists_lo value = te_jmap_class_capitalists_input }
+	}
+}
+
+# Capitalists, their share of the state's people (the yearly walk's): half the color by a fifth of the world's range.
+# The Map Room's range, under its options.
+te_jmap_range_class_capitalists_share = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_capitalists_share_lo }
+		remove_global_variable = te_jmap_rng_class_capitalists_share_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_capitalists_share_hi }
+		remove_global_variable = te_jmap_rng_class_capitalists_share_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_capitalists has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_capitalists_share }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_capitalists_share = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_capitalists has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_capitalists_share_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_capitalists_share_hi value = te_jmap_class_capitalists_share_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_capitalists has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_capitalists_share_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_capitalists_share_lo value = te_jmap_class_capitalists_share_input }
+	}
+}
+
+# Shopkeepers, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+# The Map Room's range, under its options.
+te_jmap_range_class_shopkeepers = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_shopkeepers_lo }
+		remove_global_variable = te_jmap_rng_class_shopkeepers_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_shopkeepers_hi }
+		remove_global_variable = te_jmap_rng_class_shopkeepers_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_shopkeepers var:te_dg_cls_shopkeepers > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_shopkeepers }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_shopkeepers = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_shopkeepers var:te_dg_cls_shopkeepers > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_shopkeepers_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_shopkeepers_hi value = te_jmap_class_shopkeepers_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_shopkeepers var:te_dg_cls_shopkeepers > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_shopkeepers_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_shopkeepers_lo value = te_jmap_class_shopkeepers_input }
+	}
+}
+
+# Shopkeepers, their share of the state's people (the yearly walk's).
+# The Map Room's range, under its options.
+te_jmap_range_class_shopkeepers_share = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_shopkeepers_share_lo }
+		remove_global_variable = te_jmap_rng_class_shopkeepers_share_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_shopkeepers_share_hi }
+		remove_global_variable = te_jmap_rng_class_shopkeepers_share_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_shopkeepers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_shopkeepers_share }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_shopkeepers_share = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_shopkeepers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_shopkeepers_share_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_shopkeepers_share_hi value = te_jmap_class_shopkeepers_share_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_shopkeepers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_shopkeepers_share_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_shopkeepers_share_lo value = te_jmap_class_shopkeepers_share_input }
+	}
+}
+
+# Academics, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+# The Map Room's range, under its options.
+te_jmap_range_class_academics = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_academics_lo }
+		remove_global_variable = te_jmap_rng_class_academics_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_academics_hi }
+		remove_global_variable = te_jmap_rng_class_academics_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_academics var:te_dg_cls_academics > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_academics }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_academics = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_academics var:te_dg_cls_academics > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_academics_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_academics_hi value = te_jmap_class_academics_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_academics var:te_dg_cls_academics > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_academics_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_academics_lo value = te_jmap_class_academics_input }
+	}
+}
+
+# Academics, their share of the state's people (the yearly walk's): half the color by a fifth of the world's range.
+# The Map Room's range, under its options.
+te_jmap_range_class_academics_share = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_academics_share_lo }
+		remove_global_variable = te_jmap_rng_class_academics_share_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_academics_share_hi }
+		remove_global_variable = te_jmap_rng_class_academics_share_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_academics has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_academics_share }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_academics_share = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_academics has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_academics_share_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_academics_share_hi value = te_jmap_class_academics_share_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_academics has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_academics_share_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_academics_share_lo value = te_jmap_class_academics_share_input }
+	}
+}
+
+# Clergymen, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+# The Map Room's range, under its options.
+te_jmap_range_class_clergymen = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_clergymen_lo }
+		remove_global_variable = te_jmap_rng_class_clergymen_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_clergymen_hi }
+		remove_global_variable = te_jmap_rng_class_clergymen_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_clergymen var:te_dg_cls_clergymen > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_clergymen }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_clergymen = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_clergymen var:te_dg_cls_clergymen > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_clergymen_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_clergymen_hi value = te_jmap_class_clergymen_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_clergymen var:te_dg_cls_clergymen > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_clergymen_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_clergymen_lo value = te_jmap_class_clergymen_input }
+	}
+}
+
+# Clergymen, their share of the state's people (the yearly walk's).
+# The Map Room's range, under its options.
+te_jmap_range_class_clergymen_share = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_clergymen_share_lo }
+		remove_global_variable = te_jmap_rng_class_clergymen_share_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_clergymen_share_hi }
+		remove_global_variable = te_jmap_rng_class_clergymen_share_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_clergymen has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_clergymen_share }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_clergymen_share = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_clergymen has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_clergymen_share_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_clergymen_share_hi value = te_jmap_class_clergymen_share_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_clergymen has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_clergymen_share_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_clergymen_share_lo value = te_jmap_class_clergymen_share_input }
+	}
+}
+
+# Bureaucrats, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+# The Map Room's range, under its options.
+te_jmap_range_class_bureaucrats = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_bureaucrats_lo }
+		remove_global_variable = te_jmap_rng_class_bureaucrats_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_bureaucrats_hi }
+		remove_global_variable = te_jmap_rng_class_bureaucrats_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_bureaucrats var:te_dg_cls_bureaucrats > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_bureaucrats }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_bureaucrats = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_bureaucrats var:te_dg_cls_bureaucrats > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_bureaucrats_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_bureaucrats_hi value = te_jmap_class_bureaucrats_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_bureaucrats var:te_dg_cls_bureaucrats > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_bureaucrats_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_bureaucrats_lo value = te_jmap_class_bureaucrats_input }
+	}
+}
+
+# Bureaucrats, their share of the state's people (the yearly walk's).
+# The Map Room's range, under its options.
+te_jmap_range_class_bureaucrats_share = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_bureaucrats_share_lo }
+		remove_global_variable = te_jmap_rng_class_bureaucrats_share_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_bureaucrats_share_hi }
+		remove_global_variable = te_jmap_rng_class_bureaucrats_share_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_bureaucrats has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_bureaucrats_share }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_bureaucrats_share = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_bureaucrats has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_bureaucrats_share_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_bureaucrats_share_hi value = te_jmap_class_bureaucrats_share_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_bureaucrats has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_bureaucrats_share_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_bureaucrats_share_lo value = te_jmap_class_bureaucrats_share_input }
+	}
+}
+
+# Engineers, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+# The Map Room's range, under its options.
+te_jmap_range_class_engineers = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_engineers_lo }
+		remove_global_variable = te_jmap_rng_class_engineers_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_engineers_hi }
+		remove_global_variable = te_jmap_rng_class_engineers_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_engineers var:te_dg_cls_engineers > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_engineers }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_engineers = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_engineers var:te_dg_cls_engineers > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_engineers_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_engineers_hi value = te_jmap_class_engineers_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_engineers var:te_dg_cls_engineers > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_engineers_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_engineers_lo value = te_jmap_class_engineers_input }
+	}
+}
+
+# Engineers, their share of the state's people (the yearly walk's): half the color by a fifth of the world's range.
+# The Map Room's range, under its options.
+te_jmap_range_class_engineers_share = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_engineers_share_lo }
+		remove_global_variable = te_jmap_rng_class_engineers_share_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_engineers_share_hi }
+		remove_global_variable = te_jmap_rng_class_engineers_share_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_engineers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_engineers_share }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_engineers_share = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_engineers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_engineers_share_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_engineers_share_hi value = te_jmap_class_engineers_share_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_engineers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_engineers_share_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_engineers_share_lo value = te_jmap_class_engineers_share_input }
+	}
+}
+
+# Machinists, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+# The Map Room's range, under its options.
+te_jmap_range_class_machinists = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_machinists_lo }
+		remove_global_variable = te_jmap_rng_class_machinists_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_machinists_hi }
+		remove_global_variable = te_jmap_rng_class_machinists_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_machinists var:te_dg_cls_machinists > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_machinists }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_machinists = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_machinists var:te_dg_cls_machinists > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_machinists_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_machinists_hi value = te_jmap_class_machinists_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_machinists var:te_dg_cls_machinists > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_machinists_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_machinists_lo value = te_jmap_class_machinists_input }
+	}
+}
+
+# Machinists, their share of the state's people (the yearly walk's): half the color by a fifth of the world's range.
+# The Map Room's range, under its options.
+te_jmap_range_class_machinists_share = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_machinists_share_lo }
+		remove_global_variable = te_jmap_rng_class_machinists_share_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_machinists_share_hi }
+		remove_global_variable = te_jmap_rng_class_machinists_share_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_machinists has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_machinists_share }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_machinists_share = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_machinists has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_machinists_share_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_machinists_share_hi value = te_jmap_class_machinists_share_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_machinists has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_machinists_share_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_machinists_share_lo value = te_jmap_class_machinists_share_input }
+	}
+}
+
+# Laborers, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+# The Map Room's range, under its options.
+te_jmap_range_class_laborers = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_laborers_lo }
+		remove_global_variable = te_jmap_rng_class_laborers_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_laborers_hi }
+		remove_global_variable = te_jmap_rng_class_laborers_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_laborers var:te_dg_cls_laborers > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_laborers }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_laborers = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_laborers var:te_dg_cls_laborers > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_laborers_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_laborers_hi value = te_jmap_class_laborers_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_laborers var:te_dg_cls_laborers > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_laborers_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_laborers_lo value = te_jmap_class_laborers_input }
+	}
+}
+
+# Laborers, their share of the state's people (the yearly walk's).
+# The Map Room's range, under its options.
+te_jmap_range_class_laborers_share = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_laborers_share_lo }
+		remove_global_variable = te_jmap_rng_class_laborers_share_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_laborers_share_hi }
+		remove_global_variable = te_jmap_rng_class_laborers_share_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_laborers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_laborers_share }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_laborers_share = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_laborers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_laborers_share_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_laborers_share_hi value = te_jmap_class_laborers_share_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_laborers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_laborers_share_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_laborers_share_lo value = te_jmap_class_laborers_share_input }
+	}
+}
+
+# Farmers, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+# The Map Room's range, under its options.
+te_jmap_range_class_farmers = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_farmers_lo }
+		remove_global_variable = te_jmap_rng_class_farmers_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_farmers_hi }
+		remove_global_variable = te_jmap_rng_class_farmers_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_farmers var:te_dg_cls_farmers > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_farmers }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_farmers = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_farmers var:te_dg_cls_farmers > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_farmers_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_farmers_hi value = te_jmap_class_farmers_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_farmers var:te_dg_cls_farmers > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_farmers_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_farmers_lo value = te_jmap_class_farmers_input }
+	}
+}
+
+# Farmers, their share of the state's people (the yearly walk's).
+# The Map Room's range, under its options.
+te_jmap_range_class_farmers_share = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_farmers_share_lo }
+		remove_global_variable = te_jmap_rng_class_farmers_share_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_farmers_share_hi }
+		remove_global_variable = te_jmap_rng_class_farmers_share_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_farmers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_farmers_share }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_farmers_share = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_farmers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_farmers_share_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_farmers_share_hi value = te_jmap_class_farmers_share_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_farmers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_farmers_share_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_farmers_share_lo value = te_jmap_class_farmers_share_input }
+	}
+}
+
+# Peasants, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+# The Map Room's range, under its options.
+te_jmap_range_class_peasants = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_peasants_lo }
+		remove_global_variable = te_jmap_rng_class_peasants_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_peasants_hi }
+		remove_global_variable = te_jmap_rng_class_peasants_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_peasants var:te_dg_cls_peasants > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_peasants }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_peasants = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_peasants var:te_dg_cls_peasants > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_peasants_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_peasants_hi value = te_jmap_class_peasants_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_peasants var:te_dg_cls_peasants > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_peasants_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_peasants_lo value = te_jmap_class_peasants_input }
+	}
+}
+
+# Peasants, their share of the state's people (the yearly walk's).
+# The Map Room's range, under its options.
+te_jmap_range_class_peasants_share = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_peasants_share_lo }
+		remove_global_variable = te_jmap_rng_class_peasants_share_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_peasants_share_hi }
+		remove_global_variable = te_jmap_rng_class_peasants_share_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_peasants has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_peasants_share }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_peasants_share = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_peasants has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_peasants_share_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_peasants_share_hi value = te_jmap_class_peasants_share_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_peasants has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_peasants_share_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_peasants_share_lo value = te_jmap_class_peasants_share_input }
+	}
+}
+
+# Slaves, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+# The Map Room's range, under its options.
+te_jmap_range_class_slaves = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_slaves_lo }
+		remove_global_variable = te_jmap_rng_class_slaves_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_slaves_hi }
+		remove_global_variable = te_jmap_rng_class_slaves_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_slaves var:te_dg_cls_slaves > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_slaves }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_slaves = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_slaves var:te_dg_cls_slaves > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_slaves_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_slaves_hi value = te_jmap_class_slaves_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_slaves var:te_dg_cls_slaves > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_slaves_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_slaves_lo value = te_jmap_class_slaves_input }
+	}
+}
+
+# Slaves, their share of the state's people (the yearly walk's).
+# The Map Room's range, under its options.
+te_jmap_range_class_slaves_share = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_slaves_share_lo }
+		remove_global_variable = te_jmap_rng_class_slaves_share_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_slaves_share_hi }
+		remove_global_variable = te_jmap_rng_class_slaves_share_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_slaves has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_slaves_share }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_slaves_share = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_slaves has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_slaves_share_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_slaves_share_hi value = te_jmap_class_slaves_share_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_slaves has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_slaves_share_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_slaves_share_lo value = te_jmap_class_slaves_share_input }
+	}
+}
+
+# Clerks, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+# The Map Room's range, under its options.
+te_jmap_range_class_clerks = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_clerks_lo }
+		remove_global_variable = te_jmap_rng_class_clerks_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_clerks_hi }
+		remove_global_variable = te_jmap_rng_class_clerks_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_clerks var:te_dg_cls_clerks > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_clerks }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_clerks = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_clerks var:te_dg_cls_clerks > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_clerks_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_clerks_hi value = te_jmap_class_clerks_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_clerks var:te_dg_cls_clerks > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_clerks_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_clerks_lo value = te_jmap_class_clerks_input }
+	}
+}
+
+# Clerks, their share of the state's people (the yearly walk's).
+# The Map Room's range, under its options.
+te_jmap_range_class_clerks_share = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_clerks_share_lo }
+		remove_global_variable = te_jmap_rng_class_clerks_share_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_clerks_share_hi }
+		remove_global_variable = te_jmap_rng_class_clerks_share_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_clerks has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_clerks_share }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_clerks_share = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_clerks has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_clerks_share_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_clerks_share_hi value = te_jmap_class_clerks_share_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_clerks has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_clerks_share_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_clerks_share_lo value = te_jmap_class_clerks_share_input }
+	}
+}
+
+# Officers, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+# The Map Room's range, under its options.
+te_jmap_range_class_officers = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_officers_lo }
+		remove_global_variable = te_jmap_rng_class_officers_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_officers_hi }
+		remove_global_variable = te_jmap_rng_class_officers_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_officers var:te_dg_cls_officers > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_officers }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_officers = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_officers var:te_dg_cls_officers > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_officers_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_officers_hi value = te_jmap_class_officers_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_officers var:te_dg_cls_officers > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_officers_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_officers_lo value = te_jmap_class_officers_input }
+	}
+}
+
+# Officers, their share of the state's people (the yearly walk's).
+# The Map Room's range, under its options.
+te_jmap_range_class_officers_share = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_officers_share_lo }
+		remove_global_variable = te_jmap_rng_class_officers_share_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_officers_share_hi }
+		remove_global_variable = te_jmap_rng_class_officers_share_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_officers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_officers_share }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_officers_share = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_officers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_officers_share_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_officers_share_hi value = te_jmap_class_officers_share_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_officers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_officers_share_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_officers_share_lo value = te_jmap_class_officers_share_input }
+	}
+}
+
+# Soldiers, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+# The Map Room's range, under its options.
+te_jmap_range_class_soldiers = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_soldiers_lo }
+		remove_global_variable = te_jmap_rng_class_soldiers_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_soldiers_hi }
+		remove_global_variable = te_jmap_rng_class_soldiers_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_soldiers var:te_dg_cls_soldiers > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_soldiers }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_soldiers = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_soldiers var:te_dg_cls_soldiers > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_soldiers_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_soldiers_hi value = te_jmap_class_soldiers_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_soldiers var:te_dg_cls_soldiers > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_soldiers_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_soldiers_lo value = te_jmap_class_soldiers_input }
+	}
+}
+
+# Soldiers, their share of the state's people (the yearly walk's).
+# The Map Room's range, under its options.
+te_jmap_range_class_soldiers_share = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_soldiers_share_lo }
+		remove_global_variable = te_jmap_rng_class_soldiers_share_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_class_soldiers_share_hi }
+		remove_global_variable = te_jmap_rng_class_soldiers_share_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_cls_soldiers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = class_soldiers_share }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_class_soldiers_share = {
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_soldiers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_soldiers_share_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_soldiers_share_hi value = te_jmap_class_soldiers_share_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_soldiers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_soldiers_share_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_class_soldiers_share_lo value = te_jmap_class_soldiers_share_input }
+	}
+}
+
 # The pick's map, if it is fitted to the world (te_jmap_selector, te_journal_map_values.txt).
 te_jmap_refresh_range = {
 	# One rank variable serves every map: no place outlives the pick or the setting it was taken under.
@@ -1824,6 +3264,10 @@ te_jmap_refresh_range = {
 	if = {
 		limit = { te_jmap_selector = 1 }
 		te_jmap_range_turmoil = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 2 }
+		te_jmap_range_literacy = yes
 	}
 	else_if = {
 		limit = { te_jmap_selector = 3 }
@@ -1939,19 +3383,19 @@ te_jmap_refresh_range = {
 	}
 	else_if = {
 		limit = { te_jmap_selector = 41 }
-		te_jmap_range_capitalists = yes
+		te_jmap_range_class_capitalists_share = yes
 	}
 	else_if = {
 		limit = { te_jmap_selector = 42 }
-		te_jmap_range_aristocrats = yes
+		te_jmap_range_class_aristocrats_share = yes
 	}
 	else_if = {
 		limit = { te_jmap_selector = 43 }
-		te_jmap_range_clergy = yes
+		te_jmap_range_class_clergymen_share = yes
 	}
 	else_if = {
 		limit = { te_jmap_selector = 44 }
-		te_jmap_range_academics = yes
+		te_jmap_range_class_academics_share = yes
 	}
 	else_if = {
 		limit = { te_jmap_selector = 45 }
@@ -1964,6 +3408,146 @@ te_jmap_refresh_range = {
 	else_if = {
 		limit = { te_jmap_selector = 47 }
 		te_jmap_range_density = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 48 }
+		te_jmap_range_class_aristocrats = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 49 }
+		te_jmap_range_class_capitalists = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 50 }
+		te_jmap_range_class_shopkeepers = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 51 }
+		te_jmap_range_class_academics = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 52 }
+		te_jmap_range_class_clergymen = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 53 }
+		te_jmap_range_class_bureaucrats = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 54 }
+		te_jmap_range_class_engineers = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 55 }
+		te_jmap_range_class_machinists = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 56 }
+		te_jmap_range_class_laborers = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 57 }
+		te_jmap_range_class_farmers = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 58 }
+		te_jmap_range_class_peasants = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 59 }
+		te_jmap_range_class_slaves = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 60 }
+		te_jmap_range_class_clerks = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 61 }
+		te_jmap_range_class_officers = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 62 }
+		te_jmap_range_class_soldiers = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 63 }
+		te_jmap_range_class_shopkeepers_share = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 64 }
+		te_jmap_range_class_bureaucrats_share = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 65 }
+		te_jmap_range_class_engineers_share = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 66 }
+		te_jmap_range_class_machinists_share = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 67 }
+		te_jmap_range_class_laborers_share = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 68 }
+		te_jmap_range_class_farmers_share = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 69 }
+		te_jmap_range_class_peasants_share = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 70 }
+		te_jmap_range_class_slaves_share = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 71 }
+		te_jmap_range_class_clerks_share = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 72 }
+		te_jmap_range_class_officers_share = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 73 }
+		te_jmap_range_class_soldiers_share = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 74 }
+		te_jmap_range_sol = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 75 }
+		te_jmap_range_wealth = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 76 }
+		te_jmap_range_sol_wealth = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 77 }
+		te_jmap_range_sol_expected = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 78 }
+		te_jmap_range_unemp = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 79 }
+		te_jmap_range_people = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 80 }
+		te_jmap_range_gdp = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 81 }
+		te_jmap_range_infra = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 82 }
+		te_jmap_range_loyal = yes
 	}
 	# The Scale option's Ranked setting: the pick's places, taken with its range.
 	if = {
@@ -2919,106 +4503,6 @@ te_jmap_rank_fam = {
 	}
 }
 
-# Capitalists, their share of the state's people (the yearly walk's): half the color by a fifth of the world's range.
-te_jmap_rank_capitalists = {
-	set_global_variable = te_jmap_ranks
-	# From the lowest: 0 to 1.
-	set_global_variable = { name = te_jmap_i value = -1 }
-	set_global_variable = { name = te_jmap_prev value = -1000000000 }
-	ordered_state = {
-		limit = { has_variable = te_dg_capitalists has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
-		order_by = te_jmap_capitalists_input_neg
-		min = 0
-		max = 5000
-		check_range_bounds = no
-		if = {
-			limit = { te_jmap_capitalists_input > te_jmap_rank_prev }
-			change_global_variable = { name = te_jmap_i add = 1 }
-			set_global_variable = { name = te_jmap_prev value = te_jmap_capitalists_input }
-		}
-		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
-	}
-	every_state = {
-		limit = { has_variable = te_dg_capitalists has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
-		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
-	}
-}
-
-# Aristocrats, their share of the state's people (the yearly walk's).
-te_jmap_rank_aristocrats = {
-	set_global_variable = te_jmap_ranks
-	# From the lowest: 0 to 1.
-	set_global_variable = { name = te_jmap_i value = -1 }
-	set_global_variable = { name = te_jmap_prev value = -1000000000 }
-	ordered_state = {
-		limit = { has_variable = te_dg_aristocrats has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
-		order_by = te_jmap_aristocrats_input_neg
-		min = 0
-		max = 5000
-		check_range_bounds = no
-		if = {
-			limit = { te_jmap_aristocrats_input > te_jmap_rank_prev }
-			change_global_variable = { name = te_jmap_i add = 1 }
-			set_global_variable = { name = te_jmap_prev value = te_jmap_aristocrats_input }
-		}
-		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
-	}
-	every_state = {
-		limit = { has_variable = te_dg_aristocrats has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
-		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
-	}
-}
-
-# Clergymen, their share of the state's people (the yearly walk's).
-te_jmap_rank_clergy = {
-	set_global_variable = te_jmap_ranks
-	# From the lowest: 0 to 1.
-	set_global_variable = { name = te_jmap_i value = -1 }
-	set_global_variable = { name = te_jmap_prev value = -1000000000 }
-	ordered_state = {
-		limit = { has_variable = te_dg_clergy has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
-		order_by = te_jmap_clergy_input_neg
-		min = 0
-		max = 5000
-		check_range_bounds = no
-		if = {
-			limit = { te_jmap_clergy_input > te_jmap_rank_prev }
-			change_global_variable = { name = te_jmap_i add = 1 }
-			set_global_variable = { name = te_jmap_prev value = te_jmap_clergy_input }
-		}
-		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
-	}
-	every_state = {
-		limit = { has_variable = te_dg_clergy has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
-		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
-	}
-}
-
-# Academics, their share of the state's people (the yearly walk's): half the color by a fifth of the world's range.
-te_jmap_rank_academics = {
-	set_global_variable = te_jmap_ranks
-	# From the lowest: 0 to 1.
-	set_global_variable = { name = te_jmap_i value = -1 }
-	set_global_variable = { name = te_jmap_prev value = -1000000000 }
-	ordered_state = {
-		limit = { has_variable = te_dg_academics has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
-		order_by = te_jmap_academics_input_neg
-		min = 0
-		max = 5000
-		check_range_bounds = no
-		if = {
-			limit = { te_jmap_academics_input > te_jmap_rank_prev }
-			change_global_variable = { name = te_jmap_i add = 1 }
-			set_global_variable = { name = te_jmap_prev value = te_jmap_academics_input }
-		}
-		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
-	}
-	every_state = {
-		limit = { has_variable = te_dg_academics has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
-		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
-	}
-}
-
 # Trade Capacity, the state's own, its Trade Center's: the same share of the color for each doubling from the world's low (at least 1) to its high.
 te_jmap_rank_trade = {
 	set_global_variable = te_jmap_ranks
@@ -3094,11 +4578,1115 @@ te_jmap_rank_density = {
 	}
 }
 
+# Standard of Living, the state's people's mean at the yearly walk.
+te_jmap_rank_sol = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_sol_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_sol_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_sol_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Wealth, the state's people's mean wealth at the yearly walk.
+te_jmap_rank_wealth = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_wealth_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_wealth_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_wealth_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Standard of Living less Wealth, the yearly walk's, split at none.
+te_jmap_rank_sol_wealth = {
+	set_global_variable = te_jmap_ranks
+	# Below the midpoint, the nearest first: 0.5 down to 0.
+	set_global_variable = { name = te_jmap_i value = 0 }
+	set_global_variable = { name = te_jmap_prev value = 1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes te_jmap_sol_wealth_input < 0 }
+		order_by = te_jmap_sol_wealth_input
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_sol_wealth_input < te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_sol_wealth_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes te_jmap_sol_wealth_input < 0 has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share_low }
+	}
+	# Above it, the nearest first: 0.5 up to 1.
+	set_global_variable = { name = te_jmap_i value = 0 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes te_jmap_sol_wealth_input > 0 }
+		order_by = te_jmap_sol_wealth_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_sol_wealth_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_sol_wealth_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes te_jmap_sol_wealth_input > 0 has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share_up }
+	}
+	# At the midpoint itself: its color.
+	every_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes te_jmap_sol_wealth_input = 0 }
+		set_variable = { name = te_jmap_rank value = 0.5 }
+	}
+}
+
+# Standard of Living against the expected one, live (average_sol less average_expected_sol), split at none.
+te_jmap_rank_sol_expected = {
+	set_global_variable = te_jmap_ranks
+	# Below the midpoint, the nearest first: 0.5 down to 0.
+	set_global_variable = { name = te_jmap_i value = 0 }
+	set_global_variable = { name = te_jmap_prev value = 1000000000 }
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_sol_expected_input < 0 }
+		order_by = te_jmap_sol_expected_input
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_sol_expected_input < te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_sol_expected_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_sol_expected_input < 0 has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share_low }
+	}
+	# Above it, the nearest first: 0.5 up to 1.
+	set_global_variable = { name = te_jmap_i value = 0 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_sol_expected_input > 0 }
+		order_by = te_jmap_sol_expected_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_sol_expected_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_sol_expected_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_sol_expected_input > 0 has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share_up }
+	}
+	# At the midpoint itself: its color.
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_sol_expected_input = 0 }
+		set_variable = { name = te_jmap_rank value = 0.5 }
+	}
+}
+
+# Literacy, the state's people's, 0-1, live.
+te_jmap_rank_literacy = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_literacy_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_literacy_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_literacy_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Unemployment, the share of the state's workforce without work: two-thirds of the color by a third of the world's range.
+te_jmap_rank_unemp = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_jmap_unemp te_jmap_in_area = yes }
+		order_by = te_jmap_unemp_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_unemp_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_unemp_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_jmap_unemp te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Population, the state's people: the same share of the color for each doubling from the world's low (at least 100 people) to its high.
+te_jmap_rank_people = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_people_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_people_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_people_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# GDP, the state's yearly GDP in pounds: the same share of the color for each doubling from the world's low (at least 1) to its high.
+te_jmap_rank_gdp = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { te_jmap_gdp_value > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_gdp_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_gdp_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_gdp_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { te_jmap_gdp_value > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Infrastructure less its usage, live, split at none.
+te_jmap_rank_infra = {
+	set_global_variable = te_jmap_ranks
+	# Below the midpoint, the nearest first: 0.5 down to 0.
+	set_global_variable = { name = te_jmap_i value = 0 }
+	set_global_variable = { name = te_jmap_prev value = 1000000000 }
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_infra_input < 0 }
+		order_by = te_jmap_infra_input
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_infra_input < te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_infra_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_infra_input < 0 has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share_low }
+	}
+	# Above it, the nearest first: 0.5 up to 1.
+	set_global_variable = { name = te_jmap_i value = 0 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_infra_input > 0 }
+		order_by = te_jmap_infra_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_infra_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_infra_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_infra_input > 0 has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share_up }
+	}
+	# At the midpoint itself: its color.
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_infra_input = 0 }
+		set_variable = { name = te_jmap_rank value = 0.5 }
+	}
+}
+
+# Loyalists less radicals, each a share of the state's people, live, split at none.
+te_jmap_rank_loyal = {
+	set_global_variable = te_jmap_ranks
+	# Below the midpoint, the nearest first: 0.5 down to 0.
+	set_global_variable = { name = te_jmap_i value = 0 }
+	set_global_variable = { name = te_jmap_prev value = 1000000000 }
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_loyal_input < 0 }
+		order_by = te_jmap_loyal_input
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_loyal_input < te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_loyal_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_loyal_input < 0 has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share_low }
+	}
+	# Above it, the nearest first: 0.5 up to 1.
+	set_global_variable = { name = te_jmap_i value = 0 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_loyal_input > 0 }
+		order_by = te_jmap_loyal_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_loyal_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_loyal_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_loyal_input > 0 has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share_up }
+	}
+	# At the midpoint itself: its color.
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_loyal_input = 0 }
+		set_variable = { name = te_jmap_rank value = 0.5 }
+	}
+}
+
+# Aristocrats, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+te_jmap_rank_class_aristocrats = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_aristocrats var:te_dg_cls_aristocrats > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_aristocrats_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_aristocrats_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_aristocrats_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_aristocrats var:te_dg_cls_aristocrats > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Aristocrats, their share of the state's people (the yearly walk's).
+te_jmap_rank_class_aristocrats_share = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_aristocrats has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_aristocrats_share_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_aristocrats_share_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_aristocrats_share_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_aristocrats has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Capitalists, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+te_jmap_rank_class_capitalists = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_capitalists var:te_dg_cls_capitalists > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_capitalists_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_capitalists_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_capitalists_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_capitalists var:te_dg_cls_capitalists > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Capitalists, their share of the state's people (the yearly walk's): half the color by a fifth of the world's range.
+te_jmap_rank_class_capitalists_share = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_capitalists has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_capitalists_share_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_capitalists_share_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_capitalists_share_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_capitalists has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Shopkeepers, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+te_jmap_rank_class_shopkeepers = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_shopkeepers var:te_dg_cls_shopkeepers > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_shopkeepers_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_shopkeepers_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_shopkeepers_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_shopkeepers var:te_dg_cls_shopkeepers > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Shopkeepers, their share of the state's people (the yearly walk's).
+te_jmap_rank_class_shopkeepers_share = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_shopkeepers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_shopkeepers_share_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_shopkeepers_share_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_shopkeepers_share_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_shopkeepers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Academics, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+te_jmap_rank_class_academics = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_academics var:te_dg_cls_academics > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_academics_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_academics_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_academics_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_academics var:te_dg_cls_academics > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Academics, their share of the state's people (the yearly walk's): half the color by a fifth of the world's range.
+te_jmap_rank_class_academics_share = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_academics has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_academics_share_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_academics_share_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_academics_share_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_academics has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Clergymen, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+te_jmap_rank_class_clergymen = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_clergymen var:te_dg_cls_clergymen > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_clergymen_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_clergymen_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_clergymen_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_clergymen var:te_dg_cls_clergymen > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Clergymen, their share of the state's people (the yearly walk's).
+te_jmap_rank_class_clergymen_share = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_clergymen has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_clergymen_share_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_clergymen_share_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_clergymen_share_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_clergymen has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Bureaucrats, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+te_jmap_rank_class_bureaucrats = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_bureaucrats var:te_dg_cls_bureaucrats > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_bureaucrats_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_bureaucrats_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_bureaucrats_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_bureaucrats var:te_dg_cls_bureaucrats > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Bureaucrats, their share of the state's people (the yearly walk's).
+te_jmap_rank_class_bureaucrats_share = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_bureaucrats has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_bureaucrats_share_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_bureaucrats_share_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_bureaucrats_share_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_bureaucrats has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Engineers, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+te_jmap_rank_class_engineers = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_engineers var:te_dg_cls_engineers > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_engineers_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_engineers_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_engineers_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_engineers var:te_dg_cls_engineers > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Engineers, their share of the state's people (the yearly walk's): half the color by a fifth of the world's range.
+te_jmap_rank_class_engineers_share = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_engineers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_engineers_share_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_engineers_share_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_engineers_share_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_engineers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Machinists, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+te_jmap_rank_class_machinists = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_machinists var:te_dg_cls_machinists > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_machinists_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_machinists_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_machinists_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_machinists var:te_dg_cls_machinists > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Machinists, their share of the state's people (the yearly walk's): half the color by a fifth of the world's range.
+te_jmap_rank_class_machinists_share = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_machinists has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_machinists_share_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_machinists_share_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_machinists_share_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_machinists has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Laborers, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+te_jmap_rank_class_laborers = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_laborers var:te_dg_cls_laborers > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_laborers_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_laborers_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_laborers_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_laborers var:te_dg_cls_laborers > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Laborers, their share of the state's people (the yearly walk's).
+te_jmap_rank_class_laborers_share = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_laborers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_laborers_share_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_laborers_share_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_laborers_share_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_laborers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Farmers, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+te_jmap_rank_class_farmers = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_farmers var:te_dg_cls_farmers > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_farmers_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_farmers_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_farmers_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_farmers var:te_dg_cls_farmers > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Farmers, their share of the state's people (the yearly walk's).
+te_jmap_rank_class_farmers_share = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_farmers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_farmers_share_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_farmers_share_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_farmers_share_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_farmers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Peasants, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+te_jmap_rank_class_peasants = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_peasants var:te_dg_cls_peasants > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_peasants_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_peasants_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_peasants_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_peasants var:te_dg_cls_peasants > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Peasants, their share of the state's people (the yearly walk's).
+te_jmap_rank_class_peasants_share = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_peasants has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_peasants_share_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_peasants_share_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_peasants_share_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_peasants has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Slaves, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+te_jmap_rank_class_slaves = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_slaves var:te_dg_cls_slaves > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_slaves_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_slaves_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_slaves_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_slaves var:te_dg_cls_slaves > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Slaves, their share of the state's people (the yearly walk's).
+te_jmap_rank_class_slaves_share = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_slaves has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_slaves_share_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_slaves_share_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_slaves_share_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_slaves has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Clerks, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+te_jmap_rank_class_clerks = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_clerks var:te_dg_cls_clerks > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_clerks_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_clerks_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_clerks_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_clerks var:te_dg_cls_clerks > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Clerks, their share of the state's people (the yearly walk's).
+te_jmap_rank_class_clerks_share = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_clerks has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_clerks_share_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_clerks_share_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_clerks_share_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_clerks has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Officers, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+te_jmap_rank_class_officers = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_officers var:te_dg_cls_officers > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_officers_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_officers_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_officers_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_officers var:te_dg_cls_officers > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Officers, their share of the state's people (the yearly walk's).
+te_jmap_rank_class_officers_share = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_officers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_officers_share_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_officers_share_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_officers_share_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_officers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Soldiers, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
+te_jmap_rank_class_soldiers = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_soldiers var:te_dg_cls_soldiers > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_soldiers_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_soldiers_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_soldiers_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_soldiers var:te_dg_cls_soldiers > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Soldiers, their share of the state's people (the yearly walk's).
+te_jmap_rank_class_soldiers_share = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_cls_soldiers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_class_soldiers_share_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_class_soldiers_share_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_class_soldiers_share_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_cls_soldiers has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
 # The pick's places, if it is fitted to the world.
 te_jmap_refresh_rank = {
 	if = {
 		limit = { te_jmap_selector = 1 }
 		te_jmap_rank_turmoil = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 2 }
+		te_jmap_rank_literacy = yes
 	}
 	else_if = {
 		limit = { te_jmap_selector = 3 }
@@ -3214,19 +5802,19 @@ te_jmap_refresh_rank = {
 	}
 	else_if = {
 		limit = { te_jmap_selector = 41 }
-		te_jmap_rank_capitalists = yes
+		te_jmap_rank_class_capitalists_share = yes
 	}
 	else_if = {
 		limit = { te_jmap_selector = 42 }
-		te_jmap_rank_aristocrats = yes
+		te_jmap_rank_class_aristocrats_share = yes
 	}
 	else_if = {
 		limit = { te_jmap_selector = 43 }
-		te_jmap_rank_clergy = yes
+		te_jmap_rank_class_clergymen_share = yes
 	}
 	else_if = {
 		limit = { te_jmap_selector = 44 }
-		te_jmap_rank_academics = yes
+		te_jmap_rank_class_academics_share = yes
 	}
 	else_if = {
 		limit = { te_jmap_selector = 45 }
@@ -3239,6 +5827,146 @@ te_jmap_refresh_rank = {
 	else_if = {
 		limit = { te_jmap_selector = 47 }
 		te_jmap_rank_density = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 48 }
+		te_jmap_rank_class_aristocrats = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 49 }
+		te_jmap_rank_class_capitalists = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 50 }
+		te_jmap_rank_class_shopkeepers = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 51 }
+		te_jmap_rank_class_academics = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 52 }
+		te_jmap_rank_class_clergymen = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 53 }
+		te_jmap_rank_class_bureaucrats = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 54 }
+		te_jmap_rank_class_engineers = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 55 }
+		te_jmap_rank_class_machinists = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 56 }
+		te_jmap_rank_class_laborers = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 57 }
+		te_jmap_rank_class_farmers = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 58 }
+		te_jmap_rank_class_peasants = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 59 }
+		te_jmap_rank_class_slaves = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 60 }
+		te_jmap_rank_class_clerks = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 61 }
+		te_jmap_rank_class_officers = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 62 }
+		te_jmap_rank_class_soldiers = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 63 }
+		te_jmap_rank_class_shopkeepers_share = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 64 }
+		te_jmap_rank_class_bureaucrats_share = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 65 }
+		te_jmap_rank_class_engineers_share = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 66 }
+		te_jmap_rank_class_machinists_share = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 67 }
+		te_jmap_rank_class_laborers_share = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 68 }
+		te_jmap_rank_class_farmers_share = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 69 }
+		te_jmap_rank_class_peasants_share = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 70 }
+		te_jmap_rank_class_slaves_share = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 71 }
+		te_jmap_rank_class_clerks_share = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 72 }
+		te_jmap_rank_class_officers_share = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 73 }
+		te_jmap_rank_class_soldiers_share = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 74 }
+		te_jmap_rank_sol = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 75 }
+		te_jmap_rank_wealth = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 76 }
+		te_jmap_rank_sol_wealth = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 77 }
+		te_jmap_rank_sol_expected = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 78 }
+		te_jmap_rank_unemp = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 79 }
+		te_jmap_rank_people = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 80 }
+		te_jmap_rank_gdp = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 81 }
+		te_jmap_rank_infra = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 82 }
+		te_jmap_rank_loyal = yes
 	}
 }
 

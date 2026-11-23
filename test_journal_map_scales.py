@@ -287,7 +287,9 @@ class ScalesTest(unittest.TestCase):
                         self.assertAlmostEqual(self.factor(scale, (L + H) / 2, globs=globs, fixed=True), 0.5,
                                                delta=1e-3)
         mids = {s["name"] for s in FITTED if s["world"]["kind"] == "mid"}
-        self.assertEqual(mids, {"wc", "tfr", "natural", "sex", "mig", "comfort_base", "comfort", "growth"})
+        # and the first tier's four (#1976)
+        self.assertEqual(mids, {"wc", "tfr", "natural", "sex", "mig", "comfort_base", "comfort", "growth",
+                                "sol_wealth", "sol_expected", "infra", "loyal"})
 
     def test_a_figure_is_read_only_once_it_exists(self):
         # issue #1418: a has_variable in the same AND doesn't stop the read, so the read sits inside the guard's if
@@ -316,8 +318,10 @@ class ScalesTest(unittest.TestCase):
 
     def test_a_doubling_scale_gives_each_doubling_the_same_color(self):
         doubled = [s for s in FITTED if s["world"]["kind"] == "doubling"]
+        # and every class's people (#1975: gen.class_rows, from journal_map_classes.py)
         self.assertEqual([s["name"] for s in doubled], ["gdppc", "soldiers", "hq", "war_dead", "trade", "invest",
-                                                         "density"])
+                                                         "density", "people", "gdp"]
+                         + [f"class_{c['pop']}" for c in gen.classes.CLASSES])
         for scale in doubled:
             floor = scale["world"]["floor"]
             for lo, hi in ((floor * 50, floor * 6400), (floor * 200, floor * 4000)):
@@ -407,14 +411,16 @@ class RangesTest(unittest.TestCase):
 
     def test_each_range_measures_the_states_the_map_paints(self):
         # the range's states are the map's: the Map Room's branch conditions for the selector, without the selector and
-        # the three-color split. Emissions paints through shared triggers (te_jmap_gw_no_data, te_jmap_gw_removal:
-        # a removal is green, apart from the scale), and GDP per capita leaves out a state with none (a doubling has
-        # no zero). Armed Forces, Company Headquarters and War Dead paint a zero (or a loss) apart from the scale too,
-        # in branches of their own, so their lerp's conditions are still their range's.
+        # the three-color split, are the row's paint (its where unless it says otherwise). Emissions paints through
+        # shared triggers (te_jmap_gw_no_data, te_jmap_gw_removal: a removal is green, apart from the scale). GDP per
+        # capita paints every state but leaves out of its range a state with none (a doubling has no zero), and the
+        # first tier's live maps (#1976) every state but leave out one with no people. Armed Forces, Company
+        # Headquarters and War Dead paint a zero (or a loss) apart from the scale too, in branches of their own, so
+        # their lerp's conditions are still their range's.
         room = _read(ROOM_FILE)
         mc = room[room.index("map_color = {"):room.index("map_color_second = {")]
         for scale in ROOM:
-            if scale.get("range_of") or scale["name"] in ("gw_room", "gdppc"):
+            if scale.get("range_of") or scale["name"] == "gw_room":
                 continue
             pattern = (r"limit = \{\s*te_jmap_selector = " + str(scale["sel"]) + r"\b([^{}]*)\}\s*lerp = \{[^{}]*factor ="
                        r" te_jmap_" + scale["name"] + r"_factor")
@@ -422,7 +428,7 @@ class RangesTest(unittest.TestCase):
             with self.subTest(map=scale["name"]):
                 self.assertIsNotNone(m, "no lerp branch")
                 cond = re.sub(r"te_jmap_\w+_factor < 0\.5", "", m.group(1))
-                self.assertEqual(" ".join(cond.split()), " ".join(scale["where"]))
+                self.assertEqual(" ".join(cond.split()), " ".join(gen.painted(scale)))
 
     def test_the_map_room_s_ranges_keep_to_its_area_and_the_entries_to_the_world(self):
         # the Area option: every range the Map Room reads counts and orders only the states in its area; a range a
@@ -562,11 +568,13 @@ class OptionsTest(unittest.TestCase):
 
     def test_the_pick_is_fitted_only_on_a_map_with_a_range(self):
         fitted = {s["sel"] for s in ROOM}
-        self.assertEqual(len(fitted), 36)
-        for sel in range(0, 60):
+        # 36 until the class maps (#1975): every pop type's people and share, 30 maps where four shares were; and the
+        # first tier's ten (#1976)
+        self.assertEqual(len(fitted), 36 - 4 + 2 * len(gen.classes.CLASSES) + 10)
+        for sel in range(0, 100):
             self.assertEqual(self.value("te_jmap_pick_fitted", sel=sel), 1 if sel in fitted else 0, sel)
         # the categorical maps and the fixed scales: nothing to trim
-        for sel in (0, 2, 11, 19, 20, 21, 22, 23, 25, 31, 32, 36):
+        for sel in (0, 11, 19, 20, 21, 22, 23, 25, 31, 32, 36):
             self.assertNotIn(sel, fitted)
 
     def test_the_page_reads_what_the_pick_was_measured_over(self):
@@ -911,11 +919,13 @@ class ScaleTest(unittest.TestCase):
                                          self.factor(scale, x, globs=globs, fixed=True))
 
     def test_logarithmic_keeps_the_midpoint_and_is_straight_within_min_half(self):
-        # the eight maps that run both ways from a midpoint (owner, 2026-11-14: "What about symlog?"): logarithmic
+        # the maps that run both ways from a midpoint (eight on 2026-11-14, the owner: "What about symlog?"; twelve
+        # since the first tier, #1976): logarithmic
         # on each side by the distance from the midpoint, straight within min_half of it, and the midpoint at
         # exactly 0.5, which map_color's split and the neutral color rest on
         self.assertEqual(sorted(s["name"] for s in MIDS),
-                         ["comfort", "comfort_base", "growth", "mig", "natural", "sex", "tfr", "wc"])
+                         ["comfort", "comfort_base", "growth", "infra", "loyal", "mig", "natural", "sex", "sol_expected",
+                          "sol_wealth", "tfr", "wc"])
         for scale in MIDS:
             w = scale["world"]
             mid, h = w["mid"], w["min_half"]
@@ -1009,7 +1019,8 @@ class ScaleTest(unittest.TestCase):
                                         round(math.log2((hi - w["mid"]) / w["min_half"]), 1))
         self.assertEqual(doublings, {"wc": (2.3, 2.3), "tfr": (1.1, 3.1), "natural": (3.0, 3.2), "sex": (2.0, 2.6),
                                      "mig": (3.6, 3.6), "comfort_base": (1.8, 4.7), "comfort": (1.8, 4.7),
-                                     "growth": (4.0, 4.3)})
+                                     "growth": (4.0, 4.3), "sol_wealth": (2.3, 2.3), "sol_expected": (2.3, 2.3),
+                                     "infra": (2.6, 3.6), "loyal": (3.3, 3.3)})
         self.assertGreaterEqual(min(min(pair) for pair in doublings.values()), 1)
 
 

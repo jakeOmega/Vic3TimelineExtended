@@ -177,16 +177,8 @@ colors = {
 	te_jmap_own_self_pale = hsv360 { 138 20 92 }
 	te_jmap_own_ctry = hsv360 { 355 72 66 }
 	te_jmap_own_ctry_pale = hsv360 { 355 18 95 }
-	# je_te_map_room: the classes (2026-11-11), each one's share of the people, few to many: Capitalists gold, Aristocrats
-	# violet, Clergymen slate blue, Academics teal.
-	te_jmap_capitalists_low = hsv360 { 48 12 94 }
-	te_jmap_capitalists_high = hsv360 { 38 92 62 }
-	te_jmap_aristocrats_low = hsv360 { 290 10 94 }
-	te_jmap_aristocrats_high = hsv360 { 278 72 46 }
-	te_jmap_clergy_low = hsv360 { 220 10 94 }
-	te_jmap_clergy_high = hsv360 { 226 64 40 }
-	te_jmap_academics_low = hsv360 { 172 12 94 }
-	te_jmap_academics_high = hsv360 { 182 82 42 }
+	# je_te_map_room: the class maps (#1975) are generated with the rest of their family, each class in its pop type's
+	# own hue (te_journal_map_classes_generated.txt, from journal_map_classes.py).
 	# je_te_map_room: Trade Capacity, the state's own, a doubling at a time (pale sand to deep sea green); a state with
 	# none is te_jmap_none.
 	te_jmap_trade_low = hsv360 { 52 16 92 }
@@ -216,6 +208,38 @@ colors = {
 	# je_te_map_room, Demographics: Fighting-Age Men, men aged 20 to 39 over the people (pale straw to slate blue).
 	te_jmap_fam_low = hsv360 { 58 20 93 }
 	te_jmap_fam_high = hsv360 { 218 62 44 }
+	# je_te_map_room: the first tier of the owner's new maps (2026-11-23, #1976). Standard of Living (cream to deep
+	# green), Wealth (cream to deep amber), Literacy (cream to indigo), Unemployment (pale blue to crimson), Population
+	# (pale lavender to deep violet, a doubling at a time) and GDP (pale mint to deep teal, likewise); a state with no
+	# people, or no GDP, is te_jmap_none.
+	te_jmap_sol_low = hsv360 { 60 10 95 }
+	te_jmap_sol_high = hsv360 { 150 75 38 }
+	te_jmap_wealth_low = hsv360 { 50 10 95 }
+	te_jmap_wealth_high = hsv360 { 36 92 56 }
+	te_jmap_literacy_low = hsv360 { 45 12 95 }
+	te_jmap_literacy_high = hsv360 { 235 65 45 }
+	te_jmap_unemp_low = hsv360 { 205 8 95 }
+	te_jmap_unemp_high = hsv360 { 350 78 52 }
+	te_jmap_people_low = hsv360 { 265 8 95 }
+	te_jmap_people_high = hsv360 { 272 70 40 }
+	te_jmap_gdp_low = hsv360 { 150 10 94 }
+	te_jmap_gdp_high = hsv360 { 175 85 36 }
+	# The first tier's four that run both ways from none, each a midpoint of cream as the others: SoL vs Wealth (rust
+	# where the place takes from living standards, blue where it adds), SoL vs Expected (red below what people expect,
+	# green above), Infrastructure (orange short of what is used, blue to spare), Radicals vs Loyalists (red where
+	# radicals outnumber loyalists, blue where loyalists do).
+	te_jmap_sol_wealth_low = hsv360 { 18 75 66 }
+	te_jmap_sol_wealth_mid = hsv360 { 50 6 92 }
+	te_jmap_sol_wealth_high = hsv360 { 208 70 52 }
+	te_jmap_sol_expected_low = hsv360 { 358 72 62 }
+	te_jmap_sol_expected_mid = hsv360 { 50 6 92 }
+	te_jmap_sol_expected_high = hsv360 { 135 62 44 }
+	te_jmap_infra_low = hsv360 { 28 85 80 }
+	te_jmap_infra_mid = hsv360 { 50 6 92 }
+	te_jmap_infra_high = hsv360 { 198 75 50 }
+	te_jmap_loyal_low = hsv360 { 356 78 60 }
+	te_jmap_loyal_mid = hsv360 { 50 6 92 }
+	te_jmap_loyal_high = hsv360 { 220 70 52 }
 
 	# je_banking_cycle: the seven phases of the financial cycle, panic to frenzy, and the crash-risk stripes.
 	te_jmap_bank_panic = hsv360 { 355 80 52 }

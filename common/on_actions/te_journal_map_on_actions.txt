@@ -18,6 +18,8 @@ te_jmap_monthly_ranges = {
 		te_jmap_store_hqs = yes
 		# The Investment map's, while it is the pick, and its once-a-game check.
 		te_jmap_monthly_invest = yes
+		# The Unemployment map's, while it is the pick (#1976).
+		te_jmap_monthly_unemp = yes
 		# The Map Room's area, before the range that leaves out the states outside it: a state that changed hands,
 		# market or power bloc this month joins or leaves the area here. Nothing is walked under the world.
 		te_jmap_mark_area = yes
