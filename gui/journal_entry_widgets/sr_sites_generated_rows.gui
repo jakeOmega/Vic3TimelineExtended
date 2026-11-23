@@ -7830,6 +7830,12 @@ types sr_sites_generated_rows_types
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_shackleton'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_shackleton'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_shackleton'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)35' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)35' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)35' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)35' ) ).End ) ) )]"
+			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)35' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_abandon_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)35' ) ).End )]"
@@ -8407,6 +8413,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_peary'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_peary'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_peary'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)36' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)36' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)36' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)36' ) ).End ) ) )]"
 			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)36' ) ).End )]"
@@ -8986,6 +8998,12 @@ types sr_sites_generated_rows_types
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_tranquility'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_tranquility'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_tranquility'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)37' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)37' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)37' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)37' ) ).End ) ) )]"
+			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)37' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_abandon_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)37' ) ).End )]"
@@ -9563,6 +9581,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_marius_hills'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_marius_hills'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_marius_hills'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)38' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)38' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)38' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)38' ) ).End ) ) )]"
 			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)38' ) ).End )]"
@@ -10142,6 +10166,12 @@ types sr_sites_generated_rows_types
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_daedalus'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_daedalus'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_daedalus'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)39' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)39' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)39' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)39' ) ).End ) ) )]"
+			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)39' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_abandon_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)39' ) ).End )]"
@@ -10719,6 +10749,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_imbrium'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_imbrium'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_imbrium'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)40' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)40' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)40' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)40' ) ).End ) ) )]"
 			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)40' ) ).End )]"
@@ -11348,6 +11384,12 @@ types sr_sites_generated_rows_types
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_venus'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_venus'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_venus'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).End ) ) )]"
+			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_abandon_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).End )]"
@@ -11933,6 +11975,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_mercury'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_mercury'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_mercury'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)18' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)18' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)18' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)18' ) ).End ) ) )]"
 			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)18' ) ).End )]"
@@ -12562,6 +12610,12 @@ types sr_sites_generated_rows_types
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_valles_marineris'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_valles_marineris'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_valles_marineris'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_abandon_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
@@ -13189,6 +13243,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_olympus_mons'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_olympus_mons'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_olympus_mons'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
 			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
@@ -13818,6 +13878,12 @@ types sr_sites_generated_rows_types
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_hellas_planitia'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_hellas_planitia'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_hellas_planitia'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
+			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_abandon_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
@@ -14445,6 +14511,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_utopia_planitia'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_utopia_planitia'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_utopia_planitia'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
 			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
@@ -15074,6 +15146,12 @@ types sr_sites_generated_rows_types
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_arcadia_planitia'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_arcadia_planitia'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_arcadia_planitia'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
+			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_abandon_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
@@ -15659,6 +15737,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_ceres'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_ceres'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_ceres'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
 			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
@@ -16246,6 +16330,12 @@ types sr_sites_generated_rows_types
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_vesta'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_vesta'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_vesta'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
+			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_abandon_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
@@ -16831,6 +16921,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_psyche'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_psyche'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_psyche'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
 			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
@@ -17418,6 +17514,12 @@ types sr_sites_generated_rows_types
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_pallas'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_pallas'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_pallas'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
+			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_abandon_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
@@ -18003,6 +18105,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_hygiea'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_hygiea'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_hygiea'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)10' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)10' ) ).End ) ) )]"
 			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
@@ -18590,6 +18698,12 @@ types sr_sites_generated_rows_types
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_io'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_io'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_io'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)11' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)11' ) ).End ) ) )]"
+			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_abandon_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
@@ -19175,6 +19289,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_europa'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_europa'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_europa'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)12' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)12' ) ).End ) ) )]"
 			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
@@ -19804,6 +19924,12 @@ types sr_sites_generated_rows_types
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_ganymede'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_ganymede'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_ganymede'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).End ) ) )]"
+			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_abandon_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
@@ -20432,6 +20558,12 @@ types sr_sites_generated_rows_types
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_callisto'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_callisto'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_callisto'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).End ) ) )]"
+			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_abandon_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
@@ -21018,6 +21150,12 @@ types sr_sites_generated_rows_types
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_himalia'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_himalia'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_himalia'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)15' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)15' ) ).End ) ) )]"
+			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_abandon_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
@@ -21603,6 +21741,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_amalthea'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_amalthea'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_amalthea'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)16' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)16' ) ).End ) ) )]"
 			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
@@ -22232,6 +22376,12 @@ types sr_sites_generated_rows_types
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_titan'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_titan'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_titan'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).End ) ) )]"
+			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_abandon_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).End )]"
@@ -22817,6 +22967,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_enceladus'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_enceladus'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_enceladus'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)20' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)20' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)20' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)20' ) ).End ) ) )]"
 			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)20' ) ).End )]"
@@ -23404,6 +23560,12 @@ types sr_sites_generated_rows_types
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_rhea'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_rhea'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_rhea'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)21' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)21' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)21' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)21' ) ).End ) ) )]"
+			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)21' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_abandon_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)21' ) ).End )]"
@@ -23989,6 +24151,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_mimas'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_mimas'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_mimas'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)22' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)22' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)22' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)22' ) ).End ) ) )]"
 			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)22' ) ).End )]"
@@ -24576,6 +24744,12 @@ types sr_sites_generated_rows_types
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_iapetus'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_iapetus'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_iapetus'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)23' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)23' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)23' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)23' ) ).End ) ) )]"
+			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)23' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_abandon_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)23' ) ).End )]"
@@ -25161,6 +25335,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_titania'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_titania'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_titania'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)24' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)24' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)24' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)24' ) ).End ) ) )]"
 			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)24' ) ).End )]"
@@ -25748,6 +25928,12 @@ types sr_sites_generated_rows_types
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_oberon'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_oberon'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_oberon'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)25' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)25' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)25' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)25' ) ).End ) ) )]"
+			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)25' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_abandon_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)25' ) ).End )]"
@@ -26333,6 +26519,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_miranda'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_miranda'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_miranda'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)26' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)26' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)26' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)26' ) ).End ) ) )]"
 			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)26' ) ).End )]"
@@ -26920,6 +27112,12 @@ types sr_sites_generated_rows_types
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_ariel'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_ariel'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_ariel'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)27' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)27' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)27' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)27' ) ).End ) ) )]"
+			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)27' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_abandon_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)27' ) ).End )]"
@@ -27505,6 +27703,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_triton'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_triton'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_triton'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)28' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)28' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)28' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)28' ) ).End ) ) )]"
 			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)28' ) ).End )]"
@@ -28092,6 +28296,12 @@ types sr_sites_generated_rows_types
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_proteus'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_proteus'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_proteus'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)29' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)29' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)29' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)29' ) ).End ) ) )]"
+			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)29' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_abandon_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)29' ) ).End )]"
@@ -28677,6 +28887,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_pluto'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_pluto'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_pluto'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)30' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)30' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)30' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)30' ) ).End ) ) )]"
 			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)30' ) ).End )]"
@@ -29264,6 +29480,12 @@ types sr_sites_generated_rows_types
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_eris'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_eris'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_eris'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)31' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)31' ) ).End ) ) )]"
+			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_abandon_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
@@ -29849,6 +30071,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_makemake'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_makemake'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_makemake'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)32' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)32' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)32' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)32' ) ).End ) ) )]"
 			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)32' ) ).End )]"
@@ -30436,6 +30664,12 @@ types sr_sites_generated_rows_types
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_haumea'), '(CFixedPoint)3' )]"
 			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_haumea'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_haumea'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)33' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)33' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)33' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)33' ) ).End ) ) )]"
+			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)33' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_abandon_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)33' ) ).End )]"
@@ -31021,6 +31255,12 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "aut_both_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_sedna'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "aut_revoke_button" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_sedna'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_sedna'), '(CFixedPoint)3' ) )]"
+				enabled = "[GetScriptedGui('sr_colony_revoke_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)34' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_colony_revoke_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)34' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_colony_revoke_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)34' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_revoke_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)34' ) ).End ) ) )]"
 			}
 			blockoverride "aut_abandon_button" {
 				enabled = "[GetScriptedGui('sr_colony_abandon_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)34' ) ).End )]"

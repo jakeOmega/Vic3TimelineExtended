@@ -5508,3 +5508,49 @@ space_race_events.111 = {
 		if = { limit = { has_variable = sr_earth_alert_arrive } remove_variable = sr_earth_alert_arrive }
 	}
 }
+
+# Revoke the Charter of <World>?: the Revoke button on a chartered colony's page
+# (sr_colony_revoke_sgui; owner, 2026-11-23). Players only: the AI never revokes.
+space_race_events.113 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/budget_hearing_congress.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.113.t
+	desc = space_race_events.113.d
+	flavor = space_race_events.113.f
+
+	duration = 3
+
+	trigger = { has_variable = sr_revoke_site }
+
+	# Revoke it: the specializations at their full share, the colony at 99
+	# autonomy and every other settled colony +10 (sr_site_revoke_at).
+	option = {
+		name = space_race_events.113.a
+		custom_tooltip = {
+			text = sr_revoke_tt
+			sr_site_idx_from = { VAR = sr_revoke_site }
+			sr_site_by_index = { DO = revoke }
+		}
+		if = {
+			limit = { sr_site_var_people = { VAR = sr_revoke_site MIN = sr_free_colony_minimum } }
+			custom_tooltip = sr_revoke_autonomy_tt
+		}
+		custom_tooltip = sr_revoke_spike_tt
+	}
+
+	option = {
+		name = space_race_events.113.b
+		default_option = yes
+		# REVIEWED 2026-11-23 (no_effect_option): keeping the charter is the choice; the tooltip says so
+		custom_tooltip = sr_revoke_keep_tt
+	}
+
+	after = {
+		sr_site_clear_event_var = { VAR = sr_revoke_site }
+	}
+}

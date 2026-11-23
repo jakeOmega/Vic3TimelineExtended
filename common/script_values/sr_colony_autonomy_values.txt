@@ -52,6 +52,15 @@ sr_aut_charter_cut = { value = -30 }
 sr_aut_garrison_cut = { value = -25 }
 sr_aut_charter_share = { value = 0.8 }
 
+# Revoking a charter (the colony's page, space_race_events.113; owner,
+# 2026-11-23): every colony the holder holds gains sr_aut_revoke_spike, and the
+# colony itself goes to sr_aut_revoke_level, a point short of breaking away.
+# Both are gains, so a colony under sr_free_colony_minimum people takes neither
+# (sr_site_aut_add_at). The world's five-year demand cooldown starts again, so
+# it cannot at once be offered the charter it just lost.
+sr_aut_revoke_spike = { value = 10 }
+sr_aut_revoke_level = { value = 99 }
+
 # A free colony that rejoins starts here.
 sr_aut_rejoin_level = { value = 20 }
 

@@ -612,6 +612,51 @@ sr_colony_abandon_sgui = {
 	}
 }
 
+# Colony Autonomy (owner, 2026-11-23): revoke one of our colonies' charters, from
+# its page, after the question (space_race_events.113), which names it through
+# sr_revoke_site. Not while occupied: whoever holds the colony's domes decides
+# who governs it. The AI never revokes a charter.
+sr_colony_revoke_sgui = {
+	scope = country
+	saved_scopes = { site }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_contested_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = sr_cf_req_held_tt
+			sr_cf_scope_site_held = yes
+		}
+		custom_tooltip = {
+			text = sr_revoke_req_chartered_tt
+			sr_aut_scope_site_chartered = yes
+		}
+		custom_tooltip = {
+			text = sr_md_req_not_occupied_tt
+			sr_md_scope_not_occupied = yes
+		}
+		custom_tooltip = {
+			text = sr_revoke_req_none_pending_tt
+			NOT = { has_variable = sr_revoke_site }
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = sr_revoke_ask_tt
+			sr_site_revoke_ask_from_scope = yes
+			trigger_event = { id = space_race_events.113 }
+		}
+	}
+}
+
 # Free Colonies (slice 5 design § 3): start or stop supplying a free colony. The
 # entry's modifiers follow within days (Free Colony Supply and Trade, declared
 # from the supply records: je_space_race.txt).

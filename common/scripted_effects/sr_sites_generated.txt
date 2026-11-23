@@ -45254,8 +45254,13 @@ sr_site_free_step_valles_marineris = {
 }
 # THIS holds Valles Marineris: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_valles_marineris = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_valles_marineris } } set_global_variable = { name = sr_site_contact_valles_marineris value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_valles_marineris }
 	set_global_variable = {
 		name = sr_site_autonomy_valles_marineris
 		value = {
@@ -45271,8 +45276,9 @@ sr_site_aut_step_valles_marineris = {
 		set_global_variable = { name = sr_site_self_valles_marineris value = { value = sr_site_self_value_valles_marineris add = sr_site_self_rate_valles_marineris max = sr_module_points } }
 		if = { limit = { sr_site_self_value_valles_marineris >= sr_module_points } sr_site_self_build_valles_marineris = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_valles_marineris } }
 	if = {
-		limit = { sr_site_autonomy_value_valles_marineris >= sr_aut_break_level sr_site_peopled_valles_marineris = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_valles_marineris = yes }
 		sr_aut_break_away = { KEY = valles_marineris INDEX = 1 }
 	}
 	else_if = {
@@ -45414,8 +45420,13 @@ sr_site_free_step_olympus_mons = {
 }
 # THIS holds Olympus Mons: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_olympus_mons = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_olympus_mons } } set_global_variable = { name = sr_site_contact_olympus_mons value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_olympus_mons }
 	set_global_variable = {
 		name = sr_site_autonomy_olympus_mons
 		value = {
@@ -45431,8 +45442,9 @@ sr_site_aut_step_olympus_mons = {
 		set_global_variable = { name = sr_site_self_olympus_mons value = { value = sr_site_self_value_olympus_mons add = sr_site_self_rate_olympus_mons max = sr_module_points } }
 		if = { limit = { sr_site_self_value_olympus_mons >= sr_module_points } sr_site_self_build_olympus_mons = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_olympus_mons } }
 	if = {
-		limit = { sr_site_autonomy_value_olympus_mons >= sr_aut_break_level sr_site_peopled_olympus_mons = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_olympus_mons = yes }
 		sr_aut_break_away = { KEY = olympus_mons INDEX = 2 }
 	}
 	else_if = {
@@ -45574,8 +45586,13 @@ sr_site_free_step_hellas_planitia = {
 }
 # THIS holds Hellas Planitia: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_hellas_planitia = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_hellas_planitia } } set_global_variable = { name = sr_site_contact_hellas_planitia value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_hellas_planitia }
 	set_global_variable = {
 		name = sr_site_autonomy_hellas_planitia
 		value = {
@@ -45591,8 +45608,9 @@ sr_site_aut_step_hellas_planitia = {
 		set_global_variable = { name = sr_site_self_hellas_planitia value = { value = sr_site_self_value_hellas_planitia add = sr_site_self_rate_hellas_planitia max = sr_module_points } }
 		if = { limit = { sr_site_self_value_hellas_planitia >= sr_module_points } sr_site_self_build_hellas_planitia = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_hellas_planitia } }
 	if = {
-		limit = { sr_site_autonomy_value_hellas_planitia >= sr_aut_break_level sr_site_peopled_hellas_planitia = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_hellas_planitia = yes }
 		sr_aut_break_away = { KEY = hellas_planitia INDEX = 3 }
 	}
 	else_if = {
@@ -45734,8 +45752,13 @@ sr_site_free_step_utopia_planitia = {
 }
 # THIS holds Utopia Planitia: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_utopia_planitia = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_utopia_planitia } } set_global_variable = { name = sr_site_contact_utopia_planitia value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_utopia_planitia }
 	set_global_variable = {
 		name = sr_site_autonomy_utopia_planitia
 		value = {
@@ -45751,8 +45774,9 @@ sr_site_aut_step_utopia_planitia = {
 		set_global_variable = { name = sr_site_self_utopia_planitia value = { value = sr_site_self_value_utopia_planitia add = sr_site_self_rate_utopia_planitia max = sr_module_points } }
 		if = { limit = { sr_site_self_value_utopia_planitia >= sr_module_points } sr_site_self_build_utopia_planitia = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_utopia_planitia } }
 	if = {
-		limit = { sr_site_autonomy_value_utopia_planitia >= sr_aut_break_level sr_site_peopled_utopia_planitia = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_utopia_planitia = yes }
 		sr_aut_break_away = { KEY = utopia_planitia INDEX = 4 }
 	}
 	else_if = {
@@ -45894,8 +45918,13 @@ sr_site_free_step_arcadia_planitia = {
 }
 # THIS holds Arcadia Planitia: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_arcadia_planitia = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_arcadia_planitia } } set_global_variable = { name = sr_site_contact_arcadia_planitia value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_arcadia_planitia }
 	set_global_variable = {
 		name = sr_site_autonomy_arcadia_planitia
 		value = {
@@ -45911,8 +45940,9 @@ sr_site_aut_step_arcadia_planitia = {
 		set_global_variable = { name = sr_site_self_arcadia_planitia value = { value = sr_site_self_value_arcadia_planitia add = sr_site_self_rate_arcadia_planitia max = sr_module_points } }
 		if = { limit = { sr_site_self_value_arcadia_planitia >= sr_module_points } sr_site_self_build_arcadia_planitia = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_arcadia_planitia } }
 	if = {
-		limit = { sr_site_autonomy_value_arcadia_planitia >= sr_aut_break_level sr_site_peopled_arcadia_planitia = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_arcadia_planitia = yes }
 		sr_aut_break_away = { KEY = arcadia_planitia INDEX = 5 }
 	}
 	else_if = {
@@ -46054,8 +46084,13 @@ sr_site_free_step_ceres = {
 }
 # THIS holds Ceres: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_ceres = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_ceres } } set_global_variable = { name = sr_site_contact_ceres value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_ceres }
 	set_global_variable = {
 		name = sr_site_autonomy_ceres
 		value = {
@@ -46071,8 +46106,9 @@ sr_site_aut_step_ceres = {
 		set_global_variable = { name = sr_site_self_ceres value = { value = sr_site_self_value_ceres add = sr_site_self_rate_ceres max = sr_module_points } }
 		if = { limit = { sr_site_self_value_ceres >= sr_module_points } sr_site_self_build_ceres = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_ceres } }
 	if = {
-		limit = { sr_site_autonomy_value_ceres >= sr_aut_break_level sr_site_peopled_ceres = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_ceres = yes }
 		sr_aut_break_away = { KEY = ceres INDEX = 6 }
 	}
 	else_if = {
@@ -46214,8 +46250,13 @@ sr_site_free_step_vesta = {
 }
 # THIS holds 4 Vesta: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_vesta = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_vesta } } set_global_variable = { name = sr_site_contact_vesta value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_vesta }
 	set_global_variable = {
 		name = sr_site_autonomy_vesta
 		value = {
@@ -46231,8 +46272,9 @@ sr_site_aut_step_vesta = {
 		set_global_variable = { name = sr_site_self_vesta value = { value = sr_site_self_value_vesta add = sr_site_self_rate_vesta max = sr_module_points } }
 		if = { limit = { sr_site_self_value_vesta >= sr_module_points } sr_site_self_build_vesta = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_vesta } }
 	if = {
-		limit = { sr_site_autonomy_value_vesta >= sr_aut_break_level sr_site_peopled_vesta = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_vesta = yes }
 		sr_aut_break_away = { KEY = vesta INDEX = 7 }
 	}
 	else_if = {
@@ -46374,8 +46416,13 @@ sr_site_free_step_psyche = {
 }
 # THIS holds 16 Psyche: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_psyche = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_psyche } } set_global_variable = { name = sr_site_contact_psyche value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_psyche }
 	set_global_variable = {
 		name = sr_site_autonomy_psyche
 		value = {
@@ -46391,8 +46438,9 @@ sr_site_aut_step_psyche = {
 		set_global_variable = { name = sr_site_self_psyche value = { value = sr_site_self_value_psyche add = sr_site_self_rate_psyche max = sr_module_points } }
 		if = { limit = { sr_site_self_value_psyche >= sr_module_points } sr_site_self_build_psyche = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_psyche } }
 	if = {
-		limit = { sr_site_autonomy_value_psyche >= sr_aut_break_level sr_site_peopled_psyche = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_psyche = yes }
 		sr_aut_break_away = { KEY = psyche INDEX = 8 }
 	}
 	else_if = {
@@ -46534,8 +46582,13 @@ sr_site_free_step_pallas = {
 }
 # THIS holds 2 Pallas: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_pallas = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_pallas } } set_global_variable = { name = sr_site_contact_pallas value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_pallas }
 	set_global_variable = {
 		name = sr_site_autonomy_pallas
 		value = {
@@ -46551,8 +46604,9 @@ sr_site_aut_step_pallas = {
 		set_global_variable = { name = sr_site_self_pallas value = { value = sr_site_self_value_pallas add = sr_site_self_rate_pallas max = sr_module_points } }
 		if = { limit = { sr_site_self_value_pallas >= sr_module_points } sr_site_self_build_pallas = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_pallas } }
 	if = {
-		limit = { sr_site_autonomy_value_pallas >= sr_aut_break_level sr_site_peopled_pallas = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_pallas = yes }
 		sr_aut_break_away = { KEY = pallas INDEX = 9 }
 	}
 	else_if = {
@@ -46694,8 +46748,13 @@ sr_site_free_step_hygiea = {
 }
 # THIS holds 10 Hygiea: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_hygiea = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_hygiea } } set_global_variable = { name = sr_site_contact_hygiea value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_hygiea }
 	set_global_variable = {
 		name = sr_site_autonomy_hygiea
 		value = {
@@ -46711,8 +46770,9 @@ sr_site_aut_step_hygiea = {
 		set_global_variable = { name = sr_site_self_hygiea value = { value = sr_site_self_value_hygiea add = sr_site_self_rate_hygiea max = sr_module_points } }
 		if = { limit = { sr_site_self_value_hygiea >= sr_module_points } sr_site_self_build_hygiea = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_hygiea } }
 	if = {
-		limit = { sr_site_autonomy_value_hygiea >= sr_aut_break_level sr_site_peopled_hygiea = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_hygiea = yes }
 		sr_aut_break_away = { KEY = hygiea INDEX = 10 }
 	}
 	else_if = {
@@ -46854,8 +46914,13 @@ sr_site_free_step_io = {
 }
 # THIS holds Io: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_io = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_io } } set_global_variable = { name = sr_site_contact_io value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_io }
 	set_global_variable = {
 		name = sr_site_autonomy_io
 		value = {
@@ -46871,8 +46936,9 @@ sr_site_aut_step_io = {
 		set_global_variable = { name = sr_site_self_io value = { value = sr_site_self_value_io add = sr_site_self_rate_io max = sr_module_points } }
 		if = { limit = { sr_site_self_value_io >= sr_module_points } sr_site_self_build_io = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_io } }
 	if = {
-		limit = { sr_site_autonomy_value_io >= sr_aut_break_level sr_site_peopled_io = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_io = yes }
 		sr_aut_break_away = { KEY = io INDEX = 11 }
 	}
 	else_if = {
@@ -47014,8 +47080,13 @@ sr_site_free_step_europa = {
 }
 # THIS holds Europa: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_europa = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_europa } } set_global_variable = { name = sr_site_contact_europa value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_europa }
 	set_global_variable = {
 		name = sr_site_autonomy_europa
 		value = {
@@ -47031,8 +47102,9 @@ sr_site_aut_step_europa = {
 		set_global_variable = { name = sr_site_self_europa value = { value = sr_site_self_value_europa add = sr_site_self_rate_europa max = sr_module_points } }
 		if = { limit = { sr_site_self_value_europa >= sr_module_points } sr_site_self_build_europa = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_europa } }
 	if = {
-		limit = { sr_site_autonomy_value_europa >= sr_aut_break_level sr_site_peopled_europa = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_europa = yes }
 		sr_aut_break_away = { KEY = europa INDEX = 12 }
 	}
 	else_if = {
@@ -47174,8 +47246,13 @@ sr_site_free_step_ganymede = {
 }
 # THIS holds Ganymede: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_ganymede = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_ganymede } } set_global_variable = { name = sr_site_contact_ganymede value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_ganymede }
 	set_global_variable = {
 		name = sr_site_autonomy_ganymede
 		value = {
@@ -47191,8 +47268,9 @@ sr_site_aut_step_ganymede = {
 		set_global_variable = { name = sr_site_self_ganymede value = { value = sr_site_self_value_ganymede add = sr_site_self_rate_ganymede max = sr_module_points } }
 		if = { limit = { sr_site_self_value_ganymede >= sr_module_points } sr_site_self_build_ganymede = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_ganymede } }
 	if = {
-		limit = { sr_site_autonomy_value_ganymede >= sr_aut_break_level sr_site_peopled_ganymede = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_ganymede = yes }
 		sr_aut_break_away = { KEY = ganymede INDEX = 13 }
 	}
 	else_if = {
@@ -47334,8 +47412,13 @@ sr_site_free_step_callisto = {
 }
 # THIS holds Callisto: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_callisto = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_callisto } } set_global_variable = { name = sr_site_contact_callisto value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_callisto }
 	set_global_variable = {
 		name = sr_site_autonomy_callisto
 		value = {
@@ -47351,8 +47434,9 @@ sr_site_aut_step_callisto = {
 		set_global_variable = { name = sr_site_self_callisto value = { value = sr_site_self_value_callisto add = sr_site_self_rate_callisto max = sr_module_points } }
 		if = { limit = { sr_site_self_value_callisto >= sr_module_points } sr_site_self_build_callisto = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_callisto } }
 	if = {
-		limit = { sr_site_autonomy_value_callisto >= sr_aut_break_level sr_site_peopled_callisto = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_callisto = yes }
 		sr_aut_break_away = { KEY = callisto INDEX = 14 }
 	}
 	else_if = {
@@ -47494,8 +47578,13 @@ sr_site_free_step_himalia = {
 }
 # THIS holds Himalia: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_himalia = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_himalia } } set_global_variable = { name = sr_site_contact_himalia value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_himalia }
 	set_global_variable = {
 		name = sr_site_autonomy_himalia
 		value = {
@@ -47511,8 +47600,9 @@ sr_site_aut_step_himalia = {
 		set_global_variable = { name = sr_site_self_himalia value = { value = sr_site_self_value_himalia add = sr_site_self_rate_himalia max = sr_module_points } }
 		if = { limit = { sr_site_self_value_himalia >= sr_module_points } sr_site_self_build_himalia = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_himalia } }
 	if = {
-		limit = { sr_site_autonomy_value_himalia >= sr_aut_break_level sr_site_peopled_himalia = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_himalia = yes }
 		sr_aut_break_away = { KEY = himalia INDEX = 15 }
 	}
 	else_if = {
@@ -47654,8 +47744,13 @@ sr_site_free_step_amalthea = {
 }
 # THIS holds Amalthea: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_amalthea = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_amalthea } } set_global_variable = { name = sr_site_contact_amalthea value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_amalthea }
 	set_global_variable = {
 		name = sr_site_autonomy_amalthea
 		value = {
@@ -47671,8 +47766,9 @@ sr_site_aut_step_amalthea = {
 		set_global_variable = { name = sr_site_self_amalthea value = { value = sr_site_self_value_amalthea add = sr_site_self_rate_amalthea max = sr_module_points } }
 		if = { limit = { sr_site_self_value_amalthea >= sr_module_points } sr_site_self_build_amalthea = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_amalthea } }
 	if = {
-		limit = { sr_site_autonomy_value_amalthea >= sr_aut_break_level sr_site_peopled_amalthea = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_amalthea = yes }
 		sr_aut_break_away = { KEY = amalthea INDEX = 16 }
 	}
 	else_if = {
@@ -47814,8 +47910,13 @@ sr_site_free_step_venus = {
 }
 # THIS holds Venus Cloud Habitat: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_venus = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_venus } } set_global_variable = { name = sr_site_contact_venus value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_venus }
 	set_global_variable = {
 		name = sr_site_autonomy_venus
 		value = {
@@ -47831,8 +47932,9 @@ sr_site_aut_step_venus = {
 		set_global_variable = { name = sr_site_self_venus value = { value = sr_site_self_value_venus add = sr_site_self_rate_venus max = sr_module_points } }
 		if = { limit = { sr_site_self_value_venus >= sr_module_points } sr_site_self_build_venus = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_venus } }
 	if = {
-		limit = { sr_site_autonomy_value_venus >= sr_aut_break_level sr_site_peopled_venus = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_venus = yes }
 		sr_aut_break_away = { KEY = venus INDEX = 17 }
 	}
 	else_if = {
@@ -47974,8 +48076,13 @@ sr_site_free_step_mercury = {
 }
 # THIS holds Mercury: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_mercury = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_mercury } } set_global_variable = { name = sr_site_contact_mercury value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_mercury }
 	set_global_variable = {
 		name = sr_site_autonomy_mercury
 		value = {
@@ -47991,8 +48098,9 @@ sr_site_aut_step_mercury = {
 		set_global_variable = { name = sr_site_self_mercury value = { value = sr_site_self_value_mercury add = sr_site_self_rate_mercury max = sr_module_points } }
 		if = { limit = { sr_site_self_value_mercury >= sr_module_points } sr_site_self_build_mercury = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_mercury } }
 	if = {
-		limit = { sr_site_autonomy_value_mercury >= sr_aut_break_level sr_site_peopled_mercury = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_mercury = yes }
 		sr_aut_break_away = { KEY = mercury INDEX = 18 }
 	}
 	else_if = {
@@ -48134,8 +48242,13 @@ sr_site_free_step_titan = {
 }
 # THIS holds Titan: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_titan = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_titan } } set_global_variable = { name = sr_site_contact_titan value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_titan }
 	set_global_variable = {
 		name = sr_site_autonomy_titan
 		value = {
@@ -48151,8 +48264,9 @@ sr_site_aut_step_titan = {
 		set_global_variable = { name = sr_site_self_titan value = { value = sr_site_self_value_titan add = sr_site_self_rate_titan max = sr_module_points } }
 		if = { limit = { sr_site_self_value_titan >= sr_module_points } sr_site_self_build_titan = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_titan } }
 	if = {
-		limit = { sr_site_autonomy_value_titan >= sr_aut_break_level sr_site_peopled_titan = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_titan = yes }
 		sr_aut_break_away = { KEY = titan INDEX = 19 }
 	}
 	else_if = {
@@ -48294,8 +48408,13 @@ sr_site_free_step_enceladus = {
 }
 # THIS holds Enceladus: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_enceladus = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_enceladus } } set_global_variable = { name = sr_site_contact_enceladus value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_enceladus }
 	set_global_variable = {
 		name = sr_site_autonomy_enceladus
 		value = {
@@ -48311,8 +48430,9 @@ sr_site_aut_step_enceladus = {
 		set_global_variable = { name = sr_site_self_enceladus value = { value = sr_site_self_value_enceladus add = sr_site_self_rate_enceladus max = sr_module_points } }
 		if = { limit = { sr_site_self_value_enceladus >= sr_module_points } sr_site_self_build_enceladus = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_enceladus } }
 	if = {
-		limit = { sr_site_autonomy_value_enceladus >= sr_aut_break_level sr_site_peopled_enceladus = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_enceladus = yes }
 		sr_aut_break_away = { KEY = enceladus INDEX = 20 }
 	}
 	else_if = {
@@ -48454,8 +48574,13 @@ sr_site_free_step_rhea = {
 }
 # THIS holds Rhea: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_rhea = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_rhea } } set_global_variable = { name = sr_site_contact_rhea value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_rhea }
 	set_global_variable = {
 		name = sr_site_autonomy_rhea
 		value = {
@@ -48471,8 +48596,9 @@ sr_site_aut_step_rhea = {
 		set_global_variable = { name = sr_site_self_rhea value = { value = sr_site_self_value_rhea add = sr_site_self_rate_rhea max = sr_module_points } }
 		if = { limit = { sr_site_self_value_rhea >= sr_module_points } sr_site_self_build_rhea = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_rhea } }
 	if = {
-		limit = { sr_site_autonomy_value_rhea >= sr_aut_break_level sr_site_peopled_rhea = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_rhea = yes }
 		sr_aut_break_away = { KEY = rhea INDEX = 21 }
 	}
 	else_if = {
@@ -48614,8 +48740,13 @@ sr_site_free_step_mimas = {
 }
 # THIS holds Mimas: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_mimas = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_mimas } } set_global_variable = { name = sr_site_contact_mimas value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_mimas }
 	set_global_variable = {
 		name = sr_site_autonomy_mimas
 		value = {
@@ -48631,8 +48762,9 @@ sr_site_aut_step_mimas = {
 		set_global_variable = { name = sr_site_self_mimas value = { value = sr_site_self_value_mimas add = sr_site_self_rate_mimas max = sr_module_points } }
 		if = { limit = { sr_site_self_value_mimas >= sr_module_points } sr_site_self_build_mimas = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_mimas } }
 	if = {
-		limit = { sr_site_autonomy_value_mimas >= sr_aut_break_level sr_site_peopled_mimas = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_mimas = yes }
 		sr_aut_break_away = { KEY = mimas INDEX = 22 }
 	}
 	else_if = {
@@ -48774,8 +48906,13 @@ sr_site_free_step_iapetus = {
 }
 # THIS holds Iapetus: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_iapetus = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_iapetus } } set_global_variable = { name = sr_site_contact_iapetus value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_iapetus }
 	set_global_variable = {
 		name = sr_site_autonomy_iapetus
 		value = {
@@ -48791,8 +48928,9 @@ sr_site_aut_step_iapetus = {
 		set_global_variable = { name = sr_site_self_iapetus value = { value = sr_site_self_value_iapetus add = sr_site_self_rate_iapetus max = sr_module_points } }
 		if = { limit = { sr_site_self_value_iapetus >= sr_module_points } sr_site_self_build_iapetus = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_iapetus } }
 	if = {
-		limit = { sr_site_autonomy_value_iapetus >= sr_aut_break_level sr_site_peopled_iapetus = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_iapetus = yes }
 		sr_aut_break_away = { KEY = iapetus INDEX = 23 }
 	}
 	else_if = {
@@ -48934,8 +49072,13 @@ sr_site_free_step_titania = {
 }
 # THIS holds Titania: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_titania = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_titania } } set_global_variable = { name = sr_site_contact_titania value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_titania }
 	set_global_variable = {
 		name = sr_site_autonomy_titania
 		value = {
@@ -48951,8 +49094,9 @@ sr_site_aut_step_titania = {
 		set_global_variable = { name = sr_site_self_titania value = { value = sr_site_self_value_titania add = sr_site_self_rate_titania max = sr_module_points } }
 		if = { limit = { sr_site_self_value_titania >= sr_module_points } sr_site_self_build_titania = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_titania } }
 	if = {
-		limit = { sr_site_autonomy_value_titania >= sr_aut_break_level sr_site_peopled_titania = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_titania = yes }
 		sr_aut_break_away = { KEY = titania INDEX = 24 }
 	}
 	else_if = {
@@ -49094,8 +49238,13 @@ sr_site_free_step_oberon = {
 }
 # THIS holds Oberon: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_oberon = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_oberon } } set_global_variable = { name = sr_site_contact_oberon value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_oberon }
 	set_global_variable = {
 		name = sr_site_autonomy_oberon
 		value = {
@@ -49111,8 +49260,9 @@ sr_site_aut_step_oberon = {
 		set_global_variable = { name = sr_site_self_oberon value = { value = sr_site_self_value_oberon add = sr_site_self_rate_oberon max = sr_module_points } }
 		if = { limit = { sr_site_self_value_oberon >= sr_module_points } sr_site_self_build_oberon = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_oberon } }
 	if = {
-		limit = { sr_site_autonomy_value_oberon >= sr_aut_break_level sr_site_peopled_oberon = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_oberon = yes }
 		sr_aut_break_away = { KEY = oberon INDEX = 25 }
 	}
 	else_if = {
@@ -49254,8 +49404,13 @@ sr_site_free_step_miranda = {
 }
 # THIS holds Miranda: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_miranda = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_miranda } } set_global_variable = { name = sr_site_contact_miranda value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_miranda }
 	set_global_variable = {
 		name = sr_site_autonomy_miranda
 		value = {
@@ -49271,8 +49426,9 @@ sr_site_aut_step_miranda = {
 		set_global_variable = { name = sr_site_self_miranda value = { value = sr_site_self_value_miranda add = sr_site_self_rate_miranda max = sr_module_points } }
 		if = { limit = { sr_site_self_value_miranda >= sr_module_points } sr_site_self_build_miranda = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_miranda } }
 	if = {
-		limit = { sr_site_autonomy_value_miranda >= sr_aut_break_level sr_site_peopled_miranda = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_miranda = yes }
 		sr_aut_break_away = { KEY = miranda INDEX = 26 }
 	}
 	else_if = {
@@ -49414,8 +49570,13 @@ sr_site_free_step_ariel = {
 }
 # THIS holds Ariel: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_ariel = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_ariel } } set_global_variable = { name = sr_site_contact_ariel value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_ariel }
 	set_global_variable = {
 		name = sr_site_autonomy_ariel
 		value = {
@@ -49431,8 +49592,9 @@ sr_site_aut_step_ariel = {
 		set_global_variable = { name = sr_site_self_ariel value = { value = sr_site_self_value_ariel add = sr_site_self_rate_ariel max = sr_module_points } }
 		if = { limit = { sr_site_self_value_ariel >= sr_module_points } sr_site_self_build_ariel = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_ariel } }
 	if = {
-		limit = { sr_site_autonomy_value_ariel >= sr_aut_break_level sr_site_peopled_ariel = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_ariel = yes }
 		sr_aut_break_away = { KEY = ariel INDEX = 27 }
 	}
 	else_if = {
@@ -49574,8 +49736,13 @@ sr_site_free_step_triton = {
 }
 # THIS holds Triton: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_triton = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_triton } } set_global_variable = { name = sr_site_contact_triton value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_triton }
 	set_global_variable = {
 		name = sr_site_autonomy_triton
 		value = {
@@ -49591,8 +49758,9 @@ sr_site_aut_step_triton = {
 		set_global_variable = { name = sr_site_self_triton value = { value = sr_site_self_value_triton add = sr_site_self_rate_triton max = sr_module_points } }
 		if = { limit = { sr_site_self_value_triton >= sr_module_points } sr_site_self_build_triton = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_triton } }
 	if = {
-		limit = { sr_site_autonomy_value_triton >= sr_aut_break_level sr_site_peopled_triton = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_triton = yes }
 		sr_aut_break_away = { KEY = triton INDEX = 28 }
 	}
 	else_if = {
@@ -49734,8 +49902,13 @@ sr_site_free_step_proteus = {
 }
 # THIS holds Proteus: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_proteus = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_proteus } } set_global_variable = { name = sr_site_contact_proteus value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_proteus }
 	set_global_variable = {
 		name = sr_site_autonomy_proteus
 		value = {
@@ -49751,8 +49924,9 @@ sr_site_aut_step_proteus = {
 		set_global_variable = { name = sr_site_self_proteus value = { value = sr_site_self_value_proteus add = sr_site_self_rate_proteus max = sr_module_points } }
 		if = { limit = { sr_site_self_value_proteus >= sr_module_points } sr_site_self_build_proteus = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_proteus } }
 	if = {
-		limit = { sr_site_autonomy_value_proteus >= sr_aut_break_level sr_site_peopled_proteus = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_proteus = yes }
 		sr_aut_break_away = { KEY = proteus INDEX = 29 }
 	}
 	else_if = {
@@ -49894,8 +50068,13 @@ sr_site_free_step_pluto = {
 }
 # THIS holds Pluto-Charon: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_pluto = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_pluto } } set_global_variable = { name = sr_site_contact_pluto value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_pluto }
 	set_global_variable = {
 		name = sr_site_autonomy_pluto
 		value = {
@@ -49911,8 +50090,9 @@ sr_site_aut_step_pluto = {
 		set_global_variable = { name = sr_site_self_pluto value = { value = sr_site_self_value_pluto add = sr_site_self_rate_pluto max = sr_module_points } }
 		if = { limit = { sr_site_self_value_pluto >= sr_module_points } sr_site_self_build_pluto = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_pluto } }
 	if = {
-		limit = { sr_site_autonomy_value_pluto >= sr_aut_break_level sr_site_peopled_pluto = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_pluto = yes }
 		sr_aut_break_away = { KEY = pluto INDEX = 30 }
 	}
 	else_if = {
@@ -50054,8 +50234,13 @@ sr_site_free_step_eris = {
 }
 # THIS holds Eris: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_eris = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_eris } } set_global_variable = { name = sr_site_contact_eris value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_eris }
 	set_global_variable = {
 		name = sr_site_autonomy_eris
 		value = {
@@ -50071,8 +50256,9 @@ sr_site_aut_step_eris = {
 		set_global_variable = { name = sr_site_self_eris value = { value = sr_site_self_value_eris add = sr_site_self_rate_eris max = sr_module_points } }
 		if = { limit = { sr_site_self_value_eris >= sr_module_points } sr_site_self_build_eris = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_eris } }
 	if = {
-		limit = { sr_site_autonomy_value_eris >= sr_aut_break_level sr_site_peopled_eris = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_eris = yes }
 		sr_aut_break_away = { KEY = eris INDEX = 31 }
 	}
 	else_if = {
@@ -50214,8 +50400,13 @@ sr_site_free_step_makemake = {
 }
 # THIS holds Makemake: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_makemake = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_makemake } } set_global_variable = { name = sr_site_contact_makemake value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_makemake }
 	set_global_variable = {
 		name = sr_site_autonomy_makemake
 		value = {
@@ -50231,8 +50422,9 @@ sr_site_aut_step_makemake = {
 		set_global_variable = { name = sr_site_self_makemake value = { value = sr_site_self_value_makemake add = sr_site_self_rate_makemake max = sr_module_points } }
 		if = { limit = { sr_site_self_value_makemake >= sr_module_points } sr_site_self_build_makemake = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_makemake } }
 	if = {
-		limit = { sr_site_autonomy_value_makemake >= sr_aut_break_level sr_site_peopled_makemake = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_makemake = yes }
 		sr_aut_break_away = { KEY = makemake INDEX = 32 }
 	}
 	else_if = {
@@ -50374,8 +50566,13 @@ sr_site_free_step_haumea = {
 }
 # THIS holds Haumea: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_haumea = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_haumea } } set_global_variable = { name = sr_site_contact_haumea value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_haumea }
 	set_global_variable = {
 		name = sr_site_autonomy_haumea
 		value = {
@@ -50391,8 +50588,9 @@ sr_site_aut_step_haumea = {
 		set_global_variable = { name = sr_site_self_haumea value = { value = sr_site_self_value_haumea add = sr_site_self_rate_haumea max = sr_module_points } }
 		if = { limit = { sr_site_self_value_haumea >= sr_module_points } sr_site_self_build_haumea = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_haumea } }
 	if = {
-		limit = { sr_site_autonomy_value_haumea >= sr_aut_break_level sr_site_peopled_haumea = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_haumea = yes }
 		sr_aut_break_away = { KEY = haumea INDEX = 33 }
 	}
 	else_if = {
@@ -50534,8 +50732,13 @@ sr_site_free_step_sedna = {
 }
 # THIS holds Sedna: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_sedna = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_sedna } } set_global_variable = { name = sr_site_contact_sedna value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_sedna }
 	set_global_variable = {
 		name = sr_site_autonomy_sedna
 		value = {
@@ -50551,8 +50754,9 @@ sr_site_aut_step_sedna = {
 		set_global_variable = { name = sr_site_self_sedna value = { value = sr_site_self_value_sedna add = sr_site_self_rate_sedna max = sr_module_points } }
 		if = { limit = { sr_site_self_value_sedna >= sr_module_points } sr_site_self_build_sedna = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_sedna } }
 	if = {
-		limit = { sr_site_autonomy_value_sedna >= sr_aut_break_level sr_site_peopled_sedna = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_sedna = yes }
 		sr_aut_break_away = { KEY = sedna INDEX = 34 }
 	}
 	else_if = {
@@ -50693,8 +50897,13 @@ sr_site_free_step_shackleton = {
 }
 # THIS holds Shackleton Crater: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_shackleton = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_shackleton } } set_global_variable = { name = sr_site_contact_shackleton value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_shackleton }
 	set_global_variable = {
 		name = sr_site_autonomy_shackleton
 		value = {
@@ -50710,8 +50919,9 @@ sr_site_aut_step_shackleton = {
 		set_global_variable = { name = sr_site_self_shackleton value = { value = sr_site_self_value_shackleton add = sr_site_self_rate_shackleton max = sr_module_points } }
 		if = { limit = { sr_site_self_value_shackleton >= sr_module_points } sr_site_self_build_shackleton = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_shackleton } }
 	if = {
-		limit = { sr_site_autonomy_value_shackleton >= sr_aut_break_level sr_site_peopled_shackleton = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_shackleton = yes }
 		sr_aut_break_away = { KEY = shackleton INDEX = 35 }
 	}
 	else_if = {
@@ -50852,8 +51062,13 @@ sr_site_free_step_peary = {
 }
 # THIS holds Peary Crater: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_peary = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_peary } } set_global_variable = { name = sr_site_contact_peary value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_peary }
 	set_global_variable = {
 		name = sr_site_autonomy_peary
 		value = {
@@ -50869,8 +51084,9 @@ sr_site_aut_step_peary = {
 		set_global_variable = { name = sr_site_self_peary value = { value = sr_site_self_value_peary add = sr_site_self_rate_peary max = sr_module_points } }
 		if = { limit = { sr_site_self_value_peary >= sr_module_points } sr_site_self_build_peary = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_peary } }
 	if = {
-		limit = { sr_site_autonomy_value_peary >= sr_aut_break_level sr_site_peopled_peary = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_peary = yes }
 		sr_aut_break_away = { KEY = peary INDEX = 36 }
 	}
 	else_if = {
@@ -51011,8 +51227,13 @@ sr_site_free_step_tranquility = {
 }
 # THIS holds Tranquility Base: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_tranquility = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_tranquility } } set_global_variable = { name = sr_site_contact_tranquility value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_tranquility }
 	set_global_variable = {
 		name = sr_site_autonomy_tranquility
 		value = {
@@ -51028,8 +51249,9 @@ sr_site_aut_step_tranquility = {
 		set_global_variable = { name = sr_site_self_tranquility value = { value = sr_site_self_value_tranquility add = sr_site_self_rate_tranquility max = sr_module_points } }
 		if = { limit = { sr_site_self_value_tranquility >= sr_module_points } sr_site_self_build_tranquility = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_tranquility } }
 	if = {
-		limit = { sr_site_autonomy_value_tranquility >= sr_aut_break_level sr_site_peopled_tranquility = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_tranquility = yes }
 		sr_aut_break_away = { KEY = tranquility INDEX = 37 }
 	}
 	else_if = {
@@ -51170,8 +51392,13 @@ sr_site_free_step_marius_hills = {
 }
 # THIS holds Marius Hills: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_marius_hills = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_marius_hills } } set_global_variable = { name = sr_site_contact_marius_hills value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_marius_hills }
 	set_global_variable = {
 		name = sr_site_autonomy_marius_hills
 		value = {
@@ -51187,8 +51414,9 @@ sr_site_aut_step_marius_hills = {
 		set_global_variable = { name = sr_site_self_marius_hills value = { value = sr_site_self_value_marius_hills add = sr_site_self_rate_marius_hills max = sr_module_points } }
 		if = { limit = { sr_site_self_value_marius_hills >= sr_module_points } sr_site_self_build_marius_hills = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_marius_hills } }
 	if = {
-		limit = { sr_site_autonomy_value_marius_hills >= sr_aut_break_level sr_site_peopled_marius_hills = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_marius_hills = yes }
 		sr_aut_break_away = { KEY = marius_hills INDEX = 38 }
 	}
 	else_if = {
@@ -51329,8 +51557,13 @@ sr_site_free_step_daedalus = {
 }
 # THIS holds Daedalus Crater: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_daedalus = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_daedalus } } set_global_variable = { name = sr_site_contact_daedalus value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_daedalus }
 	set_global_variable = {
 		name = sr_site_autonomy_daedalus
 		value = {
@@ -51346,8 +51579,9 @@ sr_site_aut_step_daedalus = {
 		set_global_variable = { name = sr_site_self_daedalus value = { value = sr_site_self_value_daedalus add = sr_site_self_rate_daedalus max = sr_module_points } }
 		if = { limit = { sr_site_self_value_daedalus >= sr_module_points } sr_site_self_build_daedalus = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_daedalus } }
 	if = {
-		limit = { sr_site_autonomy_value_daedalus >= sr_aut_break_level sr_site_peopled_daedalus = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_daedalus = yes }
 		sr_aut_break_away = { KEY = daedalus INDEX = 39 }
 	}
 	else_if = {
@@ -51488,8 +51722,13 @@ sr_site_free_step_imbrium = {
 }
 # THIS holds Mare Imbrium: its autonomy for the month, then its thresholds (design § 2),
 # each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).
+# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked
+# charter's spike) breaks away though the month's settling takes it back under
+# (design § 2: "at 100 the colony breaks away whatever its status"), so the break
+# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.
 sr_site_aut_step_imbrium = {
 	if = { limit = { NOT = { has_global_variable = sr_site_contact_imbrium } } set_global_variable = { name = sr_site_contact_imbrium value = te_history_month_index } }
+	set_local_variable = { name = sr_aut_peak value = sr_site_autonomy_value_imbrium }
 	set_global_variable = {
 		name = sr_site_autonomy_imbrium
 		value = {
@@ -51505,8 +51744,9 @@ sr_site_aut_step_imbrium = {
 		set_global_variable = { name = sr_site_self_imbrium value = { value = sr_site_self_value_imbrium add = sr_site_self_rate_imbrium max = sr_module_points } }
 		if = { limit = { sr_site_self_value_imbrium >= sr_module_points } sr_site_self_build_imbrium = yes }
 	}
+	set_local_variable = { name = sr_aut_peak value = { value = local_var:sr_aut_peak min = sr_site_autonomy_value_imbrium } }
 	if = {
-		limit = { sr_site_autonomy_value_imbrium >= sr_aut_break_level sr_site_peopled_imbrium = yes }
+		limit = { local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_imbrium = yes }
 		sr_aut_break_away = { KEY = imbrium INDEX = 40 }
 	}
 	else_if = {
@@ -51560,7 +51800,7 @@ sr_site_self_build_imbrium = {
 }
 
 # A world's helper by its index (local_var:sr_site_idx): sr_site_<DO>_at = { KEY = <key> },
-# DO one of aut_add, charter, garrison, let_go, abandon_home, abandon_free, rejoin, decline, breach, sabotage, toggle_supply, debug_aut, debug_integrity, debug_occupy (sr_colony_autonomy_effects.txt).
+# DO one of aut_add, charter, revoke, garrison, let_go, abandon_home, abandon_free, rejoin, decline, breach, sabotage, toggle_supply, debug_aut, debug_integrity, debug_occupy (sr_colony_autonomy_effects.txt).
 sr_site_by_index = {
 	if = {
 		limit = { local_var:sr_site_idx = 1 }
@@ -52050,6 +52290,171 @@ sr_site_abandon_ask_from_scope = {
 	else_if = {
 		limit = { scope:site = 40 }
 		sr_site_event_open = { VAR = sr_abandon_site INDEX = 40 }
+	}
+}
+
+# The Revoke button's world (scope:site, sr_colony_revoke_sgui) names the question's
+# world (space_race_events.113).
+sr_site_revoke_ask_from_scope = {
+	if = {
+		limit = { scope:site = 1 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 1 }
+	}
+	else_if = {
+		limit = { scope:site = 2 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 2 }
+	}
+	else_if = {
+		limit = { scope:site = 3 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 3 }
+	}
+	else_if = {
+		limit = { scope:site = 4 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 4 }
+	}
+	else_if = {
+		limit = { scope:site = 5 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 5 }
+	}
+	else_if = {
+		limit = { scope:site = 6 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 6 }
+	}
+	else_if = {
+		limit = { scope:site = 7 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 7 }
+	}
+	else_if = {
+		limit = { scope:site = 8 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 8 }
+	}
+	else_if = {
+		limit = { scope:site = 9 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 9 }
+	}
+	else_if = {
+		limit = { scope:site = 10 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 10 }
+	}
+	else_if = {
+		limit = { scope:site = 11 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 11 }
+	}
+	else_if = {
+		limit = { scope:site = 12 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 12 }
+	}
+	else_if = {
+		limit = { scope:site = 13 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 13 }
+	}
+	else_if = {
+		limit = { scope:site = 14 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 14 }
+	}
+	else_if = {
+		limit = { scope:site = 15 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 15 }
+	}
+	else_if = {
+		limit = { scope:site = 16 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 16 }
+	}
+	else_if = {
+		limit = { scope:site = 17 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 17 }
+	}
+	else_if = {
+		limit = { scope:site = 18 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 18 }
+	}
+	else_if = {
+		limit = { scope:site = 19 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 19 }
+	}
+	else_if = {
+		limit = { scope:site = 20 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 20 }
+	}
+	else_if = {
+		limit = { scope:site = 21 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 21 }
+	}
+	else_if = {
+		limit = { scope:site = 22 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 22 }
+	}
+	else_if = {
+		limit = { scope:site = 23 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 23 }
+	}
+	else_if = {
+		limit = { scope:site = 24 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 24 }
+	}
+	else_if = {
+		limit = { scope:site = 25 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 25 }
+	}
+	else_if = {
+		limit = { scope:site = 26 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 26 }
+	}
+	else_if = {
+		limit = { scope:site = 27 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 27 }
+	}
+	else_if = {
+		limit = { scope:site = 28 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 28 }
+	}
+	else_if = {
+		limit = { scope:site = 29 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 29 }
+	}
+	else_if = {
+		limit = { scope:site = 30 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 30 }
+	}
+	else_if = {
+		limit = { scope:site = 31 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 31 }
+	}
+	else_if = {
+		limit = { scope:site = 32 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 32 }
+	}
+	else_if = {
+		limit = { scope:site = 33 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 33 }
+	}
+	else_if = {
+		limit = { scope:site = 34 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 34 }
+	}
+	else_if = {
+		limit = { scope:site = 35 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 35 }
+	}
+	else_if = {
+		limit = { scope:site = 36 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 36 }
+	}
+	else_if = {
+		limit = { scope:site = 37 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 37 }
+	}
+	else_if = {
+		limit = { scope:site = 38 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 38 }
+	}
+	else_if = {
+		limit = { scope:site = 39 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 39 }
+	}
+	else_if = {
+		limit = { scope:site = 40 }
+		sr_site_event_open = { VAR = sr_revoke_site INDEX = 40 }
 	}
 }
 
