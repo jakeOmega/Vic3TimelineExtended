@@ -72,5 +72,48 @@ class ScaledUpTest(unittest.TestCase):
         self.assertEqual(pixels.decode_png(pixels.encode_png(picture)), picture)
 
 
+def field(width, height, rect, backdrop=(255, 0, 255), dots=()):
+    """A backdrop of `backdrop` with a grey rectangle `rect` (left, top, right, bottom; exclusive) and magenta
+    `dots` painted inside it: what `gui-show` shoots."""
+    rows = bytearray()
+    for y in range(height):
+        for x in range(width):
+            inside = rect is not None and rect[0] <= x < rect[2] and rect[1] <= y < rect[3]
+            colour = (90, 90, 90) if inside and (x, y) not in dots else ((255, 0, 255) if inside else backdrop)
+            rows += bytes(colour)
+    return width, height, bytes(rows)
+
+
+class BackdropBoxTest(unittest.TestCase):
+    """`gui-show`'s crop: the drawn rectangle on the magenta backdrop, found from the centre."""
+
+    def test_the_box_is_the_drawn_rectangle_around_the_centre(self):
+        self.assertEqual(pixels.backdrop_box(field(400, 300, rect=(120, 80, 290, 230))), (120, 80, 290, 230))
+
+    def test_stray_backdrop_pixels_inside_the_panel_do_not_end_it(self):
+        img = field(400, 300, rect=(120, 80, 290, 230), dots=[(150, 150), (151, 150)])
+        self.assertEqual(pixels.backdrop_box(img), (120, 80, 290, 230))
+
+    def test_a_near_magenta_within_the_tolerance_counts_as_backdrop(self):
+        img = field(400, 300, rect=(120, 80, 290, 230), backdrop=(250, 10, 245))
+        self.assertEqual(pixels.backdrop_box(img), (120, 80, 290, 230))
+
+    def test_a_panel_reaching_the_edges_is_cut_at_them(self):
+        self.assertEqual(pixels.backdrop_box(field(400, 300, rect=(0, 0, 400, 300))), (0, 0, 400, 300))
+
+    def test_a_centre_on_the_backdrop_raises(self):
+        with self.assertRaises(pixels.PixelsError) as caught:
+            pixels.backdrop_box(field(400, 300, rect=None))
+        self.assertIn("nothing drawn at the centre", str(caught.exception))
+
+    def test_cut(self):
+        img = field(400, 300, rect=(120, 80, 290, 230))
+        width, height, rgb = pixels.cut(img, (120, 80, 290, 230))
+        self.assertEqual((width, height), (170, 150))
+        self.assertEqual(set(rgb), {90})
+        with self.assertRaises(pixels.PixelsError):
+            pixels.cut(img, (10, 10, 10, 20))
+
+
 if __name__ == "__main__":
     unittest.main()
