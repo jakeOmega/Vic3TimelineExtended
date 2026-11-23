@@ -266,7 +266,7 @@ _DOC_MAPPING_RAW: list[tuple[str, list[str], str]] = [
     (r"^events/(decolonization|cultural_hegemony)",
      ["docs/guides/event_creation_guide.md", "docs/vanilla/vanilla_colonization_reference.md", "docs/vanilla/vanilla_pops_reference.md"],
      "events"),
-    (r"^events/(te_map_modes|repeatable|minor|te_construction_market_pulse|te_construction_market_recalc)",
+    (r"^events/(repeatable|minor|te_construction_market_pulse|te_construction_market_recalc)",
      ["docs/guides/event_creation_guide.md"],
      "events"),
     (r"^events/",

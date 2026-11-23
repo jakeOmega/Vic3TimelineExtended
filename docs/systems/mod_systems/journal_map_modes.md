@@ -754,4 +754,3 @@ listed copy of the journal map mode, each answered (`docs/testing/journal-map-mo
 4. A "show on the map" button opens a page: the entry's (`te_jmap_banking_map_button`) when every country holds it,
    or the Map Room on the system's pick (`te_jmap_gw_map_button`) when not. A tab showing an entry's content doesn't
    trigger its map.
-5. Retire the Cartographic Survey (`te_map_mode_*`, prep § 4.1) once one map is seen working in game.

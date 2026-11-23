@@ -144,7 +144,7 @@ The following patterns are derived from analysis of 40+ vanilla events across `e
 - **No formatting codes** in descriptions (no `#bold`, `#italic`, `#R`, etc.). Descriptions are plain text with scope interpolation only.
 - **Exceptions:**
   - `#N` (newline with emphasis) for mechanical warnings in DLC events.
-  - `#G`/`#R`/`#b` for **mechanical thresholds or required actions** — e.g. `#G 2/3 supermajority#!` to highlight a vote threshold, or `#b [concept_migration_pull]#!` to flag a required setup action. Reference: `un_vote.*.d_expulsion*` and `te_map_modes.1.d`. Use only when the highlighted text names a number, threshold, or action the player must understand to choose between options — not for decorative emphasis.
+  - `#G`/`#R`/`#b` for **mechanical thresholds or required actions** — e.g. `#G 2/3 supermajority#!` to highlight a vote threshold, or `#b [concept_migration_pull]#!` to flag a required setup action. Reference: `un_vote.*.d_expulsion*`. Use only when the highlighted text names a number, threshold, or action the player must understand to choose between options — not for decorative emphasis.
   - `#v` is the engine's **value-formatting convention** (e.g. `#v [SCOPE.…ScriptValue('temperature_anomaly_display')]#! °C`) and is NOT a `#bold`-style color code. It is always permitted where a live numeric value is displayed inside a description. Reference: `environmentalism_events.*.d`.
 - **Typical length:** 1–3 sentences (30–80 words). Shorter is better. Let the flavor text carry the literary weight.
 

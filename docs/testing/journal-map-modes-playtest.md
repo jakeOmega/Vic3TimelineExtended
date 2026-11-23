@@ -342,7 +342,5 @@ with no figure, so there is none to record for the three-color map).
   (`te_jmap_reopen_log_sgui`) once check 1 settles the repaint's timing, and the options' `TE_JMAP area`,
   `continent`, `outliers`, `scale` and `color` lines (`te_jmap_set_area`, `te_jmap_set_continent`, `te_jmap_set_trim`,
   `te_jmap_set_scale`, `te_jmap_set_color`) once checks 29 to 31 do. `TE_JMAP area reset` stays: it is the only record of an option the script changed.
-- Retire the Cartographic Survey (`te_map_mode_*`, prep § 4.1) in a PR of its own: it touches its events,
-  `scripts/nightly_audit_select.py` and `scripts/image_pipeline/event_image_prompts.py`.
 - Give the Banking and Demographics chapters a line each if a map grows beyond the introduction's paragraph
   (`docs/player_guide/01-introduction.md`, which covers the map buttons, the Map Room and the eye).

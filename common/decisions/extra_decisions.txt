@@ -93,27 +93,6 @@ secularization_campaign = {
 }
 
 # ============================================================================
-# Open Map-Mode Survey
-# Player-only meta-decision that opens te_map_modes.1, the picker for custom
-# map-mode overlays (Tourism Appeal / GDP per capita / Emissions). The
-# overlay applies a state_migration_pull_add correction to every state so the
-# Migration Attraction map mode color-codes by the chosen metric.
-#
-# DISABLED — vanilla engine bug.
-# The correction math depends on reading per-state migration_pull as a script
-# value. According to ~/src/vic3/docs/event_targets.log:1498, migration_pull
-# is documented to "Get the migration pull for a state or the mass migration
-# pull for a country" (Input Scopes: country, state). In practice it always
-# returns the country's mass-migration value regardless of scope, so the
-# per-state correction collapses to a constant and the gradient is flat.
-# Re-enable by restoring `is_shown = { is_player = yes NOT = { is_country_type
-# = decentralized } }` and `possible = { is_game_paused = yes }` once the
-# vanilla bug is fixed (or once we find a workable per-state pull source).
-# All the supporting files (event, scripted_effects, scripted_triggers,
-# script_values, static_modifier, loc) are left in place — only the entry
-# point is gated off here.
-# ============================================================================
-# ============================================================================
 # Imperial Federation Act — Iron Fist Path (capstone for Iron-Fist hold strategy)
 # Available only when:
 #   - colonial_solidified_months >= 36 (3 years sustained at ≥90 bar)
@@ -327,24 +306,6 @@ mandate_system_decision = {
 
 	ai_chance = {
 		value = 50
-	}
-}
-
-te_open_map_mode_survey = {
-	is_shown = {
-		always = no
-	}
-
-	possible = {
-		always = no
-	}
-
-	when_taken = {
-		trigger_event = { id = te_map_modes.1 days = 0 popup = yes }
-	}
-
-	ai_chance = {
-		value = 0
 	}
 }
 

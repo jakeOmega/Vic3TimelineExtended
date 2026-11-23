@@ -6498,18 +6498,6 @@
  te_mandate.1.t:0 "What the Bank Is For"
 
 #
-# TE_MAP_MODES
-#
- te_map_modes.1.a:0 "Tourism appeal"
- te_map_modes.1.b:0 "GDP per capita"
- te_map_modes.1.c:0 "Greenhouse gas emissions"
- te_map_modes.1.d:0 "Our cartographers can redraw the world map by whatever measure we choose. Pick a metric below, then switch to the #b [concept_migration_pull]#! map mode: its colors will show the metric we chose instead of migration appeal.\n\n#italic Re-open this decision and pick #b Clear#! before switching to another metric.#!"
- te_map_modes.1.e_clear:0 "Clear overlay"
- te_map_modes.1.f:0 "\"The map office can color the map by any figure the other offices send us: how strongly each state draws visitors, what each person there produces, what each country puts into the air. Tell us which, and we will lay it over the migration map, since that is the only sheet the printers have set up for colors. When you want a different figure, tell us to clear the sheet first, or the two will run together.\""
- te_map_modes.1.f_dismiss:0 "Never mind."
- te_map_modes.1.t:0 "Cartographic Survey"
-
-#
 # TE_ORBITAL_DEBRIS
 #
  te_orbital_debris.1.a:0 "Keep the climbers running"
