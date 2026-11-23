@@ -151,14 +151,6 @@
   "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] can force [Concept('concept_power_bloc_member', '$concept_power_bloc_members|q$')] to replace their [concept_primary_cultures] with the leader's primary cultures.",
   "es": "El [Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')|l] puede obligar a los [Concept('concept_power_bloc_member', '$concept_power_bloc_members|q$')|l] a sustituir sus [concept_primary_cultures|l] por las del líder."
  },
- "power_bloc_leader_can_peacefully_annex_bool": {
-  "en": "Leader Can Peacefully Annex Subjects",
-  "es": "El líder puede anexionar súbditos de forma pacífica"
- },
- "power_bloc_leader_can_peacefully_annex_bool_desc": {
-  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] can peacefully annex [Concept('concept_subject', '$concept_subjects|q$')] without a [concept_diplomatic_play], if the subject has low [concept_liberty_desire] and a sufficiently low [Concept('concept_gdp', 'GDP')].",
-  "es": "El [Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')|l] puede anexionar de forma pacífica [Concept('concept_subject', '$concept_subjects|q$')|l] sin una [concept_diplomatic_play|l], si el súbdito tiene un [concept_liberty_desire|l] bajo y un [Concept('concept_gdp', 'PIB')] suficientemente bajo."
- },
  "power_bloc_research_pool_bool": {
   "en": "Members’ Research Goes to the Leader",
   "es": "La investigación de los miembros va al líder"
