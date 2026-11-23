@@ -79,6 +79,8 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/script_values/te_math_generated.txt",
     "common/script_values/te_journal_map_scales_generated.txt",
     "common/scripted_effects/te_journal_map_ranges_generated.txt",
+    "common/scripted_guis/te_journal_map_picks_generated.txt",
+    "gui/journal_entry_widgets/te_map_room_picks_generated.gui",
     "common/script_values/sr_launch_windows_generated.txt",
     "common/script_values/sr_fleet_legs_generated.txt",
     "common/scripted_effects/sr_sites_generated.txt",

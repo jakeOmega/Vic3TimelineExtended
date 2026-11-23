@@ -482,7 +482,7 @@ class RangesTest(unittest.TestCase):
         # for Emissions and Grandeur), the area it runs over and what its ends leave out
         loc = "".join(_read(os.path.join(REPO, "localization", "english", f)) for f in
                       os.listdir(os.path.join(REPO, "localization", "english")) if f.endswith(".yml"))
-        sguis = _read(os.path.join(REPO, "common", "scripted_guis", "te_journal_map_sguis.txt"))
+        sguis = _read(os.path.join(REPO, "common", "scripted_guis", "te_journal_map_picks_generated.txt"))
         for scale in ROOM:
             m = re.search(r"^(te_jmap_pick_\w+)_sgui = \{(?:(?!^\}).)*?SEL = " + str(scale["sel"]) + r"\b", sguis,
                           re.M | re.S)
