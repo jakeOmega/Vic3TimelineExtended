@@ -28,9 +28,13 @@
 # module queued while the cap was higher is still built (sr_mod_fab_stock_fill_cap;
 # review of #1847); a stock already above them is kept, not cut. Then up
 # to two modules from the head of the queue, each into a free shipment slot, or
-# for a lunar world into none (sr_mq_head_needs_no_slot; the owner, 2026-11-15).
-# While every slot is taken, a lunar world's module further down goes ahead of
-# the head (sr_mq_promote_lunar). Under Full Colonies an occupied launch site
+# for a lunar world into none (the owner, 2026-11-15), and only a head that can
+# go (sr_mq_head_ready, generated): a module for a world with launch windows is
+# built once its window is at most sr_mod_build_lead_months off, so none waits
+# for a window in a slot, and nothing is built while launches are barred (the
+# owner, 2026-11-23). While the head can't be built, the first module further
+# down that can, and that the stock covers, goes ahead of it
+# (sr_mq_promote_ready). Under Full Colonies an occupied launch site
 # fabricates nothing (slice 6 fleets design § 5.1: the Space Program's method
 # still gives its country points from a state it doesn't control); a blockade in
 # orbit doesn't stop fabrication, and the modules wait at Earth.
@@ -59,22 +63,19 @@ sr_mod_month = {
 			}
 		}
 		set_local_variable = { name = sr_fab_built value = 0 }
-		sr_mq_promote_lunar = yes
+		sr_mq_promote_ready = yes
 		while = {
 			limit = {
 				local_var:sr_fab_built < sr_mod_fab_per_month
 				NOT = { sr_launch_site_lost = yes }
 				sr_mod_fab_stock_value >= sr_mq_head_cost
-				OR = {
-					sr_ms_has_free_slot = yes
-					sr_mq_head_needs_no_slot = yes
-				}
+				sr_mq_head_ready = yes
 				has_variable = sr_mq_1_site
 				has_variable = sr_mq_1_type
 			}
 			change_local_variable = { name = sr_fab_built add = 1 }
 			sr_mod_fab_head = yes
-			sr_mq_promote_lunar = yes
+			sr_mq_promote_ready = yes
 		}
 	}
 }
@@ -98,10 +99,12 @@ sr_mod_fab_build = {
 # module is built (the transit is 0), so while launches aren't barred and the
 # world is neither blockaded nor occupied it is installed at once, through the
 # landing's own install (sr_mod_install_<key>; a full cap loses it, as a landing
-# does). Otherwise it waits in a shipment slot like any other (sr_mod_month built
-# it only with one free: sr_mq_head_needs_no_slot reads the same three tests)
-# and lands when it would have before, lost if the world is still blockaded or
-# occupied then (review of #1847: paying for a module lost the same month).
+# does). Since the owner's 2026-11-23 rule sr_mod_month builds a lunar head only
+# when these three tests hold (sr_mq_head_ready reads them), so a module for a
+# blockaded or occupied Moon colony waits in the queue; the slot below is a
+# fallback for any other caller: the module waits there like any other and lands
+# when it would have, lost if the world is still blockaded or occupied then
+# (review of #1847: paying for a module lost the same month).
 sr_mod_fab_build_lunar = {
 	if = {
 		limit = {
@@ -385,8 +388,14 @@ sr_mod_stop_storage = {
 # (sr_mod_ai_plan_<key>: a Habitat when its people fill three quarters of its
 # room, else its next specialization level its crews can run; never the
 # placeholder Defences or Spaceport), and runs the dearest fabrication method
-# within its budget while anything is queued (sr_mod_activate_best_fabrication);
-# otherwise fabrication goes off. Storage stays off.
+# within its budget while anything is queued and the stock has room
+# (sr_mod_activate_best_fabrication); otherwise fabrication goes off. The room
+# test is the owner's (2026-11-23): a module waiting for its launch window stays
+# queued (sr_mq_head_ready), so with the stock at its cap (sr_mod_fab_stock_fill_cap)
+# the method would bill its goods for points the month throws away, for up to a
+# Mars cycle. The review runs before the month's builds, so it reads last month's
+# stock; one switched off keeps its points and is switched on again at the first
+# review that finds the stock below the cap. Storage stays off.
 sr_mod_ai_review = {
 	if = {
 		limit = {
@@ -407,6 +416,7 @@ sr_mod_ai_review = {
 		if = {
 			limit = {
 				sr_mq_any = yes
+				sr_mod_fab_stock_value < sr_mod_fab_stock_fill_cap
 				in_default = no
 				net_fixed_income > 0
 			}

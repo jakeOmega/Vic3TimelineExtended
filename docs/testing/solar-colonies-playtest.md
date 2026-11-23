@@ -1044,14 +1044,17 @@ queue behind them. The console is `event te_debug_space_race.4` as above.
    module stock can hold its price" crossed; with an Orbital Depot it allows up to eight past, the Slots hover giving
    the price (up to 900) and the stock's cap. Queue one, then switch storage off: when it reaches the top the stock
    still fills to its price (the Next Module hover counts down) and it is built. *Superseded by § Colony people limit modules (#1954 Part B).*
-4. **The Moon needs no slot.** With all eight shipment slots taken by modules for Mars, queue a Mining Complex at a
+4. **The Moon needs no slot.** *Since 2026-11-23 Mars modules wait in the queue, not in slots (§ Modules built only
+   once they can go): fill the slots with modules in flight instead, to Saturn on chemical drives.* With all eight
+   shipment slots taken by modules for Mars, queue a Mining Complex at a
    lunar colony behind a Mars module. Next month the lunar module jumps to the top of the queue and is installed
    that month (the level rises, Shipments stays 8 / 0); the Mars module waits behind it. With the stock below the
-   lunar module's price it stays where it is. A blockaded or occupied lunar colony's module takes a slot instead.
+   lunar module's price it stays where it is. A blockaded or occupied lunar colony's module takes a slot instead
+   (*since 2026-11-23 it waits in the queue, On Hold*).
 5. **The hover by state.** The Next Module line reads "shipping full" with every slot taken, and its hover gives
    the waiting and in-flight counts, the months until the first can leave (Mars: the months to its window) and
    the first lands, and, with a Moon module behind the head, the Moon note (with Earth blockaded, "Earth is
-   blockaded" instead). In a window's last month a module still waiting reads about a cycle less 2 months. While
+   blockaded" instead; *since 2026-11-23 a blockaded Earth reads On Hold*). In a window's last month a module still waiting reads about a cycle less 2 months. While
    fabricating, the hover gives the price, stock, rate and months; when stopped, the reason: launch site lost, or no
    fabrication. "1 month" reads singular.
 
@@ -1268,3 +1271,32 @@ No new self-check: the base room factor reads `country_sr_colony_room_add` throu
 2. **Terraforming.** Research it next: the room is double the table's (100,000 at Valles Marineris before any
    Habitat), and a Terraforming level's 4% a year is of that doubled room.
 3. **A cession.** Cede the colony to a country with neither technology: its room doesn't fall the next month.
+
+## Modules built only once they can go (2026-11-23)
+
+The owner's rule (`sr_mq_head_ready`, `sr_mq_promote_ready`): a module for a world with launch windows is built
+once its window is at most `sr_mod_build_lead_months` (1) off, so none waits for a window in a shipment slot, and
+the first module further down the queue that can go, and that the stock covers, is built ahead of one that can't.
+No self-check: every input is a variable or a script value the Next Module hover already shows. The console is
+`event te_debug_space_race.4`.
+
+1. **Mercury ahead of Mars.** Under Simple or Full Colonies, with chemical drives, a Mars window over a year off,
+   and colonies at Mars and Mercury, queue a Mars module, then a Mercury module, with the stock covering both
+   (option b). Next month the Mercury module is built (Shipments 1 / 0, then 0 / 1 once it leaves); the Mars
+   module stays first in the queue, unbuilt. Next Module reads "in N mo", N the months until a month before the window, and its hover
+   is Waiting for Its Window, with the price and the stock.
+2. **The window comes.** Advance to a month before the Mars window: the Mars module is built (Shipments 1 / 0),
+   leaves with the window, and Next Module moves to the following entry. With six or more Mars modules queued and
+   the stock full, two are built each month from then until the window's second month, six in all, and the rest
+   wait for the next window in the queue, not in a slot.
+3. **The queue's order.** Queue Mars, Ceres, Mars, Mercury with neither window near: only Mercury is built, and the
+   queue then reads Mars, Ceres, Mars in that order.
+4. **An unpaid module doesn't jump.** With the stock below 100, queue Mars (window far) then Mercury: nothing is
+   built until the stock reaches 100, then Mercury is.
+5. **On hold.** Blockade Earth (Full Colonies): nothing is built, Next Module reads "on hold" in red and its hover
+   says Earth is blockaded; the stock still fills. Lift it: building resumes. With only a Moon colony blockaded,
+   its module waits first in the queue ("on hold", the Moon line) while a Mercury module behind it is built.
+6. **Late game.** With a fusion torch or antimatter drive, every module is built in queue order as before: no
+   window holds any.
+7. **An older save.** Load a save with Mars modules waiting in slots: they leave at their window as before, and
+   new Mars modules stay in the queue.

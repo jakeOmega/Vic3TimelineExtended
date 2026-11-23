@@ -443,7 +443,7 @@ CELLS = {
         r"|eb_unassigned_figure"
         r"|resort_figure|resort_queued_figure"
         r"|free_trade_figure|sc_rate_figure|sc_rate_paused|sc_strength_figure|sc_upkeep_figure|sc_reserve_figure"
-        r"|cf_drive_value|mq_next_(?:months|full|none))"),
+        r"|cf_drive_value|mq_next_(?:months|full|none|held))"),
     "approach label (te_sr_sec_control)": (
         ("te_sr_sec_control", 'text = "je_space_race_widget_approach_label"'),
         r"je_space_race_widget_approach_label"),
@@ -775,7 +775,7 @@ def _shown_keys(gui):
     at and past the cap (lunar colonization design § 5.1)."""
     keys = set(re.findall(r'\btext = "(je_space_race_widget_\w+)"', gui))
     keys |= set(re.findall(r"'(je_space_race_widget_funding_\w+)'", gui))
-    # and the queue's next-module figure, which one picks among three
+    # and the queue's next-module figure, which one picks among four
     keys |= set(re.findall(r"'(je_space_race_widget_mq_next_\w+)'", gui))
     return sorted(keys)
 

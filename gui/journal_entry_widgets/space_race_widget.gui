@@ -4574,14 +4574,15 @@ types space_race_widget_types
 						}
 
 						### The hover says what holds the queue now (the owner, 2026-11-15):
-						### stopped (by its reason), every shipment slot taken, or fabricating.
+						### stopped (by its reason), every shipment slot taken, waiting for its
+						### launch window, on hold (the owner, 2026-11-23), or fabricating.
 						te_sr_value_row = {
-							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_next_state'), '(CFixedPoint)3' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_stop_reason'), '(CFixedPoint)1' ), 'je_space_race_widget_mq_tt_stopped_site', 'je_space_race_widget_mq_tt_stopped_fab' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_next_state'), '(CFixedPoint)2' ), 'je_space_race_widget_mq_tt_full', 'je_space_race_widget_mq_tt_months' ) )]"
+							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_next_state'), '(CFixedPoint)3' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_stop_reason'), '(CFixedPoint)1' ), 'je_space_race_widget_mq_tt_stopped_site', 'je_space_race_widget_mq_tt_stopped_fab' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_next_state'), '(CFixedPoint)2' ), 'je_space_race_widget_mq_tt_full', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_next_state'), '(CFixedPoint)4' ), 'je_space_race_widget_mq_tt_window', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_next_state'), '(CFixedPoint)5' ), 'je_space_race_widget_mq_tt_held', 'je_space_race_widget_mq_tt_months' ) ) ) )]"
 							blockoverride "row_label" {
 								text = "je_space_race_widget_mq_next_label"
 							}
 							blockoverride "row_value" {
-								text = "[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_next_state'), '(CFixedPoint)3' ), 'je_space_race_widget_mq_next_none', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_next_state'), '(CFixedPoint)2' ), 'je_space_race_widget_mq_next_full', 'je_space_race_widget_mq_next_months' ) )]"
+								text = "[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_next_state'), '(CFixedPoint)3' ), 'je_space_race_widget_mq_next_none', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_next_state'), '(CFixedPoint)2' ), 'je_space_race_widget_mq_next_full', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_next_state'), '(CFixedPoint)5' ), 'je_space_race_widget_mq_next_held', 'je_space_race_widget_mq_next_months' ) ) )]"
 							}
 						}
 						te_sr_mq_rows = {}

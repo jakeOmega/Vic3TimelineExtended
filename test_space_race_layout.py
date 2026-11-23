@@ -1804,26 +1804,52 @@ class QueueNextModuleTest(unittest.TestCase):
             depth += {"{": 1, "}": -1}.get(loop[end], 0)
             end += 1
         limit = loop[start:end]
-        for term in ("sr_launch_site_lost", "sr_mq_head_cost", "sr_ms_has_free_slot", "sr_mq_1_site"):
+        # The head can go (sr_mq_head_ready): a free slot where it needs one, its
+        # window near (the owner, 2026-11-23).
+        for term in ("sr_launch_site_lost", "sr_mq_head_cost", "sr_mq_head_ready", "sr_mq_1_site"):
             self.assertIn(term, limit)
         self.assertNotIn("sr_mod_fab_rate", limit)
 
     def test_stopped_only_when_nothing_can_build(self):
         state = _block(_read(DISPLAY), "sr_disp_mq_next_state")
-        lost, covered, no_rate = (state.index("sr_launch_site_lost = yes"),
-                                  state.index("sr_mod_fab_stock_value >= sr_mq_head_cost"),
-                                  state.index("NOT = { sr_mod_fab_rate > 0 }"))
-        # The launch site first, then a covered head (built, or waiting for a
-        # slot), and only then no rate: stopped. A price past the stock's cap
-        # doesn't stop it: the stock fills to the head's price (review of #1847).
-        self.assertLess(lost, covered)
-        self.assertLess(covered, no_rate)
-        self.assertEqual(re.findall(r"value = (\d)", state), ["0", "1", "3", "2", "3"])
+        lost, barred, no_rate, window, closed, full = (
+            state.index("sr_launch_site_lost = yes"), state.index("sr_launches_barred = yes"),
+            state.index("NOT = { sr_mod_fab_rate > 0 }"), state.index("sr_mq_head_window_months > 0"),
+            state.index("sr_mq_head_lunar_closed = yes"), state.index("NOT = { sr_mq_head_ready = yes }"))
+        # The launch site first, then Earth blockaded (on hold), then stopped only
+        # for a head the stock doesn't cover with no fabrication; a covered head is
+        # built, waits for its window or its Moon colony, or waits for a slot. A
+        # price past the stock's cap doesn't stop it: the stock fills to the head's
+        # price (review of #1847).
+        self.assertLess(lost, barred)
+        self.assertLess(barred, no_rate)
+        self.assertLess(no_rate, window)
+        self.assertLess(window, closed)
+        self.assertLess(closed, full)
+        self.assertEqual(re.findall(r"value = (\d)", state), ["0", "1", "3", "5", "3", "4", "5", "2"])
+        # Stopped: the stock short of the head's price, with no fabrication.
+        self.assertLess(barred, state.index("sr_mod_fab_stock_value < sr_mq_head_cost"))
+        self.assertLess(state.index("sr_mod_fab_stock_value < sr_mq_head_cost"), no_rate)
+        self.assertIn("sr_mod_fab_stock_value >= sr_mq_head_cost", state[closed:])
         self.assertNotIn("sr_mod_fab_stock_cap", state)
-        # A lunar head waits for no slot (the owner, 2026-11-15).
-        self.assertIn("NOT = { sr_mq_head_needs_no_slot = yes }", state)
         reason = _block(_read(DISPLAY), "sr_disp_mq_stop_reason")
         self.assertEqual(re.findall(r"value = (\d)", reason), ["3", "1"])
+        # A head waiting for its window reads the months until it is built.
+        months = _block(_read(DISPLAY), "sr_disp_mq_next_months")
+        self.assertRegex(months, r"limit = \{ sr_mq_head_window_months > 0 \}\s*min = sr_mq_head_window_months")
+
+    def test_every_state_has_its_words(self):
+        gui = _read(GUI)
+        row = gui[gui.index('text = "je_space_race_widget_mq_next_label"') - 2000:]
+        row = row[:row.index("te_sr_mq_rows = {}")]
+        for key in ("je_space_race_widget_mq_tt_stopped_site", "je_space_race_widget_mq_tt_stopped_fab",
+                    "je_space_race_widget_mq_tt_full", "je_space_race_widget_mq_tt_window",
+                    "je_space_race_widget_mq_tt_held", "je_space_race_widget_mq_tt_months",
+                    "je_space_race_widget_mq_next_none", "je_space_race_widget_mq_next_full",
+                    "je_space_race_widget_mq_next_held", "je_space_race_widget_mq_next_months"):
+            self.assertIn(f"'{key}'", row)
+        for n in (2, 3, 4, 5):
+            self.assertIn(f"ScriptValue('sr_disp_mq_next_state'), '(CFixedPoint){n}' )", row)
 
 class TabTest(unittest.TestCase):
     """The colonization status's tabs (UI pass design § 11): a row of four
