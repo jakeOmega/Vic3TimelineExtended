@@ -2146,7 +2146,7 @@
  je_space_race_widget_setbacks_probe:0 "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_setbacks_probe_value')|0]"
  je_space_race_widget_setbacks_solar_colonization:0 "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_setbacks_solar_colonization_value')|0]"
  je_space_race_widget_setbacks_suborbital:0 "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_setbacks_suborbital_value')|0]"
- je_space_race_widget_settlers_crews_tt:0 "Module levels the colony's people can crew: one for every 10,000 people, or 5,000 with $artificial_intelligence$."
+ je_space_race_widget_settlers_crews_tt:0 "The crews the colony's modules use, against the crews its people make: one for every 10,000 people, or 5,000 with $artificial_intelligence$. Every module but the Habitat needs one, and the founding specialization runs without.\n#G Green#!: crews to spare, counting the modules queued and on their way. #Y Yellow#!: just enough for them. #R Red#!: too few for them all; short of crews, every crewed module runs at a share."
  je_space_race_widget_settlers_people_tt:0 "The colony's people, and the room it has for them."
  je_space_race_widget_shipments_figure:0 "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ms_waiting')|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ms_flying')|0]"
  je_space_race_widget_shipments_label:0 "Shipments waiting / in flight"
