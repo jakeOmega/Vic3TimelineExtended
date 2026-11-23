@@ -240,8 +240,8 @@ types te_map_room_picks_generated
 		}
 
 		# Living Conditions: how people live: the yearly walk's standard of living and wealth and the one less the
-		# other, the standard against the one people expect, and literacy; then how long they live, what they die of
-		# and what medicine reaches (the census's, hidden while it doesn't run).
+		# other, the standard against the one people expect and the share living below it, and literacy; then how long
+		# they live, what they die of and what medicine reaches (the census's, hidden while it doesn't run).
 		te_jmap_category_header = {
 			blockoverride "left_text" {
 				text = "te_jmap_cat_living"
@@ -305,6 +305,15 @@ types te_map_room_picks_generated
 					visible = "[GetScriptedGui('te_jmap_pick_sol_vs_expected_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_sol_vs_expected_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_sol_vs_expected_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_below_expected_sol"
+					tooltip = "te_jmap_pick_below_expected_sol_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_below_expected_sol_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_below_expected_sol_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_below_expected_sol_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
 				}
 
@@ -702,9 +711,10 @@ types te_map_room_picks_generated
 			}
 		}
 
-		# Economy: output and work (GDP, GDP per capita, unemployment); how wealth is spread (the walk's Gini and
-		# Dynastic Wealth) and who owns the capital; where the companies keep their headquarters, what the owners
-		# invest and the trade a state can carry; its infrastructure to spare and the power grids.
+		# Economy: output (GDP, GDP per capita) and work (unemployment, the jobs open); how wealth is spread (the
+		# walk's Gini and Dynastic Wealth) and who owns the capital; where the companies keep their headquarters, what
+		# the owners invest and the trade a state can carry; its infrastructure to spare, the market access it buys,
+		# and the power grids.
 		te_jmap_category_header = {
 			blockoverride "left_text" {
 				text = "te_jmap_cat_economy"
@@ -745,6 +755,13 @@ types te_map_room_picks_generated
 					onclick = "[GetScriptedGui('te_jmap_pick_gdp_per_capita_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
 				}
+			}
+
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_unemployment"
@@ -752,6 +769,15 @@ types te_map_room_picks_generated
 					visible = "[GetScriptedGui('te_jmap_pick_unemployment_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_unemployment_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_unemployment_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_vacant_jobs"
+					tooltip = "te_jmap_pick_vacant_jobs_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_vacant_jobs_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_vacant_jobs_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_vacant_jobs_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
 				}
 			}
@@ -840,6 +866,15 @@ types te_map_room_picks_generated
 				}
 
 				te_jmap_pick_button = {
+					text = "te_jmap_pick_market_access"
+					tooltip = "te_jmap_pick_market_access_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_market_access_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_market_access_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_market_access_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
 					text = "te_jmap_pick_power_grids"
 					tooltip = "te_jmap_pick_power_grids_desc"
 					visible = "[GetScriptedGui('te_jmap_pick_power_grids_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -850,8 +885,9 @@ types te_map_room_picks_generated
 			}
 		}
 
-		# Politics: turmoil and the loyalists against the radicals; then the political models the world follows, the
-		# United Nations and the colonial empires, each while its system's rule is on.
+		# Politics: turmoil, the loyalists against the radicals, and the people short of full acceptance; then the
+		# political models the world follows, the United Nations and the colonial empires, each while its system's
+		# rule is on.
 		te_jmap_category_header = {
 			blockoverride "left_text" {
 				text = "te_jmap_cat_politics"
@@ -890,6 +926,15 @@ types te_map_room_picks_generated
 					visible = "[GetScriptedGui('te_jmap_pick_radicals_loyalists_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_radicals_loyalists_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_radicals_loyalists_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_discrimination"
+					tooltip = "te_jmap_pick_discrimination_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_discrimination_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_discrimination_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_discrimination_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
 				}
 			}
@@ -1019,7 +1064,8 @@ types te_map_room_picks_generated
 		}
 
 		# Land and Environment: the climate's comfort before and after technology's relief, and tourism's base appeal;
-		# then emissions, the ocean basins and the monuments' grandeur, each while its system's rule is on.
+		# then the regions' pollution beside the emissions, and the ocean basins and the monuments' grandeur, each
+		# system's map while its rule is on.
 		te_jmap_category_header = {
 			blockoverride "left_text" {
 				text = "te_jmap_cat_land"
@@ -1078,6 +1124,15 @@ types te_map_room_picks_generated
 				spacing = 4
 
 				te_jmap_pick_button = {
+					text = "te_jmap_pick_pollution"
+					tooltip = "te_jmap_pick_pollution_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_pollution_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_pollution_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_pollution_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
 					text = "te_jmap_pick_emissions"
 					tooltip = "te_jmap_pick_emissions_desc"
 					visible = "[GetScriptedGui('te_jmap_pick_emissions_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -1085,6 +1140,13 @@ types te_map_room_picks_generated
 					onclick = "[GetScriptedGui('te_jmap_pick_emissions_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
 				}
+			}
+
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_ocean_basins"

@@ -31,7 +31,9 @@ scripted GUIs, from one table (§ Buttons), and retires the Cartographic Survey.
 the second) maps every pop type by its people and by its share of the people, with a Count/Share switch in Map Options,
 all from one table of classes (§ The Class Maps). The eighteenth (the same day, #1976, the third) adds ten maps of
 living standards, the economy and politics, Literacy among them on its old selector (§ The Map Room, "The eighteenth
-pass's ten"). One more follows: five more maps, each with a self-check (#1977).
+pass's ten"). The nineteenth (the same day, #1977, the last of the four) adds five: four engine figures the mod reads
+as a value for the first time, each with a once-a-game self-check, and a count of the yearly walk (§ The Map Room,
+"The nineteenth pass's five").
 `docs/testing/journal-map-modes-playtest.md` lists what is still open, and this file says which parts rest on an
 unverified engine fact. Update both as the answers come in.
 
@@ -100,6 +102,7 @@ Comfort's two maps share Base Comfort's range (`range_of`), so they still compar
 (a share on a categorical map) and City Rank (a rank is already a place in the world, and its first 20 are tourism's
 Cities bonus). Population Growth keeps its midpoint at none, as Natural Change does. Armed Forces, Company HQs,
 War Dead, Trade Capacity, Investment, Population Density, every class's count (#1975), Population and GDP (#1976)
+and Vacant Jobs (#1977)
 take GDP per capita's doubling scale, since their counts run over orders of magnitude.
 Comfort's and Emissions' green removal, the census's "no data" grey and the categorical maps are unchanged.
 
@@ -292,6 +295,35 @@ entry, in no country's journal.
   `GetInfrastructureBalance`, `GetNumLoyalists`, `GetNumUnemployedWorkingAdults`), so a hover that read a script value
   as none would still show the engine's figure. Living Conditions now has maps every player sees, so its header no
   longer hides with the census. Unverified (play-test check 34): every live read in a paint, and the hovers.
+- **The nineteenth pass's five** (2026-11-23, #1977, the owner's second tier). Four read an engine figure the mod
+  never read as a value before, live, through a script value each (`te_journal_map_values.txt`), so the paint, the
+  range, the hover and the self-check read one name; each is fitted to the world, with its range in its pick's
+  tooltip. **Economy**: 83 **Market Access** (`te_jmap_market_access`: `market_access`, 0-1, min(infrastructure,
+  usage) over usage, `vanilla_states_reference.md` § 4.3), straight, crimson at the range's low and pale sage at full
+  access, so the cut-off states stand out, every state painted and an empty one left out of the range; it sits beside
+  Infrastructure, whose shortfall is what lowers it. 85 **Vacant Jobs** (`te_jmap_vacant_jobs`: `available_jobs`,
+  the jobs open in buildings other than subsistence farms), a doubling at a time, a state with none open pale, beside
+  Unemployment. **Land and Environment**: 84 **Pollution** (`te_jmap_pollution`: `state_region.pollution_amount`,
+  the region's, 0 to 255, so a region's states alike; not the pollution impact the state panel shows, which follows
+  it), two-thirds of the color by a third of the range, a clean region pale, beside Emissions. **Living Conditions**:
+  86 **Below Expected SoL** (`te_jmap_below_expected`: `population_below_expected_sol`, 0-1, the share vanilla's
+  alert prints), straight, beside SoL vs Expected. The hovers read the state's data functions where vanilla has one
+  (`GetMarketAccess`, `GetStateRegion.GetPollutionImpact`, `GetPopulationRatioBelowExpectedStandardOfLiving`,
+  `GetNumUnemployedWorkingAdults`). **Politics**: 87 **Discrimination** (`te_jmap_unacc_share`), the share of the
+  people below Full Acceptance (`pop_acceptance < acceptance_status_5`, 80), a new count in the Map Room's own walk
+  calls (`te_dg_unacc`, `te_jmap_walk_pop`), whatever the Demographics rule, straight; "Politics or Living
+  Conditions", the owner said, and it sits by Radicals vs Loyalists, since acceptance moves radicalism and turmoil.
+  It reads nothing new to the mod (`pop_acceptance` is civil rights' and the culture merges' per-pop read), so it has
+  no self-check; the four engine figures each have one, once a game from the global monthly pulse whatever the pick
+  (`te_jmap_access_selfcheck`, `_pollution_`, `_jobs_`, `_below_sol_`), each armed on three states holding a fact read
+  another way, so a read of none everywhere can't pass: `TE_SELF_CHECK OK|BROKEN market_access` (states short of
+  infrastructure read between 0 and 1, none above 1), `pollution_amount` (the value agrees with its trigger form,
+  vanilla's and the tourism buildings' `state_region = { pollution_amount > N }`, at 0 and 10, none above 255),
+  `available_jobs` (states with a building under 90% staffed read above 0, and the value agrees with its trigger
+  form) and `below_expected_sol` (states living a point below what their people expect read above 0, none above 1).
+  The play-test list's Self-checks table names each fallback. Not buildable: Migration Attraction, since state-scope
+  `migration_pull` reads the country's figure (why the Cartographic Survey was switched off). Unverified (play-test
+  check 35): the four reads in a paint, the hovers and the five maps' look.
 - **Picks are scripted GUIs on a page widget, not scripted buttons.** The engine locks a scripted button for a country
   not involved in its entry ("Countries that are not involved in the Journal Entry may not take this action"), and
   nobody is involved in the Map Room. So `te_jmap_pick_<map>_sgui`
@@ -464,7 +496,7 @@ Ranked.
   of it, to the range's end on that side, so the midpoint stays the neutral color.
 - **Logarithmic**: the same share of the color for each doubling. A map already on a doubling scale (GDP per
   Capita, Armed Forces, Company HQs, War Dead, Trade Capacity, Investment, Population Density, the class counts,
-  Population, GDP) keeps its tree: Logarithmic is its own
+  Population, GDP, Vacant Jobs) keeps its tree: Logarithmic is its own
   curve, and its tooltip says so. A straight map starts at its range's low, or at a 64th of its high where the low
   is smaller (`LOG_RATIO`: a low of 0 has no logarithm, and the engine's five decimals can't hold a smaller share
   of the Capitalists' 0.2% range), so it spans six doublings at most; the figure over the start is worked out as
@@ -589,7 +621,7 @@ the game (play-test check 31).
 - **Where it doesn't apply.** A map of categories or on a fixed scale keeps its colors: the two buttons are greyed
   there with the reason (`te_jmap_color_no_range_tt`), and Map Default stays. A system's own entry reads neither
   the option nor the shared values, so its page keeps its own colors, as it keeps its own curve.
-- **The tooltips.** Each fitted pick's tooltip (35 in this pass, 72 since #1976; `te_jmap_pick_<map>_desc`, one key again; the
+- **The tooltips.** Each fitted pick's tooltip (35 in this pass, 77 since #1977; `te_jmap_pick_<map>_desc`, one key again; the
   thirteenth pass's `_scaled` twins are gone) is four lines, each true whatever is set: what the map shows, with
   no word of a curve, a color or a range (`PickTooltipTest` holds it to that); the range now; the scale, the
   map's own curve under Map Default (`te_jmap_curve_<shape>`, eleven keys shared by the maps of a shape) and the
@@ -616,7 +648,7 @@ the game (play-test check 31).
   at its first false line; if it reads every line, each of the eleven also works out the pick's ramp or factor.
   Nothing has measured which. Off the default: the
   shared branches work `te_jmap_pick_ramp` and the factor out up to four times a state, each a ladder on the
-  pick (35 rows at most then, 72 since #1976) before the map's own factor. The owner's frame reading (below) saw no cost in the
+  pick (35 rows at most then, 77 since #1977) before the map's own factor. The owner's frame reading (below) saw no cost in the
   default paint; this has not been read.
 
 ### A stored factor, weighed and not built
@@ -691,8 +723,8 @@ of the state's people (the tenth pass).
   `gen_journal_map_picks.py` its two picks (one slot of a row, `SLOTS`). `test_journal_map_classes.py` holds the
   generator, `ClassMapsTest` what the family paints and walks.
 - **Cost, not measured.** The family's 45 paint branches (a count's lerp and its pale none, a share's lerp) and its
-  "no data" branch come last in the ladder (151 branches before this pass, 193 now), so no other map pays for them; a
-  class map pays for the 146 branches above them and up to 44 of its own family's. The generated values file went from 12,202 lines to 19,080 (each
+  "no data" branch come last in the ladder (151 branches before this pass, 193 after it, 216 since #1977), so no
+  other map pays for them; a class map pays for the 169 branches above them and up to 44 of its own family's. The generated values file went from 12,202 lines to 19,080 (each
   fitted map's three other scales), and the Color option's shared branches read a ladder of 62 fitted picks where
   they read 36. Play-test check 33 asks for the frame counter on a class map, and names the fallback.
 - **Unverified** (play-test check 33): the colors, the buttons' labels once Share is set, the switch's move and the
@@ -794,13 +826,13 @@ Every map button clears the see-through flag before it opens a page.
   flags outlive a pick's reopen, as the see-through flag does, so a group opened stays open from map to map. Population
   (Population, Population Density, Urban People; Population Growth, Net Migration, Crowding Penalty; City Rank);
   Families and Ages (Births, Deaths, Natural Change; Fertility, Family Planning, Median Age; Aged 65 and Over, Sex
-  Balance); Living Conditions (Standard of Living, Wealth, SoL vs Wealth; SoL vs Expected, Literacy; Life Expectancy,
+  Balance); Living Conditions (Standard of Living, Wealth, SoL vs Wealth; SoL vs Expected, Below Expected SoL, Literacy; Life Expectancy,
   Infant Mortality, Leading Cause; Health Care); Classes (every pop type since #1975, five rows of three by theme,
-  each class's two picks in one place: § The Class Maps); Economy (GDP, GDP per Capita, Unemployment; Gini, Dynastic
-  Wealth, Ownership; Company HQs, Investment, Trade Capacity; Infrastructure, Power Grids); Politics (Turmoil,
-  Radicals vs Loyalists; Political Models, United Nations, Colonies); Military and Security (Armed
+  each class's two picks in one place: § The Class Maps); Economy (GDP, GDP per Capita; Unemployment, Vacant Jobs; Gini,
+  Dynastic Wealth, Ownership; Company HQs, Investment, Trade Capacity; Infrastructure, Market Access, Power Grids);
+  Politics (Turmoil, Radicals vs Loyalists, Discrimination; Political Models, United Nations, Colonies); Military and Security (Armed
   Forces, Fighting-Age Men, War Dead; Devastation, Nuclear Weapons, Agent Networks); Land and Environment (Base Comfort,
-  Current Comfort, Tourism Appeal; Emissions, Ocean Basins, Grandeur). Each button keeps its own gate, so a census map
+  Current Comfort, Tourism Appeal; Pollution, Emissions; Ocean Basins, Grandeur). Each button keeps its own gate, so a census map
   hides while the census doesn't run and a system's map while its rule is off. A group whose every map is gated hides
   with them, header and all (`te_jmap_cat_<key>_sgui`, generated where a group has no map every player sees: today
   Families and Ages, and Living Conditions too until #1976 gave it maps of its own), and a row whose maps share a gate hides with it, so a closed census leaves

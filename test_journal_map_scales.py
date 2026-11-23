@@ -319,8 +319,9 @@ class ScalesTest(unittest.TestCase):
     def test_a_doubling_scale_gives_each_doubling_the_same_color(self):
         doubled = [s for s in FITTED if s["world"]["kind"] == "doubling"]
         # and every class's people (#1975: gen.class_rows, from journal_map_classes.py)
+        # and the second tier's Vacant Jobs (#1977)
         self.assertEqual([s["name"] for s in doubled], ["gdppc", "soldiers", "hq", "war_dead", "trade", "invest",
-                                                         "density", "people", "gdp"]
+                                                         "density", "people", "gdp", "jobs"]
                          + [f"class_{c['pop']}" for c in gen.classes.CLASSES])
         for scale in doubled:
             floor = scale["world"]["floor"]
@@ -569,8 +570,8 @@ class OptionsTest(unittest.TestCase):
     def test_the_pick_is_fitted_only_on_a_map_with_a_range(self):
         fitted = {s["sel"] for s in ROOM}
         # 36 until the class maps (#1975): every pop type's people and share, 30 maps where four shares were; and the
-        # first tier's ten (#1976)
-        self.assertEqual(len(fitted), 36 - 4 + 2 * len(gen.classes.CLASSES) + 10)
+        # first tier's ten (#1976) and the second tier's five (#1977)
+        self.assertEqual(len(fitted), 36 - 4 + 2 * len(gen.classes.CLASSES) + 10 + 5)
         for sel in range(0, 100):
             self.assertEqual(self.value("te_jmap_pick_fitted", sel=sel), 1 if sel in fitted else 0, sel)
         # the categorical maps and the fixed scales: nothing to trim

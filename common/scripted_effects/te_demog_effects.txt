@@ -29,6 +29,8 @@
 #   te_dg_cls_<pop>     each pop type's people (te_dg_cls_peasants ...): the Map Room's class maps,
 #                       counted by its three calls (te_jmap_walk_*, te_journal_map_effects.txt; the
 #                       classes' part generated, te_journal_map_classes_generated.txt)
+#   te_dg_wealth        the people's mean wealth (the Map Room's Wealth map, #1976), and
+#   te_dg_unacc         the people below Full Acceptance (its Discrimination map, #1977), by the same calls
 #   te_dg_urban         people not at a rural workplace
 #   te_dg_urban_share   te_dg_urban over te_dg_walk_pop
 #   te_dg_fjob_share    share of employed people at a workplace that draws
