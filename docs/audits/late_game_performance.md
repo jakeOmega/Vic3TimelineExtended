@@ -1160,6 +1160,77 @@ error logs, the same 1,156 lines each. Each row is one session
 `20261120T110308Z`, `20261120T110737Z`, `20261120T114406Z`,
 `20261120T114842Z`, `20261120T115423Z`).
 
+## The USA of 2024: the Deep-Sea Mine gate, 2026-11-22: 1.15.2
+
+The owner's game of "The USA of 1992" above, played on to 2024 with `main`
+deployed (143596dff). Their report: the game got much slower once the
+Deep-Sea Mine came in and started building. Their own `dedicated_server.log`,
+no harness attached: the weekly day's hour 0 took 9 s on 27 May 2024, at
+least 343 s on 3 June (they paused then; the next hour ran at 459 s) and
+564 s on 10 June. The save (`autosave_exit.v3`, 11 June 2024) holds the
+reason. The USA had 83 seabed licences to spare, its first unused claims,
+from the sharing at the start of June. Its government queue held 2,269
+Deep-Sea Mine levels in three states (New York 1,000, Hawaii 850, Nunavut
+419), none built and all recorded. No other country had a mine queued, and
+no private queue held one.
+
+**What took the week.** The harness on the save (`--playset current`, 11 to
+19 June, the script profiler on; each variant an `--add-mod` folder of the
+changed files at the mod's paths, kept in `D:\vic3te-data\perf-2026-11-22\variants`).
+The 17 June weekly day was one frame of 781 s, and 777 s of it was the
+engine's private investment pass, `HandleAutonomousInvestment`. In the
+script profiler that week, the mine's `possible` (`03_zz_te_mines.txt:438`)
+was read 306,315 times for 779 s, 2.54 ms a read. The next-costliest script
+took 2.6 s. The pass reads every unlocked building's `possible` in every
+state, many times a week: the Chemical Plant's 91,532 times. Until the
+USA held unused claims, the gate's first test (a sum of five variables)
+failed. From June it went on to the room, `te_seabed_room`, which walked
+every building of every coastal state of the owner, twice a read, and more
+under Build only on local claims. The profiler adds to the cost: the
+owner's own 10 June ran 564 s.
+
+| Variant | Session | Weekly-day frame | `HandleAutonomousInvestment` | Mine `possible`: reads, time |
+|---|---|---|---|---|
+| `main` | `20261122T235340Z` | 780.9 s | 777.2 s | 306,315, 778.8 s |
+| The room by `b:`, walking only states with a mine | `20261123T001911Z` | 123.2 s | 119.6 s | 306,317, 116.7 s |
+| That, and `can_build_private` false | `20261123T003209Z` | 124.8 s | 121.2 s | 306,316, 118.1 s |
+| That, with the gate in `can_build_government` (shipped) | `20261123T004937Z` | 7.9 s | 4.2 s | 306,316, 0.04 s |
+
+The `b:` lookup makes each read cheaper (0.38 ms) but leaves 306,000
+of them. Forbidding private building changed nothing: the pass reads
+`possible` before `can_build_private`. With the gate in
+`can_build_government`, which the pass doesn't read, the gate was read
+once in the eight days, for 1.2 ms. The week is back to the 8 s a weekly
+day took in 1992. The `b:` forms read the same as the walks they replace,
+in game on the save (session `20261122T232347Z`, with the old forms
+renamed beside them): room 83 both ways, every basin's local room equal,
+New York's mine 1,000 levels after queued and 0 built.
+
+**What changed.** `building_ocean_mine`'s `possible` is `is_coastal = yes`
+alone. The licence gate is its `can_build_government`, as vanilla's
+Skyscraper keeps its site rule. With the Global Commons rule on,
+`can_build_private` is false, so investors, who never read the gate, can't
+build past the licences (the owner's suggestion). `te_seabed_state_levels`,
+`te_seabed_state_built_levels` and the gate's under-construction tests read
+the state's mine by `b:building_ocean_mine`. The room walks read only
+coastal states that have one: the national walk by `exists`, the basin walks
+by `te_seabed_state_counts_locally`, which also keeps a state holding records
+but no mine. `test_seabed_script.py`'s `GateTest` holds all of it.
+
+**Harness notes.** A `read` sent while the weekly day's tick ran hung the
+game ("Random should not be acquired by any other thread", then no answer),
+and the session had to be stopped. The runs above waited for the tick to end before
+sending any verb.
+
+**Left open.** At room 0 the production lens hides the mine, since it hides
+any building whose `can_build_government` fails. Whether the state's own
+building list still shows it grey, with the licence lines, is on the
+play-test list (`docs/testing/global-commons-playtest.md`, item 2). So is
+whether AI governments still build mines; in this save no AI country had one
+queued. The Solar Power Receiver's slot count walks every building of every
+state from its `possible`, behind a test of the slot modifier. No country
+had slots in this save, but a country that has them will pay the same price.
+
 ## Measurements, 2026-10-03: 2072
 
 The same save, 7 Nov 2072 → Jan 2073, measured with the flat dump.

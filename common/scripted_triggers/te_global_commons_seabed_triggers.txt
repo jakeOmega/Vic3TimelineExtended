@@ -104,11 +104,23 @@ te_seabed_navy_assertive = {
 }
 
 # State scope. The state has seabed data to record: records, or a Deep-Sea
-# Mine (finished or under construction).
+# Mine (finished or under construction; b: finds one whose levels are all
+# queued, te_seabed_state_levels).
 te_seabed_state_has_data = {
 	OR = {
 		te_seabed_state_records > 0
-		any_scope_building = { is_building_type = building_ocean_mine }
+		exists = b:building_ocean_mine
+	}
+}
+
+# State scope. The state can count in its basin's local room
+# (te_seabed_local_room_<basin>): a Deep-Sea Mine, whose levels may be
+# unrecorded, or records, which may be another basin's. A state with neither
+# adds 0 to both terms, so the walk skips it.
+te_seabed_state_counts_locally = {
+	OR = {
+		exists = b:building_ocean_mine
+		has_variable = te_seabed_lic_pacific
 	}
 }
 
@@ -157,10 +169,7 @@ te_seabed_local_open = {
 			te_seabed_state_local_room > 0
 		}
 		AND = {
-			any_scope_building = {
-				is_building_type = building_ocean_mine
-				is_under_construction = yes
-			}
+			b:building_ocean_mine ?= { is_under_construction = yes }
 			te_seabed_state_local_room >= 0
 		}
 	}
@@ -227,14 +236,14 @@ te_seabed_gate_local_line = {
 }
 
 # State scope: building_ocean_mine's licence gate (§ 2.6), read from its
-# possible. With the rule on, the owner must have room; as for the Solar Power
+# can_build_government. With the rule on, the owner must have room; as for the Solar Power
 # Receiver, a state with a level already under construction passes at 0 room,
 # so construction under way is not halted by its own queued level. That second
 # branch can't tell re-checking a queued level from queueing one more, so at
 # room 0 it lets one extra level in; the recording leaves that level waiting
 # unrecorded (te_seabed_record_country, review H1), room drops below 0 and both
 # branches shut until a share pays for it. Whether the engine re-checks
-# possible on construction under way at all is unread
+# the building's rules on construction under way at all is unread
 # (docs/testing/global-commons-playtest.md): if it doesn't, the branch can go.
 # With Build only on local claims on (te_seabed_local_only_on, the Seabed
 # tab's checkbox), a level also needs local room in the state's own basin
@@ -244,7 +253,17 @@ te_seabed_gate_local_line = {
 # shown while the level can be queued (not when the setting is what stops
 # it). Every room read sits behind a cheap test first (review M1): the
 # unbuilt shares (a variable sum), or a Deep-Sea Mine under construction here,
-# since te_seabed_room walks every building of every coastal state.
+# since te_seabed_room walks the owner's states for those with a mine.
+# Read from the Deep-Sea Mine's can_build_government, never its possible: the
+# weekly private investment pass (HandleAutonomousInvestment) reads every
+# building's possible in every state before it looks at can_build_private,
+# and read this gate there 306,315 times in one week for the owner's USA of
+# 2024 (2,269 levels queued, room 83): 779 s of the week's tick while the room
+# walked each state's buildings, 117 s with the b: lookup. From
+# can_build_government it was read once in eight days, and the week's tick
+# took 8 s (docs/audits/late_game_performance.md § "The USA of 2024"). The
+# build list and its tooltip still read it for every coastal state shown, so
+# nothing in it walks a state's buildings either.
 te_seabed_gate = {
 	trigger_if = {
 		limit = { te_global_commons_enabled = yes }
@@ -256,10 +275,7 @@ te_seabed_gate = {
 					te_seabed_room > 0
 				}
 				AND = {
-					any_scope_building = {
-						is_building_type = building_ocean_mine
-						is_under_construction = yes
-					}
+					b:building_ocean_mine ?= { is_under_construction = yes }
 					owner = { te_seabed_room >= 0 }
 				}
 			}

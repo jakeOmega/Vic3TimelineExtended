@@ -4,7 +4,7 @@ Commons, spec § 2).
 test_seabed_allocation.py proves the model; this holds the script to it: the
 constants are the same numbers, every effect the model names exists, the
 yearly pass runs its steps in the model's order, the gate sits in the Deep-Sea
-Mine's possible, the influence modifiers restate their script values, and the
+Mine's can_build_government, the influence modifiers restate their script values, and the
 UN hooks, the game rule and the variables keep the names the five Global
 Commons branches share.
 """
@@ -545,7 +545,7 @@ class FeeScriptTest(unittest.TestCase):
         lic = block(values, "te_seabed_state_unbuilt_lic")
         self.assertIn("subtract = te_seabed_state_built_levels", lic)
         self.assertIn("max = te_seabed_state_queued_levels", lic)
-        self.assertIn("add = level\n", block(values, "te_seabed_state_built_levels"))
+        self.assertIn("value = b:building_ocean_mine.level\n", block(values, "te_seabed_state_built_levels"))
         self.assertIn("te_seabed_state_fee_base", block(values, "te_seabed_fee_base"))
         weekly = block(values, "te_seabed_fee_weekly_value")
         for v in ("te_seabed_fee_base", "te_seabed_level_output_value", "te_seabed_fee_rate"):
@@ -788,10 +788,21 @@ class PanelDataTest(unittest.TestCase):
 
 class GateTest(unittest.TestCase):
     def test_the_deep_sea_mine_reads_the_gate(self):
-        building = block(read(BUILDINGS), "building_ocean_mine")
-        possible = re.search(r"possible = \{(.*?)\n\t\}", building, re.S).group(1)
-        self.assertIn("is_coastal = yes", possible)
-        self.assertIn("te_seabed_gate = yes", possible)
+        building = strip_comments(block(read(BUILDINGS), "building_ocean_mine"))
+        government = re.search(r"can_build_government = \{(.*?)\n\t\}", building, re.S).group(1)
+        self.assertIn("te_seabed_gate = yes", government)
+        # Private investors never read the gate, so with the rule on they may not build.
+        self.assertRegex(building, r"can_build_private = \{\s*NOT = \{ te_global_commons_enabled = yes \}\s*\}")
+
+    def test_the_deep_sea_mine_possible_is_cheap(self):
+        """The engine reads a building's possible for its private investors in
+        every state, before can_build_private: 306,316 times in one week for
+        the owner's USA of 2024. With the gate there, that cost 779 s of the
+        week's tick (117 s once the gate walked no buildings), so possible
+        holds only the coastline and the gate is the government's."""
+        building = strip_comments(block(read(BUILDINGS), "building_ocean_mine"))
+        possible = re.search(r"\tpossible = \{(.*?)\n\t\}", building, re.S).group(1)
+        self.assertEqual(possible.split(), ["is_coastal", "=", "yes"])
 
     def test_the_gate_reads_the_rule_and_no_basin(self):
         gate = strip_comments(block(read(TRIGGERS), "te_seabed_gate"))
@@ -806,7 +817,33 @@ class GateTest(unittest.TestCase):
         room = block(values, "te_seabed_room")
         self.assertIn("value = te_seabed_unbuilt_total", room)
         self.assertIn("subtract = te_seabed_unrecorded_total", room)
-        self.assertIn("add = level_after_queued_constructions", block(values, "te_seabed_state_levels"))
+        self.assertIn("value = b:building_ocean_mine.level_after_queued_constructions",
+                      block(values, "te_seabed_state_levels"))
+
+    def test_the_gate_walks_no_buildings(self):
+        """Each read of the gate reads the owner's coastal states several
+        times. With the gate in possible, a walk of each state's buildings cost
+        the owner's USA of 2024 2.54 ms a read, 779 s of one week's tick; the
+        b: lookup, 0.38 ms. The state's mine is the engine's b: lookup, and the
+        room walks skip states without one."""
+        values = strip_comments(read(VALUES))
+        triggers = strip_comments(read(TRIGGERS))
+        for name in ("te_seabed_state_levels", "te_seabed_state_built_levels",
+                     "te_seabed_unrecorded_total", "te_seabed_state_unrecorded",
+                     "te_seabed_state_records", "te_seabed_state_local_room",
+                     *(f"te_seabed_local_room_{b}" for b in m.BASINS)):
+            with self.subTest(value=name):
+                self.assertNotIn("scope_building", block(values, name))
+        for name in ("te_seabed_gate", "te_seabed_gate_local", "te_seabed_local_open",
+                     "te_seabed_state_next_local", "te_seabed_state_has_data",
+                     "te_seabed_state_counts_locally"):
+            with self.subTest(trigger=name):
+                self.assertNotIn("scope_building", block(triggers, name))
+        self.assertRegex(block(values, "te_seabed_unrecorded_total"),
+                         r"limit = \{\s*is_coastal = yes\s*exists = b:building_ocean_mine\s*\}")
+        counts = block(triggers, "te_seabed_state_counts_locally")
+        self.assertIn("exists = b:building_ocean_mine", counts)
+        self.assertIn("has_variable = te_seabed_lic_pacific", counts)
 
 
 class ContractTest(unittest.TestCase):

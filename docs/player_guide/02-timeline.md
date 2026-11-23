@@ -323,7 +323,8 @@ deposits are covered in [New mineral deposits](03-economy.md#new-mineral-deposit
 
 Two late buildings mine the seabed and space. The Deep-Sea Mine (Abyssal Plain
 Mining) can be built in any coastal state, and each level needs a seabed license
-([Seabed licenses](#seabed-licenses)). Like a fishing wharf, it loses up to
+([Seabed licenses](#seabed-licenses)). With the Global Commons rule on (the
+default), only governments build it, never private investors. Like a fishing wharf, it loses up to
 three quarters of its throughput while its state is blockaded. Its ships come
 from the Support Vessels group: Motor Ship Tenders run it on Motor Ships, and
 Magnetic Drive Tenders, from Modern Material Science, run it on fewer Magnetic
@@ -418,7 +419,7 @@ its own. The
 building's requirements list how many licenses you have to spare and which
 kind the next level would take. Tick Build only on local claims in the Seabed
 tab and a level can be queued only in a state whose own basin has a claim to
-spare, so neither you nor private investment builds one by accident; long-haul
+spare, so you don't build one by accident; long-haul
 levels already in that basin take its freed claims first.
 
 #### Claims, protection and the holding fee

@@ -437,9 +437,25 @@ building_ocean_mine = {
 	has_max_level = no
 	possible = {
 		is_coastal = yes
-		# Global Commons (§ 2.6): with the rule on, a seabed licence to spare
-		# (te_seabed_gate, te_global_commons_seabed_triggers.txt).
+	}
+	# Global Commons (§ 2.6): with the rule on, a seabed licence to spare
+	# (te_seabed_gate, te_global_commons_seabed_triggers.txt). It sits here,
+	# not in possible: the engine reads a building's possible for its private
+	# investors before it reads can_build_private, 306,316 times in one week
+	# for the owner's USA of 2024, while a government reads this only when it
+	# considers building: once in eight days there (docs/audits/
+	# late_game_performance.md § "The USA of 2024"). Vanilla's Skyscraper keeps
+	# its site check here the same way.
+	can_build_government = {
 		te_seabed_gate = yes
+	}
+	# With the rule on, built by governments only, as the company flagships
+	# are (the owner's suggestion, 2026-11-22: the licences are few and where
+	# a level goes matters by basin). Private investors never read the gate
+	# above, so without this they could queue past the licences. With the rule
+	# off there are no licences, and investors build the mine as before.
+	can_build_private = {
+		NOT = { te_global_commons_enabled = yes }
 	}
 	ownership_type = self
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
