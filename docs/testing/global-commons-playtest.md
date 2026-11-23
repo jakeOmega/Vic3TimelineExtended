@@ -121,10 +121,17 @@ even in that save, and the scale comes from those lines.
    "Seabed Licences to spare: N (unbuilt: …)" with a tick, and a second line saying whether the next
    level takes the state's own basin's licence or another's at -25%. Queue levels until the room is
    0: the button greys with the line crossed, and a level already under construction keeps building.
-   An AI country stops queueing at its room (its builder obeys `possible`).
+   An AI country stops queueing at its room (its government builder obeys `can_build_government`).
+   **Since 2026-11-22 the gate is the mine's `can_build_government`, not its `possible`** (the private
+   investment pass read `possible` 306,315 times a week, `docs/audits/late_game_performance.md`
+   § "The USA of 2024"). Check that both lines still show in the state's building list, and what the
+   production lens does at room 0: it hides a building whose `can_build_government` fails, so the mine
+   should drop out of the lens while the state's own list shows it grey with the reason. With the rule
+   on, private investors queue no Deep-Sea Mine (`can_build_private`), and auto-expand on a mine
+   should add no level if it builds through them (unverified); with the rule off they build as before.
    **The deciding unknown for the gate's second branch** (a state with a level under construction
-   passes at room 0): does the engine re-check `possible` for construction already queued, and halt
-   or cancel it when `possible` fails? Test it: at room 0 with one level under construction, use
+   passes at room 0): does the engine re-check the building's rules for construction already queued,
+   and halt or cancel it when they fail? Test it: at room 0 with one level under construction, use
    the console to take the country's last unbuilt share away (or watch a country whose share shrinks
    at a January sharing) and see whether the queued level keeps building. If construction under way
    is never halted, the branch is unnecessary and can go (`te_seabed_gate`). While it stays, it lets
@@ -351,7 +358,7 @@ even in that save, and the scale comes from those lines.
     next monthly update. With distant licenses in a basin's states and no claim left there, no new level
     is let in there until freed claims have replaced them (the line says none to spare while the Free
     column shows claims: those go to the long-haul levels first). If construction already under way in
-    that basin stops while the box is ticked, the engine re-checks `possible` (item 2's unknown): the
+    that basin stops while the box is ticked, the engine re-checks the gate (item 2's unknown): the
     local room is then below 0 there, as the national room is under a waiting level. (e) A revolution's
     winner keeps the setting (a variable); a country the player leaves to the AI builds as it did
     before, ticked or not (the gate reads it only while the country isn't AI). (f) The setting can still
@@ -402,20 +409,22 @@ The Seabed tab's share of the GUI and localization audit (`docs/audits/gui_audit
 - `ordered_country` with `position = 0` takes the highest `order_by` value (the largest remainder
   first).
 - `change_relations` changes the pair's one relations figure from either side (item 8).
-- The gate's room walk (`te_seabed_unrecorded_total`, every coastal state's buildings) is affordable
-  where the AI builder evaluates `possible`; the Solar Power Receiver's gate walks every state's
-  buildings the same way. Every room read now sits behind a cheap test (the unbuilt sum, or a mine
-  under construction in the state), so a country with no licences never walks. Watch the script
-  profiler (`ScriptProfiling.Dump`) on a late-game save with many claimants.
-- Whether a failing `possible` halts construction already under way (item 2): it decides whether
+- Answered 2026-11-22 (the owner's USA of 2024, `docs/audits/late_game_performance.md` § "The USA of
+  2024"): the room walk was not affordable in `possible`, which the weekly private investment pass read
+  306,315 times in a week, 779 s of the week's tick. The gate is now the mine's `can_build_government`,
+  read once in eight days there, and its room walks read only the coastal states with a mine, by `b:`.
+  The Solar Power Receiver's slot count still walks every state's buildings, behind a cheap modifier
+  test, from its `possible`.
+- Whether a failing gate halts construction already under way (item 2): it decides whether
   the gate's second branch is needed at all, the local gate's under Build only on local claims too
   (item 32). If it never halts, both second branches can go, and the setting then lets no level take a
   distant license (the model: none); if it halts, the local room's distant term halts construction in a
   basin whose states hold more distant licenses than its claims, and the fallback is to count only
   unrecorded levels in the second branch's room, which leaks one long-haul level a month while a
   construction runs there (`test_seabed_local_only.py`'s plain-count control).
-- The engine's builders (the AI's, private investment's, auto-expand) obey `possible` for a player
-  country, and `is_ai = no` reads false for a country the player has left (item 32).
+- The engine's government builders (the player's, the AI's) obey `can_build_government`, as vanilla's
+  Skyscraper relies on for its site rule, and `is_ai = no` reads false for a country the player has
+  left (item 32).
 - `is_revolutionary` reads true for a revolution's side in a civil war (the AI's policy choice skips
   it).
 - The rivals list rests on four reads nothing in the mod has shown for this shape: an
