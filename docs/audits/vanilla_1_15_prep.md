@@ -544,7 +544,7 @@ Design notes for whichever is built first:
 - **Cheap reads only.** Read a stored variable or modifier, never walk pops, until C6 says how often the map is evaluated (`docs/audits/late_game_performance.md`).
 - **Fixed scales.** Normalise the `lerp` factor to 0–1 against fixed bounds (life expectancy 20–85), not this year's world range, so a colour means the same thing in 1850 and 1950. Clamp it.
 - **The tooltip carries the number.** `map_tooltip` with `custom_tooltip_no_bullet` naming the state's value and, for a striped map, what the stripe means. The loc rules and audits apply as they do to any loc.
-- **Retire the survey** once one map works: `te_map_mode_script_values.txt`, `te_map_modes_effects.txt`, `te_map_modes_triggers.txt`, `te_map_mode_modifiers.txt`, `events/te_map_modes_events.txt`, the decision at `extra_decisions.txt:321` with its disabled-comment block, and their loc.
+- **Retire the survey** once one map works: `te_map_mode_script_values.txt`, `te_map_modes_effects.txt`, `te_map_modes_triggers.txt`, `te_map_mode_modifiers.txt`, `events/te_map_modes_events.txt`, the decision at `extra_decisions.txt:321` with its disabled-comment block, and their loc. Done 2026-11-23 (#1974), with the survey's lines in `gui_chart_script_values.txt` and `states_panel.gui`.
 - **The player guide** gains a line where each system's chapter describes its panel.
 
 ### 4.2 Scaling modifiers

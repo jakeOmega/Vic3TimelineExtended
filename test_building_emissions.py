@@ -505,9 +505,7 @@ class DisplayBoundaryTest(unittest.TestCase):
             gross = emissions.recipe_emissions(pm, {"coal": Decimal(2), "oil": Decimal("1.74")})
             self.assertEqual(scalar(state, emissions.STATE_MODIFIER), gross - expected)
 
-    def test_map_and_treaty_display_use_snapshots_without_live_household_sweeps(self):
-        mapping = parsed("common/script_values/te_map_mode_script_values.txt")
-        self.assertEqual(body(body(mapping, "te_map_mode_correction_for_emissions"), "value"), "owner.gw_market_emis_raw")
+    def test_treaty_display_uses_snapshots_without_live_household_sweeps(self):
         loc = (ROOT / "localization/english/te_concepts_l_english.yml").read_text(encoding="utf-8-sig")
         treaty = next(line for line in loc.splitlines() if line.startswith(" enforce_emissions_reduction_article_short_desc:"))
         self.assertIn("SOURCE_COUNTRY.MakeScope.ScriptValue('gw_market_emis_display')", treaty)

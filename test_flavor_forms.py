@@ -72,8 +72,8 @@ class KeyTests(unittest.TestCase):
             self.assertFalse(is_flavor(key), key)
 
     def test_an_option_named_like_a_flavor_is_not_one(self):
-        self.assertIn("te_map_modes.1.f_dismiss", ff.option_names())
-        self.assertNotIn("te_map_modes.1.f_dismiss", [key for key, _ in ff.load()["te_map_modes"]])
+        self.assertIn("te_debug_demog.80.f_opt", ff.option_names())
+        self.assertNotIn("te_debug_demog.80.f_opt", [key for key, _ in ff.load()["te_debug_demog"]])
 
 
 class RepoTests(unittest.TestCase):

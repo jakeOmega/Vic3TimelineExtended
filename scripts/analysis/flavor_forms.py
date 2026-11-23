@@ -70,7 +70,7 @@ MIN_CHAIN = 6
 # `monument_events.24.forum`, which made that chain read 45% narration (#1550).
 FLAVOR_KEY = re.compile(r'^\s*((?P<ns>[\w\-]+)\.\d+\.(?:f|flavor)(?:_\w+|\.(?!tt\b)\w+)?):\d*\s*"(?P<text>.*)"\s*(?:#.*)?$')
 # A key that some event uses as an option's `name` is an option, whatever it is
-# called (`te_map_modes.1.f_dismiss`).
+# called (`te_debug_demog.80.f_opt`).
 OPTION_NAME = re.compile(r"^\s*name\s*=\s*([\w\-]+\.\d+\.[\w.]+)\s*(?:#.*)?$", re.M)
 FORMS = ("exchange", "several voices", "one voice", "quotation", "scene", "list", "document", "narration")
 DOCUMENT_OPENING = re.compile(

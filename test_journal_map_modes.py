@@ -32,6 +32,9 @@ REPO = os.path.dirname(os.path.abspath(__file__))
 HOST = "common/journal_entries/te_journal_maps.txt"
 EFFECTS = "common/scripted_effects/te_journal_map_effects.txt"
 SGUIS = "common/scripted_guis/te_journal_map_sguis.txt"
+# The picks' scripted GUIs and their rows on the page, generated from one table (gen_journal_map_picks.py, #1974)
+PICK_SGUIS = "common/scripted_guis/te_journal_map_picks_generated.txt"
+PICKS_GUI = "gui/journal_entry_widgets/te_map_room_picks_generated.gui"
 ROOM_WIDGET = "gui/journal_entry_widgets/te_map_room_widget.gui"
 BANKING = "common/journal_entries/je_banking.txt"
 # The systems' maps: (selector, entry file, entry key, Map Room pick, tab button, tab file, rule gate). The Seabed and
@@ -93,6 +96,11 @@ def code(rel):
             kept.append(ch)
         out.append("".join(kept))
     return "\n".join(out)
+
+
+def sguis():
+    """Every Map Room scripted GUI: the generated picks and the hand-written options."""
+    return code(PICK_SGUIS) + "\n" + code(SGUIS)
 
 
 def block(text, key):
@@ -177,7 +185,8 @@ def tracked(rel):
 
 class FilesTest(unittest.TestCase):
     def test_each_new_file_has_one_bom(self):
-        for rel in (HOST, COLORS, VALUES, SCALES, WIDGETS, ROOM_WIDGET, EFFECTS, SGUIS, TRIGGERS, ON_ACTIONS):
+        for rel in (HOST, COLORS, VALUES, SCALES, WIDGETS, ROOM_WIDGET, EFFECTS, SGUIS, PICK_SGUIS, PICKS_GUI, TRIGGERS,
+                    ON_ACTIONS):
             with open(os.path.join(REPO, rel), "rb") as f:
                 head = f.read(6)
             self.assertTrue(head.startswith(BOM) and not head[3:].startswith(BOM), rel)
@@ -280,7 +289,7 @@ class CauseColorsTest(unittest.TestCase):
 class MapRoomTest(unittest.TestCase):
     def setUp(self):
         self.room = entry(HOST, "je_te_map_room")
-        self.sguis = code(SGUIS)
+        self.sguis = sguis()
 
     def picks(self):
         """{scripted GUI: selector} for every Map Room pick."""
@@ -373,7 +382,7 @@ class MapRoomTest(unittest.TestCase):
             self.assertRegex(valid, r"NOT\s*=\s*\{\s*te_jmap_selector\s*=\s*" + str(sel) + r"\s*\}", name)
 
     def test_every_pick_has_a_button(self):
-        row = block(code(WIDGETS), "te_jmap_pick_row")
+        row = block(code(PICKS_GUI), "te_jmap_pick_row")
         self.assertIsNotNone(row)
         seen = []
         for m in re.finditer(r"\bte_jmap_pick_button\s*=\s*\{", row):
@@ -479,7 +488,7 @@ class SystemMapsTest(unittest.TestCase):
 
     def setUp(self):
         self.room = entry(HOST, "je_te_map_room")
-        self.sguis = code(SGUIS)
+        self.sguis = sguis()
         self.widgets = code(WIDGETS)
 
     def room_branches(self, key, sel):
@@ -711,7 +720,7 @@ class NinthPassMapsTest(_RoomBranches, unittest.TestCase):
         walk = code("common/scripted_effects/te_demog_effects.txt")
         self.assertIn("set_variable = { name = te_dg_soldiers value = local_var:te_dg_w_sold }", walk)
         # whatever the Demographics rule, as the walk runs
-        self.assertEqual(block(block(code(SGUIS), "te_jmap_pick_armed_forces_sgui"), "is_shown").split(),
+        self.assertEqual(block(block(sguis(), "te_jmap_pick_armed_forces_sgui"), "is_shown").split(),
                          ["is_player", "=", "yes"])
 
     def test_company_hqs_grey_without_one(self):
@@ -788,11 +797,11 @@ class NinthPassMapsTest(_RoomBranches, unittest.TestCase):
         self.assertIn("var:te_dg_dc_war > 0", colors[0][0])
         self.assertIn("factor = te_jmap_war_dead_factor", colors[0][1])
         self.assertEqual(colors[1][1], 'value = "te_jmap_none"', "a state that lost none is pale")
-        self.assertIn("te_demog_cohorts_run = yes", block(block(code(SGUIS), "te_jmap_pick_war_dead_sgui"), "is_shown"))
+        self.assertIn("te_demog_cohorts_run = yes", block(block(sguis(), "te_jmap_pick_war_dead_sgui"), "is_shown"))
 
     def test_armed_forces_and_war_dead_share_a_row(self):
         # the census shares a country's war dead out to its states by their soldiers: the two read together
-        row = block(code(WIDGETS), "te_jmap_pick_row")
+        row = block(code(PICKS_GUI), "te_jmap_pick_row")
         at = row.index('text = "te_jmap_pick_armed_forces"')
         self.assertIn('text = "te_jmap_pick_war_dead"', enclosing(row, enclosing_span(row, at)[0] - 1))
 
@@ -831,12 +840,12 @@ class SecondRoundMapsTest(_RoomBranches, unittest.TestCase):
             self.assertIn(f"set_variable = {{ name = te_dg_lv_{var} value = local_var:te_dg_w_{var} }}", walk)
 
     def test_the_walk_s_maps_wait_for_no_rule(self):
-        sguis = code(SGUIS)
+        every = sguis()
         for name in ("te_jmap_pick_ownership_sgui", "te_jmap_pick_population_growth_sgui"):
-            self.assertEqual(block(block(sguis, name), "is_shown").split(), ["is_player", "=", "yes"], name)
+            self.assertEqual(block(block(every, name), "is_shown").split(), ["is_player", "=", "yes"], name)
         for name in ("te_jmap_pick_family_planning_sgui", "te_jmap_pick_health_care_sgui",
                      "te_jmap_pick_fighting_age_men_sgui"):
-            self.assertIn("te_demog_cohorts_run = yes", block(block(sguis, name), "is_shown"), name)
+            self.assertIn("te_demog_cohorts_run = yes", block(block(every, name), "is_shown"), name)
 
     def test_population_growth_is_walk_to_walk(self):
         body = block(code(VALUES), "te_jmap_pop_growth")
@@ -866,7 +875,7 @@ class SecondRoundMapsTest(_RoomBranches, unittest.TestCase):
         self.assertIn("is_building_group = bg_company_regional_headquarter", body)
 
     def test_the_new_rows(self):
-        row = block(code(WIDGETS), "te_jmap_pick_row")
+        row = block(code(PICKS_GUI), "te_jmap_pick_row")
 
         def row_of(key):
             at = row.index(f'text = "te_jmap_pick_{key}"')
@@ -874,10 +883,10 @@ class SecondRoundMapsTest(_RoomBranches, unittest.TestCase):
             return re.findall(r'text = "te_jmap_pick_(\w+)"', enclosing(row, inner))
 
         self.assertEqual(row_of("ownership"), ["ownership", "company_hqs"])
-        self.assertEqual(row_of("investment"), ["investment", "trade_capacity"])
+        self.assertEqual(row_of("investment"), ["investment", "trade_capacity", "power_grids"])
         self.assertEqual(row_of("armed_forces"), ["armed_forces", "fighting_age_men", "war_dead"])
-        self.assertEqual(row_of("population_growth"), ["sex_balance", "net_migration", "population_growth"])
-        self.assertEqual(row_of("health_care"), ["health_care", "family_planning"])
+        self.assertEqual(row_of("population_growth"), ["population_growth", "net_migration", "crowding"])
+        self.assertEqual(row_of("health_care"), ["health_care"])
 
 
 class ClassesAndTradeMapsTest(_RoomBranches, unittest.TestCase):
@@ -899,7 +908,7 @@ class ClassesAndTradeMapsTest(_RoomBranches, unittest.TestCase):
                 self.assertIn(f"value = var:te_dg_{key}", share)
                 self.assertIn("divide = { value = var:te_dg_walk_pop min = 1 }", " ".join(share.split()))
                 # the yearly walk's, whatever the Demographics rule
-                self.assertEqual(block(block(code(SGUIS), f"te_jmap_pick_{key}_sgui"), "is_shown").split(),
+                self.assertEqual(block(block(sguis(), f"te_jmap_pick_{key}_sgui"), "is_shown").split(),
                                  ["is_player", "=", "yes"])
 
     def test_the_walk_counts_the_classes_in_calls_of_its_own(self):
@@ -1060,23 +1069,26 @@ class PopulationDensityMapTest(_RoomBranches, unittest.TestCase):
                                                         "on_game_started"))
 
     def test_it_sits_with_the_cities(self):
-        row = block(code(WIDGETS), "te_jmap_pick_row")
+        row = block(code(PICKS_GUI), "te_jmap_pick_row")
         at = row.index('text = "te_jmap_pick_population_density"')
         inner = enclosing_span(row, at)[0] - 1
         self.assertEqual(re.findall(r'text = "te_jmap_pick_(\w+)"', enclosing(row, inner)),
-                         ["tourism_appeal", "city_rank", "population_density"])
-        migration = CategoriesTest.CATEGORIES.index("migration")
+                         ["population_density", "urban_share", "city_rank"])
+        population = CategoriesTest.CATEGORIES.index("population")
         bodies = [enclosing(row, m.end()) for m in re.finditer(r"\bte_jmap_category\s*=\s*\{", row)]
-        self.assertIn('text = "te_jmap_pick_population_density"', bodies[migration])
+        self.assertIn('text = "te_jmap_pick_population_density"', bodies[population])
 
 
 class CategoriesTest(unittest.TestCase):
-    """The Map Room's picks in seven collapsible categories (owner's ask, 2026-11-11)."""
+    """The Map Room's picks in collapsible groups by theme (owner's ask, 2026-11-11; by theme, not by game system,
+    2026-11-23, #1974)."""
 
-    CATEGORIES = ("society", "classes", "economy", "migration", "military", "systems", "census")
+    CATEGORIES = ("population", "families", "living", "classes", "economy", "politics", "military", "land")
+    # the groups whose every map is the census's: their headers hide while it doesn't run
+    GATED = ("families", "living")
 
     def setUp(self):
-        self.row = block(code(WIDGETS), "te_jmap_pick_row")
+        self.row = block(code(PICKS_GUI), "te_jmap_pick_row")
 
     def headers(self):
         return [enclosing(self.row, m.end()) for m in re.finditer(r"\bte_jmap_category_header\s*=\s*\{", self.row)]
@@ -1099,8 +1111,30 @@ class CategoriesTest(unittest.TestCase):
                 self.assertIn(f"visible = \"[Not(GetVariableSystem.Exists('{flag}'))]\"",
                               override(header, "onclick_showmore"))
                 self.assertIn(f"visible = \"[GetVariableSystem.Exists('{flag}')]\"", override(header, "onclick_showless"))
-                self.assertIn(f"visible = \"[GetVariableSystem.Exists('{flag}')]\"", body)
+                # the rows' own visible, before any row's: open, and (for a gated group) shown
+                self.assertIn(f"GetVariableSystem.Exists('{flag}')", re.search(r'visible = "([^"]*)"', body).group(1))
                 self.assertIn("te_jmap_pick_button = {", body)
+
+    def test_a_group_of_census_maps_hides_with_the_census(self):
+        # with the census off, Families and Ages and Living Conditions have nothing to open: header and rows go
+        shown = "GetScriptedGui('te_jmap_cat_{0}_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )"
+        for cat, header, body in zip(self.CATEGORIES, self.headers(), self.bodies()):
+            own = re.findall(r'visible = "[^"]*"', re.sub(r'blockoverride\s+"\w+"\s*\{[^{}]*\}', "", header))
+            with self.subTest(category=cat):
+                if cat in self.GATED:
+                    self.assertEqual(own, [f'visible = "[{shown.format(cat)}]"'])
+                    self.assertIn(f"visible = \"[And( GetVariableSystem.Exists('te_jmap_cat_{cat}_open'), "
+                                  f"{shown.format(cat)} )]\"", body)
+                    gate = block(block(sguis(), f"te_jmap_cat_{cat}_sgui"), "is_shown").split()
+                    self.assertEqual(gate, ["is_player", "=", "yes", "te_demog_cohorts_run", "=", "yes"])
+                else:
+                    self.assertEqual(own, [], "a group with a map every player sees is always shown")
+                    self.assertIsNone(block(sguis(), f"te_jmap_cat_{cat}_sgui"))
+                for name in re.findall(r"GetScriptedGui\('(te_jmap_pick_\w+_sgui)'\)", body):
+                    pick = block(block(sguis(), name), "is_shown")
+                    self.assertEqual("te_demog_cohorts_run = yes" in pick, cat in self.GATED or name in {
+                        "te_jmap_pick_net_migration_sgui", "te_jmap_pick_fighting_age_men_sgui",
+                        "te_jmap_pick_war_dead_sgui"}, name)
 
     def test_every_pick_sits_in_one_category(self):
         seen = []
@@ -1110,15 +1144,34 @@ class CategoriesTest(unittest.TestCase):
         self.assertEqual(sorted(seen), sorted(everything), "a pick outside every category")
         self.assertEqual(len(seen), len(set(seen)), "a pick in two categories")
 
-    def test_the_census_maps_are_together(self):
-        census = self.bodies()[self.CATEGORIES.index("census")]
-        for key in ("life_expectancy", "infant_mortality", "leading_cause", "birth_rate", "death_rate",
-                    "natural_change", "fertility", "median_age", "old_share", "sex_balance", "net_migration",
-                    "health_care", "family_planning"):
-            self.assertIn(f'text = "te_jmap_pick_{key}"', census, key)
-        classes = self.bodies()[self.CATEGORIES.index("classes")]
-        for key in ("capitalists", "aristocrats", "clergy", "academics"):
-            self.assertIn(f'text = "te_jmap_pick_{key}"', classes, key)
+    def test_the_maps_sit_by_theme(self):
+        # by theme, not by the system a map comes from: no Systems or Census group, and each system's map beside the
+        # maps of its kind (owner, 2026-11-23)
+        where = {}
+        for cat, body in zip(self.CATEGORIES, self.bodies()):
+            for key in re.findall(r'text = "te_jmap_pick_(\w+)"', body):
+                where[key] = cat
+        expected = {
+            "population": ("population_density", "urban_share", "city_rank", "population_growth", "net_migration",
+                           "crowding"),
+            "families": ("birth_rate", "death_rate", "natural_change", "fertility", "family_planning", "median_age",
+                         "old_share", "sex_balance"),
+            "living": ("life_expectancy", "infant_mortality", "leading_cause", "health_care"),
+            "classes": ("aristocrats", "clergy", "capitalists", "academics"),
+            "economy": ("gdp_per_capita", "gini", "dynastic_wealth", "ownership", "company_hqs", "investment",
+                        "trade_capacity", "power_grids"),
+            "politics": ("turmoil", "political_models", "united_nations", "colonies"),
+            "military": ("armed_forces", "fighting_age_men", "war_dead", "devastation", "nuclear", "networks"),
+            "land": ("base_comfort", "current_comfort", "tourism_appeal", "emissions", "ocean_basins", "grandeur"),
+        }
+        self.assertEqual(where, {key: cat for cat, keys in expected.items() for key in keys})
+        values = loc_values()
+        names = {"population": "Population", "families": "Families and Ages", "living": "Living Conditions",
+                 "classes": "Classes", "economy": "Economy", "politics": "Politics",
+                 "military": "Military and Security", "land": "Land and Environment"}
+        self.assertEqual({cat: values[f"te_jmap_cat_{cat}"] for cat in self.CATEGORIES}, names)
+        for gone in ("society", "migration", "systems", "census"):
+            self.assertNotIn(f"te_jmap_cat_{gone}", values, "a retired group's name")
 
 
 def option_buttons():
@@ -1182,7 +1235,7 @@ class OptionsTest(unittest.TestCase):
 
     def setUp(self):
         self.room = entry(HOST, "je_te_map_room")
-        self.sguis = code(SGUIS)
+        self.sguis = sguis()
         self.effects = code(EFFECTS)
         self.triggers = code(TRIGGERS)
 
@@ -1884,8 +1937,8 @@ class PickTooltipTest(_RoomBranches, unittest.TestCase):
         self.gen = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(self.gen)
         self.values = loc_values()
-        self.sguis = code(SGUIS)
-        self.row = block(code(WIDGETS), "te_jmap_pick_row")
+        self.sguis = sguis()
+        self.row = block(code(PICKS_GUI), "te_jmap_pick_row")
 
     def picks(self):
         """{pick key: its scale} for every map fitted to a range."""
@@ -2177,7 +2230,7 @@ class LocTest(unittest.TestCase):
         wanted = set()
         for rel in MAP_ENTRIES:
             wanted |= set(re.findall(r"custom_tooltip_no_bullet\s*=\s*(\w+)", code(rel)))
-        for rel in (WIDGETS, ROOM_WIDGET, JE_PANEL):
+        for rel in (WIDGETS, PICKS_GUI, ROOM_WIDGET, JE_PANEL):
             wanted |= set(re.findall(r'(?:text|tooltip)\s*=\s*"(te_j(?:map|e)_\w+)"', code(rel)))
         self.assertIn("te_je_see_through_tt", wanted)
         wanted |= {"je_te_map_room", "je_te_map_room_reason"}
@@ -2193,7 +2246,7 @@ class LocTest(unittest.TestCase):
         self.assertEqual(gone, set())
 
     def test_literacy_is_gone(self):
-        self.assertNotIn("te_jmap_pick_literacy_sgui", code(SGUIS))
+        self.assertNotIn("te_jmap_pick_literacy_sgui", sguis())
         self.assertNotIn("literacy", code(VALUES))
         self.assertNotIn("literacy", code(COLORS))
 

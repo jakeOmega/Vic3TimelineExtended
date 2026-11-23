@@ -51,10 +51,11 @@ _None._
 - `events/nuclear_weapon_events.txt` — `nuclear_weapon_events.31` option `nuclear_weapon_events.31.b` (no_effect_option) — **2026-10-28**: not giving the order is the choice
 - `events/resettlement_events.txt` — `resettlement.20` option `resettlement.20.a` (no_effect_option) — **2026-09-26**: continuing the coercive program
 - `events/space_race_events.txt` — `space_race_events.93` option `space_race_events.93.c` (no_effect_option) — **2026-10-26**: keeping the colony is the choice; the tooltip says so
+- `events/space_race_events.txt` — `space_race_events.113` option `space_race_events.113.b` (no_effect_option) — **2026-11-23**: keeping the charter is the choice; the tooltip says so
 - `events/te_formable_formation_events.txt` — `formation_te.10` option `formation_te.10.c` (no_effect_option) — **2026-09-26**: the decline: no annexation
 - `events/te_inflation_events.txt` — `te_inflation.1` option `te_inflation.1.c` (no_effect_option) — **2026-09-26**: doing nothing is the choice; the tooltip says the question returns in two years
 - `events/te_judiciary_events.txt` — `te_judiciary_events.5` option `te_judiciary_events.5.b` (no_effect_option) — **2026-10-25**: the packed court stays for the rest of its ten years
-- `events/te_map_modes_events.txt` — `te_map_modes.1` option `te_map_modes.1.f_dismiss` (no_effect_option) — **2026-09-26**: closes the survey menu
+- `events/te_power_bloc_summit_events.txt` — `te_pb_summit.1` option `te_pb_summit.1.h` (no_effect_option) — **2026-11-06**: adjourning is the choice; the tooltip says no mandate is spent
 - `events/un_events.txt` — `un_events.10` option `un_events.10.b` (no_effect_option) — **2026-09-26**: waiting is the choice; the tooltip says so
 - `events/un_events.txt` — `un_events.35` option `un_events.35.b` (no_effect_option) — **2026-09-26**: the refusal; the tooltip says so
 - `events/un_vote_events.txt` — `un_vote.1` option `un_vote.1.later` (no_effect_option) — **2026-11-03**: deferring is the point; the vote is cast later in the chamber
@@ -62,6 +63,6 @@ _None._
 ## Coverage
 
 - empty blocks: 0 (0 unreviewed)
-- no-effect options: 30 (0 unreviewed)
+- no-effect options: 31 (0 unreviewed)
 - stale tags: 0
 

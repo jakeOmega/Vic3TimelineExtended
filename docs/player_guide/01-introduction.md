@@ -31,19 +31,22 @@ A tab with a journal entry ends on the entry's modifier icons, the ones its
 journal page shows at the top right, above the Open Journal Entry button. Hover
 an icon for its effects.
 
-The Map Room is a page of world maps with a button for each, in seven
-groups. Click a group's header to open it or close it; every group starts
-closed, and one you open stays open as you switch maps.
+The Map Room is a page of world maps with a button for each, in eight
+groups by theme. Click a group's header to open it or close it; every group
+starts closed, and one you open stays open as you switch maps. The census's
+maps show only while the Demographics census runs, and a system's map only
+while its game rule is on; a group with none of its maps to show is hidden.
 
 | Group | Maps |
 |---|---|
-| Society | Turmoil, Devastation, Urban People |
+| Population | Population Density, Urban People, City Rank, Population Growth, Net Migration, Crowding Penalty |
+| Families and Ages | Birth Rate, Death Rate, Natural Change, Fertility, Family Planning, Median Age, Aged 65 and Over, Sex Balance |
+| Living Conditions | Life Expectancy, Infant Mortality, Leading Cause, Health Care |
 | Classes | Aristocrats, Clergymen, Capitalists, Academics: each class's share of the state's people |
-| Economy | GDP per Capita, Gini Coefficient, Dynastic Wealth, Ownership, Company HQs, Investment, Trade Capacity |
-| Migration and Cities | Base Comfort, Current Comfort, Crowding Penalty, Tourism Appeal, City Rank, Population Density |
-| Military | Armed Forces, Fighting-Age Men, War Dead |
-| Systems | A map for each of nine systems: Emissions, Nuclear Weapons, Agent Networks, United Nations, Political Models, Ocean Basins, Grandeur, Colonies, Power Grids |
-| Census | Life Expectancy, Infant Mortality, Leading Cause, Birth Rate, Death Rate, Natural Change, Fertility, Median Age, Aged 65 and Over, Sex Balance, Net Migration, Population Growth, Health Care, Family Planning |
+| Economy | GDP per Capita, Gini Coefficient, Dynastic Wealth, Ownership, Company HQs, Investment, Trade Capacity, Power Grids |
+| Politics | Turmoil, Political Models, United Nations, Colonies |
+| Military and Security | Armed Forces, Fighting-Age Men, War Dead, Devastation, Nuclear Weapons, Agent Networks |
+| Land and Environment | Base Comfort, Current Comfort, Tourism Appeal, Emissions, Ocean Basins, Grandeur |
 
 Hover a state for its figure. Trade Capacity colors each state by its own
 Trade Capacity, what its Trade Center can carry. Investment colors it by what
@@ -151,7 +154,9 @@ A map's tooltip follows the options: it says what the map shows, its range
 now, the scale in force and the colors in force, so it tells you which color
 is the low end whatever you have set.
 
-Those nine systems' tabs, and Demographics', have a map button left of the
+The tabs of the nine systems with a map here (Emissions, Nuclear Weapons,
+Agent Networks, United Nations, Political Models, Ocean Basins, Grandeur,
+Colonies and Power Grids), and Demographics', have a map button left of the
 "?" that opens the Map Room on their map. Seven of the nine (all but Ocean
 Basins and Power Grids) also draw the same map in their own journal entry while its page is
 open. Banking's button opens its journal entry,

@@ -25,6 +25,11 @@ ways from a midpoint, "What about symlog?") adds a third, Scale: the map's own c
 owner named, Color: the map's own colors, colorblind-safe ramps or greyscale, and rewrites the 35 fitted picks'
 tooltips so that each is true under every scale and color (§ The Map Room's Options, Color). The fifteenth
 (2026-11-16, the owner's ask: "a population density map mode") adds Population Density, people per km² of land.
+The sixteenth (2026-11-23, #1974, the first of four the owner asked for: "I'd like the modes to be grouped more by
+theme than by game system or effect") regroups the picks by theme in eight groups and generates them, with their
+scripted GUIs, from one table (§ Buttons), and retires the Cartographic Survey. Three more follow: every pop type by
+headcount with a Count/Share switch (#1975), maps of living standards, the economy and politics (#1976), and five
+more, each with a self-check (#1977).
 `docs/testing/journal-map-modes-playtest.md` lists what is still open, and this file says which parts rest on an
 unverified engine fact. Update both as the answers come in.
 
@@ -260,11 +265,13 @@ entry, in no country's journal.
   Play-test check 32.
 - **Picks are scripted GUIs on a page widget, not scripted buttons.** The engine locks a scripted button for a country
   not involved in its entry ("Countries that are not involved in the Journal Entry may not take this action"), and
-  nobody is involved in the Map Room. So `te_jmap_pick_<map>_sgui` (`common/scripted_guis/te_journal_map_sguis.txt`)
-  set the global pick with the player as root, and `te_jmap_pick_row` (`gui/te_map_widgets.gui`) draws them on the page
-  through the entry's `widget` (`gui/journal_entry_widgets/te_map_room_widget.gui`, above the description; a widget
+  nobody is involved in the Map Room. So `te_jmap_pick_<map>_sgui`
+  (`common/scripted_guis/te_journal_map_picks_generated.txt`) set the global pick with the player as root, and
+  `te_jmap_pick_row` (`gui/journal_entry_widgets/te_map_room_picks_generated.gui`, both written by
+  `scripts/generators/gen_journal_map_picks.py`) draws them on the page through the entry's `widget` (`gui/journal_entry_widgets/te_map_room_widget.gui`, above the description; a widget
   draws on a contextless page, 2026-11-05). A pick's `is_valid` is false while it is the pick, which its button draws
-  pressed (`down`, seen working 2026-11-05); the census maps' `is_shown` hides them while the census doesn't run.
+  pressed (`down`, seen working 2026-11-05); the census maps' `is_shown` hides them while the census doesn't run, and
+  a system's map's while its rule is off.
 - **A pick repaints at once.** Each pick button (`te_jmap_pick_button`) runs its scripted GUI, then fires
   `te_jmap_repaint` with `PdxGuiTriggerAllAnimations`. That state sits on `te_jmap_repainter`, a zero-size scripted
   widget outside the page (`gui/te_map_widgets.gui`, registered in `gui/scripted_widgets/te_systems_window.txt`), which
@@ -690,17 +697,24 @@ fails at load whether bare or ended with `.AccessSelf` (`gui_modding_guide.md` g
   The close comes last, in case a button whose window hides mid-click loses the lines after it.
 
 Every map button clears the see-through flag before it opens a page.
-- `te_jmap_pick_row`: the Map Room's picks on its page, in seven categories (2026-11-11, the owner's ask), each a
-  collapsible section: a header (`te_jmap_category_header`, the Demographics tab's `section_header_button` at 470 wide)
-  over its rows (`te_jmap_category`), shown while the category's client-side flag `te_jmap_cat_<key>_open` is set. Every
-  category starts collapsed, a long list (`gui_style_guide.md` § Sections), and the flags outlive a pick's reopen, as the
-  see-through flag does, so a category opened stays open from map to map. Society (Turmoil, Devastation, Urban People);
-  Classes (Aristocrats, Clergymen; Capitalists, Academics); Economy (GDP per Capita, Gini, Dynastic Wealth; Ownership,
-  Company HQs; Investment, Trade Capacity); Migration and Cities (Base Comfort, Current Comfort, Crowding Penalty; Tourism Appeal, City
-  Rank, Population Density); Military (Armed Forces, and Fighting-Age Men and War Dead while the census runs); Systems (the systems' nine in
-  rows of three, Grandeur, Colonies and Power Grids last); Census (its maps three to a row, Population Growth, the walk's,
-  beside Net Migration, and a last row of Health Care and Family Planning). `test_journal_map_modes.py`'s
-  `CategoriesTest` holds every pick to one category.
+- `te_jmap_pick_row`: the Map Room's picks on its page, generated (`gen_journal_map_picks.py`: `MAPS`, each map's pick
+  key, selector and gate, and `GROUPS`, its place), in eight groups by theme (2026-11-23, #1974; seven by game system
+  from 2026-11-11), each a collapsible section: a header (`te_jmap_category_header`, the Demographics tab's
+  `section_header_button` at 470 wide) over its rows (`te_jmap_category`), shown while the group's client-side flag
+  `te_jmap_cat_<key>_open` is set. Every group starts collapsed, a long list (`gui_style_guide.md` § Sections), and the
+  flags outlive a pick's reopen, as the see-through flag does, so a group opened stays open from map to map. Population
+  (Population Density, Urban People, City Rank; Population Growth, Net Migration, Crowding Penalty); Families and Ages
+  (Births, Deaths, Natural Change; Fertility, Family Planning, Median Age; Aged 65 and Over, Sex Balance); Living
+  Conditions (Life Expectancy, Infant Mortality, Leading Cause; Health Care); Classes (Aristocrats, Clergymen;
+  Capitalists, Academics); Economy (GDP per Capita, Gini, Dynastic Wealth; Ownership, Company HQs; Investment, Trade
+  Capacity, Power Grids); Politics (Turmoil; Political Models, United Nations, Colonies); Military and Security (Armed
+  Forces, Fighting-Age Men, War Dead; Devastation, Nuclear Weapons, Agent Networks); Land and Environment (Base Comfort,
+  Current Comfort, Tourism Appeal; Emissions, Ocean Basins, Grandeur). Each button keeps its own gate, so a census map
+  hides while the census doesn't run and a system's map while its rule is off. A group whose every map is gated hides
+  with them, header and all (`te_jmap_cat_<key>_sgui`, generated where a group has no map every player sees: today
+  Families and Ages and Living Conditions), and a row whose maps share a gate hides with it, so a closed census leaves
+  no empty row's spacing. Until #1974 the Census header stayed with nothing under it. `test_journal_map_modes.py`'s
+  `CategoriesTest` holds every pick to one group; `test_journal_map_picks.py` holds the generator.
 - `te_jmap_options`: the Map Room's options (2026-11-14, § The Map Room's Options), one more collapsible section in
   the picks' form, mounted below `te_jmap_pick_row` on the page (`te_map_room_widget.gui`) and closed at first
   (`te_jmap_options_open`), with the options in force at the header's right. Open: an Area row of five buttons
@@ -743,7 +757,8 @@ listed copy of the journal map mode, each answered (`docs/testing/journal-map-mo
    `entry` if a system's own entry draws it: the entry then reads `te_jmap_<map>_factor`, on the whole world's range,
    and the Map Room its twin, `te_jmap_<map>_room_factor` (and `te_jmap_<map>_room_lo` / `_hi` in the tooltip).
 2. A system with no entry borrows the Map Room: a new selector number, its branches in `map_color` and `map_tooltip`, a
-   pick scripted GUI and its `te_jmap_pick_button` in one of `te_jmap_pick_row`'s categories, and loc for both. A map that reads a stored
+   row in `gen_journal_map_picks.py`'s `MAPS` (its key, selector and gate) and a place in one of its `GROUPS`, then a
+   rerun, which writes its pick's scripted GUI and button; and loc for both (`te_jmap_pick_<key>`, `_desc`). A map that reads a stored
    figure joins `map_color`'s "no data" `OR` and one of `map_tooltip`'s (`test_journal_map_modes.py` checks it). A
    figure behind a long `state_region` chain is stored by the refresh that already computes it, not read live
    (tourism's and Local Climate's are the pattern). The Area option needs nothing from a new map: `map_color`'s and
@@ -754,4 +769,3 @@ listed copy of the journal map mode, each answered (`docs/testing/journal-map-mo
 4. A "show on the map" button opens a page: the entry's (`te_jmap_banking_map_button`) when every country holds it,
    or the Map Room on the system's pick (`te_jmap_gw_map_button`) when not. A tab showing an entry's content doesn't
    trigger its map.
-5. Retire the Cartographic Survey (`te_map_mode_*`, prep § 4.1) once one map is seen working in game.

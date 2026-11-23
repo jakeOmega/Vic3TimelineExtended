@@ -1694,7 +1694,7 @@ IMAGES = {
     "orbital_earth_view": {
         "prompt": "An astronaut looking out a spacecraft window at Earth below — the thin blue atmosphere line, swirling white clouds, the curvature of the planet. The profound loneliness and beauty of orbit. Earth as a fragile island in blackness.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["modern_election_events.32", "space_race_events.2", "te_map_modes.1"],
+        "events": ["modern_election_events.32", "space_race_events.2"],
         "reframed": "mirror",
     },
     "moon_landing_footprint": {
