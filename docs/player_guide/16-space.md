@@ -251,7 +251,7 @@ shows:
 
 | View | Shows | Above the rows |
 |---|---|---|
-| People (the default) | Each colony's people and room, its crews (and, red, the crews it needs while short) and its settler priority | Settlers a month, last month's settlers and their Launch Capacity a week, and your people off Earth |
+| People (the default) | Each colony's people and room, its crews in use against the crews it has (green with crews to spare for the modules queued and on their way, yellow with just enough, red short) and its settler priority | Settlers a month, last month's settlers and their Launch Capacity a week, and your people off Earth |
 | Modules | Each colony's crews against the crews it needs (red while short), its Habitats against their cap (red past it) and its Extraplanetary Base room and grade, then every module's level with a button to queue one more | Fabrication, shipments, module upkeep, Extraplanetary Base and Resort Colony room, and the queue in a box of its own with when its next module is built |
 | Autonomy | Each colony's autonomy, how much it moves a month (hover it for that colony's terms), what it is building of its own, its charter or garrison, and Abandon | Free colony trade; the free colonies are listed below the rows |
 | Defenses | Each colony's Defenses, integrity and marines, and what threatens it | |

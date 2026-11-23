@@ -685,8 +685,8 @@ class ModulesViewTest(unittest.TestCase):
 
 class PeopleViewTest(unittest.TestCase):
     """Design § 10: the programme line shows the amount, last month's sent and
-    the week's Launch Capacity; each colony its crews and, red, how many it
-    needs when short; the overview a cell while any colony is short; and the
+    the week's Launch Capacity; each colony its crews used / available,
+    colored by the crews left once its queue lands; the overview a cell while any colony is short; and the
     Habitat cap, with the people and crews it holds at our share, wherever a
     destination is picked (the owner)."""
 
@@ -708,15 +708,28 @@ class PeopleViewTest(unittest.TestCase):
             self._has_loc(key)
             self.assertTrue(f'"{key}"' in self.gui, f"{key} isn't shown")
 
-    def test_each_colony_says_how_many_crews_it_needs(self):
-        self.assertTrue('block "settler_crews_short" {}' in self.gui, "no short crews cell")
-        rows = _raw(str(gss.GUI_OUT))  # unstripped: the figure's #R reads as a comment to _strip
+    def test_each_colony_shows_its_crews_used_of_available(self):
+        """The owner, 2026-11-23: used / available, green with crews to spare
+        once the queue and every shipment land, yellow with exactly enough, red short."""
+        for block in ("settler_crews", "settler_crews_exact", "settler_crews_short"):
+            self.assertTrue(f'block "{block}" {{}}' in self.gui, f"no {block} cell")
+        rows = _raw(str(gss.GUI_OUT))  # unstripped: the figure's color code reads as a comment to _strip
         for site in gss.SITES:
             k = site.key
             with self.subTest(site=k):
-                self.assertIn(f"ScriptValue('sr_disp_site_crews_short_{k}'), '(CFixedPoint)1' )]\"\n\t\t\t\traw_text = "
-                              f"\"#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_{k}')|0] needed#!\"",
-                              rows)
+                planned = _block(self.display, f"sr_site_crews_planned_{k}")
+                self.assertIn(f"value = sr_mod_crewed_pending_{k}", planned)
+                self.assertIn("subtract = 1", planned)
+                fit = _block(self.display, f"sr_disp_site_crews_fit_{k}")
+                self.assertIn(f"if = {{ limit = {{ sr_site_crews_planned_{k} = sr_site_crews_{k} }} value = 1 }}", fit)
+                self.assertIn(f"else_if = {{ limit = {{ sr_site_crews_planned_{k} > sr_site_crews_{k} }} value = 2 }}", fit)
+                used = (f"[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_{k}')|0]/"
+                        f"[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_{k}')|0]")
+                for block, value, color in (("settler_crews", 0, "G"), ("settler_crews_exact", 1, "Y"),
+                                            ("settler_crews_short", 2, "R")):
+                    self.assertIn(f'blockoverride "{block}" {{\n\t\t\t\tvisible = "[EqualTo_CFixedPoint( '
+                                  f"JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_fit_{k}'), "
+                                  f"'(CFixedPoint){value}' )]\"\n\t\t\t\traw_text = \"#{color} {used}#!\"", rows)
 
     def test_the_overview_counts_the_understaffed(self):
         count = _block(self.display, "sr_disp_understaffed_count")

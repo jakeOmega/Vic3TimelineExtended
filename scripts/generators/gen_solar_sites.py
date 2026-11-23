@@ -3846,7 +3846,9 @@ def render_display() -> str:
     out += ["",
             "# Modules (slice 4 design § 11), per world:",
             "#   sr_disp_mod_pending_<type>_<key>  our queue of the type and every shipment of it on its way",
-            "#   sr_disp_site_staffing_<key>       the colony's staffing, in percent"]
+            "#   sr_disp_site_staffing_<key>       the colony's staffing, in percent",
+            "#   sr_site_crews_planned_<key>       the crews needed once our queue and shipments land",
+            "#   sr_disp_site_crews_fit_<key>      the crews against that: 0 spare, 1 exact, 2 short"]
     for site in SITES:
         k = site.key
         for t in ("a", "b", *generic_types(site)):
@@ -3862,6 +3864,20 @@ def render_display() -> str:
                 f"sr_disp_site_crews_short_{k} = {{",
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ sr_site_crew_needed_{k} > sr_site_crews_{k} }} value = 1 }}",
+                "}",
+                # The People view's Crews color (the owner, 2026-11-23): the crews
+                # needed once our queue and every shipment land, against the crews;
+                # 0 with crews to spare (green), 1 exactly enough (yellow), 2 short
+                # (red). Spare is the + button's crew line, sr_mod_scope_crew_spare.
+                f"sr_site_crews_planned_{k} = {{",
+                f"\tvalue = sr_mod_crewed_pending_{k}",
+                "\tsubtract = 1",
+                "\tmin = 0",
+                "}",
+                f"sr_disp_site_crews_fit_{k} = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ sr_site_crews_planned_{k} = sr_site_crews_{k} }} value = 1 }}",
+                f"\telse_if = {{ limit = {{ sr_site_crews_planned_{k} > sr_site_crews_{k} }} value = 2 }}",
                 "}"]
         out += [f"sr_disp_site_staffing_{k} = {{",
                 f"\tvalue = sr_site_staffing_{k}",
@@ -4287,10 +4303,13 @@ def _colony_row(site: Site) -> list[str]:
     # The figures under a hover of their own are underlined by the type; #v
     # here keeps the value color the type's format used to give them.
     out += _override("settler_people", f'raw_text = "#v [{_sv(f"sr_disp_site_pop_{k}")}|K] / [{_sv(f"sr_site_room_{k}")}|K]#!"')
-    out += _override("settler_crews", f'raw_text = "[{_sv(f"sr_site_crews_{k}")}|0]"')
-    # ... and, red, the crews it needs while its people are short (colony people design § 10).
-    out += _override("settler_crews_short", f'visible = "[{_eq(f"sr_disp_site_crews_short_{k}", 1)}]"',
-                     f'raw_text = "#R [{_sv(f"sr_disp_site_crews_needed_{k}")}|0] needed#!"')
+    # Crews used / available (the owner, 2026-11-23): green with crews to spare
+    # once the queue and every shipment land, yellow with exactly enough, red short.
+    used = f"[{_sv(f'sr_disp_site_crews_needed_{k}')}|0]/[{_sv(f'sr_disp_site_crews_{k}')}|0]"
+    fit = f"sr_disp_site_crews_fit_{k}"
+    for block, value, color in (("settler_crews", 0, "G"), ("settler_crews_exact", 1, "Y"),
+                                ("settler_crews_short", 2, "R")):
+        out += _override(block, f'visible = "[{_eq(fit, value)}]"', f'raw_text = "#{color} {used}#!"')
     # Modules
     # Crews needed / available, red when short, then the share they run (colony
     # people design § 10).

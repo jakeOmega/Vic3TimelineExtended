@@ -1214,10 +1214,15 @@ Console: `event te_debug_space_race.3` (g fills our colonies to half their room,
 sends them) and `event te_debug_space_race.4` (b fills the stock, c queues one of each module, e lands them).
 
 1. **Crews at a large colony.** A colony of 45,000 people with eight crewed levels: the Modules view's Crews reads
-   4/7 in red, its hover says what a short crew costs and how to get more, and every crewed module runs at
-   (4 + 1) ÷ 8, 62.5%, in the specialization's multiplier on the entry. The People view's row shows its 4 crews and "7 needed" in
+   7/4 (needed / available) in red, its hover says what a short crew costs and how to get more, and every crewed module runs at
+   (4 + 1) ÷ 8, 62.5%, in the specialization's multiplier on the entry. The People view's Crews reads 7/4 in
    red, and the overview shows a Crews cell, "1 short". With Artificial General Intelligence the same
-   colony reads 9/7, not red, and the cell goes.
+   colony reads 7/9, not red, and the cell goes.
+1a. **The People view's Crews color** (owner, 2026-11-23). Crews used / available, colored by the crews left once
+   the queue and every shipment land: at a colony of 50,000 people (5 crews) with five crewed levels (4 used) it
+   reads 4/5 in green; queue one crewed module and it turns yellow, still 4/5, the moment the + button's crew
+   line reads "No crew to spare"; queue a second and it turns red, still 4/5. Queuing a Habitat changes nothing.
+   When the modules land the figure follows: 5/5 yellow, then 6/5 red.
 2. **The + button's crew line.** At that colony the + button on a facility shows "No crew to spare" in red and
    still lets us queue; at a fully crewed colony with one crew to spare it reads "Needs a crew: this colony's people
    have one to spare", and after one more crewed module is queued it reads short; on a Habitat the line is absent.

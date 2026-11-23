@@ -1666,23 +1666,24 @@ types space_race_widget_types
 					block "settler_people" {}
 				}
 			}
-			### Its crews, and red while its people are short the crews it needs
-			### (colony people design § 10).
+			### Its crews used / available (the owner, 2026-11-23), one cell shown
+			### by sr_disp_site_crews_fit_<key>: green with crews to spare once the
+			### modules queued and on their way land, yellow with exactly enough,
+			### red short (colony people design § 10).
 			widget = {
-				size = { 120 24 }
+				size = { 60 24 }
 				parentanchor = vcenter
 				tooltip = "je_space_race_widget_settlers_crews_tt"
 
 				flowcontainer = {
 					direction = horizontal
-					spacing = 4
 					parentanchor = left|vcenter
 					ignoreinvisible = yes
 
 					textbox = {
 						parentanchor = left|vcenter
 						autoresize = yes
-						max_width = 24
+						max_width = 48
 						align = left|nobaseline
 						using = te_sr_fontsize_row
 						elide = right
@@ -1691,7 +1692,16 @@ types space_race_widget_types
 					textbox = {
 						parentanchor = left|vcenter
 						autoresize = yes
-						max_width = 88
+						max_width = 48
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						block "settler_crews_exact" {}
+					}
+					textbox = {
+						parentanchor = left|vcenter
+						autoresize = yes
+						max_width = 48
 						align = left|nobaseline
 						using = te_sr_fontsize_row
 						elide = right

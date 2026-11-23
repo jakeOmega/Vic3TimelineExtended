@@ -913,7 +913,8 @@ class FigureBudgetTest(unittest.TestCase):
     FIGURES = {
         # Colonies (te_sr_colony_row): people and room in K, crews, crew share,
         # a module level and what is on its way, autonomy and drift, Defenses
-        "settler_people": "999.9K / 999.9K", "settler_crews": "99", "module_staffing": "100%",
+        "settler_people": "999.9K / 999.9K", "settler_crews": "99/99", "settler_crews_exact": "99/99",
+        "settler_crews_short": "99/99", "module_staffing": "100%",
         "module_crews": "99/99", "module_crews_short": "99/99",
         "aut_figure": "100%", "aut_drift": "+0.99", "def_level": "99", "def_integrity": "100%", "def_marines": "99",
         # slots used of slots (4 + 5 technologies + 4 past), base room (60 + 10 levels x 10),
