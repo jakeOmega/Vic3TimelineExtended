@@ -119,9 +119,9 @@ class BuildingTest(unittest.TestCase):
         # Every branch counts a queued station, which has_building misses until it is built.
         self.assertNotIn("has_building", possible)
         self.assertEqual(possible.count("te_grid_state_has_station = yes"), 3)
+        # The engine's b: lookup finds a queued station at level 0 too, without walking the state's buildings.
         trigger = _code(_top_level(_read(TRIGGERS), "te_grid_state_has_station"))
-        self.assertIn("any_scope_building", trigger)
-        self.assertIn("is_building_type = building_grid_transfer_station", trigger)
+        self.assertEqual(trigger.split(), ["exists", "=", "b:building_grid_transfer_station"])
 
     def test_has_a_panel_background(self):
         self.assertRegex(self.building, r'background = "gfx/interface/icons/building_icons/backgrounds/\w+\.dds"')

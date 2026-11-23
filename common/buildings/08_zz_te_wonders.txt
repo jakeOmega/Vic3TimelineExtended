@@ -994,12 +994,10 @@ building_wonder_continental_union_hq = {
 			has_foreign_affairs_ministry_3 = yes
 		}
 	}
-	potential = {
+	potential = { # REVIEWED 2026-11-22: government funded and after Globalization (0 reads in a week of the 2024 USA); the continent walk does one b: lookup a state
 		owner ?= { has_technology_researched = globalization }
 		OR = {
-			any_scope_building = {
-				is_building_type = building_wonder_continental_union_hq
-			}
+			exists = b:building_wonder_continental_union_hq
 			AND = {
 				state_is_in_recognized_continent = yes
 				# Only allow if this state is on the same continent as the owner's capital

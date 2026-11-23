@@ -61,7 +61,7 @@ building_strategic_reserve_hub = {
 				owner = { has_variable = st_res_hub_relocating }
 				owner = {
 					NOT = {
-						any_scope_building = { is_building_type = building_strategic_reserve_hub }
+						any_scope_building = { is_building_type = building_strategic_reserve_hub } # REVIEWED 2026-11-22: only in the capital (is_capital first); a country-scope walk, no b: form
 					}
 				}
 			}
@@ -149,7 +149,7 @@ building_strategic_reserve_silo = {
 		if = {
 			limit = {
 				owner ?= {
-					any_scope_building = {
+					any_scope_building = { # REVIEWED 2026-11-22: government funded (bg_public_infrastructure); a country-scope walk, no b: form
 						is_building_type = building_strategic_reserve_hub
 					}
 				}

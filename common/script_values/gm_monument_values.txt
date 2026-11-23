@@ -214,7 +214,7 @@ gm_state_monument_count = {
 	}
 	if = {
 		limit = { has_variable_list = gm_monuments_here }
-		every_in_list = {
+		every_in_list = { # REVIEWED 2026-11-22: a state's monuments, at most six
 			variable = gm_monuments_here
 			add = 1
 		}

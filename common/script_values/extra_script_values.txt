@@ -1863,7 +1863,7 @@ same_owner_state_region_arable_land_added = {
 	value = 0
 	save_temporary_scope_as = te_arable_land_state
 	state_region = {
-		every_scope_state = {
+		every_scope_state = { # REVIEWED 2026-11-22: one state region's states, a handful
 			limit = { owner = scope:te_arable_land_state.owner }
 			if = {
 				limit = { has_variable = arable_land_added }
@@ -3357,34 +3357,39 @@ free_port_tariff_export_cap = {
 # These script values compute remaining slots accounting for queued constructions.
 # The country modifier already tracks max - built; these additionally subtract queued levels.
 # Used in building possible blocks. Evaluated in country scope.
+# Each state's building of a type is the engine's b: lookup, which also finds
+# one whose levels are all queued, never a walk of the state's buildings: the
+# weekly private investment pass reads a privately built type's possible in
+# every state, up to 306,316 times a week, and a building walk there cost the
+# Deep-Sea Mine 779 s of one week's tick (scripting_best_practices.md § "A
+# Building's `possible` Runs in Every State for Private Investment, Before
+# `can_build_private`").
 
-# Solar Receiver: slots from Orbital Solar Collector levels (10 per level), consumed by receivers (-1 per level)
+# Solar Receiver: slots from Orbital Solar Collector levels (3 per staffed
+# level), consumed by receivers (-1 per level)
 solar_receiver_slots_remaining = {
 	value = modifier:country_solar_receiver_max_level_add
-	every_scope_state = {
-		every_scope_building = {
-			limit = { is_building_type = building_solar_receiver }
-			subtract = level_after_queued_constructions
-			add = level
-		}
+	every_scope_state = { # REVIEWED 2026-11-22: behind the slot modifier, so only a country with free Orbital Solar Collector slots walks, one b: lookup a state; moving the test to can_build_government is #1964
+		limit = { exists = b:building_solar_receiver }
+		subtract = b:building_solar_receiver.level_after_queued_constructions
+		add = b:building_solar_receiver.level
 	}
 }
 
-# Antimatter sub-buildings: slots from Antimatter Facility levels (5 per level),
-# consumed by both Antimatter Engines and Warhead Plants (-1 per level each)
+# Antimatter sub-buildings: slots from Antimatter Facility levels (5 per
+# staffed level), consumed by both Antimatter Engines and Warhead Plants (-1
+# per staffed level each)
 antimatter_sub_building_slots_remaining = {
 	value = modifier:country_antimatter_facility_max_level_add
-	every_scope_state = {
-		every_scope_building = {
-			limit = {
-				OR = {
-					is_building_type = building_antimatter_engine
-					is_building_type = building_antimatter_warhead_plant
-				}
-			}
-			subtract = level_after_queued_constructions
-			add = level
-		}
+	every_scope_state = { # REVIEWED 2026-11-22: behind the slot modifier, so only a country with free Antimatter Facility slots walks, one b: lookup a state; moving the test to can_build_government is #1964
+		limit = { exists = b:building_antimatter_engine }
+		subtract = b:building_antimatter_engine.level_after_queued_constructions
+		add = b:building_antimatter_engine.level
+	}
+	every_scope_state = { # REVIEWED 2026-11-22: as the walk above
+		limit = { exists = b:building_antimatter_warhead_plant }
+		subtract = b:building_antimatter_warhead_plant.level_after_queued_constructions
+		add = b:building_antimatter_warhead_plant.level
 	}
 }
 

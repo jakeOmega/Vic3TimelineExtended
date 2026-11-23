@@ -5,9 +5,11 @@
 # State scope. The state has a Grid Transfer Station, built, under construction
 # or queued. A queued building exists at level 0 (the Solar Power Receiver and
 # the seabed licences count queued levels the same way), but has_building only
-# sees it once it is built.
+# sees it once it is built. The engine's b: lookup finds it at level 0 too,
+# without walking the state's buildings: the station's possible and ai_value
+# read this, and the private investment pass reads those in every state.
 te_grid_state_has_station = {
-	any_scope_building = { is_building_type = building_grid_transfer_station }
+	exists = b:building_grid_transfer_station
 }
 
 # State scope. The state is joined to a power grid: it has a Power Grid
@@ -210,7 +212,7 @@ te_grid_ai_interconnector_wanted = {
 te_grid_ai_market_area_has_power = {
 	save_temporary_scope_as = te_grid_ai_powered
 	owner = {
-		any_scope_state = {
+		any_scope_state = { # REVIEWED 2026-11-22: the station's ai_value; it was read about 120 times in a week of the 2024 USA
 			is_in_same_market_area = scope:te_grid_ai_powered
 			OR = {
 				te_grid_electricity_production > 0
@@ -240,13 +242,13 @@ te_grid_ai_partner_near = {
 	owner = { has_variable_list = te_grid_partners }
 	save_temporary_scope_as = te_grid_ai_site
 	OR = {
-		any_neighbouring_state = {
+		any_neighbouring_state = { # REVIEWED 2026-11-22: a state's neighbours
 			te_grid_ai_partner_end = { ANY = $ANY$ }
 		}
 		AND = {
 			is_coastal = yes
 			owner = { has_technology_researched = clean_energy_technologies }
-			any_sea_node_adjacent_state = {
+			any_sea_node_adjacent_state = { # REVIEWED 2026-11-22: the states on one Sea Node, behind the cable technology
 				te_grid_ai_partner_end = { ANY = $ANY$ }
 			}
 		}

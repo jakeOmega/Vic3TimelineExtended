@@ -14,6 +14,44 @@ te_company_is_failing = {
 	var:te_company_months_failing >= te_company_failing_months
 }
 
+# State scope, in every buildable company flagship's potential, after its
+# has_company test (common/buildings/company_buildings.txt, whose header has
+# the whole rule): the state holds the flagship, built or queued (the engine's
+# b: lookup, which sees a building whose levels are all queued), or no state
+# of the owner has one built (has_building, an engine lookup that misses a
+# queued one; possible holds the exact test).
+te_company_flagship_site_open = {
+	OR = {
+		exists = b:$BUILDING$
+		owner = {
+			NOT = {
+				any_scope_state = { # REVIEWED 2026-11-22: one engine lookup a state, behind has_company; all 314 flagships' potential were read 15,275 times in a week of the USA of 2024
+					has_building = $BUILDING$
+				}
+			}
+		}
+	}
+}
+
+# State scope, in every buildable company flagship's possible: one site per
+# country, the state's own (built or queued) or the first. Both tests are the
+# engine's b: lookup, which sees a building whose levels are all queued.
+te_company_flagship_one_site = {
+	custom_tooltip = {
+		text = building_company_one_site_tt
+		OR = {
+			exists = b:$BUILDING$
+			owner = {
+				NOT = {
+					any_scope_state = { # REVIEWED 2026-11-22: one engine lookup a state, read only where potential passes; all flagships' possible were read 267 times in a week of the USA of 2024
+						exists = b:$BUILDING$
+					}
+				}
+			}
+		}
+	}
+}
+
 # State scope, in every buildable company flagship's possible and
 # can_build_government (common/buildings/company_buildings.txt): only the
 # country that owns the state builds or expands its flagship there, so

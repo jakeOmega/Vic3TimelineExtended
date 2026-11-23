@@ -57,13 +57,13 @@ building_grid_transfer_station = {
 			OR = {
 				# The station's own state, so the guard never reads against it.
 				te_grid_state_has_station = yes
-				any_neighbouring_state = {
+				any_neighbouring_state = { # REVIEWED 2026-11-22: a state's neighbours, one b: lookup each
 					owner = ROOT.owner
 					te_grid_state_has_station = yes
 				}
 				NOT = {
 					owner = {
-						any_scope_state = {
+						any_scope_state = { # REVIEWED 2026-11-22: only where neither the state nor a neighbour has a station; one b: lookup a state; the station's blocks were read about 120 times in a week of the 2024 USA
 							is_in_same_market_area = ROOT
 							te_grid_state_has_station = yes
 						}

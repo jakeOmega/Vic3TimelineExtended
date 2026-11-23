@@ -123,12 +123,16 @@ class ResortRoomTest(unittest.TestCase):
     def test_hand_values(self):
         values = _strip(_raw("common", "script_values", "sr_colony_module_values.txt"))
         self.assertRegex(values, r"(?m)^sr_mod_resort_room = \{ value = 10 \}")
+        # Each state's colony by the engine's b: lookup, never a walk of its buildings: the private
+        # investment pass reads the queued count in every state.
         levels = _block(values, "sr_resort_levels")
-        self.assertIn("is_building_type = building_space_resort", levels)
-        self.assertIn("add = level", levels)
+        self.assertIn("limit = { exists = b:building_space_resort }", levels)
+        self.assertIn("add = b:building_space_resort.level\n", levels)
         queued = _block(values, "sr_resort_queued_levels")
-        self.assertIn("is_building_type = building_space_resort", queued)
-        self.assertIn("add = level_after_queued_constructions", queued)
+        self.assertIn("limit = { exists = b:building_space_resort }", queued)
+        self.assertIn("add = b:building_space_resort.level_after_queued_constructions", queued)
+        for block in (levels, queued):
+            self.assertNotIn("scope_building", block)
 
     def test_display(self):
         display = _strip(_raw(*gss.DISPLAY_OUT.parts))

@@ -765,37 +765,10 @@ def generate_building(building_suffix, company_id, icon_path):
 \t\towner = {{
 \t\t\thas_company = company_type:{company_id}
 \t\t}}
-\t\tOR = {{
-\t\t\tany_scope_building = {{
-\t\t\t\tis_building_type = {building_name}
-\t\t\t}}
-\t\t\towner = {{
-\t\t\t\tNOT = {{
-\t\t\t\t\tany_scope_state = {{
-\t\t\t\t\t\thas_building = {building_name}
-\t\t\t\t\t}}
-\t\t\t\t}}
-\t\t\t}}
-\t\t}}
+\t\tte_company_flagship_site_open = {{ BUILDING = {building_name} }}
 \t}}
 \tpossible = {{
-\t\tcustom_tooltip = {{
-\t\t\ttext = building_company_one_site_tt
-\t\t\tOR = {{
-\t\t\t\tany_scope_building = {{
-\t\t\t\t\tis_building_type = {building_name}
-\t\t\t\t}}
-\t\t\t\towner = {{
-\t\t\t\t\tNOT = {{
-\t\t\t\t\t\tany_scope_state = {{
-\t\t\t\t\t\t\tany_scope_building = {{
-\t\t\t\t\t\t\t\tis_building_type = {building_name}
-\t\t\t\t\t\t\t}}
-\t\t\t\t\t\t}}
-\t\t\t\t\t}}
-\t\t\t\t}}
-\t\t\t}}
-\t\t}}
+\t\tte_company_flagship_one_site = {{ BUILDING = {building_name} }}
 \t\tte_company_flagship_builder_owns_state = yes
 \t}}
 \tcan_build_government = {{

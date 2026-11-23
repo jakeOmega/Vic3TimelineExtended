@@ -55,7 +55,7 @@ building_space_command = {
 				text = sr_sc_one_per_nation_tt
 				owner ?= {
 					NOT = {
-						any_scope_building = {
+						any_scope_building = { # REVIEWED 2026-11-22: only in the Space Program's state (has_building first); level >= 1 has no b: form here
 							is_building_type = building_space_command
 							level >= 1
 						}
