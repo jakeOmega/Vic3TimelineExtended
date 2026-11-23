@@ -899,17 +899,35 @@ REPLACE_OR_CREATE:building_solar_receiver = {
 
 	required_construction = construction_cost_medium
 
+	# A slot no built receiver takes: one modifier read. The exact count, which
+	# also takes queued levels, walks the owner's states, so it sits in
+	# can_build_government below, not here: the engine reads a building's
+	# possible in every state for its private investors, before it reads
+	# can_build_private, up to 306,316 times a week (scripting_best_practices.md
+	# § "A Building's `possible` Runs in Every State for Private Investment,
+	# Before `can_build_private`"; #1964). This test is implied by both
+	# branches of that one (the slot count only subtracts queued levels from
+	# the modifier), so it refuses nothing they allow, and it keeps a country
+	# with no free slot seeing the receiver greyed with the reason: the
+	# production lens hides a building only while its can_build_government
+	# fails, here while every free slot is queued.
 	possible = {
+		custom_tooltip = {
+			text = building_solar_receiver_any_slot_tt
+			owner = { modifier:country_solar_receiver_max_level_add > 0 }
+		}
+	}
+
+	# Read when a government considers building, and for a queued level until
+	# it finishes: a level this turns away waits in the queue. At 0 the second
+	# branch lets a level already under construction finish; it can't tell that
+	# from one more level queued in the same state, which then waits until a
+	# slot frees (the Deep-Sea Mine's te_seabed_gate has the same form).
+	can_build_government = {
 		custom_tooltip = {
 			text = building_solar_receiver_slots_tt
 			OR = {
-				# The modifier check is implied by the slot count (it only subtracts
-				# queued levels from the modifier) and skips the state walk for
-				# countries with no slots. Not added to the >= 0 test below.
-				owner = {
-					modifier:country_solar_receiver_max_level_add > 0
-					solar_receiver_slots_remaining > 0
-				}
+				owner = { solar_receiver_slots_remaining > 0 }
 				AND = {
 					b:building_solar_receiver ?= { is_under_construction = yes }
 					owner = { solar_receiver_slots_remaining >= 0 }
@@ -919,7 +937,7 @@ REPLACE_OR_CREATE:building_solar_receiver = {
 	}
 
 	can_build_private ={
-		always = no # can privatize but not build new ones
+		always = no # can privatize but not build new ones; investors never read the gate above
 	}
 
 	ownership_type = self
@@ -1133,25 +1151,35 @@ REPLACE_OR_CREATE:building_antimatter_engine = {
 
 	required_construction = construction_cost_medium
 
+	# The Solar Power Receiver's gate (see there): a slot no built Engine or
+	# Warhead Plant takes in possible, one modifier read; the exact count, which
+	# walks the owner's states, in can_build_government (#1964).
 	possible = {
 		custom_tooltip = {
+			text = building_antimatter_sub_any_slot_tt
+			owner = { modifier:country_antimatter_facility_max_level_add > 0 }
+		}
+	}
+
+	# Every level takes a slot, an existing building's next level too (#1965:
+	# until 2026-11-23 a has_building branch let a state that had one expand it
+	# past the cap). At 0 the second branch lets a level already under
+	# construction finish.
+	can_build_government = {
+		custom_tooltip = {
 			text = building_antimatter_sub_slots_tt
-			# Cheap tests first. The modifier check is implied by the slot
-			# count (it only subtracts queued levels from the modifier) and
-			# skips that country-wide state walk for countries with no slots.
 			OR = {
-				has_building = building_antimatter_engine
-				b:building_antimatter_engine ?= { is_under_construction = yes }
-				owner = {
-					modifier:country_antimatter_facility_max_level_add > 0
-					antimatter_sub_building_slots_remaining > 0
+				owner = { antimatter_sub_building_slots_remaining > 0 }
+				AND = {
+					b:building_antimatter_engine ?= { is_under_construction = yes }
+					owner = { antimatter_sub_building_slots_remaining >= 0 }
 				}
 			}
 		}
 	}
 
 	can_build_private ={
-		always = no # can privatize but not build new ones
+		always = no # can privatize but not build new ones; investors never read the gate above
 	}
 
 	ownership_type = self
@@ -1176,18 +1204,24 @@ REPLACE_OR_CREATE:building_antimatter_warhead_plant = {
 	# The engine's base, and nothing for a country in default (te_ai_coverage_values.txt, #1822).
 	ai_value = { value = te_megaproject_ai_value }
 
+	# The Antimatter Engine's gate (see there). Its group is government funded,
+	# so the engine reads its possible far less often than the Engine's, but
+	# the walk would be the same.
 	possible = {
 		custom_tooltip = {
+			text = building_antimatter_sub_any_slot_tt
+			owner = { modifier:country_antimatter_facility_max_level_add > 0 }
+		}
+	}
+
+	can_build_government = {
+		custom_tooltip = {
 			text = building_antimatter_sub_slots_tt
-			# Cheap tests first. The modifier check is implied by the slot
-			# count (it only subtracts queued levels from the modifier) and
-			# skips that country-wide state walk for countries with no slots.
 			OR = {
-				has_building = building_antimatter_warhead_plant
-				b:building_antimatter_warhead_plant ?= { is_under_construction = yes }
-				owner = {
-					modifier:country_antimatter_facility_max_level_add > 0
-					antimatter_sub_building_slots_remaining > 0
+				owner = { antimatter_sub_building_slots_remaining > 0 }
+				AND = {
+					b:building_antimatter_warhead_plant ?= { is_under_construction = yes }
+					owner = { antimatter_sub_building_slots_remaining >= 0 }
 				}
 			}
 		}

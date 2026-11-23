@@ -413,8 +413,9 @@ The Seabed tab's share of the GUI and localization audit (`docs/audits/gui_audit
   2024"): the room walk was not affordable in `possible`, which the weekly private investment pass read
   306,315 times in a week, 779 s of the week's tick. The gate is now the mine's `can_build_government`,
   read once in eight days there, and its room walks read only the coastal states with a mine, by `b:`.
-  The Solar Power Receiver's slot count still walks every state's buildings, behind a cheap modifier
-  test, from its `possible`.
+  The Solar Power Receiver's and the antimatter buildings' slot counts moved the same way on
+  2026-11-23 (#1964): their `possible` keeps one modifier read, the count is in `can_build_government`
+  (`docs/testing/perf-fixes-playtest.md`, "Solar and antimatter slot gates").
 - Whether a failing gate halts construction already under way (item 2): it decides whether
   the gate's second branch is needed at all, the local gate's under Build only on local claims too
   (item 32). If it never halts, both second branches can go, and the setting then lets no level take a

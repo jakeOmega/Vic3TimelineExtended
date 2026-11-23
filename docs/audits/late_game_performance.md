@@ -1241,7 +1241,10 @@ one-site rule, now two shared triggers in place of 942 inline walks. The
 slot counts still walk the owner's states, one lookup a state, from a
 private type's `possible`: moving them to `can_build_government`, as the
 Deep-Sea Mine's gate was, is #1964. `building_gate_walk_audit.py` now flags
-any walk these blocks reach.
+any walk these blocks reach. Done 2026-11-23: each `possible` keeps one
+read of the slot modifier, which the count implies, and the count is in
+`can_build_government`, so the receivers and antimatter buildings leave
+the lens only while every free slot is queued.
 
 ## Measurements, 2026-10-03: 2072
 

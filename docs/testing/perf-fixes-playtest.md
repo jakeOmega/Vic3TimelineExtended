@@ -87,3 +87,22 @@ tooltip was hovered, since no harness verb can hover.
 | A row's tooltip | The type's description, a delimiter, then every source with its value and the total, as the old hover on the number gave | The description alone: `GetTooltipFor` returned nothing in a widget tooltip; put the breakdown back in the text for that row only |
 | National Info, another country | The same rows and tooltips for the country shown | The player's own figures: `Country` reads the player there |
 | Frame time with the tab open | Well below the old figure, paused (on 2026-11-20, vsync off: 19.8 ms open before, 12.0 with this change, about 6 shut, in the full-screen layout; the rest of the tab's cost is open in #1760) | Unchanged: the replace file or the deployed loc did not load |
+
+## Solar and antimatter slot gates (2026-11-23, #1964, #1965)
+
+The Solar Power Receiver's, Antimatter Engine's and Antimatter Warhead Plant's `possible` reads only the slot modifier
+(a slot no built level takes); the exact count, which subtracts queued levels and walks the owner's states, is their
+`can_build_government`. An existing Engine or Warhead Plant can no longer be expanded without a slot, and each of their
+built levels takes a whole slot whether staffed or not. Nothing here has been seen in game. Use a late save with Orbital
+Solar Collector or Antimatter Containment Facility levels.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| Lens, a slot free | The receiver (and the Engine and Warhead Plant) sits in the production lens's Development tab and can be queued | Missing with a slot free: the lens reads something else in `can_build_government`; compare with the Deep-Sea Mine's row in `global-commons-playtest.md`, item 2 |
+| Lens, every free slot queued | It leaves the lens | Still offered and a level queues: the queue does not read `can_build_government`; put the count back in `possible` and take the cost |
+| No slot free before queued levels | Greyed in the lens and the state's view, the tooltip naming the slot and the free count | Hidden instead: fine, but the tooltip line is not seen; say so |
+| The last slot's level finishes | Queue exactly the free slots in one state: every level finishes, none waits | The last level waits at 0 points: the second branch does not hold; read the queue entry's tooltip |
+| An existing Engine at 0 free | Its expand button is refused (or the lens hides it) | A level queues: another branch passes; read `possible` and `can_build_government` |
+| Understaffed Engine | Right after a level finishes, the state panel's antimatter slot row already counts it as taken | The count rises again while it hires: the PM's `level_scaled` block is not read for country modifiers; move the −1 to `unscaled` |
+| AI uptake | AI governments with slots still build receivers and Engines | None queued over ten years with slots free: the AI's planner skips a building whose `can_build_government` holds a walk, or needs `ai_value`; compare with the mine |
+| Profile | With slots free, the receiver's `possible` row (`trigger common/buildings/extra_buildings.txt:<its possible line>`) costs well under 0.01 ms a read | Higher: something else in the block walks |

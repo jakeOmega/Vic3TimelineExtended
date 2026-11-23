@@ -16101,8 +16101,8 @@ pm_container_ports = {
 			# Profit: 1550.0
 			# Profit margin: 129.17%
 			# Zero profit price multiplier: 0.44
-			# Employment: 0
-			# Wage breakeven: 0.00
+			# Employment: 750
+			# Wage breakeven: 2.07
 		}
 		level_scaled = {
 			building_employment_laborers_add = 250
@@ -16147,8 +16147,8 @@ pm_global_ports = {
 			# Profit: 2700.0
 			# Profit margin: 131.71%
 			# Zero profit price multiplier: 0.43
-			# Employment: 0
-			# Wage breakeven: 0.00
+			# Employment: 250
+			# Wage breakeven: 10.80
 		}
 		level_scaled = {
 			building_employment_laborers_add = 50
@@ -16400,8 +16400,8 @@ pm_magnetic_drive_ports = {
 			# Profit: 4000.0
 			# Profit margin: 133.33%
 			# Zero profit price multiplier: 0.43
-			# Employment: 0
-			# Wage breakeven: 0.00
+			# Employment: 850
+			# Wage breakeven: 4.71
 		}
 		level_scaled = {
 			building_employment_laborers_add = 200
@@ -17462,8 +17462,8 @@ pm_space_elevator = {
 			# Profit: 179036000.0
 			# Profit margin: 854.02%
 			# Zero profit price multiplier: 0.10
-			# Employment: 0
-			# Wage breakeven: 0.00
+			# Employment: 10000
+			# Wage breakeven: 17903.60
 		}
 
 		level_scaled = {
@@ -22585,8 +22585,8 @@ pm_solar_collector = {
 			# Profit: -655000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: 0
-			# Wage breakeven: 0.00
+			# Employment: 4000
+			# Wage breakeven: -163.75
 		}
 
 		level_scaled = {
@@ -22618,8 +22618,8 @@ pm_solar_receiver = {
 			# Profit: 29989500.0
 			# Profit margin: 285614.29%
 			# Zero profit price multiplier: 0.00
-			# Employment: 0
-			# Wage breakeven: 0.00
+			# Employment: 1000
+			# Wage breakeven: 29989.50
 		}
 
 		level_scaled = {
@@ -22782,8 +22782,8 @@ pm_orbital_battlestation = {
 			# Profit: -2280000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: 0
-			# Wage breakeven: 0.00
+			# Employment: 6000
+			# Wage breakeven: -380.00
 		}
 
 		level_scaled = {
@@ -22949,8 +22949,8 @@ pm_mind_upload_nexus = {
 			# Profit: 5960000.0
 			# Profit margin: 278.50%
 			# Zero profit price multiplier: 0.26
-			# Employment: 0
-			# Wage breakeven: 0.00
+			# Employment: 10000
+			# Wage breakeven: 596.00
 		}
 
 		level_scaled = {
@@ -23113,8 +23113,8 @@ pm_antimatter_facility = {
 			# Profit: -2334000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: 0
-			# Wage breakeven: 0.00
+			# Employment: 6000
+			# Wage breakeven: -389.00
 		}
 
 		level_scaled = {
@@ -23131,8 +23131,14 @@ pm_antimatter_engine = {
 	texture = "gfx/interface/icons/production_method_icons/pm_antimatter_engine.dds"
 
 	country_modifiers = {
-		workforce_scaled = {
+		# A whole slot for every built level, staffed or not, as the Solar
+		# Power Receiver's: workforce scaled, an understaffed level took less
+		# than a slot and freed room to queue past the cap (#1965). The
+		# facility's +5 stays workforce scaled: slots follow its staffing.
+		level_scaled = {
 			country_antimatter_facility_max_level_add = -1
+		}
+		workforce_scaled = {
 			military_formation_army_movement_speed_mult = 0.02
 			military_formation_fleet_movement_speed_mult = 0.02
 			country_space_race_progress_mult = 0.05
@@ -23176,8 +23182,14 @@ pm_antimatter_warhead_plant = {
 	texture = "gfx/interface/icons/production_method_icons/pm_antimatter_warhead_plant.dds"
 
 	country_modifiers = {
-		workforce_scaled = {
+		# A whole slot for every built level, staffed or not, as the Solar
+		# Power Receiver's: workforce scaled, an understaffed level took less
+		# than a slot and freed room to queue past the cap (#1965). The
+		# facility's +5 stays workforce scaled: slots follow its staffing.
+		level_scaled = {
 			country_antimatter_facility_max_level_add = -1
+		}
+		workforce_scaled = {
 			country_nuclear_weapon_attack_success_add = 0.05
 			unit_offense_mult = 0.02
 			unit_morale_damage_mult = 0.02
@@ -23374,8 +23386,8 @@ pm_nanofabrication_center = {
 			# Profit: -105000.0
 			# Profit margin: -1.04%
 			# Zero profit price multiplier: 1.01
-			# Employment: 0
-			# Wage breakeven: 0.00
+			# Employment: 6000
+			# Wage breakeven: -17.50
 		}
 
 		level_scaled = {
@@ -23553,8 +23565,8 @@ pm_consciousness_network = {
 			# Profit: -1880000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: 0
-			# Wage breakeven: 0.00
+			# Employment: 6000
+			# Wage breakeven: -313.33
 		}
 
 		level_scaled = {
@@ -23912,8 +23924,8 @@ pm_naval_fortification_missile_battery = {
 			# Profit: -5200.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: 0
-			# Wage breakeven: 0.00
+			# Employment: 1000
+			# Wage breakeven: -5.20
 		}
 		level_scaled = {
 			building_employment_soldiers_add = 700
@@ -23960,8 +23972,8 @@ pm_naval_fortification_integrated_defense = {
 			# Profit: -11150.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: 0
-			# Wage breakeven: 0.00
+			# Employment: 1000
+			# Wage breakeven: -11.15
 		}
 		level_scaled = {
 			building_employment_soldiers_add = 600
