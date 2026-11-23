@@ -116,9 +116,17 @@ te_cm_gate_slavery_banned = {
 # ---- Schooling and independence (standing) ----
 
 # French and Chinese. Occitan gave way to French under the Ferry laws (1881-82); Yue, Min and Hakka to one spoken
-# standard once the national language was taught in primary schools (Guoyu, from 1920).
-te_cm_gate_public_schools = {
-	has_law_or_variant = law_type:law_public_schools
+# standard once the national language was taught in primary schools (Guoyu, from 1920). Mass schooling, not who ran
+# the schools (owner, 2026-11-23): Public Schools opens it at once, and literacy of te_cm_gate_literacy (60%, the bar
+# vanilla's je_filipino_ethnogenesis sets for the Filipino nation) opens it under any school law. State Religion
+# disallows Public Schools, so until then a State Religion country, nearly every theocracy among them, could never
+# merge these cultures. France's Guizot law (1833) had already put a school, often a teaching order's, in every
+# commune.
+te_cm_gate_schooling = {
+	OR = {
+		has_law_or_variant = law_type:law_public_schools
+		literacy_rate >= te_cm_gate_literacy
+	}
 }
 
 # Filipino and Hindustani. The Filipino nation came out of the 1896 revolution (vanilla's je_philippines_main has the
@@ -128,8 +136,9 @@ te_cm_gate_independent = {
 }
 
 # Arab and East African. A shared standard language spread through the schools and broadcasts of independent states:
-# the Arabization of schooling after independence, Nyerere's Swahili-medium primary schools.
-te_cm_gate_independent_schools = {
+# the Arabization of schooling after independence, Nyerere's Swahili-medium primary schools. The schooling half is
+# te_cm_gate_schooling's: Quranic schools taught the written standard of Arabic, and mission schools Swahili's.
+te_cm_gate_independent_schooling = {
 	is_subject = no
-	has_law_or_variant = law_type:law_public_schools
+	te_cm_gate_schooling = yes
 }

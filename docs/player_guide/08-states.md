@@ -400,11 +400,13 @@ is complete.
 |---|---|
 | American | Slavery settled one way or the other, and any civil war over it ended: Slavery Banned with The Slavery Debate over, or slavery legal in every state under Slave Trade or Debt Slavery. Legacy Slavery and Colonial Slavery keep it shut |
 | Anglophone | Slavery Banned |
-| French, Han | Public Schools |
+| French, Han | Public Schools, or 60% literacy under any school law |
 | Hindustani, Pilipino | You aren't a subject of another country |
-| Arab, East African | You aren't a subject of another country, and Public Schools |
+| Arab, East African | You aren't a subject of another country, and Public Schools or 60% literacy |
 
-Afro-American pops (in American) and Afro-Brazilian pops join only under
+State Religion forbids Public Schools, so a country that keeps its state
+church reaches the schooling condition through literacy, under Religious
+Schools. Afro-American pops (in American) and Afro-Brazilian pops join only under
 Slavery Banned. A merge's journal entry lists its condition with the others.
 
 A few cultures wait while any country has a base-game journal entry open that

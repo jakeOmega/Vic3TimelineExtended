@@ -207,21 +207,27 @@ GATE_SLAVERY_BANNED = Gate(
     "the $law_slavery_banned$ law is in force",
     "No common identity was ever on offer between a free country and a slaveholding one. The merge begins once the "
     "$law_slavery_banned$ law is in force.")
-GATE_PUBLIC_SCHOOLS = Gate(
-    "te_cm_gate_public_schools", False,
-    "the $law_public_schools$ law is in force",
-    "Spoken languages this far apart gave way to one only once schools taught the national standard in every village. "
-    "The merge begins once the $law_public_schools$ law is in force.")
+# The schooling gate's literacy bar, te_cm_gate_literacy, spliced as a script value (every figure is one, never a
+# digit).
+_LITERACY_BAR = "[GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0]"
+GATE_SCHOOLING = Gate(
+    "te_cm_gate_schooling", False,
+    "the $law_public_schools$ law is in force, or our literacy is at least %s" % _LITERACY_BAR,
+    "Spoken languages this far apart gave way to one only once schools taught the national standard in every village, "
+    "whoever ran them. The merge begins once the $law_public_schools$ law is in force or our literacy is at least %s."
+    % _LITERACY_BAR)
 GATE_INDEPENDENT = Gate(
     "te_cm_gate_independent", False,
     "we are not a subject of another country",
     "A national culture here was the work of the independence movement and the state it won, not of foreign rule. The "
     "merge begins once we are not a subject of another country.")
-GATE_INDEPENDENT_SCHOOLS = Gate(
-    "te_cm_gate_independent_schools", False,
-    "we are not a subject of another country, and the $law_public_schools$ law is in force",
-    "The shared standard language spread through the schools and broadcasts of independent states, not under foreign "
-    "rule. The merge begins once we are not a subject of another country and the $law_public_schools$ law is in force.")
+GATE_INDEPENDENT_SCHOOLING = Gate(
+    "te_cm_gate_independent_schooling", False,
+    "we are not a subject of another country, and the $law_public_schools$ law is in force or our literacy is at "
+    "least %s" % _LITERACY_BAR,
+    "The shared standard language spread through the schools, whoever ran them, and the broadcasts of independent "
+    "states, not under foreign rule. The merge begins once we are not a subject of another country, and once the "
+    "$law_public_schools$ law is in force or our literacy is at least %s." % _LITERACY_BAR)
 
 
 MERGES: tuple[Merge, ...] = (
@@ -282,7 +288,7 @@ MERGES: tuple[Merge, ...] = (
         # Occitan included. It still joins at tier 1 once the sphere holds Wallonia.
         core=(_p("french", tier=1), _p("occitan", tier=1)),
         optional=(_p("wallonian", tier=1), _p("catalan", tier=3)),
-        gate=GATE_PUBLIC_SCHOOLS,
+        gate=GATE_SCHOOLING,
     ),
     Merge("british", "british", None, core=(_p("british"), _p("scottish"))),
     Merge(
@@ -331,14 +337,14 @@ MERGES: tuple[Merge, ...] = (
         "chinese", "han", None,
         # Four vanilla languages, one historical Han identity (spec section 3).
         core=(_p("han", tier=1), _p("yue", tier=1), _p("min", tier=1), _p("hakka", tier=1)),
-        gate=GATE_PUBLIC_SCHOOLS,
+        gate=GATE_SCHOOLING,
     ),
     Merge("japanese", "japanese", None, core=(_p("japanese", tier=1), _p("ryukyuan", tier=1)), gate=GATE_MEIJI),
     Merge(
         "arab", "cm_arab", _new("Arab", 30, 112, 70),
         core=(_p("maghrebi"), _p("misri"), _p("mashriqi"), _p("bedouin"), _p("yemenite")),
         optional=(_p("sudanese"), _p("haratin"), _p("bidan")),
-        gate=GATE_INDEPENDENT_SCHOOLS,
+        gate=GATE_INDEPENDENT_SCHOOLING,
     ),
     Merge(
         "persian", "persian", None,
@@ -413,7 +419,7 @@ MERGES: tuple[Merge, ...] = (
         # Tier 3 with no tier-1 merge to wait for (owner's ruling).
         core=(_p("swahili"), _p("nyamwezi"), _p("sukuma")),
         optional=(_p("yao"), _p("makua"), _p("lacustrine_bantu"), _p("kikuyu")),
-        gate=GATE_INDEPENDENT_SCHOOLS,
+        gate=GATE_INDEPENDENT_SCHOOLING,
     ),
 )
 

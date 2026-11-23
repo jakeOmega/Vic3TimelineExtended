@@ -3226,10 +3226,10 @@ te_cmg_french_result_switched = {
 	has_global_variable = te_cm_switched_french
 }
 
-# Country scope. The french merge's own precondition, a standing one (te_cm_gate_public_schools): read to start and, on the starter,
+# Country scope. The french merge's own precondition, a standing one (te_cm_gate_schooling): read to start and, on the starter,
 # for as long as the merge runs. While it fails, no culture joins and none converts, complete or not.
 te_cmg_french_gate_ok = {
-	te_cm_gate_public_schools = yes
+	te_cm_gate_schooling = yes
 }
 
 # Country scope. Can this country start the french merge? The system is on, a core culture is
@@ -6763,10 +6763,10 @@ te_cmg_chinese_result_switched = {
 	always = no
 }
 
-# Country scope. The chinese merge's own precondition, a standing one (te_cm_gate_public_schools): read to start and, on the starter,
+# Country scope. The chinese merge's own precondition, a standing one (te_cm_gate_schooling): read to start and, on the starter,
 # for as long as the merge runs. While it fails, no culture joins and none converts, complete or not.
 te_cmg_chinese_gate_ok = {
-	te_cm_gate_public_schools = yes
+	te_cm_gate_schooling = yes
 }
 
 # Country scope. Can this country start the chinese merge? The system is on, a core culture is
@@ -7430,10 +7430,10 @@ te_cmg_arab_result_switched = {
 	always = no
 }
 
-# Country scope. The arab merge's own precondition, a standing one (te_cm_gate_independent_schools): read to start and, on the starter,
+# Country scope. The arab merge's own precondition, a standing one (te_cm_gate_independent_schooling): read to start and, on the starter,
 # for as long as the merge runs. While it fails, no culture joins and none converts, complete or not.
 te_cmg_arab_gate_ok = {
-	te_cm_gate_independent_schools = yes
+	te_cm_gate_independent_schooling = yes
 }
 
 # Country scope. Can this country start the arab merge? The system is on, a core culture is
@@ -13431,10 +13431,10 @@ te_cmg_east_african_result_switched = {
 	always = no
 }
 
-# Country scope. The east_african merge's own precondition, a standing one (te_cm_gate_independent_schools): read to start and, on the starter,
+# Country scope. The east_african merge's own precondition, a standing one (te_cm_gate_independent_schooling): read to start and, on the starter,
 # for as long as the merge runs. While it fails, no culture joins and none converts, complete or not.
 te_cmg_east_african_gate_ok = {
-	te_cm_gate_independent_schools = yes
+	te_cm_gate_independent_schooling = yes
 }
 
 # Country scope. Can this country start the east_african merge? The system is on, a core culture is

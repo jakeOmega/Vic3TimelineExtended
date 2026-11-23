@@ -39,6 +39,13 @@ te_cm_sol_gap_open = 3
 te_cm_meaningful_share = 0.10
 te_cm_switch_share = 0.60
 
+# ---- The schooling gate (te_cm_gate_schooling, French, Chinese, Arab, East African) ----
+# Its way in under any school law: the country's literacy (owner, 2026-11-23), the
+# bar vanilla's je_filipino_ethnogenesis sets for the Filipino nation. Public
+# Schools opens the gate at any literacy. No looser closing value, by the owner's
+# ruling: literacy moves slowly.
+te_cm_gate_literacy = 0.60
+
 # ---- Waiting and counters, in years ----
 # Tiers 1b and 2 count years of holding the parts together before a merge may
 # start; a merge that qualifies while waiting for a vanilla entry waits at most
