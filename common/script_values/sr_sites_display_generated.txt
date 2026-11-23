@@ -1743,7 +1743,7 @@ sr_disp_mq_count = {
 # Modules (slice 4 design § 11), per world:
 #   sr_disp_mod_pending_<type>_<key>  our queue of the type and every shipment of it on its way
 #   sr_disp_site_staffing_<key>       the colony's staffing, in percent
-#   sr_disp_site_crews_planned_<key>  the crews needed once our queue and shipments land
+#   sr_site_crews_planned_<key>       the crews needed once our queue and shipments land
 #   sr_disp_site_crews_fit_<key>      the crews against that: 0 spare, 1 exact, 2 short
 sr_disp_mod_pending_a_valles_marineris = {
 	value = 0
@@ -1831,15 +1831,15 @@ sr_disp_site_crews_short_valles_marineris = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_valles_marineris > sr_site_crews_valles_marineris } value = 1 }
 }
-sr_disp_site_crews_planned_valles_marineris = {
+sr_site_crews_planned_valles_marineris = {
 	value = sr_mod_crewed_pending_valles_marineris
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_valles_marineris = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_valles_marineris = sr_site_crews_valles_marineris } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_valles_marineris > sr_site_crews_valles_marineris } value = 2 }
+	if = { limit = { sr_site_crews_planned_valles_marineris = sr_site_crews_valles_marineris } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_valles_marineris > sr_site_crews_valles_marineris } value = 2 }
 }
 sr_disp_site_staffing_valles_marineris = {
 	value = sr_site_staffing_valles_marineris
@@ -1952,15 +1952,15 @@ sr_disp_site_crews_short_olympus_mons = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_olympus_mons > sr_site_crews_olympus_mons } value = 1 }
 }
-sr_disp_site_crews_planned_olympus_mons = {
+sr_site_crews_planned_olympus_mons = {
 	value = sr_mod_crewed_pending_olympus_mons
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_olympus_mons = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_olympus_mons = sr_site_crews_olympus_mons } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_olympus_mons > sr_site_crews_olympus_mons } value = 2 }
+	if = { limit = { sr_site_crews_planned_olympus_mons = sr_site_crews_olympus_mons } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_olympus_mons > sr_site_crews_olympus_mons } value = 2 }
 }
 sr_disp_site_staffing_olympus_mons = {
 	value = sr_site_staffing_olympus_mons
@@ -2073,15 +2073,15 @@ sr_disp_site_crews_short_hellas_planitia = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_hellas_planitia > sr_site_crews_hellas_planitia } value = 1 }
 }
-sr_disp_site_crews_planned_hellas_planitia = {
+sr_site_crews_planned_hellas_planitia = {
 	value = sr_mod_crewed_pending_hellas_planitia
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_hellas_planitia = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_hellas_planitia = sr_site_crews_hellas_planitia } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_hellas_planitia > sr_site_crews_hellas_planitia } value = 2 }
+	if = { limit = { sr_site_crews_planned_hellas_planitia = sr_site_crews_hellas_planitia } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_hellas_planitia > sr_site_crews_hellas_planitia } value = 2 }
 }
 sr_disp_site_staffing_hellas_planitia = {
 	value = sr_site_staffing_hellas_planitia
@@ -2194,15 +2194,15 @@ sr_disp_site_crews_short_utopia_planitia = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_utopia_planitia > sr_site_crews_utopia_planitia } value = 1 }
 }
-sr_disp_site_crews_planned_utopia_planitia = {
+sr_site_crews_planned_utopia_planitia = {
 	value = sr_mod_crewed_pending_utopia_planitia
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_utopia_planitia = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_utopia_planitia = sr_site_crews_utopia_planitia } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_utopia_planitia > sr_site_crews_utopia_planitia } value = 2 }
+	if = { limit = { sr_site_crews_planned_utopia_planitia = sr_site_crews_utopia_planitia } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_utopia_planitia > sr_site_crews_utopia_planitia } value = 2 }
 }
 sr_disp_site_staffing_utopia_planitia = {
 	value = sr_site_staffing_utopia_planitia
@@ -2315,15 +2315,15 @@ sr_disp_site_crews_short_arcadia_planitia = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_arcadia_planitia > sr_site_crews_arcadia_planitia } value = 1 }
 }
-sr_disp_site_crews_planned_arcadia_planitia = {
+sr_site_crews_planned_arcadia_planitia = {
 	value = sr_mod_crewed_pending_arcadia_planitia
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_arcadia_planitia = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_arcadia_planitia = sr_site_crews_arcadia_planitia } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_arcadia_planitia > sr_site_crews_arcadia_planitia } value = 2 }
+	if = { limit = { sr_site_crews_planned_arcadia_planitia = sr_site_crews_arcadia_planitia } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_arcadia_planitia > sr_site_crews_arcadia_planitia } value = 2 }
 }
 sr_disp_site_staffing_arcadia_planitia = {
 	value = sr_site_staffing_arcadia_planitia
@@ -2431,15 +2431,15 @@ sr_disp_site_crews_short_ceres = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_ceres > sr_site_crews_ceres } value = 1 }
 }
-sr_disp_site_crews_planned_ceres = {
+sr_site_crews_planned_ceres = {
 	value = sr_mod_crewed_pending_ceres
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_ceres = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_ceres = sr_site_crews_ceres } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_ceres > sr_site_crews_ceres } value = 2 }
+	if = { limit = { sr_site_crews_planned_ceres = sr_site_crews_ceres } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_ceres > sr_site_crews_ceres } value = 2 }
 }
 sr_disp_site_staffing_ceres = {
 	value = sr_site_staffing_ceres
@@ -2547,15 +2547,15 @@ sr_disp_site_crews_short_vesta = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_vesta > sr_site_crews_vesta } value = 1 }
 }
-sr_disp_site_crews_planned_vesta = {
+sr_site_crews_planned_vesta = {
 	value = sr_mod_crewed_pending_vesta
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_vesta = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_vesta = sr_site_crews_vesta } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_vesta > sr_site_crews_vesta } value = 2 }
+	if = { limit = { sr_site_crews_planned_vesta = sr_site_crews_vesta } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_vesta > sr_site_crews_vesta } value = 2 }
 }
 sr_disp_site_staffing_vesta = {
 	value = sr_site_staffing_vesta
@@ -2663,15 +2663,15 @@ sr_disp_site_crews_short_psyche = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_psyche > sr_site_crews_psyche } value = 1 }
 }
-sr_disp_site_crews_planned_psyche = {
+sr_site_crews_planned_psyche = {
 	value = sr_mod_crewed_pending_psyche
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_psyche = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_psyche = sr_site_crews_psyche } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_psyche > sr_site_crews_psyche } value = 2 }
+	if = { limit = { sr_site_crews_planned_psyche = sr_site_crews_psyche } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_psyche > sr_site_crews_psyche } value = 2 }
 }
 sr_disp_site_staffing_psyche = {
 	value = sr_site_staffing_psyche
@@ -2779,15 +2779,15 @@ sr_disp_site_crews_short_pallas = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_pallas > sr_site_crews_pallas } value = 1 }
 }
-sr_disp_site_crews_planned_pallas = {
+sr_site_crews_planned_pallas = {
 	value = sr_mod_crewed_pending_pallas
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_pallas = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_pallas = sr_site_crews_pallas } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_pallas > sr_site_crews_pallas } value = 2 }
+	if = { limit = { sr_site_crews_planned_pallas = sr_site_crews_pallas } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_pallas > sr_site_crews_pallas } value = 2 }
 }
 sr_disp_site_staffing_pallas = {
 	value = sr_site_staffing_pallas
@@ -2895,15 +2895,15 @@ sr_disp_site_crews_short_hygiea = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_hygiea > sr_site_crews_hygiea } value = 1 }
 }
-sr_disp_site_crews_planned_hygiea = {
+sr_site_crews_planned_hygiea = {
 	value = sr_mod_crewed_pending_hygiea
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_hygiea = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_hygiea = sr_site_crews_hygiea } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_hygiea > sr_site_crews_hygiea } value = 2 }
+	if = { limit = { sr_site_crews_planned_hygiea = sr_site_crews_hygiea } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_hygiea > sr_site_crews_hygiea } value = 2 }
 }
 sr_disp_site_staffing_hygiea = {
 	value = sr_site_staffing_hygiea
@@ -3011,15 +3011,15 @@ sr_disp_site_crews_short_io = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_io > sr_site_crews_io } value = 1 }
 }
-sr_disp_site_crews_planned_io = {
+sr_site_crews_planned_io = {
 	value = sr_mod_crewed_pending_io
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_io = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_io = sr_site_crews_io } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_io > sr_site_crews_io } value = 2 }
+	if = { limit = { sr_site_crews_planned_io = sr_site_crews_io } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_io > sr_site_crews_io } value = 2 }
 }
 sr_disp_site_staffing_io = {
 	value = sr_site_staffing_io
@@ -3127,15 +3127,15 @@ sr_disp_site_crews_short_europa = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_europa > sr_site_crews_europa } value = 1 }
 }
-sr_disp_site_crews_planned_europa = {
+sr_site_crews_planned_europa = {
 	value = sr_mod_crewed_pending_europa
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_europa = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_europa = sr_site_crews_europa } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_europa > sr_site_crews_europa } value = 2 }
+	if = { limit = { sr_site_crews_planned_europa = sr_site_crews_europa } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_europa > sr_site_crews_europa } value = 2 }
 }
 sr_disp_site_staffing_europa = {
 	value = sr_site_staffing_europa
@@ -3248,15 +3248,15 @@ sr_disp_site_crews_short_ganymede = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_ganymede > sr_site_crews_ganymede } value = 1 }
 }
-sr_disp_site_crews_planned_ganymede = {
+sr_site_crews_planned_ganymede = {
 	value = sr_mod_crewed_pending_ganymede
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_ganymede = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_ganymede = sr_site_crews_ganymede } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_ganymede > sr_site_crews_ganymede } value = 2 }
+	if = { limit = { sr_site_crews_planned_ganymede = sr_site_crews_ganymede } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_ganymede > sr_site_crews_ganymede } value = 2 }
 }
 sr_disp_site_staffing_ganymede = {
 	value = sr_site_staffing_ganymede
@@ -3369,15 +3369,15 @@ sr_disp_site_crews_short_callisto = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_callisto > sr_site_crews_callisto } value = 1 }
 }
-sr_disp_site_crews_planned_callisto = {
+sr_site_crews_planned_callisto = {
 	value = sr_mod_crewed_pending_callisto
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_callisto = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_callisto = sr_site_crews_callisto } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_callisto > sr_site_crews_callisto } value = 2 }
+	if = { limit = { sr_site_crews_planned_callisto = sr_site_crews_callisto } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_callisto > sr_site_crews_callisto } value = 2 }
 }
 sr_disp_site_staffing_callisto = {
 	value = sr_site_staffing_callisto
@@ -3485,15 +3485,15 @@ sr_disp_site_crews_short_himalia = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_himalia > sr_site_crews_himalia } value = 1 }
 }
-sr_disp_site_crews_planned_himalia = {
+sr_site_crews_planned_himalia = {
 	value = sr_mod_crewed_pending_himalia
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_himalia = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_himalia = sr_site_crews_himalia } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_himalia > sr_site_crews_himalia } value = 2 }
+	if = { limit = { sr_site_crews_planned_himalia = sr_site_crews_himalia } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_himalia > sr_site_crews_himalia } value = 2 }
 }
 sr_disp_site_staffing_himalia = {
 	value = sr_site_staffing_himalia
@@ -3601,15 +3601,15 @@ sr_disp_site_crews_short_amalthea = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_amalthea > sr_site_crews_amalthea } value = 1 }
 }
-sr_disp_site_crews_planned_amalthea = {
+sr_site_crews_planned_amalthea = {
 	value = sr_mod_crewed_pending_amalthea
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_amalthea = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_amalthea = sr_site_crews_amalthea } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_amalthea > sr_site_crews_amalthea } value = 2 }
+	if = { limit = { sr_site_crews_planned_amalthea = sr_site_crews_amalthea } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_amalthea > sr_site_crews_amalthea } value = 2 }
 }
 sr_disp_site_staffing_amalthea = {
 	value = sr_site_staffing_amalthea
@@ -3722,15 +3722,15 @@ sr_disp_site_crews_short_venus = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_venus > sr_site_crews_venus } value = 1 }
 }
-sr_disp_site_crews_planned_venus = {
+sr_site_crews_planned_venus = {
 	value = sr_mod_crewed_pending_venus
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_venus = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_venus = sr_site_crews_venus } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_venus > sr_site_crews_venus } value = 2 }
+	if = { limit = { sr_site_crews_planned_venus = sr_site_crews_venus } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_venus > sr_site_crews_venus } value = 2 }
 }
 sr_disp_site_staffing_venus = {
 	value = sr_site_staffing_venus
@@ -3838,15 +3838,15 @@ sr_disp_site_crews_short_mercury = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_mercury > sr_site_crews_mercury } value = 1 }
 }
-sr_disp_site_crews_planned_mercury = {
+sr_site_crews_planned_mercury = {
 	value = sr_mod_crewed_pending_mercury
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_mercury = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_mercury = sr_site_crews_mercury } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_mercury > sr_site_crews_mercury } value = 2 }
+	if = { limit = { sr_site_crews_planned_mercury = sr_site_crews_mercury } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_mercury > sr_site_crews_mercury } value = 2 }
 }
 sr_disp_site_staffing_mercury = {
 	value = sr_site_staffing_mercury
@@ -3959,15 +3959,15 @@ sr_disp_site_crews_short_titan = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_titan > sr_site_crews_titan } value = 1 }
 }
-sr_disp_site_crews_planned_titan = {
+sr_site_crews_planned_titan = {
 	value = sr_mod_crewed_pending_titan
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_titan = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_titan = sr_site_crews_titan } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_titan > sr_site_crews_titan } value = 2 }
+	if = { limit = { sr_site_crews_planned_titan = sr_site_crews_titan } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_titan > sr_site_crews_titan } value = 2 }
 }
 sr_disp_site_staffing_titan = {
 	value = sr_site_staffing_titan
@@ -4075,15 +4075,15 @@ sr_disp_site_crews_short_enceladus = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_enceladus > sr_site_crews_enceladus } value = 1 }
 }
-sr_disp_site_crews_planned_enceladus = {
+sr_site_crews_planned_enceladus = {
 	value = sr_mod_crewed_pending_enceladus
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_enceladus = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_enceladus = sr_site_crews_enceladus } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_enceladus > sr_site_crews_enceladus } value = 2 }
+	if = { limit = { sr_site_crews_planned_enceladus = sr_site_crews_enceladus } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_enceladus > sr_site_crews_enceladus } value = 2 }
 }
 sr_disp_site_staffing_enceladus = {
 	value = sr_site_staffing_enceladus
@@ -4191,15 +4191,15 @@ sr_disp_site_crews_short_rhea = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_rhea > sr_site_crews_rhea } value = 1 }
 }
-sr_disp_site_crews_planned_rhea = {
+sr_site_crews_planned_rhea = {
 	value = sr_mod_crewed_pending_rhea
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_rhea = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_rhea = sr_site_crews_rhea } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_rhea > sr_site_crews_rhea } value = 2 }
+	if = { limit = { sr_site_crews_planned_rhea = sr_site_crews_rhea } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_rhea > sr_site_crews_rhea } value = 2 }
 }
 sr_disp_site_staffing_rhea = {
 	value = sr_site_staffing_rhea
@@ -4307,15 +4307,15 @@ sr_disp_site_crews_short_mimas = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_mimas > sr_site_crews_mimas } value = 1 }
 }
-sr_disp_site_crews_planned_mimas = {
+sr_site_crews_planned_mimas = {
 	value = sr_mod_crewed_pending_mimas
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_mimas = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_mimas = sr_site_crews_mimas } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_mimas > sr_site_crews_mimas } value = 2 }
+	if = { limit = { sr_site_crews_planned_mimas = sr_site_crews_mimas } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_mimas > sr_site_crews_mimas } value = 2 }
 }
 sr_disp_site_staffing_mimas = {
 	value = sr_site_staffing_mimas
@@ -4423,15 +4423,15 @@ sr_disp_site_crews_short_iapetus = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_iapetus > sr_site_crews_iapetus } value = 1 }
 }
-sr_disp_site_crews_planned_iapetus = {
+sr_site_crews_planned_iapetus = {
 	value = sr_mod_crewed_pending_iapetus
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_iapetus = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_iapetus = sr_site_crews_iapetus } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_iapetus > sr_site_crews_iapetus } value = 2 }
+	if = { limit = { sr_site_crews_planned_iapetus = sr_site_crews_iapetus } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_iapetus > sr_site_crews_iapetus } value = 2 }
 }
 sr_disp_site_staffing_iapetus = {
 	value = sr_site_staffing_iapetus
@@ -4539,15 +4539,15 @@ sr_disp_site_crews_short_titania = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_titania > sr_site_crews_titania } value = 1 }
 }
-sr_disp_site_crews_planned_titania = {
+sr_site_crews_planned_titania = {
 	value = sr_mod_crewed_pending_titania
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_titania = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_titania = sr_site_crews_titania } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_titania > sr_site_crews_titania } value = 2 }
+	if = { limit = { sr_site_crews_planned_titania = sr_site_crews_titania } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_titania > sr_site_crews_titania } value = 2 }
 }
 sr_disp_site_staffing_titania = {
 	value = sr_site_staffing_titania
@@ -4655,15 +4655,15 @@ sr_disp_site_crews_short_oberon = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_oberon > sr_site_crews_oberon } value = 1 }
 }
-sr_disp_site_crews_planned_oberon = {
+sr_site_crews_planned_oberon = {
 	value = sr_mod_crewed_pending_oberon
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_oberon = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_oberon = sr_site_crews_oberon } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_oberon > sr_site_crews_oberon } value = 2 }
+	if = { limit = { sr_site_crews_planned_oberon = sr_site_crews_oberon } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_oberon > sr_site_crews_oberon } value = 2 }
 }
 sr_disp_site_staffing_oberon = {
 	value = sr_site_staffing_oberon
@@ -4771,15 +4771,15 @@ sr_disp_site_crews_short_miranda = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_miranda > sr_site_crews_miranda } value = 1 }
 }
-sr_disp_site_crews_planned_miranda = {
+sr_site_crews_planned_miranda = {
 	value = sr_mod_crewed_pending_miranda
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_miranda = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_miranda = sr_site_crews_miranda } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_miranda > sr_site_crews_miranda } value = 2 }
+	if = { limit = { sr_site_crews_planned_miranda = sr_site_crews_miranda } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_miranda > sr_site_crews_miranda } value = 2 }
 }
 sr_disp_site_staffing_miranda = {
 	value = sr_site_staffing_miranda
@@ -4887,15 +4887,15 @@ sr_disp_site_crews_short_ariel = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_ariel > sr_site_crews_ariel } value = 1 }
 }
-sr_disp_site_crews_planned_ariel = {
+sr_site_crews_planned_ariel = {
 	value = sr_mod_crewed_pending_ariel
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_ariel = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_ariel = sr_site_crews_ariel } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_ariel > sr_site_crews_ariel } value = 2 }
+	if = { limit = { sr_site_crews_planned_ariel = sr_site_crews_ariel } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_ariel > sr_site_crews_ariel } value = 2 }
 }
 sr_disp_site_staffing_ariel = {
 	value = sr_site_staffing_ariel
@@ -5003,15 +5003,15 @@ sr_disp_site_crews_short_triton = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_triton > sr_site_crews_triton } value = 1 }
 }
-sr_disp_site_crews_planned_triton = {
+sr_site_crews_planned_triton = {
 	value = sr_mod_crewed_pending_triton
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_triton = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_triton = sr_site_crews_triton } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_triton > sr_site_crews_triton } value = 2 }
+	if = { limit = { sr_site_crews_planned_triton = sr_site_crews_triton } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_triton > sr_site_crews_triton } value = 2 }
 }
 sr_disp_site_staffing_triton = {
 	value = sr_site_staffing_triton
@@ -5119,15 +5119,15 @@ sr_disp_site_crews_short_proteus = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_proteus > sr_site_crews_proteus } value = 1 }
 }
-sr_disp_site_crews_planned_proteus = {
+sr_site_crews_planned_proteus = {
 	value = sr_mod_crewed_pending_proteus
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_proteus = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_proteus = sr_site_crews_proteus } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_proteus > sr_site_crews_proteus } value = 2 }
+	if = { limit = { sr_site_crews_planned_proteus = sr_site_crews_proteus } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_proteus > sr_site_crews_proteus } value = 2 }
 }
 sr_disp_site_staffing_proteus = {
 	value = sr_site_staffing_proteus
@@ -5235,15 +5235,15 @@ sr_disp_site_crews_short_pluto = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_pluto > sr_site_crews_pluto } value = 1 }
 }
-sr_disp_site_crews_planned_pluto = {
+sr_site_crews_planned_pluto = {
 	value = sr_mod_crewed_pending_pluto
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_pluto = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_pluto = sr_site_crews_pluto } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_pluto > sr_site_crews_pluto } value = 2 }
+	if = { limit = { sr_site_crews_planned_pluto = sr_site_crews_pluto } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_pluto > sr_site_crews_pluto } value = 2 }
 }
 sr_disp_site_staffing_pluto = {
 	value = sr_site_staffing_pluto
@@ -5351,15 +5351,15 @@ sr_disp_site_crews_short_eris = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_eris > sr_site_crews_eris } value = 1 }
 }
-sr_disp_site_crews_planned_eris = {
+sr_site_crews_planned_eris = {
 	value = sr_mod_crewed_pending_eris
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_eris = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_eris = sr_site_crews_eris } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_eris > sr_site_crews_eris } value = 2 }
+	if = { limit = { sr_site_crews_planned_eris = sr_site_crews_eris } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_eris > sr_site_crews_eris } value = 2 }
 }
 sr_disp_site_staffing_eris = {
 	value = sr_site_staffing_eris
@@ -5467,15 +5467,15 @@ sr_disp_site_crews_short_makemake = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_makemake > sr_site_crews_makemake } value = 1 }
 }
-sr_disp_site_crews_planned_makemake = {
+sr_site_crews_planned_makemake = {
 	value = sr_mod_crewed_pending_makemake
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_makemake = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_makemake = sr_site_crews_makemake } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_makemake > sr_site_crews_makemake } value = 2 }
+	if = { limit = { sr_site_crews_planned_makemake = sr_site_crews_makemake } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_makemake > sr_site_crews_makemake } value = 2 }
 }
 sr_disp_site_staffing_makemake = {
 	value = sr_site_staffing_makemake
@@ -5583,15 +5583,15 @@ sr_disp_site_crews_short_haumea = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_haumea > sr_site_crews_haumea } value = 1 }
 }
-sr_disp_site_crews_planned_haumea = {
+sr_site_crews_planned_haumea = {
 	value = sr_mod_crewed_pending_haumea
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_haumea = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_haumea = sr_site_crews_haumea } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_haumea > sr_site_crews_haumea } value = 2 }
+	if = { limit = { sr_site_crews_planned_haumea = sr_site_crews_haumea } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_haumea > sr_site_crews_haumea } value = 2 }
 }
 sr_disp_site_staffing_haumea = {
 	value = sr_site_staffing_haumea
@@ -5699,15 +5699,15 @@ sr_disp_site_crews_short_sedna = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_sedna > sr_site_crews_sedna } value = 1 }
 }
-sr_disp_site_crews_planned_sedna = {
+sr_site_crews_planned_sedna = {
 	value = sr_mod_crewed_pending_sedna
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_sedna = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_sedna = sr_site_crews_sedna } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_sedna > sr_site_crews_sedna } value = 2 }
+	if = { limit = { sr_site_crews_planned_sedna = sr_site_crews_sedna } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_sedna > sr_site_crews_sedna } value = 2 }
 }
 sr_disp_site_staffing_sedna = {
 	value = sr_site_staffing_sedna
@@ -5810,15 +5810,15 @@ sr_disp_site_crews_short_shackleton = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_shackleton > sr_site_crews_shackleton } value = 1 }
 }
-sr_disp_site_crews_planned_shackleton = {
+sr_site_crews_planned_shackleton = {
 	value = sr_mod_crewed_pending_shackleton
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_shackleton = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_shackleton = sr_site_crews_shackleton } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_shackleton > sr_site_crews_shackleton } value = 2 }
+	if = { limit = { sr_site_crews_planned_shackleton = sr_site_crews_shackleton } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_shackleton > sr_site_crews_shackleton } value = 2 }
 }
 sr_disp_site_staffing_shackleton = {
 	value = sr_site_staffing_shackleton
@@ -5921,15 +5921,15 @@ sr_disp_site_crews_short_peary = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_peary > sr_site_crews_peary } value = 1 }
 }
-sr_disp_site_crews_planned_peary = {
+sr_site_crews_planned_peary = {
 	value = sr_mod_crewed_pending_peary
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_peary = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_peary = sr_site_crews_peary } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_peary > sr_site_crews_peary } value = 2 }
+	if = { limit = { sr_site_crews_planned_peary = sr_site_crews_peary } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_peary > sr_site_crews_peary } value = 2 }
 }
 sr_disp_site_staffing_peary = {
 	value = sr_site_staffing_peary
@@ -6032,15 +6032,15 @@ sr_disp_site_crews_short_tranquility = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_tranquility > sr_site_crews_tranquility } value = 1 }
 }
-sr_disp_site_crews_planned_tranquility = {
+sr_site_crews_planned_tranquility = {
 	value = sr_mod_crewed_pending_tranquility
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_tranquility = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_tranquility = sr_site_crews_tranquility } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_tranquility > sr_site_crews_tranquility } value = 2 }
+	if = { limit = { sr_site_crews_planned_tranquility = sr_site_crews_tranquility } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_tranquility > sr_site_crews_tranquility } value = 2 }
 }
 sr_disp_site_staffing_tranquility = {
 	value = sr_site_staffing_tranquility
@@ -6143,15 +6143,15 @@ sr_disp_site_crews_short_marius_hills = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_marius_hills > sr_site_crews_marius_hills } value = 1 }
 }
-sr_disp_site_crews_planned_marius_hills = {
+sr_site_crews_planned_marius_hills = {
 	value = sr_mod_crewed_pending_marius_hills
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_marius_hills = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_marius_hills = sr_site_crews_marius_hills } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_marius_hills > sr_site_crews_marius_hills } value = 2 }
+	if = { limit = { sr_site_crews_planned_marius_hills = sr_site_crews_marius_hills } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_marius_hills > sr_site_crews_marius_hills } value = 2 }
 }
 sr_disp_site_staffing_marius_hills = {
 	value = sr_site_staffing_marius_hills
@@ -6254,15 +6254,15 @@ sr_disp_site_crews_short_daedalus = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_daedalus > sr_site_crews_daedalus } value = 1 }
 }
-sr_disp_site_crews_planned_daedalus = {
+sr_site_crews_planned_daedalus = {
 	value = sr_mod_crewed_pending_daedalus
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_daedalus = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_daedalus = sr_site_crews_daedalus } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_daedalus > sr_site_crews_daedalus } value = 2 }
+	if = { limit = { sr_site_crews_planned_daedalus = sr_site_crews_daedalus } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_daedalus > sr_site_crews_daedalus } value = 2 }
 }
 sr_disp_site_staffing_daedalus = {
 	value = sr_site_staffing_daedalus
@@ -6365,15 +6365,15 @@ sr_disp_site_crews_short_imbrium = {
 	value = 0
 	if = { limit = { sr_site_crew_needed_imbrium > sr_site_crews_imbrium } value = 1 }
 }
-sr_disp_site_crews_planned_imbrium = {
+sr_site_crews_planned_imbrium = {
 	value = sr_mod_crewed_pending_imbrium
 	subtract = 1
 	min = 0
 }
 sr_disp_site_crews_fit_imbrium = {
 	value = 0
-	if = { limit = { sr_disp_site_crews_planned_imbrium = sr_site_crews_imbrium } value = 1 }
-	else_if = { limit = { sr_disp_site_crews_planned_imbrium > sr_site_crews_imbrium } value = 2 }
+	if = { limit = { sr_site_crews_planned_imbrium = sr_site_crews_imbrium } value = 1 }
+	else_if = { limit = { sr_site_crews_planned_imbrium > sr_site_crews_imbrium } value = 2 }
 }
 sr_disp_site_staffing_imbrium = {
 	value = sr_site_staffing_imbrium

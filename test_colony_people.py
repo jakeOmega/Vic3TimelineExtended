@@ -717,12 +717,12 @@ class PeopleViewTest(unittest.TestCase):
         for site in gss.SITES:
             k = site.key
             with self.subTest(site=k):
-                planned = _block(self.display, f"sr_disp_site_crews_planned_{k}")
+                planned = _block(self.display, f"sr_site_crews_planned_{k}")
                 self.assertIn(f"value = sr_mod_crewed_pending_{k}", planned)
                 self.assertIn("subtract = 1", planned)
                 fit = _block(self.display, f"sr_disp_site_crews_fit_{k}")
-                self.assertIn(f"if = {{ limit = {{ sr_disp_site_crews_planned_{k} = sr_site_crews_{k} }} value = 1 }}", fit)
-                self.assertIn(f"else_if = {{ limit = {{ sr_disp_site_crews_planned_{k} > sr_site_crews_{k} }} value = 2 }}", fit)
+                self.assertIn(f"if = {{ limit = {{ sr_site_crews_planned_{k} = sr_site_crews_{k} }} value = 1 }}", fit)
+                self.assertIn(f"else_if = {{ limit = {{ sr_site_crews_planned_{k} > sr_site_crews_{k} }} value = 2 }}", fit)
                 used = (f"[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_{k}')|0]/"
                         f"[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_{k}')|0]")
                 for block, value, color in (("settler_crews", 0, "G"), ("settler_crews_exact", 1, "Y"),
