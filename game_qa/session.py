@@ -209,6 +209,7 @@ GUI_RELOAD_WAIT_S = 15.0                # from the wrapper's write to its token'
 GUI_RELOAD_POLL_S = 0.25
 GUI_SETTLE_S = 0.5                      # from the create to the shot: the widget drawn
 GUI_CROP_MARGIN = 8                     # pixels of backdrop kept round the panel (spec § 5.2, step 7)
+GUI_CROP_GAP = 64                       # what is drawn this near the panel joins the crop (live: a 23 px gap)
 GUI_WIDTH_RANGE = (100, 3000)           # what --width takes, in UI units
 GUI_DEBUG = "gui.debug"                 # toggles; answers Enabled or Disabled (live, 2026-11-23)
 GUI_DRAWALL = "gui.debug.drawall"       # toggles; draws every widget's box only while GUI_DEBUG is on
@@ -216,6 +217,7 @@ SET_SCALE = "gui.setscale %s"           # the game's UI scale, live; the console
 CLEAR_CREATE = "gui.createwidget %s %s" % (gui_preview.PREVIEW_FILE, gui_preview.CLEAR_WIDGET)
 SETTINGS_FILE = "pdx_settings.json"     # under the user data: GUI.scale is the scale the settings menu set
 GUI_SCALE_RANGE = (0.25, 4.0)
+GUI_HIDE_NEXT = "gui-hide, to clear the preview left up (click --console first if a reply said keyboard_away)"
 ENTER_SETTLE_S = 10.0                   # after Start, before the console is looked for: the game loads (a guess; live
                                         # 2026-11-11 the console answered after Start, how soon is unmeasured)
 ENTER_WAIT_S = 90.0                     # then, for the console to take commands again (a guess, generous)
@@ -2238,7 +2240,15 @@ class Session:
         with self._step("gui_show", type=type_name, context=context, width=width) as out:
             try:
                 changes = gui_preview.branch_changes(Path(repo))
-                files = {rel: (Path(repo) / rel).read_bytes() for rel in changes.gui}
+                # The branch's files, and every file synced earlier in the session, kept equal to the repo's: one
+                # reverted since is synced back, one gone is removed from the overlay (spec § 5.2 step 1).
+                files: dict[str, bytes] = {}
+                gone: list[str] = []
+                for rel in sorted(set(changes.gui) | set(self._overlay.synced)):
+                    if (Path(repo) / rel).is_file():
+                        files[rel] = (Path(repo) / rel).read_bytes()
+                    else:
+                        gone.append(rel)
                 for rel, data in files.items():
                     problem = overlay.brace_problem(data.decode("utf-8-sig", errors="replace"))
                     if problem:
@@ -2256,10 +2266,15 @@ class Session:
             revision = self._overlay.preview_revision + 1
             result: dict[str, Any] = {"type": type_name, "context": context, "revision": revision,
                                       "stale_script": changes.script}
+            self._new_lines()                   # what was logged before (an earlier preview's flood) is not this one's
             self._errors_seen = []
+            created = False
             try:
                 try:
                     result["synced"] = [rel for rel, data in files.items() if overlay.sync_gui(self._overlay, rel, data)]
+                    removed = [rel for rel in gone if overlay.unsync_gui(self._overlay, rel)]
+                    if removed:
+                        result["removed"] = removed
                     overlay.write_preview(self._overlay, gui_preview.wrapper_text(
                         type_name, context, width, revision, variables), revision)
                 except overlay.OverlayError as e:
@@ -2268,18 +2283,30 @@ class Session:
                 if setup is not None:
                     result["setup_lines"] = self.run_setup(setup)
                 self._console.run(CLEAR_WIDGETS)
-                self._console.run(PREVIEW_CREATE)
+                created = True                  # from here a failure may leave the widget (and its values) up
                 self._preview_kept = dict(variables)
+                self._console.run(PREVIEW_CREATE)
                 with self._preview_options(outlines, scale, owner_scale, result):
                     self._sleep(GUI_SETTLE_S)
                     self.click(console=True)
                     result.update(self._preview_shot(type_name))
                 self._new_lines()
                 result["log"] = gui_preview.gui_log(self._errors_seen, list(files) + [gui_preview.PREVIEW_FILE])
-                if not keep:
-                    self._clear_preview()
+            except Exception as failure:
+                if not created:
+                    raise
+                error = self._preview_failed(failure, keep)
+                if error is failure:
+                    raise
+                raise error from failure
             finally:
                 self._errors_seen = None
+            if not keep:
+                try:
+                    self._clear_preview()
+                except Exception as e:          # the shot stands: say what is left up rather than lose it
+                    result.update(preview_left_up=True, clear_failed="%s: %s" % (type(e).__name__, e),
+                                  next=GUI_HIDE_NEXT)
             out.update({k: v for k, v in result.items() if k != "log"}, log_lines=len(result["log"]))
         return result
 
@@ -2292,6 +2319,24 @@ class Session:
             self._clear_preview()
             out.update(variables_cleared=cleared)
         return {"cleared": True, "variables_cleared": cleared}
+
+    def _preview_failed(self, failure: Exception, keep: bool) -> Exception:
+        """After a failure with the preview created: clear it unless `keep`, and when it stays up (kept, or the
+        clear failed too) say so on the error (`preview_left_up`, `next`), since its full-screen backdrop covers
+        the game for every later verb. A failure that is not a SessionError is wrapped in one to say it."""
+        left = keep
+        if not keep:
+            try:
+                self._clear_preview()
+            except Exception:
+                left = True
+        if not left:
+            return failure
+        if isinstance(failure, SessionError):
+            failure.info.update(preview_left_up=True, next=GUI_HIDE_NEXT)
+            return failure
+        return SessionError(getattr(failure, "code", type(failure).__name__), getattr(failure, "detail", str(failure)),
+                            preview_left_up=True, next=GUI_HIDE_NEXT)
 
     def _clear_preview(self) -> None:
         """Clear the created widgets; when the preview set client-side values, create the wrapper's clear widget,
@@ -2311,9 +2356,15 @@ class Session:
         except (OSError, ValueError, KeyError, TypeError) as e:
             raise SessionError("no_scale", "the owner's UI scale could not be read from %s (%s: %s), so a scale "
                                "could not be put back: show without --scale" % (path, type(e).__name__, e)) from e
-        if isinstance(value, bool) or not isinstance(value, (int, float)):
-            raise SessionError("no_scale", "%s holds GUI.scale = %r, not a number" % (path, value))
-        return float(value)
+        try:                                # the owner's file holds it as text, "1.5" (live, 2026-11-23)
+            if isinstance(value, bool):
+                raise ValueError
+            scale = float(value)
+            if not math.isfinite(scale) or scale <= 0:
+                raise ValueError
+        except (TypeError, ValueError) as e:
+            raise SessionError("no_scale", "%s holds GUI.scale = %r, not a number" % (path, value)) from e
+        return scale
 
     @contextmanager
     def _preview_options(self, outlines: bool, scale: float | None, owner_scale: float | None, result: dict):
@@ -2403,7 +2454,7 @@ class Session:
         crop = shot.with_name("gui_%02d_%s.png" % (self._shots, type_name))
         try:
             image = pixels.decode_png(shot.read_bytes())
-            left, top, right, bottom = pixels.backdrop_box(image, gui_preview.BACKDROP)
+            left, top, right, bottom = pixels.backdrop_box(image, gui_preview.BACKDROP, gap=GUI_CROP_GAP)
             m = GUI_CROP_MARGIN
             part = pixels.cut(image, (left - m, top - m, right + m, bottom + m))
             crop.write_bytes(pixels.encode_png(part))

@@ -90,6 +90,32 @@ class BackdropBoxTest(unittest.TestCase):
     def test_the_box_is_the_drawn_rectangle_around_the_centre(self):
         self.assertEqual(pixels.backdrop_box(field(400, 300, rect=(120, 80, 290, 230))), (120, 80, 290, 230))
 
+    def paint(self, img, rect, colour=(200, 200, 200)):
+        width, height, rgb = img
+        rgb = bytearray(rgb)
+        for y in range(rect[1], rect[3]):
+            for x in range(rect[0], rect[2]):
+                rgb[(y * width + x) * 3:(y * width + x) * 3 + 3] = bytes(colour)
+        return width, height, bytes(rgb)
+
+    def test_with_a_gap_drawn_pixels_near_an_edge_join_the_box(self):
+        # Live 2026-11-23: a type spilled out of the wrapper's window, below it with backdrop between.
+        img = field(400, 300, rect=(120, 80, 290, 160))
+        img = self.paint(img, (130, 172, 200, 186))         # 12 px below the panel: a line of text
+        img = self.paint(img, (296, 100, 305, 120))         # 6 px to its right
+        self.assertEqual(pixels.backdrop_box(img), (120, 80, 290, 160))             # no gap: the panel alone
+        self.assertEqual(pixels.backdrop_box(img, gap=16), (120, 80, 305, 186))
+
+    def test_with_a_gap_what_lies_further_away_stays_out(self):
+        img = self.paint(field(400, 300, rect=(120, 80, 290, 160)), (20, 100, 60, 140))   # 60 px off: the console
+        self.assertEqual(pixels.backdrop_box(img, gap=16), (120, 80, 290, 160))
+
+    def test_a_gap_reaches_on_from_what_it_joined(self):
+        img = field(400, 300, rect=(120, 80, 290, 160))
+        img = self.paint(img, (130, 170, 200, 180))
+        img = self.paint(img, (130, 190, 200, 200))          # 10 px below the first line: joined in turn
+        self.assertEqual(pixels.backdrop_box(img, gap=16)[3], 200)
+
     def test_stray_backdrop_pixels_inside_the_panel_do_not_end_it(self):
         img = field(400, 300, rect=(120, 80, 290, 230), dots=[(150, 150), (151, 150)])
         self.assertEqual(pixels.backdrop_box(img), (120, 80, 290, 230))

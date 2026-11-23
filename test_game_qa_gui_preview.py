@@ -208,6 +208,19 @@ class WrapperTest(unittest.TestCase):
         self.assertNotIn("    ", t)                               # tabs, never spaces
         self.assertNotIn("te_qa_preview_clear", t)               # no variables, no clear widget
 
+    def test_the_panel_is_a_flowcontainer_that_grows_with_its_content(self):
+        # Live 2026-11-23: a `window` kept the size its resizeparent flowcontainer had before the type laid out,
+        # and the type spilled below it; a flowcontainer carrying the background grew round all of it.
+        t = gui_preview.wrapper_text("te_x_section", "player", 520, 7, {})
+        self.assertNotIn("window = {", t)
+        self.assertNotIn("resizeparent", t)
+        self.assertNotIn("Window_Decoration_Spike", t)            # its corner icons would be flow items
+        panel = t[t.index("\tflowcontainer = {"):]
+        for piece in ("parentanchor = center", "direction = vertical", "using = Window_Background",
+                      "margin = { 43 37 }", 'datacontext = "[GetPlayer]"', "te_x_section = {}"):
+            with self.subTest(piece=piece):
+                self.assertIn(piece, panel)
+
     def test_contexts(self):
         self.assertNotIn("datacontext", gui_preview.wrapper_text("t", "none", 520, 1, {}))
         je = gui_preview.wrapper_text("t", "je:je_x", 520, 1, {})

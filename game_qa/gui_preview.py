@@ -32,6 +32,7 @@ CLEAR_WIDGET = "te_qa_preview_clear"       # created once after a shot, to clear
 REV_PREFIX = "te_qa_rev_"
 BACKDROP = (255, 0, 255)                   # the icon's `color = { 1 0 1 1 }`
 DEFAULT_WIDTH = 520                        # a journal entry's widgets: te_tax_layout_widget.gui's roots are 520
+PANEL_MARGIN = (43, 37)                    # Window_Background's inset (23, 17), and 20 units of padding
 GUI_FAILURES = ("Unlocalized text", "FetchData failed", "pdx_data_factory", "pdx_gui_factory")
 _KEY = re.compile(r"[A-Za-z0-9_]+")
 _REV = re.compile(r"Unlocalized text '%s([0-9]{1,9})' at %s:" % (REV_PREFIX, re.escape(PREVIEW_FILE)))
@@ -202,9 +203,12 @@ def _vars_state(variables: Mapping[str, str], action: str, indent: str) -> list[
 def wrapper_text(type_name: str | None, context: str, width: int, revision: int,
                  variables: Mapping[str, str]) -> str:
     """The overlay's `PREVIEW_FILE` (no BOM: `overlay` adds it): a full-screen magenta backdrop on the top layer, a
-    centred window holding a header, the revision token (an unlocalized `text`, whose warning the game logs each time
+    centred panel holding a header, the revision token (an unlocalized `text`, whose warning the game logs each time
     it parses the file: the proof of the reload) and the type; and, with `variables`, a state that sets them when the
-    widget is created and a `CLEAR_WIDGET` that clears them when it is. `type_name` None is the empty wrapper of
+    widget is created and a `CLEAR_WIDGET` that clears them when it is. The panel is a flowcontainer carrying the
+    window background, not a `window`: live (2026-11-23) a window kept the size its resizeparent flowcontainer had
+    before the type laid out, and the type spilled below it, while a flowcontainer's background grew round all of
+    its content. PANEL_MARGIN covers the background's own inset (`Window_Background`: margin -23 -17) and pads. `type_name` None is the empty wrapper of
     revision 0, written at build. Arguments are trusted: the session checks them first (`check_type`,
     `parse_context`, `parse_var`)."""
     header = "%s - %s" % (type_name, context) if type_name else "game_qa GUI preview"
@@ -212,30 +216,29 @@ def wrapper_text(type_name: str | None, context: str, width: int, revision: int,
            % revision, "", "widget = {", '\tname = "%s"' % PREVIEW_WIDGET, "\tsize = { 100% 100% }", "\tlayer = top"]
     out += _vars_state(variables, "Set", "\t")
     out += ["", "\ticon = {", "\t\tsize = { 100% 100% }", '\t\ttexture = "gfx/interface/backgrounds/white.dds"',
-            "\t\tcolor = { 1 0 1 1 }", "\t}", "", "\twindow = {", "\t\tparentanchor = center", "\t\tmovable = no",
-            "\t\tusing = Window_Background", "\t\tusing = Window_Decoration_Spike"]
+            "\t\tcolor = { 1 0 1 1 }", "\t}", "", "\tflowcontainer = {", "\t\tparentanchor = center",
+            "\t\tdirection = vertical", "\t\tusing = Window_Background", "\t\tmargin = { %d %d }" % PANEL_MARGIN,
+            "\t\tspacing = 10", "\t\tignoreinvisible = yes", "\t\tminimumsize = { %d -1 }" % width]
     if context == "player":
         out.append('\t\tdatacontext = "[GetPlayer]"')
     elif context.startswith("je:"):
         out.append("\t\tdatacontext = \"[GetPlayerJournalEntry('%s')]\"" % context[3:])
-    out += ["", "\t\tflowcontainer = {", "\t\t\tdirection = vertical", "\t\t\tposition = { 20 20 }",
-            "\t\t\tspacing = 10", "\t\t\tresizeparent = yes", "\t\t\tignoreinvisible = yes",
-            "\t\t\tminimumsize = { %d -1 }" % width, "",
-            "\t\t\ttextbox = {", "\t\t\t\tsize = { %d 24 }" % width, '\t\t\t\traw_text = "%s"' % header,
-            '\t\t\t\tdefault_format = "#header"', "\t\t\t\talign = left|nobaseline", "\t\t\t}",
-            "\t\t\ttextbox = {", "\t\t\t\tsize = { %d 18 }" % width, '\t\t\t\ttext = "%s%d"' % (REV_PREFIX, revision),
-            "\t\t\t\talign = left|nobaseline", "\t\t\t}"]
+    out += ["",
+            "\t\ttextbox = {", "\t\t\tsize = { %d 24 }" % width, '\t\t\traw_text = "%s"' % header,
+            '\t\t\tdefault_format = "#header"', "\t\t\talign = left|nobaseline", "\t\t}",
+            "\t\ttextbox = {", "\t\t\tsize = { %d 18 }" % width, '\t\t\ttext = "%s%d"' % (REV_PREFIX, revision),
+            "\t\t\talign = left|nobaseline", "\t\t}"]
     if type_name and context.startswith("je:"):
-        out += ["\t\t\ttextbox = {", '\t\t\t\tvisible = "[Not( JournalEntry.IsActive )]"',
-                "\t\t\t\tsize = { %d 24 }" % width,
-                '\t\t\t\traw_text = "%s is not active for the played country"' % context[3:],
-                "\t\t\t\talign = left|nobaseline", "\t\t\t}",
-                "\t\t\tflowcontainer = {", '\t\t\t\tvisible = "[JournalEntry.IsActive]"',
-                "\t\t\t\tdirection = vertical", "\t\t\t\tignoreinvisible = yes",
-                "\t\t\t\t%s = {}" % type_name, "\t\t\t}"]
+        out += ["\t\ttextbox = {", '\t\t\tvisible = "[Not( JournalEntry.IsActive )]"',
+                "\t\t\tsize = { %d 24 }" % width,
+                '\t\t\traw_text = "%s is not active for the played country"' % context[3:],
+                "\t\t\talign = left|nobaseline", "\t\t}",
+                "\t\tflowcontainer = {", '\t\t\tvisible = "[JournalEntry.IsActive]"',
+                "\t\t\tdirection = vertical", "\t\t\tignoreinvisible = yes",
+                "\t\t\t%s = {}" % type_name, "\t\t}"]
     elif type_name:
-        out.append("\t\t\t%s = {}" % type_name)
-    out += ["\t\t}", "\t}", "}"]
+        out.append("\t\t%s = {}" % type_name)
+    out += ["\t}", "}"]
     if variables:
         out += ["", "widget = {", '\tname = "%s"' % CLEAR_WIDGET, "\tsize = { 0 0 }"]
         out += _vars_state(variables, "Clear", "\t")

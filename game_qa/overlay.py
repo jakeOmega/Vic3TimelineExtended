@@ -373,6 +373,21 @@ def sync_gui(ov: Overlay, rel: str, data: bytes) -> bool:
     return True
 
 
+def unsync_gui(ov: Overlay, rel: str) -> bool:
+    """Remove the overlay's copy of `rel`, which this session synced (`ov.synced`), now that the repo no longer
+    has it: True when a copy was removed, False for a path this session never synced (the harness's own files
+    are never synced, so never removed). OverlayError, with nothing removed, for an overlay no longer ours."""
+    if not isinstance(rel, str) or rel not in ov.synced or _SYNC_PATH.fullmatch(rel) is None:
+        return False
+    if not _is_overlay(ov.dir):
+        raise OverlayError(f"{ov.dir} is not this session's overlay any more, so nothing was removed")
+    path = ov.dir / rel
+    if path.is_symlink() or path.is_file():
+        path.unlink()
+    del ov.synced[rel]
+    return True
+
+
 def loaded_revision(line_text: str) -> int | None:
     """The revision a LOADED_EVENT log line names, or None for any other line: the message must end with the
     prefix and plain digits, nothing after."""

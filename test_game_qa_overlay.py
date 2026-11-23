@@ -890,6 +890,22 @@ class PreviewFilesTest(OverlayTestCase):
         self.assertIn("te_qa_rev_0", self.ov.preview_file.read_text(encoding="utf-8-sig"))
         self.assertEqual(self.ov.preview_revision, 0)
 
+    def test_unsync_removes_a_copy_this_session_synced_and_nothing_else(self):
+        overlay.sync_gui(self.ov, "gui/a.gui", b"types t {}\n")
+        self.assertTrue(overlay.unsync_gui(self.ov, "gui/a.gui"))
+        self.assertFalse((self.dest / "gui/a.gui").exists())
+        self.assertNotIn("gui/a.gui", self.ov.synced)
+        self.assertFalse(overlay.unsync_gui(self.ov, "gui/a.gui"))                 # not synced (any more)
+        self.assertFalse(overlay.unsync_gui(self.ov, overlay.PREVIEW_FILE))        # never the harness's own
+        self.assertTrue(self.ov.preview_file.is_file())
+
+    def test_unsync_refuses_an_overlay_that_is_not_ours(self):
+        overlay.sync_gui(self.ov, "gui/a.gui", b"types t {}\n")
+        (self.dest / ".metadata" / "metadata.json").write_text("{}", encoding="utf-8")
+        with self.assertRaises(overlay.OverlayError):
+            overlay.unsync_gui(self.ov, "gui/a.gui")
+        self.assertTrue((self.dest / "gui/a.gui").exists())
+
     def test_build_without_it_writes_no_wrapper(self):
         ov = overlay.build(self.mods / overlay.OVERLAY_NAME, {}, "1.15.2")
         self.assertIsNone(ov.preview_file)
