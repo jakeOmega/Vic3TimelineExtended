@@ -582,21 +582,297 @@ te_jmap_invest_selfcheck = {
 	}
 }
 
+# The second tier's four engine figures (#1977), each read as a value for the first time in the mod: one
+# once-a-game check each, from the global monthly pulse whatever the pick, so a game answers them before anyone picks
+# the maps (te_journal_map_on_actions.txt). Each arms on a fact read another way, so a read of none everywhere can't
+# pass. No root: the counts are globals. The fallbacks are in the play-test list's Self-checks table
+# (docs/testing/journal-map-modes-playtest.md) and in each comment.
+
+# TE_SELF_CHECK market_access (check 35). The Market Access map (83) reads market_access as a value
+# (te_jmap_market_access), as vanilla's cultural_community_creation_weight multiplies by it; the mod never had.
+# Market access is min(infrastructure, usage) over usage (vanilla_states_reference.md § 4.3), so a state using more
+# infrastructure than it has reads below 1. Once a game, the first month at least three states with people are short
+# (te_jmap_infra_balance < 0): OK when one of them reads between 0 and 1 and no state reads above 1; BROKEN when none
+# does (the read is none, or doesn't follow infrastructure) or a state reads above 1 (a percentage, not a share). The
+# fallbacks, if BROKEN: a read of none, work the access out from infrastructure (infrastructure over
+# infrastructure_usage, at most 1; is_isolated_from_market 0); a read above 1, divide it by 100.
+te_jmap_access_selfcheck = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_jmap_access_selfcheck_done }
+			any_state = {
+				count >= 3
+				state_population > 0
+				te_jmap_infra_balance < 0
+			}
+		}
+		set_global_variable = te_jmap_access_selfcheck_done
+		set_global_variable = { name = te_jmap_sc_acc_short value = 0 }
+		set_global_variable = { name = te_jmap_sc_acc_cut value = 0 }
+		set_global_variable = { name = te_jmap_sc_acc_live value = 0 }
+		set_global_variable = { name = te_jmap_sc_acc_over value = 0 }
+		every_state = {
+			limit = { state_population > 0 }
+			if = {
+				limit = { te_jmap_market_access > 0 }
+				change_global_variable = { name = te_jmap_sc_acc_live add = 1 }
+			}
+			if = {
+				limit = { te_jmap_market_access > 1 }
+				change_global_variable = { name = te_jmap_sc_acc_over add = 1 }
+			}
+			if = {
+				limit = { te_jmap_infra_balance < 0 }
+				change_global_variable = { name = te_jmap_sc_acc_short add = 1 }
+				if = {
+					limit = {
+						te_jmap_market_access > 0
+						te_jmap_market_access < 1
+					}
+					change_global_variable = { name = te_jmap_sc_acc_cut add = 1 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				global_var:te_jmap_sc_acc_cut > 0
+				global_var:te_jmap_sc_acc_over = 0
+			}
+			debug_log = "TE_SELF_CHECK OK market_access short=[GetGlobalVariable('te_jmap_sc_acc_short').GetValue|0] short_below_1=[GetGlobalVariable('te_jmap_sc_acc_cut').GetValue|0] above_0=[GetGlobalVariable('te_jmap_sc_acc_live').GetValue|0] above_1=0 date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN market_access short=[GetGlobalVariable('te_jmap_sc_acc_short').GetValue|0] short_below_1=[GetGlobalVariable('te_jmap_sc_acc_cut').GetValue|0] above_0=[GetGlobalVariable('te_jmap_sc_acc_live').GetValue|0] above_1=[GetGlobalVariable('te_jmap_sc_acc_over').GetValue|0] (states short of infrastructure don't read a market access between 0 and 1, or some state reads above 1: the Market Access map is one color or on the wrong scale; take the fallback in docs/testing/journal-map-modes-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		remove_global_variable = te_jmap_sc_acc_short
+		remove_global_variable = te_jmap_sc_acc_cut
+		remove_global_variable = te_jmap_sc_acc_live
+		remove_global_variable = te_jmap_sc_acc_over
+	}
+}
+
+# TE_SELF_CHECK pollution_amount (check 35). The Pollution map (84) reads the region's pollution_amount as a value
+# (te_jmap_pollution: state_region.pollution_amount; a political movement's support weight reads it so, never
+# checked), where its trigger form, state_region = { pollution_amount > N }, is vanilla's ideologies' and the mod's
+# tourism's. Once a game, the first month the trigger form passes at 0 in at least three states: the value against the
+# trigger form in every state, at 0 and at 10, so a read of another figure (the impact, a share) disagrees too. OK when
+# they agree everywhere and no state reads above 255 (POLLUTION_MAX); BROKEN when they disagree anywhere (a read of
+# none paints the map pale everywhere) or a read is above 255. The fallback, if BROKEN: store the figure in bands from
+# the trigger form, a ladder of thresholds from 0 to 255, at a pick and monthly while picked, as Unemployment's is
+# stored (te_jmap_store_unemp).
+te_jmap_pollution_selfcheck = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_jmap_pollution_selfcheck_done }
+			any_state = {
+				count >= 3
+				state_region = { pollution_amount > 0 }
+			}
+		}
+		set_global_variable = te_jmap_pollution_selfcheck_done
+		set_global_variable = { name = te_jmap_sc_poll_trig value = 0 }
+		set_global_variable = { name = te_jmap_sc_poll_read value = 0 }
+		set_global_variable = { name = te_jmap_sc_poll_diff value = 0 }
+		set_global_variable = { name = te_jmap_sc_poll_over value = 0 }
+		every_state = {
+			if = {
+				limit = { state_region = { pollution_amount > 0 } }
+				change_global_variable = { name = te_jmap_sc_poll_trig add = 1 }
+			}
+			if = {
+				limit = { te_jmap_pollution > 0 }
+				change_global_variable = { name = te_jmap_sc_poll_read add = 1 }
+			}
+			if = {
+				limit = { te_jmap_pollution > 255 }
+				change_global_variable = { name = te_jmap_sc_poll_over add = 1 }
+			}
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							state_region = { pollution_amount > 0 }
+							NOT = { te_jmap_pollution > 0 }
+						}
+						AND = {
+							NOT = { state_region = { pollution_amount > 0 } }
+							te_jmap_pollution > 0
+						}
+						AND = {
+							state_region = { pollution_amount > 10 }
+							NOT = { te_jmap_pollution > 10 }
+						}
+						AND = {
+							NOT = { state_region = { pollution_amount > 10 } }
+							te_jmap_pollution > 10
+						}
+					}
+				}
+				change_global_variable = { name = te_jmap_sc_poll_diff add = 1 }
+			}
+		}
+		if = {
+			limit = {
+				global_var:te_jmap_sc_poll_diff = 0
+				global_var:te_jmap_sc_poll_over = 0
+			}
+			debug_log = "TE_SELF_CHECK OK pollution_amount polluted=[GetGlobalVariable('te_jmap_sc_poll_trig').GetValue|0] read=[GetGlobalVariable('te_jmap_sc_poll_read').GetValue|0] disagree=0 above_255=0 date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN pollution_amount polluted=[GetGlobalVariable('te_jmap_sc_poll_trig').GetValue|0] read=[GetGlobalVariable('te_jmap_sc_poll_read').GetValue|0] disagree=[GetGlobalVariable('te_jmap_sc_poll_diff').GetValue|0] above_255=[GetGlobalVariable('te_jmap_sc_poll_over').GetValue|0] (the region's pollution_amount read as a value isn't its trigger form's, or reads above 255: the Pollution map is pale or wrong; take the fallback in docs/testing/journal-map-modes-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		remove_global_variable = te_jmap_sc_poll_trig
+		remove_global_variable = te_jmap_sc_poll_read
+		remove_global_variable = te_jmap_sc_poll_diff
+		remove_global_variable = te_jmap_sc_poll_over
+	}
+}
+
+# TE_SELF_CHECK available_jobs (check 35). The Vacant Jobs map (85) reads available_jobs as a value
+# (te_jmap_vacant_jobs), which the mod never has. A building other than a subsistence farm under 90% staffed
+# (occupancy, which the AI probe reads) has jobs open. Once a game, the first month at least three states hold one:
+# OK when one of those states reads above 0 and the value agrees with the trigger form (available_jobs > 0) in every
+# state; BROKEN when none reads above 0 (a read of none: the map pale everywhere) or the two disagree. The fallback, if
+# BROKEN: store the figure in bands from the trigger form (available_jobs > N, a ladder of doublings) at a pick and
+# monthly while picked, as Unemployment's is stored; or sum each building's open jobs from its occupancy and levels.
+te_jmap_jobs_selfcheck = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_jmap_jobs_selfcheck_done }
+			any_state = {
+				count >= 3
+				any_scope_building = {
+					is_subsistence_building = no
+					level >= 1
+					occupancy < 0.9
+				}
+			}
+		}
+		set_global_variable = te_jmap_jobs_selfcheck_done
+		set_global_variable = { name = te_jmap_sc_jobs_open value = 0 }
+		set_global_variable = { name = te_jmap_sc_jobs_read value = 0 }
+		set_global_variable = { name = te_jmap_sc_jobs_diff value = 0 }
+		every_state = {
+			if = {
+				limit = {
+					any_scope_building = {
+						is_subsistence_building = no
+						level >= 1
+						occupancy < 0.9
+					}
+				}
+				change_global_variable = { name = te_jmap_sc_jobs_open add = 1 }
+				if = {
+					limit = { te_jmap_vacant_jobs > 0 }
+					change_global_variable = { name = te_jmap_sc_jobs_read add = 1 }
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							available_jobs > 0
+							NOT = { te_jmap_vacant_jobs > 0 }
+						}
+						AND = {
+							NOT = { available_jobs > 0 }
+							te_jmap_vacant_jobs > 0
+						}
+					}
+				}
+				change_global_variable = { name = te_jmap_sc_jobs_diff add = 1 }
+			}
+		}
+		if = {
+			limit = {
+				global_var:te_jmap_sc_jobs_read > 0
+				global_var:te_jmap_sc_jobs_diff = 0
+			}
+			debug_log = "TE_SELF_CHECK OK available_jobs understaffed=[GetGlobalVariable('te_jmap_sc_jobs_open').GetValue|0] read=[GetGlobalVariable('te_jmap_sc_jobs_read').GetValue|0] disagree=0 date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN available_jobs understaffed=[GetGlobalVariable('te_jmap_sc_jobs_open').GetValue|0] read=[GetGlobalVariable('te_jmap_sc_jobs_read').GetValue|0] disagree=[GetGlobalVariable('te_jmap_sc_jobs_diff').GetValue|0] (states with an understaffed building read no vacant jobs as a value, or the value and available_jobs' trigger form disagree: the Vacant Jobs map is pale or wrong; take the fallback in docs/testing/journal-map-modes-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		remove_global_variable = te_jmap_sc_jobs_open
+		remove_global_variable = te_jmap_sc_jobs_read
+		remove_global_variable = te_jmap_sc_jobs_diff
+	}
+}
+
+# TE_SELF_CHECK below_expected_sol (check 35). The Below Expected SoL map (86) reads population_below_expected_sol as
+# a value (te_jmap_below_expected), which the mod never has. A state whose people's mean standard of living is a point
+# or more below the mean they expect (te_jmap_sol_expected < -1, the first tier's SoL vs Expected) holds people below
+# their own. Once a game, the first month at least three states with people stand so: OK when one of them reads above
+# 0 and no state reads above 1; BROKEN when none does (a read of none: the map pale everywhere) or a state reads above
+# 1 (a percentage, not a share). The fallbacks, if BROKEN: a read above 1, divide it by 100; a read of none, retire
+# the map, since script reads no pop's expected standard of living to count the people below it, and SoL vs Expected
+# (77) maps the same gap.
+te_jmap_below_sol_selfcheck = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_jmap_below_sol_selfcheck_done }
+			any_state = {
+				count >= 3
+				state_population > 0
+				te_jmap_sol_expected < -1
+			}
+		}
+		set_global_variable = te_jmap_below_sol_selfcheck_done
+		set_global_variable = { name = te_jmap_sc_bel_short value = 0 }
+		set_global_variable = { name = te_jmap_sc_bel_read value = 0 }
+		set_global_variable = { name = te_jmap_sc_bel_over value = 0 }
+		every_state = {
+			limit = { state_population > 0 }
+			if = {
+				limit = { te_jmap_below_expected > 1 }
+				change_global_variable = { name = te_jmap_sc_bel_over add = 1 }
+			}
+			if = {
+				limit = { te_jmap_sol_expected < -1 }
+				change_global_variable = { name = te_jmap_sc_bel_short add = 1 }
+				if = {
+					limit = { te_jmap_below_expected > 0 }
+					change_global_variable = { name = te_jmap_sc_bel_read add = 1 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				global_var:te_jmap_sc_bel_read > 0
+				global_var:te_jmap_sc_bel_over = 0
+			}
+			debug_log = "TE_SELF_CHECK OK below_expected_sol below_expected=[GetGlobalVariable('te_jmap_sc_bel_short').GetValue|0] read=[GetGlobalVariable('te_jmap_sc_bel_read').GetValue|0] above_1=0 date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN below_expected_sol below_expected=[GetGlobalVariable('te_jmap_sc_bel_short').GetValue|0] read=[GetGlobalVariable('te_jmap_sc_bel_read').GetValue|0] above_1=[GetGlobalVariable('te_jmap_sc_bel_over').GetValue|0] (states living a point below what their people expect read nobody below it, or some state reads above 1: the Below Expected SoL map is pale or on the wrong scale; take the fallback in docs/testing/journal-map-modes-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		remove_global_variable = te_jmap_sc_bel_short
+		remove_global_variable = te_jmap_sc_bel_read
+		remove_global_variable = te_jmap_sc_bel_over
+	}
+}
+
 # The Map Room's own sums in Demographics' yearly walk (te_demog_walks, te_demog_effects.txt), whatever the rule:
-# every class's people (te_jmap_class_walk_*, generated from journal_map_classes.py: te_journal_map_classes_generated.txt)
-# and the people's mean wealth (te_dg_wealth, the Wealth map's figure, #1976). Calls of the Map Room's own, not the census's helpers,
+# every class's people (te_jmap_class_walk_*, generated from journal_map_classes.py: te_journal_map_classes_generated.txt),
+# the people's mean wealth (te_dg_wealth, the Wealth map's figure, #1976) and the people short of Full Acceptance
+# (te_dg_unacc, the Discrimination map's, #1977). Calls of the Map Room's own, not the census's helpers,
 # which set nothing outside the census (test_demographics_registry.py, TestWorkWalk); test_demographics_golden.py
 # leaves the three lines out of the walk it pins.
 # State scope, before the walk's pop loop.
 te_jmap_walk_init = {
 	te_jmap_class_walk_init = yes
 	set_local_variable = { name = te_jmap_w_wealth value = 0 }
+	set_local_variable = { name = te_jmap_w_unacc value = 0 }
 }
 
-# Pop scope, in the walk's pop loop.
+# Pop scope, in the walk's pop loop. Not fully accepted: the pop's acceptance below acceptance_status_5 (80, vanilla's
+# Full Acceptance), the per-pop read civil rights and the culture merges take (pop_acceptance).
 te_jmap_walk_pop = {
 	te_jmap_class_walk_pop = yes
 	change_local_variable = { name = te_jmap_w_wealth add = te_jmap_pop_wealth }
+	if = {
+		limit = { pop_acceptance < acceptance_status_5 }
+		change_local_variable = { name = te_jmap_w_unacc add = total_size }
+	}
 }
 
 # State scope, after the walk's pop loop, which has stored te_dg_walk_pop, the people it summed.
@@ -612,4 +888,5 @@ te_jmap_walk_store = {
 			}
 		}
 	}
+	set_variable = { name = te_dg_unacc value = local_var:te_jmap_w_unacc }
 }

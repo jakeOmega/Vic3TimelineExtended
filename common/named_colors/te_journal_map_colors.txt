@@ -240,6 +240,20 @@ colors = {
 	te_jmap_loyal_low = hsv360 { 356 78 60 }
 	te_jmap_loyal_mid = hsv360 { 50 6 92 }
 	te_jmap_loyal_high = hsv360 { 220 70 52 }
+	# je_te_map_room: the second tier (2026-11-23, #1977). Market Access (deep crimson at the range's low to pale sage
+	# at full access, so the cut-off states stand out), Pollution (pale yellow to soot, a clean region te_jmap_none),
+	# Vacant Jobs (pale aqua to deep blue, a doubling at a time; none open te_jmap_none), Below Expected SoL (cream to
+	# deep rose) and Discrimination (cream to deep violet).
+	te_jmap_access_low = hsv360 { 352 82 48 }
+	te_jmap_access_high = hsv360 { 95 10 92 }
+	te_jmap_pollution_low = hsv360 { 55 30 92 }
+	te_jmap_pollution_high = hsv360 { 25 70 30 }
+	te_jmap_jobs_low = hsv360 { 185 14 94 }
+	te_jmap_jobs_high = hsv360 { 225 80 45 }
+	te_jmap_below_sol_low = hsv360 { 45 10 95 }
+	te_jmap_below_sol_high = hsv360 { 330 75 45 }
+	te_jmap_unacc_low = hsv360 { 40 8 95 }
+	te_jmap_unacc_high = hsv360 { 285 70 40 }
 
 	# je_banking_cycle: the seven phases of the financial cycle, panic to frenzy, and the crash-risk stripes.
 	te_jmap_bank_panic = hsv360 { 355 80 52 }

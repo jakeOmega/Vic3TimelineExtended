@@ -98,6 +98,12 @@ MAPS = [
     dict(key="gdp", sel=80),
     dict(key="infrastructure", sel=81),
     dict(key="radicals_loyalists", sel=82),
+    # the second tier (2026-11-23, #1977): four engine figures, each with a self-check, and the walk's discrimination
+    dict(key="market_access", sel=83),
+    dict(key="pollution", sel=84),
+    dict(key="vacant_jobs", sel=85),
+    dict(key="below_expected_sol", sel=86),
+    dict(key="discrimination", sel=87),
 ]
 # The class maps (#1975): two per pop type, its people and its share of the people, from journal_map_classes.py. The
 # Count/Share switch (te_jmap_class_mode) shows one of a class's two buttons, so `mode` joins the pick's is_shown.
@@ -127,10 +133,10 @@ GROUPS = [
                ["old_share", "sex_balance"]]),
     dict(key="living", name="Living Conditions",
          note="how people live: the yearly walk's standard of living and wealth and the one less the other, the "
-              "standard against the one people expect, and literacy; then how long they live, what they die of and "
-              "what medicine reaches (the census's, hidden while it doesn't run)",
+              "standard against the one people expect and the share living below it, and literacy; then how long "
+              "they live, what they die of and what medicine reaches (the census's, hidden while it doesn't run)",
          rows=[["standard_of_living", "wealth", "sol_vs_wealth"],
-               ["sol_vs_expected", "literacy"],
+               ["sol_vs_expected", "below_expected_sol", "literacy"],
                ["life_expectancy", "infant_mortality", "leading_cause"],
                ["health_care"]]),
     dict(key="classes", name="Classes",
@@ -140,17 +146,20 @@ GROUPS = [
          rows=[[classes.slot(c) for c in classes.CLASSES if c["pop"] in row] for row in classes.ROWS],
          right="te_jmap_classes_now"),
     dict(key="economy", name="Economy",
-         note="output and work (GDP, GDP per capita, unemployment); how wealth is spread (the walk's Gini and "
-              "Dynastic Wealth) and who owns the capital; where the companies keep their headquarters, what the "
-              "owners invest and the trade a state can carry; its infrastructure to spare and the power grids",
-         rows=[["gdp", "gdp_per_capita", "unemployment"],
+         note="output (GDP, GDP per capita) and work (unemployment, the jobs open); how wealth is spread (the walk's "
+              "Gini and Dynastic Wealth) and who owns the capital; where the companies keep their headquarters, what "
+              "the owners invest and the trade a state can carry; its infrastructure to spare, the market access it "
+              "buys, and the power grids",
+         rows=[["gdp", "gdp_per_capita"],
+               ["unemployment", "vacant_jobs"],
                ["gini", "dynastic_wealth", "ownership"],
                ["company_hqs", "investment", "trade_capacity"],
-               ["infrastructure", "power_grids"]]),
+               ["infrastructure", "market_access", "power_grids"]]),
     dict(key="politics", name="Politics",
-         note="turmoil and the loyalists against the radicals; then the political models the world follows, the "
-              "United Nations and the colonial empires, each while its system's rule is on",
-         rows=[["turmoil", "radicals_loyalists"],
+         note="turmoil, the loyalists against the radicals, and the people short of full acceptance; then the "
+              "political models the world follows, the United Nations and the colonial empires, each while its "
+              "system's rule is on",
+         rows=[["turmoil", "radicals_loyalists", "discrimination"],
                ["political_models", "united_nations", "colonies"]]),
     dict(key="military", name="Military and Security",
          note="where the soldiers are, the men of fighting age and the war dead, on one row since the census shares a "
@@ -159,10 +168,12 @@ GROUPS = [
          rows=[["armed_forces", "fighting_age_men", "war_dead"],
                ["devastation", "nuclear", "networks"]]),
     dict(key="land", name="Land and Environment",
-         note="the climate's comfort before and after technology's relief, and tourism's base appeal; then emissions, "
-              "the ocean basins and the monuments' grandeur, each while its system's rule is on",
+         note="the climate's comfort before and after technology's relief, and tourism's base appeal; then the "
+              "regions' pollution beside the emissions, and the ocean basins and the monuments' grandeur, each "
+              "system's map while its rule is on",
          rows=[["base_comfort", "current_comfort", "tourism_appeal"],
-               ["emissions", "ocean_basins", "grandeur"]]),
+               ["pollution", "emissions"],
+               ["ocean_basins", "grandeur"]]),
 ]
 
 ROW_WIDTH = 3

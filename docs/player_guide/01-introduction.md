@@ -41,12 +41,12 @@ while its game rule is on; a group with none of its maps to show is hidden.
 |---|---|
 | Population | Population, Population Density, Urban People, Population Growth, Net Migration, Crowding Penalty, City Rank |
 | Families and Ages | Birth Rate, Death Rate, Natural Change, Fertility, Family Planning, Median Age, Aged 65 and Over, Sex Balance |
-| Living Conditions | Standard of Living, Wealth, SoL vs Wealth, SoL vs Expected, Literacy, Life Expectancy, Infant Mortality, Leading Cause, Health Care |
+| Living Conditions | Standard of Living, Wealth, SoL vs Wealth, SoL vs Expected, Below Expected SoL, Literacy, Life Expectancy, Infant Mortality, Leading Cause, Health Care |
 | Classes | Every pop type, from Aristocrats to Soldiers |
-| Economy | GDP, GDP per Capita, Unemployment, Gini Coefficient, Dynastic Wealth, Ownership, Company HQs, Investment, Trade Capacity, Infrastructure, Power Grids |
-| Politics | Turmoil, Radicals/Loyalists, Political Models, United Nations, Colonies |
+| Economy | GDP, GDP per Capita, Unemployment, Vacant Jobs, Gini Coefficient, Dynastic Wealth, Ownership, Company HQs, Investment, Trade Capacity, Infrastructure, Market Access, Power Grids |
+| Politics | Turmoil, Radicals/Loyalists, Discrimination, Political Models, United Nations, Colonies |
 | Military and Security | Armed Forces, Fighting-Age Men, War Dead, Devastation, Nuclear Weapons, Agent Networks |
-| Land and Environment | Base Comfort, Current Comfort, Tourism Appeal, Emissions, Ocean Basins, Grandeur |
+| Land and Environment | Base Comfort, Current Comfort, Tourism Appeal, Pollution, Emissions, Ocean Basins, Grandeur |
 
 Hover a state for its figure. Trade Capacity colors each state by its own
 Trade Capacity, what its Trade Center can carry. Investment colors it by what
@@ -72,6 +72,16 @@ Infrastructure is what a state has less what it uses: below the middle it is
 short and loses market access. Radicals/Loyalists is the loyalists' share of
 the people less the radicals'. Literacy, GDP and Population read the game's own
 figures, and a state with no people is pale on the last two.
+
+Market Access is crimson where a state falls short of full access, because it
+uses more infrastructure than it has or is cut off from its market's capital,
+and pale at full access. Pollution is the state region's, 0 to 255, so every
+state of a region shares it; it drives the Pollution Impact the state panel
+shows, and a clean region is pale. Vacant Jobs counts the jobs open in a
+state's buildings, subsistence farms aside, a doubling at a time, and leaves a
+state with none open pale. Below Expected SoL is the share of a state's people
+living below their expected standard of living, the ones who turn radical, and
+Discrimination the share short of Full Acceptance, counted once a year.
 
 A map of figures shows how states differ now, not how the world has moved: its
 colors run from the fifth lowest state in the world to the fifth highest, the
@@ -116,8 +126,8 @@ of Death chart, full where that cause took 90% of the deaths and paler as its
 share falls toward 30%. Stripes in a second cause's color mark a state where
 that cause took at least half as many deaths as the leader. Leading Cause,
 Birth Rate, Death Rate, Natural Change, Net Migration and War Dead need a
-state's first full census year, Standard of Living, Wealth, SoL vs Wealth and
-the class maps its first yearly count, and Population Growth its second, so they
+state's first full census year, Standard of Living, Wealth, SoL vs Wealth,
+Discrimination and the class maps its first yearly count, and Population Growth its second, so they
 start gray.
 
 Map Options, below the groups, changes where the Map Room draws its maps,

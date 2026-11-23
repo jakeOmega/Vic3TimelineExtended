@@ -197,8 +197,8 @@ te_jmap_pick_sex_balance_sgui = {
 }
 
 # Living Conditions: how people live: the yearly walk's standard of living and wealth and the one less the other, the
-# standard against the one people expect, and literacy; then how long they live, what they die of and what medicine
-# reaches (the census's, hidden while it doesn't run).
+# standard against the one people expect and the share living below it, and literacy; then how long they live, what
+# they die of and what medicine reaches (the census's, hidden while it doesn't run).
 
 te_jmap_pick_standard_of_living_sgui = {
 	scope = country
@@ -237,6 +237,16 @@ te_jmap_pick_sol_vs_expected_sgui = {
 	is_valid = { NOT = { te_jmap_selector = 77 } }
 	effect = {
 		te_jmap_set_selector = { SEL = 77 }
+	}
+}
+
+te_jmap_pick_below_expected_sol_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 86 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 86 }
 	}
 }
 
@@ -696,9 +706,9 @@ te_jmap_pick_class_soldiers_share_sgui = {
 	}
 }
 
-# Economy: output and work (GDP, GDP per capita, unemployment); how wealth is spread (the walk's Gini and Dynastic
-# Wealth) and who owns the capital; where the companies keep their headquarters, what the owners invest and the trade
-# a state can carry; its infrastructure to spare and the power grids.
+# Economy: output (GDP, GDP per capita) and work (unemployment, the jobs open); how wealth is spread (the walk's Gini
+# and Dynastic Wealth) and who owns the capital; where the companies keep their headquarters, what the owners invest
+# and the trade a state can carry; its infrastructure to spare, the market access it buys, and the power grids.
 
 te_jmap_pick_gdp_sgui = {
 	scope = country
@@ -727,6 +737,16 @@ te_jmap_pick_unemployment_sgui = {
 	is_valid = { NOT = { te_jmap_selector = 78 } }
 	effect = {
 		te_jmap_set_selector = { SEL = 78 }
+	}
+}
+
+te_jmap_pick_vacant_jobs_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 85 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 85 }
 	}
 }
 
@@ -800,6 +820,16 @@ te_jmap_pick_infrastructure_sgui = {
 	}
 }
 
+te_jmap_pick_market_access_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 83 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 83 }
+	}
+}
+
 te_jmap_pick_power_grids_sgui = {
 	scope = country
 	is_shown = { is_player = yes }
@@ -810,8 +840,8 @@ te_jmap_pick_power_grids_sgui = {
 	}
 }
 
-# Politics: turmoil and the loyalists against the radicals; then the political models the world follows, the United
-# Nations and the colonial empires, each while its system's rule is on.
+# Politics: turmoil, the loyalists against the radicals, and the people short of full acceptance; then the political
+# models the world follows, the United Nations and the colonial empires, each while its system's rule is on.
 
 te_jmap_pick_turmoil_sgui = {
 	scope = country
@@ -830,6 +860,16 @@ te_jmap_pick_radicals_loyalists_sgui = {
 	is_valid = { NOT = { te_jmap_selector = 82 } }
 	effect = {
 		te_jmap_set_selector = { SEL = 82 }
+	}
+}
+
+te_jmap_pick_discrimination_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 87 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 87 }
 	}
 }
 
@@ -949,7 +989,8 @@ te_jmap_pick_networks_sgui = {
 }
 
 # Land and Environment: the climate's comfort before and after technology's relief, and tourism's base appeal; then
-# emissions, the ocean basins and the monuments' grandeur, each while its system's rule is on.
+# the regions' pollution beside the emissions, and the ocean basins and the monuments' grandeur, each system's map
+# while its rule is on.
 
 te_jmap_pick_base_comfort_sgui = {
 	scope = country
@@ -978,6 +1019,16 @@ te_jmap_pick_tourism_appeal_sgui = {
 	is_valid = { NOT = { te_jmap_selector = 26 } }
 	effect = {
 		te_jmap_set_selector = { SEL = 26 }
+	}
+}
+
+te_jmap_pick_pollution_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 84 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 84 }
 	}
 }
 

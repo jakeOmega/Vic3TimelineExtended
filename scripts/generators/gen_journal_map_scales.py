@@ -445,6 +445,33 @@ TABLE = [
          where=["state_population > 0"], paint=[],     # an empty state paints at none, and is left out of the range
          world=rel_mid(diverging(-0.2, 0, 0.2), 0, 0.02), min_span=0.02,
          note="Loyalists less radicals, each a share of the state's people, live, split at none"),
+    # The second tier (2026-11-23, #1977): four engine figures the mod reads as a value for the first time, each with a
+    # once-a-game self-check (te_journal_map_effects.txt), and the walk's count of the people not fully accepted.
+    # Market access, live, 0-1: most states stand at 1, so the range's low is the cut-off states'.
+    dict(name="access", input="te_jmap_market_access", guards=[], three=False, sel=83,
+         where=["state_population > 0"], paint=[],     # every state paints; an empty one is left out of the range
+         world=rel(linear(0, 1)), min_span=0.1,
+         note="Market access, the state's, 0-1, live: min(infrastructure, usage) over usage"),
+    # The region's pollution, 0 to 255 (POLLUTION_MAX), live; a clean region pale, apart from the scale. Most polluted
+    # regions sit low on the 255, so two-thirds of the color goes by a third of the range.
+    dict(name="pollution", input="te_jmap_pollution", guards=[], three=False, sel=84,
+         where=["te_jmap_pollution > 0"], world=rel(soft_cap(0, 50, 150)), min_span=5,
+         note="Pollution, the state region's, 0-255, live: two-thirds of the color by a third of the world's range"),
+    # The jobs open in a state's buildings, live, which run over orders of magnitude, so a doubling at a time; a state
+    # with none open pale, apart from the scale.
+    dict(name="jobs", input="te_jmap_vacant_jobs", guards=[], three=False, sel=85,
+         where=["te_jmap_vacant_jobs > 0"], world=rel_doubling(1000, 512000, 4, 10), min_span=4,
+         note="Vacant Jobs, the jobs open in the state's buildings other than subsistence farms: the same share of the "
+              "color for each doubling from the world's low (at least 10) to its high"),
+    dict(name="below_sol", input="te_jmap_below_expected", guards=[], three=False, sel=86,
+         where=["state_population > 0"], paint=[],     # an empty state paints at its 0, and is left out of the range
+         world=rel(linear(0, 1)), min_span=0.1,
+         note="The share of the state's people below their expected standard of living, 0-1, live"),
+    # The share below Full Acceptance at the yearly walk (te_dg_unacc), whatever the Demographics rule.
+    dict(name="unacc", input="te_jmap_unacc_share", guards=[], three=False, sel=87,
+         where=["has_variable = te_dg_unacc", "has_variable = te_dg_walk_pop", "var:te_dg_walk_pop > 0"],
+         world=rel(linear(0, 1)), min_span=0.1,
+         note="Discrimination, the share of the state's people below Full Acceptance (the yearly walk's)"),
 ]
 
 

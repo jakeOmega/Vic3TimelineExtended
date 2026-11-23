@@ -14087,6 +14087,1285 @@ te_jmap_loyal_factor_upper = {
 	max = 1
 }
 
+# Market access, the state's, 0-1, live: min(infrastructure, usage) over usage.
+# Fitted to the world; before the first measure, 0 to 1.
+te_jmap_access_input = {
+	value = te_jmap_market_access
+}
+te_jmap_access_input_neg = {
+	value = te_jmap_access_input
+	multiply = -1
+}
+te_jmap_access_lo = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_rng_access_lo }
+		value = global_var:te_jmap_rng_access_lo
+	}
+}
+te_jmap_access_hi = {
+	value = 1
+	if = {
+		limit = { has_global_variable = te_jmap_rng_access_hi }
+		value = global_var:te_jmap_rng_access_hi
+	}
+	min = te_jmap_access_hi_floor
+}
+te_jmap_access_hi_floor = {
+	value = te_jmap_access_lo
+	add = 0.1
+}
+te_jmap_access_span = {
+	value = te_jmap_access_hi
+	subtract = te_jmap_access_lo
+}
+te_jmap_access_d0 = {
+	value = te_jmap_access_span
+	multiply = 1
+}
+te_jmap_access_lg_min = {
+	value = te_jmap_access_hi
+	divide = 64
+}
+te_jmap_access_lg_r = {
+	value = te_jmap_market_access
+	multiply = 64
+	divide = te_jmap_access_hi
+	if = {
+		limit = { te_jmap_access_lo > te_jmap_access_lg_min }
+		value = te_jmap_market_access
+		divide = te_jmap_access_lo
+	}
+}
+te_jmap_access_lg_t = {
+	if = {
+		limit = { te_jmap_access_lg_r < 2 }
+		value = te_jmap_access_lg_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_r < 4 }
+		value = te_jmap_access_lg_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_r < 8 }
+		value = te_jmap_access_lg_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_r < 16 }
+		value = te_jmap_access_lg_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_r < 32 }
+		value = te_jmap_access_lg_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_r < 64 }
+		value = te_jmap_access_lg_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_r < 128 }
+		value = te_jmap_access_lg_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_r < 256 }
+		value = te_jmap_access_lg_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_r < 512 }
+		value = te_jmap_access_lg_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_r < 1024 }
+		value = te_jmap_access_lg_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_r < 2048 }
+		value = te_jmap_access_lg_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_r < 4096 }
+		value = te_jmap_access_lg_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_r < 8192 }
+		value = te_jmap_access_lg_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_r < 16384 }
+		value = te_jmap_access_lg_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_r < 32768 }
+		value = te_jmap_access_lg_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_r < 65536 }
+		value = te_jmap_access_lg_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_r < 131072 }
+		value = te_jmap_access_lg_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_r < 262144 }
+		value = te_jmap_access_lg_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_r < 524288 }
+		value = te_jmap_access_lg_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_r < 1048576 }
+		value = te_jmap_access_lg_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_access_lg_r divide = 1048576 add = 19
+	}
+}
+te_jmap_access_lg_span_r = {
+	value = 64
+	if = {
+		limit = { te_jmap_access_lo > te_jmap_access_lg_min }
+		value = te_jmap_access_hi
+		divide = te_jmap_access_lo
+	}
+}
+te_jmap_access_lg_top = {
+	if = {
+		limit = { te_jmap_access_lg_span_r < 2 }
+		value = te_jmap_access_lg_span_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_span_r < 4 }
+		value = te_jmap_access_lg_span_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_span_r < 8 }
+		value = te_jmap_access_lg_span_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_span_r < 16 }
+		value = te_jmap_access_lg_span_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_span_r < 32 }
+		value = te_jmap_access_lg_span_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_span_r < 64 }
+		value = te_jmap_access_lg_span_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_span_r < 128 }
+		value = te_jmap_access_lg_span_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_span_r < 256 }
+		value = te_jmap_access_lg_span_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_span_r < 512 }
+		value = te_jmap_access_lg_span_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_span_r < 1024 }
+		value = te_jmap_access_lg_span_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_span_r < 2048 }
+		value = te_jmap_access_lg_span_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_span_r < 4096 }
+		value = te_jmap_access_lg_span_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_span_r < 8192 }
+		value = te_jmap_access_lg_span_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_span_r < 16384 }
+		value = te_jmap_access_lg_span_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_span_r < 32768 }
+		value = te_jmap_access_lg_span_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_span_r < 65536 }
+		value = te_jmap_access_lg_span_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_span_r < 131072 }
+		value = te_jmap_access_lg_span_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_span_r < 262144 }
+		value = te_jmap_access_lg_span_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_span_r < 524288 }
+		value = te_jmap_access_lg_span_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_access_lg_span_r < 1048576 }
+		value = te_jmap_access_lg_span_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_access_lg_span_r divide = 1048576 add = 19
+	}
+	min = 0.001
+}
+te_jmap_access_factor = {
+	if = {
+		limit = { te_jmap_scale = 0 }
+		value = te_jmap_market_access subtract = te_jmap_access_lo divide = te_jmap_access_d0
+	}
+	else_if = {
+		limit = { te_jmap_scale = 1 }
+		value = te_jmap_market_access
+		subtract = te_jmap_access_lo
+		divide = te_jmap_access_span
+	}
+	else_if = {
+		limit = { te_jmap_scale = 2 }
+		value = te_jmap_access_lg_t
+		divide = te_jmap_access_lg_top
+	}
+	else = {
+		value = 0
+		if = {
+			limit = { has_variable = te_jmap_rank }
+			value = var:te_jmap_rank
+		}
+	}
+	min = 0
+	max = 1
+}
+
+# Pollution, the state region's, 0-255, live: two-thirds of the color by a third of the world's range.
+# Fitted to the world; before the first measure, 0 to 150.
+te_jmap_pollution_input = {
+	value = te_jmap_pollution
+}
+te_jmap_pollution_input_neg = {
+	value = te_jmap_pollution_input
+	multiply = -1
+}
+te_jmap_pollution_lo = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_rng_pollution_lo }
+		value = global_var:te_jmap_rng_pollution_lo
+	}
+}
+te_jmap_pollution_hi = {
+	value = 150
+	if = {
+		limit = { has_global_variable = te_jmap_rng_pollution_hi }
+		value = global_var:te_jmap_rng_pollution_hi
+	}
+	min = te_jmap_pollution_hi_floor
+}
+te_jmap_pollution_hi_floor = {
+	value = te_jmap_pollution_lo
+	add = 5
+}
+te_jmap_pollution_span = {
+	value = te_jmap_pollution_hi
+	subtract = te_jmap_pollution_lo
+}
+te_jmap_pollution_k1 = {
+	value = te_jmap_pollution_span
+	multiply = 0.33333
+	add = te_jmap_pollution_lo
+}
+te_jmap_pollution_d0 = {
+	value = te_jmap_pollution_span
+	multiply = 0.5
+}
+te_jmap_pollution_d1 = {
+	value = te_jmap_pollution_span
+	multiply = 2
+}
+te_jmap_pollution_lg_min = {
+	value = te_jmap_pollution_hi
+	divide = 64
+}
+te_jmap_pollution_lg_r = {
+	value = te_jmap_pollution
+	multiply = 64
+	divide = te_jmap_pollution_hi
+	if = {
+		limit = { te_jmap_pollution_lo > te_jmap_pollution_lg_min }
+		value = te_jmap_pollution
+		divide = te_jmap_pollution_lo
+	}
+}
+te_jmap_pollution_lg_t = {
+	if = {
+		limit = { te_jmap_pollution_lg_r < 2 }
+		value = te_jmap_pollution_lg_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_r < 4 }
+		value = te_jmap_pollution_lg_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_r < 8 }
+		value = te_jmap_pollution_lg_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_r < 16 }
+		value = te_jmap_pollution_lg_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_r < 32 }
+		value = te_jmap_pollution_lg_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_r < 64 }
+		value = te_jmap_pollution_lg_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_r < 128 }
+		value = te_jmap_pollution_lg_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_r < 256 }
+		value = te_jmap_pollution_lg_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_r < 512 }
+		value = te_jmap_pollution_lg_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_r < 1024 }
+		value = te_jmap_pollution_lg_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_r < 2048 }
+		value = te_jmap_pollution_lg_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_r < 4096 }
+		value = te_jmap_pollution_lg_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_r < 8192 }
+		value = te_jmap_pollution_lg_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_r < 16384 }
+		value = te_jmap_pollution_lg_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_r < 32768 }
+		value = te_jmap_pollution_lg_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_r < 65536 }
+		value = te_jmap_pollution_lg_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_r < 131072 }
+		value = te_jmap_pollution_lg_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_r < 262144 }
+		value = te_jmap_pollution_lg_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_r < 524288 }
+		value = te_jmap_pollution_lg_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_r < 1048576 }
+		value = te_jmap_pollution_lg_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_pollution_lg_r divide = 1048576 add = 19
+	}
+}
+te_jmap_pollution_lg_span_r = {
+	value = 64
+	if = {
+		limit = { te_jmap_pollution_lo > te_jmap_pollution_lg_min }
+		value = te_jmap_pollution_hi
+		divide = te_jmap_pollution_lo
+	}
+}
+te_jmap_pollution_lg_top = {
+	if = {
+		limit = { te_jmap_pollution_lg_span_r < 2 }
+		value = te_jmap_pollution_lg_span_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_span_r < 4 }
+		value = te_jmap_pollution_lg_span_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_span_r < 8 }
+		value = te_jmap_pollution_lg_span_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_span_r < 16 }
+		value = te_jmap_pollution_lg_span_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_span_r < 32 }
+		value = te_jmap_pollution_lg_span_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_span_r < 64 }
+		value = te_jmap_pollution_lg_span_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_span_r < 128 }
+		value = te_jmap_pollution_lg_span_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_span_r < 256 }
+		value = te_jmap_pollution_lg_span_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_span_r < 512 }
+		value = te_jmap_pollution_lg_span_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_span_r < 1024 }
+		value = te_jmap_pollution_lg_span_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_span_r < 2048 }
+		value = te_jmap_pollution_lg_span_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_span_r < 4096 }
+		value = te_jmap_pollution_lg_span_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_span_r < 8192 }
+		value = te_jmap_pollution_lg_span_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_span_r < 16384 }
+		value = te_jmap_pollution_lg_span_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_span_r < 32768 }
+		value = te_jmap_pollution_lg_span_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_span_r < 65536 }
+		value = te_jmap_pollution_lg_span_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_span_r < 131072 }
+		value = te_jmap_pollution_lg_span_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_span_r < 262144 }
+		value = te_jmap_pollution_lg_span_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_span_r < 524288 }
+		value = te_jmap_pollution_lg_span_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_pollution_lg_span_r < 1048576 }
+		value = te_jmap_pollution_lg_span_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_pollution_lg_span_r divide = 1048576 add = 19
+	}
+	min = 0.001
+}
+te_jmap_pollution_factor = {
+	if = {
+		limit = { te_jmap_scale = 0 }
+		if = {
+			limit = { te_jmap_pollution < te_jmap_pollution_k1 }
+			value = te_jmap_pollution subtract = te_jmap_pollution_lo divide = te_jmap_pollution_d0
+		}
+		else = {
+			value = te_jmap_pollution subtract = te_jmap_pollution_k1 divide = te_jmap_pollution_d1 add = 0.66667
+		}
+	}
+	else_if = {
+		limit = { te_jmap_scale = 1 }
+		value = te_jmap_pollution
+		subtract = te_jmap_pollution_lo
+		divide = te_jmap_pollution_span
+	}
+	else_if = {
+		limit = { te_jmap_scale = 2 }
+		value = te_jmap_pollution_lg_t
+		divide = te_jmap_pollution_lg_top
+	}
+	else = {
+		value = 0
+		if = {
+			limit = { has_variable = te_jmap_rank }
+			value = var:te_jmap_rank
+		}
+	}
+	min = 0
+	max = 1
+}
+
+# Vacant Jobs, the jobs open in the state's buildings other than subsistence farms: the same share of the color for each doubling from the world's low (at least 10) to its high.
+# A doubling at a time, fitted to the world; before the first measure, 1000 to 512000.
+te_jmap_jobs_input = {
+	value = te_jmap_vacant_jobs
+}
+te_jmap_jobs_input_neg = {
+	value = te_jmap_jobs_input
+	multiply = -1
+}
+te_jmap_jobs_lo = {
+	value = 1000
+	if = {
+		limit = { has_global_variable = te_jmap_rng_jobs_lo }
+		value = global_var:te_jmap_rng_jobs_lo
+	}
+	min = 10
+}
+te_jmap_jobs_hi = {
+	value = 512000
+	if = {
+		limit = { has_global_variable = te_jmap_rng_jobs_hi }
+		value = global_var:te_jmap_rng_jobs_hi
+	}
+	min = te_jmap_jobs_hi_floor
+}
+te_jmap_jobs_hi_floor = {
+	value = te_jmap_jobs_lo
+	multiply = 4
+}
+te_jmap_jobs_ratio = {
+	value = te_jmap_vacant_jobs
+	divide = te_jmap_jobs_lo
+}
+te_jmap_jobs_log = {
+	if = {
+		limit = { te_jmap_jobs_ratio < 2 }
+		value = te_jmap_jobs_ratio subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_jobs_ratio < 4 }
+		value = te_jmap_jobs_ratio divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_jobs_ratio < 8 }
+		value = te_jmap_jobs_ratio divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_jobs_ratio < 16 }
+		value = te_jmap_jobs_ratio divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_jobs_ratio < 32 }
+		value = te_jmap_jobs_ratio divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_jobs_ratio < 64 }
+		value = te_jmap_jobs_ratio divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_jobs_ratio < 128 }
+		value = te_jmap_jobs_ratio divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_jobs_ratio < 256 }
+		value = te_jmap_jobs_ratio divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_jobs_ratio < 512 }
+		value = te_jmap_jobs_ratio divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_jobs_ratio < 1024 }
+		value = te_jmap_jobs_ratio divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_jobs_ratio < 2048 }
+		value = te_jmap_jobs_ratio divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_jobs_ratio < 4096 }
+		value = te_jmap_jobs_ratio divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_jobs_ratio < 8192 }
+		value = te_jmap_jobs_ratio divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_jobs_ratio < 16384 }
+		value = te_jmap_jobs_ratio divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_jobs_ratio < 32768 }
+		value = te_jmap_jobs_ratio divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_jobs_ratio < 65536 }
+		value = te_jmap_jobs_ratio divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_jobs_ratio < 131072 }
+		value = te_jmap_jobs_ratio divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_jobs_ratio < 262144 }
+		value = te_jmap_jobs_ratio divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_jobs_ratio < 524288 }
+		value = te_jmap_jobs_ratio divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_jobs_ratio < 1048576 }
+		value = te_jmap_jobs_ratio divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_jobs_ratio divide = 1048576 add = 19
+	}
+}
+te_jmap_jobs_span_ratio = {
+	value = te_jmap_jobs_hi
+	divide = te_jmap_jobs_lo
+}
+te_jmap_jobs_log_span = {
+	if = {
+		limit = { te_jmap_jobs_span_ratio < 2 }
+		value = te_jmap_jobs_span_ratio subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_jobs_span_ratio < 4 }
+		value = te_jmap_jobs_span_ratio divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_jobs_span_ratio < 8 }
+		value = te_jmap_jobs_span_ratio divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_jobs_span_ratio < 16 }
+		value = te_jmap_jobs_span_ratio divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_jobs_span_ratio < 32 }
+		value = te_jmap_jobs_span_ratio divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_jobs_span_ratio < 64 }
+		value = te_jmap_jobs_span_ratio divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_jobs_span_ratio < 128 }
+		value = te_jmap_jobs_span_ratio divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_jobs_span_ratio < 256 }
+		value = te_jmap_jobs_span_ratio divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_jobs_span_ratio < 512 }
+		value = te_jmap_jobs_span_ratio divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_jobs_span_ratio < 1024 }
+		value = te_jmap_jobs_span_ratio divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_jobs_span_ratio < 2048 }
+		value = te_jmap_jobs_span_ratio divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_jobs_span_ratio < 4096 }
+		value = te_jmap_jobs_span_ratio divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_jobs_span_ratio < 8192 }
+		value = te_jmap_jobs_span_ratio divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_jobs_span_ratio < 16384 }
+		value = te_jmap_jobs_span_ratio divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_jobs_span_ratio < 32768 }
+		value = te_jmap_jobs_span_ratio divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_jobs_span_ratio < 65536 }
+		value = te_jmap_jobs_span_ratio divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_jobs_span_ratio < 131072 }
+		value = te_jmap_jobs_span_ratio divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_jobs_span_ratio < 262144 }
+		value = te_jmap_jobs_span_ratio divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_jobs_span_ratio < 524288 }
+		value = te_jmap_jobs_span_ratio divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_jobs_span_ratio < 1048576 }
+		value = te_jmap_jobs_span_ratio divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_jobs_span_ratio divide = 1048576 add = 19
+	}
+	min = 1
+}
+te_jmap_jobs_span = {
+	value = te_jmap_jobs_hi
+	subtract = te_jmap_jobs_lo
+}
+te_jmap_jobs_factor = {
+	if = {
+		limit = { te_jmap_scale = 0 }
+		value = te_jmap_jobs_log
+		divide = te_jmap_jobs_log_span
+	}
+	else_if = {
+		limit = { te_jmap_scale = 1 }
+		value = te_jmap_vacant_jobs
+		subtract = te_jmap_jobs_lo
+		divide = te_jmap_jobs_span
+	}
+	else_if = {
+		limit = { te_jmap_scale = 2 }
+		value = te_jmap_jobs_log
+		divide = te_jmap_jobs_log_span
+	}
+	else = {
+		value = 0
+		if = {
+			limit = { has_variable = te_jmap_rank }
+			value = var:te_jmap_rank
+		}
+	}
+	min = 0
+	max = 1
+}
+
+# The share of the state's people below their expected standard of living, 0-1, live.
+# Fitted to the world; before the first measure, 0 to 1.
+te_jmap_below_sol_input = {
+	value = te_jmap_below_expected
+}
+te_jmap_below_sol_input_neg = {
+	value = te_jmap_below_sol_input
+	multiply = -1
+}
+te_jmap_below_sol_lo = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_rng_below_sol_lo }
+		value = global_var:te_jmap_rng_below_sol_lo
+	}
+}
+te_jmap_below_sol_hi = {
+	value = 1
+	if = {
+		limit = { has_global_variable = te_jmap_rng_below_sol_hi }
+		value = global_var:te_jmap_rng_below_sol_hi
+	}
+	min = te_jmap_below_sol_hi_floor
+}
+te_jmap_below_sol_hi_floor = {
+	value = te_jmap_below_sol_lo
+	add = 0.1
+}
+te_jmap_below_sol_span = {
+	value = te_jmap_below_sol_hi
+	subtract = te_jmap_below_sol_lo
+}
+te_jmap_below_sol_d0 = {
+	value = te_jmap_below_sol_span
+	multiply = 1
+}
+te_jmap_below_sol_lg_min = {
+	value = te_jmap_below_sol_hi
+	divide = 64
+}
+te_jmap_below_sol_lg_r = {
+	value = te_jmap_below_expected
+	multiply = 64
+	divide = te_jmap_below_sol_hi
+	if = {
+		limit = { te_jmap_below_sol_lo > te_jmap_below_sol_lg_min }
+		value = te_jmap_below_expected
+		divide = te_jmap_below_sol_lo
+	}
+}
+te_jmap_below_sol_lg_t = {
+	if = {
+		limit = { te_jmap_below_sol_lg_r < 2 }
+		value = te_jmap_below_sol_lg_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_r < 4 }
+		value = te_jmap_below_sol_lg_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_r < 8 }
+		value = te_jmap_below_sol_lg_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_r < 16 }
+		value = te_jmap_below_sol_lg_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_r < 32 }
+		value = te_jmap_below_sol_lg_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_r < 64 }
+		value = te_jmap_below_sol_lg_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_r < 128 }
+		value = te_jmap_below_sol_lg_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_r < 256 }
+		value = te_jmap_below_sol_lg_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_r < 512 }
+		value = te_jmap_below_sol_lg_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_r < 1024 }
+		value = te_jmap_below_sol_lg_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_r < 2048 }
+		value = te_jmap_below_sol_lg_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_r < 4096 }
+		value = te_jmap_below_sol_lg_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_r < 8192 }
+		value = te_jmap_below_sol_lg_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_r < 16384 }
+		value = te_jmap_below_sol_lg_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_r < 32768 }
+		value = te_jmap_below_sol_lg_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_r < 65536 }
+		value = te_jmap_below_sol_lg_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_r < 131072 }
+		value = te_jmap_below_sol_lg_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_r < 262144 }
+		value = te_jmap_below_sol_lg_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_r < 524288 }
+		value = te_jmap_below_sol_lg_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_r < 1048576 }
+		value = te_jmap_below_sol_lg_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_below_sol_lg_r divide = 1048576 add = 19
+	}
+}
+te_jmap_below_sol_lg_span_r = {
+	value = 64
+	if = {
+		limit = { te_jmap_below_sol_lo > te_jmap_below_sol_lg_min }
+		value = te_jmap_below_sol_hi
+		divide = te_jmap_below_sol_lo
+	}
+}
+te_jmap_below_sol_lg_top = {
+	if = {
+		limit = { te_jmap_below_sol_lg_span_r < 2 }
+		value = te_jmap_below_sol_lg_span_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_span_r < 4 }
+		value = te_jmap_below_sol_lg_span_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_span_r < 8 }
+		value = te_jmap_below_sol_lg_span_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_span_r < 16 }
+		value = te_jmap_below_sol_lg_span_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_span_r < 32 }
+		value = te_jmap_below_sol_lg_span_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_span_r < 64 }
+		value = te_jmap_below_sol_lg_span_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_span_r < 128 }
+		value = te_jmap_below_sol_lg_span_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_span_r < 256 }
+		value = te_jmap_below_sol_lg_span_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_span_r < 512 }
+		value = te_jmap_below_sol_lg_span_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_span_r < 1024 }
+		value = te_jmap_below_sol_lg_span_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_span_r < 2048 }
+		value = te_jmap_below_sol_lg_span_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_span_r < 4096 }
+		value = te_jmap_below_sol_lg_span_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_span_r < 8192 }
+		value = te_jmap_below_sol_lg_span_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_span_r < 16384 }
+		value = te_jmap_below_sol_lg_span_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_span_r < 32768 }
+		value = te_jmap_below_sol_lg_span_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_span_r < 65536 }
+		value = te_jmap_below_sol_lg_span_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_span_r < 131072 }
+		value = te_jmap_below_sol_lg_span_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_span_r < 262144 }
+		value = te_jmap_below_sol_lg_span_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_span_r < 524288 }
+		value = te_jmap_below_sol_lg_span_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_below_sol_lg_span_r < 1048576 }
+		value = te_jmap_below_sol_lg_span_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_below_sol_lg_span_r divide = 1048576 add = 19
+	}
+	min = 0.001
+}
+te_jmap_below_sol_factor = {
+	if = {
+		limit = { te_jmap_scale = 0 }
+		value = te_jmap_below_expected subtract = te_jmap_below_sol_lo divide = te_jmap_below_sol_d0
+	}
+	else_if = {
+		limit = { te_jmap_scale = 1 }
+		value = te_jmap_below_expected
+		subtract = te_jmap_below_sol_lo
+		divide = te_jmap_below_sol_span
+	}
+	else_if = {
+		limit = { te_jmap_scale = 2 }
+		value = te_jmap_below_sol_lg_t
+		divide = te_jmap_below_sol_lg_top
+	}
+	else = {
+		value = 0
+		if = {
+			limit = { has_variable = te_jmap_rank }
+			value = var:te_jmap_rank
+		}
+	}
+	min = 0
+	max = 1
+}
+
+# Discrimination, the share of the state's people below Full Acceptance (the yearly walk's).
+# Fitted to the world; before the first measure, 0 to 1.
+te_jmap_unacc_input = {
+	value = te_jmap_unacc_share
+}
+te_jmap_unacc_input_neg = {
+	value = te_jmap_unacc_input
+	multiply = -1
+}
+te_jmap_unacc_lo = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_rng_unacc_lo }
+		value = global_var:te_jmap_rng_unacc_lo
+	}
+}
+te_jmap_unacc_hi = {
+	value = 1
+	if = {
+		limit = { has_global_variable = te_jmap_rng_unacc_hi }
+		value = global_var:te_jmap_rng_unacc_hi
+	}
+	min = te_jmap_unacc_hi_floor
+}
+te_jmap_unacc_hi_floor = {
+	value = te_jmap_unacc_lo
+	add = 0.1
+}
+te_jmap_unacc_span = {
+	value = te_jmap_unacc_hi
+	subtract = te_jmap_unacc_lo
+}
+te_jmap_unacc_d0 = {
+	value = te_jmap_unacc_span
+	multiply = 1
+}
+te_jmap_unacc_lg_min = {
+	value = te_jmap_unacc_hi
+	divide = 64
+}
+te_jmap_unacc_lg_r = {
+	value = te_jmap_unacc_share
+	multiply = 64
+	divide = te_jmap_unacc_hi
+	if = {
+		limit = { te_jmap_unacc_lo > te_jmap_unacc_lg_min }
+		value = te_jmap_unacc_share
+		divide = te_jmap_unacc_lo
+	}
+}
+te_jmap_unacc_lg_t = {
+	if = {
+		limit = { te_jmap_unacc_lg_r < 2 }
+		value = te_jmap_unacc_lg_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_r < 4 }
+		value = te_jmap_unacc_lg_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_r < 8 }
+		value = te_jmap_unacc_lg_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_r < 16 }
+		value = te_jmap_unacc_lg_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_r < 32 }
+		value = te_jmap_unacc_lg_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_r < 64 }
+		value = te_jmap_unacc_lg_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_r < 128 }
+		value = te_jmap_unacc_lg_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_r < 256 }
+		value = te_jmap_unacc_lg_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_r < 512 }
+		value = te_jmap_unacc_lg_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_r < 1024 }
+		value = te_jmap_unacc_lg_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_r < 2048 }
+		value = te_jmap_unacc_lg_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_r < 4096 }
+		value = te_jmap_unacc_lg_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_r < 8192 }
+		value = te_jmap_unacc_lg_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_r < 16384 }
+		value = te_jmap_unacc_lg_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_r < 32768 }
+		value = te_jmap_unacc_lg_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_r < 65536 }
+		value = te_jmap_unacc_lg_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_r < 131072 }
+		value = te_jmap_unacc_lg_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_r < 262144 }
+		value = te_jmap_unacc_lg_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_r < 524288 }
+		value = te_jmap_unacc_lg_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_r < 1048576 }
+		value = te_jmap_unacc_lg_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_unacc_lg_r divide = 1048576 add = 19
+	}
+}
+te_jmap_unacc_lg_span_r = {
+	value = 64
+	if = {
+		limit = { te_jmap_unacc_lo > te_jmap_unacc_lg_min }
+		value = te_jmap_unacc_hi
+		divide = te_jmap_unacc_lo
+	}
+}
+te_jmap_unacc_lg_top = {
+	if = {
+		limit = { te_jmap_unacc_lg_span_r < 2 }
+		value = te_jmap_unacc_lg_span_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_span_r < 4 }
+		value = te_jmap_unacc_lg_span_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_span_r < 8 }
+		value = te_jmap_unacc_lg_span_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_span_r < 16 }
+		value = te_jmap_unacc_lg_span_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_span_r < 32 }
+		value = te_jmap_unacc_lg_span_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_span_r < 64 }
+		value = te_jmap_unacc_lg_span_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_span_r < 128 }
+		value = te_jmap_unacc_lg_span_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_span_r < 256 }
+		value = te_jmap_unacc_lg_span_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_span_r < 512 }
+		value = te_jmap_unacc_lg_span_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_span_r < 1024 }
+		value = te_jmap_unacc_lg_span_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_span_r < 2048 }
+		value = te_jmap_unacc_lg_span_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_span_r < 4096 }
+		value = te_jmap_unacc_lg_span_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_span_r < 8192 }
+		value = te_jmap_unacc_lg_span_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_span_r < 16384 }
+		value = te_jmap_unacc_lg_span_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_span_r < 32768 }
+		value = te_jmap_unacc_lg_span_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_span_r < 65536 }
+		value = te_jmap_unacc_lg_span_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_span_r < 131072 }
+		value = te_jmap_unacc_lg_span_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_span_r < 262144 }
+		value = te_jmap_unacc_lg_span_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_span_r < 524288 }
+		value = te_jmap_unacc_lg_span_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_unacc_lg_span_r < 1048576 }
+		value = te_jmap_unacc_lg_span_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_unacc_lg_span_r divide = 1048576 add = 19
+	}
+	min = 0.001
+}
+te_jmap_unacc_factor = {
+	if = {
+		limit = { te_jmap_scale = 0 }
+		value = te_jmap_unacc_share subtract = te_jmap_unacc_lo divide = te_jmap_unacc_d0
+	}
+	else_if = {
+		limit = { te_jmap_scale = 1 }
+		value = te_jmap_unacc_share
+		subtract = te_jmap_unacc_lo
+		divide = te_jmap_unacc_span
+	}
+	else_if = {
+		limit = { te_jmap_scale = 2 }
+		value = te_jmap_unacc_lg_t
+		divide = te_jmap_unacc_lg_top
+	}
+	else = {
+		value = 0
+		if = {
+			limit = { has_variable = te_jmap_rank }
+			value = var:te_jmap_rank
+		}
+	}
+	min = 0
+	max = 1
+}
+
 # Aristocrats, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
 # A doubling at a time, fitted to the world; before the first measure, 250 to 32000.
 te_jmap_class_aristocrats_input = {
@@ -21913,6 +23192,11 @@ te_jmap_pick_fitted = {
 				te_jmap_selector = 80
 				te_jmap_selector = 81
 				te_jmap_selector = 82
+				te_jmap_selector = 83
+				te_jmap_selector = 84
+				te_jmap_selector = 85
+				te_jmap_selector = 86
+				te_jmap_selector = 87
 			}
 		}
 		value = 1
@@ -22376,6 +23660,35 @@ te_jmap_pick_ramp = {
 		limit = { te_jmap_selector = 82 }
 		value = 2
 	}
+	else_if = {
+		limit = { te_jmap_selector = 83 }
+		value = 1
+	}
+	else_if = {
+		limit = { te_jmap_selector = 84 }
+		if = {
+			limit = { te_jmap_pollution > 0 }
+			value = 1
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 85 }
+		if = {
+			limit = { te_jmap_vacant_jobs > 0 }
+			value = 1
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 86 }
+		value = 1
+	}
+	else_if = {
+		limit = { te_jmap_selector = 87 has_variable = te_dg_unacc has_variable = te_dg_walk_pop }
+		if = {
+			limit = { var:te_dg_walk_pop > 0 }
+			value = 1
+		}
+	}
 }
 # The picked map's factor, 0-1, under the Scale option as every factor is (each tree guards its own read).
 te_jmap_pick_factor = {
@@ -22667,6 +23980,26 @@ te_jmap_pick_factor = {
 	else_if = {
 		limit = { te_jmap_selector = 82 }
 		value = te_jmap_loyal_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 83 }
+		value = te_jmap_access_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 84 }
+		value = te_jmap_pollution_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 85 }
+		value = te_jmap_jobs_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 86 }
+		value = te_jmap_below_sol_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 87 }
+		value = te_jmap_unacc_factor
 	}
 }
 # The factor along each of a shared ramp's 4 lerps: the paint takes the first whose end the factor is

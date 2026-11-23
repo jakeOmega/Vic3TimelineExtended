@@ -34,6 +34,11 @@ te_jmap_monthly_ranges = {
 		te_jmap_area_selfcheck = yes
 		te_jmap_range_selfcheck = yes
 		te_jmap_rank_selfcheck = yes
+		# Once a game each, whatever the pick (#1977): whether the second tier's four engine figures read as values.
+		te_jmap_access_selfcheck = yes
+		te_jmap_pollution_selfcheck = yes
+		te_jmap_jobs_selfcheck = yes
+		te_jmap_below_sol_selfcheck = yes
 	}
 }
 

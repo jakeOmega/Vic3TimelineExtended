@@ -20,7 +20,8 @@
 # 48-62 each class's people and 63-73 the other eleven classes' shares (#1975: journal_map_classes.py names each
 # class's two); the first tier's (#1976): 2 literacy (retired in the fifth pass as the twin of vanilla's own lens, back
 # because the Map Room's options are what a vanilla lens lacks), 74 standard of living, 75 wealth, 76 SoL vs wealth,
-# 77 SoL vs expected, 78 unemployment, 79 population, 80 GDP, 81 infrastructure, 82 radicals vs loyalists; 0 none. 6
+# 77 SoL vs expected, 78 unemployment, 79 population, 80 GDP, 81 infrastructure, 82 radicals vs loyalists; the
+# second tier's (#1977): 83 market access, 84 pollution, 85 vacant jobs, 86 below expected SoL, 87 discrimination; 0 none. 6
 # was the scope probe until the fourth session. A global variable (te_jmap_set_selector), since a state's map_color reaches neither the
 # entry nor a country (the scope probe painted blue, 2026-11-05): one player's pick is every player's in multiplayer.
 # Root-free, so the Map Room's state roots and the pick buttons' country roots read the same number.
@@ -636,6 +637,53 @@ te_jmap_infra_balance = {
 te_jmap_loyal_net = {
 	value = loyalist_fraction
 	subtract = radical_fraction
+}
+
+# The second tier (2026-11-23, #1977): four engine figures the mod reads as a value for the first time, live, each
+# with a once-a-game self-check from the global monthly pulse (te_jmap_<figure>_selfcheck, te_journal_map_effects.txt),
+# and one count of the yearly walk. A script value each, so the paint, the range, the hover and the self-check read
+# one name.
+
+# Market Access (83): the state's market access, 0-1 (min(infrastructure, usage) over usage; an isolated state 0).
+# Vanilla multiplies by it in a state's script value (cultural_community_creation_weight). TE_SELF_CHECK market_access.
+te_jmap_market_access = {
+	value = market_access
+}
+
+# Pollution (84): the state region's pollution, 0 to 255 (POLLUTION_MAX; vanilla script compares it with 100 at most),
+# so every state of a region reads the same. Not the pollution impact the state panel shows, which follows it
+# (scripting_best_practices.md, "Devastation's and pollution's mortality ..."). TE_SELF_CHECK pollution_amount.
+te_jmap_pollution = {
+	value = state_region.pollution_amount
+}
+
+# Vacant Jobs (85): the jobs open in the state's buildings other than subsistence farms, people.
+# TE_SELF_CHECK available_jobs.
+te_jmap_vacant_jobs = {
+	value = available_jobs
+}
+
+# Below Expected SoL (86): the share of the state's people below their expected standard of living, 0-1, the figure
+# vanilla's alert prints (GetPopulationRatioBelowExpectedStandardOfLiving). TE_SELF_CHECK below_expected_sol.
+te_jmap_below_expected = {
+	value = population_below_expected_sol
+}
+
+# Discrimination (87): the share of the state's people below Full Acceptance (acceptance_status_5) at the yearly walk
+# (te_dg_unacc, te_jmap_walk_pop), whatever the Demographics rule. 0 for a state the walk hasn't counted.
+te_jmap_unacc_share = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_unacc
+			has_variable = te_dg_walk_pop
+		}
+		value = var:te_dg_unacc
+		divide = {
+			value = var:te_dg_walk_pop
+			min = 1
+		}
+	}
 }
 
 # ---------------------------------------------------------------------------
