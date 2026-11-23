@@ -487,6 +487,9 @@ CELLS = {
     "the Abandon button (te_sr_colony_row)": (
         ("te_sr_colony_row", 'text = "je_space_race_widget_autonomy_abandon"'),
         r"je_space_race_widget_autonomy_abandon"),
+    "the Revoke button, beside Abandon on a colony's page (te_sr_colony_row)": (
+        ("te_sr_colony_row", 'text = "je_space_race_widget_autonomy_revoke"'),
+        r"je_space_race_widget_autonomy_revoke"),
     "the Supply and Stop buttons (te_sr_free_row)": (
         ("te_sr_free_row", 'text = "je_space_race_widget_free_supply"'),
         r"je_space_race_widget_free_(supply|stop)"),

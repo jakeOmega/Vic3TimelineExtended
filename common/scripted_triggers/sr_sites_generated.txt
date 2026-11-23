@@ -8679,3 +8679,49 @@ sr_free_scope_site_supplied = {
 		AND = { scope:site = 40 has_variable = sr_free_supply_imbrium }
 	}
 }
+
+# The scripted GUIs' world (scope:site) holds a charter (sr_colony_revoke_sgui).
+sr_aut_scope_site_chartered = {
+	OR = {
+		AND = { scope:site = 1 has_global_variable = sr_site_charter_valles_marineris }
+		AND = { scope:site = 2 has_global_variable = sr_site_charter_olympus_mons }
+		AND = { scope:site = 3 has_global_variable = sr_site_charter_hellas_planitia }
+		AND = { scope:site = 4 has_global_variable = sr_site_charter_utopia_planitia }
+		AND = { scope:site = 5 has_global_variable = sr_site_charter_arcadia_planitia }
+		AND = { scope:site = 6 has_global_variable = sr_site_charter_ceres }
+		AND = { scope:site = 7 has_global_variable = sr_site_charter_vesta }
+		AND = { scope:site = 8 has_global_variable = sr_site_charter_psyche }
+		AND = { scope:site = 9 has_global_variable = sr_site_charter_pallas }
+		AND = { scope:site = 10 has_global_variable = sr_site_charter_hygiea }
+		AND = { scope:site = 11 has_global_variable = sr_site_charter_io }
+		AND = { scope:site = 12 has_global_variable = sr_site_charter_europa }
+		AND = { scope:site = 13 has_global_variable = sr_site_charter_ganymede }
+		AND = { scope:site = 14 has_global_variable = sr_site_charter_callisto }
+		AND = { scope:site = 15 has_global_variable = sr_site_charter_himalia }
+		AND = { scope:site = 16 has_global_variable = sr_site_charter_amalthea }
+		AND = { scope:site = 17 has_global_variable = sr_site_charter_venus }
+		AND = { scope:site = 18 has_global_variable = sr_site_charter_mercury }
+		AND = { scope:site = 19 has_global_variable = sr_site_charter_titan }
+		AND = { scope:site = 20 has_global_variable = sr_site_charter_enceladus }
+		AND = { scope:site = 21 has_global_variable = sr_site_charter_rhea }
+		AND = { scope:site = 22 has_global_variable = sr_site_charter_mimas }
+		AND = { scope:site = 23 has_global_variable = sr_site_charter_iapetus }
+		AND = { scope:site = 24 has_global_variable = sr_site_charter_titania }
+		AND = { scope:site = 25 has_global_variable = sr_site_charter_oberon }
+		AND = { scope:site = 26 has_global_variable = sr_site_charter_miranda }
+		AND = { scope:site = 27 has_global_variable = sr_site_charter_ariel }
+		AND = { scope:site = 28 has_global_variable = sr_site_charter_triton }
+		AND = { scope:site = 29 has_global_variable = sr_site_charter_proteus }
+		AND = { scope:site = 30 has_global_variable = sr_site_charter_pluto }
+		AND = { scope:site = 31 has_global_variable = sr_site_charter_eris }
+		AND = { scope:site = 32 has_global_variable = sr_site_charter_makemake }
+		AND = { scope:site = 33 has_global_variable = sr_site_charter_haumea }
+		AND = { scope:site = 34 has_global_variable = sr_site_charter_sedna }
+		AND = { scope:site = 35 has_global_variable = sr_site_charter_shackleton }
+		AND = { scope:site = 36 has_global_variable = sr_site_charter_peary }
+		AND = { scope:site = 37 has_global_variable = sr_site_charter_tranquility }
+		AND = { scope:site = 38 has_global_variable = sr_site_charter_marius_hills }
+		AND = { scope:site = 39 has_global_variable = sr_site_charter_daedalus }
+		AND = { scope:site = 40 has_global_variable = sr_site_charter_imbrium }
+	}
+}

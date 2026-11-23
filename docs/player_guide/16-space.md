@@ -243,7 +243,8 @@ the asteroids, a moon of Jupiter, Saturn, Uranus or Neptune, Venus, Mercury, or 
 dwarf planet). Hovering its name shows the colony's permanent effects, and
 clicking it, or the arrow beside it, opens the colony's page. The page sets out
 People, Modules, Autonomy and (under Full Colonies) Defenses one under another,
-each with its control beside its heading (the settler priority, Clear, Abandon),
+each with its control beside its heading (the settler priority, Clear, Abandon,
+and Revoke while the colony has a charter),
 its figures in tiles and every module on a line of its own with its full name,
 with buttons to queue one more level or take one down.
 Back returns to the list. The buttons above the rows switch what each box
@@ -1146,17 +1147,35 @@ years at most, and you choose:
 
 | Choice | Now | After |
 |---|---|---|
-| Grant a charter | −30 autonomy | For good: its specializations work at 80% for you, and its autonomy falls 0.4 a month |
+| Grant a charter | −30 autonomy | Until you revoke it: its specializations work at 80% for you, and its autonomy falls 0.4 a month |
 | Send a garrison | −25 autonomy | For ten years: +2% Space Program throughput a garrisoned colony (Colonial Garrisons), and the colony's resentment adds 0.2 a month |
 | Let it go | It becomes a free colony, on good terms with you | — |
 
-A charter settles a colony for good at a fifth of its output; a garrison buys
-ten years and costs Launch Capacity. Under Full Colonies a garrison is real
+A charter settles a colony at a fifth of its output for as long as it stands; a
+garrison buys ten years and costs Launch Capacity. Under Full Colonies a garrison is real
 troops: it takes effect only once a fleet lands two marine battalions at the
 colony, within a year of the order, or the order lapses. A colony that reaches 100 declares itself
 free whatever you chose. A charter stays with the colony when it changes hands;
 a garrison goes home. AI powers grant a charter, garrison while at war, and let
 a colony go only when they have no Space Program to supply it.
+
+**Revoking a charter.** A chartered colony's page has a Revoke button beside
+Abandon, which asks first and is grayed out while the colony is occupied.
+Revoking gives you back the fifth of its output and ends the charter's −0.4 a
+month, at a price:
+
+| Revoking a charter | |
+|---|---|
+| The colony | Its autonomy goes to 99, a point short of declaring itself free, and it makes no new demand for five years, so you can't answer it with a garrison |
+| Your other colonies | Each of 1,000 people or more gains 10 autonomy; one at 90 or more declares itself free the next month |
+
+Settling then brings the colony down slowly: one whose terms add up to +0.5
+loses about half a point a month at first, so it stays within reach of 100 for
+months, and a rival's Incite Colonial Autonomy, a second revocation or a colony
+you destroy can tip it over. It is worth it for a colony whose terms now
+settle it low, with Administration staffed and settlers arriving, and in a
+year without war. A colony under 1,000 people takes none of the autonomy. The
+AI never revokes a charter.
 
 **A colony's own modules.** Autonomy has its use: each month a colony gains its
 autonomy ÷ 100 × its people ÷ 10,000 points toward a module of its own, at most

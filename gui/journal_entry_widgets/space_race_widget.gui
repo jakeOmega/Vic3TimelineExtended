@@ -3078,6 +3078,25 @@ types space_race_widget_types
 					text = "je_space_race_widget_cv_autonomy"
 				}
 				blockoverride "heading_controls" {
+					### Revoke, shown while the colony holds a charter (sr_colony_revoke_sgui).
+					button = {
+						using = default_button_action
+						size = { 80 24 }
+						parentanchor = vcenter
+						block "aut_revoke_button" {
+							visible = no
+						}
+
+						textbox = {
+							parentanchor = center
+							autoresize = yes
+							max_width = 74
+							align = center|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							text = "je_space_race_widget_autonomy_revoke"
+						}
+					}
 					button = {
 						using = default_button_action
 						size = { 80 24 }

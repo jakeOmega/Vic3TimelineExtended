@@ -111,7 +111,7 @@ sr_site_aut_add_at = {
 	}
 }
 
-# Country scope, the holder (space_race_events.94): a charter, for good. The
+# Country scope, the holder (space_race_events.94): a charter, until revoked. The
 # world syncs at once, so its specializations show at the charter's share.
 sr_site_charter_at = {
 	if = {
@@ -120,6 +120,35 @@ sr_site_charter_at = {
 		set_local_variable = { name = sr_aut_delta value = sr_aut_charter_cut }
 		sr_site_aut_add_at = { KEY = $KEY$ }
 		sr_site_sync_$KEY$ = yes
+	}
+}
+
+# Country scope, the holder (space_race_events.113, from the colony's page): the
+# charter revoked. Every colony THIS holds gains sr_aut_revoke_spike, this one
+# included, and this one is then set to sr_aut_revoke_level; both are gains, so
+# a colony under sr_free_colony_minimum people takes neither. The demand's
+# five-year cooldown starts again. The world syncs at once, so its
+# specializations show at their full share.
+sr_site_revoke_at = {
+	if = {
+		limit = {
+			global_var:sr_site_holder_$KEY$ ?= this
+			has_global_variable = sr_site_charter_$KEY$
+		}
+		remove_global_variable = sr_site_charter_$KEY$
+		set_local_variable = { name = sr_aut_delta value = sr_aut_revoke_spike }
+		sr_site_aut_add_all = yes
+		set_local_variable = {
+			name = sr_aut_delta
+			value = {
+				value = sr_aut_revoke_level
+				subtract = sr_site_autonomy_value_$KEY$
+			}
+		}
+		sr_site_aut_add_at = { KEY = $KEY$ }
+		set_global_variable = { name = sr_site_aut_asked_$KEY$ value = yes days = 1825 }
+		sr_site_sync_$KEY$ = yes
+		debug_log = "TE_SR_AUTONOMY $KEY$: charter revoked, autonomy [THIS.ScriptValue('sr_site_autonomy_value_$KEY$')|1]"
 	}
 }
 
@@ -496,6 +525,7 @@ sr_site_event_open = {
 sr_site_events_clear_stale = {
 	sr_site_clear_stale_var = { VAR = sr_aut_site }
 	sr_site_clear_stale_var = { VAR = sr_abandon_site }
+	sr_site_clear_stale_var = { VAR = sr_revoke_site }
 	sr_site_clear_stale_var = { VAR = sr_freed_site }
 	sr_site_clear_stale_var = { VAR = sr_petition_site }
 	sr_site_clear_stale_var = { VAR = sr_life_site }
