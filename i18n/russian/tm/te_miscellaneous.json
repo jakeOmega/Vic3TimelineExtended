@@ -8423,6 +8423,10 @@
   "en": "Enables Founding the #bold United Nations#!",
   "ru": "Позволяет основать #bold Организацию Объединённых Наций#!"
  },
+ "country_can_peacefully_annex_subjects_bool": {
+  "en": "Leader Can Peacefully Annex Subjects",
+  "ru": "Лидер может мирно аннексировать зависимые государства"
+ },
  "country_can_use_asset_relief_bool": {
   "en": "Enables #bold Asset Relief Program#!",
   "ru": "Открывает #bold Программу помощи активам#!"

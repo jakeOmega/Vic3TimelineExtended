@@ -8579,6 +8579,10 @@
   "en": "Enables Founding the #bold United Nations#!",
   "de": "Schaltet die Gründung der #bold Vereinten Nationen#! frei"
  },
+ "country_can_peacefully_annex_subjects_bool": {
+  "en": "Leader Can Peacefully Annex Subjects",
+  "de": "Anführer kann Klientelländer friedlich annektieren"
+ },
  "country_can_use_asset_relief_bool": {
   "en": "Enables #bold Asset Relief Program#!",
   "de": "Schaltet #bold Vermögensentlastungsprogramm#! frei"

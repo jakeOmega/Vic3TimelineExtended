@@ -110,3 +110,17 @@ answer it at the next launch, and the log triage reports them (their registry en
 |---|---|---|---|
 | 1 | The first launch's log (`log_triage.py`, Untagged) | None of the six `Identity 'identity_creditors_consortium' / 'identity_research_commons' / 'identity_diplomatic' is not default for any hero!` (and pedestal) lines, and no line naming `te_statue_hero_defaults.txt` or `te_statue_pedestal_defaults.txt` | The six lines and a line naming a file: the database takes no `INJECT`; add mod pieces in files of their own that reuse vanilla's entities (issue #1916, option 2). The six lines gone but `Identity 'identity_trade_league'` (or another vanilla identity) now logged: the INJECT replaced vanilla's list; restate vanilla's identities in each INJECT |
 | 2 | An AI bloc of each mod identity founded in play: open its statue (power bloc panel) | A statue drawn from its pieces above, e.g. a globe or an octopus on pedestal 1 or 2 for a Consortium | Another piece: the AI draws from more than the default list |
+
+## Vassalization IV and V: Peaceful Integration for every member (2026-11-23)
+
+Peaceful Integration (`annex_subject_peaceful`, `extra_diplo_actions.txt`) was open only to the bloc leader. Tiers IV
+and V now put `country_can_peacefully_annex_subjects_bool` in `member_modifier`, and the action reads it on the
+annexing country, so any member can integrate its own puppet or colony. The engine fact this rests on: a principle's
+`member_modifier` reaches the leader as well as the other members, as vanilla's Vassalization I–III already assume.
+
+| # | Check | Expect | If not |
+|---|---|---|---|
+| 1 | As a member that isn't the leader, in a bloc with Vassalization IV, with a puppet under 25 liberty desire, cordial relations and under a tenth of your GDP: open the puppet's diplomatic actions | Peaceful Integration is offered and annexes it | Greyed or missing: read `modifier:country_can_peacefully_annex_subjects_bool` on the member in the console; if it is 0, the principle's block isn't reaching it |
+| 2 | The same as the leader | Peaceful Integration is still offered | Missing for the leader alone: `member_modifier` doesn't reach the leader; put the flag in `leader_modifier` as well |
+| 3 | Hover Vassalization IV in the principle picker | "Can Peacefully Annex Subjects" under All Bloc Members, and no "Leader Can Peacefully Annex Subjects" line under Power Bloc | The raw key: the loc moved files (`organize_loc.py`); check `te_miscellaneous_l_english.yml` |
+| 4 | Leave the bloc as that member | Peaceful Integration is no longer offered | Still offered: the flag outlives membership |

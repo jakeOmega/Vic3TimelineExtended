@@ -3,9 +3,10 @@
 # Mod-invented power-bloc capability flags (script_only booleans) gating bespoke
 # bloc actions: humanitarian/healthcare/security/science/education aid, crisis
 # resolution, decree_cultural_emigration_initiative, force_cultural_acceptance/
-# adoption, peaceful_annexation, greenest_grass_campaign, extend_influence,
-# diplomatic_alignment, joining the UN and development aid. Read by the
-# corresponding scripted_buttons / decrees / treaty articles, except the five
+# adoption, greenest_grass_campaign, extend_influence, diplomatic_alignment,
+# joining the UN and development aid, plus the country flag every member
+# carries for peaceful annexation. Read by the corresponding scripted_buttons /
+# decrees / treaty articles / diplomatic actions, except the five
 # monetary-union markers and the power grid marker near the end, which only
 # label the principle's tooltip.
 
@@ -27,7 +28,11 @@ power_bloc_leader_can_force_cultural_adoption_bool = {
 	script_only = yes
 }
 
-power_bloc_leader_can_peacefully_annex_bool = {
+# Vassalization IV and V carry this one in member_modifier ("All Bloc Members",
+# the leader included), so every member can use Peaceful Integration
+# (annex_subject_peaceful, extra_diplo_actions.txt) on its own subjects. It was
+# a power_bloc_ type that only the leader could use until 2026-11-23.
+country_can_peacefully_annex_subjects_bool = {
 	color = neutral
 	boolean = yes
 	game_data = {

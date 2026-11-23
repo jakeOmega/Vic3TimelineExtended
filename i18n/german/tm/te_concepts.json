@@ -4311,6 +4311,10 @@
   "en": "Lets a [concept_great_power] found the [concept_united_nations_system] while none exists, or convene a founding conference after one has been dissolved. Also lets a [concept_power_bloc] leader bring this country into the United Nations by treaty. Joining a United Nations that already exists needs no technology.",
   "de": "Erlaubt es einer [concept_great_power], die [concept_united_nations_system] zu gründen, solange keine existiert, oder eine Gründungskonferenz einzuberufen, nachdem eine aufgelöst wurde. Erlaubt es außerdem dem Anführer eines [concept_power_bloc], dieses Land per Vertrag in die Vereinten Nationen aufzunehmen. Der Beitritt zu bereits existierenden Vereinten Nationen erfordert keine Technologie."
  },
+ "country_can_peacefully_annex_subjects_bool_desc": {
+  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] can peacefully annex [Concept('concept_subject', '$concept_subjects|q$')] without a [concept_diplomatic_play], if the subject has low [concept_liberty_desire] and a sufficiently low [Concept('concept_gdp', 'GDP')].",
+  "de": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] kann [Concept('concept_subject', '$concept_subjects|q$')] ohne [concept_diplomatic_play] friedlich annektieren, sofern das Klientelland einen niedrigen [concept_liberty_desire] und ein ausreichend niedriges [Concept('concept_gdp', 'BIP')] hat."
+ },
  "country_can_use_asset_relief_bool_desc": {
   "en": "A [concept_banking_cycle] tool that purchases non-performing assets from private ledgers. Improves financial conditions and reduces [concept_bubble_pressure], at the cost of tax revenue and [concept_bureaucracy].",
   "de": "Ein Instrument des [concept_banking_cycle], das notleidende Vermögenswerte aus privaten Büchern aufkauft. Verbessert die Finanzlage und verringert den [concept_bubble_pressure], auf Kosten der Steuereinnahmen und der [concept_bureaucracy]."
