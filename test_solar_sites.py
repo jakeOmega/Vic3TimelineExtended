@@ -2134,6 +2134,86 @@ class FreeColoniesTest(unittest.TestCase):
                     self.assertIn(f"multiply = sr_site_charter_factor_{site.key}",
                                   _block(self.values, f"sr_site_mult_{slot}_{site.key}"))
 
+    def test_a_charter_can_be_revoked_at_a_cost(self):
+        """Revoking a charter (owner, 2026-11-23): the colony's page asks first
+        (space_race_events.113); the charter goes, every colony we hold gains
+        sr_aut_revoke_spike, the colony itself is set to sr_aut_revoke_level, and
+        its five-year demand cooldown starts again. The AI never revokes."""
+        self.assertEqual(self._number("sr_aut_revoke_spike"), 10)
+        self.assertEqual(self._number("sr_aut_revoke_level"), 99)
+        self.assertLess(self._number("sr_aut_revoke_level"), self._number("sr_aut_break_level"))
+        body = _block(self.shared, "sr_site_revoke_at")
+        self.assertIn("global_var:sr_site_holder_$KEY$ ?= this", body)
+        self.assertIn("has_global_variable = sr_site_charter_$KEY$", body)
+        order = ["remove_global_variable = sr_site_charter_$KEY$",
+                 "set_local_variable = { name = sr_aut_delta value = sr_aut_revoke_spike }",
+                 "sr_site_aut_add_all = yes",
+                 "value = sr_aut_revoke_level",
+                 "subtract = sr_site_autonomy_value_$KEY$",
+                 "sr_site_aut_add_at = { KEY = $KEY$ }",
+                 "set_global_variable = { name = sr_site_aut_asked_$KEY$ value = yes days = 1825 }",
+                 "sr_site_sync_$KEY$ = yes"]
+        at = [body.index(step) for step in order]
+        self.assertEqual(at, sorted(at), "the spike must come before the colony is set to its level")
+        # The same cooldown the demand sets.
+        self.assertIn("set_global_variable = { name = sr_site_aut_asked_valles_marineris value = yes days = 1825 }",
+                      _block(self.effects, "sr_site_aut_step_valles_marineris"))
+        # The button: held, chartered, not occupied, no question open; never the AI.
+        sgui = _block(_strip(_raw("common", "scripted_guis", "sr_colony_sguis.txt")), "sr_colony_revoke_sgui")
+        self.assertIn("always = no", _block(sgui, "ai_is_valid"))
+        valid = _block(sgui, "is_valid")
+        for line in ("sr_cf_scope_site_held = yes", "sr_aut_scope_site_chartered = yes",
+                     "sr_md_scope_not_occupied = yes", "NOT = { has_variable = sr_revoke_site }"):
+            self.assertIn(line, valid)
+        effect = _block(sgui, "effect")
+        self.assertIn("sr_site_revoke_ask_from_scope = yes", effect)
+        self.assertIn("trigger_event = { id = space_race_events.113 }", effect)
+        self.assertIn("sr_site_clear_stale_var = { VAR = sr_revoke_site }",
+                      _block(self.shared, "sr_site_events_clear_stale"))
+        revoke = _block(self.events, "space_race_events.113")
+        self.assertIn("sr_site_by_index = { DO = revoke }", revoke)
+        chartered = _block(self.triggers, "sr_aut_scope_site_chartered")
+        for site in gss.SITES:
+            with self.subTest(site=site.key):
+                self.assertIn(f"AND = {{ scope:site = {site.index} has_global_variable = sr_site_charter_{site.key} }}",
+                              chartered)
+                self.assertIn(f"sr_site_event_open = {{ VAR = sr_revoke_site INDEX = {site.index} }}",
+                              _block(self.effects, "sr_site_revoke_ask_from_scope"))
+        # Each colony's page shows the button only while chartered (status 1 or 3).
+        self.assertEqual(self.rows.count('blockoverride "aut_revoke_button"'), len(gss.SITES))
+        for site in gss.SITES:
+            status = f"JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_aut_status_{site.key}')"
+            with self.subTest(site=site.key):
+                self.assertIn(f"visible = \"[Or( EqualTo_CFixedPoint( {status}, '(CFixedPoint)1' ), "
+                              f"EqualTo_CFixedPoint( {status}, '(CFixedPoint)3' ) )]\"", self.rows)
+        # The tooltips give the script's figures.
+        misc = _raw("localization", "english", "te_miscellaneous_l_english.yml")
+        spike = re.search(r'(?m)^ sr_revoke_spike_tt:0 "(.*)"$', misc).group(1)
+        level = re.search(r'(?m)^ sr_revoke_autonomy_tt:0 "(.*)"$', misc).group(1)
+        self.assertIn(f"#v {int(self._number('sr_aut_revoke_spike'))}#! autonomy", spike)
+        self.assertIn(f"#v {int(self._number('sr_free_colony_minimum')):,}#! people", spike)
+        self.assertIn(f"rises to #v {int(self._number('sr_aut_revoke_level'))}#!", level)
+
+    def test_a_colony_pushed_to_the_break_level_breaks_away(self):
+        """Design § 2: at 100 a colony breaks away whatever its status. The month's
+        settling takes 1% of the autonomy off before the check, so a colony an
+        incitement, a sabotage or a revoked charter's spike pushed to 100 would
+        drift back under it: the check reads the higher of the autonomy before the
+        drift and after (sr_aut_peak)."""
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                step = _block(self.effects, f"sr_site_aut_step_{k}")
+                before = step.index(f"set_local_variable = {{ name = sr_aut_peak value = sr_site_autonomy_value_{k} }}")
+                drift = step.index(f"add = sr_site_aut_drift_{k}")
+                after = step.index(f"value = local_var:sr_aut_peak min = sr_site_autonomy_value_{k}")
+                brk = step.index("sr_aut_break_away")
+                self.assertLess(before, drift)
+                self.assertLess(drift, after)
+                self.assertLess(after, brk)
+                self.assertIn(f"limit = {{ local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_{k} = yes }}",
+                              step[after:brk])
+
     def test_the_garrison_goes_home_with_a_cession(self):
         for site in gss.SITES:
             with self.subTest(site=site.key):
@@ -2173,7 +2253,7 @@ class FreeColoniesTest(unittest.TestCase):
 
     def test_each_event_names_its_world_and_clears_it(self):
         names = {"sr_abandon_site": 93, "sr_aut_site": 94, "sr_life_site": (95, 96, 97), "sr_freed_site": 98,
-                 "sr_petition_site": 99}
+                 "sr_petition_site": 99, "sr_revoke_site": 113}
         for var, ids in names.items():
             self.assertIn(f"{var}_name = {{", self.custom_loc)
             for n in (ids if isinstance(ids, tuple) else (ids,)):

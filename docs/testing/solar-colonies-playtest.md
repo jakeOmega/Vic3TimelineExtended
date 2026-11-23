@@ -199,6 +199,17 @@ for `TE_SR_SITES <world> is a free colony`.
    country holding a colony under Simple Colonies, and not under Races Only; once established, the target's colonies'
    autonomy climbs (Incite) or its largest colony loses people (Sabotage).
 10. **Old saves.** A save from before this change keeps its Space Race setting; its colonies start at autonomy 0.
+11. **Revoking a charter** (owner, 2026-11-23). Grant a colony of 1,000 people or more a charter (option b, then the
+    demand), then open its page: Revoke shows beside Abandon while the Status tile reads Charter (or Both), and not
+    otherwise; a colony we hold occupied greys it out. Revoke asks first ("Revoke the Charter of <World>?", the world
+    named, the budget-hearing picture). Keep it changes nothing. Revoke it: the Status tile reads Ruled (or Garrison),
+    the world's specialization line in the entry's modifiers goes back to its full size, its autonomy reads 99, every
+    other colony of ours with 1,000 people or more is 10 higher, `debug.log` has `TE_SR_AUTONOMY <world>: charter
+    revoked, autonomy 99.0`, and the next month brings no "<World> Demands Self-Government" (the five-year cooldown
+    started again). A colony of ours that was at 90 or more reads Free the next month.
+12. **A push to 100 frees a colony** (2026-11-23). With option b on a colony below 100, run Incite Colonial Autonomy
+    against its holder at full priority, or revoke a second charter while one colony stands at 99: the colony reads
+    Free the month after it reaches 100, though the month's settling would have taken it back to 99.
 
 ## Fleets, Space Command, combat and seizure (slice 6, parts 6a and 6b)
 

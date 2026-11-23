@@ -3014,7 +3014,7 @@ def render_dismantle_display() -> list[str]:
 # The helpers a by-index or by-scope dispatcher reaches, as sr_site_<do>_at =
 # { KEY = <key> } (hand-written in sr_colony_autonomy_effects.txt). Each names
 # $KEY$, so every one takes the dispatcher's one argument (script_argument_audit).
-SITE_ACTIONS = ("aut_add", "charter", "garrison", "let_go", "abandon_home", "abandon_free",
+SITE_ACTIONS = ("aut_add", "charter", "revoke", "garrison", "let_go", "abandon_home", "abandon_free",
                 "rejoin", "decline", "breach", "sabotage", "toggle_supply", "debug_aut",
                 "debug_integrity", "debug_occupy")
 
@@ -3126,9 +3126,14 @@ def _autonomy_world(site: Site) -> list[str]:
         "}",
         f"# THIS holds {site.name}: its autonomy for the month, then its thresholds (design § 2),",
         "# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).",
+        "# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked",
+        "# charter's spike) breaks away though the month's settling takes it back under",
+        "# (design § 2: \"at 100 the colony breaks away whatever its status\"), so the break",
+        "# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.",
         f"sr_site_aut_step_{k} = {{",
         f"\tif = {{ limit = {{ NOT = {{ has_global_variable = sr_site_contact_{k} }} }} "
         f"set_global_variable = {{ name = sr_site_contact_{k} value = te_history_month_index }} }}",
+        f"\tset_local_variable = {{ name = sr_aut_peak value = sr_site_autonomy_value_{k} }}",
         "\tset_global_variable = {",
         f"\t\tname = sr_site_autonomy_{k}",
         "\t\tvalue = {",
@@ -3145,8 +3150,9 @@ def _autonomy_world(site: Site) -> list[str]:
         f"add = sr_site_self_rate_{k} max = sr_module_points }} }}",
         f"\t\tif = {{ limit = {{ sr_site_self_value_{k} >= sr_module_points }} sr_site_self_build_{k} = yes }}",
         "\t}",
+        f"\tset_local_variable = {{ name = sr_aut_peak value = {{ value = local_var:sr_aut_peak min = sr_site_autonomy_value_{k} }} }}",
         "\tif = {",
-        f"\t\tlimit = {{ sr_site_autonomy_value_{k} >= sr_aut_break_level sr_site_peopled_{k} = yes }}",
+        f"\t\tlimit = {{ local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_{k} = yes }}",
         f"\t\tsr_aut_break_away = {{ KEY = {k} INDEX = {i} }}",
         "\t}",
         "\telse_if = {",
@@ -3233,6 +3239,10 @@ def render_autonomy_effects() -> list[str]:
             "# world (space_race_events.93)."]
     out += _by_index("sr_site_abandon_ask_from_scope", "scope:site",
                      "sr_site_event_open = {{ VAR = sr_abandon_site INDEX = {i} }}")
+    out += ["", "# The Revoke button's world (scope:site, sr_colony_revoke_sgui) names the question's",
+            "# world (space_race_events.113)."]
+    out += _by_index("sr_site_revoke_ask_from_scope", "scope:site",
+                     "sr_site_event_open = {{ VAR = sr_revoke_site INDEX = {i} }}")
     # Covert hooks (design § 6), country scope = the operation's target.
     out += ["",
             "# Incite Colonial Autonomy (covert_ops_apply_all_phase_effects; THIS the target,",
@@ -3395,6 +3405,10 @@ def render_autonomy_triggers() -> list[str]:
     out += [f"\t\tAND = {{ scope:site = {s.index} has_global_variable = sr_site_free_{s.key} }}" for s in SITES]
     out += ["\t}", "}", "sr_free_scope_site_supplied = {", "\tOR = {"]
     out += [f"\t\tAND = {{ scope:site = {s.index} has_variable = sr_free_supply_{s.key} }}" for s in SITES]
+    out += ["\t}", "}"]
+    out += ["", "# The scripted GUIs' world (scope:site) holds a charter (sr_colony_revoke_sgui).",
+            "sr_aut_scope_site_chartered = {", "\tOR = {"]
+    out += [f"\t\tAND = {{ scope:site = {s.index} has_global_variable = sr_site_charter_{s.key} }}" for s in SITES]
     out += ["\t}", "}"]
     return out
 
@@ -4113,6 +4127,7 @@ def render_custom_loc() -> str:
              # Slice 5's events (design § 10): each one's world.
              ("sr_aut_site_name", "sr_aut_site"),
              ("sr_abandon_site_name", "sr_abandon_site"),
+             ("sr_revoke_site_name", "sr_revoke_site"),
              ("sr_freed_site_name", "sr_freed_site"),
              ("sr_petition_site_name", "sr_petition_site"),
              ("sr_life_site_name", "sr_life_site"),
@@ -4437,6 +4452,11 @@ def _colony_row(site: Site) -> list[str]:
                                   f'(+[{_sv(f"sr_disp_site_self_rate_{k}")}|1])"')
     for code, name in enumerate(("none", "charter", "garrison", "both")):
         out += _override(f"aut_{name}_visible", f'visible = "[{_eq(status, code)}]"')
+    out += _override("aut_revoke_button",
+                     f'visible = "[Or( {_eq(status, 1)}, {_eq(status, 3)} )]"',
+                     f'enabled = "{_sgui_call("sr_colony_revoke_sgui", "IsValid", site)}"',
+                     f'onclick = "{_sgui_call("sr_colony_revoke_sgui", "Execute", site)}"',
+                     f'tooltip = "{_reasoned("sr_colony_revoke_sgui", _site_scope(site))}"')
     out += _override("aut_abandon_button",
                      f'enabled = "{_sgui_call("sr_colony_abandon_sgui", "IsValid", site)}"',
                      f'onclick = "{_sgui_call("sr_colony_abandon_sgui", "Execute", site)}"',
