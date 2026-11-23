@@ -1227,9 +1227,21 @@ any building whose `can_build_government` fails. Whether the state's own
 building list still shows it grey, with the licence lines, is on the
 play-test list (`docs/testing/global-commons-playtest.md`, item 2). So is
 whether AI governments still build mines; in this save no AI country had one
-queued. The Solar Power Receiver's slot count walks every building of every
-state from its `possible`, behind a test of the slot modifier. No country
-had slots in this save, but a country that has them will pay the same price.
+queued.
+
+**The other building gates, 2026-11-22.** A review of every mod building's
+`potential`, `possible`, `can_build_private` and `ai_value`, against the 51
+profiles on the backup drive, found no other one costly yet, and several
+that would be once a game reached them. Their walks of a state's buildings
+became `b:` lookups: the Solar Power Receiver's and the antimatter
+buildings' slot counts, the Extraplanetary Base's and Resort Colony's
+queued levels (read from their `can_build_private`), the Grid Transfer
+Station's test, the wonders' uniqueness tests, and the company flagships'
+one-site rule, now two shared triggers in place of 942 inline walks. The
+slot counts still walk the owner's states, one lookup a state, from a
+private type's `possible`: moving them to `can_build_government`, as the
+Deep-Sea Mine's gate was, is #1964. `building_gate_walk_audit.py` now flags
+any walk these blocks reach.
 
 ## Measurements, 2026-10-03: 2072
 

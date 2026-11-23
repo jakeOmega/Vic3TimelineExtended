@@ -75,6 +75,7 @@ POST_LOAD_AUDITS = [
     ("loc_render_audit",              "loc_render_audit"),
     ("any_limit_audit",               "any_limit_audit"),
     ("iterator_limit_audit",          "iterator_limit_audit"),
+    ("building_gate_walk_audit",      "building_gate_walk_audit"),
     ("modifier_multiplier_var_audit", "modifier_multiplier_var_audit"),
     ("je_multiplier_scope_audit",    "je_multiplier_scope_audit"),
     ("pm_employment_audit",           "pm_employment_audit"),
