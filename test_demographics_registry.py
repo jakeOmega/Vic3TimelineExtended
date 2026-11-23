@@ -1068,6 +1068,27 @@ class TestCohortScript(unittest.TestCase):
         eng.call("te_demog_state_figures")
         self.assertEqual(eng.vars["te_dg_prev_median"], 99.0)
 
+    def test_the_all_ages_sex_balance_is_the_rings(self):
+        """The pyramid's all-ages row (te_demog_state_sex_balance_all and the country's, te_demog_display_values.txt):
+        men per 100 women of every age, from the census's bands, as the ring holds them."""
+        eng, ring = self.seed_both()
+        rows = ring.by_age()
+        want = 100 * sum(m for _a, _f, m in rows) / sum(f for _a, f, _m in rows)
+        self.close(eng.value("te_demog_state_sex_balance_all"), want, rel=1e-4, what="men per 100 women, all ages")
+        self.assertNotAlmostEqual(want, demographics_model.structure(ring)["men_per_100_women"], places=1,
+                                  msg="the 20-59 figure is another number, or the row would add nothing")
+        # the country's reads its band sums, te_dg_cbf<b> and te_dg_cbm<b>, the same way
+        for b in range(P.BANDS):
+            for sex in ("f", "m"):
+                eng.vars[f"te_dg_cb{sex}{b}"] = eng.vars[f"te_dg_b{sex}{b}"]
+        self.assertAlmostEqual(eng.value("te_demog_country_sex_balance_all"),
+                               eng.value("te_demog_state_sex_balance_all"), places=6)
+        # before a census, 0 (the rows read it only under the census's gate)
+        for b in range(P.BANDS):
+            for sex in ("f", "m"):
+                del eng.vars[f"te_dg_b{sex}{b}"]
+        self.assertEqual(eng.value("te_demog_state_sex_balance_all"), 0)
+
     def test_reseed_clears_ages_nobody_reaches(self):
         eng = _engine_for(self.INP, self.YEAR, self.POP)
         for k in range(P.RING_YEARS):

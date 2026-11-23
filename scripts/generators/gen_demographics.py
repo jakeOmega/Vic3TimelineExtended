@@ -2003,9 +2003,11 @@ def consequence_values(o):
         o(f"divide = {people}")
         o("}")
         o("}")
-    # the census's men by scope, and the country's people (a state has te_dg_people): the bands' sums
-    for scope, prefix, whats in (("state", "te_dg_b", (("men", ("m",)),)),
-                                 ("country", "te_dg_cb", (("men", ("m",)), ("people", ("f", "m"))))):
+    # the census's men and women by scope, and the country's people (a state has te_dg_people): the bands' sums.
+    # The women are the all-ages sex balance's divisor (te_demog_state_sex_balance_all, te_demog_display_values.txt)
+    for scope, prefix, whats in (("state", "te_dg_b", (("men", ("m",)), ("women", ("f",)))),
+                                 ("country", "te_dg_cb", (("men", ("m",)), ("women", ("f",)),
+                                                          ("people", ("f", "m"))))):
         o(f"# {scope.capitalize()} scope: the census's {' and '.join(w for w, _ in whats)} (its bands' sum), 0 before a "
           "census.")
         for what, sexes in whats:

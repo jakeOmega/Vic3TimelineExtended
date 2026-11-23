@@ -2087,7 +2087,7 @@ te_demog_country_youth_share = {
 		divide = { value = te_demog_country_people min = 1 }
 	}
 }
-# State scope: the census's men (its bands' sum), 0 before a census.
+# State scope: the census's men and women (its bands' sum), 0 before a census.
 te_demog_state_men = {
 	value = 0
 	if = { limit = { has_variable = te_dg_bm0 }
@@ -2111,7 +2111,30 @@ te_demog_state_men = {
 		add = var:te_dg_bm17
 	}
 }
-# Country scope: the census's men and people (its bands' sum), 0 before a census.
+te_demog_state_women = {
+	value = 0
+	if = { limit = { has_variable = te_dg_bm0 }
+		value = var:te_dg_bf0
+		add = var:te_dg_bf1
+		add = var:te_dg_bf2
+		add = var:te_dg_bf3
+		add = var:te_dg_bf4
+		add = var:te_dg_bf5
+		add = var:te_dg_bf6
+		add = var:te_dg_bf7
+		add = var:te_dg_bf8
+		add = var:te_dg_bf9
+		add = var:te_dg_bf10
+		add = var:te_dg_bf11
+		add = var:te_dg_bf12
+		add = var:te_dg_bf13
+		add = var:te_dg_bf14
+		add = var:te_dg_bf15
+		add = var:te_dg_bf16
+		add = var:te_dg_bf17
+	}
+}
+# Country scope: the census's men and women and people (its bands' sum), 0 before a census.
 te_demog_country_men = {
 	value = 0
 	if = { limit = { has_variable = te_dg_cbm0 }
@@ -2133,6 +2156,29 @@ te_demog_country_men = {
 		add = var:te_dg_cbm15
 		add = var:te_dg_cbm16
 		add = var:te_dg_cbm17
+	}
+}
+te_demog_country_women = {
+	value = 0
+	if = { limit = { has_variable = te_dg_cbm0 }
+		value = var:te_dg_cbf0
+		add = var:te_dg_cbf1
+		add = var:te_dg_cbf2
+		add = var:te_dg_cbf3
+		add = var:te_dg_cbf4
+		add = var:te_dg_cbf5
+		add = var:te_dg_cbf6
+		add = var:te_dg_cbf7
+		add = var:te_dg_cbf8
+		add = var:te_dg_cbf9
+		add = var:te_dg_cbf10
+		add = var:te_dg_cbf11
+		add = var:te_dg_cbf12
+		add = var:te_dg_cbf13
+		add = var:te_dg_cbf14
+		add = var:te_dg_cbf15
+		add = var:te_dg_cbf16
+		add = var:te_dg_cbf17
 	}
 }
 te_demog_country_people = {
