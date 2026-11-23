@@ -207,23 +207,25 @@ sr_mod_fab_stock_value = {
 # ---- Upkeep (design § 8) -------------------------------------------------------------
 # ---- Extraplanetary Base room (design § 9) --------------------------------------------
 # Country scope. Its Extraplanetary Base levels, built, and built and queued.
+# Each state's base is the engine's b: lookup, which also finds one whose
+# levels are all queued, never a walk of the state's buildings: the base's
+# can_build_private reads the queued count, and the private investment pass
+# reads that in every state (scripting_best_practices.md § "A Building's
+# `possible` Runs in Every State for Private Investment, Before
+# `can_build_private`"). The Resort Colony's below do the same.
 sr_ebase_levels = {
 	value = 0
 	every_scope_state = {
-		every_scope_building = {
-			limit = { is_building_type = building_space_mine }
-			add = level
-		}
+		limit = { exists = b:building_space_mine }
+		add = b:building_space_mine.level
 	}
 }
 
 sr_ebase_queued_levels = {
 	value = 0
-	every_scope_state = {
-		every_scope_building = {
-			limit = { is_building_type = building_space_mine }
-			add = level_after_queued_constructions
-		}
+	every_scope_state = { # REVIEWED 2026-11-22: investors must obey the room, so it stays in can_build_private; one b: lookup a state, 36 reads in a week of the 2024 USA
+		limit = { exists = b:building_space_mine }
+		add = b:building_space_mine.level_after_queued_constructions
 	}
 }
 
@@ -232,19 +234,15 @@ sr_ebase_queued_levels = {
 sr_resort_levels = {
 	value = 0
 	every_scope_state = {
-		every_scope_building = {
-			limit = { is_building_type = building_space_resort }
-			add = level
-		}
+		limit = { exists = b:building_space_resort }
+		add = b:building_space_resort.level
 	}
 }
 
 sr_resort_queued_levels = {
 	value = 0
-	every_scope_state = {
-		every_scope_building = {
-			limit = { is_building_type = building_space_resort }
-			add = level_after_queued_constructions
-		}
+	every_scope_state = { # REVIEWED 2026-11-22: as sr_ebase_queued_levels
+		limit = { exists = b:building_space_resort }
+		add = b:building_space_resort.level_after_queued_constructions
 	}
 }

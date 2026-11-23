@@ -48,7 +48,7 @@ building_military_base = {
 		}
 		if = {
 			limit = {
-				any_neighbouring_state = {
+				any_neighbouring_state = { # REVIEWED 2026-11-22: a state's neighbours
 					owner = {
 						is_country_type = unrecognized
 						NOT = { has_diplomatic_relevance = root.owner }

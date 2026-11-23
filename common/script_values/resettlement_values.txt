@@ -33,7 +33,7 @@ resettlement_world_population_scale = {
 te_region_population = {
 	value = 0
 	state_region = {
-		every_scope_state = {
+		every_scope_state = { # REVIEWED 2026-11-22: one state region's states, a handful
 			add = state_population
 		}
 	}

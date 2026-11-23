@@ -38,55 +38,55 @@ continent_has_no_building_of_type = {
 		NOT = {
 			AND = {
 				is_in_geographic_region = geographic_region_africa
-				any_state_in_africa = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+				any_state_in_africa = { exists = b:$BUILDING_TYPE$ }
 			}
 		}
 		NOT = {
 			AND = {
 				is_in_geographic_region = geographic_region_europe
-				any_state_in_europe = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+				any_state_in_europe = { exists = b:$BUILDING_TYPE$ }
 			}
 		}
 		NOT = {
 			AND = {
 				is_in_geographic_region = geographic_region_north_america
-				any_state_in_north_america = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+				any_state_in_north_america = { exists = b:$BUILDING_TYPE$ }
 			}
 		}
 		NOT = {
 			AND = {
 				is_in_geographic_region = geographic_region_south_america
-				any_state_in_south_america = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+				any_state_in_south_america = { exists = b:$BUILDING_TYPE$ }
 			}
 		}
 		NOT = {
 			AND = {
 				is_in_geographic_region = geographic_region_east_asia
-				any_state_in_east_asia = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+				any_state_in_east_asia = { exists = b:$BUILDING_TYPE$ }
 			}
 		}
 		NOT = {
 			AND = {
 				is_in_geographic_region = geographic_region_south_east_asia
-				any_state_in_south_east_asia = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+				any_state_in_south_east_asia = { exists = b:$BUILDING_TYPE$ }
 			}
 		}
 		NOT = {
 			AND = {
 				is_in_geographic_region = geographic_region_india
-				any_state_in_india = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+				any_state_in_india = { exists = b:$BUILDING_TYPE$ }
 			}
 		}
 		NOT = {
 			AND = {
 				is_in_geographic_region = geographic_region_middle_east
-				any_state_in_middle_east = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+				any_state_in_middle_east = { exists = b:$BUILDING_TYPE$ }
 			}
 		}
 		NOT = {
 			AND = {
 				is_in_geographic_region = geographic_region_central_asia
-				any_state_in_central_asia = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
+				any_state_in_central_asia = { exists = b:$BUILDING_TYPE$ }
 			}
 		}
 	}
@@ -101,12 +101,10 @@ continent_has_no_building_of_type = {
 # guard adds nothing beyond it.
 building_unique_per_owner_potential = {
 	OR = {
-		any_scope_building = {
-			is_building_type = $BUILDING_TYPE$
-		}
+		exists = b:$BUILDING_TYPE$
 		NOT = {
 			owner = {
-				any_scope_building = {
+				any_scope_building = { # REVIEWED 2026-11-22: government funded, so far less read than a private type (88 reads of these potentials in a week of the 2024 USA); a country-scope walk, no b: form
 					is_building_type = $BUILDING_TYPE$
 				}
 			}

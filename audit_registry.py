@@ -110,6 +110,18 @@ AUDITS: tuple[Audit, ...] = (
         where="trailing on the `limit = {` line or the iterator's opener line",
     ),
     Audit(
+        "building_gate_walk_audit",
+        "A walk (`any_*`, `every_*`, `ordered_*`, `random_*`) that a mod building's `potential`, `possible`, "
+        "`can_build_private` or `ai_value` reaches, written there or in a scripted trigger or script value it "
+        "calls. The weekly private investment pass reads these blocks in every state, some 300,000 times a "
+        "week for its busiest type, so a walk there runs that often: the Deep-Sea Mine's took 779 s of one "
+        "week's tick. Use `b:<type>` for a state's building of one type, test something cheap first, or move "
+        "a rule only governments need to `can_build_government`; the comment says why a walk that stays "
+        "runs rarely or over a few scopes.",
+        where="trailing on the iterator's own line (covers every building reaching it) or on the block's "
+              "opening line, `possible = {` (covers that block)",
+    ),
+    Audit(
         "delayed_event_trigger_audit",
         "An event queued with `days`, `months` or `years` whose top-level `trigger` may be false on the "
         "day it is queued, which seems to drop it for good (#1596). One that waits for something to "

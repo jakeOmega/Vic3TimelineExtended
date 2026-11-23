@@ -65,7 +65,7 @@ building_resettlement_colony = {
 			limit = {
 				resettlement_state_is_open_frontier = yes
 				owner = {
-					any_scope_state = {
+					any_scope_state = { # REVIEWED 2026-11-22: government funded (bg_resettlement), behind the open-frontier test
 						OR = {
 							te_state_unemployment_share > 0.1
 							migration_crowding_mult > 0
@@ -89,7 +89,7 @@ building_resettlement_colony = {
 			limit = {
 				NOT = { has_building = building_resettlement_colony }
 				owner = {
-					any_scope_state = {
+					any_scope_state = { # REVIEWED 2026-11-22: government funded (bg_resettlement), behind NOT has_building
 						count >= 3
 						has_building = building_resettlement_colony
 					}
