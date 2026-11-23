@@ -12,8 +12,8 @@
 ###                             age, working age and the Gini, each with a figure beneath and most with a trend arrow
 ###   te_demog_sec_causes       open: last year's deaths per 1,000, a pie of them by cause with its legend, Health
 ###                             Care Access (issue #1029)
-###   te_demog_sec_pyramid      open: the sex balance, then 18 five-year bands, men left, women right, with the outline
-###                             twenty years ahead
+###   te_demog_sec_pyramid      open: the sex balance at 20-59 and at all ages, then 18 five-year bands, men left,
+###                             women right, with the outline twenty years ahead
 ###   te_demog_sec_work         open: Work and Retirement (phase 2 step 2): the workforce, old age from, the pension age
 ###                             and its five buttons, the pensioners, the pension bill, health need, Fighting-Age Men
 ###                             (te_demog_fam_row) and, while a state has a youth bulge, Youth
@@ -1550,7 +1550,7 @@ types te_demographics_widgets
 		te_demog_panel = {
 			visible = "[Not(GetVariableSystem.Exists('te_demog_pyr_closed'))]"
 
-			### issue #1029: the sex balance, from the overview (men per 100 women aged 20-59)
+			### issue #1029: the sex balance, from the overview (men per 100 women aged 20-59), the one the census's effects read
 			te_demog_figure_row = {
 				tooltip = "te_demog_ov_sex_tt"
 				blockoverride "row_label" {
@@ -1571,6 +1571,17 @@ types te_demographics_widgets
 							visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_trend_sex_balance'), '(CFixedPoint)0' )]"
 						}
 					}
+				}
+			}
+			### the sex balance at all ages, from the census's bands (te_demog_country_sex_balance_all): no arrow, since
+			### last year's bands aren't kept
+			te_demog_figure_row = {
+				tooltip = "te_demog_ov_sex_all_tt"
+				blockoverride "row_label" {
+					text = "te_demog_ov_sex_all"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_ov_sex_all_value"
 				}
 			}
 			### Phase 3: the Calendar / Biological toggle, where the biological bands exist (a GUI flag, no script state)
@@ -5154,7 +5165,7 @@ types te_demographics_widgets
 		te_demog_panel = {
 			visible = "[Not(GetVariableSystem.Exists('te_demog_st_pyr_closed'))]"
 
-			### issue #1029: the sex balance and the urban share, from the overview
+			### issue #1029: the sex balance (20-59, then all ages) and the urban share, from the overview
 			te_demog_figure_row = {
 				tooltip = "te_demog_st_sex_tt"
 				blockoverride "row_label" {
@@ -5175,6 +5186,17 @@ types te_demographics_widgets
 							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_sex_balance'), '(CFixedPoint)0' )]"
 						}
 					}
+				}
+			}
+			### the sex balance at all ages, from the census's bands (te_demog_state_sex_balance_all): no arrow, since
+			### last year's bands aren't kept
+			te_demog_figure_row = {
+				tooltip = "te_demog_ov_sex_all_tt"
+				blockoverride "row_label" {
+					text = "te_demog_ov_sex_all"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_st_sex_all_value"
 				}
 			}
 			te_demog_figure_row = {

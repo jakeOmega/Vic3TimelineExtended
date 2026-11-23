@@ -1898,3 +1898,18 @@ country type off a principle too (`country_cultural_pull_add`, Cultural Hegemony
 6. **Healthcare Aid** (Full, then Disabled). A recipient's state heads for 10 points more Health Care Access, with no
    health system too, its infection hover's treatment heads 10 points higher, and its mortality tooltip shows no line from the article; with the rule off, Laws and
    Institutions is 5% lower, as the article's own line was.
+
+## The sex balance at all ages (2026-11-23)
+
+The pyramid section (the Population panel's tab, the Census Data window's and the state subtab) shows Sex Balance,
+All Ages under Sex Balance, Ages 20 to 59: men per 100 women of every age, read live from the census's bands
+(`te_demog_state_sex_balance_all`, `te_demog_country_sex_balance_all`). The States section's row hover and the Map
+Room's Sex Balance hover add the same figure. Offline: `test_demographics_registry.py`'s
+`test_the_all_ages_sex_balance_is_the_rings` holds it to the ring. Nothing in the census reads it.
+
+1. **The rows** (any rule but Disabled). On an 1836 save, the country's and a state's all-ages row read a point or
+   two above the 20-59 one (the model's 1836 seeds: Britain 96.8 against 95.0, France 95.9 against 94.5; the young
+   are many and more boys are born), with no arrow, and its hover has no "last census". An old
+   save shows it at once, with no error.log line about a missing variable. If a row reads 0, the bands' prefix in the
+   value is wrong for that scope.
+2. **The hovers.** A row of the States section and a state on the Sex Balance map each list both figures.
